@@ -68,7 +68,7 @@ def create_tasks_table(tasks: list[mteb.AbsTask]) -> str:
     return table
 
 
-def create_task_lang_table(tasks: list[mteb.AbsTask]) -> str:
+def create_task_lang_table(tasks: list[mteb.AbsTask], sort_by_sum=False) -> str:
     table_dict = {}
     ## Group by language. If it is a multilingual dataset, 1 is added to all languages present.
     for task in tasks:
@@ -88,6 +88,8 @@ def create_task_lang_table(tasks: list[mteb.AbsTask]) -> str:
     df = pl.DataFrame(pl_table_dict).sort(by="0-lang")
     df = df.with_columns(sum=pl.sum_horizontal(get_args(TASK_TYPE)))
     df = df.select(sorted(df.columns))
+    if sort_by_sum:
+        df = df.sort(by="sum", descending=True)
     
     total = df.sum()
 
