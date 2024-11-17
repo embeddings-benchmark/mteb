@@ -82,7 +82,7 @@ def create_task_lang_table(tasks: list[mteb.AbsTask], sort_by_sum=False) -> str:
     ## Wrangle for polars
     pl_table_dict = []
     for lang, d in table_dict.items():
-        d.update({"0-lang": lang}) # for sorting columns
+        d.update({"0-lang": lang})  # for sorting columns
         pl_table_dict.append(d)
 
     df = pl.DataFrame(pl_table_dict).sort(by="0-lang")
@@ -90,7 +90,7 @@ def create_task_lang_table(tasks: list[mteb.AbsTask], sort_by_sum=False) -> str:
     df = df.select(sorted(df.columns))
     if sort_by_sum:
         df = df.sort(by="sum", descending=True)
-    
+
     total = df.sum()
 
     task_names_md = " | ".join(sorted(get_args(TASK_TYPE)))
