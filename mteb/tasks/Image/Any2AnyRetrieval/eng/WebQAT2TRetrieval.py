@@ -14,7 +14,7 @@ class WebQAT2TRetrieval(AbsTaskAny2AnyRetrieval):
             "revision": "468b42a2b2e767d80d2d93f5ae5d42f135a10478",
         },
         type="Any2AnyRetrieval",
-        category="s2p",
+        category="t2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",

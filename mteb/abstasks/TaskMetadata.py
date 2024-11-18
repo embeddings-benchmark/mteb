@@ -113,6 +113,7 @@ TASK_CATEGORY = Literal[
     "s2s",  # Sentence-to-sentence
     "s2p",  # Sentence-to-paragraph
     "p2p",  # Paragraph-to-paragraph
+    "t2t",  # specifically for text-only tasks in mieb
     "i2i",
     "i2t",
     "t2i",
