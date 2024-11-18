@@ -1,0 +1,92 @@
+{
+    "test": {
+        "num_samples": 2048,
+        "number_of_characters": 505523,
+        "number_texts_intersect_with_train": 347,
+        "min_text_length": 204,
+        "average_text_length": 246.83740234375,
+        "max_text_length": 302,
+        "unique_text": 2041,
+        "unique_labels": 11,
+        "labels": {
+            "9": {
+                "count": 186
+            },
+            "2": {
+                "count": 186
+            },
+            "10": {
+                "count": 186
+            },
+            "5": {
+                "count": 187
+            },
+            "8": {
+                "count": 186
+            },
+            "0": {
+                "count": 186
+            },
+            "4": {
+                "count": 186
+            },
+            "1": {
+                "count": 187
+            },
+            "7": {
+                "count": 186
+            },
+            "3": {
+                "count": 186
+            },
+            "6": {
+                "count": 186
+            }
+        }
+    },
+    "train": {
+        "num_samples": 33000,
+        "number_of_characters": 8180949,
+        "number_texts_intersect_with_train": null,
+        "min_text_length": 204,
+        "average_text_length": 247.90754545454544,
+        "max_text_length": 302,
+        "unique_text": 29948,
+        "unique_labels": 11,
+        "labels": {
+            "9": {
+                "count": 3000
+            },
+            "1": {
+                "count": 3000
+            },
+            "3": {
+                "count": 3000
+            },
+            "8": {
+                "count": 3000
+            },
+            "6": {
+                "count": 3000
+            },
+            "2": {
+                "count": 3000
+            },
+            "10": {
+                "count": 3000
+            },
+            "5": {
+                "count": 3000
+            },
+            "7": {
+                "count": 3000
+            },
+            "4": {
+                "count": 3000
+            },
+            "0": {
+                "count": 3000
+            }
+        }
+    }
+}

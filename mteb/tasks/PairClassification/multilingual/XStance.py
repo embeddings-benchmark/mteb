@@ -58,7 +58,11 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
         self.dataset = {}
         path = self.metadata_dict["dataset"]["path"]
         revision = self.metadata_dict["dataset"]["revision"]
-        raw_dataset = load_dataset(path, revision=revision, trust_remote_code=True)
+        raw_dataset = load_dataset(
+            path,
+            revision=revision,
+            trust_remote_code=self.metadata.dataset["trust_remote_code"],
+        )
 
         def convert_example(example):
             return {
@@ -83,26 +87,13 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
                     )
 
                 # convert examples
-                self.dataset[lang][split] = self.dataset[lang][split].map(
-                    convert_example,
-                    remove_columns=self.dataset[lang][split].column_names,
+                self.dataset[lang][split] = (
+                    self.dataset[lang][split]
+                    .map(
+                        convert_example,
+                        remove_columns=self.dataset[lang][split].column_names,
+                    )
+                    .to_dict()
                 )
 
-        self.dataset_transform()
         self.data_loaded = True
-
-    def dataset_transform(self):
-        """Transform dataset into sentence-pair format"""
-        _dataset = {}
-
-        for lang in self.metadata.eval_langs:
-            _dataset[lang] = {}
-            for split in self.metadata.eval_splits:
-                _dataset[lang][split] = [
-                    {
-                        "sent1": self.dataset[lang][split]["sent1"],
-                        "sent2": self.dataset[lang][split]["sent2"],
-                        "labels": self.dataset[lang][split]["labels"],
-                    }
-                ]
-        self.dataset = _dataset

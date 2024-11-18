@@ -62,19 +62,16 @@ isbn="978-3-030-15719-7"
         query_rows = datasets.load_dataset(
             name="queries",
             split="test",
-            trust_remote_code=True,
             **self.metadata_dict["dataset"],
         )
         corpus_rows = datasets.load_dataset(
             name="corpus.documents",
             split="test",
-            trust_remote_code=True,
             **self.metadata_dict["dataset"],
         )
         qrels_rows = datasets.load_dataset(
             name="qrels.s2p",
             split="test",
-            trust_remote_code=True,
             **self.metadata_dict["dataset"],
         )
 

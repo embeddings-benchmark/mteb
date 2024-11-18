@@ -64,7 +64,7 @@ class SickBrSTS(AbsTaskSTS):
             self.dataset.update(
                 {
                     split: self.dataset[split].train_test_split(
-                        test_size=N_SAMPLES, seed=self.seed, label="entailment_label"
+                        test_size=N_SAMPLES, seed=self.seed
                     )["test"]
                 }
             )

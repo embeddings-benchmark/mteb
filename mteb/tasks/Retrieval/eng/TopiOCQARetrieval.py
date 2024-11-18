@@ -74,6 +74,7 @@ class TopiOCQARetrieval(AbsTaskRetrieval):
             dataset_path,
             split=split,
             revision=revision,
+            trust_remote_code=self.metadata.dataset["trust_remote_code"],
         )
         queries, corpus, qrels = {}, {}, {}
         for sample in ds:

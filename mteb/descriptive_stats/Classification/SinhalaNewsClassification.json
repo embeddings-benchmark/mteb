@@ -1,0 +1,29 @@
+{
+    "train": {
+        "num_samples": 2048,
+        "number_of_characters": 306830,
+        "number_texts_intersect_with_train": null,
+        "min_text_length": 1,
+        "average_text_length": 149.8193359375,
+        "max_text_length": 1094,
+        "unique_text": 2015,
+        "unique_labels": 5,
+        "labels": {
+            "2": {
+                "count": 526
+            },
+            "3": {
+                "count": 626
+            },
+            "0": {
+                "count": 345
+            },
+            "4": {
+                "count": 269
+            },
+            "1": {
+                "count": 282
+            }
+        }
+    }
+}
