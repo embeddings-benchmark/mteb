@@ -37,12 +37,12 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
         average_query_length: Average length of queries
         max_query_length: Maximum length of queries
         unique_queries: Number of unique queries
+        none_queries: Number of none queries
 
         min_relevant_docs_per_query: Minimum number of relevant documents per query
         average_relevant_docs_per_query: Average number of relevant documents per query
         max_relevant_docs_per_query: Maximum number of relevant documents per query
         unique_relevant_docs: Number of unique relevant documents
-
 
         num_instructions: Number of instructions
         min_instruction_length: Minimum length of instructions
@@ -69,6 +69,7 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
     average_query_length: float
     max_query_length: int
     unique_queries: int
+    none_queries: int
 
     min_relevant_docs_per_query: int
     average_relevant_docs_per_query: float
@@ -347,6 +348,10 @@ class AbsTaskRetrieval(AbsTask):
                 if self.top_ranked is not None:
                     top_ranked.update(process_docs(self.top_ranked, hf_subset, split))
         else:
+            if "default" in self.queries:
+                return self._calculate_metrics_from_split(
+                    split=split, hf_subset="default"
+                )
             queries = self.queries[split]
             corpus = self.corpus[split]
             relevant_docs = self.relevant_docs[split]
@@ -358,6 +363,7 @@ class AbsTaskRetrieval(AbsTask):
         query_len, doc_len = calculate_length(queries, corpus)
         num_documents = len(corpus)
         num_queries = len(queries)
+        none_queries = sum(q is None or len(q) == 0 for q in queries.values())
 
         # create a list of number of relevant docs per query
         qrels_lengths = [
@@ -389,10 +395,8 @@ class AbsTaskRetrieval(AbsTask):
             max_instruction_length = None
             unique_instructions = None
 
-        if self.top_ranked is not None:
-            top_ranked_per_query = (
-                [len(docs) for docs in top_ranked.values()] if num_queries else None
-            )
+        if self.top_ranked is not None and num_queries:
+            top_ranked_per_query = [len(docs) for docs in top_ranked.values()]
             min_top_ranked_per_query = min(top_ranked_per_query)
             average_top_ranked_per_query = sum(top_ranked_per_query) / num_queries
             max_top_ranked_per_query = max(top_ranked_per_query)
@@ -414,6 +418,7 @@ class AbsTaskRetrieval(AbsTask):
             average_query_length=sum(query_len) / num_queries,
             max_query_length=max(query_len),
             unique_queries=len(set(queries)),
+            none_queries=none_queries,
             min_relevant_docs_per_query=min(qrels_lengths),
             average_relevant_docs_per_query=qrels_per_doc,
             max_relevant_docs_per_query=max(qrels_lengths),
@@ -435,6 +440,9 @@ def calculate_length(
     queries_lens = []
     doc_lens = []
     for query in queries.values():
+        if query is None or len(query) == 0:
+            continue
+
         if isinstance(query[0], str):
             queries_lens.append(len(query))
         else:

@@ -13,6 +13,7 @@ from time import time
 from typing import Any
 
 import datasets
+from codecarbon import EmissionsTracker
 from sentence_transformers import SentenceTransformer
 
 from mteb.encoder_interface import Encoder
@@ -322,7 +323,7 @@ class MTEB:
         eval_splits=None,
         overwrite_results: bool = False,
         raise_error: bool = True,
-        co2_tracker: bool = False,
+        co2_tracker: bool = True,
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ) -> list[TaskResult]:
@@ -418,15 +419,14 @@ class MTEB:
                 kg_co2_emissions: int | None = 0 if co2_tracker else None
                 for split in task_eval_splits:
                     if co2_tracker:
-                        try:
-                            from codecarbon import EmissionsTracker
-                        except ImportError:
-                            raise ImportError(
-                                "To use the CO2 emissions tracker, please install codecarbon using 'pip install codecarbon'"
-                            )
-
+                        logger.warning(
+                            "Evaluating multiple MTEB runs simultaniously will produce incorrect CO₂ results"
+                        )
                         with EmissionsTracker(
-                            save_to_file=False, save_to_api=False, logging_logger=logger
+                            save_to_file=False,
+                            save_to_api=False,
+                            logging_logger=logger,
+                            allow_multiple_runs=True,
                         ) as tracker:
                             results, tick, tock = self._run_eval(
                                 task,

@@ -12,6 +12,7 @@
         "average_query_length": 1111375.55,
         "max_query_length": 2960,
         "unique_queries": 40,
+        "none_queries": 0,
         "min_relevant_docs_per_query": 135,
         "average_relevant_docs_per_query": 43.6,
         "max_relevant_docs_per_query": 379,
