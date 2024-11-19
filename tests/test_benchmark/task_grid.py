@@ -61,6 +61,8 @@ TASK_TEST_GRID = [
     "BrazilianToxicTweetsClassification",  # multilabel classification
     "FaroeseSTS",  # STS
     "SummEval",  # summarization
+    "Core17InstructionRetrieval",  # instruction reranking
+    "InstructIR",  # instruction retrieval
 ]
 
 TASK_TEST_GRID_AS_STRING = [
