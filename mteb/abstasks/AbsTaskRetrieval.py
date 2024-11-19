@@ -150,7 +150,8 @@ class AbsTaskRetrieval(AbsTask):
                 # Conversion from DataSet
                 queries = {query["id"]: query["text"] for query in queries}
                 corpus = {
-                    doc["id"]: doc.get("title", "") + " " + doc["text"] for doc in corpus
+                    doc["id"]: doc.get("title", "") + " " + doc["text"]
+                    for doc in corpus
                 }
                 self.corpus[split], self.queries[split], self.relevant_docs[split] = (
                     corpus,
@@ -162,7 +163,8 @@ class AbsTaskRetrieval(AbsTask):
                 if instructions:
                     self.instructions = {
                         split: {
-                            inst["query-id"]: inst["instruction"] for inst in instructions
+                            inst["query-id"]: inst["instruction"]
+                            for inst in instructions
                         }
                     }
                 if top_ranked:
@@ -171,7 +173,7 @@ class AbsTaskRetrieval(AbsTask):
                     }
         else:
             if not isinstance(self.metadata.eval_langs, dict):
-                raise ValueError(f"eval_langs must be a dict for multilingual tasks")
+                raise ValueError("eval_langs must be a dict for multilingual tasks")
             for lang in self.metadata.eval_langs:
                 self.corpus[lang], self.queries[lang], self.relevant_docs[lang] = (
                     {},
@@ -191,9 +193,14 @@ class AbsTaskRetrieval(AbsTask):
                     # Conversion from DataSet
                     queries = {query["id"]: query["text"] for query in queries}
                     corpus = {
-                        doc["id"]: doc.get("title", "") + " " + doc["text"] for doc in corpus
+                        doc["id"]: doc.get("title", "") + " " + doc["text"]
+                        for doc in corpus
                     }
-                    self.corpus[lang][split], self.queries[lang][split], self.relevant_docs[lang][split] = (
+                    (
+                        self.corpus[lang][split],
+                        self.queries[lang][split],
+                        self.relevant_docs[lang][split],
+                    ) = (
                         corpus,
                         queries,
                         qrels,
@@ -205,14 +212,17 @@ class AbsTaskRetrieval(AbsTask):
                             self.instructions = {}
                         self.instructions[lang] = {
                             split: {
-                                inst["query-id"]: inst["instruction"] for inst in instructions
+                                inst["query-id"]: inst["instruction"]
+                                for inst in instructions
                             }
                         }
                     if top_ranked:
                         if self.top_ranked is None:
                             self.top_ranked = {}
                         self.top_ranked = {
-                            split: {tr["query-id"]: tr["corpus-ids"] for tr in top_ranked}
+                            split: {
+                                tr["query-id"]: tr["corpus-ids"] for tr in top_ranked
+                            }
                         }
 
         self.data_loaded = True
