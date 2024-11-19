@@ -132,42 +132,98 @@ class AbsTaskRetrieval(AbsTask):
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
         self.instructions, self.top_ranked = None, None
-        dataset_path = self.metadata_dict["dataset"]["path"]
+        dataset_path = self.metadata.dataset["path"]
         hf_repo_qrels = (
             dataset_path + "-qrels" if "clarin-knext" in dataset_path else None
         )
-        for split in kwargs.get("eval_splits", self.metadata_dict["eval_splits"]):
-            corpus, queries, qrels, instructions, top_ranked = HFDataLoader(
-                hf_repo=dataset_path,
-                hf_repo_qrels=hf_repo_qrels,
-                streaming=False,
-                keep_in_memory=False,
-                trust_remote_code=self.metadata_dict["dataset"].get(
-                    "trust_remote_code", False
-                ),
-            ).load(split=split)
-            # Conversion from DataSet
-            queries = {query["id"]: query["text"] for query in queries}
-            corpus = {
-                doc["id"]: doc.get("title", "") + " " + doc["text"] for doc in corpus
-            }
-            self.corpus[split], self.queries[split], self.relevant_docs[split] = (
-                corpus,
-                queries,
-                qrels,
-            )
+        if not self.is_multilingual:
+            for split in kwargs.get("eval_splits", self.metadata.eval_splits):
+                corpus, queries, qrels, instructions, top_ranked = HFDataLoader(
+                    hf_repo=dataset_path,
+                    hf_repo_qrels=hf_repo_qrels,
+                    streaming=False,
+                    keep_in_memory=False,
+                    trust_remote_code=self.metadata.dataset.get(
+                        "trust_remote_code", False
+                    ),
+                ).load(split=split)
+                # Conversion from DataSet
+                queries = {query["id"]: query["text"] for query in queries}
+                corpus = {
+                    doc["id"]: doc.get("title", "") + " " + doc["text"]
+                    for doc in corpus
+                }
+                self.corpus[split], self.queries[split], self.relevant_docs[split] = (
+                    corpus,
+                    queries,
+                    qrels,
+                )
 
-            # optional args
-            if instructions:
-                self.instructions = {
-                    split: {
-                        inst["query-id"]: inst["instruction"] for inst in instructions
+                # optional args
+                if instructions:
+                    self.instructions = {
+                        split: {
+                            inst["query-id"]: inst["instruction"]
+                            for inst in instructions
+                        }
                     }
-                }
-            if top_ranked:
-                self.top_ranked = {
-                    split: {tr["query-id"]: tr["corpus-ids"] for tr in top_ranked}
-                }
+                if top_ranked:
+                    self.top_ranked = {
+                        split: {tr["query-id"]: tr["corpus-ids"] for tr in top_ranked}
+                    }
+        else:
+            if not isinstance(self.metadata.eval_langs, dict):
+                raise ValueError("eval_langs must be a dict for multilingual tasks")
+            for lang in self.metadata.eval_langs:
+                self.corpus[lang], self.queries[lang], self.relevant_docs[lang] = (
+                    {},
+                    {},
+                    {},
+                )
+                for split in kwargs.get("eval_splits", self.metadata.eval_splits):
+                    corpus, queries, qrels, instructions, top_ranked = HFDataLoader(
+                        hf_repo=dataset_path,
+                        hf_repo_qrels=hf_repo_qrels,
+                        streaming=False,
+                        keep_in_memory=False,
+                        trust_remote_code=self.metadata.dataset.get(
+                            "trust_remote_code", False
+                        ),
+                    ).load(split=split, config=lang)
+                    # Conversion from DataSet
+                    queries = {query["id"]: query["text"] for query in queries}
+                    corpus = {
+                        doc["id"]: doc.get("title", "") + " " + doc["text"]
+                        for doc in corpus
+                    }
+                    (
+                        self.corpus[lang][split],
+                        self.queries[lang][split],
+                        self.relevant_docs[lang][split],
+                    ) = (
+                        corpus,
+                        queries,
+                        qrels,
+                    )
+
+                    # optional args
+                    if instructions:
+                        if self.instructions is None:
+                            self.instructions = {}
+                        self.instructions[lang] = {
+                            split: {
+                                inst["query-id"]: inst["instruction"]
+                                for inst in instructions
+                            }
+                        }
+                    if top_ranked:
+                        if self.top_ranked is None:
+                            self.top_ranked = {}
+                        self.top_ranked = {
+                            split: {
+                                tr["query-id"]: tr["corpus-ids"] for tr in top_ranked
+                            }
+                        }
 
         self.data_loaded = True
 
