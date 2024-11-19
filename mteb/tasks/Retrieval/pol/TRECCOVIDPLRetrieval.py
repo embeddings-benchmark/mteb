@@ -25,7 +25,7 @@ class TRECCOVIDPL(AbsTaskRetrieval):
             "2019-12-01",
             "2022-12-31",
         ),  # approximate date of covid pandemic start and end (best guess)
-        domains=["Academic", "Non-fiction", "Written"],
+        domains=["Academic", "Medical", "Non-fiction", "Written"],
         task_subtypes=["Article retrieval"],
         license="not specified",
         annotations_creators="derived",

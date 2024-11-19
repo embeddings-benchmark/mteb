@@ -22,7 +22,7 @@ class SciFactPL(AbsTaskRetrieval):
         eval_langs=["pol-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        domains=None,
+        domains=["Academic", "Medical", "Written"],
         task_subtypes=None,
         license=None,
         annotations_creators=None,

@@ -50,7 +50,7 @@ class CUREv1Retrieval(MultilingualTask, AbsTaskRetrieval):
         eval_langs=_LANGUAGES,
         main_score="ndcg_at_10",
         date=("2024-01-01", "2024-10-31"),
-        domains=["Medical", "Academic"],
+        domains=["Medical", "Academic", "Written"],
         task_subtypes=[],
         license="cc-by-nc-4.0",
         annotations_creators="expert-annotated",

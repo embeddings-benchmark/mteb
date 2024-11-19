@@ -21,7 +21,7 @@ class TRECCOVID(AbsTaskRetrieval):
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        domains=None,
+        domains=["Medical", "Academic", "Written"],
         task_subtypes=None,
         license=None,
         annotations_creators=None,
