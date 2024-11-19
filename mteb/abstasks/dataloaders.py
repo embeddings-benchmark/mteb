@@ -93,7 +93,7 @@ class HFDataLoader:
             raise ValueError(f"File {fIn} must be present with extension {ext}")
 
     def load(
-        self, split: str = "test"
+        self, split: str = "test", config: str | None = None
     ) -> tuple[
         dict[str, dict[str, str]],  # corpus
         dict[str, str | list[str]],  # queries
@@ -118,33 +118,33 @@ class HFDataLoader:
 
         if not len(self.corpus):
             logger.info("Loading Corpus...")
-            self._load_corpus()
+            self._load_corpus(config)
             logger.info("Loaded %d %s Documents.", len(self.corpus), split.upper())
             logger.info("Doc Example: %s", self.corpus[0])
 
         if not len(self.queries):
             logger.info("Loading Queries...")
-            self._load_queries()
+            self._load_queries(config)
 
-        if "top_ranked" in configs or (not self.hf_repo and self.top_ranked_file):
+        if any(c.endswith("top_ranked") for c in configs) in configs or (not self.hf_repo and self.top_ranked_file):
             logger.info("Loading Top Ranked")
-            self._load_top_ranked()
+            self._load_top_ranked(config)
             logger.info(
                 f"Top ranked loaded: {len(self.top_ranked) if self.top_ranked else 0}"
             )
         else:
             self.top_ranked = None
 
-        if "instruction" in configs or (not self.hf_repo and self.instructions_file):
+        if any(c.endswith("instruction") for c in configs) or (not self.hf_repo and self.instructions_file):
             logger.info("Loading Instructions")
-            self._load_instructions()
+            self._load_instructions(config)
             logger.info(
                 f"Instructions loaded: {len(self.instructions) if self.instructions else 0}"
             )
         else:
             self.instructions = None
 
-        self._load_qrels(split)
+        self._load_qrels(split, config)
         # filter queries with no qrels
         qrels_dict = defaultdict(dict)
 
@@ -159,23 +159,24 @@ class HFDataLoader:
 
         return self.corpus, self.queries, self.qrels, self.instructions, self.top_ranked
 
-    def load_corpus(self) -> dict[str, dict[str, str]]:
+    def load_corpus(self, config: str | None = None) -> dict[str, dict[str, str]]:
         if not self.hf_repo:
             self.check(fIn=self.corpus_file, ext="jsonl")
 
         if not len(self.corpus):
             logger.info("Loading Corpus...")
-            self._load_corpus()
+            self._load_corpus(config)
             logger.info("Loaded %d %s Documents.", len(self.corpus))
             logger.info("Doc Example: %s", self.corpus[0])
 
         return self.corpus
 
-    def _load_corpus(self):
+    def _load_corpus(self, config: str | None = None):
+        config = f"{config}-corpus" if config is not None else "corpus"
         if self.hf_repo:
             corpus_ds = load_dataset(
                 self.hf_repo,
-                "corpus",
+                config,
                 keep_in_memory=self.keep_in_memory,
                 streaming=self.streaming,
                 trust_remote_code=self.trust_remote_code,
@@ -200,11 +201,12 @@ class HFDataLoader:
         )
         self.corpus = corpus_ds
 
-    def _load_queries(self):
+    def _load_queries(self, config: str | None = None):
+        config = f"{config}-queries" if config is not None else "queries"
         if self.hf_repo:
             queries_ds = load_dataset(
                 self.hf_repo,
-                "queries",
+                config,
                 keep_in_memory=self.keep_in_memory,
                 streaming=self.streaming,
                 trust_remote_code=self.trust_remote_code,
@@ -224,10 +226,12 @@ class HFDataLoader:
         )
         self.queries = queries_ds
 
-    def _load_qrels(self, split):
+    def _load_qrels(self, split: str, config: str | None = None):
+        config = f"{config}-qrels" if config is not None else None
         if self.hf_repo:
             qrels_ds = load_dataset(
                 self.hf_repo_qrels,
+                name=config,
                 keep_in_memory=self.keep_in_memory,
                 streaming=self.streaming,
                 trust_remote_code=self.trust_remote_code,
@@ -249,11 +253,12 @@ class HFDataLoader:
         qrels_ds = qrels_ds.cast(features)
         self.qrels = qrels_ds
 
-    def _load_top_ranked(self):
+    def _load_top_ranked(self, config: str | None = None):
+        config = f"top_ranked-{config}" if config is not None else "top_ranked"
         if self.hf_repo:
             top_ranked_ds = load_dataset(
                 self.hf_repo,
-                "top_ranked",
+                config,
                 keep_in_memory=self.keep_in_memory,
                 streaming=self.streaming,
                 trust_remote_code=self.trust_remote_code,
@@ -293,11 +298,12 @@ class HFDataLoader:
         )
         self.top_ranked = top_ranked_ds
 
-    def _load_instructions(self):
+    def _load_instructions(self, config: str | None = None):
+        config = f"instruction-{config}"if config is not None else"instruction"
         if self.hf_repo:
             instructions_ds = load_dataset(
                 self.hf_repo,
-                "instruction",
+                config,
                 keep_in_memory=self.keep_in_memory,
                 streaming=self.streaming,
                 trust_remote_code=self.trust_remote_code,
