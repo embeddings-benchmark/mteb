@@ -40,4 +40,11 @@ SFR_Embedding_2_R = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    citation="""@misc{SFR-embedding-2,
+      title={SFR-Embedding-2: Advanced Text Embedding with Multi-stage Training},
+      author={Rui Meng*, Ye Liu*, Shafiq Rayhan Joty, Caiming Xiong, Yingbo Zhou, Semih Yavuz},
+      year={2024},
+      url={https://huggingface.co/Salesforce/SFR-Embedding-2_R}
+    }
+    """,
 )

@@ -75,4 +75,12 @@ uae_large_v1 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     reference="https://huggingface.co/WhereIsAI/UAE-Large-V1",
     use_instructions=False,
+    citation="""
+    @article{li2023angle,
+      title={AnglE-optimized Text Embeddings},
+      author={Li, Xianming and Li, Jing},
+      journal={arXiv preprint arXiv:2309.12871},
+      year={2023}
+    }
+    """,
 )

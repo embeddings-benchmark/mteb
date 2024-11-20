@@ -60,6 +60,17 @@ paraphrase_langs = [
     "zho_Hant",
 ]
 
+SBERT_CITATION = """@inproceedings{reimers-2019-sentence-bert,
+    title = "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+    author = "Reimers, Nils and Gurevych, Iryna",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing",
+    month = "11",
+    year = "2019",
+    publisher = "Association for Computational Linguistics",
+    url = "http://arxiv.org/abs/1908.10084",
+}
+"""
+
 all_MiniLM_L6_v2 = ModelMeta(
     name="sentence-transformers/all-MiniLM-L6-v2",
     languages=["eng-Latn"],
@@ -75,6 +86,7 @@ all_MiniLM_L6_v2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    citation=SBERT_CITATION,
 )
 
 paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
@@ -92,6 +104,7 @@ paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    citation=SBERT_CITATION,
 )
 
 paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
@@ -109,6 +122,7 @@ paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    citation=SBERT_CITATION,
 )
 
 labse = ModelMeta(
@@ -126,6 +140,15 @@ labse = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    citation="""@misc{feng2022languageagnosticbertsentenceembedding,
+      title={Language-agnostic BERT Sentence Embedding}, 
+      author={Fangxiaoyu Feng and Yinfei Yang and Daniel Cer and Naveen Arivazhagan and Wei Wang},
+      year={2022},
+      eprint={2007.01852},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2007.01852}, 
+    }""",
 )
 
 contriever = ModelMeta(
@@ -143,4 +166,12 @@ contriever = ModelMeta(
     similarity_fn_name="dot",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    citation="""
+    @misc{izacard2021contriever,
+      title={Unsupervised Dense Information Retrieval with Contrastive Learning}, 
+      author={Gautier Izacard and Mathilde Caron and Lucas Hosseini and Sebastian Riedel and Piotr Bojanowski and Armand Joulin and Edouard Grave},
+      year={2021},
+      url = {https://arxiv.org/abs/2112.09118},
+      doi = {10.48550/ARXIV.2112.09118},
+    }""",
 )
