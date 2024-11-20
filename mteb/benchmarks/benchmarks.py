@@ -309,7 +309,7 @@ MTEB_RETRIEVAL_LAW = Benchmark(
 )
 
 MTEB_RETRIEVAL_MEDICAL = Benchmark(
-    name="medMTEB",
+    name="MTEB(Medical)",
     tasks=get_tasks(
         tasks=[
             "CUREv1",
@@ -326,7 +326,7 @@ MTEB_RETRIEVAL_MEDICAL = Benchmark(
             "CMedQAv2-reranking",
         ],
     ),
-    description="medMTEB: A curated set of MTEB tasks designed to evaluate systems in the context of medical information retrieval.",
+    description="A curated set of MTEB tasks designed to evaluate systems in the context of medical information retrieval.",
     reference="",
     citation=None,
 )
