@@ -379,7 +379,7 @@ class AbsTaskRetrieval(AbsTask):
         top_ranked = None
         instructions = None
         if hf_subset and hf_subset in self.queries:
-            # Bright retrieval have different have different splits for diffrent subsets for corpus
+            # BrightRetrieval has different splits for different subsets of the corpus.
             if (
                 self.corpus.get(hf_subset, None) is None
                 or self.corpus[hf_subset].get(split, None) is None
@@ -400,7 +400,7 @@ class AbsTaskRetrieval(AbsTask):
             instructions = {}
             top_ranked = {}
             for hf_subset in self.metadata.eval_langs:
-                # Bright retrieval have different have different splits for diffrent subsets for corpus
+                # BrightRetrieval has different splits for different subsets of the corpus.
                 if (
                     self.corpus.get(hf_subset, None) is None
                     or self.corpus[hf_subset].get(split, None) is None
