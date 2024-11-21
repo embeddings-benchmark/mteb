@@ -308,6 +308,29 @@ MTEB_RETRIEVAL_LAW = Benchmark(
     citation=None,
 )
 
+MTEB_RETRIEVAL_MEDICAL = Benchmark(
+    name="MTEB(Medical)",
+    tasks=get_tasks(
+        tasks=[
+            "CUREv1",
+            "NFCorpus",
+            "TRECCOVID",
+            "TRECCOVID-PL",
+            "SciFact",
+            "SciFact-PL",
+            "MedicalQARetrieval",
+            "PublicHealthQA",
+            "MedrxivClusteringP2P.v2",
+            "MedrxivClusteringS2S.v2",
+            "CmedqaRetrieval",
+            "CMedQAv2-reranking",
+        ],
+    ),
+    description="A curated set of MTEB tasks designed to evaluate systems in the context of medical information retrieval.",
+    reference="",
+    citation=None,
+)
+
 MTEB_MINERS_BITEXT_MINING = Benchmark(
     name="MINERSBitextMining",
     tasks=get_tasks(
@@ -702,6 +725,7 @@ MTEB_multilingual = Benchmark(
             "SpartQA",
             "TempReasonL1",
             "TRECCOVID",
+            "CUREv1",
             "WinoGrande",
             "BelebeleRetrieval",
             "MLQARetrieval",
