@@ -379,6 +379,10 @@ class AbsTaskRetrieval(AbsTask):
         top_ranked = None
         instructions = None
         if hf_subset and hf_subset in self.queries:
+            # Bright retrieval have different have different splits for diffrent subsets for corpus
+            if self.corpus.get(hf_subset, None) is None or self.corpus[hf_subset].get(split, None) is None:
+                return {}
+
             queries = self.queries[hf_subset][split]
             corpus = self.corpus[hf_subset][split]
             relevant_docs = self.relevant_docs[hf_subset][split]
@@ -393,6 +397,9 @@ class AbsTaskRetrieval(AbsTask):
             instructions = {}
             top_ranked = {}
             for hf_subset in self.metadata.eval_langs:
+                # Bright retrieval have different have different splits for diffrent subsets for corpus
+                if self.corpus.get(hf_subset, None) is None or self.corpus[hf_subset].get(split, None) is None:
+                    continue
                 queries.update(process_docs(self.queries, hf_subset, split))
                 corpus.update(process_docs(self.corpus, hf_subset, split))
                 relevant_docs.update(
@@ -506,7 +513,8 @@ def calculate_length(
             queries_lens.append(len(query))
         else:
             queries_lens.extend([len(turn) for turn in query])
-
+    if corpus is None:
+        return None, queries_lens
     for doc in corpus.values():
         if isinstance(doc, dict):
             doc_lens.append(len(doc["text"]))
