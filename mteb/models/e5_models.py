@@ -108,6 +108,24 @@ XLMR_LANGUAGES = [
     "zho_Hans",
 ]
 
+MULTILINGUAL_E5_CITATION = """
+@article{wang2024multilingual,
+  title={Multilingual E5 Text Embeddings: A Technical Report},
+  author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Yang, Linjun and Majumder, Rangan and Wei, Furu},
+  journal={arXiv preprint arXiv:2402.05672},
+  year={2024}
+}
+"""
+
+E5_CITATION = """
+@article{wang2022text,
+  title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
+  author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Jiao, Binxing and Yang, Linjun and Jiang, Daxin and Majumder, Rangan and Wei, Furu},
+  journal={arXiv preprint arXiv:2212.03533},
+  year={2022}
+}
+"""
+
 model_prompts = {
     PromptType.query.value: "query: ",
     PromptType.passage.value: "passage: ",
@@ -134,6 +152,7 @@ e5_mult_small = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    citation=MULTILINGUAL_E5_CITATION,
 )
 
 e5_mult_base = ModelMeta(
@@ -156,6 +175,7 @@ e5_mult_base = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    citation=MULTILINGUAL_E5_CITATION,
 )
 
 e5_mult_large = ModelMeta(
@@ -179,6 +199,7 @@ e5_mult_large = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    citation=MULTILINGUAL_E5_CITATION,
 )
 
 e5_eng_small_v2 = ModelMeta(
@@ -201,6 +222,7 @@ e5_eng_small_v2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    citation=E5_CITATION,
 )
 
 e5_eng_small = ModelMeta(
@@ -224,6 +246,7 @@ e5_eng_small = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    citation=E5_CITATION,
 )
 
 e5_eng_base_v2 = ModelMeta(
@@ -247,6 +270,7 @@ e5_eng_base_v2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    citation=E5_CITATION,
 )
 
 e5_eng_large_v2 = ModelMeta(
@@ -270,4 +294,5 @@ e5_eng_large_v2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    citation=E5_CITATION,
 )

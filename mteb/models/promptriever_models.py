@@ -42,6 +42,19 @@ def _loader(wrapper: type[PromptrieverWrapper], **kwargs) -> Callable[..., Encod
     return loader_inner
 
 
+PROMPTRIEVER_CITATION = """
+@article{weller2024promptriever,
+      title={Promptriever: Instruction-Trained Retrievers Can Be Prompted Like Language Models}, 
+      author={Orion Weller and Benjamin Van Durme and Dawn Lawrie and Ashwin Paranjape and Yuhao Zhang and Jack Hessel},
+      year={2024},
+      eprint={2409.11136},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2409.11136}, 
+}
+"""
+
+
 promptriever_llama2 = ModelMeta(
     loader=_loader(
         RepLLaMAWrapper,
@@ -64,6 +77,7 @@ promptriever_llama2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
+    citation=PROMPTRIEVER_CITATION,
 )
 
 promptriever_llama3 = ModelMeta(
@@ -88,6 +102,7 @@ promptriever_llama3 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
+    citation=PROMPTRIEVER_CITATION,
 )
 
 
@@ -113,6 +128,7 @@ promptriever_llama3_instruct = ModelMeta(
     similarity_fn_name="cosine",
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
+    citation=PROMPTRIEVER_CITATION,
 )
 
 promptriever_mistral_v1 = ModelMeta(
@@ -137,4 +153,5 @@ promptriever_mistral_v1 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
+    citation=PROMPTRIEVER_CITATION,
 )

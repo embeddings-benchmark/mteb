@@ -95,6 +95,14 @@ user_base_ru = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    citation="""@misc{deepvk2024user,
+        title={USER: Universal Sentence Encoder for Russian},
+        author={Malashenko, Boris and  Zemerov, Anton and Spirin, Egor},
+        url={https://huggingface.co/datasets/deepvk/USER-base},
+        publisher={Hugging Face}
+        year={2024},
+    }
+    """,
 )
 
 deberta_v1_ru = ModelMeta(
@@ -129,6 +137,15 @@ rubert_base_cased = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    citation="""@misc{kuratov2019adaptationdeepbidirectionalmultilingual,
+      title={Adaptation of Deep Bidirectional Multilingual Transformers for Russian Language}, 
+      author={Yuri Kuratov and Mikhail Arkhipov},
+      year={2019},
+      eprint={1905.07213},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/1905.07213}, 
+    }""",
 )
 
 distilrubert_small_cased_conversational = ModelMeta(
@@ -146,6 +163,16 @@ distilrubert_small_cased_conversational = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    citation="""@misc{https://doi.org/10.48550/arxiv.2205.02340,
+      doi = {10.48550/ARXIV.2205.02340},
+      url = {https://arxiv.org/abs/2205.02340},
+      author = {Kolesnikova, Alina and Kuratov, Yuri and Konovalov, Vasily and Burtsev, Mikhail},
+      keywords = {Computation and Language (cs.CL), Machine Learning (cs.LG), FOS: Computer and information sciences, FOS: Computer and information sciences},
+      title = {Knowledge Distillation of Russian Language Models with Reduction of Vocabulary},
+      publisher = {arXiv},
+      year = {2022},
+      copyright = {arXiv.org perpetual, non-exclusive license}
+    }""",
 )
 
 rubert_base_cased_sentence = ModelMeta(
@@ -234,4 +261,14 @@ rosberta_ru_en = ModelMeta(
     open_weights=True,
     revision="89fb1651989adbb1cfcfdedafd7d102951ad0555",
     release_date="2024-07-29",
+    citation="""@misc{snegirev2024russianfocusedembeddersexplorationrumteb,
+      title={The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design}, 
+      author={Artem Snegirev and Maria Tikhonova and Anna Maksimova and Alena Fenogenova and Alexander Abramov},
+      year={2024},
+      eprint={2408.12503},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2408.12503}, 
+    }
+    """,
 )

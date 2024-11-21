@@ -531,19 +531,17 @@ def test_empty_descriptive_stat_in_new_datasets(task: AbsTask):
     # DON'T ADD NEW DATASETS TO THIS LIST
     # THIS IS ONLY INTENDED FOR HISTORIC DATASETS
     exceptions = [
-        "FEVER",
-        "HotpotQA",
-        "MSMARCO",
         "MSMARCOv2",
-        "TopiOCQA",
-        "MIRACLRetrieval",
-        "MrTidyRetrieval",
         "BrightRetrieval",
-        "MultiLongDocRetrieval",
         "NeuCLIR2022Retrieval",
         "NeuCLIR2023Retrieval",
+        "BibleNLPBitextMining",
         "FloresBitextMining",
         "FilipinoHateSpeechClassification",
+        "SwissJudgementClassification",
+        "MindSmallReranking",
+        "WebLINXCandidatesReranking",
+        "VoyageMMarcoReranking",
     ]
 
     if task.metadata.name.startswith("Mock"):

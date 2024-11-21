@@ -74,6 +74,7 @@ class ModelMeta(BaseModel):
             input such as "query: {document}" or "passage: {document}".
         zero_shot_benchmarks: A list of benchmarks on which the model has been evaluated in a zero-shot setting. By default we assume that all models
             are evaluated non-zero-shot unless specified otherwise.
+        citation: The citation for the model. This is a bibtex string.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -96,6 +97,7 @@ class ModelMeta(BaseModel):
     similarity_fn_name: DISTANCE_METRICS | None = None
     use_instructions: bool | None = None
     zero_shot_benchmarks: list[str] | None = None
+    citation: str | None = None
 
     def to_dict(self):
         dict_repr = self.model_dump()
