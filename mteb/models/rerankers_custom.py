@@ -248,4 +248,22 @@ bge_reranker_v2_m3 = ModelMeta(
     open_weights=True,
     revision="953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e",
     release_date="2024-06-24",
+    citation="""
+    @misc{li2023making,
+      title={Making Large Language Models A Better Foundation For Dense Retrieval}, 
+      author={Chaofan Li and Zheng Liu and Shitao Xiao and Yingxia Shao},
+      year={2023},
+      eprint={2312.15503},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+    }
+    @misc{chen2024bge,
+          title={BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation}, 
+          author={Jianlv Chen and Shitao Xiao and Peitian Zhang and Kun Luo and Defu Lian and Zheng Liu},
+          year={2024},
+          eprint={2402.03216},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL}
+    }
+    """,
 )
