@@ -58,6 +58,7 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
     num_samples: int
     num_queries: int
     num_documents: int
+    num_relevant_docs: int
     number_of_characters: int
 
     min_document_length: int
@@ -419,6 +420,7 @@ class AbsTaskRetrieval(AbsTask):
         query_len, doc_len = calculate_length(queries, corpus)
         num_documents = len(corpus)
         num_queries = len(queries)
+        num_relevant_docs = sum(len(relevant_docs[qid]) for qid in relevant_docs)
         none_queries = sum(q is None or len(q) == 0 for q in queries.values())
 
         # create a list of number of relevant docs per query
@@ -466,6 +468,7 @@ class AbsTaskRetrieval(AbsTask):
             num_samples=num_documents + num_queries,
             num_queries=num_queries,
             num_documents=num_documents,
+            num_relevant_docs=num_relevant_docs,
             min_document_length=min(doc_len),
             average_document_length=sum(doc_len) / num_documents,
             max_document_length=max(doc_len),
