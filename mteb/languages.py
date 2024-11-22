@@ -17,7 +17,7 @@ ISO_SCRIPT = str  # a 4-letter ISO 15924 script code
 # Language mappings
 path_to_lang_codes = Path(__file__).parent / "iso_639_3_to_language.json"
 path_to_lang_scripts = Path(__file__).parent / "iso_15924_to_script.json"
-
+path_to_lang_fam = Path(__file__).parent / "language_family.json"
 
 with path_to_lang_codes.open("r") as f:
     ISO_TO_LANGUAGE = json.load(f)
@@ -25,6 +25,10 @@ with path_to_lang_codes.open("r") as f:
 with path_to_lang_scripts.open("r") as f:
     ISO_TO_SCRIPT = json.load(f)
 
+with path_to_lang_fam.open("r") as f:
+    ISO_TO_FAM = json.load(f)
+
+ISO_TO_FAM_LEVEL0 = {k:v['level0'] for k, v in ISO_TO_FAM.items()}
 
 @dataclass
 class LanguageScripts:
