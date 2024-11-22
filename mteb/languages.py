@@ -28,7 +28,8 @@ with path_to_lang_scripts.open("r") as f:
 with path_to_lang_fam.open("r") as f:
     ISO_TO_FAM = json.load(f)
 
-ISO_TO_FAM_LEVEL0 = {k:v['level0'] for k, v in ISO_TO_FAM.items()}
+ISO_TO_FAM_LEVEL0 = {k: v["level0"] for k, v in ISO_TO_FAM.items()}
+
 
 @dataclass
 class LanguageScripts:

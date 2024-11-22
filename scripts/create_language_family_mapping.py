@@ -2,14 +2,14 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from tqdm import tqdm
 
-from pyglottolog.api import Glottolog
-from pyglottolog.api import lls
+from pyglottolog.api import Glottolog, lls
+from tqdm import tqdm
 
 glottolog = Glottolog(
     "/home/ubuntu/isaac/work/glottolog"
 )  # Download the Glottolog repository
+
 
 def get_languages_with_iso_by_languoid(languoid, level=0, prev_fam=None):
     # Recursively gather all descendant languages with ISO codes
@@ -23,7 +23,7 @@ def get_languages_with_iso_by_languoid(languoid, level=0, prev_fam=None):
         # Create a copy of `prev_fam` to avoid overwriting
         current_fam = prev_fam.copy()
         current_fam[f"level{level}"] = languoid.name
-        
+
         if descendant.level.name == "language":  # Direct languages
             if descendant.iso:
                 iso_key = descendant.iso
@@ -32,7 +32,6 @@ def get_languages_with_iso_by_languoid(languoid, level=0, prev_fam=None):
                 ISO2FAMILY[iso_key] = current_fam
         elif descendant.level.name == "family":  # Subfamilies, recurse
             get_languages_with_iso_by_languoid(descendant, level + 1, current_fam)
-
 
 
 all_languoids = list(glottolog.languoids())

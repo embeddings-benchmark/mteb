@@ -8,7 +8,7 @@ import polars as pl
 
 import mteb
 from mteb.abstasks.TaskMetadata import PROGRAMMING_LANGS, TASK_TYPE
-from mteb.languages import ISO_TO_LANGUAGE, ISO_TO_FAM_LEVEL0
+from mteb.languages import ISO_TO_FAM_LEVEL0, ISO_TO_LANGUAGE
 
 
 def author_from_bibtex(bibtex: str | None) -> str:
@@ -87,13 +87,15 @@ def create_task_lang_table(tasks: list[mteb.AbsTask], sort_by_sum=False) -> str:
         pl_table_dict.append(d)
 
     df = pl.DataFrame(pl_table_dict).sort(by="0-lang-code")
-    df = df.with_columns(pl.col('0-lang-code')
+    df = df.with_columns(
+        pl.col("0-lang-code")
         .replace_strict(ISO_TO_LANGUAGE, default="unknown")
-        .alias('1-lang-name')
+        .alias("1-lang-name")
     )
-    df = df.with_columns(pl.col('0-lang-code')
+    df = df.with_columns(
+        pl.col("0-lang-code")
         .replace_strict(ISO_TO_FAM_LEVEL0, default="Unclassified")
-        .alias('2-lang-fam')
+        .alias("2-lang-fam")
     )
 
     df = df.with_columns(sum=pl.sum_horizontal(get_args(TASK_TYPE)))
