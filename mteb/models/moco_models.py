@@ -78,8 +78,11 @@ def mocov3_loader(**kwargs):
                 with torch.no_grad():
                     for i in tqdm(range(0, len(images), batch_size)):
                         batch_images = images[i : i + batch_size]
+                        inputs = torch.vstack(
+                            [self.processor(b).unsqueeze(0) for b in batch_images]
+                        )
                         output = self.model(
-                            self.processor(batch_images)
+                            inputs
                         )  # output is (batch_size, num_features) shaped tensor
                         all_image_embeddings.append(output)
 
