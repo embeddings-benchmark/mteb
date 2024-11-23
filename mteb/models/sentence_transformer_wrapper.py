@@ -98,7 +98,9 @@ class SentenceTransformerWrapper(Wrapper):
 
         embeddings = self.model.encode(
             sentences,
+            task_name=task_name,
             prompt_name=prompt_name,
+            prompt_type=prompt_type,
             **kwargs,
         )
         if isinstance(embeddings, torch.Tensor):
