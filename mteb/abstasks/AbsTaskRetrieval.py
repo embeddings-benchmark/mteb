@@ -433,9 +433,10 @@ class AbsTaskRetrieval(AbsTask):
             if self.top_ranked is not None:
                 top_ranked = self.top_ranked[split]
 
-        doc_len, query_len = calculate_length(queries, corpus)
-        num_documents = len(corpus)
-        num_queries = len(queries)
+        query_len = calculate_queries_length(queries)
+        doc_len = calculate_corpus_length(corpus)
+        num_documents = len(doc_len) if corpus is not None else 0
+        num_queries = len(query_len)
         num_relevant_docs = sum(len(relevant_docs[qid]) for qid in relevant_docs)
         none_queries = sum(q is None or len(q) == 0 for q in queries.values())
 
@@ -515,11 +516,10 @@ class AbsTaskRetrieval(AbsTask):
         )
 
 
-def calculate_length(
-    queries: dict[str, str], corpus: dict[str, str]
-) -> tuple[list[int] | None, list[int]]:
+def calculate_queries_length(
+    queries: dict[str, str]
+) -> list[int] | None:
     queries_lens = []
-    doc_lens = []
     for query in queries.values():
         if query is None or len(query) == 0:
             continue
@@ -528,15 +528,22 @@ def calculate_length(
             queries_lens.append(len(query))
         else:
             queries_lens.extend([len(turn) for turn in query])
+    return queries_lens
+
+
+def calculate_corpus_length(
+    corpus: dict[str, str | dict[str, str]],
+) -> list[int] | None:
+    doc_lens = []
     if corpus is None:
-        return None, queries_lens
+        return None
     for doc in corpus.values():
         if isinstance(doc, dict):
             doc_lens.append(len(doc["text"]) + len(doc.get("title", "")))
         else:
             doc_lens.append(len(doc))
 
-    return doc_lens, queries_lens
+    return doc_lens
 
 
 def process_docs(
