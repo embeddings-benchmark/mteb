@@ -535,13 +535,8 @@ def test_empty_descriptive_stat_in_new_datasets(task: AbsTask):
         "BrightRetrieval",
         "NeuCLIR2022Retrieval",
         "NeuCLIR2023Retrieval",
-        "BibleNLPBitextMining",
         "FloresBitextMining",
         "FilipinoHateSpeechClassification",
-        "SwissJudgementClassification",
-        "MindSmallReranking",
-        "WebLINXCandidatesReranking",
-        "VoyageMMarcoReranking",
     ]
 
     if task.metadata.name.startswith("Mock"):
