@@ -1124,36 +1124,8 @@ class MockMultilingualSummarizationTask(AbsTaskSummarization, MultilingualTask):
 
 
 class MockRerankingTask(AbsTaskReranking):
-    expected_stats = {
-        "test": {
-            "number_of_characters": 106,
-            "num_samples": 4,
-            "num_queries": 2,
-            "num_documents": 2,
-            "num_relevant_docs": 4,
-            "min_document_length": 23,
-            "average_document_length": 26.0,
-            "max_document_length": 29,
-            "unique_documents": 2,
-            "min_query_length": 27,
-            "average_query_length": 27.0,
-            "max_query_length": 27,
-            "unique_queries": 2,
-            "none_queries": 0,
-            "min_relevant_docs_per_query": 2,
-            "average_relevant_docs_per_query": 1.0,
-            "max_relevant_docs_per_query": 2,
-            "unique_relevant_docs": 2,
-            "num_instructions": None,
-            "min_instruction_length": None,
-            "average_instruction_length": None,
-            "max_instruction_length": None,
-            "unique_instructions": None,
-            "min_top_ranked_per_query": 2,
-            "average_top_ranked_per_query": 2.0,
-            "max_top_ranked_per_query": 2,
-        }
-    }
+    expected_stats = {'test': {'num_samples': 4, 'number_of_characters': 106, 'num_documents': 2, 'min_document_length': 27, 'average_document_length': 27.0, 'max_document_length': 27, 'unique_documents': 2, 'num_queries': 2, 'min_query_length': 23, 'average_query_length': 26.0, 'max_query_length': 29, 'unique_queries': 2, 'none_queries': 0, 'num_relevant_docs': 4, 'min_relevant_docs_per_query': 2, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 2, 'unique_relevant_docs': 2, 'num_instructions': None, 'min_instruction_length': None, 'average_instruction_length': None, 'max_instruction_length': None, 'unique_instructions': None, 'num_top_ranked': 2, 'min_top_ranked_per_query': 2, 'average_top_ranked_per_query': 2.0, 'max_top_ranked_per_query': 2}}
+
 
     metadata = TaskMetadata(
         type="Reranking",
@@ -1194,94 +1166,7 @@ class MockRerankingTask(AbsTaskReranking):
 
 
 class MockMultilingualRerankingTask(AbsTaskReranking, MultilingualTask):
-    expected_stats = {
-        "test": {
-            "number_of_characters": 224,
-            "num_samples": 8,
-            "num_queries": 4,
-            "num_documents": 4,
-            "num_relevant_docs": 8,
-            "min_document_length": 23,
-            "average_document_length": 26.0,
-            "max_document_length": 29,
-            "unique_documents": 4,
-            "min_query_length": 27,
-            "average_query_length": 30.0,
-            "max_query_length": 33,
-            "unique_queries": 4,
-            "none_queries": 0,
-            "min_relevant_docs_per_query": 2,
-            "average_relevant_docs_per_query": 1.0,
-            "max_relevant_docs_per_query": 2,
-            "unique_relevant_docs": 4,
-            "num_instructions": None,
-            "min_instruction_length": None,
-            "average_instruction_length": None,
-            "max_instruction_length": None,
-            "unique_instructions": None,
-            "min_top_ranked_per_query": 2,
-            "average_top_ranked_per_query": 2.0,
-            "max_top_ranked_per_query": 2,
-            "hf_subset_descriptive_stats": {
-                "eng": {
-                    "number_of_characters": 112,
-                    "num_samples": 4,
-                    "num_queries": 2,
-                    "num_documents": 2,
-                    "num_relevant_docs": 4,
-                    "min_document_length": 23,
-                    "average_document_length": 26.0,
-                    "max_document_length": 29,
-                    "unique_documents": 2,
-                    "min_query_length": 27,
-                    "average_query_length": 30.0,
-                    "max_query_length": 33,
-                    "unique_queries": 2,
-                    "none_queries": 0,
-                    "min_relevant_docs_per_query": 2,
-                    "average_relevant_docs_per_query": 1.0,
-                    "max_relevant_docs_per_query": 2,
-                    "unique_relevant_docs": 2,
-                    "num_instructions": None,
-                    "min_instruction_length": None,
-                    "average_instruction_length": None,
-                    "max_instruction_length": None,
-                    "unique_instructions": None,
-                    "min_top_ranked_per_query": 2,
-                    "average_top_ranked_per_query": 2.0,
-                    "max_top_ranked_per_query": 2,
-                },
-                "fra": {
-                    "number_of_characters": 112,
-                    "num_samples": 4,
-                    "num_queries": 2,
-                    "num_documents": 2,
-                    "num_relevant_docs": 4,
-                    "min_document_length": 23,
-                    "average_document_length": 26.0,
-                    "max_document_length": 29,
-                    "unique_documents": 2,
-                    "min_query_length": 27,
-                    "average_query_length": 30.0,
-                    "max_query_length": 33,
-                    "unique_queries": 2,
-                    "none_queries": 0,
-                    "min_relevant_docs_per_query": 2,
-                    "average_relevant_docs_per_query": 1.0,
-                    "max_relevant_docs_per_query": 2,
-                    "unique_relevant_docs": 2,
-                    "num_instructions": None,
-                    "min_instruction_length": None,
-                    "average_instruction_length": None,
-                    "max_instruction_length": None,
-                    "unique_instructions": None,
-                    "min_top_ranked_per_query": 2,
-                    "average_top_ranked_per_query": 2.0,
-                    "max_top_ranked_per_query": 2,
-                },
-            },
-        }
-    }
+    expected_stats = {'test': {'num_samples': 8, 'number_of_characters': 224, 'num_documents': 4, 'min_document_length': 27, 'average_document_length': 30.0, 'max_document_length': 33, 'unique_documents': 4, 'num_queries': 4, 'min_query_length': 23, 'average_query_length': 26.0, 'max_query_length': 29, 'unique_queries': 4, 'none_queries': 0, 'num_relevant_docs': 8, 'min_relevant_docs_per_query': 2, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 2, 'unique_relevant_docs': 4, 'num_instructions': None, 'min_instruction_length': None, 'average_instruction_length': None, 'max_instruction_length': None, 'unique_instructions': None, 'num_top_ranked': 4, 'min_top_ranked_per_query': 2, 'average_top_ranked_per_query': 2.0, 'max_top_ranked_per_query': 2, 'hf_subset_descriptive_stats': {'eng': {'num_samples': 4, 'number_of_characters': 112, 'num_documents': 2, 'min_document_length': 27, 'average_document_length': 30.0, 'max_document_length': 33, 'unique_documents': 2, 'num_queries': 2, 'min_query_length': 23, 'average_query_length': 26.0, 'max_query_length': 29, 'unique_queries': 2, 'none_queries': 0, 'num_relevant_docs': 4, 'min_relevant_docs_per_query': 2, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 2, 'unique_relevant_docs': 2, 'num_instructions': None, 'min_instruction_length': None, 'average_instruction_length': None, 'max_instruction_length': None, 'unique_instructions': None, 'num_top_ranked': 2, 'min_top_ranked_per_query': 2, 'average_top_ranked_per_query': 2.0, 'max_top_ranked_per_query': 2}, 'fra': {'num_samples': 4, 'number_of_characters': 112, 'num_documents': 2, 'min_document_length': 27, 'average_document_length': 30.0, 'max_document_length': 33, 'unique_documents': 2, 'num_queries': 2, 'min_query_length': 23, 'average_query_length': 26.0, 'max_query_length': 29, 'unique_queries': 2, 'none_queries': 0, 'num_relevant_docs': 4, 'min_relevant_docs_per_query': 2, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 2, 'unique_relevant_docs': 2, 'num_instructions': None, 'min_instruction_length': None, 'average_instruction_length': None, 'max_instruction_length': None, 'unique_instructions': None, 'num_top_ranked': 2, 'min_top_ranked_per_query': 2, 'average_top_ranked_per_query': 2.0, 'max_top_ranked_per_query': 2}}}}
 
     metadata = TaskMetadata(
         type="Reranking",
@@ -1332,36 +1217,8 @@ class MockMultilingualRerankingTask(AbsTaskReranking, MultilingualTask):
 
 
 class MockRetrievalTask(AbsTaskRetrieval):
-    expected_stats = {
-        "test": {
-            "number_of_characters": 112,
-            "num_samples": 4,
-            "num_queries": 2,
-            "num_documents": 2,
-            "num_relevant_docs": 4,
-            "min_document_length": 23,
-            "average_document_length": 26.0,
-            "max_document_length": 29,
-            "unique_documents": 2,
-            "min_query_length": 27,
-            "average_query_length": 30.0,
-            "max_query_length": 33,
-            "unique_queries": 2,
-            "none_queries": 0,
-            "min_relevant_docs_per_query": 2,
-            "average_relevant_docs_per_query": 1.0,
-            "max_relevant_docs_per_query": 2,
-            "unique_relevant_docs": 2,
-            "num_instructions": None,
-            "min_instruction_length": None,
-            "average_instruction_length": None,
-            "max_instruction_length": None,
-            "unique_instructions": None,
-            "min_top_ranked_per_query": None,
-            "average_top_ranked_per_query": None,
-            "max_top_ranked_per_query": None,
-        }
-    }
+    expected_stats = {'test': {'num_samples': 4, 'number_of_characters': 154, 'num_documents': 2, 'min_document_length': 51, 'average_document_length': 51.0, 'max_document_length': 51, 'unique_documents': 2, 'num_queries': 2, 'min_query_length': 23, 'average_query_length': 26.0, 'max_query_length': 29, 'unique_queries': 2, 'none_queries': 0, 'num_relevant_docs': 4, 'min_relevant_docs_per_query': 2, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 2, 'unique_relevant_docs': 2, 'num_instructions': None, 'min_instruction_length': None, 'average_instruction_length': None, 'max_instruction_length': None, 'unique_instructions': None, 'num_top_ranked': None, 'min_top_ranked_per_query': None, 'average_top_ranked_per_query': None, 'max_top_ranked_per_query': None}}
+
 
     metadata = TaskMetadata(
         type="Retrieval",
@@ -1377,10 +1234,17 @@ class MockRetrievalTask(AbsTaskRetrieval):
                 "q2": "This is another test sentence",
             }
         }
+
         self.corpus = {
             "test": {
-                "d1": "This is a positive sentence",
-                "d2": "This is another positive sentence",
+                "d1": {
+                    "title": "This is a positive title",
+                    "text": "This is a positive sentence",
+                },
+                "d2": {
+                    "title": "This is a negative title",
+                    "text": "This is a negative sentence",
+                },
             }
         }
 
@@ -1396,94 +1260,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
 
 
 class MockMultilingualRetrievalTask(AbsTaskRetrieval, MultilingualTask):
-    expected_stats = {
-        "test": {
-            "number_of_characters": 224,
-            "num_samples": 8,
-            "num_queries": 4,
-            "num_documents": 4,
-            "num_relevant_docs": 8,
-            "min_document_length": 23,
-            "average_document_length": 26.0,
-            "max_document_length": 29,
-            "unique_documents": 4,
-            "min_query_length": 27,
-            "average_query_length": 30.0,
-            "max_query_length": 33,
-            "unique_queries": 4,
-            "none_queries": 0,
-            "min_relevant_docs_per_query": 2,
-            "average_relevant_docs_per_query": 1.0,
-            "max_relevant_docs_per_query": 2,
-            "unique_relevant_docs": 4,
-            "num_instructions": None,
-            "min_instruction_length": None,
-            "average_instruction_length": None,
-            "max_instruction_length": None,
-            "unique_instructions": None,
-            "min_top_ranked_per_query": None,
-            "average_top_ranked_per_query": None,
-            "max_top_ranked_per_query": None,
-            "hf_subset_descriptive_stats": {
-                "eng": {
-                    "number_of_characters": 112,
-                    "num_samples": 4,
-                    "num_queries": 2,
-                    "num_documents": 2,
-                    "num_relevant_docs": 4,
-                    "min_document_length": 23,
-                    "average_document_length": 26.0,
-                    "max_document_length": 29,
-                    "unique_documents": 2,
-                    "min_query_length": 27,
-                    "average_query_length": 30.0,
-                    "max_query_length": 33,
-                    "unique_queries": 2,
-                    "none_queries": 0,
-                    "min_relevant_docs_per_query": 2,
-                    "average_relevant_docs_per_query": 1.0,
-                    "max_relevant_docs_per_query": 2,
-                    "unique_relevant_docs": 2,
-                    "num_instructions": None,
-                    "min_instruction_length": None,
-                    "average_instruction_length": None,
-                    "max_instruction_length": None,
-                    "unique_instructions": None,
-                    "min_top_ranked_per_query": None,
-                    "average_top_ranked_per_query": None,
-                    "max_top_ranked_per_query": None,
-                },
-                "fra": {
-                    "number_of_characters": 112,
-                    "num_samples": 4,
-                    "num_queries": 2,
-                    "num_documents": 2,
-                    "num_relevant_docs": 4,
-                    "min_document_length": 23,
-                    "average_document_length": 26.0,
-                    "max_document_length": 29,
-                    "unique_documents": 2,
-                    "min_query_length": 27,
-                    "average_query_length": 30.0,
-                    "max_query_length": 33,
-                    "unique_queries": 2,
-                    "none_queries": 0,
-                    "min_relevant_docs_per_query": 2,
-                    "average_relevant_docs_per_query": 1.0,
-                    "max_relevant_docs_per_query": 2,
-                    "unique_relevant_docs": 2,
-                    "num_instructions": None,
-                    "min_instruction_length": None,
-                    "average_instruction_length": None,
-                    "max_instruction_length": None,
-                    "unique_instructions": None,
-                    "min_top_ranked_per_query": None,
-                    "average_top_ranked_per_query": None,
-                    "max_top_ranked_per_query": None,
-                },
-            },
-        }
-    }
+    expected_stats = {'test': {'num_samples': 8, 'number_of_characters': 224, 'num_documents': 4, 'min_document_length': 27, 'average_document_length': 30.0, 'max_document_length': 33, 'unique_documents': 4, 'num_queries': 4, 'min_query_length': 23, 'average_query_length': 26.0, 'max_query_length': 29, 'unique_queries': 4, 'none_queries': 0, 'num_relevant_docs': 8, 'min_relevant_docs_per_query': 2, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 2, 'unique_relevant_docs': 4, 'num_instructions': None, 'min_instruction_length': None, 'average_instruction_length': None, 'max_instruction_length': None, 'unique_instructions': None, 'num_top_ranked': None, 'min_top_ranked_per_query': None, 'average_top_ranked_per_query': None, 'max_top_ranked_per_query': None, 'hf_subset_descriptive_stats': {'eng': {'num_samples': 4, 'number_of_characters': 112, 'num_documents': 2, 'min_document_length': 27, 'average_document_length': 30.0, 'max_document_length': 33, 'unique_documents': 2, 'num_queries': 2, 'min_query_length': 23, 'average_query_length': 26.0, 'max_query_length': 29, 'unique_queries': 2, 'none_queries': 0, 'num_relevant_docs': 4, 'min_relevant_docs_per_query': 2, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 2, 'unique_relevant_docs': 2, 'num_instructions': None, 'min_instruction_length': None, 'average_instruction_length': None, 'max_instruction_length': None, 'unique_instructions': None, 'num_top_ranked': None, 'min_top_ranked_per_query': None, 'average_top_ranked_per_query': None, 'max_top_ranked_per_query': None}, 'fra': {'num_samples': 4, 'number_of_characters': 112, 'num_documents': 2, 'min_document_length': 27, 'average_document_length': 30.0, 'max_document_length': 33, 'unique_documents': 2, 'num_queries': 2, 'min_query_length': 23, 'average_query_length': 26.0, 'max_query_length': 29, 'unique_queries': 2, 'none_queries': 0, 'num_relevant_docs': 4, 'min_relevant_docs_per_query': 2, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 2, 'unique_relevant_docs': 2, 'num_instructions': None, 'min_instruction_length': None, 'average_instruction_length': None, 'max_instruction_length': None, 'unique_instructions': None, 'num_top_ranked': None, 'min_top_ranked_per_query': None, 'average_top_ranked_per_query': None, 'max_top_ranked_per_query': None}}}}
 
     metadata = TaskMetadata(
         type="Retrieval",
@@ -1717,36 +1494,8 @@ class MockMultilingualMultilabelClassification(
 
 
 class MockInstructionRetrieval(AbsTaskRetrieval):
-    expected_stats = {
-        "test": {
-            "number_of_characters": 112,
-            "num_samples": 4,
-            "num_queries": 2,
-            "num_documents": 2,
-            "num_relevant_docs": 4,
-            "min_document_length": 23,
-            "average_document_length": 26.0,
-            "max_document_length": 29,
-            "unique_documents": 2,
-            "min_query_length": 27,
-            "average_query_length": 30.0,
-            "max_query_length": 33,
-            "unique_queries": 2,
-            "none_queries": 0,
-            "min_relevant_docs_per_query": 2,
-            "average_relevant_docs_per_query": 1.0,
-            "max_relevant_docs_per_query": 2,
-            "unique_relevant_docs": 2,
-            "num_instructions": 2,
-            "min_instruction_length": 26,
-            "average_instruction_length": 58,
-            "max_instruction_length": 32,
-            "unique_instructions": 2,
-            "min_top_ranked_per_query": None,
-            "average_top_ranked_per_query": None,
-            "max_top_ranked_per_query": None,
-        }
-    }
+    expected_stats = {'test': {'num_samples': 4, 'number_of_characters': 112, 'num_documents': 2, 'min_document_length': 27, 'average_document_length': 30.0, 'max_document_length': 33, 'unique_documents': 2, 'num_queries': 2, 'min_query_length': 23, 'average_query_length': 26.0, 'max_query_length': 29, 'unique_queries': 2, 'none_queries': 0, 'num_relevant_docs': 4, 'min_relevant_docs_per_query': 2, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 2, 'unique_relevant_docs': 2, 'num_instructions': 2, 'min_instruction_length': 26, 'average_instruction_length': 58, 'max_instruction_length': 32, 'unique_instructions': 2, 'num_top_ranked': None, 'min_top_ranked_per_query': None, 'average_top_ranked_per_query': None, 'max_top_ranked_per_query': None}}
+
 
     metadata = TaskMetadata(
         type="InstructionRetrieval",
@@ -1786,36 +1535,8 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
 
 
 class MockInstructionReranking(AbsTaskReranking):
-    expected_stats = {
-        "test": {
-            "number_of_characters": 112,
-            "num_samples": 4,
-            "num_queries": 2,
-            "num_documents": 2,
-            "num_relevant_docs": 4,
-            "min_document_length": 23,
-            "average_document_length": 26.0,
-            "max_document_length": 29,
-            "unique_documents": 2,
-            "min_query_length": 27,
-            "average_query_length": 30.0,
-            "max_query_length": 33,
-            "unique_queries": 2,
-            "none_queries": 0,
-            "min_relevant_docs_per_query": 2,
-            "average_relevant_docs_per_query": 1.0,
-            "max_relevant_docs_per_query": 2,
-            "unique_relevant_docs": 2,
-            "num_instructions": 2,
-            "min_instruction_length": 26,
-            "average_instruction_length": 58,
-            "max_instruction_length": 32,
-            "unique_instructions": 2,
-            "min_top_ranked_per_query": 2,
-            "average_top_ranked_per_query": 2.0,
-            "max_top_ranked_per_query": 2,
-        }
-    }
+    expected_stats = {'test': {'num_samples': 4, 'number_of_characters': 112, 'num_documents': 2, 'min_document_length': 27, 'average_document_length': 30.0, 'max_document_length': 33, 'unique_documents': 2, 'num_queries': 2, 'min_query_length': 23, 'average_query_length': 26.0, 'max_query_length': 29, 'unique_queries': 2, 'none_queries': 0, 'num_relevant_docs': 4, 'min_relevant_docs_per_query': 2, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 2, 'unique_relevant_docs': 2, 'num_instructions': 2, 'min_instruction_length': 26, 'average_instruction_length': 58, 'max_instruction_length': 32, 'unique_instructions': 2, 'num_top_ranked': 2, 'min_top_ranked_per_query': 2, 'average_top_ranked_per_query': 2.0, 'max_top_ranked_per_query': 2}}
+
 
     metadata = TaskMetadata(
         type="InstructionReranking",
@@ -1860,94 +1581,8 @@ class MockInstructionReranking(AbsTaskReranking):
 
 
 class MockMultilingualInstructionRetrieval(AbsTaskRetrieval, MultilingualTask):
-    expected_stats = {
-        "test": {
-            "number_of_characters": 224,
-            "num_samples": 8,
-            "num_queries": 4,
-            "num_documents": 4,
-            "num_relevant_docs": 8,
-            "min_document_length": 23,
-            "average_document_length": 26.0,
-            "max_document_length": 29,
-            "unique_documents": 4,
-            "min_query_length": 27,
-            "average_query_length": 30.0,
-            "max_query_length": 33,
-            "unique_queries": 4,
-            "none_queries": 0,
-            "min_relevant_docs_per_query": 2,
-            "average_relevant_docs_per_query": 1.0,
-            "max_relevant_docs_per_query": 2,
-            "unique_relevant_docs": 4,
-            "num_instructions": 4,
-            "min_instruction_length": 26,
-            "average_instruction_length": 116,
-            "max_instruction_length": 32,
-            "unique_instructions": 4,
-            "min_top_ranked_per_query": None,
-            "average_top_ranked_per_query": None,
-            "max_top_ranked_per_query": None,
-            "hf_subset_descriptive_stats": {
-                "eng": {
-                    "number_of_characters": 112,
-                    "num_samples": 4,
-                    "num_queries": 2,
-                    "num_documents": 2,
-                    "num_relevant_docs": 4,
-                    "min_document_length": 23,
-                    "average_document_length": 26.0,
-                    "max_document_length": 29,
-                    "unique_documents": 2,
-                    "min_query_length": 27,
-                    "average_query_length": 30.0,
-                    "max_query_length": 33,
-                    "unique_queries": 2,
-                    "none_queries": 0,
-                    "min_relevant_docs_per_query": 2,
-                    "average_relevant_docs_per_query": 1.0,
-                    "max_relevant_docs_per_query": 2,
-                    "unique_relevant_docs": 2,
-                    "num_instructions": 2,
-                    "min_instruction_length": 26,
-                    "average_instruction_length": 58,
-                    "max_instruction_length": 32,
-                    "unique_instructions": 2,
-                    "min_top_ranked_per_query": None,
-                    "average_top_ranked_per_query": None,
-                    "max_top_ranked_per_query": None,
-                },
-                "fra": {
-                    "number_of_characters": 112,
-                    "num_samples": 4,
-                    "num_queries": 2,
-                    "num_documents": 2,
-                    "num_relevant_docs": 4,
-                    "min_document_length": 23,
-                    "average_document_length": 26.0,
-                    "max_document_length": 29,
-                    "unique_documents": 2,
-                    "min_query_length": 27,
-                    "average_query_length": 30.0,
-                    "max_query_length": 33,
-                    "unique_queries": 2,
-                    "none_queries": 0,
-                    "min_relevant_docs_per_query": 2,
-                    "average_relevant_docs_per_query": 1.0,
-                    "max_relevant_docs_per_query": 2,
-                    "unique_relevant_docs": 2,
-                    "num_instructions": 2,
-                    "min_instruction_length": 26,
-                    "average_instruction_length": 58,
-                    "max_instruction_length": 32,
-                    "unique_instructions": 2,
-                    "min_top_ranked_per_query": None,
-                    "average_top_ranked_per_query": None,
-                    "max_top_ranked_per_query": None,
-                },
-            },
-        }
-    }
+    expected_stats = {'test': {'num_samples': 8, 'number_of_characters': 224, 'num_documents': 4, 'min_document_length': 27, 'average_document_length': 30.0, 'max_document_length': 33, 'unique_documents': 4, 'num_queries': 4, 'min_query_length': 23, 'average_query_length': 26.0, 'max_query_length': 29, 'unique_queries': 4, 'none_queries': 0, 'num_relevant_docs': 8, 'min_relevant_docs_per_query': 2, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 2, 'unique_relevant_docs': 4, 'num_instructions': 4, 'min_instruction_length': 26, 'average_instruction_length': 116, 'max_instruction_length': 32, 'unique_instructions': 4, 'num_top_ranked': None, 'min_top_ranked_per_query': None, 'average_top_ranked_per_query': None, 'max_top_ranked_per_query': None, 'hf_subset_descriptive_stats': {'eng': {'num_samples': 4, 'number_of_characters': 112, 'num_documents': 2, 'min_document_length': 27, 'average_document_length': 30.0, 'max_document_length': 33, 'unique_documents': 2, 'num_queries': 2, 'min_query_length': 23, 'average_query_length': 26.0, 'max_query_length': 29, 'unique_queries': 2, 'none_queries': 0, 'num_relevant_docs': 4, 'min_relevant_docs_per_query': 2, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 2, 'unique_relevant_docs': 2, 'num_instructions': 2, 'min_instruction_length': 26, 'average_instruction_length': 58, 'max_instruction_length': 32, 'unique_instructions': 2, 'num_top_ranked': None, 'min_top_ranked_per_query': None, 'average_top_ranked_per_query': None, 'max_top_ranked_per_query': None}, 'fra': {'num_samples': 4, 'number_of_characters': 112, 'num_documents': 2, 'min_document_length': 27, 'average_document_length': 30.0, 'max_document_length': 33, 'unique_documents': 2, 'num_queries': 2, 'min_query_length': 23, 'average_query_length': 26.0, 'max_query_length': 29, 'unique_queries': 2, 'none_queries': 0, 'num_relevant_docs': 4, 'min_relevant_docs_per_query': 2, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 2, 'unique_relevant_docs': 2, 'num_instructions': 2, 'min_instruction_length': 26, 'average_instruction_length': 58, 'max_instruction_length': 32, 'unique_instructions': 2, 'num_top_ranked': None, 'min_top_ranked_per_query': None, 'average_top_ranked_per_query': None, 'max_top_ranked_per_query': None}}}}
+
 
     metadata = TaskMetadata(
         type="InstructionRetrieval",
@@ -2004,94 +1639,8 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval, MultilingualTask):
 
 
 class MockMultilingualInstructionReranking(AbsTaskReranking, MultilingualTask):
-    expected_stats = {
-        "test": {
-            "number_of_characters": 224,
-            "num_samples": 8,
-            "num_queries": 4,
-            "num_documents": 4,
-            "num_relevant_docs": 8,
-            "min_document_length": 23,
-            "average_document_length": 26.0,
-            "max_document_length": 29,
-            "unique_documents": 4,
-            "min_query_length": 27,
-            "average_query_length": 30.0,
-            "max_query_length": 33,
-            "unique_queries": 4,
-            "none_queries": 0,
-            "min_relevant_docs_per_query": 2,
-            "average_relevant_docs_per_query": 1.0,
-            "max_relevant_docs_per_query": 2,
-            "unique_relevant_docs": 4,
-            "num_instructions": 4,
-            "min_instruction_length": 26,
-            "average_instruction_length": 116,
-            "max_instruction_length": 32,
-            "unique_instructions": 4,
-            "min_top_ranked_per_query": 2,
-            "average_top_ranked_per_query": 2.0,
-            "max_top_ranked_per_query": 2,
-            "hf_subset_descriptive_stats": {
-                "eng": {
-                    "number_of_characters": 112,
-                    "num_samples": 4,
-                    "num_queries": 2,
-                    "num_documents": 2,
-                    "num_relevant_docs": 4,
-                    "min_document_length": 23,
-                    "average_document_length": 26.0,
-                    "max_document_length": 29,
-                    "unique_documents": 2,
-                    "min_query_length": 27,
-                    "average_query_length": 30.0,
-                    "max_query_length": 33,
-                    "unique_queries": 2,
-                    "none_queries": 0,
-                    "min_relevant_docs_per_query": 2,
-                    "average_relevant_docs_per_query": 1.0,
-                    "max_relevant_docs_per_query": 2,
-                    "unique_relevant_docs": 2,
-                    "num_instructions": 2,
-                    "min_instruction_length": 26,
-                    "average_instruction_length": 58,
-                    "max_instruction_length": 32,
-                    "unique_instructions": 2,
-                    "min_top_ranked_per_query": 2,
-                    "average_top_ranked_per_query": 2.0,
-                    "max_top_ranked_per_query": 2,
-                },
-                "fra": {
-                    "number_of_characters": 112,
-                    "num_samples": 4,
-                    "num_queries": 2,
-                    "num_documents": 2,
-                    "num_relevant_docs": 4,
-                    "min_document_length": 23,
-                    "average_document_length": 26.0,
-                    "max_document_length": 29,
-                    "unique_documents": 2,
-                    "min_query_length": 27,
-                    "average_query_length": 30.0,
-                    "max_query_length": 33,
-                    "unique_queries": 2,
-                    "none_queries": 0,
-                    "min_relevant_docs_per_query": 2,
-                    "average_relevant_docs_per_query": 1.0,
-                    "max_relevant_docs_per_query": 2,
-                    "unique_relevant_docs": 2,
-                    "num_instructions": 2,
-                    "min_instruction_length": 26,
-                    "average_instruction_length": 58,
-                    "max_instruction_length": 32,
-                    "unique_instructions": 2,
-                    "min_top_ranked_per_query": 2,
-                    "average_top_ranked_per_query": 2.0,
-                    "max_top_ranked_per_query": 2,
-                },
-            },
-        }
-    }
+    expected_stats = {'test': {'num_samples': 8, 'number_of_characters': 224, 'num_documents': 4, 'min_document_length': 27, 'average_document_length': 30.0, 'max_document_length': 33, 'unique_documents': 4, 'num_queries': 4, 'min_query_length': 23, 'average_query_length': 26.0, 'max_query_length': 29, 'unique_queries': 4, 'none_queries': 0, 'num_relevant_docs': 8, 'min_relevant_docs_per_query': 2, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 2, 'unique_relevant_docs': 4, 'num_instructions': 4, 'min_instruction_length': 26, 'average_instruction_length': 116, 'max_instruction_length': 32, 'unique_instructions': 4, 'num_top_ranked': 4, 'min_top_ranked_per_query': 2, 'average_top_ranked_per_query': 2.0, 'max_top_ranked_per_query': 2, 'hf_subset_descriptive_stats': {'eng': {'num_samples': 4, 'number_of_characters': 112, 'num_documents': 2, 'min_document_length': 27, 'average_document_length': 30.0, 'max_document_length': 33, 'unique_documents': 2, 'num_queries': 2, 'min_query_length': 23, 'average_query_length': 26.0, 'max_query_length': 29, 'unique_queries': 2, 'none_queries': 0, 'num_relevant_docs': 4, 'min_relevant_docs_per_query': 2, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 2, 'unique_relevant_docs': 2, 'num_instructions': 2, 'min_instruction_length': 26, 'average_instruction_length': 58, 'max_instruction_length': 32, 'unique_instructions': 2, 'num_top_ranked': 2, 'min_top_ranked_per_query': 2, 'average_top_ranked_per_query': 2.0, 'max_top_ranked_per_query': 2}, 'fra': {'num_samples': 4, 'number_of_characters': 112, 'num_documents': 2, 'min_document_length': 27, 'average_document_length': 30.0, 'max_document_length': 33, 'unique_documents': 2, 'num_queries': 2, 'min_query_length': 23, 'average_query_length': 26.0, 'max_query_length': 29, 'unique_queries': 2, 'none_queries': 0, 'num_relevant_docs': 4, 'min_relevant_docs_per_query': 2, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 2, 'unique_relevant_docs': 2, 'num_instructions': 2, 'min_instruction_length': 26, 'average_instruction_length': 58, 'max_instruction_length': 32, 'unique_instructions': 2, 'num_top_ranked': 2, 'min_top_ranked_per_query': 2, 'average_top_ranked_per_query': 2.0, 'max_top_ranked_per_query': 2}}}}
+
 
     metadata = TaskMetadata(
         type="InstructionReranking",
