@@ -516,9 +516,7 @@ class AbsTaskRetrieval(AbsTask):
         )
 
 
-def calculate_queries_length(
-    queries: dict[str, str]
-) -> list[int] | None:
+def calculate_queries_length(queries: dict[str, str]) -> list[int] | None:
     queries_lens = []
     for query in queries.values():
         if query is None or len(query) == 0:
