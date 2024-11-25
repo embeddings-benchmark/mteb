@@ -545,3 +545,4 @@ def test_empty_descriptive_stat_in_new_datasets(task: AbsTask):
         assert (
             task.metadata.descriptive_stats is not None
         ), f"Dataset {task.metadata.name} should have descriptive stats. You can add metadata to your task by running `YorTask().calculate_metadata_metrics()`"
+        assert task.metadata.n_samples is not None

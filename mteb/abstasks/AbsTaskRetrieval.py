@@ -421,7 +421,7 @@ class AbsTaskRetrieval(AbsTask):
                 if self.top_ranked is not None:
                     top_ranked.update(process_docs(self.top_ranked, hf_subset, split))
         else:
-            if "default" in self.queries:
+            if "default" in self.queries and split != "default":
                 return self._calculate_metrics_from_split(
                     split=split, hf_subset="default"
                 )
