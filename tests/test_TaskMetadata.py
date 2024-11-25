@@ -531,10 +531,6 @@ def test_empty_descriptive_stat_in_new_datasets(task: AbsTask):
     # DON'T ADD NEW DATASETS TO THIS LIST
     # THIS IS ONLY INTENDED FOR HISTORIC DATASETS
     exceptions = [
-        "MSMARCOv2",
-        "NeuCLIR2022Retrieval",
-        "NeuCLIR2023Retrieval",
-        "FloresBitextMining",
         "FilipinoHateSpeechClassification",
     ]
 
