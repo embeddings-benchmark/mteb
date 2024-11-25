@@ -359,10 +359,10 @@ class MTEB:
 
         if verbosity == 0:
             datasets.logging.set_verbosity(logging.CRITICAL)  # 40
-            # datasets.logging.disable_progress_bar()  # Disable progress bar
+            datasets.logging.disable_progress_bar()  # Disable progress bar
         elif verbosity == 1:
             datasets.logging.set_verbosity(logging.WARNING)
-            # datasets.logging.disable_progress_bar()  # Disable progress bar
+            datasets.logging.disable_progress_bar()  # Disable progress bar
         elif verbosity == 2:
             datasets.logging.set_verbosity(logging.INFO)
         elif verbosity == 3:
