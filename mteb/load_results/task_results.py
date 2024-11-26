@@ -156,9 +156,9 @@ class TaskResult(BaseModel):
 
     dataset_revision: str
     task_name: str
-    mteb_version: str
+    mteb_version: str | None
     scores: dict[Split, list[ScoresDict]]
-    evaluation_time: float
+    evaluation_time: float | None
     kg_co2_emissions: float | None = None
 
     @classmethod
@@ -289,6 +289,9 @@ class TaskResult(BaseModel):
                 raise ValueError(
                     f"Error loading TaskResult from disk. You can try to load historic data by setting `load_historic_data=True`. Error: {e}"
                 )
+
+        if data["mteb_version"] is None:
+            data.pop("mteb_version")
 
         pre_1_11_load = (
             (
@@ -466,6 +469,10 @@ class TaskResult(BaseModel):
 
             return aggregation(values)
 
+    @classmethod
+    def from_validated(cls, **data) -> TaskResult:
+        return cls.model_construct(**data)
+
     def __repr__(self) -> str:
         return f"TaskResult(task_name={self.task_name}, scores=...)"
 
@@ -510,5 +517,5 @@ class TaskResult(BaseModel):
         if seen_splits != set(splits):
             raise ValueError(f"Missing splits {set(splits) - seen_splits}")
         new_res = {**self.to_dict(), "scores": new_scores}
-        new_res = TaskResult.from_dict(new_res)
+        new_res = TaskResult.from_validated(**new_res)
         return new_res

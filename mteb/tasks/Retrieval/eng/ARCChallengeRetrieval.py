@@ -41,16 +41,5 @@ class ARCChallenge(AbsTaskRetrieval):
   year={2018}
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 1172},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 30.94235294117647,
-                    "average_query_length": 131.56569965870307,
-                    "num_documents": 9350,
-                    "num_queries": 1172,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
+        prompt={"query": "Retrieve the answer to the question."},
     )

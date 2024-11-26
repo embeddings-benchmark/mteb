@@ -8,10 +8,6 @@ import numpy as np
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import (
-    get_prompt_name,
-    validate_task_to_prompt_name,
-)
 from mteb.requires_package import requires_package
 
 from .wrapper import Wrapper
@@ -86,7 +82,7 @@ class VoyageWrapper(Wrapper):
         self._model_name = model_name
         self._max_tpm = max_tpm
         self.model_prompts = (
-            validate_task_to_prompt_name(model_prompts) if model_prompts else None
+            self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
         )
 
     def encode(
@@ -99,7 +95,8 @@ class VoyageWrapper(Wrapper):
         **kwargs: Any,
     ) -> np.ndarray:
         input_type = (
-            get_prompt_name(self.model_prompts, task_name, prompt_type) or "document"
+            self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+            or "document"
         )
         return self._batched_encode(sentences, batch_size, input_type)
 
@@ -162,7 +159,7 @@ voyage_large_2_instruct = ModelMeta(
     reference="https://blog.voyageai.com/2024/05/05/voyage-large-2-instruct-instruction-tuned-and-rank-1-on-mteb/",
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instuctions=True,
+    use_instructions=True,
 )
 
 voyage_finance_2 = ModelMeta(
@@ -184,7 +181,7 @@ voyage_finance_2 = ModelMeta(
     reference="https://blog.voyageai.com/2024/06/03/domain-specific-embeddings-finance-edition-voyage-finance-2/",
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instuctions=False,
+    use_instructions=False,
 )
 
 voyage_law_2 = ModelMeta(
@@ -206,7 +203,7 @@ voyage_law_2 = ModelMeta(
     reference="https://blog.voyageai.com/2024/04/15/domain-specific-embeddings-and-retrieval-legal-edition-voyage-law-2/",
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instuctions=False,
+    use_instructions=False,
 )
 
 voyage_code_2 = ModelMeta(
@@ -228,7 +225,7 @@ voyage_code_2 = ModelMeta(
     reference="https://blog.voyageai.com/2024/01/23/voyage-code-2-elevate-your-code-retrieval/",
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instuctions=False,
+    use_instructions=False,
 )
 
 voyage_large_2 = ModelMeta(
@@ -250,7 +247,7 @@ voyage_large_2 = ModelMeta(
     reference="https://blog.voyageai.com/2023/10/29/voyage-embeddings/",
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instuctions=False,
+    use_instructions=False,
 )
 
 voyage_2 = ModelMeta(
@@ -272,7 +269,7 @@ voyage_2 = ModelMeta(
     reference="https://blog.voyageai.com/2023/10/29/voyage-embeddings/",
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instuctions=False,
+    use_instructions=False,
 )
 voyage_multilingual_2 = ModelMeta(
     name="voyage-multilingual-2",
@@ -293,5 +290,5 @@ voyage_multilingual_2 = ModelMeta(
     reference="https://blog.voyageai.com/2024/06/10/voyage-multilingual-2-multilingual-embedding-model/",
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instuctions=False,
+    use_instructions=False,
 )

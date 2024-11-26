@@ -44,10 +44,6 @@ class CyrillicTurkicLangClassification(AbsTaskClassification):
         year={2012}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 2048},
-            "avg_character_length": {"test": 92.22},
-        },
     )
 
     def dataset_transform(self):

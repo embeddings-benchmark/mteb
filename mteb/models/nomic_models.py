@@ -10,10 +10,6 @@ from sentence_transformers import SentenceTransformer
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import (
-    get_prompt_name,
-    validate_task_to_prompt_name,
-)
 
 from .wrapper import Wrapper
 
@@ -33,7 +29,7 @@ class NomicWrapper(Wrapper):
         self.model_name = model_name
         self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
         self.model_prompts = (
-            validate_task_to_prompt_name(model_prompts) if model_prompts else None
+            self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
         )
 
     def to(self, device: torch.device) -> None:
@@ -48,7 +44,7 @@ class NomicWrapper(Wrapper):
         batch_size: int = 32,
         **kwargs: Any,
     ):
-        input_type = get_prompt_name(self.model_prompts, task_name, prompt_type)
+        input_type = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
 
         # default to search_document if input_type and prompt_name are not provided
         if input_type is None:
@@ -78,6 +74,17 @@ model_prompts = {
     PromptType.passage.value: "search_document: ",
 }
 
+NOMIC_CITATION = """
+@misc{nussbaum2024nomic,
+      title={Nomic Embed: Training a Reproducible Long Context Text Embedder}, 
+      author={Zach Nussbaum and John X. Morris and Brandon Duderstadt and Andriy Mulyar},
+      year={2024},
+      eprint={2402.01613},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+"""
+
 nomic_embed_v1_5 = ModelMeta(
     loader=partial(  # type: ignore
         NomicWrapper,
@@ -91,6 +98,7 @@ nomic_embed_v1_5 = ModelMeta(
     open_weights=True,
     revision="b0753ae76394dd36bcfb912a46018088bca48be0",
     release_date="2024-02-10",  # first commit
+    citation=NOMIC_CITATION,
 )
 
 nomic_embed_v1 = ModelMeta(
@@ -114,5 +122,6 @@ nomic_embed_v1 = ModelMeta(
     reference="https://huggingface.co/nomic-ai/nomic-embed-text-v1",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
+    citation=NOMIC_CITATION,
 )

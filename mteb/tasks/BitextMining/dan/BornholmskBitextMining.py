@@ -29,26 +29,19 @@ class BornholmBitextMining(AbsTaskBitextMining):
         sample_creation="created",
         bibtex_citation="""
 @inproceedings{derczynskiBornholmskNaturalLanguage2019,
-	title = {Bornholmsk natural language processing: Resources and tools},
-	url = {https://pure.itu.dk/ws/files/84551091/W19_6138.pdf},
-	shorttitle = {Bornholmsk natural language processing},
-	pages = {338--344},
-	booktitle = {Proceedings of the Nordic Conference of Computational Linguistics (2019)},
-	publisher = {Linköping University Electronic Press},
-	author = {Derczynski, Leon and Kjeldsen, Alex Speed},
-	urldate = {2024-04-24},
-	date = {2019},
-	file = {Available Version (via Google Scholar):/Users/au554730/Zotero/storage/FBQ73ZYN/Derczynski and Kjeldsen - 2019 - Bornholmsk natural language processing Resources .pdf:application/pdf},
+    title = {Bornholmsk natural language processing: Resources and tools},
+    url = {https://pure.itu.dk/ws/files/84551091/W19_6138.pdf},
+    shorttitle = {Bornholmsk natural language processing},
+    pages = {338--344},
+    booktitle = {Proceedings of the Nordic Conference of Computational Linguistics (2019)},
+    publisher = {Linköping University Electronic Press},
+    author = {Derczynski, Leon and Kjeldsen, Alex Speed},
+    urldate = {2024-04-24},
+    date = {2019},
+    file = {Available Version (via Google Scholar):/Users/au554730/Zotero/storage/FBQ73ZYN/Derczynski and Kjeldsen - 2019 - Bornholmsk natural language processing Resources .pdf:application/pdf},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 500},
-            "test": {
-                "average_sentence1_length": 49.834,
-                "average_sentence2_length": 38.888,
-                "num_samples": 500,
-            },
-        },
+        prompt="Retrieve parallel sentences.",
     )
 
     def dataset_transform(self):

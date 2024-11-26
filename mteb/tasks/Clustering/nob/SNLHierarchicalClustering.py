@@ -42,10 +42,7 @@ class SNLHierarchicalClusteringP2P(AbsTaskClusteringFast):
   year={2023},
   school={Norwegian University of Life Sciences, {\AA}s}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 1300},
-            "avg_character_length": {"test": 1986.9453846153847},
-        },
+        prompt="Identify categories in a Norwegian lexicon",
     )
     max_depth = 5
 
@@ -87,10 +84,7 @@ class SNLHierarchicalClusteringS2S(AbsTaskClusteringFast):
   year={2023},
   school={Norwegian University of Life Sciences, {\AA}s}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 1300},
-            "avg_character_length": {"test": 242.22384615384615},
-        },
+        prompt="Identify categories in a Norwegian lexicon",
     )
     max_depth = 5
 

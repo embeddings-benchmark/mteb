@@ -49,10 +49,7 @@ class StackExchangeClusteringP2PFast(AbsTaskClusteringFast):
         archivePrefix = {arXiv},
         eprint    = {2104.07081}
         }""",
-        descriptive_stats={
-            "n_samples": {"test": 2996},
-            "avg_character_length": {"test": 1090.7},
-        },
+        prompt="Identify the topic or theme of StackExchange posts based on the given paragraphs",
     )
 
     def dataset_transform(self):
@@ -114,8 +111,5 @@ class StackExchangeClusteringP2P(AbsTaskClustering):
         archivePrefix = {arXiv},
         eprint    = {2104.07081}
         }""",
-        descriptive_stats={
-            "n_samples": {"test": 75000},
-            "avg_character_length": {"test": 1090.7},
-        },
+        prompt="Identify the topic or theme of StackExchange posts based on the given paragraphs",
     )

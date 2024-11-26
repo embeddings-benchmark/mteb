@@ -4,6 +4,7 @@ import logging
 
 import pytest
 
+from mteb import AbsTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.overview import get_tasks
 
@@ -203,7 +204,6 @@ def test_given_dataset_config_then_it_is_valid():
         dialect=None,
         sample_creation=None,
         bibtex_citation="",
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
     assert my_task.dataset["path"] == "test/dataset"
     assert my_task.dataset["revision"] == "1.0"
@@ -229,7 +229,6 @@ def test_given_missing_dataset_path_then_it_throws():
             dialect=None,
             sample_creation=None,
             bibtex_citation="",
-            descriptive_stats={"n_samples": None, "avg_character_length": None},
         )
 
 
@@ -256,7 +255,6 @@ def test_given_missing_revision_path_then_it_throws():
             dialect=None,
             sample_creation=None,
             bibtex_citation="",
-            descriptive_stats={"n_samples": None, "avg_character_length": None},
         )
 
 
@@ -281,7 +279,6 @@ def test_given_none_revision_path_then_it_logs_warning(caplog):
             dialect=None,
             sample_creation=None,
             bibtex_citation="",
-            descriptive_stats={"n_samples": None, "avg_character_length": None},
         )
 
         assert my_task.dataset["revision"] is None
@@ -321,7 +318,6 @@ def test_unfilled_metadata_is_not_filled():
             dialect=None,
             sample_creation=None,
             bibtex_citation="",
-            descriptive_stats={"n_samples": None, "avg_character_length": None},
         ).is_filled()
         is False
     )
@@ -351,10 +347,6 @@ def test_filled_metadata_is_filled():
             dialect=[],
             sample_creation="found",
             bibtex_citation="Someone et al",
-            descriptive_stats={
-                "n_samples": {"train": 1},
-                "avg_character_length": {"train": 1},
-            },
         ).is_filled()
         is True
     )
@@ -389,10 +381,10 @@ def test_disallow_trust_remote_code_in_new_datasets():
         "DiaBlaBitextMining",
         "FloresBitextMining",
         "IN22ConvBitextMining",
+        "NTREXBitextMining",
         "IN22GenBitextMining",
         "IndicGenBenchFloresBitextMining",
         "IWSLT2017BitextMining",
-        "NTREXBitextMining",
         "SRNCorpusBitextMining",
         "VieMedEVBitextMining",
         "HotelReviewSentimentClassification",
@@ -532,3 +524,28 @@ def test_disallow_trust_remote_code_in_new_datasets():
             assert (
                 task.metadata.name not in exceptions
             ), f"Dataset {task.metadata.name} should not trust remote code"
+
+
+@pytest.mark.parametrize("task", get_tasks())
+def test_empty_descriptive_stat_in_new_datasets(task: AbsTask):
+    # DON'T ADD NEW DATASETS TO THIS LIST
+    # THIS IS ONLY INTENDED FOR HISTORIC DATASETS
+    exceptions = [
+        "MSMARCOv2",
+        "NeuCLIR2022Retrieval",
+        "NeuCLIR2023Retrieval",
+        "FloresBitextMining",
+        "FilipinoHateSpeechClassification",
+    ]
+
+    if task.metadata.name.startswith("Mock"):
+        return
+
+    if task.metadata.name in exceptions:
+        assert (
+            task.metadata.descriptive_stats is None
+        ), f"Dataset {task.metadata.name} should not have descriptive stats"
+    else:
+        assert (
+            task.metadata.descriptive_stats is not None
+        ), f"Dataset {task.metadata.name} should have descriptive stats. You can add metadata to your task by running `YorTask().calculate_metadata_metrics()`"

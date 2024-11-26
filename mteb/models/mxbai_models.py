@@ -26,5 +26,20 @@ mxbai_embed_large_v1 = ModelMeta(
     reference="https://huggingface.co/mixedbread-ai/mxbai-embed-large-v1",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
+    citation="""
+    @online{emb2024mxbai,
+      title={Open Source Strikes Bread - New Fluffy Embeddings Model},
+      author={Sean Lee and Aamir Shakir and Darius Koenig and Julius Lipp},
+      year={2024},
+      url={https://www.mixedbread.ai/blog/mxbai-embed-large-v1},
+    }
+    
+    @article{li2023angle,
+      title={AnglE-optimized Text Embeddings},
+      author={Li, Xianming and Li, Jing},
+      journal={arXiv preprint arXiv:2309.12871},
+      year={2023}
+    }
+    """,
 )

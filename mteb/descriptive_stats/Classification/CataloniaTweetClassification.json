@@ -1,0 +1,197 @@
+{
+    "validation": {
+        "num_samples": 4025,
+        "number_of_characters": 814740,
+        "number_texts_intersect_with_train": 5,
+        "min_text_length": 17,
+        "average_text_length": 202.4198757763975,
+        "max_text_length": 956,
+        "unique_text": 4025,
+        "unique_labels": 3,
+        "labels": {
+            "1": {
+                "count": 1545
+            },
+            "0": {
+                "count": 1676
+            },
+            "2": {
+                "count": 804
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "spanish": {
+                "num_samples": 2015,
+                "number_of_characters": 424553,
+                "number_texts_intersect_with_train": 5,
+                "min_text_length": 17,
+                "average_text_length": 210.69627791563275,
+                "max_text_length": 956,
+                "unique_text": 2015,
+                "unique_labels": 3,
+                "labels": {
+                    "1": {
+                        "count": 782
+                    },
+                    "0": {
+                        "count": 856
+                    },
+                    "2": {
+                        "count": 377
+                    }
+                }
+            },
+            "catalan": {
+                "num_samples": 2010,
+                "number_of_characters": 390187,
+                "number_texts_intersect_with_train": 0,
+                "min_text_length": 26,
+                "average_text_length": 194.1228855721393,
+                "max_text_length": 753,
+                "unique_text": 2010,
+                "unique_labels": 3,
+                "labels": {
+                    "1": {
+                        "count": 763
+                    },
+                    "2": {
+                        "count": 427
+                    },
+                    "0": {
+                        "count": 820
+                    }
+                }
+            }
+        }
+    },
+    "test": {
+        "num_samples": 4026,
+        "number_of_characters": 807122,
+        "number_texts_intersect_with_train": 4,
+        "min_text_length": 21,
+        "average_text_length": 200.47739692001988,
+        "max_text_length": 911,
+        "unique_text": 4026,
+        "unique_labels": 3,
+        "labels": {
+            "0": {
+                "count": 1581
+            },
+            "1": {
+                "count": 1611
+            },
+            "2": {
+                "count": 834
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "spanish": {
+                "num_samples": 2016,
+                "number_of_characters": 421522,
+                "number_texts_intersect_with_train": 1,
+                "min_text_length": 21,
+                "average_text_length": 209.08829365079364,
+                "max_text_length": 911,
+                "unique_text": 2016,
+                "unique_labels": 3,
+                "labels": {
+                    "0": {
+                        "count": 829
+                    },
+                    "1": {
+                        "count": 807
+                    },
+                    "2": {
+                        "count": 380
+                    }
+                }
+            },
+            "catalan": {
+                "num_samples": 2010,
+                "number_of_characters": 385600,
+                "number_texts_intersect_with_train": 0,
+                "min_text_length": 26,
+                "average_text_length": 191.8407960199005,
+                "max_text_length": 781,
+                "unique_text": 2010,
+                "unique_labels": 3,
+                "labels": {
+                    "1": {
+                        "count": 804
+                    },
+                    "2": {
+                        "count": 454
+                    },
+                    "0": {
+                        "count": 752
+                    }
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 12074,
+        "number_of_characters": 2421991,
+        "number_texts_intersect_with_train": null,
+        "min_text_length": 16,
+        "average_text_length": 200.59557727348022,
+        "max_text_length": 938,
+        "unique_text": 12070,
+        "unique_labels": 3,
+        "labels": {
+            "0": {
+                "count": 4836
+            },
+            "2": {
+                "count": 2388
+            },
+            "1": {
+                "count": 4850
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "spanish": {
+                "num_samples": 6046,
+                "number_of_characters": 1266286,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 16,
+                "average_text_length": 209.44194508766125,
+                "max_text_length": 938,
+                "unique_text": 6043,
+                "unique_labels": 3,
+                "labels": {
+                    "0": {
+                        "count": 2420
+                    },
+                    "2": {
+                        "count": 1111
+                    },
+                    "1": {
+                        "count": 2515
+                    }
+                }
+            },
+            "catalan": {
+                "num_samples": 6028,
+                "number_of_characters": 1155705,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 30,
+                "average_text_length": 191.72279362972793,
+                "max_text_length": 828,
+                "unique_text": 6028,
+                "unique_labels": 3,
+                "labels": {
+                    "0": {
+                        "count": 2416
+                    },
+                    "1": {
+                        "count": 2335
+                    },
+                    "2": {
+                        "count": 1277
+                    }
+                }
+            }
+        }
+    }
+}

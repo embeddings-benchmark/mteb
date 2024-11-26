@@ -41,16 +41,7 @@ class SIQA(AbsTaskRetrieval):
   year={2019}
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 0},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 22.967085695044617,
-                    "average_query_length": 127.75383828045035,
-                    "num_documents": 71276,
-                    "num_queries": 1954,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
+        prompt={
+            "query": "Given the following context and question, retrieve the correct answer."
         },
     )

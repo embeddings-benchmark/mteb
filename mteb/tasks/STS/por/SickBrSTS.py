@@ -50,10 +50,6 @@ class SickBrSTS(AbsTaskSTS):
   isbn="978-3-319-99722-3"
 }
         """,
-        descriptive_stats={
-            "n_samples": {"test": N_SAMPLES},
-            "avg_character_length": {"test": 54.89},
-        },
     )
 
     @property
@@ -68,7 +64,7 @@ class SickBrSTS(AbsTaskSTS):
             self.dataset.update(
                 {
                     split: self.dataset[split].train_test_split(
-                        test_size=N_SAMPLES, seed=self.seed, label="entailment_label"
+                        test_size=N_SAMPLES, seed=self.seed
                     )["test"]
                 }
             )

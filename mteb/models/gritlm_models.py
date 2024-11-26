@@ -1,17 +1,11 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Sequence
 from functools import partial
-from typing import Any
-
-import numpy as np
 
 from mteb.model_meta import ModelMeta
 
-from ..encoder_interface import PromptType
-from .instructions import task_to_instruction
-from .wrapper import Wrapper
+from .instruct_wrapper import instruct_wrapper
 
 logger = logging.getLogger(__name__)
 
@@ -22,38 +16,23 @@ def gritlm_instruction(instruction: str = "") -> str:
     )
 
 
-def gritlm_loader(**kwargs):
-    try:
-        from gritlm import GritLM
-    except ImportError:
-        raise ImportError("Please install `pip install gritlm` to use GritLM models.")
-
-    class GritLMWrapper(GritLM, Wrapper):
-        def encode(
-            self,
-            sentences: Sequence[str],
-            *args,
-            task_name: str,
-            prompt_type: PromptType | None = None,
-            **kwargs: Any,
-        ) -> np.ndarray:
-            if "instruction" in kwargs:
-                instruction = kwargs.pop("instruction", "")
-            else:
-                instruction = task_to_instruction(
-                    task_name, prompt_type == PromptType.query
-                )
-            if instruction:
-                kwargs["instruction"] = gritlm_instruction(instruction)
-            return super().encode(sentences, *args, **kwargs)
-
-    return GritLMWrapper(**kwargs)
+GRITLM_CITATION = """
+@misc{muennighoff2024generative,
+      title={Generative Representational Instruction Tuning}, 
+      author={Niklas Muennighoff and Hongjin Su and Liang Wang and Nan Yang and Furu Wei and Tao Yu and Amanpreet Singh and Douwe Kiela},
+      year={2024},
+      eprint={2402.09906},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+"""
 
 
 gritlm7b = ModelMeta(
     loader=partial(
-        gritlm_loader,
+        instruct_wrapper,
         model_name_or_path="GritLM/GritLM-7B",
+        instruction_template=gritlm_instruction,
         mode="embedding",
         torch_dtype="auto",
     ),
@@ -70,12 +49,14 @@ gritlm7b = ModelMeta(
     reference="https://huggingface.co/GritLM/GritLM-7B",
     similarity_fn_name="cosine",
     framework=["GritLM", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
+    citation=GRITLM_CITATION,
 )
 gritlm8x7b = ModelMeta(
     loader=partial(
-        gritlm_loader,
+        instruct_wrapper,
         model_name_or_path="GritLM/GritLM-8x7B",
+        instruction_template=gritlm_instruction,
         mode="embedding",
         torch_dtype="auto",
     ),
@@ -92,5 +73,6 @@ gritlm8x7b = ModelMeta(
     reference="https://huggingface.co/GritLM/GritLM-8x7B",
     similarity_fn_name="cosine",
     framework=["GritLM", "PyTorch"],
-    use_instuctions=True,
+    use_instructions=True,
+    citation=GRITLM_CITATION,
 )

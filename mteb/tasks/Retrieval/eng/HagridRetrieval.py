@@ -42,18 +42,6 @@ class HagridRetrieval(AbsTaskRetrieval):
       year={2023},
       journal={arXiv:2307.16883},
 }""",
-        descriptive_stats={
-            "n_samples": {"train": 1922},
-            "avg_character_length": {
-                "dev": {
-                    "average_document_length": 228.36693548387098,
-                    "average_query_length": 40.064516129032256,
-                    "num_documents": 496,
-                    "num_queries": 496,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -65,6 +53,7 @@ class HagridRetrieval(AbsTaskRetrieval):
             "miracl/hagrid",
             split=self.metadata.eval_splits[0],
             revision=self.metadata_dict["dataset"].get("revision", None),
+            trust_remote_code=self.metadata.dataset["trust_remote_code"],
         )
         proc_data = self.preprocess_data(data)
 

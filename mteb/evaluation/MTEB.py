@@ -13,6 +13,7 @@ from time import time
 from typing import Any
 
 import datasets
+from codecarbon import EmissionsTracker
 from sentence_transformers import SentenceTransformer
 
 from mteb.encoder_interface import Encoder
@@ -20,7 +21,7 @@ from mteb.model_meta import ModelMeta
 from mteb.models import model_meta_from_sentence_transformers
 
 from ..abstasks import *
-from ..abstasks import AbsTask
+from ..abstasks import AbsTask, AbsTaskReranking
 from ..load_results.task_results import TaskResult
 from ..models.sentence_transformer_wrapper import SentenceTransformerWrapper
 from ..models.wrapper import Wrapper
@@ -222,13 +223,19 @@ class MTEB:
     def select_tasks(self, **kwargs):
         """Select the tasks to be evaluated."""
         # Get all existing tasks
-        tasks_categories_cls = list(AbsTask.__subclasses__())
-        self.tasks_cls = [
-            cls(hf_subsets=self._task_langs, **kwargs)
-            for cat_cls in tasks_categories_cls
-            for cls in cat_cls.__subclasses__()
-            if cat_cls.__name__.startswith("AbsTask")
-        ]
+        # reranking subclasses retrieval to share methods, but is an abstract task
+        tasks_categories_cls = list(AbsTask.__subclasses__()) + [AbsTaskReranking]
+        all_task_classes = []
+        for cat_cls in tasks_categories_cls:
+            for cls in cat_cls.__subclasses__():
+                if (
+                    cat_cls.__name__.startswith("AbsTask")
+                    and cls.__name__ != "AbsTaskReranking"
+                ):
+                    task = cls(hf_subsets=self._task_langs, **kwargs)
+                    all_task_classes.append(task)
+
+        self.tasks_cls = all_task_classes
 
         # If `task_list` is specified, select list of tasks
         if self._tasks is not None:
@@ -316,7 +323,7 @@ class MTEB:
         eval_splits=None,
         overwrite_results: bool = False,
         raise_error: bool = True,
-        co2_tracker: bool = False,
+        co2_tracker: bool = True,
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ) -> list[TaskResult]:
@@ -325,9 +332,10 @@ class MTEB:
         Args:
             model: Model to be used for evaluation
             verbosity: Verbosity level. Default is 1.
-                0: print tasks tqdm progress bar
-                1: print tasks tqdm progress bar and scores
-                2: print everything (including datasets loading)
+                0: Only shows a progress bar for tasks being processed.
+                1: Shows a progress bar and prints task scores.
+                2: Prints detailed output, including messages about loading datasets and task scores.
+                3: Prints comprehensive logs for debugging, including all data loading and evaluation details.
             output_folder: Folder where the results will be saved. Default to 'results'. Where it will save the results in the format:
                 `{output_folder}/{model_name}/{model_revision}/{task_name}.json`.
             eval_splits: List of splits to evaluate on. If None, the splits are taken from the task metadata.
@@ -347,10 +355,18 @@ class MTEB:
             )
             encode_kwargs["batch_size"] = kwargs["batch_size"]
 
-        # Set logging
-        if verbosity < 2:
-            datasets.logging.set_verbosity(40)
-            datasets.logging.disable_progress_bar()
+        # update logging to account for different levels of Verbosity (similar to the command line)
+
+        if verbosity == 0:
+            datasets.logging.set_verbosity(logging.CRITICAL)  # 40
+            datasets.logging.disable_progress_bar()  # Disable progress bar
+        elif verbosity == 1:
+            datasets.logging.set_verbosity(logging.WARNING)
+            datasets.logging.disable_progress_bar()  # Disable progress bar
+        elif verbosity == 2:
+            datasets.logging.set_verbosity(logging.INFO)
+        elif verbosity == 3:
+            datasets.logging.set_verbosity(logging.DEBUG)
 
         meta = self.create_model_meta(model)
         output_path = self.create_output_folder(meta, output_folder)
@@ -362,7 +378,10 @@ class MTEB:
 
         # Run selected tasks
         logger.info(f"\n\n## Evaluating {len(self.tasks)} tasks:")
-        self.print_selected_tasks()
+
+        if verbosity > 0:
+            self.print_selected_tasks()
+
         evaluation_results = []
         original_tasks = (
             self.tasks.copy()
@@ -400,15 +419,14 @@ class MTEB:
                 kg_co2_emissions: int | None = 0 if co2_tracker else None
                 for split in task_eval_splits:
                     if co2_tracker:
-                        try:
-                            from codecarbon import EmissionsTracker
-                        except ImportError:
-                            raise ImportError(
-                                "To use the CO2 emissions tracker, please install codecarbon using 'pip install codecarbon'"
-                            )
-
+                        logger.warning(
+                            "Evaluating multiple MTEB runs simultaniously will produce incorrect CO₂ results"
+                        )
                         with EmissionsTracker(
-                            save_to_file=False, save_to_api=False, logging_logger=logger
+                            save_to_file=False,
+                            save_to_api=False,
+                            logging_logger=logger,
+                            allow_multiple_runs=True,
                         ) as tracker:
                             results, tick, tock = self._run_eval(
                                 task,

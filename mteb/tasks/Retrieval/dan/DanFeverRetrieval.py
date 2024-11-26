@@ -44,17 +44,8 @@ class DanFeverRetrieval(AbsTaskRetrieval):
     abstract = "We present a dataset, DanFEVER, intended for multilingual misinformation research. The dataset is in Danish and has the same format as the well-known English FEVER dataset. It can be used for testing methods in multilingual settings, as well as for creating models in production for the Danish language.",
 }
 """,
-        descriptive_stats={
-            "n_samples": {"train": 8897},
-            "avg_character_length": {
-                "train": {
-                    "average_document_length": 312.1117274167987,
-                    "average_query_length": 50.26957476855484,
-                    "num_documents": 2524,
-                    "num_queries": 6373,
-                    "average_relevant_docs_per_query": 0.48721167425074535,
-                }
-            },
+        prompt={
+            "query": "Given a claim in Danish, retrieve documents that support the claim"
         },
         task_subtypes=["Claim verification"],
     )
@@ -156,17 +147,8 @@ class DanFever(AbsTaskRetrieval):
     abstract = "We present a dataset, DanFEVER, intended for multilingual misinformation research. The dataset is in Danish and has the same format as the well-known English FEVER dataset. It can be used for testing methods in multilingual settings, as well as for creating models in production for the Danish language.",
 }
 """,
-        descriptive_stats={
-            "n_samples": {"train": 8897},
-            "avg_character_length": {
-                "train": {
-                    "average_document_length": 312.1117274167987,
-                    "average_query_length": 50.26957476855484,
-                    "num_documents": 2524,
-                    "num_queries": 6373,
-                    "average_relevant_docs_per_query": 0.48721167425074535,
-                }
-            },
+        prompt={
+            "query": "Given a claim in Danish, retrieve documents that support the claim"
         },
         task_subtypes=["Claim verification"],
     )
