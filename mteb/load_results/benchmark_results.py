@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import warnings
 from collections import defaultdict
 from collections.abc import Iterable
 from pathlib import Path
@@ -10,7 +11,8 @@ import numpy as np
 from pydantic import BaseModel, ConfigDict
 
 from mteb.abstasks.AbsTask import AbsTask, ScoresDict
-from mteb.abstasks.TaskMetadata import ISO_LANGUAGE_SCRIPT, TASK_DOMAIN, TASK_TYPE
+from mteb.abstasks.TaskMetadata import (ISO_LANGUAGE_SCRIPT, TASK_DOMAIN,
+                                        TASK_TYPE)
 from mteb.languages import ISO_LANGUAGE
 from mteb.load_results.task_results import TaskResult
 from mteb.models.overview import get_model_metas
@@ -225,33 +227,43 @@ class BenchmarkResults(BaseModel):
         entries = []
         if format == "wide":
             for model_res in self:
-                model_scores = model_res.get_scores(
-                    splits=splits,
-                    languages=languages,
-                    scripts=scripts,
-                    getter=getter,
-                    aggregation=aggregation,
-                    format="wide",
-                )
-                entries.append(
-                    {
-                        "model": model_res.model_name,
-                        "revision": model_res.model_revision,
-                        **model_scores,
-                    }
-                )
-        if format == "long":
-            for model_res in self:
-                entries.extend(
-                    model_res.get_scores(
+                try:
+                    model_scores = model_res.get_scores(
                         splits=splits,
                         languages=languages,
                         scripts=scripts,
                         getter=getter,
                         aggregation=aggregation,
-                        format="long",
+                        format="wide",
                     )
-                )
+                    entries.append(
+                        {
+                            "model": model_res.model_name,
+                            "revision": model_res.model_revision,
+                            **model_scores,
+                        }
+                    )
+                except Exception as e:
+                    warnings.warn(
+                        f"Couldn't get scores for {model_res.model_name}({model_res.model_revision}), due to: {e}"
+                    )
+        if format == "long":
+            for model_res in self:
+                try:
+                    entries.extend(
+                        model_res.get_scores(
+                            splits=splits,
+                            languages=languages,
+                            scripts=scripts,
+                            getter=getter,
+                            aggregation=aggregation,
+                            format="long",
+                        )
+                    )
+                except Exception as e:
+                    warnings.warn(
+                        f"Couldn't get scores for {model_res.model_name}({model_res.model_revision}), due to: {e}"
+                    )
         return entries
 
     def __iter__(self):
