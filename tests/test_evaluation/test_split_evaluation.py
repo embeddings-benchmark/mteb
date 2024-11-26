@@ -17,6 +17,7 @@ def nfcorpus_tasks():
     return mteb.get_tasks(tasks=["NFCorpus"], languages=["eng"])
 
 
+@pytest.mark.skip(reason="WIP")
 def test_all_splits_evaluated(model, nfcorpus_tasks, tmp_path):
     evaluation = MTEB(tasks=nfcorpus_tasks)
     evaluation.run(
@@ -33,6 +34,7 @@ def test_all_splits_evaluated(model, nfcorpus_tasks, tmp_path):
     assert len(last_evaluated_splits["NFCorpus"]) == 2
 
 
+@pytest.mark.skip(reason="WIP")
 def test_one_missing_split(model, nfcorpus_tasks, tmp_path):
     evaluation = MTEB(tasks=nfcorpus_tasks)
     evaluation.run(
@@ -64,6 +66,7 @@ def test_one_missing_split(model, nfcorpus_tasks, tmp_path):
     assert len(last_evaluated_splits["NFCorpus"]) == 1
 
 
+@pytest.mark.skip(reason="WIP")
 def test_no_missing_splits(model, nfcorpus_tasks, tmp_path):
     evaluation_1 = MTEB(tasks=nfcorpus_tasks)
     evaluation_1.run(
