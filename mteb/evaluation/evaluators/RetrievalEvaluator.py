@@ -318,7 +318,7 @@ class DenseRetrievalExactSearch:
                 len(queries_in_pair) == len(corpus_in_pair) == len(instructions_in_pair)
             )
 
-            if isinstance(self.model.model, CrossEncoder):
+            if hasattr(self.model, "model") and isinstance(self.model.model, CrossEncoder):
                 # can't take instructions, so add them here
                 queries_in_pair = [
                     f"{q} {i}".strip()
@@ -428,7 +428,7 @@ class DRESModel:
 
 
 def is_cross_encoder_compatible(model) -> bool:
-    op = getattr(model.model, "predict", None)
+    op = getattr(model, "predict", None)
     return callable(op)
 
 
