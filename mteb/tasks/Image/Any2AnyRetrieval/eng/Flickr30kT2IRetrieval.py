@@ -10,8 +10,8 @@ class Flickr30kT2IRetrieval(AbsTaskAny2AnyRetrieval):
         description="Retrieve images based on captions.",
         reference="https://www.semanticscholar.org/paper/From-image-descriptions-to-visual-denotations%3A-New-Young-Lai/44040913380206991b1991daf1192942e038fe31",
         dataset={
-            "path": "JamieSJS/flickr30k",
-            "revision": "24acb2d0b72e18b03388eb20a6225983c0e3f629",
+            "path": "isaacchung/flickr30kt2i",
+            "revision": "e819702b287bfbe084e129a61f308a802b7c108e",
         },
         type="Any2AnyRetrieval",
         category="t2i",
@@ -40,16 +40,3 @@ class Flickr30kT2IRetrieval(AbsTaskAny2AnyRetrieval):
         },
     )
 
-    def load_data(self, **kwargs):
-        super().load_data(**kwargs)
-        # swap corpus and query
-        for split in kwargs.get("eval_splits", self.metadata_dict["eval_splits"]):
-            self.queries[split], self.corpus[split] = (
-                self.corpus[split],
-                self.queries[split],
-            )
-            self.relevant_docs[split] = {
-                cid: {qid: score}
-                for qid, cid_score in self.relevant_docs[split].items()
-                for cid, score in cid_score.items()
-            }
