@@ -39,4 +39,3 @@ class Flickr30kT2IRetrieval(AbsTaskAny2AnyRetrieval):
             "n_samples": {"default": 31014},  # qrels
         },
     )
-
