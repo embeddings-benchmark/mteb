@@ -26,7 +26,7 @@ from ..load_results.task_results import TaskResult
 from ..models.sentence_transformer_wrapper import SentenceTransformerWrapper
 from ..models.wrapper import Wrapper
 from ..tasks import *
-from . import LangMapping, MTEBResults
+from . import LangMapping
 
 logger = logging.getLogger(__name__)
 
@@ -313,7 +313,7 @@ class MTEB:
 
     @staticmethod
     def _get_missing_splits(
-        existing_results: MTEBResults | None, task_eval_splits: list[str], task: AbsTask
+        existing_results: TaskResult | None, task_eval_splits: list[str], task: AbsTask
     ) -> list[str]:
         if existing_results is None:
             return task_eval_splits
@@ -331,8 +331,8 @@ class MTEB:
 
     @staticmethod
     def _merge_results(
-        existing_results: MTEBResults, new_results: MTEBResults
-    ) -> MTEBResults:
+        existing_results: TaskResult, new_results: TaskResult
+    ) -> TaskResult:
         merged_scores = existing_results.scores.copy()
 
         for split, scores in new_results.scores.items():
@@ -343,7 +343,7 @@ class MTEB:
             else:
                 merged_scores[split] = scores
 
-        merged_results = MTEBResults(
+        merged_results = TaskResult(
             dataset_revision=existing_results.dataset_revision,
             task_name=existing_results.task_name,
             mteb_version=existing_results.mteb_version,
