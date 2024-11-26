@@ -46,12 +46,8 @@ from sentence_transformers import SentenceTransformer
 
 # Define the sentence-transformers model name
 model_name = "average_word_embeddings_komninos"
-# or directly from huggingface:
-# model_name = "sentence-transformers/all-MiniLM-L6-v2"
 
-model = SentenceTransformer(model_name)
-# or directly from mteb:
-model = mteb.get_model(model_name)
+model = mteb.get_model(model_name) # if the model is not implemented in MTEB it will be eq. to SentenceTransformer(model_name)
 tasks = mteb.get_tasks(tasks=["Banking77Classification"])
 evaluation = mteb.MTEB(tasks=tasks)
 results = evaluation.run(model, output_folder=f"results/{model_name}")
@@ -224,11 +220,10 @@ Models should implement the following interface, implementing an `encode` functi
 ```python
 import mteb
 from mteb.encoder_interface import PromptType
-from mteb.models.wrapper import Wrapper
 import numpy as np
 
 
-class CustomModel(Wrapper):
+class CustomModel:
     def encode(
         self,
         sentences: list[str],
