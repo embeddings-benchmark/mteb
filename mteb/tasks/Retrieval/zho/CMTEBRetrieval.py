@@ -236,7 +236,7 @@ class CmedqaRetrieval(AbsTaskRetrieval):
         eval_langs=["cmn-Hans"],
         main_score="ndcg_at_10",
         date=None,
-        domains=None,
+        domains=["Medical", "Written"],
         task_subtypes=None,
         license=None,
         annotations_creators=None,
