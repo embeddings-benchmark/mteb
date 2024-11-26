@@ -268,7 +268,7 @@ class DenseRetrievalExactSearch:
         for qid in queries.keys():
             if self.previous_results is None:
                 # try to use all of them
-                logging.logging(
+                logging.info(
                     f"previous_results is None. Using all the documents to rerank: {len(corpus)}"
                 )
                 q_results = {doc_id: 0.0 for doc_id in corpus.keys()}
