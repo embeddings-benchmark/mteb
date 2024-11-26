@@ -5,7 +5,7 @@ import logging
 import os
 import traceback
 from collections.abc import Iterable
-from copy import copy
+from copy import copy, deepcopy
 from datetime import datetime
 from itertools import chain
 from pathlib import Path
@@ -15,6 +15,7 @@ from typing import Any
 import datasets
 from sentence_transformers import SentenceTransformer
 
+from mteb import MTEBResults
 from mteb.abstasks.AbsTask import ScoresDict
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
@@ -453,7 +454,7 @@ class MTEB:
                     evaluation_results.append(mteb_results)
                     del self.tasks[0]  # empty memory
                     continue
-            try:
+
                 task_eval_splits = (
                     eval_splits if eval_splits is not None else task.eval_splits
                 )
@@ -527,7 +528,7 @@ class MTEB:
                     if verbosity >= 1:
                         logger.info(f"Scores: {results}")
 
-                mteb_task_result = TaskResult.from_task_results(
+                new_results = TaskResult.from_task_results(
                     task,
                     task_results,
                     evaluation_time=evaluation_time,
