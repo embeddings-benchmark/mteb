@@ -1,0 +1,69 @@
+{
+    "train": {
+        "num_samples": 1640,
+        "number_of_characters": 445805,
+        "unique_pairs": 1632,
+        "min_sentence1_length": 3,
+        "average_sentence1_length": 136.3170731707317,
+        "max_sentence1_length": 1698,
+        "unique_sentence1": 405,
+        "min_sentence2_length": 3,
+        "average_sentence2_length": 135.515243902439,
+        "max_sentence2_length": 1728,
+        "unique_sentence2": 1631,
+        "hf_subset_descriptive_stats": {
+            "en-ha": {
+                "num_samples": 410,
+                "number_of_characters": 115348,
+                "unique_pairs": 407,
+                "min_sentence1_length": 3,
+                "average_sentence1_length": 136.3170731707317,
+                "max_sentence1_length": 1698,
+                "unique_sentence1": 405,
+                "min_sentence2_length": 4,
+                "average_sentence2_length": 145.01951219512196,
+                "max_sentence2_length": 1728,
+                "unique_sentence2": 407
+            },
+            "en-ig": {
+                "num_samples": 410,
+                "number_of_characters": 107173,
+                "unique_pairs": 409,
+                "min_sentence1_length": 3,
+                "average_sentence1_length": 136.3170731707317,
+                "max_sentence1_length": 1698,
+                "unique_sentence1": 405,
+                "min_sentence2_length": 5,
+                "average_sentence2_length": 125.08048780487805,
+                "max_sentence2_length": 1137,
+                "unique_sentence2": 408
+            },
+            "en-pcm": {
+                "num_samples": 410,
+                "number_of_characters": 109955,
+                "unique_pairs": 408,
+                "min_sentence1_length": 3,
+                "average_sentence1_length": 136.3170731707317,
+                "max_sentence1_length": 1698,
+                "unique_sentence1": 405,
+                "min_sentence2_length": 3,
+                "average_sentence2_length": 131.8658536585366,
+                "max_sentence2_length": 1552,
+                "unique_sentence2": 408
+            },
+            "en-yo": {
+                "num_samples": 410,
+                "number_of_characters": 113329,
+                "unique_pairs": 409,
+                "min_sentence1_length": 3,
+                "average_sentence1_length": 136.3170731707317,
+                "max_sentence1_length": 1698,
+                "unique_sentence1": 405,
+                "min_sentence2_length": 6,
+                "average_sentence2_length": 140.0951219512195,
+                "max_sentence2_length": 1338,
+                "unique_sentence2": 409
+            }
+        }
+    }
+}

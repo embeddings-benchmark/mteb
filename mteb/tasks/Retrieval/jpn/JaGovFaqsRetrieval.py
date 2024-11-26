@@ -35,18 +35,6 @@ class JaGovFaqsRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-        descriptive_stats={
-            "n_samples": {_EVAL_SPLIT: _MAX_EVAL_SIZE},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 210.02601561814512,
-                    "average_query_length": 59.48193359375,
-                    "num_documents": 22794,
-                    "num_queries": 2048,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):

@@ -27,8 +27,8 @@ def test_available_benchmarks():
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
     assert (
-        "MTEB(eng)" in result.stdout
-    ), "Sample benchmark MTEB(eng) task not found in available bencmarks"
+        "MTEB(eng, classic)" in result.stdout
+    ), "Sample benchmark MTEB(eng, classic) task not found in available benchmarks"
 
 
 run_task_fixures = [
@@ -40,7 +40,7 @@ run_task_fixures = [
     (
         "intfloat/multilingual-e5-small",
         "BornholmBitextMining",
-        "e4ce9877abf3edfe10b0d82785e83bdcb973e22e",
+        "fd1525a9fd15316a2d503bf26ab031a61d056e98",
     ),
 ]
 
@@ -65,6 +65,7 @@ def test_run_task(
         co2_tracker=None,
         overwrite=True,
         eval_splits=None,
+        benchmarks=None,
     )
 
     run(args)

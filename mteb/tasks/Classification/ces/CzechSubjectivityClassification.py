@@ -39,8 +39,4 @@ class CzechSubjectivityClassification(AbsTaskClassification):
     pages = "1381--1391",
 }
 """,
-        descriptive_stats={
-            "n_samples": {"validation": 500, "test": 2000},
-            "avg_character_length": {"validation": 108.2, "test": 108.3},
-        },
     )

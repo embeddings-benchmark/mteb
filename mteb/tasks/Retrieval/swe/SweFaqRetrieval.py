@@ -37,18 +37,7 @@ class SweFaqRetrieval(AbsTaskRetrieval):
   pages={8137--8153},
   year={2023}
 }""",  # for the benchmark in which this dataset is used
-        descriptive_stats={
-            "n_samples": {"test": 1024},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 319.8473581213307,
-                    "average_query_length": 70.51461988304094,
-                    "num_documents": 511,
-                    "num_queries": 513,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
+        prompt={"query": "Retrieve answers given questions in Swedish"},
     )
 
     def load_data(self, **kwargs):
@@ -62,9 +51,9 @@ class SweFaqRetrieval(AbsTaskRetrieval):
     def dataset_transform(self) -> None:
         """And transform to a retrieval datset, which have the following attributes
 
-        self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document datas like title and text
-        self.queries = Dict[query_id, str] #id => query
-        self.relevant_docs = Dict[query_id, Dict[[doc_id, score]]
+        self.corpus = dict[doc_id, dict[str, str]] #id => dict with document datas like title and text
+        self.queries = dict[query_id, str] #id => query
+        self.relevant_docs = dict[query_id, dict[[doc_id, score]]
         """
         self.corpus = {}
         self.relevant_docs = {}

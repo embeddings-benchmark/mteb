@@ -34,18 +34,7 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
   year={2024}
 }
 """,
-        descriptive_stats={
-            "n_samples": {"train": 340},
-            "avg_character_length": {
-                "train": {
-                    "average_document_length": 128.85114503816794,
-                    "average_query_length": 166.3846153846154,
-                    "num_documents": 262,
-                    "num_queries": 78,
-                    "average_relevant_docs_per_query": 3.358974358974359,
-                },
-            },
-        },
+        prompt={"query": "Retrieve answers to questions asked in Danish tweets"},
         task_subtypes=["Question answering"],
     )
 
@@ -60,9 +49,9 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
     def dataset_transform(self) -> None:
         """And transform to a retrieval datset, which have the following attributes
 
-        self.corpus = Dict[doc_id, Dict[str, str]] #id => dict with document datas like title and text
-        self.queries = Dict[query_id, str] #id => query
-        self.relevant_docs = Dict[query_id, Dict[[doc_id, score]]
+        self.corpus = dict[doc_id, dict[str, str]] #id => dict with document datas like title and text
+        self.queries = dict[query_id, str] #id => query
+        self.relevant_docs = dict[query_id, dict[[doc_id, score]]
         """
         self.corpus = {}
         self.relevant_docs = {}

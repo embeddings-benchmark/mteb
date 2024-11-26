@@ -7,13 +7,14 @@ from typing import Any
 import numpy as np
 
 from mteb.model_meta import ModelMeta
-from mteb.models.text_formatting_utils import corpus_to_texts
 from mteb.requires_package import requires_package
+
+from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
 
-class OpenAIWrapper:
+class OpenAIWrapper(Wrapper):
     def __init__(self, model_name: str, embed_dim: int | None = None, **kwargs) -> None:
         requires_package(self, "openai", "Openai text embedding")
         from openai import OpenAI
@@ -50,15 +51,6 @@ class OpenAIWrapper:
 
         return np.array(all_embeddings)
 
-    def encode_queries(self, queries: list[str], **kwargs: Any) -> np.ndarray:
-        return self.encode(queries, **kwargs)
-
-    def encode_corpus(
-        self, corpus: list[dict[str, str]] | dict[str, list[str]], **kwargs: Any
-    ) -> np.ndarray:
-        sentences = corpus_to_texts(corpus)
-        return self.encode(sentences, **kwargs)
-
     def _to_numpy(self, embedding_response) -> np.ndarray:
         return np.array([e.embedding for e in embedding_response.data])
 
@@ -71,7 +63,14 @@ text_embedding_3_small = ModelMeta(
     loader=partial(OpenAIWrapper, model_name="text-embedding-3-small"),
     max_tokens=8191,
     embed_dim=1536,
-    open_source=False,
+    open_weights=False,
+    n_parameters=None,
+    memory_usage=None,
+    license=None,
+    reference="https://openai.com/index/new-embedding-models-and-api-updates/",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=False,
 )
 text_embedding_3_large = ModelMeta(
     name="text-embedding-3-large",
@@ -81,7 +80,11 @@ text_embedding_3_large = ModelMeta(
     loader=partial(OpenAIWrapper, model_name="text-embedding-3-large"),
     max_tokens=8191,
     embed_dim=3072,
-    open_source=False,
+    open_weights=False,
+    framework=["API"],
+    use_instructions=False,
+    n_parameters=None,
+    memory_usage=None,
 )
 text_embedding_ada_002 = ModelMeta(
     name="text-embedding-ada-002",
@@ -91,5 +94,9 @@ text_embedding_ada_002 = ModelMeta(
     loader=partial(OpenAIWrapper, model_name="text-embedding-ada-002"),
     max_tokens=8191,
     embed_dim=1536,
-    open_source=False,
+    open_weights=False,
+    framework=["API"],
+    use_instructions=False,
+    n_parameters=None,
+    memory_usage=None,
 )

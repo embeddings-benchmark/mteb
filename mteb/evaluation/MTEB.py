@@ -4,11 +4,13 @@ import json
 import logging
 import os
 import traceback
-from copy import copy, deepcopy
+from collections.abc import Iterable
+from copy import copy
 from datetime import datetime
+from itertools import chain
 from pathlib import Path
 from time import time
-from typing import Any, Iterable
+from typing import Any
 
 import datasets
 from sentence_transformers import SentenceTransformer
@@ -20,7 +22,9 @@ from mteb.models import model_meta_from_sentence_transformers
 
 from ..abstasks import *
 from ..abstasks import AbsTask
-from ..load_results.mteb_results import MTEBResults
+from ..load_results.task_results import TaskResult
+from ..models.sentence_transformer_wrapper import SentenceTransformerWrapper
+from ..models.wrapper import Wrapper
 from ..tasks import *
 from . import LangMapping
 
@@ -53,12 +57,17 @@ class MTEB:
             err_logs_path: Path to save error logs.
             kwargs: Additional arguments to be passed to the tasks
         """
+        from mteb.benchmarks import Benchmark
+
         self.deprecation_warning(
             task_types, task_categories, task_langs, tasks, version
         )
 
         if tasks is not None:
             self._tasks = tasks
+            if isinstance(tasks[0], Benchmark):
+                self.benchmarks = tasks
+                self._tasks = list(chain.from_iterable(tasks))
             assert (
                 task_types is None and task_categories is None
             ), "Cannot specify both `tasks` and `task_types`/`task_categories`"
@@ -117,7 +126,8 @@ class MTEB:
 
     @property
     def available_task_types(self):
-        return {x.metadata_dict["type"] for x in self.tasks_cls}
+        # sort the task types
+        return sorted({x.metadata_dict["type"] for x in self.tasks_cls})
 
     @property
     def available_task_categories(self):
@@ -151,7 +161,7 @@ class MTEB:
         console = Console()
         if name:
             console.rule(f"[bold]{name}\n", style="grey15")
-        for task_type in self.available_task_types:
+        for task_type in self.available_task_types:  # iterate through sorted task_types
             current_type_tasks = list(
                 filter(lambda x: x.metadata.type == task_type, task_list)
             )
@@ -159,7 +169,9 @@ class MTEB:
                 continue
             else:
                 console.print(f"[bold]{task_type}[/]")
-                for task in current_type_tasks:
+                for (
+                    task
+                ) in current_type_tasks:  # will be sorted as input to this function
                     prefix = "    - "
                     name = f"{task.metadata.name}"
                     category = f", [italic grey39]{task.metadata.category}[/]"
@@ -173,7 +185,30 @@ class MTEB:
 
     def mteb_benchmarks(self):
         """Get all benchmarks available in the MTEB."""
-        for benchmark in self._tasks:
+        from mteb.overview import MTEBTasks
+
+        # get all the MTEB specific benchmarks:
+        sorted_mteb_benchmarks = sorted(
+            self.benchmarks, key=lambda obj: obj.name.lower()
+        )
+
+        mteb_b, remaining_b = [], []
+        for b in sorted_mteb_benchmarks:
+            if "MTEB" in b.name:
+                mteb_b.append(b)
+            else:
+                remaining_b.append(b)
+
+        # place mteb first, then remaining
+        sorted_mteb_benchmarks = mteb_b + remaining_b
+
+        # task ordering within each benchmark should be alphabetical
+        for st in sorted_mteb_benchmarks:
+            st.tasks = MTEBTasks(
+                sorted(st.tasks, key=lambda obj: obj.metadata.name.lower())
+            )
+
+        for benchmark in sorted_mteb_benchmarks:
             name = benchmark.name
             self._display_tasks(benchmark.tasks, name=name)
 
@@ -340,15 +375,16 @@ class MTEB:
         co2_tracker: bool = False,
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
-    ) -> list[MTEBResults]:
+    ) -> list[TaskResult]:
         """Run the evaluation pipeline on the selected tasks.
 
         Args:
             model: Model to be used for evaluation
             verbosity: Verbosity level. Default is 1.
-                0: print tasks tqdm progress bar
-                1: print tasks tqdm progress bar and scores
-                2: print everything (including datasets loading)
+                0: Only shows a progress bar for tasks being processed.
+                1: Shows a progress bar and prints task scores.
+                2: Prints detailed output, including messages about loading datasets and task scores.
+                3: Prints comprehensive logs for debugging, including all data loading and evaluation details.
             output_folder: Folder where the results will be saved. Default to 'results'. Where it will save the results in the format:
                 `{output_folder}/{model_name}/{model_revision}/{task_name}.json`.
             eval_splits: List of splits to evaluate on. If None, the splits are taken from the task metadata.
@@ -359,7 +395,7 @@ class MTEB:
             kwargs: Additional arguments to be passed to `_run_eval` method and task.load_data.
 
         Returns:
-            A list of MTEBResults objects, one for each task evaluated.
+            A list of TaskResult objects, one for each task evaluated.
         """
         if "batch_size" in kwargs:
             logger.warning(
@@ -368,20 +404,33 @@ class MTEB:
             )
             encode_kwargs["batch_size"] = kwargs["batch_size"]
 
-        # Set logging
-        if verbosity < 2:
-            datasets.logging.set_verbosity(40)
-            datasets.logging.disable_progress_bar()
+        # update logging to account for different levels of Verbosity (similar to the command line)
+
+        if verbosity == 0:
+            datasets.logging.set_verbosity(logging.CRITICAL)  # 40
+            datasets.logging.disable_progress_bar()  # Disable progress bar
+        elif verbosity == 1:
+            datasets.logging.set_verbosity(logging.WARNING)
+            datasets.logging.disable_progress_bar()  # Disable progress bar
+        elif verbosity == 2:
+            datasets.logging.set_verbosity(logging.INFO)
+        elif verbosity == 3:
+            datasets.logging.set_verbosity(logging.DEBUG)
 
         meta = self.create_model_meta(model)
         output_path = self.create_output_folder(meta, output_folder)
+        if not isinstance(model, Wrapper):
+            model = SentenceTransformerWrapper(model)
 
         if output_path:
             self._save_model_metadata(meta, output_path)
 
         # Run selected tasks
         logger.info(f"\n\n## Evaluating {len(self.tasks)} tasks:")
-        self.print_selected_tasks()
+
+        if verbosity > 0:
+            self.print_selected_tasks()
+
         evaluation_results = []
         original_tasks = (
             self.tasks.copy()
@@ -397,11 +446,14 @@ class MTEB:
                 save_path = output_path / f"{task.metadata.name}{task.save_suffix}.json"
                 existing_results = None
                 if save_path.exists() and not overwrite_results:
-                    try:
-                        existing_results = MTEBResults.from_disk(save_path)
-                    except Exception as e:
-                        logger.warning(f"Error loading existing results: {e}")
-
+                    logger.info(
+                        f"{task.metadata.name} results already exists. Loading results from disk. Set overwrite_results=True to overwrite."
+                    )
+                    mteb_results = TaskResult.from_disk(save_path)
+                    evaluation_results.append(mteb_results)
+                    del self.tasks[0]  # empty memory
+                    continue
+            try:
                 task_eval_splits = (
                     eval_splits if eval_splits is not None else task.eval_splits
                 )
@@ -475,11 +527,7 @@ class MTEB:
                     if verbosity >= 1:
                         logger.info(f"Scores: {results}")
 
-                    if task.metadata_dict["name"] not in self.last_evaluated_splits:
-                        self.last_evaluated_splits[task.metadata_dict["name"]] = set()
-                    self.last_evaluated_splits[task.metadata_dict["name"]].add(split)
-
-                new_results = MTEBResults.from_task_results(
+                mteb_task_result = TaskResult.from_task_results(
                     task,
                     task_results,
                     evaluation_time=evaluation_time,

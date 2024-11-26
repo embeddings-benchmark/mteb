@@ -17,10 +17,8 @@ class BrazilianToxicTweetsClassification(AbsTaskMultilabelClassification):
         """,
         reference="https://paperswithcode.com/dataset/told-br",
         dataset={
-            "path": "JAugusto97/told-br",
-            "revision": "fb4f11a5bc68b99891852d20f1ec074be6289768",
-            "name": "multilabel",
-            "trust_remote_code": True,
+            "path": "mteb/told-br",
+            "revision": "f333c1fcfa3ab43f008a327c8bd0140441354d34",
         },
         type="MultilabelClassification",
         category="s2s",
@@ -50,10 +48,6 @@ class BrazilianToxicTweetsClassification(AbsTaskMultilabelClassification):
             eprint    = {2010.04543},
             timestamp = {Tue, 15 Dec 2020 16:10:16 +0100},
             }""",
-        descriptive_stats={
-            "n_samples": {"test": 2048},
-            "avg_character_length": {"test": 85.05},
-        },
     )
 
     def dataset_transform(self):

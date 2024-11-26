@@ -33,10 +33,6 @@ class BengaliSentimentAnalysis(AbsTaskClassification):
         pages={50--60},
         year={2020}
         }""",
-        descriptive_stats={
-            "n_samples": {"train": 11807},
-            "avg_character_length": {"train": 69.66},
-        },
     )
 
     def dataset_transform(self):

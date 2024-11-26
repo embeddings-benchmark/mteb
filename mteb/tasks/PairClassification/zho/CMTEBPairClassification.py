@@ -34,7 +34,7 @@ class Ocnli(AbsTaskPairClassification):
             archivePrefix={arXiv},
             primaryClass={cs.CL}
         }""",
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
+        prompt="Retrieve semantically similar text.",
     )
 
     def dataset_transform(self):
@@ -54,7 +54,7 @@ class Cmnli(AbsTaskPairClassification):
         type="PairClassification",
         category="s2s",
         modalities=["text"],
-        eval_splits=["validation", "test"],
+        eval_splits=["validation"],
         eval_langs=["cmn-Hans"],
         main_score="max_accuracy",
         date=None,
@@ -107,7 +107,7 @@ class Cmnli(AbsTaskPairClassification):
             doi = "10.18653/v1/2020.coling-main.419",
             pages = "4762--4772",
         }""",
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
+        prompt="Retrieve semantically similar text.",
     )
 
     def dataset_transform(self):

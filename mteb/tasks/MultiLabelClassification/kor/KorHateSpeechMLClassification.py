@@ -55,10 +55,6 @@ class KorHateSpeechMLClassification(AbsTaskMultilabelClassification):
             url = "https://aclanthology.org/2022.coling-1.311",
             pages = "3530--3538",
         }""",
-        descriptive_stats={
-            "n_samples": {"train": 8192, "test": 2048},
-            "avg_character_length": {"train": 33.67, "test": 34.67},
-        },
     )
 
     def dataset_transform(self):

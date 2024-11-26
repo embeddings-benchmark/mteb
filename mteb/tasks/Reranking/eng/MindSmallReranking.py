@@ -27,6 +27,7 @@ class MindSmallReranking(AbsTaskReranking):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
+        prompt="Retrieve relevant news articles based on user browsing history",
         bibtex_citation="""@inproceedings{wu-etal-2020-mind, title = "{MIND}: A Large-scale Dataset for News 
         Recommendation", author = "Wu, Fangzhao  and Qiao, Ying  and Chen, Jiun-Hung  and Wu, Chuhan  and Qi, 
         Tao  and Lian, Jianxun  and Liu, Danyang  and Xie, Xing  and Gao, Jianfeng  and Wu, Winnie  and Zhou, Ming", 
@@ -46,8 +47,4 @@ class MindSmallReranking(AbsTaskReranking):
         Many natural language processing techniques such as effective text representation methods and pre-trained 
         language models can effectively improve the performance of news recommendation. The MIND dataset will be 
         available at https://msnews.github.io}.", }""",
-        descriptive_stats={
-            "n_samples": {"test": 107968},
-            "avg_character_length": {"test": 70.9},
-        },
     )

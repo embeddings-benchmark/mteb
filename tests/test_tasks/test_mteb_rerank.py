@@ -7,6 +7,7 @@ from pathlib import Path
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb import MTEB
+from mteb.model_meta import ModelMeta
 
 logging.basicConfig(level=logging.INFO)
 
@@ -365,6 +366,14 @@ def test_reranker_same_ndcg1():
     revision = "21eec43590414cb8e3a6f654857abed0483ae36e"
     de = SentenceTransformer(de_name, revision=revision)
     ce = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
+    ce_revision = "e9ea2688951463fc2791a2ea2ddfce6762900675"
+    ce.mteb_model_meta = ModelMeta(
+        name="cross-encoder/ms-marco-TinyBERT-L-2-v2",
+        languages=["eng-Latn"],
+        open_weights=True,
+        revision=ce_revision,
+        release_date="2021-04-15",
+    )
     eval = MTEB(tasks=["SciFact"])
     eval.run(
         de,
@@ -390,7 +399,7 @@ def test_reranker_same_ndcg1():
         stage1 = json.load(f)
 
     with open(
-        "tests/results/stage2/cross-encoder__ms-marco-TinyBERT-L-2-v2/no_revision_available/SciFact.json"
+        f"tests/results/stage2/cross-encoder__ms-marco-TinyBERT-L-2-v2/{ce_revision}/SciFact.json"
     ) as f:
         stage2 = json.load(f)
 

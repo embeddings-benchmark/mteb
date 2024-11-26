@@ -4,6 +4,7 @@ import json
 import logging
 from argparse import Namespace
 from collections import defaultdict
+from functools import cached_property
 from importlib.metadata import version
 from pathlib import Path
 from typing import Any, Callable
@@ -13,10 +14,7 @@ from packaging.version import Version
 from pydantic import BaseModel, field_validator
 
 from mteb.abstasks.AbsTask import AbsTask, ScoresDict
-from mteb.abstasks.TaskMetadata import (
-    ISO_LANGUAGE_SCRIPT,
-    HFSubset,
-)
+from mteb.abstasks.TaskMetadata import ISO_LANGUAGE_SCRIPT, HFSubset
 from mteb.languages import ISO_LANGUAGE, LanguageScripts
 
 Split = str
@@ -116,7 +114,7 @@ renamed_tasks = {
 }
 
 
-class MTEBResults(BaseModel):
+class TaskResult(BaseModel):
     """A class to represent the MTEB result.
 
     Attributes:
@@ -142,7 +140,7 @@ class MTEBResults(BaseModel):
         ...     },
         ... }
         >>> sample_task = ... # some MTEB task
-        >>> mteb_results = MTEBResults.from_task_results(sample_task, scores)
+        >>> mteb_results = TaskResult.from_task_results(sample_task, scores)
         >>> mteb_results.get_score()  # get the main score for all languages
         0.55
         >>> mteb_results.get_score(languages=["fra"])  # get the main score for French
@@ -158,9 +156,9 @@ class MTEBResults(BaseModel):
 
     dataset_revision: str
     task_name: str
-    mteb_version: str
+    mteb_version: str | None
     scores: dict[Split, list[ScoresDict]]
-    evaluation_time: float
+    evaluation_time: float | None
     kg_co2_emissions: float | None = None
 
     @classmethod
@@ -170,7 +168,7 @@ class MTEBResults(BaseModel):
         scores: dict[Split, dict[HFSubset, ScoresDict]],
         evaluation_time: float,
         kg_co2_emissions: float | None = None,
-    ) -> MTEBResults:
+    ) -> TaskResult:
         task_meta = task.metadata
         subset2langscripts = task_meta.hf_subsets_to_langscripts
         flat_scores = defaultdict(list)
@@ -184,7 +182,7 @@ class MTEBResults(BaseModel):
                 }
                 flat_scores[split].append(_scores)
 
-        return MTEBResults(
+        return TaskResult(
             dataset_revision=task.metadata.dataset["revision"],
             task_name=task.metadata.name,
             mteb_version=version("mteb"),
@@ -219,11 +217,36 @@ class MTEBResults(BaseModel):
         except Exception as e:
             raise ValueError(f"Scores are not json serializable: {e}")
 
+    @property
+    def languages(self) -> list[str]:
+        langs = []
+        for split, split_res in self.scores.items():
+            for entry in split_res:
+                langs.extend([lang.split("-")[0] for lang in entry["languages"]])
+        return list(set(langs))
+
+    @cached_property
+    def task(self) -> AbsTask:
+        from mteb.overview import get_task
+
+        return get_task(self.task_name)
+
+    @property
+    def domains(self) -> list[str]:
+        doms = self.task.metadata.domains
+        if doms is None:
+            doms = []
+        return doms
+
+    @property
+    def task_type(self) -> str:
+        return self.task.metadata.type
+
     def to_dict(self) -> dict:
         return self.model_dump()
 
     @classmethod
-    def from_dict(cls, data: dict) -> MTEBResults:
+    def from_dict(cls, data: dict) -> TaskResult:
         return cls.model_validate(data)
 
     def _round_scores(self, scores: dict[Split, list[ScoresDict]], n: int) -> None:
@@ -249,8 +272,8 @@ class MTEBResults(BaseModel):
             json.dump(json_obj, f, indent=2)
 
     @classmethod
-    def from_disk(cls, path: Path, load_historic_data: bool = True) -> MTEBResults:  # type: ignore
-        """Load MTEBResults from disk.
+    def from_disk(cls, path: Path, load_historic_data: bool = True) -> TaskResult:  # type: ignore
+        """Load TaskResult from disk.
 
         Args:
             path: The path to the file to load.
@@ -264,29 +287,33 @@ class MTEBResults(BaseModel):
                 return cls.model_validate(data)
             except Exception as e:
                 raise ValueError(
-                    f"Error loading MTEBResults from disk. You can try to load historic data by setting `load_historic_data=True`. Error: {e}"
+                    f"Error loading TaskResult from disk. You can try to load historic data by setting `load_historic_data=True`. Error: {e}"
                 )
 
         pre_1_11_load = (
             (
                 "mteb_version" in data
+                and data["mteb_version"] is not None
                 and Version(data["mteb_version"]) < Version("1.11.0")
             )
             or "mteb_version" not in data
         )  # assume it is before 1.11.0 if the version is not present
+
         try:
             obj = cls.model_validate(data)
         except Exception as e:
             if not pre_1_11_load:
                 raise e
             logger.debug(
-                f"Could not load MTEBResults from disk, got error: {e}. Attempting to load from disk using format from before v1.11.0"
+                f"Could not load TaskResult from disk, got error: {e}. Attempting to load from disk using format from before v1.11.0"
             )
             obj = cls._convert_from_before_v1_11_0(data)
 
-        pre_v_12_48 = "mteb_version" in data and Version(
-            data["mteb_version"]
-        ) < Version("1.12.48")
+        pre_v_12_48 = (
+            "mteb_version" in data
+            and data["mteb_version"] is not None
+            and Version(data["mteb_version"]) < Version("1.12.48")
+        )
 
         if pre_v_12_48:
             cls._fix_pair_classification_scores(obj)
@@ -294,7 +321,7 @@ class MTEBResults(BaseModel):
         return obj
 
     @classmethod
-    def _fix_pair_classification_scores(cls, obj: MTEBResults) -> None:
+    def _fix_pair_classification_scores(cls, obj: TaskResult) -> None:
         from mteb import get_task
 
         task_name = obj.task_name
@@ -314,7 +341,7 @@ class MTEBResults(BaseModel):
                             hf_subset_scores.pop(key)
 
     @classmethod
-    def _convert_from_before_v1_11_0(cls, data: dict) -> MTEBResults:
+    def _convert_from_before_v1_11_0(cls, data: dict) -> TaskResult:
         from mteb.overview import TASKS_REGISTRY
 
         # in case the task name is not found in the registry, try to find a lower case version
@@ -394,7 +421,7 @@ class MTEBResults(BaseModel):
             if "test" in scores and "fr" in scores["test"]:
                 scores["test"]["fra-fra"] = scores["test"].pop("fr")
 
-        result: MTEBResults = MTEBResults.from_task_results(
+        result: TaskResult = TaskResult.from_task_results(
             task,  # type: ignore
             scores,
             evaluation_time,
@@ -443,12 +470,17 @@ class MTEBResults(BaseModel):
 
             return aggregation(values)
 
-    def __repr__(self) -> str:
-        return f"MTEBResults(task_name={self.task_name}, scores=...)"
+    @classmethod
+    def from_validated(cls, **data) -> TaskResult:
+        return cls.model_construct(**data)
 
-    def validate_and_filter_scores(self, task: AbsTask | None = None) -> None:
+    def __repr__(self) -> str:
+        return f"TaskResult(task_name={self.task_name}, scores=...)"
+
+    def validate_and_filter_scores(self, task: AbsTask | None = None) -> AbsTask:
         """This ensures that the scores are correct for the given task, by removing any splits besides those specified in the task metadata.
         Additionally it also ensure that all of the splits required as well as the languages are present in the scores.
+        Returns new TaskResult object.
 
         Args:
             task: The task to validate the scores against. E.g. if the task supplied is limited to certain splits and languages,
@@ -459,30 +491,32 @@ class MTEBResults(BaseModel):
         if task is None:
             task = get_task(self.task_name)
         splits = task.metadata.eval_splits
-        hf_subsets = set(task.metadata.hf_subsets_to_langscripts)
-
+        if task.is_multilingual:
+            hf_subsets = getattr(
+                task, "hf_subsets", task.metadata.hf_subsets_to_langscripts.keys()
+            )
+            hf_subsets = set(hf_subsets)
+        else:
+            hf_subsets = {"default"}
         new_scores = {}
         seen_splits = set()
         for split in self.scores:
             if split not in splits:
                 continue
             new_scores[split] = []
-
             seen_subsets = set()
             for _scores in self.scores[split]:
                 if _scores["hf_subset"] not in hf_subsets:
                     continue
                 new_scores[split].append(_scores)
                 seen_subsets.add(_scores["hf_subset"])
-
             if seen_subsets != hf_subsets:
                 raise ValueError(
                     f"Missing subsets {hf_subsets - seen_subsets} for split {split}"
                 )
-
             seen_splits.add(split)
-
         if seen_splits != set(splits):
             raise ValueError(f"Missing splits {set(splits) - seen_splits}")
-
-        self.scores = new_scores
+        new_res = {**self.to_dict(), "scores": new_scores}
+        new_res = TaskResult.from_validated(**new_res)
+        return new_res

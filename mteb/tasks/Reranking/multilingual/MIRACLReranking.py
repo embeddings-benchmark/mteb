@@ -7,9 +7,9 @@ from datasets import Dataset
 
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
-from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.encoder_interface import Encoder
 from mteb.evaluation.evaluators import RerankingEvaluator
-from mteb.load_results.mteb_results import ScoresDict
+from mteb.load_results.task_results import ScoresDict
 
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
 
@@ -74,15 +74,14 @@ class MIRACLReranking(MultilingualTask, AbsTaskReranking):
         dialect=[],
         sample_creation="created",
         bibtex_citation=_CITATION,
-        descriptive_stats={
-            "n_samples": {"dev": 44608},
-            "avg_character_length": {"dev": 506.30},
+        prompt={
+            "query": "Given a question, retrieve Wikipedia passages that answer the question"
         },
     )
 
     def _evaluate_subset(
         self,
-        model: Encoder | EncoderWithQueryCorpusEncode,
+        model: Encoder,
         data_split: Dataset,
         *,
         encode_kwargs: dict[str, Any] = {},

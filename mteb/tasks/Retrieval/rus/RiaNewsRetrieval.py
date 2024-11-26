@@ -35,18 +35,7 @@ class RiaNewsRetrieval(AbsTaskRetrieval):
         booktitle={Proceedings of the 41st European Conference on Information Retrieval},
         year={2019}
         }""",
-        descriptive_stats={
-            "n_samples": {"test": 10000},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1165.6429557148213,
-                    "average_query_length": 62.4029,
-                    "num_documents": 704344,
-                    "num_queries": 10000,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
+        prompt={"query": "Given a news title, retrieve relevant news article"},
     )
 
 
@@ -80,16 +69,4 @@ class RiaNewsRetrievalHardNegatives(AbsTaskRetrieval):
         booktitle={Proceedings of the 41st European Conference on Information Retrieval},
         year={2019}
         }""",
-        descriptive_stats={
-            "n_samples": {"test": 1000},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1225.7253146619116,
-                    "average_query_length": 62.338,
-                    "num_documents": 191237,
-                    "num_queries": 1000,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )

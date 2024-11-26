@@ -34,10 +34,7 @@ class NorwegianCourtsBitextMining(AbsTaskBitextMining):
   year={2020}
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 2050},
-            "avg_character_length": {"test": 1884.0},
-        },
+        prompt="Retrieve parallel sentences in Norwegian Bokmål and Nynorsk",
     )
 
     def dataset_transform(self):

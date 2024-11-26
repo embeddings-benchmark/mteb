@@ -28,7 +28,6 @@ class SickFrSTS(AbsTaskSTS):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
     @property

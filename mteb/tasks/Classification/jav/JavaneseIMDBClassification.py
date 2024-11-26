@@ -37,10 +37,6 @@ class JavaneseIMDBClassification(AbsTaskClassification):
             organization={IEEE}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 25_000},
-            "avg_character_length": {"test": 481.83},
-        },
     )
 
     def dataset_transform(self):
