@@ -1291,12 +1291,16 @@ class MockRetrievalTask(AbsTaskRetrieval):
         type="Retrieval",
         name="MockRetrievalTask",
         main_score="ndcg_at_10",
-        **general_args,  # type: ignore
+        **dict(general_args | {"eval_splits": ["val", "test"]}),  # type: ignore
     )
 
     def load_data(self, **kwargs):
         self.queries = {
             "test": {
+                "q1": "This is a test sentence",
+                "q2": "This is another test sentence",
+            },
+            "val": {
                 "q1": "This is a test sentence",
                 "q2": "This is another test sentence",
             }
@@ -1305,11 +1309,19 @@ class MockRetrievalTask(AbsTaskRetrieval):
             "test": {
                 "d1": "This is a positive sentence",
                 "d2": "This is another positive sentence",
+            },
+            "val": {
+                "d1": "This is a positive sentence",
+                "d2": "This is another positive sentence",
             }
         }
 
         self.relevant_docs = {
             "test": {
+                "q1": {"d1": 1, "d2": 0},
+                "q2": {"d1": 0, "d2": 1},
+            },
+            "val": {
                 "q1": {"d1": 1, "d2": 0},
                 "q2": {"d1": 0, "d2": 1},
             },

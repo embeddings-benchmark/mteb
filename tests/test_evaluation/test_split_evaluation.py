@@ -1,59 +1,55 @@
 from __future__ import annotations
 
 import pytest
-from sentence_transformers import SentenceTransformer
+from tests.test_benchmark.mock_models import (
+    MockSentenceTransformer,
+)
 
-import mteb
+from tests.test_benchmark.mock_tasks import (
+    MockRetrievalTask,
+)
+
 from mteb import MTEB
 
 
 @pytest.fixture
 def model():
-    return SentenceTransformer("all-MiniLM-L6-v2")
+    return MockSentenceTransformer()
 
 
 @pytest.fixture
-def nfcorpus_tasks():
-    return mteb.get_tasks(tasks=["NFCorpus"], languages=["eng"])
+def tasks():
+    return [MockRetrievalTask()]
 
 
-@pytest.mark.skip(reason="WIP")
-def test_all_splits_evaluated(model, nfcorpus_tasks, tmp_path):
-    evaluation = MTEB(tasks=nfcorpus_tasks)
-    evaluation.run(
+def test_all_splits_evaluated(model, tasks, tmp_path):
+    evaluation = MTEB(tasks=tasks)
+    results = evaluation.run(
         model,
-        eval_splits=["train", "test"],
-        save_predictions=True,
-        output_folder=str(tmp_path / "testcase1"),
+        eval_splits=["val", "test"],
+        output_folder=str(tmp_path / "all_splits_evaluated"),
         verbosity=2,
     )
-    last_evaluated_splits = evaluation.get_last_evaluated_splits()
-    print(last_evaluated_splits)
-    assert "NFCorpus" in last_evaluated_splits
-    assert set(last_evaluated_splits["NFCorpus"]) == {"train", "test"}
-    assert len(last_evaluated_splits["NFCorpus"]) == 2
+    print(results)
+    assert "MockRetrievalTask" == results[0].task_name
+    scores = results[0].scores
+    assert set(scores.keys()) == {"val", "test"}
+    assert len(scores.keys()) == 2
 
 
-@pytest.mark.skip(reason="WIP")
-def test_one_missing_split(model, nfcorpus_tasks, tmp_path):
-    evaluation = MTEB(tasks=nfcorpus_tasks)
-    evaluation.run(
+def test_one_missing_split(model, tasks, tmp_path):
+    evaluation = MTEB(tasks=tasks)
+    results1 = evaluation.run(
         model,
-        eval_splits=["train"],
-        save_predictions=True,
+        eval_splits=["val"],
         output_folder=str(tmp_path / "testcase2"),
         verbosity=2,
     )
 
-    # Get model and tasks again
-    model = SentenceTransformer("all-MiniLM-L6-v2")
-    nfcorpus_tasks = mteb.get_tasks(tasks=["NFCorpus"], languages=["eng"])
-
-    evaluation_2 = MTEB(tasks=nfcorpus_tasks)
-    evaluation_2.run(
+    evaluation_2 = MTEB(tasks=tasks)
+    results2 = evaluation_2.run(
         model,
-        eval_splits=["train", "test"],
-        save_predictions=True,
+        eval_splits=["val", "test"],
         output_folder=str(tmp_path / "testcase2"),
         verbosity=2,
     )
@@ -61,27 +57,24 @@ def test_one_missing_split(model, nfcorpus_tasks, tmp_path):
     last_evaluated_splits = evaluation_2.get_last_evaluated_splits()
 
     print(last_evaluated_splits)
-    assert "NFCorpus" in last_evaluated_splits
+    assert "MockRetrievalTask" in last_evaluated_splits
     assert set(last_evaluated_splits["NFCorpus"]) == {"test"}
     assert len(last_evaluated_splits["NFCorpus"]) == 1
 
 
-@pytest.mark.skip(reason="WIP")
-def test_no_missing_splits(model, nfcorpus_tasks, tmp_path):
-    evaluation_1 = MTEB(tasks=nfcorpus_tasks)
-    evaluation_1.run(
+def test_no_missing_splits(model, tasks, tmp_path):
+    evaluation_1 = MTEB(tasks=tasks)
+    results = evaluation_1.run(
         model,
-        eval_splits=["train", "test"],
-        save_predictions=True,
+        eval_splits=["val", "test"],
         output_folder=str(tmp_path / "testcase3"),
         verbosity=2,
     )
 
-    evaluation_2 = MTEB(tasks=nfcorpus_tasks)
-    evaluation_2.run(
+    evaluation_2 = MTEB(tasks=tasks)
+    results2 = evaluation_2.run(
         model,
-        eval_splits=["train", "test"],
-        save_predictions=True,
+        eval_splits=["val", "test"],
         output_folder=str(tmp_path / "testcase3"),
         verbosity=2,
     )
