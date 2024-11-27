@@ -81,7 +81,7 @@ def update_task_info(task_names: str) -> gr.DataFrame:
     return gr.DataFrame(df, datatype=["markdown"] + ["str"] * (len(df.columns) - 1))
 
 
-all_results = load_results().join_revisions()
+all_results = load_results().join_revisions().filter_models()
 
 # Model sizes in million parameters
 min_model_size, max_model_size = 0, 10_000
