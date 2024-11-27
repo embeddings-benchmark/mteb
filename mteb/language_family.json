@@ -6946,6 +6946,11 @@
       "level0": "Bororoan",
       "level1": "Bororo-Otuke"
    },
+   "bos": {
+      "level0": "Indo-European",
+      "level1": "Balto-Slavic",
+      "level2": "Slavic"
+   },
    "bot": {
       "level0": "Central Sudanic",
       "level1": "Sara-Bongo-Bagirmi"
@@ -14824,6 +14829,10 @@
       "level1": "Eskimo",
       "level2": "Yupik"
    },
+   "est": {
+      "level0": "Uralic",
+      "level1": "Finnic"
+   },
    "esu": {
       "level0": "Eskimo-Aleut",
       "level1": "Eskimo",
@@ -15117,6 +15126,17 @@
       "level7": "Malaita",
       "level8": "Central-Northern Malaita",
       "level9": "North Malaitan"
+   },
+   "fas": {
+      "level0": "Indo-European",
+      "level1": "Classical Indo-European",
+      "level2": "Indo-Iranian",
+      "level3": "Iranian",
+      "level4": "Southwestern Iranian",
+      "level5": "Middle-Modern Persian",
+      "level6": "Modern Southwestern Iranian",
+      "level7": "Farsic-Caucasian Tat",
+      "level8": "Farsic"
    },
    "fau": {
       "level0": "Lakes Plain",
@@ -19705,6 +19725,10 @@
       "level8": "Eastern Aramaic",
       "level9": "Central Eastern Aramaic",
       "level10": "Bohtan"
+   },
+   "hrv": {
+      "level0": "Indo-European",
+      "level1": "Balto-Slavic"
    },
    "hrx": {
       "level0": "Indo-European",
@@ -48744,6 +48768,10 @@
       "level8": "Sardo-Corsican",
       "level9": "Sardinian"
    },
+   "srp": {
+      "level0": "Indo-European",
+      "level1": "Balto-Slavic"
+   },
    "srq": {
       "level0": "Tupian",
       "level1": "Eastern Tupian",
@@ -49415,6 +49443,13 @@
    },
    "svr": {
       "level0": "Bookkeeping"
+   },
+   "swa": {
+      "level0": "Atlantic-Congo",
+      "level1": "Volta-Congo",
+      "level2": "Benue-Congo",
+      "level3": "Bantoid",
+      "level4": "Southern Bantoid"
    },
    "swb": {
       "level0": "Atlantic-Congo",
