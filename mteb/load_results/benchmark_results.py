@@ -211,8 +211,8 @@ class BenchmarkResults(BaseModel):
         n_parameters_range: tuple[int | None, int | None] = (None, None),
         use_instructions: bool | None = None,
     ) -> BenchmarkResults:
-        if model_names is None:
-            model_names = [model_res.model_name for model_res in self]
+        # if model_names is None:
+        #     model_names = [model_res.model_name for model_res in self]
         model_metas = get_model_metas(
             model_names=model_names,
             languages=languages,
