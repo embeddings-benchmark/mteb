@@ -56,7 +56,7 @@ class OpenAIWrapper(Wrapper):
 
 
 text_embedding_3_small = ModelMeta(
-    name="text-embedding-3-small",
+    name="openai/text-embedding-3-small",
     revision="1",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
@@ -73,7 +73,7 @@ text_embedding_3_small = ModelMeta(
     use_instructions=False,
 )
 text_embedding_3_large = ModelMeta(
-    name="text-embedding-3-large",
+    name="openai/text-embedding-3-large",
     revision="1",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
@@ -87,7 +87,7 @@ text_embedding_3_large = ModelMeta(
     memory_usage=None,
 )
 text_embedding_ada_002 = ModelMeta(
-    name="text-embedding-ada-002",
+    name="openai/text-embedding-ada-002",
     revision="1",
     release_date="2022-12-15",
     languages=None,  # supported languages not specified
