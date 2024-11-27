@@ -7,21 +7,12 @@ import torch
 from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import Blip2Processor
+from transformers import Blip2VisionModelWithProjection, Blip2TextModelWithProjection, Blip2Model, AutoTokenizer, AutoProcessor
 
 from mteb.model_meta import ModelMeta
 
 
 def blip2_loader(**kwargs):
-    try:  # a temporal fix for the dependency issues.
-        from lavis.models.blip2_models.blip2_image_text_matching import (
-            Blip2ITM,
-        )
-    except ImportError:
-        raise ImportError(
-            "Please install `pip install salesforce-lavis` to use BLIP-2 models."
-        )
-
     class BLIP2ModelWrapper:
         def __init__(
             self,
@@ -31,13 +22,10 @@ def blip2_loader(**kwargs):
         ):
             self.model_name = model_name
             self.device = device
-            model_type = "coco" if "coco" in model_name else "pretrain"
-            self.model = Blip2ITM.from_pretrained(model_type).to(self.device).float()
-            # print numbr of parameters
-            print(
-                f"Number of parameters: {sum(p.numel() for p in self.model.parameters())}"
-            )
-            self.processor = Blip2Processor.from_pretrained(model_name)
+            #self.processor = Blip2Processor.from_pretrained(model_name)
+            self.vision_model = Blip2VisionModelWithProjection.from_pretrained(model_name).to(device)
+            self.language_model = Blip2TextModelWithProjection.from_pretrained(model_name).to(device)
+            self.processor = AutoProcessor.from_pretrained(model_name)
 
         def preprocess(
             self,
@@ -54,14 +42,14 @@ def blip2_loader(**kwargs):
             with torch.no_grad():
                 for i in tqdm(range(0, len(texts), batch_size)):
                     batch_texts = texts[i : i + batch_size]
-                    text_tokens = self.model.tokenizer(
-                        batch_texts,
-                        padding="max_length",
+                    text_tokens = self.processor(
+                        text=batch_texts,
+                        padding=True,
                         truncation=True,
-                        max_length=self.model.max_txt_len,
-                        return_tensors="pt",
+                        #max_length=self.language_model.max_txt_len,
+                        return_tensors="pt"
                     ).to(self.device)
-                    text_outputs = self.model.forward_text(text_tokens)
+                    text_outputs = self.language_model.forward(**text_tokens)["text_embeds"][:,0,:]
                     # text_outputs = normalize(self.model.text_proj(text_outputs))
                     all_text_embeddings.append(text_outputs.cpu())
 
@@ -79,7 +67,7 @@ def blip2_loader(**kwargs):
                         inputs = self.processor(
                             images=batch, return_tensors="pt", padding=True
                         )
-                        image_outputs = self.model.forward_image(
+                        image_outputs = self.vision_model.forward(
                             inputs["pixel_values"].to(self.device)
                         )
                         image_outputs = image_outputs[0][:, 0, :]
@@ -92,57 +80,13 @@ def blip2_loader(**kwargs):
                         inputs = self.processor(
                             images=batch_images, return_tensors="pt", padding=True
                         )["pixel_values"].to(self.device)
-                        image_outputs = self.model.forward_image(inputs)
+                        image_outputs = self.vision_model.forward(inputs)
                         image_outputs = image_outputs[0][:, 0, :]
                         # image_outputs = normalize(self.model.vision_proj(image_outputs), dim=-1)
                         all_image_embeddings.append(image_outputs.cpu())
 
             all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
             return all_image_embeddings
-
-        def get_multimodal_embeddings(self, texts, images, batch_size=32):
-            all_multimodal_embeddings = []
-
-            with torch.no_grad():
-                if isinstance(images, DataLoader):
-                    # check dataloader batch size is the same as batch size
-                    if images.batch_size != batch_size:
-                        raise ValueError(
-                            "Image DataLoader batch size must be the same as the given batch size: "
-                            + str(batch_size)
-                        )
-                    for batch_images, i in tqdm(
-                        zip(images, range(0, len(texts), batch_size))
-                    ):
-                        batch_texts = texts[i : i + batch_size]
-
-                        image_inputs = self.processor(
-                            images=batch_images, return_tensors="pt", padding=True
-                        )["pixel_values"].to(self.device)
-                        multimodal_outputs = self.model.extract_features(
-                            {"text_input": batch_texts, "image": image_inputs}
-                        ).multimodal_embeds[:, 0, :]
-
-                        # multimodal_outputs = normalize(self.model.text_proj(multimodal_outputs), dim=-1)
-
-                        all_multimodal_embeddings.append(multimodal_outputs.cpu())
-                else:
-                    for i in tqdm(range(0, len(texts), batch_size)):
-                        batch_images = images[i : i + batch_size]
-                        batch_texts = texts[i : i + batch_size]
-
-                        image_inputs = self.processor(
-                            images=batch_images, return_tensors="pt", padding=True
-                        )["pixel_values"].to(self.device)
-                        multimodal_outputs = self.model.extract_features(
-                            {"text_input": batch_texts, "image": image_inputs}
-                        ).multimodal_embeds[:, 0, :]
-
-                        # multimodal_outputs = normalize(self.model.text_proj(multimodal_outputs), dim=-1)
-
-                        all_multimodal_embeddings.append(multimodal_outputs.cpu())
-
-            return torch.cat(all_multimodal_embeddings, dim=0)
 
         def calculate_probs(self, text_embeddings, image_embeddings):
             text_embeddings = text_embeddings / text_embeddings.norm(
@@ -182,10 +126,6 @@ def blip2_loader(**kwargs):
                     )
                 if fusion_mode == "sum":
                     fused_embeddings = text_embeddings + image_embeddings
-                elif fusion_mode == "multimodal":
-                    fused_embeddings = self.get_multimodal_embeddings(
-                        texts, images, batch_size
-                    )
                 else:
                     # to do: add other fusion mode
                     raise ValueError(
@@ -200,7 +140,7 @@ def blip2_loader(**kwargs):
     return BLIP2ModelWrapper(**kwargs)
 
 
-blip2_opt_2_7b = ModelMeta(
+"""blip2_opt_2_7b = ModelMeta(
     loader=partial(
         blip2_loader,
         model_name="Salesforce/blip2-opt-2.7b",
@@ -208,8 +148,8 @@ blip2_opt_2_7b = ModelMeta(
     name="Salesforce/blip2-opt-2.7b",
     languages=["eng_Latn"],
     open_source=True,
-    revision="51572668da0eb669e01a189dc22abe6088589a24",
-    release_date="2024-03-22",
+    revision="ec3c346f4aff99452053bae7abd1753401e6f28a",
+    release_date="2024-11-23",
 )
 
 blip2_opt_6_7b_coco = ModelMeta(
@@ -222,13 +162,41 @@ blip2_opt_6_7b_coco = ModelMeta(
     open_source=True,
     revision="0d580de59320a25a4d2c386387bcef310d5f286e",
     release_date="2024-03-31",
-)
+)"""
+
+blip2_itm_vit_g = ModelMeta(
+    loader=partial(
+        blip2_loader,
+        model_name="Salesforce/blip2-itm-vit-g",
+    ),
+    name="Salesforce/blip2-itm-vit-g",
+    languages=["eng_Latn"],
+    open_source=True,
+    revision="6e2c730e768eb499b886c73935a539ca2c197290",
+    release_date="2024-11-04",
+) 
+
+
+blip2_itm_vit_g_coco = ModelMeta(
+    loader=partial(
+        blip2_loader,
+        model_name="Salesforce/blip2-itm-vit-g-coco",
+    ),
+    name="Salesforce/blip2-itm-vit-g-coco",
+    languages=["eng_Latn"],
+    open_source=True,
+    revision="b1c997706e13245bbd2af5b2717239488d849f07",
+    release_date="2024-11-04",
+) 
 
 
 if __name__ == "__main__":
     import mteb
+    mdl = mteb.get_model(blip2_itm_vit_g.name, blip2_itm_vit_g.revision, device="cuda")
 
-    mdl = mteb.get_model(blip2_opt_2_7b.name, blip2_opt_2_7b.revision, device="cpu")
+    cat_img = Image.open("cat.jpg")
+    image_cat_emb = mdl.get_image_embeddings([cat_img])
+
     emb = mdl.get_text_embeddings(["Hello, world!"])
     emb2 = mdl.get_text_embeddings(["Hello there, world!"])
     emb3 = mdl.get_text_embeddings(["Goodbye, person!"])
@@ -239,16 +207,14 @@ if __name__ == "__main__":
     sim = torch.nn.functional.cosine_similarity(emb, emb3)
     print(sim)
 
-    cat_img = Image.open("cat.jpg")
     cat_text = "An image of a cat"
 
     multi_cat_emb = mdl.get_fused_embeddings(
-        ["A photo of an animal"], [cat_img], fusion_mode="multimodal"
+        ["A photo of an animal"], [cat_img]
     )
     multi_conflicting_emb = mdl.get_fused_embeddings(
-        ["A photo of a dog"], [cat_img], fusion_mode="multimodal"
+        ["A photo of a dog"], [cat_img]
     )
-    image_cat_emb = mdl.get_image_embeddings([cat_img])
     text_cat_emb = mdl.get_text_embeddings(["An photo of a cat"])
     text_dog_emb = mdl.get_text_embeddings(["An image of a dog"])
 
