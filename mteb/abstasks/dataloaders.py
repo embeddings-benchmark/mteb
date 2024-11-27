@@ -231,7 +231,7 @@ class HFDataLoader:
         self.queries = queries_ds
 
     def _load_qrels(self, split: str, config: str | None = None):
-        config = f"{config}-qrels" if config is not None else None
+        config = f"{config}-qrels" if config is not None else "default"
         if self.hf_repo:
             qrels_ds = load_dataset(
                 self.hf_repo_qrels,
