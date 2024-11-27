@@ -98,6 +98,13 @@ def get_means_per_types(df: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame.from_records(records)
 
 
+def failsafe_get_model_meta(model_name):
+    try:
+        return get_model_meta(model_name)
+    except Exception as e:
+        return None
+
+
 def scores_to_tables(
     scores_long: list[dict], search_query: str | None = None
 ) -> tuple[gr.DataFrame, gr.DataFrame]:
@@ -132,7 +139,8 @@ def scores_to_tables(
     joint_table["borda_rank"] = get_borda_rank(per_task)
     joint_table = joint_table.reset_index()
     joint_table = joint_table.drop(columns=["model_revision"])
-    model_metas = joint_table["model_name"].map(get_model_meta)
+    model_metas = joint_table["model_name"].map(failsafe_get_model_meta)
+    joint_table = joint_table[model_metas.notna()]
     joint_table["model_link"] = model_metas.map(lambda m: m.reference)
     joint_table.insert(
         1,
