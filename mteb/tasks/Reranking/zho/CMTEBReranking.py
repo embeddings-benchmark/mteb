@@ -128,7 +128,7 @@ class CMedQAv2(AbsTaskReranking):
         main_score="map_at_1000",
         date=None,
         form=None,
-        domains=None,
+        domains=["Medical", "Written"],
         task_subtypes=None,
         license=None,
         annotations_creators=None,
