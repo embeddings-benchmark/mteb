@@ -2,37 +2,22 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Iterable
+from functools import lru_cache
 from typing import Any
 
+from huggingface_hub import ModelCard
 from sentence_transformers import SentenceTransformer
 
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
-from mteb.models import (
-    bge_models,
-    bm25,
-    cohere_models,
-    e5_instruct,
-    e5_models,
-    google_models,
-    gritlm_models,
-    gte_models,
-    jina_models,
-    llm2vec_models,
-    mxbai_models,
-    nomic_models,
-    openai_models,
-    promptriever_models,
-    repllama_models,
-    rerankers_custom,
-    rerankers_monot5_based,
-    ru_sentence_models,
-    salesforce_models,
-    sentence_transformers_models,
-    stella_models,
-    uae_models,
-    voyage_models,
-)
+from mteb.models import (bge_models, bm25, cohere_models, e5_instruct,
+                         e5_models, google_models, gritlm_models, gte_models,
+                         jina_models, llm2vec_models, mxbai_models,
+                         nomic_models, openai_models, promptriever_models,
+                         repllama_models, rerankers_custom,
+                         rerankers_monot5_based, ru_sentence_models,
+                         salesforce_models, sentence_transformers_models,
+                         stella_models, uae_models, voyage_models)
 
 logger = logging.getLogger(__name__)
 
@@ -152,19 +137,44 @@ def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
         return MODEL_REGISTRY[model_name]
     else:  # assume it is a sentence-transformers model
         logger.info(
-            "Model not found in model registry, assuming it is a sentence-transformers model."
+            "Model not found in model registry, assuming it is on HF Hub model."
         )
         logger.info(
-            f"Attempting to extract metadata by loading the model ({model_name}) using sentence-transformers."
+            f"Attempting to extract metadata by loading the model ({model_name}) using HuggingFace."
         )
-        model = SentenceTransformer(
-            model_name, revision=revision, trust_remote_code=True
-        )
-        meta = model_meta_from_sentence_transformers(model)
-
+        meta = model_meta_from_hf_hub(model_name)
         meta.revision = revision
         meta.name = model_name
     return meta
+
+
+@lru_cache
+def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
+    try:
+        card = ModelCard.load(model_name)
+        card_data = card.data.to_dict()
+        frameworks = ["PyTorch"]
+        if card_data.get("library_name", None) == "sentence-transformers":
+            frameworks.append("Sentence Transformers")
+        return ModelMeta(
+            name=model_name,
+            revision=None,
+            # TODO
+            release_date=None,
+            # TODO: We need a mapping between conflicting language codes
+            languages=None,
+            license=card_data.get("license", None),
+            framework=frameworks,
+            public_training_data=bool(card_data.get("datasets", None)),
+        )
+    except Exception as e:
+        logger.warning(f"Failed to extract metadata from model: {e}.")
+        return ModelMeta(
+            name=None,
+            revision=None,
+            languages=None,
+            release_date=None,
+        )
 
 
 def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMeta:
