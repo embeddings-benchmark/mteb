@@ -1,19 +1,16 @@
+from __future__ import annotations
+
 import mteb
-from sentence_transformers import SentenceTransformer
-from transformers import AutoTokenizer, AutoModel
 
 model = mteb.get_model(
     "jxm/cde-small-v1",
     trust_remote_code=True,
-    model_prompts={
-        "query": "search_query: ",
-        "passage": "search_document: "
-    }
+    model_prompts={"query": "search_query: ", "passage": "search_document: "},
 )
 tasks = mteb.get_tasks(
     tasks=[
         # classification
-        "AmazonCounterfactualClassification", 
+        "AmazonCounterfactualClassification",
         # clustering
         "RedditClustering",
         # pair classification
@@ -21,19 +18,19 @@ tasks = mteb.get_tasks(
         # reranking
         "AskUbuntuDupQuestions",
         # retrieval
-        "SCIDOCS", 
-#         # sts
+        "SCIDOCS",
+        #         # sts
         "STS22",
-#         # summarization
+        #         # summarization
         "SummEval",
-        ]
+    ]
 )
 evaluation = mteb.MTEB(tasks=tasks)
 results = evaluation.run(
     model,
     output_folder="results",
     extra_kwargs={"batch_size": 8},
-    overwrite_results=True
+    overwrite_results=True,
 )
 
-#print(results)
+# print(results)
