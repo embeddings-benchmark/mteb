@@ -757,7 +757,7 @@ The following tables give you an overview of the tasks in MTEB.
 | bod | Tibetan | Sino-Tibetan | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 6 |
 | boj | Anjam | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | bon | Bine | Eastern Trans-Fly | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bos | Bosnian | Unclassified | 3 | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
+| bos | Bosnian | Indo-European | 3 | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
 | box | Buamu | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | boy | Bodo (Central African Republic) | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | bpr | Koronadal Blaan | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -895,7 +895,7 @@ The following tables give you an overview of the tasks in MTEB.
 | eri | Ogea | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | ese | Ese Ejja | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | esk | Northwest Alaska Inupiatun | Eskimo-Aleut | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| est | Estonian | Unclassified | 2 | 2 | 1 | 0 | 1 | 0 | 0 | 2 | 0 | 0 | 0 | 8 |
+| est | Estonian | Uralic | 2 | 2 | 1 | 0 | 1 | 0 | 0 | 2 | 0 | 0 | 0 | 8 |
 | etr | Edolo | Bosavi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | eus | Basque | Unclassified | 3 | 2 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
 | ewe | Ewe | Atlantic-Congo | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
@@ -903,7 +903,7 @@ The following tables give you an overview of the tasks in MTEB.
 | fai | Faiwol | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | fao | Faroese | Indo-European | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 7 |
 | far | Fataleka | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fas | Persian | Unclassified | 1 | 4 | 0 | 0 | 0 | 1 | 2 | 9 | 0 | 0 | 0 | 17 |
+| fas | Persian | Indo-European | 1 | 4 | 0 | 0 | 0 | 1 | 2 | 9 | 0 | 0 | 0 | 17 |
 | ffm | Maasina Fulfulde | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | fij | Fijian | Austronesian | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
 | fil | Filipino | Austronesian | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
@@ -977,7 +977,7 @@ The following tables give you an overview of the tasks in MTEB.
 | hns | Caribbean Hindustani | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | hop | Hopi | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | hot | Hote | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hrv | Croatian | Unclassified | 4 | 3 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 10 |
+| hrv | Croatian | Indo-European | 4 | 3 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 10 |
 | hsb | Upper Sorbian | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | hto | Minica Huitoto | Huitotoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | hub | Huambisa | Chicham | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1446,7 +1446,7 @@ The following tables give you an overview of the tasks in MTEB.
 | sri | Siriano | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | srm | Saramaccan | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | srn | Sranan Tongo | Indo-European | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| srp | Serbian | Unclassified | 4 | 1 | 1 | 0 | 0 | 0 | 1 | 2 | 0 | 0 | 0 | 9 |
+| srp | Serbian | Indo-European | 4 | 1 | 1 | 0 | 0 | 0 | 1 | 2 | 0 | 0 | 0 | 9 |
 | srq | Sirionó | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | ssd | Siroi | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | ssg | Seimat | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1459,7 +1459,7 @@ The following tables give you an overview of the tasks in MTEB.
 | sus | Susu | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | suz | Sunwar | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | svk | Slovakian Sign Language | Sign Language | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| swa | Swahili (macrolanguage) | Unclassified | 1 | 7 | 2 | 0 | 0 | 1 | 1 | 3 | 0 | 0 | 0 | 15 |
+| swa | Swahili (macrolanguage) | Atlantic-Congo | 1 | 7 | 2 | 0 | 0 | 1 | 1 | 3 | 0 | 0 | 0 | 15 |
 | swe | Swedish | Indo-European | 4 | 8 | 3 | 0 | 1 | 1 | 1 | 4 | 0 | 0 | 0 | 22 |
 | swg | Swabian | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | swh | Swahili (individual language) | Atlantic-Congo | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 6 |
