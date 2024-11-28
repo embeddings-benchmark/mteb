@@ -528,21 +528,10 @@ def test_disallow_trust_remote_code_in_new_datasets():
 
 @pytest.mark.parametrize("task", get_tasks())
 def test_empty_descriptive_stat_in_new_datasets(task: AbsTask):
-    # DON'T ADD NEW DATASETS TO THIS LIST
-    # THIS IS ONLY INTENDED FOR HISTORIC DATASETS
-    exceptions = [
-        "FilipinoHateSpeechClassification",
-    ]
-
     if task.metadata.name.startswith("Mock"):
         return
 
-    if task.metadata.name in exceptions:
-        assert (
-            task.metadata.descriptive_stats is None
-        ), f"Dataset {task.metadata.name} should not have descriptive stats"
-    else:
-        assert (
-            task.metadata.descriptive_stats is not None
-        ), f"Dataset {task.metadata.name} should have descriptive stats. You can add metadata to your task by running `YorTask().calculate_metadata_metrics()`"
-        assert task.metadata.n_samples is not None
+    assert (
+        task.metadata.descriptive_stats is not None
+    ), f"Dataset {task.metadata.name} should have descriptive stats. You can add metadata to your task by running `YorTask().calculate_metadata_metrics()`"
+    assert task.metadata.n_samples is not None
