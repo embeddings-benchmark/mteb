@@ -32,5 +32,3 @@ results = evaluation.run(
     extra_kwargs={"batch_size": 8},
     overwrite_results=True,
 )
-
-
