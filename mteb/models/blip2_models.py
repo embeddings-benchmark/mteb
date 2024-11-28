@@ -7,7 +7,11 @@ import torch
 from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import Blip2VisionModelWithProjection, Blip2TextModelWithProjection, Blip2Model, AutoTokenizer, AutoProcessor
+from transformers import (
+    AutoProcessor,
+    Blip2TextModelWithProjection,
+    Blip2VisionModelWithProjection,
+)
 
 from mteb.model_meta import ModelMeta
 
@@ -22,9 +26,13 @@ def blip2_loader(**kwargs):
         ):
             self.model_name = model_name
             self.device = device
-            #self.processor = Blip2Processor.from_pretrained(model_name)
-            self.vision_model = Blip2VisionModelWithProjection.from_pretrained(model_name).to(device)
-            self.language_model = Blip2TextModelWithProjection.from_pretrained(model_name).to(device)
+            # self.processor = Blip2Processor.from_pretrained(model_name)
+            self.vision_model = Blip2VisionModelWithProjection.from_pretrained(
+                model_name
+            ).to(device)
+            self.language_model = Blip2TextModelWithProjection.from_pretrained(
+                model_name
+            ).to(device)
             self.processor = AutoProcessor.from_pretrained(model_name)
 
         def preprocess(
@@ -46,10 +54,12 @@ def blip2_loader(**kwargs):
                         text=batch_texts,
                         padding=True,
                         truncation=True,
-                        #max_length=self.language_model.max_txt_len,
-                        return_tensors="pt"
+                        # max_length=self.language_model.max_txt_len,
+                        return_tensors="pt",
                     ).to(self.device)
-                    text_outputs = self.language_model.forward(**text_tokens)["text_embeds"][:,0,:]
+                    text_outputs = self.language_model.forward(**text_tokens)[
+                        "text_embeds"
+                    ][:, 0, :]
                     # text_outputs = normalize(self.model.text_proj(text_outputs))
                     all_text_embeddings.append(text_outputs.cpu())
 
@@ -174,7 +184,7 @@ blip2_itm_vit_g = ModelMeta(
     open_source=True,
     revision="6e2c730e768eb499b886c73935a539ca2c197290",
     release_date="2024-11-04",
-) 
+)
 
 
 blip2_itm_vit_g_coco = ModelMeta(
@@ -187,11 +197,12 @@ blip2_itm_vit_g_coco = ModelMeta(
     open_source=True,
     revision="b1c997706e13245bbd2af5b2717239488d849f07",
     release_date="2024-11-04",
-) 
+)
 
 
 if __name__ == "__main__":
     import mteb
+
     mdl = mteb.get_model(blip2_itm_vit_g.name, blip2_itm_vit_g.revision, device="cuda")
 
     cat_img = Image.open("cat.jpg")
@@ -209,12 +220,8 @@ if __name__ == "__main__":
 
     cat_text = "An image of a cat"
 
-    multi_cat_emb = mdl.get_fused_embeddings(
-        ["A photo of an animal"], [cat_img]
-    )
-    multi_conflicting_emb = mdl.get_fused_embeddings(
-        ["A photo of a dog"], [cat_img]
-    )
+    multi_cat_emb = mdl.get_fused_embeddings(["A photo of an animal"], [cat_img])
+    multi_conflicting_emb = mdl.get_fused_embeddings(["A photo of a dog"], [cat_img])
     text_cat_emb = mdl.get_text_embeddings(["An photo of a cat"])
     text_dog_emb = mdl.get_text_embeddings(["An image of a dog"])
 
