@@ -7,22 +7,7 @@ from datetime import date
 from pathlib import Path
 from typing import Annotated, Any, Union
 
-from pydantic import (
-    AnyUrl,
-    BaseModel,
-    BeforeValidator,
-    TypeAdapter,
-    field_validator,
-    ConfigDict,
-)
-from typing_extensions import Literal, TypedDict
-from pydantic import (
-    AnyUrl,
-    BaseModel,
-    BeforeValidator,
-    TypeAdapter,
-    field_validator,
-)
+from pydantic import AnyUrl, BaseModel, BeforeValidator, ConfigDict, TypeAdapter, field_validator
 from typing_extensions import Literal, TypedDict
 
 from ..encoder_interface import PromptType
@@ -254,9 +239,9 @@ class TaskMetadata(BaseModel):
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
     """
 
-    model_config = ConfigDict(extra="forbid")
+    # model_config = ConfigDict(extra="forbid")
 
-    dataset: MetadataDatasetDict
+    dataset: dict #MetadataDatasetDict
 
     name: str
     description: str

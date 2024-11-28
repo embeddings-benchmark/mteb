@@ -35,15 +35,4 @@ class InstructIR(AbsTaskRetrieval):
       archivePrefix={{arXiv}},
       primaryClass={{cs.CL}}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 2255},
-            "test": {
-                "num_samples": 375,
-                "num_positive": 375,
-                "num_negative": 375,
-                "avg_query_len": 50.205333333333336,
-                "avg_positive_len": 6.013333333333334,
-                "avg_negative_len": 13.986666666666666,
-            },
-        },
     )

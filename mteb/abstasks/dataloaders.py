@@ -231,7 +231,7 @@ class HFDataLoader:
         self.queries = queries_ds
 
     def _load_qrels(self, split: str, config: str | None = None):
-        config = f"{config}-qrels" if config is not None else None
+        config = f"{config}-qrels" if config is not None else "default"
         if self.hf_repo:
             qrels_ds = load_dataset(
                 self.hf_repo_qrels,
@@ -258,7 +258,7 @@ class HFDataLoader:
         self.qrels = qrels_ds
 
     def _load_top_ranked(self, config: str | None = None):
-        config = f"top_ranked-{config}" if config is not None else "top_ranked"
+        config = f"{config}-top_ranked" if config is not None else "top_ranked"
         if self.hf_repo:
             top_ranked_ds = load_dataset(
                 self.hf_repo,

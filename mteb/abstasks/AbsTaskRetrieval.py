@@ -220,7 +220,7 @@ class AbsTaskRetrieval(AbsTask):
                     if top_ranked:
                         if self.top_ranked is None:
                             self.top_ranked = {}
-                        self.top_ranked = {
+                        self.top_ranked[lang] = {
                             split: {
                                 tr["query-id"]: tr["corpus-ids"] for tr in top_ranked
                             }
