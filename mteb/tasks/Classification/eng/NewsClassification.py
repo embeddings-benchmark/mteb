@@ -41,8 +41,4 @@ class NewsClassification(AbsTaskClassification):
         volume = {28},
         year = {2015}
         }""",
-        descriptive_stats={
-            "n_samples": {"test": 7600},
-            "avg_character_length": {"test": 235.29},
-        },
     )

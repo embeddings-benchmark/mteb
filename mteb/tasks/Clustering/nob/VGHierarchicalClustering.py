@@ -43,10 +43,6 @@ class VGHierarchicalClusteringP2P(AbsTaskClusteringFast):
     school={Norwegian University of Life Sciences, {\AA}s}
 }""",
         prompt="Identify the categories (e.g. sports) of given articles in Norwegian",
-        descriptive_stats={
-            "n_samples": {"test": N_SAMPLES},
-            "avg_character_length": {"test": 2670.3243084794544},
-        },
     )
 
     def dataset_transform(self) -> None:
@@ -92,10 +88,6 @@ class VGHierarchicalClusteringS2S(AbsTaskClusteringFast):
     school={Norwegian University of Life Sciences, {\AA}s}
 }""",
         prompt="Identify the categories (e.g. sports) of given articles in Norwegian",
-        descriptive_stats={
-            "n_samples": {"test": N_SAMPLES},
-            "avg_character_length": {"test": 139.31247668283325},
-        },
     )
 
     def dataset_transform(self) -> None:

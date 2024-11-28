@@ -100,10 +100,12 @@ from .jpn.NLPJournalAbsIntroRetrieval import *
 from .jpn.NLPJournalTitleAbsRetrieval import *
 from .jpn.NLPJournalTitleIntroRetrieval import *
 from .kat.GeorgianFAQRetrieval import *
+from .kor.AutoRAGRetrieval import *
 from .kor.KoStrategyQA import *
 from .multilingual.BelebeleRetrieval import *
 from .multilingual.CrossLingualSemanticDiscriminationWMT19 import *
 from .multilingual.CrossLingualSemanticDiscriminationWMT21 import *
+from .multilingual.CUREv1Retrieval import *
 from .multilingual.IndicQARetrieval import *
 from .multilingual.MintakaRetrieval import *
 from .multilingual.MIRACLRetrieval import *

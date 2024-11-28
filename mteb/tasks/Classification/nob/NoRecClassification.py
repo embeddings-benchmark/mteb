@@ -58,8 +58,4 @@ class NoRecClassification(AbsTaskClassification):
 }
 """,
         prompt="Classify Norwegian reviews by sentiment",
-        descriptive_stats={
-            "n_samples": {"test": 2050},
-            "avg_character_length": {"test": 82},
-        },
     )

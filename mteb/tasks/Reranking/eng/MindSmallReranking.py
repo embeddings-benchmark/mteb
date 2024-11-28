@@ -47,8 +47,4 @@ class MindSmallReranking(AbsTaskReranking):
         Many natural language processing techniques such as effective text representation methods and pre-trained 
         language models can effectively improve the performance of news recommendation. The MIND dataset will be 
         available at https://msnews.github.io}.", }""",
-        descriptive_stats={
-            "n_samples": {"test": 107968},
-            "avg_character_length": {"test": 70.9},
-        },
     )

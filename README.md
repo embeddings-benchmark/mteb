@@ -46,17 +46,15 @@ from sentence_transformers import SentenceTransformer
 
 # Define the sentence-transformers model name
 model_name = "average_word_embeddings_komninos"
-# or directly from huggingface:
-# model_name = "sentence-transformers/all-MiniLM-L6-v2"
 
-model = SentenceTransformer(model_name)
+model = mteb.get_model(model_name) # if the model is not implemented in MTEB it will be eq. to SentenceTransformer(model_name)
 tasks = mteb.get_tasks(tasks=["Banking77Classification"])
 evaluation = mteb.MTEB(tasks=tasks)
 results = evaluation.run(model, output_folder=f"results/{model_name}")
 ```
 
 <details>
-  <summary> Running SentneceTransformermer model with prompts </summary>
+  <summary> Running SentenceTransformer model with prompts </summary>
 
 Prompts can be passed to the SentenceTransformer model using the `prompts` parameter. The following code shows how to use prompts with SentenceTransformer:
 
@@ -220,7 +218,10 @@ Note that the public leaderboard uses the test splits for all datasets except MS
 Models should implement the following interface, implementing an `encode` function taking as inputs a list of sentences, and returning a list of embeddings (embeddings can be `np.array`, `torch.tensor`, etc.). For inspiration, you can look at the [mteb/mtebscripts repo](https://github.com/embeddings-benchmark/mtebscripts) used for running diverse models via SLURM scripts for the paper.
 
 ```python
+import mteb
 from mteb.encoder_interface import PromptType
+import numpy as np
+
 
 class CustomModel:
     def encode(
@@ -244,7 +245,7 @@ class CustomModel:
         pass
 
 model = CustomModel()
-tasks = mteb.get_task("Banking77Classification")
+tasks = mteb.get_tasks(tasks=["Banking77Classification"])
 evaluation = MTEB(tasks=tasks)
 evaluation.run(model)
 ```

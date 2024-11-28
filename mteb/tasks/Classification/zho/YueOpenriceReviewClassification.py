@@ -34,18 +34,9 @@ class YueOpenriceReviewClassification(AbsTaskClassification):
   year={2019},
   organization={KDD WISDOM}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 6161},
-            "avg_character_length": {"test": 173.0},
-        },
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["n_experiments"] = 10
-        metadata_dict["samples_per_label"] = 32
-        return metadata_dict
+    samples_per_label = 32
 
     def dataset_transform(self):
         self.dataset = self.stratified_subsampling(

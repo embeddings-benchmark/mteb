@@ -32,10 +32,6 @@ class MarathiNewsClassification(AbsTaskClassification):
     year={2020},
     journal={arXiv preprint arXiv:2005.00085},
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 2048},
-            "avg_character_length": {"test": 52.37},
-        },
     )
 
     def dataset_transform(self):

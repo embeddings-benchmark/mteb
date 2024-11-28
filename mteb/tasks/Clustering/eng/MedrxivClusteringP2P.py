@@ -36,10 +36,6 @@ class MedrxivClusteringP2PFast(AbsTaskClusteringFast):
         sample_creation="created",
         bibtex_citation="",
         prompt="Identify the main category of Medrxiv papers based on the titles and abstracts",
-        descriptive_stats={
-            "n_samples": {"test": 1500},
-            "avg_character_length": {"test": 1984.7},
-        },
     )
 
     def dataset_transform(self):
@@ -79,8 +75,4 @@ class MedrxivClusteringP2P(AbsTaskClustering):
         sample_creation="created",
         bibtex_citation="",
         prompt="Identify the main category of Medrxiv papers based on the titles and abstracts",
-        descriptive_stats={
-            "n_samples": {"test": 37500},
-            "avg_character_length": {"test": 1981.2},
-        },
     )

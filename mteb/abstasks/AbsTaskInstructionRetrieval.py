@@ -16,8 +16,9 @@ from ..evaluation.evaluators import utils
 from ..evaluation.evaluators.InstructionRetrievalEvaluator import (
     InstructionRetrievalEvaluator,
 )
-from .AbsTask import AbsTask, DescriptiveStatistics
+from .AbsTask import AbsTask
 from .AbsTaskRetrieval import HFDataLoader
+from .TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +37,7 @@ class HFDataLoaderInstructions(HFDataLoader):
         qrels_file: str = "",
         streaming: bool = False,
         keep_in_memory: bool = False,
+        trust_remote_code: bool = False,
     ):
         self.corpus = {}
         self.queries = {}
@@ -68,6 +70,7 @@ class HFDataLoaderInstructions(HFDataLoader):
             self.qrels_file = qrels_file
         self.streaming = streaming
         self.keep_in_memory = keep_in_memory
+        self.trust_remote_code = trust_remote_code
 
     def load(
         self, split="test"
@@ -222,24 +225,72 @@ class InstructionRetrievalDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for Instruction Retrieval tasks
 
     Attributes:
+        num_samples: Number of samples
         num_queries: Number of queries
         num_docs: Number of documents
+        number_of_characters: Total number of symbols in the dataset
+
+        min_document_length: Minimum length of documents
         average_document_length: Average length of documents
+        max_document_length: Maximum length of documents
+        unique_docs: Number of unique documents
+
+        min_query_length: Minimum length of queries
         average_query_length: Average length of queries
+        max_query_length: Maximum length of queries
+        unique_queries: Number of unique queries
+
+        min_instruction_length: Minimum length of instructions
         average_instruction_length: Average length of instructions
+        max_instruction_length: Maximum length of instructions
+        unique_instructions: Number of unique instructions
+
+        min_changed_instruction_length: Minimum length of changed instructions
         average_changed_instruction_length: Average length of changed instructions
+        max_changed_instruction_length: Maximum length of changed instructions
+        unique_changed_instructions: Number of unique changed instructions
+
+        min_average_relevant_docs_per_query: Minimum number of relevant docs per query
         average_relevant_docs_per_query: Average number of relevant docs per query
+        max_average_relevant_docs_per_query: Maximum number of relevant docs per query
+
+        min_average_top_ranked_per_query: Minimum number of top ranked docs per query
         average_top_ranked_per_query: Average number of top ranked docs per query
+        max_average_top_ranked_per_query: Maximum number of top ranked docs per query
     """
 
+    num_samples: int
     num_queries: int
     num_docs: int
+    number_of_characters: int
+
+    min_document_length: int
     average_document_length: float
+    max_document_length: int
+    unique_docs: int
+
+    min_query_length: int
     average_query_length: float
+    max_query_length: int
+    unique_queries: int
+
+    min_instruction_length: int
     average_instruction_length: float
+    max_instruction_length: int
+    unique_instructions: int
+
+    min_changed_instruction_length: int
     average_changed_instruction_length: float
+    max_changed_instruction_length: int
+    unique_changed_instructions: int
+
+    min_average_relevant_docs_per_query: float
     average_relevant_docs_per_query: float
+    max_average_relevant_docs_per_query: float
+
+    min_average_top_ranked_per_query: float
     average_top_ranked_per_query: float
+    max_average_top_ranked_per_query: float
 
 
 class AbsTaskInstructionRetrieval(AbsTask):
@@ -660,43 +711,70 @@ class AbsTaskInstructionRetrieval(AbsTask):
             changed_instructions = self.changed_instructions[split]
             top_ranked = self.top_ranked[split]
 
-        total_corpus_len = sum(
-            [len(doc.get("title", "")) + len(doc["text"]) for doc in corpus.values()]
-        )
-        total_queries_len = sum([len(query) for query in queries.values()])
-        total_instructions_len = sum(
-            [len(instruction) for instruction in og_instructions.values()]
-        )
-        total_changed_instructions_len = sum(
-            [len(instruction) for instruction in changed_instructions.values()]
-        )
-        num_qrels_non_zero = sum(
+        corpus_combined = [
+            doc.get("title", "") + doc["text"] for doc in corpus.values()
+        ]
+        corpus_len = [len(doc) for doc in corpus_combined]
+        total_corpus_len = sum(corpus_len)
+
+        queries_len = [len(query) for query in queries.values()]
+        total_queries_len = sum(queries_len)
+        instructions_len = [
+            len(instruction) for instruction in og_instructions.values()
+        ]
+        total_instructions_len = sum(instructions_len)
+        changed_instructions_len = [
+            len(instruction) for instruction in changed_instructions.values()
+        ]
+        total_changed_instructions_len = sum(changed_instructions_len)
+        qrels_non_zero = [
             sum(1 for doc_id in docs if docs[doc_id] != 0)
             for docs in relevant_docs.values()
-        )
+        ]
+        num_qrels_non_zero = sum(qrels_non_zero)
         qrels_per_doc = num_qrels_non_zero / len(relevant_docs) if len(queries) else 0
+        ranked_per_query = [len(docs) for docs in top_ranked.values()]
         top_ranked_per_query = (
-            sum(len(docs) for docs in top_ranked.values()) / len(queries)
-            if len(queries)
-            else 0
+            sum(ranked_per_query) / len(queries) if len(queries) else 0
         )
         return InstructionRetrievalDescriptiveStatistics(
+            num_samples=len(queries) + len(corpus),
             num_docs=len(corpus),
             num_queries=len(queries),
+            number_of_characters=total_corpus_len
+            + total_queries_len
+            + total_instructions_len
+            + total_changed_instructions_len,
+            min_document_length=min(corpus_len),
             average_document_length=(
                 total_corpus_len / len(corpus) if len(corpus) else 0
             ),
+            max_document_length=max(corpus_len),
+            unique_docs=len(set(corpus_combined)),
+            min_query_length=min(queries_len),
             average_query_length=(
                 total_queries_len / len(queries) if len(queries) else 0
             ),
+            max_query_length=max(queries_len),
+            unique_queries=len(set(queries.values())),
+            min_instruction_length=min(instructions_len),
             average_instruction_length=(
                 total_instructions_len / len(queries) if len(queries) else 0
             ),
+            max_instruction_length=max(instructions_len),
+            unique_instructions=len(set(og_instructions.values())),
+            min_changed_instruction_length=min(changed_instructions_len),
             average_changed_instruction_length=(
                 total_changed_instructions_len / len(queries) if len(queries) else 0
             ),
+            max_changed_instruction_length=max(changed_instructions_len),
+            unique_changed_instructions=len(set(changed_instructions.values())),
+            min_average_relevant_docs_per_query=min(qrels_non_zero),
             average_relevant_docs_per_query=qrels_per_doc,
+            max_average_relevant_docs_per_query=max(qrels_non_zero),
+            min_average_top_ranked_per_query=min(ranked_per_query),
             average_top_ranked_per_query=top_ranked_per_query,
+            max_average_top_ranked_per_query=max(ranked_per_query),
         )
 
 

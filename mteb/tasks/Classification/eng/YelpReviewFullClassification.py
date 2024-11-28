@@ -39,15 +39,9 @@ class YelpReviewFullClassification(AbsTaskClassification):
         year = {2015}
         }
         """,
-        descriptive_stats={"n_samples": {"test": 50000}, "avg_character_length": {}},
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
-        metadata_dict["n_experiments"] = 10
-        metadata_dict["samples_per_label"] = 128
-        return metadata_dict
+    samples_per_label = 128
 
     def dataset_transform(self):
         self.dataset = self.stratified_subsampling(

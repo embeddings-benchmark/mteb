@@ -36,8 +36,4 @@ class KinopoiskClassification(AbsTaskClassification):
         year={2013}
         }""",
         prompt="Classify the sentiment expressed in the given movie review text",
-        descriptive_stats={
-            "n_samples": {"test": 1500},
-            "avg_character_length": {"test": 1897.3},
-        },
     )

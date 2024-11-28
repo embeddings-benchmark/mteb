@@ -36,18 +36,6 @@ class NQPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 502.14302128535564,
-                    "average_query_length": 48.31662804171495,
-                    "num_documents": 2681468,
-                    "num_queries": 3452,
-                    "average_relevant_docs_per_query": 1.2169756662804172,
-                }
-            },
-        },
     )
 
 
@@ -82,16 +70,4 @@ class NQPLHardNegatives(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 1000},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 610.7449138094336,
-                    "average_query_length": 48.381,
-                    "num_documents": 184765,
-                    "num_queries": 1000,
-                    "average_relevant_docs_per_query": 1.213,
-                }
-            },
-        },
     )

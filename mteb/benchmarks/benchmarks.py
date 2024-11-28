@@ -106,7 +106,7 @@ MTEB_EN = Benchmark(
             "StackExchangeClustering.v2",
             "StackExchangeClusteringP2P.v2",
             "TRECCOVID",
-            "Touche2020",
+            "Touche2020Retrieval.v3",
             "ToxicConversationsClassification",
             "TweetSentimentExtractionClassification",
             "TwentyNewsgroupsClustering.v2",
@@ -186,7 +186,7 @@ MTEB_ENG_CLASSIC = Benchmark(
             "StackOverflowDupQuestions",
             "SummEval",
             "TRECCOVID",
-            "Touche2020Retrieval.v3",
+            "Touche2020",
             "ToxicConversationsClassification",
             "TweetSentimentExtractionClassification",
             "TwentyNewsgroupsClustering",
@@ -305,6 +305,29 @@ MTEB_RETRIEVAL_LAW = Benchmark(
     ),
     description="Legal benchmarks from MTEB.",
     reference="https://aclanthology.org/2023.eacl-main.148/",
+    citation=None,
+)
+
+MTEB_RETRIEVAL_MEDICAL = Benchmark(
+    name="MTEB(Medical)",
+    tasks=get_tasks(
+        tasks=[
+            "CUREv1",
+            "NFCorpus",
+            "TRECCOVID",
+            "TRECCOVID-PL",
+            "SciFact",
+            "SciFact-PL",
+            "MedicalQARetrieval",
+            "PublicHealthQA",
+            "MedrxivClusteringP2P.v2",
+            "MedrxivClusteringS2S.v2",
+            "CmedqaRetrieval",
+            "CMedQAv2-reranking",
+        ],
+    ),
+    description="A curated set of MTEB tasks designed to evaluate systems in the context of medical information retrieval.",
+    reference="",
     citation=None,
 )
 
@@ -702,6 +725,7 @@ MTEB_multilingual = Benchmark(
             "SpartQA",
             "TempReasonL1",
             "TRECCOVID",
+            "CUREv1",
             "WinoGrande",
             "BelebeleRetrieval",
             "MLQARetrieval",
@@ -917,4 +941,41 @@ MTEB_EU = Benchmark(
     description="Main European benchmark from MMTEB",
     reference=None,
     citation=None,
+)
+
+LONG_EMBED = Benchmark(
+    name="LongEmbed",
+    tasks=get_tasks(
+        tasks=[
+            "LEMBNarrativeQARetrieval",
+            "LEMBNeedleRetrieval",
+            "LEMBPasskeyRetrieval",
+            "LEMBQMSumRetrieval",
+            "LEMBSummScreenFDRetrieval",
+            "LEMBWikimQARetrieval",
+        ],
+    ),
+    description="The main benchmark for evaluating long document retrieval.",
+    reference="https://arxiv.org/abs/2404.12096v2",
+    citation="""@article{zhu2024longembed,
+  title={LongEmbed: Extending Embedding Models for Long Context Retrieval},
+  author={Zhu, Dawei and Wang, Liang and Yang, Nan and Song, Yifan and Wu, Wenhao and Wei, Furu and Li, Sujian},
+  journal={arXiv preprint arXiv:2404.12096},
+  year={2024}
+}""",
+)
+
+BRIGHT = Benchmark(
+    name="BRIGHT",
+    tasks=get_tasks(
+        tasks=["BrightRetrieval"],
+    ),
+    description="A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.",
+    reference="https://brightbenchmark.github.io/",
+    citation="""@article{su2024bright,
+  title={Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
+  author={Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
+  journal={arXiv preprint arXiv:2407.12883},
+  year={2024}
+}""",
 )

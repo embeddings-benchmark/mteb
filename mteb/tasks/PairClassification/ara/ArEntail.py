@@ -37,10 +37,6 @@ class ArEntail(AbsTaskPairClassification):
         year={2024},
         publisher={Springer}
         }""",
-        descriptive_stats={
-            "n_samples": {"test": 1000},
-            "avg_character_length": {"test": 65.77},
-        },
     )
 
     def dataset_transform(self):

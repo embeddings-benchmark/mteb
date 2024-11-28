@@ -13,7 +13,7 @@ from time import time
 from typing import Any
 
 import datasets
-from sentence_transformers import SentenceTransformer
+from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
@@ -23,7 +23,6 @@ from ..abstasks import *
 from ..abstasks import AbsTask
 from ..load_results.task_results import TaskResult
 from ..models.sentence_transformer_wrapper import SentenceTransformerWrapper
-from ..models.wrapper import Wrapper
 from ..tasks import *
 from . import LangMapping
 
@@ -363,7 +362,7 @@ class MTEB:
 
         meta = self.create_model_meta(model)
         output_path = self.create_output_folder(meta, output_folder)
-        if not isinstance(model, Wrapper):
+        if isinstance(model, (SentenceTransformer, CrossEncoder)):
             model = SentenceTransformerWrapper(model)
 
         if output_path:
@@ -371,7 +370,10 @@ class MTEB:
 
         # Run selected tasks
         logger.info(f"\n\n## Evaluating {len(self.tasks)} tasks:")
-        self.print_selected_tasks()
+
+        if verbosity > 0:
+            self.print_selected_tasks()
+
         evaluation_results = []
         original_tasks = (
             self.tasks.copy()

@@ -56,18 +56,9 @@ class DKHateClassification(AbsTaskClassification):
     ISBN = "979-10-95546-34-4",
 }""",
         prompt="Classify Danish tweets based on offensiveness (offensive, not offensive)",
-        descriptive_stats={
-            "n_samples": {"test": 329},
-            "avg_character_length": {"test": 104.0},
-        },
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
-        metadata_dict["n_experiments"] = 10
-        metadata_dict["samples_per_label"] = 16
-        return metadata_dict
+    samples_per_label = 16
 
     def dataset_transform(self):
         # convert label to a 0/1 label

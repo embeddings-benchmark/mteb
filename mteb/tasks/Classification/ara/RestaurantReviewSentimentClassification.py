@@ -3,8 +3,6 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-N_SAMPLES = 2048
-
 
 class RestaurantReviewSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
@@ -38,10 +36,6 @@ class RestaurantReviewSentimentClassification(AbsTaskClassification):
   organization={Springer}
 }
 """,
-        descriptive_stats={
-            "n_samples": {"train": N_SAMPLES},
-            "avg_character_length": {"train": 231.4},
-        },
     )
 
     def dataset_transform(self):

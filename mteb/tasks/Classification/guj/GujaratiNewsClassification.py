@@ -27,10 +27,6 @@ class GujaratiNewsClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",  # none found
-        descriptive_stats={
-            "n_samples": {"train": 5269, "test": 1318},
-            "avg_character_length": {"train": 61.95, "test": 61.91},
-        },
     )
 
     def dataset_transform(self):

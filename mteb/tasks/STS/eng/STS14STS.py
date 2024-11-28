@@ -45,10 +45,6 @@ class STS14STS(AbsTaskSTS):
     doi = "10.3115/v1/S14-1002",
     pages = "12--21",
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 7500},
-            "avg_character_length": {"test": 54.3},
-        },
     )
 
     @property
