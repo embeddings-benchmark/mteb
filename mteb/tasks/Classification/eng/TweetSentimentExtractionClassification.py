@@ -37,15 +37,6 @@ class TweetSentimentExtractionClassification(AbsTaskClassification):
     url = {https://kaggle.com/competitions/tweet-sentiment-extraction}
 }""",
         prompt="Classify the sentiment of a given tweet as either positive, negative, or neutral",
-        descriptive_stats={
-            "n_samples": {"test": 3534},
-            "avg_character_length": {"test": 67.8},
-        },
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
-        metadata_dict["n_experiments"] = 10
-        metadata_dict["samples_per_label"] = 32
-        return metadata_dict
+    samples_per_label = 32

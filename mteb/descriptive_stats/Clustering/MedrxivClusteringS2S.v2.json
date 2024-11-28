@@ -1,0 +1,168 @@
+{
+    "test": {
+        "num_samples": 37500,
+        "number_of_characters": 4301276,
+        "min_text_length": 18,
+        "average_text_length": 114.70069333333333,
+        "max_text_length": 339,
+        "min_labels_per_text": 6,
+        "average_labels_per_text": 1.0,
+        "max_labels_per_text": 8830,
+        "unique_labels": 51,
+        "labels": {
+            "epidemiology": {
+                "count": 6656
+            },
+            "public and global health": {
+                "count": 3595
+            },
+            "oncology": {
+                "count": 845
+            },
+            "allergy and immunology": {
+                "count": 464
+            },
+            "orthopedics": {
+                "count": 104
+            },
+            "health informatics": {
+                "count": 1107
+            },
+            "occupational and environmental health": {
+                "count": 415
+            },
+            "infectious diseases": {
+                "count": 8830
+            },
+            "genetic and genomic medicine": {
+                "count": 1918
+            },
+            "health policy": {
+                "count": 527
+            },
+            "gastroenterology": {
+                "count": 343
+            },
+            "radiology and imaging": {
+                "count": 541
+            },
+            "pain medicine": {
+                "count": 121
+            },
+            "neurology": {
+                "count": 1773
+            },
+            "primary care research": {
+                "count": 232
+            },
+            "rheumatology": {
+                "count": 189
+            },
+            "endocrinology": {
+                "count": 419
+            },
+            "hematology": {
+                "count": 202
+            },
+            "addiction medicine": {
+                "count": 178
+            },
+            "pediatrics": {
+                "count": 589
+            },
+            "cardiovascular medicine": {
+                "count": 855
+            },
+            "obstetrics and gynecology": {
+                "count": 373
+            },
+            "health systems and quality improvement": {
+                "count": 491
+            },
+            "nephrology": {
+                "count": 241
+            },
+            "respiratory medicine": {
+                "count": 482
+            },
+            "geriatric medicine": {
+                "count": 169
+            },
+            "dentistry and oral medicine": {
+                "count": 159
+            },
+            "psychiatry and clinical psychology": {
+                "count": 1781
+            },
+            "nutrition": {
+                "count": 240
+            },
+            "intensive care and critical care medicine": {
+                "count": 368
+            },
+            "rehabilitation medicine and physical therapy": {
+                "count": 322
+            },
+            "otolaryngology": {
+                "count": 166
+            },
+            "nursing": {
+                "count": 93
+            },
+            "transplantation": {
+                "count": 118
+            },
+            "health economics": {
+                "count": 327
+            },
+            "sports medicine": {
+                "count": 180
+            },
+            "hiv aids": {
+                "count": 363
+            },
+            "dermatology": {
+                "count": 98
+            },
+            "pathology": {
+                "count": 223
+            },
+            "emergency medicine": {
+                "count": 191
+            },
+            "pharmacology and therapeutics": {
+                "count": 221
+            },
+            "ophthalmology": {
+                "count": 220
+            },
+            "medical ethics": {
+                "count": 46
+            },
+            "palliative medicine": {
+                "count": 45
+            },
+            "sexual and reproductive health": {
+                "count": 156
+            },
+            "medical education": {
+                "count": 203
+            },
+            "surgery": {
+                "count": 162
+            },
+            "urology": {
+                "count": 65
+            },
+            "anesthesia": {
+                "count": 72
+            },
+            "toxicology": {
+                "count": 16
+            },
+            "forensic medicine": {
+                "count": 6
+            }
+        }
+    }
+}

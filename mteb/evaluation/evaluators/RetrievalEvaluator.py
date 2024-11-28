@@ -188,7 +188,12 @@ class DenseRetrievalExactSearch:
             cos_scores = self.score_functions[score_function](
                 query_embeddings, sub_corpus_embeddings
             )
-            cos_scores[torch.isnan(cos_scores)] = -1
+            is_nan = torch.isnan(cos_scores)
+            if is_nan.sum() > 0:
+                logger.warning(
+                    f"Found {is_nan.sum()} NaN values in the similarity scores. Replacing NaN values with -1."
+                )
+            cos_scores[is_nan] = -1
 
             # Get top-k values
             cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
@@ -263,7 +268,7 @@ class DenseRetrievalExactSearch:
         for qid in queries.keys():
             if self.previous_results is None:
                 # try to use all of them
-                logging.logging(
+                logging.info(
                     f"previous_results is None. Using all the documents to rerank: {len(corpus)}"
                 )
                 q_results = {doc_id: 0.0 for doc_id in corpus.keys()}
@@ -313,7 +318,9 @@ class DenseRetrievalExactSearch:
                 len(queries_in_pair) == len(corpus_in_pair) == len(instructions_in_pair)
             )
 
-            if isinstance(self.model.model, CrossEncoder):
+            if hasattr(self.model, "model") and isinstance(
+                self.model.model, CrossEncoder
+            ):
                 # can't take instructions, so add them here
                 queries_in_pair = [
                     f"{q} {i}".strip()
@@ -423,7 +430,7 @@ class DRESModel:
 
 
 def is_cross_encoder_compatible(model) -> bool:
-    op = getattr(model.model, "predict", None)
+    op = getattr(model, "predict", None)
     return callable(op)
 
 

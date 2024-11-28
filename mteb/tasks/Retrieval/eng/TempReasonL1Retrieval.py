@@ -44,16 +44,4 @@ class TempReasonL1(AbsTaskRetrieval):
         prompt={
             "query": "Given the following question about time, retrieve the correct answer."
         },
-        descriptive_stats={
-            "n_samples": {"test": 4000},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 8.989843250159948,
-                    "average_query_length": 50.22375,
-                    "num_documents": 12504,
-                    "num_queries": 4000,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )

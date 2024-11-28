@@ -37,10 +37,6 @@ class FinancialPhrasebankClassification(AbsTaskClassification):
             volume={65}
             }
         """,
-        descriptive_stats={
-            "n_samples": {"train": 4840},
-            "avg_character_length": {"train": 121.96},
-        },
     )
 
     def dataset_transform(self):

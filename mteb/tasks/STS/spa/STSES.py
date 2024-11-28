@@ -47,7 +47,6 @@ class STSES(AbsTaskSTS):
   year={2014}
 }
 """,
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
     @property

@@ -43,10 +43,6 @@ class MalteseNewsClassification(AbsTaskMultilabelClassification):
             year = "2024",
             publisher = "Association for Computational Linguistics",
         }""",
-        descriptive_stats={
-            "n_samples": {"train": 10784, "test": 2297},
-            "avg_character_length": {"train": 1595.63, "test": 1752.1},
-        },
     )
 
     def dataset_transform(self):

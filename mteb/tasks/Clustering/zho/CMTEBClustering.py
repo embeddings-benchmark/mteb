@@ -48,10 +48,6 @@ class CLSClusteringFastS2S(AbsTaskClusteringFast):
             primaryClass={cs.CL}
         }""",
         prompt="Identify the main category of scholar papers based on the titles",
-        descriptive_stats={
-            "n_samples": {"test": NUM_SAMPLES},
-            "avg_character_length": {},
-        },
     )
 
     def dataset_transform(self):
@@ -71,7 +67,6 @@ class CLSClusteringFastS2S(AbsTaskClusteringFast):
             self.seed,
             self.metadata.eval_splits,
             label="labels",
-            n_samples=NUM_SAMPLES,
         )
 
 
@@ -109,10 +104,6 @@ class CLSClusteringFastP2P(AbsTaskClusteringFast):
             primaryClass={cs.CL}
         }""",
         prompt="Identify the main category of scholar papers based on the titles and abstracts",
-        descriptive_stats={
-            "n_samples": {"test": NUM_SAMPLES},
-            "avg_character_length": {},
-        },
     )
 
     def dataset_transform(self):
@@ -132,7 +123,6 @@ class CLSClusteringFastP2P(AbsTaskClusteringFast):
             self.seed,
             self.metadata.eval_splits,
             label="labels",
-            n_samples=NUM_SAMPLES,
         )
 
 
@@ -169,7 +159,6 @@ class CLSClusteringS2S(AbsTaskClustering):
 }
 """,
         prompt="Identify the main category of scholar papers based on the titles",
-        descriptive_stats={"n_samples": {"test": 100000}, "avg_character_length": None},
     )
 
 
@@ -204,7 +193,6 @@ class CLSClusteringP2P(AbsTaskClustering):
   year={2022}
 }""",
         prompt="Identify the main category of scholar papers based on the titles and abstracts",
-        descriptive_stats={"n_samples": {"test": 100000}, "avg_character_length": None},
     )
 
 
@@ -242,10 +230,6 @@ class ThuNewsClusteringFastS2S(AbsTaskClusteringFast):
   url = {https://github.com/thunlp/THUCTC}
 }""",
         prompt="Identify the topic or theme of the given news articles based on the titles",
-        descriptive_stats={
-            "n_samples": {"test": NUM_SAMPLES},
-            "avg_character_length": {},
-        },
     )
 
     def dataset_transform(self):
@@ -265,7 +249,6 @@ class ThuNewsClusteringFastS2S(AbsTaskClusteringFast):
             self.seed,
             self.metadata.eval_splits,
             label="labels",
-            n_samples=NUM_SAMPLES,
         )
 
 
@@ -303,10 +286,6 @@ class ThuNewsClusteringFastP2P(AbsTaskClusteringFast):
   url = {https://github.com/thunlp/THUCTC}
 }""",
         prompt="Identify the topic or theme of the given news articles based on the titles and contents",
-        descriptive_stats={
-            "n_samples": {"test": NUM_SAMPLES},
-            "avg_character_length": {},
-        },
     )
 
     def dataset_transform(self):
@@ -326,7 +305,6 @@ class ThuNewsClusteringFastP2P(AbsTaskClusteringFast):
             self.seed,
             self.metadata.eval_splits,
             label="labels",
-            n_samples=NUM_SAMPLES,
         )
 
 
@@ -370,7 +348,6 @@ class ThuNewsClusteringS2S(AbsTaskClustering):
 }
 """,
         prompt="Identify the topic or theme of the given news articles based on the titles",
-        descriptive_stats={"n_samples": {"test": 100000}, "avg_character_length": None},
     )
 
 
@@ -414,5 +391,4 @@ class ThuNewsClusteringP2P(AbsTaskClustering):
 }
 """,
         prompt="Identify the topic or theme of the given news articles based on the titles and contents",
-        descriptive_stats={"n_samples": {"test": 100000}, "avg_character_length": None},
     )

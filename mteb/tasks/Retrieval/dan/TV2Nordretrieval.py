@@ -58,18 +58,6 @@ class TV2Nordretrieval(AbsTaskRetrieval):
         prompt={
             "query": "Given a summary of a Danish news article retrieve the corresponding news article"
         },
-        descriptive_stats={
-            "n_samples": {"test": 4096},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1440.66552734375,
-                    "average_query_length": 126.552734375,
-                    "num_documents": 2048,
-                    "num_queries": 2048,
-                    "average_relevant_docs_per_query": 1.0,
-                },
-            },
-        },
         task_subtypes=["Article retrieval"],
     )
 

@@ -167,7 +167,7 @@ class JinaWrapper(SentenceTransformerWrapper):
         prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
         if prompt_name:
             logger.info(
-                f"Using prompt_nane={prompt_name} for task={task_name} prompt_type={prompt_type}"
+                f"Using prompt_name={prompt_name} for task={task_name} prompt_type={prompt_type}"
             )
         else:
             logger.info(
@@ -214,7 +214,7 @@ jina_embeddings_v3 = ModelMeta(
     open_weights=True,
     revision="215a6e121fa0183376388ac6b1ae230326bfeaed",
     release_date="2024-09-18",  # official release date
-    n_parameters=572_000,
+    n_parameters=572 * 1e6,
     max_tokens=8194,
     embed_dim=4096,
     license="cc-by-nc-4.0",

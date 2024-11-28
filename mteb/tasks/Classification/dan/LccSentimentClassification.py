@@ -47,15 +47,6 @@ class LccSentimentClassification(AbsTaskClassification):
     abstract = "A simple and flexible schema for storing and presenting monolingual language resources is proposed. In this format, data for 18 different languages is already available in various sizes. The data is provided free of charge for online use and download. The main target is to ease the application of algorithms for monolingual and interlingual studies.",
 }""",
         prompt="Classify texts based on sentiment",
-        descriptive_stats={
-            "n_samples": {"test": 150},
-            "avg_character_length": {"test": 118.7},
-        },
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["n_experiments"] = 10
-        metadata_dict["samples_per_label"] = 16
-        return metadata_dict
+    samples_per_label = 16

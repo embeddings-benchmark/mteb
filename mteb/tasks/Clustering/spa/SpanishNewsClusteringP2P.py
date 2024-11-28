@@ -28,5 +28,4 @@ class SpanishNewsClusteringP2P(AbsTaskClustering):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )

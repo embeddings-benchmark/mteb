@@ -44,16 +44,4 @@ acmid = {2838934},
 publisher = {ACM},
 address = {New York, NY, USA},
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 482.4710971880361,
-                    "average_query_length": 48.32993630573248,
-                    "num_documents": 40221,
-                    "num_queries": 1570,
-                    "average_relevant_docs_per_query": 2.3980891719745223,
-                }
-            },
-        },
     )
