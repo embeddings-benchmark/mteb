@@ -313,7 +313,7 @@ class MTEB:
 
     @staticmethod
     def _get_missing_splits(
-        existing_results: TaskResult | None, task_eval_splits: list[str], task: AbsTask
+        existing_results: TaskResult | None, task_eval_splits: list[str]
     ) -> list[str]:
         if existing_results is None:
             return task_eval_splits
@@ -435,7 +435,11 @@ class MTEB:
         original_tasks = (
             self.tasks.copy()
         )  # save them in case we re-use the object (e.g. for reranking)
+
+        # To evaluate missing splits, we keep track of the task name and the corresponding splits.
+        # TODO: track languages too.
         self.last_evaluated_splits = {}
+
         while len(self.tasks) > 0:
             task = self.tasks[0]
             logger.info(
@@ -445,28 +449,29 @@ class MTEB:
             if output_path:
                 save_path = output_path / f"{task.metadata.name}{task.save_suffix}.json"
                 existing_results = None
-                if save_path.exists() and not overwrite_results:
-                    logger.info(
-                        f"{task.metadata.name} results already exists. Loading results from disk. Set overwrite_results=True to overwrite."
-                    )
-                    mteb_results = TaskResult.from_disk(save_path)
-                    evaluation_results.append(mteb_results)
-                    del self.tasks[0]  # empty memory
-                    continue
+                if save_path.exists():
+                    existing_results = TaskResult.from_disk(save_path)
+
+                    if not overwrite_results:
+                        logger.info(
+                            f"{task.metadata.name} results already exists. Loading results from disk. Set overwrite_results=True to overwrite."
+                        )
+                        evaluation_results.append(existing_results)
+                        del self.tasks[0]  # empty memory
+                        continue
 
                 task_eval_splits = (
                     eval_splits if eval_splits is not None else task.eval_splits
                 )
                 missing_splits = self._get_missing_splits(
-                    existing_results, task_eval_splits, task
+                    existing_results, task_eval_splits
                 )
 
                 if not missing_splits and existing_results:
-                    logger.info(
-                        f"{task.metadata.name} results already exist. Loading results from disk."
-                    )
                     evaluation_results.append(existing_results)
-                    self.last_evaluated_splits[task.metadata.name] = []  # Add this line
+
+                    # no splits are evaluated.
+                    self.last_evaluated_splits[task.metadata.name] = []
                     del self.tasks[0]
                     continue
 
@@ -483,6 +488,8 @@ class MTEB:
                 task_results = {}
                 evaluation_time = 0
                 kg_co2_emissions: int | None = 0 if co2_tracker else None
+
+                self.last_evaluated_splits[task.metadata.name] = []
 
                 for split in missing_splits:
                     if co2_tracker:
@@ -517,6 +524,8 @@ class MTEB:
                             encode_kwargs=encode_kwargs,
                             **kwargs,
                         )
+
+                    self.last_evaluated_splits[task.metadata.name].append(split)
 
                     logger.info(
                         f"Evaluation for {task.metadata_dict['name']} on {split} took {tock - tick:.2f} seconds"
