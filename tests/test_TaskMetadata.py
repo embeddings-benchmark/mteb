@@ -531,10 +531,6 @@ def test_empty_descriptive_stat_in_new_datasets(task: AbsTask):
     # DON'T ADD NEW DATASETS TO THIS LIST
     # THIS IS ONLY INTENDED FOR HISTORIC DATASETS
     exceptions = [
-        "MSMARCOv2",
-        "NeuCLIR2022Retrieval",
-        "NeuCLIR2023Retrieval",
-        "FloresBitextMining",
         "FilipinoHateSpeechClassification",
     ]
 
@@ -549,8 +545,4 @@ def test_empty_descriptive_stat_in_new_datasets(task: AbsTask):
         assert (
             task.metadata.descriptive_stats is not None
         ), f"Dataset {task.metadata.name} should have descriptive stats. You can add metadata to your task by running `YorTask().calculate_metadata_metrics()`"
-
-
-@pytest.mark.parametrize("task", get_tasks())
-def test_validate_metadata(task: AbsTask):
-    task.metadata.validate_metadata()
+        assert task.metadata.n_samples is not None

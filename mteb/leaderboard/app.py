@@ -60,21 +60,25 @@ def format_list(props: list[str]):
     return ", ".join(props)
 
 
-def update_task_info(task_names: str) -> str:
+def update_task_info(task_names: str) -> gr.DataFrame:
     tasks = mteb.get_tasks(tasks=task_names)
-    df = tasks.to_dataframe()
+    df = tasks.to_dataframe(
+        properties=["name", "type", "languages", "domains", "reference", "main_score"]
+    )
     df["languages"] = df["languages"].map(format_list)
     df["domains"] = df["domains"].map(format_list)
+    df["name"] = "[" + df["name"] + "](" + df["reference"] + ")"
     df = df.rename(
         columns={
             "name": "Task Name",
             "type": "Task Type",
             "languages": "Languages",
             "domains": "Domains",
-            "license": "License",
+            "main_score": "Metric",
         }
     )
-    return df
+    df = df.drop(columns="reference")
+    return gr.DataFrame(df, datatype=["markdown"] + ["str"] * (len(df.columns) - 1))
 
 
 all_results = load_results().filter_models()
@@ -215,6 +219,9 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             citation = gr.Markdown(update_citation, inputs=[benchmark_select])
         with gr.Column():
             plot = gr.Plot(performance_size_plot, inputs=[summary_table])
+            gr.Markdown(
+                "*We only display models that have been run on all tasks in the benchmark*"
+            )
     with gr.Tab("Summary"):
         summary_table.render()
     with gr.Tab("Performance per task"):

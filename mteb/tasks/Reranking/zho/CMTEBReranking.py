@@ -125,7 +125,7 @@ class CMedQAv2(AbsTaskReranking):
         eval_langs=["cmn-Hans"],
         main_score="map_at_1000",
         date=None,
-        domains=None,
+        domains=["Medical", "Written"],
         task_subtypes=None,
         license=None,
         annotations_creators=None,
