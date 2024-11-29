@@ -350,7 +350,7 @@ class MTEB:
             scores=merged_scores,
             evaluation_time=existing_results.evaluation_time
             + new_results.evaluation_time,
-            kg_co2_emissions=existing_results.kg_co2_emissions,
+            kg_co2_emissions=existing_results.kg_co2_emissions + new_results.kg_co2_emissions,
         )
 
         return merged_results
@@ -437,7 +437,6 @@ class MTEB:
         )  # save them in case we re-use the object (e.g. for reranking)
 
         # To evaluate missing splits, we keep track of the task name and the corresponding splits.
-        # TODO: track languages too.
         self.last_evaluated_splits = {}
 
         while len(self.tasks) > 0:
