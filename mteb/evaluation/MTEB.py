@@ -343,6 +343,17 @@ class MTEB:
             else:
                 merged_scores[split] = scores
 
+        existing_kg_co2_emissions = (
+            existing_results.kg_co2_emissions
+            if existing_results.kg_co2_emissions
+            else 0
+        )
+        new_kg_co2_emissions = (
+            new_results.kg_co2_emissions if new_results.kg_co2_emissions else 0
+        )
+        merged_kg_co2_emissions = None
+        if existing_kg_co2_emissions and new_kg_co2_emissions:
+            merged_kg_co2_emissions = existing_kg_co2_emissions + new_kg_co2_emissions
         merged_results = TaskResult(
             dataset_revision=existing_results.dataset_revision,
             task_name=existing_results.task_name,
@@ -350,8 +361,7 @@ class MTEB:
             scores=merged_scores,
             evaluation_time=existing_results.evaluation_time
             + new_results.evaluation_time,
-            kg_co2_emissions=existing_results.kg_co2_emissions
-            + new_results.kg_co2_emissions,
+            kg_co2_emissions=merged_kg_co2_emissions,
         )
 
         return merged_results
