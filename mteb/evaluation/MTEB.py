@@ -355,9 +355,9 @@ class MTEB:
         if existing_kg_co2_emissions and new_kg_co2_emissions:
             merged_kg_co2_emissions = existing_kg_co2_emissions + new_kg_co2_emissions
         merged_results = TaskResult(
-            dataset_revision=existing_results.dataset_revision,
-            task_name=existing_results.task_name,
-            mteb_version=existing_results.mteb_version,
+            dataset_revision=new_results.dataset_revision,
+            task_name=new_results.task_name,
+            mteb_version=new_results.mteb_version,
             scores=merged_scores,
             evaluation_time=existing_results.evaluation_time
             + new_results.evaluation_time,
