@@ -84,7 +84,7 @@ text_embedding_3_small = ModelMeta(
     tokenizer_name="cl100k_base",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
-    loader=partial(OpenAIWrapper, model_name="text-embedding-3-small"),
+    loader=partial(OpenAIWrapper, model_name="text-embedding-3-small", tokenizer_name="cl100k_base", max_tokens=8192),
     max_tokens=8191,
     embed_dim=1536,
     open_weights=False,
@@ -102,7 +102,7 @@ text_embedding_3_large = ModelMeta(
     tokenizer_name="cl100k_base",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
-    loader=partial(OpenAIWrapper, model_name="text-embedding-3-large"),
+    loader=partial(OpenAIWrapper, model_name="text-embedding-3-large", tokenizer_name="cl100k_base", max_tokens=8192),
     max_tokens=8191,
     embed_dim=3072,
     open_weights=False,
@@ -117,7 +117,7 @@ text_embedding_ada_002 = ModelMeta(
     tokenizer_name="cl100k_base",
     release_date="2022-12-15",
     languages=None,  # supported languages not specified
-    loader=partial(OpenAIWrapper, model_name="text-embedding-ada-002"),
+    loader=partial(OpenAIWrapper, model_name="text-embedding-ada-002", tokenizer_name="cl100k_base", max_tokens=8192),
     max_tokens=8191,
     embed_dim=1536,
     open_weights=False,
