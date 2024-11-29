@@ -18,7 +18,7 @@ class OpenAIWrapper(Wrapper):
     def __init__(
         self,
         model_name: str,
-        max_seq_length: int,
+        max_tokens: int,
         tokenizer_name: str = "cl100k_base",  # since all models use this tokenizer now
         embed_dim: int | None = None,
         **kwargs,
@@ -29,11 +29,12 @@ class OpenAIWrapper(Wrapper):
         self._client = OpenAI()
         self._model_name = model_name
         self._embed_dim = embed_dim
-        self._max_seq_length = max_seq_length
+        self._max_tokens = max_tokens
         self._tokenizer_name = tokenizer_name
 
     def encode(self, sentences: list[str], **kwargs: Any) -> np.ndarray:
         requires_package(self, "openai", "Openai text embedding")
+        requires_package(self, "tiktoken", "Tiktoken package")
         import tiktoken
         from openai import NotGiven
 
@@ -46,9 +47,9 @@ class OpenAIWrapper(Wrapper):
         for sentence in sentences:
             encoding = tiktoken.get_encoding(self._tokenizer_name)
             encoded_sentence = encoding.encode(sentence)
-            if len(encoded_sentence) > self._max_seq_length:
+            if len(encoded_sentence) > self._max_tokens:
                 trimmed_sentence = encoding.decode(
-                    encoded_sentence[: self._max_seq_length]
+                    encoded_sentence[: self._max_tokens]
                 )
                 trimmed_sentences.append(trimmed_sentence)
             else:
@@ -80,6 +81,7 @@ class OpenAIWrapper(Wrapper):
 text_embedding_3_small = ModelMeta(
     name="openai/text-embedding-3-small",
     revision="1",
+    tokenizer_name="cl100k_base",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
     loader=partial(OpenAIWrapper, model_name="text-embedding-3-small"),
@@ -97,6 +99,7 @@ text_embedding_3_small = ModelMeta(
 text_embedding_3_large = ModelMeta(
     name="openai/text-embedding-3-large",
     revision="1",
+    tokenizer_name="cl100k_base",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
     loader=partial(OpenAIWrapper, model_name="text-embedding-3-large"),
@@ -111,6 +114,7 @@ text_embedding_3_large = ModelMeta(
 text_embedding_ada_002 = ModelMeta(
     name="openai/text-embedding-ada-002",
     revision="1",
+    tokenizer_name="cl100k_base",
     release_date="2022-12-15",
     languages=None,  # supported languages not specified
     loader=partial(OpenAIWrapper, model_name="text-embedding-ada-002"),
