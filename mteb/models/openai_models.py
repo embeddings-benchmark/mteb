@@ -5,6 +5,7 @@ from functools import partial
 from typing import Any
 
 import numpy as np
+import tiktoken
 
 from mteb.model_meta import ModelMeta
 from mteb.requires_package import requires_package
@@ -15,13 +16,22 @@ logger = logging.getLogger(__name__)
 
 
 class OpenAIWrapper(Wrapper):
-    def __init__(self, model_name: str, embed_dim: int | None = None, **kwargs) -> None:
+    def __init__(
+        self,
+        model_name: str,
+        max_seq_length: int,
+        tokenizer_name: str = "cl100k_base",
+        embed_dim: int | None = None,
+        **kwargs,
+    ) -> None:
         requires_package(self, "openai", "Openai text embedding")
         from openai import OpenAI
 
         self._client = OpenAI()
         self._model_name = model_name
         self._embed_dim = embed_dim
+        self._max_seq_length = max_seq_length
+        self._tokenizer_name = tokenizer_name
 
     def encode(self, sentences: list[str], **kwargs: Any) -> np.ndarray:
         requires_package(self, "openai", "Openai text embedding")
@@ -32,10 +42,22 @@ class OpenAIWrapper(Wrapper):
                 "Reducing embedding size available only for text-embedding-3-* models"
             )
 
+        trimmed_sentences = []
+        for sentence in sentences:
+            encoding = tiktoken.get_encoding(self._tokenizer_name)
+            encoded_sentence = encoding.encode(sentence)
+            if len(encoded_sentence) > self._max_seq_length:
+                trimmed_sentence = encoding.decode(
+                    encoded_sentence[: self._max_seq_length]
+                )
+                trimmed_sentences.append(trimmed_sentence)
+            else:
+                trimmed_sentences.append(sentence)
+
         max_batch_size = 2048
         sublists = [
-            sentences[i : i + max_batch_size]
-            for i in range(0, len(sentences), max_batch_size)
+            trimmed_sentences[i : i + max_batch_size]
+            for i in range(0, len(trimmed_sentences), max_batch_size)
         ]
 
         all_embeddings = []
