@@ -53,7 +53,6 @@ class ModelMeta(BaseModel):
     Attributes:
         loader: the function that loads the model. If None it will just default to loading the model using the sentence transformer library.
         name: The name of the model, ideally the name on huggingface.
-        tokenizer_name: The name of the tokenizer used by the model.
         n_parameters: The number of parameters in the model, e.g. 7_000_000 for a 7M parameter model. Can be None if the the number of parameters is not known (e.g. for proprietary models) or
             if the loader returns a SentenceTransformer model from which it can be derived.
         memory_usage: The amount of memory the model uses in GB. Can be None if the memory usage is not known (e.g. for proprietary models).
@@ -83,7 +82,6 @@ class ModelMeta(BaseModel):
     revision: str | None
     release_date: STR_DATE | None
     languages: list[ISO_LANGUAGE_SCRIPT] | None
-    tokenizer_name: str | None = None
     loader: Callable[..., Encoder] | None = None
     n_parameters: int | None = None
     memory_usage: float | None = None

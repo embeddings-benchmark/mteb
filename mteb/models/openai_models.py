@@ -48,9 +48,7 @@ class OpenAIWrapper(Wrapper):
             encoding = tiktoken.get_encoding(self._tokenizer_name)
             encoded_sentence = encoding.encode(sentence)
             if len(encoded_sentence) > self._max_tokens:
-                trimmed_sentence = encoding.decode(
-                    encoded_sentence[: self._max_tokens]
-                )
+                trimmed_sentence = encoding.decode(encoded_sentence[: self._max_tokens])
                 trimmed_sentences.append(trimmed_sentence)
             else:
                 trimmed_sentences.append(sentence)
@@ -81,10 +79,14 @@ class OpenAIWrapper(Wrapper):
 text_embedding_3_small = ModelMeta(
     name="openai/text-embedding-3-small",
     revision="1",
-    tokenizer_name="cl100k_base",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
-    loader=partial(OpenAIWrapper, model_name="text-embedding-3-small", tokenizer_name="cl100k_base", max_tokens=8192),
+    loader=partial(
+        OpenAIWrapper,
+        model_name="text-embedding-3-small",
+        tokenizer_name="cl100k_base",
+        max_tokens=8192,
+    ),
     max_tokens=8191,
     embed_dim=1536,
     open_weights=False,
@@ -99,10 +101,14 @@ text_embedding_3_small = ModelMeta(
 text_embedding_3_large = ModelMeta(
     name="openai/text-embedding-3-large",
     revision="1",
-    tokenizer_name="cl100k_base",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
-    loader=partial(OpenAIWrapper, model_name="text-embedding-3-large", tokenizer_name="cl100k_base", max_tokens=8192),
+    loader=partial(
+        OpenAIWrapper,
+        model_name="text-embedding-3-large",
+        tokenizer_name="cl100k_base",
+        max_tokens=8192,
+    ),
     max_tokens=8191,
     embed_dim=3072,
     open_weights=False,
@@ -114,10 +120,14 @@ text_embedding_3_large = ModelMeta(
 text_embedding_ada_002 = ModelMeta(
     name="openai/text-embedding-ada-002",
     revision="1",
-    tokenizer_name="cl100k_base",
     release_date="2022-12-15",
     languages=None,  # supported languages not specified
-    loader=partial(OpenAIWrapper, model_name="text-embedding-ada-002", tokenizer_name="cl100k_base", max_tokens=8192),
+    loader=partial(
+        OpenAIWrapper,
+        model_name="text-embedding-ada-002",
+        tokenizer_name="cl100k_base",
+        max_tokens=8192,
+    ),
     max_tokens=8191,
     embed_dim=1536,
     open_weights=False,
