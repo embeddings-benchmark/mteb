@@ -163,9 +163,13 @@ def scores_to_tables(
         lambda name: name.split("/")[-1]
     )
     # Adding markdown link to model names
-    joint_table["model_name"] = (
-        "[" + joint_table["model_name"] + "](" + joint_table.pop("model_link") + ")"
+    name_w_link = (
+        "[" + joint_table["model_name"] + "](" + joint_table["model_link"] + ")"
     )
+    joint_table["model_name"] = joint_table["model_name"].mask(
+        joint_table["model_link"].notna(), name_w_link
+    )
+    joint_table = joint_table.drop(columns=["model_link"])
     joint_table = joint_table.rename(
         columns={
             "model_name": "Model",
