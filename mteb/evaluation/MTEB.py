@@ -350,7 +350,8 @@ class MTEB:
             scores=merged_scores,
             evaluation_time=existing_results.evaluation_time
             + new_results.evaluation_time,
-            kg_co2_emissions=existing_results.kg_co2_emissions + new_results.kg_co2_emissions,
+            kg_co2_emissions=existing_results.kg_co2_emissions
+            + new_results.kg_co2_emissions,
         )
 
         return merged_results
