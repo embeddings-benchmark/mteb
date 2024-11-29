@@ -81,9 +81,9 @@ class ModelMeta(BaseModel):
 
     name: str | None
     revision: str | None
-    tokenizer_name: str | None
     release_date: STR_DATE | None
     languages: list[ISO_LANGUAGE_SCRIPT] | None
+    tokenizer_name: str | None = None
     loader: Callable[..., Encoder] | None = None
     n_parameters: int | None = None
     memory_usage: float | None = None
