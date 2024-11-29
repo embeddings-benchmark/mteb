@@ -5,7 +5,6 @@ from functools import partial
 from typing import Any
 
 import numpy as np
-import tiktoken
 
 from mteb.model_meta import ModelMeta
 from mteb.requires_package import requires_package
@@ -20,7 +19,7 @@ class OpenAIWrapper(Wrapper):
         self,
         model_name: str,
         max_seq_length: int,
-        tokenizer_name: str = "cl100k_base",
+        tokenizer_name: str = "cl100k_base",  # since all models use this tokenizer now
         embed_dim: int | None = None,
         **kwargs,
     ) -> None:
@@ -35,6 +34,7 @@ class OpenAIWrapper(Wrapper):
 
     def encode(self, sentences: list[str], **kwargs: Any) -> np.ndarray:
         requires_package(self, "openai", "Openai text embedding")
+        import tiktoken
         from openai import NotGiven
 
         if self._model_name == "text-embedding-ada-002" and self._embed_dim is not None:
