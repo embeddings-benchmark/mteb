@@ -176,7 +176,7 @@ class mFollowIRCrossLingual(MultilingualTask, AbsTaskReranking):
         self.data_loaded = True
 
 
-class mFollowIR(MultilingualTask, AbsTaskReranking):
+class mFollowIR(AbsTaskReranking, MultilingualTask):
     metadata = TaskMetadata(
         name="mFollowIR",
         description="This tasks measures retrieval instruction following ability on NeuCLIR narratives for the mFollowIR benchmark on the Farsi, Russian, and Chinese languages.",

@@ -30,7 +30,6 @@ def categorize_float(float_value):
 
 
 class IndicCrosslingualSTS(AbsTaskSTS, MultilingualTask):
-    fast_loading = True
     metadata = TaskMetadata(
         name="IndicCrosslingualSTS",
         dataset={

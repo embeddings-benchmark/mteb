@@ -87,7 +87,7 @@ def _load_data(
     return corpus, queries, qrels
 
 
-class WikipediaRetrievalMultilingual(MultilingualTask, AbsTaskRetrieval):
+class WikipediaRetrievalMultilingual(AbsTaskRetrieval, MultilingualTask):
     metadata = TaskMetadata(
         name="WikipediaRetrievalMultilingual",
         description="The dataset is derived from Cohere's wikipedia-2023-11 dataset and contains synthetically generated queries.",
