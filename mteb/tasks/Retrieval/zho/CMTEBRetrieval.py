@@ -34,8 +34,8 @@ class T2Retrieval(AbsTaskRetrieval):
         description="T2Ranking: A large-scale Chinese Benchmark for Passage Ranking",
         reference="https://arxiv.org/abs/2304.03679",
         dataset={
-            "path": "Samoed/T2Retrieval",
-            "revision": "7509a81fa69439aa38adf9dbb7a90766acbfef4b",
+            "path": "mteb/T2Retrieval",
+            "revision": "cf778c0ea4168ec5174a34d888d6453e4cde9222",
             # "qrel_revision": "1c83b8d1544e529875e3f6930f3a1fcf749a8e97",
         },
         type="Retrieval",
@@ -85,9 +85,9 @@ class MMarcoRetrieval(AbsTaskRetrieval):
         description="MMarcoRetrieval",
         reference="https://arxiv.org/abs/2309.07597",
         dataset={
-            "path": "C-MTEB/MMarcoRetrieval",
-            "revision": "539bbde593d947e2a124ba72651aafc09eb33fc2",
-            "qrel_revision": "bae08bb7bddbedb96c7e7db52018a55167b67f89",
+            "path": "mteb/MMarcoRetrieval",
+            "revision": "4940a7b26bf53463cfe3435bb8e201963e9c31ae",
+            # "qrel_revision": "bae08bb7bddbedb96c7e7db52018a55167b67f89",
         },
         type="Retrieval",
         category="s2p",
@@ -115,17 +115,17 @@ class MMarcoRetrieval(AbsTaskRetrieval):
         },
     )
 
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = load_retrieval_data(
-            self.metadata_dict["dataset"]["path"],
-            self.metadata_dict["dataset"]["revision"],
-            self.metadata_dict["dataset"]["qrel_revision"],
-            self.metadata_dict["eval_splits"],
-        )
-        self.data_loaded = True
+    # def load_data(self, **kwargs):
+    #     if self.data_loaded:
+    #         return
+    #
+    #     self.corpus, self.queries, self.relevant_docs = load_retrieval_data(
+    #         self.metadata_dict["dataset"]["path"],
+    #         self.metadata_dict["dataset"]["revision"],
+    #         self.metadata_dict["dataset"]["qrel_revision"],
+    #         self.metadata_dict["eval_splits"],
+    #     )
+    #     self.data_loaded = True
 
 
 class DuRetrieval(AbsTaskRetrieval):
@@ -134,9 +134,9 @@ class DuRetrieval(AbsTaskRetrieval):
         description="A Large-scale Chinese Benchmark for Passage Retrieval from Web Search Engine",
         reference="https://aclanthology.org/2022.emnlp-main.357.pdf",
         dataset={
-            "path": "C-MTEB/DuRetrieval",
-            "revision": "a1a333e290fe30b10f3f56498e3a0d911a693ced",
-            "qrel_revision": "497b7bd1bbb25cb3757ff34d95a8be50a3de2279",
+            "path": "mteb/DuRetrieval",
+            "revision": "313c81b51311893c8fd09ca432f96b841ed0ebb3",
+            # "qrel_revision": "497b7bd1bbb25cb3757ff34d95a8be50a3de2279",
         },
         type="Retrieval",
         category="s2p",
@@ -164,17 +164,17 @@ class DuRetrieval(AbsTaskRetrieval):
         },
     )
 
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = load_retrieval_data(
-            self.metadata_dict["dataset"]["path"],
-            self.metadata_dict["dataset"]["revision"],
-            self.metadata_dict["dataset"]["qrel_revision"],
-            self.metadata_dict["eval_splits"],
-        )
-        self.data_loaded = True
+    # def load_data(self, **kwargs):
+    #     if self.data_loaded:
+    #         return
+    #
+    #     self.corpus, self.queries, self.relevant_docs = load_retrieval_data(
+    #         self.metadata_dict["dataset"]["path"],
+    #         self.metadata_dict["dataset"]["revision"],
+    #         self.metadata_dict["dataset"]["qrel_revision"],
+    #         self.metadata_dict["eval_splits"],
+    #     )
+    #     self.data_loaded = True
 
 
 class CovidRetrieval(AbsTaskRetrieval):
@@ -183,9 +183,9 @@ class CovidRetrieval(AbsTaskRetrieval):
         description="COVID-19 news articles",
         reference="https://arxiv.org/abs/2203.03367",
         dataset={
-            "path": "C-MTEB/CovidRetrieval",
-            "revision": "1271c7809071a13532e05f25fb53511ffce77117",
-            "qrel_revision": "a9f41b7cdf24785531d12417ce0d1157ed4b39ca",
+            "path": "mteb/CovidRetrieval",
+            "revision": "9c6dc4b276bb47c3ff725bbc5ffcafd56dded38b",
+            # "qrel_revision": "a9f41b7cdf24785531d12417ce0d1157ed4b39ca",
         },
         type="Retrieval",
         category="s2p",
@@ -206,17 +206,17 @@ class CovidRetrieval(AbsTaskRetrieval):
         },
     )
 
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = load_retrieval_data(
-            self.metadata_dict["dataset"]["path"],
-            self.metadata_dict["dataset"]["revision"],
-            self.metadata_dict["dataset"]["qrel_revision"],
-            self.metadata_dict["eval_splits"],
-        )
-        self.data_loaded = True
+    # def load_data(self, **kwargs):
+    #     if self.data_loaded:
+    #         return
+    #
+    #     self.corpus, self.queries, self.relevant_docs = load_retrieval_data(
+    #         self.metadata_dict["dataset"]["path"],
+    #         self.metadata_dict["dataset"]["revision"],
+    #         self.metadata_dict["dataset"]["qrel_revision"],
+    #         self.metadata_dict["eval_splits"],
+    #     )
+    #     self.data_loaded = True
 
 
 class CmedqaRetrieval(AbsTaskRetrieval):
@@ -225,9 +225,9 @@ class CmedqaRetrieval(AbsTaskRetrieval):
         description="Online medical consultation text. Used the CMedQAv2 as its underlying dataset.",
         reference="https://aclanthology.org/2022.emnlp-main.357.pdf",
         dataset={
-            "path": "C-MTEB/CmedqaRetrieval",
-            "revision": "cd540c506dae1cf9e9a59c3e06f42030d54e7301",
-            "qrel_revision": "279d737f36c731c8ff6e2b055f31fe02216fa23d",
+            "path": "mteb/CmedqaRetrieval",
+            "revision": "c476f85bf03d6642ec66bf54b9a551c88108bbb4",
+            # "qrel_revision": "279d737f36c731c8ff6e2b055f31fe02216fa23d",
         },
         type="Retrieval",
         category="s2p",
@@ -248,17 +248,17 @@ class CmedqaRetrieval(AbsTaskRetrieval):
         },
     )
 
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = load_retrieval_data(
-            self.metadata_dict["dataset"]["path"],
-            self.metadata_dict["dataset"]["revision"],
-            self.metadata_dict["dataset"]["qrel_revision"],
-            self.metadata_dict["eval_splits"],
-        )
-        self.data_loaded = True
+    # def load_data(self, **kwargs):
+    #     if self.data_loaded:
+    #         return
+    #
+    #     self.corpus, self.queries, self.relevant_docs = load_retrieval_data(
+    #         self.metadata_dict["dataset"]["path"],
+    #         self.metadata_dict["dataset"]["revision"],
+    #         self.metadata_dict["dataset"]["qrel_revision"],
+    #         self.metadata_dict["eval_splits"],
+    #     )
+    #     self.data_loaded = True
 
 
 class EcomRetrieval(AbsTaskRetrieval):
@@ -269,9 +269,9 @@ class EcomRetrieval(AbsTaskRetrieval):
         description="EcomRetrieval",
         reference="https://arxiv.org/abs/2203.03367",
         dataset={
-            "path": "C-MTEB/EcomRetrieval",
-            "revision": "687de13dc7294d6fd9be10c6945f9e8fec8166b9",
-            "qrel_revision": "39c90699b034ec22ac45b3abf5b0bbb5ffd421f9",
+            "path": "mteb/EcomRetrieval",
+            "revision": "fa705ce5418e91636b1eaeaf43f34c15aa3f5a8a",
+            # "qrel_revision": "39c90699b034ec22ac45b3abf5b0bbb5ffd421f9",
         },
         type="Retrieval",
         category="s2p",
@@ -292,17 +292,17 @@ class EcomRetrieval(AbsTaskRetrieval):
         },
     )
 
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = load_retrieval_data(
-            self.metadata_dict["dataset"]["path"],
-            self.metadata_dict["dataset"]["revision"],
-            self.metadata_dict["dataset"]["qrel_revision"],
-            self.metadata_dict["eval_splits"],
-        )
-        self.data_loaded = True
+    # def load_data(self, **kwargs):
+    #     if self.data_loaded:
+    #         return
+    #
+    #     self.corpus, self.queries, self.relevant_docs = load_retrieval_data(
+    #         self.metadata_dict["dataset"]["path"],
+    #         self.metadata_dict["dataset"]["revision"],
+    #         self.metadata_dict["dataset"]["qrel_revision"],
+    #         self.metadata_dict["eval_splits"],
+    #     )
+    #     self.data_loaded = True
 
 
 class MedicalRetrieval(AbsTaskRetrieval):
@@ -313,9 +313,9 @@ class MedicalRetrieval(AbsTaskRetrieval):
         description="MedicalRetrieval",
         reference="https://arxiv.org/abs/2203.03367",
         dataset={
-            "path": "C-MTEB/MedicalRetrieval",
-            "revision": "2039188fb5800a9803ba5048df7b76e6fb151fc6",
-            "qrel_revision": "37b8efec53c54c3d9c6af212f6710b62ccdf895c",
+            "path": "mteb/MedicalRetrieval",
+            "revision": "023ae3b2c6b96f583c4ff9b3f9239c93f7885c20",
+            # "qrel_revision": "37b8efec53c54c3d9c6af212f6710b62ccdf895c",
         },
         type="Retrieval",
         category="s2p",
@@ -336,17 +336,17 @@ class MedicalRetrieval(AbsTaskRetrieval):
         },
     )
 
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = load_retrieval_data(
-            self.metadata_dict["dataset"]["path"],
-            self.metadata_dict["dataset"]["revision"],
-            self.metadata_dict["dataset"]["qrel_revision"],
-            self.metadata_dict["eval_splits"],
-        )
-        self.data_loaded = True
+    # def load_data(self, **kwargs):
+    #     if self.data_loaded:
+    #         return
+    #
+    #     self.corpus, self.queries, self.relevant_docs = load_retrieval_data(
+    #         self.metadata_dict["dataset"]["path"],
+    #         self.metadata_dict["dataset"]["revision"],
+    #         self.metadata_dict["dataset"]["qrel_revision"],
+    #         self.metadata_dict["eval_splits"],
+    #     )
+    #     self.data_loaded = True
 
 
 class VideoRetrieval(AbsTaskRetrieval):
@@ -357,9 +357,9 @@ class VideoRetrieval(AbsTaskRetrieval):
         description="VideoRetrieval",
         reference="https://arxiv.org/abs/2203.03367",
         dataset={
-            "path": "C-MTEB/VideoRetrieval",
-            "revision": "58c2597a5943a2ba48f4668c3b90d796283c5639",
-            "qrel_revision": "faa71382b6a29cf1778d1f436b963e75cb5b927c",
+            "path": "mteb/VideoRetrieval",
+            "revision": "146a9d5e4fd7a9c182b6b92cccb6a3753994305c",
+            # "qrel_revision": "faa71382b6a29cf1778d1f436b963e75cb5b927c",
         },
         type="Retrieval",
         category="s2p",
@@ -380,14 +380,14 @@ class VideoRetrieval(AbsTaskRetrieval):
         },
     )
 
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = load_retrieval_data(
-            self.metadata_dict["dataset"]["path"],
-            self.metadata_dict["dataset"]["revision"],
-            self.metadata_dict["dataset"]["qrel_revision"],
-            self.metadata_dict["eval_splits"],
-        )
-        self.data_loaded = True
+    # def load_data(self, **kwargs):
+    #     if self.data_loaded:
+    #         return
+    #
+    #     self.corpus, self.queries, self.relevant_docs = load_retrieval_data(
+    #         self.metadata_dict["dataset"]["path"],
+    #         self.metadata_dict["dataset"]["revision"],
+    #         self.metadata_dict["dataset"]["qrel_revision"],
+    #         self.metadata_dict["eval_splits"],
+    #     )
+    #     self.data_loaded = True

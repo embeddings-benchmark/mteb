@@ -30,9 +30,9 @@ class IndicReviewsClusteringP2P(AbsTaskClustering, MultilingualTask):
     metadata = TaskMetadata(
         name="IndicReviewsClusteringP2P",
         dataset={
-            "path": "ai4bharat/IndicSentiment",
-            "revision": "ccb472517ce32d103bba9d4f5df121ed5a6592a4",
-            "trust_remote_code": True,
+            "path": "mteb/IndicReviewsClusteringP2P",
+            "revision": "add94d3b9154cc561bbad0e16ee66ebf5941f8a4",
+            # "trust_remote_code": True,
         },
         description="Clustering of reviews from IndicSentiment dataset. Clustering of 14 sets on the generic categories label.",
         reference="https://arxiv.org/abs/2212.05409",
@@ -58,28 +58,28 @@ class IndicReviewsClusteringP2P(AbsTaskClustering, MultilingualTask):
 }""",
     )
 
-    def load_data(self, **kwargs: Any) -> None:
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-        self.dataset = {}
-        for lang in self.hf_subsets:
-            self.dataset[lang] = datasets.load_dataset(
-                name=f"translation-{lang}",
-                **self.metadata_dict["dataset"],
-            )
-        self.dataset_transform()
-        self.data_loaded = True
-
-    def dataset_transform(self) -> None:
-        for lang in self.hf_subsets:
-            self.dataset[lang].pop("validation")
-
-            texts = self.dataset[lang]["test"]["INDIC REVIEW"]
-            labels = self.dataset[lang]["test"]["GENERIC CATEGORIES"]
-
-            new_format = {
-                "sentences": [split.tolist() for split in np.array_split(texts, 5)],
-                "labels": [split.tolist() for split in np.array_split(labels, 5)],
-            }
-            self.dataset[lang]["test"] = datasets.Dataset.from_dict(new_format)
+    # def load_data(self, **kwargs: Any) -> None:
+    #     """Load dataset from HuggingFace hub"""
+    #     if self.data_loaded:
+    #         return
+    #     self.dataset = {}
+    #     for lang in self.hf_subsets:
+    #         self.dataset[lang] = datasets.load_dataset(
+    #             name=f"translation-{lang}",
+    #             **self.metadata_dict["dataset"],
+    #         )
+    #     self.dataset_transform()
+    #     self.data_loaded = True
+    #
+    # def dataset_transform(self) -> None:
+    #     for lang in self.hf_subsets:
+    #         self.dataset[lang].pop("validation")
+    #
+    #         texts = self.dataset[lang]["test"]["INDIC REVIEW"]
+    #         labels = self.dataset[lang]["test"]["GENERIC CATEGORIES"]
+    #
+    #         new_format = {
+    #             "sentences": [split.tolist() for split in np.array_split(texts, 5)],
+    #             "labels": [split.tolist() for split in np.array_split(labels, 5)],
+    #         }
+    #         self.dataset[lang]["test"] = datasets.Dataset.from_dict(new_format)

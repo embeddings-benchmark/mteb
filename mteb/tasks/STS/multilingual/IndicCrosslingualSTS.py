@@ -34,8 +34,8 @@ class IndicCrosslingualSTS(AbsTaskSTS, MultilingualTask):
     metadata = TaskMetadata(
         name="IndicCrosslingualSTS",
         dataset={
-            "path": "mteb/indic_sts",
-            "revision": "0ca7b87dda68ef4ebb2f50a20a62b9dbebcac3e4",
+            "path": "mteb/IndicCrosslingualSTS",
+            "revision": "f0366eb5a20087355c0e131162bbed943ba54b51",
         },
         description="This is a Semantic Textual Similarity testset between English and 12 high-resource Indic languages.",
         reference="https://huggingface.co/datasets/jaygala24/indic_sts",
@@ -82,19 +82,19 @@ class IndicCrosslingualSTS(AbsTaskSTS, MultilingualTask):
         metadata_dict["max_score"] = 5
         return metadata_dict
 
-    def dataset_transform(self) -> None:
-        # Convert to standard format
-        for lang in self.hf_subsets:
-            self.dataset[lang] = self.dataset[lang].rename_columns(
-                {"english_sentence": "sentence1", "indic_sentence": "sentence2"}
-            )
-            self.dataset[lang] = (
-                self.dataset[lang]
-                .map(lambda x: {"label": round(x["score"])})
-                .class_encode_column("label")
-            )
-            self.dataset[lang]["test"] = self.dataset[lang]["test"].train_test_split(
-                test_size=256,
-                seed=self.seed,
-                stratify_by_column="label",
-            )["test"]
+    # def dataset_transform(self) -> None:
+    #     # Convert to standard format
+    #     for lang in self.hf_subsets:
+    #         self.dataset[lang] = self.dataset[lang].rename_columns(
+    #             {"english_sentence": "sentence1", "indic_sentence": "sentence2"}
+    #         )
+    #         self.dataset[lang] = (
+    #             self.dataset[lang]
+    #             .map(lambda x: {"label": round(x["score"])})
+    #             .class_encode_column("label")
+    #         )
+    #         self.dataset[lang]["test"] = self.dataset[lang]["test"].train_test_split(
+    #             test_size=256,
+    #             seed=self.seed,
+    #             stratify_by_column="label",
+    #         )["test"]

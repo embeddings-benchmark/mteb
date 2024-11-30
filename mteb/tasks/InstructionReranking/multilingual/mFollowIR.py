@@ -182,8 +182,8 @@ class mFollowIR(MultilingualTask, AbsTaskReranking):
         description="This tasks measures retrieval instruction following ability on NeuCLIR narratives for the mFollowIR benchmark on the Farsi, Russian, and Chinese languages.",
         reference="https://neuclir.github.io/",
         dataset={
-            "path": "jhu-clsp/mFollowIR-parquet-mteb",
-            "revision": "09eecbe45c54b4a6dfb8e68e345cae77337768e2",
+            "path": "mteb/mFollowIR",
+            "revision": "743e93679253adac28d1b914e9331a862107812a",
         },
         type="Retrieval",
         category="s2p",
@@ -206,22 +206,22 @@ class mFollowIR(MultilingualTask, AbsTaskReranking):
 }""",
     )
 
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        (
-            self.corpus,
-            self.queries,
-            self.instructions,
-            self.relevant_docs,
-            self.top_ranked,
-        ) = load_data(
-            path=self.metadata_dict["dataset"]["path"],
-            langs=self.metadata.eval_langs,
-            eval_splits=self.metadata_dict["eval_splits"],
-            cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
-        )
-
-        self.data_loaded = True
+    # def load_data(self, **kwargs):
+    #     if self.data_loaded:
+    #         return
+    #
+    #     (
+    #         self.corpus,
+    #         self.queries,
+    #         self.instructions,
+    #         self.relevant_docs,
+    #         self.top_ranked,
+    #     ) = load_data(
+    #         path=self.metadata_dict["dataset"]["path"],
+    #         langs=self.metadata.eval_langs,
+    #         eval_splits=self.metadata_dict["eval_splits"],
+    #         cache_dir=kwargs.get("cache_dir", None),
+    #         revision=self.metadata_dict["dataset"]["revision"],
+    #     )
+    #
+    #     self.data_loaded = True

@@ -11,36 +11,111 @@ from mteb import (
     AbsTaskPairClassification,
     AbsTaskRetrieval,
     AbsTaskSTS,
-    AbsTaskSummarization,
 )
 from mteb.abstasks.AbsTask import AbsTask
 
 
 def upload_task_to_hf(task: AbsTask, repo_name: str) -> None:
+    """
+    Uploads a task's dataset to Hugging Face hub based on its type.
+
+    Args:
+        task (AbsTask): The task object.
+        repo_name (str): The name of the repository on Hugging Face hub.
+    """
     if not task.data_loaded:
         task.load_data()
 
-    if isinstance(task, AbsTaskBitextMining):
-        upload_bitext_mining(task, repo_name)
-    elif isinstance(task, AbsTaskClassification):
-        upload_classification(task, repo_name)
-    elif isinstance(task, AbsTaskClustering) or isinstance(task, AbsTaskClusteringFast):
-        pass
-    elif isinstance(task, AbsTaskPairClassification):
-        pass
-    elif isinstance(task, AbsTaskRetrieval):
-        upload_retrieval(task, repo_name)
-    elif isinstance(task, AbsTaskSTS):
-        pass
-    elif isinstance(task, AbsTaskSummarization):
-        pass
+    task_upload_mapping = {
+        AbsTaskBitextMining: upload_bitext_mining,
+        AbsTaskClassification: upload_classification,
+        AbsTaskClustering: upload_clustering,
+        AbsTaskClusteringFast: upload_clustering,
+        AbsTaskPairClassification: upload_pair_classification,
+        AbsTaskSTS: upload_sts,
+        AbsTaskRetrieval: upload_retrieval,
+    }
+
+    for task_type, upload_fn in task_upload_mapping.items():
+        if isinstance(task, task_type):
+            upload_fn(task, repo_name)
+            return
+
+    raise NotImplementedError(f"Task type {type(task)} not implemented.")
+
+
+def push_to_hub(repo_name: str, sentences: dict, subset_name: str = None) -> None:
+    """
+    Pushes a dataset to the Hugging Face hub.
+
+    Args:
+        repo_name (str): The name of the repository on Hugging Face hub.
+        sentences (dict): A dictionary with splits and corresponding datasets.
+        subset_name (str, optional): The name of the subset (used for multilingual datasets).
+    """
+    sentences = DatasetDict(sentences)
+    if subset_name:
+        sentences.push_to_hub(repo_name, subset_name, commit_message=f"Add {subset_name} dataset")
+    else:
+        sentences.push_to_hub(repo_name, commit_message="Add dataset")
+
+
+def process_dataset(task: AbsTask, repo_name: str, fields: list[str], is_multilingual: bool) -> None:
+    """
+    Generic function to process datasets for multilingual and non-multilingual tasks.
+
+    Args:
+        task (AbsTask): The task object.
+        repo_name (str): The name of the repository on Hugging Face hub.
+        fields (list[str]): List of field names to extract from the dataset.
+        is_multilingual (bool): Whether the task is multilingual.
+    """
+    if is_multilingual:
+        for subset in task.metadata.eval_langs:
+            sentences = {}
+            for split in task.dataset[subset]:
+                sentences[split] = Dataset.from_dict(
+                    {field: task.dataset[subset][split][field] for field in fields}
+                )
+            push_to_hub(repo_name, sentences, subset)
+    else:
+        sentences = {}
+        for split in task.dataset:
+            sentences[split] = Dataset.from_dict(
+                {field: task.dataset[split][field] for field in fields}
+            )
+        push_to_hub(repo_name, sentences)
+
+
+def upload_classification(task: AbsTaskClassification, repo_name: str) -> None:
+    process_dataset(task, repo_name, ["text", "label"], task.is_multilingual)
+
+
+def upload_clustering(task: AbsTaskClustering | AbsTaskClusteringFast, repo_name: str) -> None:
+    process_dataset(task, repo_name, ["sentences", "labels"], task.is_multilingual)
+
+
+def upload_pair_classification(task: AbsTaskPairClassification, repo_name: str) -> None:
+    process_dataset(task, repo_name, ["sentence1", "sentence2", "labels"], task.is_multilingual)
+
+
+def upload_sts(task: AbsTaskSTS, repo_name: str) -> None:
+    process_dataset(task, repo_name, ["sentence1", "sentence2", "score"], task.is_multilingual)
 
 
 def upload_bitext_mining(task: AbsTaskBitextMining, repo_name: str) -> None:
+    """
+    Uploads a Bitext Mining task dataset to Hugging Face hub.
+
+    Args:
+        task (AbsTaskBitextMining): The task object.
+        repo_name (str): The name of the repository on Hugging Face hub.
+    """
     if task.is_multilingual:
         for hf_subset in task.metadata.eval_langs:
             sentences = {}
             if task.parallel_subsets:
+                # If there are parallel subsets, process them
                 for split in task.dataset:
                     sent_1, sent_2 = hf_subset.split("-")
                     sentences[split] = Dataset.from_dict(
@@ -50,6 +125,7 @@ def upload_bitext_mining(task: AbsTaskBitextMining, repo_name: str) -> None:
                         }
                     )
             else:
+                # Handle the non-parallel subset case
                 sent_1, sent_2 = task.get_pairs(task.parallel_subsets)[0]
                 for split in task.dataset[hf_subset]:
                     sentences[split] = Dataset.from_dict(
@@ -74,40 +150,17 @@ def upload_bitext_mining(task: AbsTaskBitextMining, repo_name: str) -> None:
         sentences.push_to_hub(repo_name)
 
 
-def upload_classification(task: AbsTaskClassification, repo_name: str) -> None:
-    if task.is_multilingual:
-        for hf_subset in task.metadata.eval_langs:
-            sentences = {}
-            for split in task.dataset[hf_subset]:
-                print(hf_subset, split)
-                sentences[split] = Dataset.from_dict(
-                    {
-                        "text": task.dataset[hf_subset][split]["text"],
-                        "label": task.dataset[hf_subset][split]["label"],
-                    }
-                )
-            sentences = DatasetDict(sentences)
-            sentences.push_to_hub(repo_name, hf_subset)
-    else:
-        sentences = {}
-        for split in task.dataset:
-            sentences[split] = Dataset.from_dict(
-                {
-                    "text": task.dataset[split]["text"],
-                    "label": task.dataset[split]["label"],
-                }
-            )
-        sentences = DatasetDict(sentences)
-        sentences.push_to_hub(repo_name)
-
-
 def upload_retrieval(task: AbsTaskRetrieval, repo_name: str) -> None:
+    def format_text_field(text):
+        """Formats the text field to match loader expectations."""
+        if isinstance(text, str):
+            return text
+        return f"{text.get('title', '')} {text.get('text', '')}".strip()
+
     if task.is_multilingual:
         for config in tqdm(task.queries):
             queries_dataset = {}
             for split in task.queries[config]:
-                # print(split)
-                # print(task.queries[config][split])
                 queries_dataset[split] = Dataset.from_list(
                     [
                         {
@@ -126,17 +179,13 @@ def upload_retrieval(task: AbsTaskRetrieval, repo_name: str) -> None:
                     [
                         {
                             "_id": idx,
-                            "text": text
-                            if isinstance(text, str)
-                            else (
-                                text.get("title", "") + " " if text.get("title") else ""
-                            )
-                            + text["text"],
-                            "title": "",
+                            "text": format_text_field(text),
+                            "title": text.get("title", "") if isinstance(text, dict) else "",
                         }
                         for idx, text in task.corpus[config][split].items()
                     ]
                 )
+
             corpus_dataset = DatasetDict(corpus_dataset)
             corpus_dataset.push_to_hub(repo_name, f"{config}-corpus")
 
@@ -159,7 +208,7 @@ def upload_retrieval(task: AbsTaskRetrieval, repo_name: str) -> None:
                         [
                             {
                                 "query-id": idx,
-                                "text": text,
+                                "instruction": text,
                             }
                             for idx, text in task.instructions[config][split].items()
                         ]
@@ -173,19 +222,14 @@ def upload_retrieval(task: AbsTaskRetrieval, repo_name: str) -> None:
                         [
                             {
                                 "query-id": query_id,
-                                "corpus-ids": doc_id,
+                                "corpus-ids": docs,
                             }
                             for query_id, docs in task.top_ranked[config][split].items()
-                            for doc_id in docs  # todo add case if docs is dict
                         ]
                     )
                 top_ranked_dataset = DatasetDict(top_ranked_dataset)
                 top_ranked_dataset.push_to_hub(repo_name, f"{config}-top_ranked")
-                # DatasetDict(
-                #     {split: Dataset.from_dict(task.top_ranked[config][split]) for split in task.top_ranked[config]}
-                # ).push_to_hub(repo_name, f"{config}-top_ranked")
     else:
-        queries_dataset = {}
         if "default" in task.queries:
             # old rerankers have additional default split
             task.queries = task.queries["default"]
@@ -195,6 +239,8 @@ def upload_retrieval(task: AbsTaskRetrieval, repo_name: str) -> None:
                 task.instructions = task.instructions["default"]
             if task.top_ranked:
                 task.top_ranked = task.top_ranked["default"]
+
+        queries_dataset = {}
         for split in task.queries:
             queries_dataset[split] = Dataset.from_list(
                 [
@@ -213,22 +259,17 @@ def upload_retrieval(task: AbsTaskRetrieval, repo_name: str) -> None:
                 [
                     {
                         "_id": idx,
-                        "text": text
-                        if isinstance(text, str)
-                        else (
-                                 text.get("title", "") + " " if text.get("title") else ""
-                             )
-                             + text["text"],
-                        "title": "",
+                        "text": format_text_field(text),
+                        "title": text.get("title", "") if isinstance(text, dict) else "",
                     }
                     for idx, text in task.corpus[split].items()
                 ]
             )
+
         corpus_dataset = DatasetDict(corpus_dataset)
         corpus_dataset.push_to_hub(repo_name, "corpus")
         relevant_docs_dataset = {}
         for split in task.relevant_docs:
-            print(task.relevant_docs[split])
             relevant_docs_dataset[split] = Dataset.from_list(
                 [
                     {"query-id": query_id, "corpus-id": doc_id, "score": score}
@@ -245,7 +286,7 @@ def upload_retrieval(task: AbsTaskRetrieval, repo_name: str) -> None:
                     [
                         {
                             "query-id": idx,
-                            "text": text,
+                            "instruction": text,
                         }
                         for idx, text in task.instructions[split].items()
                     ]
@@ -255,7 +296,6 @@ def upload_retrieval(task: AbsTaskRetrieval, repo_name: str) -> None:
         if task.top_ranked:
             top_ranked_dataset = {}
             for split in task.top_ranked:
-                print(task.top_ranked[split])
                 top_ranked_dataset[split] = Dataset.from_list(
                     [
                         {
@@ -271,21 +311,34 @@ def upload_retrieval(task: AbsTaskRetrieval, repo_name: str) -> None:
 
 if __name__ == "__main__":
     import mteb
-
     for task in [
-        # "T2Retrieval",
-        # "MMarcoRetrieval",
-        # "DuRetrieval",
-        # "CovidRetrieval",
-        # "CmedqaRetrieval",
-        # "EcomRetrieval",
-        # "MedicalRetrieval",
-        # "VideoRetrieval",
-        # "WikipediaRetrievalMultilingual",
-        # "AskUbuntuDupQuestions", # TODO
+        # retrieval
+        "T2Retrieval",
+        "MMarcoRetrieval",
+        "DuRetrieval",
+        "CovidRetrieval",
+        "CmedqaRetrieval",
+        "EcomRetrieval",
+        "MedicalRetrieval",
+        "VideoRetrieval",
+        "WikipediaRetrievalMultilingual",
+        # reranking
+        "AskUbuntuDupQuestions",
+        # instruct retrieval
+        "mFollowIR",
+        # bitext mining
+        "IWSLT2017BitextMining",
+        # classification
+        "AmazonReviewsClassification",
+        # clustering
+        "IndicReviewsClusteringP2P",
+        # pairclassification
+        "XNLIV2",
+        # sts
+        "IndicCrosslingualSTS"
     ]:
+        print(task)
         task1 = mteb.get_task(task)
-        # upload_task_to_hf(task1, task)
         upload_task_to_hf(task1, f"mteb/{task}")
         # model = mteb.get_model("intfloat/multilingual-e5-small")
         # evaluator = mteb.MTEB([task1])

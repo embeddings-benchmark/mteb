@@ -11,10 +11,8 @@ class AskUbuntuDupQuestions(AbsTaskReranking):
         description="AskUbuntu Question Dataset - Questions from AskUbuntu with manual annotations marking pairs of questions as similar or non-similar",
         reference="https://github.com/taolei87/askubuntu",
         dataset={
-            # "path": "mteb/askubuntudupquestions-reranking",
-            # "revision": "2000358ca161889fa9c082cb41daa8dcfb161a54",
-            "path": "Samoed/AskUbuntuDupQuestions",
-            "revision": "3c1a78d41c9e3c9db937f71061b2d2f3ce31692d",
+            "path": "mteb/AskUbuntuDupQuestions",
+            "revision": "c5691e3c48741d5f83b5cc8e630653d7a8cfc048",
         },
         type="Reranking",
         category="s2s",

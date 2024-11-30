@@ -11,6 +11,7 @@ class AmazonReviewsClassification(MultilingualTask, AbsTaskClassification):
         dataset={
             "path": "mteb/AmazonReviewsClassification",
             "revision": "6b5d328eaae8ef408dd7d775040245cf86f92e9d",
+            # "trust_remote_code": True,
         },
         description="A collection of Amazon reviews specifically designed to aid research in multilingual text classification.",
         reference="https://arxiv.org/abs/2010.02573",

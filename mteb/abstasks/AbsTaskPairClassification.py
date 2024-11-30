@@ -81,7 +81,7 @@ class AbsTaskPairClassification(AbsTask):
         encode_kwargs: dict[str, str] = {},
         **kwargs,
     ) -> ScoresDict:
-        data_split = dataset[0]
+        data_split = dataset[0] if len(dataset) == 1 else dataset
         logging.getLogger(
             "sentence_transformers.evaluation.PairClassificationEvaluator"
         ).setLevel(logging.WARN)

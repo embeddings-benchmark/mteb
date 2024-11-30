@@ -11,7 +11,7 @@ from pydantic import (
     AnyUrl,
     BaseModel,
     BeforeValidator,
-    TypeAdapter,
+    ConfigDict, TypeAdapter,
     field_validator,
 )
 from typing_extensions import Literal, TypedDict
@@ -246,9 +246,9 @@ class TaskMetadata(BaseModel):
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
     """
 
-    # model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid")
 
-    dataset: dict  # MetadataDatasetDict
+    dataset: MetadataDatasetDict
 
     name: str
     description: str

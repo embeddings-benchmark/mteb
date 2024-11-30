@@ -16,6 +16,7 @@ from .multilingual.PawsXPairClassification import *
 from .multilingual.RTE3 import *
 from .multilingual.XNLI import *
 from .multilingual.XStance import *
+from .multilingual.IndicXnliPairClassification import IndicXnliPairClassification
 from .pol.PolishPC import *
 from .por.Assin2RTE import *
 from .por.SickBrPC import *
