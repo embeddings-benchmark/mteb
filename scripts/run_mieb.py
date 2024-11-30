@@ -25,7 +25,8 @@ for model_name in [
     "laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K",
     "nyu-visionx/moco-v3-vit-b",
     "nyu-visionx/moco-v3-vit-l",
-    "google/siglip-so400m-patch14-384",
+    "google/siglip-so400m-patch14-224" "google/siglip-so400m-patch14-384",
+    "google/siglip-so400m-patch16-256-i18n"
     "google/siglip-base-patch16-256-multilingual",
     "google/siglip-base-patch16-256",
     "google/siglip-base-patch16-512",

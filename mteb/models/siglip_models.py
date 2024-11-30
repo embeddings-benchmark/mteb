@@ -140,6 +140,18 @@ class SiglipModelWrapper:
             return image_embeddings
 
 
+siglip_so400m_patch14_224 = ModelMeta(
+    loader=partial(
+        SiglipModelWrapper,
+        model_name="google/siglip-so400m-patch14-224",
+    ),
+    name="google/siglip-so400m-patch14-224",
+    languages=["eng_Latn"],
+    open_source=True,
+    revision="d04cf29fca7b6374f74d8bea1969314492266b5e",
+    release_date="2024-01-08",
+)
+
 siglip_so400m_patch14_384 = ModelMeta(
     loader=partial(
         SiglipModelWrapper,
@@ -149,6 +161,18 @@ siglip_so400m_patch14_384 = ModelMeta(
     languages=["eng_Latn"],
     open_source=True,
     revision="9fdffc58afc957d1a03a25b10dba0329ab15c2a3",
+    release_date="2024-01-08",
+)
+
+siglip_so400m_patch16_256_i18n = ModelMeta(
+    loader=partial(
+        SiglipModelWrapper,
+        model_name="google/siglip-so400m-patch16-256-i18n",
+    ),
+    name="google/siglip-so400m-patch16-256-i18n",
+    languages=["eng_Latn"],
+    open_source=True,
+    revision="365d321c0cfdea96bc28e3a29787a11a062681a1",
     release_date="2024-01-08",
 )
 
