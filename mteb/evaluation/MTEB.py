@@ -490,7 +490,7 @@ class MTEB:
                     )
 
             try:
-                task.check_if_dataset_is_superseeded()
+                task.check_if_dataset_is_superseded()
                 task.load_data(eval_splits=task_eval_splits, **kwargs)
 
                 # run evaluation

@@ -101,7 +101,7 @@ def get_means_per_types(df: pd.DataFrame) -> pd.DataFrame:
 def failsafe_get_model_meta(model_name):
     try:
         return get_model_meta(model_name)
-    except Exception as e:
+    except Exception:
         return None
 
 
