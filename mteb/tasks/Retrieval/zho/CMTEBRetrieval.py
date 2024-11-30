@@ -64,17 +64,17 @@ class T2Retrieval(AbsTaskRetrieval):
         },
     )
 
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = load_retrieval_data(
-            self.metadata_dict["dataset"]["path"],
-            self.metadata_dict["dataset"]["revision"],
-            self.metadata_dict["dataset"]["qrel_revision"],
-            self.metadata_dict["eval_splits"],
-        )
-        self.data_loaded = True
+    # def load_data(self, **kwargs):
+    #     if self.data_loaded:
+    #         return
+    #
+    #     self.corpus, self.queries, self.relevant_docs = load_retrieval_data(
+    #         self.metadata_dict["dataset"]["path"],
+    #         self.metadata_dict["dataset"]["revision"],
+    #         self.metadata_dict["dataset"]["qrel_revision"],
+    #         self.metadata_dict["eval_splits"],
+    #     )
+    #     self.data_loaded = True
 
 
 class MMarcoRetrieval(AbsTaskRetrieval):
