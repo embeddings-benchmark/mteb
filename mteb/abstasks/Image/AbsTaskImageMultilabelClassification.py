@@ -7,10 +7,10 @@ from typing import Any
 
 import numpy as np
 from sklearn.base import ClassifierMixin, clone
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import f1_score, label_ranking_average_precision_score
 from sklearn.model_selection import train_test_split
 from sklearn.multioutput import MultiOutputClassifier
-from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import MultiLabelBinarizer
 
 from mteb.abstasks.TaskMetadata import HFSubset

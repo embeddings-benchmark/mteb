@@ -140,7 +140,6 @@ class SiglipModelWrapper:
             return image_embeddings
 
 
-
 siglip_so400m_patch14_224 = ModelMeta(
     loader=partial(
         SiglipModelWrapper,
