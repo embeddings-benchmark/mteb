@@ -7,7 +7,13 @@ from datetime import date
 from pathlib import Path
 from typing import Annotated, Any, Union
 
-from pydantic import AnyUrl, BaseModel, BeforeValidator, ConfigDict, TypeAdapter, field_validator
+from pydantic import (
+    AnyUrl,
+    BaseModel,
+    BeforeValidator,
+    TypeAdapter,
+    field_validator,
+)
 from typing_extensions import Literal, TypedDict
 
 from ..encoder_interface import PromptType
@@ -193,6 +199,7 @@ logger = logging.getLogger(__name__)
 
 class MetadataDatasetDict(TypedDict, total=False):
     """A dictionary containing the dataset path and revision.
+
     Args:
         path: The path to the dataset.
         revision: The revision of the dataset.
@@ -241,7 +248,7 @@ class TaskMetadata(BaseModel):
 
     # model_config = ConfigDict(extra="forbid")
 
-    dataset: dict #MetadataDatasetDict
+    dataset: dict  # MetadataDatasetDict
 
     name: str
     description: str

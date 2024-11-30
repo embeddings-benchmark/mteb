@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from datasets import load_dataset
-
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -35,7 +33,6 @@ class WikipediaRetrievalMultilingual(AbsTaskRetrieval, MultilingualTask):
         dataset={
             "path": "mteb/WikipediaRetrievalMultilingual",
             "revision": "5f6c91d21f2f5b9afb663858d19848fbd223c775",
-
         },
         type="Retrieval",
         category="s2p",
@@ -52,4 +49,3 @@ class WikipediaRetrievalMultilingual(AbsTaskRetrieval, MultilingualTask):
         sample_creation="LM-generated and verified",
         bibtex_citation="",
     )
-

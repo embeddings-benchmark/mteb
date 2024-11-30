@@ -11,7 +11,7 @@ from .AbsTaskRetrieval import AbsTaskRetrieval
 logger = logging.getLogger(__name__)
 
 OLD_FORMAT_RERANKING_TASKS = [
-    "AskUbuntuDupQuestions",
+    # "AskUbuntuDupQuestions",
     "MindSmallReranking",
     "SciDocsRR",
     "StackOverflowDupQuestions",
