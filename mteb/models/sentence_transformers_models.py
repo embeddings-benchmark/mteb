@@ -143,6 +143,8 @@ multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    supersedes=None,
+    adapted_from=None,
 )
 
 all_mpnet_base_v2 = ModelMeta(
@@ -160,4 +162,6 @@ all_mpnet_base_v2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    supersedes="sentence-transformers/all-mpnet-base-v1",
+    adapted_from=None,
 )
