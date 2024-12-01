@@ -58,7 +58,7 @@ class IndicXnliPairClassification(AbsTaskPairClassification, MultilingualTask):
             author = {Aggarwal, Divyanshu and Gupta, Vivek and Kunchukuttan, Anoop},
             title = {IndicXNLI: Evaluating Multilingual Inference for Indian Languages}, 
             publisher = {arXiv},
-            year = {2022},        
+            year = {2022},
             copyright = {Creative Commons Attribution 4.0 International}
         }
         """,
