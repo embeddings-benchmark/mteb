@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import logging
-
 import pytest
 from pydantic import ValidationError
 
@@ -179,6 +177,7 @@ _HISTORIC_DATASETS = [
     "TamilNewsClassification",
     "TenKGnadClusteringP2P.v2",
     "TenKGnadClusteringS2S.v2",
+    "IndicXnliPairClassification",
 ]
 
 
@@ -281,7 +280,6 @@ def test_given_none_revision_path_then_it_logs_warning(caplog):
             sample_creation=None,
             bibtex_citation="",
         )
-
 
 
 def test_unfilled_metadata_is_not_filled():
@@ -505,7 +503,7 @@ def test_disallow_trust_remote_code_in_new_datasets():
     ]
 
     assert (
-        135 == len(exceptions)
+        136 == len(exceptions)
     ), "The number of exceptions has changed. Please do not add new datasets to this list."
 
     exceptions = []
