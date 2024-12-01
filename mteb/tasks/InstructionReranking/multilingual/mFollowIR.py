@@ -6,6 +6,9 @@ from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
+from logging import getLogger
+
+logger = getLogger(__name__)
 
 _LANGUAGES = {
     "fas": ["fas-Arab"],
@@ -58,7 +61,7 @@ def load_data(
             loading_lang = lang.split("-")[1]  # don't care about the eng part
         else:
             loading_lang = lang
-        print(f"Loading data for {lang} from {loading_lang}")
+        logger.info(f"Loading data for {lang} from {loading_lang}")
 
         # Load corpus data
         corpus_data = datasets.load_dataset(
@@ -182,8 +185,8 @@ class mFollowIR(AbsTaskReranking, MultilingualTask):
         description="This tasks measures retrieval instruction following ability on NeuCLIR narratives for the mFollowIR benchmark on the Farsi, Russian, and Chinese languages.",
         reference="https://neuclir.github.io/",
         dataset={
-            "path": "mteb/mFollowIR",
-            "revision": "743e93679253adac28d1b914e9331a862107812a",
+            "path": "jhu-clsp/mFollowIR-parquet-mteb",
+            "revision": "09eecbe45c54b4a6dfb8e68e345cae77337768e2",
         },
         type="Retrieval",
         category="s2p",
@@ -206,22 +209,22 @@ class mFollowIR(AbsTaskReranking, MultilingualTask):
 }""",
     )
 
-    # def load_data(self, **kwargs):
-    #     if self.data_loaded:
-    #         return
-    #
-    #     (
-    #         self.corpus,
-    #         self.queries,
-    #         self.instructions,
-    #         self.relevant_docs,
-    #         self.top_ranked,
-    #     ) = load_data(
-    #         path=self.metadata_dict["dataset"]["path"],
-    #         langs=self.metadata.eval_langs,
-    #         eval_splits=self.metadata_dict["eval_splits"],
-    #         cache_dir=kwargs.get("cache_dir", None),
-    #         revision=self.metadata_dict["dataset"]["revision"],
-    #     )
-    #
-    #     self.data_loaded = True
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
+        (
+            self.corpus,
+            self.queries,
+            self.instructions,
+            self.relevant_docs,
+            self.top_ranked,
+        ) = load_data(
+            path=self.metadata_dict["dataset"]["path"],
+            langs=self.metadata.eval_langs,
+            eval_splits=self.metadata_dict["eval_splits"],
+            cache_dir=kwargs.get("cache_dir", None),
+            revision=self.metadata_dict["dataset"]["revision"],
+        )
+
+        self.data_loaded = True

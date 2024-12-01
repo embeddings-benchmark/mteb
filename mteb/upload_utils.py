@@ -214,7 +214,7 @@ def upload_retrieval(task: AbsTaskRetrieval, repo_name: str) -> None:
                         ]
                     )
                 instructions_dataset = DatasetDict(instructions_dataset)
-                instructions_dataset.push_to_hub(repo_name, f"{config}-instructions")
+                instructions_dataset.push_to_hub(repo_name, f"{config}-instruction")
             if task.top_ranked:
                 top_ranked_dataset = {}
                 for split in task.top_ranked[config]:
@@ -292,7 +292,7 @@ def upload_retrieval(task: AbsTaskRetrieval, repo_name: str) -> None:
                     ]
                 )
             instructions_dataset = DatasetDict(instructions_dataset)
-            instructions_dataset.push_to_hub(repo_name, "instructions")
+            instructions_dataset.push_to_hub(repo_name, "instruction")
         if task.top_ranked:
             top_ranked_dataset = {}
             for split in task.top_ranked:
@@ -324,8 +324,6 @@ if __name__ == "__main__":
         "WikipediaRetrievalMultilingual",
         # reranking
         "AskUbuntuDupQuestions",
-        # instruct retrieval
-        "mFollowIR",
         # bitext mining
         "IWSLT2017BitextMining",
         # classification
@@ -337,9 +335,5 @@ if __name__ == "__main__":
         # sts
         "IndicCrosslingualSTS"
     ]:
-        print(task)
-        task1 = mteb.get_task(task)
+        task1 = mteb.get_task("mFollowIR", languages=["rus"])
         upload_task_to_hf(task1, f"mteb/{task}")
-        # model = mteb.get_model("intfloat/multilingual-e5-small")
-        # evaluator = mteb.MTEB([task1])
-        # evaluator.run(model, overwrite_results=True)
