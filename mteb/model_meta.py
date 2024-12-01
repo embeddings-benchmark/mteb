@@ -74,8 +74,8 @@ class ModelMeta(BaseModel):
             input such as "query: {document}" or "passage: {document}".
         zero_shot_benchmarks: A list of benchmarks on which the model has been evaluated in a zero-shot setting. By default we assume that all models
             are evaluated non-zero-shot unless specified otherwise.
-        adapted_from: Name of the model from which this model is adapted from. For quantizations, fine-tunes, long doc extensions, etc. 
-        supersedes: Name of the model that this model supersedes, e.g. nvidia/NV-Embed-v2 supersedes v1. 
+        adapted_from: Name of the model from which this model is adapted from. For quantizations, fine-tunes, long doc extensions, etc.
+        supersedes: Name of the model that this model supersedes, e.g. nvidia/NV-Embed-v2 supersedes v1.
     """
 
     model_config = ConfigDict(extra="forbid")
