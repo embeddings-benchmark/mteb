@@ -11,7 +11,8 @@ from pydantic import (
     AnyUrl,
     BaseModel,
     BeforeValidator,
-    ConfigDict, TypeAdapter,
+    ConfigDict,
+    TypeAdapter,
     field_validator,
 )
 from typing_extensions import Literal, TypedDict

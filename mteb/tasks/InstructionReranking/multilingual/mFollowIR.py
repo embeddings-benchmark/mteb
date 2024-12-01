@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+from logging import getLogger
+
 import datasets
 
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
-from logging import getLogger
 
 logger = getLogger(__name__)
 

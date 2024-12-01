@@ -16,8 +16,7 @@ from mteb.abstasks.AbsTask import AbsTask
 
 
 def upload_task_to_hf(task: AbsTask, repo_name: str) -> None:
-    """
-    Uploads a task's dataset to Hugging Face hub based on its type.
+    """Uploads a task's dataset to Hugging Face hub based on its type.
 
     Args:
         task (AbsTask): The task object.
@@ -45,8 +44,7 @@ def upload_task_to_hf(task: AbsTask, repo_name: str) -> None:
 
 
 def push_to_hub(repo_name: str, sentences: dict, subset_name: str = None) -> None:
-    """
-    Pushes a dataset to the Hugging Face hub.
+    """Pushes a dataset to the Hugging Face hub.
 
     Args:
         repo_name (str): The name of the repository on Hugging Face hub.
@@ -55,14 +53,17 @@ def push_to_hub(repo_name: str, sentences: dict, subset_name: str = None) -> Non
     """
     sentences = DatasetDict(sentences)
     if subset_name:
-        sentences.push_to_hub(repo_name, subset_name, commit_message=f"Add {subset_name} dataset")
+        sentences.push_to_hub(
+            repo_name, subset_name, commit_message=f"Add {subset_name} dataset"
+        )
     else:
         sentences.push_to_hub(repo_name, commit_message="Add dataset")
 
 
-def process_dataset(task: AbsTask, repo_name: str, fields: list[str], is_multilingual: bool) -> None:
-    """
-    Generic function to process datasets for multilingual and non-multilingual tasks.
+def process_dataset(
+    task: AbsTask, repo_name: str, fields: list[str], is_multilingual: bool
+) -> None:
+    """Generic function to process datasets for multilingual and non-multilingual tasks.
 
     Args:
         task (AbsTask): The task object.
@@ -91,21 +92,26 @@ def upload_classification(task: AbsTaskClassification, repo_name: str) -> None:
     process_dataset(task, repo_name, ["text", "label"], task.is_multilingual)
 
 
-def upload_clustering(task: AbsTaskClustering | AbsTaskClusteringFast, repo_name: str) -> None:
+def upload_clustering(
+    task: AbsTaskClustering | AbsTaskClusteringFast, repo_name: str
+) -> None:
     process_dataset(task, repo_name, ["sentences", "labels"], task.is_multilingual)
 
 
 def upload_pair_classification(task: AbsTaskPairClassification, repo_name: str) -> None:
-    process_dataset(task, repo_name, ["sentence1", "sentence2", "labels"], task.is_multilingual)
+    process_dataset(
+        task, repo_name, ["sentence1", "sentence2", "labels"], task.is_multilingual
+    )
 
 
 def upload_sts(task: AbsTaskSTS, repo_name: str) -> None:
-    process_dataset(task, repo_name, ["sentence1", "sentence2", "score"], task.is_multilingual)
+    process_dataset(
+        task, repo_name, ["sentence1", "sentence2", "score"], task.is_multilingual
+    )
 
 
 def upload_bitext_mining(task: AbsTaskBitextMining, repo_name: str) -> None:
-    """
-    Uploads a Bitext Mining task dataset to Hugging Face hub.
+    """Uploads a Bitext Mining task dataset to Hugging Face hub.
 
     Args:
         task (AbsTaskBitextMining): The task object.
@@ -180,7 +186,9 @@ def upload_retrieval(task: AbsTaskRetrieval, repo_name: str) -> None:
                         {
                             "_id": idx,
                             "text": format_text_field(text),
-                            "title": text.get("title", "") if isinstance(text, dict) else "",
+                            "title": text.get("title", "")
+                            if isinstance(text, dict)
+                            else "",
                         }
                         for idx, text in task.corpus[config][split].items()
                     ]
@@ -260,7 +268,9 @@ def upload_retrieval(task: AbsTaskRetrieval, repo_name: str) -> None:
                     {
                         "_id": idx,
                         "text": format_text_field(text),
-                        "title": text.get("title", "") if isinstance(text, dict) else "",
+                        "title": text.get("title", "")
+                        if isinstance(text, dict)
+                        else "",
                     }
                     for idx, text in task.corpus[split].items()
                 ]
@@ -311,6 +321,7 @@ def upload_retrieval(task: AbsTaskRetrieval, repo_name: str) -> None:
 
 if __name__ == "__main__":
     import mteb
+
     for task in [
         # retrieval
         "T2Retrieval",
@@ -333,7 +344,7 @@ if __name__ == "__main__":
         # pairclassification
         "XNLIV2",
         # sts
-        "IndicCrosslingualSTS"
+        "IndicCrosslingualSTS",
     ]:
         task1 = mteb.get_task("mFollowIR", languages=["rus"])
         upload_task_to_hf(task1, f"mteb/{task}")

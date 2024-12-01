@@ -1,13 +1,8 @@
 from __future__ import annotations
 
-from collections import defaultdict
-
-from datasets import DatasetDict, load_dataset
-
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-
 
 
 class T2Retrieval(AbsTaskRetrieval):
