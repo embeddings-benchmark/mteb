@@ -20,15 +20,6 @@ _LANGUAGES = {
 }
 
 
-def categorize_float(float_value):
-    left_bound = int(float_value)
-    right_bound = left_bound + 1
-    if float_value - left_bound < right_bound - float_value:
-        return left_bound
-    else:
-        return right_bound
-
-
 class IndicCrosslingualSTS(AbsTaskSTS, MultilingualTask):
     metadata = TaskMetadata(
         name="IndicCrosslingualSTS",
@@ -80,20 +71,3 @@ class IndicCrosslingualSTS(AbsTaskSTS, MultilingualTask):
         metadata_dict["min_score"] = 0
         metadata_dict["max_score"] = 5
         return metadata_dict
-
-    # def dataset_transform(self) -> None:
-    #     # Convert to standard format
-    #     for lang in self.hf_subsets:
-    #         self.dataset[lang] = self.dataset[lang].rename_columns(
-    #             {"english_sentence": "sentence1", "indic_sentence": "sentence2"}
-    #         )
-    #         self.dataset[lang] = (
-    #             self.dataset[lang]
-    #             .map(lambda x: {"label": round(x["score"])})
-    #             .class_encode_column("label")
-    #         )
-    #         self.dataset[lang]["test"] = self.dataset[lang]["test"].train_test_split(
-    #             test_size=256,
-    #             seed=self.seed,
-    #             stratify_by_column="label",
-    #         )["test"]

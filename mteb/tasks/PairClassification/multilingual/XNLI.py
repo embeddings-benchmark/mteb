@@ -140,30 +140,4 @@ class XNLIV2(MultilingualTask, AbsTaskPairClassification):
             organization={IEEE}
             }
         """,
-        # average of premise and hypothesis
     )
-
-    # def dataset_transform(self):
-    #     _dataset = {}
-    #     for lang in self.hf_subsets:
-    #         _dataset[lang] = {}
-    #         self.dataset[lang] = self.stratified_subsampling(
-    #             self.dataset[lang], seed=self.seed, splits=self.metadata.eval_splits
-    #         )
-    #         for split in self.metadata.eval_splits:
-    #             # 0=entailment, 2=contradiction. Filter out neutral to match the task.
-    #             # Then map entailment as positive (1) and contradiction as negative (0).
-    #             hf_dataset = self.dataset[lang][split].filter(
-    #                 lambda x: x["label"] in [0, 2]
-    #             )
-    #             hf_dataset = hf_dataset.map(
-    #                 lambda example: {"label": 0 if example["label"] == 2 else 1}
-    #             )
-    #             import datasets
-    #             _dataset[lang][split] = datasets.Dataset.from_dict({
-    #                     "sentence1": hf_dataset["premise"],
-    #                     "sentence2": hf_dataset["hypothesis"],
-    #                     "labels": hf_dataset["label"],
-    #                 }
-    #             )
-    #     self.dataset = _dataset
