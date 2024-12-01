@@ -127,3 +127,20 @@ labse = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
 )
+
+multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
+    name="sentence-transformer/multi-qa-MiniLM-L6-cos-v1",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="b207367332321f8e44f96e224ef15bc607f4dbf0",  # can be any
+    release_date="2021-08-30",
+    n_parameters=22_700_000,
+    memory_usage=None,
+    embed_dim=384,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/sentence-transformers/LaBSE",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+)
