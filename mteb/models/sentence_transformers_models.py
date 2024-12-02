@@ -165,3 +165,81 @@ all_mpnet_base_v2 = ModelMeta(
     supersedes="sentence-transformers/all-mpnet-base-v1",
     adapted_from=None,
 )
+
+e5_base_v2 = ModelMeta(
+    name="intfloat/e5-base-v2",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="1c644c92ad3ba1efdad3f1451a637716616a20e8",  # can be any
+    release_date="2023-05-19",
+    n_parameters=109_000_000,
+    memory_usage=None,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/intfloat/e5-base-v2",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    supersedes="intfloat/e5-base",
+    adapted_from=None,
+)
+
+e5_base = ModelMeta(
+    name="intfloat/e5-base",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="b533fe4636f4a2507c08ddab40644d20b0006d6a",  # can be any
+    release_date="2022-12-26",
+    n_parameters=109_000_000,
+    memory_usage=None,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/intfloat/e5-base",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    supersedes=None,
+    adapted_from=None,
+)
+
+e5_large_v2 = ModelMeta(
+    name="intfloat/e5-large-v2",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="b322e09026e4ea05f42beadf4d661fb4e101d311",  # can be any
+    release_date="2023-05-19",
+    n_parameters=335_000_000,
+    memory_usage=None,
+    embed_dim=1024,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/intfloat/e5-large-v2",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    supersedes="intfloat/e5-large",
+    adapted_from=None,
+)
+
+
+e5_large = ModelMeta(
+    name="intfloat/e5-large",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="4dc6d853a804b9c8886ede6dda8a073b7dc08a81",  # can be any
+    release_date="2022-12-26",
+    n_parameters=335_000_000,
+    memory_usage=None,
+    embed_dim=1024,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/intfloat/e5-large",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    supersedes=None,
+    adapted_from=None,
+)
+
