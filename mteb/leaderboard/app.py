@@ -5,6 +5,7 @@ from collections import defaultdict
 from pathlib import Path
 
 import gradio as gr
+import pandas as pd
 from gradio_rangeslider import RangeSlider
 
 import mteb
@@ -316,12 +317,13 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             domains=domains,
         )
         lower, upper = model_size
-        # Multiplying by millions
-        lower = lower * 1e6
-        upper = upper * 1e6
         # Setting to None, when the user doesn't specify anything
         if (lower == min_model_size) and (upper == max_model_size):
             lower, upper = None, None
+        else:
+            # Multiplying by millions
+            lower = lower * 1e6
+            upper = upper * 1e6
         benchmark_results = benchmark_results.filter_models(
             open_weights=availability,
             use_instructions=instructions,
