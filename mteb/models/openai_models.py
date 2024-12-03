@@ -115,6 +115,7 @@ text_embedding_3_large = ModelMeta(
     max_tokens=8191,
     embed_dim=3072,
     open_weights=False,
+    reference="https://openai.com/index/new-embedding-models-and-api-updates/",
     framework=["API"],
     use_instructions=False,
     n_parameters=None,
@@ -125,12 +126,8 @@ text_embedding_ada_002 = ModelMeta(
     revision="2",
     release_date="2022-12-15",
     languages=None,  # supported languages not specified
-    loader=partial(
-        OpenAIWrapper,
-        model_name="text-embedding-ada-002",
-        tokenizer_name="cl100k_base",
-        max_tokens=8192,
-    ),
+    loader=partial(OpenAIWrapper, model_name="text-embedding-ada-002"),
+    reference="https://openai.com/index/new-and-improved-embedding-model/",
     max_tokens=8191,
     embed_dim=1536,
     open_weights=False,

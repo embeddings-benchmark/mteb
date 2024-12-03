@@ -70,7 +70,7 @@ all_MiniLM_L6_v2 = ModelMeta(
     memory_usage=None,
     embed_dim=384,
     license="apache-2.0",
-    max_tokens=512,
+    max_tokens=256,
     reference="https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
@@ -126,4 +126,42 @@ labse = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+)
+
+multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
+    name="sentence-transformer/multi-qa-MiniLM-L6-cos-v1",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="b207367332321f8e44f96e224ef15bc607f4dbf0",  # can be any
+    release_date="2021-08-30",
+    n_parameters=22_700_000,
+    memory_usage=None,
+    embed_dim=384,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/sentence-transformers/multi-qa-MiniLM-L6-cos-v1",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    supersedes=None,
+    adapted_from=None,
+)
+
+all_mpnet_base_v2 = ModelMeta(
+    name="sentence-transformers/all-mpnet-base-v2",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="9a3225965996d404b775526de6dbfe85d3368642",  # can be any
+    release_date="2021-08-30",
+    n_parameters=109_000_000,
+    memory_usage=None,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=384,
+    reference="https://huggingface.co/sentence-transformers/all-mpnet-base-v2",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    supersedes="sentence-transformers/all-mpnet-base-v1",
+    adapted_from=None,
 )
