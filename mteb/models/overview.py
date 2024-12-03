@@ -11,6 +11,7 @@ from sentence_transformers import SentenceTransformer
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import (
+    arctic_models,
     bge_models,
     bm25,
     cohere_models,
@@ -39,6 +40,7 @@ from mteb.models import (
 logger = logging.getLogger(__name__)
 
 model_modules = [
+    arctic_models,
     bge_models,
     bm25,
     cohere_models,
