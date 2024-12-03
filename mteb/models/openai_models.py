@@ -23,6 +23,9 @@ class OpenAIWrapper(Wrapper):
         embed_dim: int | None = None,
         **kwargs,
     ) -> None:
+        """Wrapper for OpenAIs embedding API.
+        To handle documents larger than 8192 tokens, we truncate the document to the specified sequence length.
+        """
         requires_package(self, "openai", "Openai text embedding")
         from openai import OpenAI
 
@@ -42,7 +45,7 @@ class OpenAIWrapper(Wrapper):
             logger.warning(
                 "Reducing embedding size available only for text-embedding-3-* models"
             )
-
+        
         trimmed_sentences = []
         for sentence in sentences:
             encoding = tiktoken.get_encoding(self._tokenizer_name)
