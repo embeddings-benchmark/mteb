@@ -5,7 +5,7 @@ import warnings
 from collections import defaultdict
 from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, Callable, Literal, Optional
+from typing import Any, Callable, Literal
 
 import numpy as np
 import pandas as pd
@@ -229,7 +229,7 @@ class BenchmarkResults(BaseModel):
         return type(self).model_construct(model_results=new_model_results)
 
     def join_revisions(self):
-        def parse_version(version_str: str) -> Optional[Version]:
+        def parse_version(version_str: str) -> Version | None:
             try:
                 return Version(version_str)
             except (InvalidVersion, TypeError):

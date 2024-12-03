@@ -5,7 +5,6 @@ from collections import defaultdict
 from pathlib import Path
 
 import gradio as gr
-import pandas as pd
 from gradio_rangeslider import RangeSlider
 
 import mteb

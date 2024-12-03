@@ -121,6 +121,7 @@ ignore = ["E501",   # line too long
         "D107",     # Missing docstring in __init__
         "D205",     # 1 blank line required between summary line and description
         "D415",     # First line should end with a period
+        "C408",     # don't use unecc. collection call, e.g. dict over {}
 ]
 
 [tool.ruff.lint.flake8-implicit-str-concat]
