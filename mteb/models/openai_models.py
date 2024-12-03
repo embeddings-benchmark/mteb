@@ -45,7 +45,7 @@ class OpenAIWrapper(Wrapper):
             logger.warning(
                 "Reducing embedding size available only for text-embedding-3-* models"
             )
-        
+
         trimmed_sentences = []
         for sentence in sentences:
             encoding = tiktoken.get_encoding(self._tokenizer_name)
