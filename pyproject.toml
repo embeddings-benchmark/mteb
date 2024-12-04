@@ -61,6 +61,7 @@ leaderboard = ["gradio>=5.7.1", "gradio_rangeslider>=0.0.8"]
 flagembedding = ["FlagEmbedding"]
 jina = ["einops>=0.8.0"]
 flash_attention = ["flash-attn>=2.6.3"]
+openai = ["openai>=1.41.0", "tiktoken>=0.8.0"]
 
 
 [tool.coverage.report]
