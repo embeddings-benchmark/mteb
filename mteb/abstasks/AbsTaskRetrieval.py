@@ -7,6 +7,8 @@ from pathlib import Path
 from time import time
 from typing import Any
 
+from datasets import Dataset, DatasetDict
+
 from mteb.abstasks.TaskMetadata import HFSubset
 
 from ..evaluation.evaluators import RetrievalEvaluator
@@ -514,6 +516,176 @@ class AbsTaskRetrieval(AbsTask):
             average_top_ranked_per_query=average_top_ranked_per_query,
             max_top_ranked_per_query=max_top_ranked_per_query,
         )
+
+    def _push_dataset_to_hub(self, repo_name: str) -> None:
+        def format_text_field(text):
+            """Formats the text field to match loader expectations."""
+            if isinstance(text, str):
+                return text
+            return f"{text.get('title', '')} {text.get('text', '')}".strip()
+
+        if self.is_multilingual:
+            for config in self.queries:
+                logger.info(f"Converting {config} of {self.metadata.name}")
+
+                queries_dataset = {}
+                for split in self.queries[config]:
+                    queries_dataset[split] = Dataset.from_list(
+                        [
+                            {
+                                "_id": idx,
+                                "text": text,
+                            }
+                            for idx, text in self.queries[config][split].items()
+                        ]
+                    )
+                queries_dataset = DatasetDict(queries_dataset)
+                queries_dataset.push_to_hub(repo_name, f"{config}-queries")
+
+                corpus_dataset = {}
+                for split in self.corpus[config]:
+                    corpus_dataset[split] = Dataset.from_list(
+                        [
+                            {
+                                "_id": idx,
+                                "text": format_text_field(text),
+                                "title": text.get("title", "")
+                                if isinstance(text, dict)
+                                else "",
+                            }
+                            for idx, text in self.corpus[config][split].items()
+                        ]
+                    )
+
+                corpus_dataset = DatasetDict(corpus_dataset)
+                corpus_dataset.push_to_hub(repo_name, f"{config}-corpus")
+
+                relevant_docs_dataset = {}
+                for split in self.relevant_docs[config]:
+                    relevant_docs_dataset[split] = Dataset.from_list(
+                        [
+                            {"query-id": query_id, "corpus-id": doc_id, "score": score}
+                            for query_id, docs in self.relevant_docs[config][
+                                split
+                            ].items()
+                            for doc_id, score in docs.items()
+                        ]
+                    )
+                relevant_docs_dataset = DatasetDict(relevant_docs_dataset)
+                relevant_docs_dataset.push_to_hub(repo_name, f"{config}-qrels")
+
+                if self.instructions:
+                    instructions_dataset = {}
+                    for split in self.instructions[config]:
+                        instructions_dataset[split] = Dataset.from_list(
+                            [
+                                {
+                                    "query-id": idx,
+                                    "instruction": text,
+                                }
+                                for idx, text in self.instructions[config][
+                                    split
+                                ].items()
+                            ]
+                        )
+                    instructions_dataset = DatasetDict(instructions_dataset)
+                    instructions_dataset.push_to_hub(repo_name, f"{config}-instruction")
+                if self.top_ranked:
+                    top_ranked_dataset = {}
+                    for split in self.top_ranked[config]:
+                        top_ranked_dataset[split] = Dataset.from_list(
+                            [
+                                {
+                                    "query-id": query_id,
+                                    "corpus-ids": docs,
+                                }
+                                for query_id, docs in self.top_ranked[config][
+                                    split
+                                ].items()
+                            ]
+                        )
+                    top_ranked_dataset = DatasetDict(top_ranked_dataset)
+                    top_ranked_dataset.push_to_hub(repo_name, f"{config}-top_ranked")
+        else:
+            if "default" in self.queries:
+                # old rerankers have additional default split
+                self.queries = self.queries["default"]
+                self.corpus = self.corpus["default"]
+                self.relevant_docs = self.relevant_docs["default"]
+                if self.instructions:
+                    self.instructions = self.instructions["default"]
+                if self.top_ranked:
+                    self.top_ranked = self.top_ranked["default"]
+
+            queries_dataset = {}
+            for split in self.queries:
+                queries_dataset[split] = Dataset.from_list(
+                    [
+                        {
+                            "_id": idx,
+                            "text": text,
+                        }
+                        for idx, text in self.queries[split].items()
+                    ]
+                )
+            queries_dataset = DatasetDict(queries_dataset)
+            queries_dataset.push_to_hub(repo_name, "queries")
+            corpus_dataset = {}
+            for split in self.corpus:
+                corpus_dataset[split] = Dataset.from_list(
+                    [
+                        {
+                            "_id": idx,
+                            "text": format_text_field(text),
+                            "title": text.get("title", "")
+                            if isinstance(text, dict)
+                            else "",
+                        }
+                        for idx, text in self.corpus[split].items()
+                    ]
+                )
+
+            corpus_dataset = DatasetDict(corpus_dataset)
+            corpus_dataset.push_to_hub(repo_name, "corpus")
+            relevant_docs_dataset = {}
+            for split in self.relevant_docs:
+                relevant_docs_dataset[split] = Dataset.from_list(
+                    [
+                        {"query-id": query_id, "corpus-id": doc_id, "score": score}
+                        for query_id, docs in self.relevant_docs[split].items()
+                        for doc_id, score in docs.items()
+                    ]
+                )
+            relevant_docs_dataset = DatasetDict(relevant_docs_dataset)
+            relevant_docs_dataset.push_to_hub(repo_name, "default")
+            if self.instructions:
+                instructions_dataset = {}
+                for split in self.instructions:
+                    instructions_dataset[split] = Dataset.from_list(
+                        [
+                            {
+                                "query-id": idx,
+                                "instruction": text,
+                            }
+                            for idx, text in self.instructions[split].items()
+                        ]
+                    )
+                instructions_dataset = DatasetDict(instructions_dataset)
+                instructions_dataset.push_to_hub(repo_name, "instruction")
+            if self.top_ranked:
+                top_ranked_dataset = {}
+                for split in self.top_ranked:
+                    top_ranked_dataset[split] = Dataset.from_list(
+                        [
+                            {
+                                "query-id": query_id,
+                                "corpus-ids": docs,
+                            }
+                            for query_id, docs in self.top_ranked[split].items()
+                        ]
+                    )
+                top_ranked_dataset = DatasetDict(top_ranked_dataset)
+                top_ranked_dataset.push_to_hub(repo_name, "top_ranked")
 
 
 def calculate_queries_length(queries: dict[str, str]) -> list[int] | None:

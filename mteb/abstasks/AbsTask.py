@@ -300,6 +300,43 @@ class AbsTask(ABC):
         self.hf_subsets = subsets_to_keep
         return self
 
+    def _upload_dataset_to_hub(self, repo_name: str, fields: list[str]) -> None:
+        if self.is_multilingual:
+            for config in self.metadata.eval_langs:
+                logger.info(f"Converting {config} of {self.metadata.name}")
+                sentences = {}
+                for split in self.dataset[config]:
+                    sentences[split] = Dataset.from_dict(
+                        {field: self.dataset[config][split][field] for field in fields}
+                    )
+                sentences = DatasetDict(sentences)
+                sentences.push_to_hub(
+                    repo_name, config, commit_message=f"Add {config} dataset"
+                )
+        else:
+            sentences = {}
+            for split in self.dataset:
+                sentences[split] = Dataset.from_dict(
+                    {field: self.dataset[split][field] for field in fields}
+                )
+            sentences = DatasetDict(sentences)
+            sentences.push_to_hub(repo_name, commit_message="Add dataset")
+
+    def _push_dataset_to_hub(self, repo_name: str) -> None:
+        raise NotImplementedError
+
+    def push_dataset_to_hub(self, repo_name: str) -> None:
+        """
+        Push the dataset to the HuggingFace Hub.
+
+        Args:
+            repo_name: The name of the repository to push the dataset to.
+        """
+        if not self.data_loaded:
+            self.load_data()
+
+        self._push_dataset_to_hub(repo_name)
+
     @property
     def eval_splits(self) -> list[str]:
         if self._eval_splits:
