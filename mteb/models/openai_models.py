@@ -19,7 +19,7 @@ class OpenAIWrapper(Wrapper):
         self,
         model_name: str,
         max_tokens: int,
-        tokenizer_name: str = "cl100k_base",  # since all models use this tokenizer now 
+        tokenizer_name: str = "cl100k_base",  # since all models use this tokenizer now
         embed_dim: int | None = None,
         **kwargs,
     ) -> None:
@@ -28,6 +28,7 @@ class OpenAIWrapper(Wrapper):
         """
         requires_package(self, "openai", "Openai text embedding")
         from openai import OpenAI
+
         requires_package(self, "tiktoken", "Tiktoken package")
         import tiktoken
 
@@ -36,15 +37,15 @@ class OpenAIWrapper(Wrapper):
         self._embed_dim = embed_dim
         self._max_tokens = max_tokens
         self._encoding = tiktoken.get_encoding(tokenizer_name)
-    
+
     def truncate_text_tokens(self, text):
         """Truncate a string to have `max_tokens` according to the given encoding."""
-        truncated_sentence = self._encoding.encode(text)[:self._max_tokens]
+        truncated_sentence = self._encoding.encode(text)[: self._max_tokens]
         return self._encoding.decode(truncated_sentence)
 
     def encode(self, sentences: list[str], **kwargs: Any) -> np.ndarray:
         requires_package(self, "openai", "Openai text embedding")
-        
+
         from openai import NotGiven
 
         if self._model_name == "text-embedding-ada-002" and self._embed_dim is not None:
@@ -81,6 +82,7 @@ class OpenAIWrapper(Wrapper):
                 # Sleep due to too many requests
                 logger.info("Sleeping for 10 seconds due to error", e)
                 import time
+
                 time.sleep(10)
                 try:
                     response = self._client.embeddings.create(
