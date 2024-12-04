@@ -36,13 +36,13 @@ class MSCOCOI2TRetrieval(AbsTaskAny2AnyRetrieval):
         organization={Springer}
         }""",
         descriptive_stats={
-            "n_samples": {"test": 1172},
+            "n_samples": {"test": 5000},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 30.94235294117647,
                     "average_query_length": 131.56569965870307,
-                    "num_documents": 9350,
-                    "num_queries": 1172,
+                    "num_documents": 24809,
+                    "num_queries": 5000,
                     "average_relevant_docs_per_query": 1.0,
                 }
             },

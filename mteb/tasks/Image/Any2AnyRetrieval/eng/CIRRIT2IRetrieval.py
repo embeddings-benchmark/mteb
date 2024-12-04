@@ -35,13 +35,13 @@ class CIRRIT2IRetrieval(AbsTaskAny2AnyRetrieval):
         year={2021}
         }""",
         descriptive_stats={
-            "n_samples": {"test": 1172},
+            "n_samples": {"test": 4170},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 0.0,
                     "average_query_length": 0.0,
-                    "num_documents": 9350,
-                    "num_queries": 1172,
+                    "num_documents": 21551,
+                    "num_queries": 4170,
                     "average_relevant_docs_per_query": 1.0,
                 }
             },

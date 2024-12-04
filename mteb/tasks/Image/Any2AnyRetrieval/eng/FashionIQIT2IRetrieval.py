@@ -35,13 +35,13 @@ class FashionIQIT2IRetrieval(AbsTaskAny2AnyRetrieval):
   year={2021}
 }""",
         descriptive_stats={
-            "n_samples": {"test": 6000},
+            "n_samples": {"test": 6003},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 0.0,
                     "average_query_length": 0.0,
-                    "num_documents": 74400,
-                    "num_queries": 6000,
+                    "num_documents": 74381,
+                    "num_queries": 6003,
                     "average_relevant_docs_per_query": 1.0,
                 }
             },
