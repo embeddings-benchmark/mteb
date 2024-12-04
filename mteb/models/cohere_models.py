@@ -210,7 +210,7 @@ cohere_mult_3 = ModelMeta(
 cohere_eng_3 = ModelMeta(
     loader=partial(
         CohereTextEmbeddingModel,
-        model_name="embed-multilingual-v3.0",
+        model_name="embed-english-v3.0",
         model_prompts=model_prompts,
     ),
     name="Cohere/Cohere-embed-english-v3.0",
@@ -228,7 +228,6 @@ cohere_eng_3 = ModelMeta(
     framework=["API"],
     use_instructions=False,
 )
-
 
 cohere_mult_light_3 = ModelMeta(
     loader=partial(
