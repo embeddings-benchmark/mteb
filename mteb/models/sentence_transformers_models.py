@@ -249,3 +249,23 @@ jina_embedding_s_en_v1 = ModelMeta(
     superseded_by="jinaai/jina-embeddings-v2-small-en",
     adapted_from=None,
 )
+
+
+all_MiniLM_L12_v2 = ModelMeta(
+    name="sentence-transformers/all-MiniLM-L12-v2",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="364dd28d28dcd3359b537f3cf1f5348ba679da62",  # can be any
+    release_date="2021-08-30",
+    n_parameters=33_400_000,
+    memory_usage=None,
+    embed_dim=384,
+    license="apache-2.0",
+    max_tokens=256,
+    reference="https://huggingface.co/sentence-transformers/all-MiniLM-L12-v2",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    supersedes="sentence-transformers/all-MiniLM-L12-v1",
+    adapted_from=None,
+)
