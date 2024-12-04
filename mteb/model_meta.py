@@ -75,7 +75,7 @@ class ModelMeta(BaseModel):
         zero_shot_benchmarks: A list of benchmarks on which the model has been evaluated in a zero-shot setting. By default we assume that all models
             are evaluated non-zero-shot unless specified otherwise.
         adapted_from: Name of the model from which this model is adapted from. For quantizations, fine-tunes, long doc extensions, etc.
-        supersedes: Name of the model that this model supersedes, e.g. nvidia/NV-Embed-v2 supersedes v1.
+        superseded_by: Name of the model that supersedes this model, e.g. nvidia/NV-Embed-v2 supersedes v1.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -99,7 +99,7 @@ class ModelMeta(BaseModel):
     use_instructions: bool | None = None
     zero_shot_benchmarks: list[str] | None = None
     adapted_from: str | None = None
-    supersedes: str | None = None
+    superseded_by: str | None = None
 
     def to_dict(self):
         dict_repr = self.model_dump()

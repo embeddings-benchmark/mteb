@@ -75,6 +75,8 @@ all_MiniLM_L6_v2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    superseded_by=None,
+    adapted_from=None,
 )
 
 paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
@@ -92,6 +94,8 @@ paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    superseded_by=None,
+    adapted_from=None,
 )
 
 paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
@@ -109,6 +113,8 @@ paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    superseded_by=None,
+    adapted_from=None,
 )
 
 labse = ModelMeta(
@@ -126,6 +132,8 @@ labse = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    superseded_by=None,
+    adapted_from=None,
 )
 
 multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
@@ -143,7 +151,7 @@ multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
-    supersedes=None,
+    superseded_by=None,
     adapted_from=None,
 )
 
@@ -162,6 +170,82 @@ all_mpnet_base_v2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
-    supersedes="sentence-transformers/all-mpnet-base-v1",
+    superseded_by=None,
+    adapted_from=None,
+)
+
+jina_embeddings_v2_base_en = ModelMeta(
+    name="jinaai/jina-embeddings-v2-base-en",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="6e85f575bc273f1fd840a658067d0157933c83f0",  # can be any
+    release_date="2023-09-27",
+    n_parameters=137_000_000,
+    memory_usage=None,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=8192,
+    reference="https://huggingface.co/jinaai/jina-embeddings-v2-base-en",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    superseded_by=None,
+    adapted_from=None,
+)
+
+jina_embeddings_v2_small_en = ModelMeta(
+    name="jinaai/jina-embeddings-v2-small-en",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="",  # can be any
+    release_date="2023-09-27",
+    n_parameters=32_700_000,
+    memory_usage=None,
+    embed_dim=512,
+    license="apache-2.0",
+    max_tokens=8192,
+    reference="https://huggingface.co/jinaai/jina-embeddings-v2-small-en",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    superseded_by=None,
+    adapted_from=None,
+)
+
+jina_embedding_b_en_v1 = ModelMeta(
+    name="jinaai/jina-embedding-b-en-v1",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="aa0645035294a8c0607ce5bb700aba982cdff32c",  # can be any
+    release_date="2023-07-07",
+    n_parameters=110_000_000,
+    memory_usage=None,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/jinaai/jina-embedding-b-en-v1",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    superseded_by="jinaai/jina-embeddings-v2-base-en",
+    adapted_from=None,
+)
+
+jina_embedding_s_en_v1 = ModelMeta(
+    name="jinaai/jina-embedding-s-en-v1",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="c1fed70aa4823a640f1a7150a276e4d3b08dce08",  # can be any
+    release_date="2023-07-07",
+    n_parameters=35_000_000,
+    memory_usage=None,
+    embed_dim=512,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/jinaai/jina-embedding-s-en-v1",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    superseded_by="jinaai/jina-embeddings-v2-small-en",
     adapted_from=None,
 )
