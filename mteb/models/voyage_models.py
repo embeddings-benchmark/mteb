@@ -145,7 +145,7 @@ voyage_large_2_instruct = ModelMeta(
     revision="1",
     release_date="2024-05-05",
     languages=None,  # supported languages not specified
-    loader=partial(
+    loader=partial(  # type: ignore
         VoyageWrapper,
         model_name="voyage-large-2-instruct",
         model_prompts=model_prompts,
@@ -167,7 +167,7 @@ voyage_finance_2 = ModelMeta(
     revision="1",
     release_date="2024-05-30",
     languages=None,  # supported languages not specified
-    loader=partial(
+    loader=partial(  # type: ignore
         VoyageWrapper,
         model_name="voyage-finance-2",
         model_prompts=model_prompts,
@@ -189,7 +189,7 @@ voyage_law_2 = ModelMeta(
     revision="1",
     release_date="2024-04-15",
     languages=None,  # supported languages not specified
-    loader=partial(
+    loader=partial(  # type: ignore
         VoyageWrapper,
         model_name="voyage-law-2",
         model_prompts=model_prompts,
@@ -211,7 +211,7 @@ voyage_code_2 = ModelMeta(
     revision="1",
     release_date="2024-01-23",
     languages=None,  # supported languages not specified
-    loader=partial(
+    loader=partial(  # type: ignore
         VoyageWrapper,
         model_name="voyage-code-2",
         model_prompts=model_prompts,
@@ -233,7 +233,7 @@ voyage_large_2 = ModelMeta(
     revision="1",
     release_date="2023-10-29",
     languages=None,  # supported languages not specified
-    loader=partial(
+    loader=partial(  # type: ignore
         VoyageWrapper,
         model_name="voyage-large-2",
         model_prompts=model_prompts,
@@ -255,7 +255,7 @@ voyage_2 = ModelMeta(
     revision="1",
     release_date="2023-10-29",
     languages=None,  # supported languages not specified
-    loader=partial(
+    loader=partial(  # type: ignore
         VoyageWrapper,
         model_name="voyage-2",
         model_prompts=model_prompts,
@@ -276,7 +276,7 @@ voyage_multilingual_2 = ModelMeta(
     revision="1",
     release_date="2024-06-10",
     languages=None,  # supported languages not specified
-    loader=partial(
+    loader=partial(  # type: ignore
         VoyageWrapper,
         model_name="voyage-multilingual-2",
         model_prompts=model_prompts,

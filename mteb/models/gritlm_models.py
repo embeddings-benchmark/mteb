@@ -17,7 +17,7 @@ def gritlm_instruction(instruction: str = "") -> str:
 
 
 gritlm7b = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         instruct_wrapper,
         model_name_or_path="GritLM/GritLM-7B",
         instruction_template=gritlm_instruction,
@@ -40,7 +40,7 @@ gritlm7b = ModelMeta(
     use_instructions=True,
 )
 gritlm8x7b = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         instruct_wrapper,
         model_name_or_path="GritLM/GritLM-8x7B",
         instruction_template=gritlm_instruction,

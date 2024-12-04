@@ -78,7 +78,7 @@ class GoogleTextEmbeddingModel(Encoder, Wrapper):
 
 name = "text-embedding-004"
 google_emb_004 = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         GoogleTextEmbeddingModel,
         model_name=name,
         model_prompts={

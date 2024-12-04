@@ -7,7 +7,7 @@ from mteb.models.instruct_wrapper import instruct_wrapper
 
 stella_en_400M = ModelMeta(
     # https://huggingface.co/dunzhang/stella_en_400M_v5/discussions/21#671a6205ac1e2416090f2bf4
-    loader=partial(
+    loader=partial(  # type: ignore
         instruct_wrapper,
         model_name_or_path="dunzhang/stella_en_400M_v5",
         attn="cccc",
@@ -31,7 +31,7 @@ stella_en_400M = ModelMeta(
 )
 
 stella_en_1_5b = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         instruct_wrapper,
         model_name_or_path="dunzhang/stella_en_1.5B_v5",
         attn="cccc",

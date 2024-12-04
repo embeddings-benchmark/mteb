@@ -75,7 +75,7 @@ sbert_large_mt_nlu_ru = ModelMeta(
 )
 
 user_base_ru = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="deepvk/USER-base",
         revision="436a489a2087d61aa670b3496a9915f84e46c861",
@@ -218,7 +218,7 @@ labse_ru_turbo = ModelMeta(
 
 
 rosberta_ru_en = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="ai-forever/ru-en-RoSBERTa",
         revision="89fb1651989adbb1cfcfdedafd7d102951ad0555",
