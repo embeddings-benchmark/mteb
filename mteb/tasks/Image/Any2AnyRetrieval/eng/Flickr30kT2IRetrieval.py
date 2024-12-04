@@ -36,6 +36,14 @@ class Flickr30kT2IRetrieval(AbsTaskAny2AnyRetrieval):
   url={https://api.semanticscholar.org/CorpusID:3104920}
 }""",
         descriptive_stats={
-            "n_samples": {"default": 31014},  # qrels
+            "n_samples": {"test": 5000},
+            "avg_character_length": {
+                "test": {
+                    "average_document_length": 0.0,
+                    "average_query_length": 0.0,
+                    "num_documents": 1000,
+                    "num_queries": 5000,
+                }
+            },
         },
     )

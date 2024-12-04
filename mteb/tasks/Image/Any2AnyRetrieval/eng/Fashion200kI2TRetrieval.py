@@ -34,13 +34,13 @@ class Fashion200kI2TRetrieval(AbsTaskAny2AnyRetrieval):
   year={2017}
 }""",
         descriptive_stats={
-            "n_samples": {"test": 4890},
+            "n_samples": {"test": 4889},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 0.0,
                     "average_query_length": 0.0,
-                    "num_documents": 61700,
-                    "num_queries": 4890,
+                    "num_documents": 61707,
+                    "num_queries": 4889,
                     "average_relevant_docs_per_query": 1.0,
                 }
             },
