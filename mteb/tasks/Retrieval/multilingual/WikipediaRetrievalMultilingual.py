@@ -32,7 +32,7 @@ class WikipediaRetrievalMultilingual(AbsTaskRetrieval, MultilingualTask):
         reference="https://huggingface.co/datasets/ellamind/wikipedia-2023-11-retrieval-multilingual-queries",
         dataset={
             "path": "mteb/WikipediaRetrievalMultilingual",
-            "revision": "5f6c91d21f2f5b9afb663858d19848fbd223c775", 
+            "revision": "5f6c91d21f2f5b9afb663858d19848fbd223c775",
         },
         type="Retrieval",
         category="s2p",

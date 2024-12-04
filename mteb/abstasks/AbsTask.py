@@ -326,8 +326,7 @@ class AbsTask(ABC):
         raise NotImplementedError
 
     def push_dataset_to_hub(self, repo_name: str) -> None:
-        """
-        Push the dataset to the HuggingFace Hub.
+        """Push the dataset to the HuggingFace Hub.
 
         Args:
             repo_name: The name of the repository to push the dataset to.
