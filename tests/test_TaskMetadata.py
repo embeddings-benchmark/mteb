@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-import logging
-
 import pytest
+from pydantic import ValidationError
 
 from mteb import AbsTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
@@ -178,6 +177,7 @@ _HISTORIC_DATASETS = [
     "TamilNewsClassification",
     "TenKGnadClusteringP2P.v2",
     "TenKGnadClusteringS2S.v2",
+    "IndicXnliPairClassification",
 ]
 
 
@@ -259,8 +259,8 @@ def test_given_missing_revision_path_then_it_throws():
 
 
 def test_given_none_revision_path_then_it_logs_warning(caplog):
-    with caplog.at_level(logging.WARNING):
-        my_task = TaskMetadata(
+    with pytest.raises(ValidationError):
+        TaskMetadata(
             name="MyTask",
             dataset={"path": "test/dataset", "revision": None},
             description="testing",
@@ -279,18 +279,6 @@ def test_given_none_revision_path_then_it_logs_warning(caplog):
             dialect=None,
             sample_creation=None,
             bibtex_citation="",
-        )
-
-        assert my_task.dataset["revision"] is None
-
-        warning_logs = [
-            record for record in caplog.records if record.levelname == "WARNING"
-        ]
-        assert len(warning_logs) == 1
-        assert (
-            warning_logs[0].message
-            == "Revision missing for the dataset test/dataset. "
-            + "It is encourage to specify a dataset revision for reproducability."
         )
 
 
@@ -511,10 +499,11 @@ def test_disallow_trust_remote_code_in_new_datasets():
         "MLSUMClusteringS2S.v2",
         "SwednClusteringP2P",
         "SwednClusteringS2S",
+        "IndicXnliPairClassification",
     ]
 
     assert (
-        135 == len(exceptions)
+        136 == len(exceptions)
     ), "The number of exceptions has changed. Please do not add new datasets to this list."
 
     exceptions = []

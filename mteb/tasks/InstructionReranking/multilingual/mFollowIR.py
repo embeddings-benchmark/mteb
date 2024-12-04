@@ -1,11 +1,15 @@
 from __future__ import annotations
 
+from logging import getLogger
+
 import datasets
 
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
+
+logger = getLogger(__name__)
 
 _LANGUAGES = {
     "fas": ["fas-Arab"],
@@ -58,7 +62,7 @@ def load_data(
             loading_lang = lang.split("-")[1]  # don't care about the eng part
         else:
             loading_lang = lang
-        print(f"Loading data for {lang} from {loading_lang}")
+        logger.info(f"Loading data for {lang} from {loading_lang}")
 
         # Load corpus data
         corpus_data = datasets.load_dataset(
@@ -176,7 +180,7 @@ class mFollowIRCrossLingual(MultilingualTask, AbsTaskReranking):
         self.data_loaded = True
 
 
-class mFollowIR(MultilingualTask, AbsTaskReranking):
+class mFollowIR(AbsTaskReranking, MultilingualTask):
     metadata = TaskMetadata(
         name="mFollowIR",
         description="This tasks measures retrieval instruction following ability on NeuCLIR narratives for the mFollowIR benchmark on the Farsi, Russian, and Chinese languages.",

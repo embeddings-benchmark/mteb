@@ -126,7 +126,7 @@ class HFDataLoader:
             logger.info("Loading Queries...")
             self._load_queries(config)
 
-        if any(c.endswith("top_ranked") for c in configs) in configs or (
+        if any(c.endswith("top_ranked") for c in configs) or (
             not self.hf_repo and self.top_ranked_file
         ):
             logger.info("Loading Top Ranked")
@@ -258,7 +258,7 @@ class HFDataLoader:
         self.qrels = qrels_ds
 
     def _load_top_ranked(self, config: str | None = None):
-        config = f"top_ranked-{config}" if config is not None else "top_ranked"
+        config = f"{config}-top_ranked" if config is not None else "top_ranked"
         if self.hf_repo:
             top_ranked_ds = load_dataset(
                 self.hf_repo,
@@ -303,7 +303,7 @@ class HFDataLoader:
         self.top_ranked = top_ranked_ds
 
     def _load_instructions(self, config: str | None = None):
-        config = f"instruction-{config}" if config is not None else "instruction"
+        config = f"{config}-instruction" if config is not None else "instruction"
         if self.hf_repo:
             instructions_ds = load_dataset(
                 self.hf_repo,

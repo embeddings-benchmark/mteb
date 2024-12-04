@@ -11,6 +11,9 @@ from .fas.FarsTail import *
 from .hye.ArmenianParaphrasePC import *
 from .ind.IndoNLI import *
 from .kor.KlueNLI import *
+from .multilingual.IndicXnliPairClassification import (
+    IndicXnliPairClassification as IndicXnliPairClassification,
+)
 from .multilingual.OpusparcusPC import *
 from .multilingual.PawsXPairClassification import *
 from .multilingual.RTE3 import *
