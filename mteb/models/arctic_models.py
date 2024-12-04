@@ -28,7 +28,7 @@ arctic_m_v1_5 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     adapted_from=None,
-    supersedes="Snowflake/snowflake-arctic-embed-m",
+    superseded_by=None,
 )
 
 
@@ -53,7 +53,7 @@ arctic_embed_xs = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     adapted_from="sentence-transformers/all-MiniLM-L6-v2",
-    supersedes=None,
+    superseded_by=None,
 )
 
 
@@ -78,7 +78,7 @@ arctic_embed_s = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     adapted_from="intfloat/e5-small-unsupervised",
-    supersedes=None,
+    superseded_by=None,
 )
 
 
@@ -103,7 +103,7 @@ arctic_embed_m = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     adapted_from="intfloat/e5-base-unsupervised",
-    supersedes=None,
+    superseded_by="Snowflake/snowflake-arctic-embed-m-v1.5",
 )
 
 arctic_embed_m_long = ModelMeta(
@@ -127,7 +127,7 @@ arctic_embed_m_long = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     adapted_from="nomic-ai/nomic-embed-text-v1-unsupervised",
-    supersedes=None,
+    superseded_by=None,
 )
 
 
@@ -152,5 +152,5 @@ arctic_embed_l = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     adapted_from="intfloat/e5-base-unsupervised",
-    supersedes=None,
+    superseded_by=None,
 )

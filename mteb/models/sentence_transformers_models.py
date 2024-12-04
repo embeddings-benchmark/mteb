@@ -266,6 +266,6 @@ all_MiniLM_L12_v2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
-    supersedes="sentence-transformers/all-MiniLM-L12-v1",
+    superseded_by=None,
     adapted_from=None,
 )

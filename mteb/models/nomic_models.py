@@ -97,7 +97,7 @@ nomic_embed_v1_5 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from=None,
-    supersedes="nomic-ai/nomic-embed-text-v1",
+    superseded_by=None,
 )
 
 nomic_embed_v1 = ModelMeta(
@@ -123,7 +123,7 @@ nomic_embed_v1 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from=None,
-    supersedes=None,
+    superseded_by="nomic-ai/nomic-embed-text-v1.5",
 )
 
 nomic_embed_v1_ablated = ModelMeta(
@@ -149,7 +149,7 @@ nomic_embed_v1_ablated = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from=None,
-    supersedes=None,
+    superseded_by=None,
 )
 
 
@@ -176,5 +176,5 @@ nomic_embed_v1_ablated = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from=None,
-    supersedes=None,
+    superseded_by=None,
 )
