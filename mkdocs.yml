@@ -39,16 +39,24 @@ markdown_extensions:
 copyright: Copyright &copy; 2024 The Embedding Benchmark Team
 
 nav:
-  - The Benchmark:
-      - Benchmark: index.md
-      - Domains: domains.md
-      - Task Types: task_type.md
-      - Tasks: tasks.md
-  - Package:
+  - Getting Started:
+      - Embedding Benchmark: index.md
       - Installation: installation.md
-      - Getting Started: getting_started.ipynb
-      - CLI: cli.md
-      - API: api.md
+      - Getting Started: getting_started.md
+  - Leaderboard: LINK
+  - Overview:
+      - Benchmarks: benchmarks.md
+      - Tasks: tasks.md
+      - Models: models.md
+  - Contribute:
+      - Adding a Model: adding_a_model.md
+      - Adding a Benchmark: adding_a_leaderboard_tab.md
+      - Adding a Task: adding_a_dataset.md
+      - Development Setup: CONTRIBUTING.md
+  - API:
+      - Benchmark: api/benchmark.md
+      - Task: api/task.md
+      - Model: api/model.md
 plugins:
   - mkdocs-jupyter:
       execute: false
@@ -73,4 +81,4 @@ plugins:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/KennethEnevoldsen/Scandinavian-Embedding-Benchmark
+      link: https://github.com/embedding-benchmark/mteb
