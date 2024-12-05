@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 class Model2VecWrapper(Wrapper):
     def __init__(
         self,
-        model: str,
+        model_name: str,
         **kwargs,
     ) -> None:
         """Wrapper for Model2Vec models.
@@ -26,9 +26,14 @@ class Model2VecWrapper(Wrapper):
         Args:
             model: The Model2Vec model to use. Can be a string (model name), a SentenceTransformer model, or a CrossEncoder model.
         """
-        from model2vec import StaticModel
+        try:
+            from model2vec import StaticModel
+        except ModuleNotFoundError as e:
+            raise ModuleNotFoundError(
+                "To use the Model2Vec models `model2vec` is required. Please install it with `pip install mteb[model2vec]`."
+            ) from e
 
-        self.model = model
+        self.model_name = model_name
         self.static_model = StaticModel.from_pretrained(self.model)
 
     def encode(
@@ -51,7 +56,7 @@ class Model2VecWrapper(Wrapper):
 m2v_base_glove_subword = ModelMeta(
     loader=partial(
         Model2VecWrapper,
-        model="minishlab/M2V_base_glove_subword",
+        model_name="minishlab/M2V_base_glove_subword",
     ),
     name="minishlab/M2V_base_glove_subword",
     languages=["eng_Latn"],
@@ -74,7 +79,7 @@ m2v_base_glove_subword = ModelMeta(
 m2v_base_glove = ModelMeta(
     loader=partial(
         Model2VecWrapper,
-        model="minishlab/M2V_base_glove",
+        model_name="minishlab/M2V_base_glove",
     ),
     name="minishlab/M2V_base_glove",
     languages=["eng_Latn"],
@@ -96,7 +101,7 @@ m2v_base_glove = ModelMeta(
 m2v_base_output = ModelMeta(
     loader=partial(
         Model2VecWrapper,
-        model="minishlab/M2V_base_output",
+        model_name="minishlab/M2V_base_output",
     ),
     name="minishlab/M2V_base_output",
     languages=["eng_Latn"],
@@ -118,7 +123,7 @@ m2v_base_output = ModelMeta(
 m2v_multilingual_output = ModelMeta(
     loader=partial(
         Model2VecWrapper,
-        model="minishlab/M2V_multilingual_output",
+        model_name="minishlab/M2V_multilingual_output",
     ),
     name="minishlab/M2V_multilingual_output",
     languages=["eng_Latn"],
@@ -140,7 +145,7 @@ m2v_multilingual_output = ModelMeta(
 potion_base_2m = ModelMeta(
     loader=partial(
         Model2VecWrapper,
-        model="minishlab/potion-base-2M",
+        model_name="minishlab/potion-base-2M",
     ),
     name="minishlab/potion-base-2M",
     languages=["eng_Latn"],
@@ -162,7 +167,7 @@ potion_base_2m = ModelMeta(
 potion_base_4m = ModelMeta(
     loader=partial(
         Model2VecWrapper,
-        model="minishlab/potion-base-4M",
+        model_name="minishlab/potion-base-4M",
     ),
     name="minishlab/potion-base-4M",
     languages=["eng_Latn"],
@@ -184,7 +189,7 @@ potion_base_4m = ModelMeta(
 potion_base_8m = ModelMeta(
     loader=partial(
         Model2VecWrapper,
-        model="minishlab/potion-base-8M",
+        model_name="minishlab/potion-base-8M",
     ),
     name="minishlab/potion-base-8M",
     languages=["eng_Latn"],

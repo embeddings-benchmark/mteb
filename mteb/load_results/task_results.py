@@ -511,8 +511,8 @@ class TaskResult(BaseModel):
                 new_scores[split].append(_scores)
                 seen_subsets.add(_scores["hf_subset"])
             if seen_subsets != hf_subsets:
-                raise ValueError(
-                    f"Missing subsets {hf_subsets - seen_subsets} for split {split}"
+                logger.warning(
+                    f"{task.metadata.name}: Missing subsets {hf_subsets - seen_subsets} for split {split}"
                 )
             seen_splits.add(split)
         if seen_splits != set(splits):
