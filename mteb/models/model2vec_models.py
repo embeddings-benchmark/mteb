@@ -67,7 +67,7 @@ m2v_base_glove_subword = ModelMeta(
     reference="https://huggingface.co/minishlab/M2V_base_glove_subword",
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
-    superseeded_by=None,
+    superseded_by=None,
 )
 
 
@@ -90,7 +90,7 @@ m2v_base_glove = ModelMeta(
     reference="https://huggingface.co/minishlab/M2V_base_glove",
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
-    superseeded_by=None,
+    superseded_by=None,
 )
 
 m2v_base_output = ModelMeta(
@@ -112,7 +112,7 @@ m2v_base_output = ModelMeta(
     reference="https://huggingface.co/minishlab/M2V_base_output",
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
-    superseeded_by=None,
+    superseded_by=None,
 )
 
 m2v_multilingual_output = ModelMeta(
@@ -134,7 +134,7 @@ m2v_multilingual_output = ModelMeta(
     reference="https://huggingface.co/minishlab/M2V_multilingual_output",
     use_instructions=False,
     adapted_from="sentence-transformers/LaBSE",
-    superseeded_by=None,
+    superseded_by=None,
 )
 
 potion_base_2m = ModelMeta(
@@ -156,7 +156,7 @@ potion_base_2m = ModelMeta(
     reference="https://huggingface.co/minishlab/potion-base-2M",
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
-    superseeded_by=None,
+    superseded_by=None,
 )
 
 potion_base_4m = ModelMeta(
@@ -178,7 +178,7 @@ potion_base_4m = ModelMeta(
     reference="https://huggingface.co/minishlab/potion-base-4M",
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
-    superseeded_by=None,
+    superseded_by=None,
 )
 
 potion_base_8m = ModelMeta(
@@ -200,5 +200,5 @@ potion_base_8m = ModelMeta(
     reference="https://huggingface.co/minishlab/potion-base-8M",
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
-    superseeded_by=None,
+    superseded_by=None,
 )
