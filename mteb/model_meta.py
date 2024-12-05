@@ -25,7 +25,7 @@ FRAMEWORKS = Literal[
     "TensorFlow",
     "API",
     "Tevatron",
-    "Numpy",
+    "NumPy",
 ]
 DISTANCE_METRICS = Literal["cosine"]
 
