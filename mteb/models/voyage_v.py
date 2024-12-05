@@ -66,7 +66,6 @@ def voyage_v_loader(**kwargs):
                             batch_images, model=self.model_name, input_type=input_type
                         ).embeddings
                     )
-                    # time.sleep(1.5)
             else:
                 for i in tqdm(range(0, len(images), batch_size)):
                     batch_images = images[i : i + batch_size]
@@ -76,7 +75,6 @@ def voyage_v_loader(**kwargs):
                             batch_images, model=self.model_name, input_type=input_type
                         ).embeddings
                     )
-                    # time.sleep(1.5)
             all_image_embeddings = torch.vstack(all_image_embeddings)
             return all_image_embeddings
 
@@ -126,7 +124,6 @@ def voyage_v_loader(**kwargs):
                                 input_type=input_type,
                             ).embeddings
                         )
-                        # time.sleep(1.5)
                 else:
                     for i in tqdm(range(0, len(images), batch_size)):
                         batch_images = images[i : i + batch_size]
@@ -142,7 +139,6 @@ def voyage_v_loader(**kwargs):
                                 input_type=input_type,
                             ).embeddings
                         )
-                        # time.sleep(1.5)
                 interleaved_embeddings = torch.vstack(interleaved_embeddings)
                 return interleaved_embeddings
 
