@@ -123,7 +123,7 @@ m2v_multilingual_output = ModelMeta(
     license="mit",
     similarity_fn_name="cosine",
     framework=["PyTorch"],
-    reference="https://huggingface.co/minishlab/M2V_base_output",
+    reference="https://huggingface.co/minishlab/M2V_multilingual_output",
     use_instructions=False,
 )
 
