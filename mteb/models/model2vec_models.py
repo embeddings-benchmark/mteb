@@ -26,6 +26,8 @@ class Model2VecWrapper(Wrapper):
         Args:
             model: The Model2Vec model to use. Can be a string (model name), a SentenceTransformer model, or a CrossEncoder model.
         """
+        from model2vec import StaticModel
+
         self.model = model
         self.static_model = StaticModel.from_pretrained(self.model)
 
