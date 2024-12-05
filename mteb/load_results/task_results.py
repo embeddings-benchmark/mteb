@@ -459,7 +459,7 @@ class TaskResult(BaseModel):
         values = []
         for split in splits:
             if split not in self.scores:
-                raise ValueError(f"Split {split} not found in scores")
+                logger.warning(f"Split {split} not found in scores")
 
             for scores in self.scores[split]:
                 eval_langs = scores["languages"]
@@ -511,12 +511,14 @@ class TaskResult(BaseModel):
                 new_scores[split].append(_scores)
                 seen_subsets.add(_scores["hf_subset"])
             if seen_subsets != hf_subsets:
-                raise ValueError(
-                    f"Missing subsets {hf_subsets - seen_subsets} for split {split}"
+                logger.warning(
+                    f"{task.metadata.name}: Missing subsets {hf_subsets - seen_subsets} for split {split}"
                 )
             seen_splits.add(split)
         if seen_splits != set(splits):
-            raise ValueError(f"Missing splits {set(splits) - seen_splits}")
+            logger.warning(
+                f"{task.metadata.name}: Missing splits {set(splits) - seen_splits}"
+            )
         new_res = {**self.to_dict(), "scores": new_scores}
         new_res = TaskResult.from_validated(**new_res)
         return new_res
