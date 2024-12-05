@@ -40,7 +40,6 @@ dependencies = [
     "typing_extensions>=0.0.0",
     "eval_type_backport>=0.0.0",
     "polars>=0.20.22",
-    "model2vec>=0.3.0"
 ]
 
 
@@ -63,6 +62,7 @@ flagembedding = ["FlagEmbedding"]
 jina = ["einops>=0.8.0"]
 flash_attention = ["flash-attn>=2.6.3"]
 openai = ["openai>=1.41.0", "tiktoken>=0.8.0"]
+model2vec = ["model2vec>=0.3.0"]
 
 
 [tool.coverage.report]
