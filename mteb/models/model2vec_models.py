@@ -183,6 +183,6 @@ potion_base_8m = ModelMeta(
     license="mit",
     similarity_fn_name="cosine",
     framework=["PyTorch"],
-    reference="https://huggingface.co/minishlab/potion-base-4M",
+    reference="https://huggingface.co/minishlab/potion-base-8M",
     use_instructions=False,
 )
