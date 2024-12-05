@@ -1,5 +1,6 @@
-## Available tasks
-The following tables give you an overview of the tasks in MTEB.
+# Task Overview
+
+The following tables give you an overview of the tasks within MTEB.
 
 <details>
 

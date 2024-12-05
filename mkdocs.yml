@@ -1,0 +1,76 @@
+site_name: Massive Text Embedding Benchmark
+docs_dir: "docs/"
+repo_url: https://github.com/embedding-benchmark/mteb
+watch: [src/, docs/]
+edit_uri: "blob/main/docs/"
+theme:
+  name: material
+  favicon: mteb_logo/mteb_logo_transparent.png
+  logo: mteb_logo/mteb_logo_transparent.png
+  features:
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.annotation
+    - content.code.copy
+    - content.action.edit
+    - content.action.view
+    - content.code.annotate
+    - content.tooltips
+    - navigation.footer
+    - navigation.indexes
+    - toc.follow
+  palette:
+    primary: white
+    accent: light blue
+
+markdown_extensions:
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - toc:
+      permalink: true
+
+copyright: Copyright &copy; 2024 The Embedding Benchmark Team
+
+nav:
+  - The Benchmark:
+      - Benchmark: index.md
+      - Domains: domains.md
+      - Task Types: task_type.md
+      - Tasks: tasks.md
+  - Package:
+      - Installation: installation.md
+      - Getting Started: getting_started.ipynb
+      - CLI: cli.md
+      - API: api.md
+plugins:
+  - mkdocs-jupyter:
+      execute: false
+      # execute: true
+      # allow_errors: false
+      execute_ignore:
+        - "*.py"
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          preload_modules: [pydantic]
+          paths: [src]
+          type: python
+          root_package: seb
+          docstring_style: google
+          options:
+            heading_level: 3
+            show_source: true
+            show_root_heading: true
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/KennethEnevoldsen/Scandinavian-Embedding-Benchmark
