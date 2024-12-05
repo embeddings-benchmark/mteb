@@ -21,7 +21,7 @@ def voyage_v_loader(**kwargs):
     try:
         import voyageai
     except ImportError:
-        raise ImportError("To use cohere models, please run `pip install -U voyageai`.")
+        raise ImportError("To use voyage models, please run `pip install -U voyageai`.")
 
     class VoyageMultiModalModelWrapper:
         def __init__(
