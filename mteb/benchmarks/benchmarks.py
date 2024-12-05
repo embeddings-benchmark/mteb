@@ -725,7 +725,6 @@ MTEB_multilingual = Benchmark(
             "SpartQA",
             "TempReasonL1",
             "TRECCOVID",
-            "CUREv1",
             "WinoGrande",
             "BelebeleRetrieval",
             "MLQARetrieval",
