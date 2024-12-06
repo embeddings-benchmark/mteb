@@ -36,7 +36,7 @@ class Model2VecWrapper(Wrapper):
             ) from e
 
         self.model_name = model_name
-        self.static_model = StaticModel.from_pretrained(self.model)
+        self.static_model = StaticModel.from_pretrained(self.model_name)
 
     def encode(
         self,
