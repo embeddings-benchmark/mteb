@@ -88,7 +88,7 @@ class ModelMeta(BaseModel):
     loader: Callable[..., Encoder] | None = None
     n_parameters: int | None = None
     memory_usage: float | None = None
-    max_tokens: int | None = None
+    max_tokens: float | None = None
     embed_dim: int | None = None
     license: str | None = None
     open_weights: bool | None = None
