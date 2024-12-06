@@ -16,18 +16,34 @@ class JinaCLIPModelWrapper:
     def __init__(
         self,
         model_name: str,
+        revision: str | None = None,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
+        if model_name == 'jina-clip-v2':
+            try:
+                import einops  # noqa: F401
+            except ImportError:
+                raise ImportError(
+                    "To use the jina-embeddings-v3 models `einops` is required. Please install it with `pip install mteb[jina]`."
+                )
+            try:
+                import flash_attn  # noqa: F401
+            except ImportError:
+                logger.warning(
+                    "Using flash_attn for jina-embeddings-v3 models is recommended. Please install it with `pip install mteb[flash_attention]`."
+                    "Fallback to native implementation."
+                )
         self.model_name = model_name
         self.device = device
-        self.model = AutoModel.from_pretrained(model_name, trust_remote_code=True).to(
+        self.model = AutoModel.from_pretrained(model_name, trust_remote_code=True, revision=revision).to(
             self.device
         )
 
     def get_text_embeddings(
         self,
         texts: list[str],
+        task: str | None = None,
         batch_size: int = 32,
         convert_to_numpy=False,
         convert_to_tensor=True,
@@ -37,8 +53,9 @@ class JinaCLIPModelWrapper:
         with torch.no_grad():
             for i in tqdm(range(0, len(texts), batch_size)):
                 batch_texts = texts[i : i + batch_size]
-                text_outputs = self.model.encode_text(
+                text_outputs = self.model.encode_text(  # encode_text will handle `model_prompt`
                     batch_texts,
+                    task=task,
                     convert_to_numpy=convert_to_numpy,
                     convert_to_tensor=convert_to_tensor,
                 )
@@ -91,6 +108,7 @@ class JinaCLIPModelWrapper:
     def get_fused_embeddings(
         self,
         texts: list[str] = None,
+        task: str | None = None,
         images: list[Image.Image] = None,
         fusion_mode="sum",
         batch_size: int = 32,
@@ -104,6 +122,7 @@ class JinaCLIPModelWrapper:
         if texts is not None:
             text_embeddings = self.get_text_embeddings(
                 texts,
+                task=task,
                 batch_size=batch_size,
                 convert_to_numpy=False,
                 convert_to_tensor=True,
@@ -136,13 +155,15 @@ class JinaCLIPModelWrapper:
     def encode(  # type: ignore
         self,
         sentences: list[str],
+        task: str | None,
         *,
         batch_size: int = 32,
         **kwargs: Any,
     ):
+        # TODO: Why `task_name` is being poped?
         if "task_name" in kwargs:
             kwargs.pop("task_name")
-        return self.model.encode_text(sentences, batch_size=batch_size, **kwargs)
+        return self.model.encode_text(sentences, batch_size=batch_size, task=task, **kwargs)
 
 
 jina_clip_v1 = ModelMeta(
@@ -155,6 +176,18 @@ jina_clip_v1 = ModelMeta(
     open_source=True,
     revision="06150c7c382d7a4faedc7d5a0d8cdb59308968f4",
     release_date="2024-05-30",
+)
+
+jina_clip_v2 = ModelMeta(
+    loader=partial(
+        JinaCLIPModelWrapper,
+        model_name="jinaai/jina-clip-v2",
+    ),
+    name="jinaai/jina-clip-v2",
+    languages=["eng_Latn"], # TODO: move `jina_clip` to `jina_models.py` on main branch, shared languages.
+    open_source=True,
+    revision="placeholder",
+    release_date="placeholder",
 )
 
 
