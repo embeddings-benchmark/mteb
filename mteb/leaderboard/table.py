@@ -106,6 +106,14 @@ def failsafe_get_model_meta(model_name):
         return None
 
 
+def format_max_tokens(max_tokens: float | None) -> str:
+    if max_tokens is None:
+        return "Unknown"
+    if max_tokens == np.inf:
+        return "Infinite"
+    return str(int(max_tokens))
+
+
 def scores_to_tables(
     scores_long: list[dict], search_query: str | None = None
 ) -> tuple[gr.DataFrame, gr.DataFrame]:
@@ -145,9 +153,7 @@ def scores_to_tables(
     joint_table.insert(
         1,
         "Max Tokens",
-        model_metas.map(
-            lambda m: str(int(m.max_tokens)) if m.max_tokens else "Unknown"
-        ),
+        model_metas.map(lambda m: format_max_tokens(m.max_tokens)),
     )
     joint_table.insert(
         1,
