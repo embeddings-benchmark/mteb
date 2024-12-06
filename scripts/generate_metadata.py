@@ -219,7 +219,7 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
 
 
 def code_from_meta(meta: ModelMeta) -> str:
-    template = "{variable_name} = ModelMeta({meta})\n"
+    template = "{variable_name} ={meta}\n"
     variable_name = meta.name.replace("/", "__").replace("-", "_").replace(".", "_")
     return template.format(variable_name=variable_name, meta=meta.__repr__())
 
