@@ -291,13 +291,10 @@ class TaskResult(BaseModel):
                 )
 
         pre_1_11_load = (
-            (
-                "mteb_version" in data
-                and data["mteb_version"] is not None
-                and Version(data["mteb_version"]) < Version("1.11.0")
-            )
-            or "mteb_version" not in data
-        )  # assume it is before 1.11.0 if the version is not present
+            "mteb_version" in data
+            and data["mteb_version"] is not None
+            and Version(data["mteb_version"]) < Version("1.11.0")
+        ) or "mteb_version" not in data  # assume it is before 1.11.0 if the version is not present
 
         try:
             obj = cls.model_validate(data)
@@ -459,7 +456,7 @@ class TaskResult(BaseModel):
         values = []
         for split in splits:
             if split not in self.scores:
-                logger.warning(f"Split {split} not found in scores")
+                raise ValueError(f"Split {split} not found in scores")
 
             for scores in self.scores[split]:
                 eval_langs = scores["languages"]
