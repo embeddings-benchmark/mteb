@@ -516,7 +516,9 @@ class TaskResult(BaseModel):
                 )
             seen_splits.add(split)
         if seen_splits != set(splits):
-            raise ValueError(f"Missing splits {set(splits) - seen_splits}")
+            logger.warning(
+                f"{task.metadata.name}: Missing splits {set(splits) - seen_splits}"
+            )
         new_res = {**self.to_dict(), "scores": new_scores}
         new_res = TaskResult.from_validated(**new_res)
         return new_res
