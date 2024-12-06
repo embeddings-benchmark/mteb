@@ -6,7 +6,6 @@ from pathlib import Path
 
 import iso639
 from huggingface_hub import HfApi, ModelCard, hf_hub_download
-from packaging.version import InvalidVersion, Version
 from tqdm import tqdm
 
 from mteb.model_meta import ModelMeta
