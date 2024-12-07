@@ -63,6 +63,7 @@ jina = ["einops>=0.8.0"]
 flash_attention = ["flash-attn>=2.6.3"]
 openai = ["openai>=1.41.0", "tiktoken>=0.8.0"]
 model2vec = ["model2vec>=0.3.0"]
+pylate = ["pylate>=1.1.4"]
 
 
 [tool.coverage.report]

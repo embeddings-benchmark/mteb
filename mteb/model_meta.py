@@ -27,7 +27,7 @@ FRAMEWORKS = Literal[
     "Tevatron",
     "NumPy",
 ]
-DISTANCE_METRICS = Literal["cosine"]
+DISTANCE_METRICS = Literal["cosine", "max_sim"]
 
 
 def sentence_transformers_loader(
