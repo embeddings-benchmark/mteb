@@ -7,7 +7,6 @@ from typing import Any
 
 import numpy as np
 
-from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
 from .wrapper import Wrapper
@@ -25,6 +24,7 @@ class Model2VecWrapper(Wrapper):
 
         Args:
             model_name: The Model2Vec model to load from HuggingFace Hub.
+            **kwargs: Additional arguments
         """
         try:
             from model2vec import StaticModel
