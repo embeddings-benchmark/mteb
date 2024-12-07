@@ -60,7 +60,6 @@ docs = [
   "mkdocs-material>=9.5.47",
   "mkdocstrings[python]>=0.18",
   "mkdocs-bibtex>=2.16.2",
-  "griffe-pydantic"
 ]
 
 speedtask = ["GPUtil>=1.4.0", "psutil>=5.9.8"]

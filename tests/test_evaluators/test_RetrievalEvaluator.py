@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from mteb import SentenceTransformerWrapper
+from mteb.models import SentenceTransformerWrapper
 from mteb.evaluation.evaluators import RetrievalEvaluator
 from tests.test_benchmark.mock_models import MockNumpyEncoder
 

@@ -4,7 +4,7 @@ import logging
 
 import pytest
 
-from mteb import AbsTask
+from mteb.abstasks import AbsTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.overview import get_tasks
 

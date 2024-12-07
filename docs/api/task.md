@@ -19,7 +19,9 @@ as well as the correct documents to retrieve for a given query. In addition to t
 Each task also contains extensive metadata, we annotate this using the following object. This allows to use [pydantic](https://docs.pydantic.dev/latest/) to evaluate that the 
 metadata is valid and consistent. 
 
-:::mteb.abstasks.TaskMetadata
+:::mteb.TaskMetadata
+    options:
+      members: true
 
 
 
@@ -27,6 +29,8 @@ metadata is valid and consistent.
 
 All tasks in `mteb` inherits from the following abstract class.
 
+
+:::mteb.AbsTask
 <!-- 
 TODO: we probably need to hide some of the method and potentially add a docstring to the class.
 -->

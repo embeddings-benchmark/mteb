@@ -6,17 +6,15 @@ A model in `mteb` cover two concept, its metadata and its implementation. The me
 length, valid frameworks, license and degree of openness. The implementation, is simply a reproducible workflow which allows other to run the
 exact model again using the same prompts, hyperparameters, aggregation strategies and so on.
 
-[!](modelmeta_explainer.png)
+![](../images/visualizations/modelmeta_explainer.png)
 
 ## Metadata
 
-<!-- :::mteb.ModelMeta -->
+:::mteb.models.ModelMeta
 
 ## The Encoder Interface
 
-In the following the present the standard encoder interface for `mteb`. 
-
-<!-- :::mteb.Encoder -->
+:::mteb.Encoder
 
 
 

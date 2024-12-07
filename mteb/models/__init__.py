@@ -10,6 +10,7 @@ from mteb.models.overview import (
     get_model_metas,
     model_meta_from_sentence_transformers,
 )
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 
 logger = logging.getLogger(__name__)
 

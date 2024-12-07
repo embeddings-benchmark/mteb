@@ -77,9 +77,6 @@ plugins:
           root_package: mteb
           docstring_style: google
           options:
-            # extensions:
-            # - griffe_pydantic:
-            #     schema: true
             heading_level: 3
             show_source: true
             show_root_heading: true
