@@ -43,8 +43,9 @@ nav:
       - Embedding Benchmark: index.md
       - Installation: installation.md
       - Getting Started: getting_started.md
-  - Leaderboard: LINK
-  - Overview:
+      - CLI: cli.md
+  - Leaderboard: LINK # <-- TODO: Figure out if this is possible - we might also want to embed it
+  - Overview: # <-- TODO: find a better word
       - Benchmarks: benchmarks.md
       - Tasks: tasks.md
       - Models: models.md

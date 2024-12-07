@@ -55,6 +55,18 @@ def _multilabel_subsampling(
 
 
 class AbsTask(ABC):
+    """The abstract class for the tasks
+
+    Attributes:
+        metadata: The metadata describing the task
+        dataset: The dataset represented as a dictionary on the form {"hf subset": {"split": Dataset}} where "split" is the dataset split (e.g. "test")
+            and Dataset is a datasets.Dataset objedct. "hf subset" is the data subset on Huggingface typically used to denote the language e.g.
+            datasets.load_dataset("data", "en"). If the dataset does not have a subset this is simply "default".
+        abstask_prompt: The potential prompt of the abstask
+        superseeded_by: Denotes the task that this task is superseeded by. Used to issue warning to users of outdated datasets, while maintaining
+            reproducibility of existing benchmarks.
+    """
+
     metadata: TaskMetadata
     abstask_prompt: str | None = None
     _eval_splits: list[str] | None = None
@@ -64,6 +76,12 @@ class AbsTask(ABC):
     is_multilingual: bool = False
 
     def __init__(self, seed: int = 42, **kwargs: Any):
+        """The init function. This is called primarily to set the seed.
+
+        Args:
+            seed: An integer seed.
+            kwargs: arguments passed to subclasses.
+        """
         self.save_suffix = kwargs.get("save_suffix", "")
 
         self.seed = seed
@@ -73,15 +91,17 @@ class AbsTask(ABC):
         torch.cuda.manual_seed_all(self.seed)
 
     def check_if_dataset_is_superseeded(self):
-        """Check if the dataset is superseeded by a newer version"""
+        """Checks if the dataset is superseeded by a newer version. If it is the case it will raise a warning."""
         if self.superseded_by:
             logger.warning(
                 f"Dataset '{self.metadata.name}' is superseeded by '{self.superseded_by}', you might consider using the newer version of the dataset."
             )
 
     def dataset_transform(self):
-        """Transform operations applied to the dataset after loading.
-        Override this method if your dataset requires any transformation.
+        """A transform operations applied to the dataset after loading.
+
+        This method is useful when the dataset from Huggingface is not in an `mteb` compatible format.
+        Override this method if your dataset requires additional transformation.
         """
         pass
 
@@ -182,7 +202,11 @@ class AbsTask(ABC):
         return dataset_dict
 
     def load_data(self, **kwargs):
-        """Load dataset from HuggingFace hub"""
+        """Loads dataset from HuggingFace hub
+
+        This is the main loading function for Task. Do not overwrite this, instead we recommend using `dataset_transform`, which is called after the
+        dataset is loaded using `datasets.load_dataset`.
+        """
         if self.data_loaded:
             return
         self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])  # type: ignore
@@ -192,6 +216,7 @@ class AbsTask(ABC):
     def calculate_metadata_metrics(
         self, overwrite_results: bool = False
     ) -> dict[str, DescriptiveStatistics | dict[str, DescriptiveStatistics]]:
+        """Calculates descriptive statistics from the dataset by calling `_calculate_metrics_from_split`."""
         if self.metadata.descriptive_stat_path.exists() and not overwrite_results:
             logger.info("Loading metadata descriptive statistics from cache.")
             return self.metadata.descriptive_stats
