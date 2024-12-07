@@ -6,7 +6,12 @@ A model in `mteb` cover two concept, its metadata and its implementation. The me
 length, valid frameworks, license and degree of openness. The implementation, is simply a reproducible workflow which allows other to run the
 exact model again using the same prompts, hyperparameters, aggregation strategies and so on.
 
-![](../images/visualizations/modelmeta_explainer.png)
+<figure markdown="span">
+    ![](../images/visualizations/modelmeta_explainer.png){ width="80%" }
+    <figcaption>An overview of the model and its metadata within `mteb`</figcaption>
+</figure>
+
+
 
 ## Metadata
 

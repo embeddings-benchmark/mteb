@@ -21,7 +21,7 @@ UrlString = Annotated[
 class Benchmark:
     """A benchmark object intended to run a certain benchmark within MTEB.
 
-    Args:
+    Attributes:
         name: The name of the benchmark
         tasks: The tasks within the benchmark.
         description: A description of the benchmark, should include its intended goal and potentially a description of its construction

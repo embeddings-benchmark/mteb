@@ -39,6 +39,7 @@ deal with this limitations (e.g. by truncating the sequence). Having a shared im
 for reproducible workflow. To ensure consistency we define a [standard interface](api/model.md#the-encoder-interface) that models should follow to be implemented. These implementations additionally come with [metadata](api/model.md#metadata), that for exampe include license, compatible frameworks, and whether the weight are public or not.
 
 <figure markdown="span">
-    ![](images/visualizations/benchmark_explainer.png){ width="80%" }
+    ![](../images/visualizations/modelmeta_explainer.png){ width="80%" }
     <figcaption>An overview of the model and its metadata within `mteb`</figcaption>
 </figure>
+
