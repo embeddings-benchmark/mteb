@@ -53,6 +53,24 @@ def dot_score(a: torch.Tensor, b: torch.Tensor):
     return torch.mm(a, b.transpose(0, 1))
 
 
+def max_sim(a: list, b: list):
+    """Computes the max-similarity max_sim(a[i], b[j]) for all i and j.
+
+    Return:
+        Matrix with res[i][j]  = max_sim(a[i], b[j])
+    """  # noqa: D402
+    a = torch.stack(a)
+    b = torch.stack(b)
+
+    scores = torch.einsum(
+        "ash,bth->abst",
+        a,
+        b,
+    )
+
+    return scores.max(axis=-1).values.sum(axis=-1)
+
+
 # From https://github.com/beir-cellar/beir/blob/f062f038c4bfd19a8ca942a9910b1e0d218759d4/beir/retrieval/custom_metrics.py#L4
 def mrr(
     qrels: dict[str, dict[str, int]],

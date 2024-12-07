@@ -319,6 +319,32 @@ evaluation.run(
 <details>
   <summary>  Saving retrieval task predictions </summary>
 
+### Using Lateinteraction model for retrival
+
+```python
+from mteb import MTEB
+import mteb
+from pylate import models
+
+
+colbert = models.ColBERT("colbert-ir/colbertv2.0")
+
+
+tasks = mteb.get_tasks(tasks=["NFCorpus"], languages=["eng"])
+
+subset = "default"
+eval_splits = ["test"]
+
+evaluation = MTEB(tasks=tasks)
+
+evaluation.run(
+    colbert,
+    eval_splits=eval_splits,
+    score_function="max_sim"
+)
+```
+
+
 ### Saving retrieval task predictions
 
 To save the predictions from a retrieval task, add the `--save_predictions` flag in the CLI or set `save_predictions=True` in the run method. The filename will be in the "{task_name}_{subset}_predictions.json" format.

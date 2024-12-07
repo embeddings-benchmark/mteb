@@ -25,6 +25,7 @@ from .utils import (
     dot_score,
     download,
     hole,
+    max_sim,
     mrr,
     nAUC,
     recall_cap,
@@ -77,10 +78,15 @@ class DenseRetrievalExactSearch:
         if "convert_to_tensor" not in encode_kwargs:
             encode_kwargs["convert_to_tensor"] = True
 
-        self.score_functions = {"cos_sim": cos_sim, "dot": dot_score}
+        self.score_functions = {
+            "cos_sim": cos_sim,
+            "dot": dot_score,
+            "max_sim": max_sim,
+        }
         self.score_function_desc = {
             "cos_sim": "Cosine Similarity",
             "dot": "Dot Product",
+            "max_sim": "MaxSim",
         }
         self.corpus_chunk_size = corpus_chunk_size
         if isinstance(previous_results, Path):
