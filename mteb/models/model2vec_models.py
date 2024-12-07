@@ -24,7 +24,7 @@ class Model2VecWrapper(Wrapper):
 
         Args:
             model_name: The Model2Vec model to load from HuggingFace Hub.
-            **kwargs: Additional arguments
+            **kwargs: Additional arguments to pass to the wrapper.
         """
         try:
             from model2vec import StaticModel
