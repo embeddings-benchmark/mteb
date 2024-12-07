@@ -144,7 +144,7 @@ class CohereTextEmbeddingModel(Wrapper):
         self,
         sentences: list[str],
         cohere_task_type: str,
-        show_progress_bar: bool,
+        show_progress_bar: bool = False,
         retries: int = 5,
     ) -> torch.Tensor:
         import cohere  # type: ignore
