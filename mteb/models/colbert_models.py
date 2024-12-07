@@ -50,7 +50,7 @@ class ColBERTWrapper(Wrapper):
         Returns:
             The encoded sentences.
         """
-        return self.static_model.encode(sentences, **kwargs)
+        return np.asarray(self.static_model.encode(sentences, **kwargs))
 
 
 colbert_v2 = ModelMeta(
