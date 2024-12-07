@@ -459,7 +459,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [SICK-BR-PC](https://linux.ime.usp.br/~thalen/SICK_PT.pdf) | ['por'] | PairClassification | s2s | [Web, Written] | None | None |
 | [SICK-BR-STS](https://linux.ime.usp.br/~thalen/SICK_PT.pdf) | ['por'] | STS | s2s | [Web, Written] | None | None |
 | [SICK-E-PL](https://aclanthology.org/2020.lrec-1.207) | ['pol'] | PairClassification | s2s |  | None | None |
-| [SICK-R](https://aclanthology.org/2020.lrec-1.207) | ['eng'] | STS | s2s |  | None | None |
+| [SICK-R](https://aclanthology.org/L14-1314/) | ['eng'] | STS | s2s | [Web, Written] | None | None |
 | [SICK-R-PL](https://aclanthology.org/2020.lrec-1.207) | ['pol'] | STS | s2s | [Web, Written] | None | None |
 | [SICKFr](https://huggingface.co/datasets/Lajavaness/SICK-fr) | ['fra'] | STS | s2s |  | None | None |
 | [SIQA](https://leaderboard.allenai.org/socialiqa/submissions/get-started) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic, Written] | None | None |
