@@ -4,7 +4,7 @@ A benchmark within `mteb` is essentially just a list of tasks along with some me
 
 
 <figure markdown="span">
-    ![](images/visualizations/benchmark_explainer.png){ width="80%" }
+    ![](../images/visualizations/benchmark_explainer.png){ width="80%" }
     <figcaption>An overview of the benchmark within `mteb`</figcaption>
 </figure>
 
@@ -21,7 +21,7 @@ that you cite it along with `mteb`.
 
 ## The Benchmark Object
 
-:::mteb.Benchmark
+<!-- :::mteb.Benchmark -->
 
 
 
