@@ -17,7 +17,7 @@ def bm25_loader(**kwargs):
         import Stemmer
     except ImportError:
         raise ImportError(
-            "bm25s or Stemmer is not installed. Please install it with `pip install bm25s Stemmer`."
+            "bm25s or Stemmer is not installed. Please install it with `pip install bm25s PyStemmer`."
         )
 
     class BM25Search(DRESModel, Wrapper):
