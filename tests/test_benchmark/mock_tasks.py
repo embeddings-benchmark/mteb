@@ -80,20 +80,22 @@ class MockClassificationTask(AbsTaskClassification):
     )
 
     def load_data(self, **kwargs):
-        texts = ["This is a test sentence", "This is another test sentence"]
+        train_texts = ["This is a test sentence", "This is another train sentence"]
+        test_texts = ["This is a test sentence", "This is another test sentence"]
+
         labels = [0, 1]
 
         self.dataset = DatasetDict(
             {
                 "test": Dataset.from_dict(
                     {
-                        "text": texts,
+                        "text": test_texts,
                         "label": labels,
                     }
                 ),
                 "train": Dataset.from_dict(
                     {
-                        "text": texts,
+                        "text": train_texts,
                         "label": labels,
                     }
                 ),
@@ -145,8 +147,6 @@ class MockMultilingualClassificationTask(AbsTaskClassification, MultilingualTask
             "number_texts_intersect_with_train": None,
             "min_text_length": 23,
             "average_text_length": 26.0,
-            "max_text_length": 29,
-            "unique_text": 2,
             "unique_labels": 2,
             "labels": {"0": {"count": 2}, "1": {"count": 2}},
             "hf_subset_descriptive_stats": {
@@ -156,8 +156,6 @@ class MockMultilingualClassificationTask(AbsTaskClassification, MultilingualTask
                     "number_texts_intersect_with_train": None,
                     "min_text_length": 23,
                     "average_text_length": 26.0,
-                    "max_text_length": 29,
-                    "unique_text": 2,
                     "unique_labels": 2,
                     "labels": {"0": {"count": 1}, "1": {"count": 1}},
                 },
@@ -185,18 +183,19 @@ class MockMultilingualClassificationTask(AbsTaskClassification, MultilingualTask
     metadata.eval_langs = multilingual_eval_langs
 
     def load_data(self, **kwargs):
-        texts = ["This is a test sentence", "This is another test sentence"]
+        train_texts = ["This is a test sentence", "This is another train sentence"]
+        test_texts = ["This is a test sentence", "This is another test sentence"]
         labels = [0, 1]
         data = {
             "test": Dataset.from_dict(
                 {
-                    "text": texts,
+                    "text": test_texts,
                     "label": labels,
                 }
             ),
             "train": Dataset.from_dict(
                 {
-                    "text": texts,
+                    "text": train_texts,
                     "label": labels,
                 }
             ),
@@ -1372,7 +1371,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
         type="Retrieval",
         name="MockRetrievalTask",
         main_score="ndcg_at_10",
-        **general_args,  # type: ignore
+        **dict(general_args | {"eval_splits": ["val", "test"]}),  # type: ignore
     )
 
     def load_data(self, **kwargs):
@@ -1380,24 +1379,30 @@ class MockRetrievalTask(AbsTaskRetrieval):
             "test": {
                 "q1": "This is a test sentence",
                 "q2": "This is another test sentence",
-            }
+            },
+            "val": {
+                "q1": "This is a test sentence",
+                "q2": "This is another test sentence",
+            },
         }
 
         self.corpus = {
             "test": {
-                "d1": {
-                    "title": "This is a positive title",
-                    "text": "This is a positive sentence",
-                },
-                "d2": {
-                    "title": "This is a negative title",
-                    "text": "This is a negative sentence",
-                },
-            }
+                "d1": "This is a positive sentence",
+                "d2": "This is another positive sentence",
+            },
+            "val": {
+                "d1": "This is a positive sentence",
+                "d2": "This is another positive sentence",
+            },
         }
 
         self.relevant_docs = {
             "test": {
+                "q1": {"d1": 1, "d2": 0},
+                "q2": {"d1": 0, "d2": 1},
+            },
+            "val": {
                 "q1": {"d1": 1, "d2": 0},
                 "q2": {"d1": 0, "d2": 1},
             },
@@ -1579,20 +1584,21 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
     )
 
     def load_data(self, **kwargs):
-        texts = ["This is a test sentence", "This is another test sentence"] * 3
+        train_texts = ["This is a test sentence", "This is another train sentence"] * 3
+        test_texts = ["This is a test sentence", "This is another test sentence"] * 3
         labels = [[0, 1], [1, 0]] * 3
 
         self.dataset = DatasetDict(
             {
                 "test": Dataset.from_dict(
                     {
-                        "text": texts,
+                        "text": test_texts,
                         "label": labels,
                     }
                 ),
                 "train": Dataset.from_dict(
                     {
-                        "text": texts,
+                        "text": train_texts,
                         "label": labels,
                     }
                 ),
@@ -1704,19 +1710,20 @@ class MockMultilingualMultilabelClassification(
     metadata.eval_langs = multilingual_eval_langs
 
     def load_data(self, **kwargs):
-        texts = ["This is a test sentence", "This is another test sentence"] * 3
+        train_texts = ["This is a test sentence", "This is another train sentence"] * 3
+        test_texts = ["This is a test sentence", "This is another test sentence"] * 3
         labels = [[0, 1], [1, 0]] * 3
 
         data = {
             "test": Dataset.from_dict(
                 {
-                    "text": texts,
+                    "text": test_texts,
                     "label": labels,
                 }
             ),
             "train": Dataset.from_dict(
                 {
-                    "text": texts,
+                    "text": train_texts,
                     "label": labels,
                 }
             ),

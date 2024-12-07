@@ -37,20 +37,20 @@ def test_get_task(task_name: str, eval_splits: list[str] | None):
 @pytest.mark.parametrize("script", [["Latn"], ["Cyrl"], None])
 @pytest.mark.parametrize("domains", [["Legal"], ["Medical", "Non-fiction"], None])
 @pytest.mark.parametrize("task_types", [["Classification"], ["Clustering"], None])
-@pytest.mark.parametrize("exclude_superseeded_datasets", [True, False])
+@pytest.mark.parametrize("exclude_superseded_datasets", [True, False])
 def test_get_tasks(
     languages: list[str],
     script: list[str],
     domains: list[TASK_DOMAIN],
     task_types: list[TASK_TYPE] | None,
-    exclude_superseeded_datasets: bool,
+    exclude_superseded_datasets: bool,
 ):
     tasks = mteb.get_tasks(
         languages=languages,
         script=script,
         domains=domains,
         task_types=task_types,
-        exclude_superseeded=exclude_superseeded_datasets,
+        exclude_superseded=exclude_superseded_datasets,
     )
 
     for task in tasks:
@@ -65,7 +65,7 @@ def test_get_tasks(
             assert set(domains).intersection(set(task_domains))
         if task_types:
             assert task.metadata.type in task_types
-        if exclude_superseeded_datasets:
+        if exclude_superseded_datasets:
             assert task.superseded_by is None
 
 
