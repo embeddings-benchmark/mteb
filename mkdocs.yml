@@ -1,12 +1,12 @@
 site_name: Massive Text Embedding Benchmark
 docs_dir: "docs/"
-repo_url: https://github.com/embedding-benchmark/mteb
-watch: [src/, docs/]
+repo_url: https://github.com/embeddings-benchmark/mteb
+watch: [mteb/, docs/]
 edit_uri: "blob/main/docs/"
 theme:
   name: material
-  favicon: mteb_logo/mteb_logo_transparent.png
-  logo: mteb_logo/mteb_logo_transparent.png
+  favicon: images/logos/mteb_logo/mteb_logo_transparent.png # TODO: probably not very good logo
+  logo: images/logos/mteb_logo/mteb_logo_transparent.png
   features:
     - navigation.tracking
     - navigation.tabs
@@ -35,51 +35,58 @@ markdown_extensions:
       alternate_style: true
   - toc:
       permalink: true
+  - footnotes
+  - attr_list
+  - md_in_html
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - tables
+  - pymdownx.details
 
 copyright: Copyright &copy; 2024 The Embedding Benchmark Team
 
 nav:
-  - Getting Started:
-      - Embedding Benchmark: index.md
-      - Installation: installation.md
-      - Getting Started: getting_started.md
-      - CLI: cli.md
-  - Leaderboard: LINK # <-- TODO: Figure out if this is possible - we might also want to embed it
-  - Overview: # <-- TODO: find a better word
-      - Benchmarks: benchmarks.md
-      - Tasks: tasks.md
-      - Models: models.md
-  - Contribute:
-      - Adding a Model: adding_a_model.md
-      - Adding a Benchmark: adding_a_leaderboard_tab.md
-      - Adding a Task: adding_a_dataset.md
-      - Development Setup: CONTRIBUTING.md
-  - API:
+  # - Home:
+  #     - Overview: index.md
+      # - Getting Started: getting_started.md # TODO: Move usage documentation to docs (Keeping a minimal example in readme.md)
+      # - Command Line Interface: cli.md # TODO: Add CLI documentation
+  # - Overview: # <-- TODO: find a better word
+  #     - Benchmarks: benchmarks.md
+  #     - Tasks: tasks.md
+  #     - Models: models.md
+  # - Contribute: # TODO: Add contributions
+  #     - Adding a Model: adding_a_model.md
+  #     - Adding a Benchmark: adding_a_leaderboard_tab.md
+  #     - Adding a Task: adding_a_dataset.md
+  #     - Development Setup: CONTRIBUTING.md
+  - API: 
+      - Overview: index.md
       - Benchmark: api/benchmark.md
       - Task: api/task.md
       - Model: api/model.md
+  - Leaderboard: https://huggingface.co/spaces/mteb/leaderboard 
+
 plugins:
-  - mkdocs-jupyter:
-      execute: false
-      # execute: true
-      # allow_errors: false
-      execute_ignore:
-        - "*.py"
   - search
   - mkdocstrings:
       handlers:
         python:
-          preload_modules: [pydantic]
-          paths: [src]
+          paths: [mteb]
           type: python
-          root_package: seb
+          root_package: mteb
           docstring_style: google
           options:
+            # extensions:
+            # - griffe_pydantic:
+            #     schema: true
             heading_level: 3
             show_source: true
             show_root_heading: true
+  - bibtex:
+      bib_file: "docs/references.bib"
 
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/embedding-benchmark/mteb
+      link: https://github.com/embeddings-benchmark/mteb

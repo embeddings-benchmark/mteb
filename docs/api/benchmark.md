@@ -11,12 +11,12 @@ that you cite it along with `mteb`.
 
 ## Utilities
 
-:::mteb.get_benchmark
+<!-- :::mteb.get_benchmark -->
 
 
 ## The Benchmark Object
 
-:::mteb.Benchmark
+<!-- :::mteb.Benchmark -->
 
 
 

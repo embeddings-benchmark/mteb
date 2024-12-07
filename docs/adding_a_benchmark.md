@@ -5,7 +5,7 @@ MTEB covers a wide variety benchmark which are all presented in the public [lead
 To add a new benchmark you will need to:
 
 1) [Implement the tasks](adding_a_dataset.md) that you want to evaluate on, or find then in the existing list of tasks.
-2) Implement the benchmark in the [`benchmark.py](missing) file and submit it as a PR
+2) Implement the benchmark in the [`benchmark.py`](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/benchmarks/benchmarks.py) file and submit it as a PR
 
 This is easy to do 
 ```python

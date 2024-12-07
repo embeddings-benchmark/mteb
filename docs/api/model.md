@@ -10,13 +10,13 @@ exact model again using the same prompts, hyperparameters, aggregation strategie
 
 ## Metadata
 
-:::mteb.ModelMeta
+<!-- :::mteb.ModelMeta -->
 
 ## The Encoder Interface
 
 In the following the present the standard encoder interface for `mteb`. 
 
-:::mteb.Encoder
+<!-- :::mteb.Encoder -->
 
 
 

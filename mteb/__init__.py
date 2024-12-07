@@ -2,14 +2,6 @@ from __future__ import annotations
 
 from importlib.metadata import version
 
-from mteb.benchmarks.benchmarks import (
-    MTEB_ENG_CLASSIC,
-    MTEB_MAIN_RU,
-    MTEB_RETRIEVAL_LAW,
-    MTEB_RETRIEVAL_WITH_INSTRUCTIONS,
-    CoIR,
-)
-from mteb.evaluation import *
 from mteb.load_results import BenchmarkResults, load_results
 from mteb.models import get_model, get_model_meta, get_model_metas
 from mteb.overview import TASKS_REGISTRY, get_task, get_tasks
@@ -21,11 +13,6 @@ __version__ = version("mteb")  # fetch version from install metadata
 
 
 __all__ = [
-    "MTEB_ENG_CLASSIC",
-    "MTEB_MAIN_RU",
-    "MTEB_RETRIEVAL_LAW",
-    "MTEB_RETRIEVAL_WITH_INSTRUCTIONS",
-    "CoIR",
     "TASKS_REGISTRY",
     "get_tasks",
     "get_task",
