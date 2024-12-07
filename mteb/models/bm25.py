@@ -58,7 +58,17 @@ def bm25_loader(**kwargs):
         ) -> dict[str, dict[str, float]]:
             logger.info("Encoding Corpus...")
             corpus_ids = list(corpus.keys())
-            corpus_with_ids = [{"doc_id": cid, **corpus[cid]} for cid in corpus_ids]
+            corpus_with_ids = [
+                {
+                    "doc_id": cid,
+                    **(
+                        {"text": corpus[cid]}
+                        if isinstance(corpus[cid], str)
+                        else corpus[cid]
+                    ),
+                }
+                for cid in corpus_ids
+            ]
 
             corpus_texts = [
                 "\n".join([doc.get("title", ""), doc["text"]])
