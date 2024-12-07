@@ -5,7 +5,7 @@ from collections.abc import Sequence
 from functools import partial
 from typing import Any
 
-import torch
+import numpy as np
 
 from mteb.model_meta import ModelMeta
 
@@ -27,20 +27,20 @@ class ColBERTWrapper(Wrapper):
             **kwargs: Additional arguments to pass to the model.
         """
         try:
-            from pylate import models
+            from pylate import models as colbert_model
         except ModuleNotFoundError as e:
             raise ModuleNotFoundError(
                 "To use the ColBERT models `pylate` is required. Please install it with `pip install mteb[pylate]`."
             ) from e
 
         self.model_name = model_name
-        self.static_model = models.ColBERT(self.model_name, **kwargs)
+        self.static_model = colbert_model.ColBERT(self.model_name, **kwargs)
 
     def encode(
         self,
         sentences: Sequence[str],
         **kwargs: Any,
-    ) -> list[torch.Tensor]:
+    ) -> np.ndarray:
         """Encodes the given sentences using the encoder.
 
         Args:
@@ -50,7 +50,7 @@ class ColBERTWrapper(Wrapper):
         Returns:
             The encoded sentences.
         """
-        return self.static_model.encode(sentences)
+        return self.static_model.encode(sentences, **kwargs)
 
 
 colbert_v2 = ModelMeta(
