@@ -33,6 +33,15 @@ MULTILINGUAL_EVALUATED_LANGUAGES = [
     "zho_Hans",
 ]
 
+MODEL_PROMPTS = {
+    "Classification": "CLASSIFICATION",
+    "MultilabelClassification": "CLASSIFICATION",
+    "Clustering": "CLUSTERING",
+    "STS": "SIMILARITY",
+    PromptType.query.value: "RETRIEVAL_QUERY",
+    PromptType.passage.value: "RETRIEVAL_DOCUMENT",
+}
+
 
 class GoogleTextEmbeddingModel(Encoder, Wrapper):
     def __init__(
@@ -50,8 +59,8 @@ class GoogleTextEmbeddingModel(Encoder, Wrapper):
     def _embed(
         self,
         texts: list[str],
-        google_task_type: str,
-        show_progress_bar: bool,
+        google_task_type: str | None = None,
+        show_progress_bar: bool = False,
         titles: list[str] | None = None,
         dimensionality: int | None = 768,
     ) -> list[list[float]]:
@@ -128,14 +137,7 @@ google_text_emb_004 = ModelMeta(
     loader=partial(
         GoogleTextEmbeddingModel,
         model_name="text-embedding-004",
-        model_prompts={
-            "Classification": "CLASSIFICATION",
-            "MultilabelClassification": "CLASSIFICATION",
-            "Clustering": "CLUSTERING",
-            "STS": "SIMILARITY",
-            PromptType.query.value: "RETRIEVAL_QUERY",
-            PromptType.passage.value: "RETRIEVAL_DOCUMENT",
-        },
+        model_prompts=MODEL_PROMPTS,
     ),
     name="google/text-embedding-004",
     languages=["eng-Latn"],
@@ -156,14 +158,7 @@ google_text_emb_005 = ModelMeta(
     loader=partial(
         GoogleTextEmbeddingModel,
         model_name="text-embedding-005",
-        model_prompts={
-            "Classification": "CLASSIFICATION",
-            "MultilabelClassification": "CLASSIFICATION",
-            "Clustering": "CLUSTERING",
-            "STS": "SIMILARITY",
-            PromptType.query.value: "RETRIEVAL_QUERY",
-            PromptType.passage.value: "RETRIEVAL_DOCUMENT",
-        },
+        model_prompts=MODEL_PROMPTS,
     ),
     name="google/text-embedding-005",
     languages=["eng-Latn"],
@@ -184,14 +179,7 @@ google_text_multilingual_emb_002 = ModelMeta(
     loader=partial(
         GoogleTextEmbeddingModel,
         model_name="text-multilingual-embedding-002",
-        model_prompts={
-            "Classification": "CLASSIFICATION",
-            "MultilabelClassification": "CLASSIFICATION",
-            "Clustering": "CLUSTERING",
-            "STS": "SIMILARITY",
-            PromptType.query.value: "RETRIEVAL_QUERY",
-            PromptType.passage.value: "RETRIEVAL_DOCUMENT",
-        },
+        model_prompts=MODEL_PROMPTS,
     ),
     name="google/text-multilingual-embedding-002",
     languages=MULTILINGUAL_EVALUATED_LANGUAGES,  # From the list of evaluated languages in https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/text-embeddings-api#supported_text_languages
