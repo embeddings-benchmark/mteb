@@ -6,6 +6,7 @@ from functools import partial
 from typing import Any
 
 import numpy as np
+import torch
 
 from mteb.model_meta import ModelMeta
 
@@ -50,7 +51,14 @@ class ColBERTWrapper(Wrapper):
         Returns:
             The encoded sentences.
         """
-        return np.asarray(self.static_model.encode(sentences, **kwargs))
+        if "task_name" in kwargs:
+            kwargs.pop("task_name")
+        if "prompt_type" in kwargs:
+            kwargs.pop("prompt_type")
+
+        pred = self.static_model.encode(sentences, **kwargs)
+        pred = torch.stack(pred)
+        return pred.cpu().numpy()
 
 
 colbert_v2 = ModelMeta(

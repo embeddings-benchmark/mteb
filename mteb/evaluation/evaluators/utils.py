@@ -59,8 +59,17 @@ def max_sim(a: list, b: list):
     Return:
         Matrix with res[i][j]  = max_sim(a[i], b[j])
     """  # noqa: D402
-    a = torch.stack(a)
-    b = torch.stack(b)
+    if not isinstance(a, torch.Tensor):
+        a = torch.tensor(a)
+
+    if not isinstance(b, torch.Tensor):
+        b = torch.tensor(b)
+
+    if len(a.shape) == 2:
+        a = a.unsqueeze(0)
+
+    if len(b.shape) == 2:
+        b = b.unsqueeze(0)
 
     scores = torch.einsum(
         "ash,bth->abst",
