@@ -19,7 +19,7 @@ Haon_Chen__speed_embedding_7b_instruct = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="mistralai/Mistral-7B-v0.1",
     superseded_by=None,
 )
 Gameselo__STS_multilingual_mpnet_base_v2 = ModelMeta(
@@ -41,7 +41,7 @@ Gameselo__STS_multilingual_mpnet_base_v2 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     superseded_by=None,
 )
 HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1 = ModelMeta(
@@ -63,7 +63,7 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="/mnt/shgeminicephfs/wx-dc-plt-hpc/xinshuohu/Output/Embedding/Qwen2-0.5B-eos_mean_pretrain_0806_1e-4_uen_sft_1022_filtered_v2_inst_3node_g8_1e-5_sin-0.1_mrl",
     superseded_by=None,
 )
 HIT_TMG__KaLM_embedding_multilingual_mini_v1 = ModelMeta(
@@ -85,7 +85,7 @@ HIT_TMG__KaLM_embedding_multilingual_mini_v1 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="/mnt/shgeminicephfs/wx-dc-plt-hpc/xinshuohu/Output/Embedding/Qwen2-0.5B-eos_mean_pretrain_0806_1e-4_uen_sft_0902_filtered_v2_3node_g8_1e-5_sin-0.1",
     superseded_by=None,
 )
 Hum_Works__lodestone_base_4096_v1 = ModelMeta(
@@ -107,7 +107,7 @@ Hum_Works__lodestone_base_4096_v1 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="hum-lodestone-v1",
     superseded_by=None,
 )
 Jaume__gemma_2b_embeddings = ModelMeta(
@@ -129,7 +129,7 @@ Jaume__gemma_2b_embeddings = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="google/gemma-2b",
     superseded_by=None,
 )
 BeastyZ__e5_R_mistral_7b = ModelMeta(
@@ -151,7 +151,7 @@ BeastyZ__e5_R_mistral_7b = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="/ConRetriever/public_weight_mistral",
     superseded_by=None,
 )
 Lajavaness__bilingual_embedding_base = ModelMeta(
@@ -173,7 +173,7 @@ Lajavaness__bilingual_embedding_base = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="dangvantuan/bilingual_impl",
     superseded_by=None,
 )
 Lajavaness__bilingual_embedding_large = ModelMeta(
@@ -195,7 +195,7 @@ Lajavaness__bilingual_embedding_large = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="dangvantuan/bilingual_impl",
     superseded_by=None,
 )
 Lajavaness__bilingual_embedding_small = ModelMeta(
@@ -217,7 +217,7 @@ Lajavaness__bilingual_embedding_small = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="dangvantuan/bilingual_impl",
     superseded_by=None,
 )
 Mihaiii__Bulbasaur = ModelMeta(
@@ -239,7 +239,7 @@ Mihaiii__Bulbasaur = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="Mihaiii/dwsdwass",
     superseded_by=None,
 )
 Mihaiii__Ivysaur = ModelMeta(
@@ -261,7 +261,7 @@ Mihaiii__Ivysaur = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="Mihaiii/jhjghjgh",
     superseded_by=None,
 )
 Mihaiii__Squirtle = ModelMeta(
@@ -283,7 +283,7 @@ Mihaiii__Squirtle = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="Mihaiii/test21",
     superseded_by=None,
 )
 Mihaiii__Venusaur = ModelMeta(
@@ -305,7 +305,7 @@ Mihaiii__Venusaur = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="Mihaiii/test14",
     superseded_by=None,
 )
 Mihaiii__Wartortle = ModelMeta(
@@ -327,7 +327,7 @@ Mihaiii__Wartortle = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="Mihaiii/test22",
     superseded_by=None,
 )
 Mihaiii__gte_micro = ModelMeta(
@@ -393,7 +393,7 @@ OrdalieTech__Solon_embeddings_large_0_1 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="solon-large-06-BIG",
     superseded_by=None,
 )
 Omartificial_Intelligence_Space__Arabert_all_nli_triplet_Matryoshka = ModelMeta(
@@ -415,7 +415,7 @@ Omartificial_Intelligence_Space__Arabert_all_nli_triplet_Matryoshka = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="aubmindlab/bert-base-arabertv02",
     superseded_by=None,
 )
 Omartificial_Intelligence_Space__Arabic_MiniLM_L12_v2_all_nli_triplet = ModelMeta(
@@ -437,7 +437,7 @@ Omartificial_Intelligence_Space__Arabic_MiniLM_L12_v2_all_nli_triplet = ModelMet
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
     superseded_by=None,
 )
 Omartificial_Intelligence_Space__Arabic_all_nli_triplet_Matryoshka = ModelMeta(
@@ -459,7 +459,7 @@ Omartificial_Intelligence_Space__Arabic_all_nli_triplet_Matryoshka = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     superseded_by=None,
 )
 Omartificial_Intelligence_Space__Arabic_labse_Matryoshka = ModelMeta(
@@ -481,7 +481,7 @@ Omartificial_Intelligence_Space__Arabic_labse_Matryoshka = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="sentence-transformers/LaBSE",
     superseded_by=None,
 )
 Omartificial_Intelligence_Space__Arabic_mpnet_base_all_nli_triplet = ModelMeta(
@@ -503,7 +503,7 @@ Omartificial_Intelligence_Space__Arabic_mpnet_base_all_nli_triplet = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="tomaarsen/mpnet-base-all-nli-triplet",
     superseded_by=None,
 )
 Omartificial_Intelligence_Space__Marbert_all_nli_triplet_Matryoshka = ModelMeta(
@@ -525,7 +525,7 @@ Omartificial_Intelligence_Space__Marbert_all_nli_triplet_Matryoshka = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="UBC-NLP/MARBERTv2",
     superseded_by=None,
 )
 consciousAI__cai_lunaris_text_embeddings = ModelMeta(
@@ -547,7 +547,7 @@ consciousAI__cai_lunaris_text_embeddings = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="/root/.cache/torch/sentence_transformers/intfloat_e5-large-v2",
     superseded_by=None,
 )
 consciousAI__cai_stellaris_text_embeddings = ModelMeta(
@@ -569,7 +569,7 @@ consciousAI__cai_stellaris_text_embeddings = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="/root/.cache/torch/sentence_transformers/sentence-transformers_all-mpnet-base-v1/",
     superseded_by=None,
 )
 manu__bge_m3_custom_fr = ModelMeta(
@@ -591,7 +591,7 @@ manu__bge_m3_custom_fr = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="data/bge-m3-custom",
     superseded_by=None,
 )
 manu__sentence_croissant_alpha_v0_2 = ModelMeta(
@@ -613,7 +613,7 @@ manu__sentence_croissant_alpha_v0_2 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="croissantllm/CroissantCool",
     superseded_by=None,
 )
 manu__sentence_croissant_alpha_v0_3 = ModelMeta(
@@ -635,7 +635,7 @@ manu__sentence_croissant_alpha_v0_3 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="croissantllm/CroissantCool-v0.2",
     superseded_by=None,
 )
 manu__sentence_croissant_alpha_v0_4 = ModelMeta(
@@ -657,7 +657,7 @@ manu__sentence_croissant_alpha_v0_4 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="croissantllm/CroissantCool-v0.2",
     superseded_by=None,
 )
 thenlper__gte_base = ModelMeta(
@@ -745,7 +745,7 @@ OrlikB__KartonBERT_USE_base_v1 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="KartonBERT-USE-base-v1",
     superseded_by=None,
 )
 OrlikB__st_polish_kartonberta_base_alpha_v1 = ModelMeta(
@@ -767,7 +767,7 @@ OrlikB__st_polish_kartonberta_base_alpha_v1 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="st-polish-kartonberta-base-alpha-v1",
     superseded_by=None,
 )
 sdadas__mmlw_e5_base = ModelMeta(
@@ -789,7 +789,7 @@ sdadas__mmlw_e5_base = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="intfloat/multilingual-e5-base",
     superseded_by=None,
 )
 dwzhu__e5_base_4k = ModelMeta(
@@ -811,7 +811,7 @@ dwzhu__e5_base_4k = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="/mnt/default/longembed/models/intfloat/e5-base-v2",
     superseded_by=None,
 )
 sdadas__mmlw_e5_large = ModelMeta(
@@ -833,7 +833,7 @@ sdadas__mmlw_e5_large = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="intfloat/multilingual-e5-large",
     superseded_by=None,
 )
 sdadas__mmlw_e5_small = ModelMeta(
@@ -855,7 +855,7 @@ sdadas__mmlw_e5_small = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="intfloat/multilingual-e5-small",
     superseded_by=None,
 )
 sdadas__mmlw_roberta_base = ModelMeta(
@@ -877,7 +877,7 @@ sdadas__mmlw_roberta_base = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="sdadas/polish-roberta-base-v2",
     superseded_by=None,
 )
 sdadas__mmlw_roberta_large = ModelMeta(
@@ -899,7 +899,7 @@ sdadas__mmlw_roberta_large = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="sdadas/polish-roberta-large-v2",
     superseded_by=None,
 )
 izhx__udever_bloom_1b1 = ModelMeta(
@@ -967,7 +967,7 @@ izhx__udever_bloom_1b1 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="bigscience/bloom-1b1",
     superseded_by=None,
 )
 izhx__udever_bloom_3b = ModelMeta(
@@ -1035,7 +1035,7 @@ izhx__udever_bloom_3b = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="bigscience/bloom-3b",
     superseded_by=None,
 )
 izhx__udever_bloom_560m = ModelMeta(
@@ -1103,7 +1103,7 @@ izhx__udever_bloom_560m = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="bigscience/bloom-560m",
     superseded_by=None,
 )
 izhx__udever_bloom_7b1 = ModelMeta(
@@ -1171,7 +1171,7 @@ izhx__udever_bloom_7b1 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="bigscience/bloom-7b1",
     superseded_by=None,
 )
 avsolatorio__GIST_Embedding_v0 = ModelMeta(
@@ -1281,7 +1281,7 @@ bigscience__sgpt_bloom_7b1_msmarco = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="/gpfsscratch/rech/six/commun/commun/experiments/muennighoff/bloomckpt/6b3/bloom-7b1",
     superseded_by=None,
 )
 aari1995__German_Semantic_STS_V2 = ModelMeta(
@@ -1303,7 +1303,7 @@ aari1995__German_Semantic_STS_V2 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="/content/drive/MyDrive/Stanford_NLU/Project/false_friends/gbert_large_sts_only",
     superseded_by=None,
 )
 abhinand__MedEmbed_small_v0_1 = ModelMeta(
@@ -1325,7 +1325,7 @@ abhinand__MedEmbed_small_v0_1 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="./medical-bge-small-v1-mix1",
     superseded_by=None,
 )
 avsolatorio__NoInstruct_small_Embedding_v0 = ModelMeta(
@@ -1391,7 +1391,7 @@ deepfile__embedder_100p = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     superseded_by=None,
 )
 deepvk__USER_bge_m3 = ModelMeta(
@@ -1413,7 +1413,7 @@ deepvk__USER_bge_m3 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="USER-bge-m3",
     superseded_by=None,
 )
 infgrad__stella_base_en_v2 = ModelMeta(
@@ -1457,7 +1457,7 @@ malenia1__ternary_weight_embedding = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="ternary-weight-embedding",
     superseded_by=None,
 )
 omarelshehy__arabic_english_sts_matryoshka = ModelMeta(
@@ -1479,7 +1479,7 @@ omarelshehy__arabic_english_sts_matryoshka = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="FacebookAI/xlm-roberta-large",
     superseded_by=None,
 )
 openbmb__MiniCPM_Embedding = ModelMeta(
@@ -1533,7 +1533,7 @@ shibing624__text2vec_base_multilingual = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
     superseded_by=None,
 )
 silma_ai__silma_embeddding_matryoshka_v0_1 = ModelMeta(
@@ -1555,7 +1555,7 @@ silma_ai__silma_embeddding_matryoshka_v0_1 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="/workspace/v3-matryoshka_aubmindlab-bert-base-arabertv02-2024-10-12_13-55-06/checkpoint-26250",
     superseded_by=None,
 )
 zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
@@ -1577,6 +1577,6 @@ zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     zero_shot_benchmarks=None,
-    adapted_from=None,
+    adapted_from="intfloat/e5-mistral-7b-instruct",
     superseded_by=None,
 )
