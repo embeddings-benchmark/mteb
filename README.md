@@ -324,7 +324,6 @@ evaluation.run(
 ```python
 from mteb import MTEB
 import mteb
-from pylate import models
 
 
 colbert = mteb.get_model("colbert-ir/colbertv2.0")
