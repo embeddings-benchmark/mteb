@@ -6,8 +6,8 @@ from functools import partial
 from typing import Any
 
 import numpy as np
-import torch
 
+from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
 from .wrapper import Wrapper
@@ -40,12 +40,14 @@ class ColBERTWrapper(Wrapper):
     def encode(
         self,
         sentences: Sequence[str],
+        prompt_type: PromptType,
         **kwargs: Any,
     ) -> np.ndarray:
         """Encodes the given sentences using the encoder.
 
         Args:
             sentences: The sentences to encode.
+            prompt_type: PromptType.query or PromptType.passage.
             **kwargs: Additional arguments to pass to the encoder.
 
         Returns:
@@ -56,9 +58,13 @@ class ColBERTWrapper(Wrapper):
         if "prompt_type" in kwargs:
             kwargs.pop("prompt_type")
 
-        pred = self.static_model.encode(sentences, **kwargs)
-        pred = torch.stack(pred)
-        return pred.cpu().numpy()
+        pred = self.static_model.encode(
+            sentences,
+            is_query=True if prompt_type == PromptType.query else False,
+            **kwargs,
+        )
+
+        return pred
 
 
 colbert_v2 = ModelMeta(
