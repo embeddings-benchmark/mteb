@@ -86,7 +86,7 @@ class DenseRetrievalExactSearch:
         self.score_function_desc = {
             "cos_sim": "Cosine Similarity",
             "dot": "Dot Product",
-            "max_sim": "MaxSim",
+            "max_sim": "Max Similarity",
         }
         self.corpus_chunk_size = corpus_chunk_size
         if isinstance(previous_results, Path):
