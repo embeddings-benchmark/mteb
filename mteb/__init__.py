@@ -12,14 +12,30 @@ from mteb.benchmarks.benchmarks import (
 )
 from mteb.evaluation import MTEB
 from mteb.load_results import BenchmarkResults, load_results
-from mteb.models import get_model, get_model_meta, get_model_metas
+from mteb.models import get_model, get_model_meta, get_model_metas, SentenceTransformerWrapper
+from mteb.encoder_interface import Encoder
 from mteb.overview import TASKS_REGISTRY, get_task, get_tasks
+from mteb.load_results.task_results import TaskResult
+from mteb.abstasks import (
+    AbsTask,
+    AbsTaskBitextMining,
+    AbsTaskClassification,
+    AbsTaskClustering,
+    AbsTaskClusteringFast,
+    AbsTaskMultilabelClassification,
+    AbsTaskPairClassification,
+    AbsTaskReranking,
+    AbsTaskRetrieval,
+    AbsTaskSpeedTask,
+    AbsTaskSTS,
+    AbsTaskSummarization,
+    MultilingualTask,
+)
 
 from .benchmarks.benchmarks import Benchmark
 from .benchmarks.get_benchmark import BENCHMARK_REGISTRY, get_benchmark, get_benchmarks
 
 __version__ = version("mteb")  # fetch version from install metadata
-
 
 __all__ = [
     "MTEB_ENG_CLASSIC",
@@ -41,4 +57,20 @@ __all__ = [
     "BenchmarkResults",
     "BENCHMARK_REGISTRY",
     "MTEB",
+    "TaskResult",
+    "AbsTask",
+    "AbsTaskBitextMining",
+    "AbsTaskClassification",
+    "AbsTaskClustering",
+    "AbsTaskClusteringFast",
+    "AbsTaskMultilabelClassification",
+    "AbsTaskPairClassification",
+    "AbsTaskReranking",
+    "AbsTaskRetrieval",
+    "AbsTaskSpeedTask",
+    "AbsTaskSTS",
+    "AbsTaskSummarization",
+    "MultilingualTask",
+    "SentenceTransformerWrapper",
+    "Encoder",
 ]

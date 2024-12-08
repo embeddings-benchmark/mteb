@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import logging
 
 from mteb.models.overview import (
     MODEL_REGISTRY,
@@ -10,8 +9,7 @@ from mteb.models.overview import (
     get_model_metas,
     model_meta_from_sentence_transformers,
 )
-
-logger = logging.getLogger(__name__)
+from .sentence_transformer_wrapper import SentenceTransformerWrapper
 
 
 __all__ = [
@@ -21,4 +19,5 @@ __all__ = [
     "get_model_meta",
     "get_model_metas",
     "model_meta_from_sentence_transformers",
+    "SentenceTransformerWrapper",
 ]
