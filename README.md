@@ -329,7 +329,6 @@ import mteb
 colbert = mteb.get_model("colbert-ir/colbertv2.0")
 tasks = mteb.get_tasks(tasks=["NFCorpus"], languages=["eng"])
 
-subset = "default"
 eval_splits = ["test"]
 
 evaluation = MTEB(tasks=tasks)
