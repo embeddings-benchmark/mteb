@@ -320,9 +320,7 @@ def get_task(
     if task_name not in TASKS_REGISTRY:
         close_matches = difflib.get_close_matches(task_name, TASKS_REGISTRY.keys())
         if close_matches:
-            suggestion = (
-                f"KeyError: '{task_name}' not found. Did you mean: '{close_matches[0]}'?"
-            )
+            suggestion = f"KeyError: '{task_name}' not found. Did you mean: '{close_matches[0]}'?"
         else:
             suggestion = (
                 f"KeyError: '{task_name}' not found and no similar keys were found."

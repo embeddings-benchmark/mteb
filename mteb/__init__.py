@@ -2,20 +2,6 @@ from __future__ import annotations
 
 from importlib.metadata import version
 
-from mteb.benchmarks.benchmarks import (
-    MTEB_ENG_CLASSIC,
-    MTEB_MAIN_RU,
-    MTEB_RETRIEVAL_LAW,
-    MTEB_RETRIEVAL_MEDICAL,
-    MTEB_RETRIEVAL_WITH_INSTRUCTIONS,
-    CoIR,
-)
-from mteb.evaluation import MTEB
-from mteb.load_results import BenchmarkResults, load_results
-from mteb.models import get_model, get_model_meta, get_model_metas, SentenceTransformerWrapper
-from mteb.encoder_interface import Encoder
-from mteb.overview import TASKS_REGISTRY, get_task, get_tasks
-from mteb.load_results.task_results import TaskResult
 from mteb.abstasks import (
     AbsTask,
     AbsTaskBitextMining,
@@ -31,6 +17,25 @@ from mteb.abstasks import (
     AbsTaskSummarization,
     MultilingualTask,
 )
+from mteb.benchmarks.benchmarks import (
+    MTEB_ENG_CLASSIC,
+    MTEB_MAIN_RU,
+    MTEB_RETRIEVAL_LAW,
+    MTEB_RETRIEVAL_MEDICAL,
+    MTEB_RETRIEVAL_WITH_INSTRUCTIONS,
+    CoIR,
+)
+from mteb.encoder_interface import Encoder
+from mteb.evaluation import MTEB
+from mteb.load_results import BenchmarkResults, load_results
+from mteb.load_results.task_results import TaskResult
+from mteb.models import (
+    SentenceTransformerWrapper,
+    get_model,
+    get_model_meta,
+    get_model_metas,
+)
+from mteb.overview import TASKS_REGISTRY, get_task, get_tasks
 
 from .benchmarks.benchmarks import Benchmark
 from .benchmarks.get_benchmark import BENCHMARK_REGISTRY, get_benchmark, get_benchmarks

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-
 from mteb.models.overview import (
     MODEL_REGISTRY,
     ModelMeta,
@@ -9,8 +8,8 @@ from mteb.models.overview import (
     get_model_metas,
     model_meta_from_sentence_transformers,
 )
-from .sentence_transformer_wrapper import SentenceTransformerWrapper
 
+from .sentence_transformer_wrapper import SentenceTransformerWrapper
 
 __all__ = [
     "MODEL_REGISTRY",
