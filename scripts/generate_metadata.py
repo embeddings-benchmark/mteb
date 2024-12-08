@@ -205,6 +205,13 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
             print(f"Couldn't get model size for {model_name}, reason: {e}")
             n_parameters = None
         n_dimensions = get_embedding_dimensions(model_name)
+        datasets = card_data.get("datasets", None)
+        if isinstance(datasets, str):
+            datasets = [datasets]
+        if datasets is not None:
+            training_datasets = {ds: ["train"] for ds in datasets}
+        else:
+            training_datasets = None
         return ModelMeta(
             name=model_name,
             revision=revision,
@@ -213,8 +220,9 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
             license=card_data.get("license", None),
             framework=frameworks,
             n_parameters=n_parameters,
-            public_training_data=bool(card_data.get("datasets", None)),
+            public_training_data=bool(datasets),
             adapted_from=get_base_model(model_name),
+            training_datasets=training_datasets,
             open_weights=True,
             superseded_by=None,
             max_tokens=get_max_token(model_name),
