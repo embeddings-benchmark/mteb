@@ -319,7 +319,7 @@ evaluation.run(
 <details>
   <summary>  Saving retrieval task predictions </summary>
 
-### Using Lateinteraction model for retrival
+### Using Late Interaction models for retrieval
 
 ```python
 from mteb import MTEB
