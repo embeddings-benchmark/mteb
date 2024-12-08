@@ -5,6 +5,7 @@ from typing import Any
 
 import numpy as np
 import torch
+import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
@@ -140,25 +141,43 @@ class CohereTextEmbeddingModel(Wrapper):
         )
 
     def _embed(
-        self, sentences: list[str], cohere_task_type: str, retries: int = 5
+        self,
+        sentences: list[str],
+        cohere_task_type: str,
+        show_progress_bar: bool = False,
+        retries: int = 5,
     ) -> torch.Tensor:
         import cohere  # type: ignore
 
+        max_batch_size = 256
+
+        batches = [
+            sentences[i : i + max_batch_size]
+            for i in range(0, len(sentences), max_batch_size)
+        ]
+
         client = cohere.Client()
-        while retries > 0:  # Cohere's API is not always reliable
-            try:
-                response = client.embed(
-                    texts=list(sentences),
-                    model=self.model_name,
-                    input_type=cohere_task_type,
-                )
-                break
-            except Exception as e:
-                print(f"Retrying... {retries} retries left.")
-                retries -= 1
-                if retries == 0:
-                    raise e
-        return torch.tensor(response.embeddings)
+
+        all_embeddings = []
+
+        for batch in tqdm.tqdm(batches, leave=False, disable=not show_progress_bar):
+            while retries > 0:  # Cohere's API is not always reliable
+                try:
+                    response = client.embed(
+                        texts=batch,
+                        model=self.model_name,
+                        input_type=cohere_task_type,
+                    )
+                    break
+                except Exception as e:
+                    print(f"Retrying... {retries} retries left.")
+                    retries -= 1
+                    if retries == 0:
+                        raise e
+
+            all_embeddings.extend(torch.tensor(response.embeddings).numpy())
+
+        return np.array(all_embeddings)
 
     def encode(
         self,
@@ -168,13 +187,24 @@ class CohereTextEmbeddingModel(Wrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        cohere_task_type = self.get_prompt_name(
-            self.model_prompts, task_name, prompt_type
-        )
+        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+        cohere_task_type = self.model_prompts.get(prompt_name)
+
         if cohere_task_type is None:
             # search_document is recommended if unknown (https://cohere.com/blog/introducing-embed-v3)
             cohere_task_type = "search_document"
-        return self._embed(sentences, cohere_task_type=cohere_task_type).numpy()
+
+        show_progress_bar = (
+            False
+            if "show_progress_bar" not in kwargs
+            else kwargs.pop("show_progress_bar")
+        )
+
+        return self._embed(
+            sentences,
+            cohere_task_type=cohere_task_type,
+            show_progress_bar=show_progress_bar,
+        )
 
 
 model_prompts = {
