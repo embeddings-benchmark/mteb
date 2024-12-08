@@ -10,7 +10,7 @@ from mteb.benchmarks.benchmarks import (
     MTEB_RETRIEVAL_WITH_INSTRUCTIONS,
     CoIR,
 )
-from mteb.evaluation import *
+from mteb.evaluation import MTEB
 from mteb.load_results import BenchmarkResults, load_results
 from mteb.models import get_model, get_model_meta, get_model_metas
 from mteb.overview import TASKS_REGISTRY, get_task, get_tasks
@@ -40,4 +40,5 @@ __all__ = [
     "get_benchmarks",
     "BenchmarkResults",
     "BENCHMARK_REGISTRY",
+    "MTEB",
 ]

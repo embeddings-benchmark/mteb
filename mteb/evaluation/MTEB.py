@@ -13,19 +13,17 @@ from time import time
 from typing import Any
 
 import datasets
-from sentence_transformers import CrossEncoder, SentenceTransformer
 from codecarbon import EmissionsTracker
+from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.abstasks.AbsTask import ScoresDict
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import model_meta_from_sentence_transformers
 
-from ..abstasks import *
 from ..abstasks import AbsTask, AbsTaskReranking
 from ..load_results.task_results import TaskResult
 from ..models.sentence_transformer_wrapper import SentenceTransformerWrapper
-from ..tasks import *
 from . import LangMapping
 
 logger = logging.getLogger(__name__)
