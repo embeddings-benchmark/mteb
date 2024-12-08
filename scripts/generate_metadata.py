@@ -168,6 +168,21 @@ def get_max_token(model_name: str) -> int | None:
         return None
 
 
+def get_base_model(model_name: str) -> str | None:
+    try:
+        file_path = hf_hub_download(repo_id=model_name, filename="config.json")
+        with open(file_path) as in_file:
+            config = json.loads(in_file.read())
+            base_model = config.get("_name_or_path", None)
+            if base_model != model_name:
+                return base_model
+            else:
+                return None
+    except Exception as e:
+        print(f"Couldn't get base model for {model_name}, reason: {e}")
+        return None
+
+
 def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
     try:
         card = ModelCard.load(model_name)
@@ -199,7 +214,7 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
             framework=frameworks,
             n_parameters=n_parameters,
             public_training_data=bool(card_data.get("datasets", None)),
-            adapted_from=None,
+            adapted_from=get_base_model(model_name),
             open_weights=True,
             superseded_by=None,
             max_tokens=get_max_token(model_name),
