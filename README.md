@@ -335,8 +335,7 @@ evaluation = MTEB(tasks=tasks)
 
 evaluation.run(
     colbert,
-    eval_splits=eval_splits,
-    score_function="max_sim"
+    eval_splits=eval_splits
 )
 ```
 
