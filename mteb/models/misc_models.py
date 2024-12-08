@@ -614,7 +614,7 @@ manu__sentence_croissant_alpha_v0_2 = ModelMeta(
     use_instructions=None,
     zero_shot_benchmarks=None,
     adapted_from="croissantllm/CroissantCool",
-    superseded_by=None,
+    superseded_by="manu/sentence_croissant_alpha_v0.3",
 )
 manu__sentence_croissant_alpha_v0_3 = ModelMeta(
     name="manu/sentence_croissant_alpha_v0.3",
@@ -658,7 +658,7 @@ manu__sentence_croissant_alpha_v0_4 = ModelMeta(
     use_instructions=None,
     zero_shot_benchmarks=None,
     adapted_from="croissantllm/CroissantCool-v0.2",
-    superseded_by=None,
+    superseded_by="manu/sentence_croissant_alpha_v0.3",
 )
 thenlper__gte_base = ModelMeta(
     name="thenlper/gte-base",
