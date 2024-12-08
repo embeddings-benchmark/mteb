@@ -6,12 +6,12 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class WongnaiReviewsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="WongnaiReviewsClassification ",
+        name="WongnaiReviewsClassification",
         description="Wongnai features over 200,000 restaurants, beauty salons, and spas across Thailand on its platform, with detailed information about each merchant and user reviews. In this dataset there are 5 classes corressponding each star rating",
         reference="https://github.com/wongnai/wongnai-corpus",
         dataset={
-            "path": "wongnai_reviews",
-            "revision": "e708d4545d7ab10dd2c6b5b5b2a72ca28685dae2",
+            "path": "Wongnai/wongnai_reviews",
+            "revision": "cd351eb26093aa4b232a2390a0da35e7fab21655",
         },
         type="Classification",
         category="p2p",
@@ -23,7 +23,7 @@ class WongnaiReviewsClassification(AbsTaskClassification):
         dialect=[],
         domains=["Reviews", "Written"],
         task_subtypes=[],
-        license="LGPL-3.0",
+        license="lgpl-3.0",
         annotations_creators="derived",
         sample_creation="found",
         bibtex_citation="""

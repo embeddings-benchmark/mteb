@@ -1,6 +1,16 @@
 from __future__ import annotations
 
-from .eng.Core17InstructionRetrieval import *
-from .eng.News21InstructionRetrieval import *
-from .eng.Robust04InstructionRetrieval import *
-from .multilingual.mFollowIR import *
+from .eng import (
+    Core17InstructionRetrieval,
+    News21InstructionRetrieval,
+    Robust04InstructionRetrieval,
+)
+from .multilingual import mFollowIR, mFollowIRCrossLingual
+
+__all__ = [
+    "News21InstructionRetrieval",
+    "Core17InstructionRetrieval",
+    "Robust04InstructionRetrieval",
+    "mFollowIR",
+    "mFollowIRCrossLingual",
+]

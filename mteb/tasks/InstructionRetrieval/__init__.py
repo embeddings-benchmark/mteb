@@ -1,3 +1,5 @@
 from __future__ import annotations
 
-from .eng.InstructIR import *
+from .eng import InstructIR
+
+__all__ = ["InstructIR"]

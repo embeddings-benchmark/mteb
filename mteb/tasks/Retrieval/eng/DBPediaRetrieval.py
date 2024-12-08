@@ -17,7 +17,7 @@ class DBPedia(AbsTaskRetrieval):
         type="Retrieval",
         category="s2p",
         modalities=["text"],
-        eval_splits=["dev", "test"],
+        eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=("2017-01-01", "2017-01-01"),  # best guess: based on publication date

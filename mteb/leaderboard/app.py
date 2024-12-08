@@ -81,7 +81,7 @@ def update_task_info(task_names: str) -> gr.DataFrame:
     return gr.DataFrame(df, datatype=["markdown"] + ["str"] * (len(df.columns) - 1))
 
 
-all_results = load_results().filter_models()
+all_results = load_results().join_revisions().filter_models()
 
 # Model sizes in million parameters
 min_model_size, max_model_size = 0, 10_000
@@ -316,12 +316,13 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             domains=domains,
         )
         lower, upper = model_size
-        # Multiplying by millions
-        lower = lower * 1e6
-        upper = upper * 1e6
         # Setting to None, when the user doesn't specify anything
         if (lower == min_model_size) and (upper == max_model_size):
             lower, upper = None, None
+        else:
+            # Multiplying by millions
+            lower = lower * 1e6
+            upper = upper * 1e6
         benchmark_results = benchmark_results.filter_models(
             open_weights=availability,
             use_instructions=instructions,

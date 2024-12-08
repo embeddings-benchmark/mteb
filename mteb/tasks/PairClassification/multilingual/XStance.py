@@ -96,4 +96,21 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
                     .to_dict()
                 )
 
+        self.dataset_transform()
         self.data_loaded = True
+
+    def dataset_transform(self):
+        """Transform dataset into sentence-pair format"""
+        _dataset = {}
+
+        for lang in self.metadata.eval_langs:
+            _dataset[lang] = {}
+            for split in self.metadata.eval_splits:
+                _dataset[lang][split] = [
+                    {
+                        "sentence1": self.dataset[lang][split]["sentence1"],
+                        "sentence2": self.dataset[lang][split]["sentence2"],
+                        "labels": self.dataset[lang][split]["labels"],
+                    }
+                ]
+        self.dataset = _dataset
