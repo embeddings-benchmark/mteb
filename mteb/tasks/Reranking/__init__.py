@@ -13,3 +13,4 @@ from .multilingual.MIRACLReranking import *
 from .multilingual.WikipediaRerankingMultilingual import *
 from .rus.RuBQReranking import *
 from .zho.CMTEBReranking import *
+from .ara.NamaaMrTydiReranking import *
