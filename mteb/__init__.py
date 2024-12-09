@@ -2,21 +2,6 @@ from __future__ import annotations
 
 from importlib.metadata import version
 
-from mteb.abstasks import (
-    AbsTask,
-    AbsTaskBitextMining,
-    AbsTaskClassification,
-    AbsTaskClustering,
-    AbsTaskClusteringFast,
-    AbsTaskMultilabelClassification,
-    AbsTaskPairClassification,
-    AbsTaskReranking,
-    AbsTaskRetrieval,
-    AbsTaskSpeedTask,
-    AbsTaskSTS,
-    AbsTaskSummarization,
-    MultilingualTask,
-)
 from mteb.benchmarks.benchmarks import (
     MTEB_ENG_CLASSIC,
     MTEB_MAIN_RU,
@@ -63,19 +48,6 @@ __all__ = [
     "BENCHMARK_REGISTRY",
     "MTEB",
     "TaskResult",
-    "AbsTask",
-    "AbsTaskBitextMining",
-    "AbsTaskClassification",
-    "AbsTaskClustering",
-    "AbsTaskClusteringFast",
-    "AbsTaskMultilabelClassification",
-    "AbsTaskPairClassification",
-    "AbsTaskReranking",
-    "AbsTaskRetrieval",
-    "AbsTaskSpeedTask",
-    "AbsTaskSTS",
-    "AbsTaskSummarization",
-    "MultilingualTask",
     "SentenceTransformerWrapper",
     "Encoder",
 ]
