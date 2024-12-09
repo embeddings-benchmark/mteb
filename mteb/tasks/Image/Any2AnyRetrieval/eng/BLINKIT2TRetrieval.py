@@ -11,7 +11,7 @@ class BLINKIT2TRetrieval(AbsTaskAny2AnyRetrieval):
         reference="https://arxiv.org/abs/2404.12390",
         dataset={
             "path": "JamieSJS/blink-it2t",
-            "revision": "302cf2008f204285985099dcd46425b00356c610",
+            "revision": "c6470936de49d6d2ae5fc09612752c75175ce5b6",
             "trust_remote_code": True,
         },
         type="Any2AnyRetrieval",
