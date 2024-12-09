@@ -1,8 +1,11 @@
+from __future__ import annotations
+
+import datasets
+
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
 
-import datasets
 
 class NamaaMrTydiReranking(AbsTaskReranking):
     metadata = TaskMetadata(
@@ -42,7 +45,7 @@ class NamaaMrTydiReranking(AbsTaskReranking):
 
         self.dataset = self.dataset.map(
             lambda x: {
-                "query" : x["query"],
+                "query": x["query"],
                 "positive": [x["positive"]],
                 "negative": x["negative"],
             }

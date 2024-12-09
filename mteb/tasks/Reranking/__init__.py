@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .ara.NamaaMrTydiReranking import *
 from .eng.AskUbuntuDupQuestions import *
 from .eng.MindSmallReranking import *
 from .eng.SciDocsReranking import *
@@ -13,4 +14,3 @@ from .multilingual.MIRACLReranking import *
 from .multilingual.WikipediaRerankingMultilingual import *
 from .rus.RuBQReranking import *
 from .zho.CMTEBReranking import *
-from .ara.NamaaMrTydiReranking import *
