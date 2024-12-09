@@ -111,6 +111,8 @@ task_types = [
     "STS",
     "Summarization",
     # "InstructionRetrieval",
+    # Not displayed, because the scores are negative,
+    # doesn't work well with the radar chart.
     "Speed",
 ]
 
