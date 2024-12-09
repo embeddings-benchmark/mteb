@@ -6,6 +6,7 @@ import pytest
 
 import mteb
 from mteb import MTEB
+from mteb.abstasks import AbsTask
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
@@ -23,7 +24,7 @@ def test_reproducibility_workflow(task_name: str, model_name: str, model_revisio
     task = mteb.get_task(task_name)
 
     assert isinstance(model_meta, ModelMeta)
-    assert isinstance(task, mteb.AbsTask)
+    assert isinstance(task, AbsTask)
 
     model = mteb.get_model(model_name, revision=model_revision)
     assert isinstance(model, Encoder)
@@ -50,8 +51,8 @@ def test_reproducibility_workflow(task_name: str, model_name: str, model_revisio
         "Speed",
     ],
 )
-def test_validate_task_to_prompt_name(task_name: str | mteb.AbsTask):
-    if isinstance(task_name, mteb.AbsTask):
+def test_validate_task_to_prompt_name(task_name: str | AbsTask):
+    if isinstance(task_name, AbsTask):
         task_names = [task_name.metadata.name]
     else:
         task_names = [task_name]

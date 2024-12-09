@@ -3,8 +3,7 @@ from __future__ import annotations
 import pytest
 from pydantic import ValidationError
 
-from mteb import AbsTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks import AbsTask, TaskMetadata
 from mteb.overview import get_tasks
 
 # Historic datasets without filled metadata. Do NOT add new datasets to this list.

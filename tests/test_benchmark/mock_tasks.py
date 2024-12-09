@@ -51,7 +51,7 @@ class MockClassificationTask(AbsTaskClassification):
         "test": {
             "num_samples": 2,
             "number_of_characters": 52,
-            "number_texts_intersect_with_train": 2,
+            "number_texts_intersect_with_train": 1,
             "min_text_length": 23,
             "average_text_length": 26.0,
             "max_text_length": 29,
@@ -61,11 +61,11 @@ class MockClassificationTask(AbsTaskClassification):
         },
         "train": {
             "num_samples": 2,
-            "number_of_characters": 52,
+            "number_of_characters": 53,
             "number_texts_intersect_with_train": None,
             "min_text_length": 23,
-            "average_text_length": 26.0,
-            "max_text_length": 29,
+            "average_text_length": 26.5,
+            "max_text_length": 30,
             "unique_text": 2,
             "unique_labels": 2,
             "labels": {"0": {"count": 1}, "1": {"count": 1}},
@@ -80,20 +80,22 @@ class MockClassificationTask(AbsTaskClassification):
     )
 
     def load_data(self, **kwargs):
-        texts = ["This is a test sentence", "This is another test sentence"]
+        train_texts = ["This is a test sentence", "This is another train sentence"]
+        test_texts = ["This is a test sentence", "This is another test sentence"]
+
         labels = [0, 1]
 
         self.dataset = DatasetDict(
             {
                 "test": Dataset.from_dict(
                     {
-                        "text": texts,
+                        "text": test_texts,
                         "label": labels,
                     }
                 ),
                 "train": Dataset.from_dict(
                     {
-                        "text": texts,
+                        "text": train_texts,
                         "label": labels,
                     }
                 ),
@@ -107,7 +109,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification, MultilingualTask
         "test": {
             "num_samples": 4,
             "number_of_characters": 104,
-            "number_texts_intersect_with_train": 2,
+            "number_texts_intersect_with_train": 1,
             "min_text_length": 23,
             "average_text_length": 26.0,
             "max_text_length": 29,
@@ -118,7 +120,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification, MultilingualTask
                 "eng": {
                     "num_samples": 2,
                     "number_of_characters": 52,
-                    "number_texts_intersect_with_train": 2,
+                    "number_texts_intersect_with_train": 1,
                     "min_text_length": 23,
                     "average_text_length": 26.0,
                     "max_text_length": 29,
@@ -129,7 +131,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification, MultilingualTask
                 "fra": {
                     "num_samples": 2,
                     "number_of_characters": 52,
-                    "number_texts_intersect_with_train": 2,
+                    "number_texts_intersect_with_train": 1,
                     "min_text_length": 23,
                     "average_text_length": 26.0,
                     "max_text_length": 29,
@@ -141,33 +143,33 @@ class MockMultilingualClassificationTask(AbsTaskClassification, MultilingualTask
         },
         "train": {
             "num_samples": 4,
-            "number_of_characters": 104,
+            "number_of_characters": 106,
             "number_texts_intersect_with_train": None,
             "min_text_length": 23,
-            "average_text_length": 26.0,
-            "max_text_length": 29,
+            "average_text_length": 26.5,
+            "max_text_length": 30,
             "unique_text": 2,
             "unique_labels": 2,
             "labels": {"0": {"count": 2}, "1": {"count": 2}},
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 2,
-                    "number_of_characters": 52,
+                    "number_of_characters": 53,
                     "number_texts_intersect_with_train": None,
                     "min_text_length": 23,
-                    "average_text_length": 26.0,
-                    "max_text_length": 29,
+                    "average_text_length": 26.5,
+                    "max_text_length": 30,
                     "unique_text": 2,
                     "unique_labels": 2,
                     "labels": {"0": {"count": 1}, "1": {"count": 1}},
                 },
                 "fra": {
                     "num_samples": 2,
-                    "number_of_characters": 52,
+                    "number_of_characters": 53,
                     "number_texts_intersect_with_train": None,
                     "min_text_length": 23,
-                    "average_text_length": 26.0,
-                    "max_text_length": 29,
+                    "average_text_length": 26.5,
+                    "max_text_length": 30,
                     "unique_text": 2,
                     "unique_labels": 2,
                     "labels": {"0": {"count": 1}, "1": {"count": 1}},
@@ -185,18 +187,19 @@ class MockMultilingualClassificationTask(AbsTaskClassification, MultilingualTask
     metadata.eval_langs = multilingual_eval_langs
 
     def load_data(self, **kwargs):
-        texts = ["This is a test sentence", "This is another test sentence"]
+        train_texts = ["This is a test sentence", "This is another train sentence"]
+        test_texts = ["This is a test sentence", "This is another test sentence"]
         labels = [0, 1]
         data = {
             "test": Dataset.from_dict(
                 {
-                    "text": texts,
+                    "text": test_texts,
                     "label": labels,
                 }
             ),
             "train": Dataset.from_dict(
                 {
-                    "text": texts,
+                    "text": train_texts,
                     "label": labels,
                 }
             ),
@@ -1337,13 +1340,13 @@ class MockMultilingualRerankingTask(AbsTaskReranking, MultilingualTask):
 
 class MockRetrievalTask(AbsTaskRetrieval):
     expected_stats = {
-        "test": {
+        "val": {
             "num_samples": 4,
-            "number_of_characters": 154,
+            "number_of_characters": 112,
             "num_documents": 2,
-            "min_document_length": 51,
-            "average_document_length": 51.0,
-            "max_document_length": 51,
+            "min_document_length": 27,
+            "average_document_length": 30.0,
+            "max_document_length": 33,
             "unique_documents": 2,
             "num_queries": 2,
             "min_query_length": 23,
@@ -1365,14 +1368,43 @@ class MockRetrievalTask(AbsTaskRetrieval):
             "min_top_ranked_per_query": None,
             "average_top_ranked_per_query": None,
             "max_top_ranked_per_query": None,
-        }
+        },
+        "test": {
+            "num_samples": 4,
+            "number_of_characters": 112,
+            "num_documents": 2,
+            "min_document_length": 27,
+            "average_document_length": 30.0,
+            "max_document_length": 33,
+            "unique_documents": 2,
+            "num_queries": 2,
+            "min_query_length": 23,
+            "average_query_length": 26.0,
+            "max_query_length": 29,
+            "unique_queries": 2,
+            "none_queries": 0,
+            "num_relevant_docs": 4,
+            "min_relevant_docs_per_query": 2,
+            "average_relevant_docs_per_query": 1.0,
+            "max_relevant_docs_per_query": 2,
+            "unique_relevant_docs": 2,
+            "num_instructions": None,
+            "min_instruction_length": None,
+            "average_instruction_length": None,
+            "max_instruction_length": None,
+            "unique_instructions": None,
+            "num_top_ranked": None,
+            "min_top_ranked_per_query": None,
+            "average_top_ranked_per_query": None,
+            "max_top_ranked_per_query": None,
+        },
     }
 
     metadata = TaskMetadata(
         type="Retrieval",
         name="MockRetrievalTask",
         main_score="ndcg_at_10",
-        **general_args,  # type: ignore
+        **dict(general_args | {"eval_splits": ["val", "test"]}),  # type: ignore
     )
 
     def load_data(self, **kwargs):
@@ -1380,24 +1412,30 @@ class MockRetrievalTask(AbsTaskRetrieval):
             "test": {
                 "q1": "This is a test sentence",
                 "q2": "This is another test sentence",
-            }
+            },
+            "val": {
+                "q1": "This is a test sentence",
+                "q2": "This is another test sentence",
+            },
         }
 
         self.corpus = {
             "test": {
-                "d1": {
-                    "title": "This is a positive title",
-                    "text": "This is a positive sentence",
-                },
-                "d2": {
-                    "title": "This is a negative title",
-                    "text": "This is a negative sentence",
-                },
-            }
+                "d1": "This is a positive sentence",
+                "d2": "This is another positive sentence",
+            },
+            "val": {
+                "d1": "This is a positive sentence",
+                "d2": "This is another positive sentence",
+            },
         }
 
         self.relevant_docs = {
             "test": {
+                "q1": {"d1": 1, "d2": 0},
+                "q2": {"d1": 0, "d2": 1},
+            },
+            "val": {
                 "q1": {"d1": 1, "d2": 0},
                 "q2": {"d1": 0, "d2": 1},
             },
@@ -1544,7 +1582,7 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
         "test": {
             "num_samples": 6,
             "number_of_characters": 156,
-            "number_texts_intersect_with_train": 2,
+            "number_texts_intersect_with_train": 1,
             "min_text_length": 23,
             "average_text_length": 26.0,
             "max_text_length": 29,
@@ -1557,11 +1595,11 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
         },
         "train": {
             "num_samples": 6,
-            "number_of_characters": 156,
+            "number_of_characters": 159,
             "number_texts_intersect_with_train": None,
             "min_text_length": 23,
-            "average_text_length": 26.0,
-            "max_text_length": 29,
+            "average_text_length": 26.5,
+            "max_text_length": 30,
             "unique_texts": 2,
             "min_labels_per_text": 2,
             "average_label_per_text": 2.0,
@@ -1579,20 +1617,21 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
     )
 
     def load_data(self, **kwargs):
-        texts = ["This is a test sentence", "This is another test sentence"] * 3
+        train_texts = ["This is a test sentence", "This is another train sentence"] * 3
+        test_texts = ["This is a test sentence", "This is another test sentence"] * 3
         labels = [[0, 1], [1, 0]] * 3
 
         self.dataset = DatasetDict(
             {
                 "test": Dataset.from_dict(
                     {
-                        "text": texts,
+                        "text": test_texts,
                         "label": labels,
                     }
                 ),
                 "train": Dataset.from_dict(
                     {
-                        "text": texts,
+                        "text": train_texts,
                         "label": labels,
                     }
                 ),
@@ -1608,7 +1647,7 @@ class MockMultilingualMultilabelClassification(
         "test": {
             "num_samples": 12,
             "number_of_characters": 312,
-            "number_texts_intersect_with_train": 2,
+            "number_texts_intersect_with_train": 1,
             "min_text_length": 23,
             "average_text_length": 26.0,
             "max_text_length": 29,
@@ -1622,7 +1661,7 @@ class MockMultilingualMultilabelClassification(
                 "eng": {
                     "num_samples": 6,
                     "number_of_characters": 156,
-                    "number_texts_intersect_with_train": 2,
+                    "number_texts_intersect_with_train": 1,
                     "min_text_length": 23,
                     "average_text_length": 26.0,
                     "max_text_length": 29,
@@ -1636,7 +1675,7 @@ class MockMultilingualMultilabelClassification(
                 "fra": {
                     "num_samples": 6,
                     "number_of_characters": 156,
-                    "number_texts_intersect_with_train": 2,
+                    "number_texts_intersect_with_train": 1,
                     "min_text_length": 23,
                     "average_text_length": 26.0,
                     "max_text_length": 29,
@@ -1651,11 +1690,11 @@ class MockMultilingualMultilabelClassification(
         },
         "train": {
             "num_samples": 12,
-            "number_of_characters": 312,
+            "number_of_characters": 318,
             "number_texts_intersect_with_train": None,
             "min_text_length": 23,
-            "average_text_length": 26.0,
-            "max_text_length": 29,
+            "average_text_length": 26.5,
+            "max_text_length": 30,
             "unique_texts": 2,
             "min_labels_per_text": 2,
             "average_label_per_text": 2.0,
@@ -1665,11 +1704,11 @@ class MockMultilingualMultilabelClassification(
             "hf_subset_descriptive_stats": {
                 "eng": {
                     "num_samples": 6,
-                    "number_of_characters": 156,
+                    "number_of_characters": 159,
                     "number_texts_intersect_with_train": None,
                     "min_text_length": 23,
-                    "average_text_length": 26.0,
-                    "max_text_length": 29,
+                    "average_text_length": 26.5,
+                    "max_text_length": 30,
                     "unique_texts": 2,
                     "min_labels_per_text": 2,
                     "average_label_per_text": 2.0,
@@ -1679,11 +1718,11 @@ class MockMultilingualMultilabelClassification(
                 },
                 "fra": {
                     "num_samples": 6,
-                    "number_of_characters": 156,
+                    "number_of_characters": 159,
                     "number_texts_intersect_with_train": None,
                     "min_text_length": 23,
-                    "average_text_length": 26.0,
-                    "max_text_length": 29,
+                    "average_text_length": 26.5,
+                    "max_text_length": 30,
                     "unique_texts": 2,
                     "min_labels_per_text": 2,
                     "average_label_per_text": 2.0,
@@ -1704,19 +1743,20 @@ class MockMultilingualMultilabelClassification(
     metadata.eval_langs = multilingual_eval_langs
 
     def load_data(self, **kwargs):
-        texts = ["This is a test sentence", "This is another test sentence"] * 3
+        train_texts = ["This is a test sentence", "This is another train sentence"] * 3
+        test_texts = ["This is a test sentence", "This is another test sentence"] * 3
         labels = [[0, 1], [1, 0]] * 3
 
         data = {
             "test": Dataset.from_dict(
                 {
-                    "text": texts,
+                    "text": test_texts,
                     "label": labels,
                 }
             ),
             "train": Dataset.from_dict(
                 {
-                    "text": texts,
+                    "text": train_texts,
                     "label": labels,
                 }
             ),

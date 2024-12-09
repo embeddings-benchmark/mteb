@@ -32,7 +32,7 @@ def format_scores(score: float) -> float:
 
 def format_n_parameters(n_parameters) -> str:
     if (n_parameters is None) or (not int(n_parameters)):
-        return ""
+        return "Unknown"
     n_thousand = int(n_parameters // 1e3)
     if n_thousand < 1:
         return str(int(n_parameters))
@@ -46,9 +46,7 @@ def format_n_parameters(n_parameters) -> str:
 
 def split_on_capital(s: str) -> str:
     """Splits on capital letters and joins with spaces"""
-    if all(c.isupper() for c in s):
-        return s
-    return " ".join(re.findall("[A-Z][^A-Z]*", s))
+    return " ".join(re.findall(r"[A-Z]?[a-z]+|[A-Z]+(?=[A-Z]|$)", s))
 
 
 def get_column_widths(df: pd.DataFrame) -> list[str]:
@@ -59,9 +57,12 @@ def get_column_widths(df: pd.DataFrame) -> list[str]:
             value_lengths = [len(f"{value:.2f}") for value in df[column_name]]
         else:
             value_lengths = [len(str(value)) for value in df[column_name]]
-        max_length = max(max(column_word_lengths), max(value_lengths))
-        n_pixels = 25 + (max_length * 10)
-        widths.append(f"{n_pixels}px")
+        try:
+            max_length = max(max(column_word_lengths), max(value_lengths))
+            n_pixels = 35 + (max_length * 12.5)
+            widths.append(f"{n_pixels}px")
+        except Exception:
+            widths.append("50px")
     return widths
 
 
@@ -98,6 +99,21 @@ def get_means_per_types(df: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame.from_records(records)
 
 
+def failsafe_get_model_meta(model_name):
+    try:
+        return get_model_meta(model_name)
+    except Exception:
+        return None
+
+
+def format_max_tokens(max_tokens: float | None) -> str:
+    if max_tokens is None:
+        return "Unknown"
+    if max_tokens == np.inf:
+        return "Infinite"
+    return str(int(max_tokens))
+
+
 def scores_to_tables(
     scores_long: list[dict], search_query: str | None = None
 ) -> tuple[gr.DataFrame, gr.DataFrame]:
@@ -131,18 +147,18 @@ def scores_to_tables(
     joint_table.insert(1, "mean_by_task_type", typed_mean)
     joint_table["borda_rank"] = get_borda_rank(per_task)
     joint_table = joint_table.reset_index()
-    joint_table = joint_table.drop(columns=["model_revision"])
-    model_metas = joint_table["model_name"].map(get_model_meta)
+    model_metas = joint_table["model_name"].map(failsafe_get_model_meta)
+    joint_table = joint_table[model_metas.notna()]
     joint_table["model_link"] = model_metas.map(lambda m: m.reference)
     joint_table.insert(
         1,
         "Max Tokens",
-        model_metas.map(lambda m: str(int(m.max_tokens)) if m.max_tokens else ""),
+        model_metas.map(lambda m: format_max_tokens(m.max_tokens)),
     )
     joint_table.insert(
         1,
         "Embedding Dimensions",
-        model_metas.map(lambda m: str(int(m.embed_dim)) if m.embed_dim else ""),
+        model_metas.map(lambda m: str(int(m.embed_dim)) if m.embed_dim else "Unknown"),
     )
     joint_table.insert(
         1,
@@ -150,14 +166,22 @@ def scores_to_tables(
         model_metas.map(lambda m: format_n_parameters(m.n_parameters)),
     )
     joint_table = joint_table.sort_values("borda_rank", ascending=True)
+    per_task = per_task.loc[
+        joint_table.set_index(["model_name", "model_revision"]).index
+    ]
+    joint_table = joint_table.drop(columns=["model_revision"])
     # Removing HF organization from model
     joint_table["model_name"] = joint_table["model_name"].map(
         lambda name: name.split("/")[-1]
     )
     # Adding markdown link to model names
-    joint_table["model_name"] = (
-        "[" + joint_table["model_name"] + "](" + joint_table.pop("model_link") + ")"
+    name_w_link = (
+        "[" + joint_table["model_name"] + "](" + joint_table["model_link"] + ")"
     )
+    joint_table["model_name"] = joint_table["model_name"].mask(
+        joint_table["model_link"].notna(), name_w_link
+    )
+    joint_table = joint_table.drop(columns=["model_link"])
     joint_table = joint_table.rename(
         columns={
             "model_name": "Model",
@@ -176,6 +200,7 @@ def scores_to_tables(
     )
     joint_table.insert(0, "Rank (Borda)", joint_table.pop("borda_rank"))
     column_widths = get_column_widths(joint_table)
+    task_column_widths = get_column_widths(per_task)
     # overriding for model name
     column_widths[1] = "250px"
     column_types = get_column_types(joint_table)
@@ -198,9 +223,12 @@ def scores_to_tables(
     return (
         gr.DataFrame(
             joint_table_style,
-            # column_widths=column_widths,
+            column_widths=column_widths,
             datatype=column_types,
-            # wrap=True,
+            interactive=False,
+            wrap=True,
         ),
-        gr.DataFrame(per_task_style),
+        gr.DataFrame(
+            per_task_style, column_widths=task_column_widths, interactive=False
+        ),
     )
