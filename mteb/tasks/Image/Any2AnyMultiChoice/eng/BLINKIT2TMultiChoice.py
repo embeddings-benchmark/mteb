@@ -11,7 +11,7 @@ class BLINKIT2TMultiChoice(AbsTaskAny2AnyMultiChoice):
         reference="https://arxiv.org/abs/2404.12390",
         dataset={
             "path": "JamieSJS/blink-it2t-multi",
-            "revision": "61c78d13d8e97a4b6a7962c0b2b0ae92fbb26576",
+            "revision": "bc8f4c7f62450a4ceb737c8339061cf87aea42d5",
         },
         type="Any2AnyMultiChoice",
         category="it2t",
