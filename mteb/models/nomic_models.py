@@ -134,6 +134,59 @@ nomic_embed_v1 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    adapted_from=None,
+    superseded_by="nomic-ai/nomic-embed-text-v1.5",
+)
+
+nomic_embed_v1_ablated = ModelMeta(
+    loader=partial(  # type: ignore
+        NomicWrapper,
+        trust_remote_code=True,
+        model_name="nomic-ai/nomic-embed-text-v1-ablated",
+        revision="7d948905c5d5d3874fa55a925d68e49dbf411e5f",
+        model_prompts=model_prompts,
+    ),
+    name="nomic-ai/nomic-embed-text-v1-ablated",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="7d948905c5d5d3874fa55a925d68e49dbf411e5f",
+    release_date="2024-01-15",  # first commit
+    n_parameters=None,
+    memory_usage=None,
+    max_tokens=8192,
+    embed_dim=768,
+    license="apache-2.0",
+    reference="https://huggingface.co/nomic-ai/nomic-embed-text-v1-ablated",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    adapted_from=None,
+    superseded_by=None,
+)
+
+
+nomic_embed_v1_ablated = ModelMeta(
+    loader=partial(  # type: ignore
+        NomicWrapper,
+        trust_remote_code=True,
+        model_name="nomic-ai/nomic-embed-text-v1-unsupervised",
+        revision="b53d557b15ae63852847c222d336c1609eced93c",
+        model_prompts=model_prompts,
+    ),
+    name="nomic-ai/nomic-embed-text-v1-unsupervised",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="b53d557b15ae63852847c222d336c1609eced93c",
+    release_date="2024-01-15",  # first commit
+    n_parameters=None,
+    memory_usage=None,
+    max_tokens=8192,
+    embed_dim=768,
+    license="apache-2.0",
+    reference="https://huggingface.co/nomic-ai/nomic-embed-text-v1-unsupervised",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
     citation=NOMIC_CITATION,
     adapted_from=None,
     superseded_by="nomic-ai/nomic-embed-text-v1.5",

@@ -73,8 +73,6 @@ class ModelMeta(BaseModel):
             in the Latin script.
         use_instructions: Whether the model uses instructions E.g. for prompt-based models. This also include models that require a specific format for
             input such as "query: {document}" or "passage: {document}".
-        zero_shot_benchmarks: A list of benchmarks on which the model has been evaluated in a zero-shot setting. By default we assume that all models
-            are evaluated non-zero-shot unless specified otherwise.
         citation: The citation for the model. This is a bibtex string.
         training_datasets: A dictionary of datasets that the model was trained on. Names should be names as their appear in `mteb` for example
             {"ArguAna": ["test"]} if the model is trained on the ArguAna test set. This field is used to determine if a model generalizes zero-shot to

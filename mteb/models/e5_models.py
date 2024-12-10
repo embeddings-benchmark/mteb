@@ -298,6 +298,56 @@ e5_eng_large_v2 = ModelMeta(
     use_instructions=True,
     superseded_by=None,
     adapted_from=None,
+)
+
+e5_large = ModelMeta(
+    loader=partial(
+        sentence_transformers_loader,
+        model_name="intfloat/e5-large",
+        revision="4dc6d853a804b9c8886ede6dda8a073b7dc08a81",
+        model_prompts=model_prompts,
+    ),
+    name="intfloat/e5-large",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="4dc6d853a804b9c8886ede6dda8a073b7dc08a81",
+    release_date="2022-12-26",
+    n_parameters=335_000_000,
+    memory_usage=None,
+    embed_dim=1024,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/intfloat/e5-large",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    superseded_by="intfloat/e5-large-v2",
+    adapted_from=None,
+)
+
+e5_base = ModelMeta(
+    loader=partial(
+        sentence_transformers_loader,
+        model_name="intfloat/e5-base",
+        revision="b533fe4636f4a2507c08ddab40644d20b0006d6a",
+        model_prompts=model_prompts,
+    ),
+    name="intfloat/e5-base",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="b533fe4636f4a2507c08ddab40644d20b0006d6a",
+    release_date="2022-12-26",
+    n_parameters=109_000_000,
+    memory_usage=None,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/intfloat/e5-base",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    superseded_by="intfloat/e5-base-v2",
+    adapted_from=None,
     citation=E5_CITATION,
 )
 
