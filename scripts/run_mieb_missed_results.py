@@ -2,75 +2,6 @@ from __future__ import annotations
 
 import mteb
 
-# missing
-model = mteb.get_model("royokong/e5-v")
-tasks = mteb.get_tasks(tasks=["EDIST2ITRetrieval", "Winoground"])
-evaluation = mteb.MTEB(tasks=tasks)
-results = evaluation.run(model, output_folder="results-mieb-final")
-
-model = mteb.get_model("nyu-visionx/moco-v3-vit-b")
-tasks = mteb.get_tasks(
-    tasks=[
-        "CIFAR10Clustering",
-        "ImageNetDog15Clustering",
-        "TinyImageNetClustering",
-        "UCF101",
-        "VOC2007",
-    ]
-)
-evaluation = mteb.MTEB(tasks=tasks)
-results = evaluation.run(model, output_folder="results-mieb-final")
-
-model = mteb.get_model("nyu-visionx/moco-v3-vit-l")
-tasks = mteb.get_tasks(
-    tasks=[
-        "SketchyI2IRetrieval",
-        "CIFAR10Clustering",
-        "ImageNetDog15Clustering",
-        "TinyImageNetClustering",
-        "UCF101",
-        "VOC2007",
-    ]
-)
-evaluation = mteb.MTEB(tasks=tasks)
-results = evaluation.run(model, output_folder="results-mieb-final")
-
-model = mteb.get_model("BAAI/bge-visualized-base")
-tasks = mteb.get_tasks(
-    tasks=[
-        "SciMMIRI2TRetrieval",
-        "SciMMIRT2IRetrieval",
-        "VisualNewsI2TRetrieval",
-        "WITT2IRetrieval",
-    ]
-)
-evaluation = mteb.MTEB(tasks=tasks)
-results = evaluation.run(model, output_folder="results-mieb-final")
-
-model = mteb.get_model("TIGER-Lab/VLM2Vec-Full")
-tasks = mteb.get_tasks(
-    tasks=["CVBenchCount", "CVBenchDepth", "CVBenchDistance", "CVBenchRelation"]
-)
-evaluation = mteb.MTEB(tasks=tasks)
-results = evaluation.run(model, output_folder="results-mieb-final")
-
-model = mteb.get_model("TIGER-Lab/VLM2Vec-LoRA")
-tasks = mteb.get_tasks(
-    task_types=[
-        "Any2AnyRetrieval",
-        "Any2AnyMultiChoice",
-        "Any2TextMutipleChoice",
-        "ImageClustering",
-        "ImageClassification",
-        "ImageMultilabelClassification",
-        "ImageTextPairClassification",
-        "VisualSTS",
-        "ZeroShotClassification",
-    ]
-)
-evaluation = mteb.MTEB(tasks=tasks)
-results = evaluation.run(model, output_folder="results-mieb-final")
-
 # rerun
 for model_name in [
     "openai/clip-vit-base-patch32",
@@ -82,8 +13,8 @@ for model_name in [
     "kakaobrain/align-base",
     "jinaai/jina-clip-v1",
     "nomic-ai/nomic-embed-vision-v1.5",
-    "Salesforce/blip-image-captioning-large",
-    "Salesforce/blip-image-captioning-base",
+    # "Salesforce/blip-image-captioning-large",
+    # "Salesforce/blip-image-captioning-base",
     "Salesforce/blip2-opt-2.7b",
     "Salesforce/blip2-opt-6.7b-coco",
     "facebook/dinov2-small",
@@ -125,12 +56,18 @@ for model_name in [
     model = mteb.get_model(model_name)
     tasks = mteb.get_tasks(
         tasks=[
-            "ROxfordEasyI2IRetrieval",
-            "ROxfordHardI2IRetrieval",
-            "ROxfordMediumI2IRetrieval",
-            "RParisEasyI2IRetrieval",
-            "RParisHardI2IRetrieval",
-            "RParisMediumI2IRetrieval",
+            "ROxfordEasyI2IMultiChoice",
+            "ROxfordHardI2IMultiChoice",
+            "ROxfordMediumI2IMultiChoice",
+            "RParisEasyI2IMultiChoice",
+            "RParisHardI2IMultiChoice",
+            "RParisMediumI2IMultiChoice",
+            "BLINKIT2IRetrieval",
+            "BLINKIT2TRetrieval",
+            "BLINKIT2IMultiChoice",
+            "BLINKIT2TMultiChoice",
+            "Flickr30kI2TRetrieval",
+            "Flickr30kT2IRetrieval"
         ]
     )
     # get i-only tasks for i-only models.
@@ -138,4 +75,18 @@ for model_name in [
         tasks = [task for task in tasks if "t" not in task.metadata.category]
 
     evaluation = mteb.MTEB(tasks=tasks)
-    results = evaluation.run(model, output_folder="results-mieb-rerun")
+    results = evaluation.run(model, output_folder="results-mieb-rerun2")
+    
+# # missing task
+model_name = "TIGER-Lab/VLM2Vec-Full"
+model = mteb.get_model(model_name)
+tasks = mteb.get_tasks(
+    tasks=[
+        "CVBenchCount",
+        "CVBenchDepth",
+        "CVBenchDistance",
+        "CVBenchRelation",
+    ]
+)
+evaluation = mteb.MTEB(tasks=tasks)
+results = evaluation.run(model, output_folder="results-mieb-rerun2")
