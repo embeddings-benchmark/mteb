@@ -67,7 +67,7 @@ for model_name in [
             "BLINKIT2IMultiChoice",
             "BLINKIT2TMultiChoice",
             "Flickr30kI2TRetrieval",
-            "Flickr30kT2IRetrieval"
+            "Flickr30kT2IRetrieval",
         ]
     )
     # get i-only tasks for i-only models.
@@ -76,7 +76,7 @@ for model_name in [
 
     evaluation = mteb.MTEB(tasks=tasks)
     results = evaluation.run(model, output_folder="results-mieb-rerun2")
-    
+
 # # missing task
 model_name = "TIGER-Lab/VLM2Vec-Full"
 model = mteb.get_model(model_name)
