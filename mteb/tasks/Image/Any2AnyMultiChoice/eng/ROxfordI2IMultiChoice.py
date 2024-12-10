@@ -3,6 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+
 class ROxfordEasyI2IMultiChoice(AbsTaskAny2AnyMultiChoice):
     metadata = TaskMetadata(
         name="ROxfordEasyI2IMultiChoice",
@@ -10,7 +11,7 @@ class ROxfordEasyI2IMultiChoice(AbsTaskAny2AnyMultiChoice):
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Oxford_and_CVPR_2018_paper.html",
         dataset={
             "path": "JamieSJS/r-oxford-easy-multi",
-            "revision": "6a542241dff5a7e91147894b7d222f5182733a3a",
+            "revision": "8fde638cd1a297b81f7e26914a39b58788a3e4b4",
         },
         type="Any2AnyMultiChoice",
         category="i2i",
@@ -56,7 +57,7 @@ class ROxfordMediumI2IMultiChoice(AbsTaskAny2AnyMultiChoice):
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Oxford_and_CVPR_2018_paper.html",
         dataset={
             "path": "JamieSJS/r-oxford-medium-multi",
-            "revision": "07df6908b79c2ba5e48cc635c8bdfe9a10cb87c8",
+            "revision": "3aed4b566b6ea51b81ee50e6cbf18db8349893c0",
         },
         type="Any2AnyMultiChoice",
         category="i2i",
@@ -102,7 +103,7 @@ class ROxfordHardI2IMultiChoice(AbsTaskAny2AnyMultiChoice):
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Oxford_and_CVPR_2018_paper.html",
         dataset={
             "path": "JamieSJS/r-oxford-hard-multi",
-            "revision": "d2252ed25a03da127c1ff4a65d7bc1bdf3e23050",
+            "revision": "93d282cc623d122d583b6db3837f07d91a7b5575",
         },
         type="Any2AnyMultiChoice",
         category="i2i",

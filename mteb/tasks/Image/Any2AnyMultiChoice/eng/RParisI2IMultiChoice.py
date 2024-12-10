@@ -3,6 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+
 class RParisEasyI2IMultiChoice(AbsTaskAny2AnyMultiChoice):
     metadata = TaskMetadata(
         name="RParisEasyI2IMultiChoice",
@@ -10,7 +11,7 @@ class RParisEasyI2IMultiChoice(AbsTaskAny2AnyMultiChoice):
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Paris_and_CVPR_2018_paper.html",
         dataset={
             "path": "JamieSJS/r-paris-easy-multi",
-            "revision": "ada9fe747a5ca4c796de7cd7418fead338dad605",
+            "revision": "e4dbd9e9950a8579c78ac6a92c1e33fb6ecb21d2",
         },
         type="Any2AnyMultiChoice",
         category="i2i",
@@ -56,7 +57,7 @@ class RParisMediumI2IMultiChoice(AbsTaskAny2AnyMultiChoice):
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Paris_and_CVPR_2018_paper.html",
         dataset={
             "path": "JamieSJS/r-paris-medium-multi",
-            "revision": "f9f3ca5453fe12337040f0709520fd7d2df8f78f",
+            "revision": "0244f07ac6e9f32a489385aeba4fc8ee5a1d6a2e",
         },
         type="Any2AnyMultiChoice",
         category="i2i",
@@ -102,7 +103,7 @@ class RParisHardI2IMultiChoice(AbsTaskAny2AnyMultiChoice):
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Paris_and_CVPR_2018_paper.html",
         dataset={
             "path": "JamieSJS/r-paris-hard-multi",
-            "revision": "6a33a2f25eb7b0c07dc3cbccba096658414aa79e",
+            "revision": "4dc9963fa1da13594b6d28f3eb3a5b0f1b13c373",
         },
         type="Any2AnyMultiChoice",
         category="i2i",
