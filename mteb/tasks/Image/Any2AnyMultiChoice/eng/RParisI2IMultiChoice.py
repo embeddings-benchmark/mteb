@@ -11,7 +11,7 @@ class RParisEasyI2IMultiChoice(AbsTaskAny2AnyMultiChoice):
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Paris_and_CVPR_2018_paper.html",
         dataset={
             "path": "JamieSJS/r-paris-easy-multi",
-            "revision": "e4dbd9e9950a8579c78ac6a92c1e33fb6ecb21d2",
+            "revision": "db94b5afd0014ab8c978f20a0fbcc52da1612a08",
         },
         type="Any2AnyMultiChoice",
         category="i2i",
@@ -57,7 +57,7 @@ class RParisMediumI2IMultiChoice(AbsTaskAny2AnyMultiChoice):
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Paris_and_CVPR_2018_paper.html",
         dataset={
             "path": "JamieSJS/r-paris-medium-multi",
-            "revision": "0244f07ac6e9f32a489385aeba4fc8ee5a1d6a2e",
+            "revision": "372c79fc823e1cebc1d55f8e0039aa239285e177",
         },
         type="Any2AnyMultiChoice",
         category="i2i",
@@ -103,7 +103,7 @@ class RParisHardI2IMultiChoice(AbsTaskAny2AnyMultiChoice):
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Paris_and_CVPR_2018_paper.html",
         dataset={
             "path": "JamieSJS/r-paris-hard-multi",
-            "revision": "4dc9963fa1da13594b6d28f3eb3a5b0f1b13c373",
+            "revision": "4e5997e48fb2f2f8bf1c8973851dedeb17e09a83",
         },
         type="Any2AnyMultiChoice",
         category="i2i",

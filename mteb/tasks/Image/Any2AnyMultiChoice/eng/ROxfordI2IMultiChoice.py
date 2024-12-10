@@ -11,7 +11,7 @@ class ROxfordEasyI2IMultiChoice(AbsTaskAny2AnyMultiChoice):
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Oxford_and_CVPR_2018_paper.html",
         dataset={
             "path": "JamieSJS/r-oxford-easy-multi",
-            "revision": "8fde638cd1a297b81f7e26914a39b58788a3e4b4",
+            "revision": "4c167c3ce529f19457c9b8e694258cc6cf8e7cc7",
         },
         type="Any2AnyMultiChoice",
         category="i2i",
@@ -57,7 +57,7 @@ class ROxfordMediumI2IMultiChoice(AbsTaskAny2AnyMultiChoice):
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Oxford_and_CVPR_2018_paper.html",
         dataset={
             "path": "JamieSJS/r-oxford-medium-multi",
-            "revision": "3aed4b566b6ea51b81ee50e6cbf18db8349893c0",
+            "revision": "83bd440268e200a4f60313070618e3f45000fa94",
         },
         type="Any2AnyMultiChoice",
         category="i2i",
@@ -103,7 +103,7 @@ class ROxfordHardI2IMultiChoice(AbsTaskAny2AnyMultiChoice):
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Oxford_and_CVPR_2018_paper.html",
         dataset={
             "path": "JamieSJS/r-oxford-hard-multi",
-            "revision": "93d282cc623d122d583b6db3837f07d91a7b5575",
+            "revision": "fc7c4ae6655b1e6b132f3b262a359acef42dfce8",
         },
         type="Any2AnyMultiChoice",
         category="i2i",
