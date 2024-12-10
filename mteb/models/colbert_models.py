@@ -6,6 +6,7 @@ from functools import partial
 from typing import Any
 
 import numpy as np
+import torch
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
@@ -64,7 +65,9 @@ class ColBERTWrapper(Wrapper):
             **kwargs,
         )
 
-        return pred
+        pred = torch.nn.utils.rnn.pad_sequence(pred, batch_first=True, padding_value=0)
+
+        return pred.cpu().numpy()
 
 
 colbert_v2 = ModelMeta(
