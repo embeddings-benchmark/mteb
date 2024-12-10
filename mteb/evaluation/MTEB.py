@@ -13,8 +13,8 @@ from time import time
 from typing import Any
 
 import datasets
-from sentence_transformers import CrossEncoder, SentenceTransformer
 from codecarbon import EmissionsTracker
+from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.abstasks.AbsTask import ScoresDict
 from mteb.encoder_interface import Encoder
