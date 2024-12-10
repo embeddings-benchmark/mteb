@@ -80,9 +80,9 @@ def get_means_per_types(df: pd.DataFrame) -> pd.DataFrame:
     task_names_per_type = defaultdict(list)
     for task_name, task_type in zip(df["task_name"], df["task_type"]):
         task_names_per_type[task_type].append(task_name)
-    groups = df.groupby(["model_name", "model_revision"])
+    groups = df.groupby("model_name")
     records = []
-    for (model_name, model_revision), group_data in groups:
+    for (model_name), group_data in groups:
         name_to_score = dict(zip(group_data["task_name"], group_data["score"]))
         for task_type, task_names in task_names_per_type.items():
             type_mean = np.mean(
@@ -91,7 +91,6 @@ def get_means_per_types(df: pd.DataFrame) -> pd.DataFrame:
             records.append(
                 dict(  # noqa
                     model_name=model_name,
-                    model_revision=model_revision,
                     task_type=task_type,
                     score=type_mean,
                 )
@@ -125,24 +124,23 @@ def scores_to_tables(
     )
     mean_per_type = get_means_per_types(data)
     mean_per_type = mean_per_type.pivot(
-        index=["model_name", "model_revision"], columns="task_type", values="score"
+        index="model_name", columns="task_type", values="score"
     )
     mean_per_type.columns = [
         split_on_capital(column) for column in mean_per_type.columns
     ]
-    per_task = data.pivot(
-        index=["model_name", "model_revision"], columns="task_name", values="score"
-    )
+    per_task = data.pivot(index="model_name", columns="task_name", values="score")
     to_remove = per_task.isna().all(axis="columns")
     if search_query:
         names = per_task.index.get_level_values("model_name")
         names = pd.Series(names, index=per_task.index)
         to_remove |= ~names.str.contains(search_query, regex=True)
+    models_to_remove = list(per_task[to_remove].index)
     typed_mean = mean_per_type.mean(skipna=False, axis=1)
     overall_mean = per_task.mean(skipna=False, axis=1)
     joint_table = mean_per_type.copy()
-    per_task = per_task[~to_remove]
-    joint_table = joint_table[~to_remove]
+    per_task = per_task.drop(models_to_remove, axis=0)
+    joint_table = joint_table.drop(models_to_remove, axis=0)
     joint_table.insert(0, "mean", overall_mean)
     joint_table.insert(1, "mean_by_task_type", typed_mean)
     joint_table["borda_rank"] = get_borda_rank(per_task)
@@ -166,10 +164,7 @@ def scores_to_tables(
         model_metas.map(lambda m: format_n_parameters(m.n_parameters)),
     )
     joint_table = joint_table.sort_values("borda_rank", ascending=True)
-    per_task = per_task.loc[
-        joint_table.set_index(["model_name", "model_revision"]).index
-    ]
-    joint_table = joint_table.drop(columns=["model_revision"])
+    per_task = per_task.loc[joint_table.set_index("model_name").index]
     # Removing HF organization from model
     joint_table["model_name"] = joint_table["model_name"].map(
         lambda name: name.split("/")[-1]
@@ -189,7 +184,7 @@ def scores_to_tables(
             "mean": "Mean (Task)",
         }
     )
-    per_task = per_task.reset_index().drop(columns=["model_revision"])
+    per_task = per_task.reset_index()
     per_task["model_name"] = per_task["model_name"].map(
         lambda name: name.split("/")[-1]
     )
