@@ -1,0 +1,33 @@
+{
+  "dataset_revision": "d2252ed25a03da127c1ff4a65d7bc1bdf3e23050",
+  "evaluation_time": 13.891337156295776,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.12.90",
+  "scores": {
+    "test": [
+      {
+        "accuracy": 0.0,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.0,
+        "mrr_at_1": 0.0,
+        "mrr_at_10": 0.0,
+        "mrr_at_100": 0.0,
+        "mrr_at_1000": 0.0,
+        "mrr_at_20": 0.0,
+        "mrr_at_3": 0.0,
+        "mrr_at_5": 0.0,
+        "ndcg_at_1": 0.0,
+        "ndcg_at_10": 0.0,
+        "ndcg_at_100": 0.0,
+        "ndcg_at_1000": 0.0,
+        "ndcg_at_20": 0.0,
+        "ndcg_at_3": 0.0,
+        "ndcg_at_5": 0.0
+      }
+    ]
+  },
+  "task_name": "ROxfordHardI2IMultiChoice"
+}
