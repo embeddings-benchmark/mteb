@@ -26,7 +26,7 @@ class ClassificationDescriptiveStatistics(DescriptiveStatistics):
     Attributes:
       num_samples: number of samples in the dataset.
       number_of_characters: Total number of symbols in the dataset.
-      num_texts_in_train: Number of texts in the train split
+      number_texts_intersect_with_train: Number of texts in the train split
 
       min_text_length: Minimum length of text
       average_text_length: Average length of text
@@ -39,7 +39,7 @@ class ClassificationDescriptiveStatistics(DescriptiveStatistics):
 
     num_samples: int
     number_of_characters: int
-    num_texts_in_train: int | None
+    number_texts_intersect_with_train: int | None
 
     min_text_length: int
     average_text_length: float
@@ -205,7 +205,8 @@ class AbsTaskClassification(AbsTask):
         y_sampled = []
         if idxs is None:
             idxs = np.arange(len(y))
-        np.random.shuffle(idxs)
+        rng_state = np.random.default_rng(self.seed)
+        rng_state.shuffle(idxs)
         label_counter = defaultdict(int)
         for i in idxs:
             if label_counter[y[i]] < samples_per_label:
@@ -246,7 +247,7 @@ class AbsTaskClassification(AbsTask):
         return ClassificationDescriptiveStatistics(
             num_samples=len(text),
             number_of_characters=total_text_len,
-            num_texts_in_train=num_texts_in_train,
+            number_texts_intersect_with_train=num_texts_in_train,
             min_text_length=min(text_len),
             average_text_length=total_text_len / len(text),
             max_text_length=max(text_len),
@@ -256,3 +257,6 @@ class AbsTaskClassification(AbsTask):
                 str(label): {"count": count} for label, count in label_count.items()
             },
         )
+
+    def _push_dataset_to_hub(self, repo_name: str) -> None:
+        self._upload_dataset_to_hub(repo_name, ["text", "label"])

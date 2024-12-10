@@ -78,6 +78,18 @@ def _loader(wrapper: type[LLM2VecWrapper], **kwargs) -> Callable[..., Encoder]:
     return loader_inner
 
 
+LLM2VEC_CITATION = """
+@misc{behnamghader2024llm2veclargelanguagemodels,
+      title={LLM2Vec: Large Language Models Are Secretly Powerful Text Encoders}, 
+      author={Parishad BehnamGhader and Vaibhav Adlakha and Marius Mosbach and Dzmitry Bahdanau and Nicolas Chapados and Siva Reddy},
+      year={2024},
+      eprint={2404.05961},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2404.05961}, 
+}"""
+
+
 llm2vec_llama3_8b_supervised = ModelMeta(
     loader=_loader(
         LLM2VecWrapper,
@@ -100,6 +112,7 @@ llm2vec_llama3_8b_supervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    citation=LLM2VEC_CITATION,
 )
 
 llm2vec_llama3_8b_unsupervised = ModelMeta(
@@ -124,6 +137,7 @@ llm2vec_llama3_8b_unsupervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    citation=LLM2VEC_CITATION,
 )
 
 
@@ -149,6 +163,7 @@ llm2vec_mistral7b_supervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    citation=LLM2VEC_CITATION,
 )
 
 llm2vec_mistral7b_unsupervised = ModelMeta(
@@ -173,6 +188,7 @@ llm2vec_mistral7b_unsupervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    citation=LLM2VEC_CITATION,
 )
 
 llm2vec_llama2_7b_supervised = ModelMeta(
@@ -197,6 +213,7 @@ llm2vec_llama2_7b_supervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    citation=LLM2VEC_CITATION,
 )
 
 llm2vec_llama2_7b_unsupervised = ModelMeta(
@@ -221,6 +238,7 @@ llm2vec_llama2_7b_unsupervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    citation=LLM2VEC_CITATION,
 )
 
 llm2vec_sheared_llama_supervised = ModelMeta(
@@ -245,6 +263,7 @@ llm2vec_sheared_llama_supervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    citation=LLM2VEC_CITATION,
 )
 
 llm2vec_sheared_llama_unsupervised = ModelMeta(
@@ -269,4 +288,5 @@ llm2vec_sheared_llama_unsupervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    citation=LLM2VEC_CITATION,
 )

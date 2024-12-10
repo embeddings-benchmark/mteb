@@ -6,6 +6,15 @@ from mteb.model_meta import ModelMeta
 
 from .instruct_wrapper import instruct_wrapper
 
+GTE_CITATION = """
+@article{li2023towards,
+  title={Towards general text embeddings with multi-stage contrastive learning},
+  author={Li, Zehan and Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan},
+  journal={arXiv preprint arXiv:2308.03281},
+  year={2023}
+}
+"""
+
 gte_Qwen2_7B_instruct = ModelMeta(
     loader=partial(
         instruct_wrapper,
@@ -32,4 +41,5 @@ gte_Qwen2_7B_instruct = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    citation=GTE_CITATION,
 )

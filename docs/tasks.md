@@ -63,7 +63,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [CLSClusteringP2P.v2](https://arxiv.org/abs/2209.05034) (Yudong Li, 2022) | ['cmn'] | Clustering | p2p | [Academic, Written] | None | None |
 | [CLSClusteringS2S.v2](https://arxiv.org/abs/2209.05034) (Yudong Li, 2022) | ['cmn'] | Clustering | s2s | [Academic, Written] | None | None |
 | [CMedQAv1-reranking](https://github.com/zhangsheng93/cMedQA) (Zhang et al., 2017) | ['cmn'] | Reranking | s2s | [Medical, Written] | None | None |
-| [CMedQAv2-reranking](https://github.com/zhangsheng93/cMedQA2) (S. Zhang, 2018) | ['cmn'] | Reranking | s2s | [Medical, Written] | None | None |
+| [CMedQAv2-reranking](https://github.com/zhangsheng93/cMedQA2) (S. Zhang, 2018) | ['cmn'] | Reranking | s2s |  | None | None |
 | [COIRCodeSearchNetRetrieval](https://huggingface.co/datasets/code_search_net/) (Husain et al., 2019) | ['go', 'java', 'javascript', 'php', 'python', 'ruby'] | Retrieval | p2p | [Programming, Written] | {'test': 1056326} | {'test': {'number_of_characters': 36843313, 'num_samples': 1056326, 'num_queries': 52561, 'num_documents': 1003765, 'min_document_length': 54, 'average_document_length': 34.71, 'max_document_length': 334374, 'unique_documents': 1003765, 'min_query_length': 2, 'average_query_length': 38.19, 'max_query_length': 2, 'unique_queries': 52561, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 52561, 'hf_subset_descriptive_stats': {'python': {'number_of_characters': 14574651, 'num_samples': 295228, 'num_queries': 14918, 'num_documents': 280310, 'min_document_length': 95, 'average_document_length': 49.99, 'max_document_length': 14008, 'unique_documents': 280310, 'min_query_length': 2, 'average_query_length': 37.58, 'max_query_length': 2, 'unique_queries': 14918, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 14918}, 'javascript': {'number_of_characters': 2587540, 'num_samples': 68145, 'num_queries': 3291, 'num_documents': 64854, 'min_document_length': 87, 'average_document_length': 37.9, 'max_document_length': 334374, 'unique_documents': 64854, 'min_query_length': 2, 'average_query_length': 39.41, 'max_query_length': 2, 'unique_queries': 3291, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 3291}, 'go': {'number_of_characters': 3641108, 'num_samples': 190562, 'num_queries': 8122, 'num_documents': 182440, 'min_document_length': 54, 'average_document_length': 17.96, 'max_document_length': 5280, 'unique_documents': 182440, 'min_query_length': 2, 'average_query_length': 44.92, 'max_query_length': 2, 'unique_queries': 8122, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 8122}, 'ruby': {'number_of_characters': 629446, 'num_samples': 28831, 'num_queries': 1261, 'num_documents': 27570, 'min_document_length': 83, 'average_document_length': 20.83, 'max_document_length': 3992, 'unique_documents': 27570, 'min_query_length': 2, 'average_query_length': 43.73, 'max_query_length': 2, 'unique_queries': 1261, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 1261}, 'java': {'number_of_characters': 6791137, 'num_samples': 191821, 'num_queries': 10955, 'num_documents': 180866, 'min_document_length': 77, 'average_document_length': 35.55, 'max_document_length': 7615, 'unique_documents': 180866, 'min_query_length': 2, 'average_query_length': 33.02, 'max_query_length': 2, 'unique_queries': 10955, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 10955}, 'php': {'number_of_characters': 8619431, 'num_samples': 281739, 'num_queries': 14014, 'num_documents': 267725, 'min_document_length': 94, 'average_document_length': 30.2, 'max_document_length': 4904, 'unique_documents': 267725, 'min_query_length': 2, 'average_query_length': 38.21, 'max_query_length': 2, 'unique_queries': 14014, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 14014}}}} |
 | [CPUSpeedTask](https://github.com/KennethEnevoldsen/scandinavian-embedding-benchmark/blob/c8376f967d1294419be1d3eb41217d04cd3a65d3/src/seb/registered_tasks/speed.py#L83-L96) | ['eng'] | Speed | s2s | [Fiction, Written] | None | None |
 | [CQADupstackAndroidRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  | None | None |
@@ -119,12 +119,11 @@ The following tables give you an overview of the tasks in MTEB.
 | [CUADUnlimitedAllYouCanEatLicenseLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal, Written] | None | None |
 | [CUADVolumeRestrictionLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal, Written] | None | None |
 | [CUADWarrantyDurationLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal, Written] | None | None |
-| [CUREv1](https://huggingface.co/datasets/clinia/CUREv1) | ['eng', 'fra', 'spa'] | Retrieval | s2p | [Medical, Academic, Written] | None | None |
 | [CanadaTaxCourtOutcomesLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal, Written] | None | None |
 | [CataloniaTweetClassification](https://aclanthology.org/2020.lrec-1.171/) | ['cat', 'spa'] | Classification | s2s | [Social, Government, Written] | None | None |
 | [ClimateFEVER](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html) (Thomas Diggelmann, 2021) | ['eng'] | Retrieval | s2p |  | None | None |
 | [ClimateFEVERHardNegatives](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html) (Thomas Diggelmann, 2021) | ['eng'] | Retrieval | s2p |  | None | None |
-| [CmedqaRetrieval](https://aclanthology.org/2022.emnlp-main.357.pdf) | ['cmn'] | Retrieval | s2p | [Medical, Written] | None | None |
+| [CmedqaRetrieval](https://aclanthology.org/2022.emnlp-main.357.pdf) | ['cmn'] | Retrieval | s2p |  | None | None |
 | [Cmnli](https://huggingface.co/datasets/clue/viewer/cmnli) | ['cmn'] | PairClassification | s2s |  | None | None |
 | [CodeEditSearchRetrieval](https://huggingface.co/datasets/cassanof/CodeEditSearch/viewer) (Niklas Muennighoff, 2023) | ['c', 'c++', 'go', 'java', 'javascript', 'php', 'python', 'ruby', 'rust', 'scala', 'shell', 'swift', 'typescript'] | Retrieval | p2p | [Programming, Written] | {'train': 26000} | {'train': {'number_of_characters': 935841, 'num_samples': 26000, 'num_queries': 13000, 'num_documents': 13000, 'min_document_length': 18, 'average_document_length': 70.99, 'max_document_length': 2532, 'unique_documents': 13000, 'min_query_length': 1, 'average_query_length': 1.0, 'max_query_length': 1, 'unique_queries': 13000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 13000, 'hf_subset_descriptive_stats': {'python': {'number_of_characters': 70519, 'num_samples': 2000, 'num_queries': 1000, 'num_documents': 1000, 'min_document_length': 21, 'average_document_length': 69.52, 'max_document_length': 1811, 'unique_documents': 1000, 'min_query_length': 1, 'average_query_length': 1.0, 'max_query_length': 1, 'unique_queries': 1000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 1000}, 'javascript': {'number_of_characters': 57880, 'num_samples': 2000, 'num_queries': 1000, 'num_documents': 1000, 'min_document_length': 18, 'average_document_length': 56.88, 'max_document_length': 601, 'unique_documents': 1000, 'min_query_length': 1, 'average_query_length': 1.0, 'max_query_length': 1, 'unique_queries': 1000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 1000}, 'typescript': {'number_of_characters': 61092, 'num_samples': 2000, 'num_queries': 1000, 'num_documents': 1000, 'min_document_length': 19, 'average_document_length': 60.09, 'max_document_length': 659, 'unique_documents': 1000, 'min_query_length': 1, 'average_query_length': 1.0, 'max_query_length': 1, 'unique_queries': 1000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 1000}, 'go': {'number_of_characters': 71797, 'num_samples': 2000, 'num_queries': 1000, 'num_documents': 1000, 'min_document_length': 19, 'average_document_length': 70.8, 'max_document_length': 1529, 'unique_documents': 1000, 'min_query_length': 1, 'average_query_length': 1.0, 'max_query_length': 1, 'unique_queries': 1000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 1000}, 'ruby': {'number_of_characters': 67900, 'num_samples': 2000, 'num_queries': 1000, 'num_documents': 1000, 'min_document_length': 20, 'average_document_length': 66.9, 'max_document_length': 751, 'unique_documents': 1000, 'min_query_length': 1, 'average_query_length': 1.0, 'max_query_length': 1, 'unique_queries': 1000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 1000}, 'java': {'number_of_characters': 63984, 'num_samples': 2000, 'num_queries': 1000, 'num_documents': 1000, 'min_document_length': 23, 'average_document_length': 62.98, 'max_document_length': 807, 'unique_documents': 1000, 'min_query_length': 1, 'average_query_length': 1.0, 'max_query_length': 1, 'unique_queries': 1000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 1000}, 'php': {'number_of_characters': 62927, 'num_samples': 2000, 'num_queries': 1000, 'num_documents': 1000, 'min_document_length': 21, 'average_document_length': 61.93, 'max_document_length': 766, 'unique_documents': 1000, 'min_query_length': 1, 'average_query_length': 1.0, 'max_query_length': 1, 'unique_queries': 1000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 1000}, 'c': {'number_of_characters': 98588, 'num_samples': 2000, 'num_queries': 1000, 'num_documents': 1000, 'min_document_length': 20, 'average_document_length': 97.59, 'max_document_length': 1672, 'unique_documents': 1000, 'min_query_length': 1, 'average_query_length': 1.0, 'max_query_length': 1, 'unique_queries': 1000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 1000}, 'c++': {'number_of_characters': 115480, 'num_samples': 2000, 'num_queries': 1000, 'num_documents': 1000, 'min_document_length': 22, 'average_document_length': 114.48, 'max_document_length': 1856, 'unique_documents': 1000, 'min_query_length': 1, 'average_query_length': 1.0, 'max_query_length': 1, 'unique_queries': 1000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 1000}, 'rust': {'number_of_characters': 68503, 'num_samples': 2000, 'num_queries': 1000, 'num_documents': 1000, 'min_document_length': 19, 'average_document_length': 67.5, 'max_document_length': 2532, 'unique_documents': 1000, 'min_query_length': 1, 'average_query_length': 1.0, 'max_query_length': 1, 'unique_queries': 1000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 1000}, 'swift': {'number_of_characters': 58279, 'num_samples': 2000, 'num_queries': 1000, 'num_documents': 1000, 'min_document_length': 19, 'average_document_length': 57.28, 'max_document_length': 727, 'unique_documents': 1000, 'min_query_length': 1, 'average_query_length': 1.0, 'max_query_length': 1, 'unique_queries': 1000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 1000}, 'scala': {'number_of_characters': 65833, 'num_samples': 2000, 'num_queries': 1000, 'num_documents': 1000, 'min_document_length': 22, 'average_document_length': 64.83, 'max_document_length': 685, 'unique_documents': 1000, 'min_query_length': 1, 'average_query_length': 1.0, 'max_query_length': 1, 'unique_queries': 1000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 1000}, 'shell': {'number_of_characters': 73059, 'num_samples': 2000, 'num_queries': 1000, 'num_documents': 1000, 'min_document_length': 18, 'average_document_length': 72.06, 'max_document_length': 813, 'unique_documents': 1000, 'min_query_length': 1, 'average_query_length': 1.0, 'max_query_length': 1, 'unique_queries': 1000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 1000}}}} |
 | [CodeFeedbackMT](https://arxiv.org/abs/2402.14658) (Tianyu Zheng, 2024) | ['eng'] | Retrieval | p2p | [Programming, Written] | {'test': 79660} | {'test': {'number_of_characters': 156266302, 'num_samples': 79660, 'num_queries': 13277, 'num_documents': 66383, 'min_document_length': 127, 'average_document_length': 885.13, 'max_document_length': 32432, 'unique_documents': 66383, 'min_query_length': 2, 'average_query_length': 7344.18, 'max_query_length': 9403, 'unique_queries': 13277, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 13277}} |
@@ -348,7 +347,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [MultilingualSentiment](https://github.com/tyqiangz/multilingual-sentiment-datasets) | ['cmn'] | Classification | s2s |  | None | None |
 | [MultilingualSentimentClassification](https://huggingface.co/datasets/mteb/multilingual-sentiment-classification) | ['ara', 'bam', 'bul', 'cmn', 'cym', 'deu', 'dza', 'ell', 'eng', 'eus', 'fas', 'fin', 'heb', 'hrv', 'ind', 'jpn', 'kor', 'mlt', 'nor', 'pol', 'rus', 'slk', 'spa', 'tha', 'tur', 'uig', 'urd', 'vie', 'zho'] | Classification | s2s | [Reviews, Written] | None | None |
 | [MyanmarNews](https://huggingface.co/datasets/myanmar_news) (A. H. Khine, 2017) | ['mya'] | Classification | p2p | [News, Written] | None | None |
-| [NFCorpus](https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/) (Boteva et al., 2016) | ['eng'] | Retrieval | s2p | [Medical, Academic, Written] | {'test': 3956} | {'test': {'number_of_characters': 1612.55, 'num_samples': 3956, 'num_queries': 323, 'num_documents': 3633, 'average_document_length': 0.44, 'average_query_length': 0.07, 'average_relevant_docs_per_query': 38.19}} |
+| [NFCorpus](https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/) (Boteva et al., 2016) | ['eng'] | Retrieval | s2p |  | {'test': 3956} | {'test': {'number_of_characters': 1612.55, 'num_samples': 3956, 'num_queries': 323, 'num_documents': 3633, 'average_document_length': 0.44, 'average_query_length': 0.07, 'average_relevant_docs_per_query': 38.19}} |
 | [NFCorpus-PL](https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  | None | None |
 | [NLPJournalAbsIntroRetrieval](https://github.com/sbintuitions/JMTEB) | ['jpn'] | Retrieval | s2s | [Academic, Written] | None | None |
 | [NLPJournalTitleAbsRetrieval](https://github.com/sbintuitions/JMTEB) | ['jpn'] | Retrieval | s2s | [Academic, Written] | None | None |
@@ -459,7 +458,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [SICK-BR-PC](https://linux.ime.usp.br/~thalen/SICK_PT.pdf) | ['por'] | PairClassification | s2s | [Web, Written] | None | None |
 | [SICK-BR-STS](https://linux.ime.usp.br/~thalen/SICK_PT.pdf) | ['por'] | STS | s2s | [Web, Written] | None | None |
 | [SICK-E-PL](https://aclanthology.org/2020.lrec-1.207) | ['pol'] | PairClassification | s2s |  | None | None |
-| [SICK-R](https://aclanthology.org/L14-1314/) | ['eng'] | STS | s2s | [Web, Written] | None | None |
+| [SICK-R](https://aclanthology.org/2020.lrec-1.207) | ['eng'] | STS | s2s |  | None | None |
 | [SICK-R-PL](https://aclanthology.org/2020.lrec-1.207) | ['pol'] | STS | s2s | [Web, Written] | None | None |
 | [SICKFr](https://huggingface.co/datasets/Lajavaness/SICK-fr) | ['fra'] | STS | s2s |  | None | None |
 | [SIQA](https://leaderboard.allenai.org/socialiqa/submissions/get-started) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic, Written] | None | None |
@@ -483,8 +482,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [SanskritShlokasClassification](https://github.com/goru001/nlp-for-sanskrit) | ['san'] | Classification | s2s | [Religious, Written] | None | None |
 | [ScalaClassification](https://aclanthology.org/2023.nodalida-1.20/) | ['dan', 'nno', 'nob', 'swe'] | Classification | s2s | [Fiction, News, Non-fiction, Blog, Spoken, Web, Written] | None | None |
 | [SciDocsRR](https://allenai.org/data/scidocs) | ['eng'] | Reranking | s2s | [Academic, Non-fiction, Written] | None | None |
-| [SciFact](https://github.com/allenai/scifact) (Arman Cohan, 2020) | ['eng'] | Retrieval | s2p | [Academic, Medical, Written] | None | None |
-| [SciFact-PL](https://github.com/allenai/scifact) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p | [Academic, Medical, Written] | None | None |
+| [SciFact](https://github.com/allenai/scifact) (Arman Cohan, 2020) | ['eng'] | Retrieval | s2p |  | None | None |
+| [SciFact-PL](https://github.com/allenai/scifact) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  | None | None |
 | [SemRel24STS](https://huggingface.co/datasets/SemRel/SemRel2024) (Nedjma Ousidhoum, 2024) | ['afr', 'amh', 'arb', 'arq', 'ary', 'eng', 'hau', 'hin', 'ind', 'kin', 'mar', 'tel'] | STS | s2s | [Spoken, Written] | None | None |
 | [SensitiveTopicsClassification](https://aclanthology.org/2021.bsnlp-1.4) | ['rus'] | MultilabelClassification | s2s | [Web, Social, Written] | None | None |
 | [SentimentAnalysisHindi](https://huggingface.co/datasets/OdiaGenAI/sentiment_analysis_hindi) (Shantipriya Parida, 2023) | ['hin'] | Classification | s2s | [Reviews, Written] | None | None |
@@ -524,8 +523,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [T2Retrieval](https://arxiv.org/abs/2304.03679) (Xiaohui Xie, 2023) | ['cmn'] | Retrieval | s2p |  | None | None |
 | [TERRa](https://arxiv.org/pdf/2010.15925) (Shavrina et al., 2020) | ['rus'] | PairClassification | s2s | [News, Web, Written] | None | None |
 | [TNews](https://www.cluebenchmarks.com/introduce.html) | ['cmn'] | Classification | s2s |  | None | None |
-| [TRECCOVID](https://ir.nist.gov/covidSubmit/index.html) (Kirk Roberts, 2021) | ['eng'] | Retrieval | s2p | [Medical, Academic, Written] | None | None |
-| [TRECCOVID-PL](https://ir.nist.gov/covidSubmit/index.html) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p | [Academic, Medical, Non-fiction, Written] | None | None |
+| [TRECCOVID](https://ir.nist.gov/covidSubmit/index.html) (Kirk Roberts, 2021) | ['eng'] | Retrieval | s2p |  | None | None |
+| [TRECCOVID-PL](https://ir.nist.gov/covidSubmit/index.html) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p | [Academic, Non-fiction, Written] | None | None |
 | [TV2Nordretrieval](https://huggingface.co/datasets/alexandrainst/nordjylland-news-summarization) | ['dan'] | Retrieval | p2p | [News, Non-fiction, Written] | None | None |
 | [TamilNewsClassification](https://github.com/vanangamudi/tamil-news-classification) (Anoop Kunchukuttan, 2020) | ['tam'] | Classification | s2s | [News, Written] | None | None |
 | [Tatoeba](https://github.com/facebookresearch/LASER/tree/main/data/tatoeba/v1) (Tatoeba community, 2021) | ['afr', 'amh', 'ang', 'ara', 'arq', 'arz', 'ast', 'awa', 'aze', 'bel', 'ben', 'ber', 'bos', 'bre', 'bul', 'cat', 'cbk', 'ceb', 'ces', 'cha', 'cmn', 'cor', 'csb', 'cym', 'dan', 'deu', 'dsb', 'dtp', 'ell', 'eng', 'epo', 'est', 'eus', 'fao', 'fin', 'fra', 'fry', 'gla', 'gle', 'glg', 'gsw', 'heb', 'hin', 'hrv', 'hsb', 'hun', 'hye', 'ido', 'ile', 'ina', 'ind', 'isl', 'ita', 'jav', 'jpn', 'kab', 'kat', 'kaz', 'khm', 'kor', 'kur', 'kzj', 'lat', 'lfn', 'lit', 'lvs', 'mal', 'mar', 'max', 'mhr', 'mkd', 'mon', 'nds', 'nld', 'nno', 'nob', 'nov', 'oci', 'orv', 'pam', 'pes', 'pms', 'pol', 'por', 'ron', 'rus', 'slk', 'slv', 'spa', 'sqi', 'srp', 'swe', 'swg', 'swh', 'tam', 'tat', 'tel', 'tgl', 'tha', 'tuk', 'tur', 'tzl', 'uig', 'ukr', 'urd', 'uzb', 'vie', 'war', 'wuu', 'xho', 'yid', 'yue', 'zsm'] | BitextMining | s2s | [Written] | None | None |
@@ -608,1060 +607,1060 @@ The following tables give you an overview of the tasks in MTEB.
 <details>
 
 <!-- TASK LANG TABLE START -->
-| ISO Code | Language | Family | BitextMining | Classification | Clustering | InstructionRetrieval | MultilabelClassification | PairClassification | Reranking | Retrieval | STS | Speed | Summarization | Sum |
-|---|------|------|------|------|------|------|------|------|------|------|------|---|
-| aai | Arifama-Miniafia | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aak | Ankave | Angan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aau | Abau | Sepik | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aaz | Amarasi | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| abs | Ambonese Malay | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| abt | Ambulas | Ndu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| abx | Inabaknon | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aby | Aneme Wake | Yareban | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ace | Achinese | Austronesian | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| acf | Saint Lucian Creole French | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| acm | Mesopotamian Arabic | Afro-Asiatic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| acq | Ta'izzi-Adeni Arabic | Afro-Asiatic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| acr | Achi | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| acu | Achuar-Shiwiar | Chicham | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| adz | Adzera | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aeb | Tunisian Arabic | Afro-Asiatic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| aer | Eastern Arrernte | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aey | Amele | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| afr | Afrikaans | Indo-European | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 10 |
-| agd | Agarabi | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| agg | Angor | Senagi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| agm | Angaataha | Angan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| agn | Agutaynen | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| agr | Aguaruna | Chicham | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| agt | Central Cagayan Agta | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| agu | Aguacateco | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aia | Arosi | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aii | Assyrian Neo-Aramaic | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ajp | South Levantine Arabic | Unclassified | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| aka | Akan | Atlantic-Congo | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| ake | Akawaio | Cariban | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| alp | Alune | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| alq | Algonquin | Algic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| als | Tosk Albanian | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 5 |
-| aly | Alyawarr | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ame | Yanesha' | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| amf | Hamer-Banna | South Omotic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| amh | Amharic | Afro-Asiatic | 3 | 6 | 3 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 14 |
-| amk | Ambai | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| amm | Ama (Papua New Guinea) | Left May | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| amn | Amanab | Border | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| amo | Amo | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| amp | Alamblak | Sepik | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| amr | Amarakaeri | Harakmbut | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| amu | Guerrero Amuzgo | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| amx | Anmatyerre | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ang | Old English (ca. 450-1100) | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| anh | Nend | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| anp | Angika | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| anv | Denya | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aoi | Anindilyakwa | Gunwinyguan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aoj | Mufian | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aom | Ömie | Koiarian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aon | Bumbita Arapesh | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| apb | Sa'a | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| apc | Levantine Arabic | Afro-Asiatic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| ape | Bukiyip | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| apn | Apinayé | Nuclear-Macro-Je | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| apr | Arop-Lokep | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| apu | Apurinã | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| apw | Western Apache | Athabaskan-Eyak-Tlingit | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| apz | Safeyoka | Angan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ara | Arabic | Unclassified | 2 | 12 | 0 | 0 | 0 | 2 | 1 | 9 | 2 | 0 | 0 | 28 |
-| arb | Standard Arabic | Afro-Asiatic | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 2 | 1 | 0 | 0 | 8 |
-| are | Western Arrarnta | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| arl | Arabela | Zaparoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| arn | Mapudungun | Araucanian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| arp | Arapaho | Algic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| arq | Algerian Arabic | Afro-Asiatic | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 4 |
-| ars | Najdi Arabic | Afro-Asiatic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| ary | Moroccan Arabic | Afro-Asiatic | 1 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 7 |
-| arz | Egyptian Arabic | Afro-Asiatic | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 5 |
-| asm | Assamese | Indo-European | 5 | 3 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 | 14 |
-| aso | Dano | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ast | Asturian | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| ata | Pele-Ata | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| atb | Zaiwa | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| atd | Ata Manobo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| atg | Ivbie North-Okpela-Arhe | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| att | Pamplona Atta | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| auc | Waorani | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aui | Anuki | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| auy | Awiyaana | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| avt | Au | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| awa | Awadhi | Indo-European | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
-| awb | Awa (Papua New Guinea) | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| awk | Awabakal | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| awx | Awara | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ayr | Central Aymara | Aymaran | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| azb | South Azerbaijani | Turkic | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| aze | Azerbaijani | Unclassified | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| azg | San Pedro Amuzgos Amuzgo | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| azj | North Azerbaijani | Turkic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| azz | Highland Puebla Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bak | Bashkir | Turkic | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
-| bam | Bambara | Mande | 1 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 5 |
-| ban | Balinese | Austronesian | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| bao | Waimaha | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bba | Baatonum | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bbb | Barai | Koiarian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bbc | Batak Toba | Austronesian | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| bbr | Girawa | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bch | Bariai | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bco | Kaluli | Bosavi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bdd | Bunama | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bea | Beaver | Athabaskan-Eyak-Tlingit | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bef | Benabena | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bel | Belarusian | Indo-European | 4 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
-| bem | Bemba (Zambia) | Atlantic-Congo | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| ben | Bengali | Indo-European | 7 | 9 | 2 | 0 | 0 | 1 | 2 | 6 | 1 | 0 | 0 | 28 |
-| beo | Beami | Bosavi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ber | Berber (Other) | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| beu | Blagar | Timor-Alor-Pantar | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bew | Betawi | Austronesian | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| bgc | Haryanvi | Indo-European | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| bgs | Tagabawa | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bgt | Bughotu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bhb | Bhili | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bhd | Bhadrawahi | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bhg | Binandere | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bhl | Bimin | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bho | Bhojpuri | Indo-European | 2 | 2 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 6 |
-| bhp | Bima | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| big | Biangai | Kunimaipan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bjj | Kanauji | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bjk | Barok | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bjn | Banjar | Austronesian | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| bjp | Fanamaket | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bjr | Binumarien | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bjv | Bedjond | Central Sudanic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bjz | Baruga | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bkd | Binukid | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bki | Baki | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bkq | Bakairí | Cariban | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bkx | Baikeno | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| blw | Balangao | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| blz | Balantak | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bmh | Kein | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bmk | Ghayavi | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bmr | Muinane | Boran | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bmu | Somba-Siawari | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bnp | Bola | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bns | Bundeli | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| boa | Bora | Boran | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bod | Tibetan | Sino-Tibetan | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 6 |
-| boj | Anjam | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bon | Bine | Eastern Trans-Fly | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bos | Bosnian | Indo-European | 3 | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
-| box | Buamu | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| boy | Bodo (Central African Republic) | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bpr | Koronadal Blaan | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bps | Sarangani Blaan | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bqc | Boko (Benin) | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bqp | Busa | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bra | Braj | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bre | Breton | Indo-European | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| brx | Bodo (India) | Sino-Tibetan | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| bsj | Bangwinji | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bsn | Barasana-Eduria | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bsp | Baga Sitemu | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bss | Akoose | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bug | Buginese | Austronesian | 2 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
-| buk | Bugawac | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bul | Bulgarian | Indo-European | 3 | 4 | 1 | 0 | 1 | 1 | 1 | 2 | 0 | 0 | 0 | 13 |
-| bus | Bokobaru | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bvd | Baeggu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bvr | Burarra | Maningrida | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bxh | Buhutu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| byr | Baruya | Angan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| byx | Qaqet | Baining | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bzd | Bribri | Chibchan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bzh | Mapos Buang | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bzj | Belize Kriol English | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| caa | Chortí | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cab | Garifuna | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cac | Chuj | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| caf | Southern Carrier | Athabaskan-Eyak-Tlingit | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cak | Kaqchikel | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cao | Chácobo | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cap | Chipaya | Uru-Chipaya | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| car | Galibi Carib | Cariban | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cat | Catalan | Indo-European | 3 | 2 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| cav | Cavineña | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cax | Chiquitano | Chiquitano | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cbc | Carapana | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cbi | Chachi | Barbacoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cbk | Chavacano | Indo-European | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| cbr | Cashibo-Cacataibo | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cbs | Cashinahua | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cbt | Chayahuita | Cahuapanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cbu | Candoshi-Shapra | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cbv | Cacua | Kakua-Nukak | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cco | Comaltepec Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ceb | Cebuano | Austronesian | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 6 |
-| cek | Eastern Khumi Chin | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ces | Czech | Indo-European | 4 | 5 | 2 | 0 | 1 | 1 | 1 | 2 | 0 | 0 | 0 | 16 |
-| cgc | Kagayanen | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cha | Chamorro | Austronesian | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| chd | Highland Oaxaca Chontal | Tequistlatecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| chf | Tabasco Chontal | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| chk | Chuukese | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| chq | Quiotepec Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| chv | Chuvash | Turkic | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| chz | Ozumacín Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cjk | Chokwe | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| cjo | Ashéninka Pajonal | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cjv | Chuave | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ckb | Central Kurdish | Indo-European | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 6 |
-| cle | Lealao Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| clu | Caluyanun | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cme | Cerma | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cmn | Mandarin Chinese | Sino-Tibetan | 4 | 10 | 4 | 0 | 0 | 3 | 4 | 10 | 9 | 0 | 0 | 44 |
-| cmo | Central Mnong | Austroasiatic | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| cni | Asháninka | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cnl | Lalana Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cnt | Tepetotutla Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| code | unknown | Unclassified | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 37 | 0 | 0 | 0 | 37 |
-| cof | Colorado | Barbacoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| con | Cofán | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cop | Coptic | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cor | Cornish | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cot | Caquinte | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cpa | Palantla Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cpb | Ucayali-Yurúa Ashéninka | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cpc | Ajyíninka Apurucayali | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cpu | Pichis Ashéninka | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cpy | South Ucayali Ashéninka | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| crh | Crimean Tatar | Turkic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| crn | El Nayar Cora | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| crx | Carrier | Athabaskan-Eyak-Tlingit | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| csb | Kashubian | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cso | Sochiapam Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| csy | Siyin Chin | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cta | Tataltepec Chatino | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cth | Thaiphum Chin | Bookkeeping | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ctp | Western Highland Chatino | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ctu | Chol | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cub | Cubeo | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cuc | Usila Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cui | Cuiba | Guahiboan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cuk | San Blas Kuna | Chibchan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cut | Teutila Cuicatec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cux | Tepeuxila Cuicatec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cwe | Kwere | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cya | Nopala Chatino | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cym | Welsh | Indo-European | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
-| daa | Dangaléat | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dad | Marik | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dah | Gwahatike | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dan | Danish | Indo-European | 5 | 9 | 2 | 0 | 1 | 0 | 1 | 5 | 0 | 0 | 0 | 23 |
-| ded | Dedua | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| deu | German | Indo-European | 6 | 14 | 7 | 0 | 1 | 6 | 2 | 18 | 4 | 0 | 0 | 58 |
-| dgc | Casiguran Dumagat Agta | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dgr | Dogrib | Athabaskan-Eyak-Tlingit | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dgz | Daga | Dagan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dhg | Dhangu-Djangu | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dif | Dieri | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dik | Southwestern Dinka | Nilotic | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| div | Dhivehi | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dji | Djinang | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| djk | Eastern Maroon Creole | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| djr | Djambarrpuyngu | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dob | Dobu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| doi | Dogri (macrolanguage) | Unclassified | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| dop | Lukpa | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dov | Dombe | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dsb | Lower Sorbian | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dtp | Kadazan Dusun | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dwr | Dawro | Ta-Ne-Omotic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dww | Dawawa | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dwy | Dhuwaya | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dyu | Dyula | Mande | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| dza | Tunzu | Atlantic-Congo | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dzo | Dzongkha | Sino-Tibetan | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| ebk | Eastern Bontok | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| eko | Koti | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ell | Modern Greek (1453-) | Indo-European | 3 | 6 | 1 | 0 | 1 | 2 | 0 | 3 | 0 | 0 | 0 | 16 |
-| emi | Mussau-Emira | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| emp | Northern Emberá | Chocoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| eng | English | Indo-European | 16 | 143 | 16 | 3 | 1 | 8 | 8 | 92 | 13 | 2 | 1 | 303 |
-| enq | Enga | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| epo | Esperanto | Artificial Language | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| eri | Ogea | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ese | Ese Ejja | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| esk | Northwest Alaska Inupiatun | Eskimo-Aleut | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| est | Estonian | Uralic | 2 | 2 | 1 | 0 | 1 | 0 | 0 | 2 | 0 | 0 | 0 | 8 |
-| etr | Edolo | Bosavi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| eus | Basque | Unclassified | 3 | 2 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| ewe | Ewe | Atlantic-Congo | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| faa | Fasu | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fai | Faiwol | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fao | Faroese | Indo-European | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 7 |
-| far | Fataleka | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fas | Persian | Indo-European | 1 | 4 | 0 | 0 | 0 | 1 | 2 | 9 | 0 | 0 | 0 | 17 |
-| ffm | Maasina Fulfulde | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fij | Fijian | Austronesian | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| fil | Filipino | Austronesian | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| fin | Finnish | Uralic | 3 | 5 | 1 | 0 | 1 | 1 | 2 | 5 | 1 | 0 | 0 | 19 |
-| fon | Fon | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| for | Fore | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fra | French | Indo-European | 7 | 13 | 8 | 0 | 1 | 5 | 3 | 15 | 4 | 0 | 1 | 57 |
-| fry | Western Frisian | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fuc | Pulaar | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fue | Borgu Fulfulde | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fuf | Pular | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fuh | Western Niger Fulfulde | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fur | Friulian | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| fuv | Nigerian Fulfulde | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| gah | Alekano | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gai | Borei | Ramu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gam | Kandawo | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gaw | Nobonob | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gaz | West Central Oromo | Afro-Asiatic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| gbm | Garhwali | Indo-European | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| gdn | Umanakaina | Dagan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gdr | Wipi | Eastern Trans-Fly | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| geb | Kire | Ramu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gfk | Patpatar | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ghs | Guhu-Samane | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gla | Scottish Gaelic | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| gle | Irish | Indo-European | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| glg | Galician | Indo-European | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| glk | Gilaki | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| glv | Manx | Indo-European | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gmv | Gamo | Ta-Ne-Omotic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gng | Ngangam | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gnn | Gumatj | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gnw | Western Bolivian Guaraní | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gof | Gofa | Ta-Ne-Omotic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gom | Goan Konkani | Indo-European | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| grc | Ancient Greek (to 1453) | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| grn | Guarani | Unclassified | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| gsw | Swiss German | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gub | Guajajára | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| guh | Guahibo | Guahiboan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gui | Eastern Bolivian Guaraní | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| guj | Gujarati | Indo-European | 6 | 6 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 | 18 |
-| gul | Sea Island Creole English | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gum | Guambiano | Barbacoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gun | Mbyá Guaraní | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| guo | Guayabero | Guahiboan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gup | Gunwinggu | Gunwinyguan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gux | Gourmanchéma | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gvc | Guanano | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gvf | Golin | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gvn | Kuku-Yalanji | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gvs | Gumawana | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gwi | Gwichʼin | Athabaskan-Eyak-Tlingit | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gym | Ngäbere | Chibchan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gyr | Guarayu | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hat | Haitian | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 5 |
-| hau | Hausa | Afro-Asiatic | 4 | 5 | 3 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 14 |
-| haw | Hawaiian | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hbo | Ancient Hebrew | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hch | Huichol | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| heb | Hebrew | Afro-Asiatic | 4 | 5 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 11 |
-| heg | Helong | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hin | Hindi | Indo-European | 9 | 12 | 2 | 0 | 0 | 1 | 2 | 10 | 2 | 0 | 0 | 38 |
-| hix | Hixkaryána | Cariban | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hla | Halia | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hlt | Matu Chin | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hmn | Hmong | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hmo | Hiri Motu | Pidgin | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hne | Chhattisgarhi | Indo-European | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| hns | Caribbean Hindustani | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hop | Hopi | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hot | Hote | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hrv | Croatian | Indo-European | 4 | 3 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 10 |
-| hsb | Upper Sorbian | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hto | Minica Huitoto | Huitotoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hub | Huambisa | Chicham | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hui | Huli | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hun | Hungarian | Uralic | 5 | 3 | 1 | 0 | 1 | 0 | 0 | 2 | 0 | 0 | 0 | 12 |
-| hus | Huastec | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| huu | Murui Huitoto | Huitotoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| huv | San Mateo Del Mar Huave | Huavean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hvn | Sabu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hye | Armenian | Indo-European | 3 | 3 | 1 | 0 | 0 | 1 | 0 | 1 | 0 | 0 | 0 | 9 |
-| ian | Iatmul | Ndu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ibo | Igbo | Atlantic-Congo | 3 | 5 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 12 |
-| ido | Ido | Artificial Language | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ign | Ignaciano | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ikk | Ika | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ikw | Ikwere | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ile | Interlingue | Artificial Language | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ilo | Iloko | Austronesian | 2 | 1 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 6 |
-| imo | Imbongu | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ina | Interlingua (International Auxiliary Language Association) | Artificial Language | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| inb | Inga | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ind | Indonesian | Austronesian | 6 | 7 | 1 | 0 | 0 | 1 | 1 | 4 | 1 | 0 | 0 | 21 |
-| ino | Inoke-Yate | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| iou | Tuma-Irumu | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ipi | Ipili | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| isl | Icelandic | Indo-European | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 9 |
-| isn | Isanzu | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ita | Italian | Indo-European | 5 | 9 | 1 | 0 | 1 | 2 | 1 | 5 | 3 | 0 | 0 | 27 |
-| iws | Sepik Iwam | Sepik | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ixl | Ixil | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| jac | Popti' | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| jae | Yabem | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| jao | Yanyuwa | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| jav | Javanese | Austronesian | 4 | 7 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 13 |
-| jic | Tol | Jicaquean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| jid | Bu (Kaduna State) | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| jiv | Shuar | Chicham | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| jni | Janji | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| jpn | Japanese | Japonic | 5 | 8 | 3 | 0 | 0 | 1 | 3 | 13 | 2 | 0 | 0 | 35 |
-| jvn | Caribbean Javanese | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kab | Kabyle | Afro-Asiatic | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| kac | Kachin | Sino-Tibetan | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| kam | Kamba (Kenya) | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| kan | Kannada | Dravidian | 6 | 7 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 | 19 |
-| kaq | Capanahua | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kas | Kashmiri | Indo-European | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
-| kat | Georgian | Kartvelian | 4 | 3 | 1 | 0 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 10 |
-| kaz | Kazakh | Turkic | 3 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| kbc | Kadiwéu | Guaicuruan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kbh | Camsá | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kbm | Iwal | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kbp | Kabiyè | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| kbq | Kamano | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kdc | Kutu | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kde | Makonde | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kdl | Tsikimba | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kea | Kabuverdianu | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| kek | Kekchí | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ken | Kenyang | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kew | West Kewa | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kfg | Kudiya | Dravidian | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kfy | Kumaoni | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kgf | Kube | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kgk | Kaiwá | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kgp | Kaingang | Nuclear-Macro-Je | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| khk | Halh Mongolian | Mongolic-Khitan | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| khm | Khmer | Austroasiatic | 3 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| khs | Kasua | Bosavi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| khz | Keapara | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kik | Kikuyu | Atlantic-Congo | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| kin | Kinyarwanda | Atlantic-Congo | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 8 |
-| kir | Kirghiz | Turkic | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 7 |
-| kiw | Northeast Kiwai | Kiwaian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kiz | Kisi | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kje | Kisar | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kjs | East Kewa | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kkc | Odoodee | East Strickland | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kkl | Kosarek Yale | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| klt | Nukna | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| klv | Maskelynes | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kmb | Kimbundu | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| kmg | Kâte | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kmh | Kalam | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kmk | Limos Kalinga | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kmo | Kwoma | Sepik | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kmr | Northern Kurdish | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| kms | Kamasau | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kmu | Kanite | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| knc | Central Kanuri | Saharan | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| kne | Kankanaey | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| knf | Mankanya | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| knj | Western Kanjobal | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| knv | Tabo | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kon | Kongo | Unclassified | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| kor | Korean | Koreanic | 4 | 8 | 1 | 0 | 1 | 2 | 1 | 9 | 3 | 0 | 0 | 29 |
-| kos | Kosraean | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kpf | Komba | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kpg | Kapingamarangi | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kpj | Karajá | Nuclear-Macro-Je | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kpr | Korafe-Yegha | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kpw | Kobon | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kpx | Mountain Koiali | Koiarian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kqa | Mum | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kqc | Doromu-Koki | Manubaran | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kqf | Kakabai | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kql | Kyenele | Yuat | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kqw | Kandas | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| krc | Karachay-Balkar | Turkic | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ksd | Kuanua | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ksj | Uare | Kwalean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ksr | Borong | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ktm | Kurti | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kto | Kuot | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kud | 'Auhelawa | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kue | Kuman (Papua New Guinea) | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kup | Kunimaipa | Kunimaipan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kur | Kurdish | Unclassified | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| kvg | Kuni-Boazi | Anim | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kvn | Border Kuna | Chibchan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kwd | Kwaio | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kwf | Kwara'ae | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kwi | Awa-Cuaiquer | Barbacoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kwj | Kwanga | Sepik | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kyc | Kyaka | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kyf | Kouya | Kru | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kyg | Keyagana | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kyq | Kenga | Central Sudanic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kyz | Kayabí | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kze | Kosena | Bookkeeping | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kzj | Coastal Kadazan | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| lac | Lacandon | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| lao | Lao | Tai-Kadai | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 5 |
-| lat | Latin | Indo-European | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| lav | Latvian | Indo-European | 1 | 2 | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| lbb | Label | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| lbk | Central Bontok | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| lcm | Tungag | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| leu | Kara (Papua New Guinea) | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| lex | Luang | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| lfn | Lingua Franca Nova | Artificial Language | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| lgl | Wala | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| lid | Nyindrou | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| lif | Limbu | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| lij | Ligurian | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| lim | Limburgan | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| lin | Lingala | Atlantic-Congo | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| lit | Lithuanian | Indo-European | 4 | 1 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| llg | Lole | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| lmo | Lombard | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| ltg | Latgalian | Unclassified | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| ltz | Luxembourgish | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| lua | Luba-Lulua | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| lug | Ganda | Atlantic-Congo | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| luo | Luo (Kenya and Tanzania) | Nilotic | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 5 |
-| lus | Lushai | Sino-Tibetan | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| lvs | Standard Latvian | Unclassified | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 5 |
-| lww | Lewo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| maa | San Jerónimo Tecóatl Mazatec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mad | Madurese | Austronesian | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| mag | Magahi | Indo-European | 1 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| mai | Maithili | Indo-European | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
-| maj | Jalapa De Díaz Mazatec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mak | Makasar | Austronesian | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| mal | Malayalam | Dravidian | 7 | 7 | 2 | 0 | 0 | 0 | 0 | 2 | 1 | 0 | 0 | 19 |
-| mam | Mam | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| maq | Chiquihuitlán Mazatec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mar | Marathi | Indo-European | 7 | 6 | 2 | 0 | 0 | 1 | 0 | 2 | 2 | 0 | 0 | 20 |
-| mau | Huautla Mazatec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mav | Sateré-Mawé | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| max | North Moluccan Malay | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| maz | Central Mazahua | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mbb | Western Bukidnon Manobo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mbc | Macushi | Cariban | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mbh | Mangseng | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mbj | Nadëb | Naduhup | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mbl | Maxakalí | Nuclear-Macro-Je | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mbs | Sarangani Manobo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mbt | Matigsalug Manobo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mca | Maca | Mataguayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mcb | Machiguenga | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mcd | Sharanahua | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mcf | Matsés | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mco | Coatlán Mixe | Mixe-Zoque | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mcp | Makaa | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mcq | Ese | Koiarian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mcr | Menya | Angan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mdy | Male (Ethiopia) | Ta-Ne-Omotic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| med | Melpa | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mee | Mengen | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mek | Mekeo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| meq | Merey | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| met | Mato | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| meu | Motu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mey | Hassaniyya | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mgc | Morokodo | Central Sudanic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mgh | Makhuwa-Meetto | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mgw | Matumbi | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mhl | Mauwake | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mhr | Eastern Mari | Uralic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mib | Atatláhuca Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mic | Mi'kmaq | Algic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mie | Ocotepec Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mig | San Miguel El Grande Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mih | Chayuco Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mil | Peñoles Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| min | Minangkabau | Austronesian | 3 | 4 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 9 |
-| mio | Pinotepa Nacional Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mir | Isthmus Mixe | Mixe-Zoque | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mit | Southern Puebla Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| miz | Coatzospan Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mjc | San Juan Colorado Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mkd | Macedonian | Indo-European | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 7 |
-| mkj | Mokilese | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mkl | Mokole | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mkn | Kupang Malay | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mks | Silacayoapan Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mle | Manambu | Ndu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mlg | Malagasy | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mlh | Mape | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mlp | Bargam | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mlt | Maltese | Afro-Asiatic | 2 | 2 | 2 | 0 | 2 | 0 | 0 | 1 | 0 | 0 | 0 | 9 |
-| mmo | Mangga Buang | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mmx | Madak | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mna | Mbula | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mni | Manipuri | Sino-Tibetan | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
-| mon | Mongolian | Unclassified | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| mop | Mopán Maya | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mos | Mossi | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| mox | Molima | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mph | Maung | Iwaidjan Proper | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mpj | Martu Wangka | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mpm | Yosondúa Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mpp | Migabac | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mps | Dadibi | Teberan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mpt | Mian | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mpx | Misima-Panaeati | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mqb | Mbuko | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mqj | Mamasa | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mri | Maori | Austronesian | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 5 |
-| msa | Malay (macrolanguage) | Unclassified | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| msb | Masbatenyo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| msc | Sankaran Maninka | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| msk | Mansaka | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| msm | Agusan Manobo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| msy | Aruamu | Ramu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mti | Maiwa (Papua New Guinea) | Dagan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mto | Totontepec Mixe | Mixe-Zoque | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mui | Musi | Austronesian | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| mup | Malvi | Indo-European | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| mux | Bo-Ung | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| muy | Muyang | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mva | Manam | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mvn | Minaveha | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mwc | Are | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mwe | Mwera (Chimwera) | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mwf | Murrinh-Patha | Southern Daly | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mwp | Kala Lagaw Ya | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mwr | Marwari | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mxb | Tezoatlán Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mxp | Tlahuitoltepec Mixe | Mixe-Zoque | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mxq | Juquila Mixe | Mixe-Zoque | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mxt | Jamiltepec Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mya | Burmese | Sino-Tibetan | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 9 |
-| myk | Mamara Senoufo | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| myu | Mundurukú | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| myw | Muyuw | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| myy | Macuna | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mzz | Maiadomu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nab | Southern Nambikuára | Nambiquaran | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| naf | Nabak | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nak | Nakanai | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nas | Naasioi | South Bougainville | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nbl | South Ndebele | Unclassified | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nbq | Nggem | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nca | Iyo | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nch | Central Huasteca Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ncj | Northern Puebla Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ncl | Michoacán Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ncu | Chumburung | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nde | North Ndebele | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ndg | Ndengereko | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ndj | Ndamba | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nds | Low German | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nep | Nepali (macrolanguage) | Unclassified | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| nfa | Dhao | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ngp | Ngulu | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ngu | Guerrero Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nhe | Eastern Huasteca Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nhg | Tetelcingo Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nhi | Zacatlán-Ahuacatlán-Tepetzintla Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nho | Takuu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nhr | Naro | Khoe-Kwadi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nhu | Noone | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nhw | Western Huasteca Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nhy | Northern Oaxaca Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nif | Nek | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nii | Nii | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nij | Ngaju | Austronesian | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| nin | Ninzo | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nko | Nkonya | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nld | Dutch | Indo-European | 6 | 6 | 1 | 0 | 1 | 0 | 1 | 2 | 2 | 0 | 0 | 19 |
-| nlg | Gela | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nna | Nyangumarta | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nno | Norwegian Nynorsk | Unclassified | 4 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
-| nnq | Ngindo | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| noa | Woun Meu | Chocoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nob | Norwegian Bokmål | Unclassified | 4 | 7 | 5 | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 0 | 19 |
-| noe | Nimadi | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nop | Numanggang | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nor | Norwegian | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 3 |
-| not | Nomatsiguenga | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nou | Ewage-Notu | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nov | Novial | Artificial Language | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| npi | Nepali (individual language) | Indo-European | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| npl | Southeastern Puebla Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nqo | N'Ko | Artificial Language | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| nsn | Nehan | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nso | Pedi | Atlantic-Congo | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 6 |
-| nss | Nali | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ntj | Ngaanyatjarra | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ntp | Northern Tepehuan | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ntu | Natügu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nus | Nuer | Nilotic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| nuy | Nunggubuyu | Gunwinyguan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nvm | Namiae | Koiarian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nwi | Southwest Tanna | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nya | Nyanja | Atlantic-Congo | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 6 |
-| nys | Nyungar | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nyu | Nyungwe | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| obo | Obo Manobo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| oci | Occitan (post 1500) | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| okv | Orokaiva | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| omw | South Tairora | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ong | Olo | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ons | Ono | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ood | Tohono O'odham | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| opm | Oksapmin | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ori | Oriya (macrolanguage) | Unclassified | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| orm | Oromo | Unclassified | 1 | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| orv | Old Russian | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ory | Odia | Indo-European | 5 | 4 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 | 15 |
-| ote | Mezquital Otomi | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| otm | Eastern Highland Otomi | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| otn | Tenango Otomi | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| otq | Querétaro Otomi | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ots | Estado de México Otomi | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pab | Parecís | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pad | Paumarí | Arawan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pag | Pangasinan | Austronesian | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| pah | Tenharim | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pam | Pampanga | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pan | Panjabi | Indo-European | 6 | 6 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 | 18 |
-| pao | Northern Paiute | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pap | Papiamento | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| pbt | Southern Pashto | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| pcm | Nigerian Pidgin | Indo-European | 1 | 4 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
-| pes | Iranian Persian | Indo-European | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 6 |
-| pib | Yine | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pio | Piapoco | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pir | Piratapuyo | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| piu | Pintupi-Luritja | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pjt | Pitjantjatjara | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pls | San Marcos Tlacoyalco Popoloca | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| plt | Plateau Malagasy | Austronesian | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| plu | Palikúr | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pma | Paama | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pms | Piemontese | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| poe | San Juan Atzingo Popoloca | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| poh | Poqomchi' | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| poi | Highland Popoluca | Mixe-Zoque | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pol | Polish | Indo-European | 4 | 11 | 4 | 0 | 1 | 4 | 0 | 18 | 4 | 0 | 0 | 46 |
-| pon | Pohnpeian | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| por | Portuguese | Indo-European | 4 | 9 | 1 | 0 | 2 | 2 | 1 | 5 | 3 | 0 | 0 | 27 |
-| poy | Pogolo | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ppo | Folopa | Teberan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| prf | Paranan | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pri | Paicî | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| prs | Dari | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| ptp | Patep | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ptu | Bambam | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pus | Pushto | Unclassified | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| pwg | Gapapaiwa | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qub | Huallaga Huánuco Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| quc | K'iche' | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| quf | Lambayeque Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| quh | South Bolivian Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qul | North Bolivian Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qup | Southern Pastaza Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| quy | Ayacucho Quechua | Quechuan | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| qvc | Cajamarca Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qve | Eastern Apurímac Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qvh | Huamalíes-Dos de Mayo Huánuco Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qvm | Margos-Yarowilca-Lauricocha Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qvn | North Junín Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qvs | San Martín Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qvw | Huaylla Wanca Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qvz | Northern Pastaza Quichua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qwh | Huaylas Ancash Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qxh | Panao Huánuco Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qxn | Northern Conchucos Ancash Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qxo | Southern Conchucos Ancash Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| rai | Ramoaaina | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| raj | Rajasthani | Unclassified | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| reg | Kara (Tanzania) | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| rej | Rejang | Austronesian | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| rgu | Ringgou | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| rkb | Rikbaktsa | Nuclear-Macro-Je | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| rmc | Carpathian Romani | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| rmy | Vlax Romani | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| rom | Romany | Unclassified | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| ron | Romanian | Indo-European | 5 | 6 | 1 | 0 | 1 | 0 | 1 | 3 | 1 | 0 | 0 | 18 |
-| roo | Rotokas | North Bougainville | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| rop | Kriol | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| row | Dela-Oenale | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| rro | Waima | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ruf | Luguru | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| rug | Roviana | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| run | Rundi | Atlantic-Congo | 1 | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
-| rus | Russian | Indo-European | 5 | 13 | 6 | 0 | 2 | 4 | 2 | 16 | 4 | 0 | 0 | 52 |
-| rwo | Rawa | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sab | Buglere | Chibchan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sag | Sango | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| sah | Yakut | Turkic | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| san | Sanskrit | Indo-European | 5 | 3 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 10 |
-| sat | Santali | Austroasiatic | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
-| sbe | Saliba | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sbk | Safwa | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sbs | Subiya | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| scn | Sicilian | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| sco | Scots | Indo-European | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| seh | Sena | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sey | Secoya | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sgb | Mag-antsi Ayta | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sgz | Sursurunga | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| shi | Tachelhit | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| shj | Shatt | Dajuic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| shn | Shan | Tai-Kadai | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| shp | Shipibo-Conibo | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sim | Mende (Papua New Guinea) | Sepik | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sin | Sinhala | Indo-European | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 7 |
-| sja | Epena | Chocoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| slk | Slovak | Indo-European | 3 | 4 | 1 | 0 | 1 | 0 | 0 | 3 | 0 | 0 | 0 | 12 |
-| sll | Salt-Yui | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| slv | Slovenian | Indo-European | 3 | 4 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 10 |
-| smk | Bolinao | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| smo | Samoan | Austronesian | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| sna | Shona | Atlantic-Congo | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| snc | Sinaugoro | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| snd | Sindhi | Indo-European | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| snn | Siona | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| snp | Siane | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| snx | Sam | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sny | Saniyo-Hiyewe | Sepik | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| som | Somali | Afro-Asiatic | 3 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 9 |
-| soq | Kanasi | Dagan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sot | Southern Sotho | Atlantic-Congo | 1 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 5 |
-| soy | Miyobe | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| spa | Spanish | Indo-European | 4 | 13 | 4 | 0 | 1 | 2 | 2 | 13 | 4 | 0 | 0 | 43 |
-| spl | Selepet | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| spm | Akukem | Ramu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| spp | Supyire Senoufo | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sps | Saposa | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| spy | Sabaot | Nilotic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sqi | Albanian | Unclassified | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| srd | Sardinian | Unclassified | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| sri | Siriano | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| srm | Saramaccan | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| srn | Sranan Tongo | Indo-European | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| srp | Serbian | Indo-European | 4 | 1 | 1 | 0 | 0 | 0 | 1 | 2 | 0 | 0 | 0 | 9 |
-| srq | Sirionó | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ssd | Siroi | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ssg | Seimat | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ssw | Swati | Atlantic-Congo | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 7 |
-| ssx | Samberigi | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| stp | Southeastern Tepehuan | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sua | Sulka | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sue | Suena | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sun | Sundanese | Austronesian | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 9 |
-| sus | Susu | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| suz | Sunwar | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| svk | Slovakian Sign Language | Sign Language | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| swa | Swahili (macrolanguage) | Atlantic-Congo | 1 | 7 | 2 | 0 | 0 | 1 | 1 | 3 | 0 | 0 | 0 | 15 |
-| swe | Swedish | Indo-European | 4 | 8 | 3 | 0 | 1 | 1 | 1 | 4 | 0 | 0 | 0 | 22 |
-| swg | Swabian | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| swh | Swahili (individual language) | Atlantic-Congo | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 6 |
-| swp | Suau | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sxb | Suba | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| szl | Silesian | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| tac | Lowland Tarahumara | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tah | Tahitian | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| taj | Eastern Tamang | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tam | Tamil | Dravidian | 7 | 7 | 2 | 0 | 0 | 1 | 0 | 3 | 1 | 0 | 0 | 21 |
-| taq | Tamasheq | Afro-Asiatic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| tat | Tatar | Turkic | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
-| tav | Tatuyo | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| taw | Tai | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tbc | Takia | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tbf | Mandara | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tbg | North Tairora | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tbo | Tawala | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tbz | Ditammari | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tca | Ticuna | Ticuna-Yuri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tcs | Torres Strait Creole | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tcz | Thado Chin | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tdt | Tetun Dili | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tee | Huehuetla Tepehua | Totonacan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tel | Telugu | Dravidian | 7 | 7 | 2 | 0 | 0 | 0 | 1 | 5 | 2 | 0 | 0 | 24 |
-| ter | Tereno | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tet | Tetum | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tew | Tewa (USA) | Kiowa-Tanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tfr | Teribe | Chibchan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tgk | Tajik | Indo-European | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 6 |
-| tgl | Tagalog | Austronesian | 3 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| tgo | Sudest | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tgp | Tangoa | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tha | Thai | Tai-Kadai | 4 | 8 | 1 | 0 | 0 | 1 | 1 | 6 | 0 | 0 | 0 | 21 |
-| tif | Tifal | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tim | Timbe | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tir | Tigrinya | Afro-Asiatic | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| tiw | Tiwi | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tiy | Tiruray | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tke | Takwane | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tku | Upper Necaxa Totonac | Totonacan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tlf | Telefol | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tmd | Haruai | Piawi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tna | Tacana | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tnc | Tanimuca-Retuarã | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tnk | Kwamera | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tnn | North Tanna | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tnp | Whitesands | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| toc | Coyutla Totonac | Totonacan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tod | Toma | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tof | Gizrra | Eastern Trans-Fly | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| toj | Tojolabal | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ton | Tonga (Tonga Islands) | Austronesian | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| too | Xicotepec De Juárez Totonac | Totonacan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| top | Papantla Totonac | Totonacan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tos | Highland Totonac | Totonacan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tpa | Taupota | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tpi | Tok Pisin | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| tpt | Tlachichilco Tepehua | Totonacan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tpz | Tinputz | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| trc | Copala Triqui | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tsn | Tswana | Atlantic-Congo | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 7 |
-| tso | Tsonga | Atlantic-Congo | 1 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 7 |
-| tsw | Tsishingini | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ttc | Tektiteko | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tte | Bwanabwana | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tuc | Mutu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tue | Tuyuca | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tuf | Central Tunebo | Chibchan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tuk | Turkmen | Turkic | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| tum | Tumbuka | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| tuo | Tucano | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tur | Turkish | Turkic | 4 | 7 | 1 | 0 | 0 | 2 | 0 | 3 | 2 | 0 | 0 | 19 |
-| tvk | Southeast Ambrym | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| twi | Twi | Unclassified | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
-| txq | Tii | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| txu | Kayapó | Nuclear-Macro-Je | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tyv | Tuvinian | Turkic | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tzj | Tz'utujil | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tzl | Talossan | Artificial Language | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tzm | Central Atlas Tamazight | Afro-Asiatic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| tzo | Tzotzil | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ubr | Ubir | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ubu | Umbu-Ungu | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| udu | Uduk | Koman | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| uig | Uighur | Turkic | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
-| ukr | Ukrainian | Indo-European | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| uli | Ulithian | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ulk | Meriam Mir | Eastern Trans-Fly | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| umb | Umbundu | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| upv | Uripiv-Wala-Rano-Atchin | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ura | Urarina | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| urb | Urubú-Kaapor | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| urd | Urdu | Indo-European | 7 | 8 | 2 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 19 |
-| uri | Urim | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| urt | Urat | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| urw | Sop | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| usa | Usarufa | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| usp | Uspanteco | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| uvh | Uri | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| uvl | Lote | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| uzb | Uzbek | Unclassified | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| uzn | Northern Uzbek | Turkic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| vec | Venetian | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| ven | Venda | Atlantic-Congo | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| vid | Vidunda | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| vie | Vietnamese | Austroasiatic | 5 | 6 | 1 | 0 | 0 | 1 | 0 | 5 | 0 | 0 | 0 | 18 |
-| viv | Iduna | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| vmy | Ayautla Mazatec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| waj | Waffa | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wal | Wolaytta | Ta-Ne-Omotic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wap | Wapishana | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| war | Waray (Philippines) | Austronesian | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 5 |
-| wat | Kaninuwa | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wbi | Vwanji | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wbp | Warlpiri | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wed | Wedau | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wer | Weri | Kunimaipan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wim | Wik-Mungkan | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wiu | Wiru | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wiv | Vitu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wln | Walloon | Indo-European | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wmt | Walmajarri | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wmw | Mwani | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wnc | Wantoat | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wnu | Usan | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wol | Wolof | Atlantic-Congo | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 6 |
-| wos | Hanga Hundi | Ndu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wrk | Garrwa | Garrwan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wro | Worrorra | Worrorran | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wrs | Waris | Border | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wsk | Waskia | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wuu | Wu Chinese | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wuv | Wuvulu-Aua | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| xav | Xavánte | Nuclear-Macro-Je | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| xbi | Kombio | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| xed | Hdi | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| xho | Xhosa | Atlantic-Congo | 3 | 3 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 10 |
-| xla | Kamula | Kamula-Elevala | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| xnn | Northern Kankanay | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| xon | Konkomba | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| xsi | Sio | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| xtd | Diuxi-Tilantongo Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| xtm | Magdalena Peñasco Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yaa | Yaminahua | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yad | Yagua | Peba-Yagua | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yal | Yalunka | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yap | Yapese | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yaq | Yaqui | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yby | Yaweyuha | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ycn | Yucuna | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ydd | Eastern Yiddish | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| yid | Yiddish | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yka | Yakan | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yle | Yele | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yml | Iamalele | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yon | Yongkom | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yor | Yoruba | Atlantic-Congo | 4 | 5 | 3 | 0 | 0 | 0 | 1 | 3 | 0 | 0 | 0 | 16 |
-| yrb | Yareba | Yareban | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yre | Yaouré | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yss | Yessan-Mayo | Sepik | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yue | Yue Chinese | Sino-Tibetan | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
-| yuj | Karkar-Yuri | Pauwasi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yut | Yopno | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yuw | Yau (Morobe Province) | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yva | Yawa | Yawa-Saweru | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zaa | Sierra de Juárez Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zab | Western Tlacolula Valley Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zac | Ocotlán Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zad | Cajonos Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zai | Isthmus Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zaj | Zaramo | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zam | Miahuatlán Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zao | Ozolotepec Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zap | Zapotec | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zar | Rincón Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zas | Santo Domingo Albarradas Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zat | Tabaa Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zav | Yatzachi Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zaw | Mitla Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zca | Coatecas Altas Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zga | Kinga | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zho | Chinese | Unclassified | 2 | 2 | 1 | 0 | 0 | 1 | 1 | 13 | 0 | 0 | 0 | 20 |
-| zia | Zia | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ziw | Zigula | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zlm | Malay (individual language) | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zos | Francisco León Zoque | Mixe-Zoque | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zpc | Choapan Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zpl | Lachixío Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zpm | Mixtepec Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zpo | Amatlán Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zpq | Zoogocho Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zpu | Yalálag Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zpv | Chichicapan Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zpz | Texmelucan Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zsm | Standard Malay | Austronesian | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 5 |
-| zsr | Southern Rincon Zapotec | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ztq | Quioquitani-Quierí Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zty | Yatee Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zul | Zulu | Atlantic-Congo | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 7 |
-| zyp | Zyphe Chin | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| Total | None | None | None | 1394 | 795 | 304 | 3 | 28 | 67 | 50 | 460 | 85 | 2 | 2 |
+| Language | BitextMining | Classification | Clustering | InstructionRetrieval | MultilabelClassification | PairClassification | Reranking | Retrieval | STS | Speed | Summarization |
+|---|------|------|------|------|------|------|------|------|------|------|---|
+| aai | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aak | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aau | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aaz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| abs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| abt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| abx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aby | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ace | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| acf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| acm | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| acq | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| acr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| acu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| adz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aeb | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aer | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aey | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| afr | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 |
+| agd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| agg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| agm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| agn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| agr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| agt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| agu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aia | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aii | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ajp | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aka | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ake | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| alp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| alq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| als | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| aly | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ame | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| amf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| amh | 3 | 6 | 3 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 |
+| amk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| amm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| amn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| amo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| amp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| amr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| amu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| amx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ang | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| anh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| anp | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| anv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aoi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aoj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aom | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aon | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| apb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| apc | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| ape | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| apn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| apr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| apu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| apw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| apz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ara | 2 | 12 | 0 | 0 | 0 | 2 | 1 | 9 | 2 | 0 | 0 |
+| arb | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 2 | 1 | 0 | 0 |
+| are | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| arl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| arn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| arp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| arq | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
+| ars | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| ary | 1 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 |
+| arz | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| asm | 5 | 3 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 |
+| aso | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ast | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ata | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| atb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| atd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| atg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| att | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| auc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aui | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| auy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| avt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| awa | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| awb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| awk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| awx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ayr | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| azb | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| aze | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| azg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| azj | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| azz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bak | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bam | 1 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| ban | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bao | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bba | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bbb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bbc | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bbr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bch | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bco | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bdd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bef | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bel | 4 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bem | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ben | 7 | 9 | 2 | 0 | 0 | 1 | 2 | 6 | 1 | 0 | 0 |
+| beo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ber | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| beu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bew | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bgc | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bgs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bgt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bhb | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bhd | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bhg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bhl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bho | 2 | 2 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
+| bhp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| big | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bjj | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bjk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bjn | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bjp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bjr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bjv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bjz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bkd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bki | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bkq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bkx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| blw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| blz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bmh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bmk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bmr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bmu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bnp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bns | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| boa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bod | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| boj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bon | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bos | 3 | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| box | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| boy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bpr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bps | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bqc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bqp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bra | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bre | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| brx | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bsj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bsn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bsp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bss | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bug | 2 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| buk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bul | 3 | 4 | 1 | 0 | 1 | 1 | 1 | 2 | 0 | 0 | 0 |
+| bus | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bvd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bvr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bxh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| byr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| byx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bzd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bzh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| bzj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| caa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cab | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cac | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| caf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cak | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cao | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cap | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| car | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cat | 3 | 2 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| cav | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cax | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cbc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cbi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cbk | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cbr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cbs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cbt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cbu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cbv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cco | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ceb | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| cek | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ces | 4 | 5 | 2 | 0 | 1 | 1 | 1 | 2 | 0 | 0 | 0 |
+| cgc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cha | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| chd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| chf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| chk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| chq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| chv | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| chz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cjk | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cjo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cjv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ckb | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| cle | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| clu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cme | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cmn | 4 | 10 | 4 | 0 | 0 | 3 | 4 | 10 | 9 | 0 | 0 |
+| cmo | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cni | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cnl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cnt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| code | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 37 | 0 | 0 | 0 |
+| cof | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| con | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cop | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cor | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cot | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cpa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cpb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cpc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cpu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cpy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| crh | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| crn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| crx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| csb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cso | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| csy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cta | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cth | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ctp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ctu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cub | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cuc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cui | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cuk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cut | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cux | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cwe | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cya | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| cym | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| daa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dad | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dah | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dan | 5 | 9 | 2 | 0 | 1 | 0 | 1 | 5 | 0 | 0 | 0 |
+| ded | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| deu | 6 | 14 | 7 | 0 | 1 | 6 | 2 | 18 | 4 | 0 | 0 |
+| dgc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dgr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dgz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dhg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dif | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dik | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| div | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dji | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| djk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| djr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dob | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| doi | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dop | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dov | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dsb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dtp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dwr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dww | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dwy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dyu | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dza | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| dzo | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ebk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| eko | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ell | 3 | 6 | 1 | 0 | 1 | 2 | 0 | 3 | 0 | 0 | 0 |
+| emi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| emp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| eng | 16 | 143 | 16 | 3 | 1 | 8 | 8 | 91 | 13 | 2 | 1 |
+| enq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| epo | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| eri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ese | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| esk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| est | 2 | 2 | 1 | 0 | 1 | 0 | 0 | 2 | 0 | 0 | 0 |
+| etr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| eus | 3 | 2 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| ewe | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| faa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fai | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fao | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 |
+| far | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fas | 1 | 4 | 0 | 0 | 0 | 1 | 2 | 9 | 0 | 0 | 0 |
+| ffm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fij | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fil | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fin | 3 | 5 | 1 | 0 | 1 | 1 | 2 | 5 | 1 | 0 | 0 |
+| fon | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| for | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fra | 7 | 13 | 8 | 0 | 1 | 5 | 3 | 14 | 4 | 0 | 1 |
+| fry | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fuc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fue | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fuf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fuh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fur | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| fuv | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| gah | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gai | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gam | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gaw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gaz | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| gbm | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gdn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gdr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| geb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gfk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ghs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gla | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gle | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| glg | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| glk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| glv | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gmv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gng | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gnn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gnw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gof | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gom | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| grc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| grn | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| gsw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gub | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| guh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gui | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| guj | 6 | 6 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 |
+| gul | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gum | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gun | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| guo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gup | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gux | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gvc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gvf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gvn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gvs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gwi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gym | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| gyr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hat | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| hau | 4 | 5 | 3 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 |
+| haw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hbo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hch | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| heb | 4 | 5 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| heg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hin | 9 | 12 | 2 | 0 | 0 | 1 | 2 | 10 | 2 | 0 | 0 |
+| hix | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hla | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hlt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hmn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hmo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hne | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hns | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hop | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hot | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hrv | 4 | 3 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 |
+| hsb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hto | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hub | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hui | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hun | 5 | 3 | 1 | 0 | 1 | 0 | 0 | 2 | 0 | 0 | 0 |
+| hus | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| huu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| huv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hvn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| hye | 3 | 3 | 1 | 0 | 0 | 1 | 0 | 1 | 0 | 0 | 0 |
+| ian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ibo | 3 | 5 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| ido | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ign | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ikk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ikw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ile | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ilo | 2 | 1 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| imo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ina | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| inb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ind | 6 | 7 | 1 | 0 | 0 | 1 | 1 | 4 | 1 | 0 | 0 |
+| ino | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| iou | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ipi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| isl | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| isn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ita | 5 | 9 | 1 | 0 | 1 | 2 | 1 | 5 | 3 | 0 | 0 |
+| iws | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ixl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| jac | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| jae | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| jao | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| jav | 4 | 7 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| jic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| jid | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| jiv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| jni | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| jpn | 5 | 8 | 3 | 0 | 0 | 1 | 3 | 13 | 2 | 0 | 0 |
+| jvn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kab | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kac | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| kam | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kan | 6 | 7 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 |
+| kaq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kas | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kat | 4 | 3 | 1 | 0 | 0 | 0 | 0 | 2 | 0 | 0 | 0 |
+| kaz | 3 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| kbc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kbh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kbm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kbp | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kbq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kdc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kde | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kdl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kea | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| kek | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ken | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kew | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kfg | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kfy | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kgf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kgk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kgp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| khk | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| khm | 3 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| khs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| khz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kik | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kin | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 |
+| kir | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| kiw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kiz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kje | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kjs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kkc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kkl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| klt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| klv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kmb | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kmg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kmh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kmk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kmo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kmr | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kms | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kmu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| knc | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kne | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| knf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| knj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| knv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kon | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kor | 4 | 8 | 1 | 0 | 1 | 2 | 1 | 9 | 3 | 0 | 0 |
+| kos | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kpf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kpg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kpj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kpr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kpw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kpx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kqa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kqc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kqf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kql | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kqw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| krc | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ksd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ksj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ksr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ktm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kto | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kud | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kue | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kup | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kur | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kvg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kvn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kwd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kwf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kwi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kwj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kyc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kyf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kyg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kyq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kyz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kze | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| kzj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lac | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lao | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| lat | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lav | 1 | 2 | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lbb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lbk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lcm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| leu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lex | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lfn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lgl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lid | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lif | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lij | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lim | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lin | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| lit | 4 | 1 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 |
+| llg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lmo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ltg | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ltz | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lua | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lug | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| luo | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| lus | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| lvs | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| lww | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| maa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mad | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mag | 1 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mai | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| maj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mak | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mal | 7 | 7 | 2 | 0 | 0 | 0 | 0 | 2 | 1 | 0 | 0 |
+| mam | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| maq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mar | 7 | 6 | 2 | 0 | 0 | 1 | 0 | 2 | 2 | 0 | 0 |
+| mau | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mav | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| max | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| maz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mbb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mbc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mbh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mbj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mbl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mbs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mbt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mca | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mcb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mcd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mcf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mco | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mcp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mcq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mcr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mdy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| med | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mee | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mek | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| meq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| met | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| meu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mey | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mgc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mgh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mgw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mhl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mhr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mib | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mie | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mig | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mih | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mil | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| min | 3 | 4 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mio | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mir | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mit | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| miz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mjc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mkd | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| mkj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mkl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mkn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mks | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mle | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mlg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mlh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mlp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mlt | 2 | 2 | 2 | 0 | 2 | 0 | 0 | 1 | 0 | 0 | 0 |
+| mmo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mmx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mna | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mni | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mon | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mop | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mos | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mox | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mph | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mpj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mpm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mpp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mps | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mpt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mpx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mqb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mqj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mri | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| msa | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| msb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| msc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| msk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| msm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| msy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mti | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mto | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mui | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mup | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mux | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| muy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mva | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mvn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mwc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mwe | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mwf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mwp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mwr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mxb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mxp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mxq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mxt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mya | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| myk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| myu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| myw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| myy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| mzz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nab | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| naf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nak | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nas | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nbl | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nbq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nca | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nch | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ncj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ncl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ncu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nde | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ndg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ndj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nds | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nep | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nfa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ngp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ngu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nhe | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nhg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nhi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nho | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nhr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nhu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nhw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nhy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nif | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nii | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nij | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nin | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nko | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nld | 6 | 6 | 1 | 0 | 1 | 0 | 1 | 2 | 2 | 0 | 0 |
+| nlg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nna | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nno | 4 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nnq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| noa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nob | 4 | 7 | 5 | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 0 |
+| noe | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nop | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nor | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 0 |
+| not | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nou | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nov | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| npi | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| npl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nqo | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nsn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nso | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| nss | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ntj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ntp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ntu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nus | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nuy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nvm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nwi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nya | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| nys | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| nyu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| obo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| oci | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| okv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| omw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ong | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ons | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ood | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| opm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ori | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| orm | 1 | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| orv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ory | 5 | 4 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 |
+| ote | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| otm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| otn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| otq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ots | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pab | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pad | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pag | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pah | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pam | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pan | 6 | 6 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 |
+| pao | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pap | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pbt | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| pcm | 1 | 4 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pes | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| pib | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pio | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pir | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| piu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pjt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pls | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| plt | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| plu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pma | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pms | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| poe | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| poh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| poi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pol | 4 | 11 | 4 | 0 | 1 | 4 | 0 | 18 | 4 | 0 | 0 |
+| pon | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| por | 4 | 9 | 1 | 0 | 2 | 2 | 1 | 5 | 3 | 0 | 0 |
+| poy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ppo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| prf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| prs | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ptp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ptu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pus | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| pwg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qub | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| quc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| quf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| quh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qul | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qup | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| quy | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qvc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qve | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qvh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qvm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qvn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qvs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qvw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qvz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qwh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qxh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qxn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| qxo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| rai | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| raj | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| reg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| rej | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| rgu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| rkb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| rmc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| rmy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| rom | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ron | 5 | 6 | 1 | 0 | 1 | 0 | 1 | 3 | 1 | 0 | 0 |
+| roo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| rop | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| row | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| rro | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ruf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| rug | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| run | 1 | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| rus | 5 | 13 | 6 | 0 | 2 | 4 | 2 | 16 | 4 | 0 | 0 |
+| rwo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sab | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sag | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sah | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| san | 5 | 3 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
+| sat | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sbe | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sbk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sbs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| scn | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sco | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| seh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sey | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sgb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sgz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| shi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| shj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| shn | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| shp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sim | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sin | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| sja | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| slk | 3 | 4 | 1 | 0 | 1 | 0 | 0 | 3 | 0 | 0 | 0 |
+| sll | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| slv | 3 | 4 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 |
+| smk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| smo | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sna | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| snc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| snd | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| snn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| snp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| snx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sny | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| som | 3 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| soq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sot | 1 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| soy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| spa | 4 | 13 | 4 | 0 | 1 | 2 | 2 | 12 | 4 | 0 | 0 |
+| spl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| spm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| spp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sps | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| spy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sqi | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| srd | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| srm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| srn | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| srp | 4 | 1 | 1 | 0 | 0 | 0 | 1 | 2 | 0 | 0 | 0 |
+| srq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ssd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ssg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ssw | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| ssx | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| stp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sua | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sue | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sun | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| sus | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| suz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| svk | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| swa | 1 | 7 | 2 | 0 | 0 | 1 | 1 | 3 | 0 | 0 | 0 |
+| swe | 4 | 8 | 3 | 0 | 1 | 1 | 1 | 4 | 0 | 0 | 0 |
+| swg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| swh | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| swp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| sxb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| szl | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tac | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tah | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| taj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tam | 7 | 7 | 2 | 0 | 0 | 1 | 0 | 3 | 1 | 0 | 0 |
+| taq | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tat | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tav | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| taw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tbc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tbf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tbg | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tbo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tbz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tca | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tcs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tcz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tdt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tee | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tel | 7 | 7 | 2 | 0 | 0 | 0 | 1 | 5 | 2 | 0 | 0 |
+| ter | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tet | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tew | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tfr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tgk | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| tgl | 3 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| tgo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tgp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tha | 4 | 8 | 1 | 0 | 0 | 1 | 1 | 6 | 0 | 0 | 0 |
+| tif | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tim | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tir | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| tiw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tiy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tke | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tku | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tlf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tmd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tna | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tnc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tnk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tnn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tnp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| toc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tod | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tof | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| toj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ton | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| too | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| top | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tos | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tpa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tpi | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tpt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tpz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| trc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tsn | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| tso | 1 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| tsw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ttc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tte | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tuc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tue | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tuf | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tuk | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tum | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tuo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tur | 4 | 7 | 1 | 0 | 0 | 2 | 0 | 3 | 2 | 0 | 0 |
+| tvk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| twi | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| txq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| txu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tyv | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tzj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tzl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tzm | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| tzo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ubr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ubu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| udu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| uig | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ukr | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| uli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ulk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| umb | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| upv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ura | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| urb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| urd | 7 | 8 | 2 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 |
+| uri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| urt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| urw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| usa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| usp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| uvh | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| uvl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| uzb | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| uzn | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| vec | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ven | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| vid | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| vie | 5 | 6 | 1 | 0 | 0 | 1 | 0 | 5 | 0 | 0 | 0 |
+| viv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| vmy | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| waj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wal | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wap | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| war | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| wat | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wbi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wbp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wed | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wer | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wim | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wiu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wiv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wln | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wmt | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wmw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wnc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wnu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wol | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| wos | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wrk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wro | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wrs | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wsk | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wuu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| wuv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| xav | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| xbi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| xed | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| xho | 3 | 3 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| xla | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| xnn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| xon | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| xsi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| xtd | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| xtm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yaa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yad | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yal | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yap | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yaq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yby | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ycn | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ydd | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yid | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yka | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yle | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yml | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yon | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yor | 4 | 5 | 3 | 0 | 0 | 0 | 1 | 3 | 0 | 0 | 0 |
+| yrb | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yre | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yss | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yue | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yuj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yut | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yuw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| yva | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zaa | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zab | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zac | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zad | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zai | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zaj | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zam | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zao | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zap | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zar | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zas | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zat | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zav | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zaw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zca | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zga | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zho | 2 | 2 | 1 | 0 | 0 | 1 | 1 | 13 | 0 | 0 | 0 |
+| zia | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ziw | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zlm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zos | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zpc | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zpl | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zpm | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zpo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zpq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zpu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zpv | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zpz | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zsm | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| zsr | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| ztq | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zty | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| zul | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| zyp | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Total | 1394 | 795 | 304 | 3 | 28 | 67 | 50 | 457 | 85 | 2 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>

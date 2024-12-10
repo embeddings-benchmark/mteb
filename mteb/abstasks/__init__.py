@@ -1,16 +1,33 @@
 from __future__ import annotations
 
-from ..evaluation.LangMapping import *
-from .AbsTask import *
-from .AbsTaskBitextMining import *
-from .AbsTaskClassification import *
-from .AbsTaskClustering import *
-from .AbsTaskInstructionRetrieval import *
-from .AbsTaskMultilabelClassification import *
-from .AbsTaskPairClassification import *
-from .AbsTaskReranking import *
-from .AbsTaskRetrieval import *
-from .AbsTaskSpeedTask import *
-from .AbsTaskSTS import *
-from .AbsTaskSummarization import *
-from .MultilingualTask import *
+from .AbsTask import AbsTask
+from .AbsTaskBitextMining import AbsTaskBitextMining
+from .AbsTaskClassification import AbsTaskClassification
+from .AbsTaskClustering import AbsTaskClustering
+from .AbsTaskClusteringFast import AbsTaskClusteringFast
+from .AbsTaskMultilabelClassification import AbsTaskMultilabelClassification
+from .AbsTaskPairClassification import AbsTaskPairClassification
+from .AbsTaskReranking import AbsTaskReranking
+from .AbsTaskRetrieval import AbsTaskRetrieval
+from .AbsTaskSpeedTask import AbsTaskSpeedTask
+from .AbsTaskSTS import AbsTaskSTS
+from .AbsTaskSummarization import AbsTaskSummarization
+from .MultilingualTask import MultilingualTask
+from .TaskMetadata import TaskMetadata
+
+__all__ = [
+    "AbsTask",
+    "AbsTaskBitextMining",
+    "AbsTaskClassification",
+    "AbsTaskClustering",
+    "AbsTaskClusteringFast",
+    "AbsTaskMultilabelClassification",
+    "AbsTaskPairClassification",
+    "AbsTaskReranking",
+    "AbsTaskRetrieval",
+    "AbsTaskSpeedTask",
+    "AbsTaskSTS",
+    "AbsTaskSummarization",
+    "MultilingualTask",
+    "TaskMetadata",
+]

@@ -41,6 +41,12 @@ e5_instruct = ModelMeta(
     embed_dim=1024,
     license="mit",
     max_tokens=514,
+    citation="""@article{wang2024multilingual,
+      title={Multilingual E5 Text Embeddings: A Technical Report},
+      author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Yang, Linjun and Majumder, Rangan and Wei, Furu},
+      journal={arXiv preprint arXiv:2402.05672},
+      year={2024}
+    }""",
 )
 
 e5_mistral = ModelMeta(
@@ -70,4 +76,19 @@ e5_mistral = ModelMeta(
     embed_dim=4096,
     license="mit",
     max_tokens=32768,
+    citation="""
+    @article{wang2023improving,
+      title={Improving Text Embeddings with Large Language Models},
+      author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Yang, Linjun and Majumder, Rangan and Wei, Furu},
+      journal={arXiv preprint arXiv:2401.00368},
+      year={2023}
+    }
+    
+    @article{wang2022text,
+      title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
+      author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Jiao, Binxing and Yang, Linjun and Jiang, Daxin and Majumder, Rangan and Wei, Furu},
+      journal={arXiv preprint arXiv:2212.03533},
+      year={2022}
+    }
+    """,
 )

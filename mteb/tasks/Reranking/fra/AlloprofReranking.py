@@ -21,7 +21,7 @@ class AlloprofReranking(AbsTaskReranking):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2020-01-01", "2023-04-14"),  # supposition
         domains=["Web", "Academic", "Written"],
         task_subtypes=None,
@@ -65,5 +65,8 @@ class AlloprofReranking(AbsTaskReranking):
         self.dataset = datasets.DatasetDict({"test": self.dataset})
 
         self.dataset_transform()
+
+        # now convert to the new format
+        self.transform_old_dataset_format(self.dataset)
 
         self.data_loaded = True

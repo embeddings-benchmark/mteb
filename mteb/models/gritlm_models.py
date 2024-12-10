@@ -16,6 +16,18 @@ def gritlm_instruction(instruction: str = "") -> str:
     )
 
 
+GRITLM_CITATION = """
+@misc{muennighoff2024generative,
+      title={Generative Representational Instruction Tuning}, 
+      author={Niklas Muennighoff and Hongjin Su and Liang Wang and Nan Yang and Furu Wei and Tao Yu and Amanpreet Singh and Douwe Kiela},
+      year={2024},
+      eprint={2402.09906},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+"""
+
+
 gritlm7b = ModelMeta(
     loader=partial(
         instruct_wrapper,
@@ -38,6 +50,7 @@ gritlm7b = ModelMeta(
     similarity_fn_name="cosine",
     framework=["GritLM", "PyTorch"],
     use_instructions=True,
+    citation=GRITLM_CITATION,
 )
 gritlm8x7b = ModelMeta(
     loader=partial(
@@ -61,4 +74,5 @@ gritlm8x7b = ModelMeta(
     similarity_fn_name="cosine",
     framework=["GritLM", "PyTorch"],
     use_instructions=True,
+    citation=GRITLM_CITATION,
 )

@@ -29,6 +29,15 @@ arctic_m_v1_5 = ModelMeta(
     use_instructions=False,
     adapted_from=None,
     superseded_by=None,
+    citation="""@misc{merrick2024embeddingclusteringdataimprove,
+      title={Embedding And Clustering Your Data Can Improve Contrastive Pretraining}, 
+      author={Luke Merrick},
+      year={2024},
+      eprint={2407.18887},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2407.18887}, 
+    }""",
 )
 
 

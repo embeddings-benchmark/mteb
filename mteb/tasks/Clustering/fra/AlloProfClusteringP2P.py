@@ -31,7 +31,6 @@ class AlloProfClusteringP2P(AbsTaskClustering):
         eval_langs=["fra-Latn"],
         main_score="v_measure",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
