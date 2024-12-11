@@ -379,7 +379,8 @@ class MTEB:
         model: SentenceTransformer | Encoder,
         verbosity: int = 1,
         output_folder: str | None = "results",
-        eval_splits=None,
+        eval_splits: list[str] | None =None,
+        eval_langs: list[str] | None = None,
         overwrite_results: bool = False,
         raise_error: bool = True,
         co2_tracker: bool = False,
@@ -398,6 +399,7 @@ class MTEB:
             output_folder: Folder where the results will be saved. Default to 'results'. Where it will save the results in the format:
                 `{output_folder}/{model_name}/{model_revision}/{task_name}.json`.
             eval_splits: List of splits to evaluate on. If None, the splits are taken from the task metadata.
+            eval_langs: List of langs to evaluate on. If None, the splits are taken from the task metadata.
             overwrite_results: Whether to overwrite existing results.
             raise_error: Whether to raise an error if an exception occurs during evaluation.
             co2_tracker: Whether to enable or disable CO2 emissions tracker using codecarbon.
@@ -469,61 +471,100 @@ class MTEB:
                         del self.tasks[0]  # empty memory
                         continue
 
-                task_eval_splits = (
-                    eval_splits if eval_splits is not None else task.eval_splits
-                )
-                missing_splits = self._get_missing_splits(
-                    existing_results, task_eval_splits
+                task_eval_splits = eval_splits if eval_splits is not None else task.eval_splits
+                # Check missing splits
+                missing_splits = self._get_missing_splits(existing_results, task_eval_splits)
+
+                # If the task is multilingual, we have a dictionary of subsets and their languages.
+                # If not multilingual, eval_langs is either a list, then hf_subsets = "default".
+                task_eval_langs = None
+                if isinstance(task.metadata.eval_langs, dict):
+                    task_eval_langs = task.metadata.eval_langs
+
+                # Check missing subsets for the selected languages if needed
+                missing_subsets_per_split = self._get_missing_subsets_for_langs(
+                    existing_results,
+                    task_eval_splits,
+                    task_eval_langs,
+                    eval_langs
                 )
 
-                if not missing_splits and existing_results:
+                # If no splits missing and subsets missing are also empty, skip
+                all_subsets_missing = any(len(subsets) > 0 for subsets in missing_subsets_per_split.values())
+
+                if not missing_splits and not all_subsets_missing and existing_results:
                     evaluation_results.append(existing_results)
-
-                    # no splits are evaluated.
                     self.last_evaluated_splits[task.metadata.name] = []
                     del self.tasks[0]
                     continue
 
-                if missing_splits:
-                    logger.info(
-                        f"Running evaluation for missing splits: {missing_splits}"
-                    )
+                # Determine final splits to run (those that are missing or have missing subsets)
+                # A split should be run if it's missing entirely or if it has missing subsets.
+                final_splits_to_run = []
+                for sp in task_eval_splits:
+                    if sp in missing_splits:
+                        final_splits_to_run.append(sp)
+                    else:
+                        # If split is not missing entirely, check subsets
+                        if sp in missing_subsets_per_split and len(missing_subsets_per_split[sp]) > 0:
+                            final_splits_to_run.append(sp)
+
+                if not final_splits_to_run:
+                    # no new splits or subsets to run
+                    if existing_results:
+                        evaluation_results.append(existing_results)
+                    else:
+                        # No results and no splits means no evaluation (empty?), just skip
+                        evaluation_results.append(TaskResult(
+                            dataset_revision=task.metadata_dict["dataset"].get("revision", None),
+                            task_name=task.metadata_dict["name"],
+                            mteb_version=None,
+                            scores={},
+                            evaluation_time=0.0,
+                            kg_co2_emissions=None
+                        ))
+                    self.last_evaluated_splits[task.metadata.name] = []
+                    del self.tasks[0]
+                    continue
 
             try:
                 task.check_if_dataset_is_superseded()
                 task.load_data(eval_splits=task_eval_splits, **kwargs)
 
-                # run evaluation
                 task_results = {}
                 evaluation_time = 0
                 kg_co2_emissions: int | None = 0 if co2_tracker else None
 
                 self.last_evaluated_splits[task.metadata.name] = []
 
-                for split in missing_splits:
+                for split in final_splits_to_run:
+                    # Run only missing subsets if partial results exist
+                    subsets_to_run = missing_subsets_per_split[split]
+                    # If subsets_to_run is empty and split in missing_splits,
+                    # it means no results at all for this split previously
+                    # so we run all subsets.
+                    if not subsets_to_run and (existing_results is None or split in missing_splits):
+                        # Run all subsets
+                        if task_eval_langs is not None:
+                            subsets_to_run = list(task_eval_langs.keys())
+                        else:
+                            # Non multilingual
+                            subsets_to_run = ["default"]
+
                     if co2_tracker:
                         try:
                             from codecarbon import EmissionsTracker
                         except ImportError:
-                            raise ImportError(
-                                "To use the CO2 emissions tracker, please install codecarbon using 'pip install codecarbon'"
-                            )
-
-                        with EmissionsTracker(
-                            save_to_file=False, save_to_api=False, logging_logger=logger
-                        ) as tracker:
-                            results, tick, tock = self._run_eval(
-                                task,
+                            raise ImportError("Install codecarbon to use co2_tracker.")
+                        with EmissionsTracker(save_to_file=False, save_to_api=False, logging_logger=logger):
+                            results, tick, tock = task.evaluate(
                                 model,
                                 split,
-                                output_folder,
                                 encode_kwargs=encode_kwargs,
-                                **kwargs,
+                                **kwargs
                             )
 
-                        kg_co2_emissions += (
-                            tracker.final_emissions
-                        )  # expressed as kilograms of CO₂-equivalents
+                        kg_co2_emissions += tracker.final_emissions  # type: ignore
                     else:
                         results, tick, tock = self._run_eval(
                             task,
@@ -534,17 +575,30 @@ class MTEB:
                             **kwargs,
                         )
 
-                    self.last_evaluated_splits[task.metadata.name].append(split)
+                    # Filter results to only keep subsets_to_run if partial run
+                    filtered_results = {}
+                    for hf_subset, score_dict in results.items():
+                        if hf_subset in subsets_to_run:
+                            filtered_results[hf_subset] = score_dict
 
+                    # If we ran all subsets and got all results
+                    # filtered_results could be empty if subsets_to_run was empty, means no action needed
+                    if not subsets_to_run:
+                        continue
+
+                    # replace with filtered results
+                    task_results[split] = filtered_results
                     logger.info(
                         f"Evaluation for {task.metadata_dict['name']} on {split} took {tock - tick:.2f} seconds"
                     )
                     evaluation_time += tock - tick
 
-                    task_results[split] = results
                     if verbosity >= 1:
-                        logger.info(f"Scores: {results}")
+                        logger.info(f"Scores: {filtered_results}")
 
+                    self.last_evaluated_splits[task.metadata.name].append(split)
+
+                # Create new TaskResult
                 new_results = TaskResult.from_task_results(
                     task,
                     task_results,
@@ -552,6 +606,9 @@ class MTEB:
                     kg_co2_emissions=kg_co2_emissions,
                 )
 
+                # Merge with existing if needed
+                if output_path and save_path.exists():
+                    existing_results = TaskResult.from_disk(save_path)
                 if existing_results:
                     merged_results = self._merge_results(existing_results, new_results)
                 else:
@@ -637,3 +694,56 @@ class MTEB:
         return deepcopy(
             {task: list(splits) for task, splits in self.last_evaluated_splits.items()}
         )
+
+
+    @staticmethod
+    def _get_missing_subsets_for_langs(
+            existing_results: TaskResult | None,
+            task_eval_splits: list[str],
+            task_eval_langs: dict[str, list[str]] | None,
+            langs_to_run: list[str] | None,
+    ) -> dict[str, list[str]]:
+        """Return which subsets (hf_subsets) are missing results for the given languages to run.
+
+        If langs_to_run is None, consider all subsets/languages.
+        If langs_to_run is provided, only consider those subsets that include at least one language from langs_to_run.
+        If no task_eval_langs is provided (non-multilingual task), returns an empty dict.
+
+        Returns:
+            A dictionary with keys as splits and values as a list of subsets (hf_subsets) that need to be run.
+        """
+
+        # If no multilingual info provided, no need to check subsets by languages
+        if task_eval_langs is None:
+            return {split: [] for split in task_eval_splits}
+
+        # Filter subsets by desired languages
+        # If langs_to_run is None, we run all subsets. Otherwise run only those containing at least one of langs_to_run.
+        if langs_to_run is not None:
+            subsets_to_consider = []
+            for hf_subset, lang_list in task_eval_langs.items():
+                # lang_list are strings like "eng-Latn"
+                # Extract just the iso codes (part before the dash)
+                iso_langs = [l.split("-")[0] for l in lang_list]
+                if any(run_lang in iso_langs for run_lang in langs_to_run):
+                    subsets_to_consider.append(hf_subset)
+        else:
+            subsets_to_consider = list(task_eval_langs.keys())
+
+        missing_subsets_per_split = {}
+        if existing_results is None:
+            # If no existing results, all subsets need to be run
+            missing_subsets_per_split = {split: subsets_to_consider for split in task_eval_splits}
+        else:
+            # Check existing results for missing subsets
+            missing_subsets_per_split = {}
+            for split in task_eval_splits:
+                # existing_results.scores[split] = list of ScoresDict for each subset
+                existing_subsets = []
+                if split in existing_results.scores:
+                    for score_dict in existing_results.scores[split]:
+                        existing_subsets.append(score_dict["hf_subset"])
+                # Determine which subsets are missing
+                missing_subsets = [s for s in subsets_to_consider if s not in existing_subsets]
+                missing_subsets_per_split[split] = missing_subsets
+        return missing_subsets_per_split

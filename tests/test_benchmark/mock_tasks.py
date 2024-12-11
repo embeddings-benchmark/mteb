@@ -1420,19 +1420,31 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval, MultilingualTask):
             "test": {
                 "q1": "This is a test sentence",
                 "q2": "This is another test sentence",
-            }
+            },
+            "val": {
+                "q1": "This is a test sentence",
+                "q2": "This is another test sentence",
+            },
         }
         self.queries = {"eng": queries, "fra": queries}
         corpus = {
             "test": {
                 "d1": "This is a positive sentence",
                 "d2": "This is another positive sentence",
-            }
+            },
+            "val": {
+                "d1": "This is a positive sentence",
+                "d2": "This is another positive sentence",
+            },
         }
         self.corpus = {"eng": corpus, "fra": corpus}
 
         relevant_docs = {
             "test": {
+                "q1": {"d1": 1, "d2": 0},
+                "q2": {"d1": 0, "d2": 1},
+            },
+            "val": {
                 "q1": {"d1": 1, "d2": 0},
                 "q2": {"d1": 0, "d2": 1},
             },
