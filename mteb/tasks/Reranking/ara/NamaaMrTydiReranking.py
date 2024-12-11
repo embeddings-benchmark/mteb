@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
@@ -10,11 +8,11 @@ from ....abstasks.AbsTaskReranking import AbsTaskReranking
 class NamaaMrTydiReranking(AbsTaskReranking):
     metadata = TaskMetadata(
         name="NamaaMrTydiReranking",
-        description="MrTydi reranking dataset for arabic reranking evaluation",
+        description="Mr. TyDi is a multi-lingual benchmark dataset built on TyDi, covering eleven typologically diverse languages. It is designed for monolingual retrieval, specifically to evaluate ranking with learned dense representations. This dataset adapts the arabic test split for Reranking evaluation purposes by the addition of multiple (Hard) Negatives to each query and positive",
         reference="https://huggingface.co/NAMAA-Space",
         dataset={
             "path": "NAMAA-Space/mteb-eval-mrtydi",
-            "revision": "bb3638ffe3b2be76fe2e5a4581123923afee5cda",
+            "revision": "502637220a7ad0ecc5c39ff5518d7508d2624af8",
         },
         type="Reranking",
         category="s2s",
@@ -22,35 +20,20 @@ class NamaaMrTydiReranking(AbsTaskReranking):
         eval_splits=["test"],
         eval_langs=["ara-Arab"],
         main_score="map",
-        date=("2024-12-09", "2024-12-09"),
-        domains=[],
+        date=("2023-11-01", "2024-05-15"),
+        domains=["Encyclopaedic", "Written"],
         task_subtypes=[],
-        license="not specified",
+        license="cc-by-sa-3.0",
         annotations_creators="human-annotated",
         dialect=[],
-        sample_creation="created",
-        prompt="",
-        bibtex_citation="",
+        sample_creation="found",
+        bibtex_citation="""@article{muennighoff2022mteb,
+  doi = {10.48550/ARXIV.2210.07316},
+  url = {https://arxiv.org/abs/2210.07316},
+  author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Lo{\"\i}c and Reimers, Nils},
+  title = {MTEB: Massive Text Embedding Benchmark},
+  publisher = {arXiv},
+  journal={arXiv preprint arXiv:2210.07316},  
+  year = {2022}
+}""",
     )
-
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.dataset = datasets.load_dataset(
-            name="default",
-            **self.metadata_dict["dataset"],
-            split=self.metadata.eval_splits[0],
-        )
-
-        self.dataset = self.dataset.map(
-            lambda x: {
-                "query": x["query"],
-                "positive": [x["positive"]],
-                "negative": x["negative"],
-            }
-        )
-        self.dataset = datasets.DatasetDict({"test": self.dataset})
-        self.dataset_transform()
-
-        self.data_loaded = True
