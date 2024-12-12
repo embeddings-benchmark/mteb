@@ -22,7 +22,7 @@ MY_BENCHMARK = Benchmark(
 
 3) Run a representative set of models on benchmark and submit the results you do this by
 <!-- TODO: we should probably create seperate page for how to submit results -->
-1. Open a PR in https://hf.co/datasets/mteb/results with:
+1. Open a PR on the result [repository](https://github.com/embeddings-benchmark/results) with:
 - All results added in existing model folders or new folders
 - Updated paths.json (see snippet results.py)
 <!-- TODO: ^check if this is still required, if so we should probably update it, if not we should remove it once the new leaderboard is lie -->
@@ -35,6 +35,6 @@ MY_BENCHMARK = Benchmark(
 - You may also have to uncomment `, download_mode='force_redownload', verification_mode="no_checks")` where the datasets are loaded to experiment locally without caching of results
 - Test that it runs & works locally as you desire with python app.py, **please add screenshots to the PR**
 
-4) Wait for the automatic update
+1) Wait for the automatic update
 
 Once the review from (3) is done the benchmark should appear on the leaderboard once it automatically updated (might take a day).
