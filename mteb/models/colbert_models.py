@@ -139,7 +139,7 @@ colbert_v2 = ModelMeta(
     superseded_by=None,
 )
 
-# TODO:
+
 jina_colbert_v2 = ModelMeta(
     loader=partial(
         ColBERTWrapper,
