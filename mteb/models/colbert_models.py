@@ -110,7 +110,7 @@ class ColBERTWrapper(Wrapper):
         # encode returns a list of tensors shaped (x, token_dim) where x is the number of tokens in the sentence
         # we need to pad these tensors to the same length
         # Tensors have varying lengths; therefore, they need to be padded with zeros to ensure uniformity before being combined
-        # output shape will be (batch_size, max_tokens, token_dim)
+        # output shape will be (batch_size, len(max(tokens)), embedding_token_dim)
         pred = torch.nn.utils.rnn.pad_sequence(pred, batch_first=True, padding_value=0)
 
         return pred.cpu().numpy()
