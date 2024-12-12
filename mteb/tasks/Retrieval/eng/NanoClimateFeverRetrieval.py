@@ -86,10 +86,3 @@ class NanoClimateFeverRetrieval(AbsTaskRetrieval):
         # print("relevant_docs")
         # print(self.relevant_docs)
         self.data_loaded = True
-
-model_name = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
-
-
-model = SentenceTransformer(model_name)
-evaluation = MTEB(tasks=[NanoClimateFeverRetrieval()])
-evaluation.run(model)
