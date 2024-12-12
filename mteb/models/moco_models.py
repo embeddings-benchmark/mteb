@@ -8,6 +8,7 @@ from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
+from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
 
@@ -56,6 +57,9 @@ def mocov3_loader(**kwargs):
             self,
             images: list[Image.Image] | DataLoader,
             batch_size: int = 32,
+            task_name: str | None = None,
+            prompt_type: PromptType | None = None,
+            **kwargs: Any,
         ):
             all_image_embeddings = []
 
@@ -99,6 +103,9 @@ def mocov3_loader(**kwargs):
             images: list[Image.Image] | DataLoader = None,
             fusion_mode="sum",
             batch_size: int = 32,
+            task_name: str | None = None,
+            prompt_type: PromptType | None = None,
+            **kwargs: Any,
         ):
             if texts is None and images is None:
                 raise ValueError("images must be provided for MOCO models")

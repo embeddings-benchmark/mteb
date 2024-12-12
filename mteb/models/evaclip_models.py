@@ -8,6 +8,7 @@ from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
+from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
 
@@ -49,11 +50,20 @@ def evaclip_loader(**kwargs):
             sentences: list[str],
             *,
             batch_size: int = 32,
+            task_name: str | None = None,
+            prompt_type: PromptType | None = None,
             **kwargs: Any,
         ):
             return self.get_text_embeddings(texts=sentences, batch_size=batch_size)
 
-        def get_text_embeddings(self, texts: list[str], batch_size: int = 32):
+        def get_text_embeddings(
+            self,
+            texts: list[str],
+            batch_size: int = 32,
+            task_name: str | None = None,
+            prompt_type: PromptType | None = None,
+            **kwargs: Any,
+        ):
             all_text_embeddings = []
 
             with torch.no_grad(), torch.cuda.amp.autocast():
@@ -67,7 +77,12 @@ def evaclip_loader(**kwargs):
             return all_text_embeddings
 
         def get_image_embeddings(
-            self, images: list[Image.Image] | DataLoader, batch_size: int = 32
+            self,
+            images: list[Image.Image] | DataLoader,
+            batch_size: int = 32,
+            task_name: str | None = None,
+            prompt_type: PromptType | None = None,
+            **kwargs: Any,
         ):
             all_image_embeddings = []
             if isinstance(images, DataLoader):
@@ -114,6 +129,9 @@ def evaclip_loader(**kwargs):
             images: list[Image.Image] | DataLoader = None,
             fusion_mode="sum",
             batch_size: int = 32,
+            task_name: str | None = None,
+            prompt_type: PromptType | None = None,
+            **kwargs: Any,
         ):
             if texts is None and images is None:
                 raise ValueError("Either texts or images must be provided")

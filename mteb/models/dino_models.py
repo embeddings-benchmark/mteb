@@ -9,6 +9,7 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoImageProcessor, AutoModel
 
+from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
 
@@ -29,7 +30,13 @@ class DINOModelWrapper:
         self.processor = AutoImageProcessor.from_pretrained(model_name)
 
     @staticmethod
-    def get_text_embeddings(texts: list[str], batch_size: int = 32):
+    def get_text_embeddings(
+        texts: list[str],
+        batch_size: int = 32,
+        task_name: str | None = None,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ):
         raise ValueError("DINO models only support image encoding.")
 
     def get_image_embeddings(
@@ -37,6 +44,9 @@ class DINOModelWrapper:
         images: list[Image.Image] | DataLoader,
         batch_size: int = 32,
         pooling="cls",
+        task_name: str | None = None,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
     ):
         all_image_embeddings = []
 
@@ -87,6 +97,9 @@ class DINOModelWrapper:
         images: list[Image.Image] | DataLoader = None,
         fusion_mode="sum",
         batch_size: int = 32,
+        task_name: str | None = None,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
     ):
         if texts is None and images is None:
             raise ValueError("images must be provided for DINO models")
