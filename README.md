@@ -335,10 +335,11 @@ evaluation = MTEB(tasks=tasks)
 
 evaluation.run(
     colbert,
-    eval_splits=eval_splits
+    eval_splits=eval_splits,
+    corpus_chunk_size=500,
 )
 ```
-
+This implementation uses the MaxSim operation to calculate the similarity between the sentences. Because of this, the number of embeddings processed is higher, which might lead to higher resource usage. Therefore, you can lower the `corpus_chunk_size` to reduce the load on resources.
 
 ### Saving retrieval task predictions
 
