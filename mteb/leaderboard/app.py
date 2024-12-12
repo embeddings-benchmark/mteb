@@ -9,7 +9,7 @@ from gradio_rangeslider import RangeSlider
 
 import mteb
 from mteb.caching import json_cache
-from mteb.leaderboard.figures import performance_size_plot
+from mteb.leaderboard.figures import performance_size_plot, radar_chart
 from mteb.leaderboard.table import scores_to_tables
 
 
@@ -218,10 +218,16 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             )
             citation = gr.Markdown(update_citation, inputs=[benchmark_select])
         with gr.Column():
-            plot = gr.Plot(performance_size_plot, inputs=[summary_table])
-            gr.Markdown(
-                "*We only display models that have been run on all tasks in the benchmark*"
-            )
+            with gr.Tab("Performance-Size Plot"):
+                plot = gr.Plot(performance_size_plot, inputs=[summary_table])
+                gr.Markdown(
+                    "*We only display models that have been run on all tasks in the benchmark*"
+                )
+            with gr.Tab("Top 5 Radar Chart"):
+                radar_plot = gr.Plot(radar_chart, inputs=[summary_table])
+                gr.Markdown(
+                    "*We only display models that have been run on all task types in the benchmark*"
+                )
     with gr.Tab("Summary"):
         summary_table.render()
     with gr.Tab("Performance per task"):

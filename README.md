@@ -403,6 +403,28 @@ df = results_to_dataframe(results)
 
 </details>
 
+
+<details>
+  <summary>  Annotate Contamination in the training data of a model  </summary>
+
+### Annotate Contamination
+
+have your found contamination in the training data of a model? Please let us know, either by opening an issue or ideally by submitting a PR
+annotatig the training datasets of the model:
+
+```py
+model_w_contamination = ModelMeta(
+    name = "model-with-contamination"
+    ...
+    training_datasets: {"ArguAna": # name of dataset within MTEB
+                        ["test"]} # the splits that have been trained on
+    ...
+)
+```
+
+
+</details>
+
 <details>
   <summary>  Caching Embeddings To Re-Use Them </summary>
 
