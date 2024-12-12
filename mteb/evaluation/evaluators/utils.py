@@ -55,15 +55,16 @@ def dot_score(a: torch.Tensor, b: torch.Tensor):
 
 def max_sim(a: list, b: list):
     """Computes the max-similarity max_sim(a[i], b[j]) for all i and j.
+        Works with a Tensor of the shape (batch_size, num_tokens, token_dim)
 
     Return:
         Matrix with res[i][j]  = max_sim(a[i], b[j])
     """  # noqa: D402
     if not isinstance(a, torch.Tensor):
-        a = torch.tensor(a)
+        a = torch.tensor(a, dtype=torch.float32)
 
     if not isinstance(b, torch.Tensor):
-        b = torch.tensor(b)
+        b = torch.tensor(b, dtype=torch.float32)
 
     if len(a.shape) == 2:
         a = a.unsqueeze(0)

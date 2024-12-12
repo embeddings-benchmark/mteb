@@ -26,6 +26,8 @@ FRAMEWORKS = Literal[
     "API",
     "Tevatron",
     "NumPy",
+    "PyLate",
+    "ColBERT",
 ]
 DISTANCE_METRICS = Literal["cosine", "max_sim"]
 
