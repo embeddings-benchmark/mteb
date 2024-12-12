@@ -539,8 +539,9 @@ class MTEB:
                         try:
                             from codecarbon import EmissionsTracker
                         except ImportError:
-                            raise ImportError("Install codecarbon to use co2_tracker.")
-
+                            raise ImportError(
+                                "To use the CO2 emissions tracker, please install codecarbon using 'pip install codecarbon'"
+                            )
                         with EmissionsTracker(
                             save_to_file=False, save_to_api=False, logging_logger=logger
                         ) as tracker:
@@ -553,7 +554,9 @@ class MTEB:
                                 **kwargs,
                             )
 
-                        kg_co2_emissions += tracker.final_emissions  # type: ignore
+                        kg_co2_emissions += (
+                            tracker.final_emissions
+                        )  # expressed as kilograms of CO₂-equivalents
                     else:
                         results, tick, tock = self._run_eval(
                             task,

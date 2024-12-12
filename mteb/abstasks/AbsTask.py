@@ -97,12 +97,12 @@ class AbsTask(ABC):
         """Evaluates a Sentence Embedding Model on the task.
 
         Args:
-            model: Sentence embedding method. Implements a encode(sentences) method.
+            model: Sentence embedding method. Implements a encode(sentences) method, that encodes sentences and returns a numpy matrix with the
+                sentence embeddings
             split: Which datasplit to be used.
             subsets_to_run: List of HFSubsets to evaluate. If None, all subsets are evaluated.
-            encode_kwargs: Additional keyword arguments passed to the model's `encode` method.
+            encode_kwargs: Additional keyword arguments that are passed to the model's `encode` method.
             kwargs: Additional keyword arguments that are passed to the _evaluate_subset method.
-                    In particular, this may include `subsets_to_run`, a list of hf_subsets to evaluate.
         """
         if not self.data_loaded:
             self.load_data()

@@ -1349,6 +1349,62 @@ class MockRetrievalTask(AbsTaskRetrieval):
 
 class MockMultilingualRetrievalTask(AbsTaskRetrieval, MultilingualTask):
     expected_stats = {
+        "val": {
+            "number_of_characters": 224,
+            "num_samples": 8,
+            "num_queries": 4,
+            "num_documents": 4,
+            "min_document_length": 23,
+            "average_document_length": 26.0,
+            "max_document_length": 29,
+            "unique_documents": 4,
+            "min_query_length": 27,
+            "average_query_length": 30.0,
+            "max_query_length": 33,
+            "unique_queries": 4,
+            "min_relevant_docs_per_query": 2,
+            "average_relevant_docs_per_query": 2.0,
+            "max_relevant_docs_per_query": 2,
+            "unique_relevant_docs": 4,
+            "hf_subset_descriptive_stats": {
+                "eng": {
+                    "number_of_characters": 112,
+                    "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
+                    "min_document_length": 23,
+                    "average_document_length": 26.0,
+                    "max_document_length": 29,
+                    "unique_documents": 2,
+                    "min_query_length": 27,
+                    "average_query_length": 30.0,
+                    "max_query_length": 33,
+                    "unique_queries": 2,
+                    "min_relevant_docs_per_query": 2,
+                    "average_relevant_docs_per_query": 2.0,
+                    "max_relevant_docs_per_query": 2,
+                    "unique_relevant_docs": 2,
+                },
+                "fra": {
+                    "number_of_characters": 112,
+                    "num_samples": 4,
+                    "num_queries": 2,
+                    "num_documents": 2,
+                    "min_document_length": 23,
+                    "average_document_length": 26.0,
+                    "max_document_length": 29,
+                    "unique_documents": 2,
+                    "min_query_length": 27,
+                    "average_query_length": 30.0,
+                    "max_query_length": 33,
+                    "unique_queries": 2,
+                    "min_relevant_docs_per_query": 2,
+                    "average_relevant_docs_per_query": 2.0,
+                    "max_relevant_docs_per_query": 2,
+                    "unique_relevant_docs": 2,
+                },
+            },
+        },
         "test": {
             "number_of_characters": 224,
             "num_samples": 8,
@@ -1404,14 +1460,14 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval, MultilingualTask):
                     "unique_relevant_docs": 2,
                 },
             },
-        }
+        },
     }
 
     metadata = TaskMetadata(
         type="Retrieval",
         name="MockMultilingualRetrievalTask",
         main_score="ndcg_at_10",
-        **general_args,  # type: ignore
+        **dict(general_args | {"eval_splits": ["val", "test"]}),  # type: ignore
     )
     metadata.eval_langs = multilingual_eval_langs
 
