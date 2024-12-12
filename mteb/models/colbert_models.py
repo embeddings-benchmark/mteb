@@ -20,6 +20,7 @@ class ColBERTWrapper(Wrapper):
     def __init__(
         self,
         model_name: str,
+        revision: str | None = None,
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
@@ -27,6 +28,7 @@ class ColBERTWrapper(Wrapper):
 
         Args:
             model_name: The ColBERT model to load from HuggingFace Hub.
+            revision: The revision of the model to use.
             model_prompts: A dictionary mapping task names to prompt names.
                 First priority is given to the composed prompt of task name + prompt type (query or passage), then to the specific task prompt,
                 then to the composed prompt of task type + prompt type, then to the specific task type prompt,
@@ -41,7 +43,7 @@ class ColBERTWrapper(Wrapper):
             ) from e
 
         self.model_name = model_name
-        self.model = colbert_model.ColBERT(self.model_name, **kwargs)
+        self.model = colbert_model.ColBERT(self.model_name, revision=revision, **kwargs)
         if (
             model_prompts is None
             and hasattr(self.model, "prompts")
@@ -83,11 +85,6 @@ class ColBERTWrapper(Wrapper):
         Returns:
             The encoded sentences as a numpy array.
         """
-        if "task_name" in kwargs:
-            kwargs.pop("task_name")
-        if "prompt_type" in kwargs:
-            kwargs.pop("prompt_type")
-
         prompt_name = None
         if self.model_prompts is not None:
             prompt_name = self.get_prompt_name(
@@ -105,6 +102,7 @@ class ColBERTWrapper(Wrapper):
 
         pred = self.model.encode(
             sentences,
+            prompt_name=prompt_name,
             is_query=True if prompt_type == PromptType.query else False,
             **kwargs,
         )
