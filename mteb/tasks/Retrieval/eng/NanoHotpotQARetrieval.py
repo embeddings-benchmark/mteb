@@ -5,11 +5,13 @@ from datasets import load_dataset
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+
 class NanoHotpotQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NanoHotpotQARetrieval",
-        description="NanoHotpotQARetrieval is a smaller subset of the " + "HotpotQA dataset, which is a question answering dataset featuring natural, multi-hop questions, with strong"
-            + " supervision for supporting facts to enable more explainable question answering systems.", 
+        description="NanoHotpotQARetrieval is a smaller subset of the "
+        + "HotpotQA dataset, which is a question answering dataset featuring natural, multi-hop questions, with strong"
+        + " supervision for supporting facts to enable more explainable question answering systems.",
         reference="https://hotpotqa.github.io/",
         dataset={
             "path": "zeta-alpha-ai/NanoHotpotQA",
@@ -79,20 +81,10 @@ class NanoHotpotQARetrieval(AbsTaskRetrieval):
 
         self.relevant_docs = {
             split: {
-                sample["query-id"]: {
-                    sample[
-                        "corpus-id"
-                    ]: 1  # Assuming a score of 1 for relevant documents
-                }
+                sample["query-id"]: {sample["corpus-id"]: 1}
                 for sample in self.relevant_docs[split]
             }
             for split in self.relevant_docs
         }
 
-        # print("corpus")
-        # print(self.corpus)
-        # print("queries")
-        # print(self.queries)
-        # print("relevant_docs")
-        # print(self.relevant_docs)
         self.data_loaded = True

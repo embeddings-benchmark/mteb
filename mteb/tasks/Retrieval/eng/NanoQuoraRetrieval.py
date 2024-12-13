@@ -9,8 +9,9 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class NanoQuoraRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NanoQuoraRetrieval",
-        description="NanoQuoraRetrieval is a smaller subset of the " + "QuoraRetrieval dataset, which is based on questions that are marked as duplicates on the Quora platform. Given a"
-            + " question, find other (duplicate) questions.",
+        description="NanoQuoraRetrieval is a smaller subset of the "
+        + "QuoraRetrieval dataset, which is based on questions that are marked as duplicates on the Quora platform. Given a"
+        + " question, find other (duplicate) questions.",
         reference="https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs",
         dataset={
             "path": "zeta-alpha-ai/NanoQuoraRetrieval",
@@ -29,7 +30,7 @@ class NanoQuoraRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-       bibtex_citation="""@misc{quora-question-pairs,
+        bibtex_citation="""@misc{quora-question-pairs,
     author = {DataCanary, hilfialkaff, Lili Jiang, Meg Risdal, Nikhil Dandekar, tomtung},
     title = {Quora Question Pairs},
     publisher = {Kaggle},
@@ -64,20 +65,10 @@ class NanoQuoraRetrieval(AbsTaskRetrieval):
 
         self.relevant_docs = {
             split: {
-                sample["query-id"]: {
-                    sample[
-                        "corpus-id"
-                    ]: 1  # Assuming a score of 1 for relevant documents
-                }
+                sample["query-id"]: {sample["corpus-id"]: 1}
                 for sample in self.relevant_docs[split]
             }
             for split in self.relevant_docs
         }
 
-        # print("corpus")
-        # print(self.corpus)
-        # print("queries")
-        # print(self.queries)
-        # print("relevant_docs")
-        # print(self.relevant_docs)
         self.data_loaded = True

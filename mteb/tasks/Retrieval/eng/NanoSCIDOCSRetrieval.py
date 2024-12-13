@@ -5,11 +5,13 @@ from datasets import load_dataset
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+
 class NanoSCIDOCSRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NanoSCIDOCSRetrieval",
-        description="NanoFiQA2018 is a smaller subset of " + "SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation"
-            + " prediction, to document classification and recommendation.",
+        description="NanoFiQA2018 is a smaller subset of "
+        + "SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation"
+        + " prediction, to document classification and recommendation.",
         reference="https://allenai.org/data/scidocs",
         dataset={
             "path": "zeta-alpha-ai/NanoSCIDOCS",
@@ -62,20 +64,10 @@ class NanoSCIDOCSRetrieval(AbsTaskRetrieval):
 
         self.relevant_docs = {
             split: {
-                sample["query-id"]: {
-                    sample[
-                        "corpus-id"
-                    ]: 1  # Assuming a score of 1 for relevant documents
-                }
+                sample["query-id"]: {sample["corpus-id"]: 1}
                 for sample in self.relevant_docs[split]
             }
             for split in self.relevant_docs
         }
 
-        # print("corpus")
-        # print(self.corpus)
-        # print("queries")
-        # print(self.queries)
-        # print("relevant_docs")
-        # print(self.relevant_docs)
         self.data_loaded = True
