@@ -462,11 +462,8 @@ class MTEB:
             task_eval_splits = (
                 eval_splits if eval_splits is not None else task.eval_splits
             )
-            task_eval_langs = (
-                task.metadata.eval_langs
-                if isinstance(task.metadata.eval_langs, dict)
-                else None
-            )
+            task_eval_langs = task.metadata.hf_subsets_to_langscripts
+
             existing_results = None
             save_path = None
 
@@ -680,7 +677,7 @@ class MTEB:
     def _get_missing_evaluations(
         existing_results: TaskResult | None,
         task_eval_splits: list[str],
-        task_eval_langs: dict[str, list[str]] | None,
+        task_eval_langs: dict[str, list[str]],
         eval_langs: list[str] | None,
     ) -> dict[str, dict[str, Any]]:
         """Return a dictionary for each split, indicating if the whole split is missing and which subsets are missing."""
@@ -690,21 +687,17 @@ class MTEB:
         }
 
         # Determine subsets to consider if multilingual
-        if task_eval_langs is not None:
-            if eval_langs is None:
-                # If no eval_langs specified, consider all subsets
-                subsets_to_consider = list(task_eval_langs.keys())
-            else:
-                subsets_to_consider = []
-                for hf_subset, lang_list in task_eval_langs.items():
-                    # lang_list are like ["eng-Latn", "deu-Latn"]
-                    iso_langs = [l.split("-")[0] for l in lang_list]
-                    # If any requested language is present in this subset, consider it
-                    if any(run_lang in iso_langs for run_lang in eval_langs):
-                        subsets_to_consider.append(hf_subset)
+        if eval_langs is None:
+            # If no eval_langs specified, consider all subsets
+            subsets_to_consider = list(task_eval_langs.keys())
         else:
-            # Not multilingual, just one "default" subset
-            subsets_to_consider = ["default"]
+            subsets_to_consider = []
+            for hf_subset, lang_list in task_eval_langs.items():
+                # lang_list are like ["eng-Latn", "deu-Latn"]
+                iso_langs = [l.split("-")[0] for l in lang_list]
+                # If any requested language is present in this subset, consider it
+                if any(run_lang in iso_langs for run_lang in eval_langs):
+                    subsets_to_consider.append(hf_subset)
 
         # If no existing results, all splits and subsets are missing
         if existing_results is None:
