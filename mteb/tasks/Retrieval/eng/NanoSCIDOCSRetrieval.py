@@ -5,13 +5,14 @@ from datasets import load_dataset
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-class NanoClimateFeverRetrieval(AbsTaskRetrieval):
+class NanoSCIDOCSRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="NanoClimateFeverRetrieval",
-        description="NanoClimateFever is a small version of the BEIR dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change.",
-        reference="https://arxiv.org/abs/2012.00614",
+        name="NanoSCIDOCSRetrieval",
+        description="NanoFiQA2018 is a smaller subset of " + "SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation"
+            + " prediction, to document classification and recommendation.",
+        reference="https://allenai.org/data/scidocs",
         dataset={
-            "path": "zeta-alpha-ai/NanoClimateFEVER",
+            "path": "zeta-alpha-ai/NanoSCIDOCS",
             "revision": "main",
         },
         type="Retrieval",
@@ -21,22 +22,20 @@ class NanoClimateFeverRetrieval(AbsTaskRetrieval):
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=["2020-01-01", "2020-12-31"],
-        domains=["Non-fiction", "Academic", "News"],
-        task_subtypes=["Claim verification"],
+        domains=["Academic", "Written", "Non-fiction"],
+        task_subtypes=[],
         license="cc-by-4.0",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{diggelmann2021climatefever,
-      title={CLIMATE-FEVER: A Dataset for Verification of Real-World Climate Claims}, 
-      author={Thomas Diggelmann and Jordan Boyd-Graber and Jannis Bulian and Massimiliano Ciaramita and Markus Leippold},
-      year={2021},
-      eprint={2012.00614},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+        bibtex_citation="""@inproceedings{specter2020cohan,
+  title={SPECTER: Document-level Representation Learning using Citation-informed Transformers},
+  author={Arman Cohan and Sergey Feldman and Iz Beltagy and Doug Downey and Daniel S. Weld},
+  booktitle={ACL},
+  year={2020}
 }""",
         prompt={
-            "query": "Given a claim about climate change, retrieve documents that support or refute the claim"
+            "query": "Given a scientific paper title, retrieve paper abstracts that are cited by the given paper"
         },
     )
 
@@ -44,9 +43,9 @@ class NanoClimateFeverRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus = load_dataset("zeta-alpha-ai/NanoClimateFEVER", "corpus")
-        self.queries = load_dataset("zeta-alpha-ai/NanoClimateFEVER", "queries")
-        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoClimateFEVER", "qrels")
+        self.corpus = load_dataset("zeta-alpha-ai/NanoSCIDOCS", "corpus")
+        self.queries = load_dataset("zeta-alpha-ai/NanoSCIDOCS", "queries")
+        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoSCIDOCS", "qrels")
 
         self.corpus = {
             split: {

@@ -5,13 +5,14 @@ from datasets import load_dataset
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-class NanoClimateFeverRetrieval(AbsTaskRetrieval):
+
+class NanoNFCorpusRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="NanoClimateFeverRetrieval",
-        description="NanoClimateFever is a small version of the BEIR dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change.",
-        reference="https://arxiv.org/abs/2012.00614",
+        name="NanoNFCorpusRetrieval",
+        description="NanoNFCorpus is a smaller subset of NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval.",
+        reference="https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/",
         dataset={
-            "path": "zeta-alpha-ai/NanoClimateFEVER",
+            "path": "zeta-alpha-ai/NanoNFCorpus",
             "revision": "main",
         },
         type="Retrieval",
@@ -20,23 +21,25 @@ class NanoClimateFeverRetrieval(AbsTaskRetrieval):
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=["2020-01-01", "2020-12-31"],
-        domains=["Non-fiction", "Academic", "News"],
-        task_subtypes=["Claim verification"],
+        date=["2016-01-01", "2016-12-31"],
+        domains=["Medical", "Academic", "Written"],
+        task_subtypes=["Question answering"],
         license="cc-by-4.0",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{diggelmann2021climatefever,
-      title={CLIMATE-FEVER: A Dataset for Verification of Real-World Climate Claims}, 
-      author={Thomas Diggelmann and Jordan Boyd-Graber and Jannis Bulian and Massimiliano Ciaramita and Markus Leippold},
-      year={2021},
-      eprint={2012.00614},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+        bibtex_citation="""@inproceedings{boteva2016,
+  author = {Boteva, Vera and Gholipour, Demian and Sokolov, Artem and Riezler, Stefan},
+  title = {A Full-Text Learning to Rank Dataset for Medical Information Retrieval},
+  journal = {Proceedings of the 38th European Conference on Information Retrieval},
+  journal-abbrev = {ECIR},
+  year = {2016},
+  city = {Padova},
+  country = {Italy},
+  url = {http://www.cl.uni-heidelberg.de/~riezler/publications/papers/ECIR2016.pdf}
 }""",
         prompt={
-            "query": "Given a claim about climate change, retrieve documents that support or refute the claim"
+            "query": "Given a question, retrieve relevant documents that best answer the question"
         },
     )
 
@@ -44,9 +47,9 @@ class NanoClimateFeverRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus = load_dataset("zeta-alpha-ai/NanoClimateFEVER", "corpus")
-        self.queries = load_dataset("zeta-alpha-ai/NanoClimateFEVER", "queries")
-        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoClimateFEVER", "qrels")
+        self.corpus = load_dataset("zeta-alpha-ai/NanoNFCorpus", "corpus")
+        self.queries = load_dataset("zeta-alpha-ai/NanoNFCorpus", "queries")
+        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoNFCorpus", "qrels")
 
         self.corpus = {
             split: {

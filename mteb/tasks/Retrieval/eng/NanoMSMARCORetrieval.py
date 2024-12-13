@@ -5,13 +5,13 @@ from datasets import load_dataset
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-class NanoClimateFeverRetrieval(AbsTaskRetrieval):
+class NanoMSMARCORetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="NanoClimateFeverRetrieval",
-        description="NanoClimateFever is a small version of the BEIR dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change.",
-        reference="https://arxiv.org/abs/2012.00614",
+        name="NanoMSMARCORetrieval",
+        description="NanoMSMARCORetrieval is a smaller subset of MS MARCO, a collection of datasets focused on deep learning in search.",
+        reference="https://microsoft.github.io/msmarco/",
         dataset={
-            "path": "zeta-alpha-ai/NanoClimateFEVER",
+            "path": "zeta-alpha-ai/NanoMSMARCO",
             "revision": "main",
         },
         type="Retrieval",
@@ -20,23 +20,35 @@ class NanoClimateFeverRetrieval(AbsTaskRetrieval):
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=["2020-01-01", "2020-12-31"],
-        domains=["Non-fiction", "Academic", "News"],
-        task_subtypes=["Claim verification"],
+        date=["2016-01-01", "2016-12-31"],
+        domains=["Web"],
+        task_subtypes=["Question answering"],
         license="cc-by-4.0",
-        annotations_creators="expert-annotated",
+        annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{diggelmann2021climatefever,
-      title={CLIMATE-FEVER: A Dataset for Verification of Real-World Climate Claims}, 
-      author={Thomas Diggelmann and Jordan Boyd-Graber and Jannis Bulian and Massimiliano Ciaramita and Markus Leippold},
-      year={2021},
-      eprint={2012.00614},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+        bibtex_citation="""@article{DBLP:journals/corr/NguyenRSGTMD16,
+  author    = {Tri Nguyen and
+               Mir Rosenberg and
+               Xia Song and
+               Jianfeng Gao and
+               Saurabh Tiwary and
+               Rangan Majumder and
+               Li Deng},
+  title     = {{MS} {MARCO:} {A} Human Generated MAchine Reading COmprehension Dataset},
+  journal   = {CoRR},
+  volume    = {abs/1611.09268},
+  year      = {2016},
+  url       = {http://arxiv.org/abs/1611.09268},
+  archivePrefix = {arXiv},
+  eprint    = {1611.09268},
+  timestamp = {Mon, 13 Aug 2018 16:49:03 +0200},
+  biburl    = {https://dblp.org/rec/journals/corr/NguyenRSGTMD16.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
 }""",
         prompt={
-            "query": "Given a claim about climate change, retrieve documents that support or refute the claim"
+            "query": "Given a web search query, retrieve relevant passages that answer the query"
         },
     )
 
@@ -44,9 +56,9 @@ class NanoClimateFeverRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus = load_dataset("zeta-alpha-ai/NanoClimateFEVER", "corpus")
-        self.queries = load_dataset("zeta-alpha-ai/NanoClimateFEVER", "queries")
-        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoClimateFEVER", "qrels")
+        self.corpus = load_dataset("zeta-alpha-ai/NanoMSMARCO", "corpus")
+        self.queries = load_dataset("zeta-alpha-ai/NanoMSMARCO", "queries")
+        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoMSMARCO", "qrels")
 
         self.corpus = {
             split: {

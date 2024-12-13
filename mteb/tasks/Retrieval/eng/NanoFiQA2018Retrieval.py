@@ -5,13 +5,13 @@ from datasets import load_dataset
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-class NanoClimateFeverRetrieval(AbsTaskRetrieval):
+class NanoFiQA2018Retrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="NanoClimateFeverRetrieval",
-        description="NanoClimateFever is a small version of the BEIR dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change.",
-        reference="https://arxiv.org/abs/2012.00614",
+        name="NanoFiQA2018Retrieval",
+        description="NanoFiQA2018 is a smaller subset of the Financial Opinion Mining and Question Answering dataset.",
+        reference="https://sites.google.com/view/fiqa/",
         dataset={
-            "path": "zeta-alpha-ai/NanoClimateFEVER",
+            "path": "zeta-alpha-ai/NanoFiQA2018",
             "revision": "main",
         },
         type="Retrieval",
@@ -20,23 +20,23 @@ class NanoClimateFeverRetrieval(AbsTaskRetrieval):
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=["2020-01-01", "2020-12-31"],
-        domains=["Non-fiction", "Academic", "News"],
-        task_subtypes=["Claim verification"],
+        date=["2018-01-01", "2018-12-31"],
+        domains=["Academic", "Social"],
+        task_subtypes=["Sentiment/Hate speech"],
         license="cc-by-4.0",
-        annotations_creators="expert-annotated",
+        annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{diggelmann2021climatefever,
-      title={CLIMATE-FEVER: A Dataset for Verification of Real-World Climate Claims}, 
-      author={Thomas Diggelmann and Jordan Boyd-Graber and Jannis Bulian and Massimiliano Ciaramita and Markus Leippold},
-      year={2021},
-      eprint={2012.00614},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+        bibtex_citation="""@inproceedings{
+thakur2021beir,
+title={{BEIR}: A Heterogeneous Benchmark for Zero-shot Evaluation of Information Retrieval Models},
+author={Nandan Thakur and Nils Reimers and Andreas R{\"u}ckl{\'e} and Abhishek Srivastava and Iryna Gurevych},
+booktitle={Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
+year={2021},
+url={https://openreview.net/forum?id=wCu6T5xFjeJ}
 }""",
         prompt={
-            "query": "Given a claim about climate change, retrieve documents that support or refute the claim"
+            "query": "Given a financial question, retrieve user replies that best answer the question"
         },
     )
 
@@ -44,9 +44,9 @@ class NanoClimateFeverRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus = load_dataset("zeta-alpha-ai/NanoClimateFEVER", "corpus")
-        self.queries = load_dataset("zeta-alpha-ai/NanoClimateFEVER", "queries")
-        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoClimateFEVER", "qrels")
+        self.corpus = load_dataset("zeta-alpha-ai/NanoFiQA2018", "corpus")
+        self.queries = load_dataset("zeta-alpha-ai/NanoFiQA2018", "queries")
+        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoFiQA2018", "qrels")
 
         self.corpus = {
             split: {
@@ -80,3 +80,4 @@ class NanoClimateFeverRetrieval(AbsTaskRetrieval):
         # print("relevant_docs")
         # print(self.relevant_docs)
         self.data_loaded = True
+

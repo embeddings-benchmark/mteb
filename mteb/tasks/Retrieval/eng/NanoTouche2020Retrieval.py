@@ -5,13 +5,13 @@ from datasets import load_dataset
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-class NanoClimateFeverRetrieval(AbsTaskRetrieval):
+class NanoTouche2020Retrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="NanoClimateFeverRetrieval",
-        description="NanoClimateFever is a small version of the BEIR dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change.",
-        reference="https://arxiv.org/abs/2012.00614",
+        name="NanoTouche2020Retrieval",
+        description="NanoTouche2020 is a smaller subset of Touché Task 1: Argument Retrieval for Controversial Questions.",
+        reference="https://webis.de/events/touche-20/shared-task-1.html",
         dataset={
-            "path": "zeta-alpha-ai/NanoClimateFEVER",
+            "path": "zeta-alpha-ai/NanoTouche2020",
             "revision": "main",
         },
         type="Retrieval",
@@ -20,23 +20,32 @@ class NanoClimateFeverRetrieval(AbsTaskRetrieval):
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=["2020-01-01", "2020-12-31"],
-        domains=["Non-fiction", "Academic", "News"],
-        task_subtypes=["Claim verification"],
+        date=("2020-09-23", "2020-09-23"),
+        domains=["Academic"],
+        task_subtypes=["Question answering"],
         license="cc-by-4.0",
-        annotations_creators="expert-annotated",
+        annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{diggelmann2021climatefever,
-      title={CLIMATE-FEVER: A Dataset for Verification of Real-World Climate Claims}, 
-      author={Thomas Diggelmann and Jordan Boyd-Graber and Jannis Bulian and Massimiliano Ciaramita and Markus Leippold},
-      year={2021},
-      eprint={2012.00614},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+        bibtex_citation="""@dataset{potthast_2022_6862281,
+  author       = {Potthast, Martin and
+                  Gienapp, Lukas and
+                  Wachsmuth, Henning and
+                  Hagen, Matthias and
+                  Fröbe, Maik and
+                  Bondarenko, Alexander and
+                  Ajjour, Yamen and
+                  Stein, Benno},
+  title        = {{Touché20-Argument-Retrieval-for-Controversial- 
+                   Questions}},
+  month        = jul,
+  year         = 2022,
+  publisher    = {Zenodo},
+  doi          = {10.5281/zenodo.6862281},
+  url          = {https://doi.org/10.5281/zenodo.6862281}
 }""",
         prompt={
-            "query": "Given a claim about climate change, retrieve documents that support or refute the claim"
+            "query": "Given a question, retrieve detailed and persuasive arguments that answer the question"
         },
     )
 
@@ -44,9 +53,9 @@ class NanoClimateFeverRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus = load_dataset("zeta-alpha-ai/NanoClimateFEVER", "corpus")
-        self.queries = load_dataset("zeta-alpha-ai/NanoClimateFEVER", "queries")
-        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoClimateFEVER", "qrels")
+        self.corpus = load_dataset("zeta-alpha-ai/NanoTouche2020", "corpus")
+        self.queries = load_dataset("zeta-alpha-ai/NanoTouche2020", "queries")
+        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoTouche2020", "qrels")
 
         self.corpus = {
             split: {

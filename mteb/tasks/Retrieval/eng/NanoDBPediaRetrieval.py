@@ -5,13 +5,13 @@ from datasets import load_dataset
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-class NanoClimateFeverRetrieval(AbsTaskRetrieval):
+class NanoDBPediaRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="NanoClimateFeverRetrieval",
-        description="NanoClimateFever is a small version of the BEIR dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change.",
-        reference="https://arxiv.org/abs/2012.00614",
+        name="NanoDBPediaRetrieval",
+        description="NanoDBPediaRetrieval is a small version of the standard test collection for entity search over the DBpedia knowledge base.",
+        reference="https://huggingface.co/datasets/zeta-alpha-ai/NanoDBPedia",
         dataset={
-            "path": "zeta-alpha-ai/NanoClimateFEVER",
+            "path": "zeta-alpha-ai/NanoDBPedia",
             "revision": "main",
         },
         type="Retrieval",
@@ -20,33 +20,23 @@ class NanoClimateFeverRetrieval(AbsTaskRetrieval):
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=["2020-01-01", "2020-12-31"],
-        domains=["Non-fiction", "Academic", "News"],
-        task_subtypes=["Claim verification"],
+        date=["2015-01-01", "2015-12-31"],
+        domains=["Encyclopaedic"],
+        task_subtypes=["Topic classification"],
         license="cc-by-4.0",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{diggelmann2021climatefever,
-      title={CLIMATE-FEVER: A Dataset for Verification of Real-World Climate Claims}, 
-      author={Thomas Diggelmann and Jordan Boyd-Graber and Jannis Bulian and Massimiliano Ciaramita and Markus Leippold},
-      year={2021},
-      eprint={2012.00614},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-}""",
-        prompt={
-            "query": "Given a claim about climate change, retrieve documents that support or refute the claim"
-        },
+        bibtex_citation="""@article{lehmann2015dbpedia, title={DBpedia: A large-scale, multilingual knowledge base extracted from Wikipedia}, author={Lehmann, Jens and et al.}, journal={Semantic Web}, year={2015}}""",
     )
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
 
-        self.corpus = load_dataset("zeta-alpha-ai/NanoClimateFEVER", "corpus")
-        self.queries = load_dataset("zeta-alpha-ai/NanoClimateFEVER", "queries")
-        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoClimateFEVER", "qrels")
+        self.corpus = load_dataset("zeta-alpha-ai/NanoDBPedia", "corpus")
+        self.queries = load_dataset("zeta-alpha-ai/NanoDBPedia", "queries")
+        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoDBPedia", "qrels")
 
         self.corpus = {
             split: {
