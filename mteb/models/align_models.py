@@ -52,9 +52,10 @@ class ALIGNModelWrapper:
     def get_image_embeddings(
         self,
         images: list[Image.Image] | DataLoader,
-        batch_size: int = 32,
+        *,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
+        batch_size: int = 32,
         **kwargs: Any,
     ):
         all_image_embeddings = []
@@ -100,10 +101,10 @@ class ALIGNModelWrapper:
         self,
         texts: list[str] = None,
         images: list[Image.Image] | DataLoader = None,
-        fusion_mode="sum",
-        batch_size: int = 32,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
+        batch_size: int = 32,
+        fusion_mode="sum",
         **kwargs: Any,
     ):
         if texts is None and images is None:

@@ -36,10 +36,11 @@ def voyage_v_loader(**kwargs):
         def get_text_embeddings(
             self,
             texts: list[str],
-            batch_size: int = 32,
-            input_type=None,
+            *,
             task_name: str | None = None,
             prompt_type: PromptType | None = None,
+            batch_size: int = 32,
+            input_type=None,
             **kwargs: Any,
         ):
             if input_type is None and prompt_type is not None:
@@ -64,10 +65,11 @@ def voyage_v_loader(**kwargs):
         def get_image_embeddings(
             self,
             images: list[Image.Image] | DataLoader,
-            batch_size: int = 32,
-            input_type=None,
+            *,
             task_name: str | None = None,
             prompt_type: PromptType | None = None,
+            batch_size: int = 32,
+            input_type=None,
             **kwargs: Any,
         ):
             if input_type is None and prompt_type is not None:
@@ -115,10 +117,11 @@ def voyage_v_loader(**kwargs):
             self,
             texts: list[str] = None,
             images: list[Image.Image] | DataLoader = None,
-            batch_size: int = 32,
-            input_type=None,
+            *,
             task_name: str | None = None,
             prompt_type: PromptType | None = None,
+            batch_size: int = 32,
+            input_type=None,
             **kwargs: Any,
         ):
             if texts is None and images is None:
