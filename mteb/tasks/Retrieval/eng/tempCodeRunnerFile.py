@@ -1,6 +1,0 @@
-# print("corpus")
-# print(self.corpus)
-# print("queries")
-# print(self.queries)
-# print("relevant_docs")
-# print(self.relevant_docs)
