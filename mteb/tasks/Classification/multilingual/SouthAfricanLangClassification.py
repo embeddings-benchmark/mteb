@@ -3,19 +3,19 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-_LANGUAGES = {
-    "afr": ["afr-Latn"],
-    "eng": ["eng-Latn"],
-    "nbl": ["nbl-Latn"],
-    "nso": ["nso-Latn"],
-    "sot": ["sot-Latn"],
-    "ssw": ["ssw-Latn"],
-    "tsn": ["tsn-Latn"],
-    "tso": ["tso-Latn"],
-    "ven": ["ven-Latn"],
-    "xho": ["xho-Latn"],
-    "zul": ["zul-Latn"],
-}
+_LANGUAGES = [
+    "afr-Latn",
+    "eng-Latn",
+    "nbl-Latn",
+    "nso-Latn",
+    "sot-Latn",
+    "ssw-Latn",
+    "tsn-Latn",
+    "tso-Latn",
+    "ven-Latn",
+    "xho-Latn",
+    "zul-Latn",
+]
 
 
 class SouthAfricanLangClassification(AbsTaskClassification):
