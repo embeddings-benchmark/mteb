@@ -1101,6 +1101,10 @@ def test_empy_descriptive_stat_in_new_datasets():
 @pytest.mark.parametrize("task", get_tasks())
 def test_eval_langs_correctly_specified(task: AbsTask):
     if task.is_multilingual:
-        assert isinstance(task.metadata.eval_langs, dict), f"{task.metadata.name} should have eval_langs as a dict"
+        assert isinstance(
+            task.metadata.eval_langs, dict
+        ), f"{task.metadata.name} should have eval_langs as a dict"
     else:
-        assert isinstance(task.metadata.eval_langs, list), f"{task.metadata.name} should have eval_langs as a list"
+        assert isinstance(
+            task.metadata.eval_langs, list
+        ), f"{task.metadata.name} should have eval_langs as a list"
