@@ -103,10 +103,12 @@ from .jpn.NLPJournalAbsIntroRetrieval import *
 from .jpn.NLPJournalTitleAbsRetrieval import *
 from .jpn.NLPJournalTitleIntroRetrieval import *
 from .kat.GeorgianFAQRetrieval import *
+from .kor.AutoRAGRetrieval import *
 from .kor.KoStrategyQA import *
 from .multilingual.BelebeleRetrieval import *
 from .multilingual.CrossLingualSemanticDiscriminationWMT19 import *
 from .multilingual.CrossLingualSemanticDiscriminationWMT21 import *
+from .multilingual.CUREv1Retrieval import *
 from .multilingual.IndicQARetrieval import *
 from .multilingual.MintakaRetrieval import *
 from .multilingual.MIRACLRetrieval import *
@@ -136,6 +138,7 @@ from .pol.SciFactPLRetrieval import *
 from .pol.TRECCOVIDPLRetrieval import *
 from .rus.RiaNewsRetrieval import *
 from .rus.RuBQRetrieval import *
+from .slk.SKQuadRetrieval import *
 from .slk.SlovakSumRetrieval import *
 from .spa.SpanishPassageRetrievalS2P import *
 from .spa.SpanishPassageRetrievalS2S import *

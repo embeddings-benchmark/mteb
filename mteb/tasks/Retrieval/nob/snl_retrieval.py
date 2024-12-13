@@ -33,18 +33,7 @@ class SNLRetrieval(AbsTaskRetrieval):
     year={2023},
     school={Norwegian University of Life Sciences, {\AA}s}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 2048},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1986.9453846153847,
-                    "average_query_length": 14.906153846153845,
-                    "num_documents": 1300,
-                    "num_queries": 1300,
-                    "average_relevant_docs_per_query": 1.0,
-                },
-            },
-        },
+        prompt={"query": "Given a lexicon headline in Norwegian, retrieve its article"},
         task_subtypes=["Article retrieval"],
     )
 

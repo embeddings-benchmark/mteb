@@ -59,17 +59,8 @@ class T2Retrieval(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "dev": {
-                    "average_document_length": 874.1184182791619,
-                    "average_query_length": 10.938847974750132,
-                    "num_documents": 118605,
-                    "num_queries": 22812,
-                    "average_relevant_docs_per_query": 5.213571804313519,
-                }
-            },
+        prompt={
+            "query": "Given a Chinese search query, retrieve web passages that answer the question"
         },
     )
 
@@ -119,17 +110,8 @@ class MMarcoRetrieval(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "dev": {
-                    "average_document_length": 114.41787048392986,
-                    "average_query_length": 10.51131805157593,
-                    "num_documents": 106813,
-                    "num_queries": 6980,
-                    "average_relevant_docs_per_query": 1.0654727793696275,
-                }
-            },
+        prompt={
+            "query": "Given a web search query, retrieve relevant passages that answer the query"
         },
     )
 
@@ -177,17 +159,8 @@ class DuRetrieval(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "dev": {
-                    "average_document_length": 331.3219967800322,
-                    "average_query_length": 9.289,
-                    "num_documents": 100001,
-                    "num_queries": 2000,
-                    "average_relevant_docs_per_query": 4.9195,
-                }
-            },
+        prompt={
+            "query": "Given a Chinese search query, retrieve web passages that answer the question"
         },
     )
 
@@ -228,17 +201,8 @@ class CovidRetrieval(AbsTaskRetrieval):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "dev": {
-                    "average_document_length": 332.4152658473415,
-                    "average_query_length": 25.9304531085353,
-                    "num_documents": 100001,
-                    "num_queries": 949,
-                    "average_relevant_docs_per_query": 1.0105374077976819,
-                }
-            },
+        prompt={
+            "query": "Given a question on COVID-19, retrieve news articles that answer the question"
         },
     )
 
@@ -272,24 +236,15 @@ class CmedqaRetrieval(AbsTaskRetrieval):
         eval_langs=["cmn-Hans"],
         main_score="ndcg_at_10",
         date=None,
-        domains=None,
+        domains=["Medical", "Written"],
         task_subtypes=None,
         license=None,
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "dev": {
-                    "average_document_length": 307.7710222897771,
-                    "average_query_length": 48.470367591897976,
-                    "num_documents": 100001,
-                    "num_queries": 3999,
-                    "average_relevant_docs_per_query": 1.86271567891973,
-                }
-            },
+        prompt={
+            "query": "Given a Chinese community medical question, retrieve replies that best answer the question"
         },
     )
 
@@ -332,17 +287,8 @@ class EcomRetrieval(AbsTaskRetrieval):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "dev": {
-                    "average_document_length": 32.98041664189015,
-                    "average_query_length": 6.798,
-                    "num_documents": 100902,
-                    "num_queries": 1000,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
+        prompt={
+            "query": "Given a user query from an e-commerce website, retrieve description sentences of relevant products"
         },
     )
 
@@ -385,17 +331,8 @@ class MedicalRetrieval(AbsTaskRetrieval):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "dev": {
-                    "average_document_length": 122.04231725066585,
-                    "average_query_length": 17.938,
-                    "num_documents": 100999,
-                    "num_queries": 1000,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
+        prompt={
+            "query": "Given a medical question, retrieve user replies that best answer the question"
         },
     )
 
@@ -438,17 +375,8 @@ class VideoRetrieval(AbsTaskRetrieval):
         dialect=None,
         sample_creation=None,
         bibtex_citation=None,
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "dev": {
-                    "average_document_length": 31.048855642524522,
-                    "average_query_length": 7.365,
-                    "num_documents": 100930,
-                    "num_queries": 1000,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
+        prompt={
+            "query": "Given a video search query, retrieve the titles of relevant videos"
         },
     )
 

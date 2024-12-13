@@ -39,18 +39,9 @@ class YahooAnswersTopicsClassification(AbsTaskClassification):
         volume = {28},
         year = {2015}
         }""",
-        descriptive_stats={
-            "n_samples": {"test": 60000},
-            "avg_character_length": {"test": 346.35},
-        },
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = dict(self.metadata)
-        metadata_dict["n_experiments"] = 10
-        metadata_dict["samples_per_label"] = 32
-        return metadata_dict
+    samples_per_label = 32
 
     def dataset_transform(self):
         self.dataset = self.dataset.remove_columns(

@@ -1,0 +1,20 @@
+{
+    "test": {
+        "num_samples": 375,
+        "number_of_characters": 413674,
+        "num_positive": 2255,
+        "num_negative": 5245,
+        "min_query_length": 17,
+        "avg_query_length": 50.205333333333336,
+        "max_query_length": 148,
+        "unique_query": 374,
+        "min_positive_length": 15,
+        "avg_positive_length": 52.54013303769401,
+        "max_positive_length": 152,
+        "unique_positive": 2165,
+        "min_negative_length": 15,
+        "avg_negative_length": 52.69189704480458,
+        "max_negative_length": 148,
+        "unique_negative": 5002
+    }
+}

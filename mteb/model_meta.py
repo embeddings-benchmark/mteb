@@ -1,34 +1,45 @@
 from __future__ import annotations
 
-from datetime import date
+import logging
 from functools import partial
-from typing import Annotated, Any, Callable, Literal
+from typing import TYPE_CHECKING, Any, Callable, Literal
 
-from pydantic import BaseModel, BeforeValidator, TypeAdapter
-from sentence_transformers import SentenceTransformer
+from pydantic import BaseModel, ConfigDict
 
-from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.abstasks.TaskMetadata import STR_DATE, STR_URL
+from mteb.encoder_interface import Encoder
 
 from .languages import ISO_LANGUAGE_SCRIPT
 
-Frameworks = Literal["Sentence Transformers", "PyTorch"]
+if TYPE_CHECKING:
+    from .models.sentence_transformer_wrapper import SentenceTransformerWrapper
 
-pastdate_adapter = TypeAdapter(date)
-STR_DATE = Annotated[
-    str, BeforeValidator(lambda value: str(pastdate_adapter.validate_python(value)))
-]  # Allows the type to be a string, but ensures that the string is a valid date
+logger = logging.getLogger(__name__)
+
+
+FRAMEWORKS = Literal[
+    "Sentence Transformers",
+    "PyTorch",
+    "GritLM",
+    "LLM2Vec",
+    "TensorFlow",
+    "API",
+    "Tevatron",
+    "NumPy",
+]
+DISTANCE_METRICS = Literal["cosine"]
 
 
 def sentence_transformers_loader(
-    model_name: str, revision: str | None, **kwargs
-) -> SentenceTransformer:
-    return SentenceTransformer(
-        model_name_or_path=model_name, revision=revision, **kwargs
-    )
+    model_name: str, revision: str | None = None, **kwargs
+) -> SentenceTransformerWrapper:
+    from .models.sentence_transformer_wrapper import SentenceTransformerWrapper
+
+    return SentenceTransformerWrapper(model=model_name, revision=revision, **kwargs)
 
 
 def get_loader_name(
-    loader: Callable[..., Encoder | EncoderWithQueryCorpusEncode] | None,
+    loader: Callable[..., Encoder] | None,
 ) -> str | None:
     if loader is None:
         return None
@@ -51,27 +62,46 @@ class ModelMeta(BaseModel):
         embed_dim: The dimension of the embeddings produced by the model. Currently all models are assumed to produce fixed-size embeddings.
         revision: The revision number of the model. If None it is assumed that the metadata (including the loader) is valid for all revisions of the model.
         release_date: The date the model's revision was released.
-        license: The license under which the model is released. Required if open_source is True.
-        open_source: Whether the model is open source or proprietary.
-        distance_metric: The distance metric used by the model.
+        license: The license under which the model is released. Required if open_weights is True.
+        open_weights: Whether the model is open source or proprietary.
+        public_training_data: Whether the training data used to train the model is publicly available.
+        public_training_code: Whether the code used to train the model is publicly available.
+        similarity_fn_name: The distance metric used by the model.
         framework: The framework the model is implemented in, can be a list of frameworks e.g. `["Sentence Transformers", "PyTorch"]`.
+        reference: A URL to the model's page on huggingface or another source.
         languages: The languages the model is intended for specified as a 3 letter language code followed by a script code e.g. "eng-Latn" for English
             in the Latin script.
+        use_instructions: Whether the model uses instructions E.g. for prompt-based models. This also include models that require a specific format for
+            input such as "query: {document}" or "passage: {document}".
+        training_datasets: A dictionary of datasets that the model was trained on. Names should be names as their appear in `mteb` for example
+            {"ArguAna": ["test"]} if the model is trained on the ArguAna test set. This field is used to determine if a model generalizes zero-shot to
+            a benchmark as well as mark dataset contaminations.
+        adapted_from: Name of the model from which this model is adapted from. For quantizations, fine-tunes, long doc extensions, etc.
+        superseded_by: Name of the model that supersedes this model, e.g. nvidia/NV-Embed-v2 supersedes v1.
     """
+
+    model_config = ConfigDict(extra="forbid")
 
     name: str | None
     revision: str | None
     release_date: STR_DATE | None
     languages: list[ISO_LANGUAGE_SCRIPT] | None
-    loader: Callable[..., Encoder | EncoderWithQueryCorpusEncode] | None = None
+    loader: Callable[..., Encoder] | None = None
     n_parameters: int | None = None
     memory_usage: float | None = None
-    max_tokens: int | None = None
+    max_tokens: float | None = None
     embed_dim: int | None = None
     license: str | None = None
-    open_source: bool | None = None
-    similarity_fn_name: str | None = None
-    framework: list[Frameworks] = []
+    open_weights: bool | None = None
+    public_training_data: bool | None = None
+    public_training_code: bool | None = None
+    framework: list[FRAMEWORKS] = []
+    reference: STR_URL | None = None
+    similarity_fn_name: DISTANCE_METRICS | None = None
+    use_instructions: bool | None = None
+    training_datasets: dict[str, list[str]] | None = None
+    adapted_from: str | None = None
+    superseded_by: str | None = None
 
     def to_dict(self):
         dict_repr = self.model_dump()
@@ -79,19 +109,21 @@ class ModelMeta(BaseModel):
         dict_repr["loader"] = get_loader_name(loader)
         return dict_repr
 
-    def load_model(self, **kwargs: Any) -> Encoder | EncoderWithQueryCorpusEncode:
+    def load_model(self, **kwargs: Any) -> Encoder:
         if self.loader is None:
+            logger.warning(
+                f"Loader not specified for model {self.name}, loading using sentence transformers."
+            )
             loader = partial(
                 sentence_transformers_loader,
                 model_name=self.name,
                 revision=self.revision,
-                trust_remote_code=True,
                 **kwargs,
             )
         else:
             loader = self.loader
 
-        model: Encoder | EncoderWithQueryCorpusEncode = loader(**kwargs)  # type: ignore
+        model: Encoder = loader(**kwargs)  # type: ignore
         return model
 
     def model_name_as_path(self) -> str:

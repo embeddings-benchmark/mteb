@@ -5,10 +5,11 @@ from collections import Counter, defaultdict
 
 from datasets import Dataset
 
-from ..encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from ..encoder_interface import Encoder
 from ..evaluation.evaluators import PairClassificationEvaluator
 from ..load_results.task_results import ScoresDict
-from .AbsTask import AbsTask, DescriptiveStatistics
+from .AbsTask import AbsTask
+from .TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -18,15 +19,35 @@ class PairClassificationDescriptiveStatistics(DescriptiveStatistics):
 
     Attributes:
         num_samples: number of samples in the dataset.
-        avg_sentence1_len: Average length of sentence1
-        avg_sentence2_len: Average length of sentence2
+        number_of_characters: Total number of symbols in the dataset.
+
+        min_sentence1_length: Minimum length of sentence1
+        avg_sentence1_length: Average length of sentence1
+        max_sentence1_length: Maximum length of sentence1
+        unique_sentence1: Number of unique sentence
+
+        min_sentence2_length: Minimum length of sentence2
+        avg_sentence2_length: Average length of sentence2
+        max_sentence2_length: Maximum length of sentence2
+        unique_sentence2: Number of unique sentence
+
         unique_labels: Number of unique labels
         labels: dict of label frequencies
     """
 
     num_samples: int
-    avg_sentence1_len: float
-    avg_sentence2_len: float
+    number_of_characters: int
+
+    min_sentence1_length: int
+    avg_sentence1_length: float
+    max_sentence1_length: int
+    unique_sentence1: int
+
+    min_sentence2_length: int
+    avg_sentence2_length: float
+    max_sentence2_length: int
+    unique_sentence2: int
+
     unique_labels: int
     labels: dict[str, dict[str, int]]
 
@@ -42,6 +63,8 @@ class AbsTaskPairClassification(AbsTask):
         labels: list[int]
     """
 
+    abstask_prompt = "Retrieve text that are semantically similar to the given text."
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -50,7 +73,7 @@ class AbsTaskPairClassification(AbsTask):
 
     def _evaluate_subset(
         self,
-        model: Encoder | EncoderWithQueryCorpusEncode,
+        model: Encoder,
         dataset: Dataset,
         *,
         encode_kwargs: dict[str, str] = {},
@@ -104,13 +127,22 @@ class AbsTaskPairClassification(AbsTask):
             dataset["labels"][0] if len(dataset["labels"]) == 1 else dataset["labels"]
         )
 
-        total_sentence1_len = sum([len(sentence) for sentence in sentence1])
-        total_sentence2_len = sum([len(sentence) for sentence in sentence2])
+        sentence1_len = [len(sentence) for sentence in sentence1]
+        total_sentence1_len = sum(sentence1_len)
+        sentence2_len = [len(sentence) for sentence in sentence2]
+        total_sentence2_len = sum(sentence2_len)
         label_count = Counter(labels)
         return PairClassificationDescriptiveStatistics(
             num_samples=len(sentence1),
-            avg_sentence1_len=total_sentence1_len / len(sentence1),
-            avg_sentence2_len=total_sentence2_len / len(sentence2),
+            number_of_characters=total_sentence1_len + total_sentence2_len,
+            min_sentence1_length=min(sentence1_len),
+            avg_sentence1_length=total_sentence1_len / len(sentence1),
+            max_sentence1_length=max(sentence1_len),
+            unique_sentence1=len(set(sentence1)),
+            min_sentence2_length=min(sentence2_len),
+            avg_sentence2_length=total_sentence2_len / len(sentence2),
+            max_sentence2_length=max(sentence2_len),
+            unique_sentence2=len(set(sentence2)),
             unique_labels=len(set(labels)),
             labels={
                 str(label): {"count": count} for label, count in label_count.items()

@@ -1,0 +1,11 @@
+{
+    "test": {
+        "number_of_characters": 894.2168128654971,
+        "num_samples": 834,
+        "num_queries": 114,
+        "num_documents": 720,
+        "average_document_length": 1.1452816358024691,
+        "average_query_length": 0.610649430594029,
+        "average_relevant_docs_per_query": 1.0
+    }
+}

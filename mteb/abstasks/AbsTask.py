@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+import json
 import logging
 import random
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
-from typing import Any, TypedDict
+from typing import Any
 
 import datasets
 import numpy as np
@@ -14,8 +15,8 @@ from datasets import Dataset, DatasetDict
 from sklearn.preprocessing import MultiLabelBinarizer
 
 from mteb.abstasks.stratification import _iterative_train_test_split
-from mteb.abstasks.TaskMetadata import HFSubset, TaskMetadata
-from mteb.encoder_interface import Encoder, EncoderWithQueryCorpusEncode
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset, TaskMetadata
+from mteb.encoder_interface import Encoder
 from mteb.languages import LanguageScripts
 
 logger = logging.getLogger(__name__)
@@ -53,14 +54,9 @@ def _multilabel_subsampling(
     return dataset_dict
 
 
-class DescriptiveStatistics(TypedDict):
-    """Class for descriptive statistics."""
-
-    pass
-
-
 class AbsTask(ABC):
     metadata: TaskMetadata
+    abstask_prompt: str | None = None
     _eval_splits: list[str] | None = None
     superseded_by: None | str = None
     dataset: dict[HFSubset, DatasetDict] | None = None  # type: ignore
@@ -76,11 +72,11 @@ class AbsTask(ABC):
         torch.manual_seed(self.seed)
         torch.cuda.manual_seed_all(self.seed)
 
-    def check_if_dataset_is_superseeded(self):
-        """Check if the dataset is superseeded by a newer version"""
+    def check_if_dataset_is_superseded(self):
+        """Check if the dataset is superseded by a newer version"""
         if self.superseded_by:
             logger.warning(
-                f"Dataset '{self.metadata.name}' is superseeded by '{self.superseded_by}', you might consider using the newer version of the dataset."
+                f"Dataset '{self.metadata.name}' is superseded by '{self.superseded_by}', you might consider using the newer version of the dataset."
             )
 
     def dataset_transform(self):
@@ -91,7 +87,7 @@ class AbsTask(ABC):
 
     def evaluate(
         self,
-        model: Encoder | EncoderWithQueryCorpusEncode,
+        model: Encoder,
         split: str = "test",
         *,
         encode_kwargs: dict[str, Any] = {},
@@ -194,38 +190,50 @@ class AbsTask(ABC):
         self.data_loaded = True
 
     def calculate_metadata_metrics(
-        self,
+        self, overwrite_results: bool = False
     ) -> dict[str, DescriptiveStatistics | dict[str, DescriptiveStatistics]]:
+        if self.metadata.descriptive_stat_path.exists() and not overwrite_results:
+            logger.info("Loading metadata descriptive statistics from cache.")
+            return self.metadata.descriptive_stats
+
         self.load_data()
 
-        all_details = {}
-        pbar_split = tqdm.tqdm(
-            self.metadata_dict["eval_splits"], desc="Processing Splits..."
-        )
+        descriptive_stats = {}
+        hf_subset_stat = "hf_subset_descriptive_stats"
+        eval_splits = self.metadata.eval_splits
+        if self.metadata.type in ["Classification", "MultilabelClassification"]:
+            eval_splits += ["train"]
+
+        pbar_split = tqdm.tqdm(eval_splits, desc="Processing Splits...")
         for split in pbar_split:
             pbar_split.set_postfix_str(f"Split: {split}")
-            print(f"Processing metadata for split {split}")
+            logger.info(f"Processing metadata for split {split}")
             if self.is_multilingual:
-                all_details[split] = self._calculate_metrics_from_split(
+                descriptive_stats[split] = self._calculate_metrics_from_split(
                     split, compute_overall=True
                 )
-                all_details[split]["hf_subset_descriptive_stats"] = {}
+                descriptive_stats[split][hf_subset_stat] = {}
 
-                pbar_subsets = tqdm.tqdm(
-                    self.metadata.eval_langs, desc="Processing Languages..."
+                eval_langs = (
+                    list(self.metadata.eval_langs.keys())
+                    if isinstance(self.metadata.eval_langs, dict)
+                    else self.metadata.eval_langs
                 )
+
+                pbar_subsets = tqdm.tqdm(eval_langs, desc="Processing Languages...")
                 for hf_subset in pbar_subsets:
                     pbar_subsets.set_postfix_str(f"Language: {hf_subset}")
-                    print(f"Processing metadata for language {hf_subset}")
+                    logger.info(f"Processing metadata for language {hf_subset}")
                     split_details = self._calculate_metrics_from_split(split, hf_subset)
-                    all_details[split]["hf_subset_descriptive_stats"][hf_subset] = (
-                        split_details
-                    )
+                    descriptive_stats[split][hf_subset_stat][hf_subset] = split_details
             else:
                 split_details = self._calculate_metrics_from_split(split)
-                all_details[split] = split_details
+                descriptive_stats[split] = split_details
 
-        return all_details
+        with self.metadata.descriptive_stat_path.open("w") as f:
+            json.dump(descriptive_stats, f, indent=4)
+
+        return descriptive_stats
 
     @abstractmethod
     def _calculate_metrics_from_split(

@@ -3,9 +3,10 @@ from __future__ import annotations
 from importlib.metadata import version
 
 from mteb.benchmarks.benchmarks import (
-    MTEB_MAIN_EN,
+    MTEB_ENG_CLASSIC,
     MTEB_MAIN_RU,
     MTEB_RETRIEVAL_LAW,
+    MTEB_RETRIEVAL_MEDICAL,
     MTEB_RETRIEVAL_WITH_INSTRUCTIONS,
     CoIR,
 )
@@ -15,15 +16,16 @@ from mteb.models import get_model, get_model_meta, get_model_metas
 from mteb.overview import TASKS_REGISTRY, get_task, get_tasks
 
 from .benchmarks.benchmarks import Benchmark
-from .benchmarks.get_benchmark import get_benchmark, get_benchmarks
+from .benchmarks.get_benchmark import BENCHMARK_REGISTRY, get_benchmark, get_benchmarks
 
 __version__ = version("mteb")  # fetch version from install metadata
 
 
 __all__ = [
-    "MTEB_MAIN_EN",
+    "MTEB_ENG_CLASSIC",
     "MTEB_MAIN_RU",
     "MTEB_RETRIEVAL_LAW",
+    "MTEB_RETRIEVAL_MEDICAL",
     "MTEB_RETRIEVAL_WITH_INSTRUCTIONS",
     "CoIR",
     "TASKS_REGISTRY",
@@ -37,4 +39,5 @@ __all__ = [
     "get_benchmark",
     "get_benchmarks",
     "BenchmarkResults",
+    "BENCHMARK_REGISTRY",
 ]

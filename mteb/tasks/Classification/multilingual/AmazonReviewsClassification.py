@@ -43,8 +43,5 @@ class AmazonReviewsClassification(MultilingualTask, AbsTaskClassification):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        descriptive_stats={
-            "n_samples": {"validation": 30000, "test": 30000},
-            "avg_character_length": {"validation": 159.2, "test": 160.4},
-        },
+        prompt="Classify the given Amazon review into its appropriate rating category",
     )

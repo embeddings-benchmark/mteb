@@ -42,8 +42,4 @@ class MacedonianTweetSentimentClassification(AbsTaskClassification):
     url = "https://aclanthology.org/R15-1034",
     pages = "249--257",
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 1139},
-            "avg_character_length": {"test": 67.6},
-        },
     )

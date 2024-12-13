@@ -35,18 +35,4 @@ class SyntheticText2SQLRetrieval(AbsTaskRetrieval):
           year = {2024},
           url = {https://huggingface.co/datasets/gretelai/synthetic-text-to-sql}
         }""",
-        descriptive_stats={
-            "n_samples": {
-                _EVAL_SPLIT: 1000,
-            },
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 127.07126054548375,
-                    "average_query_length": 82.90582806357888,
-                    "num_documents": 105851,
-                    "num_queries": 5851,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )

@@ -43,6 +43,9 @@ def _load_publichealthqa_data(
         answer_ids = {answer: _id for _id, answer in enumerate(set(data["answer"]))}
 
         for row in data:
+            if row["question"] is None or row["answer"] is None:
+                # There are some questions and answers that are None in the original dataset, specifically in the Arabic subset.
+                continue
             question = row["question"]
             answer = row["answer"]
             query_id = f"Q{question_ids[question]}"
@@ -92,69 +95,6 @@ class PublicHealthQARetrieval(MultilingualTask, AbsTaskRetrieval):
 	publisher    = { Hugging Face }
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 888},
-            "avg_character_length": {
-                "test": {
-                    "arabic": {
-                        "average_document_length": 836.8850574712644,
-                        "average_query_length": 79.84883720930233,
-                        "num_documents": 87,
-                        "num_queries": 87,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "chinese": {
-                        "average_document_length": 239.58282208588957,
-                        "average_query_length": 24.828220858895705,
-                        "num_documents": 163,
-                        "num_queries": 163,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "english": {
-                        "average_document_length": 799.3430232558139,
-                        "average_query_length": 71.78488372093024,
-                        "num_documents": 172,
-                        "num_queries": 172,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "french": {
-                        "average_document_length": 1021.6823529411764,
-                        "average_query_length": 101.88235294117646,
-                        "num_documents": 85,
-                        "num_queries": 85,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "korean": {
-                        "average_document_length": 339.0,
-                        "average_query_length": 36.90909090909091,
-                        "num_documents": 77,
-                        "num_queries": 77,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "russian": {
-                        "average_document_length": 985.1076923076923,
-                        "average_query_length": 85.2,
-                        "num_documents": 65,
-                        "num_queries": 65,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "spanish": {
-                        "average_document_length": 941.1666666666666,
-                        "average_query_length": 84.67901234567901,
-                        "num_documents": 162,
-                        "num_queries": 162,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "vietnamese": {
-                        "average_document_length": 704.5454545454545,
-                        "average_query_length": 71.83116883116882,
-                        "num_documents": 77,
-                        "num_queries": 77,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):

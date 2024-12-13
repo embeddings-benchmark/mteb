@@ -37,10 +37,7 @@ class ArxivClusteringP2P(AbsTaskClustering):
     author={arXiv.org submitters},
     year={2024}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 732723},
-            "avg_character_length": {"test": 1009.98},
-        },
+        prompt="Identify the main and secondary category of Arxiv papers based on the titles and abstracts",
     )
 
 
@@ -78,10 +75,7 @@ class ArxivClusteringP2PFast(AbsTaskClustering):
     author={arXiv.org submitters},
     year={2024}
 }""",  # None found
-        descriptive_stats={
-            "n_samples": {"test": 250_000},
-            "avg_character_length": {"test": 1009.98},
-        },
+        prompt="Identify the main and secondary category of Arxiv papers based on the titles and abstracts",
     )
 
     def dataset_transform(self):

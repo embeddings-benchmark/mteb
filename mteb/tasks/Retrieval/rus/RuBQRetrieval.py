@@ -36,16 +36,7 @@ class RuBQRetrieval(AbsTaskRetrieval):
         year={2021},
         pages={532--547}
         }""",
-        descriptive_stats={
-            "n_samples": {"test": 2845},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 448.94659134903037,
-                    "average_query_length": 45.29609929078014,
-                    "num_documents": 56826,
-                    "num_queries": 1692,
-                    "average_relevant_docs_per_query": 1.6814420803782506,
-                }
-            },
+        prompt={
+            "query": "Given a question, retrieve Wikipedia passages that answer the question"
         },
     )

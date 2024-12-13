@@ -15,7 +15,6 @@ from sklearn.neighbors import KNeighborsClassifier
 from torch import Tensor
 
 from mteb.encoder_interface import Encoder
-from mteb.evaluation.evaluators.model_encode import model_encode
 
 from .Evaluator import Evaluator
 
@@ -63,16 +62,14 @@ class kNNClassificationEvaluator(Evaluator):
         max_accuracy = 0
         max_f1 = 0
         max_ap = 0
-        X_train = model_encode(
+        X_train = model.encode(
             self.sentences_train,
-            model=model,
             task_name=self.task_name,
             **self.encode_kwargs,
         )
         if test_cache is None:
-            X_test = model_encode(
+            X_test = model.encode(
                 self.sentences_test,
-                model=model,
                 task_name=self.task_name,
                 **self.encode_kwargs,
             )
@@ -139,17 +136,15 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         max_accuracy = 0
         max_f1 = 0
         max_ap = 0
-        X_train = model_encode(
+        X_train = model.encode(
             self.sentences_train,
-            model=model,
             task_name=self.task_name,
             **self.encode_kwargs,
         )
 
         if test_cache is None:
-            X_test = model_encode(
+            X_test = model.encode(
                 self.sentences_test,
-                model=model,
                 task_name=self.task_name,
                 **self.encode_kwargs,
             )
@@ -293,16 +288,14 @@ class logRegClassificationEvaluator(Evaluator):
             max_iter=self.max_iter,
             verbose=1 if logger.isEnabledFor(logging.DEBUG) else 0,
         )
-        X_train = model_encode(
+        X_train = model.encode(
             self.sentences_train,
-            model=model,
             task_name=self.task_name,
             **self.encode_kwargs,
         )
         if test_cache is None:
-            X_test = model_encode(
+            X_test = model.encode(
                 self.sentences_test,
-                model=model,
                 task_name=self.task_name,
                 **self.encode_kwargs,
             )

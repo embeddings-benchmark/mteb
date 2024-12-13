@@ -41,16 +41,7 @@ class TempReasonL3Fact(AbsTaskRetrieval):
   year={2023}
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 4426},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 19.80534984678243,
-                    "average_query_length": 896.0754631721645,
-                    "num_documents": 15664,
-                    "num_queries": 4426,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
+        prompt={
+            "query": "Given the following question and facts, retrieve the correct answer."
         },
     )

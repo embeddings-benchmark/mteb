@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Callable, Literal
+from typing import Any, Callable
 
 import numpy as np
 import torch
@@ -9,18 +9,24 @@ import torch.nn.functional as F
 import tqdm
 from transformers import AutoModel, AutoTokenizer
 
-from mteb.encoder_interface import Encoder
+from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
-from mteb.models.text_formatting_utils import corpus_to_texts
 
-logging.basicConfig(level=logging.WARNING)
+from .wrapper import Wrapper
+
 logger = logging.getLogger(__name__)
 
-EncodeTypes = Literal["query", "passage"]
 
-
-class RepLLaMAWrapper:
-    def __init__(self, *args, **kwargs):
+class RepLLaMAWrapper(Wrapper):
+    def __init__(
+        self,
+        base_model_name_or_path: str,
+        peft_model_name_or_path: str,
+        torch_dtype: torch.dtype,
+        device_map: str,
+        model_prompts: dict[str, str] | None = None,
+        **kwargs,
+    ):
         try:
             from peft import PeftModel
         except ImportError:
@@ -29,24 +35,23 @@ class RepLLaMAWrapper:
             )
 
         self.base_model = AutoModel.from_pretrained(
-            kwargs["base_model_name_or_path"],
-            torch_dtype=kwargs["torch_dtype"],
-            device_map=kwargs["device_map"],
+            base_model_name_or_path,
+            torch_dtype=torch_dtype,
+            device_map=device_map,
         )
-        self.model = PeftModel.from_pretrained(
-            self.base_model, kwargs["peft_model_name_or_path"]
-        )
+        self.model = PeftModel.from_pretrained(self.base_model, peft_model_name_or_path)
         self.model = self.model.merge_and_unload()
 
-        self.tokenizer = AutoTokenizer.from_pretrained(
-            kwargs["base_model_name_or_path"]
-        )
+        self.tokenizer = AutoTokenizer.from_pretrained(base_model_name_or_path)
         self.tokenizer.pad_token_id = self.tokenizer.eos_token_id
         self.tokenizer.pad_token = self.tokenizer.eos_token
         self.tokenizer.padding_side = "right"
         # set the max_length for the evals as they did, although the model can handle longer
         self.model.config.max_length = 512
         self.tokenizer.model_max_length = 512
+        self.model_prompts = (
+            self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
+        )
 
     def create_batch_dict(self, tokenizer, input_texts):
         max_length = self.model.config.max_length
@@ -74,11 +79,15 @@ class RepLLaMAWrapper:
         self,
         sentences: list[str],
         *,
-        prompt_name: str = None,
+        task_name: str,
+        prompt_type: PromptType | None = None,
         **kwargs: Any,  # noqa
     ) -> np.ndarray:
         batch_size = 16 if "batch_size" not in kwargs else kwargs.pop("batch_size")
         all_embeddings = []
+        prompt = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+        if prompt:
+            sentences = [f"{prompt}{sentence}".strip() for sentence in sentences]
         for i in tqdm.tqdm(range(0, len(sentences), batch_size)):
             batch_texts = sentences[i : i + batch_size]
 
@@ -102,28 +111,6 @@ class RepLLaMAWrapper:
 
         return np.concatenate(all_embeddings, axis=0)
 
-    def encode_corpus(
-        self,
-        corpus: list[dict[str, str]] | dict[str, list[str]] | list[str],
-        prompt_name: str = None,
-        **kwargs: Any,
-    ) -> np.ndarray:
-        sentences = corpus_to_texts(corpus, sep=" ")
-        if "request_qid" in kwargs:
-            kwargs.pop("request_qid")
-        # NOTE: two spaces after the colon
-        sentences = [f"passage:  {sentence}".strip() for sentence in sentences]
-        print(f"Encoding corpus of length {len(sentences)}")
-        print(f"First sentence: {sentences[0]}")
-        return self.encode(sentences, **kwargs)
-
-    def encode_queries(self, queries: list[str], **kwargs: Any) -> np.ndarray:
-        # NOTE: two spaces after the colon
-        queries = [f"query:  {query.strip()}".strip() for query in queries]
-        print(f"Encoding queries of length {len(queries)}")
-        print(queries[0])
-        return self.encode(queries, **kwargs)
-
 
 def _loader(wrapper: type[RepLLaMAWrapper], **kwargs) -> Callable[..., Encoder]:
     _kwargs = kwargs
@@ -134,6 +121,11 @@ def _loader(wrapper: type[RepLLaMAWrapper], **kwargs) -> Callable[..., Encoder]:
     return loader_inner
 
 
+model_prompts = {
+    PromptType.query.value: "query:  ",
+    PromptType.passage.value: "passage:  ",
+}
+
 repllama_llama2_original = ModelMeta(
     loader=_loader(
         RepLLaMAWrapper,
@@ -141,12 +133,22 @@ repllama_llama2_original = ModelMeta(
         peft_model_name_or_path="castorini/repllama-v1-7b-lora-passage",
         device_map="auto",
         torch_dtype=torch.bfloat16,
+        model_prompts=model_prompts,
     ),
     name="castorini/repllama-v1-7b-lora-passage",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="01c7f73d771dfac7d292323805ebc428287df4f9-6097554dfe6e7d93e92f55010b678bcca1e233a8",  # base-peft revision
     release_date="2023-10-11",
+    n_parameters=7_000_000,
+    memory_usage=None,
+    max_tokens=4096,
+    embed_dim=4096,
+    license="apache-2.0",
+    reference="https://huggingface.co/samaya-ai/castorini/repllama-v1-7b-lora-passage",
+    similarity_fn_name="cosine",
+    framework=["PyTorch", "Tevatron"],
+    use_instructions=True,
 )
 
 
@@ -157,18 +159,20 @@ repllama_llama2_reproduced = ModelMeta(
         peft_model_name_or_path="samaya-ai/RepLLaMA-reproduced",
         device_map="auto",
         torch_dtype=torch.bfloat16,
+        model_prompts=model_prompts,
     ),
     name="samaya-ai/RepLLaMA-reproduced",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="01c7f73d771dfac7d292323805ebc428287df4f9-ad5c1d0938a1e02954bcafb4d811ba2f34052e71",  # base-peft revision
     release_date="2024-09-15",
+    n_parameters=7_000_000,
+    memory_usage=None,
+    max_tokens=4096,
+    embed_dim=4096,
+    license="apache-2.0",
+    reference="https://huggingface.co/samaya-ai/RepLLaMA-reproduced",
+    similarity_fn_name="cosine",
+    framework=["PyTorch", "Tevatron"],
+    use_instructions=True,
 )
-
-
-## Debug code
-# import mteb
-# model = mteb.get_model("samaya-ai/RepLLaMA-reproduced")
-# tasks = mteb.get_tasks(tasks=["SciFact"], languages=["eng"])
-# evaluation = mteb.MTEB(tasks=tasks)
-# evaluation.run(model)

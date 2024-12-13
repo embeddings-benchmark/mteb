@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
 class News21InstructionRetrieval(AbsTaskInstructionRetrieval):
     metadata = TaskMetadata(
         name="News21InstructionRetrieval",
-        description="Measuring retrieval instruction following ability on News21 narratives.",
+        description="Measuring retrieval instruction following ability on News21 narratives for the FollowIR benchmark.",
         reference="https://arxiv.org/abs/2403.15246",
         dataset={
             "path": "jhu-clsp/news21-instructions",
@@ -35,8 +35,4 @@ class News21InstructionRetrieval(AbsTaskInstructionRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        descriptive_stats={
-            "n_samples": {"eng": 30953 * 2},
-            "avg_character_length": {"eng": 2983.724665391969},
-        },
     )

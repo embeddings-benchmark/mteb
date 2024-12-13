@@ -37,7 +37,6 @@ class SyntecReranking(AbsTaskReranking):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
     def load_data(self, **kwargs):

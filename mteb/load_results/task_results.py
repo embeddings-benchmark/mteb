@@ -156,9 +156,9 @@ class TaskResult(BaseModel):
 
     dataset_revision: str
     task_name: str
-    mteb_version: str
+    mteb_version: str | None
     scores: dict[Split, list[ScoresDict]]
-    evaluation_time: float
+    evaluation_time: float | None
     kg_co2_emissions: float | None = None
 
     @classmethod
@@ -293,10 +293,12 @@ class TaskResult(BaseModel):
         pre_1_11_load = (
             (
                 "mteb_version" in data
+                and data["mteb_version"] is not None
                 and Version(data["mteb_version"]) < Version("1.11.0")
             )
             or "mteb_version" not in data
         )  # assume it is before 1.11.0 if the version is not present
+
         try:
             obj = cls.model_validate(data)
         except Exception as e:
@@ -307,9 +309,11 @@ class TaskResult(BaseModel):
             )
             obj = cls._convert_from_before_v1_11_0(data)
 
-        pre_v_12_48 = "mteb_version" in data and Version(
-            data["mteb_version"]
-        ) < Version("1.12.48")
+        pre_v_12_48 = (
+            "mteb_version" in data
+            and data["mteb_version"] is not None
+            and Version(data["mteb_version"]) < Version("1.12.48")
+        )
 
         if pre_v_12_48:
             cls._fix_pair_classification_scores(obj)
@@ -466,6 +470,10 @@ class TaskResult(BaseModel):
 
             return aggregation(values)
 
+    @classmethod
+    def from_validated(cls, **data) -> TaskResult:
+        return cls.model_construct(**data)
+
     def __repr__(self) -> str:
         return f"TaskResult(task_name={self.task_name}, scores=...)"
 
@@ -492,23 +500,25 @@ class TaskResult(BaseModel):
             hf_subsets = {"default"}
         new_scores = {}
         seen_splits = set()
-        for split in task_result.scores:
+        for split in self.scores:
             if split not in splits:
                 continue
             new_scores[split] = []
             seen_subsets = set()
-            for _scores in task_result.scores[split]:
+            for _scores in self.scores[split]:
                 if _scores["hf_subset"] not in hf_subsets:
                     continue
                 new_scores[split].append(_scores)
                 seen_subsets.add(_scores["hf_subset"])
             if seen_subsets != hf_subsets:
-                raise ValueError(
-                    f"Missing subsets {hf_subsets - seen_subsets} for split {split}"
+                logger.warning(
+                    f"{task.metadata.name}: Missing subsets {hf_subsets - seen_subsets} for split {split}"
                 )
             seen_splits.add(split)
         if seen_splits != set(splits):
-            raise ValueError(f"Missing splits {set(splits) - seen_splits}")
-        new_res = {**task_result.to_dict(), "scores": new_scores}
-        new_res = TaskResult.from_dict(new_res)
+            logger.warning(
+                f"{task.metadata.name}: Missing splits {set(splits) - seen_splits}"
+            )
+        new_res = {**self.to_dict(), "scores": new_scores}
+        new_res = TaskResult.from_validated(**new_res)
         return new_res

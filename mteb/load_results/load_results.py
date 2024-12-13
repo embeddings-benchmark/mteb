@@ -4,7 +4,6 @@ import json
 import logging
 import os
 import subprocess
-from collections import defaultdict
 from collections.abc import Sequence
 from pathlib import Path
 
@@ -104,9 +103,6 @@ def load_results(
             extract the model name and revision from the path.
         validate_and_filter: If True it will validate that the results object for the task contains the correct splits and filter out
             splits from the results object that are not default in the task metadata. Defaults to True.
-
-    Returns:
-
     """
     repo_directory = download_of_results(results_repo, download_latest=download_latest)
     model_paths = [p for p in (repo_directory / "results").glob("*") if p.is_dir()]

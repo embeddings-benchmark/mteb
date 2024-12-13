@@ -41,18 +41,6 @@ class TurHistQuadRetrieval(AbsTaskRetrieval):
                 doi={10.1109/UBMK52708.2021.9559013}}
 
         """,
-        descriptive_stats={
-            "n_samples": {"test": 1330},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 172.12118713932398,
-                    "average_query_length": 62.5302734375,
-                    "num_documents": 1213,
-                    "num_queries": 1024,
-                    "average_relevant_docs_per_query": 2.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs) -> None:
