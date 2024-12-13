@@ -28,9 +28,10 @@ class ALIGNModelWrapper:
     def get_text_embeddings(
         self,
         texts: list[str],
-        batch_size: int = 32,
+        *,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
+        batch_size: int = 32,
         **kwargs: Any,
     ):
         all_text_embeddings = []

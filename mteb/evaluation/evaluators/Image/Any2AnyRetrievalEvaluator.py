@@ -310,7 +310,7 @@ class Any2AnyRetrievalEvaluator(Evaluator):
             queries,
             self.top_k,
             self.score_function,
-            task_name=self.task_name,  # type: ignore
+            task_name=self.task_name,
         )
 
     @staticmethod
