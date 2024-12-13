@@ -84,6 +84,6 @@ class ZeroshotClassificationEvaluator(Evaluator):
 
         logger.info("Evaluating...")
 
-        accuracy = metrics.accuracy_score(self.labels, predictions)
+        accuracy = metrics.accuracy_score(self.labels, predictions.tolist())
 
         return {"accuracy": accuracy}
