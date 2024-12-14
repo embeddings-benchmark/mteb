@@ -22,17 +22,11 @@ class JasperWrapper(Wrapper):
         self,
         model_name: str,
         revision: str,
-        model_prompts: dict[str, str] | None = None,
         instruction_template: str | Callable[[str], str] | None = None,
-        max_length: int = 1024,
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
-        self.model_prompts = (
-            self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
-        )
-        self.model.max_seq_length = max_length
         self.instruction_template = instruction_template
 
     def encode(
@@ -49,18 +43,13 @@ class JasperWrapper(Wrapper):
         if prompt_type == PromptType.passage:
             instruction = None
 
-        if instruction:
-            sentences = [instruction + s for s in sentences]
-
-        # process white space data
-        sentences = [i if i.strip() else "<|endoftext|>" for i in sentences]
-
         embeddings = self.model.encode(
             sentences,
             normalize_embeddings=True,
-            # prompt=instruction,
+            prompt=instruction,
             **kwargs,
         )
+
         if isinstance(embeddings, torch.Tensor):
             # sometimes in kwargs can be return_tensors=True
             embeddings = embeddings.cpu().detach().float().numpy()
@@ -73,8 +62,11 @@ jasper_en_v1 = ModelMeta(
         model_name="infgrad/jasper_en_vision_language_v1",
         revision="d6330ce98f8a0d741e781df845904c9484f00efa",
         config_kwargs={"is_text_encoder": True, "vector_dim": 12288},
-        model_kwargs={"attn_implementation": "sdpa", "torch_dtype": torch.bfloat16},
-        max_length=2048,
+        model_kwargs={
+            "attn_implementation": "sdpa",
+            "torch_dtype": torch.bfloat16,
+            "max_seq_length": 2048,
+        },
         trust_remote_code=True,
         instruction_template="Instruct: {instruction}\nQuery: ",
     ),
