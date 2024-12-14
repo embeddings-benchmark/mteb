@@ -23,11 +23,13 @@ class JasperWrapper(Wrapper):
         model_name: str,
         revision: str,
         instruction_template: str | Callable[[str], str] | None = None,
+        max_seq_length: int = 2048,
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
         self.instruction_template = instruction_template
+        self.model.max_seq_length = max_seq_length
 
     def encode(
         self,
@@ -65,9 +67,9 @@ jasper_en_v1 = ModelMeta(
         model_kwargs={
             "attn_implementation": "sdpa",
             "torch_dtype": torch.float16,
-            "max_seq_length": 2048,
         },
         trust_remote_code=True,
+        max_seq_length=2048,
         instruction_template="Instruct: {instruction}\nQuery: ",
     ),
     name="infgrad/jasper_en_vision_language_v1",
