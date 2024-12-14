@@ -6,7 +6,6 @@ from functools import partial
 from typing import Any, Callable
 
 import numpy as np
-import torch
 from sentence_transformers import SentenceTransformer
 
 from mteb.encoder_interface import PromptType
@@ -15,23 +14,6 @@ from mteb.model_meta import ModelMeta
 from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
-
-
-def jasper_vl_forward(
-    self, features: dict[str, torch.Tensor], **kwargs
-) -> dict[str, torch.Tensor]:
-    trans_features = {
-        "input_ids": features["input_ids"],
-        "attention_mask": features["attention_mask"],
-    }
-    if "pixel_values" in features:
-        trans_features["pixel_values"] = features["pixel_values"]
-
-    sentence_embedding = self.auto_model(**trans_features, **kwargs)[
-        "sentence_embedding"
-    ]
-    features.update({"sentence_embedding": sentence_embedding})
-    return features
 
 
 class JasperWrapper(Wrapper):
@@ -46,9 +28,6 @@ class JasperWrapper(Wrapper):
     ):
         self.model_name = model_name
         self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
-        self.model._first_module().forward = partial(
-            jasper_vl_forward, self.model._first_module()
-        )
         self.model_prompts = (
             self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
         )
@@ -71,7 +50,7 @@ class JasperWrapper(Wrapper):
             instruction = None
 
         # process white space data
-        sentences = [i if i.strip() else "<|endoftext|>" for i in sentences]
+        # sentences = [i if i.strip() else "<|endoftext|>" for i in sentences]
 
         vectors = self.model.encode_multi_process(
             sentences=sentences,
@@ -90,10 +69,9 @@ jasper_en_v1 = ModelMeta(
         model_name="infgrad/jasper_en_vision_language_v1",
         revision="d6330ce98f8a0d741e781df845904c9484f00efa",
         config_kwargs={"is_text_encoder": True, "vector_dim": 12288},
-        tokenizer_kwargs={"padding_side": "right"},
-        model_kwargs={"attn_implementation": "sdpa"},
+        # model_kwargs={"attn_implementation": "sdpa"},
         # https://huggingface.co/infgrad/jasper_en_vision_language_v1/blob/d6330ce98f8a0d741e781df845904c9484f00efa/scripts/evaluate_en_mteb/run_evaluate_mteb.py#L14
-        max_length=400,
+        # max_length=400,
         instruction_template="Instruct: {instruction}\nQuery: ",
     ),
     name="infgrad/jasper_en_vision_language_v1",
