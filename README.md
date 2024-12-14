@@ -343,6 +343,8 @@ evaluation.run(
 This implementation employs the MaxSim operation to compute the similarity between sentences. While MaxSim provides high-quality results, it processes a larger number of embeddings, potentially leading to increased resource usage. To manage resource consumption, consider lowering the `corpus_chunk_size` parameter.
 
 
+</details>
+
 <details>
   <summary>  Saving retrieval task predictions </summary>
 
