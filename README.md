@@ -317,7 +317,7 @@ evaluation.run(
 </details>
 
 <details>
-  <summary>  Saving retrieval task predictions </summary>
+  <summary> Late Interaction (ColBERT) </summary>
 
 ### Using Late Interaction models for retrieval
 
@@ -336,10 +336,16 @@ evaluation = MTEB(tasks=tasks)
 evaluation.run(
     colbert,
     eval_splits=eval_splits,
+    score_function="max_sim", 
     corpus_chunk_size=500,
 )
 ```
-This implementation uses the MaxSim operation to calculate the similarity between the sentences. Because of this, the number of embeddings processed is higher, which might lead to higher resource usage. Therefore, you can lower the `corpus_chunk_size` to reduce the load on resources.
+This implementation employs the MaxSim operation to compute the similarity between sentences. While MaxSim provides high-quality results, it processes a larger number of embeddings, potentially leading to increased resource usage. To manage resource consumption, consider lowering the `corpus_chunk_size` parameter.
+
+Currently, this implementation does not utilize an index. However, support for indexing will be introduced once PyLate adds compatibility with the PLAID Index. You can track the progress of this feature on the PyLate GitHub repository: [Issue #72](https://github.com/lightonai/pylate/issues/72).
+
+<details>
+  <summary>  Saving retrieval task predictions </summary>
 
 ### Saving retrieval task predictions
 
