@@ -319,6 +319,28 @@ evaluation.run(
 <details>
   <summary>  Saving retrieval task predictions </summary>
 
+### Using Late Interaction models for retrieval
+
+```python
+from mteb import MTEB
+import mteb
+
+
+colbert = mteb.get_model("colbert-ir/colbertv2.0")
+tasks = mteb.get_tasks(tasks=["NFCorpus"], languages=["eng"])
+
+eval_splits = ["test"]
+
+evaluation = MTEB(tasks=tasks)
+
+evaluation.run(
+    colbert,
+    eval_splits=eval_splits,
+    corpus_chunk_size=500,
+)
+```
+This implementation uses the MaxSim operation to calculate the similarity between the sentences. Because of this, the number of embeddings processed is higher, which might lead to higher resource usage. Therefore, you can lower the `corpus_chunk_size` to reduce the load on resources.
+
 ### Saving retrieval task predictions
 
 To save the predictions from a retrieval task, add the `--save_predictions` flag in the CLI or set `save_predictions=True` in the run method. The filename will be in the "{task_name}_{subset}_predictions.json" format.

@@ -53,6 +53,34 @@ def dot_score(a: torch.Tensor, b: torch.Tensor):
     return torch.mm(a, b.transpose(0, 1))
 
 
+def max_sim(a: list, b: list):
+    """Computes the max-similarity max_sim(a[i], b[j]) for all i and j.
+        Works with a Tensor of the shape (batch_size, num_tokens, token_dim)
+
+    Return:
+        Matrix with res[i][j]  = max_sim(a[i], b[j])
+    """  # noqa: D402
+    if not isinstance(a, torch.Tensor):
+        a = torch.tensor(a, dtype=torch.float32)
+
+    if not isinstance(b, torch.Tensor):
+        b = torch.tensor(b, dtype=torch.float32)
+
+    if len(a.shape) == 2:
+        a = a.unsqueeze(0)
+
+    if len(b.shape) == 2:
+        b = b.unsqueeze(0)
+
+    scores = torch.einsum(
+        "ash,bth->abst",
+        a,
+        b,
+    )
+
+    return scores.max(axis=-1).values.sum(axis=-1)
+
+
 # From https://github.com/beir-cellar/beir/blob/f062f038c4bfd19a8ca942a9910b1e0d218759d4/beir/retrieval/custom_metrics.py#L4
 def mrr(
     qrels: dict[str, dict[str, int]],
