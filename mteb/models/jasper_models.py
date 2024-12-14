@@ -49,6 +49,9 @@ class JasperWrapper(Wrapper):
         if prompt_type == PromptType.passage:
             instruction = None
 
+        # process white space data
+        sentences = [i if i.strip() else "<|endoftext|>" for i in sentences]
+
         vectors = self.model.encode(
             sentences,
             normalize_embeddings=True,
