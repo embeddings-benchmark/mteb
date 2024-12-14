@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Sequence
-from typing import Any, Literal
+from typing import Any
 
 import numpy as np
 import torch
@@ -10,8 +10,8 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.encoder_interface import PromptType
 
-from .wrapper import Wrapper
 from ..model_meta import DISTANCE_METRICS
+from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 

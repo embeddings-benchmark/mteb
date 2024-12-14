@@ -34,6 +34,7 @@ class ColBERTWrapper(Wrapper):
                 First priority is given to the composed prompt of task name + prompt type (query or passage), then to the specific task prompt,
                 then to the composed prompt of task type + prompt type, then to the specific task type prompt,
                 and finally to the specific prompt type.
+            score_function: The similarity function to use when calling the predict method. Used in retrieval tasks.
             **kwargs: Additional arguments to pass to the model.
         """
         try:
