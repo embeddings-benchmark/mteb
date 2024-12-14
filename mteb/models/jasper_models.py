@@ -6,6 +6,7 @@ from functools import partial
 from typing import Any, Callable
 
 import numpy as np
+import torch
 from sentence_transformers import SentenceTransformer
 
 from mteb.encoder_interface import PromptType
@@ -70,6 +71,7 @@ jasper_en_v1 = ModelMeta(
         revision="d6330ce98f8a0d741e781df845904c9484f00efa",
         config_kwargs={"is_text_encoder": True, "vector_dim": 12288},
         model_kwargs={"attn_implementation": "sdpa"},
+        torch_dtype=torch.float16,
         # https://huggingface.co/infgrad/jasper_en_vision_language_v1/blob/d6330ce98f8a0d741e781df845904c9484f00efa/scripts/evaluate_en_mteb/run_evaluate_mteb.py#L14
         max_length=1024,
         instruction_template="Instruct: {instruction}\nQuery: ",
