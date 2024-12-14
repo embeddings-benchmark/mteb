@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from mteb.model_meta import ModelMeta
 
 Haon_Chen__speed_embedding_7b_instruct = ModelMeta(

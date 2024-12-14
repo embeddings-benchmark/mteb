@@ -20,6 +20,7 @@ from mteb.models import (
     google_models,
     gritlm_models,
     gte_models,
+    jasper_models,
     jina_models,
     llm2vec_models,
     misc_models,

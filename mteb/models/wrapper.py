@@ -14,6 +14,7 @@ class Wrapper:
     """Base class to indicate that this is a wrapper for a model.
     Also contains some utility functions for wrappers for working with prompts and instructions.
     """
+
     instruction_template: str | Callable[[str], str] | None = None
 
     @staticmethod
@@ -107,9 +108,10 @@ class Wrapper:
             return self.instruction_template.format(instruction=instruction)
         return self.instruction_template(instruction)
 
-    def get_task_instruction(self, task_name: str, prompt_type: PromptType | None) -> str:
+    def get_task_instruction(
+        self, task_name: str, prompt_type: PromptType | None
+    ) -> str:
         instruction = self.get_instruction(task_name, prompt_type)
         if self.instruction_template:
             return self.format_instruction(instruction)
         return instruction
-
