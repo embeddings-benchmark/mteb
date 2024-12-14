@@ -342,7 +342,6 @@ evaluation.run(
 ```
 This implementation employs the MaxSim operation to compute the similarity between sentences. While MaxSim provides high-quality results, it processes a larger number of embeddings, potentially leading to increased resource usage. To manage resource consumption, consider lowering the `corpus_chunk_size` parameter.
 
-Currently, this implementation does not utilize an index. However, support for indexing will be introduced once PyLate adds compatibility with the PLAID Index. You can track the progress of this feature on the PyLate GitHub repository: [Issue #72](https://github.com/lightonai/pylate/issues/72).
 
 <details>
   <summary>  Saving retrieval task predictions </summary>
