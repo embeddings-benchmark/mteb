@@ -49,16 +49,22 @@ class JasperWrapper(Wrapper):
         if prompt_type == PromptType.passage:
             instruction = None
 
+        if instruction:
+            sentences = [instruction + s for s in sentences]
+
         # process white space data
         sentences = [i if i.strip() else "<|endoftext|>" for i in sentences]
 
-        vectors = self.model.encode(
+        embeddings = self.model.encode(
             sentences,
             normalize_embeddings=True,
-            prompt=instruction,
+            # prompt=instruction,
             **kwargs,
         )
-        return vectors.astype(dtype=np.float32)
+        if isinstance(embeddings, torch.Tensor):
+            # sometimes in kwargs can be return_tensors=True
+            embeddings = embeddings.cpu().detach().float().numpy()
+        return embeddings
 
 
 jasper_en_v1 = ModelMeta(
