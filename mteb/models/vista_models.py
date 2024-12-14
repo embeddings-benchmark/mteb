@@ -9,6 +9,7 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 from tqdm import tqdm
 
+from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
 tensor_to_image = transforms.Compose([transforms.ToPILImage()])
@@ -94,7 +95,15 @@ def vista_loader(**kwargs):
                 t_reps = torch.nn.functional.normalize(t_reps, dim=-1)
             return t_reps.contiguous()
 
-        def encode(self, images=None, texts=None, tensors=False):
+        def encode(
+            self,
+            images=None,
+            texts=None,
+            tensors=False,
+            task_name: str | None = None,
+            prompt_type: PromptType | None = None,
+            **kwargs: Any,
+        ):
             if images is not None:
                 if isinstance(images, list):
                     if not tensors:
@@ -122,7 +131,15 @@ def vista_loader(**kwargs):
                 else:
                     return None
 
-        def get_text_embeddings(self, texts: list[str], batch_size: int = 32):
+        def get_text_embeddings(
+            self,
+            texts: list[str],
+            *,
+            task_name: str | None = None,
+            prompt_type: PromptType | None = None,
+            batch_size: int = 32,
+            **kwargs: Any,
+        ):
             all_text_embeddings = []
             for i in tqdm(range(0, len(texts), batch_size)):
                 batch_texts = texts[i : i + batch_size]
@@ -132,7 +149,13 @@ def vista_loader(**kwargs):
             return torch.cat(all_text_embeddings, dim=0)
 
         def get_image_embeddings(
-            self, images: list[Image.Image] | DataLoader, batch_size: int = 32
+            self,
+            images: list[Image.Image] | DataLoader,
+            *,
+            task_name: str | None = None,
+            prompt_type: PromptType | None = None,
+            batch_size: int = 32,
+            **kwargs: Any,
         ):
             all_image_embeddings = []
 
@@ -153,7 +176,11 @@ def vista_loader(**kwargs):
             self,
             texts: list[str] = None,
             images: list[Image.Image] | DataLoader = None,
+            *,
+            task_name: str | None = None,
+            prompt_type: PromptType | None = None,
             batch_size: int = 32,
+            **kwargs: Any,
         ):
             all_embeddings = []
 

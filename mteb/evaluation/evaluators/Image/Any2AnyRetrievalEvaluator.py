@@ -17,7 +17,7 @@ from PIL import Image
 from torch.utils.data import DataLoader
 from torchvision import transforms
 
-from mteb.encoder_interface import Encoder
+from mteb.encoder_interface import Encoder, PromptType
 
 from ..Evaluator import Evaluator
 from ..utils import (
@@ -36,7 +36,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 logger = logging.getLogger(__name__)
 
-transform = transforms.Compose([transforms.PILToTensor()])
+DEFAULT_TRANSFORM = transforms.Compose([transforms.PILToTensor()])
 
 
 class ImageDataset(torch.utils.data.Dataset):
@@ -57,7 +57,8 @@ class ImageDataset(torch.utils.data.Dataset):
             image = image
         if image.mode != "RGB":
             image = image.convert("RGB")
-        image = self.transform(image)
+        if self.transform is not None:
+            image = self.transform(image)
         return image
 
 
@@ -73,11 +74,13 @@ class Any2AnyDenseRetrievalExactSearch:
         encode_kwargs: dict[str, Any] = {},
         corpus_chunk_size: int = 20000,
         previous_results: str | None = None,
+        transform=DEFAULT_TRANSFORM,
         **kwargs: Any,
     ):
         # Model is class that provides get_text_embeddings() and get_image_embeddings()
         self.model = model
         self.encode_kwargs = encode_kwargs
+        self.transform = transform
 
         if "batch_size" not in encode_kwargs:
             encode_kwargs["batch_size"] = 128
@@ -104,6 +107,7 @@ class Any2AnyDenseRetrievalExactSearch:
         queries: Dataset,  # solve memoery issues
         top_k: int,
         score_function: str,
+        task_name: str,
         return_sorted: bool = False,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
@@ -121,11 +125,14 @@ class Any2AnyDenseRetrievalExactSearch:
         if q_modality == "text":
             query_texts = queries["text"]
             query_embeddings = self.model.get_text_embeddings(
-                texts=query_texts, batch_size=self.encode_kwargs["batch_size"]
+                texts=query_texts,
+                task_name=task_name,
+                prompt_type=PromptType.query,
+                **self.encode_kwargs,
             )
         else:
             queries_dataset = ImageDataset(
-                queries, image_column_name="image", transform=transform
+                queries, image_column_name="image", transform=self.transform
             )
             query_image_dataloader = DataLoader(
                 queries_dataset,
@@ -137,14 +144,18 @@ class Any2AnyDenseRetrievalExactSearch:
             if q_modality == "image":
                 query_embeddings = self.model.get_image_embeddings(
                     images=query_image_dataloader,
-                    batch_size=self.encode_kwargs["batch_size"],
+                    task_name=task_name,
+                    prompt_type=PromptType.query,
+                    **self.encode_kwargs,
                 )
             elif q_modality == "image,text":
                 query_texts = queries["text"]
                 query_embeddings = self.model.get_fused_embeddings(
                     texts=query_texts,
                     images=query_image_dataloader,
-                    batch_size=self.encode_kwargs["batch_size"],
+                    task_name=task_name,
+                    prompt_type=PromptType.query,
+                    **self.encode_kwargs,
                 )
             else:
                 raise ValueError(f"Unsupported modality: {q_modality}")
@@ -171,11 +182,14 @@ class Any2AnyDenseRetrievalExactSearch:
             if corpus_modality == "text":
                 corpus_texts = chunk["text"]
                 sub_corpus_embeddings = self.model.get_text_embeddings(
-                    texts=corpus_texts, batch_size=self.encode_kwargs["batch_size"]
+                    texts=corpus_texts,
+                    task_name=task_name,
+                    prompt_type=PromptType.passage,
+                    **self.encode_kwargs,
                 )
             else:
                 corpus_dataset = ImageDataset(
-                    chunk, image_column_name="image", transform=transform
+                    chunk, image_column_name="image", transform=self.transform
                 )
                 corpus_image_dataloader = DataLoader(
                     corpus_dataset,
@@ -187,14 +201,18 @@ class Any2AnyDenseRetrievalExactSearch:
                 if corpus_modality == "image":
                     sub_corpus_embeddings = self.model.get_image_embeddings(
                         images=corpus_image_dataloader,
-                        batch_size=self.encode_kwargs["batch_size"],
+                        task_name=task_name,
+                        prompt_type=PromptType.passage,
+                        **self.encode_kwargs,
                     )
                 elif corpus_modality == "image,text":
                     corpus_texts = chunk["text"]
                     sub_corpus_embeddings = self.model.get_fused_embeddings(
                         texts=corpus_texts,
                         images=corpus_image_dataloader,
-                        batch_size=self.encode_kwargs["batch_size"],
+                        task_name=task_name,
+                        prompt_type=PromptType.passage,
+                        **self.encode_kwargs,
                     )
                 else:
                     raise ValueError(f"Unsupported modality: {corpus_modality}")
@@ -292,7 +310,7 @@ class Any2AnyRetrievalEvaluator(Evaluator):
             queries,
             self.top_k,
             self.score_function,
-            prompt_name=self.task_name,  # type: ignore
+            task_name=self.task_name,
         )
 
     @staticmethod

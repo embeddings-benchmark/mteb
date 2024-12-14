@@ -9,6 +9,7 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoModel
 
+from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
 
@@ -28,9 +29,13 @@ class JinaCLIPModelWrapper:
     def get_text_embeddings(
         self,
         texts: list[str],
+        *,
+        task_name: str | None = None,
+        prompt_type: PromptType | None = None,
         batch_size: int = 32,
         convert_to_numpy=False,
         convert_to_tensor=True,
+        **kwargs: Any,
     ):
         all_text_embeddings = []
 
@@ -50,9 +55,13 @@ class JinaCLIPModelWrapper:
     def get_image_embeddings(
         self,
         images: list[Image.Image] | DataLoader,
+        *,
+        task_name: str | None = None,
+        prompt_type: PromptType | None = None,
         batch_size: int = 32,
         convert_to_numpy=False,
         convert_to_tensor=True,
+        **kwargs: Any,
     ):
         all_image_embeddings = []
 
@@ -92,8 +101,12 @@ class JinaCLIPModelWrapper:
         self,
         texts: list[str] = None,
         images: list[Image.Image] = None,
-        fusion_mode="sum",
+        *,
+        task_name: str | None = None,
+        prompt_type: PromptType | None = None,
         batch_size: int = 32,
+        fusion_mode="sum",
+        **kwargs: Any,
     ):
         if texts is None and images is None:
             raise ValueError("Either texts or images must be provided")

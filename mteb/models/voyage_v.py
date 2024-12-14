@@ -11,6 +11,7 @@ from torchvision import transforms
 from tqdm import tqdm
 
 import mteb
+from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
 api_key = os.getenv("VOYAGE_API_KEY")
@@ -33,8 +34,21 @@ def voyage_v_loader(**kwargs):
             self.vo = voyageai.Client()
 
         def get_text_embeddings(
-            self, texts: list[str], batch_size: int = 32, input_type=None
+            self,
+            texts: list[str],
+            *,
+            task_name: str | None = None,
+            prompt_type: PromptType | None = None,
+            batch_size: int = 32,
+            input_type=None,
+            **kwargs: Any,
         ):
+            if input_type is None and prompt_type is not None:
+                if prompt_type == PromptType.passage:
+                    input_type = "document"
+                elif prompt_type == PromptType.query:
+                    input_type = "query"
+
             all_text_embeddings = []
 
             for i in tqdm(range(0, len(texts), batch_size)):
@@ -51,9 +65,19 @@ def voyage_v_loader(**kwargs):
         def get_image_embeddings(
             self,
             images: list[Image.Image] | DataLoader,
+            *,
+            task_name: str | None = None,
+            prompt_type: PromptType | None = None,
             batch_size: int = 32,
             input_type=None,
+            **kwargs: Any,
         ):
+            if input_type is None and prompt_type is not None:
+                if prompt_type == PromptType.passage:
+                    input_type = "document"
+                elif prompt_type == PromptType.query:
+                    input_type = "query"
+
             all_image_embeddings = []
 
             if isinstance(images, DataLoader):
@@ -93,11 +117,21 @@ def voyage_v_loader(**kwargs):
             self,
             texts: list[str] = None,
             images: list[Image.Image] | DataLoader = None,
+            *,
+            task_name: str | None = None,
+            prompt_type: PromptType | None = None,
             batch_size: int = 32,
             input_type=None,
+            **kwargs: Any,
         ):
             if texts is None and images is None:
                 raise ValueError("Either texts or images must be provided")
+
+            if input_type is None and prompt_type is not None:
+                if prompt_type == PromptType.passage:
+                    input_type = "document"
+                elif prompt_type == PromptType.query:
+                    input_type = "query"
 
             text_embeddings = None
             image_embeddings = None
