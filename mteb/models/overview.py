@@ -66,6 +66,7 @@ model_modules = [
     repllama_models,
     promptriever_models,
     jina_models,
+    jasper_models,
     uae_models,
     stella_models,
     rerankers_monot5_based,
