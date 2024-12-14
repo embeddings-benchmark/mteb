@@ -23,7 +23,7 @@ class JasperWrapper(Wrapper):
         revision: str,
         model_prompts: dict[str, str] | None = None,
         instruction_template: str | Callable[[str], str] | None = None,
-        max_length: int = 400,
+        max_length: int = 1024,
         **kwargs: Any,
     ):
         self.model_name = model_name
@@ -71,7 +71,7 @@ jasper_en_v1 = ModelMeta(
         config_kwargs={"is_text_encoder": True, "vector_dim": 12288},
         # model_kwargs={"attn_implementation": "sdpa"},
         # https://huggingface.co/infgrad/jasper_en_vision_language_v1/blob/d6330ce98f8a0d741e781df845904c9484f00efa/scripts/evaluate_en_mteb/run_evaluate_mteb.py#L14
-        # max_length=400,
+        max_length=1024,
         instruction_template="Instruct: {instruction}\nQuery: ",
     ),
     name="infgrad/jasper_en_vision_language_v1",
