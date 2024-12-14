@@ -66,14 +66,12 @@ class JasperWrapper(Wrapper):
 jasper_en_v1 = ModelMeta(
     loader=partial(  # type: ignore
         JasperWrapper,
-        trust_remote_code=True,
         model_name="infgrad/jasper_en_vision_language_v1",
         revision="d6330ce98f8a0d741e781df845904c9484f00efa",
         config_kwargs={"is_text_encoder": True, "vector_dim": 12288},
-        model_kwargs={"attn_implementation": "sdpa"},
-        torch_dtype=torch.float16,
-        # https://huggingface.co/infgrad/jasper_en_vision_language_v1/blob/d6330ce98f8a0d741e781df845904c9484f00efa/scripts/evaluate_en_mteb/run_evaluate_mteb.py#L14
-        max_length=1024,
+        model_kwargs={"attn_implementation": "sdpa", "torch_dtype": torch.bfloat16},
+        max_length=2048,
+        trust_remote_code=True,
         instruction_template="Instruct: {instruction}\nQuery: ",
     ),
     name="infgrad/jasper_en_vision_language_v1",
