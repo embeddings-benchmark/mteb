@@ -15,7 +15,7 @@ import tqdm
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.encoder_interface import Encoder, PromptType
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import DISTANCE_METRICS, ModelMeta
 
 from .Evaluator import Evaluator
 from .utils import (
@@ -79,12 +79,12 @@ class DenseRetrievalExactSearch:
             encode_kwargs["convert_to_tensor"] = True
 
         self.score_functions = {
-            "cos_sim": cos_sim,
+            "cosine": cos_sim,
             "dot": dot_score,
             "max_sim": max_sim,
         }
         self.score_function_desc = {
-            "cos_sim": "Cosine Similarity",
+            "cosine": "Cosine Similarity",
             "dot": "Dot Product",
             "max_sim": "Max Similarity",
         }
@@ -112,7 +112,7 @@ class DenseRetrievalExactSearch:
         corpus: dict[str, dict[str, str]],
         queries: dict[str, str | list[str]],
         top_k: int,
-        score_function: str,
+        score_function: DISTANCE_METRICS,
         task_name: str,
         instructions: dict[str, str] | None = None,
         request_qid: str | None = None,
@@ -124,7 +124,7 @@ class DenseRetrievalExactSearch:
         # Returns a ranked list with the corpus ids
         if score_function not in self.score_functions:
             raise ValueError(
-                f"score function: {score_function} must be either (cos_sim) for cosine similarity or (dot) for dot product"
+                f"score function: {score_function} must be either (cosine) for cosine similarity, (dot) for dot product or (max_sim) for max similarity"
             )
 
         logger.info("Encoding Queries.")
@@ -447,7 +447,7 @@ class RetrievalEvaluator(Evaluator):
         retriever,
         task_name: str | None = None,
         k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000],
-        score_function: str = "cos_sim",
+        score_function: DISTANCE_METRICS = "cosine",
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ):

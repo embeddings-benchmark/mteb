@@ -9,7 +9,7 @@ import numpy as np
 import torch
 
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import DISTANCE_METRICS, ModelMeta
 
 from .wrapper import Wrapper
 
@@ -22,6 +22,7 @@ class ColBERTWrapper(Wrapper):
         model_name: str,
         revision: str | None = None,
         model_prompts: dict[str, str] | None = None,
+        score_function: DISTANCE_METRICS = "max_sim",
         **kwargs,
     ) -> None:
         """Wrapper for ColBERT models.
@@ -57,6 +58,7 @@ class ColBERTWrapper(Wrapper):
             logger.info(f"Model prompts will be overwritten with {model_prompts}")
             self.model.prompts = model_prompts
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
+        self.score_function = score_function
 
     def encode(
         self,
@@ -120,6 +122,7 @@ colbert_v2 = ModelMeta(
     loader=partial(
         ColBERTWrapper,
         model_name="colbert-ir/colbertv2.0",
+        score_function="max_sim",
     ),
     name="colbert-ir/colbertv2.0",
     languages=["eng_Latn"],
@@ -148,6 +151,7 @@ jina_colbert_v2 = ModelMeta(
         document_prefix="[DocumentMarker]",
         attend_to_expansion_tokens=True,
         trust_remote_code=True,
+        score_function="max_sim",
     ),
     name="jinaai/jina-colbert-v2",
     languages=[  # list of languages the model has been evaluated on

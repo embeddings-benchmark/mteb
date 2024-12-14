@@ -6,6 +6,7 @@ from typing import get_args
 import mteb
 from mteb.abstasks.TaskMetadata import TASK_TYPE
 from mteb.encoder_interface import PromptType
+from ..model_meta import DISTANCE_METRICS
 
 logger = logging.getLogger(__name__)
 
@@ -14,6 +15,7 @@ class Wrapper:
     """Base class to indicate that this is a wrapper for a model.
     Also contains some utility functions for wrappers for working with prompts and instructions.
     """
+    score_function: DISTANCE_METRICS = "cosine"
 
     @staticmethod
     def get_prompt_name(

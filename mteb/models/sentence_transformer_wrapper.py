@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Sequence
-from typing import Any
+from typing import Any, Literal
 
 import numpy as np
 import torch
@@ -11,6 +11,7 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 from mteb.encoder_interface import PromptType
 
 from .wrapper import Wrapper
+from ..model_meta import DISTANCE_METRICS
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +22,7 @@ class SentenceTransformerWrapper(Wrapper):
         model: str | SentenceTransformer | CrossEncoder,
         revision: str | None = None,
         model_prompts: dict[str, str] | None = None,
+        score_function: DISTANCE_METRICS = "cosine",
         **kwargs,
     ) -> None:
         """Wrapper for SentenceTransformer models.
@@ -32,6 +34,7 @@ class SentenceTransformerWrapper(Wrapper):
                 First priority is given to the composed prompt of task name + prompt type (query or passage), then to the specific task prompt,
                 then to the composed prompt of task type + prompt type, then to the specific task type prompt,
                 and finally to the specific prompt type.
+            score_function: The similarity function to use when calling the predict method. Used in retrieval tasks.
             **kwargs: Additional arguments to pass to the SentenceTransformer model.
         """
         if isinstance(model, str):
@@ -52,6 +55,7 @@ class SentenceTransformerWrapper(Wrapper):
             logger.info(f"Model prompts will be overwritten with {model_prompts}")
             self.model.prompts = model_prompts
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
+        self.score_function = score_function
 
         if isinstance(self.model, CrossEncoder):
             self.predict = self._predict
