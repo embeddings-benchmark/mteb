@@ -33,7 +33,6 @@ class JasperWrapper(Wrapper):
             self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
         )
         self.model.max_seq_length = max_length
-        self.pool = self.model.start_multi_process_pool()
         self.instruction_template = instruction_template
 
     def encode(
@@ -50,17 +49,8 @@ class JasperWrapper(Wrapper):
         if prompt_type == PromptType.passage:
             instruction = None
 
-        # process white space data
-        # sentences = [i if i.strip() else "<|endoftext|>" for i in sentences]
-
-        if "convert_to_tensor" in kwargs:
-            # SentenceTransformer.encode_multi_process() got an unexpected keyword argument 'convert_to_tensor'
-            # https://github.com/embeddings-benchmark/mteb/issues/1325
-            kwargs.pop("convert_to_tensor")
-
-        vectors = self.model.encode_multi_process(
-            sentences=sentences,
-            pool=self.pool,
+        vectors = self.model.encode(
+            sentences,
             normalize_embeddings=True,
             prompt=instruction,
             **kwargs,
