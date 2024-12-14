@@ -53,6 +53,11 @@ class JasperWrapper(Wrapper):
         # process white space data
         # sentences = [i if i.strip() else "<|endoftext|>" for i in sentences]
 
+        if "convert_to_tensor" in kwargs:
+            # SentenceTransformer.encode_multi_process() got an unexpected keyword argument 'convert_to_tensor'
+            # https://github.com/embeddings-benchmark/mteb/issues/1325
+            kwargs.pop("convert_to_tensor")
+
         vectors = self.model.encode_multi_process(
             sentences=sentences,
             pool=self.pool,
