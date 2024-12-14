@@ -105,6 +105,10 @@ class Wrapper:
 
     def format_instruction(self, instruction: str) -> str:
         if isinstance(self.instruction_template, str):
+            if "{instruction}" not in self.instruction_template:
+                raise ValueError(
+                    "Instruction template must contain the string '{instruction}'."
+                )
             return self.instruction_template.format(instruction=instruction)
         return self.instruction_template(instruction)
 
