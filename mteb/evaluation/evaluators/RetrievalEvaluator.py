@@ -167,9 +167,7 @@ class DenseRetrievalExactSearch:
                     self.corpus_embeddings[request_qid].append(sub_corpus_embeddings)
 
             # Compute similarites using either cosine-similarity or dot product
-            similarity_scores = cos_sim(
-                query_embeddings, sub_corpus_embeddings
-            )
+            similarity_scores = cos_sim(query_embeddings, sub_corpus_embeddings)
             if hasattr(self.model, "similarity"):
                 similarity_scores = self.model.similarity(
                     float(self.model.similarity(e1, e2))
@@ -187,19 +185,24 @@ class DenseRetrievalExactSearch:
                 similarity_scores,
                 min(
                     top_k + 1,
-                    len(similarity_scores[1]) if len(similarity_scores) > 1 else len(similarity_scores[-1]),
+                    len(similarity_scores[1])
+                    if len(similarity_scores) > 1
+                    else len(similarity_scores[-1]),
                 ),
                 dim=1,
                 largest=True,
                 sorted=return_sorted,
             )
-            similarity_scores_top_k_values = similarity_scores_top_k_values.cpu().tolist()
+            similarity_scores_top_k_values = (
+                similarity_scores_top_k_values.cpu().tolist()
+            )
             similarity_scores_top_k_idx = similarity_scores_top_k_idx.cpu().tolist()
 
             for query_itr in range(len(query_embeddings)):
                 query_id = query_ids[query_itr]
                 for sub_corpus_id, score in zip(
-                    similarity_scores_top_k_idx[query_itr], similarity_scores_top_k_values[query_itr]
+                    similarity_scores_top_k_idx[query_itr],
+                    similarity_scores_top_k_values[query_itr],
                 ):
                     corpus_id = corpus_ids[corpus_start_idx + sub_corpus_id]
                     if len(result_heaps[query_id]) < top_k:

@@ -9,7 +9,7 @@ import numpy as np
 import torch
 
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import DISTANCE_METRICS, ModelMeta
+from mteb.model_meta import ModelMeta
 
 from .wrapper import Wrapper
 
@@ -33,7 +33,6 @@ class ColBERTWrapper(Wrapper):
                 First priority is given to the composed prompt of task name + prompt type (query or passage), then to the specific task prompt,
                 then to the composed prompt of task type + prompt type, then to the specific task type prompt,
                 and finally to the specific prompt type.
-            score_function: The similarity function to use when calling the predict method. Used in retrieval tasks.
             **kwargs: Additional arguments to pass to the model.
         """
         try:
@@ -117,8 +116,7 @@ class ColBERTWrapper(Wrapper):
         return pred.cpu().numpy()
 
     def similarity(self, a: np.ndarray, b: np.ndarray) -> np.ndarray:
-        """
-        Computes the max-similarity max_sim(a[i], b[j]) for all i and j.
+        """Computes the max-similarity max_sim(a[i], b[j]) for all i and j.
             Works with a Tensor of the shape (batch_size, num_tokens, token_dim)
 
         Return:

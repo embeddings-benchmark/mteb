@@ -7,8 +7,6 @@ import mteb
 from mteb.abstasks.TaskMetadata import TASK_TYPE
 from mteb.encoder_interface import PromptType
 
-from ..model_meta import DISTANCE_METRICS
-
 logger = logging.getLogger(__name__)
 
 
