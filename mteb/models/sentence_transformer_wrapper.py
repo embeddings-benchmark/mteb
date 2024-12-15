@@ -22,7 +22,6 @@ class SentenceTransformerWrapper(Wrapper):
         model: str | SentenceTransformer | CrossEncoder,
         revision: str | None = None,
         model_prompts: dict[str, str] | None = None,
-        score_function: DISTANCE_METRICS = "cosine",
         **kwargs,
     ) -> None:
         """Wrapper for SentenceTransformer models.
@@ -55,10 +54,12 @@ class SentenceTransformerWrapper(Wrapper):
             logger.info(f"Model prompts will be overwritten with {model_prompts}")
             self.model.prompts = model_prompts
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
-        self.score_function = score_function
 
         if isinstance(self.model, CrossEncoder):
             self.predict = self._predict
+
+        if hasattr(self.model, "similarity"):
+            self.similarity = self.model.similarity
 
     def encode(
         self,

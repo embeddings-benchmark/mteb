@@ -22,7 +22,6 @@ class ColBERTWrapper(Wrapper):
         model_name: str,
         revision: str | None = None,
         model_prompts: dict[str, str] | None = None,
-        score_function: DISTANCE_METRICS = "max_sim",
         **kwargs,
     ) -> None:
         """Wrapper for ColBERT models.
@@ -59,7 +58,6 @@ class ColBERTWrapper(Wrapper):
             logger.info(f"Model prompts will be overwritten with {model_prompts}")
             self.model.prompts = model_prompts
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
-        self.score_function = score_function
 
     def encode(
         self,
@@ -118,12 +116,39 @@ class ColBERTWrapper(Wrapper):
 
         return pred.cpu().numpy()
 
+    def similarity(self, a: np.ndarray, b: np.ndarray) -> np.ndarray:
+        """
+        Computes the max-similarity max_sim(a[i], b[j]) for all i and j.
+            Works with a Tensor of the shape (batch_size, num_tokens, token_dim)
+
+        Return:
+            Matrix with res[i][j]  = max_sim(a[i], b[j])
+        """  # noqa: D402
+        if not isinstance(a, torch.Tensor):
+            a = torch.tensor(a, dtype=torch.float32)
+
+        if not isinstance(b, torch.Tensor):
+            b = torch.tensor(b, dtype=torch.float32)
+
+        if len(a.shape) == 2:
+            a = a.unsqueeze(0)
+
+        if len(b.shape) == 2:
+            b = b.unsqueeze(0)
+
+        scores = torch.einsum(
+            "ash,bth->abst",
+            a,
+            b,
+        )
+
+        return scores.max(axis=-1).values.sum(axis=-1)
+
 
 colbert_v2 = ModelMeta(
     loader=partial(
         ColBERTWrapper,
         model_name="colbert-ir/colbertv2.0",
-        score_function="max_sim",
     ),
     name="colbert-ir/colbertv2.0",
     languages=["eng_Latn"],
@@ -152,7 +177,6 @@ jina_colbert_v2 = ModelMeta(
         document_prefix="[DocumentMarker]",
         attend_to_expansion_tokens=True,
         trust_remote_code=True,
-        score_function="max_sim",
     ),
     name="jinaai/jina-colbert-v2",
     languages=[  # list of languages the model has been evaluated on

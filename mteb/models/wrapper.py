@@ -17,8 +17,6 @@ class Wrapper:
     Also contains some utility functions for wrappers for working with prompts and instructions.
     """
 
-    score_function: DISTANCE_METRICS = "cosine"
-
     @staticmethod
     def get_prompt_name(
         task_to_prompt: dict[str, str] | None,
