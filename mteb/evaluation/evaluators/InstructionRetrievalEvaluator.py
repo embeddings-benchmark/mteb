@@ -34,7 +34,6 @@ class InstructionRetrievalEvaluator(RetrievalEvaluator):
                 corpus,
                 queries,
                 self.top_k,
-                self.score_function,
                 task_name=self.task_name,  # type: ignore
                 instructions=instructions,
                 **kwargs,
@@ -44,7 +43,6 @@ class InstructionRetrievalEvaluator(RetrievalEvaluator):
                 corpus,
                 queries,
                 self.top_k,
-                self.score_function,
                 instructions=instructions,
                 request_qid=qid,
                 task_name=self.task_name,
