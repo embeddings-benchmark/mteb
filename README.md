@@ -209,6 +209,21 @@ Note that the public leaderboard uses the test splits for all datasets except MS
 
 </details>
 
+
+<details>
+  <summary> Selecting evaluation subset </summary>
+
+### Selecting evaluation subset
+You can evaluate only on `eng` subsets of all tasks by doing the following:
+
+```python
+evaluation.run(model, eval_subsets=["eng"])
+```
+
+Monolingual tasks have `default` subset, other tasks have subsets that are specific to the dataset.
+
+</details>
+
 <details>
   <summary>  Using a custom model </summary>
 
