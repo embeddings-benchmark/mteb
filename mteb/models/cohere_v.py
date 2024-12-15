@@ -14,6 +14,7 @@ from torchvision import transforms
 from tqdm import tqdm
 
 import mteb
+from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
 api_key = os.getenv("COHERE_API_KEY")
@@ -42,7 +43,15 @@ def cohere_v_loader(**kwargs):
             Remove or adjust this after Cohere API changes capacity.
             """
 
-        def get_text_embeddings(self, texts: list[str], batch_size: int = 32):
+        def get_text_embeddings(
+            self,
+            texts: list[str],
+            *,
+            task_name: str | None = None,
+            prompt_type: PromptType | None = None,
+            batch_size: int = 32,
+            **kwargs: Any,
+        ):
             all_text_embeddings = []
 
             for i in tqdm(range(0, len(texts), batch_size)):
@@ -58,7 +67,13 @@ def cohere_v_loader(**kwargs):
             return all_text_embeddings
 
         def get_image_embeddings(
-            self, images: list[Image.Image] | DataLoader, batch_size: int = 32
+            self,
+            images: list[Image.Image] | DataLoader,
+            *,
+            task_name: str | None = None,
+            prompt_type: PromptType | None = None,
+            batch_size: int = 32,
+            **kwargs: Any,
         ):
             all_image_embeddings = []
 
@@ -130,8 +145,11 @@ def cohere_v_loader(**kwargs):
             self,
             texts: list[str] = None,
             images: list[Image.Image] | DataLoader = None,
-            fusion_mode="sum",
+            task_name: str | None = None,
+            prompt_type: PromptType | None = None,
             batch_size: int = 32,
+            fusion_mode="sum",
+            **kwargs: Any,
         ):
             if texts is None and images is None:
                 raise ValueError("Either texts or images must be provided")
