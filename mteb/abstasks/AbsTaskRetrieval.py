@@ -308,14 +308,10 @@ class AbsTaskRetrieval(AbsTask):
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ) -> dict[HFSubset, ScoresDict]:
-        score_function = "cosine"
-        if hasattr(model, "score_function"):
-            score_function = model.score_function
         retriever = RetrievalEvaluator(
             retriever=model,
             task_name=self.metadata.name,
             encode_kwargs=encode_kwargs,
-            score_function=score_function,
             **kwargs,
         )
 
