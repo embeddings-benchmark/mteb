@@ -523,14 +523,9 @@ class MTEB:
                     # Determine subsets to run for this split
                     # If the whole split is missing, run all required subsets
                     # If only some subsets are missing, run only those
-                    if info["whole_split_missing"]:
-                        if task_subsets is not None:
-                            subsets_to_run = info["missing_subsets"]
-                        else:
-                            subsets_to_run = ["default"]
-                    else:
-                        # partial subsets missing
-                        subsets_to_run = info["missing_subsets"]
+                    subsets_to_run = info["missing_subsets"]
+                    if info["whole_split_missing"] and task_subsets is None:
+                        subsets_to_run = ["default"]
 
                     if co2_tracker:
                         try:

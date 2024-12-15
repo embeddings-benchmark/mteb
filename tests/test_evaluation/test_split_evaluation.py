@@ -109,7 +109,7 @@ def test_all_languages_evaluated(model, multilingual_tasks, tmp_path):
         eval_splits=["test"],
         output_folder=str(tmp_path / "all_lang_evaluated"),
         verbosity=2,
-        eval_langs=None,
+        eval_subsets=None,
     )
     assert "MockMultilingualRetrievalTask" == results[0].task_name
     last_evaluated_splits = evaluation.get_last_evaluated_splits()
@@ -127,7 +127,7 @@ def test_missing_language(model, multilingual_tasks, tmp_path):
         eval_splits=["test"],
         output_folder=str(tmp_path / "missing_lang_test"),
         verbosity=2,
-        eval_langs=["eng"],
+        eval_subsets=["eng"],
     )
 
     assert "MockMultilingualRetrievalTask" == results[0].task_name
@@ -143,7 +143,7 @@ def test_missing_language(model, multilingual_tasks, tmp_path):
         eval_splits=["test"],
         output_folder=str(tmp_path / "missing_lang_test"),
         verbosity=2,
-        eval_langs=["eng", "fra"],
+        eval_subsets=["eng", "fra"],
         overwrite_results=True,
     )
 
@@ -162,7 +162,7 @@ def test_no_missing_languages(model, multilingual_tasks, tmp_path):
         eval_splits=["test"],
         output_folder=str(tmp_path / "no_missing_lang_test"),
         verbosity=2,
-        eval_langs=["eng", "fra"],
+        eval_subsets=["eng", "fra"],
     )
     last_evaluated_splits = evaluation.get_last_evaluated_splits()
     assert "MockMultilingualRetrievalTask" in last_evaluated_splits
@@ -177,7 +177,7 @@ def test_no_missing_languages(model, multilingual_tasks, tmp_path):
         eval_splits=["test"],
         output_folder=str(tmp_path / "no_missing_lang_test"),
         verbosity=2,
-        eval_langs=["eng", "fra"],
+        eval_subsets=["eng", "fra"],
         overwrite_results=True,
     )
     last_evaluated_splits = evaluation.get_last_evaluated_splits()
@@ -195,7 +195,7 @@ def test_partial_languages(model, multilingual_tasks, tmp_path):
         eval_splits=["test"],
         output_folder=str(tmp_path / "partial_lang_test"),
         verbosity=2,
-        eval_langs=["fra"],
+        eval_subsets=["fra"],
     )
     last_evaluated_splits = evaluation.get_last_evaluated_splits()
     assert len(last_evaluated_splits["MockMultilingualRetrievalTask"]) == 1
@@ -209,7 +209,7 @@ def test_partial_languages(model, multilingual_tasks, tmp_path):
         eval_splits=["test"],
         output_folder=str(tmp_path / "partial_lang_test"),
         verbosity=2,
-        eval_langs=["fra", "eng"],
+        eval_subsets=["fra", "eng"],
         overwrite_results=True,
     )
     last_evaluated_splits = evaluation.get_last_evaluated_splits()
@@ -229,7 +229,7 @@ def test_multilingual_one_missing_split_no_missing_lang(
         eval_splits=["val"],
         output_folder=str(tmp_path / "partial_langs_partial_splits"),
         verbosity=2,
-        eval_langs=["eng", "fra"],
+        eval_subsets=["eng", "fra"],
     )
 
     last_evaluated_splits = evaluation.get_last_evaluated_splits()
@@ -244,7 +244,7 @@ def test_multilingual_one_missing_split_no_missing_lang(
         eval_splits=["val", "test"],
         output_folder=str(tmp_path / "partial_langs_partial_splits"),
         verbosity=2,
-        eval_langs=["eng", "fra"],
+        eval_subsets=["eng", "fra"],
         overwrite_results=True,
     )
 
@@ -265,7 +265,7 @@ def test_multilingual_one_missing_lang_in_one_split(
         eval_splits=["val"],
         output_folder=str(tmp_path / "one_lang_one_split"),
         verbosity=2,
-        eval_langs=["eng", "fra"],
+        eval_subsets=["eng", "fra"],
     )
 
     last_evaluated_splits = evaluation.get_last_evaluated_splits()
@@ -279,7 +279,7 @@ def test_multilingual_one_missing_lang_in_one_split(
         eval_splits=["val", "test"],
         output_folder=str(tmp_path / "one_lang_one_split"),
         verbosity=2,
-        eval_langs=["eng"],
+        eval_subsets=["eng"],
         overwrite_results=True,
     )
 
@@ -295,7 +295,7 @@ def test_multilingual_one_missing_lang_in_one_split(
         eval_splits=["test"],
         output_folder=str(tmp_path / "one_lang_one_split"),
         verbosity=2,
-        eval_langs=["eng", "fra"],
+        eval_subsets=["eng", "fra"],
         overwrite_results=True,
     )
 
