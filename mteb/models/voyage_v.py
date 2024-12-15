@@ -17,6 +17,27 @@ from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_excep
 api_key = os.getenv("VOYAGE_API_KEY")
 tensor_to_image = transforms.Compose([transforms.ToPILImage()])
 
+def downsample_image(image: Image.Image, max_pixels: int = 16000000, target_longest_side: int = 4000) -> Image.Image:
+    """
+    if image pixel > max_pixels, downsample it to target_longest_side while keeping the width height ratio.
+    """
+    width, height = image.size
+    pixels = width * height
+    
+    if pixels > max_pixels:
+        if width > height:
+            new_width = target_longest_side
+            new_height = int(height * (target_longest_side / width))
+        else:
+            new_height = target_longest_side
+            new_width = int(width * (target_longest_side / height))
+        
+        new_size = (new_width, new_height)
+        print(f"Downsampling image from {width}x{height} to {new_width}x{new_height}")
+        return image.resize(new_size, Image.LANCZOS)
+    
+    return image
+
 
 def voyage_v_loader(**kwargs):
     try:
@@ -77,7 +98,8 @@ def voyage_v_loader(**kwargs):
                 for index, batch in enumerate(tqdm(images)):
                     if index == 0:
                         assert len(batch) == batch_size
-                    batch_images = [[tensor_to_image(image)] for image in batch]
+                    # batch_images = [[tensor_to_image(image)] for image in batch]
+                    batch_images = [[downsample_image(tensor_to_image(image))] for image in batch]
                     # all_image_embeddings += torch.tensor(
                     #     self.vo.multimodal_embed(
                     #         batch_images, model=self.model_name, input_type=input_type
@@ -90,7 +112,8 @@ def voyage_v_loader(**kwargs):
             else:
                 for i in tqdm(range(0, len(images), batch_size)):
                     batch_images = images[i : i + batch_size]
-                    batch_images = [[image] for image in batch_images]
+                    # batch_images = [[image] for image in batch_images]
+                    batch_images = [[downsample_image(image)] for image in batch_images]
                     # all_image_embeddings += torch.tensor(
                     #     self.vo.multimodal_embed(
                     #         batch_images, model=self.model_name, input_type=input_type
