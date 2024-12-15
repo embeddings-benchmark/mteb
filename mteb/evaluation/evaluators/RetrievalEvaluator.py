@@ -166,7 +166,7 @@ class DenseRetrievalExactSearch:
                 if self.save_corpus_embeddings and request_qid:
                     self.corpus_embeddings[request_qid].append(sub_corpus_embeddings)
 
-            # Compute similarites using either cosine-similarity or dot product
+            # Compute similarites using self defined similarity otherwise default to cosine-similarity
             similarity_scores = cos_sim(query_embeddings, sub_corpus_embeddings)
             if hasattr(self.model, "similarity"):
                 similarity_scores = self.model.similarity(
