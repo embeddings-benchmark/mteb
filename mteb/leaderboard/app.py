@@ -4,6 +4,7 @@ import json
 import tempfile
 from collections import defaultdict
 from pathlib import Path
+from urllib.parse import urlencode
 
 import gradio as gr
 import pandas as pd
@@ -24,6 +25,24 @@ def load_results():
     else:
         with results_cache_path.open() as cache_file:
             return mteb.BenchmarkResults.from_validated(**json.load(cache_file))
+
+
+def produce_benchmark_link(benchmark_name: str, request: gr.Request) -> str:
+    """Produces a URL for the selected benchmark."""
+    params = urlencode(
+        {
+            "benchmark_name": benchmark_name,
+        }
+    )
+    base_url = request.request.base_url
+    url = f"{base_url}?{params}"
+    md = f"```\n{url}\n```"
+    return md
+
+
+def set_benchmark_on_load(request: gr.Request):
+    query_params = request.query_params
+    return query_params.get("benchmark_name", "MTEB(Multilingual, beta)")
 
 
 def download_table(table: pd.DataFrame) -> Path:
@@ -74,6 +93,7 @@ def update_task_info(task_names: str) -> gr.DataFrame:
         properties=["name", "type", "languages", "domains", "reference", "main_score"]
     )
     df["languages"] = df["languages"].map(format_list)
+    df = df.sort_values("name")
     df["domains"] = df["domains"].map(format_list)
     df["name"] = "[" + df["name"] + "](" + df["reference"] + ")"
     df = df.rename(
@@ -86,7 +106,6 @@ def update_task_info(task_names: str) -> gr.DataFrame:
         }
     )
     df = df.drop(columns="reference")
-    df = df.sort_values("name")
     return gr.DataFrame(df, datatype=["markdown"] + ["str"] * (len(df.columns) - 1))
 
 
@@ -226,6 +245,8 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                 inputs=[benchmark_select, lang_select, type_select, domain_select],
             )
             citation = gr.Markdown(update_citation, inputs=[benchmark_select])
+            with gr.Accordion("Share this benchmark:", open=False):
+                gr.Markdown(produce_benchmark_link, inputs=[benchmark_select])
         with gr.Column():
             with gr.Tab("Performance-Size Plot"):
                 plot = gr.Plot(performance_size_plot, inputs=[summary_table])
@@ -263,6 +284,9 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
         )
     with gr.Tab("Task information"):
         task_info_table = gr.DataFrame(update_task_info, inputs=[task_select])
+
+    # This sets the benchmark from the URL query parameters
+    demo.load(set_benchmark_on_load, inputs=[], outputs=[benchmark_select])
 
     @gr.on(inputs=[scores, searchbar], outputs=[summary_table, per_task_table])
     def update_tables(scores, search_query: str):
