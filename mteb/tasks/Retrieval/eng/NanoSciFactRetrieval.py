@@ -43,9 +43,9 @@ class NanoSciFactRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus = load_dataset("zeta-alpha-ai/NanoSciFact", "corpus")
-        self.queries = load_dataset("zeta-alpha-ai/NanoSciFact", "queries")
-        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoSciFact", "qrels")
+        self.corpus = load_dataset("zeta-alpha-ai/NanoSciFact", "corpus", revision="309f1d1ae3ae2e092444a8a0c25bed59b82318bc")
+        self.queries = load_dataset("zeta-alpha-ai/NanoSciFact", "queries", revision="309f1d1ae3ae2e092444a8a0c25bed59b82318bc")
+        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoSciFact", "qrels", revision="309f1d1ae3ae2e092444a8a0c25bed59b82318bc")
 
         self.corpus = {
             split: {

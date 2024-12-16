@@ -44,10 +44,10 @@ class NanoArguAnaRetrieval(AbsTaskRetrieval):
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
-
-        self.corpus = load_dataset("zeta-alpha-ai/NanoArguAna", "corpus")
-        self.queries = load_dataset("zeta-alpha-ai/NanoArguAna", "queries")
-        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoArguAna", "qrels")
+        
+        self.corpus = load_dataset("zeta-alpha-ai/NanoArguAna", "corpus", revision="8f4a982d470a32c45817738b9d29042ca55d75ad")
+        self.queries = load_dataset("zeta-alpha-ai/NanoArguAna", "queries", revision="8f4a982d470a32c45817738b9d29042ca55d75ad")
+        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoArguAna", "qrels", revision="8f4a982d470a32c45817738b9d29042ca55d75ad")
 
         self.corpus = {
             split: {

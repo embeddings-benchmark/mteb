@@ -45,9 +45,9 @@ url={https://openreview.net/forum?id=wCu6T5xFjeJ}
         if self.data_loaded:
             return
 
-        self.corpus = load_dataset("zeta-alpha-ai/NanoFiQA2018", "corpus")
-        self.queries = load_dataset("zeta-alpha-ai/NanoFiQA2018", "queries")
-        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoFiQA2018", "qrels")
+        self.corpus = load_dataset("zeta-alpha-ai/NanoFiQA2018", "corpus", revision="4163ba032953d5044a7a6244261413f609c14342")
+        self.queries = load_dataset("zeta-alpha-ai/NanoFiQA2018", "queries", revision="4163ba032953d5044a7a6244261413f609c14342")
+        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoFiQA2018", "qrels", revision="4163ba032953d5044a7a6244261413f609c14342")
 
         self.corpus = {
             split: {

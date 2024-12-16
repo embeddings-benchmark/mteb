@@ -45,9 +45,9 @@ class NanoSCIDOCSRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus = load_dataset("zeta-alpha-ai/NanoSCIDOCS", "corpus")
-        self.queries = load_dataset("zeta-alpha-ai/NanoSCIDOCS", "queries")
-        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoSCIDOCS", "qrels")
+        self.corpus = load_dataset("zeta-alpha-ai/NanoSCIDOCS", "corpus", revision="484eb90549fc3f0b9c42b3551e80ceb999515537")
+        self.queries = load_dataset("zeta-alpha-ai/NanoSCIDOCS", "queries", revision="484eb90549fc3f0b9c42b3551e80ceb999515537")
+        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoSCIDOCS", "qrels", revision="484eb90549fc3f0b9c42b3551e80ceb999515537")
 
         self.corpus = {
             split: {

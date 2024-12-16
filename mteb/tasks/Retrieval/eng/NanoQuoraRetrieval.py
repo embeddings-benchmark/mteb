@@ -46,9 +46,9 @@ class NanoQuoraRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus = load_dataset("zeta-alpha-ai/NanoQuoraRetrieval", "corpus")
-        self.queries = load_dataset("zeta-alpha-ai/NanoQuoraRetrieval", "queries")
-        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoQuoraRetrieval", "qrels")
+        self.corpus = load_dataset("zeta-alpha-ai/NanoQuoraRetrieval", "corpus", revision="2ab2d73e6c862026282808b913a34f4136928545")
+        self.queries = load_dataset("zeta-alpha-ai/NanoQuoraRetrieval", "queries", revision="2ab2d73e6c862026282808b913a34f4136928545")
+        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoQuoraRetrieval", "qrels", revision="2ab2d73e6c862026282808b913a34f4136928545")
 
         self.corpus = {
             split: {

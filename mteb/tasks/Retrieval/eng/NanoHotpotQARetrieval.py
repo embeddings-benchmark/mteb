@@ -62,9 +62,9 @@ class NanoHotpotQARetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus = load_dataset("zeta-alpha-ai/NanoHotpotQA", "corpus")
-        self.queries = load_dataset("zeta-alpha-ai/NanoHotpotQA", "queries")
-        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoHotpotQA", "qrels")
+        self.corpus = load_dataset("zeta-alpha-ai/NanoHotpotQA", "corpus", revision="d79c0cdda980aba54842756770928035e1b61a51")
+        self.queries = load_dataset("zeta-alpha-ai/NanoHotpotQA", "queries", revision="d79c0cdda980aba54842756770928035e1b61a51")
+        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoHotpotQA", "qrels", revision="d79c0cdda980aba54842756770928035e1b61a51")
 
         self.corpus = {
             split: {

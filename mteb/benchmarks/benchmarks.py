@@ -992,7 +992,7 @@ NANOBEIR = Benchmark(
             "NanoMSMARCORetrieval",
             "NanoNFCorpusRetrieval",
             "NanoNQRetrieval",
-            "NanoQuoraRetrieval"
+            "NanoQuoraRetrieval",
             "NanoSCIDOCSRetrieval",
             "NanoSciFactRetrieval",
             "NanoTouche2020Retrieval",
