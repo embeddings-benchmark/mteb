@@ -8,8 +8,7 @@ A benchmark within `mteb` is essentially just a list of tasks along with some me
     <figcaption>An overview of the benchmark within `mteb`</figcaption>
 </figure>
 
-This metadata includes short description of the benchmarks intention, a reference and the citation. If you use a benchmark from `mteb` we recommend
-that you cite it along with `mteb`.
+This metadata includes a short description of the benchmark's intention, the reference, and the citation. If you use a benchmark from `mteb`, we recommend that you cite it along with `mteb`.
 
 
 ## Utilities

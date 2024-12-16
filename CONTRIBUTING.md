@@ -18,7 +18,7 @@ cd mteb
 make install
 ```
 
-This uses [make](missing) to define the install command. You can see what each command does in the [makefile](missing).  
+This uses [make](https://www.gnu.org/software/make/) to define the install command. You can see what each command does in the [makefile](https://github.com/embeddings-benchmark/mteb/blob/main/Makefile).  
 
 ### Running Tests
 
@@ -28,12 +28,12 @@ To run the tests, you can use the following command:
 make test
 ```
 
-This is also run by the CI pipeline, so if this passed locally you can be almost sure that your changes will not cause a failed test once you create a pull request. We recommend running the tests in the lowest version of python supported by the package (see the [pyproject.toml](missing)) to ensure compatibility.
+This is also run by the CI pipeline, so if this passed locally, you can be almost sure that your changes will not cause a failed test once you create a pull request. We recommend running the tests in the lowest version of python supported by the package (see the [pyproject.toml](https://github.com/embeddings-benchmark/mteb/blob/main/pyproject.toml)) to ensure compatibility.
 
 
 ### Running linting
 
-To run the linting before a pull request you can use the following command:
+To run the linting before submitting a pull request, use:
 
 ```bash
 make lint

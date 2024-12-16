@@ -1,7 +1,7 @@
 # Tasks
 
-A task is an implementation of a dataset for evaluation. It could for instance be the MIRACL dataset consisting of queries, a corpus of documents 
-as well as the correct documents to retrieve for a given query. In addition to the dataset a task includes specification for how a model should be run on the dataset and how its output should be evaluation. Each task also come with extensive metadata including the license, who annotated the data and so on.
+A task is an implementation of a dataset for evaluation. It could, for instance, be the MIRACL dataset consisting of queries, a corpus of documents 
+,and the correct documents to retrieve for a given query. In addition to the dataset, a task includes the specifications for how a model should be run on the dataset and how its output should be evaluated. Each task also comes with extensive metadata including the license, who annotated the data, etc.
 
 <figure markdown="span">
     ![](../images/visualizations/task_explainer.png){ width="80%" }
@@ -16,8 +16,7 @@ as well as the correct documents to retrieve for a given query. In addition to t
 
 ## Metadata
 
-Each task also contains extensive metadata, we annotate this using the following object. This allows to use [pydantic](https://docs.pydantic.dev/latest/) to evaluate that the 
-metadata is valid and consistent. 
+Each task also contains extensive metadata. We annotate this using the following object, which allows us to use [pydantic](https://docs.pydantic.dev/latest/) to validate the metadata. 
 
 :::mteb.TaskMetadata
     options:
