@@ -31,6 +31,9 @@ class NvEmbedWrapper(SentenceTransformerWrapper):
         super().__init__(model, revision, model_prompts, **kwargs)
         self.model.max_seq_length = 32768
         self.model.tokenizer.padding_side = "right"
+        logger.warning(
+            "Instructions are used in both query and docs, which may cause performance discrepancies from the original implementation."
+        )
 
     def encode(
         self,
