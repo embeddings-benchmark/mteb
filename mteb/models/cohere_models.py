@@ -216,7 +216,7 @@ model_prompts = {
 }
 
 cohere_mult_3 = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         CohereTextEmbeddingModel,
         model_name="embed-multilingual-v3.0",
         model_prompts=model_prompts,
@@ -238,7 +238,7 @@ cohere_mult_3 = ModelMeta(
 )
 
 cohere_eng_3 = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         CohereTextEmbeddingModel,
         model_name="embed-english-v3.0",
         model_prompts=model_prompts,

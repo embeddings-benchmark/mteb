@@ -175,7 +175,7 @@ def _loader(wrapper: type[RerankerWrapper], **kwargs) -> Callable[..., Encoder]:
 
 
 monobert_large = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=MonoBERTReranker,
         model_name_or_path="castorini/monobert-large-msmarco",
@@ -190,7 +190,7 @@ monobert_large = ModelMeta(
 
 # languages unclear: https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual/discussions/28
 jina_reranker_multilingual = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=JinaReranker,
         model_name_or_path="jinaai/jina-reranker-v2-base-multilingual",
@@ -204,7 +204,7 @@ jina_reranker_multilingual = ModelMeta(
 )
 
 bge_reranker_v2_m3 = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=BGEReranker,
         model_name_or_path="BAAI/bge-reranker-v2-m3",
