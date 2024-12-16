@@ -41,6 +41,7 @@ class CIFAR10Clustering(AbsTaskImageClustering):
             "avg_character_length": {"test": 431.4},
         },
     )
+    
     image_column_name: str = "img"
 
 

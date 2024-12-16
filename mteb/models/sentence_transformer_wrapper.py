@@ -39,8 +39,10 @@ class SentenceTransformerWrapper(Wrapper):
             self.model = SentenceTransformer(
                 model, revision=revision, trust_remote_code=True, **kwargs
             )
+            self.device = self.model.device
         else:
             self.model = model
+            self.device = None
 
         if (
             model_prompts is None
