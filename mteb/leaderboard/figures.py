@@ -6,6 +6,28 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 
+def text_plot(text: str):
+    """Returns empty scatter plot with text added, this can be great for error messages."""
+    return px.scatter(template="plotly_white").add_annotation(
+        text=text, showarrow=False, font=dict(size=20)
+    )
+
+
+def failsafe_plot(fun):
+    """Decorator that turns the function producing a figure failsafe.
+    This is necessary, because once a Callback encounters an exception it
+    becomes useless in Gradio.
+    """
+
+    def wrapper(*args, **kwargs):
+        try:
+            return fun(*args, **kwargs)
+        except Exception:
+            return text_plot("Couldn't produce plot.")
+
+    return wrapper
+
+
 def parse_n_params(text: str) -> int:
     if text.endswith("M"):
         return float(text[:-1]) * 1e6
@@ -78,6 +100,7 @@ def add_size_guide(fig: go.Figure):
     return fig
 
 
+@failsafe_plot
 def performance_size_plot(df: pd.DataFrame) -> go.Figure:
     df = df.copy()
     df["Number of Parameters"] = df["Number of Parameters"].map(parse_n_params)
@@ -185,6 +208,7 @@ fill_colors = [
 ]
 
 
+@failsafe_plot
 def radar_chart(df: pd.DataFrame) -> go.Figure:
     df = df.copy()
     df["Model"] = df["Model"].map(parse_model_name)
@@ -192,6 +216,10 @@ def radar_chart(df: pd.DataFrame) -> go.Figure:
     task_type_columns = [
         column for column in df.columns if "".join(column.split()) in task_types
     ]
+    if len(task_type_columns) <= 1:
+        raise ValueError(
+            "Couldn't produce radar chart, the benchmark only contains one task category."
+        )
     df = df[["Model", *task_type_columns]].set_index("Model")
     df = df.replace("", np.nan)
     df = df.dropna()
