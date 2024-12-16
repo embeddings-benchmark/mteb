@@ -268,6 +268,9 @@ class AbsTaskClusteringFast(AbsTask):
             },
         )
 
+    def _push_dataset_to_hub(self, repo_name: str) -> None:
+        self._upload_dataset_to_hub(repo_name, ["sentences", "labels"])
+
 
 def clustering_downsample(
     dataset: DatasetDict, seed: int, max_samples_in_cluster: int = 2048

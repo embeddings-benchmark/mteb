@@ -81,7 +81,7 @@ class AbsTaskPairClassification(AbsTask):
         encode_kwargs: dict[str, str] = {},
         **kwargs,
     ) -> ScoresDict:
-        data_split = dataset[0]
+        data_split = dataset[0] if len(dataset) == 1 else dataset
         logging.getLogger(
             "sentence_transformers.evaluation.PairClassificationEvaluator"
         ).setLevel(logging.WARN)
@@ -152,3 +152,6 @@ class AbsTaskPairClassification(AbsTask):
                 str(label): {"count": count} for label, count in label_count.items()
             },
         )
+
+    def _push_dataset_to_hub(self, repo_name: str) -> None:
+        self._upload_dataset_to_hub(repo_name, ["sentence1", "sentence2", "labels"])

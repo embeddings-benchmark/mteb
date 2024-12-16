@@ -297,3 +297,6 @@ class AbsTaskMultilabelClassification(AbsTask):
                 for label, value in label_count.items()
             },
         )
+
+    def _push_dataset_to_hub(self, repo_name: str) -> None:
+        self._upload_dataset_to_hub(repo_name, ["text", "label"])

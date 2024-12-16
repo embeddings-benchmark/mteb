@@ -9,9 +9,8 @@ class AmazonReviewsClassification(MultilingualTask, AbsTaskClassification):
     metadata = TaskMetadata(
         name="AmazonReviewsClassification",
         dataset={
-            "path": "mteb/amazon_reviews_multi",
-            "revision": "1399c76144fd37290681b995c656ef9b2e06e26d",
-            "trust_remote_code": True,
+            "path": "mteb/AmazonReviewsClassification",
+            "revision": "6b5d328eaae8ef408dd7d775040245cf86f92e9d",
         },
         description="A collection of Amazon reviews specifically designed to aid research in multilingual text classification.",
         reference="https://arxiv.org/abs/2010.02573",

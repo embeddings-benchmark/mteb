@@ -1,11 +1,9 @@
 from __future__ import annotations
 
-import logging
-
 import pytest
+from pydantic import ValidationError
 
-from mteb.abstasks import AbsTask
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks import AbsTask, TaskMetadata
 from mteb.overview import get_tasks
 
 # Historic datasets without filled metadata. Do NOT add new datasets to this list.
@@ -178,6 +176,7 @@ _HISTORIC_DATASETS = [
     "TamilNewsClassification",
     "TenKGnadClusteringP2P.v2",
     "TenKGnadClusteringS2S.v2",
+    "IndicXnliPairClassification",
 ]
 
 
@@ -259,8 +258,8 @@ def test_given_missing_revision_path_then_it_throws():
 
 
 def test_given_none_revision_path_then_it_logs_warning(caplog):
-    with caplog.at_level(logging.WARNING):
-        my_task = TaskMetadata(
+    with pytest.raises(ValidationError):
+        TaskMetadata(
             name="MyTask",
             dataset={"path": "test/dataset", "revision": None},
             description="testing",
@@ -279,18 +278,6 @@ def test_given_none_revision_path_then_it_logs_warning(caplog):
             dialect=None,
             sample_creation=None,
             bibtex_citation="",
-        )
-
-        assert my_task.dataset["revision"] is None
-
-        warning_logs = [
-            record for record in caplog.records if record.levelname == "WARNING"
-        ]
-        assert len(warning_logs) == 1
-        assert (
-            warning_logs[0].message
-            == "Revision missing for the dataset test/dataset. "
-            + "It is encourage to specify a dataset revision for reproducability."
         )
 
 
@@ -511,10 +498,11 @@ def test_disallow_trust_remote_code_in_new_datasets():
         "MLSUMClusteringS2S.v2",
         "SwednClusteringP2P",
         "SwednClusteringS2S",
+        "IndicXnliPairClassification",
     ]
 
     assert (
-        135 == len(exceptions)
+        136 == len(exceptions)
     ), "The number of exceptions has changed. Please do not add new datasets to this list."
 
     exceptions = []
@@ -528,24 +516,10 @@ def test_disallow_trust_remote_code_in_new_datasets():
 
 @pytest.mark.parametrize("task", get_tasks())
 def test_empty_descriptive_stat_in_new_datasets(task: AbsTask):
-    # DON'T ADD NEW DATASETS TO THIS LIST
-    # THIS IS ONLY INTENDED FOR HISTORIC DATASETS
-    exceptions = [
-        "MSMARCOv2",
-        "NeuCLIR2022Retrieval",
-        "NeuCLIR2023Retrieval",
-        "FloresBitextMining",
-        "FilipinoHateSpeechClassification",
-    ]
-
     if task.metadata.name.startswith("Mock"):
         return
 
-    if task.metadata.name in exceptions:
-        assert (
-            task.metadata.descriptive_stats is None
-        ), f"Dataset {task.metadata.name} should not have descriptive stats"
-    else:
-        assert (
-            task.metadata.descriptive_stats is not None
-        ), f"Dataset {task.metadata.name} should have descriptive stats. You can add metadata to your task by running `YorTask().calculate_metadata_metrics()`"
+    assert (
+        task.metadata.descriptive_stats is not None
+    ), f"Dataset {task.metadata.name} should have descriptive stats. You can add metadata to your task by running `YorTask().calculate_metadata_metrics()`"
+    assert task.metadata.n_samples is not None

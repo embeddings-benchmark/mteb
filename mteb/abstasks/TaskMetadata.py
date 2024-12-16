@@ -11,6 +11,7 @@ from pydantic import (
     AnyUrl,
     BaseModel,
     BeforeValidator,
+    ConfigDict,
     TypeAdapter,
     field_validator,
 )
@@ -167,6 +168,7 @@ LICENSES = (  # this list can be extended as needed
         "cc0-1.0",
         "bsd-3-clause",
         "gpl-3.0",
+        "lgpl-3.0",
         "cdla-sharing-1.0",
         "mpl-2.0",
     ]
@@ -195,6 +197,24 @@ class DescriptiveStatistics(TypedDict):
 
 
 logger = logging.getLogger(__name__)
+
+
+class MetadataDatasetDict(TypedDict, total=False):
+    """A dictionary containing the dataset path and revision.
+
+    Args:
+        path: The path to the dataset.
+        revision: The revision of the dataset.
+        name: The name the dataset config.
+        split: The split of the dataset.
+        trust_remote_code: Whether to trust the remote code.
+    """
+
+    path: str
+    revision: str
+    name: str
+    split: str
+    trust_remote_code: bool
 
 
 class TaskMetadata(BaseModel):
@@ -228,7 +248,9 @@ class TaskMetadata(BaseModel):
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
     """
 
-    dataset: dict
+    model_config = ConfigDict(extra="forbid")
+
+    dataset: MetadataDatasetDict
 
     name: str
     description: str
