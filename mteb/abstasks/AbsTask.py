@@ -90,7 +90,6 @@ class AbsTask(ABC):
         torch.manual_seed(self.seed)
         torch.cuda.manual_seed_all(self.seed)
 
-
     def check_if_dataset_is_superseded(self):
         """Check if the dataset is superseded by a newer version"""
         if self.superseded_by:

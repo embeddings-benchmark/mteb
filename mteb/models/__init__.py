@@ -10,8 +10,6 @@ from mteb.models.overview import (
 )
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 
-from .sentence_transformer_wrapper import SentenceTransformerWrapper
-
 __all__ = [
     "MODEL_REGISTRY",
     "ModelMeta",
