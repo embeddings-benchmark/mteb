@@ -56,6 +56,9 @@ class SentenceTransformerWrapper(Wrapper):
         if isinstance(self.model, CrossEncoder):
             self.predict = self._predict
 
+        if hasattr(self.model, "similarity"):
+            self.similarity = self.model.similarity
+
     def encode(
         self,
         sentences: Sequence[str],
