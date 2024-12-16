@@ -60,6 +60,7 @@ speedtask = ["GPUtil>=1.4.0", "psutil>=5.9.8"]
 peft = ["peft>=0.11.0"]
 leaderboard = ["gradio>=4.44.0", "gradio_rangeslider>=0.0.6"]
 flagembedding = ["FlagEmbedding"]
+e5v = ["accelerate>=0.26.0"]
 
 
 [tool.coverage.report]

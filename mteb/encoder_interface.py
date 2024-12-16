@@ -6,7 +6,6 @@ from typing import Any, Protocol, Union, runtime_checkable
 
 import numpy as np
 import torch
-
 from PIL import Image
 from torch.utils.data import DataLoader
 
@@ -182,30 +181,29 @@ class ImageEncoder:
     ) -> np.ndarray:
         pass
 
-    def get_image_embeddings( # Seems like sentence transformers use a singular encode for both images and text. Not sure if we want to do the same.
+    def get_image_embeddings(  # Seems like sentence transformers use a singular encode for both images and text. Not sure if we want to do the same.
         # If not it might be ideal to redefine Encoder.encode
         self,
         images: list[Image.Image] | DataLoader,
-        *, 
         **kwargs,
         # removed batch_size, it is not required that it will accept kwargs
     ) -> np.ndarray:  # added standard output (I believe we actually expect tensors in the code, but would like to be consistent)
         pass
 
-    def get_text_embeddings( # any reason for this?
+    def get_text_embeddings(  # any reason for this?
         self,
         texts: list[str],
-        *, 
-        **kwargs, 
+        **kwargs,
     ) -> np.ndarray:
         pass
 
-    def get_fused_embeddings( # hmm what if I have a document with images at specific positions?
+    def get_fused_embeddings(  # hmm what if I have a document with images at specific positions?
         self,
         texts: list[str] | None = None,
-        images: list[Image.Image] | DataLoader | None = None, # the requirement for these two to be the same seems odd (docs without images, images without associated text, docs with multiple images)
+        images: list[Image.Image]
+        | DataLoader
+        | None = None,  # the requirement for these two to be the same seems odd (docs without images, images without associated text, docs with multiple images)
         # fusion_mode: str="sum", # will remove this as it should be required in the interface
-        *, 
         **kwargs: Any,
     ) -> np.ndarray:
-    pass
+        pass

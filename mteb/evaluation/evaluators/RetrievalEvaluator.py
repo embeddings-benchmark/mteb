@@ -379,8 +379,9 @@ class DRESModel:
     mteb_model_meta: ModelMeta | None
 
     def __init__(self, model, **kwargs):
-        self.model = model
+        self.model: Any = model
         self.use_sbert_model = isinstance(model, SentenceTransformer)
+        self.device = model.device if hasattr(model, "device") else None
         self.save_corpus_embeddings = kwargs.get("save_corpus_embeddings", False)
         self.corpus_embeddings = {}
 
@@ -418,9 +419,10 @@ class DRESModel:
     def encode(
         self,
         sentences: list[str],
+        *,
         task_name: str,
         prompt_type: PromptType | None = None,
-        **kwargs,
+        **kwargs: Any,
     ):
         if prompt_type and prompt_type == PromptType.passage:
             return self.encode_corpus(
