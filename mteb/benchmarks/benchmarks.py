@@ -6,10 +6,10 @@ from typing import Annotated
 
 from pydantic import AnyUrl, BeforeValidator, TypeAdapter
 
+from mteb import get_tasks
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.load_results.benchmark_results import BenchmarkResults
 from mteb.load_results.load_results import load_results
-from mteb.overview import get_tasks
 
 http_url_adapter = TypeAdapter(AnyUrl)
 UrlString = Annotated[
@@ -21,7 +21,7 @@ UrlString = Annotated[
 class Benchmark:
     """A benchmark object intended to run a certain benchmark within MTEB.
 
-    Args:
+    Attributes:
         name: The name of the benchmark
         tasks: The tasks within the benchmark.
         description: A description of the benchmark, should include its intended goal and potentially a description of its construction

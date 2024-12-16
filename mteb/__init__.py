@@ -2,14 +2,7 @@ from __future__ import annotations
 
 from importlib.metadata import version
 
-from mteb.benchmarks.benchmarks import (
-    MTEB_ENG_CLASSIC,
-    MTEB_MAIN_RU,
-    MTEB_RETRIEVAL_LAW,
-    MTEB_RETRIEVAL_MEDICAL,
-    MTEB_RETRIEVAL_WITH_INSTRUCTIONS,
-    CoIR,
-)
+from mteb.abstasks import AbsTask, TaskMetadata
 from mteb.encoder_interface import Encoder
 from mteb.evaluation import MTEB
 from mteb.load_results import BenchmarkResults, load_results
@@ -28,12 +21,6 @@ from .benchmarks.get_benchmark import BENCHMARK_REGISTRY, get_benchmark, get_ben
 __version__ = version("mteb")  # fetch version from install metadata
 
 __all__ = [
-    "MTEB_ENG_CLASSIC",
-    "MTEB_MAIN_RU",
-    "MTEB_RETRIEVAL_LAW",
-    "MTEB_RETRIEVAL_MEDICAL",
-    "MTEB_RETRIEVAL_WITH_INSTRUCTIONS",
-    "CoIR",
     "TASKS_REGISTRY",
     "get_tasks",
     "get_task",
@@ -48,6 +35,8 @@ __all__ = [
     "BENCHMARK_REGISTRY",
     "MTEB",
     "TaskResult",
-    "SentenceTransformerWrapper",
+    "TaskMetadata",
     "Encoder",
+    "AbsTask",
+    "SentenceTransformerWrapper",
 ]

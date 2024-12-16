@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from mteb import SentenceTransformerWrapper
 from mteb.evaluation.evaluators import RetrievalEvaluator, utils
+from mteb.models import SentenceTransformerWrapper
 from tests.test_benchmark.mock_models import MockNumpyEncoder
 
 

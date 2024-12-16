@@ -1,6 +1,6 @@
 install:
 	@echo "--- 🚀 Installing project dependencies ---"
-	pip install -e ".[dev]"
+	pip install -e ".[dev,docs]"
 
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"
@@ -36,3 +36,7 @@ build-docs:
 	@echo "--- 📚 Building documentation ---"
 	# since we do not have a documentation site, this just build tables for the .md files
 	python docs/create_tasks_table.py
+
+serve-docs:
+	@echo "--- 📚 Serving documentation ---"
+	python -m mkdocs serve

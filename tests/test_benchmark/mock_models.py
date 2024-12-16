@@ -12,8 +12,8 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 from torch import Tensor
 
 import mteb
-from mteb import SentenceTransformerWrapper
 from mteb.encoder_interface import PromptType
+from mteb.models import SentenceTransformerWrapper
 from tests.test_benchmark.task_grid import MOCK_TASK_TEST_GRID
 
 
