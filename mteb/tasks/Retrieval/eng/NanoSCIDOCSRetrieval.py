@@ -15,7 +15,7 @@ class NanoSCIDOCSRetrieval(AbsTaskRetrieval):
         reference="https://allenai.org/data/scidocs",
         dataset={
             "path": "zeta-alpha-ai/NanoSCIDOCS",
-            "revision": "main",
+            "revision": "484eb90549fc3f0b9c42b3551e80ceb999515537",
         },
         type="Retrieval",
         category="s2p",

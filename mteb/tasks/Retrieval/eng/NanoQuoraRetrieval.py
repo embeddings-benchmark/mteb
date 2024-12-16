@@ -15,7 +15,7 @@ class NanoQuoraRetrieval(AbsTaskRetrieval):
         reference="https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs",
         dataset={
             "path": "zeta-alpha-ai/NanoQuoraRetrieval",
-            "revision": "main",
+            "revision": "2ab2d73e6c862026282808b913a34f4136928545",
         },
         type="Retrieval",
         category="s2s",

@@ -13,7 +13,7 @@ class NanoSciFactRetrieval(AbsTaskRetrieval):
         reference="https://github.com/allenai/scifact",
         dataset={
             "path": "zeta-alpha-ai/NanoSciFact",
-            "revision": "main",
+            "revision": "309f1d1ae3ae2e092444a8a0c25bed59b82318bc",
         },
         type="Retrieval",
         category="s2p",

@@ -16,7 +16,7 @@ class NanoFEVERRetrieval(AbsTaskRetrieval):
         reference="https://fever.ai/",
         dataset={
             "path": "zeta-alpha-ai/NanoFEVER",
-            "revision": "main",
+            "revision": "a8bfdf1bf15181167a7e22e69cf8754bdea9b4c8",
         },
         type="Retrieval",
         category="s2p",

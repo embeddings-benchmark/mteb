@@ -13,7 +13,7 @@ class NanoDBPediaRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/zeta-alpha-ai/NanoDBPedia",
         dataset={
             "path": "zeta-alpha-ai/NanoDBPedia",
-            "revision": "main",
+            "revision": "438f1c25129f05db6238699b5afdc9c6b58d2096",
         },
         type="Retrieval",
         category="s2p",

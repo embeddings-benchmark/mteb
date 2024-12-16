@@ -13,7 +13,7 @@ class NanoClimateFeverRetrieval(AbsTaskRetrieval):
         reference="https://arxiv.org/abs/2012.00614",
         dataset={
             "path": "zeta-alpha-ai/NanoClimateFEVER",
-            "revision": "main",
+            "revision": "96741bfa30b9f56db8c9eb7d08e775ed6474f206",
         },
         type="Retrieval",
         category="s2p",

@@ -15,7 +15,7 @@ class NanoHotpotQARetrieval(AbsTaskRetrieval):
         reference="https://hotpotqa.github.io/",
         dataset={
             "path": "zeta-alpha-ai/NanoHotpotQA",
-            "revision": "main",
+            "revision": "d79c0cdda980aba54842756770928035e1b61a51",
         },
         type="Retrieval",
         category="s2p",

@@ -13,7 +13,7 @@ class NanoFiQA2018Retrieval(AbsTaskRetrieval):
         reference="https://sites.google.com/view/fiqa/",
         dataset={
             "path": "zeta-alpha-ai/NanoFiQA2018",
-            "revision": "main",
+            "revision": "4163ba032953d5044a7a6244261413f609c14342",
         },
         type="Retrieval",
         category="s2p",

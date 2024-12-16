@@ -13,7 +13,7 @@ class NanoTouche2020Retrieval(AbsTaskRetrieval):
         reference="https://webis.de/events/touche-20/shared-task-1.html",
         dataset={
             "path": "zeta-alpha-ai/NanoTouche2020",
-            "revision": "main",
+            "revision": "0d2f26ed8c5ad309f95c7f9499c70a40e140fccd",
         },
         type="Retrieval",
         category="s2p",

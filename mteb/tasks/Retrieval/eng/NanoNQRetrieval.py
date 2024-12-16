@@ -13,7 +13,7 @@ class NanoNQRetrieval(AbsTaskRetrieval):
         reference="https://ai.google.com/research/NaturalQuestions",
         dataset={
             "path": "zeta-alpha-ai/NanoNQ",
-            "revision": "main",
+            "revision": "77540146379abf95df8326a3c5bb9eb21c7146c3",
         },
         type="Retrieval",
         category="s2p",

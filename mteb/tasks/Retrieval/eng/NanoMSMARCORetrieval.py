@@ -13,7 +13,7 @@ class NanoMSMARCORetrieval(AbsTaskRetrieval):
         reference="https://microsoft.github.io/msmarco/",
         dataset={
             "path": "zeta-alpha-ai/NanoMSMARCO",
-            "revision": "main",
+            "revision": "7b8ff22f2771dc65ac5b439f222eb19a1f56abda",
         },
         type="Retrieval",
         category="s2p",

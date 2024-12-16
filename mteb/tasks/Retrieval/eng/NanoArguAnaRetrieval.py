@@ -13,7 +13,7 @@ class NanoArguAnaRetrieval(AbsTaskRetrieval):
         reference="http://argumentation.bplaced.net/arguana/data",
         dataset={
             "path": "zeta-alpha-ai/NanoArguAna",
-            "revision": "main",
+            "revision": "8f4a982d470a32c45817738b9d29042ca55d75ad",
         },
         type="Retrieval",
         category="s2p",

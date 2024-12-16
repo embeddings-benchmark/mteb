@@ -13,7 +13,7 @@ class NanoNFCorpusRetrieval(AbsTaskRetrieval):
         reference="https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/",
         dataset={
             "path": "zeta-alpha-ai/NanoNFCorpus",
-            "revision": "main",
+            "revision": "dd542a7efb9ad2136b9e00768b60fca9038f8156",
         },
         type="Retrieval",
         category="s2p",

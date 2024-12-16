@@ -72,6 +72,7 @@ from .eng.NanoFiQA2018Retrieval import *
 from .eng.NanoHotpotQARetrieval import *
 from .eng.NanoMSMARCORetrieval import *
 from .eng.NanoNFCorpusRetrieval import *
+from .eng.NanoNQRetrieval import *
 from .eng.NanoQuoraRetrieval import *
 from .eng.NanoSCIDOCSRetrieval import *
 from .eng.NanoSciFactRetrieval import *
