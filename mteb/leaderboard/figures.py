@@ -37,6 +37,47 @@ models_to_annotate = [
 ]
 
 
+def add_size_guide(fig: go.Figure):
+    xpos = [5 * 1e9] * 4
+    ypos = [7.8, 8.5, 9, 10]
+    sizes = [256, 1024, 2048, 4096]
+    fig.add_trace(
+        go.Scatter(
+            showlegend=False,
+            opacity=0.3,
+            mode="markers",
+            marker=dict(
+                size=np.sqrt(sizes),
+                color="rgba(0,0,0,0)",
+                line=dict(color="black", width=2),
+            ),
+            x=xpos,
+            y=ypos,
+        )
+    )
+    fig.add_annotation(
+        text="<b>Embedding Size:</b>",
+        font=dict(size=16),
+        x=np.log10(1.5e9),
+        y=10,
+        showarrow=False,
+        opacity=0.3,
+    )
+    for x, y, size in zip(xpos, np.linspace(7.5, 14, 4), sizes):
+        fig.add_annotation(
+            text=f"<b>{size}</b>",
+            font=dict(size=12),
+            x=np.log10(x),
+            y=y,
+            showarrow=True,
+            ay=0,
+            ax=50,
+            opacity=0.3,
+            arrowwidth=2,
+        )
+    return fig
+
+
 def performance_size_plot(df: pd.DataFrame) -> go.Figure:
     df = df.copy()
     df["Number of Parameters"] = df["Number of Parameters"].map(parse_n_params)
@@ -50,6 +91,7 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
     if not len(df.index):
         return go.Figure()
     min_score, max_score = df["Mean (Task)"].min(), df["Mean (Task)"].max()
+    df["sqrt(dim)"] = np.sqrt(df["Embedding Dimensions"])
     fig = px.scatter(
         df,
         x="Number of Parameters",
@@ -57,7 +99,7 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
         log_x=True,
         template="plotly_white",
         text="model_text",
-        size="Embedding Dimensions",
+        size="sqrt(dim)",
         color="Log(Tokens)",
         range_color=[2, 5],
         range_x=[8 * 1e6, 11 * 1e9],
@@ -69,10 +111,21 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
             "Mean (Task)": True,
             "Rank (Borda)": True,
             "Log(Tokens)": False,
+            "sqrt(dim)": False,
             "model_text": False,
         },
         hover_name="Model",
     )
+    # Note: it's important that this comes before setting the size mode
+    fig = add_size_guide(fig)
+    fig.update_traces(
+        marker=dict(
+            sizemode="diameter",
+            sizeref=1.5,
+            sizemin=0,
+        )
+    )
+    fig.add_annotation(x=1e9, y=10, text="Model size:")
     fig.update_layout(
         coloraxis_colorbar=dict(  # noqa
             title="Max Tokens",
@@ -124,11 +177,11 @@ line_colors = [
     "#3CBBB1",
 ]
 fill_colors = [
-    "rgba(238,66,102,0.2)",
-    "rgba(0,166,237,0.2)",
-    "rgba(236,167,44,0.2)",
-    "rgba(180,35,24,0.2)",
-    "rgba(60,187,177,0.2)",
+    "rgba(238,66,102,0.05)",
+    "rgba(0,166,237,0.05)",
+    "rgba(236,167,44,0.05)",
+    "rgba(180,35,24,0.05)",
+    "rgba(60,187,177,0.05)",
 ]
 
 
@@ -156,7 +209,7 @@ def radar_chart(df: pd.DataFrame) -> go.Figure:
                 mode="lines",
                 line=dict(width=2, color=line_colors[i]),
                 fill="toself",
-                fillcolor=fill_colors[i],
+                fillcolor="rgba(0,0,0,0)",
             )
         )
     fig.update_layout(
