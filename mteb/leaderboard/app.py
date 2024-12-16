@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import json
+import tempfile
 from collections import defaultdict
 from pathlib import Path
 
 import gradio as gr
+import pandas as pd
 from gradio_rangeslider import RangeSlider
 
 import mteb
@@ -22,6 +24,12 @@ def load_results():
     else:
         with results_cache_path.open() as cache_file:
             return mteb.BenchmarkResults.from_validated(**json.load(cache_file))
+
+
+def download_table(table: pd.DataFrame) -> Path:
+    file = tempfile.NamedTemporaryFile(delete=False, suffix=".csv")
+    table.to_csv(file)
+    return file.name
 
 
 def update_citation(benchmark_name: str) -> str:
@@ -242,8 +250,16 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
         )
     with gr.Tab("Summary"):
         summary_table.render()
+        download_summary = gr.DownloadButton("Download Table")
+        download_summary.click(
+            download_table, inputs=[summary_table], outputs=[download_summary]
+        )
     with gr.Tab("Performance per task"):
         per_task_table.render()
+        download_per_task = gr.DownloadButton("Download Table")
+        download_per_task.click(
+            download_table, inputs=[per_task_table], outputs=[download_per_task]
+        )
     with gr.Tab("Task information"):
         task_info_table = gr.DataFrame(update_task_info, inputs=[task_select])
 
