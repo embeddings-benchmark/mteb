@@ -1,10 +1,13 @@
 from __future__ import annotations
 
 import json
+import tempfile
 from collections import defaultdict
 from pathlib import Path
+from urllib.parse import urlencode
 
 import gradio as gr
+import pandas as pd
 from gradio_rangeslider import RangeSlider
 
 import mteb
@@ -22,6 +25,30 @@ def load_results():
     else:
         with results_cache_path.open() as cache_file:
             return mteb.BenchmarkResults.from_validated(**json.load(cache_file))
+
+
+def produce_benchmark_link(benchmark_name: str, request: gr.Request) -> str:
+    """Produces a URL for the selected benchmark."""
+    params = urlencode(
+        {
+            "benchmark_name": benchmark_name,
+        }
+    )
+    base_url = request.request.base_url
+    url = f"{base_url}?{params}"
+    md = f"```\n{url}\n```"
+    return md
+
+
+def set_benchmark_on_load(request: gr.Request):
+    query_params = request.query_params
+    return query_params.get("benchmark_name", "MTEB(Multilingual, beta)")
+
+
+def download_table(table: pd.DataFrame) -> Path:
+    file = tempfile.NamedTemporaryFile(delete=False, suffix=".csv")
+    table.to_csv(file)
+    return file.name
 
 
 def update_citation(benchmark_name: str) -> str:
@@ -66,6 +93,7 @@ def update_task_info(task_names: str) -> gr.DataFrame:
         properties=["name", "type", "languages", "domains", "reference", "main_score"]
     )
     df["languages"] = df["languages"].map(format_list)
+    df = df.sort_values("name")
     df["domains"] = df["domains"].map(format_list)
     df["name"] = "[" + df["name"] + "](" + df["reference"] + ")"
     df = df.rename(
@@ -217,6 +245,8 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                 inputs=[benchmark_select, lang_select, type_select, domain_select],
             )
             citation = gr.Markdown(update_citation, inputs=[benchmark_select])
+            with gr.Accordion("Share this benchmark:", open=False):
+                gr.Markdown(produce_benchmark_link, inputs=[benchmark_select])
         with gr.Column():
             with gr.Tab("Performance per Model Size"):
                 plot = gr.Plot(performance_size_plot, inputs=[summary_table])
@@ -229,11 +259,35 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                     "*We only display models that have been run on all task types in the benchmark*"
                 )
     with gr.Tab("Summary"):
+        with gr.Accordion(
+            "What do aggregate measures (Rank(Borda), Mean(Task), etc.) mean?",
+            open=False,
+        ):
+            gr.Markdown(
+                """
+    **Rank(borda)** is computed based on the [borda count](https://en.wikipedia.org/wiki/Borda_count), where each task is treated as a preference voter, which gives votes on the models in accordance with their relative performance on the task. The best model obtains the highest number of votes. The model with the highest number of votes across tasks obtains the highest rank. The Borda rank tends to prefer models that perform well broadly across tasks. However, given that it is a rank it can be unclear if the two models perform similarly.
+
+    **Mean(Task)**: This is a naïve average computed across all the tasks within the benchmark. This score is simple to understand and is continuous as opposed to the Borda rank. However, the mean can overvalue tasks with higher variance in its scores. 
+
+    **Mean(TaskType)**: This is a weighted average across different task categories, such as classification or retrieval. It is computed by first computing the average by task category and then computing the average on each category. Similar to the Mean(Task) this measure is continuous and tends to overvalue tasks with higher variance. This score also prefers models that perform well across all task categories.
+            """
+            )
         summary_table.render()
+        download_summary = gr.DownloadButton("Download Table")
+        download_summary.click(
+            download_table, inputs=[summary_table], outputs=[download_summary]
+        )
     with gr.Tab("Performance per task"):
         per_task_table.render()
+        download_per_task = gr.DownloadButton("Download Table")
+        download_per_task.click(
+            download_table, inputs=[per_task_table], outputs=[download_per_task]
+        )
     with gr.Tab("Task information"):
         task_info_table = gr.DataFrame(update_task_info, inputs=[task_select])
+
+    # This sets the benchmark from the URL query parameters
+    demo.load(set_benchmark_on_load, inputs=[], outputs=[benchmark_select])
 
     @gr.on(inputs=[scores, searchbar], outputs=[summary_table, per_task_table])
     def update_tables(scores, search_query: str):
