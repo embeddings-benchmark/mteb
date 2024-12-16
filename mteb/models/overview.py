@@ -44,6 +44,7 @@ from mteb.models import (
     vista_models,
     vlm2vec_models,
     voyage_models,
+    voyage_v,
 )
 
 logger = logging.getLogger(__name__)
@@ -81,6 +82,7 @@ model_modules = [
     siglip_models,
     vista_models,
     voyage_models,
+    voyage_v,
     vlm2vec_models,
     repllama_models,
     promptriever_models,

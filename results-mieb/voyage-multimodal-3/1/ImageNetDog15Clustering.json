@@ -1,0 +1,22 @@
+{
+  "dataset_revision": "bfb6ad3b2109d26c9daddf14f98d315daa35ee72",
+  "evaluation_time": 78.63793706893921,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.14.15",
+  "scores": {
+    "test": [
+      {
+        "ari": 0.8119121646758497,
+        "cluster_accuracy": 0.820631970260223,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.8381839891894807,
+        "nmi": 0.8381839891894807,
+        "v_measure": 0.8381839891894807
+      }
+    ]
+  },
+  "task_name": "ImageNetDog15Clustering"
+}

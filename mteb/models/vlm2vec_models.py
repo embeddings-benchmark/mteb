@@ -10,6 +10,7 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoConfig, AutoModelForCausalLM, AutoProcessor
 
+from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
 logging.basicConfig(level=logging.WARNING)
@@ -82,8 +83,9 @@ class VLM2VecWrapper:
         self,
         sentences: list[str],
         *,
-        prompt_name: str = None,
-        **kwargs: Any,  # noqa
+        task_name: str | None = None,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
     ):
         return self.get_text_embeddings(texts=sentences)
 
@@ -109,7 +111,13 @@ class VLM2VecWrapper:
 
     # reference: https://github.com/TIGER-AI-Lab/VLM2Vec/blob/main/src/collator.py
     def get_image_embeddings(
-        self, images: list[Image.Image] | DataLoader, batch_size: int = 32
+        self,
+        images: list[Image.Image] | DataLoader,
+        *,
+        task_name: str | None = None,
+        prompt_type: PromptType | None = None,
+        batch_size: int = 32,
+        **kwargs: Any,
     ):
         text = "<|image_1|> Represent the given image."
         all_image_embeddings = []
@@ -191,7 +199,15 @@ class VLM2VecWrapper:
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
         return all_image_embeddings
 
-    def get_text_embeddings(self, texts: list[str], batch_size: int = 32):
+    def get_text_embeddings(
+        self,
+        texts: list[str],
+        *,
+        task_name: str | None = None,
+        prompt_type: PromptType | None = None,
+        batch_size: int = 32,
+        **kwargs: Any,
+    ):
         all_text_embeddings = []
 
         with torch.no_grad():
@@ -239,8 +255,12 @@ class VLM2VecWrapper:
         self,
         texts: list[str] = None,
         images: list[Image.Image] | DataLoader = None,
-        fusion_mode="sum",
+        *,
+        task_name: str | None = None,
+        prompt_type: PromptType | None = None,
         batch_size: int = 32,
+        fusion_mode="sum",
+        **kwargs: Any,
     ):
         if texts is None and images is None:
             raise ValueError("Either texts or images must be provided")
