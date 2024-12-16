@@ -456,6 +456,7 @@ class RerankingEvaluator(Evaluator):
             query_emb: Query embedding, with shape `(num_queries, hidden_size)`
                 if `num_queries` > 0: we take the closest document to any of the queries
             docs_emb: Candidates documents embeddings, with shape `(num_pos+num_neg, hidden_size)`
+            model: Model to use for computing similarity scores if model.similarity is available
 
         Returns:
             sim_scores: Query-documents similarity scores, with shape `(num_pos+num_neg,)`

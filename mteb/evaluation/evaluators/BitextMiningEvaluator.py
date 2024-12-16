@@ -80,7 +80,9 @@ class BitextMiningEvaluator(Evaluator):
     ):
         # Find nearest neighbors
         logger.info("Finding nearest neighbors...")
-        nearest_neighbors = self._similarity_search(embeddings1, embeddings2, model, top_k=1)
+        nearest_neighbors = self._similarity_search(
+            embeddings1, embeddings2, model, top_k=1
+        )
 
         # Compute errors
         logger.info("Computing metrics...")
