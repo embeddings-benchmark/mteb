@@ -90,10 +90,10 @@ def test_dataset_availability():
     asyncio.run(check_datasets_are_available_on_hf(tasks))
 
 
-def test_superseeded_dataset_exists():
-    tasks = mteb.get_tasks(exclude_superseeded=False)
+def test_superseded_dataset_exists():
+    tasks = mteb.get_tasks(exclude_superseded=False)
     for task in tasks:
         if task.superseded_by:
             assert (
                 task.superseded_by in TASKS_REGISTRY
-            ), f"{task} is superseeded by {task.superseded_by} but {task.superseded_by} is not in the TASKS_REGISTRY"
+            ), f"{task} is superseded by {task.superseded_by} but {task.superseded_by} is not in the TASKS_REGISTRY"

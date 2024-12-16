@@ -22,7 +22,6 @@ from .utils import (
     confidence_scores,
     convert_conv_history_to_query,
     cos_sim,
-    dot_score,
     download,
     hole,
     mrr,
@@ -77,11 +76,6 @@ class DenseRetrievalExactSearch:
         if "convert_to_tensor" not in encode_kwargs:
             encode_kwargs["convert_to_tensor"] = True
 
-        self.score_functions = {"cos_sim": cos_sim, "dot": dot_score}
-        self.score_function_desc = {
-            "cos_sim": "Cosine Similarity",
-            "dot": "Dot Product",
-        }
         self.corpus_chunk_size = corpus_chunk_size
         if isinstance(previous_results, Path):
             self.previous_results = str(previous_results)
@@ -106,21 +100,12 @@ class DenseRetrievalExactSearch:
         corpus: dict[str, dict[str, str]],
         queries: dict[str, str | list[str]],
         top_k: int,
-        score_function: str,
         task_name: str,
         instructions: dict[str, str] | None = None,
         request_qid: str | None = None,
         return_sorted: bool = False,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
-        # Create embeddings for all queries using model.encode
-        # Runs semantic search against the corpus embeddings
-        # Returns a ranked list with the corpus ids
-        if score_function not in self.score_functions:
-            raise ValueError(
-                f"score function: {score_function} must be either (cos_sim) for cosine similarity or (dot) for dot product"
-            )
-
         logger.info("Encoding Queries.")
         query_ids = list(queries.keys())
         self.results = {qid: {} for qid in query_ids}
@@ -150,9 +135,6 @@ class DenseRetrievalExactSearch:
         corpus = [corpus[cid] for cid in corpus_ids]  # type: ignore
 
         logger.info("Encoding Corpus in batches... Warning: This might take a while!")
-        logger.info(
-            f"Scoring Function: {self.score_function_desc[score_function]} ({score_function})"
-        )
 
         itr = range(0, len(corpus), self.corpus_chunk_size)
 
@@ -184,35 +166,43 @@ class DenseRetrievalExactSearch:
                 if self.save_corpus_embeddings and request_qid:
                     self.corpus_embeddings[request_qid].append(sub_corpus_embeddings)
 
-            # Compute similarites using either cosine-similarity or dot product
-            cos_scores = self.score_functions[score_function](
-                query_embeddings, sub_corpus_embeddings
-            )
-            is_nan = torch.isnan(cos_scores)
+            # Compute similarites using self defined similarity otherwise default to cosine-similarity
+            similarity_scores = cos_sim(query_embeddings, sub_corpus_embeddings)
+            if hasattr(self.model, "similarity"):
+                similarity_scores = self.model.similarity(
+                    float(self.model.similarity(e1, e2))
+                    for e1, e2 in zip(query_embeddings, sub_corpus_embeddings)
+                )
+            is_nan = torch.isnan(similarity_scores)
             if is_nan.sum() > 0:
                 logger.warning(
                     f"Found {is_nan.sum()} NaN values in the similarity scores. Replacing NaN values with -1."
                 )
-            cos_scores[is_nan] = -1
+            similarity_scores[is_nan] = -1
 
             # Get top-k values
-            cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
-                cos_scores,
+            similarity_scores_top_k_values, similarity_scores_top_k_idx = torch.topk(
+                similarity_scores,
                 min(
                     top_k + 1,
-                    len(cos_scores[1]) if len(cos_scores) > 1 else len(cos_scores[-1]),
+                    len(similarity_scores[1])
+                    if len(similarity_scores) > 1
+                    else len(similarity_scores[-1]),
                 ),
                 dim=1,
                 largest=True,
                 sorted=return_sorted,
             )
-            cos_scores_top_k_values = cos_scores_top_k_values.cpu().tolist()
-            cos_scores_top_k_idx = cos_scores_top_k_idx.cpu().tolist()
+            similarity_scores_top_k_values = (
+                similarity_scores_top_k_values.cpu().tolist()
+            )
+            similarity_scores_top_k_idx = similarity_scores_top_k_idx.cpu().tolist()
 
             for query_itr in range(len(query_embeddings)):
                 query_id = query_ids[query_itr]
                 for sub_corpus_id, score in zip(
-                    cos_scores_top_k_idx[query_itr], cos_scores_top_k_values[query_itr]
+                    similarity_scores_top_k_idx[query_itr],
+                    similarity_scores_top_k_values[query_itr],
                 ):
                     corpus_id = corpus_ids[corpus_start_idx + sub_corpus_id]
                     if len(result_heaps[query_id]) < top_k:
@@ -268,7 +258,7 @@ class DenseRetrievalExactSearch:
         for qid in queries.keys():
             if self.previous_results is None:
                 # try to use all of them
-                logging.logging(
+                logging.info(
                     f"previous_results is None. Using all the documents to rerank: {len(corpus)}"
                 )
                 q_results = {doc_id: 0.0 for doc_id in corpus.keys()}
@@ -318,7 +308,9 @@ class DenseRetrievalExactSearch:
                 len(queries_in_pair) == len(corpus_in_pair) == len(instructions_in_pair)
             )
 
-            if isinstance(self.model.model, CrossEncoder):
+            if hasattr(self.model, "model") and isinstance(
+                self.model.model, CrossEncoder
+            ):
                 # can't take instructions, so add them here
                 queries_in_pair = [
                     f"{q} {i}".strip()
@@ -428,7 +420,7 @@ class DRESModel:
 
 
 def is_cross_encoder_compatible(model) -> bool:
-    op = getattr(model.model, "predict", None)
+    op = getattr(model, "predict", None)
     return callable(op)
 
 
@@ -439,7 +431,6 @@ class RetrievalEvaluator(Evaluator):
         retriever,
         task_name: str | None = None,
         k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000],
-        score_function: str = "cos_sim",
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ):
@@ -461,7 +452,6 @@ class RetrievalEvaluator(Evaluator):
         self.top_k = (
             max(k_values) if "top_k" not in kwargs else kwargs["top_k"]
         )  # can lower it if reranking
-        self.score_function = score_function
         self.task_name = task_name
 
     def __call__(
@@ -475,14 +465,13 @@ class RetrievalEvaluator(Evaluator):
         if self.is_cross_encoder:
             return self.retriever.search_cross_encoder(corpus, queries, self.top_k)
         elif (
-            hasattr(self.retriever.model, "mteb_model_meta")
-            and self.retriever.model.mteb_model_meta.name == "bm25s"
+            hasattr(self.retriever.model.model, "mteb_model_meta")
+            and self.retriever.model.model.mteb_model_meta.name == "bm25s"
         ):
-            return self.retriever.model.search(
+            return self.retriever.model.model.search(
                 corpus,
                 queries,
                 self.top_k,
-                self.score_function,
                 task_name=self.task_name,  # type: ignore
             )
         else:
@@ -490,7 +479,6 @@ class RetrievalEvaluator(Evaluator):
                 corpus,
                 queries,
                 self.top_k,
-                self.score_function,
                 task_name=self.task_name,  # type: ignore
             )
 

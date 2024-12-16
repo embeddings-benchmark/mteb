@@ -106,7 +106,7 @@ MTEB_EN = Benchmark(
             "StackExchangeClustering.v2",
             "StackExchangeClusteringP2P.v2",
             "TRECCOVID",
-            "Touche2020",
+            "Touche2020Retrieval.v3",
             "ToxicConversationsClassification",
             "TweetSentimentExtractionClassification",
             "TwentyNewsgroupsClustering.v2",
@@ -186,7 +186,7 @@ MTEB_ENG_CLASSIC = Benchmark(
             "StackOverflowDupQuestions",
             "SummEval",
             "TRECCOVID",
-            "Touche2020Retrieval.v3",
+            "Touche2020",
             "ToxicConversationsClassification",
             "TweetSentimentExtractionClassification",
             "TwentyNewsgroupsClustering",
@@ -305,6 +305,29 @@ MTEB_RETRIEVAL_LAW = Benchmark(
     ),
     description="Legal benchmarks from MTEB.",
     reference="https://aclanthology.org/2023.eacl-main.148/",
+    citation=None,
+)
+
+MTEB_RETRIEVAL_MEDICAL = Benchmark(
+    name="MTEB(Medical)",
+    tasks=get_tasks(
+        tasks=[
+            "CUREv1",
+            "NFCorpus",
+            "TRECCOVID",
+            "TRECCOVID-PL",
+            "SciFact",
+            "SciFact-PL",
+            "MedicalQARetrieval",
+            "PublicHealthQA",
+            "MedrxivClusteringP2P.v2",
+            "MedrxivClusteringS2S.v2",
+            "CmedqaRetrieval",
+            "CMedQAv2-reranking",
+        ],
+    ),
+    description="A curated set of MTEB tasks designed to evaluate systems in the context of medical information retrieval.",
+    reference="",
     citation=None,
 )
 

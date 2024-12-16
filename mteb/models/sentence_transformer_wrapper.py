@@ -53,6 +53,12 @@ class SentenceTransformerWrapper(Wrapper):
             self.model.prompts = model_prompts
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
 
+        if isinstance(self.model, CrossEncoder):
+            self.predict = self._predict
+
+        if hasattr(self.model, "similarity"):
+            self.similarity = self.model.similarity
+
     def encode(
         self,
         sentences: Sequence[str],
@@ -106,7 +112,7 @@ class SentenceTransformerWrapper(Wrapper):
             embeddings = embeddings.cpu().detach().float().numpy()
         return embeddings
 
-    def predict(
+    def _predict(
         self,
         sentences: Sequence[str],
         **kwargs: Any,

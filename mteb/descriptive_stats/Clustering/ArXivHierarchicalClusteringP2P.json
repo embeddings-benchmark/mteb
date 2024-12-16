@@ -2,8 +2,12 @@
     "test": {
         "num_samples": 2048,
         "number_of_characters": 2065284,
+        "min_text_length": 103,
         "average_text_length": 1008.439453125,
+        "max_text_length": 2103,
+        "min_labels_per_text": 1,
         "average_labels_per_text": 1.46337890625,
+        "max_labels_per_text": 381,
         "unique_labels": 129,
         "labels": {
             "cs": {

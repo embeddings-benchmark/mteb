@@ -4,6 +4,7 @@ import logging
 
 import pytest
 
+from mteb import AbsTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.overview import get_tasks
 
@@ -1095,3 +1096,15 @@ def test_empy_descriptive_stat_in_new_datasets():
             assert (
                 task.metadata.name not in exceptions
             ), f"Dataset {task.metadata.name} should have descriptive stats"
+
+
+@pytest.mark.parametrize("task", get_tasks())
+def test_eval_langs_correctly_specified(task: AbsTask):
+    if task.is_multilingual:
+        assert isinstance(
+            task.metadata.eval_langs, dict
+        ), f"{task.metadata.name} should have eval_langs as a dict"
+    else:
+        assert isinstance(
+            task.metadata.eval_langs, list
+        ), f"{task.metadata.name} should have eval_langs as a list"

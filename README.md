@@ -46,10 +46,8 @@ from sentence_transformers import SentenceTransformer
 
 # Define the sentence-transformers model name
 model_name = "average_word_embeddings_komninos"
-# or directly from huggingface:
-# model_name = "sentence-transformers/all-MiniLM-L6-v2"
 
-model = SentenceTransformer(model_name)
+model = mteb.get_model(model_name) # if the model is not implemented in MTEB it will be eq. to SentenceTransformer(model_name)
 tasks = mteb.get_tasks(tasks=["Banking77Classification"])
 evaluation = mteb.MTEB(tasks=tasks)
 results = evaluation.run(model, output_folder=f"results/{model_name}")
@@ -220,7 +218,10 @@ Note that the public leaderboard uses the test splits for all datasets except MS
 Models should implement the following interface, implementing an `encode` function taking as inputs a list of sentences, and returning a list of embeddings (embeddings can be `np.array`, `torch.tensor`, etc.). For inspiration, you can look at the [mteb/mtebscripts repo](https://github.com/embeddings-benchmark/mtebscripts) used for running diverse models via SLURM scripts for the paper.
 
 ```python
+import mteb
 from mteb.encoder_interface import PromptType
+import numpy as np
+
 
 class CustomModel:
     def encode(
@@ -244,7 +245,7 @@ class CustomModel:
         pass
 
 model = CustomModel()
-tasks = mteb.get_task("Banking77Classification")
+tasks = mteb.get_tasks(tasks=["Banking77Classification"])
 evaluation = MTEB(tasks=tasks)
 evaluation.run(model)
 ```
@@ -316,6 +317,34 @@ evaluation.run(
 </details>
 
 <details>
+  <summary> Late Interaction (ColBERT) </summary>
+
+### Using Late Interaction models for retrieval
+
+```python
+from mteb import MTEB
+import mteb
+
+
+colbert = mteb.get_model("colbert-ir/colbertv2.0")
+tasks = mteb.get_tasks(tasks=["NFCorpus"], languages=["eng"])
+
+eval_splits = ["test"]
+
+evaluation = MTEB(tasks=tasks)
+
+evaluation.run(
+    colbert,
+    eval_splits=eval_splits,
+    corpus_chunk_size=500,
+)
+```
+This implementation employs the MaxSim operation to compute the similarity between sentences. While MaxSim provides high-quality results, it processes a larger number of embeddings, potentially leading to increased resource usage. To manage resource consumption, consider lowering the `corpus_chunk_size` parameter.
+
+
+</details>
+
+<details>
   <summary>  Saving retrieval task predictions </summary>
 
 ### Saving retrieval task predictions
@@ -377,6 +406,28 @@ results = mteb.load_results(models=models, tasks=tasks)
 
 df = results_to_dataframe(results)
 ```
+
+</details>
+
+
+<details>
+  <summary>  Annotate Contamination in the training data of a model  </summary>
+
+### Annotate Contamination
+
+have your found contamination in the training data of a model? Please let us know, either by opening an issue or ideally by submitting a PR
+annotatig the training datasets of the model:
+
+```py
+model_w_contamination = ModelMeta(
+    name = "model-with-contamination"
+    ...
+    training_datasets: {"ArguAna": # name of dataset within MTEB
+                        ["test"]} # the splits that have been trained on
+    ...
+)
+```
+
 
 </details>
 

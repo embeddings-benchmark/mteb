@@ -2,8 +2,13 @@
     "test": {
         "num_samples": 140,
         "number_of_characters": 71680,
+        "min_text_length": 512,
         "average_text_length": 512.0,
+        "max_text_length": 512,
+        "unique_texts": 49704,
+        "min_labels_per_text": 1,
         "average_labels_per_text": 512.0,
+        "max_labels_per_text": 3986,
         "unique_labels": 282,
         "labels": {
             "Nauke": {
@@ -857,8 +862,13 @@
             "bs": {
                 "num_samples": 10,
                 "number_of_characters": 5120,
+                "min_text_length": 512,
                 "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 3860,
+                "min_labels_per_text": 6,
                 "average_labels_per_text": 512.0,
+                "max_labels_per_text": 1492,
                 "unique_labels": 17,
                 "labels": {
                     "Nauke": {
@@ -917,8 +927,13 @@
             "ca": {
                 "num_samples": 10,
                 "number_of_characters": 5120,
+                "min_text_length": 512,
                 "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 4596,
+                "min_labels_per_text": 20,
                 "average_labels_per_text": 512.0,
+                "max_labels_per_text": 1844,
                 "unique_labels": 8,
                 "labels": {
                     "Llocs": {
@@ -950,8 +965,13 @@
             "cs": {
                 "num_samples": 10,
                 "number_of_characters": 5120,
+                "min_text_length": 512,
                 "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 4782,
+                "min_labels_per_text": 21,
                 "average_labels_per_text": 512.0,
+                "max_labels_per_text": 1559,
                 "unique_labels": 21,
                 "labels": {
                     "Lid\u00c3\u00a9": {
@@ -1022,8 +1042,13 @@
             "da": {
                 "num_samples": 10,
                 "number_of_characters": 5120,
+                "min_text_length": 512,
                 "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 4725,
+                "min_labels_per_text": 35,
                 "average_labels_per_text": 512.0,
+                "max_labels_per_text": 911,
                 "unique_labels": 20,
                 "labels": {
                     "Natur": {
@@ -1091,8 +1116,13 @@
             "eu": {
                 "num_samples": 10,
                 "number_of_characters": 5120,
+                "min_text_length": 512,
                 "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 4474,
+                "min_labels_per_text": 110,
                 "average_labels_per_text": 512.0,
+                "max_labels_per_text": 2486,
                 "unique_labels": 5,
                 "labels": {
                     "Entitateak": {
@@ -1115,8 +1145,13 @@
             "gv": {
                 "num_samples": 10,
                 "number_of_characters": 5120,
+                "min_text_length": 512,
                 "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 2717,
+                "min_labels_per_text": 2,
                 "average_labels_per_text": 512.0,
+                "max_labels_per_text": 1334,
                 "unique_labels": 28,
                 "labels": {
                     "Chron-oaylleeaght": {
@@ -1208,8 +1243,13 @@
             "ilo": {
                 "num_samples": 10,
                 "number_of_characters": 5120,
+                "min_text_length": 512,
                 "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 2258,
+                "min_labels_per_text": 1,
                 "average_labels_per_text": 512.0,
+                "max_labels_per_text": 1405,
                 "unique_labels": 34,
                 "labels": {
                     "Katutubo": {
@@ -1319,8 +1359,13 @@
             "ku": {
                 "num_samples": 10,
                 "number_of_characters": 5120,
+                "min_text_length": 512,
                 "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 3365,
+                "min_labels_per_text": 5,
                 "average_labels_per_text": 512.0,
+                "max_labels_per_text": 1078,
                 "unique_labels": 39,
                 "labels": {
                     "Kes": {
@@ -1445,8 +1490,13 @@
             "lv": {
                 "num_samples": 10,
                 "number_of_characters": 5120,
+                "min_text_length": 512,
                 "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 4540,
+                "min_labels_per_text": 13,
                 "average_labels_per_text": 512.0,
+                "max_labels_per_text": 878,
                 "unique_labels": 16,
                 "labels": {
                     "Kult\u00c5\u00abra": {
@@ -1502,8 +1552,13 @@
             "min": {
                 "num_samples": 10,
                 "number_of_characters": 5120,
+                "min_text_length": 512,
                 "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 3881,
+                "min_labels_per_text": 1,
                 "average_labels_per_text": 512.0,
+                "max_labels_per_text": 3986,
                 "unique_labels": 16,
                 "labels": {
                     "Makaluak_iduik": {
@@ -1559,8 +1614,13 @@
             "mt": {
                 "num_samples": 10,
                 "number_of_characters": 5120,
+                "min_text_length": 512,
                 "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 1887,
+                "min_labels_per_text": 2,
                 "average_labels_per_text": 512.0,
+                "max_labels_per_text": 1634,
                 "unique_labels": 27,
                 "labels": {
                     "\u00c4\u00a0eografija": {
@@ -1649,8 +1709,13 @@
             "sco": {
                 "num_samples": 10,
                 "number_of_characters": 5120,
+                "min_text_length": 512,
                 "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 2605,
+                "min_labels_per_text": 3,
                 "average_labels_per_text": 512.0,
+                "max_labels_per_text": 1081,
                 "unique_labels": 23,
                 "labels": {
                     "Life": {
@@ -1727,8 +1792,13 @@
             "sq": {
                 "num_samples": 10,
                 "number_of_characters": 5120,
+                "min_text_length": 512,
                 "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 3741,
+                "min_labels_per_text": 2,
                 "average_labels_per_text": 512.0,
+                "max_labels_per_text": 1109,
                 "unique_labels": 36,
                 "labels": {
                     "Gjeografi": {
@@ -1844,8 +1914,13 @@
             "wa": {
                 "num_samples": 10,
                 "number_of_characters": 5120,
+                "min_text_length": 512,
                 "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 2317,
+                "min_labels_per_text": 2,
                 "average_labels_per_text": 512.0,
+                "max_labels_per_text": 3653,
                 "unique_labels": 6,
                 "labels": {
                     "Economeye": {
