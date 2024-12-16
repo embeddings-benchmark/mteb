@@ -228,6 +228,18 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                 gr.Markdown(
                     "*We only display models that have been run on all task types in the benchmark*"
                 )
+    with gr.Accordion(
+        "What do aggregate measures (Rank(Borda), Mean(Task), etc.) mean?", open=False
+    ):
+        gr.Markdown(
+            """
+**Rank(borda)** is computed based on the [borda count](https://en.wikipedia.org/wiki/Borda_count), where each task is treated as a preference voter, which gives votes on the models in accordance with their relative performance on the task. The best model obtains the highest number of votes. The model with the highest number of votes across tasks obtains the highest rank. The Borda rank tends to prefer models that perform well broadly across tasks. However, given that it is a rank it can be unclear if the two models perform similarly.
+
+**Mean(Task)**: This is a naïve average computed across all the tasks within the benchmark. This score is simple to understand and is continuous as opposed to the Borda rank. However, the mean can overvalue tasks with higher variance in its scores. 
+
+**Mean(TaskType)**: This is a weighted average across different task categories, such as classification or retrieval. It is computed by first computing the average by task category and then computing the average on each category. Similar to the Mean(Task) this measure is continuous and tends to overvalue tasks with higher variance. This score also prefers models that perform well across all task categories.
+        """
+        )
     with gr.Tab("Summary"):
         summary_table.render()
     with gr.Tab("Performance per task"):
