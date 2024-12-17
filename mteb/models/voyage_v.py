@@ -4,6 +4,7 @@ import os
 from functools import partial
 from typing import Any
 
+import logging
 import torch
 from PIL import Image
 from torch.utils.data import DataLoader
@@ -11,6 +12,7 @@ from torchvision import transforms
 from tqdm import tqdm
 
 import mteb
+from mteb.model_meta import ModelMeta
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
@@ -18,11 +20,50 @@ api_key = os.getenv("VOYAGE_API_KEY")
 tensor_to_image = transforms.Compose([transforms.ToPILImage()])
 
 
+def downsample_image(
+    image: Image.Image, max_pixels: int = 16000000, target_longest_side: int = 4000
+) -> Image.Image:
+    """
+    if image pixel > max_pixels, downsample it to target_longest_side while keeping the width height ratio.
+    """
+    width, height = image.size
+    pixels = width * height
+
+    if pixels > max_pixels:
+        if width > height:
+            new_width = target_longest_side
+            new_height = int(height * (target_longest_side / width))
+        else:
+            new_height = target_longest_side
+            new_width = int(width * (target_longest_side / height))
+
+        new_size = (new_width, new_height)
+        logging.info(
+            f"Downsampling image from {width}x{height} to {new_width}x{new_height}"
+        )
+        return image.resize(new_size, Image.LANCZOS)
+    if width > height:
+        if width > 10000:
+            logging.error("Processing extremely wide images.")
+            return image.resize((10000, height), Image.LANCZOS)
+    else:
+        if height > 10000:
+            logging.error("Processing extremely high images.")
+            return image.resize((width, 10000), Image.LANCZOS)
+    return image
+
+
 def voyage_v_loader(**kwargs):
     try:
         import voyageai
     except ImportError:
         raise ImportError("To use voyage models, please run `pip install -U voyageai`.")
+    try:
+        from tenacity import retry, stop_after_attempt, wait_exponential
+    except ImportError:
+        raise ImportError(
+            "please run `pip install tenacity` to use exponential backoff."
+        )
 
     class VoyageMultiModalModelWrapper:
         def __init__(
@@ -32,6 +73,13 @@ def voyage_v_loader(**kwargs):
         ):
             self.model_name = model_name
             self.vo = voyageai.Client()
+
+        @retry(
+            stop=stop_after_attempt(6),  # Stop after 6 attempts
+            wait=wait_exponential(multiplier=1, max=60),  # Exponential backoff
+        )
+        def _multimodal_embed(self, inputs, model, input_type):
+            return self.vo.multimodal_embed(inputs, model=model, input_type=input_type)
 
         def get_text_embeddings(
             self,
@@ -51,14 +99,17 @@ def voyage_v_loader(**kwargs):
 
             all_text_embeddings = []
 
+            batch_size = 128  # for run tasks purpose
+
             for i in tqdm(range(0, len(texts), batch_size)):
                 batch_texts = texts[i : i + batch_size]
                 batch_texts = [[text] for text in batch_texts]
-                all_text_embeddings += torch.tensor(
-                    self.vo.multimodal_embed(
-                        batch_texts, model=self.model_name, input_type=input_type
-                    ).embeddings
-                )
+
+                # with retry mechanism
+                embeddings = self._multimodal_embed(
+                    batch_texts, model=self.model_name, input_type=input_type
+                ).embeddings
+                all_text_embeddings.append(torch.tensor(embeddings))
             all_text_embeddings = torch.vstack(all_text_embeddings)
             return all_text_embeddings
 
@@ -84,21 +135,21 @@ def voyage_v_loader(**kwargs):
                 for index, batch in enumerate(tqdm(images)):
                     if index == 0:
                         assert len(batch) == batch_size
-                    batch_images = [[tensor_to_image(image)] for image in batch]
-                    all_image_embeddings += torch.tensor(
-                        self.vo.multimodal_embed(
-                            batch_images, model=self.model_name, input_type=input_type
-                        ).embeddings
-                    )
+                    batch_images = [
+                        [downsample_image(tensor_to_image(image))] for image in batch
+                    ]
+                    embeddings = self._multimodal_embed(
+                        batch_images, model=self.model_name, input_type=input_type
+                    ).embeddings
+                    all_image_embeddings.append(torch.tensor(embeddings))
             else:
                 for i in tqdm(range(0, len(images), batch_size)):
                     batch_images = images[i : i + batch_size]
-                    batch_images = [[image] for image in batch_images]
-                    all_image_embeddings += torch.tensor(
-                        self.vo.multimodal_embed(
-                            batch_images, model=self.model_name, input_type=input_type
-                        ).embeddings
-                    )
+                    batch_images = [[downsample_image(image)] for image in batch_images]
+                    embeddings = self._multimodal_embed(
+                        batch_images, model=self.model_name, input_type=input_type
+                    ).embeddings
+                    all_image_embeddings.append(torch.tensor(embeddings))
             all_image_embeddings = torch.vstack(all_image_embeddings)
             return all_image_embeddings
 
@@ -138,12 +189,13 @@ def voyage_v_loader(**kwargs):
 
             interleaved_embeddings = []
             if texts is not None and images is not None:
-                # print("encoding interleaved inputs")
                 if isinstance(images, DataLoader):
                     for index, batch in tqdm(enumerate(images)):
                         if index == 0:
                             assert len(batch) == batch_size
-                        batch_images = [tensor_to_image(image) for image in batch]
+                        batch_images = [
+                            downsample_image(tensor_to_image(image)) for image in batch
+                        ]
                         batch_texts = texts[
                             index * batch_size : (index + 1) * batch_size
                         ]
@@ -151,13 +203,12 @@ def voyage_v_loader(**kwargs):
                             [text, image]
                             for image, text in zip(batch_images, batch_texts)
                         ]
-                        interleaved_embeddings += torch.tensor(
-                            self.vo.multimodal_embed(
-                                interleaved_inputs,
-                                model=self.model_name,
-                                input_type=input_type,
-                            ).embeddings
-                        )
+                        embeddings = self._multimodal_embed(
+                            interleaved_inputs,
+                            model=self.model_name,
+                            input_type=input_type,
+                        ).embeddings
+                        interleaved_embeddings.append(torch.tensor(embeddings))
                 else:
                     for i in tqdm(range(0, len(images), batch_size)):
                         batch_images = images[i : i + batch_size]
@@ -166,23 +217,24 @@ def voyage_v_loader(**kwargs):
                             [text, image]
                             for image, text in zip(batch_images, batch_texts)
                         ]
-                        interleaved_embeddings += torch.tensor(
-                            self.vo.multimodal_embed(
-                                interleaved_inputs,
-                                model=self.model_name,
-                                input_type=input_type,
-                            ).embeddings
-                        )
+                        embeddings = self._multimodal_embed(
+                            interleaved_inputs,
+                            model=self.model_name,
+                            input_type=input_type,
+                        ).embeddings
+                        interleaved_embeddings.append(torch.tensor(embeddings))
                 interleaved_embeddings = torch.vstack(interleaved_embeddings)
                 return interleaved_embeddings
 
             elif texts is not None:
-                # print("encoding texts only")
-                text_embeddings = self.get_text_embeddings(texts, batch_size)
+                text_embeddings = self.get_text_embeddings(
+                    texts, batch_size, input_type=input_type
+                )
 
             elif images is not None:
-                # print("encoding images only")
-                image_embeddings = self.get_image_embeddings(images, batch_size)
+                image_embeddings = self.get_image_embeddings(
+                    images, batch_size, input_type=input_type
+                )
 
             if text_embeddings is not None:
                 return text_embeddings
