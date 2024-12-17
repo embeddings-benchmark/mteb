@@ -1,13 +1,17 @@
 from __future__ import annotations
 
-from datasets import load_dataset, Dataset
+from datasets import Dataset, load_dataset
 
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 def _load_data(
-    path: str, splits: str, cache_dir: str = None, revision: str = None, num_queries=None
+    path: str,
+    splits: str,
+    cache_dir: str = None,
+    revision: str = None,
+    num_queries=None,
 ):
     corpus = {}
     queries = {}
@@ -25,25 +29,27 @@ def _load_data(
         relevant_docs[split] = {}
         deduplicated_corpus = {}
         for i, row in enumerate(split_dataset):
-            if row['image_filename'] in deduplicated_corpus:
-                doc_id = deduplicated_corpus[row['image_filename']]["id"]
+            if row["image_filename"] in deduplicated_corpus:
+                doc_id = deduplicated_corpus[row["image_filename"]]["id"]
             else:
                 doc_id = f"corpus-{split}-{len(deduplicated_corpus)}"
-                deduplicated_corpus[row['image_filename']] = {
+                deduplicated_corpus[row["image_filename"]] = {
                     "id": doc_id,
                     "modality": "image",
                     "text": None,
-                    "image": row["image"]
+                    "image": row["image"],
                 }
             if isinstance(num_queries, int) and i >= num_queries:
                 continue
             query_id = f"query-{split}-{i}"
-            queries_split.append({
-                "id": query_id,
-                "modality": "text",
-                "image": None,
-                "text": row["query"],
-            })
+            queries_split.append(
+                {
+                    "id": query_id,
+                    "modality": "text",
+                    "image": None,
+                    "text": row["query"],
+                }
+            )
             if query_id not in relevant_docs[split]:
                 relevant_docs[split][query_id] = {}
             relevant_docs[split][query_id][doc_id] = 1
@@ -366,7 +372,7 @@ class VidoreShiftProjectRetrieval(AbsTaskAny2AnyRetrieval):
             splits=self.metadata_dict["eval_splits"],
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["dataset"]["revision"],
-            num_queries=100, # query corpus unmatched
+            num_queries=100,  # query corpus unmatched
         )
 
         self.data_loaded = True
@@ -420,7 +426,7 @@ class VidoreSyntheticDocQAAIRetrieval(AbsTaskAny2AnyRetrieval):
             splits=self.metadata_dict["eval_splits"],
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["dataset"]["revision"],
-            num_queries=100, # query corpus unmatched
+            num_queries=100,  # query corpus unmatched
         )
 
         self.data_loaded = True
@@ -474,7 +480,7 @@ class VidoreSyntheticDocQAEnergyRetrieval(AbsTaskAny2AnyRetrieval):
             splits=self.metadata_dict["eval_splits"],
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["dataset"]["revision"],
-            num_queries=100, # query corpus unmatched
+            num_queries=100,  # query corpus unmatched
         )
 
         self.data_loaded = True
@@ -528,7 +534,7 @@ class VidoreSyntheticDocQAGovernmentReportsRetrieval(AbsTaskAny2AnyRetrieval):
             splits=self.metadata_dict["eval_splits"],
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["dataset"]["revision"],
-            num_queries=100, # query corpus unmatched
+            num_queries=100,  # query corpus unmatched
         )
 
         self.data_loaded = True
@@ -582,7 +588,7 @@ class VidoreSyntheticDocQAHealthcareIndustryRetrieval(AbsTaskAny2AnyRetrieval):
             splits=self.metadata_dict["eval_splits"],
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["dataset"]["revision"],
-            num_queries=100, # query corpus unmatched
+            num_queries=100,  # query corpus unmatched
         )
 
         self.data_loaded = True
