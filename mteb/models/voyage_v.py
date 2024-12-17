@@ -19,13 +19,16 @@ from mteb.model_meta import ModelMeta
 api_key = os.getenv("VOYAGE_API_KEY")
 tensor_to_image = transforms.Compose([transforms.ToPILImage()])
 
-def downsample_image(image: Image.Image, max_pixels: int = 16000000, target_longest_side: int = 4000) -> Image.Image:
+
+def downsample_image(
+    image: Image.Image, max_pixels: int = 16000000, target_longest_side: int = 4000
+) -> Image.Image:
     """
     if image pixel > max_pixels, downsample it to target_longest_side while keeping the width height ratio.
     """
     width, height = image.size
     pixels = width * height
-    
+
     if pixels > max_pixels:
         if width > height:
             new_width = target_longest_side
@@ -33,18 +36,18 @@ def downsample_image(image: Image.Image, max_pixels: int = 16000000, target_long
         else:
             new_height = target_longest_side
             new_width = int(width * (target_longest_side / height))
-        
+
         new_size = (new_width, new_height)
         print(f"Downsampling image from {width}x{height} to {new_width}x{new_height}")
         return image.resize(new_size, Image.LANCZOS)
     if width > height:
         if width > 10000:
             print(f"Error handing: Processing extremely wide images.")
-            return image.resize((10000,height), Image.LANCZOS)
+            return image.resize((10000, height), Image.LANCZOS)
     else:
         if height > 10000:
             print(f"Error handing: Processing extremely high images.")
-            return image.resize((width, 10000), Image.LANCZOS)    
+            return image.resize((width, 10000), Image.LANCZOS)
     return image
 
 
@@ -69,7 +72,7 @@ def voyage_v_loader(**kwargs):
         )
         def _multimodal_embed(self, inputs, model, input_type):
             return self.vo.multimodal_embed(inputs, model=model, input_type=input_type)
-    
+
         def get_text_embeddings(
             self,
             texts: list[str],
@@ -80,21 +83,20 @@ def voyage_v_loader(**kwargs):
             input_type=None,
             **kwargs: Any,
         ):
-
             if input_type is None and prompt_type is not None:
                 if prompt_type == PromptType.passage:
                     input_type = "document"
                 elif prompt_type == PromptType.query:
                     input_type = "query"
-                    
+
             all_text_embeddings = []
 
-            batch_size = 128 # for run tasks purpose
-            
+            batch_size = 128  # for run tasks purpose
+
             for i in tqdm(range(0, len(texts), batch_size)):
                 batch_texts = texts[i : i + batch_size]
                 batch_texts = [[text] for text in batch_texts]
-                
+
                 # with retry mechanism
                 embeddings = self._multimodal_embed(
                     batch_texts, model=self.model_name, input_type=input_type
@@ -125,7 +127,9 @@ def voyage_v_loader(**kwargs):
                 for index, batch in enumerate(tqdm(images)):
                     if index == 0:
                         assert len(batch) == batch_size
-                    batch_images = [[downsample_image(tensor_to_image(image))] for image in batch]
+                    batch_images = [
+                        [downsample_image(tensor_to_image(image))] for image in batch
+                    ]
                     embeddings = self._multimodal_embed(
                         batch_images, model=self.model_name, input_type=input_type
                     ).embeddings
@@ -181,7 +185,9 @@ def voyage_v_loader(**kwargs):
                     for index, batch in tqdm(enumerate(images)):
                         if index == 0:
                             assert len(batch) == batch_size
-                        batch_images = [downsample_image(tensor_to_image(image)) for image in batch]
+                        batch_images = [
+                            downsample_image(tensor_to_image(image)) for image in batch
+                        ]
                         batch_texts = texts[
                             index * batch_size : (index + 1) * batch_size
                         ]
@@ -190,7 +196,9 @@ def voyage_v_loader(**kwargs):
                             for image, text in zip(batch_images, batch_texts)
                         ]
                         embeddings = self._multimodal_embed(
-                            interleaved_inputs, model=self.model_name, input_type=input_type
+                            interleaved_inputs,
+                            model=self.model_name,
+                            input_type=input_type,
                         ).embeddings
                         interleaved_embeddings.append(torch.tensor(embeddings))
                 else:
@@ -202,17 +210,23 @@ def voyage_v_loader(**kwargs):
                             for image, text in zip(batch_images, batch_texts)
                         ]
                         embeddings = self._multimodal_embed(
-                            interleaved_inputs, model=self.model_name, input_type=input_type
+                            interleaved_inputs,
+                            model=self.model_name,
+                            input_type=input_type,
                         ).embeddings
                         interleaved_embeddings.append(torch.tensor(embeddings))
                 interleaved_embeddings = torch.vstack(interleaved_embeddings)
                 return interleaved_embeddings
 
             elif texts is not None:
-                text_embeddings = self.get_text_embeddings(texts, batch_size, input_type=input_type)
+                text_embeddings = self.get_text_embeddings(
+                    texts, batch_size, input_type=input_type
+                )
 
             elif images is not None:
-                image_embeddings = self.get_image_embeddings(images, batch_size, input_type=input_type)
+                image_embeddings = self.get_image_embeddings(
+                    images, batch_size, input_type=input_type
+                )
 
             if text_embeddings is not None:
                 return text_embeddings
