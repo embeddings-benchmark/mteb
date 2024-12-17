@@ -4,6 +4,7 @@ import os
 from functools import partial
 from typing import Any
 
+import logging
 import torch
 from PIL import Image
 from torch.utils.data import DataLoader
@@ -37,15 +38,17 @@ def downsample_image(
             new_width = int(width * (target_longest_side / height))
 
         new_size = (new_width, new_height)
-        print(f"Downsampling image from {width}x{height} to {new_width}x{new_height}")
+        logging.info(
+            f"Downsampling image from {width}x{height} to {new_width}x{new_height}"
+        )
         return image.resize(new_size, Image.LANCZOS)
     if width > height:
         if width > 10000:
-            print(f"Error handing: Processing extremely wide images.")
+            logging.error("Processing extremely wide images.")
             return image.resize((10000, height), Image.LANCZOS)
     else:
         if height > 10000:
-            print(f"Error handing: Processing extremely high images.")
+            logging.error("Processing extremely high images.")
             return image.resize((width, 10000), Image.LANCZOS)
     return image
 
