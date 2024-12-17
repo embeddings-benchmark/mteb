@@ -1,0 +1,19 @@
+{
+  "dataset_revision": "fe12fc5f1b7606543b0355eda392f1ddc54625c6",
+  "evaluation_time": 669.4255020618439,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.14.15",
+  "scores": {
+    "test": [
+      {
+        "accuracy": 0.6173015873015874,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.6173015873015874
+      }
+    ]
+  },
+  "task_name": "RESISC45ZeroShot"
+}

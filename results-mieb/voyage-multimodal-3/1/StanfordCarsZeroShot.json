@@ -1,0 +1,19 @@
+{
+  "dataset_revision": "09ffe9bc7864d3f1e851529e5c4b7e05601a04fb",
+  "evaluation_time": 3249.768146753311,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.14.15",
+  "scores": {
+    "test": [
+      {
+        "accuracy": 0.49396841188906854,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.49396841188906854
+      }
+    ]
+  },
+  "task_name": "StanfordCarsZeroShot"
+}

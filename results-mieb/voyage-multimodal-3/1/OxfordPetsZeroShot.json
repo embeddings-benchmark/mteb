@@ -1,0 +1,19 @@
+{
+  "dataset_revision": "557b480fae8d69247be74d9503b378a09425096f",
+  "evaluation_time": 677.260498046875,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.14.15",
+  "scores": {
+    "test": [
+      {
+        "accuracy": 0.7050967566094304,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.7050967566094304
+      }
+    ]
+  },
+  "task_name": "OxfordPetsZeroShot"
+}

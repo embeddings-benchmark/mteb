@@ -1,0 +1,19 @@
+{
+  "dataset_revision": "d2afa97d9f335b1a6b3b09c637aef667f98f966e",
+  "evaluation_time": 437.40010952949524,
+  "kg_co2_emissions": null,
+  "mteb_version": "1.14.15",
+  "scores": {
+    "test": [
+      {
+        "accuracy": 0.5904255319148937,
+        "hf_subset": "default",
+        "languages": [
+          "eng-Latn"
+        ],
+        "main_score": 0.5904255319148937
+      }
+    ]
+  },
+  "task_name": "DTDZeroShot"
+}
