@@ -37,7 +37,14 @@ def downsample_image(image: Image.Image, max_pixels: int = 16000000, target_long
         new_size = (new_width, new_height)
         print(f"Downsampling image from {width}x{height} to {new_width}x{new_height}")
         return image.resize(new_size, Image.LANCZOS)
-    
+    if width > height:
+        if width > 10000:
+            print(f"Error handing: Processing extremely wide images.")
+            return image.resize((10000,height), Image.LANCZOS)
+    else:
+        if height > 10000:
+            print(f"Error handing: Processing extremely high images.")
+            return image.resize((width, 10000), Image.LANCZOS)    
     return image
 
 
@@ -174,7 +181,7 @@ def voyage_v_loader(**kwargs):
                     for index, batch in tqdm(enumerate(images)):
                         if index == 0:
                             assert len(batch) == batch_size
-                        batch_images = [tensor_to_image(image) for image in batch]
+                        batch_images = [downsample_image(tensor_to_image(image)) for image in batch]
                         batch_texts = texts[
                             index * batch_size : (index + 1) * batch_size
                         ]
