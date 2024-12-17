@@ -317,6 +317,34 @@ evaluation.run(
 </details>
 
 <details>
+  <summary> Late Interaction (ColBERT) </summary>
+
+### Using Late Interaction models for retrieval
+
+```python
+from mteb import MTEB
+import mteb
+
+
+colbert = mteb.get_model("colbert-ir/colbertv2.0")
+tasks = mteb.get_tasks(tasks=["NFCorpus"], languages=["eng"])
+
+eval_splits = ["test"]
+
+evaluation = MTEB(tasks=tasks)
+
+evaluation.run(
+    colbert,
+    eval_splits=eval_splits,
+    corpus_chunk_size=500,
+)
+```
+This implementation employs the MaxSim operation to compute the similarity between sentences. While MaxSim provides high-quality results, it processes a larger number of embeddings, potentially leading to increased resource usage. To manage resource consumption, consider lowering the `corpus_chunk_size` parameter.
+
+
+</details>
+
+<details>
   <summary>  Saving retrieval task predictions </summary>
 
 ### Saving retrieval task predictions

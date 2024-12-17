@@ -47,6 +47,11 @@ def instruct_wrapper(
                     "No instruction template provided. Instructions will be used as-is."
                 )
 
+            if "gte-Qwen" in model_name_or_path:
+                logger.warning(
+                    "Instructions are used in both query and docs, which may cause performance discrepancies from the original implementation."
+                )
+
             self.instruction_template = instruction_template
             super().__init__(model_name_or_path=model_name_or_path, mode=mode, **kwargs)
 
