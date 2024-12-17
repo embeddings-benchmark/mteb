@@ -12,7 +12,6 @@ from tqdm import tqdm
 
 import mteb
 from mteb.model_meta import ModelMeta
-from tenacity import retry, stop_after_attempt, wait_exponential
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
@@ -56,7 +55,10 @@ def voyage_v_loader(**kwargs):
         import voyageai
     except ImportError:
         raise ImportError("To use voyage models, please run `pip install -U voyageai`.")
-
+    try:
+        from tenacity import retry, stop_after_attempt, wait_exponential
+    except ImportError:
+        raise ImportError("please run `pip install tenacity` to use exponential backoff.")
     class VoyageMultiModalModelWrapper:
         def __init__(
             self,
