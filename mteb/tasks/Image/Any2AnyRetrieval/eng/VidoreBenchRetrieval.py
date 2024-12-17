@@ -1,54 +1,13 @@
 from __future__ import annotations
 
-from datasets import load_dataset
+from datasets import load_dataset, Dataset
 
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = None):
-    corpus = {}
-    queries = {}
-    relevant_docs = {}
-
-    dataset = load_dataset(
-        path,
-        cache_dir=cache_dir,
-        revision=revision,
-    )
-
-    for split in splits:
-        split_dataset = dataset[split]
-        split_dataset = split_dataset.rename_column("query", "text")
-        corpus[split] = split_dataset.map(
-            lambda x, idx: {
-                "id": f"corpus-{split}-{idx}",
-                "modality": "image",
-                "text": None,
-            },
-            with_indices=True,
-        )
-
-        queries[split] = split_dataset.map(
-            lambda x, idx: {
-                "id": f"query-{split}-{idx}",
-                "image": None,
-                "modality": "text",
-            },
-            with_indices=True,
-        )
-        relevant_docs[split] = {}
-        for index in range(len(split_dataset)):
-            query_id = f"query-{split}-{index}"
-            doc_id = f"corpus-{split}-{index}"
-            if query_id not in relevant_docs[split]:
-                relevant_docs[split][query_id] = {}
-            relevant_docs[split][query_id][doc_id] = 1
-    return corpus, queries, relevant_docs
-
-
-def _load_data_qc_unmatched(
-    path: str, splits: str, cache_dir: str = None, revision: str = None, num_queries=100
+def _load_data(
+    path: str, splits: str, cache_dir: str = None, revision: str = None, num_queries=None
 ):
     corpus = {}
     queries = {}
@@ -62,32 +21,35 @@ def _load_data_qc_unmatched(
 
     for split in splits:
         split_dataset = dataset[split]
-        split_dataset = split_dataset.rename_column("query", "text")
-        corpus[split] = split_dataset.map(
-            lambda x, idx: {
-                "id": f"corpus-{split}-{idx}",
-                "modality": "image",
-                "text": None,
-            },
-            with_indices=True,
-        )
-
-        split_dataset = split_dataset.select(range(num_queries))
-        queries[split] = split_dataset.map(
-            lambda x, idx: {
-                "id": f"query-{split}-{idx}",
-                "image": None,
-                "modality": "text",
-            },
-            with_indices=True,
-        )
+        queries_split = []
         relevant_docs[split] = {}
-        for index in range(len(queries[split])):
-            query_id = f"query-{split}-{index}"
-            doc_id = f"corpus-{split}-{index}"
+        deduplicated_corpus = {}
+        for i, row in enumerate(split_dataset):
+            if row['image_filename'] in deduplicated_corpus:
+                doc_id = deduplicated_corpus[row['image_filename']]["id"]
+            else:
+                doc_id = f"corpus-{split}-{len(deduplicated_corpus)}"
+                deduplicated_corpus[row['image_filename']] = {
+                    "id": doc_id,
+                    "modality": "image",
+                    "text": None,
+                    "image": row["image"]
+                }
+            if isinstance(num_queries, int) and i >= num_queries:
+                continue
+            query_id = f"query-{split}-{i}"
+            queries_split.append({
+                "id": query_id,
+                "modality": "text",
+                "image": None,
+                "text": row["query"],
+            })
             if query_id not in relevant_docs[split]:
                 relevant_docs[split][query_id] = {}
             relevant_docs[split][query_id][doc_id] = 1
+        queries[split] = Dataset.from_list(queries_split)
+        corpus[split] = Dataset.from_list(list(deduplicated_corpus.values()))
+
     return corpus, queries, relevant_docs
 
 
@@ -284,7 +246,7 @@ class VidoreTabfquadRetrieval(AbsTaskAny2AnyRetrieval):
                 "test": {
                     "average_document_length": 1.0,
                     "average_query_length": 100.63214285714285,
-                    "num_documents": 280,
+                    "num_documents": 70,
                     "num_queries": 280,
                     "average_relevant_docs_per_query": 1.0,
                 }
@@ -337,7 +299,7 @@ class VidoreTatdqaRetrieval(AbsTaskAny2AnyRetrieval):
                 "test": {
                     "average_document_length": 1.0,
                     "average_query_length": 72.76368009621167,
-                    "num_documents": 1663,
+                    "num_documents": 277,
                     "num_queries": 1663,
                     "average_relevant_docs_per_query": 1.0,
                 }
@@ -399,11 +361,12 @@ class VidoreShiftProjectRetrieval(AbsTaskAny2AnyRetrieval):
     )
 
     def load_data(self, **kwargs):
-        self.corpus, self.queries, self.relevant_docs = _load_data_qc_unmatched(
+        self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata_dict["dataset"]["path"],
             splits=self.metadata_dict["eval_splits"],
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["dataset"]["revision"],
+            num_queries=100, # query corpus unmatched
         )
 
         self.data_loaded = True
@@ -443,7 +406,7 @@ class VidoreSyntheticDocQAAIRetrieval(AbsTaskAny2AnyRetrieval):
                 "test": {
                     "average_document_length": 1.0,
                     "average_query_length": 77.71,
-                    "num_documents": 1000,
+                    "num_documents": 968,
                     "num_queries": 100,
                     "average_relevant_docs_per_query": 1.0,
                 }
@@ -452,11 +415,12 @@ class VidoreSyntheticDocQAAIRetrieval(AbsTaskAny2AnyRetrieval):
     )
 
     def load_data(self, **kwargs):
-        self.corpus, self.queries, self.relevant_docs = _load_data_qc_unmatched(
+        self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata_dict["dataset"]["path"],
             splits=self.metadata_dict["eval_splits"],
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["dataset"]["revision"],
+            num_queries=100, # query corpus unmatched
         )
 
         self.data_loaded = True
@@ -496,7 +460,7 @@ class VidoreSyntheticDocQAEnergyRetrieval(AbsTaskAny2AnyRetrieval):
                 "test": {
                     "average_document_length": 1.0,
                     "average_query_length": 83.69,
-                    "num_documents": 1000,
+                    "num_documents": 977,
                     "num_queries": 100,
                     "average_relevant_docs_per_query": 1.0,
                 }
@@ -505,11 +469,12 @@ class VidoreSyntheticDocQAEnergyRetrieval(AbsTaskAny2AnyRetrieval):
     )
 
     def load_data(self, **kwargs):
-        self.corpus, self.queries, self.relevant_docs = _load_data_qc_unmatched(
+        self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata_dict["dataset"]["path"],
             splits=self.metadata_dict["eval_splits"],
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["dataset"]["revision"],
+            num_queries=100, # query corpus unmatched
         )
 
         self.data_loaded = True
@@ -549,7 +514,7 @@ class VidoreSyntheticDocQAGovernmentReportsRetrieval(AbsTaskAny2AnyRetrieval):
                 "test": {
                     "average_document_length": 1.0,
                     "average_query_length": 82.53,
-                    "num_documents": 1000,
+                    "num_documents": 972,
                     "num_queries": 100,
                     "average_relevant_docs_per_query": 1.0,
                 }
@@ -558,11 +523,12 @@ class VidoreSyntheticDocQAGovernmentReportsRetrieval(AbsTaskAny2AnyRetrieval):
     )
 
     def load_data(self, **kwargs):
-        self.corpus, self.queries, self.relevant_docs = _load_data_qc_unmatched(
+        self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata_dict["dataset"]["path"],
             splits=self.metadata_dict["eval_splits"],
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["dataset"]["revision"],
+            num_queries=100, # query corpus unmatched
         )
 
         self.data_loaded = True
@@ -602,7 +568,7 @@ class VidoreSyntheticDocQAHealthcareIndustryRetrieval(AbsTaskAny2AnyRetrieval):
                 "test": {
                     "average_document_length": 1.0,
                     "average_query_length": 80.43,
-                    "num_documents": 1000,
+                    "num_documents": 965,
                     "num_queries": 100,
                     "average_relevant_docs_per_query": 1.0,
                 }
@@ -611,11 +577,12 @@ class VidoreSyntheticDocQAHealthcareIndustryRetrieval(AbsTaskAny2AnyRetrieval):
     )
 
     def load_data(self, **kwargs):
-        self.corpus, self.queries, self.relevant_docs = _load_data_qc_unmatched(
+        self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata_dict["dataset"]["path"],
             splits=self.metadata_dict["eval_splits"],
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["dataset"]["revision"],
+            num_queries=100, # query corpus unmatched
         )
 
         self.data_loaded = True
