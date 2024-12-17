@@ -58,7 +58,10 @@ def voyage_v_loader(**kwargs):
     try:
         from tenacity import retry, stop_after_attempt, wait_exponential
     except ImportError:
-        raise ImportError("please run `pip install tenacity` to use exponential backoff.")
+        raise ImportError(
+            "please run `pip install tenacity` to use exponential backoff."
+        )
+
     class VoyageMultiModalModelWrapper:
         def __init__(
             self,
