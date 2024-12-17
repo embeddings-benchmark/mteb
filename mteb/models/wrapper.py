@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import get_args
+from typing import Callable, get_args
 
 import mteb
 from mteb.abstasks.TaskMetadata import TASK_TYPE
@@ -14,6 +14,8 @@ class Wrapper:
     """Base class to indicate that this is a wrapper for a model.
     Also contains some utility functions for wrappers for working with prompts and instructions.
     """
+
+    instruction_template: str | Callable[[str], str] | None = None
 
     @staticmethod
     def get_prompt_name(
@@ -100,3 +102,20 @@ class Wrapper:
         if task_metadata.prompt:
             return task_metadata.prompt
         return task.abstask_prompt
+
+    def format_instruction(self, instruction: str) -> str:
+        if isinstance(self.instruction_template, str):
+            if "{instruction}" not in self.instruction_template:
+                raise ValueError(
+                    "Instruction template must contain the string '{instruction}'."
+                )
+            return self.instruction_template.format(instruction=instruction)
+        return self.instruction_template(instruction)
+
+    def get_task_instruction(
+        self, task_name: str, prompt_type: PromptType | None
+    ) -> str:
+        instruction = self.get_instruction(task_name, prompt_type)
+        if self.instruction_template:
+            return self.format_instruction(instruction)
+        return instruction
