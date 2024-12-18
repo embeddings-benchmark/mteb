@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datasets import Dataset, load_dataset
+from datasets import load_dataset
 
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
@@ -9,52 +9,63 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 def _load_data(
     path: str,
     splits: str,
-    cache_dir: str = None,
-    revision: str = None,
-    num_queries=None,
+    cache_dir: str | None = None,
+    revision: str | None = None,
 ):
     corpus = {}
     queries = {}
     relevant_docs = {}
 
-    dataset = load_dataset(
-        path,
-        cache_dir=cache_dir,
-        revision=revision,
-    )
-
     for split in splits:
-        split_dataset = dataset[split]
-        queries_split = []
+        query_ds = load_dataset(
+            path,
+            "queries",
+            split=split,
+            cache_dir=cache_dir,
+            revision=revision,
+        )
+        query_ds = query_ds.map(
+            lambda x: {
+                "id": f"query-{split}-{x['query-id']}",
+                "text": x["query"],
+                "image": None,
+                "modality": "text",
+            },
+            remove_columns=["query-id", "query"],
+        )
+        queries[split] = query_ds
+
+        corpus_ds = load_dataset(
+            path,
+            "corpus",
+            split=split,
+            cache_dir=cache_dir,
+            revision=revision,
+        )
+        corpus_ds = corpus_ds.map(
+            lambda x: {
+                "id": f"corpus-{split}-{x['corpus-id']}",
+                "text": None,
+                "modality": "image",
+            },
+            remove_columns=["corpus-id"],
+        )
+        corpus[split] = corpus_ds
+
+        qrels_ds = load_dataset(
+            path,
+            "qrels",
+            split=split,
+            cache_dir=cache_dir,
+            revision=revision,
+        )
         relevant_docs[split] = {}
-        deduplicated_corpus = {}
-        for i, row in enumerate(split_dataset):
-            if row["image_filename"] in deduplicated_corpus:
-                doc_id = deduplicated_corpus[row["image_filename"]]["id"]
-            else:
-                doc_id = f"corpus-{split}-{len(deduplicated_corpus)}"
-                deduplicated_corpus[row["image_filename"]] = {
-                    "id": doc_id,
-                    "modality": "image",
-                    "text": None,
-                    "image": row["image"],
-                }
-            if isinstance(num_queries, int) and i >= num_queries:
-                continue
-            query_id = f"query-{split}-{i}"
-            queries_split.append(
-                {
-                    "id": query_id,
-                    "modality": "text",
-                    "image": None,
-                    "text": row["query"],
-                }
-            )
-            if query_id not in relevant_docs[split]:
-                relevant_docs[split][query_id] = {}
-            relevant_docs[split][query_id][doc_id] = 1
-        queries[split] = Dataset.from_list(queries_split)
-        corpus[split] = Dataset.from_list(list(deduplicated_corpus.values()))
+        for row in qrels_ds:
+            qid = f"query-{split}-{row['query-id']}"
+            did = f"corpus-{split}-{row['corpus-id']}"
+            if qid not in relevant_docs[split]:
+                relevant_docs[split][qid] = {}
+            relevant_docs[split][qid][did] = int(row["score"])
 
     return corpus, queries, relevant_docs
 
@@ -65,8 +76,8 @@ class VidoreArxivQARetrieval(AbsTaskAny2AnyRetrieval):
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
-            "path": "vidore/arxivqa_test_subsampled",
-            "revision": "fe2b0e055eaac82d8f6801ebc8e85d8832248133",
+            "path": "vidore/arxivqa_test_subsampled_beir",
+            "revision": "7d94d570960eac2408d3baa7a33f9de4822ae3e4",
         },
         type="Any2AnyRetrieval",
         category="t2i",
@@ -118,8 +129,8 @@ class VidoreDocVQARetrieval(AbsTaskAny2AnyRetrieval):
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
-            "path": "vidore/docvqa_test_subsampled",
-            "revision": "b1d89eda849e636676df6ead8002602fb1858600",
+            "path": "vidore/docvqa_test_subsampled_beir",
+            "revision": "162ba2fc1a8437eda8b6c37b240bc1c0f0deb092",
         },
         type="Any2AnyRetrieval",
         category="t2i",
@@ -171,8 +182,8 @@ class VidoreInfoVQARetrieval(AbsTaskAny2AnyRetrieval):
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
-            "path": "vidore/infovqa_test_subsampled",
-            "revision": "fec9c59496ddf4a34e01ca8080515722bd3cf970",
+            "path": "vidore/infovqa_test_subsampled_beir",
+            "revision": "b802cc5fd6c605df2d673a963667d74881d2c9a4",
         },
         type="Any2AnyRetrieval",
         category="t2i",
@@ -224,8 +235,8 @@ class VidoreTabfquadRetrieval(AbsTaskAny2AnyRetrieval):
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
-            "path": "vidore/tabfquad_test_subsampled",
-            "revision": "501f02a80aff50c90045b0feaa81565c4e8f889e",
+            "path": "vidore/tabfquad_test_subsampled_beir",
+            "revision": "61a2224bcd29b7b261a4892ff4c8bea353527a31",
         },
         type="Any2AnyRetrieval",
         category="t2i",
@@ -277,8 +288,8 @@ class VidoreTatdqaRetrieval(AbsTaskAny2AnyRetrieval):
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
-            "path": "vidore/tatdqa_test",
-            "revision": "9c3a626c16c811f15514689c3e7e95a4f2b9b8c3",
+            "path": "vidore/tatdqa_test_beir",
+            "revision": "5feb5630fdff4d8d189ffedb2dba56862fdd45c0",
         },
         type="Any2AnyRetrieval",
         category="t2i",
@@ -330,8 +341,8 @@ class VidoreShiftProjectRetrieval(AbsTaskAny2AnyRetrieval):
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
-            "path": "vidore/shiftproject_test",
-            "revision": "9e7df4c35994683a7ba88002fb22917ffa15067e",
+            "path": "vidore/shiftproject_test_beir",
+            "revision": "84a382e05c4473fed9cff2bbae95fe2379416117",
         },
         type="Any2AnyRetrieval",
         category="t2i",
@@ -372,7 +383,6 @@ class VidoreShiftProjectRetrieval(AbsTaskAny2AnyRetrieval):
             splits=self.metadata_dict["eval_splits"],
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["dataset"]["revision"],
-            num_queries=100,  # query corpus unmatched
         )
 
         self.data_loaded = True
@@ -384,8 +394,8 @@ class VidoreSyntheticDocQAAIRetrieval(AbsTaskAny2AnyRetrieval):
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
-            "path": "vidore/syntheticDocQA_artificial_intelligence_test",
-            "revision": "5fe59d7e52732b86d11ee0e9c4a8cdb0e8ba7a6e",
+            "path": "vidore/syntheticDocQA_artificial_intelligence_test_beir",
+            "revision": "2d9ebea5a1c6e9ef4a3b902a612f605dca11261c",
         },
         type="Any2AnyRetrieval",
         category="t2i",
@@ -426,7 +436,6 @@ class VidoreSyntheticDocQAAIRetrieval(AbsTaskAny2AnyRetrieval):
             splits=self.metadata_dict["eval_splits"],
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["dataset"]["revision"],
-            num_queries=100,  # query corpus unmatched
         )
 
         self.data_loaded = True
@@ -438,8 +447,8 @@ class VidoreSyntheticDocQAEnergyRetrieval(AbsTaskAny2AnyRetrieval):
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
-            "path": "vidore/syntheticDocQA_energy_test",
-            "revision": "0821bc71310cfa51d5c8131d4d8b9c4d537bd8c8",
+            "path": "vidore/syntheticDocQA_energy_test_beir",
+            "revision": "9935aadbad5c8deec30910489db1b2c7133ae7a7",
         },
         type="Any2AnyRetrieval",
         category="t2i",
@@ -480,7 +489,6 @@ class VidoreSyntheticDocQAEnergyRetrieval(AbsTaskAny2AnyRetrieval):
             splits=self.metadata_dict["eval_splits"],
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["dataset"]["revision"],
-            num_queries=100,  # query corpus unmatched
         )
 
         self.data_loaded = True
@@ -492,8 +500,8 @@ class VidoreSyntheticDocQAGovernmentReportsRetrieval(AbsTaskAny2AnyRetrieval):
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
-            "path": "vidore/syntheticDocQA_government_reports_test",
-            "revision": "8270b3751ce6b95bec362fb38fbcd2a4aa400cfc",
+            "path": "vidore/syntheticDocQA_government_reports_test_beir",
+            "revision": "b4909afa930f81282fd20601e860668073ad02aa",
         },
         type="Any2AnyRetrieval",
         category="t2i",
@@ -534,7 +542,6 @@ class VidoreSyntheticDocQAGovernmentReportsRetrieval(AbsTaskAny2AnyRetrieval):
             splits=self.metadata_dict["eval_splits"],
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["dataset"]["revision"],
-            num_queries=100,  # query corpus unmatched
         )
 
         self.data_loaded = True
@@ -546,8 +553,8 @@ class VidoreSyntheticDocQAHealthcareIndustryRetrieval(AbsTaskAny2AnyRetrieval):
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
-            "path": "vidore/syntheticDocQA_healthcare_industry_test",
-            "revision": "86f09ebc1703516c76e5f931465e2ed7626a5e52",
+            "path": "vidore/syntheticDocQA_healthcare_industry_test_beir",
+            "revision": "f9e25d5b6e13e1ad9f5c3cce202565031b3ab164",
         },
         type="Any2AnyRetrieval",
         category="t2i",
@@ -588,7 +595,6 @@ class VidoreSyntheticDocQAHealthcareIndustryRetrieval(AbsTaskAny2AnyRetrieval):
             splits=self.metadata_dict["eval_splits"],
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["dataset"]["revision"],
-            num_queries=100,  # query corpus unmatched
         )
 
         self.data_loaded = True
