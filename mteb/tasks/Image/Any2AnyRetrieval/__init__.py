@@ -5,6 +5,7 @@ from .eng.BLINKIT2TRetrieval import *
 from .eng.CIRRIT2IRetrieval import *
 from .eng.CUB200I2IRetrieval import *
 from .eng.EDIST2ITRetrieval import *
+from .eng.EncyclopediaVQAIT2ITRetrieval import *
 from .eng.Fashion200kI2TRetrieval import *
 from .eng.Fashion200kT2IRetrieval import *
 from .eng.FashionIQIT2IRetrieval import *
@@ -18,14 +19,17 @@ from .eng.HatefulMemesT2IRetrieval import *
 from .eng.ImageCoDeT2IRetrieval import *
 from .eng.InfoSeekIT2ITRetrieval import *
 from .eng.InfoSeekIT2TRetrieval import *
+from .eng.LLaVAIT2TRetrieval import *
 from .eng.MemotionI2TRetrieval import *
 from .eng.MemotionT2IRetrieval import *
 from .eng.METI2IRetrieval import *
 from .eng.MSCOCOI2TRetrieval import *
 from .eng.MSCOCOT2IRetrieval import *
 from .eng.NIGHTSI2IRetrieval import *
+from .eng.OKVQAIT2TRetrieval import *
 from .eng.OVENIT2ITRetrieval import *
 from .eng.OVENIT2TRetrieval import *
+from .eng.ReMuQIT2TRetrieval import *
 from .eng.ROxfordI2IRetrieval import *
 from .eng.RP2kI2IRetrieval import *
 from .eng.RParisI2IRetrieval import *
