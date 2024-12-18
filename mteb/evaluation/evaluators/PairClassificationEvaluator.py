@@ -12,7 +12,7 @@ from sklearn.metrics.pairwise import (
     paired_manhattan_distances,
 )
 
-from mteb.encoder_interface import Encoder, EncoderWithSimilarity, PromptType
+from mteb.encoder_interface import Encoder, EncoderWithSimilarity
 
 from .Evaluator import Evaluator
 
@@ -77,7 +77,6 @@ class PairClassificationEvaluator(Evaluator):
         all_texts: list[str],
         model: Encoder,
         task_name: str | None,
-        prompt_type: PromptType | None,
         **encode_kwargs: Any,
     ):
         index_map, all_unique_texts, all_texts_indexes = {}, [], []
@@ -94,7 +93,6 @@ class PairClassificationEvaluator(Evaluator):
             model.encode(
                 all_unique_texts,
                 task_name=task_name,
-                prompt_type=prompt_type,
                 **encode_kwargs,
             )
         )
