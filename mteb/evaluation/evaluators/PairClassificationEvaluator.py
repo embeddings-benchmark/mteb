@@ -113,7 +113,6 @@ class PairClassificationEvaluator(Evaluator):
             all_sentences,
             model,
             task_name=self.task_name,
-            prompt_type=None,
             **encode_kwargs,
         )
         embeddings1 = embeddings[:len_sentences1]
