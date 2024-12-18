@@ -40,6 +40,8 @@ granite_107m_multilingual = ModelMeta(
     reference="https://huggingface.co/ibm-granite/granite-embedding-107m-multilingual",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
+    adapted_from=None,
+    superseded_by=None,
 )
 
 granite_278m_multilingual = ModelMeta(
@@ -61,6 +63,8 @@ granite_278m_multilingual = ModelMeta(
     reference="https://huggingface.co/ibm-granite/granite-embedding-278m-multilingual",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
+    adapted_from=None,
+    superseded_by=None,
 )
 
 granite_30m_english = ModelMeta(
@@ -82,6 +86,8 @@ granite_30m_english = ModelMeta(
     reference="https://huggingface.co/ibm-granite/granite-embedding-30m-english",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
+    adapted_from=None,
+    superseded_by=None,
 )
 
 granite_125m_english = ModelMeta(
@@ -103,4 +109,6 @@ granite_125m_english = ModelMeta(
     reference="https://huggingface.co/ibm-granite/granite-embedding-125m-english",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
+    adapted_from=None,
+    superseded_by=None,
 )
