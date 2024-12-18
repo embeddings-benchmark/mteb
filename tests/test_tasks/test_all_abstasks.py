@@ -10,7 +10,7 @@ import pytest
 import mteb
 from mteb import MTEB
 from mteb.abstasks import AbsTask
-from mteb.abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
+from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.AbsTaskSpeedTask import AbsTaskSpeedTask
 from mteb.abstasks.MultiSubsetLoader import MultiSubsetLoader
@@ -34,7 +34,7 @@ def test_load_data(
     # TODO: We skip because this load_data is completely different.
     if (
         isinstance(task, AbsTaskRetrieval)
-        or isinstance(task, AbsTaskInstructionRetrieval)
+        or isinstance(task, AbsTaskReranking)
         or isinstance(task, MultiSubsetLoader)
         or isinstance(task, AbsTaskSpeedTask)
     ):
@@ -90,10 +90,10 @@ def test_dataset_availability():
     asyncio.run(check_datasets_are_available_on_hf(tasks))
 
 
-def test_superseeded_dataset_exists():
-    tasks = mteb.get_tasks(exclude_superseeded=False)
+def test_superseded_dataset_exists():
+    tasks = mteb.get_tasks(exclude_superseded=False)
     for task in tasks:
         if task.superseded_by:
             assert (
                 task.superseded_by in TASKS_REGISTRY
-            ), f"{task} is superseeded by {task.superseded_by} but {task.superseded_by} is not in the TASKS_REGISTRY"
+            ), f"{task} is superseded by {task.superseded_by} but {task.superseded_by} is not in the TASKS_REGISTRY"

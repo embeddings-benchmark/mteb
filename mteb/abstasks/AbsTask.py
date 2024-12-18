@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+import json
 import logging
 import random
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
-from typing import Any, TypedDict
+from typing import Any
 
 import datasets
 import numpy as np
@@ -14,7 +15,7 @@ from datasets import Dataset, DatasetDict
 from sklearn.preprocessing import MultiLabelBinarizer
 
 from mteb.abstasks.stratification import _iterative_train_test_split
-from mteb.abstasks.TaskMetadata import HFSubset, TaskMetadata
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset, TaskMetadata
 from mteb.encoder_interface import Encoder
 from mteb.languages import LanguageScripts
 
@@ -53,14 +54,21 @@ def _multilabel_subsampling(
     return dataset_dict
 
 
-class DescriptiveStatistics(TypedDict):
-    """Class for descriptive statistics."""
-
-    pass
-
-
 class AbsTask(ABC):
+    """The abstract class for the tasks
+
+    Attributes:
+        metadata: The metadata describing the task
+        dataset: The dataset represented as a dictionary on the form {"hf subset": {"split": Dataset}} where "split" is the dataset split (e.g. "test")
+            and Dataset is a datasets.Dataset objedct. "hf subset" is the data subset on Huggingface typically used to denote the language e.g.
+            datasets.load_dataset("data", "en"). If the dataset does not have a subset this is simply "default".
+        abstask_prompt: The potential prompt of the abstask
+        superseeded_by: Denotes the task that this task is superseeded by. Used to issue warning to users of outdated datasets, while maintaining
+            reproducibility of existing benchmarks.
+    """
+
     metadata: TaskMetadata
+    abstask_prompt: str | None = None
     _eval_splits: list[str] | None = None
     superseded_by: None | str = None
     dataset: dict[HFSubset, DatasetDict] | None = None  # type: ignore
@@ -68,6 +76,12 @@ class AbsTask(ABC):
     is_multilingual: bool = False
 
     def __init__(self, seed: int = 42, **kwargs: Any):
+        """The init function. This is called primarily to set the seed.
+
+        Args:
+            seed: An integer seed.
+            kwargs: arguments passed to subclasses.
+        """
         self.save_suffix = kwargs.get("save_suffix", "")
 
         self.seed = seed
@@ -76,16 +90,18 @@ class AbsTask(ABC):
         torch.manual_seed(self.seed)
         torch.cuda.manual_seed_all(self.seed)
 
-    def check_if_dataset_is_superseeded(self):
-        """Check if the dataset is superseeded by a newer version"""
+    def check_if_dataset_is_superseded(self):
+        """Check if the dataset is superseded by a newer version"""
         if self.superseded_by:
             logger.warning(
-                f"Dataset '{self.metadata.name}' is superseeded by '{self.superseded_by}', you might consider using the newer version of the dataset."
+                f"Dataset '{self.metadata.name}' is superseded by '{self.superseded_by}', you might consider using the newer version of the dataset."
             )
 
     def dataset_transform(self):
-        """Transform operations applied to the dataset after loading.
-        Override this method if your dataset requires any transformation.
+        """A transform operations applied to the dataset after loading.
+
+        This method is useful when the dataset from Huggingface is not in an `mteb` compatible format.
+        Override this method if your dataset requires additional transformation.
         """
         pass
 
@@ -186,7 +202,11 @@ class AbsTask(ABC):
         return dataset_dict
 
     def load_data(self, **kwargs):
-        """Load dataset from HuggingFace hub"""
+        """Loads dataset from HuggingFace hub
+
+        This is the main loading function for Task. Do not overwrite this, instead we recommend using `dataset_transform`, which is called after the
+        dataset is loaded using `datasets.load_dataset`.
+        """
         if self.data_loaded:
             return
         self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])  # type: ignore
@@ -194,38 +214,51 @@ class AbsTask(ABC):
         self.data_loaded = True
 
     def calculate_metadata_metrics(
-        self,
+        self, overwrite_results: bool = False
     ) -> dict[str, DescriptiveStatistics | dict[str, DescriptiveStatistics]]:
+        """Calculates descriptive statistics from the dataset by calling `_calculate_metrics_from_split`."""
+        if self.metadata.descriptive_stat_path.exists() and not overwrite_results:
+            logger.info("Loading metadata descriptive statistics from cache.")
+            return self.metadata.descriptive_stats
+
         self.load_data()
 
-        all_details = {}
-        pbar_split = tqdm.tqdm(
-            self.metadata_dict["eval_splits"], desc="Processing Splits..."
-        )
+        descriptive_stats = {}
+        hf_subset_stat = "hf_subset_descriptive_stats"
+        eval_splits = self.metadata.eval_splits
+        if self.metadata.type in ["Classification", "MultilabelClassification"]:
+            eval_splits += ["train"]
+
+        pbar_split = tqdm.tqdm(eval_splits, desc="Processing Splits...")
         for split in pbar_split:
             pbar_split.set_postfix_str(f"Split: {split}")
-            print(f"Processing metadata for split {split}")
+            logger.info(f"Processing metadata for split {split}")
             if self.is_multilingual:
-                all_details[split] = self._calculate_metrics_from_split(
+                descriptive_stats[split] = self._calculate_metrics_from_split(
                     split, compute_overall=True
                 )
-                all_details[split]["hf_subset_descriptive_stats"] = {}
+                descriptive_stats[split][hf_subset_stat] = {}
 
-                pbar_subsets = tqdm.tqdm(
-                    self.metadata.eval_langs, desc="Processing Languages..."
+                eval_langs = (
+                    list(self.metadata.eval_langs.keys())
+                    if isinstance(self.metadata.eval_langs, dict)
+                    else self.metadata.eval_langs
                 )
+
+                pbar_subsets = tqdm.tqdm(eval_langs, desc="Processing Languages...")
                 for hf_subset in pbar_subsets:
                     pbar_subsets.set_postfix_str(f"Language: {hf_subset}")
-                    print(f"Processing metadata for language {hf_subset}")
+                    logger.info(f"Processing metadata for language {hf_subset}")
                     split_details = self._calculate_metrics_from_split(split, hf_subset)
-                    all_details[split]["hf_subset_descriptive_stats"][hf_subset] = (
-                        split_details
-                    )
+                    descriptive_stats[split][hf_subset_stat][hf_subset] = split_details
             else:
                 split_details = self._calculate_metrics_from_split(split)
-                all_details[split] = split_details
+                descriptive_stats[split] = split_details
 
-        return all_details
+        with self.metadata.descriptive_stat_path.open("w") as f:
+            json.dump(descriptive_stats, f, indent=4)
+
+        return descriptive_stats
 
     @abstractmethod
     def _calculate_metrics_from_split(
@@ -291,6 +324,42 @@ class AbsTask(ABC):
 
         self.hf_subsets = subsets_to_keep
         return self
+
+    def _upload_dataset_to_hub(self, repo_name: str, fields: list[str]) -> None:
+        if self.is_multilingual:
+            for config in self.metadata.eval_langs:
+                logger.info(f"Converting {config} of {self.metadata.name}")
+                sentences = {}
+                for split in self.dataset[config]:
+                    sentences[split] = Dataset.from_dict(
+                        {field: self.dataset[config][split][field] for field in fields}
+                    )
+                sentences = DatasetDict(sentences)
+                sentences.push_to_hub(
+                    repo_name, config, commit_message=f"Add {config} dataset"
+                )
+        else:
+            sentences = {}
+            for split in self.dataset:
+                sentences[split] = Dataset.from_dict(
+                    {field: self.dataset[split][field] for field in fields}
+                )
+            sentences = DatasetDict(sentences)
+            sentences.push_to_hub(repo_name, commit_message="Add dataset")
+
+    def _push_dataset_to_hub(self, repo_name: str) -> None:
+        raise NotImplementedError
+
+    def push_dataset_to_hub(self, repo_name: str) -> None:
+        """Push the dataset to the HuggingFace Hub.
+
+        Args:
+            repo_name: The name of the repository to push the dataset to.
+        """
+        if not self.data_loaded:
+            self.load_data()
+
+        self._push_dataset_to_hub(repo_name)
 
     @property
     def eval_splits(self) -> list[str]:

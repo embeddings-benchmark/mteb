@@ -26,11 +26,10 @@ class MLSUMClusteringS2S(AbsTaskClustering, MultilingualTask):
     metadata = TaskMetadata(
         name="MLSUMClusteringS2S",
         description="Clustering of newspaper article contents and titles from MLSUM dataset. Clustering of 10 sets on the newpaper article topics.",
-        reference="https://huggingface.co/datasets/reciTAL/mlsum",
+        reference="https://huggingface.co/datasets/mteb/mlsum",
         dataset={
-            "path": "reciTAL/mlsum",
-            "revision": "b5d54f8f3b61ae17845046286940f03c6bc79bc7",
-            "trust_remote_code": True,
+            "path": "mteb/mlsum",
+            "revision": "b4efe498c4d0b9d7bdd2905f6fff4e22ae251d00",
         },
         type="Clustering",
         category="s2s",
@@ -51,10 +50,6 @@ class MLSUMClusteringS2S(AbsTaskClustering, MultilingualTask):
         journal={arXiv preprint arXiv:2004.14900},
         year={2020}
         }""",
-        descriptive_stats={
-            "n_samples": {"validation": 38561, "test": 41206},
-            "avg_character_length": {"validation": 4613, "test": 4810},
-        },
     )
 
     def load_data(self, **kwargs):
@@ -96,11 +91,10 @@ class MLSUMClusteringS2SFast(AbsTaskClusteringFast, MultilingualTask):
     metadata = TaskMetadata(
         name="MLSUMClusteringS2S.v2",
         description="Clustering of newspaper article contents and titles from MLSUM dataset. Clustering of 10 sets on the newpaper article topics.",
-        reference="https://huggingface.co/datasets/mlsum",
+        reference="https://huggingface.co/datasets/mteb/mlsum",
         dataset={
-            "path": "reciTAL/mlsum",
-            "revision": "b5d54f8f3b61ae17845046286940f03c6bc79bc7",
-            "trust_remote_code": True,
+            "path": "mteb/mlsum",
+            "revision": "b4efe498c4d0b9d7bdd2905f6fff4e22ae251d00",
         },
         type="Clustering",
         category="s2s",
@@ -121,10 +115,6 @@ class MLSUMClusteringS2SFast(AbsTaskClusteringFast, MultilingualTask):
         journal={arXiv preprint arXiv:2004.14900},
         year={2020}
         }""",
-        descriptive_stats={
-            "n_samples": {"validation": 750, "test": 756},
-            "avg_character_length": {"validation": 4613, "test": 4810},
-        },
     )
 
     def load_data(self, **kwargs):
@@ -169,5 +159,4 @@ class MLSUMClusteringS2SFast(AbsTaskClusteringFast, MultilingualTask):
             self.seed,
             self.metadata.eval_splits,
             label="labels",
-            n_samples=N_SAMPLES,
         )

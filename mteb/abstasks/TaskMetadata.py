@@ -1,13 +1,23 @@
 from __future__ import annotations
 
+import json
 import logging
 from collections.abc import Mapping
 from datetime import date
+from pathlib import Path
 from typing import Annotated, Any, Union
 
-from pydantic import AnyUrl, BaseModel, BeforeValidator, TypeAdapter, field_validator
-from typing_extensions import Literal
+from pydantic import (
+    AnyUrl,
+    BaseModel,
+    BeforeValidator,
+    ConfigDict,
+    TypeAdapter,
+    field_validator,
+)
+from typing_extensions import Literal, TypedDict
 
+from ..encoder_interface import PromptType
 from ..languages import (
     ISO_LANGUAGE_SCRIPT,
     ISO_TO_LANGUAGE,
@@ -85,6 +95,7 @@ TASK_TYPE = Literal[
     "STS",
     "Summarization",
     "InstructionRetrieval",
+    "InstructionReranking",
     "Speed",
 ]
 
@@ -157,6 +168,7 @@ LICENSES = (  # this list can be extended as needed
         "cc0-1.0",
         "bsd-3-clause",
         "gpl-3.0",
+        "lgpl-3.0",
         "cdla-sharing-1.0",
         "mpl-2.0",
     ]
@@ -165,14 +177,51 @@ LICENSES = (  # this list can be extended as needed
 METRIC_NAME = str
 METRIC_VALUE = Union[int, float, dict[str, Any]]
 
+
+class PromptDict(TypedDict, total=False):
+    """A dictionary containing the prompt used for the task.
+
+    Args:
+        query: The prompt used for the queries in the task.
+        passage: The prompt used for the passages in the task.
+    """
+
+    query: str
+    passage: str
+
+
+class DescriptiveStatistics(TypedDict):
+    """Class for descriptive statistics."""
+
+    pass
+
+
 logger = logging.getLogger(__name__)
+
+
+class MetadataDatasetDict(TypedDict, total=False):
+    """A dictionary containing the dataset path and revision.
+
+    Args:
+        path: The path to the dataset.
+        revision: The revision of the dataset.
+        name: The name the dataset config.
+        split: The split of the dataset.
+        trust_remote_code: Whether to trust the remote code.
+    """
+
+    path: str
+    revision: str
+    name: str
+    split: str
+    trust_remote_code: bool
 
 
 class TaskMetadata(BaseModel):
     """Metadata for a task.
 
-    Args:
-        dataset: All arguments to pass to datasets.load_dataset to load the dataset for the task. Refer to https://huggingface.co/docs/datasets/v2.18.0/en/package_reference/loading_methods#datasets.load_dataset
+    Attributes:
+        dataset: All arguments to pass to [datasets.load_dataset](https://huggingface.co/docs/datasets/v2.18.0/en/package_reference/loading_methods#datasets.load_dataset) to load the dataset for the task.
         name: The name of the task.
         description: A description of the task.
         type: The type of the task. These includes "Classification", "Summarization", "STS", "Retrieval", "Reranking", "Clustering",
@@ -190,23 +239,22 @@ class TaskMetadata(BaseModel):
             "Government", "Legal", "Medical", "Poetry", "Religious", "Reviews", "Web", "Spoken", "Written". A dataset can belong to multiple domains.
         task_subtypes: The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". Feel free to update the list as needed.
         license: The license of the data specified as lowercase, e.g. "cc-by-nc-4.0". If the license is not specified, use "not specified". For custom licenses a URL is used.
-        socioeconomic_status: The socioeconomic status of the data. Includes "high", "medium", "low", "mixed".
         annotations_creators: The type of the annotators. Includes "expert-annotated" (annotated by experts), "human-annotated" (annotated e.g. by
             mturkers), "derived" (derived from structure in the data).
         dialect: The dialect of the data, if applicable. Ideally specified as a BCP-47 language tag. Empty list if no dialects are present.
         sample_creation: The method of text creation. Includes "found", "created", "machine-translated", "machine-translated and verified", and
             "machine-translated and localized".
+        prompt: The prompt used for the task. Can be a string or a dictionary containing the query and passage prompts.
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
-        n_samples: The number of samples in the dataset. This should only be for the splits evaluated on. For retrieval tasks, this should be the
-            number of query-document pairs.
-        avg_character_length: The average character length of the samples in the dataset. This should only be for the splits evaluated on. For
-            retrieval tasks, this will be a dict containing the character length of the queries and documents separately, as well as the total number of queries, documents, and relevance judgements per query.
     """
 
-    dataset: dict
+    model_config = ConfigDict(extra="forbid")
+
+    dataset: MetadataDatasetDict
 
     name: str
     description: str
+    prompt: str | PromptDict | None = None
     type: TASK_TYPE
     modalities: list[Literal["text"]] = ["text"]
     category: TASK_CATEGORY | None = None
@@ -227,8 +275,6 @@ class TaskMetadata(BaseModel):
     sample_creation: SAMPLE_CREATION_METHOD | None = None
     bibtex_citation: str | None = None
 
-    descriptive_stats: dict[METRIC_NAME, dict[SPLIT_NAME, METRIC_VALUE] | None] = {}
-
     def validate_metadata(self) -> None:
         self.dataset_path_is_specified(self.dataset)
         self.dataset_revision_is_specified(self.dataset)
@@ -247,6 +293,18 @@ class TaskMetadata(BaseModel):
     ) -> dict[str, Any]:
         cls.dataset_revision_is_specified(dataset)
         return dataset
+
+    @field_validator("prompt")
+    def _check_prompt_is_valid(
+        cls, prompt: str | PromptDict | None
+    ) -> str | PromptDict | None:
+        if isinstance(prompt, dict):
+            for key in prompt:
+                if key not in [e.value for e in PromptType]:
+                    raise ValueError(
+                        "The prompt dictionary should only contain the keys 'query' and 'passage'."
+                    )
+        return prompt
 
     @staticmethod
     def dataset_path_is_specified(dataset: dict[str, Any]) -> None:
@@ -328,7 +386,9 @@ class TaskMetadata(BaseModel):
     def is_filled(self) -> bool:
         """Check if all the metadata fields are filled."""
         return all(
-            getattr(self, field_name) is not None for field_name in self.model_fields
+            getattr(self, field_name) is not None
+            for field_name in self.model_fields
+            if field_name != "prompt"
         )
 
     @property
@@ -352,6 +412,39 @@ class TaskMetadata(BaseModel):
                 )
             return f"\\cite{{{cite}}}"
         return cite
+
+    @property
+    def descriptive_stats(self) -> dict[str, DescriptiveStatistics] | None:
+        """Return the descriptive statistics for the dataset."""
+        if self.descriptive_stat_path.exists():
+            with self.descriptive_stat_path.open("r") as f:
+                return json.load(f)
+        return None
+
+    @property
+    def descriptive_stat_path(self) -> Path:
+        """Return the path to the descriptive statistics file."""
+        descriptive_stat_base_dir = Path(__file__).parent.parent / "descriptive_stats"
+        if not descriptive_stat_base_dir.exists():
+            descriptive_stat_base_dir.mkdir()
+        task_type_dir = descriptive_stat_base_dir / self.type
+        if not task_type_dir.exists():
+            task_type_dir.mkdir()
+        return task_type_dir / f"{self.name}.json"
+
+    @property
+    def n_samples(self) -> dict[str, int] | None:
+        """Returns the number of samples in the dataset"""
+        stats = self.descriptive_stats
+        if not stats:
+            return None
+
+        n_samples = {}
+        for subset, subset_value in stats.items():
+            if subset == "hf_subset_descriptive_stats":
+                continue
+            n_samples[subset] = subset_value["num_samples"]
+        return n_samples
 
     def __hash__(self) -> int:
         return hash(self.model_dump_json())

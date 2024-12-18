@@ -6,12 +6,10 @@ from typing import Annotated
 
 from pydantic import AnyUrl, BeforeValidator, TypeAdapter
 
+from mteb import get_tasks
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.load_results.benchmark_results import (
-    BenchmarkResults,
-)
+from mteb.load_results.benchmark_results import BenchmarkResults
 from mteb.load_results.load_results import load_results
-from mteb.overview import get_tasks
 
 http_url_adapter = TypeAdapter(AnyUrl)
 UrlString = Annotated[
@@ -23,7 +21,7 @@ UrlString = Annotated[
 class Benchmark:
     """A benchmark object intended to run a certain benchmark within MTEB.
 
-    Args:
+    Attributes:
         name: The name of the benchmark
         tasks: The tasks within the benchmark.
         description: A description of the benchmark, should include its intended goal and potentially a description of its construction
@@ -59,15 +57,72 @@ class Benchmark:
     def load_results(
         self, base_results: None | BenchmarkResults = None
     ) -> BenchmarkResults:
+        if not hasattr(self, "results_cache"):
+            self.results_cache = {}
+        if base_results in self.results_cache:
+            return self.results_cache[base_results]
         if base_results is None:
             base_results = load_results()
-        return base_results.select_tasks(self.tasks)
+        results = base_results.select_tasks(self.tasks)
+        self.results_cache[base_results] = results
+        return results
 
 
-MTEB_MAIN_MULTILINGUAL = Benchmark(name="MTEB(multilingual)", tasks=get_tasks())
+MTEB_EN = Benchmark(
+    name="MTEB(eng, beta)",
+    tasks=get_tasks(
+        tasks=[
+            "AmazonCounterfactualClassification",
+            "ArguAna",
+            "ArXivHierarchicalClusteringP2P",
+            "ArXivHierarchicalClusteringS2S",
+            "AskUbuntuDupQuestions",
+            "BIOSSES",
+            "Banking77Classification",
+            "BiorxivClusteringP2P.v2",
+            "CQADupstackGamingRetrieval",
+            "CQADupstackUnixRetrieval",
+            "ClimateFEVERHardNegatives",
+            "FEVERHardNegatives",
+            "FiQA2018",
+            "HotpotQAHardNegatives",
+            "ImdbClassification",
+            "MTOPDomainClassification",
+            "MassiveIntentClassification",
+            "MassiveScenarioClassification",
+            "MedrxivClusteringP2P.v2",
+            "MedrxivClusteringS2S.v2",
+            "MindSmallReranking",
+            "SCIDOCS",
+            "SICK-R",
+            "STS12",
+            "STS13",
+            "STS14",
+            "STS15",
+            "STS17",
+            "STS22.v2",
+            "STSBenchmark",
+            "SprintDuplicateQuestions",
+            "StackExchangeClustering.v2",
+            "StackExchangeClusteringP2P.v2",
+            "TRECCOVID",
+            "Touche2020Retrieval.v3",
+            "ToxicConversationsClassification",
+            "TweetSentimentExtractionClassification",
+            "TwentyNewsgroupsClustering.v2",
+            "TwitterSemEval2015",
+            "TwitterURLCorpus",
+            "SummEvalSummarization.v2",
+        ],
+        languages=["eng"],
+        eval_splits=["test"],
+    ),
+    description="English benchmarks from MTEB",
+    citation="",
+)
 
-MTEB_MAIN_EN = Benchmark(
-    name="MTEB(eng)",
+MTEB_ENG_CLASSIC = Benchmark(
+    name="MTEB(eng, classic)",
     tasks=get_tasks(
         tasks=[
             "AmazonCounterfactualClassification",
@@ -131,7 +186,7 @@ MTEB_MAIN_EN = Benchmark(
             "StackOverflowDupQuestions",
             "SummEval",
             "TRECCOVID",
-            "Touche2020Retrieval.v3",
+            "Touche2020",
             "ToxicConversationsClassification",
             "TweetSentimentExtractionClassification",
             "TwentyNewsgroupsClustering",
@@ -141,7 +196,7 @@ MTEB_MAIN_EN = Benchmark(
         languages=["eng"],
         eval_splits=["test"],
     ),
-    description="Main English benchmarks from MTEB",
+    description="The original English benchmarks by Muennighoff et al., (2023).",
     citation="""@inproceedings{muennighoff-etal-2023-mteb,
     title = "{MTEB}: Massive Text Embedding Benchmark",
     author = "Muennighoff, Niklas  and
@@ -250,6 +305,29 @@ MTEB_RETRIEVAL_LAW = Benchmark(
     ),
     description="Legal benchmarks from MTEB.",
     reference="https://aclanthology.org/2023.eacl-main.148/",
+    citation=None,
+)
+
+MTEB_RETRIEVAL_MEDICAL = Benchmark(
+    name="MTEB(Medical)",
+    tasks=get_tasks(
+        tasks=[
+            "CUREv1",
+            "NFCorpus",
+            "TRECCOVID",
+            "TRECCOVID-PL",
+            "SciFact",
+            "SciFact-PL",
+            "MedicalQARetrieval",
+            "PublicHealthQA",
+            "MedrxivClusteringP2P.v2",
+            "MedrxivClusteringS2S.v2",
+            "CmedqaRetrieval",
+            "CMedQAv2-reranking",
+        ],
+    ),
+    description="A curated set of MTEB tasks designed to evaluate systems in the context of medical information retrieval.",
+    reference="",
     citation=None,
 )
 
@@ -560,7 +638,7 @@ MTEB_code = Benchmark(
 
 
 MTEB_multilingual = Benchmark(
-    name="MTEB(Multilingual)",
+    name="MTEB(Multilingual, beta)",
     tasks=get_tasks(
         tasks=[
             "BornholmBitextMining",
@@ -647,6 +725,7 @@ MTEB_multilingual = Benchmark(
             "SpartQA",
             "TempReasonL1",
             "TRECCOVID",
+            "CUREv1",
             "WinoGrande",
             "BelebeleRetrieval",
             "MLQARetrieval",
@@ -738,7 +817,7 @@ MTEB_JPN = Benchmark(
 
 
 MTEB_INDIC = Benchmark(
-    name="MTEB(indic)",
+    name="MTEB(Indic, beta)",
     tasks=get_tasks(
         tasks=[
             # Bitext
@@ -780,7 +859,7 @@ MTEB_INDIC = Benchmark(
 
 
 MTEB_EU = Benchmark(
-    name="MTEB(Europe)",
+    name="MTEB(Europe, beta)",
     tasks=get_tasks(
         tasks=[
             "BornholmBitextMining",
@@ -862,4 +941,41 @@ MTEB_EU = Benchmark(
     description="Main European benchmark from MMTEB",
     reference=None,
     citation=None,
+)
+
+LONG_EMBED = Benchmark(
+    name="LongEmbed",
+    tasks=get_tasks(
+        tasks=[
+            "LEMBNarrativeQARetrieval",
+            "LEMBNeedleRetrieval",
+            "LEMBPasskeyRetrieval",
+            "LEMBQMSumRetrieval",
+            "LEMBSummScreenFDRetrieval",
+            "LEMBWikimQARetrieval",
+        ],
+    ),
+    description="The main benchmark for evaluating long document retrieval.",
+    reference="https://arxiv.org/abs/2404.12096v2",
+    citation="""@article{zhu2024longembed,
+  title={LongEmbed: Extending Embedding Models for Long Context Retrieval},
+  author={Zhu, Dawei and Wang, Liang and Yang, Nan and Song, Yifan and Wu, Wenhao and Wei, Furu and Li, Sujian},
+  journal={arXiv preprint arXiv:2404.12096},
+  year={2024}
+}""",
+)
+
+BRIGHT = Benchmark(
+    name="BRIGHT",
+    tasks=get_tasks(
+        tasks=["BrightRetrieval"],
+    ),
+    description="A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.",
+    reference="https://brightbenchmark.github.io/",
+    citation="""@article{su2024bright,
+  title={Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
+  author={Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
+  journal={arXiv preprint arXiv:2407.12883},
+  year={2024}
+}""",
 )

@@ -1,0 +1,24 @@
+{
+    "test": {
+        "num_samples": 1470,
+        "number_of_characters": 354826,
+        "unique_pairs": 1470,
+        "min_sentence1_length": 28,
+        "avg_sentence1_length": 123.76054421768707,
+        "max_sentence1_length": 268,
+        "unique_sentence1": 1465,
+        "min_sentence2_length": 29,
+        "avg_sentence2_length": 117.61768707482993,
+        "max_sentence2_length": 271,
+        "unique_sentence2": 1469,
+        "unique_labels": 2,
+        "labels": {
+            "1": {
+                "count": 1021
+            },
+            "0": {
+                "count": 449
+            }
+        }
+    }
+}

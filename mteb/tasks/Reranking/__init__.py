@@ -1,15 +1,35 @@
 from __future__ import annotations
 
-from .eng.AskUbuntuDupQuestions import *
-from .eng.MindSmallReranking import *
-from .eng.SciDocsReranking import *
-from .eng.StackOverflowDupQuestions import *
-from .eng.WebLINXCandidatesReranking import *
-from .fra.AlloprofReranking import *
-from .fra.SyntecReranking import *
-from .jpn.MMarcoReranking import *
-from .multilingual.ESCIReranking import *
-from .multilingual.MIRACLReranking import *
-from .multilingual.WikipediaRerankingMultilingual import *
-from .rus.RuBQReranking import *
-from .zho.CMTEBReranking import *
+from .eng import (
+    AskUbuntuDupQuestions,
+    MindSmallReranking,
+    NevIR,
+    SciDocsReranking,
+    StackOverflowDupQuestions,
+    WebLINXCandidatesReranking,
+)
+from .fra import AlloprofReranking, SyntecReranking
+from .jpn import VoyageMMarcoReranking
+from .multilingual import ESCIReranking, MIRACLReranking, WikipediaRerankingMultilingual
+from .rus import RuBQReranking
+from .zho import CMedQAv1, CMedQAv2, MMarcoReranking, T2Reranking
+
+__all__ = [
+    "CMedQAv1",
+    "CMedQAv2",
+    "MMarcoReranking",
+    "T2Reranking",
+    "AskUbuntuDupQuestions",
+    "WebLINXCandidatesReranking",
+    "StackOverflowDupQuestions",
+    "NevIR",
+    "MindSmallReranking",
+    "SciDocsReranking",
+    "VoyageMMarcoReranking",
+    "MIRACLReranking",
+    "ESCIReranking",
+    "WikipediaRerankingMultilingual",
+    "RuBQReranking",
+    "SyntecReranking",
+    "AlloprofReranking",
+]

@@ -37,8 +37,4 @@ class KurdishSentimentClassification(AbsTaskClassification):
             doi = {10.1007/s10579-023-09716-6}
             }
         """,
-        descriptive_stats={
-            "n_samples": {"train": 6000, "test": 1987},
-            "avg_character_length": {"train": 59.38, "test": 56.11},
-        },
     )

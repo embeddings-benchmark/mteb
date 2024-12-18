@@ -63,10 +63,6 @@ class SemRel24STS(AbsTaskSTS, MultilingualTask):
               primaryClass={cs.CL}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"dev": 2089, "test": 7498},
-            "avg_character_length": {"dev": 163.1, "test": 145.9},
-        },
     )
 
     @property

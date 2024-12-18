@@ -47,10 +47,7 @@ class RedditFastClusteringS2S(AbsTaskClusteringFast):
         archivePrefix = {arXiv},
         eprint    = {2104.07081}
         }""",
-        descriptive_stats={
-            "n_samples": {"test": 32768},
-            "avg_character_length": {"test": 64.7},
-        },
+        prompt="Identify the topic or theme of Reddit posts based on the titles",
     )
 
     def dataset_transform(self):
@@ -68,7 +65,6 @@ class RedditFastClusteringS2S(AbsTaskClusteringFast):
             self.seed,
             self.metadata.eval_splits,
             label="labels",
-            n_samples=32768,
         )
         self.max_fraction_of_documents_to_embed = None
 
@@ -90,7 +86,6 @@ class RedditClustering(AbsTaskClustering):
         eval_langs=["eng-Latn"],
         main_score="v_measure",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
@@ -110,8 +105,5 @@ class RedditClustering(AbsTaskClustering):
         archivePrefix = {arXiv},
         eprint    = {2104.07081}
         }""",
-        descriptive_stats={
-            "n_samples": {"test": 420464},
-            "avg_character_length": {"test": 64.7},
-        },
+        prompt="Identify the topic or theme of Reddit posts based on the titles",
     )

@@ -1,0 +1,99 @@
+{
+    "test": {
+        "num_samples": 2048,
+        "number_of_characters": 1822339,
+        "min_text_length": 84,
+        "average_text_length": 889.81396484375,
+        "max_text_length": 3143,
+        "min_labels_per_text": 73,
+        "average_labels_per_text": 1.0,
+        "max_labels_per_text": 74,
+        "unique_labels": 28,
+        "labels": {
+            "3": {
+                "count": 73
+            },
+            "4": {
+                "count": 73
+            },
+            "20": {
+                "count": 73
+            },
+            "9": {
+                "count": 73
+            },
+            "21": {
+                "count": 73
+            },
+            "15": {
+                "count": 73
+            },
+            "16": {
+                "count": 74
+            },
+            "2": {
+                "count": 73
+            },
+            "8": {
+                "count": 73
+            },
+            "23": {
+                "count": 73
+            },
+            "6": {
+                "count": 73
+            },
+            "24": {
+                "count": 73
+            },
+            "10": {
+                "count": 73
+            },
+            "1": {
+                "count": 73
+            },
+            "17": {
+                "count": 74
+            },
+            "14": {
+                "count": 74
+            },
+            "18": {
+                "count": 73
+            },
+            "27": {
+                "count": 73
+            },
+            "19": {
+                "count": 73
+            },
+            "22": {
+                "count": 73
+            },
+            "12": {
+                "count": 73
+            },
+            "25": {
+                "count": 73
+            },
+            "5": {
+                "count": 74
+            },
+            "0": {
+                "count": 73
+            },
+            "26": {
+                "count": 73
+            },
+            "11": {
+                "count": 73
+            },
+            "13": {
+                "count": 73
+            },
+            "7": {
+                "count": 73
+            }
+        }
+    }
+}

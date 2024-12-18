@@ -37,18 +37,4 @@ class StackOverflowQARetrieval(AbsTaskRetrieval):
         primaryClass={cs.IR},
         url={https://arxiv.org/abs/2407.02883},
         }""",
-        descriptive_stats={
-            "n_samples": {
-                _EVAL_SPLIT: 1000,
-            },
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1202.4815613867845,
-                    "average_query_length": 1302.6263791374122,
-                    "num_documents": 19931,
-                    "num_queries": 1994,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )

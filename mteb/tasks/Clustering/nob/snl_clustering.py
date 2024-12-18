@@ -51,10 +51,6 @@ class SNLClustering(AbsTaskClustering):
   year={2023},
   school={Norwegian University of Life Sciences, {\AA}s}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 2048},
-            "avg_character_length": {"test": 1101.30},
-        },
     )
 
     def dataset_transform(self):

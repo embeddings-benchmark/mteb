@@ -39,16 +39,5 @@ class ArguAna(AbsTaskRetrieval):
   country = {Italy},
   url = {http://www.cl.uni-heidelberg.de/~riezler/publications/papers/ECIR2016.pdf}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1029.2327645838136,
-                    "average_query_length": 1192.7204836415362,
-                    "num_documents": 8674,
-                    "num_queries": 1406,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
+        prompt={"query": "Given a claim, find documents that refute the claim"},
     )

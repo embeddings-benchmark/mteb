@@ -1,23 +1,58 @@
 from __future__ import annotations
 
-from .ara.ArEntail import *
-from .ces.CTKFactsNLI import *
-from .deu.FalseFriendsDeEnPC import *
-from .eng.LegalBenchPC import *
-from .eng.SprintDuplicateQuestionsPC import *
-from .eng.TwitterSemEval2015PC import *
-from .eng.TwitterURLCorpusPC import *
-from .fas.FarsTail import *
-from .hye.ArmenianParaphrasePC import *
-from .ind.IndoNLI import *
-from .kor.KlueNLI import *
-from .multilingual.OpusparcusPC import *
-from .multilingual.PawsXPairClassification import *
-from .multilingual.RTE3 import *
-from .multilingual.XNLI import *
-from .multilingual.XStance import *
-from .pol.PolishPC import *
-from .por.Assin2RTE import *
-from .por.SickBrPC import *
-from .rus.TERRa import *
-from .zho.CMTEBPairClassification import *
+from .ara import ArEntail
+from .ces import CTKFactsNLI
+from .deu import FalseFriendsDeEnPC
+from .eng import (
+    LegalBenchPC,
+    SprintDuplicateQuestionsPC,
+    TwitterSemEval2015PC,
+    TwitterURLCorpusPC,
+)
+from .fas import FarsTail
+from .hye import ArmenianParaphrasePC
+from .ind import IndoNLI
+from .kor import KlueNLI
+from .multilingual import (
+    RTE3,
+    XNLI,
+    XNLIV2,
+    IndicXnliPairClassification,
+    OpusparcusPC,
+    PawsXPairClassification,
+    XStance,
+)
+from .pol import CdscePC, PpcPC, PscPC, SickePLPC
+from .por import Assin2RTE, SickBrPC
+from .rus import TERRa
+from .zho import Cmnli, Ocnli
+
+__all__ = [
+    "Cmnli",
+    "Ocnli",
+    "Assin2RTE",
+    "SickBrPC",
+    "CdscePC",
+    "PpcPC",
+    "PscPC",
+    "SickePLPC",
+    "IndoNLI",
+    "FalseFriendsDeEnPC",
+    "ArEntail",
+    "ArmenianParaphrasePC",
+    "CTKFactsNLI",
+    "LegalBenchPC",
+    "TwitterSemEval2015PC",
+    "TwitterURLCorpusPC",
+    "SprintDuplicateQuestionsPC",
+    "FarsTail",
+    "KlueNLI",
+    "IndicXnliPairClassification",
+    "OpusparcusPC",
+    "PawsXPairClassification",
+    "RTE3",
+    "XStance",
+    "XNLI",
+    "XNLIV2",
+    "TERRa",
+]

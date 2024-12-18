@@ -11,10 +11,6 @@ from transformers import AutoModel, AutoTokenizer
 
 from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import (
-    get_prompt_name,
-    validate_task_to_prompt_name,
-)
 
 from .wrapper import Wrapper
 
@@ -54,7 +50,7 @@ class RepLLaMAWrapper(Wrapper):
         self.model.config.max_length = 512
         self.tokenizer.model_max_length = 512
         self.model_prompts = (
-            validate_task_to_prompt_name(model_prompts) if model_prompts else None
+            self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
         )
 
     def create_batch_dict(self, tokenizer, input_texts):
@@ -89,7 +85,7 @@ class RepLLaMAWrapper(Wrapper):
     ) -> np.ndarray:
         batch_size = 16 if "batch_size" not in kwargs else kwargs.pop("batch_size")
         all_embeddings = []
-        prompt = get_prompt_name(self.model_prompts, task_name, prompt_type)
+        prompt = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
         if prompt:
             sentences = [f"{prompt}{sentence}".strip() for sentence in sentences]
         for i in tqdm.tqdm(range(0, len(sentences), batch_size)):
@@ -130,6 +126,15 @@ model_prompts = {
     PromptType.passage.value: "passage:  ",
 }
 
+REPLLAMA_CITATION = """
+@article{rankllama,
+      title={Fine-Tuning LLaMA for Multi-Stage Text Retrieval}, 
+      author={Xueguang Ma and Liang Wang and Nan Yang and Furu Wei and Jimmy Lin},
+      year={2023},
+      journal={arXiv:2310.08319},
+}
+"""
+
 repllama_llama2_original = ModelMeta(
     loader=_loader(
         RepLLaMAWrapper,
@@ -141,9 +146,19 @@ repllama_llama2_original = ModelMeta(
     ),
     name="castorini/repllama-v1-7b-lora-passage",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="01c7f73d771dfac7d292323805ebc428287df4f9-6097554dfe6e7d93e92f55010b678bcca1e233a8",  # base-peft revision
     release_date="2023-10-11",
+    n_parameters=7_000_000,
+    memory_usage=None,
+    max_tokens=4096,
+    embed_dim=4096,
+    license="apache-2.0",
+    reference="https://huggingface.co/samaya-ai/castorini/repllama-v1-7b-lora-passage",
+    similarity_fn_name="cosine",
+    framework=["PyTorch", "Tevatron"],
+    use_instructions=True,
+    citation=REPLLAMA_CITATION,
 )
 
 
@@ -158,7 +173,17 @@ repllama_llama2_reproduced = ModelMeta(
     ),
     name="samaya-ai/RepLLaMA-reproduced",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="01c7f73d771dfac7d292323805ebc428287df4f9-ad5c1d0938a1e02954bcafb4d811ba2f34052e71",  # base-peft revision
     release_date="2024-09-15",
+    n_parameters=7_000_000,
+    memory_usage=None,
+    max_tokens=4096,
+    embed_dim=4096,
+    license="apache-2.0",
+    reference="https://huggingface.co/samaya-ai/RepLLaMA-reproduced",
+    similarity_fn_name="cosine",
+    framework=["PyTorch", "Tevatron"],
+    use_instructions=True,
+    citation=REPLLAMA_CITATION,
 )

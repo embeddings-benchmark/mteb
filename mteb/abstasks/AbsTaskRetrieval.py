@@ -3,211 +3,96 @@ from __future__ import annotations
 import json
 import logging
 import os
-from collections import defaultdict
 from pathlib import Path
 from time import time
 from typing import Any
 
-from datasets import Features, Value, load_dataset
+from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.TaskMetadata import HFSubset
 
 from ..evaluation.evaluators import RetrievalEvaluator
+from ..evaluation.evaluators.utils import make_score_dict
 from ..load_results.task_results import ScoresDict
-from .AbsTask import AbsTask, DescriptiveStatistics
+from .AbsTask import AbsTask
+from .dataloaders import HFDataLoader
+from .TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
-
-
-# Adapted from https://github.com/beir-cellar/beir/blob/f062f038c4bfd19a8ca942a9910b1e0d218759d4/beir/datasets/data_loader_hf.py#L10
-class HFDataLoader:
-    def __init__(
-        self,
-        hf_repo: str | None = None,
-        hf_repo_qrels: str | None = None,
-        data_folder: str | None = None,
-        prefix: str | None = None,
-        corpus_file: str = "corpus.jsonl",
-        query_file: str = "queries.jsonl",
-        qrels_folder: str = "qrels",
-        qrels_file: str = "",
-        streaming: bool = False,
-        keep_in_memory: bool = False,
-    ):
-        self.corpus = {}
-        self.queries = {}
-        self.qrels = {}
-        self.hf_repo = hf_repo
-        if hf_repo:
-            # By default fetch qrels from same repo not a second repo with "-qrels" like in original
-            self.hf_repo_qrels = hf_repo_qrels if hf_repo_qrels else hf_repo
-        else:
-            # data folder would contain these files:
-            # (1) fiqa/corpus.jsonl  (format: jsonlines)
-            # (2) fiqa/queries.jsonl (format: jsonlines)
-            # (3) fiqa/qrels/test.tsv (format: tsv ("\t"))
-            if prefix:
-                query_file = prefix + "-" + query_file
-                qrels_folder = prefix + "-" + qrels_folder
-
-            self.corpus_file = (
-                os.path.join(data_folder, corpus_file) if data_folder else corpus_file
-            )
-            self.query_file = (
-                os.path.join(data_folder, query_file) if data_folder else query_file
-            )
-            self.qrels_folder = (
-                os.path.join(data_folder, qrels_folder) if data_folder else None
-            )
-            self.qrels_file = qrels_file
-        self.streaming = streaming
-        self.keep_in_memory = keep_in_memory
-
-    @staticmethod
-    def check(fIn: str, ext: str):
-        if not os.path.exists(fIn):
-            raise ValueError(f"File {fIn} not present! Please provide accurate file.")
-
-        if not fIn.endswith(ext):
-            raise ValueError(f"File {fIn} must be present with extension {ext}")
-
-    def load(
-        self, split="test"
-    ) -> tuple[dict[str, dict[str, str]], dict[str, str], dict[str, dict[str, int]]]:
-        if not self.hf_repo:
-            self.qrels_file = os.path.join(self.qrels_folder, split + ".tsv")
-            self.check(fIn=self.corpus_file, ext="jsonl")
-            self.check(fIn=self.query_file, ext="jsonl")
-            self.check(fIn=self.qrels_file, ext="tsv")
-
-        if not len(self.corpus):
-            logger.info("Loading Corpus...")
-            self._load_corpus()
-            logger.info("Loaded %d %s Documents.", len(self.corpus), split.upper())
-            logger.info("Doc Example: %s", self.corpus[0])
-
-        if not len(self.queries):
-            logger.info("Loading Queries...")
-            self._load_queries()
-
-        self._load_qrels(split)
-        # filter queries with no qrels
-        qrels_dict = defaultdict(dict)
-
-        def qrels_dict_init(row):
-            qrels_dict[row["query-id"]][row["corpus-id"]] = int(row["score"])
-
-        self.qrels.map(qrels_dict_init)
-        self.qrels = qrels_dict
-        self.queries = self.queries.filter(lambda x: x["id"] in self.qrels)
-        logger.info("Loaded %d %s Queries.", len(self.queries), split.upper())
-        logger.info("Query Example: %s", self.queries[0])
-
-        return self.corpus, self.queries, self.qrels
-
-    def load_corpus(self) -> dict[str, dict[str, str]]:
-        if not self.hf_repo:
-            self.check(fIn=self.corpus_file, ext="jsonl")
-
-        if not len(self.corpus):
-            logger.info("Loading Corpus...")
-            self._load_corpus()
-            logger.info("Loaded %d %s Documents.", len(self.corpus))
-            logger.info("Doc Example: %s", self.corpus[0])
-
-        return self.corpus
-
-    def _load_corpus(self):
-        if self.hf_repo:
-            corpus_ds = load_dataset(
-                self.hf_repo,
-                "corpus",
-                keep_in_memory=self.keep_in_memory,
-                streaming=self.streaming,
-            )
-        else:
-            corpus_ds = load_dataset(
-                "json",
-                data_files=self.corpus_file,
-                streaming=self.streaming,
-                keep_in_memory=self.keep_in_memory,
-            )
-        corpus_ds = next(iter(corpus_ds.values()))  # get first split
-        corpus_ds = corpus_ds.cast_column("_id", Value("string"))
-        corpus_ds = corpus_ds.rename_column("_id", "id")
-        corpus_ds = corpus_ds.remove_columns(
-            [
-                col
-                for col in corpus_ds.column_names
-                if col not in ["id", "text", "title"]
-            ]
-        )
-        self.corpus = corpus_ds
-
-    def _load_queries(self):
-        if self.hf_repo:
-            queries_ds = load_dataset(
-                self.hf_repo,
-                "queries",
-                keep_in_memory=self.keep_in_memory,
-                streaming=self.streaming,
-            )
-        else:
-            queries_ds = load_dataset(
-                "json",
-                data_files=self.query_file,
-                streaming=self.streaming,
-                keep_in_memory=self.keep_in_memory,
-            )
-        queries_ds = next(iter(queries_ds.values()))  # get first split
-        queries_ds = queries_ds.cast_column("_id", Value("string"))
-        queries_ds = queries_ds.rename_column("_id", "id")
-        queries_ds = queries_ds.remove_columns(
-            [col for col in queries_ds.column_names if col not in ["id", "text"]]
-        )
-        self.queries = queries_ds
-
-    def _load_qrels(self, split):
-        if self.hf_repo:
-            qrels_ds = load_dataset(
-                self.hf_repo_qrels,
-                keep_in_memory=self.keep_in_memory,
-                streaming=self.streaming,
-            )[split]
-        else:
-            qrels_ds = load_dataset(
-                "csv",
-                data_files=self.qrels_file,
-                delimiter="\t",
-                keep_in_memory=self.keep_in_memory,
-            )
-        features = Features(
-            {
-                "query-id": Value("string"),
-                "corpus-id": Value("string"),
-                "score": Value("float"),
-            }
-        )
-        qrels_ds = qrels_ds.cast(features)
-        self.qrels = qrels_ds
 
 
 class RetrievalDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for Retrieval
 
     Attributes:
-        num_queries: number of samples in the dataset
-        average_document_length: Average length of documents
-        average_query_length: Average length of queries
+        num_samples: Number of queries and documents
+        num_relevant_docs: Number of relevant documents
+
         num_documents: Number of documents
+        min_document_length: Minimum length of documents
+        average_document_length: Average length of documents
+        max_document_length: Maximum length of documents
+        unique_documents: Number of unique documents
+
+        num_queries: number of queries in the dataset
+        min_query_length: Minimum length of queries
+        average_query_length: Average length of queries
+        max_query_length: Maximum length of queries
+        unique_queries: Number of unique queries
+        none_queries: Number of none queries
+
+        number_of_characters: Total number of symbols in the dataset
+        min_relevant_docs_per_query: Minimum number of relevant documents per query
         average_relevant_docs_per_query: Average number of relevant documents per query
+        max_relevant_docs_per_query: Maximum number of relevant documents per query
+        unique_relevant_docs: Number of unique relevant documents
+
+        num_instructions: Number of instructions
+        min_instruction_length: Minimum length of instructions
+        average_instruction_length: Average length of instructions
+        max_instruction_length: Maximum length of instructions
+        unique_instructions: Number of unique instructions
+
+        num_top_ranked: Number of top ranked documents
+        min_top_ranked_per_query: Minimum number of top ranked documents per query
+        average_top_ranked_per_query: Average number of top ranked documents per query
+        max_top_ranked_per_query: Maximum number of relevant documents per query
     """
 
-    num_queries: int
-    average_document_length: float
-    average_query_length: float
+    num_samples: int
+    number_of_characters: int
+
     num_documents: int
+    min_document_length: int
+    average_document_length: float
+    max_document_length: int
+    unique_documents: int
+
+    num_queries: int
+    min_query_length: int
+    average_query_length: float
+    max_query_length: int
+    unique_queries: int
+    none_queries: int
+
+    num_relevant_docs: int
+    min_relevant_docs_per_query: int
     average_relevant_docs_per_query: float
+    max_relevant_docs_per_query: float
+    unique_relevant_docs: int
+
+    # these are for datasets with instructions
+    num_instructions: int | None
+    min_instruction_length: int | None
+    average_instruction_length: float | None
+    max_instruction_length: float | None
+    unique_instructions: int | None
+
+    # this is for datasets that do reranking
+    num_top_ranked: int | None
+    min_top_ranked_per_query: int | None
+    average_top_ranked_per_query: float | None
+    max_top_ranked_per_query: int | None
 
 
 class AbsTaskRetrieval(AbsTask):
@@ -227,38 +112,124 @@ class AbsTaskRetrieval(AbsTask):
     self.relevant_docs: dict[str, dict[str, dict[str, int]]]
         Semantically, it should contain dict[split_name, dict[sample_id, dict[doc_id, score]]]
         E.g.: {"test": {"q1": {"document_one": 1}}}
+
+    Child classes may optionally implement the following properties (top_ranked for reranking and instructions if needed):
+
+    self.top_ranked: dict[str, dict[str, list[str]]] or dict[str, dict[str, dict[str, float]]]
+        Semantically, it should contain dict[split_name, dict[sample_id, list[doc_id]]] or dict[split_name, dict[sample_id, dict[doc_id, score]]]
+        E.g.: {"test": {"q1": ["document_one", "document_two"]}} or {"test": {"q1": {"document_one": 1, "document_two": 0.5}}}
+
+    self.instructions: dict[str, dict[str, str]] or dict[str, dict[str, list[str]]]
+        Semantically, it should contain dict[split_name, dict[sample_id, str]]. If there are multiple instructions per query, please duplicate the queries and give them unique ids for consolidation.
+        E.g. {"test": {"query-id1": "instruction text"}}
     """
 
     ignore_identical_ids: bool = False
+    abstask_prompt = "Retrieve text based on user query."
 
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+        self.top_ranked = None
+        self.instructions = None
+        # there could be multiple options, so do this even if multilingual
+        super(AbsTaskRetrieval, self).__init__(**kwargs)  # noqa
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
-        dataset_path = self.metadata_dict["dataset"]["path"]
+        self.instructions, self.top_ranked = None, None
+        dataset_path = self.metadata.dataset["path"]
         hf_repo_qrels = (
             dataset_path + "-qrels" if "clarin-knext" in dataset_path else None
         )
-        for split in kwargs.get("eval_splits", self.metadata_dict["eval_splits"]):
-            corpus, queries, qrels = HFDataLoader(
-                hf_repo=dataset_path,
-                hf_repo_qrels=hf_repo_qrels,
-                streaming=False,
-                keep_in_memory=False,
-            ).load(split=split)
-            # Conversion from DataSet
-            queries = {query["id"]: query["text"] for query in queries}
-            corpus = {
-                doc["id"]: doc.get("title", "") + " " + doc["text"] for doc in corpus
-            }
-            self.corpus[split], self.queries[split], self.relevant_docs[split] = (
-                corpus,
-                queries,
-                qrels,
-            )
+        if not self.is_multilingual:
+            for split in kwargs.get("eval_splits", self.metadata.eval_splits):
+                corpus, queries, qrels, instructions, top_ranked = HFDataLoader(
+                    hf_repo=dataset_path,
+                    hf_repo_qrels=hf_repo_qrels,
+                    streaming=False,
+                    keep_in_memory=False,
+                    trust_remote_code=self.metadata.dataset.get(
+                        "trust_remote_code", False
+                    ),
+                ).load(split=split)
+                # Conversion from DataSet
+                queries = {query["id"]: query["text"] for query in queries}
+                corpus = {
+                    doc["id"]: doc.get("title", "") + " " + doc["text"]
+                    for doc in corpus
+                }
+                self.corpus[split], self.queries[split], self.relevant_docs[split] = (
+                    corpus,
+                    queries,
+                    qrels,
+                )
+
+                # optional args
+                if instructions:
+                    self.instructions = {
+                        split: {
+                            inst["query-id"]: inst["instruction"]
+                            for inst in instructions
+                        }
+                    }
+                if top_ranked:
+                    self.top_ranked = {
+                        split: {tr["query-id"]: tr["corpus-ids"] for tr in top_ranked}
+                    }
+        else:
+            if not isinstance(self.metadata.eval_langs, dict):
+                raise ValueError("eval_langs must be a dict for multilingual tasks")
+            for lang in self.metadata.eval_langs:
+                self.corpus[lang], self.queries[lang], self.relevant_docs[lang] = (
+                    {},
+                    {},
+                    {},
+                )
+                for split in kwargs.get("eval_splits", self.metadata.eval_splits):
+                    corpus, queries, qrels, instructions, top_ranked = HFDataLoader(
+                        hf_repo=dataset_path,
+                        hf_repo_qrels=hf_repo_qrels,
+                        streaming=False,
+                        keep_in_memory=False,
+                        trust_remote_code=self.metadata.dataset.get(
+                            "trust_remote_code", False
+                        ),
+                    ).load(split=split, config=lang)
+                    # Conversion from DataSet
+                    queries = {query["id"]: query["text"] for query in queries}
+                    corpus = {
+                        doc["id"]: doc.get("title", "") + " " + doc["text"]
+                        for doc in corpus
+                    }
+                    (
+                        self.corpus[lang][split],
+                        self.queries[lang][split],
+                        self.relevant_docs[lang][split],
+                    ) = (
+                        corpus,
+                        queries,
+                        qrels,
+                    )
+
+                    # optional args
+                    if instructions:
+                        if self.instructions is None:
+                            self.instructions = {}
+                        self.instructions[lang] = {
+                            split: {
+                                inst["query-id"]: inst["instruction"]
+                                for inst in instructions
+                            }
+                        }
+                    if top_ranked:
+                        if self.top_ranked is None:
+                            self.top_ranked = {}
+                        self.top_ranked[lang] = {
+                            split: {
+                                tr["query-id"]: tr["corpus-ids"] for tr in top_ranked
+                            }
+                        }
 
         self.data_loaded = True
 
@@ -283,18 +254,27 @@ class AbsTaskRetrieval(AbsTask):
         for hf_subset in hf_subsets:
             logger.info(f"Subset: {hf_subset}")
 
-            if hf_subset == "default":
+            if hf_subset == "default" and "default" not in self.corpus:
                 corpus, queries, relevant_docs = (
                     self.corpus[split],
                     self.queries[split],
                     self.relevant_docs[split],
                 )
+                if self.top_ranked is not None:
+                    kwargs["top_ranked"] = self.top_ranked[split]
+                if self.instructions is not None:
+                    kwargs["instructions"] = self.instructions[split]
             else:
                 corpus, queries, relevant_docs = (
                     self.corpus[hf_subset][split],
                     self.queries[hf_subset][split],
                     self.relevant_docs[hf_subset][split],
                 )
+                if self.top_ranked is not None:
+                    kwargs["top_ranked"] = self.top_ranked[hf_subset][split]
+                if self.instructions is not None:
+                    kwargs["instructions"] = self.instructions[hf_subset][split]
+
             scores[hf_subset] = self._evaluate_subset(
                 retriever, corpus, queries, relevant_docs, hf_subset, **kwargs
             )
@@ -303,14 +283,20 @@ class AbsTaskRetrieval(AbsTask):
     def _evaluate_subset(
         self, retriever, corpus, queries, relevant_docs, hf_subset: str, **kwargs
     ) -> ScoresDict:
-        start_time = time()
-        results = retriever(corpus, queries)
-        end_time = time()
-        logger.info(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
+        if "results" in kwargs:
+            # reranking has already been done
+            results = kwargs["results"]
+        else:
+            # perform the retrieval here
+            start_time = time()
+            results = retriever(corpus, queries, **kwargs)
+            end_time = time()
+            logger.info(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
 
         save_predictions = kwargs.get("save_predictions", False)
         export_errors = kwargs.get("export_errors", False)
-        if save_predictions or export_errors:
+        save_qrels = kwargs.get("save_qrels", False)
+        if save_predictions or export_errors or save_qrels:
             output_folder = Path(kwargs.get("output_folder", "results"))
             if not os.path.isdir(output_folder):
                 os.makedirs(output_folder)
@@ -334,30 +320,26 @@ class AbsTaskRetrieval(AbsTask):
             with open(qrels_save_path, "w") as f:
                 json.dump(results, f)
 
-        ndcg, _map, recall, precision, naucs = retriever.evaluate(
+        if save_qrels:
+            with open(
+                output_folder / f"{self.metadata.name}_{hf_subset}_qrels.json", "w"
+            ) as f:
+                json.dump(relevant_docs, f)
+
+        ndcg, _map, recall, precision, naucs, task_scores = retriever.evaluate(
             relevant_docs,
             results,
             retriever.k_values,
             ignore_identical_ids=self.ignore_identical_ids,
+            task_name=self.metadata.name,
         )
+
         mrr, naucs_mrr = retriever.evaluate_custom(
             relevant_docs, results, retriever.k_values, "mrr"
         )
-        scores = {
-            **{f"ndcg_at_{k.split('@')[1]}": v for (k, v) in ndcg.items()},
-            **{f"map_at_{k.split('@')[1]}": v for (k, v) in _map.items()},
-            **{f"recall_at_{k.split('@')[1]}": v for (k, v) in recall.items()},
-            **{f"precision_at_{k.split('@')[1]}": v for (k, v) in precision.items()},
-            **{f"mrr_at_{k.split('@')[1]}": v for (k, v) in mrr.items()},
-            **{
-                k.replace("@", "_at_").replace("_P", "_precision").lower(): v
-                for k, v in naucs.items()
-            },
-            **{
-                k.replace("@", "_at_").replace("_P", "_precision").lower(): v
-                for k, v in naucs_mrr.items()
-            },
-        }
+        scores = make_score_dict(
+            ndcg, _map, recall, precision, mrr, naucs, naucs_mrr, task_scores
+        )
         self._add_main_score(scores)
 
         if export_errors:
@@ -399,58 +381,339 @@ class AbsTaskRetrieval(AbsTask):
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> RetrievalDescriptiveStatistics:
-        if hf_subset:
+        top_ranked = None
+        instructions = None
+        if hf_subset and hf_subset in self.queries:
+            # BrightRetrieval has different splits for different subsets of the corpus.
+            if (
+                self.corpus.get(hf_subset, None) is None
+                or self.corpus[hf_subset].get(split, None) is None
+            ):
+                return {}
+
             queries = self.queries[hf_subset][split]
             corpus = self.corpus[hf_subset][split]
             relevant_docs = self.relevant_docs[hf_subset][split]
+            if self.instructions is not None:
+                instructions = self.instructions[hf_subset][split]
+            if self.top_ranked is not None:
+                top_ranked = self.top_ranked[hf_subset][split]
         elif compute_overall:
             queries = {}
             corpus = {}
             relevant_docs = {}
+            instructions = {}
+            top_ranked = {}
             for hf_subset in self.metadata.eval_langs:
+                # BrightRetrieval has different splits for different subsets of the corpus.
+                if (
+                    self.corpus.get(hf_subset, None) is None
+                    or self.corpus[hf_subset].get(split, None) is None
+                ):
+                    continue
                 queries.update(process_docs(self.queries, hf_subset, split))
                 corpus.update(process_docs(self.corpus, hf_subset, split))
                 relevant_docs.update(
                     process_relevant_docs(self.relevant_docs, hf_subset, split)
                 )
+                if self.instructions is not None:
+                    instructions.update(
+                        process_docs(self.instructions, hf_subset, split)
+                    )
+                if self.top_ranked is not None:
+                    top_ranked.update(process_docs(self.top_ranked, hf_subset, split))
         else:
+            if "default" in self.queries and split != "default":
+                return self._calculate_metrics_from_split(
+                    split=split, hf_subset="default"
+                )
             queries = self.queries[split]
             corpus = self.corpus[split]
             relevant_docs = self.relevant_docs[split]
+            if self.instructions is not None:
+                instructions = self.instructions[split]
+            if self.top_ranked is not None:
+                top_ranked = self.top_ranked[split]
 
-        query_len, doc_len = calculate_length(queries, corpus)
-        num_documents = len(corpus)
-        num_queries = len(queries)
+        query_len = calculate_queries_length(queries)
+        doc_len = calculate_corpus_length(corpus)
+        num_documents = len(doc_len) if corpus is not None else 0
+        num_queries = len(query_len)
+        num_relevant_docs = sum(len(relevant_docs[qid]) for qid in relevant_docs)
+        none_queries = sum(q is None or len(q) == 0 for q in queries.values())
 
+        # create a list of number of relevant docs per query
+        qrels_lengths = [
+            len(relevant_docs[qid]) for qid in relevant_docs if qid in queries
+        ]
+        unique_qrels = len({doc for qid in relevant_docs for doc in relevant_docs[qid]})
         # number of qrels that are not 0
         num_qrels_non_zero = sum(
             sum(1 for doc_id in docs if docs[doc_id] != 0)
             for docs in relevant_docs.values()
         )
         qrels_per_doc = num_qrels_non_zero / len(relevant_docs) if num_queries else 0
+
+        if self.instructions is not None:
+            instructions_len = [
+                len(instruction) for instruction in instructions.values()
+            ]
+            num_instructions = len(instructions)
+            average_instruction_length = sum(instructions_len)
+            min_instruction_length = min(instructions_len)
+            max_instruction_length = max(instructions_len)
+            unique_instructions = len(set(instructions))
+        else:
+            num_instructions = None
+            average_instruction_length = None
+            min_instruction_length = None
+            max_instruction_length = None
+            unique_instructions = None
+
+        if self.top_ranked is not None and num_queries:
+            top_ranked_per_query = [len(docs) for docs in top_ranked.values()]
+            num_top_ranked = len(top_ranked_per_query)
+            min_top_ranked_per_query = min(top_ranked_per_query)
+            average_top_ranked_per_query = sum(top_ranked_per_query) / num_queries
+            max_top_ranked_per_query = max(top_ranked_per_query)
+        else:
+            num_top_ranked = None
+            min_top_ranked_per_query = None
+            average_top_ranked_per_query = None
+            max_top_ranked_per_query = None
+
         return RetrievalDescriptiveStatistics(
-            average_document_length=doc_len,
-            average_query_length=query_len,
+            num_samples=num_documents + num_queries,
+            number_of_characters=sum(query_len) + sum(doc_len),
+            # documents
             num_documents=num_documents,
+            min_document_length=min(doc_len),
+            average_document_length=sum(doc_len) / num_documents,
+            max_document_length=max(doc_len),
+            unique_documents=len(set(corpus)),
+            # queries
             num_queries=num_queries,
+            min_query_length=min(query_len),
+            average_query_length=sum(query_len) / num_queries,
+            max_query_length=max(query_len),
+            unique_queries=len(set(queries)),
+            none_queries=none_queries,
+            # relevant docs
+            num_relevant_docs=num_relevant_docs,
+            min_relevant_docs_per_query=min(qrels_lengths),
             average_relevant_docs_per_query=qrels_per_doc,
+            max_relevant_docs_per_query=max(qrels_lengths),
+            unique_relevant_docs=unique_qrels,
+            # instructions
+            num_instructions=num_instructions,
+            min_instruction_length=min_instruction_length,
+            average_instruction_length=average_instruction_length,
+            max_instruction_length=max_instruction_length,
+            unique_instructions=unique_instructions,
+            # top ranked
+            num_top_ranked=num_top_ranked,
+            min_top_ranked_per_query=min_top_ranked_per_query,
+            average_top_ranked_per_query=average_top_ranked_per_query,
+            max_top_ranked_per_query=max_top_ranked_per_query,
         )
 
+    def _push_dataset_to_hub(self, repo_name: str) -> None:
+        def format_text_field(text):
+            """Formats the text field to match loader expectations."""
+            if isinstance(text, str):
+                return text
+            return f"{text.get('title', '')} {text.get('text', '')}".strip()
 
-def calculate_length(
-    queries: dict[str, str], corpus: dict[str, str]
-) -> tuple[float, float]:
+        if self.is_multilingual:
+            for config in self.queries:
+                logger.info(f"Converting {config} of {self.metadata.name}")
+
+                queries_dataset = {}
+                for split in self.queries[config]:
+                    queries_dataset[split] = Dataset.from_list(
+                        [
+                            {
+                                "_id": idx,
+                                "text": text,
+                            }
+                            for idx, text in self.queries[config][split].items()
+                        ]
+                    )
+                queries_dataset = DatasetDict(queries_dataset)
+                queries_dataset.push_to_hub(repo_name, f"{config}-queries")
+
+                corpus_dataset = {}
+                for split in self.corpus[config]:
+                    corpus_dataset[split] = Dataset.from_list(
+                        [
+                            {
+                                "_id": idx,
+                                "text": format_text_field(text),
+                                "title": text.get("title", "")
+                                if isinstance(text, dict)
+                                else "",
+                            }
+                            for idx, text in self.corpus[config][split].items()
+                        ]
+                    )
+
+                corpus_dataset = DatasetDict(corpus_dataset)
+                corpus_dataset.push_to_hub(repo_name, f"{config}-corpus")
+
+                relevant_docs_dataset = {}
+                for split in self.relevant_docs[config]:
+                    relevant_docs_dataset[split] = Dataset.from_list(
+                        [
+                            {"query-id": query_id, "corpus-id": doc_id, "score": score}
+                            for query_id, docs in self.relevant_docs[config][
+                                split
+                            ].items()
+                            for doc_id, score in docs.items()
+                        ]
+                    )
+                relevant_docs_dataset = DatasetDict(relevant_docs_dataset)
+                relevant_docs_dataset.push_to_hub(repo_name, f"{config}-qrels")
+
+                if self.instructions:
+                    instructions_dataset = {}
+                    for split in self.instructions[config]:
+                        instructions_dataset[split] = Dataset.from_list(
+                            [
+                                {
+                                    "query-id": idx,
+                                    "instruction": text,
+                                }
+                                for idx, text in self.instructions[config][
+                                    split
+                                ].items()
+                            ]
+                        )
+                    instructions_dataset = DatasetDict(instructions_dataset)
+                    instructions_dataset.push_to_hub(repo_name, f"{config}-instruction")
+                if self.top_ranked:
+                    top_ranked_dataset = {}
+                    for split in self.top_ranked[config]:
+                        top_ranked_dataset[split] = Dataset.from_list(
+                            [
+                                {
+                                    "query-id": query_id,
+                                    "corpus-ids": docs,
+                                }
+                                for query_id, docs in self.top_ranked[config][
+                                    split
+                                ].items()
+                            ]
+                        )
+                    top_ranked_dataset = DatasetDict(top_ranked_dataset)
+                    top_ranked_dataset.push_to_hub(repo_name, f"{config}-top_ranked")
+        else:
+            if "default" in self.queries:
+                # old rerankers have additional default split
+                self.queries = self.queries["default"]
+                self.corpus = self.corpus["default"]
+                self.relevant_docs = self.relevant_docs["default"]
+                if self.instructions:
+                    self.instructions = self.instructions["default"]
+                if self.top_ranked:
+                    self.top_ranked = self.top_ranked["default"]
+
+            queries_dataset = {}
+            for split in self.queries:
+                queries_dataset[split] = Dataset.from_list(
+                    [
+                        {
+                            "_id": idx,
+                            "text": text,
+                        }
+                        for idx, text in self.queries[split].items()
+                    ]
+                )
+            queries_dataset = DatasetDict(queries_dataset)
+            queries_dataset.push_to_hub(repo_name, "queries")
+            corpus_dataset = {}
+            for split in self.corpus:
+                corpus_dataset[split] = Dataset.from_list(
+                    [
+                        {
+                            "_id": idx,
+                            "text": format_text_field(text),
+                            "title": text.get("title", "")
+                            if isinstance(text, dict)
+                            else "",
+                        }
+                        for idx, text in self.corpus[split].items()
+                    ]
+                )
+
+            corpus_dataset = DatasetDict(corpus_dataset)
+            corpus_dataset.push_to_hub(repo_name, "corpus")
+            relevant_docs_dataset = {}
+            for split in self.relevant_docs:
+                relevant_docs_dataset[split] = Dataset.from_list(
+                    [
+                        {"query-id": query_id, "corpus-id": doc_id, "score": score}
+                        for query_id, docs in self.relevant_docs[split].items()
+                        for doc_id, score in docs.items()
+                    ]
+                )
+            relevant_docs_dataset = DatasetDict(relevant_docs_dataset)
+            relevant_docs_dataset.push_to_hub(repo_name, "default")
+            if self.instructions:
+                instructions_dataset = {}
+                for split in self.instructions:
+                    instructions_dataset[split] = Dataset.from_list(
+                        [
+                            {
+                                "query-id": idx,
+                                "instruction": text,
+                            }
+                            for idx, text in self.instructions[split].items()
+                        ]
+                    )
+                instructions_dataset = DatasetDict(instructions_dataset)
+                instructions_dataset.push_to_hub(repo_name, "instruction")
+            if self.top_ranked:
+                top_ranked_dataset = {}
+                for split in self.top_ranked:
+                    top_ranked_dataset[split] = Dataset.from_list(
+                        [
+                            {
+                                "query-id": query_id,
+                                "corpus-ids": docs,
+                            }
+                            for query_id, docs in self.top_ranked[split].items()
+                        ]
+                    )
+                top_ranked_dataset = DatasetDict(top_ranked_dataset)
+                top_ranked_dataset.push_to_hub(repo_name, "top_ranked")
+
+
+def calculate_queries_length(queries: dict[str, str]) -> list[int] | None:
     queries_lens = []
-    doc_lens = []
     for query in queries.values():
-        queries_lens.append(len(query))
+        if query is None or len(query) == 0:
+            continue
 
+        if isinstance(query[0], str):
+            queries_lens.append(len(query))
+        else:
+            queries_lens.extend([len(turn) for turn in query])
+    return queries_lens
+
+
+def calculate_corpus_length(
+    corpus: dict[str, str | dict[str, str]],
+) -> list[int] | None:
+    doc_lens = []
+    if corpus is None:
+        return None
     for doc in corpus.values():
-        doc_lens.append(len(doc))
+        if isinstance(doc, dict):
+            doc_lens.append(len(doc["text"]) + len(doc.get("title", "")))
+        else:
+            doc_lens.append(len(doc))
 
-    doc_len = sum(doc_lens) / len(doc_lens) if doc_lens else 0
-    query_len = sum(queries_lens) / len(queries_lens) if queries_lens else 0
-    return query_len, doc_len
+    return doc_lens
 
 
 def process_docs(

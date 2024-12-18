@@ -36,16 +36,4 @@ class NFCorpusPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1652.1926782273604,
-                    "average_query_length": 24.390092879256965,
-                    "num_documents": 3633,
-                    "num_queries": 323,
-                    "average_relevant_docs_per_query": 38.18575851393189,
-                }
-            },
-        },
     )

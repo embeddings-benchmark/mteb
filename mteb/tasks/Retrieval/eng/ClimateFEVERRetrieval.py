@@ -35,17 +35,8 @@ class ClimateFEVER(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 538.241873443325,
-                    "average_query_length": 123.39934853420195,
-                    "num_documents": 5416593,
-                    "num_queries": 1535,
-                    "average_relevant_docs_per_query": 3.0495114006514656,
-                }
-            },
+        prompt={
+            "query": "Given a claim about climate change, retrieve documents that support or refute the claim"
         },
     )
 
@@ -80,16 +71,4 @@ class ClimateFEVERHardNegatives(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 1000},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1245.4236333727013,
-                    "average_query_length": 121.879,
-                    "num_documents": 47416,
-                    "num_queries": 1000,
-                    "average_relevant_docs_per_query": 3.048,
-                }
-            },
-        },
     )

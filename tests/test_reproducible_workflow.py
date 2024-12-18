@@ -6,9 +6,10 @@ import pytest
 
 import mteb
 from mteb import MTEB
+from mteb.abstasks import AbsTask
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import validate_task_to_prompt_name
+from mteb.models.wrapper import Wrapper
 from tests.test_benchmark.task_grid import TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
@@ -23,7 +24,7 @@ def test_reproducibility_workflow(task_name: str, model_name: str, model_revisio
     task = mteb.get_task(task_name)
 
     assert isinstance(model_meta, ModelMeta)
-    assert isinstance(task, mteb.AbsTask)
+    assert isinstance(task, AbsTask)
 
     model = mteb.get_model(model_name, revision=model_revision)
     assert isinstance(model, Encoder)
@@ -46,11 +47,12 @@ def test_reproducibility_workflow(task_name: str, model_name: str, model_revisio
         "STS",
         "Summarization",
         "InstructionRetrieval",
+        "InstructionReranking",
         "Speed",
     ],
 )
-def test_validate_task_to_prompt_name(task_name: str | mteb.AbsTask):
-    if isinstance(task_name, mteb.AbsTask):
+def test_validate_task_to_prompt_name(task_name: str | AbsTask):
+    if isinstance(task_name, AbsTask):
         task_names = [task_name.metadata.name]
     else:
         task_names = [task_name]
@@ -62,14 +64,14 @@ def test_validate_task_to_prompt_name(task_name: str | mteb.AbsTask):
         "query": "prompt_name",
         "passage": "prompt_name",
     }
-    validate_task_to_prompt_name(model_prompts)
+    Wrapper.validate_task_to_prompt_name(model_prompts)
 
 
 def test_validate_task_to_prompt_name_fail():
     with pytest.raises(KeyError):
-        validate_task_to_prompt_name(
+        Wrapper.validate_task_to_prompt_name(
             {"task_name": "prompt_name", "task_name-query": "prompt_name"}
         )
 
     with pytest.raises(ValueError):
-        validate_task_to_prompt_name({"task_name-task_name": "prompt_name"})
+        Wrapper.validate_task_to_prompt_name({"task_name-task_name": "prompt_name"})

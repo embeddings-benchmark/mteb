@@ -40,18 +40,16 @@ class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
             "revision": "a75a0eb",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
-        description=("Bright retrieval dataset."),
+        description="Bright retrieval dataset.",
         type="Retrieval",
         category="s2p",
         eval_splits=EVAL_SPLITS,
         eval_langs=DOMAINS_langs,
         main_score="ndcg_at_10",
         date=("2024-03-01", "2024-06-01"),
-        form=["written"],
-        domains=["Non-fiction"],
+        domains=["Written", "Non-fiction"],
         task_subtypes=["Article retrieval"],
         license="cc-by-4.0",
-        socioeconomic_status="low",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
@@ -67,13 +65,6 @@ class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
     url={https://arxiv.org/abs/2407.12883}, 
 }
         """,
-        descriptive_stats={
-            "n_samples": {"standard": 1334914, "long": 7048},
-            "avg_character_length": {
-                "standard": 800.3994729248476,
-                "long": 46527.35839954597,
-            },
-        },
     )
 
     def load_bright_data(

@@ -1,143 +1,543 @@
 from __future__ import annotations
 
-from .ara.AJGT import *
-from .ara.HotelReviewSentimentClassification import *
-from .ara.OnlineStoreReviewSentimentClassification import *
-from .ara.RestaurantReviewSentimentClassification import *
-from .ara.TweetEmotionClassification import *
-from .ara.TweetSarcasmClassification import *
-from .ben.BengaliDocumentClassification import *
-from .ben.BengaliHateSpeechClassification import *
-from .ben.BengaliSentimentAnalysis import *
-from .bul.BulgarianStoreReviewSentimentClassfication import *
-from .ces.CSFDCZMovieReviewSentimentClassification import *
-from .ces.CzechProductReviewSentimentClassification import *
-from .ces.CzechSoMeSentimentClassification import *
-from .ces.CzechSubjectivityClassification import *
-from .dan.AngryTweetsClassification import *
-from .dan.DanishPoliticalCommentsClassification import *
-from .dan.DKHateClassification import *
-from .dan.LccSentimentClassification import *
-from .deu.GermanPoliticiansTwitterSentimentClassification import *
-from .deu.TenKGnadClassification import *
-from .ell.GreekLegalCodeClassification import *
-from .eng.AmazonPolarityClassification import *
-from .eng.ArxivClassification import *
-from .eng.Banking77Classification import *
-from .eng.DBpediaClassification import *
-from .eng.EmotionClassification import *
-from .eng.FinancialPhrasebankClassification import *
-from .eng.FrenkEnClassification import *
-from .eng.ImdbClassification import *
-from .eng.LegalBenchClassification import *
-from .eng.NewsClassification import *
-from .eng.PatentClassification import *
-from .eng.PoemSentimentClassification import *
-from .eng.ToxicChatClassification import *
-from .eng.ToxicConversationsClassification import *
-from .eng.TweetSentimentExtractionClassification import *
-from .eng.TweetTopicSingleClassification import *
-from .eng.YahooAnswersTopicsClassification import *
-from .eng.YelpReviewFullClassification import *
-from .est.estonian_valence import *
-from .fas.PersianFoodSentimentClassification import *
-from .fil.FilipinoHateSpeechClassification import *
-from .fil.FilipinoShopeeReviewsClassification import *
-from .fin.FinToxicityClassification import *
-from .fra.FrenchBookReviews import *
-from .fra.MovieReviewSentimentClassification import *
-from .guj.GujaratiNewsClassification import *
-from .heb.HebrewSentimentAnalysis import *
-from .hin.HindiDiscourseClassification import *
-from .hin.SentimentAnalysisHindi import *
-from .hrv.FrenkHrClassification import *
-from .ind.IndonesianIdClickbaitClassification import *
-from .ind.IndonesianMongabayConservationClassification import *
-from .ita.ItaCaseholdClassification import *
-from .ita.ItalianLinguistAcceptabilityClassification import *
-from .jav.JavaneseIMDBClassification import *
-from .jpn.WRIMEClassification import *
-from .kan.KannadaNewsClassification import *
-from .kor.KlueTC import *
-from .kor.KorFin import *
-from .kor.KorHateClassification import *
-from .kor.KorSarcasmClassification import *
-from .kur.KurdishSentimentClassification import *
-from .mal.MalayalamNewsClassification import *
-from .mar.MarathiNewsClassification import *
-from .mkd.MacedonianTweetSentimentClassification import *
-from .multilingual.AfriSentiClassification import *
-from .multilingual.AfriSentiLangClassification import *
-from .multilingual.AmazonCounterfactualClassification import *
-from .multilingual.AmazonReviewsClassification import *
-from .multilingual.CataloniaTweetClassification import *
-from .multilingual.CyrillicTurkicLangClassification import *
-from .multilingual.HinDialectClassification import *
-from .multilingual.IndicLangClassification import *
-from .multilingual.IndicNLPNewsClassification import *
-from .multilingual.IndicSentimentClassification import *
-from .multilingual.LanguageClassification import *
-from .multilingual.MasakhaNEWSClassification import *
-from .multilingual.MassiveIntentClassification import *
-from .multilingual.MassiveScenarioClassification import *
-from .multilingual.MTOPDomainClassification import *
-from .multilingual.MTOPIntentClassification import *
-from .multilingual.MultiHateClassification import *
-from .multilingual.MultilingualSentimentClassification import *
-from .multilingual.NaijaSenti import *
-from .multilingual.NordicLangClassification import *
-from .multilingual.NusaParagraphEmotionClassification import *
-from .multilingual.NusaParagraphTopicClassification import *
-from .multilingual.NusaXSenti import *
-from .multilingual.ScalaClassification import *
-from .multilingual.SIB200Classification import *
-from .multilingual.SouthAfricanLangClassification import *
-from .multilingual.SwissJudgementClassification import *
-from .multilingual.TurkicClassification import *
-from .multilingual.TweetSentimentClassification import *
-from .mya.MyanmarNews import *
-from .nep.NepaliNewsClassification import *
-from .nld.DutchBookReviewSentimentClassification import *
-from .nob.NoRecClassification import *
-from .nob.NorwegianParliamentClassification import *
-from .ory.OdiaNewsClassification import *
-from .pan.PunjabiNewsClassification import *
-from .pol.PolishClassification import *
-from .por.HateSpeechPortugueseClassification import *
-from .ron.Moroco import *
-from .ron.RomanianReviewsSentiment import *
-from .ron.RomanianSentimentClassification import *
-from .rus.GeoreviewClassification import *
-from .rus.HeadlineClassification import *
-from .rus.InappropriatenessClassification import *
-from .rus.KinopoiskClassification import *
-from .rus.RuReviewsClassification import *
-from .rus.RuSciBenchGRNTIClassification import *
-from .rus.RuSciBenchOECDClassification import *
-from .san.SanskritShlokasClassification import *
-from .sin.SinhalaNewsClassification import *
-from .sin.SinhalaNewsSourceClassification import *
-from .slk.CSFDSKMovieReviewSentimentClassification import *
-from .slv.FrenkSlClassification import *
-from .spa.SpanishNewsClassification import *
-from .spa.SpanishSentimentClassification import *
-from .ssw.SiswatiNewsClassification import *
-from .svk.SlovakMovieReviewSentimentClassification import *
-from .swa.SwahiliNewsClassification import *
-from .swe.DalajClassification import *
-from .swe.SwedishSentimentClassification import *
-from .swe.SweRecClassification import *
-from .tam.TamilNewsClassification import *
-from .tel.TeluguAndhraJyotiNewsClassification import *
-from .tha.WisesightSentimentClassification import *
-from .tsn.TswanaNewsClassification import *
-from .tur.TurkishMovieSentimentClassification import *
-from .tur.TurkishProductSentimentClassification import *
-from .ukr.UkrFormalityClassification import *
-from .urd.UrduRomanSentimentClassification import *
-from .vie.VieStudentFeedbackClassification import *
-from .zho.CMTEBClassification import *
-from .zho.YueOpenriceReviewClassification import (
-    YueOpenriceReviewClassification,  # noqa: F401
+from .ara import (
+    AJGT,
+    HotelReviewSentimentClassification,
+    OnlineStoreReviewSentimentClassification,
+    RestaurantReviewSentimentClassification,
+    TweetEmotionClassification,
+    TweetSarcasmClassification,
 )
-from .zul.IsiZuluNewsClassification import *
+from .ben import (
+    BengaliDocumentClassification,
+    BengaliHateSpeechClassification,
+    BengaliSentimentAnalysis,
+)
+from .bul import BulgarianStoreReviewSentimentClassfication
+from .ces import (
+    CSFDCZMovieReviewSentimentClassification,
+    CzechProductReviewSentimentClassification,
+    CzechSoMeSentimentClassification,
+    CzechSubjectivityClassification,
+)
+from .dan import (
+    AngryTweetsClassification,
+    DanishPoliticalCommentsClassification,
+    DdiscoCohesionClassification,
+    DKHateClassification,
+    LccSentimentClassification,
+)
+from .deu import GermanPoliticiansTwitterSentimentClassification, TenKGnadClassification
+from .ell import GreekLegalCodeClassification
+from .eng import (
+    AmazonPolarityClassification,
+    ArxivClassification,
+    Banking77Classification,
+    CanadaTaxCourtOutcomesLegalBenchClassification,
+    ContractNLIConfidentialityOfAgreementLegalBenchClassification,
+    ContractNLIExplicitIdentificationLegalBenchClassification,
+    ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification,
+    ContractNLILimitedUseLegalBenchClassification,
+    ContractNLINoLicensingLegalBenchClassification,
+    ContractNLINoticeOnCompelledDisclosureLegalBenchClassification,
+    ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassification,
+    ContractNLIPermissibleCopyLegalBenchClassification,
+    ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassification,
+    ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification,
+    ContractNLIReturnOfConfidentialInformationLegalBenchClassification,
+    ContractNLISharingWithEmployeesLegalBenchClassification,
+    ContractNLISharingWithThirdPartiesLegalBenchClassification,
+    ContractNLISurvivalOfObligationsLegalBenchClassification,
+    CorporateLobbyingLegalBenchClassification,
+    CUADAffiliateLicenseLicenseeLegalBenchClassification,
+    CUADAffiliateLicenseLicensorLegalBenchClassification,
+    CUADAntiAssignmentLegalBenchClassification,
+    CUADAuditRightsLegalBenchClassification,
+    CUADCapOnLiabilityLegalBenchClassification,
+    CUADChangeOfControlLegalBenchClassification,
+    CUADCompetitiveRestrictionExceptionLegalBenchClassification,
+    CUADCovenantNotToSueLegalBenchClassification,
+    CUADEffectiveDateLegalBenchClassification,
+    CUADExclusivityLegalBenchClassification,
+    CUADExpirationDateLegalBenchClassification,
+    CUADGoverningLawLegalBenchClassification,
+    CUADInsuranceLegalBenchClassification,
+    CUADIPOwnershipAssignmentLegalBenchClassification,
+    CUADIrrevocableOrPerpetualLicenseLegalBenchClassification,
+    CUADJointIPOwnershipLegalBenchClassification,
+    CUADLicenseGrantLegalBenchClassification,
+    CUADLiquidatedDamagesLegalBenchClassification,
+    CUADMinimumCommitmentLegalBenchClassification,
+    CUADMostFavoredNationLegalBenchClassification,
+    CUADNonCompeteLegalBenchClassification,
+    CUADNonDisparagementLegalBenchClassification,
+    CUADNonTransferableLicenseLegalBenchClassification,
+    CUADNoSolicitOfCustomersLegalBenchClassification,
+    CUADNoSolicitOfEmployeesLegalBenchClassification,
+    CUADNoticePeriodToTerminateRenewalLegalBenchClassification,
+    CUADPostTerminationServicesLegalBenchClassification,
+    CUADPriceRestrictionsLegalBenchClassification,
+    CUADRenewalTermLegalBenchClassification,
+    CUADRevenueProfitSharingLegalBenchClassification,
+    CUADRofrRofoRofnLegalBenchClassification,
+    CUADSourceCodeEscrowLegalBenchClassification,
+    CUADTerminationForConvenienceLegalBenchClassification,
+    CUADThirdPartyBeneficiaryLegalBenchClassification,
+    CUADUncappedLiabilityLegalBenchClassification,
+    CUADUnlimitedAllYouCanEatLicenseLegalBenchClassification,
+    CUADVolumeRestrictionLegalBenchClassification,
+    CUADWarrantyDurationLegalBenchClassification,
+    DBpediaClassification,
+    DefinitionClassificationLegalBenchClassification,
+    Diversity1LegalBenchClassification,
+    Diversity2LegalBenchClassification,
+    Diversity3LegalBenchClassification,
+    Diversity4LegalBenchClassification,
+    Diversity5LegalBenchClassification,
+    Diversity6LegalBenchClassification,
+    EmotionClassification,
+    FinancialPhrasebankClassification,
+    FrenkEnClassification,
+    FunctionOfDecisionSectionLegalBenchClassification,
+    ImdbClassification,
+    InsurancePolicyInterpretationLegalBenchClassification,
+    InternationalCitizenshipQuestionsLegalBenchClassification,
+    JCrewBlockerLegalBenchClassification,
+    LearnedHandsBenefitsLegalBenchClassification,
+    LearnedHandsBusinessLegalBenchClassification,
+    LearnedHandsConsumerLegalBenchClassification,
+    LearnedHandsCourtsLegalBenchClassification,
+    LearnedHandsCrimeLegalBenchClassification,
+    LearnedHandsDivorceLegalBenchClassification,
+    LearnedHandsDomesticViolenceLegalBenchClassification,
+    LearnedHandsEducationLegalBenchClassification,
+    LearnedHandsEmploymentLegalBenchClassification,
+    LearnedHandsEstatesLegalBenchClassification,
+    LearnedHandsFamilyLegalBenchClassification,
+    LearnedHandsHealthLegalBenchClassification,
+    LearnedHandsHousingLegalBenchClassification,
+    LearnedHandsImmigrationLegalBenchClassification,
+    LearnedHandsTortsLegalBenchClassification,
+    LearnedHandsTrafficLegalBenchClassification,
+    LegalReasoningCausalityLegalBenchClassification,
+    MAUDLegalBenchClassification,
+    NewsClassification,
+    NYSJudicialEthicsLegalBenchClassification,
+    OPP115DataRetentionLegalBenchClassification,
+    OPP115DataSecurityLegalBenchClassification,
+    OPP115DoNotTrackLegalBenchClassification,
+    OPP115FirstPartyCollectionUseLegalBenchClassification,
+    OPP115InternationalAndSpecificAudiencesLegalBenchClassification,
+    OPP115PolicyChangeLegalBenchClassification,
+    OPP115ThirdPartySharingCollectionLegalBenchClassification,
+    OPP115UserAccessEditAndDeletionLegalBenchClassification,
+    OPP115UserChoiceControlLegalBenchClassification,
+    OralArgumentQuestionPurposeLegalBenchClassification,
+    OverrulingLegalBenchClassification,
+    PatentClassification,
+    PersonalJurisdictionLegalBenchClassification,
+    PoemSentimentClassification,
+    PROALegalBenchClassification,
+    SCDBPAccountabilityLegalBenchClassification,
+    SCDBPAuditsLegalBenchClassification,
+    SCDBPCertificationLegalBenchClassification,
+    SCDBPTrainingLegalBenchClassification,
+    SCDBPVerificationLegalBenchClassification,
+    SCDDAccountabilityLegalBenchClassification,
+    SCDDAuditsLegalBenchClassification,
+    SCDDCertificationLegalBenchClassification,
+    SCDDTrainingLegalBenchClassification,
+    SCDDVerificationLegalBenchClassification,
+    TelemarketingSalesRuleLegalBenchClassification,
+    TextualismToolDictionariesLegalBenchClassification,
+    TextualismToolPlainLegalBenchClassification,
+    ToxicChatClassification,
+    ToxicConversationsClassification,
+    TweetSentimentExtractionClassification,
+    TweetTopicSingleClassification,
+    UCCVCommonLawLegalBenchClassification,
+    UnfairTOSLegalBenchClassification,
+    YahooAnswersTopicsClassification,
+    YelpReviewFullClassification,
+)
+from .est import EstonianValenceClassification
+from .fas import PersianFoodSentimentClassification
+from .fil import FilipinoHateSpeechClassification, FilipinoShopeeReviewsClassification
+from .fin import FinToxicityClassification
+from .fra import FrenchBookReviews, MovieReviewSentimentClassification
+from .guj import GujaratiNewsClassification
+from .heb import HebrewSentimentAnalysis
+from .hin import HindiDiscourseClassification, SentimentAnalysisHindi
+from .hrv import FrenkHrClassification
+from .ind import (
+    IndonesianIdClickbaitClassification,
+    IndonesianMongabayConservationClassification,
+)
+from .ita import ItaCaseholdClassification, ItalianLinguisticAcceptabilityClassification
+from .jav import JavaneseIMDBClassification
+from .jpn import WRIMEClassification
+from .kan import KannadaNewsClassification
+from .kat import GeorgianSentimentClassification
+from .kor import KlueTC, KorFin, KorHateClassification, KorSarcasmClassification
+from .kur import KurdishSentimentClassification
+from .mal import MalayalamNewsClassification
+from .mar import MarathiNewsClassification
+from .mkd import MacedonianTweetSentimentClassification
+from .multilingual import (
+    AfriSentiClassification,
+    AfriSentiLangClassification,
+    AmazonCounterfactualClassification,
+    AmazonReviewsClassification,
+    CataloniaTweetClassification,
+    CyrillicTurkicLangClassification,
+    HinDialectClassification,
+    IndicLangClassification,
+    IndicNLPNewsClassification,
+    IndicSentimentClassification,
+    LanguageClassification,
+    MasakhaNEWSClassification,
+    MassiveIntentClassification,
+    MassiveScenarioClassification,
+    MTOPDomainClassification,
+    MTOPIntentClassification,
+    MultiHateClassification,
+    MultilingualSentimentClassification,
+    NaijaSenti,
+    NordicLangClassification,
+    NusaParagraphEmotionClassification,
+    NusaParagraphTopicClassification,
+    NusaXSentiClassification,
+    ScalaClassification,
+    SIB200Classification,
+    SouthAfricanLangClassification,
+    SwissJudgementClassification,
+    TurkicClassification,
+    TweetSentimentClassification,
+)
+from .mya import MyanmarNews
+from .nep import NepaliNewsClassification
+from .nld import DutchBookReviewSentimentClassification
+from .nob import NoRecClassification, NorwegianParliamentClassification
+from .ory import OdiaNewsClassification
+from .pan import PunjabiNewsClassification
+from .pol import (
+    AllegroReviewsClassification,
+    CbdClassification,
+    PacClassification,
+    PolEmo2InClassification,
+    PolEmo2OutClassification,
+)
+from .por import HateSpeechPortugueseClassification
+from .ron import Moroco, RomanianReviewsSentiment, RomanianSentimentClassification
+from .rus import (
+    GeoreviewClassification,
+    HeadlineClassification,
+    InappropriatenessClassification,
+    KinopoiskClassification,
+    RuReviewsClassification,
+    RuSciBenchGRNTIClassification,
+    RuSciBenchOECDClassification,
+)
+from .san import SanskritShlokasClassification
+from .sin import SinhalaNewsClassification, SinhalaNewsSourceClassification
+from .slk import (
+    CSFDSKMovieReviewSentimentClassification,
+    SlovakHateSpeechClassification,
+)
+from .slv import FrenkSlClassification
+from .spa import SpanishNewsClassification, SpanishSentimentClassification
+from .ssw import SiswatiNewsClassification
+from .svk import SlovakMovieReviewSentimentClassification
+from .swa import SwahiliNewsClassification
+from .swe import (
+    DalajClassification,
+    SwedishSentimentClassification,
+    SweRecClassification,
+)
+from .tam import TamilNewsClassification
+from .tel import TeluguAndhraJyotiNewsClassification
+from .tha import WisesightSentimentClassification, WongnaiReviewsClassification
+from .tsn import TswanaNewsClassification
+from .tur import (
+    TurkishMovieSentimentClassification,
+    TurkishProductSentimentClassification,
+)
+from .ukr import UkrFormalityClassification
+from .urd import UrduRomanSentimentClassification
+from .vie import VieStudentFeedbackClassification
+from .zho import (
+    IFlyTek,
+    JDReview,
+    MultilingualSentiment,
+    OnlineShopping,
+    TNews,
+    Waimai,
+    YueOpenriceReviewClassification,
+)
+from .zul import IsiZuluNewsClassification
+
+__all__ = [
+    "TeluguAndhraJyotiNewsClassification",
+    "IFlyTek",
+    "JDReview",
+    "MultilingualSentiment",
+    "OnlineShopping",
+    "TNews",
+    "Waimai",
+    "YueOpenriceReviewClassification",
+    "HateSpeechPortugueseClassification",
+    "SpanishNewsClassification",
+    "SpanishSentimentClassification",
+    "AllegroReviewsClassification",
+    "CbdClassification",
+    "PacClassification",
+    "PolEmo2InClassification",
+    "PolEmo2OutClassification",
+    "BulgarianStoreReviewSentimentClassfication",
+    "KurdishSentimentClassification",
+    "ItaCaseholdClassification",
+    "ItalianLinguisticAcceptabilityClassification",
+    "GeorgianSentimentClassification",
+    "DalajClassification",
+    "SweRecClassification",
+    "SwedishSentimentClassification",
+    "CSFDSKMovieReviewSentimentClassification",
+    "SlovakHateSpeechClassification",
+    "NorwegianParliamentClassification",
+    "NoRecClassification",
+    "FilipinoHateSpeechClassification",
+    "FilipinoShopeeReviewsClassification",
+    "MarathiNewsClassification",
+    "IndonesianIdClickbaitClassification",
+    "IndonesianMongabayConservationClassification",
+    "UrduRomanSentimentClassification",
+    "MacedonianTweetSentimentClassification",
+    "FrenkSlClassification",
+    "SwahiliNewsClassification",
+    "FinToxicityClassification",
+    "KannadaNewsClassification",
+    "TenKGnadClassification",
+    "GermanPoliticiansTwitterSentimentClassification",
+    "PunjabiNewsClassification",
+    "TswanaNewsClassification",
+    "TweetSarcasmClassification",
+    "TweetEmotionClassification",
+    "RestaurantReviewSentimentClassification",
+    "HotelReviewSentimentClassification",
+    "OnlineStoreReviewSentimentClassification",
+    "AJGT",
+    "TurkishProductSentimentClassification",
+    "TurkishMovieSentimentClassification",
+    "NepaliNewsClassification",
+    "VieStudentFeedbackClassification",
+    "DutchBookReviewSentimentClassification",
+    "SiswatiNewsClassification",
+    "UkrFormalityClassification",
+    "SanskritShlokasClassification",
+    "SlovakMovieReviewSentimentClassification",
+    "AngryTweetsClassification",
+    "DdiscoCohesionClassification",
+    "DanishPoliticalCommentsClassification",
+    "DKHateClassification",
+    "LccSentimentClassification",
+    "TamilNewsClassification",
+    "CSFDCZMovieReviewSentimentClassification",
+    "CzechSubjectivityClassification",
+    "CzechProductReviewSentimentClassification",
+    "CzechSoMeSentimentClassification",
+    "EstonianValenceClassification",
+    "MyanmarNews",
+    "JavaneseIMDBClassification",
+    "YahooAnswersTopicsClassification",
+    "CUADAffiliateLicenseLicenseeLegalBenchClassification",
+    "CUADAffiliateLicenseLicensorLegalBenchClassification",
+    "CUADAntiAssignmentLegalBenchClassification",
+    "CUADAuditRightsLegalBenchClassification",
+    "CUADCapOnLiabilityLegalBenchClassification",
+    "CUADChangeOfControlLegalBenchClassification",
+    "CUADCompetitiveRestrictionExceptionLegalBenchClassification",
+    "CUADCovenantNotToSueLegalBenchClassification",
+    "CUADEffectiveDateLegalBenchClassification",
+    "CUADExclusivityLegalBenchClassification",
+    "CUADExpirationDateLegalBenchClassification",
+    "CUADGoverningLawLegalBenchClassification",
+    "CUADIPOwnershipAssignmentLegalBenchClassification",
+    "CUADInsuranceLegalBenchClassification",
+    "CUADIrrevocableOrPerpetualLicenseLegalBenchClassification",
+    "CUADJointIPOwnershipLegalBenchClassification",
+    "CUADLicenseGrantLegalBenchClassification",
+    "CUADLiquidatedDamagesLegalBenchClassification",
+    "CUADMinimumCommitmentLegalBenchClassification",
+    "CUADMostFavoredNationLegalBenchClassification",
+    "CUADNoSolicitOfCustomersLegalBenchClassification",
+    "CUADNoSolicitOfEmployeesLegalBenchClassification",
+    "CUADNonCompeteLegalBenchClassification",
+    "CUADNonDisparagementLegalBenchClassification",
+    "CUADNonTransferableLicenseLegalBenchClassification",
+    "CUADNoticePeriodToTerminateRenewalLegalBenchClassification",
+    "CUADPostTerminationServicesLegalBenchClassification",
+    "CUADPriceRestrictionsLegalBenchClassification",
+    "CUADRenewalTermLegalBenchClassification",
+    "CUADRevenueProfitSharingLegalBenchClassification",
+    "CUADRofrRofoRofnLegalBenchClassification",
+    "CUADSourceCodeEscrowLegalBenchClassification",
+    "CUADTerminationForConvenienceLegalBenchClassification",
+    "CUADThirdPartyBeneficiaryLegalBenchClassification",
+    "CUADUncappedLiabilityLegalBenchClassification",
+    "CUADUnlimitedAllYouCanEatLicenseLegalBenchClassification",
+    "CUADVolumeRestrictionLegalBenchClassification",
+    "CUADWarrantyDurationLegalBenchClassification",
+    "CanadaTaxCourtOutcomesLegalBenchClassification",
+    "ContractNLIConfidentialityOfAgreementLegalBenchClassification",
+    "ContractNLIExplicitIdentificationLegalBenchClassification",
+    "ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification",
+    "ContractNLILimitedUseLegalBenchClassification",
+    "ContractNLINoLicensingLegalBenchClassification",
+    "ContractNLINoticeOnCompelledDisclosureLegalBenchClassification",
+    "ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassification",
+    "ContractNLIPermissibleCopyLegalBenchClassification",
+    "ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassification",
+    "ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification",
+    "ContractNLIReturnOfConfidentialInformationLegalBenchClassification",
+    "ContractNLISharingWithEmployeesLegalBenchClassification",
+    "ContractNLISharingWithThirdPartiesLegalBenchClassification",
+    "ContractNLISurvivalOfObligationsLegalBenchClassification",
+    "CorporateLobbyingLegalBenchClassification",
+    "DefinitionClassificationLegalBenchClassification",
+    "Diversity1LegalBenchClassification",
+    "Diversity2LegalBenchClassification",
+    "Diversity3LegalBenchClassification",
+    "Diversity4LegalBenchClassification",
+    "Diversity5LegalBenchClassification",
+    "Diversity6LegalBenchClassification",
+    "FunctionOfDecisionSectionLegalBenchClassification",
+    "InsurancePolicyInterpretationLegalBenchClassification",
+    "InternationalCitizenshipQuestionsLegalBenchClassification",
+    "JCrewBlockerLegalBenchClassification",
+    "LearnedHandsBenefitsLegalBenchClassification",
+    "LearnedHandsBusinessLegalBenchClassification",
+    "LearnedHandsConsumerLegalBenchClassification",
+    "LearnedHandsCourtsLegalBenchClassification",
+    "LearnedHandsCrimeLegalBenchClassification",
+    "LearnedHandsDivorceLegalBenchClassification",
+    "LearnedHandsDomesticViolenceLegalBenchClassification",
+    "LearnedHandsEducationLegalBenchClassification",
+    "LearnedHandsEmploymentLegalBenchClassification",
+    "LearnedHandsEstatesLegalBenchClassification",
+    "LearnedHandsFamilyLegalBenchClassification",
+    "LearnedHandsHealthLegalBenchClassification",
+    "LearnedHandsHousingLegalBenchClassification",
+    "LearnedHandsImmigrationLegalBenchClassification",
+    "LearnedHandsTortsLegalBenchClassification",
+    "LearnedHandsTrafficLegalBenchClassification",
+    "LegalReasoningCausalityLegalBenchClassification",
+    "MAUDLegalBenchClassification",
+    "NYSJudicialEthicsLegalBenchClassification",
+    "OPP115DataRetentionLegalBenchClassification",
+    "OPP115DataSecurityLegalBenchClassification",
+    "OPP115DoNotTrackLegalBenchClassification",
+    "OPP115FirstPartyCollectionUseLegalBenchClassification",
+    "OPP115InternationalAndSpecificAudiencesLegalBenchClassification",
+    "OPP115PolicyChangeLegalBenchClassification",
+    "OPP115ThirdPartySharingCollectionLegalBenchClassification",
+    "OPP115UserAccessEditAndDeletionLegalBenchClassification",
+    "OPP115UserChoiceControlLegalBenchClassification",
+    "OralArgumentQuestionPurposeLegalBenchClassification",
+    "OverrulingLegalBenchClassification",
+    "PROALegalBenchClassification",
+    "PersonalJurisdictionLegalBenchClassification",
+    "SCDBPAccountabilityLegalBenchClassification",
+    "SCDBPAuditsLegalBenchClassification",
+    "SCDBPCertificationLegalBenchClassification",
+    "SCDBPTrainingLegalBenchClassification",
+    "SCDBPVerificationLegalBenchClassification",
+    "SCDDAccountabilityLegalBenchClassification",
+    "SCDDAuditsLegalBenchClassification",
+    "SCDDCertificationLegalBenchClassification",
+    "SCDDTrainingLegalBenchClassification",
+    "SCDDVerificationLegalBenchClassification",
+    "TelemarketingSalesRuleLegalBenchClassification",
+    "TextualismToolDictionariesLegalBenchClassification",
+    "TextualismToolPlainLegalBenchClassification",
+    "UCCVCommonLawLegalBenchClassification",
+    "UnfairTOSLegalBenchClassification",
+    "FinancialPhrasebankClassification",
+    "DBpediaClassification",
+    "FrenkEnClassification",
+    "TweetTopicSingleClassification",
+    "AmazonPolarityClassification",
+    "NewsClassification",
+    "ToxicChatClassification",
+    "YelpReviewFullClassification",
+    "ToxicConversationsClassification",
+    "TweetSentimentExtractionClassification",
+    "PatentClassification",
+    "ImdbClassification",
+    "ArxivClassification",
+    "EmotionClassification",
+    "PoemSentimentClassification",
+    "Banking77Classification",
+    "PersianFoodSentimentClassification",
+    "HebrewSentimentAnalysis",
+    "BengaliSentimentAnalysis",
+    "BengaliDocumentClassification",
+    "BengaliHateSpeechClassification",
+    "SinhalaNewsSourceClassification",
+    "SinhalaNewsClassification",
+    "WisesightSentimentClassification",
+    "WongnaiReviewsClassification",
+    "WRIMEClassification",
+    "RomanianReviewsSentiment",
+    "Moroco",
+    "RomanianSentimentClassification",
+    "KorSarcasmClassification",
+    "KorHateClassification",
+    "KorFin",
+    "KlueTC",
+    "IndicLangClassification",
+    "SouthAfricanLangClassification",
+    "SwissJudgementClassification",
+    "AmazonReviewsClassification",
+    "NaijaSenti",
+    "TurkicClassification",
+    "ScalaClassification",
+    "MultilingualSentimentClassification",
+    "SIB200Classification",
+    "NordicLangClassification",
+    "NusaParagraphTopicClassification",
+    "CyrillicTurkicLangClassification",
+    "IndicNLPNewsClassification",
+    "MassiveScenarioClassification",
+    "MTOPIntentClassification",
+    "NusaParagraphEmotionClassification",
+    "MultiHateClassification",
+    "AfriSentiClassification",
+    "IndicSentimentClassification",
+    "LanguageClassification",
+    "AfriSentiLangClassification",
+    "NusaXSentiClassification",
+    "MTOPDomainClassification",
+    "HinDialectClassification",
+    "CataloniaTweetClassification",
+    "TweetSentimentClassification",
+    "MassiveIntentClassification",
+    "AmazonCounterfactualClassification",
+    "MasakhaNEWSClassification",
+    "GujaratiNewsClassification",
+    "IsiZuluNewsClassification",
+    "KinopoiskClassification",
+    "HeadlineClassification",
+    "InappropriatenessClassification",
+    "RuSciBenchGRNTIClassification",
+    "RuSciBenchOECDClassification",
+    "RuReviewsClassification",
+    "GeoreviewClassification",
+    "OdiaNewsClassification",
+    "GreekLegalCodeClassification",
+    "MovieReviewSentimentClassification",
+    "FrenchBookReviews",
+    "FrenkHrClassification",
+    "HindiDiscourseClassification",
+    "SentimentAnalysisHindi",
+    "MalayalamNewsClassification",
+]

@@ -46,10 +46,7 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
                 url       = "http://ceur-ws.org/Vol-2624/paper9.pdf"
             }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 2048},
-            "avg_character_length": {"test": 152.41},
-        },  # length of`sent1` + `sent2`
+        # length of`sent1` + `sent2`
     )
 
     def load_data(self, **kwargs):
@@ -61,7 +58,11 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
         self.dataset = {}
         path = self.metadata_dict["dataset"]["path"]
         revision = self.metadata_dict["dataset"]["revision"]
-        raw_dataset = load_dataset(path, revision=revision)
+        raw_dataset = load_dataset(
+            path,
+            revision=revision,
+            trust_remote_code=self.metadata.dataset["trust_remote_code"],
+        )
 
         def convert_example(example):
             return {
@@ -86,9 +87,13 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
                     )
 
                 # convert examples
-                self.dataset[lang][split] = self.dataset[lang][split].map(
-                    convert_example,
-                    remove_columns=self.dataset[lang][split].column_names,
+                self.dataset[lang][split] = (
+                    self.dataset[lang][split]
+                    .map(
+                        convert_example,
+                        remove_columns=self.dataset[lang][split].column_names,
+                    )
+                    .to_dict()
                 )
 
         self.dataset_transform()
@@ -103,8 +108,8 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
             for split in self.metadata.eval_splits:
                 _dataset[lang][split] = [
                     {
-                        "sent1": self.dataset[lang][split]["sent1"],
-                        "sent2": self.dataset[lang][split]["sent2"],
+                        "sentence1": self.dataset[lang][split]["sentence1"],
+                        "sentence2": self.dataset[lang][split]["sentence2"],
                         "labels": self.dataset[lang][split]["labels"],
                     }
                 ]

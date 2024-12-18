@@ -18,15 +18,15 @@ class T2Reranking(AbsTaskReranking):
         modalities=["text"],
         eval_splits=["dev"],
         eval_langs=["cmn-Hans"],
-        main_score="map",
+        main_score="map_at_1000",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
+        prompt="Given a Chinese search query, retrieve web passages that answer the question",
         bibtex_citation="""@misc{xie2023t2ranking,
       title={T2Ranking: A large-scale Chinese Benchmark for Passage Ranking}, 
       author={Xiaohui Xie and Qian Dong and Bingning Wang and Feiyang Lv and Ting Yao and Weinan Gan and Zhijing Wu and Xiangsheng Li and Haitao Li and Yiqun Liu and Jin Ma},
@@ -35,7 +35,6 @@ class T2Reranking(AbsTaskReranking):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
 
@@ -53,15 +52,15 @@ class MMarcoReranking(AbsTaskReranking):
         modalities=["text"],
         eval_splits=["dev"],
         eval_langs=["cmn-Hans"],
-        main_score="map",
+        main_score="map_at_1000",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
+        prompt="Given a Chinese search query, retrieve web passages that answer the question",
         bibtex_citation="""@misc{bonifacio2021mmarco,
       title={mMARCO: A Multilingual Version of MS MARCO Passage Ranking Dataset}, 
       author={Luiz Henrique Bonifacio and Vitor Jeronymo and Hugo Queiroz Abonizio and Israel Campiotti and Marzieh Fadaee and  and Roberto Lotufo and Rodrigo Nogueira},
@@ -70,7 +69,6 @@ class MMarcoReranking(AbsTaskReranking):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
 
@@ -78,6 +76,7 @@ class CMedQAv1(AbsTaskReranking):
     metadata = TaskMetadata(
         name="CMedQAv1-reranking",
         description="Chinese community medical question answering",
+        prompt="Given a Chinese community medical question, retrieve replies that best answer the question",
         reference="https://github.com/zhangsheng93/cMedQA",
         dataset={
             "path": "C-MTEB/CMedQAv1-reranking",
@@ -88,7 +87,7 @@ class CMedQAv1(AbsTaskReranking):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2017-01-01", "2017-07-26"),
         domains=["Medical", "Written"],
         task_subtypes=[],
@@ -106,10 +105,6 @@ class CMedQAv1(AbsTaskReranking):
   year={2017},
   publisher={Multidisciplinary Digital Publishing Institute}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 2000},
-            "avg_character_length": {"test": 165},
-        },
     )
 
 
@@ -117,6 +112,7 @@ class CMedQAv2(AbsTaskReranking):
     metadata = TaskMetadata(
         name="CMedQAv2-reranking",
         description="Chinese community medical question answering",
+        prompt="Given a Chinese community medical question, retrieve replies that best answer the question",
         reference="https://github.com/zhangsheng93/cMedQA2",
         dataset={
             "path": "C-MTEB/CMedQAv2-reranking",
@@ -127,10 +123,9 @@ class CMedQAv2(AbsTaskReranking):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
-        main_score="map",
+        main_score="map_at_1000",
         date=None,
-        form=None,
-        domains=None,
+        domains=["Medical", "Written"],
         task_subtypes=None,
         license=None,
         annotations_creators=None,
@@ -148,5 +143,4 @@ keywords={Biomedical imaging;Data mining;Semantics;Medical services;Feature extr
 doi={10.1109/ACCESS.2018.2883637}, 
 ISSN={2169-3536}, 
 month={},}""",
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )

@@ -1,56 +1,25 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
 from functools import partial
-from typing import Any
 
-import numpy as np
-
-from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
-from .instructions import task_to_instruction
-from .wrapper import Wrapper
+from .instruct_wrapper import instruct_wrapper
 
-
-def gte_instruction(instruction: str) -> str:
-    return f"Instruct: {instruction}\nQuery: "
-
-
-def gte_loader(**kwargs):
-    try:
-        from gritlm import GritLM
-    except ImportError:
-        raise ImportError(
-            "Please install `pip install gritlm` to use gte-Qwen2-7B-instruct."
-        )
-
-    class GTEWrapper(GritLM, Wrapper):
-        def encode(
-            self,
-            sentences: Sequence[str],
-            *args,
-            task_name: str,
-            prompt_type: PromptType | None = None,
-            **kwargs: Any,
-        ) -> np.ndarray:
-            if "instruction" in kwargs:
-                instruction = kwargs.pop("instruction", "")
-            else:
-                instruction = task_to_instruction(
-                    task_name, prompt_type == PromptType.query
-                )
-            if instruction:
-                kwargs["instruction"] = gte_instruction(instruction)
-            return super().encode(sentences, *args, **kwargs)
-
-    return GTEWrapper(**kwargs)
-
+GTE_CITATION = """
+@article{li2023towards,
+  title={Towards general text embeddings with multi-stage contrastive learning},
+  author={Li, Zehan and Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan},
+  journal={arXiv preprint arXiv:2308.03281},
+  year={2023}
+}
+"""
 
 gte_Qwen2_7B_instruct = ModelMeta(
     loader=partial(
-        gte_loader,
+        instruct_wrapper,
         model_name_or_path="Alibaba-NLP/gte-Qwen2-7B-instruct",
+        instruction_template="Instruct: {instruction}\nQuery: ",
         attn="cccc",
         pooling_method="lasttoken",
         mode="embedding",
@@ -61,7 +30,16 @@ gte_Qwen2_7B_instruct = ModelMeta(
     ),
     name="Alibaba-NLP/gte-Qwen2-7B-instruct",
     languages=None,
-    open_source=True,
+    open_weights=True,
     revision="e26182b2122f4435e8b3ebecbf363990f409b45b",
     release_date="2024-06-15",  # initial commit of hf model.
+    n_parameters=7_613_000_000,
+    memory_usage=None,
+    embed_dim=3584,
+    license="apache-2.0",
+    reference="https://huggingface.co/Alibaba-NLP/gte-Qwen2-7B-instruct",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    citation=GTE_CITATION,
 )
