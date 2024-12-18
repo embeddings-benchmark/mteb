@@ -243,7 +243,7 @@ def get_tasks(
     domains: list[TASK_DOMAIN] | None = None,
     task_types: list[TASK_TYPE] | None = None,
     categories: list[TASK_CATEGORY] | None = None,
-    exclude_superseeded: bool = True,
+    exclude_superseded: bool = True,
     eval_splits: list[str] | None = None,
 ) -> MTEBTasks:
     """Get a list of tasks based on the specified filters.
@@ -258,7 +258,7 @@ def get_tasks(
         task_types: A string specifying the type of task e.g. "Classification" or "Retrieval". If None, all tasks are included.
         categories: A list of task categories these include "s2s" (sentence to sentence), "s2p" (sentence to paragraph) and "p2p" (paragraph to
             paragraph).
-        exclude_superseeded: A boolean flag to exclude datasets which are superseeded by another.
+        exclude_superseded: A boolean flag to exclude datasets which are superseded by another.
         eval_splits: A list of evaluation splits to include. If None, all splits are included.
 
     Returns:
