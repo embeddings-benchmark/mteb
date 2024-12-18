@@ -236,18 +236,20 @@ class MTEBTasks(tuple):
 
 
 def get_tasks(
+    tasks: list[str] | None = None,
+    *,
     languages: list[str] | None = None,
     script: list[str] | None = None,
     domains: list[TASK_DOMAIN] | None = None,
     task_types: list[TASK_TYPE] | None = None,
     categories: list[TASK_CATEGORY] | None = None,
-    tasks: list[str] | None = None,
     exclude_superseded: bool = True,
     eval_splits: list[str] | None = None,
 ) -> MTEBTasks:
     """Get a list of tasks based on the specified filters.
 
     Args:
+        tasks: A list of task names to include. If None, all tasks which pass the filters are included.
         languages: A list of languages either specified as 3 letter languages codes (ISO 639-3, e.g. "eng") or as script languages codes e.g.
             "eng-Latn". For multilingual tasks this will also remove languages that are not in the specified list.
         script: A list of script codes (ISO 15924 codes, e.g. "Latn"). If None, all scripts are included. For multilingual tasks this will also remove scripts
@@ -256,7 +258,6 @@ def get_tasks(
         task_types: A string specifying the type of task e.g. "Classification" or "Retrieval". If None, all tasks are included.
         categories: A list of task categories these include "s2s" (sentence to sentence), "s2p" (sentence to paragraph) and "p2p" (paragraph to
             paragraph).
-        tasks: A list of task names to include. If None, all tasks which pass the filters are included.
         exclude_superseded: A boolean flag to exclude datasets which are superseded by another.
         eval_splits: A list of evaluation splits to include. If None, all splits are included.
 
