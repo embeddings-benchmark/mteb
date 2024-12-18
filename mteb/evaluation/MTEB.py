@@ -293,8 +293,9 @@ class MTEB:
     def _run_eval(
         task: AbsTask,
         model: Encoder,
-        split,
-        output_folder,
+        split: str,
+        output_folder: str | None,
+        subsets_to_run: list[str] | None = None,
         *,
         encode_kwargs: dict[str, Any],
         **kwargs: Any,
@@ -303,6 +304,7 @@ class MTEB:
         results = task.evaluate(
             model,
             split,
+            subsets_to_run=subsets_to_run,
             output_folder=output_folder,
             encode_kwargs=encode_kwargs,
             **kwargs,
@@ -379,7 +381,8 @@ class MTEB:
         model: SentenceTransformer | Encoder,
         verbosity: int = 1,
         output_folder: str | None = "results",
-        eval_splits=None,
+        eval_splits: list[str] | None = None,
+        eval_subsets: list[str] | None = None,
         overwrite_results: bool = False,
         raise_error: bool = True,
         co2_tracker: bool = False,
@@ -398,6 +401,7 @@ class MTEB:
             output_folder: Folder where the results will be saved. Default to 'results'. Where it will save the results in the format:
                 `{output_folder}/{model_name}/{model_revision}/{task_name}.json`.
             eval_splits: List of splits to evaluate on. If None, the splits are taken from the task metadata.
+            eval_subsets: List of subsets to evaluate on. If None, the subsets are taken from the task metadata.
             overwrite_results: Whether to overwrite existing results.
             raise_error: Whether to raise an error if an exception occurs during evaluation.
             co2_tracker: Whether to enable or disable CO2 emissions tracker using codecarbon.
@@ -455,9 +459,16 @@ class MTEB:
                 f"\n\n********************** Evaluating {task.metadata.name} **********************"
             )
 
+            task_eval_splits = (
+                eval_splits if eval_splits is not None else task.eval_splits
+            )
+            task_subsets = list(task.metadata.hf_subsets_to_langscripts.keys())
+
+            existing_results = None
+            save_path = None
+
             if output_path:
                 save_path = output_path / f"{task.metadata.name}{task.save_suffix}.json"
-                existing_results = None
                 if save_path.exists():
                     existing_results = TaskResult.from_disk(save_path)
 
@@ -469,38 +480,53 @@ class MTEB:
                         del self.tasks[0]  # empty memory
                         continue
 
-                task_eval_splits = (
-                    eval_splits if eval_splits is not None else task.eval_splits
-                )
-                missing_splits = self._get_missing_splits(
-                    existing_results, task_eval_splits
-                )
+            # Unified call to get missing splits and subsets
+            missing_evaluations = self._get_missing_evaluations(
+                existing_results,
+                task_eval_splits,
+                task_subsets,
+                eval_subsets,
+            )
 
-                if not missing_splits and existing_results:
+            # Determine final splits to run
+            final_splits_to_run = []
+            # We need to run any split that is fully missing or has missing subsets
+            for sp, info in missing_evaluations.items():
+                if info["whole_split_missing"] or info["missing_subsets"]:
+                    final_splits_to_run.append(sp)
+
+            # If no splits need to be run and results exist, skip
+            if not final_splits_to_run:
+                if existing_results is not None:
                     evaluation_results.append(existing_results)
-
-                    # no splits are evaluated.
-                    self.last_evaluated_splits[task.metadata.name] = []
-                    del self.tasks[0]
-                    continue
-
-                if missing_splits:
+                else:
                     logger.info(
-                        f"Running evaluation for missing splits: {missing_splits}"
+                        f"No splits to evaluate for {task.metadata.name}. Skipping evaluation."
                     )
+                self.last_evaluated_splits[task.metadata.name] = []
+                del self.tasks[0]
+                continue
 
             try:
                 task.check_if_dataset_is_superseded()
                 task.load_data(eval_splits=task_eval_splits, **kwargs)
 
-                # run evaluation
                 task_results = {}
                 evaluation_time = 0
                 kg_co2_emissions: int | None = 0 if co2_tracker else None
 
                 self.last_evaluated_splits[task.metadata.name] = []
 
-                for split in missing_splits:
+                for split in final_splits_to_run:
+                    info = missing_evaluations[split]
+
+                    # Determine subsets to run for this split
+                    # If the whole split is missing, run all required subsets
+                    # If only some subsets are missing, run only those
+                    subsets_to_run = info["missing_subsets"]
+                    if info["whole_split_missing"] and task_subsets is None:
+                        subsets_to_run = ["default"]
+
                     if co2_tracker:
                         try:
                             from codecarbon import EmissionsTracker
@@ -508,7 +534,6 @@ class MTEB:
                             raise ImportError(
                                 "To use the CO2 emissions tracker, please install codecarbon using 'pip install codecarbon'"
                             )
-
                         with EmissionsTracker(
                             save_to_file=False, save_to_api=False, logging_logger=logger
                         ) as tracker:
@@ -516,8 +541,8 @@ class MTEB:
                                 task,
                                 model,
                                 split,
-                                output_folder,
                                 encode_kwargs=encode_kwargs,
+                                subsets_to_run=subsets_to_run,
                                 **kwargs,
                             )
 
@@ -530,11 +555,10 @@ class MTEB:
                             model,
                             split,
                             output_folder,
+                            subsets_to_run=subsets_to_run,
                             encode_kwargs=encode_kwargs,
                             **kwargs,
                         )
-
-                    self.last_evaluated_splits[task.metadata.name].append(split)
 
                     logger.info(
                         f"Evaluation for {task.metadata_dict['name']} on {split} took {tock - tick:.2f} seconds"
@@ -543,8 +567,11 @@ class MTEB:
 
                     task_results[split] = results
                     if verbosity >= 1:
-                        logger.info(f"Scores: {results}")
+                        logger.info(f"Scores: {task_results[split]}")
 
+                    self.last_evaluated_splits[task.metadata.name].append(split)
+
+                # Create new TaskResult
                 new_results = TaskResult.from_task_results(
                     task,
                     task_results,
@@ -552,6 +579,9 @@ class MTEB:
                     kg_co2_emissions=kg_co2_emissions,
                 )
 
+                # Merge with existing if needed
+                if output_path and save_path.exists():
+                    existing_results = TaskResult.from_disk(save_path)
                 if existing_results:
                     merged_results = self._merge_results(existing_results, new_results)
                 else:
@@ -637,3 +667,56 @@ class MTEB:
         return deepcopy(
             {task: list(splits) for task, splits in self.last_evaluated_splits.items()}
         )
+
+    @staticmethod
+    def _get_missing_evaluations(
+        existing_results: TaskResult | None,
+        task_eval_splits: list[str],
+        task_eval_langs: list[str],
+        eval_subsets: list[str] | None,
+    ) -> dict[str, dict[str, Any]]:
+        """Return a dictionary for each split, indicating if the whole split is missing and which subsets are missing."""
+        missing_evaluations = {
+            split: {"whole_split_missing": False, "missing_subsets": []}
+            for split in task_eval_splits
+        }
+
+        # Determine subsets to consider if multilingual
+        if eval_subsets is None:
+            # If no eval_langs specified, consider all subsets
+            subsets_to_consider = task_eval_langs
+        else:
+            subsets_to_consider = [
+                subset for subset in task_eval_langs if subset in eval_subsets
+            ]
+
+        # If no existing results, all splits and subsets are missing
+        if existing_results is None:
+            for split in task_eval_splits:
+                missing_evaluations[split]["whole_split_missing"] = True
+                missing_evaluations[split]["missing_subsets"] = list(
+                    subsets_to_consider
+                )
+            return missing_evaluations
+
+        # If we have existing results, check which splits and subsets are missing
+        for split in task_eval_splits:
+            if split not in existing_results.scores:
+                # Whole split missing
+                missing_evaluations[split]["whole_split_missing"] = True
+                missing_evaluations[split]["missing_subsets"] = list(
+                    subsets_to_consider
+                )
+            else:
+                # Some subsets may be missing
+                existing_subsets = {
+                    score_dict["hf_subset"]
+                    for score_dict in existing_results.scores[split]
+                }
+                missing_subsets = [
+                    s for s in subsets_to_consider if s not in existing_subsets
+                ]
+                if missing_subsets:
+                    missing_evaluations[split]["missing_subsets"] = missing_subsets
+
+        return missing_evaluations

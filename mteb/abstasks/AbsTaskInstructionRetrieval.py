@@ -516,6 +516,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
         self,
         model: Encoder,
         split: str = "test",
+        subsets_to_run: list[str] | None = None,
         *,
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
@@ -528,7 +529,11 @@ class AbsTaskInstructionRetrieval(AbsTask):
         )
         scores = {}
         if self.is_multilingual:
-            for lang in self.hf_subsets:
+            hf_subsets = self.hf_subsets
+            if subsets_to_run is not None:
+                hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
+
+            for lang in hf_subsets:
                 logger.info(f"Language: {lang}")
                 scores[lang] = self._evaluate_subset_lang(
                     retriever,
