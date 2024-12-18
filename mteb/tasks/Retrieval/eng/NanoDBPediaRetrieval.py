@@ -35,9 +35,21 @@ class NanoDBPediaRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus = load_dataset("zeta-alpha-ai/NanoDBPedia", "corpus", revision="438f1c25129f05db6238699b5afdc9c6b58d2096")
-        self.queries = load_dataset("zeta-alpha-ai/NanoDBPedia", "queries", revision="438f1c25129f05db6238699b5afdc9c6b58d2096")
-        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoDBPedia", "qrels", revision="438f1c25129f05db6238699b5afdc9c6b58d2096")
+        self.corpus = load_dataset(
+            "zeta-alpha-ai/NanoDBPedia",
+            "corpus",
+            revision="438f1c25129f05db6238699b5afdc9c6b58d2096",
+        )
+        self.queries = load_dataset(
+            "zeta-alpha-ai/NanoDBPedia",
+            "queries",
+            revision="438f1c25129f05db6238699b5afdc9c6b58d2096",
+        )
+        self.relevant_docs = load_dataset(
+            "zeta-alpha-ai/NanoDBPedia",
+            "qrels",
+            revision="438f1c25129f05db6238699b5afdc9c6b58d2096",
+        )
 
         self.corpus = {
             split: {

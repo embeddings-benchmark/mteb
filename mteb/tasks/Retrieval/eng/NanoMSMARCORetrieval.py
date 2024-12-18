@@ -57,9 +57,21 @@ class NanoMSMARCORetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus = load_dataset("zeta-alpha-ai/NanoMSMARCO", "corpus", revision="7b8ff22f2771dc65ac5b439f222eb19a1f56abda")
-        self.queries = load_dataset("zeta-alpha-ai/NanoMSMARCO", "queries", revision="7b8ff22f2771dc65ac5b439f222eb19a1f56abda")
-        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoMSMARCO", "qrels", revision="7b8ff22f2771dc65ac5b439f222eb19a1f56abda")
+        self.corpus = load_dataset(
+            "zeta-alpha-ai/NanoMSMARCO",
+            "corpus",
+            revision="7b8ff22f2771dc65ac5b439f222eb19a1f56abda",
+        )
+        self.queries = load_dataset(
+            "zeta-alpha-ai/NanoMSMARCO",
+            "queries",
+            revision="7b8ff22f2771dc65ac5b439f222eb19a1f56abda",
+        )
+        self.relevant_docs = load_dataset(
+            "zeta-alpha-ai/NanoMSMARCO",
+            "qrels",
+            revision="7b8ff22f2771dc65ac5b439f222eb19a1f56abda",
+        )
 
         self.corpus = {
             split: {

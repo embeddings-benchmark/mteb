@@ -43,9 +43,21 @@ class NanoNQRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus = load_dataset("zeta-alpha-ai/NanoNQ", "corpus", revision="77540146379abf95df8326a3c5bb9eb21c7146c3")
-        self.queries = load_dataset("zeta-alpha-ai/NanoNQ", "queries", revision="77540146379abf95df8326a3c5bb9eb21c7146c3")
-        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoNQ", "qrels", revision="77540146379abf95df8326a3c5bb9eb21c7146c3")
+        self.corpus = load_dataset(
+            "zeta-alpha-ai/NanoNQ",
+            "corpus",
+            revision="77540146379abf95df8326a3c5bb9eb21c7146c3",
+        )
+        self.queries = load_dataset(
+            "zeta-alpha-ai/NanoNQ",
+            "queries",
+            revision="77540146379abf95df8326a3c5bb9eb21c7146c3",
+        )
+        self.relevant_docs = load_dataset(
+            "zeta-alpha-ai/NanoNQ",
+            "qrels",
+            revision="77540146379abf95df8326a3c5bb9eb21c7146c3",
+        )
 
         self.corpus = {
             split: {

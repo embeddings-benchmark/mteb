@@ -54,9 +54,21 @@ class NanoTouche2020Retrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus = load_dataset("zeta-alpha-ai/NanoTouche2020", "corpus", revision="0d2f26ed8c5ad309f95c7f9499c70a40e140fccd")
-        self.queries = load_dataset("zeta-alpha-ai/NanoTouche2020", "queries", revision="0d2f26ed8c5ad309f95c7f9499c70a40e140fccd")
-        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoTouche2020","qrels", revision="0d2f26ed8c5ad309f95c7f9499c70a40e140fccd")
+        self.corpus = load_dataset(
+            "zeta-alpha-ai/NanoTouche2020",
+            "corpus",
+            revision="0d2f26ed8c5ad309f95c7f9499c70a40e140fccd",
+        )
+        self.queries = load_dataset(
+            "zeta-alpha-ai/NanoTouche2020",
+            "queries",
+            revision="0d2f26ed8c5ad309f95c7f9499c70a40e140fccd",
+        )
+        self.relevant_docs = load_dataset(
+            "zeta-alpha-ai/NanoTouche2020",
+            "qrels",
+            revision="0d2f26ed8c5ad309f95c7f9499c70a40e140fccd",
+        )
 
         self.corpus = {
             split: {

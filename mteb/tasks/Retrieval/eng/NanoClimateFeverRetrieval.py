@@ -45,9 +45,21 @@ class NanoClimateFeverRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus = load_dataset("zeta-alpha-ai/NanoClimateFEVER", "corpus", revision="96741bfa30b9f56db8c9eb7d08e775ed6474f206")
-        self.queries = load_dataset("zeta-alpha-ai/NanoClimateFEVER", "queries", revision="96741bfa30b9f56db8c9eb7d08e775ed6474f206")
-        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoClimateFEVER", "qrels", revision="96741bfa30b9f56db8c9eb7d08e775ed6474f206")
+        self.corpus = load_dataset(
+            "zeta-alpha-ai/NanoClimateFEVER",
+            "corpus",
+            revision="96741bfa30b9f56db8c9eb7d08e775ed6474f206",
+        )
+        self.queries = load_dataset(
+            "zeta-alpha-ai/NanoClimateFEVER",
+            "queries",
+            revision="96741bfa30b9f56db8c9eb7d08e775ed6474f206",
+        )
+        self.relevant_docs = load_dataset(
+            "zeta-alpha-ai/NanoClimateFEVER",
+            "qrels",
+            revision="96741bfa30b9f56db8c9eb7d08e775ed6474f206",
+        )
 
         self.corpus = {
             split: {

@@ -59,9 +59,21 @@ class NanoFEVERRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus = load_dataset("zeta-alpha-ai/NanoFEVER", "corpus", revision="a8bfdf1bf15181167a7e22e69cf8754bdea9b4c8")
-        self.queries = load_dataset("zeta-alpha-ai/NanoFEVER", "queries", revision="a8bfdf1bf15181167a7e22e69cf8754bdea9b4c8")
-        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoFEVER", "qrels", revision="a8bfdf1bf15181167a7e22e69cf8754bdea9b4c8")
+        self.corpus = load_dataset(
+            "zeta-alpha-ai/NanoFEVER",
+            "corpus",
+            revision="a8bfdf1bf15181167a7e22e69cf8754bdea9b4c8",
+        )
+        self.queries = load_dataset(
+            "zeta-alpha-ai/NanoFEVER",
+            "queries",
+            revision="a8bfdf1bf15181167a7e22e69cf8754bdea9b4c8",
+        )
+        self.relevant_docs = load_dataset(
+            "zeta-alpha-ai/NanoFEVER",
+            "qrels",
+            revision="a8bfdf1bf15181167a7e22e69cf8754bdea9b4c8",
+        )
 
         self.corpus = {
             split: {

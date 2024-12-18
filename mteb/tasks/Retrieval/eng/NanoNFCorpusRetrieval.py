@@ -47,9 +47,21 @@ class NanoNFCorpusRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus = load_dataset("zeta-alpha-ai/NanoNFCorpus", "corpus", revision="dd542a7efb9ad2136b9e00768b60fca9038f8156")
-        self.queries = load_dataset("zeta-alpha-ai/NanoNFCorpus", "queries", revision="dd542a7efb9ad2136b9e00768b60fca9038f8156")
-        self.relevant_docs = load_dataset("zeta-alpha-ai/NanoNFCorpus", "qrels", revision="dd542a7efb9ad2136b9e00768b60fca9038f8156")
+        self.corpus = load_dataset(
+            "zeta-alpha-ai/NanoNFCorpus",
+            "corpus",
+            revision="dd542a7efb9ad2136b9e00768b60fca9038f8156",
+        )
+        self.queries = load_dataset(
+            "zeta-alpha-ai/NanoNFCorpus",
+            "queries",
+            revision="dd542a7efb9ad2136b9e00768b60fca9038f8156",
+        )
+        self.relevant_docs = load_dataset(
+            "zeta-alpha-ai/NanoNFCorpus",
+            "qrels",
+            revision="dd542a7efb9ad2136b9e00768b60fca9038f8156",
+        )
 
         self.corpus = {
             split: {
