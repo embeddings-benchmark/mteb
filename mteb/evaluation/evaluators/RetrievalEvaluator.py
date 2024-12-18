@@ -83,10 +83,10 @@ class RetrievalEvaluator(Evaluator):
                 corpus, queries, self.top_k, instructions=instructions, **kwargs
             )
         elif (
-            hasattr(self.retriever.model, "mteb_model_meta")
-            and self.retriever.model.mteb_model_meta.name == "bm25s"
+            hasattr(self.retriever.model.model, "mteb_model_meta")
+            and self.retriever.model.model.mteb_model_meta.name == "bm25s"
         ):
-            return self.retriever.model.search(
+            return self.retriever.model.model.search(
                 corpus,
                 queries,
                 self.top_k,

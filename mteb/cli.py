@@ -1,10 +1,17 @@
-"""Command line interface for various MTEB.
+"""This is the command line interface for `mteb`.
 
-MTEB is a benchmark for evaluating the quality of embeddings in various tasks. It supports the following commands:
+`mteb` is a toolkit for evaluating the quality of embedding models on various benchmarks. It supports the following commands:
 
-- mteb run: Runs a model on a set of tasks
-- mteb available_tasks: Lists the available tasks within MTEB
-- mteb create_meta: Creates the metadata for a model card from a folder of results
+- `mteb run`: Runs a model on a set of tasks
+- `mteb available_tasks`: Lists the available tasks within MTEB
+- `mteb available_benchmarks`: Lists the available benchmarks
+- `mteb create_meta`: Creates the metadata for a model card from a folder of results
+
+In the following we outline some sample use cases, but if you want to learn more about the arguments for each command you can run:
+
+```
+mteb {command} --help
+```
 
 ## Running Models on Tasks
 

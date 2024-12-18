@@ -5,8 +5,7 @@ from pathlib import Path
 
 import pytest
 
-import mteb
-from mteb import AbsTask
+from mteb.abstasks import AbsTask, TaskMetadata
 from mteb.load_results.task_results import TaskResult
 
 tests_folder = Path(__file__).parent.parent
@@ -14,7 +13,7 @@ tests_folder = Path(__file__).parent.parent
 
 class DummyTask(AbsTask):
     superseded_by = "newer_task"
-    metadata = mteb.TaskMetadata(
+    metadata = TaskMetadata(
         name="dummy_task",
         description="dummy task for testing",
         dataset={"revision": "1.0", "path": "dummy_dataset"},
@@ -34,7 +33,6 @@ class DummyTask(AbsTask):
         annotations_creators="derived",
         dialect=[],
         bibtex_citation="",
-        descriptive_stats={},
         modalities=["text"],
         sample_creation="created",
     )

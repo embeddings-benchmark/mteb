@@ -136,3 +136,6 @@ class AbsTaskSTS(AbsTask):
             avg_score=avg_score,
             max_score=max(score),
         )
+
+    def _push_dataset_to_hub(self, repo_name: str) -> None:
+        self._upload_dataset_to_hub(repo_name, ["sentence1", "sentence2", "score"])

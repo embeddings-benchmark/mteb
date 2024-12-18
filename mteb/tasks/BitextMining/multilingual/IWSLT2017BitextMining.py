@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
@@ -40,9 +38,8 @@ class IWSLT2017BitextMining(AbsTaskBitextMining, MultilingualTask):
     metadata = TaskMetadata(
         name="IWSLT2017BitextMining",
         dataset={
-            "path": "IWSLT/iwslt2017",
-            "revision": "c18a4f81a47ae6fa079fe9d32db288ddde38451d",
-            "trust_remote_code": True,
+            "path": "mteb/IWSLT2017BitextMining",
+            "revision": "14034eed1824a54d866c93a988319b77b2e90217",
         },
         description="The IWSLT 2017 Multilingual Task addresses text translation, including zero-shot translation, with a single MT system across all directions including English, German, Dutch, Italian and Romanian.",
         reference="https://aclanthology.org/2017.iwslt-1.1/",
@@ -82,35 +79,3 @@ class IWSLT2017BitextMining(AbsTaskBitextMining, MultilingualTask):
 }
 """,
     )
-
-    def load_data(self, **kwargs):
-        """Load dataset from HuggingFace hub and convert it to the standard format."""
-        if self.data_loaded:
-            return
-
-        self.dataset = {}
-        for lang in self.hf_subsets:
-            self.dataset[lang] = datasets.load_dataset(
-                name=f"iwslt2017-{lang}",
-                **self.metadata_dict["dataset"],
-            )
-
-        self.dataset_transform()
-        self.data_loaded = True
-
-    def dataset_transform(self):
-        def create_columns(row, lang):
-            l1, l2 = lang.split("-")
-            row["sentence1"] = row["translation"][l1]
-            row["sentence2"] = row["translation"][l2]
-            return row
-
-        # Convert to standard format
-        dataset = {}
-        for lang in self.hf_subsets:
-            dataset[lang] = {}
-            for split in _SPLITS:
-                dataset[lang][split] = self.dataset[lang][split].map(
-                    lambda x: create_columns(x, lang=lang)
-                )
-        self.dataset = dataset

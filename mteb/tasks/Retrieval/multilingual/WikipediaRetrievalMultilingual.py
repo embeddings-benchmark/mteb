@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from datasets import load_dataset
-
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -27,76 +25,14 @@ _EVAL_LANGS = {
 }
 
 
-# adapted from MIRACLRetrieval
-def _load_data(
-    path: str,
-    langs: list,
-    split: str,
-    cache_dir: str = None,
-    revision_queries: str = None,
-    revision_corpus: str = None,
-    revision_qrels: str = None,
-):
-    queries = {lang: {split: {}} for lang in langs}
-    corpus = {lang: {split: {}} for lang in langs}
-    qrels = {lang: {split: {}} for lang in langs}
-
-    for lang in langs:
-        queries_path = path
-        corpus_path = path.replace("queries", "corpus")
-        qrels_path = path.replace("queries", "qrels")
-        queries_lang = load_dataset(
-            queries_path,
-            lang,
-            split=split,
-            cache_dir=cache_dir,
-            revision=revision_queries,
-        )
-        corpus_lang = load_dataset(
-            corpus_path,
-            lang,
-            split=split,
-            cache_dir=cache_dir,
-            revision=revision_corpus,
-        )
-        qrels_lang = load_dataset(
-            qrels_path,
-            lang,
-            split=split,
-            cache_dir=cache_dir,
-            revision=revision_qrels,
-        )
-        # don't pass on titles to make task harder
-        corpus_lang_dict = {doc["_id"]: {"text": doc["text"]} for doc in corpus_lang}
-        queries_lang_dict = {query["_id"]: query["text"] for query in queries_lang}
-        # qrels_lang_dict = {qrel["query-id"]: {qrel["corpus-id"]: qrel["score"]} for qrel in qrels_lang}
-
-        qrels_lang_dict = {}
-        for qrel in qrels_lang:
-            if qrel["score"] == 0.5:
-                continue
-            # score = 0 if qrel["score"] == 0.5 else qrel["score"]
-            # score = int(score)
-            score = int(qrel["score"])
-            qrels_lang_dict[qrel["query-id"]] = {qrel["corpus-id"]: score}
-
-        corpus[lang][split] = corpus_lang_dict
-        queries[lang][split] = queries_lang_dict
-        qrels[lang][split] = qrels_lang_dict
-
-    return corpus, queries, qrels
-
-
-class WikipediaRetrievalMultilingual(MultilingualTask, AbsTaskRetrieval):
+class WikipediaRetrievalMultilingual(AbsTaskRetrieval, MultilingualTask):
     metadata = TaskMetadata(
         name="WikipediaRetrievalMultilingual",
         description="The dataset is derived from Cohere's wikipedia-2023-11 dataset and contains synthetically generated queries.",
         reference="https://huggingface.co/datasets/ellamind/wikipedia-2023-11-retrieval-multilingual-queries",
         dataset={
-            "path": "ellamind/wikipedia-2023-11-retrieval-multilingual-queries",
-            "revision": "3b6ea595c94bac3448a2ad167ca2e06abd340d6e",  # avoid validation error
-            "revision_corpus": "f20ac0c449c85358d3d5c72a95f92f1eddc98aa5",
-            "revision_qrels": "ec88a7bb2da034d538e98e3122d2c98530ca1c8d",
+            "path": "mteb/WikipediaRetrievalMultilingual",
+            "revision": "5f6c91d21f2f5b9afb663858d19848fbd223c775",
         },
         type="Retrieval",
         category="s2p",
@@ -113,19 +49,3 @@ class WikipediaRetrievalMultilingual(MultilingualTask, AbsTaskRetrieval):
         sample_creation="LM-generated and verified",
         bibtex_citation="",
     )
-
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata_dict["dataset"]["path"],
-            langs=self.hf_subsets,
-            split=self.metadata_dict["eval_splits"][0],
-            cache_dir=kwargs.get("cache_dir", None),
-            revision_queries=self.metadata_dict["dataset"]["revision"],
-            revision_corpus=self.metadata_dict["dataset"]["revision_corpus"],
-            revision_qrels=self.metadata_dict["dataset"]["revision_qrels"],
-        )
-
-        self.data_loaded = True
