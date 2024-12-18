@@ -4,7 +4,6 @@ from functools import partial
 
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
-
 GRANITE_LANGUAGES = [
     "ara_Latn",
     "ces_Latn",
