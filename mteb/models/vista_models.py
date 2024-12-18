@@ -176,7 +176,6 @@ def vista_loader(**kwargs):
             self,
             texts: list[str] = None,
             images: list[Image.Image] | DataLoader = None,
-            *,
             task_name: str | None = None,
             prompt_type: PromptType | None = None,
             batch_size: int = 32,

@@ -129,10 +129,6 @@ def evaclip_loader(**kwargs):
             self,
             texts: list[str] = None,
             images: list[Image.Image] | DataLoader = None,
-            *,
-            task_name: str | None = None,
-            prompt_type: PromptType | None = None,
-            batch_size: int = 32,
             fusion_mode="sum",
             **kwargs: Any,
         ):
@@ -143,10 +139,10 @@ def evaclip_loader(**kwargs):
             image_embeddings = None
 
             if texts is not None:
-                text_embeddings = self.get_text_embeddings(texts, batch_size)
+                text_embeddings = self.get_text_embeddings(texts, **kwargs)
 
             if images is not None:
-                image_embeddings = self.get_image_embeddings(images, batch_size)
+                image_embeddings = self.get_image_embeddings(images, **kwargs)
 
             if text_embeddings is not None and image_embeddings is not None:
                 if len(text_embeddings) != len(image_embeddings):

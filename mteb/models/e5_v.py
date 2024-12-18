@@ -120,9 +120,6 @@ class E5VWrapper:
         self,
         texts: list[str] = None,
         images: list[Image.Image] = None,
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
         batch_size: int = 8,
         **kwargs: Any,
     ):
@@ -130,6 +127,7 @@ class E5VWrapper:
             raise ValueError("Either texts or images must be provided")
 
         all_fused_embeddings = []
+        kwargs.update(batch_size=batch_size)
 
         if texts is not None and images is not None:
             with torch.no_grad():
@@ -168,10 +166,10 @@ class E5VWrapper:
                         all_fused_embeddings.append(outputs.cpu())
             return torch.cat(all_fused_embeddings, dim=0)
         elif texts is not None:
-            text_embeddings = self.get_text_embeddings(texts, batch_size)
+            text_embeddings = self.get_text_embeddings(texts, **kwargs)
             return text_embeddings
         elif images is not None:
-            image_embeddings = self.get_image_embeddings(images, batch_size)
+            image_embeddings = self.get_image_embeddings(images, **kwargs)
             return image_embeddings
 
 
