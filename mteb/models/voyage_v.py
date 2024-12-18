@@ -1,10 +1,10 @@
 from __future__ import annotations
 
+import logging
 import os
 from functools import partial
 from typing import Any
 
-import logging
 import torch
 from PIL import Image
 from torch.utils.data import DataLoader
@@ -12,7 +12,6 @@ from torchvision import transforms
 from tqdm import tqdm
 
 import mteb
-from mteb.model_meta import ModelMeta
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
@@ -23,9 +22,7 @@ tensor_to_image = transforms.Compose([transforms.ToPILImage()])
 def downsample_image(
     image: Image.Image, max_pixels: int = 16000000, target_longest_side: int = 4000
 ) -> Image.Image:
-    """
-    if image pixel > max_pixels, downsample it to target_longest_side while keeping the width height ratio.
-    """
+    """If image pixel > max_pixels, downsample it to target_longest_side while keeping the width height ratio."""
     width, height = image.size
     pixels = width * height
 

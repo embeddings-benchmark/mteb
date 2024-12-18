@@ -101,10 +101,6 @@ class JinaCLIPModelWrapper:
         self,
         texts: list[str] = None,
         images: list[Image.Image] = None,
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 32,
         fusion_mode="sum",
         **kwargs: Any,
     ):
@@ -116,18 +112,12 @@ class JinaCLIPModelWrapper:
 
         if texts is not None:
             text_embeddings = self.get_text_embeddings(
-                texts,
-                batch_size=batch_size,
-                convert_to_numpy=False,
-                convert_to_tensor=True,
+                texts, convert_to_numpy=False, convert_to_tensor=True, **kwargs
             )
 
         if images is not None:
             image_embeddings = self.get_image_embeddings(
-                images,
-                batch_size=batch_size,
-                convert_to_numpy=False,
-                convert_to_tensor=True,
+                images, convert_to_numpy=False, convert_to_tensor=True, **kwargs
             )
 
         if text_embeddings is not None and image_embeddings is not None:
