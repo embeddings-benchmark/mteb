@@ -361,6 +361,19 @@ The following tables give you an overview of the tasks in MTEB.
 | [NYSJudicialEthicsLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal, Written] | None | None |
 | [NaijaSenti](https://github.com/hausanlp/NaijaSenti) | ['hau', 'ibo', 'pcm', 'yor'] | Classification | s2s | [Social, Written] | None | None |
 | [NamaaMrTydiReranking](https://huggingface.co/NAMAA-Space) (Muennighoff et al., 2022) | ['ara'] | Reranking | s2s | [Encyclopaedic, Written] | None | None |
+| [NanoArguAnaRetrieval](http://argumentation.bplaced.net/arguana/data) (Boteva et al., 2016) | ['eng'] | Retrieval | s2p | [Medical, Written] | None | None |
+| [NanoClimateFeverRetrieval](https://arxiv.org/abs/2012.00614) (Thomas Diggelmann, 2021) | ['eng'] | Retrieval | s2p | [Non-fiction, Academic, News] | None | None |
+| [NanoDBPediaRetrieval](https://huggingface.co/datasets/zeta-alpha-ai/NanoDBPedia) (Lehmann et al., 2015) | ['eng'] | Retrieval | s2p | [Encyclopaedic] | None | None |
+| [NanoFEVERRetrieval](https://fever.ai/) | ['eng'] | Retrieval | s2p | [Academic, Encyclopaedic] | None | None |
+| [NanoFiQA2018Retrieval](https://sites.google.com/view/fiqa/) (Nandan Thakur, 2021) | ['eng'] | Retrieval | s2p | [Academic, Social] | None | None |
+| [NanoHotpotQARetrieval](https://hotpotqa.github.io/) | ['eng'] | Retrieval | s2p | [Web, Written] | None | None |
+| [NanoMSMARCORetrieval](https://microsoft.github.io/msmarco/) (Tri Nguyen and                Mir Rosenberg and                Xia Song and                Jianfeng Gao and                Saurabh Tiwary and                Rangan Majumder and                Li Deng, 2016) | ['eng'] | Retrieval | s2p | [Web] | None | None |
+| [NanoNFCorpusRetrieval](https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/) (Boteva et al., 2016) | ['eng'] | Retrieval | s2p | [Medical, Academic, Written] | None | None |
+| [NanoNQRetrieval](https://ai.google.com/research/NaturalQuestions) (Tom Kwiatkowski, 2019) | ['eng'] | Retrieval | s2p | [Academic, Web] | None | None |
+| [NanoQuoraRetrieval](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs) (DataCanary et al., 2017) | ['eng'] | Retrieval | s2s | [Social] | None | None |
+| [NanoSCIDOCSRetrieval](https://allenai.org/data/scidocs) (Arman Cohan, 2020) | ['eng'] | Retrieval | s2p | [Academic, Written, Non-fiction] | None | None |
+| [NanoSciFactRetrieval](https://github.com/allenai/scifact) (Arman Cohan, 2020) | ['eng'] | Retrieval | s2p | [Academic, Medical, Written] | None | None |
+| [NanoTouche2020Retrieval](https://webis.de/events/touche-20/shared-task-1.html) | ['eng'] | Retrieval | s2p | [Academic] | None | None |
 | [NarrativeQARetrieval](https://metatext.io/datasets/narrativeqa) (Tomáš Kočiský, 2017) | ['eng'] | Retrieval | s2p |  | None | None |
 | [NepaliNewsClassification](https://github.com/goru001/nlp-for-nepali) | ['nep'] | Classification | s2s | [News, Written] | None | None |
 | [NeuCLIR2022Retrieval](https://neuclir.github.io/) (Lawrie et al., 2023) | ['fas', 'rus', 'zho'] | Retrieval | s2p | [News, Written] | None | None |
@@ -890,7 +903,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | Modern Greek (1453-) | Indo-European | 3 | 6 | 1 | 0 | 1 | 2 | 0 | 3 | 0 | 0 | 0 | 16 |
 | emi | Mussau-Emira | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | emp | Northern Emberá | Chocoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| eng | English | Indo-European | 16 | 143 | 16 | 3 | 1 | 8 | 8 | 92 | 13 | 2 | 1 | 303 |
+| eng | English | Indo-European | 16 | 143 | 16 | 3 | 1 | 8 | 8 | 105 | 13 | 2 | 1 | 316 |
 | enq | Enga | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | epo | Esperanto | Artificial Language | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | eri | Ogea | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1662,7 +1675,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | Yatee Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zul | Zulu | Atlantic-Congo | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 7 |
 | zyp | Zyphe Chin | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| Total | None | None | None | 1394 | 795 | 304 | 3 | 28 | 67 | 51 | 460 | 85 | 2 | 2 |
+| Total | None | None | None | 1394 | 795 | 304 | 3 | 28 | 67 | 51 | 473 | 85 | 2 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
