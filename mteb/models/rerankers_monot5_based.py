@@ -94,8 +94,10 @@ class MonoT5Reranker(RerankerWrapper):
                 token_true_id = tokenizer.get_vocab()[token_true]
                 return token_false_id, token_true_id
             else:
-                raise Exception(f"We don't know the indexes for the non-relevant/relevant tokens for\
-                        the checkpoint {model_name_or_path} and you did not provide any.")
+                raise Exception(
+                    f"We don't know the indexes for the non-relevant/relevant tokens for\
+                        the checkpoint {model_name_or_path} and you did not provide any."
+                )
         else:
             token_false_id = tokenizer.get_vocab()[token_false]
             token_true_id = tokenizer.get_vocab()[token_true]
