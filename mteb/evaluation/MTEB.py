@@ -478,7 +478,8 @@ class MTEB:
 
                     if not overwrite_results:
                         logger.info(
-                            f"{task.metadata.name} results already exists. Loading results from disk. Set overwrite_results=True to overwrite."
+                            f"{task.metadata.name} results already exists. Loading results from disk."
+                            f" Set overwrite_results=True to overwrite or `--overwrite`."
                         )
                         evaluation_results.append(existing_results)
                         del self.tasks[0]  # empty memory
@@ -496,7 +497,7 @@ class MTEB:
             final_splits_to_run = []
             # We need to run any split that is fully missing or has missing subsets
             for sp, info in missing_evaluations.items():
-                if info["whole_split_missing"] or info["missing_subsets"]:
+                if info["whole_split_missing"] or info["missing_subsets"] or overwrite_results:
                     final_splits_to_run.append(sp)
 
             # If no splits need to be run and results exist, skip
@@ -527,8 +528,9 @@ class MTEB:
                     # Determine subsets to run for this split
                     # If the whole split is missing, run all required subsets
                     # If only some subsets are missing, run only those
-                    subsets_to_run = info["missing_subsets"]
-                    if info["whole_split_missing"] and task_subsets is None:
+                    subsets_to_run = info["missing_subsets"] if not overwrite_results else task_subsets
+
+                    if (info["whole_split_missing"] or overwrite_results) and task_subsets is None:
                         subsets_to_run = ["default"]
 
                     if co2_tracker:
