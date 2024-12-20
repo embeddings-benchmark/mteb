@@ -497,7 +497,11 @@ class MTEB:
             final_splits_to_run = []
             # We need to run any split that is fully missing or has missing subsets
             for sp, info in missing_evaluations.items():
-                if info["whole_split_missing"] or info["missing_subsets"] or overwrite_results:
+                if (
+                    info["whole_split_missing"]
+                    or info["missing_subsets"]
+                    or overwrite_results
+                ):
                     final_splits_to_run.append(sp)
 
             # If no splits need to be run and results exist, skip
@@ -528,9 +532,15 @@ class MTEB:
                     # Determine subsets to run for this split
                     # If the whole split is missing, run all required subsets
                     # If only some subsets are missing, run only those
-                    subsets_to_run = info["missing_subsets"] if not overwrite_results else task_subsets
+                    subsets_to_run = (
+                        info["missing_subsets"]
+                        if not overwrite_results
+                        else task_subsets
+                    )
 
-                    if (info["whole_split_missing"] or overwrite_results) and task_subsets is None:
+                    if (
+                        info["whole_split_missing"] or overwrite_results
+                    ) and task_subsets is None:
                         subsets_to_run = ["default"]
 
                     if co2_tracker:
