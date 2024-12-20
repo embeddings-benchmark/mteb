@@ -468,7 +468,7 @@ class TaskResult(BaseModel):
                         values.append(getter(scores))
                         break
 
-            return aggregation(values)
+        return aggregation(values)
 
     @classmethod
     def from_validated(cls, **data) -> TaskResult:

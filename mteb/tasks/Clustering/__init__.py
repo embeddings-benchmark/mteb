@@ -23,6 +23,10 @@ from .fra.AlloProfClusteringS2S import *
 from .fra.HALClusteringS2S import *
 from .jpn.LivedoorNewsClustering import *
 from .jpn.MewsC16JaClustering import *
+
+from .metagene.HumanVirusReferenceClustering import *
+from .metagene.HumanMicrobiomeProjectReferenceClustering import *
+
 from .multilingual.IndicReviewsClusteringP2P import *
 from .multilingual.MasakhaNEWSClusteringP2P import *
 from .multilingual.MasakhaNEWSClusteringS2S import *

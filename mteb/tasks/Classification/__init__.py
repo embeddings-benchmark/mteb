@@ -65,6 +65,12 @@ from .kor.KorSarcasmClassification import *
 from .kur.KurdishSentimentClassification import *
 from .mal.MalayalamNewsClassification import *
 from .mar.MarathiNewsClassification import *
+
+from .metagene.HumanMicrobiomeProjectDemonstrationMultiClassification import *
+from .metagene.HumanMicrobiomeProjectDemonstrationClassification import *
+from .metagene.HumanMicrobiomeProjectReferenceClassificationMini import *
+from .metagene.HumanVirusClassification import *
+
 from .mkd.MacedonianTweetSentimentClassification import *
 from .multilingual.AfriSentiClassification import *
 from .multilingual.AfriSentiLangClassification import *
