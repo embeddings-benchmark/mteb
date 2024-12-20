@@ -181,7 +181,7 @@ voyage_finance_2 = ModelMeta(
     reference="https://blog.voyageai.com/2024/06/03/domain-specific-embeddings-finance-edition-voyage-finance-2/",
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instructions=False,
+    use_instructions=True,
 )
 
 voyage_law_2 = ModelMeta(
@@ -203,7 +203,7 @@ voyage_law_2 = ModelMeta(
     reference="https://blog.voyageai.com/2024/04/15/domain-specific-embeddings-and-retrieval-legal-edition-voyage-law-2/",
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instructions=False,
+    use_instructions=True,
 )
 
 voyage_code_2 = ModelMeta(
@@ -225,7 +225,7 @@ voyage_code_2 = ModelMeta(
     reference="https://blog.voyageai.com/2024/01/23/voyage-code-2-elevate-your-code-retrieval/",
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instructions=False,
+    use_instructions=True,
 )
 
 voyage_large_2 = ModelMeta(
@@ -247,7 +247,7 @@ voyage_large_2 = ModelMeta(
     reference="https://blog.voyageai.com/2023/10/29/voyage-embeddings/",
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instructions=False,
+    use_instructions=True,
 )
 
 voyage_2 = ModelMeta(
@@ -269,7 +269,7 @@ voyage_2 = ModelMeta(
     reference="https://blog.voyageai.com/2023/10/29/voyage-embeddings/",
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instructions=False,
+    use_instructions=True,
 )
 voyage_multilingual_2 = ModelMeta(
     name="voyageai/voyage-multilingual-2",
@@ -290,7 +290,7 @@ voyage_multilingual_2 = ModelMeta(
     reference="https://blog.voyageai.com/2024/06/10/voyage-multilingual-2-multilingual-embedding-model/",
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instructions=False,
+    use_instructions=True,
 )
 
 voyage_3 = ModelMeta(
@@ -312,7 +312,7 @@ voyage_3 = ModelMeta(
     reference="https://blog.voyageai.com/2024/09/18/voyage-3/",
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instructions=False,
+    use_instructions=True,
 )
 
 voyage_3_lite = ModelMeta(
@@ -334,5 +334,5 @@ voyage_3_lite = ModelMeta(
     reference="https://blog.voyageai.com/2024/09/18/voyage-3/",
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instructions=False,
+    use_instructions=True,
 )
