@@ -436,6 +436,10 @@ class MTEB:
         if isinstance(model, (SentenceTransformer, CrossEncoder)):
             model = SentenceTransformerWrapper(model)
 
+        ## Disable co2_tracker for API models
+        if "API" in meta.framework:
+            co2_tracker = False
+
         if output_path:
             self._save_model_metadata(meta, output_path)
 
