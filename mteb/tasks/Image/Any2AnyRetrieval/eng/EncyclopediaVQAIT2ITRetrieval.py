@@ -17,7 +17,7 @@ class EncyclopediaVQAIT2ITRetrieval(AbsTaskAny2AnyRetrieval):
         category="it2it",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="recall_at_5",
+        main_score="cv_recall_at_5",
         date=("2023-01-01", "2023-07-20"),
         domains=["Encyclopaedic"],
         task_subtypes=["Image Text Retrieval"],

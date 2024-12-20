@@ -17,7 +17,7 @@ class OKVQAIT2TRetrieval(AbsTaskAny2AnyRetrieval):
         category="it2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="recall_at_10",
+        main_score="cv_recall_at_10",
         date=("2019-01-01", "2020-07-29"),
         domains=["Encyclopaedic"],
         task_subtypes=["Image Text Retrieval"],

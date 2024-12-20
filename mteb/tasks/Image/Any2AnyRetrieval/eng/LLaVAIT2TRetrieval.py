@@ -17,7 +17,7 @@ class LLaVAIT2TRetrieval(AbsTaskAny2AnyRetrieval):
         category="it2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="recall_at_5",
+        main_score="cv_recall_at_5",
         date=("2024-07-06", "2024-02-26"),
         domains=["Encyclopaedic"],
         task_subtypes=["Image Text Retrieval"],
