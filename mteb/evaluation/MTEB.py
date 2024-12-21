@@ -495,10 +495,7 @@ class MTEB:
                     final_splits_to_run = []
                     # We need to run any split that is fully missing or has missing subsets
                     for sp, info in missing_evaluations.items():
-                        if (
-                                info["whole_split_missing"]
-                                or info["missing_subsets"]
-                        ):
+                        if info["whole_split_missing"] or info["missing_subsets"]:
                             final_splits_to_run.append(sp)
 
                     if overwrite_results:

@@ -326,7 +326,9 @@ def test_all_splits_evaluated_with_overwrite(model, tasks, tmp_path):
     assert results[0].scores.keys() == {"val", "test"}
 
 
-def test_all_splits_subsets_evaluated_with_overwrite(model, multilingual_tasks, tmp_path):
+def test_all_splits_subsets_evaluated_with_overwrite(
+    model, multilingual_tasks, tmp_path
+):
     evaluation = MTEB(tasks=multilingual_tasks)
     results = evaluation.run(
         model,
@@ -360,4 +362,3 @@ def test_all_splits_subsets_evaluated_with_overwrite(model, multilingual_tasks, 
     for split in ["test", "val"]:
         assert len(results2[0].scores[split]) == 2
         assert sorted(results2[0].languages) == ["eng", "fra"]
-
