@@ -37,8 +37,3 @@ class TweetEmotionClassification(AbsTaskClassification):
 }
 """,
     )
-
-    # def dataset_transform(self):
-    #     self.dataset = self.stratified_subsampling(
-    #         self.dataset, seed=self.seed, splits=["train"]
-    #     )

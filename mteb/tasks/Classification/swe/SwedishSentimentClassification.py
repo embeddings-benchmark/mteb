@@ -28,8 +28,3 @@ class SwedishSentimentClassification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation="",
     )
-
-    # def dataset_transform(self):
-    #     self.dataset = self.stratified_subsampling(
-    #         self.dataset, seed=self.seed, splits=["validation", "test"]
-    #     )
