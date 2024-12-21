@@ -3,6 +3,7 @@ from __future__ import annotations
 from functools import partial
 
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
+
 LANGUAGES_V2_0 = [
     "afr_Latn",
     "ara_Arab",

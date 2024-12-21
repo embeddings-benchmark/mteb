@@ -979,27 +979,27 @@ BRIGHT = Benchmark(
   year={2024}
 }""",
 )
-
-NANOBEIR = Benchmark(
-    name="NanoBEIR",
-    tasks=get_tasks(
-        tasks=[
-            "NanoArguAnaRetrieval",
-            "NanoClimateFeverRetrieval",
-            "NanoDBPediaRetrieval",
-            "NanoFEVERRetrieval",
-            "NanoFiQA2018Retrieval",
-            "NanoHotpotQARetrieval",
-            "NanoMSMARCORetrieval",
-            "NanoNFCorpusRetrieval",
-            "NanoNQRetrieval",
-            "NanoQuoraRetrieval",
-            "NanoSCIDOCSRetrieval",
-            "NanoSciFactRetrieval",
-            "NanoTouche2020Retrieval",
-        ],
-    ),
-    description="A benchmark to evaluate with subsets of BEIR datasets to use less computational power",
-    reference="https://huggingface.co/collections/zeta-alpha-ai/nanobeir-66e1a0af21dfd93e620cd9f6",
-    citation=None,
-)
+#
+# NANOBEIR = Benchmark(
+#     name="NanoBEIR",
+#     tasks=get_tasks(
+#         tasks=[
+#             "NanoArguAnaRetrieval",
+#             "NanoClimateFeverRetrieval",
+#             "NanoDBPediaRetrieval",
+#             "NanoFEVERRetrieval",
+#             "NanoFiQA2018Retrieval",
+#             "NanoHotpotQARetrieval",
+#             "NanoMSMARCORetrieval",
+#             "NanoNFCorpusRetrieval",
+#             "NanoNQRetrieval",
+#             "NanoQuoraRetrieval",
+#             "NanoSCIDOCSRetrieval",
+#             "NanoSciFactRetrieval",
+#             "NanoTouche2020Retrieval",
+#         ],
+#     ),
+#     description="A benchmark to evaluate with subsets of BEIR datasets to use less computational power",
+#     reference="https://huggingface.co/collections/zeta-alpha-ai/nanobeir-66e1a0af21dfd93e620cd9f6",
+#     citation=None,
+# )

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .ara import NamaaMrTydiReranking
 from .eng import (
     AskUbuntuDupQuestions,
     MindSmallReranking,
@@ -19,6 +20,7 @@ __all__ = [
     "CMedQAv2",
     "MMarcoReranking",
     "T2Reranking",
+    "NamaaMrTydiReranking",
     "AskUbuntuDupQuestions",
     "WebLINXCandidatesReranking",
     "StackOverflowDupQuestions",

@@ -7,8 +7,7 @@ import os
 import types
 from pathlib import Path
 
-# Adjust this import to the correct location of AbsTask.
-from mteb.tasks import AbsTask
+from mteb.abstasks import AbsTask
 
 BASE_DIR = Path("../mteb/tasks")
 
