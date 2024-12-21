@@ -300,7 +300,6 @@ class MTEB:
         task: AbsTask,
         model: Encoder,
         split: str,
-        output_folder: str | None,
         subsets_to_run: list[str] | None = None,
         *,
         encode_kwargs: dict[str, Any],
@@ -311,7 +310,6 @@ class MTEB:
             model,
             split,
             subsets_to_run=subsets_to_run,
-            output_folder=output_folder,
             encode_kwargs=encode_kwargs,
             **kwargs,
         )
