@@ -476,6 +476,7 @@ class MTEB:
             save_path = None
 
             if output_path:
+                kwargs["output_folder"] = output_folder  # needed for retrieval tasks
                 save_path = output_path / f"{task.metadata.name}{task.save_suffix}.json"
                 if save_path.exists():
                     existing_results = TaskResult.from_disk(save_path)
