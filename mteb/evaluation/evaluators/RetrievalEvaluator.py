@@ -3,13 +3,12 @@ from __future__ import annotations
 import logging
 from typing import Any
 
+from .Evaluator import Evaluator
 from .model_classes import (
     DenseRetrievalExactSearch,
     DRESModel,
     is_cross_encoder_compatible,
 )
-
-from .Evaluator import Evaluator
 from .utils import (
     add_task_specific_scores,
     calculate_retrieval_scores,

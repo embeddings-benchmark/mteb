@@ -10,12 +10,12 @@ from typing import Any
 import numpy as np
 import torch
 import tqdm
-from sentence_transformers import CrossEncoder, SentenceTransformer
+from sentence_transformers import SentenceTransformer
 
 from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
 
-from .utils import convert_conv_history_to_query, cos_sim, dot_score, download
+from .utils import convert_conv_history_to_query, cos_sim, download
 
 logger = logging.getLogger(__name__)
 
@@ -238,7 +238,9 @@ class DenseRetrievalExactSearch:
             # Ensure query embedding is on the correct device and has correct shape
             query_embedding = query_embeddings[query_idx].unsqueeze(0)
 
-            score_function = self.model.score if hasattr(self.model, "score") else cos_sim
+            score_function = (
+                self.model.score if hasattr(self.model, "score") else cos_sim
+            )
 
             with torch.inference_mode():
                 scores = score_function(
@@ -319,12 +321,12 @@ class DenseRetrievalExactSearch:
             query_embeddings = torch.as_tensor(query_embeddings).to(device)
             sub_corpus_embeddings = torch.as_tensor(sub_corpus_embeddings).to(device)
 
-            score_function = self.model.score if hasattr(self.model, "score") else cos_sim
+            score_function = (
+                self.model.score if hasattr(self.model, "score") else cos_sim
+            )
 
             with torch.inference_mode():
-                scores = score_function(
-                    query_embeddings, sub_corpus_embeddings
-                )
+                scores = score_function(query_embeddings, sub_corpus_embeddings)
 
             # get top-k values
             cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
