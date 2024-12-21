@@ -239,7 +239,7 @@ class DenseRetrievalExactSearch:
             query_embedding = query_embeddings[query_idx].unsqueeze(0)
 
             score_function = (
-                self.model.score if hasattr(self.model, "score") else cos_sim
+                self.model.similarity if hasattr(self.model, "similarity") else cos_sim
             )
 
             with torch.inference_mode():
@@ -322,7 +322,7 @@ class DenseRetrievalExactSearch:
             sub_corpus_embeddings = torch.as_tensor(sub_corpus_embeddings).to(device)
 
             score_function = (
-                self.model.score if hasattr(self.model, "score") else cos_sim
+                self.model.similarity if hasattr(self.model, "similarity") else cos_sim
             )
 
             with torch.inference_mode():
