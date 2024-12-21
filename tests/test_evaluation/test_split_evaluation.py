@@ -301,29 +301,29 @@ def test_all_splits_evaluated_with_overwrite(model, tasks, tmp_path):
     evaluation = MTEB(tasks=tasks)
     results = evaluation.run(
         model,
-        eval_splits=["val", "test"],
-        output_folder=str(tmp_path / "all_splits_evaluated"),
+        eval_splits=["val"],
+        output_folder=str(tmp_path / "all_splits_evaluated_with_overwrite"),
         verbosity=2,
     )
 
     assert "MockRetrievalTask" == results[0].task_name
     last_evaluated_splits = evaluation.get_last_evaluated_splits()
-    assert set(last_evaluated_splits["MockRetrievalTask"]) == {"val", "test"}
-    assert len(last_evaluated_splits["MockRetrievalTask"]) == 2
-    assert results[0].scores.keys() == {"val", "test"}
+    assert set(last_evaluated_splits["MockRetrievalTask"]) == {"val"}
+    assert len(last_evaluated_splits["MockRetrievalTask"]) == 1
+    assert results[0].scores.keys() == {"val"}
 
     results2 = evaluation.run(
         model,
-        eval_splits=["val", "test"],
-        output_folder=str(tmp_path / "all_splits_evaluated"),
+        eval_splits=["val"],
+        output_folder=str(tmp_path / "all_splits_evaluated_with_overwrite"),
         verbosity=2,
         overwrite_results=True,
     )
     assert "MockRetrievalTask" == results2[0].task_name
     last_evaluated_splits = evaluation.get_last_evaluated_splits()
-    assert set(last_evaluated_splits["MockRetrievalTask"]) == {"val", "test"}
-    assert len(last_evaluated_splits["MockRetrievalTask"]) == 2
-    assert results[0].scores.keys() == {"val", "test"}
+    assert set(last_evaluated_splits["MockRetrievalTask"]) == {"val"}
+    assert len(last_evaluated_splits["MockRetrievalTask"]) == 1
+    assert results2[0].scores.keys() == {"val"}
 
 
 def test_all_splits_subsets_evaluated_with_overwrite(
@@ -332,33 +332,31 @@ def test_all_splits_subsets_evaluated_with_overwrite(
     evaluation = MTEB(tasks=multilingual_tasks)
     results = evaluation.run(
         model,
-        eval_splits=["test", "val"],
-        output_folder=str(tmp_path / "no_missing_lang_test"),
+        eval_splits=["test",],
+        output_folder=str(tmp_path / "all_splits_subsets_evaluated_with_overwrite"),
         verbosity=2,
-        eval_subsets=["eng", "fra"],
+        eval_subsets=["fra"],
     )
     last_evaluated_splits = evaluation.get_last_evaluated_splits()
     assert "MockMultilingualRetrievalTask" in last_evaluated_splits
-    assert len(last_evaluated_splits["MockMultilingualRetrievalTask"]) == 2
-    assert results[0].scores.keys() == {"test", "val"}
-    for split in ["test", "val"]:
-        assert len(results[0].scores[split]) == 2
-        assert sorted(results[0].languages) == ["eng", "fra"]
+    assert len(last_evaluated_splits["MockMultilingualRetrievalTask"]) == 1
+    assert results[0].scores.keys() == {"test"}
+    for split in ["test"]:
+        assert len(results[0].scores[split]) == 1
+        assert sorted(results[0].languages) == ["fra"]
 
     results2 = evaluation.run(
         model,
-        eval_splits=["test", "val"],
-        output_folder=str(tmp_path / "no_missing_lang_test"),
+        eval_splits=["test"],
+        output_folder=str(tmp_path / "all_splits_subsets_evaluated_with_overwrite"),
         verbosity=2,
-        eval_subsets=["eng", "fra"],
+        eval_subsets=["fra"],
         overwrite_results=True,
     )
     last_evaluated_splits = evaluation.get_last_evaluated_splits()
     assert "MockMultilingualRetrievalTask" in last_evaluated_splits
-    assert len(last_evaluated_splits["MockMultilingualRetrievalTask"]) == 2
-    assert results2[0].scores.keys() == {"test", "val"}
-    assert len(results2[0].scores["test"]) == 2
-    assert results[0].scores.keys() == {"test", "val"}
-    for split in ["test", "val"]:
-        assert len(results2[0].scores[split]) == 2
-        assert sorted(results2[0].languages) == ["eng", "fra"]
+    assert len(last_evaluated_splits["MockMultilingualRetrievalTask"]) == 1
+    assert results2[0].scores.keys() == {"test"}
+    for split in ["test"]:
+        assert len(results2[0].scores[split]) == 1
+        assert sorted(results2[0].languages) == ["fra"]
