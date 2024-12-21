@@ -512,7 +512,6 @@ class DRESModel:
         self,
         corpus: list[dict[str, str]],
         task_name: str,
-        batch_size: int,
         prompt_type: PromptType = PromptType.passage,
         **kwargs,
     ):
@@ -521,7 +520,6 @@ class DRESModel:
             sentences,
             task_name=task_name,
             prompt_type=prompt_type,
-            batch_size=batch_size,
             **kwargs,
         )
         return corpus_embeddings
