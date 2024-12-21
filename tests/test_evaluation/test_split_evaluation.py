@@ -332,7 +332,9 @@ def test_all_splits_subsets_evaluated_with_overwrite(
     evaluation = MTEB(tasks=multilingual_tasks)
     results = evaluation.run(
         model,
-        eval_splits=["test",],
+        eval_splits=[
+            "test",
+        ],
         output_folder=str(tmp_path / "all_splits_subsets_evaluated_with_overwrite"),
         verbosity=2,
         eval_subsets=["fra"],
