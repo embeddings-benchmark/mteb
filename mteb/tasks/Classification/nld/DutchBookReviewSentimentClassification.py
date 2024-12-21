@@ -10,9 +10,8 @@ class DutchBookReviewSentimentClassification(AbsTaskClassification):
         description="A Dutch book review for sentiment classification.",
         reference="https://github.com/benjaminvdb/DBRD",
         dataset={
-            "path": "benjaminvdb/dbrd",
-            "revision": "3f756ab4572e071eb53e887ab629f19fa747d39e",
-            "trust_remote_code": True,
+            "path": "mteb/DutchBookReviewSentimentClassification",
+            "revision": "1c2815ad38cf4794eb8d678fb08f569ea79392f6",
         },
         type="Classification",
         category="s2s",

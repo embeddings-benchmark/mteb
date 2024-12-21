@@ -12,9 +12,8 @@ class FilipinoHateSpeechClassification(AbsTaskClassification):
         description="Filipino Twitter dataset for sentiment classification.",
         reference="https://pcj.csp.org.ph/index.php/pcj/issue/download/29/PCJ%20V14%20N1%20pp1-14%202019",
         dataset={
-            "path": "jcblaise/hatespeech_filipino",
-            "revision": "b01711587b073e55569de75ef04d7da4592a3618",
-            "trust_remote_code": True,
+            "path": "mteb/FilipinoHateSpeechClassification",
+            "revision": "087a17c0b7f9a78901c88aea00ad2892a319fdac",
         },
         type="Classification",
         category="s2s",
@@ -42,7 +41,7 @@ class FilipinoHateSpeechClassification(AbsTaskClassification):
         """,
     )
 
-    def dataset_transform(self):
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["validation", "test"]
-        )
+    # def dataset_transform(self):
+    #     self.dataset = self.stratified_subsampling(
+    #         self.dataset, seed=self.seed, splits=["validation", "test"]
+    #     )

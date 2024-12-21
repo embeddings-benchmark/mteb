@@ -10,9 +10,8 @@ class UrduRomanSentimentClassification(AbsTaskClassification):
         description="The Roman Urdu dataset is a data corpus comprising of more than 20000 records tagged for sentiment (Positive, Negative, Neutral)",
         reference="https://archive.ics.uci.edu/dataset/458/roman+urdu+data+set",
         dataset={
-            "path": "community-datasets/roman_urdu",
-            "revision": "566be6449bb30b9b9f2b59173391647fe0ca3224",
-            "trust_remote_code": True,
+            "path": "mteb/UrduRomanSentimentClassification",
+            "revision": "905c1121c002c4b9adc4ebc5faaf4d6f50d1b1ee",
         },
         type="Classification",
         category="s2s",
@@ -38,10 +37,7 @@ class UrduRomanSentimentClassification(AbsTaskClassification):
     """,
     )
 
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_columns(
-            {"sentence": "text", "sentiment": "label"}
-        )
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"]
-        )
+    # def dataset_transform(self):
+    #     self.dataset = self.stratified_subsampling(
+    #         self.dataset, seed=self.seed, splits=["train"]
+    #     )

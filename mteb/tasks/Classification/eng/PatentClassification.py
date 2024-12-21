@@ -9,9 +9,8 @@ class PatentClassification(AbsTaskClassification):
         name="PatentClassification",
         description="Classification Dataset of Patents and Abstract",
         dataset={
-            "path": "ccdv/patent-classification",
-            "revision": "2f38a1dfdecfacee0184d74eaeafd3c0fb49d2a6",
-            "trust_remote_code": True,
+            "path": "mteb/PatentClassification",
+            "revision": "6bd77eb030ab3bfbf1e6f7a2b069979daf167311",
         },
         reference="https://aclanthology.org/P19-1212.pdf",
         type="Classification",
@@ -47,7 +46,7 @@ class PatentClassification(AbsTaskClassification):
         }""",
     )
 
-    def dataset_transform(self):
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"]
-        )
+    # def dataset_transform(self):
+    #     self.dataset = self.stratified_subsampling(
+    #         self.dataset, seed=self.seed, splits=["test"]
+    #     )
