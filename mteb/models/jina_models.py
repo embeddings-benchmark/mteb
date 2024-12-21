@@ -191,7 +191,7 @@ class JinaWrapper(SentenceTransformerWrapper):
 
 
 jina_embeddings_v3 = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         JinaWrapper,
         model="jinaai/jina-embeddings-v3",
         revision="215a6e121fa0183376388ac6b1ae230326bfeaed",
@@ -220,7 +220,7 @@ jina_embeddings_v3 = ModelMeta(
     license="cc-by-nc-4.0",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instructions=False,
+    use_instructions=True,
     reference="https://huggingface.co/jinaai/jina-embeddings-v3",
     citation="""
     @misc{sturua2024jinaembeddingsv3multilingualembeddingstask,

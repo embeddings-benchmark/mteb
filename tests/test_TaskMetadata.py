@@ -4,6 +4,8 @@ import pytest
 from pydantic import ValidationError
 
 from mteb.abstasks import AbsTask, TaskMetadata
+from mteb import AbsTask
+from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.overview import get_tasks
 
 # Historic datasets without filled metadata. Do NOT add new datasets to this list.
@@ -523,3 +525,15 @@ def test_empty_descriptive_stat_in_new_datasets(task: AbsTask):
         task.metadata.descriptive_stats is not None
     ), f"Dataset {task.metadata.name} should have descriptive stats. You can add metadata to your task by running `YorTask().calculate_metadata_metrics()`"
     assert task.metadata.n_samples is not None
+
+
+@pytest.mark.parametrize("task", get_tasks())
+def test_eval_langs_correctly_specified(task: AbsTask):
+    if task.is_multilingual:
+        assert isinstance(
+            task.metadata.eval_langs, dict
+        ), f"{task.metadata.name} should have eval_langs as a dict"
+    else:
+        assert isinstance(
+            task.metadata.eval_langs, list
+        ), f"{task.metadata.name} should have eval_langs as a list"

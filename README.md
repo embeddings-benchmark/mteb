@@ -210,6 +210,21 @@ Note that the public leaderboard uses the test splits for all datasets except MS
 
 </details>
 
+
+<details>
+  <summary> Selecting evaluation subset </summary>
+
+### Selecting evaluation subset
+You can evaluate only on selected subsets. For example, if you want to evaluate only the `subset_name_to_run` subset of all tasks, do the following:
+
+```python
+evaluation.run(model, eval_subsets=["subset_name_to_run"])
+```
+
+Monolingual tasks have `default` subset, other tasks have subsets that are specific to the dataset.
+
+</details>
+
 <details>
   <summary>  Using a custom model </summary>
 
@@ -314,6 +329,34 @@ evaluation.run(
     previous_results=f"results/stage1/NFCorpus_{subset}_predictions.json",
 )
 ```
+
+</details>
+
+<details>
+  <summary> Late Interaction (ColBERT) </summary>
+
+### Using Late Interaction models for retrieval
+
+```python
+from mteb import MTEB
+import mteb
+
+
+colbert = mteb.get_model("colbert-ir/colbertv2.0")
+tasks = mteb.get_tasks(tasks=["NFCorpus"], languages=["eng"])
+
+eval_splits = ["test"]
+
+evaluation = MTEB(tasks=tasks)
+
+evaluation.run(
+    colbert,
+    eval_splits=eval_splits,
+    corpus_chunk_size=500,
+)
+```
+This implementation employs the MaxSim operation to compute the similarity between sentences. While MaxSim provides high-quality results, it processes a larger number of embeddings, potentially leading to increased resource usage. To manage resource consumption, consider lowering the `corpus_chunk_size` parameter.
+
 
 </details>
 

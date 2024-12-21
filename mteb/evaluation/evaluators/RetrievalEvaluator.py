@@ -14,6 +14,10 @@ from .utils import (
     add_task_specific_scores,
     calculate_retrieval_scores,
     evaluate_abstention,
+    confidence_scores,
+    convert_conv_history_to_query,
+    cos_sim,
+    download,
     hole,
     mrr,
     recall_cap,
@@ -30,7 +34,6 @@ class RetrievalEvaluator(Evaluator):
         retriever,
         task_name: str | None = None,
         k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000],
-        score_function: str = "cos_sim",
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ):

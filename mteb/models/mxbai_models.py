@@ -5,7 +5,7 @@ from functools import partial
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
 mxbai_embed_large_v1 = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="mixedbread-ai/mxbai-embed-large-v1",
         revision="990580e27d329c7408b3741ecff85876e128e203",

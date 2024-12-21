@@ -237,6 +237,7 @@ class AbsTaskRetrieval(AbsTask):
         self,
         model,
         split: str = "test",
+        subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
@@ -250,6 +251,8 @@ class AbsTaskRetrieval(AbsTask):
 
         scores = {}
         hf_subsets = list(self.hf_subsets) if self.is_multilingual else ["default"]
+        if subsets_to_run is not None:
+            hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
 
         for hf_subset in hf_subsets:
             logger.info(f"Subset: {hf_subset}")

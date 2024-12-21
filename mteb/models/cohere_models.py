@@ -216,7 +216,7 @@ model_prompts = {
 }
 
 cohere_mult_3 = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         CohereTextEmbeddingModel,
         model_name="embed-multilingual-v3.0",
         model_prompts=model_prompts,
@@ -234,11 +234,11 @@ cohere_mult_3 = ModelMeta(
     license=None,
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instructions=False,
+    use_instructions=True,
 )
 
 cohere_eng_3 = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         CohereTextEmbeddingModel,
         model_name="embed-english-v3.0",
         model_prompts=model_prompts,
@@ -256,7 +256,7 @@ cohere_eng_3 = ModelMeta(
     license=None,
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instructions=False,
+    use_instructions=True,
 )
 
 cohere_mult_light_3 = ModelMeta(
@@ -278,7 +278,7 @@ cohere_mult_light_3 = ModelMeta(
     license=None,
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instructions=False,
+    use_instructions=True,
 )
 
 cohere_eng_light_3 = ModelMeta(
@@ -300,5 +300,5 @@ cohere_eng_light_3 = ModelMeta(
     license=None,
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instructions=False,
+    use_instructions=True,
 )
