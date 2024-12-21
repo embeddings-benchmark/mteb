@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from mteb.evaluation.evaluators.model_classes import (
+from .model_classes import (
     DenseRetrievalExactSearch,
     DRESModel,
     is_cross_encoder_compatible,
@@ -14,10 +14,6 @@ from .utils import (
     add_task_specific_scores,
     calculate_retrieval_scores,
     evaluate_abstention,
-    confidence_scores,
-    convert_conv_history_to_query,
-    cos_sim,
-    download,
     hole,
     mrr,
     recall_cap,
@@ -55,14 +51,6 @@ class RetrievalEvaluator(Evaluator):
         self.top_k = (
             max(k_values) if "top_k" not in kwargs else kwargs["top_k"]
         )  # can lower it if reranking
-        self.score_function = (
-            retriever.mteb_model_meta.similarity_fn_name
-            if (
-                hasattr(retriever, "mteb_model_meta")
-                and retriever.mteb_model_meta.similarity_fn_name
-            )
-            else score_function
-        )
         self.task_name = task_name
 
     def __call__(
@@ -93,7 +81,6 @@ class RetrievalEvaluator(Evaluator):
                 corpus,
                 queries,
                 self.top_k,
-                self.score_function,
                 task_name=self.task_name,  # type: ignore
                 instructions=instructions,
                 **kwargs,
@@ -103,7 +90,6 @@ class RetrievalEvaluator(Evaluator):
                 corpus,
                 queries,
                 self.top_k,
-                self.score_function,
                 instructions=instructions,
                 request_qid=qid,
                 task_name=self.task_name,
@@ -118,6 +104,7 @@ class RetrievalEvaluator(Evaluator):
         ignore_identical_ids: bool = False,
         task_name: str = None,
     ) -> tuple[
+        dict[str, float],
         dict[str, float],
         dict[str, float],
         dict[str, float],
