@@ -19,7 +19,7 @@ _LANGUAGES = {
 }
 
 
-class IndicQARetrieval(MultilingualTask, AbsTaskRetrieval):
+class IndicQARetrieval(AbsTaskRetrieval, MultilingualTask):
     metadata = TaskMetadata(
         name="IndicQARetrieval",
         dataset={
