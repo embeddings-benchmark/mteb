@@ -198,7 +198,7 @@ MTEB_ENG_CLASSIC = Benchmark(
         )
         + get_tasks(tasks=["MSMARCO"], languages=["eng"], eval_splits=["dev"])
     ),
-    description="The original English benchmarks by Muennighoff et al., (2023).",
+    description="The original English benchmark by Muennighoff et al., (2023).",
     citation="""@inproceedings{muennighoff-etal-2023-mteb,
     title = "{MTEB}: Massive Text Embedding Benchmark",
     author = "Muennighoff, Niklas  and
