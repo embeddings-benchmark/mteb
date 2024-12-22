@@ -501,7 +501,6 @@ class MTEB:
                             if info["whole_split_missing"] or info["missing_subsets"]:
                                 final_splits_to_run.append(sp)
 
-
                     if not overwrite_results and len(final_splits_to_run) == 0:
                         logger.info(
                             f"{task.metadata.name} results already exists. Loading results from disk."
