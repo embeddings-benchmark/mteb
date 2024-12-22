@@ -308,22 +308,22 @@ def test_all_splits_evaluated_with_overwrite(model, tasks, tmp_path):
 
     assert "MockRetrievalTask" == results[0].task_name
     last_evaluated_splits = evaluation.get_last_evaluated_splits()
-    assert set(last_evaluated_splits["MockRetrievalTask"]) == {"val"}
     assert len(last_evaluated_splits["MockRetrievalTask"]) == 1
+    assert set(last_evaluated_splits["MockRetrievalTask"]) == {"val"}
     assert results[0].scores.keys() == {"val"}
 
     results2 = evaluation.run(
         model,
-        eval_splits=["val"],
+        eval_splits=["val", "test"],
         output_folder=str(tmp_path / "all_splits_evaluated_with_overwrite"),
         verbosity=2,
         overwrite_results=True,
     )
     assert "MockRetrievalTask" == results2[0].task_name
     last_evaluated_splits = evaluation.get_last_evaluated_splits()
-    assert set(last_evaluated_splits["MockRetrievalTask"]) == {"val"}
-    assert len(last_evaluated_splits["MockRetrievalTask"]) == 1
-    assert results2[0].scores.keys() == {"val"}
+    assert len(last_evaluated_splits["MockRetrievalTask"]) == 2
+    assert set(last_evaluated_splits["MockRetrievalTask"]) == {"val", "test"}
+    assert results2[0].scores.keys() == {"val", "test"}
 
 
 def test_all_splits_subsets_evaluated_with_overwrite(
@@ -352,7 +352,7 @@ def test_all_splits_subsets_evaluated_with_overwrite(
         eval_splits=["test"],
         output_folder=str(tmp_path / "all_splits_subsets_evaluated_with_overwrite"),
         verbosity=2,
-        eval_subsets=["fra"],
+        eval_subsets=["fra", "eng"],
         overwrite_results=True,
     )
     last_evaluated_splits = evaluation.get_last_evaluated_splits()
@@ -360,5 +360,5 @@ def test_all_splits_subsets_evaluated_with_overwrite(
     assert len(last_evaluated_splits["MockMultilingualRetrievalTask"]) == 1
     assert results2[0].scores.keys() == {"test"}
     for split in ["test"]:
-        assert len(results2[0].scores[split]) == 1
-        assert sorted(results2[0].languages) == ["fra"]
+        assert len(results2[0].scores[split]) == 2
+        assert sorted(results2[0].languages) == ["eng", "fra"]

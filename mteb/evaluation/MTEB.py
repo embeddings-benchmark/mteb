@@ -491,15 +491,16 @@ class MTEB:
                         eval_subsets,
                     )
 
-                    # Determine final splits to run
-                    final_splits_to_run = []
-                    # We need to run any split that is fully missing or has missing subsets
-                    for sp, info in missing_evaluations.items():
-                        if info["whole_split_missing"] or info["missing_subsets"]:
-                            final_splits_to_run.append(sp)
-
                     if overwrite_results:
                         final_splits_to_run = task_eval_splits
+                    else:
+                        # Determine final splits to run
+                        final_splits_to_run = []
+                        # We need to run any split that is fully missing or has missing subsets
+                        for sp, info in missing_evaluations.items():
+                            if info["whole_split_missing"] or info["missing_subsets"]:
+                                final_splits_to_run.append(sp)
+
 
                     if not overwrite_results and len(final_splits_to_run) == 0:
                         logger.info(
