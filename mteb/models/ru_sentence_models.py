@@ -75,11 +75,11 @@ sbert_large_mt_nlu_ru = ModelMeta(
 )
 
 user_base_ru = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="deepvk/USER-base",
         revision="436a489a2087d61aa670b3496a9915f84e46c861",
-        prompts={"query": "query: ", "passage": "passage: "},
+        model_prompts={"query": "query: ", "passage": "passage: "},
     ),
     name="deepvk/USER-base",
     languages=["rus_Cyrl"],
@@ -94,7 +94,7 @@ user_base_ru = ModelMeta(
     reference="https://huggingface.co/ai-forever/sbert_large_mt_nlu_ru",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instructions=False,
+    use_instructions=True,
     citation="""@misc{deepvk2024user,
         title={USER: Universal Sentence Encoder for Russian},
         author={Malashenko, Boris and  Zemerov, Anton and Spirin, Egor},
@@ -245,7 +245,7 @@ labse_ru_turbo = ModelMeta(
 
 
 rosberta_ru_en = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="ai-forever/ru-en-RoSBERTa",
         revision="89fb1651989adbb1cfcfdedafd7d102951ad0555",
@@ -261,6 +261,7 @@ rosberta_ru_en = ModelMeta(
     open_weights=True,
     revision="89fb1651989adbb1cfcfdedafd7d102951ad0555",
     release_date="2024-07-29",
+    use_instructions=True,
     citation="""@misc{snegirev2024russianfocusedembeddersexplorationrumteb,
       title={The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design}, 
       author={Artem Snegirev and Maria Tikhonova and Anna Maksimova and Alena Fenogenova and Alexander Abramov},

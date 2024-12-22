@@ -29,7 +29,7 @@ GRITLM_CITATION = """
 
 
 gritlm7b = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         instruct_wrapper,
         model_name_or_path="GritLM/GritLM-7B",
         instruction_template=gritlm_instruction,
@@ -53,7 +53,7 @@ gritlm7b = ModelMeta(
     citation=GRITLM_CITATION,
 )
 gritlm8x7b = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         instruct_wrapper,
         model_name_or_path="GritLM/GritLM-8x7B",
         instruction_template=gritlm_instruction,

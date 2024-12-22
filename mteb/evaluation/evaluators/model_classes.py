@@ -7,14 +7,15 @@ import os
 from pathlib import Path
 from typing import Any
 
+import numpy as np
 import torch
 import tqdm
-from sentence_transformers import CrossEncoder, SentenceTransformer
+from sentence_transformers import SentenceTransformer
 
 from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
 
-from .utils import convert_conv_history_to_query, cos_sim, dot_score, download
+from .utils import convert_conv_history_to_query, cos_sim, download
 
 logger = logging.getLogger(__name__)
 
@@ -53,32 +54,24 @@ class DenseRetrievalExactSearch:
     ):
         # Model is class that provides encode_corpus() and encode_queries()
         self.model = model
-        self.encode_kwargs = encode_kwargs
+        self.encode_kwargs = encode_kwargs.copy()
 
-        if "batch_size" not in encode_kwargs:
-            encode_kwargs["batch_size"] = 128
         if "show_progress_bar" not in encode_kwargs:
-            encode_kwargs["show_progress_bar"] = True
+            self.encode_kwargs["show_progress_bar"] = True
 
-        self.score_functions = {"cos_sim": cos_sim, "dot": dot_score, "cosine": cos_sim}
-        self.score_function_desc = {
-            "cos_sim": "Cosine Similarity",
-            "cosine": "Cosine Similarity",
-            "dot": "Dot Product",
-        }
         self.corpus_chunk_size = corpus_chunk_size
         if isinstance(previous_results, Path):
             self.previous_results = str(previous_results)
         else:
             self.previous_results = previous_results
-        self.batch_size = encode_kwargs.get("batch_size")
-        self.show_progress_bar = encode_kwargs.get("show_progress_bar")
+        self.batch_size = self.encode_kwargs.get("batch_size", 32)
+        self.show_progress_bar = self.encode_kwargs.get("show_progress_bar")
         self.results = {}
 
         if self.previous_results is not None:
             self.previous_results = self.load_results_file()
 
-        if isinstance(self.model, CrossEncoder):
+        if hasattr(self.model, "predict"):
             # load the predict instance from the CrossEncoder
             # custom functions can be used by extending the DenseRetrievalExactSearch class
             self.predict = self.model.predict
@@ -88,7 +81,6 @@ class DenseRetrievalExactSearch:
         corpus: dict[str, dict[str, str]],
         queries: dict[str, str],
         top_k: int,
-        score_function: str,
         task_name: str,
         instructions: dict[str, str] | None = None,
         request_qid: str | None = None,
@@ -102,7 +94,6 @@ class DenseRetrievalExactSearch:
             corpus: Dictionary mapping corpus IDs to document dictionaries
             queries: Dictionary mapping query IDs to query strings
             top_k: Number of top results to return
-            score_function: Scoring function to use ('cos_sim' or 'dot')
             task_name: Name of the task
             instructions: Optional instructions to append to queries
             request_qid: Optional request query ID
@@ -110,11 +101,6 @@ class DenseRetrievalExactSearch:
             top_ranked: Optional dict mapping query IDs to lists of pre-ranked corpus IDs
             **kwargs: Additional keyword arguments passed to the underlying model
         """
-        if score_function not in self.score_functions:
-            raise ValueError(
-                f"score function: {score_function} must be either (cos_sim) for cosine similarity or (dot) for dot product"
-            )
-
         logger.info("Encoding Queries.")
         query_ids = list(queries.keys())
         self.results = {qid: {} for qid in query_ids}
@@ -159,10 +145,6 @@ class DenseRetrievalExactSearch:
         # Map back to original order but reuse embeddings
         query_embeddings = unique_query_embeddings[query_idx_mapping]
 
-        logger.info(
-            f"Scoring Function: {self.score_function_desc[score_function]} ({score_function})"
-        )
-
         if top_ranked is not None:
             logger.info("Performing reranking on pre-ranked documents...")
             result_heaps = self._rerank_documents(
@@ -171,7 +153,6 @@ class DenseRetrievalExactSearch:
                 corpus=corpus,
                 top_ranked=top_ranked,
                 top_k=top_k,
-                score_function=score_function,
                 task_name=task_name,
                 request_qid=request_qid,
                 return_sorted=return_sorted,
@@ -183,7 +164,6 @@ class DenseRetrievalExactSearch:
                 query_embeddings=query_embeddings,
                 corpus=corpus,
                 top_k=top_k,
-                score_function=score_function,
                 task_name=task_name,
                 request_qid=request_qid,
                 return_sorted=return_sorted,
@@ -198,11 +178,10 @@ class DenseRetrievalExactSearch:
     def _rerank_documents(
         self,
         query_ids: list[str],
-        query_embeddings: torch.Tensor,
+        query_embeddings: np.ndarray,
         corpus: dict[str, dict[str, str]],
         top_ranked: dict[str, list[str]],
         top_k: int,
-        score_function: str,
         task_name: str,
         request_qid: str | None = None,
         return_sorted: bool = False,
@@ -259,8 +238,12 @@ class DenseRetrievalExactSearch:
             # Ensure query embedding is on the correct device and has correct shape
             query_embedding = query_embeddings[query_idx].unsqueeze(0)
 
+            score_function = (
+                self.model.similarity if hasattr(self.model, "similarity") else cos_sim
+            )
+
             with torch.inference_mode():
-                scores = self.score_functions[score_function](
+                scores = score_function(
                     query_embedding,
                     query_doc_embeddings,
                 )
@@ -305,7 +288,6 @@ class DenseRetrievalExactSearch:
         query_embeddings: torch.Tensor,
         corpus: dict[str, dict[str, str]],
         top_k: int,
-        score_function: str,
         task_name: str,
         request_qid: str | None = None,
         return_sorted: bool = False,
@@ -338,17 +320,20 @@ class DenseRetrievalExactSearch:
             logging.info("Computing Similarities...")
             query_embeddings = torch.as_tensor(query_embeddings).to(device)
             sub_corpus_embeddings = torch.as_tensor(sub_corpus_embeddings).to(device)
+
+            score_function = (
+                self.model.similarity if hasattr(self.model, "similarity") else cos_sim
+            )
+
             with torch.inference_mode():
-                cos_scores = self.score_functions[score_function](
-                    query_embeddings, sub_corpus_embeddings
-                )
+                scores = score_function(query_embeddings, sub_corpus_embeddings)
 
             # get top-k values
             cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
-                cos_scores,
+                scores,
                 min(
                     top_k + 1,
-                    len(cos_scores[1]) if len(cos_scores) > 1 else len(cos_scores[-1]),
+                    len(scores[1]) if len(scores) > 1 else len(scores[-1]),
                 ),
                 dim=1,
                 largest=True,
@@ -411,7 +396,7 @@ class DenseRetrievalExactSearch:
         for qid in queries.keys():
             if self.previous_results is None:
                 # try to use all of them
-                logging.logging(
+                logging.info(
                     f"previous_results is None. Using all the documents to rerank: {len(corpus)}"
                 )
                 q_results = {doc_id: 0.0 for doc_id in corpus.keys()}
@@ -461,7 +446,7 @@ class DenseRetrievalExactSearch:
                 len(queries_in_pair) == len(corpus_in_pair) == len(instructions_in_pair)
             )
 
-            if isinstance(self.model.model, CrossEncoder):
+            if hasattr(self.model, "predict"):
                 # can't take instructions, so add them here
                 queries_in_pair = [
                     f"{q} {i}".strip()
@@ -527,7 +512,6 @@ class DRESModel:
         self,
         corpus: list[dict[str, str]],
         task_name: str,
-        batch_size: int,
         prompt_type: PromptType = PromptType.passage,
         **kwargs,
     ):
@@ -536,7 +520,6 @@ class DRESModel:
             sentences,
             task_name=task_name,
             prompt_type=prompt_type,
-            batch_size=batch_size,
             **kwargs,
         )
         return corpus_embeddings

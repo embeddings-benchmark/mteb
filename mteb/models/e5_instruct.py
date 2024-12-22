@@ -12,15 +12,14 @@ from .instruct_wrapper import instruct_wrapper
 MISTRAL_LANGUAGES = ["eng_Latn", "fra_Latn", "deu_Latn", "ita_Latn", "spa_Latn"]
 
 
-def e5_instruction(instruction: str) -> str:
-    return f"Instruct: {instruction}\nQuery: "
+E5_INSTRUCTION = "Instruct: {instruction}\nQuery: "
 
 
 e5_instruct = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         instruct_wrapper,
         model_name_or_path="intfloat/multilingual-e5-large-instruct",
-        instruction_template=e5_instruction,
+        instruction_template=E5_INSTRUCTION,
         attn="cccc",
         pooling_method="mean",
         mode="embedding",
@@ -50,10 +49,10 @@ e5_instruct = ModelMeta(
 )
 
 e5_mistral = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         instruct_wrapper,
         model_name_or_path="intfloat/e5-mistral-7b-instruct",
-        instruction_template=e5_instruction,
+        instruction_template=E5_INSTRUCTION,
         attn="cccc",
         pooling_method="lasttoken",
         mode="embedding",

@@ -94,8 +94,10 @@ class MonoT5Reranker(RerankerWrapper):
                 token_true_id = tokenizer.get_vocab()[token_true]
                 return token_false_id, token_true_id
             else:
-                raise Exception(f"We don't know the indexes for the non-relevant/relevant tokens for\
-                        the checkpoint {model_name_or_path} and you did not provide any.")
+                raise Exception(
+                    f"We don't know the indexes for the non-relevant/relevant tokens for\
+                        the checkpoint {model_name_or_path} and you did not provide any."
+                )
         else:
             token_false_id = tokenizer.get_vocab()[token_false]
             token_true_id = tokenizer.get_vocab()[token_true]
@@ -276,7 +278,7 @@ Passage: {text}"""
 
 
 monot5_small = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=MonoT5Reranker,
         model_name_or_path="castorini/monot5-small-msmarco-10k",
@@ -299,7 +301,7 @@ monot5_small = ModelMeta(
 )
 
 monot5_base = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=MonoT5Reranker,
         model_name_or_path="castorini/monot5-base-msmarco-10k",
@@ -322,7 +324,7 @@ monot5_base = ModelMeta(
 )
 
 monot5_large = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=MonoT5Reranker,
         model_name_or_path="castorini/monot5-large-msmarco-10k",
@@ -345,7 +347,7 @@ monot5_large = ModelMeta(
 )
 
 monot5_3b = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=MonoT5Reranker,
         model_name_or_path="castorini/monot5-3b-msmarco-10k",
@@ -368,7 +370,7 @@ monot5_3b = ModelMeta(
 )
 
 flant5_base = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=FLANT5Reranker,
         model_name_or_path="google/flan-t5-base",
@@ -393,7 +395,7 @@ flant5_base = ModelMeta(
 )
 
 flant5_large = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=FLANT5Reranker,
         model_name_or_path="google/flan-t5-large",
@@ -418,7 +420,7 @@ flant5_large = ModelMeta(
 )
 
 flant5_xl = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=FLANT5Reranker,
         model_name_or_path="google/flan-t5-xl",
@@ -443,7 +445,7 @@ flant5_xl = ModelMeta(
 )
 
 flant5_xxl = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=FLANT5Reranker,
         model_name_or_path="google/flan-t5-xxl",
@@ -469,7 +471,7 @@ flant5_xxl = ModelMeta(
 
 
 llama2_7b = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=LlamaReranker,
         model_name_or_path="meta-llama/Llama-2-7b-hf",
@@ -492,7 +494,7 @@ llama2_7b = ModelMeta(
 )
 
 llama2_7b_chat = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=LlamaReranker,
         model_name_or_path="meta-llama/Llama-2-7b-chat-hf",
@@ -515,7 +517,7 @@ llama2_7b_chat = ModelMeta(
 )
 
 mistral_7b = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=MistralReranker,
         model_name_or_path="mistralai/Mistral-7B-Instruct-v0.2",
@@ -538,7 +540,7 @@ mistral_7b = ModelMeta(
 )
 
 followir_7b = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=FollowIRReranker,
         model_name_or_path="jhu-clsp/FollowIR-7B",
@@ -667,7 +669,7 @@ mt5_languages = [
 ]
 
 mt5_base_mmarco_v2 = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=MonoT5Reranker,
         model_name_or_path="unicamp-dl/mt5-base-mmarco-v2",
@@ -690,7 +692,7 @@ mt5_base_mmarco_v2 = ModelMeta(
 )
 
 mt5_13b_mmarco_100k = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=MonoT5Reranker,
         model_name_or_path="unicamp-dl/mt5-13b-mmarco-100k",

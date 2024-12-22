@@ -41,6 +41,19 @@ from .MedicalQARetrieval import MedicalQARetrieval
 from .MLQuestions import MLQuestionsRetrieval
 from .MSMARCORetrieval import MSMARCO, MSMARCOHardNegatives
 from .MSMARCOv2Retrieval import MSMARCOv2
+from .NanoArguAnaRetrieval import NanoArguAnaRetrieval
+from .NanoClimateFeverRetrieval import NanoClimateFeverRetrieval
+from .NanoDBPediaRetrieval import NanoDBPediaRetrieval
+from .NanoFEVERRetrieval import NanoFEVERRetrieval
+from .NanoFiQA2018Retrieval import NanoFiQA2018Retrieval
+from .NanoHotpotQARetrieval import NanoHotpotQARetrieval
+from .NanoMSMARCORetrieval import NanoMSMARCORetrieval
+from .NanoNFCorpusRetrieval import NanoNFCorpusRetrieval
+from .NanoNQRetrieval import NanoNQRetrieval
+from .NanoQuoraRetrieval import NanoQuoraRetrieval
+from .NanoSCIDOCSRetrieval import NanoSCIDOCSRetrieval
+from .NanoSciFactRetrieval import NanoSciFactRetrieval
+from .NanoTouche2020Retrieval import NanoTouche2020Retrieval
 from .NarrativeQARetrieval import NarrativeQARetrieval
 from .NFCorpusRetrieval import NFCorpus
 from .NQRetrieval import NQ, NQHardNegatives
@@ -90,6 +103,7 @@ __all__ = [
     "LEMBPasskeyRetrieval",
     "CQADupstackAndroidRetrieval",
     "TempReasonL2Context",
+    "NanoDBPediaRetrieval",
     "ARCChallenge",
     "LegalBenchCorporateLobbying",
     "SCIDOCS",
@@ -104,22 +118,29 @@ __all__ = [
     "ClimateFEVERHardNegatives",
     "CQADupstackWordpressRetrieval",
     "CQADupstackEnglishRetrieval",
+    "NanoTouche2020Retrieval",
     "CQADupstackStatsRetrieval",
     "MLQuestionsRetrieval",
     "TempReasonL2Fact",
+    "NanoSciFactRetrieval",
     "CQADupstackGamingRetrieval",
     "CQADupstackWebmastersRetrieval",
+    "NanoFiQA2018Retrieval",
     "CQADupstackUnixRetrieval",
     "TempReasonL3Pure",
     "CQADupstackPhysicsRetrieval",
     "FiQA2018",
     "LitSearchRetrieval",
+    "NanoFEVERRetrieval",
+    "NanoMSMARCORetrieval",
     "FeedbackQARetrieval",
     "HagridRetrieval",
+    "NanoNFCorpusRetrieval",
     "FaithDialRetrieval",
     "SciFact",
     "CQADupstackMathematicaRetrieval",
     "RARbMath",
+    "NanoNQRetrieval",
     "HellaSwag",
     "PIQA",
     "SpartQA",
@@ -127,13 +148,18 @@ __all__ = [
     "TempReasonL1",
     "HotpotQA",
     "HotpotQAHardNegatives",
+    "NanoClimateFeverRetrieval",
+    "NanoQuoraRetrieval",
+    "NanoArguAnaRetrieval",
     "LegalBenchConsumerContractsQA",
+    "NanoHotpotQARetrieval",
     "ArguAna",
     "LEMBWikimQARetrieval",
     "TempReasonL3Fact",
     "FEVER",
     "FEVERHardNegatives",
     "CQADupstackGisRetrieval",
+    "NanoSCIDOCSRetrieval",
     "AILACasedocs",
     "NFCorpus",
     "LEMBSummScreenFDRetrieval",
