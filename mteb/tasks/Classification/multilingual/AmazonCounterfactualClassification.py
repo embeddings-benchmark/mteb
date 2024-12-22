@@ -10,8 +10,7 @@ class AmazonCounterfactualClassification(MultilingualTask, AbsTaskClassification
         name="AmazonCounterfactualClassification",
         dataset={
             "path": "mteb/amazon_counterfactual",
-            "revision": "e8379541af4e31359cca9fbcf4b00f2671dba205",
-            "trust_remote_code": True,
+            "revision": "1f7e6a9d6fa6e64c53d146e428565640410c0df1",
         },
         description=(
             "A collection of Amazon customer reviews annotated for counterfactual detection pair classification."

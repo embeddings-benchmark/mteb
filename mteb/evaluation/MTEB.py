@@ -13,6 +13,7 @@ from time import time
 from typing import Any
 
 import datasets
+from codecarbon import EmissionsTracker
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.abstasks.AbsTask import ScoresDict
@@ -20,11 +21,10 @@ from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import model_meta_from_sentence_transformers
 
-from ..abstasks import *
-from ..abstasks import AbsTask
+from ..abstasks.AbsTask import AbsTask
+from ..abstasks.AbsTaskReranking import AbsTaskReranking
 from ..load_results.task_results import TaskResult
 from ..models.sentence_transformer_wrapper import SentenceTransformerWrapper
-from ..tasks import *
 from . import LangMapping
 
 logger = logging.getLogger(__name__)
@@ -224,13 +224,19 @@ class MTEB:
     def select_tasks(self, **kwargs):
         """Select the tasks to be evaluated."""
         # Get all existing tasks
-        tasks_categories_cls = list(AbsTask.__subclasses__())
-        self.tasks_cls = [
-            cls(hf_subsets=self._task_langs, **kwargs)
-            for cat_cls in tasks_categories_cls
-            for cls in cat_cls.__subclasses__()
-            if cat_cls.__name__.startswith("AbsTask")
-        ]
+        # reranking subclasses retrieval to share methods, but is an abstract task
+        tasks_categories_cls = list(AbsTask.__subclasses__()) + [AbsTaskReranking]
+        all_task_classes = []
+        for cat_cls in tasks_categories_cls:
+            for cls in cat_cls.__subclasses__():
+                if (
+                    cat_cls.__name__.startswith("AbsTask")
+                    and cls.__name__ != "AbsTaskReranking"
+                ):
+                    task = cls(hf_subsets=self._task_langs, **kwargs)
+                    all_task_classes.append(task)
+
+        self.tasks_cls = all_task_classes
 
         # If `task_list` is specified, select list of tasks
         if self._tasks is not None:
@@ -294,7 +300,6 @@ class MTEB:
         task: AbsTask,
         model: Encoder,
         split: str,
-        output_folder: str | None,
         subsets_to_run: list[str] | None = None,
         *,
         encode_kwargs: dict[str, Any],
@@ -305,7 +310,6 @@ class MTEB:
             model,
             split,
             subsets_to_run=subsets_to_run,
-            output_folder=output_folder,
             encode_kwargs=encode_kwargs,
             **kwargs,
         )
@@ -385,7 +389,7 @@ class MTEB:
         eval_subsets: list[str] | None = None,
         overwrite_results: bool = False,
         raise_error: bool = True,
-        co2_tracker: bool = False,
+        co2_tracker: bool = True,
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ) -> list[TaskResult]:
@@ -472,6 +476,7 @@ class MTEB:
             save_path = None
 
             if output_path:
+                kwargs["output_folder"] = output_folder  # needed for retrieval tasks
                 save_path = output_path / f"{task.metadata.name}{task.save_suffix}.json"
                 if save_path.exists():
                     existing_results = TaskResult.from_disk(save_path)
@@ -532,14 +537,14 @@ class MTEB:
                         subsets_to_run = ["default"]
 
                     if co2_tracker:
-                        try:
-                            from codecarbon import EmissionsTracker
-                        except ImportError:
-                            raise ImportError(
-                                "To use the CO2 emissions tracker, please install codecarbon using 'pip install codecarbon'"
-                            )
+                        logger.warning(
+                            "Evaluating multiple MTEB runs simultaniously will produce incorrect CO₂ results"
+                        )
                         with EmissionsTracker(
-                            save_to_file=False, save_to_api=False, logging_logger=logger
+                            save_to_file=False,
+                            save_to_api=False,
+                            logging_logger=logger,
+                            allow_multiple_runs=True,
                         ) as tracker:
                             results, tick, tock = self._run_eval(
                                 task,

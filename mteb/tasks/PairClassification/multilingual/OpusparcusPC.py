@@ -83,4 +83,4 @@ class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
             new_dict["labels"] = [labels]
             new_dict["sentence1"] = [sent1]
             new_dict["sentence2"] = [sent2]
-            self.dataset[lang][split] = datasets.Dataset.from_dict(new_dict)
+            self.dataset[lang][split] = new_dict

@@ -75,6 +75,7 @@ class ModelMeta(BaseModel):
             in the Latin script.
         use_instructions: Whether the model uses instructions E.g. for prompt-based models. This also include models that require a specific format for
             input such as "query: {document}" or "passage: {document}".
+        citation: The citation for the model. This is a bibtex string.
         training_datasets: A dictionary of datasets that the model was trained on. Names should be names as their appear in `mteb` for example
             {"ArguAna": ["test"]} if the model is trained on the ArguAna test set. This field is used to determine if a model generalizes zero-shot to
             a benchmark as well as mark dataset contaminations.
@@ -104,6 +105,7 @@ class ModelMeta(BaseModel):
     training_datasets: dict[str, list[str]] | None = None
     adapted_from: str | None = None
     superseded_by: str | None = None
+    citation: str | None = None
 
     def to_dict(self):
         dict_repr = self.model_dump()

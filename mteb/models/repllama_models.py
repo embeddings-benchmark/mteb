@@ -126,6 +126,15 @@ model_prompts = {
     PromptType.passage.value: "passage:  ",
 }
 
+REPLLAMA_CITATION = """
+@article{rankllama,
+      title={Fine-Tuning LLaMA for Multi-Stage Text Retrieval}, 
+      author={Xueguang Ma and Liang Wang and Nan Yang and Furu Wei and Jimmy Lin},
+      year={2023},
+      journal={arXiv:2310.08319},
+}
+"""
+
 repllama_llama2_original = ModelMeta(
     loader=_loader(
         RepLLaMAWrapper,
@@ -149,6 +158,7 @@ repllama_llama2_original = ModelMeta(
     similarity_fn_name="cosine",
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
+    citation=REPLLAMA_CITATION,
 )
 
 
@@ -175,4 +185,5 @@ repllama_llama2_reproduced = ModelMeta(
     similarity_fn_name="cosine",
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
+    citation=REPLLAMA_CITATION,
 )

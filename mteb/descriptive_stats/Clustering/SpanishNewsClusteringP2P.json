@@ -1,0 +1,37 @@
+{
+    "test": {
+        "num_samples": 1,
+        "number_of_characters": 1217,
+        "min_text_length": 1217,
+        "average_text_length": 1217.0,
+        "max_text_length": 1217,
+        "unique_texts": 1138,
+        "min_labels_per_text": 26,
+        "average_labels_per_text": 1217.0,
+        "max_labels_per_text": 340,
+        "unique_labels": 7,
+        "labels": {
+            "Otra": {
+                "count": 130
+            },
+            "Regulaciones": {
+                "count": 142
+            },
+            "Alianzas": {
+                "count": 247
+            },
+            "Macroeconomia": {
+                "count": 340
+            },
+            "Innovacion": {
+                "count": 195
+            },
+            "Sostenibilidad": {
+                "count": 137
+            },
+            "Reputacion": {
+                "count": 26
+            }
+        }
+    }
+}

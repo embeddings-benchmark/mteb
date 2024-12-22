@@ -18,7 +18,7 @@ class KorFin(AbsTaskClassification):
         type="Classification",
         category="s2s",
         modalities=["text"],
-        eval_splits=["test"],
+        eval_splits=["train"],
         eval_langs=["kor-Hang"],
         main_score="accuracy",
         date=(
@@ -46,5 +46,5 @@ class KorFin(AbsTaskClassification):
             {"SRC": "text", "SENTIMENT": "label"}
         ).remove_columns(["SID", "TYPE", "ASPECT"])
         self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"]
+            self.dataset, seed=self.seed, splits=self.metadata.eval_splits
         )

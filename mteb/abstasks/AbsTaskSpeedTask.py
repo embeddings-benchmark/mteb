@@ -112,4 +112,4 @@ class AbsTaskSpeedTask(AbsTask):
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> dict[str, float]:
-        pass
+        return {"num_samples": 1}

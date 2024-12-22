@@ -12,8 +12,8 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 from torch import Tensor
 
 import mteb
-from mteb import SentenceTransformerWrapper
 from mteb.encoder_interface import PromptType
+from mteb.models import SentenceTransformerWrapper
 from tests.test_benchmark.task_grid import MOCK_TASK_TEST_GRID
 
 
@@ -61,6 +61,7 @@ class MockSentenceTransformer(SentenceTransformer):
         convert_to_tensor: bool = False,
         device: str | None = None,
         normalize_embeddings: bool = False,
+        **kwargs: Any,
     ) -> list[Tensor] | ndarray | Tensor:
         return torch.randn(len(sentences), 10).numpy()
 
