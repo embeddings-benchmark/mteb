@@ -73,3 +73,31 @@ SFR_Embedding_Mistral = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
 )
+
+
+SFR_Embedding_Mistral = ModelMeta(
+    loader=partial(  # type: ignore
+        instruct_wrapper,
+        model_name_or_path="Salesforce/SFR-Embedding-Mistral",
+        instruction_template=instruction_template,
+        attn="cccc",
+        pooling_method="lasttoken",
+        mode="embedding",
+        torch_dtype="auto",
+        normalized=True,
+    ),
+    name="Salesforce/SFR-Embedding-Mistral",
+    languages=["eng_Latn"],
+    open_weights=True,
+    revision="938c560d1c236aa563b2dbdf084f28ab28bccb11",
+    release_date="2024-01-24",  # initial commit of hf model.
+    n_parameters=7_110_000_000,
+    memory_usage=None,
+    embed_dim=4096,
+    license="cc-by-nc-4.0",
+    max_tokens=32768,
+    reference="https://huggingface.co/Salesforce/SFR-Embedding-Mistral",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+)
