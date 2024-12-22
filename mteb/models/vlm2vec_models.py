@@ -267,7 +267,9 @@ class VLM2VecWrapper:
 
         text_embeddings = None
         image_embeddings = None
-        kwargs.update(task_name=task_name, prompt_type=prompt_type, batch_size=batch_size)
+        kwargs.update(
+            task_name=task_name, prompt_type=prompt_type, batch_size=batch_size
+        )
 
         if texts is not None and images is None:
             text_embeddings = self.get_text_embeddings(texts, **kwargs)
