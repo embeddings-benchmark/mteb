@@ -8,9 +8,8 @@ class HotelReviewSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="HotelReviewSentimentClassification",
         dataset={
-            "path": "Elnagara/hard",
-            "revision": "b108d2c32ee4e1f4176ea233e1a5ac17bceb9ef9",
-            "trust_remote_code": True,
+            "path": "mteb/HotelReviewSentimentClassification",
+            "revision": "273d5105974460d3979149e29e88c06a8214c541",
         },
         description="HARD is a dataset of Arabic hotel reviews collected from the Booking.com website.",
         reference="https://link.springer.com/chapter/10.1007/978-3-319-67056-0_3",
@@ -38,8 +37,3 @@ class HotelReviewSentimentClassification(AbsTaskClassification):
 }
 """,
     )
-
-    def dataset_transform(self):
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"]
-        )
