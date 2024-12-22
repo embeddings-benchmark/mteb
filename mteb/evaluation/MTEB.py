@@ -470,21 +470,7 @@ class MTEB:
 
             existing_results = None
             save_path = None
-
-            if output_path:
-                save_path = output_path / f"{task.metadata.name}{task.save_suffix}.json"
-                if save_path.exists():
-                    existing_results = TaskResult.from_disk(save_path)
-
-                    if not overwrite_results:
-                        logger.info(
-                            f"{task.metadata.name} results already exists. Loading results from disk. Set overwrite_results=True to overwrite."
-                        )
-                        evaluation_results.append(existing_results)
-                        del self.tasks[0]  # empty memory
-                        continue
-
-            # Unified call to get missing splits and subsets
+            final_splits_to_run = task_eval_splits
             missing_evaluations = self._get_missing_evaluations(
                 existing_results,
                 task_eval_splits,
@@ -492,12 +478,37 @@ class MTEB:
                 eval_subsets,
             )
 
-            # Determine final splits to run
-            final_splits_to_run = []
-            # We need to run any split that is fully missing or has missing subsets
-            for sp, info in missing_evaluations.items():
-                if info["whole_split_missing"] or info["missing_subsets"]:
-                    final_splits_to_run.append(sp)
+            if output_path:
+                save_path = output_path / f"{task.metadata.name}{task.save_suffix}.json"
+                if save_path.exists():
+                    existing_results = TaskResult.from_disk(save_path)
+
+                    # Unified call to get missing splits and subsets
+                    missing_evaluations = self._get_missing_evaluations(
+                        existing_results,
+                        task_eval_splits,
+                        task_subsets,
+                        eval_subsets,
+                    )
+
+                    if overwrite_results:
+                        final_splits_to_run = task_eval_splits
+                    else:
+                        # Determine final splits to run
+                        final_splits_to_run = []
+                        # We need to run any split that is fully missing or has missing subsets
+                        for sp, info in missing_evaluations.items():
+                            if info["whole_split_missing"] or info["missing_subsets"]:
+                                final_splits_to_run.append(sp)
+
+                    if not overwrite_results and len(final_splits_to_run) == 0:
+                        logger.info(
+                            f"{task.metadata.name} results already exists. Loading results from disk."
+                            f" Set overwrite_results=True to overwrite or `--overwrite`."
+                        )
+                        evaluation_results.append(existing_results)
+                        del self.tasks[0]  # empty memory
+                        continue
 
             # If no splits need to be run and results exist, skip
             if not final_splits_to_run:
@@ -513,7 +524,7 @@ class MTEB:
 
             try:
                 task.check_if_dataset_is_superseded()
-                task.load_data(eval_splits=task_eval_splits, **kwargs)
+                task.load_data(**kwargs)
 
                 task_results = {}
                 evaluation_time = 0
@@ -527,8 +538,15 @@ class MTEB:
                     # Determine subsets to run for this split
                     # If the whole split is missing, run all required subsets
                     # If only some subsets are missing, run only those
-                    subsets_to_run = info["missing_subsets"]
-                    if info["whole_split_missing"] and task_subsets is None:
+                    subsets_to_run = (
+                        info["missing_subsets"]
+                        if not overwrite_results
+                        else (eval_subsets or task_subsets)
+                    )
+
+                    if (
+                        info["whole_split_missing"] or overwrite_results
+                    ) and task_subsets is None:
                         subsets_to_run = ["default"]
 
                     if co2_tracker:
