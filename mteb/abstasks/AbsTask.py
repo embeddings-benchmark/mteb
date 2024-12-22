@@ -89,17 +89,18 @@ class AbsTask(ABC):
         self,
         model: Encoder,
         split: str = "test",
+        subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any] = {},
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluates a Sentence Embedding Model on the task.
-        Returns a dict (that can be serialized to json).
 
         Args:
             model: Sentence embedding method. Implements a encode(sentences) method, that encodes sentences and returns a numpy matrix with the
                 sentence embeddings
             split: Which datasplit to be used.
+            subsets_to_run: List of HFSubsets to evaluate. If None, all subsets are evaluated.
             encode_kwargs: Additional keyword arguments that are passed to the model's `encode` method.
             kwargs: Additional keyword arguments that are passed to the _evaluate_subset method.
         """
@@ -110,6 +111,9 @@ class AbsTask(ABC):
 
         scores = {}
         hf_subsets = list(self.dataset.keys()) if self.is_multilingual else ["default"]
+
+        if subsets_to_run is not None:
+            hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
 
         for hf_subset in hf_subsets:
             logger.info(

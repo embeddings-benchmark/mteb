@@ -121,6 +121,7 @@ class AbsTaskMultilabelClassification(AbsTask):
         model: Encoder,
         eval_split: str = "test",
         train_split: str = "train",
+        subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any] = {},
         **kwargs: Any,
@@ -130,6 +131,9 @@ class AbsTaskMultilabelClassification(AbsTask):
 
         scores = {}
         hf_subsets = list(self.dataset) if self.is_multilingual else ["default"]
+        # If subsets_to_run is specified, filter the hf_subsets accordingly
+        if subsets_to_run is not None:
+            hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
 
         for hf_subset in hf_subsets:
             logger.info(

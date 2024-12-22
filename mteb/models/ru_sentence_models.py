@@ -79,7 +79,7 @@ user_base_ru = ModelMeta(
         sentence_transformers_loader,
         model_name="deepvk/USER-base",
         revision="436a489a2087d61aa670b3496a9915f84e46c861",
-        prompts={"query": "query: ", "passage": "passage: "},
+        model_prompts={"query": "query: ", "passage": "passage: "},
     ),
     name="deepvk/USER-base",
     languages=["rus_Cyrl"],
@@ -94,7 +94,7 @@ user_base_ru = ModelMeta(
     reference="https://huggingface.co/ai-forever/sbert_large_mt_nlu_ru",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
-    use_instructions=False,
+    use_instructions=True,
 )
 
 deberta_v1_ru = ModelMeta(
@@ -234,4 +234,5 @@ rosberta_ru_en = ModelMeta(
     open_weights=True,
     revision="89fb1651989adbb1cfcfdedafd7d102951ad0555",
     release_date="2024-07-29",
+    use_instructions=True,
 )

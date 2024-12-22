@@ -74,5 +74,5 @@ uae_large_v1 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     reference="https://huggingface.co/WhereIsAI/UAE-Large-V1",
-    use_instructions=False,
+    use_instructions=True,
 )
