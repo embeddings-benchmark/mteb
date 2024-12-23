@@ -14,4 +14,3 @@ print("succesffully got the model!")
 
 print(mteb.get_model_meta(model_name, revision))
 
-#test 
