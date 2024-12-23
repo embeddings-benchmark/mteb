@@ -100,8 +100,8 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
             for split in self.metadata.eval_splits:
                 _dataset[lang][split] = [
                     {
-                        "sent1": self.dataset[lang][split]["sent1"],
-                        "sent2": self.dataset[lang][split]["sent2"],
+                        "sentence1": self.dataset[lang][split]["sentence1"],
+                        "sentence2": self.dataset[lang][split]["sentence2"],
                         "labels": self.dataset[lang][split]["labels"],
                     }
                 ]

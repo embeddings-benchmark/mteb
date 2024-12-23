@@ -43,6 +43,9 @@ def _load_publichealthqa_data(
         answer_ids = {answer: _id for _id, answer in enumerate(set(data["answer"]))}
 
         for row in data:
+            if row["question"] is None or row["answer"] is None:
+                # There are some questions and answers that are None in the original dataset, specifically in the Arabic subset.
+                continue
             question = row["question"]
             answer = row["answer"]
             query_id = f"Q{question_ids[question]}"
