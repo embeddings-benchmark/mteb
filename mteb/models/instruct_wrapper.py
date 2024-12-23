@@ -77,9 +77,4 @@ def instruct_wrapper(
                 embeddings = embeddings.cpu().detach().float().numpy()
             return embeddings
 
-        def format_instruction(self, instruction: str) -> str:
-            if isinstance(self.instruction_template, str):
-                return self.instruction_template.format(instruction=instruction)
-            return self.instruction_template(instruction)
-
     return InstructWrapper(model_name_or_path, mode, instruction_template, **kwargs)
