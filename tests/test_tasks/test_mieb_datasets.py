@@ -14,7 +14,7 @@ from ..test_benchmark.mock_models import MockCLIPEncoder
 from ..test_benchmark.task_grid import MIEB_TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
- 
+
 
 @pytest.mark.parametrize("task", MIEB_TASK_TEST_GRID)
 @pytest.mark.parametrize("model", [MockCLIPEncoder()])

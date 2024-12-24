@@ -10,14 +10,15 @@ from mteb.tasks.Classification.multilingual.IndicSentimentClassification import 
 from mteb.tasks.Clustering.eng.TwentyNewsgroupsClustering import (
     TwentyNewsgroupsClusteringFast,
 )
+from mteb.tasks.Image.Any2AnyMultiChoice import ROxfordEasyI2IMultiChoice
+from mteb.tasks.Image.Any2AnyRetrieval import Flickr30kI2TRetrieval
+from mteb.tasks.Image.Any2TextMultipleChoice import CVBenchCount
 from mteb.tasks.Image.Clustering import TinyImageNet
 from mteb.tasks.Image.ImageClassification import OxfordPetsClassification
 from mteb.tasks.Image.ImageMultilabelClassification import VOC2007Classification
 from mteb.tasks.Image.ImageTextPairClassification import AROFlickrOrder
+from mteb.tasks.Image.VisualSTS import STS16VisualSTS
 from mteb.tasks.Image.ZeroshotClassification import RenderedSST2
-from mteb.tasks.Image.Any2AnyRetrieval import Flickr30kI2TRetrieval
-from mteb.tasks.Image.Any2AnyMultiChoice import ROxfordEasyI2IMultiChoice
-from mteb.tasks.Image.Any2TextMultipleChoice import CVBenchCount
 
 from .mock_tasks import (
     MockBitextMiningTask,
@@ -87,6 +88,7 @@ voc2007 = VOC2007Classification()
 flickr = Flickr30kI2TRetrieval()
 roxford_mc = ROxfordEasyI2IMultiChoice()
 cvbench_count = CVBenchCount()
+sts16 = STS16VisualSTS()
 
 ## method override to speed up tests
 tiny_imagenet.dataset_transform = dataset_transform.__get__(tiny_imagenet)
@@ -97,6 +99,7 @@ voc2007.dataset_transform = dataset_transform.__get__(voc2007)
 flickr.dataset_transform = dataset_transform.__get__(flickr)
 roxford_mc.dataset_transform = dataset_transform.__get__(roxford_mc)
 cvbench_count.dataset_transform = dataset_transform.__get__(cvbench_count)
+sts16.dataset_transform = dataset_transform.__get__(sts16)
 
 
 MIEB_TASK_TEST_GRID = [
@@ -105,9 +108,10 @@ MIEB_TASK_TEST_GRID = [
     renderedSST2,  # zero shot classification
     oxford_pets,  # image classification
     voc2007,  # multilabel classification
-    flickr, # I2T retrieval
-    roxford_mc, # Any2Any MultiChoice
-    cvbench_count, # Any2Any Text MultiChoice
+    flickr,  # I2T retrieval
+    roxford_mc,  # Any2Any MultiChoice
+    cvbench_count,  # Any2Any Text MultiChoice
+    sts16,  # visual sts
 ]
 
 MIEB_TASK_TEST_GRID_AS_STRING = [
