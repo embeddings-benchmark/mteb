@@ -273,14 +273,16 @@ class AbsTaskRetrieval(AbsTask):
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
-        dataset_path = self.metadata_dict["dataset"]["path"]
+        hf_dataset_path = self.metadata_dict["dataset"]["path"]
+        local_dataset_path = self.metadata_dict["dataset"].get("local_path")
         hf_repo_qrels = (
-            dataset_path + "-qrels" if "clarin-knext" in dataset_path else None
+            hf_dataset_path + "-qrels" if "clarin-knext" in hf_dataset_path else None
         )
         for split in kwargs.get("eval_splits", self.metadata_dict["eval_splits"]):
             corpus, queries, qrels = HFDataLoader(
-                hf_repo=dataset_path,
+                hf_repo=hf_dataset_path,
                 hf_repo_qrels=hf_repo_qrels,
+                data_folder=local_dataset_path,
                 streaming=False,
                 keep_in_memory=False,
                 trust_remote_code=self.metadata_dict["dataset"].get(
