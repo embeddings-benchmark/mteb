@@ -38,9 +38,7 @@ cde_small_v1_meta = ModelMeta(
     
     similarity_fn_name="cosine",  # Based on the use of cosine similarity in examples
     
-    use_instructions=True,  # Uses prefixes for queries and documents
-    
-    zero_shot_benchmarks=["MTEB"]  # Mentioned in the model description
+    use_instructions=True,  # Uses prefixes for queries and documents    
 
 )
 
