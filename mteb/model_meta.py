@@ -25,8 +25,11 @@ FRAMEWORKS = Literal[
     "TensorFlow",
     "API",
     "Tevatron",
+    "NumPy",
+    "PyLate",
+    "ColBERT",
 ]
-DISTANCE_METRICS = Literal["cosine"]
+DISTANCE_METRICS = Literal["cosine", "max_sim", "dot"]
 
 
 def sentence_transformers_loader(
@@ -72,8 +75,11 @@ class ModelMeta(BaseModel):
             in the Latin script.
         use_instructions: Whether the model uses instructions E.g. for prompt-based models. This also include models that require a specific format for
             input such as "query: {document}" or "passage: {document}".
-        zero_shot_benchmarks: A list of benchmarks on which the model has been evaluated in a zero-shot setting. By default we assume that all models
-            are evaluated non-zero-shot unless specified otherwise.
+        training_datasets: A dictionary of datasets that the model was trained on. Names should be names as their appear in `mteb` for example
+            {"ArguAna": ["test"]} if the model is trained on the ArguAna test set. This field is used to determine if a model generalizes zero-shot to
+            a benchmark as well as mark dataset contaminations.
+        adapted_from: Name of the model from which this model is adapted from. For quantizations, fine-tunes, long doc extensions, etc.
+        superseded_by: Name of the model that supersedes this model, e.g. nvidia/NV-Embed-v2 supersedes v1.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -85,7 +91,7 @@ class ModelMeta(BaseModel):
     loader: Callable[..., Encoder] | None = None
     n_parameters: int | None = None
     memory_usage: float | None = None
-    max_tokens: int | None = None
+    max_tokens: float | None = None
     embed_dim: int | None = None
     license: str | None = None
     open_weights: bool | None = None
@@ -95,7 +101,9 @@ class ModelMeta(BaseModel):
     reference: STR_URL | None = None
     similarity_fn_name: DISTANCE_METRICS | None = None
     use_instructions: bool | None = None
-    zero_shot_benchmarks: list[str] | None = None
+    training_datasets: dict[str, list[str]] | None = None
+    adapted_from: str | None = None
+    superseded_by: str | None = None
 
     def to_dict(self):
         dict_repr = self.model_dump()
@@ -118,6 +126,7 @@ class ModelMeta(BaseModel):
             loader = self.loader
 
         model: Encoder = loader(**kwargs)  # type: ignore
+        model.mteb_model_meta = self
         return model
 
     def model_name_as_path(self) -> str:

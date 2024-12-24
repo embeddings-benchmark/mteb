@@ -141,11 +141,11 @@ model_prompts = {
 }
 
 voyage_large_2_instruct = ModelMeta(
-    name="voyage-large-2-instruct",
+    name="voyageai/voyage-large-2-instruct",
     revision="1",
     release_date="2024-05-05",
     languages=None,  # supported languages not specified
-    loader=partial(
+    loader=partial(  # type: ignore
         VoyageWrapper,
         model_name="voyage-large-2-instruct",
         model_prompts=model_prompts,
@@ -163,11 +163,11 @@ voyage_large_2_instruct = ModelMeta(
 )
 
 voyage_finance_2 = ModelMeta(
-    name="voyage-finance-2",
+    name="voyageai/voyage-finance-2",
     revision="1",
     release_date="2024-05-30",
     languages=None,  # supported languages not specified
-    loader=partial(
+    loader=partial(  # type: ignore
         VoyageWrapper,
         model_name="voyage-finance-2",
         model_prompts=model_prompts,
@@ -181,15 +181,15 @@ voyage_finance_2 = ModelMeta(
     reference="https://blog.voyageai.com/2024/06/03/domain-specific-embeddings-finance-edition-voyage-finance-2/",
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instructions=False,
+    use_instructions=True,
 )
 
 voyage_law_2 = ModelMeta(
-    name="voyage-law-2",
+    name="voyageai/voyage-law-2",
     revision="1",
     release_date="2024-04-15",
     languages=None,  # supported languages not specified
-    loader=partial(
+    loader=partial(  # type: ignore
         VoyageWrapper,
         model_name="voyage-law-2",
         model_prompts=model_prompts,
@@ -203,15 +203,15 @@ voyage_law_2 = ModelMeta(
     reference="https://blog.voyageai.com/2024/04/15/domain-specific-embeddings-and-retrieval-legal-edition-voyage-law-2/",
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instructions=False,
+    use_instructions=True,
 )
 
 voyage_code_2 = ModelMeta(
-    name="voyage-code-2",
+    name="voyageai/voyage-code-2",
     revision="1",
     release_date="2024-01-23",
     languages=None,  # supported languages not specified
-    loader=partial(
+    loader=partial(  # type: ignore
         VoyageWrapper,
         model_name="voyage-code-2",
         model_prompts=model_prompts,
@@ -225,7 +225,7 @@ voyage_code_2 = ModelMeta(
     reference="https://blog.voyageai.com/2024/01/23/voyage-code-2-elevate-your-code-retrieval/",
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instructions=False,
+    use_instructions=True,
 )
 
 voyage_large_2 = ModelMeta(
@@ -233,7 +233,7 @@ voyage_large_2 = ModelMeta(
     revision="1",
     release_date="2023-10-29",
     languages=None,  # supported languages not specified
-    loader=partial(
+    loader=partial(  # type: ignore
         VoyageWrapper,
         model_name="voyage-large-2",
         model_prompts=model_prompts,
@@ -247,15 +247,15 @@ voyage_large_2 = ModelMeta(
     reference="https://blog.voyageai.com/2023/10/29/voyage-embeddings/",
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instructions=False,
+    use_instructions=True,
 )
 
 voyage_2 = ModelMeta(
-    name="voyage-2",
+    name="voyageai/voyage-2",
     revision="1",
     release_date="2023-10-29",
     languages=None,  # supported languages not specified
-    loader=partial(
+    loader=partial(  # type: ignore
         VoyageWrapper,
         model_name="voyage-2",
         model_prompts=model_prompts,
@@ -269,14 +269,14 @@ voyage_2 = ModelMeta(
     reference="https://blog.voyageai.com/2023/10/29/voyage-embeddings/",
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instructions=False,
+    use_instructions=True,
 )
 voyage_multilingual_2 = ModelMeta(
-    name="voyage-multilingual-2",
+    name="voyageai/voyage-multilingual-2",
     revision="1",
     release_date="2024-06-10",
     languages=None,  # supported languages not specified
-    loader=partial(
+    loader=partial(  # type: ignore
         VoyageWrapper,
         model_name="voyage-multilingual-2",
         model_prompts=model_prompts,
@@ -290,5 +290,49 @@ voyage_multilingual_2 = ModelMeta(
     reference="https://blog.voyageai.com/2024/06/10/voyage-multilingual-2-multilingual-embedding-model/",
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instructions=False,
+    use_instructions=True,
+)
+
+voyage_3 = ModelMeta(
+    name="voyageai/voyage-3",
+    revision="1",
+    release_date="2024-09-18",
+    languages=None,  # supported languages not specified
+    loader=partial(
+        VoyageWrapper,
+        model_name="voyage-3",
+        model_prompts=model_prompts,
+    ),
+    max_tokens=32000,
+    embed_dim=1024,
+    open_weights=False,
+    n_parameters=None,
+    memory_usage=None,
+    license=None,
+    reference="https://blog.voyageai.com/2024/09/18/voyage-3/",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+)
+
+voyage_3_lite = ModelMeta(
+    name="voyageai/voyage-3-lite",
+    revision="1",
+    release_date="2024-09-18",
+    languages=None,  # supported languages not specified
+    loader=partial(
+        VoyageWrapper,
+        model_name="voyage-3-lite",
+        model_prompts=model_prompts,
+    ),
+    max_tokens=32000,
+    embed_dim=512,
+    open_weights=False,
+    n_parameters=None,
+    memory_usage=None,
+    license=None,
+    reference="https://blog.voyageai.com/2024/09/18/voyage-3/",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
 )
