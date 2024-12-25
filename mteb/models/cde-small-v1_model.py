@@ -1,10 +1,11 @@
 from __future__ import annotations
-import mteb
+from mteb import MTEB
 from sentence_transformers import SentenceTransformer
 from functools import partial
 from mteb.model_meta import ModelMeta
+import random
 
-# first we create a model meta card
+
 cde_small_v1_meta = ModelMeta(
     loader=partial(
         name="jxm/cde-small-v1",
@@ -35,15 +36,31 @@ cde_small_v1_meta = ModelMeta(
 
 )
 
+#implement the model
 
 model = SentenceTransformer("jxm/cde-small-v1", trust_remote_code=True)
 
+corpus_file = "random_strings_cde.txt"
+
+with open(corpus_file, "r") as file:
+    random_corpus = [line.strip() for line in file]
+
+minicorpus_size = 512  
+assert len(random_corpus) >= minicorpus_size, "Corpus size is smaller than required!"
+
+minicorpus_docs = random.sample(random_corpus, k=minicorpus_size)
+
+print("Generating dataset embeddings...")
+dataset_embeddings = model.encode(
+    minicorpus_docs,
+    prompt_name="document",
+    convert_to_tensor=True
+)
+
+print("Dataset embeddings shape:", dataset_embeddings.shape)
 
 
-
-
-#temporarily commented out below for clarity
-tasks = mteb.get_tasks(
+tasks = MTEB.get_tasks(
     tasks=[
         # classification
         "AmazonCounterfactualClassification",
@@ -55,27 +72,24 @@ tasks = mteb.get_tasks(
         "AskUbuntuDupQuestions",
         # retrieval
         "SCIDOCS",
-        #         # sts
+        # semantic textual similarity
         "STS22",
-        #         # summarization
+        # summarization
         "SummEval",
     ]
 )
-evaluation = mteb.MTEB(tasks=tasks)
+
+
+evaluation = MTEB(tasks=tasks)
+
+print("Running MTEB evaluation...")
 results = evaluation.run(
-    model,
+    model=model,
     output_folder="results",
     extra_kwargs={"batch_size": 8},
     overwrite_results=True,
 )
 
-
-"""
-OLD CODE:
-
-model = mteb.get_model(
-    "jxm/cde-small-v1",
-    trust_remote_code=True,
-    model_prompts={"query": "search_query: ", "passage": "search_document: "},
-)
-"""
+print("\nEvaluation Results:")
+for task, result in results.items():
+    print(f"{task}: {result}")
