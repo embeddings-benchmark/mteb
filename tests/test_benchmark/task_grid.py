@@ -10,8 +10,14 @@ from mteb.tasks.Classification.multilingual.IndicSentimentClassification import 
 from mteb.tasks.Clustering.eng.TwentyNewsgroupsClustering import (
     TwentyNewsgroupsClusteringFast,
 )
+from mteb.tasks.Image.Any2AnyMultiChoice import ROxfordEasyI2IMultiChoice
+from mteb.tasks.Image.Any2AnyRetrieval import Flickr30kI2TRetrieval
+from mteb.tasks.Image.Any2TextMultipleChoice import CVBenchCount
 from mteb.tasks.Image.Clustering import TinyImageNet
-from mteb.tasks.Image.ImageTextPairClassification import Winoground
+from mteb.tasks.Image.ImageClassification import OxfordPetsClassification
+from mteb.tasks.Image.ImageMultilabelClassification import VOC2007Classification
+from mteb.tasks.Image.ImageTextPairClassification import AROFlickrOrder
+from mteb.tasks.Image.VisualSTS import STS16VisualSTS
 from mteb.tasks.Image.ZeroshotClassification import RenderedSST2
 
 from .mock_tasks import (
@@ -76,23 +82,36 @@ def dataset_transform(self):
 
 tiny_imagenet = TinyImageNet()
 renderedSST2 = RenderedSST2()
-winoground = Winoground()
+aro = AROFlickrOrder()
+oxford_pets = OxfordPetsClassification()
+voc2007 = VOC2007Classification()
+flickr = Flickr30kI2TRetrieval()
+roxford_mc = ROxfordEasyI2IMultiChoice()
+cvbench_count = CVBenchCount()
+sts16 = STS16VisualSTS()
 
 ## method override to speed up tests
 tiny_imagenet.dataset_transform = dataset_transform.__get__(tiny_imagenet)
 renderedSST2.dataset_transform = dataset_transform.__get__(renderedSST2)
-winoground.dataset_transform = dataset_transform.__get__(winoground)
+aro.dataset_transform = dataset_transform.__get__(aro)
+oxford_pets.dataset_transform = dataset_transform.__get__(oxford_pets)
+voc2007.dataset_transform = dataset_transform.__get__(voc2007)
+flickr.dataset_transform = dataset_transform.__get__(flickr)
+roxford_mc.dataset_transform = dataset_transform.__get__(roxford_mc)
+cvbench_count.dataset_transform = dataset_transform.__get__(cvbench_count)
+sts16.dataset_transform = dataset_transform.__get__(sts16)
 
 
 MIEB_TASK_TEST_GRID = [
     tiny_imagenet,  # image clustering
-    # winoground,  # pair classification. Gated
+    aro,  # pair classification
     renderedSST2,  # zero shot classification
-    # The following takes a long time. Consider creating a mock class.
-    # "CIRRIT2TRetrieval",  # it2i retrieval
-    # "MSCOCOI2TRetrieval",  # i2t retrieval
-    # "MSCOCOT2IRetrieval",  # t2i retrieval
-    # oxford_flowers,  # image classification
+    oxford_pets,  # image classification
+    voc2007,  # multilabel classification
+    flickr,  # I2T retrieval
+    roxford_mc,  # Any2Any MultiChoice
+    cvbench_count,  # Any2Any Text MultiChoice
+    sts16,  # visual sts
 ]
 
 MIEB_TASK_TEST_GRID_AS_STRING = [
