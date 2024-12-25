@@ -1,16 +1,21 @@
 from __future__ import annotations
+import mteb
 from mteb import MTEB
 from sentence_transformers import SentenceTransformer
 from functools import partial
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, sentence_transformers_loader
 import random
 
 
 cde_small_v1_meta = ModelMeta(
     loader=partial(
+        sentence_transformers_loader,
         name="jxm/cde-small-v1",
         revision="6a8c2f9f0a8184480f2e58f7d1413320b7b6392d",
-        model_prompts={"query": "search_query: ", "passage": "search_document: "} 
+        model_prompts={
+            "query": "search_query: ",
+            "passage": "search_document: ",
+        }     
     ),
 
     name="jxm/cde-small-v1",
@@ -25,13 +30,9 @@ cde_small_v1_meta = ModelMeta(
     open_weights=True,  
     public_training_data=None,  
     public_training_code=True,  
-    
     framework=["Sentence Transformers", "PyTorch"],  
-    
     reference="https://huggingface.co/jxm/cde-small-v1",
-    
     similarity_fn_name="cosine", 
-    
     use_instructions=True,  
 
 )
@@ -39,6 +40,10 @@ cde_small_v1_meta = ModelMeta(
 #implement the model
 
 model = SentenceTransformer("jxm/cde-small-v1", trust_remote_code=True)
+model.prompts = {
+    "query": "search_query: ",
+    "passage": "search_document: ",# Use 'passage' instead of 'document' for consistency with MTEB
+}
 
 corpus_file = "random_strings_cde.txt"
 
@@ -60,7 +65,7 @@ dataset_embeddings = model.encode(
 print("Dataset embeddings shape:", dataset_embeddings.shape)
 
 
-tasks = MTEB.get_tasks(
+tasks = mteb.get_tasks(
     tasks=[
         # classification
         "AmazonCounterfactualClassification",
@@ -93,3 +98,6 @@ results = evaluation.run(
 print("\nEvaluation Results:")
 for task, result in results.items():
     print(f"{task}: {result}")
+
+
+    
