@@ -189,7 +189,7 @@ def test_create_meta_from_existing(existing_readme_name: str, gold_readme_name: 
 
 
 def test_save_predictions():
-    command = f"{sys.executable} -m mteb run -m all-MiniLM-L6-v2 -t NFCorpus --output_folder tests/results --save_predictions"
+    command = f"{sys.executable} -m mteb run -m average_word_embeddings_komninos -t NFCorpus --output_folder tests/results --save_predictions"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
     test_folder = Path(__file__).parent
