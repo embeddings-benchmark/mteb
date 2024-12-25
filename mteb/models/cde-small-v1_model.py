@@ -58,15 +58,14 @@ minicorpus_docs = random.sample(random_corpus, k=minicorpus_size)
 print("Generating dataset embeddings...")
 dataset_embeddings = model.encode(
     minicorpus_docs,
-    prompt_name="document",
+    prompt_name="passage",
     convert_to_tensor=True
 )
 
 print("Dataset embeddings shape:", dataset_embeddings.shape)
 
 
-tasks = mteb.get_tasks(
-    tasks=[
+tasks=[
         # classification
         "AmazonCounterfactualClassification",
         # clustering
@@ -82,7 +81,6 @@ tasks = mteb.get_tasks(
         # summarization
         "SummEval",
     ]
-)
 
 
 evaluation = MTEB(tasks=tasks)
@@ -94,10 +92,3 @@ results = evaluation.run(
     extra_kwargs={"batch_size": 8},
     overwrite_results=True,
 )
-
-print("\nEvaluation Results:")
-for task, result in results.items():
-    print(f"{task}: {result}")
-
-
-    
