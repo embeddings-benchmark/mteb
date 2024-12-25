@@ -75,7 +75,7 @@ TASK_TEST_GRID_AS_STRING = [
 ]
 
 
-def dataset_transform(self):
+def downsampled_dataset_transform(self):
     for split in self.metadata.eval_splits:
         self.dataset[split] = self.dataset[split].select([0, 1])
 
@@ -91,15 +91,15 @@ cvbench_count = CVBenchCount()
 sts16 = STS16VisualSTS()
 
 ## method override to speed up tests
-tiny_imagenet.dataset_transform = dataset_transform.__get__(tiny_imagenet)
-renderedSST2.dataset_transform = dataset_transform.__get__(renderedSST2)
-aro.dataset_transform = dataset_transform.__get__(aro)
-oxford_pets.dataset_transform = dataset_transform.__get__(oxford_pets)
-voc2007.dataset_transform = dataset_transform.__get__(voc2007)
-flickr.dataset_transform = dataset_transform.__get__(flickr)
-roxford_mc.dataset_transform = dataset_transform.__get__(roxford_mc)
-cvbench_count.dataset_transform = dataset_transform.__get__(cvbench_count)
-sts16.dataset_transform = dataset_transform.__get__(sts16)
+tiny_imagenet.dataset_transform = downsampled_dataset_transform.__get__(tiny_imagenet)
+renderedSST2.dataset_transform = downsampled_dataset_transform.__get__(renderedSST2)
+aro.dataset_transform = downsampled_dataset_transform.__get__(aro)
+oxford_pets.dataset_transform = downsampled_dataset_transform.__get__(oxford_pets)
+voc2007.dataset_transform = downsampled_dataset_transform.__get__(voc2007)
+flickr.dataset_transform = downsampled_dataset_transform.__get__(flickr)
+roxford_mc.dataset_transform = downsampled_dataset_transform.__get__(roxford_mc)
+cvbench_count.dataset_transform = downsampled_dataset_transform.__get__(cvbench_count)
+sts16.dataset_transform = downsampled_dataset_transform.__get__(sts16)
 
 
 MIEB_TASK_TEST_GRID = [
