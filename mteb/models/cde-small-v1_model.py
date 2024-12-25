@@ -1,8 +1,8 @@
 from __future__ import annotations
 import mteb
-
+from sentence_transformers import SentenceTransformer
 from functools import partial
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import ModelMeta
 
 # first we create a model meta card
 cde_small_v1_meta = ModelMeta(
@@ -36,17 +36,13 @@ cde_small_v1_meta = ModelMeta(
 )
 
 
+model = SentenceTransformer("jxm/cde-small-v1", trust_remote_code=True)
+
+
 
 
 
 #temporarily commented out below for clarity
-
-
-model = mteb.get_model(
-    "jxm/cde-small-v1",
-    trust_remote_code=True,
-    model_prompts={"query": "search_query: ", "passage": "search_document: "},
-)
 tasks = mteb.get_tasks(
     tasks=[
         # classification
@@ -72,3 +68,14 @@ results = evaluation.run(
     extra_kwargs={"batch_size": 8},
     overwrite_results=True,
 )
+
+
+"""
+OLD CODE:
+
+model = mteb.get_model(
+    "jxm/cde-small-v1",
+    trust_remote_code=True,
+    model_prompts={"query": "search_query: ", "passage": "search_document: "},
+)
+"""
