@@ -10,7 +10,7 @@ cde_small_v1_meta = ModelMeta(
     loader=partial(
         name="jxm/cde-small-v1",
         revision="6a8c2f9f0a8184480f2e58f7d1413320b7b6392d",
-        model_prompts={"query": "search_query: ", "passage": "search_document: "}; 
+        model_prompts={"query": "search_query: ", "passage": "search_document: "} 
     ),
 
     name="jxm/cde-small-v1",
