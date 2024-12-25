@@ -38,7 +38,6 @@ cde_small_v1_meta = ModelMeta(
 )
 
 #implement the model
-
 model = SentenceTransformer("jxm/cde-small-v1", trust_remote_code=True)
 model.prompts = {
     "query": "search_query: ",
