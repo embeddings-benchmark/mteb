@@ -130,6 +130,7 @@ dinov2_small = ModelMeta(
     open_source=True,
     revision="ed25f3a31f01632728cabb09d1542f84ab7b0056",
     release_date="2023-07-18",
+    modalities="i",
 )
 
 dinov2_base = ModelMeta(
@@ -142,6 +143,7 @@ dinov2_base = ModelMeta(
     open_source=True,
     revision="f9e44c814b77203eaa57a6bdbbd535f21ede1415",
     release_date="2023-07-18",
+    modalities="i",
 )
 
 dinov2_large = ModelMeta(
@@ -154,6 +156,7 @@ dinov2_large = ModelMeta(
     open_source=True,
     revision="47b73eefe95e8d44ec3623f8890bd894b6ea2d6c",
     release_date="2023-07-18",
+    modalities="i",
 )
 
 dinov2_giant = ModelMeta(
@@ -166,6 +169,7 @@ dinov2_giant = ModelMeta(
     open_source=True,
     revision="611a9d42f2335e0f921f1e313ad3c1b7178d206d",
     release_date="2023-07-18",
+    modalities="i",
 )
 
 if __name__ == "__main__":
