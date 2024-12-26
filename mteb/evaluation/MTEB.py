@@ -372,6 +372,11 @@ class MTEB:
                 f"\n\n********************** Evaluating {task.metadata.name} **********************"
             )
 
+            # skip evaluation if the model does not support the task modalities.
+            for modality in meta.modalities:
+                if modality not in task.metadata.category:
+                    logger.info(f"{meta.name} only supports {meta.modalities}, but the task category is {task.metadata.category}.")
+
             # skip evaluation if results folder exists and overwrite_results is False
             if output_path:
                 save_path = output_path / f"{task.metadata.name}{task.save_suffix}.json"
