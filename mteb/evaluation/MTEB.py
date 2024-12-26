@@ -373,9 +373,15 @@ class MTEB:
             )
 
             # skip evaluation if the model does not support the task modalities.
-            for modality in meta.modalities:
-                if modality not in task.metadata.category:
-                    logger.info(f"{meta.name} only supports {meta.modalities}, but the task category is {task.metadata.category}.")
+            task_modalities = sorted(
+                "".join([m for m in set(task.metadata.category) if m.isalpha()])
+            )
+            if sorted(meta.modalities) != task_modalities:
+                logger.info(
+                    f"{meta.name} only supports {meta.modalities}, but the task category is {task.metadata.category}."
+                )
+                del self.tasks[0]  # empty memory
+                continue
 
             # skip evaluation if results folder exists and overwrite_results is False
             if output_path:

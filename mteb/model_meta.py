@@ -74,7 +74,7 @@ class ModelMeta(BaseModel):
             input such as "query: {document}" or "passage: {document}".
         zero_shot_benchmarks: A list of benchmarks on which the model has been evaluated in a zero-shot setting. By default we assume that all models
             are evaluated non-zero-shot unless specified otherwise.
-        modalities: A string representing the modalities the model supports. e.g. "t" means the model supports text-related tasks, "it" or "ti" means 
+        modalities: A string representing the modalities the model supports. e.g. "t" means the model supports text-related tasks, "it" or "ti" means
             the model support text and image-related tasks. Default is "t".
     """
 
