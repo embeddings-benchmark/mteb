@@ -15,6 +15,7 @@ from ..languages import (
     path_to_lang_codes,
     path_to_lang_scripts,
 )
+from ..modalities import MODALITIES
 
 TASK_SUBTYPE = Literal[
     "Article retrieval",
@@ -122,11 +123,6 @@ TASK_CATEGORY = Literal[
     "i2it",
     "t2it",
     "it2it",
-]
-
-MODALITIES = Literal[
-    "text",
-    "image",
 ]
 
 ANNOTATOR_TYPE = Literal[

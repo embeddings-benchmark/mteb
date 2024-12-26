@@ -164,7 +164,7 @@ blip_image_captioning_large = ModelMeta(
     open_source=True,
     revision="2227ac38c9f16105cb0412e7cab4759978a8fd90",
     release_date="2023-12-07",
-    modalities="it",
+    modalities=["image", "text"],
 )
 
 blip_image_captioning_base = ModelMeta(
@@ -177,7 +177,7 @@ blip_image_captioning_base = ModelMeta(
     open_source=True,
     revision="89b09ea1789f7addf2f6d6f0dfc4ce10ab58ef84",
     release_date="2023-08-01",
-    modalities="it",
+    modalities=["image", "text"],
 )
 
 
@@ -191,7 +191,7 @@ blip_vqa_base = ModelMeta(
     open_source=True,
     revision="c7df8e7cd7aa2ee9af18f56e2b29e59a92651b64",
     release_date="2023-12-07",
-    modalities="it",
+    modalities=["image", "text"],
 )
 
 blip_vqa_capfilt_large = ModelMeta(
@@ -204,7 +204,7 @@ blip_vqa_capfilt_large = ModelMeta(
     open_source=True,
     revision="e53f95265aeab69013fabb5380500ab984adbbb4",
     release_date="2023-01-22",
-    modalities="it",
+    modalities=["image", "text"],
 )
 
 blip_itm_base_coco = ModelMeta(
@@ -217,7 +217,7 @@ blip_itm_base_coco = ModelMeta(
     open_source=True,
     revision="7eaa90c11850c0b17fc38c6a11e7d88bd6ac231f",
     release_date="2023-08-01",
-    modalities="it",
+    modalities=["image", "text"],
 )
 
 blip_itm_large_coco = ModelMeta(
@@ -230,7 +230,7 @@ blip_itm_large_coco = ModelMeta(
     open_source=True,
     revision="fef05cafc05298067cbbca00b125749394a77a6f",
     release_date="2023-08-01",
-    modalities="it",
+    modalities=["image", "text"],
 )
 
 blip_itm_base_flickr = ModelMeta(
@@ -243,7 +243,7 @@ blip_itm_base_flickr = ModelMeta(
     open_source=True,
     revision="1de29e660d91ae1786c1876212ea805a22eab251",
     release_date="2023-08-01",
-    modalities="it",
+    modalities=["image", "text"],
 )
 
 blip_itm_large_flickr = ModelMeta(
@@ -256,7 +256,7 @@ blip_itm_large_flickr = ModelMeta(
     open_source=True,
     revision="bda12e6506758f54261b5ab174b2c55a3ba143fb",
     release_date="2023-08-01",
-    modalities="it",
+    modalities=["image", "text"],
 )
 
 

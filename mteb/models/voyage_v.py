@@ -255,7 +255,7 @@ voyage_v = ModelMeta(
     license=None,
     similarity_fn_name="cosine",
     framework=[],
-    modalities="it",
+    modalities=["image", "text"],
 )
 
 if __name__ == "__main__":

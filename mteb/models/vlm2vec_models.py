@@ -372,7 +372,7 @@ vlm2vec_lora = ModelMeta(
     open_source=True,
     revision="7403b6327958071c1e33c822c7453adadccc7298",
     release_date="2024-10-08",
-    modalities="it",
+    modalities=["image", "text"],
 )
 
 vlm2vec_full = ModelMeta(
@@ -385,5 +385,5 @@ vlm2vec_full = ModelMeta(
     open_source=True,
     revision="e9afa98002097ac2471827ba23ea1f2ddd229480",
     release_date="2024-10-08",
-    modalities="it",
+    modalities=["image", "text"],
 )

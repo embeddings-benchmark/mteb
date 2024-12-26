@@ -373,12 +373,10 @@ class MTEB:
             )
 
             # skip evaluation if the model does not support the task modalities.
-            task_modalities = sorted(
-                "".join([m for m in set(task.metadata.category) if m.isalpha()])
-            )
-            if sorted(meta.modalities) != task_modalities:
+            task_modalities = "".join(sorted(task.metadata.modalities))
+            if "".join(sorted(meta.modalities)) != task_modalities:
                 logger.info(
-                    f"{meta.name} only supports {meta.modalities}, but the task category is {task.metadata.category}."
+                    f"{meta.name} only supports {meta.modalities}, but the task modalities are {task.metadata.modalities}."
                 )
                 del self.tasks[0]  # empty memory
                 continue

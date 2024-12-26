@@ -147,7 +147,7 @@ clip_vit_large_patch14 = ModelMeta(
     open_source=True,
     revision="32bd64288804d66eefd0ccbe215aa642df71cc41",
     release_date="2021-02-26",
-    modalities="it",
+    modalities=["image", "text"],
 )
 
 clip_vit_base_patch32 = ModelMeta(
@@ -160,7 +160,7 @@ clip_vit_base_patch32 = ModelMeta(
     open_source=True,
     revision="3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
     release_date="2021-02-26",
-    modalities="it",
+    modalities=["image", "text"],
 )
 
 clip_vit_base_patch16 = ModelMeta(
@@ -173,7 +173,7 @@ clip_vit_base_patch16 = ModelMeta(
     open_source=True,
     revision="57c216476eefef5ab752ec549e440a49ae4ae5f3",
     release_date="2021-02-26",
-    modalities="it",
+    modalities=["image", "text"],
 )
 
 if __name__ == "__main__":

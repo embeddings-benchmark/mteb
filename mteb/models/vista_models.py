@@ -230,7 +230,7 @@ visualized_bge_base = ModelMeta(
     open_source=True,
     revision="98db10b10d22620010d06f11733346e1c98c34aa",
     release_date="2024-06-06",
-    modalities="it",
+    modalities=["image", "text"],
 )
 
 visualized_bge_m3 = ModelMeta(
@@ -244,7 +244,7 @@ visualized_bge_m3 = ModelMeta(
     open_source=True,
     revision="98db10b10d22620010d06f11733346e1c98c34aa",
     release_date="2024-06-06",
-    modalities="it",
+    modalities=["image", "text"],
 )
 
 if __name__ == "__main__":
