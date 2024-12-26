@@ -50,7 +50,14 @@ def mocov3_loader(**kwargs):
             )
 
         @staticmethod
-        def get_text_embeddings(texts: list[str], batch_size: int = 32):
+        def get_text_embeddings(
+            texts: list[str],
+            *,
+            task_name: str | None = None,
+            prompt_type: PromptType | None = None,
+            batch_size: int = 32,
+            **kwargs: Any,
+        ):
             raise ValueError("MOCO models only support image encoding.")
 
         def get_image_embeddings(
@@ -141,6 +148,7 @@ mocov3_vit_base = ModelMeta(
     open_source=True,
     revision="7d091cd70772c5c0ecf7f00b5f12ca609a99d69d",
     release_date="2024-06-03",
+    modalities=["image"],
 )
 
 mocov3_vit_large = ModelMeta(
@@ -153,4 +161,5 @@ mocov3_vit_large = ModelMeta(
     open_source=True,
     revision="7bf75358d616f39b9716148bf4e3425f3bd35b47",
     release_date="2024-06-03",
+    modalities=["image"],
 )

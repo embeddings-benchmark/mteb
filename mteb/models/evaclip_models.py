@@ -175,6 +175,7 @@ EVA02_CLIP_B_16 = ModelMeta(
     open_source=True,
     revision="11afd202f2ae80869d6cef18b1ec775e79bd8d12",
     release_date="2023-04-26",
+    modalities=["image", "text"],
 )
 
 EVA02_CLIP_L_14 = ModelMeta(
@@ -187,6 +188,7 @@ EVA02_CLIP_L_14 = ModelMeta(
     open_source=True,
     revision="11afd202f2ae80869d6cef18b1ec775e79bd8d12",
     release_date="2023-04-26",
+    modalities=["image", "text"],
 )
 
 EVA02_CLIP_bigE_14 = ModelMeta(
@@ -199,6 +201,7 @@ EVA02_CLIP_bigE_14 = ModelMeta(
     open_source=True,
     revision="11afd202f2ae80869d6cef18b1ec775e79bd8d12",
     release_date="2023-04-26",
+    modalities=["image", "text"],
 )
 
 
@@ -212,4 +215,5 @@ EVA02_CLIP_bigE_14_plus = ModelMeta(
     open_source=True,
     revision="11afd202f2ae80869d6cef18b1ec775e79bd8d12",
     release_date="2023-04-26",
+    modalities=["image", "text"],
 )

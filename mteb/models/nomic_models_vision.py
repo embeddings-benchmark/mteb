@@ -171,6 +171,7 @@ nomic_embed_vision_v1_5 = ModelMeta(
     open_source=True,
     revision="af2246fffdab78d8458418480e4886a8e48b70a7",
     release_date="2024-06-08",
+    modalities=["image", "text"],
 )
 
 if __name__ == "__main__":

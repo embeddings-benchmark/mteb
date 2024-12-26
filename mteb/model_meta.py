@@ -10,6 +10,7 @@ from mteb.abstasks.TaskMetadata import STR_DATE, STR_URL
 from mteb.encoder_interface import Encoder
 
 from .languages import ISO_LANGUAGE_SCRIPT
+from .modalities import MODALITIES
 
 if TYPE_CHECKING:
     from .models.sentence_transformer_wrapper import SentenceTransformerWrapper
@@ -74,6 +75,7 @@ class ModelMeta(BaseModel):
             input such as "query: {document}" or "passage: {document}".
         zero_shot_benchmarks: A list of benchmarks on which the model has been evaluated in a zero-shot setting. By default we assume that all models
             are evaluated non-zero-shot unless specified otherwise.
+        modalities: A list of strings representing the modalities the model supports. Default is ["text].
     """
 
     name: str | None
@@ -94,6 +96,7 @@ class ModelMeta(BaseModel):
     similarity_fn_name: DISTANCE_METRICS | None = None
     use_instuctions: bool | None = None
     zero_shot_benchmarks: list[str] | None = None
+    modalities: list[MODALITIES] = ["text"]
 
     def to_dict(self):
         dict_repr = self.model_dump()

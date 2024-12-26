@@ -195,6 +195,7 @@ cohere_mult_3 = ModelMeta(
     license=None,
     similarity_fn_name="cosine",
     framework=[],
+    modalities=["image", "text"],
 )
 
 cohere_eng_3 = ModelMeta(
@@ -211,6 +212,7 @@ cohere_eng_3 = ModelMeta(
     license=None,
     similarity_fn_name="cosine",
     framework=[],
+    modalities=["image", "text"],
 )
 
 if __name__ == "__main__":

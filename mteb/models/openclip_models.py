@@ -160,6 +160,7 @@ CLIP_ViT_L_14_DataComp_XL_s13B_b90K = ModelMeta(
     open_source=True,
     revision="84c9828e63dc9a9351d1fe637c346d4c1c4db341",
     release_date="2023-04-26",
+    modalities=["image", "text"],
 )
 
 CLIP_ViT_B_32_DataComp_XL_s13B_b90K = ModelMeta(
@@ -172,6 +173,7 @@ CLIP_ViT_B_32_DataComp_XL_s13B_b90K = ModelMeta(
     open_source=True,
     revision="f0e2ffa09cbadab3db6a261ec1ec56407ce42912",
     release_date="2023-04-26",
+    modalities=["image", "text"],
 )
 
 CLIP_ViT_B_16_DataComp_XL_s13B_b90K = ModelMeta(
@@ -184,6 +186,7 @@ CLIP_ViT_B_16_DataComp_XL_s13B_b90K = ModelMeta(
     open_source=True,
     revision="d110532e8d4ff91c574ee60a342323f28468b287",
     release_date="2023-04-26",
+    modalities=["image", "text"],
 )
 
 CLIP_ViT_bigG_14_laion2B_39B_b160k = ModelMeta(
@@ -196,6 +199,7 @@ CLIP_ViT_bigG_14_laion2B_39B_b160k = ModelMeta(
     open_source=True,
     revision="bc7788f151930d91b58474715fdce5524ad9a189",
     release_date="2023-01-23",
+    modalities=["image", "text"],
 )
 
 CLIP_ViT_g_14_laion2B_s34B_b88K = ModelMeta(
@@ -208,6 +212,7 @@ CLIP_ViT_g_14_laion2B_s34B_b88K = ModelMeta(
     open_source=True,
     revision="15efd0f6ac0c40c0f9da7becca03c974d7012604",
     release_date="2023-03-06",
+    modalities=["image", "text"],
 )
 
 CLIP_ViT_H_14_laion2B_s32B_b79K = ModelMeta(
@@ -220,6 +225,7 @@ CLIP_ViT_H_14_laion2B_s32B_b79K = ModelMeta(
     open_source=True,
     revision="de081ac0a0ca8dc9d1533eed1ae884bb8ae1404b",
     release_date="2022-09-15",
+    modalities=["image", "text"],
 )
 
 CLIP_ViT_L_14_laion2B_s32B_b82K = ModelMeta(
@@ -232,6 +238,7 @@ CLIP_ViT_L_14_laion2B_s32B_b82K = ModelMeta(
     open_source=True,
     revision="1627032197142fbe2a7cfec626f4ced3ae60d07a",
     release_date="2022-09-15",
+    modalities=["image", "text"],
 )
 
 CLIP_ViT_B_32_laion2B_s34B_b79K = ModelMeta(
@@ -244,4 +251,5 @@ CLIP_ViT_B_32_laion2B_s34B_b79K = ModelMeta(
     open_source=True,
     revision="08f73555f1b2fb7c82058aebbd492887a94968ef",
     release_date="2022-09-15",
+    modalities=["image", "text"],
 )

@@ -241,7 +241,7 @@ def voyage_v_loader(**kwargs):
     return VoyageMultiModalModelWrapper(**kwargs)
 
 
-cohere_mult_3 = ModelMeta(
+voyage_v = ModelMeta(
     loader=partial(voyage_v_loader, model_name="voyage-multimodal-3"),
     name="voyage-multimodal-3",
     languages=[],  # Unknown
@@ -255,8 +255,9 @@ cohere_mult_3 = ModelMeta(
     license=None,
     similarity_fn_name="cosine",
     framework=[],
+    modalities=["image", "text"],
 )
 
 if __name__ == "__main__":
-    mdl = mteb.get_model(cohere_mult_3.name, cohere_mult_3.revision)
+    mdl = mteb.get_model(voyage_v.name, voyage_v.revision)
     emb = mdl.encode(["Hello, world!"])

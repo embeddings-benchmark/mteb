@@ -372,6 +372,15 @@ class MTEB:
                 f"\n\n********************** Evaluating {task.metadata.name} **********************"
             )
 
+            # skip evaluation if the model does not support the task modalities.
+            task_modalities = "".join(sorted(task.metadata.modalities))
+            if "".join(sorted(meta.modalities)) != task_modalities:
+                logger.info(
+                    f"{meta.name} only supports {meta.modalities}, but the task modalities are {task.metadata.modalities}."
+                )
+                del self.tasks[0]  # empty memory
+                continue
+
             # skip evaluation if results folder exists and overwrite_results is False
             if output_path:
                 save_path = output_path / f"{task.metadata.name}{task.save_suffix}.json"
