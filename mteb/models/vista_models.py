@@ -17,10 +17,10 @@ tensor_to_image = transforms.Compose([transforms.ToPILImage()])
 
 def vista_loader(**kwargs):
     try:  # a temporal fix for the dependency issues of vista models.
-        from FlagEmbedding.visual.modeling import Visualized_BGE
+        from visual_bge.modeling import Visualized_BGE
     except ImportError:
         raise ImportError(
-            "Please install `pip install FlagEmbedding` to use VisualizedBGE models."
+            "Please install `visual_bge`, refer to https://github.com/FlagOpen/FlagEmbedding/tree/master/research/visual_bge#install-flagembedding."
         )
 
     class VisualizedBGEWrapper(Visualized_BGE):
@@ -33,6 +33,7 @@ def vista_loader(**kwargs):
             negatives_cross_device: bool = False,
             temperature: float = 0.02,
             from_pretrained=None,
+            image_tokens_num: int = None,
             **kwargs: Any,
         ):
             super().__init__(
@@ -43,6 +44,10 @@ def vista_loader(**kwargs):
                 negatives_cross_device=negatives_cross_device,
                 temperature=temperature,
                 from_pretrained=from_pretrained,
+            )
+            self.image_tokens_num = image_tokens_num
+            self.max_text_len_with_image = (
+                self.tokenizer.model_max_length - image_tokens_num
             )
             self.eval()
 
@@ -120,13 +125,21 @@ def vista_loader(**kwargs):
                         ]
                     images = torch.stack(images)
                 if texts is not None:
-                    texts = self.tokenizer(texts, return_tensors="pt", padding=True)
+                    texts = self.tokenizer(
+                        texts,
+                        return_tensors="pt",
+                        padding=True,
+                        truncation=True,
+                        max_length=self.max_text_len_with_image,
+                    )
                     return self.encode_mm(images.to(self.device), texts.to(self.device))
                 else:
                     return self.encode_image(images.to(self.device))
             else:
                 if texts is not None:
-                    texts = self.tokenizer(texts, return_tensors="pt", padding=True)
+                    texts = self.tokenizer(
+                        texts, return_tensors="pt", padding=True, truncation=True
+                    )
                     return self.encode_text(texts.to(self.device))
                 else:
                     return None
@@ -224,6 +237,7 @@ visualized_bge_base = ModelMeta(
         vista_loader,
         model_name_bge="BAAI/bge-base-en-v1.5",
         model_weight="visualized_base_en_V1.5.pth",
+        image_tokens_num=196,
     ),
     name="BAAI/bge-visualized-base",
     languages=["eng_Latn"],
@@ -237,6 +251,7 @@ visualized_bge_m3 = ModelMeta(
         vista_loader,
         model_name_bge="BAAI/bge-m3",
         model_weight="visualized_m3.pth",
+        image_tokens_num=256,
     ),
     name="BAAI/bge-visualized-m3",
     languages=["eng_Latn"],
