@@ -103,14 +103,16 @@ class Wrapper:
             return task_metadata.prompt
         return task.abstask_prompt
 
-    def format_instruction(self, instruction: str) -> str:
+    def format_instruction(
+        self, instruction: str, prompt_type: PromptType | None = None
+    ) -> str:
         if isinstance(self.instruction_template, str):
             if "{instruction}" not in self.instruction_template:
                 raise ValueError(
                     "Instruction template must contain the string '{instruction}'."
                 )
             return self.instruction_template.format(instruction=instruction)
-        return self.instruction_template(instruction)
+        return self.instruction_template(instruction, prompt_type)
 
     def get_task_instruction(
         self, task_name: str, prompt_type: PromptType | None
