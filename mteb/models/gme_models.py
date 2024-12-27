@@ -50,14 +50,14 @@ _GME_TASK_TO_INSTRUCTION = {
     "WebQAT2ITRetrieval": "Find a Wikipedia image that answers this question.",
     "EDIST2ITRetrieval": "Identify the news photo for the given caption.",
     "OVENIT2TRetrieval": "Retrieve a Wikipedia paragraph that provides an answer to the given query about the image.",
-    "InfoSeekIT2TRetrieval": "Retrieve a Wikipedia paragraph that provides an answer to the given query about the image.",
+    "InfoSeekIT2TRetrieval": "Find a paragraph from Wikipedia that answers my question about this image.",
     "ReMuQIT2TRetrieval": "Retrieve a fact-based paragraph that provides an answer to the given query about the image.",
     "OKVQAIT2TRetrieval": "Retrieve documents that provide an answer to the question alongside the image.",
     "LLaVAIT2TRetrieval": "Provide a specific decription of the image along with the following question.",
     "FashionIQIT2IRetrieval": "Find a fashion image that aligns with the reference image and style note.",
     "CIRRIT2IRetrieval": "Retrieve a day-to-day image that aligns with the modification instructions of the provided image.",
     "OVENIT2ITRetrieval": "Retrieve a Wikipedia image-description pair that provides evidence for the question of this image.",
-    "InfoSeekIT2ITRetrieval": "Retrieve a Wikipedia image-description pair that provides evidence for the question of this image.",
+    "InfoSeekIT2ITRetrieval": "Find an image and subject description from Wikipedia that answers my question about this image.",
     "EncyclopediaVQAIT2ITRetrieval": "Obtain illustrated documents that correspond to the inquiry alongside the provided image.",
 }
 
