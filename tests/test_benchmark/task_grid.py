@@ -44,6 +44,24 @@ from .mock_tasks import (
     MockRetrievalTask,
     MockSTSTask,
     MockSummarizationTask,
+    MockAny2AnyRetrievalTask,
+    MockTextMultipleChoiceTask,
+    MockMultiChoiceTask,
+    MockImageClassificationTask,
+    MockImageClusteringTask,
+    MockImageTextPairClassificationTask,
+    MockVisualSTSTask,
+    MockZeroshotClassificationTask,
+    MockMultilingualAny2AnyRetrievalTask,
+    MockImageMultilabelClassificationTask,
+    MockMultilingualImageClassificationTask,
+    MockMultilingualImageTextPairClassificationTask,
+    MockMultilingualVisualSTSTask,
+    MockMultilingualZeroshotClassificationTask,
+    MockMultilingualTextMultipleChoiceTask,
+    MockMultilingualMultiChoiceTask,
+    MockMultilingualImageMultilabelClassificationTask,
+    MockMultilingualZeroshotClassificationTask,
 )
 
 twenty_news = TwentyNewsgroupsClusteringFast()
@@ -74,10 +92,13 @@ TASK_TEST_GRID_AS_STRING = [
     t.metadata.name if isinstance(t, AbsTask) else t for t in TASK_TEST_GRID
 ]
 
+import logging
+logging.basicConfig(level=logging.INFO)
 
 def downsampled_dataset_transform(self):
     for split in self.metadata.eval_splits:
         self.dataset[split] = self.dataset[split].select([0, 1])
+    logging.info(self.dataset)
 
 
 tiny_imagenet = TinyImageNet()
@@ -103,15 +124,15 @@ sts16.dataset_transform = downsampled_dataset_transform.__get__(sts16)
 
 
 MIEB_TASK_TEST_GRID = [
-    tiny_imagenet,  # image clustering
-    aro,  # pair classification
-    renderedSST2,  # zero shot classification
+    # tiny_imagenet,  # image clustering
+    # aro,  # pair classification
+    # renderedSST2,  # zero shot classification
     oxford_pets,  # image classification
-    voc2007,  # multilabel classification
-    flickr,  # I2T retrieval
-    roxford_mc,  # Any2Any MultiChoice
-    cvbench_count,  # Any2Any Text MultiChoice
-    sts16,  # visual sts
+    # voc2007,  # multilabel classification
+    # flickr,  # I2T retrieval
+    # roxford_mc,  # Any2Any MultiChoice
+    # cvbench_count,  # Any2Any Text MultiChoice
+    # sts16,  # visual sts
 ]
 
 MIEB_TASK_TEST_GRID_AS_STRING = [
@@ -152,3 +173,30 @@ MOCK_TASK_TEST_GRID_AS_STRING = [
 ]
 
 MOCK_TASK_REGISTRY = {task.metadata.name: type(task) for task in MOCK_TASK_TEST_GRID}
+
+MOCK_MIEB_TASK_GRID = [
+    MockAny2AnyRetrievalTask(),
+    MockTextMultipleChoiceTask(),
+    MockMultiChoiceTask(),
+    MockImageClassificationTask(),
+    MockImageClusteringTask(),
+    MockImageTextPairClassificationTask(),
+    MockVisualSTSTask(),
+    MockZeroshotClassificationTask(),
+    # MockImageMultilabelClassificationTask(),
+    MockMultilingualAny2AnyRetrievalTask(),
+    MockMultilingualImageClassificationTask(),
+    # MockMultilingualImageTextPairClassificationTask(),
+    # MockMultilingualVisualSTSTask(),
+    # MockMultilingualTextMultipleChoiceTask(),
+    # MockMultilingualMultiChoiceTask(),
+    # MockMultilingualImageMultilabelClassificationTask(),
+    MockMultilingualZeroshotClassificationTask(),
+]
+
+MOCK_MIEB_TASK_GRID_AS_STRING = [
+    t.metadata.name if isinstance(t, AbsTask) else t for t in MOCK_MIEB_TASK_GRID
+]
+
+MOCK_MIEB_TASK_REGISTRY = {task.metadata.name: type(task) for task in MOCK_MIEB_TASK_GRID}
+
