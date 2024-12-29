@@ -66,7 +66,7 @@ def instruct_wrapper(
             instruction = self.get_instruction(task_name, prompt_type)
 
             if self.instruction_template:
-                instruction = self.format_instruction(instruction)
+                instruction = self.format_instruction(instruction, prompt_type)
 
             logger.info(f"Using instruction: '{instruction}' for task: '{task_name}'")
             embeddings = super().encode(
