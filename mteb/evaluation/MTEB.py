@@ -374,7 +374,9 @@ class MTEB:
 
             # skip evaluation if the model does not support the task modalities.
             task_modalities = "".join(sorted(task.metadata.modalities))
-            if "".join(sorted(meta.modalities)) != task_modalities:
+            if ("".join(sorted(meta.modalities)) != task_modalities) and (
+                not set(task.metadata.modalities).issubset(set(meta.modalities))
+            ):
                 logger.warning(
                     f"{meta.name} only supports {meta.modalities}, but the task modalities are {task.metadata.modalities}. Skipping task."
                 )
