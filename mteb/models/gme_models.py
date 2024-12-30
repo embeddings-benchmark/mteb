@@ -25,48 +25,9 @@ HF_GME_QWEN2VL_2B = "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
 HF_GME_QWEN2VL_7B = "Alibaba-NLP/gme-Qwen2-VL-7B-Instruct"
 
 
-_ViDoRe_INSTRUCTION = "Find a screenshot that relevant to the user's question."
-_GME_TASK_TO_INSTRUCTION = {
-    "WebQAT2TRetrieval": "Retrieve passages from Wikipedia that provide answers to the following question.",
-    "NIGHTSI2IRetrieval": "Find a day-to-day image that looks similar to the provided image.",
-    "VisualNewsT2IRetrieval": "Identify the news-related image in line with the described event.",
-    "Fashion200kT2IRetrieval": "Based on the following fashion description, retrieve the best matching image.",
-    "MSCOCOT2IRetrieval": "Identify the image showcasing the described everyday scene.",
-    "Flickr30kT2IRetrieval": "Find an image that matches the given caption.",
-    "VidoreTatdqaRetrieval": _ViDoRe_INSTRUCTION,
-    "VidoreArxivQARetrieval": _ViDoRe_INSTRUCTION,
-    "VidoreDocVQARetrieval": _ViDoRe_INSTRUCTION,
-    "VidoreInfoVQARetrieval": _ViDoRe_INSTRUCTION,
-    "VidoreShiftProjectRetrieval": _ViDoRe_INSTRUCTION,
-    "VidoreSyntheticDocQAAIRetrieval": _ViDoRe_INSTRUCTION,
-    "VidoreSyntheticDocQAGovernmentReportsRetrieval": _ViDoRe_INSTRUCTION,
-    "VidoreSyntheticDocQAHealthcareIndustryRetrieval": _ViDoRe_INSTRUCTION,
-    "VidoreSyntheticDocQAEnergyRetrieval": _ViDoRe_INSTRUCTION,
-    "VidoreTabfquadRetrieval": _ViDoRe_INSTRUCTION,
-    "VisualNewsI2TRetrieval": "Find a caption for the news in the given photo.",
-    "Fashion200kI2TRetrieval": "Based on the following fashion description, retrieve the best matching image.",
-    "MSCOCOI2TRetrieval": "Find an image caption describing the following everyday image.",
-    "Flickr30kI2TRetrieval": "Find an image caption describing the following image.",
-    "WebQAT2ITRetrieval": "Find a Wikipedia image that answers this question.",
-    "EDIST2ITRetrieval": "Identify the news photo for the given caption.",
-    "OVENIT2TRetrieval": "Retrieve a Wikipedia paragraph that provides an answer to the given query about the image.",
-    "InfoSeekIT2TRetrieval": "Find a paragraph from Wikipedia that answers my question about this image.",
-    "ReMuQIT2TRetrieval": "Retrieve a fact-based paragraph that provides an answer to the given query about the image.",
-    "OKVQAIT2TRetrieval": "Retrieve documents that provide an answer to the question alongside the image.",
-    "LLaVAIT2TRetrieval": "Provide a specific decription of the image along with the following question.",
-    "FashionIQIT2IRetrieval": "Find a fashion image that aligns with the reference image and style note.",
-    "CIRRIT2IRetrieval": "Retrieve a day-to-day image that aligns with the modification instructions of the provided image.",
-    "OVENIT2ITRetrieval": "Retrieve a Wikipedia image-description pair that provides evidence for the question of this image.",
-    "InfoSeekIT2ITRetrieval": "Find an image and subject description from Wikipedia that answers my question about this image.",
-    "EncyclopediaVQAIT2ITRetrieval": "Obtain illustrated documents that correspond to the inquiry alongside the provided image.",
-}
-
-
 def get_gme_instruction(task_name: str, is_query: bool = True) -> str:
     # TODO Prompts for other multimodal tasks.
-    if task_name in _GME_TASK_TO_INSTRUCTION:
-        prompt = _GME_TASK_TO_INSTRUCTION[task_name]
-    elif task_name in TASKNAME2INSTRUCTIONS:
+    if task_name in TASKNAME2INSTRUCTIONS:
         prompt = TASKNAME2INSTRUCTIONS[task_name]
         if isinstance(prompt, tuple):
             prompt = prompt[0] if is_query else prompt[1]
@@ -451,7 +412,7 @@ gme_qwen2vl_2b = ModelMeta(
         model_name=HF_GME_QWEN2VL_2B,
     ),
     name=HF_GME_QWEN2VL_2B,
-    languages=["eng_Latn", "zho-Hans"],
+    languages=["eng_Latn", "cmn-Hans"],
     open_weights=True,
     revision="ce765ae71b8cdb208203cd8fb64a170b1b84293a",
     release_date="2024-12-24",
@@ -472,7 +433,7 @@ gme_qwen2vl_7b = ModelMeta(
         model_name=HF_GME_QWEN2VL_7B,
     ),
     name=HF_GME_QWEN2VL_7B,
-    languages=["eng_Latn", "zho-Hans"],
+    languages=["eng_Latn", "cmn-Hans"],
     open_weights=True,
     revision="477027a6480f8630363be77751f169cc3434b673",
     release_date="2024-12-24",
