@@ -563,6 +563,7 @@ class MTEB:
                                 task,
                                 model,
                                 split,
+                                output_folder,
                                 encode_kwargs=encode_kwargs,
                                 subsets_to_run=subsets_to_run,
                                 **kwargs,
