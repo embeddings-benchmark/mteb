@@ -269,3 +269,22 @@ all_MiniLM_L12_v2 = ModelMeta(
     superseded_by=None,
     adapted_from=None,
 )
+
+microllama_text_embedding = ModelMeta(
+    name="keeeeenw/MicroLlama-text-embedding",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="98f70f14cdf12d7ea217ed2fd4e808b0195f1e7e",
+    release_date="2024-11-10",
+    n_parameters=272_000_000,
+    memory_usage=None,
+    embed_dim=1024,
+    license="apache-2.0",
+    max_tokens=2048,
+    reference="https://huggingface.co/keeeeenw/MicroLlama-text-embedding",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    superseded_by=None,
+    adapted_from=None,
+)
