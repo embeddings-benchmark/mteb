@@ -438,6 +438,39 @@ CoIR = Benchmark(
     }""",
 )
 
+RAR_b = Benchmark(
+    name="RAR-b",
+    tasks=get_tasks(
+        tasks=[
+            "ARCChallenge",
+            "AlphaNLI",
+            "HellaSwag",
+            "WinoGrande",
+            "PIQA",
+            "SIQA",
+            "Quail",
+            "SpartQA",
+            "TempReasonL1",
+            "TempReasonL2Pure",
+            "TempReasonL2Fact",
+            "TempReasonL2Context",
+            "TempReasonL3Pure",
+            "TempReasonL3Fact",
+            "TempReasonL3Context",
+            "RARbCode",
+            "RARbMath",
+        ]
+    ),
+    description="A benchmark to evaluate reasoning capabilities of retrievers.",
+    reference="https://arxiv.org/abs/2404.06347",
+    citation="""@article{xiao2024rar,
+      title={RAR-b: Reasoning as Retrieval Benchmark},
+      author={Xiao, Chenghao and Hudson, G Thomas and Al Moubayed, Noura},
+      journal={arXiv preprint arXiv:2404.06347},
+      year={2024}
+    }""",
+)
+
 MTEB_FRA = Benchmark(
     name="MTEB(fra)",
     tasks=get_tasks(
