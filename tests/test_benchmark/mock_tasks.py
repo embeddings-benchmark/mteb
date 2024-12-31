@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import numpy as np
-from PIL import Image
 from datasets import Dataset, DatasetDict
+from PIL import Image
 
 from mteb.abstasks import MultilingualTask
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
@@ -20,6 +20,8 @@ from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
 from mteb.abstasks.AbsTaskSummarization import AbsTaskSummarization
+from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
+from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
 from mteb.abstasks.Image.AbsTaskImageClustering import AbsTaskImageClustering
 from mteb.abstasks.Image.AbsTaskImageMultilabelClassification import (  # noqa
@@ -32,8 +34,6 @@ from mteb.abstasks.Image.AbsTaskVisualSTS import AbsTaskVisualSTS
 from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
     AbsTaskZeroshotClassification,
 )
-from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 general_args = {
@@ -1436,21 +1436,30 @@ class MockMultiChoiceTask(AbsTaskAny2AnyMultiChoice):
 
     def load_data(self, **kwargs):
         images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [Image.fromarray(image.astype('uint8')).convert('RGBA') for image in images]
+        images = [
+            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
+        ]
 
         self.queries = {
-            "test": Dataset.from_dict({
-                "id": [f"q{i}" for i in range(2)],
-                "image": [images[i] for i in range(2)],
-                "modality": ["image" for _ in range(2)],
-            })
+            "test": Dataset.from_dict(
+                {
+                    "id": [f"q{i}" for i in range(2)],
+                    "image": [images[i] for i in range(2)],
+                    "modality": ["image" for _ in range(2)],
+                }
+            )
         }
         self.corpus = {
-            "test": Dataset.from_dict({
-                "id": ["d1", "d2"],
-                "text": ["This is a positive sentence", "This is another positive sentence"],
-                "modality": ["text" for _ in range(2)],
-            })
+            "test": Dataset.from_dict(
+                {
+                    "id": ["d1", "d2"],
+                    "text": [
+                        "This is a positive sentence",
+                        "This is another positive sentence",
+                    ],
+                    "modality": ["text" for _ in range(2)],
+                }
+            )
         }
 
         self.relevant_docs = {
@@ -1498,21 +1507,30 @@ class MockMultilingualMultiChoiceTask(AbsTaskAny2AnyMultiChoice, MultilingualTas
 
     def load_data(self, **kwargs):
         images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [Image.fromarray(image.astype('uint8')).convert('RGBA') for image in images]
+        images = [
+            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
+        ]
 
         self.queries = {
-            "test": Dataset.from_dict({
-                "id": [f"q{i}" for i in range(2)], 
-                "image": [images[i] for i in range(2)],
-                "modality": ["image" for _ in range(2)],
-            })
+            "test": Dataset.from_dict(
+                {
+                    "id": [f"q{i}" for i in range(2)],
+                    "image": [images[i] for i in range(2)],
+                    "modality": ["image" for _ in range(2)],
+                }
+            )
         }
         self.corpus = {
-            "test": Dataset.from_dict({
-                "id": ["d1", "d2"],
-                "text": ["This is a positive sentence", "This is another positive sentence"],
-                "modality": ["text" for _ in range(2)],
-            })
+            "test": Dataset.from_dict(
+                {
+                    "id": ["d1", "d2"],
+                    "text": [
+                        "This is a positive sentence",
+                        "This is another positive sentence",
+                    ],
+                    "modality": ["text" for _ in range(2)],
+                }
+            )
         }
 
         self.relevant_docs = {
@@ -1522,6 +1540,7 @@ class MockMultilingualMultiChoiceTask(AbsTaskAny2AnyMultiChoice, MultilingualTas
             },
         }
         self.data_loaded = True
+
 
 class MockAny2AnyRetrievalTask(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
@@ -1539,26 +1558,35 @@ class MockAny2AnyRetrievalTask(AbsTaskAny2AnyRetrieval):
         },
         **general_args,  # type: ignore
     )
-    metadata.modalities = ["image","text"]
+    metadata.modalities = ["image", "text"]
     metadata.category = "i2t"
 
     def load_data(self, **kwargs):
         images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [Image.fromarray(image.astype('uint8')).convert('RGBA') for image in images]
+        images = [
+            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
+        ]
 
         self.queries = {
-            "test": Dataset.from_dict({
-                "id": [f"q{i}" for i in range(2)], 
-                "image": [images[i] for i in range(2)],
-                "modality": ["image" for _ in range(2)],
-            })
+            "test": Dataset.from_dict(
+                {
+                    "id": [f"q{i}" for i in range(2)],
+                    "image": [images[i] for i in range(2)],
+                    "modality": ["image" for _ in range(2)],
+                }
+            )
         }
         self.corpus = {
-            "test": Dataset.from_dict({
-                "id": ["d1", "d2"],
-                "text": ["This is a positive sentence", "This is another positive sentence"],
-                "modality": ["text" for _ in range(2)],
-            })
+            "test": Dataset.from_dict(
+                {
+                    "id": ["d1", "d2"],
+                    "text": [
+                        "This is a positive sentence",
+                        "This is another positive sentence",
+                    ],
+                    "modality": ["text" for _ in range(2)],
+                }
+            )
         }
 
         self.relevant_docs = {
@@ -1602,30 +1630,39 @@ class MockMultilingualAny2AnyRetrievalTask(AbsTaskAny2AnyRetrieval, Multilingual
         },
         **general_args,  # type: ignore
     )
-    metadata.modalities = ["image","text"]
+    metadata.modalities = ["image", "text"]
     metadata.category = "i2t"
     metadata.eval_langs = multilingual_eval_langs
 
     def load_data(self, **kwargs):
         images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [Image.fromarray(image.astype('uint8')).convert('RGBA') for image in images]
+        images = [
+            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
+        ]
         queries = {
-            "test": Dataset.from_dict({
-                "id": [f"q{i}" for i in range(2)], 
-                "image": [images[i] for i in range(2)],
-                "modality": ["image" for _ in range(2)],
-            })
+            "test": Dataset.from_dict(
+                {
+                    "id": [f"q{i}" for i in range(2)],
+                    "image": [images[i] for i in range(2)],
+                    "modality": ["image" for _ in range(2)],
+                }
+            )
         }
         self.queries = {
             "eng": queries,
             "fra": queries,
         }
         corpus = {
-            "test": Dataset.from_dict({
-                "id": ["d1", "d2"],
-                "text": ["This is a positive sentence", "This is another positive sentence"],
-                "modality": ["text" for _ in range(2)],
-            })
+            "test": Dataset.from_dict(
+                {
+                    "id": ["d1", "d2"],
+                    "text": [
+                        "This is a positive sentence",
+                        "This is another positive sentence",
+                    ],
+                    "modality": ["text" for _ in range(2)],
+                }
+            )
         }
         self.corpus = {
             "eng": corpus,
@@ -1666,21 +1703,30 @@ class MockTextMultipleChoiceTask(AbsTaskAny2AnyMultiChoice):
 
     def load_data(self, **kwargs):
         images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [Image.fromarray(image.astype('uint8')).convert('RGBA') for image in images]
+        images = [
+            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
+        ]
 
         self.queries = {
-            "test": Dataset.from_dict({
-                "id": [f"q{i}" for i in range(2)], 
-                "image": [images[i] for i in range(2)],
-                "modality": ["image" for _ in range(2)],
-            })
+            "test": Dataset.from_dict(
+                {
+                    "id": [f"q{i}" for i in range(2)],
+                    "image": [images[i] for i in range(2)],
+                    "modality": ["image" for _ in range(2)],
+                }
+            )
         }
         self.corpus = {
-            "test": Dataset.from_dict({
-                "id": ["d1", "d2"],
-                "text": ["This is a positive sentence", "This is another positive sentence"],
-                "modality": ["text" for _ in range(2)],
-            })
+            "test": Dataset.from_dict(
+                {
+                    "id": ["d1", "d2"],
+                    "text": [
+                        "This is a positive sentence",
+                        "This is another positive sentence",
+                    ],
+                    "modality": ["text" for _ in range(2)],
+                }
+            )
         }
 
         self.relevant_docs = {
@@ -1690,7 +1736,6 @@ class MockTextMultipleChoiceTask(AbsTaskAny2AnyMultiChoice):
             },
         }
         self.data_loaded = True
-
 
 
 class MockMultilingualTextMultipleChoiceTask(
@@ -1731,21 +1776,30 @@ class MockMultilingualTextMultipleChoiceTask(
 
     def load_data(self, **kwargs):
         images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [Image.fromarray(image.astype('uint8')).convert('RGBA') for image in images]
+        images = [
+            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
+        ]
 
         self.queries = {
-            "test": Dataset.from_dict({
-                "id": [f"q{i}" for i in range(2)], 
-                "image": [images[i] for i in range(2)],
-                "modality": ["image" for _ in range(2)],
-            })
+            "test": Dataset.from_dict(
+                {
+                    "id": [f"q{i}" for i in range(2)],
+                    "image": [images[i] for i in range(2)],
+                    "modality": ["image" for _ in range(2)],
+                }
+            )
         }
         self.corpus = {
-            "test": Dataset.from_dict({
-                "id": ["d1", "d2"],
-                "text": ["This is a positive sentence", "This is another positive sentence"],
-                "modality": ["text" for _ in range(2)],
-            })
+            "test": Dataset.from_dict(
+                {
+                    "id": ["d1", "d2"],
+                    "text": [
+                        "This is a positive sentence",
+                        "This is another positive sentence",
+                    ],
+                    "modality": ["text" for _ in range(2)],
+                }
+            )
         }
 
         self.relevant_docs = {
@@ -1776,7 +1830,7 @@ class MockImageClassificationTask(AbsTaskImageClassification):
                 "average_image_size": 26.0,
                 "unique_labels": 2,
                 "labels": {"1": {"count": 5}, "0": {"count": 5}},
-            }
+            },
         },
         **general_args,  # type: ignore
     )
@@ -1785,7 +1839,9 @@ class MockImageClassificationTask(AbsTaskImageClassification):
 
     def load_data(self, **kwargs):
         images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [Image.fromarray(image.astype('uint8')).convert('RGBA') for image in images]
+        images = [
+            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
+        ]
         labels = [1, 0]
 
         self.dataset = DatasetDict(
@@ -1798,8 +1854,8 @@ class MockImageClassificationTask(AbsTaskImageClassification):
                 ),
                 "train": Dataset.from_dict(
                     {
-                        "image": images*5,
-                        "label": labels*5,
+                        "image": images * 5,
+                        "label": labels * 5,
                     }
                 ),
             }
@@ -1856,7 +1912,7 @@ class MockMultilingualImageClassificationTask(
                         "labels": {"1": {"count": 5}, "0": {"count": 5}},
                     },
                 },
-            }
+            },
         },
         **general_args,  # type: ignore
     )
@@ -1866,7 +1922,9 @@ class MockMultilingualImageClassificationTask(
 
     def load_data(self, **kwargs):
         images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [Image.fromarray(image.astype('uint8')).convert('RGBA') for image in images]
+        images = [
+            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
+        ]
         labels = [1, 0]
         data = {
             "test": Dataset.from_dict(
@@ -1877,8 +1935,8 @@ class MockMultilingualImageClassificationTask(
             ),
             "train": Dataset.from_dict(
                 {
-                    "image": images*5,
-                    "label": labels*5,
+                    "image": images * 5,
+                    "label": labels * 5,
                 }
             ),
         }
@@ -1911,7 +1969,9 @@ class MockImageClusteringTask(AbsTaskImageClustering):
 
     def load_data(self, **kwargs):
         images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [Image.fromarray(image.astype('uint8')).convert('RGBA') for image in images]
+        images = [
+            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
+        ]
         labels = [1, 0]
 
         self.dataset = DatasetDict(
@@ -1950,21 +2010,23 @@ class MockImageMultilabelClassificationTask(AbsTaskImageMultilabelClassification
 
     def load_data(self, **kwargs):
         images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [Image.fromarray(image.astype('uint8')).convert('RGBA') for image in images]
+        images = [
+            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
+        ]
         labels = [["0", "3"], ["1", "2"]]
 
         self.dataset = DatasetDict(
             {
                 "test": Dataset.from_dict(
                     {
-                        "image": images*2,
-                        "labels": labels*2,
+                        "image": images * 2,
+                        "labels": labels * 2,
                     }
                 ),
                 "train": Dataset.from_dict(
                     {
-                        "image": images*5,
-                        "labels": labels*5,
+                        "image": images * 5,
+                        "labels": labels * 5,
                     }
                 ),
             }
@@ -2058,7 +2120,9 @@ class MockImageTextPairClassificationTask(AbsTaskImageTextPairClassification):
 
     def load_data(self, **kwargs):
         images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [[Image.fromarray(image.astype('uint8')).convert('RGBA') for image in images]]
+        images = [
+            [Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images]
+        ]
         texts = [["This is a test sentence", "This is another test sentence"]]
 
         self.dataset = DatasetDict(
@@ -2115,7 +2179,9 @@ class MockMultilingualImageTextPairClassificationTask(
 
     def load_data(self, **kwargs):
         images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [[Image.fromarray(image.astype('uint8')).convert('RGBA') for image in images]]
+        images = [
+            [Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images]
+        ]
         texts = [["This is a test sentence", "This is another test sentence"]]
         data = {
             "test": Dataset.from_dict(
@@ -2155,7 +2221,9 @@ class MockVisualSTSTask(AbsTaskVisualSTS):
 
     def load_data(self, **kwargs):
         images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [Image.fromarray(image.astype('uint8')).convert('RGBA') for image in images]
+        images = [
+            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
+        ]
         scores = [0.5, 0.5]
 
         self.dataset = DatasetDict(
@@ -2170,7 +2238,7 @@ class MockVisualSTSTask(AbsTaskVisualSTS):
             }
         )
         self.data_loaded = True
-    
+
     @property
     def metadata_dict(self) -> dict[str, str]:
         metadata_dict = super().metadata_dict
@@ -2214,19 +2282,21 @@ class MockMultilingualVisualSTSTask(AbsTaskVisualSTS, MultilingualTask):
 
     def load_data(self, **kwargs):
         images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [Image.fromarray(image.astype('uint8')).convert('RGBA') for image in images]
+        images = [
+            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
+        ]
         scores = [0.5, 0.5]
         data = {
             "test": Dataset.from_dict(
                 {
-                "test": Dataset.from_dict(
-                    {
-                        "sentence1": images,
-                        "sentence2": images,
-                        "score": scores,
-                    }
-                ),
-            }
+                    "test": Dataset.from_dict(
+                        {
+                            "sentence1": images,
+                            "sentence2": images,
+                            "score": scores,
+                        }
+                    ),
+                }
             ),
         }
 
@@ -2255,11 +2325,13 @@ class MockZeroshotClassificationTask(AbsTaskZeroshotClassification):
         **general_args,  # type: ignore
     )
     metadata.modalities = ["image", "text"]
-    metadata.category="i2t"
+    metadata.category = "i2t"
 
     def load_data(self, **kwargs):
         images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [Image.fromarray(image.astype('uint8')).convert('RGBA') for image in images]
+        images = [
+            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
+        ]
         labels = ["label1", "label2"]
 
         self.dataset = DatasetDict(
@@ -2273,7 +2345,7 @@ class MockZeroshotClassificationTask(AbsTaskZeroshotClassification):
             }
         )
         self.data_loaded = True
-        
+
     def get_candidate_labels(self) -> list[str]:
         return ["This is a test sentence", "This is another test sentence"]
 
@@ -2310,12 +2382,14 @@ class MockMultilingualZeroshotClassificationTask(
         **general_args,  # type: ignore
     )
     metadata.modalities = ["image", "text"]
-    metadata.category="i2t"
+    metadata.category = "i2t"
     metadata.eval_langs = multilingual_eval_langs
 
     def load_data(self, **kwargs):
         images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [Image.fromarray(image.astype('uint8')).convert('RGBA') for image in images]
+        images = [
+            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
+        ]
         labels = ["label1", "label2"]
         data = {
             "test": Dataset.from_dict(
