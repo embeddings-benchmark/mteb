@@ -71,7 +71,12 @@ class BGEReranker(RerankerWrapper):
 
     @torch.inference_mode()
     def predict(self, input_to_rerank, **kwargs):
-        queries, passages, instructions = list(zip(*input_to_rerank))
+        inputs = list(zip(*input_to_rerank))
+        if len(input_to_rerank[0]) == 2:
+            queries, passages = inputs
+            instructions = None
+        else:
+            queries, passages, instructions = inputs
         if instructions is not None and instructions[0] is not None:
             assert len(instructions) == len(queries)
             queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
@@ -113,7 +118,13 @@ class MonoBERTReranker(RerankerWrapper):
 
     @torch.inference_mode()
     def predict(self, input_to_rerank, **kwargs):
-        queries, passages, instructions = list(zip(*input_to_rerank))
+        inputs = list(zip(*input_to_rerank))
+        if len(input_to_rerank[0]) == 2:
+            queries, passages = inputs
+            instructions = None
+        else:
+            queries, passages, instructions = inputs
+
         if instructions is not None and instructions[0] is not None:
             queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
 
@@ -153,7 +164,13 @@ class JinaReranker(RerankerWrapper):
         )
 
     def predict(self, input_to_rerank, **kwargs):
-        queries, passages, instructions = list(zip(*input_to_rerank))
+        inputs = list(zip(*input_to_rerank))
+        if len(input_to_rerank[0]) == 2:
+            queries, passages = inputs
+            instructions = None
+        else:
+            queries, passages, instructions = inputs
+
         if instructions is not None and instructions[0] is not None:
             queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
 
@@ -180,7 +197,7 @@ monobert_large = ModelMeta(
         _loader,
         wrapper=MonoBERTReranker,
         model_name_or_path="castorini/monobert-large-msmarco",
-        fp_options="float1616",
+        fp_options="float16",
     ),
     name="castorini/monobert-large-msmarco",
     languages=["eng_Latn"],
@@ -195,7 +212,7 @@ jina_reranker_multilingual = ModelMeta(
         _loader,
         wrapper=JinaReranker,
         model_name_or_path="jinaai/jina-reranker-v2-base-multilingual",
-        fp_options="float1616",
+        fp_options="float16",
     ),
     name="jinaai/jina-reranker-v2-base-multilingual",
     languages=["eng_Latn"],
@@ -209,7 +226,7 @@ bge_reranker_v2_m3 = ModelMeta(
         _loader,
         wrapper=BGEReranker,
         model_name_or_path="BAAI/bge-reranker-v2-m3",
-        fp_options="float1616",
+        fp_options="float16",
     ),
     name="BAAI/bge-reranker-v2-m3",
     languages=[
