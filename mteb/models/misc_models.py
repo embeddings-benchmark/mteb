@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from mteb.model_meta import ModelMeta
+from functools import partial
+
+from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
 Haon_Chen__speed_embedding_7b_instruct = ModelMeta(
     name="Haon-Chen/speed-embedding-7b-instruct",
@@ -1535,11 +1537,16 @@ omarelshehy__arabic_english_sts_matryoshka = ModelMeta(
     superseded_by=None,
 )
 openbmb__MiniCPM_Embedding = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        name="openbmb/MiniCPM-Embedding",
+        revision="c0cb2de33fb366e17c30f9d53142ff11bc18e049",
+        trust_remote_code=True,
+    ),
     name="openbmb/MiniCPM-Embedding",
     revision="c0cb2de33fb366e17c30f9d53142ff11bc18e049",
     release_date="2024-09-04",
     languages=["zho_Hans", "eng_Latn"],
-    loader=None,
     n_parameters=2724880896,
     memory_usage=None,
     max_tokens=512.0,
