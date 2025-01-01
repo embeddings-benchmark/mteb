@@ -18,13 +18,16 @@ from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.MultiSubsetLoader import MultiSubsetLoader
 from mteb.overview import TASKS_REGISTRY
 
-from ..test_benchmark.task_grid import MOCK_TASK_TEST_GRID_AS_STRING
+from ..test_benchmark.task_grid import (
+    MOCK_MIEB_TASK_GRID_AS_STRING,
+    MOCK_TASK_TEST_GRID_AS_STRING,
+)
 
 logging.basicConfig(level=logging.INFO)
 
-tasks = [
-    t for t in MTEB().tasks_cls if t.metadata.name not in MOCK_TASK_TEST_GRID_AS_STRING
-]
+ALL_MOCK_TASKS = MOCK_TASK_TEST_GRID_AS_STRING + MOCK_MIEB_TASK_GRID_AS_STRING
+
+tasks = [t for t in MTEB().tasks_cls if t.metadata.name not in ALL_MOCK_TASKS]
 
 
 @pytest.mark.parametrize("task", tasks)
@@ -90,7 +93,7 @@ async def check_datasets_are_available_on_hf(tasks):
 def test_dataset_availability():
     """Checks if the datasets are available on Hugging Face using both their name and revision."""
     tasks = MTEB().tasks_cls
-    tasks = [t for t in tasks if t.metadata.name not in MOCK_TASK_TEST_GRID_AS_STRING]
+    tasks = [t for t in tasks if t.metadata.name not in ALL_MOCK_TASKS]
     asyncio.run(check_datasets_are_available_on_hf(tasks))
 
 

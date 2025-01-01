@@ -216,6 +216,7 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
             y_pred = torch.mode(
                 y_train[neigh_indices], dim=1
             ).values  # TODO: case where there is no majority
+            y_pred = y_pred.tolist()
             accuracy = accuracy_score(self.y_test, y_pred)
             f1 = f1_score(self.y_test, y_pred, average="macro")
             scores["accuracy_" + metric] = accuracy
