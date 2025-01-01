@@ -10,7 +10,7 @@ from .instruct_wrapper import instruct_wrapper
 logger = logging.getLogger(__name__)
 
 
-def gritlm_instruction(instruction: str = "", prompt_type = None) -> str:
+def gritlm_instruction(instruction: str = "", prompt_type=None) -> str:
     return (
         "<|user|>\n" + instruction + "\n<|embed|>\n" if instruction else "<|embed|>\n"
     )
