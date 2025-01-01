@@ -15,7 +15,7 @@ class Wrapper:
     Also contains some utility functions for wrappers for working with prompts and instructions.
     """
 
-    instruction_template: str | Callable[[str], str] | None = None
+    instruction_template: str | Callable[[str, str], str] | None = None
 
     @staticmethod
     def get_prompt_name(
