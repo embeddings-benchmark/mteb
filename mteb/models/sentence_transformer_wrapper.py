@@ -46,7 +46,7 @@ class SentenceTransformerWrapper(Wrapper):
         ):
             try:
                 model_prompts = self.validate_task_to_prompt_name(self.model.prompts)
-            except (ValueError, KeyError):
+            except KeyError:
                 model_prompts = None
                 logger.warning(
                     "Model prompts are not in the expected format. Ignoring them."
