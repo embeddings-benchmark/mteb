@@ -463,6 +463,13 @@ class MTEB:
                 f"\n\n********************** Evaluating {task.metadata.name} **********************"
             )
 
+            if "bm25s" in meta.name and task.metadata.type != "Retrieval":
+                logger.warning(
+                    f"bm25s only supports Retrieval tasks, but the task type is {task.metadata.type}. Skipping task."
+                )
+                del self.tasks[0]  # empty memory
+                continue
+
             task_eval_splits = (
                 eval_splits if eval_splits is not None else task.eval_splits
             )
