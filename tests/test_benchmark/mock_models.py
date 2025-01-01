@@ -60,7 +60,7 @@ class MockCLIPEncoder:
             return torch.randn(len(images), 10)
 
     def get_fused_embeddings(self, texts, images, **kwargs):
-        return torch.randn(len(images), 10)
+        return torch.randn(len(texts), 10)
 
     def calculate_probs(self, text_embeddings, image_embeddings):
         return torch.randn(image_embeddings.shape[0], text_embeddings.shape[0])
