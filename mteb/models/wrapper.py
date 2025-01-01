@@ -64,20 +64,6 @@ class Wrapper:
         )
         return None
 
-    def get_prompt(
-        self,
-        task_to_prompt: dict[str, str] | None,
-        task_name: str,
-        prompt_type: PromptType | None,
-    ) -> str | None:
-        """Get the prompt to be used for encoding sentences."""
-        if task_to_prompt is None:
-            return None
-        prompt_name = self.get_prompt_name(task_to_prompt, task_name, prompt_type)
-        if prompt_name is None:
-            return None
-        return task_to_prompt[prompt_name]
-
     @staticmethod
     def validate_task_to_prompt_name(
         task_to_prompt_name: dict[str, str] | None,
