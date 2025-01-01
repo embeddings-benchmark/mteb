@@ -22,6 +22,7 @@ class RerankerWrapper(DenseRetrievalExactSearch):
         batch_size: int = 4,
         fp_options: bool = None,
         silent: bool = False,
+        **kwargs,
     ):
         self.model_name_or_path = model_name_or_path
         self.batch_size = batch_size
@@ -34,7 +35,7 @@ class RerankerWrapper(DenseRetrievalExactSearch):
             self.fp_options = torch.float32
         elif self.fp_options == "bfloat16":
             self.fp_options = torch.bfloat16
-        print(f"Using fp_options of {self.fp_options}")
+        logger.info(f"Using fp_options of {self.fp_options}")
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.silent = silent
         self.first_print = True  # for debugging
