@@ -1539,7 +1539,7 @@ omarelshehy__arabic_english_sts_matryoshka = ModelMeta(
 openbmb__MiniCPM_Embedding = ModelMeta(
     loader=partial(  # type: ignore
         sentence_transformers_loader,
-        name="openbmb/MiniCPM-Embedding",
+        model_name="openbmb/MiniCPM-Embedding",
         revision="c0cb2de33fb366e17c30f9d53142ff11bc18e049",
         trust_remote_code=True,
     ),
