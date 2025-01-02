@@ -28,11 +28,6 @@ class NomicWrapper(Wrapper):
         model_prompts: dict[str, str] | None = None,
         **kwargs: Any,
     ):
-        if model_name == "nomic-ai/modernbert-embed-base":
-            if CURRENT_TRANSFORMERS_VERSION < MODERN_BERT_TRANSFORMERS_MIN_VERSION:
-                raise ValueError(
-                    f"ModernBERT requires transformers>=4.48.0, but found {torch.__version__}"
-                )
         self.model_name = model_name
         self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
         self.model_prompts = (
