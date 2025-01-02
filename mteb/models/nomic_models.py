@@ -52,7 +52,11 @@ class NomicWrapper(SentenceTransformerWrapper):
         # https://github.com/nomic-ai/contrastors/blob/5f7b461e5a13b5636692d1c9f1141b27232fe966/src/contrastors/eval/mteb_eval/eval_mteb.py#L172
         normalize = task.metadata.type != "Classification"
         emb = self.model.encode(
-            sentences, prompt_name=prompt_name, batch_size=batch_size, normalize_embeddings=normalize, **kwargs
+            sentences,
+            prompt_name=prompt_name,
+            batch_size=batch_size,
+            normalize_embeddings=normalize,
+            **kwargs,
         )
         # v1.5 has a non-trainable layer norm to unit normalize the embeddings for binary quantization
         # the outputs are similar to if we just normalized but keeping the same for consistency
