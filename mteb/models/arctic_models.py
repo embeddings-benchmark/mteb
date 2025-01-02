@@ -160,6 +160,7 @@ arctic_embed_m_long = ModelMeta(
         sentence_transformers_loader,
         model_name="Snowflake/snowflake-arctic-embed-m-long",
         revision="89d0f6ab196eead40b90cb6f9fefec01a908d2d1",
+        trust_remote_code=True,
     ),
     name="Snowflake/snowflake-arctic-embed-m-long",
     revision="89d0f6ab196eead40b90cb6f9fefec01a908d2d1",
