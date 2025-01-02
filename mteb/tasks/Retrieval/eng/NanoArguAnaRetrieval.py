@@ -80,8 +80,10 @@ class NanoArguAnaRetrieval(AbsTaskRetrieval):
 
         for split in self.relevant_docs:
             relevant_docs[split] = defaultdict(dict)
-            for query_id, corpus_id in zip(self.relevant_docs[split]["query-id"],
-                                           self.relevant_docs[split]["corpus-id"]):
+            for query_id, corpus_id in zip(
+                self.relevant_docs[split]["query-id"],
+                self.relevant_docs[split]["corpus-id"],
+            ):
                 relevant_docs[split][query_id][corpus_id] = 1
         self.relevant_docs = relevant_docs
 
