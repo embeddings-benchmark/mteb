@@ -28,9 +28,11 @@ class NomicWrapper(Wrapper):
         **kwargs: Any,
     ):
         self.model_name = model_name
-        self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
         self.model_prompts = (
             self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
+        )
+        self.model = SentenceTransformer(
+            model_name, revision=revision, prompts=model_prompts, **kwargs
         )
 
     def to(self, device: torch.device) -> None:
