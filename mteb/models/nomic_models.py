@@ -6,6 +6,7 @@ from typing import Any
 
 import torch
 import torch.nn.functional as F
+import transformers
 from sentence_transformers import SentenceTransformer
 
 from mteb.encoder_interface import PromptType
@@ -14,6 +15,9 @@ from mteb.model_meta import ModelMeta
 from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
+
+MODERN_BERT_TRANSFORMERS_MIN_VERSION = (4, 48, 0)
+CURRENT_TRANSFORMERS_VERSION = tuple(map(int, transformers.__version__.split(".")[:3]))
 
 
 class NomicWrapper(Wrapper):
@@ -26,6 +30,11 @@ class NomicWrapper(Wrapper):
         model_prompts: dict[str, str] | None = None,
         **kwargs: Any,
     ):
+        if model_name == "nomic-ai/modernbert-embed-base":
+            if CURRENT_TRANSFORMERS_VERSION < MODERN_BERT_TRANSFORMERS_MIN_VERSION:
+                raise ValueError(
+                    f"ModernBERT requires transformers>=4.48.0, but found {torch.__version__}"
+                )
         self.model_name = model_name
         self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
         self.model_prompts = (
@@ -75,7 +84,7 @@ model_prompts = {
 }
 
 nomic_embed_v1_5 = ModelMeta(
-    loader=partial(  # type: ignore
+    loader=partial(
         NomicWrapper,
         trust_remote_code=True,
         model_name="nomic-ai/nomic-embed-text-v1.5",
@@ -101,7 +110,7 @@ nomic_embed_v1_5 = ModelMeta(
 )
 
 nomic_embed_v1 = ModelMeta(
-    loader=partial(  # type: ignore
+    loader=partial(
         NomicWrapper,
         trust_remote_code=True,
         model_name="nomic-ai/nomic-embed-text-v1",
@@ -127,7 +136,7 @@ nomic_embed_v1 = ModelMeta(
 )
 
 nomic_embed_v1_ablated = ModelMeta(
-    loader=partial(  # type: ignore
+    loader=partial(
         NomicWrapper,
         trust_remote_code=True,
         model_name="nomic-ai/nomic-embed-text-v1-ablated",
@@ -153,8 +162,8 @@ nomic_embed_v1_ablated = ModelMeta(
 )
 
 
-nomic_embed_v1_ablated = ModelMeta(
-    loader=partial(  # type: ignore
+nomic_embed_v1_unsupervised = ModelMeta(
+    loader=partial(
         NomicWrapper,
         trust_remote_code=True,
         model_name="nomic-ai/nomic-embed-text-v1-unsupervised",
@@ -172,6 +181,34 @@ nomic_embed_v1_ablated = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/nomic-ai/nomic-embed-text-v1-unsupervised",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    adapted_from=None,
+    superseded_by=None,
+)
+
+nomic_modern_bert_embed = ModelMeta(
+    loader=partial(
+        NomicWrapper,
+        model_name="nomic-ai/modernbert-embed-base",
+        revision="5960f1566fb7cb1adf1eb6e816639cf4646d9b12",
+        model_prompts={
+            PromptType.query.value: "search_query: ",
+            PromptType.passage.value: "search_document: ",
+        },
+    ),
+    name="nomic-ai/modernbert-embed-base",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="5960f1566fb7cb1adf1eb6e816639cf4646d9b12",
+    release_date="2024-12-29",
+    n_parameters=149_000_000,
+    memory_usage=None,
+    max_tokens=8192,
+    embed_dim=768,
+    license="apache-2.0",
+    reference="https://huggingface.co/nomic-ai/modernbert-embed-base",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
