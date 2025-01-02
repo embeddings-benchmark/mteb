@@ -8,6 +8,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 from sentence_transformers import SentenceTransformer
+from .sentence_transformer_wrapper import SentenceTransformerWrapper
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
@@ -17,7 +18,7 @@ from .wrapper import Wrapper
 logger = logging.getLogger(__name__)
 
 
-class NomicWrapper(Wrapper):
+class NomicWrapper(SentenceTransformerWrapper):
     """following the hf model card documentation."""
 
     def __init__(
@@ -28,12 +29,7 @@ class NomicWrapper(Wrapper):
         **kwargs: Any,
     ):
         self.model_name = model_name
-        self.model_prompts = (
-            self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
-        )
-        self.model = SentenceTransformer(
-            model_name, revision=revision, prompts=model_prompts, **kwargs
-        )
+        super().__init__(model_name, revision, model_prompts, **kwargs)
 
     def to(self, device: torch.device) -> None:
         self.model.to(device)
@@ -52,7 +48,6 @@ class NomicWrapper(Wrapper):
             self.get_prompt_name(self.model_prompts, task_name, prompt_type)
             or PromptType.passage.value
         )
-
         emb = self.model.encode(
             sentences, prompt_name=prompt_name, batch_size=batch_size, **kwargs
         )
@@ -66,7 +61,6 @@ class NomicWrapper(Wrapper):
 
         if isinstance(emb, torch.Tensor):
             emb = emb.cpu().detach().float().numpy()
-
         return emb
 
 
