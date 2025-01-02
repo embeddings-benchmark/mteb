@@ -155,7 +155,7 @@ nomic_embed_v1_ablated = ModelMeta(
 )
 
 
-nomic_embed_v1_ablated = ModelMeta(
+nomic_embed_v1_unsupervised = ModelMeta(
     loader=partial(  # type: ignore
         NomicWrapper,
         trust_remote_code=True,
