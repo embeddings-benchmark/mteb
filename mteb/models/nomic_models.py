@@ -4,6 +4,7 @@ import logging
 from functools import partial
 from typing import Any
 
+import numpy as np
 import torch
 import torch.nn.functional as F
 from sentence_transformers import SentenceTransformer
@@ -43,7 +44,7 @@ class NomicWrapper(Wrapper):
         prompt_type: PromptType | None = None,
         batch_size: int = 32,
         **kwargs: Any,
-    ):
+    ) -> np.ndarray:
         input_type = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
 
         # default to search_document if input_type and prompt_name are not provided
