@@ -145,7 +145,6 @@ nomic_bert = ModelMeta(
     open_weights=True,
     revision="40b98394640e630d5276807046089b233113aa87",
     release_date="2024-01-03",  # first commit
-    open_weights=True,
     license="apache-2.0",
     framework=["Sentence Transformers", "PyTorch"],
     reference="https://huggingface.co/nomic-ai/nomic-bert-2048",
