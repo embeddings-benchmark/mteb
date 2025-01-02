@@ -45,15 +45,15 @@ class NomicWrapper(Wrapper):
         batch_size: int = 32,
         **kwargs: Any,
     ) -> np.ndarray:
-        input_type = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
-
         # default to search_document if input_type and prompt_name are not provided
-        if input_type is None:
-            input_type = "search_document"
+        prompt_name = (
+            self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+            or PromptType.passage.value
+        )
 
-        sentences = [f"{input_type}: {sentence}" for sentence in sentences]
-
-        emb = self.model.encode(sentences, batch_size=batch_size, **kwargs)
+        emb = self.model.encode(
+            sentences, prompt_name=prompt_name, batch_size=batch_size, **kwargs
+        )
         # v1.5 has a non-trainable layer norm to unit normalize the embeddings for binary quantization
         # the outputs are similar to if we just normalized but keeping the same for consistency
         if self.model_name == "nomic-ai/nomic-embed-text-v1.5":
