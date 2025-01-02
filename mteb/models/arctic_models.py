@@ -235,6 +235,7 @@ arctic_embed_m_v2_0 = ModelMeta(
         sentence_transformers_loader,
         model_name="Snowflake/snowflake-arctic-embed-m-v2.0",
         revision="f2a7d59d80dfda5b1d14f096f3ce88bb6bf9ebdc",
+        trust_remote_code=True,
     ),
     name="Snowflake/snowflake-arctic-embed-m-v2.0",
     revision="f2a7d59d80dfda5b1d14f096f3ce88bb6bf9ebdc",
