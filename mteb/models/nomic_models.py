@@ -60,8 +60,9 @@ class NomicWrapper(Wrapper):
                 emb = torch.tensor(emb)
             emb = F.layer_norm(emb, normalized_shape=(emb.shape[1],))
             emb = F.normalize(emb, p=2, dim=1)
-            if kwargs.get("convert_to_tensor", False):
-                emb = emb.cpu().detach().numpy()
+
+        if isinstance(emb, torch.Tensor):
+            emb = emb.cpu().detach().float().numpy()
 
         return emb
 
