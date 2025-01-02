@@ -13,11 +13,9 @@ from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
 from .wrapper import Wrapper
+from .sentence_transformer_wrapper import SentenceTransformerWrapper
 
 logger = logging.getLogger(__name__)
-
-MODERN_BERT_TRANSFORMERS_MIN_VERSION = (4, 48, 0)
-CURRENT_TRANSFORMERS_VERSION = tuple(map(int, transformers.__version__.split(".")[:3]))
 
 
 class NomicWrapper(Wrapper):
@@ -188,9 +186,28 @@ nomic_embed_v1_unsupervised = ModelMeta(
     superseded_by=None,
 )
 
+MODERN_BERT_TRANSFORMERS_MIN_VERSION = (4, 48, 0)
+CURRENT_TRANSFORMERS_VERSION = tuple(map(int, transformers.__version__.split(".")[:3]))
+
+
+class ModernBertWrapper(SentenceTransformerWrapper):
+    def __init__(
+        self,
+        model_name: str,
+        revision: str,
+        model_prompts: dict[str, str] | None = None,
+        **kwargs: Any,
+    ):
+        if CURRENT_TRANSFORMERS_VERSION < MODERN_BERT_TRANSFORMERS_MIN_VERSION:
+            raise ValueError(
+                f"ModernBERT requires transformers>=4.48.0, but found {torch.__version__}"
+            )
+        super().__init__(model_name, revision, model_prompts, **kwargs)
+
+
 nomic_modern_bert_embed = ModelMeta(
     loader=partial(
-        NomicWrapper,
+        ModernBertWrapper,
         model_name="nomic-ai/modernbert-embed-base",
         revision="5960f1566fb7cb1adf1eb6e816639cf4646d9b12",
         model_prompts={
