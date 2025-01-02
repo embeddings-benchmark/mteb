@@ -4,11 +4,14 @@ from functools import partial
 
 import torch
 
+from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.instruct_wrapper import instruct_wrapper
 
 
-def instruction_template(instruction: str) -> str:
+def instruction_template(
+    instruction: str, prompt_type: PromptType | None = None
+) -> str:
     return f"Instruct: {instruction}\nQuery: " if instruction else ""
 
 

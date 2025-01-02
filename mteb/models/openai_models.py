@@ -63,7 +63,7 @@ class OpenAIWrapper(Wrapper):
             else:
                 trimmed_sentences.append(sentence)
 
-        max_batch_size = 2048
+        max_batch_size = kwargs.get("batch_size", 2048)
         sublists = [
             trimmed_sentences[i : i + max_batch_size]
             for i in range(0, len(trimmed_sentences), max_batch_size)

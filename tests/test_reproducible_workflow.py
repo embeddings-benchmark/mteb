@@ -71,5 +71,5 @@ def test_validate_task_to_prompt_name_fail():
             {"task_name": "prompt_name", "task_name-query": "prompt_name"}
         )
 
-    with pytest.raises(ValueError):
+    with pytest.raises(KeyError):
         Wrapper.validate_task_to_prompt_name({"task_name-task_name": "prompt_name"})
