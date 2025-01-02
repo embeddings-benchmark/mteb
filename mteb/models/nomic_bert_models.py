@@ -142,8 +142,15 @@ nomic_bert = ModelMeta(
     ),
     name="nomic-ai/nomic-bert-2048",
     languages=["eng-Latn"],
-    open_source=True,
-    revision=None,
+    open_weights=True,
+    revision="40b98394640e630d5276807046089b233113aa87",
     release_date="2024-01-03",  # first commit
+    open_weights=True,
+    license="apache-2.0",
+    framework=["Sentence Transformers", "PyTorch"],
+    reference="https://huggingface.co/nomic-ai/nomic-bert-2048",
+    public_training_data=True,
+    public_training_code=True,
+    max_tokens=2048,
 )
 
