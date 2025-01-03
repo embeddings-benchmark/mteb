@@ -14,18 +14,14 @@ logging.basicConfig(level=logging.INFO)
 CACHE_FOLDER = Path(__file__).parent / ".cache"
 
 
-@pytest.fixture(scope="module", autouse=True)
-def setup_and_teardown():
-    # Setup code: create cache folder if it doesn't exist
-    CACHE_FOLDER.mkdir(parents=True, exist_ok=True)
-    yield
+@pytest.fixture(scope="function", autouse=True)
+def teardown():
     # Teardown code: remove cache folder and its contents
     for item in CACHE_FOLDER.iterdir():
         if item.is_file():
             item.unlink()
         elif item.is_dir():
             item.rmdir()
-    CACHE_FOLDER.rmdir()
 
 
 @pytest.mark.parametrize("model_name", MODEL_REGISTRY.keys())
