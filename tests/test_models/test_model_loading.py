@@ -17,4 +17,4 @@ def test_get_all_models_below_n_param_threshold(model_name: str):
     assert model_meta is not None
     if model_meta.n_parameters is not None and model_meta.n_parameters < 2e9:
         m = get_model(model_name)
-        assert m is not None
+        assert m is not None, f"Failed to load model {model_name}"
