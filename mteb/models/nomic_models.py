@@ -50,12 +50,14 @@ class NomicWrapper(SentenceTransformerWrapper):
         task = mteb.get_task(task_name)
         # normalization not applied to classification
         # https://github.com/nomic-ai/contrastors/blob/5f7b461e5a13b5636692d1c9f1141b27232fe966/src/contrastors/eval/mteb_eval/eval_mteb.py#L172
-        normalize = task.metadata.type != "Classification"
+        normalize = task.metadata.type not in (
+            "Classification",
+            "MultilabelClassification",
+        )
         emb = self.model.encode(
             sentences,
             prompt_name=prompt_name,
             batch_size=batch_size,
-            normalize_embeddings=normalize,
             **kwargs,
         )
         # v1.5 has a non-trainable layer norm to unit normalize the embeddings for binary quantization
@@ -64,7 +66,8 @@ class NomicWrapper(SentenceTransformerWrapper):
             if not isinstance(emb, torch.Tensor):
                 emb = torch.tensor(emb)
             emb = F.layer_norm(emb, normalized_shape=(emb.shape[1],))
-            emb = F.normalize(emb, p=2, dim=1)
+            if normalize:
+                emb = F.normalize(emb, p=2, dim=1)
 
         if isinstance(emb, torch.Tensor):
             emb = emb.cpu().detach().float().numpy()
@@ -79,6 +82,7 @@ model_prompts = {
     "PairClassification": "classification: ",
     "Reranking": "classification: ",
     "STS": "classification: ",
+    "Summarization": "classification: ",
     PromptType.query.value: "search_query: ",
     PromptType.passage.value: "search_document: ",
 }
