@@ -213,10 +213,10 @@ nomic_modern_bert_embed = ModelMeta(
         NomicWrapper,
         model_name="nomic-ai/modernbert-embed-base",
         revision="5960f1566fb7cb1adf1eb6e816639cf4646d9b12",
-        model_prompts={
-            PromptType.query.value: "search_query: ",
-            PromptType.passage.value: "search_document: ",
-        },
+        # model_prompts={
+        #     PromptType.query.value: "search_query: ",
+        #     PromptType.passage.value: "search_document: ",
+        # },
     ),
     name="nomic-ai/modernbert-embed-base",
     languages=["eng-Latn"],
