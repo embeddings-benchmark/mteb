@@ -22,6 +22,7 @@ class RerankerWrapper(DenseRetrievalExactSearch):
         batch_size: int = 4,
         fp_options: bool = None,
         silent: bool = False,
+        **kwargs,
     ):
         self.model_name_or_path = model_name_or_path
         self.batch_size = batch_size
@@ -34,7 +35,7 @@ class RerankerWrapper(DenseRetrievalExactSearch):
             self.fp_options = torch.float32
         elif self.fp_options == "bfloat16":
             self.fp_options = torch.bfloat16
-        print(f"Using fp_options of {self.fp_options}")
+        logger.info(f"Using fp_options of {self.fp_options}")
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.silent = silent
         self.first_print = True  # for debugging
@@ -70,7 +71,12 @@ class BGEReranker(RerankerWrapper):
 
     @torch.inference_mode()
     def predict(self, input_to_rerank, **kwargs):
-        queries, passages, instructions = list(zip(*input_to_rerank))
+        inputs = list(zip(*input_to_rerank))
+        if len(input_to_rerank[0]) == 2:
+            queries, passages = inputs
+            instructions = None
+        else:
+            queries, passages, instructions = inputs
         if instructions is not None and instructions[0] is not None:
             assert len(instructions) == len(queries)
             queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
@@ -112,7 +118,13 @@ class MonoBERTReranker(RerankerWrapper):
 
     @torch.inference_mode()
     def predict(self, input_to_rerank, **kwargs):
-        queries, passages, instructions = list(zip(*input_to_rerank))
+        inputs = list(zip(*input_to_rerank))
+        if len(input_to_rerank[0]) == 2:
+            queries, passages = inputs
+            instructions = None
+        else:
+            queries, passages, instructions = inputs
+
         if instructions is not None and instructions[0] is not None:
             queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
 
@@ -152,7 +164,13 @@ class JinaReranker(RerankerWrapper):
         )
 
     def predict(self, input_to_rerank, **kwargs):
-        queries, passages, instructions = list(zip(*input_to_rerank))
+        inputs = list(zip(*input_to_rerank))
+        if len(input_to_rerank[0]) == 2:
+            queries, passages = inputs
+            instructions = None
+        else:
+            queries, passages, instructions = inputs
+
         if instructions is not None and instructions[0] is not None:
             queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
 
@@ -179,7 +197,7 @@ monobert_large = ModelMeta(
         _loader,
         wrapper=MonoBERTReranker,
         model_name_or_path="castorini/monobert-large-msmarco",
-        fp_options="float1616",
+        fp_options="float16",
     ),
     name="castorini/monobert-large-msmarco",
     languages=["eng_Latn"],
@@ -194,7 +212,7 @@ jina_reranker_multilingual = ModelMeta(
         _loader,
         wrapper=JinaReranker,
         model_name_or_path="jinaai/jina-reranker-v2-base-multilingual",
-        fp_options="float1616",
+        fp_options="float16",
     ),
     name="jinaai/jina-reranker-v2-base-multilingual",
     languages=["eng_Latn"],
@@ -208,7 +226,7 @@ bge_reranker_v2_m3 = ModelMeta(
         _loader,
         wrapper=BGEReranker,
         model_name_or_path="BAAI/bge-reranker-v2-m3",
-        fp_options="float1616",
+        fp_options="float16",
     ),
     name="BAAI/bge-reranker-v2-m3",
     languages=[
