@@ -53,6 +53,10 @@ class NomicWrapper(SentenceTransformerWrapper):
         normalize = task.metadata.type not in (
             "Classification",
             "MultilabelClassification",
+            "PairClassification",
+            "Reranking",
+            "STS",
+            "Summarization",
         )
         emb = self.model.encode(
             sentences,
