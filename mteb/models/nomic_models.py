@@ -4,21 +4,22 @@ import logging
 from functools import partial
 from typing import Any
 
+import numpy as np
 import torch
 import torch.nn.functional as F
 import transformers
 from sentence_transformers import SentenceTransformer
 
+import mteb
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
-from .wrapper import Wrapper
 from .sentence_transformer_wrapper import SentenceTransformerWrapper
 
 logger = logging.getLogger(__name__)
 
 
-class NomicWrapper(Wrapper):
+class NomicWrapper(SentenceTransformerWrapper):
     """following the hf model card documentation."""
 
     def __init__(
@@ -29,10 +30,7 @@ class NomicWrapper(Wrapper):
         **kwargs: Any,
     ):
         self.model_name = model_name
-        self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
-        self.model_prompts = (
-            self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
-        )
+        super().__init__(model_name, revision, model_prompts, **kwargs)
 
     def to(self, device: torch.device) -> None:
         self.model.to(device)
@@ -45,33 +43,52 @@ class NomicWrapper(Wrapper):
         prompt_type: PromptType | None = None,
         batch_size: int = 32,
         **kwargs: Any,
-    ):
-        input_type = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
-
+    ) -> np.ndarray:
         # default to search_document if input_type and prompt_name are not provided
-        if input_type is None:
-            input_type = "search_document"
-
-        sentences = [f"{input_type}: {sentence}" for sentence in sentences]
-
-        emb = self.model.encode(sentences, batch_size=batch_size, **kwargs)
+        prompt_name = (
+            self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+            or PromptType.passage.value
+        )
+        task = mteb.get_task(task_name)
+        # normalization not applied to classification
+        # https://github.com/nomic-ai/contrastors/blob/5f7b461e5a13b5636692d1c9f1141b27232fe966/src/contrastors/eval/mteb_eval/eval_mteb.py#L172
+        normalize = task.metadata.type not in (
+            "Classification",
+            "MultilabelClassification",
+            "PairClassification",
+            "Reranking",
+            "STS",
+            "Summarization",
+        )
+        emb = self.model.encode(
+            sentences,
+            prompt_name=prompt_name,
+            batch_size=batch_size,
+            **kwargs,
+        )
         # v1.5 has a non-trainable layer norm to unit normalize the embeddings for binary quantization
         # the outputs are similar to if we just normalized but keeping the same for consistency
         if self.model_name == "nomic-ai/nomic-embed-text-v1.5":
             if not isinstance(emb, torch.Tensor):
                 emb = torch.tensor(emb)
             emb = F.layer_norm(emb, normalized_shape=(emb.shape[1],))
-            emb = F.normalize(emb, p=2, dim=1)
-            if kwargs.get("convert_to_tensor", False):
-                emb = emb.cpu().detach().numpy()
+            if normalize:
+                emb = F.normalize(emb, p=2, dim=1)
 
+        if isinstance(emb, torch.Tensor):
+            emb = emb.cpu().detach().float().numpy()
         return emb
 
 
+# https://github.com/nomic-ai/contrastors/blob/5f7b461e5a13b5636692d1c9f1141b27232fe966/src/contrastors/eval/mteb_eval/eval_mteb.py#L142-L159
 model_prompts = {
     "Classification": "classification: ",
     "MultilabelClassification": "classification: ",
     "Clustering": "clustering: ",
+    "PairClassification": "classification: ",
+    "Reranking": "classification: ",
+    "STS": "classification: ",
+    "Summarization": "classification: ",
     PromptType.query.value: "search_query: ",
     PromptType.passage.value: "search_document: ",
 }
@@ -183,22 +200,6 @@ nomic_embed_v1_unsupervised = ModelMeta(
 
 MODERN_BERT_TRANSFORMERS_MIN_VERSION = (4, 48, 0)
 CURRENT_TRANSFORMERS_VERSION = tuple(map(int, transformers.__version__.split(".")[:3]))
-
-
-class ModernBertWrapper(SentenceTransformerWrapper):
-    def __init__(
-        self,
-        model_name: str,
-        revision: str,
-        model_prompts: dict[str, str] | None = None,
-        **kwargs: Any,
-    ):
-        if CURRENT_TRANSFORMERS_VERSION < MODERN_BERT_TRANSFORMERS_MIN_VERSION:
-            raise ValueError(
-                f"ModernBERT requires transformers>=4.48.0, but found {torch.__version__}"
-            )
-        super().__init__(model_name, revision, model_prompts, **kwargs)
-
 
 nomic_modern_bert_embed = ModelMeta(
     loader=partial(
