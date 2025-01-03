@@ -8,7 +8,6 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 import transformers
-from sentence_transformers import SentenceTransformer
 
 import mteb
 from mteb.encoder_interface import PromptType
@@ -17,6 +16,9 @@ from mteb.model_meta import ModelMeta
 from .sentence_transformer_wrapper import SentenceTransformerWrapper
 
 logger = logging.getLogger(__name__)
+
+MODERN_BERT_TRANSFORMERS_MIN_VERSION = (4, 48, 0)
+CURRENT_TRANSFORMERS_VERSION = tuple(map(int, transformers.__version__.split(".")[:3]))
 
 
 class NomicWrapper(SentenceTransformerWrapper):
@@ -30,6 +32,14 @@ class NomicWrapper(SentenceTransformerWrapper):
         **kwargs: Any,
     ):
         self.model_name = model_name
+        if (
+            model_name == "nomic-ai/modernbert-embed-base"
+            and CURRENT_TRANSFORMERS_VERSION < MODERN_BERT_TRANSFORMERS_MIN_VERSION
+        ):
+            raise RuntimeError(
+                f"Current transformers version is {CURRENT_TRANSFORMERS_VERSION} is lower than the required version"
+                f" {'.'.join(MODERN_BERT_TRANSFORMERS_MIN_VERSION)}"
+            )
         super().__init__(model_name, revision, model_prompts, **kwargs)
 
     def to(self, device: torch.device) -> None:
@@ -197,9 +207,6 @@ nomic_embed_v1_unsupervised = ModelMeta(
     adapted_from=None,
     superseded_by=None,
 )
-
-MODERN_BERT_TRANSFORMERS_MIN_VERSION = (4, 48, 0)
-CURRENT_TRANSFORMERS_VERSION = tuple(map(int, transformers.__version__.split(".")[:3]))
 
 nomic_modern_bert_embed = ModelMeta(
     loader=partial(
