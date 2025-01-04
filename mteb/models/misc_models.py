@@ -1560,7 +1560,7 @@ openbmb__MiniCPM_Embedding = ModelMeta(
         revision="c0cb2de33fb366e17c30f9d53142ff11bc18e049",
         # https://huggingface.co/openbmb/MiniCPM-Embedding/blob/c0cb2de33fb366e17c30f9d53142ff11bc18e049/README.md?code=true#L405
         model_kwargs={
-            "attn_implementation": "flash_attention_2",
+            # "attn_implementation": "flash_attention_2",
             "torch_dtype": torch.float16,
         },
         trust_remote_code=True,
