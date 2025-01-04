@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
+import numpy as np
 import torch
 import tqdm
 from datasets import Dataset
@@ -31,6 +32,7 @@ class BitextMiningEvaluator(Evaluator):
         self.pairs = pair_columns
         self.n = len(sentences)
         self.sentences = sentences
+        # TODO used only by BUCC
         self.gold = (
             list(zip(range(self.n), range(self.n)))
             if "gold" not in sentences
@@ -74,10 +76,10 @@ class BitextMiningEvaluator(Evaluator):
 
     def _compute_metrics(
         self,
-        embeddings1,
-        embeddings2,
+        embeddings1: np.ndarray,
+        embeddings2: np.ndarray,
         model: Encoder,
-    ):
+    ) -> dict[str, float]:
         # Find nearest neighbors
         logger.info("Finding nearest neighbors...")
         nearest_neighbors = self._similarity_search(
@@ -107,13 +109,13 @@ class BitextMiningEvaluator(Evaluator):
 
     def _similarity_search(
         self,
-        query_embeddings,
-        corpus_embeddings,
+        query_embeddings: np.ndarray,
+        corpus_embeddings: np.ndarray,
         model: Encoder,
         query_chunk_size: int = 100,
         corpus_chunk_size: int = 500000,
         top_k: int = 10,
-    ):
+    ) -> list[list[dict[str, float]]]:
         """This function performs a cosine similarity search between a list of query embeddings  and a list of corpus embeddings.
         It can be used for Information Retrieval / Semantic Search for corpora up to about 1 Million entries.
 

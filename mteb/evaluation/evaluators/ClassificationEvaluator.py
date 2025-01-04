@@ -35,15 +35,9 @@ class kNNClassificationEvaluator(Evaluator):
         task_name: str | None = None,
         k: int = 1,
         encode_kwargs: dict[str, Any] = {},
-        limit: int | None = None,
         **kwargs,
     ):
         super().__init__(**kwargs)
-        if limit is not None:
-            sentences_train = sentences_train[:limit]
-            y_train = y_train[:limit]
-            sentences_test = sentences_test[:limit]
-            y_test = y_test[:limit]
         self.sentences_train = sentences_train
         self.y_train = y_train
         self.sentences_test = sentences_test
@@ -57,7 +51,7 @@ class kNNClassificationEvaluator(Evaluator):
 
         self.k = k
 
-    def __call__(self, model, test_cache=None):
+    def __call__(self, model: Encoder, test_cache=None) -> tuple[dict[str, float], Any]:
         scores = {}
         max_accuracy = 0
         max_f1 = 0
@@ -108,15 +102,9 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         task_name: str,
         k: int = 1,
         encode_kwargs: dict[str, Any] = {},
-        limit: int | None = None,
         **kwargs: Any,
     ):
         super().__init__(**kwargs)
-        if limit is not None:
-            sentences_train = sentences_train[:limit]
-            y_train = y_train[:limit]
-            sentences_test = sentences_test[:limit]
-            y_test = y_test[:limit]
 
         self.sentences_train = sentences_train
         self.y_train = y_train
@@ -258,7 +246,6 @@ class logRegClassificationEvaluator(Evaluator):
         task_name: str,
         max_iter: int = 100,
         encode_kwargs: dict[str, Any] = {},
-        limit: int | None = None,
         **kwargs,
     ):
         super().__init__(**kwargs)
@@ -267,11 +254,6 @@ class logRegClassificationEvaluator(Evaluator):
         if "batch_size" not in self.encode_kwargs:
             self.encode_kwargs["batch_size"] = 32
 
-        if limit is not None:
-            sentences_train = sentences_train[:limit]
-            y_train = y_train[:limit]
-            sentences_test = sentences_test[:limit]
-            y_test = y_test[:limit]
         self.sentences_train = sentences_train
         self.y_train = y_train
         self.sentences_test = sentences_test

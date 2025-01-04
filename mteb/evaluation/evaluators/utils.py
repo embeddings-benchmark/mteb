@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import random
 from collections import defaultdict
 
 import numpy as np
@@ -9,6 +10,7 @@ import pytrec_eval
 import requests
 import torch
 import tqdm
+import transformers
 from datasets import load_dataset
 from packaging.version import Version
 from sklearn.metrics import auc
@@ -786,3 +788,10 @@ def evaluate_abstention(
             naucs[f"nAUC_{metric_name}_{fct}"] = nAUC(conf_scores, scores)
 
     return naucs
+
+
+def set_seed(seed: int) -> tuple[random.Random, np.random.Generator]:
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    transformers.set_seed(seed)
+    return random.Random(seed), np.random.default_rng(seed)

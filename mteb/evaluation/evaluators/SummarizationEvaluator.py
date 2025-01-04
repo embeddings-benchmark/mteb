@@ -26,24 +26,20 @@ logger = logging.getLogger(__name__)
 class SummarizationEvaluator(Evaluator):
     def __init__(
         self,
-        task_name: str | None = None,
-        human_summaries=None,
-        machine_summaries=None,
-        texts=None,
-        gold_scores=None,
-        limit: int | None = None,
+        human_summaries: list[list[str]],
+        machine_summaries: list[list[str]],
+        texts: list[str],
+        gold_scores: list[list[float]],
+        task_name: str,
         **kwargs,
     ):
-        # human_summaries shape: (None, num_human_summaries)
-        # machine_summaries shape: (None, num_machine_summaries)
-        # gold scores shape: (None, num_machine_summaries)
-        # texts: (None,)
+        """Args:
+        human_summaries: shape: (-1, num_human_summaries)
+        machine_summaries: shape: (-1, num_machine_summaries)
+        texts: shape: (-1,)
+        gold_scores: shape: (-1, num_machine_summaries)
+        """
         super().__init__(**kwargs)
-        if limit is not None:
-            human_summaries = human_summaries[:limit]
-            machine_summaries = machine_summaries[:limit]
-            gold_scores = gold_scores[:limit]
-            texts = texts[:limit]
         self.human_summaries = human_summaries
         self.machine_summaries = machine_summaries
         self.texts = texts
@@ -190,7 +186,6 @@ class DeprecatedSummarizationEvaluator(Evaluator):
         machine_summaries=None,
         texts=None,
         gold_scores=None,
-        limit: int | None = None,
         **kwargs,
     ):
         # human_summaries shape: (None, num_human_summaries)
@@ -198,11 +193,6 @@ class DeprecatedSummarizationEvaluator(Evaluator):
         # gold scores shape: (None, num_machine_summaries)
         # texts: (None,)
         super().__init__(**kwargs)
-        if limit is not None:
-            human_summaries = human_summaries[:limit]
-            machine_summaries = machine_summaries[:limit]
-            gold_scores = gold_scores[:limit]
-            texts = texts[:limit]
         self.human_summaries = human_summaries
         self.machine_summaries = machine_summaries
         self.texts = texts
@@ -311,12 +301,18 @@ class DeprecatedSummarizationEvaluator(Evaluator):
                 logger.info(f"Skipping sample {i} due to equal scores")
                 continue
 
-            cosine_spearman_scores.append(spearmanr(human_scores, cosine_pred_scores))
-            cosine_pearson_scores.append(pearsonr(human_scores, cosine_pred_scores))
-            dot_spearman_scores.append(spearmanr(human_scores, dot_pred_scores))
-            dot_pearson_scores.append(pearsonr(human_scores, dot_pred_scores))
-            spearman_scores.append(spearmanr(human_scores, sim_scores))
-            pearson_scores.append(pearsonr(human_scores, sim_scores))
+            cosine_spearman_scores.append(
+                spearmanr(human_scores, cosine_pred_scores).statistic
+            )
+            cosine_pearson_scores.append(
+                pearsonr(human_scores, cosine_pred_scores).statistic
+            )
+            dot_spearman_scores.append(
+                spearmanr(human_scores, dot_pred_scores).statistic
+            )
+            dot_pearson_scores.append(pearsonr(human_scores, dot_pred_scores).statistic)
+            spearman_scores.append(spearmanr(human_scores, sim_scores).statistic)
+            pearson_scores.append(pearsonr(human_scores, sim_scores).statistic)
 
         return {
             "pearson": np.mean(pearson_scores),

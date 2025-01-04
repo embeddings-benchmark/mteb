@@ -1,13 +1,10 @@
 from __future__ import annotations
 
-import random
 from abc import ABC, abstractmethod
 from typing import Any
 
-import numpy as np
-import torch
-
 from mteb.encoder_interface import Encoder
+from mteb.evaluation.evaluators.utils import set_seed
 
 
 class Evaluator(ABC):
@@ -17,10 +14,7 @@ class Evaluator(ABC):
 
     def __init__(self, seed: int = 42, **kwargs: Any):
         self.seed = seed
-        random.seed(self.seed)
-        np.random.seed(self.seed)
-        torch.manual_seed(self.seed)
-        torch.cuda.manual_seed_all(self.seed)
+        self.rng_state, self.np_rng = set_seed(seed)
 
     @abstractmethod
     def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}):

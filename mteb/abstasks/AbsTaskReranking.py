@@ -33,9 +33,6 @@ OLD_FORMAT_RERANKING_TASKS = [
 class AbsTaskReranking(AbsTaskRetrieval):
     """Abstract class for re-ranking experiments. This is mostly the same as the RetrievalEvaluator, but here to adapt the old format to the new format. TODO: update these tasks to the new format and delete this class."""
 
-    def __init__(self, **kwargs):
-        super(AbsTaskRetrieval, self).__init__(**kwargs)
-
     def load_data(self, **kwargs):
         if self.data_loaded:
             return

@@ -27,18 +27,18 @@ def evaluate_classifier(
     embeddings_test: np.ndarray,
     y_test: np.ndarray,
     classifier: ClassifierMixin,
-):
-    scores = {}
+) -> dict[str, float]:
     classifier = clone(classifier)
     classifier.fit(embeddings_train, y_train)
     y_pred = classifier.predict(embeddings_test)
     accuracy = classifier.score(embeddings_test, y_test)
     f1 = f1_score(y_test, y_pred, average="macro")
-    scores["accuracy"] = accuracy
-    scores["f1"] = f1
     lrap = label_ranking_average_precision_score(y_test, y_pred)
-    scores["lrap"] = lrap
-    return scores
+    return {
+        "accuracy": accuracy,
+        "f1": f1,
+        "lrap": lrap,
+    }
 
 
 class MultilabelClassificationDescriptiveStatistics(DescriptiveStatistics):
@@ -97,24 +97,12 @@ class AbsTaskMultilabelClassification(AbsTask):
     def __init__(
         self,
         n_experiments=None,
-        batch_size=32,
         **kwargs,
     ):
         super().__init__(**kwargs)
-        self.batch_size = batch_size
 
         # Bootstrap parameters
         self.n_experiments = n_experiments or getattr(self, "n_experiments", 10)
-
-        # Run metadata validation by instantiating addressing the attribute
-        # This is quite hacky. Ideally, this would be done in the constructor of
-        # each concrete task, but then we have to duplicate the __init__ method's
-        # interface.
-        if hasattr(self, "metadata"):
-            self.metadata
-
-    def _add_main_score(self, scores):
-        scores["main_score"] = scores[self.metadata.main_score]
 
     def evaluate(
         self,
@@ -137,7 +125,7 @@ class AbsTaskMultilabelClassification(AbsTask):
 
         for hf_subset in hf_subsets:
             logger.info(
-                f"\nTask: {self.metadata.name}, split: {eval_split}, subset: {hf_subset}. Running..."
+                f"Task: {self.metadata.name}, split: {eval_split}, subset: {hf_subset}. Running..."
             )
 
             if hf_subset not in self.dataset and hf_subset == "default":
@@ -168,12 +156,6 @@ class AbsTaskMultilabelClassification(AbsTask):
     ) -> ScoresDict:
         train_split = dataset[train_split]
         eval_split = dataset[eval_split]
-        params = {
-            "classifier_type": type(self.classifier).__name__,
-            "classifier_params": self.classifier.get_params(),
-            "batch_size": self.batch_size,
-        }
-        params.update(kwargs)
 
         scores = []
         # Bootstrap sample indices from training set for each experiment
