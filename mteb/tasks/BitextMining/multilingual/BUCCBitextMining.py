@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from mteb import logging
+import logging
+
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
