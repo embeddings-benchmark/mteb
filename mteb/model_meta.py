@@ -128,6 +128,7 @@ class ModelMeta(BaseModel):
             loader = self.loader
 
         model: Encoder = loader(**kwargs)  # type: ignore
+        model.mteb_model_meta = self
         return model
 
     def model_name_as_path(self) -> str:

@@ -2,12 +2,21 @@ from __future__ import annotations
 
 from functools import partial
 
+import torch
+
+from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.instruct_wrapper import instruct_wrapper
 
 
-def instruction_template(instruction: str) -> str:
-    return f"Instruct: {instruction}\nQuery: " if instruction else ""
+def instruction_template(
+    instruction: str, prompt_type: PromptType | None = None
+) -> str:
+    return (
+        f"Instruct: {instruction}\nQuery: "
+        if (prompt_type is None or prompt_type == PromptType.query) and instruction
+        else ""
+    )
 
 
 GTE_CITATION = """
@@ -24,13 +33,14 @@ gte_Qwen2_7B_instruct = ModelMeta(
         instruct_wrapper,
         model_name_or_path="Alibaba-NLP/gte-Qwen2-7B-instruct",
         instruction_template=instruction_template,
-        attn="cccc",
+        attn="bbcc",
         pooling_method="lasttoken",
         mode="embedding",
-        torch_dtype="auto",
+        torch_dtype=torch.float16,
         # The ST script does not normalize while the HF one does so unclear what to do
         # https://huggingface.co/Alibaba-NLP/gte-Qwen2-7B-instruct#sentence-transformers
         normalized=True,
+        embed_eos="<|endoftext|>",
     ),
     name="Alibaba-NLP/gte-Qwen2-7B-instruct",
     languages=None,
@@ -54,11 +64,12 @@ gte_Qwen1_5_7B_instruct = ModelMeta(
         instruct_wrapper,
         model_name_or_path="Alibaba-NLP/gte-Qwen1.5-7B-instruct",
         instruction_template=instruction_template,
-        attn="cccc",
+        attn="bbcc",
         pooling_method="lasttoken",
         mode="embedding",
-        torch_dtype="auto",
+        torch_dtype=torch.float16,
         normalized=True,
+        embed_eos="<|endoftext|>",
     ),
     name="Alibaba-NLP/gte-Qwen1.5-7B-instruct",
     languages=["eng_Latn"],
@@ -82,11 +93,12 @@ gte_Qwen2_1_5B_instruct = ModelMeta(
         instruct_wrapper,
         model_name_or_path="Alibaba-NLP/gte-Qwen2-1.5B-instruct",
         instruction_template=instruction_template,
-        attn="cccc",
+        attn="bbcc",
         pooling_method="lasttoken",
         mode="embedding",
-        torch_dtype="auto",
+        torch_dtype=torch.float16,
         normalized=True,
+        embed_eos="<|endoftext|>",
     ),
     name="Alibaba-NLP/gte-Qwen2-1.5B-instruct",
     languages=["eng_Latn"],

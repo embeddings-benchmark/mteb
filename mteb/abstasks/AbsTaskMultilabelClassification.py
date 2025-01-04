@@ -209,7 +209,6 @@ class AbsTaskMultilabelClassification(AbsTask):
 
         X_test = model.encode(
             test_text,
-            model=model,
             task_name=self.metadata.name,
             **encode_kwargs,
         )

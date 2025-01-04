@@ -46,8 +46,11 @@ class SentenceTransformerWrapper(Wrapper):
         ):
             try:
                 model_prompts = self.validate_task_to_prompt_name(self.model.prompts)
-            except ValueError:
+            except KeyError:
                 model_prompts = None
+                logger.warning(
+                    "Model prompts are not in the expected format. Ignoring them."
+                )
         elif model_prompts is not None and hasattr(self.model, "prompts"):
             logger.info(f"Model prompts will be overwritten with {model_prompts}")
             self.model.prompts = model_prompts

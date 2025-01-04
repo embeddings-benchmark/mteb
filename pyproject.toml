@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.25.3"
+version = "1.26.4"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -71,6 +71,7 @@ flash_attention = ["flash-attn>=2.6.3"]
 openai = ["openai>=1.41.0", "tiktoken>=0.8.0"]
 model2vec = ["model2vec>=0.3.0"]
 pylate = ["pylate>=1.1.4"]
+bm25s = ["bm25s>=0.2.6", "PyStemmer>=2.2.0.3"]
 
 
 [tool.coverage.report]
