@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from collections import defaultdict
+
 from datasets import load_dataset
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
@@ -74,12 +76,15 @@ class NanoClimateFeverRetrieval(AbsTaskRetrieval):
             for split in self.queries
         }
 
-        self.relevant_docs = {
-            split: {
-                sample["query-id"]: {sample["corpus-id"]: 1}
-                for sample in self.relevant_docs[split]
-            }
-            for split in self.relevant_docs
-        }
+        relevant_docs = {}
+
+        for split in self.relevant_docs:
+            relevant_docs[split] = defaultdict(dict)
+            for query_id, corpus_id in zip(
+                self.relevant_docs[split]["query-id"],
+                self.relevant_docs[split]["corpus-id"],
+            ):
+                relevant_docs[split][query_id][corpus_id] = 1
+        self.relevant_docs = relevant_docs
 
         self.data_loaded = True
