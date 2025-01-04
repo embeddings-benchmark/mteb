@@ -1555,14 +1555,13 @@ omarelshehy__arabic_english_sts_matryoshka = ModelMeta(
 )
 openbmb__MiniCPM_Embedding = ModelMeta(
     loader=partial(  # type: ignore
-        # reqieres flash attention, tiktoken, blobfile, protobuf
         sentence_transformers_loader,
         model_name="openbmb/MiniCPM-Embedding",
         revision="c0cb2de33fb366e17c30f9d53142ff11bc18e049",
         # https://huggingface.co/openbmb/MiniCPM-Embedding/blob/c0cb2de33fb366e17c30f9d53142ff11bc18e049/README.md?code=true#L405
         model_kwargs={
-            # "attn_implementation": "flash_attention_2",
-            "torch_dtype": torch.float16
+            "attn_implementation": "flash_attention_2",
+            "torch_dtype": torch.float16,
         },
         trust_remote_code=True,
     ),
