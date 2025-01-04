@@ -58,7 +58,7 @@ if __name__ == "__main__":
         with output_file.open("r") as f:
             results = json.load(f)
 
-    all_model_names = list(MODEL_REGISTRY.keys())
+    all_model_names = list(MODEL_REGISTRY.keys()) - list(results.keys())
     for model_name in all_model_names:
         error_msg = get_model_below_n_param_threshold(model_name)
         results[model_name] = error_msg
