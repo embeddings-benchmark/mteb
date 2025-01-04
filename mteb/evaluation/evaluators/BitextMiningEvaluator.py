@@ -49,6 +49,7 @@ class BitextMiningEvaluator(Evaluator):
                 col for col in self.sentences.features.keys() if col in pair_elements
             ]
         else:
+            # BUCC outputs a dict instead of a Dataset
             subsets = [col for col in pair_elements]
         n_subsets = len(subsets)
 
