@@ -6,6 +6,8 @@
     "Cohere/Cohere-embed-english-v3.0": null,
     "Cohere/Cohere-embed-multilingual-light-v3.0": null,
     "Cohere/Cohere-embed-multilingual-v3.0": null,
+    "Omartificial-Intelligence-Space/Marbert-all-nli-triplet-Matryoshka": "None",
+    "Salesforce/SFR-Embedding-2_R": "Over threshold. Not tested.",
     "Snowflake/snowflake-arctic-embed-l": "None",
     "Snowflake/snowflake-arctic-embed-l-v2.0": "None",
     "Snowflake/snowflake-arctic-embed-m": "None",
@@ -14,10 +16,16 @@
     "Snowflake/snowflake-arctic-embed-m-v2.0": "None",
     "Snowflake/snowflake-arctic-embed-s": "None",
     "Snowflake/snowflake-arctic-embed-xs": "None",
+    "ai-forever/sbert_large_mt_nlu_ru": "None",
     "bm25s": null,
     "colbert-ir/colbertv2.0": "To use the ColBERT models `pylate` is required. Please install it with `pip install mteb[pylate]`.",
+    "google/flan-t5-large": null,
     "intfloat/e5-mistral-7b-instruct": "Over threshold. Not tested.",
     "intfloat/multilingual-e5-large-instruct": "XLMRobertaModel.__init__() got an unexpected keyword argument 'cache_folder'",
     "intfloat/multilingual-e5-small": "None",
-    "jinaai/jina-colbert-v2": "To use the ColBERT models `pylate` is required. Please install it with `pip install mteb[pylate]`."
+    "jinaai/jina-colbert-v2": "To use the ColBERT models `pylate` is required. Please install it with `pip install mteb[pylate]`.",
+    "nvidia/NV-Embed-v1": "Over threshold. Not tested.",
+    "samaya-ai/promptriever-llama3.1-8b-instruct-v1": "To use the RepLLaMA based models `peft` is required. Please install it with `pip install 'mteb[peft]'`.",
+    "thenlper/gte-base": "None",
+    "unicamp-dl/mt5-13b-mmarco-100k": null
 }
