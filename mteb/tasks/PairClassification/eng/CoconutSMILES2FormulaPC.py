@@ -1,28 +1,18 @@
 from __future__ import annotations
 
-
-from typing import Any
-
 import datasets
 
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-_DATASET_COLUMN_MAP = {
-    "sentence1": "formula",
-    "sentence2": "smiles",
-    "labels": "label",
-}
-
-
 class CoconutSMILES2FormulaPC(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="CoconutSMILES2FormulaPC",
-        description="""TBW""",
-        reference="https://coconut.naturalproducts.net/",
+        description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
+        reference="https://arxiv.org/abs/2412.00532",
         dataset={
-            "path": "BASF-We-Create-Chemistry/CoconutSMILES2FormulaPC",
+            "path": "BASF-AI/CoconutSMILES2FormulaPC",
             "revision": "e46d4868e417703bdcf32aadbe5d0e05a1b7f085"
         },
         type="PairClassification",
@@ -30,19 +20,25 @@ class CoconutSMILES2FormulaPC(AbsTaskPairClassification):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="max_f1",
+        main_score="max_ap",
         date=None,
-        domains=None,
+        domains=["Chemistry"],
         task_subtypes=None,
-        license=None,
+        license="cc-by-nc-sa-4.0",
         annotations_creators="derived",
         dialect=None,
-        sample_creation="created",
-        bibtex_citation=None,
-        descriptive_stats={}
+        sample_creation=None,
+        bibtex_citation="""
+        @article{kasmaee2024chemteb,
+        title={ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
+        author={Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
+        journal={arXiv preprint arXiv:2412.00532},
+        year={2024}
+        }
+        """,
     )
 
-    def load_data(self, **kwargs: Any) -> None:
+    def load_data(self):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
@@ -57,16 +53,16 @@ class CoconutSMILES2FormulaPC(AbsTaskPairClassification):
 
     def dataset_transform(self):
         self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"], label=_DATASET_COLUMN_MAP["labels"]
+            self.dataset, seed=self.seed, splits=["test"], label='label'
         )
         _dataset = {}
         for split in self.metadata.eval_splits:
             hf_dataset = self.dataset[split]
             _dataset[split] = [
                 {
-                    "sentence1": hf_dataset[_DATASET_COLUMN_MAP["sentence1"]],
-                    "sentence2": hf_dataset[_DATASET_COLUMN_MAP["sentence2"]],
-                    "labels": hf_dataset[_DATASET_COLUMN_MAP["labels"]]
+                    "sentence1": hf_dataset['formula'],
+                    "sentence2": hf_dataset['smiles'],
+                    "labels": hf_dataset['label']
                 }
             ]
         self.dataset = _dataset

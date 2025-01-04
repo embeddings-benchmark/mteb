@@ -6,23 +6,35 @@ from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+COL_MAPPING = {
+    "iso-title": {"title": "sentence1", "isomeric_smiles": "sentence2"},
+    "iso-desc": {"description": "sentence1", "isomeric_smiles": "sentence2"},
+    "canon-title": {"title": "sentence1", "canonical_smiles": "sentence2"},
+    "canon-desc": {"description": "sentence1", "canonical_smiles": "sentence2"},
+}
 
-class PubChemSMILESCanonDescBM(AbsTaskBitextMining, MultilingualTask):
+EVAL_LANGS = {
+    "iso-title": ["en-Latn", "eng-Latn"],
+    "iso-desc": ["en-Latn", "eng-Latn"],
+    "canon-title": ["en-Latn", "eng-Latn"],
+    "canon-desc": ["en-Latn", "eng-Latn"],
+}
+
+
+class PubChemSMILESBitextMining(AbsTaskBitextMining, MultilingualTask):
     metadata = TaskMetadata(
-        name="PubChemSMILESCanonDescBM",
+        name="PubChemSMILESBitextMining",
         dataset={
-            "path": "BASF-AI/PubChemSMILESCanonDescBM",
-            "revision": "a721de4af2857bf3cc014b92f013a4f573d9cb00"
+            "path": "BASF-AI/PubChemSMILESBitextMining",
+            "revision": "36700ea628118312ebf2f90ad2353a9a8f188dc9"
         },
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
         reference="https://arxiv.org/abs/2412.00532",
         type="BitextMining",
-        category="s2p",
+        category="s2s",
         modalities=["text"],
         eval_splits=["test"],
-        eval_langs={
-            "en-en": ["en-Latn", "eng-Latn"]
-        },
+        eval_langs=EVAL_LANGS,
         main_score="f1",
         date=None,
         domains=["Chemistry"],
@@ -45,19 +57,15 @@ class PubChemSMILESCanonDescBM(AbsTaskBitextMining, MultilingualTask):
         """Load dataset from HuggingFace hub and convert it to the standard format."""
         if self.data_loaded:
             return
-
         self.dataset = {}
 
-        for lang in self.hf_subsets:
-            self.dataset[lang] = datasets.load_dataset(
-                **self.metadata_dict["dataset"])
+        for subset in self.hf_subsets:
+            self.dataset[subset] = datasets.load_dataset(
+                **self.metadata_dict["dataset"], name=subset)
 
         self.dataset_transform()
         self.data_loaded = True
 
     def dataset_transform(self):
-        for lang in self.hf_subsets:
-            self.dataset[lang] = self.dataset[lang].rename_columns({
-                "description": "sentence1",
-                "canonical_smiles": "sentence2"
-            })
+        for subset in self.hf_subsets:
+            self.dataset[subset] = self.dataset[subset].rename_columns(COL_MAPPING[subset])

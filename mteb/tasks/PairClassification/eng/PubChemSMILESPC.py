@@ -5,15 +5,41 @@ import datasets
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+_DATASET_COLUMN_MAP = [
+    {
+        "name": "iso-desc",
+        "sent1": "description",
+        "sent2": "isomeric_smiles",
+        "labels": "labels",
+    },
+    {
+        "name": "iso-title",
+        "sent1": "title",
+        "sent2": "isomeric_smiles",
+        "labels": "labels",
+    },
+    {
+        "name": "canon-desc",
+        "sent1": "description",
+        "sent2": "canonical_smiles",
+        "labels": "labels",
+    },
+    {
+        "name": "canon-title",
+        "sent1": "title",
+        "sent2": "canonical_smiles",
+        "labels": "labels",
+    },
+]
 
-class PubChemSMILESCanonTitlePC(AbsTaskPairClassification):
+class PubChemSMILESPC(AbsTaskPairClassification):
     metadata = TaskMetadata(
-        name="PubChemSMILESCanonTitlePC",
+        name="PubChemSMILESPC",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
         reference="https://arxiv.org/abs/2412.00532",
         dataset={
-            "path": "BASF-AI/PubChemSMILESCanonTitlePC",
-            "revision": "3cce5bbb9ffe0d63a74102f2f5037aea47244c8f"
+            "path": "BASF-AI/PubChemSMILESPairClassification",
+            "revision": "7ba40b69f5fe6ffe4cc189aac9e1710913c73c8a"
         },
         type="PairClassification",
         category="s2s",
@@ -43,15 +69,33 @@ class PubChemSMILESCanonTitlePC(AbsTaskPairClassification):
         if self.data_loaded:
             return
 
-        _dataset = datasets.load_dataset(
-            self.metadata_dict["dataset"]["path"],
-            revision=self.metadata_dict["dataset"]["revision"],
-            trust_remote_code=True,
-        )
+        _hf_dataset = None
+        for dataset_col_map in _DATASET_COLUMN_MAP:
+            _dataset = datasets.load_dataset(
+                self.metadata_dict["dataset"]["path"],
+                dataset_col_map["name"],
+                revision=self.metadata_dict["dataset"]["revision"],
+            )
 
-        self.dataset = _dataset
+            _dataset = _dataset.rename_columns(
+                {
+                    dataset_col_map["sent1"]: "sentence1",
+                    dataset_col_map["sent2"]: "sentence2",
+                    dataset_col_map["labels"]: "labels",
+                }
+            )
+
+            if _hf_dataset is None:
+                _hf_dataset = _dataset
+            else:
+                _hf_dataset["test"] = datasets.concatenate_datasets(
+                    [_hf_dataset["test"], _dataset["test"]]
+                )
+
+        self.dataset = _hf_dataset
         self.dataset_transform()
         self.data_loaded = True
+
 
     def dataset_transform(self):
         self.dataset = self.stratified_subsampling(
@@ -63,9 +107,9 @@ class PubChemSMILESCanonTitlePC(AbsTaskPairClassification):
             hf_dataset = self.dataset[split]
             _dataset[split] = [
                 {
-                    "sentence1": hf_dataset["title"],
-                    "sentence2": hf_dataset["canonical_smiles"],
-                    "labels": hf_dataset["labels"]
+                    "sentence1": hf_dataset["sentence1"],
+                    "sentence2": hf_dataset["sentence2"],
+                    "labels": hf_dataset["labels"],
                 }
             ]
         self.dataset = _dataset

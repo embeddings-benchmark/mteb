@@ -10,6 +10,7 @@ from .eng.PubChemSMILESCanonDescPC import *
 from .eng.PubChemSMILESCanonTitlePC import *
 from .eng.PubChemSMILESIsoDescPC import *
 from .eng.PubChemSMILESIsoTitlePC import *
+from .eng.PubChemSMILESPC import *
 from .eng.PubChemSynonymPC import *
 from .eng.PubChemWikiParagraphsPC import *
 from .eng.SprintDuplicateQuestionsPC import *
@@ -22,6 +23,7 @@ from .ind.IndoNLI import *
 from .kor.KlueNLI import *
 from .multilingual.OpusparcusPC import *
 from .multilingual.PawsXPairClassification import *
+from .multilingual.PubChemWikiPairClassification import *
 from .multilingual.RTE3 import *
 from .multilingual.XNLI import *
 from .multilingual.XStance import *

@@ -11,11 +11,11 @@ class PubChemSMILESISoTitleBM(AbsTaskBitextMining, MultilingualTask):
     metadata = TaskMetadata(
         name="PubChemSMILESISoTitleBM",
         dataset={
-            "path": "BASF-We-Create-Chemistry/PubChemSMILESIsoTitleBM",
+            "path": "BASF-AI/PubChemSMILESIsoTitleBM",
             "revision": "d60f975694c1841e60a39518b80e157c145f0be1"
         },
-        description="TBW",
-        reference="https://pubchem.ncbi.nlm.nih.gov/",
+        description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
+        reference="https://arxiv.org/abs/2412.00532",
         type="BitextMining",
         category="s2s",
         modalities=["text"],
@@ -25,14 +25,20 @@ class PubChemSMILESISoTitleBM(AbsTaskBitextMining, MultilingualTask):
         },
         main_score="f1",
         date=None,
-        domains=None,
+        domains=["Chemistry"],
         task_subtypes=None,
-        license=None,
-        annotations_creators=None,
+        license="cc-by-nc-sa-4.0",
+        annotations_creators="derived",
         dialect=None,
         sample_creation=None,
-        bibtex_citation=None,
-        descriptive_stats={"n_samples": {}, "avg_character_length": {}},
+        bibtex_citation="""
+        @article{kasmaee2024chemteb,
+        title={ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
+        author={Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
+        journal={arXiv preprint arXiv:2412.00532},
+        year={2024}
+        }
+        """,
     )
 
     def load_data(self, **kwargs):
@@ -50,12 +56,8 @@ class PubChemSMILESISoTitleBM(AbsTaskBitextMining, MultilingualTask):
         self.data_loaded = True
 
     def dataset_transform(self):
-        def create_columns(row):
-            """Put all English titles in column 'sentence1' and SMILES strings in 'sentence2' column"""
-            row["sentence1"] = row["title"]
-            row["sentence2"] = row["isomeric_smiles"]
-            return row
-
-        # Convert to standard format
         for lang in self.hf_subsets:
-            self.dataset[lang] = self.dataset[lang].map(create_columns)
+            self.dataset[lang] = self.dataset[lang].rename_columns({
+            "title": "sentence1",
+            "isomeric_smiles": "sentence2"
+            })

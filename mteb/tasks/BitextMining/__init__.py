@@ -5,8 +5,7 @@ from .kat.TbilisiCityHallBitextMining import *
 from .multilingual.BibleNLPBitextMining import *
 from .multilingual.BUCCBitextMining import *
 from .multilingual.BUCCBitextMiningFast import *
-from .multilingual.CoconutSMILES2Formula1BM import *
-from .multilingual.CoconutSMILES2Formula2BM import *
+from .multilingual.CoconutSMILES2FormulaBM import *
 from .multilingual.DiaBLaBitextMining import *
 from .multilingual.FloresBitextMining import *
 from .multilingual.IN22ConvBitextMining import *
@@ -20,6 +19,7 @@ from .multilingual.NTREXBitextMining import *
 from .multilingual.NusaTranslationBitextMining import *
 from .multilingual.NusaXBitextMining import *
 from .multilingual.PhincBitextMining import *
+from .multilingual.PubChemSMILESBitextMining import *
 from .multilingual.PubChemSMILESCanonDescBM import *
 from .multilingual.PubChemSMILESCanonTitleBM import *
 from .multilingual.PubChemSMILESISoDescBM import *

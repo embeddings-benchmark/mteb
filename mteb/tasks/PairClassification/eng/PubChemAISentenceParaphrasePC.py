@@ -1,8 +1,5 @@
 from __future__ import annotations
 
-
-from typing import Any
-
 import datasets
 
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
@@ -12,10 +9,10 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class PubChemAISentenceParaphrasePC(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="PubChemAISentenceParaphrasePC",
-        description="""TBW""",
-        reference="https://pubchem.ncbi.nlm.nih.gov/",
+        description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
+        reference="https://arxiv.org/abs/2412.00532",
         dataset={
-            "path": "BASF-We-Create-Chemistry/PubChemAISentenceParaphrasePC",
+            "path": "BASF-AI/PubChemAISentenceParaphrasePC",
             "revision": "f33a205966ce032f957c3a22f4f9e378f89a2c56"
         },
         type="PairClassification",
@@ -25,17 +22,23 @@ class PubChemAISentenceParaphrasePC(AbsTaskPairClassification):
         eval_langs=["eng-Latn"],
         main_score="max_f1",
         date=None,
-        domains=None,
+        domains=["Chemistry"],
         task_subtypes=None,
-        license=None,
-        annotations_creators="derived",
+        license="cc-by-nc-sa-4.0",
+        annotations_creators="LM-generated",
         dialect=None,
-        sample_creation="created",
-        bibtex_citation=None,
-        descriptive_stats={}
+        sample_creation=None,
+        bibtex_citation="""
+        @article{kasmaee2024chemteb,
+        title={ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
+        author={Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
+        journal={arXiv preprint arXiv:2412.00532},
+        year={2024}
+        }
+        """,
     )
 
-    def load_data(self, **kwargs: Any) -> None:
+    def load_data(self):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return

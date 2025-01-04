@@ -1,24 +1,24 @@
 from __future__ import annotations
 
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
-from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class ChemNQRetrieval(AbsTaskRetrieval):
+class WikipediaChemistryTopicsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="ChemNQRetrieval",
-        dataset={
-            "path": "BASF-AI/ChemNQRetrieval",
-            "revision": "5d958fb6b31055495347724d46431ba41309b03a",
-        },
+        name="WikipediaChemistryTopicsClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
         reference="https://arxiv.org/abs/2412.00532",
-        type="Retrieval",
-        category="s2p",
+        dataset={
+            "path": "BASF-AI/WikipediaEasy10Classification",
+            "revision": "d8fb355db2248f95df8ea410a43aa1db1ee96ba4",
+        },
+        type="Classification",
+        category="s2s",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="ndcg_at_10",
+        main_score="accuracy",
         date=None,
         domains=["Chemistry"],
         task_subtypes=None,

@@ -1,30 +1,30 @@
 from __future__ import annotations
 
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
-from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class ChemNQRetrieval(AbsTaskRetrieval):
+class WikipediaBiolumNeurochemClassification(AbsTaskClassification):
     metadata = TaskMetadata(
-        name="ChemNQRetrieval",
-        dataset={
-            "path": "BASF-AI/ChemNQRetrieval",
-            "revision": "5d958fb6b31055495347724d46431ba41309b03a",
-        },
+        name="WikipediaBiolumNeurochemClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
         reference="https://arxiv.org/abs/2412.00532",
-        type="Retrieval",
-        category="s2p",
+        dataset={
+            "path": "BASF-AI/WikipediaMedium2BioluminescenceVsNeurochemistryClassification",
+            "revision": "2f68b7d34c2be896e46b14533573b366e59e5aae",
+        },
+        type="Classification",
+        category="s2s",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="ndcg_at_10",
+        main_score="accuracy",
         date=None,
         domains=["Chemistry"],
         task_subtypes=None,
         license="cc-by-nc-sa-4.0",
         annotations_creators="derived",
-        dialect=None,
+        dialect=[],
         sample_creation=None,
         bibtex_citation="""
         @article{kasmaee2024chemteb,

@@ -1,30 +1,31 @@
 from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
-from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+
+from ....abstasks.AbsTaskClustering import AbsTaskClustering
 
 
-class ChemNQRetrieval(AbsTaskRetrieval):
+class WikipediaChemistryTopicsClustering(AbsTaskClustering):
     metadata = TaskMetadata(
-        name="ChemNQRetrieval",
-        dataset={
-            "path": "BASF-AI/ChemNQRetrieval",
-            "revision": "5d958fb6b31055495347724d46431ba41309b03a",
-        },
+        name="WikipediaChemistryTopicsClustering",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
         reference="https://arxiv.org/abs/2412.00532",
-        type="Retrieval",
-        category="s2p",
+        dataset={
+            "path": "BASF-We-Create-Chemistry/WikipediaEasy10Clustering",
+            "revision": "0a0886b06acbfc735bca6a71b21ce1e5cb92a37b",
+        },
+        type="Clustering",
+        category="p2p",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="ndcg_at_10",
+        main_score="v_measure",
         date=None,
         domains=["Chemistry"],
-        task_subtypes=None,
+        task_subtypes=[],
         license="cc-by-nc-sa-4.0",
-        annotations_creators="derived",
-        dialect=None,
+        annotations_creators=None,
+        dialect=[],
         sample_creation=None,
         bibtex_citation="""
         @article{kasmaee2024chemteb,

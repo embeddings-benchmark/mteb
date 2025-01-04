@@ -1,8 +1,5 @@
 from __future__ import annotations
 
-
-from typing import Any
-
 import datasets
 
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
@@ -12,8 +9,8 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class WikipediaAIParagraphsParaphrasePC(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="WikipediaAIParagraphsParaphrasePC",
-        description="""TBW""",
-        reference="https://pubchem.ncbi.nlm.nih.gov/",
+        description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
+        reference="https://arxiv.org/abs/2412.00532",
         dataset={
             "path": "BASF-We-Create-Chemistry/WikipediaAIParagraphsParaphrasePC",
             "revision": "a430437ea6c6fe0e6461e6d6659f647d0bf62496"
@@ -23,19 +20,25 @@ class WikipediaAIParagraphsParaphrasePC(AbsTaskPairClassification):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="max_f1",
+        main_score="max_ap",
         date=None,
-        domains=None,
+        domains=["Chemistry"],
         task_subtypes=None,
-        license=None,
-        annotations_creators="derived",
+        license="cc-by-nc-sa-4.0",
+        annotations_creators="LM-generated",
         dialect=None,
-        sample_creation="created",
-        bibtex_citation=None,
-        descriptive_stats={}
+        sample_creation=None,
+        bibtex_citation="""
+        @article{kasmaee2024chemteb,
+        title={ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
+        author={Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
+        journal={arXiv preprint arXiv:2412.00532},
+        year={2024}
+        }
+        """,
     )
 
-    def load_data(self, **kwargs: Any) -> None:
+    def load_data(self):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return

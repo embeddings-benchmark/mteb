@@ -1,8 +1,5 @@
 from __future__ import annotations
 
-
-from typing import Any
-
 import datasets
 
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
@@ -12,30 +9,36 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class PubChemWikiParagraphsPC(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="PubChemWikiParagraphsPC",
-        description="""TBW""",
-        reference="https://pubchem.ncbi.nlm.nih.gov/",
+        description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
+        reference="https://arxiv.org/abs/2412.00532",
         dataset={
-            "path": "BASF-We-Create-Chemistry/PubChemWikiParagraphsPC",
-            "revision": "36c2aabe8e5bdb034701d0a226cac3c27d09575c"
+            "path": "BASF-AI/PubChemWikiParagraphsPC",
+            "revision": "7fb14716e4106b72f51a16e682e5cd2d67e9bd70"
         },
         type="PairClassification",
         category="p2p",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="max_f1",
+        main_score="max_ap",
         date=None,
-        domains=None,
+        domains=["Chemistry"],
         task_subtypes=None,
-        license=None,
+        license="cc-by-nc-sa-4.0",
         annotations_creators="derived",
         dialect=None,
-        sample_creation="created",
-        bibtex_citation=None,
-        descriptive_stats={}
+        sample_creation=None,
+        bibtex_citation="""
+        @article{kasmaee2024chemteb,
+        title={ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
+        author={Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
+        journal={arXiv preprint arXiv:2412.00532},
+        year={2024}
+        }
+        """,
     )
 
-    def load_data(self, **kwargs: Any) -> None:
+    def load_data(self):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
