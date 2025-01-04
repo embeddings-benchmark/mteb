@@ -44,9 +44,12 @@ class BitextMiningEvaluator(Evaluator):
 
     def compute_metrics(self, model: Encoder, encode_kwargs: dict[str, Any] = {}):
         pair_elements = {p for pair in self.pairs for p in pair}
-        subsets = [
-            col for col in self.sentences.features.keys() if col in pair_elements
-        ]
+        if isinstance(self.sentences, Dataset):
+            subsets = [
+                col for col in self.sentences.features.keys() if col in pair_elements
+            ]
+        else:
+            subsets = [col for col in pair_elements]
         n_subsets = len(subsets)
 
         embeddings = {}
