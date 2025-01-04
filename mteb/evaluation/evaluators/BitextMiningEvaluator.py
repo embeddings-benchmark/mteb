@@ -50,7 +50,7 @@ class BitextMiningEvaluator(Evaluator):
             ]
         else:
             # BUCC outputs a dict instead of a Dataset
-            subsets = [col for col in pair_elements]
+            subsets = list(pair_elements)
         n_subsets = len(subsets)
 
         embeddings = {}
