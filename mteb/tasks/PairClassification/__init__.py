@@ -3,13 +3,8 @@ from __future__ import annotations
 from .ara.ArEntail import *
 from .ces.CTKFactsNLI import *
 from .deu.FalseFriendsDeEnPC import *
-from .eng.CoconutSMILES2FormulaPC import *
 from .eng.LegalBenchPC import *
 from .eng.PubChemAISentenceParaphrasePC import *
-from .eng.PubChemSMILESCanonDescPC import *
-from .eng.PubChemSMILESCanonTitlePC import *
-from .eng.PubChemSMILESIsoDescPC import *
-from .eng.PubChemSMILESIsoTitlePC import *
 from .eng.PubChemSMILESPC import *
 from .eng.PubChemSynonymPC import *
 from .eng.PubChemWikiParagraphsPC import *
