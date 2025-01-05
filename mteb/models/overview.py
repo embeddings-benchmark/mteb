@@ -32,7 +32,6 @@ from mteb.models import (
     model2vec_models,
     mxbai_models,
     no_instruct_sentence_models,
-    nomic_bert_model,
     nomic_models,
     nvidia_models,
     openai_models,
@@ -90,7 +89,6 @@ model_modules = [
     stella_models,
     amazon_models,
     cohere_bedrock_models,
-    nomic_bert_model,
     uae_models,
     voyage_models,
 ]
