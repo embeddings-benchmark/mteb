@@ -33,5 +33,12 @@ class SDSEyeProtectionClassification(AbsTaskClassification):
         journal={arXiv preprint arXiv:2412.00532},
         year={2024}
         }
+        @inproceedings{pereira2020msds,
+        title={MSDS-OPP: Operator Procedures Prediction in Material Safety Data Sheets},
+        author={Pereira, Eliseu},
+        booktitle={15th Doctoral Symposium},
+        pages={42},
+        year={2020}
+        }
         """,
     )

@@ -20,7 +20,7 @@ class PubChemAISentenceParaphrasePC(AbsTaskPairClassification):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="max_f1",
+        main_score="max_ap",
         date=None,
         domains=["Chemistry"],
         task_subtypes=None,
@@ -34,6 +34,16 @@ class PubChemAISentenceParaphrasePC(AbsTaskPairClassification):
         author={Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
         journal={arXiv preprint arXiv:2412.00532},
         year={2024}
+        }
+        @article{kim2023pubchem,
+        title={PubChem 2023 update},
+        author={Kim, Sunghwan and Chen, Jie and Cheng, Tiejun and Gindulyte, Asta and He, Jia and He, Siqian and Li, Qingliang and Shoemaker, Benjamin A and Thiessen, Paul A and Yu, Bo and others},
+        journal={Nucleic acids research},
+        volume={51},
+        number={D1},
+        pages={D1373--D1380},
+        year={2023},
+        publisher={Oxford University Press}
         }
         """,
     )

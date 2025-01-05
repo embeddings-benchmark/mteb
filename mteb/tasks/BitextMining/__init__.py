@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from .dan.BornholmskBitextMining import *
+from .eng.PubChemSMILESBitextMining import *
 from .kat.TbilisiCityHallBitextMining import *
 from .multilingual.BibleNLPBitextMining import *
 from .multilingual.BUCCBitextMining import *
@@ -18,7 +19,6 @@ from .multilingual.NTREXBitextMining import *
 from .multilingual.NusaTranslationBitextMining import *
 from .multilingual.NusaXBitextMining import *
 from .multilingual.PhincBitextMining import *
-from .multilingual.PubChemSMILESBitextMining import *
 from .multilingual.RomaTalesBitextMining import *
 from .multilingual.TatoebaBitextMining import *
 from .srn.SRNCorpusBitextMining import *

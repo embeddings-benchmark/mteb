@@ -12,8 +12,8 @@ class WikipediaAIParagraphsParaphrasePC(AbsTaskPairClassification):
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
         reference="https://arxiv.org/abs/2412.00532",
         dataset={
-            "path": "BASF-We-Create-Chemistry/WikipediaAIParagraphsParaphrasePC",
-            "revision": "a430437ea6c6fe0e6461e6d6659f647d0bf62496"
+            "path": "BASF-AI/WikipediaAIParagraphsParaphrasePC",
+            "revision": "7694661b6e28000d9b2c2376a1bbd49417d279ea"
         },
         type="PairClassification",
         category="p2p",

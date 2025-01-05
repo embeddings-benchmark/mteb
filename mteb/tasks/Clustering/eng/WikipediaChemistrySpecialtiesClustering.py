@@ -15,7 +15,7 @@ class WikipediaChemistrySpecialtiesClustering(AbsTaskClustering):
             "revision": "7754d8d296f9f4c3af1c6426fab36304730ccddf",
         },
         type="Clustering",
-        category="p2p",
+        category="s2p",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
