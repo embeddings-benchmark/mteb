@@ -137,7 +137,8 @@ class ModelMeta(BaseModel):
 
     def is_zero_shot_on(self, tasks: list[AbsTask]) -> bool:
         """Indicates whether the given model can be considered
-        zero-shot or not on the given tasks."""
+        zero-shot or not on the given tasks.
+        """
         if not self.training_datasets:
             return False
         benchmark_datasets = set()
