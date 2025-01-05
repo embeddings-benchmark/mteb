@@ -42,6 +42,16 @@ def get_model_below_n_param_threshold(model_name: str) -> str:
             m = get_model(model_name, cache_folder=CACHE_FOLDER)
             if m is not None:
                 return "None"
+        except TypeError:  # when cache_folder is not supported.
+            try:
+                m = get_model(model_name)
+                if m is not None:
+                    return "None"
+            except Exception as e:
+                logging.warning(f"Failed to load model {model_name} with error {e}")
+                return e.__str__()
+            finally:
+                teardown_function()
         except Exception as e:
             logging.warning(f"Failed to load model {model_name} with error {e}")
             return e.__str__()
