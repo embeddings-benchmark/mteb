@@ -9,8 +9,9 @@ class HumanMicrobiomeProjectDemonstrationClassificationDisease(AbsTaskClassifica
         name="HumanMicrobiomeProjectDemonstrationClassificationDisease",
         description="",
         dataset={
-            "path": "/project/neiswang_1391/MGFM/MGFM-serving/datasets/evaluate/gene-mteb/hmpd-disease",
-            "revision": "None",
+            "path": "metagene-ai/HumanMicrobiomeProjectDemonstration",
+            "name": "disease",
+            "revision": "main",
         },
         type="Classification",
         category="s2s",
@@ -29,15 +30,17 @@ class HumanMicrobiomeProjectDemonstrationClassificationDisease(AbsTaskClassifica
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
-        from transformers.trainer_utils import set_seed
-        set_seed(42)
         self.method = "logReg"
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
+
+        from transformers.trainer_utils import set_seed
+        set_seed(42)
+
         import datasets
+
         self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])  # type: ignore
 
         self.dataset_transform()
@@ -82,8 +85,9 @@ class HumanMicrobiomeProjectDemonstrationClassificationSex(AbsTaskClassification
         name="HumanMicrobiomeProjectDemonstrationClassificationSex",
         description="",
         dataset={
-            "path": "/project/neiswang_1391/MGFM/MGFM-serving/datasets/evaluate/gene-mteb/hmpd-sex",
-            "revision": "None",
+            "path": "metagene-ai/HumanMicrobiomeProjectDemonstration",
+            "name": "sex",
+            "revision": "main",
         },
         type="Classification",
         category="s2s",
@@ -102,14 +106,15 @@ class HumanMicrobiomeProjectDemonstrationClassificationSex(AbsTaskClassification
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
-        from transformers.trainer_utils import set_seed
-        set_seed(42)
         self.method = "logReg"
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
+
+        from transformers.trainer_utils import set_seed
+        set_seed(42)
+
         import datasets
         self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])  # type: ignore
 
@@ -155,8 +160,9 @@ class HumanMicrobiomeProjectDemonstrationClassificationSource(AbsTaskClassificat
         name="HumanMicrobiomeProjectDemonstrationClassificationSource",
         description="",
         dataset={
-            "path": "/project/neiswang_1391/MGFM/MGFM-serving/datasets/evaluate/gene-mteb/hmpd-source",
-            "revision": "None",
+            "path": "metagene-ai/HumanMicrobiomeProjectDemonstration",
+            "name": "source",
+            "revision": "main",
         },
         type="Classification",
         category="s2s",
@@ -175,14 +181,15 @@ class HumanMicrobiomeProjectDemonstrationClassificationSource(AbsTaskClassificat
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
-        from transformers.trainer_utils import set_seed
-        set_seed(42)
         self.method = "logReg"
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
+
+        from transformers.trainer_utils import set_seed
+        set_seed(42)
+
         import datasets
         self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])  # type: ignore
 

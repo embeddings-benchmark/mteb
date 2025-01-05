@@ -10,8 +10,9 @@ class HumanMicrobiomeProjectDemonstrationMultiClassification(AbsTaskMultilabelCl
         name="HumanMicrobiomeProjectDemonstrationMultiClassification",
         description="",
         dataset={
-            "path": "/project/neiswang_1391/MGFM/MGFM-serving/datasets/evaluate/gene-mteb/hmpd",
-            "revision": "None",
+            "path": "metagene-ai/HumanMicrobiomeProjectDemonstration",
+            "name": "multi-label",
+            "revision": "main",
         },
         type="MultilabelClassification",
         category="s2s",
@@ -30,14 +31,15 @@ class HumanMicrobiomeProjectDemonstrationMultiClassification(AbsTaskMultilabelCl
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
-        from transformers.trainer_utils import set_seed
-        set_seed(42)
         self.method = "logReg"
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
+
+        from transformers.trainer_utils import set_seed
+        set_seed(42)
+
         import datasets
         self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])  # type: ignore
 

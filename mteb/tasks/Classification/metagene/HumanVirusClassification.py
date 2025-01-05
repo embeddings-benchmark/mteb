@@ -7,10 +7,11 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class HumanVirusClassificationOne(AbsTaskClassification):
     metadata = TaskMetadata(
         name="HumanVirusClassificationOne",
-        description="First dataset for classification of human virus infecting samples",
+        description="",
         dataset={
-            "path": "/project/neiswang_1391/MGFM/MGFM-serving/datasets/evaluate/gene-mteb/hv-1",
-            "revision": "None",
+            "path": "metagene-ai/HumanVirusInfecting",
+            "name": "class-1",
+            "revision": "main",
         },
         type="Classification",
         category="s2s",
@@ -31,13 +32,14 @@ class HumanVirusClassificationOne(AbsTaskClassification):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        from transformers.trainer_utils import set_seed
-        set_seed(42)
         self.method = "logReg"
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
+
+        from transformers.trainer_utils import set_seed
+        set_seed(42)
 
         import datasets
         self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])  # type: ignore
@@ -83,10 +85,11 @@ class HumanVirusClassificationOne(AbsTaskClassification):
 class HumanVirusClassificationTwo(AbsTaskClassification):
     metadata = TaskMetadata(
         name="HumanVirusClassificationTwo",
-        description="Second dataset for classification of human virus infecting samples",
+        description="",
         dataset={
-            "path": "/project/neiswang_1391/MGFM/MGFM-serving/datasets/evaluate/gene-mteb/hv-2",
-            "revision": "None",
+            "path": "metagene-ai/HumanVirusInfecting",
+            "name": "class-2",
+            "revision": "main",
         },
         type="Classification",
         category="s2s",
@@ -107,13 +110,14 @@ class HumanVirusClassificationTwo(AbsTaskClassification):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        from transformers.trainer_utils import set_seed
-        set_seed(42)
         self.method = "logReg"
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
+
+        from transformers.trainer_utils import set_seed
+        set_seed(42)
 
         import datasets
         self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])  # type: ignore
@@ -159,10 +163,11 @@ class HumanVirusClassificationTwo(AbsTaskClassification):
 class HumanVirusClassificationThree(AbsTaskClassification):
     metadata = TaskMetadata(
         name="HumanVirusClassificationThree",
-        description="Third dataset for classification of human virus infecting samples",
+        description="",
         dataset={
-            "path": "/project/neiswang_1391/MGFM/MGFM-serving/datasets/evaluate/gene-mteb/hv-3",
-            "revision": "None",
+            "path": "metagene-ai/HumanVirusInfecting",
+            "name": "class-3",
+            "revision": "main",
         },
         type="Classification",
         category="s2s",
@@ -183,13 +188,14 @@ class HumanVirusClassificationThree(AbsTaskClassification):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        from transformers.trainer_utils import set_seed
-        set_seed(42)
         self.method = "logReg"
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
+
+        from transformers.trainer_utils import set_seed
+        set_seed(42)
 
         import datasets
         self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])  # type: ignore
@@ -235,10 +241,11 @@ class HumanVirusClassificationThree(AbsTaskClassification):
 class HumanVirusClassificationFour(AbsTaskClassification):
     metadata = TaskMetadata(
         name="HumanVirusClassificationFour",
-        description="Fourth dataset for classification of human virus infecting samples",
+        description="",
         dataset={
-            "path": "/project/neiswang_1391/MGFM/MGFM-serving/datasets/evaluate/gene-mteb/hv-4",
-            "revision": "None",
+            "path": "metagene-ai/HumanVirusInfecting",
+            "name": "class-4",
+            "revision": "main",
         },
         type="Classification",
         category="s2s",
@@ -258,14 +265,14 @@ class HumanVirusClassificationFour(AbsTaskClassification):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
-        from transformers.trainer_utils import set_seed
-        set_seed(42)
         self.method = "logReg"
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
+
+        from transformers.trainer_utils import set_seed
+        set_seed(42)
 
         import datasets
         self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])  # type: ignore

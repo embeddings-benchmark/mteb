@@ -15,7 +15,7 @@ class HumanMicrobiomeProjectReferenceClusteringP2P(AbsTaskClusteringFast):
         name="HumanMicrobiomeProjectReferenceClusteringP2P",
         description="",
         dataset={
-            "path": "/project/neiswang_1391/MGFM/MGFM-serving/datasets/evaluate/gene-mteb/hmpr",
+            "path": "metagene-ai/HumanMicrobiomeProjectReference",
             "revision": "main",
         },
         type="Clustering",
@@ -37,12 +37,12 @@ class HumanMicrobiomeProjectReferenceClusteringP2P(AbsTaskClusteringFast):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        from transformers.trainer_utils import set_seed
-        set_seed(42)
-
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
+
+        from transformers.trainer_utils import set_seed
+        set_seed(42)
 
         import datasets
         self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
@@ -84,7 +84,7 @@ class HumanMicrobiomeProjectReferenceClusteringS2SAlign(AbsTaskClusteringFast):
         name="HumanMicrobiomeProjectReferenceClusteringS2SAlign",
         description="",
         dataset={
-            "path": "/project/neiswang_1391/MGFM/MGFM-serving/datasets/evaluate/gene-mteb/hmpr",
+            "path": "metagene-ai/HumanMicrobiomeProjectReference",
             "revision": "main",
         },
         type="Clustering",
@@ -106,12 +106,12 @@ class HumanMicrobiomeProjectReferenceClusteringS2SAlign(AbsTaskClusteringFast):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        from transformers.trainer_utils import set_seed
-        set_seed(42)
-
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
+
+        from transformers.trainer_utils import set_seed
+        set_seed(42)
 
         import datasets
         self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
@@ -189,7 +189,7 @@ class HumanMicrobiomeProjectReferenceClusteringS2SSmall(AbsTaskClusteringFast):
         name="HumanMicrobiomeProjectReferenceClusteringS2SSmall",
         description="",
         dataset={
-            "path": "/project/neiswang_1391/MGFM/MGFM-serving/datasets/evaluate/gene-mteb/hmpr",
+            "path": "metagene-ai/HumanMicrobiomeProjectReference",
             "revision": "main",
         },
         type="Clustering",
@@ -211,12 +211,12 @@ class HumanMicrobiomeProjectReferenceClusteringS2SSmall(AbsTaskClusteringFast):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        from transformers.trainer_utils import set_seed
-        set_seed(42)
-
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
+
+        from transformers.trainer_utils import set_seed
+        set_seed(42)
 
         import datasets
         self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
@@ -294,7 +294,7 @@ class HumanMicrobiomeProjectReferenceClusteringS2STiny(AbsTaskClusteringFast):
         name="HumanMicrobiomeProjectReferenceClusteringS2STiny",
         description="",
         dataset={
-            "path": "/project/neiswang_1391/MGFM/MGFM-serving/datasets/evaluate/gene-mteb/hmpr",
+            "path": "metagene-ai/HumanMicrobiomeProjectReference",
             "revision": "main",
         },
         type="Clustering",
@@ -316,12 +316,12 @@ class HumanMicrobiomeProjectReferenceClusteringS2STiny(AbsTaskClusteringFast):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        from transformers.trainer_utils import set_seed
-        set_seed(42)
-
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
+
+        from transformers.trainer_utils import set_seed
+        set_seed(42)
 
         import datasets
         self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
