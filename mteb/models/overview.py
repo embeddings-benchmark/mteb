@@ -11,11 +11,10 @@ from sentence_transformers import SentenceTransformer
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import (
-    amazon_models,
     arctic_models,
+    bedrock_models,
     bge_models,
     bm25,
-    cohere_bedrock_models,
     cohere_models,
     colbert_models,
     e5_instruct,
@@ -87,8 +86,7 @@ model_modules = [
     jasper_models,
     uae_models,
     stella_models,
-    amazon_models,
-    cohere_bedrock_models,
+    bedrock_models,
     uae_models,
     voyage_models,
 ]
