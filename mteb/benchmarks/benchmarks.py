@@ -1066,7 +1066,6 @@ CHEMTEB = Benchmark(
             "PubChemSMILESPC",
             "PubChemSynonymPC",
             "PubChemWikiParagraphsPC",
-            "WikipediaAIParagraphsParaphrasePC",
             "PubChemWikiPairClassification",
             "ChemNQRetrieval",
             "ChemHotpotQARetrieval",

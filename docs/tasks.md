@@ -428,7 +428,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [PolEmo2.0-OUT](https://aclanthology.org/K19-1092.pdf) | ['pol'] | Classification | s2s | [Written, Social] | None | None |
 | [PpcPC](https://arxiv.org/pdf/2207.12759.pdf) (Sławomir Dadas, 2022) | ['pol'] | PairClassification | s2s | [Fiction, Non-fiction, Web, Written, Spoken, Social, News] | None | None |
 | [PubChemAISentenceParaphrasePC](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | PairClassification | s2s | [Chemistry] | None | None |
-| [PubChemSMILESBitextMining](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['en', 'eng'] | BitextMining | s2s | [Chemistry] | None | None |
+| [PubChemSMILESBitextMining](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | BitextMining | s2s | [Chemistry] | None | None |
 | [PubChemSMILESPC](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | PairClassification | s2s | [Chemistry] | None | None |
 | [PubChemSynonymPC](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | PairClassification | s2s | [Chemistry] | None | None |
 | [PubChemWikiPairClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['ces', 'deu', 'eng', 'fra', 'hin', 'jpn', 'kor', 'msa', 'nld', 'por', 'spa', 'tur', 'zho'] | PairClassification | s2s | [Chemistry] | None | None |
@@ -605,7 +605,6 @@ The following tables give you an overview of the tasks in MTEB.
 | [WebLINXCandidatesReranking](https://mcgill-nlp.github.io/weblinx) (Xing Han Lù, 2024) | ['eng'] | Reranking | p2p | [Academic, Web, Written] | None | None |
 | [WikiCitiesClustering](https://huggingface.co/datasets/wikipedia) | ['eng'] | Clustering | p2p | [Encyclopaedic, Written] | None | None |
 | [WikiClusteringP2P.v2](https://github.com/Rysias/wiki-clustering) | ['bos', 'cat', 'ces', 'dan', 'eus', 'glv', 'ilo', 'kur', 'lav', 'min', 'mlt', 'sco', 'sqi', 'wln'] | Clustering | p2p | [Encyclopaedic, Written] | None | None |
-| [WikipediaAIParagraphsParaphrasePC](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | PairClassification | p2p | [Chemistry] | None | None |
 | [WikipediaBioMetChemClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Classification | s2s | [Chemistry] | None | None |
 | [WikipediaBiolumNeurochemClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Classification | s2s | [Chemistry] | None | None |
 | [WikipediaChemEngSpecialtiesClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Classification | s2s | [Chemistry] | None | None |
@@ -931,8 +930,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | Modern Greek (1453-) | Indo-European | 3 | 6 | 1 | 0 | 1 | 2 | 0 | 3 | 0 | 0 | 0 | 16 |
 | emi | Mussau-Emira | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | emp | Northern Emberá | Chocoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| en | unknown | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| eng | English | Indo-European | 17 | 160 | 18 | 3 | 1 | 14 | 8 | 107 | 13 | 2 | 1 | 344 |
+| eng | English | Indo-European | 17 | 160 | 18 | 3 | 1 | 13 | 8 | 107 | 13 | 2 | 1 | 343 |
 | enq | Enga | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | epo | Esperanto | Artificial Language | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | eri | Ogea | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1704,7 +1702,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | Yatee Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zul | Zulu | Atlantic-Congo | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 7 |
 | zyp | Zyphe Chin | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| Total | None | None | None | 1396 | 812 | 306 | 3 | 28 | 85 | 51 | 475 | 85 | 2 | 2 |
+| Total | None | None | None | 1395 | 812 | 306 | 3 | 28 | 84 | 51 | 475 | 85 | 2 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>

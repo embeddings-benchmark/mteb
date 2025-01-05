@@ -11,7 +11,6 @@ from .eng.PubChemWikiParagraphsPC import *
 from .eng.SprintDuplicateQuestionsPC import *
 from .eng.TwitterSemEval2015PC import *
 from .eng.TwitterURLCorpusPC import *
-from .eng.WikipediaAIParagraphsParaphrasePC import *
 from .fas.FarsTail import *
 from .hye.ArmenianParaphrasePC import *
 from .ind.IndoNLI import *
