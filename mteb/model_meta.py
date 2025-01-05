@@ -143,6 +143,6 @@ class ModelMeta(BaseModel):
         benchmark_datasets = set()
         for task in tasks:
             benchmark_datasets.add(task.metadata.dataset.get("path"))
-        model_datasets = {ds_name for ds_name, splits in self.training_datasets}
+        model_datasets = {ds_name for ds_name, splits in self.training_datasets.items()}
         intersection = model_datasets & benchmark_datasets
         return len(intersection) == 0
