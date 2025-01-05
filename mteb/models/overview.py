@@ -8,42 +8,21 @@ from typing import Any
 from huggingface_hub import ModelCard
 from sentence_transformers import SentenceTransformer
 
+from mteb.abstasks.AbsTask import AbsTask
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
-from mteb.models import (
-    arctic_models,
-    bge_models,
-    bm25,
-    cohere_models,
-    colbert_models,
-    e5_instruct,
-    e5_models,
-    google_models,
-    gritlm_models,
-    gte_models,
-    ibm_granite_models,
-    jasper_models,
-    jina_models,
-    linq_models,
-    llm2vec_models,
-    misc_models,
-    model2vec_models,
-    mxbai_models,
-    no_instruct_sentence_models,
-    nomic_models,
-    nvidia_models,
-    openai_models,
-    promptriever_models,
-    repllama_models,
-    rerankers_custom,
-    rerankers_monot5_based,
-    ru_sentence_models,
-    salesforce_models,
-    sentence_transformers_models,
-    stella_models,
-    uae_models,
-    voyage_models,
-)
+from mteb.models import (arctic_models, bge_models, bm25, cohere_models,
+                         colbert_models, e5_instruct, e5_models, google_models,
+                         gritlm_models, gte_models, ibm_granite_models,
+                         jasper_models, jina_models, linq_models,
+                         llm2vec_models, misc_models, model2vec_models,
+                         mxbai_models, no_instruct_sentence_models,
+                         nomic_models, nvidia_models, openai_models,
+                         promptriever_models, repllama_models,
+                         rerankers_custom, rerankers_monot5_based,
+                         ru_sentence_models, salesforce_models,
+                         sentence_transformers_models, stella_models,
+                         uae_models, voyage_models)
 
 logger = logging.getLogger(__name__)
 
@@ -103,6 +82,7 @@ def get_model_metas(
     frameworks: Iterable[str] | None = None,
     n_parameters_range: tuple[int | None, int | None] = (None, None),
     use_instructions: bool | None = None,
+    zero_shot_on: list[AbsTask] | None = None,
 ) -> list[ModelMeta]:
     """Load all models' metadata that fit the specified criteria."""
     res = []
@@ -132,6 +112,9 @@ def get_model_metas(
                 continue
         if lower is not None:
             if (n_parameters is None) or (n_parameters < lower):
+                continue
+        if zero_shot_on is not None:
+            if not model_meta.is_zero_shot_on(zero_shot_on):
                 continue
         res.append(model_meta)
     return res

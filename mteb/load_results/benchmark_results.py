@@ -13,7 +13,8 @@ from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict
 
 from mteb.abstasks.AbsTask import AbsTask, ScoresDict
-from mteb.abstasks.TaskMetadata import ISO_LANGUAGE_SCRIPT, TASK_DOMAIN, TASK_TYPE
+from mteb.abstasks.TaskMetadata import (ISO_LANGUAGE_SCRIPT, TASK_DOMAIN,
+                                        TASK_TYPE)
 from mteb.languages import ISO_LANGUAGE
 from mteb.load_results.task_results import TaskResult
 from mteb.models.overview import get_model_metas
@@ -209,6 +210,7 @@ class BenchmarkResults(BaseModel):
         frameworks: Iterable[str] | None = None,
         n_parameters_range: tuple[int | None, int | None] = (None, None),
         use_instructions: bool | None = None,
+        zero_shot_on: list[AbsTask] | None = None,
     ) -> BenchmarkResults:
         # if model_names is None:
         #     model_names = [model_res.model_name for model_res in self]
@@ -219,6 +221,7 @@ class BenchmarkResults(BaseModel):
             frameworks=frameworks,
             n_parameters_range=n_parameters_range,
             use_instructions=use_instructions,
+            zero_shot_on=zero_shot_on,
         )
         models = {meta.name for meta in model_metas}
         # model_revision_pairs = {(meta.name, meta.revision) for meta in model_metas}
