@@ -219,17 +219,29 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                             interactive=True,
                         )
                     with gr.Column():
-                        compatibility = gr.CheckboxGroup(
-                            [
-                                (
-                                    "Should be sentence-transformers compatible",
-                                    "Sentence Transformers",
-                                )
-                            ],
-                            value=[],
-                            label="Compatibility",
-                            interactive=True,
-                        )
+                        with gr.Row():
+                            compatibility = gr.CheckboxGroup(
+                                [
+                                    (
+                                        "Should be sentence-transformers compatible",
+                                        "Sentence Transformers",
+                                    )
+                                ],
+                                value=[],
+                                label="Compatibility",
+                                interactive=True,
+                            )
+                            zero_shot = gr.CheckboxGroup(
+                                [
+                                    (
+                                        "Should be zero-shot on Benchmark",
+                                        True,
+                                    )
+                                ],
+                                value=[],
+                                label="Zero-shot",
+                                interactive=True,
+                            )
                         model_size = RangeSlider(
                             minimum=min_model_size,
                             maximum=max_model_size,
@@ -353,6 +365,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             compatibility,
             instructions,
             model_size,
+            zero_shot,
         ],
         outputs=[scores],
     )
@@ -366,6 +379,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
         compatibility,
         instructions,
         model_size,
+        zero_shot,
     ):
         benchmark = mteb.get_benchmark(benchmark_name)
         benchmark_results = benchmark.load_results(base_results=all_results)
@@ -383,11 +397,13 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             # Multiplying by millions
             lower = lower * 1e6
             upper = upper * 1e6
+        zero_shot_on = benchmark.tasks if zero_shot else None
         benchmark_results = benchmark_results.filter_models(
             open_weights=availability,
             use_instructions=instructions,
             frameworks=compatibility,
             n_parameters_range=(lower, upper),
+            zero_shot_on=zero_shot_on,
         )
         scores = benchmark_results.get_scores(languages=languages, format="long")
         return scores

@@ -117,7 +117,10 @@ def scores_to_tables(
     scores_long: list[dict], search_query: str | None = None
 ) -> tuple[gr.DataFrame, gr.DataFrame]:
     if not scores_long:
-        return gr.DataFrame(), gr.DataFrame()
+        no_results_frame = pd.DataFrame(
+            {"No results": ["You can try relaxing your criteria"]}
+        )
+        return gr.DataFrame(no_results_frame), gr.DataFrame(no_results_frame)
     data = pd.DataFrame.from_records(scores_long)
     data["task_type"] = data["task_name"].map(
         lambda task_name: get_task(task_name).metadata.type
