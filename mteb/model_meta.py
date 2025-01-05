@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, Any, Callable, Literal
 
 from pydantic import BaseModel, ConfigDict
 
+from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.TaskMetadata import STR_DATE, STR_URL
 from mteb.encoder_interface import Encoder
 
@@ -133,3 +134,15 @@ class ModelMeta(BaseModel):
         if self.name is None:
             raise ValueError("Model name is not set")
         return self.name.replace("/", "__").replace(" ", "_")
+
+    def is_zero_shot_on(self, tasks: list[AbsTask]) -> bool:
+        """Indicates whether the given model can be considered
+        zero-shot or not on the given tasks."""
+        if not self.training_datasets:
+            return False
+        benchmark_datasets = set()
+        for task in tasks:
+            benchmark_datasets.add(task.metadata.dataset.get("path"))
+        model_datasets = {ds_name for ds_name, splits in self.training_datasets}
+        intersection = model_datasets & benchmark_datasets
+        return len(intersection) == 0
