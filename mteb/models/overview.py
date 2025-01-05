@@ -11,18 +11,40 @@ from sentence_transformers import SentenceTransformer
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
-from mteb.models import (arctic_models, bge_models, bm25, cohere_models,
-                         colbert_models, e5_instruct, e5_models, google_models,
-                         gritlm_models, gte_models, ibm_granite_models,
-                         jasper_models, jina_models, linq_models,
-                         llm2vec_models, misc_models, model2vec_models,
-                         mxbai_models, no_instruct_sentence_models,
-                         nomic_models, nvidia_models, openai_models,
-                         promptriever_models, repllama_models,
-                         rerankers_custom, rerankers_monot5_based,
-                         ru_sentence_models, salesforce_models,
-                         sentence_transformers_models, stella_models,
-                         uae_models, voyage_models)
+from mteb.models import (
+    arctic_models,
+    bge_models,
+    bm25,
+    cohere_models,
+    colbert_models,
+    e5_instruct,
+    e5_models,
+    google_models,
+    gritlm_models,
+    gte_models,
+    ibm_granite_models,
+    jasper_models,
+    jina_models,
+    linq_models,
+    llm2vec_models,
+    misc_models,
+    model2vec_models,
+    mxbai_models,
+    no_instruct_sentence_models,
+    nomic_models,
+    nvidia_models,
+    openai_models,
+    promptriever_models,
+    repllama_models,
+    rerankers_custom,
+    rerankers_monot5_based,
+    ru_sentence_models,
+    salesforce_models,
+    sentence_transformers_models,
+    stella_models,
+    uae_models,
+    voyage_models,
+)
 
 logger = logging.getLogger(__name__)
 
