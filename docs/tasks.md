@@ -122,6 +122,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [CUREv1](https://huggingface.co/datasets/clinia/CUREv1) | ['eng', 'fra', 'spa'] | Retrieval | s2p | [Medical, Academic, Written] | None | None |
 | [CanadaTaxCourtOutcomesLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal, Written] | None | None |
 | [CataloniaTweetClassification](https://aclanthology.org/2020.lrec-1.171/) | ['cat', 'spa'] | Classification | s2s | [Social, Government, Written] | None | None |
+| [ChemHotpotQARetrieval](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Retrieval | s2p | [Chemistry] | None | None |
+| [ChemNQRetrieval](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Retrieval | s2p | [Chemistry] | None | None |
 | [ClimateFEVER](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html) (Thomas Diggelmann, 2021) | ['eng'] | Retrieval | s2p |  | None | None |
 | [ClimateFEVERHardNegatives](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html) (Thomas Diggelmann, 2021) | ['eng'] | Retrieval | s2p |  | None | None |
 | [CmedqaRetrieval](https://aclanthology.org/2022.emnlp-main.357.pdf) | ['cmn'] | Retrieval | s2p | [Medical, Written] | None | None |
@@ -425,6 +427,12 @@ The following tables give you an overview of the tasks in MTEB.
 | [PolEmo2.0-IN](https://aclanthology.org/K19-1092.pdf) | ['pol'] | Classification | s2s | [Written, Social] | None | None |
 | [PolEmo2.0-OUT](https://aclanthology.org/K19-1092.pdf) | ['pol'] | Classification | s2s | [Written, Social] | None | None |
 | [PpcPC](https://arxiv.org/pdf/2207.12759.pdf) (Sławomir Dadas, 2022) | ['pol'] | PairClassification | s2s | [Fiction, Non-fiction, Web, Written, Spoken, Social, News] | None | None |
+| [PubChemAISentenceParaphrasePC](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | PairClassification | s2s | [Chemistry] | None | None |
+| [PubChemSMILESBitextMining](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['en', 'eng'] | BitextMining | s2s | [Chemistry] | None | None |
+| [PubChemSMILESPC](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | PairClassification | s2s | [Chemistry] | None | None |
+| [PubChemSynonymPC](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | PairClassification | s2s | [Chemistry] | None | None |
+| [PubChemWikiPairClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['ces', 'deu', 'eng', 'fra', 'hin', 'jpn', 'kor', 'msa', 'nld', 'por', 'spa', 'tur', 'zho'] | PairClassification | s2s | [Chemistry] | None | None |
+| [PubChemWikiParagraphsPC](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | PairClassification | p2p | [Chemistry] | None | None |
 | [PublicHealthQA](https://huggingface.co/datasets/xhluca/publichealth-qa) | ['ara', 'eng', 'fra', 'kor', 'rus', 'spa', 'vie', 'zho'] | Retrieval | s2p | [Medical, Government, Web, Written] | None | None |
 | [PunjabiNewsClassification](https://github.com/goru001/nlp-for-punjabi/) (Anoop Kunchukuttan, 2020) | ['pan'] | Classification | s2s | [News, Written] | None | None |
 | [QBQTC](https://github.com/CLUEbenchmark/QBQTC/tree/main/dataset) | ['cmn'] | STS | s2s |  | None | None |
@@ -468,6 +476,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [SCDDVerificationLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal, Written] | None | None |
 | [SCIDOCS](https://allenai.org/data/scidocs) (Arman Cohan, 2020) | ['eng'] | Retrieval | s2p | [Academic, Written, Non-fiction] | None | None |
 | [SCIDOCS-PL](https://allenai.org/data/scidocs) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  | None | None |
+| [SDSEyeProtectionClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Classification | s2p | [Chemistry] | None | None |
+| [SDSGlovesClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Classification | s2p | [Chemistry] | None | None |
 | [SIB200Classification](https://arxiv.org/abs/2309.07445) (Adelani et al., 2023) | ['ace', 'acm', 'acq', 'aeb', 'afr', 'ajp', 'aka', 'als', 'amh', 'apc', 'arb', 'ars', 'ary', 'arz', 'asm', 'ast', 'awa', 'ayr', 'azb', 'azj', 'bak', 'bam', 'ban', 'bel', 'bem', 'ben', 'bho', 'bjn', 'bod', 'bos', 'bug', 'bul', 'cat', 'ceb', 'ces', 'cjk', 'ckb', 'crh', 'cym', 'dan', 'deu', 'dik', 'dyu', 'dzo', 'ell', 'eng', 'epo', 'est', 'eus', 'ewe', 'fao', 'fij', 'fin', 'fon', 'fra', 'fur', 'fuv', 'gaz', 'gla', 'gle', 'glg', 'grn', 'guj', 'hat', 'hau', 'heb', 'hin', 'hne', 'hrv', 'hun', 'hye', 'ibo', 'ilo', 'ind', 'isl', 'ita', 'jav', 'jpn', 'kab', 'kac', 'kam', 'kan', 'kas', 'kat', 'kaz', 'kbp', 'kea', 'khk', 'khm', 'kik', 'kin', 'kir', 'kmb', 'kmr', 'knc', 'kon', 'kor', 'lao', 'lij', 'lim', 'lin', 'lit', 'lmo', 'ltg', 'ltz', 'lua', 'lug', 'luo', 'lus', 'lvs', 'mag', 'mai', 'mal', 'mar', 'min', 'mkd', 'mlt', 'mni', 'mos', 'mri', 'mya', 'nld', 'nno', 'nob', 'npi', 'nqo', 'nso', 'nus', 'nya', 'oci', 'ory', 'pag', 'pan', 'pap', 'pbt', 'pes', 'plt', 'pol', 'por', 'prs', 'quy', 'ron', 'run', 'rus', 'sag', 'san', 'sat', 'scn', 'shn', 'sin', 'slk', 'slv', 'smo', 'sna', 'snd', 'som', 'sot', 'spa', 'srd', 'srp', 'ssw', 'sun', 'swe', 'swh', 'szl', 'tam', 'taq', 'tat', 'tel', 'tgk', 'tgl', 'tha', 'tir', 'tpi', 'tsn', 'tso', 'tuk', 'tum', 'tur', 'twi', 'tzm', 'uig', 'ukr', 'umb', 'urd', 'uzn', 'vec', 'vie', 'war', 'wol', 'xho', 'ydd', 'yor', 'yue', 'zho', 'zsm', 'zul'] | Classification | s2s | [News, Written] | None | None |
 | [SIB200ClusteringS2S](https://arxiv.org/abs/2309.07445) (Adelani et al., 2023) | ['ace', 'acm', 'acq', 'aeb', 'afr', 'ajp', 'aka', 'als', 'amh', 'apc', 'arb', 'ars', 'ary', 'arz', 'asm', 'ast', 'awa', 'ayr', 'azb', 'azj', 'bak', 'bam', 'ban', 'bel', 'bem', 'ben', 'bho', 'bjn', 'bod', 'bos', 'bug', 'bul', 'cat', 'ceb', 'ces', 'cjk', 'ckb', 'crh', 'cym', 'dan', 'deu', 'dik', 'dyu', 'dzo', 'ell', 'eng', 'epo', 'est', 'eus', 'ewe', 'fao', 'fij', 'fin', 'fon', 'fra', 'fur', 'fuv', 'gaz', 'gla', 'gle', 'glg', 'grn', 'guj', 'hat', 'hau', 'heb', 'hin', 'hne', 'hrv', 'hun', 'hye', 'ibo', 'ilo', 'ind', 'isl', 'ita', 'jav', 'jpn', 'kab', 'kac', 'kam', 'kan', 'kas', 'kat', 'kaz', 'kbp', 'kea', 'khk', 'khm', 'kik', 'kin', 'kir', 'kmb', 'kmr', 'knc', 'kon', 'kor', 'lao', 'lij', 'lim', 'lin', 'lit', 'lmo', 'ltg', 'ltz', 'lua', 'lug', 'luo', 'lus', 'lvs', 'mag', 'mai', 'mal', 'mar', 'min', 'mkd', 'mlt', 'mni', 'mos', 'mri', 'mya', 'nld', 'nno', 'nob', 'npi', 'nqo', 'nso', 'nus', 'nya', 'oci', 'ory', 'pag', 'pan', 'pap', 'pbt', 'pes', 'plt', 'pol', 'por', 'prs', 'quy', 'ron', 'run', 'rus', 'sag', 'san', 'sat', 'scn', 'shn', 'sin', 'slk', 'slv', 'smo', 'sna', 'snd', 'som', 'sot', 'spa', 'srd', 'srp', 'ssw', 'sun', 'swe', 'swh', 'szl', 'tam', 'taq', 'tat', 'tel', 'tgk', 'tgl', 'tha', 'tir', 'tpi', 'tsn', 'tso', 'tuk', 'tum', 'tur', 'twi', 'tzm', 'uig', 'ukr', 'umb', 'urd', 'uzn', 'vec', 'vie', 'war', 'wol', 'xho', 'ydd', 'yor', 'yue', 'zho', 'zsm', 'zul'] | Clustering | s2s | [News, Written] | None | None |
 | [SICK-BR-PC](https://linux.ime.usp.br/~thalen/SICK_PT.pdf) | ['por'] | PairClassification | s2s | [Web, Written] | None | None |
@@ -595,8 +605,26 @@ The following tables give you an overview of the tasks in MTEB.
 | [WebLINXCandidatesReranking](https://mcgill-nlp.github.io/weblinx) (Xing Han Lù, 2024) | ['eng'] | Reranking | p2p | [Academic, Web, Written] | None | None |
 | [WikiCitiesClustering](https://huggingface.co/datasets/wikipedia) | ['eng'] | Clustering | p2p | [Encyclopaedic, Written] | None | None |
 | [WikiClusteringP2P.v2](https://github.com/Rysias/wiki-clustering) | ['bos', 'cat', 'ces', 'dan', 'eus', 'glv', 'ilo', 'kur', 'lav', 'min', 'mlt', 'sco', 'sqi', 'wln'] | Clustering | p2p | [Encyclopaedic, Written] | None | None |
+| [WikipediaAIParagraphsParaphrasePC](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | PairClassification | p2p | [Chemistry] | None | None |
+| [WikipediaBioMetChemClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Classification | s2s | [Chemistry] | None | None |
+| [WikipediaBiolumNeurochemClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Classification | s2s | [Chemistry] | None | None |
+| [WikipediaChemEngSpecialtiesClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Classification | s2s | [Chemistry] | None | None |
+| [WikipediaChemFieldsClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Classification | s2s | [Chemistry] | None | None |
+| [WikipediaChemistryTopicsClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Classification | s2s | [Chemistry] | None | None |
+| [WikipediaChemistryTopicsClustering](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Clustering | s2p | [Chemistry] | None | None |
+| [WikipediaCompChemSpectroscopyClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Classification | s2s | [Chemistry] | None | None |
+| [WikipediaCryobiologySeparationClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Classification | s2s | [Chemistry] | None | None |
+| [WikipediaCrystallographyAnalyticalClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Classification | s2s | [Chemistry] | None | None |
+| [WikipediaGreenhouseEnantiopureClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Classification | s2s | [Chemistry] | None | None |
+| [WikipediaIsotopesFissionClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Classification | s2s | [Chemistry] | None | None |
+| [WikipediaLuminescenceClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Classification | s2s | [Chemistry] | None | None |
+| [WikipediaOrganicInorganicClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Classification | s2s | [Chemistry] | None | None |
 | [WikipediaRerankingMultilingual](https://huggingface.co/datasets/ellamind/wikipedia-2023-11-reranking-multilingual) | ['ben', 'bul', 'ces', 'dan', 'deu', 'eng', 'fas', 'fin', 'hin', 'ita', 'nld', 'nor', 'por', 'ron', 'srp', 'swe'] | Reranking | s2p | [Encyclopaedic, Written] | {'test': 24000} | {'test': {'num_samples': 24000, 'number_of_characters': 83866932, 'num_positive': 24000, 'num_negative': 192000, 'min_query_length': 7, 'avg_query_length': 59.09, 'max_query_length': 180, 'unique_query': 23997, 'min_positive_length': 100, 'avg_positive_length': 385.45, 'max_positive_length': 3515, 'unique_positive': 23993, 'min_negative_length': 100, 'avg_negative_length': 381.24, 'max_negative_length': 9461, 'unique_negative': 191783, 'hf_subset_descriptive_stats': {'bg': {'num_samples': 1500, 'number_of_characters': 5145316, 'num_positive': 1500, 'num_negative': 12000, 'min_query_length': 18, 'avg_query_length': 60.83, 'max_query_length': 166, 'unique_query': 1500, 'min_positive_length': 100, 'avg_positive_length': 375.89, 'max_positive_length': 2241, 'unique_positive': 1500, 'min_negative_length': 100, 'avg_negative_length': 374.19, 'max_negative_length': 4869, 'unique_negative': 11996}, 'bn': {'num_samples': 1500, 'number_of_characters': 5390581, 'num_positive': 1500, 'num_negative': 12000, 'min_query_length': 7, 'avg_query_length': 47.27, 'max_query_length': 123, 'unique_query': 1500, 'min_positive_length': 100, 'avg_positive_length': 394.59, 'max_positive_length': 2338, 'unique_positive': 1499, 'min_negative_length': 100, 'avg_negative_length': 393.98, 'max_negative_length': 5104, 'unique_negative': 11996}, 'cs': {'num_samples': 1500, 'number_of_characters': 5079180, 'num_positive': 1500, 'num_negative': 12000, 'min_query_length': 17, 'avg_query_length': 56.27, 'max_query_length': 137, 'unique_query': 1500, 'min_positive_length': 100, 'avg_positive_length': 383.84, 'max_positive_length': 2300, 'unique_positive': 1499, 'min_negative_length': 100, 'avg_negative_length': 368.25, 'max_negative_length': 3487, 'unique_negative': 11982}, 'da': {'num_samples': 1500, 'number_of_characters': 4746132, 'num_positive': 1500, 'num_negative': 12000, 'min_query_length': 17, 'avg_query_length': 56.75, 'max_query_length': 137, 'unique_query': 1499, 'min_positive_length': 100, 'avg_positive_length': 351.68, 'max_positive_length': 2159, 'unique_positive': 1500, 'min_negative_length': 100, 'avg_negative_length': 344.46, 'max_negative_length': 2563, 'unique_negative': 11972}, 'de': {'num_samples': 1500, 'number_of_characters': 5483592, 'num_positive': 1500, 'num_negative': 12000, 'min_query_length': 20, 'avg_query_length': 70.0, 'max_query_length': 180, 'unique_query': 1499, 'min_positive_length': 100, 'avg_positive_length': 391.54, 'max_positive_length': 2674, 'unique_positive': 1500, 'min_negative_length': 100, 'avg_negative_length': 399.27, 'max_negative_length': 3083, 'unique_negative': 12000}, 'en': {'num_samples': 1500, 'number_of_characters': 6217884, 'num_positive': 1500, 'num_negative': 12000, 'min_query_length': 18, 'avg_query_length': 68.37, 'max_query_length': 162, 'unique_query': 1500, 'min_positive_length': 100, 'avg_positive_length': 451.73, 'max_positive_length': 3515, 'unique_positive': 1500, 'min_negative_length': 100, 'avg_negative_length': 453.14, 'max_negative_length': 3662, 'unique_negative': 12000}, 'fa': {'num_samples': 1500, 'number_of_characters': 4732619, 'num_positive': 1500, 'num_negative': 12000, 'min_query_length': 12, 'avg_query_length': 48.67, 'max_query_length': 119, 'unique_query': 1500, 'min_positive_length': 100, 'avg_positive_length': 347.7, 'max_positive_length': 2571, 'unique_positive': 1500, 'min_negative_length': 100, 'avg_negative_length': 344.84, 'max_negative_length': 4707, 'unique_negative': 11978}, 'fi': {'num_samples': 1500, 'number_of_characters': 5209132, 'num_positive': 1500, 'num_negative': 12000, 'min_query_length': 14, 'avg_query_length': 55.34, 'max_query_length': 132, 'unique_query': 1500, 'min_positive_length': 100, 'avg_positive_length': 394.71, 'max_positive_length': 2129, 'unique_positive': 1498, 'min_negative_length': 100, 'avg_negative_length': 377.84, 'max_negative_length': 2574, 'unique_negative': 11972}, 'hi': {'num_samples': 1500, 'number_of_characters': 5620959, 'num_positive': 1500, 'num_negative': 12000, 'min_query_length': 13, 'avg_query_length': 50.78, 'max_query_length': 125, 'unique_query': 1499, 'min_positive_length': 100, 'avg_positive_length': 420.38, 'max_positive_length': 2361, 'unique_positive': 1500, 'min_negative_length': 100, 'avg_negative_length': 409.52, 'max_negative_length': 5912, 'unique_negative': 11996}, 'it': {'num_samples': 1500, 'number_of_characters': 5420496, 'num_positive': 1500, 'num_negative': 12000, 'min_query_length': 23, 'avg_query_length': 70.05, 'max_query_length': 156, 'unique_query': 1500, 'min_positive_length': 100, 'avg_positive_length': 396.97, 'max_positive_length': 2082, 'unique_positive': 1500, 'min_negative_length': 100, 'avg_negative_length': 393.33, 'max_negative_length': 9461, 'unique_negative': 11993}, 'nl': {'num_samples': 1500, 'number_of_characters': 5169556, 'num_positive': 1500, 'num_negative': 12000, 'min_query_length': 18, 'avg_query_length': 65.34, 'max_query_length': 136, 'unique_query': 1500, 'min_positive_length': 100, 'avg_positive_length': 380.79, 'max_positive_length': 1864, 'unique_positive': 1500, 'min_negative_length': 100, 'avg_negative_length': 375.03, 'max_negative_length': 3641, 'unique_negative': 11985}, 'pt': {'num_samples': 1500, 'number_of_characters': 5474356, 'num_positive': 1500, 'num_negative': 12000, 'min_query_length': 18, 'avg_query_length': 65.12, 'max_query_length': 176, 'unique_query': 1500, 'min_positive_length': 100, 'avg_positive_length': 404.02, 'max_positive_length': 3057, 'unique_positive': 1499, 'min_negative_length': 100, 'avg_negative_length': 397.55, 'max_negative_length': 2877, 'unique_negative': 11991}, 'ro': {'num_samples': 1500, 'number_of_characters': 4796113, 'num_positive': 1500, 'num_negative': 12000, 'min_query_length': 14, 'avg_query_length': 61.97, 'max_query_length': 169, 'unique_query': 1500, 'min_positive_length': 100, 'avg_positive_length': 346.71, 'max_positive_length': 1917, 'unique_positive': 1499, 'min_negative_length': 100, 'avg_negative_length': 348.59, 'max_negative_length': 4213, 'unique_negative': 11971}, 'sr': {'num_samples': 1500, 'number_of_characters': 5271732, 'num_positive': 1500, 'num_negative': 12000, 'min_query_length': 15, 'avg_query_length': 55.67, 'max_query_length': 146, 'unique_query': 1500, 'min_positive_length': 100, 'avg_positive_length': 386.35, 'max_positive_length': 2421, 'unique_positive': 1499, 'min_negative_length': 100, 'avg_negative_length': 384.06, 'max_negative_length': 3668, 'unique_negative': 11974}, 'no': {'num_samples': 1500, 'number_of_characters': 5036586, 'num_positive': 1500, 'num_negative': 12000, 'min_query_length': 14, 'avg_query_length': 55.29, 'max_query_length': 129, 'unique_query': 1500, 'min_positive_length': 100, 'avg_positive_length': 367.72, 'max_positive_length': 1450, 'unique_positive': 1500, 'min_negative_length': 100, 'avg_negative_length': 366.84, 'max_negative_length': 2841, 'unique_negative': 11996}, 'sv': {'num_samples': 1500, 'number_of_characters': 5072698, 'num_positive': 1500, 'num_negative': 12000, 'min_query_length': 17, 'avg_query_length': 57.73, 'max_query_length': 133, 'unique_query': 1500, 'min_positive_length': 100, 'avg_positive_length': 372.59, 'max_positive_length': 2493, 'unique_positive': 1500, 'min_negative_length': 100, 'avg_negative_length': 368.94, 'max_negative_length': 3680, 'unique_negative': 11999}}}} |
 | [WikipediaRetrievalMultilingual](https://huggingface.co/datasets/ellamind/wikipedia-2023-11-retrieval-multilingual-queries) | ['ben', 'bul', 'ces', 'dan', 'deu', 'eng', 'fas', 'fin', 'hin', 'ita', 'nld', 'nor', 'por', 'ron', 'srp', 'swe'] | Retrieval | s2p | [Encyclopaedic, Written] | None | None |
+| [WikipediaSaltsSemiconductorsClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Classification | s2s | [Chemistry] | None | None |
+| [WikipediaSolidStateColloidalClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Classification | s2s | [Chemistry] | None | None |
+| [WikipediaSpecialtiesInChemistryClustering](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Clustering | s2p | [Chemistry] | None | None |
+| [WikipediaTheoreticalAppliedClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Classification | s2s | [Chemistry] | None | None |
 | [WinoGrande](https://winogrande.allenai.org/) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic, Written] | None | None |
 | [WisesightSentimentClassification](https://github.com/PyThaiNLP/wisesight-sentiment) | ['tha'] | Classification | s2s | [Social, News, Written] | None | None |
 | XMarket (Bonab et al., 2021) | ['deu', 'eng', 'spa'] | Retrieval | s2p |  | None | None |
@@ -819,7 +847,7 @@ The following tables give you an overview of the tasks in MTEB.
 | cco | Comaltepec Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | ceb | Cebuano | Austronesian | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 6 |
 | cek | Eastern Khumi Chin | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ces | Czech | Indo-European | 4 | 5 | 2 | 0 | 1 | 1 | 1 | 2 | 0 | 0 | 0 | 16 |
+| ces | Czech | Indo-European | 4 | 5 | 2 | 0 | 1 | 2 | 1 | 2 | 0 | 0 | 0 | 17 |
 | cgc | Kagayanen | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | cha | Chamorro | Austronesian | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
 | chd | Highland Oaxaca Chontal | Tequistlatecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -875,7 +903,7 @@ The following tables give you an overview of the tasks in MTEB.
 | dah | Gwahatike | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | dan | Danish | Indo-European | 5 | 9 | 2 | 0 | 1 | 0 | 1 | 5 | 0 | 0 | 0 | 23 |
 | ded | Dedua | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| deu | German | Indo-European | 6 | 14 | 7 | 0 | 1 | 6 | 2 | 18 | 4 | 0 | 0 | 58 |
+| deu | German | Indo-European | 6 | 14 | 7 | 0 | 1 | 7 | 2 | 18 | 4 | 0 | 0 | 59 |
 | dgc | Casiguran Dumagat Agta | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | dgr | Dogrib | Athabaskan-Eyak-Tlingit | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | dgz | Daga | Dagan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -903,7 +931,8 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | Modern Greek (1453-) | Indo-European | 3 | 6 | 1 | 0 | 1 | 2 | 0 | 3 | 0 | 0 | 0 | 16 |
 | emi | Mussau-Emira | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | emp | Northern Emberá | Chocoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| eng | English | Indo-European | 16 | 143 | 16 | 3 | 1 | 8 | 8 | 105 | 13 | 2 | 1 | 316 |
+| en | unknown | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| eng | English | Indo-European | 17 | 160 | 18 | 3 | 1 | 14 | 8 | 107 | 13 | 2 | 1 | 344 |
 | enq | Enga | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | epo | Esperanto | Artificial Language | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | eri | Ogea | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -924,7 +953,7 @@ The following tables give you an overview of the tasks in MTEB.
 | fin | Finnish | Uralic | 3 | 5 | 1 | 0 | 1 | 1 | 2 | 5 | 1 | 0 | 0 | 19 |
 | fon | Fon | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
 | for | Fore | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fra | French | Indo-European | 7 | 13 | 8 | 0 | 1 | 5 | 3 | 15 | 4 | 0 | 1 | 57 |
+| fra | French | Indo-European | 7 | 13 | 8 | 0 | 1 | 6 | 3 | 15 | 4 | 0 | 1 | 58 |
 | fry | Western Frisian | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | fuc | Pulaar | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | fue | Borgu Fulfulde | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -981,7 +1010,7 @@ The following tables give you an overview of the tasks in MTEB.
 | hch | Huichol | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | heb | Hebrew | Afro-Asiatic | 4 | 5 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 11 |
 | heg | Helong | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hin | Hindi | Indo-European | 9 | 12 | 2 | 0 | 0 | 1 | 2 | 10 | 2 | 0 | 0 | 38 |
+| hin | Hindi | Indo-European | 9 | 12 | 2 | 0 | 0 | 2 | 2 | 10 | 2 | 0 | 0 | 39 |
 | hix | Hixkaryána | Cariban | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | hla | Halia | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | hlt | Matu Chin | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1030,7 +1059,7 @@ The following tables give you an overview of the tasks in MTEB.
 | jid | Bu (Kaduna State) | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | jiv | Shuar | Chicham | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | jni | Janji | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| jpn | Japanese | Japonic | 5 | 8 | 3 | 0 | 0 | 1 | 3 | 13 | 2 | 0 | 0 | 35 |
+| jpn | Japanese | Japonic | 5 | 8 | 3 | 0 | 0 | 2 | 3 | 13 | 2 | 0 | 0 | 36 |
 | jvn | Caribbean Javanese | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | kab | Kabyle | Afro-Asiatic | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
 | kac | Kachin | Sino-Tibetan | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
@@ -1086,7 +1115,7 @@ The following tables give you an overview of the tasks in MTEB.
 | knj | Western Kanjobal | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | knv | Tabo | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | kon | Kongo | Unclassified | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| kor | Korean | Koreanic | 4 | 8 | 1 | 0 | 1 | 2 | 1 | 9 | 3 | 0 | 0 | 29 |
+| kor | Korean | Koreanic | 4 | 8 | 1 | 0 | 1 | 3 | 1 | 9 | 3 | 0 | 0 | 30 |
 | kos | Kosraean | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | kpf | Komba | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | kpg | Kapingamarangi | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1231,7 +1260,7 @@ The following tables give you an overview of the tasks in MTEB.
 | mqb | Mbuko | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | mqj | Mamasa | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | mri | Maori | Austronesian | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 5 |
-| msa | Malay (macrolanguage) | Unclassified | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| msa | Malay (macrolanguage) | Unclassified | 1 | 2 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 4 |
 | msb | Masbatenyo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | msc | Sankaran Maninka | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | msk | Mansaka | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1292,7 +1321,7 @@ The following tables give you an overview of the tasks in MTEB.
 | nij | Ngaju | Austronesian | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
 | nin | Ninzo | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | nko | Nkonya | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nld | Dutch | Indo-European | 6 | 6 | 1 | 0 | 1 | 0 | 1 | 2 | 2 | 0 | 0 | 19 |
+| nld | Dutch | Indo-European | 6 | 6 | 1 | 0 | 1 | 1 | 1 | 2 | 2 | 0 | 0 | 20 |
 | nlg | Gela | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | nna | Nyangumarta | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | nno | Norwegian Nynorsk | Unclassified | 4 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
@@ -1364,7 +1393,7 @@ The following tables give you an overview of the tasks in MTEB.
 | poi | Highland Popoluca | Mixe-Zoque | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | pol | Polish | Indo-European | 4 | 11 | 4 | 0 | 1 | 4 | 0 | 18 | 4 | 0 | 0 | 46 |
 | pon | Pohnpeian | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| por | Portuguese | Indo-European | 4 | 9 | 1 | 0 | 2 | 2 | 1 | 5 | 3 | 0 | 0 | 27 |
+| por | Portuguese | Indo-European | 4 | 9 | 1 | 0 | 2 | 3 | 1 | 5 | 3 | 0 | 0 | 28 |
 | poy | Pogolo | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | ppo | Folopa | Teberan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | prf | Paranan | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1449,7 +1478,7 @@ The following tables give you an overview of the tasks in MTEB.
 | soq | Kanasi | Dagan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | sot | Southern Sotho | Atlantic-Congo | 1 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 5 |
 | soy | Miyobe | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| spa | Spanish | Indo-European | 4 | 13 | 4 | 0 | 1 | 2 | 2 | 13 | 4 | 0 | 0 | 43 |
+| spa | Spanish | Indo-European | 4 | 13 | 4 | 0 | 1 | 3 | 2 | 13 | 4 | 0 | 0 | 44 |
 | spl | Selepet | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | spm | Akukem | Ramu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | spp | Supyire Senoufo | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1546,7 +1575,7 @@ The following tables give you an overview of the tasks in MTEB.
 | tuk | Turkmen | Turkic | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | tum | Tumbuka | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
 | tuo | Tucano | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tur | Turkish | Turkic | 4 | 7 | 1 | 0 | 0 | 2 | 0 | 3 | 2 | 0 | 0 | 19 |
+| tur | Turkish | Turkic | 4 | 7 | 1 | 0 | 0 | 3 | 0 | 3 | 2 | 0 | 0 | 20 |
 | tvk | Southeast Ambrym | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | twi | Twi | Unclassified | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
 | txq | Tii | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1656,7 +1685,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zaw | Mitla Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zca | Coatecas Altas Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zga | Kinga | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zho | Chinese | Unclassified | 2 | 2 | 1 | 0 | 0 | 1 | 1 | 13 | 0 | 0 | 0 | 20 |
+| zho | Chinese | Unclassified | 2 | 2 | 1 | 0 | 0 | 2 | 1 | 13 | 0 | 0 | 0 | 21 |
 | zia | Zia | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | ziw | Zigula | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zlm | Malay (individual language) | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1675,7 +1704,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | Yatee Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zul | Zulu | Atlantic-Congo | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 7 |
 | zyp | Zyphe Chin | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| Total | None | None | None | 1394 | 795 | 304 | 3 | 28 | 67 | 51 | 473 | 85 | 2 | 2 |
+| Total | None | None | None | 1396 | 812 | 306 | 3 | 28 | 85 | 51 | 475 | 85 | 2 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
