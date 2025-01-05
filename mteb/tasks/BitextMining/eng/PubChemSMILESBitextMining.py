@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
@@ -21,7 +19,7 @@ EVAL_LANGS = {
 }
 
 
-class PubChemSMILESBitextMining(AbsTaskBitextMining, MultilingualTask):
+class PubChemSMILESBitextMining(MultilingualTask, AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="PubChemSMILESBitextMining",
         dataset={
@@ -62,20 +60,6 @@ class PubChemSMILESBitextMining(AbsTaskBitextMining, MultilingualTask):
         }
         """,
     )
-
-    def load_data(self, **kwargs):
-        """Load dataset from HuggingFace hub and convert it to the standard format."""
-        if self.data_loaded:
-            return
-        self.dataset = {}
-
-        for subset in self.hf_subsets:
-            self.dataset[subset] = datasets.load_dataset(
-                **self.metadata_dict["dataset"], name=subset
-            )
-
-        self.dataset_transform()
-        self.data_loaded = True
 
     def dataset_transform(self):
         for subset in self.hf_subsets:

@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -47,20 +45,6 @@ class PubChemSynonymPC(AbsTaskPairClassification):
         }
         """,
     )
-
-    def load_data(self):
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-
-        _dataset = datasets.load_dataset(
-            self.metadata_dict["dataset"]["path"],
-            revision=self.metadata_dict["dataset"]["revision"],
-            trust_remote_code=True,
-        )
-        self.dataset = _dataset
-        self.dataset_transform()
-        self.data_loaded = True
 
     def dataset_transform(self):
         _dataset = {}
