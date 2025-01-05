@@ -68,7 +68,6 @@ from .mar.MarathiNewsClassification import *
 
 from .metagene.HumanMicrobiomeProjectDemonstrationMultiClassification import *
 from .metagene.HumanMicrobiomeProjectDemonstrationClassification import *
-from .metagene.HumanMicrobiomeProjectReferenceClassificationMini import *
 from .metagene.HumanVirusClassification import *
 
 from .mkd.MacedonianTweetSentimentClassification import *
