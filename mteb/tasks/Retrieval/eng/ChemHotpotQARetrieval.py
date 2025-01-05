@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class ChemHotpotQARetrieval(AbsTaskRetrieval):
@@ -19,13 +19,13 @@ class ChemHotpotQARetrieval(AbsTaskRetrieval):
         eval_splits=["train", "dev", "test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=None,
+        date=("2024-06-01", "2024-11-30"),
         domains=["Chemistry"],
-        task_subtypes=None,
+        task_subtypes=[],
         license="cc-by-nc-sa-4.0",
         annotations_creators="derived",
-        dialect=None,
-        sample_creation=None,
+        dialect=[],
+        sample_creation="found",
         bibtex_citation="""
         @article{kasmaee2024chemteb,
         title={ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},

@@ -11,9 +11,11 @@ from sentence_transformers import SentenceTransformer
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import (
+    amazon_models,
     arctic_models,
     bge_models,
     bm25,
+    cohere_bedrock_models,
     cohere_models,
     colbert_models,
     e5_instruct,
@@ -30,6 +32,7 @@ from mteb.models import (
     model2vec_models,
     mxbai_models,
     no_instruct_sentence_models,
+    nomic_bert_model,
     nomic_models,
     nvidia_models,
     openai_models,
@@ -43,9 +46,6 @@ from mteb.models import (
     stella_models,
     uae_models,
     voyage_models,
-    amazon_models,
-    cohere_bedrock_models,
-    nomic_bert_models
 )
 
 logger = logging.getLogger(__name__)
@@ -90,7 +90,7 @@ model_modules = [
     stella_models,
     amazon_models,
     cohere_bedrock_models,
-    nomic_bert_models,
+    nomic_bert_model,
     uae_models,
     voyage_models,
 ]

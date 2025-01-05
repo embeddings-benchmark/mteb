@@ -1,16 +1,17 @@
 from __future__ import annotations
 
+import json
 import logging
 from functools import partial
 from typing import Any
 
 import numpy as np
-import json
 import tqdm
 
-from mteb.model_meta import ModelMeta
 from mteb.encoder_interface import PromptType
+from mteb.model_meta import ModelMeta
 from mteb.requires_package import requires_package
+
 from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
@@ -131,13 +132,11 @@ supported_languages = [
 
 class CohereBedrockWrapper(Wrapper):
     def __init__(
-        self,
-        model_id: str,
-        model_prompts: dict[str, str] | None = None,
-        **kwargs
+        self, model_id: str, model_prompts: dict[str, str] | None = None, **kwargs
     ) -> None:
         requires_package(self, "boto3", "Amazon Bedrock")
         import boto3
+
         boto3_session = boto3.session.Session()
         region_name = boto3_session.region_name
         self._client = boto3.client(
@@ -158,7 +157,7 @@ class CohereBedrockWrapper(Wrapper):
         max_batch_size = 96
 
         batches = [
-            sentences[i: i + max_batch_size]
+            sentences[i : i + max_batch_size]
             for i in range(0, len(sentences), max_batch_size)
         ]
 
@@ -166,12 +165,15 @@ class CohereBedrockWrapper(Wrapper):
 
         for batch in tqdm.tqdm(batches, leave=False, disable=not show_progress_bar):
             response = self._client.invoke_model(
-                body=json.dumps({
-                    "texts": [sent[:2048] for sent in batch],
-                    "input_type": cohere_task_type}),
+                body=json.dumps(
+                    {
+                        "texts": [sent[:2048] for sent in batch],
+                        "input_type": cohere_task_type,
+                    }
+                ),
                 modelId=self._model_id,
                 accept="*/*",
-                contentType="application/json"
+                contentType="application/json",
             )
             all_embeddings.extend(self._to_numpy(response))
 
@@ -206,7 +208,7 @@ class CohereBedrockWrapper(Wrapper):
 
     def _to_numpy(self, embedding_response) -> np.ndarray:
         response = json.loads(embedding_response.get("body").read())
-        return np.array(response['embeddings'])
+        return np.array(response["embeddings"])
 
 
 model_prompts = {
@@ -218,8 +220,11 @@ model_prompts = {
 }
 
 cohere_embed_english_v3 = ModelMeta(
-    loader=partial(CohereBedrockWrapper,
-                   model_id="cohere.embed-english-v3", model_prompts=model_prompts),
+    loader=partial(
+        CohereBedrockWrapper,
+        model_id="cohere.embed-english-v3",
+        model_prompts=model_prompts,
+    ),
     name="bedrock/cohere-embed-english-v3",
     languages=["eng-Latn"],
     open_weights=False,
@@ -237,8 +242,11 @@ cohere_embed_english_v3 = ModelMeta(
 )
 
 cohere_embed_multilingual_v3 = ModelMeta(
-    loader=partial(CohereBedrockWrapper,
-                   model_id="cohere.embed-multilingual-v3", model_prompts=model_prompts),
+    loader=partial(
+        CohereBedrockWrapper,
+        model_id="cohere.embed-multilingual-v3",
+        model_prompts=model_prompts,
+    ),
     name="cohere-embed-multilingual-v3",
     languages=supported_languages,
     open_weights=False,

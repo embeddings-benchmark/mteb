@@ -13,7 +13,7 @@ class PubChemAISentenceParaphrasePC(AbsTaskPairClassification):
         reference="https://arxiv.org/abs/2412.00532",
         dataset={
             "path": "BASF-AI/PubChemAISentenceParaphrasePC",
-            "revision": "f33a205966ce032f957c3a22f4f9e378f89a2c56"
+            "revision": "f33a205966ce032f957c3a22f4f9e378f89a2c56",
         },
         type="PairClassification",
         category="s2s",
@@ -21,13 +21,13 @@ class PubChemAISentenceParaphrasePC(AbsTaskPairClassification):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="max_ap",
-        date=None,
+        date=("2024-06-01", "2024-11-30"),
         domains=["Chemistry"],
-        task_subtypes=None,
+        task_subtypes=[],
         license="cc-by-nc-sa-4.0",
         annotations_creators="LM-generated",
-        dialect=None,
-        sample_creation=None,
+        dialect=[],
+        sample_creation="created",
         bibtex_citation="""
         @article{kasmaee2024chemteb,
         title={ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
@@ -69,7 +69,7 @@ class PubChemAISentenceParaphrasePC(AbsTaskPairClassification):
                 {
                     "sentence1": hf_dataset["sent1"],
                     "sentence2": hf_dataset["sent2"],
-                    "labels": hf_dataset["labels"]
+                    "labels": hf_dataset["labels"],
                 }
             ]
         self.dataset = _dataset

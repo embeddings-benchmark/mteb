@@ -14,10 +14,10 @@ COL_MAPPING = {
 }
 
 EVAL_LANGS = {
-    "iso-title": ["en-Latn", "eng-Latn"],
-    "iso-desc": ["en-Latn", "eng-Latn"],
-    "canon-title": ["en-Latn", "eng-Latn"],
-    "canon-desc": ["en-Latn", "eng-Latn"],
+    "iso-title": ["eng-Latn", "eng-Latn"],
+    "iso-desc": ["eng-Latn", "eng-Latn"],
+    "canon-title": ["eng-Latn", "eng-Latn"],
+    "canon-desc": ["eng-Latn", "eng-Latn"],
 }
 
 
@@ -26,7 +26,7 @@ class PubChemSMILESBitextMining(AbsTaskBitextMining, MultilingualTask):
         name="PubChemSMILESBitextMining",
         dataset={
             "path": "BASF-AI/PubChemSMILESBitextMining",
-            "revision": "36700ea628118312ebf2f90ad2353a9a8f188dc9"
+            "revision": "36700ea628118312ebf2f90ad2353a9a8f188dc9",
         },
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
         reference="https://arxiv.org/abs/2412.00532",
@@ -36,13 +36,13 @@ class PubChemSMILESBitextMining(AbsTaskBitextMining, MultilingualTask):
         eval_splits=["test"],
         eval_langs=EVAL_LANGS,
         main_score="f1",
-        date=None,
+        date=("2024-06-01", "2024-11-30"),
         domains=["Chemistry"],
-        task_subtypes=None,
+        task_subtypes=[],
         license="cc-by-nc-sa-4.0",
         annotations_creators="derived",
-        dialect=None,
-        sample_creation=None,
+        dialect=[],
+        sample_creation="created",
         bibtex_citation="""
         @article{kasmaee2024chemteb,
         title={ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
@@ -71,11 +71,14 @@ class PubChemSMILESBitextMining(AbsTaskBitextMining, MultilingualTask):
 
         for subset in self.hf_subsets:
             self.dataset[subset] = datasets.load_dataset(
-                **self.metadata_dict["dataset"], name=subset)
+                **self.metadata_dict["dataset"], name=subset
+            )
 
         self.dataset_transform()
         self.data_loaded = True
 
     def dataset_transform(self):
         for subset in self.hf_subsets:
-            self.dataset[subset] = self.dataset[subset].rename_columns(COL_MAPPING[subset])
+            self.dataset[subset] = self.dataset[subset].rename_columns(
+                COL_MAPPING[subset]
+            )
