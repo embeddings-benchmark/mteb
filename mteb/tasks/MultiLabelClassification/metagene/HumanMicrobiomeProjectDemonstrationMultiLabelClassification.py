@@ -7,7 +7,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 # https://github.com/embeddings-benchmark/mteb/blob/ad05983fc3e44afc9087328f010a06ceb83f6f7d/mteb/tasks/MultiLabelClassification/por/BrazilianToxicTweetsClassification.py
 class HumanMicrobiomeProjectDemonstrationMultiClassification(AbsTaskMultilabelClassification):
     metadata = TaskMetadata(
-        name="HumanMicrobiomeProjectDemonstrationMultiClassification",
+        name="HumanMicrobiomeProjectDemonstrationMultiLabelClassification",
         description="",
         dataset={
             "path": "metagene-ai/HumanMicrobiomeProjectDemonstration",

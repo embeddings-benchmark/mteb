@@ -66,7 +66,6 @@ from .kur.KurdishSentimentClassification import *
 from .mal.MalayalamNewsClassification import *
 from .mar.MarathiNewsClassification import *
 
-from .metagene.HumanMicrobiomeProjectDemonstrationMultiClassification import *
 from .metagene.HumanMicrobiomeProjectDemonstrationClassification import *
 from .metagene.HumanVirusClassification import *
 
