@@ -1,11 +1,15 @@
-from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from sentence_transformers import SentenceTransformer
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from __future__ import annotations
+
 import datasets
 
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
+
 def split_by_first_newline(s):
-    parts = s.split('\n', 1)  # Split the string by the first newline
-    return parts if len(parts) > 1 else (s, '')  # Return parts or (s, '') if no newline
+    parts = s.split("\n", 1)  # Split the string by the first newline
+    return parts if len(parts) > 1 else (s, "")  # Return parts or (s, '') if no newline
+
 
 class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -15,14 +19,14 @@ class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
         type="Reranking",
         category="s2s",
         modalities=["text"],
-        eval_splits=["test"],
+        eval_splits=["train"],
         eval_langs=["python-Code"],
         main_score="ndcg_at_10",
         dataset={
             "path": "code-rag-bench/library-documentation",
-            "revision": "b530d3b5a25087d2074e731b76232db85b9e9107"
+            "revision": "b530d3b5a25087d2074e731b76232db85b9e9107",
         },
-        date=("2024-06-02","2024-06-02"), # best guess
+        date=("2024-06-02", "2024-06-02"),  # best guess
         domains=["Programming"],
         task_subtypes=["Code retrieval"],
         license="cc-by-sa-4.0",
@@ -40,8 +44,7 @@ class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
       url={https://arxiv.org/abs/2406.14497}, 
 }
 """,
-)
-
+    )
 
     def load_data(self, **kwargs):
         """Load dataset from HuggingFace hub"""
@@ -50,7 +53,7 @@ class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
         self.dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
         self.dataset_transform()
         self.data_loaded = True
-        
+
     def dataset_transform(self) -> None:
         """And transform to a retrieval datset, which have the following attributes
 
@@ -66,7 +69,7 @@ class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
             ds: datasets.Dataset = self.dataset[split]  # type: ignore
             ds = ds.shuffle(seed=42)
             split = "test"
-            
+
             self.queries[split] = {}
             self.relevant_docs[split] = {}
             self.corpus[split] = {}
@@ -78,7 +81,7 @@ class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
             for _, text in zip(ids, texts):
                 # text format "document title \n document content"
                 query, doc = split_by_first_newline(text)
-                
+
                 # some library documents doesn't have query-doc pair
                 if not doc:
                     continue

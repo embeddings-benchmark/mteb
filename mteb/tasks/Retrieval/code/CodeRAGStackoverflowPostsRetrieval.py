@@ -1,11 +1,14 @@
-from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from sentence_transformers import SentenceTransformer
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from __future__ import annotations
+
 import datasets
 
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
+
 def split_by_first_newline(s):
-    parts = s.split('\n', 1)  # Split the string by the first newline
-    return parts if len(parts) > 1 else (s, '')  # Return parts or (s, '') if no newline
+    parts = s.split("\n", 1)  # Split the string by the first newline
+    return parts if len(parts) > 1 else (s, "")  # Return parts or (s, '') if no newline
 
 
 class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
@@ -16,15 +19,14 @@ class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
         type="Reranking",
         category="s2s",
         modalities=["text"],
-        eval_splits=["test"],
-
+        eval_splits=["train"],
         eval_langs=["python-Code"],
         main_score="ndcg_at_10",
         dataset={
             "path": "code-rag-bench/stackoverflow-posts",
-            "revision": "04e05d86cb0ac467b29a5d87f4c56eac99dfc0a4"
+            "revision": "04e05d86cb0ac467b29a5d87f4c56eac99dfc0a4",
         },
-        date=("2024-06-02","2024-06-02"), # best guess
+        date=("2024-06-02", "2024-06-02"),  # best guess
         domains=["Programming"],
         task_subtypes=["Code retrieval"],
         license="cc-by-sa-4.0",
@@ -42,8 +44,8 @@ class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
       url={https://arxiv.org/abs/2406.14497}, 
 }
 """,
-)
-    
+    )
+
     def load_data(self, **kwargs):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
@@ -51,7 +53,7 @@ class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
         self.dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
         self.dataset_transform()
         self.data_loaded = True
-        
+
     def dataset_transform(self) -> None:
         """And transform to a retrieval datset, which have the following attributes
 
@@ -66,23 +68,21 @@ class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
         for split in self.dataset:
             ds: datasets.Dataset = self.dataset[split]  # type: ignore
             ds = ds.shuffle(seed=42)
-            split = "test"
-            
+
             self.queries[split] = {}
             self.relevant_docs[split] = {}
             self.corpus[split] = {}
 
-            titles = ds["title"] # titles are empty strings
             texts = ds["text"]
             meta = ds["meta"]
             for text, mt in zip(texts, meta):
                 # in code-rag-bench,
                 # text = query + "\n" + doc
                 query, doc = split_by_first_newline(text)
-                
+
                 # task_id is string
                 id = mt["task_id"]
-                
+
                 query_id = id
                 doc_id = f"doc_{id}"
                 self.queries[split][query_id] = query
