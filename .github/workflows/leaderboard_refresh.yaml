@@ -1,0 +1,26 @@
+name: Daily Space Rebuild
+on:
+  schedule:
+    # Runs at midnight Pacific Time (8 AM UTC)
+    - cron: '0 8 * * *'
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get CSRF Token
+        id: get-csrf
+        run: |
+          CSRF_TOKEN=$(curl -s 'https://huggingface.co/spaces/mteb/leaderboard_2_demo' \
+            -H 'Authorization: Bearer ${{ secrets.HF_TOKEN }}' \
+            | grep -o 'csrf":"[^"]*' | cut -d'"' -f3)
+          echo "csrf=$CSRF_TOKEN" >> $GITHUB_OUTPUT
+
+      - name: Trigger Factory Rebuild
+        run: |
+          curl -X POST \
+            "https://huggingface.co/spaces/mteb/leaderboard_2_demo/restart?factory=true" \
+            -H "Authorization: Bearer ${{ secrets.HF_TOKEN }}" \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            -d "csrf=${{ steps.get-csrf.outputs.csrf }}"
