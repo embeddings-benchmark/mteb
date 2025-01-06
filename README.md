@@ -2,7 +2,7 @@
 
 Gene-MTEB is a specialized extension of the [MTEB](https://github.com/mteb/mteb) repository, tailored for metagenomic analysis using gene sequences derived from the [Human Microbiome Project (HMP)](https://www.ncbi.nlm.nih.gov/bioproject/28331), [Human Virus Reference Sequences](https://www.ncbi.nlm.nih.gov/labs/virus/vssi/#/) and Human Virus infecting samples.
 
-Please refer to our Huggingface page to access all the related datasets: [metagene-1](https://huggingface.co/metagene-ai). 
+Please refer to our Huggingface page to access all the related datasets: [metagene-ai](https://huggingface.co/metagene-ai). 
 
 ## Quick Tour
 
