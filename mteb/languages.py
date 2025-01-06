@@ -45,7 +45,10 @@ class LanguageScripts:
         script_codes: set[str] = set(scripts) if (scripts is not None) else set()
         # normalize to 3 letter language codes
         normalized_langs = set()
-
+        # if type(languages) is not list and languages is not None:
+        #     import pdb; pdb.set_trace()
+        #     print('')
+            
         if languages is not None:
             for lang in languages:
                 lang_script = lang.split("-")

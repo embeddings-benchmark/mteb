@@ -11,6 +11,10 @@ from .code.CodeTransOceanContestRetrieval import *
 from .code.CodeTransOceanDLRetrieval import *
 from .code.COIRCodeSearchNetRetrieval import *
 from .code.CosQARetrieval import *
+from .code.CodeRAGOnlineTutorialsRetrieval import *
+from .code.CodeRAGLibraryDocumentationRetrieval import *
+from .code.CodeRAGProgrammingSolutionsRetrieval import *
+from .code.CodeRAGStackoverflowPostsRetrieval import *
 from .code.StackOverflowQARetrieval import *
 from .code.SyntheticText2SqlRetrieval import *
 from .dan.DanFeverRetrieval import *

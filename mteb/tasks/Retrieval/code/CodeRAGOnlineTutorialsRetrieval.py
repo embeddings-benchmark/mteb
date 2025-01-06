@@ -55,7 +55,7 @@ class CodeRAGOnlineTutorialsRetrieval(AbsTaskRetrieval):
         self.corpus = {}
         self.relevant_docs = {}
         self.queries = {}
-        text2id = {}
+
 
         for split in self.dataset:
             ds: datasets.Dataset = self.dataset[split]  # type: ignore
@@ -69,19 +69,13 @@ class CodeRAGOnlineTutorialsRetrieval(AbsTaskRetrieval):
             
             titles = ds["title"]
             texts = ds["text"]
-            parsed = ds["parsed"]
+            metadata = ds["parsed"] # metadata which is currently not required by mteb
             id = 0
-            for title, text, mt in zip(titles, texts, parsed):
+            for title, text in zip(titles, texts):
                 # in code-rag-bench,
-                # query=doc(code)
-                # text=query+doc(code)
-                # doc_id
-                # code_id
-                # query id
+                # query = title
+                # corpus text = text
                 query, doc = title, text
-                
-                
-                
                 query_id = str(id)
                 doc_id = f"doc_{id}"
                 self.queries[split][query_id] = query

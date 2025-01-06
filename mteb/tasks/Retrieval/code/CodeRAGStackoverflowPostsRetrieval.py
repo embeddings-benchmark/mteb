@@ -62,7 +62,6 @@ class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
         self.corpus = {}
         self.relevant_docs = {}
         self.queries = {}
-        text2id = {}
 
         for split in self.dataset:
             ds: datasets.Dataset = self.dataset[split]  # type: ignore
@@ -73,12 +72,12 @@ class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
             self.relevant_docs[split] = {}
             self.corpus[split] = {}
 
-            titles = ds["title"]
+            titles = ds["title"] # titles are empty strings
             texts = ds["text"]
             meta = ds["meta"]
-            n = 0
-            for title, text, mt in zip(titles, texts, meta):
-                # text format "post query \n post content"
+            for text, mt in zip(texts, meta):
+                # in code-rag-bench,
+                # text = query + "\n" + doc
                 query, doc = split_by_first_newline(text)
                 
                 # task_id is string

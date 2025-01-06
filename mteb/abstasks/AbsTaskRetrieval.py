@@ -287,6 +287,8 @@ class AbsTaskRetrieval(AbsTask):
                     "trust_remote_code", False
                 ),
             ).load(split=split)
+            
+            
             # Conversion from DataSet
             queries = {query["id"]: query["text"] for query in queries}
             corpus = {
@@ -346,6 +348,7 @@ class AbsTaskRetrieval(AbsTask):
         end_time = time()
         logger.info(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
 
+        
         save_predictions = kwargs.get("save_predictions", False)
         export_errors = kwargs.get("export_errors", False)
         if save_predictions or export_errors:

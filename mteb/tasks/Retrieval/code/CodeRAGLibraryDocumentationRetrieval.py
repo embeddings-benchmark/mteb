@@ -16,7 +16,6 @@ class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
         category="s2s",
         modalities=["text"],
         eval_splits=["test"],
-        # eval_splits=["default"],
         eval_langs=["python-Code"],
         main_score="ndcg_at_10",
         dataset={
@@ -62,7 +61,6 @@ class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
         self.corpus = {}
         self.relevant_docs = {}
         self.queries = {}
-        text2id = {}
 
         for split in self.dataset:
             ds: datasets.Dataset = self.dataset[split]  # type: ignore
