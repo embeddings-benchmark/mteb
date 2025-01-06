@@ -9,18 +9,8 @@ jobs:
   rebuild:
     runs-on: ubuntu-latest
     steps:
-      - name: Get CSRF Token
-        id: get-csrf
-        run: |
-          CSRF_TOKEN=$(curl -s 'https://huggingface.co/spaces/mteb/leaderboard_2_demo' \
-            -H 'Authorization: Bearer ${{ secrets.HF_TOKEN }}' \
-            | grep -o 'csrf":"[^"]*' | cut -d'"' -f3)
-          echo "csrf=$CSRF_TOKEN" >> $GITHUB_OUTPUT
-
       - name: Trigger Factory Rebuild
         run: |
           curl -X POST \
-            "https://huggingface.co/spaces/mteb/leaderboard_2_demo/restart?factory=true" \
-            -H "Authorization: Bearer ${{ secrets.HF_TOKEN }}" \
-            -H "Content-Type: application/x-www-form-urlencoded" \
-            -d "csrf=${{ steps.get-csrf.outputs.csrf }}"
+            "https://huggingface.co/api/spaces/mteb/leaderboard_2_demo/restart" \
+            -H "Authorization: Bearer ${{ secrets.HF_TOKEN }}"
