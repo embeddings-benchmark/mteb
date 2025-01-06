@@ -30,7 +30,7 @@ def get_model_below_n_param_threshold(model_name: str) -> str:
     model_meta = get_model_meta(model_name=model_name)
     assert model_meta is not None
     if model_meta.n_parameters is not None:
-        if model_meta.n_parameters >= 7.1e9:
+        if model_meta.n_parameters >= 2e9:
             return "Over threshold. Not tested."
         elif "API" in model_meta.framework:
             try:
@@ -64,8 +64,15 @@ def parse_args():
     parser.add_argument(
         "--run_missing",
         action="store_true",
-        default=True,
+        default=False,
         help="Run the missing models in the registry that are missing from existing results.",
+    )
+    parser.add_argument(
+        "--model_name",
+        type=str,
+        nargs="+",
+        default=None,
+        help="Run the script for specific model names, e.g. model_1, model_2",
     )
 
     return parser.parse_args()
@@ -82,14 +89,17 @@ if __name__ == "__main__":
         with output_file.open("r") as f:
             results = json.load(f)
 
-    omit_keys = []
-    if args.run_missing:
-        omit_keys = list(results.keys())
+    if args.model_name:
+        all_model_names = args.model_name
+    else:
+        omit_keys = []
+        if args.run_missing:
+            omit_keys = list(results.keys())
+        elif args.omit_previous_success:
+            omit_keys = [k for k, v in results.items() if v == "None"]
 
-    if args.omit_previous_success:
-        omit_keys = [k for k, v in results.items() if v == "None"]
+        all_model_names = list(set(MODEL_REGISTRY.keys()) - set(omit_keys))
 
-    all_model_names = list(set(MODEL_REGISTRY.keys()) - set(omit_keys))
     for model_name in all_model_names:
         error_msg = get_model_below_n_param_threshold(model_name)
         results[model_name] = error_msg

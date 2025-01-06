@@ -1,0 +1,52 @@
+name: Model Loading
+
+on:
+  pull_request:
+    paths:
+      - 'mteb/models/**.py'
+
+jobs:
+  extract-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Extract model names from changed files
+      id: extract_models
+      run: |
+        changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'mteb/models/.*.py')
+        model_names=()
+        for file in $changed_files; do
+          python -c "
+            import ast
+            from mteb.model_meta import ModelMeta
+
+            with open('$file', 'r') as f:
+                tree = ast.parse(f.read())
+                for node in ast.walk(tree):
+                    if isinstance(node, ast.Assign):
+                        for target in node.targets:
+                            if isinstance(target, ast.Name) and isinstance(node.value, ast.Call) and node.value.func.id == 'ModelMeta':
+                                model_name = [kw.value.s for kw in node.value.keywords if kw.arg == 'name'][0]
+                                print(model_name)
+                    " >> mteb/scripts/model_names.txt
+        done
+        model_names=$(cat mteb/scripts/model_names.txt | tr '\n' ' ')
+        echo "::set-output name=model_names::$model_names"
+
+    - name: Run model_loading.py
+      if: steps.extract_models.outputs.model_names != ''
+      run: |
+        python mteb/scripts/model_loading.py --model_name "${{ steps.extract_models.outputs.model_names }}"
