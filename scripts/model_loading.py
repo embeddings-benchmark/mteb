@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import argparse
 import json
 import logging
-import shutil
 from pathlib import Path
+
+from huggingface_hub import scan_cache_dir
 
 from mteb import get_model, get_model_meta
 from mteb.models.overview import MODEL_REGISTRY
@@ -11,16 +13,16 @@ from mteb.models.overview import MODEL_REGISTRY
 logging.basicConfig(level=logging.INFO)
 
 
-CACHE_FOLDER = Path(__file__).parent / ".cache"
-
-
 def teardown_function():
-    """Remove cache folder and its contents"""
-    for item in CACHE_FOLDER.iterdir():
-        if item.is_file():
-            item.unlink()
-        elif item.is_dir():
-            shutil.rmtree(item)
+    hf_cache_info = scan_cache_dir()
+    all_revisions = []
+    for repo in list(hf_cache_info.repos):
+        for revision in list(repo.revisions):
+            all_revisions.append(revision.commit_hash)
+
+    delete_strategy = scan_cache_dir().delete_revisions(*all_revisions)
+    print("Will free " + delete_strategy.expected_freed_size_str)
+    delete_strategy.execute()
 
 
 def get_model_below_n_param_threshold(model_name: str) -> str:
@@ -28,30 +30,22 @@ def get_model_below_n_param_threshold(model_name: str) -> str:
     model_meta = get_model_meta(model_name=model_name)
     assert model_meta is not None
     if model_meta.n_parameters is not None:
-        if model_meta.n_parameters >= 2e9:
+        if model_meta.n_parameters >= 7.1e9:
             return "Over threshold. Not tested."
         elif "API" in model_meta.framework:
             try:
                 m = get_model(model_name)
                 if m is not None:
+                    del m
                     return "None"
             except Exception as e:
                 logging.warning(f"Failed to load model {model_name} with error {e}")
                 return e.__str__()
         try:
-            m = get_model(model_name, cache_folder=CACHE_FOLDER)
+            m = get_model(model_name)
             if m is not None:
+                del m
                 return "None"
-        except TypeError:  # when cache_folder is not supported.
-            try:
-                m = get_model(model_name)
-                if m is not None:
-                    return "None"
-            except Exception as e:
-                logging.warning(f"Failed to load model {model_name} with error {e}")
-                return e.__str__()
-            finally:
-                teardown_function()
         except Exception as e:
             logging.warning(f"Failed to load model {model_name} with error {e}")
             return e.__str__()
@@ -59,8 +53,28 @@ def get_model_below_n_param_threshold(model_name: str) -> str:
             teardown_function()
 
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--omit_previous_success",
+        action="store_true",
+        default=False,
+        help="Omit models that have been successfully loaded in the past",
+    )
+    parser.add_argument(
+        "--run_missing",
+        action="store_true",
+        default=True,
+        help="Run the missing models in the registry that are missing from existing results.",
+    )
+
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
-    output_file = Path(__file__).parent / "failures.json"
+    output_file = Path(__file__).parent / "model_load_failures.json"
+
+    args = parse_args()
 
     # Load existing results if the file exists
     results = {}
@@ -68,7 +82,14 @@ if __name__ == "__main__":
         with output_file.open("r") as f:
             results = json.load(f)
 
-    all_model_names = list(set(MODEL_REGISTRY.keys()) - set(results.keys()))
+    omit_keys = []
+    if args.run_missing:
+        omit_keys = list(results.keys())
+
+    if args.omit_previous_success:
+        omit_keys = [k for k, v in results.items() if v == "None"]
+
+    all_model_names = list(set(MODEL_REGISTRY.keys()) - set(omit_keys))
     for model_name in all_model_names:
         error_msg = get_model_below_n_param_threshold(model_name)
         results[model_name] = error_msg
