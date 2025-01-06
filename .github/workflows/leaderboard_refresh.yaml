@@ -12,5 +12,5 @@ jobs:
       - name: Trigger Factory Rebuild
         run: |
           curl -X POST \
-            "https://huggingface.co/api/spaces/mteb/leaderboard_2_demo/restart" \
+            "https://huggingface.co/api/spaces/mteb/leaderboard_2_demo/restart?factory=true" \
             -H "Authorization: Bearer ${{ secrets.HF_TOKEN }}"
