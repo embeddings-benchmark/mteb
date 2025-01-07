@@ -34,7 +34,6 @@ class kNNClassificationEvaluator(Evaluator):
         y_test,
         task_name: str | None = None,
         k: int = 1,
-        encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ):
         super().__init__(**kwargs)
@@ -44,14 +43,12 @@ class kNNClassificationEvaluator(Evaluator):
         self.y_test = y_test
 
         self.task_name = task_name
-        self.encode_kwargs = encode_kwargs
-
-        if "batch_size" not in self.encode_kwargs:
-            self.encode_kwargs["batch_size"] = 32
 
         self.k = k
 
-    def __call__(self, model: Encoder, test_cache=None) -> tuple[dict[str, float], Any]:
+    def __call__(
+        self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}, test_cache=None
+    ) -> tuple[dict[str, float], Any]:
         scores = {}
         max_accuracy = 0
         max_f1 = 0
@@ -119,7 +116,9 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
 
         self.k = k
 
-    def __call__(self, model: Encoder, test_cache=None):
+    def __call__(
+        self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}, test_cache=None
+    ) -> tuple[dict[str, float], Any]:
         scores = {}
         max_accuracy = 0
         max_f1 = 0
@@ -262,7 +261,9 @@ class logRegClassificationEvaluator(Evaluator):
         self.max_iter = max_iter
         self.task_name = task_name
 
-    def __call__(self, model, test_cache=None):
+    def __call__(
+        self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}, test_cache=None
+    ) -> tuple[dict[str, float], Any]:
         scores = {}
         clf = LogisticRegression(
             random_state=self.seed,

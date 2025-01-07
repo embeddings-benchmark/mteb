@@ -164,7 +164,6 @@ class AbsTaskClassification(AbsTask):
                     eval_split["text"],  # type: ignore
                     eval_split["label"],  # type: ignore
                     task_name=self.metadata.name,
-                    encode_kwargs=encode_kwargs,
                     **params,
                 )
             elif self.method == "kNN-pytorch":
@@ -174,7 +173,6 @@ class AbsTaskClassification(AbsTask):
                     eval_split["text"],  # type: ignore
                     eval_split["label"],  # type: ignore
                     task_name=self.metadata.name,
-                    encode_kwargs=encode_kwargs,
                     **params,
                 )
             elif self.method == "logReg":
@@ -184,13 +182,14 @@ class AbsTaskClassification(AbsTask):
                     eval_split["text"],  # type: ignore
                     eval_split["label"],  # type: ignore
                     task_name=self.metadata.name,
-                    encode_kwargs=encode_kwargs,
                     **params,
                 )
             else:
                 raise ValueError(f"Method {self.method} not supported")
 
-            scores_exp, test_cache = evaluator(model, test_cache=test_cache)
+            scores_exp, test_cache = evaluator(
+                model, encode_kwargs=encode_kwargs, test_cache=test_cache
+            )
             scores.append(scores_exp)
 
         avg_scores: dict[str, Any] = {

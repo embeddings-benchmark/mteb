@@ -3,8 +3,8 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Any
 
+from mteb.abstasks.AbsTask import set_seed
 from mteb.encoder_interface import Encoder
-from mteb.evaluation.evaluators.utils import set_seed
 
 
 class Evaluator(ABC):

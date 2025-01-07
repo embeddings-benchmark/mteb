@@ -2,26 +2,35 @@ from __future__ import annotations
 
 import json
 import logging
+import random
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from typing import Any
 
 import datasets
 import numpy as np
+import torch
 import tqdm
+import transformers
 from datasets import Dataset, DatasetDict
 from sklearn.preprocessing import MultiLabelBinarizer
 
 from mteb.abstasks.stratification import _iterative_train_test_split
 from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset, TaskMetadata
 from mteb.encoder_interface import Encoder
-from mteb.evaluation.evaluators.utils import set_seed
 from mteb.languages import LanguageScripts
 
 logger = logging.getLogger(__name__)
 
 ScoresDict = dict[str, Any]
 # ^ e.g {'main_score': 0.5, 'hf_subset': 'en-de', 'languages': ['eng-Latn', 'deu-Latn']}
+
+
+def set_seed(seed: int) -> tuple[random.Random, np.random.Generator]:
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    transformers.set_seed(seed)
+    return random.Random(seed), np.random.default_rng(seed)
 
 
 def _multilabel_subsampling(
