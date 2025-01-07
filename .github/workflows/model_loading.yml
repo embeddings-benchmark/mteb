@@ -27,7 +27,8 @@ jobs:
     - name: Extract model names from changed files
       id: extract_models
       run: |
-        changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'mteb/models/.*.py')
+        base_commit=$(git merge-base origin/main HEAD)
+        changed_files=$(git diff --name-only $base_commit HEAD | grep 'mteb/models/.*.py')
         model_names=()
         for file in $changed_files; do
           python -c "
