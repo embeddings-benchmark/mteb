@@ -7,7 +7,7 @@ from functools import partial
 import torch
 
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
-from mteb.models.jasper_models import JasperWrapper
+from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
 
 rubert_tiny2 = ModelMeta(
     name="cointegrated/rubert-tiny2",
@@ -241,11 +241,13 @@ rosberta_ru_en = ModelMeta(
 )
 
 giga_embeddings = ModelMeta(
-    loader=partial(  # type: ignore
-        JasperWrapper,
+    loader=partial(
+        InstructSentenceTransformerWrapper,
         model_name="ai-sage/Giga-Embeddings-instruct",
         revision="646f5ff3587e74a18141c8d6b60d1cffd5897b92",
         trust_remote_code=True,
+        instruction_template="Instruct: {instruction}\nQuery: ",
+        apply_instruction_to_passages=False,
         model_kwargs={
             "torch_dtype": torch.float16,
         },
@@ -265,4 +267,3 @@ giga_embeddings = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
 )
-
