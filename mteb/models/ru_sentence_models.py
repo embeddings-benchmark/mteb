@@ -4,7 +4,10 @@ from __future__ import annotations
 
 from functools import partial
 
+import torch
+
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.models.jasper_models import JasperWrapper
 
 rubert_tiny2 = ModelMeta(
     name="cointegrated/rubert-tiny2",
@@ -236,3 +239,30 @@ rosberta_ru_en = ModelMeta(
     release_date="2024-07-29",
     use_instructions=True,
 )
+
+giga_embeddings = ModelMeta(
+    loader=partial(  # type: ignore
+        JasperWrapper,
+        model="ai-sage/Giga-Embeddings-instruct",
+        revision="646f5ff3587e74a18141c8d6b60d1cffd5897b92",
+        trust_remote_code=True,
+        model_kwargs={
+            "torch_dtype": torch.float16,
+        },
+    ),
+    name="ai-sage/Giga-Embeddings-instruct",
+    languages=["eng_Latn", "rus_Cyrl"],
+    open_weights=True,
+    revision="646f5ff3587e74a18141c8d6b60d1cffd5897b92",
+    release_date="2024-12-13",
+    n_parameters=2_530_000_000,
+    memory_usage=None,
+    embed_dim=2048,
+    license="mit",
+    max_tokens=32768,
+    reference="https://huggingface.co/ai-sage/Giga-Embeddings-instruct",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+)
+
