@@ -58,8 +58,8 @@ pages = "2595--2605"}""",
 
         seed = 42
         random.seed(seed)
-        split = self.metadata_dict["eval_splits"][0]
-        ds = load_dataset(**self.metadata_dict["dataset"], split=split)
+        split = self.metadata.eval_splits[0]
+        ds = load_dataset(**self.metadata.dataset, split=split)
         ds = ds.shuffle(seed=seed)
 
         titles, questions, contexts, answers = [], [], [], []

@@ -170,11 +170,11 @@ class mFollowIRCrossLingual(MultilingualTask, AbsTaskReranking):
             self.relevant_docs,
             self.top_ranked,
         ) = load_data(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
-            eval_splits=self.metadata_dict["eval_splits"],
+            eval_splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
@@ -221,11 +221,11 @@ class mFollowIR(AbsTaskReranking, MultilingualTask):
             self.relevant_docs,
             self.top_ranked,
         ) = load_data(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
-            eval_splits=self.metadata_dict["eval_splits"],
+            eval_splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True

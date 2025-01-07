@@ -62,12 +62,12 @@ class MLQuestionsRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
-        dataset_path = self.metadata_dict["dataset"]["path"]
-        revision = self.metadata_dict["dataset"].get("revision", None)
+        dataset_path = self.metadata.dataset["path"]
+        revision = self.metadata.dataset.get("revision", None)
         download_dir = snapshot_download(
             repo_id=dataset_path, repo_type="dataset", revision=revision
         )
-        for split in kwargs.get("eval_splits", self.metadata_dict["eval_splits"]):
+        for split in kwargs.get("eval_splits", self.metadata.eval_splits):
             corpus, queries, qrels = self._load_data_for_split(download_dir, split)
             self.corpus[split], self.queries[split], self.relevant_docs[split] = (
                 corpus,

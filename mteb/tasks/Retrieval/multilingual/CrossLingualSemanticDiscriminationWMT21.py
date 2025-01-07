@@ -80,7 +80,7 @@ class CrossLingualSemanticDiscriminationWMT21(AbsTaskRetrieval, MultilingualTask
                 lang_pair = _build_lang_pair(langs)
                 dataset_raw[lang_pair] = datasets.load_dataset(
                     name=hf_subset,
-                    **self.metadata_dict["dataset"],
+                    **self.metadata.dataset,
                 )[split]
 
                 queries[lang_pair] = {}

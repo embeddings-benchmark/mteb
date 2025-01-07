@@ -105,11 +105,11 @@ class COIRCodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
 
         self.corpus, self.queries, self.relevant_docs = (
             _load_code_search_code_retrieval(
-                path=self.metadata_dict["dataset"]["path"],
+                path=self.metadata.dataset["path"],
                 langs=self.hf_subsets,
-                splits=self.metadata_dict["eval_splits"],
+                splits=self.metadata.eval_splits,
                 cache_dir=kwargs.get("cache_dir", None),
-                revision=self.metadata_dict["dataset"]["revision"],
+                revision=self.metadata.dataset["revision"],
             )
         )
 

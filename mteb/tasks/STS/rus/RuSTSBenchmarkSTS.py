@@ -36,9 +36,5 @@ url={https://github.com/PhilipMay/stsb-multi-mt}
 }""",
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5

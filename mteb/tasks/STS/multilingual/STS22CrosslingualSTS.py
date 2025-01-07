@@ -77,14 +77,8 @@ class STS22CrosslingualSTSv2(AbsTaskSTS, MultilingualTask):
     doi = "10.18653/v1/2022.semeval-1.155",
     pages = "1094--1106",
 }""",
-    )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 1
-        metadata_dict["max_score"] = 4
-        return metadata_dict
+    )    min_score = 1
+    max_score = 4
 
 
 class STS22CrosslingualSTS(AbsTaskSTS, MultilingualTask):
@@ -139,11 +133,5 @@ class STS22CrosslingualSTS(AbsTaskSTS, MultilingualTask):
     doi = "10.18653/v1/2022.semeval-1.155",
     pages = "1094--1106",
 }""",
-    )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 1
-        metadata_dict["max_score"] = 4
-        return metadata_dict
+    )    min_score = 1
+    max_score = 4

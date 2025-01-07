@@ -64,8 +64,8 @@ class CUREv1Retrieval(MultilingualTask, AbsTaskRetrieval):
 
     def _load_corpus(self, split: str, cache_dir: str | None = None):
         ds = load_dataset(
-            path=self.metadata_dict["dataset"]["path"],
-            revision=self.metadata_dict["dataset"]["revision"],
+            path=self.metadata.dataset["path"],
+            revision=self.metadata.dataset["revision"],
             name="corpus",
             split=split,
             cache_dir=cache_dir,
@@ -79,8 +79,8 @@ class CUREv1Retrieval(MultilingualTask, AbsTaskRetrieval):
 
     def _load_qrels(self, split: str, cache_dir: str | None = None):
         ds = load_dataset(
-            path=self.metadata_dict["dataset"]["path"],
-            revision=self.metadata_dict["dataset"]["revision"],
+            path=self.metadata.dataset["path"],
+            revision=self.metadata.dataset["revision"],
             name="qrels",
             split=split,
             cache_dir=cache_dir,
@@ -100,8 +100,8 @@ class CUREv1Retrieval(MultilingualTask, AbsTaskRetrieval):
 
     def _load_queries(self, split: str, language: str, cache_dir: str | None = None):
         ds = load_dataset(
-            path=self.metadata_dict["dataset"]["path"],
-            revision=self.metadata_dict["dataset"]["revision"],
+            path=self.metadata.dataset["path"],
+            revision=self.metadata.dataset["revision"],
             name=f"queries-{language}",
             split=split,
             cache_dir=cache_dir,

@@ -50,7 +50,7 @@ class NarrativeQARetrieval(AbsTaskRetrieval):
 
         data = datasets.load_dataset(
             split=self._EVAL_SPLIT,
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
         self.queries = {
             self._EVAL_SPLIT: {

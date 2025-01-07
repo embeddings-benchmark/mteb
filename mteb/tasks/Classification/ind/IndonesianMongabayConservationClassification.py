@@ -57,7 +57,7 @@ class IndonesianMongabayConservationClassification(AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        splits = self.metadata_dict["eval_splits"]
+        splits = self.metadata.eval_splits
         class_labels = ["positif", "netral", "negatif"]
 
         ds = {}

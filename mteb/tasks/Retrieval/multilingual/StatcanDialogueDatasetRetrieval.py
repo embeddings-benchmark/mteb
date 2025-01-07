@@ -107,11 +107,11 @@ class StatcanDialogueDatasetRetrieval(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_statcan_data(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             langs=list(_LANGS.keys()),
-            splits=self.metadata_dict["eval_splits"],
+            splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True

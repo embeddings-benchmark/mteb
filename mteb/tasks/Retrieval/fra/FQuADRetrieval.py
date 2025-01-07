@@ -56,7 +56,7 @@ class FQuADRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
         dataset_raw = datasets.load_dataset(
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         # set valid_hasAns and test_hasAns as the validation and test splits (only queries with answers)
@@ -73,12 +73,12 @@ class FQuADRetrieval(AbsTaskRetrieval):
             eval_split: {
                 str(i): q["question"] for i, q in enumerate(dataset_raw[eval_split])
             }
-            for eval_split in self.metadata_dict["eval_splits"]
+            for eval_split in self.metadata.eval_splits
         }
 
         self.corpus = {
             eval_split: {str(row["title"]): row for row in dataset_raw[eval_split]}
-            for eval_split in self.metadata_dict["eval_splits"]
+            for eval_split in self.metadata.eval_splits
         }
 
         self.relevant_docs = {
@@ -86,7 +86,7 @@ class FQuADRetrieval(AbsTaskRetrieval):
                 str(i): {str(q["title"]): 1}
                 for i, q in enumerate(dataset_raw[eval_split])
             }
-            for eval_split in self.metadata_dict["eval_splits"]
+            for eval_split in self.metadata.eval_splits
         }
 
         self.data_loaded = True

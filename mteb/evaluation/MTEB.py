@@ -121,16 +121,16 @@ class MTEB:
 
     @property
     def available_tasks(self):
-        return [x.metadata_dict["name"] for x in self.tasks_cls]
+        return [x.metadata.name for x in self.tasks_cls]
 
     @property
     def available_task_types(self):
         # sort the task types
-        return sorted({x.metadata_dict["type"] for x in self.tasks_cls})
+        return sorted({x.metadata.type for x in self.tasks_cls})
 
     @property
     def available_task_categories(self):
-        return {x.metadata_dict["category"] for x in self.tasks_cls}
+        return {x.metadata.category for x in self.tasks_cls}
 
     def _extend_lang_code(self):
         # add all possible language codes
@@ -242,11 +242,11 @@ class MTEB:
         if self._tasks is not None:
             self.tasks = list(
                 filter(
-                    lambda x: (x.metadata_dict["name"] in self._tasks), self.tasks_cls
+                    lambda x: (x.metadata.name in self._tasks), self.tasks_cls
                 )
             )
             if len(self.tasks) != len(self._tasks):
-                tasks_known = {x.metadata_dict["name"] for x in self.tasks_cls}
+                tasks_known = {x.metadata.name for x in self.tasks_cls}
                 tasks_unknown = {
                     x for x in self._tasks if isinstance(x, str)
                 } - tasks_known
@@ -265,23 +265,23 @@ class MTEB:
         # Otherwise use filters to select tasks
         filtered_tasks = filter(
             lambda x: (self._task_types is None)
-            or (x.metadata_dict["type"] in self._task_types),
+            or (x.metadata.type in self._task_types),
             self.tasks_cls,
         )
         filtered_tasks = filter(
             lambda x: (self._task_categories is None)
-            or (x.metadata_dict["category"] in self._task_categories),
+            or (x.metadata.category in self._task_categories),
             filtered_tasks,
         )
         filtered_tasks = filter(
             lambda x: (self._version is None)
-            or (x.metadata_dict["version"] >= self._version),
+            or (x.metadata.version >= self._version),
             filtered_tasks,
         )
         # keep only tasks with at least one language in the filter
         filtered_tasks = filter(
-            lambda x: (not (self._task_langs))
-            or (len(set(x.metadata_dict["eval_langs"]) & set(self._task_langs)) > 0),
+            lambda x: (not self._task_langs)
+            or (len(set(x.metadata.eval_langs) & set(self._task_langs)) > 0),
             filtered_tasks,
         )
 
@@ -292,7 +292,7 @@ class MTEB:
         """Load datasets for the selected tasks."""
         logger.info(f"\n\n## Loading datasets for {len(self.tasks)} tasks")
         for task in self.tasks:
-            logger.info(f"\n# Loading dataset for {task.metadata_dict['name']}")
+            logger.info(f"\n# Loading dataset for {task.metadata.name}")
             task.load_data()
 
     @staticmethod
@@ -595,7 +595,7 @@ class MTEB:
                         )
 
                     logger.info(
-                        f"Evaluation for {task.metadata_dict['name']} on {split} took {tock - tick:.2f} seconds"
+                        f"Evaluation for {task.metadata.name} on {split} took {tock - tick:.2f} seconds"
                     )
                     evaluation_time += tock - tick
 
@@ -628,7 +628,7 @@ class MTEB:
 
             except Exception as e:
                 logger.error(
-                    f"Error while evaluating {task.metadata_dict['name']}: {e}"
+                    f"Error while evaluating {task.metadata.name}: {e}"
                 )
                 if raise_error:
                     raise e
@@ -636,7 +636,7 @@ class MTEB:
                     f"Please check all the error logs at: {self.err_logs_path}"
                 )
                 with open(self.err_logs_path, "a") as f_out:
-                    f_out.write(f"{datetime.now()} >>> {task.metadata_dict['name']}\n")
+                    f_out.write(f"{datetime.now()} >>> {task.metadata.name}\n")
                     f_out.write(traceback.format_exc())
                     f_out.write("\n\n")
 

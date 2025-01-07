@@ -107,12 +107,12 @@ class MintakaRetrieval(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_mintaka_data(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
-            split=self.metadata_dict["eval_splits"][0],
+            split=self.metadata.eval_splits[0],
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
-            trust_remote_code=self.metadata_dict["dataset"]["trust_remote_code"],
+            revision=self.metadata.dataset["revision"],
+            trust_remote_code=self.metadata.dataset["trust_remote_code"],
         )
 
         self.data_loaded = True

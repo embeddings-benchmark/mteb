@@ -53,12 +53,12 @@ class BSARDRetrieval(AbsTaskRetrieval):
         corpus_raw = datasets.load_dataset(
             name="corpus",
             split="corpus",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
         queries_raw = datasets.load_dataset(
             name="questions",
             split=self.metadata.eval_splits[0],
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         self.queries = {

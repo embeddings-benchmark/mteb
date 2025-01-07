@@ -51,10 +51,10 @@ class TbilisiCityHallBitextMining(AbsTaskBitextMining, MultilingualTask):
         for lang in self.hf_subsets:
             l1, l2 = lang.split("-")
             dataset = load_dataset(
-                self.metadata_dict["dataset"]["path"],
+                self.metadata.dataset["path"],
                 split=_EVAL_SPLIT,
                 cache_dir=kwargs.get("cache_dir", None),
-                revision=self.metadata_dict["dataset"]["revision"],
+                revision=self.metadata.dataset["revision"],
             )
             dataset = dataset.rename_columns(
                 {_LANGUAGES[l1]: "sentence1", _LANGUAGES[l2]: "sentence2"}

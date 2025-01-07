@@ -37,15 +37,8 @@ class SummEvalFrSummarization(AbsTaskSummarization):
   journal={arXiv preprint arXiv:2007.12626},
   year={2020}
 }""",
-    )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-
-        return metadata_dict
+    )    min_score = 0
+    max_score = 5
 
 
 class SummEvalFrSummarizationv2(AbsTaskSummarization):
@@ -76,12 +69,5 @@ class SummEvalFrSummarizationv2(AbsTaskSummarization):
   journal={arXiv preprint arXiv:2007.12626},
   year={2020}
 }""",
-    )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-
-        return metadata_dict
+    )    min_score = 0
+    max_score = 5

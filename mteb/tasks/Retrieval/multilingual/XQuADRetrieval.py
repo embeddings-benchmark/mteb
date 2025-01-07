@@ -77,7 +77,7 @@ class XQuADRetrieval(MultilingualTask, AbsTaskRetrieval):
 
         for lang in self.hf_subsets:
             data = datasets.load_dataset(
-                name=f"xquad.{lang}", **self.metadata_dict["dataset"]
+                name=f"xquad.{lang}", **self.metadata.dataset
             )[split]
             data = data.filter(lambda x: x["answers"]["text"] != "")
 

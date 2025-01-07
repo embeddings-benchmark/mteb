@@ -61,7 +61,7 @@ class LEMBNeedleRetrieval(AbsTaskRetrieval):
 
         for split in self._EVAL_SPLIT:
             context_length = int(split.split("_")[1])
-            query_list = datasets.load_dataset(**self.metadata_dict["dataset"])[
+            query_list = datasets.load_dataset(**self.metadata.dataset)[
                 "queries"
             ]  # dict_keys(['qid', 'text'])
             query_list = query_list.filter(
@@ -69,7 +69,7 @@ class LEMBNeedleRetrieval(AbsTaskRetrieval):
             )
             queries = {row["qid"]: row["text"] for row in query_list}
 
-            corpus_list = datasets.load_dataset(**self.metadata_dict["dataset"])[
+            corpus_list = datasets.load_dataset(**self.metadata.dataset)[
                 "corpus"
             ]  # dict_keys(['doc_id', 'text'])
             corpus_list = corpus_list.filter(
@@ -77,7 +77,7 @@ class LEMBNeedleRetrieval(AbsTaskRetrieval):
             )
             corpus = {row["doc_id"]: {"text": row["text"]} for row in corpus_list}
 
-            qrels_list = datasets.load_dataset(**self.metadata_dict["dataset"])[
+            qrels_list = datasets.load_dataset(**self.metadata.dataset)[
                 "qrels"
             ]  # dict_keys(['qid', 'doc_id'])
             qrels_list = qrels_list.filter(

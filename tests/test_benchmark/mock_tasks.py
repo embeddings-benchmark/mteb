@@ -851,12 +851,8 @@ class MockSTSTask(AbsTaskSTS):
         )
         self.data_loaded = True
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 1
-        return metadata_dict
+    min_score = 0
+    max_score = 1
 
 
 class MockMultilingualSTSTask(AbsTaskSTS, MultilingualTask):
@@ -946,12 +942,8 @@ class MockMultilingualSTSTask(AbsTaskSTS, MultilingualTask):
         )
         self.data_loaded = True
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 1
-        return metadata_dict
+    min_score = 0
+    max_score = 1
 
 
 class MockSummarizationTask(AbsTaskSummarization):
@@ -1010,12 +1002,8 @@ class MockSummarizationTask(AbsTaskSummarization):
         )
         self.data_loaded = True
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 1
-        return metadata_dict
+    min_score = 0
+    max_score = 1
 
 
 class MockMultilingualSummarizationTask(AbsTaskSummarization, MultilingualTask):
@@ -1118,12 +1106,8 @@ class MockMultilingualSummarizationTask(AbsTaskSummarization, MultilingualTask):
         )
         self.data_loaded = True
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 1
-        return metadata_dict
+    min_score = 0
+    max_score = 1
 
 
 class MockRerankingTask(AbsTaskReranking):

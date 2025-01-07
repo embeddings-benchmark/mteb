@@ -53,14 +53,14 @@ class TurHistQuadRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)
 
         self.corpus = {}
         self.relevant_docs = {}
         self.queries = {}
         text2id = {}
 
-        for split in self.metadata_dict["eval_splits"]:
+        for split in self.metadata.eval_splits:
             ds: datasets.Dataset = self.dataset[split]  # type: ignore
             ds = ds.shuffle(seed=42)
             max_samples = min(1024, len(ds))
