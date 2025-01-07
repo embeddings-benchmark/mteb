@@ -21,8 +21,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install mteb[pylate] gritlm mteb[model2vec] xformers
+        make install
+        pip install .[pylate] gritlm .[model2vec] xformers
 
     - name: Extract model names from changed files
       id: extract_models
@@ -33,7 +33,6 @@ jobs:
           python -c "
             import ast
             from mteb.model_meta import ModelMeta
-
             with open('$file', 'r') as f:
                 tree = ast.parse(f.read())
                 for node in ast.walk(tree):
@@ -42,12 +41,12 @@ jobs:
                             if isinstance(target, ast.Name) and isinstance(node.value, ast.Call) and node.value.func.id == 'ModelMeta':
                                 model_name = [kw.value.s for kw in node.value.keywords if kw.arg == 'name'][0]
                                 print(model_name)
-                    " >> mteb/scripts/model_names.txt
+                    " >> scripts/model_names.txt
         done
-        model_names=$(cat mteb/scripts/model_names.txt | tr '\n' ' ')
+        model_names=$(cat scripts/model_names.txt | tr '\n' ' ')
         echo "::set-output name=model_names::$model_names"
 
     - name: Run model_loading.py
       if: steps.extract_models.outputs.model_names != ''
       run: |
-        python mteb/scripts/model_loading.py --model_name "${{ steps.extract_models.outputs.model_names }}"
+        python scripts/model_loading.py --model_name "${{ steps.extract_models.outputs.model_names }}"

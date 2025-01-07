@@ -79,7 +79,12 @@ def parse_args():
 
 
 if __name__ == "__main__":
-    output_file = Path(__file__).parent / "model_load_failures.json"
+    output_file = (
+        Path(__file__).parent.parent
+        / "tests"
+        / "test_models"
+        / "model_load_failures.json"
+    )
 
     args = parse_args()
 
