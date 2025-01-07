@@ -14,6 +14,7 @@ import mteb
 from mteb.caching import json_cache
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
 from mteb.leaderboard.table import scores_to_tables
+from mteb.models.overview import get_model_meta
 
 
 def load_results():
@@ -191,11 +192,23 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             """,
             )
             with gr.Group():
-                searchbar = gr.Textbox(
-                    label="Search Models",
-                    info="Search models by name (RegEx sensitive. Separate queries with `|`)",
-                    interactive=True,
-                )
+                with gr.Row():
+                    searchbar = gr.Textbox(
+                        label="Search Models",
+                        info="Search models by name (RegEx sensitive. Separate queries with `|`)",
+                        interactive=True,
+                    )
+                    compatibility = gr.CheckboxGroup(
+                        [
+                            (
+                                "Should be sentence-transformers compatible",
+                                "Sentence Transformers",
+                            )
+                        ],
+                        value=[],
+                        label="Compatibility",
+                        interactive=True,
+                    )
                 with gr.Row(elem_classes=""):
                     with gr.Column():
                         availability = gr.Radio(
@@ -219,29 +232,19 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                             interactive=True,
                         )
                     with gr.Column():
-                        with gr.Row():
-                            compatibility = gr.CheckboxGroup(
-                                [
-                                    (
-                                        "Should be sentence-transformers compatible",
-                                        "Sentence Transformers",
-                                    )
-                                ],
-                                value=[],
-                                label="Compatibility",
-                                interactive=True,
-                            )
-                            zero_shot = gr.CheckboxGroup(
-                                [
-                                    (
-                                        "Should be zero-shot on Benchmark",
-                                        True,
-                                    )
-                                ],
-                                value=[],
-                                label="Zero-shot",
-                                interactive=True,
-                            )
+                        zero_shot = gr.Radio(
+                            [
+                                (
+                                    "Only Zero-shot",
+                                    "hard",
+                                ),
+                                ("Allow Unknown", "soft"),
+                                ("Allow all", "off"),
+                            ],
+                            value="soft",
+                            label="Zero-shot",
+                            interactive=True,
+                        )
                         model_size = RangeSlider(
                             minimum=min_model_size,
                             maximum=max_model_size,
@@ -404,13 +407,31 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             # Multiplying by millions
             lower = lower * 1e6
             upper = upper * 1e6
-        zero_shot_on = benchmark.tasks if zero_shot else None
+        model_names = None
+        all_model_metas = [
+            get_model_meta(model_res.model_name) for model_res in benchmark_results
+        ]
+        if zero_shot == "hard":
+            model_names = list(
+                {
+                    model_meta.name
+                    for model_meta in all_model_metas
+                    if model_meta.is_zero_shot_on(benchmark.tasks)
+                }
+            )
+        if zero_shot == "soft":
+            model_names = set()
+            for model_meta in all_model_metas:
+                is_zero_shot = model_meta.is_zero_shot_on(benchmark.tasks)
+                if is_zero_shot or (is_zero_shot is None):
+                    model_names.add(model_meta.name)
+            model_names = list(model_names)
         benchmark_results = benchmark_results.filter_models(
+            model_names=model_names,
             open_weights=availability,
             use_instructions=instructions,
             frameworks=compatibility,
             n_parameters_range=(lower, upper),
-            zero_shot_on=zero_shot_on,
         )
         scores = benchmark_results.get_scores(languages=languages, format="long")
         return scores
