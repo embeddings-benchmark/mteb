@@ -79,6 +79,7 @@ class AbsTaskSummarization(AbsTask):
     abstask_prompt = (
         "Given a news summary, retrieve other semantically similar summaries."
     )
+    evaluator = SummarizationEvaluator
 
     @property
     def min_score(self):
@@ -100,7 +101,8 @@ class AbsTaskSummarization(AbsTask):
             (np.array(x) - self.min_score) / (self.max_score - self.min_score)
             for x in data_split["relevance"]
         ]
-        evaluator = SummarizationEvaluator(
+        # SummEval has DeprecatedSummarizationEvaluator
+        evaluator = self.evaluator(
             machine_summaries=data_split["machine_summaries"],
             human_summaries=data_split["human_summaries"],
             texts=data_split["text"],
