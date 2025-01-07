@@ -29,14 +29,19 @@ def extract_model_names(files: list[str]) -> list[str]:
                         if (
                             isinstance(target, ast.Name)
                             and isinstance(node.value, ast.Call)
+                            and isinstance(node.value.func, ast.Name)
                             and node.value.func.id == "ModelMeta"
                         ):
-                            model_name = [
-                                kw.value.s
-                                for kw in node.value.keywords
-                                if kw.arg == "name"
-                            ][0]
-                            model_names.append(model_name)
+                            model_name = next(
+                                (
+                                    kw.value.value
+                                    for kw in node.value.keywords
+                                    if kw.arg == "name"
+                                ),
+                                None,
+                            )
+                            if model_name:
+                                model_names.append(model_name)
     return model_names
 
 

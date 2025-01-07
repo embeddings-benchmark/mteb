@@ -18,7 +18,7 @@ def get_model_names():
         capture_output=True,
         text=True,
     )
-    with model_names_file_path.open() as f:
+    with model_names_file_path.open("r") as f:
         model_names = f.read().strip()
     return model_names
 
