@@ -10,14 +10,6 @@ def get_model_names():
     model_names_file_path = (
         Path(__file__).parent.parent.parent / "scripts" / "model_names.txt"
     )
-    extract_model_names_file_path = (
-        Path(__file__).parent.parent.parent / "scripts" / "extract_model_names.py"
-    )
-    _ = subprocess.run(
-        ["python", extract_model_names_file_path],
-        capture_output=True,
-        text=True,
-    )
     with model_names_file_path.open("r") as f:
         model_names = f.read().strip()
     return model_names
