@@ -6,6 +6,7 @@
     "BAAI/bge-large-en-v1.5": "Over threshold. Not tested.",
     "BAAI/bge-reranker-v2-m3": "None",
     "BAAI/bge-small-en-v1.5": "None",
+    "BAAI/bge-small-en-v1.5 BAAI/bge-base-en-v1.5 BAAI/bge-large-en-v1.5": null,
     "BeastyZ/e5-R-mistral-7b": "Over threshold. Not tested.",
     "Cohere/Cohere-embed-english-light-v3.0": "None",
     "Cohere/Cohere-embed-english-v3.0": "None",

@@ -18,38 +18,6 @@ jobs:
       with:
         python-version: '3.10'
 
-    - name: Install dependencies
+    - name: Install dependencies and run tests
       run: |
-        python -m pip install --upgrade pip
-        make install
-        pip install .[pylate] gritlm .[model2vec] xformers
-
-    - name: Extract model names from changed files
-      id: extract_models
-      run: |
-        git fetch origin ${{ github.event.pull_request.base.ref }}:refs/remotes/origin/${{ github.event.pull_request.base.ref }}
-        base_branch=${{ github.event.pull_request.base.ref }}
-        base_commit=$(git merge-base origin/$base_branch HEAD)
-        changed_files=$(git diff --name-only $base_commit HEAD | grep 'mteb/models/.*.py')
-        model_names=()
-        for file in $changed_files; do
-          python -c "
-            import ast
-            from mteb.model_meta import ModelMeta
-            with open('$file', 'r') as f:
-                tree = ast.parse(f.read())
-                for node in ast.walk(tree):
-                    if isinstance(node, ast.Assign):
-                        for target in node.targets:
-                            if isinstance(target, ast.Name) and isinstance(node.value, ast.Call) and node.value.func.id == 'ModelMeta':
-                                model_name = [kw.value.s for kw in node.value.keywords if kw.arg == 'name'][0]
-                                print(model_name)
-                    " >> scripts/model_names.txt
-        done
-        model_names=$(cat scripts/model_names.txt | tr '\n' ' ')
-        echo "::set-output name=model_names::$model_names"
-
-    - name: Run model_loading.py
-      if: steps.extract_models.outputs.model_names != ''
-      run: |
-        python scripts/model_loading.py --model_name "${{ steps.extract_models.outputs.model_names }}"
+        make model-load-test
