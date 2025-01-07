@@ -8,7 +8,8 @@ from git import Repo
 
 
 def get_changed_files(base_branch="main"):
-    repo = Repo(".")
+    repo_path = Path(__file__).parent.parent
+    repo = Repo(repo_path)
     repo.remotes.origin.fetch(base_branch)
     base_commit = repo.merge_base(f"origin/{base_branch}", "HEAD")[0]
     diff = repo.git.diff("--name-only", base_commit, "HEAD")
