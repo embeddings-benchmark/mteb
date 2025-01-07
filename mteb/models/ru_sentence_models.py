@@ -243,7 +243,7 @@ rosberta_ru_en = ModelMeta(
 giga_embeddings = ModelMeta(
     loader=partial(  # type: ignore
         JasperWrapper,
-        model="ai-sage/Giga-Embeddings-instruct",
+        model_name="ai-sage/Giga-Embeddings-instruct",
         revision="646f5ff3587e74a18141c8d6b60d1cffd5897b92",
         trust_remote_code=True,
         model_kwargs={
