@@ -80,9 +80,7 @@ class AbsTaskClassification(AbsTask):
 
         # Bootstrap parameters
         self.n_experiments: int = (  # type: ignore
-            n_experiments
-            if n_experiments is not None
-            else self.metadata.n_experiments
+            n_experiments if n_experiments is not None else self.metadata.n_experiments
         )
 
         # kNN parameters

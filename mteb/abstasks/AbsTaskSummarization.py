@@ -74,6 +74,7 @@ class AbsTaskSummarization(AbsTask):
         machine_summaries: list[str]
         relevance: list[float] (the score of the machine generated summaries)
     """
+
     min_score: int
     max_score: int
 

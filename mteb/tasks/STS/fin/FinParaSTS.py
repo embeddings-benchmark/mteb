@@ -61,7 +61,6 @@ class FinParaSTS(AbsTaskSTS):
     min_score = 2
     max_score = 4
 
-
     def dataset_transform(self):
         self.dataset = self.dataset.shuffle(seed=self.seed)
         for split in self.dataset:

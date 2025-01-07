@@ -148,7 +148,6 @@ class IFlyTek(AbsTaskClassification):
     n_experiments = 5
 
 
-
 class MultilingualSentiment(AbsTaskClassification):
     metadata = TaskMetadata(
         name="MultilingualSentiment",

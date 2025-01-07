@@ -77,7 +77,9 @@ class STS22CrosslingualSTSv2(AbsTaskSTS, MultilingualTask):
     doi = "10.18653/v1/2022.semeval-1.155",
     pages = "1094--1106",
 }""",
-    )    min_score = 1
+    )
+
+    min_score = 1
     max_score = 4
 
 
@@ -133,5 +135,7 @@ class STS22CrosslingualSTS(AbsTaskSTS, MultilingualTask):
     doi = "10.18653/v1/2022.semeval-1.155",
     pages = "1094--1106",
 }""",
-    )    min_score = 1
+    )
+
+    min_score = 1
     max_score = 4

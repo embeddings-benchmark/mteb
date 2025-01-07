@@ -241,9 +241,7 @@ class MTEB:
         # If `task_list` is specified, select list of tasks
         if self._tasks is not None:
             self.tasks = list(
-                filter(
-                    lambda x: (x.metadata.name in self._tasks), self.tasks_cls
-                )
+                filter(lambda x: (x.metadata.name in self._tasks), self.tasks_cls)
             )
             if len(self.tasks) != len(self._tasks):
                 tasks_known = {x.metadata.name for x in self.tasks_cls}
@@ -274,8 +272,7 @@ class MTEB:
             filtered_tasks,
         )
         filtered_tasks = filter(
-            lambda x: (self._version is None)
-            or (x.metadata.version >= self._version),
+            lambda x: (self._version is None) or (x.metadata.version >= self._version),
             filtered_tasks,
         )
         # keep only tasks with at least one language in the filter
@@ -627,9 +624,7 @@ class MTEB:
                 evaluation_results.append(merged_results)
 
             except Exception as e:
-                logger.error(
-                    f"Error while evaluating {task.metadata.name}: {e}"
-                )
+                logger.error(f"Error while evaluating {task.metadata.name}: {e}")
                 if raise_error:
                     raise e
                 logger.error(

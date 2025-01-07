@@ -37,7 +37,9 @@ class SummEvalFrSummarization(AbsTaskSummarization):
   journal={arXiv preprint arXiv:2007.12626},
   year={2020}
 }""",
-    )    min_score = 0
+    )
+
+    min_score = 0
     max_score = 5
 
 
@@ -69,5 +71,7 @@ class SummEvalFrSummarizationv2(AbsTaskSummarization):
   journal={arXiv preprint arXiv:2007.12626},
   year={2020}
 }""",
-    )    min_score = 0
+    )
+
+    min_score = 0
     max_score = 5

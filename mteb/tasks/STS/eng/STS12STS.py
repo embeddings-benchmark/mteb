@@ -44,4 +44,3 @@ location = {Montr\'{e}al, Canada},
 series = {SemEval '12}
 }""",
     )
-
