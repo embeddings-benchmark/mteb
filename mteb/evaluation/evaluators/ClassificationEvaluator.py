@@ -98,7 +98,6 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         y_test,
         task_name: str,
         k: int = 1,
-        encode_kwargs: dict[str, Any] = {},
         **kwargs: Any,
     ):
         super().__init__(**kwargs)
@@ -109,11 +108,6 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         self.y_test = y_test
 
         self.task_name = task_name
-        self.encode_kwargs = encode_kwargs
-
-        if "batch_size" not in self.encode_kwargs:
-            self.encode_kwargs["batch_size"] = 32
-
         self.k = k
 
     def __call__(
@@ -126,14 +120,14 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         X_train = model.encode(
             self.sentences_train,
             task_name=self.task_name,
-            **self.encode_kwargs,
+            **encode_kwargs,
         )
 
         if test_cache is None:
             X_test = model.encode(
                 self.sentences_test,
                 task_name=self.task_name,
-                **self.encode_kwargs,
+                **encode_kwargs,
             )
             test_cache = X_test
         else:
@@ -244,15 +238,9 @@ class logRegClassificationEvaluator(Evaluator):
         y_test,
         task_name: str,
         max_iter: int = 100,
-        encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ):
         super().__init__(**kwargs)
-        self.encode_kwargs = encode_kwargs
-
-        if "batch_size" not in self.encode_kwargs:
-            self.encode_kwargs["batch_size"] = 32
-
         self.sentences_train = sentences_train
         self.y_train = y_train
         self.sentences_test = sentences_test
@@ -274,13 +262,13 @@ class logRegClassificationEvaluator(Evaluator):
         X_train = model.encode(
             self.sentences_train,
             task_name=self.task_name,
-            **self.encode_kwargs,
+            **encode_kwargs,
         )
         if test_cache is None:
             X_test = model.encode(
                 self.sentences_test,
                 task_name=self.task_name,
-                **self.encode_kwargs,
+                **encode_kwargs,
             )
             test_cache = X_test
         else:
