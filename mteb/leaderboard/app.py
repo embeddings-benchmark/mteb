@@ -271,6 +271,14 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                     "*We only display models that have been run on all task types in the benchmark*"
                 )
     with gr.Tab("Summary"):
+        gr.Markdown(
+            """
+            ✅ - Model is zero-shot on the benchmark <br>
+            ⚠️  - Training data unknown <br>
+            ❌ - Model is **NOT** zero-shot on the benchmark
+        """
+        )
+        summary_table.render()
         with gr.Accordion(
             "What do aggregate measures (Rank(Borda), Mean(Task), etc.) mean?",
             open=False,
@@ -284,7 +292,6 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
     **Mean(TaskType)**: This is a weighted average across different task categories, such as classification or retrieval. It is computed by first computing the average by task category and then computing the average on each category. Similar to the Mean(Task) this measure is continuous and tends to overvalue tasks with higher variance. This score also prefers models that perform well across all task categories.
             """
             )
-        summary_table.render()
         download_summary = gr.DownloadButton("Download Table")
         download_summary.click(
             download_table, inputs=[summary_table], outputs=[download_summary]
