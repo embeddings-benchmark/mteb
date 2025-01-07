@@ -135,12 +135,13 @@ class ModelMeta(BaseModel):
             raise ValueError("Model name is not set")
         return self.name.replace("/", "__").replace(" ", "_")
 
-    def is_zero_shot_on(self, tasks: list[AbsTask]) -> bool:
+    def is_zero_shot_on(self, tasks: list[AbsTask]) -> bool | None:
         """Indicates whether the given model can be considered
         zero-shot or not on the given tasks.
+        Returns None if no training data is specified on the model.
         """
-        if not self.training_datasets:
-            return False
+        if self.training_datasets is None:
+            return None
         benchmark_datasets = set()
         for task in tasks:
             benchmark_datasets.add(task.metadata.dataset.get("path"))
