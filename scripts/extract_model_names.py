@@ -11,7 +11,7 @@ def get_changed_files(base_branch="main"):
     repo_path = Path(__file__).parent.parent
     repo = Repo(repo_path)
     repo.remotes.origin.fetch(base_branch)
-    repo.git.rebase(f"origin/{base_branch}")
+    repo.git.merge(f"origin/{base_branch}")
     check = repo.is_ancestor(repo.commit(f"origin/{base_branch}"), repo.commit("HEAD"))
     if not check:
         raise ValueError(
