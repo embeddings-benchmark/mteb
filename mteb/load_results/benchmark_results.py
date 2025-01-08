@@ -209,6 +209,7 @@ class BenchmarkResults(BaseModel):
         frameworks: Iterable[str] | None = None,
         n_parameters_range: tuple[int | None, int | None] = (None, None),
         use_instructions: bool | None = None,
+        zero_shot_on: list[AbsTask] | None = None,
     ) -> BenchmarkResults:
         # if model_names is None:
         #     model_names = [model_res.model_name for model_res in self]
@@ -219,6 +220,7 @@ class BenchmarkResults(BaseModel):
             frameworks=frameworks,
             n_parameters_range=n_parameters_range,
             use_instructions=use_instructions,
+            zero_shot_on=zero_shot_on,
         )
         models = {meta.name for meta in model_metas}
         # model_revision_pairs = {(meta.name, meta.revision) for meta in model_metas}

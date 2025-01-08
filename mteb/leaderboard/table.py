@@ -10,7 +10,7 @@ import pandas as pd
 from pandas.api.types import is_numeric_dtype
 
 from mteb.models.overview import get_model_meta
-from mteb.overview import get_task
+from mteb.overview import get_task, get_tasks
 
 
 def borda_count(scores: pd.Series) -> pd.Series:
@@ -113,11 +113,25 @@ def format_max_tokens(max_tokens: float | None) -> str:
     return str(int(max_tokens))
 
 
+def get_zero_shot_emoji(model_meta, tasks):
+    if model_meta is None:
+        return "⚠️"
+    is_zero_shot = model_meta.is_zero_shot_on(tasks)
+    if is_zero_shot is None:
+        return "⚠️"
+    if is_zero_shot:
+        return "✅"
+    return "❌"
+
+
 def scores_to_tables(
     scores_long: list[dict], search_query: str | None = None
 ) -> tuple[gr.DataFrame, gr.DataFrame]:
     if not scores_long:
-        return gr.DataFrame(), gr.DataFrame()
+        no_results_frame = pd.DataFrame(
+            {"No results": ["You can try relaxing your criteria"]}
+        )
+        return gr.DataFrame(no_results_frame), gr.DataFrame(no_results_frame)
     data = pd.DataFrame.from_records(scores_long)
     data["task_type"] = data["task_name"].map(
         lambda task_name: get_task(task_name).metadata.type
@@ -162,6 +176,10 @@ def scores_to_tables(
         1,
         "Number of Parameters",
         model_metas.map(lambda m: format_n_parameters(m.n_parameters)),
+    )
+    tasks = get_tasks(tasks=list(data["task_name"].unique()))
+    joint_table.insert(
+        1, "Zero-shot", model_metas.map(lambda m: get_zero_shot_emoji(m, tasks))
     )
     joint_table = joint_table.sort_values("borda_rank", ascending=True)
     per_task = per_task.loc[joint_table.set_index("model_name").index]
