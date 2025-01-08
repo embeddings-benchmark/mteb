@@ -166,7 +166,7 @@ text_embedding_ada_002 = ModelMeta(
         OpenAIWrapper,
         model_name="text-embedding-ada-002",
         tokenizer_name="cl100k_base",
-        max_tokens=8192,
+        max_tokens=8191,
     ),
     reference="https://openai.com/index/new-and-improved-embedding-model/",
     max_tokens=8191,

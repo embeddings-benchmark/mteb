@@ -11,7 +11,7 @@ class WikipediaTheoreticalAppliedClassification(AbsTaskClassification):
         reference="https://arxiv.org/abs/2412.00532",
         dataset={
             "path": "BASF-AI/WikipediaEZ2Classification",
-            "revision": "39350f72444caf0cff039dbf0f57933d8226f73e",
+            "revision": "7896906653d31d7102a143d7f55d67cd688e3147",
         },
         type="Classification",
         category="s2s",

@@ -24,6 +24,7 @@ class BedrockWrapper(Wrapper):
         self,
         model_id: str,
         provider: str,
+        max_tokens: int,
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
@@ -44,7 +45,9 @@ class BedrockWrapper(Wrapper):
                 else None
             )
             self._max_batch_size = 96
-            self._max_sequence_length = 2048
+            self._max_sequence_length = max_tokens * 4
+        else:
+            self._max_tokens = max_tokens
 
     def encode(
         self,
@@ -77,17 +80,18 @@ class BedrockWrapper(Wrapper):
         self, sentences: list[str], show_progress_bar: bool = False
     ) -> np.ndarray:
         all_embeddings = []
+        # https://docs.aws.amazon.com/bedrock/latest/userguide/titan-embedding-models.html
+        max_sequence_length = int(self._max_tokens * 4.5)
 
         for sentence in tqdm.tqdm(
             sentences, leave=False, disable=not show_progress_bar
         ):
-            response = self._client.invoke_model(
-                body=json.dumps({"inputText": sentence}),
-                modelId=self._model_id,
-                accept="application/json",
-                contentType="application/json",
-            )
-            all_embeddings.append(self._to_numpy(response))
+            if len(sentence) > max_sequence_length:
+                all_embeddings.append(
+                    self._embed_amazon(sentence[:max_sequence_length])
+                )
+            else:
+                all_embeddings.append(self._embed_amazon(sentence))
 
         return np.array(all_embeddings)
 
@@ -120,6 +124,15 @@ class BedrockWrapper(Wrapper):
 
         return np.array(all_embeddings)
 
+    def _embed_amazon(self, sentence: str) -> np.ndarray:
+        response = self._client.invoke_model(
+            body=json.dumps({"inputText": sentence}),
+            modelId=self._model_id,
+            accept="application/json",
+            contentType="application/json",
+        )
+        return self._to_numpy(response)
+
     def _to_numpy(self, embedding_response) -> np.ndarray:
         response = json.loads(embedding_response.get("body").read())
         key = "embedding" if self._provider == "amazon" else "embeddings"
@@ -135,6 +148,7 @@ amazon_titan_embed_text_v1 = ModelMeta(
         BedrockWrapper,
         model_id="amazon.titan-embed-text-v1",
         provider="amazon",
+        max_tokens=8192,
     ),
     max_tokens=8192,
     embed_dim=1536,
@@ -157,6 +171,7 @@ amazon_titan_embed_text_v2 = ModelMeta(
         BedrockWrapper,
         model_id="amazon.titan-embed-text-v2:0",
         provider="amazon",
+        max_tokens=8192,
     ),
     max_tokens=8192,
     embed_dim=1024,
@@ -175,6 +190,7 @@ cohere_embed_english_v3 = ModelMeta(
         BedrockWrapper,
         model_id="cohere.embed-english-v3",
         provider="cohere",
+        max_tokens=512,
         model_prompts=cohere_model_prompts,
     ),
     name="bedrock/cohere-embed-english-v3",
@@ -198,6 +214,7 @@ cohere_embed_multilingual_v3 = ModelMeta(
         BedrockWrapper,
         model_id="cohere.embed-multilingual-v3",
         provider="cohere",
+        max_tokens=512,
         model_prompts=cohere_model_prompts,
     ),
     name="bedrock/cohere-embed-multilingual-v3",

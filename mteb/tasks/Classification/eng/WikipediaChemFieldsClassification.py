@@ -11,7 +11,7 @@ class WikipediaChemFieldsClassification(AbsTaskClassification):
         reference="https://arxiv.org/abs/2412.00532",
         dataset={
             "path": "BASF-AI/WikipediaEZ10Classification",
-            "revision": "bb465f7e0dc023c7effc39b45aa268ff70d4312c",
+            "revision": "a75fae77759acc115f015f2b856baa47776d733d",
         },
         type="Classification",
         category="s2s",
