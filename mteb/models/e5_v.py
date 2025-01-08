@@ -14,8 +14,9 @@ from transformers import LlavaNextForConditionalGeneration, LlavaNextProcessor
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
-
-E5_V_TRANSFORMERS_VERSION = "4.44.2" # Issue 1647: Only works with transformers==4.44.2.
+E5_V_TRANSFORMERS_VERSION = (
+    "4.44.2"  # Issue 1647: Only works with transformers==4.44.2.
+)
 
 
 class E5VWrapper:
@@ -25,8 +26,12 @@ class E5VWrapper:
         composed_prompt=None,
         **kwargs: Any,
     ):
-        if version.parse(transformers.__version__) != version.parse(E5_V_TRANSFORMERS_VERSION):
-            raise ImportError(f"This wrapper only works with transformers=={E5_V_TRANSFORMERS_VERSION}")
+        if version.parse(transformers.__version__) != version.parse(
+            E5_V_TRANSFORMERS_VERSION
+        ):
+            raise ImportError(
+                f"This wrapper only works with transformers=={E5_V_TRANSFORMERS_VERSION}"
+            )
 
         self.model_name = model_name
         self.processor = LlavaNextProcessor.from_pretrained(model_name)
