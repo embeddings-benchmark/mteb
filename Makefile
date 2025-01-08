@@ -40,7 +40,6 @@ build-docs:
 
 model-load-test:
 	@echo "--- 🚀 Running model load test ---"
-	make install-for-tests
-	pip install ".[pylate,gritlm,xformers,model2vec]"
+	pip install ".[dev, speedtask, pylate,gritlm,xformers,model2vec]"
 	python scripts/extract_model_names.py
 	python tests/test_models/test_model_loading.py

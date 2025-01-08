@@ -52,7 +52,7 @@ def extract_model_names(files: list[str]) -> list[str]:
 
 if __name__ == "__main__":
     """
-    Can pass in base brnach as an argument. Defaults to 'main'.
+    Can pass in base branch as an argument. Defaults to 'main'.
     e.g. python extract_model_names.py mieb
     """
     base_branch = sys.argv[1] if len(sys.argv) > 1 else "main"
