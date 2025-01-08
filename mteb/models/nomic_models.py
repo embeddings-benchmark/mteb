@@ -36,9 +36,10 @@ class NomicWrapper(SentenceTransformerWrapper):
             model_name == "nomic-ai/modernbert-embed-base"
             and CURRENT_TRANSFORMERS_VERSION < MODERN_BERT_TRANSFORMERS_MIN_VERSION
         ):
+            min_version_str = '.'.join([str(v) for v in MODERN_BERT_TRANSFORMERS_MIN_VERSION])
             raise RuntimeError(
-                f"Current transformers version is {CURRENT_TRANSFORMERS_VERSION} is lower than the required version"
-                f" {'.'.join(MODERN_BERT_TRANSFORMERS_MIN_VERSION)}"
+                f"Current transformers version is {transformers.__version__} is lower than the required version"
+                f" {min_version_str}"
             )
         super().__init__(model_name, revision, model_prompts, **kwargs)
 
@@ -214,6 +215,9 @@ nomic_modern_bert_embed = ModelMeta(
         model_name="nomic-ai/modernbert-embed-base",
         revision="5960f1566fb7cb1adf1eb6e816639cf4646d9b12",
         model_prompts=model_prompts,
+        model_kwargs={
+            "torch_dtype": torch.float16,
+        },
         # model_prompts={
         #     PromptType.query.value: "search_query: ",
         #     PromptType.passage.value: "search_document: ",
