@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import logging
+
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
@@ -14,6 +16,8 @@ _LANGUAGES = {
 
 _SPLITS = ["test"]
 
+logger = logging.getLogger(__name__)
+
 
 class BUCCBitextMining(AbsTaskBitextMining, MultilingualTask):
     superseded_by = "BUCC.v2"
@@ -21,7 +25,8 @@ class BUCCBitextMining(AbsTaskBitextMining, MultilingualTask):
         name="BUCC",
         dataset={
             "path": "mteb/bucc-bitext-mining",
-            "revision": "1739dc11ffe9b7bfccd7f3d585aeb4c544fc6677",
+            "revision": "d51519689f32196a32af33b075a01d0e7c51e252",
+            "trust_remote_code": True,
         },
         description="BUCC bitext mining dataset",
         reference="https://comparable.limsi.fr/bucc2018/bucc2018-task.html",
@@ -70,8 +75,9 @@ class BUCCBitextMining(AbsTaskBitextMining, MultilingualTask):
                 sentence1 = data["sentence1"][0]
                 sentence2 = data["sentence2"][0]
                 sentence1 = [sentence1[i] for (i, j) in gold]
-                print(lang, len(gold))
-                print(len(sentence1), len(sentence2))
+                logger.info(f"Lang {lang} num gold {len(gold)}")
+                logger.info(f"Lang {lang} num sentence1 {len(sentence1)}")
+                logger.info(f"Lang {lang} num sentence2 {len(sentence2)}")
                 dataset[lang][split] = {
                     "sentence1": sentence1,
                     "sentence2": sentence2,
