@@ -85,7 +85,7 @@ class RepLLaMAWrapper(Wrapper):
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,  # noqa
+        **kwargs,
     ) -> np.ndarray:
         batch_size = 16 if "batch_size" not in kwargs else kwargs.pop("batch_size")
         all_embeddings = []
@@ -93,7 +93,7 @@ class RepLLaMAWrapper(Wrapper):
         prompt = self.model_prompts.get(prompt_name)
 
         if prompt:
-            if prompt_name == "queries":
+            if prompt_type == "queries":
                 sentences = [
                     f"{prompt}{sentence.strip()}".strip() for sentence in sentences
                 ]

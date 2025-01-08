@@ -25,10 +25,9 @@ class PromptrieverWrapper(RepLLaMAWrapper, Wrapper):
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,  # noqa
+        **kwargs: Any,
     ) -> np.ndarray:
         kwargs["is_promptriever"] = True
-        # pass task_name and prompt_type along with other kwargs
         return super().encode(
             sentences, task_name=task_name, prompt_type=prompt_type, **kwargs
         )

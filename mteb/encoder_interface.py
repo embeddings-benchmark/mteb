@@ -60,6 +60,22 @@ class Encoder(Protocol):
         """
         ...
 
+    def combine_query_and_instruction(
+        self,
+        query: str,
+        instruction: str,
+    ) -> str:
+        """Optional functionL: Combines a query with an instruction.
+
+        Args:
+            query: The query text to combine.
+            instruction: The instruction text to combine with the query.
+
+        Returns:
+            The combined query and instruction text.
+        """
+        ...
+
 
 class EncoderWithSimilarity(Encoder, Protocol):
     """Besides the required functions in the Encoder interface, the encoder can additionally specify its own similiarity functions.
