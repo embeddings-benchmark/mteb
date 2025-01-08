@@ -75,6 +75,10 @@ class RepLLaMAWrapper(Wrapper):
             return_tensors="pt",
         )
 
+    def combine_query_and_instruction(self, query, instruction):
+        end_punct = "?" if query.strip()[-1] not in ["?", ".", "!"] else ""
+        return f"{query}{end_punct} {instruction}".strip()
+
     def encode(
         self,
         sentences: list[str],
@@ -85,9 +89,17 @@ class RepLLaMAWrapper(Wrapper):
     ) -> np.ndarray:
         batch_size = 16 if "batch_size" not in kwargs else kwargs.pop("batch_size")
         all_embeddings = []
-        prompt = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+        prompt = self.model_prompts.get(prompt_name)
+
         if prompt:
-            sentences = [f"{prompt}{sentence}".strip() for sentence in sentences]
+            if prompt_name == "queries":
+                sentences = [
+                    f"{prompt}{sentence.strip()}".strip() for sentence in sentences
+                ]
+            else:
+                sentences = [f"{prompt}{sentence}".strip() for sentence in sentences]
+
         for i in tqdm.tqdm(range(0, len(sentences), batch_size)):
             batch_texts = sentences[i : i + batch_size]
 
