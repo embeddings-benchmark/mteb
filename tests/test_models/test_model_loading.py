@@ -6,12 +6,14 @@ from pathlib import Path
 import pytest
 
 
-def get_model_names():
+def get_model_names() -> list[str]:
+    model_names = []
     model_names_file_path = (
         Path(__file__).parent.parent.parent / "scripts" / "model_names.txt"
     )
-    with model_names_file_path.open("r") as f:
-        model_names = f.read().strip()
+    if model_names_file_path.exists():
+        with model_names_file_path.open("r") as f:
+            model_names = f.read().strip()
     return model_names
 
 
