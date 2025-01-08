@@ -21,11 +21,4 @@ jobs:
 
     - name: Install dependencies and run tests
       run: |
-        make install-for-tests
-        pip install ".[pylate,gritlm,xformers,model2vec]"
-    - name: Extract model names
-      run: |
-        python scripts/extract_model_names.py
-    - name: Run tests
-      run: |
-        python tests/test_models/test_model_loading.py
+        make model-load-test
