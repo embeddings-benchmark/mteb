@@ -4,6 +4,8 @@ from functools import partial
 from typing import Any
 
 import torch
+import transformers
+from packaging import version
 from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm import tqdm
@@ -20,6 +22,10 @@ class E5VWrapper:
         composed_prompt=None,
         **kwargs: Any,
     ):
+        # Issue 1647: Only works with transformers==4.44.2.
+        if version.parse(transformers.__version__) != version.parse("4.44.2"):
+            raise ImportError("This wrapper only works with transformers==4.44.2")
+
         self.model_name = model_name
         self.processor = LlavaNextProcessor.from_pretrained(model_name)
         if "device" in kwargs:
