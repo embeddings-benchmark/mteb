@@ -43,7 +43,7 @@ class CodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
             split=self._EVAL_SPLIT,
             trust_remote_code=True,
             streaming=True,
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
         data = data.shuffle(seed=42)
 

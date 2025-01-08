@@ -64,6 +64,6 @@ class GermanQuADRetrieval(AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = load_retrieval_data(
-            self.metadata_dict["dataset"]["path"], self.metadata_dict["eval_splits"]
+            self.metadata.dataset["path"], self.metadata.eval_splits
         )
         self.data_loaded = True

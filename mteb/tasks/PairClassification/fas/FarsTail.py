@@ -41,8 +41,8 @@ class FarsTail(AbsTaskPairClassification):
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
-        path = self.metadata_dict["dataset"]["path"]
-        revision = self.metadata_dict["dataset"]["revision"]
+        path = self.metadata.dataset["path"]
+        revision = self.metadata.dataset["revision"]
         data_files = {
             "test": f"https://huggingface.co/datasets/{path}/resolve/{revision}/data/Test-word.csv"
         }

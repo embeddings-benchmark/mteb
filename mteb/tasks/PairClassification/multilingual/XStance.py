@@ -56,8 +56,8 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
 
         max_n_samples = 2048
         self.dataset = {}
-        path = self.metadata_dict["dataset"]["path"]
-        revision = self.metadata_dict["dataset"]["revision"]
+        path = self.metadata.dataset["path"]
+        revision = self.metadata.dataset["revision"]
         raw_dataset = load_dataset(
             path,
             revision=revision,
@@ -73,7 +73,7 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
 
         for lang in self.metadata.eval_langs:
             self.dataset[lang] = {}
-            for split in self.metadata_dict["eval_splits"]:
+            for split in self.metadata.eval_splits:
                 # filter by language
                 self.dataset[lang][split] = raw_dataset[split].filter(
                     lambda row: row["language"] == lang

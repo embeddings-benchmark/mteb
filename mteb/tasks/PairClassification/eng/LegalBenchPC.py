@@ -127,9 +127,9 @@ class LegalBenchPC(AbsTaskPairClassification):
         _hf_dataset = None
         for dataset_col_map in _DATASET_COLUMN_MAP:
             _dataset = datasets.load_dataset(
-                self.metadata_dict["dataset"]["path"],
+                self.metadata.dataset["path"],
                 dataset_col_map["name"],
-                revision=self.metadata_dict["dataset"]["revision"],
+                revision=self.metadata.dataset["revision"],
                 trust_remote_code=True,
             )
 

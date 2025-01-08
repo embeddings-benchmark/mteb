@@ -41,7 +41,7 @@ class NLPJournalAbsIntroRetrieval(AbsTaskRetrieval):
         query_list = datasets.load_dataset(
             name="nlp_journal_abs_intro-query",
             split=_EVAL_SPLIT,
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         queries = {}
@@ -53,7 +53,7 @@ class NLPJournalAbsIntroRetrieval(AbsTaskRetrieval):
         corpus_list = datasets.load_dataset(
             name="nlp_journal_abs_intro-corpus",
             split="corpus",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         corpus = {str(row["docid"]): {"text": row["text"]} for row in corpus_list}

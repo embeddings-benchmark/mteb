@@ -58,7 +58,7 @@ class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
             self.dataset[lang] = datasets.load_dataset(
                 lang=lang,
                 quality=100,
-                **self.metadata_dict["dataset"],
+                **self.metadata.dataset,
             )
             self.dataset_transform(lang)
         self.data_loaded = True

@@ -908,7 +908,7 @@ class BibleNLPBitextMining(AbsTaskBitextMining, MultilingualTask):
             else:
                 dataset = datasets.load_dataset(
                     name=self._transform_lang_name_hf(lang),
-                    **self.metadata_dict["dataset"],
+                    **self.metadata.dataset,
                 )
                 self.dataset[lang] = datasets.DatasetDict({"train": dataset})
                 seen_pairs.append(hf_lang_name)

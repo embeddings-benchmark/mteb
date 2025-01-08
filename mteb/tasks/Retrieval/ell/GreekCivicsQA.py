@@ -38,8 +38,8 @@ class GreekCivicsQA(AbsTaskRetrieval):
         if self.data_loaded:
             return
         # fetch both subsets of the dataset
-        eval_split = self.metadata_dict["eval_splits"][0]
-        data_raw = datasets.load_dataset(**self.metadata_dict["dataset"])[eval_split]
+        eval_split = self.metadata.eval_splits[0]
+        data_raw = datasets.load_dataset(**self.metadata.dataset)[eval_split]
 
         queries = {eval_split: {}}
         corpus = {eval_split: {}}

@@ -65,7 +65,7 @@ class AfriSentiClassification(MultilingualTask, AbsTaskClassification):
             return
         self.dataset = {}
         for lang in self.hf_subsets:
-            metadata = self.metadata_dict.get("dataset", None)
+            metadata = self.metadata.dataset
             dataset = datasets.load_dataset(name=lang, **metadata)
             self.dataset[lang] = _transform(dataset, lang)
         self.dataset_transform()

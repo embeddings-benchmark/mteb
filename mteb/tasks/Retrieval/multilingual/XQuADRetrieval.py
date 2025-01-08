@@ -76,9 +76,9 @@ class XQuADRetrieval(MultilingualTask, AbsTaskRetrieval):
         relevant_docs = {lang: {split: {}} for lang in self.hf_subsets}
 
         for lang in self.hf_subsets:
-            data = datasets.load_dataset(
-                name=f"xquad.{lang}", **self.metadata_dict["dataset"]
-            )[split]
+            data = datasets.load_dataset(name=f"xquad.{lang}", **self.metadata.dataset)[
+                split
+            ]
             data = data.filter(lambda x: x["answers"]["text"] != "")
 
             question_ids = {
