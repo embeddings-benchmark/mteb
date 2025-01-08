@@ -36,7 +36,9 @@ class NomicWrapper(SentenceTransformerWrapper):
             model_name == "nomic-ai/modernbert-embed-base"
             and CURRENT_TRANSFORMERS_VERSION < MODERN_BERT_TRANSFORMERS_MIN_VERSION
         ):
-            min_version_str = '.'.join([str(v) for v in MODERN_BERT_TRANSFORMERS_MIN_VERSION])
+            min_version_str = ".".join(
+                [str(v) for v in MODERN_BERT_TRANSFORMERS_MIN_VERSION]
+            )
             raise RuntimeError(
                 f"Current transformers version is {transformers.__version__} is lower than the required version"
                 f" {min_version_str}"
