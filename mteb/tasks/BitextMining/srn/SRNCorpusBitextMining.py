@@ -71,7 +71,7 @@ class SRNCorpusBitextMining(AbsTaskBitextMining, MultilingualTask):
             dataset = datasets.load_dataset(
                 name="srn-nl_other",
                 split="test",
-                **self.metadata_dict["dataset"],
+                **self.metadata.dataset,
             ).map(lambda batch: _clean_columns(batch, ["nl", "srn"]), batched=True)
             dataset = dataset.rename_columns(
                 {_LANGUAGES[l1]: "sentence1", _LANGUAGES[l2]: "sentence2"}

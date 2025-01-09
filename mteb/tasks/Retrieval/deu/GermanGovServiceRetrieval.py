@@ -56,10 +56,10 @@ class GermanGovServiceRetrieval(AbsTaskRetrieval):
             return
 
         dataset = datasets.load_dataset(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             split=_EVAL_SPLIT,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
         corpus = {}
         queries = {}

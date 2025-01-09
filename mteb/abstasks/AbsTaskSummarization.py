@@ -69,25 +69,21 @@ class SummarizationDescriptiveStatistics(DescriptiveStatistics):
 class AbsTaskSummarization(AbsTask):
     """Abstract class for summarization experiments.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns:
         text: str
         human_summaries: list[str]
         machine_summaries: list[str]
         relevance: list[float] (the score of the machine generated summaries)
     """
 
+    min_score: int
+    max_score: int
+
     abstask_prompt = (
         "Given a news summary, retrieve other semantically similar summaries."
     )
+    # SummEval has DeprecatedSummarizationEvaluator
     evaluator = SummarizationEvaluator
-
-    @property
-    def min_score(self):
-        return self.metadata_dict["min_score"]
-
-    @property
-    def max_score(self):
-        return self.metadata_dict["max_score"]
 
     def _evaluate_subset(
         self,
@@ -101,7 +97,6 @@ class AbsTaskSummarization(AbsTask):
             (np.array(x) - self.min_score) / (self.max_score - self.min_score)
             for x in data_split["relevance"]
         ]
-        # SummEval has DeprecatedSummarizationEvaluator
         evaluator = self.evaluator(
             machine_summaries=data_split["machine_summaries"],
             human_summaries=data_split["human_summaries"],

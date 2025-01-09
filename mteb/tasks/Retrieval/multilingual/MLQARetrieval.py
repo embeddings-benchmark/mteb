@@ -127,7 +127,7 @@ class MLQARetrieval(AbsTaskRetrieval, MultilingualTask):
 
             _dataset_raw[lang_pair] = datasets.load_dataset(
                 name=hf_subset,
-                **self.metadata_dict["dataset"],
+                **self.metadata.dataset,
             )
 
             self.queries[lang_pair] = {}

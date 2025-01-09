@@ -127,7 +127,7 @@ class AbsTaskClusteringFast(AbsTask):
     If the clustering is hierarchical, and more than one label is specified in order for each observation,
     V-measures are calculated in the outlined way on each of the levels separately.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset.
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset.
     It must contain the following columns:
         sentences: list[str]
         labels: list[str] | list[list[str]]

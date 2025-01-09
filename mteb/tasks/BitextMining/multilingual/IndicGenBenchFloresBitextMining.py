@@ -149,7 +149,7 @@ class IndicGenBenchFloresBitextMining(AbsTaskBitextMining, MultilingualTask):
                 language = f"{coded_source_language}_en"
 
             self.dataset[lang] = datasets.load_dataset(
-                **self.metadata_dict["dataset"],
+                **self.metadata.dataset,
                 field="examples",
                 data_files={
                     "validation": f"flores_{language}_dev.json",

@@ -54,7 +54,7 @@ class AbsTaskClassification(AbsTask):
     """Abstract class for kNN classification tasks
     The similarity is computed between pairs and the results are ranked.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It
     must contain the following columns:
         text: str
         label: int
@@ -66,6 +66,7 @@ class AbsTaskClassification(AbsTask):
 
     abstask_prompt = "Classify user passages."
     samples_per_label: int = 8
+    n_experiments: int = 10
 
     def __init__(
         self,
@@ -79,9 +80,7 @@ class AbsTaskClassification(AbsTask):
 
         # Bootstrap parameters
         self.n_experiments: int = (  # type: ignore
-            n_experiments
-            if n_experiments is not None
-            else self.metadata_dict.get("n_experiments", 10)
+            n_experiments if n_experiments is not None else self.n_experiments
         )
 
         # kNN parameters

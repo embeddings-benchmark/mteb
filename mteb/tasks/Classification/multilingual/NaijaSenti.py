@@ -70,7 +70,7 @@ class NaijaSenti(AbsTaskClassification, MultilingualTask):
         for lang in self.hf_subsets:
             self.dataset[lang] = datasets.load_dataset(
                 name=f"{lang}",
-                **self.metadata_dict["dataset"],
+                **self.metadata.dataset,
             )
             self.dataset[lang] = datasets.DatasetDict(
                 {

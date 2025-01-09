@@ -47,11 +47,11 @@ class AlloprofReranking(AbsTaskReranking):
 
         self.dataset = datasets.load_dataset(
             name="queries",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
             split=self.metadata.eval_splits[0],
         )
         documents = datasets.load_dataset(
-            name="documents", **self.metadata_dict["dataset"], split="test"
+            name="documents", **self.metadata.dataset, split="test"
         )
         # replace documents ids in positive and negative column by their respective texts
         doc_id2txt = dict(list(zip(documents["doc_id"], documents["text"])))

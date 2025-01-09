@@ -79,12 +79,8 @@ class STS22CrosslingualSTSv2(AbsTaskSTS, MultilingualTask):
 }""",
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 1
-        metadata_dict["max_score"] = 4
-        return metadata_dict
+    min_score = 1
+    max_score = 4
 
 
 class STS22CrosslingualSTS(AbsTaskSTS, MultilingualTask):
@@ -141,9 +137,5 @@ class STS22CrosslingualSTS(AbsTaskSTS, MultilingualTask):
 }""",
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 1
-        metadata_dict["max_score"] = 4
-        return metadata_dict
+    min_score = 1
+    max_score = 4
