@@ -74,16 +74,16 @@ class AbsTaskClassification(AbsTask):
     samples_per_label: int = 8
     n_experiments: int = 10
     k: int = 3
-    eval_split = "test"
     train_split = "train"
 
     def evaluate(
         self,
-        model,
+        model: Encoder,
+        split: str = "test",
         subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any] = {},
-        **kwargs,
+        **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         if not self.data_loaded:
             self.load_data()
@@ -95,7 +95,7 @@ class AbsTaskClassification(AbsTask):
 
         for hf_subset in hf_subsets:
             logger.info(
-                f"Task: {self.metadata.name}, split: {self.eval_split}, subset: {hf_subset}. Running..."
+                f"Task: {self.metadata.name}, split: {split}, subset: {hf_subset}. Running..."
             )
 
             if hf_subset not in self.dataset and hf_subset == "default":
@@ -105,6 +105,7 @@ class AbsTaskClassification(AbsTask):
             scores[hf_subset] = self._evaluate_subset(
                 model,
                 ds,
+                eval_split_name=split,
                 encode_kwargs=encode_kwargs,
                 **kwargs,
             )
@@ -116,11 +117,12 @@ class AbsTaskClassification(AbsTask):
         self,
         model: Encoder,
         dataset: DatasetDict | Dataset,
+        eval_split_name: str,
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ) -> ScoresDict:
         train_split = dataset[self.train_split]
-        eval_split = dataset[self.eval_split]
+        eval_split = dataset[eval_split_name]
         params = {"k": self.k}
         params.update(kwargs)
 

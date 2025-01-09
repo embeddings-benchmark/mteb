@@ -6,6 +6,7 @@ from collections import defaultdict
 from typing import Any
 
 import numpy as np
+from datasets import Dataset, DatasetDict
 from sklearn.base import ClassifierMixin, clone
 from sklearn.metrics import f1_score, label_ranking_average_precision_score
 from sklearn.model_selection import train_test_split
@@ -58,13 +59,14 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
     def _evaluate_subset(
         self,
         model: Encoder,
-        dataset,
+        dataset: DatasetDict | Dataset,
+        eval_split_name: str,
         *,
         encode_kwargs: dict[str, Any] = {},
         **kwargs: Any,
     ) -> ScoresDict:
         train_split = dataset[self.train_split]
-        eval_split = dataset[self.eval_split]
+        eval_split = dataset[eval_split_name]
 
         scores = []
         # Bootstrap sample indices from training set for each experiment
