@@ -60,12 +60,16 @@ class Encoder(Protocol):
         """
         ...
 
+
+class EncoderWithQueryInstructionFormatting(Protocol):
+    """Optional protocol for encoders that support combining queries with instructions in a model-specific way. If not implemented, MTEB will use the default query instruction formatting ({query} {instruction})."""
+
     def combine_query_and_instruction(
         self,
         query: str,
         instruction: str,
     ) -> str:
-        """Optional functionL: Combines a query with an instruction.
+        """Combines a query with an instruction.
 
         Args:
             query: The query text to combine.
