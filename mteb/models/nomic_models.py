@@ -8,6 +8,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 import transformers
+from packaging.version import Version
 
 import mteb
 from mteb.encoder_interface import PromptType
@@ -17,8 +18,7 @@ from .sentence_transformer_wrapper import SentenceTransformerWrapper
 
 logger = logging.getLogger(__name__)
 
-MODERN_BERT_TRANSFORMERS_MIN_VERSION = (4, 48, 0)
-CURRENT_TRANSFORMERS_VERSION = tuple(map(int, transformers.__version__.split(".")[:3]))
+MODERN_BERT_TRANSFORMERS_MIN_VERSION = "4.48.0"
 
 
 class NomicWrapper(SentenceTransformerWrapper):
@@ -32,16 +32,13 @@ class NomicWrapper(SentenceTransformerWrapper):
         **kwargs: Any,
     ):
         self.model_name = model_name
-        if (
-            model_name == "nomic-ai/modernbert-embed-base"
-            and CURRENT_TRANSFORMERS_VERSION < MODERN_BERT_TRANSFORMERS_MIN_VERSION
+        if model_name == "nomic-ai/modernbert-embed-base" and (
+            Version(transformers.__version__).release
+            < Version(MODERN_BERT_TRANSFORMERS_MIN_VERSION).release
         ):
-            min_version_str = ".".join(
-                [str(v) for v in MODERN_BERT_TRANSFORMERS_MIN_VERSION]
-            )
             raise RuntimeError(
                 f"Current transformers version is {transformers.__version__} is lower than the required version"
-                f" {min_version_str}"
+                f" {MODERN_BERT_TRANSFORMERS_MIN_VERSION}"
             )
         super().__init__(model_name, revision, model_prompts, **kwargs)
 
