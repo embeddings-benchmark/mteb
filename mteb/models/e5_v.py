@@ -26,7 +26,7 @@ class E5VWrapper:
         composed_prompt=None,
         **kwargs: Any,
     ):
-        if version.parse(transformers.__version__) != version.parse(
+        if version.parse(transformers.__version__) > version.parse(
             E5_V_TRANSFORMERS_VERSION
         ):
             raise ImportError(
