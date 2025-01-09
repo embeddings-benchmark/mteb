@@ -217,10 +217,6 @@ nomic_modern_bert_embed = ModelMeta(
         model_kwargs={
             "torch_dtype": torch.float16,
         },
-        # model_prompts={
-        #     PromptType.query.value: "search_query: ",
-        #     PromptType.passage.value: "search_document: ",
-        # },
     ),
     name="nomic-ai/modernbert-embed-base",
     languages=["eng-Latn"],
