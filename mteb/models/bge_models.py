@@ -80,6 +80,8 @@ bge_base_en_v1_5 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    public_training_data=True,  # https://data.baai.ac.cn/details/BAAI-MTP
+    public_training_code=None,  # seemingly released (at least for some models, but the link is broken
     training_datasets={
         # source: https://data.baai.ac.cn/details/BAAI-MTP
         "NQ": ["test"],
@@ -131,6 +133,8 @@ bge_large_en_v1_5 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    public_training_data=True,  # https://data.baai.ac.cn/details/BAAI-MTP
+    public_training_code=None,  # seemingly released (at least for some models, but the link is broken
     training_datasets={
         # source: https://data.baai.ac.cn/details/BAAI-MTP
         "NQ": ["test"],
