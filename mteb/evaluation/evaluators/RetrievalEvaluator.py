@@ -307,15 +307,17 @@ class DenseRetrievalExactSearch:
             assert (
                 len(queries_in_pair) == len(corpus_in_pair) == len(instructions_in_pair)
             )
+            corpus_in_pair = corpus_to_str(list(corpus_in_pair))
 
             if hasattr(self.model, "model") and isinstance(
                 self.model.model, CrossEncoder
             ):
                 # can't take instructions, so add them here
-                queries_in_pair = [
-                    f"{q} {i}".strip()
-                    for i, q in zip(instructions_in_pair, queries_in_pair)
-                ]
+                if instructions_in_pair[0] is not None:
+                    queries_in_pair = [
+                        f"{q} {i}".strip()
+                        for i, q in zip(instructions_in_pair, queries_in_pair)
+                    ]
                 scores = self.model.predict(list(zip(queries_in_pair, corpus_in_pair)))  # type: ignore
             else:
                 # may use the instructions in a unique way, so give them also
