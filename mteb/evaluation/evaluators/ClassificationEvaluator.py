@@ -28,11 +28,11 @@ def dot_distance(a: np.ndarray, b: np.ndarray) -> float:
 class kNNClassificationEvaluator(Evaluator):
     def __init__(
         self,
-        sentences_train,
-        y_train,
-        sentences_test,
-        y_test,
-        task_name: str | None = None,
+        sentences_train: list[str],
+        y_train: list[int],
+        sentences_test: list[str],
+        y_test: list[int],
+        task_name: str,
         k: int = 1,
         **kwargs,
     ):
@@ -47,7 +47,7 @@ class kNNClassificationEvaluator(Evaluator):
         self.k = k
 
     def __call__(
-        self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}, test_cache=None
+        self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}, test_cache: np.ndarray =None
     ) -> tuple[dict[str, float], Any]:
         scores = {}
         max_accuracy = 0
@@ -92,10 +92,10 @@ class kNNClassificationEvaluator(Evaluator):
 class kNNClassificationEvaluatorPytorch(Evaluator):
     def __init__(
         self,
-        sentences_train,
-        y_train,
-        sentences_test,
-        y_test,
+        sentences_train: list[str],
+        y_train: list[int],
+        sentences_test: list[str],
+        y_test: list[int],
         task_name: str,
         k: int = 1,
         **kwargs: Any,
@@ -111,7 +111,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         self.k = k
 
     def __call__(
-        self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}, test_cache=None
+        self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}, test_cache: np.ndarray =None
     ) -> tuple[dict[str, float], Any]:
         scores = {}
         max_accuracy = 0
@@ -232,10 +232,10 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
 class logRegClassificationEvaluator(Evaluator):
     def __init__(
         self,
-        sentences_train,
-        y_train,
-        sentences_test,
-        y_test,
+        sentences_train: list[str],
+        y_train: list[int],
+        sentences_test: list[str],
+        y_test: list[int],
         task_name: str,
         max_iter: int = 100,
         **kwargs,
@@ -250,7 +250,7 @@ class logRegClassificationEvaluator(Evaluator):
         self.task_name = task_name
 
     def __call__(
-        self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}, test_cache=None
+        self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}, test_cache: np.ndarray =None
     ) -> tuple[dict[str, float], Any]:
         scores = {}
         clf = LogisticRegression(
