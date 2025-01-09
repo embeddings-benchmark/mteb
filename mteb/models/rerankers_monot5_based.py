@@ -4,11 +4,7 @@ import logging
 from functools import partial
 
 import torch
-from transformers import (
-    AutoModelForCausalLM,
-    AutoModelForSeq2SeqLM,
-    AutoTokenizer,
-)
+from transformers import AutoModelForCausalLM, AutoModelForSeq2SeqLM, AutoTokenizer
 
 from mteb.model_meta import ModelMeta
 from mteb.models.rerankers_custom import RerankerWrapper, _loader
@@ -105,7 +101,12 @@ class MonoT5Reranker(RerankerWrapper):
 
     @torch.inference_mode()
     def predict(self, input_to_rerank, **kwargs):
-        queries, passages, instructions = list(zip(*input_to_rerank))
+        inputs = list(zip(*input_to_rerank))
+        if len(input_to_rerank[0]) == 2:
+            queries, passages = inputs
+            instructions = None
+        else:
+            queries, passages, instructions = inputs
 
         if instructions is not None and instructions[0] is not None:
             queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
@@ -194,7 +195,13 @@ Relevant: """
 
     @torch.inference_mode()
     def predict(self, input_to_rerank, **kwargs):
-        queries, passages, instructions = list(zip(*input_to_rerank))
+        inputs = list(zip(*input_to_rerank))
+        if len(input_to_rerank[0]) == 2:
+            queries, passages = inputs
+            instructions = None
+        else:
+            queries, passages, instructions = inputs
+
         if instructions is not None and instructions[0] is not None:
             # logger.info(f"Adding instructions to LLAMA queries")
             queries = [
@@ -345,6 +352,18 @@ flant5_base = ModelMeta(
     open_weights=True,
     revision="7bcac572ce56db69c1ea7c8af255c5d7c9672fc2",
     release_date="2022-10-21",
+    training_datasets={
+        "svakulenk0/qrecc": ["train"],
+        "taskmaster2": ["train"],
+        "djaym7/wiki_dialog": ["train"],
+        "deepmind/code_contests": ["train"],
+        "lambada": ["train"],
+        "gsm8k": ["train"],
+        "aqua_rat": ["train"],
+        "esnli": ["train"],
+        "quasc": ["train"],
+        "qed": ["train"],
+    },
 )
 
 flant5_large = ModelMeta(
@@ -359,6 +378,18 @@ flant5_large = ModelMeta(
     open_weights=True,
     revision="0613663d0d48ea86ba8cb3d7a44f0f65dc596a2a",
     release_date="2022-10-21",
+    training_datasets={
+        "svakulenk0/qrecc": ["train"],
+        "taskmaster2": ["train"],
+        "djaym7/wiki_dialog": ["train"],
+        "deepmind/code_contests": ["train"],
+        "lambada": ["train"],
+        "gsm8k": ["train"],
+        "aqua_rat": ["train"],
+        "esnli": ["train"],
+        "quasc": ["train"],
+        "qed": ["train"],
+    },
 )
 
 flant5_xl = ModelMeta(
@@ -373,6 +404,18 @@ flant5_xl = ModelMeta(
     open_weights=True,
     revision="7d6315df2c2fb742f0f5b556879d730926ca9001",
     release_date="2022-10-21",
+    training_datasets={
+        "svakulenk0/qrecc": ["train"],
+        "taskmaster2": ["train"],
+        "djaym7/wiki_dialog": ["train"],
+        "deepmind/code_contests": ["train"],
+        "lambada": ["train"],
+        "gsm8k": ["train"],
+        "aqua_rat": ["train"],
+        "esnli": ["train"],
+        "quasc": ["train"],
+        "qed": ["train"],
+    },
 )
 
 flant5_xxl = ModelMeta(
@@ -387,6 +430,18 @@ flant5_xxl = ModelMeta(
     open_weights=True,
     revision="ae7c9136adc7555eeccc78cdd960dfd60fb346ce",
     release_date="2022-10-21",
+    training_datasets={
+        "svakulenk0/qrecc": ["train"],
+        "taskmaster2": ["train"],
+        "djaym7/wiki_dialog": ["train"],
+        "deepmind/code_contests": ["train"],
+        "lambada": ["train"],
+        "gsm8k": ["train"],
+        "aqua_rat": ["train"],
+        "esnli": ["train"],
+        "quasc": ["train"],
+        "qed": ["train"],
+    },
 )
 
 
@@ -444,6 +499,7 @@ followir_7b = ModelMeta(
     open_weights=True,
     revision="4d25d437e38b510c01852070c0731e8f6e1875d1",
     release_date="2024-04-29",
+    training_datasets={"jhu-clsp/FollowIR-train": ["train"]},
 )
 
 
@@ -563,6 +619,7 @@ mt5_base_mmarco_v2 = ModelMeta(
     open_weights=True,
     revision="cc0a949b9f21efcaba45c8cabb998ad02ce8d4e7",
     release_date="2022-01-05",
+    training_datasets={"msmarco": ["train"]},
 )
 
 mt5_13b_mmarco_100k = ModelMeta(

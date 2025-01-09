@@ -477,6 +477,22 @@ class TaskResult(BaseModel):
     def __repr__(self) -> str:
         return f"TaskResult(task_name={self.task_name}, scores=...)"
 
+    def only_main_score(self) -> TaskResult:
+        new_scores = {}
+        for split in self.scores:
+            new_scores[split] = []
+            for subset_scores in self.scores[split]:
+                new_scores[split].append(
+                    {
+                        "hf_subset": subset_scores.get("hf_subset", "default"),
+                        "main_score": subset_scores.get("main_score", np.nan),
+                        "languages": subset_scores.get("languages", []),
+                    }
+                )
+        new_res = {**self.to_dict(), "scores": new_scores}
+        new_res = TaskResult.from_validated(**new_res)
+        return new_res
+
     def validate_and_filter_scores(self, task: AbsTask | None = None) -> AbsTask:
         """This ensures that the scores are correct for the given task, by removing any splits besides those specified in the task metadata.
         Additionally it also ensure that all of the splits required as well as the languages are present in the scores.
@@ -511,8 +527,15 @@ class TaskResult(BaseModel):
                 new_scores[split].append(_scores)
                 seen_subsets.add(_scores["hf_subset"])
             if seen_subsets != hf_subsets:
+                missing_subsets = hf_subsets - seen_subsets
+                if len(missing_subsets) > 2:
+                    subset1, subset2 = list(missing_subsets)[:2]
+                    missing_subsets_str = f"{{'{subset1}', '{subset2}', ...}}"
+                else:
+                    missing_subsets_str = str(missing_subsets)
+
                 logger.warning(
-                    f"{task.metadata.name}: Missing subsets {hf_subsets - seen_subsets} for split {split}"
+                    f"{task.metadata.name}: Missing subsets {missing_subsets_str} for split {split}"
                 )
             seen_splits.add(split)
         if seen_splits != set(splits):

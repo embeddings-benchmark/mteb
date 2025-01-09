@@ -90,6 +90,7 @@ def load_results(
     tasks: Sequence[AbsTask] | Sequence[str] | None = None,
     validate_and_filter: bool = True,
     require_model_meta: bool = True,
+    only_main_score: bool = False,
 ) -> BenchmarkResults:
     """Loads the results from the latest version of the results repository. The results are cached locally in the MTEB_CACHE directory.
     This directory can be set using the MTEB_CACHE environment variable or defaults to "~/.cache/mteb".
@@ -103,6 +104,7 @@ def load_results(
             extract the model name and revision from the path.
         validate_and_filter: If True it will validate that the results object for the task contains the correct splits and filter out
             splits from the results object that are not default in the task metadata. Defaults to True.
+        only_main_score: If True, only the main score will be loaded.
     """
     repo_directory = download_of_results(results_repo, download_latest=download_latest)
     model_paths = [p for p in (repo_directory / "results").glob("*") if p.is_dir()]
@@ -146,7 +148,12 @@ def load_results(
             task_json_files = [
                 f for f in revision_path.glob("*.json") if "model_meta.json" != f.name
             ]
-            _results = [TaskResult.from_disk(f) for f in task_json_files]
+            _results = []
+            for f in task_json_files:
+                task_res = TaskResult.from_disk(f)
+                if only_main_score:
+                    task_res = task_res.only_main_score()
+                _results.append(task_res)
 
             # filter out tasks that are not in the tasks list
             if tasks is not None:
@@ -163,7 +170,7 @@ def load_results(
                         r = r.validate_and_filter_scores(task=task)
                         filtered_results.append(r)
                     except Exception as e:
-                        logger.warning(
+                        logger.info(
                             f"Validation failed for {r.task_name} in {model_name} {revision}: {e}"
                         )
                 _results = filtered_results
