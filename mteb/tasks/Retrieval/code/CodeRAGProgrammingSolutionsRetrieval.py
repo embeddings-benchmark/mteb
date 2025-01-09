@@ -34,16 +34,16 @@ class CodeRAGProgrammingSolutionsRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation="""
-@misc{wang2024coderagbenchretrievalaugmentcode,
-      title={CodeRAG-Bench: Can Retrieval Augment Code Generation?}, 
-      author={Zora Zhiruo Wang and Akari Asai and Xinyan Velocity Yu and Frank F. Xu and Yiqing Xie and Graham Neubig and Daniel Fried},
-      year={2024},
-      eprint={2406.14497},
-      archivePrefix={arXiv},
-      primaryClass={cs.SE},
-      url={https://arxiv.org/abs/2406.14497}, 
-}
-""",
+        @misc{wang2024coderagbenchretrievalaugmentcode,
+            title={CodeRAG-Bench: Can Retrieval Augment Code Generation?}, 
+            author={Zora Zhiruo Wang and Akari Asai and Xinyan Velocity Yu and Frank F. Xu and Yiqing Xie and Graham Neubig and Daniel Fried},
+            year={2024},
+            eprint={2406.14497},
+            archivePrefix={arXiv},
+            primaryClass={cs.SE},
+            url={https://arxiv.org/abs/2406.14497}, 
+        }
+        """,
     )
 
     def load_data(self, **kwargs):
@@ -65,28 +65,28 @@ class CodeRAGProgrammingSolutionsRetrieval(AbsTaskRetrieval):
         self.relevant_docs = {}
         self.queries = {}
 
-        for split in self.dataset:
-            ds: datasets.Dataset = self.dataset[split]  # type: ignore
-            ds = ds.shuffle(seed=42)
+        split = self.metadata.eval_splits[0]
+        ds: datasets.Dataset = self.dataset[split]  # type: ignore
+        ds = ds.shuffle(seed=42)
 
-            self.queries[split] = {}
-            self.relevant_docs[split] = {}
-            self.corpus[split] = {}
+        self.queries[split] = {}
+        self.relevant_docs[split] = {}
+        self.corpus[split] = {}
 
-            texts = ds["text"]
-            meta = ds["meta"]
-            for text, mt in zip(texts, meta):
-                # in code-rag-bench,
-                # text = query + "\n" + doc(code)
-                query, doc = split_by_first_newline(text)
+        texts = ds["text"]
+        meta = ds["meta"]
+        for text, mt in zip(texts, meta):
+            # in code-rag-bench,
+            # text = query + "\n" + doc(code)
+            query, doc = split_by_first_newline(text)
 
-                id = mt["task_id"]
+            id = mt["task_id"]
 
-                query_id = id
-                doc_id = f"doc_{id}"
-                self.queries[split][query_id] = query
-                self.corpus[split][doc_id] = {"title": "", "text": doc}
+            query_id = id
+            doc_id = f"doc_{id}"
+            self.queries[split][query_id] = query
+            self.corpus[split][doc_id] = {"title": "", "text": doc}
 
-                self.relevant_docs[split][query_id] = {
-                    doc_id: 1
-                }  # only one correct matches
+            self.relevant_docs[split][query_id] = {
+                doc_id: 1
+            }  # only one correct matches
