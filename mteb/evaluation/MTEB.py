@@ -21,6 +21,7 @@ from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import model_meta_from_sentence_transformers
 
+from ..abstasks import AbsTaskMultilabelClassification
 from ..abstasks.AbsTask import AbsTask
 from ..abstasks.AbsTaskReranking import AbsTaskReranking
 from ..load_results.task_results import TaskResult
@@ -224,14 +225,17 @@ class MTEB:
     def select_tasks(self, **kwargs):
         """Select the tasks to be evaluated."""
         # Get all existing tasks
-        # reranking subclasses retrieval to share methods, but is an abstract task
-        tasks_categories_cls = list(AbsTask.__subclasses__()) + [AbsTaskReranking]
+        # reranking and multiclassClassification subclasses retrieval to share methods, but is an abstract task
+        tasks_categories_cls = list(AbsTask.__subclasses__()) + [
+            AbsTaskReranking,
+            AbsTaskMultilabelClassification,
+        ]
         all_task_classes = []
         for cat_cls in tasks_categories_cls:
             for cls in cat_cls.__subclasses__():
-                if (
-                    cat_cls.__name__.startswith("AbsTask")
-                    and cls.__name__ != "AbsTaskReranking"
+                if cat_cls.__name__.startswith("AbsTask") and cls.__name__ not in (
+                    "AbsTaskReranking",
+                    "AbsTaskMultilabelClassification",
                 ):
                     task = cls(hf_subsets=self._task_langs, **kwargs)
                     all_task_classes.append(task)

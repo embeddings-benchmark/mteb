@@ -64,9 +64,6 @@ class AbsTaskClustering(AbsTask):
 
     abstask_prompt = "Identify categories in user passages."
 
-    def _add_main_score(self, scores) -> None:
-        scores["main_score"] = scores[self.metadata.main_score]
-
     def _evaluate_subset(
         self,
         model: Encoder,

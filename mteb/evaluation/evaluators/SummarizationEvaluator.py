@@ -33,11 +33,15 @@ class SummarizationEvaluator(Evaluator):
         task_name: str,
         **kwargs,
     ):
-        """Args:
+        """Summarization Evaluator
+
+        Args:
         human_summaries: shape: (-1, num_human_summaries)
         machine_summaries: shape: (-1, num_machine_summaries)
         texts: shape: (-1,)
         gold_scores: shape: (-1, num_machine_summaries)
+        task_name: Name of the task
+        **kwargs: Additional arguments to pass to the Evaluator
         """
         super().__init__(**kwargs)
         self.human_summaries = human_summaries

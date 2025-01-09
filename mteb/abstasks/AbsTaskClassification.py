@@ -5,12 +5,11 @@ from collections import Counter, defaultdict
 from typing import Any
 
 import numpy as np
+from datasets import Dataset, DatasetDict
 
 from mteb.encoder_interface import Encoder
 
 from ..evaluation.evaluators import (
-    kNNClassificationEvaluator,
-    kNNClassificationEvaluatorPytorch,
     logRegClassificationEvaluator,
 )
 from ..load_results.task_results import HFSubset, ScoresDict
@@ -21,20 +20,23 @@ logger = logging.getLogger(__name__)
 
 
 class ClassificationDescriptiveStatistics(DescriptiveStatistics):
-    """Descriptive statistics for Classification
+    """Descriptive statistics for MultilabelClassification
 
     Attributes:
-      num_samples: number of samples in the dataset.
-      number_of_characters: Total number of symbols in the dataset.
-      number_texts_intersect_with_train: Number of texts in the train split
+        num_samples: number of samples in the dataset.
+        number_of_characters: Total number of symbols in the dataset.
+        number_texts_intersect_with_train: Number of texts in the train split
 
-      min_text_length: Minimum length of text
-      average_text_length: Average length of text
-      max_text_length: Maximum length of text
-      unique_text: Number of unique texts
+        min_text_length: Minimum length of text
+        average_text_length: Average length of text
+        max_text_length: Maximum length of text
+        unique_texts: Number of unique texts
 
-      unique_labels: Number of unique labels
-      labels: dict of label frequencies
+        min_labels_per_text: Minimum number of labels per text
+        average_label_per_text: Average number of labels per text
+        max_labels_per_text: Maximum number of labels per text
+        unique_labels: Number of unique labels
+        labels: dict of label frequencies
     """
 
     num_samples: int
@@ -44,14 +46,17 @@ class ClassificationDescriptiveStatistics(DescriptiveStatistics):
     min_text_length: int
     average_text_length: float
     max_text_length: int
-    unique_text: int
+    unique_texts: int
 
+    min_labels_per_text: int
+    average_label_per_text: float
+    max_labels_per_text: int
     unique_labels: int
     labels: dict[str, dict[str, int]]
 
 
 class AbsTaskClassification(AbsTask):
-    """Abstract class for kNN classification tasks
+    """Abstract class for classification tasks
     The similarity is computed between pairs and the results are ranked.
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It
@@ -64,33 +69,17 @@ class AbsTaskClassification(AbsTask):
 
     """
 
+    evaluator = logRegClassificationEvaluator
     abstask_prompt = "Classify user passages."
     samples_per_label: int = 8
     n_experiments: int = 10
-
-    def __init__(
-        self,
-        method: str = "logReg",
-        n_experiments: int | None = None,
-        k: int = 3,
-        **kwargs,
-    ):
-        super().__init__(**kwargs)
-        self.method = method
-
-        # Bootstrap parameters
-        self.n_experiments: int = (  # type: ignore
-            n_experiments if n_experiments is not None else self.n_experiments
-        )
-
-        # kNN parameters
-        self.k = k
+    k: int = 3
+    eval_split = "test"
+    train_split = "train"
 
     def evaluate(
         self,
         model,
-        eval_split: str = "test",
-        train_split: str = "train",
         subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any] = {},
@@ -106,7 +95,7 @@ class AbsTaskClassification(AbsTask):
 
         for hf_subset in hf_subsets:
             logger.info(
-                f"Task: {self.metadata.name}, split: {eval_split}, subset: {hf_subset}. Running..."
+                f"Task: {self.metadata.name}, split: {self.eval_split}, subset: {hf_subset}. Running..."
             )
 
             if hf_subset not in self.dataset and hf_subset == "default":
@@ -116,8 +105,6 @@ class AbsTaskClassification(AbsTask):
             scores[hf_subset] = self._evaluate_subset(
                 model,
                 ds,
-                eval_split,
-                train_split,
                 encode_kwargs=encode_kwargs,
                 **kwargs,
             )
@@ -128,14 +115,12 @@ class AbsTaskClassification(AbsTask):
     def _evaluate_subset(
         self,
         model: Encoder,
-        dataset,
-        eval_split: str = "test",
-        train_split: str = "train",
+        dataset: DatasetDict | Dataset,
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ) -> ScoresDict:
-        train_split = dataset[train_split]
-        eval_split = dataset[eval_split]
+        train_split = dataset[self.train_split]
+        eval_split = dataset[self.eval_split]
         params = {"k": self.k}
         params.update(kwargs)
 
@@ -156,36 +141,14 @@ class AbsTaskClassification(AbsTask):
                 idxs,
             )
 
-            if self.method == "kNN":
-                evaluator = kNNClassificationEvaluator(
-                    X_sampled,
-                    y_sampled,
-                    eval_split["text"],  # type: ignore
-                    eval_split["label"],  # type: ignore
-                    task_name=self.metadata.name,
-                    **params,
-                )
-            elif self.method == "kNN-pytorch":
-                evaluator = kNNClassificationEvaluatorPytorch(
-                    X_sampled,
-                    y_sampled,
-                    eval_split["text"],  # type: ignore
-                    eval_split["label"],  # type: ignore
-                    task_name=self.metadata.name,
-                    **params,
-                )
-            elif self.method == "logReg":
-                evaluator = logRegClassificationEvaluator(
-                    X_sampled,
-                    y_sampled,
-                    eval_split["text"],  # type: ignore
-                    eval_split["label"],  # type: ignore
-                    task_name=self.metadata.name,
-                    **params,
-                )
-            else:
-                raise ValueError(f"Method {self.method} not supported")
-
+            evaluator = self.evaluator(
+                X_sampled,
+                y_sampled,
+                eval_split["text"],  # type: ignore
+                eval_split["label"],  # type: ignore
+                task_name=self.metadata.name,
+                **params,
+            )
             scores_exp, test_cache = evaluator(
                 model, encode_kwargs=encode_kwargs, test_cache=test_cache
             )
@@ -238,7 +201,12 @@ class AbsTaskClassification(AbsTask):
 
         text_len = [len(t) for t in text]
         total_text_len = sum(text_len)
-        label_count = Counter(label)
+        label_len = [len(l) for l in label]
+        total_label_len = sum(label_len)
+        total_labels = []
+        for l in label:
+            total_labels.extend(l if len(l) > 0 else [None])
+        label_count = Counter(total_labels)
         num_texts_in_train = (
             len(set(text) & set(train_text)) if split != "train" else None
         )
@@ -249,10 +217,16 @@ class AbsTaskClassification(AbsTask):
             min_text_length=min(text_len),
             average_text_length=total_text_len / len(text),
             max_text_length=max(text_len),
-            unique_text=len(set(text)),
+            unique_texts=len(set(text)),
+            min_labels_per_text=min(label_len),
+            average_label_per_text=total_label_len / len(label),
+            max_labels_per_text=max(label_len),
             unique_labels=len(label_count),
             labels={
-                str(label): {"count": count} for label, count in label_count.items()
+                str(label): {
+                    "count": value,
+                }
+                for label, value in label_count.items()
             },
         )
 

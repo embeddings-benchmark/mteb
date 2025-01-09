@@ -151,6 +151,7 @@ class AbsTask(ABC):
             scores[hf_subset] = self._evaluate_subset(
                 model, data_split, encode_kwargs=encode_kwargs, **kwargs
             )
+            self._add_main_score(scores[hf_subset])
         return scores
 
     @abstractmethod
