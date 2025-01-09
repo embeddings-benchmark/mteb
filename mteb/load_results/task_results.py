@@ -511,8 +511,15 @@ class TaskResult(BaseModel):
                 new_scores[split].append(_scores)
                 seen_subsets.add(_scores["hf_subset"])
             if seen_subsets != hf_subsets:
+                missing_subsets = hf_subsets - seen_subsets
+                if len(missing_subsets) > 2:
+                    subset1, subset2 = list(missing_subsets)[:2]
+                    missing_subsets_str = f"{{'{subset1}', '{subset2}', ...}}"
+                else:
+                    missing_subsets_str = str(missing_subsets)
+
                 logger.warning(
-                    f"{task.metadata.name}: Missing subsets {hf_subsets - seen_subsets} for split {split}"
+                    f"{task.metadata.name}: Missing subsets {missing_subsets_str} for split {split}"
                 )
             seen_splits.add(split)
         if seen_splits != set(splits):

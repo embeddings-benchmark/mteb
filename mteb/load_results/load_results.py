@@ -163,7 +163,7 @@ def load_results(
                         r = r.validate_and_filter_scores(task=task)
                         filtered_results.append(r)
                     except Exception as e:
-                        logger.warning(
+                        logger.info(
                             f"Validation failed for {r.task_name} in {model_name} {revision}: {e}"
                         )
                 _results = filtered_results

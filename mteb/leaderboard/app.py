@@ -14,6 +14,7 @@ import mteb
 from mteb.caching import json_cache
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
 from mteb.leaderboard.table import scores_to_tables
+from mteb.models.overview import get_model_meta
 
 
 def load_results():
@@ -191,11 +192,23 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             """,
             )
             with gr.Group():
-                searchbar = gr.Textbox(
-                    label="Search Models",
-                    info="Search models by name (RegEx sensitive. Separate queries with `|`)",
-                    interactive=True,
-                )
+                with gr.Row():
+                    searchbar = gr.Textbox(
+                        label="Search Models",
+                        info="Search models by name (RegEx sensitive. Separate queries with `|`)",
+                        interactive=True,
+                    )
+                    compatibility = gr.CheckboxGroup(
+                        [
+                            (
+                                "Should be sentence-transformers compatible",
+                                "Sentence Transformers",
+                            )
+                        ],
+                        value=[],
+                        label="Compatibility",
+                        interactive=True,
+                    )
                 with gr.Row(elem_classes=""):
                     with gr.Column():
                         availability = gr.Radio(
@@ -219,15 +232,17 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                             interactive=True,
                         )
                     with gr.Column():
-                        compatibility = gr.CheckboxGroup(
+                        zero_shot = gr.Radio(
                             [
                                 (
-                                    "Should be sentence-transformers compatible",
-                                    "Sentence Transformers",
-                                )
+                                    "Only Zero-shot",
+                                    "hard",
+                                ),
+                                ("Allow Unknown", "soft"),
+                                ("Allow all", "off"),
                             ],
-                            value=[],
-                            label="Compatibility",
+                            value="soft",
+                            label="Zero-shot",
                             interactive=True,
                         )
                         model_size = RangeSlider(
@@ -259,6 +274,14 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                     "*We only display models that have been run on all task types in the benchmark*"
                 )
     with gr.Tab("Summary"):
+        gr.Markdown(
+            """
+            ✅ - Model is zero-shot on the benchmark <br>
+            ⚠️  - Training data unknown <br>
+            ❌ - Model is **NOT** zero-shot on the benchmark
+        """
+        )
+        summary_table.render()
         with gr.Accordion(
             "What do aggregate measures (Rank(Borda), Mean(Task), etc.) mean?",
             open=False,
@@ -272,7 +295,6 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
     **Mean(TaskType)**: This is a weighted average across different task categories, such as classification or retrieval. It is computed by first computing the average by task category and then computing the average on each category. Similar to the Mean(Task) this measure is continuous and tends to overvalue tasks with higher variance. This score also prefers models that perform well across all task categories.
             """
             )
-        summary_table.render()
         download_summary = gr.DownloadButton("Download Table")
         download_summary.click(
             download_table, inputs=[summary_table], outputs=[download_summary]
@@ -353,6 +375,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             compatibility,
             instructions,
             model_size,
+            zero_shot,
         ],
         outputs=[scores],
     )
@@ -366,6 +389,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
         compatibility,
         instructions,
         model_size,
+        zero_shot,
     ):
         benchmark = mteb.get_benchmark(benchmark_name)
         benchmark_results = benchmark.load_results(base_results=all_results)
@@ -383,7 +407,27 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             # Multiplying by millions
             lower = lower * 1e6
             upper = upper * 1e6
+        model_names = None
+        all_model_metas = [
+            get_model_meta(model_res.model_name) for model_res in benchmark_results
+        ]
+        if zero_shot == "hard":
+            model_names = list(
+                {
+                    model_meta.name
+                    for model_meta in all_model_metas
+                    if model_meta.is_zero_shot_on(benchmark.tasks)
+                }
+            )
+        if zero_shot == "soft":
+            model_names = set()
+            for model_meta in all_model_metas:
+                is_zero_shot = model_meta.is_zero_shot_on(benchmark.tasks)
+                if is_zero_shot or (is_zero_shot is None):
+                    model_names.add(model_meta.name)
+            model_names = list(model_names)
         benchmark_results = benchmark_results.filter_models(
+            model_names=model_names,
             open_weights=availability,
             use_instructions=instructions,
             frameworks=compatibility,
