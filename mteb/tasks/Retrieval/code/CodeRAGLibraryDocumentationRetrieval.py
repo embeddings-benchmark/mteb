@@ -6,9 +6,11 @@ from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-def split_by_first_newline(s):
-    parts = s.split("\n", 1)  # Split the string by the first newline
-    return parts if len(parts) > 1 else (s, "")  # Return parts or (s, '') if no newline
+def _split_by_first_newline(s):
+    # Split the string by the first newline
+    parts = s.split("\n", 1)
+    # Return parts or (s, '') if no newline
+    return parts if len(parts) > 1 else (s, "")
 
 
 class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
@@ -78,7 +80,7 @@ class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
         id = 0
         for text in texts:
             # text format "document title \n document content"
-            query, doc = split_by_first_newline(text)
+            query, doc = _split_by_first_newline(text)
 
             # some library documents doesn't have query-doc pair
             if not doc:
