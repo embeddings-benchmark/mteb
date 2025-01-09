@@ -291,13 +291,10 @@ class TaskResult(BaseModel):
                 )
 
         pre_1_11_load = (
-            (
-                "mteb_version" in data
-                and data["mteb_version"] is not None
-                and Version(data["mteb_version"]) < Version("1.11.0")
-            )
-            or "mteb_version" not in data
-        )  # assume it is before 1.11.0 if the version is not present
+            "mteb_version" in data
+            and data["mteb_version"] is not None
+            and Version(data["mteb_version"]) < Version("1.11.0")
+        ) or "mteb_version" not in data  # assume it is before 1.11.0 if the version is not present
 
         try:
             obj = cls.model_validate(data)
@@ -476,6 +473,22 @@ class TaskResult(BaseModel):
 
     def __repr__(self) -> str:
         return f"TaskResult(task_name={self.task_name}, scores=...)"
+
+    def only_main_score(self) -> TaskResult:
+        new_scores = {}
+        for split in self.scores:
+            new_scores[split] = []
+            for subset_scores in self.scores[split]:
+                new_scores[split].append(
+                    {
+                        "hf_subset": subset_scores.get("hf_subset", "default"),
+                        "main_score": subset_scores.get("main_score", np.nan),
+                        "languages": subset_scores.get("languages", []),
+                    }
+                )
+        new_res = {**self.to_dict(), "scores": new_scores}
+        new_res = TaskResult.from_validated(**new_res)
+        return new_res
 
     def validate_and_filter_scores(self, task: AbsTask | None = None) -> AbsTask:
         """This ensures that the scores are correct for the given task, by removing any splits besides those specified in the task metadata.
