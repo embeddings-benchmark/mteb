@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 
 class ClassificationDescriptiveStatistics(DescriptiveStatistics):
-    """Descriptive statistics for MultilabelClassification
+    """Descriptive statistics for Classification
 
     Attributes:
         num_samples: number of samples in the dataset.
@@ -201,11 +201,17 @@ class AbsTaskClassification(AbsTask):
 
         text_len = [len(t) for t in text]
         total_text_len = sum(text_len)
-        label_len = [len(l) for l in label]
-        total_label_len = sum(label_len)
-        total_labels = []
-        for l in label:
-            total_labels.extend(l if len(l) > 0 else [None])
+        if isinstance(label[0], int):
+            label_len = [1] * len(label)
+            total_label_len = len(label)
+            total_labels = label
+        else:
+            # multilabel classification
+            label_len = [len(l) for l in label]
+            total_label_len = sum(label_len)
+            total_labels = []
+            for l in label:
+                total_labels.extend(l if len(l) > 0 else [None])
         label_count = Counter(total_labels)
         num_texts_in_train = (
             len(set(text) & set(train_text)) if split != "train" else None

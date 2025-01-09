@@ -15,7 +15,7 @@ from sklearn.preprocessing import MultiLabelBinarizer
 from mteb.encoder_interface import Encoder
 
 from ..load_results.task_results import ScoresDict
-from . import AbsTaskClassification
+from .AbsTaskClassification import AbsTaskClassification
 
 logger = logging.getLogger(__name__)
 
