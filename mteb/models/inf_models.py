@@ -12,7 +12,7 @@ inf_retriever_v1 = ModelMeta(
         trust_remote_code=True,
     ),
     name="infly/inf-retriever-v1",
-    languages=["eng_Latn","zho_Hans"],
+    languages=["eng_Latn", "zho_Hans"],
     open_weights=True,
     revision="d2d074546028c0012b5cc6af78c4fac24896e67f",
     release_date="2024-12-24",  # initial commit of hf model.
