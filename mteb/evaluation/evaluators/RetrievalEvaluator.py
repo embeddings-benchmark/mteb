@@ -43,7 +43,7 @@ def corpus_to_str(
             else corpus["text"][i].strip()
             for i in range(len(corpus["text"]))
         ]
-    elif isinstance(corpus, (list, tuple)) and isinstance(corpus[0], dict):
+    elif isinstance(corpus, list) and isinstance(corpus[0], dict):
         sentences = [
             (doc["title"] + " " + doc["text"]).strip()
             if "title" in doc
@@ -307,7 +307,7 @@ class DenseRetrievalExactSearch:
             assert (
                 len(queries_in_pair) == len(corpus_in_pair) == len(instructions_in_pair)
             )
-            corpus_in_pair = corpus_to_str(corpus_in_pair)
+            corpus_in_pair = corpus_to_str(list(corpus_in_pair))
 
             if hasattr(self.model, "model") and isinstance(
                 self.model.model, CrossEncoder
