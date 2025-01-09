@@ -70,3 +70,37 @@ e5_mistral = ModelMeta(
     license="mit",
     max_tokens=32768,
 )
+
+zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
+    loader=partial(  # type: ignore
+        instruct_wrapper,
+        model_name_or_path="zeta-alpha-ai/Zeta-Alpha-E5-Mistral",
+        instruction_template=E5_INSTRUCTION,
+        attn="cccc",
+        pooling_method="lasttoken",
+        mode="embedding",
+        torch_dtype=torch.float16,
+        # The ST script does not normalize while the HF one does so unclear what to do
+        # https://huggingface.co/intfloat/e5-mistral-7b-instruct#transformers
+        normalized=True,
+    ),
+    name="zeta-alpha-ai/Zeta-Alpha-E5-Mistral",
+    revision="c791d37474fa6a5c72eb3a2522be346bc21fbfc3",
+    release_date="2024-08-30",
+    languages=["eng_Latn"],
+    n_parameters=7110660096,
+    memory_usage=None,
+    max_tokens=32768.0,
+    embed_dim=4096,
+    license="mit",
+    open_weights=True,
+    public_training_data=False,
+    public_training_code=None,
+    framework=["PyTorch"],
+    reference="https://huggingface.co/zeta-alpha-ai/Zeta-Alpha-E5-Mistral",
+    similarity_fn_name="cosine",
+    use_instructions=None,
+    training_datasets=None,
+    adapted_from="intfloat/e5-mistral-7b-instruct",
+    superseded_by=None,
+)
