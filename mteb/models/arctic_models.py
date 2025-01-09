@@ -156,18 +156,19 @@ arctic_embed_s = ModelMeta(
         # source: https://arxiv.org/pdf/2405.05374
         # splits not specified to assuming everything
         # in MTEB
-        "NQ": ["test"],
+        "NQ": ["test"], 
         "HotPotQA": ["test"],
         "HotPotQAHardNegatives": ["test"],
         "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
         "FEVER": ["test"],
         "FEVERHardNegatives": ["test"],
-        # trained on stack exchange, unsure if sources match
-        "StackExchangeClusteringP2P": ["test"],
-        "StackExchangeClusteringP2P.v2": ["test"],
-        "StackExchangeClustering": ["test"],
-        "StackExchangeClustering.v2": ["test"],
         # not in MTEB
+        # trained on stack exchange (title-body)
+        "stackexchange": [],
+        # "StackExchangeClusteringP2P": ["test"],
+        # "StackExchangeClusteringP2P.v2": ["test"],
+        # "StackExchangeClustering": ["test"],
+        # "StackExchangeClustering.v2": ["test"],
         "paq": [],
         "s2orc": [],
         "other": [],  # indisclosed including webdata

@@ -78,9 +78,17 @@ all_MiniLM_L6_v2 = ModelMeta(
     superseded_by=None,
     adapted_from=None,
     training_datasets={
+        # trained on stack exchange, unsure if sources match
+        "StackExchangeClusteringP2P": ["test"],
+        "StackExchangeClusteringP2P.v2": ["test"],
+        "StackExchangeClustering": ["test"],
+        "StackExchangeClustering.v2": ["test"],
+        "NQ": ["test"],
+        "MSMARCO": ["train"],
+        # Non MTEB sources
         "s2orc": ["train"],
         "flax-sentence-embeddings/stackexchange_xml": ["train"],
-        "ms_marco": ["train"],
+        # "ms_marco": ["train"],
         "gooaq": ["train"],
         "yahoo_answers_topics": ["train"],
         "code_search_net": ["train"],
@@ -89,7 +97,6 @@ all_MiniLM_L6_v2 = ModelMeta(
         "snli": ["train"],
         "multi_nli": ["train"],
         "wikihow": ["train"],
-        "natural_questions": ["train"],
         "trivia_qa": ["train"],
         "embedding-data/sentence-compression": ["train"],
         "embedding-data/flickr30k-captions": ["train"],
