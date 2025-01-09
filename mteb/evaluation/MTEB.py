@@ -21,7 +21,7 @@ from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import model_meta_from_sentence_transformers
 
-from ..abstasks import AbsTaskMultilabelClassification
+from ..abstasks.AbsTaskMultilabelClassification import AbsTaskMultilabelClassification
 from ..abstasks.AbsTask import AbsTask
 from ..abstasks.AbsTaskReranking import AbsTaskReranking
 from ..load_results.task_results import TaskResult
@@ -231,6 +231,7 @@ class MTEB:
             AbsTaskMultilabelClassification,
         ]
         all_task_classes = []
+        print(tasks_categories_cls)
         for cat_cls in tasks_categories_cls:
             for cls in cat_cls.__subclasses__():
                 if cat_cls.__name__.startswith("AbsTask") and cls.__name__ not in (
