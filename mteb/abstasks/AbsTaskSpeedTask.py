@@ -24,9 +24,6 @@ class AbsTaskSpeedTask(AbsTask):
     num_loops = 7
     device = "cpu"
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
     def load_data(self, **kwargs):
         """Reads the text 'The Ugly Duckling' as the `test` split with a `text` column."""
         if self.data_loaded:

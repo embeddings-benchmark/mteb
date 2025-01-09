@@ -64,9 +64,6 @@ class AbsTaskSTS(AbsTask):
     min_score: int
     max_score: int
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
     def _evaluate_subset(
         self, model, data_split, *, encode_kwargs: dict[str, Any] = {}, **kwargs
     ) -> ScoresDict:

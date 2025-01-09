@@ -127,12 +127,6 @@ class AbsTaskRetrieval(AbsTask):
     ignore_identical_ids: bool = False
     abstask_prompt = "Retrieve text based on user query."
 
-    def __init__(self, **kwargs):
-        self.top_ranked = None
-        self.instructions = None
-        # there could be multiple options, so do this even if multilingual
-        super(AbsTaskRetrieval, self).__init__(**kwargs)  # noqa
-
     def load_data(self, **kwargs):
         if self.data_loaded:
             return

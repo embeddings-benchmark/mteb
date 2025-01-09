@@ -54,10 +54,7 @@ class CrossLingualSemanticDiscriminationWMT19(AbsTaskRetrieval, MultilingualTask
         sample_creation="LM-generated and verified",
         bibtex_citation="preprint_coming",
     )
-
-    def __init__(self, **kwargs):
-        self.num_of_distractors = 4
-        super().__init__(**kwargs)
+    num_of_distractors = 4
 
     def load_data(self, **kwargs):
         """Generic data loader function for original clsd datasets with the format shown in "hf_dataset_link".
