@@ -76,23 +76,19 @@ def get_column_types(df: pd.DataFrame) -> list[str]:
     return types
 
 
-def get_means_per_types(df: pd.DataFrame) -> pd.DataFrame:
+def get_means_per_types(per_task: pd.DataFrame):
     task_names_per_type = defaultdict(list)
-    for task_name, task_type in zip(df["task_name"], df["task_type"]):
+    for task_name in per_task.columns:
+        task_type = get_task(task_name).metadata.type
         task_names_per_type[task_type].append(task_name)
-    groups = df.groupby("model_name")
     records = []
-    for (model_name), group_data in groups:
-        name_to_score = dict(zip(group_data["task_name"], group_data["score"]))
-        for task_type, task_names in task_names_per_type.items():
-            type_mean = np.mean(
-                [name_to_score.get(task_name, np.nan) for task_name in task_names]
-            )
+    for task_type, tasks in task_names_per_type.items():
+        for model_name, scores in per_task.iterrows():
             records.append(
-                dict(  # noqa
+                dict(
                     model_name=model_name,
                     task_type=task_type,
-                    score=type_mean,
+                    score=scores[tasks].mean(),
                 )
             )
     return pd.DataFrame.from_records(records)
@@ -133,17 +129,14 @@ def scores_to_tables(
         )
         return gr.DataFrame(no_results_frame), gr.DataFrame(no_results_frame)
     data = pd.DataFrame.from_records(scores_long)
-    data["task_type"] = data["task_name"].map(
-        lambda task_name: get_task(task_name).metadata.type
-    )
-    mean_per_type = get_means_per_types(data)
+    per_task = data.pivot(index="model_name", columns="task_name", values="score")
+    mean_per_type = get_means_per_types(per_task)
     mean_per_type = mean_per_type.pivot(
         index="model_name", columns="task_type", values="score"
     )
     mean_per_type.columns = [
         split_on_capital(column) for column in mean_per_type.columns
     ]
-    per_task = data.pivot(index="model_name", columns="task_name", values="score")
     to_remove = per_task.isna().all(axis="columns")
     if search_query:
         names = per_task.index.get_level_values("model_name")
