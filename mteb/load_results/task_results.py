@@ -470,7 +470,9 @@ class TaskResult(BaseModel):
 
         return aggregation(values)
 
-    def get_score_fast(self, splits, languages):
+    def get_score_fast(
+        self, splits: str | None = None, languages: str | None = None
+    ) -> float:
         """Sped up version of get_score that will be used if no aggregation, script or getter needs to be specified."""
         if splits is None:
             splits = self.scores
@@ -479,7 +481,7 @@ class TaskResult(BaseModel):
         for split in splits:
             if split not in self.scores:
                 raise ValueError(f"Split missing from scores: {split}")
-                continue
+
             for scores in self.scores[split]:
                 langs = scores["languages"]
                 hf_subset = scores["hf_subset"]
