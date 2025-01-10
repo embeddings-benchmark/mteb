@@ -79,11 +79,17 @@ class RetrievalDataLoader:
         self.qrels.map(qrels_dict_init)
         self.qrels = qrels_dict
         self.queries = self.queries.filter(lambda x: x["id"] in self.qrels)
-        self.queries = {query["id"]: query["text"] for query in self.queries}
         logger.info("Loaded %d %s Queries.", len(self.queries), self.split.upper())
         logger.info("Query Example: %s", self.queries[0])
+
+        self.queries = {query["id"]: query["text"] for query in self.queries}
         self.corpus = {
-            doc["id"]: doc.get("title", "") + " " + doc["text"] for doc in self.corpus
+            doc["id"]: (
+                doc["title"] + " " + doc["text"]
+                if len(doc.get("title", "")) > 0
+                else doc["text"]
+            )
+            for doc in self.corpus
         }
 
         return self.corpus, self.queries, self.qrels, self.instructions, self.top_ranked
