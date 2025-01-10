@@ -323,7 +323,6 @@ jina_embedding_s_en_v1 = ModelMeta(
     training_datasets={"jinaai/negation-dataset": ["train"]},
 )
 
-
 all_MiniLM_L12_v2 = ModelMeta(
     name="sentence-transformers/all-MiniLM-L12-v2",
     languages=["eng-Latn"],
@@ -373,7 +372,6 @@ all_MiniLM_L12_v2 = ModelMeta(
         "embedding-data/PAQ_pairs": ["train"],
         "embedding-data/WikiAnswers": ["train"],
     },
-
 )
 
 contriever = ModelMeta(
