@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import itertools
 import json
+import logging
 import tempfile
+import time
 from collections import defaultdict
 from pathlib import Path
 from urllib.parse import urlencode
@@ -15,6 +18,8 @@ from mteb.caching import json_cache
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
 from mteb.leaderboard.table import scores_to_tables
 from mteb.models.overview import get_model_meta
+
+logger = logging.getLogger(__name__)
 
 
 def load_results():
@@ -112,15 +117,20 @@ def update_task_info(task_names: str) -> gr.DataFrame:
     return gr.DataFrame(df, datatype=["markdown"] + ["str"] * (len(df.columns) - 1))
 
 
+print("Loading all benchmark results")
 all_results = load_results()
 
 # Model sizes in million parameters
 min_model_size, max_model_size = 0, 10_000
 
 benchmarks = mteb.get_benchmarks()
-
+all_benchmark_results = {
+    benchmark.name: benchmark.load_results(base_results=all_results)
+    for benchmark in benchmarks
+}
 default_benchmark = mteb.get_benchmark("MTEB(Multilingual, beta)")
-default_results = default_benchmark.load_results(base_results=all_results)
+default_results = all_benchmark_results[default_benchmark.name]
+print("Benchmark results loaded")
 
 default_scores = default_results.get_scores(format="long")
 summary_table, per_task_table = scores_to_tables(default_scores)
@@ -133,28 +143,28 @@ benchmark_select = gr.Dropdown(
 )
 lang_select = gr.Dropdown(
     all_results.languages,
-    value=default_results.languages,
+    value=list(sorted(default_results.languages)),
     multiselect=True,
     label="Language",
     info="Select languages to include.",
 )
 type_select = gr.Dropdown(
     all_results.task_types,
-    value=default_results.task_types,
+    value=list(sorted(default_results.task_types)),
     multiselect=True,
     label="Task Type",
     info="Select task types to include.",
 )
 domain_select = gr.Dropdown(
     all_results.domains,
-    value=default_results.domains,
+    value=list(sorted(default_results.domains)),
     multiselect=True,
     label="Domain",
     info="Select domains to include.",
 )
 task_select = gr.Dropdown(
     all_results.task_names,
-    value=default_results.task_names,
+    value=list(sorted(default_results.task_names)),
     allow_custom_value=True,
     multiselect=True,
     label="Task",
@@ -255,6 +265,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                             interactive=True,
                         )
     scores = gr.State(default_scores)
+    models = gr.State(list({entry["model_name"] for entry in default_scores}))
     with gr.Row():
         with gr.Column():
             description = gr.Markdown(
@@ -313,94 +324,96 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
     # This sets the benchmark from the URL query parameters
     demo.load(set_benchmark_on_load, inputs=[], outputs=[benchmark_select])
 
-    @gr.on(inputs=[scores, searchbar], outputs=[summary_table, per_task_table])
-    def update_tables(scores, search_query: str):
-        summary, per_task = scores_to_tables(scores, search_query)
-        return summary, per_task
-
-    @gr.on(
-        inputs=[benchmark_select],
-        outputs=[
-            lang_select,
-            type_select,
-            domain_select,
-        ],
-    )
     @json_cache
-    def on_select_benchmark(benchmark_name):
+    def on_benchmark_select(benchmark_name):
+        start_time = time.time()
         benchmark = mteb.get_benchmark(benchmark_name)
-        benchmark_results = benchmark.load_results(base_results=all_results)
-        task_types = benchmark_results.task_types
-        langs = benchmark_results.languages
-        domains = benchmark_results.domains
+        languages = [task.languages for task in benchmark.tasks if task.languages]
+        languages = set(itertools.chain.from_iterable(languages))
+        languages = list(sorted(languages))
+        domains = [
+            task.metadata.domains for task in benchmark.tasks if task.metadata.domains
+        ]
+        domains = set(itertools.chain.from_iterable(domains))
+        types = {task.metadata.type for task in benchmark.tasks if task.metadata.type}
+        languages, domains, types = (
+            list(sorted(languages)),
+            list(sorted(domains)),
+            list(sorted(types)),
+        )
+        elapsed = time.time() - start_time
+        benchmark_results = all_benchmark_results[benchmark_name]
+        scores = benchmark_results.get_scores(format="long")
+        logger.info(f"on_benchmark_select callback: {elapsed}s")
         return (
-            langs,
-            task_types,
+            languages,
             domains,
+            types,
+            [task.metadata.name for task in benchmark.tasks],
+            scores,
         )
 
-    @gr.on(
-        inputs=[benchmark_select, lang_select, type_select, domain_select],
-        outputs=[task_select],
+    benchmark_select.change(
+        on_benchmark_select,
+        inputs=[benchmark_select],
+        outputs=[lang_select, domain_select, type_select, task_select, scores],
     )
-    @json_cache
-    def update_task_list(benchmark_name, languages, task_types, domains):
-        benchmark = mteb.get_benchmark(benchmark_name)
-        benchmark_results = benchmark.load_results(base_results=all_results)
-        task_to_lang_set = defaultdict(set)
-        task_to_type = {}
-        task_to_domains = defaultdict(set)
-        for model_res in benchmark_results:
-            for task_res in model_res:
-                task_to_lang_set[task_res.task_name] |= set(task_res.languages)
-                task_to_domains[task_res.task_name] |= set(task_res.domains)
-                task_to_type[task_res.task_name] = task_res.task_type
-        res = []
-        for task_name in benchmark_results.task_names:
-            if not (task_to_domains[task_name] & set(domains)):
-                continue
-            if not (task_to_lang_set[task_name] & set(languages)):
-                continue
-            if task_to_type[task_name] not in task_types:
-                continue
-            res.append(task_name)
-        return res
 
-    @gr.on(
-        inputs=[
-            benchmark_select,
-            task_select,
-            lang_select,
-            type_select,
-            domain_select,
-            availability,
-            compatibility,
-            instructions,
-            model_size,
-            zero_shot,
-        ],
+    @json_cache
+    def update_scores_on_lang_change(benchmark_name, languages):
+        start_time = time.time()
+        benchmark_results = all_benchmark_results[benchmark_name]
+        scores = benchmark_results.get_scores(languages=languages, format="long")
+        elapsed = time.time() - start_time
+        logger.info(f"update_scores callback: {elapsed}s")
+        return scores
+
+    lang_select.input(
+        update_scores_on_lang_change,
+        inputs=[benchmark_select, lang_select],
         outputs=[scores],
     )
-    def update_scores(
-        benchmark_name,
-        task_names,
-        languages,
-        task_types,
-        domains,
+
+    def update_task_list(benchmark_name, type_select, domain_select, lang_select):
+        start_time = time.time()
+        tasks_to_keep = []
+        for task in mteb.get_benchmark(benchmark_name).tasks:
+            if task.metadata.type not in type_select:
+                continue
+            if not (set(task.metadata.domains or []) & set(domain_select)):
+                continue
+            if not (set(task.languages or []) & set(lang_select)):
+                continue
+            tasks_to_keep.append(task.metadata.name)
+        elapsed = time.time() - start_time
+        logger.info(f"update_task_list callback: {elapsed}s")
+        return tasks_to_keep
+
+    type_select.input(
+        update_task_list,
+        inputs=[benchmark_select, type_select, domain_select, lang_select],
+        outputs=[task_select],
+    )
+    domain_select.input(
+        update_task_list,
+        inputs=[benchmark_select, type_select, domain_select, lang_select],
+        outputs=[task_select],
+    )
+    lang_select.input(
+        update_task_list,
+        inputs=[benchmark_select, type_select, domain_select, lang_select],
+        outputs=[task_select],
+    )
+
+    def filter_models(
+        model_names,
+        task_select,
         availability,
         compatibility,
         instructions,
         model_size,
         zero_shot,
     ):
-        benchmark = mteb.get_benchmark(benchmark_name)
-        benchmark_results = benchmark.load_results(base_results=all_results)
-        benchmark_results = benchmark_results.filter_tasks(
-            languages=languages,
-            task_names=task_names,
-            task_types=task_types,
-            domains=domains,
-        )
         lower, upper = model_size
         # Setting to None, when the user doesn't specify anything
         if (lower == min_model_size) and (upper == max_model_size):
@@ -409,34 +422,183 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             # Multiplying by millions
             lower = lower * 1e6
             upper = upper * 1e6
-        model_names = None
-        all_model_metas = [
-            get_model_meta(model_res.model_name) for model_res in benchmark_results
-        ]
-        if zero_shot == "hard":
-            model_names = list(
-                {
-                    model_meta.name
-                    for model_meta in all_model_metas
-                    if model_meta.is_zero_shot_on(benchmark.tasks)
-                }
-            )
-        if zero_shot == "soft":
-            model_names = set()
-            for model_meta in all_model_metas:
-                is_zero_shot = model_meta.is_zero_shot_on(benchmark.tasks)
-                if is_zero_shot or (is_zero_shot is None):
-                    model_names.add(model_meta.name)
-            model_names = list(model_names)
-        benchmark_results = benchmark_results.filter_models(
+        model_metas = mteb.get_model_metas(
             model_names=model_names,
             open_weights=availability,
             use_instructions=instructions,
             frameworks=compatibility,
             n_parameters_range=(lower, upper),
         )
-        scores = benchmark_results.get_scores(languages=languages, format="long")
-        return scores
+        tasks = mteb.get_tasks(tasks=task_select)
+        models_to_keep = set()
+        for model_meta in model_metas:
+            is_zero_shot = model_meta.is_zero_shot_on(tasks)
+            if is_zero_shot is None:
+                if zero_shot == "hard":
+                    continue
+            if not zero_shot:
+                if zero_shot != "off":
+                    continue
+            models_to_keep.add(model_meta.name)
+        return list(models_to_keep)
+
+    def update_models(
+        scores,
+        tasks,
+        availability,
+        compatibility,
+        instructions,
+        model_size,
+        zero_shot,
+    ):
+        start_time = time.time()
+        model_names = list({entry["model_name"] for entry in scores})
+        filtered_models = filter_models(
+            model_names,
+            tasks,
+            availability,
+            compatibility,
+            instructions,
+            model_size,
+            zero_shot,
+        )
+        elapsed = time.time() - start_time
+        logger.info(f"update_models callback: {elapsed}s")
+        return filtered_models
+
+    scores.change(
+        update_models,
+        inputs=[
+            scores,
+            task_select,
+            availability,
+            compatibility,
+            instructions,
+            model_size,
+            zero_shot,
+        ],
+        outputs=[models],
+    )
+    task_select.change(
+        update_models,
+        inputs=[
+            scores,
+            task_select,
+            availability,
+            compatibility,
+            instructions,
+            model_size,
+            zero_shot,
+        ],
+        outputs=[models],
+    )
+    availability.input(
+        update_models,
+        inputs=[
+            scores,
+            task_select,
+            availability,
+            compatibility,
+            instructions,
+            model_size,
+            zero_shot,
+        ],
+        outputs=[models],
+    )
+    compatibility.input(
+        update_models,
+        inputs=[
+            scores,
+            task_select,
+            availability,
+            compatibility,
+            instructions,
+            model_size,
+            zero_shot,
+        ],
+        outputs=[models],
+    )
+    instructions.input(
+        update_models,
+        inputs=[
+            scores,
+            task_select,
+            availability,
+            compatibility,
+            instructions,
+            model_size,
+            zero_shot,
+        ],
+        outputs=[models],
+    )
+    model_size.input(
+        update_models,
+        inputs=[
+            scores,
+            task_select,
+            availability,
+            compatibility,
+            instructions,
+            model_size,
+            zero_shot,
+        ],
+        outputs=[models],
+    )
+    zero_shot.input(
+        update_models,
+        inputs=[
+            scores,
+            task_select,
+            availability,
+            compatibility,
+            instructions,
+            model_size,
+            zero_shot,
+        ],
+        outputs=[models],
+    )
+
+    def update_tables(
+        scores,
+        search_query: str,
+        tasks,
+        models_to_keep,
+    ):
+        start_time = time.time()
+        tasks = set(tasks)
+        models_to_keep = set(models_to_keep)
+        filtered_scores = []
+        for entry in scores:
+            if entry["task_name"] not in tasks:
+                continue
+            if entry["model_name"] not in models_to_keep:
+                continue
+            filtered_scores.append(entry)
+        summary, per_task = scores_to_tables(filtered_scores, search_query)
+        elapsed = time.time() - start_time
+        logger.info(f"update_tables callback: {elapsed}s")
+        return summary, per_task
+
+    task_select.change(
+        update_tables,
+        inputs=[scores, searchbar, task_select, models],
+        outputs=[summary_table, per_task_table],
+    )
+    scores.change(
+        update_tables,
+        inputs=[scores, searchbar, task_select, models],
+        outputs=[summary_table, per_task_table],
+    )
+    models.change(
+        update_tables,
+        inputs=[scores, searchbar, task_select, models],
+        outputs=[summary_table, per_task_table],
+    )
+    searchbar.input(
+        update_tables,
+        inputs=[scores, searchbar, task_select, models],
+        outputs=[summary_table, per_task_table],
+    )
 
 
 if __name__ == "__main__":
