@@ -20,7 +20,9 @@ from mteb.models.overview import get_model_meta
 def load_results():
     results_cache_path = Path(__file__).parent.joinpath("__cached_results.json")
     if not results_cache_path.exists():
-        all_results = mteb.load_results()
+        all_results = (
+            mteb.load_results(only_main_score=True).join_revisions().filter_models()
+        )
         all_results.to_disk(results_cache_path)
         return all_results
     else:
@@ -110,7 +112,7 @@ def update_task_info(task_names: str) -> gr.DataFrame:
     return gr.DataFrame(df, datatype=["markdown"] + ["str"] * (len(df.columns) - 1))
 
 
-all_results = load_results().join_revisions().filter_models()
+all_results = load_results()
 
 # Model sizes in million parameters
 min_model_size, max_model_size = 0, 10_000
