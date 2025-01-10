@@ -29,13 +29,7 @@ def bm25_loader(**kwargs):
             stemmer_language: str | None = "english",
             **kwargs,
         ):
-            super().__init__(
-                model=None,
-                batch_size=1,
-                corpus_chunk_size=1,
-                previous_results=previous_results,
-                **kwargs,
-            )
+            self.model = None
 
             self.stopwords = stopwords
             self.stemmer = (
@@ -51,8 +45,6 @@ def bm25_loader(**kwargs):
             corpus: dict[str, dict[str, str]],
             queries: dict[str, str | list[str]],
             top_k: int,
-            score_function: str,
-            return_sorted: bool = False,
             **kwargs,
         ) -> dict[str, dict[str, float]]:
             logger.info("Encoding Corpus...")
