@@ -30,10 +30,10 @@ These will save the results in a folder called `results/{model_name}/{model_revi
 
 2. **Push Results to the Leaderboard**
 
-To add results to the public leaderboard you can push your results to the [results repository](https://github.com/embeddings-benchmark/results) afterwards they will appear on the leaderboard after a day.
+To add results to the public leaderboard you can push your results to the [results repository](https://github.com/embeddings-benchmark/results) via a PR. Once merged they will appear on the leaderboard after a day.
 
 
-3. (Optional) **Add the results using to the model card:**
+3. (Optional) **Add results to the model card:**
 
 `mteb` implements a cli for adding results to the model card:
 
@@ -49,7 +49,7 @@ If the readme already exists:
 mteb create_meta --results_folder results/{model_name}/{model_revision} --output_path model_card.md --from_existing your_existing_readme.md 
 ```
 
-Note that if you can run the model on many tasks, this can lead to an excessively large readme frontmatter.
+Note that running the model on many tasks may lead to a huge readme front matter.
 
 4. **Wait for a refresh the leaderboard:**
 

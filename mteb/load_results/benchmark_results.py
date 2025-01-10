@@ -87,21 +87,35 @@ class ModelResult(BaseModel):
         splits: list[Split] | None = None,
         languages: list[ISO_LANGUAGE | ISO_LANGUAGE_SCRIPT] | None = None,
         scripts: list[ISO_LANGUAGE_SCRIPT] | None = None,
-        getter: Callable[[ScoresDict], Score] = lambda scores: scores["main_score"],
-        aggregation: Callable[[list[Score]], Any] = np.mean,
+        getter: Callable[[ScoresDict], Score] | None = None,
+        aggregation: Callable[[list[Score]], Any] | None = None,
         format: Literal["wide", "long"] = "wide",
     ) -> dict | list:
+        if (getter is not None) or (aggregation is not None) or (scripts is not None):
+            use_fast = False
+            getter = (
+                getter if getter is not None else lambda scores: scores["main_score"]
+            )
+            aggregation = aggregation if aggregation is not None else np.mean
+        else:
+            use_fast = True
         if format == "wide":
             scores = {}
             for res in self.task_results:
                 try:
-                    scores[res.task_name] = res.get_score(
-                        splits=splits,
-                        languages=languages,
-                        scripts=scripts,
-                        getter=getter,
-                        aggregation=aggregation,
-                    )
+                    if use_fast:
+                        scores[res.task_name] = res.get_score_fast(
+                            splits=splits,
+                            languages=languages,
+                        )
+                    else:
+                        scores[res.task_name] = res.get_score(
+                            splits=splits,
+                            languages=languages,
+                            aggregation=aggregation,
+                            getter=getter,
+                            scripts=scripts,
+                        )
                 except Exception as e:
                     warnings.warn(
                         f"Couldn't get scores for {res.task_name} due to {e}."
@@ -111,16 +125,23 @@ class ModelResult(BaseModel):
             entries = []
             for task_res in self.task_results:
                 try:
+                    if use_fast:
+                        score = task_res.get_score_fast(
+                            splits=splits, languages=languages
+                        )
+                    else:
+                        score = task_res.get_score(
+                            splits=splits,
+                            languages=languages,
+                            aggregation=aggregation,
+                            getter=getter,
+                            scripts=scripts,
+                        )
                     entry = dict(  # noqa
                         model_name=self.model_name,
                         model_revision=self.model_revision,
                         task_name=task_res.task_name,
-                        score=task_res.get_score(
-                            splits=splits,
-                            languages=languages,
-                            getter=getter,
-                            aggregation=aggregation,
-                        ),
+                        score=score,
                         mteb_version=task_res.mteb_version,
                         dataset_revision=task_res.dataset_revision,
                         evaluation_time=task_res.evaluation_time,
@@ -209,6 +230,7 @@ class BenchmarkResults(BaseModel):
         frameworks: Iterable[str] | None = None,
         n_parameters_range: tuple[int | None, int | None] = (None, None),
         use_instructions: bool | None = None,
+        zero_shot_on: list[AbsTask] | None = None,
     ) -> BenchmarkResults:
         # if model_names is None:
         #     model_names = [model_res.model_name for model_res in self]
@@ -219,6 +241,7 @@ class BenchmarkResults(BaseModel):
             frameworks=frameworks,
             n_parameters_range=n_parameters_range,
             use_instructions=use_instructions,
+            zero_shot_on=zero_shot_on,
         )
         models = {meta.name for meta in model_metas}
         # model_revision_pairs = {(meta.name, meta.revision) for meta in model_metas}
@@ -283,8 +306,8 @@ class BenchmarkResults(BaseModel):
         splits: list[Split] | None = None,
         languages: list[ISO_LANGUAGE | ISO_LANGUAGE_SCRIPT] | None = None,
         scripts: list[ISO_LANGUAGE_SCRIPT] | None = None,
-        getter: Callable[[ScoresDict], Score] = lambda scores: scores["main_score"],
-        aggregation: Callable[[list[Score]], Any] = np.mean,
+        getter: Callable[[ScoresDict], Score] = None,
+        aggregation: Callable[[list[Score]], Any] = None,
         format: Literal["wide", "long"] = "wide",
     ) -> list[dict]:
         entries = []

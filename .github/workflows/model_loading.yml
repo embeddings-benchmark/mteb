@@ -1,0 +1,24 @@
+name: Model Loading
+
+on:
+  pull_request:
+    paths:
+      - 'mteb/models/**.py'
+
+jobs:
+  extract-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+
+    - name: Install dependencies and run tests
+      run: |
+        make model-load-test

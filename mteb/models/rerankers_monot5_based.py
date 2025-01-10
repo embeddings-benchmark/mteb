@@ -4,11 +4,7 @@ import logging
 from functools import partial
 
 import torch
-from transformers import (
-    AutoModelForCausalLM,
-    AutoModelForSeq2SeqLM,
-    AutoTokenizer,
-)
+from transformers import AutoModelForCausalLM, AutoModelForSeq2SeqLM, AutoTokenizer
 
 from mteb.model_meta import ModelMeta
 from mteb.models.rerankers_custom import RerankerWrapper, _loader
@@ -105,7 +101,12 @@ class MonoT5Reranker(RerankerWrapper):
 
     @torch.inference_mode()
     def predict(self, input_to_rerank, **kwargs):
-        queries, passages, instructions = list(zip(*input_to_rerank))
+        inputs = list(zip(*input_to_rerank))
+        if len(input_to_rerank[0]) == 2:
+            queries, passages = inputs
+            instructions = None
+        else:
+            queries, passages, instructions = inputs
 
         if instructions is not None and instructions[0] is not None:
             queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
@@ -194,7 +195,13 @@ Relevant: """
 
     @torch.inference_mode()
     def predict(self, input_to_rerank, **kwargs):
-        queries, passages, instructions = list(zip(*input_to_rerank))
+        inputs = list(zip(*input_to_rerank))
+        if len(input_to_rerank[0]) == 2:
+            queries, passages = inputs
+            instructions = None
+        else:
+            queries, passages, instructions = inputs
+
         if instructions is not None and instructions[0] is not None:
             # logger.info(f"Adding instructions to LLAMA queries")
             queries = [
@@ -392,6 +399,18 @@ flant5_base = ModelMeta(
       copyright = {Creative Commons Attribution 4.0 International}
     }
     """,
+    training_datasets={
+        "svakulenk0/qrecc": ["train"],
+        "taskmaster2": ["train"],
+        "djaym7/wiki_dialog": ["train"],
+        "deepmind/code_contests": ["train"],
+        "lambada": ["train"],
+        "gsm8k": ["train"],
+        "aqua_rat": ["train"],
+        "esnli": ["train"],
+        "quasc": ["train"],
+        "qed": ["train"],
+    },
 )
 
 flant5_large = ModelMeta(
@@ -417,6 +436,18 @@ flant5_large = ModelMeta(
       copyright = {Creative Commons Attribution 4.0 International}
     }
     """,
+    training_datasets={
+        "svakulenk0/qrecc": ["train"],
+        "taskmaster2": ["train"],
+        "djaym7/wiki_dialog": ["train"],
+        "deepmind/code_contests": ["train"],
+        "lambada": ["train"],
+        "gsm8k": ["train"],
+        "aqua_rat": ["train"],
+        "esnli": ["train"],
+        "quasc": ["train"],
+        "qed": ["train"],
+    },
 )
 
 flant5_xl = ModelMeta(
@@ -442,6 +473,18 @@ flant5_xl = ModelMeta(
       copyright = {Creative Commons Attribution 4.0 International}
     }
     """,
+    training_datasets={
+        "svakulenk0/qrecc": ["train"],
+        "taskmaster2": ["train"],
+        "djaym7/wiki_dialog": ["train"],
+        "deepmind/code_contests": ["train"],
+        "lambada": ["train"],
+        "gsm8k": ["train"],
+        "aqua_rat": ["train"],
+        "esnli": ["train"],
+        "quasc": ["train"],
+        "qed": ["train"],
+    },
 )
 
 flant5_xxl = ModelMeta(
@@ -467,6 +510,18 @@ flant5_xxl = ModelMeta(
       copyright = {Creative Commons Attribution 4.0 International}
     }
     """,
+    training_datasets={
+        "svakulenk0/qrecc": ["train"],
+        "taskmaster2": ["train"],
+        "djaym7/wiki_dialog": ["train"],
+        "deepmind/code_contests": ["train"],
+        "lambada": ["train"],
+        "gsm8k": ["train"],
+        "aqua_rat": ["train"],
+        "esnli": ["train"],
+        "quasc": ["train"],
+        "qed": ["train"],
+    },
 )
 
 
@@ -551,6 +606,7 @@ followir_7b = ModelMeta(
     open_weights=True,
     revision="4d25d437e38b510c01852070c0731e8f6e1875d1",
     release_date="2024-04-29",
+    training_datasets={"jhu-clsp/FollowIR-train": ["train"]},
     citation="""
     @misc{weller2024followir,
       title={FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions}, 
@@ -689,6 +745,7 @@ mt5_base_mmarco_v2 = ModelMeta(
       primaryClass={cs.CL}
     }
     """,
+    training_datasets={"msmarco": ["train"]},
 )
 
 mt5_13b_mmarco_100k = ModelMeta(
