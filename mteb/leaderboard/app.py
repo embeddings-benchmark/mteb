@@ -117,7 +117,7 @@ def update_task_info(task_names: str) -> gr.DataFrame:
     return gr.DataFrame(df, datatype=["markdown"] + ["str"] * (len(df.columns) - 1))
 
 
-print("Loading all benchmark results")
+logger.info("Loading all benchmark results")
 all_results = load_results()
 
 # Model sizes in million parameters
@@ -130,7 +130,7 @@ all_benchmark_results = {
 }
 default_benchmark = mteb.get_benchmark("MTEB(Multilingual, beta)")
 default_results = all_benchmark_results[default_benchmark.name]
-print("Benchmark results loaded")
+logger.info("Benchmark results loaded")
 
 default_scores = default_results.get_scores(format="long")
 summary_table, per_task_table = scores_to_tables(default_scores)
