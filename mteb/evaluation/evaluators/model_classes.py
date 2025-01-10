@@ -52,7 +52,6 @@ class DenseRetrievalExactSearch:
         previous_results: str | Path | None = None,
         **kwargs: Any,
     ):
-        # Model is class that provides encode_corpus() and encode_queries()
         self.model = model
         self.encode_kwargs = encode_kwargs.copy()
 
@@ -496,49 +495,6 @@ class DenseRetrievalExactSearch:
         if callable(getattr(model, "convert_conv_history_to_query", None)):
             return model.convert_conv_history_to_query(conversations)  # type: ignore
         return convert_conv_history_to_query(conversations)  # type: ignore
-
-
-class DRESModel:
-    """Dense Retrieval Exact Search (DRES).
-    This class converts a model with just an .encode method into DRES format.
-    """
-
-    mteb_model_meta: ModelMeta | None
-
-    def __init__(self, model, **kwargs):
-        self.model = model
-        self.use_sbert_model = isinstance(model, SentenceTransformer)
-
-    def encode_corpus(
-        self,
-        corpus: list[dict[str, str]],
-        task_name: str,
-        prompt_type: PromptType = PromptType.passage,
-        **kwargs,
-    ):
-        sentences = corpus_to_str(corpus)
-        corpus_embeddings = self.model.encode(
-            sentences,
-            task_name=task_name,
-            prompt_type=prompt_type,
-            **kwargs,
-        )
-        return corpus_embeddings
-
-    def encode(
-        self,
-        sentences: list[str],
-        task_name: str,
-        prompt_type: PromptType | None = None,
-        **kwargs,
-    ):
-        if prompt_type and prompt_type == PromptType.passage:
-            return self.encode_corpus(
-                sentences, task_name, prompt_type=prompt_type, **kwargs
-            )
-        return self.model.encode(
-            sentences, task_name=task_name, prompt_type=prompt_type, **kwargs
-        )
 
 
 def is_cross_encoder_compatible(model) -> bool:

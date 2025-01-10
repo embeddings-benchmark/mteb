@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from functools import partial
 
-from mteb.evaluation.evaluators.RetrievalEvaluator import DRESModel
 from mteb.model_meta import ModelMeta
 
 from .wrapper import Wrapper
@@ -20,7 +19,7 @@ def bm25_loader(**kwargs):
             "bm25s or PyStemmer is not installed. Please install it with `pip install mteb[bm25s]`."
         )
 
-    class BM25Search(DRESModel, Wrapper):
+    class BM25Search(Wrapper):
         """BM25 search"""
 
         def __init__(

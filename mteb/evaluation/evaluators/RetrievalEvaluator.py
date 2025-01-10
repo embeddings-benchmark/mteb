@@ -6,7 +6,6 @@ from typing import Any
 from .Evaluator import Evaluator
 from .model_classes import (
     DenseRetrievalExactSearch,
-    DRESModel,
     is_cross_encoder_compatible,
 )
 from .utils import (
@@ -44,7 +43,7 @@ class RetrievalEvaluator(Evaluator):
             self.is_cross_encoder = True
         else:
             self.retriever = DenseRetrievalExactSearch(
-                DRESModel(retriever), encode_kwargs=encode_kwargs, **kwargs
+                retriever, encode_kwargs=encode_kwargs, **kwargs
             )
         self.k_values = k_values
         self.top_k = (
