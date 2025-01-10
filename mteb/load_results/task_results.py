@@ -468,7 +468,7 @@ class TaskResult(BaseModel):
                         values.append(getter(scores))
                         break
 
-            return aggregation(values)
+        return aggregation(values)
 
     def get_score_fast(self, splits, languages):
         """Sped up version of get_score that will be used if no aggregation, script or getter needs to be specified."""
