@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from enum import Enum
 from functools import partial
 from typing import TYPE_CHECKING, Any, Callable, Literal
 
@@ -9,6 +10,7 @@ from pydantic import BaseModel, ConfigDict
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.TaskMetadata import STR_DATE, STR_URL
 from mteb.encoder_interface import Encoder
+from mteb.evaluation.evaluators.utils import cos_sim, dot_score
 
 from .languages import ISO_LANGUAGE_SCRIPT
 
@@ -49,6 +51,11 @@ def get_loader_name(
     if hasattr(loader, "func"):  # partial class wrapper
         return loader.func.__name__
     return loader.__name__
+
+
+class EvaluationFunction(str, Enum):
+    DOT_PRODUCT: str = "dot_score"
+    COSINE: str = "cos_sim"
 
 
 class ModelMeta(BaseModel):
@@ -101,12 +108,26 @@ class ModelMeta(BaseModel):
     public_training_code: bool | None = None
     framework: list[FRAMEWORKS] = []
     reference: STR_URL | None = None
-    similarity_fn_name: DISTANCE_METRICS | None = None
+    similarity_fn_name: DISTANCE_METRICS | EvaluationFunction | None = None
     use_instructions: bool | None = None
     training_datasets: dict[str, list[str]] | None = None
     adapted_from: str | None = None
     superseded_by: str | None = None
     citation: str | None = None
+
+    def get_evaluation_function(self) -> callable:
+        if (
+            self.similarity_fn_name == "cosine"
+            or self.similarity_fn_name == EvaluationFunction.COSINE
+        ):
+            return cos_sim
+        elif (
+            self.similarity_fn_name == "dot"
+            or self.similarity_fn_name == EvaluationFunction.DOT_PRODUCT
+        ):
+            return dot_score
+        else:
+            raise ValueError(f"Unknown similarity function {self.similarity_fn_name}")
 
     def to_dict(self):
         dict_repr = self.model_dump()
