@@ -73,6 +73,7 @@ from .ind.IndonesianIdClickbaitClassification import *
 from .ind.IndonesianMongabayConservationClassification import *
 from .ita.ItaCaseholdClassification import *
 from .ita.ItalianLinguistAcceptabilityClassification import *
+from .ita.DadoEvalCoarseClassification import *
 from .jav.JavaneseIMDBClassification import *
 from .jpn.WRIMEClassification import *
 from .kan.KannadaNewsClassification import *
