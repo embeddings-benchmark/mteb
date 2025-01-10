@@ -225,9 +225,7 @@ class AbsTaskRetrieval(AbsTask):
                     self.top_ranked[hf_subset][split] if self.top_ranked else None
                 )
                 instructions = (
-                    self.instructions[hf_subset][split]
-                    if self.instructions is None
-                    else None
+                    self.instructions[hf_subset][split] if self.instructions else None
                 )
 
             scores[hf_subset] = self._evaluate_subset(
@@ -237,7 +235,8 @@ class AbsTaskRetrieval(AbsTask):
                 relevant_docs,
                 hf_subset,
                 top_ranked,
-                instructions**kwargs,
+                instructions,
+                **kwargs,
             )
         return scores
 
