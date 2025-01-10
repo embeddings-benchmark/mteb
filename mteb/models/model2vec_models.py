@@ -76,6 +76,7 @@ m2v_base_glove_subword = ModelMeta(
     public_training_code=None,  # distilled model
     training_datasets={  # same as adapted from
         "NQ": ["test"],
+        "NQHardNegatives": ["test"],
         "AmazonReviewsClassification": [
             "validation",
             "test",
@@ -113,6 +114,7 @@ m2v_base_glove = ModelMeta(
     public_training_code=None,  # distilled model
     training_datasets={  # same as adapted from
         "NQ": ["test"],
+        "NQHardNegatives": ["test"],
         "AmazonReviewsClassification": [
             "validation",
             "test",
@@ -148,6 +150,7 @@ m2v_base_output = ModelMeta(
     public_training_code=None,  # distilled model
     training_datasets={  # same as adapted from
         "NQ": ["test"],
+        "NQHardNegatives": ["test"],
         "AmazonReviewsClassification": [
             "validation",
             "test",
@@ -207,6 +210,7 @@ potion_base_2m = ModelMeta(
     public_training_code=None,  # distilled model
     training_datasets={  # same as adapted from
         "NQ": ["test"],
+        "NQHardNegatives": ["test"],
         "AmazonReviewsClassification": [
             "validation",
             "test",
@@ -242,6 +246,7 @@ potion_base_4m = ModelMeta(
     public_training_code=None,  # distilled model
     training_datasets={  # same as adapted from
         "NQ": ["test"],
+        "NQHardNegatives": ["test"],
         "AmazonReviewsClassification": [
             "validation",
             "test",
@@ -277,6 +282,7 @@ potion_base_8m = ModelMeta(
     public_training_code=None,  # distilled model
     training_datasets={  # same as adapted from
         "NQ": ["test"],
+        "NQHardNegatives": ["test"],
         "AmazonReviewsClassification": [
             "validation",
             "test",

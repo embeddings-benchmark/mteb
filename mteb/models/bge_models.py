@@ -32,6 +32,7 @@ bge_small_en_v1_5 = ModelMeta(
     training_datasets={
         # source: https://data.baai.ac.cn/details/BAAI-MTP
         "NQ": ["test"],
+        "NQHardNegatives": ["test"],
         "AmazonReviewsClassification": [
             "validation",
             "test",
@@ -85,6 +86,7 @@ bge_base_en_v1_5 = ModelMeta(
     training_datasets={
         # source: https://data.baai.ac.cn/details/BAAI-MTP
         "NQ": ["test"],
+        "NQHardNegatives": ["test"],
         "AmazonReviewsClassification": [
             "validation",
             "test",
@@ -138,6 +140,7 @@ bge_large_en_v1_5 = ModelMeta(
     training_datasets={
         # source: https://data.baai.ac.cn/details/BAAI-MTP
         "NQ": ["test"],
+        "NQHardNegatives": ["test"],
         "AmazonReviewsClassification": [
             "validation",
             "test",

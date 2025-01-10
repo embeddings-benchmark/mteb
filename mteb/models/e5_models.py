@@ -151,6 +151,7 @@ e5_mult_small = ModelMeta(
         # ----
         # from Misc. SBERT Data 10M:
         "NQ": ["test"],
+        "NQHardNegatives": ["test"],
         "MSMARCO": ["train"],  # dev?
     },
 )
@@ -192,6 +193,7 @@ e5_mult_base = ModelMeta(
         # ----
         # from Misc. SBERT Data 10M:
         "NQ": ["test"],
+        "NQHardNegatives": ["test"],
         "MSMARCO": ["train"],  # dev?
     },
 )
@@ -234,6 +236,7 @@ e5_mult_large = ModelMeta(
         # ----
         # from Misc. SBERT Data 10M:
         "NQ": ["test"],
+        "NQHardNegatives": ["test"],
         "MSMARCO": ["train"],  # dev?
     },
 )
@@ -263,6 +266,7 @@ e5_eng_small_v2 = ModelMeta(
     training_datasets={
         # source: https://arxiv.org/pdf/2212.03533
         "NQ": ["test"],
+        "NQHardNegatives": ["test"],
         "MSMARCO": ["train"],  # dev?
     },
 )
@@ -293,6 +297,7 @@ e5_eng_small = ModelMeta(
     training_datasets={
         # source: https://arxiv.org/pdf/2212.03533
         "NQ": ["test"],
+        "NQHardNegatives": ["test"],
         "MSMARCO": ["train"],  # dev?
     },
 )
@@ -325,6 +330,7 @@ e5_eng_base_v2 = ModelMeta(
     training_datasets={
         # source: https://arxiv.org/pdf/2212.03533
         "NQ": ["test"],
+        "NQHardNegatives": ["test"],
         "MSMARCO": ["train"],  # dev?
     },
 )
@@ -357,6 +363,7 @@ e5_eng_large_v2 = ModelMeta(
     training_datasets={
         # source: https://arxiv.org/pdf/2212.03533
         "NQ": ["test"],
+        "NQHardNegatives": ["test"],
         "MSMARCO": ["train"],  # dev?
     },
 )
@@ -389,6 +396,7 @@ e5_large = ModelMeta(
     training_datasets={
         # source: https://arxiv.org/pdf/2212.03533
         "NQ": ["test"],
+        "NQHardNegatives": ["test"],
         "MSMARCO": ["train"],  # dev?
     },
 )
@@ -421,6 +429,7 @@ e5_base = ModelMeta(
     training_datasets={
         # source: https://arxiv.org/pdf/2212.03533
         "NQ": ["test"],
+        "NQHardNegatives": ["test"],
         "MSMARCO": ["train"],  # dev?
     },
 )
