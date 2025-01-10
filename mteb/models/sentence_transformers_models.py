@@ -5,7 +5,9 @@ from __future__ import annotations
 from functools import partial
 
 from mteb.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapperDotSimilarity
+from mteb.models.sentence_transformer_wrapper import (
+    SentenceTransformerWrapperDotSimilarity,
+)
 
 paraphrase_langs = [
     "ara_Arab",
