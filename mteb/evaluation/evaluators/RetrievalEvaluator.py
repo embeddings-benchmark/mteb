@@ -57,6 +57,7 @@ class RetrievalEvaluator(Evaluator):
         queries: dict[str, str],
         instructions: dict[str, str] | None = None,
         qid: str | None = None,
+        top_ranked: dict[str, list[str]] | None = None,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
         if not self.retriever:
@@ -89,6 +90,7 @@ class RetrievalEvaluator(Evaluator):
                 queries,
                 self.top_k,
                 instructions=instructions,
+                top_ranked=top_ranked,
                 request_qid=qid,
                 task_name=self.task_name,
                 **kwargs,
