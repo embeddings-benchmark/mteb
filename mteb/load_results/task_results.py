@@ -470,6 +470,35 @@ class TaskResult(BaseModel):
 
             return aggregation(values)
 
+    def get_score_fast(self, splits, languages):
+        """Sped up version of get_score that will be used if no aggregation, script or getter needs to be specified."""
+        if splits is None:
+            splits = self.scores
+        val_sum = 0
+        n_val = 0
+        for split in splits:
+            if split not in self.scores:
+                raise ValueError(f"Split missing from scores: {split}")
+                continue
+            for scores in self.scores[split]:
+                langs = scores["languages"]
+                hf_subset = scores["hf_subset"]
+                main_score = scores.get("main_score", None)
+                if main_score is None:
+                    raise ValueError(f"Missing main score for subset: {hf_subset}")
+                if languages is None:
+                    val_sum += main_score
+                    n_val += 1
+                    continue
+                for lang in langs:
+                    if lang.split("-")[0] in languages:
+                        val_sum += main_score
+                        n_val += 1
+                        break
+        if n_val == 0:
+            raise ValueError("No splits had scores for the specified languages.")
+        return val_sum / n_val
+
     @classmethod
     def from_validated(cls, **data) -> TaskResult:
         return cls.model_construct(**data)
@@ -493,7 +522,7 @@ class TaskResult(BaseModel):
         new_res = TaskResult.from_validated(**new_res)
         return new_res
 
-    def validate_and_filter_scores(self, task: AbsTask | None = None) -> AbsTask:
+    def validate_and_filter_scores(self, task: AbsTask | None = None) -> TaskResult:
         """This ensures that the scores are correct for the given task, by removing any splits besides those specified in the task metadata.
         Additionally it also ensure that all of the splits required as well as the languages are present in the scores.
         Returns new TaskResult object.
