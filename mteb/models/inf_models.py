@@ -25,4 +25,5 @@ inf_retriever_v1 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    adapted_from="Alibaba-NLP/gte-Qwen2-7B-instruct",
 )
