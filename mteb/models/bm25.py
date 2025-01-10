@@ -131,7 +131,6 @@ bm25_s = ModelMeta(
     revision="0_1_10",
     release_date="2024-07-10",  ## release of version 0.1.10
     n_parameters=None,
-    memory_usage=None,
     embed_dim=None,
     license=None,
     max_tokens=None,

@@ -59,7 +59,6 @@ class ModelMeta(BaseModel):
         name: The name of the model, ideally the name on huggingface.
         n_parameters: The number of parameters in the model, e.g. 7_000_000 for a 7M parameter model. Can be None if the the number of parameters is not known (e.g. for proprietary models) or
             if the loader returns a SentenceTransformer model from which it can be derived.
-        memory_usage: The amount of memory the model uses in GB. Can be None if the memory usage is not known (e.g. for proprietary models).
         max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
             models).
         embed_dim: The dimension of the embeddings produced by the model. Currently all models are assumed to produce fixed-size embeddings.
@@ -92,7 +91,6 @@ class ModelMeta(BaseModel):
     languages: list[ISO_LANGUAGE_SCRIPT] | None
     loader: Callable[..., Encoder] | None = None
     n_parameters: int | None = None
-    memory_usage: float | None = None
     max_tokens: float | None = None
     embed_dim: int | None = None
     license: str | None = None
