@@ -33,6 +33,7 @@ for model_name_to_search in models:
             task_name = task_res.task.metadata.name
             split = "test" if task_name != "MSMARCO" else "dev"
             scores = [score["main_score"] for score in task_res.scores[split]]
+            # this tmp solution, because some tasks have multiple results
             cur_model[task_name] = {"new": sum(scores) / len(scores)}
 
     for task_dir in data_tasks_path.iterdir():
