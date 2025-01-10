@@ -470,9 +470,7 @@ class TaskResult(BaseModel):
 
         return aggregation(values)
 
-    def get_score_fast(
-        self, splits: str | None, languages: str | None
-    ) -> float:
+    def get_score_fast(self, splits: str | None, languages: str | None) -> float:
         """Sped up version of get_score that will be used if no aggregation, script or getter needs to be specified."""
         if splits is None:
             splits = self.scores
