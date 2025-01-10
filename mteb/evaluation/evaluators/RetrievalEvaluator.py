@@ -167,12 +167,12 @@ class DenseRetrievalExactSearch:
                     self.corpus_embeddings[request_qid].append(sub_corpus_embeddings)
 
             # Compute similarites using self defined similarity otherwise default to cosine-similarity
-            similarity_scores = cos_sim(query_embeddings, sub_corpus_embeddings)
             if hasattr(self.model, "similarity"):
                 similarity_scores = self.model.similarity(
-                    float(self.model.similarity(e1, e2))
-                    for e1, e2 in zip(query_embeddings, sub_corpus_embeddings)
+                    query_embeddings, sub_corpus_embeddings
                 )
+            else:
+                similarity_scores = cos_sim(query_embeddings, sub_corpus_embeddings)
             is_nan = torch.isnan(similarity_scores)
             if is_nan.sum() > 0:
                 logger.warning(
@@ -375,6 +375,9 @@ class DRESModel:
         self.use_sbert_model = isinstance(model, SentenceTransformer)
         self.save_corpus_embeddings = kwargs.get("save_corpus_embeddings", False)
         self.corpus_embeddings = {}
+
+        if hasattr(self.model, "similarity") and callable(self.model.similarity):
+            self.similarity = self.model.similarity
 
     def encode_corpus(
         self,
