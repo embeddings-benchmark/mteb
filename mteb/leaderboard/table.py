@@ -158,6 +158,10 @@ def scores_to_tables(
     joint_table.insert(0, "mean", overall_mean)
     joint_table.insert(1, "mean_by_task_type", typed_mean)
     joint_table["borda_rank"] = get_borda_rank(per_task)
+    joint_table = joint_table.sort_values("borda_rank", ascending=True)
+    per_task["borda_rank"] = joint_table["borda_rank"]
+    per_task = per_task.sort_values("borda_rank", ascending=True)
+    per_task = per_task.drop(columns=["borda_rank"])
     joint_table = joint_table.reset_index()
     model_metas = joint_table["model_name"].map(failsafe_get_model_meta)
     joint_table = joint_table[model_metas.notna()]
@@ -181,8 +185,6 @@ def scores_to_tables(
     joint_table.insert(
         1, "Zero-shot", model_metas.map(lambda m: get_zero_shot_emoji(m, tasks))
     )
-    joint_table = joint_table.sort_values("borda_rank", ascending=True)
-    per_task = per_task.loc[joint_table.set_index("model_name").index]
     # Removing HF organization from model
     joint_table["model_name"] = joint_table["model_name"].map(
         lambda name: name.split("/")[-1]
