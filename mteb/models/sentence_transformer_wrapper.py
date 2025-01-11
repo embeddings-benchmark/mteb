@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Sequence
-from typing import Any
+from typing import Any, Callable
 
 import numpy as np
 import torch
@@ -10,7 +10,6 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.encoder_interface import PromptType
 
-from ..evaluation import dot_distance
 from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
@@ -22,6 +21,7 @@ class SentenceTransformerWrapper(Wrapper):
         model: str | SentenceTransformer | CrossEncoder,
         revision: str | None = None,
         model_prompts: dict[str, str] | None = None,
+        similarity_fn: Callable[[np.ndarray, np.ndarray], np.ndarray] | None = None,
         **kwargs,
     ) -> None:
         """Wrapper for SentenceTransformer models.
@@ -33,6 +33,7 @@ class SentenceTransformerWrapper(Wrapper):
                 First priority is given to the composed prompt of task name + prompt type (query or passage), then to the specific task prompt,
                 then to the composed prompt of task type + prompt type, then to the specific task type prompt,
                 and finally to the specific prompt type.
+            similarity_fn: A similarity function to use.
             **kwargs: Additional arguments to pass to the SentenceTransformer model.
         """
         if isinstance(model, str):
@@ -60,7 +61,10 @@ class SentenceTransformerWrapper(Wrapper):
         if isinstance(self.model, CrossEncoder):
             self.predict = self._predict
 
-        if hasattr(self.model, "similarity") and not hasattr(self, "similarity"):
+        if similarity_fn and callable(similarity_fn):
+            self.similarity = similarity_fn
+
+        if hasattr(self.model, "similarity") and similarity_fn is None:
             self.similarity = self.model.similarity
 
     def encode(
@@ -126,8 +130,3 @@ class SentenceTransformerWrapper(Wrapper):
             convert_to_numpy=True,
             **kwargs,
         )
-
-
-class SentenceTransformerWrapperDotSimilarity(SentenceTransformerWrapper):
-    def similarity(self, embedding1: np.ndarray, embedding2: np.ndarray) -> float:
-        return dot_distance(embedding1, embedding2)

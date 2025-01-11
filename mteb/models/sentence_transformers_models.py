@@ -4,9 +4,10 @@ from __future__ import annotations
 
 from functools import partial
 
+from mteb.evaluation import dot_distance
 from mteb.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import (
-    SentenceTransformerWrapperDotSimilarity,
+    SentenceTransformerWrapper,
 )
 
 paraphrase_langs = [
@@ -381,9 +382,10 @@ all_MiniLM_L12_v2 = ModelMeta(
 
 contriever = ModelMeta(
     loader=partial(
-        SentenceTransformerWrapperDotSimilarity,
+        SentenceTransformerWrapper,
         model="facebook/contriever-msmarco",
         revision="abe8c1493371369031bcb1e02acb754cf4e162fa",
+        similarity_fn=dot_distance,
     ),
     name="facebook/contriever-msmarco",
     languages=["eng-Latn"],
