@@ -100,7 +100,49 @@ zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
     reference="https://huggingface.co/zeta-alpha-ai/Zeta-Alpha-E5-Mistral",
     similarity_fn_name="cosine",
     use_instructions=True,
-    training_datasets=None,
+    training_datasets={
+        # copied from e5
+        # source: https://arxiv.org/pdf/2212.03533
+        "NQ": ["test"],
+        "NQHardNegatives": ["test"],
+        "MSMARCO": ["train"],  # dev?
+        # source: https://www.zeta-alpha.com/post/fine-tuning-an-llm-for-state-of-the-art-retrieval-zeta-alpha-s-top-10-submission-to-the-the-mteb-be
+        # "Arguana",
+        # "FEVER",
+        # "FIQA",
+        # "HotPotQA",
+        # "MsMarco (passage)",
+        # "NFCorpus",
+        # "SciFact",
+        # "NLI",
+        # "SQuad",
+        # "StackExchange",
+        # "TriviaQA",
+        # "SciRep",
+        # "SciRepEval"
+        # mteb
+        # https://huggingface.co/datasets/mteb/raw_arxiv
+        # "ArxivClusteringS2S": ["train"],
+        # "ArxivClusteringP2P": ["train"],
+        # https://huggingface.co/datasets/mteb/raw_biorxiv
+        # "BiorxivClusteringS2S": ["train"],
+        # "BiorxivClusteringP2P": ["train"],
+        # https://huggingface.co/datasets/mteb/raw_medrxiv
+        # "MedrxivClusteringS2S": ["train"],
+        # "MedrxivClusteringP2P": ["train"],
+        # as their train datasets
+        "AmazonCounterfactualClassification": ["train"],
+        "AmazonReviewsClassification": ["train"],
+        "Banking77Classification": ["train"],
+        "EmotionClassification": ["train"],
+        "MTOPIntentClassification": ["train"],
+        "ToxicConversationsClassification": ["train"],
+        "TweetSentimentExtractionClassification": ["train"],
+        "ImdbClassification": ["train"],
+        "STS12": ["train"],
+        "STS22": ["train"],
+        "STSBenchmark": ["train"],
+    },
     adapted_from="intfloat/e5-mistral-7b-instruct",
     superseded_by=None,
 )
