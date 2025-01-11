@@ -128,9 +128,7 @@ class InstructSentenceTransformerWrapper(Wrapper):
         **kwargs: Any,
     ) -> np.ndarray:
         task = mteb.get_task(task_name=task_name)
-        instruction = self.get_instruction(task_name, prompt_type)
-        if self.instruction_template:
-            instruction = self.format_instruction(instruction, prompt_type)
+        instruction = self.get_task_instruction(task_name, prompt_type)
 
         # to passage prompts won't be applied to passages
         if not self.apply_instruction_to_passages:
