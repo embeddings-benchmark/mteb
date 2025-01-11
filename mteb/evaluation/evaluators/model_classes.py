@@ -321,12 +321,19 @@ class DenseRetrievalExactSearch:
             query_embeddings = torch.as_tensor(query_embeddings).to(device)
             sub_corpus_embeddings = torch.as_tensor(sub_corpus_embeddings).to(device)
 
-            # TODO: If the model is not DRESModel
-            score_function = (
-                self.model.similarity
-                if hasattr(self.model, "similarity")
-                else self.model.model.mteb_model_meta.get_evaluation_function()
-            )
+            if hasattr(self.model.model, "mteb_model_meta") or hasattr(
+                self.model, "similarity"
+            ):
+                score_function = (
+                    self.model.similarity
+                    if hasattr(self.model, "similarity")
+                    else self.model.model.mteb_model_meta.get_evaluation_function()
+                )
+            else:
+                logger.warning(
+                    "The model does not provide `mteb_model_meta`; defaulting to the cosine similarity function."
+                )
+                score_function = cos_sim
 
             with torch.inference_mode():
                 scores = score_function(query_embeddings, sub_corpus_embeddings)

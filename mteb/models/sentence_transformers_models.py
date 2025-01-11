@@ -2,12 +2,7 @@
 
 from __future__ import annotations
 
-from functools import partial
-
-from mteb.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import (
-    SentenceTransformerWrapperDotSimilarity,
-)
+from mteb.model_meta import ModelMeta, ScoringFunction
 
 paraphrase_langs = [
     "ara_Arab",
@@ -380,11 +375,6 @@ all_MiniLM_L12_v2 = ModelMeta(
 )
 
 contriever = ModelMeta(
-    loader=partial(
-        SentenceTransformerWrapperDotSimilarity,
-        model="facebook/contriever-msmarco",
-        revision="abe8c1493371369031bcb1e02acb754cf4e162fa",
-    ),
     name="facebook/contriever-msmarco",
     languages=["eng-Latn"],
     open_weights=True,
@@ -396,7 +386,7 @@ contriever = ModelMeta(
     license=None,
     max_tokens=512,
     reference="https://huggingface.co/facebook/contriever-msmarco",
-    similarity_fn_name="dot",
+    similarity_fn_name=ScoringFunction.DOT_PRODUCT,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     citation="""
