@@ -5,7 +5,6 @@ import json
 import logging
 import tempfile
 import time
-from collections import defaultdict
 from pathlib import Path
 from urllib.parse import urlencode
 
@@ -17,7 +16,6 @@ import mteb
 from mteb.caching import json_cache
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
 from mteb.leaderboard.table import scores_to_tables
-from mteb.models.overview import get_model_meta
 
 logger = logging.getLogger(__name__)
 
@@ -143,28 +141,28 @@ benchmark_select = gr.Dropdown(
 )
 lang_select = gr.Dropdown(
     all_results.languages,
-    value=list(sorted(default_results.languages)),
+    value=sorted(default_results.languages),
     multiselect=True,
     label="Language",
     info="Select languages to include.",
 )
 type_select = gr.Dropdown(
     all_results.task_types,
-    value=list(sorted(default_results.task_types)),
+    value=sorted(default_results.task_types),
     multiselect=True,
     label="Task Type",
     info="Select task types to include.",
 )
 domain_select = gr.Dropdown(
     all_results.domains,
-    value=list(sorted(default_results.domains)),
+    value=sorted(default_results.domains),
     multiselect=True,
     label="Domain",
     info="Select domains to include.",
 )
 task_select = gr.Dropdown(
     all_results.task_names,
-    value=list(sorted(default_results.task_names)),
+    value=sorted(default_results.task_names),
     allow_custom_value=True,
     multiselect=True,
     label="Task",
@@ -330,16 +328,16 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
         benchmark = mteb.get_benchmark(benchmark_name)
         languages = [task.languages for task in benchmark.tasks if task.languages]
         languages = set(itertools.chain.from_iterable(languages))
-        languages = list(sorted(languages))
+        languages = sorted(languages)
         domains = [
             task.metadata.domains for task in benchmark.tasks if task.metadata.domains
         ]
         domains = set(itertools.chain.from_iterable(domains))
         types = {task.metadata.type for task in benchmark.tasks if task.metadata.type}
         languages, domains, types = (
-            list(sorted(languages)),
-            list(sorted(domains)),
-            list(sorted(types)),
+            sorted(languages),
+            sorted(domains),
+            sorted(types),
         )
         elapsed = time.time() - start_time
         benchmark_results = all_benchmark_results[benchmark_name]
