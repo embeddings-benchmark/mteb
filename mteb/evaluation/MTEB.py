@@ -63,7 +63,7 @@ class MTEB:
         )
 
         if tasks is not None:
-            self._tasks = tasks
+            self._tasks: Iterable[str | AbsTask] = tasks
             if isinstance(tasks[0], Benchmark):
                 self.benchmarks = tasks
                 self._tasks = list(chain.from_iterable(tasks))

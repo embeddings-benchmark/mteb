@@ -11,6 +11,7 @@ from pydantic import (
     AnyUrl,
     BaseModel,
     BeforeValidator,
+    ConfigDict,
     TypeAdapter,
     field_validator,
 )
@@ -226,6 +227,8 @@ class TaskMetadata(BaseModel):
         prompt: The prompt used for the task. Can be a string or a dictionary containing the query and passage prompts.
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
     """
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     dataset: dict
 
