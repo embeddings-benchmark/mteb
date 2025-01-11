@@ -128,6 +128,9 @@ paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
+    training_datasets=None,
+    public_training_data=False,  # currently not release
+    public_training_code=False,
 )
 
 paraphrase_multilingual_mpnet_base_v2 = ModelMeta(

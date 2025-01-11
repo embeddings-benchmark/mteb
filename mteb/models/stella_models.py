@@ -28,6 +28,9 @@ stella_en_400M = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch", "GritLM"],
     reference="https://huggingface.co/dunzhang/stella_en_400M_v5",
+    training_datasets=None, 
+    public_training_data=False,  # currently not released
+    public_training_code=False,
 )
 
 stella_en_1_5b = ModelMeta(
@@ -52,4 +55,7 @@ stella_en_1_5b = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch", "GritLM"],
     reference="https://huggingface.co/dunzhang/stella_en_1.5B_v5",
+    training_datasets=None, 
+    public_training_data=False,  # currently not released
+    public_training_code=False,
 )
