@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 from functools import partial
 from typing import Any
 
@@ -79,6 +80,8 @@ class BedrockWrapper(Wrapper):
     def _encode_amazon(
         self, sentences: list[str], show_progress_bar: bool = False
     ) -> np.ndarray:
+        from botocore.exceptions import ValidationError
+
         all_embeddings = []
         # https://docs.aws.amazon.com/bedrock/latest/userguide/titan-embedding-models.html
         max_sequence_length = int(self._max_tokens * 4.5)
@@ -87,11 +90,28 @@ class BedrockWrapper(Wrapper):
             sentences, leave=False, disable=not show_progress_bar
         ):
             if len(sentence) > max_sequence_length:
-                all_embeddings.append(
-                    self._embed_amazon(sentence[:max_sequence_length])
-                )
+                truncated_sentence = sentence[:max_sequence_length]
             else:
-                all_embeddings.append(self._embed_amazon(sentence))
+                truncated_sentence = sentence
+
+            try:
+                embedding = self._embed_amazon(truncated_sentence)
+                all_embeddings.append(embedding)
+
+            except ValidationError as e:
+                error_str = str(e)
+                pattern = r"request input token count:\s*(\d+)"
+                match = re.search(pattern, error_str)
+                if match:
+                    num_tokens = int(match.group(1))
+
+                    ratio = 0.9 * (self._max_tokens / num_tokens)
+                    dynamic_cutoff = int(len(truncated_sentence) * ratio)
+
+                    embedding = self._embed_amazon(truncated_sentence[:dynamic_cutoff])
+                    all_embeddings.append(embedding)
+                else:
+                    raise e
 
         return np.array(all_embeddings)
 
