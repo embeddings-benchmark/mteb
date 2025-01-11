@@ -72,7 +72,7 @@ class NvEmbedWrapper(SentenceTransformerWrapper):
         return embeddings
 
 
-training_datasets = {
+nvidia_training_datasets = {
     # source: https://arxiv.org/pdf/2405.17428
     "ArguAna": ["train"],
     "ArguAna-PL": ["train"],
@@ -140,7 +140,7 @@ NV_embed_v2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
-    training_datasets=training_datasets,
+    training_datasets=nvidia_training_datasets,
     public_training_code=None,
     public_training_data=True,
 )
@@ -165,7 +165,7 @@ NV_embed_v1 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
-    training_datasets=training_datasets,
+    training_datasets=nvidia_training_datasets,
     public_training_code=None,
     public_training_data=True,
 )
