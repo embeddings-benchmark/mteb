@@ -63,7 +63,12 @@ for model_name_to_search in models:
                                             "old"
                                         ] = value
 
-    results.append({"model": model_name_to_search, "results": cur_model})
+    sorted_cur_model = {
+        task.metadata.name: cur_model[task.metadata.name]
+        for task in MTEB_ENG_CLASSIC.tasks
+        if task.metadata.name in cur_model
+    }
+    results.append({"model": model_name_to_search, "results": sorted_cur_model})
 
 # Write results to JSONL file
 with open("results.jsonl", "w") as file:
