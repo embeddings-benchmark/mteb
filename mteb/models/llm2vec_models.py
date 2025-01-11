@@ -20,6 +20,31 @@ def llm2vec_instruction(instruction):
     return instruction
 
 
+llm2vec_supervised_training_data = {
+    # source, section g1: https://arxiv.org/pdf/2404.05961
+    # splits assumed but unkown
+    "HotpotQA": ["train"],
+    "HotpotQA-PL": ["train"],  # translation not trained on
+    "HotpotQAHardNegatives": ["train"],
+    "MSMARCO": ["train"],
+    "MSMARCOHardNegatives": ["train"],
+    "NanoMSMARCORetrieval": ["train"],
+    "MSMARCO-PL": ["train"],  # translation not trained on
+    "MIRACLRetrieval": ["train"],
+    "MIRACLRetrievalHardNegatives": ["train"],
+    "MIRACLReranking": ["train"],
+    "NQ": ["train"],
+    "NQHardNegatives": ["train"],
+    "NanoNQRetrieval": ["train"],
+    "NQ-PL": ["train"],  # translation not trained on
+    "FEVER": ["train"],
+    "FEVERHardNegatives": ["train"],
+    "NanoFEVERRetrieval": ["train"],
+    "MrTidyRetrieval": ["train"],
+    "T2Reranking": ["train"],
+}
+
+
 class LLM2VecWrapper(Wrapper):
     def __init__(
         self,
@@ -100,6 +125,9 @@ llm2vec_llama3_8b_supervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    public_training_code=True,
+    public_training_data=True,
+    training_datasets=llm2vec_supervised_training_data,
 )
 
 llm2vec_llama3_8b_unsupervised = ModelMeta(
@@ -124,6 +152,9 @@ llm2vec_llama3_8b_unsupervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    public_training_code=True,
+    public_training_data=True,
+    training_datasets={},
 )
 
 
@@ -149,6 +180,9 @@ llm2vec_mistral7b_supervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    public_training_code=True,
+    public_training_data=True,
+    training_datasets=llm2vec_supervised_training_data,
 )
 
 llm2vec_mistral7b_unsupervised = ModelMeta(
@@ -173,6 +207,9 @@ llm2vec_mistral7b_unsupervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    public_training_code=True,
+    public_training_data=True,
+    training_datasets={},
 )
 
 llm2vec_llama2_7b_supervised = ModelMeta(
@@ -197,6 +234,9 @@ llm2vec_llama2_7b_supervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    public_training_code=True,
+    public_training_data=True,
+    training_datasets=llm2vec_supervised_training_data,
 )
 
 llm2vec_llama2_7b_unsupervised = ModelMeta(
@@ -221,6 +261,9 @@ llm2vec_llama2_7b_unsupervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    public_training_code=True,
+    public_training_data=True,
+    training_datasets={},
 )
 
 llm2vec_sheared_llama_supervised = ModelMeta(
@@ -245,6 +288,9 @@ llm2vec_sheared_llama_supervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    public_training_code=True,
+    public_training_data=True,
+    training_datasets=llm2vec_supervised_training_data,
 )
 
 llm2vec_sheared_llama_unsupervised = ModelMeta(
@@ -269,4 +315,7 @@ llm2vec_sheared_llama_unsupervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    public_training_code=True,
+    public_training_data=True,
+    training_datasets={},
 )
