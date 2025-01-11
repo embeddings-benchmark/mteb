@@ -385,7 +385,7 @@ contriever = ModelMeta(
         SentenceTransformerWrapper,
         model="facebook/contriever-msmarco",
         revision="abe8c1493371369031bcb1e02acb754cf4e162fa",
-        similarity_fn=dot_distance,
+        similarity_fn="dot",
     ),
     name="facebook/contriever-msmarco",
     languages=["eng-Latn"],
