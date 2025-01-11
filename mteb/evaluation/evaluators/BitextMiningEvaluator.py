@@ -44,9 +44,13 @@ class BitextMiningEvaluator(Evaluator):
 
     def compute_metrics(self, model: Encoder, encode_kwargs: dict[str, Any] = {}):
         pair_elements = {p for pair in self.pairs for p in pair}
-        subsets = [
-            col for col in self.sentences.features.keys() if col in pair_elements
-        ]
+        if isinstance(self.sentences, Dataset):
+            subsets = [
+                col for col in self.sentences.features.keys() if col in pair_elements
+            ]
+        else:
+            # BUCC outputs a dict instead of a Dataset
+            subsets = list(pair_elements)
         n_subsets = len(subsets)
 
         embeddings = {}

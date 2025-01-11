@@ -16,7 +16,7 @@ class EmotionClassification(AbsTaskClassification):
         type="Classification",
         category="s2s",
         modalities=["text"],
-        eval_splits=["validation", "test"],
+        eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=(
