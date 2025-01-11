@@ -63,7 +63,7 @@ m2v_base_glove_subword = ModelMeta(
     open_weights=True,
     revision="5f4f5ca159b7321a8b39739bba0794fa0debddf4",
     release_date="2024-09-21",
-    n_parameters=103 * 1e6,
+    n_parameters=int(103 * 1e6),
     max_tokens=np.inf,  # Theoretically infinite
     embed_dim=256,
     license="mit",
@@ -73,6 +73,9 @@ m2v_base_glove_subword = ModelMeta(
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
+    training_datasets=None,  # source is unkown
+    public_training_code=True,  # https://github.com/MinishLab/model2vec
+    public_training_data=False,
 )
 
 
@@ -96,6 +99,9 @@ m2v_base_glove = ModelMeta(
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
+    training_datasets=None,  # source is unkown
+    public_training_code=True,  # https://github.com/MinishLab/model2vec
+    public_training_data=False,
 )
 
 m2v_base_output = ModelMeta(
@@ -118,6 +124,9 @@ m2v_base_output = ModelMeta(
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
+    training_datasets=None,  # source is unkown
+    public_training_code=True,  # https://github.com/MinishLab/model2vec
+    public_training_data=False,
 )
 
 m2v_multilingual_output = ModelMeta(
@@ -140,6 +149,9 @@ m2v_multilingual_output = ModelMeta(
     use_instructions=False,
     adapted_from="sentence-transformers/LaBSE",
     superseded_by=None,
+    training_datasets=None,  # source is unkown
+    public_training_code=True,  # https://github.com/MinishLab/model2vec
+    public_training_data=False,
 )
 
 potion_base_2m = ModelMeta(
@@ -162,6 +174,9 @@ potion_base_2m = ModelMeta(
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
+    training_datasets=None,  # source is unkown
+    public_training_code=True,  # https://github.com/MinishLab/model2vec
+    public_training_data=False,
 )
 
 potion_base_4m = ModelMeta(
@@ -184,6 +199,9 @@ potion_base_4m = ModelMeta(
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
+    training_datasets=None,  # source is unkown
+    public_training_code=True,  # https://github.com/MinishLab/model2vec
+    public_training_data=False,
 )
 
 potion_base_8m = ModelMeta(
@@ -206,4 +224,7 @@ potion_base_8m = ModelMeta(
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
+    training_datasets=None,  # source is unkown
+    public_training_code=True,  # https://github.com/MinishLab/model2vec
+    public_training_data=False,
 )

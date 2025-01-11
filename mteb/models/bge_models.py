@@ -27,6 +27,9 @@ bge_small_en_v1_5 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    training_datasets=None,  # https://github.com/staoxiao/RetroMAE, includes wikipedia and bookcorpus and contrastive pairs (unknown)
+    public_training_code=False,
+    public_training_data=False,
 )
 
 bge_base_en_v1_5 = ModelMeta(
@@ -50,6 +53,9 @@ bge_base_en_v1_5 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    training_datasets=None,  # https://github.com/staoxiao/RetroMAE, includes wikipedia and bookcorpus and contrastive pairs (unknown)
+    public_training_code=False,
+    public_training_data=False,
 )
 
 bge_large_en_v1_5 = ModelMeta(
@@ -73,4 +79,7 @@ bge_large_en_v1_5 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    training_datasets=None,  # https://github.com/staoxiao/RetroMAE, includes wikipedia and bookcorpus and contrastive pairs (unknown)
+    public_training_code=False,
+    public_training_data=False,
 )
