@@ -113,38 +113,47 @@ Hum_Works__lodestone_base_4096_v1 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     training_datasets={
-        "s2orc": ["train"],
-        "flax-sentence-embeddings/stackexchange_title_body_jsonl": ["train"],
-        "flax-sentence-embeddings/stackexchange_titlebody_best_voted_answer_jsonl": [
-            "train"
-        ],
-        "flax-sentence-embeddings/stackexchange_title_best_voted_answer_jsonl": [
-            "train"
-        ],
-        "flax-sentence-embeddings/stackexchange_titlebody_best_and_down_voted_answer_jsonl": [
-            "train"
-        ],
-        "sentence-transformers/reddit-title-body": ["train"],
-        "msmarco": ["train"],
-        "gooaq": ["train"],
-        "yahoo_answers_topics": ["train"],
-        "code_search_net": ["train"],
-        "search_qa": ["train"],
-        "eli5": ["train"],
-        "snli": ["train"],
-        "multi_nli": ["train"],
-        "wikihow": ["train"],
-        "natural_questions": ["train"],
-        "trivia_qa": ["train"],
-        "embedding-data/sentence-compression": ["train"],
-        "embedding-data/flickr30k-captions": ["train"],
-        "embedding-data/altlex": ["train"],
-        "embedding-data/simple-wiki": ["train"],
-        "embedding-data/QQP": ["train"],
-        "embedding-data/SPECTER": ["train"],
-        "embedding-data/PAQ_pairs": ["train"],
-        "embedding-data/WikiAnswers": ["train"],
-        "sentence-transformers/embedding-training-data": ["train"],
+        "MSMARCO": ["train"],
+        "MSMARCOHardNegatives": ["train"],
+        "NanoMSMARCORetrieval": ["train"],
+        "MSMARCO-PL": ["train"],  # translation not trained on
+        "NQ": ["train"],
+        "NQHardNegatives": ["train"],
+        "NanoNQRetrieval": ["train"],
+        "NQ-PL": ["train"],  # translation not trained on
+        # not in MTEB
+        # "s2orc": ["train"],
+        # "flax-sentence-embeddings/stackexchange_title_body_jsonl": ["train"],
+        # "flax-sentence-embeddings/stackexchange_titlebody_best_voted_answer_jsonl": [
+        #     "train"
+        # ],
+        # "flax-sentence-embeddings/stackexchange_title_best_voted_answer_jsonl": [
+        #     "train"
+        # ],
+        # "flax-sentence-embeddings/stackexchange_titlebody_best_and_down_voted_answer_jsonl": [
+        #     "train"
+        # ],
+        # "sentence-transformers/reddit-title-body": ["train"],
+        # "msmarco": ["train"],
+        # "gooaq": ["train"],
+        # "yahoo_answers_topics": ["train"],
+        # "code_search_net": ["train"],
+        # "search_qa": ["train"],
+        # "eli5": ["train"],
+        # "snli": ["train"],
+        # "multi_nli": ["train"],
+        # "wikihow": ["train"],
+        # "natural_questions": ["train"],
+        # "trivia_qa": ["train"],
+        # "embedding-data/sentence-compression": ["train"],
+        # "embedding-data/flickr30k-captions": ["train"],
+        # "embedding-data/altlex": ["train"],
+        # "embedding-data/simple-wiki": ["train"],
+        # "embedding-data/QQP": ["train"],
+        # "embedding-data/SPECTER": ["train"],
+        # "embedding-data/PAQ_pairs": ["train"],
+        # "embedding-data/WikiAnswers": ["train"],
+        # "sentence-transformers/embedding-training-data": ["train"],
     },
     adapted_from="hum-lodestone-v1",
     superseded_by=None,
