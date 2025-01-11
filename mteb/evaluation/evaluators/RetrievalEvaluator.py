@@ -167,12 +167,12 @@ class DenseRetrievalExactSearch:
                     self.corpus_embeddings[request_qid].append(sub_corpus_embeddings)
 
             # Compute similarites using self defined similarity otherwise default to cosine-similarity
-            similarity_scores = cos_sim(query_embeddings, sub_corpus_embeddings)
             if hasattr(self.model, "similarity"):
                 similarity_scores = self.model.similarity(
-                    float(self.model.similarity(e1, e2))
-                    for e1, e2 in zip(query_embeddings, sub_corpus_embeddings)
+                    query_embeddings, sub_corpus_embeddings
                 )
+            else:
+                similarity_scores = cos_sim(query_embeddings, sub_corpus_embeddings)
             is_nan = torch.isnan(similarity_scores)
             if is_nan.sum() > 0:
                 logger.warning(
@@ -307,15 +307,17 @@ class DenseRetrievalExactSearch:
             assert (
                 len(queries_in_pair) == len(corpus_in_pair) == len(instructions_in_pair)
             )
+            corpus_in_pair = corpus_to_str(list(corpus_in_pair))
 
             if hasattr(self.model, "model") and isinstance(
                 self.model.model, CrossEncoder
             ):
                 # can't take instructions, so add them here
-                queries_in_pair = [
-                    f"{q} {i}".strip()
-                    for i, q in zip(instructions_in_pair, queries_in_pair)
-                ]
+                if instructions_in_pair[0] is not None:
+                    queries_in_pair = [
+                        f"{q} {i}".strip()
+                        for i, q in zip(instructions_in_pair, queries_in_pair)
+                    ]
                 scores = self.model.predict(list(zip(queries_in_pair, corpus_in_pair)))  # type: ignore
             else:
                 # may use the instructions in a unique way, so give them also
@@ -373,6 +375,9 @@ class DRESModel:
         self.use_sbert_model = isinstance(model, SentenceTransformer)
         self.save_corpus_embeddings = kwargs.get("save_corpus_embeddings", False)
         self.corpus_embeddings = {}
+
+        if hasattr(self.model, "similarity") and callable(self.model.similarity):
+            self.similarity = self.model.similarity
 
     def encode_corpus(
         self,

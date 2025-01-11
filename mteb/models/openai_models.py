@@ -63,7 +63,7 @@ class OpenAIWrapper(Wrapper):
             else:
                 trimmed_sentences.append(sentence)
 
-        max_batch_size = 2048
+        max_batch_size = kwargs.get("batch_size", 2048)
         sublists = [
             trimmed_sentences[i : i + max_batch_size]
             for i in range(0, len(trimmed_sentences), max_batch_size)
@@ -136,6 +136,9 @@ text_embedding_3_small = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=False,
+    public_training_data=False,  # assumed
+    public_training_code=False,  # assumed
+    training_datasets=None,
 )
 text_embedding_3_large = ModelMeta(
     name="openai/text-embedding-3-large",
@@ -156,6 +159,9 @@ text_embedding_3_large = ModelMeta(
     use_instructions=False,
     n_parameters=None,
     memory_usage=None,
+    public_training_data=False,  # assumed
+    public_training_code=False,  # assumed
+    training_datasets=None,
 )
 text_embedding_ada_002 = ModelMeta(
     name="openai/text-embedding-ada-002",
@@ -176,4 +182,7 @@ text_embedding_ada_002 = ModelMeta(
     use_instructions=False,
     n_parameters=None,
     memory_usage=None,
+    public_training_data=False,  # assumed
+    public_training_code=False,  # assumed
+    training_datasets=None,
 )

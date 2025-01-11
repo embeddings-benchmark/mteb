@@ -15,7 +15,7 @@ class Wrapper:
     Also contains some utility functions for wrappers for working with prompts and instructions.
     """
 
-    instruction_template: str | Callable[[str], str] | None = None
+    instruction_template: str | Callable[[str, str], str] | None = None
 
     @staticmethod
     def get_prompt_name(
@@ -76,15 +76,15 @@ class Wrapper:
             if "-" in task_name:
                 task_name, prompt_type = task_name.split("-")
                 if prompt_type not in prompt_types:
-                    raise ValueError(
-                        f"Prompt type {prompt_type} is not valid. Valid prompt types are {prompt_types}"
-                    )
+                    msg = f"Prompt type {prompt_type} is not valid. Valid prompt types are {prompt_types}"
+                    logger.warning(msg)
+                    raise KeyError(msg)
             if task_name not in task_types and task_name not in prompt_types:
                 task = mteb.get_task(task_name=task_name)
                 if not task:
-                    raise ValueError(
-                        f"Task name {task_name} is not valid. Valid task names are task types [{task_types}], prompt types [{prompt_types}] and task names"
-                    )
+                    msg = f"Task name {task_name} is not valid. Valid task names are task types [{task_types}], prompt types [{prompt_types}] and task names"
+                    logger.warning(msg)
+                    raise KeyError(msg)
         return task_to_prompt_name
 
     @staticmethod
@@ -103,14 +103,16 @@ class Wrapper:
             return task_metadata.prompt
         return task.abstask_prompt
 
-    def format_instruction(self, instruction: str) -> str:
+    def format_instruction(
+        self, instruction: str, prompt_type: PromptType | None = None
+    ) -> str:
         if isinstance(self.instruction_template, str):
             if "{instruction}" not in self.instruction_template:
                 raise ValueError(
                     "Instruction template must contain the string '{instruction}'."
                 )
             return self.instruction_template.format(instruction=instruction)
-        return self.instruction_template(instruction)
+        return self.instruction_template(instruction, prompt_type)
 
     def get_task_instruction(
         self, task_name: str, prompt_type: PromptType | None

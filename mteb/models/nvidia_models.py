@@ -16,7 +16,9 @@ from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 logger = logging.getLogger(__name__)
 
 
-def instruction_template(instruction: str) -> str:
+def instruction_template(
+    instruction: str, prompt_type: PromptType | None = None
+) -> str:
     return f"Instruct: {instruction}\nQuery: " if instruction else ""
 
 

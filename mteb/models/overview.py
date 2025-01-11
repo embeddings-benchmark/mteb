@@ -8,6 +8,7 @@ from typing import Any
 from huggingface_hub import ModelCard
 from sentence_transformers import SentenceTransformer
 
+from mteb.abstasks.AbsTask import AbsTask
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import (
@@ -29,6 +30,7 @@ from mteb.models import (
     misc_models,
     model2vec_models,
     mxbai_models,
+    no_instruct_sentence_models,
     nomic_models,
     nvidia_models,
     openai_models,
@@ -66,6 +68,7 @@ model_modules = [
     model2vec_models,
     misc_models,
     nomic_models,
+    no_instruct_sentence_models,
     nvidia_models,
     openai_models,
     promptriever_models,
@@ -101,6 +104,7 @@ def get_model_metas(
     frameworks: Iterable[str] | None = None,
     n_parameters_range: tuple[int | None, int | None] = (None, None),
     use_instructions: bool | None = None,
+    zero_shot_on: list[AbsTask] | None = None,
 ) -> list[ModelMeta]:
     """Load all models' metadata that fit the specified criteria."""
     res = []
@@ -130,6 +134,9 @@ def get_model_metas(
                 continue
         if lower is not None:
             if (n_parameters is None) or (n_parameters < lower):
+                continue
+        if zero_shot_on is not None:
+            if not model_meta.is_zero_shot_on(zero_shot_on):
                 continue
         res.append(model_meta)
     return res

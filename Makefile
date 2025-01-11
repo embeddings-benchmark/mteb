@@ -36,3 +36,10 @@ build-docs:
 	@echo "--- 📚 Building documentation ---"
 	# since we do not have a documentation site, this just build tables for the .md files
 	python docs/create_tasks_table.py
+
+
+model-load-test:
+	@echo "--- 🚀 Running model load test ---"
+	pip install ".[dev, speedtask, pylate,gritlm,xformers,model2vec]"
+	python scripts/extract_model_names.py
+	python tests/test_models/model_loading.py --model_name_file scripts/model_names.txt

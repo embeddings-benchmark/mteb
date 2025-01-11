@@ -140,6 +140,7 @@ repllama_llama2_original = ModelMeta(
     open_weights=True,
     revision="01c7f73d771dfac7d292323805ebc428287df4f9-6097554dfe6e7d93e92f55010b678bcca1e233a8",  # base-peft revision
     release_date="2023-10-11",
+    training_datasets={"Tevatron/msmarco-passage-aug": ["train"]},
     n_parameters=7_000_000,
     memory_usage=None,
     max_tokens=4096,

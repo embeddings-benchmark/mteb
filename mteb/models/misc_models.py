@@ -1,6 +1,10 @@
 from __future__ import annotations
 
-from mteb.model_meta import ModelMeta
+from functools import partial
+
+import torch
+
+from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
 Haon_Chen__speed_embedding_7b_instruct = ModelMeta(
     name="Haon-Chen/speed-embedding-7b-instruct",
@@ -194,7 +198,12 @@ Lajavaness__bilingual_embedding_base = ModelMeta(
     revision="0bfc54bb2aa2666dd84715289c7ef58a95eb4d8d",
     release_date="2024-06-26",
     languages=None,
-    loader=None,
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="Lajavaness/bilingual-embedding-base",
+        revision="0bfc54bb2aa2666dd84715289c7ef58a95eb4d8d",
+        trust_remote_code=True,
+    ),
     n_parameters=278043648,
     memory_usage=None,
     max_tokens=514.0,
@@ -216,7 +225,12 @@ Lajavaness__bilingual_embedding_large = ModelMeta(
     revision="e83179d7a66e8aed1b3015e98bb5ae234ed89598",
     release_date="2024-06-24",
     languages=["fra_Latn", "eng_Latn"],
-    loader=None,
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="Lajavaness/bilingual-embedding-large",
+        revision="e83179d7a66e8aed1b3015e98bb5ae234ed89598",
+        trust_remote_code=True,
+    ),
     n_parameters=559890432,
     memory_usage=None,
     max_tokens=514.0,
@@ -238,7 +252,12 @@ Lajavaness__bilingual_embedding_small = ModelMeta(
     revision="ed4a1dd814de0db81d4a4e287c296a03194463e3",
     release_date="2024-07-17",
     languages=["fra_Latn", "eng_Latn"],
-    loader=None,
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="Lajavaness/bilingual-embedding-small",
+        revision="ed4a1dd814de0db81d4a4e287c296a03194463e3",
+        trust_remote_code=True,
+    ),
     n_parameters=117653760,
     memory_usage=None,
     max_tokens=512.0,
@@ -1535,11 +1554,21 @@ omarelshehy__arabic_english_sts_matryoshka = ModelMeta(
     superseded_by=None,
 )
 openbmb__MiniCPM_Embedding = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="openbmb/MiniCPM-Embedding",
+        revision="c0cb2de33fb366e17c30f9d53142ff11bc18e049",
+        # https://huggingface.co/openbmb/MiniCPM-Embedding/blob/c0cb2de33fb366e17c30f9d53142ff11bc18e049/README.md?code=true#L405
+        model_kwargs={
+            # "attn_implementation": "flash_attention_2",
+            "torch_dtype": torch.float16,
+        },
+        trust_remote_code=True,
+    ),
     name="openbmb/MiniCPM-Embedding",
     revision="c0cb2de33fb366e17c30f9d53142ff11bc18e049",
     release_date="2024-09-04",
     languages=["zho_Hans", "eng_Latn"],
-    loader=None,
     n_parameters=2724880896,
     memory_usage=None,
     max_tokens=512.0,
@@ -1548,7 +1577,7 @@ openbmb__MiniCPM_Embedding = ModelMeta(
     open_weights=True,
     public_training_data=False,
     public_training_code=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Sentence Transformers"],
     reference="https://huggingface.co/openbmb/MiniCPM-Embedding",
     similarity_fn_name="cosine",
     use_instructions=None,

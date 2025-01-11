@@ -435,7 +435,7 @@ class RerankingEvaluator(Evaluator):
                 all_unique_texts.append(text)
             all_texts_indexes.append(index_map[text_hash])
         logger.warning(
-            f"A total on {len(all_texts) - len(all_unique_texts)}/{len(all_texts)} duplicate texts were found during encoding. Only encoding unique text and duplicating embeddings across."
+            f"A total of {len(all_texts) - len(all_unique_texts)}/{len(all_texts)} duplicate texts were found during encoding. Only encoding unique text and duplicating embeddings across."
         )
         all_unique_texts_embs = np.asarray(
             model.encode(

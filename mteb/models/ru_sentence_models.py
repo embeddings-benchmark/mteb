@@ -95,6 +95,22 @@ user_base_ru = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    training_datasets={
+        "deepvk/ru-HNP": ["train"],
+        "deepvk/ru-WANLI": ["train"],
+        "Shitao/bge-m3-data": ["train"],
+        "RussianNLP/russian_super_glue": ["train"],
+        "reciTAL/mlsum": ["train"],
+        "Helsinki-NLP/opus-100": ["train"],
+        "Helsinki-NLP/bible_para": ["train"],
+        "d0rj/rudetoxifier_data_detox": ["train"],
+        "s-nlp/ru_paradetox": ["train"],
+        "Milana/russian_keywords": ["train"],
+        "IlyaGusev/gazeta": ["train"],
+        "d0rj/gsm8k-ru": ["train"],
+        "bragovo/dsum_ru": ["train"],
+        "CarlBrendt/Summ_Dialog_News": ["train"],
+    },
 )
 
 deberta_v1_ru = ModelMeta(
@@ -197,6 +213,7 @@ rubert_tiny_turbo = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    training_datasets={"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
 )
 
 labse_ru_turbo = ModelMeta(
@@ -214,6 +231,7 @@ labse_ru_turbo = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    training_datasets={"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
 )
 
 
