@@ -9,12 +9,12 @@ from mteb import MTEB_ENG_CLASSIC, load_results
 logging.basicConfig(level=logging.INFO)
 
 models = [
-    "intfloat/multilingual-e5-small",
-    "intfloat/multilingual-e5-base",
-    "intfloat/multilingual-e5-large",
+    "dunzhang/stella_en_1.5B_v5",
+    "dunzhang/stella_en_400M_v5",
     # Add other models here
 ]
 
+# in same folder as mteb repo
 # git clone https://github.com/embeddings-benchmark/leaderboard
 data_tasks_path = Path("../../leaderboard/boards_data/en/data_tasks/")
 
@@ -34,7 +34,7 @@ for model_name_to_search in models:
             split = "test" if task_name != "MSMARCO" else "dev"
             scores = [score["main_score"] for score in task_res.scores[split]]
             # this tmp solution, because some tasks have multiple results
-            cur_model[task_name] = {"new": sum(scores) / len(scores)}
+            cur_model[task_name] = {"new": round((sum(scores) / len(scores)) * 100, 2)}
 
     for task_dir in data_tasks_path.iterdir():
         if task_dir.is_dir():
