@@ -10,7 +10,6 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.encoder_interface import PromptType
 
-from ..evaluation import dot_distance
 from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
@@ -22,7 +21,6 @@ class SentenceTransformerWrapper(Wrapper):
         model: str | SentenceTransformer | CrossEncoder,
         revision: str | None = None,
         model_prompts: dict[str, str] | None = None,
-        use_model_similarity: bool = True,
         **kwargs,
     ) -> None:
         """Wrapper for SentenceTransformer models.
@@ -34,7 +32,6 @@ class SentenceTransformerWrapper(Wrapper):
                 First priority is given to the composed prompt of task name + prompt type (query or passage), then to the specific task prompt,
                 then to the composed prompt of task type + prompt type, then to the specific task type prompt,
                 and finally to the specific prompt type.
-            use_model_similarity: Whether to use the model's similarity method.
             **kwargs: Additional arguments to pass to the SentenceTransformer model.
         """
         if isinstance(model, str):
@@ -62,7 +59,7 @@ class SentenceTransformerWrapper(Wrapper):
         if isinstance(self.model, CrossEncoder):
             self.predict = self._predict
 
-        if hasattr(self.model, "similarity") and use_model_similarity:
+        if hasattr(self.model, "similarity"):
             self.similarity = self.model.similarity
 
     def encode(
@@ -128,8 +125,3 @@ class SentenceTransformerWrapper(Wrapper):
             convert_to_numpy=True,
             **kwargs,
         )
-
-
-class SentenceTransformerWrapperDotSimilarity(SentenceTransformerWrapper):
-    def similarity(self, embedding1: np.ndarray, embedding2: np.ndarray) -> float:
-        return dot_distance(embedding1, embedding2)

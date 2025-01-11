@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from functools import partial
+
 from mteb.model_meta import ModelMeta, ScoringFunction
 
 paraphrase_langs = [
