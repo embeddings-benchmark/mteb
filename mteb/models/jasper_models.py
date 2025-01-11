@@ -13,10 +13,10 @@ import mteb
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
+from .nvidia_models import nvidia_training_datasets
 from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
-from .nvidia_models import nvidia_training_datasets
 
 
 class JasperWrapper(Wrapper):
