@@ -13,6 +13,7 @@ from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
+from .bge_models import bge_training_data
 
 class Model2VecWrapper(Wrapper):
     def __init__(
@@ -27,7 +28,7 @@ class Model2VecWrapper(Wrapper):
             **kwargs: Additional arguments to pass to the wrapper.
         """
         try:
-            from model2vec import StaticModel
+            from model2vec import StaticModel  # type: ignore
         except ModuleNotFoundError as e:
             raise ModuleNotFoundError(
                 "To use the Model2Vec models `model2vec` is required. Please install it with `pip install mteb[model2vec]`."
@@ -73,7 +74,7 @@ m2v_base_glove_subword = ModelMeta(
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
-    training_datasets=None,  # source is unkown
+    training_datasets=bge_training_data, # distilled
     public_training_code=True,  # https://github.com/MinishLab/model2vec
     public_training_data=False,
 )
@@ -89,7 +90,7 @@ m2v_base_glove = ModelMeta(
     open_weights=True,
     revision="38ebd7f10f71e67fa8db898290f92b82e9cfff2b",
     release_date="2024-09-21",
-    n_parameters=102 * 1e6,
+    n_parameters=int(102 * 1e6),
     max_tokens=np.inf,
     embed_dim=256,
     license="mit",
@@ -99,7 +100,7 @@ m2v_base_glove = ModelMeta(
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
-    training_datasets=None,  # source is unkown
+    training_datasets=bge_training_data, # distilled
     public_training_code=True,  # https://github.com/MinishLab/model2vec
     public_training_data=False,
 )
@@ -114,7 +115,7 @@ m2v_base_output = ModelMeta(
     open_weights=True,
     revision="02460ae401a22b09d2c6652e23371398329551e2",
     release_date="2024-09-21",
-    n_parameters=7.56 * 1e6,
+    n_parameters=int(7.56 * 1e6),
     max_tokens=np.inf,
     embed_dim=256,
     license="mit",
@@ -124,7 +125,7 @@ m2v_base_output = ModelMeta(
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
-    training_datasets=None,  # source is unkown
+    training_datasets=bge_training_data, # distilled
     public_training_code=True,  # https://github.com/MinishLab/model2vec
     public_training_data=False,
 )
@@ -139,7 +140,7 @@ m2v_multilingual_output = ModelMeta(
     open_weights=True,
     revision="2cf4ec4e1f51aeca6c55cf9b93097d00711a6305",
     release_date="2024-09-21",
-    n_parameters=128 * 1e6,
+    n_parameters=int(128 * 1e6),
     max_tokens=np.inf,
     embed_dim=256,
     license="mit",
@@ -149,7 +150,7 @@ m2v_multilingual_output = ModelMeta(
     use_instructions=False,
     adapted_from="sentence-transformers/LaBSE",
     superseded_by=None,
-    training_datasets=None,  # source is unkown
+    training_datasets=bge_training_data, # distilled
     public_training_code=True,  # https://github.com/MinishLab/model2vec
     public_training_data=False,
 )
@@ -174,7 +175,7 @@ potion_base_2m = ModelMeta(
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
-    training_datasets=None,  # source is unkown
+    training_datasets=bge_training_data, # distilled
     public_training_code=True,  # https://github.com/MinishLab/model2vec
     public_training_data=False,
 )
@@ -199,7 +200,7 @@ potion_base_4m = ModelMeta(
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
-    training_datasets=None,  # source is unkown
+    training_datasets=bge_training_data, # distilled
     public_training_code=True,  # https://github.com/MinishLab/model2vec
     public_training_data=False,
 )
@@ -224,7 +225,7 @@ potion_base_8m = ModelMeta(
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
-    training_datasets=None,  # source is unkown
+    training_datasets=bge_training_data, # distilled
     public_training_code=True,  # https://github.com/MinishLab/model2vec
     public_training_data=False,
 )
