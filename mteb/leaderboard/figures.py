@@ -22,8 +22,8 @@ def failsafe_plot(fun):
     def wrapper(*args, **kwargs):
         try:
             return fun(*args, **kwargs)
-        except Exception:
-            return text_plot("Couldn't produce plot.")
+        except Exception as e:
+            return text_plot(f"Couldn't produce plot. Reason: {e}")
 
     return wrapper
 
@@ -110,7 +110,9 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
     df["Max Tokens"] = df["Max Tokens"].map(parse_float)
     df["Log(Tokens)"] = np.log10(df["Max Tokens"])
     df["Mean (Task)"] = df["Mean (Task)"].map(parse_float)
-    df = df.dropna(subset=["Mean (Task)", "Number of Parameters"])
+    df = df.dropna(
+        subset=["Mean (Task)", "Number of Parameters", "Embedding Dimensions"]
+    )
     if not len(df.index):
         return go.Figure()
     min_score, max_score = df["Mean (Task)"].min(), df["Mean (Task)"].max()
