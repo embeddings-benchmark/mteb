@@ -113,6 +113,19 @@ model_prompts = {
     PromptType.passage.value: "passage: ",
 }
 
+E5_TRAINING_DATA = {
+    # from 4.2 in https://arxiv.org/pdf/2212.03533
+    # also pre-training data from a variety of sources (stackexchange, semantic scholar, reddit, CC, ...)
+    "MSMARCO": ["train"],
+    "MSMARCOHardNegatives": ["train"],
+    "NanoMSMARCORetrieval": ["train"],
+    "MSMARCO-PL": ["train"],  # translation not trained on
+    "NQ": ["train"],
+    "NQHardNegatives": ["train"],
+    "NanoNQRetrieval": ["train"],
+    "NQ-PL": ["train"],  # translation not trained on
+}
+
 e5_mult_small = ModelMeta(
     loader=partial(  # type: ignore
         sentence_transformers_loader,
@@ -134,6 +147,9 @@ e5_mult_small = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    public_training_data=False,
+    public_training_code=False,
+    training_datasets=E5_TRAINING_DATA,
 )
 
 e5_mult_base = ModelMeta(
@@ -156,6 +172,9 @@ e5_mult_base = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    public_training_data=False,
+    public_training_code=False,
+    training_datasets=E5_TRAINING_DATA,
 )
 
 e5_mult_large = ModelMeta(
@@ -179,6 +198,9 @@ e5_mult_large = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    public_training_data=False,
+    public_training_code=False,
+    training_datasets=E5_TRAINING_DATA,
 )
 
 e5_eng_small_v2 = ModelMeta(
@@ -201,6 +223,9 @@ e5_eng_small_v2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    public_training_data=False,
+    public_training_code=False,
+    training_datasets=E5_TRAINING_DATA,
 )
 
 e5_eng_small = ModelMeta(
@@ -224,6 +249,9 @@ e5_eng_small = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    public_training_data=False,
+    public_training_code=False,
+    training_datasets=E5_TRAINING_DATA,
 )
 
 e5_eng_base_v2 = ModelMeta(
@@ -249,6 +277,9 @@ e5_eng_base_v2 = ModelMeta(
     use_instructions=True,
     superseded_by=None,
     adapted_from=None,
+    public_training_data=False,
+    public_training_code=False,
+    training_datasets=E5_TRAINING_DATA,
 )
 
 e5_eng_large_v2 = ModelMeta(
@@ -274,6 +305,9 @@ e5_eng_large_v2 = ModelMeta(
     use_instructions=True,
     superseded_by=None,
     adapted_from=None,
+    public_training_data=False,
+    public_training_code=False,
+    training_datasets=E5_TRAINING_DATA,
 )
 
 e5_large = ModelMeta(
@@ -299,6 +333,9 @@ e5_large = ModelMeta(
     use_instructions=True,
     superseded_by="intfloat/e5-large-v2",
     adapted_from=None,
+    public_training_data=False,
+    public_training_code=False,
+    training_datasets=E5_TRAINING_DATA,
 )
 
 e5_base = ModelMeta(
@@ -324,4 +361,7 @@ e5_base = ModelMeta(
     use_instructions=True,
     superseded_by="intfloat/e5-base-v2",
     adapted_from=None,
+    public_training_data=False,
+    public_training_code=False,
+    training_datasets=E5_TRAINING_DATA,
 )
