@@ -190,6 +190,7 @@ class DeprecatedSummarizationEvaluator(Evaluator):
         machine_summaries=None,
         texts=None,
         gold_scores=None,
+        limit: int | None = None,
         **kwargs,
     ):
         # human_summaries shape: (None, num_human_summaries)
@@ -197,6 +198,11 @@ class DeprecatedSummarizationEvaluator(Evaluator):
         # gold scores shape: (None, num_machine_summaries)
         # texts: (None,)
         super().__init__(**kwargs)
+        if limit is not None:
+            human_summaries = human_summaries[:limit]
+            machine_summaries = machine_summaries[:limit]
+            gold_scores = gold_scores[:limit]
+            texts = texts[:limit]
         self.human_summaries = human_summaries
         self.machine_summaries = machine_summaries
         self.texts = texts
@@ -306,17 +312,17 @@ class DeprecatedSummarizationEvaluator(Evaluator):
                 continue
 
             cosine_spearman_scores.append(
-                spearmanr(human_scores, cosine_pred_scores).statistic
+                spearmanr(human_scores, cosine_pred_scores)
             )
             cosine_pearson_scores.append(
-                pearsonr(human_scores, cosine_pred_scores).statistic
+                pearsonr(human_scores, cosine_pred_scores)
             )
             dot_spearman_scores.append(
-                spearmanr(human_scores, dot_pred_scores).statistic
+                spearmanr(human_scores, dot_pred_scores)
             )
-            dot_pearson_scores.append(pearsonr(human_scores, dot_pred_scores).statistic)
-            spearman_scores.append(spearmanr(human_scores, sim_scores).statistic)
-            pearson_scores.append(pearsonr(human_scores, sim_scores).statistic)
+            dot_pearson_scores.append(pearsonr(human_scores, dot_pred_scores))
+            spearman_scores.append(spearmanr(human_scores, sim_scores))
+            pearson_scores.append(pearsonr(human_scores, sim_scores))
 
         return {
             "pearson": np.mean(pearson_scores),
