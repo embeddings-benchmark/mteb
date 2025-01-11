@@ -53,7 +53,7 @@ def get_loader_name(
     return loader.__name__
 
 
-class EvaluationFunction(str, Enum):
+class ScoringFunction(str, Enum):
     DOT_PRODUCT: str = "dot_score"
     COSINE: str = "cos_sim"
 
@@ -108,7 +108,7 @@ class ModelMeta(BaseModel):
     public_training_code: bool | None = None
     framework: list[FRAMEWORKS] = []
     reference: STR_URL | None = None
-    similarity_fn_name: DISTANCE_METRICS | EvaluationFunction | None = None
+    similarity_fn_name: DISTANCE_METRICS | ScoringFunction | None = None
     use_instructions: bool | None = None
     training_datasets: dict[str, list[str]] | None = None
     adapted_from: str | None = None
@@ -118,12 +118,12 @@ class ModelMeta(BaseModel):
     def get_evaluation_function(self) -> callable:
         if (
             self.similarity_fn_name == "cosine"
-            or self.similarity_fn_name == EvaluationFunction.COSINE
+            or self.similarity_fn_name == ScoringFunction.COSINE
         ):
             return cos_sim
         elif (
             self.similarity_fn_name == "dot"
-            or self.similarity_fn_name == EvaluationFunction.DOT_PRODUCT
+            or self.similarity_fn_name == ScoringFunction.DOT_PRODUCT
         ):
             return dot_score
         else:
