@@ -136,6 +136,9 @@ text_embedding_3_small = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=False,
+    public_training_data=False,  # assumed
+    public_training_code=False,  # assumed
+    training_datasets=None,
 )
 text_embedding_3_large = ModelMeta(
     name="openai/text-embedding-3-large",
@@ -156,6 +159,9 @@ text_embedding_3_large = ModelMeta(
     use_instructions=False,
     n_parameters=None,
     memory_usage=None,
+    public_training_data=False,  # assumed
+    public_training_code=False,  # assumed
+    training_datasets=None,
 )
 text_embedding_ada_002 = ModelMeta(
     name="openai/text-embedding-ada-002",
@@ -176,4 +182,7 @@ text_embedding_ada_002 = ModelMeta(
     use_instructions=False,
     n_parameters=None,
     memory_usage=None,
+    public_training_data=False,  # assumed
+    public_training_code=False,  # assumed
+    training_datasets=None,
 )
