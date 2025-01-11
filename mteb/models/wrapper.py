@@ -68,12 +68,16 @@ class Wrapper:
         return None
 
     @staticmethod
-    def get_similarity_function(similarity_fn_name: str) -> Callable[[np.ndarray, np.ndarray], np.ndarray]:
+    def get_similarity_function(
+        similarity_fn_name: str,
+    ) -> Callable[[np.ndarray, np.ndarray], np.ndarray]:
         if similarity_fn_name == "cosine":
             return cos_sim
         if similarity_fn_name == "dot":
             return dot_score
-        raise ValueError("Invalid similarity function. Should be one of ['cosine', 'dot']")
+        raise ValueError(
+            "Invalid similarity function. Should be one of ['cosine', 'dot']"
+        )
 
     @staticmethod
     def validate_task_to_prompt_name(

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from functools import partial
 
-from mteb.evaluation import dot_distance
 from mteb.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerWrapper,
