@@ -311,15 +311,9 @@ class DeprecatedSummarizationEvaluator(Evaluator):
                 logger.info(f"Skipping sample {i} due to equal scores")
                 continue
 
-            cosine_spearman_scores.append(
-                spearmanr(human_scores, cosine_pred_scores)
-            )
-            cosine_pearson_scores.append(
-                pearsonr(human_scores, cosine_pred_scores)
-            )
-            dot_spearman_scores.append(
-                spearmanr(human_scores, dot_pred_scores)
-            )
+            cosine_spearman_scores.append(spearmanr(human_scores, cosine_pred_scores))
+            cosine_pearson_scores.append(pearsonr(human_scores, cosine_pred_scores))
+            dot_spearman_scores.append(spearmanr(human_scores, dot_pred_scores))
             dot_pearson_scores.append(pearsonr(human_scores, dot_pred_scores))
             spearman_scores.append(spearmanr(human_scores, sim_scores))
             pearson_scores.append(pearsonr(human_scores, sim_scores))
