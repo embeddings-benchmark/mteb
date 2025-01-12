@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 class MTEB:
     def __init__(
         self,
-        tasks: Iterable[str | AbsTask] | None = None,
+        tasks: Iterable[AbsTask],
         *,
         err_logs_path: str = "error_logs.txt",
         **kwargs,
@@ -45,28 +45,28 @@ class MTEB:
         """
         from mteb.benchmarks import Benchmark
 
-        self._tasks = tasks
+        self.tasks = tasks
         if isinstance(tasks[0], Benchmark):
             self.benchmarks = tasks
-            self._tasks = list(chain.from_iterable(tasks))
+            self.tasks = list(chain.from_iterable(tasks))
 
         self.err_logs_path = err_logs_path
         self.last_evaluated_splits = {}
 
     @property
     def available_tasks(self):
-        return [x.metadata.name for x in self.tasks_cls]
+        return [x.metadata.name for x in self.tasks]
 
     @property
     def available_task_types(self):
         # sort the task types
-        return sorted({x.metadata.type for x in self.tasks_cls})
+        return sorted({x.metadata.type for x in self.tasks})
 
     @property
     def available_task_categories(self):
-        return {x.metadata.category for x in self.tasks_cls}
+        return {x.metadata.category for x in self.tasks}
 
-    def _display_tasks(self, task_list, name=None):
+    def _display_tasks(self, task_list: Iterable[AbsTask], name: str | None = None):
         from rich.console import Console
 
         # disable logging for other ranks
@@ -126,12 +126,6 @@ class MTEB:
         for benchmark in sorted_mteb_benchmarks:
             name = benchmark.name
             self._display_tasks(benchmark.tasks, name=name)
-
-    @classmethod
-    def mteb_tasks(cls):
-        """Get all tasks available in the MTEB."""
-        instance = cls()
-        instance._display_tasks(instance.tasks_cls, name="MTEB tasks")
 
     def print_selected_tasks(self):
         """Print the selected tasks."""
