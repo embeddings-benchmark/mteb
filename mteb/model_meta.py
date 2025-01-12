@@ -5,6 +5,7 @@ from enum import Enum
 from functools import partial
 from typing import TYPE_CHECKING, Any, Callable, Literal
 
+import numpy as np
 from pydantic import BaseModel, ConfigDict, field_validator
 
 from mteb.abstasks.AbsTask import AbsTask
@@ -129,6 +130,16 @@ class ModelMeta(BaseModel):
         if value in mapping:
             return mapping[value]
         raise ValueError(f"Invalid similarity function name: {value}")
+
+    def get_similarity_function(self) -> Callable[[np.ndarray, np.ndarray], np.ndarray]:
+        if self.similarity_fn_name == ScoringFunction.COSINE:
+            return cos_sim
+        elif self.similarity_fn_name == ScoringFunction.DOT_PRODUCT:
+            return dot_score
+        elif self.similarity_fn_name == ScoringFunction.MAX_SIM:
+            return None
+        elif self.similarity_fn_name is None:
+            return None
 
     def get_evaluation_function(self) -> callable:
         if (

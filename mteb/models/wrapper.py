@@ -3,13 +3,9 @@ from __future__ import annotations
 import logging
 from typing import Callable, get_args
 
-import numpy as np
-
 import mteb
 from mteb.abstasks.TaskMetadata import TASK_TYPE
 from mteb.encoder_interface import PromptType
-from mteb.evaluation.evaluators.utils import cos_sim, dot_score
-from mteb.model_meta import ScoringFunction
 
 logger = logging.getLogger(__name__)
 
@@ -67,24 +63,6 @@ class Wrapper:
             "No combination of task name and prompt type was found in model prompts."
         )
         return None
-
-    @staticmethod
-    def get_similarity_function(
-        similarity_fn_name: str,
-    ) -> Callable[[np.ndarray, np.ndarray], np.ndarray]:
-        if similarity_fn_name == ScoringFunction.COSINE:
-            return cos_sim
-        elif similarity_fn_name == ScoringFunction.DOT_PRODUCT:
-            return dot_score
-        elif similarity_fn_name == ScoringFunction.MAX_SIM:
-            return None
-        elif similarity_fn_name is None:
-            return None
-        else:
-            logging.warning(
-                f"Unknown similarity function {similarity_fn_name} defaulting to cosine similarity."
-            )
-            return cos_sim
 
     @staticmethod
     def validate_task_to_prompt_name(
