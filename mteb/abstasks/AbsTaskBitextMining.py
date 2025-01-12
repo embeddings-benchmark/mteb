@@ -61,9 +61,6 @@ class AbsTaskBitextMining(AbsTask):
     parallel_subsets = False
     abstask_prompt = "Retrieve parallel sentences."
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
     def evaluate(
         self,
         model: Encoder,
@@ -94,7 +91,7 @@ class AbsTaskBitextMining(AbsTask):
         else:
             for hf_subet in hf_subsets:
                 logger.info(
-                    f"\nTask: {self.metadata.name}, split: {split}, subset: {hf_subet}. Running..."
+                    f"Task: {self.metadata.name}, split: {split}, subset: {hf_subet}. Running..."
                 )
 
                 if hf_subet not in self.dataset and hf_subet == "default":
@@ -103,8 +100,7 @@ class AbsTaskBitextMining(AbsTask):
                     data_split = self.dataset[hf_subet][split]
                 scores[hf_subet] = self._evaluate_subset(
                     model,
-                    data_split,  # type: ignore
-                    subsets=["sentence1", "sentence2"],
+                    data_split,
                     encode_kwargs=encode_kwargs,
                     **kwargs,
                 )
@@ -141,9 +137,6 @@ class AbsTaskBitextMining(AbsTask):
         else:
             self._add_main_score(metrics)
         return metrics
-
-    def _add_main_score(self, scores) -> None:
-        scores["main_score"] = scores[self.metadata.main_score]
 
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False

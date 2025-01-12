@@ -35,6 +35,37 @@ bge_small_en_v1_5 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     citation=BGE_15_CITATION,
+    public_training_data=True,  # https://data.baai.ac.cn/details/BAAI-MTP
+    public_training_code=None,  # seemingly released (at least for some models, but the link is broken
+    training_datasets={
+        # source: https://data.baai.ac.cn/details/BAAI-MTP
+        "NQ": ["test"],
+        "NQHardNegatives": ["test"],
+        "AmazonReviewsClassification": [
+            "validation",
+            "test",
+        ],  # assumed from: amazon_reviews_multi
+        "MLQARetrieval": [
+            "validation",
+            "test",
+        ],  # assumed from mlqa	(question, context)
+        # not in mteb
+        # Dataset	Pairs
+        # wudao	(title, passage)
+        # cmrc2018	(query, context)
+        # dureader	(query, context)
+        # simclue	(sentence_a, sentence_b)
+        # csl	(title, abstract)
+        # amazon_reviews_multi	(title, body)
+        # wiki_atomic_edits	(base_sentence, edited_sentence)
+        # mlqa	(question, context)
+        # xlsum	(title, summary) (title, text)
+        # "sentence-transformers data": [],  # https://huggingface.co/datasets/sentence-transformers/embedding-training-data # TODO check this further
+        # "wikipedia": [],  # title + section title, passage
+        # "reddit": [],  # title, body
+        # "stackexchange": [],  # (title, upvoted answer) (title+body, upvoted answer)
+        # "s2orc": [],  # (title, abstract) (title, citation title) (abstract, citation abstract)
+    },
 )
 
 bge_base_en_v1_5 = ModelMeta(
@@ -58,6 +89,37 @@ bge_base_en_v1_5 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     citation=BGE_15_CITATION,
+    public_training_data=True,  # https://data.baai.ac.cn/details/BAAI-MTP
+    public_training_code=None,  # seemingly released (at least for some models, but the link is broken
+    training_datasets={
+        # source: https://data.baai.ac.cn/details/BAAI-MTP
+        "NQ": ["test"],
+        "NQHardNegatives": ["test"],
+        "AmazonReviewsClassification": [
+            "validation",
+            "test",
+        ],  # assumed from: amazon_reviews_multi
+        "MLQARetrieval": [
+            "validation",
+            "test",
+        ],  # assumed from mlqa	(question, context)
+        # not in mteb
+        # Dataset	Pairs
+        # wudao	(title, passage)
+        # cmrc2018	(query, context)
+        # dureader	(query, context)
+        # simclue	(sentence_a, sentence_b)
+        # csl	(title, abstract)
+        # amazon_reviews_multi	(title, body)
+        # wiki_atomic_edits	(base_sentence, edited_sentence)
+        # mlqa	(question, context)
+        # xlsum	(title, summary) (title, text)
+        # "sentence-transformers data": [],  # https://huggingface.co/datasets/sentence-transformers/embedding-training-data # TODO check this further
+        # "wikipedia": [],  # title + section title, passage
+        # "reddit": [],  # title, body
+        # "stackexchange": [],  # (title, upvoted answer) (title+body, upvoted answer)
+        # "s2orc": [],  # (title, abstract) (title, citation title) (abstract, citation abstract)
+    },
 )
 
 bge_large_en_v1_5 = ModelMeta(
@@ -81,4 +143,35 @@ bge_large_en_v1_5 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     citation=BGE_15_CITATION,
+    public_training_data=True,  # https://data.baai.ac.cn/details/BAAI-MTP
+    public_training_code=None,  # seemingly released (at least for some models, but the link is broken
+    training_datasets={
+        # source: https://data.baai.ac.cn/details/BAAI-MTP
+        "NQ": ["test"],
+        "NQHardNegatives": ["test"],
+        "AmazonReviewsClassification": [
+            "validation",
+            "test",
+        ],  # assumed from: amazon_reviews_multi
+        "MLQARetrieval": [
+            "validation",
+            "test",
+        ],  # assumed from mlqa	(question, context)
+        # not in mteb
+        # Dataset	Pairs
+        # wudao	(title, passage)
+        # cmrc2018	(query, context)
+        # dureader	(query, context)
+        # simclue	(sentence_a, sentence_b)
+        # csl	(title, abstract)
+        # amazon_reviews_multi	(title, body)
+        # wiki_atomic_edits	(base_sentence, edited_sentence)
+        # mlqa	(question, context)
+        # xlsum	(title, summary) (title, text)
+        # "sentence-transformers data": [],  # https://huggingface.co/datasets/sentence-transformers/embedding-training-data # TODO check this further
+        # "wikipedia": [],  # title + section title, passage
+        # "reddit": [],  # title, body
+        # "stackexchange": [],  # (title, upvoted answer) (title+body, upvoted answer)
+        # "s2orc": [],  # (title, abstract) (title, citation title) (abstract, citation abstract)
+    },
 )

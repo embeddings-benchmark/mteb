@@ -151,6 +151,9 @@ google_text_emb_004 = ModelMeta(
     similarity_fn_name="cosine",  # assumed
     framework=["API"],
     use_instructions=True,
+    public_training_data=False,  # assumed
+    public_training_code=False,  # assumed
+    training_datasets=None,
 )
 
 google_text_emb_005 = ModelMeta(
@@ -171,6 +174,9 @@ google_text_emb_005 = ModelMeta(
     similarity_fn_name="cosine",  # assumed
     framework=["API"],
     use_instructions=True,
+    public_training_data=False,  # assumed
+    public_training_code=False,  # assumed
+    training_datasets=None,
 )
 
 google_text_multilingual_emb_002 = ModelMeta(
@@ -191,4 +197,7 @@ google_text_multilingual_emb_002 = ModelMeta(
     similarity_fn_name="cosine",  # assumed
     framework=["API"],
     use_instructions=True,
+    public_training_data=False,  # assumed
+    public_training_code=False,  # assumed
+    training_datasets=None,
 )

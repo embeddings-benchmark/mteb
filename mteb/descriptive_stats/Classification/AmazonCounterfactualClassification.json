@@ -6,7 +6,10 @@
         "min_text_length": 9,
         "average_text_length": 94.74495602690119,
         "max_text_length": 525,
-        "unique_text": 1903,
+        "unique_texts": 1903,
+        "min_labels_per_text": 1,
+        "average_label_per_text": 1.0,
+        "max_labels_per_text": 1,
         "unique_labels": 2,
         "labels": {
             "0": {
@@ -24,7 +27,10 @@
                 "min_text_length": 31,
                 "average_text_length": 102.14414414414415,
                 "max_text_length": 370,
-                "unique_text": 666,
+                "unique_texts": 666,
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
                 "unique_labels": 2,
                 "labels": {
                     "0": {
@@ -42,7 +48,10 @@
                 "min_text_length": 36,
                 "average_text_length": 109.20298507462687,
                 "max_text_length": 470,
-                "unique_text": 335,
+                "unique_texts": 335,
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
                 "unique_labels": 2,
                 "labels": {
                     "0": {
@@ -60,7 +69,10 @@
                 "min_text_length": 22,
                 "average_text_length": 125.00214592274678,
                 "max_text_length": 525,
-                "unique_text": 466,
+                "unique_texts": 466,
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
                 "unique_labels": 2,
                 "labels": {
                     "0": {
@@ -78,7 +90,10 @@
                 "min_text_length": 9,
                 "average_text_length": 43.51931330472103,
                 "max_text_length": 191,
-                "unique_text": 464,
+                "unique_texts": 464,
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
                 "unique_labels": 2,
                 "labels": {
                     "0": {
@@ -98,7 +113,10 @@
         "min_text_length": 6,
         "average_text_length": 93.37706611570248,
         "max_text_length": 568,
-        "unique_text": 3779,
+        "unique_texts": 3779,
+        "min_labels_per_text": 1,
+        "average_label_per_text": 1.0,
+        "max_labels_per_text": 1,
         "unique_labels": 2,
         "labels": {
             "1": {
@@ -116,7 +134,10 @@
                 "min_text_length": 6,
                 "average_text_length": 101.47226386806597,
                 "max_text_length": 420,
-                "unique_text": 1333,
+                "unique_texts": 1333,
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
                 "unique_labels": 2,
                 "labels": {
                     "1": {
@@ -134,7 +155,10 @@
                 "min_text_length": 32,
                 "average_text_length": 106.14626865671642,
                 "max_text_length": 541,
-                "unique_text": 670,
+                "unique_texts": 670,
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
                 "unique_labels": 2,
                 "labels": {
                     "0": {
@@ -152,7 +176,10 @@
                 "min_text_length": 23,
                 "average_text_length": 123.58886509635974,
                 "max_text_length": 568,
-                "unique_text": 933,
+                "unique_texts": 933,
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
                 "unique_labels": 2,
                 "labels": {
                     "0": {
@@ -170,7 +197,10 @@
                 "min_text_length": 6,
                 "average_text_length": 42.44325481798715,
                 "max_text_length": 165,
-                "unique_text": 934,
+                "unique_texts": 934,
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
                 "unique_labels": 2,
                 "labels": {
                     "0": {
@@ -190,7 +220,10 @@
         "min_text_length": 6,
         "average_text_length": 93.08924110603841,
         "max_text_length": 572,
-        "unique_text": 19945,
+        "unique_texts": 19945,
+        "min_labels_per_text": 1,
+        "average_label_per_text": 1.0,
+        "max_labels_per_text": 1,
         "unique_labels": 2,
         "labels": {
             "0": {
@@ -208,7 +241,10 @@
                 "min_text_length": 6,
                 "average_text_length": 102.10175,
                 "max_text_length": 541,
-                "unique_text": 7998,
+                "unique_texts": 7998,
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
                 "unique_labels": 2,
                 "labels": {
                     "0": {
@@ -226,7 +262,10 @@
                 "min_text_length": 33,
                 "average_text_length": 107.30039820806371,
                 "max_text_length": 514,
-                "unique_text": 4018,
+                "unique_texts": 4018,
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
                 "unique_labels": 2,
                 "labels": {
                     "1": {
@@ -244,7 +283,10 @@
                 "min_text_length": 19,
                 "average_text_length": 120.44482142857143,
                 "max_text_length": 572,
-                "unique_text": 5587,
+                "unique_texts": 5587,
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
                 "unique_labels": 2,
                 "labels": {
                     "1": {
@@ -262,7 +304,10 @@
                 "min_text_length": 8,
                 "average_text_length": 42.662142857142854,
                 "max_text_length": 190,
-                "unique_text": 5530,
+                "unique_texts": 5530,
+                "min_labels_per_text": 1,
+                "average_label_per_text": 1.0,
+                "max_labels_per_text": 1,
                 "unique_labels": 2,
                 "labels": {
                     "0": {
