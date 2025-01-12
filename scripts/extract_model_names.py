@@ -19,7 +19,11 @@ def get_changed_files(base_branch="main"):
 
     changed_files = diff.splitlines()
     return [
-        f for f in changed_files if f.startswith("mteb/models/") and f.endswith(".py") and ("model" in f or "instruct" in f)
+        f
+        for f in changed_files
+        if f.startswith("mteb/models/")
+        and f.endswith(".py")
+        and ("model" in f or "instruct" in f)
     ]
 
 
@@ -39,10 +43,7 @@ def extract_model_names(files: list[str]) -> list[str]:
                         ):
                             model_name = next(
                                 (
-                                    kw.value.s
-                                    if isinstance(kw.value, ast.Constant)
-                                    and isinstance(kw.value.value, str)
-                                    else kw.value.id
+                                    kw.value.value
                                     for kw in node.value.keywords
                                     if kw.arg == "name"
                                 ),
