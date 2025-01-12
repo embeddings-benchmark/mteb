@@ -5,7 +5,7 @@ from functools import partial
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
 model_prompts = {"query": "Represent this sentence for searching relevant passages: "}
-
+# testing that model loading works.
 bge_small_en_v1_5 = ModelMeta(
     loader=partial(  # type: ignore
         sentence_transformers_loader,
