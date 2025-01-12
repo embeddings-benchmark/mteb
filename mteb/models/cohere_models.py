@@ -11,7 +11,7 @@ from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
 from .wrapper import Wrapper
-
+# test this one loading.
 supported_languages = [
     "afr-Latn",
     "amh-Ethi",
