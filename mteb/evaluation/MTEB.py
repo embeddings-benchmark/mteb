@@ -52,12 +52,8 @@ class MTEB:
             self.benchmarks = tasks
             self._tasks = list(chain.from_iterable(tasks))
 
-        self._extend_lang_code()
-        self._extend_lang_pairs()  # add all possible pairs
         self.err_logs_path = err_logs_path
         self.last_evaluated_splits = {}
-
-        self.select_tasks(**kwargs)
 
     @property
     def available_tasks(self):
@@ -71,24 +67,6 @@ class MTEB:
     @property
     def available_task_categories(self):
         return {x.metadata.category for x in self.tasks_cls}
-
-    def _extend_lang_code(self):
-        # add all possible language codes
-        for lang in set(self._task_langs):
-            if lang in LangMapping.LANG_MAPPING:
-                self._task_langs += LangMapping.LANG_MAPPING[lang]
-
-    def _extend_lang_pairs(self):
-        # add all possible language pairs
-        langs = set(self._task_langs)
-        for x in langs:
-            if "-" not in x:
-                for y in langs:
-                    if "-" not in y:
-                        pair = f"{x}-{y}"
-                        if pair not in langs:
-                            self._task_langs.append(pair)
-        return
 
     def _display_tasks(self, task_list, name=None):
         from rich.console import Console
@@ -160,70 +138,6 @@ class MTEB:
     def print_selected_tasks(self):
         """Print the selected tasks."""
         self._display_tasks(self.tasks, name="Selected tasks")
-
-    def select_tasks(self, **kwargs):
-        """Select the tasks to be evaluated."""
-        # Get all existing tasks
-        # reranking subclasses retrieval to share methods, but is an abstract task
-        tasks_categories_cls = list(AbsTask.__subclasses__()) + [AbsTaskReranking]
-        all_task_classes = []
-        for cat_cls in tasks_categories_cls:
-            for cls in cat_cls.__subclasses__():
-                if (
-                    cat_cls.__name__.startswith("AbsTask")
-                    and cls.__name__ != "AbsTaskReranking"
-                ):
-                    task = cls(hf_subsets=self._task_langs, **kwargs)
-                    all_task_classes.append(task)
-
-        self.tasks_cls = all_task_classes
-
-        # If `task_list` is specified, select list of tasks
-        if self._tasks is not None:
-            self.tasks = list(
-                filter(lambda x: (x.metadata.name in self._tasks), self.tasks_cls)
-            )
-            if len(self.tasks) != len(self._tasks):
-                tasks_known = {x.metadata.name for x in self.tasks_cls}
-                tasks_unknown = {
-                    x for x in self._tasks if isinstance(x, str)
-                } - tasks_known
-                if tasks_unknown:
-                    unknown_str, known_str = (
-                        ",".join(sorted(tasks_unknown)),
-                        ",".join(sorted(tasks_known)),
-                    )
-                    logger.warning(
-                        f"WARNING: Unknown tasks: {unknown_str}. Known tasks: {known_str}."
-                    )
-            # add task if subclass of mteb.tasks
-            self.tasks.extend([x for x in self._tasks if isinstance(x, AbsTask)])
-            return
-
-        # Otherwise use filters to select tasks
-        filtered_tasks = filter(
-            lambda x: (self._task_types is None)
-            or (x.metadata.type in self._task_types),
-            self.tasks_cls,
-        )
-        filtered_tasks = filter(
-            lambda x: (self._task_categories is None)
-            or (x.metadata.category in self._task_categories),
-            filtered_tasks,
-        )
-        filtered_tasks = filter(
-            lambda x: (self._version is None) or (x.metadata.version >= self._version),
-            filtered_tasks,
-        )
-        # keep only tasks with at least one language in the filter
-        filtered_tasks = filter(
-            lambda x: (not self._task_langs)
-            or (len(set(x.metadata.eval_langs) & set(self._task_langs)) > 0),
-            filtered_tasks,
-        )
-
-        # Get final list of tasks
-        self.tasks = list(filtered_tasks)
 
     def load_tasks_data(self):
         """Load datasets for the selected tasks."""
