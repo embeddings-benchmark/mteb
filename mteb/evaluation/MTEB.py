@@ -5,12 +5,12 @@ import logging
 import os
 import traceback
 from collections.abc import Iterable
-from copy import copy, deepcopy
+from copy import deepcopy
 from datetime import datetime
 from itertools import chain
 from pathlib import Path
 from time import time
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import datasets
 from codecarbon import EmissionsTracker
@@ -25,13 +25,16 @@ from ..abstasks.AbsTask import AbsTask
 from ..load_results.task_results import TaskResult
 from ..models.sentence_transformer_wrapper import SentenceTransformerWrapper
 
+if TYPE_CHECKING:
+    from mteb.benchmarks import Benchmark
+
 logger = logging.getLogger(__name__)
 
 
 class MTEB:
     def __init__(
         self,
-        tasks: Iterable[AbsTask],
+        tasks: list[AbsTask | Benchmark],
         *,
         err_logs_path: str = "error_logs.txt",
         **kwargs,
@@ -290,8 +293,8 @@ class MTEB:
             self.print_selected_tasks()
 
         evaluation_results = []
-        original_tasks = (
-            self.tasks.copy()
+        original_tasks = deepcopy(
+            self.tasks
         )  # save them in case we re-use the object (e.g. for reranking)
 
         # To evaluate missing splits, we keep track of the task name and the corresponding splits.
@@ -501,7 +504,7 @@ class MTEB:
                 )
 
         # create a copy of the meta to avoid modifying the original object
-        meta = copy(meta)
+        meta = deepcopy(meta)
         meta.revision = meta.revision or "no_revision_available"
         meta.name = meta.name or "no_model_name_available"
 

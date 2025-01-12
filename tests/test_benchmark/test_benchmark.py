@@ -170,7 +170,7 @@ def test_run_using_benchmark(model: mteb.Encoder):
         name="test_bench", tasks=mteb.get_tasks(tasks=["STS12", "SummEval"])
     )
 
-    eval = mteb.MTEB(tasks=bench)
+    eval = mteb.MTEB(tasks=[bench])
     eval.run(
         model, output_folder="tests/results", overwrite_results=True
     )  # we just want to test that it runs

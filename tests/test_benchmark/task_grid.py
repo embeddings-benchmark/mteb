@@ -3,12 +3,20 @@
 from __future__ import annotations
 
 from mteb.abstasks import AbsTask
-from mteb.tasks.BitextMining.dan.BornholmskBitextMining import BornholmBitextMining
-from mteb.tasks.Classification.multilingual.IndicSentimentClassification import (
+from mteb.tasks import (
+    Banking77Classification,
+    BornholmBitextMining,
+    BrazilianToxicTweetsClassification,
+    Core17InstructionRetrieval,
+    FaroeseSTS,
+    FarsTail,
     IndicSentimentClassification,
-)
-from mteb.tasks.Clustering.eng.TwentyNewsgroupsClustering import (
+    InstructIR,
+    SciDocsReranking,
+    SummEvalSummarization,
+    TwentyNewsgroupsClustering,
     TwentyNewsgroupsClusteringFast,
+    TwitterHjerneRetrieval,
 )
 
 from .mock_tasks import (
@@ -52,17 +60,17 @@ TASK_TEST_GRID = [
         hf_subsets=["as"],  # we only load one subset here to speed up tests
         n_experiments=2,  # to speed up the test
     ),
-    "TwentyNewsgroupsClustering",  # clustering and string instead of class
+    TwentyNewsgroupsClustering,  # clustering and string instead of class
     twenty_news,  # fast clustering
-    "Banking77Classification",  # classification
-    "SciDocsRR",  # reranking
-    "FarsTail",  # pair classification
-    "TwitterHjerneRetrieval",  # retrieval
-    "BrazilianToxicTweetsClassification",  # multilabel classification
-    "FaroeseSTS",  # STS
-    "SummEval",  # summarization
-    "Core17InstructionRetrieval",  # instruction reranking
-    "InstructIR",  # instruction retrieval
+    Banking77Classification,  # classification
+    SciDocsReranking,  # reranking
+    FarsTail,  # pair classification
+    TwitterHjerneRetrieval,  # retrieval
+    BrazilianToxicTweetsClassification,  # multilabel classification
+    FaroeseSTS,  # STS
+    SummEvalSummarization,  # summarization
+    Core17InstructionRetrieval,  # instruction reranking
+    InstructIR,  # instruction retrieval
 ]
 
 TASK_TEST_GRID_AS_STRING = [

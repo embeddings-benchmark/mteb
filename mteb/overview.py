@@ -119,7 +119,7 @@ def filter_task_by_categories(
     return [t for t in tasks if t.metadata.category in _categories]
 
 
-class MTEBTasks(tuple):
+class MTEBTasks(list):
     def __repr__(self) -> str:
         return "MTEBTasks" + super().__repr__()
 
