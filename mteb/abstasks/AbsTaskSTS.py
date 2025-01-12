@@ -64,9 +64,6 @@ class AbsTaskSTS(AbsTask):
     min_score: int
     max_score: int
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
     def _evaluate_subset(
         self, model, data_split, *, encode_kwargs: dict[str, Any] = {}, **kwargs
     ) -> ScoresDict:
@@ -85,9 +82,6 @@ class AbsTaskSTS(AbsTask):
 
         self._add_main_score(scores)
         return scores
-
-    def _add_main_score(self, scores: ScoresDict) -> None:
-        scores["main_score"] = scores[self.metadata.main_score]
 
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False

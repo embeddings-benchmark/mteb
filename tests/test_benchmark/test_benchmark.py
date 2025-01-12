@@ -156,7 +156,7 @@ def test_encode_kwargs_passed_to_all_encodes(task_name: str | AbsTask):
     my_encode_kwargs = {"no_one_uses_this_args": "but_its_here"}
 
     class MockEncoderWithKwargs(mteb.Encoder):
-        def encode(self, sentences, prompt_name: str | None = None, **kwargs):
+        def encode(self, sentences, task_name: str | None = None, **kwargs):
             assert "no_one_uses_this_args" in kwargs
             assert (
                 my_encode_kwargs["no_one_uses_this_args"]

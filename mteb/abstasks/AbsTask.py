@@ -11,6 +11,7 @@ import datasets
 import numpy as np
 import torch
 import tqdm
+import transformers
 from datasets import Dataset, DatasetDict
 from sklearn.preprocessing import MultiLabelBinarizer
 
@@ -23,6 +24,13 @@ logger = logging.getLogger(__name__)
 
 ScoresDict = dict[str, Any]
 # ^ e.g {'main_score': 0.5, 'hf_subset': 'en-de', 'languages': ['eng-Latn', 'deu-Latn']}
+
+
+def set_seed(seed: int) -> tuple[random.Random, np.random.Generator]:
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    transformers.set_seed(seed)
+    return random.Random(seed), np.random.default_rng(seed)
 
 
 def _multilabel_subsampling(
@@ -63,14 +71,14 @@ class AbsTask(ABC):
             and Dataset is a datasets.Dataset objedct. "hf subset" is the data subset on Huggingface typically used to denote the language e.g.
             datasets.load_dataset("data", "en"). If the dataset does not have a subset this is simply "default".
         abstask_prompt: The potential prompt of the abstask
-        superseeded_by: Denotes the task that this task is superseeded by. Used to issue warning to users of outdated datasets, while maintaining
+        superseded_by: Denotes the task that this task is superseeded by. Used to issue warning to users of outdated datasets, while maintaining
             reproducibility of existing benchmarks.
     """
 
     metadata: TaskMetadata
     abstask_prompt: str | None = None
     _eval_splits: list[str] | None = None
-    superseded_by: None | str = None
+    superseded_by: str | None = None
     dataset: dict[HFSubset, DatasetDict] | None = None  # type: ignore
     data_loaded: bool = False
     is_multilingual: bool = False
@@ -85,10 +93,7 @@ class AbsTask(ABC):
         self.save_suffix = kwargs.get("save_suffix", "")
 
         self.seed = seed
-        random.seed(self.seed)
-        np.random.seed(self.seed)
-        torch.manual_seed(self.seed)
-        torch.cuda.manual_seed_all(self.seed)
+        self.rng_state, self.np_rng = set_seed(seed)
 
     def check_if_dataset_is_superseded(self):
         """Check if the dataset is superseded by a newer version"""
@@ -146,6 +151,7 @@ class AbsTask(ABC):
             scores[hf_subset] = self._evaluate_subset(
                 model, data_split, encode_kwargs=encode_kwargs, **kwargs
             )
+            self._add_main_score(scores[hf_subset])
         return scores
 
     @abstractmethod
@@ -328,6 +334,9 @@ class AbsTask(ABC):
 
         self.hf_subsets = subsets_to_keep
         return self
+
+    def _add_main_score(self, scores: dict[HFSubset, ScoresDict]) -> None:
+        scores["main_score"] = scores[self.metadata.main_score]
 
     def _upload_dataset_to_hub(self, repo_name: str, fields: list[str]) -> None:
         if self.is_multilingual:

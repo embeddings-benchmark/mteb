@@ -127,11 +127,8 @@ class AbsTaskRetrieval(AbsTask):
     ignore_identical_ids: bool = False
     abstask_prompt = "Retrieve text based on user query."
 
-    def __init__(self, **kwargs):
-        self.top_ranked = None
-        self.instructions = None
-        # there could be multiple options, so do this even if multilingual
-        super(AbsTaskRetrieval, self).__init__(**kwargs)  # noqa
+    instructions = None
+    top_ranked = None
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -377,9 +374,6 @@ class AbsTaskRetrieval(AbsTask):
                 json.dump(errors, f)
 
         return scores
-
-    def _add_main_score(self, scores: ScoresDict) -> None:
-        scores["main_score"] = scores[self.metadata.main_score]
 
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False

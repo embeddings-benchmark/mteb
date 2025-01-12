@@ -145,13 +145,15 @@ google_text_emb_004 = ModelMeta(
     revision="1",  # revision is intended for implementation
     release_date="2024-05-14",
     n_parameters=None,
-    memory_usage=None,
     max_tokens=2048,
     embed_dim=768,
     license=None,
     similarity_fn_name="cosine",  # assumed
     framework=["API"],
     use_instructions=True,
+    public_training_data=False,  # assumed
+    public_training_code=False,  # assumed
+    training_datasets=None,
 )
 
 google_text_emb_005 = ModelMeta(
@@ -166,13 +168,15 @@ google_text_emb_005 = ModelMeta(
     revision="1",  # revision is intended for implementation
     release_date="2024-11-18",
     n_parameters=None,
-    memory_usage=None,
     max_tokens=2048,
     embed_dim=768,
     license=None,
     similarity_fn_name="cosine",  # assumed
     framework=["API"],
     use_instructions=True,
+    public_training_data=False,  # assumed
+    public_training_code=False,  # assumed
+    training_datasets=None,
 )
 
 google_text_multilingual_emb_002 = ModelMeta(
@@ -187,11 +191,13 @@ google_text_multilingual_emb_002 = ModelMeta(
     revision="1",  # revision is intended for implementation
     release_date="2024-05-14",
     n_parameters=None,
-    memory_usage=None,
     max_tokens=2048,
     embed_dim=768,
     license=None,
     similarity_fn_name="cosine",  # assumed
     framework=["API"],
     use_instructions=True,
+    public_training_data=False,  # assumed
+    public_training_code=False,  # assumed
+    training_datasets=None,
 )
