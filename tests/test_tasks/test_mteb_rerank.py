@@ -6,6 +6,7 @@ from pathlib import Path
 
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
+import mteb
 from mteb import MTEB
 from mteb.model_meta import ModelMeta
 
@@ -318,11 +319,7 @@ def test_mteb_rerank(tmp_path: Path):
         "1395",
     ]
     model = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
-    eval = MTEB(
-        tasks=[
-            "SciFact",
-        ]
-    )
+    eval = MTEB(tasks=mteb.get_tasks(["SciFact"]))
     # create fake first stage results
     tmp_file = tmp_path / "tmp.json"
     with open(tmp_file, "w") as f:
@@ -374,7 +371,7 @@ def test_reranker_same_ndcg1():
         revision=ce_revision,
         release_date="2021-04-15",
     )
-    eval = MTEB(tasks=["SciFact"])
+    eval = MTEB(tasks=mteb.get_tasks(["SciFact"]))
     eval.run(
         de,
         output_folder="tests/results/stage1",

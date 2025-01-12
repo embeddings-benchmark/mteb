@@ -16,6 +16,7 @@ import datasets
 from codecarbon import EmissionsTracker
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
+import mteb
 from mteb.abstasks.AbsTask import ScoresDict
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
@@ -49,7 +50,7 @@ class MTEB:
         from mteb.benchmarks import Benchmark
 
         self.tasks = deepcopy(tasks)
-        if isinstance(self.tasks[0], Benchmark):
+        if len(self.tasks) > 0 and isinstance(self.tasks[0], Benchmark):
             self.benchmarks = tasks
             self.tasks = list(chain.from_iterable(self.tasks))
 
@@ -129,6 +130,13 @@ class MTEB:
         for benchmark in sorted_mteb_benchmarks:
             name = benchmark.name
             self._display_tasks(benchmark.tasks, name=name)
+
+    @classmethod
+    def mteb_tasks(cls):
+        """Get all tasks available in the MTEB."""
+        tasks = mteb.get_tasks()
+        instance = cls(tasks)
+        instance._display_tasks(tasks, name="MTEB tasks")
 
     def print_selected_tasks(self):
         """Print the selected tasks."""

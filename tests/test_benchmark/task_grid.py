@@ -50,7 +50,7 @@ TASK_TEST_GRID = (
             "InstructIR",  # instruction retrieval
         ]
     )
-    + mteb.get_tasks(tasks=["IndicSentimentClassification"], eval_splits=["as"])
+    + mteb.get_tasks(tasks=["IndicSentimentClassification"], languages=["asm-Beng"])
 )
 
 TASK_TEST_GRID_AS_STRING = [
