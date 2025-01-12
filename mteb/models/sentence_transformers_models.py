@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from mteb.model_meta import ModelMeta
-
+# this one causes No space left on device?
 paraphrase_langs = [
     "ara_Arab",
     "bul_Cyrl",
