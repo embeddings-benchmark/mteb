@@ -39,7 +39,10 @@ def extract_model_names(files: list[str]) -> list[str]:
                         ):
                             model_name = next(
                                 (
-                                    kw.value.value
+                                    kw.value.s
+                                    if isinstance(kw.value, ast.Constant)
+                                    and isinstance(kw.value.value, str)
+                                    else kw.value.id
                                     for kw in node.value.keywords
                                     if kw.arg == "name"
                                 ),
