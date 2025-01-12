@@ -9,11 +9,11 @@ import numpy as np
 
 from mteb.model_meta import ModelMeta
 
+from .bge_models import bge_training_data
 from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
-from .bge_models import bge_training_data
 
 class Model2VecWrapper(Wrapper):
     def __init__(
@@ -74,7 +74,7 @@ m2v_base_glove_subword = ModelMeta(
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
-    training_datasets=bge_training_data, # distilled
+    training_datasets=bge_training_data,  # distilled
     public_training_code=True,  # https://github.com/MinishLab/model2vec
     public_training_data=False,
 )
@@ -100,7 +100,7 @@ m2v_base_glove = ModelMeta(
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
-    training_datasets=bge_training_data, # distilled
+    training_datasets=bge_training_data,  # distilled
     public_training_code=True,  # https://github.com/MinishLab/model2vec
     public_training_data=False,
 )
@@ -125,7 +125,7 @@ m2v_base_output = ModelMeta(
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
-    training_datasets=bge_training_data, # distilled
+    training_datasets=bge_training_data,  # distilled
     public_training_code=True,  # https://github.com/MinishLab/model2vec
     public_training_data=False,
 )
@@ -150,7 +150,7 @@ m2v_multilingual_output = ModelMeta(
     use_instructions=False,
     adapted_from="sentence-transformers/LaBSE",
     superseded_by=None,
-    training_datasets=bge_training_data, # distilled
+    training_datasets=bge_training_data,  # distilled
     public_training_code=True,  # https://github.com/MinishLab/model2vec
     public_training_data=False,
 )
@@ -175,7 +175,7 @@ potion_base_2m = ModelMeta(
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
-    training_datasets=bge_training_data, # distilled
+    training_datasets=bge_training_data,  # distilled
     public_training_code=True,  # https://github.com/MinishLab/model2vec
     public_training_data=False,
 )
@@ -200,7 +200,7 @@ potion_base_4m = ModelMeta(
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
-    training_datasets=bge_training_data, # distilled
+    training_datasets=bge_training_data,  # distilled
     public_training_code=True,  # https://github.com/MinishLab/model2vec
     public_training_data=False,
 )
@@ -225,7 +225,7 @@ potion_base_8m = ModelMeta(
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
-    training_datasets=bge_training_data, # distilled
+    training_datasets=bge_training_data,  # distilled
     public_training_code=True,  # https://github.com/MinishLab/model2vec
     public_training_data=False,
 )
