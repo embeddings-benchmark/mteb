@@ -4,7 +4,7 @@ import logging
 from functools import partial
 
 from mteb.evaluation.evaluators.RetrievalEvaluator import DRESModel
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 
 from .wrapper import Wrapper
 
@@ -135,7 +135,7 @@ bm25_s = ModelMeta(
     license=None,
     max_tokens=None,
     reference=None,
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.CUSTOM,
     framework=[],
     use_instructions=False,
 )

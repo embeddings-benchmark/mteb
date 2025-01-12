@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from functools import partial
 
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import ModelMeta, ScoringFunction, sentence_transformers_loader
 
 model_prompts = {"query": "Represent this sentence for searching relevant passages: "}
 BGE_15_CITATION = """@misc{bge_embedding,
@@ -31,7 +31,7 @@ bge_small_en_v1_5 = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/BAAI/bge-small-en-v1.5",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     citation=BGE_15_CITATION,
@@ -85,7 +85,7 @@ bge_base_en_v1_5 = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/BAAI/bge-base-en-v1.5",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     citation=BGE_15_CITATION,
@@ -139,7 +139,7 @@ bge_large_en_v1_5 = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/BAAI/bge-large-en-v1.5",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     citation=BGE_15_CITATION,

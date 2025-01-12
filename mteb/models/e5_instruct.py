@@ -4,7 +4,7 @@ from functools import partial
 
 import torch
 
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 
 from .e5_models import E5_PAPER_RELEASE_DATE, XLMR_LANGUAGES
 from .instruct_wrapper import instruct_wrapper
@@ -32,7 +32,7 @@ e5_instruct = ModelMeta(
     revision="baa7be480a7de1539afce709c8f13f833a510e0a",
     release_date=E5_PAPER_RELEASE_DATE,
     framework=["GritLM", "PyTorch"],
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     reference="https://huggingface.co/intfloat/multilingual-e5-large-instruct",
     n_parameters=560_000_000,
@@ -66,7 +66,7 @@ e5_mistral = ModelMeta(
     revision="07163b72af1488142a360786df853f237b1a3ca1",
     release_date=E5_PAPER_RELEASE_DATE,
     framework=["GritLM", "PyTorch"],
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     reference="https://huggingface.co/intfloat/e5-mistral-7b-instruct",
     n_parameters=7_111_000_000,

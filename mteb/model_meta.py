@@ -54,8 +54,10 @@ def get_loader_name(
 
 
 class ScoringFunction(str, Enum):
-    DOT_PRODUCT: str = "dot_score"
+    DOT_PRODUCT: str = "dot"
     COSINE: str = "cos_sim"
+    MAX_SIM: str = "max_sim"
+    CUSTOM: str = None
 
 
 class ModelMeta(BaseModel):
@@ -106,7 +108,7 @@ class ModelMeta(BaseModel):
     public_training_code: bool | None = None
     framework: list[FRAMEWORKS] = []
     reference: STR_URL | None = None
-    similarity_fn_name: DISTANCE_METRICS | ScoringFunction | None = None
+    similarity_fn_name: ScoringFunction | None = None
     use_instructions: bool | None = None
     training_datasets: dict[str, list[str]] | None = None
     adapted_from: str | None = None

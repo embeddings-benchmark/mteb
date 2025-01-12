@@ -5,7 +5,7 @@ from functools import partial
 import torch
 
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.instruct_wrapper import instruct_wrapper
 
 
@@ -36,7 +36,7 @@ Linq_Embed_Mistral = ModelMeta(
     license="cc-by-nc-4.0",
     max_tokens=32768,
     reference="https://huggingface.co/Linq-AI-Research/Linq-Embed-Mistral",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
 )
