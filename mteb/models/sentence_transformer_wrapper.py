@@ -63,7 +63,7 @@ class SentenceTransformerWrapper(Wrapper):
 
         if similarity_fn_name:
             self.similarity = self.get_similarity_function(similarity_fn_name)
-        elif hasattr(self.model, "similarity"):
+        elif hasattr(self.model, "similarity") and callable(self.model.similarity):
             self.similarity = self.model.similarity
 
     def encode(
