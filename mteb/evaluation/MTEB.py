@@ -35,10 +35,6 @@ class MTEB:
         self,
         tasks: Iterable[str | AbsTask] | None = None,
         *,
-        task_types: list[str] | None = None,
-        task_categories: list[str] | None = None,
-        task_langs: list[str] | None = None,
-        version=None,
         err_logs_path: str = "error_logs.txt",
         **kwargs,
     ):
@@ -46,78 +42,22 @@ class MTEB:
 
         Args:
             tasks: List of tasks to be evaluated.
-            task_types: Will be deprecated we recommend that you use `mteb.get_tasks()` to filter tasks. List of task types (Clustering, Retrieval..) to be
-                evaluated. If None, all tasks will be evaluated
-            task_categories: Will be deprecated we recommend that you use `mteb.get_tasks()` to filter tasks. List of task categories (s2s, p2p..) to be
-                evaluated. If None, all tasks will be evaluated
-            task_langs: Will be deprecated we recommend that you use `mteb.get_tasks()` to filter tasks. List of languages to be evaluated. if None, all
-                languages will be evaluated. ["eng-Latn", "deu_Latn"] will evaluate on all tasks with these languages.
-            version: Will be deprecated. Version of the benchmark to use. If None, latest is used
             err_logs_path: Path to save error logs.
             kwargs: Additional arguments to be passed to the tasks
         """
         from mteb.benchmarks import Benchmark
 
-        self.deprecation_warning(
-            task_types, task_categories, task_langs, tasks, version
-        )
-
-        if tasks is not None:
-            self._tasks = tasks
-            if isinstance(tasks[0], Benchmark):
-                self.benchmarks = tasks
-                self._tasks = list(chain.from_iterable(tasks))
-            assert (
-                task_types is None and task_categories is None
-            ), "Cannot specify both `tasks` and `task_types`/`task_categories`"
-        else:
-            self._task_types = task_types
-            self._task_categories = task_categories
-            self._tasks = None
-
-        self._task_langs = task_langs if task_langs is not None else []
-        if isinstance(self._task_langs, str):
-            self._task_langs = [self._task_langs]
+        self._tasks = tasks
+        if isinstance(tasks[0], Benchmark):
+            self.benchmarks = tasks
+            self._tasks = list(chain.from_iterable(tasks))
 
         self._extend_lang_code()
         self._extend_lang_pairs()  # add all possible pairs
-
-        self._version = version
         self.err_logs_path = err_logs_path
-
         self.last_evaluated_splits = {}
 
         self.select_tasks(**kwargs)
-
-    def deprecation_warning(
-        self, task_types, task_categories, task_langs, tasks, version
-    ):
-        if task_types is not None:
-            logger.warning(
-                "The `task_types` argument is deprecated and will be removed in the next release. "
-                + "Please use `tasks = mteb.get_tasks(... task_types = [...])` to filter tasks instead."
-            )
-        if task_categories is not None:
-            logger.warning(
-                "The `task_categories` argument is deprecated and will be removed in the next release. "
-                + "Please use `tasks = mteb.get_tasks(... categories = [...])` to filter tasks instead."
-            )
-        if task_langs is not None:
-            logger.warning(
-                "The `task_langs` argument is deprecated and will be removed in the next release. "
-                + "Please use `tasks = mteb.get_tasks(... languages = [...])` to filter tasks instead. "
-                + "Note that this uses 3 letter language codes (ISO 639-3)."
-            )
-        if version is not None:
-            logger.warning(
-                "The `version` argument is deprecated and will be removed in the next release."
-            )
-        task_contains_strings = any(isinstance(x, str) for x in tasks or [])
-        if task_contains_strings:
-            logger.warning(
-                "Passing task names as strings is deprecated and will be removed in the next release. "
-                + "Please use `tasks = mteb.get_tasks(tasks=[...])` method to get tasks instead."
-            )
 
     @property
     def available_tasks(self):
@@ -412,13 +352,6 @@ class MTEB:
         Returns:
             A list of TaskResult objects, one for each task evaluated.
         """
-        if "batch_size" in kwargs:
-            logger.warning(
-                "The `batch_size` argument is deprecated and will be removed in the next release. "
-                + "Please use `encode_kwargs = {'batch_size': ...}` to set the batch size instead."
-            )
-            encode_kwargs["batch_size"] = kwargs["batch_size"]
-
         # update logging to account for different levels of Verbosity (similar to the command line)
 
         if verbosity == 0:
