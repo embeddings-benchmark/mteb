@@ -13,14 +13,14 @@ from mteb.abstasks import AbsTask, MultilingualTask
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.AbsTaskSpeedTask import AbsTaskSpeedTask
-from mteb.overview import TASKS_REGISTRY
+from mteb.overview import TASKS_REGISTRY, get_tasks
 
 from ..test_benchmark.task_grid import MOCK_TASK_TEST_GRID_AS_STRING
 
 logging.basicConfig(level=logging.INFO)
 
 tasks = [
-    t for t in MTEB().tasks_cls if t.metadata.name not in MOCK_TASK_TEST_GRID_AS_STRING
+    t for t in get_tasks() if t.metadata.name not in MOCK_TASK_TEST_GRID_AS_STRING
 ]
 
 
