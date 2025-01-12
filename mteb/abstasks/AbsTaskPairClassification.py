@@ -67,12 +67,6 @@ class AbsTaskPairClassification(AbsTask):
 
     abstask_prompt = "Retrieve text that are semantically similar to the given text."
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def _add_main_score(self, scores: ScoresDict) -> None:
-        scores["main_score"] = scores[self.metadata.main_score]
-
     def _evaluate_subset(
         self,
         model: Encoder,

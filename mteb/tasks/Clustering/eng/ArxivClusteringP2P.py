@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import random
+
+from datasets import Dataset, DatasetDict
+
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.AbsTaskClusteringFast import clustering_downsample
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
@@ -79,5 +82,25 @@ class ArxivClusteringP2PFast(AbsTaskClustering):
     )
 
     def dataset_transform(self):
-        ds = clustering_downsample(self.dataset, self.seed)
-        self.dataset = ds
+        rng_state = random.Random(self.seed)
+
+        ds = {}
+        for split in self.dataset:
+            _docs = []
+            _labels = []
+
+            n_clusters = len(self.dataset[split])
+
+            for i in range(n_clusters):
+                labels = self.dataset[split]["labels"][i]
+                sentences = self.dataset[split]["sentences"][i]
+
+                n_sample = min(2048, len(sentences))
+
+                # sample n_sample from each cluster
+                idxs = rng_state.sample(range(len(sentences)), n_sample)
+                _docs.append([sentences[idx] for idx in idxs])
+                _labels.append([labels[idx] for idx in idxs])
+
+            ds[split] = Dataset.from_dict({"sentences": _docs, "labels": _labels})
+        self.dataset = DatasetDict(ds)
