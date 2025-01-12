@@ -51,7 +51,7 @@ class kNNClassificationEvaluator(Evaluator):
         model: Encoder,
         *,
         encode_kwargs: dict[str, Any] = {},
-        test_cache: np.ndarray = None,
+        test_cache: np.ndarray | None = None,
     ) -> tuple[dict[str, float], Any]:
         scores = {}
         max_accuracy = 0
@@ -60,13 +60,13 @@ class kNNClassificationEvaluator(Evaluator):
         X_train = model.encode(
             self.sentences_train,
             task_name=self.task_name,
-            **self.encode_kwargs,
+            **encode_kwargs,
         )
         if test_cache is None:
             X_test = model.encode(
                 self.sentences_test,
                 task_name=self.task_name,
-                **self.encode_kwargs,
+                **encode_kwargs,
             )
             test_cache = X_test
         else:
@@ -119,7 +119,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         model: Encoder,
         *,
         encode_kwargs: dict[str, Any] = {},
-        test_cache: np.ndarray = None,
+        test_cache: np.ndarray | None = None,
     ) -> tuple[dict[str, float], Any]:
         scores = {}
         max_accuracy = 0
@@ -262,7 +262,7 @@ class logRegClassificationEvaluator(Evaluator):
         model: Encoder,
         *,
         encode_kwargs: dict[str, Any] = {},
-        test_cache: np.ndarray = None,
+        test_cache: np.ndarray | None = None,
     ) -> tuple[dict[str, float], Any]:
         scores = {}
         clf = LogisticRegression(
