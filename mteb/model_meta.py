@@ -11,7 +11,7 @@ from pydantic import BaseModel, ConfigDict, field_validator
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.TaskMetadata import STR_DATE, STR_URL
 from mteb.encoder_interface import Encoder
-from mteb.evaluation.evaluators.utils import cos_sim, dot_score
+from mteb.evaluation.evaluators.utils import cos_sim, dot_score, max_sim
 
 from .languages import ISO_LANGUAGE_SCRIPT
 
@@ -137,23 +137,9 @@ class ModelMeta(BaseModel):
         elif self.similarity_fn_name == ScoringFunction.DOT_PRODUCT:
             return dot_score
         elif self.similarity_fn_name == ScoringFunction.MAX_SIM:
-            return None
+            return max_sim
         elif self.similarity_fn_name is None:
-            return None
-
-    def get_evaluation_function(self) -> callable:
-        if (
-            self.similarity_fn_name == "cosine"
-            or self.similarity_fn_name == ScoringFunction.COSINE
-        ):
-            return cos_sim
-        elif (
-            self.similarity_fn_name == "dot"
-            or self.similarity_fn_name == ScoringFunction.DOT_PRODUCT
-        ):
-            return dot_score
-        else:
-            raise ValueError(f"Unknown similarity function {self.similarity_fn_name}")
+            raise ValueError("Similarity function not specified.")
 
     def to_dict(self):
         dict_repr = self.model_dump()
