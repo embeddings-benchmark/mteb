@@ -2,22 +2,8 @@
 
 from __future__ import annotations
 
+import mteb
 from mteb.abstasks import AbsTask
-from mteb.tasks import (
-    Banking77Classification,
-    BornholmBitextMining,
-    BrazilianToxicTweetsClassification,
-    Core17InstructionRetrieval,
-    FaroeseSTS,
-    FarsTail,
-    IndicSentimentClassification,
-    InstructIR,
-    SciDocsReranking,
-    SummEvalSummarization,
-    TwentyNewsgroupsClustering,
-    TwentyNewsgroupsClusteringFast,
-    TwitterHjerneRetrieval,
-)
 
 from .mock_tasks import (
     MockBitextMiningTask,
@@ -47,31 +33,25 @@ from .mock_tasks import (
     MockSummarizationTask,
 )
 
-twenty_news = TwentyNewsgroupsClusteringFast()
-
-# downsample to speed up tests
-twenty_news.max_document_to_embed = 1000
-twenty_news.n_clusters = 2
-twenty_news.max_fraction_of_documents_to_embed = None
-
-TASK_TEST_GRID = [
-    BornholmBitextMining(),  # bitext mining + just supplying a task class instead of a string
-    IndicSentimentClassification(  # multi subset loader
-        hf_subsets=["as"],  # we only load one subset here to speed up tests
-        n_experiments=2,  # to speed up the test
-    ),
-    TwentyNewsgroupsClustering,  # clustering and string instead of class
-    twenty_news,  # fast clustering
-    Banking77Classification,  # classification
-    SciDocsReranking,  # reranking
-    FarsTail,  # pair classification
-    TwitterHjerneRetrieval,  # retrieval
-    BrazilianToxicTweetsClassification,  # multilabel classification
-    FaroeseSTS,  # STS
-    SummEvalSummarization,  # summarization
-    Core17InstructionRetrieval,  # instruction reranking
-    InstructIR,  # instruction retrieval
-]
+TASK_TEST_GRID = (
+    mteb.get_tasks(
+        tasks=[
+            "BornholmBitextMining",  # bitext mining + just supplying a task class instead of a string
+            "TwentyNewsgroupsClustering",  # clustering and string instead of class
+            "TwentyNewsgroupsClustering.v2",  # fast clustering
+            "Banking77Classification",  # classification
+            "SciDocsRR",  # reranking
+            "FarsTail",  # pair classification
+            "TwitterHjerneRetrieval",  # retrieval
+            "BrazilianToxicTweetsClassification",  # multilabel classification
+            "FaroeseSTS",  # STS
+            "SummEval",  # summarization
+            "Core17InstructionRetrieval",  # instruction reranking
+            "InstructIR",  # instruction retrieval
+        ]
+    )
+    + mteb.get_tasks(tasks=["IndicSentimentClassification"], eval_splits=["as"])
+)
 
 TASK_TEST_GRID_AS_STRING = [
     t.metadata.name if isinstance(t, AbsTask) else t for t in TASK_TEST_GRID
