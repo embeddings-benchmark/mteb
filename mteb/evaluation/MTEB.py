@@ -22,10 +22,8 @@ from mteb.model_meta import ModelMeta
 from mteb.models import model_meta_from_sentence_transformers
 
 from ..abstasks.AbsTask import AbsTask
-from ..abstasks.AbsTaskReranking import AbsTaskReranking
 from ..load_results.task_results import TaskResult
 from ..models.sentence_transformer_wrapper import SentenceTransformerWrapper
-from . import LangMapping
 
 logger = logging.getLogger(__name__)
 
