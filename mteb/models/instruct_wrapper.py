@@ -134,10 +134,17 @@ class InstructSentenceTransformerWrapper(Wrapper):
         if not self.apply_instruction_to_passages:
             if task.metadata.type == "p2p":
                 instruction = None
+                logger.info(
+                    f"No instruction used, because task retrieve type {task.metadata.type}"
+                )
             elif prompt_type == PromptType.passage and task.metadata.type == "s2p":
                 instruction = None
+                logger.info(
+                    f"No instruction used, because prompt type = {prompt_type.passage} and task retrieve type {task.metadata.type}"
+                )
 
-        logger.info(f"Using instruction: '{instruction}' for task: '{task_name}'")
+        if instruction:
+            logger.info(f"Using instruction: '{instruction}' for task: '{task_name}'")
         embeddings = self.model.encode(
             sentences,
             prompt=instruction,
