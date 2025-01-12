@@ -67,7 +67,7 @@ def test_benchmark_encoders_on_task(task: str | AbsTask, model: mteb.Encoder):
     eval.run(model, output_folder="tests/results", overwrite_results=True)
 
 
-@pytest.mark.parametrize("task", [MockMultilingualRetrievalTask])
+@pytest.mark.parametrize("task", [MockMultilingualRetrievalTask()])
 @pytest.mark.parametrize(
     "model",
     [MockSentenceTransformer()],

@@ -8,7 +8,6 @@ import aiohttp
 import pytest
 
 import mteb
-from mteb import MTEB
 from mteb.abstasks import AbsTask, MultilingualTask
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
