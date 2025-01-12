@@ -47,7 +47,7 @@ from mteb.models import (
 )
 
 logger = logging.getLogger(__name__)
-# What about this?
+
 model_modules = [
     arctic_models,
     bge_models,
