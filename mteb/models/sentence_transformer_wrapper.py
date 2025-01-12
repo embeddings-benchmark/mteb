@@ -132,7 +132,7 @@ class SentenceTransformerWrapper(Wrapper):
         queries, corpus, instructions = list(zip(*sentences))
         # combine the queries and instructions
         queries_with_instructions = [
-            f"{query.strip()} {instruction}".strip()
+            f"{query.strip()} {instruction}".strip() if instruction else query
             for query, instruction in zip(queries, instructions)
         ]
         return self._predict(list(zip(queries_with_instructions, corpus)), **kwargs)
