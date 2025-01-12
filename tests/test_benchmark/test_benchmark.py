@@ -67,6 +67,24 @@ def test_benchmark_encoders_on_task(task: str | AbsTask, model: mteb.Encoder):
     eval.run(model, output_folder="tests/results", overwrite_results=True)
 
 
+@pytest.mark.parametrize("task", [MockMultilingualRetrievalTask])
+@pytest.mark.parametrize(
+    "model",
+    [MockSentenceTransformer()],
+)
+def test_run_eval_without_co2_tracking(task: str | AbsTask, model: mteb.Encoder):
+    """Test that a task can be fetched and run without CO2 tracking"""
+    if isinstance(task, str):
+        tasks = mteb.get_tasks(tasks=[task])
+    else:
+        tasks = [task]
+
+    eval = mteb.MTEB(tasks=tasks)
+    eval.run(
+        model, output_folder="tests/results", overwrite_results=True, co2_tracker=False
+    )
+
+
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID[:1])
 @pytest.mark.parametrize("model", [MockNumpyEncoder()])
 def test_reload_results(task: str | AbsTask, model: mteb.Encoder, tmp_path: Path):
