@@ -83,9 +83,9 @@ class PubChemSMILESPC(AbsTaskPairClassification):
         _hf_dataset = None
         for dataset_col_map in _DATASET_COLUMN_MAP:
             _dataset = datasets.load_dataset(
-                self.metadata_dict["dataset"]["path"],
+                self.metadata.dataset["path"],
                 dataset_col_map["name"],
-                revision=self.metadata_dict["dataset"]["revision"],
+                revision=self.metadata.dataset["revision"],
             )
 
             _dataset = _dataset.rename_columns(
@@ -111,7 +111,7 @@ class PubChemSMILESPC(AbsTaskPairClassification):
         self.dataset = self.stratified_subsampling(
             self.dataset,
             seed=self.seed,
-            splits=self.metadata_dict["eval_splits"],
+            splits=self.metadata["eval_splits"],
             label="labels",
         )
 
