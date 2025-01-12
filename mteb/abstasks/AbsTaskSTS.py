@@ -54,24 +54,15 @@ class STSDescriptiveStatistics(DescriptiveStatistics):
 class AbsTaskSTS(AbsTask):
     """Abstract class for STS experiments.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns::
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns::
         sentence1: str
         sentence2: str
         score: float
     """
 
     abstask_prompt = "Retrieve semantically similar text."
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    @property
-    def min_score(self) -> int:
-        return self.metadata_dict["min_score"]
-
-    @property
-    def max_score(self) -> int:
-        return self.metadata_dict["max_score"]
+    min_score: int
+    max_score: int
 
     def _evaluate_subset(
         self, model, data_split, *, encode_kwargs: dict[str, Any] = {}, **kwargs
@@ -91,9 +82,6 @@ class AbsTaskSTS(AbsTask):
 
         self._add_main_score(scores)
         return scores
-
-    def _add_main_score(self, scores: ScoresDict) -> None:
-        scores["main_score"] = scores[self.metadata.main_score]
 
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False

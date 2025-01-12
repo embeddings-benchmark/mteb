@@ -46,7 +46,7 @@ class LitSearchRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
-        dataset_path = self.metadata_dict["dataset"]["path"]
+        dataset_path = self.metadata.dataset["path"]
 
         query_ds = datasets.load_dataset(dataset_path, "query")
 

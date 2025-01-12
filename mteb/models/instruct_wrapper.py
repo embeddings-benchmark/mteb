@@ -24,7 +24,7 @@ def instruct_wrapper(
         from gritlm import GritLM
     except ImportError:
         raise ImportError(
-            f"Please install `pip install gritlm` to use {model_name_or_path}."
+            f"Please install `pip install mteb[gritlm]` to use {model_name_or_path}."
         )
 
     class InstructWrapper(GritLM, Wrapper):

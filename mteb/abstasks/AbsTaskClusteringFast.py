@@ -38,8 +38,6 @@ def evaluate_clustering_bootstrapped(
     The bootstrapping is done by sampling N samples from the corpus and clustering them. It is done without replacement to get a diverse set of
     samples.
     """
-    n_embeddings = embeddings.shape[0]
-
     v_measures = defaultdict(list)
     if max_depth is not None:
         max_depth = min(max_depth, max(map(len, labels)))
@@ -129,7 +127,7 @@ class AbsTaskClusteringFast(AbsTask):
     If the clustering is hierarchical, and more than one label is specified in order for each observation,
     V-measures are calculated in the outlined way on each of the levels separately.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset.
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset.
     It must contain the following columns:
         sentences: list[str]
         labels: list[str] | list[list[str]]
@@ -143,17 +141,6 @@ class AbsTaskClusteringFast(AbsTask):
     max_depth = None
     abstask_prompt = "Identify categories in user passages."
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def _add_main_score(self, scores):
-        if self.metadata_dict["main_score"] in scores:
-            scores["main_score"] = scores[self.metadata.main_score]
-        else:
-            logger.warning(
-                f"main score {self.metadata.main_score} not found in scores {scores.keys()}"
-            )
-
     def _evaluate_subset(
         self,
         model: Encoder,
@@ -162,8 +149,6 @@ class AbsTaskClusteringFast(AbsTask):
         encode_kwargs: dict[str, Any] = {},
         **kwargs: Any,
     ) -> dict[str, float | dict[str, list[float]]]:
-        rng_state = random.Random(self.seed)
-
         if (
             self.max_document_to_embed is not None
             and self.max_fraction_of_documents_to_embed is not None
@@ -186,7 +171,7 @@ class AbsTaskClusteringFast(AbsTask):
                 max_documents_to_embed = self.max_document_to_embed
 
             max_documents_to_embed = min(len(dataset), max_documents_to_embed)  # type: ignore
-            example_indices = rng_state.sample(
+            example_indices = self.rng_state.sample(
                 range(len(dataset)), k=max_documents_to_embed
             )
             downsampled_dataset = dataset.select(example_indices)  # type: ignore
@@ -210,7 +195,7 @@ class AbsTaskClusteringFast(AbsTask):
             cluster_size=self.max_documents_per_cluster,
             kmean_batch_size=self.k_mean_batch_size,
             max_depth=self.max_depth,
-            rng_state=rng_state,
+            rng_state=self.rng_state,
         )
         v_measures = list(itertools.chain.from_iterable(all_v_scores.values()))
 
@@ -270,37 +255,6 @@ class AbsTaskClusteringFast(AbsTask):
 
     def _push_dataset_to_hub(self, repo_name: str) -> None:
         self._upload_dataset_to_hub(repo_name, ["sentences", "labels"])
-
-
-def clustering_downsample(
-    dataset: DatasetDict, seed: int, max_samples_in_cluster: int = 2048
-) -> DatasetDict:
-    """In cases where it is not possible to convert the dataset to a fast version, we can downsample the dataset to speed up the evaluation.
-
-    This might be necessary when the clusters in the dataset is not sampled from the same distribution.
-    """
-    rng_state = random.Random(seed)
-
-    ds = {}
-    for split in dataset:
-        _docs = []
-        _labels = []
-
-        n_clusters = len(dataset[split])
-
-        for i in range(n_clusters):
-            labels = dataset[split]["labels"][i]
-            sentences = dataset[split]["sentences"][i]
-
-            n_sample = min(max_samples_in_cluster, len(sentences))
-
-            # sample n_sample from each cluster
-            idxs = rng_state.sample(range(len(sentences)), n_sample)
-            _docs.append([sentences[idx] for idx in idxs])
-            _labels.append([labels[idx] for idx in idxs])
-
-        ds[split] = Dataset.from_dict({"sentences": _docs, "labels": _labels})
-    return DatasetDict(ds)
 
 
 def convert_to_fast(

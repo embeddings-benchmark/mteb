@@ -98,9 +98,9 @@ class XPQARetrieval(AbsTaskRetrieval, MultilingualTask):
         if self.data_loaded:
             return
 
-        path = self.metadata_dict["dataset"]["path"]
-        revision = self.metadata_dict["dataset"]["revision"]
-        eval_splits = self.metadata_dict["eval_splits"]
+        path = self.metadata.dataset["path"]
+        revision = self.metadata.dataset["revision"]
+        eval_splits = self.metadata.eval_splits
         dataset = _load_dataset_csv(path, revision, eval_splits)
 
         self.queries, self.corpus, self.relevant_docs = {}, {}, {}

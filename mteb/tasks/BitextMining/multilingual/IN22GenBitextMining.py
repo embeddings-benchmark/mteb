@@ -100,5 +100,5 @@ note={}
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)
         self.data_loaded = True

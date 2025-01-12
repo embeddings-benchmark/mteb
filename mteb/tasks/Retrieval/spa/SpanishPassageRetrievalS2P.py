@@ -62,17 +62,17 @@ isbn="978-3-030-15719-7"
         query_rows = datasets.load_dataset(
             name="queries",
             split="test",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
         corpus_rows = datasets.load_dataset(
             name="corpus.documents",
             split="test",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
         qrels_rows = datasets.load_dataset(
             name="qrels.s2p",
             split="test",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         self.queries = {"test": {row["_id"]: row["text"] for row in query_rows}}

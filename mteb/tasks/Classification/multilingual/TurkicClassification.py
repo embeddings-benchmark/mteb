@@ -57,8 +57,7 @@ class TurkicClassification(MultilingualTask, AbsTaskClassification):
         if self.data_loaded:
             return
         dataset = {}
-        metadata = self.metadata_dict.get("dataset", None)
-        full_dataset = datasets.load_dataset(**metadata)
+        full_dataset = datasets.load_dataset(**self.metadata.dataset)
         full_dataset = full_dataset.rename_columns(
             {"processed_text": "text", "category": "label"}
         )

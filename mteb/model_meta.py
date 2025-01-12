@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, Any, Callable, Literal
 
 from pydantic import BaseModel, ConfigDict
 
+from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.TaskMetadata import STR_DATE, STR_URL
 from mteb.encoder_interface import Encoder
 
@@ -58,7 +59,6 @@ class ModelMeta(BaseModel):
         name: The name of the model, ideally the name on huggingface.
         n_parameters: The number of parameters in the model, e.g. 7_000_000 for a 7M parameter model. Can be None if the the number of parameters is not known (e.g. for proprietary models) or
             if the loader returns a SentenceTransformer model from which it can be derived.
-        memory_usage: The amount of memory the model uses in GB. Can be None if the memory usage is not known (e.g. for proprietary models).
         max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
             models).
         embed_dim: The dimension of the embeddings produced by the model. Currently all models are assumed to produce fixed-size embeddings.
@@ -91,7 +91,6 @@ class ModelMeta(BaseModel):
     languages: list[ISO_LANGUAGE_SCRIPT] | None
     loader: Callable[..., Encoder] | None = None
     n_parameters: int | None = None
-    memory_usage: float | None = None
     max_tokens: float | None = None
     embed_dim: int | None = None
     license: str | None = None
@@ -135,3 +134,17 @@ class ModelMeta(BaseModel):
         if self.name is None:
             raise ValueError("Model name is not set")
         return self.name.replace("/", "__").replace(" ", "_")
+
+    def is_zero_shot_on(self, tasks: list[AbsTask]) -> bool | None:
+        """Indicates whether the given model can be considered
+        zero-shot or not on the given tasks.
+        Returns None if no training data is specified on the model.
+        """
+        if self.training_datasets is None:
+            return None
+        benchmark_datasets = set()
+        for task in tasks:
+            benchmark_datasets.add(task.metadata.name)
+        model_datasets = {ds_name for ds_name, splits in self.training_datasets.items()}
+        intersection = model_datasets & benchmark_datasets
+        return len(intersection) == 0

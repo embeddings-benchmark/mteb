@@ -22,6 +22,7 @@ from mteb.model_meta import ModelMeta
 from mteb.models import model_meta_from_sentence_transformers
 
 from ..abstasks.AbsTask import AbsTask
+from ..abstasks.AbsTaskMultilabelClassification import AbsTaskMultilabelClassification
 from ..abstasks.AbsTaskReranking import AbsTaskReranking
 from ..load_results.task_results import TaskResult
 from ..models.sentence_transformer_wrapper import SentenceTransformerWrapper
@@ -121,16 +122,16 @@ class MTEB:
 
     @property
     def available_tasks(self):
-        return [x.metadata_dict["name"] for x in self.tasks_cls]
+        return [x.metadata.name for x in self.tasks_cls]
 
     @property
     def available_task_types(self):
         # sort the task types
-        return sorted({x.metadata_dict["type"] for x in self.tasks_cls})
+        return sorted({x.metadata.type for x in self.tasks_cls})
 
     @property
     def available_task_categories(self):
-        return {x.metadata_dict["category"] for x in self.tasks_cls}
+        return {x.metadata.category for x in self.tasks_cls}
 
     def _extend_lang_code(self):
         # add all possible language codes
@@ -224,14 +225,17 @@ class MTEB:
     def select_tasks(self, **kwargs):
         """Select the tasks to be evaluated."""
         # Get all existing tasks
-        # reranking subclasses retrieval to share methods, but is an abstract task
-        tasks_categories_cls = list(AbsTask.__subclasses__()) + [AbsTaskReranking]
+        # reranking and multiclassClassification subclasses retrieval to share methods, but is an abstract task
+        tasks_categories_cls = list(AbsTask.__subclasses__()) + [
+            AbsTaskReranking,
+            AbsTaskMultilabelClassification,
+        ]
         all_task_classes = []
         for cat_cls in tasks_categories_cls:
             for cls in cat_cls.__subclasses__():
-                if (
-                    cat_cls.__name__.startswith("AbsTask")
-                    and cls.__name__ != "AbsTaskReranking"
+                if cat_cls.__name__.startswith("AbsTask") and cls.__name__ not in (
+                    "AbsTaskReranking",
+                    "AbsTaskMultilabelClassification",
                 ):
                     task = cls(hf_subsets=self._task_langs, **kwargs)
                     all_task_classes.append(task)
@@ -241,12 +245,10 @@ class MTEB:
         # If `task_list` is specified, select list of tasks
         if self._tasks is not None:
             self.tasks = list(
-                filter(
-                    lambda x: (x.metadata_dict["name"] in self._tasks), self.tasks_cls
-                )
+                filter(lambda x: (x.metadata.name in self._tasks), self.tasks_cls)
             )
             if len(self.tasks) != len(self._tasks):
-                tasks_known = {x.metadata_dict["name"] for x in self.tasks_cls}
+                tasks_known = {x.metadata.name for x in self.tasks_cls}
                 tasks_unknown = {
                     x for x in self._tasks if isinstance(x, str)
                 } - tasks_known
@@ -265,23 +267,22 @@ class MTEB:
         # Otherwise use filters to select tasks
         filtered_tasks = filter(
             lambda x: (self._task_types is None)
-            or (x.metadata_dict["type"] in self._task_types),
+            or (x.metadata.type in self._task_types),
             self.tasks_cls,
         )
         filtered_tasks = filter(
             lambda x: (self._task_categories is None)
-            or (x.metadata_dict["category"] in self._task_categories),
+            or (x.metadata.category in self._task_categories),
             filtered_tasks,
         )
         filtered_tasks = filter(
-            lambda x: (self._version is None)
-            or (x.metadata_dict["version"] >= self._version),
+            lambda x: (self._version is None) or (x.metadata.version >= self._version),
             filtered_tasks,
         )
         # keep only tasks with at least one language in the filter
         filtered_tasks = filter(
-            lambda x: (not (self._task_langs))
-            or (len(set(x.metadata_dict["eval_langs"]) & set(self._task_langs)) > 0),
+            lambda x: (not self._task_langs)
+            or (len(set(x.metadata.eval_langs) & set(self._task_langs)) > 0),
             filtered_tasks,
         )
 
@@ -292,7 +293,7 @@ class MTEB:
         """Load datasets for the selected tasks."""
         logger.info(f"\n\n## Loading datasets for {len(self.tasks)} tasks")
         for task in self.tasks:
-            logger.info(f"\n# Loading dataset for {task.metadata_dict['name']}")
+            logger.info(f"\n# Loading dataset for {task.metadata.name}")
             task.load_data()
 
     @staticmethod
@@ -595,7 +596,7 @@ class MTEB:
                         )
 
                     logger.info(
-                        f"Evaluation for {task.metadata_dict['name']} on {split} took {tock - tick:.2f} seconds"
+                        f"Evaluation for {task.metadata.name} on {split} took {tock - tick:.2f} seconds"
                     )
                     evaluation_time += tock - tick
 
@@ -627,16 +628,14 @@ class MTEB:
                 evaluation_results.append(merged_results)
 
             except Exception as e:
-                logger.error(
-                    f"Error while evaluating {task.metadata_dict['name']}: {e}"
-                )
+                logger.error(f"Error while evaluating {task.metadata.name}: {e}")
                 if raise_error:
                     raise e
                 logger.error(
                     f"Please check all the error logs at: {self.err_logs_path}"
                 )
                 with open(self.err_logs_path, "a") as f_out:
-                    f_out.write(f"{datetime.now()} >>> {task.metadata_dict['name']}\n")
+                    f_out.write(f"{datetime.now()} >>> {task.metadata.name}\n")
                     f_out.write(traceback.format_exc())
                     f_out.write("\n\n")
 

@@ -108,10 +108,10 @@ class MultiLongDocRetrieval(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = load_mldr_data(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
-            eval_splits=self.metadata_dict["eval_splits"],
+            eval_splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
         self.data_loaded = True

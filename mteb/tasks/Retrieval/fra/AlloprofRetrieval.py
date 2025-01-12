@@ -48,13 +48,13 @@ class AlloprofRetrieval(AbsTaskRetrieval):
         # fetch both subsets of the dataset
         corpus_raw = datasets.load_dataset(
             name="documents",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
         queries_raw = datasets.load_dataset(
             name="queries",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
-        eval_split = self.metadata_dict["eval_splits"][0]
+        eval_split = self.metadata.eval_splits[0]
         self.queries = {
             eval_split: {str(q["id"]): q["text"] for q in queries_raw[eval_split]}
         }

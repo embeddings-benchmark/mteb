@@ -145,12 +145,7 @@ class IFlyTek(AbsTaskClassification):
     )
 
     samples_per_label = 32
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["n_experiments"] = 5
-        return metadata_dict
+    n_experiments = 5
 
 
 class MultilingualSentiment(AbsTaskClassification):

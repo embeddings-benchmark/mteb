@@ -54,7 +54,7 @@ class SNLClustering(AbsTaskClustering):
     )
 
     def dataset_transform(self):
-        splits = self.metadata_dict["eval_splits"]
+        splits = self.metadata.eval_splits
 
         documents: list = []
         labels: list = []

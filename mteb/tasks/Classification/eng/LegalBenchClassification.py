@@ -4550,9 +4550,9 @@ class MAUDLegalBenchClassification(AbsTaskClassification):
         class_count = 0
         for dataset_col_map in _MAUD_DATASET_MAP:
             _dataset = datasets.load_dataset(
-                self.metadata_dict["dataset"]["path"],
+                self.metadata.dataset["path"],
                 dataset_col_map["name"],
-                revision=self.metadata_dict["dataset"]["revision"],
+                revision=self.metadata.dataset["revision"],
                 trust_remote_code=True,
             )
 
