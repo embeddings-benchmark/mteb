@@ -19,7 +19,7 @@ def get_changed_files(base_branch="main"):
 
     changed_files = diff.splitlines()
     return [
-        f for f in changed_files if f.startswith("mteb/models/") and f.endswith(".py")
+        f for f in changed_files if f.startswith("mteb/models/") and f.endswith(".py") and ("model" in f or "instruct" in f)
     ]
 
 
