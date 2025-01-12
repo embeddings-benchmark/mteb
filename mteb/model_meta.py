@@ -5,7 +5,7 @@ from enum import Enum
 from functools import partial
 from typing import TYPE_CHECKING, Any, Callable, Literal
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_validator
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.TaskMetadata import STR_DATE, STR_URL
@@ -32,7 +32,6 @@ FRAMEWORKS = Literal[
     "PyLate",
     "ColBERT",
 ]
-DISTANCE_METRICS = Literal["cosine", "max_sim", "dot"]
 
 
 def sentence_transformers_loader(
@@ -57,7 +56,6 @@ class ScoringFunction(str, Enum):
     DOT_PRODUCT: str = "dot"
     COSINE: str = "cos_sim"
     MAX_SIM: str = "max_sim"
-    CUSTOM: str = None
 
 
 class ModelMeta(BaseModel):
@@ -114,6 +112,23 @@ class ModelMeta(BaseModel):
     adapted_from: str | None = None
     superseded_by: str | None = None
     citation: str | None = None
+
+    # @validator('similarity_fn_name', pre=True)
+    @field_validator("similarity_fn_name", mode="before")
+    @classmethod
+    def validate_similarity_fn_name(cls, value):
+        """Converts the similarity function name to the corresponding enum value.
+        sentence_transformers uses Literal['cosine', 'dot', 'euclidean', 'manhattan'] for similarity_fn_name
+        """
+        if type(value) is ScoringFunction or value is None:
+            return value
+        mapping = {
+            "cosine": ScoringFunction.COSINE,
+            "dot": ScoringFunction.DOT_PRODUCT,
+        }
+        if value in mapping:
+            return mapping[value]
+        raise ValueError(f"Invalid similarity function name: {value}")
 
     def get_evaluation_function(self) -> callable:
         if (

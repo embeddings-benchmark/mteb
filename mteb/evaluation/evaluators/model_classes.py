@@ -327,7 +327,7 @@ class DenseRetrievalExactSearch:
                 score_function = (
                     self.model.similarity
                     if hasattr(self.model, "similarity")
-                    else self.model.model.mteb_model_meta.get_evaluation_function()
+                    else self.get_similarity_function()
                 )
             else:
                 logger.warning(
