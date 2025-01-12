@@ -45,10 +45,10 @@ class MTEB:
         """
         from mteb.benchmarks import Benchmark
 
-        self.tasks = tasks
-        if isinstance(tasks[0], Benchmark):
+        self.tasks = deepcopy(tasks)
+        if isinstance(self.tasks[0], Benchmark):
             self.benchmarks = tasks
-            self.tasks = list(chain.from_iterable(tasks))
+            self.tasks = list(chain.from_iterable(self.tasks))
 
         self.err_logs_path = err_logs_path
         self.last_evaluated_splits = {}
