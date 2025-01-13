@@ -27,6 +27,7 @@ class Benchmark:
         description: A description of the benchmark, should include its intended goal and potentially a description of its construction
         reference: A link reference, to a source containing additional information typically to a paper, leaderboard or github.
         citation: A bibtex citation
+        contacts: The people to contact in case of a problem in the benchmark, preferably a GitHub handle.
 
     Example:
         >>> Benchmark(
@@ -44,6 +45,7 @@ class Benchmark:
     description: str | None = None
     reference: UrlString | None = None
     citation: str | None = None
+    contacts: list[str] | None = None
 
     def __iter__(self):
         return iter(self.tasks)
@@ -128,6 +130,7 @@ MTEB_EN = Benchmark(
     ),
     description="English benchmarks from MTEB",
     citation="",
+    contacts=["KennethEnevoldsen", "Muennighoff"],
 )
 
 MTEB_ENG_CLASSIC = Benchmark(
@@ -232,6 +235,7 @@ MTEB_ENG_CLASSIC = Benchmark(
     pages = "2014--2037",
 }
 """,
+    contacts=["Muennighoff"],
 )
 
 MTEB_MAIN_RU = Benchmark(
@@ -422,6 +426,7 @@ SEB = Benchmark(
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
+    contacts=["KennethEnevoldsen", "x-tabdeveloping"],
 )
 
 CoIR = Benchmark(
@@ -484,6 +489,7 @@ RAR_b = Benchmark(
       journal={arXiv preprint arXiv:2404.06347},
       year={2024}
     }""",
+    contacts=["gowitheflow-1998"],
 )
 
 MTEB_FRA = Benchmark(
@@ -538,6 +544,7 @@ MTEB_FRA = Benchmark(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2405.20468}, 
 }""",
+    contacts=["imenelydiaker"],
 )
 
 
@@ -833,6 +840,7 @@ MTEB_multilingual = Benchmark(
     description="The Multilingual benchmarks from MMTEB. Currently under development.",
     reference=None,
     citation=None,
+    contacts=["KennethEnevoldsen"],
 )
 
 MTEB_JPN = Benchmark(
@@ -944,6 +952,7 @@ MTEB_INDIC = Benchmark(
     description="Main Indic benchmark from MMTEB",
     reference=None,
     citation=None,
+    contacts=["KennethEnevoldsen"],
 )
 
 
@@ -1075,6 +1084,7 @@ MTEB_EU = Benchmark(
     description="Main European benchmark from MMTEB",
     reference=None,
     citation=None,
+    contacts=["KennethEnevoldsen"],
 )
 
 LONG_EMBED = Benchmark(
