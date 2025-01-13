@@ -11,7 +11,7 @@ from .mock_tasks import MockRetrievalTask
 
 @pytest.mark.parametrize("model", ["colbert-ir/colbertv2.0"])
 @pytest.mark.parametrize("task", [MockRetrievalTask()])
-@pytest.mark.skip(reason="Needs pylate")
+@pytest.mark.skip(reason="Needs mteb[pylate]")
 def test_colbert_model_e2e(task: AbsTask, model: str):
     eval_splits = ["test"]
 
@@ -27,6 +27,7 @@ def test_colbert_model_e2e(task: AbsTask, model: str):
     assert result.scores["test"][0]["ndcg_at_1"] == 1.0
 
 
+@pytest.mark.skip(reason="Needs mteb[bm25s]")
 def test_bm25s_e2e():
     # fails for dataset smaller then 1000
     model = mteb.get_model("bm25s")
