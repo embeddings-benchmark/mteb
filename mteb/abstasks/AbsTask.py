@@ -113,9 +113,7 @@ class AbsTask(ABC):
 
         scores = {}
         if self.hf_subsets is None:
-            hf_subsets = (
-                list(self.dataset.keys()) if self.is_multilingual else ["default"]
-            )
+            hf_subsets = list(self.dataset.keys())
         else:
             hf_subsets = copy(self.hf_subsets)
 
