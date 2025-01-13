@@ -130,6 +130,9 @@ paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
@@ -149,6 +152,9 @@ paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 labse = ModelMeta(
@@ -168,6 +174,9 @@ labse = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
@@ -187,6 +196,9 @@ multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 all_mpnet_base_v2 = ModelMeta(
@@ -260,6 +272,8 @@ jina_embeddings_v2_base_en = ModelMeta(
     superseded_by=None,
     adapted_from=None,
     training_datasets={"allenai/c4": ["train"]},
+    public_training_data=None,
+    public_training_code=None,
 )
 
 jina_embeddings_v2_small_en = ModelMeta(
@@ -280,6 +294,8 @@ jina_embeddings_v2_small_en = ModelMeta(
     superseded_by=None,
     adapted_from=None,
     training_datasets={"jinaai/negation-dataset": ["train"]},
+    public_training_data=None,
+    public_training_code=None,
 )
 
 jina_embedding_b_en_v1 = ModelMeta(
@@ -300,6 +316,8 @@ jina_embedding_b_en_v1 = ModelMeta(
     superseded_by="jinaai/jina-embeddings-v2-base-en",
     adapted_from=None,
     training_datasets={"jinaai/negation-dataset": ["train"]},
+    public_training_data=None,
+    public_training_code=None,
 )
 
 jina_embedding_s_en_v1 = ModelMeta(
@@ -320,6 +338,8 @@ jina_embedding_s_en_v1 = ModelMeta(
     superseded_by="jinaai/jina-embeddings-v2-small-en",
     adapted_from=None,
     training_datasets={"jinaai/negation-dataset": ["train"]},
+    public_training_data=None,
+    public_training_code=None,
 )
 
 
@@ -402,4 +422,6 @@ microllama_text_embedding = ModelMeta(
         # "sentence-transformers/quora-duplicates": ["train"],
         # "sentence-transformers/natural-questions": ["train"],
     },
+    public_training_data=None,
+    public_training_code=None,
 )

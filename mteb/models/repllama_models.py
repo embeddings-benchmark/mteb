@@ -150,6 +150,8 @@ repllama_llama2_original = ModelMeta(
     similarity_fn_name="cosine",
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
 )
 
 
@@ -176,4 +178,7 @@ repllama_llama2_reproduced = ModelMeta(
     similarity_fn_name="cosine",
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )

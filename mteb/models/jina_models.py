@@ -222,4 +222,7 @@ jina_embeddings_v3 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     reference="https://huggingface.co/jinaai/jina-embeddings-v3",
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )

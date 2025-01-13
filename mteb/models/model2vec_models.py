@@ -184,6 +184,7 @@ m2v_multilingual_output = ModelMeta(
     superseded_by=None,
     public_training_data=True,
     public_training_code=None,  # distilled model
+    training_datasets=None,
 )
 
 potion_base_2m = ModelMeta(

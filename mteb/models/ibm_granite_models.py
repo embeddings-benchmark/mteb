@@ -42,6 +42,10 @@ granite_107m_multilingual = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     adapted_from=None,
     superseded_by=None,
+    public_training_data=None,
+    public_training_code=None,
+    use_instructions=False,
+    training_datasets=None,
 )
 
 granite_278m_multilingual = ModelMeta(
@@ -65,6 +69,10 @@ granite_278m_multilingual = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     adapted_from=None,
     superseded_by=None,
+    public_training_data=None,
+    public_training_code=None,
+    use_instructions=False,
+    training_datasets=None,
 )
 
 granite_30m_english = ModelMeta(
@@ -88,6 +96,10 @@ granite_30m_english = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     adapted_from=None,
     superseded_by=None,
+    public_training_data=None,
+    public_training_code=None,
+    use_instructions=False,
+    training_datasets=None,
 )
 
 granite_125m_english = ModelMeta(
@@ -111,4 +123,8 @@ granite_125m_english = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     adapted_from=None,
     superseded_by=None,
+    public_training_data=None,
+    public_training_code=None,
+    use_instructions=False,
+    training_datasets=None,
 )

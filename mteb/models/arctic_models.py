@@ -360,6 +360,32 @@ arctic_embed_m_v1_5 = ModelMeta(
     use_instructions=True,
     adapted_from=None,
     superseded_by="Snowflake/snowflake-arctic-embed-m-v2.0",
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets={
+        # source: https://arxiv.org/pdf/2405.05374
+        # splits not specified to assuming everything
+        # in MTEB
+        "NQ": ["test"],
+        "NQHardNegatives": ["test"],
+        "HotPotQA": ["test"],
+        "HotPotQAHardNegatives": ["test"],
+        "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
+        "FEVER": ["test"],
+        "FEVERHardNegatives": ["test"],
+        # not in MTEB
+        # trained on stack exchange (title-body)
+        # "stackexchange": [],
+        # potentially means that:
+        # "StackExchangeClusteringP2P": ["test"],
+        # "StackExchangeClusteringP2P.v2": ["test"],
+        # "StackExchangeClustering": ["test"],
+        # "StackExchangeClustering.v2": ["test"],
+        # not in MTEB
+        # "paq": [],
+        # "s2orc": [],
+        # "other": [],  # undisclosed including webdata
+    },  # also use synthetic
 )
 
 arctic_embed_m_v2_0 = ModelMeta(

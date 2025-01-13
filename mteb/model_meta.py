@@ -85,24 +85,24 @@ class ModelMeta(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    name: str | None
-    revision: str | None
-    release_date: STR_DATE | None
+    name: str
+    revision: str | None  # None in get model
+    release_date: STR_DATE | None  # None in get model
     languages: list[ISO_LANGUAGE_SCRIPT] | None
     loader: Callable[..., Encoder] | None = None
-    n_parameters: int | None = None
+    n_parameters: int | None
     memory_usage: float | None = None
-    max_tokens: float | None = None
-    embed_dim: int | None = None
-    license: str | None = None
-    open_weights: bool | None = None
-    public_training_data: bool | None = None
-    public_training_code: bool | None = None
+    max_tokens: float | None
+    embed_dim: int | None
+    license: str | None
+    open_weights: bool | None
+    public_training_data: bool | None
+    public_training_code: bool | None
     framework: list[FRAMEWORKS] = []
     reference: STR_URL | None = None
-    similarity_fn_name: DISTANCE_METRICS | None = None
-    use_instructions: bool | None = None
-    training_datasets: dict[str, list[str]] | None = None
+    similarity_fn_name: DISTANCE_METRICS | None
+    use_instructions: bool | None
+    training_datasets: dict[str, list[str]] | None
     adapted_from: str | None = None
     superseded_by: str | None = None
 

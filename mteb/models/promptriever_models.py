@@ -65,6 +65,8 @@ promptriever_llama2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
 )
 
 promptriever_llama3 = ModelMeta(
@@ -90,6 +92,8 @@ promptriever_llama3 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
 )
 
 
@@ -116,6 +120,8 @@ promptriever_llama3_instruct = ModelMeta(
     similarity_fn_name="cosine",
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
 )
 
 promptriever_mistral_v1 = ModelMeta(
@@ -141,4 +147,6 @@ promptriever_mistral_v1 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
 )

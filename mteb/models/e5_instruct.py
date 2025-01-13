@@ -40,6 +40,9 @@ e5_instruct = ModelMeta(
     embed_dim=1024,
     license="mit",
     max_tokens=514,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 e5_mistral = ModelMeta(
@@ -69,4 +72,7 @@ e5_mistral = ModelMeta(
     embed_dim=4096,
     license="mit",
     max_tokens=32768,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )

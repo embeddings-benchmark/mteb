@@ -212,14 +212,32 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
             license=card_data.get("license", None),
             framework=frameworks,
             public_training_data=bool(card_data.get("datasets", None)),
+            training_datasets=card_data.get("datasets", None),
+            similarity_fn_name=None,
+            n_parameters=None,
+            max_tokens=None,
+            embed_dim=None,
+            open_weights=True,
+            public_training_code=None,
+            use_instructions=None,
         )
     except Exception as e:
         logger.warning(f"Failed to extract metadata from model: {e}.")
         return ModelMeta(
-            name=None,
+            name=model_name,
             revision=None,
             languages=None,
             release_date=None,
+            n_parameters=None,
+            max_tokens=None,
+            embed_dim=None,
+            license=None,
+            open_weights=True,
+            public_training_data=None,
+            public_training_code=None,
+            similarity_fn_name=None,
+            use_instructions=None,
+            training_datasets=None,
         )
 
 

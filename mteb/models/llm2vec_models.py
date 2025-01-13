@@ -100,6 +100,9 @@ llm2vec_llama3_8b_supervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 llm2vec_llama3_8b_unsupervised = ModelMeta(
@@ -124,6 +127,9 @@ llm2vec_llama3_8b_unsupervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 
@@ -149,6 +155,9 @@ llm2vec_mistral7b_supervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 llm2vec_mistral7b_unsupervised = ModelMeta(
@@ -173,6 +182,9 @@ llm2vec_mistral7b_unsupervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 llm2vec_llama2_7b_supervised = ModelMeta(
@@ -197,6 +209,9 @@ llm2vec_llama2_7b_supervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 llm2vec_llama2_7b_unsupervised = ModelMeta(
@@ -221,6 +236,9 @@ llm2vec_llama2_7b_unsupervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 llm2vec_sheared_llama_supervised = ModelMeta(
@@ -245,6 +263,9 @@ llm2vec_sheared_llama_supervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 llm2vec_sheared_llama_unsupervised = ModelMeta(
@@ -269,4 +290,7 @@ llm2vec_sheared_llama_unsupervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )

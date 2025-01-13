@@ -46,6 +46,10 @@ gte_Qwen2_7B_instruct = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
+    max_tokens=131072,
 )
 
 
@@ -75,6 +79,9 @@ gte_Qwen1_5_7B_instruct = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 
@@ -104,4 +111,7 @@ gte_Qwen2_1_5B_instruct = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )

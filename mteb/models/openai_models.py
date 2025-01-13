@@ -162,6 +162,8 @@ text_embedding_3_large = ModelMeta(
     public_training_data=False,  # assumed
     public_training_code=False,  # assumed
     training_datasets=None,
+    license=None,
+    similarity_fn_name=None,
 )
 text_embedding_ada_002 = ModelMeta(
     name="openai/text-embedding-ada-002",
@@ -185,4 +187,6 @@ text_embedding_ada_002 = ModelMeta(
     public_training_data=False,  # assumed
     public_training_code=False,  # assumed
     training_datasets=None,
+    license=None,
+    similarity_fn_name=None,
 )

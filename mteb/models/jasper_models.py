@@ -93,4 +93,6 @@ jasper_en_v1 = ModelMeta(
     training_datasets={
         "non_mteb": ["BAAI/Infinity-MM", "HuggingFaceFW/fineweb-edu"],
     },
+    public_training_data=None,
+    public_training_code=None,
 )

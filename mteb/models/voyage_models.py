@@ -157,6 +157,9 @@ voyage_large_2_instruct = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 voyage_finance_2 = ModelMeta(
@@ -179,6 +182,9 @@ voyage_finance_2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 voyage_law_2 = ModelMeta(
@@ -201,6 +207,9 @@ voyage_law_2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 voyage_code_2 = ModelMeta(
@@ -223,6 +232,9 @@ voyage_code_2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 voyage_large_2 = ModelMeta(
@@ -245,6 +257,9 @@ voyage_large_2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 voyage_2 = ModelMeta(
@@ -267,6 +282,9 @@ voyage_2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 voyage_multilingual_2 = ModelMeta(
     name="voyageai/voyage-multilingual-2",
@@ -288,6 +306,9 @@ voyage_multilingual_2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 voyage_3 = ModelMeta(
@@ -310,6 +331,9 @@ voyage_3 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 voyage_3_lite = ModelMeta(
@@ -332,4 +356,7 @@ voyage_3_lite = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )

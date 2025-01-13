@@ -40,6 +40,9 @@ SFR_Embedding_2_R = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 
@@ -68,4 +71,7 @@ SFR_Embedding_Mistral = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )

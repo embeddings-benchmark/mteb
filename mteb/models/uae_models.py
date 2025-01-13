@@ -75,4 +75,7 @@ uae_large_v1 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     reference="https://huggingface.co/WhereIsAI/UAE-Large-V1",
     use_instructions=True,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )

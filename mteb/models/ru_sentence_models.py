@@ -21,6 +21,9 @@ rubert_tiny2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 rubert_tiny = ModelMeta(
@@ -38,6 +41,9 @@ rubert_tiny = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 sbert_large_nlu_ru = ModelMeta(
@@ -55,6 +61,9 @@ sbert_large_nlu_ru = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 sbert_large_mt_nlu_ru = ModelMeta(
@@ -72,6 +81,9 @@ sbert_large_mt_nlu_ru = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 user_base_ru = ModelMeta(
@@ -111,6 +123,8 @@ user_base_ru = ModelMeta(
         "bragovo/dsum_ru": ["train"],
         "CarlBrendt/Summ_Dialog_News": ["train"],
     },
+    public_training_data=True,
+    public_training_code=None,
 )
 
 deberta_v1_ru = ModelMeta(
@@ -128,6 +142,9 @@ deberta_v1_ru = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 rubert_base_cased = ModelMeta(
@@ -145,6 +162,9 @@ rubert_base_cased = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 distilrubert_small_cased_conversational = ModelMeta(
@@ -162,6 +182,9 @@ distilrubert_small_cased_conversational = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 rubert_base_cased_sentence = ModelMeta(
@@ -179,6 +202,9 @@ rubert_base_cased_sentence = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 labse_en_ru = ModelMeta(
@@ -196,6 +222,9 @@ labse_en_ru = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 rubert_tiny_turbo = ModelMeta(
@@ -214,6 +243,8 @@ rubert_tiny_turbo = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     training_datasets={"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
+    public_training_data=True,
+    public_training_code=None,
 )
 
 labse_ru_turbo = ModelMeta(
@@ -232,6 +263,8 @@ labse_ru_turbo = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     training_datasets={"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
+    public_training_data=None,
+    public_training_code=None,
 )
 
 
@@ -253,4 +286,12 @@ rosberta_ru_en = ModelMeta(
     revision="89fb1651989adbb1cfcfdedafd7d102951ad0555",
     release_date="2024-07-29",
     use_instructions=True,
+    n_parameters=404_000_000,
+    max_tokens=514,
+    embed_dim=1024,
+    license="mit",
+    similarity_fn_name="cosine",
+    public_training_data=None,
+    public_training_code=None,
+    training_datasets=None,
 )
