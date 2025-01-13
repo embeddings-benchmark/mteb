@@ -234,23 +234,23 @@ class TaskMetadata(BaseModel):
     prompt: str | PromptDict | None = None
     type: TASK_TYPE
     modalities: list[Literal["text"]] = ["text"]
-    category: TASK_CATEGORY | None = None
-    reference: STR_URL | None = None
+    category: TASK_CATEGORY | None
+    reference: STR_URL | None
 
     eval_splits: list[str] = ["test"]
     eval_langs: LANGUAGES
     main_score: str
 
-    date: tuple[STR_DATE, STR_DATE] | None = None
-    domains: list[TASK_DOMAIN] | None = None
-    task_subtypes: list[TASK_SUBTYPE] | None = None
-    license: LICENSES | STR_URL | None = None
+    date: tuple[STR_DATE, STR_DATE] | None
+    domains: list[TASK_DOMAIN] | None
+    task_subtypes: list[TASK_SUBTYPE] | None
+    license: LICENSES | STR_URL | None
 
-    annotations_creators: ANNOTATOR_TYPE | None = None
-    dialect: list[str] | None = None
+    annotations_creators: ANNOTATOR_TYPE | None
+    dialect: list[str] | None
 
-    sample_creation: SAMPLE_CREATION_METHOD | None = None
-    bibtex_citation: str | None = None
+    sample_creation: SAMPLE_CREATION_METHOD | None
+    bibtex_citation: str | None
 
     def validate_metadata(self) -> None:
         self.dataset_path_is_specified(self.dataset)
