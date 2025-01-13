@@ -8,7 +8,6 @@ import numpy as np
 import torch
 from sentence_transformers import SentenceTransformer
 
-import mteb
 from mteb.encoder_interface import PromptType
 
 from .wrapper import Wrapper
@@ -127,21 +126,14 @@ class InstructSentenceTransformerWrapper(Wrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        task = mteb.get_task(task_name=task_name)
         instruction = self.get_task_instruction(task_name, prompt_type)
 
         # to passage prompts won't be applied to passages
-        if not self.apply_instruction_to_passages:
-            if task.metadata.type == "p2p":
-                instruction = None
-                logger.info(
-                    f"No instruction used, because task retrieve type {task.metadata.type}"
-                )
-            elif prompt_type == PromptType.passage and task.metadata.type == "s2p":
-                instruction = None
-                logger.info(
-                    f"No instruction used, because prompt type = {prompt_type.passage} and task retrieve type {task.metadata.type}"
-                )
+        if not self.apply_instruction_to_passages and prompt_type == PromptType.passage:
+            instruction = None
+            logger.info(
+                f"No instruction used, because prompt type = {prompt_type.passage}"
+            )
 
         if instruction:
             logger.info(f"Using instruction: '{instruction}' for task: '{task_name}'")
