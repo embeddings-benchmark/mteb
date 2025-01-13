@@ -126,6 +126,7 @@ class ModelMeta(BaseModel):
         mapping = {
             "cosine": ScoringFunction.COSINE,
             "dot": ScoringFunction.DOT_PRODUCT,
+            "MaxSim": ScoringFunction.MAX_SIM,
         }
         if value in mapping:
             return mapping[value]
