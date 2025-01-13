@@ -7,7 +7,7 @@ from typing import Any
 
 import numpy as np
 
-from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.model_meta import ModelMeta
 
 from .wrapper import Wrapper
 
@@ -67,7 +67,7 @@ m2v_base_glove_subword = ModelMeta(
     max_tokens=np.inf,  # Theoretically infinite
     embed_dim=256,
     license="mit",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["NumPy"],
     reference="https://huggingface.co/minishlab/M2V_base_glove_subword",
     use_instructions=False,
@@ -104,7 +104,7 @@ m2v_base_glove = ModelMeta(
     max_tokens=np.inf,
     embed_dim=256,
     license="mit",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["NumPy"],
     reference="https://huggingface.co/minishlab/M2V_base_glove",
     use_instructions=False,
@@ -140,7 +140,7 @@ m2v_base_output = ModelMeta(
     max_tokens=np.inf,
     embed_dim=256,
     license="mit",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["NumPy"],
     reference="https://huggingface.co/minishlab/M2V_base_output",
     use_instructions=False,
@@ -176,7 +176,7 @@ m2v_multilingual_output = ModelMeta(
     max_tokens=np.inf,
     embed_dim=256,
     license="mit",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["NumPy"],
     reference="https://huggingface.co/minishlab/M2V_multilingual_output",
     use_instructions=False,
@@ -200,7 +200,7 @@ potion_base_2m = ModelMeta(
     max_tokens=np.inf,
     embed_dim=64,
     license="mit",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["NumPy"],
     reference="https://huggingface.co/minishlab/potion-base-2M",
     use_instructions=False,
@@ -236,7 +236,7 @@ potion_base_4m = ModelMeta(
     max_tokens=np.inf,
     embed_dim=128,
     license="mit",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["NumPy"],
     reference="https://huggingface.co/minishlab/potion-base-4M",
     use_instructions=False,
@@ -272,7 +272,7 @@ potion_base_8m = ModelMeta(
     max_tokens=np.inf,
     embed_dim=256,
     license="mit",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["NumPy"],
     reference="https://huggingface.co/minishlab/potion-base-8M",
     use_instructions=False,

@@ -8,7 +8,7 @@ import torch
 import tqdm
 
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.model_meta import ModelMeta
 
 from .wrapper import Wrapper
 
@@ -231,7 +231,7 @@ cohere_mult_3 = ModelMeta(
     embed_dim=512,
     reference="https://cohere.com/blog/introducing-embed-v3",
     license=None,
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
     public_training_data=False,  # assumed
@@ -255,7 +255,7 @@ cohere_eng_3 = ModelMeta(
     max_tokens=512,
     embed_dim=1024,
     license=None,
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
     public_training_data=False,  # assumed
@@ -279,7 +279,7 @@ cohere_mult_light_3 = ModelMeta(
     max_tokens=512,
     embed_dim=384,
     license=None,
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
     public_training_data=False,  # assumed
@@ -303,7 +303,7 @@ cohere_eng_light_3 = ModelMeta(
     max_tokens=512,
     embed_dim=384,
     license=None,
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
     public_training_data=False,  # assumed

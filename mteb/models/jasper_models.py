@@ -11,7 +11,7 @@ from sentence_transformers import SentenceTransformer
 
 import mteb
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.model_meta import ModelMeta
 
 from .wrapper import Wrapper
 
@@ -84,7 +84,7 @@ jasper_en_v1 = ModelMeta(
     embed_dim=8960,
     license="apache-2.0",
     reference="https://huggingface.co/infgrad/jasper_en_vision_language_v1/tree/main",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from=None,

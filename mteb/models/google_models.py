@@ -7,7 +7,7 @@ import numpy as np
 import tqdm
 
 from mteb.encoder_interface import Encoder, PromptType
-from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.model_meta import ModelMeta
 
 from .wrapper import Wrapper
 
@@ -148,7 +148,7 @@ google_text_emb_004 = ModelMeta(
     max_tokens=2048,
     embed_dim=768,
     license=None,
-    similarity_fn_name=ScoringFunction.COSINE,  # assumed
+    similarity_fn_name="cosine",  # assumed
     framework=["API"],
     use_instructions=True,
     public_training_data=False,  # assumed
@@ -171,7 +171,7 @@ google_text_emb_005 = ModelMeta(
     max_tokens=2048,
     embed_dim=768,
     license=None,
-    similarity_fn_name=ScoringFunction.COSINE,  # assumed
+    similarity_fn_name="cosine",  # assumed
     framework=["API"],
     use_instructions=True,
     public_training_data=False,  # assumed
@@ -194,7 +194,7 @@ google_text_multilingual_emb_002 = ModelMeta(
     max_tokens=2048,
     embed_dim=768,
     license=None,
-    similarity_fn_name=ScoringFunction.COSINE,  # assumed
+    similarity_fn_name="cosine",  # assumed
     framework=["API"],
     use_instructions=True,
     public_training_data=False,  # assumed

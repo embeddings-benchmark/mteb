@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from functools import partial
 
-from mteb.model_meta import ModelMeta, ScoringFunction, sentence_transformers_loader
+from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
 rubert_tiny2 = ModelMeta(
     name="cointegrated/rubert-tiny2",
@@ -17,7 +17,7 @@ rubert_tiny2 = ModelMeta(
     license="mit",
     max_tokens=2048,
     reference="https://huggingface.co/cointegrated/rubert-tiny2",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
 )
@@ -33,7 +33,7 @@ rubert_tiny = ModelMeta(
     license="mit",
     max_tokens=2048,
     reference="https://huggingface.co/cointegrated/rubert-tiny",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
 )
@@ -49,7 +49,7 @@ sbert_large_nlu_ru = ModelMeta(
     license="mit",
     max_tokens=512,  # best guess
     reference="https://huggingface.co/ai-forever/sbert_large_nlu_ru",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
 )
@@ -65,7 +65,7 @@ sbert_large_mt_nlu_ru = ModelMeta(
     license="Not specified",
     max_tokens=512,  # best guess
     reference="https://huggingface.co/ai-forever/sbert_large_mt_nlu_ru",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
 )
@@ -87,7 +87,7 @@ user_base_ru = ModelMeta(
     license="Not specified",
     max_tokens=512,  # best guess
     reference="https://huggingface.co/ai-forever/sbert_large_mt_nlu_ru",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     citation="""@misc{deepvk2024user,
@@ -127,7 +127,7 @@ deberta_v1_ru = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/deepvk/deberta-v1-base",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
 )
@@ -143,7 +143,7 @@ rubert_base_cased = ModelMeta(
     license="Not specified",
     max_tokens=512,  # best guess
     reference="https://huggingface.co/DeepPavlov/rubert-base-cased",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     citation="""@misc{kuratov2019adaptationdeepbidirectionalmultilingual,
@@ -168,7 +168,7 @@ distilrubert_small_cased_conversational = ModelMeta(
     license="Not specified",
     max_tokens=512,
     reference="https://huggingface.co/DeepPavlov/distilrubert-small-cased-conversational",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     citation="""@misc{https://doi.org/10.48550/arxiv.2205.02340,
@@ -194,7 +194,7 @@ rubert_base_cased_sentence = ModelMeta(
     license="Not specified",
     max_tokens=512,
     reference="https://huggingface.co/DeepPavlov/rubert-base-cased-sentence",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
 )
@@ -210,7 +210,7 @@ labse_en_ru = ModelMeta(
     license="Not specified",
     max_tokens=512,
     reference="https://huggingface.co/cointegrated/LaBSE-en-ru",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
 )
@@ -226,7 +226,7 @@ rubert_tiny_turbo = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/sergeyzh/rubert-tiny-turbo",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     training_datasets={"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
@@ -243,7 +243,7 @@ labse_ru_turbo = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/sergeyzh/LaBSE-ru-turbo",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     training_datasets={"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},

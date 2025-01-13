@@ -9,7 +9,7 @@ import numpy as np
 import torch
 
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.model_meta import ModelMeta
 
 from .sentence_transformer_wrapper import SentenceTransformerWrapper
 
@@ -71,7 +71,7 @@ uae_large_v1 = ModelMeta(
     max_tokens=512,
     embed_dim=1024,
     license="mit",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     reference="https://huggingface.co/WhereIsAI/UAE-Large-V1",
     use_instructions=True,

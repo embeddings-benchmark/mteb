@@ -9,7 +9,7 @@ import numpy as np
 import torch
 from sentence_transformers import __version__ as st_version
 
-from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.model_meta import ModelMeta
 
 from ..encoder_interface import PromptType
 from .sentence_transformer_wrapper import SentenceTransformerWrapper
@@ -218,7 +218,7 @@ jina_embeddings_v3 = ModelMeta(
     max_tokens=8194,
     embed_dim=4096,
     license="cc-by-nc-4.0",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     reference="https://huggingface.co/jinaai/jina-embeddings-v3",

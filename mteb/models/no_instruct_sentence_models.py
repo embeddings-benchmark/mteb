@@ -8,7 +8,7 @@ import torch
 from transformers import AutoModel, AutoTokenizer
 
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
 
 from .utils import batched
@@ -94,7 +94,7 @@ no_instruct_small_v0 = ModelMeta(
     embed_dim=384,
     license="mit",
     reference="https://huggingface.co/avsolatorio/NoInstruct-small-Embedding-v0",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["PyTorch"],
     use_instructions=False,
     adapted_from=None,

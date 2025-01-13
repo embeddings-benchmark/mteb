@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from functools import partial
 
-from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.model_meta import ModelMeta
 from mteb.models.instruct_wrapper import instruct_wrapper
 
 stella_en_400M = ModelMeta(
@@ -25,7 +25,7 @@ stella_en_400M = ModelMeta(
     max_tokens=8192,
     embed_dim=4096,
     license="mit",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch", "GritLM"],
     reference="https://huggingface.co/dunzhang/stella_en_400M_v5",
 )
@@ -49,7 +49,7 @@ stella_en_1_5b = ModelMeta(
     max_tokens=131072,
     embed_dim=8960,
     license="mit",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch", "GritLM"],
     reference="https://huggingface.co/dunzhang/stella_en_1.5B_v5",
 )
