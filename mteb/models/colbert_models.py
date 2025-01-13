@@ -100,10 +100,13 @@ class ColBERTWrapper(Wrapper):
             )
         logger.info(f"Encoding {len(sentences)} sentences.")
 
+        if "request_qid" in kwargs:
+            kwargs.pop("request_qid")
         pred = self.model.encode(
             sentences,
             prompt_name=prompt_name,
             is_query=True if prompt_type == PromptType.query else False,
+            convert_to_tensor=True,
             **kwargs,
         )
 

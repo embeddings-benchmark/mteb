@@ -55,7 +55,7 @@ def get_loader_name(
 
 class ScoringFunction(str, Enum):
     DOT_PRODUCT: str = "dot"
-    COSINE: str = "cos_sim"
+    COSINE: str = "cosine"
     MAX_SIM: str = "max_sim"
 
 

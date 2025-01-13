@@ -161,7 +161,8 @@ def get_model(model_name: str, revision: str | None = None, **kwargs: Any) -> En
         _meta = model_meta_from_sentence_transformers(model.model)
         if meta.revision is None:
             meta.revision = _meta.revision if _meta.revision else meta.revision
-        meta.similarity_fn_name = _meta.similarity_fn_name
+        if not meta.similarity_fn_name:
+            meta.similarity_fn_name = _meta.similarity_fn_name
 
     model.mteb_model_meta = meta  # type: ignore
     return model

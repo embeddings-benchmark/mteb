@@ -70,7 +70,7 @@ def cos_sim(a: torch.Tensor, b: torch.Tensor):
         return _cos_sim_core(a, b)
 
 
-def max_sim(self, a: np.ndarray, b: np.ndarray) -> np.ndarray:
+def max_sim(a: np.ndarray, b: np.ndarray) -> np.ndarray:
     """Computes the max-similarity max_sim(a[i], b[j]) for all i and j.
         Works with a Tensor of the shape (batch_size, num_tokens, token_dim)
 
@@ -96,6 +96,7 @@ def max_sim(self, a: np.ndarray, b: np.ndarray) -> np.ndarray:
     )
 
     return scores.max(axis=-1).values.sum(axis=-1)
+
 
 def dot_score(a: torch.Tensor, b: torch.Tensor):
     """Computes the dot-product dot_prod(a[i], b[j]) for all i and j.
