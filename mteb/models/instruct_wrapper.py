@@ -91,13 +91,17 @@ class InstructSentenceTransformerWrapper(Wrapper):
         apply_instruction_to_passages: bool = True,
         **kwargs: Any,
     ):
-        """Args:
-        model_name: model name
-        revision: revision
-        instruction_template: Model template. Should contain the string '{instruction}'.
-        max_seq_length: maximum sequence length. If None, the maximum sequence length won't be changed.
-        apply_instruction_to_passages: Whether to apply the instruction template to the passages.
-        **kwargs:
+        """
+        Instruct Sentence Transformer Wrapper. Wrapper that passes instructions to the Sentence Transformer model.
+        Applied for models like gte-Qwen, stella, etc.
+
+        Arguments:
+            model_name: Model name
+            revision: Revision
+            instruction_template: Model template. Should contain the string '{instruction}'.
+            max_seq_length: Maximum sequence length. If None, the maximum sequence length won't be changed.
+            apply_instruction_to_passages: Whether to apply the instruction template to the passages.
+            **kwargs:
         """
         if (
             isinstance(instruction_template, str)
