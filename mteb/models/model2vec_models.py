@@ -150,7 +150,7 @@ m2v_multilingual_output = ModelMeta(
     use_instructions=False,
     adapted_from="sentence-transformers/LaBSE",
     superseded_by=None,
-    training_datasets=bge_training_data,  # distilled
+    training_datasets=None,
     public_training_code=True,  # https://github.com/MinishLab/model2vec
     public_training_data=False,
 )
