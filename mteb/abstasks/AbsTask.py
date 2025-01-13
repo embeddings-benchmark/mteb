@@ -298,7 +298,6 @@ class AbsTask(ABC):
 
         subsets_to_keep = []
 
-
         for hf_subset, langs in self.metadata.hf_subsets_to_langscripts.items():
             if (hf_subsets is not None) and (hf_subset not in hf_subsets):
                 continue
