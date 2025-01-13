@@ -59,7 +59,7 @@ class SentenceTransformerWrapper(Wrapper):
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
 
         if isinstance(self.model, CrossEncoder):
-            self.predict = self._predict
+            self.predict = self.handle_instructions_predict
 
         if similarity_fn_name:
             self.similarity = self.get_similarity_function(similarity_fn_name)
@@ -129,3 +129,14 @@ class SentenceTransformerWrapper(Wrapper):
             convert_to_numpy=True,
             **kwargs,
         )
+
+    def handle_instructions_predict(self, sentences, **kwargs):
+        # unzip the queries, corpus, and instruction so we can add the instructions to the queries
+        # as ST models can't take an arg for instructions
+        queries, corpus, instructions = list(zip(*sentences))
+        # combine the queries and instructions
+        queries_with_instructions = [
+            f"{query.strip()} {instruction}".strip() if instruction else query
+            for query, instruction in zip(queries, instructions)
+        ]
+        return self._predict(list(zip(queries_with_instructions, corpus)), **kwargs)

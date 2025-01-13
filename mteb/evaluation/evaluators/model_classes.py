@@ -76,6 +76,15 @@ class DenseRetrievalExactSearch:
             # custom functions can be used by extending the DenseRetrievalExactSearch class
             self.predict = self.model.predict
 
+        if hasattr(self.model, "combine_query_and_instruction"):
+            self.combine_query_and_instruction = (
+                self.model.combine_query_and_instruction
+            )
+        else:
+            self.combine_query_and_instruction = (
+                lambda query, instruction: f"{query.strip()} {instruction}".strip()
+            )
+
     def search(
         self,
         corpus: dict[str, dict[str, str]],
@@ -110,7 +119,9 @@ class DenseRetrievalExactSearch:
             new_queries = []
             for q_idx, qid in enumerate(query_ids):
                 new_queries.append(
-                    f"{queries[q_idx].strip()} {instructions[qid]}".strip()
+                    self.combine_query_and_instruction(
+                        queries[q_idx], instructions[qid]
+                    )
                 )
             queries = new_queries
 
@@ -446,19 +457,11 @@ class DenseRetrievalExactSearch:
                 len(queries_in_pair) == len(corpus_in_pair) == len(instructions_in_pair)
             )
 
-            if hasattr(self.model, "predict"):
-                # can't take instructions, so add them here
-                if instructions_in_pair[0] is not None:
-                    queries_in_pair = [
-                        f"{q} {i}".strip()
-                        for i, q in zip(instructions_in_pair, queries_in_pair)
-                    ]
-                scores = self.model.predict(list(zip(queries_in_pair, corpus_in_pair)))  # type: ignore
-            else:
-                # may use the instructions in a unique way, so give them also
-                scores = self.model.predict(  # type: ignore
-                    list(zip(queries_in_pair, corpus_in_pair, instructions_in_pair))
-                )
+            # cross-encoders may use the instructions in a unique way
+            # due to the many ways of combining query+instruct+doc, so let them decide
+            scores = self.model.predict(  # type: ignore
+                list(zip(queries_in_pair, corpus_in_pair, instructions_in_pair))
+            )
 
             for i, score in enumerate(scores):
                 results[query_ids[i]][corpus_ids[i]] = float(score)
