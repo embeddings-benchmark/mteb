@@ -269,7 +269,6 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
             public_training_code=None,
             use_instructions=None,
             training_datasets=None,
-
         )
     except AttributeError as e:
         logger.warning(

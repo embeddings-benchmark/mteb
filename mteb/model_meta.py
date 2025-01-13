@@ -86,8 +86,8 @@ class ModelMeta(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     name: str | None
-    revision: str | None  # None in get model
-    release_date: STR_DATE | None  # None in get model
+    revision: str | None
+    release_date: STR_DATE | None
     languages: list[ISO_LANGUAGE_SCRIPT] | None
     loader: Callable[..., Encoder] | None = None
     n_parameters: int | None
