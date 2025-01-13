@@ -204,7 +204,7 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
             frameworks.append("Sentence Transformers")
         return ModelMeta(
             name=model_name,
-            revision=None,
+            revision=card.base_model_revision,
             # TODO
             release_date=None,
             # TODO: We need a mapping between conflicting language codes
@@ -260,6 +260,16 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
             languages=languages,
             framework=["Sentence Transformers"],
             similarity_fn_name=model.similarity_fn_name,
+            n_parameters=None,
+            max_tokens=None,
+            embed_dim=None,
+            license=None,
+            open_weights=True,
+            public_training_data=None,
+            public_training_code=None,
+            use_instructions=None,
+            training_datasets=None,
+
         )
     except AttributeError as e:
         logger.warning(
@@ -270,5 +280,15 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
             revision=None,
             languages=None,
             release_date=None,
+            n_parameters=None,
+            max_tokens=None,
+            embed_dim=None,
+            license=None,
+            open_weights=True,
+            public_training_data=None,
+            public_training_code=None,
+            similarity_fn_name=None,
+            use_instructions=None,
+            training_datasets=None,
         )
     return meta
