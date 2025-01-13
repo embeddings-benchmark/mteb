@@ -6,6 +6,30 @@ from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
 model_prompts = {"query": "Represent this sentence for searching relevant passages: "}
 
+bge_m_training_data = {
+    # source: https://arxiv.org/pdf/2402.03216
+    "MIRACLRetrieval": ["train"],
+    "MIRACLRetrievalHardNegatives": ["train"],
+    "MIRACLReranking": ["train"],
+    "LeCaRDv2": ["train"],
+    "CMedQAv1-reranking": ["train"],
+    "CMedQAv2-reranking": ["train"],
+    "MrTidyRetrieval": ["train"],
+    "T2Reranking": ["train"],
+    "MSMARCO": ["train"],
+    "MSMARCOHardNegatives": ["train"],
+    "NanoMSMARCORetrieval": ["train"],
+    "MSMARCO-PL": ["train"],  # translation not trained on
+    "NQ": ["train"],
+    "NQHardNegatives": ["train"],
+    "NanoNQRetrieval": ["train"],
+    "NQ-PL": ["train"],  # translation not trained on
+    "HotpotQA": ["train"],
+    "HotpotQA-PL": ["train"],  # translation not trained on
+    "HotpotQAHardNegatives": ["train"],
+    # + synthetic data
+}
+
 bge_training_data = {
     # source: https://data.baai.ac.cn/details/BAAI-MTP
     "NQ": ["test"],
