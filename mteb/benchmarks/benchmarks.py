@@ -488,42 +488,44 @@ RAR_b = Benchmark(
 
 MTEB_FRA = Benchmark(
     name="MTEB(fra)",
-    tasks=get_tasks(
-        languages=["fra"],
-        tasks=[
-            # Classification
-            "AmazonReviewsClassification",
-            "MasakhaNEWSClassification",
-            "MassiveIntentClassification",
-            "MassiveScenarioClassification",
-            "MTOPDomainClassification",
-            "MTOPIntentClassification",
-            # Clustering
-            "AlloProfClusteringP2P",
-            "AlloProfClusteringS2S",
-            "HALClusteringS2S",
-            "MasakhaNEWSClusteringP2P",
-            "MasakhaNEWSClusteringS2S",
-            "MLSUMClusteringP2P",
-            "MLSUMClusteringS2S",
-            # Pair Classification
-            "OpusparcusPC",
-            "PawsXPairClassification",
-            # Reranking
-            "AlloprofReranking",
-            "SyntecReranking",
-            # Retrieval
-            "AlloprofRetrieval",
-            "BSARDRetrieval",
-            "MintakaRetrieval",
-            "SyntecRetrieval",
-            "XPQARetrieval",
-            # STS
-            "SICKFr",
-            "STS22",
-            "STSBenchmarkMultilingualSTS",
-            "SummEvalFr",
-        ],
+    tasks=MTEBTasks(
+        get_tasks(
+            languages=["fra"],
+            tasks=[
+                # Classification
+                "AmazonReviewsClassification",
+                "MasakhaNEWSClassification",
+                "MassiveIntentClassification",
+                "MassiveScenarioClassification",
+                "MTOPDomainClassification",
+                "MTOPIntentClassification",
+                # Clustering
+                "AlloProfClusteringP2P",
+                "AlloProfClusteringS2S",
+                "HALClusteringS2S",
+                "MasakhaNEWSClusteringP2P",
+                "MasakhaNEWSClusteringS2S",
+                "MLSUMClusteringP2P",
+                "MLSUMClusteringS2S",
+                # Pair Classification
+                "OpusparcusPC",
+                "PawsXPairClassification",
+                # Reranking
+                "AlloprofReranking",
+                "SyntecReranking",
+                # Retrieval
+                "AlloprofRetrieval",
+                "BSARDRetrieval",
+                "MintakaRetrieval",
+                "SyntecRetrieval",
+                "XPQARetrieval",
+                # STS
+                "SICKFr",
+                "STSBenchmarkMultilingualSTS",
+                "SummEvalFr",
+            ],
+        )
+        + (get_task("STS22", eval_splits=["test"], hf_subsets=["fr"]),)
     ),
     description="Main French benchmarks from MTEB",
     reference="https://arxiv.org/abs/2405.20468",
@@ -543,6 +545,7 @@ MTEB_DEU = Benchmark(
     name="MTEB(deu)",
     tasks=get_tasks(
         languages=["deu"],
+        exclusive_language_filter=True,
         tasks=[
             # Classification
             "AmazonCounterfactualClassification",
@@ -610,32 +613,34 @@ MTEB_KOR = Benchmark(
 
 MTEB_POL = Benchmark(
     name="MTEB(pol)",
-    tasks=get_tasks(
-        languages=["pol"],
-        tasks=[
-            # Classification
-            "AllegroReviews",
-            "CBD",
-            "MassiveIntentClassification",
-            "MassiveScenarioClassification",
-            "PolEmo2.0-IN",
-            "PolEmo2.0-OUT",
-            "PAC",
-            # Clustering
-            "EightTagsClustering",
-            "PlscClusteringS2S",
-            "PlscClusteringP2P",
-            # Pair Classification
-            "CDSC-E",
-            "PpcPC",
-            "PSC",
-            "SICK-E-PL",
-            # STS
-            "CDSC-R",
-            "STS22",
-            "STSBenchmarkMultilingualSTS",
-            "SICK-R-PL",
-        ],
+    tasks=MTEBTasks(
+        get_tasks(
+            languages=["pol"],
+            tasks=[
+                # Classification
+                "AllegroReviews",
+                "CBD",
+                "MassiveIntentClassification",
+                "MassiveScenarioClassification",
+                "PolEmo2.0-IN",
+                "PolEmo2.0-OUT",
+                "PAC",
+                # Clustering
+                "EightTagsClustering",
+                "PlscClusteringS2S",
+                "PlscClusteringP2P",
+                # Pair Classification
+                "CDSC-E",
+                "PpcPC",
+                "PSC",
+                "SICK-E-PL",
+                # STS
+                "CDSC-R",
+                "STSBenchmarkMultilingualSTS",
+                "SICK-R-PL",
+            ],
+        )
+        + (get_task("STS22", eval_splits=["test"], hf_subsets=["pl"]),),
     ),
     description="Main Polish benchmarks from MTEB",
     reference="https://arxiv.org/abs/2405.10138",
