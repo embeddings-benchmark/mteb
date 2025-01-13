@@ -93,7 +93,7 @@ class InstructSentenceTransformerWrapper(Wrapper):
     ):
         """
         Instruct Sentence Transformer Wrapper. Wrapper that passes instructions to the Sentence Transformer model.
-        Applied for models like gte-Qwen, stella, etc.
+        Applied for models like gte-Qwen, e5-mistral, etc.
 
         Arguments:
             model_name: Model name
