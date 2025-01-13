@@ -73,7 +73,6 @@ MTEB_EN = Benchmark(
     tasks=MTEBTasks(
         get_tasks(
             tasks=[
-                "AmazonCounterfactualClassification",
                 "ArguAna",
                 "ArXivHierarchicalClusteringP2P",
                 "ArXivHierarchicalClusteringS2S",
@@ -118,6 +117,11 @@ MTEB_EN = Benchmark(
             exclusive_language_filter=True,
         )
         + (
+            get_task(
+                "AmazonCounterfactualClassification",
+                eval_splits=["test"],
+                hf_subsets=["en"],
+            ),
             get_task("STS17", eval_splits=["test"], hf_subsets=["en-en"]),
             get_task("STS22.v2", eval_splits=["test"], hf_subsets=["en"]),
         ),
@@ -131,7 +135,6 @@ MTEB_ENG_CLASSIC = Benchmark(
     tasks=MTEBTasks(
         get_tasks(
             tasks=[
-                "AmazonCounterfactualClassification",
                 "AmazonPolarityClassification",
                 "AmazonReviewsClassification",
                 "ArguAna",
@@ -201,6 +204,11 @@ MTEB_ENG_CLASSIC = Benchmark(
         )
         + get_tasks(tasks=["MSMARCO"], languages=["eng"], eval_splits=["dev"])
         + (
+            get_task(
+                "AmazonCounterfactualClassification",
+                eval_splits=["test"],
+                hf_subsets=["en"],
+            ),
             get_task("STS17", eval_splits=["test"], hf_subsets=["en-en"]),
             get_task("STS22", eval_splits=["test"], hf_subsets=["en"]),
         )
