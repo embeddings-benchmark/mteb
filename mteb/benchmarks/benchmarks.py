@@ -426,7 +426,7 @@ SEB = Benchmark(
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-    contacts=["KennethEnevoldsen", "x-tabdeveloping"],
+    contacts=["KennethEnevoldsen", "x-tabdeveloping", "Samoed"],
 )
 
 CoIR = Benchmark(
