@@ -8,7 +8,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 class InstructIR(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="InstructIR",
-        description='A benchmark specifically designed to evaluate the instruction following ability in information retrieval models. Our approach focuses on user-aligned instructions tailored to each query instance, reflecting the diverse characteristics inherent in real-world search scenarios. NOTE: scores on this may differ unless you include instruction first, then "[SEP]" and then the query.',
+        description='A benchmark specifically designed to evaluate the instruction following ability in information retrieval models. Our approach focuses on user-aligned instructions tailored to each query instance, reflecting the diverse characteristics inherent in real-world search scenarios. **NOTE**: scores on this may differ unless you include instruction first, then "[SEP]" and then the query via redefining `combine_query_and_instruction` in your model.',
         reference="https://github.com/kaistAI/InstructIR/tree/main",
         dataset={
             "path": "mteb/InstructIR-mteb",

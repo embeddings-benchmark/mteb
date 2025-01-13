@@ -6,10 +6,12 @@ from typing import Any, Callable
 import numpy as np
 import torch
 
-from mteb.encoder_interface import Encoder
+
+from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
 
-from .repllama_models import RepLLaMAWrapper
+
+from .repllama_models import RepLLaMAWrapper, model_prompts
 from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
@@ -19,18 +21,18 @@ class PromptrieverWrapper(RepLLaMAWrapper, Wrapper):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def encode_queries(self, queries: list[str], **kwargs: Any) -> np.ndarray:
-        queries = [f"query:  {query}" for query in queries]
-        if "instruction" in kwargs:
-            end_punct_list = [
-                "?" if query.strip()[-1] not in ["?", ".", "!"] else ""
-                for query in queries
-            ]
-            queries = [
-                f"{query}{end_punct_list[i]} {kwargs['instruction']}"
-                for i, query in enumerate(queries)
-            ]
-        return self.encode(queries, **kwargs)
+    def encode(
+        self,
+        sentences: list[str],
+        *,
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> np.ndarray:
+        kwargs["is_promptriever"] = True
+        return super().encode(
+            sentences, task_name=task_name, prompt_type=prompt_type, **kwargs
+        )
 
 
 def _loader(wrapper: type[PromptrieverWrapper], **kwargs) -> Callable[..., Encoder]:
@@ -57,11 +59,12 @@ PROMPTRIEVER_CITATION = """
 
 promptriever_llama2 = ModelMeta(
     loader=_loader(
-        RepLLaMAWrapper,
+        PromptrieverWrapper,
         base_model_name_or_path="meta-llama/Llama-2-7b-hf",
         peft_model_name_or_path="samaya-ai/promptriever-llama2-7b-v1",
         device_map="auto",
         torch_dtype=torch.bfloat16,
+        model_prompts=model_prompts,
     ),
     name="samaya-ai/promptriever-llama2-7b-v1",
     languages=["eng_Latn"],
@@ -82,11 +85,12 @@ promptriever_llama2 = ModelMeta(
 
 promptriever_llama3 = ModelMeta(
     loader=_loader(
-        RepLLaMAWrapper,
+        PromptrieverWrapper,
         base_model_name_or_path="meta-llama/Meta-Llama-3.1-8B",
         peft_model_name_or_path="samaya-ai/promptriever-llama3.1-8b-v1",
         device_map="auto",
         torch_dtype=torch.bfloat16,
+        model_prompts=model_prompts,
     ),
     name="samaya-ai/promptriever-llama3.1-8b-v1",
     languages=["eng_Latn"],
@@ -108,11 +112,12 @@ promptriever_llama3 = ModelMeta(
 
 promptriever_llama3_instruct = ModelMeta(
     loader=_loader(
-        RepLLaMAWrapper,
+        PromptrieverWrapper,
         base_model_name_or_path="meta-llama/Meta-Llama-3.1-8B-Instruct",
         peft_model_name_or_path="samaya-ai/promptriever-llama3.1-8b-instruct-v1",
         device_map="auto",
         torch_dtype=torch.bfloat16,
+        model_prompts=model_prompts,
     ),
     name="samaya-ai/promptriever-llama3.1-8b-instruct-v1",
     languages=["eng_Latn"],
@@ -133,11 +138,12 @@ promptriever_llama3_instruct = ModelMeta(
 
 promptriever_mistral_v1 = ModelMeta(
     loader=_loader(
-        RepLLaMAWrapper,
+        PromptrieverWrapper,
         base_model_name_or_path="mistralai/Mistral-7B-v0.1",
         peft_model_name_or_path="samaya-ai/promptriever-mistral-v0.1-7b-v1",
         device_map="auto",
         torch_dtype=torch.bfloat16,
+        model_prompts=model_prompts,
     ),
     name="samaya-ai/promptriever-mistral-v0.1-7b-v1",
     languages=["eng_Latn"],
