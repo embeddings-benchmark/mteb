@@ -9,11 +9,10 @@ import pytest
 
 import mteb
 from mteb import MTEB
-from mteb.abstasks import AbsTask
+from mteb.abstasks import AbsTask, MultilingualTask
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.AbsTaskSpeedTask import AbsTaskSpeedTask
-from mteb.abstasks.MultiSubsetLoader import MultiSubsetLoader
 from mteb.overview import TASKS_REGISTRY
 
 from ..test_benchmark.task_grid import MOCK_TASK_TEST_GRID_AS_STRING
@@ -35,8 +34,8 @@ def test_load_data(
     if (
         isinstance(task, AbsTaskRetrieval)
         or isinstance(task, AbsTaskReranking)
-        or isinstance(task, MultiSubsetLoader)
         or isinstance(task, AbsTaskSpeedTask)
+        or isinstance(task, MultilingualTask)
     ):
         pytest.skip()
     with patch.object(task, "dataset_transform") as mock_dataset_transform:
@@ -86,7 +85,14 @@ async def check_datasets_are_available_on_hf(tasks):
 def test_dataset_availability():
     """Checks if the datasets are available on Hugging Face using both their name and revision."""
     tasks = MTEB().tasks_cls
-    tasks = [t for t in tasks if t.metadata.name not in MOCK_TASK_TEST_GRID_AS_STRING]
+    tasks = [
+        t
+        for t in tasks
+        if t.metadata.name not in MOCK_TASK_TEST_GRID_AS_STRING
+        if t.metadata.name not in MOCK_TASK_TEST_GRID_AS_STRING
+        and t.metadata.name
+        != "AfriSentiLangClassification"  # HOTFIX: Issue#1777. Remove this line when issue is resolved.
+    ]
     asyncio.run(check_datasets_are_available_on_hf(tasks))
 
 

@@ -5,12 +5,14 @@ import logging
 import random
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
+from copy import copy
 from typing import Any
 
 import datasets
 import numpy as np
 import torch
 import tqdm
+import transformers
 from datasets import Dataset, DatasetDict
 from sklearn.preprocessing import MultiLabelBinarizer
 
@@ -23,6 +25,13 @@ logger = logging.getLogger(__name__)
 
 ScoresDict = dict[str, Any]
 # ^ e.g {'main_score': 0.5, 'hf_subset': 'en-de', 'languages': ['eng-Latn', 'deu-Latn']}
+
+
+def set_seed(seed: int) -> tuple[random.Random, np.random.Generator]:
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    transformers.set_seed(seed)
+    return random.Random(seed), np.random.default_rng(seed)
 
 
 def _multilabel_subsampling(
@@ -63,17 +72,18 @@ class AbsTask(ABC):
             and Dataset is a datasets.Dataset objedct. "hf subset" is the data subset on Huggingface typically used to denote the language e.g.
             datasets.load_dataset("data", "en"). If the dataset does not have a subset this is simply "default".
         abstask_prompt: The potential prompt of the abstask
-        superseeded_by: Denotes the task that this task is superseeded by. Used to issue warning to users of outdated datasets, while maintaining
+        superseded_by: Denotes the task that this task is superseeded by. Used to issue warning to users of outdated datasets, while maintaining
             reproducibility of existing benchmarks.
     """
 
     metadata: TaskMetadata
     abstask_prompt: str | None = None
     _eval_splits: list[str] | None = None
-    superseded_by: None | str = None
+    superseded_by: str | None = None
     dataset: dict[HFSubset, DatasetDict] | None = None  # type: ignore
     data_loaded: bool = False
     is_multilingual: bool = False
+    hf_subsets: list[HFSubset] | None = None
 
     def __init__(self, seed: int = 42, **kwargs: Any):
         """The init function. This is called primarily to set the seed.
@@ -85,10 +95,7 @@ class AbsTask(ABC):
         self.save_suffix = kwargs.get("save_suffix", "")
 
         self.seed = seed
-        random.seed(self.seed)
-        np.random.seed(self.seed)
-        torch.manual_seed(self.seed)
-        torch.cuda.manual_seed_all(self.seed)
+        self.rng_state, self.np_rng = set_seed(seed)
 
     def check_if_dataset_is_superseded(self):
         """Check if the dataset is superseded by a newer version"""
@@ -130,10 +137,13 @@ class AbsTask(ABC):
         self.dataset: dict[HFSubset, DatasetDict]
 
         scores = {}
-        hf_subsets = list(self.dataset.keys()) if self.is_multilingual else ["default"]
+        if self.hf_subsets is None:
+            hf_subsets = list(self.dataset.keys())
+        else:
+            hf_subsets = copy(self.hf_subsets)
 
-        if subsets_to_run is not None:
-            hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
+        if subsets_to_run is not None:  # allow overwrites of pre-filtering
+            hf_subsets = subsets_to_run
 
         for hf_subset in hf_subsets:
             logger.info(
@@ -146,6 +156,7 @@ class AbsTask(ABC):
             scores[hf_subset] = self._evaluate_subset(
                 model, data_split, encode_kwargs=encode_kwargs, **kwargs
             )
+            self._add_main_score(scores[hf_subset])
         return scores
 
     @abstractmethod
@@ -243,16 +254,13 @@ class AbsTask(ABC):
                 )
                 descriptive_stats[split][hf_subset_stat] = {}
 
-                eval_langs = (
-                    list(self.metadata.eval_langs.keys())
-                    if isinstance(self.metadata.eval_langs, dict)
-                    else self.metadata.eval_langs
+                pbar_subsets = tqdm.tqdm(
+                    self.metadata.hf_subsets_to_langscripts,
+                    desc="Processing Languages...",
                 )
-
-                pbar_subsets = tqdm.tqdm(eval_langs, desc="Processing Languages...")
                 for hf_subset in pbar_subsets:
-                    pbar_subsets.set_postfix_str(f"Language: {hf_subset}")
-                    logger.info(f"Processing metadata for language {hf_subset}")
+                    pbar_subsets.set_postfix_str(f"Huggingface subset: {hf_subset}")
+                    logger.info(f"Processing metadata for subset {hf_subset}")
                     split_details = self._calculate_metrics_from_split(split, hf_subset)
                     descriptive_stats[split][hf_subset_stat][hf_subset] = split_details
             else:
@@ -277,12 +285,8 @@ class AbsTask(ABC):
     @property
     def languages(self) -> list[str]:
         """Returns the languages of the task"""
-        # check if self.hf_subsets is set
-        if self.is_multilingual and hasattr(self, "hf_subsets"):
-            assert isinstance(
-                self.metadata.eval_langs, dict
-            ), "eval_langs must be dict for multilingual tasks"
-            eval_langs = self.metadata.eval_langs
+        if self.hf_subsets:
+            eval_langs = self.metadata.hf_subsets_to_langscripts
             languages = []
 
             for lang in self.hf_subsets:
@@ -300,34 +304,49 @@ class AbsTask(ABC):
         return self
 
     def filter_languages(
-        self, languages: list[str] | None, script: list[str] | None = None
+        self,
+        languages: list[str] | None,
+        script: list[str] | None = None,
+        hf_subsets: list[HFSubset] | None = None,
+        exclusive_language_filter: bool = False,
     ) -> AbsTask:
         """Filter the languages of the task.
 
         Args:
             languages: list of languages to filter the task by can be either a 3-letter langauge code (e.g. "eng") or also include the script
                 (e.g. "eng-Latn")
-            script: list of scripts to filter the task by. Will be ignored if language code specified the script. If None, all scripts are included.
+            script: A list of scripts to filter the task by. Will be ignored if language code specified the script. If None, all scripts are included.
                 If the language code does not specify the script the intersection of the language and script will be used.
+            hf_subsets: A list of huggingface subsets to filter on. This is useful if a dataset have multiple subsets containing the desired language,
+                but you only want to test on one. An example is STS22 which e.g. have both "en" and "de-en" which both contains English.
+            exclusive_language_filter: Some datasets contains more than one language e.g. for STS22 the subset "de-en" contain eng and deu. If
+                exclusive_language_filter is set to False both of these will be kept, but if set to True only those that contains all the languages
+                specified will be kept.
         """
         lang_scripts = LanguageScripts.from_languages_and_scripts(languages, script)
 
         subsets_to_keep = []
 
-        if not isinstance(self.metadata.eval_langs, dict):
-            self.hf_subsets = self.metadata.eval_langs
-            return self
+        for hf_subset, langs in self.metadata.hf_subsets_to_langscripts.items():
+            if (hf_subsets is not None) and (hf_subset not in hf_subsets):
+                continue
+            if exclusive_language_filter is False:
+                for langscript in langs:
+                    if lang_scripts.contains_language(
+                        langscript
+                    ) or lang_scripts.contains_script(langscript):
+                        subsets_to_keep.append(hf_subset)
+                        break
 
-        for hf_subset, langs in self.metadata.eval_langs.items():
-            for langscript in langs:
-                if lang_scripts.contains_language(
-                    langscript
-                ) or lang_scripts.contains_script(langscript):
+            if exclusive_language_filter is True and languages:
+                if lang_scripts.contains_languages(langs):
                     subsets_to_keep.append(hf_subset)
-                    break
 
         self.hf_subsets = subsets_to_keep
         return self
+
+    def _add_main_score(self, scores: dict[HFSubset, ScoresDict]) -> None:
+        scores["main_score"] = scores[self.metadata.main_score]
 
     def _upload_dataset_to_hub(self, repo_name: str, fields: list[str]) -> None:
         if self.is_multilingual:

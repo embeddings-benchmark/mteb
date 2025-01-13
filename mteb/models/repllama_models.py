@@ -75,19 +75,31 @@ class RepLLaMAWrapper(Wrapper):
             return_tensors="pt",
         )
 
+    def combine_query_and_instruction(self, query, instruction):
+        end_punct = "?" if query.strip()[-1] not in ["?", ".", "!"] else ""
+        return f"{query}{end_punct} {instruction}".strip()
+
     def encode(
         self,
         sentences: list[str],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,  # noqa
+        **kwargs,
     ) -> np.ndarray:
         batch_size = 16 if "batch_size" not in kwargs else kwargs.pop("batch_size")
         all_embeddings = []
-        prompt = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+        prompt = self.model_prompts.get(prompt_name)
+
         if prompt:
-            sentences = [f"{prompt}{sentence}".strip() for sentence in sentences]
+            if prompt_type == "queries":
+                sentences = [
+                    f"{prompt}{sentence.strip()}".strip() for sentence in sentences
+                ]
+            else:
+                sentences = [f"{prompt}{sentence}".strip() for sentence in sentences]
+
         for i in tqdm.tqdm(range(0, len(sentences), batch_size)):
             batch_texts = sentences[i : i + batch_size]
 
@@ -151,7 +163,6 @@ repllama_llama2_original = ModelMeta(
     release_date="2023-10-11",
     training_datasets={"Tevatron/msmarco-passage-aug": ["train"]},
     n_parameters=7_000_000,
-    memory_usage=None,
     max_tokens=4096,
     embed_dim=4096,
     license="apache-2.0",
@@ -178,7 +189,6 @@ repllama_llama2_reproduced = ModelMeta(
     revision="01c7f73d771dfac7d292323805ebc428287df4f9-ad5c1d0938a1e02954bcafb4d811ba2f34052e71",  # base-peft revision
     release_date="2024-09-15",
     n_parameters=7_000_000,
-    memory_usage=None,
     max_tokens=4096,
     embed_dim=4096,
     license="apache-2.0",

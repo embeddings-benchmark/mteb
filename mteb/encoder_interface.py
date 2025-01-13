@@ -61,6 +61,26 @@ class Encoder(Protocol):
         ...
 
 
+class EncoderWithQueryInstructionFormatting(Protocol):
+    """Optional protocol for encoders that support combining queries with instructions in a model-specific way. If not implemented, MTEB will use the default query instruction formatting ({query} {instruction})."""
+
+    def combine_query_and_instruction(
+        self,
+        query: str,
+        instruction: str,
+    ) -> str:
+        """Combines a query with an instruction.
+
+        Args:
+            query: The query text to combine.
+            instruction: The instruction text to combine with the query.
+
+        Returns:
+            The combined query and instruction text.
+        """
+        ...
+
+
 class EncoderWithSimilarity(Encoder, Protocol):
     """Besides the required functions in the Encoder interface, the encoder can additionally specify its own similiarity functions.
 
