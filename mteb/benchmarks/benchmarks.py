@@ -840,7 +840,7 @@ MTEB_multilingual = Benchmark(
     description="The Multilingual benchmarks from MMTEB. Currently under development.",
     reference=None,
     citation=None,
-    contacts=["KennethEnevoldsen"],
+    contacts=["KennethEnevoldsen","isaac-chung"],
 )
 
 MTEB_JPN = Benchmark(
@@ -952,7 +952,7 @@ MTEB_INDIC = Benchmark(
     description="Main Indic benchmark from MMTEB",
     reference=None,
     citation=None,
-    contacts=["KennethEnevoldsen"],
+    contacts=["KennethEnevoldsen","isaac-chung"],
 )
 
 
@@ -1084,7 +1084,7 @@ MTEB_EU = Benchmark(
     description="Main European benchmark from MMTEB",
     reference=None,
     citation=None,
-    contacts=["KennethEnevoldsen"],
+    contacts=["KennethEnevoldsen","isaac-chung"],
 )
 
 LONG_EMBED = Benchmark(
