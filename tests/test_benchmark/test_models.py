@@ -9,7 +9,6 @@ from mteb.abstasks import AbsTask
 from .mock_tasks import MockRetrievalTask
 
 
-
 @pytest.mark.parametrize("model", ["colbert-ir/colbertv2.0"])
 @pytest.mark.parametrize("task", [MockRetrievalTask()])
 @pytest.mark.skip(reason="Needs pylate")

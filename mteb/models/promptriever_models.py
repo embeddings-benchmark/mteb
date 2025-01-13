@@ -6,10 +6,8 @@ from typing import Any, Callable
 import numpy as np
 import torch
 
-
 from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
-
 
 from .repllama_models import RepLLaMAWrapper, model_prompts
 from .wrapper import Wrapper
