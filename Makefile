@@ -45,5 +45,5 @@ serve-docs:
 model-load-test:
 	@echo "--- 🚀 Running model load test ---"
 	pip install ".[dev, speedtask, pylate,gritlm,xformers,model2vec]"
-	python scripts/extract_model_names.py
+	python scripts/extract_model_names.py $(BASE_BRANCH)
 	python tests/test_models/model_loading.py --model_name_file scripts/model_names.txt

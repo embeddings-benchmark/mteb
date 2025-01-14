@@ -25,7 +25,7 @@ class OpenAIWrapper(Wrapper):
         **kwargs,
     ) -> None:
         """Wrapper for OpenAIs embedding API.
-        To handle documents larger than 8192 tokens, we truncate the document to the specified sequence length.
+        To handle documents larger than 8191 tokens, we truncate the document to the specified sequence length.
         """
         requires_package(self, "openai", "Openai text embedding")
         from openai import OpenAI
@@ -124,7 +124,7 @@ text_embedding_3_small = ModelMeta(
         OpenAIWrapper,
         model_name="text-embedding-3-small",
         tokenizer_name="cl100k_base",
-        max_tokens=8192,
+        max_tokens=8191,
     ),
     max_tokens=8191,
     embed_dim=1536,
@@ -148,7 +148,7 @@ text_embedding_3_large = ModelMeta(
         OpenAIWrapper,
         model_name="text-embedding-3-large",
         tokenizer_name="cl100k_base",
-        max_tokens=8192,
+        max_tokens=8191,
     ),
     max_tokens=8191,
     embed_dim=3072,
@@ -170,7 +170,7 @@ text_embedding_ada_002 = ModelMeta(
         OpenAIWrapper,
         model_name="text-embedding-ada-002",
         tokenizer_name="cl100k_base",
-        max_tokens=8192,
+        max_tokens=8191,
     ),
     reference="https://openai.com/index/new-and-improved-embedding-model/",
     max_tokens=8191,

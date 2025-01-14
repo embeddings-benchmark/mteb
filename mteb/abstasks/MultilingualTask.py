@@ -13,9 +13,7 @@ class MultilingualTask(AbsTask):
                 lang for lang in hf_subsets if lang in self.metadata.eval_langs
             ]
         if hf_subsets is not None and len(hf_subsets) > 0:
-            self.hf_subsets = (
-                hf_subsets  # TODO: case where user provides langs not in the dataset
-            )
+            self.hf_subsets = hf_subsets
         else:
             self.hf_subsets = self.metadata.eval_langs
         self.is_multilingual = True
