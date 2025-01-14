@@ -31,7 +31,7 @@ As an example,  [`OpenCLIPWrapper`](https://github.com/embeddings-benchmark/mteb
 class OpenCLIPWrapper:
     ...
 ```
-
+See also [adding a model](adding_a_model.md) for reference.
 
 ### X Evaluator
 With the model, [ZeroshotClassificationEvaluator](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/evaluation/evaluators/Image/ZeroshotClassificationEvaluator.py) is implemented here. This defines how the model are used to do zero-shot classification and get back results on desired metrics.
@@ -61,6 +61,7 @@ class CIFAR10ZeroShotClassification(AbsTaskZeroshotClassification):
     def get_candidate_labels(self) -> list[str]:
         ...
 ```
+See also [adding a dataset](adding_a_dataset.md) for reference.
 
 ### Putting them all together
 With all these, we can then 
@@ -83,7 +84,6 @@ By default, results will be under `results/laion__CLIP-ViT-L-14-laion2B-s32B-b82
 Some models require some specific steps before running. Those are collected here.
 
 <details>
-
     <summary> Vista </summary>
 
     ## set up VISTA 
