@@ -10,12 +10,13 @@ from datetime import datetime
 from itertools import chain
 from pathlib import Path
 from time import time
-from typing import Any
+from typing import Any, Sequence
 
 import datasets
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.abstasks.AbsTask import ScoresDict
+from mteb.abstasks.aggregated_task import AggregateTask
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import model_meta_from_sentence_transformers
@@ -31,9 +32,11 @@ logger = logging.getLogger(__name__)
 
 
 class MTEB:
+    tasks: AbsTask | AggregateTask
+
     def __init__(
         self,
-        tasks: Iterable[str | AbsTask] | None = None,
+        tasks: Sequence[str | AbsTask] | None = None,
         *,
         task_types: list[str] | None = None,
         task_categories: list[str] | None = None,
@@ -66,7 +69,7 @@ class MTEB:
             self._tasks: Iterable[str | AbsTask] = tasks
             if isinstance(tasks[0], Benchmark):
                 self.benchmarks = tasks
-                self._tasks = list(chain.from_iterable(tasks))
+                self._tasks = list(tasks)
             assert (
                 task_types is None and task_categories is None
             ), "Cannot specify both `tasks` and `task_types`/`task_categories`"

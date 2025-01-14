@@ -1,15 +1,12 @@
 from __future__ import annotations
 
 import logging
-import random
 from typing import Any
 
 import numpy as np
-import torch
-from datasets import Dataset
-from pydantic import field_validator
+from pydantic import BaseModel, ConfigDict
 
-from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset, TaskMetadata
+from mteb.abstasks.TaskMetadata import HFSubset
 from mteb.encoder_interface import Encoder
 from mteb.load_results.task_results import TaskResult
 
@@ -18,52 +15,36 @@ from .AbsTask import AbsTask, ScoresDict
 logger = logging.getLogger(__name__)
 
 
-class AggregatedTaskMetadata(TaskMetadata):
-    """A derivative of the taskmetadata used for aggregated of tasks. Can e.g. be used to create custom tasks
-    which are a combination of existing task. For an example see CQADupstackRetrieval.
-
-    The attributes are the same as TaskMetadata, with a few exceptions described below.
+class AggregateTaskMetadata(BaseModel):
+    """Metadata for an aggregation of tasks.
 
     Attributes:
-        dataset: Always None as the task dataset is specified in its subtasks
-        prompt: Always None as the task prompt is specified in its subtasks
-        tasks: A list of tasks
+        name: The name of the task.
+        description: A description of the task. Should explain the aggregation.
+        reference: A URL to the documentation of the task. E.g. a published paper.
+        tasks: A list of tasks, the majority of the metadata is described within its tasks.
+                main_score: The main score used for evaluation.
+       main_score: the main score of the task
+        eval_splits: The splits of the dataset used for evaluation.
+        bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
     """
 
-    dataset: None = None
-    prompt: None = None
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+    name: str
+    description: str
+    reference: str
     tasks: list[AbsTask]
-
-    @field_validator("dataset")
-    def _check_dataset_path_is_specified(
-        cls, dataset: dict[str, Any]
-    ) -> dict[str, Any]:
-        return dataset  # skip validation
-
-    @field_validator("dataset")
-    def _check_dataset_revision_is_specified(
-        cls, dataset: dict[str, Any]
-    ) -> dict[str, Any]:
-        return dataset  # skip validation
-
-    @field_validator("prompt")
-    def _check_prompt_is_valid(cls, prompt: None) -> None:
-        return prompt  # skip validation
+    main_score: str
+    eval_splits: list[str] = ["test"]
+    bibtex_citation: str
 
 
-class AbsTaskAggregated(AbsTask):
-    metadata: AggregatedTaskMetadata
-    abstask_prompt: None = None
+class AggregateTask:
+    metadata: AggregateTaskMetadata
 
-    def __init__(self, seed: int = 42, **kwargs: Any):
+    def __init__(self, **kwargs: Any):
         self.tasks = self.metadata.tasks
-        self.save_suffix = kwargs.get("save_suffix", "")
-
-        self.seed = seed
-        random.seed(self.seed)
-        np.random.seed(self.seed)
-        torch.manual_seed(self.seed)
-        torch.cuda.manual_seed_all(self.seed)
 
     def evaluate(
         self,
@@ -94,6 +75,7 @@ class AbsTaskAggregated(AbsTask):
         return {"default": self.task_results_to_score(task_results)}
 
     def task_results_to_score(self, task_results: list[TaskResult]) -> ScoresDict:
+        """The function that aggregated scores"""
         main_scores = []
         for task_res in task_results:
             main_scores.append(
@@ -108,21 +90,3 @@ class AbsTaskAggregated(AbsTask):
             task.load_data()
 
         self.data_loaded = True
-
-    def _evaluate_subset(
-        self,
-        model: Encoder,
-        data_split: Dataset,
-        *,
-        parallel: bool = False,
-        encode_kwargs: dict[str, Any] = {},
-        **kwargs,
-    ) -> ScoresDict:
-        raise NotImplementedError()
-
-    def _calculate_metrics_from_split(
-        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
-    ) -> DescriptiveStatistics:
-        # it is a bit annoying that we have remove
-        # functionality from a class. Let me know if you have a better way to doing this.
-        raise NotImplementedError()

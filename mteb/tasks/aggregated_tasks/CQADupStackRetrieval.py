@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks import AbsTask
-from mteb.abstasks.aggregated_task import AbsTaskAggregated, AggregatedTaskMetadata
+from mteb.abstasks.aggregated_task import AggregateTask, AggregateTaskMetadata
 from mteb.tasks.Retrieval import (
     CQADupstackAndroidRetrieval,
     CQADupstackEnglishRetrieval,
@@ -33,25 +33,14 @@ task_list_cqa: list[AbsTask] = [
 ]
 
 
-class CQADupstackRetrieval(AbsTaskAggregated):
-    metadata = AggregatedTaskMetadata(
+class CQADupstackRetrieval(AggregateTask):
+    metadata = AggregateTaskMetadata(
         name="CQADupstackRetrieval",
         description="CQADupStack: A Benchmark Data Set for Community Question-Answering Research",
         reference="http://nlp.cis.unimelb.edu.au/resources/cqadupstack/",
         tasks=task_list_cqa,
-        type="Retrieval",
-        category="s2p",
-        modalities=["text"],
-        eval_splits=["test"],
-        eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=("2010-01-01", "2014-01-01"),  # 2010 is start of stackexchange
-        domains=["Written", "Non-fiction"],
-        task_subtypes=["Question answering"],
-        license="apache-2.0",
-        annotations_creators="derived",
-        dialect=[],
-        sample_creation="found",
+        eval_splits=["test"],
         bibtex_citation="""@inproceedings{hoogeveen2015,
 author = {Hoogeveen, Doris and Verspoor, Karin M. and Baldwin, Timothy},
 title = {CQADupStack: A Benchmark Data Set for Community Question-Answering Research},

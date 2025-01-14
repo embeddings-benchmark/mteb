@@ -7,6 +7,7 @@ from typing import Annotated
 from pydantic import AnyUrl, BeforeValidator, TypeAdapter
 
 from mteb.abstasks.AbsTask import AbsTask
+from mteb.abstasks.aggregated_task import AggregateTask
 from mteb.load_results.benchmark_results import BenchmarkResults
 from mteb.load_results.load_results import load_results
 from mteb.overview import MTEBTasks, get_tasks
@@ -40,7 +41,7 @@ class Benchmark:
     """
 
     name: str
-    tasks: Sequence[AbsTask]
+    tasks: Sequence[AbsTask | AggregateTask]
     description: str | None = None
     reference: UrlString | None = None
     citation: str | None = None

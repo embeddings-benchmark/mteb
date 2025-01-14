@@ -12,8 +12,10 @@ from typing import Any, Callable
 import numpy as np
 from packaging.version import Version
 from pydantic import BaseModel, field_validator
+from typing_extensions import deprecated
 
 from mteb.abstasks.AbsTask import AbsTask, ScoresDict
+from mteb.abstasks.aggregated_task import AggregateTask
 from mteb.abstasks.TaskMetadata import ISO_LANGUAGE_SCRIPT, HFSubset
 from mteb.languages import ISO_LANGUAGE, LanguageScripts
 
@@ -499,6 +501,7 @@ class TaskResult(BaseModel):
             raise ValueError("No splits had scores for the specified languages.")
         return val_sum / n_val
 
+    @deprecated("from validated is deprecated, instead use TaskResult(**data)")
     @classmethod
     def from_validated(cls, **data) -> TaskResult:
         return cls.model_construct(**data)
@@ -519,10 +522,12 @@ class TaskResult(BaseModel):
                     }
                 )
         new_res = {**self.to_dict(), "scores": new_scores}
-        new_res = TaskResult.from_validated(**new_res)
+        new_res = TaskResult(**new_res)
         return new_res
 
-    def validate_and_filter_scores(self, task: AbsTask | None = None) -> TaskResult:
+    def validate_and_filter_scores(
+        self, task: AbsTask | AggregateTask | None = None
+    ) -> TaskResult:
         """This ensures that the scores are correct for the given task, by removing any splits besides those specified in the task metadata.
         Additionally it also ensure that all of the splits required as well as the languages are present in the scores.
         Returns new TaskResult object.
@@ -535,11 +540,13 @@ class TaskResult(BaseModel):
 
         if task is None:
             task = get_task(self.task_name)
+
+        if isinstance(task, AggregateTask):
+            return self._validate_and_filter_aggregate_task(task)
+
         splits = task.metadata.eval_splits
         if task.is_multilingual:
-            hf_subsets = getattr(
-                task, "hf_subsets", task.metadata.hf_subsets_to_langscripts.keys()
-            )
+            hf_subsets = task.hf_subsets
             hf_subsets = set(hf_subsets)
         else:
             hf_subsets = {"default"}
@@ -572,5 +579,12 @@ class TaskResult(BaseModel):
                 f"{task.metadata.name}: Missing splits {set(splits) - seen_splits}"
             )
         new_res = {**self.to_dict(), "scores": new_scores}
-        new_res = TaskResult.from_validated(**new_res)
+        new_res = TaskResult(**new_res)
         return new_res
+
+
+    def _validate_and_filter_aggregate_task(self, task: AggregateTask) -> TaskResult:
+        splits = task.metadata.eval_splits
+        for split in self.scores:
+            if split not in splits:
+                continue
