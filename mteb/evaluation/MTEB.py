@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
 class MTEB:
     def __init__(
         self,
-        tasks: list[AbsTask | Benchmark],
+        tasks: Iterable[AbsTask | Benchmark],
         *,
         err_logs_path: str = "error_logs.txt",
         **kwargs,
@@ -49,7 +49,7 @@ class MTEB:
         """
         from mteb.benchmarks import Benchmark
 
-        self.tasks = deepcopy(tasks)
+        self.tasks = list(tasks)
         if len(self.tasks) > 0 and isinstance(self.tasks[0], Benchmark):
             self.benchmarks = tasks
             self.tasks = list(chain.from_iterable(self.tasks))

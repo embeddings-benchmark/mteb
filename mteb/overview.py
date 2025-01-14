@@ -119,12 +119,12 @@ def filter_task_by_categories(
     return [t for t in tasks if t.metadata.category in _categories]
 
 
-class MTEBTasks(list):
+class MTEBTasks(tuple):
     def __repr__(self) -> str:
         return "MTEBTasks" + super().__repr__()
 
     @staticmethod
-    def _extract_property_from_task(task, property):
+    def _extract_property_from_task(task, property: str):
         if hasattr(task.metadata, property):
             return getattr(task.metadata, property)
         elif hasattr(task, property):
