@@ -24,7 +24,9 @@ def load_results():
     results_cache_path = Path(__file__).parent.joinpath("__cached_results.json")
     if not results_cache_path.exists():
         all_results = (
-            mteb.load_results(only_main_score=True).join_revisions().filter_models()
+            mteb.load_results(only_main_score=True, require_model_meta=False)
+            .join_revisions()
+            .filter_models()
         )
         all_results.to_disk(results_cache_path)
         return all_results
