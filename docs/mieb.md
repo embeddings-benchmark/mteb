@@ -2,56 +2,80 @@
 
 The Massive Image Embedding Benchmark (MIEB) is an image extension of [MTEB](https://arxiv.org/abs/2210.07316) to cover embedding tasks for image-text tasks. 
 
-## Background
+## 🌱 Background
 
 MIEB intends to extend MTEB and MMTEB to cover image representation learning and image-text alignment tasks. 
 
-## Contributing to MIEB
+## 🪴 Contributing to MIEB
 
-To make a MIEB task `X` fully runable from scratch for dataset `Y` with model `Z`, we need to implemenet an `AbsTaskX` class for it, which inherits from `AbsTask`. A task-specific `XEvaluator`, which will be called in `AbsTaskX`; a dataset-specific (e.g., Dataset `Y`) class `class Y(AbsTaskX)` inheriting from the corresponding `AbsTaskX`; and some model class `ZModelWrapper` that has needed functions.
+The FIRST step is to _always_ create an issue in the MTEB repo (this one), and add the `mieb` label. PRs without issues will not be accepted. 
+
+There are a few ways for anyone to contribute to MIEB:
+
+  1. Add a dataset as an existing task type. This means that the `AbsTask` already exists, e.g. `AbsTaskImageClassification`, and the effort is solely in adding an instance of it. 
+  2.  Add a model. This could mean either: a) The model wrapper, e.g. `OpenCLIPWrapper`, already exists, and the effort is solely in adding a filled out `ModelMeta` object, and/or b) Add a new model wrapper.
+  3. Add a new task type. This means that the existing task types do not cover this new task. An accompanying evaluator should also be implemented.
+
+Let's go through an example.
 
 ## Example
 
-Here is an example implementing zero-shot image classification from scratch.
+Here is an example implementing a zero-shot image classification from scratch. Let's say we wish to implement CIFAR10 as a task and evaluate an OpenCLIP model on it. 
 
-To solve this task, we basically need to encode the `images`, encode the `class label candidates with prompts` (things like "this is a dog pic", "this is a cat pic"), and similarity-compare them, to argmax out the class prediction for each image.
+To solve this task, we need to encode the `images`, encode the `class label candidates with prompts` (e.g. "this is a dog pic", "this is a cat pic"), and compare them by calculating similarity, and then argmax out the class prediction for each image. We begin by implementing a model wrapper. 
 
-#### Model Wrapper
-See the [`ImageEncoder` class](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/encoder_interface.py). The model class implements `get_text_embeddings`, `get_image_embeddings`, and `calculate_probs` methods. 
-As an example,  [`CLIPModelWrapper`](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/models/clip_models.py) is first implemented, with metadata defined.
+### Model Wrapper
+See the [`ImageEncoder` class](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/encoder_interface.py) for more details. The model class implements `get_text_embeddings`, `get_image_embeddings`, and `calculate_probs` methods. 
+As an example,  [`OpenCLIPWrapper`](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/models/openclip_models.py) is first implemented, with metadata defined below.
+```python
+class OpenCLIPWrapper:
+    ...
+```
 
 
-#### X Evaluator
-With the model, [ZeroshotClassificationEvaluator](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/evaluation/evaluators/Image/ZeroshotClassificationEvaluator.py) is implemented here, basically the pipeline of using the defined models to do zero-shot classification.
-
+### X Evaluator
+With the model, [ZeroshotClassificationEvaluator](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/evaluation/evaluators/Image/ZeroshotClassificationEvaluator.py) is implemented here. This defines how the model are used to do zero-shot classification and get back results on desired metrics.
 ```python
 class ZeroshotClassificationEvaluator(Evaluator):
     def __init__(self, ...):
-        pass
+        ...
     def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}):
         """Get embeddings and calculate scores."""
+        ...
 ```
 
-#### AbsTask X
+### AbsTask X
 With the evaluator, [AbsTaskZeroshotClassification](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/abstasks/Image/AbsTaskZeroshotClassification.py) is defined, operating on the dataset, calling the defined Evaluator, and gives out results.
+```python
+class AbsTaskZeroshotClassification(AbsTask):
+    ...
+```
 
 
-#### Dataset class
-With all these, we can then define the dataset. Here I choose Rendered SST2 as an example, which is to classify SST2 movie reviews, with reviews rendered into images. [RenderedSST2](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/tasks/Image/ZeroshotClassification/eng/RenderedSST2.py) is implemented like this, subclassing `AbsTaskZeroshotClassification`, and overwrite the `get_candidate_labels` function, which gives `["a negative review of a movie", "a positive review of a movie"]` to be used in the evaluator.
+### Dataset class
+With all these, we can then define the dataset. [CIFAR10](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/tasks/Image/ZeroshotClassification/eng/CIFAR.py) is implemented like this, subclassing `AbsTaskZeroshotClassification`, and overwrite the `get_candidate_labels` function, which gives `["a photo of {label_name}"]` to be used in the evaluator.
+```python
+class CIFAR10ZeroShotClassification(AbsTaskZeroshotClassification):
+    metadata = TaskMetadata(...)
 
+    def get_candidate_labels(self) -> list[str]:
+        ...
+```
+
+### Putting them all together
 With all these, we can then 
 ```python
-
 import mteb
 
-model_name = "openai/clip-vit-large-patch14"
-model = mteb.get_model(model_name = model_name)
+model_name = "laion/CLIP-ViT-L-14-laion2B-s32B-b82K"
+model = mteb.get_model(model_name=model_name)
 
-tasks = mteb.get_tasks(tasks=["RenderedSST2"])
+tasks = mteb.get_tasks(tasks=["CIFAR10ZeroShot"])
 evaluation = mteb.MTEB(tasks=tasks)
-results = evaluation.run(model, output_folder=f"results-mieb/{model_name}")
+results = evaluation.run(model)
 ```
-And yeah, the results will be under [`results-mieb/openai/clip-vit-large-patch14`](https://github.com/embeddings-benchmark/mteb/blob/mieb/results-mieb/openai__clip-vit-large-patch14/32bd64288804d66eefd0ccbe215aa642df71cc41/RenderedSST2.json) and look legit with an `"accuracy": 0.6979681493684788,`, a bit higher than the original CLIP paper but might be resolution/layout difference of images in the remake of the dataset by the CLIP benchmark team.
+
+By default, results will be under `results/laion__CLIP-ViT-L-14-laion2B-s32B-b82K/REVISION/CIFAR10ZeroShot.json`. Sometimes metrics can be a bit different than what the original paper claimed. This might be due to the resolution/layout difference of images in the remake of the dataset.
 
 
 ## Specific Model running Instructions
