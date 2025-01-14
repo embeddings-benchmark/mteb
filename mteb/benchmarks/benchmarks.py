@@ -10,7 +10,7 @@ from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.aggregated_task import AggregateTask
 from mteb.load_results.benchmark_results import BenchmarkResults
 from mteb.load_results.load_results import load_results
-from mteb.overview import MTEBTasks, get_tasks
+from mteb.overview import MTEBTasks, get_task, get_tasks
 
 http_url_adapter = TypeAdapter(AnyUrl)
 UrlString = Annotated[
@@ -71,52 +71,61 @@ class Benchmark:
 
 MTEB_EN = Benchmark(
     name="MTEB(eng, beta)",
-    tasks=get_tasks(
-        tasks=[
-            "AmazonCounterfactualClassification",
-            "ArguAna",
-            "ArXivHierarchicalClusteringP2P",
-            "ArXivHierarchicalClusteringS2S",
-            "AskUbuntuDupQuestions",
-            "BIOSSES",
-            "Banking77Classification",
-            "BiorxivClusteringP2P.v2",
-            "CQADupstackGamingRetrieval",
-            "CQADupstackUnixRetrieval",
-            "ClimateFEVERHardNegatives",
-            "FEVERHardNegatives",
-            "FiQA2018",
-            "HotpotQAHardNegatives",
-            "ImdbClassification",
-            "MTOPDomainClassification",
-            "MassiveIntentClassification",
-            "MassiveScenarioClassification",
-            "MedrxivClusteringP2P.v2",
-            "MedrxivClusteringS2S.v2",
-            "MindSmallReranking",
-            "SCIDOCS",
-            "SICK-R",
-            "STS12",
-            "STS13",
-            "STS14",
-            "STS15",
-            "STS17",
-            "STS22.v2",
-            "STSBenchmark",
-            "SprintDuplicateQuestions",
-            "StackExchangeClustering.v2",
-            "StackExchangeClusteringP2P.v2",
-            "TRECCOVID",
-            "Touche2020Retrieval.v3",
-            "ToxicConversationsClassification",
-            "TweetSentimentExtractionClassification",
-            "TwentyNewsgroupsClustering.v2",
-            "TwitterSemEval2015",
-            "TwitterURLCorpus",
-            "SummEvalSummarization.v2",
-        ],
-        languages=["eng"],
-        eval_splits=["test"],
+    tasks=MTEBTasks(
+        get_tasks(
+            tasks=[
+                "ArguAna",
+                "ArXivHierarchicalClusteringP2P",
+                "ArXivHierarchicalClusteringS2S",
+                "AskUbuntuDupQuestions",
+                "BIOSSES",
+                "Banking77Classification",
+                "BiorxivClusteringP2P.v2",
+                "CQADupstackGamingRetrieval",
+                "CQADupstackUnixRetrieval",
+                "ClimateFEVERHardNegatives",
+                "FEVERHardNegatives",
+                "FiQA2018",
+                "HotpotQAHardNegatives",
+                "ImdbClassification",
+                "MTOPDomainClassification",
+                "MassiveIntentClassification",
+                "MassiveScenarioClassification",
+                "MedrxivClusteringP2P.v2",
+                "MedrxivClusteringS2S.v2",
+                "MindSmallReranking",
+                "SCIDOCS",
+                "SICK-R",
+                "STS12",
+                "STS13",
+                "STS14",
+                "STS15",
+                "STSBenchmark",
+                "SprintDuplicateQuestions",
+                "StackExchangeClustering.v2",
+                "StackExchangeClusteringP2P.v2",
+                "TRECCOVID",
+                "Touche2020Retrieval.v3",
+                "ToxicConversationsClassification",
+                "TweetSentimentExtractionClassification",
+                "TwentyNewsgroupsClustering.v2",
+                "TwitterSemEval2015",
+                "TwitterURLCorpus",
+                "SummEvalSummarization.v2",
+            ],
+            languages=["eng"],
+            eval_splits=["test"],
+            exclusive_language_filter=True,
+        )
+        + (
+            get_task(
+                "AmazonCounterfactualClassification",
+                eval_splits=["test"],
+                hf_subsets=["en"],
+            ),
+            get_task("STS17", eval_splits=["test"], hf_subsets=["en-en"]),
+            get_task("STS22.v2", eval_splits=["test"], hf_subsets=["en"]),
+        ),
     ),
     description="English benchmarks from MTEB",
     citation="",
@@ -127,7 +136,6 @@ MTEB_ENG_CLASSIC = Benchmark(
     tasks=MTEBTasks(
         get_tasks(
             tasks=[
-                "AmazonCounterfactualClassification",
                 "AmazonPolarityClassification",
                 "AmazonReviewsClassification",
                 "ArguAna",
@@ -176,8 +184,6 @@ MTEB_ENG_CLASSIC = Benchmark(
                 "STS14",
                 "STS15",
                 "STS16",
-                "STS17",
-                "STS22",
                 "STSBenchmark",
                 "SciDocsRR",
                 "SciFact",
@@ -198,6 +204,15 @@ MTEB_ENG_CLASSIC = Benchmark(
             eval_splits=["test"],
         )
         + get_tasks(tasks=["MSMARCO"], languages=["eng"], eval_splits=["dev"])
+        + (
+            get_task(
+                "AmazonCounterfactualClassification",
+                eval_splits=["test"],
+                hf_subsets=["en"],
+            ),
+            get_task("STS17", eval_splits=["test"], hf_subsets=["en-en"]),
+            get_task("STS22", eval_splits=["test"], hf_subsets=["en"]),
+        )
     ),
     description="The original English benchmark by Muennighoff et al., (2023).",
     citation="""@inproceedings{muennighoff-etal-2023-mteb,
@@ -474,42 +489,44 @@ RAR_b = Benchmark(
 
 MTEB_FRA = Benchmark(
     name="MTEB(fra)",
-    tasks=get_tasks(
-        languages=["fra"],
-        tasks=[
-            # Classification
-            "AmazonReviewsClassification",
-            "MasakhaNEWSClassification",
-            "MassiveIntentClassification",
-            "MassiveScenarioClassification",
-            "MTOPDomainClassification",
-            "MTOPIntentClassification",
-            # Clustering
-            "AlloProfClusteringP2P",
-            "AlloProfClusteringS2S",
-            "HALClusteringS2S",
-            "MasakhaNEWSClusteringP2P",
-            "MasakhaNEWSClusteringS2S",
-            "MLSUMClusteringP2P",
-            "MLSUMClusteringS2S",
-            # Pair Classification
-            "OpusparcusPC",
-            "PawsXPairClassification",
-            # Reranking
-            "AlloprofReranking",
-            "SyntecReranking",
-            # Retrieval
-            "AlloprofRetrieval",
-            "BSARDRetrieval",
-            "MintakaRetrieval",
-            "SyntecRetrieval",
-            "XPQARetrieval",
-            # STS
-            "SICKFr",
-            "STS22",
-            "STSBenchmarkMultilingualSTS",
-            "SummEvalFr",
-        ],
+    tasks=MTEBTasks(
+        get_tasks(
+            languages=["fra"],
+            tasks=[
+                # Classification
+                "AmazonReviewsClassification",
+                "MasakhaNEWSClassification",
+                "MassiveIntentClassification",
+                "MassiveScenarioClassification",
+                "MTOPDomainClassification",
+                "MTOPIntentClassification",
+                # Clustering
+                "AlloProfClusteringP2P",
+                "AlloProfClusteringS2S",
+                "HALClusteringS2S",
+                "MasakhaNEWSClusteringP2P",
+                "MasakhaNEWSClusteringS2S",
+                "MLSUMClusteringP2P",
+                "MLSUMClusteringS2S",
+                # Pair Classification
+                "OpusparcusPC",
+                "PawsXPairClassification",
+                # Reranking
+                "AlloprofReranking",
+                "SyntecReranking",
+                # Retrieval
+                "AlloprofRetrieval",
+                "BSARDRetrieval",
+                "MintakaRetrieval",
+                "SyntecRetrieval",
+                "XPQARetrieval",
+                # STS
+                "SICKFr",
+                "STSBenchmarkMultilingualSTS",
+                "SummEvalFr",
+            ],
+        )
+        + (get_task("STS22", eval_splits=["test"], hf_subsets=["fr"]),)
     ),
     description="Main French benchmarks from MTEB",
     reference="https://arxiv.org/abs/2405.20468",
@@ -529,6 +546,7 @@ MTEB_DEU = Benchmark(
     name="MTEB(deu)",
     tasks=get_tasks(
         languages=["deu"],
+        exclusive_language_filter=True,
         tasks=[
             # Classification
             "AmazonCounterfactualClassification",
@@ -596,32 +614,34 @@ MTEB_KOR = Benchmark(
 
 MTEB_POL = Benchmark(
     name="MTEB(pol)",
-    tasks=get_tasks(
-        languages=["pol"],
-        tasks=[
-            # Classification
-            "AllegroReviews",
-            "CBD",
-            "MassiveIntentClassification",
-            "MassiveScenarioClassification",
-            "PolEmo2.0-IN",
-            "PolEmo2.0-OUT",
-            "PAC",
-            # Clustering
-            "EightTagsClustering",
-            "PlscClusteringS2S",
-            "PlscClusteringP2P",
-            # Pair Classification
-            "CDSC-E",
-            "PpcPC",
-            "PSC",
-            "SICK-E-PL",
-            # STS
-            "CDSC-R",
-            "STS22",
-            "STSBenchmarkMultilingualSTS",
-            "SICK-R-PL",
-        ],
+    tasks=MTEBTasks(
+        get_tasks(
+            languages=["pol"],
+            tasks=[
+                # Classification
+                "AllegroReviews",
+                "CBD",
+                "MassiveIntentClassification",
+                "MassiveScenarioClassification",
+                "PolEmo2.0-IN",
+                "PolEmo2.0-OUT",
+                "PAC",
+                # Clustering
+                "EightTagsClustering",
+                "PlscClusteringS2S",
+                "PlscClusteringP2P",
+                # Pair Classification
+                "CDSC-E",
+                "PpcPC",
+                "PSC",
+                "SICK-E-PL",
+                # STS
+                "CDSC-R",
+                "STSBenchmarkMultilingualSTS",
+                "SICK-R-PL",
+            ],
+        )
+        + (get_task("STS22", eval_splits=["test"], hf_subsets=["pl"]),),
     ),
     description="Main Polish benchmarks from MTEB",
     reference="https://arxiv.org/abs/2405.10138",
@@ -851,6 +871,39 @@ MTEB_JPN = Benchmark(
 )
 
 
+indic_languages = [
+    "asm",
+    "awa",
+    "ben",
+    "bgc",
+    "bho",
+    "doi",
+    "gbm",
+    "gom",
+    "guj",
+    "hin",
+    "hne",
+    "kan",
+    "kas",
+    "mai",
+    "mal",
+    "mar",
+    "mni",
+    "mup",
+    "mwr",
+    "nep",
+    "npi",
+    "ori",
+    "ory",
+    "pan",
+    "raj",
+    "san",
+    "snd",
+    "tam",
+    "tel",
+    "urd",
+]
+
 MTEB_INDIC = Benchmark(
     name="MTEB(Indic, beta)",
     tasks=get_tasks(
@@ -886,12 +939,57 @@ MTEB_INDIC = Benchmark(
             # reranking
             "WikipediaRerankingMultilingual",
         ],
+        languages=indic_languages,
+        exclusive_language_filter=True,
     ),
     description="Main Indic benchmark from MMTEB",
     reference=None,
     citation=None,
 )
 
+
+eu_languages = [
+    # official EU languages (56) - we could include the whole economic area e.g. Norway - additioanlly we could include minority languages (probably a good idea?)
+    # germanic
+    "dan",
+    "eng",
+    "deu",
+    "nld",
+    "swe",
+    # romance
+    "fra",
+    "ita",
+    "por",
+    "spa",
+    "ron",
+    # slavic
+    "bul",
+    "hrv",
+    "ces",
+    "pol",
+    "slk",
+    "slv",
+    # baltic
+    "lav",
+    "lit",
+    "est",
+    # finno-ugric
+    "fin",
+    "hun",
+    # other indo european
+    "ell",
+    # non-indo european
+    "mlt",
+    "gle",
+    # Schengen Area
+    "nno",
+    "nob",
+    "isl",
+    "ron",
+    "eus",  # Basque - recognized minority language
+    "ron",  # Romanian - recognized minority language
+    "rom",  # Romani - recognized minority language
+]
 
 MTEB_EU = Benchmark(
     name="MTEB(Europe, beta)",
@@ -971,7 +1069,9 @@ MTEB_EU = Benchmark(
             "STS17",
             "SICK-R-PL",
             "STSES",
-        ]
+        ],
+        languages=eu_languages,
+        exclusive_language_filter=True,
     ),
     description="Main European benchmark from MMTEB",
     reference=None,
