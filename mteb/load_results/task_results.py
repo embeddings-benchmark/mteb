@@ -387,18 +387,16 @@ class TaskResult(BaseModel):
         main_score = task.metadata.main_score
         for split, split_score in scores.items():
             for hf_subset, hf_subset_scores in split_score.items():
-                if task.metadata.type in ("STS", "PairClassification", "Reranking"):
-                    for name, prev_name in [
-                        ("cosine", "cos_sim"),
-                        ("manhattan", "manhattan"),
-                        ("euclidean", "euclidean"),
-                        ("dot", "dot"),
-                        ("max", "max"),
-                        ("similarity", "similarity"),
-                    ]:
-                        prev_name_scores = hf_subset_scores.pop(
-                            prev_name, {"spearman": "NaN"}
-                        )
+                for name, prev_name in [
+                    ("cosine", "cos_sim"),
+                    ("manhattan", "manhattan"),
+                    ("euclidean", "euclidean"),
+                    ("dot", "dot"),
+                    ("max", "max"),
+                    ("similarity", "similarity"),
+                ]:
+                    prev_name_scores = hf_subset_scores.pop(prev_name, None)
+                    if prev_name_scores is not None:
                         for k, v in prev_name_scores.items():
                             hf_subset_scores[f"{name}_{k}"] = v
 
