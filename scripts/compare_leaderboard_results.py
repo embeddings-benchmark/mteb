@@ -31,18 +31,21 @@ for model_name_to_search in models:
         require_model_meta=False,
     )
 
-    cur_model = {
-        task.metadata.name: defaultdict(dict)
-        for task in benchmark.tasks
-    }
+    cur_model = {task.metadata.name: defaultdict(dict) for task in benchmark.tasks}
     for model_res in model_results:
         for task_res in model_res.task_results:
             task_name = task_res.task.metadata.name
 
-            split = "test" if "test" in task_res.task.metadata.eval_splits else task_res.task.metadata.eval_splits[0]
+            split = (
+                "test"
+                if "test" in task_res.task.metadata.eval_splits
+                else task_res.task.metadata.eval_splits[0]
+            )
             if split in task_res.scores:
                 scores = [score["main_score"] for score in task_res.scores[split]]
-                cur_model[task_name]["new"] = round((sum(scores) / len(scores)) * 100, 2)
+                cur_model[task_name]["new"] = round(
+                    (sum(scores) / len(scores)) * 100, 2
+                )
 
     for lang_path in base_path.iterdir():
         data_tasks_path = lang_path / "data_tasks"
