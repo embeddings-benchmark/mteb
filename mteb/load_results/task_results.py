@@ -394,6 +394,7 @@ class TaskResult(BaseModel):
                         ("euclidean", "euclidean"),
                         ("dot", "dot"),
                         ("max", "max"),
+                        ("similarity", "similarity")
                     ]:
                         prev_name_scores = hf_subset_scores.pop(
                             prev_name, {"spearman": "NaN"}
