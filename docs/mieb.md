@@ -88,7 +88,6 @@ Some models require some specific steps before running. Those are collected here
 
     ## set up VISTA 
 
-    the latest FlagEmbedding repo doesn't support VISTA anymore so we use a old version.
     ```
     git clone https://github.com/FlagOpen/FlagEmbedding.git
     cd FlagEmbedding/research/visual_bge
