@@ -279,10 +279,6 @@ class AbsTask(ABC):
         raise NotImplementedError
 
     @property
-    def metadata_dict(self) -> dict[str, Any]:
-        return dict(self.metadata)
-
-    @property
     def languages(self) -> list[str]:
         """Returns the languages of the task"""
         if self.hf_subsets:
