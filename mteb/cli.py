@@ -374,26 +374,7 @@ def main():
     add_create_meta_parser(subparsers)
 
     args = parser.parse_args()
-
-    # If no subcommand is provided, default to run with a deprecation warning
-    if not hasattr(args, "func"):
-        logger.warning(
-            "Using `mteb` without a subcommand is deprecated. Use `mteb run` instead.",
-            DeprecationWarning,
-        )
-        # Set default arguments for 'run' if no subcommand is provided
-        default_args = parser.parse_args(
-            ["run"]
-            + list(map(str, args._get_args()))
-            + [
-                f"--{k}" if v is None else f"--{k}={v}"
-                for k, v in vars(args).items()
-                if k != "func"
-            ]
-        )
-        default_args.func(default_args)
-    else:
-        args.func(args)
+    args.func(args)
 
 
 if __name__ == "__main__":
