@@ -67,7 +67,7 @@ def test_benchmark_encoders_on_task(task: str | AbsTask, model: mteb.Encoder):
     eval.run(model, output_folder="tests/results", overwrite_results=True)
 
 
-@pytest.mark.parametrize("task", [MockMultilingualRetrievalTask])
+@pytest.mark.parametrize("task", [MockMultilingualRetrievalTask()])
 @pytest.mark.parametrize(
     "model",
     [MockSentenceTransformer()],
@@ -188,7 +188,7 @@ def test_run_using_benchmark(model: mteb.Encoder):
         name="test_bench", tasks=mteb.get_tasks(tasks=["STS12", "SummEval"])
     )
 
-    eval = mteb.MTEB(tasks=bench)
+    eval = mteb.MTEB(tasks=[bench])
     eval.run(
         model, output_folder="tests/results", overwrite_results=True
     )  # we just want to test that it runs

@@ -36,7 +36,7 @@ def test_reproducibility_workflow(task_name: str, model_name: str, model_revisio
 @pytest.mark.parametrize(
     "task_name",
     TASK_TEST_GRID
-    + [
+    + (
         "BitextMining",
         "Classification",
         "MultilabelClassification",
@@ -49,7 +49,7 @@ def test_reproducibility_workflow(task_name: str, model_name: str, model_revisio
         "InstructionRetrieval",
         "InstructionReranking",
         "Speed",
-    ],
+    ),
 )
 def test_validate_task_to_prompt_name(task_name: str | AbsTask):
     if isinstance(task_name, AbsTask):
