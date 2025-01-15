@@ -242,6 +242,82 @@ all_mpnet_base_v2 = ModelMeta(
     },
 )
 
+# Source: https://arxiv.org/pdf/1907.04307
+use_multilingual_languages = [
+    "ara-Arab",  # Arabic
+    "zho-Hans",  # Chinese (Simplified, PRC)
+    "zho-Hant",  # Chinese (Traditional, Taiwan)
+    "nld-Latn",  # Dutch
+    "eng-Latn",  # English
+    "deu-Latn",  # German
+    "fra-Latn",  # French
+    "ita-Latn",  # Italian
+    "por-Latn",  # Portuguese
+    "spa-Latn",  # Spanish
+    "jpn-Jpan",  # Japanese
+    "kor-Kore",  # Korean
+    "rus-Cyrl",  # Russian
+    "pol-Latn",  # Polish
+    "tha-Thai",  # Thai
+    "tur-Latn",  # Turkish
+]
+use_multilingual_training_data = {
+    # I'm not certain since they mined this themselves, but I would assume that there is significant overlap
+    "StackOverflowQARetrieval": ["train", "test"],
+    # Not in MTEB:
+    # - SNLI translated to 15 languages (could have intersections with other NLI datasets)
+    # - Translation pairs: Mined from the internet
+    # - QA mined from Reddit, StackOverflow, YahooAnswers (could be problematic)
+}
+distiluse_base_multilingual_cased_v2 = ModelMeta(
+    name="sentence-transformers/distiluse-base-multilingual-cased-v2",
+    languages=use_multilingual_languages,
+    open_weights=True,
+    revision="dad0fa1ee4fa6e982d3adbce87c73c02e6aee838",
+    release_date="2021-06-22",  # First commit
+    n_parameters=135 * 1e6,
+    memory_usage=None,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/sentence-transformers/distiluse-base-multilingual-cased-v2",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    superseded_by=None,
+    adapted_from=None,
+    public_training_code=True,
+    public_training_data=True,
+    training_datasets=use_multilingual_training_data,
+)
+
+use_cmlm_multilingual = ModelMeta(
+    name="sentence-transformers/use-cmlm-multilingual",
+    languages=paraphrase_langs,
+    open_weights=True,
+    revision="6f8ff6583c371cbc4d6d3b93a5e37a888fd54574",
+    release_date="2022-04-14",  # First commit
+    n_parameters=472 * 1e6,
+    memory_usage=None,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=256,
+    reference="https://huggingface.co/sentence-transformers/use-cmlm-multilingual",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    superseded_by=None,
+    adapted_from="sentence-transformers/LaBSE",
+    public_training_code=True,
+    public_training_data=True,
+    training_datasets={
+        # Not in MTEB:
+        #  - SNLI
+        #  - Translation corpus based largely on Uszkoreit et al. (2010)
+    },
+)
+
+
 jina_embeddings_v2_base_en = ModelMeta(
     name="jinaai/jina-embeddings-v2-base-en",
     languages=["eng-Latn"],
