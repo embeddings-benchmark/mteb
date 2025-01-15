@@ -218,7 +218,7 @@ all_mpnet_base_v2 = ModelMeta(
         "NQ": ["test"],
         "NQHardNegatives": ["test"],
         "MSMARCO": ["train"],
-        # Non MTEB sources
+        # Non MTEB source
         # "s2orc": ["train"],
         # "flax-sentence-embeddings/stackexchange_xml": ["train"],
         # "ms_marco": ["train"],
@@ -337,6 +337,35 @@ jina_embeddings_v2_base_en = ModelMeta(
     adapted_from=None,
     training_datasets={"allenai/c4": ["train"]},
 )
+
+jina_embeddings_v2_base_zh = ModelMeta(
+    name="jinaai/jina-embeddings-v2-base-zh",
+    languages=["eng-Latn", "zho-Hans"],
+    open_weights=True,
+    revision="c1ff9086a89a1123d7b5eff58055a665db4fb4b9",
+    release_date="2024-01-10",
+    n_parameters=161_000_000,
+    memory_usage=None,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=8192,
+    reference="https://huggingface.co/jinaai/jina-embeddings-v2-base-zh",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    superseded_by=None,
+    adapted_from=None,
+    training_datasets={
+        # source: https://arxiv.org/pdf/2402.17016
+        "XNLI": ["train"],
+        "MLSumClusteringS2S": ["train"],
+        "MLSumClusteringP2P": ["train"],
+        # Not in MTEB:
+        #  - MQA
+        #  - XLSUM
+    },
+)
+
 
 jina_embeddings_v2_small_en = ModelMeta(
     name="jinaai/jina-embeddings-v2-small-en",
