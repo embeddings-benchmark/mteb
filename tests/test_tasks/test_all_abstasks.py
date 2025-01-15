@@ -93,7 +93,14 @@ async def check_datasets_are_available_on_hf(tasks):
 def test_dataset_availability():
     """Checks if the datasets are available on Hugging Face using both their name and revision."""
     tasks = MTEB().tasks_cls
-    tasks = [t for t in tasks if t.metadata.name not in ALL_MOCK_TASKS]
+    tasks = [
+        t
+        for t in tasks
+        if t.metadata.name not in MOCK_TASK_TEST_GRID_AS_STRING
+        if t.metadata.name not in MOCK_MIEB_TASK_GRID_AS_STRING
+        and t.metadata.name
+        != "AfriSentiLangClassification"  # HOTFIX: Issue#1777. Remove this line when issue is resolved.
+    ]
     asyncio.run(check_datasets_are_available_on_hf(tasks))
 
 
