@@ -6,7 +6,7 @@ from pathlib import Path
 
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
-from mteb import MTEB
+from mteb import MTEB, ModelMeta
 
 logging.basicConfig(level=logging.INFO)
 
@@ -366,6 +366,23 @@ def test_reranker_same_ndcg1():
     de = SentenceTransformer(de_name, revision=revision)
     ce = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
     ce_revision = "e9ea2688951463fc2791a2ea2ddfce6762900675"
+    ce.mteb_model_meta = ModelMeta(
+        name="cross-encoder/ms-marco-TinyBERT-L-2-v2",
+        languages=["eng-Latn"],
+        open_weights=True,
+        revision=ce_revision,
+        release_date="2021-04-15",
+        n_parameters=None,
+        max_tokens=None,
+        embed_dim=None,
+        license=None,
+        public_training_data=None,
+        public_training_code=None,
+        reference=None,
+        similarity_fn_name=None,
+        use_instructions=None,
+        training_datasets=None,
+    )
 
     eval = MTEB(tasks=["SciFact"])
     eval.run(
