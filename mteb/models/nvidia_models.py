@@ -72,6 +72,54 @@ class NvEmbedWrapper(SentenceTransformerWrapper):
         return embeddings
 
 
+nvidia_training_datasets = {
+    # source: https://arxiv.org/pdf/2405.17428
+    "ArguAna": ["train"],
+    "ArguAna-PL": ["train"],
+    "NanoArguAnaRetrieval": ["train"],
+    "HotpotQA": ["train"],
+    "HotpotQA-PL": ["train"],  # translation not trained on
+    "HotpotQAHardNegatives": ["train"],
+    "MSMARCO": ["train"],
+    "MSMARCOHardNegatives": ["train"],
+    "NanoMSMARCORetrieval": ["train"],
+    "MSMARCO-PL": ["train"],  # translation not trained on
+    "NQ": ["train"],
+    "NQHardNegatives": ["train"],
+    "NanoNQRetrieval": ["train"],
+    "NQ-PL": ["train"],  # translation not trained on
+    "FEVER": ["train"],
+    "FEVERHardNegatives": ["train"],
+    "NanoFEVERRetrieval": ["train"],
+    "FiQA2018": ["train"],
+    "FiQA2018-PL": ["train"],  # translation not trained on
+    "STS12": ["train"],
+    "STS22": ["train"],
+    "AmazonReviewsClassification": ["train"],
+    "AmazonCounterfactualClassification": ["train"],
+    "Banking77Classification": ["train"],
+    "EmotionClassification": ["train"],
+    "ImdbClassification": ["train"],
+    "MTOPIntentClassification": ["train"],
+    "ToxicConversationsClassification": ["train"],
+    "TweetSentimentExtractionClassification": ["train"],
+    "ArxivClusteringP2P": ["train"],
+    "ArxivClusteringP2P.v2": ["train"],
+    "ArxivClusteringS2S": ["train"],
+    "ArxivClusteringS2S.v2": ["train"],
+    "BiorxivClusteringP2P": ["train"],
+    "BiorxivClusteringP2P.v2": ["train"],
+    "BiorxivClusteringS2S": ["train"],
+    "BiorxivClusteringS2S.v2": ["train"],
+    "MedrxivClusteringP2P": ["train"],
+    "MedrxivClusteringP2P.v2": ["train"],
+    "MedrxivClusteringS2S": ["train"],
+    "MedrxivClusteringS2S.v2": ["train"],
+    "TwentyNewsgroupsClustering": ["train"],
+    "TwentyNewsgroupsClustering.v2": ["train"],
+    "STSBenchmark": ["train"],
+    "STSBenchmarkMultilingualSTS": ["train"],  # translated, not trained on
+}
 NV_embed_v2 = ModelMeta(
     loader=partial(  # type: ignore
         NvEmbedWrapper,
@@ -92,9 +140,9 @@ NV_embed_v2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
-    public_training_data=None,
+    training_datasets=nvidia_training_datasets,
     public_training_code=None,
-    training_datasets=None,
+    public_training_data=True,
 )
 
 NV_embed_v1 = ModelMeta(
@@ -117,7 +165,7 @@ NV_embed_v1 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
-    public_training_data=None,
+    training_datasets=nvidia_training_datasets,
     public_training_code=None,
-    training_datasets=None,
+    public_training_data=True,
 )

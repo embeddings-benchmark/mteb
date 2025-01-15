@@ -5,6 +5,10 @@ from functools import partial
 import torch
 
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.models.e5_models import E5_TRAINING_DATA
+
+from .bge_models import bge_m_training_data, bge_training_data
+from .sentence_transformers_models import sent_trf_training_dataset
 
 Haon_Chen__speed_embedding_7b_instruct = ModelMeta(
     name="Haon-Chen/speed-embedding-7b-instruct",
@@ -113,38 +117,47 @@ Hum_Works__lodestone_base_4096_v1 = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=None,
     training_datasets={
-        "s2orc": ["train"],
-        "flax-sentence-embeddings/stackexchange_title_body_jsonl": ["train"],
-        "flax-sentence-embeddings/stackexchange_titlebody_best_voted_answer_jsonl": [
-            "train"
-        ],
-        "flax-sentence-embeddings/stackexchange_title_best_voted_answer_jsonl": [
-            "train"
-        ],
-        "flax-sentence-embeddings/stackexchange_titlebody_best_and_down_voted_answer_jsonl": [
-            "train"
-        ],
-        "sentence-transformers/reddit-title-body": ["train"],
-        "msmarco": ["train"],
-        "gooaq": ["train"],
-        "yahoo_answers_topics": ["train"],
-        "code_search_net": ["train"],
-        "search_qa": ["train"],
-        "eli5": ["train"],
-        "snli": ["train"],
-        "multi_nli": ["train"],
-        "wikihow": ["train"],
-        "natural_questions": ["train"],
-        "trivia_qa": ["train"],
-        "embedding-data/sentence-compression": ["train"],
-        "embedding-data/flickr30k-captions": ["train"],
-        "embedding-data/altlex": ["train"],
-        "embedding-data/simple-wiki": ["train"],
-        "embedding-data/QQP": ["train"],
-        "embedding-data/SPECTER": ["train"],
-        "embedding-data/PAQ_pairs": ["train"],
-        "embedding-data/WikiAnswers": ["train"],
-        "sentence-transformers/embedding-training-data": ["train"],
+        "MSMARCO": ["train"],
+        "MSMARCOHardNegatives": ["train"],
+        "NanoMSMARCORetrieval": ["train"],
+        "MSMARCO-PL": ["train"],  # translation not trained on
+        "NQ": ["train"],
+        "NQHardNegatives": ["train"],
+        "NanoNQRetrieval": ["train"],
+        "NQ-PL": ["train"],  # translation not trained on
+        # not in MTEB
+        # "s2orc": ["train"],
+        # "flax-sentence-embeddings/stackexchange_title_body_jsonl": ["train"],
+        # "flax-sentence-embeddings/stackexchange_titlebody_best_voted_answer_jsonl": [
+        #     "train"
+        # ],
+        # "flax-sentence-embeddings/stackexchange_title_best_voted_answer_jsonl": [
+        #     "train"
+        # ],
+        # "flax-sentence-embeddings/stackexchange_titlebody_best_and_down_voted_answer_jsonl": [
+        #     "train"
+        # ],
+        # "sentence-transformers/reddit-title-body": ["train"],
+        # "msmarco": ["train"],
+        # "gooaq": ["train"],
+        # "yahoo_answers_topics": ["train"],
+        # "code_search_net": ["train"],
+        # "search_qa": ["train"],
+        # "eli5": ["train"],
+        # "snli": ["train"],
+        # "multi_nli": ["train"],
+        # "wikihow": ["train"],
+        # "natural_questions": ["train"],
+        # "trivia_qa": ["train"],
+        # "embedding-data/sentence-compression": ["train"],
+        # "embedding-data/flickr30k-captions": ["train"],
+        # "embedding-data/altlex": ["train"],
+        # "embedding-data/simple-wiki": ["train"],
+        # "embedding-data/QQP": ["train"],
+        # "embedding-data/SPECTER": ["train"],
+        # "embedding-data/PAQ_pairs": ["train"],
+        # "embedding-data/WikiAnswers": ["train"],
+        # "sentence-transformers/embedding-training-data": ["train"],
     },
     adapted_from="hum-lodestone-v1",
     superseded_by=None,
@@ -189,7 +202,8 @@ BeastyZ__e5_R_mistral_7b = ModelMeta(
     reference="https://huggingface.co/BeastyZ/e5-R-mistral-7b",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets={"BeastyZ/E5-R": ["train"]},
+    training_datasets=E5_TRAINING_DATA,
+    # not MTEB: {"BeastyZ/E5-R": ["train"]},
     adapted_from="/ConRetriever/public_weight_mistral",
     superseded_by=None,
 )
@@ -286,13 +300,14 @@ Mihaiii__Bulbasaur = ModelMeta(
     embed_dim=384,
     license="mit",
     open_weights=True,
-    public_training_data=True,
+    public_training_data=False,
     public_training_code=None,
     framework=["PyTorch", "Sentence Transformers"],
     reference="https://huggingface.co/Mihaiii/Bulbasaur",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets={"Mihaiii/qa-assistant": ["train"]},
+    training_datasets=None,  # source model is GTE-tiny where training data is unknown
+    # {"Mihaiii/qa-assistant": ["train"]},
     adapted_from="Mihaiii/dwsdwass",
     superseded_by=None,
 )
@@ -308,13 +323,14 @@ Mihaiii__Ivysaur = ModelMeta(
     embed_dim=384,
     license="mit",
     open_weights=True,
-    public_training_data=True,
+    public_training_data=False,
     public_training_code=None,
     framework=["PyTorch", "Sentence Transformers"],
     reference="https://huggingface.co/Mihaiii/Ivysaur",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets={"Mihaiii/qa-assistant": ["train"]},
+    training_datasets=None,  # source model is GTE-tiny where training data is unknown
+    # not MTEB: {"Mihaiii/qa-assistant": ["train"]},
     adapted_from="Mihaiii/jhjghjgh",
     superseded_by=None,
 )
@@ -336,7 +352,8 @@ Mihaiii__Squirtle = ModelMeta(
     reference="https://huggingface.co/Mihaiii/Squirtle",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets={"Mihaiii/qa-assistant": ["train"]},
+    training_datasets=bge_training_data,  # source model is bge-base-en-v1.5
+    # not MTEB: {"Mihaiii/qa-assistant": ["train"]},
     adapted_from="Mihaiii/test21",
     superseded_by=None,
 )
@@ -358,7 +375,8 @@ Mihaiii__Venusaur = ModelMeta(
     reference="https://huggingface.co/Mihaiii/Venusaur",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets={"Mihaiii/qa-assistant": ["train"]},
+    training_datasets=None,  # source model is unkown
+    # {"Mihaiii/qa-assistant": ["train"]},
     adapted_from="Mihaiii/test14",
     superseded_by=None,
 )
@@ -380,7 +398,8 @@ Mihaiii__Wartortle = ModelMeta(
     reference="https://huggingface.co/Mihaiii/Wartortle",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets={"Mihaiii/qa-assistant": ["train"]},
+    training_datasets=bge_training_data,  # distill from  bge-base-en-v1.5
+    # {"Mihaiii/qa-assistant": ["train"]},
     adapted_from="Mihaiii/test22",
     superseded_by=None,
 )
@@ -468,7 +487,7 @@ Omartificial_Intelligence_Space__Arabert_all_nli_triplet_Matryoshka = ModelMeta(
     reference="https://huggingface.co/Omartificial-Intelligence-Space/Arabert-all-nli-triplet-Matryoshka",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets={"Omartificial-Intelligence-Space/Arabic-NLi-Triplet": ["train"]},
+    training_datasets={},  # not in MTEB: {"Omartificial-Intelligence-Space/Arabic-NLi-Triplet": ["train"]},
     adapted_from="aubmindlab/bert-base-arabertv02",
     superseded_by=None,
 )
@@ -490,7 +509,9 @@ Omartificial_Intelligence_Space__Arabic_MiniLM_L12_v2_all_nli_triplet = ModelMet
     reference="https://huggingface.co/Omartificial-Intelligence-Space/Arabic-MiniLM-L12-v2-all-nli-triplet",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets={"Omartificial-Intelligence-Space/Arabic-NLi-Triplet": ["train"]},
+    training_datasets=sent_trf_training_dataset,
+    # not in MTEB
+    # {"Omartificial-Intelligence-Space/Arabic-NLi-Triplet": ["train"]},
     adapted_from="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
     superseded_by=None,
 )
@@ -512,7 +533,9 @@ Omartificial_Intelligence_Space__Arabic_all_nli_triplet_Matryoshka = ModelMeta(
     reference="https://huggingface.co/Omartificial-Intelligence-Space/Arabic-all-nli-triplet-Matryoshka",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets={"Omartificial-Intelligence-Space/Arabic-NLi-Triplet": ["train"]},
+    training_datasets=sent_trf_training_dataset,  # derived from
+    # not in MTEB:
+    # {"Omartificial-Intelligence-Space/Arabic-NLi-Triplet": ["train"]},
     adapted_from="sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     superseded_by=None,
 )
@@ -534,7 +557,9 @@ Omartificial_Intelligence_Space__Arabic_labse_Matryoshka = ModelMeta(
     reference="https://huggingface.co/Omartificial-Intelligence-Space/Arabic-labse-Matryoshka",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets={"Omartificial-Intelligence-Space/Arabic-NLi-Triplet": ["train"]},
+    training_datasets=None,  # derived from labSE
+    # as well as:
+    # {"Omartificial-Intelligence-Space/Arabic-NLi-Triplet": ["train"]},
     adapted_from="sentence-transformers/LaBSE",
     superseded_by=None,
 )
@@ -556,7 +581,9 @@ Omartificial_Intelligence_Space__Arabic_mpnet_base_all_nli_triplet = ModelMeta(
     reference="https://huggingface.co/Omartificial-Intelligence-Space/Arabic-mpnet-base-all-nli-triplet",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets={"Omartificial-Intelligence-Space/Arabic-NLi-Triplet": ["train"]},
+    training_datasets=sent_trf_training_dataset,
+    # not in MTEB:
+    # {"Omartificial-Intelligence-Space/Arabic-NLi-Triplet": ["train"]},
     adapted_from="tomaarsen/mpnet-base-all-nli-triplet",
     superseded_by=None,
 )
@@ -578,7 +605,7 @@ Omartificial_Intelligence_Space__Marbert_all_nli_triplet_Matryoshka = ModelMeta(
     reference="https://huggingface.co/Omartificial-Intelligence-Space/Marbert-all-nli-triplet-Matryoshka",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets={"Omartificial-Intelligence-Space/Arabic-NLi-Triplet": ["train"]},
+    training_datasets={},  # not in MTEB: "Omartificial-Intelligence-Space/Arabic-NLi-Triplet": ["train"]},
     adapted_from="UBC-NLP/MARBERTv2",
     superseded_by=None,
 )
@@ -710,7 +737,8 @@ manu__sentence_croissant_alpha_v0_4 = ModelMeta(
     reference="https://huggingface.co/manu/sentence_croissant_alpha_v0.4",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets={"manu/embedding_data_v2_100k": ["train"]},
+    training_datasets=None,
+    # Not in MTEB: {"manu/embedding_data_v2_100k": ["train"]},
     adapted_from="croissantllm/CroissantCool-v0.2",
     superseded_by=None,
 )
@@ -1356,7 +1384,8 @@ aari1995__German_Semantic_STS_V2 = ModelMeta(
     reference="https://huggingface.co/aari1995/German_Semantic_STS_V2",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets={"stsb_multi_mt": ["train"]},
+    training_datasets=None,  # couldn't figure out the source model
+    # {"stsb_multi_mt": ["train"]},
     adapted_from="/content/drive/MyDrive/Stanford_NLU/Project/false_friends/gbert_large_sts_only",
     superseded_by=None,
 )
@@ -1472,18 +1501,18 @@ deepvk__USER_bge_m3 = ModelMeta(
     reference="https://huggingface.co/deepvk/USER-bge-m3",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets={
-        "deepvk/ru-HNP": ["train"],
-        "deepvk/ru-WANLI": ["train"],
-        "Shitao/bge-m3-data": ["train"],
-        "RussianNLP/russian_super_glue": ["train"],
-        "reciTAL/mlsum": ["train"],
-        "Milana/russian_keywords": ["train"],
-        "IlyaGusev/gazeta": ["train"],
-        "d0rj/gsm8k-ru": ["train"],
-        "bragovo/dsum_ru": ["train"],
-        "CarlBrendt/Summ_Dialog_News": ["train"],
-    },
+    training_datasets=bge_m_training_data,  # derived from.
+    # not in MTEB:
+    # "deepvk/ru-HNP": ["train"],
+    # "deepvk/ru-WANLI": ["train"],
+    # "Shitao/bge-m3-data": ["train"],
+    # "RussianNLP/russian_super_glue": ["train"],
+    # "reciTAL/mlsum": ["train"],
+    # "Milana/russian_keywords": ["train"],
+    # "IlyaGusev/gazeta": ["train"],
+    # "d0rj/gsm8k-ru": ["train"],
+    # "bragovo/dsum_ru": ["train"],
+    # "CarlBrendt/Summ_Dialog_News": ["train"],
     adapted_from="USER-bge-m3",
     superseded_by=None,
 )
@@ -1613,7 +1642,8 @@ shibing624__text2vec_base_multilingual = ModelMeta(
     reference="https://huggingface.co/shibing624/text2vec-base-multilingual",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets={"shibing624/nli-zh-all": ["train"]},
+    training_datasets=sent_trf_training_dataset,
+    # not MTEB: {"shibing624/nli-zh-all": ["train"]},
     adapted_from="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
     superseded_by=None,
 )

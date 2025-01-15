@@ -6,7 +6,7 @@ import torch
 
 from mteb.model_meta import ModelMeta
 
-from .e5_models import E5_PAPER_RELEASE_DATE, XLMR_LANGUAGES
+from .e5_models import E5_PAPER_RELEASE_DATE, E5_TRAINING_DATA, XLMR_LANGUAGES
 from .instruct_wrapper import instruct_wrapper
 
 MISTRAL_LANGUAGES = ["eng_Latn", "fra_Latn", "deu_Latn", "ita_Latn", "spa_Latn"]
@@ -40,9 +40,9 @@ e5_instruct = ModelMeta(
     embed_dim=1024,
     license="mit",
     max_tokens=514,
-    public_training_data=None,
-    public_training_code=None,
-    training_datasets=None,
+    public_training_data=False,
+    public_training_code=False,
+    training_datasets=E5_TRAINING_DATA,
 )
 
 e5_mistral = ModelMeta(
@@ -72,7 +72,7 @@ e5_mistral = ModelMeta(
     embed_dim=4096,
     license="mit",
     max_tokens=32768,
-    public_training_data=None,
-    public_training_code=None,
-    training_datasets=None,
+    public_training_data=False,
+    public_training_code=False,
+    training_datasets=E5_TRAINING_DATA,
 )
