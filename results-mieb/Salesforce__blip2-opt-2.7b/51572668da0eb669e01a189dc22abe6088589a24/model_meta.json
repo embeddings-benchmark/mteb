@@ -1,1 +1,0 @@
-{"name": "Salesforce/blip2-opt-2.7b", "revision": "51572668da0eb669e01a189dc22abe6088589a24", "release_date": "2024-03-22", "languages": ["eng_Latn"], "n_parameters": null, "memory_usage": null, "max_tokens": null, "embed_dim": null, "license": null, "open_source": true, "similarity_fn_name": null, "framework": [], "loader": "blip2_loader"}
