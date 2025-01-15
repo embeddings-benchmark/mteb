@@ -38,14 +38,13 @@ class MTEB:
         tasks: Iterable[AbsTask | Benchmark],
         *,
         err_logs_path: str = "error_logs.txt",
-        **kwargs,
     ):
         """Create an Evaluation pipeline, based on the provided tasks.
 
         Args:
-            tasks: List of tasks to be evaluated.
+            tasks: List of tasks or benchmarks to be evaluated, e.g. tasks returned by
+                `mteb.get_tasks(["task1","task2"]) or `mteb.get_benchmark("MTEB(eng, classic)").
             err_logs_path: Path to save error logs.
-            kwargs: Additional arguments to be passed to the tasks
         """
         from mteb.benchmarks import Benchmark
 
