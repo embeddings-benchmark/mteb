@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from mteb.model_meta import ModelMeta
 
+# testing this PR
 paraphrase_langs = [
     "ara_Arab",
     "bul_Cyrl",

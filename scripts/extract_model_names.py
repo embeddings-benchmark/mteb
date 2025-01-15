@@ -1,10 +1,14 @@
 from __future__ import annotations
 
+import argparse
 import ast
+import logging
 import sys
 from pathlib import Path
 
 from git import Repo
+
+logging.basicConfig(level=logging.INFO)
 
 
 def get_changed_files(base_branch="main"):
@@ -28,7 +32,9 @@ def get_changed_files(base_branch="main"):
     ]
 
 
-def extract_model_names(files: list[str]) -> list[str]:
+def extract_model_names(
+    files: list[str], return_one_model_name_per_file=False
+) -> list[str]:
     model_names = []
     for file in files:
         with open(file) as f:
@@ -52,7 +58,23 @@ def extract_model_names(files: list[str]) -> list[str]:
                             )
                             if model_name:
                                 model_names.append(model_name)
+                                if return_one_model_name_per_file:
+                                    logging.info(
+                                        f"Found model name {model_name} in file {file}"
+                                    )
+                                    break  # NOTE: Only take the first model_name per file to avoid disk out of space issue.
     return model_names
+
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--return_one_model_name_per_file",
+        action="store_true",
+        default=False,
+        help="Only return one model name per file.",
+    )
+    return parser.parse_args()
 
 
 if __name__ == "__main__":
@@ -60,9 +82,15 @@ if __name__ == "__main__":
     Can pass in base branch as an argument. Defaults to 'main'.
     e.g. python extract_model_names.py mieb
     """
+
+    args = parse_args()
+
     base_branch = sys.argv[1] if len(sys.argv) > 1 else "main"
     changed_files = get_changed_files(base_branch)
-    model_names = extract_model_names(changed_files)
+    model_names = extract_model_names(
+        changed_files,
+        return_one_model_name_per_file=args.return_one_model_name_per_file,
+    )
     output_file = Path(__file__).parent / "model_names.txt"
     with output_file.open("w") as f:
         f.write(" ".join(model_names))
