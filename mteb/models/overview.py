@@ -44,6 +44,7 @@ from mteb.models import (
     salesforce_models,
     sentence_transformers_models,
     stella_models,
+    text2vec_models,
     uae_models,
     voyage_models,
 )
@@ -89,6 +90,7 @@ model_modules = [
     jina_models,
     jasper_models,
     uae_models,
+    text2vec_models,
     stella_models,
     uae_models,
     voyage_models,
