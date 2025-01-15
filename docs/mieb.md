@@ -90,9 +90,8 @@ Some models require some specific steps before running. Those are collected here
 
     the latest FlagEmbedding repo doesn't support VISTA anymore so we use a old version.
     ```
-    git clone --no-checkout https://github.com/FlagOpen/FlagEmbedding.git
-    cd FlagEmbedding
-    git checkout 5c9260277977f8f8e256e56a8e12387552693af9
+    git clone https://github.com/FlagOpen/FlagEmbedding.git
+    cd FlagEmbedding/research/visual_bge
     pip install -e .
     pip install torchvision timm einops ftfy
     ```
