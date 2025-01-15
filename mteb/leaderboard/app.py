@@ -412,7 +412,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
         compatibility,
         instructions,
         model_size,
-        zero_shot,
+        zero_shot_setting,
     ):
         lower, upper = model_size
         # Setting to None, when the user doesn't specify anything
@@ -432,12 +432,12 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
         tasks = mteb.get_tasks(tasks=task_select)
         models_to_keep = set()
         for model_meta in model_metas:
-            is_zero_shot = model_meta.is_zero_shot_on(tasks)
-            if is_zero_shot is None:
-                if zero_shot == "hard":
+            is_model_zero_shot = model_meta.is_zero_shot_on(tasks)
+            if is_model_zero_shot is None:
+                if zero_shot_setting == "hard":
                     continue
-            if not zero_shot:
-                if zero_shot != "off":
+            elif not is_model_zero_shot:
+                if zero_shot_setting != "off":
                     continue
             models_to_keep.add(model_meta.name)
         return list(models_to_keep)
@@ -460,7 +460,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             compatibility,
             instructions,
             model_size,
-            zero_shot,
+            zero_shot_setting=zero_shot,
         )
         elapsed = time.time() - start_time
         logger.info(f"update_models callback: {elapsed}s")
