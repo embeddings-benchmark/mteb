@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import warnings
 from collections import defaultdict
-from collections.abc import Iterable
+from collections.abc import Iterable, Sequence
 from pathlib import Path
 from typing import Any, Callable, Literal
 
@@ -13,8 +13,8 @@ from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict
 
 from mteb.abstasks.AbsTask import AbsTask, ScoresDict
-from mteb.abstasks.TaskMetadata import ISO_LANGUAGE_SCRIPT, TASK_DOMAIN, TASK_TYPE
 from mteb.abstasks.aggregated_task import AggregateTask
+from mteb.abstasks.TaskMetadata import ISO_LANGUAGE_SCRIPT, TASK_DOMAIN, TASK_TYPE
 from mteb.languages import ISO_LANGUAGE
 from mteb.load_results.task_results import TaskResult
 from mteb.models.overview import get_model_metas
@@ -70,7 +70,7 @@ class ModelResult(BaseModel):
             task_results=new_task_results,
         )
 
-    def select_tasks(self, tasks: list[AbsTask | AggregateTask]) -> ModelResult:
+    def select_tasks(self, tasks: Sequence[AbsTask | AggregateTask]) -> ModelResult:
         task_name_to_task = {task.metadata.name: task for task in tasks}
         new_task_results = [
             task_res.validate_and_filter_scores(task_name_to_task[task_res.task_name])
@@ -217,7 +217,9 @@ class BenchmarkResults(BaseModel):
             model_results=[res for res in model_results if res.task_results]
         )
 
-    def select_tasks(self, tasks: list[AbsTask]) -> BenchmarkResults:
+    def select_tasks(
+        self, tasks: Sequence[AbsTask | AggregateTask]
+    ) -> BenchmarkResults:
         new_model_results = [
             model_res.select_tasks(tasks) for model_res in self.model_results
         ]
@@ -307,8 +309,8 @@ class BenchmarkResults(BaseModel):
         splits: list[Split] | None = None,
         languages: list[ISO_LANGUAGE | ISO_LANGUAGE_SCRIPT] | None = None,
         scripts: list[ISO_LANGUAGE_SCRIPT] | None = None,
-        getter: Callable[[ScoresDict], Score] = None,
-        aggregation: Callable[[list[Score]], Any] = None,
+        getter: Callable[[ScoresDict], Score] | None = None,
+        aggregation: Callable[[list[Score]], Any] | None = None,
         format: Literal["wide", "long"] = "wide",
     ) -> list[dict]:
         entries = []
@@ -383,7 +385,7 @@ class BenchmarkResults(BaseModel):
         return self.model_dump()
 
     @classmethod
-    def from_dict(cls, data: dict) -> TaskResult:
+    def from_dict(cls, data: dict) -> BenchmarkResults:
         return cls.model_validate(data)
 
     def to_disk(self, path: Path | str) -> None:

@@ -7,12 +7,11 @@ from collections import defaultdict
 from functools import cached_property
 from importlib.metadata import version
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, cast
 
 import numpy as np
 from packaging.version import Version
 from pydantic import BaseModel, field_validator
-from typing_extensions import deprecated
 
 from mteb.abstasks.AbsTask import AbsTask, ScoresDict
 from mteb.abstasks.aggregated_task import AggregateTask
@@ -501,11 +500,6 @@ class TaskResult(BaseModel):
             raise ValueError("No splits had scores for the specified languages.")
         return val_sum / n_val
 
-    @deprecated("from validated is deprecated, instead use TaskResult(**data)")
-    @classmethod
-    def from_validated(cls, **data) -> TaskResult:
-        return cls.model_construct(**data)
-
     def __repr__(self) -> str:
         return f"TaskResult(task_name={self.task_name}, scores=...)"
 
@@ -541,15 +535,11 @@ class TaskResult(BaseModel):
         if task is None:
             task = get_task(self.task_name)
 
-        if isinstance(task, AggregateTask):
-            return self._validate_and_filter_aggregate_task(task)
-
         splits = task.metadata.eval_splits
-        if task.is_multilingual:
-            hf_subsets = task.hf_subsets
-            hf_subsets = set(hf_subsets)
-        else:
-            hf_subsets = {"default"}
+        hf_subsets = task.hf_subsets
+        hf_subsets = cast(list[HFSubset], hf_subsets)
+        hf_subsets = set(hf_subsets)
+
         new_scores = {}
         seen_splits = set()
         for split in self.scores:
@@ -581,10 +571,3 @@ class TaskResult(BaseModel):
         new_res = {**self.to_dict(), "scores": new_scores}
         new_res = TaskResult(**new_res)
         return new_res
-
-
-    def _validate_and_filter_aggregate_task(self, task: AggregateTask) -> TaskResult:
-        splits = task.metadata.eval_splits
-        for split in self.scores:
-            if split not in splits:
-                continue

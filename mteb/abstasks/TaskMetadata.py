@@ -5,7 +5,7 @@ import logging
 from collections.abc import Mapping
 from datetime import date
 from pathlib import Path
-from typing import Annotated, Any, Union
+from typing import TYPE_CHECKING, Annotated, Any, Union
 
 from pydantic import (
     AnyUrl,
@@ -16,6 +16,9 @@ from pydantic import (
     field_validator,
 )
 from typing_extensions import Literal, TypedDict
+
+if TYPE_CHECKING:
+    from mteb.abstasks import AbsTask
 
 from ..encoder_interface import PromptType
 from ..languages import (
@@ -428,3 +431,4 @@ class TaskMetadata(BaseModel):
 
     def __hash__(self) -> int:
         return hash(self.model_dump_json())
+

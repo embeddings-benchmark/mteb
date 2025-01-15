@@ -4,13 +4,12 @@ import json
 import logging
 import os
 import traceback
-from collections.abc import Iterable
+from collections.abc import Iterable, Sequence
 from copy import copy, deepcopy
 from datetime import datetime
-from itertools import chain
 from pathlib import Path
 from time import time
-from typing import Any, Sequence
+from typing import Any
 
 import datasets
 from sentence_transformers import CrossEncoder, SentenceTransformer
@@ -32,11 +31,12 @@ logger = logging.getLogger(__name__)
 
 
 class MTEB:
-    tasks: AbsTask | AggregateTask
+    _tasks: Iterable[str | AbsTask | AggregateTask] | None
+    tasks: list[AbsTask | AggregateTask]
 
     def __init__(
         self,
-        tasks: Sequence[str | AbsTask] | None = None,
+        tasks: Sequence[str | AbsTask | AggregateTask] | None = None,
         *,
         task_types: list[str] | None = None,
         task_categories: list[str] | None = None,
@@ -66,7 +66,7 @@ class MTEB:
         )
 
         if tasks is not None:
-            self._tasks: Iterable[str | AbsTask] = tasks
+            self._tasks = tasks
             if isinstance(tasks[0], Benchmark):
                 self.benchmarks = tasks
                 self._tasks = list(tasks)
@@ -256,7 +256,9 @@ class MTEB:
                         f"WARNING: Unknown tasks: {unknown_str}. Known tasks: {known_str}."
                     )
             # add task if subclass of mteb.tasks
-            self.tasks.extend([x for x in self._tasks if isinstance(x, AbsTask)])
+            self.tasks.extend(
+                [x for x in self._tasks if isinstance(x, (AbsTask, AggregateTask))]
+            )
             return
 
         # Otherwise use filters to select tasks

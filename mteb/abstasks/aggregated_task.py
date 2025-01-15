@@ -1,16 +1,19 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any, Literal
 
 import numpy as np
 from pydantic import BaseModel, ConfigDict
 
-from mteb.abstasks.TaskMetadata import HFSubset
-from mteb.encoder_interface import Encoder
-from mteb.load_results.task_results import TaskResult
+from mteb.abstasks import AbsTask
 
-from .AbsTask import AbsTask, ScoresDict
+if TYPE_CHECKING:
+    from mteb.abstasks.TaskMetadata import HFSubset
+    from mteb.encoder_interface import Encoder
+    from mteb.load_results.task_results import TaskResult
+
+    from .AbsTask import ScoresDict
 
 logger = logging.getLogger(__name__)
 
@@ -38,10 +41,14 @@ class AggregateTaskMetadata(BaseModel):
     main_score: str
     eval_splits: list[str] = ["test"]
     bibtex_citation: str
+    type: Literal["aggregate-task"] = "aggregate-task"
 
 
 class AggregateTask:
     metadata: AggregateTaskMetadata
+    hf_subsets: list[str] = [
+        "default"
+    ]  # since there is no subset we use the "default" naming scheme
 
     def __init__(self, **kwargs: Any):
         self.tasks = self.metadata.tasks
