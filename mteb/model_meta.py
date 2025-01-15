@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 import logging
-from enum import Enum
 from functools import partial
 from typing import TYPE_CHECKING, Any, Callable, Literal
 
 import numpy as np
-from pydantic import BaseModel, ConfigDict, field_validator
+from pydantic import BaseModel, ConfigDict
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.TaskMetadata import STR_DATE, STR_URL
@@ -54,12 +53,6 @@ def get_loader_name(
 
 
 DISTANCE_METRICS = Literal["cosine", "MaxSim", "dot"]
-
-
-class ScoringFunction(str, Enum):
-    DOT_PRODUCT: str = "dot"
-    COSINE: str = "cosine"
-    MAX_SIM: str = "MaxSim"
 
 
 class ModelMeta(BaseModel):
@@ -110,37 +103,19 @@ class ModelMeta(BaseModel):
     public_training_code: bool | None = None
     framework: list[FRAMEWORKS] = []
     reference: STR_URL | None = None
-    similarity_fn_name: ScoringFunction | DISTANCE_METRICS | None = None
+    similarity_fn_name: DISTANCE_METRICS | None = None
     use_instructions: bool | None = None
     training_datasets: dict[str, list[str]] | None = None
     adapted_from: str | None = None
     superseded_by: str | None = None
     citation: str | None = None
 
-    # @validator('similarity_fn_name', pre=True)
-    @field_validator("similarity_fn_name", mode="before")
-    @classmethod
-    def validate_similarity_fn_name(cls, value):
-        """Converts the similarity function name to the corresponding enum value.
-        sentence_transformers uses Literal['cosine', 'dot', 'euclidean', 'manhattan'] for similarity_fn_name
-        """
-        if type(value) is ScoringFunction or value is None:
-            return value
-        mapping = {
-            "cosine": ScoringFunction.COSINE,
-            "dot": ScoringFunction.DOT_PRODUCT,
-            "MaxSim": ScoringFunction.MAX_SIM,
-        }
-        if value in mapping:
-            return mapping[value]
-        raise ValueError(f"Invalid similarity function name: {value}")
-
     def get_similarity_function(self) -> Callable[[np.ndarray, np.ndarray], np.ndarray]:
-        if self.similarity_fn_name == ScoringFunction.COSINE:
+        if self.similarity_fn_name == "cosine":
             return cos_sim
-        elif self.similarity_fn_name == ScoringFunction.DOT_PRODUCT:
+        elif self.similarity_fn_name == "dot":
             return dot_score
-        elif self.similarity_fn_name == ScoringFunction.MAX_SIM:
+        elif self.similarity_fn_name == "MaxSim":
             return max_sim
         elif self.similarity_fn_name is None:
             raise ValueError("Similarity function not specified.")
