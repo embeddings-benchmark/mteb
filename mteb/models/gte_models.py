@@ -5,7 +5,7 @@ from functools import partial
 import torch
 
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, sentence_transformers_loader
 from mteb.models.instruct_wrapper import instruct_wrapper
 
 
@@ -114,4 +114,197 @@ gte_Qwen2_1_5B_instruct = ModelMeta(
     public_training_data=None,
     public_training_code=None,
     training_datasets=None,
+)
+
+gte_small_zh = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="thenlper/gte-small-zh",
+        revision="af7bd46fbb00b3a6963c8dd7f1786ddfbfbe973a",
+    ),
+    name="thenlper/gte-small-zh",
+    languages=["zho_Hans"],
+    open_weights=True,
+    revision="af7bd46fbb00b3a6963c8dd7f1786ddfbfbe973a",
+    release_date="2023-11-08",  # initial commit of hf model.
+    n_parameters=30.3 * 1e6,
+    memory_usage=None,
+    embed_dim=1024,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/thenlper/gte-small-zh",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_data=False,
+    public_training_code=None,
+    training_datasets=None,  # Not disclosed
+)
+
+gte_base_zh = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="thenlper/gte-base-zh",
+        revision="71ab7947d6fac5b64aa299e6e40e6c2b2e85976c",
+    ),
+    name="thenlper/gte-base-zh",
+    languages=["zho_Hans"],
+    open_weights=True,
+    revision="71ab7947d6fac5b64aa299e6e40e6c2b2e85976c",
+    release_date="2023-11-08",  # initial commit of hf model.
+    n_parameters=102 * 1e6,
+    memory_usage=None,
+    embed_dim=1024,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/thenlper/gte-base-zh",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_data=False,
+    public_training_code=None,
+    training_datasets=None,  # Not disclosed
+)
+
+gte_large_zh = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="thenlper/gte-large-zh",
+        revision="64c364e579de308104a9b2c170ca009502f4f545",
+    ),
+    name="thenlper/gte-large-zh",
+    languages=["zho_Hans"],
+    open_weights=True,
+    revision="64c364e579de308104a9b2c170ca009502f4f545",
+    release_date="2023-11-08",  # initial commit of hf model.
+    n_parameters=326 * 1e6,
+    memory_usage=None,
+    embed_dim=1024,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/thenlper/gte-large-zh",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_data=False,
+    public_training_code=None,
+    training_datasets=None,  # Not disclosed
+)
+
+gte_multilingual_langs = [
+    "afr_Latn",
+    "ara_Arab",
+    "aze_Latn",
+    "bel_Cyrl",
+    "bul_Cyrl",
+    "ben_Beng",
+    "cat_Latn",
+    "ceb_Latn",
+    "ces_Latn",
+    "cym_Latn",
+    "dan_Latn",
+    "deu_Latn",
+    "ell_Grek",
+    "eng_Latn",
+    "spa_Latn",
+    "est_Latn",
+    "eus_Latn",
+    "fas_Arab",
+    "fin_Latn",
+    "fra_Latn",
+    "glg_Latn",
+    "guj_Gujr",
+    "heb_Hebr",
+    "hin_Deva",
+    "hrv_Latn",
+    "hat_Latn",
+    "hun_Latn",
+    "hye_Armn",
+    "ind_Latn",
+    "isl_Latn",
+    "ita_Latn",
+    "jpn_Jpan",
+    "jav_Latn",
+    "kat_Geor",
+    "kaz_Cyrl",
+    "khm_Khmr",
+    "kan_Knda",
+    "kor_Hang",
+    "kir_Cyrl",
+    "lao_Laoo",
+    "lit_Latn",
+    "lav_Latn",
+    "mkd_Cyrl",
+    "mal_Mlym",
+    "mon_Cyrl",
+    "mar_Deva",
+    "msa_Latn",
+    "mya_Mymr",
+    "nep_Deva",
+    "nld_Latn",
+    "nor_Latn",
+    "pan_Guru",
+    "pol_Latn",
+    "por_Latn",
+    "que_Latn",
+    "ron_Latn",
+    "rus_Cyrl",
+    "sin_Sinh",
+    "slk_Latn",
+    "slv_Latn",
+    "swa_Latn",
+    "tam_Taml",
+    "tel_Telu",
+    "tha_Thai",
+    "tgl_Latn",
+    "tur_Latn",
+    "ukr_Cyrl",
+    "urd_Arab",
+    "vie_Latn",
+    "yor_Latn",
+    "zho_Hans",
+]
+# Source: https://arxiv.org/pdf/2407.19669
+gte_multi_training_data = {
+    "T2Retrieval": ["train"],
+    "DuReader": ["train"],
+    "MMarcoReranking": ["train"],
+    "CMedQAv2-reranking": ["train"],
+    "NQ": ["train"],
+    "MSMARCO": ["train"],
+    "HotpotQA": ["train"],
+    "FEVER": ["train"],
+    "MIRACLReranking": ["train"],
+    "MrTidyRetrieval": ["train"],
+    "MultiLongDocRetrieval": ["train"],
+    # not in MTEB:
+    #   - TriviaQA
+    #   - SQuAD
+    #   - AllNLI
+    #   - Multi-CPR
+}
+
+gte_multilingual_base = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="Alibaba-NLP/gte-multilingual-base",
+        revision="ca1791e0bcc104f6db161f27de1340241b13c5a4",
+    ),
+    name="Alibaba-NLP/gte-multilingual-base",
+    languages=gte_multilingual_langs,
+    open_weights=True,
+    revision="ca1791e0bcc104f6db161f27de1340241b13c5a4",
+    release_date="2024-07-20",  # initial commit of hf model.
+    n_parameters=305 * 1e6,
+    memory_usage=None,
+    embed_dim=1024,
+    license="apache-2",
+    max_tokens=8192,
+    reference="https://huggingface.co/Alibaba-NLP/gte-multilingual-base",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_data=True,
+    public_training_code=None,  # couldn't find
+    training_datasets=gte_multi_training_data,
 )
