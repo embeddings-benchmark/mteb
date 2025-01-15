@@ -592,6 +592,7 @@ MTEB_DEU = Benchmark(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2401.02709}, 
 }""",
+    contacts=["slvnwhrl"],
 )
 
 
@@ -657,6 +658,7 @@ MTEB_POL = Benchmark(
     journal={arXiv preprint arXiv:2405.10138},
     year={2024}
 }""",
+    contacts=["rafalposwiata"],
 )
 
 MTEB_code = Benchmark(
