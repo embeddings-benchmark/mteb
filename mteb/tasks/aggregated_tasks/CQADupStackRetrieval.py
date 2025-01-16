@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from mteb.abstasks import AbsTask
 from mteb.abstasks.aggregated_task import AggregateTask, AggregateTaskMetadata
+from mteb.overview import get_tasks
 from mteb.tasks.Retrieval import (
     CQADupstackAndroidRetrieval,
     CQADupstackEnglishRetrieval,

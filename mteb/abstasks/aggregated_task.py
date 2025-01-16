@@ -39,7 +39,6 @@ class AggregateTaskMetadata(BaseModel):
     reference: str
     tasks: list[AbsTask]
     main_score: str
-    eval_splits: list[str] = ["test"]
     bibtex_citation: str
     type: Literal["aggregate-task"] = "aggregate-task"
 
@@ -52,34 +51,6 @@ class AggregateTask:
 
     def __init__(self, **kwargs: Any):
         self.tasks = self.metadata.tasks
-
-    def evaluate(
-        self,
-        model: Encoder,
-        split: str = "test",
-        subsets_to_run: list[HFSubset] | None = None,
-        *,
-        encode_kwargs: dict[str, Any] = {},
-        mteb_kwargs: dict[str, Any] = {},
-        **kwargs: Any,
-    ) -> dict[HFSubset, ScoresDict]:
-        from mteb.evaluation.MTEB import MTEB  # to prevent circular imports
-
-        if subsets_to_run:
-            logger.warning(
-                "Specifying which subset to run is not supported for aggregated tasks. It will be ignored."
-            )
-
-        bench = MTEB(tasks=self.tasks)
-        task_results = bench.run(
-            model=model,
-            encode_kwargs=encode_kwargs,
-            eval_subsets=None,
-            eval_splits=[split],
-            verbosity=0,
-            **mteb_kwargs,
-        )
-        return {"default": self.task_results_to_score(task_results)}
 
     def task_results_to_score(self, task_results: list[TaskResult]) -> ScoresDict:
         """The function that aggregated scores"""
