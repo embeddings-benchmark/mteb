@@ -14,6 +14,7 @@ from sklearn.multioutput import MultiOutputClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 
 from mteb.abstasks.TaskMetadata import HFSubset
+from mteb.normalize_embeddings import normalize_embeddings_to_numpy
 
 from ...encoder_interface import Encoder
 from ..AbsTask import AbsTask, ScoresDict
@@ -154,9 +155,11 @@ class AbsTaskImageMultilabelClassification(AbsTask):
             self.image_column_name
         ]
 
-        _unique_train_embeddings = model.get_image_embeddings(
-            unique_train_images,
-            **encode_kwargs,
+        _unique_train_embeddings = normalize_embeddings_to_numpy(
+            model.get_image_embeddings(
+                unique_train_images,
+                **encode_kwargs,
+            )
         )
         unique_train_embeddings = dict(
             zip(unique_train_indices, _unique_train_embeddings)
@@ -173,7 +176,9 @@ class AbsTaskImageMultilabelClassification(AbsTask):
         except ValueError:
             logger.warning("Couldn't subsample, continuing with the entire test set.")
 
-        X_test = model.get_image_embeddings(test_images, **encode_kwargs)
+        X_test = normalize_embeddings_to_numpy(
+            model.get_image_embeddings(test_images, **encode_kwargs)
+        )
         for i_experiment, sample_indices in enumerate(train_samples):
             logger.info(
                 "=" * 10

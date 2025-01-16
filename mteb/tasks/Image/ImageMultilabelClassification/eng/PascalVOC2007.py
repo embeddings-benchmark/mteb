@@ -55,3 +55,5 @@ class VOC2007Classification(AbsTaskImageMultilabelClassification):
 
     # To be removed when we want full results
     n_experiments: int = 5
+
+    samples_per_label: int = 8
