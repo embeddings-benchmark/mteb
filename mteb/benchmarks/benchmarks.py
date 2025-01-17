@@ -1171,11 +1171,8 @@ C_MTEB = Benchmark(
                 "CLSClusteringP2P",
                 "ThuNewsClusteringS2S",
                 "ThuNewsClusteringP2P",
-                "ATEC",
-                "BQ",
                 "LCQMC",
                 "PAWSX",
-                "STSB",
                 "AFQMC",
                 "QBQTC",
                 "TNews",
@@ -1186,6 +1183,14 @@ C_MTEB = Benchmark(
             ],
         )
         + get_tasks(tasks=["MultilingualSentiment"], eval_splits=["test"])
+        + get_tasks(
+            tasks=[
+                "ATEC",
+                "BQ",
+                "STSB",
+            ],
+            eval_splits=["validation"],
+        )
     ),
     description="The Chinese Massive Text Embedding Benchmark (C-MTEB) is a comprehensive benchmark for Chinese text embeddings covering 6 tasks and 35 datasets.",
     reference="https://github.com/FlagOpen/FlagEmbedding/tree/master/research/C_MTEB",
