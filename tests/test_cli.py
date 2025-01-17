@@ -72,7 +72,7 @@ def test_run_task(
     run(args)
 
     model_name_as_path = model_name.replace("/", "__").replace(" ", "_")
-    results_path = tmp_path / {model_name_as_path} / {model_revision}
+    results_path = tmp_path / model_name_as_path / model_revision
     assert results_path.exists(), "Output folder not created"
     assert "model_meta.json" in [
         f.name for f in list(results_path.glob("*.json"))
