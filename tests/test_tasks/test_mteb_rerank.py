@@ -348,9 +348,7 @@ def test_mteb_rerank(tmp_path: Path):
     )
 
     # read in the results
-    with (
-        tmp_path / "SciFact_cross-encoder__ms-marco-TinyBERT-L-2-v2.json"
-    ).open() as f:
+    with (tmp_path / "SciFact_default_predictions.json").open() as f:
         results = json.load(f)
 
     # check that only the top two results are re-orderd
