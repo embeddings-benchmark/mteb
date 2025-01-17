@@ -1691,3 +1691,50 @@ zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
     adapted_from="intfloat/e5-mistral-7b-instruct",
     superseded_by=None,
 )
+sbert_chinese_general_v1 = ModelMeta(
+    name="DMetaSoul/sbert-chinese-general-v1",
+    revision="bd27765956bcc2fcf682de0097819947ac10037e",
+    release_date="2022-03-25",
+    languages=["zho_Hans"],
+    loader=None,
+    n_parameters=None,  # Not visible on repo
+    memory_usage=None,
+    max_tokens=512,
+    embed_dim=128,
+    license="apache-2",
+    open_weights=True,
+    public_training_data=False,
+    public_training_code=None,
+    framework=["PyTorch", "Sentence Transformers"],
+    reference="https://huggingface.co/DMetaSoul/sbert-chinese-general-v1",
+    similarity_fn_name="cosine",
+    use_instructions=None,
+    training_datasets={
+        "PAWSX": ["train"],
+        "PawsXPairClassification": ["train"],  # they do not specify which one
+        # They might have trained on other datasets too, they don't say:
+        # "trained on semantically similar datasets such as NLI, PAWS-X, PKU-Paraphrase-Bank, and STS."
+    },
+    superseded_by=None,
+)
+dmeta_embedding_zh_small = ModelMeta(
+    name="DMetaSoul/Dmeta-embedding-zh-small",
+    revision="2050d3439a2f68999dd648c1697471acaac37a29",
+    release_date="2024-03-25",
+    languages=["zho_Hans"],
+    loader=None,
+    n_parameters=74.2 * 1e6,
+    memory_usage=None,
+    max_tokens=1024,
+    embed_dim=768,
+    license="apache-2",
+    open_weights=True,
+    public_training_data=False,
+    public_training_code=None,
+    framework=["PyTorch", "Sentence Transformers"],
+    reference="https://huggingface.co/DMetaSoul/Dmeta-embedding-zh-small/",
+    similarity_fn_name="cosine",
+    use_instructions=None,
+    training_datasets=None,  # They don't specify
+    superseded_by=None,
+)
