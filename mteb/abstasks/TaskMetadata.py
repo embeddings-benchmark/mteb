@@ -5,20 +5,16 @@ import logging
 from collections.abc import Mapping
 from datetime import date
 from pathlib import Path
-from typing import TYPE_CHECKING, Annotated, Any, Union
+from typing import Annotated, Any, Union
 
 from pydantic import (
     AnyUrl,
     BaseModel,
     BeforeValidator,
-    ConfigDict,
     TypeAdapter,
     field_validator,
 )
 from typing_extensions import Literal, TypedDict
-
-if TYPE_CHECKING:
-    pass
 
 from ..encoder_interface import PromptType
 from ..languages import (
@@ -232,8 +228,6 @@ class TaskMetadata(BaseModel):
         prompt: The prompt used for the task. Can be a string or a dictionary containing the query and passage prompts.
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
     """
-
-    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     dataset: dict[str, Any]
 
