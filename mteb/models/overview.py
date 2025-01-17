@@ -30,6 +30,7 @@ from mteb.models import (
     llm2vec_models,
     misc_models,
     model2vec_models,
+    moka_models,
     mxbai_models,
     no_instruct_sentence_models,
     nomic_models,
