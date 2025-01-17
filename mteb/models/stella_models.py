@@ -53,3 +53,112 @@ stella_en_1_5b = ModelMeta(
     framework=["Sentence Transformers", "PyTorch", "GritLM"],
     reference="https://huggingface.co/dunzhang/stella_en_1.5B_v5",
 )
+
+stella_large_zh_v3_1792d = ModelMeta(
+    name="dunzhang/stella-large-zh-v3-1792d",
+    languages=["zho_Hans"],
+    open_weights=True,
+    revision="d5d39eb8cd11c80a63df53314e59997074469f09",
+    release_date="2024-02-17",
+    n_parameters=None,  # can't see on model card
+    memory_usage=None,
+    embed_dim=1792,
+    license="not specified",
+    max_tokens=512,
+    reference="https://huggingface.co/dunzhang/stella-large-zh-v3-1792d",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    superseded_by="dunzhang/stella-mrl-large-zh-v3.5-1792d",
+    adapted_from=None,
+    public_training_code=False,
+    public_training_data=True,
+    training_datasets={
+        # Not in MTEB:
+        # - infgrad/dialogue_rewrite_llm
+        # - infgrad/retrieval_data_llm
+    },
+)
+
+stella_base_zh_v3_1792d = ModelMeta(
+    name="infgrad/stella-base-zh-v3-1792d",
+    languages=["zho_Hans"],
+    open_weights=True,
+    revision="82254892a0fba125aa2abf3a4800d2dd12821343",
+    release_date="2024-02-17",
+    n_parameters=None,  # can't see on model card
+    memory_usage=None,
+    embed_dim=1792,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/infgrad/stella-base-zh-v3-1792d",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    superseded_by=None,
+    adapted_from=None,
+    public_training_code=False,
+    public_training_data=True,
+    training_datasets={
+        # Not in MTEB:
+        # - infgrad/dialogue_rewrite_llm
+        # - infgrad/retrieval_data_llm
+    },
+)
+
+
+stella_mrl_large_zh_v3_5_1792d = ModelMeta(
+    name="dunzhang/stella-mrl-large-zh-v3.5-1792d",
+    languages=["zho_Hans"],
+    open_weights=True,
+    revision="17bb1c32a93a8fc5f6fc9e91d5ea86da99983cfe",
+    release_date="2024-02-27",
+    n_parameters=326 * 1e6,
+    memory_usage=None,
+    embed_dim=1792,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/dunzhang/stella-large-zh-v3-1792d",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    superseded_by=None,
+    adapted_from="dunzhang/stella-large-zh-v3-1792d",
+    public_training_code=False,
+    public_training_data=True,
+    training_datasets=None,  # Not specified
+)
+
+zpoint_large_embedding_zh = ModelMeta(
+    name="iampanda/zpoint_large_embedding_zh",
+    languages=["zho_Hans"],
+    open_weights=True,
+    revision="b1075144f440ab4409c05622c1179130ebd57d03",
+    release_date="2024-06-04",
+    n_parameters=326 * 1e6,
+    memory_usage=None,
+    embed_dim=1792,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/iampanda/zpoint_large_embedding_zh",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    superseded_by=None,
+    adapted_from="dunzhang/stella-mrl-large-zh-v3.5-1792d",
+    public_training_code=False,
+    public_training_data=True,
+    training_datasets={
+        # It's a bit unclear what they have trained on to be honest, because they don't list all
+        # And they also have some rather cryptic description of their training procedure, but at
+        # Least they disclose that they have trained on these:
+        "MIRACLRetrieval": ["train"],
+        "MIRACLReranking": ["train"],
+        "DuRetrieval": ["train"],
+        "T2Retrieval": ["train"],
+        "MultiLongDocRetrieval": ["train"],
+        #  Not in MTEB:
+        #  - Shitao/bge-reranker-data
+        #  - FreedomIntelligence/Huatuo26M-Lite
+    },
+)
