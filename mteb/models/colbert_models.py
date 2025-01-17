@@ -100,10 +100,13 @@ class ColBERTWrapper(Wrapper):
             )
         logger.info(f"Encoding {len(sentences)} sentences.")
 
+        if "request_qid" in kwargs:
+            kwargs.pop("request_qid")
         pred = self.model.encode(
             sentences,
             prompt_name=prompt_name,
             is_query=True if prompt_type == PromptType.query else False,
+            convert_to_tensor=True,
             **kwargs,
         )
 
@@ -158,7 +161,7 @@ colbert_v2 = ModelMeta(
     max_tokens=180,  # Reduced for Benchmarking - see ColBERT paper
     embed_dim=None,  # Bag of Embeddings (128) for each token
     license="mit",
-    similarity_fn_name="max_sim",
+    similarity_fn_name="MaxSim",
     framework=["PyLate", "ColBERT"],
     reference="https://huggingface.co/colbert-ir/colbertv2.0",
     use_instructions=False,
@@ -209,7 +212,7 @@ jina_colbert_v2 = ModelMeta(
     max_tokens=8192,
     embed_dim=None,  # Bag of Embeddings (128) for each token
     license="cc-by-nc-4.0",
-    similarity_fn_name="max_sim",
+    similarity_fn_name="MaxSim",
     framework=["PyLate", "ColBERT"],
     reference="https://huggingface.co/jinaai/jina-colbert-v2",
     use_instructions=False,

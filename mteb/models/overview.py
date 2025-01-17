@@ -157,9 +157,12 @@ def get_model(model_name: str, revision: str | None = None, **kwargs: Any) -> En
     model = meta.load_model(**kwargs)
 
     # If revision not available in the modelmeta, try to extract it from sentence-transformers
-    if meta.revision is None and isinstance(model, SentenceTransformer):
-        _meta = model_meta_from_sentence_transformers(model)
-        meta.revision = _meta.revision if _meta.revision else meta.revision
+    if isinstance(model.model, SentenceTransformer):
+        _meta = model_meta_from_sentence_transformers(model.model)
+        if meta.revision is None:
+            meta.revision = _meta.revision if _meta.revision else meta.revision
+        if not meta.similarity_fn_name:
+            meta.similarity_fn_name = _meta.similarity_fn_name
 
     model.mteb_model_meta = meta  # type: ignore
     return model

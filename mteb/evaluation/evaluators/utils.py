@@ -70,6 +70,34 @@ def cos_sim(a: torch.Tensor, b: torch.Tensor):
         return _cos_sim_core(a, b)
 
 
+def max_sim(a: np.ndarray, b: np.ndarray) -> np.ndarray:
+    """Computes the max-similarity max_sim(a[i], b[j]) for all i and j.
+        Works with a Tensor of the shape (batch_size, num_tokens, token_dim)
+
+    Return:
+        Matrix with res[i][j]  = max_sim(a[i], b[j])
+    """  # noqa: D402
+    if not isinstance(a, torch.Tensor):
+        a = torch.tensor(a, dtype=torch.float32)
+
+    if not isinstance(b, torch.Tensor):
+        b = torch.tensor(b, dtype=torch.float32)
+
+    if len(a.shape) == 2:
+        a = a.unsqueeze(0)
+
+    if len(b.shape) == 2:
+        b = b.unsqueeze(0)
+
+    scores = torch.einsum(
+        "ash,bth->abst",
+        a,
+        b,
+    )
+
+    return scores.max(axis=-1).values.sum(axis=-1)
+
+
 def dot_score(a: torch.Tensor, b: torch.Tensor):
     """Computes the dot-product dot_prod(a[i], b[j]) for all i and j.
     :return: Matrix with res[i][j]  = dot_prod(a[i], b[j])

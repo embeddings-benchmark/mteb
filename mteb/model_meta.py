@@ -4,11 +4,13 @@ import logging
 from functools import partial
 from typing import TYPE_CHECKING, Any, Callable, Literal
 
+import numpy as np
 from pydantic import BaseModel, ConfigDict
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.TaskMetadata import STR_DATE, STR_URL
 from mteb.encoder_interface import Encoder
+from mteb.evaluation.evaluators.utils import cos_sim, dot_score, max_sim
 
 from .languages import ISO_LANGUAGE_SCRIPT
 
@@ -30,7 +32,6 @@ FRAMEWORKS = Literal[
     "PyLate",
     "ColBERT",
 ]
-DISTANCE_METRICS = Literal["cosine", "max_sim", "dot"]
 
 
 def sentence_transformers_loader(
@@ -49,6 +50,9 @@ def get_loader_name(
     if hasattr(loader, "func"):  # partial class wrapper
         return loader.func.__name__
     return loader.__name__
+
+
+DISTANCE_METRICS = Literal["cosine", "MaxSim", "dot"]
 
 
 class ModelMeta(BaseModel):
@@ -105,6 +109,16 @@ class ModelMeta(BaseModel):
     adapted_from: str | None = None
     superseded_by: str | None = None
     citation: str | None = None
+
+    def get_similarity_function(self) -> Callable[[np.ndarray, np.ndarray], np.ndarray]:
+        if self.similarity_fn_name == "cosine":
+            return cos_sim
+        elif self.similarity_fn_name == "dot":
+            return dot_score
+        elif self.similarity_fn_name == "MaxSim":
+            return max_sim
+        elif self.similarity_fn_name is None:
+            raise ValueError("Similarity function not specified.")
 
     def to_dict(self):
         dict_repr = self.model_dump()

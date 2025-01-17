@@ -82,6 +82,7 @@ class RetrievalEvaluator(Evaluator):
                 self.top_k,
                 task_name=self.task_name,  # type: ignore
                 instructions=instructions,
+                score_function="bm25",
                 **kwargs,
             )
         else:
