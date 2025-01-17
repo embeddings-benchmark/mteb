@@ -149,7 +149,7 @@ def test_prompt_name_passed_to_all_encodes(task_name: str | AbsTask, tmp_path: P
     # Test that the task_name is not passed down to the encoder
     model = EncoderWithoutInstructions("average_word_embeddings_levy_dependency")
     assert model.prompts == {}, "The encoder should not have any prompts"
-    eval.run(model, output_folder="tests/results", overwrite_results=True)
+    eval.run(model, output_folder=tmp_path.as_posix(), overwrite_results=True)
 
 
 @pytest.mark.parametrize("task_name", MOCK_TASK_TEST_GRID)
@@ -184,7 +184,7 @@ def test_encode_kwargs_passed_to_all_encodes(task_name: str | AbsTask, tmp_path:
 
 
 @pytest.mark.parametrize("model", [MockNumpyEncoder()])
-def test_run_using_benchmark(model: mteb.Encoder):
+def test_run_using_benchmark(model: mteb.Encoder, tmp_path: Path):
     """Test that a benchmark object can be run using the MTEB class."""
     bench = Benchmark(
         name="test_bench", tasks=mteb.get_tasks(tasks=["STS12", "SummEval"])
@@ -192,7 +192,7 @@ def test_run_using_benchmark(model: mteb.Encoder):
 
     eval = mteb.MTEB(tasks=[bench])
     eval.run(
-        model, output_folder="tests/results", overwrite_results=True
+        model, output_folder=tmp_path.as_posix(), overwrite_results=True
     )  # we just want to test that it runs
 
 

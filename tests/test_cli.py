@@ -50,12 +50,13 @@ def test_run_task(
     model_name: str,
     task_name: str,
     model_revision: str,
+    tmp_path: Path,
 ):
     args = Namespace(
         model=model_name,
         tasks=[task_name],
         model_revision=model_revision,
-        output_folder="tests/results/test_model",
+        output_folder=tmp_path.as_posix(),
         verbosity=3,
         device=None,
         categories=None,
@@ -71,9 +72,7 @@ def test_run_task(
     run(args)
 
     model_name_as_path = model_name.replace("/", "__").replace(" ", "_")
-    results_path = Path(
-        f"tests/results/test_model/{model_name_as_path}/{model_revision}"
-    )
+    results_path = tmp_path / {model_name_as_path} / {model_revision}
     assert results_path.exists(), "Output folder not created"
     assert "model_meta.json" in [
         f.name for f in list(results_path.glob("*.json"))
