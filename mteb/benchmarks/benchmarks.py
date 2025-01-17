@@ -27,6 +27,7 @@ class Benchmark:
         description: A description of the benchmark, should include its intended goal and potentially a description of its construction
         reference: A link reference, to a source containing additional information typically to a paper, leaderboard or github.
         citation: A bibtex citation
+        contacts: The people to contact in case of a problem in the benchmark, preferably a GitHub handle.
 
     Example:
         >>> Benchmark(
@@ -44,6 +45,7 @@ class Benchmark:
     description: str | None = None
     reference: UrlString | None = None
     citation: str | None = None
+    contacts: list[str] | None = None
 
     def __iter__(self):
         return iter(self.tasks)
@@ -128,6 +130,7 @@ MTEB_EN = Benchmark(
     ),
     description="English benchmarks from MTEB",
     citation="",
+    contacts=["KennethEnevoldsen", "Muennighoff"],
 )
 
 MTEB_ENG_CLASSIC = Benchmark(
@@ -232,6 +235,7 @@ MTEB_ENG_CLASSIC = Benchmark(
     pages = "2014--2037",
 }
 """,
+    contacts=["Muennighoff"],
 )
 
 MTEB_MAIN_RU = Benchmark(
@@ -422,6 +426,7 @@ SEB = Benchmark(
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
+    contacts=["KennethEnevoldsen", "x-tabdeveloping", "Samoed"],
 )
 
 CoIR = Benchmark(
@@ -484,6 +489,7 @@ RAR_b = Benchmark(
       journal={arXiv preprint arXiv:2404.06347},
       year={2024}
     }""",
+    contacts=["gowitheflow-1998"],
 )
 
 MTEB_FRA = Benchmark(
@@ -538,6 +544,7 @@ MTEB_FRA = Benchmark(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2405.20468}, 
 }""",
+    contacts=["imenelydiaker"],
 )
 
 
@@ -585,6 +592,7 @@ MTEB_DEU = Benchmark(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2401.02709}, 
 }""",
+    contacts=["slvnwhrl"],
 )
 
 
@@ -650,6 +658,7 @@ MTEB_POL = Benchmark(
     journal={arXiv preprint arXiv:2405.10138},
     year={2024}
 }""",
+    contacts=["rafalposwiata"],
 )
 
 MTEB_code = Benchmark(
@@ -833,6 +842,7 @@ MTEB_multilingual = Benchmark(
     description="The Multilingual benchmarks from MMTEB. Currently under development.",
     reference=None,
     citation=None,
+    contacts=["KennethEnevoldsen", "isaac-chung"],
 )
 
 MTEB_JPN = Benchmark(
@@ -944,6 +954,7 @@ MTEB_INDIC = Benchmark(
     description="Main Indic benchmark from MMTEB",
     reference=None,
     citation=None,
+    contacts=["KennethEnevoldsen", "isaac-chung"],
 )
 
 
@@ -1075,6 +1086,7 @@ MTEB_EU = Benchmark(
     description="Main European benchmark from MMTEB",
     reference=None,
     citation=None,
+    contacts=["KennethEnevoldsen", "isaac-chung"],
 )
 
 LONG_EMBED = Benchmark(
@@ -1136,4 +1148,53 @@ NANOBEIR = Benchmark(
     description="A benchmark to evaluate with subsets of BEIR datasets to use less computational power",
     reference="https://huggingface.co/collections/zeta-alpha-ai/nanobeir-66e1a0af21dfd93e620cd9f6",
     citation=None,
+)
+
+C_MTEB = Benchmark(
+    name="MTEB(Chinese)",
+    tasks=get_tasks(
+        tasks=[
+            "T2Retrieval",
+            "MMarcoRetrieval",
+            "DuRetrieval",
+            "CovidRetrieval",
+            "CmedqaRetrieval",
+            "EcomRetrieval",
+            "MedicalRetrieval",
+            "VideoRetrieval",
+            "T2Reranking",
+            "MMarcoReranking",
+            "CMedQAv1-reranking",
+            "CMedQAv2-reranking",
+            "Ocnli",
+            "Cmnli",
+            "CLSClusteringS2S",
+            "CLSClusteringP2P",
+            "ThuNewsClusteringS2S",
+            "ThuNewsClusteringP2P",
+            "ATEC",
+            "BQ",
+            "LCQMC",
+            "PAWSX",
+            "STSB",
+            "AFQMC",
+            "QBQTC",
+            "TNews",
+            "IFlyTek",
+            "Waimai",
+            "OnlineShopping",
+            "MultilingualSentiment",
+            "JDReview",
+        ],
+    ),
+    description="The Chinese Massive Text Embedding Benchmark (C-MTEB) is a comprehensive benchmark for Chinese text embeddings covering 6 tasks and 35 datasets.",
+    reference="https://github.com/FlagOpen/FlagEmbedding/tree/master/research/C_MTEB",
+    citation="""@misc{c-pack,
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, 
+      author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff},
+      year={2023},
+      eprint={2309.07597},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
 )
