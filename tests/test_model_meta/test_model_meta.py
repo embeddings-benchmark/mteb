@@ -48,4 +48,3 @@ def test_output_folder_model_meta(task: AbsTask, tmp_path: Path):
     assert Path(output_path).name == model.config._commit_hash
     assert Path(output_path).parent.name == "cross-encoder__ms-marco-TinyBERT-L-2-v2"
     assert Path(output_path).parent.parent == tmp_path
-
