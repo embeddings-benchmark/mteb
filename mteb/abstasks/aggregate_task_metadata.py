@@ -87,7 +87,7 @@ class AggregateTaskMetadata(TaskMetadata):
     def compute_eval_langs(self) -> list[ISO_LANGUAGE_SCRIPT]:
         langs = set()
         for task in self.tasks:
-            langs.update(set(task.metadata.languages))
+            langs.update(set(task.metadata.bcp47_codes))
         return list(langs)
 
     def compute_date(self) -> tuple[STR_DATE, STR_DATE] | None:

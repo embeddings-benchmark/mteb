@@ -343,6 +343,15 @@ class TaskMetadata(BaseModel):
             )
 
     @property
+    def bcp47_codes(self) -> list[ISO_LANGUAGE_SCRIPT]:
+        """Return the languages and script codes of the dataset formatting in accordance with the BCP-47 standard."""
+        if isinstance(self.eval_langs, dict):
+            return sorted(
+                {lang for langs in self.eval_langs.values() for lang in langs}
+            )
+        return sorted(set(self.eval_langs))
+
+    @property
     def languages(self) -> list[str]:
         """Return the languages of the dataset as iso639-3 codes."""
 
@@ -428,7 +437,7 @@ class TaskMetadata(BaseModel):
         for subset, subset_value in stats.items():
             if subset == "hf_subset_descriptive_stats":
                 continue
-            n_samples[subset] = subset_value["num_samples"]
+            n_samples[subset] = subset_value["num_samples"]  # type: ignore
         return n_samples
 
     def __hash__(self) -> int:
