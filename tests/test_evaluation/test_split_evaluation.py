@@ -1,18 +1,15 @@
 from __future__ import annotations
 
-from argparse import Namespace
-
 import pytest
 
-import mteb
 from mteb import MTEB
-from mteb.cli import run
 from tests.test_benchmark.mock_models import (
     MockSentenceTransformer,
 )
 from tests.test_benchmark.mock_tasks import (
     MockMultilingualRetrievalTask,
-    MockMultilingualSTSTask, MockRetrievalTask,
+    MockMultilingualSTSTask,
+    MockRetrievalTask,
 )
 
 
@@ -374,6 +371,4 @@ def test_splits_evaluated_with_prefiltering():
 
     evaluation = MTEB(tasks=[task])
 
-    evaluation.run(
-        MockSentenceTransformer(), overwrite_results=True
-    )
+    evaluation.run(MockSentenceTransformer(), overwrite_results=True)
