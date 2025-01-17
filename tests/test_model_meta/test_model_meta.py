@@ -10,7 +10,7 @@ from mteb.abstasks import AbsTask
 from tests.test_benchmark.mock_tasks import MockRetrievalTask
 
 
-def test_create_model_meta_from_sentence_transformers(tmp_path: Path):
+def test_create_model_meta_from_sentence_transformers():
     model_name = "sentence-transformers/average_word_embeddings_levy_dependency"
     model = SentenceTransformer(model_name)
 
@@ -20,7 +20,7 @@ def test_create_model_meta_from_sentence_transformers(tmp_path: Path):
     assert meta.revision == model.model_card_data.base_model_revision
 
 
-def test_create_model_meta_from_cross_encoder(tmp_path: Path):
+def test_create_model_meta_from_cross_encoder():
     model_name = "cross-encoder/ms-marco-TinyBERT-L-2-v2"
 
     model = CrossEncoder(model_name)
@@ -44,3 +44,8 @@ def test_output_folder_model_meta(task: AbsTask, tmp_path: Path):
         model_meta=meta, output_folder=tmp_path.as_posix()
     )
     assert Path(output_path).exists()
+    assert Path(output_path).is_dir()
+    assert Path(output_path).name == model.config._commit_hash
+    assert Path(output_path).parent.name == "cross-encoder__ms-marco-TinyBERT-L-2-v2"
+    assert Path(output_path).parent.parent == tmp_path
+
