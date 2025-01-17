@@ -1,15 +1,17 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any, Literal
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
-from pydantic import BaseModel, ConfigDict
 
-from mteb.abstasks import AbsTask
+from mteb.abstasks.AbsTask import AbsTask
+from mteb.abstasks.aggregate_task_metadata import AggregateTaskMetadata
 
 if TYPE_CHECKING:
-    from mteb.abstasks.TaskMetadata import HFSubset
+    from datasets import Dataset, DatasetDict
+
+    from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset
     from mteb.encoder_interface import Encoder
     from mteb.load_results.task_results import TaskResult
 
@@ -18,53 +20,130 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class AggregateTaskMetadata(BaseModel):
-    """Metadata for an aggregation of tasks.
-
-    Attributes:
-        name: The name of the task.
-        description: A description of the task. Should explain the aggregation.
-        reference: A URL to the documentation of the task. E.g. a published paper.
-        tasks: A list of tasks, the majority of the metadata is described within its tasks.
-                main_score: The main score used for evaluation.
-       main_score: the main score of the task
-        eval_splits: The splits of the dataset used for evaluation.
-        bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
-    """
-
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
-    name: str
-    description: str
-    reference: str
-    tasks: list[AbsTask]
-    main_score: str
-    bibtex_citation: str
-    type: Literal["aggregate-task"] = "aggregate-task"
-
-
-class AggregateTask:
+class AbsTaskAggregate(AbsTask):
     metadata: AggregateTaskMetadata
-    hf_subsets: list[str] = [
-        "default"
-    ]  # since there is no subset we use the "default" naming scheme
+    superseded_by: None | str = None
+    hf_subset = "default"  # since there is no subset we use the "default" naming scheme
+    _eval_splits: list[str] | None = None
 
     def __init__(self, **kwargs: Any):
         self.tasks = self.metadata.tasks
+        self.taskname_to_task = {task.metadata.name: task for task in self.tasks}
 
-    def task_results_to_score(self, task_results: list[TaskResult]) -> ScoresDict:
-        """The function that aggregated scores"""
-        main_scores = []
-        for task_res in task_results:
-            main_scores.append(
-                task_res.get_score(
-                    getter=lambda scores: scores[self.metadata.main_score]
+    def task_results_to_scores(
+        self, task_results: list[TaskResult]
+    ) -> dict[str, dict[HFSubset, ScoresDict]]:
+        """The function that aggregated scores. Can be redefined to allow for custom aggregations."""
+        scores = {}
+        for split in self.metadata.eval_splits:
+            main_scores = []
+            for task_res in task_results:
+                main_scores.append(
+                    task_res.get_score(
+                        splits=self.metadata.eval_splits,
+                        getter=lambda scores: scores[self.metadata.main_score],
+                    )
                 )
+            main_score = np.mean(main_scores)
+            scores[split] = {
+                "default": {
+                    self.metadata.main_score: main_score,
+                    "main_score": main_score,
+                }
+            }
+        return scores
+
+    def combine_task_results(self, task_results: list[TaskResult]) -> TaskResult:
+        """Combined the task results for using `task_results_to_scores`. Do not redefine this function if you want to implement a custom aggregation.
+        Instead redefin `task_results_to_scores`.
+        """
+        from mteb.load_results.task_results import (
+            TaskResult,  # to prevent circular imports, # TODO: can potentially likely be out of function in in v2.0.0
+        )
+
+        eval_times = [tr.evaluation_time for tr in task_results if tr.evaluation_time]
+        if len(eval_times) != len(task_results):
+            logger.info(
+                f"Loaded results does not include runtime. Therefor evaluation of {self.metadata.name} "
+                + "can't be computed. Setting it to None."
             )
-        return {self.metadata.main_score: np.mean(main_scores)}
+            eval_time = np.nan
+        else:
+            eval_time = sum(eval_times)
 
-    def load_data(self, **kwargs: Any) -> None:
-        for task in self.tasks:
-            task.load_data()
+        kg_co2_emissions_ = [
+            tr.kg_co2_emissions for tr in task_results if tr.kg_co2_emissions
+        ]
+        if len(kg_co2_emissions_) != len(task_results):
+            logger.info(
+                f"Loaded results does not include co2-eq emissions. Therefor evaluation of {self.metadata.name} "
+                + "can't be computed. Setting it to None."
+            )
+            kg_co2_emissions = np.nan
+        else:
+            kg_co2_emissions = sum(kg_co2_emissions_)
 
-        self.data_loaded = True
+        task_res = TaskResult.from_task_results(
+            self,
+            scores=self.task_results_to_scores(task_results),
+            evaluation_time=eval_time,
+            kg_co2_emissions=kg_co2_emissions,
+        )
+        mteb_versions = {tr.mteb_version for tr in task_results}
+        if len(mteb_versions) != 1:
+            logger.warning(
+                f"All tasks of {self.metadata.name} is not run using the same version."
+            )
+            task_res.mteb_version = None
+        task_res.mteb_version = task_results[0].mteb_version
+        return task_res
+
+    def check_if_dataset_is_superseded(self):
+        """Check if the dataset is superseded by a newer version"""
+        if self.superseded_by:
+            logger.warning(
+                f"Dataset '{self.metadata.name}' is superseded by '{self.superseded_by}', you might consider using the newer version of the dataset."
+            )
+
+    def filter_eval_splits(self, eval_splits: list[str] | None) -> AbsTaskAggregate:
+        """Filter the evaluation splits of the task."""
+        self._eval_splits = eval_splits
+        return self
+
+    def evaluate(
+        self,
+        model: Encoder,
+        split: str = "test",
+        subsets_to_run: list[HFSubset] | None = None,
+        *,
+        encode_kwargs: dict[str, Any] = {},
+        **kwargs: Any,
+    ) -> dict[HFSubset, ScoresDict]:
+        # TODO: If we refactor the runner to at least have a subfunction mteb.run_task(model, task) we could use that here
+        raise NotImplementedError(
+            "Aggregate tasks can't be evaluated directly. Instead run it using the MTEB class."
+        )
+
+    def _evaluate_subset(
+        self,
+        model: Encoder,
+        data_split: DatasetDict | Dataset,
+        encode_kwargs: dict[str, Any],
+        **kwargs: Any,
+    ) -> ScoresDict:
+        raise NotImplementedError(
+            "Aggregate tasks does not implement a _evaluate_subset. Instead use the individual tasks."
+        )
+
+    def _calculate_metrics_from_split(
+        self, split: str, hf_subset: str | None = None, compute_overall: bool = False
+    ) -> DescriptiveStatistics:
+        raise NotImplementedError(
+            "Aggregate tasks does not implement a _calculate_metrics_from_split. Instead use the individual tasks."
+        )
+
+    @property
+    def eval_splits(self) -> list[str]:
+        if self._eval_splits:
+            return self._eval_splits
+        return self.metadata.eval_splits

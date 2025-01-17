@@ -18,7 +18,7 @@ from pydantic import (
 from typing_extensions import Literal, TypedDict
 
 if TYPE_CHECKING:
-    from mteb.abstasks import AbsTask
+    pass
 
 from ..encoder_interface import PromptType
 from ..languages import (
@@ -85,6 +85,7 @@ SAMPLE_CREATION_METHOD = Literal[
     "machine-translated and verified",
     "machine-translated and localized",
     "LM-generated and verified",
+    "multiple",
 ]
 
 TASK_TYPE = Literal[
@@ -172,9 +173,10 @@ LICENSES = (  # this list can be extended as needed
         "gpl-3.0",
         "cdla-sharing-1.0",
         "mpl-2.0",
+        "multiple",
     ]
 )
-
+MODALITIES = Literal["text"]
 METRIC_NAME = str
 METRIC_VALUE = Union[int, float, dict[str, Any]]
 
@@ -233,13 +235,13 @@ class TaskMetadata(BaseModel):
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
-    dataset: dict
+    dataset: dict[str, Any]
 
     name: str
     description: str
     prompt: str | PromptDict | None = None
     type: TASK_TYPE
-    modalities: list[Literal["text"]] = ["text"]
+    modalities: list[MODALITIES] = ["text"]
     category: TASK_CATEGORY | None = None
     reference: STR_URL | None = None
 
@@ -432,3 +434,6 @@ class TaskMetadata(BaseModel):
     def __hash__(self) -> int:
         return hash(self.model_dump_json())
 
+    @property
+    def revision(self) -> str:
+        return self.dataset["revision"]

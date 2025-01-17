@@ -14,7 +14,6 @@ from packaging.version import Version
 from pydantic import BaseModel, field_validator
 
 from mteb.abstasks.AbsTask import AbsTask, ScoresDict
-from mteb.abstasks.aggregated_task import AggregateTask
 from mteb.abstasks.TaskMetadata import ISO_LANGUAGE_SCRIPT, HFSubset
 from mteb.languages import ISO_LANGUAGE, LanguageScripts
 
@@ -99,7 +98,7 @@ class ScalaSvClassificationDummy:
 
 
 outdated_tasks = {
-    "CQADupstackRetrieval": CQADupstackRetrievalDummy,
+    # "CQADupstackRetrieval": CQADupstackRetrievalDummy,
     "ScalaNbClassification": ScalaNbClassificationDummy,
     "ScalaNnClassification": ScalaNnClassificationDummy,
     "ScalaDaClassification": ScalaDaClassificationDummy,
@@ -184,7 +183,7 @@ class TaskResult(BaseModel):
                 flat_scores[split].append(_scores)
 
         return TaskResult(
-            dataset_revision=task.metadata.dataset["revision"],
+            dataset_revision=task.metadata.revision,
             task_name=task.metadata.name,
             mteb_version=version("mteb"),
             scores=flat_scores,
@@ -519,9 +518,7 @@ class TaskResult(BaseModel):
         new_res = TaskResult(**new_res)
         return new_res
 
-    def validate_and_filter_scores(
-        self, task: AbsTask | AggregateTask | None = None
-    ) -> TaskResult:
+    def validate_and_filter_scores(self, task: AbsTask | None = None) -> TaskResult:
         """This ensures that the scores are correct for the given task, by removing any splits besides those specified in the task metadata.
         Additionally it also ensure that all of the splits required as well as the languages are present in the scores.
         Returns new TaskResult object.

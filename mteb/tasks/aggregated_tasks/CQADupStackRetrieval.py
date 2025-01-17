@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks import AbsTask
-from mteb.abstasks.aggregated_task import AggregateTask, AggregateTaskMetadata
-from mteb.overview import get_tasks
+from mteb.abstasks.aggregated_task import AbsTaskAggregate, AggregateTaskMetadata
 from mteb.tasks.Retrieval import (
     CQADupstackAndroidRetrieval,
     CQADupstackEnglishRetrieval,
@@ -34,7 +33,7 @@ task_list_cqa: list[AbsTask] = [
 ]
 
 
-class CQADupstackRetrieval(AggregateTask):
+class CQADupstackRetrieval(AbsTaskAggregate):
     metadata = AggregateTaskMetadata(
         name="CQADupstackRetrieval",
         description="CQADupStack: A Benchmark Data Set for Community Question-Answering Research",

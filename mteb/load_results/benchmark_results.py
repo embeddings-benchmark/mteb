@@ -13,7 +13,6 @@ from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict
 
 from mteb.abstasks.AbsTask import AbsTask, ScoresDict
-from mteb.abstasks.aggregated_task import AggregateTask
 from mteb.abstasks.TaskMetadata import ISO_LANGUAGE_SCRIPT, TASK_DOMAIN, TASK_TYPE
 from mteb.languages import ISO_LANGUAGE
 from mteb.load_results.task_results import TaskResult
@@ -70,7 +69,7 @@ class ModelResult(BaseModel):
             task_results=new_task_results,
         )
 
-    def select_tasks(self, tasks: Sequence[AbsTask | AggregateTask]) -> ModelResult:
+    def select_tasks(self, tasks: Sequence[AbsTask]) -> ModelResult:
         task_name_to_task = {task.metadata.name: task for task in tasks}
         new_task_results = [
             task_res.validate_and_filter_scores(task_name_to_task[task_res.task_name])
@@ -106,15 +105,15 @@ class ModelResult(BaseModel):
                 try:
                     if use_fast:
                         scores[res.task_name] = res.get_score_fast(
-                            splits=splits,
-                            languages=languages,
+                            splits=splits,  # type: ignore
+                            languages=languages,  # type: ignore
                         )
                     else:
                         scores[res.task_name] = res.get_score(
                             splits=splits,
                             languages=languages,
-                            aggregation=aggregation,
-                            getter=getter,
+                            aggregation=aggregation,  # type: ignore
+                            getter=getter,  # type: ignore
                             scripts=scripts,
                         )
                 except Exception as e:
@@ -217,9 +216,7 @@ class BenchmarkResults(BaseModel):
             model_results=[res for res in model_results if res.task_results]
         )
 
-    def select_tasks(
-        self, tasks: Sequence[AbsTask | AggregateTask]
-    ) -> BenchmarkResults:
+    def select_tasks(self, tasks: Sequence[AbsTask]) -> BenchmarkResults:
         new_model_results = [
             model_res.select_tasks(tasks) for model_res in self.model_results
         ]

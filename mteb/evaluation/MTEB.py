@@ -15,7 +15,7 @@ import datasets
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.abstasks.AbsTask import ScoresDict
-from mteb.abstasks.aggregated_task import AggregateTask
+from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import model_meta_from_sentence_transformers
@@ -31,12 +31,12 @@ logger = logging.getLogger(__name__)
 
 
 class MTEB:
-    _tasks: Iterable[str | AbsTask | AggregateTask] | None
-    tasks: list[AbsTask | AggregateTask]
+    _tasks: Iterable[str | AbsTask] | None
+    tasks: list[AbsTask]
 
     def __init__(
         self,
-        tasks: Sequence[str | AbsTask | AggregateTask] | None = None,
+        tasks: Sequence[str | AbsTask] | None = None,
         *,
         task_types: list[str] | None = None,
         task_categories: list[str] | None = None,
@@ -256,9 +256,7 @@ class MTEB:
                         f"WARNING: Unknown tasks: {unknown_str}. Known tasks: {known_str}."
                     )
             # add task if subclass of mteb.tasks
-            self.tasks.extend(
-                [x for x in self._tasks if isinstance(x, (AbsTask, AggregateTask))]
-            )
+            self.tasks.extend([x for x in self._tasks if isinstance(x, (AbsTask))])
             return
 
         # Otherwise use filters to select tasks
@@ -468,6 +466,29 @@ class MTEB:
                 f"\n\n********************** Evaluating {task.metadata.name} **********************"
             )
 
+            if isinstance(task, AbsTaskAggregate):
+                self_ = MTEB(tasks=task.metadata.tasks)
+                task_results = self_.run(
+                    model,
+                    verbosity=verbosity - 1,
+                    output_folder=output_folder,
+                    eval_splits=eval_splits,
+                    eval_subsets=eval_subsets,
+                    overwrite_results=overwrite_results,
+                    raise_error=raise_error,
+                    co2_tracker=co2_tracker,
+                    encode_kwargs=encode_kwargs,
+                    **kwargs,
+                )
+                new_results = task.combine_task_results(task_results)
+                evaluation_results.append(new_results)
+
+                if output_path:
+                    save_path = output_path / f"{task.metadata.name}.json"
+                    new_results.to_disk(save_path)
+                del self.tasks[0]
+                continue
+
             if "bm25s" in meta.name and task.metadata.type != "Retrieval":
                 logger.warning(
                     f"bm25s only supports Retrieval tasks, but the task type is {task.metadata.type}. Skipping task."
@@ -478,7 +499,11 @@ class MTEB:
             task_eval_splits = (
                 eval_splits if eval_splits is not None else task.eval_splits
             )
-            task_subsets = list(task.metadata.hf_subsets_to_langscripts.keys())
+            task_subsets = (
+                task.hf_subsets
+                if task.hf_subsets
+                else list(task.metadata.hf_subsets_to_langscripts.keys())
+            )
 
             existing_results = None
             save_path = None
