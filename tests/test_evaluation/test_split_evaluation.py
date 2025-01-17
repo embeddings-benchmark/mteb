@@ -371,4 +371,10 @@ def test_splits_evaluated_with_prefiltering():
 
     evaluation = MTEB(tasks=[task])
 
-    evaluation.run(MockSentenceTransformer(), overwrite_results=True)
+    results = evaluation.run(MockSentenceTransformer(), overwrite_results=True)
+    result_scores = results[0].scores
+
+    assert len(result_scores) == 1
+    assert "test" in result_scores
+    assert len(result_scores["test"]) == 1
+    assert result_scores["test"][0]["hf_subset"] == "fra"
