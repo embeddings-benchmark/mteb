@@ -23,24 +23,6 @@ Score = Any
 logger = logging.getLogger(__name__)
 
 
-# Tasks that were completely removed from the MTEB (we generally don't do this anymore instead we supersede tasks)
-class CQADupstackRetrievalDummy:
-    """A dummy task for loading historic results from before v1.11.0"""
-
-    metadata = Namespace(  # type: ignore
-        name="CQADupstackRetrieval",
-        main_score="ndcg_at_10",
-        type="Retrieval",
-        hf_subsets_to_langscripts={
-            "default": ["eng-Latn"],
-        },
-        dataset={
-            "revision": "revision not applicable",
-            "path": "CQADupstackRetrieval_is_a_combined_dataset",
-        },
-    )
-
-
 class ScalaNbClassificationDummy:
     """A dummy task for loading historic results from before v1.11.0"""
 
@@ -98,7 +80,6 @@ class ScalaSvClassificationDummy:
 
 
 outdated_tasks = {
-    # "CQADupstackRetrieval": CQADupstackRetrievalDummy,
     "ScalaNbClassification": ScalaNbClassificationDummy,
     "ScalaNnClassification": ScalaNnClassificationDummy,
     "ScalaDaClassification": ScalaDaClassificationDummy,
