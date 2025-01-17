@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 
 import mteb
@@ -11,7 +13,7 @@ from .mock_tasks import MockRetrievalTask
 
 @pytest.mark.parametrize("model", ["colbert-ir/colbertv2.0"])
 @pytest.mark.parametrize("task", [MockRetrievalTask()])
-def test_colbert_model_e2e(task: AbsTask, model: str):
+def test_colbert_model_e2e(task: AbsTask, model: str, tmp_path: Path):
     pytest.importorskip("pylate", reason="pylate not installed")
     eval_splits = ["test"]
     model = mteb.get_model(model)
@@ -21,13 +23,14 @@ def test_colbert_model_e2e(task: AbsTask, model: str):
         model,
         eval_splits=eval_splits,
         corpus_chunk_size=500,
+        output_folder=str(tmp_path),
     )
     result = results[0]
 
     assert result.scores["test"][0]["ndcg_at_1"] == 1.0
 
 
-def test_bm25s_e2e():
+def test_bm25s_e2e(tmp_path: Path):
     # fails for dataset smaller then 1000
     pytest.importorskip("bm25s", reason="bm25s not installed")
     pytest.importorskip("Stemmer", reason="PyStemmer not installed")
@@ -38,7 +41,9 @@ def test_bm25s_e2e():
 
     evaluation = MTEB(tasks=tasks)
 
-    results = evaluation.run(model, eval_splits=eval_splits)
+    results = evaluation.run(
+        model, eval_splits=eval_splits, output_folder=str(tmp_path)
+    )
     result = results[0]
 
     assert result.scores["test"][0]["ndcg_at_1"] == 0.42879
