@@ -89,6 +89,215 @@ bge_chinese_training_data = {
     # "s2orc": [],  # (title, abstract) (title, citation title) (abstract, citation abstract)
 }
 
+bgem3_training_data = {
+    # source https://arxiv.org/abs/2402.03216
+    "T2Retrieval": ["train"],
+    "DuReader": ["train"],
+    "MMarcoReranking": ["train"],
+    "CMedQAv2-reranking": ["train"],
+    "HotpotQA": ["train"],
+    "NQ": ["train"],
+    "MSMARCO": ["train"],
+    "MrTidyRetrieval": ["train"],
+    "MIRACLRetrieval": ["train"],
+    "CodeSearchNet": ["train"],
+    # not in mteb
+    # "s2orc"
+    # Wikipedia
+    # "xP3"
+    # "mC4"
+    # "CC-News"
+    # "MTP"
+    # "NLLB"
+    # "CCMatrix"
+    # TriviaQA
+    # COL-IEE
+    # PubMedQA
+    # SQuAD
+    # SimCSE
+    # mMARCO-ZH
+    # LawGPT
+    # NLI-zh2, LeCaRDv2,
+    # NLI, MultiLongDoc (their syntetic)
+}
+
+# https://huggingface.co/BAAI/bge-m3/discussions/29
+bgem3_languages = [
+    "afr_Latn",  # af
+    # als
+    "amh_Ethi",  # am
+    # an
+    # ar
+    "azj_Latn",  # arz
+    # as
+    "ast_Latn",  # ast
+    # av
+    # az
+    "azj_Latn",  # azb
+    # ba
+    # bar
+    # bcl
+    "ben_Beng",  # be
+    "bul_Cyrl",  # bg
+    # bh
+    # bn
+    # bo
+    "bel_Cyrl",  # bpy
+    # br
+    # bs
+    # bxr
+    "cat_Latn",  # ca
+    # cbk
+    # ce
+    "ceb_Latn",  # ceb
+    "ckb_Arab",  # ckb
+    # co
+    # cs
+    # cv
+    # cy
+    "dan_Latn",  # da
+    "deu_Latn",  # de
+    # diq
+    # dsb
+    # dty
+    # dv
+    "ell_Grek",  # el
+    # eml
+    "eng_Latn",  # en
+    # eo
+    "est_Latn",  # es
+    # et
+    # eu
+    # fa
+    "fin_Latn",  # fi
+    "fra_Latn",  # fr
+    # fy
+    # ga
+    # gd
+    "glg_Latn",  # gl
+    # gn
+    # gom
+    "guj_Gujr",  # gu
+    # gv
+    "heb_Hebr",  # he
+    "hin_Deva",  # hi
+    # hif
+    # hr
+    # hsb
+    # ht
+    # hu
+    # hy
+    # ia
+    # id
+    # ie
+    # ilo
+    # io
+    # is
+    "ita_Latn",  # it
+    "jpn_Jpan",  # ja
+    # jbo
+    # jv
+    # ka
+    # kk
+    # km
+    # kn
+    "kor_Hang",  # ko
+    # krc
+    # ku
+    # kv
+    # kw
+    # ky
+    # la
+    # lb
+    # lez
+    # li
+    # lmo
+    # lo
+    # lt
+    # lv
+    # mai
+    # mg
+    # mhr
+    # min
+    # mk
+    # ml
+    # mn
+    # mr
+    # mrj
+    # ms
+    # mt
+    # mwl
+    # my
+    # myv
+    # mzn
+    # nah
+    # nap
+    # nds
+    # ne
+    # new
+    # nl
+    # nn
+    # no
+    # oc
+    # or
+    # os
+    # pa
+    # pam
+    # pfl
+    # pl
+    # pms
+    # pnb
+    # ps
+    # pt
+    # qu
+    # rm
+    # ro
+    "rus_Cyrl",  # ru
+    # sa
+    # sah
+    # sc
+    # scn
+    # sco
+    # sd
+    # sh
+    # si
+    # sk
+    # sl
+    # so
+    # sq
+    # sr
+    # su
+    # sv
+    # sw
+    # ta
+    # te
+    # tg
+    "tha_Thai",  # th
+    # tk
+    # tl
+    # tr
+    # tt
+    # tyv
+    # ug
+    "ukr_Cyrl",  # uk
+    # ur
+    # uz
+    # vec
+    # vep
+    # vi
+    # vls
+    # vo
+    # wa
+    # war
+    # wuu
+    # xal
+    # xmf
+    # yi
+    # yo
+    # yue
+    "zho_Hans",  # zh
+]
+
 bge_m_training_data = {
     # source: https://arxiv.org/pdf/2402.03216
     "MIRACLRetrieval": ["train"],
@@ -298,6 +507,32 @@ bge_large_zh_v1_5 = ModelMeta(
     public_training_code=None,  # seemingly released (at least for some models, but the link is broken
     training_datasets=bge_chinese_training_data,
 )
+
+bge_m3 = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="BAAI/bge-m3",
+        revision="5617a9f61b028005a4858fdac845db406aefb181",
+    ),
+    name="BAAI/bge-m3",
+    languages=bgem3_languages,
+    open_weights=True,
+    revision="5617a9f61b028005a4858fdac845db406aefb181",
+    release_date="2024-06-28",
+    n_parameters=568_000_000,
+    memory_usage=None,
+    embed_dim=4096,
+    license="mit",
+    max_tokens=8194,
+    reference="https://huggingface.co/BAAI/bge-m3",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_data=True,
+    public_training_code=None,
+    training_datasets=bgem3_training_data,
+)
+
 
 bge_multilingual_gemma2 = ModelMeta(
     loader=partial(  # type: ignore
