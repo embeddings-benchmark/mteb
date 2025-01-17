@@ -481,6 +481,10 @@ class TaskResult(BaseModel):
             raise ValueError("No splits had scores for the specified languages.")
         return val_sum / n_val
 
+    @classmethod
+     def from_validated(cls, **data) -> TaskResult:
+         return cls.model_construct(**data)
+
     def __repr__(self) -> str:
         return f"TaskResult(task_name={self.task_name}, scores=...)"
 
@@ -497,7 +501,7 @@ class TaskResult(BaseModel):
                     }
                 )
         new_res = {**self.to_dict(), "scores": new_scores}
-        new_res = TaskResult(**new_res)
+        new_res = TaskResult.from_validated(**new_res)
         return new_res
 
     def validate_and_filter_scores(self, task: AbsTask | None = None) -> TaskResult:
@@ -548,5 +552,5 @@ class TaskResult(BaseModel):
                 f"{task.metadata.name}: Missing splits {set(splits) - seen_splits}"
             )
         new_res = {**self.to_dict(), "scores": new_scores}
-        new_res = TaskResult(**new_res)
+        new_res = TaskResult.from_validated(**new_res)
         return new_res
