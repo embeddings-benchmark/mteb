@@ -6,7 +6,7 @@ from functools import partial
 
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
-from .bge_models import bge_training_data
+from .bge_models import bgem3_training_data
 
 rubert_tiny2 = ModelMeta(
     name="cointegrated/rubert-tiny2",
@@ -115,7 +115,7 @@ user_base_ru = ModelMeta(
         "MLSUMClusteringP2P.v2": ["train"],
         "MLSUMClusteringS2S": ["train"],
         "MLSUMClusteringS2S.v2": ["train"],
-        **bge_training_data,
+        **bgem3_training_data,
         # not MTEB:
         # "deepvk/ru-HNP": ["train"],
         # "deepvk/ru-WANLI": ["train"],
