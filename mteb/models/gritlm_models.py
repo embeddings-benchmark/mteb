@@ -41,7 +41,7 @@ gritlm7b = ModelMeta(
     use_instructions=True,
     training_datasets=E5_TRAINING_DATA,  # source https://arxiv.org/pdf/2402.09906
     # section 3.1 "We finetune our final models from Mistral 7B [68] and Mixtral 8x7B [69] using adaptations of E5 [160] and the Tülu 2 data
-    public_training_code=True,  # https://github.com/ContextualAI/gritlm
+    public_training_code="https://github.com/ContextualAI/gritlm",
     public_training_data=False,
 )
 gritlm8x7b = ModelMeta(
@@ -68,6 +68,6 @@ gritlm8x7b = ModelMeta(
     use_instructions=True,
     training_datasets=E5_TRAINING_DATA,  # source https://arxiv.org/pdf/2402.09906
     # section 3.1 "We finetune our final models from Mistral 7B [68] and Mixtral 8x7B [69] using adaptations of E5 [160] and the Tülu 2 data
-    public_training_code=True,  # https://github.com/ContextualAI/gritlm
+    public_training_code="https://github.com/ContextualAI/gritlm",
     public_training_data=False,
 )

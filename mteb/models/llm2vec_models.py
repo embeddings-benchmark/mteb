@@ -125,7 +125,7 @@ llm2vec_llama3_8b_supervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
-    public_training_code=True,
+    public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     public_training_data=True,
     training_datasets=llm2vec_supervised_training_data,
 )
@@ -152,7 +152,7 @@ llm2vec_llama3_8b_unsupervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
-    public_training_code=True,
+    public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     public_training_data=True,
     training_datasets={},
 )
@@ -180,7 +180,7 @@ llm2vec_mistral7b_supervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
-    public_training_code=True,
+    public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     public_training_data=True,
     training_datasets=llm2vec_supervised_training_data,
 )
@@ -207,7 +207,7 @@ llm2vec_mistral7b_unsupervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
-    public_training_code=True,
+    public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     public_training_data=True,
     training_datasets={},
 )
@@ -234,7 +234,7 @@ llm2vec_llama2_7b_supervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
-    public_training_code=True,
+    public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     public_training_data=True,
     training_datasets=llm2vec_supervised_training_data,
 )
@@ -261,7 +261,7 @@ llm2vec_llama2_7b_unsupervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
-    public_training_code=True,
+    public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     public_training_data=True,
     training_datasets={},
 )
@@ -288,7 +288,7 @@ llm2vec_sheared_llama_supervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
-    public_training_code=True,
+    public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     public_training_data=True,
     training_datasets=llm2vec_supervised_training_data,
 )
@@ -315,7 +315,7 @@ llm2vec_sheared_llama_unsupervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
-    public_training_code=True,
+    public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     public_training_data=True,
     training_datasets={},
 )

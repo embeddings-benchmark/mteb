@@ -112,7 +112,7 @@ all_MiniLM_L6_v2 = ModelMeta(
     superseded_by=None,
     adapted_from=None,
     training_datasets=sent_trf_training_dataset,
-    public_training_code=True,
+    public_training_code=None,
     public_training_data=True,
 )
 
@@ -134,7 +134,7 @@ all_MiniLM_L12_v2 = ModelMeta(
     superseded_by=None,
     adapted_from=None,
     training_datasets=sent_trf_training_dataset,
-    public_training_code=True,
+    public_training_code=None,
     public_training_data=True,
 )
 
@@ -156,7 +156,7 @@ paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
     superseded_by=None,
     adapted_from=None,
     training_datasets=sent_trf_training_dataset,  # assumed (probably some parallel as well)
-    public_training_code=True,
+    public_training_code=None,
     public_training_data=True,
 )
 
@@ -189,7 +189,7 @@ paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
     # "flickr30k-captions": flickr_train_dataset,
     # "yahoo-answers": yahoo_answers_train_dataset,
     # "stack-exchange": stack_exchange_train_dataset,
-    public_training_code=True,
+    public_training_code=None,
     public_training_data=True,
 )
 
@@ -211,7 +211,7 @@ labse = ModelMeta(
     superseded_by=None,
     adapted_from=None,
     training_datasets=None,  # scraped and mined webdata including CC, wiki, see section 3.1 https://aclanthology.org/2022.acl-long.62.pdf
-    public_training_code=True,  # https://www.kaggle.com/models/google/labse/tensorFlow2/labse/2?tfhub-redirect=true
+    public_training_code="https://www.kaggle.com/models/google/labse/tensorFlow2/labse/2?tfhub-redirect=true",
     public_training_data=False,
 )
 
@@ -255,7 +255,7 @@ all_mpnet_base_v2 = ModelMeta(
     superseded_by=None,
     adapted_from=None,
     training_datasets=sent_trf_training_dataset,
-    public_training_code=True,
+    public_training_code=None,
     public_training_data=True,
 )
 
