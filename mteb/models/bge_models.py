@@ -520,6 +520,6 @@ bge_multilingual_gemma2 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_data=False,
-    public_training_code=False,
+    public_training_code=None,
     training_datasets=None,  # not disclosed
 )

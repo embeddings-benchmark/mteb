@@ -159,7 +159,7 @@ voyage_large_2_instruct = ModelMeta(
     use_instructions=True,
     training_datasets=None,
     public_training_data=False,  # couldn't find
-    public_training_code=False,
+    public_training_code=None,
 )
 
 voyage_finance_2 = ModelMeta(
@@ -184,7 +184,7 @@ voyage_finance_2 = ModelMeta(
     use_instructions=True,
     training_datasets=None,
     public_training_data=False,  # couldn't find
-    public_training_code=False,
+    public_training_code=None,
 )
 
 voyage_law_2 = ModelMeta(
@@ -209,7 +209,7 @@ voyage_law_2 = ModelMeta(
     use_instructions=True,
     training_datasets=None,
     public_training_data=False,  # couldn't find
-    public_training_code=False,
+    public_training_code=None,
 )
 
 voyage_code_2 = ModelMeta(
@@ -234,7 +234,7 @@ voyage_code_2 = ModelMeta(
     use_instructions=True,
     training_datasets=None,
     public_training_data=False,  # couldn't find
-    public_training_code=False,
+    public_training_code=None,
 )
 
 voyage_large_2 = ModelMeta(
@@ -259,7 +259,7 @@ voyage_large_2 = ModelMeta(
     use_instructions=True,
     training_datasets=None,
     public_training_data=False,  # couldn't find
-    public_training_code=False,
+    public_training_code=None,
 )
 
 voyage_2 = ModelMeta(
@@ -284,7 +284,7 @@ voyage_2 = ModelMeta(
     use_instructions=True,
     training_datasets=None,
     public_training_data=False,
-    public_training_code=False,
+    public_training_code=None,
 )
 voyage_multilingual_2 = ModelMeta(
     name="voyageai/voyage-multilingual-2",
@@ -308,7 +308,7 @@ voyage_multilingual_2 = ModelMeta(
     use_instructions=True,
     training_datasets=None,
     public_training_data=False,  # couldn't find
-    public_training_code=False,
+    public_training_code=None,
 )
 
 voyage_3 = ModelMeta(
@@ -333,7 +333,7 @@ voyage_3 = ModelMeta(
     use_instructions=True,
     training_datasets=None,
     public_training_data=False,  # couldn't find
-    public_training_code=False,
+    public_training_code=None,
 )
 
 voyage_3_lite = ModelMeta(
@@ -358,5 +358,5 @@ voyage_3_lite = ModelMeta(
     use_instructions=True,
     training_datasets=None,
     public_training_data=False,  # couldn't find
-    public_training_code=False,
+    public_training_code=None,
 )

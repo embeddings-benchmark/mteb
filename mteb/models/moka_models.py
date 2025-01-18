@@ -97,7 +97,7 @@ m3e_base = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
-    public_training_code=False,  # Not published
+    public_training_code=None,  # Not published
     public_training_data=False,  # They haven't published it yet
     training_datasets=m3e_dataset,
 )
@@ -120,7 +120,7 @@ m3e_small = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
-    public_training_code=False,  # Not published
+    public_training_code=None,  # Not published
     public_training_data=False,  # They haven't published it yet
     training_datasets=m3e_dataset,
 )
@@ -144,7 +144,7 @@ m3e_large = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
-    public_training_code=False,  # Not published
+    public_training_code=None,  # Not published
     public_training_data=False,  # They haven't published it yet
     training_datasets=m3e_dataset,
 )

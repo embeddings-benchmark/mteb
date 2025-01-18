@@ -223,7 +223,7 @@ jina_embeddings_v3 = ModelMeta(
     use_instructions=True,
     reference="https://huggingface.co/jinaai/jina-embeddings-v3",
     training_datasets=None,
-    public_training_code=False,
+    public_training_code=None,
     public_training_data=False,
 )
 
@@ -246,7 +246,7 @@ jina_embeddings_v2_base_en = ModelMeta(
     superseded_by=None,
     adapted_from=None,
     training_datasets=None,
-    public_training_code=False,
+    public_training_code=None,
     public_training_data=False,  # uses scrapes e.g. CC
 )
 
@@ -268,7 +268,7 @@ jina_embeddings_v2_small_en = ModelMeta(
     superseded_by=None,
     adapted_from=None,
     training_datasets=None,
-    public_training_code=False,
+    public_training_code=None,
     public_training_data=False,  # uses scrapes e.g. CC and {"jinaai/negation-dataset": ["train"]}
 )
 
@@ -290,7 +290,7 @@ jina_embedding_b_en_v1 = ModelMeta(
     superseded_by="jinaai/jina-embeddings-v2-base-en",
     adapted_from=None,
     training_datasets=None,
-    public_training_code=False,
+    public_training_code=None,
     public_training_data=False,  # uses scrapes e.g. CC and {"jinaai/negation-dataset": ["train"]}
 )
 
@@ -312,6 +312,6 @@ jina_embedding_s_en_v1 = ModelMeta(
     superseded_by="jinaai/jina-embeddings-v2-small-en",
     adapted_from=None,
     training_datasets=None,
-    public_training_code=False,
+    public_training_code=None,
     public_training_data=False,  # uses scrapes e.g. CC and {"jinaai/negation-dataset": ["train"]}
 )

@@ -92,12 +92,12 @@ sbert_large_mt_nlu_ru = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
-    public_training_data={
+    public_training_data=True,
+    public_training_code=None,
+    training_datasets={
         # SNLI, MNLI
         # https://github.com/brmson/dataset-sts
     },
-    public_training_code=None,
-    training_datasets=None,
 )
 
 user_base_ru = ModelMeta(

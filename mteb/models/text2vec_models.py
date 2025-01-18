@@ -22,7 +22,7 @@ text2vec_base_chinese = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
-    public_training_code=False,  # Couldn't find it
+    public_training_code=None,  # Couldn't find it
     public_training_data=True,
     training_datasets={
         # source: https://huggingface.co/shibing624/text2vec-base-chinese
@@ -49,7 +49,7 @@ text2vec_base_chinese_paraphrase = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
-    public_training_code=False,  # Couldn't find it
+    public_training_code=None,  # Couldn't find it
     public_training_data=True,
     training_datasets={
         # source: https://huggingface.co/shibing624/text2vec-base-chinese
@@ -92,7 +92,7 @@ text2vec_base_multilingual = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
-    public_training_code=False,  # Couldn't find it
+    public_training_code=None,  # Couldn't find it
     public_training_data=True,
     training_datasets={
         # source: https://huggingface.co/shibing624/text2vec-base-chinese

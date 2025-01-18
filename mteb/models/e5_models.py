@@ -148,7 +148,7 @@ e5_mult_small = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_data=False,
-    public_training_code=False,
+    public_training_code=None,
     training_datasets=E5_TRAINING_DATA,
 )
 
@@ -173,7 +173,7 @@ e5_mult_base = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_data=False,
-    public_training_code=False,
+    public_training_code=None,
     training_datasets=E5_TRAINING_DATA,
 )
 
@@ -199,7 +199,7 @@ e5_mult_large = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_data=False,
-    public_training_code=False,
+    public_training_code=None,
     training_datasets=E5_TRAINING_DATA,
 )
 
@@ -224,7 +224,7 @@ e5_eng_small_v2 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_data=False,
-    public_training_code=False,
+    public_training_code=None,
     training_datasets=E5_TRAINING_DATA,
 )
 
@@ -250,7 +250,7 @@ e5_eng_small = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_data=False,
-    public_training_code=False,
+    public_training_code=None,
     training_datasets=E5_TRAINING_DATA,
 )
 
@@ -278,7 +278,7 @@ e5_eng_base_v2 = ModelMeta(
     superseded_by=None,
     adapted_from=None,
     public_training_data=False,
-    public_training_code=False,
+    public_training_code=None,
     training_datasets=E5_TRAINING_DATA,
 )
 
@@ -306,7 +306,7 @@ e5_eng_large_v2 = ModelMeta(
     superseded_by=None,
     adapted_from=None,
     public_training_data=False,
-    public_training_code=False,
+    public_training_code=None,
     training_datasets=E5_TRAINING_DATA,
 )
 
@@ -334,7 +334,7 @@ e5_large = ModelMeta(
     superseded_by="intfloat/e5-large-v2",
     adapted_from=None,
     public_training_data=False,
-    public_training_code=False,
+    public_training_code=None,
     training_datasets=E5_TRAINING_DATA,
 )
 
@@ -362,6 +362,6 @@ e5_base = ModelMeta(
     superseded_by="intfloat/e5-base-v2",
     adapted_from=None,
     public_training_data=False,
-    public_training_code=False,
+    public_training_code=None,
     training_datasets=E5_TRAINING_DATA,
 )

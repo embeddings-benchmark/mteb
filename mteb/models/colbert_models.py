@@ -207,7 +207,7 @@ jina_colbert_v2 = ModelMeta(
     ],
     open_weights=True,
     revision="4cf816e5e2b03167b132a3c847a9ecd48ba708e1",
-    public_training_code=False,
+    public_training_code=None,
     release_date="2024-08-16",
     n_parameters=559 * 1e6,
     max_tokens=8192,

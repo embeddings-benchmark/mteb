@@ -26,7 +26,7 @@ inf_retriever_v1 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from="Alibaba-NLP/gte-Qwen2-7B-instruct",
-    public_training_code=False,
+    public_training_code=None,
     public_training_data=False,
     training_datasets=None,
 )

@@ -153,7 +153,7 @@ google_text_emb_004 = ModelMeta(
     framework=["API"],
     use_instructions=True,
     public_training_data=False,  # assumed
-    public_training_code=False,  # assumed
+    public_training_code=None,  # assumed
     training_datasets=None,
 )
 
@@ -177,7 +177,7 @@ google_text_emb_005 = ModelMeta(
     framework=["API"],
     use_instructions=True,
     public_training_data=False,  # assumed
-    public_training_code=False,  # assumed
+    public_training_code=None,  # assumed
     training_datasets=None,
 )
 
@@ -201,6 +201,6 @@ google_text_multilingual_emb_002 = ModelMeta(
     framework=["API"],
     use_instructions=True,
     public_training_data=False,  # assumed
-    public_training_code=False,  # assumed
+    public_training_code=None,  # assumed
     training_datasets=None,
 )
