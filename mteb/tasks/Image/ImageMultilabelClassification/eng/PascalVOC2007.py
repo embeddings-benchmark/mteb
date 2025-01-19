@@ -21,7 +21,7 @@ class VOC2007Classification(AbsTaskImageMultilabelClassification):
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="accuracy",
+        main_score="lrap",
         date=(
             "2005-01-01",
             "2014-01-01",
