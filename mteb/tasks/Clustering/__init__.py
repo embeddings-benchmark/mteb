@@ -21,6 +21,7 @@ from .eng.WikiCitiesClustering import *
 from .fra.AlloProfClusteringP2P import *
 from .fra.AlloProfClusteringS2S import *
 from .fra.HALClusteringS2S import *
+from .fas.FaMTEBClustering import *
 from .jpn.LivedoorNewsClustering import *
 from .jpn.MewsC16JaClustering import *
 from .multilingual.IndicReviewsClusteringP2P import *
