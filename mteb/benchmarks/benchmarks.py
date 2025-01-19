@@ -1232,3 +1232,87 @@ C_MTEB = Benchmark(
       primaryClass={cs.CL}
 }""",
 )
+
+
+FA_MTEB = Benchmark(
+    name="MTEB(fa, beta)",
+    tasks=get_tasks(
+        languages=["fas"],
+        tasks=[
+            # Classification
+            "PersianFoodSentimentClassification",
+            "SynPerChatbotConvSAClassification",
+            "SynPerChatbotConvSAToneClassification",
+            "SynPerChatbotSatisfactionLevelClassification",
+            "SynPerChatbotRAGToneClassification",
+            "SynPerChatbotToneChatbotClassification",
+            "SynPerChatbotToneUserClassification",
+            "PersianTextTone",
+            "SIDClassification",
+            "DeepSentiPers",
+            "PersianTextEmotion",
+            "SentimentDKSF",
+            "NLPTwitterAnalysisClassification",
+            "DigikalamagClassification",
+            "MassiveIntentClassification",         
+            "MassiveScenarioClassification",       
+
+            # Clustering
+            "BeytooteClustering",
+            "DigikalamagClustering",
+            "HamshahriClustring",
+            "NLPTwitterAnalysisClustering",
+            "SIDClustring",
+
+            # PairClassification
+            "FarsTail",
+            "CExaPPC",
+            "SynPerChatbotRAGFAQPC",
+            "FarsiParaphraseDetection",
+            "SynPerTextKeywordsPC",
+            "SynPerQAFaPC",
+            "ParsinluEntail",
+            "ParsinluQueryParaphPC",
+
+            # Reranking
+            "MIRACLReranking",                   
+            "WikipediaRerankingMultilingual",    
+
+            # Retrieval
+            "SynPerQARetrieval",
+            "SynPerChatbotTopicsRetrieval",
+            "SynPerChatbotRAGTopicsRetrieval",
+            "SynPerChatbotRAGFAQRetrieval",
+            "PersianWebDocumentRetrieval",
+            "WikipediaRetrievalMultilingual", 
+            "MIRACLRetrieval",                   
+            "ClimateFEVER-Fa",
+            "DBPedia-Fa",
+            "HotpotQA-Fa",
+            "MSMARCO-Fa",
+            "NQ-Fa",
+            "ArguAna-Fa",
+            "CQADupstackRetrieval-Fa",
+            "FiQA2018-Fa",
+            "NFCorpus-Fa",
+            "QuoraRetrieval-Fa",
+            "SCIDOCS-Fa",
+            "SciFact-Fa",
+            "TRECCOVID-Fa",
+            "Touche2020-Fa",
+
+            # STS
+            "Farsick",
+            "SynPerSTS",
+            "Query2Query",
+
+            # SummaryRetrieval
+            "SAMSumFa",
+            "SynPerChatbotSumSRetrieval",
+            "SynPerChatbotRAGSumSRetrieval",
+        ],
+    ),
+    description="Main Persian (Farsi) benchmarks from MTEB",
+    reference=None,
+    citation=None,
+)
