@@ -10,6 +10,7 @@ from .eng.STS15STS import *
 from .eng.STS16STS import *
 from .eng.STSBenchmarkSTS import *
 from .fao.FaroeseSTS import *
+from .fas.FaMTEBSTS import *
 from .fin.FinParaSTS import *
 from .fra.SickFrSTS import *
 from .jpn.JSICK import *
