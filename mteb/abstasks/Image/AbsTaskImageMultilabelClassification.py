@@ -36,7 +36,13 @@ def evaluate_classifier(
     f1 = f1_score(y_test, y_pred, average="macro")
     scores["accuracy"] = accuracy
     scores["f1"] = f1
-    lrap = label_ranking_average_precision_score(y_test, y_pred)
+    all_probs = []
+    for estimator in classifier.estimators_:
+        probs = estimator.predict_proba(embeddings_test)[:, 1]
+        all_probs.append(probs)
+
+    y_score = np.stack(all_probs, axis=1)  # shape: (n_samples, n_labels)
+    lrap = label_ranking_average_precision_score(y_test, y_score)
     scores["lrap"] = lrap
     return scores
 
