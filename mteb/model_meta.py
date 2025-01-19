@@ -94,7 +94,7 @@ class ModelMeta(BaseModel):
     license: str | None
     open_weights: bool | None
     public_training_code: str | None
-    framework: list[FRAMEWORKS] = []
+    framework: list[FRAMEWORKS]
     reference: STR_URL | None = None
     similarity_fn_name: DISTANCE_METRICS | None
     use_instructions: bool | None
