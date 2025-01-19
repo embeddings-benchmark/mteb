@@ -7,7 +7,7 @@ from mteb.model_meta import ModelMeta, sentence_transformers_loader
 model_prompts = {"query": "Represent this sentence for searching relevant passages: "}
 model_prompts_zh = {"query": "为这个句子生成表示以用于检索相关文章："}
 
-bgem3_training_data = {
+bge_m3_training_data = {
     # source: https://arxiv.org/abs/2402.03216
     "MIRACLRetrieval": ["train"],
     "MIRACLRetrievalHardNegatives": ["train"],
@@ -467,7 +467,7 @@ bge_m3 = ModelMeta(
     use_instructions=False,
     public_training_data=True,
     public_training_code=None,
-    training_datasets=bgem3_training_data,
+    training_datasets=bge_m3_training_data,
 )
 
 

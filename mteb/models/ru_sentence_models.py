@@ -6,7 +6,7 @@ from functools import partial
 
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
-from .bge_models import bgem3_training_data
+from .bge_models import bge_m3_training_data
 
 rubert_tiny = ModelMeta(
     name="cointegrated/rubert-tiny",
@@ -158,7 +158,7 @@ user_bge_m3 = ModelMeta(
     open_weights=True,
     revision="0cc6cfe48e260fb0474c753087a69369e88709ae",
     release_date="2024-07-05",
-    n_parameters=359_000_000,
+    n_parameters=359_026_688,
     embed_dim=1024,
     license="apache-2.0",
     max_tokens=8194,
@@ -173,7 +173,7 @@ user_bge_m3 = ModelMeta(
         "MLSUMClusteringP2P.v2": ["train"],
         "MLSUMClusteringS2S": ["train"],
         "MLSUMClusteringS2S.v2": ["train"],
-        **bgem3_training_data,
+        **bge_m3_training_data,
         # not MTEB:
         # "deepvk/ru-HNP": ["train"],
         # "deepvk/ru-WANLI": ["train"],
@@ -222,7 +222,7 @@ rubert_base_cased = ModelMeta(
     n_parameters=1280_000_000,
     embed_dim=768,
     license="Not specified",
-    max_tokens=512,  # best guess
+    max_tokens=512,
     reference="https://huggingface.co/DeepPavlov/rubert-base-cased",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
@@ -264,7 +264,10 @@ rubert_base_cased_sentence = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
-    training_datasets=None,
+    training_datasets={
+        # "SNLI": [],
+        "XNLI": ["dev"]
+    },
 )
 
 labse_en_ru = ModelMeta(
@@ -281,8 +284,9 @@ labse_en_ru = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
-    public_training_code=None,
+    public_training_code=True,  # https://colab.research.google.com/drive/1dnPRn0-ugj3vZgSpyCC9sgslM2SuSfHy?usp=sharing
     training_datasets=None,
+    adapted_from="sentence-transformers/LaBSE",
 )
 
 rubert_tiny_turbo = ModelMeta(
@@ -302,6 +306,7 @@ rubert_tiny_turbo = ModelMeta(
     public_training_code=None,
     training_datasets=None,  # source model in unknown
     # Not MTEB: {"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
+    adapted_from="cointegrated/rubert-tiny2",
 )
 
 labse_ru_turbo = ModelMeta(
@@ -321,6 +326,7 @@ labse_ru_turbo = ModelMeta(
     training_datasets=None,  # source model in unknown
     # not MTEB: {"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
     public_training_code=None,
+    adapted_from="cointegrated/LaBSE-en-ru",
 )
 
 
@@ -347,6 +353,21 @@ rosberta_ru_en = ModelMeta(
     embed_dim=1024,
     license="mit",
     similarity_fn_name="cosine",
-    public_training_code=None,
-    training_datasets=None,
+    public_training_code=False,
+    adapted_from="ai-forever/ruRoberta-large",
+    training_datasets={
+        # https://huggingface.co/ai-forever/ruRoberta-large
+        # https://huggingface.co/datasets/IlyaGusev/yandex_q_full
+        # https://huggingface.co/datasets/IlyaGusev/pikabu
+        # https://huggingface.co/datasets/IlyaGusev/ru_stackoverflow
+        # https://huggingface.co/datasets/IlyaGusev/habr
+        # https://huggingface.co/datasets/its5Q/habr_qna
+        # NewsCommentary
+        # MultiParaCrawl
+        "XNLI": [],
+        "XNLIV2": [],
+        "LanguageClassification": [],  # XNLI
+        "MIRACLReranking": ["train"],
+        "MIRACLRetrieval": ["train"],
+    },
 )

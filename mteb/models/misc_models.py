@@ -7,7 +7,7 @@ import torch
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 from mteb.models.e5_models import E5_TRAINING_DATA
 
-from .bge_models import bge_m_training_data, bge_training_data
+from .bge_models import bge_m3_training_data, bge_training_data
 from .sentence_transformers_models import sent_trf_training_dataset
 
 Haon_Chen__speed_embedding_7b_instruct = ModelMeta(
@@ -671,7 +671,7 @@ manu__bge_m3_custom_fr = ModelMeta(
     reference="https://huggingface.co/manu/bge-m3-custom-fr",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets=bge_m3_training_data,
     adapted_from="data/bge-m3-custom",
     superseded_by=None,
 )
@@ -1483,39 +1483,7 @@ deepfile__embedder_100p = ModelMeta(
     adapted_from="sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     superseded_by=None,
 )
-deepvk__USER_bge_m3 = ModelMeta(
-    name="deepvk/USER-bge-m3",
-    revision="0cc6cfe48e260fb0474c753087a69369e88709ae",
-    release_date="2024-07-05",
-    languages=["rus_Cyrl"],
-    loader=None,
-    n_parameters=359026688,
-    memory_usage=None,
-    max_tokens=8194.0,
-    embed_dim=1024,
-    license="apache-2.0",
-    open_weights=True,
-    public_training_data=True,
-    public_training_code=None,
-    framework=["PyTorch", "Sentence Transformers"],
-    reference="https://huggingface.co/deepvk/USER-bge-m3",
-    similarity_fn_name="cosine",
-    use_instructions=None,
-    training_datasets=bge_m_training_data,  # derived from.
-    # not in MTEB:
-    # "deepvk/ru-HNP": ["train"],
-    # "deepvk/ru-WANLI": ["train"],
-    # "Shitao/bge-m3-data": ["train"],
-    # "RussianNLP/russian_super_glue": ["train"],
-    # "reciTAL/mlsum": ["train"],
-    # "Milana/russian_keywords": ["train"],
-    # "IlyaGusev/gazeta": ["train"],
-    # "d0rj/gsm8k-ru": ["train"],
-    # "bragovo/dsum_ru": ["train"],
-    # "CarlBrendt/Summ_Dialog_News": ["train"],
-    adapted_from="USER-bge-m3",
-    superseded_by=None,
-)
+
 infgrad__stella_base_en_v2 = ModelMeta(
     name="infgrad/stella-base-en-v2",
     revision="c9e80ff9892d80b39dc54e30a7873f91ea161034",
