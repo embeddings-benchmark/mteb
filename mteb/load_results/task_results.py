@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from collections.abc import Iterable
 import json
 import logging
 from argparse import Namespace
 from collections import defaultdict
+from collections.abc import Iterable
 from functools import cached_property
 from importlib.metadata import version
 from pathlib import Path
