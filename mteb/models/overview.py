@@ -244,7 +244,7 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
             similarity_fn_name=None,
             use_instructions=None,
             training_datasets=None,
-            frameworks=[],
+            framework=[],
         )
 
 

@@ -381,6 +381,7 @@ def test_reranker_same_ndcg1():
         similarity_fn_name=None,
         use_instructions=None,
         training_datasets=None,
+        framework=["Sentence Transformers", "PyTorch"],
     )
 
     eval = MTEB(tasks=["SciFact"])
