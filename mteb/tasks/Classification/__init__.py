@@ -41,6 +41,7 @@ from .eng.YahooAnswersTopicsClassification import *
 from .eng.YelpReviewFullClassification import *
 from .est.estonian_valence import *
 from .fas.PersianFoodSentimentClassification import *
+from .fas.FaMTEBClassification import *
 from .fil.FilipinoHateSpeechClassification import *
 from .fil.FilipinoShopeeReviewsClassification import *
 from .fin.FinToxicityClassification import *
