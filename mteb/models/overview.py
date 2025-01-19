@@ -293,5 +293,6 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
             similarity_fn_name=None,
             use_instructions=None,
             training_datasets=None,
+            framework=[],
         )
     return meta
