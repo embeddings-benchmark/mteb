@@ -152,7 +152,7 @@ colbert_v2 = ModelMeta(
     languages=["eng_Latn"],
     open_weights=True,
     revision="c1e84128e85ef755c096a95bdb06b47793b13acf",
-    public_training_code=True,
+    public_training_code=None,
     release_date="2024-09-21",
     n_parameters=110 * 1e6,
     max_tokens=180,  # Reduced for Benchmarking - see ColBERT paper
@@ -205,7 +205,7 @@ jina_colbert_v2 = ModelMeta(
     ],
     open_weights=True,
     revision="4cf816e5e2b03167b132a3c847a9ecd48ba708e1",
-    public_training_code=False,
+    public_training_code=None,
     release_date="2024-08-16",
     n_parameters=559 * 1e6,
     max_tokens=8192,
