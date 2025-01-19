@@ -236,6 +236,16 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
             revision=None,
             languages=None,
             release_date=None,
+            n_parameters=None,
+            max_tokens=None,
+            embed_dim=None,
+            license=None,
+            open_weights=True,
+            public_training_code=None,
+            similarity_fn_name=None,
+            use_instructions=None,
+            training_datasets=None,
+            frameworks=[],
         )
 
 
