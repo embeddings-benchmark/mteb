@@ -91,25 +91,16 @@ bge_chinese_training_data = {
 
 bgem3_training_data = {
     # source https://arxiv.org/abs/2402.03216
-    "MIRACLRetrieval": ["train"],
-    "MIRACLRetrievalHardNegatives": ["train"],
-    "MIRACLReranking": ["train"],
-    "LeCaRDv2": ["train"],
-    "CMedQAv1-reranking": ["train"],
+    "T2Retrieval": ["train"],
+    "DuReader": ["train"],
+    "MMarcoReranking": ["train"],
     "CMedQAv2-reranking": ["train"],
-    "MrTidyRetrieval": ["train"],
-    "T2Reranking": ["train"],
-    "MSMARCO": ["train"],
-    "MSMARCOHardNegatives": ["train"],
-    "NanoMSMARCORetrieval": ["train"],
-    "MSMARCO-PL": ["train"],  # translation not trained on
-    "NQ": ["train"],
-    "NQHardNegatives": ["train"],
-    "NanoNQRetrieval": ["train"],
-    "NQ-PL": ["train"],  # translation not trained on
     "HotpotQA": ["train"],
-    "HotpotQA-PL": ["train"],  # translation not trained on
-    "HotpotQAHardNegatives": ["train"],
+    "NQ": ["train"],
+    "MSMARCO": ["train"],
+    "MrTidyRetrieval": ["train"],
+    "MIRACLRetrieval": ["train"],
+    "CodeSearchNet": ["train"],
     # not in mteb
     # "s2orc"
     # Wikipedia
@@ -307,6 +298,59 @@ bgem3_languages = [
     "zho_Hans",  # zh
 ]
 
+bge_m_training_data = {
+    # source: https://arxiv.org/pdf/2402.03216
+    "MIRACLRetrieval": ["train"],
+    "MIRACLRetrievalHardNegatives": ["train"],
+    "MIRACLReranking": ["train"],
+    "LeCaRDv2": ["train"],
+    "CMedQAv1-reranking": ["train"],
+    "CMedQAv2-reranking": ["train"],
+    "MrTidyRetrieval": ["train"],
+    "T2Reranking": ["train"],
+    "MSMARCO": ["train"],
+    "MSMARCOHardNegatives": ["train"],
+    "NanoMSMARCORetrieval": ["train"],
+    "MSMARCO-PL": ["train"],  # translation not trained on
+    "NQ": ["train"],
+    "NQHardNegatives": ["train"],
+    "NanoNQRetrieval": ["train"],
+    "NQ-PL": ["train"],  # translation not trained on
+    "HotpotQA": ["train"],
+    "HotpotQA-PL": ["train"],  # translation not trained on
+    "HotpotQAHardNegatives": ["train"],
+    # + synthetic data
+}
+
+bge_training_data = {
+    # source: https://data.baai.ac.cn/details/BAAI-MTP
+    "NQ": ["test"],
+    "NQHardNegatives": ["test"],
+    "AmazonReviewsClassification": [
+        "validation",
+        "test",
+    ],  # assumed from: amazon_reviews_multi
+    "MLQARetrieval": [
+        "validation",
+        "test",
+    ],  # assumed from mlqa	(question, context)
+    # not in mteb
+    # Dataset	Pairs
+    # wudao	(title, passage)
+    # cmrc2018	(query, context)
+    # dureader	(query, context)
+    # simclue	(sentence_a, sentence_b)
+    # csl	(title, abstract)
+    # amazon_reviews_multi	(title, body)
+    # wiki_atomic_edits	(base_sentence, edited_sentence)
+    # mlqa	(question, context)
+    # xlsum	(title, summary) (title, text)
+    # "sentence-transformers data": [],  # https://huggingface.co/datasets/sentence-transformers/embedding-training-data # TODO check this further
+    # "wikipedia": [],  # title + section title, passage
+    # "reddit": [],  # title, body
+    # "stackexchange": [],  # (title, upvoted answer) (title+body, upvoted answer)
+    # "s2orc": [],  # (title, abstract) (title, citation title) (abstract, citation abstract)
+}
 
 bge_small_en_v1_5 = ModelMeta(
     loader=partial(  # type: ignore
@@ -520,6 +564,6 @@ bge_multilingual_gemma2 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_data=False,
-    public_training_code=None,
+    public_training_code=False,
     training_datasets=None,  # not disclosed
 )

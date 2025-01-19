@@ -439,7 +439,7 @@ arctic_embed_l_v2_0 = ModelMeta(
     adapted_from="BAAI/bge-m3-retromae",
     superseded_by=None,
     public_training_data=False,  # couldn't find
-    public_training_code=None,  # couldn't find
+    public_training_code=False,  # couldn't find
     training_datasets={
         # source: https://arxiv.org/pdf/2405.05374
         # splits not specified to assuming everything
