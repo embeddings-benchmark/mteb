@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Iterable
 import json
 import logging
 from argparse import Namespace
@@ -7,7 +8,7 @@ from collections import defaultdict
 from functools import cached_property
 from importlib.metadata import version
 from pathlib import Path
-from typing import Any, Callable, cast
+from typing import Any, Callable
 
 import numpy as np
 from packaging.version import Version
@@ -452,10 +453,12 @@ class TaskResult(BaseModel):
 
         return aggregation(values)
 
-    def get_score_fast(self, splits: str | None, languages: str | None) -> float:
+    def get_score_fast(
+        self, splits: Iterable[str] | None = None, languages: str | None = None
+    ) -> float:
         """Sped up version of get_score that will be used if no aggregation, script or getter needs to be specified."""
         if splits is None:
-            splits = self.scores
+            splits = self.scores.keys()
         val_sum = 0
         n_val = 0
         for split in splits:
@@ -482,8 +485,8 @@ class TaskResult(BaseModel):
         return val_sum / n_val
 
     @classmethod
-     def from_validated(cls, **data) -> TaskResult:
-         return cls.model_construct(**data)
+    def from_validated(cls, **data) -> TaskResult:
+        return cls.model_construct(**data)
 
     def __repr__(self) -> str:
         return f"TaskResult(task_name={self.task_name}, scores=...)"
@@ -520,7 +523,6 @@ class TaskResult(BaseModel):
 
         splits = task.metadata.eval_splits
         hf_subsets = task.hf_subsets
-        hf_subsets = cast(list[HFSubset], hf_subsets)
         hf_subsets = set(hf_subsets)
 
         new_scores = {}

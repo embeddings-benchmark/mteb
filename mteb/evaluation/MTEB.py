@@ -7,6 +7,7 @@ import traceback
 from collections.abc import Iterable, Sequence
 from copy import copy, deepcopy
 from datetime import datetime
+from itertools import chain
 from pathlib import Path
 from time import time
 from typing import Any
@@ -64,12 +65,11 @@ class MTEB:
         self.deprecation_warning(
             task_types, task_categories, task_langs, tasks, version
         )
-
         if tasks is not None:
             self._tasks = tasks
             if isinstance(tasks[0], Benchmark):
                 self.benchmarks = tasks
-                self._tasks = list(tasks)
+                self._tasks = self._tasks = list(chain.from_iterable(tasks))  # type: ignore
             assert (
                 task_types is None and task_categories is None
             ), "Cannot specify both `tasks` and `task_types`/`task_categories`"

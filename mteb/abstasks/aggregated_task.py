@@ -39,9 +39,9 @@ class AbsTaskAggregate(AbsTask):
             main_scores = []
             for task_res in task_results:
                 main_scores.append(
-                    task_res.get_score(
+                    task_res.get_score_fast(
+                        languages=None,
                         splits=self.metadata.eval_splits,
-                        getter=lambda scores: scores[self.metadata.main_score],
                     )
                 )
             main_score = np.mean(main_scores)
