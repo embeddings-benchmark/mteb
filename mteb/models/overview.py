@@ -212,7 +212,7 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
             frameworks.append("Sentence Transformers")
         return ModelMeta(
             name=model_name,
-            revision=card.base_model_revision,
+            revision=card_data.get("base_model_revision", None),
             # TODO
             release_date=None,
             # TODO: We need a mapping between conflicting language codes
