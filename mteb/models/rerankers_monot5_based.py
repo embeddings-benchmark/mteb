@@ -304,6 +304,7 @@ monot5_small = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
+    framework=["PyTorch"],
 )
 
 monot5_base = ModelMeta(
@@ -326,6 +327,7 @@ monot5_base = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
+    framework=["PyTorch"],
 )
 
 monot5_large = ModelMeta(
@@ -348,6 +350,7 @@ monot5_large = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
+    framework=["PyTorch"],
 )
 
 monot5_3b = ModelMeta(
@@ -370,6 +373,7 @@ monot5_3b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
+    framework=["PyTorch"],
 )
 
 flant5_base = ModelMeta(
@@ -403,6 +407,7 @@ flant5_base = ModelMeta(
     public_training_code=None,
     similarity_fn_name=None,
     use_instructions=None,
+    framework=["PyTorch"],
 )
 
 flant5_large = ModelMeta(
@@ -436,6 +441,7 @@ flant5_large = ModelMeta(
     public_training_code=None,
     similarity_fn_name=None,
     use_instructions=None,
+    framework=["PyTorch"],
 )
 
 flant5_xl = ModelMeta(
@@ -469,6 +475,7 @@ flant5_xl = ModelMeta(
     public_training_code=None,
     similarity_fn_name=None,
     use_instructions=None,
+    framework=["PyTorch"],
 )
 
 flant5_xxl = ModelMeta(
@@ -502,6 +509,7 @@ flant5_xxl = ModelMeta(
     public_training_code=None,
     similarity_fn_name=None,
     use_instructions=None,
+    framework=["PyTorch"],
 )
 
 
@@ -525,6 +533,7 @@ llama2_7b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
+    framework=["PyTorch"],
 )
 
 llama2_7b_chat = ModelMeta(
@@ -547,6 +556,7 @@ llama2_7b_chat = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
+    framework=["PyTorch"],
 )
 
 mistral_7b = ModelMeta(
@@ -569,6 +579,7 @@ mistral_7b = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
+    framework=["PyTorch"],
 )
 
 followir_7b = ModelMeta(
@@ -591,6 +602,7 @@ followir_7b = ModelMeta(
     public_training_code=None,
     similarity_fn_name=None,
     use_instructions=None,
+    framework=["PyTorch"],
 )
 
 
@@ -718,6 +730,7 @@ mt5_base_mmarco_v2 = ModelMeta(
     public_training_code=None,
     similarity_fn_name=None,
     use_instructions=None,
+    framework=["PyTorch"],
 )
 
 mt5_13b_mmarco_100k = ModelMeta(
@@ -740,4 +753,5 @@ mt5_13b_mmarco_100k = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
+    framework=["PyTorch"],
 )

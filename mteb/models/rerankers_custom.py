@@ -212,6 +212,7 @@ monobert_large = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
+    framework=["Sentence Transformers", "PyTorch"],
 )
 
 # languages unclear: https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual/discussions/28
@@ -235,6 +236,7 @@ jina_reranker_multilingual = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
+    framework=["Sentence Transformers", "PyTorch"],
 )
 
 bge_reranker_v2_m3 = ModelMeta(
@@ -290,4 +292,5 @@ bge_reranker_v2_m3 = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
+    framework=["Sentence Transformers", "PyTorch"],
 )

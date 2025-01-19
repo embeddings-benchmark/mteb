@@ -280,4 +280,5 @@ rosberta_ru_en = ModelMeta(
     similarity_fn_name="cosine",
     public_training_code=None,
     training_datasets=None,
+    framework=["Sentence Transformers", "PyTorch"],
 )
