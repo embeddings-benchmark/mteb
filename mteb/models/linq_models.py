@@ -32,7 +32,6 @@ Linq_Embed_Mistral = ModelMeta(
     revision="0c1a0b0589177079acc552433cad51d7c9132379",
     release_date="2024-05-29",  # initial commit of hf model.
     n_parameters=7_110_000_000,
-    memory_usage=None,
     embed_dim=4096,
     license="cc-by-nc-4.0",
     max_tokens=32768,
@@ -40,7 +39,6 @@ Linq_Embed_Mistral = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
-    public_training_data=None,
     public_training_code=None,
     training_datasets=None,
 )

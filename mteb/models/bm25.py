@@ -131,7 +131,6 @@ bm25_s = ModelMeta(
     revision="0_1_10",
     release_date="2024-07-10",  ## release of version 0.1.10
     n_parameters=None,
-    memory_usage=None,
     embed_dim=None,
     license=None,
     max_tokens=None,
@@ -139,7 +138,6 @@ bm25_s = ModelMeta(
     similarity_fn_name=None,
     framework=[],
     use_instructions=False,
-    public_training_data=None,
     public_training_code="https://github.com/xhluca/bm25s",
     training_datasets=None,
 )

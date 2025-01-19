@@ -376,7 +376,6 @@ def test_reranker_same_ndcg1():
         max_tokens=None,
         embed_dim=None,
         license=None,
-        public_training_data=None,
         public_training_code=None,
         reference=None,
         similarity_fn_name=None,

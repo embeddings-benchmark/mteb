@@ -151,14 +151,12 @@ voyage_large_2_instruct = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
-    memory_usage=None,
     license=None,
     reference="https://blog.voyageai.com/2024/05/05/voyage-large-2-instruct-instruction-tuned-and-rank-1-on-mteb/",
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
     training_datasets=None,
-    public_training_data=False,  # couldn't find
     public_training_code=None,
 )
 
@@ -176,14 +174,12 @@ voyage_finance_2 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
-    memory_usage=None,
     license=None,
     reference="https://blog.voyageai.com/2024/06/03/domain-specific-embeddings-finance-edition-voyage-finance-2/",
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
     training_datasets=None,
-    public_training_data=False,  # couldn't find
     public_training_code=None,
 )
 
@@ -201,14 +197,12 @@ voyage_law_2 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
-    memory_usage=None,
     license=None,
     reference="https://blog.voyageai.com/2024/04/15/domain-specific-embeddings-and-retrieval-legal-edition-voyage-law-2/",
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
     training_datasets=None,
-    public_training_data=False,  # couldn't find
     public_training_code=None,
 )
 
@@ -226,14 +220,12 @@ voyage_code_2 = ModelMeta(
     embed_dim=1536,
     open_weights=False,
     n_parameters=None,
-    memory_usage=None,
     license=None,
     reference="https://blog.voyageai.com/2024/01/23/voyage-code-2-elevate-your-code-retrieval/",
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
     training_datasets=None,
-    public_training_data=False,  # couldn't find
     public_training_code=None,
 )
 
@@ -251,14 +243,12 @@ voyage_large_2 = ModelMeta(
     embed_dim=1536,
     open_weights=False,
     n_parameters=None,
-    memory_usage=None,
     license=None,
     reference="https://blog.voyageai.com/2023/10/29/voyage-embeddings/",
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
     training_datasets=None,
-    public_training_data=False,  # couldn't find
     public_training_code=None,
 )
 
@@ -276,14 +266,12 @@ voyage_2 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
-    memory_usage=None,
     license=None,
     reference="https://blog.voyageai.com/2023/10/29/voyage-embeddings/",
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
     training_datasets=None,
-    public_training_data=False,
     public_training_code=None,
 )
 voyage_multilingual_2 = ModelMeta(
@@ -300,14 +288,12 @@ voyage_multilingual_2 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
-    memory_usage=None,
     license=None,
     reference="https://blog.voyageai.com/2024/06/10/voyage-multilingual-2-multilingual-embedding-model/",
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
     training_datasets=None,
-    public_training_data=False,  # couldn't find
     public_training_code=None,
 )
 
@@ -325,14 +311,12 @@ voyage_3 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
-    memory_usage=None,
     license=None,
     reference="https://blog.voyageai.com/2024/09/18/voyage-3/",
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
     training_datasets=None,
-    public_training_data=False,  # couldn't find
     public_training_code=None,
 )
 
@@ -350,13 +334,11 @@ voyage_3_lite = ModelMeta(
     embed_dim=512,
     open_weights=False,
     n_parameters=None,
-    memory_usage=None,
     license=None,
     reference="https://blog.voyageai.com/2024/09/18/voyage-3/",
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
     training_datasets=None,
-    public_training_data=False,  # couldn't find
     public_training_code=None,
 )

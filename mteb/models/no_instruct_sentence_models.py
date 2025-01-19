@@ -90,7 +90,6 @@ no_instruct_small_v0 = ModelMeta(
     revision="b38747000553d8268915c95a55fc87e707c9aadd",
     release_date="2024-05-01",  # first commit
     n_parameters=33_400_000,
-    memory_usage=None,
     max_tokens=512,
     embed_dim=384,
     license="mit",
@@ -100,7 +99,6 @@ no_instruct_small_v0 = ModelMeta(
     use_instructions=False,
     adapted_from=None,
     superseded_by=None,
-    public_training_data=None,
     public_training_code=None,
     training_datasets=None,
 )

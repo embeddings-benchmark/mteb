@@ -101,7 +101,6 @@ all_MiniLM_L6_v2 = ModelMeta(
     revision="8b3219a92973c328a8e22fadcfa821b5dc75636a",
     release_date="2021-08-30",
     n_parameters=22_700_000,
-    memory_usage=None,
     embed_dim=384,
     license="apache-2.0",
     max_tokens=256,
@@ -113,7 +112,6 @@ all_MiniLM_L6_v2 = ModelMeta(
     adapted_from=None,
     training_datasets=sent_trf_training_dataset,
     public_training_code=None,
-    public_training_data=True,
 )
 
 all_MiniLM_L12_v2 = ModelMeta(
@@ -123,7 +121,6 @@ all_MiniLM_L12_v2 = ModelMeta(
     revision="364dd28d28dcd3359b537f3cf1f5348ba679da62",
     release_date="2021-08-30",
     n_parameters=33_400_000,
-    memory_usage=None,
     embed_dim=384,
     license="apache-2.0",
     max_tokens=256,
@@ -135,7 +132,6 @@ all_MiniLM_L12_v2 = ModelMeta(
     adapted_from=None,
     training_datasets=sent_trf_training_dataset,
     public_training_code=None,
-    public_training_data=True,
 )
 
 paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
@@ -145,7 +141,6 @@ paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
     revision="bf3bf13ab40c3157080a7ab344c831b9ad18b5eb",
     release_date="2019-11-01",  # release date of paper
     n_parameters=118_000_000,
-    memory_usage=None,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,
@@ -157,7 +152,6 @@ paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
     adapted_from=None,
     training_datasets=sent_trf_training_dataset,  # assumed (probably some parallel as well)
     public_training_code=None,
-    public_training_data=True,
 )
 
 paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
@@ -167,7 +161,6 @@ paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
     revision="79f2382ceacceacdf38563d7c5d16b9ff8d725d6",
     release_date="2019-11-01",  # release date of paper
     n_parameters=278_000_000,
-    memory_usage=None,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,
@@ -190,7 +183,6 @@ paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
     # "yahoo-answers": yahoo_answers_train_dataset,
     # "stack-exchange": stack_exchange_train_dataset,
     public_training_code=None,
-    public_training_data=True,
 )
 
 labse = ModelMeta(
@@ -200,7 +192,6 @@ labse = ModelMeta(
     revision="e34fab64a3011d2176c99545a93d5cbddc9a91b7",
     release_date="2019-11-01",  # release date of paper
     n_parameters=471_000_000,
-    memory_usage=None,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,
@@ -212,7 +203,6 @@ labse = ModelMeta(
     adapted_from=None,
     training_datasets=None,  # scraped and mined webdata including CC, wiki, see section 3.1 https://aclanthology.org/2022.acl-long.62.pdf
     public_training_code="https://www.kaggle.com/models/google/labse/tensorFlow2/labse/2?tfhub-redirect=true",
-    public_training_data=False,
 )
 
 multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
@@ -222,7 +212,6 @@ multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
     revision="b207367332321f8e44f96e224ef15bc607f4dbf0",
     release_date="2021-08-30",
     n_parameters=22_700_000,
-    memory_usage=None,
     embed_dim=384,
     license="apache-2.0",
     max_tokens=512,
@@ -234,7 +223,6 @@ multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
     adapted_from="nreimers/MiniLM-L6-H384-uncased",
     training_datasets=sent_trf_training_dataset,  # assumed
     public_training_code=None,
-    public_training_data=None,
 )
 
 all_mpnet_base_v2 = ModelMeta(
@@ -244,7 +232,6 @@ all_mpnet_base_v2 = ModelMeta(
     revision="9a3225965996d404b775526de6dbfe85d3368642",
     release_date="2021-08-30",
     n_parameters=109_000_000,
-    memory_usage=None,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=384,
@@ -256,7 +243,6 @@ all_mpnet_base_v2 = ModelMeta(
     adapted_from=None,
     training_datasets=sent_trf_training_dataset,
     public_training_code=None,
-    public_training_data=True,
 )
 
 
@@ -267,7 +253,6 @@ microllama_text_embedding = ModelMeta(
     revision="98f70f14cdf12d7ea217ed2fd4e808b0195f1e7e",
     release_date="2024-11-10",
     n_parameters=272_000_000,
-    memory_usage=None,
     embed_dim=1024,
     license="apache-2.0",
     max_tokens=2048,
@@ -288,6 +273,5 @@ microllama_text_embedding = ModelMeta(
         # "sentence-transformers/quora-duplicates": ["train"],
         # "sentence-transformers/natural-questions": ["train"],
     },
-    public_training_data=None,
     public_training_code=None,
 )

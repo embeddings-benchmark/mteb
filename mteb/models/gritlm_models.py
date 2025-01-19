@@ -31,7 +31,6 @@ gritlm7b = ModelMeta(
     revision="13f00a0e36500c80ce12870ea513846a066004af",
     release_date="2024-02-15",
     n_parameters=7_240_000_000,
-    memory_usage=None,
     embed_dim=4096,
     license="apache-2.0",
     max_tokens=4096,
@@ -42,7 +41,6 @@ gritlm7b = ModelMeta(
     training_datasets=E5_TRAINING_DATA,  # source https://arxiv.org/pdf/2402.09906
     # section 3.1 "We finetune our final models from Mistral 7B [68] and Mixtral 8x7B [69] using adaptations of E5 [160] and the Tülu 2 data
     public_training_code="https://github.com/ContextualAI/gritlm",
-    public_training_data=False,
 )
 gritlm8x7b = ModelMeta(
     loader=partial(  # type: ignore
@@ -58,7 +56,6 @@ gritlm8x7b = ModelMeta(
     revision="7f089b13e3345510281733ca1e6ff871b5b4bc76",
     release_date="2024-02-15",
     n_parameters=57_920_000_000,
-    memory_usage=None,
     embed_dim=4096,
     license="apache-2.0",
     max_tokens=4096,
@@ -69,5 +66,4 @@ gritlm8x7b = ModelMeta(
     training_datasets=E5_TRAINING_DATA,  # source https://arxiv.org/pdf/2402.09906
     # section 3.1 "We finetune our final models from Mistral 7B [68] and Mixtral 8x7B [69] using adaptations of E5 [160] and the Tülu 2 data
     public_training_code="https://github.com/ContextualAI/gritlm",
-    public_training_data=False,
 )

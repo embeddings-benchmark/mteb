@@ -220,7 +220,6 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
             license=card_data.get("license", None),
             framework=frameworks,
             n_parameters=n_parameters,
-            public_training_data=bool(datasets),
             adapted_from=get_base_model(model_name),
             training_datasets=training_datasets,
             open_weights=True,

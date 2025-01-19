@@ -164,7 +164,6 @@ colbert_v2 = ModelMeta(
     use_instructions=False,
     adapted_from=None,
     superseded_by=None,
-    public_training_data=None,
     training_datasets=None,
 )
 
@@ -217,6 +216,5 @@ jina_colbert_v2 = ModelMeta(
     use_instructions=False,
     adapted_from=None,
     superseded_by=None,
-    public_training_data=None,
     training_datasets=None,
 )
