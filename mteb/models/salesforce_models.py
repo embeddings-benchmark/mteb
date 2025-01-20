@@ -39,6 +39,18 @@ SFR_Embedding_2_R = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    adapted_from="intfloat/e5-mistral-7b-instruct",
+    public_training_code=None,
+    training_datasets={  # inherits from e5
+        "MSMARCO": ["train"],
+        "MSMARCOHardNegatives": ["train"],
+        "NanoMSMARCORetrieval": ["train"],
+        "MSMARCO-PL": ["train"],  # translation not trained on
+        "NQ": ["train"],
+        "NQHardNegatives": ["train"],
+        "NanoNQRetrieval": ["train"],
+        "NQ-PL": ["train"],  # translation not trained on
+    },
     citation="""@misc{SFR-embedding-2,
       title={SFR-Embedding-2: Advanced Text Embedding with Multi-stage Training},
       author={Rui Meng*, Ye Liu*, Shafiq Rayhan Joty, Caiming Xiong, Yingbo Zhou, Semih Yavuz},
@@ -100,4 +112,15 @@ SFR_Embedding_Mistral = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    public_training_code=None,
+    training_datasets={  # inherits from e5
+        "MSMARCO": ["train"],
+        "MSMARCOHardNegatives": ["train"],
+        "NanoMSMARCORetrieval": ["train"],
+        "MSMARCO-PL": ["train"],  # translation not trained on
+        "NQ": ["train"],
+        "NQHardNegatives": ["train"],
+        "NanoNQRetrieval": ["train"],
+        "NQ-PL": ["train"],  # translation not trained on
+    },
 )

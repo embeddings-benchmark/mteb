@@ -6,6 +6,8 @@ from functools import partial
 
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
+from .bge_models import bge_training_data
+
 rubert_tiny2 = ModelMeta(
     name="cointegrated/rubert-tiny2",
     languages=["rus_Cyrl"],
@@ -20,6 +22,8 @@ rubert_tiny2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 rubert_tiny = ModelMeta(
@@ -36,6 +40,8 @@ rubert_tiny = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 sbert_large_nlu_ru = ModelMeta(
@@ -52,6 +58,8 @@ sbert_large_nlu_ru = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 sbert_large_mt_nlu_ru = ModelMeta(
@@ -68,6 +76,8 @@ sbert_large_mt_nlu_ru = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 user_base_ru = ModelMeta(
@@ -99,21 +109,29 @@ user_base_ru = ModelMeta(
     }
     """,
     training_datasets={
-        "deepvk/ru-HNP": ["train"],
-        "deepvk/ru-WANLI": ["train"],
-        "Shitao/bge-m3-data": ["train"],
-        "RussianNLP/russian_super_glue": ["train"],
-        "reciTAL/mlsum": ["train"],
-        "Helsinki-NLP/opus-100": ["train"],
-        "Helsinki-NLP/bible_para": ["train"],
-        "d0rj/rudetoxifier_data_detox": ["train"],
-        "s-nlp/ru_paradetox": ["train"],
-        "Milana/russian_keywords": ["train"],
-        "IlyaGusev/gazeta": ["train"],
-        "d0rj/gsm8k-ru": ["train"],
-        "bragovo/dsum_ru": ["train"],
-        "CarlBrendt/Summ_Dialog_News": ["train"],
+        "BibleNLPBitextMining": ["train"],
+        "MLSUMClusteringP2P": ["train"],
+        "MLSUMClusteringP2P.v2": ["train"],
+        "MLSUMClusteringS2S": ["train"],
+        "MLSUMClusteringS2S.v2": ["train"],
+        **bge_training_data,
+        # not MTEB:
+        # "deepvk/ru-HNP": ["train"],
+        # "deepvk/ru-WANLI": ["train"],
+        # "Shitao/bge-m3-data": ["train"],
+        # "RussianNLP/russian_super_glue": ["train"],
+        # "reciTAL/mlsum": ["train"],
+        # "Helsinki-NLP/opus-100": ["train"],
+        # "Helsinki-NLP/bible_para": ["train"],
+        # "d0rj/rudetoxifier_data_detox": ["train"],
+        # "s-nlp/ru_paradetox": ["train"],
+        # "Milana/russian_keywords": ["train"],
+        # "IlyaGusev/gazeta": ["train"],
+        # "d0rj/gsm8k-ru": ["train"],
+        # "bragovo/dsum_ru": ["train"],
+        # "CarlBrendt/Summ_Dialog_News": ["train"],
     },
+    public_training_code=None,
 )
 
 deberta_v1_ru = ModelMeta(
@@ -130,6 +148,8 @@ deberta_v1_ru = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 rubert_base_cased = ModelMeta(
@@ -146,6 +166,8 @@ rubert_base_cased = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    public_training_code=None,
+    training_datasets=None,
     citation="""@misc{kuratov2019adaptationdeepbidirectionalmultilingual,
       title={Adaptation of Deep Bidirectional Multilingual Transformers for Russian Language}, 
       author={Yuri Kuratov and Mikhail Arkhipov},
@@ -171,6 +193,8 @@ distilrubert_small_cased_conversational = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    public_training_code=None,
+    training_datasets=None,
     citation="""@misc{https://doi.org/10.48550/arxiv.2205.02340,
       doi = {10.48550/ARXIV.2205.02340},
       url = {https://arxiv.org/abs/2205.02340},
@@ -197,6 +221,8 @@ rubert_base_cased_sentence = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 labse_en_ru = ModelMeta(
@@ -213,6 +239,8 @@ labse_en_ru = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 rubert_tiny_turbo = ModelMeta(
@@ -229,7 +257,9 @@ rubert_tiny_turbo = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
-    training_datasets={"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
+    public_training_code=None,
+    training_datasets=None,  # source model in unknown
+    # Not MTEB: {"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
 )
 
 labse_ru_turbo = ModelMeta(
@@ -246,7 +276,9 @@ labse_ru_turbo = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
-    training_datasets={"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
+    training_datasets=None,  # source model in unknown
+    # not MTEB: {"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
+    public_training_code=None,
 )
 
 
@@ -268,6 +300,14 @@ rosberta_ru_en = ModelMeta(
     revision="89fb1651989adbb1cfcfdedafd7d102951ad0555",
     release_date="2024-07-29",
     use_instructions=True,
+    n_parameters=404_000_000,
+    max_tokens=514,
+    embed_dim=1024,
+    license="mit",
+    similarity_fn_name="cosine",
+    public_training_code=None,
+    training_datasets=None,
+    framework=["Sentence Transformers", "PyTorch"],
     citation="""@misc{snegirev2024russianfocusedembeddersexplorationrumteb,
       title={The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design}, 
       author={Artem Snegirev and Maria Tikhonova and Anna Maksimova and Alena Fenogenova and Alexander Abramov},

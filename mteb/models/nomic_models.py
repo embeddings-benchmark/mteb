@@ -138,6 +138,8 @@ nomic_embed_v1_5 = ModelMeta(
     use_instructions=True,
     adapted_from=None,
     superseded_by=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 nomic_embed_v1 = ModelMeta(
@@ -164,6 +166,8 @@ nomic_embed_v1 = ModelMeta(
     citation=NOMIC_CITATION,
     adapted_from=None,
     superseded_by="nomic-ai/nomic-embed-text-v1.5",
+    public_training_code=None,
+    training_datasets=None,
 )
 
 nomic_embed_v1_ablated = ModelMeta(
@@ -189,6 +193,8 @@ nomic_embed_v1_ablated = ModelMeta(
     use_instructions=True,
     adapted_from=None,
     superseded_by=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 
@@ -215,6 +221,8 @@ nomic_embed_v1_unsupervised = ModelMeta(
     use_instructions=True,
     adapted_from=None,
     superseded_by=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 nomic_modern_bert_embed = ModelMeta(
@@ -242,4 +250,6 @@ nomic_modern_bert_embed = ModelMeta(
     use_instructions=True,
     adapted_from=None,
     superseded_by=None,
+    public_training_code=None,
+    training_datasets=None,
 )

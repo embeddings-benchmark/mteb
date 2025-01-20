@@ -32,6 +32,7 @@ FRAMEWORKS = Literal[
     "PyLate",
     "ColBERT",
 ]
+DISTANCE_METRICS = Literal["cosine", "max_sim", "dot"]
 
 
 def sentence_transformers_loader(
@@ -52,9 +53,6 @@ def get_loader_name(
     return loader.__name__
 
 
-DISTANCE_METRICS = Literal["cosine", "MaxSim", "dot"]
-
-
 class ModelMeta(BaseModel):
     """The model metadata object.
 
@@ -70,7 +68,6 @@ class ModelMeta(BaseModel):
         release_date: The date the model's revision was released.
         license: The license under which the model is released. Required if open_weights is True.
         open_weights: Whether the model is open source or proprietary.
-        public_training_data: Whether the training data used to train the model is publicly available.
         public_training_code: Whether the code used to train the model is publicly available.
         similarity_fn_name: The distance metric used by the model.
         framework: The framework the model is implemented in, can be a list of frameworks e.g. `["Sentence Transformers", "PyTorch"]`.
@@ -94,18 +91,17 @@ class ModelMeta(BaseModel):
     release_date: STR_DATE | None
     languages: list[ISO_LANGUAGE_SCRIPT] | None
     loader: Callable[..., Encoder] | None = None
-    n_parameters: int | None = None
-    max_tokens: float | None = None
-    embed_dim: int | None = None
-    license: str | None = None
-    open_weights: bool | None = None
-    public_training_data: bool | None = None
-    public_training_code: bool | None = None
-    framework: list[FRAMEWORKS] = []
+    n_parameters: int | None
+    max_tokens: float | None
+    embed_dim: int | None
+    license: str | None
+    open_weights: bool | None
+    public_training_code: str | None
+    framework: list[FRAMEWORKS]
     reference: STR_URL | None = None
-    similarity_fn_name: DISTANCE_METRICS | None = None
-    use_instructions: bool | None = None
-    training_datasets: dict[str, list[str]] | None = None
+    similarity_fn_name: DISTANCE_METRICS | None
+    use_instructions: bool | None
+    training_datasets: dict[str, list[str]] | None
     adapted_from: str | None = None
     superseded_by: str | None = None
     citation: str | None = None
@@ -115,7 +111,7 @@ class ModelMeta(BaseModel):
             return cos_sim
         elif self.similarity_fn_name == "dot":
             return dot_score
-        elif self.similarity_fn_name == "MaxSim":
+        elif self.similarity_fn_name == "max_sim":
             return max_sim
         elif self.similarity_fn_name is None:
             raise ValueError("Similarity function not specified.")

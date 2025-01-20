@@ -234,8 +234,7 @@ cohere_mult_3 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
-    public_training_data=False,  # assumed
-    public_training_code=False,  # assumed
+    public_training_code=None,  # assumed
     training_datasets=None,
 )
 
@@ -258,8 +257,7 @@ cohere_eng_3 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
-    public_training_data=False,  # assumed
-    public_training_code=False,  # assumed
+    public_training_code=None,  # assumed
     training_datasets=None,
 )
 
@@ -282,8 +280,7 @@ cohere_mult_light_3 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
-    public_training_data=False,  # assumed
-    public_training_code=False,  # assumed
+    public_training_code=None,  # assumed
     training_datasets=None,
 )
 
@@ -306,7 +303,6 @@ cohere_eng_light_3 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
-    public_training_data=False,  # assumed
-    public_training_code=False,  # assumed
+    public_training_code=None,  # assumed
     training_datasets=None,
 )

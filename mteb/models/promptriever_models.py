@@ -79,6 +79,7 @@ promptriever_llama2 = ModelMeta(
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
     citation=PROMPTRIEVER_CITATION,
+    public_training_code=None,
 )
 
 promptriever_llama3 = ModelMeta(
@@ -105,6 +106,7 @@ promptriever_llama3 = ModelMeta(
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
     citation=PROMPTRIEVER_CITATION,
+    public_training_code=None,
 )
 
 
@@ -132,6 +134,7 @@ promptriever_llama3_instruct = ModelMeta(
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
     citation=PROMPTRIEVER_CITATION,
+    public_training_code=None,
 )
 
 promptriever_mistral_v1 = ModelMeta(
@@ -158,4 +161,5 @@ promptriever_mistral_v1 = ModelMeta(
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
     citation=PROMPTRIEVER_CITATION,
+    public_training_code=None,
 )

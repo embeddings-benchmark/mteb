@@ -370,6 +370,16 @@ def test_reranker_same_ndcg1():
         open_weights=True,
         revision=ce_revision,
         release_date="2021-04-15",
+        n_parameters=None,
+        max_tokens=None,
+        embed_dim=None,
+        license=None,
+        public_training_code=None,
+        reference=None,
+        similarity_fn_name=None,
+        use_instructions=None,
+        training_datasets=None,
+        framework=["Sentence Transformers", "PyTorch"],
     )
     eval = MTEB(tasks=mteb.get_tasks(["SciFact"]))
     eval.run(
