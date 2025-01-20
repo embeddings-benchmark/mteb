@@ -132,7 +132,6 @@ NV_embed_v2 = ModelMeta(
     revision="7604d305b621f14095a1aa23d351674c2859553a",
     release_date="2024-09-09",  # initial commit of hf model.
     n_parameters=7_850_000_000,
-    memory_usage=None,
     embed_dim=4096,
     license="cc-by-nc-4.0",
     max_tokens=32768,
@@ -142,7 +141,6 @@ NV_embed_v2 = ModelMeta(
     use_instructions=True,
     training_datasets=nvidia_training_datasets,
     public_training_code=None,
-    public_training_data=True,
 )
 
 NV_embed_v1 = ModelMeta(
@@ -157,7 +155,6 @@ NV_embed_v1 = ModelMeta(
     revision="570834afd5fef5bf3a3c2311a2b6e0a66f6f4f2c",
     release_date="2024-09-13",  # initial commit of hf model.
     n_parameters=7_850_000_000,
-    memory_usage=None,
     embed_dim=4096,
     license="cc-by-nc-4.0",
     max_tokens=32768,
@@ -167,5 +164,4 @@ NV_embed_v1 = ModelMeta(
     use_instructions=True,
     training_datasets=nvidia_training_datasets,
     public_training_code=None,
-    public_training_data=True,
 )

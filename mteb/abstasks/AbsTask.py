@@ -118,7 +118,7 @@ class AbsTask(ABC):
             hf_subsets = copy(self.hf_subsets)
 
         if subsets_to_run is not None:  # allow overwrites of pre-filtering
-            hf_subsets = subsets_to_run
+            hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
 
         for hf_subset in hf_subsets:
             logger.info(

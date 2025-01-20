@@ -223,8 +223,7 @@ jina_embeddings_v3 = ModelMeta(
     use_instructions=True,
     reference="https://huggingface.co/jinaai/jina-embeddings-v3",
     training_datasets=None,
-    public_training_code=False,
-    public_training_data=False,
+    public_training_code=None,
 )
 
 
@@ -235,7 +234,6 @@ jina_embeddings_v2_base_en = ModelMeta(
     revision="6e85f575bc273f1fd840a658067d0157933c83f0",
     release_date="2023-09-27",
     n_parameters=137_000_000,
-    memory_usage=None,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=8192,
@@ -246,8 +244,7 @@ jina_embeddings_v2_base_en = ModelMeta(
     superseded_by=None,
     adapted_from=None,
     training_datasets=None,
-    public_training_code=False,
-    public_training_data=False,  # uses scrapes e.g. CC
+    public_training_code=None,
 )
 
 jina_embeddings_v2_small_en = ModelMeta(
@@ -257,7 +254,6 @@ jina_embeddings_v2_small_en = ModelMeta(
     revision="796cff318cdd4e5fbe8b7303a1ef8cbec36996ef",
     release_date="2023-09-27",
     n_parameters=32_700_000,
-    memory_usage=None,
     embed_dim=512,
     license="apache-2.0",
     max_tokens=8192,
@@ -268,8 +264,7 @@ jina_embeddings_v2_small_en = ModelMeta(
     superseded_by=None,
     adapted_from=None,
     training_datasets=None,
-    public_training_code=False,
-    public_training_data=False,  # uses scrapes e.g. CC and {"jinaai/negation-dataset": ["train"]}
+    public_training_code=None,
 )
 
 jina_embedding_b_en_v1 = ModelMeta(
@@ -279,7 +274,6 @@ jina_embedding_b_en_v1 = ModelMeta(
     revision="aa0645035294a8c0607ce5bb700aba982cdff32c",
     release_date="2023-07-07",
     n_parameters=110_000_000,
-    memory_usage=None,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,
@@ -290,8 +284,7 @@ jina_embedding_b_en_v1 = ModelMeta(
     superseded_by="jinaai/jina-embeddings-v2-base-en",
     adapted_from=None,
     training_datasets=None,
-    public_training_code=False,
-    public_training_data=False,  # uses scrapes e.g. CC and {"jinaai/negation-dataset": ["train"]}
+    public_training_code=None,
 )
 
 jina_embedding_s_en_v1 = ModelMeta(
@@ -301,7 +294,6 @@ jina_embedding_s_en_v1 = ModelMeta(
     revision="c1fed70aa4823a640f1a7150a276e4d3b08dce08",
     release_date="2023-07-07",
     n_parameters=35_000_000,
-    memory_usage=None,
     embed_dim=512,
     license="apache-2.0",
     max_tokens=512,
@@ -312,6 +304,5 @@ jina_embedding_s_en_v1 = ModelMeta(
     superseded_by="jinaai/jina-embeddings-v2-small-en",
     adapted_from=None,
     training_datasets=None,
-    public_training_code=False,
-    public_training_data=False,  # uses scrapes e.g. CC and {"jinaai/negation-dataset": ["train"]}
+    public_training_code=None,
 )

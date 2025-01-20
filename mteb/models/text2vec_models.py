@@ -12,7 +12,6 @@ text2vec_base_chinese = ModelMeta(
     revision="183bb99aa7af74355fb58d16edf8c13ae7c5433e",
     release_date="2022-01-23",
     n_parameters=102 * 1e6,
-    memory_usage=None,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,
@@ -22,8 +21,7 @@ text2vec_base_chinese = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
-    public_training_code=False,  # Couldn't find it
-    public_training_data=True,
+    public_training_code=None,  # Couldn't find it
     training_datasets={
         # source: https://huggingface.co/shibing624/text2vec-base-chinese
         # Not in MTEB
@@ -39,7 +37,6 @@ text2vec_base_chinese_paraphrase = ModelMeta(
     revision="e90c150a9c7fb55a67712a766d6820c55fb83cdd",
     release_date="2023-06-19",
     n_parameters=118 * 1e6,
-    memory_usage=None,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,
@@ -49,8 +46,7 @@ text2vec_base_chinese_paraphrase = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
-    public_training_code=False,  # Couldn't find it
-    public_training_data=True,
+    public_training_code=None,  # Couldn't find it
     training_datasets={
         # source: https://huggingface.co/shibing624/text2vec-base-chinese
         # Not in MTEB
@@ -82,7 +78,6 @@ text2vec_base_multilingual = ModelMeta(
     # So probably best not to.
     loader=None,
     n_parameters=118 * 1e6,
-    memory_usage=None,
     embed_dim=384,
     license="apache-2.0",
     max_tokens=256,
@@ -92,8 +87,7 @@ text2vec_base_multilingual = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
-    public_training_code=False,  # Couldn't find it
-    public_training_data=True,
+    public_training_code=None,  # Couldn't find it
     training_datasets={
         # source: https://huggingface.co/shibing624/text2vec-base-chinese
         # Not in MTEB

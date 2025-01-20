@@ -164,7 +164,6 @@ colbert_v2 = ModelMeta(
     use_instructions=False,
     adapted_from=None,
     superseded_by=None,
-    public_training_data=True,
     training_datasets={
         "MSMARCO": ["train"],  # dev?
     },
@@ -219,7 +218,6 @@ jina_colbert_v2 = ModelMeta(
     use_instructions=False,
     adapted_from=None,
     superseded_by=None,
-    public_training_data=True,
     training_datasets={
         "MSMARCO": ["train"],
         "DuRetrieval": [],

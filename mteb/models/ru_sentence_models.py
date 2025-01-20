@@ -22,7 +22,7 @@ rubert_tiny = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
-    public_training_code=True,  # "https://gist.github.com/avidale/7bc6350f26196918bf339c01261f5c60",
+    public_training_code="https://gist.github.com/avidale/7bc6350f26196918bf339c01261f5c60",
     training_datasets={
         # [Yandex Translate corpus](https://translate.yandex.ru/corpus), [OPUS-100](https://huggingface.co/datasets/opus100)
         "Tatoeba": ["train"],
@@ -44,7 +44,7 @@ rubert_tiny2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
-    public_training_code=True,  # "https://colab.research.google.com/drive/1mSWfIQ6PIlteLVZ9DKKpcorycgLIKZLf?usp=sharing",
+    public_training_code="https://colab.research.google.com/drive/1mSWfIQ6PIlteLVZ9DKKpcorycgLIKZLf?usp=sharing",
     training_datasets={
         # https://huggingface.co/datasets/cointegrated/ru-paraphrase-NMT-Leipzig
         # Wikipedia https://huggingface.co/datasets/Madjogger/JamSpell_dataset
@@ -284,7 +284,7 @@ labse_en_ru = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
-    public_training_code=True,  # https://colab.research.google.com/drive/1dnPRn0-ugj3vZgSpyCC9sgslM2SuSfHy?usp=sharing
+    public_training_code="https://colab.research.google.com/drive/1dnPRn0-ugj3vZgSpyCC9sgslM2SuSfHy?usp=sharing",
     training_datasets=None,
     adapted_from="sentence-transformers/LaBSE",
 )
@@ -323,7 +323,7 @@ labse_ru_turbo = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
-    training_datasets=None,  # source model in unknown
+    training_datasets=None,
     # not MTEB: {"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
     public_training_code=None,
     adapted_from="cointegrated/LaBSE-en-ru",
@@ -370,4 +370,5 @@ rosberta_ru_en = ModelMeta(
         "MIRACLReranking": ["train"],
         "MIRACLRetrieval": ["train"],
     },
+    framework=["Sentence Transformers", "PyTorch"],
 )

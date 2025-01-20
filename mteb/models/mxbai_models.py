@@ -19,7 +19,6 @@ mxbai_embed_large_v1 = ModelMeta(
     revision="990580e27d329c7408b3741ecff85876e128e203",
     release_date="2024-03-07",  # initial commit of hf model.
     n_parameters=335_000_000,
-    memory_usage=None,
     max_tokens=512,
     embed_dim=1024,
     license="apache-2.0",
@@ -27,4 +26,6 @@ mxbai_embed_large_v1 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    public_training_code=None,
+    training_datasets=None,
 )
