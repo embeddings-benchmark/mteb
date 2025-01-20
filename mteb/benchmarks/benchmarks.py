@@ -1235,16 +1235,26 @@ C_MTEB = Benchmark(
 
 
 FA_MTEB = Benchmark(
-    name="MTEB(fa, beta)",
+    name="FaMTEB(fas, beta)",
     tasks=get_tasks(
         languages=["fas"],
         tasks=[
             # Classification
             "PersianFoodSentimentClassification",
-            "SynPerChatbotConvSAClassification",
-            "SynPerChatbotConvSAToneClassification",
+            "SynPerChatbotConvSAAnger",
+            "SynPerChatbotConvSAFear",
+            "SynPerChatbotConvSAFriendship",
+            "SynPerChatbotConvSAHappiness",
+            "SynPerChatbotConvSAJealousy",
+            "SynPerChatbotConvSALove",
+            "SynPerChatbotConvSASadness",
+            "SynPerChatbotConvSASatisfaction",
+            "SynPerChatbotConvSASurprise",
+            "SynPerChatbotConvSAToneChatbotClassification",
+            "SynPerChatbotConvSAToneUserClassification",
             "SynPerChatbotSatisfactionLevelClassification",
-            "SynPerChatbotRAGToneClassification",
+            "SynPerChatbotRAGToneChatbotClassification",
+            "SynPerChatbotRAGToneUserClassification",
             "SynPerChatbotToneChatbotClassification",
             "SynPerChatbotToneUserClassification",
             "PersianTextTone",
@@ -1256,28 +1266,24 @@ FA_MTEB = Benchmark(
             "DigikalamagClassification",
             "MassiveIntentClassification",         
             "MassiveScenarioClassification",       
-
             # Clustering
             "BeytooteClustering",
             "DigikalamagClustering",
             "HamshahriClustring",
             "NLPTwitterAnalysisClustering",
             "SIDClustring",
-
             # PairClassification
             "FarsTail",
             "CExaPPC",
             "SynPerChatbotRAGFAQPC",
             "FarsiParaphraseDetection",
             "SynPerTextKeywordsPC",
-            "SynPerQAFaPC",
+            "SynPerQAPC",
             "ParsinluEntail",
             "ParsinluQueryParaphPC",
-
             # Reranking
             "MIRACLReranking",                   
             "WikipediaRerankingMultilingual",    
-
             # Retrieval
             "SynPerQARetrieval",
             "SynPerChatbotTopicsRetrieval",
@@ -1292,7 +1298,18 @@ FA_MTEB = Benchmark(
             "MSMARCO-Fa",
             "NQ-Fa",
             "ArguAna-Fa",
-            "CQADupstackRetrieval-Fa",
+            "CQADupstackAndroidRetrieval-Fa",
+            "CQADupstackEnglishRetrieval-Fa",
+            "CQADupstackGamingRetrieval-Fa",
+            "CQADupstackGisRetrieval-Fa",
+            "CQADupstackMathematicaRetrieval-Fa",
+            "CQADupstackPhysicsRetrieval-Fa",
+            "CQADupstackProgrammersRetrieval-Fa",
+            "CQADupstackStatsRetrieval-Fa",
+            "CQADupstackTexRetrieval-Fa",
+            "CQADupstackUnixRetrieval-Fa",
+            "CQADupstackWebmastersRetrieval-Fa",
+            "CQADupstackWordpressRetrieval-Fa",
             "FiQA2018-Fa",
             "NFCorpus-Fa",
             "QuoraRetrieval-Fa",
@@ -1300,12 +1317,10 @@ FA_MTEB = Benchmark(
             "SciFact-Fa",
             "TRECCOVID-Fa",
             "Touche2020-Fa",
-
             # STS
             "Farsick",
             "SynPerSTS",
             "Query2Query",
-
             # SummaryRetrieval
             "SAMSumFa",
             "SynPerChatbotSumSRetrieval",
