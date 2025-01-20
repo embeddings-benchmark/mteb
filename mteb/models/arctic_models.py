@@ -115,6 +115,31 @@ arctic_m_v1_5 = ModelMeta(
       primaryClass={cs.LG},
       url={https://arxiv.org/abs/2407.18887}, 
     }""",
+    public_training_code=None,
+    training_datasets={
+        # source: https://arxiv.org/pdf/2405.05374
+        # splits not specified to assuming everything
+        # in MTEB
+        "NQ": ["test"],
+        "NQHardNegatives": ["test"],
+        "HotPotQA": ["test"],
+        "HotPotQAHardNegatives": ["test"],
+        "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
+        "FEVER": ["test"],
+        "FEVERHardNegatives": ["test"],
+        # not in MTEB
+        # trained on stack exchange (title-body)
+        # "stackexchange": [],
+        # potentially means that:
+        # "StackExchangeClusteringP2P": ["test"],
+        # "StackExchangeClusteringP2P.v2": ["test"],
+        # "StackExchangeClustering": ["test"],
+        # "StackExchangeClustering.v2": ["test"],
+        # not in MTEB
+        # "paq": [],
+        # "s2orc": [],
+        # "other": [],  # undisclosed including webdata
+    },  # also use synthetic
 )
 
 

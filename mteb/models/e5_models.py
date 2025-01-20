@@ -165,7 +165,7 @@ e5_mult_small = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     citation=MULTILINGUAL_E5_CITATION,
-    public_training_code=False,  # couldn't find
+    public_training_code=None,  # couldn't find
     training_datasets=E5_TRAINING_DATA,
 )
 

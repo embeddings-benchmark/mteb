@@ -431,7 +431,6 @@ bge_large_en_v1_5 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     citation=BGE_15_CITATION,
-    public_training_data=True,  # https://data.baai.ac.cn/details/BAAI-MTP
     public_training_code=None,  # seemingly released (at least for some models, but the link is broken
     training_datasets=bge_training_data,
 )
