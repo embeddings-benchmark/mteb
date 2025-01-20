@@ -36,12 +36,10 @@ e5_instruct = ModelMeta(
     use_instructions=True,
     reference="https://huggingface.co/intfloat/multilingual-e5-large-instruct",
     n_parameters=560_000_000,
-    memory_usage=None,
     embed_dim=1024,
     license="mit",
     max_tokens=514,
-    public_training_data=False,
-    public_training_code=False,
+    public_training_code=None,
     training_datasets=E5_TRAINING_DATA,
 )
 
@@ -68,11 +66,9 @@ e5_mistral = ModelMeta(
     use_instructions=True,
     reference="https://huggingface.co/intfloat/e5-mistral-7b-instruct",
     n_parameters=7_111_000_000,
-    memory_usage=None,
     embed_dim=4096,
     license="mit",
     max_tokens=32768,
-    public_training_data=False,
-    public_training_code=False,
+    public_training_code=None,
     training_datasets=E5_TRAINING_DATA,
 )

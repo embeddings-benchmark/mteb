@@ -6,8 +6,7 @@ from pathlib import Path
 
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
-from mteb import MTEB
-from mteb.model_meta import ModelMeta
+from mteb import MTEB, ModelMeta
 
 logging.basicConfig(level=logging.INFO)
 
@@ -373,7 +372,18 @@ def test_reranker_same_ndcg1():
         open_weights=True,
         revision=ce_revision,
         release_date="2021-04-15",
+        n_parameters=None,
+        max_tokens=None,
+        embed_dim=None,
+        license=None,
+        public_training_code=None,
+        reference=None,
+        similarity_fn_name=None,
+        use_instructions=None,
+        training_datasets=None,
+        framework=["Sentence Transformers", "PyTorch"],
     )
+
     eval = MTEB(tasks=["SciFact"])
     eval.run(
         de,

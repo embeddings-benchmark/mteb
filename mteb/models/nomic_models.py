@@ -117,7 +117,6 @@ nomic_embed_v1_5 = ModelMeta(
     revision="b0753ae76394dd36bcfb912a46018088bca48be0",
     release_date="2024-02-10",  # first commit
     n_parameters=137_000_000,
-    memory_usage=None,
     max_tokens=8192,
     embed_dim=768,
     license="apache-2.0",
@@ -127,6 +126,8 @@ nomic_embed_v1_5 = ModelMeta(
     use_instructions=True,
     adapted_from=None,
     superseded_by=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 nomic_embed_v1 = ModelMeta(
@@ -143,7 +144,6 @@ nomic_embed_v1 = ModelMeta(
     revision="0759316f275aa0cb93a5b830973843ca66babcf5",
     release_date="2024-01-31",  # first commit
     n_parameters=None,
-    memory_usage=None,
     max_tokens=8192,
     embed_dim=768,
     license="apache-2.0",
@@ -153,6 +153,8 @@ nomic_embed_v1 = ModelMeta(
     use_instructions=True,
     adapted_from=None,
     superseded_by="nomic-ai/nomic-embed-text-v1.5",
+    public_training_code=None,
+    training_datasets=None,
 )
 
 nomic_embed_v1_ablated = ModelMeta(
@@ -169,7 +171,6 @@ nomic_embed_v1_ablated = ModelMeta(
     revision="7d948905c5d5d3874fa55a925d68e49dbf411e5f",
     release_date="2024-01-15",  # first commit
     n_parameters=None,
-    memory_usage=None,
     max_tokens=8192,
     embed_dim=768,
     license="apache-2.0",
@@ -179,6 +180,8 @@ nomic_embed_v1_ablated = ModelMeta(
     use_instructions=True,
     adapted_from=None,
     superseded_by=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 
@@ -196,7 +199,6 @@ nomic_embed_v1_unsupervised = ModelMeta(
     revision="b53d557b15ae63852847c222d336c1609eced93c",
     release_date="2024-01-15",  # first commit
     n_parameters=None,
-    memory_usage=None,
     max_tokens=8192,
     embed_dim=768,
     license="apache-2.0",
@@ -206,6 +208,8 @@ nomic_embed_v1_unsupervised = ModelMeta(
     use_instructions=True,
     adapted_from=None,
     superseded_by=None,
+    public_training_code=None,
+    training_datasets=None,
 )
 
 nomic_modern_bert_embed = ModelMeta(
@@ -224,7 +228,6 @@ nomic_modern_bert_embed = ModelMeta(
     revision="5960f1566fb7cb1adf1eb6e816639cf4646d9b12",
     release_date="2024-12-29",
     n_parameters=149_000_000,
-    memory_usage=None,
     max_tokens=8192,
     embed_dim=768,
     license="apache-2.0",
@@ -234,4 +237,6 @@ nomic_modern_bert_embed = ModelMeta(
     use_instructions=True,
     adapted_from=None,
     superseded_by=None,
+    public_training_code=None,
+    training_datasets=None,
 )

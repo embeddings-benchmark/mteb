@@ -81,7 +81,6 @@ jasper_en_v1 = ModelMeta(
     revision="d6330ce98f8a0d741e781df845904c9484f00efa",
     release_date="2024-12-11",  # first commit
     n_parameters=1_999_000_000,
-    memory_usage=None,
     max_tokens=131072,
     embed_dim=8960,
     license="apache-2.0",
@@ -94,5 +93,4 @@ jasper_en_v1 = ModelMeta(
     training_datasets=nvidia_training_datasets,  #  "In jasper model the teacher model is nvidia/NV-Embed-v2", source https://huggingface.co/infgrad/jasper_en_vision_language_v1
     # "non_mteb": ["BAAI/Infinity-MM", "HuggingFaceFW/fineweb-edu"],
     public_training_code=None,
-    public_training_data=None,
 )
