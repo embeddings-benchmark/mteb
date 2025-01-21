@@ -350,6 +350,10 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
         """
         )
         summary_table.render()
+        download_summary = gr.DownloadButton("Download Table")
+        download_summary.click(
+            download_table, inputs=[summary_table], outputs=[download_summary]
+        )
         with gr.Accordion(
             "What do aggregate measures (Rank(Borda), Mean(Task), etc.) mean?",
             open=False,
@@ -363,10 +367,19 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
     **Mean(TaskType)**: This is a weighted average across different task categories, such as classification or retrieval. It is computed by first computing the average by task category and then computing the average on each category. Similar to the Mean(Task) this measure is continuous and tends to overvalue tasks with higher variance. This score also prefers models that perform well across all task categories.
             """
             )
-        download_summary = gr.DownloadButton("Download Table")
-        download_summary.click(
-            download_table, inputs=[summary_table], outputs=[download_summary]
-        )
+        with gr.Accordion(
+            "What does zero-shot mean?",
+            open=False,
+        ):
+            gr.Markdown(
+                """
+A model is considered zero-shot if it is not trained on any splits of the datasets used to derive the tasks.
+E.g., if a model is trained on Natural Questions, it cannot be considered zero-shot on benchmarks containing the task “NQ” which is derived from Natural Questions.
+This definition creates a few edge cases. For instance, multiple models are typically trained on Wikipedia title and body pairs, but we do not define this as leakage on, e.g., “WikipediaRetrievalMultilingual” and “WikiClusteringP2P” as these datasets are not based on title-body pairs.
+Distilled, further fine-tunes or in other ways, derivative models inherit the datasets of their parent models.
+Based on community feedback and research findings, This definition could change in the future.
+            """
+            )
     with gr.Tab("Performance per task"):
         per_task_table.render()
         download_per_task = gr.DownloadButton("Download Table")
