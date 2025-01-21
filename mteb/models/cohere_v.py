@@ -185,7 +185,6 @@ cohere_mult_3 = ModelMeta(
     loader=partial(cohere_v_loader, model_name="embed-multilingual-v3.0"),
     name="embed-multilingual-v3.0-v",
     languages=[],  # Unknown, but support >100 languages
-    open_source=False,
     revision="1",
     release_date="2024-10-24",
     n_parameters=None,
@@ -208,7 +207,6 @@ cohere_eng_3 = ModelMeta(
     loader=partial(cohere_v_loader, model_name="embed-english-v3.0"),
     name="embed-english-v3.0-v",
     languages=["eng-Latn"],
-    open_source=False,
     revision="1",
     release_date="2024-10-24",
     n_parameters=None,

@@ -155,7 +155,6 @@ jina_clip_v1 = ModelMeta(
     ),
     name="jinaai/jina-clip-v1",
     languages=["eng_Latn"],
-    open_source=True,
     revision="06150c7c382d7a4faedc7d5a0d8cdb59308968f4",
     release_date="2024-05-30",
     modalities=["image", "text"],

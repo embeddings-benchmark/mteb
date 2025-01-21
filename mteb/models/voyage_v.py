@@ -245,7 +245,6 @@ voyage_v = ModelMeta(
     loader=partial(voyage_v_loader, model_name="voyage-multimodal-3"),
     name="voyage-multimodal-3",
     languages=[],  # Unknown
-    open_source=False,
     revision="1",
     release_date="2024-11-10",
     n_parameters=None,
