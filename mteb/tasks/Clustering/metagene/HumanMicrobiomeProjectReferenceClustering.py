@@ -4,8 +4,6 @@ from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-# https://github.com/embeddings-benchmark/mteb/blob/ad05983fc3e44afc9087328f010a06ceb83f6f7d/mteb/tasks/Clustering/nob/SNLHierarchicalClustering.py
-# https://github.com/embeddings-benchmark/mteb/blob/ad05983fc3e44afc9087328f010a06ceb83f6f7d/mteb/tasks/Clustering/nob/VGHierarchicalClustering.py
 class HumanMicrobiomeProjectReferenceClusteringP2P(AbsTaskClusteringFast):
     max_document_to_embed = 27 # aligned with the train size
     max_fraction_of_documents_to_embed = None
@@ -13,7 +11,8 @@ class HumanMicrobiomeProjectReferenceClusteringP2P(AbsTaskClusteringFast):
 
     metadata = TaskMetadata(
         name="HumanMicrobiomeProjectReferenceClusteringP2P",
-        description="",
+        description="A P2P clustering task on the Human Microbiome Project Reference dataset.",
+        reference="https://huggingface.co/datasets/metagene-ai/HumanMicrobiomeProjectReference",
         dataset={
             "path": "metagene-ai/HumanMicrobiomeProjectReference",
             "revision": "main",
@@ -76,13 +75,14 @@ class HumanMicrobiomeProjectReferenceClusteringP2P(AbsTaskClusteringFast):
 
 
 class HumanMicrobiomeProjectReferenceClusteringS2SAlign(AbsTaskClusteringFast):
-    max_document_to_embed = 2198 # aligned with the train size
+    max_document_to_embed = 2198 # When named with "align", this max_document_to_embed is set as the number of train data in the train split.
     max_fraction_of_documents_to_embed = None
     max_depth = 5
 
     metadata = TaskMetadata(
         name="HumanMicrobiomeProjectReferenceClusteringS2SAlign",
-        description="",
+        description="A S2S clustering task on the Human Microbiome Project Reference dataset.",
+        reference="https://huggingface.co/datasets/metagene-ai/HumanMicrobiomeProjectReference",
         dataset={
             "path": "metagene-ai/HumanMicrobiomeProjectReference",
             "revision": "main",
@@ -181,13 +181,14 @@ class HumanMicrobiomeProjectReferenceClusteringS2SAlign(AbsTaskClusteringFast):
 
 
 class HumanMicrobiomeProjectReferenceClusteringS2SSmall(AbsTaskClusteringFast):
-    max_document_to_embed = 27 # small size
+    max_document_to_embed = 27 # When named with "small", the max_document_to_embed is the same as the max_document_to_embed of its P2P counterpart.
     max_fraction_of_documents_to_embed = None
     max_depth = 5
 
     metadata = TaskMetadata(
         name="HumanMicrobiomeProjectReferenceClusteringS2SSmall",
-        description="",
+        description="A S2S clustering task on the Human Microbiome Project Reference dataset.",
+        reference="https://huggingface.co/datasets/metagene-ai/HumanMicrobiomeProjectReference",
         dataset={
             "path": "metagene-ai/HumanMicrobiomeProjectReference",
             "revision": "main",
@@ -286,13 +287,14 @@ class HumanMicrobiomeProjectReferenceClusteringS2SSmall(AbsTaskClusteringFast):
 
 
 class HumanMicrobiomeProjectReferenceClusteringS2STiny(AbsTaskClusteringFast):
-    max_document_to_embed = 3 # tiny size => 3-mer
+    max_document_to_embed = 3 # When named with "tiny", the max_document_to_embed is set as "3" to simulate the "3-mer" in DNA sequence processing.
     max_fraction_of_documents_to_embed = None
     max_depth = 5
 
     metadata = TaskMetadata(
         name="HumanMicrobiomeProjectReferenceClusteringS2STiny",
-        description="",
+        description="A S2S clustering task on the Human Microbiome Project Reference dataset.",
+        reference="https://huggingface.co/datasets/metagene-ai/HumanMicrobiomeProjectReference",
         dataset={
             "path": "metagene-ai/HumanMicrobiomeProjectReference",
             "revision": "main",

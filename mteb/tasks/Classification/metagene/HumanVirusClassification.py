@@ -7,7 +7,8 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class HumanVirusClassificationOne(AbsTaskClassification):
     metadata = TaskMetadata(
         name="HumanVirusClassificationOne",
-        description="",
+        description="A Classification task for predicting the virus infecting a human host based on the metagenomics.",
+        reference="https://huggingface.co/datasets/metagene-ai/HumanVirusInfecting/tree/main/hv/1",
         dataset={
             "path": "metagene-ai/HumanVirusInfecting",
             "name": "class-1",
@@ -48,9 +49,9 @@ class HumanVirusClassificationOne(AbsTaskClassification):
         from collections import Counter
         label_counts = Counter(full_train_dataset['source'])
 
-        # in AbsTaskClassification, by default, we undersample the training data to 8 samples per label
-        # which means we do not need to split out too much data for training
+        # by default, we undersample the training data to 8 samples per label
         desired_train_samples = 8
+
         M = min(label_counts.values())
         if M < desired_train_samples:
             raise ValueError(
@@ -69,7 +70,6 @@ class HumanVirusClassificationOne(AbsTaskClassification):
         print(f"Train set size: {len(new_train_dataset)} rows")
         print(f"Test set size: {len(new_test_dataset)} rows\n")
 
-        # Create a new DatasetDict with 'train' and 'test' splits
         self.dataset = datasets.DatasetDict({
             'train': new_train_dataset,
             'test': new_test_dataset
@@ -85,7 +85,8 @@ class HumanVirusClassificationOne(AbsTaskClassification):
 class HumanVirusClassificationTwo(AbsTaskClassification):
     metadata = TaskMetadata(
         name="HumanVirusClassificationTwo",
-        description="",
+        description="A Classification task for predicting the virus infecting a human host based on the metagenomics.",
+        reference="https://huggingface.co/datasets/metagene-ai/HumanVirusInfecting/tree/main/hv/2",
         dataset={
             "path": "metagene-ai/HumanVirusInfecting",
             "name": "class-2",
@@ -126,9 +127,9 @@ class HumanVirusClassificationTwo(AbsTaskClassification):
         from collections import Counter
         label_counts = Counter(full_train_dataset['source'])
 
-        # in AbsTaskClassification, by default, we undersample the training data to 8 samples per label
-        # which means we do not need to split out too much data for training
+        # by default, we undersample the training data to 8 samples per label
         desired_train_samples = 8
+
         M = min(label_counts.values())
         if M < desired_train_samples:
             raise ValueError(
@@ -147,7 +148,6 @@ class HumanVirusClassificationTwo(AbsTaskClassification):
         print(f"Train set size: {len(new_train_dataset)} rows")
         print(f"Test set size: {len(new_test_dataset)} rows\n")
 
-        # Create a new DatasetDict with 'train' and 'test' splits
         self.dataset = datasets.DatasetDict({
             'train': new_train_dataset,
             'test': new_test_dataset
@@ -163,7 +163,8 @@ class HumanVirusClassificationTwo(AbsTaskClassification):
 class HumanVirusClassificationThree(AbsTaskClassification):
     metadata = TaskMetadata(
         name="HumanVirusClassificationThree",
-        description="",
+        description="A Classification task for predicting the virus infecting a human host based on the metagenomics.",
+        reference="https://huggingface.co/datasets/metagene-ai/HumanVirusInfecting/tree/main/hv/3",
         dataset={
             "path": "metagene-ai/HumanVirusInfecting",
             "name": "class-3",
@@ -204,9 +205,9 @@ class HumanVirusClassificationThree(AbsTaskClassification):
         from collections import Counter
         label_counts = Counter(full_train_dataset['source'])
 
-        # in AbsTaskClassification, by default, we undersample the training data to 8 samples per label
-        # which means we do not need to split out too much data for training
+        # by default, we undersample the training data to 8 samples per label
         desired_train_samples = 8
+
         M = min(label_counts.values())
         if M < desired_train_samples:
             raise ValueError(
@@ -225,7 +226,6 @@ class HumanVirusClassificationThree(AbsTaskClassification):
         print(f"Train set size: {len(new_train_dataset)} rows")
         print(f"Test set size: {len(new_test_dataset)} rows\n")
 
-        # Create a new DatasetDict with 'train' and 'test' splits
         self.dataset = datasets.DatasetDict({
             'train': new_train_dataset,
             'test': new_test_dataset
@@ -241,7 +241,8 @@ class HumanVirusClassificationThree(AbsTaskClassification):
 class HumanVirusClassificationFour(AbsTaskClassification):
     metadata = TaskMetadata(
         name="HumanVirusClassificationFour",
-        description="",
+        description="A Classification task for predicting the virus infecting a human host based on the metagenomics.",
+        reference="https://huggingface.co/datasets/metagene-ai/HumanVirusInfecting/tree/main/hv/4",
         dataset={
             "path": "metagene-ai/HumanVirusInfecting",
             "name": "class-4",
@@ -281,9 +282,9 @@ class HumanVirusClassificationFour(AbsTaskClassification):
         from collections import Counter
         label_counts = Counter(full_train_dataset['source'])
 
-        # in AbsTaskClassification, by default, we undersample the training data to 8 samples per label
-        # which means we do not need to split out too much data for training
+        # by default, we undersample the training data to 8 samples per label
         desired_train_samples = 8
+
         M = min(label_counts.values())
         if M < desired_train_samples:
             raise ValueError(
@@ -302,7 +303,6 @@ class HumanVirusClassificationFour(AbsTaskClassification):
         print(f"Train set size: {len(new_train_dataset)} rows")
         print(f"Test set size: {len(new_test_dataset)} rows\n")
 
-        # Create a new DatasetDict with 'train' and 'test' splits
         self.dataset = datasets.DatasetDict({
             'train': new_train_dataset,
             'test': new_test_dataset

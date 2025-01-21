@@ -7,7 +7,8 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class HumanMicrobiomeProjectDemonstrationClassificationDisease(AbsTaskClassification):
     metadata = TaskMetadata(
         name="HumanMicrobiomeProjectDemonstrationClassificationDisease",
-        description="",
+        description="A Classification task for predicting the disease from the Human Microbiome Project Demonstration dataset.",
+        reference="https://huggingface.co/datasets/metagene-ai/HumanMicrobiomeProjectDemonstration/tree/main/hmpd/disease",
         dataset={
             "path": "metagene-ai/HumanMicrobiomeProjectDemonstration",
             "name": "disease",
@@ -47,8 +48,7 @@ class HumanMicrobiomeProjectDemonstrationClassificationDisease(AbsTaskClassifica
 
         full_train_dataset = self.dataset['train']
 
-        # in AbsTaskClassification, by default, we undersample the training data to 8 samples per label
-        # which means we do not need to split out too much data for training
+        # by default, we undersample the training data to 8 samples per label
         desired_train_samples = 8
 
         from collections import Counter
@@ -83,7 +83,8 @@ class HumanMicrobiomeProjectDemonstrationClassificationDisease(AbsTaskClassifica
 class HumanMicrobiomeProjectDemonstrationClassificationSex(AbsTaskClassification):
     metadata = TaskMetadata(
         name="HumanMicrobiomeProjectDemonstrationClassificationSex",
-        description="",
+        description="A Classification task for predicting the sex from the Human Microbiome Project Demonstration dataset.",
+        reference="https://huggingface.co/datasets/metagene-ai/HumanMicrobiomeProjectDemonstration/tree/main/hmpd/sex",
         dataset={
             "path": "metagene-ai/HumanMicrobiomeProjectDemonstration",
             "name": "sex",
@@ -122,8 +123,7 @@ class HumanMicrobiomeProjectDemonstrationClassificationSex(AbsTaskClassification
 
         full_train_dataset = self.dataset['train']
 
-        # in AbsTaskClassification, by default, we undersample the training data to 8 samples per label
-        # which means we do not need to split out too much data for training
+        # by default, we undersample the training data to 8 samples per label
         desired_train_samples = 8
 
         from collections import Counter
@@ -158,7 +158,8 @@ class HumanMicrobiomeProjectDemonstrationClassificationSex(AbsTaskClassification
 class HumanMicrobiomeProjectDemonstrationClassificationSource(AbsTaskClassification):
     metadata = TaskMetadata(
         name="HumanMicrobiomeProjectDemonstrationClassificationSource",
-        description="",
+        description="A Classification task for predicting the source from the Human Microbiome Project Demonstration dataset.",
+        reference="https://huggingface.co/datasets/metagene-ai/HumanMicrobiomeProjectDemonstration/tree/main/hmpd/source",
         dataset={
             "path": "metagene-ai/HumanMicrobiomeProjectDemonstration",
             "name": "source",
@@ -197,8 +198,7 @@ class HumanMicrobiomeProjectDemonstrationClassificationSource(AbsTaskClassificat
 
         full_train_dataset = self.dataset['train']
 
-        # in AbsTaskClassification, by default, we undersample the training data to 8 samples per label
-        # which means we do not need to split out too much data for training
+        # by default, we undersample the training data to 8 samples per label
         desired_train_samples = 8
 
         from collections import Counter

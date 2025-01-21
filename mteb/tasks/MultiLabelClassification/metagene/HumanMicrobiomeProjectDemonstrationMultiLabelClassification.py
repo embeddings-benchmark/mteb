@@ -4,11 +4,11 @@ from mteb.abstasks.AbsTaskMultilabelClassification import AbsTaskMultilabelClass
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-# https://github.com/embeddings-benchmark/mteb/blob/ad05983fc3e44afc9087328f010a06ceb83f6f7d/mteb/tasks/MultiLabelClassification/por/BrazilianToxicTweetsClassification.py
 class HumanMicrobiomeProjectDemonstrationMultiClassification(AbsTaskMultilabelClassification):
     metadata = TaskMetadata(
         name="HumanMicrobiomeProjectDemonstrationMultiLabelClassification",
-        description="",
+        description="A multi-label classification task on the Human Microbiome Project dataset.",
+        reference="https://huggingface.co/datasets/metagene-ai/HumanMicrobiomeProjectDemonstration/tree/main/hmpd/multi-label",
         dataset={
             "path": "metagene-ai/HumanMicrobiomeProjectDemonstration",
             "name": "multi-label",

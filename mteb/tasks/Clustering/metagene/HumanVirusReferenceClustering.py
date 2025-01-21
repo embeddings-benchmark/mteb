@@ -4,8 +4,6 @@ from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-# https://github.com/embeddings-benchmark/mteb/blob/ad05983fc3e44afc9087328f010a06ceb83f6f7d/mteb/tasks/Clustering/nob/SNLHierarchicalClustering.py
-# https://github.com/embeddings-benchmark/mteb/blob/ad05983fc3e44afc9087328f010a06ceb83f6f7d/mteb/tasks/Clustering/nob/VGHierarchicalClustering.py
 class HumanVirusReferenceClusteringP2P(AbsTaskClusteringFast):
     max_document_to_embed = 40 # aligned with the train size
     max_fraction_of_documents_to_embed = None
@@ -13,7 +11,8 @@ class HumanVirusReferenceClusteringP2P(AbsTaskClusteringFast):
 
     metadata = TaskMetadata(
         name="HumanVirusReferenceClusteringP2P",
-        description="",
+        description="A P2P clustering task on virus taxonomy based on metagenomic sequences",
+        reference="https://huggingface.co/datasets/metagene-ai/HumanVirusReference",
         dataset={
             "path": "metagene-ai/HumanVirusReference",
             "revision": "main",
@@ -76,13 +75,14 @@ class HumanVirusReferenceClusteringP2P(AbsTaskClusteringFast):
 
 
 class HumanVirusReferenceClusteringS2SAlign(AbsTaskClusteringFast):
-    max_document_to_embed = 147 # align with the train size
+    max_document_to_embed = 147 # When named with "align", this max_document_to_embed is set as the number of train data in the train split.
     max_fraction_of_documents_to_embed = None
     max_depth = 5
 
     metadata = TaskMetadata(
         name="HumanVirusReferenceClusteringS2SAlign",
-        description="",
+        description="A S2S clustering task on virus taxonomy based on metagenomic sequences",
+        reference="https://huggingface.co/datasets/metagene-ai/HumanVirusReference",
         dataset={
             "path": "metagene-ai/HumanVirusReference",
             "revision": "main",
@@ -181,13 +181,14 @@ class HumanVirusReferenceClusteringS2SAlign(AbsTaskClusteringFast):
 
 
 class HumanVirusReferenceClusteringS2SSmall(AbsTaskClusteringFast):
-    max_document_to_embed = 40 # small size
+    max_document_to_embed = 40 # When named with "small", the max_document_to_embed is the same as the max_document_to_embed of its P2P counterpart.
     max_fraction_of_documents_to_embed = None
     max_depth = 5
 
     metadata = TaskMetadata(
         name="HumanVirusReferenceClusteringS2SSmall",
-        description="",
+        description="A S2S clustering task on virus taxonomy based on metagenomic sequences",
+        reference="https://huggingface.co/datasets/metagene-ai/HumanVirusReference",
         dataset={
             "path": "metagene-ai/HumanVirusReference",
             "revision": "main",
@@ -286,13 +287,14 @@ class HumanVirusReferenceClusteringS2SSmall(AbsTaskClusteringFast):
 
 
 class HumanVirusReferenceClusteringS2STiny(AbsTaskClusteringFast):
-    max_document_to_embed = 3 # tiny size => 3-mer
+    max_document_to_embed = 3 # When named with "tiny", the max_document_to_embed is set as "3" to simulate the "3-mer" in DNA sequence processing.
     max_fraction_of_documents_to_embed = None
     max_depth = 5
 
     metadata = TaskMetadata(
         name="HumanVirusReferenceClusteringS2STiny",
-        description="",
+        description="A S2S clustering task on virus taxonomy based on metagenomic sequences",
+        reference="https://huggingface.co/datasets/metagene-ai/HumanVirusReference",
         dataset={
             "path": "metagene-ai/HumanVirusReference",
             "revision": "main",
