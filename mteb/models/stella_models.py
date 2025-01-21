@@ -30,6 +30,7 @@ stella_en_400M = ModelMeta(
     reference="https://huggingface.co/dunzhang/stella_en_400M_v5",
     training_datasets=None,
     public_training_code=None,
+    public_training_data=None,
 )
 
 stella_en_1_5b = ModelMeta(
@@ -56,6 +57,7 @@ stella_en_1_5b = ModelMeta(
     reference="https://huggingface.co/dunzhang/stella_en_1.5B_v5",
     training_datasets=None,
     public_training_code=None,
+    public_training_data=None,
 )
 
 stella_large_zh_v3_1792d = ModelMeta(
@@ -75,6 +77,7 @@ stella_large_zh_v3_1792d = ModelMeta(
     superseded_by="dunzhang/stella-mrl-large-zh-v3.5-1792d",
     adapted_from=None,
     public_training_code=None,
+    public_training_data=None,
     training_datasets={
         # Not in MTEB:
         # - infgrad/dialogue_rewrite_llm
@@ -99,6 +102,7 @@ stella_base_zh_v3_1792d = ModelMeta(
     superseded_by=None,
     adapted_from=None,
     public_training_code=None,
+    public_training_data=None,
     training_datasets={
         # Not in MTEB:
         # - infgrad/dialogue_rewrite_llm
@@ -124,6 +128,7 @@ stella_mrl_large_zh_v3_5_1792d = ModelMeta(
     superseded_by=None,
     adapted_from="dunzhang/stella-large-zh-v3-1792d",
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,  # Not specified
 )
 
@@ -144,6 +149,7 @@ zpoint_large_embedding_zh = ModelMeta(
     superseded_by=None,
     adapted_from="dunzhang/stella-mrl-large-zh-v3.5-1792d",
     public_training_code=None,
+    public_training_data=None,
     training_datasets={
         # It's a bit unclear what they have trained on to be honest, because they don't list all
         # And they also have some rather cryptic description of their training procedure, but at

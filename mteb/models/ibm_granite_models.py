@@ -42,6 +42,7 @@ granite_107m_multilingual = ModelMeta(
     adapted_from=None,
     superseded_by=None,
     public_training_code=None,
+    public_training_data=None,
     use_instructions=False,
     training_datasets=None,
 )
@@ -67,6 +68,7 @@ granite_278m_multilingual = ModelMeta(
     adapted_from=None,
     superseded_by=None,
     public_training_code=None,
+    public_training_data=None,
     use_instructions=False,
     training_datasets=None,
 )
@@ -92,6 +94,7 @@ granite_30m_english = ModelMeta(
     adapted_from=None,
     superseded_by=None,
     public_training_code=None,
+    public_training_data=None,
     use_instructions=False,
     training_datasets=None,
 )
@@ -117,6 +120,7 @@ granite_125m_english = ModelMeta(
     adapted_from=None,
     superseded_by=None,
     public_training_code=None,
+    public_training_data=None,
     use_instructions=False,
     training_datasets=None,
 )

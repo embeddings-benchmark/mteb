@@ -46,6 +46,7 @@ gte_Qwen2_7B_instruct = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
     max_tokens=131072,
 )
@@ -77,6 +78,7 @@ gte_Qwen1_5_7B_instruct = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
 )
 
@@ -107,6 +109,7 @@ gte_Qwen2_1_5B_instruct = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
 )
 
@@ -130,6 +133,7 @@ gte_small_zh = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,  # Not disclosed
 )
 
@@ -153,6 +157,7 @@ gte_base_zh = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,  # Not disclosed
 )
 
@@ -176,6 +181,7 @@ gte_large_zh = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,  # Not disclosed
 )
 
@@ -291,6 +297,7 @@ gte_multilingual_base = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
-    public_training_code=None,  # couldn't find
+    public_training_code=None,
+    public_training_data=None,  # couldn't find
     training_datasets=gte_multi_training_data,
 )

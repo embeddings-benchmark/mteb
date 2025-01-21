@@ -112,6 +112,7 @@ all_MiniLM_L6_v2 = ModelMeta(
     adapted_from=None,
     training_datasets=sent_trf_training_dataset,
     public_training_code=None,
+    public_training_data=None,
 )
 
 all_MiniLM_L12_v2 = ModelMeta(
@@ -132,6 +133,7 @@ all_MiniLM_L12_v2 = ModelMeta(
     adapted_from=None,
     training_datasets=sent_trf_training_dataset,
     public_training_code=None,
+    public_training_data=None,
 )
 
 paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
@@ -152,6 +154,7 @@ paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
     adapted_from=None,
     training_datasets=sent_trf_training_dataset,  # assumed (probably some parallel as well)
     public_training_code=None,
+    public_training_data=None,
 )
 
 paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
@@ -183,6 +186,7 @@ paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
     # "yahoo-answers": yahoo_answers_train_dataset,
     # "stack-exchange": stack_exchange_train_dataset,
     public_training_code=None,
+    public_training_data=None,
 )
 
 labse = ModelMeta(
@@ -203,6 +207,7 @@ labse = ModelMeta(
     adapted_from=None,
     training_datasets=None,  # scraped and mined webdata including CC, wiki, see section 3.1 https://aclanthology.org/2022.acl-long.62.pdf
     public_training_code="https://www.kaggle.com/models/google/labse/tensorFlow2/labse/2?tfhub-redirect=true",
+    public_training_data=None,
 )
 
 multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
@@ -223,6 +228,7 @@ multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
     adapted_from="nreimers/MiniLM-L6-H384-uncased",
     training_datasets=sent_trf_training_dataset,  # assumed
     public_training_code=None,
+    public_training_data=None,
 )
 
 all_mpnet_base_v2 = ModelMeta(
@@ -243,6 +249,7 @@ all_mpnet_base_v2 = ModelMeta(
     adapted_from=None,
     training_datasets=sent_trf_training_dataset,
     public_training_code=None,
+    public_training_data=None,
 )
 
 
@@ -274,4 +281,5 @@ microllama_text_embedding = ModelMeta(
         # "sentence-transformers/natural-questions": ["train"],
     },
     public_training_code=None,
+    public_training_data=None,
 )

@@ -372,7 +372,8 @@ bge_small_en_v1_5 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
-    public_training_code=None,  # seemingly released (at least for some models, but the link is broken
+    public_training_code=None,
+    public_training_data="https://data.baai.ac.cn/details/BAAI-MTP",
     training_datasets=bge_training_data,
 )
 
@@ -397,6 +398,7 @@ bge_base_en_v1_5 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,  # seemingly released (at least for some models, but the link is broken
+    public_training_data="https://data.baai.ac.cn/details/BAAI-MTP",
     training_datasets=bge_training_data,
 )
 
@@ -421,6 +423,7 @@ bge_large_en_v1_5 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,  # seemingly released (at least for some models, but the link is broken
+    public_training_data="https://data.baai.ac.cn/details/BAAI-MTP",
     training_datasets=bge_training_data,
 )
 
@@ -444,7 +447,8 @@ bge_small_zh_v1_5 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
-    public_training_code=None,  # seemingly released (at least for some models, but the link is broken
+    public_training_code=None,
+    public_training_data=None,
     training_datasets=bge_chinese_training_data,
 )
 
@@ -468,7 +472,8 @@ bge_base_zh_v1_5 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
-    public_training_code=None,  # seemingly released (at least for some models, but the link is broken
+    public_training_code=None,
+    public_training_data=None,
     training_datasets=bge_chinese_training_data,
 )
 
@@ -492,7 +497,8 @@ bge_large_zh_v1_5 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
-    public_training_code=None,  # seemingly released (at least for some models, but the link is broken
+    public_training_code=None,
+    public_training_data=None,
     training_datasets=bge_chinese_training_data,
 )
 
@@ -516,6 +522,7 @@ bge_m3 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=bgem3_training_data,
 )
 
@@ -549,5 +556,6 @@ bge_multilingual_gemma2 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,  # not disclosed
 )

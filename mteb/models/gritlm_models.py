@@ -11,6 +11,18 @@ from .instruct_wrapper import instruct_wrapper
 logger = logging.getLogger(__name__)
 
 
+GRIT_LM_TRAINING_DATA = {
+    **E5_TRAINING_DATA,  # source https://arxiv.org/pdf/2402.09906
+    # also uses medi2 which contains fever and hotpotqa:
+    "FEVER": ["train"],
+    "FEVERHardNegatives": ["train"],
+    "FEVER-PL": ["train"],  # translation not trained on
+    "HotpotQA": ["train"],
+    "HotpotQAHardNegatives": ["train"],
+    "HotpotQA-PL": ["train"],  # translation not trained on
+}
+
+
 def gritlm_instruction(instruction: str = "", prompt_type=None) -> str:
     return (
         "<|user|>\n" + instruction + "\n<|embed|>\n" if instruction else "<|embed|>\n"
@@ -38,9 +50,10 @@ gritlm7b = ModelMeta(
     similarity_fn_name="cosine",
     framework=["GritLM", "PyTorch"],
     use_instructions=True,
-    training_datasets=E5_TRAINING_DATA,  # source https://arxiv.org/pdf/2402.09906
+    training_datasets=GRIT_LM_TRAINING_DATA,
     # section 3.1 "We finetune our final models from Mistral 7B [68] and Mixtral 8x7B [69] using adaptations of E5 [160] and the Tülu 2 data
     public_training_code="https://github.com/ContextualAI/gritlm",
+    public_training_data=None,
 )
 gritlm8x7b = ModelMeta(
     loader=partial(  # type: ignore
@@ -63,7 +76,8 @@ gritlm8x7b = ModelMeta(
     similarity_fn_name="cosine",
     framework=["GritLM", "PyTorch"],
     use_instructions=True,
-    training_datasets=E5_TRAINING_DATA,  # source https://arxiv.org/pdf/2402.09906
+    training_datasets=GRIT_LM_TRAINING_DATA,
     # section 3.1 "We finetune our final models from Mistral 7B [68] and Mixtral 8x7B [69] using adaptations of E5 [160] and the Tülu 2 data
     public_training_code="https://github.com/ContextualAI/gritlm",
+    public_training_data=None,
 )
