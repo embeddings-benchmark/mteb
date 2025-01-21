@@ -120,11 +120,50 @@ def update_task_info(task_names: str) -> gr.DataFrame:
     return gr.DataFrame(df, datatype=["markdown"] + ["str"] * (len(df.columns) - 1))
 
 
+# Model sizes in million parameters
+MIN_MODEL_SIZE, MAX_MODEL_SIZE = 0, 10_000
+
+
+def filter_models(
+    model_names,
+    task_select,
+    availability,
+    compatibility,
+    instructions,
+    model_size,
+    zero_shot_setting,
+):
+    lower, upper = model_size
+    # Setting to None, when the user doesn't specify anything
+    if (lower == MIN_MODEL_SIZE) and (upper == MAX_MODEL_SIZE):
+        lower, upper = None, None
+    else:
+        # Multiplying by millions
+        lower = lower * 1e6
+        upper = upper * 1e6
+    model_metas = mteb.get_model_metas(
+        model_names=model_names,
+        open_weights=availability,
+        use_instructions=instructions,
+        frameworks=compatibility,
+        n_parameters_range=(lower, upper),
+    )
+    tasks = mteb.get_tasks(tasks=task_select)
+    models_to_keep = set()
+    for model_meta in model_metas:
+        is_model_zero_shot = model_meta.is_zero_shot_on(tasks)
+        if is_model_zero_shot is None:
+            if zero_shot_setting == "hard":
+                continue
+        elif not is_model_zero_shot:
+            if zero_shot_setting != "off":
+                continue
+        models_to_keep.add(model_meta.name)
+    return list(models_to_keep)
+
+
 logger.info("Loading all benchmark results")
 all_results = load_results()
-
-# Model sizes in million parameters
-min_model_size, max_model_size = 0, 10_000
 
 benchmarks = mteb.get_benchmarks()
 all_benchmark_results = {
@@ -136,7 +175,20 @@ default_results = all_benchmark_results[default_benchmark.name]
 logger.info("Benchmark results loaded")
 
 default_scores = default_results.get_scores(format="long")
-summary_table, per_task_table = scores_to_tables(default_scores)
+all_models = list({entry["model_name"] for entry in default_scores})
+filtered_models = filter_models(
+    all_models,
+    default_results.task_names,
+    availability=None,
+    compatibility=[],
+    instructions=None,
+    model_size=(MIN_MODEL_SIZE, MAX_MODEL_SIZE),
+    zero_shot_setting="soft",
+)
+
+summary_table, per_task_table = scores_to_tables(
+    [entry for entry in default_scores if entry["model_name"] in filtered_models]
+)
 
 benchmark_select = gr.Dropdown(
     [bench.name for bench in benchmarks],
@@ -261,14 +313,14 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                             interactive=True,
                         )
                         model_size = RangeSlider(
-                            minimum=min_model_size,
-                            maximum=max_model_size,
-                            value=(min_model_size, max_model_size),
+                            minimum=MIN_MODEL_SIZE,
+                            maximum=MAX_MODEL_SIZE,
+                            value=(MIN_MODEL_SIZE, MAX_MODEL_SIZE),
                             label="Model Size (#M Parameters)",
                             interactive=True,
                         )
     scores = gr.State(default_scores)
-    models = gr.State(list({entry["model_name"] for entry in default_scores}))
+    models = gr.State(filtered_models)
     with gr.Row():
         with gr.Column():
             description = gr.Markdown(
@@ -408,43 +460,6 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
         outputs=[task_select],
     )
 
-    def filter_models(
-        model_names,
-        task_select,
-        availability,
-        compatibility,
-        instructions,
-        model_size,
-        zero_shot_setting,
-    ):
-        lower, upper = model_size
-        # Setting to None, when the user doesn't specify anything
-        if (lower == min_model_size) and (upper == max_model_size):
-            lower, upper = None, None
-        else:
-            # Multiplying by millions
-            lower = lower * 1e6
-            upper = upper * 1e6
-        model_metas = mteb.get_model_metas(
-            model_names=model_names,
-            open_weights=availability,
-            use_instructions=instructions,
-            frameworks=compatibility,
-            n_parameters_range=(lower, upper),
-        )
-        tasks = mteb.get_tasks(tasks=task_select)
-        models_to_keep = set()
-        for model_meta in model_metas:
-            is_model_zero_shot = model_meta.is_zero_shot_on(tasks)
-            if is_model_zero_shot is None:
-                if zero_shot_setting == "hard":
-                    continue
-            elif not is_model_zero_shot:
-                if zero_shot_setting != "off":
-                    continue
-            models_to_keep.add(model_meta.name)
-        return list(models_to_keep)
-
     def update_models(
         scores,
         tasks,
@@ -547,7 +562,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
         ],
         outputs=[models],
     )
-    zero_shot.input(
+    zero_shot.change(
         update_models,
         inputs=[
             scores,
