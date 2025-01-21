@@ -259,11 +259,6 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
 def model_meta_from_cross_encoder(model: CrossEncoder) -> ModelMeta:
     try:
         name = model.model.name_or_path
-        # languages = (
-        #    [model.model_card_data.language]
-        #    if isinstance(model.model_card_data.language, str)
-        #    else model.model_card_data.language
-        # )
 
         meta = ModelMeta(
             name=name,
