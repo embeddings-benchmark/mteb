@@ -54,3 +54,18 @@ def test_output_folder_model_meta(task: AbsTask, tmp_path: Path):
     assert output_path.name == model.config._commit_hash
     assert output_path.parent.name == "cross-encoder__ms-marco-TinyBERT-L-2-v2"
     assert output_path.parent.parent == tmp_path
+
+
+def test_model_meta_colbert():
+    model_name = "colbert-ir/colbertv2.0"
+    colbert_model = pytest.importorskip("pylate.models", reason="pylate not installed")
+    model = colbert_model.ColBERT(model_name)
+    # pylate.models.
+
+    meta = MTEB.create_model_meta(model)
+
+    assert meta.similarity_fn_name == "MaxSim"
+    assert type(meta.framework) is list
+    assert meta.framework[0] == "Sentence Transformers"
+    assert meta.name == model_name
+    assert meta.revision == model.model_card_data.base_model_revision

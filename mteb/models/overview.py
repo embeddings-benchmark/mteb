@@ -267,6 +267,14 @@ def model_meta_from_cross_encoder(model: CrossEncoder) -> ModelMeta:
             languages=None,
             framework=["Sentence Transformers"],
             similarity_fn_name=None,
+            n_parameters=None,
+            max_tokens=None,
+            embed_dim=None,
+            license=None,
+            open_weights=True,
+            public_training_code=None,
+            use_instructions=None,
+            training_datasets=None,
         )
     except AttributeError as e:
         logger.warning(
@@ -277,6 +285,16 @@ def model_meta_from_cross_encoder(model: CrossEncoder) -> ModelMeta:
             revision=None,
             languages=None,
             release_date=None,
+            n_parameters=None,
+            max_tokens=None,
+            embed_dim=None,
+            license=None,
+            open_weights=True,
+            public_training_code=None,
+            similarity_fn_name=None,
+            use_instructions=None,
+            training_datasets=None,
+            framework=[],
         )
     return meta
 

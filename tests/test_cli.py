@@ -121,7 +121,7 @@ def test_create_meta():
         ), f"Value for {key} does not match"
 
     # ensure that the command line interface works as well
-    command = f"{sys.executable} -m mteb create_meta --results_folder {results} --output_path {output_path} --overwrite"
+    command = f"{sys.executable} -m mteb create_meta --results_folder {results.as_posix()} --output_path {output_path.as_posix()} --overwrite"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
 
@@ -133,14 +133,16 @@ def test_create_meta():
         ("model_card_without_frontmatter.md", "model_card_gold_without_frontmatter.md"),
     ],
 )
-def test_create_meta_from_existing(existing_readme_name: str, gold_readme_name: str):
+def test_create_meta_from_existing(
+    existing_readme_name: str, gold_readme_name: str, tmp_path: Path
+):
     """Test create_meta function directly as well as through the command line interface"""
     test_folder = Path(__file__).parent
     output_folder = test_folder / "create_meta"
     results = (
         output_folder / "all-MiniLM-L6-v2" / "8b3219a92973c328a8e22fadcfa821b5dc75636a"
     )
-    output_path = output_folder / "model_card.md"
+    output_path = tmp_path / "model_card.md"
     existing_readme = output_folder / existing_readme_name
 
     args = Namespace(
@@ -182,7 +184,7 @@ def test_create_meta_from_existing(existing_readme_name: str, gold_readme_name: 
         ), f"Value for {key} does not match"
     assert readme_output == gold_readme
     # ensure that the command line interface works as well
-    command = f"{sys.executable} -m mteb create_meta --results_folder {results} --output_path {output_path} --from_existing {existing_readme} --overwrite"
+    command = f"{sys.executable} -m mteb create_meta --results_folder {results.as_posix()} --output_path {output_path.as_posix()} --from_existing {existing_readme.as_posix()} --overwrite"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
 
