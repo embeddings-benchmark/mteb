@@ -245,6 +245,18 @@ visualized_bge_base = ModelMeta(
     revision="98db10b10d22620010d06f11733346e1c98c34aa",
     release_date="2024-06-06",
     modalities=["image", "text"],
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    open_weights=None,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
 )
 
 visualized_bge_m3 = ModelMeta(
@@ -260,6 +272,18 @@ visualized_bge_m3 = ModelMeta(
     revision="98db10b10d22620010d06f11733346e1c98c34aa",
     release_date="2024-06-06",
     modalities=["image", "text"],
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    open_weights=None,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
 )
 
 if __name__ == "__main__":

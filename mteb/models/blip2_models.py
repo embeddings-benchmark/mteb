@@ -226,6 +226,18 @@ blip2_opt_2_7b = ModelMeta(
     revision="51572668da0eb669e01a189dc22abe6088589a24",
     release_date="2024-03-22",
     modalities=["image", "text"],
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    open_weights=None,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
 )
 
 blip2_opt_6_7b_coco = ModelMeta(
@@ -239,6 +251,18 @@ blip2_opt_6_7b_coco = ModelMeta(
     revision="0d580de59320a25a4d2c386387bcef310d5f286e",
     release_date="2024-03-31",
     modalities=["image", "text"],
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    open_weights=None,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
 )
 
 

@@ -148,6 +148,18 @@ clip_vit_large_patch14 = ModelMeta(
     revision="32bd64288804d66eefd0ccbe215aa642df71cc41",
     release_date="2021-02-26",
     modalities=["image", "text"],
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    open_weights=None,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
 )
 
 clip_vit_base_patch32 = ModelMeta(
@@ -161,6 +173,18 @@ clip_vit_base_patch32 = ModelMeta(
     revision="3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
     release_date="2021-02-26",
     modalities=["image", "text"],
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    open_weights=None,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
 )
 
 clip_vit_base_patch16 = ModelMeta(
@@ -174,6 +198,18 @@ clip_vit_base_patch16 = ModelMeta(
     revision="57c216476eefef5ab752ec549e440a49ae4ae5f3",
     release_date="2021-02-26",
     modalities=["image", "text"],
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    open_weights=None,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
 )
 
 if __name__ == "__main__":

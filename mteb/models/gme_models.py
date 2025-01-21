@@ -425,6 +425,9 @@ gme_qwen2vl_2b = ModelMeta(
     similarity_fn_name="cosine",
     framework=["PyTorch"],
     use_instuctions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
 )
 
 gme_qwen2vl_7b = ModelMeta(
@@ -446,4 +449,7 @@ gme_qwen2vl_7b = ModelMeta(
     similarity_fn_name="cosine",
     framework=["PyTorch"],
     use_instuctions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
 )

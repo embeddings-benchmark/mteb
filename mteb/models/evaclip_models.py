@@ -176,6 +176,18 @@ EVA02_CLIP_B_16 = ModelMeta(
     revision="11afd202f2ae80869d6cef18b1ec775e79bd8d12",
     release_date="2023-04-26",
     modalities=["image", "text"],
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    open_weights=None,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
 )
 
 EVA02_CLIP_L_14 = ModelMeta(
@@ -189,6 +201,18 @@ EVA02_CLIP_L_14 = ModelMeta(
     revision="11afd202f2ae80869d6cef18b1ec775e79bd8d12",
     release_date="2023-04-26",
     modalities=["image", "text"],
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    open_weights=None,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
 )
 
 EVA02_CLIP_bigE_14 = ModelMeta(
@@ -202,6 +226,18 @@ EVA02_CLIP_bigE_14 = ModelMeta(
     revision="11afd202f2ae80869d6cef18b1ec775e79bd8d12",
     release_date="2023-04-26",
     modalities=["image", "text"],
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    open_weights=None,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
 )
 
 
@@ -216,4 +252,16 @@ EVA02_CLIP_bigE_14_plus = ModelMeta(
     revision="11afd202f2ae80869d6cef18b1ec775e79bd8d12",
     release_date="2023-04-26",
     modalities=["image", "text"],
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    open_weights=None,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
 )

@@ -131,6 +131,18 @@ dinov2_small = ModelMeta(
     revision="ed25f3a31f01632728cabb09d1542f84ab7b0056",
     release_date="2023-07-18",
     modalities=["image"],
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    open_weights=None,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
 )
 
 dinov2_base = ModelMeta(
@@ -144,6 +156,18 @@ dinov2_base = ModelMeta(
     revision="f9e44c814b77203eaa57a6bdbbd535f21ede1415",
     release_date="2023-07-18",
     modalities=["image"],
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    open_weights=None,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
 )
 
 dinov2_large = ModelMeta(
@@ -157,6 +181,18 @@ dinov2_large = ModelMeta(
     revision="47b73eefe95e8d44ec3623f8890bd894b6ea2d6c",
     release_date="2023-07-18",
     modalities=["image"],
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    open_weights=None,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
 )
 
 dinov2_giant = ModelMeta(
@@ -170,6 +206,18 @@ dinov2_giant = ModelMeta(
     revision="611a9d42f2335e0f921f1e313ad3c1b7178d206d",
     release_date="2023-07-18",
     modalities=["image"],
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    open_weights=None,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
 )
 
 if __name__ == "__main__":

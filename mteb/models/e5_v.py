@@ -199,6 +199,18 @@ e5_v = ModelMeta(
     revision="0c1f22679417b3ae925d779442221c40cd1861ab",
     release_date="2024-07-17",
     modalities=["image", "text"],
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    open_weights=None,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
 )
 
 if __name__ == "__main__":

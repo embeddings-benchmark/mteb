@@ -256,6 +256,12 @@ voyage_v = ModelMeta(
     similarity_fn_name="cosine",
     framework=[],
     modalities=["image", "text"],
+    open_weights=None,
+    public_training_code=None,
+    public_training_data=None,
+    reference=None,
+    use_instructions=None,
+    training_datasets=None,
 )
 
 if __name__ == "__main__":
