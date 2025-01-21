@@ -218,7 +218,11 @@ def scores_to_tables(
     joint_table[score_columns] = joint_table[score_columns].map(format_scores)
     joint_table_style = (
         joint_table.style.format(
-            {**{column: "{:.2f}" for column in score_columns}, "Rank (Borda)": "{:.0f}"}
+            {
+                **{column: "{:.2f}" for column in score_columns},
+                "Rank (Borda)": "{:.0f}",
+            },
+            na_rep="",
         )
         .highlight_min("Rank (Borda)", props="font-weight: bold")
         .highlight_max(subset=score_columns, props="font-weight: bold")
@@ -226,7 +230,7 @@ def scores_to_tables(
     task_score_columns = per_task.select_dtypes("number").columns
     per_task[task_score_columns] *= 100
     per_task_style = per_task.style.format(
-        "{:.2f}", subset=task_score_columns
+        "{:.2f}", subset=task_score_columns, na_rep=""
     ).highlight_max(subset=task_score_columns, props="font-weight: bold")
     return (
         gr.DataFrame(
