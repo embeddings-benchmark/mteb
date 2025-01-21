@@ -339,17 +339,16 @@ def test_mteb_rerank(tmp_path: Path):
 
     eval.run(
         model,  # type: ignore
-        output_folder="tests/results",
+        output_folder=tmp_path.as_posix(),
         overwrite_results=True,
         eval_splits=["test"],
         top_k=2,
         previous_results=tmp_file,
         save_predictions=True,
     )
-    tmp_file.unlink()
 
     # read in the results
-    with open("tests/results/SciFact_default_predictions.json") as f:
+    with (tmp_path / "SciFact_default_predictions.json").open() as f:
         results = json.load(f)
 
     # check that only the top two results are re-orderd
@@ -358,7 +357,7 @@ def test_mteb_rerank(tmp_path: Path):
     assert "18670" in results["1"]
 
 
-def test_reranker_same_ndcg1():
+def test_reranker_same_ndcg1(tmp_path: Path):
     de_name = "average_word_embeddings_komninos"
     revision = "21eec43590414cb8e3a6f654857abed0483ae36e"
     de = SentenceTransformer(de_name, revision=revision)
@@ -382,32 +381,35 @@ def test_reranker_same_ndcg1():
         framework=["Sentence Transformers", "PyTorch"],
     )
     eval = MTEB(tasks=mteb.get_tasks(["SciFact"]))
+    stage1_path = tmp_path / "stage1"
     eval.run(
         de,
-        output_folder="tests/results/stage1",
+        output_folder=stage1_path.as_posix(),
         overwrite_results=True,
         save_predictions=True,
         eval_splits=["test"],
     )
+    stage2_path = tmp_path / "stage2"
     eval.run(
         ce,  # type: ignore
-        output_folder="tests/results/stage2",
+        output_folder=stage2_path.as_posix(),
         overwrite_results=True,
-        previous_results="tests/results/stage1/SciFact_default_predictions.json",
+        previous_results=(stage1_path / "SciFact_default_predictions.json"),
         save_predictions=False,
         eval_splits=["test"],
         top_k=1,  # don't allow it to rerank more than 1 so we can check for top_1 being the same
     )
 
     # read in stage 1 and stage two and check ndcg@1 is the same
-    with open(
-        f"tests/results/stage1/sentence-transformers__{de_name}/{revision}/SciFact.json"
-    ) as f:
+    with (
+        stage1_path / f"sentence-transformers__{de_name}/{revision}/SciFact.json"
+    ).open() as f:
         stage1 = json.load(f)
 
-    with open(
-        f"tests/results/stage2/cross-encoder__ms-marco-TinyBERT-L-2-v2/{ce_revision}/SciFact.json"
-    ) as f:
+    with (
+        stage2_path
+        / f"cross-encoder__ms-marco-TinyBERT-L-2-v2/{ce_revision}/SciFact.json"
+    ).open() as f:
         stage2 = json.load(f)
 
     assert (

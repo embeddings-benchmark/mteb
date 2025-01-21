@@ -32,7 +32,7 @@ FRAMEWORKS = Literal[
     "PyLate",
     "ColBERT",
 ]
-DISTANCE_METRICS = Literal["cosine", "max_sim", "dot"]
+DISTANCE_METRICS = Literal["cosine", "MaxSim", "dot"]
 
 
 def sentence_transformers_loader(
@@ -111,7 +111,7 @@ class ModelMeta(BaseModel):
             return cos_sim
         elif self.similarity_fn_name == "dot":
             return dot_score
-        elif self.similarity_fn_name == "max_sim":
+        elif self.similarity_fn_name == "MaxSim":
             return max_sim
         elif self.similarity_fn_name is None:
             raise ValueError("Similarity function not specified.")

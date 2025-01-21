@@ -20,7 +20,10 @@ import mteb
 from mteb.abstasks.AbsTask import ScoresDict
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
-from mteb.models import model_meta_from_sentence_transformers
+from mteb.models import (
+    model_meta_from_cross_encoder,
+    model_meta_from_sentence_transformers,
+)
 
 from ..abstasks.AbsTask import AbsTask
 from ..load_results.task_results import TaskResult
@@ -495,7 +498,7 @@ class MTEB:
             meta = model.mteb_model_meta  # type: ignore
         else:
             try:
-                meta = model_meta_from_sentence_transformers(model)  # type: ignore
+                meta = MTEB._get_model_meta(model)
             except AttributeError:
                 logger.warning(
                     "Could not find model metadata. Please set the model.mteb_model_meta attribute or if you are using "
@@ -597,3 +600,11 @@ class MTEB:
                     missing_evaluations[split]["missing_subsets"] = missing_subsets
 
         return missing_evaluations
+
+    @staticmethod
+    def _get_model_meta(model: Encoder) -> ModelMeta:
+        if isinstance(model, CrossEncoder):
+            meta = model_meta_from_cross_encoder(model)
+        else:
+            meta = model_meta_from_sentence_transformers(model)
+        return meta
