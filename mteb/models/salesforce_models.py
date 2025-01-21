@@ -6,12 +6,27 @@ from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.instruct_wrapper import instruct_wrapper
 
+from .e5_instruct import E5_MISTRAL_TRAINING_DATA
+
 
 def instruction_template(
     instruction: str, prompt_type: PromptType | None = None
 ) -> str:
     return f"Instruct: {instruction}\nQuery: " if instruction else ""
 
+
+SFR_TRAINING_DATA = {  # inherits from e5
+    **E5_MISTRAL_TRAINING_DATA,
+    # From previously released blogpost which now have been taken down:
+    "FiQA2018": ["train"],
+    "FiQA2018-PL": ["train"],
+    "FEVER": ["train"],
+    "FEVERHardNegatives": ["train"],
+    "FEVER-PL": ["train"],  # translation not trained on
+    "HotpotQA": ["train"],
+    "HotpotQAHardNegatives": ["train"],
+    "HotpotQA-PL": ["train"],  # translation not trained on
+}
 
 SFR_Embedding_2_R = ModelMeta(
     loader=partial(  # type: ignore
@@ -41,16 +56,7 @@ SFR_Embedding_2_R = ModelMeta(
     use_instructions=True,
     adapted_from="intfloat/e5-mistral-7b-instruct",
     public_training_code=None,
-    training_datasets={  # inherits from e5
-        "MSMARCO": ["train"],
-        "MSMARCOHardNegatives": ["train"],
-        "NanoMSMARCORetrieval": ["train"],
-        "MSMARCO-PL": ["train"],  # translation not trained on
-        "NQ": ["train"],
-        "NQHardNegatives": ["train"],
-        "NanoNQRetrieval": ["train"],
-        "NQ-PL": ["train"],  # translation not trained on
-    },
+    training_datasets=SFR_TRAINING_DATA,
 )
 
 
@@ -79,14 +85,5 @@ SFR_Embedding_Mistral = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
-    training_datasets={  # inherits from e5
-        "MSMARCO": ["train"],
-        "MSMARCOHardNegatives": ["train"],
-        "NanoMSMARCORetrieval": ["train"],
-        "MSMARCO-PL": ["train"],  # translation not trained on
-        "NQ": ["train"],
-        "NQHardNegatives": ["train"],
-        "NanoNQRetrieval": ["train"],
-        "NQ-PL": ["train"],  # translation not trained on
-    },
+    training_datasets=SFR_TRAINING_DATA,
 )

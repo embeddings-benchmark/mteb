@@ -126,6 +126,16 @@ E5_TRAINING_DATA = {
     "NQ-PL": ["train"],  # translation not trained on
 }
 
+ME5_TRAINING_DATA = {
+    **E5_TRAINING_DATA,
+    "FEVER": ["train"],
+    "FEVERHardNegatives": ["train"],
+    "FEVER-PL": ["train"],  # translation not trained on
+    "HotpotQA": ["train"],
+    "HotpotQAHardNegatives": ["train"],
+    "HotpotQA-PL": ["train"],  # translation not trained on
+}
+
 e5_mult_small = ModelMeta(
     loader=partial(  # type: ignore
         sentence_transformers_loader,
@@ -147,7 +157,7 @@ e5_mult_small = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
-    training_datasets=E5_TRAINING_DATA,
+    training_datasets=ME5_TRAINING_DATA,
 )
 
 e5_mult_base = ModelMeta(
@@ -170,7 +180,7 @@ e5_mult_base = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
-    training_datasets=E5_TRAINING_DATA,
+    training_datasets=ME5_TRAINING_DATA,
 )
 
 e5_mult_large = ModelMeta(
@@ -194,7 +204,7 @@ e5_mult_large = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
-    training_datasets=E5_TRAINING_DATA,
+    training_datasets=ME5_TRAINING_DATA,
 )
 
 e5_eng_small_v2 = ModelMeta(
