@@ -48,9 +48,12 @@ def produce_benchmark_link(benchmark_name: str, request: gr.Request) -> str:
     return md
 
 
+DEFAULT_BENCHMARK_NAME = "MTEB(Multilingual)"
+
+
 def set_benchmark_on_load(request: gr.Request):
     query_params = request.query_params
-    return query_params.get("benchmark_name", "MTEB(Multilingual, beta)")
+    return query_params.get("benchmark_name", DEFAULT_BENCHMARK_NAME)
 
 
 def download_table(table: pd.DataFrame) -> Path:
@@ -128,7 +131,7 @@ all_benchmark_results = {
     benchmark.name: benchmark.load_results(base_results=all_results)
     for benchmark in benchmarks
 }
-default_benchmark = mteb.get_benchmark("MTEB(Multilingual, beta)")
+default_benchmark = mteb.get_benchmark(DEFAULT_BENCHMARK_NAME)
 default_results = all_benchmark_results[default_benchmark.name]
 logger.info("Benchmark results loaded")
 
