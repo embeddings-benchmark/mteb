@@ -23,13 +23,21 @@ class HumanVirusReferenceClusteringP2P(AbsTaskClusteringFast):
         eval_splits=["test"],
         eval_langs=["eng"],
         main_score="v_measure",
-        date=None,
-        domains=None,
+        date=("2014-01-01", "2018-01-01"),
+        domains=["Medical"],
         task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
         sample_creation="found",
+        bibtex_citation="""
+        @article{liu2025metagene,
+            title={METAGENE-1: Metagenomic Foundation Model for Pandemic Monitoring},
+            author={Liu, Ollie and Jaghouar, Sami and Hagemann, Johannes and Wang, Shangshang and Wiemels, Jason and Kaufman, Jeff and Neiswanger, Willie},
+            journal={arXiv preprint arXiv:2501.02045},
+            year={2025}
+        }
+        """,
         prompt="Identify virus taxonomy based on metagenomic sequences",
     )
 
@@ -93,13 +101,21 @@ class HumanVirusReferenceClusteringS2SAlign(AbsTaskClusteringFast):
         eval_splits=["test"],
         eval_langs=["eng"],
         main_score="v_measure",
-        date=None,
-        domains=None,
+        date=("2014-01-01", "2018-01-01"),
+        domains=["Medical"],
         task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
         sample_creation="found",
+        bibtex_citation="""
+        @article{liu2025metagene,
+            title={METAGENE-1: Metagenomic Foundation Model for Pandemic Monitoring},
+            author={Liu, Ollie and Jaghouar, Sami and Hagemann, Johannes and Wang, Shangshang and Wiemels, Jason and Kaufman, Jeff and Neiswanger, Willie},
+            journal={arXiv preprint arXiv:2501.02045},
+            year={2025}
+        }
+        """,
         prompt="Identify virus taxonomy based on metagenomic sequences",
     )
 
@@ -199,13 +215,21 @@ class HumanVirusReferenceClusteringS2SSmall(AbsTaskClusteringFast):
         eval_splits=["test"],
         eval_langs=["eng"],
         main_score="v_measure",
-        date=None,
-        domains=None,
+        date=("2014-01-01", "2018-01-01"),
+        domains=["Medical"],
         task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
         sample_creation="found",
+        bibtex_citation="""
+        @article{liu2025metagene,
+            title={METAGENE-1: Metagenomic Foundation Model for Pandemic Monitoring},
+            author={Liu, Ollie and Jaghouar, Sami and Hagemann, Johannes and Wang, Shangshang and Wiemels, Jason and Kaufman, Jeff and Neiswanger, Willie},
+            journal={arXiv preprint arXiv:2501.02045},
+            year={2025}
+        }
+        """,
         prompt="Identify virus taxonomy based on metagenomic sequences",
     )
 
@@ -305,13 +329,21 @@ class HumanVirusReferenceClusteringS2STiny(AbsTaskClusteringFast):
         eval_splits=["test"],
         eval_langs=["eng"],
         main_score="v_measure",
-        date=None,
-        domains=None,
+        date=("2014-01-01", "2018-01-01"),
+        domains=["Medical"],
         task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
         sample_creation="found",
+        bibtex_citation="""
+        @article{liu2025metagene,
+            title={METAGENE-1: Metagenomic Foundation Model for Pandemic Monitoring},
+            author={Liu, Ollie and Jaghouar, Sami and Hagemann, Johannes and Wang, Shangshang and Wiemels, Jason and Kaufman, Jeff and Neiswanger, Willie},
+            journal={arXiv preprint arXiv:2501.02045},
+            year={2025}
+        }
+        """,
         prompt="Identify virus taxonomy based on metagenomic sequences",
     )
 
