@@ -86,34 +86,6 @@ class NeuCLIR2022Retrieval(MultilingualTask, AbsTaskRetrieval):
   journal={arXiv preprint arXiv:2304.12367},
   year={2023}
 }""",
-        descriptive_stats={
-            "n_samples": {"fas": 2232130, "zho": 3179323, "rus": 4627657},
-            "avg_character_length": {
-                "test": {
-                    "fas": {
-                        "average_document_length": 2032.093148525817,
-                        "average_query_length": 85.4298245614035,
-                        "num_documents": 2232016,
-                        "num_queries": 114,
-                        "average_relevant_docs_per_query": 12.912280701754385,
-                    },
-                    "rus": {
-                        "average_document_length": 1757.9129983233004,
-                        "average_query_length": 85.58771929824562,
-                        "num_documents": 4627543,
-                        "num_queries": 114,
-                        "average_relevant_docs_per_query": 16.57017543859649,
-                    },
-                    "zho": {
-                        "average_document_length": 743.1426659901881,
-                        "average_query_length": 24.17543859649123,
-                        "num_documents": 3179209,
-                        "num_queries": 114,
-                        "average_relevant_docs_per_query": 18.710526315789473,
-                    },
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -227,6 +199,7 @@ class NeuCLIR2022RetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
   journal={arXiv preprint arXiv:2304.12367},
   year={2023}
 }""",
+<<<<<<< HEAD
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
@@ -262,6 +235,8 @@ class NeuCLIR2022RetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
                 }
             },
         },
+=======
+>>>>>>> main
     )
 
     def load_data(self, **kwargs):

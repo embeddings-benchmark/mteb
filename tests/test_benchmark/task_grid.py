@@ -115,6 +115,7 @@ MOCK_TASK_TEST_GRID_AS_STRING = [
 ]
 
 MOCK_TASK_REGISTRY = {task.metadata.name: type(task) for task in MOCK_TASK_TEST_GRID}
+<<<<<<< HEAD
 
 MOCK_MIEB_TASK_GRID = [
     MockAny2AnyRetrievalI2TTask(),
@@ -142,3 +143,5 @@ MOCK_MIEB_TASK_GRID_AS_STRING = [
 MOCK_MIEB_TASK_REGISTRY = {
     task.metadata.name: type(task) for task in MOCK_MIEB_TASK_GRID
 }
+=======
+>>>>>>> main

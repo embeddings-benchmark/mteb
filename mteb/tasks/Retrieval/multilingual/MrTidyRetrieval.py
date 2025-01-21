@@ -113,7 +113,10 @@ class MrTidyRetrieval(MultilingualTask, AbsTaskRetrieval):
               year={2021},
               journal={arXiv:2108.08787},
         }""",
+<<<<<<< HEAD
         descriptive_stats={},
+=======
+>>>>>>> main
     )
 
     def load_data(self, **kwargs):

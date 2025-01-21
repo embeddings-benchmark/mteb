@@ -1,0 +1,17 @@
+{
+    "test": {
+        "num_samples": 3108,
+        "number_of_characters": 402118,
+        "min_sentence1_length": 3,
+        "average_sentence1_len": 63.78893178893179,
+        "max_sentence1_length": 220,
+        "unique_sentence1": 2236,
+        "min_sentence2_length": 7,
+        "average_sentence2_len": 65.5926640926641,
+        "max_sentence2_length": 204,
+        "unique_sentence2": 2797,
+        "min_score": 0.0,
+        "avg_score": 3.5060643500643507,
+        "max_score": 5.0
+    }
+}

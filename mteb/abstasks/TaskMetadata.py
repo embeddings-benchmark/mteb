@@ -1,13 +1,22 @@
 from __future__ import annotations
 
+import json
 import logging
 from collections.abc import Mapping
 from datetime import date
+from pathlib import Path
 from typing import Annotated, Any, Union
 
-from pydantic import AnyUrl, BaseModel, BeforeValidator, TypeAdapter, field_validator
-from typing_extensions import Literal
+from pydantic import (
+    AnyUrl,
+    BaseModel,
+    BeforeValidator,
+    TypeAdapter,
+    field_validator,
+)
+from typing_extensions import Literal, TypedDict
 
+from ..encoder_interface import PromptType
 from ..languages import (
     ISO_LANGUAGE_SCRIPT,
     ISO_TO_LANGUAGE,
@@ -196,6 +205,25 @@ LICENSES = (  # this list can be extended as needed
 METRIC_NAME = str
 METRIC_VALUE = Union[int, float, dict[str, Any]]
 
+
+class PromptDict(TypedDict, total=False):
+    """A dictionary containing the prompt used for the task.
+
+    Args:
+        query: The prompt used for the queries in the task.
+        passage: The prompt used for the passages in the task.
+    """
+
+    query: str
+    passage: str
+
+
+class DescriptiveStatistics(TypedDict):
+    """Class for descriptive statistics."""
+
+    pass
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -226,19 +254,17 @@ class TaskMetadata(BaseModel):
         dialect: The dialect of the data, if applicable. Ideally specified as a BCP-47 language tag. Empty list if no dialects are present.
         sample_creation: The method of text creation. Includes "found", "created", "machine-translated", "machine-translated and verified", and
             "machine-translated and localized".
+        prompt: The prompt used for the task. Can be a string or a dictionary containing the query and passage prompts.
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
-        n_samples: The number of samples in the dataset. This should only be for the splits evaluated on. For retrieval tasks, this should be the
-            number of query-document pairs.
-        avg_character_length: The average character length of the samples in the dataset. This should only be for the splits evaluated on. For
-            retrieval tasks, this will be a dict containing the character length of the queries and documents separately, as well as the total number of queries, documents, and relevance judgements per query.
     """
 
     dataset: dict
 
     name: str
     description: str
+    prompt: str | PromptDict | None = None
     type: TASK_TYPE
-    modalities: list[MODALITIES] = ["text"]
+    modalities: list[Literal["text"]] = ["text"]
     category: TASK_CATEGORY | None = None
     reference: STR_URL | None = None
 
@@ -256,8 +282,6 @@ class TaskMetadata(BaseModel):
 
     sample_creation: SAMPLE_CREATION_METHOD | None = None
     bibtex_citation: str | None = None
-
-    descriptive_stats: dict[METRIC_NAME, dict[SPLIT_NAME, METRIC_VALUE] | None] = {}
 
     def validate_metadata(self) -> None:
         self.dataset_path_is_specified(self.dataset)
@@ -277,6 +301,18 @@ class TaskMetadata(BaseModel):
     ) -> dict[str, Any]:
         cls.dataset_revision_is_specified(dataset)
         return dataset
+
+    @field_validator("prompt")
+    def _check_prompt_is_valid(
+        cls, prompt: str | PromptDict | None
+    ) -> str | PromptDict | None:
+        if isinstance(prompt, dict):
+            for key in prompt:
+                if key not in [e.value for e in PromptType]:
+                    raise ValueError(
+                        "The prompt dictionary should only contain the keys 'query' and 'passage'."
+                    )
+        return prompt
 
     @staticmethod
     def dataset_path_is_specified(dataset: dict[str, Any]) -> None:
@@ -358,7 +394,9 @@ class TaskMetadata(BaseModel):
     def is_filled(self) -> bool:
         """Check if all the metadata fields are filled."""
         return all(
-            getattr(self, field_name) is not None for field_name in self.model_fields
+            getattr(self, field_name) is not None
+            for field_name in self.model_fields
+            if field_name != "prompt"
         )
 
     @property
@@ -382,6 +420,39 @@ class TaskMetadata(BaseModel):
                 )
             return f"\\cite{{{cite}}}"
         return cite
+
+    @property
+    def descriptive_stats(self) -> dict[str, DescriptiveStatistics] | None:
+        """Return the descriptive statistics for the dataset."""
+        if self.descriptive_stat_path.exists():
+            with self.descriptive_stat_path.open("r") as f:
+                return json.load(f)
+        return None
+
+    @property
+    def descriptive_stat_path(self) -> Path:
+        """Return the path to the descriptive statistics file."""
+        descriptive_stat_base_dir = Path(__file__).parent.parent / "descriptive_stats"
+        if not descriptive_stat_base_dir.exists():
+            descriptive_stat_base_dir.mkdir()
+        task_type_dir = descriptive_stat_base_dir / self.type
+        if not task_type_dir.exists():
+            task_type_dir.mkdir()
+        return task_type_dir / f"{self.name}.json"
+
+    @property
+    def n_samples(self) -> dict[str, int] | None:
+        """Returns the number of samples in the dataset"""
+        stats = self.descriptive_stats
+        if not stats:
+            return None
+
+        n_samples = {}
+        for subset, subset_value in stats.items():
+            if subset == "hf_subset_descriptive_stats":
+                continue
+            n_samples[subset] = subset_value["num_samples"]
+        return n_samples
 
     def __hash__(self) -> int:
         return hash(self.model_dump_json())

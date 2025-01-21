@@ -9,52 +9,30 @@ import torch
 
 from mteb.model_meta import ModelMeta
 
-from ..encoder_interface import PromptType
-from .e5_models import E5_PAPER_RELEASE_DATE, XLMR_LANGUAGES
-from .instructions import task_to_instruction
-from .wrapper import Wrapper
+from .e5_models import E5_PAPER_RELEASE_DATE, E5_TRAINING_DATA, XLMR_LANGUAGES
+from .instruct_wrapper import instruct_wrapper
 
 MISTRAL_LANGUAGES = ["eng_Latn", "fra_Latn", "deu_Latn", "ita_Latn", "spa_Latn"]
 
 
-def e5_instruction(instruction: str) -> str:
-    return f"Instruct: {instruction}\nQuery: "
+E5_INSTRUCTION = "Instruct: {instruction}\nQuery: "
 
 
-def e5_loader(**kwargs):
-    try:
-        from gritlm import GritLM
-    except ImportError:
-        raise ImportError(
-            "Please install `pip install gritlm` to use E5 Instruct models."
-        )
-
-    class E5InstructWrapper(GritLM, Wrapper):
-        def encode(
-            self,
-            sentences: Sequence[str],
-            *args,
-            task_name: str,
-            prompt_type: PromptType | None = None,
-            **kwargs: Any,
-        ) -> np.ndarray:
-            if "instruction" in kwargs:
-                instruction = kwargs.pop("instruction", "")
-            else:
-                instruction = task_to_instruction(
-                    task_name, prompt_type == PromptType.query
-                )
-            if instruction:
-                kwargs["instruction"] = e5_instruction(instruction)
-            return super().encode(sentences, *args, **kwargs)
-
-    return E5InstructWrapper(**kwargs)
-
+E5_MISTRAL_TRAINING_DATA = {
+    **E5_TRAINING_DATA,
+    "FEVER": ["train"],
+    "FEVERHardNegatives": ["train"],
+    "FEVER-PL": ["train"],  # translation not trained on
+    "HotpotQA": ["train"],
+    "HotpotQAHardNegatives": ["train"],
+    "HotpotQA-PL": ["train"],  # translation not trained on
+}
 
 e5_instruct = ModelMeta(
-    loader=partial(
-        e5_loader,
+    loader=partial(  # type: ignore
+        instruct_wrapper,
         model_name_or_path="intfloat/multilingual-e5-large-instruct",
+        instruction_template=E5_INSTRUCTION,
         attn="cccc",
         pooling_method="mean",
         mode="embedding",
@@ -68,19 +46,22 @@ e5_instruct = ModelMeta(
     release_date=E5_PAPER_RELEASE_DATE,
     framework=["GritLM", "PyTorch"],
     similarity_fn_name="cosine",
-    use_instuctions=True,
+    use_instructions=True,
     reference="https://huggingface.co/intfloat/multilingual-e5-large-instruct",
     n_parameters=560_000_000,
-    memory_usage=None,
     embed_dim=1024,
     license="mit",
     max_tokens=514,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=E5_TRAINING_DATA,
 )
 
 e5_mistral = ModelMeta(
-    loader=partial(
-        e5_loader,
+    loader=partial(  # type: ignore
+        instruct_wrapper,
         model_name_or_path="intfloat/e5-mistral-7b-instruct",
+        instruction_template=E5_INSTRUCTION,
         attn="cccc",
         pooling_method="lasttoken",
         mode="embedding",
@@ -96,11 +77,13 @@ e5_mistral = ModelMeta(
     release_date=E5_PAPER_RELEASE_DATE,
     framework=["GritLM", "PyTorch"],
     similarity_fn_name="cosine",
-    use_instuctions=True,
+    use_instructions=True,
     reference="https://huggingface.co/intfloat/e5-mistral-7b-instruct",
     n_parameters=7_111_000_000,
-    memory_usage=None,
     embed_dim=4096,
     license="mit",
     max_tokens=32768,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=E5_TRAINING_DATA,
 )

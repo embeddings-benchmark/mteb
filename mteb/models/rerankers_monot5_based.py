@@ -4,11 +4,7 @@ import logging
 from functools import partial
 
 import torch
-from transformers import (
-    AutoModelForCausalLM,
-    AutoModelForSeq2SeqLM,
-    AutoTokenizer,
-)
+from transformers import AutoModelForCausalLM, AutoModelForSeq2SeqLM, AutoTokenizer
 
 from mteb.model_meta import ModelMeta
 from mteb.models.rerankers_custom import RerankerWrapper, _loader
@@ -94,8 +90,10 @@ class MonoT5Reranker(RerankerWrapper):
                 token_true_id = tokenizer.get_vocab()[token_true]
                 return token_false_id, token_true_id
             else:
-                raise Exception(f"We don't know the indexes for the non-relevant/relevant tokens for\
-                        the checkpoint {model_name_or_path} and you did not provide any.")
+                raise Exception(
+                    f"We don't know the indexes for the non-relevant/relevant tokens for\
+                        the checkpoint {model_name_or_path} and you did not provide any."
+                )
         else:
             token_false_id = tokenizer.get_vocab()[token_false]
             token_true_id = tokenizer.get_vocab()[token_true]
@@ -103,7 +101,12 @@ class MonoT5Reranker(RerankerWrapper):
 
     @torch.inference_mode()
     def predict(self, input_to_rerank, **kwargs):
-        queries, passages, instructions = list(zip(*input_to_rerank))
+        inputs = list(zip(*input_to_rerank))
+        if len(input_to_rerank[0]) == 2:
+            queries, passages = inputs
+            instructions = None
+        else:
+            queries, passages, instructions = inputs
 
         if instructions is not None and instructions[0] is not None:
             queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
@@ -192,7 +195,13 @@ Relevant: """
 
     @torch.inference_mode()
     def predict(self, input_to_rerank, **kwargs):
-        queries, passages, instructions = list(zip(*input_to_rerank))
+        inputs = list(zip(*input_to_rerank))
+        if len(input_to_rerank[0]) == 2:
+            queries, passages = inputs
+            instructions = None
+        else:
+            queries, passages, instructions = inputs
+
         if instructions is not None and instructions[0] is not None:
             # logger.info(f"Adding instructions to LLAMA queries")
             queries = [
@@ -276,7 +285,7 @@ Passage: {text}"""
 
 
 monot5_small = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=MonoT5Reranker,
         model_name_or_path="castorini/monot5-small-msmarco-10k",
@@ -284,13 +293,23 @@ monot5_small = ModelMeta(
     ),
     name="castorini/monot5-small-msmarco-10k",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="77f8e3f7b1eb1afe353aa21a7c3a2fc8feca702e",
     release_date="2022-03-28",
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
+    framework=["PyTorch"],
 )
 
 monot5_base = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=MonoT5Reranker,
         model_name_or_path="castorini/monot5-base-msmarco-10k",
@@ -298,13 +317,23 @@ monot5_base = ModelMeta(
     ),
     name="castorini/monot5-base-msmarco-10k",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="f15657ab3d2a5dd0b9a30c8c0b6a0a73c9cb5884",
     release_date="2022-03-28",
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
+    framework=["PyTorch"],
 )
 
 monot5_large = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=MonoT5Reranker,
         model_name_or_path="castorini/monot5-large-msmarco-10k",
@@ -312,13 +341,23 @@ monot5_large = ModelMeta(
     ),
     name="castorini/monot5-large-msmarco-10k",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="48cfad1d8dd587670393f27ee8ec41fde63e3d98",
     release_date="2022-03-28",
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
+    framework=["PyTorch"],
 )
 
 monot5_3b = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=MonoT5Reranker,
         model_name_or_path="castorini/monot5-3b-msmarco-10k",
@@ -326,13 +365,23 @@ monot5_3b = ModelMeta(
     ),
     name="castorini/monot5-3b-msmarco-10k",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="bc0c419a438c81f592f878ce32430a1823f5db6c",
     release_date="2022-03-28",
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
+    framework=["PyTorch"],
 )
 
 flant5_base = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=FLANT5Reranker,
         model_name_or_path="google/flan-t5-base",
@@ -340,13 +389,34 @@ flant5_base = ModelMeta(
     ),
     name="google/flan-t5-base",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="7bcac572ce56db69c1ea7c8af255c5d7c9672fc2",
     release_date="2022-10-21",
+    training_datasets={
+        "svakulenk0/qrecc": ["train"],
+        "taskmaster2": ["train"],
+        "djaym7/wiki_dialog": ["train"],
+        "deepmind/code_contests": ["train"],
+        "lambada": ["train"],
+        "gsm8k": ["train"],
+        "aqua_rat": ["train"],
+        "esnli": ["train"],
+        "quasc": ["train"],
+        "qed": ["train"],
+    },
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    framework=["PyTorch"],
 )
 
 flant5_large = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=FLANT5Reranker,
         model_name_or_path="google/flan-t5-large",
@@ -354,13 +424,34 @@ flant5_large = ModelMeta(
     ),
     name="google/flan-t5-large",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="0613663d0d48ea86ba8cb3d7a44f0f65dc596a2a",
     release_date="2022-10-21",
+    training_datasets={
+        "svakulenk0/qrecc": ["train"],
+        "taskmaster2": ["train"],
+        "djaym7/wiki_dialog": ["train"],
+        "deepmind/code_contests": ["train"],
+        "lambada": ["train"],
+        "gsm8k": ["train"],
+        "aqua_rat": ["train"],
+        "esnli": ["train"],
+        "quasc": ["train"],
+        "qed": ["train"],
+    },
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    framework=["PyTorch"],
 )
 
 flant5_xl = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=FLANT5Reranker,
         model_name_or_path="google/flan-t5-xl",
@@ -368,13 +459,34 @@ flant5_xl = ModelMeta(
     ),
     name="google/flan-t5-xl",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="7d6315df2c2fb742f0f5b556879d730926ca9001",
     release_date="2022-10-21",
+    training_datasets={
+        "svakulenk0/qrecc": ["train"],
+        "taskmaster2": ["train"],
+        "djaym7/wiki_dialog": ["train"],
+        "deepmind/code_contests": ["train"],
+        "lambada": ["train"],
+        "gsm8k": ["train"],
+        "aqua_rat": ["train"],
+        "esnli": ["train"],
+        "quasc": ["train"],
+        "qed": ["train"],
+    },
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    framework=["PyTorch"],
 )
 
 flant5_xxl = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=FLANT5Reranker,
         model_name_or_path="google/flan-t5-xxl",
@@ -382,14 +494,35 @@ flant5_xxl = ModelMeta(
     ),
     name="google/flan-t5-xxl",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="ae7c9136adc7555eeccc78cdd960dfd60fb346ce",
     release_date="2022-10-21",
+    training_datasets={
+        "svakulenk0/qrecc": ["train"],
+        "taskmaster2": ["train"],
+        "djaym7/wiki_dialog": ["train"],
+        "deepmind/code_contests": ["train"],
+        "lambada": ["train"],
+        "gsm8k": ["train"],
+        "aqua_rat": ["train"],
+        "esnli": ["train"],
+        "quasc": ["train"],
+        "qed": ["train"],
+    },
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    framework=["PyTorch"],
 )
 
 
 llama2_7b = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=LlamaReranker,
         model_name_or_path="meta-llama/Llama-2-7b-hf",
@@ -397,13 +530,23 @@ llama2_7b = ModelMeta(
     ),
     name="meta-llama/Llama-2-7b-hf",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="01c7f73d771dfac7d292323805ebc428287df4f9",
     release_date="2023-07-18",
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
+    framework=["PyTorch"],
 )
 
 llama2_7b_chat = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=LlamaReranker,
         model_name_or_path="meta-llama/Llama-2-7b-chat-hf",
@@ -411,13 +554,23 @@ llama2_7b_chat = ModelMeta(
     ),
     name="meta-llama/Llama-2-7b-chat-hf",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="f5db02db724555f92da89c216ac04704f23d4590",
     release_date="2023-07-18",
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
+    framework=["PyTorch"],
 )
 
 mistral_7b = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=MistralReranker,
         model_name_or_path="mistralai/Mistral-7B-Instruct-v0.2",
@@ -425,13 +578,23 @@ mistral_7b = ModelMeta(
     ),
     name="mistralai/Mistral-7B-Instruct-v0.2",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="3ad372fc79158a2148299e3318516c786aeded6c",
     release_date="2023-12-11",
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
+    framework=["PyTorch"],
 )
 
 followir_7b = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=FollowIRReranker,
         model_name_or_path="jhu-clsp/FollowIR-7B",
@@ -439,9 +602,19 @@ followir_7b = ModelMeta(
     ),
     name="jhu-clsp/FollowIR-7B",
     languages=["eng_Latn"],
-    open_source=True,
+    open_weights=True,
     revision="4d25d437e38b510c01852070c0731e8f6e1875d1",
     release_date="2024-04-29",
+    training_datasets={"jhu-clsp/FollowIR-train": ["train"]},
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    framework=["PyTorch"],
 )
 
 
@@ -550,7 +723,7 @@ mt5_languages = [
 ]
 
 mt5_base_mmarco_v2 = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=MonoT5Reranker,
         model_name_or_path="unicamp-dl/mt5-base-mmarco-v2",
@@ -558,13 +731,23 @@ mt5_base_mmarco_v2 = ModelMeta(
     ),
     name="unicamp-dl/mt5-base-mmarco-v2",
     languages=mt5_languages,
-    open_source=True,
+    open_weights=True,
     revision="cc0a949b9f21efcaba45c8cabb998ad02ce8d4e7",
     release_date="2022-01-05",
+    training_datasets={"msmarco": ["train"]},
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    framework=["PyTorch"],
 )
 
 mt5_13b_mmarco_100k = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=MonoT5Reranker,
         model_name_or_path="unicamp-dl/mt5-13b-mmarco-100k",
@@ -572,7 +755,17 @@ mt5_13b_mmarco_100k = ModelMeta(
     ),
     name="unicamp-dl/mt5-13b-mmarco-100k",
     languages=mt5_languages,
-    open_source=True,
+    open_weights=True,
     revision="e1a4317e102a525ea9e16745ad21394a4f1bffbc",
     release_date="2022-11-04",
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
+    framework=["PyTorch"],
 )

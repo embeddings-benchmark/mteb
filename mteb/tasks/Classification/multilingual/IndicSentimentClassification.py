@@ -51,10 +51,6 @@ class IndicSentimentClassification(MultilingualTask, AbsTaskClassification):
   year      = {2022},
   doi       = {10.18653/v1/2023.acl-long.693}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 1000},
-            "avg_character_length": {"test": 137.6},
-        },
     )
 
     def dataset_transform(self) -> None:

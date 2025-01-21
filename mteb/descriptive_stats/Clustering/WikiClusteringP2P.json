@@ -1,0 +1,1948 @@
+{
+    "test": {
+        "num_samples": 140,
+        "number_of_characters": 71680,
+        "min_text_length": 512,
+        "average_text_length": 512.0,
+        "max_text_length": 512,
+        "unique_texts": 49704,
+        "min_labels_per_text": 1,
+        "average_labels_per_text": 512.0,
+        "max_labels_per_text": 3986,
+        "unique_labels": 282,
+        "labels": {
+            "Nauke": {
+                "count": 1492
+            },
+            "Dru\u00c5\u00a1tvo": {
+                "count": 504
+            },
+            "Priroda": {
+                "count": 448
+            },
+            "Kultura": {
+                "count": 1042
+            },
+            "Tehnologija": {
+                "count": 671
+            },
+            "Tehnika": {
+                "count": 281
+            },
+            "Geografija": {
+                "count": 431
+            },
+            "Informatika": {
+                "count": 355
+            },
+            "Koncepti": {
+                "count": 83
+            },
+            "Humanisti\u00c4\u008dke_nauke": {
+                "count": 62
+            },
+            "Informacija": {
+                "count": 21
+            },
+            "Historija": {
+                "count": 223
+            },
+            "Matematika": {
+                "count": 74
+            },
+            "Okoli\u00c5\u00a1": {
+                "count": 6
+            },
+            "Jezik": {
+                "count": 15
+            },
+            "Misao": {
+                "count": 28
+            },
+            "Energija": {
+                "count": 16
+            },
+            "Llocs": {
+                "count": 642
+            },
+            "Ci\u00c3\u00a8ncia": {
+                "count": 1844
+            },
+            "Humanitats": {
+                "count": 984
+            },
+            "Tecnologia": {
+                "count": 377
+            },
+            "Biografies": {
+                "count": 406
+            },
+            "Cultura": {
+                "count": 710
+            },
+            "Informaci\u00c3\u00b3": {
+                "count": 137
+            },
+            "Esdeveniments": {
+                "count": 20
+            },
+            "Lid\u00c3\u00a9": {
+                "count": 1559
+            },
+            "Geografie": {
+                "count": 1659
+            },
+            "\u00c4\u008cas": {
+                "count": 88
+            },
+            "Politika": {
+                "count": 818
+            },
+            "V\u00c4\u009bda": {
+                "count": 314
+            },
+            "Technika": {
+                "count": 189
+            },
+            "Informace": {
+                "count": 96
+            },
+            "\u00c5\u00bdivot": {
+                "count": 184
+            },
+            "Vojenstv\u00c3\u00ad": {
+                "count": 34
+            },
+            "Um\u00c4\u009bn\u00c3\u00ad": {
+                "count": 95
+            },
+            "P\u00c5\u0099\u00c3\u00adroda": {
+                "count": 387
+            },
+            "Spole\u00c4\u008dnost": {
+                "count": 319
+            },
+            "Historie": {
+                "count": 391
+            },
+            "Sport": {
+                "count": 57
+            },
+            "Dorozum\u00c3\u00adv\u00c3\u00a1n\u00c3\u00ad": {
+                "count": 142
+            },
+            "Zdravotnictv\u00c3\u00ad": {
+                "count": 94
+            },
+            "Vzd\u00c4\u009bl\u00c3\u00a1v\u00c3\u00a1n\u00c3\u00ad": {
+                "count": 41
+            },
+            "P\u00c5\u0099edm\u00c4\u009bty": {
+                "count": 21
+            },
+            "Pr\u00c3\u00a1vo": {
+                "count": 28
+            },
+            "Natur": {
+                "count": 398
+            },
+            "Kultur": {
+                "count": 911
+            },
+            "Samfund": {
+                "count": 531
+            },
+            "Politik": {
+                "count": 287
+            },
+            "Computersystemer": {
+                "count": 84
+            },
+            "Erhvervsliv": {
+                "count": 164
+            },
+            "Teknik": {
+                "count": 166
+            },
+            "Sproget": {
+                "count": 41
+            },
+            "Humaniora": {
+                "count": 139
+            },
+            "Uddannelse": {
+                "count": 79
+            },
+            "Anvendt_videnskab": {
+                "count": 199
+            },
+            "Kunst": {
+                "count": 412
+            },
+            "Sundhed": {
+                "count": 83
+            },
+            "Videnskab": {
+                "count": 257
+            },
+            "Matematik": {
+                "count": 79
+            },
+            "Geografi": {
+                "count": 671
+            },
+            "Liv": {
+                "count": 286
+            },
+            "Personer": {
+                "count": 322
+            },
+            "Jura": {
+                "count": 35
+            },
+            "Entitateak": {
+                "count": 2486
+            },
+            "Humanitateak": {
+                "count": 861
+            },
+            "Mundua": {
+                "count": 706
+            },
+            "Zientzia_eta_teknologia": {
+                "count": 957
+            },
+            "Entretenimendua": {
+                "count": 110
+            },
+            "Chron-oaylleeaght": {
+                "count": 1334
+            },
+            "\u00c3\u0087heeraghyn": {
+                "count": 470
+            },
+            "Oaylleeaght": {
+                "count": 575
+            },
+            "\u00c3\u0087heer-oaylleeaght": {
+                "count": 190
+            },
+            "Persoonyn": {
+                "count": 249
+            },
+            "Bea": {
+                "count": 207
+            },
+            "Cultoor": {
+                "count": 269
+            },
+            "Glare": {
+                "count": 152
+            },
+            "Dooghys": {
+                "count": 494
+            },
+            "Smooinaght": {
+                "count": 28
+            },
+            "Sheshaght": {
+                "count": 221
+            },
+            "\u00c3\u0087haghnoaylleeaght": {
+                "count": 33
+            },
+            "Strughtoor": {
+                "count": 54
+            },
+            "Politickaght": {
+                "count": 138
+            },
+            "Ronnaghyn_rere_bun-chooish": {
+                "count": 381
+            },
+            "Eirinys": {
+                "count": 80
+            },
+            "Ynsagh": {
+                "count": 16
+            },
+            "Am": {
+                "count": 12
+            },
+            "Leigh": {
+                "count": 9
+            },
+            "Studeyrys-sheelnaue": {
+                "count": 72
+            },
+            "Keirdyn_scoillaragh": {
+                "count": 50
+            },
+            "Shennaghys": {
+                "count": 11
+            },
+            "Dellal": {
+                "count": 23
+            },
+            "Maddaght": {
+                "count": 6
+            },
+            "Meanyn_mooarey": {
+                "count": 7
+            },
+            "Oaylleeaghtyn_feamagh": {
+                "count": 30
+            },
+            "Fysseree": {
+                "count": 7
+            },
+            "\u00c3\u0087hymmyltaght": {
+                "count": 2
+            },
+            "Katutubo": {
+                "count": 135
+            },
+            "Biag": {
+                "count": 933
+            },
+            "Pakasaritaan": {
+                "count": 1302
+            },
+            "Relihion": {
+                "count": 20
+            },
+            "Dagiti_kinatao": {
+                "count": 1405
+            },
+            "Lubong": {
+                "count": 308
+            },
+            "Siensia_ken_teknolohia": {
+                "count": 12
+            },
+            "Gobierno": {
+                "count": 208
+            },
+            "Heograpia": {
+                "count": 323
+            },
+            "Etika": {
+                "count": 12
+            },
+            "Pilosopia": {
+                "count": 26
+            },
+            "Tattao": {
+                "count": 20
+            },
+            "Dagiti_konsepto": {
+                "count": 69
+            },
+            "Panagkukua_ti_tao": {
+                "count": 16
+            },
+            "Pannakaammo": {
+                "count": 29
+            },
+            "Palpaliwa": {
+                "count": 22
+            },
+            "Pagsasao": {
+                "count": 33
+            },
+            "Kagimongan": {
+                "count": 37
+            },
+            "Salun-at": {
+                "count": 9
+            },
+            "Industria": {
+                "count": 5
+            },
+            "Linteg": {
+                "count": 1
+            },
+            "Makan_ken_mainum": {
+                "count": 19
+            },
+            "Dagiti_akademiko_a_disiplina": {
+                "count": 27
+            },
+            "Edukasion": {
+                "count": 9
+            },
+            "Musika": {
+                "count": 1
+            },
+            "Negosio": {
+                "count": 10
+            },
+            "Inhenieria": {
+                "count": 1
+            },
+            "Paspasamak": {
+                "count": 6
+            },
+            "Dagiti_banag": {
+                "count": 2
+            },
+            "Annuroten": {
+                "count": 1
+            },
+            "Enerhia": {
+                "count": 1
+            },
+            "Kes": {
+                "count": 524
+            },
+            "Medya": {
+                "count": 67
+            },
+            "Xwarin_\u00c3\u00bb_vexwarin": {
+                "count": 127
+            },
+            "Civak": {
+                "count": 277
+            },
+            "L\u00c3\u00aakol\u00c3\u00aen\u00c3\u00aan_mirovahiy\u00c3\u00aa": {
+                "count": 269
+            },
+            "Zeman": {
+                "count": 174
+            },
+            "Teknoloj\u00c3\u00ae": {
+                "count": 92
+            },
+            "D\u00c3\u00aes\u00c3\u00aepl\u00c3\u00aen\u00c3\u00aan_akadem\u00c3\u00aek": {
+                "count": 237
+            },
+            "Erdn\u00c3\u00aegar\u00c3\u00ae": {
+                "count": 1078
+            },
+            "D\u00c3\u00aerok": {
+                "count": 436
+            },
+            "Gerd\u00c3\u00bbn": {
+                "count": 42
+            },
+            "Jiyan": {
+                "count": 255
+            },
+            "\u00c5\u009eah\u00c3\u00ae": {
+                "count": 107
+            },
+            "Siyaset": {
+                "count": 126
+            },
+            "\u00c3\u0087and": {
+                "count": 349
+            },
+            "Zan\u00c3\u00aen": {
+                "count": 82
+            },
+            "D\u00c3\u00aen": {
+                "count": 150
+            },
+            "Helwesta_mirovan": {
+                "count": 41
+            },
+            "Zanist": {
+                "count": 138
+            },
+            "Hey\u00c3\u00aen": {
+                "count": 49
+            },
+            "Ziman": {
+                "count": 69
+            },
+            "Xweza": {
+                "count": 129
+            },
+            "Matemat\u00c3\u00aek": {
+                "count": 23
+            },
+            "Agah\u00c3\u00ae": {
+                "count": 17
+            },
+            "Dad": {
+                "count": 9
+            },
+            "\u00c3\u008enternet": {
+                "count": 19
+            },
+            "Hik\u00c3\u00bbmet": {
+                "count": 35
+            },
+            "Konsept": {
+                "count": 10
+            },
+            "Perwerde": {
+                "count": 6
+            },
+            "Werzi\u00c5\u009f": {
+                "count": 20
+            },
+            "Felsefe": {
+                "count": 28
+            },
+            "Et\u00c3\u00aek": {
+                "count": 19
+            },
+            "Wize": {
+                "count": 6
+            },
+            "Abor\u00c3\u00ae": {
+                "count": 27
+            },
+            "Tendurust\u00c3\u00ae": {
+                "count": 38
+            },
+            "Ragihandin": {
+                "count": 5
+            },
+            "Karwer\u00c3\u00ae": {
+                "count": 6
+            },
+            "Endezyar\u00c3\u00ae": {
+                "count": 16
+            },
+            "Le\u00c5\u009fker\u00c3\u00ae": {
+                "count": 18
+            },
+            "Kult\u00c5\u00abra": {
+                "count": 749
+            },
+            "Latvija": {
+                "count": 356
+            },
+            "\u00c4\u00a2eogr\u00c4\u0081fija": {
+                "count": 721
+            },
+            "Zin\u00c4\u0081tne_un_tehnolo\u00c4\u00a3ijas": {
+                "count": 469
+            },
+            "V\u00c4\u0093sture": {
+                "count": 149
+            },
+            "Sabiedr\u00c4\u00abba": {
+                "count": 878
+            },
+            "J\u00c4\u0093dzieni": {
+                "count": 23
+            },
+            "Dz\u00c4\u00abv\u00c4\u00abba": {
+                "count": 274
+            },
+            "Cilv\u00c4\u0093ki": {
+                "count": 428
+            },
+            "Sports": {
+                "count": 166
+            },
+            "M\u00c4\u0081ksla": {
+                "count": 185
+            },
+            "Daba": {
+                "count": 412
+            },
+            "Vesel\u00c4\u00abba": {
+                "count": 124
+            },
+            "Reli\u00c4\u00a3ija": {
+                "count": 86
+            },
+            "Notikumi": {
+                "count": 13
+            },
+            "Makaluak_iduik": {
+                "count": 3986
+            },
+            "Indonesia": {
+                "count": 184
+            },
+            "Budayo": {
+                "count": 399
+            },
+            "Ilimu_pangatauan": {
+                "count": 121
+            },
+            "Makanan": {
+                "count": 12
+            },
+            "Seni": {
+                "count": 32
+            },
+            "Organisasi": {
+                "count": 23
+            },
+            "Karajo": {
+                "count": 30
+            },
+            "Astronomi": {
+                "count": 13
+            },
+            "Sarugo": {
+                "count": 30
+            },
+            "Tokoh": {
+                "count": 26
+            },
+            "Agamo": {
+                "count": 48
+            },
+            "Sijarah": {
+                "count": 5
+            },
+            "Teknologi": {
+                "count": 1
+            },
+            "Ulahrago": {
+                "count": 2
+            },
+            "\u00c4\u00a0eografija": {
+                "count": 1634
+            },
+            "Arti": {
+                "count": 194
+            },
+            "Gvern": {
+                "count": 107
+            },
+            "Reli\u00c4\u00a1jon": {
+                "count": 293
+            },
+            "Dixxiplini_akkademi\u00c4\u008bi": {
+                "count": 139
+            },
+            "Nies": {
+                "count": 270
+            },
+            "So\u00c4\u008bjet\u00c3\u00a0": {
+                "count": 88
+            },
+            "Natura": {
+                "count": 449
+            },
+            "Sa\u00c4\u00a7\u00c4\u00a7a": {
+                "count": 31
+            },
+            "Xjenza": {
+                "count": 667
+            },
+            "Storja": {
+                "count": 167
+            },
+            "Ekonomija": {
+                "count": 199
+            },
+            "Lingwa": {
+                "count": 76
+            },
+            "Filosofija": {
+                "count": 14
+            },
+            "\u00c4\u00a6ajja_ta\\_Kuljum": {
+                "count": 81
+            },
+            "Edukazzjoni": {
+                "count": 30
+            },
+            "Mu\u00c5\u00bcika": {
+                "count": 14
+            },
+            "Komunikazzjoni_umana": {
+                "count": 39
+            },
+            "Spettaklu": {
+                "count": 38
+            },
+            "Kronolo\u00c4\u00a1ija": {
+                "count": 39
+            },
+            "Avvenimenti": {
+                "count": 6
+            },
+            "Li\u00c4\u00a1i": {
+                "count": 19
+            },
+            "Teknolo\u00c4\u00a1ija": {
+                "count": 17
+            },
+            "In\u00c4\u00a1inerija": {
+                "count": 2
+            },
+            "Life": {
+                "count": 621
+            },
+            "Naitur": {
+                "count": 265
+            },
+            "Society": {
+                "count": 446
+            },
+            "Humanities": {
+                "count": 259
+            },
+            "History": {
+                "count": 184
+            },
+            "Airts": {
+                "count": 106
+            },
+            "Technology": {
+                "count": 324
+            },
+            "Fowk": {
+                "count": 208
+            },
+            "Concepts": {
+                "count": 237
+            },
+            "Cultur": {
+                "count": 427
+            },
+            "Environs": {
+                "count": 231
+            },
+            "Warld": {
+                "count": 141
+            },
+            "Politics": {
+                "count": 294
+            },
+            "Eddication": {
+                "count": 42
+            },
+            "Airt": {
+                "count": 18
+            },
+            "Heal": {
+                "count": 70
+            },
+            "Science_an_technology": {
+                "count": 60
+            },
+            "Mathematics": {
+                "count": 36
+            },
+            "Law": {
+                "count": 3
+            },
+            "Tuils": {
+                "count": 7
+            },
+            "Employment": {
+                "count": 14
+            },
+            "Gjeografi": {
+                "count": 586
+            },
+            "Politik\u00c3\u00ab": {
+                "count": 351
+            },
+            "Let\u00c3\u00abrsi": {
+                "count": 67
+            },
+            "Administrat\u00c3\u00ab_publike": {
+                "count": 320
+            },
+            "Shoq\u00c3\u00abri": {
+                "count": 116
+            },
+            "Sporte": {
+                "count": 105
+            },
+            "Shkenc\u00c3\u00ab": {
+                "count": 1109
+            },
+            "Kultur\u00c3\u00ab": {
+                "count": 299
+            },
+            "Arte": {
+                "count": 217
+            },
+            "Persona": {
+                "count": 425
+            },
+            "Histori": {
+                "count": 744
+            },
+            "Mitologji": {
+                "count": 5
+            },
+            "Gjuh\u00c3\u00absi": {
+                "count": 64
+            },
+            "Teknologji": {
+                "count": 84
+            },
+            "Kinematografi": {
+                "count": 72
+            },
+            "Media": {
+                "count": 51
+            },
+            "Sigurime": {
+                "count": 31
+            },
+            "Loj\u00c3\u00abra": {
+                "count": 3
+            },
+            "Fe": {
+                "count": 131
+            },
+            "Bujq\u00c3\u00absi": {
+                "count": 41
+            },
+            "Ngjarje": {
+                "count": 11
+            },
+            "Biografi": {
+                "count": 116
+            },
+            "Matematik\u00c3\u00ab": {
+                "count": 27
+            },
+            "Teknik\u00c3\u00ab": {
+                "count": 26
+            },
+            "Drejt\u00c3\u00absi": {
+                "count": 18
+            },
+            "Organizata": {
+                "count": 27
+            },
+            "Jeta": {
+                "count": 4
+            },
+            "Agronomi": {
+                "count": 3
+            },
+            "Natyr\u00c3\u00ab": {
+                "count": 11
+            },
+            "Sh\u00c3\u00abndeti": {
+                "count": 3
+            },
+            "Shkencat_humane": {
+                "count": 22
+            },
+            "Shp\u00c3\u00abrblime": {
+                "count": 2
+            },
+            "Blegtori": {
+                "count": 10
+            },
+            "L\u00c3\u00abnd\u00c3\u00ab": {
+                "count": 8
+            },
+            "Enciklopedistika": {
+                "count": 6
+            },
+            "Economeye": {
+                "count": 816
+            },
+            "Syinces": {
+                "count": 3653
+            },
+            "Vicaedje_des_djins": {
+                "count": 314
+            },
+            "Creyance": {
+                "count": 310
+            },
+            "Rilom\u00c3\u00aay\u00c3\u00a8s_djins": {
+                "count": 25
+            },
+            "Date": {
+                "count": 2
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "bs": {
+                "num_samples": 10,
+                "number_of_characters": 5120,
+                "min_text_length": 512,
+                "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 3860,
+                "min_labels_per_text": 6,
+                "average_labels_per_text": 512.0,
+                "max_labels_per_text": 1492,
+                "unique_labels": 17,
+                "labels": {
+                    "Nauke": {
+                        "count": 1492
+                    },
+                    "Dru\u00c5\u00a1tvo": {
+                        "count": 504
+                    },
+                    "Priroda": {
+                        "count": 448
+                    },
+                    "Kultura": {
+                        "count": 453
+                    },
+                    "Tehnologija": {
+                        "count": 671
+                    },
+                    "Tehnika": {
+                        "count": 281
+                    },
+                    "Geografija": {
+                        "count": 431
+                    },
+                    "Informatika": {
+                        "count": 355
+                    },
+                    "Koncepti": {
+                        "count": 83
+                    },
+                    "Humanisti\u00c4\u008dke_nauke": {
+                        "count": 62
+                    },
+                    "Informacija": {
+                        "count": 21
+                    },
+                    "Historija": {
+                        "count": 223
+                    },
+                    "Matematika": {
+                        "count": 31
+                    },
+                    "Okoli\u00c5\u00a1": {
+                        "count": 6
+                    },
+                    "Jezik": {
+                        "count": 15
+                    },
+                    "Misao": {
+                        "count": 28
+                    },
+                    "Energija": {
+                        "count": 16
+                    }
+                }
+            },
+            "ca": {
+                "num_samples": 10,
+                "number_of_characters": 5120,
+                "min_text_length": 512,
+                "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 4596,
+                "min_labels_per_text": 20,
+                "average_labels_per_text": 512.0,
+                "max_labels_per_text": 1844,
+                "unique_labels": 8,
+                "labels": {
+                    "Llocs": {
+                        "count": 642
+                    },
+                    "Ci\u00c3\u00a8ncia": {
+                        "count": 1844
+                    },
+                    "Humanitats": {
+                        "count": 984
+                    },
+                    "Tecnologia": {
+                        "count": 377
+                    },
+                    "Biografies": {
+                        "count": 406
+                    },
+                    "Cultura": {
+                        "count": 710
+                    },
+                    "Informaci\u00c3\u00b3": {
+                        "count": 137
+                    },
+                    "Esdeveniments": {
+                        "count": 20
+                    }
+                }
+            },
+            "cs": {
+                "num_samples": 10,
+                "number_of_characters": 5120,
+                "min_text_length": 512,
+                "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 4782,
+                "min_labels_per_text": 21,
+                "average_labels_per_text": 512.0,
+                "max_labels_per_text": 1559,
+                "unique_labels": 21,
+                "labels": {
+                    "Lid\u00c3\u00a9": {
+                        "count": 1559
+                    },
+                    "Geografie": {
+                        "count": 578
+                    },
+                    "\u00c4\u008cas": {
+                        "count": 88
+                    },
+                    "Politika": {
+                        "count": 538
+                    },
+                    "V\u00c4\u009bda": {
+                        "count": 314
+                    },
+                    "Technika": {
+                        "count": 189
+                    },
+                    "Informace": {
+                        "count": 96
+                    },
+                    "\u00c5\u00bdivot": {
+                        "count": 184
+                    },
+                    "Vojenstv\u00c3\u00ad": {
+                        "count": 34
+                    },
+                    "Um\u00c4\u009bn\u00c3\u00ad": {
+                        "count": 95
+                    },
+                    "P\u00c5\u0099\u00c3\u00adroda": {
+                        "count": 387
+                    },
+                    "Spole\u00c4\u008dnost": {
+                        "count": 319
+                    },
+                    "Historie": {
+                        "count": 207
+                    },
+                    "Sport": {
+                        "count": 22
+                    },
+                    "Kultura": {
+                        "count": 150
+                    },
+                    "Matematika": {
+                        "count": 34
+                    },
+                    "Dorozum\u00c3\u00adv\u00c3\u00a1n\u00c3\u00ad": {
+                        "count": 142
+                    },
+                    "Zdravotnictv\u00c3\u00ad": {
+                        "count": 94
+                    },
+                    "Vzd\u00c4\u009bl\u00c3\u00a1v\u00c3\u00a1n\u00c3\u00ad": {
+                        "count": 41
+                    },
+                    "P\u00c5\u0099edm\u00c4\u009bty": {
+                        "count": 21
+                    },
+                    "Pr\u00c3\u00a1vo": {
+                        "count": 28
+                    }
+                }
+            },
+            "da": {
+                "num_samples": 10,
+                "number_of_characters": 5120,
+                "min_text_length": 512,
+                "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 4725,
+                "min_labels_per_text": 35,
+                "average_labels_per_text": 512.0,
+                "max_labels_per_text": 911,
+                "unique_labels": 20,
+                "labels": {
+                    "Natur": {
+                        "count": 398
+                    },
+                    "Kultur": {
+                        "count": 911
+                    },
+                    "Samfund": {
+                        "count": 531
+                    },
+                    "Politik": {
+                        "count": 287
+                    },
+                    "Computersystemer": {
+                        "count": 84
+                    },
+                    "Erhvervsliv": {
+                        "count": 164
+                    },
+                    "Teknik": {
+                        "count": 166
+                    },
+                    "Sproget": {
+                        "count": 41
+                    },
+                    "Humaniora": {
+                        "count": 139
+                    },
+                    "Uddannelse": {
+                        "count": 79
+                    },
+                    "Anvendt_videnskab": {
+                        "count": 199
+                    },
+                    "Kunst": {
+                        "count": 412
+                    },
+                    "Sundhed": {
+                        "count": 83
+                    },
+                    "Historie": {
+                        "count": 184
+                    },
+                    "Videnskab": {
+                        "count": 257
+                    },
+                    "Matematik": {
+                        "count": 79
+                    },
+                    "Geografi": {
+                        "count": 463
+                    },
+                    "Liv": {
+                        "count": 286
+                    },
+                    "Personer": {
+                        "count": 322
+                    },
+                    "Jura": {
+                        "count": 35
+                    }
+                }
+            },
+            "eu": {
+                "num_samples": 10,
+                "number_of_characters": 5120,
+                "min_text_length": 512,
+                "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 4474,
+                "min_labels_per_text": 110,
+                "average_labels_per_text": 512.0,
+                "max_labels_per_text": 2486,
+                "unique_labels": 5,
+                "labels": {
+                    "Entitateak": {
+                        "count": 2486
+                    },
+                    "Humanitateak": {
+                        "count": 861
+                    },
+                    "Mundua": {
+                        "count": 706
+                    },
+                    "Zientzia_eta_teknologia": {
+                        "count": 957
+                    },
+                    "Entretenimendua": {
+                        "count": 110
+                    }
+                }
+            },
+            "gv": {
+                "num_samples": 10,
+                "number_of_characters": 5120,
+                "min_text_length": 512,
+                "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 2717,
+                "min_labels_per_text": 2,
+                "average_labels_per_text": 512.0,
+                "max_labels_per_text": 1334,
+                "unique_labels": 28,
+                "labels": {
+                    "Chron-oaylleeaght": {
+                        "count": 1334
+                    },
+                    "\u00c3\u0087heeraghyn": {
+                        "count": 470
+                    },
+                    "Oaylleeaght": {
+                        "count": 575
+                    },
+                    "\u00c3\u0087heer-oaylleeaght": {
+                        "count": 190
+                    },
+                    "Persoonyn": {
+                        "count": 249
+                    },
+                    "Bea": {
+                        "count": 207
+                    },
+                    "Cultoor": {
+                        "count": 269
+                    },
+                    "Glare": {
+                        "count": 152
+                    },
+                    "Dooghys": {
+                        "count": 494
+                    },
+                    "Smooinaght": {
+                        "count": 28
+                    },
+                    "Sheshaght": {
+                        "count": 221
+                    },
+                    "\u00c3\u0087haghnoaylleeaght": {
+                        "count": 33
+                    },
+                    "Strughtoor": {
+                        "count": 54
+                    },
+                    "Politickaght": {
+                        "count": 138
+                    },
+                    "Ronnaghyn_rere_bun-chooish": {
+                        "count": 381
+                    },
+                    "Eirinys": {
+                        "count": 80
+                    },
+                    "Ynsagh": {
+                        "count": 16
+                    },
+                    "Am": {
+                        "count": 12
+                    },
+                    "Leigh": {
+                        "count": 9
+                    },
+                    "Studeyrys-sheelnaue": {
+                        "count": 72
+                    },
+                    "Keirdyn_scoillaragh": {
+                        "count": 50
+                    },
+                    "Shennaghys": {
+                        "count": 11
+                    },
+                    "Dellal": {
+                        "count": 23
+                    },
+                    "Maddaght": {
+                        "count": 6
+                    },
+                    "Meanyn_mooarey": {
+                        "count": 7
+                    },
+                    "Oaylleeaghtyn_feamagh": {
+                        "count": 30
+                    },
+                    "Fysseree": {
+                        "count": 7
+                    },
+                    "\u00c3\u0087hymmyltaght": {
+                        "count": 2
+                    }
+                }
+            },
+            "ilo": {
+                "num_samples": 10,
+                "number_of_characters": 5120,
+                "min_text_length": 512,
+                "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 2258,
+                "min_labels_per_text": 1,
+                "average_labels_per_text": 512.0,
+                "max_labels_per_text": 1405,
+                "unique_labels": 34,
+                "labels": {
+                    "Katutubo": {
+                        "count": 135
+                    },
+                    "Biag": {
+                        "count": 933
+                    },
+                    "Pakasaritaan": {
+                        "count": 1302
+                    },
+                    "Kultura": {
+                        "count": 72
+                    },
+                    "Relihion": {
+                        "count": 20
+                    },
+                    "Dagiti_kinatao": {
+                        "count": 1405
+                    },
+                    "Lubong": {
+                        "count": 308
+                    },
+                    "Siensia_ken_teknolohia": {
+                        "count": 12
+                    },
+                    "Gobierno": {
+                        "count": 208
+                    },
+                    "Heograpia": {
+                        "count": 323
+                    },
+                    "Matematika": {
+                        "count": 9
+                    },
+                    "Etika": {
+                        "count": 12
+                    },
+                    "Pilosopia": {
+                        "count": 26
+                    },
+                    "Tattao": {
+                        "count": 20
+                    },
+                    "Dagiti_konsepto": {
+                        "count": 69
+                    },
+                    "Panagkukua_ti_tao": {
+                        "count": 16
+                    },
+                    "Pannakaammo": {
+                        "count": 29
+                    },
+                    "Palpaliwa": {
+                        "count": 22
+                    },
+                    "Pagsasao": {
+                        "count": 33
+                    },
+                    "Kagimongan": {
+                        "count": 37
+                    },
+                    "Salun-at": {
+                        "count": 9
+                    },
+                    "Industria": {
+                        "count": 5
+                    },
+                    "Linteg": {
+                        "count": 1
+                    },
+                    "Makan_ken_mainum": {
+                        "count": 19
+                    },
+                    "Dagiti_akademiko_a_disiplina": {
+                        "count": 27
+                    },
+                    "Edukasion": {
+                        "count": 9
+                    },
+                    "Musika": {
+                        "count": 1
+                    },
+                    "Politika": {
+                        "count": 37
+                    },
+                    "Negosio": {
+                        "count": 10
+                    },
+                    "Inhenieria": {
+                        "count": 1
+                    },
+                    "Paspasamak": {
+                        "count": 6
+                    },
+                    "Dagiti_banag": {
+                        "count": 2
+                    },
+                    "Annuroten": {
+                        "count": 1
+                    },
+                    "Enerhia": {
+                        "count": 1
+                    }
+                }
+            },
+            "ku": {
+                "num_samples": 10,
+                "number_of_characters": 5120,
+                "min_text_length": 512,
+                "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 3365,
+                "min_labels_per_text": 5,
+                "average_labels_per_text": 512.0,
+                "max_labels_per_text": 1078,
+                "unique_labels": 39,
+                "labels": {
+                    "Kes": {
+                        "count": 524
+                    },
+                    "Medya": {
+                        "count": 67
+                    },
+                    "Xwarin_\u00c3\u00bb_vexwarin": {
+                        "count": 127
+                    },
+                    "Civak": {
+                        "count": 277
+                    },
+                    "L\u00c3\u00aakol\u00c3\u00aen\u00c3\u00aan_mirovahiy\u00c3\u00aa": {
+                        "count": 269
+                    },
+                    "Zeman": {
+                        "count": 174
+                    },
+                    "Teknoloj\u00c3\u00ae": {
+                        "count": 92
+                    },
+                    "D\u00c3\u00aes\u00c3\u00aepl\u00c3\u00aen\u00c3\u00aan_akadem\u00c3\u00aek": {
+                        "count": 237
+                    },
+                    "Erdn\u00c3\u00aegar\u00c3\u00ae": {
+                        "count": 1078
+                    },
+                    "D\u00c3\u00aerok": {
+                        "count": 436
+                    },
+                    "Gerd\u00c3\u00bbn": {
+                        "count": 42
+                    },
+                    "Jiyan": {
+                        "count": 255
+                    },
+                    "\u00c5\u009eah\u00c3\u00ae": {
+                        "count": 107
+                    },
+                    "Siyaset": {
+                        "count": 126
+                    },
+                    "\u00c3\u0087and": {
+                        "count": 349
+                    },
+                    "Zan\u00c3\u00aen": {
+                        "count": 82
+                    },
+                    "D\u00c3\u00aen": {
+                        "count": 150
+                    },
+                    "Helwesta_mirovan": {
+                        "count": 41
+                    },
+                    "Zanist": {
+                        "count": 138
+                    },
+                    "Hey\u00c3\u00aen": {
+                        "count": 49
+                    },
+                    "Ziman": {
+                        "count": 69
+                    },
+                    "Xweza": {
+                        "count": 129
+                    },
+                    "Matemat\u00c3\u00aek": {
+                        "count": 23
+                    },
+                    "Agah\u00c3\u00ae": {
+                        "count": 17
+                    },
+                    "Dad": {
+                        "count": 9
+                    },
+                    "\u00c3\u008enternet": {
+                        "count": 19
+                    },
+                    "Hik\u00c3\u00bbmet": {
+                        "count": 35
+                    },
+                    "Konsept": {
+                        "count": 10
+                    },
+                    "Perwerde": {
+                        "count": 6
+                    },
+                    "Werzi\u00c5\u009f": {
+                        "count": 20
+                    },
+                    "Felsefe": {
+                        "count": 28
+                    },
+                    "Et\u00c3\u00aek": {
+                        "count": 19
+                    },
+                    "Wize": {
+                        "count": 6
+                    },
+                    "Abor\u00c3\u00ae": {
+                        "count": 27
+                    },
+                    "Tendurust\u00c3\u00ae": {
+                        "count": 38
+                    },
+                    "Ragihandin": {
+                        "count": 5
+                    },
+                    "Karwer\u00c3\u00ae": {
+                        "count": 6
+                    },
+                    "Endezyar\u00c3\u00ae": {
+                        "count": 16
+                    },
+                    "Le\u00c5\u009fker\u00c3\u00ae": {
+                        "count": 18
+                    }
+                }
+            },
+            "lv": {
+                "num_samples": 10,
+                "number_of_characters": 5120,
+                "min_text_length": 512,
+                "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 4540,
+                "min_labels_per_text": 13,
+                "average_labels_per_text": 512.0,
+                "max_labels_per_text": 878,
+                "unique_labels": 16,
+                "labels": {
+                    "Kult\u00c5\u00abra": {
+                        "count": 749
+                    },
+                    "Latvija": {
+                        "count": 356
+                    },
+                    "\u00c4\u00a2eogr\u00c4\u0081fija": {
+                        "count": 721
+                    },
+                    "Zin\u00c4\u0081tne_un_tehnolo\u00c4\u00a3ijas": {
+                        "count": 469
+                    },
+                    "V\u00c4\u0093sture": {
+                        "count": 149
+                    },
+                    "Sabiedr\u00c4\u00abba": {
+                        "count": 878
+                    },
+                    "J\u00c4\u0093dzieni": {
+                        "count": 23
+                    },
+                    "Dz\u00c4\u00abv\u00c4\u00abba": {
+                        "count": 274
+                    },
+                    "Cilv\u00c4\u0093ki": {
+                        "count": 428
+                    },
+                    "Sports": {
+                        "count": 120
+                    },
+                    "M\u00c4\u0081ksla": {
+                        "count": 185
+                    },
+                    "Politika": {
+                        "count": 133
+                    },
+                    "Daba": {
+                        "count": 412
+                    },
+                    "Vesel\u00c4\u00abba": {
+                        "count": 124
+                    },
+                    "Reli\u00c4\u00a3ija": {
+                        "count": 86
+                    },
+                    "Notikumi": {
+                        "count": 13
+                    }
+                }
+            },
+            "min": {
+                "num_samples": 10,
+                "number_of_characters": 5120,
+                "min_text_length": 512,
+                "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 3881,
+                "min_labels_per_text": 1,
+                "average_labels_per_text": 512.0,
+                "max_labels_per_text": 3986,
+                "unique_labels": 16,
+                "labels": {
+                    "Makaluak_iduik": {
+                        "count": 3986
+                    },
+                    "Indonesia": {
+                        "count": 184
+                    },
+                    "Budayo": {
+                        "count": 399
+                    },
+                    "Ilimu_pangatauan": {
+                        "count": 121
+                    },
+                    "Geografi": {
+                        "count": 208
+                    },
+                    "Makanan": {
+                        "count": 12
+                    },
+                    "Seni": {
+                        "count": 32
+                    },
+                    "Organisasi": {
+                        "count": 23
+                    },
+                    "Karajo": {
+                        "count": 30
+                    },
+                    "Astronomi": {
+                        "count": 13
+                    },
+                    "Sarugo": {
+                        "count": 30
+                    },
+                    "Tokoh": {
+                        "count": 26
+                    },
+                    "Agamo": {
+                        "count": 48
+                    },
+                    "Sijarah": {
+                        "count": 5
+                    },
+                    "Teknologi": {
+                        "count": 1
+                    },
+                    "Ulahrago": {
+                        "count": 2
+                    }
+                }
+            },
+            "mt": {
+                "num_samples": 10,
+                "number_of_characters": 5120,
+                "min_text_length": 512,
+                "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 1887,
+                "min_labels_per_text": 2,
+                "average_labels_per_text": 512.0,
+                "max_labels_per_text": 1634,
+                "unique_labels": 27,
+                "labels": {
+                    "\u00c4\u00a0eografija": {
+                        "count": 1634
+                    },
+                    "Arti": {
+                        "count": 194
+                    },
+                    "Gvern": {
+                        "count": 107
+                    },
+                    "Reli\u00c4\u00a1jon": {
+                        "count": 293
+                    },
+                    "Dixxiplini_akkademi\u00c4\u008bi": {
+                        "count": 139
+                    },
+                    "Nies": {
+                        "count": 270
+                    },
+                    "So\u00c4\u008bjet\u00c3\u00a0": {
+                        "count": 88
+                    },
+                    "Natura": {
+                        "count": 449
+                    },
+                    "Sa\u00c4\u00a7\u00c4\u00a7a": {
+                        "count": 31
+                    },
+                    "Xjenza": {
+                        "count": 667
+                    },
+                    "Storja": {
+                        "count": 167
+                    },
+                    "Ekonomija": {
+                        "count": 199
+                    },
+                    "Kultura": {
+                        "count": 367
+                    },
+                    "Lingwa": {
+                        "count": 76
+                    },
+                    "Filosofija": {
+                        "count": 14
+                    },
+                    "\u00c4\u00a6ajja_ta\\_Kuljum": {
+                        "count": 81
+                    },
+                    "Edukazzjoni": {
+                        "count": 30
+                    },
+                    "Politika": {
+                        "count": 110
+                    },
+                    "Mu\u00c5\u00bcika": {
+                        "count": 14
+                    },
+                    "Komunikazzjoni_umana": {
+                        "count": 39
+                    },
+                    "Spettaklu": {
+                        "count": 38
+                    },
+                    "Kronolo\u00c4\u00a1ija": {
+                        "count": 39
+                    },
+                    "Avvenimenti": {
+                        "count": 6
+                    },
+                    "Li\u00c4\u00a1i": {
+                        "count": 19
+                    },
+                    "Teknolo\u00c4\u00a1ija": {
+                        "count": 17
+                    },
+                    "Sport": {
+                        "count": 30
+                    },
+                    "In\u00c4\u00a1inerija": {
+                        "count": 2
+                    }
+                }
+            },
+            "sco": {
+                "num_samples": 10,
+                "number_of_characters": 5120,
+                "min_text_length": 512,
+                "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 2605,
+                "min_labels_per_text": 3,
+                "average_labels_per_text": 512.0,
+                "max_labels_per_text": 1081,
+                "unique_labels": 23,
+                "labels": {
+                    "Life": {
+                        "count": 621
+                    },
+                    "Naitur": {
+                        "count": 265
+                    },
+                    "Geografie": {
+                        "count": 1081
+                    },
+                    "Society": {
+                        "count": 446
+                    },
+                    "Humanities": {
+                        "count": 259
+                    },
+                    "History": {
+                        "count": 184
+                    },
+                    "Airts": {
+                        "count": 106
+                    },
+                    "Technology": {
+                        "count": 324
+                    },
+                    "Fowk": {
+                        "count": 208
+                    },
+                    "Concepts": {
+                        "count": 237
+                    },
+                    "Cultur": {
+                        "count": 427
+                    },
+                    "Environs": {
+                        "count": 231
+                    },
+                    "Warld": {
+                        "count": 141
+                    },
+                    "Politics": {
+                        "count": 294
+                    },
+                    "Eddication": {
+                        "count": 42
+                    },
+                    "Airt": {
+                        "count": 18
+                    },
+                    "Heal": {
+                        "count": 70
+                    },
+                    "Science_an_technology": {
+                        "count": 60
+                    },
+                    "Sports": {
+                        "count": 46
+                    },
+                    "Mathematics": {
+                        "count": 36
+                    },
+                    "Law": {
+                        "count": 3
+                    },
+                    "Tuils": {
+                        "count": 7
+                    },
+                    "Employment": {
+                        "count": 14
+                    }
+                }
+            },
+            "sq": {
+                "num_samples": 10,
+                "number_of_characters": 5120,
+                "min_text_length": 512,
+                "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 3741,
+                "min_labels_per_text": 2,
+                "average_labels_per_text": 512.0,
+                "max_labels_per_text": 1109,
+                "unique_labels": 36,
+                "labels": {
+                    "Gjeografi": {
+                        "count": 586
+                    },
+                    "Politik\u00c3\u00ab": {
+                        "count": 351
+                    },
+                    "Let\u00c3\u00abrsi": {
+                        "count": 67
+                    },
+                    "Administrat\u00c3\u00ab_publike": {
+                        "count": 320
+                    },
+                    "Shoq\u00c3\u00abri": {
+                        "count": 116
+                    },
+                    "Sporte": {
+                        "count": 105
+                    },
+                    "Shkenc\u00c3\u00ab": {
+                        "count": 1109
+                    },
+                    "Kultur\u00c3\u00ab": {
+                        "count": 299
+                    },
+                    "Arte": {
+                        "count": 217
+                    },
+                    "Persona": {
+                        "count": 425
+                    },
+                    "Histori": {
+                        "count": 744
+                    },
+                    "Mitologji": {
+                        "count": 5
+                    },
+                    "Gjuh\u00c3\u00absi": {
+                        "count": 64
+                    },
+                    "Teknologji": {
+                        "count": 84
+                    },
+                    "Kinematografi": {
+                        "count": 72
+                    },
+                    "Media": {
+                        "count": 51
+                    },
+                    "Sigurime": {
+                        "count": 31
+                    },
+                    "Loj\u00c3\u00abra": {
+                        "count": 3
+                    },
+                    "Fe": {
+                        "count": 131
+                    },
+                    "Bujq\u00c3\u00absi": {
+                        "count": 41
+                    },
+                    "Ngjarje": {
+                        "count": 11
+                    },
+                    "Biografi": {
+                        "count": 116
+                    },
+                    "Matematik\u00c3\u00ab": {
+                        "count": 27
+                    },
+                    "Teknik\u00c3\u00ab": {
+                        "count": 26
+                    },
+                    "Drejt\u00c3\u00absi": {
+                        "count": 18
+                    },
+                    "Organizata": {
+                        "count": 27
+                    },
+                    "Jeta": {
+                        "count": 4
+                    },
+                    "Sport": {
+                        "count": 5
+                    },
+                    "Agronomi": {
+                        "count": 3
+                    },
+                    "Natyr\u00c3\u00ab": {
+                        "count": 11
+                    },
+                    "Sh\u00c3\u00abndeti": {
+                        "count": 3
+                    },
+                    "Shkencat_humane": {
+                        "count": 22
+                    },
+                    "Shp\u00c3\u00abrblime": {
+                        "count": 2
+                    },
+                    "Blegtori": {
+                        "count": 10
+                    },
+                    "L\u00c3\u00abnd\u00c3\u00ab": {
+                        "count": 8
+                    },
+                    "Enciklopedistika": {
+                        "count": 6
+                    }
+                }
+            },
+            "wa": {
+                "num_samples": 10,
+                "number_of_characters": 5120,
+                "min_text_length": 512,
+                "average_text_length": 512.0,
+                "max_text_length": 512,
+                "unique_texts": 2317,
+                "min_labels_per_text": 2,
+                "average_labels_per_text": 512.0,
+                "max_labels_per_text": 3653,
+                "unique_labels": 6,
+                "labels": {
+                    "Economeye": {
+                        "count": 816
+                    },
+                    "Syinces": {
+                        "count": 3653
+                    },
+                    "Vicaedje_des_djins": {
+                        "count": 314
+                    },
+                    "Creyance": {
+                        "count": 310
+                    },
+                    "Rilom\u00c3\u00aay\u00c3\u00a8s_djins": {
+                        "count": 25
+                    },
+                    "Date": {
+                        "count": 2
+                    }
+                }
+            }
+        }
+    }
+}

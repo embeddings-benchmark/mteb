@@ -20,7 +20,7 @@ class HotpotQA(AbsTaskRetrieval):
         type="Retrieval",
         category="s2p",
         modalities=["text"],
-        eval_splits=["train", "dev", "test"],
+        eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=("2018-01-01", "2018-12-31"),  # best guess: based on publication date
@@ -53,31 +53,8 @@ class HotpotQA(AbsTaskRetrieval):
     pages = "2369--2380",
     abstract = "Existing question answering (QA) datasets fail to train QA systems to perform complex reasoning and provide explanations for answers. We introduce HotpotQA, a new dataset with 113k Wikipedia-based question-answer pairs with four key features: (1) the questions require finding and reasoning over multiple supporting documents to answer; (2) the questions are diverse and not constrained to any pre-existing knowledge bases or knowledge schemas; (3) we provide sentence-level supporting facts required for reasoning, allowing QA systems to reason with strong supervision and explain the predictions; (4) we offer a new type of factoid comparison questions to test QA systems{'} ability to extract relevant facts and perform necessary comparison. We show that HotpotQA is challenging for the latest QA systems, and the supporting facts enable models to improve performance and make explainable predictions.",
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "train": {
-                    "average_document_length": 287.9079517072212,
-                    "average_query_length": 105.54965882352941,
-                    "num_documents": 5233329,
-                    "num_queries": 85000,
-                    "average_relevant_docs_per_query": 2.0,
-                },
-                "dev": {
-                    "average_document_length": 287.9079517072212,
-                    "average_query_length": 105.35634294106848,
-                    "num_documents": 5233329,
-                    "num_queries": 5447,
-                    "average_relevant_docs_per_query": 2.0,
-                },
-                "test": {
-                    "average_document_length": 287.9079517072212,
-                    "average_query_length": 92.17096556380824,
-                    "num_documents": 5233329,
-                    "num_queries": 7405,
-                    "average_relevant_docs_per_query": 2.0,
-                },
-            },
+        prompt={
+            "query": "Given a multi-hop question, retrieve documents that can help answer the question"
         },
     )
 
@@ -130,6 +107,7 @@ class HotpotQAHardNegatives(AbsTaskRetrieval):
     pages = "2369--2380",
     abstract = "Existing question answering (QA) datasets fail to train QA systems to perform complex reasoning and provide explanations for answers. We introduce HotpotQA, a new dataset with 113k Wikipedia-based question-answer pairs with four key features: (1) the questions require finding and reasoning over multiple supporting documents to answer; (2) the questions are diverse and not constrained to any pre-existing knowledge bases or knowledge schemas; (3) we provide sentence-level supporting facts required for reasoning, allowing QA systems to reason with strong supervision and explain the predictions; (4) we offer a new type of factoid comparison questions to test QA systems{'} ability to extract relevant facts and perform necessary comparison. We show that HotpotQA is challenging for the latest QA systems, and the supporting facts enable models to improve performance and make explainable predictions.",
 }""",
+<<<<<<< HEAD
         descriptive_stats={
             "n_samples": {"test": 1000},
             "avg_character_length": {
@@ -142,4 +120,6 @@ class HotpotQAHardNegatives(AbsTaskRetrieval):
                 }
             },
         },
+=======
+>>>>>>> main
     )

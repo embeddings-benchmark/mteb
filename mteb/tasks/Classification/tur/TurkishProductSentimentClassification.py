@@ -35,8 +35,4 @@ class TurkishProductSentimentClassification(AbsTaskClassification):
             url={https://api.semanticscholar.org/CorpusID:3912960}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 800},
-            "avg_character_length": {"test": 246.85},
-        },
     )

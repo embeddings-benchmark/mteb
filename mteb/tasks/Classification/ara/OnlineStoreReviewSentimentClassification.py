@@ -3,8 +3,6 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-N_SAMPLES = 2048
-
 
 class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
@@ -29,10 +27,6 @@ class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
         dialect=["ara-Arab-SA"],
         sample_creation="found",
         bibtex_citation="",
-        descriptive_stats={
-            "n_samples": {"train": N_SAMPLES},
-            "avg_character_length": {"train": 137.2},
-        },
     )
 
     def dataset_transform(self):

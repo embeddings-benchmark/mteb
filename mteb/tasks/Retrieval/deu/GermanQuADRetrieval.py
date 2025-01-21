@@ -57,18 +57,6 @@ class GermanQuADRetrieval(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1941.090717299578,
-                    "average_query_length": 56.74773139745916,
-                    "num_documents": 474,
-                    "num_queries": 2204,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):

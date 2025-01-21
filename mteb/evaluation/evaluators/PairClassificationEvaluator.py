@@ -13,7 +13,6 @@ from sklearn.metrics.pairwise import (
 )
 
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
-from mteb.normalize_embeddings import normalize_embeddings_to_numpy
 
 from .Evaluator import Evaluator
 
@@ -90,12 +89,10 @@ class PairClassificationEvaluator(Evaluator):
             logger.warning(
                 f"Found {n_duplicates}/{total_sents} duplicates in the input data. Only encoding unique sentences."
             )
-        embeddings = normalize_embeddings_to_numpy(
-            model.encode(
-                sentences,
-                task_name=self.task_name,
-                **encode_kwargs,
-            )
+        embeddings = model.encode(
+            sentences,
+            task_name=self.task_name,
+            **encode_kwargs,
         )
         emb_dict = dict(zip(sentences, embeddings))
         embeddings1 = [emb_dict[sent] for sent in self.sentences1]

@@ -15,7 +15,6 @@ from sklearn.neighbors import KNeighborsClassifier
 from torch import Tensor
 
 from mteb.encoder_interface import Encoder
-from mteb.normalize_embeddings import normalize_embeddings_to_numpy
 
 from .Evaluator import Evaluator
 
@@ -63,14 +62,14 @@ class kNNClassificationEvaluator(Evaluator):
         max_accuracy = 0
         max_f1 = 0
         max_ap = 0
-        emb = model.encode(
+        X_train = model.encode(
             self.sentences_train,
             task_name=self.task_name,
             **self.encode_kwargs,
         )
         X_train = normalize_embeddings_to_numpy(emb)
         if test_cache is None:
-            emb = model.encode(
+            X_test = model.encode(
                 self.sentences_test,
                 task_name=self.task_name,
                 **self.encode_kwargs,
@@ -139,21 +138,17 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         max_accuracy = 0
         max_f1 = 0
         max_ap = 0
-        X_train = normalize_embeddings_to_numpy(
-            model.encode(
-                self.sentences_train,
-                task_name=self.task_name,
-                **self.encode_kwargs,
-            )
+        X_train = model.encode(
+            self.sentences_train,
+            task_name=self.task_name,
+            **self.encode_kwargs,
         )
 
         if test_cache is None:
-            X_test = normalize_embeddings_to_numpy(
-                model.encode(
-                    self.sentences_test,
-                    task_name=self.task_name,
-                    **self.encode_kwargs,
-                )
+            X_test = model.encode(
+                self.sentences_test,
+                task_name=self.task_name,
+                **self.encode_kwargs,
             )
             test_cache = X_test
         else:
@@ -295,20 +290,16 @@ class logRegClassificationEvaluator(Evaluator):
             max_iter=self.max_iter,
             verbose=1 if logger.isEnabledFor(logging.DEBUG) else 0,
         )
-        X_train = normalize_embeddings_to_numpy(
-            model.encode(
-                self.sentences_train,
-                task_name=self.task_name,
-                **self.encode_kwargs,
-            )
+        X_train = model.encode(
+            self.sentences_train,
+            task_name=self.task_name,
+            **self.encode_kwargs,
         )
         if test_cache is None:
-            X_test = normalize_embeddings_to_numpy(
-                model.encode(
-                    self.sentences_test,
-                    task_name=self.task_name,
-                    **self.encode_kwargs,
-                )
+            X_test = model.encode(
+                self.sentences_test,
+                task_name=self.task_name,
+                **self.encode_kwargs,
             )
             test_cache = X_test
         else:

@@ -47,6 +47,7 @@ class ESCIReranking(MultilingualTask, AbsTaskReranking):
         dialect=[],
         sample_creation="created",
         bibtex_citation=_CITATION,
+<<<<<<< HEAD
         descriptive_stats={
             "test": {
                 "num_samples": 29285,
@@ -83,4 +84,6 @@ class ESCIReranking(MultilingualTask, AbsTaskReranking):
                 },
             }
         },
+=======
+>>>>>>> main
     )

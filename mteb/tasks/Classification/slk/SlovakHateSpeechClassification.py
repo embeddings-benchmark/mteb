@@ -27,8 +27,11 @@ class SlovakHateSpeechClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
+<<<<<<< HEAD
         descriptive_stats={
             "n_samples": {"test": 1319},
             "avg_character_length": {"test": 92.71},
         },
+=======
+>>>>>>> main
     )

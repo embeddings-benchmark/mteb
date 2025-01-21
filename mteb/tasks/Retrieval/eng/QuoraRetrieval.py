@@ -22,7 +22,7 @@ class QuoraRetrieval(AbsTaskRetrieval):
         type="Retrieval",
         category="s2s",
         modalities=["text"],
-        eval_splits=["dev", "test"],
+        eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=None,
@@ -39,24 +39,8 @@ class QuoraRetrieval(AbsTaskRetrieval):
     year = {2017},
     url = {https://kaggle.com/competitions/quora-question-pairs}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "dev": {
-                    "average_document_length": 62.158154708747425,
-                    "average_query_length": 51.5342,
-                    "num_documents": 522931,
-                    "num_queries": 5000,
-                    "average_relevant_docs_per_query": 1.5252,
-                },
-                "test": {
-                    "average_document_length": 62.158154708747425,
-                    "average_query_length": 51.5396,
-                    "num_documents": 522931,
-                    "num_queries": 10000,
-                    "average_relevant_docs_per_query": 1.5675,
-                },
-            },
+        prompt={
+            "query": "Given a question, retrieve questions that are semantically equivalent to the given question"
         },
     )
 
@@ -95,6 +79,7 @@ class QuoraRetrievalHardNegatives(AbsTaskRetrieval):
     year = {2017},
     url = {https://kaggle.com/competitions/quora-question-pairs}
 }""",
+<<<<<<< HEAD
         descriptive_stats={
             "n_samples": {"test": 1000},
             "avg_character_length": {
@@ -107,4 +92,6 @@ class QuoraRetrievalHardNegatives(AbsTaskRetrieval):
                 }
             },
         },
+=======
+>>>>>>> main
     )

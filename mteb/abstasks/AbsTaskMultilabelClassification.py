@@ -13,10 +13,10 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 
 from mteb.encoder_interface import Encoder
-from mteb.normalize_embeddings import normalize_embeddings_to_numpy
 
 from ..load_results.task_results import HFSubset, ScoresDict
-from .AbsTask import AbsTask, DescriptiveStatistics
+from .AbsTask import AbsTask
+from .TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -46,15 +46,33 @@ class MultilabelClassificationDescriptiveStatistics(DescriptiveStatistics):
 
     Attributes:
         num_samples: number of samples in the dataset.
+        number_of_characters: Total number of symbols in the dataset.
+        number_texts_in_train: Number of texts in the train split
+
+        min_text_length: Minimum length of text
         average_text_length: Average length of text
+        max_text_length: Maximum length of text
+        unique_texts: Number of unique texts
+
+        min_labels_per_text: Minimum number of labels per text
         average_label_per_text: Average number of labels per text
+        max_labels_per_text: Maximum number of labels per text
         unique_labels: Number of unique labels
         labels: dict of label frequencies
     """
 
     num_samples: int
+    number_of_characters: int
+    number_texts_in_train: int | None
+
+    min_text_length: int
     average_text_length: float
+    max_text_length: int
+    unique_texts: int
+
+    min_labels_per_text: int
     average_label_per_text: float
+    max_labels_per_text: int
     unique_labels: int
     labels: dict[str, dict[str, int]]
 
@@ -66,14 +84,19 @@ class AbsTaskMultilabelClassification(AbsTask):
     self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
         text: str
         label: list[list[int]]
+
+    Attributes:
+       samples_per_label: Number of samples to use pr. label. These samples are embedded and a classifier is fit using the labels and samples.
+
     """
 
     classifier = KNeighborsClassifier(n_neighbors=5)
+    abstask_prompt = "Classify user passages."
+    samples_per_label: int = 8
 
     def __init__(
         self,
         n_experiments=None,
-        samples_per_label=None,
         batch_size=32,
         **kwargs,
     ):
@@ -82,9 +105,7 @@ class AbsTaskMultilabelClassification(AbsTask):
 
         # Bootstrap parameters
         self.n_experiments = n_experiments or getattr(self, "n_experiments", 10)
-        self.samples_per_label = samples_per_label or getattr(
-            self, "samples_per_label", 8
-        )
+
         # Run metadata validation by instantiating addressing the attribute
         # This is quite hacky. Ideally, this would be done in the constructor of
         # each concrete task, but then we have to duplicate the __init__ method's
@@ -100,6 +121,7 @@ class AbsTaskMultilabelClassification(AbsTask):
         model: Encoder,
         eval_split: str = "test",
         train_split: str = "train",
+        subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any] = {},
         **kwargs: Any,
@@ -109,6 +131,9 @@ class AbsTaskMultilabelClassification(AbsTask):
 
         scores = {}
         hf_subsets = list(self.dataset) if self.is_multilingual else ["default"]
+        # If subsets_to_run is specified, filter the hf_subsets accordingly
+        if subsets_to_run is not None:
+            hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
 
         for hf_subset in hf_subsets:
             logger.info(
@@ -162,12 +187,10 @@ class AbsTaskMultilabelClassification(AbsTask):
         unique_train_indices = list(set(itertools.chain.from_iterable(train_samples)))
         unique_train_sentences = train_split.select(unique_train_indices)["text"]
 
-        _unique_train_embeddings = normalize_embeddings_to_numpy(
-            model.encode(
-                unique_train_sentences,
-                task_name=self.metadata.name,
-                **encode_kwargs,
-            )
+        _unique_train_embeddings = model.encode(
+            unique_train_sentences,
+            task_name=self.metadata.name,
+            **encode_kwargs,
         )
         unique_train_embeddings = dict(
             zip(unique_train_indices, _unique_train_embeddings)
@@ -184,12 +207,10 @@ class AbsTaskMultilabelClassification(AbsTask):
         except ValueError:
             logger.warning("Couldn't subsample, continuing with the entire test set.")
 
-        X_test = normalize_embeddings_to_numpy(
-            model.encode(
-                test_text,
-                task_name=self.metadata.name,
-                **encode_kwargs,
-            )
+        X_test = model.encode(
+            test_text,
+            task_name=self.metadata.name,
+            **encode_kwargs,
         )
         for i_experiment, sample_indices in enumerate(train_samples):
             logger.info(
@@ -229,29 +250,48 @@ class AbsTaskMultilabelClassification(AbsTask):
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> MultilabelClassificationDescriptiveStatistics:
+        train_text = []
         if hf_subset:
             text = self.dataset[hf_subset][split]["text"]
             label = self.dataset[hf_subset][split]["label"]
+            if split != "train":
+                train_text = self.dataset[hf_subset]["train"]["text"]
         elif compute_overall:
             text = []
             label = []
             for hf_subset in self.metadata.eval_langs:
                 text.extend(self.dataset[hf_subset][split]["text"])
                 label.extend(self.dataset[hf_subset][split]["label"])
+                if split != "train":
+                    train_text.extend(self.dataset[hf_subset]["train"]["text"])
         else:
             text = self.dataset[split]["text"]
             label = self.dataset[split]["label"]
+            if split != "train":
+                train_text = self.dataset["train"]["text"]
 
-        total_text_len = sum(len(t) for t in text)
-        total_label_len = sum(len(l) for l in label)
+        text_len = [len(t) for t in text]
+        total_text_len = sum(text_len)
+        label_len = [len(l) for l in label]
+        total_label_len = sum(label_len)
         total_labels = []
         for l in label:
             total_labels.extend(l if len(l) > 0 else [None])
         label_count = Counter(total_labels)
+        num_texts_in_train = (
+            len(set(text) & set(train_text)) if split != "train" else None
+        )
         return MultilabelClassificationDescriptiveStatistics(
-            average_text_length=total_text_len / len(text),
-            average_label_per_text=total_label_len / len(label),
             num_samples=len(text),
+            number_of_characters=total_text_len,
+            number_texts_in_train=num_texts_in_train,
+            min_text_length=min(text_len),
+            average_text_length=total_text_len / len(text),
+            max_text_length=max(text_len),
+            unique_texts=len(set(text)),
+            min_labels_per_text=min(label_len),
+            average_label_per_text=total_label_len / len(label),
+            max_labels_per_text=max(label_len),
             unique_labels=len(label_count),
             labels={
                 str(label): {

@@ -33,17 +33,8 @@ class NQ(AbsTaskRetrieval):
         and Kristina N. Toutanova and Llion Jones and Ming-Wei Chang and Andrew Dai and Jakob Uszkoreit and Quoc Le 
         and Slav Petrov},year	= {2019},journal	= {Transactions of the Association of Computational 
         Linguistics}}""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 492.2287851281462,
-                    "average_query_length": 48.17902665121669,
-                    "num_documents": 2681468,
-                    "num_queries": 3452,
-                    "average_relevant_docs_per_query": 1.2169756662804172,
-                }
-            },
+        prompt={
+            "query": "Given a question, retrieve Wikipedia passages that answer the question"
         },
     )
 
@@ -76,6 +67,7 @@ class NQHardNegatives(AbsTaskRetrieval):
         and Kristina N. Toutanova and Llion Jones and Ming-Wei Chang and Andrew Dai and Jakob Uszkoreit and Quoc Le 
         and Slav Petrov},year	= {2019},journal	= {Transactions of the Association of Computational 
         Linguistics}}""",
+<<<<<<< HEAD
         descriptive_stats={
             "n_samples": {"test": 1000},
             "avg_character_length": {
@@ -88,4 +80,6 @@ class NQHardNegatives(AbsTaskRetrieval):
                 }
             },
         },
+=======
+>>>>>>> main
     )

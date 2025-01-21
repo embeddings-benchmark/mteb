@@ -34,6 +34,7 @@ year =    "2020",
 url = "https://www.anlp.jp/proceedings/annual_meeting/2020/pdf_dir/P2-24.pdf"
 note= "in Japanese"
 }""",
+<<<<<<< HEAD
         descriptive_stats={
             "test": {
                 "average_document_length": 3747.995228882333,
@@ -43,4 +44,6 @@ note= "in Japanese"
                 "average_relevant_docs_per_query": 1.0,
             }
         },
+=======
+>>>>>>> main
     )
