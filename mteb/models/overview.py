@@ -293,6 +293,7 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
             if isinstance(model.model_card_data.language, str)
             else model.model_card_data.language
         )
+        embeddings_dim = model.get_sentence_embedding_dimension()
         meta = ModelMeta(
             name=name,
             revision=model.model_card_data.base_model_revision,
@@ -302,7 +303,7 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
             similarity_fn_name=model.similarity_fn_name,
             n_parameters=None,
             max_tokens=None,
-            embed_dim=None,
+            embed_dim=embeddings_dim,
             license=None,
             open_weights=True,
             public_training_code=None,
