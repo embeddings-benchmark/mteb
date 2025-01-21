@@ -1344,15 +1344,11 @@ class MockRetrievalTask(AbsTaskRetrieval):
             "test": {
                 "d1": "This is a positive sentence",
                 "d2": "This is another positive sentence",
-<<<<<<< HEAD
-            }
-=======
             },
             "val": {
                 "d1": "This is a positive sentence",
                 "d2": "This is another positive sentence",
             },
->>>>>>> main
         }
 
         self.relevant_docs = {
@@ -1508,15 +1504,11 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval, MultilingualTask):
             "test": {
                 "d1": "This is a positive sentence",
                 "d2": "This is another positive sentence",
-<<<<<<< HEAD
-            }
-=======
             },
             "val": {
                 "d1": "This is a positive sentence",
                 "d2": "This is another positive sentence",
             },
->>>>>>> main
         }
         self.corpus = {"eng": corpus, "fra": corpus}
 

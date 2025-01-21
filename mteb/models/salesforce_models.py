@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
 from functools import partial
-from typing import Any
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta

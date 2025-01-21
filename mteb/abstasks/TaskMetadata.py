@@ -24,7 +24,6 @@ from ..languages import (
     path_to_lang_codes,
     path_to_lang_scripts,
 )
-from ..modalities import MODALITIES
 
 TASK_SUBTYPE = Literal[
     "Article retrieval",

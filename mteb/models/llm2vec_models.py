@@ -209,6 +209,7 @@ llm2vec_mistral7b_unsupervised = ModelMeta(
 )
 
 llm2vec_llama2_7b_supervised = ModelMeta(
+    loader=_loader(
         LLM2VecWrapper,
         base_model_name_or_path="McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp",
         peft_model_name_or_path="McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp-supervised",

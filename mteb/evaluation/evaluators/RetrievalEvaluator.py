@@ -16,7 +16,6 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
-from mteb.normalize_embeddings import normalize_embeddings_to_numpy
 
 from .Evaluator import Evaluator
 from .utils import (

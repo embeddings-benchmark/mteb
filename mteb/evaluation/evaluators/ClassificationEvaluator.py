@@ -67,14 +67,12 @@ class kNNClassificationEvaluator(Evaluator):
             task_name=self.task_name,
             **self.encode_kwargs,
         )
-        X_train = normalize_embeddings_to_numpy(emb)
         if test_cache is None:
             X_test = model.encode(
                 self.sentences_test,
                 task_name=self.task_name,
                 **self.encode_kwargs,
             )
-            X_test = normalize_embeddings_to_numpy(emb)
             test_cache = X_test
         else:
             X_test = test_cache

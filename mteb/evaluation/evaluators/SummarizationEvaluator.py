@@ -10,7 +10,6 @@ import tqdm
 from scipy.stats import pearsonr, spearmanr
 
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
-from mteb.normalize_embeddings import normalize_embeddings_to_numpy
 
 from .Evaluator import Evaluator
 from .utils import cos_sim, dot_score

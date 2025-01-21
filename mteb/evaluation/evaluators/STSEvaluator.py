@@ -12,7 +12,6 @@ from sklearn.metrics.pairwise import (
 )
 
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
-from mteb.normalize_embeddings import normalize_embeddings_to_numpy
 
 from .Evaluator import Evaluator
 
