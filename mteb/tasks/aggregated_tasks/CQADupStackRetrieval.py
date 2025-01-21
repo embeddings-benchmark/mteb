@@ -40,6 +40,7 @@ class CQADupstackRetrieval(AbsTaskAggregate):
         reference="http://nlp.cis.unimelb.edu.au/resources/cqadupstack/",
         tasks=task_list_cqa,
         main_score="ndcg_at_10",
+        type="Retrieval",  # since everything is retrieval - otherwise it would be "Aggregated"
         eval_splits=["test"],
         bibtex_citation="""@inproceedings{hoogeveen2015,
 author = {Hoogeveen, Doris and Verspoor, Karin M. and Baldwin, Timothy},

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from datetime import datetime
-from typing import Any, Literal
+from typing import Any
 
 from pydantic import ConfigDict, model_validator
 
@@ -16,6 +16,7 @@ from mteb.abstasks.TaskMetadata import (
     STR_DATE,
     TASK_DOMAIN,
     TASK_SUBTYPE,
+    TASK_TYPE,
     HFSubset,
     TaskMetadata,
 )
@@ -49,7 +50,7 @@ class AggregateTaskMetadata(TaskMetadata):
 
     tasks: list[AbsTask]
     main_score: str
-    type: Literal["aggregate-task"] = "aggregate-task"
+    type: TASK_TYPE
     eval_splits: list[str]
     eval_langs: LANGUAGES = []
     prompt: None = None

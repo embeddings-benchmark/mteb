@@ -83,7 +83,6 @@ SAMPLE_CREATION_METHOD = Literal[
     "LM-generated and verified",
     "multiple",
 ]
-
 TASK_TYPE = Literal[
     "BitextMining",
     "Classification",
@@ -97,6 +96,7 @@ TASK_TYPE = Literal[
     "InstructionRetrieval",
     "Speed",
 ]
+
 
 TASK_CATEGORY = Literal[
     "s2s",  # Sentence-to-sentence

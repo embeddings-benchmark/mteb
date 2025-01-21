@@ -5,6 +5,7 @@ import json
 import logging
 import tempfile
 import time
+import typing
 from pathlib import Path
 from urllib.parse import urlencode
 
@@ -13,6 +14,7 @@ import pandas as pd
 from gradio_rangeslider import RangeSlider
 
 import mteb
+from mteb.abstasks.TaskMetadata import TASK_TYPE
 from mteb.caching import json_cache
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
 from mteb.leaderboard.table import scores_to_tables
@@ -150,7 +152,7 @@ lang_select = gr.Dropdown(
 )
 type_select = gr.Dropdown(
     all_results.task_types,
-    value=sorted(default_results.task_types),
+    value=sorted(typing.get_args(TASK_TYPE)),
     multiselect=True,
     label="Task Type",
     info="Select task types to include.",
