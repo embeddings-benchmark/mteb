@@ -66,6 +66,7 @@ sbert_large_nlu_ru = ModelMeta(
 )
 
 sbert_large_mt_nlu_ru = ModelMeta(
+    name="ai-forever/sbert_large_mt_nlu_ru",
     languages=["rus_Cyrl"],
     open_weights=True,
     revision="05300876c2b83f46d3ddd422a7f17e45cf633bb0",
@@ -131,6 +132,7 @@ user_base_ru = ModelMeta(
 )
 
 deberta_v1_ru = ModelMeta(
+    name="deepvk/deberta-v1-base",
     languages=["rus_Cyrl"],
     open_weights=True,
     revision="bdd30b0e19757e6940c92c7aff19e8fc0a60dff4",
@@ -168,6 +170,7 @@ rubert_base_cased = ModelMeta(
 )
 
 distilrubert_small_cased_conversational = ModelMeta(
+    name="DeepPavlov/distilrubert-small-cased-conversational",
     languages=["rus_Cyrl"],
     open_weights=True,
     revision="e348066b4a7279b97138038299bddc6580a9169a",

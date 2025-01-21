@@ -24,6 +24,7 @@ from ..languages import (
     path_to_lang_codes,
     path_to_lang_scripts,
 )
+from ..modalities import MODALITIES
 
 TASK_SUBTYPE = Literal[
     "Article retrieval",
@@ -263,7 +264,7 @@ class TaskMetadata(BaseModel):
     description: str
     prompt: str | PromptDict | None = None
     type: TASK_TYPE
-    modalities: list[Literal["text"]] = ["text"]
+    modalities: list[MODALITIES] = ["text"]
     category: TASK_CATEGORY | None = None
     reference: STR_URL | None = None
 
