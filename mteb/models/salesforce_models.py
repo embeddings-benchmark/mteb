@@ -56,6 +56,7 @@ SFR_Embedding_2_R = ModelMeta(
     use_instructions=True,
     adapted_from="intfloat/e5-mistral-7b-instruct",
     public_training_code=None,
+    public_training_data=None,
     training_datasets=SFR_TRAINING_DATA,
 )
 
@@ -85,5 +86,6 @@ SFR_Embedding_Mistral = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=SFR_TRAINING_DATA,
 )

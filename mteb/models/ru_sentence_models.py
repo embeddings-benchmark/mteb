@@ -23,6 +23,7 @@ rubert_tiny2 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
 )
 
@@ -41,6 +42,7 @@ rubert_tiny = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
 )
 
@@ -59,6 +61,7 @@ sbert_large_nlu_ru = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
 )
 
@@ -77,6 +80,7 @@ sbert_large_mt_nlu_ru = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
 )
 
@@ -124,6 +128,7 @@ user_base_ru = ModelMeta(
         # "CarlBrendt/Summ_Dialog_News": ["train"],
     },
     public_training_code=None,
+    public_training_data=None,
 )
 
 deberta_v1_ru = ModelMeta(
@@ -141,6 +146,7 @@ deberta_v1_ru = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
 )
 
@@ -159,6 +165,7 @@ rubert_base_cased = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
 )
 
@@ -177,6 +184,7 @@ distilrubert_small_cased_conversational = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
 )
 
@@ -195,6 +203,7 @@ rubert_base_cased_sentence = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
 )
 
@@ -213,6 +222,7 @@ labse_en_ru = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
 )
 
@@ -231,6 +241,7 @@ rubert_tiny_turbo = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,  # source model in unknown
     # Not MTEB: {"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
 )
@@ -252,6 +263,7 @@ labse_ru_turbo = ModelMeta(
     training_datasets=None,  # source model in unknown
     # not MTEB: {"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
     public_training_code=None,
+    public_training_data=None,
 )
 
 
@@ -279,6 +291,7 @@ rosberta_ru_en = ModelMeta(
     license="mit",
     similarity_fn_name="cosine",
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
     framework=["Sentence Transformers", "PyTorch"],
 )

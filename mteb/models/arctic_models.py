@@ -102,7 +102,8 @@ arctic_embed_xs = ModelMeta(
     use_instructions=True,
     adapted_from="sentence-transformers/all-MiniLM-L6-v2",
     superseded_by=None,
-    public_training_code=None,  # couldn't find
+    public_training_code=None,
+    public_training_data=None,
     training_datasets={
         # source: https://arxiv.org/pdf/2405.05374
         # splits not specified to assuming everything
@@ -151,7 +152,8 @@ arctic_embed_s = ModelMeta(
     use_instructions=True,
     adapted_from="intfloat/e5-small-unsupervised",
     superseded_by=None,
-    public_training_code=None,  # couldn't find
+    public_training_code=None,
+    public_training_data=None,  # couldn't find
     training_datasets={
         # source: https://arxiv.org/pdf/2405.05374
         # splits not specified to assuming everything
@@ -200,7 +202,8 @@ arctic_embed_m = ModelMeta(
     use_instructions=True,
     adapted_from="intfloat/e5-base-unsupervised",
     superseded_by="Snowflake/snowflake-arctic-embed-m-v1.5",
-    public_training_code=None,  # couldn't find
+    public_training_code=None,
+    public_training_data=None,  # couldn't find
     training_datasets={
         # source: https://arxiv.org/pdf/2405.05374
         # splits not specified to assuming everything
@@ -249,7 +252,8 @@ arctic_embed_m_long = ModelMeta(
     use_instructions=True,
     adapted_from="nomic-ai/nomic-embed-text-v1-unsupervised",
     superseded_by="Snowflake/snowflake-arctic-embed-m-v2.0",
-    public_training_code=None,  # couldn't find
+    public_training_code=None,
+    public_training_data=None,  # couldn't find
     training_datasets={
         # source: https://arxiv.org/pdf/2405.05374
         # splits not specified to assuming everything
@@ -298,7 +302,8 @@ arctic_embed_l = ModelMeta(
     use_instructions=True,
     adapted_from="intfloat/e5-base-unsupervised",
     superseded_by="Snowflake/snowflake-arctic-embed-l-v2.0",
-    public_training_code=None,  # couldn't find
+    public_training_code=None,
+    public_training_data=None,  # couldn't find
     training_datasets={
         # source: https://arxiv.org/pdf/2405.05374
         # splits not specified to assuming everything
@@ -350,6 +355,7 @@ arctic_embed_m_v1_5 = ModelMeta(
     adapted_from=None,
     superseded_by="Snowflake/snowflake-arctic-embed-m-v2.0",
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
 )
 
@@ -375,7 +381,8 @@ arctic_embed_m_v2_0 = ModelMeta(
     use_instructions=True,
     adapted_from="Alibaba-NLP/gte-multilingual-base",
     superseded_by=None,
-    public_training_code=None,  # couldn't find
+    public_training_code=None,
+    public_training_data=None,  # couldn't find
     training_datasets={
         # source: https://arxiv.org/pdf/2405.05374
         # splits not specified to assuming everything
@@ -423,7 +430,8 @@ arctic_embed_l_v2_0 = ModelMeta(
     use_instructions=True,
     adapted_from="BAAI/bge-m3-retromae",
     superseded_by=None,
-    public_training_code=None,  # couldn't find
+    public_training_code=None,
+    public_training_data=None,  # couldn't find
     training_datasets={
         # source: https://arxiv.org/pdf/2405.05374
         # splits not specified to assuming everything

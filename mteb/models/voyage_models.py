@@ -158,6 +158,7 @@ voyage_large_2_instruct = ModelMeta(
     use_instructions=True,
     training_datasets=None,
     public_training_code=None,
+    public_training_data=None,
 )
 
 voyage_finance_2 = ModelMeta(
@@ -181,6 +182,7 @@ voyage_finance_2 = ModelMeta(
     use_instructions=True,
     training_datasets=None,
     public_training_code=None,
+    public_training_data=None,
 )
 
 voyage_law_2 = ModelMeta(
@@ -204,6 +206,7 @@ voyage_law_2 = ModelMeta(
     use_instructions=True,
     training_datasets=None,
     public_training_code=None,
+    public_training_data=None,
 )
 
 voyage_code_2 = ModelMeta(
@@ -227,6 +230,7 @@ voyage_code_2 = ModelMeta(
     use_instructions=True,
     training_datasets=None,
     public_training_code=None,
+    public_training_data=None,
 )
 
 voyage_large_2 = ModelMeta(
@@ -250,6 +254,7 @@ voyage_large_2 = ModelMeta(
     use_instructions=True,
     training_datasets=None,
     public_training_code=None,
+    public_training_data=None,
 )
 
 voyage_2 = ModelMeta(
@@ -273,6 +278,7 @@ voyage_2 = ModelMeta(
     use_instructions=True,
     training_datasets=None,
     public_training_code=None,
+    public_training_data=None,
 )
 voyage_multilingual_2 = ModelMeta(
     name="voyageai/voyage-multilingual-2",
@@ -295,6 +301,7 @@ voyage_multilingual_2 = ModelMeta(
     use_instructions=True,
     training_datasets=None,
     public_training_code=None,
+    public_training_data=None,
 )
 
 voyage_3 = ModelMeta(
@@ -318,6 +325,7 @@ voyage_3 = ModelMeta(
     use_instructions=True,
     training_datasets=None,
     public_training_code=None,
+    public_training_data=None,
 )
 
 voyage_3_lite = ModelMeta(
@@ -339,6 +347,10 @@ voyage_3_lite = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
-    training_datasets=None,
+    training_datasets={
+        # Self-reported (message from VoyageAI member)
+        # synthetic data
+    },
     public_training_code=None,
+    public_training_data=None,
 )

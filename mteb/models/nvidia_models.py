@@ -141,6 +141,7 @@ NV_embed_v2 = ModelMeta(
     use_instructions=True,
     training_datasets=nvidia_training_datasets,
     public_training_code=None,
+    public_training_data=None,
 )
 
 NV_embed_v1 = ModelMeta(
@@ -164,4 +165,5 @@ NV_embed_v1 = ModelMeta(
     use_instructions=True,
     training_datasets=nvidia_training_datasets,
     public_training_code=None,
+    public_training_data=None,
 )
