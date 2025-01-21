@@ -6,6 +6,7 @@ import logging
 import tempfile
 import time
 from pathlib import Path
+from typing import Literal
 from urllib.parse import urlencode
 
 import gradio as gr
@@ -474,13 +475,13 @@ Based on community feedback and research findings, This definition could change 
     )
 
     def update_models(
-        scores,
-        tasks,
-        availability,
-        compatibility,
-        instructions,
-        model_size,
-        zero_shot,
+        scores: list[dict],
+        tasks: list[str],
+        availability: bool | None,
+        compatibility: list[str],
+        instructions: bool | None,
+        model_size: tuple[int, int],
+        zero_shot: Literal["hard", "soft", "off"],
     ):
         start_time = time.time()
         model_names = list({entry["model_name"] for entry in scores})
