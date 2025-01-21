@@ -50,10 +50,7 @@ class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
         domains=["Non-fiction", "Written"],
         task_subtypes=["Article retrieval"],
         license="cc-by-4.0",
-<<<<<<< HEAD
-=======
         socioeconomic_status="low",
->>>>>>> main
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",

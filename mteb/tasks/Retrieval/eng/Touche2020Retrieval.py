@@ -80,16 +80,4 @@ class Touche2020v3Retrieval(AbsTaskRetrieval):
    year = 2024,
    address_ = "Washington, D.C."
 }""",
-<<<<<<< HEAD
-        descriptive_stats={
-            "test": {
-                "average_document_length": 2096.391812518931,
-                "average_query_length": 43.42857142857143,
-                "num_documents": 303732,
-                "num_queries": 49,
-                "average_relevant_docs_per_query": 34.93877551020408,
-            }
-        },
-=======
->>>>>>> main
     )

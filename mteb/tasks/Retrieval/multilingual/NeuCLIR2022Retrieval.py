@@ -199,44 +199,6 @@ class NeuCLIR2022RetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
   journal={arXiv preprint arXiv:2304.12367},
   year={2023}
 }""",
-<<<<<<< HEAD
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 2066.9453653646488,
-                    "average_query_length": 63.529411764705884,
-                    "num_documents": 27931,
-                    "num_queries": 136,
-                    "average_relevant_docs_per_query": 40.39705882352941,
-                    "hf_subset_descriptive_stats": {
-                        "fas": {
-                            "average_document_length": 2816.847782031074,
-                            "average_query_length": 83.26666666666667,
-                            "num_documents": 8882,
-                            "num_queries": 45,
-                            "average_relevant_docs_per_query": 32.71111111111111,
-                        },
-                        "rus": {
-                            "average_document_length": 2446.5574277854193,
-                            "average_query_length": 85.56818181818181,
-                            "num_documents": 8724,
-                            "num_queries": 44,
-                            "average_relevant_docs_per_query": 42.93181818181818,
-                        },
-                        "zho": {
-                            "average_document_length": 1101.0984987893462,
-                            "average_query_length": 24.0,
-                            "num_documents": 10325,
-                            "num_queries": 47,
-                            "average_relevant_docs_per_query": 45.38297872340426,
-                        },
-                    },
-                }
-            },
-        },
-=======
->>>>>>> main
     )
 
     def load_data(self, **kwargs):

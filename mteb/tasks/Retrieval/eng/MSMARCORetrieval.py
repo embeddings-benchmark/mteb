@@ -99,19 +99,4 @@ class MSMARCOHardNegatives(AbsTaskRetrieval):
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 }""",
-<<<<<<< HEAD
-        descriptive_stats={
-            "n_samples": {"test": 43},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 355.2909668633681,
-                    "average_query_length": 32.74418604651163,
-                    "num_documents": 8812,
-                    "num_queries": 43,
-                    "average_relevant_docs_per_query": 95.3953488372093,
-                }
-            },
-        },
-=======
->>>>>>> main
     )

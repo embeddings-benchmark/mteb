@@ -34,21 +34,6 @@ class SKQuadRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-<<<<<<< HEAD
-        descriptive_stats={
-            "n_samples": {"test": 1134},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1180.5071792496526,
-                    "average_query_length": 53.63403880070547,
-                    "num_documents": 6477,
-                    "num_queries": 1134,
-                    "average_relevant_docs_per_query": 11,
-                }
-            },
-        },
-=======
->>>>>>> main
     )
 
     def load_data(self, eval_splits=None, **kwargs):
