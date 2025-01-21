@@ -25,7 +25,7 @@ def test_colbert_model_e2e(task: AbsTask, model: str, tmp_path: Path):
         model,
         eval_splits=eval_splits,
         corpus_chunk_size=500,
-        output_folder=str(tmp_path),
+        output_folder=tmp_path.as_posix(),
     )
     result = results[0]
 
@@ -44,7 +44,7 @@ def test_bm25s_e2e(tmp_path: Path):
     evaluation = MTEB(tasks=tasks)
 
     results = evaluation.run(
-        model, eval_splits=eval_splits, output_folder=str(tmp_path)
+        model, eval_splits=eval_splits, output_folder=tmp_path.as_posix()
     )
     result = results[0]
 
