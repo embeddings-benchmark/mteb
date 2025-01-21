@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 
 import pytest
@@ -12,7 +13,8 @@ from tests.test_benchmark.mock_tasks import MockRetrievalTask
 
 def test_create_model_meta_from_sentence_transformers():
     model_name = "sentence-transformers/average_word_embeddings_levy_dependency"
-    model = SentenceTransformer(model_name)
+    revision = "6d9c09a789ad5dd126b476323fccfeeafcd90509"
+    model = SentenceTransformer(model_name, revision=revision)
 
     meta = MTEB.create_model_meta(model)
 
@@ -21,19 +23,18 @@ def test_create_model_meta_from_sentence_transformers():
     assert type(meta.framework) is list
     assert meta.framework[0] == "Sentence Transformers"
     assert meta.name == model_name
-    assert meta.revision == model.model_card_data.base_model_revision
+    assert meta.revision == revision
 
 
 def test_create_model_meta_from_cross_encoder():
     model_name = "cross-encoder/ms-marco-TinyBERT-L-2-v2"
-
-    model = CrossEncoder(model_name)
+    revision = "841d331b6f34b15d6ac0ab366ae3a3b36eeac691"
+    model = CrossEncoder(model_name, revision=revision)
 
     meta = MTEB.create_model_meta(model)
-    # model.name_or_path
-    # _commit_hash
+
     assert meta.name == model_name
-    assert meta.revision == model.config._commit_hash
+    assert meta.revision == revision
 
     return meta
 
@@ -56,16 +57,17 @@ def test_output_folder_model_meta(task: AbsTask, tmp_path: Path):
     assert output_path.parent.parent == tmp_path
 
 
+@pytest.mark.skipif(sys.version_info < (3, 10), reason="Requires Python 3.10 or higher")
 def test_model_meta_colbert():
     model_name = "colbert-ir/colbertv2.0"
     colbert_model = pytest.importorskip("pylate.models", reason="pylate not installed")
-    model = colbert_model.ColBERT(model_name)
-    # pylate.models.
+    revision = "c1e84128e85ef755c096a95bdb06b47793b13acf"
+    model = colbert_model.ColBERT(model_name, revision=revision)
 
     meta = MTEB.create_model_meta(model)
 
-    assert meta.similarity_fn_name == "MaxSim"
+    # assert meta.similarity_fn_name == "MaxSim" test with new release of pylate
     assert type(meta.framework) is list
     assert meta.framework[0] == "Sentence Transformers"
     assert meta.name == model_name
-    assert meta.revision == model.model_card_data.base_model_revision
+    assert meta.revision == revision
