@@ -12,6 +12,11 @@ from mteb.requires_package import requires_package
 
 from .wrapper import Wrapper
 
+VOYAGE_TRAINING_DATA = {
+    # Self-reported (message from VoyageAI member)
+    # synthetic data
+}
+
 
 def token_limit(max_tpm: int, interval: int = 60):
     limit_interval_start_ts = time.time()
@@ -156,7 +161,7 @@ voyage_large_2_instruct = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
-    training_datasets=None,
+    training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
 )
@@ -180,7 +185,7 @@ voyage_finance_2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
-    training_datasets=None,
+    training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
 )
@@ -204,7 +209,7 @@ voyage_law_2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
-    training_datasets=None,
+    training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
 )
@@ -228,7 +233,7 @@ voyage_code_2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
-    training_datasets=None,
+    training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
 )
@@ -252,7 +257,7 @@ voyage_large_2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
-    training_datasets=None,
+    training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
 )
@@ -276,7 +281,7 @@ voyage_2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
-    training_datasets=None,
+    training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
 )
@@ -299,7 +304,7 @@ voyage_multilingual_2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
-    training_datasets=None,
+    training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
 )
@@ -323,7 +328,7 @@ voyage_3 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
-    training_datasets=None,
+    training_datasets=VOYAGE_TRAINING_DATA,
     public_training_code=None,
     public_training_data=None,
 )
@@ -347,9 +352,78 @@ voyage_3_lite = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
+    training_datasets=VOYAGE_TRAINING_DATA,
+    public_training_code=None,
+    public_training_data=None,
+)
+
+
+voyage_3_exp = ModelMeta(
+    name="voyageai/voyage-3-m-exp",
+    revision="1",
+    release_date=None,  # not released
+    languages=None,  # supported languages not specified
+    loader=partial(
+        VoyageWrapper,
+        model_name="voyage-3-m-exp",
+        model_prompts=model_prompts,
+    ),
+    max_tokens=32000,
+    embed_dim=512,
+    open_weights=False,
+    n_parameters=None,
+    license=None,
+    reference="https://huggingface.co/voyageai/voyage-3-m-exp",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
     training_datasets={
-        # Self-reported (message from VoyageAI member)
-        # synthetic data
+        # MTEB(eng, classic) training data:
+        "ArguAna": ["train"],
+        "ArguAna-PL": ["train"],
+        "NanoArguAnaRetrieval": ["train"],
+        "HotpotQA": ["train"],
+        "HotpotQA-PL": ["train"],  # translation not trained on
+        "HotpotQAHardNegatives": ["train"],
+        "MSMARCO": ["train"],
+        "MSMARCOHardNegatives": ["train"],
+        "NanoMSMARCORetrieval": ["train"],
+        "MSMARCO-PL": ["train"],  # translation not trained on
+        "NQ": ["train"],
+        "NQHardNegatives": ["train"],
+        "NanoNQRetrieval": ["train"],
+        "NQ-PL": ["train"],  # translation not trained on
+        "FEVER": ["train"],
+        "FEVERHardNegatives": ["train"],
+        "NanoFEVERRetrieval": ["train"],
+        "FiQA2018": ["train"],
+        "FiQA2018-PL": ["train"],  # translation not trained on
+        "STS12": ["train"],
+        "STS22": ["train"],
+        "AmazonReviewsClassification": ["train"],
+        "AmazonCounterfactualClassification": ["train"],
+        "Banking77Classification": ["train"],
+        "EmotionClassification": ["train"],
+        "ImdbClassification": ["train"],
+        "MTOPIntentClassification": ["train"],
+        "ToxicConversationsClassification": ["train"],
+        "TweetSentimentExtractionClassification": ["train"],
+        "ArxivClusteringP2P": ["train"],
+        "ArxivClusteringP2P.v2": ["train"],
+        "ArxivClusteringS2S": ["train"],
+        "ArxivClusteringS2S.v2": ["train"],
+        "BiorxivClusteringP2P": ["train"],
+        "BiorxivClusteringP2P.v2": ["train"],
+        "BiorxivClusteringS2S": ["train"],
+        "BiorxivClusteringS2S.v2": ["train"],
+        "MedrxivClusteringP2P": ["train"],
+        "MedrxivClusteringP2P.v2": ["train"],
+        "MedrxivClusteringS2S": ["train"],
+        "MedrxivClusteringS2S.v2": ["train"],
+        "TwentyNewsgroupsClustering": ["train"],
+        "TwentyNewsgroupsClustering.v2": ["train"],
+        "STSBenchmark": ["train"],
+        "STSBenchmarkMultilingualSTS": ["train"],  # translated, not trained on
     },
     public_training_code=None,
     public_training_data=None,
