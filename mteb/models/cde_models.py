@@ -28,7 +28,7 @@ cde_small_v1 = ModelMeta(
     superseded_by="jxm/cde-small-v2",
     training_datasets=bge_full_data,
     public_training_code="https://github.com/jxmorris12/cde",
-    public_training_data=True,
+    public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
 )
 
 cde_small_v2 = ModelMeta(
@@ -50,5 +50,5 @@ cde_small_v2 = ModelMeta(
     superseded_by="jxm/cde-small-v2",
     training_datasets=bge_full_data,
     public_training_code="https://github.com/jxmorris12/cde",
-    public_training_data=True,
+    public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
 )

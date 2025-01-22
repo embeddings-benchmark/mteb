@@ -634,7 +634,7 @@ bge_en_icl = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code="https://github.com/FlagOpen/FlagEmbedding",
-    public_training_data=True,
+    public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
     training_datasets={
         **E5_MISTRAL_TRAINING_DATA,
         **bge_full_data,
