@@ -295,7 +295,7 @@ gte_multilingual_base = ModelMeta(
     training_datasets=gte_multi_training_data,
 )
 
-gte-modernbert-base = ModelMeta(
+gte_modernbert_base = ModelMeta(
     loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="Alibaba-NLP/gte-modernbert-base",
