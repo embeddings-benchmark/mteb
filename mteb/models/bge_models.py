@@ -4,6 +4,8 @@ from functools import partial
 
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
+from .e5_instruct import E5_MISTRAL_TRAINING_DATA
+
 model_prompts = {"query": "Represent this sentence for searching relevant passages: "}
 model_prompts_zh = {"query": "为这个句子生成表示以用于检索相关文章："}
 
@@ -495,4 +497,84 @@ bge_multilingual_gemma2 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,  # not disclosed
+)
+
+# Contents of cfli/bge-full-data
+bge_full_data = {
+    # source: https://arxiv.org/pdf/2409.15700
+    # Charles Goodhart is turning back and forth
+    # in his grave as I'm annotating this
+    # |Retrieval|
+    # ELI5
+    # SQuaD
+    # TriviaQA
+    # QuoraDuplicateQuestions
+    "HotpotQA": ["train"],
+    "FEVER": ["train"],
+    "MSMARCO": ["train"],
+    "NQ": ["train"],
+    "ArguAna": ["train"],
+    "FiQA2018": ["train"],
+    # |Reranking|
+    "SciDocsReranking": ["train"],
+    "StackOverflowDupQuestions": ["train"],
+    # |Classification|
+    "AmazonReviewsClassification": ["train"],
+    "AmazonCounterfactualClassification": ["train"],
+    "Banking77Classification": ["train"],
+    "EmotionClassification": ["train"],
+    "TweetSentimentExtractionClassification": ["train"],
+    "MTOPIntentClassification": ["train"],
+    "ImdbClassification": ["train"],
+    "ToxicConversationsClassification": ["train"],
+    # |Clustering|
+    "ArxivClusteringS2S": ["train"],
+    "ArxivClusteringP2P": ["train"],
+    "BiorxivClusteringS2S": ["train"],
+    "BiorxivClusteringP2P": ["train"],
+    "MedrxivClusteringS2S": ["train"],
+    "MedrxivClusteringP2P": ["train"],
+    "BiorxivClusteringS2S.v2": ["train"],
+    "BiorxivClusteringP2P.v2": ["train"],
+    "MedrxivClusteringS2S.v2": ["train"],
+    "MedrxivClusteringP2P.v2": ["train"],
+    "RedditClusteringP2P": ["train"],
+    "RedditClustering": ["train"],
+    "RedditClustering.v2": ["train"],
+    "TwentyNewsgroupsClustering": ["train"],
+    "TwentyNewsgroupsClustering.v2": ["train"],
+    # |STS|
+    "STS22": ["train"],
+    "STS22.v2": ["train"],
+    "STSBenchmark": ["train"],
+}
+
+bge_en_icl = ModelMeta(
+    loader=partial(
+        sentence_transformers_loader,
+        model_name="BAAI/bge-en-icl",
+        revision="971c7e1445cc86656ca0bd85ed770b8675a40bb5",
+    ),
+    name="BAAI/bge-en-icl",
+    languages=[
+        "eng_Latn",
+    ],
+    open_weights=True,
+    revision="971c7e1445cc86656ca0bd85ed770b8675a40bb5",
+    release_date="2024-07-25",  # initial commit of hf model.
+    n_parameters=7.11 * 1e9,
+    embed_dim=4096,
+    license="apache-2",
+    max_tokens=32768,
+    reference="https://huggingface.co/BAAI/bge-en-icl",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code="https://github.com/FlagOpen/FlagEmbedding",
+    public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
+    training_datasets={
+        **E5_MISTRAL_TRAINING_DATA,
+        **bge_full_data,
+    },
+    adapted_from="intfloat/e5-mistral-7b-instruct",
 )
