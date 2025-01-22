@@ -263,7 +263,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                 with gr.Row():
                     searchbar = gr.Textbox(
                         label="Search Models",
-                        info="Search models by name (RegEx sensitive. Separate queries with `|`)",
+                        info="Press Enter to search.\nSearch models by name (RegEx sensitive. Separate queries with `|`)",
                         interactive=True,
                     )
                     compatibility = gr.CheckboxGroup(
@@ -626,7 +626,7 @@ Based on community feedback and research findings, This definition could change 
         inputs=[scores, searchbar, task_select, models],
         outputs=[summary_table, per_task_table],
     )
-    searchbar.input(
+    searchbar.submit(
         update_tables,
         inputs=[scores, searchbar, task_select, models],
         outputs=[summary_table, per_task_table],
