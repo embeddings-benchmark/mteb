@@ -295,6 +295,18 @@ gte_multilingual_base = ModelMeta(
     training_datasets=gte_multi_training_data,
 )
 
+gte_modernbert_data = {
+    "NQ": ["train"],
+    "MSMARCO": ["train"],
+    "HotpotQA": ["train"],
+    "FEVER": ["train"],
+    # not in MTEB:
+    #   - TriviaQA
+    #   - SQuAD
+    #   - AllNLI
+}
+
+
 gte-modernbert-base = ModelMeta(
     loader=partial(  # type: ignore
         sentence_transformers_loader,
@@ -315,6 +327,6 @@ gte-modernbert-base = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,  # couldn't find
-    training_datasets=None
+    training_datasets=gte_modernbert_data
 )
 
