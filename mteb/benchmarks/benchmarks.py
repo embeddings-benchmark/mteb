@@ -979,3 +979,25 @@ BRIGHT = Benchmark(
   year={2024}
 }""",
 )
+
+CODE_RAG = Benchmark(
+    name="CodeRAG",
+    tasks=get_tasks(
+        tasks=["CodeRAGProgrammingSolutions",
+               "CodeRAGOnlineTutorials",
+               "CodeRAGLibraryDocumentationSolutions",
+               "CodeRAGStackoverflowPosts"
+            ],
+    ),
+    description="A benchmark for evaluating code retrieval augmented generation, testing models' ability to retrieve relevant programming solutions, tutorials and documentation.",
+    reference="https://arxiv.org/abs/2406.14497",
+    citation="""@misc{wang2024coderagbenchretrievalaugmentcode,
+      title={CodeRAG-Bench: Can Retrieval Augment Code Generation?}, 
+      author={Zora Zhiruo Wang and Akari Asai and Xinyan Velocity Yu and Frank F. Xu and Yiqing Xie and Graham Neubig and Daniel Fried},
+      year={2024},
+      eprint={2406.14497},
+      archivePrefix={arXiv},
+      primaryClass={cs.SE},
+      url={https://arxiv.org/abs/2406.14497}, 
+    }""",
+)
