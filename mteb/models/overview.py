@@ -226,6 +226,7 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
             embed_dim=None,
             open_weights=True,
             public_training_code=None,
+            public_training_data=None,
             use_instructions=None,
         )
     except Exception as e:
@@ -241,6 +242,7 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
             license=None,
             open_weights=True,
             public_training_code=None,
+            public_training_data=None,
             similarity_fn_name=None,
             use_instructions=None,
             training_datasets=None,
@@ -273,6 +275,7 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
             license=None,
             open_weights=True,
             public_training_code=None,
+            public_training_data=None,
             use_instructions=None,
             training_datasets=None,
         )
@@ -291,6 +294,7 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
             license=None,
             open_weights=True,
             public_training_code=None,
+            public_training_data=None,
             similarity_fn_name=None,
             use_instructions=None,
             training_datasets=None,

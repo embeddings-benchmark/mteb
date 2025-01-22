@@ -15,6 +15,16 @@ MISTRAL_LANGUAGES = ["eng_Latn", "fra_Latn", "deu_Latn", "ita_Latn", "spa_Latn"]
 E5_INSTRUCTION = "Instruct: {instruction}\nQuery: "
 
 
+E5_MISTRAL_TRAINING_DATA = {
+    **E5_TRAINING_DATA,
+    "FEVER": ["train"],
+    "FEVERHardNegatives": ["train"],
+    "FEVER-PL": ["train"],  # translation not trained on
+    "HotpotQA": ["train"],
+    "HotpotQAHardNegatives": ["train"],
+    "HotpotQA-PL": ["train"],  # translation not trained on
+}
+
 e5_instruct = ModelMeta(
     loader=partial(  # type: ignore
         instruct_wrapper,
@@ -40,6 +50,7 @@ e5_instruct = ModelMeta(
     license="mit",
     max_tokens=514,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=E5_TRAINING_DATA,
 )
 
@@ -70,5 +81,6 @@ e5_mistral = ModelMeta(
     license="mit",
     max_tokens=32768,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=E5_TRAINING_DATA,
 )

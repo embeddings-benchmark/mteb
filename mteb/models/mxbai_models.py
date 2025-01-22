@@ -27,5 +27,6 @@ mxbai_embed_large_v1 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
 )

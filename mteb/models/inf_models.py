@@ -26,5 +26,6 @@ inf_retriever_v1 = ModelMeta(
     use_instructions=True,
     adapted_from="Alibaba-NLP/gte-Qwen2-7B-instruct",
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
 )

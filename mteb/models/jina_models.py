@@ -224,6 +224,7 @@ jina_embeddings_v3 = ModelMeta(
     reference="https://huggingface.co/jinaai/jina-embeddings-v3",
     training_datasets=None,
     public_training_code=None,
+    public_training_data=None,
 )
 
 
@@ -245,6 +246,7 @@ jina_embeddings_v2_base_en = ModelMeta(
     adapted_from=None,
     training_datasets=None,
     public_training_code=None,
+    public_training_data=None,
 )
 
 jina_embeddings_v2_small_en = ModelMeta(
@@ -265,6 +267,7 @@ jina_embeddings_v2_small_en = ModelMeta(
     adapted_from=None,
     training_datasets=None,
     public_training_code=None,
+    public_training_data=None,
 )
 
 jina_embedding_b_en_v1 = ModelMeta(
@@ -285,6 +288,7 @@ jina_embedding_b_en_v1 = ModelMeta(
     adapted_from=None,
     training_datasets=None,
     public_training_code=None,
+    public_training_data=None,
 )
 
 jina_embedding_s_en_v1 = ModelMeta(
@@ -305,4 +309,5 @@ jina_embedding_s_en_v1 = ModelMeta(
     adapted_from=None,
     training_datasets=None,
     public_training_code=None,
+    public_training_data=None,
 )

@@ -28,6 +28,7 @@ rubert_tiny = ModelMeta(
         "Tatoeba": ["train"],
     },
     adapted_from="google-bert/bert-base-multilingual-cased",
+    public_training_data=None,
 )
 
 rubert_tiny2 = ModelMeta(
@@ -51,6 +52,7 @@ rubert_tiny2 = ModelMeta(
         # https://huggingface.co/datasets/imvladikon/leipzig_corpora_collection
     },
     adapted_from="cointegrated/rubert-tiny",
+    public_training_data=None,
 )
 
 sbert_large_nlu_ru = ModelMeta(
@@ -68,6 +70,7 @@ sbert_large_nlu_ru = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
 )
 
@@ -86,6 +89,7 @@ sbert_large_mt_nlu_ru = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
+    public_training_data=None,
     training_datasets={
         # SNLI, MNLI
         # https://github.com/brmson/dataset-sts
@@ -191,8 +195,8 @@ user_bge_m3 = ModelMeta(
         # "CarlBrendt/Summ_Dialog_News": ["train"],
     },
     public_training_code=None,
+    public_training_data=None,
 )
-
 
 deberta_v1_ru = ModelMeta(
     name="deepvk/deberta-v1-base",
@@ -210,6 +214,7 @@ deberta_v1_ru = ModelMeta(
     use_instructions=False,
     # Wikipedia, Books, Twitter comments, Pikabu, Proza.ru, Film subtitles, News websites, and Social corpus
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
 )
 
@@ -228,6 +233,7 @@ rubert_base_cased = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
 )
 
@@ -246,6 +252,7 @@ distilrubert_small_cased_conversational = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
 )
 
@@ -264,6 +271,7 @@ rubert_base_cased_sentence = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
+    public_training_data=None,
     training_datasets={
         # "SNLI": [],
         "XNLI": ["dev"]
@@ -285,6 +293,7 @@ labse_en_ru = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code="https://colab.research.google.com/drive/1dnPRn0-ugj3vZgSpyCC9sgslM2SuSfHy?usp=sharing",
+    public_training_data=None,
     training_datasets=None,
     adapted_from="sentence-transformers/LaBSE",
 )
@@ -304,6 +313,7 @@ rubert_tiny_turbo = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,  # source model in unknown
     # Not MTEB: {"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
     adapted_from="cointegrated/rubert-tiny2",
@@ -327,6 +337,7 @@ labse_ru_turbo = ModelMeta(
     # not MTEB: {"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
     public_training_code=None,
     adapted_from="cointegrated/LaBSE-en-ru",
+    public_training_data=None,
 )
 
 
@@ -370,5 +381,6 @@ rosberta_ru_en = ModelMeta(
         "MIRACLReranking": ["train"],
         "MIRACLRetrieval": ["train"],
     },
+    public_training_data=None,
     framework=["Sentence Transformers", "PyTorch"],
 )

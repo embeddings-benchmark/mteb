@@ -199,6 +199,7 @@ nomic_embed_v1_5 = ModelMeta(
     use_instructions=True,
     adapted_from=None,
     superseded_by=None,
+    public_training_data=None,
     public_training_code="https://github.com/nomic-ai/contrastors/blob/5f7b461e5a13b5636692d1c9f1141b27232fe966/src/contrastors/configs/train/contrastive_finetune.yaml",
     training_datasets=nomic_training_data,
 )
@@ -228,6 +229,7 @@ nomic_embed_v1 = ModelMeta(
     superseded_by="nomic-ai/nomic-embed-text-v1.5",
     public_training_code="https://github.com/nomic-ai/contrastors/blob/5f7b461e5a13b5636692d1c9f1141b27232fe966/src/contrastors/configs/train/contrastive_finetune.yaml",
     training_datasets=nomic_training_data,
+    public_training_data=None,
 )
 
 nomic_embed_v1_ablated = ModelMeta(
@@ -255,6 +257,7 @@ nomic_embed_v1_ablated = ModelMeta(
     superseded_by=None,
     public_training_code="https://github.com/nomic-ai/contrastors/blob/5f7b461e5a13b5636692d1c9f1141b27232fe966/src/contrastors/configs/train/contrastive_finetune.yaml",
     training_datasets=nomic_training_data,
+    public_training_data=None,
 )
 
 
@@ -283,6 +286,7 @@ nomic_embed_v1_unsupervised = ModelMeta(
     superseded_by=None,
     public_training_code="https://github.com/nomic-ai/contrastors/blob/5f7b461e5a13b5636692d1c9f1141b27232fe966/src/contrastors/configs/train/contrastive_finetune.yaml",
     training_datasets=nomic_training_data,
+    public_training_data=None,
 )
 
 nomic_modern_bert_embed = ModelMeta(
@@ -313,4 +317,5 @@ nomic_modern_bert_embed = ModelMeta(
     # https://github.com/nomic-ai/contrastors/blob/5f7b461e5a13b5636692d1c9f1141b27232fe966/src/contrastors/configs/train/contrastive_finetune_modernnomic.yaml
     superseded_by=None,
     training_datasets=nomic_training_data,
+    public_training_data=None,
 )

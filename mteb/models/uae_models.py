@@ -83,4 +83,5 @@ uae_large_v1 = ModelMeta(
         "SNLI": [],
     },
     public_training_code=None,
+    public_training_data=None,
 )

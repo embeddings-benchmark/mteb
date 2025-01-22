@@ -242,6 +242,7 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
             license=None,
             open_weights=True,
             public_training_code=None,
+            public_training_data=None,
             similarity_fn_name=None,
             use_instructions=None,
             training_datasets=None,

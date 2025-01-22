@@ -93,4 +93,5 @@ jasper_en_v1 = ModelMeta(
     training_datasets=nvidia_training_datasets,  #  "In jasper model the teacher model is nvidia/NV-Embed-v2", source https://huggingface.co/infgrad/jasper_en_vision_language_v1
     # "non_mteb": ["BAAI/Infinity-MM", "HuggingFaceFW/fineweb-edu"],
     public_training_code=None,
+    public_training_data=None,
 )

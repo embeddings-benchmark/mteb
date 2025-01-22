@@ -21,6 +21,7 @@ piccolo_base_zh = ModelMeta(
     superseded_by=None,
     adapted_from=None,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,  # They don't specify
 )
 
@@ -42,5 +43,6 @@ piccolo_large_zh_v2 = ModelMeta(
     superseded_by=None,
     adapted_from=None,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,  # They don't say
 )

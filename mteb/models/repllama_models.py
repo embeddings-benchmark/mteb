@@ -150,6 +150,7 @@ repllama_llama2_original = ModelMeta(
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
     public_training_code=None,
+    public_training_data=None,
 )
 
 
@@ -176,5 +177,6 @@ repllama_llama2_reproduced = ModelMeta(
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
 )
