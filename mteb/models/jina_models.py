@@ -222,9 +222,25 @@ jina_embeddings_v3 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     reference="https://huggingface.co/jinaai/jina-embeddings-v3",
-    training_datasets=None,
     public_training_code=None,
     public_training_data=None,
+    training_datasets={
+        # CulturaX
+        "STS12": [],
+        # "SICK": [],
+        # "WMT19": [],
+        # "MADLAD-3B": [],
+        # NLI
+        "MSMARCO": ["train"],
+        "MSMARCOHardNegatives": ["train"],
+        "NanoMSMARCORetrieval": ["train"],
+        "NQ": ["train"],
+        "NQHardNegatives": ["train"],
+        "NanoNQRetrieval": ["train"],
+        "NQ-PL": ["train"],  # translation not trained on
+        # oasst1, oasst2
+    },
+    adapted_from="XLM-RoBERTa",
 )
 
 

@@ -29,6 +29,7 @@ stella_en_400M = ModelMeta(
     framework=["Sentence Transformers", "PyTorch", "GritLM"],
     reference="https://huggingface.co/dunzhang/stella_en_400M_v5",
     training_datasets=None,
+    # will be at https://github.com/NLPJCL/RAG-Retrieval
     public_training_code=None,
     public_training_data=None,
 )
@@ -55,6 +56,7 @@ stella_en_1_5b = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch", "GritLM"],
     reference="https://huggingface.co/dunzhang/stella_en_1.5B_v5",
+    # will be at https://github.com/NLPJCL/RAG-Retrieval
     training_datasets=None,
     public_training_code=None,
     public_training_data=None,

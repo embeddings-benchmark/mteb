@@ -7,7 +7,7 @@ import torch
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 from mteb.models.e5_models import E5_TRAINING_DATA
 
-from .bge_models import bge_m_training_data, bge_training_data
+from .bge_models import bge_m3_training_data, bge_training_data
 from .sentence_transformers_models import sent_trf_training_dataset
 
 Haon_Chen__speed_embedding_7b_instruct = ModelMeta(
@@ -1445,7 +1445,7 @@ deepvk__USER_bge_m3 = ModelMeta(
     reference="https://huggingface.co/deepvk/USER-bge-m3",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=bge_m_training_data,  # derived from.
+    training_datasets=bge_m3_training_data,  # derived from.
     # not in MTEB:
     # "deepvk/ru-HNP": ["train"],
     # "deepvk/ru-WANLI": ["train"],
