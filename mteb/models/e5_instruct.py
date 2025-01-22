@@ -93,7 +93,7 @@ zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
         attn="cccc",
         pooling_method="lasttoken",
         mode="embedding",
-        torch_dtype=torch.float16,
+        torch_dtype=torch.bfloat16,
         # The ST script does not normalize while the HF one does so unclear what to do
         # https://huggingface.co/intfloat/e5-mistral-7b-instruct#transformers
         normalized=True,
