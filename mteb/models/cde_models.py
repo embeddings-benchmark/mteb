@@ -4,7 +4,7 @@ import logging
 
 from mteb.model_meta import ModelMeta
 
-from .bge_models import bge_training_data
+from .bge_models import bge_full_data
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +26,7 @@ cde_small_v1 = ModelMeta(
     use_instructions=True,
     adapted_from="nomic-ai/nomic-bert-2048",
     superseded_by="jxm/cde-small-v2",
-    training_datasets=bge_training_data,
+    training_datasets=bge_full_data,
     public_training_code="https://github.com/jxmorris12/cde",
     public_training_data=True,
 )
@@ -48,7 +48,7 @@ cde_small_v2 = ModelMeta(
     use_instructions=True,
     adapted_from="answerdotai/ModernBERT-base",
     superseded_by="jxm/cde-small-v2",
-    training_datasets=bge_training_data,
+    training_datasets=bge_full_data,
     public_training_code="https://github.com/jxmorris12/cde",
     public_training_data=True,
 )
