@@ -149,6 +149,7 @@ user_base_ru = ModelMeta(
         # SummDialogNews
     },
     public_training_code=None,
+    public_training_data=None,
 )
 
 user_bge_m3 = ModelMeta(
@@ -364,7 +365,6 @@ rosberta_ru_en = ModelMeta(
     embed_dim=1024,
     license="mit",
     similarity_fn_name="cosine",
-    public_training_code=False,
     adapted_from="ai-forever/ruRoberta-large",
     training_datasets={
         # https://huggingface.co/ai-forever/ruRoberta-large
@@ -382,5 +382,6 @@ rosberta_ru_en = ModelMeta(
         "MIRACLRetrieval": ["train"],
     },
     public_training_data=None,
+    public_training_code=None,
     framework=["Sentence Transformers", "PyTorch"],
 )

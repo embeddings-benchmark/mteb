@@ -459,7 +459,7 @@ bge_m3 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
-    public_training_data=None,
+    public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
     training_datasets=bge_m3_training_data,
 )
 
