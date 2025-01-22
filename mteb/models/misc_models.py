@@ -1607,27 +1607,7 @@ silma_ai__silma_embeddding_matryoshka_v0_1 = ModelMeta(
     adapted_from="/workspace/v3-matryoshka_aubmindlab-bert-base-arabertv02-2024-10-12_13-55-06/checkpoint-26250",
     superseded_by=None,
 )
-zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
-    name="zeta-alpha-ai/Zeta-Alpha-E5-Mistral",
-    revision="3e6076bdc2ff592a2f95fbc04570e51db5aa0c0c",
-    release_date="2024-08-30",
-    languages=["eng_Latn"],
-    loader=None,
-    n_parameters=7110660096,
-    max_tokens=32768.0,
-    embed_dim=4096,
-    license="mit",
-    open_weights=True,
-    public_training_code=None,
-    public_training_data=None,
-    framework=["PyTorch"],
-    reference="https://huggingface.co/zeta-alpha-ai/Zeta-Alpha-E5-Mistral",
-    similarity_fn_name="cosine",
-    use_instructions=None,
-    training_datasets=None,
-    adapted_from="intfloat/e5-mistral-7b-instruct",
-    superseded_by=None,
-)
+
 sbert_chinese_general_v1 = ModelMeta(
     name="DMetaSoul/sbert-chinese-general-v1",
     revision="bd27765956bcc2fcf682de0097819947ac10037e",
