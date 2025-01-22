@@ -315,6 +315,6 @@ gte_modernbert_base = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,  # couldn't find
-    training_datasets=gte_multi_training_data
+    training_datasets=gte_multi_training_data, #English part of gte_multi_training_data
 )
 
