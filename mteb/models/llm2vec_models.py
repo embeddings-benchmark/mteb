@@ -20,6 +20,31 @@ def llm2vec_instruction(instruction):
     return instruction
 
 
+llm2vec_supervised_training_data = {
+    # source, section g1: https://arxiv.org/pdf/2404.05961
+    # splits assumed but unkown
+    "HotpotQA": ["train"],
+    "HotpotQA-PL": ["train"],  # translation not trained on
+    "HotpotQAHardNegatives": ["train"],
+    "MSMARCO": ["train"],
+    "MSMARCOHardNegatives": ["train"],
+    "NanoMSMARCORetrieval": ["train"],
+    "MSMARCO-PL": ["train"],  # translation not trained on
+    "MIRACLRetrieval": ["train"],
+    "MIRACLRetrievalHardNegatives": ["train"],
+    "MIRACLReranking": ["train"],
+    "NQ": ["train"],
+    "NQHardNegatives": ["train"],
+    "NanoNQRetrieval": ["train"],
+    "NQ-PL": ["train"],  # translation not trained on
+    "FEVER": ["train"],
+    "FEVERHardNegatives": ["train"],
+    "NanoFEVERRetrieval": ["train"],
+    "MrTidyRetrieval": ["train"],
+    "T2Reranking": ["train"],
+}
+
+
 class LLM2VecWrapper(Wrapper):
     def __init__(
         self,
@@ -92,7 +117,6 @@ llm2vec_llama3_8b_supervised = ModelMeta(
     revision="baa8ebf04a1c2500e61288e7dad65e8ae42601a7",  # TODO: Not sure what to put here as a model is made of two peft repos, each with a different revision
     release_date="2024-04-09",
     n_parameters=7_505_000_000,
-    memory_usage=None,
     max_tokens=8192,
     embed_dim=4096,
     license="mit",
@@ -100,6 +124,9 @@ llm2vec_llama3_8b_supervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
+    training_datasets=llm2vec_supervised_training_data,
+    public_training_data=None,
 )
 
 llm2vec_llama3_8b_unsupervised = ModelMeta(
@@ -116,7 +143,6 @@ llm2vec_llama3_8b_unsupervised = ModelMeta(
     revision="1cb7b735326d13a8541db8f57f35da5373f5e9c6",
     release_date="2024-04-09",
     n_parameters=7_505_000_000,
-    memory_usage=None,
     max_tokens=8192,
     embed_dim=4096,
     license="mit",
@@ -124,6 +150,9 @@ llm2vec_llama3_8b_unsupervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
+    training_datasets={},
+    public_training_data=None,
 )
 
 
@@ -141,7 +170,6 @@ llm2vec_mistral7b_supervised = ModelMeta(
     revision="0ae69bdd5816105778b971c3138e8f8a18eaa3ae",
     release_date="2024-04-09",
     n_parameters=7_111_000_000,
-    memory_usage=None,
     max_tokens=32768,
     embed_dim=4096,
     license="mit",
@@ -149,6 +177,9 @@ llm2vec_mistral7b_supervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
+    training_datasets=llm2vec_supervised_training_data,
+    public_training_data=None,
 )
 
 llm2vec_mistral7b_unsupervised = ModelMeta(
@@ -165,7 +196,6 @@ llm2vec_mistral7b_unsupervised = ModelMeta(
     revision="2c055a5d77126c0d3dc6cd8ffa30e2908f4f45f8",
     release_date="2024-04-09",
     n_parameters=7_111_000_000,
-    memory_usage=None,
     max_tokens=32768,
     embed_dim=4096,
     license="mit",
@@ -173,6 +203,9 @@ llm2vec_mistral7b_unsupervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
+    training_datasets={},
+    public_training_data=None,
 )
 
 llm2vec_llama2_7b_supervised = ModelMeta(
@@ -189,7 +222,6 @@ llm2vec_llama2_7b_supervised = ModelMeta(
     revision="2c055a5d77126c0d3dc6cd8ffa30e2908f4f45f8",
     release_date="2024-04-09",
     n_parameters=7_111_000_000,
-    memory_usage=None,
     max_tokens=32768,
     embed_dim=4096,
     license="mit",
@@ -197,6 +229,9 @@ llm2vec_llama2_7b_supervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
+    training_datasets=llm2vec_supervised_training_data,
+    public_training_data=None,
 )
 
 llm2vec_llama2_7b_unsupervised = ModelMeta(
@@ -213,7 +248,6 @@ llm2vec_llama2_7b_unsupervised = ModelMeta(
     revision="a76944871d169ebe7c97eb921764cd063afed785",
     release_date="2024-04-09",
     n_parameters=7_111_000_000,
-    memory_usage=None,
     max_tokens=32768,
     embed_dim=4096,
     license="mit",
@@ -221,6 +255,9 @@ llm2vec_llama2_7b_unsupervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
+    training_datasets={},
+    public_training_data=None,
 )
 
 llm2vec_sheared_llama_supervised = ModelMeta(
@@ -237,7 +274,6 @@ llm2vec_sheared_llama_supervised = ModelMeta(
     revision="a5943d406c6b016fef3f07906aac183cf1a0b47d",
     release_date="2024-04-09",
     n_parameters=7_111_000_000,
-    memory_usage=None,
     max_tokens=32768,
     embed_dim=4096,
     license="mit",
@@ -245,6 +281,9 @@ llm2vec_sheared_llama_supervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
+    training_datasets=llm2vec_supervised_training_data,
+    public_training_data=None,
 )
 
 llm2vec_sheared_llama_unsupervised = ModelMeta(
@@ -261,7 +300,6 @@ llm2vec_sheared_llama_unsupervised = ModelMeta(
     revision="a5943d406c6b016fef3f07906aac183cf1a0b47d",
     release_date="2024-04-09",
     n_parameters=7_111_000_000,
-    memory_usage=None,
     max_tokens=32768,
     embed_dim=4096,
     license="mit",
@@ -269,4 +307,7 @@ llm2vec_sheared_llama_unsupervised = ModelMeta(
     similarity_fn_name="cosine",
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
+    training_datasets={},
+    public_training_data=None,
 )

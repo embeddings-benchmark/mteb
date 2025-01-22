@@ -8,6 +8,7 @@ from tests.test_benchmark.mock_models import (
 )
 from tests.test_benchmark.mock_tasks import (
     MockMultilingualRetrievalTask,
+    MockMultilingualSTSTask,
     MockRetrievalTask,
 )
 
@@ -362,3 +363,18 @@ def test_all_splits_subsets_evaluated_with_overwrite(
     for split in ["test"]:
         assert len(results2[0].scores[split]) == 2
         assert sorted(results2[0].languages) == ["eng", "fra"]
+
+
+def test_splits_evaluated_with_prefiltering():
+    """Test that the evaluation only runs on the specified languages. Issue https://github.com/embeddings-benchmark/mteb/pull/1787#issuecomment-2598205049"""
+    task = MockMultilingualSTSTask().filter_languages(languages=["fra"])
+
+    evaluation = MTEB(tasks=[task])
+
+    results = evaluation.run(MockSentenceTransformer(), overwrite_results=True)
+    result_scores = results[0].scores
+
+    assert len(result_scores) == 1
+    assert "test" in result_scores
+    assert len(result_scores["test"]) == 1
+    assert result_scores["test"][0]["hf_subset"] == "fra"
