@@ -1757,3 +1757,22 @@ conan_embedding = ModelMeta(
     training_datasets=None,  # They "scraped" things from the internet, we don't know, could be leakage
     superseded_by=None,
 )
+ember_v1 = ModelMeta(
+    name="llmrails/ember-v1",
+    revision="5e5ce5904901f6ce1c353a95020f17f09e5d021d",
+    release_date="2023-10-10",
+    languages=["eng_Latn"],
+    n_parameters=335 * 1e6,
+    max_tokens=512,
+    embed_dim=1024,
+    license="mit",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch", "Sentence Transformers"],
+    reference="https://huggingface.co/llmrails/ember-v1",
+    similarity_fn_name="cosine",
+    use_instructions=None,
+    training_datasets=None,
+    superseded_by=None,
+)
