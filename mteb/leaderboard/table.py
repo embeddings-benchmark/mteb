@@ -88,7 +88,7 @@ def get_means_per_types(per_task: pd.DataFrame):
                 dict(
                     model_name=model_name,
                     task_type=task_type,
-                    score=scores[tasks].mean(),
+                    score=scores[tasks].mean(skipna=False),
                 )
             )
     return pd.DataFrame.from_records(records)
@@ -142,6 +142,11 @@ def scores_to_tables(
         names = per_task.index.get_level_values("model_name")
         names = pd.Series(names, index=per_task.index)
         to_remove |= ~names.str.contains(search_query, regex=True)
+    if to_remove.all():
+        no_results_frame = pd.DataFrame(
+            {"No results": ["You can try relaxing your criteria"]}
+        )
+        return gr.DataFrame(no_results_frame), gr.DataFrame(no_results_frame)
     models_to_remove = list(per_task[to_remove].index)
     typed_mean = mean_per_type.mean(skipna=False, axis=1)
     overall_mean = per_task.mean(skipna=False, axis=1)
@@ -218,7 +223,11 @@ def scores_to_tables(
     joint_table[score_columns] = joint_table[score_columns].map(format_scores)
     joint_table_style = (
         joint_table.style.format(
-            {**{column: "{:.2f}" for column in score_columns}, "Rank (Borda)": "{:.0f}"}
+            {
+                **{column: "{:.2f}" for column in score_columns},
+                "Rank (Borda)": "{:.0f}",
+            },
+            na_rep="",
         )
         .highlight_min("Rank (Borda)", props="font-weight: bold")
         .highlight_max(subset=score_columns, props="font-weight: bold")
@@ -226,7 +235,7 @@ def scores_to_tables(
     task_score_columns = per_task.select_dtypes("number").columns
     per_task[task_score_columns] *= 100
     per_task_style = per_task.style.format(
-        "{:.2f}", subset=task_score_columns
+        "{:.2f}", subset=task_score_columns, na_rep=""
     ).highlight_max(subset=task_score_columns, props="font-weight: bold")
     return (
         gr.DataFrame(

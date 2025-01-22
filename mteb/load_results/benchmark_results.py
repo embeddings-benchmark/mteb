@@ -260,8 +260,16 @@ class BenchmarkResults(BaseModel):
 
         def keep_best(group: pd.DataFrame) -> pd.DataFrame:
             is_main_revision = group["revision"] == group["main_revision"]
-            if is_main_revision.sum() == 1:
-                return group[is_main_revision]
+            # If the main revision is present we select that
+            if is_main_revision.sum() > 0:
+                return group[is_main_revision].head(n=1)
+            unique_revisions = group["revision"].unique()
+            # Filtering out no_revision_available if other revisions are present
+            if (len(unique_revisions) > 1) and (
+                "no_revision_available" in unique_revisions
+            ):
+                group = group[group["revision"] != "no_revision_available"]
+            # If there are any not-NA mteb versions, we select the latest one
             if group["mteb_version"].notna().any():
                 group = group.dropna(subset=["mteb_version"])
                 group = group.sort_values("mteb_version", ascending=False)
