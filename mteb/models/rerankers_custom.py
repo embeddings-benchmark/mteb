@@ -292,9 +292,9 @@ bge_reranker_v2_m3 = ModelMeta(
     embed_dim=None,
     license=None,
     public_training_code=None,
-    public_training_data=bge_m3_training_data,
+    public_training_data=None,
     similarity_fn_name=None,
     use_instructions=None,
-    training_datasets=None,
+    training_datasets=bge_m3_training_data,
     framework=["Sentence Transformers", "PyTorch"],
 )
