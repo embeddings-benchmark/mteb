@@ -14,7 +14,7 @@ def split_by_first_newline(s):
 class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CodeRAGStackoverflowPosts",
-        description="Ranking of related scientific papers based on their title.",
+        description="Evaluation of StackOverflow post retrieval using CodeRAG-Bench. Tests the ability to retrieve relevant StackOverflow posts given code-related queries.",
         reference="https://arxiv.org/pdf/2406.14497",
         type="Reranking",
         category="s2s",

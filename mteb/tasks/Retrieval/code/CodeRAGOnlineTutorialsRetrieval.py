@@ -9,7 +9,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class CodeRAGOnlineTutorialsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CodeRAGOnlineTutorials",
-        description="Ranking of related scientific papers based on their title.",
+        description="Evaluation of online programming tutorial retrieval using CodeRAG-Bench. Tests the ability to retrieve relevant tutorials from online platforms given code-related queries.",
         reference="https://arxiv.org/pdf/2406.14497",
         type="Reranking",
         category="s2s",

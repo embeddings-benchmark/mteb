@@ -16,7 +16,7 @@ def _split_by_first_newline(s):
 class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CodeRAGLibraryDocumentationSolutions",
-        description="Ranking of related scientific papers based on their title.",
+        description="Evaluation of code library documentation retrieval using CodeRAG-Bench. Tests the ability to retrieve relevant Python library documentation sections given code-related queries.",
         reference="https://arxiv.org/pdf/2406.14497",
         type="Reranking",
         category="s2s",
