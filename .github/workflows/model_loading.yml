@@ -21,4 +21,4 @@ jobs:
 
     - name: Install dependencies and run tests
       run: |
-        make model-load-test
+        make model-load-test BASE_BRANCH=${{ github.event.pull_request.base.ref }}

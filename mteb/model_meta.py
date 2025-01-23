@@ -59,7 +59,6 @@ class ModelMeta(BaseModel):
         name: The name of the model, ideally the name on huggingface.
         n_parameters: The number of parameters in the model, e.g. 7_000_000 for a 7M parameter model. Can be None if the the number of parameters is not known (e.g. for proprietary models) or
             if the loader returns a SentenceTransformer model from which it can be derived.
-        memory_usage: The amount of memory the model uses in GB. Can be None if the memory usage is not known (e.g. for proprietary models).
         max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
             models).
         embed_dim: The dimension of the embeddings produced by the model. Currently all models are assumed to produce fixed-size embeddings.
@@ -67,8 +66,8 @@ class ModelMeta(BaseModel):
         release_date: The date the model's revision was released.
         license: The license under which the model is released. Required if open_weights is True.
         open_weights: Whether the model is open source or proprietary.
-        public_training_data: Whether the training data used to train the model is publicly available.
-        public_training_code: Whether the code used to train the model is publicly available.
+        public_training_code: A link to the publicly available training code. If none it is assumed that the training code is not publicly available.
+        public_training_data: A link to the publicly available training data. If none it is assumed that the training data is not publicly available.
         similarity_fn_name: The distance metric used by the model.
         framework: The framework the model is implemented in, can be a list of frameworks e.g. `["Sentence Transformers", "PyTorch"]`.
         reference: A URL to the model's page on huggingface or another source.
@@ -90,19 +89,18 @@ class ModelMeta(BaseModel):
     release_date: STR_DATE | None
     languages: list[ISO_LANGUAGE_SCRIPT] | None
     loader: Callable[..., Encoder] | None = None
-    n_parameters: int | None = None
-    memory_usage: float | None = None
-    max_tokens: float | None = None
-    embed_dim: int | None = None
-    license: str | None = None
-    open_weights: bool | None = None
-    public_training_data: bool | None = None
-    public_training_code: bool | None = None
-    framework: list[FRAMEWORKS] = []
+    n_parameters: int | None
+    max_tokens: float | None
+    embed_dim: int | None
+    license: str | None
+    open_weights: bool | None
+    public_training_code: str | None
+    public_training_data: str | bool | None
+    framework: list[FRAMEWORKS]
     reference: STR_URL | None = None
-    similarity_fn_name: DISTANCE_METRICS | None = None
-    use_instructions: bool | None = None
-    training_datasets: dict[str, list[str]] | None = None
+    similarity_fn_name: DISTANCE_METRICS | None
+    use_instructions: bool | None
+    training_datasets: dict[str, list[str]] | None
     adapted_from: str | None = None
     superseded_by: str | None = None
 

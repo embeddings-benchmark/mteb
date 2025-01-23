@@ -20,6 +20,65 @@ GRANITE_LANGUAGES = [
     "zho_Hans",
 ]
 
+granite_training_data = {
+    # Multilingual MC4
+    # Multilingual Webhose
+    # English Wikipedia
+    # Multilingual Wikimedia
+    "WikipediaRetrievalMultilingual": [],
+    "WikipediaRerankingMultilingual": [],
+    # Miracl Corpus (Title-Body)
+    # Stack Exchange Duplicate questions (titles)
+    # Stack Exchange Duplicate questions (titles)
+    # Stack Exchange Duplicate questions (bodies)
+    "StackOverflowDupQuestions": [],
+    "AskUbuntuDupQuestions": [],
+    # Stack Exchange (Title, Answer) pairs
+    # Stack Exchange (Title, Body) pairs
+    # Stack Exchange (Title, Body) pairs
+    # Machine Translations of Stack Exchange Duplicate questions (titles)
+    # Machine Translations of Stack Exchange (Title+Body, Answer) pairs
+    "StackExchangeClusteringP2P": [],
+    "StackExchangeClusteringP2P.v2": [],
+    "StackExchangeClustering": [],
+    "StackExchangeClustering.v2": [],
+    # SearchQA
+    # S2ORC (Title, Abstract)
+    # WikiAnswers Duplicate question pairs
+    # CCNews
+    # XSum
+    # SimpleWiki
+    # Machine Translated Cross Lingual Parallel Corpora
+    # SPECTER citation triplets
+    # Machine Translations of SPECTER citation triplets
+    # Natural Questions (NQ)
+    "NQ": ["test"],
+    "NQHardNegatives": ["test"],
+    # SQuAD2.0
+    # HotpotQA
+    "HotPotQA": ["test"],
+    "HotPotQAHardNegatives": ["test"],
+    "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
+    # Fever
+    "FEVER": ["test"],
+    "FEVERHardNegatives": ["test"],
+    # PubMed
+    # Multilingual Miracl Triples
+    "MIRACLRetrieval": ["train"],
+    "MIRACLRetrievalHardNegatives": ["train"],
+    "MIRACLReranking": ["train"],
+    # Multilingual MrTydi Triples
+    "MrTidyRetrieval": ["train"],
+    # Sadeeem Question Asnwering
+    # DBPedia Title-Body Pairs
+    "DBPedia": ["train"],
+    # Synthetic: English Query-Wikipedia Passage
+    # Synthetic: English Fact Verification
+    # Synthetic: Multilingual Query-Wikipedia Passage
+    # Synthetic: Multilingual News Summaries
+    # IBM Internal Triples
+    # IBM Internal Title-Body Pairs
+}
 
 granite_107m_multilingual = ModelMeta(
     loader=partial(  # type: ignore
@@ -33,7 +92,6 @@ granite_107m_multilingual = ModelMeta(
     revision="47db56afe692f731540413c67dd818ff492277e7",
     release_date="2024-12-18",
     n_parameters=107_000_000,
-    memory_usage=None,
     embed_dim=384,
     license="apache-2.0",
     max_tokens=512,
@@ -42,6 +100,10 @@ granite_107m_multilingual = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     adapted_from=None,
     superseded_by=None,
+    public_training_code=None,
+    public_training_data=None,
+    use_instructions=False,
+    training_datasets=granite_training_data,
 )
 
 granite_278m_multilingual = ModelMeta(
@@ -56,7 +118,6 @@ granite_278m_multilingual = ModelMeta(
     revision="84e3546b88b0cb69f8078608a1df558020bcbf1f",
     release_date="2024-12-18",
     n_parameters=278_000_000,
-    memory_usage=None,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,
@@ -65,6 +126,10 @@ granite_278m_multilingual = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     adapted_from=None,
     superseded_by=None,
+    public_training_code=None,
+    public_training_data=None,
+    use_instructions=False,
+    training_datasets=granite_training_data,
 )
 
 granite_30m_english = ModelMeta(
@@ -79,7 +144,6 @@ granite_30m_english = ModelMeta(
     revision="eddbb57470f896b5f8e2bfcb823d8f0e2d2024a5",
     release_date="2024-12-18",
     n_parameters=30_000_000,
-    memory_usage=None,
     embed_dim=384,
     license="apache-2.0",
     max_tokens=512,
@@ -88,6 +152,10 @@ granite_30m_english = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     adapted_from=None,
     superseded_by=None,
+    public_training_code=None,
+    public_training_data=None,
+    use_instructions=False,
+    training_datasets=granite_training_data,
 )
 
 granite_125m_english = ModelMeta(
@@ -102,7 +170,6 @@ granite_125m_english = ModelMeta(
     revision="e48d3a5b47eaa18e3fe07d4676e187fd80f32730",
     release_date="2024-12-18",
     n_parameters=125_000_000,
-    memory_usage=None,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,
@@ -111,4 +178,8 @@ granite_125m_english = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     adapted_from=None,
     superseded_by=None,
+    public_training_code=None,
+    public_training_data=None,
+    use_instructions=False,
+    training_datasets=granite_training_data,
 )

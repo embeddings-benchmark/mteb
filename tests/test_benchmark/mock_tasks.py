@@ -927,12 +927,10 @@ class MockMultilingualSTSTask(AbsTaskSTS, MultilingualTask):
             ),
         }
 
-        self.dataset = DatasetDict(
-            {
-                "eng": data,
-                "fra": data,
-            }
-        )
+        self.dataset = {}
+        for lang in self.hf_subsets:
+            self.dataset[lang] = data
+
         self.data_loaded = True
 
     @property
