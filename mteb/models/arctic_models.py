@@ -116,6 +116,7 @@ arctic_m_v1_5 = ModelMeta(
       url={https://arxiv.org/abs/2407.18887}, 
     }""",
     public_training_code=None,
+    public_training_data=None,
     training_datasets={
         # source: https://arxiv.org/pdf/2405.05374
         # splits not specified to assuming everything
