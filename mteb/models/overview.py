@@ -216,6 +216,25 @@ def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
     return meta
 
 
+empty_model_meta = ModelMeta(
+            name=None,
+            revision=None,
+            languages=None,
+            release_date=None,
+            n_parameters=None,
+            max_tokens=None,
+            embed_dim=None,
+            license=None,
+            open_weights=True,
+            public_training_code=None,
+            public_training_data=None,
+            similarity_fn_name=None,
+            use_instructions=None,
+            training_datasets=None,
+            framework=[],
+        )
+
+
 @lru_cache
 def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
     try:
@@ -245,23 +264,9 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
         )
     except Exception as e:
         logger.warning(f"Failed to extract metadata from model: {e}.")
-        return ModelMeta(
-            name=model_name,
-            revision=None,
-            languages=None,
-            release_date=None,
-            n_parameters=None,
-            max_tokens=None,
-            embed_dim=None,
-            license=None,
-            open_weights=True,
-            public_training_code=None,
-            public_training_data=None,
-            similarity_fn_name=None,
-            use_instructions=None,
-            training_datasets=None,
-            framework=[],
-        )
+        meta = empty_model_meta
+        meta.name = model_name
+        return meta
 
 
 def model_meta_from_cross_encoder(model: CrossEncoder) -> ModelMeta:
@@ -289,23 +294,7 @@ def model_meta_from_cross_encoder(model: CrossEncoder) -> ModelMeta:
         logger.warning(
             f"Failed to extract metadata from model: {e}. Upgrading to sentence-transformers v3.0.0 or above is recommended."
         )
-        meta = ModelMeta(
-            name=None,
-            revision=None,
-            languages=None,
-            release_date=None,
-            n_parameters=None,
-            max_tokens=None,
-            embed_dim=None,
-            license=None,
-            open_weights=True,
-            public_training_code=None,
-            public_training_data=None,
-            similarity_fn_name=None,
-            use_instructions=None,
-            training_datasets=None,
-            framework=[],
-        )
+        meta = empty_model_meta
     return meta
 
 
@@ -343,20 +332,5 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
         logger.warning(
             f"Failed to extract metadata from model: {e}. Upgrading to sentence-transformers v3.0.0 or above is recommended."
         )
-        meta = ModelMeta(
-            name=None,
-            revision=None,
-            languages=None,
-            release_date=None,
-            n_parameters=None,
-            max_tokens=None,
-            embed_dim=None,
-            license=None,
-            open_weights=True,
-            public_training_code=None,
-            public_training_data=None,
-            use_instructions=None,
-            training_datasets=None,
-            framework=[],
-        )
+        meta = empty_model_meta
     return meta
