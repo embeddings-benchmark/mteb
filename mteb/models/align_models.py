@@ -148,15 +148,15 @@ align_base = ModelMeta(
     embed_dim=768,
     license=None,
     open_weights=True,
-    public_training_code=True,  # https://github.com/kakaobrain/coyo-align
+    public_training_code="https://github.com/kakaobrain/coyo-align",
     public_training_data=True,
     framework=["PyTorch"],
     reference="https://huggingface.co/kakaobrain/align-base",
     similarity_fn_name=None,
     use_instructions=False,
-    training_datasets=[
+    training_datasets={
         # COYO-700M
-    ],
+    },
 )
 
 if __name__ == "__main__":
