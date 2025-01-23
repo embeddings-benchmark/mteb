@@ -40,5 +40,6 @@ Linq_Embed_Mistral = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
 )

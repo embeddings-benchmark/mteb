@@ -42,5 +42,6 @@ mxbai_embed_large_v1 = ModelMeta(
     }
     """,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
 )

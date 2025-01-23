@@ -80,6 +80,7 @@ promptriever_llama2 = ModelMeta(
     use_instructions=True,
     citation=PROMPTRIEVER_CITATION,
     public_training_code=None,
+    public_training_data=None,
 )
 
 promptriever_llama3 = ModelMeta(
@@ -107,6 +108,7 @@ promptriever_llama3 = ModelMeta(
     use_instructions=True,
     citation=PROMPTRIEVER_CITATION,
     public_training_code=None,
+    public_training_data=None,
 )
 
 
@@ -135,6 +137,7 @@ promptriever_llama3_instruct = ModelMeta(
     use_instructions=True,
     citation=PROMPTRIEVER_CITATION,
     public_training_code=None,
+    public_training_data=None,
 )
 
 promptriever_mistral_v1 = ModelMeta(
@@ -162,4 +165,5 @@ promptriever_mistral_v1 = ModelMeta(
     use_instructions=True,
     citation=PROMPTRIEVER_CITATION,
     public_training_code=None,
+    public_training_data=None,
 )

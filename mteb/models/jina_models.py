@@ -222,8 +222,25 @@ jina_embeddings_v3 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     reference="https://huggingface.co/jinaai/jina-embeddings-v3",
-    training_datasets=None,
     public_training_code=None,
+    public_training_data=None,
+    training_datasets={
+        # CulturaX
+        "STS12": [],
+        # "SICK": [],
+        # "WMT19": [],
+        # "MADLAD-3B": [],
+        # NLI
+        "MSMARCO": ["train"],
+        "MSMARCOHardNegatives": ["train"],
+        "NanoMSMARCORetrieval": ["train"],
+        "NQ": ["train"],
+        "NQHardNegatives": ["train"],
+        "NanoNQRetrieval": ["train"],
+        "NQ-PL": ["train"],  # translation not trained on
+        # oasst1, oasst2
+    },
+    adapted_from="XLM-RoBERTa",
     citation="""
     @misc{sturua2024jinaembeddingsv3multilingualembeddingstask,
       title={jina-embeddings-v3: Multilingual Embeddings With Task LoRA}, 
@@ -256,6 +273,7 @@ jina_embeddings_v2_base_en = ModelMeta(
     adapted_from=None,
     training_datasets=None,
     public_training_code=None,
+    public_training_data=None,
 )
 
 jina_embeddings_v2_small_en = ModelMeta(
@@ -276,6 +294,7 @@ jina_embeddings_v2_small_en = ModelMeta(
     adapted_from=None,
     training_datasets=None,
     public_training_code=None,
+    public_training_data=None,
 )
 
 jina_embedding_b_en_v1 = ModelMeta(
@@ -296,6 +315,7 @@ jina_embedding_b_en_v1 = ModelMeta(
     adapted_from=None,
     training_datasets=None,
     public_training_code=None,
+    public_training_data=None,
 )
 
 jina_embedding_s_en_v1 = ModelMeta(
@@ -316,4 +336,5 @@ jina_embedding_s_en_v1 = ModelMeta(
     adapted_from=None,
     training_datasets=None,
     public_training_code=None,
+    public_training_data=None,
 )

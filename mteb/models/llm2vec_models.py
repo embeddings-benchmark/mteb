@@ -138,6 +138,7 @@ llm2vec_llama3_8b_supervised = ModelMeta(
     use_instructions=True,
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     training_datasets=llm2vec_supervised_training_data,
+    public_training_data=None,
     citation=LLM2VEC_CITATION,
 )
 
@@ -165,6 +166,7 @@ llm2vec_llama3_8b_unsupervised = ModelMeta(
     citation=LLM2VEC_CITATION,
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     training_datasets={},
+    public_training_data=None,
 )
 
 
@@ -192,6 +194,7 @@ llm2vec_mistral7b_supervised = ModelMeta(
     citation=LLM2VEC_CITATION,
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     training_datasets=llm2vec_supervised_training_data,
+    public_training_data=None,
 )
 
 llm2vec_mistral7b_unsupervised = ModelMeta(
@@ -218,6 +221,7 @@ llm2vec_mistral7b_unsupervised = ModelMeta(
     citation=LLM2VEC_CITATION,
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     training_datasets={},
+    public_training_data=None,
 )
 
 llm2vec_llama2_7b_supervised = ModelMeta(
@@ -244,6 +248,7 @@ llm2vec_llama2_7b_supervised = ModelMeta(
     citation=LLM2VEC_CITATION,
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     training_datasets=llm2vec_supervised_training_data,
+    public_training_data=None,
 )
 
 llm2vec_llama2_7b_unsupervised = ModelMeta(
@@ -269,6 +274,7 @@ llm2vec_llama2_7b_unsupervised = ModelMeta(
     use_instructions=True,
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     training_datasets={},
+    public_training_data=None,
     citation=LLM2VEC_CITATION,
 )
 
@@ -296,6 +302,7 @@ llm2vec_sheared_llama_supervised = ModelMeta(
     citation=LLM2VEC_CITATION,
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     training_datasets=llm2vec_supervised_training_data,
+    public_training_data=None,
 )
 
 llm2vec_sheared_llama_unsupervised = ModelMeta(
@@ -322,4 +329,5 @@ llm2vec_sheared_llama_unsupervised = ModelMeta(
     citation=LLM2VEC_CITATION,
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     training_datasets={},
+    public_training_data=None,
 )

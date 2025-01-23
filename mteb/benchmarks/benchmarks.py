@@ -71,7 +71,7 @@ class Benchmark:
 
 
 MTEB_EN = Benchmark(
-    name="MTEB(eng, beta)",
+    name="MTEB(eng)",
     tasks=MTEBTasks(
         get_tasks(
             tasks=[
@@ -128,7 +128,13 @@ MTEB_EN = Benchmark(
             get_task("STS22.v2", eval_splits=["test"], hf_subsets=["en"]),
         ),
     ),
-    description="English benchmarks from MTEB",
+    description="""The new English Massive Text Embedding Benchmark.
+This benchmark was created to account for the fact that many models have now been finetuned
+to tasks in the original MTEB, and contains tasks that are not as frequently used for model training.
+This way the new benchmark and leaderboard can give our users a more realistic expectation of models' generalization performance.
+
+The original MTEB leaderboard is available under the [MTEB(eng, classic)](http://mteb-leaderboard-2-demo.hf.space/?benchmark_name=MTEB%28eng%2C+classic%29) tab.
+    """,
     citation="",
     contacts=["KennethEnevoldsen", "Muennighoff"],
 )
@@ -216,7 +222,12 @@ MTEB_ENG_CLASSIC = Benchmark(
             get_task("STS22", eval_splits=["test"], hf_subsets=["en"]),
         )
     ),
-    description="The original English benchmark by Muennighoff et al., (2023).",
+    description="""The original English benchmark by Muennighoff et al., (2023).
+This page is an adaptation of the [old MTEB leaderboard](https://huggingface.co/spaces/mteb/leaderboard).
+
+> We recommend that you use [MTEB(eng)](http://mteb-leaderboard-2-demo.hf.space/?benchmark_name=MTEB%28eng%29) instead,
+as many models have been tuned on MTEB(eng, classic) datasets, and MTEB(eng) might give a more accurate representation of models' generalization performance.
+    """,
     citation="""@inproceedings{muennighoff-etal-2023-mteb,
     title = "{MTEB}: Massive Text Embedding Benchmark",
     author = "Muennighoff, Niklas  and
@@ -275,7 +286,7 @@ MTEB_MAIN_RU = Benchmark(
             "STS22",
         ],
     ),
-    description="Main Russian benchmarks from MTEB",
+    description="A Russian version of the Massive Text Embedding Benchmark with a number of novel Russian tasks in all task categories of the original MTEB.",
     reference="https://aclanthology.org/2023.eacl-main.148/",
     citation="""@misc{snegirev2024russianfocusedembeddersexplorationrumteb,
       title={The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design}, 
@@ -324,8 +335,8 @@ MTEB_RETRIEVAL_LAW = Benchmark(
             "LegalQuAD",
         ]
     ),
-    description="Legal benchmarks from MTEB.",
-    reference="https://aclanthology.org/2023.eacl-main.148/",
+    description="A benchmark of retrieval tasks in the legal domain.",
+    reference=None,
     citation=None,
 )
 
@@ -365,7 +376,10 @@ MTEB_MINERS_BITEXT_MINING = Benchmark(
             "Tatoeba",
         ]
     ),
-    description="BitextMining benchmark from MINERS",
+    description="""Bitext Mining texts from the MINERS benchmark, a benchmark designed to evaluate the
+    ability of multilingual LMs in semantic retrieval tasks,
+    including bitext mining and classification via retrieval-augmented contexts.
+    """,
     reference="https://arxiv.org/pdf/2406.07424",
     citation="""
     @article{winata2024miners,
@@ -533,7 +547,7 @@ MTEB_FRA = Benchmark(
         )
         + (get_task("STS22", eval_splits=["test"], hf_subsets=["fr"]),)
     ),
-    description="Main French benchmarks from MTEB",
+    description="MTEB-French, a French expansion of the original benchmark with high-quality native French datasets.",
     reference="https://arxiv.org/abs/2405.20468",
     citation="""@misc{ciancone2024mtebfrenchresourcesfrenchsentence,
       title={MTEB-French: Resources for French Sentence Embedding Evaluation and Analysis}, 
@@ -581,7 +595,7 @@ MTEB_DEU = Benchmark(
             "STS22",
         ],
     ),
-    description="Main German benchmarks from MTEB",
+    description="A benchmark for text-embedding performance in German.",
     reference="https://arxiv.org/html/2401.02709v1",
     citation="""@misc{wehrli2024germantextembeddingclustering,
       title={German Text Embedding Clustering Benchmark}, 
@@ -613,7 +627,7 @@ MTEB_KOR = Benchmark(
             "KorSTS",
         ],
     ),
-    description="Main Korean benchmarks from MTEB",
+    description="A benchmark and leaderboard for evaluation of text embedding in Korean.",
     reference=None,
     citation=None,
 )
@@ -650,7 +664,11 @@ MTEB_POL = Benchmark(
         )
         + (get_task("STS22", eval_splits=["test"], hf_subsets=["pl"]),),
     ),
-    description="Main Polish benchmarks from MTEB",
+    description="""Polish Massive Text Embedding Benchmark (PL-MTEB), a comprehensive benchmark for text embeddings in Polish. The PL-MTEB consists of 28 diverse NLP
+tasks from 5 task types. With tasks adapted based on previously used datasets by the Polish
+NLP community. In addition, a new PLSC (Polish Library of Science Corpus) dataset was created
+consisting of titles and abstracts of scientific publications in Polish, which was used as the basis for
+two novel clustering tasks.""",  # Rephrased from the abstract
     reference="https://arxiv.org/abs/2405.10138",
     citation="""@article{poswiata2024plmteb,
     title={PL-MTEB: Polish Massive Text Embedding Benchmark},
@@ -695,14 +713,14 @@ MTEB_code = Benchmark(
             "typescript",
         ],
     ),
-    description="Main code benchmarks from MTEB",
+    description="A massive code embedding benchmark covering retrieval tasks in a miriad of popular programming languages.",
     reference=None,
     citation=None,
 )
 
 
 MTEB_multilingual = Benchmark(
-    name="MTEB(Multilingual, beta)",
+    name="MTEB(Multilingual)",
     tasks=get_tasks(
         tasks=[
             "BornholmBitextMining",
@@ -840,7 +858,7 @@ MTEB_multilingual = Benchmark(
             "MIRACLRetrievalHardNegatives",
         ],
     ),
-    description="The Multilingual benchmarks from MMTEB. Currently under development.",
+    description="A large-scale multilingual expansion of MTEB, driven mainly by highly-curated community contributions covering 250+ languages.",
     reference=None,
     citation=None,
     contacts=["KennethEnevoldsen", "isaac-chung"],
@@ -875,7 +893,7 @@ MTEB_JPN = Benchmark(
             "ESCIReranking",
         ],
     ),
-    description="Main Japanese benchmarks from MTEB",
+    description="JMTEB is a benchmark for evaluating Japanese text embedding models.",
     reference="https://github.com/sbintuitions/JMTEB",
     citation=None,
 )
@@ -915,7 +933,7 @@ indic_languages = [
 ]
 
 MTEB_INDIC = Benchmark(
-    name="MTEB(Indic, beta)",
+    name="MTEB(Indic)",
     tasks=get_tasks(
         tasks=[
             # Bitext
@@ -952,7 +970,7 @@ MTEB_INDIC = Benchmark(
         languages=indic_languages,
         exclusive_language_filter=True,
     ),
-    description="Main Indic benchmark from MMTEB",
+    description="A regional geopolitical text embedding benchmark targetting embedding performance on Indic languages.",
     reference=None,
     citation=None,
     contacts=["KennethEnevoldsen", "isaac-chung"],
@@ -1003,7 +1021,7 @@ eu_languages = [
 ]
 
 MTEB_EU = Benchmark(
-    name="MTEB(Europe, beta)",
+    name="MTEB(Europe)",
     tasks=get_tasks(
         tasks=[
             "BornholmBitextMining",
@@ -1084,7 +1102,7 @@ MTEB_EU = Benchmark(
         languages=eu_languages,
         exclusive_language_filter=True,
     ),
-    description="Main European benchmark from MMTEB",
+    description="A regional geopolitical text embedding benchmark targetting embedding performance on European languages.",
     reference=None,
     citation=None,
     contacts=["KennethEnevoldsen", "isaac-chung"],
@@ -1102,7 +1120,10 @@ LONG_EMBED = Benchmark(
             "LEMBWikimQARetrieval",
         ],
     ),
-    description="The main benchmark for evaluating long document retrieval.",
+    description="""LongEmbed is a benchmark oriented at exploring models' performance on long-context retrieval.
+    The benchmark comprises two synthetic tasks and four carefully chosen real-world tasks,
+    featuring documents of varying length and dispersed target information.
+    """,  # Pieced together from paper abstract.
     reference="https://arxiv.org/abs/2404.12096v2",
     citation="""@article{zhu2024longembed,
   title={LongEmbed: Extending Embedding Models for Long Context Retrieval},
@@ -1117,7 +1138,13 @@ BRIGHT = Benchmark(
     tasks=get_tasks(
         tasks=["BrightRetrieval"],
     ),
-    description="A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.",
+    description="""BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
+    BRIGHT is the first text retrieval
+    benchmark that requires intensive reasoning to retrieve relevant documents with
+    a dataset consisting of 1,384 real-world queries spanning diverse domains, such as
+    economics, psychology, mathematics, and coding. These queries are drawn from
+    naturally occurring and carefully curated human data.
+    """,
     reference="https://brightbenchmark.github.io/",
     citation="""@article{su2024bright,
   title={Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},

@@ -68,7 +68,8 @@ class ModelMeta(BaseModel):
         release_date: The date the model's revision was released.
         license: The license under which the model is released. Required if open_weights is True.
         open_weights: Whether the model is open source or proprietary.
-        public_training_code: Whether the code used to train the model is publicly available.
+        public_training_code: A link to the publicly available training code. If none it is assumed that the training code is not publicly available.
+        public_training_data: A link to the publicly available training data. If none it is assumed that the training data is not publicly available.
         similarity_fn_name: The distance metric used by the model.
         framework: The framework the model is implemented in, can be a list of frameworks e.g. `["Sentence Transformers", "PyTorch"]`.
         reference: A URL to the model's page on huggingface or another source.
@@ -97,6 +98,7 @@ class ModelMeta(BaseModel):
     license: str | None
     open_weights: bool | None
     public_training_code: str | None
+    public_training_data: str | bool | None
     framework: list[FRAMEWORKS]
     reference: STR_URL | None = None
     similarity_fn_name: DISTANCE_METRICS | None

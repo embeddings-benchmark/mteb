@@ -129,6 +129,7 @@ all_MiniLM_L6_v2 = ModelMeta(
     adapted_from=None,
     training_datasets=sent_trf_training_dataset,
     public_training_code=None,
+    public_training_data=None,
     citation=SBERT_CITATION,
 )
 
@@ -151,6 +152,7 @@ all_MiniLM_L12_v2 = ModelMeta(
     training_datasets=sent_trf_training_dataset,
     public_training_code=None,
     citation=SBERT_CITATION,
+    public_training_data=None,
 )
 
 paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
@@ -172,6 +174,7 @@ paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
     training_datasets=sent_trf_training_dataset,  # assumed (probably some parallel as well)
     public_training_code=None,
     citation=SBERT_CITATION,
+    public_training_data=None,
 )
 
 paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
@@ -204,6 +207,7 @@ paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
     # "yahoo-answers": yahoo_answers_train_dataset,
     # "stack-exchange": stack_exchange_train_dataset,
     public_training_code=None,
+    public_training_data=None,
 )
 
 labse = ModelMeta(
@@ -233,6 +237,7 @@ labse = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2007.01852}, 
     }""",
+    public_training_data=None,
 )
 
 multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
@@ -253,6 +258,7 @@ multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
     adapted_from="nreimers/MiniLM-L6-H384-uncased",
     training_datasets=sent_trf_training_dataset,  # assumed
     public_training_code=None,
+    public_training_data=None,
     citation=SBERT_CITATION,
 )
 
@@ -272,39 +278,9 @@ all_mpnet_base_v2 = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
-    public_training_code=None,  # does sentence transformer count?
-    training_datasets={
-        # source: frontmatter in readme
-        # trained on stack exchange, unsure if sources match
-        "StackExchangeClusteringP2P": ["test"],
-        "StackExchangeClusteringP2P.v2": ["test"],
-        "StackExchangeClustering": ["test"],
-        "StackExchangeClustering.v2": ["test"],
-        "NQ": ["test"],
-        "NQHardNegatives": ["test"],
-        "MSMARCO": ["train"],
-        # Non MTEB sources
-        # "s2orc": ["train"],
-        # "flax-sentence-embeddings/stackexchange_xml": ["train"],
-        # "ms_marco": ["train"],
-        # "gooaq": ["train"],
-        # "yahoo_answers_topics": ["train"],
-        # "code_search_net": ["train"],
-        # "search_qa": ["train"],
-        # "eli5": ["train"],
-        # "snli": ["train"],
-        # "multi_nli": ["train"],
-        # "wikihow": ["train"],
-        # "trivia_qa": ["train"],
-        # "embedding-data/sentence-compression": ["train"],
-        # "embedding-data/flickr30k-captions": ["train"],
-        # "embedding-data/altlex": ["train"],
-        # "embedding-data/simple-wiki": ["train"],
-        # "embedding-data/QQP": ["train"],
-        # "embedding-data/SPECTER": ["train"],
-        # "embedding-data/PAQ_pairs": ["train"],
-        # "embedding-data/WikiAnswers": ["train"],
-    },
+    training_datasets=sent_trf_training_dataset,
+    public_training_code=None,
+    public_training_data=None,
     citation=SBERT_CITATION,
 )
 
@@ -337,6 +313,7 @@ contriever = ModelMeta(
       doi = {10.48550/ARXIV.2112.09118},
     }""",
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
 )
 
@@ -368,4 +345,5 @@ microllama_text_embedding = ModelMeta(
         # "sentence-transformers/natural-questions": ["train"],
     },
     public_training_code=None,
+    public_training_data=None,
 )

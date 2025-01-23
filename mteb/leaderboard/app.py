@@ -6,6 +6,7 @@ import logging
 import tempfile
 import time
 from pathlib import Path
+from typing import Literal
 from urllib.parse import urlencode
 
 import gradio as gr
@@ -48,9 +49,12 @@ def produce_benchmark_link(benchmark_name: str, request: gr.Request) -> str:
     return md
 
 
+DEFAULT_BENCHMARK_NAME = "MTEB(Multilingual)"
+
+
 def set_benchmark_on_load(request: gr.Request):
     query_params = request.query_params
-    return query_params.get("benchmark_name", "MTEB(Multilingual, beta)")
+    return query_params.get("benchmark_name", DEFAULT_BENCHMARK_NAME)
 
 
 def download_table(table: pd.DataFrame) -> Path:
@@ -117,23 +121,75 @@ def update_task_info(task_names: str) -> gr.DataFrame:
     return gr.DataFrame(df, datatype=["markdown"] + ["str"] * (len(df.columns) - 1))
 
 
+# Model sizes in million parameters
+MIN_MODEL_SIZE, MAX_MODEL_SIZE = 0, 10_000
+
+
+def filter_models(
+    model_names,
+    task_select,
+    availability,
+    compatibility,
+    instructions,
+    model_size,
+    zero_shot_setting,
+):
+    lower, upper = model_size
+    # Setting to None, when the user doesn't specify anything
+    if (lower == MIN_MODEL_SIZE) and (upper == MAX_MODEL_SIZE):
+        lower, upper = None, None
+    else:
+        # Multiplying by millions
+        lower = lower * 1e6
+        upper = upper * 1e6
+    model_metas = mteb.get_model_metas(
+        model_names=model_names,
+        open_weights=availability,
+        use_instructions=instructions,
+        frameworks=compatibility,
+        n_parameters_range=(lower, upper),
+    )
+    tasks = mteb.get_tasks(tasks=task_select)
+    models_to_keep = set()
+    for model_meta in model_metas:
+        is_model_zero_shot = model_meta.is_zero_shot_on(tasks)
+        if is_model_zero_shot is None:
+            if zero_shot_setting == "hard":
+                continue
+        elif not is_model_zero_shot:
+            if zero_shot_setting != "off":
+                continue
+        models_to_keep.add(model_meta.name)
+    return list(models_to_keep)
+
+
 logger.info("Loading all benchmark results")
 all_results = load_results()
-
-# Model sizes in million parameters
-min_model_size, max_model_size = 0, 10_000
 
 benchmarks = mteb.get_benchmarks()
 all_benchmark_results = {
     benchmark.name: benchmark.load_results(base_results=all_results)
     for benchmark in benchmarks
 }
-default_benchmark = mteb.get_benchmark("MTEB(Multilingual, beta)")
+default_benchmark = mteb.get_benchmark(DEFAULT_BENCHMARK_NAME)
 default_results = all_benchmark_results[default_benchmark.name]
 logger.info("Benchmark results loaded")
 
 default_scores = default_results.get_scores(format="long")
-summary_table, per_task_table = scores_to_tables(default_scores)
+all_models = list({entry["model_name"] for entry in default_scores})
+filtered_models = filter_models(
+    all_models,
+    default_results.task_names,
+    availability=None,
+    compatibility=[],
+    instructions=None,
+    model_size=(MIN_MODEL_SIZE, MAX_MODEL_SIZE),
+    zero_shot_setting="soft",
+)
+
+summary_table, per_task_table = scores_to_tables(
+    [entry for entry in default_scores if entry["model_name"] in filtered_models]
+)
 
 benchmark_select = gr.Dropdown(
     [bench.name for bench in benchmarks],
@@ -207,7 +263,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                 with gr.Row():
                     searchbar = gr.Textbox(
                         label="Search Models",
-                        info="Search models by name (RegEx sensitive. Separate queries with `|`)",
+                        info="Press Enter to search.\nSearch models by name (RegEx sensitive. Separate queries with `|`)",
                         interactive=True,
                     )
                     compatibility = gr.CheckboxGroup(
@@ -258,14 +314,14 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                             interactive=True,
                         )
                         model_size = RangeSlider(
-                            minimum=min_model_size,
-                            maximum=max_model_size,
-                            value=(min_model_size, max_model_size),
+                            minimum=MIN_MODEL_SIZE,
+                            maximum=MAX_MODEL_SIZE,
+                            value=(MIN_MODEL_SIZE, MAX_MODEL_SIZE),
                             label="Model Size (#M Parameters)",
                             interactive=True,
                         )
     scores = gr.State(default_scores)
-    models = gr.State(list({entry["model_name"] for entry in default_scores}))
+    models = gr.State(filtered_models)
     with gr.Row():
         with gr.Column():
             description = gr.Markdown(
@@ -295,6 +351,10 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
         """
         )
         summary_table.render()
+        download_summary = gr.DownloadButton("Download Table")
+        download_summary.click(
+            download_table, inputs=[summary_table], outputs=[download_summary]
+        )
         with gr.Accordion(
             "What do aggregate measures (Rank(Borda), Mean(Task), etc.) mean?",
             open=False,
@@ -308,10 +368,19 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
     **Mean(TaskType)**: This is a weighted average across different task categories, such as classification or retrieval. It is computed by first computing the average by task category and then computing the average on each category. Similar to the Mean(Task) this measure is continuous and tends to overvalue tasks with higher variance. This score also prefers models that perform well across all task categories.
             """
             )
-        download_summary = gr.DownloadButton("Download Table")
-        download_summary.click(
-            download_table, inputs=[summary_table], outputs=[download_summary]
-        )
+        with gr.Accordion(
+            "What does zero-shot mean?",
+            open=False,
+        ):
+            gr.Markdown(
+                """
+A model is considered zero-shot if it is not trained on any splits of the datasets used to derive the tasks.
+E.g., if a model is trained on Natural Questions, it cannot be considered zero-shot on benchmarks containing the task “NQ” which is derived from Natural Questions.
+This definition creates a few edge cases. For instance, multiple models are typically trained on Wikipedia title and body pairs, but we do not define this as leakage on, e.g., “WikipediaRetrievalMultilingual” and “WikiClusteringP2P” as these datasets are not based on title-body pairs.
+Distilled, further fine-tunes or in other ways, derivative models inherit the datasets of their parent models.
+Based on community feedback and research findings, This definition could change in the future.
+            """
+            )
     with gr.Tab("Performance per task"):
         per_task_table.render()
         download_per_task = gr.DownloadButton("Download Table")
@@ -405,51 +474,14 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
         outputs=[task_select],
     )
 
-    def filter_models(
-        model_names,
-        task_select,
-        availability,
-        compatibility,
-        instructions,
-        model_size,
-        zero_shot_setting,
-    ):
-        lower, upper = model_size
-        # Setting to None, when the user doesn't specify anything
-        if (lower == min_model_size) and (upper == max_model_size):
-            lower, upper = None, None
-        else:
-            # Multiplying by millions
-            lower = lower * 1e6
-            upper = upper * 1e6
-        model_metas = mteb.get_model_metas(
-            model_names=model_names,
-            open_weights=availability,
-            use_instructions=instructions,
-            frameworks=compatibility,
-            n_parameters_range=(lower, upper),
-        )
-        tasks = mteb.get_tasks(tasks=task_select)
-        models_to_keep = set()
-        for model_meta in model_metas:
-            is_model_zero_shot = model_meta.is_zero_shot_on(tasks)
-            if is_model_zero_shot is None:
-                if zero_shot_setting == "hard":
-                    continue
-            elif not is_model_zero_shot:
-                if zero_shot_setting != "off":
-                    continue
-            models_to_keep.add(model_meta.name)
-        return list(models_to_keep)
-
     def update_models(
-        scores,
-        tasks,
-        availability,
-        compatibility,
-        instructions,
-        model_size,
-        zero_shot,
+        scores: list[dict],
+        tasks: list[str],
+        availability: bool | None,
+        compatibility: list[str],
+        instructions: bool | None,
+        model_size: tuple[int, int],
+        zero_shot: Literal["hard", "soft", "off"],
     ):
         start_time = time.time()
         model_names = list({entry["model_name"] for entry in scores})
@@ -544,7 +576,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
         ],
         outputs=[models],
     )
-    zero_shot.input(
+    zero_shot.change(
         update_models,
         inputs=[
             scores,
@@ -594,7 +626,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
         inputs=[scores, searchbar, task_select, models],
         outputs=[summary_table, per_task_table],
     )
-    searchbar.input(
+    searchbar.submit(
         update_tables,
         inputs=[scores, searchbar, task_select, models],
         outputs=[summary_table, per_task_table],
