@@ -217,22 +217,22 @@ def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
 
 
 empty_model_meta = ModelMeta(
-            name=None,
-            revision=None,
-            languages=None,
-            release_date=None,
-            n_parameters=None,
-            max_tokens=None,
-            embed_dim=None,
-            license=None,
-            open_weights=True,
-            public_training_code=None,
-            public_training_data=None,
-            similarity_fn_name=None,
-            use_instructions=None,
-            training_datasets=None,
-            framework=[],
-        )
+    name=None,
+    revision=None,
+    languages=None,
+    release_date=None,
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
+    framework=[],
+)
 
 
 @lru_cache
