@@ -143,18 +143,20 @@ align_base = ModelMeta(
     revision="e96a37facc7b1f59090ece82293226b817afd6ba",
     release_date="2023-02-24",
     modalities=["image", "text"],
-    n_parameters=None,
-    max_tokens=None,
-    embed_dim=None,
+    n_parameters=176_000_000,
+    max_tokens=64,
+    embed_dim=768,
     license=None,
-    open_weights=None,
-    public_training_code=None,
-    public_training_data=None,
+    open_weights=True,
+    public_training_code=True,  # https://github.com/kakaobrain/coyo-align
+    public_training_data=True,
     framework=["PyTorch"],
-    reference=None,
+    reference="https://huggingface.co/kakaobrain/align-base",
     similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
+    use_instructions=False,
+    training_datasets=[
+        # COYO-700M
+    ],
 )
 
 if __name__ == "__main__":
