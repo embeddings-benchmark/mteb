@@ -1,12 +1,6 @@
 from __future__ import annotations
 
-from functools import partial
-
-import torch
-
-from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
-from mteb.models.instruct_wrapper import instruct_wrapper
+from mteb.model_meta import ModelMeta
 
 from .bge_models import bge_full_data
 
