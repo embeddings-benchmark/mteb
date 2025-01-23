@@ -335,6 +335,7 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
             license=None,
             open_weights=True,
             public_training_code=None,
+            public_training_data=None,
             use_instructions=None,
             training_datasets=None,
         )
@@ -353,7 +354,7 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
             license=None,
             open_weights=True,
             public_training_code=None,
-            similarity_fn_name=None,
+            public_training_data=None,
             use_instructions=None,
             training_datasets=None,
             framework=[],
