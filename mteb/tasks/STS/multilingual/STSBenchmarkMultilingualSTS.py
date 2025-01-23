@@ -52,10 +52,6 @@ class STSBenchmarkMultilingualSTS(AbsTaskSTS, MultilingualTask):
         year={2021},
         url={https://github.com/PhilipMay/stsb-multi-mt}
         }""",
-        descriptive_stats={
-            "n_samples": {"dev": 30000, "test": 27580},
-            "avg_character_length": {"dev": 66.5, "test": 56.1},
-        },
     )
 
     @property

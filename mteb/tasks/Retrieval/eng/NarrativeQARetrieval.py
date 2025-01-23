@@ -42,18 +42,6 @@ class NarrativeQARetrieval(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 326753.5323943662,
-                    "average_query_length": 47.730889457232166,
-                    "num_documents": 355,
-                    "num_queries": 10557,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):

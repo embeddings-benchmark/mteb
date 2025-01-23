@@ -42,7 +42,6 @@ class BiossesSTS(AbsTaskSTS):
     url = {https://doi.org/10.1093/bioinformatics/btx238},
     eprint = {https://academic.oup.com/bioinformatics/article-pdf/33/14/i49/50315066/bioinformatics\_33\_14\_i49.pdf},
 }""",
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
     @property

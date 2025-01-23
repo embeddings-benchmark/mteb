@@ -1,0 +1,20 @@
+{
+    "test": {
+        "number_of_characters": 428294530,
+        "num_samples": 115226,
+        "num_queries": 997,
+        "num_documents": 114229,
+        "min_document_length": 16,
+        "average_document_length": 0.4425671239352529,
+        "max_document_length": 98,
+        "unique_documents": 114229,
+        "min_query_length": 8,
+        "average_query_length": 429532.5737211635,
+        "max_query_length": 188424,
+        "unique_queries": 997,
+        "min_relevant_docs_per_query": 1,
+        "average_relevant_docs_per_query": 1.0,
+        "max_relevant_docs_per_query": 1,
+        "unique_relevant_docs": 989
+    }
+}

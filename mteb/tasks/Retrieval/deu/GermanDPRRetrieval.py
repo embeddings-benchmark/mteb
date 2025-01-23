@@ -40,18 +40,6 @@ class GermanDPR(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1288.3410987482614,
-                    "average_query_length": 64.38439024390244,
-                    "num_documents": 2876,
-                    "num_queries": 1025,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     @staticmethod
@@ -95,6 +83,9 @@ class GermanDPR(AbsTaskRetrieval):
             )
             corpus.update(neg_docs)
             relevant_docs[q_id] = {k: 1 for k in pos_docs}
+        corpus = {
+            key: doc.get("title", "") + " " + doc["text"] for key, doc in corpus.items()
+        }
         self.queries = {self._EVAL_SPLIT: queries}
         self.corpus = {self._EVAL_SPLIT: corpus}
         self.relevant_docs = {self._EVAL_SPLIT: relevant_docs}

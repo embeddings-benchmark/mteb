@@ -51,18 +51,10 @@ class ScalaClassification(AbsTaskClassification, MultilingualTask):
             url = "https://aclanthology.org/2023.nodalida-1.20",
             pages = "185--201",
         }""",
-        descriptive_stats={
-            "n_samples": {"test": len(_LANGS) * 1024},
-            "avg_character_length": {"test": 102.72},
-        },
+        prompt="Classify passages in Scandinavian Languages based on linguistic acceptability",
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["n_experiments"] = 10
-        metadata_dict["samples_per_label"] = 32
-        return metadata_dict
+    samples_per_label = 32
 
     def dataset_transform(self):
         for lang in self.dataset.keys():

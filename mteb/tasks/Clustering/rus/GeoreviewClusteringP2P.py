@@ -31,8 +31,5 @@ class GeoreviewClusteringP2P(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-        descriptive_stats={
-            "n_samples": {"test": 2000},
-            "avg_character_length": {"test": 384.5},
-        },
+        prompt="Identify the organization category based on the reviews",
     )

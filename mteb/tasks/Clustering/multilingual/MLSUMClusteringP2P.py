@@ -50,10 +50,6 @@ class MLSUMClusteringP2P(AbsTaskClustering, MultilingualTask):
         journal={arXiv preprint arXiv:2004.14900},
         year={2020}
         }""",
-        descriptive_stats={
-            "n_samples": {"validation": 38561, "test": 41206},
-            "avg_character_length": {"validation": 4613, "test": 4810},
-        },
     )
 
     def load_data(self, **kwargs):
@@ -124,10 +120,6 @@ class MLSUMClusteringP2PFast(AbsTaskClusteringFast, MultilingualTask):
         journal={arXiv preprint arXiv:2004.14900},
         year={2020}
         }""",
-        descriptive_stats={
-            "n_samples": {"validation": N_SAMPLES, "test": N_SAMPLES},
-            "avg_character_length": {"validation": 4613, "test": 4810},
-        },
     )
 
     def load_data(self, **kwargs):

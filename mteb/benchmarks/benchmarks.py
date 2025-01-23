@@ -9,7 +9,7 @@ from pydantic import AnyUrl, BeforeValidator, TypeAdapter
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.load_results.benchmark_results import BenchmarkResults
 from mteb.load_results.load_results import load_results
-from mteb.overview import get_tasks
+from mteb.overview import MTEBTasks, get_task, get_tasks
 
 http_url_adapter = TypeAdapter(AnyUrl)
 UrlString = Annotated[
@@ -27,6 +27,7 @@ class Benchmark:
         description: A description of the benchmark, should include its intended goal and potentially a description of its construction
         reference: A link reference, to a source containing additional information typically to a paper, leaderboard or github.
         citation: A bibtex citation
+        contacts: The people to contact in case of a problem in the benchmark, preferably a GitHub handle.
 
     Example:
         >>> Benchmark(
@@ -44,6 +45,7 @@ class Benchmark:
     description: str | None = None
     reference: UrlString | None = None
     citation: str | None = None
+    contacts: list[str] | None = None
 
     def __iter__(self):
         return iter(self.tasks)
@@ -57,87 +59,175 @@ class Benchmark:
     def load_results(
         self, base_results: None | BenchmarkResults = None
     ) -> BenchmarkResults:
+        if not hasattr(self, "results_cache"):
+            self.results_cache = {}
+        if base_results in self.results_cache:
+            return self.results_cache[base_results]
         if base_results is None:
             base_results = load_results()
-        return base_results.select_tasks(self.tasks)
+        results = base_results.select_tasks(self.tasks)
+        self.results_cache[base_results] = results
+        return results
 
 
-MTEB_MAIN_EN = Benchmark(
+MTEB_EN = Benchmark(
     name="MTEB(eng)",
-    tasks=get_tasks(
-        tasks=[
-            "AmazonCounterfactualClassification",
-            "AmazonPolarityClassification",
-            "AmazonReviewsClassification",
-            "ArguAna",
-            "ArxivClusteringP2P",
-            "ArxivClusteringS2S",
-            "AskUbuntuDupQuestions",
-            "BIOSSES",
-            "Banking77Classification",
-            "BiorxivClusteringP2P",
-            "BiorxivClusteringS2S",
-            "CQADupstackAndroidRetrieval",
-            "CQADupstackEnglishRetrieval",
-            "CQADupstackGamingRetrieval",
-            "CQADupstackGisRetrieval",
-            "CQADupstackMathematicaRetrieval",
-            "CQADupstackPhysicsRetrieval",
-            "CQADupstackProgrammersRetrieval",
-            "CQADupstackStatsRetrieval",
-            "CQADupstackTexRetrieval",
-            "CQADupstackUnixRetrieval",
-            "CQADupstackWebmastersRetrieval",
-            "CQADupstackWordpressRetrieval",
-            "ClimateFEVER",
-            "DBPedia",
-            "EmotionClassification",
-            "FEVER",
-            "FiQA2018",
-            "HotpotQA",
-            "ImdbClassification",
-            "MSMARCO",
-            "MTOPDomainClassification",
-            "MTOPIntentClassification",
-            "MassiveIntentClassification",
-            "MassiveScenarioClassification",
-            "MedrxivClusteringP2P",
-            "MedrxivClusteringS2S",
-            "MindSmallReranking",
-            "NFCorpus",
-            "NQ",
-            "QuoraRetrieval",
-            "RedditClustering",
-            "RedditClusteringP2P",
-            "SCIDOCS",
-            "SICK-R",
-            "STS12",
-            "STS13",
-            "STS14",
-            "STS15",
-            "STS16",
-            "STS17",
-            "STS22",
-            "STSBenchmark",
-            "SciDocsRR",
-            "SciFact",
-            "SprintDuplicateQuestions",
-            "StackExchangeClustering",
-            "StackExchangeClusteringP2P",
-            "StackOverflowDupQuestions",
-            "SummEval",
-            "TRECCOVID",
-            "Touche2020Retrieval.v3",
-            "ToxicConversationsClassification",
-            "TweetSentimentExtractionClassification",
-            "TwentyNewsgroupsClustering",
-            "TwitterSemEval2015",
-            "TwitterURLCorpus",
-        ],
-        languages=["eng"],
-        eval_splits=["test"],
+    tasks=MTEBTasks(
+        get_tasks(
+            tasks=[
+                "ArguAna",
+                "ArXivHierarchicalClusteringP2P",
+                "ArXivHierarchicalClusteringS2S",
+                "AskUbuntuDupQuestions",
+                "BIOSSES",
+                "Banking77Classification",
+                "BiorxivClusteringP2P.v2",
+                "CQADupstackGamingRetrieval",
+                "CQADupstackUnixRetrieval",
+                "ClimateFEVERHardNegatives",
+                "FEVERHardNegatives",
+                "FiQA2018",
+                "HotpotQAHardNegatives",
+                "ImdbClassification",
+                "MTOPDomainClassification",
+                "MassiveIntentClassification",
+                "MassiveScenarioClassification",
+                "MedrxivClusteringP2P.v2",
+                "MedrxivClusteringS2S.v2",
+                "MindSmallReranking",
+                "SCIDOCS",
+                "SICK-R",
+                "STS12",
+                "STS13",
+                "STS14",
+                "STS15",
+                "STSBenchmark",
+                "SprintDuplicateQuestions",
+                "StackExchangeClustering.v2",
+                "StackExchangeClusteringP2P.v2",
+                "TRECCOVID",
+                "Touche2020Retrieval.v3",
+                "ToxicConversationsClassification",
+                "TweetSentimentExtractionClassification",
+                "TwentyNewsgroupsClustering.v2",
+                "TwitterSemEval2015",
+                "TwitterURLCorpus",
+                "SummEvalSummarization.v2",
+            ],
+            languages=["eng"],
+            eval_splits=["test"],
+            exclusive_language_filter=True,
+        )
+        + (
+            get_task(
+                "AmazonCounterfactualClassification",
+                eval_splits=["test"],
+                hf_subsets=["en"],
+            ),
+            get_task("STS17", eval_splits=["test"], hf_subsets=["en-en"]),
+            get_task("STS22.v2", eval_splits=["test"], hf_subsets=["en"]),
+        ),
     ),
-    description="Main English benchmarks from MTEB",
+    description="""The new English Massive Text Embedding Benchmark.
+This benchmark was created to account for the fact that many models have now been finetuned
+to tasks in the original MTEB, and contains tasks that are not as frequently used for model training.
+This way the new benchmark and leaderboard can give our users a more realistic expectation of models' generalization performance.
+
+The original MTEB leaderboard is available under the [MTEB(eng, classic)](http://mteb-leaderboard-2-demo.hf.space/?benchmark_name=MTEB%28eng%2C+classic%29) tab.
+    """,
+    citation="",
+    contacts=["KennethEnevoldsen", "Muennighoff"],
+)
+
+MTEB_ENG_CLASSIC = Benchmark(
+    name="MTEB(eng, classic)",
+    tasks=MTEBTasks(
+        get_tasks(
+            tasks=[
+                "AmazonPolarityClassification",
+                "AmazonReviewsClassification",
+                "ArguAna",
+                "ArxivClusteringP2P",
+                "ArxivClusteringS2S",
+                "AskUbuntuDupQuestions",
+                "BIOSSES",
+                "Banking77Classification",
+                "BiorxivClusteringP2P",
+                "BiorxivClusteringS2S",
+                "CQADupstackAndroidRetrieval",
+                "CQADupstackEnglishRetrieval",
+                "CQADupstackGamingRetrieval",
+                "CQADupstackGisRetrieval",
+                "CQADupstackMathematicaRetrieval",
+                "CQADupstackPhysicsRetrieval",
+                "CQADupstackProgrammersRetrieval",
+                "CQADupstackStatsRetrieval",
+                "CQADupstackTexRetrieval",
+                "CQADupstackUnixRetrieval",
+                "CQADupstackWebmastersRetrieval",
+                "CQADupstackWordpressRetrieval",
+                "ClimateFEVER",
+                "DBPedia",
+                "EmotionClassification",
+                "FEVER",
+                "FiQA2018",
+                "HotpotQA",
+                "ImdbClassification",
+                "MTOPDomainClassification",
+                "MTOPIntentClassification",
+                "MassiveIntentClassification",
+                "MassiveScenarioClassification",
+                "MedrxivClusteringP2P",
+                "MedrxivClusteringS2S",
+                "MindSmallReranking",
+                "NFCorpus",
+                "NQ",
+                "QuoraRetrieval",
+                "RedditClustering",
+                "RedditClusteringP2P",
+                "SCIDOCS",
+                "SICK-R",
+                "STS12",
+                "STS13",
+                "STS14",
+                "STS15",
+                "STS16",
+                "STSBenchmark",
+                "SciDocsRR",
+                "SciFact",
+                "SprintDuplicateQuestions",
+                "StackExchangeClustering",
+                "StackExchangeClusteringP2P",
+                "StackOverflowDupQuestions",
+                "SummEval",
+                "TRECCOVID",
+                "Touche2020",
+                "ToxicConversationsClassification",
+                "TweetSentimentExtractionClassification",
+                "TwentyNewsgroupsClustering",
+                "TwitterSemEval2015",
+                "TwitterURLCorpus",
+            ],
+            languages=["eng"],
+            eval_splits=["test"],
+        )
+        + get_tasks(tasks=["MSMARCO"], languages=["eng"], eval_splits=["dev"])
+        + (
+            get_task(
+                "AmazonCounterfactualClassification",
+                eval_splits=["test"],
+                hf_subsets=["en"],
+            ),
+            get_task("STS17", eval_splits=["test"], hf_subsets=["en-en"]),
+            get_task("STS22", eval_splits=["test"], hf_subsets=["en"]),
+        )
+    ),
+    description="""The original English benchmark by Muennighoff et al., (2023).
+This page is an adaptation of the [old MTEB leaderboard](https://huggingface.co/spaces/mteb/leaderboard).
+
+> We recommend that you use [MTEB(eng)](http://mteb-leaderboard-2-demo.hf.space/?benchmark_name=MTEB%28eng%29) instead,
+as many models have been tuned on MTEB(eng, classic) datasets, and MTEB(eng) might give a more accurate representation of models' generalization performance.
+    """,
     citation="""@inproceedings{muennighoff-etal-2023-mteb,
     title = "{MTEB}: Massive Text Embedding Benchmark",
     author = "Muennighoff, Niklas  and
@@ -156,6 +246,7 @@ MTEB_MAIN_EN = Benchmark(
     pages = "2014--2037",
 }
 """,
+    contacts=["Muennighoff"],
 )
 
 MTEB_MAIN_RU = Benchmark(
@@ -195,7 +286,7 @@ MTEB_MAIN_RU = Benchmark(
             "STS22",
         ],
     ),
-    description="Main Russian benchmarks from MTEB",
+    description="A Russian version of the Massive Text Embedding Benchmark with a number of novel Russian tasks in all task categories of the original MTEB.",
     reference="https://aclanthology.org/2023.eacl-main.148/",
     citation="""@misc{snegirev2024russianfocusedembeddersexplorationrumteb,
       title={The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design}, 
@@ -244,8 +335,31 @@ MTEB_RETRIEVAL_LAW = Benchmark(
             "LegalQuAD",
         ]
     ),
-    description="Legal benchmarks from MTEB.",
-    reference="https://aclanthology.org/2023.eacl-main.148/",
+    description="A benchmark of retrieval tasks in the legal domain.",
+    reference=None,
+    citation=None,
+)
+
+MTEB_RETRIEVAL_MEDICAL = Benchmark(
+    name="MTEB(Medical)",
+    tasks=get_tasks(
+        tasks=[
+            "CUREv1",
+            "NFCorpus",
+            "TRECCOVID",
+            "TRECCOVID-PL",
+            "SciFact",
+            "SciFact-PL",
+            "MedicalQARetrieval",
+            "PublicHealthQA",
+            "MedrxivClusteringP2P.v2",
+            "MedrxivClusteringS2S.v2",
+            "CmedqaRetrieval",
+            "CMedQAv2-reranking",
+        ],
+    ),
+    description="A curated set of MTEB tasks designed to evaluate systems in the context of medical information retrieval.",
+    reference="",
     citation=None,
 )
 
@@ -262,7 +376,10 @@ MTEB_MINERS_BITEXT_MINING = Benchmark(
             "Tatoeba",
         ]
     ),
-    description="BitextMining benchmark from MINERS",
+    description="""Bitext Mining texts from the MINERS benchmark, a benchmark designed to evaluate the
+    ability of multilingual LMs in semantic retrieval tasks,
+    including bitext mining and classification via retrieval-augmented contexts.
+    """,
     reference="https://arxiv.org/pdf/2406.07424",
     citation="""
     @article{winata2024miners,
@@ -323,6 +440,7 @@ SEB = Benchmark(
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
+    contacts=["KennethEnevoldsen", "x-tabdeveloping", "Samoed"],
 )
 
 CoIR = Benchmark(
@@ -354,46 +472,82 @@ CoIR = Benchmark(
     }""",
 )
 
+RAR_b = Benchmark(
+    name="RAR-b",
+    tasks=get_tasks(
+        tasks=[
+            "ARCChallenge",
+            "AlphaNLI",
+            "HellaSwag",
+            "WinoGrande",
+            "PIQA",
+            "SIQA",
+            "Quail",
+            "SpartQA",
+            "TempReasonL1",
+            "TempReasonL2Pure",
+            "TempReasonL2Fact",
+            "TempReasonL2Context",
+            "TempReasonL3Pure",
+            "TempReasonL3Fact",
+            "TempReasonL3Context",
+            "RARbCode",
+            "RARbMath",
+        ]
+    ),
+    description="A benchmark to evaluate reasoning capabilities of retrievers.",
+    reference="https://arxiv.org/abs/2404.06347",
+    citation="""@article{xiao2024rar,
+      title={RAR-b: Reasoning as Retrieval Benchmark},
+      author={Xiao, Chenghao and Hudson, G Thomas and Al Moubayed, Noura},
+      journal={arXiv preprint arXiv:2404.06347},
+      year={2024}
+    }""",
+    contacts=["gowitheflow-1998"],
+)
+
 MTEB_FRA = Benchmark(
     name="MTEB(fra)",
-    tasks=get_tasks(
-        languages=["fra"],
-        tasks=[
-            # Classification
-            "AmazonReviewsClassification",
-            "MasakhaNEWSClassification",
-            "MassiveIntentClassification",
-            "MassiveScenarioClassification",
-            "MTOPDomainClassification",
-            "MTOPIntentClassification",
-            # Clustering
-            "AlloProfClusteringP2P",
-            "AlloProfClusteringS2S",
-            "HALClusteringS2S",
-            "MasakhaNEWSClusteringP2P",
-            "MasakhaNEWSClusteringS2S",
-            "MLSUMClusteringP2P",
-            "MLSUMClusteringS2S",
-            # Pair Classification
-            "OpusparcusPC",
-            "PawsXPairClassification",
-            # Reranking
-            "AlloprofReranking",
-            "SyntecReranking",
-            # Retrieval
-            "AlloprofRetrieval",
-            "BSARDRetrieval",
-            "MintakaRetrieval",
-            "SyntecRetrieval",
-            "XPQARetrieval",
-            # STS
-            "SICKFr",
-            "STS22",
-            "STSBenchmarkMultilingualSTS",
-            "SummEvalFr",
-        ],
+    tasks=MTEBTasks(
+        get_tasks(
+            languages=["fra"],
+            tasks=[
+                # Classification
+                "AmazonReviewsClassification",
+                "MasakhaNEWSClassification",
+                "MassiveIntentClassification",
+                "MassiveScenarioClassification",
+                "MTOPDomainClassification",
+                "MTOPIntentClassification",
+                # Clustering
+                "AlloProfClusteringP2P",
+                "AlloProfClusteringS2S",
+                "HALClusteringS2S",
+                "MasakhaNEWSClusteringP2P",
+                "MasakhaNEWSClusteringS2S",
+                "MLSUMClusteringP2P",
+                "MLSUMClusteringS2S",
+                # Pair Classification
+                "OpusparcusPC",
+                "PawsXPairClassification",
+                # Reranking
+                "AlloprofReranking",
+                "SyntecReranking",
+                # Retrieval
+                "AlloprofRetrieval",
+                "BSARDRetrieval",
+                "MintakaRetrieval",
+                "SyntecRetrieval",
+                "XPQARetrieval",
+                # STS
+                "SICKFr",
+                "STSBenchmarkMultilingualSTS",
+                "SummEvalFr",
+            ],
+        )
+        + (get_task("STS22", eval_splits=["test"], hf_subsets=["fr"]),)
     ),
-    description="Main French benchmarks from MTEB",
+    description="MTEB-French, a French expansion of the original benchmark with high-quality native French datasets.",
     reference="https://arxiv.org/abs/2405.20468",
     citation="""@misc{ciancone2024mtebfrenchresourcesfrenchsentence,
       title={MTEB-French: Resources for French Sentence Embedding Evaluation and Analysis}, 
@@ -404,6 +558,7 @@ MTEB_FRA = Benchmark(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2405.20468}, 
 }""",
+    contacts=["imenelydiaker"],
 )
 
 
@@ -411,6 +566,7 @@ MTEB_DEU = Benchmark(
     name="MTEB(deu)",
     tasks=get_tasks(
         languages=["deu"],
+        exclusive_language_filter=True,
         tasks=[
             # Classification
             "AmazonCounterfactualClassification",
@@ -439,7 +595,7 @@ MTEB_DEU = Benchmark(
             "STS22",
         ],
     ),
-    description="Main German benchmarks from MTEB",
+    description="A benchmark for text-embedding performance in German.",
     reference="https://arxiv.org/html/2401.02709v1",
     citation="""@misc{wehrli2024germantextembeddingclustering,
       title={German Text Embedding Clustering Benchmark}, 
@@ -450,6 +606,7 @@ MTEB_DEU = Benchmark(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2401.02709}, 
 }""",
+    contacts=["slvnwhrl"],
 )
 
 
@@ -470,7 +627,7 @@ MTEB_KOR = Benchmark(
             "KorSTS",
         ],
     ),
-    description="Main Korean benchmarks from MTEB",
+    description="A benchmark and leaderboard for evaluation of text embedding in Korean.",
     reference=None,
     citation=None,
 )
@@ -478,34 +635,40 @@ MTEB_KOR = Benchmark(
 
 MTEB_POL = Benchmark(
     name="MTEB(pol)",
-    tasks=get_tasks(
-        languages=["pol"],
-        tasks=[
-            # Classification
-            "AllegroReviews",
-            "CBD",
-            "MassiveIntentClassification",
-            "MassiveScenarioClassification",
-            "PolEmo2.0-IN",
-            "PolEmo2.0-OUT",
-            "PAC",
-            # Clustering
-            "EightTagsClustering",
-            "PlscClusteringS2S",
-            "PlscClusteringP2P",
-            # Pair Classification
-            "CDSC-E",
-            "PpcPC",
-            "PSC",
-            "SICK-E-PL",
-            # STS
-            "CDSC-R",
-            "STS22",
-            "STSBenchmarkMultilingualSTS",
-            "SICK-R-PL",
-        ],
+    tasks=MTEBTasks(
+        get_tasks(
+            languages=["pol"],
+            tasks=[
+                # Classification
+                "AllegroReviews",
+                "CBD",
+                "MassiveIntentClassification",
+                "MassiveScenarioClassification",
+                "PolEmo2.0-IN",
+                "PolEmo2.0-OUT",
+                "PAC",
+                # Clustering
+                "EightTagsClustering",
+                "PlscClusteringS2S",
+                "PlscClusteringP2P",
+                # Pair Classification
+                "CDSC-E",
+                "PpcPC",
+                "PSC",
+                "SICK-E-PL",
+                # STS
+                "CDSC-R",
+                "STSBenchmarkMultilingualSTS",
+                "SICK-R-PL",
+            ],
+        )
+        + (get_task("STS22", eval_splits=["test"], hf_subsets=["pl"]),),
     ),
-    description="Main Polish benchmarks from MTEB",
+    description="""Polish Massive Text Embedding Benchmark (PL-MTEB), a comprehensive benchmark for text embeddings in Polish. The PL-MTEB consists of 28 diverse NLP
+tasks from 5 task types. With tasks adapted based on previously used datasets by the Polish
+NLP community. In addition, a new PLSC (Polish Library of Science Corpus) dataset was created
+consisting of titles and abstracts of scientific publications in Polish, which was used as the basis for
+two novel clustering tasks.""",  # Rephrased from the abstract
     reference="https://arxiv.org/abs/2405.10138",
     citation="""@article{poswiata2024plmteb,
     title={PL-MTEB: Polish Massive Text Embedding Benchmark},
@@ -513,6 +676,7 @@ MTEB_POL = Benchmark(
     journal={arXiv preprint arXiv:2405.10138},
     year={2024}
 }""",
+    contacts=["rafalposwiata"],
 )
 
 MTEB_code = Benchmark(
@@ -549,7 +713,7 @@ MTEB_code = Benchmark(
             "typescript",
         ],
     ),
-    description="Main code benchmarks from MTEB",
+    description="A massive code embedding benchmark covering retrieval tasks in a miriad of popular programming languages.",
     reference=None,
     citation=None,
 )
@@ -693,9 +857,10 @@ MTEB_multilingual = Benchmark(
             "MIRACLRetrievalHardNegatives",
         ],
     ),
-    description="The Multilingual benchmarks from MMTEB. Currently under development.",
+    description="A large-scale multilingual expansion of MTEB, driven mainly by highly-curated community contributions covering 250+ languages.",
     reference=None,
     citation=None,
+    contacts=["KennethEnevoldsen", "isaac-chung"],
 )
 
 MTEB_JPN = Benchmark(
@@ -727,14 +892,47 @@ MTEB_JPN = Benchmark(
             "ESCIReranking",
         ],
     ),
-    description="Main Japanese benchmarks from MTEB",
+    description="JMTEB is a benchmark for evaluating Japanese text embedding models.",
     reference="https://github.com/sbintuitions/JMTEB",
     citation=None,
 )
 
 
+indic_languages = [
+    "asm",
+    "awa",
+    "ben",
+    "bgc",
+    "bho",
+    "doi",
+    "gbm",
+    "gom",
+    "guj",
+    "hin",
+    "hne",
+    "kan",
+    "kas",
+    "mai",
+    "mal",
+    "mar",
+    "mni",
+    "mup",
+    "mwr",
+    "nep",
+    "npi",
+    "ori",
+    "ory",
+    "pan",
+    "raj",
+    "san",
+    "snd",
+    "tam",
+    "tel",
+    "urd",
+]
+
 MTEB_INDIC = Benchmark(
-    name="MTEB(indic)",
+    name="MTEB(Indic)",
     tasks=get_tasks(
         tasks=[
             # Bitext
@@ -768,12 +966,58 @@ MTEB_INDIC = Benchmark(
             # reranking
             "WikipediaRerankingMultilingual",
         ],
+        languages=indic_languages,
+        exclusive_language_filter=True,
     ),
-    description="Main Indic benchmark from MMTEB",
+    description="A regional geopolitical text embedding benchmark targetting embedding performance on Indic languages.",
     reference=None,
     citation=None,
+    contacts=["KennethEnevoldsen", "isaac-chung"],
 )
 
+
+eu_languages = [
+    # official EU languages (56) - we could include the whole economic area e.g. Norway - additioanlly we could include minority languages (probably a good idea?)
+    # germanic
+    "dan",
+    "eng",
+    "deu",
+    "nld",
+    "swe",
+    # romance
+    "fra",
+    "ita",
+    "por",
+    "spa",
+    "ron",
+    # slavic
+    "bul",
+    "hrv",
+    "ces",
+    "pol",
+    "slk",
+    "slv",
+    # baltic
+    "lav",
+    "lit",
+    "est",
+    # finno-ugric
+    "fin",
+    "hun",
+    # other indo european
+    "ell",
+    # non-indo european
+    "mlt",
+    "gle",
+    # Schengen Area
+    "nno",
+    "nob",
+    "isl",
+    "ron",
+    "eus",  # Basque - recognized minority language
+    "ron",  # Romanian - recognized minority language
+    "rom",  # Romani - recognized minority language
+]
 
 MTEB_EU = Benchmark(
     name="MTEB(Europe)",
@@ -853,9 +1097,138 @@ MTEB_EU = Benchmark(
             "STS17",
             "SICK-R-PL",
             "STSES",
-        ]
+        ],
+        languages=eu_languages,
+        exclusive_language_filter=True,
     ),
-    description="Main European benchmark from MMTEB",
+    description="A regional geopolitical text embedding benchmark targetting embedding performance on European languages.",
     reference=None,
     citation=None,
+    contacts=["KennethEnevoldsen", "isaac-chung"],
+)
+
+LONG_EMBED = Benchmark(
+    name="LongEmbed",
+    tasks=get_tasks(
+        tasks=[
+            "LEMBNarrativeQARetrieval",
+            "LEMBNeedleRetrieval",
+            "LEMBPasskeyRetrieval",
+            "LEMBQMSumRetrieval",
+            "LEMBSummScreenFDRetrieval",
+            "LEMBWikimQARetrieval",
+        ],
+    ),
+    description="""LongEmbed is a benchmark oriented at exploring models' performance on long-context retrieval.
+    The benchmark comprises two synthetic tasks and four carefully chosen real-world tasks,
+    featuring documents of varying length and dispersed target information.
+    """,  # Pieced together from paper abstract.
+    reference="https://arxiv.org/abs/2404.12096v2",
+    citation="""@article{zhu2024longembed,
+  title={LongEmbed: Extending Embedding Models for Long Context Retrieval},
+  author={Zhu, Dawei and Wang, Liang and Yang, Nan and Song, Yifan and Wu, Wenhao and Wei, Furu and Li, Sujian},
+  journal={arXiv preprint arXiv:2404.12096},
+  year={2024}
+}""",
+)
+
+BRIGHT = Benchmark(
+    name="BRIGHT",
+    tasks=get_tasks(
+        tasks=["BrightRetrieval"],
+    ),
+    description="""BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
+    BRIGHT is the first text retrieval
+    benchmark that requires intensive reasoning to retrieve relevant documents with
+    a dataset consisting of 1,384 real-world queries spanning diverse domains, such as
+    economics, psychology, mathematics, and coding. These queries are drawn from
+    naturally occurring and carefully curated human data.
+    """,
+    reference="https://brightbenchmark.github.io/",
+    citation="""@article{su2024bright,
+  title={Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
+  author={Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
+  journal={arXiv preprint arXiv:2407.12883},
+  year={2024}
+}""",
+)
+
+NANOBEIR = Benchmark(
+    name="NanoBEIR",
+    tasks=get_tasks(
+        tasks=[
+            "NanoArguAnaRetrieval",
+            "NanoClimateFeverRetrieval",
+            "NanoDBPediaRetrieval",
+            "NanoFEVERRetrieval",
+            "NanoFiQA2018Retrieval",
+            "NanoHotpotQARetrieval",
+            "NanoMSMARCORetrieval",
+            "NanoNFCorpusRetrieval",
+            "NanoNQRetrieval",
+            "NanoQuoraRetrieval",
+            "NanoSCIDOCSRetrieval",
+            "NanoSciFactRetrieval",
+            "NanoTouche2020Retrieval",
+        ],
+    ),
+    description="A benchmark to evaluate with subsets of BEIR datasets to use less computational power",
+    reference="https://huggingface.co/collections/zeta-alpha-ai/nanobeir-66e1a0af21dfd93e620cd9f6",
+    citation=None,
+)
+
+C_MTEB = Benchmark(
+    name="MTEB(Chinese)",
+    tasks=MTEBTasks(
+        get_tasks(
+            tasks=[
+                "T2Retrieval",
+                "MMarcoRetrieval",
+                "DuRetrieval",
+                "CovidRetrieval",
+                "CmedqaRetrieval",
+                "EcomRetrieval",
+                "MedicalRetrieval",
+                "VideoRetrieval",
+                "T2Reranking",
+                "MMarcoReranking",
+                "CMedQAv1-reranking",
+                "CMedQAv2-reranking",
+                "Ocnli",
+                "Cmnli",
+                "CLSClusteringS2S",
+                "CLSClusteringP2P",
+                "ThuNewsClusteringS2S",
+                "ThuNewsClusteringP2P",
+                "LCQMC",
+                "PAWSX",
+                "AFQMC",
+                "QBQTC",
+                "TNews",
+                "IFlyTek",
+                "Waimai",
+                "OnlineShopping",
+                "JDReview",
+            ],
+        )
+        + get_tasks(tasks=["MultilingualSentiment"], eval_splits=["test"])
+        + get_tasks(
+            tasks=[
+                "ATEC",
+                "BQ",
+                "STSB",
+            ],
+            eval_splits=["validation"],
+        )
+    ),
+    description="The Chinese Massive Text Embedding Benchmark (C-MTEB) is a comprehensive benchmark for Chinese text embeddings covering 6 tasks and 35 datasets.",
+    reference="https://github.com/FlagOpen/FlagEmbedding/tree/master/research/C_MTEB",
+    citation="""@misc{c-pack,
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, 
+      author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff},
+      year={2023},
+      eprint={2309.07597},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
 )

@@ -39,10 +39,6 @@ class JSICK(AbsTaskSTS):
             publisher={MIT Press One Broadway, 12th Floor, Cambridge, Massachusetts 02142, USA~…}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 1986},
-            "avg_character_length": {"test": 21.47},
-        },
     )
 
     @property

@@ -140,10 +140,21 @@ align_base = ModelMeta(
     ),
     name="kakaobrain/align-base",
     languages=["eng_Latn"],
-    open_source=True,
     revision="e96a37facc7b1f59090ece82293226b817afd6ba",
     release_date="2023-02-24",
     modalities=["image", "text"],
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    open_weights=None,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
 )
 
 if __name__ == "__main__":

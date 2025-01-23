@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import pytest
 
-from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.tasks.Retrieval.eng.NFCorpusRetrieval import NFCorpus
+
+if TYPE_CHECKING:
+    from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
 @pytest.mark.parametrize("task", [NFCorpus()])

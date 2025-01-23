@@ -25,15 +25,13 @@ class Encoder(Protocol):
     In general the interface is kept aligned with sentence-transformers interface. In cases where exceptions occurs these are handled within MTEB.
     """
 
-    device: str | None
-
     def __init__(self, device: str | None = None) -> None:
         """The initialization function for the encoder. Used when calling it from the mteb run CLI.
 
         Args:
             device: The device to use for encoding. Can be ignored if the encoder is not using a device (e.g. for API)
         """
-        pass
+        self.device = device
 
     def encode(
         self,

@@ -9,7 +9,6 @@ import tqdm
 from sklearn.metrics import average_precision_score
 
 from mteb.evaluation.evaluators.RetrievalEvaluator import RetrievalEvaluator
-from mteb.normalize_embeddings import normalize_embeddings_to_numpy
 
 from ...encoder_interface import Encoder, PromptType
 from .Evaluator import Evaluator
@@ -35,7 +34,6 @@ class RerankingEvaluator(Evaluator):
         task_name: str | None = None,
         mrr_at_k: int = 10,
         name: str = "",
-        similarity_fct=cos_sim,
         encode_kwargs: dict[str, Any] = {},
         use_batched_encoding: bool = True,
         limit: int | None = None,
@@ -49,7 +47,6 @@ class RerankingEvaluator(Evaluator):
         self.samples = samples
         self.name = name
         self.mrr_at_k = mrr_at_k
-        self.similarity_fct = similarity_fct
         self.use_batched_encoding = use_batched_encoding
         self.task_name = task_name
         self.k_values = k_values
@@ -86,7 +83,7 @@ class RerankingEvaluator(Evaluator):
         """
         logger.info("Encoding queries...")
         if isinstance(self.samples[0]["query"], str):
-            all_query_embs = normalize_embeddings_to_numpy(
+            all_query_embs = np.asarray(
                 model.encode(
                     [sample["query"] for sample in self.samples],
                     task_name=self.task_name,
@@ -212,6 +209,7 @@ class RerankingEvaluator(Evaluator):
                 all_mrr_scores,
                 all_ap_scores,
                 all_conf_scores,
+                model,
             )
 
     def _encode_candidates_individual(
@@ -258,6 +256,7 @@ class RerankingEvaluator(Evaluator):
                 all_mrr_scores,
                 all_ap_scores,
                 all_conf_scores,
+                model,
             )
 
     def _collect_results(self, all_mrr_scores, all_ap_scores, all_conf_scores):
@@ -317,7 +316,7 @@ class RerankingEvaluator(Evaluator):
             docs_idx += num_doc
 
             fake_qid = str(query_idx)
-            results[fake_qid] = self.rerank(query_emb, docs_emb)
+            results[fake_qid] = self.rerank(query_emb, docs_emb, model)
             qrels[fake_qid] = {
                 str(i): 1 if doc in positive else 0 for i, doc in enumerate(docs)
             }
@@ -352,7 +351,7 @@ class RerankingEvaluator(Evaluator):
                 )
 
             fake_qid = str(i)
-            results[fake_qid] = self.rerank(query_emb, docs_emb)
+            results[fake_qid] = self.rerank(query_emb, docs_emb, model)
             qrels[fake_qid] = {
                 str(i): 1 if doc in positive else 0 for i, doc in enumerate(docs)
             }
@@ -372,7 +371,7 @@ class RerankingEvaluator(Evaluator):
         return scores_miracl
 
     def rerank(
-        self, query_emb: torch.Tensor, docs_emb: torch.Tensor
+        self, query_emb: np.ndarray, docs_emb: np.ndarray, model: Encoder
     ) -> dict[str, float]:
         """Rerank documents (docs_emb) given the query (query_emb)
 
@@ -380,6 +379,7 @@ class RerankingEvaluator(Evaluator):
             query_emb: Query embedding of shape `(num_queries, hidden_size)`)
                 if `num_queries` > 0: we take the closest document to any of the queries
             docs_emb: Candidates documents embeddings of shape `(num_pos+num_neg, hidden_size)`)
+            model: Model to use for computing similarity scores if model.similarity is available
 
         Returns:
             similarity_scores:
@@ -390,7 +390,10 @@ class RerankingEvaluator(Evaluator):
         if not docs_emb.shape[0]:
             return {"empty-docid": 0}
 
-        pred_scores = self.similarity_fct(query_emb, docs_emb)
+        if hasattr(model, "similarity"):
+            pred_scores = model.similarity(query_emb, docs_emb)
+        else:
+            pred_scores = cos_sim(query_emb, docs_emb)
         if len(pred_scores.shape) > 1:
             pred_scores = torch.amax(pred_scores, dim=0)
 
@@ -406,8 +409,9 @@ class RerankingEvaluator(Evaluator):
         all_mrr_scores,
         all_ap_scores,
         all_conf_scores,
+        model: Encoder,
     ):
-        sim_scores = self._compute_sim_scores_instance(query_emb, docs_emb)
+        sim_scores = self._compute_sim_scores_instance(query_emb, docs_emb, model)
         scores = self._compute_metrics_instance(sim_scores, is_relevant)
         conf_scores = self.conf_scores(sim_scores.tolist())
 
@@ -431,9 +435,9 @@ class RerankingEvaluator(Evaluator):
                 all_unique_texts.append(text)
             all_texts_indexes.append(index_map[text_hash])
         logger.warning(
-            f"A total on {len(all_texts) - len(all_unique_texts)}/{len(all_texts)} duplicate texts were found during encoding. Only encoding unique text and duplicating embeddings across."
+            f"A total of {len(all_texts) - len(all_unique_texts)}/{len(all_texts)} duplicate texts were found during encoding. Only encoding unique text and duplicating embeddings across."
         )
-        all_unique_texts_embs = normalize_embeddings_to_numpy(
+        all_unique_texts_embs = np.asarray(
             model.encode(
                 all_unique_texts,
                 task_name=task_name,
@@ -444,7 +448,7 @@ class RerankingEvaluator(Evaluator):
         return all_unique_texts_embs[all_texts_indexes]
 
     def _compute_sim_scores_instance(
-        self, query_emb: torch.Tensor, docs_emb: torch.Tensor
+        self, query_emb: np.ndarray, docs_emb: np.ndarray, model: Encoder
     ) -> torch.Tensor:
         """Computes similarity scores for a single instance = (query, positives, negatives)
 
@@ -452,11 +456,15 @@ class RerankingEvaluator(Evaluator):
             query_emb: Query embedding, with shape `(num_queries, hidden_size)`
                 if `num_queries` > 0: we take the closest document to any of the queries
             docs_emb: Candidates documents embeddings, with shape `(num_pos+num_neg, hidden_size)`
+            model: Model to use for computing similarity scores if model.similarity is available
 
         Returns:
             sim_scores: Query-documents similarity scores, with shape `(num_pos+num_neg,)`
         """
-        sim_scores = self.similarity_fct(query_emb, docs_emb)
+        if hasattr(model, "similarity"):
+            sim_scores = model.similarity(query_emb, docs_emb)
+        else:
+            sim_scores = cos_sim(query_emb, docs_emb)
         if len(sim_scores.shape) > 1:
             sim_scores = torch.amax(sim_scores, dim=0)
 

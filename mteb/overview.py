@@ -57,7 +57,7 @@ def check_is_valid_language(lang: str) -> None:
         )
 
 
-def filter_superseeded_datasets(tasks: list[AbsTask]) -> list[AbsTask]:
+def filter_superseded_datasets(tasks: list[AbsTask]) -> list[AbsTask]:
     return [t for t in tasks if t.superseded_by is None]
 
 
@@ -230,8 +230,9 @@ def get_tasks(
     task_types: list[TASK_TYPE] | None = None,
     categories: list[TASK_CATEGORY] | None = None,
     tasks: list[str] | None = None,
-    exclude_superseeded: bool = True,
+    exclude_superseded: bool = True,
     eval_splits: list[str] | None = None,
+    exclusive_language_filter: bool = False,
 ) -> MTEBTasks:
     """Get a list of tasks based on the specified filters.
 
@@ -245,8 +246,11 @@ def get_tasks(
         categories: A list of task categories these include "s2s" (sentence to sentence), "s2p" (sentence to paragraph) and "p2p" (paragraph to
             paragraph).
         tasks: A list of task names to include. If None, all tasks which pass the filters are included.
-        exclude_superseeded: A boolean flag to exclude datasets which are superseeded by another.
+        exclude_superseded: A boolean flag to exclude datasets which are superseded by another.
         eval_splits: A list of evaluation splits to include. If None, all splits are included.
+        exclusive_language_filter: Some datasets contains more than one language e.g. for STS22 the subset "de-en" contain eng and deu. If
+            exclusive_language_filter is set to False both of these will be kept, but if set to True only those that contains all the languages
+            specified will be kept.
 
     Returns:
         A list of all initialized tasks objects which pass all of the filters (AND operation).
@@ -254,12 +258,20 @@ def get_tasks(
     Examples:
         >>> get_tasks(languages=["eng", "deu"], script=["Latn"], domains=["Legal"])
         >>> get_tasks(languages=["eng"], script=["Latn"], task_types=["Classification"])
-        >>> get_tasks(languages=["eng"], script=["Latn"], task_types=["Clustering"], exclude_superseeded=False)
+        >>> get_tasks(languages=["eng"], script=["Latn"], task_types=["Clustering"], exclude_superseded=False)
         >>> get_tasks(languages=["eng"], tasks=["WikipediaRetrievalMultilingual"], eval_splits=["test"])
+        >>> get_tasks(tasks=["STS22"], languages=["eng"], exclusive_language_filter=True) # don't include multilingual subsets containing English
     """
     if tasks:
         _tasks = [
-            get_task(task, languages, script, eval_splits=eval_splits) for task in tasks
+            get_task(
+                task,
+                languages,
+                script,
+                eval_splits=eval_splits,
+                exclusive_language_filter=exclusive_language_filter,
+            )
+            for task in tasks
         ]
         return MTEBTasks(_tasks)
 
@@ -278,8 +290,8 @@ def get_tasks(
         _tasks = filter_tasks_by_task_types(_tasks, task_types)
     if categories:
         _tasks = filter_task_by_categories(_tasks, categories)
-    if exclude_superseeded:
-        _tasks = filter_superseeded_datasets(_tasks)
+    if exclude_superseded:
+        _tasks = filter_superseded_datasets(_tasks)
 
     return MTEBTasks(_tasks)
 
@@ -289,6 +301,8 @@ def get_task(
     languages: list[str] | None = None,
     script: list[str] | None = None,
     eval_splits: list[str] | None = None,
+    hf_subsets: list[str] | None = None,
+    exclusive_language_filter: bool = False,
 ) -> AbsTask:
     """Get a task by name.
 
@@ -298,6 +312,10 @@ def get_task(
             "eng-Latn". For multilingual tasks this will also remove languages that are not in the specified list.
         script: A list of script codes (ISO 15924 codes). If None, all scripts are included. For multilingual tasks this will also remove scripts
         eval_splits: A list of evaluation splits to include. If None, all splits are included.
+        hf_subsets: A list of Huggingface subsets to evaluate on.
+        exclusive_language_filter: Some datasets contains more than one language e.g. for STS22 the subset "de-en" contain eng and deu. If
+            exclusive_language_filter is set to False both of these will be kept, but if set to True only those that contains all the languages
+            specified will be kept.
 
     Returns:
         An initialized task object.
@@ -319,4 +337,9 @@ def get_task(
     task = TASKS_REGISTRY[task_name]()
     if eval_splits:
         task.filter_eval_splits(eval_splits=eval_splits)
-    return task.filter_languages(languages, script)
+    return task.filter_languages(
+        languages,
+        script,
+        hf_subsets=hf_subsets,
+        exclusive_language_filter=exclusive_language_filter,
+    )

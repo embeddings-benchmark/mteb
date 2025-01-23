@@ -1,60 +1,35 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
 from functools import partial
-from typing import Any
 
-import numpy as np
 import torch
 
 from mteb.model_meta import ModelMeta
 
-from ..encoder_interface import PromptType
-from .e5_models import E5_PAPER_RELEASE_DATE, XLMR_LANGUAGES
-from .instructions import task_to_instruction
-from .wrapper import Wrapper
+from .e5_models import E5_PAPER_RELEASE_DATE, E5_TRAINING_DATA, XLMR_LANGUAGES
+from .instruct_wrapper import instruct_wrapper
 
 MISTRAL_LANGUAGES = ["eng_Latn", "fra_Latn", "deu_Latn", "ita_Latn", "spa_Latn"]
 
 
-def e5_instruction(instruction: str) -> str:
-    return f"Instruct: {instruction}\nQuery: "
+E5_INSTRUCTION = "Instruct: {instruction}\nQuery: "
 
 
-def e5_loader(**kwargs):
-    try:
-        from gritlm import GritLM
-    except ImportError:
-        raise ImportError(
-            "Please install `pip install gritlm` to use E5 Instruct models."
-        )
-
-    class E5InstructWrapper(GritLM, Wrapper):
-        def encode(
-            self,
-            sentences: Sequence[str],
-            *args,
-            task_name: str,
-            prompt_type: PromptType | None = None,
-            **kwargs: Any,
-        ) -> np.ndarray:
-            if "instruction" in kwargs:
-                instruction = kwargs.pop("instruction", "")
-            else:
-                instruction = task_to_instruction(
-                    task_name, prompt_type == PromptType.query
-                )
-            if instruction:
-                kwargs["instruction"] = e5_instruction(instruction)
-            return super().encode(sentences, *args, **kwargs)
-
-    return E5InstructWrapper(**kwargs)
-
+E5_MISTRAL_TRAINING_DATA = {
+    **E5_TRAINING_DATA,
+    "FEVER": ["train"],
+    "FEVERHardNegatives": ["train"],
+    "FEVER-PL": ["train"],  # translation not trained on
+    "HotpotQA": ["train"],
+    "HotpotQAHardNegatives": ["train"],
+    "HotpotQA-PL": ["train"],  # translation not trained on
+}
 
 e5_instruct = ModelMeta(
-    loader=partial(
-        e5_loader,
+    loader=partial(  # type: ignore
+        instruct_wrapper,
         model_name_or_path="intfloat/multilingual-e5-large-instruct",
+        instruction_template=E5_INSTRUCTION,
         attn="cccc",
         pooling_method="mean",
         mode="embedding",
@@ -68,19 +43,22 @@ e5_instruct = ModelMeta(
     release_date=E5_PAPER_RELEASE_DATE,
     framework=["GritLM", "PyTorch"],
     similarity_fn_name="cosine",
-    use_instuctions=True,
+    use_instructions=True,
     reference="https://huggingface.co/intfloat/multilingual-e5-large-instruct",
     n_parameters=560_000_000,
-    memory_usage=None,
     embed_dim=1024,
     license="mit",
     max_tokens=514,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=E5_TRAINING_DATA,
 )
 
 e5_mistral = ModelMeta(
-    loader=partial(
-        e5_loader,
+    loader=partial(  # type: ignore
+        instruct_wrapper,
         model_name_or_path="intfloat/e5-mistral-7b-instruct",
+        instruction_template=E5_INSTRUCTION,
         attn="cccc",
         pooling_method="lasttoken",
         mode="embedding",
@@ -96,11 +74,88 @@ e5_mistral = ModelMeta(
     release_date=E5_PAPER_RELEASE_DATE,
     framework=["GritLM", "PyTorch"],
     similarity_fn_name="cosine",
-    use_instuctions=True,
+    use_instructions=True,
     reference="https://huggingface.co/intfloat/e5-mistral-7b-instruct",
     n_parameters=7_111_000_000,
-    memory_usage=None,
     embed_dim=4096,
     license="mit",
     max_tokens=32768,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=E5_TRAINING_DATA,
+)
+
+zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
+    loader=partial(  # type: ignore
+        instruct_wrapper,
+        model_name_or_path="zeta-alpha-ai/Zeta-Alpha-E5-Mistral",
+        instruction_template=E5_INSTRUCTION,
+        attn="cccc",
+        pooling_method="lasttoken",
+        mode="embedding",
+        torch_dtype=torch.bfloat16,
+        # The ST script does not normalize while the HF one does so unclear what to do
+        # https://huggingface.co/intfloat/e5-mistral-7b-instruct#transformers
+        normalized=True,
+    ),
+    name="zeta-alpha-ai/Zeta-Alpha-E5-Mistral",
+    revision="c791d37474fa6a5c72eb3a2522be346bc21fbfc3",
+    release_date="2024-08-30",
+    languages=["eng_Latn"],
+    n_parameters=7110660096,
+    max_tokens=32768.0,
+    embed_dim=4096,
+    license="mit",
+    open_weights=True,
+    public_training_data=None,
+    public_training_code=None,
+    framework=["PyTorch"],
+    reference="https://huggingface.co/zeta-alpha-ai/Zeta-Alpha-E5-Mistral",
+    similarity_fn_name="cosine",
+    use_instructions=True,
+    training_datasets={
+        # copied from e5
+        # source: https://arxiv.org/pdf/2212.03533
+        "NQ": ["test"],
+        "NQHardNegatives": ["test"],
+        "MSMARCO": ["train"],  # dev?
+        # source: https://www.zeta-alpha.com/post/fine-tuning-an-llm-for-state-of-the-art-retrieval-zeta-alpha-s-top-10-submission-to-the-the-mteb-be
+        # "Arguana",
+        # "FEVER",
+        # "FIQA",
+        # "HotPotQA",
+        # "MsMarco (passage)",
+        # "NFCorpus",
+        # "SciFact",
+        # "NLI",
+        # "SQuad",
+        # "StackExchange",
+        # "TriviaQA",
+        # "SciRep",
+        # "SciRepEval"
+        # mteb
+        # https://huggingface.co/datasets/mteb/raw_arxiv
+        # "ArxivClusteringS2S": ["train"],
+        # "ArxivClusteringP2P": ["train"],
+        # https://huggingface.co/datasets/mteb/raw_biorxiv
+        # "BiorxivClusteringS2S": ["train"],
+        # "BiorxivClusteringP2P": ["train"],
+        # https://huggingface.co/datasets/mteb/raw_medrxiv
+        # "MedrxivClusteringS2S": ["train"],
+        # "MedrxivClusteringP2P": ["train"],
+        # as their train datasets
+        "AmazonCounterfactualClassification": ["train"],
+        "AmazonReviewsClassification": ["train"],
+        "Banking77Classification": ["train"],
+        "EmotionClassification": ["train"],
+        "MTOPIntentClassification": ["train"],
+        "ToxicConversationsClassification": ["train"],
+        "TweetSentimentExtractionClassification": ["train"],
+        "ImdbClassification": ["train"],
+        "STS12": ["train"],
+        "STS22": ["train"],
+        "STSBenchmark": ["train"],
+    },
+    adapted_from="intfloat/e5-mistral-7b-instruct",
+    superseded_by=None,
 )

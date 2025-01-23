@@ -42,18 +42,6 @@ class SlovakSumRetrieval(AbsTaskRetrieval):
                 date = {2024},
             }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 600},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 2156.445,
-                    "average_query_length": 143.59833333333333,
-                    "num_documents": 600,
-                    "num_queries": 600,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -61,7 +49,7 @@ class SlovakSumRetrieval(AbsTaskRetrieval):
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
         dataset_path = self.metadata_dict["dataset"]["path"]
-        n_sample = self.metadata_dict["descriptive_stats"]["n_samples"]["test"]
+        n_sample = 600
 
         for split in kwargs.get("eval_splits", self.metadata_dict["eval_splits"]):
             split_ds = datasets.load_dataset(

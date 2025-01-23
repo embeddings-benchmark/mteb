@@ -1,0 +1,146 @@
+{
+    "test": {
+        "num_samples": 2048,
+        "number_of_characters": 224352,
+        "num_texts_in_train": 31,
+        "min_text_length": 14,
+        "average_text_length": 109.546875,
+        "max_text_length": 1270,
+        "unique_text": 2025,
+        "unique_labels": 20,
+        "labels": {
+            "17": {
+                "count": 102
+            },
+            "0": {
+                "count": 102
+            },
+            "11": {
+                "count": 102
+            },
+            "4": {
+                "count": 103
+            },
+            "3": {
+                "count": 102
+            },
+            "1": {
+                "count": 102
+            },
+            "10": {
+                "count": 102
+            },
+            "2": {
+                "count": 103
+            },
+            "16": {
+                "count": 103
+            },
+            "9": {
+                "count": 103
+            },
+            "5": {
+                "count": 102
+            },
+            "7": {
+                "count": 102
+            },
+            "13": {
+                "count": 102
+            },
+            "14": {
+                "count": 103
+            },
+            "12": {
+                "count": 102
+            },
+            "15": {
+                "count": 103
+            },
+            "19": {
+                "count": 102
+            },
+            "18": {
+                "count": 102
+            },
+            "6": {
+                "count": 103
+            },
+            "8": {
+                "count": 103
+            }
+        }
+    },
+    "train": {
+        "num_samples": 70000,
+        "number_of_characters": 7760299,
+        "num_texts_in_train": null,
+        "min_text_length": 2,
+        "average_text_length": 110.86141428571429,
+        "max_text_length": 2422,
+        "unique_text": 68978,
+        "unique_labels": 20,
+        "labels": {
+            "12": {
+                "count": 3500
+            },
+            "1": {
+                "count": 3500
+            },
+            "19": {
+                "count": 3500
+            },
+            "15": {
+                "count": 3500
+            },
+            "13": {
+                "count": 3500
+            },
+            "11": {
+                "count": 3500
+            },
+            "17": {
+                "count": 3500
+            },
+            "14": {
+                "count": 3500
+            },
+            "16": {
+                "count": 3500
+            },
+            "5": {
+                "count": 3500
+            },
+            "0": {
+                "count": 3500
+            },
+            "8": {
+                "count": 3500
+            },
+            "7": {
+                "count": 3500
+            },
+            "2": {
+                "count": 3500
+            },
+            "3": {
+                "count": 3500
+            },
+            "10": {
+                "count": 3500
+            },
+            "6": {
+                "count": 3500
+            },
+            "18": {
+                "count": 3500
+            },
+            "4": {
+                "count": 3500
+            },
+            "9": {
+                "count": 3500
+            }
+        }
+    }
+}

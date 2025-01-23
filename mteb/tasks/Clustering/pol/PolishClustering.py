@@ -69,10 +69,6 @@ class EightTagsClustering(AbsTaskClustering):
             language = "English",
             ISBN = "979-10-95546-34-4",
         }""",
-        descriptive_stats={
-            "n_samples": {"test": 49373},
-            "avg_character_length": {"test": 78.23},
-        },
     )
 
 
@@ -132,10 +128,6 @@ class EightTagsClusteringFast(AbsTaskClusteringFast):
             language = "English",
             ISBN = "979-10-95546-34-4",
         }""",
-        descriptive_stats={
-            "n_samples": {"test": N_SAMPLES},
-            "avg_character_length": {"test": 78.73},
-        },
     )
 
     def dataset_transform(self):
@@ -181,10 +173,6 @@ class PlscClusteringS2S(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-        descriptive_stats={
-            "n_samples": {"test": 17534},
-            "avg_character_length": {"test": 84.34},
-        },
     )
 
 
@@ -212,10 +200,6 @@ class PlscClusteringS2SFast(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-        descriptive_stats={
-            "n_samples": {"test": N_SAMPLES},
-            "avg_character_length": {"test": 84.34},
-        },
     )
 
     def dataset_transform(self):
@@ -270,10 +254,6 @@ class PlscClusteringP2P(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-        descriptive_stats={
-            "n_samples": {"test": 17537},
-            "avg_character_length": {"test": 1023.21},
-        },
     )
 
 
@@ -301,10 +281,6 @@ class PlscClusteringP2PFast(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-        descriptive_stats={
-            "n_samples": {"test": N_SAMPLES},
-            "avg_character_length": {"test": 1023.21},
-        },
     )
 
     def dataset_transform(self):

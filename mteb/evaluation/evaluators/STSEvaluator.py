@@ -12,7 +12,6 @@ from sklearn.metrics.pairwise import (
 )
 
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
-from mteb.normalize_embeddings import normalize_embeddings_to_numpy
 
 from .Evaluator import Evaluator
 
@@ -45,19 +44,15 @@ class STSEvaluator(Evaluator):
         *,
         encode_kwargs: dict[str, Any] = {},
     ):
-        embeddings1 = normalize_embeddings_to_numpy(
-            model.encode(
-                self.sentences1,
-                task_name=self.task_name,
-                **encode_kwargs,
-            )
+        embeddings1 = model.encode(
+            self.sentences1,
+            task_name=self.task_name,
+            **encode_kwargs,
         )
-        embeddings2 = normalize_embeddings_to_numpy(
-            model.encode(
-                self.sentences2,
-                task_name=self.task_name,
-                **encode_kwargs,
-            )
+        embeddings2 = model.encode(
+            self.sentences2,
+            task_name=self.task_name,
+            **encode_kwargs,
         )
 
         logger.info("Evaluating...")

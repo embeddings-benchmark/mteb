@@ -34,7 +34,7 @@ class MockTorchEncoder(mteb.Encoder):
         return torch.randn(len(sentences), 10).numpy()
 
 
-class MockTorchbf16Encoder(mteb.Encoder):
+class MockTorchbf16Encoder(SentenceTransformer):
     def __init__(self):
         pass
 

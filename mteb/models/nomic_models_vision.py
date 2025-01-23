@@ -168,10 +168,21 @@ nomic_embed_vision_v1_5 = ModelMeta(
     ),
     name="nomic-ai/nomic-embed-vision-v1.5",
     languages=["eng_Latn"],
-    open_source=True,
     revision="af2246fffdab78d8458418480e4886a8e48b70a7",
     release_date="2024-06-08",
     modalities=["image", "text"],
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    open_weights=None,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
 )
 
 if __name__ == "__main__":
