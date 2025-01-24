@@ -80,6 +80,7 @@ class ModelMeta(BaseModel):
             a benchmark as well as mark dataset contaminations.
         adapted_from: Name of the model from which this model is adapted from. For quantizations, fine-tunes, long doc extensions, etc.
         superseded_by: Name of the model that supersedes this model, e.g. nvidia/NV-Embed-v2 supersedes v1.
+        is_cross_encoder: Whether the model is a cross-encoder or not. If None it is assumed that the model is not a cross-encoder.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -103,6 +104,7 @@ class ModelMeta(BaseModel):
     training_datasets: dict[str, list[str]] | None
     adapted_from: str | None = None
     superseded_by: str | None = None
+    is_cross_encoder: bool | None = None
 
     def to_dict(self):
         dict_repr = self.model_dump()

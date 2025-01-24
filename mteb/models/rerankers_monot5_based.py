@@ -306,6 +306,7 @@ monot5_small = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
+    is_cross_encoder=True,
 )
 
 monot5_base = ModelMeta(
@@ -330,6 +331,7 @@ monot5_base = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
+    is_cross_encoder=True,
 )
 
 monot5_large = ModelMeta(
@@ -354,6 +356,7 @@ monot5_large = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
+    is_cross_encoder=True,
 )
 
 monot5_3b = ModelMeta(
@@ -378,6 +381,7 @@ monot5_3b = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
+    is_cross_encoder=True,
 )
 
 flant5_base = ModelMeta(
@@ -404,15 +408,16 @@ flant5_base = ModelMeta(
         "quasc": ["train"],
         "qed": ["train"],
     },
-    n_parameters=None,
+    n_parameters=248_000_000,
     max_tokens=None,
-    embed_dim=None,
-    license=None,
+    embed_dim=768,
+    license="apache-2.0",
     public_training_code=None,
     public_training_data=None,
     similarity_fn_name=None,
-    use_instructions=None,
+    use_instructions=True,
     framework=["PyTorch"],
+    is_cross_encoder=True,
 )
 
 flant5_large = ModelMeta(
@@ -439,15 +444,16 @@ flant5_large = ModelMeta(
         "quasc": ["train"],
         "qed": ["train"],
     },
-    n_parameters=None,
-    max_tokens=None,
+    n_parameters=783_000_000,
+    max_tokens=1024,
     embed_dim=None,
-    license=None,
+    license="apache-2.0",
     public_training_code=None,
     public_training_data=None,
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch"],
+    is_cross_encoder=True,
 )
 
 flant5_xl = ModelMeta(
@@ -474,15 +480,16 @@ flant5_xl = ModelMeta(
         "quasc": ["train"],
         "qed": ["train"],
     },
-    n_parameters=None,
+    n_parameters=2_850_000_000,
     max_tokens=None,
-    embed_dim=None,
-    license=None,
+    embed_dim=2048,
+    license="apache-2.0",
     public_training_code=None,
     public_training_data=None,
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch"],
+    is_cross_encoder=True,
 )
 
 flant5_xxl = ModelMeta(
@@ -509,15 +516,16 @@ flant5_xxl = ModelMeta(
         "quasc": ["train"],
         "qed": ["train"],
     },
-    n_parameters=None,
+    n_parameters=11_300_000_000,
     max_tokens=None,
-    embed_dim=None,
-    license=None,
+    embed_dim=4096,
+    license="apache-2.0",
     public_training_code=None,
     public_training_data=None,
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch"],
+    is_cross_encoder=None,
 )
 
 
@@ -533,16 +541,17 @@ llama2_7b = ModelMeta(
     open_weights=True,
     revision="01c7f73d771dfac7d292323805ebc428287df4f9",
     release_date="2023-07-18",
-    n_parameters=None,
+    n_parameters=6_740_000_000,
     max_tokens=None,
     embed_dim=None,
-    license=None,
+    license=None,  # llama2
     public_training_code=None,
     public_training_data=None,
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
+    is_cross_encoder=None,
 )
 
 llama2_7b_chat = ModelMeta(
@@ -567,6 +576,7 @@ llama2_7b_chat = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
+    is_cross_encoder=None,
 )
 
 mistral_7b = ModelMeta(
@@ -591,6 +601,7 @@ mistral_7b = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
+    is_cross_encoder=None,
 )
 
 followir_7b = ModelMeta(
@@ -606,15 +617,16 @@ followir_7b = ModelMeta(
     revision="4d25d437e38b510c01852070c0731e8f6e1875d1",
     release_date="2024-04-29",
     training_datasets={"jhu-clsp/FollowIR-train": ["train"]},
-    n_parameters=None,
+    n_parameters=7_240_000_000,
     max_tokens=None,
     embed_dim=None,
-    license=None,
+    license="apache-2.0",
     public_training_code=None,
     public_training_data=None,
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch"],
+    is_cross_encoder=True,
 )
 
 
@@ -738,12 +750,13 @@ mt5_base_mmarco_v2 = ModelMeta(
     n_parameters=None,
     max_tokens=None,
     embed_dim=None,
-    license=None,
+    license="mit",
     public_training_code=None,
     public_training_data=None,
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch"],
+    is_cross_encoder=True,
 )
 
 mt5_13b_mmarco_100k = ModelMeta(
@@ -768,4 +781,5 @@ mt5_13b_mmarco_100k = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
+    is_cross_encoder=True,
 )
