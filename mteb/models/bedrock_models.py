@@ -208,7 +208,9 @@ amazon_titan_embed_text_v2 = ModelMeta(
     framework=["API"],
     use_instructions=False,
 )
-
+# Note: For the original Cohere API implementation, refer to:
+# https://github.com/embeddings-benchmark/mteb/blob/main/mteb/models/cohere_models.py
+# This implementation uses the Amazon Bedrock endpoint for Cohere models.
 cohere_embed_english_v3 = ModelMeta(
     loader=partial(
         BedrockWrapper,
