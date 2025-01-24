@@ -6,25 +6,7 @@ from functools import partial
 
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
-from .bge_models import bge_training_data
-
-rubert_tiny2 = ModelMeta(
-    name="cointegrated/rubert-tiny2",
-    languages=["rus_Cyrl"],
-    open_weights=True,
-    revision="dad72b8f77c5eef6995dd3e4691b758ba56b90c3",
-    release_date="2021-10-28",
-    n_parameters=29_400_000,
-    embed_dim=312,
-    license="mit",
-    max_tokens=2048,
-    reference="https://huggingface.co/cointegrated/rubert-tiny2",
-    similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
-    use_instructions=False,
-    public_training_code=None,
-    training_datasets=None,
-)
+from .bge_models import bge_m3_training_data
 
 rubert_tiny = ModelMeta(
     name="cointegrated/rubert-tiny",
@@ -40,8 +22,37 @@ rubert_tiny = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
-    public_training_code=None,
-    training_datasets=None,
+    public_training_code="https://gist.github.com/avidale/7bc6350f26196918bf339c01261f5c60",
+    training_datasets={
+        # [Yandex Translate corpus](https://translate.yandex.ru/corpus), [OPUS-100](https://huggingface.co/datasets/opus100)
+        "Tatoeba": ["train"],
+    },
+    adapted_from="google-bert/bert-base-multilingual-cased",
+    public_training_data=None,
+)
+
+rubert_tiny2 = ModelMeta(
+    name="cointegrated/rubert-tiny2",
+    languages=["rus_Cyrl"],
+    open_weights=True,
+    revision="dad72b8f77c5eef6995dd3e4691b758ba56b90c3",
+    release_date="2021-10-28",
+    n_parameters=29_400_000,
+    embed_dim=312,
+    license="mit",
+    max_tokens=2048,
+    reference="https://huggingface.co/cointegrated/rubert-tiny2",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code="https://colab.research.google.com/drive/1mSWfIQ6PIlteLVZ9DKKpcorycgLIKZLf?usp=sharing",
+    training_datasets={
+        # https://huggingface.co/datasets/cointegrated/ru-paraphrase-NMT-Leipzig
+        # Wikipedia https://huggingface.co/datasets/Madjogger/JamSpell_dataset
+        # https://huggingface.co/datasets/imvladikon/leipzig_corpora_collection
+    },
+    adapted_from="cointegrated/rubert-tiny",
+    public_training_data=None,
 )
 
 sbert_large_nlu_ru = ModelMeta(
@@ -59,6 +70,7 @@ sbert_large_nlu_ru = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
 )
 
@@ -77,7 +89,11 @@ sbert_large_mt_nlu_ru = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
-    training_datasets=None,
+    public_training_data=None,
+    training_datasets={
+        # SNLI, MNLI
+        # https://github.com/brmson/dataset-sts
+    },
 )
 
 user_base_ru = ModelMeta(
@@ -93,12 +109,13 @@ user_base_ru = ModelMeta(
     revision="436a489a2087d61aa670b3496a9915f84e46c861",
     release_date="2024-06-10",
     n_parameters=427_000_000,
-    embed_dim=1024,
-    license="Not specified",
-    max_tokens=512,  # best guess
-    reference="https://huggingface.co/ai-forever/sbert_large_mt_nlu_ru",
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/deepvk/USER-base",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
+    adapted_from="https://huggingface.co/deepvk/deberta-v1-base",
     use_instructions=True,
     citation="""@misc{deepvk2024user,
         title={USER: Universal Sentence Encoder for Russian},
@@ -110,11 +127,66 @@ user_base_ru = ModelMeta(
     """,
     training_datasets={
         "BibleNLPBitextMining": ["train"],
+        # https://github.com/unicamp-dl/mMARCO
+        # deepvk/ru-HNP
+        # deepvk/ru-WANLI
+        # MedNLI
+        # RCB
+        "TERRa": ["train"],
+        # Tapaco
+        # Opus100
+        # BiblePar
+        # RudetoxifierDataDetox
+        # RuParadetox
+        "MIRACL": ["train"],
+        # MLDR
+        # Lenta
         "MLSUMClusteringP2P": ["train"],
         "MLSUMClusteringP2P.v2": ["train"],
         "MLSUMClusteringS2S": ["train"],
         "MLSUMClusteringS2S.v2": ["train"],
-        **bge_training_data,
+        "MrTidyRetrieval": ["train"],
+        # "Panorama"
+        # PravoIsrael
+        # xlsum
+        # Fialka-v1
+        # RussianKeywords
+        # Gazeta
+        # Gsm8k-ru
+        # DSumRu
+        # SummDialogNews
+    },
+    public_training_code=None,
+    public_training_data=None,
+)
+
+user_bge_m3 = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="deepvk/USER-bge-m3",
+        revision="0cc6cfe48e260fb0474c753087a69369e88709ae",
+    ),
+    name="deepvk/USER-bge-m3",
+    languages=["rus_Cyrl"],
+    open_weights=True,
+    revision="0cc6cfe48e260fb0474c753087a69369e88709ae",
+    release_date="2024-07-05",
+    n_parameters=359_026_688,
+    embed_dim=1024,
+    license="apache-2.0",
+    max_tokens=8194,
+    reference="https://huggingface.co/deepvk/USER-base",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    adapted_from="https://huggingface.co/BAAI/bge-m3",
+    use_instructions=False,
+    training_datasets={
+        "BibleNLPBitextMining": ["train"],
+        "MLSUMClusteringP2P": ["train"],
+        "MLSUMClusteringP2P.v2": ["train"],
+        "MLSUMClusteringS2S": ["train"],
+        "MLSUMClusteringS2S.v2": ["train"],
+        **bge_m3_training_data,
         # not MTEB:
         # "deepvk/ru-HNP": ["train"],
         # "deepvk/ru-WANLI": ["train"],
@@ -132,6 +204,7 @@ user_base_ru = ModelMeta(
         # "CarlBrendt/Summ_Dialog_News": ["train"],
     },
     public_training_code=None,
+    public_training_data=None,
 )
 
 deberta_v1_ru = ModelMeta(
@@ -148,7 +221,9 @@ deberta_v1_ru = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
+    # Wikipedia, Books, Twitter comments, Pikabu, Proza.ru, Film subtitles, News websites, and Social corpus
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
 )
 
@@ -161,12 +236,13 @@ rubert_base_cased = ModelMeta(
     n_parameters=1280_000_000,
     embed_dim=768,
     license="Not specified",
-    max_tokens=512,  # best guess
+    max_tokens=512,
     reference="https://huggingface.co/DeepPavlov/rubert-base-cased",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
     citation="""@misc{kuratov2019adaptationdeepbidirectionalmultilingual,
       title={Adaptation of Deep Bidirectional Multilingual Transformers for Russian Language}, 
@@ -194,6 +270,7 @@ distilrubert_small_cased_conversational = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
     citation="""@misc{https://doi.org/10.48550/arxiv.2205.02340,
       doi = {10.48550/ARXIV.2205.02340},
@@ -222,7 +299,11 @@ rubert_base_cased_sentence = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
-    training_datasets=None,
+    public_training_data=None,
+    training_datasets={
+        # "SNLI": [],
+        "XNLI": ["dev"]
+    },
 )
 
 labse_en_ru = ModelMeta(
@@ -239,8 +320,10 @@ labse_en_ru = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
-    public_training_code=None,
+    public_training_code="https://colab.research.google.com/drive/1dnPRn0-ugj3vZgSpyCC9sgslM2SuSfHy?usp=sharing",
+    public_training_data=None,
     training_datasets=None,
+    adapted_from="sentence-transformers/LaBSE",
 )
 
 rubert_tiny_turbo = ModelMeta(
@@ -258,8 +341,10 @@ rubert_tiny_turbo = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,  # source model in unknown
     # Not MTEB: {"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
+    adapted_from="cointegrated/rubert-tiny2",
 )
 
 labse_ru_turbo = ModelMeta(
@@ -276,9 +361,11 @@ labse_ru_turbo = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
-    training_datasets=None,  # source model in unknown
+    training_datasets=None,
     # not MTEB: {"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
     public_training_code=None,
+    adapted_from="cointegrated/LaBSE-en-ru",
+    public_training_data=None,
 )
 
 
@@ -305,8 +392,24 @@ rosberta_ru_en = ModelMeta(
     embed_dim=1024,
     license="mit",
     similarity_fn_name="cosine",
+    adapted_from="ai-forever/ruRoberta-large",
+    training_datasets={
+        # https://huggingface.co/ai-forever/ruRoberta-large
+        # https://huggingface.co/datasets/IlyaGusev/yandex_q_full
+        # https://huggingface.co/datasets/IlyaGusev/pikabu
+        # https://huggingface.co/datasets/IlyaGusev/ru_stackoverflow
+        # https://huggingface.co/datasets/IlyaGusev/habr
+        # https://huggingface.co/datasets/its5Q/habr_qna
+        # NewsCommentary
+        # MultiParaCrawl
+        "XNLI": [],
+        "XNLIV2": [],
+        "LanguageClassification": [],  # XNLI
+        "MIRACLReranking": ["train"],
+        "MIRACLRetrieval": ["train"],
+    },
+    public_training_data=None,
     public_training_code=None,
-    training_datasets=None,
     framework=["Sentence Transformers", "PyTorch"],
     citation="""@misc{snegirev2024russianfocusedembeddersexplorationrumteb,
       title={The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design}, 

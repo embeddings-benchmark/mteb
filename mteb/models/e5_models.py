@@ -144,6 +144,16 @@ E5_TRAINING_DATA = {
     "NQ-PL": ["train"],  # translation not trained on
 }
 
+ME5_TRAINING_DATA = {
+    **E5_TRAINING_DATA,
+    "FEVER": ["train"],
+    "FEVERHardNegatives": ["train"],
+    "FEVER-PL": ["train"],  # translation not trained on
+    "HotpotQA": ["train"],
+    "HotpotQAHardNegatives": ["train"],
+    "HotpotQA-PL": ["train"],  # translation not trained on
+}
+
 e5_mult_small = ModelMeta(
     loader=partial(  # type: ignore
         sentence_transformers_loader,
@@ -166,7 +176,8 @@ e5_mult_small = ModelMeta(
     use_instructions=True,
     citation=MULTILINGUAL_E5_CITATION,
     public_training_code=None,  # couldn't find
-    training_datasets=E5_TRAINING_DATA,
+    training_datasets=ME5_TRAINING_DATA,
+    public_training_data=None,
 )
 
 e5_mult_base = ModelMeta(
@@ -189,7 +200,8 @@ e5_mult_base = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
-    training_datasets=E5_TRAINING_DATA,
+    public_training_data=None,
+    training_datasets=ME5_TRAINING_DATA,
     citation=MULTILINGUAL_E5_CITATION,
 )
 
@@ -214,7 +226,8 @@ e5_mult_large = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
-    training_datasets=E5_TRAINING_DATA,
+    public_training_data=None,
+    training_datasets=ME5_TRAINING_DATA,
     citation=MULTILINGUAL_E5_CITATION,
 )
 
@@ -238,6 +251,7 @@ e5_eng_small_v2 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=E5_TRAINING_DATA,
     citation=E5_CITATION,
 )
@@ -263,6 +277,7 @@ e5_eng_small = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=E5_TRAINING_DATA,
     citation=E5_CITATION,
 )
@@ -291,6 +306,7 @@ e5_eng_base_v2 = ModelMeta(
     adapted_from=None,
     citation=E5_CITATION,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=E5_TRAINING_DATA,
 )
 
@@ -317,6 +333,7 @@ e5_eng_large_v2 = ModelMeta(
     superseded_by=None,
     adapted_from=None,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=E5_TRAINING_DATA,
     citation=E5_CITATION,
 )
@@ -344,6 +361,7 @@ e5_large = ModelMeta(
     superseded_by="intfloat/e5-large-v2",
     adapted_from=None,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=E5_TRAINING_DATA,
     citation=E5_CITATION,
 )
@@ -371,6 +389,7 @@ e5_base = ModelMeta(
     superseded_by="intfloat/e5-base-v2",
     adapted_from=None,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=E5_TRAINING_DATA,
     citation=E5_CITATION,
 )

@@ -172,6 +172,7 @@ repllama_llama2_original = ModelMeta(
     use_instructions=True,
     citation=REPLLAMA_CITATION,
     public_training_code=None,
+    public_training_data=None,
 )
 
 
@@ -199,5 +200,6 @@ repllama_llama2_reproduced = ModelMeta(
     use_instructions=True,
     citation=REPLLAMA_CITATION,
     public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
 )

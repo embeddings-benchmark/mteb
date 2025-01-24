@@ -139,5 +139,6 @@ bm25_s = ModelMeta(
     framework=[],
     use_instructions=False,
     public_training_code="https://github.com/xhluca/bm25s",
+    public_training_data=None,
     training_datasets=None,
 )

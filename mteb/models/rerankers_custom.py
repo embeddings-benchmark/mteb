@@ -11,6 +11,7 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 from mteb.encoder_interface import Encoder
 from mteb.evaluation.evaluators.RetrievalEvaluator import DenseRetrievalExactSearch
 from mteb.model_meta import ModelMeta
+from mteb.models.bge_models import bge_m3_training_data
 
 logger = logging.getLogger(__name__)
 
@@ -209,6 +210,7 @@ monobert_large = ModelMeta(
     embed_dim=None,
     license=None,
     public_training_code=None,
+    public_training_data=None,
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
@@ -233,6 +235,7 @@ jina_reranker_multilingual = ModelMeta(
     embed_dim=None,
     license=None,
     public_training_code=None,
+    public_training_data=None,
     similarity_fn_name=None,
     use_instructions=None,
     training_datasets=None,
@@ -289,9 +292,10 @@ bge_reranker_v2_m3 = ModelMeta(
     embed_dim=None,
     license=None,
     public_training_code=None,
+    public_training_data=None,
     similarity_fn_name=None,
     use_instructions=None,
-    training_datasets=None,
+    training_datasets=bge_m3_training_data,
     framework=["Sentence Transformers", "PyTorch"],
     citation="""
     @misc{li2023making,
