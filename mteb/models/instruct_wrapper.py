@@ -89,11 +89,12 @@ class InstructSentenceTransformerWrapper(Wrapper):
         instruction_template: str | Callable[[str], str] | None = None,
         max_seq_length: int | None = None,
         apply_instruction_to_passages: bool = True,
+        padding_side: str | None = None,
+        add_eos_token: bool = False,
         **kwargs: Any,
     ):
-        """
-        Instruct Sentence Transformer Wrapper. Wrapper that passes instructions to the Sentence Transformer model.
-        Applied for models like gte-Qwen, e5-mistral, etc.
+        """Instruct Sentence Transformer Wrapper. Wrapper that passes instructions to the Sentence Transformer model.
+        Applied for models like NV-Embed, gte-Qwen, e5-mistral, etc.
 
         Arguments:
             model_name: Model name
@@ -101,7 +102,9 @@ class InstructSentenceTransformerWrapper(Wrapper):
             instruction_template: Model template. Should contain the string '{instruction}'.
             max_seq_length: Maximum sequence length. If None, the maximum sequence length won't be changed.
             apply_instruction_to_passages: Whether to apply the instruction template to the passages.
-            **kwargs:
+            padding_side: Padding side. If None, the padding side won't be changed.
+            add_eos_token: Whether to add the eos token to each input example.
+            **kwargs: Kwargs for Sentence Transformer model.
         """
         if (
             isinstance(instruction_template, str)
@@ -119,8 +122,11 @@ class InstructSentenceTransformerWrapper(Wrapper):
         self.model = SentenceTransformer(model_name, revision=revision, **kwargs)
         self.instruction_template = instruction_template
         self.apply_instruction_to_passages = apply_instruction_to_passages
+        self.add_eos_token = add_eos_token
         if max_seq_length is not None:
             self.model.max_seq_length = max_seq_length
+        if padding_side is not None:
+            self.model.tokenizer.padding_side = padding_side
 
     def encode(
         self,
@@ -130,6 +136,12 @@ class InstructSentenceTransformerWrapper(Wrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
+        if self.add_eos_token:
+            # for nv-embed, we add eos token to each input example
+            sentences = [
+                example + self.model.tokenizer.eos_token for example in sentences
+            ]
+
         instruction = self.get_task_instruction(task_name, prompt_type)
 
         # to passage prompts won't be applied to passages
@@ -141,6 +153,7 @@ class InstructSentenceTransformerWrapper(Wrapper):
 
         if instruction:
             logger.info(f"Using instruction: '{instruction}' for task: '{task_name}'")
+
         embeddings = self.model.encode(
             sentences,
             prompt=instruction,
