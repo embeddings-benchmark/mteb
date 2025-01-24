@@ -39,7 +39,7 @@ class SynPerChatbotTopicsRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-topics-retrieval",
         dataset={
             "path": "MCINext/synthetic-persian-chatbot-topics-retrieval",
-            "revision": "576cb1b7b1ba5fd37501809964c7d7ab623fc9cb",
+            "revision": "086995ca4cea33f37a407c2fa5282f74913740ee",
         },
         type="Retrieval",
         category="s2p",
@@ -65,7 +65,7 @@ class SynPerChatbotRAGTopicsRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-rag-topics-retrieval",
         dataset={
             "path": "MCINext/synthetic-persian-chatbot-rag-topics-retrieval",
-            "revision": "66a4a07f13ec255e12a9f071e588dfa269459017",
+            "revision": "da8f36a723da155738f5e3d8d84d543589bd5083",
         },
         type="Retrieval",
         category="s2p",
@@ -92,7 +92,7 @@ class SynPerChatbotRAGFAQRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-rag-faq-retrieval",
         dataset={
             "path": "MCINext/synthetic-persian-chatbot-rag-faq-retrieval",
-            "revision": "861cb8fa13b31c5106ca05fedacde2fedce1284c",
+            "revision": "9d32af6540970e2845028cbfffe6b0d0e8f52428",
         },
         type="Retrieval",
         category="s2p",
@@ -119,7 +119,7 @@ class PersianWebDocumentRetrieval(AbsTaskRetrieval):
         reference="https://ieeexplore.ieee.org/document/10553090",
         dataset={
             "path": "MCINext/persian-web-document-retrieval",
-            "revision": "2f0e257943c5772ce9eaef8988581408ec0beb95",
+            "revision": "b3dc818368a867b30ccb55a42ff287d253512c36",
         },
         type="Retrieval",
         category="s2p",

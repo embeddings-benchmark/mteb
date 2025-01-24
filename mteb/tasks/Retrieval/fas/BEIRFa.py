@@ -13,7 +13,7 @@ class ArguAnaFa(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/arguana-fa",
         dataset={
             "path": "MCINext/arguana-fa",
-            "revision": "bd449a14a4a7d5644ffd380a957c3c4bab83bf50",
+            "revision": "fa97814be356fe4d18caadb457b4469bd34019ca",
         },
         type="Retrieval",
         category="s2p",
@@ -40,7 +40,7 @@ class ClimateFEVERFa(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/climate-fever-fa",
         dataset={
             "path": "MCINext/climate-fever-fa",
-            "revision": "febfc57c1803a734cda52ebbc4f85a829d319b61",
+            "revision": "45d9176b6fcba33abc58494ee82f18ee7e8ddbae",
         },
         type="Retrieval",
         category="s2p",
@@ -66,7 +66,7 @@ class CQADupstackAndroidRetrievalFa(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/cqadupstack-android-fa",
         dataset={
             "path": "MCINext/cqadupstack-android-fa",
-            "revision": "1e828bfefc20aaf77b7c90d98f83cc3272f2ab9e",
+            "revision": "bcdaf4e30477eea9b9b17ecbb153ca403e5c3ebd",
         },
         type="Retrieval",
         category="s2p",
@@ -91,7 +91,7 @@ class CQADupstackEnglishRetrievalFa(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/cqadupstack-english-fa",
         dataset={
             "path": "MCINext/cqadupstack-english-fa",
-            "revision": "d872fbb460dc3b6f927f7555ce2f7ee76a8b7073",
+            "revision": "029a2e69e7d9e68b6bdc471073606104417a5be7",
         },
         type="Retrieval",
         category="s2p",
@@ -116,7 +116,7 @@ class CQADupstackGamingRetrievalFa(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/cqadupstack-gaming-fa",
         dataset={
             "path": "MCINext/cqadupstack-gaming-fa",
-            "revision": "9cc3d417650243bf5f8e5424e33d0048e2cead81",
+            "revision": "e9c7ad03f29a55ab14eae730146961b8cdc14227",
         },
         type="Retrieval",
         category="s2p",
@@ -141,7 +141,7 @@ class CQADupstackGisRetrievalFa(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/cqadupstack-gis-fa",
         dataset={
             "path": "MCINext/cqadupstack-gis-fa",
-            "revision": "11a32a2de02cc377ceb65f5e9a2146017f783611",
+            "revision": "e907c4144dc27bc8a035d78d69e15f39c56623a9",
         },
         type="Retrieval",
         category="s2p",
@@ -166,7 +166,7 @@ class CQADupstackMathematicaRetrievalFa(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/cqadupstack-mathematica-fa",
         dataset={
             "path": "MCINext/cqadupstack-mathematica-fa",
-            "revision": "2c4a0f77242290ff623edbced2848152d44f6b1a",
+            "revision": "b92e24fab42ab599535a19ee744de5485ec92f64",
         },
         type="Retrieval",
         category="s2p",
@@ -191,7 +191,7 @@ class CQADupstackPhysicsRetrievalFa(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/cqadupstack-physics-fa",
         dataset={
             "path": "MCINext/cqadupstack-physics-fa",
-            "revision": "60b17339053fa23723841576a86e7f583e8b59c7",
+            "revision": "816ad7473d6813f77a0ca5e72b1ff7a52752d370",
         },
         type="Retrieval",
         category="s2p",
@@ -216,7 +216,7 @@ class CQADupstackProgrammersRetrievalFa(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/cqadupstack-programmers-fa",
         dataset={
             "path": "MCINext/cqadupstack-programmers-fa",
-            "revision": "0ff8ff35898efac6051db231434c298ec054f8b2",
+            "revision": "be6460df57ab7c1b2c9fe295a31660dbd077ecf0",
         },
         type="Retrieval",
         category="s2p",
@@ -241,7 +241,7 @@ class CQADupstackStatsRetrievalFa(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/cqadupstack-stats-fa",
         dataset={
             "path": "MCINext/cqadupstack-stats-fa",
-            "revision": "c8a59accef7b5750ad03269f1017cf7a50ae449a",
+            "revision": "c6e2c8b6153958118ec04352dd82a30ea2e2cad5",
         },
         type="Retrieval",
         category="s2p",
@@ -266,7 +266,7 @@ class CQADupstackTexRetrievalFa(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/cqadupstack-tex-fa",
         dataset={
             "path": "MCINext/cqadupstack-tex-fa",
-            "revision": "0d59dfaccac0764f53ccd8d63f8364dd27f5829a",
+            "revision": "860d152c86fda27229270b6bf4e832ff374ac01b",
         },
         type="Retrieval",
         category="s2p",
@@ -291,7 +291,7 @@ class CQADupstackUnixRetrievalFa(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/cqadupstack-unix-fa",
         dataset={
             "path": "MCINext/cqadupstack-unix-fa",
-            "revision": "d136a58b44962cf25e8630b6887a7dee3916420e",
+            "revision": "c2a326387954aad66ff00d324a9278067b1e3bb6",
         },
         type="Retrieval",
         category="s2p",
@@ -316,7 +316,7 @@ class CQADupstackWebmastersRetrievalFa(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/cqadupstack-webmasters-fa",
         dataset={
             "path": "MCINext/cqadupstack-webmasters-fa",
-            "revision": "8be7e5f57990c9fc7b2b7b859b9c0f8d704128e3",
+            "revision": "506f29f8ce59648efe99afee736b0b158eced516",
         },
         type="Retrieval",
         category="s2p",
@@ -341,7 +341,7 @@ class CQADupstackWordpressRetrievalFa(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/cqadupstack-wordpress-fa",
         dataset={
             "path": "MCINext/cqadupstack-wordpress-fa",
-            "revision": "c7e859b47542e8bad6846b93c71b9308f08c2b9d",
+            "revision": "7f755e88647b4023df52da04d4e3d31a7de5fcb0",
         },
         type="Retrieval",
         category="s2p",
@@ -367,7 +367,7 @@ class DBPediaFa(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/dbpedia-fa",
         dataset={
             "path": "MCINext/dbpedia-fa",
-            "revision": "d3045f8bb952dab9173cc5067da595f2c28c2ca9",
+            "revision": "13529e6e301e9d72f86def882cfbca04791d83f9",
         },
         type="Retrieval",
         category="s2p",
@@ -394,7 +394,7 @@ class FiQA2018Fa(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/fiqa-fa",
         dataset={
             "path": "MCINext/fiqa-fa",
-            "revision": "a4f6b783977a81d44e53371be370c53c5b3bd9db",
+            "revision": "e683ce7ecd0b47edc3e29fda7cfd75335be4a997",
         },
         type="Retrieval",
         category="s2p",
@@ -420,7 +420,7 @@ class HotpotQAFa(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/hotpotqa-fa",
         dataset={
             "path": "MCINext/hotpotqa-fa",
-            "revision": "d3369206326f66e102b13eecbe3bf1d670f99013",
+            "revision": "1cafde1306aa56b5dfdce0b14633ae9ee1a63ddb",
         },
 
         type="Retrieval",
@@ -449,7 +449,7 @@ class MSMARCOFa(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/msmarco-fa",
         dataset={
             "path": "MCINext/msmarco-fa",
-            "revision": "9bd8f89f6f1f259734cddddb62dd468054fc77de",
+            "revision": "88f90b0b04f91778ba5341095b0a9f1d7799ce10",
         },
         type="Retrieval",
         category="s2p",
@@ -474,7 +474,7 @@ class NFCorpusFa(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/nfcorpus-fa",
         dataset={
             "path": "MCINext/nfcorpus-fa",
-            "revision": "a7873741b8f5f88f84114c91861e3644baaa4b1c",
+            "revision": "70aa71825a791e87210c0355a01f538aa611feae",
         },
         type="Retrieval",
         category="s2p",
@@ -499,7 +499,7 @@ class NQFa(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/nq-fa",
         dataset={
             "path": "MCINext/nq-fa",
-            "revision": "69dcd4788696ecae180f8b835026498250853017",
+            "revision": "d4ea898b644c8d5f608b60947cb637bebbf1ac66",
         },
 
         type="Retrieval",
@@ -527,7 +527,7 @@ class QuoraRetrievalFa(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/quora-fa",
         dataset={
             "path": "MCINext/quora-fa",
-            "revision": "bdf1618da81ab481884ab0358ec502ebc093e6c9",
+            "revision": "1a43f4f5dcd71e6b14b275ae82c3237cdd4fd5fd",
         },
         type="Retrieval",
         category="s2s",
@@ -552,7 +552,7 @@ class SCIDOCSFa(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/scidocs-fa",
         dataset={
             "path": "MCINext/scidocs-fa",
-            "revision": "7d9d5a782304f7ca396e76ab738eac762812b9ab",
+            "revision": "6611ebf4b4c1aaf8b021e4728440db2188291b8b",
         },
         type="Retrieval",
         category="s2p",
@@ -578,7 +578,7 @@ class SciFactFa(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/scifact-fa",
         dataset={
             "path": "MCINext/scifact-fa",
-            "revision": "939778ed248ba84d25bf05f8b3d38ed3e371ae38",
+            "revision": "7723397096199c4d6f367b445fccaf282c518abe",
         },
         type="Retrieval",
         category="s2p",
@@ -603,7 +603,7 @@ class TRECCOVIDFa(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/trec-covid-fa",
         dataset={
             "path": "MCINext/trec-covid-fa",
-            "revision": "e52ad327135547992463c230d9eb97a13439ab9d",
+            "revision": "98e6c2d33dfa166ee326e8b1bc7ea82c7e6898dd",
         },
         type="Retrieval",
         category="s2p",
@@ -630,7 +630,7 @@ class Touche2020Fa(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/MCINext/touche2020-fa",
         dataset={
             "path": "MCINext/touche2020-fa",
-            "revision": "b7b9a535a1a62791aeaef666b0ee69d34c891335",
+            "revision": "0f464636f91641cc6ef6f6f8f249c73f4a609982",
         },
         type="Retrieval",
         category="s2p",
