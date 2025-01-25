@@ -76,7 +76,7 @@ class RetrievalEvaluator(Evaluator):
             hasattr(self.retriever.model, "mteb_model_meta")
             and self.retriever.model.mteb_model_meta.name == "bm25s"
         ):
-            return self.retriever.model.model.search(
+            return self.retriever.model.search(
                 corpus,
                 queries,
                 self.top_k,
