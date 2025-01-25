@@ -69,6 +69,8 @@ NV_embed_v2 = ModelMeta(
     loader=partial(  # type: ignore
         InstructSentenceTransformerWrapper,
         model="nvidia/NV-Embed-v2",
+        revision="7604d305b621f14095a1aa23d351674c2859553a",
+        instruction_template=instruction_template,
         trust_remote_code=True,
         max_seq_length=32768,
         padding_side="right",
@@ -97,6 +99,8 @@ NV_embed_v1 = ModelMeta(
     loader=partial(  # type: ignore
         InstructSentenceTransformerWrapper,
         model="nvidia/NV-Embed-v1",
+        revision="7604d305b621f14095a1aa23d351674c2859553a",
+        instruction_template=instruction_template,
         trust_remote_code=True,
         max_seq_length=32768,
         padding_side="right",
