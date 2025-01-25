@@ -330,13 +330,13 @@ class DenseRetrievalExactSearch:
             query_embeddings = torch.as_tensor(query_embeddings).to(device)
             sub_corpus_embeddings = torch.as_tensor(sub_corpus_embeddings).to(device)
 
-            if hasattr(self.model.model, "mteb_model_meta") or hasattr(
+            if hasattr(self.model, "mteb_model_meta") or hasattr(
                 self.model, "similarity"
             ):
                 score_function = (
                     self.model.similarity
                     if hasattr(self.model, "similarity")
-                    else self.model.model.mteb_model_meta.get_similarity_function()
+                    else self.model.mteb_model_meta.get_similarity_function()
                 )
             else:
                 logger.warning(

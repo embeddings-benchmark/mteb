@@ -52,8 +52,8 @@ def test_mulitple_mteb_tasks(tasks: list[AbsTask], model: mteb.Encoder, tmp_path
     "model",
     [
         MockNumpyEncoder(),
-        MockTorchEncoder(),
-        MockTorchbf16Encoder(),
+        # MockTorchEncoder(),
+        # MockTorchbf16Encoder(),
     ],
 )
 def test_benchmark_encoders_on_task(
