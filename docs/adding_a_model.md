@@ -2,7 +2,7 @@
 
 The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/leaderboard). To submit to it:
 
-1. Add meta information about your model to [model dir](../mteb/models/).
+1. **Add meta information about your model to [model dir](../mteb/models/)**.
    ```python
    from mteb.model_meta import ModelMeta
     
@@ -25,7 +25,7 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
        training_datasets={"your_dataset": ["train"]},
    )
    ```
-   By default model will run using the [`sentence_transformers_loader`](../mteb/models/sentence_transformer_wrapper.py) function. If you need to use a custom implementation, you can specify the `loader` parameter in the `ModelMeta` class. For example:
+   By default, the model will run using the [`sentence_transformers_loader`](../mteb/models/sentence_transformer_wrapper.py) loader function. If you need to use a custom implementation, you can specify the `loader` parameter in the `ModelMeta` class. For example:
    ```python
    from mteb.models.wrapper import Wrapper
    from mteb.encoder_interface import PromptType
@@ -88,7 +88,7 @@ These will save the results in a folder called `results/{model_name}/{model_revi
 
 To add results to the public leaderboard you can push your results to the [results repository](https://github.com/embeddings-benchmark/results) via a PR. Once merged they will appear on the leaderboard after a day.
 
-4. **Wait for a refresh the leaderboard**
+3. **Wait for a refresh the leaderboard**
 
 **Notes:**
 
@@ -96,11 +96,11 @@ To add results to the public leaderboard you can push your results to the [resul
 
 If your model uses Sentence Transformers and requires different prompts for encoding the queries and corpus, you can take advantage of the `prompts` [parameter](https://sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html#sentence_transformers.SentenceTransformer). 
 
-Internally, `mteb` uses the prompt named `query` for encoding the queries and `passage` as the prompt name for encoding the corpus. This is aligned with the default names used by Sentence Transformers.
+Internally, `mteb` uses `query` for encoding the queries and `passage` as the prompt names for encoding the corpus. This is aligned with the default names used by Sentence Transformers.
 
 ###### Adding the prompts in the model configuration (Preferred)
 
-You can directly add the prompts when saving and uploading your model to the Hub. For an example, refer to this [configuration file](https://huggingface.co/Snowflake/snowflake-arctic-embed-m-v1.5/blob/3b5a16eaf17e47bd997da998988dce5877a57092/config_sentence_transformers.json).
+You can directly add the prompts when saving and uploading your model to the Hub. For an example, refer to this [configuration file](https://huggingface.co/Snowflake/snowflake-arctic-embed-m-v1.5/blob/3b5a16eaf17e47bd997da998988dce5877a57092/config_sentence_transformers.json). These prompts can then be specified in the ModelMeta object.
 
 ```python
 model = ModelMeta(
