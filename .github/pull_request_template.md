@@ -4,11 +4,16 @@
 <!-- add additional description, question etc. related to the new dataset -->
 
 
-## Checklist
+### Code Quality
 <!-- Please do not delete this -->
+- [ ] **Tests Passed**: Run tests locally using `make test` or `make test-with-coverage` to ensure no existing functionality is broken.
+- [ ] **Code Formatted**: Format the code using `make lint` to maintain consistent style.
 
-- [ ] Run tests locally to make sure nothing is broken using `make test`. 
-- [ ] Run the formatter to format the code using `make lint`. 
+### Documentation
+- [ ] **Updated Documentation**: Add or update documentation to reflect the changes introduced in this PR.
+
+### Testing
+- [ ] **New Tests Added**: Write tests to cover new functionality. Validate with `make test-with-coverage`.
 
 
 ### Adding datasets checklist
