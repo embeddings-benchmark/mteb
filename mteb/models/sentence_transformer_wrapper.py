@@ -21,7 +21,6 @@ class SentenceTransformerWrapper(Wrapper):
         model: str | SentenceTransformer | CrossEncoder,
         revision: str | None = None,
         model_prompts: dict[str, str] | None = None,
-        similarity_fn_name: str | None = None,
         **kwargs,
     ) -> None:
         """Wrapper for SentenceTransformer models.
@@ -33,7 +32,6 @@ class SentenceTransformerWrapper(Wrapper):
                 First priority is given to the composed prompt of task name + prompt type (query or passage), then to the specific task prompt,
                 then to the composed prompt of task type + prompt type, then to the specific task type prompt,
                 and finally to the specific prompt type.
-            similarity_fn_name: A similarity function to use.
             **kwargs: Additional arguments to pass to the SentenceTransformer model.
         """
         if isinstance(model, str):
@@ -61,9 +59,7 @@ class SentenceTransformerWrapper(Wrapper):
         if isinstance(self.model, CrossEncoder):
             self.predict = self.handle_instructions_predict
 
-        if similarity_fn_name:
-            self.similarity = self.get_similarity_function(similarity_fn_name)
-        elif hasattr(self.model, "similarity") and callable(self.model.similarity):
+        if hasattr(self.model, "similarity") and callable(self.model.similarity):
             self.similarity = self.model.similarity
 
     def encode(

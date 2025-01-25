@@ -83,4 +83,13 @@ uae_large_v1 = ModelMeta(
       year={2023}
     }
     """,
+    training_datasets={
+        # source: https://arxiv.org/pdf/2309.12871
+        # not in MTEB
+        "MNLI": [],
+        "NLI": [],
+        "SNLI": [],
+    },
+    public_training_code=None,
+    public_training_data=None,
 )

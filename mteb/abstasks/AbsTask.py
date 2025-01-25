@@ -143,7 +143,7 @@ class AbsTask(ABC):
             hf_subsets = copy(self.hf_subsets)
 
         if subsets_to_run is not None:  # allow overwrites of pre-filtering
-            hf_subsets = subsets_to_run
+            hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
 
         for hf_subset in hf_subsets:
             logger.info(
@@ -277,10 +277,6 @@ class AbsTask(ABC):
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> DescriptiveStatistics:
         raise NotImplementedError
-
-    @property
-    def metadata_dict(self) -> dict[str, Any]:
-        return dict(self.metadata)
 
     @property
     def languages(self) -> list[str]:

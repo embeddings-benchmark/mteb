@@ -3,12 +3,9 @@ from __future__ import annotations
 import logging
 from typing import Callable, get_args
 
-import numpy as np
-
 import mteb
 from mteb.abstasks.TaskMetadata import TASK_TYPE
 from mteb.encoder_interface import PromptType
-from mteb.evaluation.evaluators.utils import cos_sim, dot_score
 
 logger = logging.getLogger(__name__)
 
@@ -66,18 +63,6 @@ class Wrapper:
             "No combination of task name and prompt type was found in model prompts."
         )
         return None
-
-    @staticmethod
-    def get_similarity_function(
-        similarity_fn_name: str,
-    ) -> Callable[[np.ndarray, np.ndarray], np.ndarray]:
-        if similarity_fn_name == "cosine":
-            return cos_sim
-        if similarity_fn_name == "dot":
-            return dot_score
-        raise ValueError(
-            "Invalid similarity function. Should be one of ['cosine', 'dot']"
-        )
 
     @staticmethod
     def validate_task_to_prompt_name(

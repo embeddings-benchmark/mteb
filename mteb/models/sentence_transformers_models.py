@@ -76,6 +76,41 @@ SBERT_CITATION = """@inproceedings{reimers-2019-sentence-bert,
 }
 """
 
+
+sent_trf_training_dataset = {
+    # derived from datasheets
+    "MSMARCO": ["train"],
+    "MSMARCOHardNegatives": ["train"],
+    "NanoMSMARCORetrieval": ["train"],
+    "MSMARCO-PL": ["train"],  # translation not trained on
+    "NQ": ["train"],
+    "NQHardNegatives": ["train"],
+    "NanoNQRetrieval": ["train"],
+    "NQ-PL": ["train"],  # translation not trained on
+    # not in MTEB
+    # "s2orc": ["train"],
+    # "flax-sentence-embeddings/stackexchange_xml": ["train"],
+    # "ms_marco": ["train"],
+    # "gooaq": ["train"],
+    # "yahoo_answers_topics": ["train"],
+    # "code_search_net": ["train"],
+    # "search_qa": ["train"],
+    # "eli5": ["train"],
+    # "snli": ["train"],
+    # "multi_nli": ["train"],
+    # "wikihow": ["train"],
+    # "natural_questions": ["train"],
+    # "trivia_qa": ["train"],
+    # "embedding-data/sentence-compression": ["train"],
+    # "embedding-data/flickr30k-captions": ["train"],
+    # "embedding-data/altlex": ["train"],
+    # "embedding-data/simple-wiki": ["train"],
+    # "embedding-data/QQP": ["train"],
+    # "embedding-data/SPECTER": ["train"],
+    # "embedding-data/PAQ_pairs": ["train"],
+    # "embedding-data/WikiAnswers": ["train"],
+}
+
 all_MiniLM_L6_v2 = ModelMeta(
     name="sentence-transformers/all-MiniLM-L6-v2",
     languages=["eng-Latn"],
@@ -92,41 +127,32 @@ all_MiniLM_L6_v2 = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
-    public_training_code=False,  # does sentence transformer count?
-    public_training_data=True,
-    training_datasets={
-        # source: frontmatter in readme
-        # trained on stack exchange, unsure if sources match
-        "StackExchangeClusteringP2P": ["test"],
-        "StackExchangeClusteringP2P.v2": ["test"],
-        "StackExchangeClustering": ["test"],
-        "StackExchangeClustering.v2": ["test"],
-        "NQ": ["test"],
-        "NQHardNegatives": ["test"],
-        "MSMARCO": ["train"],
-        # Non MTEB sources
-        # "s2orc": ["train"],
-        # "flax-sentence-embeddings/stackexchange_xml": ["train"],
-        # "ms_marco": ["train"],
-        # "gooaq": ["train"],
-        # "yahoo_answers_topics": ["train"],
-        # "code_search_net": ["train"],
-        # "search_qa": ["train"],
-        # "eli5": ["train"],
-        # "snli": ["train"],
-        # "multi_nli": ["train"],
-        # "wikihow": ["train"],
-        # "trivia_qa": ["train"],
-        # "embedding-data/sentence-compression": ["train"],
-        # "embedding-data/flickr30k-captions": ["train"],
-        # "embedding-data/altlex": ["train"],
-        # "embedding-data/simple-wiki": ["train"],
-        # "embedding-data/QQP": ["train"],
-        # "embedding-data/SPECTER": ["train"],
-        # "embedding-data/PAQ_pairs": ["train"],
-        # "embedding-data/WikiAnswers": ["train"],
-    },
+    training_datasets=sent_trf_training_dataset,
+    public_training_code=None,
+    public_training_data=None,
     citation=SBERT_CITATION,
+)
+
+all_MiniLM_L12_v2 = ModelMeta(
+    name="sentence-transformers/all-MiniLM-L12-v2",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="364dd28d28dcd3359b537f3cf1f5348ba679da62",
+    release_date="2021-08-30",
+    n_parameters=33_400_000,
+    embed_dim=384,
+    license="apache-2.0",
+    max_tokens=256,
+    reference="https://huggingface.co/sentence-transformers/all-MiniLM-L12-v2",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    superseded_by=None,
+    adapted_from=None,
+    training_datasets=sent_trf_training_dataset,
+    public_training_code=None,
+    citation=SBERT_CITATION,
+    public_training_data=None,
 )
 
 paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
@@ -145,7 +171,10 @@ paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
+    training_datasets=sent_trf_training_dataset,  # assumed (probably some parallel as well)
+    public_training_code=None,
     citation=SBERT_CITATION,
+    public_training_data=None,
 )
 
 paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
@@ -165,6 +194,20 @@ paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
     superseded_by=None,
     adapted_from=None,
     citation=SBERT_CITATION,
+    training_datasets=sent_trf_training_dataset,
+    # + https://github.com/UKPLab/sentence-transformers/blob/master/examples/training/paraphrases/training.py
+    # which include (not in MTEB):
+    # "all-nli": all_nli_train_dataset,
+    # "sentence-compression": sentence_compression_train_dataset,
+    # "simple-wiki": simple_wiki_train_dataset,
+    # "altlex": altlex_train_dataset,
+    # "quora-duplicates": quora_train_dataset,
+    # "coco-captions": coco_train_dataset,
+    # "flickr30k-captions": flickr_train_dataset,
+    # "yahoo-answers": yahoo_answers_train_dataset,
+    # "stack-exchange": stack_exchange_train_dataset,
+    public_training_code=None,
+    public_training_data=None,
 )
 
 labse = ModelMeta(
@@ -183,6 +226,8 @@ labse = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
+    training_datasets=None,  # scraped and mined webdata including CC, wiki, see section 3.1 https://aclanthology.org/2022.acl-long.62.pdf
+    public_training_code="https://www.kaggle.com/models/google/labse/tensorFlow2/labse/2?tfhub-redirect=true",
     citation="""@misc{feng2022languageagnosticbertsentenceembedding,
       title={Language-agnostic BERT Sentence Embedding}, 
       author={Fangxiaoyu Feng and Yinfei Yang and Daniel Cer and Naveen Arivazhagan and Wei Wang},
@@ -192,6 +237,7 @@ labse = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2007.01852}, 
     }""",
+    public_training_data=None,
 )
 
 multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
@@ -209,7 +255,11 @@ multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,
-    adapted_from=None,
+    adapted_from="nreimers/MiniLM-L6-H384-uncased",
+    training_datasets=sent_trf_training_dataset,  # assumed
+    public_training_code=None,
+    public_training_data=None,
+    citation=SBERT_CITATION,
 )
 
 all_mpnet_base_v2 = ModelMeta(
@@ -228,177 +278,10 @@ all_mpnet_base_v2 = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
-    public_training_code=False,  # does sentence transformer count?
-    public_training_data=True,
-    training_datasets={
-        # source: frontmatter in readme
-        # trained on stack exchange, unsure if sources match
-        "StackExchangeClusteringP2P": ["test"],
-        "StackExchangeClusteringP2P.v2": ["test"],
-        "StackExchangeClustering": ["test"],
-        "StackExchangeClustering.v2": ["test"],
-        "NQ": ["test"],
-        "NQHardNegatives": ["test"],
-        "MSMARCO": ["train"],
-        # Non MTEB sources
-        # "s2orc": ["train"],
-        # "flax-sentence-embeddings/stackexchange_xml": ["train"],
-        # "ms_marco": ["train"],
-        # "gooaq": ["train"],
-        # "yahoo_answers_topics": ["train"],
-        # "code_search_net": ["train"],
-        # "search_qa": ["train"],
-        # "eli5": ["train"],
-        # "snli": ["train"],
-        # "multi_nli": ["train"],
-        # "wikihow": ["train"],
-        # "trivia_qa": ["train"],
-        # "embedding-data/sentence-compression": ["train"],
-        # "embedding-data/flickr30k-captions": ["train"],
-        # "embedding-data/altlex": ["train"],
-        # "embedding-data/simple-wiki": ["train"],
-        # "embedding-data/QQP": ["train"],
-        # "embedding-data/SPECTER": ["train"],
-        # "embedding-data/PAQ_pairs": ["train"],
-        # "embedding-data/WikiAnswers": ["train"],
-    },
-)
-
-jina_embeddings_v2_base_en = ModelMeta(
-    name="jinaai/jina-embeddings-v2-base-en",
-    languages=["eng-Latn"],
-    open_weights=True,
-    revision="6e85f575bc273f1fd840a658067d0157933c83f0",
-    release_date="2023-09-27",
-    n_parameters=137_000_000,
-    embed_dim=768,
-    license="apache-2.0",
-    max_tokens=8192,
-    reference="https://huggingface.co/jinaai/jina-embeddings-v2-base-en",
-    similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
-    use_instructions=False,
-    superseded_by=None,
-    adapted_from=None,
-    training_datasets={"allenai/c4": ["train"]},
-)
-
-jina_embeddings_v2_small_en = ModelMeta(
-    name="jinaai/jina-embeddings-v2-small-en",
-    languages=["eng-Latn"],
-    open_weights=True,
-    revision="796cff318cdd4e5fbe8b7303a1ef8cbec36996ef",
-    release_date="2023-09-27",
-    n_parameters=32_700_000,
-    embed_dim=512,
-    license="apache-2.0",
-    max_tokens=8192,
-    reference="https://huggingface.co/jinaai/jina-embeddings-v2-small-en",
-    similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
-    use_instructions=False,
-    superseded_by=None,
-    adapted_from=None,
-    training_datasets={"jinaai/negation-dataset": ["train"]},
-)
-
-jina_embedding_b_en_v1 = ModelMeta(
-    name="jinaai/jina-embedding-b-en-v1",
-    languages=["eng-Latn"],
-    open_weights=True,
-    revision="aa0645035294a8c0607ce5bb700aba982cdff32c",
-    release_date="2023-07-07",
-    n_parameters=110_000_000,
-    embed_dim=768,
-    license="apache-2.0",
-    max_tokens=512,
-    reference="https://huggingface.co/jinaai/jina-embedding-b-en-v1",
-    similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
-    use_instructions=False,
-    superseded_by="jinaai/jina-embeddings-v2-base-en",
-    adapted_from=None,
-    training_datasets={"jinaai/negation-dataset": ["train"]},
-)
-
-jina_embedding_s_en_v1 = ModelMeta(
-    name="jinaai/jina-embedding-s-en-v1",
-    languages=["eng-Latn"],
-    open_weights=True,
-    revision="c1fed70aa4823a640f1a7150a276e4d3b08dce08",
-    release_date="2023-07-07",
-    n_parameters=35_000_000,
-    embed_dim=512,
-    license="apache-2.0",
-    max_tokens=512,
-    reference="https://huggingface.co/jinaai/jina-embedding-s-en-v1",
-    similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
-    use_instructions=False,
-    superseded_by="jinaai/jina-embeddings-v2-small-en",
-    adapted_from=None,
-    training_datasets={"jinaai/negation-dataset": ["train"]},
-)
-
-all_MiniLM_L12_v2 = ModelMeta(
-    name="sentence-transformers/all-MiniLM-L12-v2",
-    languages=["eng-Latn"],
-    open_weights=True,
-    revision="364dd28d28dcd3359b537f3cf1f5348ba679da62",
-    release_date="2021-08-30",
-    n_parameters=33_400_000,
-    embed_dim=384,
-    license="apache-2.0",
-    max_tokens=256,
-    reference="https://huggingface.co/sentence-transformers/all-MiniLM-L12-v2",
-    similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
-    use_instructions=False,
-    superseded_by=None,
-    adapted_from=None,
-    citation="""@misc{feng2022languageagnosticbertsentenceembedding,
-      title={Language-agnostic BERT Sentence Embedding}, 
-      author={Fangxiaoyu Feng and Yinfei Yang and Daniel Cer and Naveen Arivazhagan and Wei Wang},
-      year={2022},
-      eprint={2007.01852},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2007.01852}, 
-    }""",
-    public_training_code=False,  # does sentence transformer count?
-    public_training_data=True,
-    training_datasets={
-        # source: frontmatter in readme
-        # trained on stack exchange, unsure if sources match
-        "StackExchangeClusteringP2P": ["test"],
-        "StackExchangeClusteringP2P.v2": ["test"],
-        "StackExchangeClustering": ["test"],
-        "StackExchangeClustering.v2": ["test"],
-        "NQ": ["test"],
-        "NQHardNegatives": ["test"],
-        "MSMARCO": ["train"],
-        # Non MTEB sources
-        # "s2orc": ["train"],
-        # "flax-sentence-embeddings/stackexchange_xml": ["train"],
-        # "ms_marco": ["train"],
-        # "gooaq": ["train"],
-        # "yahoo_answers_topics": ["train"],
-        # "code_search_net": ["train"],
-        # "search_qa": ["train"],
-        # "eli5": ["train"],
-        # "snli": ["train"],
-        # "multi_nli": ["train"],
-        # "wikihow": ["train"],
-        # "trivia_qa": ["train"],
-        # "embedding-data/sentence-compression": ["train"],
-        # "embedding-data/flickr30k-captions": ["train"],
-        # "embedding-data/altlex": ["train"],
-        # "embedding-data/simple-wiki": ["train"],
-        # "embedding-data/QQP": ["train"],
-        # "embedding-data/SPECTER": ["train"],
-        # "embedding-data/PAQ_pairs": ["train"],
-        # "embedding-data/WikiAnswers": ["train"],
-    },
+    training_datasets=sent_trf_training_dataset,
+    public_training_code=None,
+    public_training_data=None,
+    citation=SBERT_CITATION,
 )
 
 contriever = ModelMeta(
@@ -429,6 +312,9 @@ contriever = ModelMeta(
       url = {https://arxiv.org/abs/2112.09118},
       doi = {10.48550/ARXIV.2112.09118},
     }""",
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
 )
 
 microllama_text_embedding = ModelMeta(
@@ -448,12 +334,16 @@ microllama_text_embedding = ModelMeta(
     superseded_by=None,
     adapted_from=None,
     training_datasets={
-        # shource yaml header:
-        "NQ": ["test"]
-        # not in MTEB:
+        "NQ": ["train"],
+        "NQHardNegatives": ["train"],
+        "NanoNQRetrieval": ["train"],
+        "NQ-PL": ["train"],  # translation not trained on
+        # not in MTEB
         # "sentence-transformers/all-nli": ["train"],
         # "sentence-transformers/stsb": ["train"],
         # "sentence-transformers/quora-duplicates": ["train"],
         # "sentence-transformers/natural-questions": ["train"],
     },
+    public_training_code=None,
+    public_training_data=None,
 )

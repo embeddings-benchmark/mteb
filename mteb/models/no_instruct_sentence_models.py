@@ -99,4 +99,7 @@ no_instruct_small_v0 = ModelMeta(
     use_instructions=False,
     adapted_from=None,
     superseded_by=None,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
 )

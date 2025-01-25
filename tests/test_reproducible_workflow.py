@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from pathlib import Path
 
 import pytest
 
@@ -18,7 +19,9 @@ logging.basicConfig(level=logging.INFO)
 @pytest.mark.parametrize("task_name", ["BornholmBitextMining"])
 @pytest.mark.parametrize("model_name", ["sentence-transformers/all-MiniLM-L6-v2"])
 @pytest.mark.parametrize("model_revision", ["8b3219a92973c328a8e22fadcfa821b5dc75636a"])
-def test_reproducibility_workflow(task_name: str, model_name: str, model_revision: str):
+def test_reproducibility_workflow(
+    task_name: str, model_name: str, model_revision: str, tmp_path: Path
+):
     """Test that a model and a task can be fetched and run in a reproducible fashion."""
     model_meta = mteb.get_model_meta(model_name, revision=model_revision)
     task = mteb.get_task(task_name)
@@ -30,13 +33,13 @@ def test_reproducibility_workflow(task_name: str, model_name: str, model_revisio
     assert isinstance(model, Encoder)
 
     eval = MTEB(tasks=[task])
-    eval.run(model, output_folder="tests/results", overwrite_results=True)
+    eval.run(model, output_folder=tmp_path.as_posix(), overwrite_results=True)
 
 
 @pytest.mark.parametrize(
     "task_name",
     TASK_TEST_GRID
-    + [
+    + (
         "BitextMining",
         "Classification",
         "MultilabelClassification",
@@ -49,7 +52,7 @@ def test_reproducibility_workflow(task_name: str, model_name: str, model_revisio
         "InstructionRetrieval",
         "InstructionReranking",
         "Speed",
-    ],
+    ),
 )
 def test_validate_task_to_prompt_name(task_name: str | AbsTask):
     if isinstance(task_name, AbsTask):

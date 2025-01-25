@@ -9,6 +9,7 @@ import numpy as np
 
 from mteb.model_meta import ModelMeta
 
+from .bge_models import bge_training_data
 from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
@@ -72,21 +73,10 @@ m2v_base_glove_subword = ModelMeta(
     reference="https://huggingface.co/minishlab/M2V_base_glove_subword",
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
-    public_training_data=True,
-    public_training_code=None,  # distilled model
-    training_datasets={  # same as adapted from
-        "NQ": ["test"],
-        "NQHardNegatives": ["test"],
-        "AmazonReviewsClassification": [
-            "validation",
-            "test",
-        ],
-        "MLQARetrieval": [
-            "validation",
-            "test",
-        ],
-    },
     superseded_by=None,
+    training_datasets=bge_training_data,  # distilled
+    public_training_code="https://github.com/MinishLab/model2vec",
+    public_training_data=None,
 )
 
 
@@ -110,20 +100,9 @@ m2v_base_glove = ModelMeta(
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
-    public_training_data=True,
-    public_training_code=None,  # distilled model
-    training_datasets={  # same as adapted from
-        "NQ": ["test"],
-        "NQHardNegatives": ["test"],
-        "AmazonReviewsClassification": [
-            "validation",
-            "test",
-        ],
-        "MLQARetrieval": [
-            "validation",
-            "test",
-        ],
-    },
+    training_datasets=bge_training_data,  # distilled
+    public_training_code="https://github.com/MinishLab/model2vec",
+    public_training_data=None,
 )
 
 m2v_base_output = ModelMeta(
@@ -146,20 +125,9 @@ m2v_base_output = ModelMeta(
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
-    public_training_data=True,
-    public_training_code=None,  # distilled model
-    training_datasets={  # same as adapted from
-        "NQ": ["test"],
-        "NQHardNegatives": ["test"],
-        "AmazonReviewsClassification": [
-            "validation",
-            "test",
-        ],
-        "MLQARetrieval": [
-            "validation",
-            "test",
-        ],
-    },
+    training_datasets=bge_training_data,  # distilled
+    public_training_code="https://github.com/MinishLab/model2vec",
+    public_training_data=None,
 )
 
 m2v_multilingual_output = ModelMeta(
@@ -182,8 +150,9 @@ m2v_multilingual_output = ModelMeta(
     use_instructions=False,
     adapted_from="sentence-transformers/LaBSE",
     superseded_by=None,
-    public_training_data=True,
-    public_training_code=None,  # distilled model
+    training_datasets=None,
+    public_training_code="https://github.com/MinishLab/model2vec",
+    public_training_data=None,
 )
 
 potion_base_2m = ModelMeta(
@@ -206,20 +175,9 @@ potion_base_2m = ModelMeta(
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
-    public_training_data=True,
-    public_training_code=None,  # distilled model
-    training_datasets={  # same as adapted from
-        "NQ": ["test"],
-        "NQHardNegatives": ["test"],
-        "AmazonReviewsClassification": [
-            "validation",
-            "test",
-        ],
-        "MLQARetrieval": [
-            "validation",
-            "test",
-        ],
-    },
+    training_datasets=bge_training_data,  # distilled
+    public_training_code="https://github.com/MinishLab/model2vec",
+    public_training_data=None,
 )
 
 potion_base_4m = ModelMeta(
@@ -242,20 +200,9 @@ potion_base_4m = ModelMeta(
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
-    public_training_data=True,
-    public_training_code=None,  # distilled model
-    training_datasets={  # same as adapted from
-        "NQ": ["test"],
-        "NQHardNegatives": ["test"],
-        "AmazonReviewsClassification": [
-            "validation",
-            "test",
-        ],
-        "MLQARetrieval": [
-            "validation",
-            "test",
-        ],
-    },
+    training_datasets=bge_training_data,  # distilled
+    public_training_code="https://github.com/MinishLab/model2vec",
+    public_training_data=None,
 )
 
 potion_base_8m = ModelMeta(
@@ -278,18 +225,7 @@ potion_base_8m = ModelMeta(
     use_instructions=False,
     adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
-    public_training_data=True,
-    public_training_code=None,  # distilled model
-    training_datasets={  # same as adapted from
-        "NQ": ["test"],
-        "NQHardNegatives": ["test"],
-        "AmazonReviewsClassification": [
-            "validation",
-            "test",
-        ],
-        "MLQARetrieval": [
-            "validation",
-            "test",
-        ],
-    },
+    training_datasets=bge_training_data,  # distilled
+    public_training_code="https://github.com/MinishLab/model2vec",
+    public_training_data=None,
 )

@@ -41,4 +41,7 @@ mxbai_embed_large_v1 = ModelMeta(
       year={2023}
     }
     """,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
 )

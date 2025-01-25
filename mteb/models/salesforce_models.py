@@ -6,12 +6,27 @@ from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.instruct_wrapper import instruct_wrapper
 
+from .e5_instruct import E5_MISTRAL_TRAINING_DATA
+
 
 def instruction_template(
     instruction: str, prompt_type: PromptType | None = None
 ) -> str:
     return f"Instruct: {instruction}\nQuery: " if instruction else ""
 
+
+SFR_TRAINING_DATA = {  # inherits from e5
+    **E5_MISTRAL_TRAINING_DATA,
+    # From previously released blogpost which now have been taken down:
+    "FiQA2018": ["train"],
+    "FiQA2018-PL": ["train"],
+    "FEVER": ["train"],
+    "FEVERHardNegatives": ["train"],
+    "FEVER-PL": ["train"],  # translation not trained on
+    "HotpotQA": ["train"],
+    "HotpotQAHardNegatives": ["train"],
+    "HotpotQA-PL": ["train"],  # translation not trained on
+}
 
 SFR_Embedding_2_R = ModelMeta(
     loader=partial(  # type: ignore
@@ -39,6 +54,10 @@ SFR_Embedding_2_R = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    adapted_from="intfloat/e5-mistral-7b-instruct",
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=SFR_TRAINING_DATA,
     citation="""@misc{SFR-embedding-2,
       title={SFR-Embedding-2: Advanced Text Embedding with Multi-stage Training},
       author={Rui Meng*, Ye Liu*, Shafiq Rayhan Joty, Caiming Xiong, Yingbo Zhou, Semih Yavuz},
@@ -73,4 +92,7 @@ SFR_Embedding_Mistral = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=SFR_TRAINING_DATA,
 )

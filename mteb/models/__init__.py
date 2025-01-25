@@ -6,6 +6,7 @@ from mteb.models.overview import (
     get_model,
     get_model_meta,
     get_model_metas,
+    model_meta_from_cross_encoder,
     model_meta_from_sentence_transformers,
 )
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
@@ -17,5 +18,6 @@ __all__ = [
     "get_model_meta",
     "get_model_metas",
     "model_meta_from_sentence_transformers",
+    "model_meta_from_cross_encoder",
     "SentenceTransformerWrapper",
 ]

@@ -131,6 +131,29 @@ model_prompts = {
     PromptType.passage.value: "passage: ",
 }
 
+E5_TRAINING_DATA = {
+    # from 4.2 in https://arxiv.org/pdf/2212.03533
+    # also pre-training data from a variety of sources (stackexchange, semantic scholar, reddit, CC, ...)
+    "MSMARCO": ["train"],
+    "MSMARCOHardNegatives": ["train"],
+    "NanoMSMARCORetrieval": ["train"],
+    "MSMARCO-PL": ["train"],  # translation not trained on
+    "NQ": ["train"],
+    "NQHardNegatives": ["train"],
+    "NanoNQRetrieval": ["train"],
+    "NQ-PL": ["train"],  # translation not trained on
+}
+
+ME5_TRAINING_DATA = {
+    **E5_TRAINING_DATA,
+    "FEVER": ["train"],
+    "FEVERHardNegatives": ["train"],
+    "FEVER-PL": ["train"],  # translation not trained on
+    "HotpotQA": ["train"],
+    "HotpotQAHardNegatives": ["train"],
+    "HotpotQA-PL": ["train"],  # translation not trained on
+}
+
 e5_mult_small = ModelMeta(
     loader=partial(  # type: ignore
         sentence_transformers_loader,
@@ -152,26 +175,9 @@ e5_mult_small = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     citation=MULTILINGUAL_E5_CITATION,
-    public_training_data=False,  # couldn't find
-    public_training_code=False,  # couldn't find
-    training_datasets={
-        # source: https://arxiv.org/pdf/2212.03533
-        # table 1:
-        # Wikipedia 150M
-        # mC4 160M
-        # Multilingual CC News 160M
-        # NLLB 160M
-        # Reddit 160M
-        # S2ORC 50M
-        # Stackexchange 50M
-        # xP3 80M
-        # Misc. SBERT Data 10M
-        # ----
-        # from Misc. SBERT Data 10M:
-        "NQ": ["test"],
-        "NQHardNegatives": ["test"],
-        "MSMARCO": ["train"],  # dev?
-    },
+    public_training_code=None,  # couldn't find
+    training_datasets=ME5_TRAINING_DATA,
+    public_training_data=None,
 )
 
 e5_mult_base = ModelMeta(
@@ -193,27 +199,10 @@ e5_mult_base = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=ME5_TRAINING_DATA,
     citation=MULTILINGUAL_E5_CITATION,
-    public_training_data=False,  # couldn't find
-    public_training_code=False,  # couldn't find
-    training_datasets={
-        # source: https://arxiv.org/pdf/2402.05672
-        # table 1:
-        # Wikipedia 150M
-        # mC4 160M
-        # Multilingual CC News 160M
-        # NLLB 160M
-        # Reddit 160M
-        # S2ORC 50M
-        # Stackexchange 50M
-        # xP3 80M
-        # Misc. SBERT Data 10M
-        # ----
-        # from Misc. SBERT Data 10M:
-        "NQ": ["test"],
-        "NQHardNegatives": ["test"],
-        "MSMARCO": ["train"],  # dev?
-    },
 )
 
 e5_mult_large = ModelMeta(
@@ -236,27 +225,10 @@ e5_mult_large = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=ME5_TRAINING_DATA,
     citation=MULTILINGUAL_E5_CITATION,
-    public_training_data=False,  # couldn't find
-    public_training_code=False,  # couldn't find
-    training_datasets={
-        # source: https://arxiv.org/pdf/2402.05672
-        # table 1:
-        # Wikipedia 150M
-        # mC4 160M
-        # Multilingual CC News 160M
-        # NLLB 160M
-        # Reddit 160M
-        # S2ORC 50M
-        # Stackexchange 50M
-        # xP3 80M
-        # Misc. SBERT Data 10M
-        # ----
-        # from Misc. SBERT Data 10M:
-        "NQ": ["test"],
-        "NQHardNegatives": ["test"],
-        "MSMARCO": ["train"],  # dev?
-    },
 )
 
 e5_eng_small_v2 = ModelMeta(
@@ -278,15 +250,10 @@ e5_eng_small_v2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=E5_TRAINING_DATA,
     citation=E5_CITATION,
-    public_training_data=False,  # couldn't find
-    public_training_code=False,  # couldn't find
-    training_datasets={
-        # source: https://arxiv.org/pdf/2212.03533
-        "NQ": ["test"],
-        "NQHardNegatives": ["test"],
-        "MSMARCO": ["train"],  # dev?
-    },
 )
 
 e5_eng_small = ModelMeta(
@@ -309,15 +276,10 @@ e5_eng_small = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=E5_TRAINING_DATA,
     citation=E5_CITATION,
-    public_training_data=False,  # couldn't find
-    public_training_code=False,  # couldn't find
-    training_datasets={
-        # source: https://arxiv.org/pdf/2212.03533
-        "NQ": ["test"],
-        "NQHardNegatives": ["test"],
-        "MSMARCO": ["train"],  # dev?
-    },
 )
 
 e5_eng_base_v2 = ModelMeta(
@@ -343,14 +305,9 @@ e5_eng_base_v2 = ModelMeta(
     superseded_by=None,
     adapted_from=None,
     citation=E5_CITATION,
-    public_training_data=False,  # couldn't find
-    public_training_code=False,  # couldn't find
-    training_datasets={
-        # source: https://arxiv.org/pdf/2212.03533
-        "NQ": ["test"],
-        "NQHardNegatives": ["test"],
-        "MSMARCO": ["train"],  # dev?
-    },
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=E5_TRAINING_DATA,
 )
 
 e5_eng_large_v2 = ModelMeta(
@@ -375,15 +332,10 @@ e5_eng_large_v2 = ModelMeta(
     use_instructions=True,
     superseded_by=None,
     adapted_from=None,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=E5_TRAINING_DATA,
     citation=E5_CITATION,
-    public_training_data=False,  # couldn't find
-    public_training_code=False,  # couldn't find
-    training_datasets={
-        # source: https://arxiv.org/pdf/2212.03533
-        "NQ": ["test"],
-        "NQHardNegatives": ["test"],
-        "MSMARCO": ["train"],  # dev?
-    },
 )
 
 e5_large = ModelMeta(
@@ -408,15 +360,10 @@ e5_large = ModelMeta(
     use_instructions=True,
     superseded_by="intfloat/e5-large-v2",
     adapted_from=None,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=E5_TRAINING_DATA,
     citation=E5_CITATION,
-    public_training_data=False,  # couldn't find
-    public_training_code=False,  # couldn't find
-    training_datasets={
-        # source: https://arxiv.org/pdf/2212.03533
-        "NQ": ["test"],
-        "NQHardNegatives": ["test"],
-        "MSMARCO": ["train"],  # dev?
-    },
 )
 
 e5_base = ModelMeta(
@@ -441,13 +388,8 @@ e5_base = ModelMeta(
     use_instructions=True,
     superseded_by="intfloat/e5-base-v2",
     adapted_from=None,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=E5_TRAINING_DATA,
     citation=E5_CITATION,
-    public_training_data=False,  # couldn't find
-    public_training_code=False,  # couldn't find
-    training_datasets={
-        # source: https://arxiv.org/pdf/2212.03533
-        "NQ": ["test"],
-        "NQHardNegatives": ["test"],
-        "MSMARCO": ["train"],  # dev?
-    },
 )

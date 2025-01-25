@@ -125,8 +125,11 @@ bm25_s = ModelMeta(
     embed_dim=None,
     license=None,
     max_tokens=None,
-    reference=None,
+    reference="https://github.com/xhluca/bm25s",
     similarity_fn_name=None,
     framework=[],
     use_instructions=False,
+    public_training_code="https://github.com/xhluca/bm25s",
+    public_training_data=None,
+    training_datasets=None,
 )

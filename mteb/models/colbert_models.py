@@ -100,10 +100,13 @@ class ColBERTWrapper(Wrapper):
             )
         logger.info(f"Encoding {len(sentences)} sentences.")
 
+        if "request_qid" in kwargs:
+            kwargs.pop("request_qid")
         pred = self.model.encode(
             sentences,
             prompt_name=prompt_name,
             is_query=True if prompt_type == PromptType.query else False,
+            convert_to_tensor=True,
             **kwargs,
         )
 
@@ -152,18 +155,22 @@ colbert_v2 = ModelMeta(
     languages=["eng_Latn"],
     open_weights=True,
     revision="c1e84128e85ef755c096a95bdb06b47793b13acf",
-    public_training_code=True,
+    public_training_code=None,
+    public_training_data=None,
     release_date="2024-09-21",
     n_parameters=110 * 1e6,
     max_tokens=180,  # Reduced for Benchmarking - see ColBERT paper
     embed_dim=None,  # Bag of Embeddings (128) for each token
     license="mit",
-    similarity_fn_name="max_sim",
+    similarity_fn_name="MaxSim",
     framework=["PyLate", "ColBERT"],
     reference="https://huggingface.co/colbert-ir/colbertv2.0",
     use_instructions=False,
     adapted_from=None,
     superseded_by=None,
+    training_datasets={
+        "MSMARCO": ["train"],  # dev?
+    },
 )
 
 
@@ -203,16 +210,22 @@ jina_colbert_v2 = ModelMeta(
     ],
     open_weights=True,
     revision="4cf816e5e2b03167b132a3c847a9ecd48ba708e1",
-    public_training_code=False,
+    public_training_code=None,
+    public_training_data=None,
     release_date="2024-08-16",
     n_parameters=559 * 1e6,
     max_tokens=8192,
     embed_dim=None,  # Bag of Embeddings (128) for each token
     license="cc-by-nc-4.0",
-    similarity_fn_name="max_sim",
+    similarity_fn_name="MaxSim",
     framework=["PyLate", "ColBERT"],
     reference="https://huggingface.co/jinaai/jina-colbert-v2",
     use_instructions=False,
     adapted_from=None,
     superseded_by=None,
+    training_datasets={
+        "MSMARCO": ["train"],
+        "DuRetrieval": [],
+        "MIRACL": ["train"],
+    },
 )

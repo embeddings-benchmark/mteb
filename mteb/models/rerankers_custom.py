@@ -11,6 +11,7 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 from mteb.encoder_interface import Encoder
 from mteb.evaluation.evaluators.RetrievalEvaluator import DenseRetrievalExactSearch
 from mteb.model_meta import ModelMeta
+from mteb.models.bge_models import bge_m3_training_data
 
 logger = logging.getLogger(__name__)
 
@@ -204,6 +205,16 @@ monobert_large = ModelMeta(
     open_weights=True,
     revision="0a97706f3827389da43b83348d5d18c9d53876fa",
     release_date="2020-05-28",
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
+    framework=["Sentence Transformers", "PyTorch"],
 )
 
 # languages unclear: https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual/discussions/28
@@ -219,6 +230,16 @@ jina_reranker_multilingual = ModelMeta(
     open_weights=True,
     revision="126747772a932960028d9f4dc93bd5d9c4869be4",
     release_date="2024-09-26",
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
+    framework=["Sentence Transformers", "PyTorch"],
 )
 
 bge_reranker_v2_m3 = ModelMeta(
@@ -266,6 +287,16 @@ bge_reranker_v2_m3 = ModelMeta(
     open_weights=True,
     revision="953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e",
     release_date="2024-06-24",
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=bge_m3_training_data,
+    framework=["Sentence Transformers", "PyTorch"],
     citation="""
     @misc{li2023making,
       title={Making Large Language Models A Better Foundation For Dense Retrieval}, 
