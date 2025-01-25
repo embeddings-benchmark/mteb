@@ -31,11 +31,6 @@ class SummaryRetrievalEvaluator(Evaluator):
         self.pairs = pair_columns
         self.n = len(sentences)
         self.sentences = sentences
-        self.gold = (
-            list(zip(range(self.n), range(self.n)))
-            if "gold" not in sentences
-            else sentences["gold"]
-        )
         self.task_name = task_name
 
     def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}):
@@ -91,7 +86,7 @@ class SummaryRetrievalEvaluator(Evaluator):
         for i, x in enumerate(nearest_neighbors):
             j = x[0]["corpus_id"]
             predictions.append(j)
-            labels.append(self.gold[i][1])
+            labels.append(i)
 
         scores = {
             "precision": precision_score(
