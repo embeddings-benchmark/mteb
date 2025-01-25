@@ -100,7 +100,7 @@ class InstructSentenceTransformerWrapper(Wrapper):
             model_name: Model name of the sentence transformers model.
             revision: Revision of the sentence transformers model.
             instruction_template: Model template. Should contain the string '{instruction}'.
-            max_seq_length: Maximum sequence length. If None, the maximum sequence length will be read from the model config. 
+            max_seq_length: Maximum sequence length. If None, the maximum sequence length will be read from the model config.
             apply_instruction_to_passages: Whether to apply the instruction template to the passages.
             padding_side: Padding side. If None, the padding side will be read from the model config.
             add_eos_token: Whether to add the eos token to each input example.
