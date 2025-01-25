@@ -72,3 +72,39 @@ class ClimateFEVERHardNegatives(AbsTaskRetrieval):
       primaryClass={cs.CL}
 }""",
     )
+
+
+class ClimateFEVERv2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="ClimateFEVER.v2",
+        description="CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change. ",
+        reference="https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html",
+        dataset={
+            "path": "Mina76/climate-fever-v2",
+            "revision": "9dd886701f63b066f5d6b82cd061a6e13befdbd4",
+        },
+        type="Retrieval",
+        category="s2p",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        date=None,
+        domains=None,
+        task_subtypes=None,
+        license=None,
+        annotations_creators=None,
+        dialect=None,
+        sample_creation=None,
+        bibtex_citation="""@misc{diggelmann2021climatefever,
+      title={CLIMATE-FEVER: A Dataset for Verification of Real-World Climate Claims}, 
+      author={Thomas Diggelmann and Jordan Boyd-Graber and Jannis Bulian and Massimiliano Ciaramita and Markus Leippold},
+      year={2021},
+      eprint={2012.00614},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
+        prompt={
+            "query": "Given a claim about climate change, retrieve documents that support or refute the claim"
+        },
+    )
