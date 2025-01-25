@@ -72,6 +72,7 @@ NV_embed_v2 = ModelMeta(
         trust_remote_code=True,
         max_seq_length=32768,
         padding_side="right",
+        # for nv-embed, we add eos token to each input example
         add_eos_token=True,
     ),
     name="nvidia/NV-Embed-v2",
@@ -99,6 +100,7 @@ NV_embed_v1 = ModelMeta(
         trust_remote_code=True,
         max_seq_length=32768,
         padding_side="right",
+        # for nv-embed, we add eos token to each input example
         add_eos_token=True,
     ),
     name="nvidia/NV-Embed-v1",
