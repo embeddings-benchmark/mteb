@@ -89,7 +89,7 @@ class ClimateFEVERv2(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=("2020-12-11"),
+        date=("2020-12-11", "2020-12-11"),
         domains=["Academic"],
         task_subtypes=["Question answering"],
         license="cc-by-sa-4.0",
