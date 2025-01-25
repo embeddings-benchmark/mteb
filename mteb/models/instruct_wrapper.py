@@ -97,8 +97,8 @@ class InstructSentenceTransformerWrapper(Wrapper):
         Applied for models like NV-Embed, gte-Qwen, e5-mistral, etc.
 
         Arguments:
-            model_name: Model name
-            revision: Revision
+            model_name: Model name of the sentence transformers model.
+            revision: Revision of the sentence transformers model.
             instruction_template: Model template. Should contain the string '{instruction}'.
             max_seq_length: Maximum sequence length. If None, the maximum sequence length won't be changed.
             apply_instruction_to_passages: Whether to apply the instruction template to the passages.
