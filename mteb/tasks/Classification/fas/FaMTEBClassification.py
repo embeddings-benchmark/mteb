@@ -28,8 +28,7 @@ class SynPerChatbotConvSAAnger(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     samples_per_label = 32
 
 
@@ -56,8 +55,7 @@ class SynPerChatbotConvSASatisfaction(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     samples_per_label = 32
 
 
@@ -86,8 +84,7 @@ class SynPerChatbotConvSAFriendship(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     samples_per_label = 32
 
 
@@ -114,8 +111,7 @@ class SynPerChatbotConvSAFear(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     samples_per_label = 32
 
 
@@ -142,8 +138,7 @@ class SynPerChatbotConvSAJealousy(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     samples_per_label = 32
 
 
@@ -171,8 +166,7 @@ class SynPerChatbotConvSASurprise(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     samples_per_label = 32
 
 
@@ -200,8 +194,7 @@ class SynPerChatbotConvSALove(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     samples_per_label = 32
 
 
@@ -229,8 +222,7 @@ class SynPerChatbotConvSASadness(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     samples_per_label = 32
 
 
@@ -258,8 +250,7 @@ class SynPerChatbotConvSAHappiness(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     samples_per_label = 32
 
 
@@ -287,8 +278,7 @@ class SynPerChatbotConvSAToneChatbotClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     samples_per_label = 32
 
 
@@ -315,8 +305,7 @@ class SynPerChatbotConvSAToneUserClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     samples_per_label = 32
 
 
@@ -343,8 +332,7 @@ class SynPerChatbotSatisfactionLevelClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     samples_per_label = 32
 
 
@@ -371,8 +359,7 @@ class SynPerChatbotRAGToneChatbotClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     samples_per_label = 32
 
 
@@ -399,8 +386,7 @@ class SynPerChatbotRAGToneUserClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     samples_per_label = 32
 
 
@@ -427,8 +413,7 @@ class SynPerChatbotToneChatbotClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     samples_per_label = 32
 
 
@@ -455,8 +440,7 @@ class SynPerChatbotToneUserClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     samples_per_label = 32
 
 
@@ -483,8 +467,7 @@ class PersianTextTone(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     samples_per_label = 32
 
 
@@ -511,8 +494,7 @@ class SIDClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     samples_per_label = 32
 
 
@@ -540,8 +522,7 @@ class DeepSentiPers(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     samples_per_label = 32
 
     def dataset_transform(self):
@@ -571,8 +552,7 @@ class PersianTextEmotion(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     samples_per_label = 32
 
 
@@ -600,8 +580,7 @@ class SentimentDKSF(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     samples_per_label = 32
 
 
@@ -628,8 +607,7 @@ class NLPTwitterAnalysisClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     samples_per_label = 32
 
     def dataset_transform(self):
@@ -660,8 +638,7 @@ class DigikalamagClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     samples_per_label = 32
 
     def dataset_transform(self):

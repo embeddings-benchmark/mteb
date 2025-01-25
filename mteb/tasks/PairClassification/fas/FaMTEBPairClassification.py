@@ -26,8 +26,7 @@ class CExaPPC(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     def dataset_transform(self):
         _dataset = {}
         self.dataset = self.dataset.map(
@@ -66,8 +65,7 @@ class SynPerChatbotRAGFAQPC(AbsTaskPairClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     def dataset_transform(self):
         _dataset = {}
         for split in self.metadata.eval_splits:
@@ -103,8 +101,7 @@ class FarsiParaphraseDetection(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     def dataset_transform(self):
         _dataset = {}
         for split in self.metadata.eval_splits:
@@ -141,8 +138,7 @@ class SynPerTextKeywordsPC(AbsTaskPairClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     def dataset_transform(self):
         _dataset = {}
         for split in self.metadata.eval_splits:
@@ -178,8 +174,7 @@ class SynPerQAPC(AbsTaskPairClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     def dataset_transform(self):
         _dataset = {}
         for split in self.metadata.eval_splits:
@@ -217,8 +212,7 @@ class ParsinluEntail(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     def dataset_transform(self):
         _dataset = {}
         self.dataset = self.dataset.filter(lambda x: x["label"] != "n")
@@ -261,8 +255,7 @@ class ParsinluQueryParaphPC(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
     def dataset_transform(self):
         _dataset = {}
         self.dataset = self.dataset.map(

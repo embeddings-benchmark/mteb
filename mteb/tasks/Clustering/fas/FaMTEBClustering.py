@@ -33,8 +33,7 @@ class BeytooteClustering(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
 
 
     def dataset_transform(self):
@@ -70,8 +69,7 @@ class DigikalamagClustering(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
 
 
     def dataset_transform(self):
@@ -111,8 +109,7 @@ class HamshahriClustring(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
 
 
     def dataset_transform(self):
@@ -172,8 +169,7 @@ class NLPTwitterAnalysisClustering(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
 
 
     def dataset_transform(self):
@@ -210,8 +206,7 @@ class SIDClustring(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
 
     def dataset_transform(self):
         self.dataset = self.stratified_subsampling(

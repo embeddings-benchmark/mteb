@@ -28,8 +28,7 @@ class Farsick(AbsTaskSTS):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
@@ -62,8 +61,7 @@ class SynPerSTS(AbsTaskSTS):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
@@ -96,8 +94,7 @@ class Query2Query(AbsTaskSTS):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
-        descriptive_stats={"n_samples": "", "avg_character_length": ""},
-    )
+ )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
