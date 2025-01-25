@@ -74,7 +74,7 @@ The leaderboard [automatically refreshes daily](https://github.com/embeddings-be
 
 ##### Adding instruction models
 
-Model that using instructions during, then it can use [`InstructSentenceTransformerWrapper`](../mteb/models/instruct_wrapper.py).
+Models that use instructions can use the [`InstructSentenceTransformerWrapper`](../mteb/models/instruct_wrapper.py). For example:
 ```python
 model = ModelMeta(
     loader=partial(
