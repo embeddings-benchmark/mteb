@@ -31,6 +31,7 @@ class SynPerQARetrieval(AbsTaskRetrieval):
         bibtex_citation="""""",
     )
 
+
 class SynPerChatbotTopicsRetrieval(AbsTaskRetrieval):
     ignore_identical_ids = True
     metadata = TaskMetadata(
@@ -56,6 +57,7 @@ class SynPerChatbotTopicsRetrieval(AbsTaskRetrieval):
         sample_creation="LM-generated and verified",
         bibtex_citation="""""",
     )
+
 
 class SynPerChatbotRAGTopicsRetrieval(AbsTaskRetrieval):
     ignore_identical_ids = True

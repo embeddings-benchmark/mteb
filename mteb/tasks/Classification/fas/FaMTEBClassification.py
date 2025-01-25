@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
-from datasets import load_dataset
 
 
 class SynPerChatbotConvSAAnger(AbsTaskClassification):
@@ -16,7 +15,7 @@ class SynPerChatbotConvSAAnger(AbsTaskClassification):
         },
         type="Classification",
         category="p2p",
-        modalities=["text"],    
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
         main_score="accuracy",
@@ -28,7 +27,7 @@ class SynPerChatbotConvSAAnger(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
- )
+    )
     samples_per_label = 32
 
 
@@ -55,10 +54,8 @@ class SynPerChatbotConvSASatisfaction(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
- )
+    )
     samples_per_label = 32
-
-
 
 
 class SynPerChatbotConvSAFriendship(AbsTaskClassification):
@@ -84,7 +81,7 @@ class SynPerChatbotConvSAFriendship(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
- )
+    )
     samples_per_label = 32
 
 
@@ -111,7 +108,7 @@ class SynPerChatbotConvSAFear(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
- )
+    )
     samples_per_label = 32
 
 
@@ -138,9 +135,8 @@ class SynPerChatbotConvSAJealousy(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
- )
+    )
     samples_per_label = 32
-
 
 
 class SynPerChatbotConvSASurprise(AbsTaskClassification):
@@ -166,9 +162,8 @@ class SynPerChatbotConvSASurprise(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
- )
+    )
     samples_per_label = 32
-
 
 
 class SynPerChatbotConvSALove(AbsTaskClassification):
@@ -194,9 +189,8 @@ class SynPerChatbotConvSALove(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
- )
+    )
     samples_per_label = 32
-
 
 
 class SynPerChatbotConvSASadness(AbsTaskClassification):
@@ -222,9 +216,8 @@ class SynPerChatbotConvSASadness(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
- )
+    )
     samples_per_label = 32
-
 
 
 class SynPerChatbotConvSAHappiness(AbsTaskClassification):
@@ -250,9 +243,8 @@ class SynPerChatbotConvSAHappiness(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
- )
+    )
     samples_per_label = 32
-
 
 
 class SynPerChatbotConvSAToneChatbotClassification(AbsTaskClassification):
@@ -278,7 +270,7 @@ class SynPerChatbotConvSAToneChatbotClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
- )
+    )
     samples_per_label = 32
 
 
@@ -305,7 +297,7 @@ class SynPerChatbotConvSAToneUserClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
- )
+    )
     samples_per_label = 32
 
 
@@ -332,7 +324,7 @@ class SynPerChatbotSatisfactionLevelClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
- )
+    )
     samples_per_label = 32
 
 
@@ -359,7 +351,7 @@ class SynPerChatbotRAGToneChatbotClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
- )
+    )
     samples_per_label = 32
 
 
@@ -386,7 +378,7 @@ class SynPerChatbotRAGToneUserClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
- )
+    )
     samples_per_label = 32
 
 
@@ -413,7 +405,7 @@ class SynPerChatbotToneChatbotClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
- )
+    )
     samples_per_label = 32
 
 
@@ -440,7 +432,7 @@ class SynPerChatbotToneUserClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
- )
+    )
     samples_per_label = 32
 
 
@@ -467,7 +459,7 @@ class PersianTextTone(AbsTaskClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
- )
+    )
     samples_per_label = 32
 
 
@@ -494,9 +486,8 @@ class SIDClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
- )
+    )
     samples_per_label = 32
-
 
 
 class DeepSentiPers(AbsTaskClassification):
@@ -522,7 +513,7 @@ class DeepSentiPers(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
- )
+    )
     samples_per_label = 32
 
     def dataset_transform(self):
@@ -552,9 +543,8 @@ class PersianTextEmotion(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
- )
+    )
     samples_per_label = 32
-
 
 
 class SentimentDKSF(AbsTaskClassification):
@@ -580,7 +570,7 @@ class SentimentDKSF(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
- )
+    )
     samples_per_label = 32
 
 
@@ -607,7 +597,7 @@ class NLPTwitterAnalysisClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
- )
+    )
     samples_per_label = 32
 
     def dataset_transform(self):
@@ -638,7 +628,7 @@ class DigikalamagClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
- )
+    )
     samples_per_label = 32
 
     def dataset_transform(self):

@@ -13,5 +13,5 @@ from .AbsTaskRetrieval import *
 from .AbsTaskSpeedTask import *
 from .AbsTaskSTS import *
 from .AbsTaskSummarization import *
-from .MultilingualTask import *
 from .AbsTaskSummaryRetrieval import *
+from .MultilingualTask import *

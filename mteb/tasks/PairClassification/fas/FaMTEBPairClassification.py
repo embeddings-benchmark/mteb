@@ -3,6 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+
 class CExaPPC(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="CExaPPC",
@@ -26,7 +27,8 @@ class CExaPPC(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
- )
+    )
+
     def dataset_transform(self):
         _dataset = {}
         self.dataset = self.dataset.map(
@@ -41,6 +43,7 @@ class CExaPPC(AbsTaskPairClassification):
                 }
             ]
         self.dataset = _dataset
+
 
 class SynPerChatbotRAGFAQPC(AbsTaskPairClassification):
     metadata = TaskMetadata(
@@ -65,7 +68,8 @@ class SynPerChatbotRAGFAQPC(AbsTaskPairClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
- )
+    )
+
     def dataset_transform(self):
         _dataset = {}
         for split in self.metadata.eval_splits:
@@ -77,6 +81,7 @@ class SynPerChatbotRAGFAQPC(AbsTaskPairClassification):
                 }
             ]
         self.dataset = _dataset
+
 
 class FarsiParaphraseDetection(AbsTaskPairClassification):
     metadata = TaskMetadata(
@@ -101,7 +106,8 @@ class FarsiParaphraseDetection(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
- )
+    )
+
     def dataset_transform(self):
         _dataset = {}
         for split in self.metadata.eval_splits:
@@ -138,7 +144,8 @@ class SynPerTextKeywordsPC(AbsTaskPairClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
- )
+    )
+
     def dataset_transform(self):
         _dataset = {}
         for split in self.metadata.eval_splits:
@@ -150,6 +157,7 @@ class SynPerTextKeywordsPC(AbsTaskPairClassification):
                 }
             ]
         self.dataset = _dataset
+
 
 class SynPerQAPC(AbsTaskPairClassification):
     metadata = TaskMetadata(
@@ -174,7 +182,8 @@ class SynPerQAPC(AbsTaskPairClassification):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
- )
+    )
+
     def dataset_transform(self):
         _dataset = {}
         for split in self.metadata.eval_splits:
@@ -212,7 +221,8 @@ class ParsinluEntail(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
- )
+    )
+
     def dataset_transform(self):
         _dataset = {}
         self.dataset = self.dataset.filter(lambda x: x["label"] != "n")
@@ -239,7 +249,6 @@ class ParsinluQueryParaphPC(AbsTaskPairClassification):
             "path": "persiannlp/parsinlu_query_paraphrasing",
             "revision": "ec675bb3ac50c1a52317c101fe1d724b4601f47a",
             "trust_remote_code": True,
-
         },
         type="PairClassification",
         category="s2s",
@@ -255,7 +264,8 @@ class ParsinluQueryParaphPC(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
- )
+    )
+
     def dataset_transform(self):
         _dataset = {}
         self.dataset = self.dataset.map(

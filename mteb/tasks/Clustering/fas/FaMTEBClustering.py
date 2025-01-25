@@ -1,6 +1,5 @@
 from __future__ import annotations
-from mteb.abstasks.TaskMetadata import TaskMetadata
-from itertools import chain
+
 import numpy as np
 from datasets import Dataset, DatasetDict
 
@@ -8,6 +7,7 @@ from mteb.abstasks.AbsTaskClusteringFast import (
     AbsTaskClusteringFast,
     check_label_distribution,
 )
+from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class BeytooteClustering(AbsTaskClusteringFast):
@@ -33,17 +33,16 @@ class BeytooteClustering(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
- )
-
+    )
 
     def dataset_transform(self):
-
         self.dataset = self.stratified_subsampling(
             self.dataset,
             seed=self.seed,
             splits=["test"],
             label="labels",
         )
+
 
 class DigikalamagClustering(AbsTaskClusteringFast):
     metadata = TaskMetadata(
@@ -69,8 +68,7 @@ class DigikalamagClustering(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
- )
-
+    )
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_columns(
@@ -83,7 +81,6 @@ class DigikalamagClustering(AbsTaskClusteringFast):
             splits=["test"],
             label="labels",
         )
-
 
 
 class HamshahriClustring(AbsTaskClusteringFast):
@@ -109,16 +106,15 @@ class HamshahriClustring(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
- )
-
+    )
 
     def dataset_transform(self):
-        self.dataset = self.dataset.map(lambda x: {'sentences': f"{x['title']}\n: {x['summary']}"})
-        self.dataset = self.dataset.map(lambda x: {'labels': x['tags'][0]})
-        self.dataset = DatasetDict({
-        "test": self.dataset["hamshahri"]
-                        })
-        
+        self.dataset = self.dataset.map(
+            lambda x: {"sentences": f"{x['title']}\n: {x['summary']}"}
+        )
+        self.dataset = self.dataset.map(lambda x: {"labels": x["tags"][0]})
+        self.dataset = DatasetDict({"test": self.dataset["hamshahri"]})
+
         ds = {}
         for split in self.metadata.eval_splits:
             labels = self.dataset[split]["labels"]
@@ -145,7 +141,6 @@ class HamshahriClustring(AbsTaskClusteringFast):
         )
 
 
-
 class NLPTwitterAnalysisClustering(AbsTaskClusteringFast):
     metadata = TaskMetadata(
         name="NLPTwitterAnalysisClustering",
@@ -169,8 +164,7 @@ class NLPTwitterAnalysisClustering(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
- )
-
+    )
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_column("tweet", "sentences")
@@ -206,7 +200,7 @@ class SIDClustring(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
- )
+    )
 
     def dataset_transform(self):
         self.dataset = self.stratified_subsampling(

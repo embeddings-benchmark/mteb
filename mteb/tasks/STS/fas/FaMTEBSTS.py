@@ -28,7 +28,7 @@ class Farsick(AbsTaskSTS):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
- )
+    )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
@@ -61,7 +61,7 @@ class SynPerSTS(AbsTaskSTS):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
- )
+    )
 
     @property
     def metadata_dict(self) -> dict[str, str]:
@@ -69,7 +69,7 @@ class SynPerSTS(AbsTaskSTS):
         metadata_dict["min_score"] = 1
         metadata_dict["max_score"] = 5
         return metadata_dict
-    
+
 
 class Query2Query(AbsTaskSTS):
     metadata = TaskMetadata(
@@ -94,7 +94,7 @@ class Query2Query(AbsTaskSTS):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
- )
+    )
 
     @property
     def metadata_dict(self) -> dict[str, str]:

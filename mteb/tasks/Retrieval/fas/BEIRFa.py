@@ -32,7 +32,6 @@ class ArguAnaFa(AbsTaskRetrieval):
     )
 
 
-
 class ClimateFEVERFa(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="ClimateFEVER-Fa",
@@ -84,6 +83,7 @@ class CQADupstackAndroidRetrievalFa(AbsTaskRetrieval):
         bibtex_citation=""" """,
     )
 
+
 class CQADupstackEnglishRetrievalFa(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CQADupstackEnglishRetrieval-Fa",
@@ -108,6 +108,7 @@ class CQADupstackEnglishRetrievalFa(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=""" """,
     )
+
 
 class CQADupstackGamingRetrievalFa(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -134,6 +135,7 @@ class CQADupstackGamingRetrievalFa(AbsTaskRetrieval):
         bibtex_citation=""" """,
     )
 
+
 class CQADupstackGisRetrievalFa(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CQADupstackGisRetrieval-Fa",
@@ -158,6 +160,7 @@ class CQADupstackGisRetrievalFa(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=""" """,
     )
+
 
 class CQADupstackMathematicaRetrievalFa(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -184,6 +187,7 @@ class CQADupstackMathematicaRetrievalFa(AbsTaskRetrieval):
         bibtex_citation=""" """,
     )
 
+
 class CQADupstackPhysicsRetrievalFa(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CQADupstackPhysicsRetrieval-Fa",
@@ -208,6 +212,7 @@ class CQADupstackPhysicsRetrievalFa(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=""" """,
     )
+
 
 class CQADupstackProgrammersRetrievalFa(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -234,6 +239,7 @@ class CQADupstackProgrammersRetrievalFa(AbsTaskRetrieval):
         bibtex_citation=""" """,
     )
 
+
 class CQADupstackStatsRetrievalFa(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CQADupstackStatsRetrieval-Fa",
@@ -258,6 +264,7 @@ class CQADupstackStatsRetrievalFa(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=""" """,
     )
+
 
 class CQADupstackTexRetrievalFa(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -284,6 +291,7 @@ class CQADupstackTexRetrievalFa(AbsTaskRetrieval):
         bibtex_citation=""" """,
     )
 
+
 class CQADupstackUnixRetrievalFa(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CQADupstackUnixRetrieval-Fa",
@@ -309,6 +317,7 @@ class CQADupstackUnixRetrievalFa(AbsTaskRetrieval):
         bibtex_citation=""" """,
     )
 
+
 class CQADupstackWebmastersRetrievalFa(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CQADupstackWebmastersRetrieval-Fa",
@@ -333,6 +342,7 @@ class CQADupstackWebmastersRetrievalFa(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=""" """,
     )
+
 
 class CQADupstackWordpressRetrievalFa(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -385,6 +395,7 @@ class DBPediaFa(AbsTaskRetrieval):
         bibtex_citation=""" """,
     )
 
+
 class FiQA2018Fa(AbsTaskRetrieval):
     ignore_identical_ids = True
 
@@ -422,7 +433,6 @@ class HotpotQAFa(AbsTaskRetrieval):
             "path": "MCINext/hotpotqa-fa",
             "revision": "1cafde1306aa56b5dfdce0b14633ae9ee1a63ddb",
         },
-
         type="Retrieval",
         category="s2p",
         modalities=["text"],
@@ -467,6 +477,7 @@ class MSMARCOFa(AbsTaskRetrieval):
         bibtex_citation=""" """,
     )
 
+
 class NFCorpusFa(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NFCorpus-Fa",
@@ -492,6 +503,7 @@ class NFCorpusFa(AbsTaskRetrieval):
         bibtex_citation=""" """,
     )
 
+
 class NQFa(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NQ-Fa",
@@ -501,7 +513,6 @@ class NQFa(AbsTaskRetrieval):
             "path": "MCINext/nq-fa",
             "revision": "d4ea898b644c8d5f608b60947cb637bebbf1ac66",
         },
-
         type="Retrieval",
         category="s2p",
         modalities=["text"],
@@ -517,6 +528,7 @@ class NQFa(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=""" """,
     )
+
 
 class QuoraRetrievalFa(AbsTaskRetrieval):
     ignore_identical_ids = True
@@ -544,6 +556,7 @@ class QuoraRetrievalFa(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation=""" """,
     )
+
 
 class SCIDOCSFa(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -596,6 +609,7 @@ class SciFactFa(AbsTaskRetrieval):
         bibtex_citation=""" """,
     )
 
+
 class TRECCOVIDFa(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="TRECCOVID-Fa",
@@ -623,7 +637,6 @@ class TRECCOVIDFa(AbsTaskRetrieval):
 
 
 class Touche2020Fa(AbsTaskRetrieval):
-
     metadata = TaskMetadata(
         name="Touche2020-Fa",
         description="Touche2020-Fa",
