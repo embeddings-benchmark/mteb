@@ -71,3 +71,18 @@ The leaderboard [automatically refreshes daily](https://github.com/embeddings-be
     ###### Instantiating the Model with Prompts
 
     If you are unable to directly add the prompts in the model configuration, you can instantiate the model using the `sentence_transformers_loader` and pass `prompts` as an argument. For more details, see the `mteb/models/bge_models.py` file.
+
+##### Adding instruction models
+
+Models that use instructions can use the [`InstructSentenceTransformerWrapper`](../mteb/models/instruct_wrapper.py). For example:
+```python
+model = ModelMeta(
+    loader=partial(
+        InstructSentenceTransformerWrapper,
+        model="nvidia/NV-Embed-v1",
+        revision="7604d305b621f14095a1aa23d351674c2859553a",
+        instruction_template="Instruct: {instruction}\nQuery: ",
+    ),
+   ...
+)
+```
