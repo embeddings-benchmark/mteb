@@ -45,7 +45,7 @@ common_args = {
 class CodeRAGProgrammingSolutionsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CodeRAGProgrammingSolutions",
-        description="Ranking of related scientific papers based on their title.",
+        description="Evaluation of programming solution retrieval using CodeRAG-Bench. Tests the ability to retrieve relevant programming solutions given code-related queries.",
         dataset={
             "path": "code-rag-bench/programming-solutions",
             "revision": "1064f7bba54d5400d4836f5831fe4c2332a566a6",
@@ -102,7 +102,7 @@ class CodeRAGProgrammingSolutionsRetrieval(AbsTaskRetrieval):
 class CodeRAGOnlineTutorialsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CodeRAGOnlineTutorials",
-        description="Ranking of related scientific papers based on their title.",
+        description="Evaluation of online programming tutorial retrieval using CodeRAG-Bench. Tests the ability to retrieve relevant tutorials from online platforms given code-related queries.",
         dataset={
             "path": "code-rag-bench/online-tutorials",
             "revision": "095bb77130082e4690d6c3a031997b03487bf6e2",
@@ -162,7 +162,7 @@ class CodeRAGOnlineTutorialsRetrieval(AbsTaskRetrieval):
 class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CodeRAGLibraryDocumentationSolutions",
-        description="Ranking of related scientific papers based on their title.",
+        description="Evaluation of code library documentation retrieval using CodeRAG-Bench. Tests the ability to retrieve relevant Python library documentation sections given code-related queries.",
         dataset={
             "path": "code-rag-bench/library-documentation",
             "revision": "b530d3b5a25087d2074e731b76232db85b9e9107",
@@ -219,7 +219,7 @@ class CodeRAGLibraryDocumentationSolutionsRetrieval(AbsTaskRetrieval):
 class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CodeRAGStackoverflowPosts",
-        description="Ranking of related scientific papers based on their title.",
+        description="Evaluation of StackOverflow post retrieval using CodeRAG-Bench. Tests the ability to retrieve relevant StackOverflow posts given code-related queries.",
         dataset={
             "path": "code-rag-bench/stackoverflow-posts",
             "revision": "04e05d86cb0ac467b29a5d87f4c56eac99dfc0a4",
@@ -255,16 +255,13 @@ class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
         self.corpus[split] = {}
 
         texts = ds["text"]
-        meta = ds["meta"]
-        for text, mt in zip(texts, meta):
+        id = 0
+        for text in texts:
             # in code-rag-bench,
             # text = query + "\n" + doc
             query, doc = split_by_first_newline(text)
 
-            # task_id is string
-            id = mt["task_id"]
-
-            query_id = id
+            query_id = str(id)
             doc_id = f"doc_{id}"
             self.queries[split][query_id] = query
             self.corpus[split][doc_id] = {"title": "", "text": doc}
@@ -272,3 +269,4 @@ class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
             self.relevant_docs[split][query_id] = {
                 doc_id: 1
             }  # only one correct matches
+            id += 1
