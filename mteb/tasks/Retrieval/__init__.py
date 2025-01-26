@@ -5,10 +5,7 @@ from .code.AppsRetrieval import *
 from .code.CodeEditSearchRetrieval import *
 from .code.CodeFeedbackMTRetrieval import *
 from .code.CodeFeedbackSTRetrieval import *
-from .code.CodeRAGLibraryDocumentationRetrieval import *
-from .code.CodeRAGOnlineTutorialsRetrieval import *
-from .code.CodeRAGProgrammingSolutionsRetrieval import *
-from .code.CodeRAGStackoverflowPostsRetrieval import *
+from .code.CodeRAG import *
 from .code.CodeSearchNetCCRetrieval import *
 from .code.CodeSearchNetRetrieval import *
 from .code.CodeTransOceanContestRetrieval import *
