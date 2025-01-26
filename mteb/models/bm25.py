@@ -17,7 +17,7 @@ def bm25_loader(**kwargs):
         import Stemmer
     except ImportError:
         raise ImportError(
-            "bm25s or Stemmer is not installed. Please install it with `pip install bm25s Stemmer`."
+            "bm25s or PyStemmer is not installed. Please install it with `pip install mteb[bm25s]`."
         )
 
     class BM25Search(DRESModel, Wrapper):
@@ -58,7 +58,17 @@ def bm25_loader(**kwargs):
         ) -> dict[str, dict[str, float]]:
             logger.info("Encoding Corpus...")
             corpus_ids = list(corpus.keys())
-            corpus_with_ids = [{"doc_id": cid, **corpus[cid]} for cid in corpus_ids]
+            corpus_with_ids = [
+                {
+                    "doc_id": cid,
+                    **(
+                        {"text": corpus[cid]}
+                        if isinstance(corpus[cid], str)
+                        else corpus[cid]
+                    ),
+                }
+                for cid in corpus_ids
+            ]
 
             corpus_texts = [
                 "\n".join([doc.get("title", ""), doc["text"]])
@@ -121,12 +131,14 @@ bm25_s = ModelMeta(
     revision="0_1_10",
     release_date="2024-07-10",  ## release of version 0.1.10
     n_parameters=None,
-    memory_usage=None,
     embed_dim=None,
     license=None,
     max_tokens=None,
-    reference=None,
+    reference="https://github.com/xhluca/bm25s",
     similarity_fn_name=None,
     framework=[],
     use_instructions=False,
+    public_training_code="https://github.com/xhluca/bm25s",
+    public_training_data=None,
+    training_datasets=None,
 )

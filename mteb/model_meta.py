@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, Any, Callable, Literal
 
 from pydantic import BaseModel, ConfigDict
 
+from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.TaskMetadata import STR_DATE, STR_URL
 from mteb.encoder_interface import Encoder
 
@@ -25,8 +26,11 @@ FRAMEWORKS = Literal[
     "TensorFlow",
     "API",
     "Tevatron",
+    "NumPy",
+    "PyLate",
+    "ColBERT",
 ]
-DISTANCE_METRICS = Literal["cosine"]
+DISTANCE_METRICS = Literal["cosine", "max_sim", "dot"]
 
 
 def sentence_transformers_loader(
@@ -55,7 +59,6 @@ class ModelMeta(BaseModel):
         name: The name of the model, ideally the name on huggingface.
         n_parameters: The number of parameters in the model, e.g. 7_000_000 for a 7M parameter model. Can be None if the the number of parameters is not known (e.g. for proprietary models) or
             if the loader returns a SentenceTransformer model from which it can be derived.
-        memory_usage: The amount of memory the model uses in GB. Can be None if the memory usage is not known (e.g. for proprietary models).
         max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
             models).
         embed_dim: The dimension of the embeddings produced by the model. Currently all models are assumed to produce fixed-size embeddings.
@@ -63,8 +66,8 @@ class ModelMeta(BaseModel):
         release_date: The date the model's revision was released.
         license: The license under which the model is released. Required if open_weights is True.
         open_weights: Whether the model is open source or proprietary.
-        public_training_data: Whether the training data used to train the model is publicly available.
-        public_training_code: Whether the code used to train the model is publicly available.
+        public_training_code: A link to the publicly available training code. If none it is assumed that the training code is not publicly available.
+        public_training_data: A link to the publicly available training data. If none it is assumed that the training data is not publicly available.
         similarity_fn_name: The distance metric used by the model.
         framework: The framework the model is implemented in, can be a list of frameworks e.g. `["Sentence Transformers", "PyTorch"]`.
         reference: A URL to the model's page on huggingface or another source.
@@ -72,8 +75,9 @@ class ModelMeta(BaseModel):
             in the Latin script.
         use_instructions: Whether the model uses instructions E.g. for prompt-based models. This also include models that require a specific format for
             input such as "query: {document}" or "passage: {document}".
-        zero_shot_benchmarks: A list of benchmarks on which the model has been evaluated in a zero-shot setting. By default we assume that all models
-            are evaluated non-zero-shot unless specified otherwise.
+        training_datasets: A dictionary of datasets that the model was trained on. Names should be names as their appear in `mteb` for example
+            {"ArguAna": ["test"]} if the model is trained on the ArguAna test set. This field is used to determine if a model generalizes zero-shot to
+            a benchmark as well as mark dataset contaminations.
         adapted_from: Name of the model from which this model is adapted from. For quantizations, fine-tunes, long doc extensions, etc.
         superseded_by: Name of the model that supersedes this model, e.g. nvidia/NV-Embed-v2 supersedes v1.
     """
@@ -85,19 +89,18 @@ class ModelMeta(BaseModel):
     release_date: STR_DATE | None
     languages: list[ISO_LANGUAGE_SCRIPT] | None
     loader: Callable[..., Encoder] | None = None
-    n_parameters: int | None = None
-    memory_usage: float | None = None
-    max_tokens: int | None = None
-    embed_dim: int | None = None
-    license: str | None = None
-    open_weights: bool | None = None
-    public_training_data: bool | None = None
-    public_training_code: bool | None = None
-    framework: list[FRAMEWORKS] = []
+    n_parameters: int | None
+    max_tokens: float | None
+    embed_dim: int | None
+    license: str | None
+    open_weights: bool | None
+    public_training_code: str | None
+    public_training_data: str | bool | None
+    framework: list[FRAMEWORKS]
     reference: STR_URL | None = None
-    similarity_fn_name: DISTANCE_METRICS | None = None
-    use_instructions: bool | None = None
-    zero_shot_benchmarks: list[str] | None = None
+    similarity_fn_name: DISTANCE_METRICS | None
+    use_instructions: bool | None
+    training_datasets: dict[str, list[str]] | None
     adapted_from: str | None = None
     superseded_by: str | None = None
 
@@ -122,9 +125,24 @@ class ModelMeta(BaseModel):
             loader = self.loader
 
         model: Encoder = loader(**kwargs)  # type: ignore
+        model.mteb_model_meta = self
         return model
 
     def model_name_as_path(self) -> str:
         if self.name is None:
             raise ValueError("Model name is not set")
         return self.name.replace("/", "__").replace(" ", "_")
+
+    def is_zero_shot_on(self, tasks: list[AbsTask]) -> bool | None:
+        """Indicates whether the given model can be considered
+        zero-shot or not on the given tasks.
+        Returns None if no training data is specified on the model.
+        """
+        if self.training_datasets is None:
+            return None
+        benchmark_datasets = set()
+        for task in tasks:
+            benchmark_datasets.add(task.metadata.name)
+        model_datasets = {ds_name for ds_name, splits in self.training_datasets.items()}
+        intersection = model_datasets & benchmark_datasets
+        return len(intersection) == 0

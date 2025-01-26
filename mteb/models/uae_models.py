@@ -52,7 +52,7 @@ class UAEWrapper(SentenceTransformerWrapper):
 
 
 uae_large_v1 = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         UAEWrapper,
         model="WhereIsAI/UAE-Large-V1",
         revision="369c368f70f16a613f19f5598d4f12d9f44235d4",
@@ -74,5 +74,14 @@ uae_large_v1 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     reference="https://huggingface.co/WhereIsAI/UAE-Large-V1",
-    use_instructions=False,
+    use_instructions=True,
+    training_datasets={
+        # source: https://arxiv.org/pdf/2309.12871
+        # not in MTEB
+        "MNLI": [],
+        "NLI": [],
+        "SNLI": [],
+    },
+    public_training_code=None,
+    public_training_data=None,
 )

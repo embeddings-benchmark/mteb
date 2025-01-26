@@ -10,7 +10,7 @@ from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import StandardScaler
 from tqdm import tqdm
 
-import mteb
+from mteb.load_results.benchmark_results import BenchmarkResults
 
 MODEL_NAME = str
 REVISION = str
@@ -35,7 +35,7 @@ def mse_with_zscore(x: list[float], y: list[float]) -> float:
 
 
 def results_to_dataframe(
-    mteb_results: dict[MODEL_NAME, dict[REVISION, list[mteb.MTEBResults]]],
+    mteb_results: BenchmarkResults,
     drop_na: bool = True,
     **kwargs: Any,
 ) -> pd.DataFrame:
@@ -47,17 +47,16 @@ def results_to_dataframe(
         **kwargs: Additional keyword arguments to be passed to the `get_score` method of the `MTEBResults` class.
     """
     data = []
-    for model_name, revisions in mteb_results.items():
-        for rev, tasks_results in revisions.items():
-            for task_result in tasks_results:
-                data.append(
-                    {
-                        "Model": model_name,
-                        "Revision": rev,
-                        "task": task_result.task_name,
-                        "main_score": task_result.get_score(**kwargs),
-                    }
-                )
+    for model_res in mteb_results:
+        for task_result in model_res.task_results:
+            data.append(
+                {
+                    "Model": model_res.model_name,
+                    "Revision": model_res.model_revision,
+                    "task": task_result.task_name,
+                    "main_score": task_result.get_score(**kwargs),
+                }
+            )
     df = pd.DataFrame(data)
 
     if drop_na:

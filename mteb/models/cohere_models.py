@@ -5,6 +5,7 @@ from typing import Any
 
 import numpy as np
 import torch
+import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
@@ -140,25 +141,43 @@ class CohereTextEmbeddingModel(Wrapper):
         )
 
     def _embed(
-        self, sentences: list[str], cohere_task_type: str, retries: int = 5
+        self,
+        sentences: list[str],
+        cohere_task_type: str,
+        show_progress_bar: bool = False,
+        retries: int = 5,
     ) -> torch.Tensor:
         import cohere  # type: ignore
 
+        max_batch_size = 256
+
+        batches = [
+            sentences[i : i + max_batch_size]
+            for i in range(0, len(sentences), max_batch_size)
+        ]
+
         client = cohere.Client()
-        while retries > 0:  # Cohere's API is not always reliable
-            try:
-                response = client.embed(
-                    texts=list(sentences),
-                    model=self.model_name,
-                    input_type=cohere_task_type,
-                )
-                break
-            except Exception as e:
-                print(f"Retrying... {retries} retries left.")
-                retries -= 1
-                if retries == 0:
-                    raise e
-        return torch.tensor(response.embeddings)
+
+        all_embeddings = []
+
+        for batch in tqdm.tqdm(batches, leave=False, disable=not show_progress_bar):
+            while retries > 0:  # Cohere's API is not always reliable
+                try:
+                    response = client.embed(
+                        texts=batch,
+                        model=self.model_name,
+                        input_type=cohere_task_type,
+                    )
+                    break
+                except Exception as e:
+                    print(f"Retrying... {retries} retries left.")
+                    retries -= 1
+                    if retries == 0:
+                        raise e
+
+            all_embeddings.extend(torch.tensor(response.embeddings).numpy())
+
+        return np.array(all_embeddings)
 
     def encode(
         self,
@@ -168,13 +187,24 @@ class CohereTextEmbeddingModel(Wrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        cohere_task_type = self.get_prompt_name(
-            self.model_prompts, task_name, prompt_type
-        )
+        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+        cohere_task_type = self.model_prompts.get(prompt_name)
+
         if cohere_task_type is None:
             # search_document is recommended if unknown (https://cohere.com/blog/introducing-embed-v3)
             cohere_task_type = "search_document"
-        return self._embed(sentences, cohere_task_type=cohere_task_type).numpy()
+
+        show_progress_bar = (
+            False
+            if "show_progress_bar" not in kwargs
+            else kwargs.pop("show_progress_bar")
+        )
+
+        return self._embed(
+            sentences,
+            cohere_task_type=cohere_task_type,
+            show_progress_bar=show_progress_bar,
+        )
 
 
 model_prompts = {
@@ -186,7 +216,7 @@ model_prompts = {
 }
 
 cohere_mult_3 = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         CohereTextEmbeddingModel,
         model_name="embed-multilingual-v3.0",
         model_prompts=model_prompts,
@@ -197,20 +227,22 @@ cohere_mult_3 = ModelMeta(
     revision="1",
     release_date="2023-11-02",
     n_parameters=None,
-    memory_usage=None,
     max_tokens=None,
     embed_dim=512,
     reference="https://cohere.com/blog/introducing-embed-v3",
     license=None,
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instructions=False,
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,  # assumed
+    training_datasets=None,
 )
 
 cohere_eng_3 = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         CohereTextEmbeddingModel,
-        model_name="embed-multilingual-v3.0",
+        model_name="embed-english-v3.0",
         model_prompts=model_prompts,
     ),
     name="Cohere/Cohere-embed-english-v3.0",
@@ -220,15 +252,16 @@ cohere_eng_3 = ModelMeta(
     revision="1",
     release_date="2023-11-02",
     n_parameters=None,
-    memory_usage=None,
     max_tokens=512,
     embed_dim=1024,
     license=None,
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instructions=False,
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,  # assumed
+    training_datasets=None,
 )
-
 
 cohere_mult_light_3 = ModelMeta(
     loader=partial(
@@ -243,13 +276,15 @@ cohere_mult_light_3 = ModelMeta(
     reference="https://cohere.com/blog/introducing-embed-v3",
     release_date="2023-11-02",
     n_parameters=None,
-    memory_usage=None,
     max_tokens=512,
     embed_dim=384,
     license=None,
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instructions=False,
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,  # assumed
+    training_datasets=None,
 )
 
 cohere_eng_light_3 = ModelMeta(
@@ -265,11 +300,13 @@ cohere_eng_light_3 = ModelMeta(
     revision="1",
     release_date="2023-11-02",
     n_parameters=None,
-    memory_usage=None,
     max_tokens=512,
     embed_dim=384,
     license=None,
     similarity_fn_name="cosine",
     framework=["API"],
-    use_instructions=False,
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,  # assumed
+    training_datasets=None,
 )

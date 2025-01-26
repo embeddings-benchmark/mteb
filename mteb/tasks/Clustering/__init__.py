@@ -18,6 +18,8 @@ from .eng.StackExchangeClustering import *
 from .eng.StackExchangeClusteringP2P import *
 from .eng.TwentyNewsgroupsClustering import *
 from .eng.WikiCitiesClustering import *
+from .eng.WikipediaChemistrySpecialtiesClustering import *
+from .eng.WikipediaChemistryTopicsClustering import *
 from .fra.AlloProfClusteringP2P import *
 from .fra.AlloProfClusteringS2S import *
 from .fra.HALClusteringS2S import *
