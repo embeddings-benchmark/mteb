@@ -164,18 +164,22 @@ blip_image_captioning_large = ModelMeta(
     revision="2227ac38c9f16105cb0412e7cab4759978a8fd90",
     release_date="2023-12-07",
     modalities=["image", "text"],
-    n_parameters=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    open_weights=None,
-    public_training_code=None,
-    public_training_data=None,
+    n_parameters=470_000_000,
+    max_tokens=512,
+    embed_dim=768,
+    license="bsd-3-clause",
+    open_weights=True,
+    public_training_code="https://github.com/salesforce/BLIP",
+    public_training_data="https://github.com/salesforce/BLIP",
     framework=["PyTorch"],
-    reference=None,
+    reference="https://huggingface.co/Salesforce/blip-image-captioning-large",
     similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
+    use_instructions=False,
+    training_datasets={
+        # COCO
+        # CC3M+CC12M+SBU
+        # LAION115M
+    },
 )
 
 blip_image_captioning_base = ModelMeta(
@@ -188,18 +192,22 @@ blip_image_captioning_base = ModelMeta(
     revision="89b09ea1789f7addf2f6d6f0dfc4ce10ab58ef84",
     release_date="2023-08-01",
     modalities=["image", "text"],
-    n_parameters=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    open_weights=None,
-    public_training_code=None,
-    public_training_data=None,
+    n_parameters=247_000_000,
+    max_tokens=512,
+    embed_dim=768,
+    license="bsd-3-clause",
+    open_weights=True,
+    public_training_code="https://github.com/salesforce/BLIP",
+    public_training_data="https://github.com/salesforce/BLIP",
     framework=["PyTorch"],
-    reference=None,
+    reference="https://huggingface.co/Salesforce/blip-image-captioning-base",
     similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
+    use_instructions=False,
+    training_datasets={
+        # COCO
+        # CC3M+CC12M+SBU
+        # LAION115M
+    },
 )
 
 
@@ -213,18 +221,21 @@ blip_vqa_base = ModelMeta(
     revision="c7df8e7cd7aa2ee9af18f56e2b29e59a92651b64",
     release_date="2023-12-07",
     modalities=["image", "text"],
-    n_parameters=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    open_weights=None,
-    public_training_code=None,
-    public_training_data=None,
+    n_parameters=247_000_000,
+    max_tokens=512,
+    embed_dim=768,
+    license="bsd-3-clause",
+    open_weights=True,
+    public_training_code="https://github.com/salesforce/BLIP",
+    public_training_data="https://github.com/salesforce/BLIP",
     framework=["PyTorch"],
-    reference=None,
+    reference="https://huggingface.co/Salesforce/blip-vqa-base",
     similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
+    use_instructions=False,
+    training_datasets={
+        # CC3M+CC12M+SBU
+        # LAION115M
+    },
 )
 
 blip_vqa_capfilt_large = ModelMeta(
@@ -237,18 +248,21 @@ blip_vqa_capfilt_large = ModelMeta(
     revision="e53f95265aeab69013fabb5380500ab984adbbb4",
     release_date="2023-01-22",
     modalities=["image", "text"],
-    n_parameters=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    open_weights=None,
-    public_training_code=None,
-    public_training_data=None,
+    n_parameters=247_000_000,
+    max_tokens=512,
+    embed_dim=768,
+    license="bsd-3-clause",
+    open_weights=True,
+    public_training_code="https://github.com/salesforce/BLIP",
+    public_training_data="https://github.com/salesforce/BLIP",
     framework=["PyTorch"],
-    reference=None,
+    reference="https://huggingface.co/Salesforce/blip-vqa-capfilt-large",
     similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
+    use_instructions=False,
+    training_datasets={
+        # CC3M+CC12M+SBU
+        # LAION115M
+    },
 )
 
 blip_itm_base_coco = ModelMeta(
@@ -261,18 +275,21 @@ blip_itm_base_coco = ModelMeta(
     revision="7eaa90c11850c0b17fc38c6a11e7d88bd6ac231f",
     release_date="2023-08-01",
     modalities=["image", "text"],
-    n_parameters=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    open_weights=None,
-    public_training_code=None,
-    public_training_data=None,
+    n_parameters=247_000_000,
+    max_tokens=512,
+    embed_dim=768,
+    license="bsd-3-clause",
+    open_weights=True,
+    public_training_code="https://github.com/salesforce/BLIP",
+    public_training_data="https://github.com/salesforce/BLIP",
     framework=["PyTorch"],
-    reference=None,
+    reference="https://huggingface.co/Salesforce/blip-itm-base-coco",
     similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
+    use_instructions=False,
+    training_datasets={
+        # CC3M+CC12M+SBU
+        # LAION115M
+    },
 )
 
 blip_itm_large_coco = ModelMeta(
@@ -285,18 +302,22 @@ blip_itm_large_coco = ModelMeta(
     revision="fef05cafc05298067cbbca00b125749394a77a6f",
     release_date="2023-08-01",
     modalities=["image", "text"],
-    n_parameters=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    open_weights=None,
-    public_training_code=None,
-    public_training_data=None,
+    n_parameters=470_000_000,
+    max_tokens=512,
+    embed_dim=768,
+    license="bsd-3-clause",
+    open_weights=True,
+    public_training_code="https://github.com/salesforce/BLIP",
+    public_training_data="https://github.com/salesforce/BLIP",
     framework=["PyTorch"],
-    reference=None,
+    reference="https://huggingface.co/Salesforce/blip-itm-large-coco",
     similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
+    use_instructions=False,
+    training_datasets={
+        # COCO
+        # CC3M+CC12M+SBU
+        # LAION115M
+    },
 )
 
 blip_itm_base_flickr = ModelMeta(
@@ -309,18 +330,22 @@ blip_itm_base_flickr = ModelMeta(
     revision="1de29e660d91ae1786c1876212ea805a22eab251",
     release_date="2023-08-01",
     modalities=["image", "text"],
-    n_parameters=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    open_weights=None,
-    public_training_code=None,
-    public_training_data=None,
+    n_parameters=247_000_000,
+    max_tokens=512,
+    embed_dim=768,
+    license="bsd-3-clause",
+    open_weights=True,
+    public_training_code="https://github.com/salesforce/BLIP",
+    public_training_data="https://github.com/salesforce/BLIP",
     framework=["PyTorch"],
-    reference=None,
+    reference="https://huggingface.co/Salesforce/blip-itm-base-flickr",
     similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
+    use_instructions=False,
+    training_datasets={
+        # CC3M+CC12M+SBU
+        # LAION115M
+        # Flickr30k
+    },
 )
 
 blip_itm_large_flickr = ModelMeta(
@@ -333,18 +358,21 @@ blip_itm_large_flickr = ModelMeta(
     revision="bda12e6506758f54261b5ab174b2c55a3ba143fb",
     release_date="2023-08-01",
     modalities=["image", "text"],
-    n_parameters=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    open_weights=None,
-    public_training_code=None,
-    public_training_data=None,
+    n_parameters=470_000_000,
+    max_tokens=512,
+    embed_dim=768,
+    license="bsd-3-clause",
+    open_weights=True,
+    public_training_code="https://github.com/salesforce/BLIP",
+    public_training_data="https://github.com/salesforce/BLIP",
     framework=["PyTorch"],
-    reference=None,
+    reference="https://huggingface.co/Salesforce/blip-itm-large-flickr",
     similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
+    use_instructions=False,
+    training_datasets={
+        # CC3M+CC12M+SBU
+        # LAION115M
+    },
 )
 
 

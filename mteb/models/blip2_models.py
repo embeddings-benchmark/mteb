@@ -215,6 +215,12 @@ def blip2_loader(**kwargs):
     return BLIP2ModelWrapper(**kwargs)
 
 
+blip2_training_datasets = {
+    # COCO
+    # CC3M+CC12M+SBU
+    # LAION400M
+}
+
 blip2_opt_2_7b = ModelMeta(
     loader=partial(
         blip2_loader,
@@ -225,18 +231,18 @@ blip2_opt_2_7b = ModelMeta(
     revision="51572668da0eb669e01a189dc22abe6088589a24",
     release_date="2024-03-22",
     modalities=["image", "text"],
-    n_parameters=None,
+    n_parameters=3_740_000_000,
     max_tokens=None,
-    embed_dim=None,
-    license=None,
-    open_weights=None,
-    public_training_code=None,
+    embed_dim=768,
+    license="mit",
+    open_weights=True,
+    public_training_code="https://github.com/salesforce/LAVIS/tree/main/projects/blip2",
     public_training_data=None,
     framework=["PyTorch"],
-    reference=None,
+    reference="https://huggingface.co/Salesforce/blip2-opt-2.7b",
     similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
+    use_instructions=False,
+    training_datasets=blip2_training_datasets,
 )
 
 blip2_opt_6_7b_coco = ModelMeta(
@@ -249,18 +255,18 @@ blip2_opt_6_7b_coco = ModelMeta(
     revision="0d580de59320a25a4d2c386387bcef310d5f286e",
     release_date="2024-03-31",
     modalities=["image", "text"],
-    n_parameters=None,
+    n_parameters=7_750_000_000,
     max_tokens=None,
-    embed_dim=None,
-    license=None,
-    open_weights=None,
-    public_training_code=None,
+    embed_dim=768,
+    license="mit",
+    open_weights=True,
+    public_training_code="https://github.com/salesforce/LAVIS/tree/main/projects/blip2",
     public_training_data=None,
     framework=["PyTorch"],
-    reference=None,
+    reference="https://huggingface.co/Salesforce/blip2-opt-6.7b-coco",
     similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
+    use_instructions=False,
+    training_datasets=blip2_training_datasets,
 )
 
 
