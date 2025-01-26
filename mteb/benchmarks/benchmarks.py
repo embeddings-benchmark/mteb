@@ -506,6 +506,20 @@ RAR_b = Benchmark(
     contacts=["gowitheflow-1998"],
 )
 
+MTEB_AR = Benchmark(
+    name="MTEB(ar)",
+    tasks=MTEBTasks(
+        get_tasks(
+            languages=["ar"],
+            tasks=[]
+        )
+    ),
+    description = "MTEB-Arabic, a benchmark for text embedding performance evaluation in the arabic language",
+    reference = None,
+    citation = None,
+    contacts = ["haytamdon"]
+)
+
 MTEB_FRA = Benchmark(
     name="MTEB(fra)",
     tasks=MTEBTasks(
