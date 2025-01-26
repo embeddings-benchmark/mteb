@@ -984,11 +984,11 @@ CODE_RAG = Benchmark(
     name="CodeRAG",
     tasks=get_tasks(
         tasks=[
-                "CodeRAGLibraryDocumentationSolutions",
-                "CodeRAGOnlineTutorials",
-                "CodeRAGProgrammingSolutions",
-                "CodeRAGStackoverflowPosts"
-            ],
+            "CodeRAGLibraryDocumentationSolutions",
+            "CodeRAGOnlineTutorials",
+            "CodeRAGProgrammingSolutions",
+            "CodeRAGStackoverflowPosts",
+        ],
     ),
     description="A benchmark for evaluating code retrieval augmented generation, testing models' ability to retrieve relevant programming solutions, tutorials and documentation.",
     reference="https://arxiv.org/abs/2406.14497",
