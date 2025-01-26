@@ -54,7 +54,7 @@ class SynPerSTS(AbsTaskSTS):
         eval_langs=["fas-Arab"],
         main_score="cosine_spearman",
         date=("2024-09-01", "2024-12-31"),
-        domains=[],
+        domains=["Web", "News", "Religious", "Blog"],
         task_subtypes=[],
         license="not specified",
         annotations_creators="LM-generated",
