@@ -61,9 +61,6 @@ class AbsTaskSummaryRetrieval(AbsTask):
     parallel_subsets = False
     # abstask_prompt = ""
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
     def evaluate(
         self,
         model: Encoder,

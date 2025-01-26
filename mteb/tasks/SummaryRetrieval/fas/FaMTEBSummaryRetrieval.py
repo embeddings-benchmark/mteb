@@ -27,21 +27,6 @@ class SAMSumFa(AbsTaskSummaryRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
-        descriptive_stats={
-            "test": {
-                "num_samples": 1561,
-                "number_of_characters": 930587,
-                "unique_pairs": 1561,
-                "min_text_length": 46,
-                "average_text_length": 489.58872517616913,
-                "max_text_length": 2802,
-                "unique_text": 1561,
-                "min_summary_length": 14,
-                "average_summary_length": 106.55925688661115,
-                "max_summary_length": 325,
-                "unique_summary": 1561,
-            }
-        },
     )
 
 
@@ -68,21 +53,6 @@ class SynPerChatbotSumSRetrieval(AbsTaskSummaryRetrieval):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
-        descriptive_stats={
-            "test": {
-                "num_samples": 1537,
-                "number_of_characters": 1701259,
-                "unique_pairs": 1537,
-                "min_text_length": 383,
-                "average_text_length": 949.729342875732,
-                "max_text_length": 1828,
-                "unique_text": 1537,
-                "min_summary_length": 68,
-                "average_summary_length": 157.1405335068315,
-                "max_summary_length": 308,
-                "unique_summary": 1537,
-            }
-        },
     )
 
 
@@ -109,19 +79,4 @@ class SynPerChatbotRAGSumSRetrieval(AbsTaskSummaryRetrieval):
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
-        descriptive_stats={
-            "test": {
-                "num_samples": 1087,
-                "number_of_characters": 835245,
-                "unique_pairs": 1087,
-                "min_text_length": 37,
-                "average_text_length": 628.5234590616375,
-                "max_text_length": 2601,
-                "unique_text": 1087,
-                "min_summary_length": 43,
-                "average_summary_length": 139.87120515179393,
-                "max_summary_length": 284,
-                "unique_summary": 1087,
-            }
-        },
     )
