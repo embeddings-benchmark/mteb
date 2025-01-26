@@ -102,6 +102,7 @@ Internally, `mteb` uses `query` for encoding the queries and `passage` as the pr
 
 You can directly add the prompts when saving and uploading your model to the Hub. For an example, refer to this [configuration file](https://huggingface.co/Snowflake/snowflake-arctic-embed-m-v1.5/blob/3b5a16eaf17e47bd997da998988dce5877a57092/config_sentence_transformers.json). These prompts can then be specified in the ModelMeta object.
 
+
 ```python
 model = ModelMeta(
     loader=partial(  # type: ignore
@@ -113,5 +114,21 @@ model = ModelMeta(
            "passage": "passage: ",
         },
     ),
+)
+```
+If you are unable to directly add the prompts in the model configuration, you can instantiate the model using the `sentence_transformers_loader` and pass `prompts` as an argument. For more details, see the `mteb/models/bge_models.py` file.
+
+##### Adding instruction models
+
+Models that use instructions can use the [`InstructSentenceTransformerWrapper`](../mteb/models/instruct_wrapper.py). For example:
+```python
+model = ModelMeta(
+    loader=partial(
+        InstructSentenceTransformerWrapper,
+        model="nvidia/NV-Embed-v1",
+        revision="7604d305b621f14095a1aa23d351674c2859553a",
+        instruction_template="Instruct: {instruction}\nQuery: ",
+    ),
+   ...
 )
 ```

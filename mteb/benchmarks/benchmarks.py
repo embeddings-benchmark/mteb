@@ -1232,3 +1232,47 @@ C_MTEB = Benchmark(
       primaryClass={cs.CL}
 }""",
 )
+
+CHEMTEB = Benchmark(
+    name="ChemTEB",
+    tasks=get_tasks(
+        tasks=[
+            "PubChemSMILESBitextMining",
+            "SDSEyeProtectionClassification",
+            "SDSGlovesClassification",
+            "WikipediaBioMetChemClassification",
+            "WikipediaGreenhouseEnantiopureClassification",
+            "WikipediaSolidStateColloidalClassification",
+            "WikipediaOrganicInorganicClassification",
+            "WikipediaCryobiologySeparationClassification",
+            "WikipediaChemistryTopicsClassification",
+            "WikipediaTheoreticalAppliedClassification",
+            "WikipediaChemFieldsClassification",
+            "WikipediaLuminescenceClassification",
+            "WikipediaIsotopesFissionClassification",
+            "WikipediaSaltsSemiconductorsClassification",
+            "WikipediaBiolumNeurochemClassification",
+            "WikipediaCrystallographyAnalyticalClassification",
+            "WikipediaCompChemSpectroscopyClassification",
+            "WikipediaChemEngSpecialtiesClassification",
+            "WikipediaChemistryTopicsClustering",
+            "WikipediaSpecialtiesInChemistryClustering",
+            "PubChemAISentenceParaphrasePC",
+            "PubChemSMILESPC",
+            "PubChemSynonymPC",
+            "PubChemWikiParagraphsPC",
+            "PubChemWikiPairClassification",
+            "ChemNQRetrieval",
+            "ChemHotpotQARetrieval",
+        ],
+    ),
+    description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
+    reference="https://arxiv.org/abs/2412.00532",
+    citation="""
+    @article{kasmaee2024chemteb,
+    title={ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
+    author={Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
+    journal={arXiv preprint arXiv:2412.00532},
+    year={2024}
+}""",
+)
