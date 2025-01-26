@@ -215,6 +215,12 @@ def blip2_loader(**kwargs):
     return BLIP2ModelWrapper(**kwargs)
 
 
+blip2_training_datasets = {
+    # COCO
+    # CC3M+CC12M+SBU
+    # LAION400M
+}
+
 blip2_opt_2_7b = ModelMeta(
     loader=partial(
         blip2_loader,
@@ -236,11 +242,7 @@ blip2_opt_2_7b = ModelMeta(
     reference="https://huggingface.co/Salesforce/blip2-opt-2.7b",
     similarity_fn_name=None,
     use_instructions=False,
-    training_datasets=[
-        # COCO
-        # CC3M+CC12M+SBU
-        # LAION400M
-    ],
+    training_datasets=blip2_training_datasets,
 )
 
 blip2_opt_6_7b_coco = ModelMeta(
@@ -264,11 +266,7 @@ blip2_opt_6_7b_coco = ModelMeta(
     reference="https://huggingface.co/Salesforce/blip2-opt-6.7b-coco",
     similarity_fn_name=None,
     use_instructions=False,
-    training_datasets=[
-        # COCO
-        # CC3M+CC12M+SBU
-        # LAION400M
-    ],
+    training_datasets=blip2_training_datasets,
 )
 
 
