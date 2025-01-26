@@ -245,6 +245,12 @@ jina_embeddings_v3 = ModelMeta(
 
 
 jina_embeddings_v2_base_en = ModelMeta(
+    loader=partial(
+        SentenceTransformerWrapper,
+        model_name="jinaai/jina-embeddings-v2-base-en",
+        revision="6e85f575bc273f1fd840a658067d0157933c83f0",
+        trust_remote_code=True,
+    ),
     name="jinaai/jina-embeddings-v2-base-en",
     languages=["eng-Latn"],
     open_weights=True,
@@ -266,6 +272,12 @@ jina_embeddings_v2_base_en = ModelMeta(
 )
 
 jina_embeddings_v2_small_en = ModelMeta(
+    loader=partial(
+        SentenceTransformerWrapper,
+        model_name="jinaai/jina-embeddings-v2-small-en",
+        revision="796cff318cdd4e5fbe8b7303a1ef8cbec36996ef",
+        trust_remote_code=True,
+    ),
     name="jinaai/jina-embeddings-v2-small-en",
     languages=["eng-Latn"],
     open_weights=True,
@@ -287,6 +299,12 @@ jina_embeddings_v2_small_en = ModelMeta(
 )
 
 jina_embedding_b_en_v1 = ModelMeta(
+    loader=partial(
+        SentenceTransformerWrapper,
+        model_name="jinaai/jina-embedding-b-en-v1",
+        revision="aa0645035294a8c0607ce5bb700aba982cdff32c",
+        trust_remote_code=True,
+    ),
     name="jinaai/jina-embedding-b-en-v1",
     languages=["eng-Latn"],
     open_weights=True,
@@ -308,6 +326,12 @@ jina_embedding_b_en_v1 = ModelMeta(
 )
 
 jina_embedding_s_en_v1 = ModelMeta(
+    loader=partial(
+        SentenceTransformerWrapper,
+        model_name="jinaai/jina-embedding-s-en-v1",
+        revision="c1fed70aa4823a640f1a7150a276e4d3b08dce08",
+        trust_remote_code=True,
+    ),
     name="jinaai/jina-embedding-s-en-v1",
     languages=["eng-Latn"],
     open_weights=True,
