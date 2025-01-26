@@ -86,6 +86,10 @@ class CodeRAGProgrammingSolutionsRetrieval(AbsTaskRetrieval):
 
             query_id = id
             doc_id = f"doc_{id}"
+            # filter out empty queries
+            if not query:
+                continue
+            
             self.queries[split][query_id] = query
             self.corpus[split][doc_id] = {"title": "", "text": doc}
 

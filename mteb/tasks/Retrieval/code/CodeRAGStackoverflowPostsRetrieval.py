@@ -75,15 +75,13 @@ class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
 
         texts = ds["text"]
         meta = ds["meta"]
+        id = 0
         for text, mt in zip(texts, meta):
             # in code-rag-bench,
             # text = query + "\n" + doc
             query, doc = split_by_first_newline(text)
 
-            # task_id is string
-            id = mt["task_id"]
-
-            query_id = id
+            query_id = str(id)
             doc_id = f"doc_{id}"
             self.queries[split][query_id] = query
             self.corpus[split][doc_id] = {"title": "", "text": doc}
@@ -91,3 +89,4 @@ class CodeRAGStackoverflowPostsRetrieval(AbsTaskRetrieval):
             self.relevant_docs[split][query_id] = {
                 doc_id: 1
             }  # only one correct matches
+            id += 1
