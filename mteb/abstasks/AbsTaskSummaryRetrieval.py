@@ -58,56 +58,6 @@ class AbsTaskSummaryRetrieval(AbsTask):
         summary: str
     """
 
-    parallel_subsets = False
-    # abstask_prompt = ""
-
-    def evaluate(
-        self,
-        model: Encoder,
-        split: str = "test",
-        subsets_to_run: list[HFSubset] | None = None,
-        *,
-        encode_kwargs: dict[str, Any] = {},
-        **kwargs,
-    ) -> dict[HFSubset, ScoresDict]:
-        if not self.data_loaded:
-            self.load_data()
-
-        hf_subsets = list(self.dataset) if self.is_multilingual else ["default"]
-
-        # If subsets_to_run is specified, filter the hf_subsets accordingly
-        if subsets_to_run is not None:
-            hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
-
-        scores = {}
-        if self.parallel_subsets:
-            scores = self._evaluate_subset(
-                model,
-                self.dataset[split],  # type: ignore
-                parallel=True,
-                encode_kwargs=encode_kwargs,
-                **kwargs,
-            )
-        else:
-            for hf_subet in hf_subsets:
-                logger.info(
-                    f"\nTask: {self.metadata.name}, split: {split}, subset: {hf_subet}. Running..."
-                )
-
-                if hf_subet not in self.dataset and hf_subet == "default":
-                    data_split = self.dataset[split]
-                else:
-                    data_split = self.dataset[hf_subet][split]
-                scores[hf_subet] = self._evaluate_subset(
-                    model,
-                    data_split,  # type: ignore
-                    subsets=["text", "summary"],
-                    encode_kwargs=encode_kwargs,
-                    **kwargs,
-                )
-
-        return scores
-
     def get_pairs(self, parallel: bool) -> list[tuple[str, str]]:
         pairs = [("text", "summary")]
         if parallel:
