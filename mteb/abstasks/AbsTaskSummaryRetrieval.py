@@ -57,13 +57,6 @@ class AbsTaskSummaryRetrieval(AbsTask):
         text: str
         summary: str
     """
-
-    def get_pairs(self, parallel: bool) -> list[tuple[str, str]]:
-        pairs = [("text", "summary")]
-        if parallel:
-            pairs = [langpair.split("-") for langpair in self.hf_subsets]
-        return pairs
-
     def _evaluate_subset(
         self,
         model: Encoder,
@@ -73,20 +66,15 @@ class AbsTaskSummaryRetrieval(AbsTask):
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ) -> ScoresDict:
-        pairs = self.get_pairs(parallel)
 
         evaluator = SummaryRetrievalEvaluator(
             data_split,
             task_name=self.metadata.name,
-            pair_columns=pairs,  # type: ignore
+            pair_columns=[("text", "summary")],  
             **kwargs,
         )
         metrics = evaluator(model, encode_kwargs=encode_kwargs)
-        if parallel:
-            for v in metrics.values():
-                self._add_main_score(v)
-        else:
-            self._add_main_score(metrics)
+        self._add_main_score(metrics)
         return metrics
 
     def _add_main_score(self, scores) -> None:
@@ -95,7 +83,7 @@ class AbsTaskSummaryRetrieval(AbsTask):
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> SummaryRetrievalDescriptiveStatistics:
-        pairs_cols = self.get_pairs(self.parallel_subsets)
+        pairs_cols = [("text", "summary")]
         if hf_subset:  
             sent_1, sent_2 = pairs_cols[0]
             text = self.dataset[hf_subset][split][sent_1]
