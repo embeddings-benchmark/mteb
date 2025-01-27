@@ -35,7 +35,7 @@ from .mock_tasks import (
     MockRetrievalTask,
     MockSTSTask,
     MockSummarizationTask,
-    MockSummaryRetrievalTask
+    MockSummaryRetrievalTask,
 )
 
 twenty_news = TwentyNewsgroupsClusteringFast()

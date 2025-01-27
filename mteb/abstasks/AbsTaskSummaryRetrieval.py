@@ -8,7 +8,7 @@ from datasets import Dataset
 from mteb.encoder_interface import Encoder
 
 from ..evaluation.evaluators import SummaryRetrievalEvaluator
-from ..load_results.task_results import HFSubset, ScoresDict
+from ..load_results.task_results import ScoresDict
 from .AbsTask import AbsTask
 from .TaskMetadata import DescriptiveStatistics
 
@@ -57,6 +57,7 @@ class AbsTaskSummaryRetrieval(AbsTask):
         text: str
         summary: str
     """
+
     def _evaluate_subset(
         self,
         model: Encoder,
@@ -66,11 +67,10 @@ class AbsTaskSummaryRetrieval(AbsTask):
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ) -> ScoresDict:
-
         evaluator = SummaryRetrievalEvaluator(
             data_split,
             task_name=self.metadata.name,
-            pair_columns=[("text", "summary")],  
+            pair_columns=[("text", "summary")],
             **kwargs,
         )
         metrics = evaluator(model, encode_kwargs=encode_kwargs)
@@ -84,7 +84,7 @@ class AbsTaskSummaryRetrieval(AbsTask):
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> SummaryRetrievalDescriptiveStatistics:
         pairs_cols = [("text", "summary")]
-        if hf_subset:  
+        if hf_subset:
             sent_1, sent_2 = pairs_cols[0]
             text = self.dataset[hf_subset][split][sent_1]
             summary = self.dataset[hf_subset][split][sent_2]
