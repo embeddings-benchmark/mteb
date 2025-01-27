@@ -194,11 +194,11 @@ cohere_mult_3 = ModelMeta(
     similarity_fn_name="cosine",
     framework=[],
     modalities=["image", "text"],
-    open_weights=None,
+    open_weights=False,
     public_training_code=None,
     public_training_data=None,
-    reference=None,
-    use_instructions=None,
+    reference="https://huggingface.co/Cohere/Cohere-embed-multilingual-v3.0",
+    use_instructions=False,
     training_datasets=None,
 )
 
@@ -215,11 +215,11 @@ cohere_eng_3 = ModelMeta(
     similarity_fn_name="cosine",
     framework=[],
     modalities=["image", "text"],
-    open_weights=None,
+    open_weights=False,
     public_training_code=None,
     public_training_data=None,
-    reference=None,
-    use_instructions=None,
+    reference="https://huggingface.co/Cohere/Cohere-embed-english-v3.0",
+    use_instructions=False,
     training_datasets=None,
 )
 
