@@ -96,28 +96,17 @@ class AbsTaskSummaryRetrieval(AbsTask):
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> SummaryRetrievalDescriptiveStatistics:
         pairs_cols = self.get_pairs(self.parallel_subsets)
-        if hf_subset:
-            if self.parallel_subsets:
-                sent_1, sent_2 = hf_subset.split("-")
-                text = self.dataset[split][sent_1]
-                summary = self.dataset[split][sent_2]
-            else:
-                sent_1, sent_2 = pairs_cols[0]
-                text = self.dataset[hf_subset][split][sent_1]
-                summary = self.dataset[hf_subset][split][sent_2]
+        if hf_subset:  
+            sent_1, sent_2 = pairs_cols[0]
+            text = self.dataset[hf_subset][split][sent_1]
+            summary = self.dataset[hf_subset][split][sent_2]
         elif compute_overall:
             text = []
             summary = []
-            if self.parallel_subsets:
-                for hf_subset in self.metadata.eval_langs:
-                    sent_1, sent_2 = hf_subset.split("-")
-                    text.extend(self.dataset[split][sent_1])
-                    summary.extend(self.dataset[split][sent_2])
-            else:
-                sent_1, sent_2 = pairs_cols[0]
-                for hf_subset in self.metadata.eval_langs:
-                    text.extend(self.dataset[hf_subset][split][sent_1])
-                    summary.extend(self.dataset[hf_subset][split][sent_2])
+            sent_1, sent_2 = pairs_cols[0]
+            for hf_subset in self.metadata.eval_langs:
+                text.extend(self.dataset[hf_subset][split][sent_1])
+                summary.extend(self.dataset[hf_subset][split][sent_2])
         else:
             sent_1, sent_2 = pairs_cols[0]
             text = self.dataset[split][sent_1]
