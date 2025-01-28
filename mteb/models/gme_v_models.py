@@ -404,6 +404,26 @@ def fetch_image(
 
 
 ###
+training_data = {
+    "MSMARCO": ["train"],
+    "NQ": ["train"],
+    "NQHardNegatives": ["train"],
+    "NanoNQRetrieval": ["train"],
+    "NQ-PL": ["train"],  # translation not trained on
+    "HotpotQA": ["train"],
+    "HotpotQA-PL": ["train"],  # translation not trained on
+    "HotpotQAHardNegatives": ["train"],
+    # TriviaQA (Joshi et al., 2017),
+    # SQuAD (Rajpurkar et al., 2016),
+    "FEVER": ["train"],
+    # AllNLI for SimCSE (Gao et al., 2021), selecting a total of 1 million entries.
+    # ImageNet (Deng et al., 2009)
+    # LAION (Schuhmann et al., 2022),
+    # mscoco (Lin et al., 2014),
+    # Docmatix (Laurenc¸on et al., 2024)
+    # synthetic data
+    # M-BEIR (Wei et al., 2024)
+}
 
 
 gme_qwen2vl_2b = ModelMeta(
@@ -416,6 +436,7 @@ gme_qwen2vl_2b = ModelMeta(
     open_weights=True,
     revision="ce765ae71b8cdb208203cd8fb64a170b1b84293a",
     release_date="2024-12-24",
+    modalities=["image", "text"],
     n_parameters=2_210_000_000,
     embed_dim=1536,
     license="apache-2.0",
@@ -426,7 +447,7 @@ gme_qwen2vl_2b = ModelMeta(
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=training_data,
 )
 
 gme_qwen2vl_7b = ModelMeta(
@@ -439,6 +460,7 @@ gme_qwen2vl_7b = ModelMeta(
     open_weights=True,
     revision="477027a6480f8630363be77751f169cc3434b673",
     release_date="2024-12-24",
+    modalities=["image", "text"],
     n_parameters=8_290_000_000,
     embed_dim=3584,
     license="apache-2.0",
@@ -449,5 +471,5 @@ gme_qwen2vl_7b = ModelMeta(
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=training_data,
 )
