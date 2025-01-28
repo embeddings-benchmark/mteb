@@ -170,12 +170,12 @@ jina_clip_v1 = ModelMeta(
     similarity_fn_name=None,
     use_instructions=True,
     training_datasets={
-        #  LAION400M
+        # LAION400M
         # ShareGPT4V
         "MSMARCO": ["train"],
         # NQ
         # HotpotQA
-        # e Natural Language Inference (NLI) dataset (Bowman et al., 2015)
+        # Natural Language Inference (NLI) dataset (Bowman et al., 2015)
     },
 )
 
