@@ -361,17 +361,17 @@ voyage_3_lite = ModelMeta(
 voyage_3_exp = ModelMeta(
     name="voyageai/voyage-3-m-exp",
     revision="1",
-    release_date=None,  # not released
-    languages=None,  # supported languages not specified
+    release_date="2025-01-08",
+    languages=["eng-Latn"],
     loader=partial(
         VoyageWrapper,
         model_name="voyage-3-m-exp",
         model_prompts=model_prompts,
     ),
     max_tokens=32000,
-    embed_dim=512,
+    embed_dim=2048,
     open_weights=False,
-    n_parameters=None,
+    n_parameters=int(6918 * 1e6),
     license=None,
     reference="https://huggingface.co/voyageai/voyage-3-m-exp",
     similarity_fn_name="cosine",
