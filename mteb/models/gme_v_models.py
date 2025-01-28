@@ -405,12 +405,17 @@ def fetch_image(
 
 ###
 training_data = {
-    # MSMARCO (Nguyen et al., 2016),
-    # NQ (Kwiatkowski et al., 2019),
-    # HotpotQA (Yang et al., 2018),
+    "MSMARCO": ["train"],
+    "NQ": ["train"],
+    "NQHardNegatives": ["train"],
+    "NanoNQRetrieval": ["train"],
+    "NQ-PL": ["train"],  # translation not trained on
+    "HotpotQA": ["train"],
+    "HotpotQA-PL": ["train"],  # translation not trained on
+    "HotpotQAHardNegatives": ["train"],
     # TriviaQA (Joshi et al., 2017),
     # SQuAD (Rajpurkar et al., 2016),
-    # FEVER (Thorne et al., 2018),
+    "FEVER": ["train"],
     # AllNLI for SimCSE (Gao et al., 2021), selecting a total of 1 million entries.
     # ImageNet (Deng et al., 2009)
     # LAION (Schuhmann et al., 2022),
