@@ -71,6 +71,7 @@ TASK_DOMAIN = Literal[
     "Written",
     "Programming",
     "Chemistry",
+    "Financial",
 ]
 
 SAMPLE_CREATION_METHOD = Literal[
