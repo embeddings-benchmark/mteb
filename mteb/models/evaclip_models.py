@@ -24,7 +24,7 @@ def evaclip_loader(**kwargs):
         # https://github.com/baaivision/EVA/tree/master/EVA-CLIP#setup
         raise ImportError(
             "Please run `git clone git@github.com:baaivision/EVA.git`,"
-            "`pip install ninja`"
+            "`pip install ninja timm`"
             "`pip install -v -U git+https://github.com/facebookresearch/xformers.git@main#egg=xformers`"
             "`git clone https://github.com/NVIDIA/apex && cd apex && pip install -v --disable-pip-version-check --no-build-isolation --no-cache-dir ./`"
         )
@@ -165,6 +165,15 @@ def evaclip_loader(**kwargs):
     return EvaCLIPWrapper(**kwargs)
 
 
+training_code = "https://github.com/baaivision/EVA/tree/master/EVA-CLIP"
+training_datasets = {
+    # COYO-700M, random sample 400M. https://github.com/kakaobrain/coyo-dataset
+    # LAION-2B, random sample 1.6B. https://laion.ai/blog/laion-5b/
+}
+laion_2b = {
+    # LAION-2B
+}
+
 EVA02_CLIP_B_16 = ModelMeta(
     loader=partial(
         evaclip_loader,
@@ -175,18 +184,18 @@ EVA02_CLIP_B_16 = ModelMeta(
     revision="11afd202f2ae80869d6cef18b1ec775e79bd8d12",
     release_date="2023-04-26",
     modalities=["image", "text"],
-    n_parameters=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    open_weights=None,
-    public_training_code=None,
+    n_parameters=149_000_000,
+    max_tokens=77,
+    embed_dim=512,
+    license="mit",
+    open_weights=True,
+    public_training_code=training_code,
     public_training_data=None,
     framework=["PyTorch"],
-    reference=None,
+    reference="https://huggingface.co/QuanSun/EVA-CLIP",
     similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
+    use_instructions=False,
+    training_datasets=training_datasets,
 )
 
 EVA02_CLIP_L_14 = ModelMeta(
@@ -199,18 +208,18 @@ EVA02_CLIP_L_14 = ModelMeta(
     revision="11afd202f2ae80869d6cef18b1ec775e79bd8d12",
     release_date="2023-04-26",
     modalities=["image", "text"],
-    n_parameters=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    open_weights=None,
-    public_training_code=None,
+    n_parameters=428_000_000,
+    max_tokens=77,
+    embed_dim=768,
+    license="mit",
+    open_weights=True,
+    public_training_code=training_code,
     public_training_data=None,
     framework=["PyTorch"],
-    reference=None,
+    reference="https://huggingface.co/QuanSun/EVA-CLIP",
     similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
+    use_instructions=False,
+    training_datasets=training_datasets,
 )
 
 EVA02_CLIP_bigE_14 = ModelMeta(
@@ -223,18 +232,18 @@ EVA02_CLIP_bigE_14 = ModelMeta(
     revision="11afd202f2ae80869d6cef18b1ec775e79bd8d12",
     release_date="2023-04-26",
     modalities=["image", "text"],
-    n_parameters=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    open_weights=None,
-    public_training_code=None,
-    public_training_data=None,
+    n_parameters=4_700_000_000,
+    max_tokens=77,
+    embed_dim=1024,
+    license="mit",
+    open_weights=True,
+    public_training_code=training_code,
+    public_training_data="https://laion.ai/blog/laion-5b/",
     framework=["PyTorch"],
-    reference=None,
+    reference="https://huggingface.co/QuanSun/EVA-CLIP",
     similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
+    use_instructions=False,
+    training_datasets=laion_2b,
 )
 
 
@@ -248,16 +257,16 @@ EVA02_CLIP_bigE_14_plus = ModelMeta(
     revision="11afd202f2ae80869d6cef18b1ec775e79bd8d12",
     release_date="2023-04-26",
     modalities=["image", "text"],
-    n_parameters=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    open_weights=None,
-    public_training_code=None,
-    public_training_data=None,
+    n_parameters=5_000_000_000,
+    max_tokens=77,
+    embed_dim=1024,
+    license="mit",
+    open_weights=True,
+    public_training_code=training_code,
+    public_training_data="https://laion.ai/blog/laion-5b/",
     framework=["PyTorch"],
-    reference=None,
+    reference="https://huggingface.co/QuanSun/EVA-CLIP",
     similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
+    use_instructions=False,
+    training_datasets=laion_2b,
 )
