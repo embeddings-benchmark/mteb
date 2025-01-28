@@ -169,7 +169,14 @@ jina_clip_v1 = ModelMeta(
     reference="https://huggingface.co/jinaai/jina-clip-v1",
     similarity_fn_name=None,
     use_instructions=True,
-    training_datasets=None,
+    training_datasets={
+        #  LAION400M
+        # ShareGPT4V
+        "MSMARCO": "train",
+        # NQ
+        # HotpotQA
+        # e Natural Language Inference (NLI) dataset (Bowman et al., 2015)
+    },
 )
 
 
