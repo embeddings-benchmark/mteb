@@ -11,7 +11,6 @@ piccolo_base_zh = ModelMeta(
     revision="47c0a63b8f667c3482e05b2fd45577bb19252196",
     release_date="2023-09-04",  # first commit
     n_parameters=None,  # can't see on model card
-    memory_usage=None,
     embed_dim=768,
     license="mit",
     max_tokens=512,
@@ -21,8 +20,8 @@ piccolo_base_zh = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
-    public_training_code=False,
-    public_training_data=False,
+    public_training_code=None,
+    public_training_data=None,
     training_datasets=None,  # They don't specify
 )
 
@@ -34,7 +33,6 @@ piccolo_large_zh_v2 = ModelMeta(
     revision="05948c1d889355936bdf9db7d30df57dd78d25a3",
     release_date="2024-04-22",  # first commit
     n_parameters=None,  # we don't know because they removed the model
-    memory_usage=None,
     embed_dim=1024,
     license="not specified",
     max_tokens=512,
@@ -44,7 +42,7 @@ piccolo_large_zh_v2 = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
-    public_training_code=False,
-    public_training_data=False,
+    public_training_code=None,
+    public_training_data=None,
     training_datasets=None,  # They don't say
 )

@@ -126,6 +126,16 @@ E5_TRAINING_DATA = {
     "NQ-PL": ["train"],  # translation not trained on
 }
 
+ME5_TRAINING_DATA = {
+    **E5_TRAINING_DATA,
+    "FEVER": ["train"],
+    "FEVERHardNegatives": ["train"],
+    "FEVER-PL": ["train"],  # translation not trained on
+    "HotpotQA": ["train"],
+    "HotpotQAHardNegatives": ["train"],
+    "HotpotQA-PL": ["train"],  # translation not trained on
+}
+
 e5_mult_small = ModelMeta(
     loader=partial(  # type: ignore
         sentence_transformers_loader,
@@ -139,7 +149,6 @@ e5_mult_small = ModelMeta(
     revision="fd1525a9fd15316a2d503bf26ab031a61d056e98",
     release_date=E5_PAPER_RELEASE_DATE,
     n_parameters=118_000_000,
-    memory_usage=None,
     embed_dim=384,
     license="mit",
     max_tokens=512,
@@ -147,9 +156,9 @@ e5_mult_small = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
-    public_training_data=False,
-    public_training_code=False,
-    training_datasets=E5_TRAINING_DATA,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=ME5_TRAINING_DATA,
 )
 
 e5_mult_base = ModelMeta(
@@ -164,7 +173,6 @@ e5_mult_base = ModelMeta(
     revision="d13f1b27baf31030b7fd040960d60d909913633f",
     release_date=E5_PAPER_RELEASE_DATE,
     n_parameters=278_000_000,
-    memory_usage=None,
     embed_dim=768,
     license="mit",
     max_tokens=514,
@@ -172,9 +180,9 @@ e5_mult_base = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
-    public_training_data=False,
-    public_training_code=False,
-    training_datasets=E5_TRAINING_DATA,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=ME5_TRAINING_DATA,
 )
 
 e5_mult_large = ModelMeta(
@@ -190,7 +198,6 @@ e5_mult_large = ModelMeta(
     revision="ab10c1a7f42e74530fe7ae5be82e6d4f11a719eb",
     release_date=E5_PAPER_RELEASE_DATE,
     n_parameters=560_000_000,
-    memory_usage=None,
     embed_dim=1024,
     license="mit",
     max_tokens=514,
@@ -198,9 +205,9 @@ e5_mult_large = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
-    public_training_data=False,
-    public_training_code=False,
-    training_datasets=E5_TRAINING_DATA,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=ME5_TRAINING_DATA,
 )
 
 e5_eng_small_v2 = ModelMeta(
@@ -215,7 +222,6 @@ e5_eng_small_v2 = ModelMeta(
     revision="dca8b1a9dae0d4575df2bf423a5edb485a431236",
     release_date=E5_PAPER_RELEASE_DATE,
     n_parameters=33_000_000,
-    memory_usage=None,
     embed_dim=384,
     license="mit",
     max_tokens=512,
@@ -223,8 +229,8 @@ e5_eng_small_v2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
-    public_training_data=False,
-    public_training_code=False,
+    public_training_code=None,
+    public_training_data=None,
     training_datasets=E5_TRAINING_DATA,
 )
 
@@ -241,7 +247,6 @@ e5_eng_small = ModelMeta(
     revision="e272f3049e853b47cb5ca3952268c6662abda68f",
     release_date=E5_PAPER_RELEASE_DATE,
     n_parameters=33_000_000,
-    memory_usage=None,
     embed_dim=384,
     license="mit",
     max_tokens=512,
@@ -249,8 +254,8 @@ e5_eng_small = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
-    public_training_data=False,
-    public_training_code=False,
+    public_training_code=None,
+    public_training_data=None,
     training_datasets=E5_TRAINING_DATA,
 )
 
@@ -267,7 +272,6 @@ e5_eng_base_v2 = ModelMeta(
     revision="1c644c92ad3ba1efdad3f1451a637716616a20e8",
     release_date=E5_PAPER_RELEASE_DATE,
     n_parameters=109_000_000,
-    memory_usage=None,
     embed_dim=768,
     license="mit",
     max_tokens=512,
@@ -277,8 +281,8 @@ e5_eng_base_v2 = ModelMeta(
     use_instructions=True,
     superseded_by=None,
     adapted_from=None,
-    public_training_data=False,
-    public_training_code=False,
+    public_training_code=None,
+    public_training_data=None,
     training_datasets=E5_TRAINING_DATA,
 )
 
@@ -295,7 +299,6 @@ e5_eng_large_v2 = ModelMeta(
     revision="b322e09026e4ea05f42beadf4d661fb4e101d311",
     release_date=E5_PAPER_RELEASE_DATE,
     n_parameters=335_000_000,
-    memory_usage=None,
     embed_dim=1024,
     license="mit",
     max_tokens=514,
@@ -305,8 +308,8 @@ e5_eng_large_v2 = ModelMeta(
     use_instructions=True,
     superseded_by=None,
     adapted_from=None,
-    public_training_data=False,
-    public_training_code=False,
+    public_training_code=None,
+    public_training_data=None,
     training_datasets=E5_TRAINING_DATA,
 )
 
@@ -323,7 +326,6 @@ e5_large = ModelMeta(
     revision="4dc6d853a804b9c8886ede6dda8a073b7dc08a81",
     release_date="2022-12-26",
     n_parameters=335_000_000,
-    memory_usage=None,
     embed_dim=1024,
     license="apache-2.0",
     max_tokens=512,
@@ -333,8 +335,8 @@ e5_large = ModelMeta(
     use_instructions=True,
     superseded_by="intfloat/e5-large-v2",
     adapted_from=None,
-    public_training_data=False,
-    public_training_code=False,
+    public_training_code=None,
+    public_training_data=None,
     training_datasets=E5_TRAINING_DATA,
 )
 
@@ -351,7 +353,6 @@ e5_base = ModelMeta(
     revision="b533fe4636f4a2507c08ddab40644d20b0006d6a",
     release_date="2022-12-26",
     n_parameters=109_000_000,
-    memory_usage=None,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,
@@ -361,7 +362,7 @@ e5_base = ModelMeta(
     use_instructions=True,
     superseded_by="intfloat/e5-base-v2",
     adapted_from=None,
-    public_training_data=False,
-    public_training_code=False,
+    public_training_code=None,
+    public_training_data=None,
     training_datasets=E5_TRAINING_DATA,
 )

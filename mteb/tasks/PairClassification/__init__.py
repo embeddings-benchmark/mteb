@@ -4,6 +4,10 @@ from .ara.ArEntail import *
 from .ces.CTKFactsNLI import *
 from .deu.FalseFriendsDeEnPC import *
 from .eng.LegalBenchPC import *
+from .eng.PubChemAISentenceParaphrasePC import *
+from .eng.PubChemSMILESPC import *
+from .eng.PubChemSynonymPC import *
+from .eng.PubChemWikiParagraphsPC import *
 from .eng.SprintDuplicateQuestionsPC import *
 from .eng.TwitterSemEval2015PC import *
 from .eng.TwitterURLCorpusPC import *
@@ -13,6 +17,7 @@ from .ind.IndoNLI import *
 from .kor.KlueNLI import *
 from .multilingual.OpusparcusPC import *
 from .multilingual.PawsXPairClassification import *
+from .multilingual.PubChemWikiPairClassification import *
 from .multilingual.RTE3 import *
 from .multilingual.XNLI import *
 from .multilingual.XStance import *

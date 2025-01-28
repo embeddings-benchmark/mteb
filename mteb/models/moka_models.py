@@ -86,7 +86,6 @@ m3e_base = ModelMeta(
     revision="764b537a0e50e5c7d64db883f2d2e051cbe3c64c",
     release_date="2023-06-06",  # first commit
     n_parameters=102 * 1e6,
-    memory_usage=None,
     embed_dim=768,
     # They don't give a specific license but commercial use is not allowed
     license="unspecified-noncommercial",
@@ -97,8 +96,8 @@ m3e_base = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
-    public_training_code=False,  # Not published
-    public_training_data=False,  # They haven't published it yet
+    public_training_code=None,
+    public_training_data=None,  # Not published
     training_datasets=m3e_dataset,
 )
 
@@ -109,7 +108,6 @@ m3e_small = ModelMeta(
     revision="44c696631b2a8c200220aaaad5f987f096e986df",
     release_date="2023-06-02",  # first commit
     n_parameters=None,  # Can't be seen on HF page
-    memory_usage=None,
     embed_dim=512,
     # They don't give a specific license but commercial use is not allowed
     license="unspecified-noncommercial",
@@ -120,8 +118,8 @@ m3e_small = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
-    public_training_code=False,  # Not published
-    public_training_data=False,  # They haven't published it yet
+    public_training_code=None,
+    public_training_data=None,  # Not published
     training_datasets=m3e_dataset,
 )
 
@@ -133,7 +131,6 @@ m3e_large = ModelMeta(
     revision="12900375086c37ba5d83d1e417b21dc7d1d1f388",
     release_date="2023-06-21",  # first commit
     n_parameters=None,  # Can't be seen on HF page
-    memory_usage=None,
     embed_dim=768,
     # They don't give a specific license but commercial use is not allowed
     license="unspecified-noncommercial",
@@ -144,7 +141,7 @@ m3e_large = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
-    public_training_code=False,  # Not published
-    public_training_data=False,  # They haven't published it yet
+    public_training_code=None,
+    public_training_data=None,  # Not published
     training_datasets=m3e_dataset,
 )
