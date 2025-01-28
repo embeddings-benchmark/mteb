@@ -170,6 +170,7 @@ LICENSES = (  # this list can be extended as needed
         "gpl-3.0",
         "cdla-sharing-1.0",
         "mpl-2.0",
+        "msr-la-nc",
     ]
 )
 

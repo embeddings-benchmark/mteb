@@ -29,14 +29,13 @@ class RedditClusteringP2P(AbsTaskClustering):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
-        date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
+        date=("2021-01-01", "2021-04-14"),
+        domains=["Web", "Social", "Written"],
+        task_subtypes=["Thematic clustering"],
+        license="not specified",  # derived from pushshift
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
         bibtex_citation="""@article{geigle:2021:arxiv,
         author    = {Gregor Geigle and 
                         Nils Reimers and 
