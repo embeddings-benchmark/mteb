@@ -182,7 +182,10 @@ nomic_embed_vision_v1_5 = ModelMeta(
     reference="https://huggingface.co/nomic-ai/nomic-embed-vision-v1.5",
     similarity_fn_name=None,
     use_instructions=True,
-    training_datasets=None,
+    training_datasets={
+        # https://arxiv.org/pdf/2406.18587
+        # DFN-2B
+    },
 )
 
 if __name__ == "__main__":
