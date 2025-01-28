@@ -48,14 +48,26 @@ def extract_model_names(
                             and isinstance(node.value.func, ast.Name)
                             and node.value.func.id == "ModelMeta"
                         ):
-                            model_name = next(
-                                (
-                                    kw.value.value
-                                    for kw in node.value.keywords
-                                    if kw.arg == "name"
-                                ),
-                                None,
-                            )
+                            try:
+                                model_name = next(
+                                    (
+                                        kw.value.value
+                                        for kw in node.value.keywords
+                                        if kw.arg == "name"
+                                    ),
+                                    None,
+                                )
+                            except AttributeError:
+                                # For cases where name is assigned a variable and not a direct string,
+                                # e.g. in gme_v_models.py: `name=HF_GME_QWEN2VL_2B`
+                                model_name = next(
+                                    (
+                                        kw.value.id
+                                        for kw in node.value.keywords
+                                        if kw.arg == "name"
+                                    ),
+                                    None,
+                                )
                             if model_name:
                                 model_names.append(model_name)
                                 first_model_found = True
