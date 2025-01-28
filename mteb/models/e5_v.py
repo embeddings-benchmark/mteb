@@ -198,18 +198,20 @@ e5_v = ModelMeta(
     revision="0c1f22679417b3ae925d779442221c40cd1861ab",
     release_date="2024-07-17",
     modalities=["image", "text"],
-    n_parameters=None,
-    max_tokens=None,
-    embed_dim=None,
+    n_parameters=8_360_000_000,
+    max_tokens=8192,
+    embed_dim=4096,
     license=None,
-    open_weights=None,
-    public_training_code=None,
-    public_training_data=None,
+    open_weights=True,
+    public_training_code="https://github.com/kongds/E5-V",
+    public_training_data="https://huggingface.co/datasets/princeton-nlp/datasets-for-simcse",
     framework=["PyTorch"],
-    reference=None,
+    reference="https://huggingface.co/royokong/e5-v",
     similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
+    use_instructions=True,
+    training_datasets={
+        # princeton-nlp/datasets-for-simcse
+    },
 )
 
 if __name__ == "__main__":
