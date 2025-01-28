@@ -171,18 +171,21 @@ nomic_embed_vision_v1_5 = ModelMeta(
     revision="af2246fffdab78d8458418480e4886a8e48b70a7",
     release_date="2024-06-08",
     modalities=["image", "text"],
-    n_parameters=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    open_weights=None,
-    public_training_code=None,
+    n_parameters=92_900_000,
+    max_tokens=2048,
+    embed_dim=768,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code="https://github.com/nomic-ai/contrastors",
     public_training_data=None,
     framework=["PyTorch"],
-    reference=None,
+    reference="https://huggingface.co/nomic-ai/nomic-embed-vision-v1.5",
     similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
+    use_instructions=True,
+    training_datasets={
+        # https://arxiv.org/pdf/2406.18587
+        # DFN-2B
+    },
 )
 
 if __name__ == "__main__":

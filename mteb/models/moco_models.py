@@ -138,6 +138,10 @@ def mocov3_loader(**kwargs):
     return MOCOv3Wrapper(**kwargs)
 
 
+mocov3_training_datasets = {
+    # imagenet
+}
+
 mocov3_vit_base = ModelMeta(
     loader=partial(
         mocov3_loader,
@@ -148,18 +152,18 @@ mocov3_vit_base = ModelMeta(
     revision="7d091cd70772c5c0ecf7f00b5f12ca609a99d69d",
     release_date="2024-06-03",
     modalities=["image"],
-    n_parameters=None,
+    n_parameters=86_600_000,
     max_tokens=None,
-    embed_dim=None,
-    license=None,
-    open_weights=None,
-    public_training_code=None,
+    embed_dim=768,
+    license="cc-by-nc-4.0",
+    open_weights=True,
+    public_training_code="https://github.com/facebookresearch/moco-v3",
     public_training_data=None,
     framework=["PyTorch"],
-    reference=None,
+    reference="https://github.com/facebookresearch/moco-v3",
     similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
+    use_instructions=False,
+    training_datasets=mocov3_training_datasets,
 )
 
 mocov3_vit_large = ModelMeta(
@@ -172,16 +176,16 @@ mocov3_vit_large = ModelMeta(
     revision="7bf75358d616f39b9716148bf4e3425f3bd35b47",
     release_date="2024-06-03",
     modalities=["image"],
-    n_parameters=None,
+    n_parameters=304_000_000,
     max_tokens=None,
-    embed_dim=None,
-    license=None,
-    open_weights=None,
-    public_training_code=None,
+    embed_dim=1024,
+    license="cc-by-nc-4.0",
+    open_weights=True,
+    public_training_code="https://github.com/facebookresearch/moco-v3",
     public_training_data=None,
     framework=["PyTorch"],
-    reference=None,
+    reference="https://github.com/facebookresearch/moco-v3",
     similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
+    use_instructions=False,
+    training_datasets=mocov3_training_datasets,
 )
