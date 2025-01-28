@@ -35,6 +35,7 @@ class ScalaNbClassificationDummy:
             "default": ["nob-Latn"],
         },
         dataset={"revision": "revision_not_applicable"},
+        revision="revision_not_applicable",
     )
 
 
@@ -49,6 +50,7 @@ class ScalaNnClassificationDummy:
             "default": ["nno-Latn"],
         },
         dataset={"revision": "revision_not_applicable"},
+        revision="revision_not_applicable",
     )
 
 
@@ -63,6 +65,7 @@ class ScalaDaClassificationDummy:
             "default": ["dan-Latn"],
         },
         dataset={"revision": "revision_not_applicable"},
+        revision="revision_not_applicable",
     )
 
 
@@ -77,6 +80,7 @@ class ScalaSvClassificationDummy:
             "default": ["swe-Latn"],
         },
         dataset={"revision": "revision_not_applicable"},
+        revision="revision_not_applicable",
     )
 
 
