@@ -259,6 +259,8 @@ class BenchmarkResults(BaseModel):
                 return None
 
         def keep_best(group: pd.DataFrame) -> pd.DataFrame:
+            # Filtering out task_results where no scores are present
+            group = group[group["has_scores"]]
             is_main_revision = group["revision"] == group["main_revision"]
             # If the main revision is present we select that
             if is_main_revision.sum() > 0:
@@ -286,6 +288,7 @@ class BenchmarkResults(BaseModel):
                         task_name=task_result.task_name,
                         mteb_version=task_result.mteb_version,
                         task_result=task_result,
+                        has_scores=bool(task_result.scores),
                     )
                 )
         task_df = pd.DataFrame.from_records(records)
