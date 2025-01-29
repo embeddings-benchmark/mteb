@@ -232,6 +232,10 @@ def vista_loader(**kwargs):
     return VisualizedBGEWrapper(**kwargs)
 
 
+vista_training_datasets = {
+    # VISTA_S2
+}
+
 visualized_bge_base = ModelMeta(
     loader=partial(
         vista_loader,
@@ -244,18 +248,18 @@ visualized_bge_base = ModelMeta(
     revision="98db10b10d22620010d06f11733346e1c98c34aa",
     release_date="2024-06-06",
     modalities=["image", "text"],
-    n_parameters=None,
-    max_tokens=None,
-    embed_dim=None,
+    n_parameters=196_000_000,
+    max_tokens=77,
+    embed_dim=768,
     license=None,
-    open_weights=None,
+    open_weights=True,
     public_training_code=None,
-    public_training_data=None,
+    public_training_data="https://huggingface.co/datasets/JUNJIE99/VISTA_S2",
     framework=["PyTorch"],
-    reference=None,
+    reference="https://huggingface.co/BAAI/bge-visualized",
     similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
+    use_instructions=False,
+    training_datasets=vista_training_datasets,
 )
 
 visualized_bge_m3 = ModelMeta(
@@ -271,17 +275,17 @@ visualized_bge_m3 = ModelMeta(
     release_date="2024-06-06",
     modalities=["image", "text"],
     n_parameters=None,
-    max_tokens=None,
-    embed_dim=None,
+    max_tokens=77,
+    embed_dim=1024,
     license=None,
-    open_weights=None,
+    open_weights=True,
     public_training_code=None,
-    public_training_data=None,
+    public_training_data="https://huggingface.co/datasets/JUNJIE99/VISTA_S2",
     framework=["PyTorch"],
-    reference=None,
+    reference="https://huggingface.co/BAAI/bge-visualized",
     similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
+    use_instructions=False,
+    training_datasets=vista_training_datasets,
 )
 
 if __name__ == "__main__":
