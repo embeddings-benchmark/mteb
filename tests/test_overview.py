@@ -20,7 +20,7 @@ def test_get_tasks_size_differences():
     )
 
 
-@pytest.mark.parametrize("task_name", ["BornholmBitextMining"])
+@pytest.mark.parametrize("task_name", ["BornholmBitextMining", "CQADupstackRetrieval"])
 @pytest.mark.parametrize("eval_splits", [["test"], None])
 def test_get_task(task_name: str, eval_splits: list[str] | None):
     task = get_task(task_name, eval_splits=eval_splits)
