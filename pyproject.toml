@@ -57,7 +57,7 @@ dev = ["ruff==0.6.4", # locked so we don't get PRs which fail only due to a lint
 codecarbon = ["codecarbon"]
 speedtask = ["GPUtil>=1.4.0", "psutil>=5.9.8"]
 peft = ["peft>=0.11.0"]
-leaderboard = ["gradio>=5.7.1", "gradio_rangeslider>=0.0.8", "plotly>=5.24.0"]
+leaderboard = ["gradio>=5.7.1", "gradio_rangeslider>=0.0.8", "plotly>=5.24.0,<6.0.0"]
 flagembedding = ["FlagEmbedding"]
 jina = ["einops>=0.8.0"]
 flash_attention = ["flash-attn>=2.6.3"]
