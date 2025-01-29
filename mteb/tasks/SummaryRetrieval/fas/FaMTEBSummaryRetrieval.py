@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskSummaryRetrieval import AbsTaskSummaryRetrieval
+from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class SAMSumFa(AbsTaskSummaryRetrieval):
+class SAMSumFa(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="SAMSumFa",
         description="Translated Version of SAMSum Dataset",
@@ -29,8 +29,13 @@ class SAMSumFa(AbsTaskSummaryRetrieval):
         bibtex_citation=""" """,
     )
 
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_columns(
+            {"text": "sentence1", "summary": "sentence2"}
+        )
 
-class SynPerChatbotSumSRetrieval(AbsTaskSummaryRetrieval):
+
+class SynPerChatbotSumSRetrieval(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="SynPerChatbotSumSRetrieval",
         description="Synthetic Persian Chatbot  Summary Dataset",
@@ -55,8 +60,13 @@ class SynPerChatbotSumSRetrieval(AbsTaskSummaryRetrieval):
         bibtex_citation=""" """,
     )
 
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_columns(
+            {"text": "sentence1", "summary": "sentence2"}
+        )
 
-class SynPerChatbotRAGSumSRetrieval(AbsTaskSummaryRetrieval):
+
+class SynPerChatbotRAGSumSRetrieval(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="SynPerChatbotRAGSumSRetrieval",
         description="Synthetic Persian Chatbot RAG Summary Dataset",
@@ -80,3 +90,8 @@ class SynPerChatbotRAGSumSRetrieval(AbsTaskSummaryRetrieval):
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
     )
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_columns(
+            {"text": "sentence1", "summary": "sentence2"}
+        )

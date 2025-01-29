@@ -35,7 +35,6 @@ from .mock_tasks import (
     MockRetrievalTask,
     MockSTSTask,
     MockSummarizationTask,
-    MockSummaryRetrievalTask,
 )
 
 twenty_news = TwentyNewsgroupsClusteringFast()
@@ -90,7 +89,6 @@ MOCK_TASK_TEST_GRID = [
     MockMultilabelClassification(),
     MockMultilingualMultilabelClassification(),
     MockSummarizationTask(),
-    MockSummaryRetrievalTask(),
     MockMultilingualSummarizationTask(),
     MockInstructionRetrival(),
     MockMultilingualInstructionRetrival(),

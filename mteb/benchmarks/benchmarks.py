@@ -1329,6 +1329,7 @@ FA_MTEB = Benchmark(
     description="Main Persian (Farsi) benchmarks from MTEB",
     reference=None,
     citation=None,
+    contacts=["mehran-sarmadi", "ERfun", "morteza20"],
 )
 
 CHEMTEB = Benchmark(
