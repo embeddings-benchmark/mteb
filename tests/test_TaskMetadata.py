@@ -59,6 +59,7 @@ _HISTORIC_DATASETS = [
     "AILAStatutes",
     "ArguAna",
     "ClimateFEVER",
+    "CQADupstackRetrieval",
     "CQADupstackAndroidRetrieval",
     "CQADupstackEnglishRetrieval",
     "CQADupstackGamingRetrieval",
