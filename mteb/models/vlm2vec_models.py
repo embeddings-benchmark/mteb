@@ -362,6 +362,10 @@ class VLM2VecWrapper:
         return fused_embeddings
 
 
+vlm2vec_training_datasets = {
+    # MMEB-train
+}
+
 vlm2vec_lora = ModelMeta(
     loader=partial(
         VLM2VecWrapper,
@@ -373,17 +377,17 @@ vlm2vec_lora = ModelMeta(
     release_date="2024-10-08",
     modalities=["image", "text"],
     n_parameters=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    open_weights=None,
+    max_tokens=131072,
+    embed_dim=3072,
+    license="apache-2.0",
+    open_weights=True,
     public_training_code=None,
-    public_training_data=None,
+    public_training_data="https://huggingface.co/datasets/TIGER-Lab/MMEB-train",
     framework=["PyTorch"],
-    reference=None,
+    reference="https://huggingface.co/TIGER-Lab/VLM2Vec-LoRA",
     similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
+    use_instructions=True,
+    training_datasets=vlm2vec_training_datasets,
 )
 
 vlm2vec_full = ModelMeta(
@@ -396,16 +400,16 @@ vlm2vec_full = ModelMeta(
     revision="e9afa98002097ac2471827ba23ea1f2ddd229480",
     release_date="2024-10-08",
     modalities=["image", "text"],
-    n_parameters=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    open_weights=None,
+    n_parameters=4_150_000_000,
+    max_tokens=131072,
+    embed_dim=3072,
+    license="apache-2.0",
+    open_weights=True,
     public_training_code=None,
-    public_training_data=None,
+    public_training_data="https://huggingface.co/TIGER-Lab/VLM2Vec-Full",
     framework=["PyTorch"],
-    reference=None,
+    reference="https://huggingface.co/TIGER-Lab/VLM2Vec-Full",
     similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
+    use_instructions=True,
+    training_datasets=vlm2vec_training_datasets,
 )
