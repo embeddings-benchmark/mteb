@@ -477,7 +477,7 @@ evaluation.run(model, ...)
 | 📋 [Tasks]                     | Overview of available tasks                                                         |
 | 📐 [Benchmarks]                | Overview of available benchmarks                                                    |
 | 📈 [Leaderboard]               | The interactive leaderboard of the benchmark                                        |
-| 🤖 [Adding a model]            | Information related to how to submit a model MTEB repository and to the leaderboard |
+| 🤖 [Adding a model]            | Information related to how to submit a model to MTEB and to the leaderboard |
 | 👩‍🔬 [Reproducible workflows] | Information related to how to reproduce and create reproducible workflows with MTEB |
 | 👩‍💻 [Adding a dataset]       | How to add a new task/dataset to MTEB                                               |
 | 👩‍💻 [Adding a benchmark]     | How to add a new benchmark to MTEB and to the leaderboard                           |
