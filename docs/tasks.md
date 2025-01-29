@@ -73,6 +73,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [CQADupstackMathematicaRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  | None | None |
 | [CQADupstackPhysicsRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  | None | None |
 | [CQADupstackProgrammersRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p | [Programming, Written, Non-fiction] | None | None |
+| [CQADupstackRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | None | [Non-fiction, Written, Programming] | None | None |
 | [CQADupstackStatsRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  | None | None |
 | [CQADupstackTexRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  | None | None |
 | [CQADupstackUnixRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  | None | None |
@@ -930,7 +931,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | Modern Greek (1453-) | Indo-European | 3 | 6 | 1 | 0 | 1 | 2 | 0 | 3 | 0 | 0 | 0 | 16 |
 | emi | Mussau-Emira | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | emp | Northern Emberá | Chocoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| eng | English | Indo-European | 17 | 160 | 18 | 3 | 1 | 13 | 8 | 107 | 13 | 2 | 1 | 343 |
+| eng | English | Indo-European | 17 | 160 | 18 | 3 | 1 | 13 | 8 | 108 | 13 | 2 | 1 | 344 |
 | enq | Enga | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | epo | Esperanto | Artificial Language | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | eri | Ogea | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1702,7 +1703,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | Yatee Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zul | Zulu | Atlantic-Congo | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 7 |
 | zyp | Zyphe Chin | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| Total | None | None | None | 1395 | 812 | 306 | 3 | 28 | 84 | 51 | 475 | 85 | 2 | 2 |
+| Total | None | None | None | 1395 | 812 | 306 | 3 | 28 | 84 | 51 | 476 | 85 | 2 | 2 |
 <!-- TASK LANG TABLE END -->
 
 </details>
