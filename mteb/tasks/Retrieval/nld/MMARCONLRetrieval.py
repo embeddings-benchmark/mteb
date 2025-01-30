@@ -23,7 +23,7 @@ class MMMARCONL(AbsTaskRetrieval):
         eval_langs=["nld-Latn"],
         main_score="ndcg_at_10",
         date=("2021-09-01", "2021-09-01"),
-        domains=["Web"],
+        domains=["Web", "Written"],
         task_subtypes=[],
         license="apache-2.0",
         annotations_creators="derived",  # manually checked a small subset
