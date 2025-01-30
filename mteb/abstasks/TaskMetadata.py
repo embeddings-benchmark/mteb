@@ -96,6 +96,7 @@ TASK_TYPE = Literal[
     "Summarization",
     "InstructionRetrieval",
     "Speed",
+    "SummaryRetrieval",
 ]
 
 
