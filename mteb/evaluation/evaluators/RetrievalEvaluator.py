@@ -3,8 +3,6 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-
-
 from mteb.models.wrapper import CustomSearchInterface
 
 from .Evaluator import Evaluator
@@ -78,7 +76,6 @@ class RetrievalEvaluator(Evaluator):
             )
 
         elif isinstance(self.retriever.model.model, CustomSearchInterface):
-
             return self.retriever.model.model.search(
                 corpus,
                 queries,
