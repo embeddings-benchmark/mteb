@@ -16,7 +16,6 @@ GRIT_LM_TRAINING_DATA = {
     # also uses medi2 which contains fever and hotpotqa:
     "FEVER": ["train"],
     "FEVERHardNegatives": ["train"],
-    "FEVER-PL": ["train"],  # translation not trained on
     "HotpotQA": ["train"],
     "HotpotQAHardNegatives": ["train"],
     "HotpotQA-PL": ["train"],  # translation not trained on
