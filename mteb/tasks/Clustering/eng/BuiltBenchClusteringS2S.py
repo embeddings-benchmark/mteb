@@ -21,7 +21,7 @@ class BuiltBenchClusteringS2S(AbsTaskClustering):
         eval_langs=["eng-Latn"],
         main_score="v_measure",
         date=None,
-        domains=None,
+        domains=["Engineering", "Written"],
         task_subtypes=None,
         license="cc-by-nd-4.0",
         annotations_creators=None,

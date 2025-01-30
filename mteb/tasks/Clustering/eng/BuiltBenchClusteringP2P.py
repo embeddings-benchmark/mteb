@@ -12,7 +12,7 @@ class BuiltBenchClusteringP2P(AbsTaskClustering):
         reference="https://arxiv.org/abs/2411.12056",
         dataset={
             "path": "mehrzad-shahin/builtbench-clustering-p2p",
-            "revision": "919bb71053e9de62a68998161ce4f0cee8f786fb", 
+            "revision": "919bb71053e9de62a68998161ce4f0cee8f786fb",
         },
         type="Clustering",
         category="p2p",
@@ -21,7 +21,7 @@ class BuiltBenchClusteringP2P(AbsTaskClustering):
         eval_langs=["eng-Latn"],
         main_score="v_measure",
         date=None,
-        domains=None,
+        domains=["Engineering", "Written"],
         task_subtypes=None,
         license="cc-by-nd-4.0",
         annotations_creators=None,

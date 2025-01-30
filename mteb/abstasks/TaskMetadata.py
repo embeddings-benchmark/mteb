@@ -55,6 +55,7 @@ TASK_DOMAIN = Literal[
     "Blog",
     "Constructed",
     "Encyclopaedic",
+    "Engineering",
     "Fiction",
     "Government",
     "Legal",

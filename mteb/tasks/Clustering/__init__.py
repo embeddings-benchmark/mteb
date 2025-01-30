@@ -10,6 +10,8 @@ from .eng.ArXivHierarchicalClustering import *
 from .eng.BigPatentClustering import *
 from .eng.BiorxivClusteringP2P import *
 from .eng.BiorxivClusteringS2S import *
+from .eng.BuiltBenchClusteringP2P import *
+from .eng.BuiltBenchClusteringS2S import *
 from .eng.MedrxivClusteringP2P import *
 from .eng.MedrxivClusteringS2S import *
 from .eng.RedditClustering import *
@@ -46,5 +48,3 @@ from .spa.SpanishNewsClusteringP2P import *
 from .swe.swedn_clustering import *
 from .swe.SwednClustering import *
 from .zho.CMTEBClustering import *
-from .eng.BuiltBenchClusteringS2S import *
-from .eng.BuiltBenchClusteringP2P import *

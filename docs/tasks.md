@@ -58,6 +58,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [BrazilianToxicTweetsClassification](https://paperswithcode.com/dataset/told-br) (Joao Augusto Leite and                         Diego F. Silva and                         Kalina Bontcheva and                         Carolina Scarton, 2020) | ['por'] | MultilabelClassification | s2s | [Constructed, Written] | None | None |
 | [BrightRetrieval](https://huggingface.co/datasets/xlangai/BRIGHT) (Hongjin Su, 2024) | ['eng'] | Retrieval | s2p | [Non-fiction] | None | None |
 | [BulgarianStoreReviewSentimentClassfication](https://doi.org/10.7910/DVN/TXIK9P) (Georgieva-Trifonova et al., 2018) | ['bul'] | Classification | s2s | [Reviews, Written] | None | None |
+| [BuiltBenchClusteringP2P](https://huggingface.co/datasets/mehrzad-shahin/builtbench-clustering-p2p) | ['eng'] | Clustering | p2p | [Engineering, Written] | {'test': 4577} | {'test':{'unique_samples': 3067, 'unique_labels': 35, 'avg_char_length': 207.91}} |
+| [BuiltBenchClusteringS2S](https://huggingface.co/datasets/mehrzad-shahin/builtbench-clustering-s2s) | ['eng'] | Clustering | s2s | [Engineering, Written] | {'test': 3815} | {'test':{'unique_samples': 2545, 'unique_labels': 31, 'avg_char_length': 28.04}} |
 | [CBD](http://2019.poleval.pl/files/poleval2019.pdf) | ['pol'] | Classification | s2s | [Written, Social] | None | None |
 | [CDSC-E](https://aclanthology.org/P17-1073.pdf) | ['pol'] | PairClassification | s2s | [Written] | None | None |
 | [CDSC-R](https://aclanthology.org/P17-1073.pdf) | ['pol'] | STS | s2s | [Web, Written] | None | None |
