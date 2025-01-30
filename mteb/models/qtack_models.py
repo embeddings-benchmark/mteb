@@ -26,4 +26,5 @@ mini_gte = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,  # Not released yet
+    adapted_from="distilbert/distilbert-base-uncased",
 )
