@@ -1,14 +1,7 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.AbsTaskClusteringFast import (
-    AbsTaskClusteringFast,
-    check_label_distribution,
-)
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-
-# NUM_SAMPLES = 2048  # TODO: to be use in dataset_transform method
 
 
 class BuiltBenchClusteringP2P(AbsTaskClustering):
@@ -42,15 +35,3 @@ class BuiltBenchClusteringP2P(AbsTaskClustering):
 }""",
         prompt="Identify the category of the built asset entities based on the entity description",
     )
-
-
-#     def dataset_transform(self):
-#         for split in self.metadata.eval_splits:
-#             check_label_distribution(self.dataset[split])
-#         self.dataset = self.stratified_subsampling(
-#             self.dataset,
-#             self.seed,
-#             self.metadata.eval_splits,
-#             label="labels",
-#             n_samples=NUM_SAMPLES,
-#         )
