@@ -21,7 +21,7 @@ class CQADupstackStatsRetrieval(AbsTaskRetrieval):
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        domains=["Written", "Academic",  "Non-fiction"],
+        domains=["Written", "Academic", "Non-fiction"],
         task_subtypes=["Question answering", "Duplicate Detection"],
         license="apache-2.0",
         annotations_creators="derived",

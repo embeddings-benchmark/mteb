@@ -111,7 +111,7 @@ arctic_embed_xs = ModelMeta(
         "NQ": ["test"],
         "NQHardNegatives": ["test"],
         "NQ-PL": ["test"],
-        "HotPotQA": ["test"], # translated, not trained on
+        "HotPotQA": ["test"],  # translated, not trained on
         "HotPotQAHardNegatives": ["test"],
         "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
         "FEVER": ["test"],
