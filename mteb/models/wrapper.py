@@ -124,6 +124,25 @@ class Wrapper:
 
 
 class CustomSearchInterface:
+    """Interface for custom search implementations.
+    Implementations should override the search method to provide custom search functionality.
+
+    Example:
+    ```python
+    class BM25Search(DRESModel, Wrapper, CustomSearchInterface):
+    ```
+
+    Returns:
+    ```python
+    {
+        "query_id": {
+            "doc_id": score,
+            ...
+        },
+        ...
+    }
+    """
+
     def search(
         self,
         corpus: dict[str, dict[str, str]],
