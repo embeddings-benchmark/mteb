@@ -20,7 +20,7 @@ class DBPediaNL(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["nld-Latn"],
         main_score="ndcg_at_10",
-        date=("2024-10-01", "2024-10-01"),
+        date=("2017-01-01", "2017-01-01"),  # best guess: based on publication date
         domains=["Written", "Encyclopaedic"],
         task_subtypes=[],
         license="cc-by-4.0",

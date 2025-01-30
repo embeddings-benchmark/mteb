@@ -21,7 +21,10 @@ class TRECCOVIDNL(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["nld-Latn"],
         main_score="ndcg_at_10",
-        date=("2024-10-01", "2024-10-01"),
+        date=(
+            "2019-12-01",
+            "2022-12-31",
+        ),  # approximate date of covid pandemic start and end (best guess)
         domains=["Medical", "Academic", "Written"],
         task_subtypes=[],
         license="cc-by-4.0",

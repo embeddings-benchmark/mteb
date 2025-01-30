@@ -22,7 +22,7 @@ class MMMARCONL(AbsTaskRetrieval):
         eval_splits=["dev"],
         eval_langs=["nld-Latn"],
         main_score="ndcg_at_10",
-        date=("2021-09-01", "2021-09-01"),
+        date=("2016-01-01", "2016-12-30"),  # best guess: based on publication date
         domains=["Web", "Written"],
         task_subtypes=[],
         license="apache-2.0",

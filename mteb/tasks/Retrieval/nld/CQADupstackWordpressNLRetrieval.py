@@ -24,7 +24,7 @@ class CQADupstackWordpressNLRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["nld-Latn"],
         main_score="ndcg_at_10",
-        date=("2024-10-01", "2024-10-01"),
+        date=("2015-12-01", "2015-12-01"),  # best guess: based on publication date
         domains=["Written"],
         task_subtypes=["Duplicate Detection"],
         license="apache-2.0",

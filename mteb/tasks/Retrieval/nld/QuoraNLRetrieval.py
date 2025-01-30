@@ -25,7 +25,7 @@ class QuoraNLRetrieval(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["nld-Latn"],
         main_score="ndcg_at_10",
-        date=("2024-10-01", "2024-10-01"),
+        date=("2016-03-01", "2016-03-01"),
         domains=["Written"],
         task_subtypes=["Duplicate Detection"],
         license="cc-by-4.0",

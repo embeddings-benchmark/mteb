@@ -20,7 +20,7 @@ class NQNL(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["nld-Latn"],
         main_score="ndcg_at_10",
-        date=("2024-10-01", "2024-10-01"),
+        date=("2018-04-01", "2018-04-01"),  # best guess: based on submission date
         domains=["Written", "Encyclopaedic"],
         task_subtypes=["Question answering"],
         license="cc-by-4.0",
