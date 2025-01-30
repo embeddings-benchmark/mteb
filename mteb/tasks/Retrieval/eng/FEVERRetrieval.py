@@ -29,10 +29,10 @@ class FEVER(AbsTaskRetrieval):
         date=None,
         domains=["Encyclopaedic", "Written"],
         task_subtypes=["Claim verification"],
-        license=None,
+        license="cc-by-nc-sa-3.0",
         annotations_creators="human-annotated",
         dialect=[],
-        sample_creation="derived",
+        sample_creation="found",
         bibtex_citation="""@inproceedings{thorne-etal-2018-fever,
     title = "{FEVER}: a Large-scale Dataset for Fact Extraction and {VER}ification",
     author = "Thorne, James  and

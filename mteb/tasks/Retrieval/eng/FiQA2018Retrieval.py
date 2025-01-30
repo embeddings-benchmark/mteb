@@ -25,7 +25,7 @@ class FiQA2018(AbsTaskRetrieval):
         date=None,
         domains=["Written", "Financial"],
         task_subtypes=["Question answering"],
-        license=None,
+        license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",

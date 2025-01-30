@@ -28,7 +28,7 @@ class QuoraRetrieval(AbsTaskRetrieval):
         date=None,
         domains=["Written", "Web", "Blog"],
         task_subtypes=["Question answering"],
-        license=None,
+        license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
