@@ -234,6 +234,13 @@ head = """
 """
 
 with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
+
+    gr.Markdown("""
+    ## MMTEB: Massive Multilingual Text Embedding Benchmark
+
+    The MMTEB leaderboard compares text embedding models on 1000+ languages. Check out the [paper](https://openreview.net/pdf?id=zl3pfz4VCV) for details on datasets, languages and tasks. And you can contribute! 🤗 To add a model, please refer to the documentation in the [GitHub repository](https://github.com/embeddings-benchmark/mteb/path/to/doc) ✨
+    """)
+
     with gr.Row():
         with gr.Column(scale=5):
             gr.Markdown(
