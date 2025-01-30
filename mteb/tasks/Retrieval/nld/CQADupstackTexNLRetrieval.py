@@ -25,7 +25,7 @@ class CQADupstackTexNLRetrieval(AbsTaskRetrieval):
         eval_langs=["nld-Latn"],
         main_score="ndcg_at_10",
         date=("2015-12-01", "2015-12-01"),  # best guess: based on publication date
-        domains=["Written"],
+        domains=["Written", "Non-fiction"],
         task_subtypes=["Duplicate Detection"],
         license="apache-2.0",
         annotations_creators="derived",

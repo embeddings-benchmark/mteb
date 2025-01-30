@@ -23,7 +23,7 @@ class FiQA2018NL(AbsTaskRetrieval):
         eval_langs=["nld-Latn"],
         main_score="ndcg_at_10",
         date=("2018-04-01", "2018-04-01"),  # best guess: based on publication date
-        domains=["Written"],
+        domains=["Written", "Non-fiction"],
         task_subtypes=["Question answering"],
         license="cc-by-4.0",
         annotations_creators="derived",

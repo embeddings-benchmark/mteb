@@ -24,7 +24,7 @@ class ArguAnaNL(AbsTaskRetrieval):
         eval_langs=["nld-Latn"],
         main_score="ndcg_at_10",
         date=("2016-03-01", "2016-03-01"),  # best guess: based on publication date
-        domains=["Written"],
+        domains=["Written", "Non-fiction"],
         task_subtypes=[],
         license="cc-by-sa-4.0",
         annotations_creators="derived",

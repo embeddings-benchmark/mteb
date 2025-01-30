@@ -20,7 +20,7 @@ class Touche2020NL(AbsTaskRetrieval):
         eval_langs=["nld-Latn"],
         main_score="ndcg_at_10",
         date=("2020-09-23", "2020-09-23"),
-        domains=["Academic"],
+        domains=["Academic", "Non-fiction"],
         task_subtypes=["Question answering"],
         license="cc-by-sa-4.0",
         annotations_creators="derived",

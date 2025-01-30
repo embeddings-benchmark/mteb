@@ -47,7 +47,7 @@ class CQADupstackNLRetrieval(AbsTaskAggregate):
         eval_splits=["test"],
         eval_langs=["nld-Latn"],
         date=("2015-12-01", "2015-12-01"),  # best guess: based on publication date
-        domains=["Written"],
+        domains=["Written", "Non-fiction"],
         task_subtypes=[],
         license="apache-2.0",
         annotations_creators="derived",
