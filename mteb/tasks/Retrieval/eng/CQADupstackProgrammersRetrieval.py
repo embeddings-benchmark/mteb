@@ -23,7 +23,7 @@ class CQADupstackProgrammersRetrieval(AbsTaskRetrieval):
         date=None,
         domains=["Programming", "Written", "Non-fiction"],
         task_subtypes=[],
-        license="cc-by-sa-4.0",
+        license="apache-2.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
