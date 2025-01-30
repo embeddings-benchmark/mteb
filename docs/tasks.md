@@ -30,6 +30,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [ArXivHierarchicalClusteringP2P](https://www.kaggle.com/Cornell-University/arxiv) | ['eng'] | Clustering | p2p | [Academic, Written] | {'test': 2048} | {'test': {'num_samples': 2048, 'number_of_characters': 2065284, 'min_text_length': 103, 'average_text_length': 1008.44, 'max_text_length': 2103, 'min_labels_per_text': 1, 'average_labels_per_text': 1.46, 'max_labels_per_text': 381, 'unique_labels': 129, 'labels': {'cs': {'count': 356}, 'math': {'count': 381}, 'OC': {'count': 11}, 'hep-lat': {'count': 13}, 'hep': {'count': 98}, 'astro-ph': {'count': 213}, 'eess': {'count': 76}, 'quant-ph': {'count': 135}, 'DC': {'count': 5}, 'cond-mat': {'count': 274}, 'hep-th': {'count': 66}, 'SP': {'count': 33}, 'hep-ph': {'count': 69}, 'FA': {'count': 6}, 'nucl-th': {'count': 17}, 'q-bio': {'count': 80}, 'HE': {'count': 22}, 'HC': {'count': 2}, 'stat': {'count': 60}, 'ML': {'count': 16}, 'IV': {'count': 13}, 'stat-mech': {'count': 47}, 'DS': {'count': 14}, 'ME': {'count': 12}, 'CC': {'count': 2}, 'mtrl-sci': {'count': 22}, 'PE': {'count': 16}, 'NT': {'count': 11}, 'SC': {'count': 6}, 'AG': {'count': 13}, 'physics': {'count': 81}, 'ins-det': {'count': 9}, 'GA': {'count': 18}, 'BM': {'count': 6}, 'GN': {'count': 17}, 'NA': {'count': 15}, 'app-ph': {'count': 7}, 'RT': {'count': 6}, 'other': {'count': 37}, 'soft': {'count': 15}, 'CO': {'count': 33}, 'supr-con': {'count': 21}, 'chem-ph': {'count': 3}, 'DM': {'count': 2}, 'MN': {'count': 12}, 'q-fin': {'count': 27}, 'PM': {'count': 2}, 'AP': {'count': 27}, 'gr-qc': {'count': 15}, 'quant-gas': {'count': 8}, 'mes-hall': {'count': 33}, 'IT': {'count': 19}, 'SI': {'count': 6}, 'SG': {'count': 3}, 'bio-ph': {'count': 2}, 'SR': {'count': 16}, 'soc-ph': {'count': 5}, 'hep-ex': {'count': 15}, 'DG': {'count': 11}, 'NE': {'count': 5}, 'CR': {'count': 6}, 'CL': {'count': 12}, 'RM': {'count': 3}, 'econ': {'count': 17}, 'nlin': {'count': 5}, 'PS': {'count': 1}, 'LG': {'count': 26}, 'QA': {'count': 9}, 'str-el': {'count': 26}, 'CV': {'count': 34}, 'MF': {'count': 6}, 'IM': {'count': 7}, 'EM': {'count': 6}, 'TH': {'count': 5}, 'PR': {'count': 20}, 'AT': {'count': 4}, 'OA': {'count': 4}, 'CP': {'count': 6}, 'LO': {'count': 14}, 'flu-dyn': {'count': 6}, 'atom-ph': {'count': 8}, 'class-ph': {'count': 1}, 'SY': {'count': 20}, 'IR': {'count': 1}, 'plasm-ph': {'count': 8}, 'CE': {'count': 2}, 'AO': {'count': 1}, 'comp-ph': {'count': 3}, 'optics': {'count': 12}, 'MG': {'count': 4}, 'ST': {'count': 6}, 'nucl-ex': {'count': 6}, 'CY': {'count': 9}, 'ao-ph': {'count': 2}, 'DB': {'count': 1}, 'math-ph': {'count': 10}, 'NC': {'count': 13}, 'GT': {'count': 11}, 'TO': {'count': 2}, 'AI': {'count': 9}, 'NI': {'count': 2}, 'gen-ph': {'count': 4}, 'OT': {'count': 4}, 'SD': {'count': 2}, 'dis-nn': {'count': 4}, 'RO': {'count': 7}, 'CA': {'count': 6}, 'FL': {'count': 1}, 'SE': {'count': 5}, 'EP': {'count': 9}, 'hist-ph': {'count': 1}, 'QM': {'count': 9}, 'ed-ph': {'count': 2}, 'GR': {'count': 4}, 'MS': {'count': 1}, 'CD': {'count': 1}, 'ET': {'count': 1}, 'acc-ph': {'count': 5}, 'AC': {'count': 2}, 'OH': {'count': 1}, 'EC': {'count': 2}, 'DL': {'count': 1}, 'AS': {'count': 3}, 'geo-ph': {'count': 2}, 'CG': {'count': 3}, 'CB': {'count': 1}, 'AR': {'count': 1}, 'TR': {'count': 1}, 'atm-clus': {'count': 1}}}} |
 | [ArXivHierarchicalClusteringS2S](https://www.kaggle.com/Cornell-University/arxiv) | ['eng'] | Clustering | p2p | [Academic, Written] | None | None |
 | [ArguAna](http://argumentation.bplaced.net/arguana/data) (Boteva et al., 2016) | ['eng'] | Retrieval | s2p | [Medical, Written] | None | None |
+| [ArguAna-Fa](https://huggingface.co/datasets/MCINext/arguana-fa) | ['fas'] | Retrieval | s2p | [Blog] | None | None |
 | [ArguAna-PL](https://huggingface.co/datasets/clarin-knext/arguana-pl) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  | None | None |
 | [ArmenianParaphrasePC](https://github.com/ivannikov-lab/arpa-paraphrase-corpus) (Arthur Malajyan, 2020) | ['hye'] | PairClassification | s2s | [News, Written] | None | None |
 | [ArxivClassification](https://ieeexplore.ieee.org/document/8675939) (He et al., 2019) | ['eng'] | Classification | s2s | [Academic, Written] | None | None |
@@ -46,6 +47,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [BengaliDocumentClassification](https://aclanthology.org/2023.eacl-main.4) | ['ben'] | Classification | s2s | [News, Written] | None | None |
 | [BengaliHateSpeechClassification](https://huggingface.co/datasets/bn_hate_speech) (Karim et al., 2020) | ['ben'] | Classification | s2s | [News, Written] | None | None |
 | [BengaliSentimentAnalysis](https://data.mendeley.com/datasets/p6zc7krs37/4) (Sazzed et al., 2020) | ['ben'] | Classification | s2s | [Reviews, Written] | None | None |
+| [BeytooteClustering](https://mcinext.com/) | ['fas'] | Clustering | p2p | [News] | None | None |
 | [BibleNLPBitextMining](https://arxiv.org/abs/2304.09919) (Akerman et al., 2023) | ['aai', 'aak', 'aau', 'aaz', 'abt', 'abx', 'aby', 'acf', 'acr', 'acu', 'adz', 'aer', 'aey', 'agd', 'agg', 'agm', 'agn', 'agr', 'agt', 'agu', 'aia', 'aii', 'aka', 'ake', 'alp', 'alq', 'als', 'aly', 'ame', 'amf', 'amk', 'amm', 'amn', 'amo', 'amp', 'amr', 'amu', 'amx', 'anh', 'anv', 'aoi', 'aoj', 'aom', 'aon', 'apb', 'ape', 'apn', 'apr', 'apu', 'apw', 'apz', 'arb', 'are', 'arl', 'arn', 'arp', 'asm', 'aso', 'ata', 'atb', 'atd', 'atg', 'att', 'auc', 'aui', 'auy', 'avt', 'awb', 'awk', 'awx', 'azb', 'azg', 'azz', 'bao', 'bba', 'bbb', 'bbr', 'bch', 'bco', 'bdd', 'bea', 'bef', 'bel', 'ben', 'beo', 'beu', 'bgs', 'bgt', 'bhg', 'bhl', 'big', 'bjk', 'bjp', 'bjr', 'bjv', 'bjz', 'bkd', 'bki', 'bkq', 'bkx', 'blw', 'blz', 'bmh', 'bmk', 'bmr', 'bmu', 'bnp', 'boa', 'boj', 'bon', 'box', 'bpr', 'bps', 'bqc', 'bqp', 'bre', 'bsj', 'bsn', 'bsp', 'bss', 'buk', 'bus', 'bvd', 'bvr', 'bxh', 'byr', 'byx', 'bzd', 'bzh', 'bzj', 'caa', 'cab', 'cac', 'caf', 'cak', 'cao', 'cap', 'car', 'cav', 'cax', 'cbc', 'cbi', 'cbk', 'cbr', 'cbs', 'cbt', 'cbu', 'cbv', 'cco', 'ceb', 'cek', 'ces', 'cgc', 'cha', 'chd', 'chf', 'chk', 'chq', 'chz', 'cjo', 'cjv', 'ckb', 'cle', 'clu', 'cme', 'cmn', 'cni', 'cnl', 'cnt', 'cof', 'con', 'cop', 'cot', 'cpa', 'cpb', 'cpc', 'cpu', 'cpy', 'crn', 'crx', 'cso', 'csy', 'cta', 'cth', 'ctp', 'ctu', 'cub', 'cuc', 'cui', 'cuk', 'cut', 'cux', 'cwe', 'cya', 'daa', 'dad', 'dah', 'dan', 'ded', 'deu', 'dgc', 'dgr', 'dgz', 'dhg', 'dif', 'dik', 'dji', 'djk', 'djr', 'dob', 'dop', 'dov', 'dwr', 'dww', 'dwy', 'ebk', 'eko', 'emi', 'emp', 'eng', 'enq', 'epo', 'eri', 'ese', 'esk', 'etr', 'ewe', 'faa', 'fai', 'far', 'ffm', 'for', 'fra', 'fue', 'fuf', 'fuh', 'gah', 'gai', 'gam', 'gaw', 'gdn', 'gdr', 'geb', 'gfk', 'ghs', 'glk', 'gmv', 'gng', 'gnn', 'gnw', 'gof', 'grc', 'gub', 'guh', 'gui', 'guj', 'gul', 'gum', 'gun', 'guo', 'gup', 'gux', 'gvc', 'gvf', 'gvn', 'gvs', 'gwi', 'gym', 'gyr', 'hat', 'hau', 'haw', 'hbo', 'hch', 'heb', 'heg', 'hin', 'hix', 'hla', 'hlt', 'hmo', 'hns', 'hop', 'hot', 'hrv', 'hto', 'hub', 'hui', 'hun', 'hus', 'huu', 'huv', 'hvn', 'ian', 'ign', 'ikk', 'ikw', 'ilo', 'imo', 'inb', 'ind', 'ino', 'iou', 'ipi', 'isn', 'ita', 'iws', 'ixl', 'jac', 'jae', 'jao', 'jic', 'jid', 'jiv', 'jni', 'jpn', 'jvn', 'kan', 'kaq', 'kbc', 'kbh', 'kbm', 'kbq', 'kdc', 'kde', 'kdl', 'kek', 'ken', 'kew', 'kgf', 'kgk', 'kgp', 'khs', 'khz', 'kik', 'kiw', 'kiz', 'kje', 'kjs', 'kkc', 'kkl', 'klt', 'klv', 'kmg', 'kmh', 'kmk', 'kmo', 'kms', 'kmu', 'kne', 'knf', 'knj', 'knv', 'kos', 'kpf', 'kpg', 'kpj', 'kpr', 'kpw', 'kpx', 'kqa', 'kqc', 'kqf', 'kql', 'kqw', 'ksd', 'ksj', 'ksr', 'ktm', 'kto', 'kud', 'kue', 'kup', 'kvg', 'kvn', 'kwd', 'kwf', 'kwi', 'kwj', 'kyc', 'kyf', 'kyg', 'kyq', 'kyz', 'kze', 'lac', 'lat', 'lbb', 'lbk', 'lcm', 'leu', 'lex', 'lgl', 'lid', 'lif', 'lin', 'lit', 'llg', 'lug', 'luo', 'lww', 'maa', 'maj', 'mal', 'mam', 'maq', 'mar', 'mau', 'mav', 'maz', 'mbb', 'mbc', 'mbh', 'mbj', 'mbl', 'mbs', 'mbt', 'mca', 'mcb', 'mcd', 'mcf', 'mco', 'mcp', 'mcq', 'mcr', 'mdy', 'med', 'mee', 'mek', 'meq', 'met', 'meu', 'mgc', 'mgh', 'mgw', 'mhl', 'mib', 'mic', 'mie', 'mig', 'mih', 'mil', 'mio', 'mir', 'mit', 'miz', 'mjc', 'mkj', 'mkl', 'mkn', 'mks', 'mle', 'mlh', 'mlp', 'mmo', 'mmx', 'mna', 'mop', 'mox', 'mph', 'mpj', 'mpm', 'mpp', 'mps', 'mpt', 'mpx', 'mqb', 'mqj', 'msb', 'msc', 'msk', 'msm', 'msy', 'mti', 'mto', 'mux', 'muy', 'mva', 'mvn', 'mwc', 'mwe', 'mwf', 'mwp', 'mxb', 'mxp', 'mxq', 'mxt', 'mya', 'myk', 'myu', 'myw', 'myy', 'mzz', 'nab', 'naf', 'nak', 'nas', 'nbq', 'nca', 'nch', 'ncj', 'ncl', 'ncu', 'ndg', 'ndj', 'nfa', 'ngp', 'ngu', 'nhe', 'nhg', 'nhi', 'nho', 'nhr', 'nhu', 'nhw', 'nhy', 'nif', 'nii', 'nin', 'nko', 'nld', 'nlg', 'nna', 'nnq', 'noa', 'nop', 'not', 'nou', 'npi', 'npl', 'nsn', 'nss', 'ntj', 'ntp', 'ntu', 'nuy', 'nvm', 'nwi', 'nya', 'nys', 'nyu', 'obo', 'okv', 'omw', 'ong', 'ons', 'ood', 'opm', 'ory', 'ote', 'otm', 'otn', 'otq', 'ots', 'pab', 'pad', 'pah', 'pan', 'pao', 'pes', 'pib', 'pio', 'pir', 'piu', 'pjt', 'pls', 'plu', 'pma', 'poe', 'poh', 'poi', 'pol', 'pon', 'por', 'poy', 'ppo', 'prf', 'pri', 'ptp', 'ptu', 'pwg', 'qub', 'quc', 'quf', 'quh', 'qul', 'qup', 'qvc', 'qve', 'qvh', 'qvm', 'qvn', 'qvs', 'qvw', 'qvz', 'qwh', 'qxh', 'qxn', 'qxo', 'rai', 'reg', 'rgu', 'rkb', 'rmc', 'rmy', 'ron', 'roo', 'rop', 'row', 'rro', 'ruf', 'rug', 'rus', 'rwo', 'sab', 'san', 'sbe', 'sbk', 'sbs', 'seh', 'sey', 'sgb', 'sgz', 'shj', 'shp', 'sim', 'sja', 'sll', 'smk', 'snc', 'snn', 'snp', 'snx', 'sny', 'som', 'soq', 'soy', 'spa', 'spl', 'spm', 'spp', 'sps', 'spy', 'sri', 'srm', 'srn', 'srp', 'srq', 'ssd', 'ssg', 'ssx', 'stp', 'sua', 'sue', 'sus', 'suz', 'swe', 'swh', 'swp', 'sxb', 'tac', 'taj', 'tam', 'tav', 'taw', 'tbc', 'tbf', 'tbg', 'tbo', 'tbz', 'tca', 'tcs', 'tcz', 'tdt', 'tee', 'tel', 'ter', 'tet', 'tew', 'tfr', 'tgk', 'tgl', 'tgo', 'tgp', 'tha', 'tif', 'tim', 'tiw', 'tiy', 'tke', 'tku', 'tlf', 'tmd', 'tna', 'tnc', 'tnk', 'tnn', 'tnp', 'toc', 'tod', 'tof', 'toj', 'ton', 'too', 'top', 'tos', 'tpa', 'tpi', 'tpt', 'tpz', 'trc', 'tsw', 'ttc', 'tte', 'tuc', 'tue', 'tuf', 'tuo', 'tur', 'tvk', 'twi', 'txq', 'txu', 'tzj', 'tzo', 'ubr', 'ubu', 'udu', 'uig', 'ukr', 'uli', 'ulk', 'upv', 'ura', 'urb', 'urd', 'uri', 'urt', 'urw', 'usa', 'usp', 'uvh', 'uvl', 'vid', 'vie', 'viv', 'vmy', 'waj', 'wal', 'wap', 'wat', 'wbi', 'wbp', 'wed', 'wer', 'wim', 'wiu', 'wiv', 'wmt', 'wmw', 'wnc', 'wnu', 'wol', 'wos', 'wrk', 'wro', 'wrs', 'wsk', 'wuv', 'xav', 'xbi', 'xed', 'xla', 'xnn', 'xon', 'xsi', 'xtd', 'xtm', 'yaa', 'yad', 'yal', 'yap', 'yaq', 'yby', 'ycn', 'yka', 'yle', 'yml', 'yon', 'yor', 'yrb', 'yre', 'yss', 'yuj', 'yut', 'yuw', 'yva', 'zaa', 'zab', 'zac', 'zad', 'zai', 'zaj', 'zam', 'zao', 'zap', 'zar', 'zas', 'zat', 'zav', 'zaw', 'zca', 'zga', 'zia', 'ziw', 'zlm', 'zos', 'zpc', 'zpl', 'zpm', 'zpo', 'zpq', 'zpu', 'zpv', 'zpz', 'zsr', 'ztq', 'zty', 'zyp'] | BitextMining | s2s | [Religious, Written] | None | None |
 | [BigPatentClustering.v2](https://huggingface.co/datasets/NortheasternUniversity/big_patent) (Eva Sharma and                Chen Li and                Lu Wang, 2019) | ['eng'] | Clustering | p2p | [Legal, Written] | None | None |
 | [BiorxivClusteringP2P.v2](https://api.biorxiv.org/) | ['eng'] | Clustering | p2p | [Academic, Written] | None | None |
@@ -60,6 +62,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [CDSC-E](https://aclanthology.org/P17-1073.pdf) | ['pol'] | PairClassification | s2s | [Written] | None | None |
 | [CDSC-R](https://aclanthology.org/P17-1073.pdf) | ['pol'] | STS | s2s | [Web, Written] | None | None |
 | [CEDRClassification](https://www.sciencedirect.com/science/article/pii/S1877050921013247) (Sboev et al., 2021) | ['rus'] | MultilabelClassification | s2s | [Web, Social, Blog, Written] | {'test': 1882, 'train': 7528} | {'test': {'num_samples': 1882, 'number_of_characters': 171649, 'number_texts_in_train': 7, 'min_text_length': 6, 'average_text_length': 91.21, 'max_text_length': 220, 'unique_texts': 1875, 'min_labels_per_text': 0, 'average_label_per_text': 0.62, 'max_labels_per_text': 2, 'unique_labels': 6, 'labels': {'None': {'count': 734}, '3': {'count': 141}, '2': {'count': 170}, '1': {'count': 379}, '0': {'count': 353}, '4': {'count': 125}}}, 'train': {'num_samples': 7528, 'number_of_characters': 697322, 'number_texts_in_train': None, 'min_text_length': 5, 'average_text_length': 92.63, 'max_text_length': 280, 'unique_texts': 7500, 'min_labels_per_text': 0, 'average_label_per_text': 0.61, 'max_labels_per_text': 3, 'unique_labels': 6, 'labels': {'None': {'count': 3043}, '2': {'count': 607}, '0': {'count': 1569}, '3': {'count': 589}, '1': {'count': 1417}, '4': {'count': 411}}}} |
+| [CExaPPC](https://github.com/exaco/exappc) | ['fas'] | PairClassification | s2s | [Social, Web] | None | None |
 | [CLSClusteringP2P.v2](https://arxiv.org/abs/2209.05034) (Yudong Li, 2022) | ['cmn'] | Clustering | p2p | [Academic, Written] | None | None |
 | [CLSClusteringS2S.v2](https://arxiv.org/abs/2209.05034) (Yudong Li, 2022) | ['cmn'] | Clustering | s2s | [Academic, Written] | None | None |
 | [CMedQAv1-reranking](https://github.com/zhangsheng93/cMedQA) (Zhang et al., 2017) | ['cmn'] | Reranking | s2s | [Medical, Written] | None | None |
@@ -67,18 +70,31 @@ The following tables give you an overview of the tasks in MTEB.
 | [COIRCodeSearchNetRetrieval](https://huggingface.co/datasets/code_search_net/) (Husain et al., 2019) | ['go', 'java', 'javascript', 'php', 'python', 'ruby'] | Retrieval | p2p | [Programming, Written] | {'test': 1056326} | {'test': {'number_of_characters': 36843313, 'num_samples': 1056326, 'num_queries': 52561, 'num_documents': 1003765, 'min_document_length': 54, 'average_document_length': 34.71, 'max_document_length': 334374, 'unique_documents': 1003765, 'min_query_length': 2, 'average_query_length': 38.19, 'max_query_length': 2, 'unique_queries': 52561, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 52561, 'hf_subset_descriptive_stats': {'python': {'number_of_characters': 14574651, 'num_samples': 295228, 'num_queries': 14918, 'num_documents': 280310, 'min_document_length': 95, 'average_document_length': 49.99, 'max_document_length': 14008, 'unique_documents': 280310, 'min_query_length': 2, 'average_query_length': 37.58, 'max_query_length': 2, 'unique_queries': 14918, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 14918}, 'javascript': {'number_of_characters': 2587540, 'num_samples': 68145, 'num_queries': 3291, 'num_documents': 64854, 'min_document_length': 87, 'average_document_length': 37.9, 'max_document_length': 334374, 'unique_documents': 64854, 'min_query_length': 2, 'average_query_length': 39.41, 'max_query_length': 2, 'unique_queries': 3291, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 3291}, 'go': {'number_of_characters': 3641108, 'num_samples': 190562, 'num_queries': 8122, 'num_documents': 182440, 'min_document_length': 54, 'average_document_length': 17.96, 'max_document_length': 5280, 'unique_documents': 182440, 'min_query_length': 2, 'average_query_length': 44.92, 'max_query_length': 2, 'unique_queries': 8122, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 8122}, 'ruby': {'number_of_characters': 629446, 'num_samples': 28831, 'num_queries': 1261, 'num_documents': 27570, 'min_document_length': 83, 'average_document_length': 20.83, 'max_document_length': 3992, 'unique_documents': 27570, 'min_query_length': 2, 'average_query_length': 43.73, 'max_query_length': 2, 'unique_queries': 1261, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 1261}, 'java': {'number_of_characters': 6791137, 'num_samples': 191821, 'num_queries': 10955, 'num_documents': 180866, 'min_document_length': 77, 'average_document_length': 35.55, 'max_document_length': 7615, 'unique_documents': 180866, 'min_query_length': 2, 'average_query_length': 33.02, 'max_query_length': 2, 'unique_queries': 10955, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 10955}, 'php': {'number_of_characters': 8619431, 'num_samples': 281739, 'num_queries': 14014, 'num_documents': 267725, 'min_document_length': 94, 'average_document_length': 30.2, 'max_document_length': 4904, 'unique_documents': 267725, 'min_query_length': 2, 'average_query_length': 38.21, 'max_query_length': 2, 'unique_queries': 14014, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 14014}}}} |
 | [CPUSpeedTask](https://github.com/KennethEnevoldsen/scandinavian-embedding-benchmark/blob/c8376f967d1294419be1d3eb41217d04cd3a65d3/src/seb/registered_tasks/speed.py#L83-L96) | ['eng'] | Speed | s2s | [Fiction, Written] | None | None |
 | [CQADupstackAndroidRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  | None | None |
+| [CQADupstackAndroidRetrieval-Fa](https://huggingface.co/datasets/MCINext/cqadupstack-android-fa) | ['fas'] | Retrieval | s2p | [Web] | None | None |
 | [CQADupstackEnglishRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  | None | None |
+| [CQADupstackEnglishRetrieval-Fa](https://huggingface.co/datasets/MCINext/cqadupstack-english-fa) | ['fas'] | Retrieval | s2p | [Web] | None | None |
 | [CQADupstackGamingRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  | None | None |
+| [CQADupstackGamingRetrieval-Fa](https://huggingface.co/datasets/MCINext/cqadupstack-gaming-fa) | ['fas'] | Retrieval | s2p | [Web] | None | None |
 | [CQADupstackGisRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  | None | None |
+| [CQADupstackGisRetrieval-Fa](https://huggingface.co/datasets/MCINext/cqadupstack-gis-fa) | ['fas'] | Retrieval | s2p | [Web] | None | None |
 | [CQADupstackMathematicaRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  | None | None |
+| [CQADupstackMathematicaRetrieval-Fa](https://huggingface.co/datasets/MCINext/cqadupstack-mathematica-fa) | ['fas'] | Retrieval | s2p | [Web] | None | None |
 | [CQADupstackPhysicsRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  | None | None |
+| [CQADupstackPhysicsRetrieval-Fa](https://huggingface.co/datasets/MCINext/cqadupstack-physics-fa) | ['fas'] | Retrieval | s2p | [Web] | None | None |
 | [CQADupstackProgrammersRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p | [Programming, Written, Non-fiction] | None | None |
-| [CQADupstackRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | None | [Programming, Written, Non-fiction] | None | None |
+| [CQADupstackProgrammersRetrieval-Fa](https://huggingface.co/datasets/MCINext/cqadupstack-programmers-fa) | ['fas'] | Retrieval | s2p | [Web] | None | None |
+| [CQADupstackRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | None | [Written, Non-fiction, Programming] | None | None |
+| CQADupstackRetrieval-Fa | ['fas'] | Retrieval | None | [Web] | None | None |
 | [CQADupstackStatsRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  | None | None |
+| [CQADupstackStatsRetrieval-Fa](https://huggingface.co/datasets/MCINext/cqadupstack-stats-fa) | ['fas'] | Retrieval | s2p | [Web] | None | None |
 | [CQADupstackTexRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  | None | None |
+| [CQADupstackTexRetrieval-Fa](https://huggingface.co/datasets/MCINext/cqadupstack-tex-fa) | ['fas'] | Retrieval | s2p | [Web] | None | None |
 | [CQADupstackUnixRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  | None | None |
+| [CQADupstackUnixRetrieval-Fa](https://huggingface.co/datasets/MCINext/cqadupstack-unix-fa) | ['fas'] | Retrieval | s2p | [Web] | None | None |
 | [CQADupstackWebmastersRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  | None | None |
+| [CQADupstackWebmastersRetrieval-Fa](https://huggingface.co/datasets/MCINext/cqadupstack-webmasters-fa) | ['fas'] | Retrieval | s2p | [Web] | None | None |
 | [CQADupstackWordpressRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  | None | None |
+| [CQADupstackWordpressRetrieval-Fa](https://huggingface.co/datasets/MCINext/cqadupstack-wordpress-fa) | ['fas'] | Retrieval | s2p | [Web] | None | None |
 | [CSFDCZMovieReviewSentimentClassification](https://arxiv.org/abs/2304.01922) (Michal Štefánik, 2023) | ['ces'] | Classification | s2s | [Reviews, Written] | None | None |
 | [CSFDSKMovieReviewSentimentClassification](https://arxiv.org/abs/2304.01922) (Michal Štefánik, 2023) | ['slk'] | Classification | s2s | [Reviews, Written] | None | None |
 | [CTKFactsNLI](https://arxiv.org/abs/2201.11115) (Ullrich et al., 2023) | ['ces'] | PairClassification | s2s | [News, Written] | None | None |
@@ -126,6 +142,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [ChemHotpotQARetrieval](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Retrieval | s2p | [Chemistry] | None | None |
 | [ChemNQRetrieval](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Retrieval | s2p | [Chemistry] | None | None |
 | [ClimateFEVER](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html) (Thomas Diggelmann, 2021) | ['eng'] | Retrieval | s2p |  | None | None |
+| [ClimateFEVER-Fa](https://huggingface.co/datasets/MCINext/climate-fever-fa) | ['fas'] | Retrieval | s2p | [Web] | None | None |
 | [ClimateFEVERHardNegatives](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html) (Thomas Diggelmann, 2021) | ['eng'] | Retrieval | s2p |  | None | None |
 | [CmedqaRetrieval](https://aclanthology.org/2022.emnlp-main.357.pdf) | ['cmn'] | Retrieval | s2p | [Medical, Written] | None | None |
 | [Cmnli](https://huggingface.co/datasets/clue/viewer/cmnli) | ['cmn'] | PairClassification | s2s |  | None | None |
@@ -161,6 +178,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [CzechSoMeSentimentClassification](https://aclanthology.org/W13-1609/) | ['ces'] | Classification | s2s | [Reviews, Written] | None | None |
 | [CzechSubjectivityClassification](https://arxiv.org/abs/2009.08712) | ['ces'] | Classification | s2s | [Reviews, Written] | None | None |
 | [DBPedia](https://github.com/iai-group/DBpedia-Entity/) (Hasibi et al., 2017) | ['eng'] | Retrieval | s2p | [Written, Encyclopaedic] | None | None |
+| [DBPedia-Fa](https://huggingface.co/datasets/MCINext/dbpedia-fa) | ['fas'] | Retrieval | s2p | [Encyclopaedic] | None | None |
 | [DBPedia-PL](https://github.com/iai-group/DBpedia-Entity/) (Hasibi et al., 2017) | ['pol'] | Retrieval | s2p | [Written, Encyclopaedic] | None | None |
 | [DBPedia-PLHardNegatives](https://github.com/iai-group/DBpedia-Entity/) (Hasibi et al., 2017) | ['pol'] | Retrieval | s2p | [Written, Encyclopaedic] | None | None |
 | [DBPediaHardNegatives](https://github.com/iai-group/DBpedia-Entity/) (Hasibi et al., 2017) | ['eng'] | Retrieval | s2p | [Written, Encyclopaedic] | None | None |
@@ -169,8 +187,11 @@ The following tables give you an overview of the tasks in MTEB.
 | [DalajClassification](https://spraakbanken.gu.se/en/resources/superlim) | ['swe'] | Classification | s2s | [Non-fiction, Written] | None | None |
 | [DanFeverRetrieval](https://aclanthology.org/2021.nodalida-main.47/) | ['dan'] | Retrieval | p2p | [Encyclopaedic, Non-fiction, Spoken] | None | None |
 | [DanishPoliticalCommentsClassification](https://huggingface.co/datasets/danish_political_comments) (Mads Guldborg Kjeldgaard Kongsbak, 2019) | ['dan'] | Classification | s2s | [Social, Written] | None | None |
+| [DeepSentiPers](https://github.com/JoyeBright/DeepSentiPers) | ['fas'] | Classification | s2s | [Reviews] | None | None |
 | [DefinitionClassificationLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal, Written] | None | None |
 | [DiaBlaBitextMining](https://inria.hal.science/hal-03021633) (González et al., 2019) | ['eng', 'fra'] | BitextMining | s2s | [Social, Written] | None | None |
+| [DigikalamagClassification](https://hooshvare.github.io/docs/datasets/tc) | ['fas'] | Classification | p2p | [Web] | None | None |
+| [DigikalamagClustering](https://hooshvare.github.io/docs/datasets/tc) | ['fas'] | Clustering | p2p | [Web] | None | None |
 | [Diversity1LegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal, Written] | None | None |
 | [Diversity2LegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal, Written] | None | None |
 | [Diversity3LegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal, Written] | None | None |
@@ -192,9 +213,12 @@ The following tables give you an overview of the tasks in MTEB.
 | [FalseFriendsGermanEnglish](https://drive.google.com/file/d/1jgq0nBnV-UiYNxbKNrrr2gxDEHm-DMKH/view?usp=share_link) | ['deu'] | PairClassification | s2s | [Written] | None | None |
 | [FaroeseSTS](https://aclanthology.org/2023.nodalida-1.74.pdf) | ['fao'] | STS | s2s | [News, Web, Written] | None | None |
 | [FarsTail](https://link.springer.com/article/10.1007/s00500-023-08959-3) (Amirkhani et al., 2023) | ['fas'] | PairClassification | s2s | [Academic, Written] | None | None |
+| [FarsiParaphraseDetection](https://huggingface.co/datasets/alighasemi/farsi_paraphrase_detection) | ['fas'] | PairClassification | s2s |  | None | None |
+| [Farsick](https://github.com/ZahraGhasemi-AI/FarSick) | ['fas'] | STS | s2s |  | None | None |
 | [FeedbackQARetrieval](https://arxiv.org/abs/2204.03025) | ['eng'] | Retrieval | s2p | [Web, Government, Medical, Written] | None | None |
 | [FiQA-PL](https://sites.google.com/view/fiqa/) (Nandan Thakur, 2021) | ['pol'] | Retrieval | s2p |  | None | None |
 | [FiQA2018](https://sites.google.com/view/fiqa/) (Nandan Thakur, 2021) | ['eng'] | Retrieval | s2p |  | None | None |
+| [FiQA2018-Fa](https://huggingface.co/datasets/MCINext/fiqa-fa) | ['fas'] | Retrieval | s2p | [Web] | None | None |
 | [FilipinoHateSpeechClassification](https://pcj.csp.org.ph/index.php/pcj/issue/download/29/PCJ%20V14%20N1%20pp1-14%202019) (Neil Vicente Cabasag et al., 2019) | ['fil'] | Classification | s2s | [Social, Written] | None | None |
 | [FilipinoShopeeReviewsClassification](https://uijrt.com/articles/v4/i8/UIJRTV4I80009.pdf) | ['fil'] | Classification | s2s | [Social, Written] | None | None |
 | [FinParaSTS](https://huggingface.co/datasets/TurkuNLP/turku_paraphrase_corpus) | ['fin'] | STS | s2s | [News, Subtitles, Written] | None | None |
@@ -222,6 +246,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [GujaratiNewsClassification](https://github.com/goru001/nlp-for-gujarati) | ['guj'] | Classification | s2s | [News, Written] | None | None |
 | [HALClusteringS2S.v2](https://huggingface.co/datasets/lyon-nlp/clustering-hal-s2s) (Mathieu Ciancone, 2024) | ['fra'] | Clustering | s2s | [Academic, Written] | None | None |
 | [HagridRetrieval](https://github.com/project-miracl/hagrid) (Ehsan Kamalloo, 2023) | ['eng'] | Retrieval | s2p | [Encyclopaedic, Written] | None | None |
+| [HamshahriClustring](https://github.com/mallahyari/Farsi-datasets) | ['fas'] | Clustering | p2p | [News] | None | None |
 | [HateSpeechPortugueseClassification](https://aclanthology.org/W19-3510) | ['por'] | Classification | s2s | [Social, Written] | None | None |
 | [HeadlineClassification](https://aclanthology.org/2020.ngt-1.6/) | ['rus'] | Classification | s2s | [News, Written] | None | None |
 | [HebrewSentimentAnalysis](https://huggingface.co/datasets/hebrew_sentiment) | ['heb'] | Classification | s2s | [Reviews, Written] | None | None |
@@ -230,6 +255,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [HindiDiscourseClassification](https://aclanthology.org/2020.lrec-1.149/) | ['hin'] | Classification | s2s | [Fiction, Social, Written] | None | None |
 | [HotelReviewSentimentClassification](https://link.springer.com/chapter/10.1007/978-3-319-67056-0_3) (Elnagar et al., 2018) | ['ara'] | Classification | s2s | [Reviews, Written] | None | None |
 | [HotpotQA](https://hotpotqa.github.io/) | ['eng'] | Retrieval | s2p | [Web, Written] | None | None |
+| [HotpotQA-Fa](https://huggingface.co/datasets/MCINext/hotpotqa-fa) | ['fas'] | Retrieval | s2p | [Encyclopaedic] | None | None |
 | [HotpotQA-PL](https://hotpotqa.github.io/) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p | [Web, Written] | None | None |
 | [HotpotQA-PLHardNegatives](https://hotpotqa.github.io/) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p | [Web, Written] | None | None |
 | [HotpotQAHardNegatives](https://hotpotqa.github.io/) | ['eng'] | Retrieval | s2p | [Web, Written] | None | None |
@@ -320,6 +346,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [MMarcoReranking](https://github.com/unicamp-dl/mMARCO) (Luiz Henrique Bonifacio, 2021) | ['cmn'] | Reranking | s2s |  | None | None |
 | [MMarcoRetrieval](https://arxiv.org/abs/2309.07597) (Shitao Xiao, 2024) | ['cmn'] | Retrieval | s2p |  | None | None |
 | [MSMARCO](https://microsoft.github.io/msmarco/) (Tri Nguyen and                Mir Rosenberg and                Xia Song and                Jianfeng Gao and                Saurabh Tiwary and                Rangan Majumder and                Li Deng, 2016) | ['eng'] | Retrieval | s2p |  | None | None |
+| [MSMARCO-Fa](https://huggingface.co/datasets/MCINext/msmarco-fa) | ['fas'] | Retrieval | s2p | [Web] | None | None |
 | [MSMARCO-PL](https://microsoft.github.io/msmarco/) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p | [Web, Written] | None | None |
 | [MSMARCO-PLHardNegatives](https://microsoft.github.io/msmarco/) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p | [Web, Written] | None | None |
 | [MSMARCOHardNegatives](https://microsoft.github.io/msmarco/) (Tri Nguyen and                Mir Rosenberg and                Xia Song and                Jianfeng Gao and                Saurabh Tiwary and                Rangan Majumder and                Li Deng, 2016) | ['eng'] | Retrieval | s2p |  | None | None |
@@ -352,11 +379,15 @@ The following tables give you an overview of the tasks in MTEB.
 | [MultilingualSentimentClassification](https://huggingface.co/datasets/mteb/multilingual-sentiment-classification) | ['ara', 'bam', 'bul', 'cmn', 'cym', 'deu', 'dza', 'ell', 'eng', 'eus', 'fas', 'fin', 'heb', 'hrv', 'ind', 'jpn', 'kor', 'mlt', 'nor', 'pol', 'rus', 'slk', 'spa', 'tha', 'tur', 'uig', 'urd', 'vie', 'zho'] | Classification | s2s | [Reviews, Written] | None | None |
 | [MyanmarNews](https://huggingface.co/datasets/myanmar_news) (A. H. Khine, 2017) | ['mya'] | Classification | p2p | [News, Written] | None | None |
 | [NFCorpus](https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/) (Boteva et al., 2016) | ['eng'] | Retrieval | s2p | [Medical, Academic, Written] | {'test': 3956} | {'test': {'number_of_characters': 1612.55, 'num_samples': 3956, 'num_queries': 323, 'num_documents': 3633, 'average_document_length': 0.44, 'average_query_length': 0.07, 'average_relevant_docs_per_query': 38.19}} |
+| [NFCorpus-Fa](https://huggingface.co/datasets/MCINext/nfcorpus-fa) | ['fas'] | Retrieval | s2p | [Medical] | None | None |
 | [NFCorpus-PL](https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  | None | None |
 | [NLPJournalAbsIntroRetrieval](https://github.com/sbintuitions/JMTEB) | ['jpn'] | Retrieval | s2s | [Academic, Written] | None | None |
 | [NLPJournalTitleAbsRetrieval](https://github.com/sbintuitions/JMTEB) | ['jpn'] | Retrieval | s2s | [Academic, Written] | None | None |
 | [NLPJournalTitleIntroRetrieval](https://github.com/sbintuitions/JMTEB) | ['jpn'] | Retrieval | s2s | [Academic, Written] | None | None |
+| [NLPTwitterAnalysisClassification](https://huggingface.co/datasets/hamedhf/nlp_twitter_analysis/tree/main) | ['fas'] | Classification | s2p | [Social] | None | None |
+| [NLPTwitterAnalysisClustering](https://huggingface.co/datasets/hamedhf/nlp_twitter_analysis/commits/main) | ['fas'] | Clustering | s2s | [Social] | None | None |
 | [NQ](https://ai.google.com/research/NaturalQuestions/) (Tom Kwiatkowski, 2019) | ['eng'] | Retrieval | s2p |  | None | None |
+| [NQ-Fa](https://huggingface.co/datasets/MCINext/nq-fa) | ['fas'] | Retrieval | s2p | [Encyclopaedic] | None | None |
 | [NQ-PL](https://ai.google.com/research/NaturalQuestions/) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  | None | None |
 | [NQ-PLHardNegatives](https://ai.google.com/research/NaturalQuestions/) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  | None | None |
 | [NQHardNegatives](https://ai.google.com/research/NaturalQuestions/) (Tom Kwiatkowski, 2019) | ['eng'] | Retrieval | s2p |  | None | None |
@@ -417,9 +448,14 @@ The following tables give you an overview of the tasks in MTEB.
 | [PIQA](https://arxiv.org/abs/1911.11641) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic, Written] | None | None |
 | [PROALegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal, Written] | None | None |
 | [PSC](http://www.lrec-conf.org/proceedings/lrec2014/pdf/1211_Paper.pdf) | ['pol'] | PairClassification | s2s | [News, Written] | None | None |
+| [ParsinluEntail](https://github.com/persiannlp/parsinlu) | ['fas'] | PairClassification | s2s |  | None | None |
+| [ParsinluQueryParaphPC](https://huggingface.co/datasets/persiannlp/parsinlu_query_paraphrasing) | ['fas'] | PairClassification | s2s |  | None | None |
 | [PatentClassification](https://aclanthology.org/P19-1212.pdf) | ['eng'] | Classification | s2s | [Legal, Written] | None | None |
 | [PawsXPairClassification](https://arxiv.org/abs/1908.11828) (Yinfei Yang, 2019) | ['cmn', 'deu', 'eng', 'fra', 'jpn', 'kor', 'spa'] | PairClassification | s2s | [Web, Encyclopaedic, Written] | {'test': 14000, 'validation': 14000} | {'test': {'num_samples': 14000, 'number_of_characters': 2551922, 'min_sentence1_length': 2, 'avg_sentence1_length': 91.18, 'max_sentence1_length': 268, 'unique_sentence1': 13404, 'min_sentence2_length': 2, 'avg_sentence2_length': 91.1, 'max_sentence2_length': 247, 'unique_sentence2': 13462, 'unique_labels': 2, 'labels': {'1': {'count': 6285}, '0': {'count': 7715}}, 'hf_subset_descriptive_stats': {'de': {'num_samples': 2000, 'number_of_characters': 478034, 'min_sentence1_length': 2, 'avg_sentence1_length': 119.78, 'max_sentence1_length': 268, 'unique_sentence1': 1934, 'min_sentence2_length': 2, 'avg_sentence2_length': 119.24, 'max_sentence2_length': 235, 'unique_sentence2': 1938, 'unique_labels': 2, 'labels': {'1': {'count': 895}, '0': {'count': 1105}}}, 'en': {'num_samples': 2000, 'number_of_characters': 454362, 'min_sentence1_length': 25, 'avg_sentence1_length': 113.76, 'max_sentence1_length': 209, 'unique_sentence1': 1761, 'min_sentence2_length': 25, 'avg_sentence2_length': 113.42, 'max_sentence2_length': 209, 'unique_sentence2': 1800, 'unique_labels': 2, 'labels': {'1': {'count': 907}, '0': {'count': 1093}}}, 'es': {'num_samples': 2000, 'number_of_characters': 471226, 'min_sentence1_length': 2, 'avg_sentence1_length': 117.81, 'max_sentence1_length': 226, 'unique_sentence1': 1955, 'min_sentence2_length': 22, 'avg_sentence2_length': 117.8, 'max_sentence2_length': 233, 'unique_sentence2': 1959, 'unique_labels': 2, 'labels': {'1': {'count': 907}, '0': {'count': 1093}}}, 'fr': {'num_samples': 2000, 'number_of_characters': 480033, 'min_sentence1_length': 2, 'avg_sentence1_length': 120.03, 'max_sentence1_length': 238, 'unique_sentence1': 1954, 'min_sentence2_length': 2, 'avg_sentence2_length': 119.99, 'max_sentence2_length': 247, 'unique_sentence2': 1953, 'unique_labels': 2, 'labels': {'1': {'count': 903}, '0': {'count': 1097}}}, 'ja': {'num_samples': 2000, 'number_of_characters': 235106, 'min_sentence1_length': 2, 'avg_sentence1_length': 58.68, 'max_sentence1_length': 192, 'unique_sentence1': 1944, 'min_sentence2_length': 2, 'avg_sentence2_length': 58.88, 'max_sentence2_length': 198, 'unique_sentence2': 1941, 'unique_labels': 2, 'labels': {'1': {'count': 883}, '0': {'count': 1117}}}, 'ko': {'num_samples': 2000, 'number_of_characters': 260149, 'min_sentence1_length': 2, 'avg_sentence1_length': 64.96, 'max_sentence1_length': 153, 'unique_sentence1': 1954, 'min_sentence2_length': 2, 'avg_sentence2_length': 65.11, 'max_sentence2_length': 159, 'unique_sentence2': 1969, 'unique_labels': 2, 'labels': {'1': {'count': 896}, '0': {'count': 1104}}}, 'zh': {'num_samples': 2000, 'number_of_characters': 173012, 'min_sentence1_length': 2, 'avg_sentence1_length': 43.23, 'max_sentence1_length': 120, 'unique_sentence1': 1909, 'min_sentence2_length': 2, 'avg_sentence2_length': 43.27, 'max_sentence2_length': 113, 'unique_sentence2': 1909, 'unique_labels': 2, 'labels': {'1': {'count': 894}, '0': {'count': 1106}}}}}, 'validation': {'num_samples': 14000, 'number_of_characters': 2524625, 'min_sentence1_length': 2, 'avg_sentence1_length': 90.13, 'max_sentence1_length': 248, 'unique_sentence1': 13357, 'min_sentence2_length': 2, 'avg_sentence2_length': 90.2, 'max_sentence2_length': 275, 'unique_sentence2': 13397, 'unique_labels': 2, 'labels': {'1': {'count': 5948}, '0': {'count': 8052}}, 'hf_subset_descriptive_stats': {'de': {'num_samples': 2000, 'number_of_characters': 467643, 'min_sentence1_length': 2, 'avg_sentence1_length': 116.82, 'max_sentence1_length': 248, 'unique_sentence1': 1914, 'min_sentence2_length': 2, 'avg_sentence2_length': 117.0, 'max_sentence2_length': 275, 'unique_sentence2': 1920, 'unique_labels': 2, 'labels': {'1': {'count': 831}, '0': {'count': 1169}}}, 'en': {'num_samples': 2000, 'number_of_characters': 451931, 'min_sentence1_length': 25, 'avg_sentence1_length': 113.11, 'max_sentence1_length': 213, 'unique_sentence1': 1758, 'min_sentence2_length': 25, 'avg_sentence2_length': 112.86, 'max_sentence2_length': 213, 'unique_sentence2': 1771, 'unique_labels': 2, 'labels': {'1': {'count': 863}, '0': {'count': 1137}}}, 'es': {'num_samples': 2000, 'number_of_characters': 466112, 'min_sentence1_length': 2, 'avg_sentence1_length': 116.33, 'max_sentence1_length': 240, 'unique_sentence1': 1938, 'min_sentence2_length': 2, 'avg_sentence2_length': 116.73, 'max_sentence2_length': 241, 'unique_sentence2': 1941, 'unique_labels': 2, 'labels': {'1': {'count': 847}, '0': {'count': 1153}}}, 'fr': {'num_samples': 2000, 'number_of_characters': 478510, 'min_sentence1_length': 2, 'avg_sentence1_length': 119.5, 'max_sentence1_length': 233, 'unique_sentence1': 1933, 'min_sentence2_length': 2, 'avg_sentence2_length': 119.75, 'max_sentence2_length': 246, 'unique_sentence2': 1939, 'unique_labels': 2, 'labels': {'1': {'count': 860}, '0': {'count': 1140}}}, 'ja': {'num_samples': 2000, 'number_of_characters': 229655, 'min_sentence1_length': 2, 'avg_sentence1_length': 57.51, 'max_sentence1_length': 126, 'unique_sentence1': 1957, 'min_sentence2_length': 2, 'avg_sentence2_length': 57.32, 'max_sentence2_length': 121, 'unique_sentence2': 1969, 'unique_labels': 2, 'labels': {'1': {'count': 854}, '0': {'count': 1146}}}, 'ko': {'num_samples': 2000, 'number_of_characters': 261355, 'min_sentence1_length': 2, 'avg_sentence1_length': 65.16, 'max_sentence1_length': 178, 'unique_sentence1': 1963, 'min_sentence2_length': 2, 'avg_sentence2_length': 65.52, 'max_sentence2_length': 174, 'unique_sentence2': 1968, 'unique_labels': 2, 'labels': {'1': {'count': 840}, '0': {'count': 1160}}}, 'zh': {'num_samples': 2000, 'number_of_characters': 169419, 'min_sentence1_length': 2, 'avg_sentence1_length': 42.45, 'max_sentence1_length': 101, 'unique_sentence1': 1899, 'min_sentence2_length': 2, 'avg_sentence2_length': 42.26, 'max_sentence2_length': 120, 'unique_sentence2': 1895, 'unique_labels': 2, 'labels': {'1': {'count': 853}, '0': {'count': 1147}}}}}} |
 | [PersianFoodSentimentClassification](https://hooshvare.github.io/docs/datasets/sa) (Mehrdad Farahani et al., 2020) | ['fas'] | Classification | s2s | [Reviews, Written] | None | None |
+| [PersianTextEmotion](https://huggingface.co/datasets/SeyedAli/Persian-Text-Emotion) | ['fas'] | Classification | s2s |  | None | None |
+| [PersianTextTone](https://mcinext.com/) | ['fas'] | Classification | s2p |  | None | None |
+| [PersianWebDocumentRetrieval](https://ieeexplore.ieee.org/document/10553090) | ['fas'] | Retrieval | s2p | [Web] | None | None |
 | [PersonalJurisdictionLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal, Written] | None | None |
 | [PhincBitextMining](https://huggingface.co/datasets/veezbo/phinc) (Srivastava et al., 2020) | ['eng', 'hin'] | BitextMining | s2s | [Social, Written] | {'train': 13738} | {'train': {'num_samples': 13738, 'number_of_characters': 2069457, 'unique_pairs': 13737, 'min_sentence1_length': 1, 'average_sentence1_length': 74.02, 'max_sentence1_length': 278, 'unique_sentence1': 13515, 'min_sentence2_length': 3, 'average_sentence2_length': 76.61, 'max_sentence2_length': 274, 'unique_sentence2': 13736, 'hf_subset_descriptive_stats': {'eng-eng_hin': {'num_samples': 13738, 'number_of_characters': 2069457, 'unique_pairs': 13737, 'min_sentence1_length': 1, 'average_sentence1_length': 74.02, 'max_sentence1_length': 278, 'unique_sentence1': 13515, 'min_sentence2_length': 3, 'average_sentence2_length': 76.61, 'max_sentence2_length': 274, 'unique_sentence2': 13736}}}} |
 | [PlscClusteringP2P.v2](https://huggingface.co/datasets/rafalposwiata/plsc) | ['pol'] | Clustering | s2s | [Academic, Written] | None | None |
@@ -438,9 +474,11 @@ The following tables give you an overview of the tasks in MTEB.
 | [PunjabiNewsClassification](https://github.com/goru001/nlp-for-punjabi/) (Anoop Kunchukuttan, 2020) | ['pan'] | Classification | s2s | [News, Written] | None | None |
 | [QBQTC](https://github.com/CLUEbenchmark/QBQTC/tree/main/dataset) | ['cmn'] | STS | s2s |  | None | None |
 | [Quail](https://text-machine.cs.uml.edu/lab2/projects/quail/) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic, Written] | None | None |
+| [Query2Query](https://mcinext.com/) | ['fas'] | STS | s2s |  | None | None |
 | [Quora-PL](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2s |  | None | None |
 | [Quora-PLHardNegatives](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2s |  | None | None |
 | [QuoraRetrieval](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs) (DataCanary et al., 2017) | ['eng'] | Retrieval | s2s |  | None | None |
+| [QuoraRetrieval-Fa](https://huggingface.co/datasets/MCINext/quora-fa) | ['fas'] | Retrieval | s2s | [Web] | None | None |
 | [QuoraRetrievalHardNegatives](https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs) (DataCanary et al., 2017) | ['eng'] | Retrieval | s2s |  | None | None |
 | [RARbCode](https://arxiv.org/abs/2404.06347) (Xiao et al., 2024) | ['eng'] | Retrieval | s2p | [Programming, Written] | None | None |
 | [RARbMath](https://arxiv.org/abs/2404.06347) (Xiao et al., 2024) | ['eng'] | Retrieval | s2p | [Encyclopaedic, Written] | None | None |
@@ -465,6 +503,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [RuSciBenchGRNTIClusteringP2P](https://github.com/mlsa-iai-msu-lab/ru_sci_bench/) | ['rus'] | Clustering | p2p | [Academic, Written] | {'test': 2048} | {'test': {'num_samples': 2048, 'number_of_characters': 1822339, 'min_text_length': 84, 'average_text_length': 889.81, 'max_text_length': 3143, 'min_labels_per_text': 73, 'average_labels_per_text': 1.0, 'max_labels_per_text': 74, 'unique_labels': 28, 'labels': {'3': {'count': 73}, '4': {'count': 73}, '20': {'count': 73}, '9': {'count': 73}, '21': {'count': 73}, '15': {'count': 73}, '16': {'count': 74}, '2': {'count': 73}, '8': {'count': 73}, '23': {'count': 73}, '6': {'count': 73}, '24': {'count': 73}, '10': {'count': 73}, '1': {'count': 73}, '17': {'count': 74}, '14': {'count': 74}, '18': {'count': 73}, '27': {'count': 73}, '19': {'count': 73}, '22': {'count': 73}, '12': {'count': 73}, '25': {'count': 73}, '5': {'count': 74}, '0': {'count': 73}, '26': {'count': 73}, '11': {'count': 73}, '13': {'count': 73}, '7': {'count': 73}}}} |
 | [RuSciBenchOECDClassification](https://github.com/mlsa-iai-msu-lab/ru_sci_bench/) | ['rus'] | Classification | p2p | [Academic, Written] | None | None |
 | [RuSciBenchOECDClusteringP2P](https://github.com/mlsa-iai-msu-lab/ru_sci_bench/) | ['rus'] | Clustering | p2p | [Academic, Written] | None | None |
+| [SAMSumFa](https://huggingface.co/datasets/MCINext/samsum-fa) | ['fas'] | SummaryRetrieval | s2p | [Spoken] | None | None |
 | [SCDBPAccountabilityLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal, Written] | None | None |
 | [SCDBPAuditsLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal, Written] | None | None |
 | [SCDBPCertificationLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal, Written] | None | None |
@@ -476,6 +515,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [SCDDTrainingLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal, Written] | None | None |
 | [SCDDVerificationLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal, Written] | None | None |
 | [SCIDOCS](https://allenai.org/data/scidocs) (Arman Cohan, 2020) | ['eng'] | Retrieval | s2p | [Academic, Written, Non-fiction] | None | None |
+| [SCIDOCS-Fa](https://huggingface.co/datasets/MCINext/scidocs-fa) | ['fas'] | Retrieval | s2p | [Academic] | None | None |
 | [SCIDOCS-PL](https://allenai.org/data/scidocs) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  | None | None |
 | [SDSEyeProtectionClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Classification | s2p | [Chemistry] | None | None |
 | [SDSGlovesClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Classification | s2p | [Chemistry] | None | None |
@@ -487,6 +527,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [SICK-R](https://aclanthology.org/L14-1314/) | ['eng'] | STS | s2s | [Web, Written] | None | None |
 | [SICK-R-PL](https://aclanthology.org/2020.lrec-1.207) | ['pol'] | STS | s2s | [Web, Written] | None | None |
 | [SICKFr](https://huggingface.co/datasets/Lajavaness/SICK-fr) | ['fra'] | STS | s2s |  | None | None |
+| [SIDClassification](https://mcinext.com/) | ['fas'] | Classification | p2p | [Academic] | None | None |
+| [SIDClustring](https://www.sid.com/) | ['fas'] | Clustering | p2p | [Academic] | None | None |
 | [SIQA](https://leaderboard.allenai.org/socialiqa/submissions/get-started) (Xiao et al., 2024) | ['eng'] | Retrieval | s2s | [Encyclopaedic, Written] | None | None |
 | [SKQuadRetrieval](https://huggingface.co/datasets/TUKE-KEMT/retrieval-skquad) | ['slk'] | Retrieval | s2s | [Encyclopaedic] | None | None |
 | [SNLHierarchicalClusteringP2P](https://huggingface.co/datasets/navjordj/SNL_summarization) (Navjord et al., 2023) | ['nob'] | Clustering | p2p | [Encyclopaedic, Non-fiction, Written] | None | None |
@@ -509,10 +551,12 @@ The following tables give you an overview of the tasks in MTEB.
 | [ScalaClassification](https://aclanthology.org/2023.nodalida-1.20/) | ['dan', 'nno', 'nob', 'swe'] | Classification | s2s | [Fiction, News, Non-fiction, Blog, Spoken, Web, Written] | None | None |
 | [SciDocsRR](https://allenai.org/data/scidocs) | ['eng'] | Reranking | s2s | [Academic, Non-fiction, Written] | None | None |
 | [SciFact](https://github.com/allenai/scifact) (Arman Cohan, 2020) | ['eng'] | Retrieval | s2p | [Academic, Medical, Written] | None | None |
+| [SciFact-Fa](https://huggingface.co/datasets/MCINext/scifact-fa) | ['fas'] | Retrieval | s2p | [Academic] | None | None |
 | [SciFact-PL](https://github.com/allenai/scifact) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p | [Academic, Medical, Written] | None | None |
 | [SemRel24STS](https://huggingface.co/datasets/SemRel/SemRel2024) (Nedjma Ousidhoum, 2024) | ['afr', 'amh', 'arb', 'arq', 'ary', 'eng', 'hau', 'hin', 'ind', 'kin', 'mar', 'tel'] | STS | s2s | [Spoken, Written] | None | None |
 | [SensitiveTopicsClassification](https://aclanthology.org/2021.bsnlp-1.4) | ['rus'] | MultilabelClassification | s2s | [Web, Social, Written] | None | None |
 | [SentimentAnalysisHindi](https://huggingface.co/datasets/OdiaGenAI/sentiment_analysis_hindi) (Shantipriya Parida, 2023) | ['hin'] | Classification | s2s | [Reviews, Written] | None | None |
+| [SentimentDKSF](https://github.com/hezarai/hezar) | ['fas'] | Classification | s2p | [Reviews] | None | None |
 | [SinhalaNewsClassification](https://huggingface.co/datasets/NLPC-UOM/Sinhala-News-Category-classification) (Nisansa de Silva, 2015) | ['sin'] | Classification | s2s | [News, Written] | None | None |
 | [SinhalaNewsSourceClassification](https://huggingface.co/datasets/NLPC-UOM/Sinhala-News-Source-classification) (Dhananjaya et al., 2022) | ['sin'] | Classification | s2s | [News, Written] | None | None |
 | [SiswatiNewsClassification](https://huggingface.co/datasets/dsfsi/za-isizulu-siswati-news) (Madodonga et al., 2023) | ['ssw'] | Classification | s2s | [News, Written] | None | None |
@@ -542,6 +586,33 @@ The following tables give you an overview of the tasks in MTEB.
 | [SwednClusteringS2S](https://spraakbanken.gu.se/en/resources/swedn) (Monsen et al., 2021) | ['swe'] | Clustering | s2s | [News, Non-fiction, Written] | None | None |
 | [SwednRetrieval](https://spraakbanken.gu.se/en/resources/swedn) (Monsen et al., 2021) | ['swe'] | Retrieval | p2p | [News, Non-fiction, Written] | None | None |
 | [SwissJudgementClassification](https://aclanthology.org/2021.nllp-1.3/) (Joel Niklaus, 2022) | ['deu', 'fra', 'ita'] | Classification | s2s | [Legal, Written] | None | None |
+| [SynPerChatbotConvSAAnger](https://mcinext.com/) | ['fas'] | Classification | p2p | [Spoken] | None | None |
+| SynPerChatbotConvSAClassification | ['fas'] | Classification | None | [Spoken] | None | None |
+| [SynPerChatbotConvSAFear](https://mcinext.com/) | ['fas'] | Classification | p2p | [Spoken] | None | None |
+| [SynPerChatbotConvSAFriendship](https://mcinext.com/) | ['fas'] | Classification | p2p | [Spoken] | None | None |
+| [SynPerChatbotConvSAHappiness](https://mcinext.com/) | ['fas'] | Classification | p2p | [Spoken] | None | None |
+| [SynPerChatbotConvSAJealousy](https://mcinext.com/) | ['fas'] | Classification | p2p | [Spoken] | None | None |
+| [SynPerChatbotConvSALove](https://mcinext.com/) | ['fas'] | Classification | p2p | [Spoken] | None | None |
+| [SynPerChatbotConvSASadness](https://mcinext.com/) | ['fas'] | Classification | p2p | [Spoken] | None | None |
+| [SynPerChatbotConvSASatisfaction](https://mcinext.com/) | ['fas'] | Classification | p2p | [Spoken] | None | None |
+| [SynPerChatbotConvSASurprise](https://mcinext.com/) | ['fas'] | Classification | p2p | [Spoken] | None | None |
+| [SynPerChatbotConvSAToneChatbotClassification](https://mcinext.com/) | ['fas'] | Classification | p2p | [Spoken] | None | None |
+| [SynPerChatbotConvSAToneUserClassification](https://mcinext.com/) | ['fas'] | Classification | p2p | [Spoken] | None | None |
+| [SynPerChatbotRAGFAQPC](https://mcinext.com/) | ['fas'] | PairClassification | s2p | [Spoken] | None | None |
+| [SynPerChatbotRAGFAQRetrieval](https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-rag-faq-retrieval) | ['fas'] | Retrieval | s2p | [Spoken] | None | None |
+| [SynPerChatbotRAGSumSRetrieval](https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-rag-summary-retrieval) | ['fas'] | SummaryRetrieval | p2p | [Spoken] | None | None |
+| [SynPerChatbotRAGToneChatbotClassification](https://mcinext.com/) | ['fas'] | Classification | p2p | [Spoken] | None | None |
+| [SynPerChatbotRAGToneUserClassification](https://mcinext.com/) | ['fas'] | Classification | p2p | [Spoken] | None | None |
+| [SynPerChatbotRAGTopicsRetrieval](https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-rag-topics-retrieval) | ['fas'] | Retrieval | s2p | [Spoken] | None | None |
+| [SynPerChatbotSatisfactionLevelClassification](https://mcinext.com/) | ['fas'] | Classification | p2p | [Spoken] | None | None |
+| [SynPerChatbotSumSRetrieval](https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-summary-retrieval) | ['fas'] | SummaryRetrieval | p2p | [Spoken] | None | None |
+| [SynPerChatbotToneChatbotClassification](https://mcinext.com/) | ['fas'] | Classification | p2p | [Spoken] | None | None |
+| [SynPerChatbotToneUserClassification](https://mcinext.com/) | ['fas'] | Classification | p2p | [Spoken] | None | None |
+| [SynPerChatbotTopicsRetrieval](https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-topics-retrieval) | ['fas'] | Retrieval | s2p | [Spoken] | None | None |
+| [SynPerQAPC](https://mcinext.com/) | ['fas'] | PairClassification | s2p | [Web, News, Religious, Blog] | None | None |
+| [SynPerQARetrieval](https://huggingface.co/datasets/MCINext/synthetic-persian-qa-retrieval/settings) | ['fas'] | Retrieval | s2p | [Web] | None | None |
+| [SynPerSTS](https://mcinext.com/) | ['fas'] | STS | s2s | [Web, News, Religious, Blog] | None | None |
+| [SynPerTextKeywordsPC](https://mcinext.com/) | ['fas'] | PairClassification | s2p | [Web, News, Religious, Blog] | None | None |
 | [SyntecReranking](https://huggingface.co/datasets/lyon-nlp/mteb-fr-reranking-syntec-s2p) (Mathieu Ciancone, 2024) | ['fra'] | Reranking | s2p | [Legal, Written] | None | None |
 | [SyntecRetrieval](https://huggingface.co/datasets/lyon-nlp/mteb-fr-retrieval-syntec-s2p) (Mathieu Ciancone, 2024) | ['fra'] | Retrieval | s2p | [Legal, Written] | None | None |
 | [SyntheticText2SQL](https://huggingface.co/datasets/gretelai/synthetic_text_to_sql) (Meyer et al., 2024) | ['eng', 'sql'] | Retrieval | p2p | [Programming, Written] | {'test': 111702} | {'test': {'number_of_characters': 14041553, 'num_samples': 111702, 'num_queries': 5851, 'num_documents': 105851, 'min_document_length': 13, 'average_document_length': 4.58, 'max_document_length': 281, 'unique_documents': 105851, 'min_query_length': 17, 'average_query_length': 2316.95, 'max_query_length': 762, 'unique_queries': 5851, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 5851}} |
@@ -550,6 +621,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [TERRa](https://arxiv.org/pdf/2010.15925) (Shavrina et al., 2020) | ['rus'] | PairClassification | s2s | [News, Web, Written] | None | None |
 | [TNews](https://www.cluebenchmarks.com/introduce.html) | ['cmn'] | Classification | s2s |  | None | None |
 | [TRECCOVID](https://ir.nist.gov/covidSubmit/index.html) (Kirk Roberts, 2021) | ['eng'] | Retrieval | s2p | [Medical, Academic, Written] | None | None |
+| [TRECCOVID-Fa](https://huggingface.co/datasets/MCINext/trec-covid-fa) | ['fas'] | Retrieval | s2p | [Medical] | None | None |
 | [TRECCOVID-PL](https://ir.nist.gov/covidSubmit/index.html) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p | [Academic, Medical, Non-fiction, Written] | None | None |
 | [TV2Nordretrieval](https://huggingface.co/datasets/alexandrainst/nordjylland-news-summarization) | ['dan'] | Retrieval | p2p | [News, Non-fiction, Written] | None | None |
 | [TamilNewsClassification](https://github.com/vanangamudi/tamil-news-classification) (Anoop Kunchukuttan, 2020) | ['tam'] | Classification | s2s | [News, Written] | None | None |
@@ -573,6 +645,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [ThuNewsClusteringS2S.v2](http://thuctc.thunlp.org/) (Sun et al., 2016) | ['cmn'] | Clustering | s2s | [News, Written] | None | None |
 | [TopiOCQA](https://mcgill-nlp.github.io/topiocqa) (Vaibhav Adlakha, 2022) | ['eng'] | Retrieval | s2p | [Encyclopaedic, Written] | None | None |
 | [TopiOCQAHardNegatives](https://mcgill-nlp.github.io/topiocqa) (Vaibhav Adlakha, 2022) | ['eng'] | Retrieval | s2p | [Encyclopaedic, Written] | None | None |
+| [Touche2020-Fa](https://huggingface.co/datasets/MCINext/touche2020-fa) | ['fas'] | Retrieval | s2p | [Spoken] | None | None |
 | [Touche2020Retrieval.v3](https://github.com/castorini/touche-error-analysis) | ['eng'] | Retrieval | s2p | [Academic] | {'test': 303781} | {'test': {'number_of_characters': 637047138, 'num_samples': 303781, 'num_queries': 49, 'num_documents': 303732, 'min_document_length': 16, 'average_document_length': 0.01, 'max_document_length': 83, 'unique_documents': 303732, 'min_query_length': 41, 'average_query_length': 13000918.57, 'max_query_length': 105983, 'unique_queries': 49, 'min_relevant_docs_per_query': 40, 'average_relevant_docs_per_query': 58.14, 'max_relevant_docs_per_query': 87, 'unique_relevant_docs': 2732}} |
 | [ToxicChatClassification](https://aclanthology.org/2023.findings-emnlp.311/) (Zi Lin, 2023) | ['eng'] | Classification | s2s | [Constructed, Written] | None | None |
 | [ToxicConversationsClassification](https://www.kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification/overview) (cjadams, 2019) | ['eng'] | Classification | s2s | [Social, Written] | None | None |
@@ -650,1060 +723,1060 @@ The following tables give you an overview of the tasks in MTEB.
 <details>
 
 <!-- TASK LANG TABLE START -->
-| ISO Code | Language | Family | BitextMining | Classification | Clustering | InstructionRetrieval | MultilabelClassification | PairClassification | Reranking | Retrieval | STS | Speed | Summarization | Sum |
-|---|------|------|------|------|------|------|------|------|------|------|------|---|
-| aai | Arifama-Miniafia | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aak | Ankave | Angan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aau | Abau | Sepik | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aaz | Amarasi | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| abs | Ambonese Malay | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| abt | Ambulas | Ndu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| abx | Inabaknon | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aby | Aneme Wake | Yareban | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ace | Achinese | Austronesian | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| acf | Saint Lucian Creole French | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| acm | Mesopotamian Arabic | Afro-Asiatic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| acq | Ta'izzi-Adeni Arabic | Afro-Asiatic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| acr | Achi | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| acu | Achuar-Shiwiar | Chicham | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| adz | Adzera | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aeb | Tunisian Arabic | Afro-Asiatic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| aer | Eastern Arrernte | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aey | Amele | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| afr | Afrikaans | Indo-European | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 10 |
-| agd | Agarabi | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| agg | Angor | Senagi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| agm | Angaataha | Angan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| agn | Agutaynen | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| agr | Aguaruna | Chicham | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| agt | Central Cagayan Agta | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| agu | Aguacateco | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aia | Arosi | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aii | Assyrian Neo-Aramaic | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ajp | South Levantine Arabic | Unclassified | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| aka | Akan | Atlantic-Congo | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| ake | Akawaio | Cariban | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| alp | Alune | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| alq | Algonquin | Algic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| als | Tosk Albanian | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 5 |
-| aly | Alyawarr | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ame | Yanesha' | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| amf | Hamer-Banna | South Omotic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| amh | Amharic | Afro-Asiatic | 3 | 6 | 3 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 14 |
-| amk | Ambai | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| amm | Ama (Papua New Guinea) | Left May | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| amn | Amanab | Border | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| amo | Amo | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| amp | Alamblak | Sepik | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| amr | Amarakaeri | Harakmbut | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| amu | Guerrero Amuzgo | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| amx | Anmatyerre | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ang | Old English (ca. 450-1100) | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| anh | Nend | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| anp | Angika | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| anv | Denya | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aoi | Anindilyakwa | Gunwinyguan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aoj | Mufian | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aom | Ömie | Koiarian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aon | Bumbita Arapesh | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| apb | Sa'a | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| apc | Levantine Arabic | Afro-Asiatic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| ape | Bukiyip | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| apn | Apinayé | Nuclear-Macro-Je | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| apr | Arop-Lokep | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| apu | Apurinã | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| apw | Western Apache | Athabaskan-Eyak-Tlingit | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| apz | Safeyoka | Angan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ara | Arabic | Unclassified | 2 | 12 | 0 | 0 | 0 | 2 | 2 | 9 | 2 | 0 | 0 | 29 |
-| arb | Standard Arabic | Afro-Asiatic | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 2 | 1 | 0 | 0 | 8 |
-| are | Western Arrarnta | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| arl | Arabela | Zaparoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| arn | Mapudungun | Araucanian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| arp | Arapaho | Algic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| arq | Algerian Arabic | Afro-Asiatic | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 4 |
-| ars | Najdi Arabic | Afro-Asiatic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| ary | Moroccan Arabic | Afro-Asiatic | 1 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 7 |
-| arz | Egyptian Arabic | Afro-Asiatic | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 5 |
-| asm | Assamese | Indo-European | 5 | 3 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 | 14 |
-| aso | Dano | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ast | Asturian | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| ata | Pele-Ata | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| atb | Zaiwa | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| atd | Ata Manobo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| atg | Ivbie North-Okpela-Arhe | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| att | Pamplona Atta | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| auc | Waorani | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| aui | Anuki | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| auy | Awiyaana | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| avt | Au | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| awa | Awadhi | Indo-European | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
-| awb | Awa (Papua New Guinea) | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| awk | Awabakal | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| awx | Awara | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ayr | Central Aymara | Aymaran | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| azb | South Azerbaijani | Turkic | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| aze | Azerbaijani | Unclassified | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| azg | San Pedro Amuzgos Amuzgo | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| azj | North Azerbaijani | Turkic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| azz | Highland Puebla Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bak | Bashkir | Turkic | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
-| bam | Bambara | Mande | 1 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 5 |
-| ban | Balinese | Austronesian | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| bao | Waimaha | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bba | Baatonum | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bbb | Barai | Koiarian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bbc | Batak Toba | Austronesian | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| bbr | Girawa | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bch | Bariai | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bco | Kaluli | Bosavi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bdd | Bunama | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bea | Beaver | Athabaskan-Eyak-Tlingit | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bef | Benabena | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bel | Belarusian | Indo-European | 4 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
-| bem | Bemba (Zambia) | Atlantic-Congo | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| ben | Bengali | Indo-European | 7 | 9 | 2 | 0 | 0 | 1 | 2 | 6 | 1 | 0 | 0 | 28 |
-| beo | Beami | Bosavi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ber | Berber (Other) | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| beu | Blagar | Timor-Alor-Pantar | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bew | Betawi | Austronesian | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| bgc | Haryanvi | Indo-European | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| bgs | Tagabawa | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bgt | Bughotu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bhb | Bhili | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bhd | Bhadrawahi | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bhg | Binandere | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bhl | Bimin | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bho | Bhojpuri | Indo-European | 2 | 2 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 6 |
-| bhp | Bima | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| big | Biangai | Kunimaipan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bjj | Kanauji | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bjk | Barok | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bjn | Banjar | Austronesian | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| bjp | Fanamaket | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bjr | Binumarien | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bjv | Bedjond | Central Sudanic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bjz | Baruga | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bkd | Binukid | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bki | Baki | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bkq | Bakairí | Cariban | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bkx | Baikeno | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| blw | Balangao | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| blz | Balantak | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bmh | Kein | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bmk | Ghayavi | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bmr | Muinane | Boran | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bmu | Somba-Siawari | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bnp | Bola | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bns | Bundeli | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| boa | Bora | Boran | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bod | Tibetan | Sino-Tibetan | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 6 |
-| boj | Anjam | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bon | Bine | Eastern Trans-Fly | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bos | Bosnian | Indo-European | 3 | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
-| box | Buamu | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| boy | Bodo (Central African Republic) | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bpr | Koronadal Blaan | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bps | Sarangani Blaan | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bqc | Boko (Benin) | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bqp | Busa | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bra | Braj | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bre | Breton | Indo-European | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| brx | Bodo (India) | Sino-Tibetan | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| bsj | Bangwinji | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bsn | Barasana-Eduria | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bsp | Baga Sitemu | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bss | Akoose | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bug | Buginese | Austronesian | 2 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
-| buk | Bugawac | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bul | Bulgarian | Indo-European | 3 | 4 | 1 | 0 | 1 | 1 | 1 | 2 | 0 | 0 | 0 | 13 |
-| bus | Bokobaru | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bvd | Baeggu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bvr | Burarra | Maningrida | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bxh | Buhutu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| byr | Baruya | Angan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| byx | Qaqet | Baining | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bzd | Bribri | Chibchan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bzh | Mapos Buang | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bzj | Belize Kriol English | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| caa | Chortí | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cab | Garifuna | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cac | Chuj | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| caf | Southern Carrier | Athabaskan-Eyak-Tlingit | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cak | Kaqchikel | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cao | Chácobo | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cap | Chipaya | Uru-Chipaya | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| car | Galibi Carib | Cariban | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cat | Catalan | Indo-European | 3 | 2 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| cav | Cavineña | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cax | Chiquitano | Chiquitano | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cbc | Carapana | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cbi | Chachi | Barbacoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cbk | Chavacano | Indo-European | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| cbr | Cashibo-Cacataibo | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cbs | Cashinahua | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cbt | Chayahuita | Cahuapanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cbu | Candoshi-Shapra | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cbv | Cacua | Kakua-Nukak | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cco | Comaltepec Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ceb | Cebuano | Austronesian | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 6 |
-| cek | Eastern Khumi Chin | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ces | Czech | Indo-European | 4 | 5 | 2 | 0 | 1 | 2 | 1 | 2 | 0 | 0 | 0 | 17 |
-| cgc | Kagayanen | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cha | Chamorro | Austronesian | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| chd | Highland Oaxaca Chontal | Tequistlatecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| chf | Tabasco Chontal | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| chk | Chuukese | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| chq | Quiotepec Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| chv | Chuvash | Turkic | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| chz | Ozumacín Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cjk | Chokwe | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| cjo | Ashéninka Pajonal | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cjv | Chuave | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ckb | Central Kurdish | Indo-European | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 6 |
-| cle | Lealao Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| clu | Caluyanun | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cme | Cerma | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cmn | Mandarin Chinese | Sino-Tibetan | 4 | 10 | 4 | 0 | 0 | 3 | 4 | 10 | 9 | 0 | 0 | 44 |
-| cmo | Central Mnong | Austroasiatic | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| cni | Asháninka | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cnl | Lalana Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cnt | Tepetotutla Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| code | unknown | Unclassified | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 37 | 0 | 0 | 0 | 37 |
-| cof | Colorado | Barbacoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| con | Cofán | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cop | Coptic | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cor | Cornish | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cot | Caquinte | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cpa | Palantla Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cpb | Ucayali-Yurúa Ashéninka | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cpc | Ajyíninka Apurucayali | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cpu | Pichis Ashéninka | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cpy | South Ucayali Ashéninka | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| crh | Crimean Tatar | Turkic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| crn | El Nayar Cora | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| crx | Carrier | Athabaskan-Eyak-Tlingit | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| csb | Kashubian | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cso | Sochiapam Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| csy | Siyin Chin | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cta | Tataltepec Chatino | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cth | Thaiphum Chin | Bookkeeping | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ctp | Western Highland Chatino | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ctu | Chol | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cub | Cubeo | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cuc | Usila Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cui | Cuiba | Guahiboan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cuk | San Blas Kuna | Chibchan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cut | Teutila Cuicatec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cux | Tepeuxila Cuicatec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cwe | Kwere | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cya | Nopala Chatino | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cym | Welsh | Indo-European | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
-| daa | Dangaléat | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dad | Marik | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dah | Gwahatike | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dan | Danish | Indo-European | 5 | 9 | 2 | 0 | 1 | 0 | 1 | 5 | 0 | 0 | 0 | 23 |
-| ded | Dedua | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| deu | German | Indo-European | 6 | 14 | 7 | 0 | 1 | 7 | 2 | 18 | 4 | 0 | 0 | 59 |
-| dgc | Casiguran Dumagat Agta | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dgr | Dogrib | Athabaskan-Eyak-Tlingit | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dgz | Daga | Dagan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dhg | Dhangu-Djangu | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dif | Dieri | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dik | Southwestern Dinka | Nilotic | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| div | Dhivehi | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dji | Djinang | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| djk | Eastern Maroon Creole | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| djr | Djambarrpuyngu | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dob | Dobu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| doi | Dogri (macrolanguage) | Unclassified | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| dop | Lukpa | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dov | Dombe | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dsb | Lower Sorbian | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dtp | Kadazan Dusun | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dwr | Dawro | Ta-Ne-Omotic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dww | Dawawa | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dwy | Dhuwaya | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dyu | Dyula | Mande | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| dza | Tunzu | Atlantic-Congo | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dzo | Dzongkha | Sino-Tibetan | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| ebk | Eastern Bontok | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| eko | Koti | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ell | Modern Greek (1453-) | Indo-European | 3 | 6 | 1 | 0 | 1 | 2 | 0 | 3 | 0 | 0 | 0 | 16 |
-| emi | Mussau-Emira | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| emp | Northern Emberá | Chocoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| eng | English | Indo-European | 17 | 160 | 18 | 3 | 1 | 13 | 8 | 108 | 13 | 2 | 1 | 344 |
-| enq | Enga | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| epo | Esperanto | Artificial Language | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| eri | Ogea | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ese | Ese Ejja | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| esk | Northwest Alaska Inupiatun | Eskimo-Aleut | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| est | Estonian | Uralic | 2 | 2 | 1 | 0 | 1 | 0 | 0 | 2 | 0 | 0 | 0 | 8 |
-| etr | Edolo | Bosavi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| eus | Basque | Unclassified | 3 | 2 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| ewe | Ewe | Atlantic-Congo | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| faa | Fasu | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fai | Faiwol | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fao | Faroese | Indo-European | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 7 |
-| far | Fataleka | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fas | Persian | Indo-European | 1 | 4 | 0 | 0 | 0 | 1 | 2 | 9 | 0 | 0 | 0 | 17 |
-| ffm | Maasina Fulfulde | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fij | Fijian | Austronesian | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| fil | Filipino | Austronesian | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| fin | Finnish | Uralic | 3 | 5 | 1 | 0 | 1 | 1 | 2 | 5 | 1 | 0 | 0 | 19 |
-| fon | Fon | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| for | Fore | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fra | French | Indo-European | 7 | 13 | 8 | 0 | 1 | 6 | 3 | 15 | 4 | 0 | 1 | 58 |
-| fry | Western Frisian | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fuc | Pulaar | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fue | Borgu Fulfulde | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fuf | Pular | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fuh | Western Niger Fulfulde | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fur | Friulian | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| fuv | Nigerian Fulfulde | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| gah | Alekano | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gai | Borei | Ramu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gam | Kandawo | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gaw | Nobonob | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gaz | West Central Oromo | Afro-Asiatic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| gbm | Garhwali | Indo-European | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| gdn | Umanakaina | Dagan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gdr | Wipi | Eastern Trans-Fly | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| geb | Kire | Ramu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gfk | Patpatar | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ghs | Guhu-Samane | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gla | Scottish Gaelic | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| gle | Irish | Indo-European | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| glg | Galician | Indo-European | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| glk | Gilaki | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| glv | Manx | Indo-European | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gmv | Gamo | Ta-Ne-Omotic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gng | Ngangam | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gnn | Gumatj | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gnw | Western Bolivian Guaraní | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gof | Gofa | Ta-Ne-Omotic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gom | Goan Konkani | Indo-European | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| grc | Ancient Greek (to 1453) | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| grn | Guarani | Unclassified | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| gsw | Swiss German | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gub | Guajajára | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| guh | Guahibo | Guahiboan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gui | Eastern Bolivian Guaraní | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| guj | Gujarati | Indo-European | 6 | 6 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 | 18 |
-| gul | Sea Island Creole English | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gum | Guambiano | Barbacoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gun | Mbyá Guaraní | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| guo | Guayabero | Guahiboan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gup | Gunwinggu | Gunwinyguan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gux | Gourmanchéma | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gvc | Guanano | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gvf | Golin | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gvn | Kuku-Yalanji | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gvs | Gumawana | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gwi | Gwichʼin | Athabaskan-Eyak-Tlingit | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gym | Ngäbere | Chibchan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| gyr | Guarayu | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hat | Haitian | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 5 |
-| hau | Hausa | Afro-Asiatic | 4 | 5 | 3 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 14 |
-| haw | Hawaiian | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hbo | Ancient Hebrew | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hch | Huichol | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| heb | Hebrew | Afro-Asiatic | 4 | 5 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 11 |
-| heg | Helong | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hin | Hindi | Indo-European | 9 | 12 | 2 | 0 | 0 | 2 | 2 | 10 | 2 | 0 | 0 | 39 |
-| hix | Hixkaryána | Cariban | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hla | Halia | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hlt | Matu Chin | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hmn | Hmong | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hmo | Hiri Motu | Pidgin | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hne | Chhattisgarhi | Indo-European | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| hns | Caribbean Hindustani | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hop | Hopi | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hot | Hote | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hrv | Croatian | Indo-European | 4 | 3 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 10 |
-| hsb | Upper Sorbian | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hto | Minica Huitoto | Huitotoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hub | Huambisa | Chicham | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hui | Huli | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hun | Hungarian | Uralic | 5 | 3 | 1 | 0 | 1 | 0 | 0 | 2 | 0 | 0 | 0 | 12 |
-| hus | Huastec | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| huu | Murui Huitoto | Huitotoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| huv | San Mateo Del Mar Huave | Huavean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hvn | Sabu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hye | Armenian | Indo-European | 3 | 3 | 1 | 0 | 0 | 1 | 0 | 1 | 0 | 0 | 0 | 9 |
-| ian | Iatmul | Ndu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ibo | Igbo | Atlantic-Congo | 3 | 5 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 12 |
-| ido | Ido | Artificial Language | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ign | Ignaciano | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ikk | Ika | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ikw | Ikwere | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ile | Interlingue | Artificial Language | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ilo | Iloko | Austronesian | 2 | 1 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 6 |
-| imo | Imbongu | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ina | Interlingua (International Auxiliary Language Association) | Artificial Language | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| inb | Inga | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ind | Indonesian | Austronesian | 6 | 7 | 1 | 0 | 0 | 1 | 1 | 4 | 1 | 0 | 0 | 21 |
-| ino | Inoke-Yate | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| iou | Tuma-Irumu | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ipi | Ipili | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| isl | Icelandic | Indo-European | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 9 |
-| isn | Isanzu | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ita | Italian | Indo-European | 5 | 9 | 1 | 0 | 1 | 2 | 1 | 5 | 3 | 0 | 0 | 27 |
-| iws | Sepik Iwam | Sepik | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ixl | Ixil | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| jac | Popti' | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| jae | Yabem | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| jao | Yanyuwa | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| jav | Javanese | Austronesian | 4 | 7 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 13 |
-| jic | Tol | Jicaquean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| jid | Bu (Kaduna State) | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| jiv | Shuar | Chicham | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| jni | Janji | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| jpn | Japanese | Japonic | 5 | 8 | 3 | 0 | 0 | 2 | 3 | 13 | 2 | 0 | 0 | 36 |
-| jvn | Caribbean Javanese | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kab | Kabyle | Afro-Asiatic | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| kac | Kachin | Sino-Tibetan | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| kam | Kamba (Kenya) | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| kan | Kannada | Dravidian | 6 | 7 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 | 19 |
-| kaq | Capanahua | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kas | Kashmiri | Indo-European | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
-| kat | Georgian | Kartvelian | 4 | 3 | 1 | 0 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 10 |
-| kaz | Kazakh | Turkic | 3 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| kbc | Kadiwéu | Guaicuruan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kbh | Camsá | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kbm | Iwal | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kbp | Kabiyè | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| kbq | Kamano | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kdc | Kutu | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kde | Makonde | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kdl | Tsikimba | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kea | Kabuverdianu | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| kek | Kekchí | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ken | Kenyang | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kew | West Kewa | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kfg | Kudiya | Dravidian | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kfy | Kumaoni | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kgf | Kube | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kgk | Kaiwá | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kgp | Kaingang | Nuclear-Macro-Je | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| khk | Halh Mongolian | Mongolic-Khitan | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| khm | Khmer | Austroasiatic | 3 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| khs | Kasua | Bosavi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| khz | Keapara | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kik | Kikuyu | Atlantic-Congo | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| kin | Kinyarwanda | Atlantic-Congo | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 8 |
-| kir | Kirghiz | Turkic | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 7 |
-| kiw | Northeast Kiwai | Kiwaian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kiz | Kisi | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kje | Kisar | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kjs | East Kewa | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kkc | Odoodee | East Strickland | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kkl | Kosarek Yale | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| klt | Nukna | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| klv | Maskelynes | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kmb | Kimbundu | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| kmg | Kâte | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kmh | Kalam | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kmk | Limos Kalinga | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kmo | Kwoma | Sepik | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kmr | Northern Kurdish | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| kms | Kamasau | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kmu | Kanite | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| knc | Central Kanuri | Saharan | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| kne | Kankanaey | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| knf | Mankanya | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| knj | Western Kanjobal | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| knv | Tabo | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kon | Kongo | Unclassified | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| kor | Korean | Koreanic | 4 | 8 | 1 | 0 | 1 | 3 | 1 | 9 | 3 | 0 | 0 | 30 |
-| kos | Kosraean | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kpf | Komba | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kpg | Kapingamarangi | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kpj | Karajá | Nuclear-Macro-Je | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kpr | Korafe-Yegha | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kpw | Kobon | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kpx | Mountain Koiali | Koiarian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kqa | Mum | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kqc | Doromu-Koki | Manubaran | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kqf | Kakabai | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kql | Kyenele | Yuat | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kqw | Kandas | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| krc | Karachay-Balkar | Turkic | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ksd | Kuanua | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ksj | Uare | Kwalean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ksr | Borong | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ktm | Kurti | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kto | Kuot | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kud | 'Auhelawa | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kue | Kuman (Papua New Guinea) | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kup | Kunimaipa | Kunimaipan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kur | Kurdish | Unclassified | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| kvg | Kuni-Boazi | Anim | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kvn | Border Kuna | Chibchan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kwd | Kwaio | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kwf | Kwara'ae | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kwi | Awa-Cuaiquer | Barbacoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kwj | Kwanga | Sepik | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kyc | Kyaka | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kyf | Kouya | Kru | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kyg | Keyagana | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kyq | Kenga | Central Sudanic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kyz | Kayabí | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kze | Kosena | Bookkeeping | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| kzj | Coastal Kadazan | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| lac | Lacandon | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| lao | Lao | Tai-Kadai | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 5 |
-| lat | Latin | Indo-European | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| lav | Latvian | Indo-European | 1 | 2 | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| lbb | Label | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| lbk | Central Bontok | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| lcm | Tungag | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| leu | Kara (Papua New Guinea) | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| lex | Luang | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| lfn | Lingua Franca Nova | Artificial Language | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| lgl | Wala | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| lid | Nyindrou | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| lif | Limbu | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| lij | Ligurian | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| lim | Limburgan | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| lin | Lingala | Atlantic-Congo | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| lit | Lithuanian | Indo-European | 4 | 1 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| llg | Lole | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| lmo | Lombard | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| ltg | Latgalian | Unclassified | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| ltz | Luxembourgish | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| lua | Luba-Lulua | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| lug | Ganda | Atlantic-Congo | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| luo | Luo (Kenya and Tanzania) | Nilotic | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 5 |
-| lus | Lushai | Sino-Tibetan | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| lvs | Standard Latvian | Unclassified | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 5 |
-| lww | Lewo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| maa | San Jerónimo Tecóatl Mazatec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mad | Madurese | Austronesian | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| mag | Magahi | Indo-European | 1 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| mai | Maithili | Indo-European | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
-| maj | Jalapa De Díaz Mazatec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mak | Makasar | Austronesian | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| mal | Malayalam | Dravidian | 7 | 7 | 2 | 0 | 0 | 0 | 0 | 2 | 1 | 0 | 0 | 19 |
-| mam | Mam | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| maq | Chiquihuitlán Mazatec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mar | Marathi | Indo-European | 7 | 6 | 2 | 0 | 0 | 1 | 0 | 2 | 2 | 0 | 0 | 20 |
-| mau | Huautla Mazatec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mav | Sateré-Mawé | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| max | North Moluccan Malay | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| maz | Central Mazahua | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mbb | Western Bukidnon Manobo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mbc | Macushi | Cariban | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mbh | Mangseng | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mbj | Nadëb | Naduhup | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mbl | Maxakalí | Nuclear-Macro-Je | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mbs | Sarangani Manobo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mbt | Matigsalug Manobo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mca | Maca | Mataguayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mcb | Machiguenga | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mcd | Sharanahua | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mcf | Matsés | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mco | Coatlán Mixe | Mixe-Zoque | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mcp | Makaa | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mcq | Ese | Koiarian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mcr | Menya | Angan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mdy | Male (Ethiopia) | Ta-Ne-Omotic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| med | Melpa | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mee | Mengen | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mek | Mekeo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| meq | Merey | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| met | Mato | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| meu | Motu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mey | Hassaniyya | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mgc | Morokodo | Central Sudanic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mgh | Makhuwa-Meetto | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mgw | Matumbi | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mhl | Mauwake | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mhr | Eastern Mari | Uralic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mib | Atatláhuca Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mic | Mi'kmaq | Algic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mie | Ocotepec Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mig | San Miguel El Grande Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mih | Chayuco Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mil | Peñoles Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| min | Minangkabau | Austronesian | 3 | 4 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 9 |
-| mio | Pinotepa Nacional Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mir | Isthmus Mixe | Mixe-Zoque | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mit | Southern Puebla Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| miz | Coatzospan Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mjc | San Juan Colorado Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mkd | Macedonian | Indo-European | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 7 |
-| mkj | Mokilese | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mkl | Mokole | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mkn | Kupang Malay | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mks | Silacayoapan Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mle | Manambu | Ndu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mlg | Malagasy | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mlh | Mape | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mlp | Bargam | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mlt | Maltese | Afro-Asiatic | 2 | 2 | 2 | 0 | 2 | 0 | 0 | 1 | 0 | 0 | 0 | 9 |
-| mmo | Mangga Buang | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mmx | Madak | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mna | Mbula | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mni | Manipuri | Sino-Tibetan | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
-| mon | Mongolian | Unclassified | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| mop | Mopán Maya | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mos | Mossi | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| mox | Molima | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mph | Maung | Iwaidjan Proper | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mpj | Martu Wangka | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mpm | Yosondúa Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mpp | Migabac | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mps | Dadibi | Teberan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mpt | Mian | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mpx | Misima-Panaeati | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mqb | Mbuko | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mqj | Mamasa | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mri | Maori | Austronesian | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 5 |
-| msa | Malay (macrolanguage) | Unclassified | 1 | 2 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 4 |
-| msb | Masbatenyo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| msc | Sankaran Maninka | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| msk | Mansaka | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| msm | Agusan Manobo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| msy | Aruamu | Ramu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mti | Maiwa (Papua New Guinea) | Dagan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mto | Totontepec Mixe | Mixe-Zoque | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mui | Musi | Austronesian | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| mup | Malvi | Indo-European | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| mux | Bo-Ung | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| muy | Muyang | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mva | Manam | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mvn | Minaveha | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mwc | Are | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mwe | Mwera (Chimwera) | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mwf | Murrinh-Patha | Southern Daly | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mwp | Kala Lagaw Ya | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mwr | Marwari | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mxb | Tezoatlán Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mxp | Tlahuitoltepec Mixe | Mixe-Zoque | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mxq | Juquila Mixe | Mixe-Zoque | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mxt | Jamiltepec Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mya | Burmese | Sino-Tibetan | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 9 |
-| myk | Mamara Senoufo | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| myu | Mundurukú | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| myw | Muyuw | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| myy | Macuna | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mzz | Maiadomu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nab | Southern Nambikuára | Nambiquaran | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| naf | Nabak | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nak | Nakanai | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nas | Naasioi | South Bougainville | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nbl | South Ndebele | Unclassified | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nbq | Nggem | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nca | Iyo | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nch | Central Huasteca Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ncj | Northern Puebla Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ncl | Michoacán Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ncu | Chumburung | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nde | North Ndebele | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ndg | Ndengereko | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ndj | Ndamba | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nds | Low German | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nep | Nepali (macrolanguage) | Unclassified | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| nfa | Dhao | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ngp | Ngulu | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ngu | Guerrero Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nhe | Eastern Huasteca Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nhg | Tetelcingo Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nhi | Zacatlán-Ahuacatlán-Tepetzintla Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nho | Takuu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nhr | Naro | Khoe-Kwadi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nhu | Noone | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nhw | Western Huasteca Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nhy | Northern Oaxaca Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nif | Nek | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nii | Nii | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nij | Ngaju | Austronesian | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| nin | Ninzo | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nko | Nkonya | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nld | Dutch | Indo-European | 6 | 6 | 1 | 0 | 1 | 1 | 1 | 2 | 2 | 0 | 0 | 20 |
-| nlg | Gela | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nna | Nyangumarta | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nno | Norwegian Nynorsk | Unclassified | 4 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
-| nnq | Ngindo | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| noa | Woun Meu | Chocoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nob | Norwegian Bokmål | Unclassified | 4 | 7 | 5 | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 0 | 19 |
-| noe | Nimadi | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nop | Numanggang | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nor | Norwegian | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 3 |
-| not | Nomatsiguenga | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nou | Ewage-Notu | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nov | Novial | Artificial Language | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| npi | Nepali (individual language) | Indo-European | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| npl | Southeastern Puebla Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nqo | N'Ko | Artificial Language | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| nsn | Nehan | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nso | Pedi | Atlantic-Congo | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 6 |
-| nss | Nali | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ntj | Ngaanyatjarra | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ntp | Northern Tepehuan | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ntu | Natügu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nus | Nuer | Nilotic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| nuy | Nunggubuyu | Gunwinyguan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nvm | Namiae | Koiarian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nwi | Southwest Tanna | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nya | Nyanja | Atlantic-Congo | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 6 |
-| nys | Nyungar | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nyu | Nyungwe | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| obo | Obo Manobo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| oci | Occitan (post 1500) | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| okv | Orokaiva | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| omw | South Tairora | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ong | Olo | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ons | Ono | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ood | Tohono O'odham | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| opm | Oksapmin | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ori | Oriya (macrolanguage) | Unclassified | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| orm | Oromo | Unclassified | 1 | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| orv | Old Russian | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ory | Odia | Indo-European | 5 | 4 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 | 15 |
-| ote | Mezquital Otomi | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| otm | Eastern Highland Otomi | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| otn | Tenango Otomi | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| otq | Querétaro Otomi | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ots | Estado de México Otomi | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pab | Parecís | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pad | Paumarí | Arawan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pag | Pangasinan | Austronesian | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| pah | Tenharim | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pam | Pampanga | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pan | Panjabi | Indo-European | 6 | 6 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 | 18 |
-| pao | Northern Paiute | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pap | Papiamento | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| pbt | Southern Pashto | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| pcm | Nigerian Pidgin | Indo-European | 1 | 4 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
-| pes | Iranian Persian | Indo-European | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 6 |
-| pib | Yine | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pio | Piapoco | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pir | Piratapuyo | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| piu | Pintupi-Luritja | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pjt | Pitjantjatjara | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pls | San Marcos Tlacoyalco Popoloca | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| plt | Plateau Malagasy | Austronesian | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| plu | Palikúr | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pma | Paama | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pms | Piemontese | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| poe | San Juan Atzingo Popoloca | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| poh | Poqomchi' | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| poi | Highland Popoluca | Mixe-Zoque | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pol | Polish | Indo-European | 4 | 11 | 4 | 0 | 1 | 4 | 0 | 18 | 4 | 0 | 0 | 46 |
-| pon | Pohnpeian | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| por | Portuguese | Indo-European | 4 | 9 | 1 | 0 | 2 | 3 | 1 | 5 | 3 | 0 | 0 | 28 |
-| poy | Pogolo | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ppo | Folopa | Teberan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| prf | Paranan | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pri | Paicî | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| prs | Dari | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| ptp | Patep | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ptu | Bambam | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pus | Pushto | Unclassified | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| pwg | Gapapaiwa | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qub | Huallaga Huánuco Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| quc | K'iche' | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| quf | Lambayeque Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| quh | South Bolivian Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qul | North Bolivian Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qup | Southern Pastaza Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| quy | Ayacucho Quechua | Quechuan | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| qvc | Cajamarca Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qve | Eastern Apurímac Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qvh | Huamalíes-Dos de Mayo Huánuco Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qvm | Margos-Yarowilca-Lauricocha Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qvn | North Junín Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qvs | San Martín Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qvw | Huaylla Wanca Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qvz | Northern Pastaza Quichua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qwh | Huaylas Ancash Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qxh | Panao Huánuco Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qxn | Northern Conchucos Ancash Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| qxo | Southern Conchucos Ancash Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| rai | Ramoaaina | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| raj | Rajasthani | Unclassified | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| reg | Kara (Tanzania) | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| rej | Rejang | Austronesian | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| rgu | Ringgou | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| rkb | Rikbaktsa | Nuclear-Macro-Je | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| rmc | Carpathian Romani | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| rmy | Vlax Romani | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| rom | Romany | Unclassified | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| ron | Romanian | Indo-European | 5 | 6 | 1 | 0 | 1 | 0 | 1 | 3 | 1 | 0 | 0 | 18 |
-| roo | Rotokas | North Bougainville | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| rop | Kriol | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| row | Dela-Oenale | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| rro | Waima | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ruf | Luguru | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| rug | Roviana | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| run | Rundi | Atlantic-Congo | 1 | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
-| rus | Russian | Indo-European | 5 | 13 | 6 | 0 | 2 | 4 | 2 | 16 | 4 | 0 | 0 | 52 |
-| rwo | Rawa | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sab | Buglere | Chibchan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sag | Sango | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| sah | Yakut | Turkic | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| san | Sanskrit | Indo-European | 5 | 3 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 10 |
-| sat | Santali | Austroasiatic | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
-| sbe | Saliba | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sbk | Safwa | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sbs | Subiya | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| scn | Sicilian | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| sco | Scots | Indo-European | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| seh | Sena | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sey | Secoya | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sgb | Mag-antsi Ayta | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sgz | Sursurunga | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| shi | Tachelhit | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| shj | Shatt | Dajuic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| shn | Shan | Tai-Kadai | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| shp | Shipibo-Conibo | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sim | Mende (Papua New Guinea) | Sepik | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sin | Sinhala | Indo-European | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 7 |
-| sja | Epena | Chocoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| slk | Slovak | Indo-European | 3 | 4 | 1 | 0 | 1 | 0 | 0 | 3 | 0 | 0 | 0 | 12 |
-| sll | Salt-Yui | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| slv | Slovenian | Indo-European | 3 | 4 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 10 |
-| smk | Bolinao | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| smo | Samoan | Austronesian | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| sna | Shona | Atlantic-Congo | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| snc | Sinaugoro | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| snd | Sindhi | Indo-European | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| snn | Siona | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| snp | Siane | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| snx | Sam | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sny | Saniyo-Hiyewe | Sepik | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| som | Somali | Afro-Asiatic | 3 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 9 |
-| soq | Kanasi | Dagan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sot | Southern Sotho | Atlantic-Congo | 1 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 5 |
-| soy | Miyobe | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| spa | Spanish | Indo-European | 4 | 13 | 4 | 0 | 1 | 3 | 2 | 13 | 4 | 0 | 0 | 44 |
-| spl | Selepet | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| spm | Akukem | Ramu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| spp | Supyire Senoufo | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sps | Saposa | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| spy | Sabaot | Nilotic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sqi | Albanian | Unclassified | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| srd | Sardinian | Unclassified | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| sri | Siriano | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| srm | Saramaccan | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| srn | Sranan Tongo | Indo-European | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| srp | Serbian | Indo-European | 4 | 1 | 1 | 0 | 0 | 0 | 1 | 2 | 0 | 0 | 0 | 9 |
-| srq | Sirionó | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ssd | Siroi | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ssg | Seimat | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ssw | Swati | Atlantic-Congo | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 7 |
-| ssx | Samberigi | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| stp | Southeastern Tepehuan | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sua | Sulka | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sue | Suena | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sun | Sundanese | Austronesian | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 9 |
-| sus | Susu | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| suz | Sunwar | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| svk | Slovakian Sign Language | Sign Language | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| swa | Swahili (macrolanguage) | Atlantic-Congo | 1 | 7 | 2 | 0 | 0 | 1 | 1 | 3 | 0 | 0 | 0 | 15 |
-| swe | Swedish | Indo-European | 4 | 8 | 3 | 0 | 1 | 1 | 1 | 4 | 0 | 0 | 0 | 22 |
-| swg | Swabian | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| swh | Swahili (individual language) | Atlantic-Congo | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 6 |
-| swp | Suau | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sxb | Suba | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| szl | Silesian | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| tac | Lowland Tarahumara | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tah | Tahitian | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| taj | Eastern Tamang | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tam | Tamil | Dravidian | 7 | 7 | 2 | 0 | 0 | 1 | 0 | 3 | 1 | 0 | 0 | 21 |
-| taq | Tamasheq | Afro-Asiatic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| tat | Tatar | Turkic | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
-| tav | Tatuyo | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| taw | Tai | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tbc | Takia | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tbf | Mandara | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tbg | North Tairora | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tbo | Tawala | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tbz | Ditammari | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tca | Ticuna | Ticuna-Yuri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tcs | Torres Strait Creole | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tcz | Thado Chin | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tdt | Tetun Dili | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tee | Huehuetla Tepehua | Totonacan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tel | Telugu | Dravidian | 7 | 7 | 2 | 0 | 0 | 0 | 1 | 5 | 2 | 0 | 0 | 24 |
-| ter | Tereno | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tet | Tetum | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tew | Tewa (USA) | Kiowa-Tanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tfr | Teribe | Chibchan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tgk | Tajik | Indo-European | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 6 |
-| tgl | Tagalog | Austronesian | 3 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| tgo | Sudest | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tgp | Tangoa | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tha | Thai | Tai-Kadai | 4 | 8 | 1 | 0 | 0 | 1 | 1 | 6 | 0 | 0 | 0 | 21 |
-| tif | Tifal | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tim | Timbe | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tir | Tigrinya | Afro-Asiatic | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| tiw | Tiwi | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tiy | Tiruray | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tke | Takwane | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tku | Upper Necaxa Totonac | Totonacan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tlf | Telefol | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tmd | Haruai | Piawi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tna | Tacana | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tnc | Tanimuca-Retuarã | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tnk | Kwamera | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tnn | North Tanna | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tnp | Whitesands | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| toc | Coyutla Totonac | Totonacan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tod | Toma | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tof | Gizrra | Eastern Trans-Fly | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| toj | Tojolabal | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ton | Tonga (Tonga Islands) | Austronesian | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| too | Xicotepec De Juárez Totonac | Totonacan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| top | Papantla Totonac | Totonacan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tos | Highland Totonac | Totonacan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tpa | Taupota | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tpi | Tok Pisin | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| tpt | Tlachichilco Tepehua | Totonacan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tpz | Tinputz | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| trc | Copala Triqui | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tsn | Tswana | Atlantic-Congo | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 7 |
-| tso | Tsonga | Atlantic-Congo | 1 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 7 |
-| tsw | Tsishingini | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ttc | Tektiteko | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tte | Bwanabwana | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tuc | Mutu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tue | Tuyuca | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tuf | Central Tunebo | Chibchan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tuk | Turkmen | Turkic | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
-| tum | Tumbuka | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| tuo | Tucano | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tur | Turkish | Turkic | 4 | 7 | 1 | 0 | 0 | 3 | 0 | 3 | 2 | 0 | 0 | 20 |
-| tvk | Southeast Ambrym | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| twi | Twi | Unclassified | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
-| txq | Tii | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| txu | Kayapó | Nuclear-Macro-Je | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tyv | Tuvinian | Turkic | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tzj | Tz'utujil | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tzl | Talossan | Artificial Language | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tzm | Central Atlas Tamazight | Afro-Asiatic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| tzo | Tzotzil | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ubr | Ubir | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ubu | Umbu-Ungu | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| udu | Uduk | Koman | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| uig | Uighur | Turkic | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
-| ukr | Ukrainian | Indo-European | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 8 |
-| uli | Ulithian | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ulk | Meriam Mir | Eastern Trans-Fly | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| umb | Umbundu | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| upv | Uripiv-Wala-Rano-Atchin | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ura | Urarina | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| urb | Urubú-Kaapor | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| urd | Urdu | Indo-European | 7 | 8 | 2 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 19 |
-| uri | Urim | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| urt | Urat | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| urw | Sop | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| usa | Usarufa | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| usp | Uspanteco | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| uvh | Uri | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| uvl | Lote | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| uzb | Uzbek | Unclassified | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| uzn | Northern Uzbek | Turkic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
-| vec | Venetian | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| ven | Venda | Atlantic-Congo | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| vid | Vidunda | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| vie | Vietnamese | Austroasiatic | 5 | 6 | 1 | 0 | 0 | 1 | 0 | 5 | 0 | 0 | 0 | 18 |
-| viv | Iduna | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| vmy | Ayautla Mazatec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| waj | Waffa | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wal | Wolaytta | Ta-Ne-Omotic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wap | Wapishana | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| war | Waray (Philippines) | Austronesian | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 5 |
-| wat | Kaninuwa | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wbi | Vwanji | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wbp | Warlpiri | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wed | Wedau | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wer | Weri | Kunimaipan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wim | Wik-Mungkan | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wiu | Wiru | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wiv | Vitu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wln | Walloon | Indo-European | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wmt | Walmajarri | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wmw | Mwani | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wnc | Wantoat | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wnu | Usan | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wol | Wolof | Atlantic-Congo | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 6 |
-| wos | Hanga Hundi | Ndu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wrk | Garrwa | Garrwan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wro | Worrorra | Worrorran | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wrs | Waris | Border | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wsk | Waskia | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wuu | Wu Chinese | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| wuv | Wuvulu-Aua | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| xav | Xavánte | Nuclear-Macro-Je | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| xbi | Kombio | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| xed | Hdi | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| xho | Xhosa | Atlantic-Congo | 3 | 3 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 10 |
-| xla | Kamula | Kamula-Elevala | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| xnn | Northern Kankanay | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| xon | Konkomba | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| xsi | Sio | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| xtd | Diuxi-Tilantongo Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| xtm | Magdalena Peñasco Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yaa | Yaminahua | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yad | Yagua | Peba-Yagua | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yal | Yalunka | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yap | Yapese | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yaq | Yaqui | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yby | Yaweyuha | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ycn | Yucuna | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ydd | Eastern Yiddish | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| yid | Yiddish | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yka | Yakan | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yle | Yele | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yml | Iamalele | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yon | Yongkom | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yor | Yoruba | Atlantic-Congo | 4 | 5 | 3 | 0 | 0 | 0 | 1 | 3 | 0 | 0 | 0 | 16 |
-| yrb | Yareba | Yareban | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yre | Yaouré | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yss | Yessan-Mayo | Sepik | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yue | Yue Chinese | Sino-Tibetan | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
-| yuj | Karkar-Yuri | Pauwasi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yut | Yopno | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yuw | Yau (Morobe Province) | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| yva | Yawa | Yawa-Saweru | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zaa | Sierra de Juárez Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zab | Western Tlacolula Valley Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zac | Ocotlán Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zad | Cajonos Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zai | Isthmus Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zaj | Zaramo | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zam | Miahuatlán Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zao | Ozolotepec Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zap | Zapotec | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zar | Rincón Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zas | Santo Domingo Albarradas Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zat | Tabaa Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zav | Yatzachi Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zaw | Mitla Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zca | Coatecas Altas Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zga | Kinga | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zho | Chinese | Unclassified | 2 | 2 | 1 | 0 | 0 | 2 | 1 | 13 | 0 | 0 | 0 | 21 |
-| zia | Zia | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ziw | Zigula | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zlm | Malay (individual language) | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zos | Francisco León Zoque | Mixe-Zoque | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zpc | Choapan Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zpl | Lachixío Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zpm | Mixtepec Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zpo | Amatlán Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zpq | Zoogocho Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zpu | Yalálag Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zpv | Chichicapan Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zpz | Texmelucan Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zsm | Standard Malay | Austronesian | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 5 |
-| zsr | Southern Rincon Zapotec | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ztq | Quioquitani-Quierí Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zty | Yatee Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zul | Zulu | Atlantic-Congo | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 7 |
-| zyp | Zyphe Chin | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| Total | None | None | None | 1395 | 812 | 306 | 3 | 28 | 84 | 51 | 476 | 85 | 2 | 2 |
+| ISO Code | Language | Family | BitextMining | Classification | Clustering | InstructionRetrieval | MultilabelClassification | PairClassification | Reranking | Retrieval | STS | Speed | Summarization | SummaryRetrieval | Sum |
+|---|------|------|------|------|------|------|------|------|------|------|------|------|---|
+| aai | Arifama-Miniafia | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| aak | Ankave | Angan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| aau | Abau | Sepik | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| aaz | Amarasi | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| abs | Ambonese Malay | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| abt | Ambulas | Ndu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| abx | Inabaknon | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| aby | Aneme Wake | Yareban | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ace | Achinese | Austronesian | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
+| acf | Saint Lucian Creole French | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| acm | Mesopotamian Arabic | Afro-Asiatic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 4 |
+| acq | Ta'izzi-Adeni Arabic | Afro-Asiatic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| acr | Achi | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| acu | Achuar-Shiwiar | Chicham | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| adz | Adzera | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| aeb | Tunisian Arabic | Afro-Asiatic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| aer | Eastern Arrernte | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| aey | Amele | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| afr | Afrikaans | Indo-European | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 10 |
+| agd | Agarabi | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| agg | Angor | Senagi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| agm | Angaataha | Angan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| agn | Agutaynen | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| agr | Aguaruna | Chicham | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| agt | Central Cagayan Agta | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| agu | Aguacateco | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| aia | Arosi | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| aii | Assyrian Neo-Aramaic | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ajp | South Levantine Arabic | Unclassified | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| aka | Akan | Atlantic-Congo | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| ake | Akawaio | Cariban | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| alp | Alune | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| alq | Algonquin | Algic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| als | Tosk Albanian | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 5 |
+| aly | Alyawarr | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ame | Yanesha' | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| amf | Hamer-Banna | South Omotic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| amh | Amharic | Afro-Asiatic | 3 | 6 | 3 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 14 |
+| amk | Ambai | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| amm | Ama (Papua New Guinea) | Left May | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| amn | Amanab | Border | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| amo | Amo | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| amp | Alamblak | Sepik | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| amr | Amarakaeri | Harakmbut | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| amu | Guerrero Amuzgo | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| amx | Anmatyerre | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ang | Old English (ca. 450-1100) | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| anh | Nend | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| anp | Angika | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| anv | Denya | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| aoi | Anindilyakwa | Gunwinyguan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| aoj | Mufian | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| aom | Ömie | Koiarian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| aon | Bumbita Arapesh | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| apb | Sa'a | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| apc | Levantine Arabic | Afro-Asiatic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 4 |
+| ape | Bukiyip | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| apn | Apinayé | Nuclear-Macro-Je | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| apr | Arop-Lokep | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| apu | Apurinã | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| apw | Western Apache | Athabaskan-Eyak-Tlingit | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| apz | Safeyoka | Angan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ara | Arabic | Unclassified | 2 | 12 | 0 | 0 | 0 | 2 | 2 | 9 | 2 | 0 | 0 | 0 | 29 |
+| arb | Standard Arabic | Afro-Asiatic | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 2 | 1 | 0 | 0 | 0 | 8 |
+| are | Western Arrarnta | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| arl | Arabela | Zaparoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| arn | Mapudungun | Araucanian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| arp | Arapaho | Algic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| arq | Algerian Arabic | Afro-Asiatic | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 4 |
+| ars | Najdi Arabic | Afro-Asiatic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 4 |
+| ary | Moroccan Arabic | Afro-Asiatic | 1 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 7 |
+| arz | Egyptian Arabic | Afro-Asiatic | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 5 |
+| asm | Assamese | Indo-European | 5 | 3 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 | 0 | 14 |
+| aso | Dano | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ast | Asturian | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| ata | Pele-Ata | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| atb | Zaiwa | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| atd | Ata Manobo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| atg | Ivbie North-Okpela-Arhe | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| att | Pamplona Atta | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| auc | Waorani | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| aui | Anuki | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| auy | Awiyaana | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| avt | Au | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| awa | Awadhi | Indo-European | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
+| awb | Awa (Papua New Guinea) | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| awk | Awabakal | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| awx | Awara | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ayr | Central Aymara | Aymaran | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| azb | South Azerbaijani | Turkic | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| aze | Azerbaijani | Unclassified | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| azg | San Pedro Amuzgos Amuzgo | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| azj | North Azerbaijani | Turkic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 4 |
+| azz | Highland Puebla Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bak | Bashkir | Turkic | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
+| bam | Bambara | Mande | 1 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 5 |
+| ban | Balinese | Austronesian | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
+| bao | Waimaha | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bba | Baatonum | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bbb | Barai | Koiarian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bbc | Batak Toba | Austronesian | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
+| bbr | Girawa | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bch | Bariai | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bco | Kaluli | Bosavi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bdd | Bunama | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bea | Beaver | Athabaskan-Eyak-Tlingit | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bef | Benabena | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bel | Belarusian | Indo-European | 4 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
+| bem | Bemba (Zambia) | Atlantic-Congo | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| ben | Bengali | Indo-European | 7 | 9 | 2 | 0 | 0 | 1 | 2 | 6 | 1 | 0 | 0 | 0 | 28 |
+| beo | Beami | Bosavi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ber | Berber (Other) | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| beu | Blagar | Timor-Alor-Pantar | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bew | Betawi | Austronesian | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| bgc | Haryanvi | Indo-European | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
+| bgs | Tagabawa | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bgt | Bughotu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bhb | Bhili | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bhd | Bhadrawahi | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bhg | Binandere | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bhl | Bimin | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bho | Bhojpuri | Indo-European | 2 | 2 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
+| bhp | Bima | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| big | Biangai | Kunimaipan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bjj | Kanauji | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bjk | Barok | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bjn | Banjar | Austronesian | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
+| bjp | Fanamaket | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bjr | Binumarien | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bjv | Bedjond | Central Sudanic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bjz | Baruga | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bkd | Binukid | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bki | Baki | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bkq | Bakairí | Cariban | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bkx | Baikeno | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| blw | Balangao | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| blz | Balantak | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bmh | Kein | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bmk | Ghayavi | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bmr | Muinane | Boran | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bmu | Somba-Siawari | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bnp | Bola | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bns | Bundeli | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| boa | Bora | Boran | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bod | Tibetan | Sino-Tibetan | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 6 |
+| boj | Anjam | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bon | Bine | Eastern Trans-Fly | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bos | Bosnian | Indo-European | 3 | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
+| box | Buamu | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| boy | Bodo (Central African Republic) | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bpr | Koronadal Blaan | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bps | Sarangani Blaan | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bqc | Boko (Benin) | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bqp | Busa | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bra | Braj | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bre | Breton | Indo-European | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
+| brx | Bodo (India) | Sino-Tibetan | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
+| bsj | Bangwinji | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bsn | Barasana-Eduria | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bsp | Baga Sitemu | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bss | Akoose | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bug | Buginese | Austronesian | 2 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
+| buk | Bugawac | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bul | Bulgarian | Indo-European | 3 | 4 | 1 | 0 | 1 | 1 | 1 | 2 | 0 | 0 | 0 | 0 | 13 |
+| bus | Bokobaru | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bvd | Baeggu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bvr | Burarra | Maningrida | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bxh | Buhutu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| byr | Baruya | Angan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| byx | Qaqet | Baining | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bzd | Bribri | Chibchan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bzh | Mapos Buang | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| bzj | Belize Kriol English | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| caa | Chortí | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cab | Garifuna | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cac | Chuj | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| caf | Southern Carrier | Athabaskan-Eyak-Tlingit | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cak | Kaqchikel | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cao | Chácobo | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cap | Chipaya | Uru-Chipaya | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| car | Galibi Carib | Cariban | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cat | Catalan | Indo-European | 3 | 2 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 8 |
+| cav | Cavineña | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cax | Chiquitano | Chiquitano | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cbc | Carapana | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cbi | Chachi | Barbacoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cbk | Chavacano | Indo-European | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
+| cbr | Cashibo-Cacataibo | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cbs | Cashinahua | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cbt | Chayahuita | Cahuapanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cbu | Candoshi-Shapra | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cbv | Cacua | Kakua-Nukak | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cco | Comaltepec Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ceb | Cebuano | Austronesian | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 6 |
+| cek | Eastern Khumi Chin | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ces | Czech | Indo-European | 4 | 5 | 2 | 0 | 1 | 2 | 1 | 2 | 0 | 0 | 0 | 0 | 17 |
+| cgc | Kagayanen | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cha | Chamorro | Austronesian | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
+| chd | Highland Oaxaca Chontal | Tequistlatecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| chf | Tabasco Chontal | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| chk | Chuukese | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| chq | Quiotepec Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| chv | Chuvash | Turkic | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| chz | Ozumacín Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cjk | Chokwe | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| cjo | Ashéninka Pajonal | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cjv | Chuave | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ckb | Central Kurdish | Indo-European | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 6 |
+| cle | Lealao Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| clu | Caluyanun | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cme | Cerma | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cmn | Mandarin Chinese | Sino-Tibetan | 4 | 10 | 4 | 0 | 0 | 3 | 4 | 10 | 9 | 0 | 0 | 0 | 44 |
+| cmo | Central Mnong | Austroasiatic | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
+| cni | Asháninka | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cnl | Lalana Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cnt | Tepetotutla Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| code | unknown | Unclassified | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 37 | 0 | 0 | 0 | 0 | 37 |
+| cof | Colorado | Barbacoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| con | Cofán | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cop | Coptic | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cor | Cornish | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cot | Caquinte | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cpa | Palantla Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cpb | Ucayali-Yurúa Ashéninka | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cpc | Ajyíninka Apurucayali | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cpu | Pichis Ashéninka | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cpy | South Ucayali Ashéninka | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| crh | Crimean Tatar | Turkic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| crn | El Nayar Cora | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| crx | Carrier | Athabaskan-Eyak-Tlingit | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| csb | Kashubian | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cso | Sochiapam Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| csy | Siyin Chin | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cta | Tataltepec Chatino | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cth | Thaiphum Chin | Bookkeeping | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ctp | Western Highland Chatino | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ctu | Chol | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cub | Cubeo | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cuc | Usila Chinantec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cui | Cuiba | Guahiboan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cuk | San Blas Kuna | Chibchan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cut | Teutila Cuicatec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cux | Tepeuxila Cuicatec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cwe | Kwere | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cya | Nopala Chatino | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| cym | Welsh | Indo-European | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
+| daa | Dangaléat | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| dad | Marik | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| dah | Gwahatike | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| dan | Danish | Indo-European | 5 | 9 | 2 | 0 | 1 | 0 | 1 | 5 | 0 | 0 | 0 | 0 | 23 |
+| ded | Dedua | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| deu | German | Indo-European | 6 | 14 | 7 | 0 | 1 | 7 | 2 | 18 | 4 | 0 | 0 | 0 | 59 |
+| dgc | Casiguran Dumagat Agta | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| dgr | Dogrib | Athabaskan-Eyak-Tlingit | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| dgz | Daga | Dagan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| dhg | Dhangu-Djangu | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| dif | Dieri | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| dik | Southwestern Dinka | Nilotic | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| div | Dhivehi | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| dji | Djinang | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| djk | Eastern Maroon Creole | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| djr | Djambarrpuyngu | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| dob | Dobu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| doi | Dogri (macrolanguage) | Unclassified | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| dop | Lukpa | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| dov | Dombe | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| dsb | Lower Sorbian | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| dtp | Kadazan Dusun | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| dwr | Dawro | Ta-Ne-Omotic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| dww | Dawawa | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| dwy | Dhuwaya | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| dyu | Dyula | Mande | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| dza | Tunzu | Atlantic-Congo | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| dzo | Dzongkha | Sino-Tibetan | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| ebk | Eastern Bontok | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| eko | Koti | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ell | Modern Greek (1453-) | Indo-European | 3 | 6 | 1 | 0 | 1 | 2 | 0 | 3 | 0 | 0 | 0 | 0 | 16 |
+| emi | Mussau-Emira | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| emp | Northern Emberá | Chocoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| eng | English | Indo-European | 17 | 160 | 18 | 3 | 1 | 13 | 8 | 108 | 13 | 2 | 1 | 0 | 344 |
+| enq | Enga | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| epo | Esperanto | Artificial Language | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
+| eri | Ogea | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ese | Ese Ejja | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| esk | Northwest Alaska Inupiatun | Eskimo-Aleut | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| est | Estonian | Uralic | 2 | 2 | 1 | 0 | 1 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 8 |
+| etr | Edolo | Bosavi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| eus | Basque | Unclassified | 3 | 2 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 8 |
+| ewe | Ewe | Atlantic-Congo | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
+| faa | Fasu | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| fai | Faiwol | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| fao | Faroese | Indo-European | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 7 |
+| far | Fataleka | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| fas | Persian | Indo-European | 1 | 28 | 5 | 0 | 0 | 8 | 2 | 40 | 3 | 0 | 0 | 3 | 90 |
+| ffm | Maasina Fulfulde | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| fij | Fijian | Austronesian | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| fil | Filipino | Austronesian | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| fin | Finnish | Uralic | 3 | 5 | 1 | 0 | 1 | 1 | 2 | 5 | 1 | 0 | 0 | 0 | 19 |
+| fon | Fon | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| for | Fore | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| fra | French | Indo-European | 7 | 13 | 8 | 0 | 1 | 6 | 3 | 15 | 4 | 0 | 1 | 0 | 58 |
+| fry | Western Frisian | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| fuc | Pulaar | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| fue | Borgu Fulfulde | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| fuf | Pular | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| fuh | Western Niger Fulfulde | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| fur | Friulian | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| fuv | Nigerian Fulfulde | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 4 |
+| gah | Alekano | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gai | Borei | Ramu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gam | Kandawo | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gaw | Nobonob | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gaz | West Central Oromo | Afro-Asiatic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 4 |
+| gbm | Garhwali | Indo-European | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
+| gdn | Umanakaina | Dagan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gdr | Wipi | Eastern Trans-Fly | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| geb | Kire | Ramu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gfk | Patpatar | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ghs | Guhu-Samane | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gla | Scottish Gaelic | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| gle | Irish | Indo-European | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
+| glg | Galician | Indo-European | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
+| glk | Gilaki | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| glv | Manx | Indo-European | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gmv | Gamo | Ta-Ne-Omotic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gng | Ngangam | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gnn | Gumatj | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gnw | Western Bolivian Guaraní | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gof | Gofa | Ta-Ne-Omotic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gom | Goan Konkani | Indo-European | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| grc | Ancient Greek (to 1453) | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| grn | Guarani | Unclassified | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 4 |
+| gsw | Swiss German | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gub | Guajajára | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| guh | Guahibo | Guahiboan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gui | Eastern Bolivian Guaraní | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| guj | Gujarati | Indo-European | 6 | 6 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 | 0 | 18 |
+| gul | Sea Island Creole English | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gum | Guambiano | Barbacoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gun | Mbyá Guaraní | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| guo | Guayabero | Guahiboan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gup | Gunwinggu | Gunwinyguan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gux | Gourmanchéma | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gvc | Guanano | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gvf | Golin | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gvn | Kuku-Yalanji | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gvs | Gumawana | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gwi | Gwichʼin | Athabaskan-Eyak-Tlingit | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gym | Ngäbere | Chibchan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| gyr | Guarayu | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| hat | Haitian | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 5 |
+| hau | Hausa | Afro-Asiatic | 4 | 5 | 3 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 14 |
+| haw | Hawaiian | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| hbo | Ancient Hebrew | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| hch | Huichol | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| heb | Hebrew | Afro-Asiatic | 4 | 5 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 11 |
+| heg | Helong | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| hin | Hindi | Indo-European | 9 | 12 | 2 | 0 | 0 | 2 | 2 | 10 | 2 | 0 | 0 | 0 | 39 |
+| hix | Hixkaryána | Cariban | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| hla | Halia | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| hlt | Matu Chin | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| hmn | Hmong | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| hmo | Hiri Motu | Pidgin | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| hne | Chhattisgarhi | Indo-European | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
+| hns | Caribbean Hindustani | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| hop | Hopi | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| hot | Hote | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| hrv | Croatian | Indo-European | 4 | 3 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 10 |
+| hsb | Upper Sorbian | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| hto | Minica Huitoto | Huitotoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| hub | Huambisa | Chicham | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| hui | Huli | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| hun | Hungarian | Uralic | 5 | 3 | 1 | 0 | 1 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 12 |
+| hus | Huastec | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| huu | Murui Huitoto | Huitotoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| huv | San Mateo Del Mar Huave | Huavean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| hvn | Sabu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| hye | Armenian | Indo-European | 3 | 3 | 1 | 0 | 0 | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 9 |
+| ian | Iatmul | Ndu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ibo | Igbo | Atlantic-Congo | 3 | 5 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 12 |
+| ido | Ido | Artificial Language | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ign | Ignaciano | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ikk | Ika | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ikw | Ikwere | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ile | Interlingue | Artificial Language | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ilo | Iloko | Austronesian | 2 | 1 | 2 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 6 |
+| imo | Imbongu | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ina | Interlingua (International Auxiliary Language Association) | Artificial Language | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| inb | Inga | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ind | Indonesian | Austronesian | 6 | 7 | 1 | 0 | 0 | 1 | 1 | 4 | 1 | 0 | 0 | 0 | 21 |
+| ino | Inoke-Yate | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| iou | Tuma-Irumu | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ipi | Ipili | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| isl | Icelandic | Indo-European | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 9 |
+| isn | Isanzu | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ita | Italian | Indo-European | 5 | 9 | 1 | 0 | 1 | 2 | 1 | 5 | 3 | 0 | 0 | 0 | 27 |
+| iws | Sepik Iwam | Sepik | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ixl | Ixil | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| jac | Popti' | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| jae | Yabem | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| jao | Yanyuwa | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| jav | Javanese | Austronesian | 4 | 7 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 13 |
+| jic | Tol | Jicaquean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| jid | Bu (Kaduna State) | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| jiv | Shuar | Chicham | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| jni | Janji | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| jpn | Japanese | Japonic | 5 | 8 | 3 | 0 | 0 | 2 | 3 | 13 | 2 | 0 | 0 | 0 | 36 |
+| jvn | Caribbean Javanese | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kab | Kabyle | Afro-Asiatic | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| kac | Kachin | Sino-Tibetan | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 4 |
+| kam | Kamba (Kenya) | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| kan | Kannada | Dravidian | 6 | 7 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 | 0 | 19 |
+| kaq | Capanahua | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kas | Kashmiri | Indo-European | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
+| kat | Georgian | Kartvelian | 4 | 3 | 1 | 0 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 10 |
+| kaz | Kazakh | Turkic | 3 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 8 |
+| kbc | Kadiwéu | Guaicuruan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kbh | Camsá | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kbm | Iwal | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kbp | Kabiyè | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| kbq | Kamano | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kdc | Kutu | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kde | Makonde | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kdl | Tsikimba | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kea | Kabuverdianu | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 4 |
+| kek | Kekchí | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ken | Kenyang | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kew | West Kewa | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kfg | Kudiya | Dravidian | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kfy | Kumaoni | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kgf | Kube | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kgk | Kaiwá | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kgp | Kaingang | Nuclear-Macro-Je | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| khk | Halh Mongolian | Mongolic-Khitan | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 4 |
+| khm | Khmer | Austroasiatic | 3 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 8 |
+| khs | Kasua | Bosavi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| khz | Keapara | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kik | Kikuyu | Atlantic-Congo | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| kin | Kinyarwanda | Atlantic-Congo | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 8 |
+| kir | Kirghiz | Turkic | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 7 |
+| kiw | Northeast Kiwai | Kiwaian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kiz | Kisi | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kje | Kisar | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kjs | East Kewa | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kkc | Odoodee | East Strickland | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kkl | Kosarek Yale | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| klt | Nukna | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| klv | Maskelynes | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kmb | Kimbundu | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| kmg | Kâte | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kmh | Kalam | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kmk | Limos Kalinga | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kmo | Kwoma | Sepik | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kmr | Northern Kurdish | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| kms | Kamasau | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kmu | Kanite | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| knc | Central Kanuri | Saharan | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| kne | Kankanaey | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| knf | Mankanya | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| knj | Western Kanjobal | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| knv | Tabo | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kon | Kongo | Unclassified | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| kor | Korean | Koreanic | 4 | 8 | 1 | 0 | 1 | 3 | 1 | 9 | 3 | 0 | 0 | 0 | 30 |
+| kos | Kosraean | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kpf | Komba | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kpg | Kapingamarangi | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kpj | Karajá | Nuclear-Macro-Je | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kpr | Korafe-Yegha | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kpw | Kobon | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kpx | Mountain Koiali | Koiarian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kqa | Mum | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kqc | Doromu-Koki | Manubaran | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kqf | Kakabai | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kql | Kyenele | Yuat | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kqw | Kandas | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| krc | Karachay-Balkar | Turkic | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ksd | Kuanua | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ksj | Uare | Kwalean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ksr | Borong | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ktm | Kurti | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kto | Kuot | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kud | 'Auhelawa | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kue | Kuman (Papua New Guinea) | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kup | Kunimaipa | Kunimaipan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kur | Kurdish | Unclassified | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| kvg | Kuni-Boazi | Anim | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kvn | Border Kuna | Chibchan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kwd | Kwaio | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kwf | Kwara'ae | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kwi | Awa-Cuaiquer | Barbacoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kwj | Kwanga | Sepik | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kyc | Kyaka | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kyf | Kouya | Kru | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kyg | Keyagana | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kyq | Kenga | Central Sudanic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kyz | Kayabí | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kze | Kosena | Bookkeeping | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| kzj | Coastal Kadazan | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| lac | Lacandon | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| lao | Lao | Tai-Kadai | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 5 |
+| lat | Latin | Indo-European | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
+| lav | Latvian | Indo-European | 1 | 2 | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
+| lbb | Label | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| lbk | Central Bontok | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| lcm | Tungag | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| leu | Kara (Papua New Guinea) | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| lex | Luang | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| lfn | Lingua Franca Nova | Artificial Language | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| lgl | Wala | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| lid | Nyindrou | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| lif | Limbu | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| lij | Ligurian | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| lim | Limburgan | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| lin | Lingala | Atlantic-Congo | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 8 |
+| lit | Lithuanian | Indo-European | 4 | 1 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 8 |
+| llg | Lole | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| lmo | Lombard | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| ltg | Latgalian | Unclassified | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| ltz | Luxembourgish | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| lua | Luba-Lulua | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| lug | Ganda | Atlantic-Congo | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 8 |
+| luo | Luo (Kenya and Tanzania) | Nilotic | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 5 |
+| lus | Lushai | Sino-Tibetan | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| lvs | Standard Latvian | Unclassified | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 5 |
+| lww | Lewo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| maa | San Jerónimo Tecóatl Mazatec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mad | Madurese | Austronesian | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
+| mag | Magahi | Indo-European | 1 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| mai | Maithili | Indo-European | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
+| maj | Jalapa De Díaz Mazatec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mak | Makasar | Austronesian | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| mal | Malayalam | Dravidian | 7 | 7 | 2 | 0 | 0 | 0 | 0 | 2 | 1 | 0 | 0 | 0 | 19 |
+| mam | Mam | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| maq | Chiquihuitlán Mazatec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mar | Marathi | Indo-European | 7 | 6 | 2 | 0 | 0 | 1 | 0 | 2 | 2 | 0 | 0 | 0 | 20 |
+| mau | Huautla Mazatec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mav | Sateré-Mawé | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| max | North Moluccan Malay | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| maz | Central Mazahua | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mbb | Western Bukidnon Manobo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mbc | Macushi | Cariban | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mbh | Mangseng | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mbj | Nadëb | Naduhup | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mbl | Maxakalí | Nuclear-Macro-Je | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mbs | Sarangani Manobo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mbt | Matigsalug Manobo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mca | Maca | Mataguayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mcb | Machiguenga | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mcd | Sharanahua | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mcf | Matsés | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mco | Coatlán Mixe | Mixe-Zoque | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mcp | Makaa | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mcq | Ese | Koiarian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mcr | Menya | Angan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mdy | Male (Ethiopia) | Ta-Ne-Omotic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| med | Melpa | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mee | Mengen | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mek | Mekeo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| meq | Merey | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| met | Mato | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| meu | Motu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mey | Hassaniyya | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mgc | Morokodo | Central Sudanic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mgh | Makhuwa-Meetto | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mgw | Matumbi | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mhl | Mauwake | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mhr | Eastern Mari | Uralic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mib | Atatláhuca Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mic | Mi'kmaq | Algic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mie | Ocotepec Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mig | San Miguel El Grande Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mih | Chayuco Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mil | Peñoles Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| min | Minangkabau | Austronesian | 3 | 4 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 9 |
+| mio | Pinotepa Nacional Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mir | Isthmus Mixe | Mixe-Zoque | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mit | Southern Puebla Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| miz | Coatzospan Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mjc | San Juan Colorado Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mkd | Macedonian | Indo-European | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 7 |
+| mkj | Mokilese | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mkl | Mokole | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mkn | Kupang Malay | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mks | Silacayoapan Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mle | Manambu | Ndu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mlg | Malagasy | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mlh | Mape | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mlp | Bargam | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mlt | Maltese | Afro-Asiatic | 2 | 2 | 2 | 0 | 2 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 9 |
+| mmo | Mangga Buang | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mmx | Madak | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mna | Mbula | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mni | Manipuri | Sino-Tibetan | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
+| mon | Mongolian | Unclassified | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| mop | Mopán Maya | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mos | Mossi | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| mox | Molima | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mph | Maung | Iwaidjan Proper | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mpj | Martu Wangka | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mpm | Yosondúa Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mpp | Migabac | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mps | Dadibi | Teberan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mpt | Mian | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mpx | Misima-Panaeati | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mqb | Mbuko | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mqj | Mamasa | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mri | Maori | Austronesian | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 5 |
+| msa | Malay (macrolanguage) | Unclassified | 1 | 2 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| msb | Masbatenyo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| msc | Sankaran Maninka | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| msk | Mansaka | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| msm | Agusan Manobo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| msy | Aruamu | Ramu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mti | Maiwa (Papua New Guinea) | Dagan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mto | Totontepec Mixe | Mixe-Zoque | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mui | Musi | Austronesian | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| mup | Malvi | Indo-European | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
+| mux | Bo-Ung | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| muy | Muyang | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mva | Manam | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mvn | Minaveha | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mwc | Are | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mwe | Mwera (Chimwera) | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mwf | Murrinh-Patha | Southern Daly | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mwp | Kala Lagaw Ya | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mwr | Marwari | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mxb | Tezoatlán Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mxp | Tlahuitoltepec Mixe | Mixe-Zoque | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mxq | Juquila Mixe | Mixe-Zoque | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mxt | Jamiltepec Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mya | Burmese | Sino-Tibetan | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 9 |
+| myk | Mamara Senoufo | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| myu | Mundurukú | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| myw | Muyuw | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| myy | Macuna | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| mzz | Maiadomu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nab | Southern Nambikuára | Nambiquaran | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| naf | Nabak | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nak | Nakanai | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nas | Naasioi | South Bougainville | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nbl | South Ndebele | Unclassified | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nbq | Nggem | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nca | Iyo | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nch | Central Huasteca Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ncj | Northern Puebla Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ncl | Michoacán Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ncu | Chumburung | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nde | North Ndebele | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ndg | Ndengereko | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ndj | Ndamba | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nds | Low German | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nep | Nepali (macrolanguage) | Unclassified | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| nfa | Dhao | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ngp | Ngulu | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ngu | Guerrero Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nhe | Eastern Huasteca Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nhg | Tetelcingo Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nhi | Zacatlán-Ahuacatlán-Tepetzintla Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nho | Takuu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nhr | Naro | Khoe-Kwadi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nhu | Noone | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nhw | Western Huasteca Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nhy | Northern Oaxaca Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nif | Nek | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nii | Nii | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nij | Ngaju | Austronesian | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
+| nin | Ninzo | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nko | Nkonya | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nld | Dutch | Indo-European | 6 | 6 | 1 | 0 | 1 | 1 | 1 | 2 | 2 | 0 | 0 | 0 | 20 |
+| nlg | Gela | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nna | Nyangumarta | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nno | Norwegian Nynorsk | Unclassified | 4 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
+| nnq | Ngindo | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| noa | Woun Meu | Chocoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nob | Norwegian Bokmål | Unclassified | 4 | 7 | 5 | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 0 | 0 | 19 |
+| noe | Nimadi | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nop | Numanggang | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nor | Norwegian | Indo-European | 0 | 1 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 3 |
+| not | Nomatsiguenga | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nou | Ewage-Notu | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nov | Novial | Artificial Language | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| npi | Nepali (individual language) | Indo-European | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 8 |
+| npl | Southeastern Puebla Nahuatl | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nqo | N'Ko | Artificial Language | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
+| nsn | Nehan | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nso | Pedi | Atlantic-Congo | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 6 |
+| nss | Nali | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ntj | Ngaanyatjarra | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ntp | Northern Tepehuan | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ntu | Natügu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nus | Nuer | Nilotic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| nuy | Nunggubuyu | Gunwinyguan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nvm | Namiae | Koiarian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nwi | Southwest Tanna | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nya | Nyanja | Atlantic-Congo | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 6 |
+| nys | Nyungar | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| nyu | Nyungwe | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| obo | Obo Manobo | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| oci | Occitan (post 1500) | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| okv | Orokaiva | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| omw | South Tairora | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ong | Olo | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ons | Ono | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ood | Tohono O'odham | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| opm | Oksapmin | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ori | Oriya (macrolanguage) | Unclassified | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| orm | Oromo | Unclassified | 1 | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| orv | Old Russian | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ory | Odia | Indo-European | 5 | 4 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 | 0 | 15 |
+| ote | Mezquital Otomi | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| otm | Eastern Highland Otomi | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| otn | Tenango Otomi | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| otq | Querétaro Otomi | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ots | Estado de México Otomi | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| pab | Parecís | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| pad | Paumarí | Arawan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| pag | Pangasinan | Austronesian | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| pah | Tenharim | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| pam | Pampanga | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| pan | Panjabi | Indo-European | 6 | 6 | 2 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 | 0 | 18 |
+| pao | Northern Paiute | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| pap | Papiamento | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| pbt | Southern Pashto | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 4 |
+| pcm | Nigerian Pidgin | Indo-European | 1 | 4 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
+| pes | Iranian Persian | Indo-European | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 6 |
+| pib | Yine | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| pio | Piapoco | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| pir | Piratapuyo | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| piu | Pintupi-Luritja | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| pjt | Pitjantjatjara | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| pls | San Marcos Tlacoyalco Popoloca | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| plt | Plateau Malagasy | Austronesian | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 4 |
+| plu | Palikúr | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| pma | Paama | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| pms | Piemontese | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| poe | San Juan Atzingo Popoloca | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| poh | Poqomchi' | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| poi | Highland Popoluca | Mixe-Zoque | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| pol | Polish | Indo-European | 4 | 11 | 4 | 0 | 1 | 4 | 0 | 18 | 4 | 0 | 0 | 0 | 46 |
+| pon | Pohnpeian | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| por | Portuguese | Indo-European | 4 | 9 | 1 | 0 | 2 | 3 | 1 | 5 | 3 | 0 | 0 | 0 | 28 |
+| poy | Pogolo | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ppo | Folopa | Teberan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| prf | Paranan | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| pri | Paicî | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| prs | Dari | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| ptp | Patep | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ptu | Bambam | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| pus | Pushto | Unclassified | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
+| pwg | Gapapaiwa | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| qub | Huallaga Huánuco Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| quc | K'iche' | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| quf | Lambayeque Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| quh | South Bolivian Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| qul | North Bolivian Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| qup | Southern Pastaza Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| quy | Ayacucho Quechua | Quechuan | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| qvc | Cajamarca Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| qve | Eastern Apurímac Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| qvh | Huamalíes-Dos de Mayo Huánuco Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| qvm | Margos-Yarowilca-Lauricocha Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| qvn | North Junín Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| qvs | San Martín Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| qvw | Huaylla Wanca Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| qvz | Northern Pastaza Quichua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| qwh | Huaylas Ancash Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| qxh | Panao Huánuco Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| qxn | Northern Conchucos Ancash Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| qxo | Southern Conchucos Ancash Quechua | Quechuan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| rai | Ramoaaina | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| raj | Rajasthani | Unclassified | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
+| reg | Kara (Tanzania) | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| rej | Rejang | Austronesian | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| rgu | Ringgou | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| rkb | Rikbaktsa | Nuclear-Macro-Je | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| rmc | Carpathian Romani | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| rmy | Vlax Romani | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| rom | Romany | Unclassified | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
+| ron | Romanian | Indo-European | 5 | 6 | 1 | 0 | 1 | 0 | 1 | 3 | 1 | 0 | 0 | 0 | 18 |
+| roo | Rotokas | North Bougainville | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| rop | Kriol | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| row | Dela-Oenale | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| rro | Waima | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ruf | Luguru | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| rug | Roviana | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| run | Rundi | Atlantic-Congo | 1 | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
+| rus | Russian | Indo-European | 5 | 13 | 6 | 0 | 2 | 4 | 2 | 16 | 4 | 0 | 0 | 0 | 52 |
+| rwo | Rawa | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| sab | Buglere | Chibchan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| sag | Sango | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| sah | Yakut | Turkic | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| san | Sanskrit | Indo-European | 5 | 3 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 10 |
+| sat | Santali | Austroasiatic | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
+| sbe | Saliba | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| sbk | Safwa | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| sbs | Subiya | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| scn | Sicilian | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| sco | Scots | Indo-European | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| seh | Sena | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| sey | Secoya | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| sgb | Mag-antsi Ayta | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| sgz | Sursurunga | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| shi | Tachelhit | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| shj | Shatt | Dajuic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| shn | Shan | Tai-Kadai | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 4 |
+| shp | Shipibo-Conibo | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| sim | Mende (Papua New Guinea) | Sepik | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| sin | Sinhala | Indo-European | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 7 |
+| sja | Epena | Chocoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| slk | Slovak | Indo-European | 3 | 4 | 1 | 0 | 1 | 0 | 0 | 3 | 0 | 0 | 0 | 0 | 12 |
+| sll | Salt-Yui | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| slv | Slovenian | Indo-European | 3 | 4 | 1 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 10 |
+| smk | Bolinao | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| smo | Samoan | Austronesian | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| sna | Shona | Atlantic-Congo | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 8 |
+| snc | Sinaugoro | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| snd | Sindhi | Indo-European | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 8 |
+| snn | Siona | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| snp | Siane | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| snx | Sam | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| sny | Saniyo-Hiyewe | Sepik | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| som | Somali | Afro-Asiatic | 3 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 9 |
+| soq | Kanasi | Dagan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| sot | Southern Sotho | Atlantic-Congo | 1 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 5 |
+| soy | Miyobe | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| spa | Spanish | Indo-European | 4 | 13 | 4 | 0 | 1 | 3 | 2 | 13 | 4 | 0 | 0 | 0 | 44 |
+| spl | Selepet | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| spm | Akukem | Ramu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| spp | Supyire Senoufo | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| sps | Saposa | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| spy | Sabaot | Nilotic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| sqi | Albanian | Unclassified | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
+| srd | Sardinian | Unclassified | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| sri | Siriano | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| srm | Saramaccan | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| srn | Sranan Tongo | Indo-European | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
+| srp | Serbian | Indo-European | 4 | 1 | 1 | 0 | 0 | 0 | 1 | 2 | 0 | 0 | 0 | 0 | 9 |
+| srq | Sirionó | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ssd | Siroi | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ssg | Seimat | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ssw | Swati | Atlantic-Congo | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 7 |
+| ssx | Samberigi | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| stp | Southeastern Tepehuan | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| sua | Sulka | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| sue | Suena | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| sun | Sundanese | Austronesian | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 9 |
+| sus | Susu | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| suz | Sunwar | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| svk | Slovakian Sign Language | Sign Language | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| swa | Swahili (macrolanguage) | Atlantic-Congo | 1 | 7 | 2 | 0 | 0 | 1 | 1 | 3 | 0 | 0 | 0 | 0 | 15 |
+| swe | Swedish | Indo-European | 4 | 8 | 3 | 0 | 1 | 1 | 1 | 4 | 0 | 0 | 0 | 0 | 22 |
+| swg | Swabian | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| swh | Swahili (individual language) | Atlantic-Congo | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 6 |
+| swp | Suau | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| sxb | Suba | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| szl | Silesian | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| tac | Lowland Tarahumara | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tah | Tahitian | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| taj | Eastern Tamang | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tam | Tamil | Dravidian | 7 | 7 | 2 | 0 | 0 | 1 | 0 | 3 | 1 | 0 | 0 | 0 | 21 |
+| taq | Tamasheq | Afro-Asiatic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| tat | Tatar | Turkic | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
+| tav | Tatuyo | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| taw | Tai | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tbc | Takia | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tbf | Mandara | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tbg | North Tairora | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tbo | Tawala | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tbz | Ditammari | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tca | Ticuna | Ticuna-Yuri | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tcs | Torres Strait Creole | Indo-European | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tcz | Thado Chin | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tdt | Tetun Dili | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tee | Huehuetla Tepehua | Totonacan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tel | Telugu | Dravidian | 7 | 7 | 2 | 0 | 0 | 0 | 1 | 5 | 2 | 0 | 0 | 0 | 24 |
+| ter | Tereno | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tet | Tetum | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tew | Tewa (USA) | Kiowa-Tanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tfr | Teribe | Chibchan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tgk | Tajik | Indo-European | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 6 |
+| tgl | Tagalog | Austronesian | 3 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 8 |
+| tgo | Sudest | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tgp | Tangoa | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tha | Thai | Tai-Kadai | 4 | 8 | 1 | 0 | 0 | 1 | 1 | 6 | 0 | 0 | 0 | 0 | 21 |
+| tif | Tifal | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tim | Timbe | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tir | Tigrinya | Afro-Asiatic | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 8 |
+| tiw | Tiwi | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tiy | Tiruray | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tke | Takwane | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tku | Upper Necaxa Totonac | Totonacan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tlf | Telefol | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tmd | Haruai | Piawi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tna | Tacana | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tnc | Tanimuca-Retuarã | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tnk | Kwamera | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tnn | North Tanna | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tnp | Whitesands | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| toc | Coyutla Totonac | Totonacan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tod | Toma | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tof | Gizrra | Eastern Trans-Fly | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| toj | Tojolabal | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ton | Tonga (Tonga Islands) | Austronesian | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
+| too | Xicotepec De Juárez Totonac | Totonacan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| top | Papantla Totonac | Totonacan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tos | Highland Totonac | Totonacan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tpa | Taupota | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tpi | Tok Pisin | Indo-European | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| tpt | Tlachichilco Tepehua | Totonacan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tpz | Tinputz | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| trc | Copala Triqui | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tsn | Tswana | Atlantic-Congo | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 7 |
+| tso | Tsonga | Atlantic-Congo | 1 | 4 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 7 |
+| tsw | Tsishingini | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ttc | Tektiteko | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tte | Bwanabwana | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tuc | Mutu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tue | Tuyuca | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tuf | Central Tunebo | Chibchan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tuk | Turkmen | Turkic | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
+| tum | Tumbuka | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| tuo | Tucano | Tucanoan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tur | Turkish | Turkic | 4 | 7 | 1 | 0 | 0 | 3 | 0 | 3 | 2 | 0 | 0 | 0 | 20 |
+| tvk | Southeast Ambrym | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| twi | Twi | Unclassified | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
+| txq | Tii | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| txu | Kayapó | Nuclear-Macro-Je | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tyv | Tuvinian | Turkic | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tzj | Tz'utujil | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tzl | Talossan | Artificial Language | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| tzm | Central Atlas Tamazight | Afro-Asiatic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| tzo | Tzotzil | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ubr | Ubir | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ubu | Umbu-Ungu | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| udu | Uduk | Koman | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| uig | Uighur | Turkic | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
+| ukr | Ukrainian | Indo-European | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 8 |
+| uli | Ulithian | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ulk | Meriam Mir | Eastern Trans-Fly | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| umb | Umbundu | Atlantic-Congo | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| upv | Uripiv-Wala-Rano-Atchin | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ura | Urarina | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| urb | Urubú-Kaapor | Tupian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| urd | Urdu | Indo-European | 7 | 8 | 2 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 19 |
+| uri | Urim | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| urt | Urat | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| urw | Sop | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| usa | Usarufa | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| usp | Uspanteco | Mayan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| uvh | Uri | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| uvl | Lote | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| uzb | Uzbek | Unclassified | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
+| uzn | Northern Uzbek | Turkic | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 4 |
+| vec | Venetian | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| ven | Venda | Atlantic-Congo | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
+| vid | Vidunda | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| vie | Vietnamese | Austroasiatic | 5 | 6 | 1 | 0 | 0 | 1 | 0 | 5 | 0 | 0 | 0 | 0 | 18 |
+| viv | Iduna | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| vmy | Ayautla Mazatec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| waj | Waffa | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| wal | Wolaytta | Ta-Ne-Omotic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| wap | Wapishana | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| war | Waray (Philippines) | Austronesian | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 5 |
+| wat | Kaninuwa | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| wbi | Vwanji | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| wbp | Warlpiri | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| wed | Wedau | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| wer | Weri | Kunimaipan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| wim | Wik-Mungkan | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| wiu | Wiru | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| wiv | Vitu | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| wln | Walloon | Indo-European | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| wmt | Walmajarri | Pama-Nyungan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| wmw | Mwani | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| wnc | Wantoat | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| wnu | Usan | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| wol | Wolof | Atlantic-Congo | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 6 |
+| wos | Hanga Hundi | Ndu | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| wrk | Garrwa | Garrwan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| wro | Worrorra | Worrorran | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| wrs | Waris | Border | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| wsk | Waskia | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| wuu | Wu Chinese | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| wuv | Wuvulu-Aua | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| xav | Xavánte | Nuclear-Macro-Je | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| xbi | Kombio | Nuclear Torricelli | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| xed | Hdi | Afro-Asiatic | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| xho | Xhosa | Atlantic-Congo | 3 | 3 | 3 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 10 |
+| xla | Kamula | Kamula-Elevala | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| xnn | Northern Kankanay | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| xon | Konkomba | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| xsi | Sio | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| xtd | Diuxi-Tilantongo Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| xtm | Magdalena Peñasco Mixtec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| yaa | Yaminahua | Pano-Tacanan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| yad | Yagua | Peba-Yagua | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| yal | Yalunka | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| yap | Yapese | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| yaq | Yaqui | Uto-Aztecan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| yby | Yaweyuha | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ycn | Yucuna | Arawakan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ydd | Eastern Yiddish | Indo-European | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
+| yid | Yiddish | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| yka | Yakan | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| yle | Yele | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| yml | Iamalele | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| yon | Yongkom | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| yor | Yoruba | Atlantic-Congo | 4 | 5 | 3 | 0 | 0 | 0 | 1 | 3 | 0 | 0 | 0 | 0 | 16 |
+| yrb | Yareba | Yareban | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| yre | Yaouré | Mande | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| yss | Yessan-Mayo | Sepik | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| yue | Yue Chinese | Sino-Tibetan | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
+| yuj | Karkar-Yuri | Pauwasi | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| yut | Yopno | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| yuw | Yau (Morobe Province) | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| yva | Yawa | Yawa-Saweru | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zaa | Sierra de Juárez Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zab | Western Tlacolula Valley Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zac | Ocotlán Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zad | Cajonos Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zai | Isthmus Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zaj | Zaramo | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zam | Miahuatlán Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zao | Ozolotepec Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zap | Zapotec | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zar | Rincón Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zas | Santo Domingo Albarradas Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zat | Tabaa Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zav | Yatzachi Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zaw | Mitla Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zca | Coatecas Altas Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zga | Kinga | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zho | Chinese | Unclassified | 2 | 2 | 1 | 0 | 0 | 2 | 1 | 13 | 0 | 0 | 0 | 0 | 21 |
+| zia | Zia | Nuclear Trans New Guinea | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ziw | Zigula | Atlantic-Congo | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zlm | Malay (individual language) | Austronesian | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zos | Francisco León Zoque | Mixe-Zoque | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zpc | Choapan Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zpl | Lachixío Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zpm | Mixtepec Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zpo | Amatlán Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zpq | Zoogocho Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zpu | Yalálag Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zpv | Chichicapan Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zpz | Texmelucan Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zsm | Standard Malay | Austronesian | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 5 |
+| zsr | Southern Rincon Zapotec | Unclassified | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| ztq | Quioquitani-Quierí Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zty | Yatee Zapotec | Otomanguean | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| zul | Zulu | Atlantic-Congo | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 7 |
+| zyp | Zyphe Chin | Sino-Tibetan | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| Total | None | None | None | 1395 | 836 | 311 | 3 | 28 | 91 | 51 | 507 | 88 | 2 | 2 | 3 |
 <!-- TASK LANG TABLE END -->
 
 </details>
