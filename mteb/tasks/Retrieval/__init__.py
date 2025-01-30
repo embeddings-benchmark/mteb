@@ -103,6 +103,8 @@ from .eng.Touche2020Retrieval import *
 from .eng.TRECCOVIDRetrieval import *
 from .eng.WinoGrandeRetrieval import *
 from .est.estqa import *
+from .fas.BEIRFa import *
+from .fas.FaMTEBRetrieval import *
 from .fra.AlloprofRetrieval import *
 from .fra.BSARDRetrieval import *
 from .fra.FQuADRetrieval import *

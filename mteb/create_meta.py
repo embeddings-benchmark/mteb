@@ -8,7 +8,6 @@ import yaml
 
 import mteb
 from mteb import TaskResult
-from mteb.load_results.task_results import CQADupstackRetrievalDummy
 
 
 def generate_readme(results_folder: Path, from_existing: Path | None = None) -> str:
@@ -46,12 +45,7 @@ def load_model_name(results_folder: Path) -> str:
 
 
 def process_task_result(task_result: TaskResult) -> list[dict[str, Any]]:
-    # CQADupstackRetrieval is a combined dataset (special case atm.)
-    task = (
-        CQADupstackRetrievalDummy()
-        if task_result.task_name == "CQADupstackRetrieval"
-        else mteb.get_task(task_result.task_name)
-    )
+    task = mteb.get_task(task_result.task_name)
     yaml_results = []
 
     for split, hf_subset_scores in task_result.scores.items():

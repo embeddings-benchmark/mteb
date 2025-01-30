@@ -63,7 +63,7 @@ class AbsTask(ABC):
     dataset: dict[HFSubset, DatasetDict] | None = None  # type: ignore
     data_loaded: bool = False
     is_multilingual: bool = False
-    hf_subsets: list[HFSubset] | None = None
+    hf_subsets: list[HFSubset]
 
     def __init__(self, seed: int = 42, **kwargs: Any):
         self.save_suffix = kwargs.get("save_suffix", "")
@@ -73,6 +73,7 @@ class AbsTask(ABC):
         np.random.seed(self.seed)
         torch.manual_seed(self.seed)
         torch.cuda.manual_seed_all(self.seed)
+        self.hf_subsets = list(self.metadata.hf_subsets_to_langscripts.keys())
 
     def check_if_dataset_is_superseded(self):
         """Check if the dataset is superseded by a newer version"""
