@@ -170,3 +170,55 @@ class EncoderWithConversationEncode(Encoder, Protocol):
             The query.
         """
         ...
+
+
+class CustomSearchInterface:
+    """Interface for custom search implementations.
+    Implementations should override the search method to provide custom search functionality.
+
+    Example:
+    ```python
+    class BM25Search(DRESModel, Wrapper, CustomSearchInterface):
+    ```
+
+    `search(...)` Returns:
+    ```python
+    {
+        "query_id": {
+            "doc_id": score,
+            ...
+        },
+        ...
+    }
+    """
+
+    def search(
+        self,
+        corpus: dict[str, dict[str, str]],
+        queries: dict[str, str | list[str]],
+        top_k: int,
+        return_sorted: bool = False,
+        **kwargs,
+    ) -> dict[str, dict[str, float]]:
+        """Searches the corpus for the given queries and returns the top k results.
+
+        Args:
+            corpus: The corpus to search.
+            queries: The queries to search for.
+            top_k: The number of results to return.
+            return_sorted: Whether to return the results sorted by score.
+            **kwargs: Additional arguments to pass to the search method.
+
+        Returns:
+            The search results.
+            ```python
+            {
+                "query_id": {
+                    "doc_id": score,
+                    ...
+                },
+                ...
+            }
+            ```
+        """
+        ...

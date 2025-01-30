@@ -3,10 +3,11 @@ from __future__ import annotations
 import logging
 from functools import partial
 
+from mteb.encoder_interface import CustomSearchInterface
 from mteb.evaluation.evaluators.RetrievalEvaluator import DRESModel
 from mteb.model_meta import ModelMeta
 
-from .wrapper import CustomSearchInterface, Wrapper
+from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +53,6 @@ def bm25_loader(**kwargs):
             corpus: dict[str, dict[str, str]],
             queries: dict[str, str | list[str]],
             top_k: int,
-            score_function: str = None,
             return_sorted: bool = False,
             **kwargs,
         ) -> dict[str, dict[str, float]]:

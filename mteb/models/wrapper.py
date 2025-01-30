@@ -121,34 +121,3 @@ class Wrapper:
         if self.instruction_template:
             return self.format_instruction(instruction)
         return instruction
-
-
-class CustomSearchInterface:
-    """Interface for custom search implementations.
-    Implementations should override the search method to provide custom search functionality.
-
-    Example:
-    ```python
-    class BM25Search(DRESModel, Wrapper, CustomSearchInterface):
-    ```
-
-    Returns:
-    ```python
-    {
-        "query_id": {
-            "doc_id": score,
-            ...
-        },
-        ...
-    }
-    """
-
-    def search(
-        self,
-        corpus: dict[str, dict[str, str]],
-        queries: dict[str, str | list[str]],
-        top_k: int,
-        score_function: str = None,
-        return_sorted: bool = False,
-        **kwargs,
-    ) -> dict[str, dict[str, float]]: ...

@@ -3,8 +3,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from mteb.models.wrapper import CustomSearchInterface
-
+from mteb.encoder_interface import CustomSearchInterface
 from .Evaluator import Evaluator
 from .model_classes import (
     DenseRetrievalExactSearch,
