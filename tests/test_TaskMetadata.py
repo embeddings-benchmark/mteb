@@ -179,6 +179,8 @@ _HISTORIC_DATASETS = [
     "TamilNewsClassification",
     "TenKGnadClusteringP2P.v2",
     "TenKGnadClusteringS2S.v2",
+    "SynPerChatbotConvSAClassification",
+    "CQADupstackRetrieval-Fa",
 ]
 
 

@@ -472,24 +472,24 @@ evaluation.run(model, ...)
 
 ## Documentation
 
-| Documentation                  |                        |
-| ------------------------------ | ---------------------- |
-| 📋 [Tasks] | Overview of available tasks |
-| 📐 [Benchmarks] | Overview of available benchmarks |
-| 📈 [Leaderboard] | The interactive leaderboard of the benchmark |
-| 🤖 [Adding a model] | Information related to how to submit a model to the leaderboard |
+| Documentation                  |                                                                                     |
+|--------------------------------|-------------------------------------------------------------------------------------|
+| 📋 [Tasks]                     | Overview of available tasks                                                         |
+| 📐 [Benchmarks]                | Overview of available benchmarks                                                    |
+| 📈 [Leaderboard]               | The interactive leaderboard of the benchmark                                        |
+| 🤖 [Adding a model]            | Information related to how to submit a model to MTEB and to the leaderboard |
 | 👩‍🔬 [Reproducible workflows] | Information related to how to reproduce and create reproducible workflows with MTEB |
-| 👩‍💻 [Adding a dataset] | How to add a new task/dataset to MTEB | 
-| 👩‍💻 [Adding a leaderboard tab] | How to add a new leaderboard tab to MTEB | 
-| 🤝 [Contributing] | How to contribute to MTEB and set it up for development |
-| 🌐 [MMTEB] | An open-source effort to extend MTEB to cover a broad set of languages |  
+| 👩‍💻 [Adding a dataset]       | How to add a new task/dataset to MTEB                                               |
+| 👩‍💻 [Adding a benchmark]     | How to add a new benchmark to MTEB and to the leaderboard                           |
+| 🤝 [Contributing]              | How to contribute to MTEB and set it up for development                             |
+| 🌐 [MMTEB]                     | An open-source effort to extend MTEB to cover a broad set of languages              |
 
 [Tasks]: docs/tasks.md
 [Benchmarks]: docs/benchmarks.md
 [Contributing]: CONTRIBUTING.md
 [Adding a model]: docs/adding_a_model.md
 [Adding a dataset]: docs/adding_a_dataset.md
-[Adding a leaderboard tab]: docs/adding_a_leaderboard_tab.md
+[Adding a benchmark]: docs/adding_a_benchmark.md
 [Leaderboard]: https://huggingface.co/spaces/mteb/leaderboard
 [MMTEB]: docs/mmteb/readme.md
 [Reproducible workflows]: docs/reproducible_workflow.md
