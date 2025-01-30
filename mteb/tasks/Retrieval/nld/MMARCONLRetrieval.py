@@ -26,7 +26,7 @@ class MMMARCONL(AbsTaskRetrieval):
         domains=["Web"],
         task_subtypes=[],
         license="apache-2.0",
-        annotations_creators="LM-generated and reviewed",
+        annotations_creators="derived",
         dialect=[],
         sample_creation="machine-translated and verified",
         bibtex_citation="""@article{DBLP:journals/corr/abs-2108-13897,

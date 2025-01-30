@@ -23,7 +23,7 @@ class Touche2020NL(AbsTaskRetrieval):
         domains=["Academic"],
         task_subtypes=["Question answering"],
         license="cc-by-sa-4.0",
-        annotations_creators="LM-generated and reviewed",
+        annotations_creators="derived",
         dialect=[],
         sample_creation="machine-translated and verified",
         bibtex_citation="""@misc{banar2024beirnlzeroshotinformationretrieval,

@@ -25,7 +25,7 @@ class ClimateFEVERNL(AbsTaskRetrieval):
         domains=["Encyclopaedic"],
         task_subtypes=[],
         license="cc-by-sa-4.0",
-        annotations_creators="LM-generated and reviewed",
+        annotations_creators="derived",
         dialect=[],
         sample_creation="machine-translated and verified",
         bibtex_citation="""@misc{banar2024beirnlzeroshotinformationretrieval,
