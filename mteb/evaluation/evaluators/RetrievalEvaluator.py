@@ -3,6 +3,10 @@ from __future__ import annotations
 import logging
 from typing import Any
 
+
+
+from mteb.models.wrapper import CustomSearchInterface
+
 from .Evaluator import Evaluator
 from .model_classes import (
     DenseRetrievalExactSearch,
@@ -72,10 +76,9 @@ class RetrievalEvaluator(Evaluator):
             return self.retriever.search_cross_encoder(
                 corpus, queries, self.top_k, instructions=instructions, **kwargs
             )
-        elif (
-            hasattr(self.retriever.model.model, "mteb_model_meta")
-            and self.retriever.model.model.mteb_model_meta.name == "bm25s"
-        ):
+
+        elif isinstance(self.retriever.model.model, CustomSearchInterface):
+
             return self.retriever.model.model.search(
                 corpus,
                 queries,

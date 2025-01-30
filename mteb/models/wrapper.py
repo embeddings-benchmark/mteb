@@ -121,3 +121,15 @@ class Wrapper:
         if self.instruction_template:
             return self.format_instruction(instruction)
         return instruction
+
+
+class CustomSearchInterface:
+    def search(
+        self,
+        corpus: dict[str, dict[str, str]],
+        queries: dict[str, str | list[str]],
+        top_k: int,
+        score_function: str = None,
+        return_sorted: bool = False,
+        **kwargs,
+    ) -> dict[str, dict[str, float]]: ...
