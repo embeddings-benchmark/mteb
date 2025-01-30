@@ -22,7 +22,7 @@ class ClimateFEVERNL(AbsTaskRetrieval):
         eval_langs=["nld-Latn"],
         main_score="ndcg_at_10",
         date=("2024-10-01", "2024-10-01"),
-        domains=["Encyclopaedic"],
+        domains=["Encyclopaedic", "Written"],
         task_subtypes=[],
         license="cc-by-sa-4.0",
         annotations_creators="derived",
