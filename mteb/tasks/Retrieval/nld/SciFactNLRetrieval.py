@@ -1,0 +1,39 @@
+from __future__ import annotations
+
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+
+
+class SciFactNL(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="SciFact-NL",
+        dataset={
+            "path": "clips/beir-nl-scifact",
+            "revision": "856d8dfc294b138856bbf3042450e3782321e44e",
+        },
+        description="SciFactNL verifies scientific claims in Dutch using evidence from the research literature containing scientific paper abstracts.",
+        reference="https://huggingface.co/datasets/clips/beir-nl-scifact",
+        type="Retrieval",
+        category="s2p",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["nld-Latn"],
+        main_score="ndcg_at_10",
+        date=("2024-10-01", "2024-10-01"),
+        domains=["Academic", "Medical", "Written"],
+        task_subtypes=[],
+        license="cc-by-4.0",
+        annotations_creators="LM-generated and reviewed",
+        dialect=[],
+        sample_creation="machine-translated and verified",
+        bibtex_citation="""@misc{banar2024beirnlzeroshotinformationretrieval,
+    title={BEIR-NL: Zero-shot Information Retrieval Benchmark for the Dutch Language}, 
+     author={Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
+     year={2024},
+     eprint={2412.08329},
+     archivePrefix={arXiv},
+     primaryClass={cs.CL},
+     url={https://arxiv.org/abs/2412.08329}, 
+}""",
+    )
