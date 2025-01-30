@@ -83,7 +83,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [CQADupstackPhysicsRetrieval-Fa](https://huggingface.co/datasets/MCINext/cqadupstack-physics-fa) | ['fas'] | Retrieval | s2p | [Web] | None | None |
 | [CQADupstackProgrammersRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p | [Programming, Written, Non-fiction] | None | None |
 | [CQADupstackProgrammersRetrieval-Fa](https://huggingface.co/datasets/MCINext/cqadupstack-programmers-fa) | ['fas'] | Retrieval | s2p | [Web] | None | None |
-| [CQADupstackRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | None | [Written, Programming, Non-fiction] | None | None |
+| [CQADupstackRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | None | [Written, Non-fiction, Programming] | None | None |
 | CQADupstackRetrieval-Fa | ['fas'] | Retrieval | None | [Web] | None | None |
 | [CQADupstackStatsRetrieval](http://nlp.cis.unimelb.edu.au/resources/cqadupstack/) (Hoogeveen et al., 2015) | ['eng'] | Retrieval | s2p |  | None | None |
 | [CQADupstackStatsRetrieval-Fa](https://huggingface.co/datasets/MCINext/cqadupstack-stats-fa) | ['fas'] | Retrieval | s2p | [Web] | None | None |
