@@ -167,9 +167,9 @@ colbert_v2 = ModelMeta(
     superseded_by=None,
     training_datasets={
         "MSMARCO": ["train"],  # dev?
+        "mMARCO-NL": ["train"],  # translation not trained on
     },
 )
-
 
 jina_colbert_v2 = ModelMeta(
     loader=partial(
@@ -222,6 +222,7 @@ jina_colbert_v2 = ModelMeta(
     superseded_by=None,
     training_datasets={
         "MSMARCO": ["train"],
+        "mMARCO-NL": ["train"],  # translation not trained on
         "DuRetrieval": [],
         "MIRACL": ["train"],
     },
