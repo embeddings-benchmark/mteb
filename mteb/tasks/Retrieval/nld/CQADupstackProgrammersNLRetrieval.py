@@ -30,7 +30,7 @@ class CQADupstackProgrammersNLRetrieval(AbsTaskRetrieval):
         license="apache-2.0",
         annotations_creators="derived",
         dialect=[],
-        sample_creation="machine-translated and verified",
+        sample_creation="machine-translated and verified",  # manually checked a small subset
         bibtex_citation="""@misc{banar2024beirnlzeroshotinformationretrieval,
     title={BEIR-NL: Zero-shot Information Retrieval Benchmark for the Dutch Language}, 
      author={Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
