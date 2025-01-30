@@ -234,7 +234,6 @@ head = """
 """
 
 with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
-
     gr.Markdown("""
     ## MMTEB: Massive Multilingual Text Embedding Benchmark
 
