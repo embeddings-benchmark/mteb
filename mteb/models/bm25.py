@@ -53,6 +53,7 @@ def bm25_loader(**kwargs):
             corpus: dict[str, dict[str, str]],
             queries: dict[str, str | list[str]],
             top_k: int,
+            task_name: str,
             return_sorted: bool = False,
             **kwargs,
         ) -> dict[str, dict[str, float]]:

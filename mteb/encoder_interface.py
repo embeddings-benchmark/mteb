@@ -197,6 +197,7 @@ class CustomSearchInterface:
         corpus: dict[str, dict[str, str]],
         queries: dict[str, str | list[str]],
         top_k: int,
+        task_name: str,
         return_sorted: bool = False,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
@@ -206,6 +207,8 @@ class CustomSearchInterface:
             corpus: The corpus to search.
             queries: The queries to search for.
             top_k: The number of results to return.
+            task_name: The name of the task. Sentence-transformers uses this to
+                determine which prompt to use.
             return_sorted: Whether to return the results sorted by score.
             **kwargs: Additional arguments to pass to the search method.
 
