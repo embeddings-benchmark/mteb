@@ -22,7 +22,7 @@ class CQADupstackUnixRetrieval(AbsTaskRetrieval):
         main_score="ndcg_at_10",
         date=None,
         domains=["Written", "Web", "Programming"],
-        task_subtypes=["Question answering"],
+        task_subtypes=["Question answering", "Duplicate Detection"],
         license="apache-2.0",
         annotations_creators="derived",
         dialect=[],
