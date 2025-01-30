@@ -159,6 +159,7 @@ LICENSES = (  # this list can be extended as needed
         "cc-by-nc-sa-3.0",
         "cc-by-nc-sa-4.0",
         "cc-by-nc-nd-4.0",
+        "cc-by-nd-4.0",
         "openrail",
         "openrail++",
         "odc-by",

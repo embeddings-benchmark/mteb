@@ -45,3 +45,5 @@ from .spa.SpanishNewsClusteringP2P import *
 from .swe.swedn_clustering import *
 from .swe.SwednClustering import *
 from .zho.CMTEBClustering import *
+from .eng.BuiltBenchClusteringS2S import *
+from .eng.BuiltBenchClusteringP2P import *
