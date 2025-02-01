@@ -5,6 +5,7 @@ from .code.AppsRetrieval import *
 from .code.CodeEditSearchRetrieval import *
 from .code.CodeFeedbackMTRetrieval import *
 from .code.CodeFeedbackSTRetrieval import *
+from .code.CodeRAG import *
 from .code.CodeSearchNetCCRetrieval import *
 from .code.CodeSearchNetRetrieval import *
 from .code.CodeTransOceanContestRetrieval import *
