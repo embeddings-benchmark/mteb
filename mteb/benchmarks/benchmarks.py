@@ -1175,6 +1175,7 @@ CODE_RAG = Benchmark(
       primaryClass={cs.SE},
       url={https://arxiv.org/abs/2406.14497}, 
     }""",
+)
 
 NANOBEIR = Benchmark(
     name="NanoBEIR",
