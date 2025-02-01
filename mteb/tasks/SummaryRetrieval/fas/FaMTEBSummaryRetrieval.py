@@ -7,7 +7,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class SAMSumFa(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="SAMSumFa",
-        description="Translated Version of SAMSum Dataset",
+        description="Translated Version of SAMSum Dataset for summary retrieval.",
         reference="https://huggingface.co/datasets/MCINext/samsum-fa",
         dataset={
             "path": "MCINext/samsum-fa",
@@ -35,10 +35,10 @@ class SAMSumFa(AbsTaskBitextMining):
         )
 
 
-class SynPerChatbotSumSBitextMining(AbsTaskBitextMining):
+class SynPerChatbotSumSRetrieval(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="SynPerChatbotSumSRetrieval",
-        description="Synthetic Persian Chatbot Summary Dataset",
+        description="Synthetic Persian Chatbot Summary Dataset for summary retrieval.",
         reference="https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-summary-retrieval",
         dataset={
             "path": "MCINext/synthetic-persian-chatbot-summary-retrieval",
@@ -66,10 +66,10 @@ class SynPerChatbotSumSBitextMining(AbsTaskBitextMining):
         )
 
 
-class SynPerChatbotRAGSumSBitextMining(AbsTaskBitextMining):
+class SynPerChatbotRAGSumSRetrieval(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="SynPerChatbotRAGSumSRetrieval",
-        description="Synthetic Persian Chatbot RAG Summary Dataset",
+        description="Synthetic Persian Chatbot RAG Summary Dataset for summary retrieval.",
         reference="https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-rag-summary-retrieval",
         dataset={
             "path": "MCINext/synthetic-persian-chatbot-rag-summary-retrieval",
