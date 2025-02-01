@@ -7,7 +7,7 @@ import torch
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 from mteb.models.e5_models import E5_TRAINING_DATA
 
-from .bge_models import bge_m_training_data, bge_training_data
+from .bge_models import bge_m3_training_data, bge_training_data
 from .sentence_transformers_models import sent_trf_training_dataset
 
 Haon_Chen__speed_embedding_7b_instruct = ModelMeta(
@@ -1445,7 +1445,7 @@ deepvk__USER_bge_m3 = ModelMeta(
     reference="https://huggingface.co/deepvk/USER-bge-m3",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=bge_m_training_data,  # derived from.
+    training_datasets=bge_m3_training_data,  # derived from.
     # not in MTEB:
     # "deepvk/ru-HNP": ["train"],
     # "deepvk/ru-WANLI": ["train"],
@@ -1607,27 +1607,7 @@ silma_ai__silma_embeddding_matryoshka_v0_1 = ModelMeta(
     adapted_from="/workspace/v3-matryoshka_aubmindlab-bert-base-arabertv02-2024-10-12_13-55-06/checkpoint-26250",
     superseded_by=None,
 )
-zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
-    name="zeta-alpha-ai/Zeta-Alpha-E5-Mistral",
-    revision="3e6076bdc2ff592a2f95fbc04570e51db5aa0c0c",
-    release_date="2024-08-30",
-    languages=["eng_Latn"],
-    loader=None,
-    n_parameters=7110660096,
-    max_tokens=32768.0,
-    embed_dim=4096,
-    license="mit",
-    open_weights=True,
-    public_training_code=None,
-    public_training_data=None,
-    framework=["PyTorch"],
-    reference="https://huggingface.co/zeta-alpha-ai/Zeta-Alpha-E5-Mistral",
-    similarity_fn_name="cosine",
-    use_instructions=None,
-    training_datasets=None,
-    adapted_from="intfloat/e5-mistral-7b-instruct",
-    superseded_by=None,
-)
+
 sbert_chinese_general_v1 = ModelMeta(
     name="DMetaSoul/sbert-chinese-general-v1",
     revision="bd27765956bcc2fcf682de0097819947ac10037e",
@@ -1755,5 +1735,43 @@ conan_embedding = ModelMeta(
     use_instructions=None,
     # source: https://arxiv.org/pdf/2408.15710
     training_datasets=None,  # They "scraped" things from the internet, we don't know, could be leakage
+    superseded_by=None,
+)
+ember_v1 = ModelMeta(
+    name="llmrails/ember-v1",
+    revision="5e5ce5904901f6ce1c353a95020f17f09e5d021d",
+    release_date="2023-10-10",
+    languages=["eng_Latn"],
+    n_parameters=335 * 1e6,
+    max_tokens=512,
+    embed_dim=1024,
+    license="mit",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch", "Sentence Transformers"],
+    reference="https://huggingface.co/llmrails/ember-v1",
+    similarity_fn_name="cosine",
+    use_instructions=None,
+    training_datasets=None,
+    superseded_by=None,
+)
+amazon_titan_text_embeddings_v2 = ModelMeta(
+    name="amazon/Titan-text-embeddings-v2",
+    revision="1",
+    release_date="2024-04-30",
+    languages=["eng_Latn"],
+    n_parameters=None,
+    max_tokens=None,
+    embed_dim=None,
+    license="proprietary",
+    open_weights=False,
+    public_training_code=None,
+    public_training_data=None,
+    framework=[],
+    reference="https://huggingface.co/amazon/Titan-text-embeddings-v2",
+    similarity_fn_name="cosine",
+    use_instructions=False,
+    training_datasets=None,
     superseded_by=None,
 )

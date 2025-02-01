@@ -19,7 +19,6 @@ E5_MISTRAL_TRAINING_DATA = {
     **E5_TRAINING_DATA,
     "FEVER": ["train"],
     "FEVERHardNegatives": ["train"],
-    "FEVER-PL": ["train"],  # translation not trained on
     "HotpotQA": ["train"],
     "HotpotQAHardNegatives": ["train"],
     "HotpotQA-PL": ["train"],  # translation not trained on
@@ -83,4 +82,79 @@ e5_mistral = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=E5_TRAINING_DATA,
+)
+
+zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
+    loader=partial(  # type: ignore
+        instruct_wrapper,
+        model_name_or_path="zeta-alpha-ai/Zeta-Alpha-E5-Mistral",
+        instruction_template=E5_INSTRUCTION,
+        attn="cccc",
+        pooling_method="lasttoken",
+        mode="embedding",
+        torch_dtype=torch.bfloat16,
+        # The ST script does not normalize while the HF one does so unclear what to do
+        # https://huggingface.co/intfloat/e5-mistral-7b-instruct#transformers
+        normalized=True,
+    ),
+    name="zeta-alpha-ai/Zeta-Alpha-E5-Mistral",
+    revision="c791d37474fa6a5c72eb3a2522be346bc21fbfc3",
+    release_date="2024-08-30",
+    languages=["eng_Latn"],
+    n_parameters=7110660096,
+    max_tokens=32768.0,
+    embed_dim=4096,
+    license="mit",
+    open_weights=True,
+    public_training_data=None,
+    public_training_code=None,
+    framework=["PyTorch"],
+    reference="https://huggingface.co/zeta-alpha-ai/Zeta-Alpha-E5-Mistral",
+    similarity_fn_name="cosine",
+    use_instructions=True,
+    training_datasets={
+        # copied from e5
+        # source: https://arxiv.org/pdf/2212.03533
+        "NQ": ["test"],
+        "NQHardNegatives": ["test"],
+        "MSMARCO": ["train"],  # dev?
+        # source: https://www.zeta-alpha.com/post/fine-tuning-an-llm-for-state-of-the-art-retrieval-zeta-alpha-s-top-10-submission-to-the-the-mteb-be
+        # "Arguana",
+        # "FEVER",
+        # "FIQA",
+        # "HotPotQA",
+        # "MsMarco (passage)",
+        # "NFCorpus",
+        # "SciFact",
+        # "NLI",
+        # "SQuad",
+        # "StackExchange",
+        # "TriviaQA",
+        # "SciRep",
+        # "SciRepEval"
+        # mteb
+        # https://huggingface.co/datasets/mteb/raw_arxiv
+        # "ArxivClusteringS2S": ["train"],
+        # "ArxivClusteringP2P": ["train"],
+        # https://huggingface.co/datasets/mteb/raw_biorxiv
+        # "BiorxivClusteringS2S": ["train"],
+        # "BiorxivClusteringP2P": ["train"],
+        # https://huggingface.co/datasets/mteb/raw_medrxiv
+        # "MedrxivClusteringS2S": ["train"],
+        # "MedrxivClusteringP2P": ["train"],
+        # as their train datasets
+        "AmazonCounterfactualClassification": ["train"],
+        "AmazonReviewsClassification": ["train"],
+        "Banking77Classification": ["train"],
+        "EmotionClassification": ["train"],
+        "MTOPIntentClassification": ["train"],
+        "ToxicConversationsClassification": ["train"],
+        "TweetSentimentExtractionClassification": ["train"],
+        "ImdbClassification": ["train"],
+        "STS12": ["train"],
+        "STS22": ["train"],
+        "STSBenchmark": ["train"],
+    },
+    adapted_from="intfloat/e5-mistral-7b-instruct",
+    superseded_by=None,
 )

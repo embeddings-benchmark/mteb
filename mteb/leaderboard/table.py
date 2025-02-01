@@ -142,6 +142,11 @@ def scores_to_tables(
         names = per_task.index.get_level_values("model_name")
         names = pd.Series(names, index=per_task.index)
         to_remove |= ~names.str.contains(search_query, regex=True)
+    if to_remove.all():
+        no_results_frame = pd.DataFrame(
+            {"No results": ["You can try relaxing your criteria"]}
+        )
+        return gr.DataFrame(no_results_frame), gr.DataFrame(no_results_frame)
     models_to_remove = list(per_task[to_remove].index)
     typed_mean = mean_per_type.mean(skipna=False, axis=1)
     overall_mean = per_task.mean(skipna=False, axis=1)

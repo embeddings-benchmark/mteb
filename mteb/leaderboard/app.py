@@ -5,6 +5,7 @@ import json
 import logging
 import tempfile
 import time
+import typing
 from pathlib import Path
 from typing import Literal
 from urllib.parse import urlencode
@@ -14,21 +15,22 @@ import pandas as pd
 from gradio_rangeslider import RangeSlider
 
 import mteb
+from mteb.abstasks.TaskMetadata import TASK_TYPE
 from mteb.caching import json_cache
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
 from mteb.leaderboard.table import scores_to_tables
 
 logger = logging.getLogger(__name__)
 
+ALL_MODELS = {meta.name for meta in mteb.get_model_metas()}
+
 
 def load_results():
     results_cache_path = Path(__file__).parent.joinpath("__cached_results.json")
     if not results_cache_path.exists():
-        all_results = (
-            mteb.load_results(only_main_score=True, require_model_meta=False)
-            .join_revisions()
-            .filter_models()
-        )
+        all_results = mteb.load_results(
+            only_main_score=True, require_model_meta=False, models=ALL_MODELS
+        ).filter_models()
         all_results.to_disk(results_cache_path)
         return all_results
     else:
@@ -168,7 +170,7 @@ all_results = load_results()
 
 benchmarks = mteb.get_benchmarks()
 all_benchmark_results = {
-    benchmark.name: benchmark.load_results(base_results=all_results)
+    benchmark.name: benchmark.load_results(base_results=all_results).join_revisions()
     for benchmark in benchmarks
 }
 default_benchmark = mteb.get_benchmark(DEFAULT_BENCHMARK_NAME)
@@ -206,7 +208,7 @@ lang_select = gr.Dropdown(
 )
 type_select = gr.Dropdown(
     all_results.task_types,
-    value=sorted(default_results.task_types),
+    value=sorted(typing.get_args(TASK_TYPE)),
     multiselect=True,
     label="Task Type",
     info="Select task types to include.",
@@ -232,6 +234,12 @@ head = """
 """
 
 with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
+    gr.Markdown("""
+    ## MMTEB: Massive Multilingual Text Embedding Benchmark
+
+    The MMTEB leaderboard compares text embedding models on 1000+ languages. Check out the [paper](https://openreview.net/pdf?id=zl3pfz4VCV) for details on datasets, languages and tasks. And you can contribute! 🤗 To add a model, please refer to the documentation in the [GitHub repository](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_model.md). Also check out [MTEB Arena](https://huggingface.co/spaces/mteb/arena) ⚔️
+    """)
+
     with gr.Row():
         with gr.Column(scale=5):
             gr.Markdown(
@@ -263,7 +271,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                 with gr.Row():
                     searchbar = gr.Textbox(
                         label="Search Models",
-                        info="Search models by name (RegEx sensitive. Separate queries with `|`)",
+                        info="Press Enter to search.\nSearch models by name (RegEx sensitive. Separate queries with `|`)",
                         interactive=True,
                     )
                     compatibility = gr.CheckboxGroup(
@@ -626,7 +634,7 @@ Based on community feedback and research findings, This definition could change 
         inputs=[scores, searchbar, task_select, models],
         outputs=[summary_table, per_task_table],
     )
-    searchbar.input(
+    searchbar.submit(
         update_tables,
         inputs=[scores, searchbar, task_select, models],
         outputs=[summary_table, per_task_table],
