@@ -421,13 +421,12 @@ SEB = Benchmark(
     ),
     description="A curated selection of tasks coverering the Scandinavian languages; Danish, Swedish and Norwegian, including Bokmål and Nynorsk.",
     reference="https://kennethenevoldsen.github.io/scandinavian-embedding-benchmark/",
-    citation="""@misc{enevoldsen2024scandinavian,
-      title={The Scandinavian Embedding Benchmarks: Comprehensive Assessment of Multilingual and Monolingual Text Embedding}, 
-      author={Kenneth Enevoldsen and Márton Kardos and Niklas Muennighoff and Kristoffer Laigaard Nielbo},
-      year={2024},
-      eprint={2406.02396},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+    citation="""@inproceedings{enevoldsen2024scandinavian,
+  title={The Scandinavian Embedding Benchmarks: Comprehensive Assessment of Multilingual and Monolingual Text Embedding},
+  author={Enevoldsen, Kenneth and Kardos, M{\'a}rton and Muennighoff, Niklas and Nielbo, Kristoffer},
+  booktitle={Advances in Neural Information Processing Systems},
+  year={2024},
+  url={https://nips.cc/virtual/2024/poster/97869}
 }""",
     contacts=["KennethEnevoldsen", "x-tabdeveloping", "Samoed"],
 )
