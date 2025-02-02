@@ -93,6 +93,25 @@ bge_chinese_training_data = {
     "CMedQAv2-reranking": ["train"],
     "Cmnli": ["train"],
     "Ocnli": ["train"],
+    # from https://github.com/FlagOpen/FlagEmbedding/blob/1.1/FlagEmbedding/baai_general_embedding/README.md
+    "MSMARCO": ["train"],
+    "MSMARCOHardNegatives": ["train"],
+    "NanoMSMARCORetrieval": ["train"],
+    "MSMARCO-PL": ["train"],  # translation not trained on
+    "NQ": ["test"],
+    "NQHardNegatives": ["test"],
+    "HotpotQA": ["train"],
+    "HotpotQA-PL": ["train"],  # translation not trained on
+    "HotpotQAHardNegatives": ["train"],
+    "QuoraRetrieval": ["train"],
+    "QuoraRetrievalHardNegatives": ["train"],
+    "Quora-PLHardNegatives": ["train"],
+    "QuoraRetrieval-Fa": ["train"],
+    "Quora-PL": ["train"],
+    # "StackExchangeClusteringP2P": ["test"],
+    # "StackExchangeClusteringP2P.v2": ["test"],
+    # "StackExchangeClustering": ["test"],
+    # "StackExchangeClustering.v2": ["test"],
     # not in mteb
     #  - multi-cpr
     #  - NLI-zh
@@ -106,7 +125,7 @@ bge_chinese_training_data = {
     # wiki_atomic_edits	(base_sentence, edited_sentence)
     # mlqa	(question, context)
     # xlsum	(title, summary) (title, text)
-    # "sentence-transformers data": [],  # https://huggingface.co/datasets/sentence-transformers/embedding-training-data # TODO check this further
+    # s2orc
     # "wikipedia": [],  # title + section title, passage
     # "reddit": [],  # title, body
     # "stackexchange": [],  # (title, upvoted answer) (title+body, upvoted answer)
@@ -365,6 +384,82 @@ bge_large_en_v1_5 = ModelMeta(
     public_training_data="https://data.baai.ac.cn/details/BAAI-MTP",
     training_datasets=bge_training_data,
 )
+
+bge_small_zh = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="BAAI/bge-small-zh",
+        revision="1d2363c5de6ce9ba9c890c8e23a4c72dce540ca8",
+        model_prompts=model_prompts_zh,
+    ),
+    name="BAAI/bge-small-zh",
+    languages=["zho_Hans"],
+    open_weights=True,
+    revision="1d2363c5de6ce9ba9c890c8e23a4c72dce540ca8",
+    release_date="2023-08-05",  # initial commit of hf model.
+    n_parameters=24_000_000,
+    embed_dim=512,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/BAAI/bge-small-zh",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=bge_chinese_training_data,
+)
+
+bge_base_zh = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="BAAI/bge-base-zh",
+        revision="0e5f83d4895db7955e4cb9ed37ab73f7ded339b6",
+        model_prompts=model_prompts_zh,
+    ),
+    name="BAAI/bge-base-zh",
+    languages=["zho_Hans"],
+    open_weights=True,
+    revision="0e5f83d4895db7955e4cb9ed37ab73f7ded339b6",
+    release_date="2023-08-05",  # initial commit of hf model.
+    n_parameters=438_000_000,
+    embed_dim=768,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/BAAI/bge-base-zh",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=bge_chinese_training_data,
+)
+
+bge_large_zh = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="BAAI/bge-large-zh",
+        revision="b5d9f5c027e87b6f0b6fa4b614f8f9cdc45ce0e8",
+        model_prompts=model_prompts_zh,
+    ),
+    name="BAAI/bge-large-zh",
+    languages=["zho_Hans"],
+    open_weights=True,
+    revision="b5d9f5c027e87b6f0b6fa4b614f8f9cdc45ce0e8",
+    release_date="2023-08-02",  # initial commit of hf model.
+    n_parameters=1_340_000_000,
+    embed_dim=1024,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/BAAI/bge-large-zh",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=bge_chinese_training_data,
+)
+
 
 bge_small_zh_v1_5 = ModelMeta(
     loader=partial(  # type: ignore
