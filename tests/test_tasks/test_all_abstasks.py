@@ -8,13 +8,12 @@ import aiohttp
 import pytest
 
 import mteb
-from mteb.abstasks import AbsTask, MultilingualTask
+from mteb.abstasks import AbsTask
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.AbsTaskSpeedTask import AbsTaskSpeedTask
-from mteb.overview import TASKS_REGISTRY, get_tasks
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
-from mteb.overview import TASKS_REGISTRY
+from mteb.overview import TASKS_REGISTRY, get_tasks
 
 from ..test_benchmark.task_grid import MOCK_TASK_TEST_GRID_AS_STRING
 

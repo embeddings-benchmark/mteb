@@ -6,6 +6,8 @@ from .AlphaNLIRetrieval import AlphaNLI
 from .ARCChallengeRetrieval import ARCChallenge
 from .ArguAnaRetrieval import ArguAna
 from .BrightRetrieval import BrightRetrieval
+from .ChemHotpotQARetrieval import ChemHotpotQARetrieval
+from .ChemNQRetrieval import ChemNQRetrieval
 from .ClimateFEVERRetrieval import ClimateFEVER, ClimateFEVERHardNegatives
 from .CQADupstackAndroidRetrieval import CQADupstackAndroidRetrieval
 from .CQADupstackEnglishRetrieval import CQADupstackEnglishRetrieval
@@ -105,6 +107,7 @@ __all__ = [
     "TempReasonL2Context",
     "NanoDBPediaRetrieval",
     "ARCChallenge",
+    "ChemHotpotQARetrieval",
     "LegalBenchCorporateLobbying",
     "SCIDOCS",
     "MedicalQARetrieval",
@@ -162,6 +165,7 @@ __all__ = [
     "NanoSCIDOCSRetrieval",
     "AILACasedocs",
     "NFCorpus",
+    "ChemNQRetrieval",
     "LEMBSummScreenFDRetrieval",
     "LEMBNarrativeQARetrieval",
     "CQADupstackProgrammersRetrieval",
