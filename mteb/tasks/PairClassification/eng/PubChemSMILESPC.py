@@ -111,7 +111,7 @@ class PubChemSMILESPC(AbsTaskPairClassification):
         self.dataset = self.stratified_subsampling(
             self.dataset,
             seed=self.seed,
-            splits=self.metadata["eval_splits"],
+            splits=self.metadata.eval_splits,
             label="labels",
         )
 
