@@ -233,9 +233,9 @@ class AbsTask(ABC):
                 self.fast_load()
             else:
                 self.dataset = {}
-                for lang in self.hf_subsets:
-                    self.dataset[lang] = datasets.load_dataset(
-                        name=lang,
+                for hf_subset in self.hf_subsets:
+                    self.dataset[hf_subset] = datasets.load_dataset(
+                        name= hf_subset,
                         **self.metadata.dataset,
                     )
         else:
