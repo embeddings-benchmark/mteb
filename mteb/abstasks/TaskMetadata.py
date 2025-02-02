@@ -71,6 +71,8 @@ TASK_DOMAIN = Literal[
     "Web",
     "Written",
     "Programming",
+    "Chemistry",
+    "Financial",
 ]
 
 SAMPLE_CREATION_METHOD = Literal[
@@ -82,6 +84,7 @@ SAMPLE_CREATION_METHOD = Literal[
     "machine-translated and verified",
     "machine-translated and localized",
     "LM-generated and verified",
+    "multiple",
 ]
 
 TASK_TYPE = Literal[
@@ -98,6 +101,7 @@ TASK_TYPE = Literal[
     "InstructionReranking",
     "Speed",
 ]
+
 
 TASK_CATEGORY = Literal[
     "s2s",  # Sentence-to-sentence
@@ -171,9 +175,11 @@ LICENSES = (  # this list can be extended as needed
         "lgpl-3.0",
         "cdla-sharing-1.0",
         "mpl-2.0",
+        "msr-la-nc",
+        "multiple",
     ]
 )
-
+MODALITIES = Literal["text"]
 METRIC_NAME = str
 METRIC_VALUE = Union[int, float, dict[str, Any]]
 
@@ -220,7 +226,7 @@ class MetadataDatasetDict(TypedDict, total=False):
 class TaskMetadata(BaseModel):
     """Metadata for a task.
 
-    Attributes:
+    Args:
         dataset: All arguments to pass to [datasets.load_dataset](https://huggingface.co/docs/datasets/v2.18.0/en/package_reference/loading_methods#datasets.load_dataset) to load the dataset for the task.
         name: The name of the task.
         description: A description of the task.
@@ -256,7 +262,7 @@ class TaskMetadata(BaseModel):
     description: str
     prompt: str | PromptDict | None = None
     type: TASK_TYPE
-    modalities: list[Literal["text"]] = ["text"]
+    modalities: list[MODALITIES] = ["text"]
     category: TASK_CATEGORY | None = None
     reference: STR_URL | None = None
 
@@ -358,6 +364,15 @@ class TaskMetadata(BaseModel):
             )
 
     @property
+    def bcp47_codes(self) -> list[ISO_LANGUAGE_SCRIPT]:
+        """Return the languages and script codes of the dataset formatting in accordance with the BCP-47 standard."""
+        if isinstance(self.eval_langs, dict):
+            return sorted(
+                {lang for langs in self.eval_langs.values() for lang in langs}
+            )
+        return sorted(set(self.eval_langs))
+
+    @property
     def languages(self) -> list[str]:
         """Return the languages of the dataset as iso639-3 codes."""
 
@@ -443,8 +458,12 @@ class TaskMetadata(BaseModel):
         for subset, subset_value in stats.items():
             if subset == "hf_subset_descriptive_stats":
                 continue
-            n_samples[subset] = subset_value["num_samples"]
+            n_samples[subset] = subset_value["num_samples"]  # type: ignore
         return n_samples
 
     def __hash__(self) -> int:
         return hash(self.model_dump_json())
+
+    @property
+    def revision(self) -> str:
+        return self.dataset["revision"]

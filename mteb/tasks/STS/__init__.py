@@ -1,72 +1,32 @@
 from __future__ import annotations
 
-from .deu import GermanSTSBenchmarkSTS
-from .eng import (
-    STS12STS,
-    STS13STS,
-    STS14STS,
-    STS15STS,
-    STS16STS,
-    BiossesSTS,
-    SickrSTS,
-    STSBenchmarkSTS,
-)
-from .fao import FaroeseSTS
-from .fin import FinParaSTS
-from .fra import SickFrSTS
-from .jpn import JSICK, JSTS
-from .kor import KlueSTS, KorSTS
-from .multilingual import (
-    IndicCrosslingualSTS,
-    SemRel24STS,
-    STS17Crosslingual,
-    STS22CrosslingualSTS,
-    STS22CrosslingualSTSv2,
-    STSBenchmarkMultilingualSTS,
-)
-from .pol import CdscrSTS, SickrPLSTS
-from .por import Assin2STS, SickBrSTS
-from .ron import RonSTS
-from .rus import RUParaPhraserSTS, RuSTSBenchmarkSTS
-from .spa import STSES
-from .zho import AFQMC, ATEC, BQ, LCQMC, PAWSX, QBQTC, STSB
-
-__all__ = [
-    "AFQMC",
-    "ATEC",
-    "BQ",
-    "LCQMC",
-    "PAWSX",
-    "QBQTC",
-    "STSB",
-    "Assin2STS",
-    "SickBrSTS",
-    "STSES",
-    "CdscrSTS",
-    "SickrPLSTS",
-    "FinParaSTS",
-    "GermanSTSBenchmarkSTS",
-    "STS12STS",
-    "STS13STS",
-    "BiossesSTS",
-    "STS15STS",
-    "STSBenchmarkSTS",
-    "SickrSTS",
-    "STS16STS",
-    "STS14STS",
-    "FaroeseSTS",
-    "JSICK",
-    "JSTS",
-    "RonSTS",
-    "KorSTS",
-    "KlueSTS",
-    "IndicCrosslingualSTS",
-    "SemRel24STS",
-    "STS17Crosslingual",
-    "STS22CrosslingualSTS",
-    "STS22CrosslingualSTSv2",
-    "STSBenchmarkMultilingualSTS",
-    "RUParaPhraserSTS",
-    "RuSTSBenchmarkSTS",
-    "SickFrSTS",
-]
+from .deu.GermanSTSBenchmarkSTS import *
+from .eng.BiossesSTS import *
+from .eng.SickrSTS import *
+from .eng.STS12STS import *
+from .eng.STS13STS import *
+from .eng.STS14STS import *
+from .eng.STS15STS import *
+from .eng.STS16STS import *
+from .eng.STSBenchmarkSTS import *
+from .fao.FaroeseSTS import *
+from .fas.FaMTEBSTS import *
+from .fin.FinParaSTS import *
+from .fra.SickFrSTS import *
+from .jpn.JSICK import *
+from .jpn.JSTS import *
+from .kor.KlueSTS import *
+from .kor.KorSTS import *
+from .multilingual.IndicCrosslingualSTS import *
+from .multilingual.SemRel24STS import *
+from .multilingual.STS17CrosslingualSTS import *
+from .multilingual.STS22CrosslingualSTS import *
+from .multilingual.STSBenchmarkMultilingualSTS import *
+from .pol.PolishSTS import *
+from .por.Assin2STS import *
+from .por.SickBrSTS import *
+from .ron.RonSTS import *
+from .rus.RUParaPhraserSTS import *
+from .rus.RuSTSBenchmarkSTS import *
+from .spa.STSES import *
+from .zho.CMTEBSTS import *

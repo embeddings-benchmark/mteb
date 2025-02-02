@@ -13,6 +13,8 @@ from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.AbsTaskSpeedTask import AbsTaskSpeedTask
 from mteb.overview import TASKS_REGISTRY, get_tasks
+from mteb.abstasks.aggregated_task import AbsTaskAggregate
+from mteb.overview import TASKS_REGISTRY
 
 from ..test_benchmark.task_grid import MOCK_TASK_TEST_GRID_AS_STRING
 
@@ -32,7 +34,6 @@ def test_load_data(
         isinstance(task, AbsTaskRetrieval)
         or isinstance(task, AbsTaskReranking)
         or isinstance(task, AbsTaskSpeedTask)
-        or isinstance(task, MultilingualTask)
     ):
         pytest.skip()
     with patch.object(task, "dataset_transform") as mock_dataset_transform:
@@ -82,6 +83,8 @@ async def check_datasets_are_available_on_hf(tasks):
 def test_dataset_availability():
     """Checks if the datasets are available on Hugging Face using both their name and revision."""
     tasks = get_tasks()
+    # do not check aggregated tasks as they don't have a dataset
+    tasks = [t for t in tasks if not isinstance(t, AbsTaskAggregate)]
     tasks = [
         t
         for t in tasks

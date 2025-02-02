@@ -13,6 +13,7 @@ from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import (
     arctic_models,
+    bedrock_models,
     bge_models,
     bm25,
     cde_models,
@@ -100,6 +101,7 @@ model_modules = [
     uae_models,
     text2vec_models,
     stella_models,
+    bedrock_models,
     uae_models,
     voyage_models,
 ]

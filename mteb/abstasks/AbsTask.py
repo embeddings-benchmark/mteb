@@ -83,7 +83,7 @@ class AbsTask(ABC):
     dataset: dict[HFSubset, DatasetDict] | None = None  # type: ignore
     data_loaded: bool = False
     is_multilingual: bool = False
-    hf_subsets: list[HFSubset] | None = None
+    hf_subsets: list[HFSubset]
 
     def __init__(self, seed: int = 42, **kwargs: Any):
         """The init function. This is called primarily to set the seed.
@@ -94,6 +94,7 @@ class AbsTask(ABC):
         """
         self.save_suffix = kwargs.get("save_suffix", "")
 
+        self.hf_subsets = list(self.metadata.hf_subsets_to_langscripts.keys())
         self.seed = seed
         self.rng_state, self.np_rng = set_seed(seed)
 

@@ -1,51 +1,25 @@
 from __future__ import annotations
 
-from .dan import BornholmBitextMining
-from .kat import TbilisiCityHallBitextMining
-from .multilingual import (
-    BibleNLPBitextMining,
-    BUCCBitextMining,
-    BUCCBitextMiningFast,
-    DiaBLaBitextMining,
-    FloresBitextMining,
-    IN22ConvBitextMining,
-    IN22GenBitextMining,
-    IndicGenBenchFloresBitextMining,
-    IWSLT2017BitextMining,
-    LinceMTBitextMining,
-    NollySentiBitextMining,
-    NorwegianCourtsBitextMining,
-    NTREXBitextMining,
-    NusaTranslationBitextMining,
-    NusaXBitextMining,
-    PhincBitextMining,
-    RomaTalesBitextMining,
-    TatoebaBitextMining,
-)
-from .srn import SRNCorpusBitextMining
-from .vie import VieMedEVBitextMining
-
-__all__ = [
-    "TbilisiCityHallBitextMining",
-    "VieMedEVBitextMining",
-    "BornholmBitextMining",
-    "SRNCorpusBitextMining",
-    "IN22ConvBitextMining",
-    "IN22GenBitextMining",
-    "BUCCBitextMining",
-    "LinceMTBitextMining",
-    "NusaTranslationBitextMining",
-    "DiaBLaBitextMining",
-    "NTREXBitextMining",
-    "IndicGenBenchFloresBitextMining",
-    "NollySentiBitextMining",
-    "BUCCBitextMiningFast",
-    "PhincBitextMining",
-    "TatoebaBitextMining",
-    "NusaXBitextMining",
-    "IWSLT2017BitextMining",
-    "BibleNLPBitextMining",
-    "FloresBitextMining",
-    "RomaTalesBitextMining",
-    "NorwegianCourtsBitextMining",
-]
+from .dan.BornholmskBitextMining import *
+from .eng.PubChemSMILESBitextMining import *
+from .kat.TbilisiCityHallBitextMining import *
+from .multilingual.BibleNLPBitextMining import *
+from .multilingual.BUCCBitextMining import *
+from .multilingual.BUCCBitextMiningFast import *
+from .multilingual.DiaBLaBitextMining import *
+from .multilingual.FloresBitextMining import *
+from .multilingual.IN22ConvBitextMining import *
+from .multilingual.IN22GenBitextMining import *
+from .multilingual.IndicGenBenchFloresBitextMining import *
+from .multilingual.IWSLT2017BitextMining import *
+from .multilingual.LinceMTBitextMining import *
+from .multilingual.NollySentiBitextMining import *
+from .multilingual.NorwegianCourtsBitextMining import *
+from .multilingual.NTREXBitextMining import *
+from .multilingual.NusaTranslationBitextMining import *
+from .multilingual.NusaXBitextMining import *
+from .multilingual.PhincBitextMining import *
+from .multilingual.RomaTalesBitextMining import *
+from .multilingual.TatoebaBitextMining import *
+from .srn.SRNCorpusBitextMining import *
+from .vie.VieMedEVBitextMining import *
