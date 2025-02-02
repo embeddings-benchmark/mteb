@@ -22,6 +22,25 @@ from mteb.leaderboard.table import scores_to_tables
 
 logger = logging.getLogger(__name__)
 
+acknowledgment_md = """
+### Acknowledgment
+We thank [ServiceNow](https://www.servicenow.com/), [Contextual AI](https://contextual.ai/) and [Hugging Face](https://huggingface.co/) for their generous sponsorship. If you'd like to sponsor us, please get in [touch](mailto:n.muennighoff@gmail.com).
+
+<div class="sponsor-image-about" style="display: flex; align-items: center; gap: 10px;">
+    <a href="https://www.servicenow.com/">
+        <img src="https://play-lh.googleusercontent.com/HdfHZ5jnfMM1Ep7XpPaVdFIVSRx82wKlRC_qmnHx9H1E4aWNp4WKoOcH0x95NAnuYg" width="60" height="55" style="padding: 10px;">
+    </a>
+    <a href="https://contextual.ai/">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQd4EDMoZLFRrIjVBrSXOQYGcmvUJ3kL4U2usvjuKPla-LoRTZtLzFnb_Cu5tXzRI7DNBo&usqp=CAU" width="60" height="55" style="padding: 10px;">
+    </a>
+    <a href="https://huggingface.co">
+        <img src="https://raw.githubusercontent.com/embeddings-benchmark/mteb/main/docs/images/hf_logo.png" width="60" height="55" style="padding: 10px;">
+    </a>
+</div>
+
+We also thank the following companies which provide API credits to evaluate their models: [OpenAI](https://openai.com/), [Voyage AI](https://www.voyageai.com/)
+"""
+
 ALL_MODELS = {meta.name for meta in mteb.get_model_metas()}
 
 
@@ -640,6 +659,7 @@ Based on community feedback and research findings, This definition could change 
         outputs=[summary_table, per_task_table],
     )
 
+    gr.Markdown(acknowledgment_md, elem_id="ack_markdown")
 
 if __name__ == "__main__":
     demo.launch()
