@@ -9,7 +9,7 @@ from .ClassificationEvaluator import (
 )
 from .ClusteringEvaluator import ClusteringEvaluator
 from .Evaluator import Evaluator
-from .model_classes import DenseRetrievalExactSearch, DRESModel, corpus_to_str
+from .model_classes import DenseRetrievalExactSearch, corpus_to_str
 from .PairClassificationEvaluator import PairClassificationEvaluator
 from .RetrievalEvaluator import RetrievalEvaluator
 from .STSEvaluator import STSEvaluator
@@ -24,7 +24,6 @@ __all__ = [
     "SummarizationEvaluator",
     "DeprecatedSummarizationEvaluator",
     "RetrievalEvaluator",
-    "DRESModel",
     "DenseRetrievalExactSearch",
     "ClusteringEvaluator",
     "BitextMiningEvaluator",

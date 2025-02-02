@@ -10,10 +10,8 @@ from typing import Any
 import numpy as np
 import torch
 import tqdm
-from sentence_transformers import SentenceTransformer
 
 from mteb.encoder_interface import Encoder, PromptType
-from mteb.model_meta import ModelMeta
 
 from .utils import convert_conv_history_to_query, cos_sim, download
 
@@ -52,7 +50,6 @@ class DenseRetrievalExactSearch:
         previous_results: str | Path | None = None,
         **kwargs: Any,
     ):
-        # Model is class that provides encode_corpus() and encode_queries()
         self.model = model
         self.encode_kwargs = encode_kwargs.copy()
 
@@ -221,7 +218,7 @@ class DenseRetrievalExactSearch:
         doc_id_to_idx = {doc_id: idx for idx, doc_id in enumerate(unique_doc_ids)}
 
         # Encode unique documents only once
-        unique_docs = [corpus[doc_id] for doc_id in unique_doc_ids]
+        unique_docs = corpus_to_str([corpus[doc_id] for doc_id in unique_doc_ids])
         all_doc_embeddings = self.model.encode(
             unique_docs,
             task_name=task_name,
@@ -289,6 +286,7 @@ class DenseRetrievalExactSearch:
 
         # Clear CUDA cache after processing
         if device.type == "cuda":
+            del query_doc_embeddings
             torch.cuda.empty_cache()
 
         return result_heaps
@@ -296,7 +294,7 @@ class DenseRetrievalExactSearch:
     def _full_corpus_search(
         self,
         query_ids: list[str],
-        query_embeddings: torch.Tensor,
+        query_embeddings: np.ndarray,
         corpus: dict[str, dict[str, str]],
         top_k: int,
         task_name: str,
@@ -309,7 +307,7 @@ class DenseRetrievalExactSearch:
 
         logger.info("Sorting Corpus by document length (Longest first)...")
         corpus_ids = sorted(corpus, reverse=True)
-        corpus = [corpus[cid] for cid in corpus_ids]
+        corpus = corpus_to_str([corpus[cid] for cid in corpus_ids])
 
         logger.info("Encoding Corpus in batches... Warning: This might take a while!")
         itr = range(0, len(corpus), self.corpus_chunk_size)
@@ -327,18 +325,18 @@ class DenseRetrievalExactSearch:
                 **self.encode_kwargs,
             )
 
-            # Compute similarites using either cosine-similarity or dot product
+            # Compute similarities using either cosine-similarity or dot product
             logging.info("Computing Similarities...")
             query_embeddings = torch.as_tensor(query_embeddings).to(device)
             sub_corpus_embeddings = torch.as_tensor(sub_corpus_embeddings).to(device)
 
-            if hasattr(self.model.model, "mteb_model_meta") or hasattr(
+            if hasattr(self.model, "mteb_model_meta") or hasattr(
                 self.model, "similarity"
             ):
                 score_function = (
                     self.model.similarity
                     if hasattr(self.model, "similarity")
-                    else self.model.model.mteb_model_meta.get_similarity_function()
+                    else self.model.mteb_model_meta.get_similarity_function()
                 )
             else:
                 logger.warning(
@@ -397,8 +395,15 @@ class DenseRetrievalExactSearch:
 
         with open(self.previous_results) as f:
             previous_results = json.load(f)
-        assert isinstance(previous_results, dict)
-        assert isinstance(previous_results[list(previous_results.keys())[0]], dict)
+
+        if not isinstance(previous_results, dict) or not isinstance(
+            previous_results[list(previous_results.keys())[0]], dict
+        ):
+            raise ValueError(
+                "Previous results file must be in format {qid: {doc_id: score}}. Got "
+                + type(previous_results)
+            )
+
         return previous_results
 
     def search_cross_encoder(
@@ -446,11 +451,14 @@ class DenseRetrievalExactSearch:
                 )
 
         logger.info(f"Reranking the top {top_k} in batches... This might take a while!")
-        itr = range(0, len(pairs), self.batch_size)
 
         results = {qid: {} for qid in queries.keys()}
         for batch_num, corpus_start_idx in enumerate(
-            tqdm.tqdm(itr, leave=False, disable=not self.show_progress_bar)
+            tqdm.tqdm(
+                range(0, len(pairs), self.batch_size),
+                leave=False,
+                disable=not self.show_progress_bar,
+            )
         ):
             corpus_end_idx = min(corpus_start_idx + self.batch_size, len(pairs))
             cur_batch = pairs[corpus_start_idx:corpus_end_idx]
@@ -463,9 +471,12 @@ class DenseRetrievalExactSearch:
                 corpus_ids,
             ) = zip(*cur_batch)
 
-            assert (
+            if not (
                 len(queries_in_pair) == len(corpus_in_pair) == len(instructions_in_pair)
-            )
+            ):
+                raise ValueError(
+                    "Queries, corpus, and instructions must be the same length"
+                )
 
             # cross-encoders may use the instructions in a unique way
             # due to the many ways of combining query+instruct+doc, so let them decide
@@ -509,49 +520,6 @@ class DenseRetrievalExactSearch:
         if callable(getattr(model, "convert_conv_history_to_query", None)):
             return model.convert_conv_history_to_query(conversations)  # type: ignore
         return convert_conv_history_to_query(conversations)  # type: ignore
-
-
-class DRESModel:
-    """Dense Retrieval Exact Search (DRES).
-    This class converts a model with just an .encode method into DRES format.
-    """
-
-    mteb_model_meta: ModelMeta | None
-
-    def __init__(self, model, **kwargs):
-        self.model = model
-        self.use_sbert_model = isinstance(model, SentenceTransformer)
-
-    def encode_corpus(
-        self,
-        corpus: list[dict[str, str]],
-        task_name: str,
-        prompt_type: PromptType = PromptType.passage,
-        **kwargs,
-    ):
-        sentences = corpus_to_str(corpus)
-        corpus_embeddings = self.model.encode(
-            sentences,
-            task_name=task_name,
-            prompt_type=prompt_type,
-            **kwargs,
-        )
-        return corpus_embeddings
-
-    def encode(
-        self,
-        sentences: list[str],
-        task_name: str,
-        prompt_type: PromptType | None = None,
-        **kwargs,
-    ):
-        if prompt_type and prompt_type == PromptType.passage:
-            return self.encode_corpus(
-                sentences, task_name, prompt_type=prompt_type, **kwargs
-            )
-        return self.model.encode(
-            sentences, task_name=task_name, prompt_type=prompt_type, **kwargs
-        )
 
 
 def is_cross_encoder_compatible(model) -> bool:
