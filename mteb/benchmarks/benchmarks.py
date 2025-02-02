@@ -1165,6 +1165,39 @@ CODE_RAG = Benchmark(
     }""",
 )
 
+
+BEIR = Benchmark(
+    name="BEIR",
+    tasks=get_tasks(
+        tasks=[
+            "TRECCOVID",
+            "NFCorpus",
+            "NQ",
+            "HotpotQA",
+            "FiQA2018",
+            "ArguAna",
+            "Touche2020",
+            "CQADupstackRetrieval",
+            "QuoraRetrieval",
+            "DBPedia",
+            "SCIDOCS",
+            "FEVER",
+            "ClimateFEVER",
+            "SciFact",
+        ],
+    )
+    + get_tasks(tasks=["MSMARCO"], languages=["eng"], eval_splits=["dev"]),
+    description="BEIR is a heterogeneous benchmark containing diverse IR tasks. It also provides a common and easy framework for evaluation of your NLP-based retrieval models within the benchmark.",
+    reference="https://arxiv.org/abs/2104.08663",
+    citation="""@article{thakur2021beir,
+  title={Beir: A heterogenous benchmark for zero-shot evaluation of information retrieval models},
+  author={Thakur, Nandan and Reimers, Nils and R{\"u}ckl{\'e}, Andreas and Srivastava, Abhishek and Gurevych, Iryna},
+  journal={arXiv preprint arXiv:2104.08663},
+  year={2021}
+}
+""",
+)
+
 NANOBEIR = Benchmark(
     name="NanoBEIR",
     tasks=get_tasks(
