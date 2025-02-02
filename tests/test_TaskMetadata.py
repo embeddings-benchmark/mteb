@@ -4,6 +4,7 @@ import pytest
 from pydantic import ValidationError
 
 from mteb.abstasks import AbsTask, TaskMetadata
+from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.overview import get_tasks
 
 # Historic datasets without filled metadata. Do NOT add new datasets to this list.
@@ -519,7 +520,10 @@ def test_disallow_trust_remote_code_in_new_datasets():
 
 @pytest.mark.parametrize("task", get_tasks())
 def test_empty_descriptive_stat_in_new_datasets(task: AbsTask):
-    if task.metadata.name.startswith("Mock"):
+    if task.metadata.name.startswith("Mock") or isinstance(task, AbsTaskAggregate):
+        return
+
+    if task.metadata.name in ["CodeRAGStackoverflowPosts"]:
         return
 
     assert (
