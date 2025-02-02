@@ -33,7 +33,7 @@ def get_metadata(task_name):
         reference="https://github.com/sunnweiwei/MAIR",
         dataset={
             "path": "MAIR-Bench/MAIR-QD",
-            "revision": "d6f32a1d027b43e3c62097fff412b1aca18d9fe8",
+            "revision": "dad8aa74094cbc560b090a883977aa8db454a6cb",
         },
         type="Retrieval",
         category="s2p",
