@@ -46,9 +46,7 @@ class TurkicClassification(AbsTaskClassification):
             lambda example: example["lang"] == lang
             and label_count[example["label"]] >= 20
         )
-        dataset_lang = self.stratified_subsampling(
-            dataset_lang, seed=self.seed
-        )
+        dataset_lang = self.stratified_subsampling(dataset_lang, seed=self.seed)
         return dataset_lang
 
     def load_data(self, **kwargs):
