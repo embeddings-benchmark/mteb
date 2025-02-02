@@ -523,6 +523,7 @@ def test_empty_descriptive_stat_in_new_datasets(task: AbsTask):
     if task.metadata.name.startswith("Mock") or isinstance(task, AbsTaskAggregate):
         return
 
+    # TODO add descriptive_stat for CodeRAGStackoverflowPosts. Required > 128GB of RAM
     if task.metadata.name in ["CodeRAGStackoverflowPosts"]:
         return
 
