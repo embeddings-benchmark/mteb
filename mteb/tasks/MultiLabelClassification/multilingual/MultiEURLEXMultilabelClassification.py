@@ -3,13 +3,11 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskMultilabelClassification import (
     AbsTaskMultilabelClassification,
 )
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class MultiEURLEXMultilabelClassification(
-    MultilingualTask, AbsTaskMultilabelClassification
-):
+class MultiEURLEXMultilabelClassification(AbsTaskMultilabelClassification):
+    is_multilingual = True
     metadata = TaskMetadata(
         name="MultiEURLEXMultilabelClassification",
         dataset={

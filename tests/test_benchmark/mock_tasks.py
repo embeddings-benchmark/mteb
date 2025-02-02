@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks import MultilingualTask
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
@@ -744,9 +743,8 @@ class MockPairClassificationTask(AbsTaskPairClassification):
         self.data_loaded = True
 
 
-class MockMultilingualPairClassificationTask(
-    AbsTaskPairClassification, MultilingualTask
-):
+class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
+    is_multilingual = True
     expected_stats = {
         "test": {
             "num_samples": 4,
@@ -1756,9 +1754,8 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
         self.data_loaded = True
 
 
-class MockMultilingualMultilabelClassification(
-    AbsTaskMultilabelClassification, MultilingualTask
-):
+class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
+    is_multilingual = True
     expected_stats = {
         "test": {
             "num_samples": 12,

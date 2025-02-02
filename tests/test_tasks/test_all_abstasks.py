@@ -8,7 +8,7 @@ import aiohttp
 import pytest
 
 import mteb
-from mteb.abstasks import AbsTask, MultilingualTask
+from mteb.abstasks import AbsTask
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.AbsTaskSpeedTask import AbsTaskSpeedTask
@@ -32,7 +32,6 @@ def test_load_data(
         isinstance(task, AbsTaskRetrieval)
         or isinstance(task, AbsTaskReranking)
         or isinstance(task, AbsTaskSpeedTask)
-        or isinstance(task, MultilingualTask)
     ):
         pytest.skip()
     with patch.object(task, "dataset_transform") as mock_dataset_transform:

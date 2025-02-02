@@ -27,7 +27,6 @@ def find_task_classes_in_module(full_module_name):
             and issubclass(obj, AbsTask)
             and obj is not AbsTask
             and not obj.__name__.startswith("AbsTask")
-            and not obj.__name__ == "MultilingualTask"
         ):
             task_classes.append(name)
     return task_classes
