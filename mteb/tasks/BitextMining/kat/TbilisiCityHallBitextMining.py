@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datasets import DatasetDict, load_dataset
+import datasets
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.TaskMetadata import TaskMetadata
@@ -50,7 +50,7 @@ class TbilisiCityHallBitextMining(AbsTaskBitextMining):
 
         for lang in self.hf_subsets:
             l1, l2 = lang.split("-")
-            dataset = load_dataset(
+            dataset = datasets.load_dataset(
                 self.metadata.dataset["path"],
                 split=_EVAL_SPLIT,
                 cache_dir=kwargs.get("cache_dir", None),
@@ -59,6 +59,6 @@ class TbilisiCityHallBitextMining(AbsTaskBitextMining):
             dataset = dataset.rename_columns(
                 {_LANGUAGES[l1]: "sentence1", _LANGUAGES[l2]: "sentence2"}
             )
-            self.dataset[lang] = DatasetDict({_EVAL_SPLIT: dataset})
+            self.dataset[lang] = datasets.DatasetDict({_EVAL_SPLIT: dataset})
 
         self.data_loaded = True

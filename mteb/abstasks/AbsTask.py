@@ -235,10 +235,11 @@ class AbsTask(ABC):
                 self.dataset = {}
                 for hf_subset in self.hf_subsets:
                     self.dataset[hf_subset] = datasets.load_dataset(
-                        name= hf_subset,
+                        name=hf_subset,
                         **self.metadata.dataset,
                     )
         else:
+            # some of monolingual datasets explicitly adding the split name to the dataset name
             self.dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
         self.dataset_transform()
         self.data_loaded = True
