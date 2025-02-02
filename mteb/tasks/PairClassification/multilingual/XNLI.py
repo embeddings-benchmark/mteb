@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGS = {
@@ -22,7 +21,8 @@ _LANGS = {
 }
 
 
-class XNLI(MultilingualTask, AbsTaskPairClassification):
+class XNLI(AbsTaskPairClassification):
+    is_multilingual = True
     metadata = TaskMetadata(
         name="XNLI",
         dataset={
@@ -106,7 +106,8 @@ _LANGS_2 = {
 }
 
 
-class XNLIV2(MultilingualTask, AbsTaskPairClassification):
+class XNLIV2(AbsTaskPairClassification):
+    is_multilingual = True
     metadata = TaskMetadata(
         name="XNLIV2",
         dataset={

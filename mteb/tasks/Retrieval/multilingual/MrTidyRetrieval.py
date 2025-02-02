@@ -5,7 +5,6 @@ import logging
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _EVAL_LANGS = {
@@ -85,7 +84,8 @@ def _load_data_retrieval(
     return corpus, queries, relevant_docs
 
 
-class MrTidyRetrieval(MultilingualTask, AbsTaskRetrieval):
+class MrTidyRetrieval(AbsTaskRetrieval):
+    is_multilingual = True
     metadata = TaskMetadata(
         name="MrTidyRetrieval",
         description="Mr. TyDi is a multi-lingual benchmark dataset built on TyDi, covering eleven typologically diverse languages. It is designed for monolingual retrieval, specifically to evaluate ranking with learned dense representations.",

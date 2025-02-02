@@ -3,7 +3,6 @@ from __future__ import annotations
 from datasets import DatasetDict, load_dataset
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -18,7 +17,8 @@ _EVAL_LANGS = {
 _EVAL_SPLIT = "test"
 
 
-class TbilisiCityHallBitextMining(AbsTaskBitextMining, MultilingualTask):
+class TbilisiCityHallBitextMining(AbsTaskBitextMining):
+    is_multilingual = True
     metadata = TaskMetadata(
         name="TbilisiCityHallBitextMining",
         dataset={

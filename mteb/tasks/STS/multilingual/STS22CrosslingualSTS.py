@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -26,7 +25,8 @@ _LANGUAGES = {
 }
 
 
-class STS22CrosslingualSTSv2(AbsTaskSTS, MultilingualTask):
+class STS22CrosslingualSTSv2(AbsTaskSTS):
+    is_multilingual = True
     fast_loading = True
     metadata = TaskMetadata(
         name="STS22.v2",
@@ -83,7 +83,8 @@ class STS22CrosslingualSTSv2(AbsTaskSTS, MultilingualTask):
     max_score = 4
 
 
-class STS22CrosslingualSTS(AbsTaskSTS, MultilingualTask):
+class STS22CrosslingualSTS(AbsTaskSTS):
+    is_multilingual = True
     superseded_by = "STS22.v2"
     fast_loading = True
     metadata = TaskMetadata(

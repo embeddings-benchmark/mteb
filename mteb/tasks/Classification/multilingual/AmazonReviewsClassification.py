@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class AmazonReviewsClassification(MultilingualTask, AbsTaskClassification):
+class AmazonReviewsClassification(AbsTaskClassification):
+    is_multilingual = True
     metadata = TaskMetadata(
         name="AmazonReviewsClassification",
         dataset={

@@ -6,11 +6,11 @@ import datasets
 from datasets import DatasetDict
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class TurkicClassification(MultilingualTask, AbsTaskClassification):
+class TurkicClassification(AbsTaskClassification):
+    is_multilingual = True
     metadata = TaskMetadata(
         name="TurkicClassification",
         description="A dataset of news classification in three Turkic languages.",

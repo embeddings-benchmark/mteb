@@ -7,7 +7,6 @@ from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -28,7 +27,8 @@ _LANGUAGES = {
 }
 
 
-class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
+class WikiClusteringP2P(AbsTaskClustering):
+    is_multilingual = True
     superseded_by = "WikiClusteringP2P.v2"
     metadata = TaskMetadata(
         name="WikiClusteringP2P",
@@ -55,7 +55,8 @@ class WikiClusteringP2P(AbsTaskClustering, MultilingualTask):
     )
 
 
-class WikiClusteringFastP2P(AbsTaskClusteringFast, MultilingualTask):
+class WikiClusteringFastP2P(AbsTaskClusteringFast):
+    is_multilingual = True
     max_document_to_embed = 2048
     max_fraction_of_documents_to_embed = None
 

@@ -3,7 +3,6 @@ from __future__ import annotations
 from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGS = {
@@ -207,7 +206,8 @@ _LANGS = {
 }
 
 
-class SIB200ClusteringFast(MultilingualTask, AbsTaskClusteringFast):
+class SIB200ClusteringFast(AbsTaskClusteringFast):
+    is_multilingual = True
     max_document_to_embed = 1004
     max_fraction_of_documents_to_embed = None
 

@@ -74,6 +74,8 @@ class AbsTask(ABC):
         abstask_prompt: The potential prompt of the abstask
         superseded_by: Denotes the task that this task is superseeded by. Used to issue warning to users of outdated datasets, while maintaining
             reproducibility of existing benchmarks.
+        is_multilingual: Denotes if the task is multilingual. If True, the task will be evaluated on all languages in the metadata.eval_langs.
+        fast_loading: (Deprecated) Denotes if the task should be loaded using the fast loading method. This is only possible if the dataset have a "default" config
     """
 
     metadata: TaskMetadata
@@ -84,6 +86,7 @@ class AbsTask(ABC):
     data_loaded: bool = False
     is_multilingual: bool = False
     hf_subsets: list[HFSubset] | None = None
+    fast_loading: bool = False
 
     def __init__(self, seed: int = 42, **kwargs: Any):
         """The init function. This is called primarily to set the seed.
@@ -96,6 +99,7 @@ class AbsTask(ABC):
 
         self.seed = seed
         self.rng_state, self.np_rng = set_seed(seed)
+        self.hf_subsets = list(self.metadata.hf_subsets_to_langscripts.keys())
 
     def check_if_dataset_is_superseded(self):
         """Check if the dataset is superseded by a newer version"""
@@ -224,9 +228,41 @@ class AbsTask(ABC):
         """
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
+        if self.is_multilingual:
+            if self.fast_loading:
+                self.fast_load()
+            else:
+                self.dataset = {}
+                for lang in self.hf_subsets:
+                    self.dataset[lang] = datasets.load_dataset(
+                        name=lang,
+                        **self.metadata.dataset,
+                    )
+        else:
+            self.dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
         self.dataset_transform()
         self.data_loaded = True
+
+    def fast_load(self, **kwargs):
+        # todo remove
+        """Load all subsets at once, then group by language with Polars. Using fast loading has two requirements:
+        - Each row in the dataset should have a 'lang' feature giving the corresponding language/language pair
+        - The datasets must have a 'default' config that loads all the subsets of the dataset (see https://huggingface.co/docs/datasets/en/repository_structure#configurations)
+        """
+        self.dataset = {}
+        merged_dataset = datasets.load_dataset(
+            **self.metadata.dataset
+        )  # load "default" subset
+        for split in merged_dataset.keys():
+            df_split = merged_dataset[split].to_polars()
+            df_grouped = dict(df_split.group_by(["lang"]))
+            for lang in set(df_split["lang"].unique()) & set(self.hf_subsets):
+                self.dataset.setdefault(lang, {})
+                self.dataset[lang][split] = datasets.Dataset.from_polars(
+                    df_grouped[(lang,)].drop("lang")
+                )  # Remove lang column and convert back to HF datasets, not strictly necessary but better for compatibility
+        for lang, subset in self.dataset.items():
+            self.dataset[lang] = datasets.DatasetDict(subset)
 
     def calculate_metadata_metrics(
         self, overwrite_results: bool = False

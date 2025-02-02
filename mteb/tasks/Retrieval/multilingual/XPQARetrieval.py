@@ -3,7 +3,6 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _EVAL_LANGS = {
@@ -62,7 +61,8 @@ _LANG_CONVERSION = {
 }
 
 
-class XPQARetrieval(AbsTaskRetrieval, MultilingualTask):
+class XPQARetrieval(AbsTaskRetrieval):
+    is_multilingual = True
     metadata = TaskMetadata(
         name="XPQARetrieval",
         description="XPQARetrieval",

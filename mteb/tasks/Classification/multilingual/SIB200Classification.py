@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGS = {
@@ -205,7 +204,8 @@ _LANGS = {
 }
 
 
-class SIB200Classification(MultilingualTask, AbsTaskClassification):
+class SIB200Classification(AbsTaskClassification):
+    is_multilingual = True
     metadata = TaskMetadata(
         name="SIB200Classification",
         description="""SIB-200 is the largest publicly available topic classification

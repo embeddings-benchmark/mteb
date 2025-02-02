@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -15,7 +14,8 @@ _LANGUAGES = {
 _SPLITS = ["test"]
 
 
-class BUCCBitextMiningFast(AbsTaskBitextMining, MultilingualTask):
+class BUCCBitextMiningFast(AbsTaskBitextMining):
+    is_multilingual = True
     fast_loading = True
     metadata = TaskMetadata(
         name="BUCC.v2",

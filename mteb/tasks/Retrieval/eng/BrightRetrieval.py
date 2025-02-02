@@ -5,7 +5,6 @@ from collections import defaultdict
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 DOMAINS_LONG = [
@@ -32,7 +31,8 @@ DOMAINS_langs = {split: ["eng-Latn"] for split in DOMAINS}
 EVAL_SPLITS = ["standard", "long"]
 
 
-class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
+class BrightRetrieval(AbsTaskRetrieval):
+    is_multilingual = True
     metadata = TaskMetadata(
         name="BrightRetrieval",
         dataset={

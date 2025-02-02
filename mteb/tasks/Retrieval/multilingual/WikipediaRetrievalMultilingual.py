@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
@@ -25,7 +24,8 @@ _EVAL_LANGS = {
 }
 
 
-class WikipediaRetrievalMultilingual(AbsTaskRetrieval, MultilingualTask):
+class WikipediaRetrievalMultilingual(AbsTaskRetrieval):
+    is_multilingual = True
     metadata = TaskMetadata(
         name="WikipediaRetrievalMultilingual",
         description="The dataset is derived from Cohere's wikipedia-2023-11 dataset and contains synthetically generated queries.",

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
@@ -64,7 +63,8 @@ def _load_xmarket_data(
     return corpus, queries, relevant_docs
 
 
-class XMarket(MultilingualTask, AbsTaskRetrieval):
+class XMarket(AbsTaskRetrieval):
+    is_multilingual = True
     metadata = TaskMetadata(
         name="XMarket",
         description="XMarket",

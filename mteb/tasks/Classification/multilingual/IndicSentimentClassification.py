@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -21,7 +20,8 @@ _LANGUAGES = {
 }
 
 
-class IndicSentimentClassification(AbsTaskClassification, MultilingualTask):
+class IndicSentimentClassification(AbsTaskClassification):
+    is_multilingual = True
     fast_loading = True
     metadata = TaskMetadata(
         name="IndicSentimentClassification",

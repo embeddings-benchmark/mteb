@@ -5,7 +5,6 @@ from typing import Any
 import datasets
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = [
@@ -53,7 +52,8 @@ def extend_lang_pairs() -> dict[str, list[str]]:
 _LANGUAGES_MAPPING = extend_lang_pairs()
 
 
-class IN22GenBitextMining(AbsTaskBitextMining, MultilingualTask):
+class IN22GenBitextMining(AbsTaskBitextMining):
+    is_multilingual = True
     parallel_subsets = True
     metadata = TaskMetadata(
         name="IN22GenBitextMining",

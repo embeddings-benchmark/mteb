@@ -5,7 +5,6 @@ from collections import defaultdict
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import *
@@ -57,7 +56,8 @@ def load_neuclir_data(
     return corpus, queries, relevant_docs
 
 
-class NeuCLIR2022Retrieval(MultilingualTask, AbsTaskRetrieval):
+class NeuCLIR2022Retrieval(AbsTaskRetrieval):
+    is_multilingual = True
     metadata = TaskMetadata(
         name="NeuCLIR2022Retrieval",
         description="The task involves identifying and retrieving the documents that are relevant to the queries.",
@@ -170,7 +170,8 @@ def load_neuclir_data_hard_negatives(
     return corpus, queries, relevant_docs
 
 
-class NeuCLIR2022RetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
+class NeuCLIR2022RetrievalHardNegatives(AbsTaskRetrieval):
+    is_multilingual = True
     metadata = TaskMetadata(
         name="NeuCLIR2022RetrievalHardNegatives",
         description="The task involves identifying and retrieving the documents that are relevant to the queries. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",

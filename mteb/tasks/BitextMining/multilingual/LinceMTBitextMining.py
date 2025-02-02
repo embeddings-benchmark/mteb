@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -9,7 +8,8 @@ _LANGUAGES = {
 }
 
 
-class LinceMTBitextMining(AbsTaskBitextMining, MultilingualTask):
+class LinceMTBitextMining(AbsTaskBitextMining):
+    is_multilingual = True
     metadata = TaskMetadata(
         name="LinceMTBitextMining",
         dataset={

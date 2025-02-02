@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 logger = logging.getLogger(__name__)
@@ -24,7 +23,8 @@ _CITATION = """@article{reddy2022shopping,
 }"""
 
 
-class ESCIReranking(AbsTaskReranking, MultilingualTask):
+class ESCIReranking(AbsTaskReranking):
+    is_multilingual = True
     metadata = TaskMetadata(
         name="ESCIReranking",
         description="",

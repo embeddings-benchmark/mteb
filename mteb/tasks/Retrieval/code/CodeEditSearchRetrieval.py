@@ -3,7 +3,6 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGS = [
@@ -23,7 +22,8 @@ _LANGS = [
 ]
 
 
-class CodeEditSearchRetrieval(MultilingualTask, AbsTaskRetrieval):
+class CodeEditSearchRetrieval(AbsTaskRetrieval):
+    is_multilingual = True
     _EVAL_SPLIT = "train"
     metadata = TaskMetadata(
         name="CodeEditSearchRetrieval",

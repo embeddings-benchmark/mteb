@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -19,7 +18,8 @@ _SPLITS = ["test"]
 logger = logging.getLogger(__name__)
 
 
-class BUCCBitextMining(AbsTaskBitextMining, MultilingualTask):
+class BUCCBitextMining(AbsTaskBitextMining):
+    is_multilingual = True
     superseded_by = "BUCC.v2"
     metadata = TaskMetadata(
         name="BUCC",

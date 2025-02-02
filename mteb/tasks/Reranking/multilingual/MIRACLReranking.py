@@ -5,7 +5,6 @@ from collections import defaultdict
 
 import datasets
 
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
@@ -47,7 +46,8 @@ _CITATION = """@article{10.1162/tacl_a_00595,
 }"""
 
 
-class MIRACLReranking(AbsTaskReranking, MultilingualTask):
+class MIRACLReranking(AbsTaskReranking):
+    is_multilingual = True
     metadata = TaskMetadata(
         name="MIRACLReranking",
         description="MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval dataset that focuses on search across 18 different languages.",
