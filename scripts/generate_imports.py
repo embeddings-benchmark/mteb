@@ -33,9 +33,6 @@ def find_task_classes_in_module(full_module_name):
             and not obj.__name__ == "MultilingualTask"
         ):
             if is_module_aggregated:
-                print(
-                    "aggregated_tasks", obj.__name__, issubclass(obj, AbsTaskAggregate)
-                )
                 if issubclass(obj, AbsTaskAggregate):
                     task_classes.append(name)
                 continue
