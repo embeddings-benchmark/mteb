@@ -8,6 +8,7 @@ import types
 from pathlib import Path
 
 from mteb.abstasks import AbsTask
+from mteb.abstasks.aggregated_task import AbsTaskAggregate
 
 BASE_DIR = Path("../mteb/tasks")
 
@@ -19,6 +20,8 @@ def find_task_classes_in_module(full_module_name):
     except ImportError:
         return []
 
+    is_module_aggregated = "aggregated_tasks" in full_module_name
+
     task_classes = []
     for name, obj in inspect.getmembers(mod, inspect.isclass):
         if (
@@ -29,6 +32,13 @@ def find_task_classes_in_module(full_module_name):
             and not obj.__name__.startswith("AbsTask")
             and not obj.__name__ == "MultilingualTask"
         ):
+            if is_module_aggregated:
+                print(
+                    "aggregated_tasks", obj.__name__, issubclass(obj, AbsTaskAggregate)
+                )
+                if issubclass(obj, AbsTaskAggregate):
+                    task_classes.append(name)
+                continue
             task_classes.append(name)
     return task_classes
 
