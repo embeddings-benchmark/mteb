@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datasets import load_dataset
+import datasets
 
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
@@ -58,7 +58,7 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
         self.dataset = {}
         path = self.metadata.dataset["path"]
         revision = self.metadata.dataset["revision"]
-        raw_dataset = load_dataset(
+        raw_dataset = datasets.load_dataset(
             path,
             revision=revision,
             trust_remote_code=self.metadata.dataset["trust_remote_code"],
