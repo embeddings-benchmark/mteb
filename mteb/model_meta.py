@@ -146,3 +146,15 @@ class ModelMeta(BaseModel):
         model_datasets = {ds_name for ds_name, splits in self.training_datasets.items()}
         intersection = model_datasets & benchmark_datasets
         return len(intersection) == 0
+
+    @property
+    def memory_usage(self) -> int | None:
+        """Calculates the memory usage (in FP32) of the model in GB."""
+        if self.n_parameters is None or self.embed_dim is None:
+            return None
+        # Model memory in bytes
+        model_memory_bytes = self.num_params * 4
+
+        # Convert to MB
+        model_memory_mb = model_memory_bytes / (1024 ** 3)
+        return model_memory_mb
