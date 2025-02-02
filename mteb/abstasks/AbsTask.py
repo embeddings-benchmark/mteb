@@ -75,7 +75,9 @@ class AbsTask(ABC):
         superseded_by: Denotes the task that this task is superseeded by. Used to issue warning to users of outdated datasets, while maintaining
             reproducibility of existing benchmarks.
         is_multilingual: Denotes if the task is multilingual. If True, the task will be evaluated on all languages in the metadata.eval_langs.
-        fast_loading: (Deprecated) Denotes if the task should be loaded using the fast loading method. This is only possible if the dataset have a "default" config
+        fast_loading: (Not recommended to use) Denotes if the task should be loaded using the fast loading method.
+            This is only possible if the dataset have a "default" config. We don't recommend to use this method, and suggest to use different subsets for loading datasets.
+            This was used only for historical reasons and will be removed in the future.
     """
 
     metadata: TaskMetadata
