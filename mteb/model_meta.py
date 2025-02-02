@@ -156,5 +156,5 @@ class ModelMeta(BaseModel):
         model_memory_bytes = self.num_params * 4
 
         # Convert to MB
-        model_memory_mb = model_memory_bytes / (1024 ** 3)
+        model_memory_mb = model_memory_bytes / (1024**3)
         return model_memory_mb
