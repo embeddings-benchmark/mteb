@@ -28,6 +28,7 @@ def get_changed_files(base_branch="main"):
         and f.endswith(".py")
         and "overview" not in f
         and "init" not in f
+        and "instructions" not in f
     ]
 
 
