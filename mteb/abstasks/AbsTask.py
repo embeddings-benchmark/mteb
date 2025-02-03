@@ -92,9 +92,8 @@ class AbsTask(ABC):
             seed: An integer seed.
             kwargs: arguments passed to subclasses.
         """
-        self.save_suffix = kwargs.get("save_suffix", "")
-
         self.hf_subsets = list(self.metadata.hf_subsets_to_langscripts.keys())
+
         self.seed = seed
         self.rng_state, self.np_rng = set_seed(seed)
 
