@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import warnings
+
 from .AbsTask import AbsTask
 from .MultiSubsetLoader import MultiSubsetLoader
 
@@ -7,6 +9,9 @@ from .MultiSubsetLoader import MultiSubsetLoader
 class MultilingualTask(MultiSubsetLoader, AbsTask):
     def __init__(self, hf_subsets: list[str] | None = None, **kwargs):
         super().__init__(**kwargs)
+        warnings.warn(
+            "`MultilingualTask` will be removed in v2.0.0.", DeprecationWarning
+        )
         if isinstance(hf_subsets, list):
             hf_subsets = [
                 lang for lang in hf_subsets if lang in self.metadata.eval_langs
