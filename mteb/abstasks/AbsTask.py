@@ -67,6 +67,8 @@ class AbsTask(ABC):
 
     def __init__(self, seed: int = 42, **kwargs: Any):
         self.save_suffix = kwargs.get("save_suffix", "")
+        if self.save_suffix:
+            logger.warning("`save_suffix` will be removed in v2.0.0.")
 
         self.seed = seed
         random.seed(self.seed)

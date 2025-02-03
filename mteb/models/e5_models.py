@@ -132,7 +132,6 @@ ME5_TRAINING_DATA = {
     **E5_TRAINING_DATA,
     "FEVER": ["train"],
     "FEVERHardNegatives": ["train"],
-    "FEVER-PL": ["train"],  # translation not trained on
     "FEVER-NL": ["train"],  # translation not trained on
     "HotpotQA": ["train"],
     "HotpotQAHardNegatives": ["train"],

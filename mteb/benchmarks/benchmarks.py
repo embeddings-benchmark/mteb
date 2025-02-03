@@ -421,13 +421,12 @@ SEB = Benchmark(
     ),
     description="A curated selection of tasks coverering the Scandinavian languages; Danish, Swedish and Norwegian, including Bokmål and Nynorsk.",
     reference="https://kennethenevoldsen.github.io/scandinavian-embedding-benchmark/",
-    citation="""@misc{enevoldsen2024scandinavian,
-      title={The Scandinavian Embedding Benchmarks: Comprehensive Assessment of Multilingual and Monolingual Text Embedding}, 
-      author={Kenneth Enevoldsen and Márton Kardos and Niklas Muennighoff and Kristoffer Laigaard Nielbo},
-      year={2024},
-      eprint={2406.02396},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+    citation="""@inproceedings{enevoldsen2024scandinavian,
+  title={The Scandinavian Embedding Benchmarks: Comprehensive Assessment of Multilingual and Monolingual Text Embedding},
+  author={Enevoldsen, Kenneth and Kardos, M{\'a}rton and Muennighoff, Niklas and Nielbo, Kristoffer},
+  booktitle={Advances in Neural Information Processing Systems},
+  year={2024},
+  url={https://nips.cc/virtual/2024/poster/97869}
 }""",
     contacts=["KennethEnevoldsen", "x-tabdeveloping", "Samoed"],
 )
@@ -1142,6 +1141,30 @@ BRIGHT = Benchmark(
 }""",
 )
 
+
+CODE_RAG = Benchmark(
+    name="CodeRAG",
+    tasks=get_tasks(
+        tasks=[
+            "CodeRAGLibraryDocumentationSolutions",
+            "CodeRAGOnlineTutorials",
+            "CodeRAGProgrammingSolutions",
+            "CodeRAGStackoverflowPosts",
+        ],
+    ),
+    description="A benchmark for evaluating code retrieval augmented generation, testing models' ability to retrieve relevant programming solutions, tutorials and documentation.",
+    reference="https://arxiv.org/abs/2406.14497",
+    citation="""@misc{wang2024coderagbenchretrievalaugmentcode,
+      title={CodeRAG-Bench: Can Retrieval Augment Code Generation?}, 
+      author={Zora Zhiruo Wang and Akari Asai and Xinyan Velocity Yu and Frank F. Xu and Yiqing Xie and Graham Neubig and Daniel Fried},
+      year={2024},
+      eprint={2406.14497},
+      archivePrefix={arXiv},
+      primaryClass={cs.SE},
+      url={https://arxiv.org/abs/2406.14497}, 
+    }""",
+)
+
 NANOBEIR = Benchmark(
     name="NanoBEIR",
     tasks=get_tasks(
@@ -1337,8 +1360,7 @@ CHEMTEB = Benchmark(
     ),
     description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
     reference="https://arxiv.org/abs/2412.00532",
-    citation="""
-    @article{kasmaee2024chemteb,
+    citation="""@article{kasmaee2024chemteb,
     title={ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
     author={Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
     journal={arXiv preprint arXiv:2412.00532},

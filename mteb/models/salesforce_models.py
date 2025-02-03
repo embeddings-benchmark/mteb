@@ -23,7 +23,6 @@ SFR_TRAINING_DATA = {  # inherits from e5
     "FiQA2018-NL": ["train"],  # translation not trained on
     "FEVER": ["train"],
     "FEVERHardNegatives": ["train"],
-    "FEVER-PL": ["train"],  # translation not trained on
     "FEVER-NL": ["train"],  # translation not trained on
     "HotpotQA": ["train"],
     "HotpotQAHardNegatives": ["train"],
