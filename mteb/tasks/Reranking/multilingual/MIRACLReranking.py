@@ -120,8 +120,7 @@ class MIRACLReranking(AbsTaskReranking):
         self.relevant_docs = defaultdict(lambda: defaultdict(lambda: defaultdict(dict)))
         self.top_ranked = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
 
-        hf_subsets = self.metadata.hf_subsets
-        for hf_subset in hf_subsets:
+        for hf_subset in self.hf_subsets:
             if "name" in self.metadata.dataset:
                 cur_dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
                 assert (
