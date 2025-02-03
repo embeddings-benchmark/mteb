@@ -383,7 +383,7 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
         )
         for split in pbar_split:
             pbar_split.set_postfix_str(f"Split: {split}")
-            print(f"Processing metadata for split {split}")
+            logger.info(f"Processing metadata for split {split}")
             all_details[split] = {}
             if self.is_multilingual:
                 pbar_lang = tqdm.tqdm(
@@ -391,7 +391,7 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
                 )
                 for lang in pbar_lang:
                     pbar_lang.set_postfix_str(f"Language: {lang}")
-                    print(f"Processing metadata for language {lang}")
+                    logger.info(f"Processing metadata for language {lang}")
                     split_details = process_language(
                         self.relevant_docs[lang][split],
                         self.queries[lang][split],
@@ -426,11 +426,11 @@ def process_language(relevant_docs, queries, corpus, lang=None):
     qrels_per_doc = num_qrels_non_zero / num_queries if num_queries else 0
 
     language_description = f" for language {lang}" if lang else ""
-    print(f"Average document character length{language_description} is {doc_len}")
-    print(f"Average query character length{language_description} is {query_len}")
-    print(f"Number of documents{language_description} is {num_documents}")
-    print(f"Number of queries{language_description} is {num_queries}")
-    print(
+    logger.info(f"Average document character length{language_description} is {doc_len}")
+    logger.info(f"Average query character length{language_description} is {query_len}")
+    logger.info(f"Number of documents{language_description} is {num_documents}")
+    logger.info(f"Number of queries{language_description} is {num_queries}")
+    logger.info(
         f"Average number of relevant documents per query{language_description} is {qrels_per_doc}"
     )
     return {
