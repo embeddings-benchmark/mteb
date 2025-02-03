@@ -25,7 +25,6 @@ _EVAL_LANGS = {
 
 
 class WikipediaRetrievalMultilingual(AbsTaskRetrieval):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="WikipediaRetrievalMultilingual",
         description="The dataset is derived from Cohere's wikipedia-2023-11 dataset and contains synthetically generated queries.",

@@ -27,7 +27,6 @@ _LANGUAGES = {
 
 
 class MasakhaNEWSClusteringS2S(AbsTaskClustering):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="MasakhaNEWSClusteringS2S",
         dataset={

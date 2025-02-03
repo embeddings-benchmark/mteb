@@ -60,7 +60,6 @@ def load_mldr_data(
 
 
 class MultiLongDocRetrieval(AbsTaskRetrieval):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="MultiLongDocRetrieval",
         description="""Multi Long Doc Retrieval (MLDR) 'is curated by the multilingual articles from Wikipedia, Wudao and mC4 (see Table 7), and NarrativeQA (Kocˇisky ́ et al., 2018; Gu ̈nther et al., 2023), which is only for English.' (Chen et al., 2024). 

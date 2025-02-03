@@ -10,7 +10,6 @@ _LANGS = {
 
 
 class CataloniaTweetClassification(AbsTaskClassification):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="CataloniaTweetClassification",
         description="""This dataset contains two corpora in Spanish and Catalan that consist of annotated Twitter

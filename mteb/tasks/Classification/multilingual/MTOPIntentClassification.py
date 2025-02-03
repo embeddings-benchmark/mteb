@@ -14,7 +14,6 @@ _LANGUAGES = {
 
 
 class MTOPIntentClassification(AbsTaskClassification):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="MTOPIntentClassification",
         dataset={

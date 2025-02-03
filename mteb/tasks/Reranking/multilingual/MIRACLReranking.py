@@ -47,7 +47,6 @@ _CITATION = """@article{10.1162/tacl_a_00595,
 
 
 class MIRACLReranking(AbsTaskReranking):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="MIRACLReranking",
         description="MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval dataset that focuses on search across 18 different languages.",
@@ -121,7 +120,7 @@ class MIRACLReranking(AbsTaskReranking):
         self.relevant_docs = defaultdict(lambda: defaultdict(lambda: defaultdict(dict)))
         self.top_ranked = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
 
-        hf_subsets = list(self.hf_subsets) if self.is_multilingual else ["default"]
+        hf_subsets = self.metadata.hf_subsets
         for hf_subset in hf_subsets:
             if "name" in self.metadata.dataset:
                 cur_dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore

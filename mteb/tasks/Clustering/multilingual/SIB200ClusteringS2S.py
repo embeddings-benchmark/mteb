@@ -207,7 +207,6 @@ _LANGS = {
 
 
 class SIB200ClusteringFast(AbsTaskClusteringFast):
-    is_multilingual = True
     max_document_to_embed = 1004
     max_fraction_of_documents_to_embed = None
 

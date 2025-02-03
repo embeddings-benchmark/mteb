@@ -23,7 +23,6 @@ _LANGS = [
 
 
 class CodeEditSearchRetrieval(AbsTaskRetrieval):
-    is_multilingual = True
     _EVAL_SPLIT = "train"
     metadata = TaskMetadata(
         name="CodeEditSearchRetrieval",

@@ -19,7 +19,6 @@ logger = logging.getLogger(__name__)
 
 
 class BUCCBitextMining(AbsTaskBitextMining):
-    is_multilingual = True
     superseded_by = "BUCC.v2"
     metadata = TaskMetadata(
         name="BUCC",

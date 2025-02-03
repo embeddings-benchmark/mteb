@@ -22,7 +22,6 @@ _SPLITS = ["test"]
 
 
 class SemRel24STS(AbsTaskSTS):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="SemRel24STS",
         dataset={

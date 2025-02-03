@@ -23,7 +23,6 @@ _EVAL_LANGS = {
 
 
 class SRNCorpusBitextMining(AbsTaskBitextMining):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="SRNCorpusBitextMining",
         dataset={

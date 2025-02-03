@@ -99,7 +99,7 @@ class AbsTaskReranking(AbsTaskRetrieval):
         self.relevant_docs = defaultdict(lambda: defaultdict(lambda: defaultdict(dict)))
         self.top_ranked = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
 
-        hf_subsets = list(self.hf_subsets) if self.is_multilingual else ["default"]
+        hf_subsets = self.hf_subsets
 
         for hf_subset in hf_subsets:
             if given_dataset:

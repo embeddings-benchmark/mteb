@@ -64,7 +64,6 @@ def _load_xmarket_data(
 
 
 class XMarket(AbsTaskRetrieval):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="XMarket",
         description="XMarket",

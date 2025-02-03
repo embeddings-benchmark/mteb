@@ -14,7 +14,6 @@ _LANGUAGES = {
 
 
 class MTOPDomainClassification(AbsTaskClassification):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="MTOPDomainClassification",
         dataset={

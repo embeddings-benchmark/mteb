@@ -12,7 +12,6 @@ _LANGUAGES = {
 
 
 class NollySentiBitextMining(AbsTaskBitextMining):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="NollySentiBitextMining",
         dataset={

@@ -59,7 +59,6 @@ _LANGUAGES = {
 
 
 class MassiveScenarioClassification(AbsTaskClassification):
-    is_multilingual = True
     fast_loading = True
     metadata = TaskMetadata(
         name="MassiveScenarioClassification",

@@ -19,7 +19,6 @@ _LANGUAGES = {
 
 
 class STS17Crosslingual(AbsTaskSTS):
-    is_multilingual = True
     fast_loading = True
     metadata = TaskMetadata(
         name="STS17",

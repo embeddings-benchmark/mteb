@@ -19,7 +19,6 @@ _LANGUAGES = {
 
 
 class NusaTranslationBitextMining(AbsTaskBitextMining):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="NusaTranslationBitextMining",
         dataset={

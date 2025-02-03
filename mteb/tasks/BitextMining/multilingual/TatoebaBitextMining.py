@@ -120,7 +120,6 @@ _LANGUAGES = {
 
 
 class TatoebaBitextMining(AbsTaskBitextMining):
-    is_multilingual = True
     fast_loading = True
     metadata = TaskMetadata(
         name="Tatoeba",

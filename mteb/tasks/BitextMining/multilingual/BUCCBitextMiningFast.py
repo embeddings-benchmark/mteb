@@ -15,7 +15,6 @@ _SPLITS = ["test"]
 
 
 class BUCCBitextMiningFast(AbsTaskBitextMining):
-    is_multilingual = True
     fast_loading = True
     metadata = TaskMetadata(
         name="BUCC.v2",

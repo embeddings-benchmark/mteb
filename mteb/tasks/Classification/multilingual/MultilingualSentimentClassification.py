@@ -39,7 +39,6 @@ _LANGUAGES = {
 
 
 class MultilingualSentimentClassification(AbsTaskClassification):
-    is_multilingual = True
     fast_loading = True
     metadata = TaskMetadata(
         name="MultilingualSentimentClassification",

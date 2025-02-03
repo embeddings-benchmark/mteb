@@ -21,7 +21,6 @@ _LANGUAGES = {
 
 
 class IndicReviewsClusteringP2P(AbsTaskClustering):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="IndicReviewsClusteringP2P",
         dataset={

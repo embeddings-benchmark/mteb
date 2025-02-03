@@ -26,7 +26,6 @@ _LANGUAGES = {
 
 
 class STS22CrosslingualSTSv2(AbsTaskSTS):
-    is_multilingual = True
     fast_loading = True
     metadata = TaskMetadata(
         name="STS22.v2",
@@ -84,7 +83,6 @@ class STS22CrosslingualSTSv2(AbsTaskSTS):
 
 
 class STS22CrosslingualSTS(AbsTaskSTS):
-    is_multilingual = True
     superseded_by = "STS22.v2"
     fast_loading = True
     metadata = TaskMetadata(

@@ -9,7 +9,6 @@ _LANGS = ["python", "javascript", "go", "ruby", "java", "php"]
 
 
 class CodeSearchNetRetrieval(AbsTaskRetrieval):
-    is_multilingual = True
     _EVAL_SPLIT = "test"
     metadata = TaskMetadata(
         name="CodeSearchNetRetrieval",

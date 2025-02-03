@@ -34,7 +34,6 @@ class CUREv1Splits(str, Enum):
 
 
 class CUREv1Retrieval(AbsTaskRetrieval):
-    is_multilingual = True
     metadata = TaskMetadata(
         dataset={
             "path": "clinia/CUREv1",

@@ -18,7 +18,6 @@ _LANGUAGES = {
 
 
 class NusaParagraphEmotionClassification(AbsTaskClassification):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="NusaParagraphEmotionClassification",
         dataset={

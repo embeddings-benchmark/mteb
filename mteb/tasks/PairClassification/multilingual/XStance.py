@@ -8,7 +8,6 @@ from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 
 class XStance(AbsTaskPairClassification):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="XStance",
         dataset={

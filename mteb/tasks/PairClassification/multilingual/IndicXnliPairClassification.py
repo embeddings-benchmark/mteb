@@ -20,7 +20,6 @@ _LANGUAGES = {
 
 
 class IndicXnliPairClassification(AbsTaskPairClassification):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="IndicXnliPairClassification",
         dataset={

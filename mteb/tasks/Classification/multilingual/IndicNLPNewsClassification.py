@@ -16,7 +16,6 @@ _LANGUAGES = {
 
 
 class IndicNLPNewsClassification(AbsTaskClassification):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="IndicNLPNewsClassification",
         dataset={

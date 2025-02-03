@@ -63,7 +63,6 @@ def _load_publichealthqa_data(
 
 
 class PublicHealthQARetrieval(AbsTaskRetrieval):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="PublicHealthQA",
         description="A multilingual dataset for public health question answering, based on FAQ sourced from CDC and WHO.",

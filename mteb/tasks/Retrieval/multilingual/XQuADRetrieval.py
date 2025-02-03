@@ -25,7 +25,6 @@ _LANGUAGES = {
 
 
 class XQuADRetrieval(AbsTaskRetrieval):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="XQuADRetrieval",
         dataset={

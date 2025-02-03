@@ -859,7 +859,6 @@ _LANGUAGES_MAPPING = extend_lang_pairs_english_centric()
 
 
 class BibleNLPBitextMining(AbsTaskBitextMining):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="BibleNLPBitextMining",
         dataset={

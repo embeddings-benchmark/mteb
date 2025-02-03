@@ -32,7 +32,6 @@ EVAL_SPLITS = ["standard", "long"]
 
 
 class BrightRetrieval(AbsTaskRetrieval):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="BrightRetrieval",
         dataset={

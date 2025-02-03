@@ -63,7 +63,6 @@ def _load_statcan_data(
 
 
 class StatcanDialogueDatasetRetrieval(AbsTaskRetrieval):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="StatcanDialogueDatasetRetrieval",
         description="A Dataset for Retrieving Data Tables through Conversations with Genuine Intents, available in English and French.",

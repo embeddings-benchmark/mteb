@@ -16,7 +16,6 @@ _LANGUAGES = {
 
 
 class TweetSentimentClassification(AbsTaskClassification):
-    is_multilingual = True
     fast_loading = True
     metadata = TaskMetadata(
         name="TweetSentimentClassification",

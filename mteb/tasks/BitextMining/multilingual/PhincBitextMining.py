@@ -9,7 +9,6 @@ _LANGUAGES = {
 
 
 class PhincBitextMining(AbsTaskBitextMining):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="PhincBitextMining",
         dataset={

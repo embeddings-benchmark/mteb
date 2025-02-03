@@ -32,7 +32,7 @@ def test_load_data(
         isinstance(task, AbsTaskRetrieval)
         or isinstance(task, AbsTaskReranking)
         or isinstance(task, AbsTaskSpeedTask)
-        or task.is_multilingual
+        or task.metadata.is_multilingual
     ):
         pytest.skip()
     with patch.object(task, "dataset_transform") as mock_dataset_transform:
@@ -40,7 +40,7 @@ def test_load_data(
         mock_load_dataset.assert_called()
 
         # They don't yet but should they so they can be expanded more easily?
-        if not task.is_multilingual:
+        if not task.metadata.is_multilingual:
             mock_dataset_transform.assert_called_once()
 
 

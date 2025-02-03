@@ -28,7 +28,6 @@ _LANGUAGES = {
 
 
 class WikiClusteringP2P(AbsTaskClustering):
-    is_multilingual = True
     superseded_by = "WikiClusteringP2P.v2"
     metadata = TaskMetadata(
         name="WikiClusteringP2P",
@@ -56,7 +55,6 @@ class WikiClusteringP2P(AbsTaskClustering):
 
 
 class WikiClusteringFastP2P(AbsTaskClusteringFast):
-    is_multilingual = True
     max_document_to_embed = 2048
     max_fraction_of_documents_to_embed = None
 

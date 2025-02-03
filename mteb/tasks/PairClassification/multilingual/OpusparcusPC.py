@@ -16,7 +16,6 @@ _LANGUAGES = {
 
 
 class OpusparcusPC(AbsTaskPairClassification):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="OpusparcusPC",
         dataset={

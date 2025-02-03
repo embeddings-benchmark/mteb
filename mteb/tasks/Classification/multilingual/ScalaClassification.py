@@ -12,7 +12,6 @@ _LANGS = {
 
 
 class ScalaClassification(AbsTaskClassification):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="ScalaClassification",
         description="""ScaLa a linguistic acceptability dataset for the mainland Scandinavian languages automatically constructed from dependency annotations in Universal Dependencies Treebanks. 

@@ -205,7 +205,6 @@ _LANGS = {
 
 
 class SIB200Classification(AbsTaskClassification):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="SIB200Classification",
         description="""SIB-200 is the largest publicly available topic classification

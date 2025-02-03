@@ -6,7 +6,6 @@ from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 
 class PawsXPairClassification(AbsTaskPairClassification):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="PawsXPairClassification",
         dataset={

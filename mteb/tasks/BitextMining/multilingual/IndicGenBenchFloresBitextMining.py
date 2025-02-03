@@ -97,7 +97,6 @@ _LANGUAGES_MAPPING = get_lang_pairs()
 
 
 class IndicGenBenchFloresBitextMining(AbsTaskBitextMining):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="IndicGenBenchFloresBitextMining",
         dataset={

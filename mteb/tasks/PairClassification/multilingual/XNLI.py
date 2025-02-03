@@ -22,7 +22,6 @@ _LANGS = {
 
 
 class XNLI(AbsTaskPairClassification):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="XNLI",
         dataset={
@@ -107,7 +106,6 @@ _LANGS_2 = {
 
 
 class XNLIV2(AbsTaskPairClassification):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="XNLIV2",
         dataset={

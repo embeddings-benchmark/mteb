@@ -5,7 +5,6 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class SwissJudgementClassification(AbsTaskClassification):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="SwissJudgementClassification",
         description="Multilingual, diachronic dataset of Swiss Federal Supreme Court cases annotated with the respective binarized judgment outcome (approval/dismissal)",

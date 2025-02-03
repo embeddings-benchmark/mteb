@@ -7,7 +7,6 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class RomaTalesBitextMining(AbsTaskBitextMining):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="RomaTalesBitextMining",
         dataset={

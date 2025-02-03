@@ -53,7 +53,6 @@ _LANGUAGES_MAPPING = extend_lang_pairs()
 
 
 class IN22GenBitextMining(AbsTaskBitextMining):
-    is_multilingual = True
     parallel_subsets = True
     metadata = TaskMetadata(
         name="IN22GenBitextMining",

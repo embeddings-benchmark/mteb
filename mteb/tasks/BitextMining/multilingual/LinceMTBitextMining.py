@@ -9,7 +9,6 @@ _LANGUAGES = {
 
 
 class LinceMTBitextMining(AbsTaskBitextMining):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="LinceMTBitextMining",
         dataset={

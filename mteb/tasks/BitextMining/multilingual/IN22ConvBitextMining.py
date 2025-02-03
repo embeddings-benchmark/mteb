@@ -67,7 +67,6 @@ def check_uniques(example, uniques):
 
 
 class IN22ConvBitextMining(AbsTaskBitextMining):
-    is_multilingual = True
     parallel_subsets = True
     metadata = TaskMetadata(
         name="IN22ConvBitextMining",

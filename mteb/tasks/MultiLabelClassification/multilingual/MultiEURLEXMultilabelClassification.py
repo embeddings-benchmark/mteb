@@ -7,7 +7,6 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class MultiEURLEXMultilabelClassification(AbsTaskMultilabelClassification):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="MultiEURLEXMultilabelClassification",
         dataset={

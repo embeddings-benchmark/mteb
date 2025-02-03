@@ -24,7 +24,6 @@ _LANGUAGES = {
 
 
 class MasakhaNEWSClassification(AbsTaskClassification):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="MasakhaNEWSClassification",
         dataset={

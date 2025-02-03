@@ -5,7 +5,6 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class AmazonCounterfactualClassification(AbsTaskClassification):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="AmazonCounterfactualClassification",
         dataset={

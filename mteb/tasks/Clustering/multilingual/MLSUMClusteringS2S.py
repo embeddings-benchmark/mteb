@@ -21,7 +21,6 @@ N_SAMPLES = 2048
 
 
 class MLSUMClusteringS2S(AbsTaskClustering):
-    is_multilingual = True
     superseded_by = "MLSUMClusteringS2S.v2"
     metadata = TaskMetadata(
         name="MLSUMClusteringS2S",
@@ -85,7 +84,6 @@ class MLSUMClusteringS2S(AbsTaskClustering):
 
 
 class MLSUMClusteringS2SFast(AbsTaskClusteringFast):
-    is_multilingual = True
     max_document_to_embed = N_SAMPLES
     max_fraction_of_documents_to_embed = None
 

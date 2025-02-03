@@ -10,7 +10,6 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class TurkicClassification(AbsTaskClassification):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="TurkicClassification",
         description="A dataset of news classification in three Turkic languages.",

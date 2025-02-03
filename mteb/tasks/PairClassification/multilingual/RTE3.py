@@ -14,7 +14,6 @@ _LANGS = {
 
 
 class RTE3(AbsTaskPairClassification):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="RTE3",
         dataset={

@@ -62,7 +62,6 @@ _LANG_CONVERSION = {
 
 
 class XPQARetrieval(AbsTaskRetrieval):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="XPQARetrieval",
         description="XPQARetrieval",

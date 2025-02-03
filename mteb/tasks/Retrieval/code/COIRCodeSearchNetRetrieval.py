@@ -73,7 +73,6 @@ def _load_code_search_code_retrieval(
 
 
 class COIRCodeSearchNetRetrieval(AbsTaskRetrieval):
-    is_multilingual = True
     _EVAL_SPLIT = "test"
     metadata = TaskMetadata(
         name="COIRCodeSearchNetRetrieval",

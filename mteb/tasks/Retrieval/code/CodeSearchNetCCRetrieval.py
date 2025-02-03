@@ -73,7 +73,6 @@ def _load_code_search_code_retrieval(
 
 
 class CodeSearchNetCCRetrieval(AbsTaskRetrieval):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="CodeSearchNetCCRetrieval",
         description="The dataset is a collection of code snippets. The task is to retrieve the most relevant code snippet for a given code snippet.",

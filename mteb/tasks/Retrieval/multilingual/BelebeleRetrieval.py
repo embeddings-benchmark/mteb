@@ -177,7 +177,6 @@ _LANGUAGES_MAPPING = get_lang_pairs()
 
 
 class BelebeleRetrieval(AbsTaskRetrieval):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="BelebeleRetrieval",
         dataset={

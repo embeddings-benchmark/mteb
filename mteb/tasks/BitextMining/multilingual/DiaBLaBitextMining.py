@@ -7,7 +7,6 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class DiaBLaBitextMining(AbsTaskBitextMining):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="DiaBlaBitextMining",
         dataset={

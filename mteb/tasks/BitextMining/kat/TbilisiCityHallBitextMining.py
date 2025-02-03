@@ -18,7 +18,6 @@ _EVAL_SPLIT = "test"
 
 
 class TbilisiCityHallBitextMining(AbsTaskBitextMining):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="TbilisiCityHallBitextMining",
         dataset={

@@ -34,7 +34,6 @@ _SPLITS = ["validation"]
 
 
 class IWSLT2017BitextMining(AbsTaskBitextMining):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="IWSLT2017BitextMining",
         dataset={

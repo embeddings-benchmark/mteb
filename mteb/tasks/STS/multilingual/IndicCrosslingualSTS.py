@@ -20,7 +20,6 @@ _LANGUAGES = {
 
 
 class IndicCrosslingualSTS(AbsTaskSTS):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="IndicCrosslingualSTS",
         dataset={

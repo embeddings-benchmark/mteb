@@ -30,7 +30,6 @@ _EVAL_LANGS = extend_lang_pairs()
 
 
 class CrossLingualSemanticDiscriminationWMT19(AbsTaskRetrieval):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="CrossLingualSemanticDiscriminationWMT19",
         dataset={

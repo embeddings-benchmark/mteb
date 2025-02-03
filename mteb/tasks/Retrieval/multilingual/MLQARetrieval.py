@@ -77,7 +77,6 @@ _EVAL_LANGS = extend_lang_pairs()
 
 
 class MLQARetrieval(AbsTaskRetrieval):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="MLQARetrieval",
         description="""MLQA (MultiLingual Question Answering) is a benchmark dataset for evaluating cross-lingual question answering performance.

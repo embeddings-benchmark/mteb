@@ -27,7 +27,6 @@ _LANGUAGES = {
 
 
 class MasakhaNEWSClusteringP2P(AbsTaskClustering):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="MasakhaNEWSClusteringP2P",
         description="Clustering of news article headlines and texts from MasakhaNEWS dataset. Clustering of 10 sets on the news article label.",

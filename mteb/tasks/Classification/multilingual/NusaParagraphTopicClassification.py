@@ -18,7 +18,6 @@ _LANGUAGES = {
 
 
 class NusaParagraphTopicClassification(AbsTaskClassification):
-    is_multilingual = True
     metadata = TaskMetadata(
         name="NusaParagraphTopicClassification",
         dataset={

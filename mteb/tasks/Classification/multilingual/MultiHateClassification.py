@@ -19,7 +19,6 @@ _LANGUAGES = {
 
 
 class MultiHateClassification(AbsTaskClassification):
-    is_multilingual = True
     fast_loading = True
     metadata = TaskMetadata(
         name="MultiHateClassification",

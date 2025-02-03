@@ -235,7 +235,6 @@ _LANGUAGES_MAPPING = extend_lang_pairs()
 
 
 class FloresBitextMining(AbsTaskBitextMining):
-    is_multilingual = True
     parallel_subsets = True
     metadata = TaskMetadata(
         name="FloresBitextMining",

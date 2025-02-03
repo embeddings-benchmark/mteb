@@ -74,7 +74,6 @@ class AbsTask(ABC):
         abstask_prompt: The potential prompt of the abstask
         superseded_by: Denotes the task that this task is superseeded by. Used to issue warning to users of outdated datasets, while maintaining
             reproducibility of existing benchmarks.
-        is_multilingual: Denotes if the task is multilingual. If True, the task will be evaluated on all languages in the metadata.eval_langs.
         fast_loading: (Not recommended to use) Denotes if the task should be loaded using the fast loading method.
             This is only possible if the dataset have a "default" config. We don't recommend to use this method, and suggest to use different subsets for loading datasets.
             This was used only for historical reasons and will be removed in the future.
@@ -86,7 +85,6 @@ class AbsTask(ABC):
     superseded_by: str | None = None
     dataset: dict[HFSubset, DatasetDict] | None = None  # type: ignore
     data_loaded: bool = False
-    is_multilingual: bool = False
     hf_subsets: list[HFSubset] | None = None
     fast_loading: bool = False
 
@@ -101,7 +99,7 @@ class AbsTask(ABC):
 
         self.seed = seed
         self.rng_state, self.np_rng = set_seed(seed)
-        self.hf_subsets = list(self.metadata.hf_subsets_to_langscripts.keys())
+        self.hf_subsets = self.metadata.hf_subsets
 
     def check_if_dataset_is_superseded(self):
         """Check if the dataset is superseded by a newer version"""
@@ -230,7 +228,7 @@ class AbsTask(ABC):
         """
         if self.data_loaded:
             return
-        if self.is_multilingual:
+        if self.metadata.is_multilingual:
             if self.fast_loading:
                 self.fast_load()
             else:
@@ -287,14 +285,14 @@ class AbsTask(ABC):
         for split in pbar_split:
             pbar_split.set_postfix_str(f"Split: {split}")
             logger.info(f"Processing metadata for split {split}")
-            if self.is_multilingual:
+            if self.metadata.is_multilingual:
                 descriptive_stats[split] = self._calculate_metrics_from_split(
                     split, compute_overall=True
                 )
                 descriptive_stats[split][hf_subset_stat] = {}
 
                 pbar_subsets = tqdm.tqdm(
-                    self.metadata.hf_subsets_to_langscripts,
+                    self.metadata.hf_subsets,
                     desc="Processing Languages...",
                 )
                 for hf_subset in pbar_subsets:
@@ -384,7 +382,7 @@ class AbsTask(ABC):
         scores["main_score"] = scores[self.metadata.main_score]
 
     def _upload_dataset_to_hub(self, repo_name: str, fields: list[str]) -> None:
-        if self.is_multilingual:
+        if self.metadata.is_multilingual:
             for config in self.metadata.eval_langs:
                 logger.info(f"Converting {config} of {self.metadata.name}")
                 sentences = {}

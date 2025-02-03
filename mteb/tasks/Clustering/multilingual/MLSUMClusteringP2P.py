@@ -21,7 +21,6 @@ N_SAMPLES = 2048
 
 
 class MLSUMClusteringP2P(AbsTaskClustering):
-    is_multilingual = True
     superseded_by = "MLSUMClusteringP2P.v2"
     metadata = TaskMetadata(
         name="MLSUMClusteringP2P",
@@ -90,7 +89,6 @@ class MLSUMClusteringP2P(AbsTaskClustering):
 
 
 class MLSUMClusteringP2PFast(AbsTaskClusteringFast):
-    is_multilingual = True
     max_document_to_embed = N_SAMPLES
     max_fraction_of_documents_to_embed = None
 
