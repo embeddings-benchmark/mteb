@@ -408,7 +408,7 @@ bge_small_zh = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=bge_chinese_training_data,
-    suprerseded_by="BAAI/bge-small-zh-v1.5",
+    superseded_by="BAAI/bge-small-zh-v1.5",
 )
 
 bge_base_zh = ModelMeta(
@@ -434,7 +434,7 @@ bge_base_zh = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=bge_chinese_training_data,
-    suprerseded_by="BAAI/bge-base-zh-v1.5",
+    superseded_by="BAAI/bge-base-zh-v1.5",
 )
 
 bge_large_zh = ModelMeta(
@@ -460,7 +460,7 @@ bge_large_zh = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=bge_chinese_training_data,
-    suprerseded_by="BAAI/bge-large-zh-v1.5",
+    superseded_by="BAAI/bge-large-zh-v1.5",
 )
 
 bge_small_en = ModelMeta(
@@ -486,7 +486,7 @@ bge_small_en = ModelMeta(
     public_training_code=None,
     public_training_data="https://data.baai.ac.cn/details/BAAI-MTP",
     training_datasets=bge_training_data,
-    suprerseded_by="BAAI/bge-small-en-v1.5",
+    superseded_by="BAAI/bge-small-en-v1.5",
 )
 
 bge_base_en = ModelMeta(
@@ -512,7 +512,7 @@ bge_base_en = ModelMeta(
     public_training_code=None,  # seemingly released (at least for some models, but the link is broken
     public_training_data="https://data.baai.ac.cn/details/BAAI-MTP",
     training_datasets=bge_training_data,
-    suprerseded_by="BAAI/bge-base-en-v1.5",
+    superseded_by="BAAI/bge-base-en-v1.5",
 )
 
 bge_large_en = ModelMeta(
@@ -538,7 +538,7 @@ bge_large_en = ModelMeta(
     public_training_code=None,  # seemingly released (at least for some models, but the link is broken
     public_training_data="https://data.baai.ac.cn/details/BAAI-MTP",
     training_datasets=bge_training_data,
-    suprerseded_by="BAAI/bge-large-en-v1.5",
+    superseded_by="BAAI/bge-large-en-v1.5",
 )
 
 
