@@ -34,6 +34,9 @@ class FashionIQIT2IRetrieval(AbsTaskAny2AnyRetrieval):
   pages={11307--11317},
   year={2021}
 }""",
+        prompt={
+            "query": "Find a fashion image that aligns with the reference image and style note."
+        },
         descriptive_stats={
             "n_samples": {"test": 6003},
             "avg_character_length": {

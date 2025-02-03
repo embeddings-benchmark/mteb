@@ -5,6 +5,7 @@ from .code.AppsRetrieval import *
 from .code.CodeEditSearchRetrieval import *
 from .code.CodeFeedbackMTRetrieval import *
 from .code.CodeFeedbackSTRetrieval import *
+from .code.CodeRAG import *
 from .code.CodeSearchNetCCRetrieval import *
 from .code.CodeSearchNetRetrieval import *
 from .code.CodeTransOceanContestRetrieval import *
@@ -29,6 +30,8 @@ from .eng.AlphaNLIRetrieval import *
 from .eng.ARCChallengeRetrieval import *
 from .eng.ArguAnaRetrieval import *
 from .eng.BrightRetrieval import *
+from .eng.ChemHotpotQARetrieval import *
+from .eng.ChemNQRetrieval import *
 from .eng.ClimateFEVERRetrieval import *
 from .eng.CQADupstackAndroidRetrieval import *
 from .eng.CQADupstackEnglishRetrieval import *
@@ -101,6 +104,8 @@ from .eng.Touche2020Retrieval import *
 from .eng.TRECCOVIDRetrieval import *
 from .eng.WinoGrandeRetrieval import *
 from .est.estqa import *
+from .fas.BEIRFa import *
+from .fas.FaMTEBRetrieval import *
 from .fra.AlloprofRetrieval import *
 from .fra.BSARDRetrieval import *
 from .fra.FQuADRetrieval import *

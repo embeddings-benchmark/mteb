@@ -33,6 +33,9 @@ class EncyclopediaVQAIT2ITRetrieval(AbsTaskAny2AnyRetrieval):
   pages={3113--3124},
   year={2023}
 }""",
+        prompt={
+            "query": "Obtain illustrated documents that correspond to the inquiry alongside the provided image."
+        },
         descriptive_stats={
             "n_samples": {"test": 3743},
             "avg_character_length": {

@@ -45,6 +45,9 @@ class ReMuQIT2TRetrieval(AbsTaskAny2AnyRetrieval):
     doi = "10.18653/v1/2023.acl-long.478",
     pages = "8573--8589",
 }""",
+        prompt={
+            "query": "Retrieve a fact-based paragraph that provides an answer to the given query about the image."
+        },
         descriptive_stats={
             "n_samples": {"test": 3609},
             "avg_character_length": {

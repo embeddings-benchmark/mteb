@@ -33,6 +33,9 @@ class OKVQAIT2TRetrieval(AbsTaskAny2AnyRetrieval):
   pages={3195--3204},
   year={2019}
 }""",
+        prompt={
+            "query": "Retrieve documents that provide an answer to the question alongside the image."
+        },
         descriptive_stats={
             "n_samples": {"test": 5046},
             "avg_character_length": {

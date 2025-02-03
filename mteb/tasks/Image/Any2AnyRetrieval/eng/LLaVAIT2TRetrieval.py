@@ -44,6 +44,9 @@ class LLaVAIT2TRetrieval(AbsTaskAny2AnyRetrieval):
     doi = "10.18653/v1/2024.acl-long.289",
     pages = "5294--5316",
 }""",
+        prompt={
+            "query": "Provide a specific decription of the image along with the following question."
+        },
         descriptive_stats={
             "n_samples": {"test": 5120},
             "avg_character_length": {

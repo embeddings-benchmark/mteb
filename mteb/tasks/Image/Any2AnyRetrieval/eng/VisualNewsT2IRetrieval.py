@@ -33,6 +33,9 @@ class VisualNewsT2IRetrieval(AbsTaskAny2AnyRetrieval):
   pages={6761--6771},
   year={2021}
 }""",
+        prompt={
+            "query": "Identify the news-related image in line with the described event."
+        },
         descriptive_stats={
             "n_samples": {"test": 19995},
             "avg_character_length": {

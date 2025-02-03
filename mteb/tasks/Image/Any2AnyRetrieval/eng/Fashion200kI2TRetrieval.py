@@ -33,6 +33,9 @@ class Fashion200kI2TRetrieval(AbsTaskAny2AnyRetrieval):
   pages={1463--1471},
   year={2017}
 }""",
+        prompt={
+            "query": "Based on the following fashion description, retrieve the best matching image."
+        },
         descriptive_stats={
             "n_samples": {"test": 4889},
             "avg_character_length": {
