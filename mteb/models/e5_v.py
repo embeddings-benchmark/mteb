@@ -213,9 +213,3 @@ e5_v = ModelMeta(
         # princeton-nlp/datasets-for-simcse
     },
 )
-
-if __name__ == "__main__":
-    import mteb
-
-    mdl = mteb.get_model(e5_v.name, e5_v.revision)
-    emb = mdl.get_text_embeddings(["Hello, world!"])

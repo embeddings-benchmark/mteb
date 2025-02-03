@@ -208,9 +208,3 @@ clip_vit_base_patch16 = ModelMeta(
     use_instructions=False,
     training_datasets=None,
 )
-
-if __name__ == "__main__":
-    import mteb
-
-    mdl = mteb.get_model(clip_vit_base_patch16.name, clip_vit_base_patch16.revision)
-    emb = mdl.get_text_embeddings(["Hello, world!"])

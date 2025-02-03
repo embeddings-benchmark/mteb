@@ -13,7 +13,6 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 from tqdm import tqdm
 
-import mteb
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
@@ -222,7 +221,3 @@ cohere_eng_3 = ModelMeta(
     use_instructions=False,
     training_datasets=None,
 )
-
-if __name__ == "__main__":
-    mdl = mteb.get_model(cohere_mult_3.name, cohere_mult_3.revision)
-    emb = mdl.encode(["Hello, world!"])

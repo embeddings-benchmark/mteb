@@ -398,11 +398,3 @@ siglip_large_patch16_384 = ModelMeta(
     use_instructions=False,
     training_datasets=siglip_training_datasets,
 )
-
-if __name__ == "__main__":
-    import mteb
-
-    mdl = mteb.get_model(
-        siglip_so400m_patch14_384.name, siglip_so400m_patch14_384.revision
-    )
-    emb = mdl.get_text_embeddings(["Hello, world!"])

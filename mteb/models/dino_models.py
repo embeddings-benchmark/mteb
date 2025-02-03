@@ -221,8 +221,3 @@ dinov2_giant = ModelMeta(
     use_instructions=False,
     training_datasets=dinov2_training_datasets,
 )
-
-if __name__ == "__main__":
-    import mteb
-
-    mdl = mteb.get_model(dinov2_base.name, dinov2_base.revision)

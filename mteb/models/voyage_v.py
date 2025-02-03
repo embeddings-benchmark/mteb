@@ -11,7 +11,6 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 from tqdm import tqdm
 
-import mteb
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
@@ -261,7 +260,3 @@ voyage_v = ModelMeta(
     use_instructions=None,
     training_datasets=None,
 )
-
-if __name__ == "__main__":
-    mdl = mteb.get_model(voyage_v.name, voyage_v.revision)
-    emb = mdl.encode(["Hello, world!"])

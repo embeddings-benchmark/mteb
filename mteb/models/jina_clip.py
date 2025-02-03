@@ -178,10 +178,3 @@ jina_clip_v1 = ModelMeta(
         # Natural Language Inference (NLI) dataset (Bowman et al., 2015)
     },
 )
-
-
-if __name__ == "__main__":
-    import mteb
-
-    mdl = mteb.get_model(jina_clip_v1.name, jina_clip_v1.revision)
-    emb = mdl.get_text_embeddings(["Hello, world!"])

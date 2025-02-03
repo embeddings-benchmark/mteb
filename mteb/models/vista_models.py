@@ -287,9 +287,3 @@ visualized_bge_m3 = ModelMeta(
     use_instructions=False,
     training_datasets=vista_training_datasets,
 )
-
-if __name__ == "__main__":
-    import mteb
-
-    mdl = mteb.get_model(visualized_bge_base.name, visualized_bge_base.name.revision)
-    emb = mdl.get_text_embeddings(["Hello, world!"])

@@ -374,18 +374,3 @@ blip_itm_large_flickr = ModelMeta(
         # LAION115M
     },
 )
-
-
-if __name__ == "__main__":
-    import mteb
-
-    mdl = mteb.get_model(blip_itm_base_coco.name, blip_itm_base_coco.revision)
-    emb = mdl.get_text_embeddings(["Hello, world!"])
-    emb2 = mdl.get_text_embeddings(["Hello there, world!"])
-    emb3 = mdl.get_text_embeddings(["Goodbye, person!"])
-
-    sim = torch.nn.functional.cosine_similarity(emb, emb2)
-    print(sim)
-
-    sim = torch.nn.functional.cosine_similarity(emb, emb3)
-    print(sim)

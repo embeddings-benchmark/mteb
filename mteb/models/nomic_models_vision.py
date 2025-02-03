@@ -187,9 +187,3 @@ nomic_embed_vision_v1_5 = ModelMeta(
         # DFN-2B
     },
 )
-
-if __name__ == "__main__":
-    import mteb
-
-    mdl = mteb.get_model(nomic_embed_vision_v1_5.name, nomic_embed_vision_v1_5.revision)
-    emb = mdl.get_text_embeddings(["Hello, world!"])

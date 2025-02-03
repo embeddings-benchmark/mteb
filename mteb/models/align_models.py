@@ -158,9 +158,3 @@ align_base = ModelMeta(
         # COYO-700M
     },
 )
-
-if __name__ == "__main__":
-    import mteb
-
-    mdl = mteb.get_model(align_base.name, align_base.revision)
-    emb = mdl.get_text_embeddings(["Hello, world!"])
