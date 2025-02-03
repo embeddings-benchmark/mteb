@@ -92,8 +92,6 @@ class AbsTask(ABC):
             seed: An integer seed.
             kwargs: arguments passed to subclasses.
         """
-        self.save_suffix = kwargs.get("save_suffix", "")
-
         self.seed = seed
         self.rng_state, self.np_rng = set_seed(seed)
 
