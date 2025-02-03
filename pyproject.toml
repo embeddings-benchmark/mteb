@@ -68,6 +68,7 @@ pylate = ["pylate>=1.1.4"]
 bm25s = ["bm25s>=0.2.6", "PyStemmer>=2.2.0.3"]
 gritlm = ["gritlm>=1.0.2"]
 xformers = ["xformers>=0.0.29"]
+blip2 = ["salesforce-lavis>=1.0.2"]
 
 
 [tool.coverage.report]

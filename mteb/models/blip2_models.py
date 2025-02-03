@@ -20,7 +20,7 @@ def blip2_loader(**kwargs):
         )
     except ImportError:
         raise ImportError(
-            "Please install `pip install salesforce-lavis` to use BLIP-2 models."
+            "Please install `pip install mteb[blip2]` to use BLIP-2 models."
         )
 
     class BLIP2ModelWrapper:
