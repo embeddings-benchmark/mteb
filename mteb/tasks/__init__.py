@@ -13,3 +13,9 @@ from .SpeedTask import *
 from .STS import *
 from .Summarization import *
 from .SummaryRetrieval import *
+
+from .Reranking.eng.BIRCODorisMae import BIRCODorisMaeReranking
+from .Reranking.eng.BIRCOArguAna import BIRCOArguAnaReranking
+from .Reranking.eng.BIRCOWhatsThatBook import BIRCOWhatsThatBookReranking
+from .Reranking.eng.BIRCOClinicalTrial import BIRCOClinicalTrialReranking
+from .Reranking.eng.BIRCORELIC import BIRCORELICReranking
