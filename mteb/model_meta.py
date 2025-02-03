@@ -148,13 +148,13 @@ class ModelMeta(BaseModel):
         return len(intersection) == 0
 
     @property
-    def memory_usage(self) -> int | None:
-        """Calculates the memory usage (in FP32) of the model in GB."""
-        if self.n_parameters is None or self.embed_dim is None:
+    def memory_usage(self) -> float | None:
+        """Calculates the memory usage (in FP32) of the model in MB."""
+        if self.n_parameters is None:
             return None
-        # Model memory in bytes
+        # Model memory in bytes. For FP32 each parameter is 4 bytes.
         model_memory_bytes = self.num_params * 4
 
         # Convert to MB
-        model_memory_mb = model_memory_bytes / (1024**3)
+        model_memory_mb = model_memory_bytes / (1024**2)
         return model_memory_mb
