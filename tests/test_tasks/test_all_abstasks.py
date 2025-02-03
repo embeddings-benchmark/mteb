@@ -32,6 +32,7 @@ def test_load_data(
         isinstance(task, AbsTaskRetrieval)
         or isinstance(task, AbsTaskReranking)
         or isinstance(task, AbsTaskSpeedTask)
+        or task.is_multilingual
     ):
         pytest.skip()
     with patch.object(task, "dataset_transform") as mock_dataset_transform:
