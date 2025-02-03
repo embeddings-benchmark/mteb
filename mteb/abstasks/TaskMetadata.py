@@ -1,12 +1,26 @@
 from __future__ import annotations
 
 import json
+import json
 import logging
+from collections.abc import Mapping
 from collections.abc import Mapping
 from datetime import date
 from pathlib import Path
 from typing import Annotated, Any, Union
+from pathlib import Path
+from typing import Annotated, Any, Union
 
+from pydantic import (
+    AnyUrl,
+    BaseModel,
+    BeforeValidator,
+    TypeAdapter,
+    field_validator,
+)
+from typing_extensions import Literal, TypedDict
+
+from ..encoder_interface import PromptType
 from pydantic import (
     AnyUrl,
     BaseModel,
@@ -84,6 +98,8 @@ TASK_DOMAIN = Literal[
     "Programming",
     "Chemistry",
     "Financial",
+    "Chemistry",
+    "Financial",
 ]
 
 SAMPLE_CREATION_METHOD = Literal[
@@ -98,7 +114,6 @@ SAMPLE_CREATION_METHOD = Literal[
     "rendered",
     "multiple",
 ]
-
 TASK_TYPE = Literal[
     "BitextMining",
     "Classification",
@@ -229,6 +244,26 @@ class DescriptiveStatistics(TypedDict):
 
     pass
 
+METRIC_VALUE = Union[int, float, dict[str, Any]]
+
+
+class PromptDict(TypedDict, total=False):
+    """A dictionary containing the prompt used for the task.
+
+    Args:
+        query: The prompt used for the queries in the task.
+        passage: The prompt used for the passages in the task.
+    """
+
+    query: str
+    passage: str
+
+
+class DescriptiveStatistics(TypedDict):
+    """Class for descriptive statistics."""
+
+    pass
+
 
 logger = logging.getLogger(__name__)
 
@@ -255,19 +290,25 @@ class TaskMetadata(BaseModel):
             "Government", "Legal", "Medical", "Poetry", "Religious", "Reviews", "Web", "Spoken", "Written". A dataset can belong to multiple domains.
         task_subtypes: The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". Feel free to update the list as needed.
         license: The license of the data specified as lowercase, e.g. "cc-by-nc-4.0". If the license is not specified, use "not specified". For custom licenses a URL is used.
+        license: The license of the data specified as lowercase, e.g. "cc-by-nc-4.0". If the license is not specified, use "not specified". For custom licenses a URL is used.
         annotations_creators: The type of the annotators. Includes "expert-annotated" (annotated by experts), "human-annotated" (annotated e.g. by
             mturkers), "derived" (derived from structure in the data).
         dialect: The dialect of the data, if applicable. Ideally specified as a BCP-47 language tag. Empty list if no dialects are present.
         sample_creation: The method of text creation. Includes "found", "created", "machine-translated", "machine-translated and verified", and
             "machine-translated and localized".
         prompt: The prompt used for the task. Can be a string or a dictionary containing the query and passage prompts.
+        prompt: The prompt used for the task. Can be a string or a dictionary containing the query and passage prompts.
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
     """
 
     dataset: dict[str, Any]
+    dataset: dict[str, Any]
 
     name: str
     description: str
+    prompt: str | PromptDict | None = None
+    type: TASK_TYPE
+    modalities: list[MODALITIES] = ["text"]
     prompt: str | PromptDict | None = None
     type: TASK_TYPE
     modalities: list[MODALITIES] = ["text"]
@@ -281,6 +322,7 @@ class TaskMetadata(BaseModel):
     date: tuple[STR_DATE, STR_DATE] | None = None
     domains: list[TASK_DOMAIN] | None = None
     task_subtypes: list[TASK_SUBTYPE] | None = None
+    license: LICENSES | STR_URL | None = None
     license: LICENSES | STR_URL | None = None
 
     annotations_creators: ANNOTATOR_TYPE | None = None
@@ -307,6 +349,18 @@ class TaskMetadata(BaseModel):
     ) -> dict[str, Any]:
         cls.dataset_revision_is_specified(dataset)
         return dataset
+
+    @field_validator("prompt")
+    def _check_prompt_is_valid(
+        cls, prompt: str | PromptDict | None
+    ) -> str | PromptDict | None:
+        if isinstance(prompt, dict):
+            for key in prompt:
+                if key not in [e.value for e in PromptType]:
+                    raise ValueError(
+                        "The prompt dictionary should only contain the keys 'query' and 'passage'."
+                    )
+        return prompt
 
     @field_validator("prompt")
     def _check_prompt_is_valid(
@@ -381,6 +435,15 @@ class TaskMetadata(BaseModel):
         return sorted(set(self.eval_langs))
 
     @property
+    def bcp47_codes(self) -> list[ISO_LANGUAGE_SCRIPT]:
+        """Return the languages and script codes of the dataset formatting in accordance with the BCP-47 standard."""
+        if isinstance(self.eval_langs, dict):
+            return sorted(
+                {lang for langs in self.eval_langs.values() for lang in langs}
+            )
+        return sorted(set(self.eval_langs))
+
+    @property
     def languages(self) -> list[str]:
         """Return the languages of the dataset as iso639-3 codes."""
 
@@ -412,6 +475,9 @@ class TaskMetadata(BaseModel):
             getattr(self, field_name) is not None
             for field_name in self.model_fields
             if field_name != "prompt"
+            getattr(self, field_name) is not None
+            for field_name in self.model_fields
+            if field_name != "prompt"
         )
 
     @property
@@ -435,6 +501,46 @@ class TaskMetadata(BaseModel):
                 )
             return f"\\cite{{{cite}}}"
         return cite
+
+    @property
+    def descriptive_stats(self) -> dict[str, DescriptiveStatistics] | None:
+        """Return the descriptive statistics for the dataset."""
+        if self.descriptive_stat_path.exists():
+            with self.descriptive_stat_path.open("r") as f:
+                return json.load(f)
+        return None
+
+    @property
+    def descriptive_stat_path(self) -> Path:
+        """Return the path to the descriptive statistics file."""
+        descriptive_stat_base_dir = Path(__file__).parent.parent / "descriptive_stats"
+        if not descriptive_stat_base_dir.exists():
+            descriptive_stat_base_dir.mkdir()
+        task_type_dir = descriptive_stat_base_dir / self.type
+        if not task_type_dir.exists():
+            task_type_dir.mkdir()
+        return task_type_dir / f"{self.name}.json"
+
+    @property
+    def n_samples(self) -> dict[str, int] | None:
+        """Returns the number of samples in the dataset"""
+        stats = self.descriptive_stats
+        if not stats:
+            return None
+
+        n_samples = {}
+        for subset, subset_value in stats.items():
+            if subset == "hf_subset_descriptive_stats":
+                continue
+            n_samples[subset] = subset_value["num_samples"]  # type: ignore
+        return n_samples
+
+    def __hash__(self) -> int:
+        return hash(self.model_dump_json())
+
+    @property
+    def revision(self) -> str:
+        return self.dataset["revision"]
 
     @property
     def descriptive_stats(self) -> dict[str, DescriptiveStatistics] | None:
