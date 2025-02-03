@@ -41,13 +41,16 @@ class TurkicClassification(AbsTaskClassification):
     )
 
     def transform_data(self, dataset, lang):
+        dataset_lang = DatasetDict()
         label_count = Counter(dataset["train"]["label"])
-        dataset_lang = dataset["train"].filter(
+        dataset_lang["train"] = dataset["train"].filter(
             lambda example: example["lang"] == lang
             and label_count[example["label"]] >= 20
         )
-        dataset_lang = self.stratified_subsampling(dataset_lang, seed=self.seed)
-        return dataset_lang
+        dataset_lang = self.stratified_subsampling(
+            dataset_lang, seed=self.seed, splits=["train"]
+        )
+        return dataset_lang["train"]
 
     def load_data(self, **kwargs):
         """Load dataset from HuggingFace hub"""
