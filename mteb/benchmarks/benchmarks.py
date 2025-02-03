@@ -506,12 +506,22 @@ RAR_b = Benchmark(
     contacts=["gowitheflow-1998"],
 )
 
-MTEB_AR = Benchmark(
-    name="MTEB(ar)",
+MTEB_ARA = Benchmark(
+    name="MTEB(ara)",
     tasks=MTEBTasks(
         get_tasks(
             languages=["ar"],
-            tasks=[]
+            tasks=[
+                "XNLI",
+                "MIRACLRetrievalHardNegatives",
+                "MassiveIntentClassification",
+                "MultiHateClassification",
+                "MLQARetrieval",
+                "STS17.v2",
+                "MassiveScenarioClassification",
+                "TweetSentimentClassification",
+            ],
+            languages = ["ara"]
         )
     ),
     description = "MTEB-Arabic, a benchmark for text embedding performance evaluation in the arabic language",
