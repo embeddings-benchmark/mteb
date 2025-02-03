@@ -129,14 +129,14 @@ TASK_CATEGORY = Literal[
     "s2p",  # Sentence-to-paragraph
     "p2p",  # Paragraph-to-paragraph
     "t2t",  # specifically for text-only tasks in mieb
-    "i2i",
-    "i2t",
-    "t2i",
-    "it2t",
-    "it2i",
-    "i2it",
-    "t2it",
-    "it2it",
+    "i2i",  # image-to-image
+    "i2t",  # image-to-text
+    "t2i",  # text-to-image
+    "it2t",  # image+text-to-text
+    "it2i",  # image+text-to-image
+    "i2it",  # image-to-image+text
+    "t2it",  # text-to-image+text
+    "it2it",  # image+text-to-image+text
 ]
 
 ANNOTATOR_TYPE = Literal[
