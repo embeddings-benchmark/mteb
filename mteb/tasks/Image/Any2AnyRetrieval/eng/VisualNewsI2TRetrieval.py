@@ -33,6 +33,7 @@ class VisualNewsI2TRetrieval(AbsTaskAny2AnyRetrieval):
   pages={6761--6771},
   year={2021}
 }""",
+        prompt={"query": "Find a caption for the news in the given photo."},
         descriptive_stats={
             "n_samples": {"test": 20000},
             "avg_character_length": {

@@ -33,6 +33,7 @@ class EDIST2ITRetrieval(AbsTaskAny2AnyRetrieval):
   pages={4877--4894},
   year={2023}
 }""",
+        prompt={"query": "Identify the news photo for the given caption."},
         descriptive_stats={
             "n_samples": {"test": 3241},
             "avg_character_length": {

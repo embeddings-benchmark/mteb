@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from mteb.model_meta import ModelMeta
 
+from .bge_models import bge_full_data
+
 lens_d4000 = ModelMeta(
     loader=None,  # TODO: implement this in the future
     name="yibinlei/LENS-d4000",
@@ -17,8 +19,8 @@ lens_d4000 = ModelMeta(
     framework=["PyTorch"],
     use_instructions=True,
     public_training_code=None,
-    public_training_data=None,
-    training_datasets=None,
+    public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
+    training_datasets=bge_full_data,
     max_tokens=32768,
 )
 
@@ -37,7 +39,7 @@ lens_d8000 = ModelMeta(
     framework=["PyTorch"],
     use_instructions=True,
     public_training_code=None,
-    public_training_data=None,
-    training_datasets=None,
+    public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
+    training_datasets=bge_full_data,
     max_tokens=32768,
 )

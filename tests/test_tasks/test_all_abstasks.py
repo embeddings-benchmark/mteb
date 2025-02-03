@@ -13,6 +13,7 @@ from mteb.abstasks import AbsTask
 from mteb.abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.AbsTaskSpeedTask import AbsTaskSpeedTask
+from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.MultiSubsetLoader import MultiSubsetLoader
@@ -93,6 +94,8 @@ async def check_datasets_are_available_on_hf(tasks):
 def test_dataset_availability():
     """Checks if the datasets are available on Hugging Face using both their name and revision."""
     tasks = MTEB().tasks_cls
+    # do not check aggregated tasks as they don't have a dataset
+    tasks = [t for t in tasks if not isinstance(t, AbsTaskAggregate)]
     tasks = [
         t
         for t in tasks

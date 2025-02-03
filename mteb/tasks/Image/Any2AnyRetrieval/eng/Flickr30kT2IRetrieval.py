@@ -35,6 +35,7 @@ class Flickr30kT2IRetrieval(AbsTaskAny2AnyRetrieval):
   pages={67-78},
   url={https://api.semanticscholar.org/CorpusID:3104920}
 }""",
+        prompt={"query": "Find an image that matches the given caption."},
         descriptive_stats={
             "n_samples": {"test": 5000},
             "avg_character_length": {

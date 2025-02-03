@@ -33,6 +33,9 @@ class OVENIT2ITRetrieval(AbsTaskAny2AnyRetrieval):
   pages={12065--12075},
   year={2023}
 }""",
+        prompt={
+            "query": "Retrieve a Wikipedia image-description pair that provides evidence for the question of this image."
+        },
         descriptive_stats={
             "n_samples": {"test": 14741},
             "avg_character_length": {

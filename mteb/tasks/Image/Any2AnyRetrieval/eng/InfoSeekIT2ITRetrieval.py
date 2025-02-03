@@ -34,6 +34,9 @@ class InfoSeekIT2ITRetrieval(AbsTaskAny2AnyRetrieval):
   pages={14948--14968},
   year={2023}
 }""",
+        prompt={
+            "query": "Find an image and subject description from Wikipedia that answers my question about this image."
+        },
         descriptive_stats={
             "n_samples": {"test": 17593},
             "avg_character_length": {

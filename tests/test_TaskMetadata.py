@@ -59,6 +59,7 @@ _HISTORIC_DATASETS = [
     "AILAStatutes",
     "ArguAna",
     "ClimateFEVER",
+    "CQADupstackRetrieval",
     "CQADupstackAndroidRetrieval",
     "CQADupstackEnglishRetrieval",
     "CQADupstackGamingRetrieval",
@@ -178,6 +179,8 @@ _HISTORIC_DATASETS = [
     "TamilNewsClassification",
     "TenKGnadClusteringP2P.v2",
     "TenKGnadClusteringS2S.v2",
+    "SynPerChatbotConvSAClassification",
+    "CQADupstackRetrieval-Fa",
 ]
 
 

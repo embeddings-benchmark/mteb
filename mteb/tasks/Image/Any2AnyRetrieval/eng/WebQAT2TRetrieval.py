@@ -33,6 +33,9 @@ class WebQAT2TRetrieval(AbsTaskAny2AnyRetrieval):
       pages={16495--16504},
        year={2022}
       }""",
+        prompt={
+            "query": "Retrieve passages from Wikipedia that provide answers to the following question."
+        },
         descriptive_stats={
             "n_samples": {"test": 2455},
             "avg_character_length": {

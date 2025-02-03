@@ -33,6 +33,9 @@ class OVENIT2TRetrieval(AbsTaskAny2AnyRetrieval):
   pages={12065--12075},
   year={2023}
 }""",
+        prompt={
+            "query": "Retrieve a Wikipedia paragraph that provides an answer to the given query about the image."
+        },
         descriptive_stats={
             "n_samples": {"test": 50004},
             "avg_character_length": {

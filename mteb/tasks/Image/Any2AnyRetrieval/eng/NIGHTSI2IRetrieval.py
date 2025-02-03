@@ -33,6 +33,9 @@ class NIGHTSI2IRetrieval(AbsTaskAny2AnyRetrieval):
   volume={36},
   year={2024}
 }""",
+        prompt={
+            "query": "Find a day-to-day image that looks similar to the provided image."
+        },
         descriptive_stats={
             "n_samples": {"test": 2120},
             "avg_character_length": {

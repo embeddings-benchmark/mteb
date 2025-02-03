@@ -35,6 +35,9 @@ class MSCOCOI2TRetrieval(AbsTaskAny2AnyRetrieval):
         year={2014},
         organization={Springer}
         }""",
+        prompt={
+            "query": "Find an image caption describing the following everyday image."
+        },
         descriptive_stats={
             "n_samples": {"test": 5000},
             "avg_character_length": {

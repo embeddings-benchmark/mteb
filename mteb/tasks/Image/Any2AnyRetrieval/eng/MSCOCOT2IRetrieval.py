@@ -35,6 +35,7 @@ class MSCOCOT2IRetrieval(AbsTaskAny2AnyRetrieval):
         year={2014},
         organization={Springer}
         }""",
+        prompt={"query": "Identify the image showcasing the described everyday scene."},
         descriptive_stats={
             "n_samples": {"test": 24809},
             "avg_character_length": {

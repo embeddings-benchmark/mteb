@@ -34,6 +34,9 @@ class CIRRIT2IRetrieval(AbsTaskAny2AnyRetrieval):
         pages={2125--2134},
         year={2021}
         }""",
+        prompt={
+            "query": "Retrieve a day-to-day image that aligns with the modification instructions of the provided image."
+        },
         descriptive_stats={
             "n_samples": {"test": 4170},
             "avg_character_length": {

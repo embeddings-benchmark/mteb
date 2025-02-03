@@ -98,6 +98,7 @@ class VidoreArxivQARetrieval(AbsTaskAny2AnyRetrieval):
   journal={arXiv preprint arXiv:2407.01449},
   year={2024}
 }""",
+        prompt={"query": "Find a screenshot that relevant to the user's question."},
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
@@ -151,6 +152,7 @@ class VidoreDocVQARetrieval(AbsTaskAny2AnyRetrieval):
   journal={arXiv preprint arXiv:2407.01449},
   year={2024}
 }""",
+        prompt={"query": "Find a screenshot that relevant to the user's question."},
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
@@ -204,6 +206,7 @@ class VidoreInfoVQARetrieval(AbsTaskAny2AnyRetrieval):
   journal={arXiv preprint arXiv:2407.01449},
   year={2024}
 }""",
+        prompt={"query": "Find a screenshot that relevant to the user's question."},
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
@@ -257,6 +260,7 @@ class VidoreTabfquadRetrieval(AbsTaskAny2AnyRetrieval):
   journal={arXiv preprint arXiv:2407.01449},
   year={2024}
 }""",
+        prompt={"query": "Find a screenshot that relevant to the user's question."},
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
@@ -310,6 +314,7 @@ class VidoreTatdqaRetrieval(AbsTaskAny2AnyRetrieval):
   journal={arXiv preprint arXiv:2407.01449},
   year={2024}
 }""",
+        prompt={"query": "Find a screenshot that relevant to the user's question."},
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
@@ -363,6 +368,7 @@ class VidoreShiftProjectRetrieval(AbsTaskAny2AnyRetrieval):
   journal={arXiv preprint arXiv:2407.01449},
   year={2024}
 }""",
+        prompt={"query": "Find a screenshot that relevant to the user's question."},
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
@@ -416,6 +422,7 @@ class VidoreSyntheticDocQAAIRetrieval(AbsTaskAny2AnyRetrieval):
   journal={arXiv preprint arXiv:2407.01449},
   year={2024}
 }""",
+        prompt={"query": "Find a screenshot that relevant to the user's question."},
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
@@ -469,6 +476,7 @@ class VidoreSyntheticDocQAEnergyRetrieval(AbsTaskAny2AnyRetrieval):
   journal={arXiv preprint arXiv:2407.01449},
   year={2024}
 }""",
+        prompt={"query": "Find a screenshot that relevant to the user's question."},
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
@@ -522,6 +530,7 @@ class VidoreSyntheticDocQAGovernmentReportsRetrieval(AbsTaskAny2AnyRetrieval):
   journal={arXiv preprint arXiv:2407.01449},
   year={2024}
 }""",
+        prompt={"query": "Find a screenshot that relevant to the user's question."},
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
@@ -575,6 +584,7 @@ class VidoreSyntheticDocQAHealthcareIndustryRetrieval(AbsTaskAny2AnyRetrieval):
   journal={arXiv preprint arXiv:2407.01449},
   year={2024}
 }""",
+        prompt={"query": "Find a screenshot that relevant to the user's question."},
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {

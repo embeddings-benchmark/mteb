@@ -33,6 +33,7 @@ class WebQAT2ITRetrieval(AbsTaskAny2AnyRetrieval):
       pages={16495--16504},
        year={2022}
       }""",
+        prompt={"query": "Find a Wikipedia image that answers this question."},
         descriptive_stats={
             "n_samples": {"test": 2511},
             "avg_character_length": {
