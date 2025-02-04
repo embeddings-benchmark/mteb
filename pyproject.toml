@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.31.8"
+version = "1.34.0"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -40,6 +40,7 @@ dependencies = [
     "typing_extensions>=0.0.0",
     "eval_type_backport>=0.0.0",
     "polars>=0.20.22",
+    "torchvision>0.0.0",
 ]
 
 
@@ -67,6 +68,7 @@ pylate = ["pylate>=1.1.4"]
 bm25s = ["bm25s>=0.2.6", "PyStemmer>=2.2.0.3"]
 gritlm = ["gritlm>=1.0.2"]
 xformers = ["xformers>=0.0.29"]
+blip2 = ["salesforce-lavis>=1.0.2"]
 
 
 [tool.coverage.report]

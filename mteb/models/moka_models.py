@@ -10,7 +10,9 @@ sent_trf_training_dataset = {
     "MSMARCOHardNegatives": ["train"],
     "NanoMSMARCORetrieval": ["train"],
     "MSMARCO-PL": ["train"],  # translation not trained on
+    "mMARCO-NL": ["train"],  # translation not trained on
     "NQ": ["train"],
+    "NQ-NL": ["train"],  # translation not trained on
     "NQHardNegatives": ["train"],
     "NanoNQRetrieval": ["train"],
     "NQ-PL": ["train"],  # translation not trained on
@@ -124,7 +126,6 @@ m3e_small = ModelMeta(
     public_training_data=None,  # Not published
     training_datasets=m3e_dataset,
 )
-
 
 m3e_large = ModelMeta(
     name="moka-ai/m3e-large",

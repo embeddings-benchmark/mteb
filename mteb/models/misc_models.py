@@ -120,10 +120,12 @@ Hum_Works__lodestone_base_4096_v1 = ModelMeta(
         "MSMARCOHardNegatives": ["train"],
         "NanoMSMARCORetrieval": ["train"],
         "MSMARCO-PL": ["train"],  # translation not trained on
+        "mMARCO-NL": ["train"],  # translation not trained on
         "NQ": ["train"],
         "NQHardNegatives": ["train"],
         "NanoNQRetrieval": ["train"],
         "NQ-PL": ["train"],  # translation not trained on
+        "NQ-NL": ["train"],  # translation not trained on
         # not in MTEB
         # "s2orc": ["train"],
         # "flax-sentence-embeddings/stackexchange_title_body_jsonl": ["train"],
@@ -1409,9 +1411,12 @@ abhinand__MedEmbed_small_v0_1 = ModelMeta(
     training_datasets={
         "MedicalQARetrieval": ["train"],
         "NFCorpus": ["train"],
+        "NFCorpus-NL": ["train"],  # translation not trained on
         "PublicHealthQA": ["train"],
         "TRECCOVID": ["train"],
         "ArguAna": ["train"],
+        "TRECCOVID-NL": ["train"],  # translation not trained on
+        "ArguAna-NL": ["train"],  # translation not trained on
     },
     adapted_from="./medical-bge-small-v1-mix1",
     superseded_by=None,

@@ -22,12 +22,15 @@ bge_m3_training_data = {
     "MSMARCOHardNegatives": ["train"],
     "NanoMSMARCORetrieval": ["train"],
     "MSMARCO-PL": ["train"],  # translation not trained on
+    "mMARCO-NL": ["train"],  # translation not trained on
     "NQ": ["train"],
+    "NQ-NL": ["train"],  # translation not trained on
     "NQHardNegatives": ["train"],
     "NanoNQRetrieval": ["train"],
     "NQ-PL": ["train"],  # translation not trained on
     "HotpotQA": ["train"],
     "HotpotQA-PL": ["train"],  # translation not trained on
+    "HotpotQA-NL": ["train"],  # translation not trained on
     "HotpotQAHardNegatives": ["train"],
     "T2Retrieval": ["train"],
     "DuReader": ["train"],
@@ -57,6 +60,7 @@ bge_m3_training_data = {
 bge_training_data = {
     # source: https://data.baai.ac.cn/details/BAAI-MTP
     "NQ": ["test"],
+    "NQ-NL": ["test"],  # translation not trained on
     "NQHardNegatives": ["test"],
     "AmazonReviewsClassification": [
         "validation",
@@ -92,6 +96,25 @@ bge_chinese_training_data = {
     "CMedQAv2-reranking": ["train"],
     "Cmnli": ["train"],
     "Ocnli": ["train"],
+    # from https://github.com/FlagOpen/FlagEmbedding/blob/1.1/FlagEmbedding/baai_general_embedding/README.md
+    "MSMARCO": ["train"],
+    "MSMARCOHardNegatives": ["train"],
+    "NanoMSMARCORetrieval": ["train"],
+    "MSMARCO-PL": ["train"],  # translation not trained on
+    "NQ": ["test"],
+    "NQHardNegatives": ["test"],
+    "HotpotQA": ["train"],
+    "HotpotQA-PL": ["train"],  # translation not trained on
+    "HotpotQAHardNegatives": ["train"],
+    "QuoraRetrieval": ["train"],
+    "QuoraRetrievalHardNegatives": ["train"],
+    "Quora-PLHardNegatives": ["train"],
+    "QuoraRetrieval-Fa": ["train"],
+    "Quora-PL": ["train"],
+    # "StackExchangeClusteringP2P": ["test"],
+    # "StackExchangeClusteringP2P.v2": ["test"],
+    # "StackExchangeClustering": ["test"],
+    # "StackExchangeClustering.v2": ["test"],
     # not in mteb
     #  - multi-cpr
     #  - NLI-zh
@@ -105,7 +128,7 @@ bge_chinese_training_data = {
     # wiki_atomic_edits	(base_sentence, edited_sentence)
     # mlqa	(question, context)
     # xlsum	(title, summary) (title, text)
-    # "sentence-transformers data": [],  # https://huggingface.co/datasets/sentence-transformers/embedding-training-data # TODO check this further
+    # s2orc
     # "wikipedia": [],  # title + section title, passage
     # "reddit": [],  # title, body
     # "stackexchange": [],  # (title, upvoted answer) (title+body, upvoted answer)
@@ -289,7 +312,6 @@ bgem3_languages = [
     "zho_Hans",  # zh
 ]
 
-
 bge_small_en_v1_5 = ModelMeta(
     loader=partial(  # type: ignore
         sentence_transformers_loader,
@@ -302,7 +324,7 @@ bge_small_en_v1_5 = ModelMeta(
     open_weights=True,
     revision="5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
     release_date="2023-09-12",  # initial commit of hf model.
-    n_parameters=24_000_000,
+    n_parameters=33_400_000,
     memory_usage_mb=127,
     embed_dim=512,
     license="mit",
@@ -328,7 +350,7 @@ bge_base_en_v1_5 = ModelMeta(
     open_weights=True,
     revision="a5beb1e3e68b9ab74eb54cfd186867f64f240e1a",
     release_date="2023-09-11",  # initial commit of hf model.
-    n_parameters=438_000_000,
+    n_parameters=109_000_000,
     memory_usage_mb=1671,
     embed_dim=768,
     license="mit",
@@ -354,7 +376,7 @@ bge_large_en_v1_5 = ModelMeta(
     open_weights=True,
     revision="d4aa6901d3a41ba39fb536a557fa166f842b0e09",
     release_date="2023-09-12",  # initial commit of hf model.
-    n_parameters=1_340_000_000,
+    n_parameters=335_000_000,
     memory_usage_mb=5112,
     embed_dim=1024,
     license="mit",
@@ -368,6 +390,163 @@ bge_large_en_v1_5 = ModelMeta(
     training_datasets=bge_training_data,
 )
 
+bge_small_zh = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="BAAI/bge-small-zh",
+        revision="1d2363c5de6ce9ba9c890c8e23a4c72dce540ca8",
+        model_prompts=model_prompts_zh,
+    ),
+    name="BAAI/bge-small-zh",
+    languages=["zho_Hans"],
+    open_weights=True,
+    revision="1d2363c5de6ce9ba9c890c8e23a4c72dce540ca8",
+    release_date="2023-08-05",  # initial commit of hf model.
+    n_parameters=33_400_000,
+    embed_dim=512,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/BAAI/bge-small-zh",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=bge_chinese_training_data,
+    superseded_by="BAAI/bge-small-zh-v1.5",
+)
+
+bge_base_zh = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="BAAI/bge-base-zh",
+        revision="0e5f83d4895db7955e4cb9ed37ab73f7ded339b6",
+        model_prompts=model_prompts_zh,
+    ),
+    name="BAAI/bge-base-zh",
+    languages=["zho_Hans"],
+    open_weights=True,
+    revision="0e5f83d4895db7955e4cb9ed37ab73f7ded339b6",
+    release_date="2023-08-05",  # initial commit of hf model.
+    n_parameters=109_000_000,
+    embed_dim=768,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/BAAI/bge-base-zh",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=bge_chinese_training_data,
+    superseded_by="BAAI/bge-base-zh-v1.5",
+)
+
+bge_large_zh = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="BAAI/bge-large-zh",
+        revision="b5d9f5c027e87b6f0b6fa4b614f8f9cdc45ce0e8",
+        model_prompts=model_prompts_zh,
+    ),
+    name="BAAI/bge-large-zh",
+    languages=["zho_Hans"],
+    open_weights=True,
+    revision="b5d9f5c027e87b6f0b6fa4b614f8f9cdc45ce0e8",
+    release_date="2023-08-02",  # initial commit of hf model.
+    n_parameters=335_000_000,
+    embed_dim=1024,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/BAAI/bge-large-zh",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=bge_chinese_training_data,
+    superseded_by="BAAI/bge-large-zh-v1.5",
+)
+
+bge_small_en = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="BAAI/bge-small-en",
+        revision="4778d71a06863076696b03fd2777eb118712cad8",
+        model_prompts=model_prompts,
+    ),
+    name="BAAI/bge-small-en",
+    languages=["eng_Latn"],
+    open_weights=True,
+    revision="4778d71a06863076696b03fd2777eb118712cad8",
+    release_date="2023-08-05",  # initial commit of hf model.
+    n_parameters=33_400_000,
+    embed_dim=512,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/BAAI/bge-small-en",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data="https://data.baai.ac.cn/details/BAAI-MTP",
+    training_datasets=bge_training_data,
+    superseded_by="BAAI/bge-small-en-v1.5",
+)
+
+bge_base_en = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="BAAI/bge-base-en",
+        revision="b737bf5dcc6ee8bdc530531266b4804a5d77b5d8",
+        model_prompts=model_prompts,
+    ),
+    name="BAAI/bge-base-en",
+    languages=["eng_Latn"],
+    open_weights=True,
+    revision="b737bf5dcc6ee8bdc530531266b4804a5d77b5d8",
+    release_date="2023-08-05",  # initial commit of hf model.
+    n_parameters=109_000_000,
+    embed_dim=768,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/BAAI/bge-base-en",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    public_training_code=None,  # seemingly released (at least for some models, but the link is broken
+    public_training_data="https://data.baai.ac.cn/details/BAAI-MTP",
+    training_datasets=bge_training_data,
+    superseded_by="BAAI/bge-base-en-v1.5",
+)
+
+bge_large_en = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="BAAI/bge-large-en",
+        revision="abe7d9d814b775ca171121fb03f394dc42974275",
+        model_prompts=model_prompts,
+    ),
+    name="BAAI/bge-large-en",
+    languages=["eng_Latn"],
+    open_weights=True,
+    revision="abe7d9d814b775ca171121fb03f394dc42974275",
+    release_date="2023-08-05",  # initial commit of hf model.
+    n_parameters=335_000_000,
+    embed_dim=1024,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/BAAI/bge-large-en",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    public_training_code=None,  # seemingly released (at least for some models, but the link is broken
+    public_training_data="https://data.baai.ac.cn/details/BAAI-MTP",
+    training_datasets=bge_training_data,
+    superseded_by="BAAI/bge-large-en-v1.5",
+)
+
+
 bge_small_zh_v1_5 = ModelMeta(
     loader=partial(  # type: ignore
         sentence_transformers_loader,
@@ -380,7 +559,7 @@ bge_small_zh_v1_5 = ModelMeta(
     open_weights=True,
     revision="7999e1d3359715c523056ef9478215996d62a620",
     release_date="2023-09-12",  # initial commit of hf model.
-    n_parameters=24_000_000,
+    n_parameters=33_400_000,
     memory_usage_mb=91,
     embed_dim=512,
     license="mit",
@@ -406,7 +585,7 @@ bge_base_zh_v1_5 = ModelMeta(
     open_weights=True,
     revision="f03589ceff5aac7111bd60cfc7d497ca17ecac65",
     release_date="2023-09-11",  # initial commit of hf model.
-    n_parameters=438_000_000,
+    n_parameters=109_000_000,
     memory_usage_mb=1671,
     embed_dim=768,
     license="mit",
@@ -432,7 +611,7 @@ bge_large_zh_v1_5 = ModelMeta(
     open_weights=True,
     revision="79e7739b6ab944e86d6171e44d24c997fc1e0116",
     release_date="2023-09-12",  # initial commit of hf model.
-    n_parameters=1_340_000_000,
+    n_parameters=335_000_000,
     memory_usage_mb=5112,
     embed_dim=1024,
     license="mit",
@@ -470,7 +649,6 @@ bge_m3 = ModelMeta(
     public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
     training_datasets=bge_m3_training_data,
 )
-
 
 bge_multilingual_gemma2 = ModelMeta(
     loader=partial(  # type: ignore
@@ -517,11 +695,17 @@ bge_full_data = {
     # TriviaQA
     # QuoraDuplicateQuestions
     "HotpotQA": ["train"],
+    "HotpotQA-NL": ["train"],  # translation not trained on
     "FEVER": ["train"],
+    "FEVER-NL": ["train"],  # translation not trained on
     "MSMARCO": ["train"],
+    "mMARCO-NL": ["train"],  # translation not trained on
     "NQ": ["train"],
+    "NQ-NL": ["train"],  # translation not trained on
     "ArguAna": ["train"],
+    "ArguAna-NL": ["train"],  # translation not trained on
     "FiQA2018": ["train"],
+    "FiQA2018-NL": ["train"],  # translation not trained on
     # |Reranking|
     "SciDocsReranking": ["train"],
     "StackOverflowDupQuestions": ["train"],

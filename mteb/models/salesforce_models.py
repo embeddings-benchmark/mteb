@@ -19,11 +19,14 @@ SFR_TRAINING_DATA = {  # inherits from e5
     # From previously released blogpost which now have been taken down:
     "FiQA2018": ["train"],
     "FiQA2018-PL": ["train"],
+    "FiQA2018-NL": ["train"],  # translation not trained on
     "FEVER": ["train"],
     "FEVERHardNegatives": ["train"],
+    "FEVER-NL": ["train"],  # translation not trained on
     "HotpotQA": ["train"],
     "HotpotQAHardNegatives": ["train"],
     "HotpotQA-PL": ["train"],  # translation not trained on
+    "HotpotQA-NL": ["train"],  # translation not trained on
 }
 
 SFR_Embedding_2_R = ModelMeta(
@@ -58,7 +61,6 @@ SFR_Embedding_2_R = ModelMeta(
     public_training_data=None,
     training_datasets=SFR_TRAINING_DATA,
 )
-
 
 SFR_Embedding_Mistral = ModelMeta(
     loader=partial(  # type: ignore

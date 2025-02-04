@@ -14,17 +14,17 @@ from mteb.models.instruct_wrapper import instruct_wrapper
 
 MISTRAL_LANGUAGES = ["eng_Latn", "fra_Latn", "deu_Latn", "ita_Latn", "spa_Latn"]
 
-
 E5_INSTRUCTION = "Instruct: {instruction}\nQuery: "
-
 
 E5_MISTRAL_TRAINING_DATA = {
     **E5_TRAINING_DATA,
     "FEVER": ["train"],
     "FEVERHardNegatives": ["train"],
+    "FEVER-NL": ["train"],  # translation not trained on
     "HotpotQA": ["train"],
     "HotpotQAHardNegatives": ["train"],
     "HotpotQA-PL": ["train"],  # translation not trained on
+    "HotpotQA-NL": ["train"],  # translation not trained on
 }
 
 e5_instruct = ModelMeta(
@@ -122,8 +122,10 @@ zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
         # copied from e5
         # source: https://arxiv.org/pdf/2212.03533
         "NQ": ["test"],
+        "NQ-NL": ["test"],  # translation not trained on
         "NQHardNegatives": ["test"],
         "MSMARCO": ["train"],  # dev?
+        "mMARCO-NL": ["train"],  # translation not trained on
         # source: https://www.zeta-alpha.com/post/fine-tuning-an-llm-for-state-of-the-art-retrieval-zeta-alpha-s-top-10-submission-to-the-the-mteb-be
         # "Arguana",
         # "FEVER",

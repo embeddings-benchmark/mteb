@@ -53,15 +53,18 @@ granite_training_data = {
     # Machine Translations of SPECTER citation triplets
     # Natural Questions (NQ)
     "NQ": ["test"],
+    "NQ-NL": ["test"],  # translation not trained on
     "NQHardNegatives": ["test"],
     # SQuAD2.0
     # HotpotQA
     "HotPotQA": ["test"],
     "HotPotQAHardNegatives": ["test"],
     "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
+    "HotpotQA-NL": ["test"],  # translated from hotpotQA (not trained on)
     # Fever
     "FEVER": ["test"],
     "FEVERHardNegatives": ["test"],
+    "FEVER-NL": ["test"],  # translated from hotpotQA (not trained on)
     # PubMed
     # Multilingual Miracl Triples
     "MIRACLRetrieval": ["train"],
@@ -72,6 +75,7 @@ granite_training_data = {
     # Sadeeem Question Asnwering
     # DBPedia Title-Body Pairs
     "DBPedia": ["train"],
+    "DBPedia-NL": ["train"],  # translated from hotpotQA (not trained on)
     # Synthetic: English Query-Wikipedia Passage
     # Synthetic: English Fact Verification
     # Synthetic: Multilingual Query-Wikipedia Passage

@@ -365,7 +365,6 @@ voyage_3_lite = ModelMeta(
     public_training_data=None,
 )
 
-
 voyage_3_exp = ModelMeta(
     name="voyageai/voyage-3-m-exp",
     revision="1",
@@ -390,23 +389,29 @@ voyage_3_exp = ModelMeta(
         # MTEB(eng, classic) training data:
         "ArguAna": ["train"],
         "ArguAna-PL": ["train"],
+        "ArguAna-NL": ["train"],  # translation not trained on
         "NanoArguAnaRetrieval": ["train"],
         "HotpotQA": ["train"],
         "HotpotQA-PL": ["train"],  # translation not trained on
+        "HotpotQA-NL": ["train"],  # translation not trained on
         "HotpotQAHardNegatives": ["train"],
         "MSMARCO": ["train"],
         "MSMARCOHardNegatives": ["train"],
         "NanoMSMARCORetrieval": ["train"],
         "MSMARCO-PL": ["train"],  # translation not trained on
+        "mMARCO-NL": ["train"],  # translation not trained on
         "NQ": ["train"],
         "NQHardNegatives": ["train"],
         "NanoNQRetrieval": ["train"],
         "NQ-PL": ["train"],  # translation not trained on
+        "NQ-NL": ["train"],  # translation not trained on
         "FEVER": ["train"],
         "FEVERHardNegatives": ["train"],
         "NanoFEVERRetrieval": ["train"],
+        "FEVER-NL": ["train"],  # translation not trained on
         "FiQA2018": ["train"],
         "FiQA2018-PL": ["train"],  # translation not trained on
+        "FiQA2018-NL": ["train"],  # translation not trained on
         "STS12": ["train"],
         "STS22": ["train"],
         "AmazonReviewsClassification": ["train"],

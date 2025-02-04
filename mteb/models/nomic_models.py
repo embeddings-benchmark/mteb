@@ -133,6 +133,7 @@ nomic_training_data = {
     # altlex
     # quora
     "QuoraRetrieval": [],
+    "Quora-NL": [],  # translation not trained on
     "NanoQuoraRetrieval": [],
     # simplewiki
     # squad
@@ -142,11 +143,13 @@ nomic_training_data = {
     "MSMARCO": ["train"],
     "MSMARCOHardNegatives": ["train"],
     "NanoMSMARCORetrieval": ["train"],
+    "mMARCO-NL": ["train"],
     # nq_triples
     "NQ": ["train"],
     "NQHardNegatives": ["train"],
     "NanoNQRetrieval": ["train"],
     "NQ-PL": ["train"],  # translation not trained on
+    "NQ-NL": ["train"],  # translation not trained on
     # nli_triplets
     # reddit
     # medi_wiki
@@ -157,9 +160,11 @@ nomic_training_data = {
     "HotPotQA": ["test"],
     "HotPotQAHardNegatives": ["test"],
     "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
+    "HotpotQA-NL": ["test"],  # translated from hotpotQA (not trained on)
     # fever
     "FEVER": ["test"],
     "FEVERHardNegatives": ["test"],
+    "FEVER-NL": ["test"],  # translated, not trained on
 }
 
 # https://github.com/nomic-ai/contrastors/blob/5f7b461e5a13b5636692d1c9f1141b27232fe966/src/contrastors/eval/mteb_eval/eval_mteb.py#L142-L159
@@ -261,7 +266,6 @@ nomic_embed_v1_ablated = ModelMeta(
     training_datasets=nomic_training_data,
     public_training_data=None,
 )
-
 
 nomic_embed_v1_unsupervised = ModelMeta(
     loader=partial(
