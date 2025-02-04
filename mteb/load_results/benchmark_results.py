@@ -13,7 +13,8 @@ from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict
 
 from mteb.abstasks.AbsTask import AbsTask, ScoresDict
-from mteb.abstasks.TaskMetadata import ISO_LANGUAGE_SCRIPT, TASK_DOMAIN, TASK_TYPE
+from mteb.abstasks.TaskMetadata import (ISO_LANGUAGE_SCRIPT, TASK_DOMAIN,
+                                        TASK_TYPE)
 from mteb.languages import ISO_LANGUAGE
 from mteb.load_results.task_results import TaskResult
 from mteb.models.overview import get_model_metas
@@ -291,6 +292,8 @@ class BenchmarkResults(BaseModel):
                         has_scores=bool(task_result.scores),
                     )
                 )
+        if not records:
+            return BenchmarkResults.model_construct(model_results=[])
         task_df = pd.DataFrame.from_records(records)
         model_to_main_revision = {
             meta.name: meta.revision for meta in get_model_metas()
