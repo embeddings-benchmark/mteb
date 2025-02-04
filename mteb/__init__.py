@@ -18,10 +18,21 @@ from mteb.overview import TASKS_REGISTRY, get_task, get_tasks
 from .benchmarks.benchmarks import Benchmark
 from .benchmarks.get_benchmark import BENCHMARK_REGISTRY, get_benchmark, get_benchmarks
 
+from .Reranking.eng.BIRCO.BIRCODorisMae import BIRCODorisMaeReranking
+from .Reranking.eng.BIRCO.BIRCOArguAna import BIRCOArguAnaReranking
+from .Reranking.eng.BIRCO.BIRCOWhatsThatBook import BIRCOWhatsThatBookReranking
+from .Reranking.eng.BIRCO.BIRCOClinicalTrial import BIRCOClinicalTrialReranking
+from .Reranking.eng.BIRCO.BIRCORELIC import BIRCORELICReranking
+
 __version__ = version("mteb")  # fetch version from install metadata
 
 
 __all__ = [
+    "BIRCODorisMaeReranking",
+    "BIRCOArguAnaReranking",
+    "BIRCOWhatsThatBookReranking",
+    "BIRCOClinicalTrialReranking",
+    "BIRCORELICReranking",
     "MTEB_ENG_CLASSIC",
     "MTEB_MAIN_RU",
     "MTEB_RETRIEVAL_LAW",

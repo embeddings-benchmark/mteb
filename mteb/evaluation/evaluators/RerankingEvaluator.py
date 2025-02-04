@@ -57,6 +57,14 @@ class RerankingEvaluator(Evaluator):
         self.evaluator_type = evaluator_type
         self.encode_kwargs = encode_kwargs
 
+        # Graded Relevance Detection
+        self.graded_relevance = self._detect_graded_relevance()
+        self.main_score = "ndcg_at_10" if self.graded_relevance else "map"
+
+        if not self.graded_relevance:
+            self._convert_legacy_samples()
+            self.graded_relevance = True  # Force graded mode for all datasets
+
         if "batch_size" not in self.encode_kwargs:
             self.encode_kwargs["batch_size"] = 512
 
@@ -70,11 +78,39 @@ class RerankingEvaluator(Evaluator):
             if len(sample["positive"]) > 0 and len(sample["negative"]) > 0
         ]
 
+    def _detect_graded_relevance(self):
+        # Check for explicit metadata flag first
+        if getattr(self.task.metadata, '_needs_graded_evaluation', False):
+            return True
+        # Fallback to sample structure detection
+        return any('scores' in sample for sample in self.samples)
+
+    
+    def _convert_legacy_samples(self):
+        """Convert old format to new graded format"""
+        for sample in self.samples:
+            if 'positive' in sample:
+                sample["docs"] = sample["positive"] + sample["negative"]
+                sample["scores"] = [1]*len(sample["positive"]) + [0]*len(sample["negative"])
+                del sample["positive"]
+                del sample["negative"]
+
     def __call__(self, model: Encoder):
         scores = self.compute_metrics(model)
         return scores
 
     def compute_metrics(self, model: Encoder):
+        if self.graded_relevance:
+            return self._compute_graded_metrics(model)
+        else:
+            return self._compute_legacy_metrics(model)
+
+    def _compute_graded_metrics(self, model):
+        qrels, run = self._prepare_graded_evaluation(model)
+        return self._calculate_graded_metrics(qrels, run)
+
+    def _compute_legacy_metrics(self, model):
+        # Original MRR/MAP calculation
         return (
             self.compute_metrics_batched(model)
             if self.use_batched_encoding
@@ -216,6 +252,46 @@ class RerankingEvaluator(Evaluator):
                 model,
             )
 
+    def _prepare_graded_evaluation(self, model):
+        """Prepares qrels and run for pytrec_eval"""
+        qrels = {}
+        run = {}
+        doc_index = 0
+        
+        for idx, sample in enumerate(self.samples):
+            qid = f"Q{idx+1}"
+            docs = sample.get("docs", sample["positive"] + sample["negative"])
+            
+            # Get relevance scores
+            if 'scores' in sample:
+                scores = sample['scores']
+            else:  # For backward compatibility
+                scores = [1]*len(sample["positive"]) + [0]*len(sample["negative"])
+            
+            # Get model predictions
+            query_emb = model.encode(sample["query"])
+            doc_embs = model.encode(docs)
+            pred_scores = cos_sim(query_emb, doc_embs).flatten()
+            
+            # Build structures
+            qrels[qid] = {str(i): float(score) for i, score in enumerate(scores)}
+            run[qid] = {str(i): float(pred_scores[i]) for i in range(len(docs))}
+            
+        return qrels, run
+
+    def _calculate_graded_metrics(self, qrels, run):
+        """Calculate nDCG and Recall using official trec_eval"""
+        evaluator = pytrec_eval.RelevanceEvaluator(
+            qrels,
+            {'ndcg_cut.10', 'recall.10'}
+        )
+        results = evaluator.evaluate(run)
+        
+        return {
+            'ndcg_at_10': np.mean([v['ndcg_cut_10'] for v in results.values()]),
+            'recall_at_10': np.mean([v['recall_10'] for v in results.values()])
+        }
+    
     def _encode_candidates_individual(
         self,
         model: Encoder,
