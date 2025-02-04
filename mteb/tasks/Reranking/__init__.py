@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from .ara.NamaaMrTydiReranking import *
 from .eng.AskUbuntuDupQuestions import *
+from .eng.BuiltBenchReranking import *
 from .eng.MindSmallReranking import *
 from .eng.SciDocsReranking import *
 from .eng.StackOverflowDupQuestions import *

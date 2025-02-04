@@ -1,28 +1,28 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
-class BuiltBenchClusteringS2S(AbsTaskClustering):
-    superseded_by = None
+
+class BuiltBenchRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="BuiltBenchClusteringS2S",
-        description="Clustering of built asset names/titles based on categories identified within industry classification systems such as IFC, Uniclass, etc.",
+        name="BuiltBenchRetrieval",
+        description="Retrieval of built asset entity type/class descriptions given a query describing an entity as represented in well-established industry classification systems such as Uniclass, IFC, etc.",
         reference="https://arxiv.org/abs/2411.12056",
         dataset={
-            "path": "mehrzad-shahin/BuiltBench-clustering-s2s",
-            "revision": "1aaeb2ece89ea0a8c64e215c95c4cfaf7e891149",
+            "path": "mehrzad-shahin/BuiltBench-retrieval",
+            "revision": "ae611238a58dae85f3130563fe9f9e995444a8d6",
         },
-        type="Clustering",
-        category="s2s",
+        type="Retrieval",
+        category="p2p",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="v_measure",
+        main_score="ndcg_at_10",
         date=("2024-06-01", "2024-11-30"),
         domains=["Engineering", "Written"],
-        task_subtypes=["Thematic clustering"],
+        task_subtypes=["Question answering"],
         license="cc-by-nd-4.0",
         annotations_creators="derived",
         dialect=[],
@@ -33,5 +33,7 @@ class BuiltBenchClusteringS2S(AbsTaskClustering):
     journal={arXiv preprint arXiv:2411.12056},
     year={2024}
 }""",
-        prompt="Identify the category of the built asset entities based on the names or titles",
+        prompt={
+            "query": "Given a query, retrieve relevant entity descriptions from buit asset classification systems such as IFC and Uniclass"
+        },
     )
