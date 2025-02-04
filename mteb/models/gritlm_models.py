@@ -54,7 +54,6 @@ gritlm7b = ModelMeta(
     public_training_code="https://github.com/ContextualAI/gritlm",
     public_training_data=None,
 )
-
 gritlm8x7b = ModelMeta(
     loader=partial(  # type: ignore
         instruct_wrapper,
