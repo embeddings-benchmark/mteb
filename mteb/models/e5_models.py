@@ -139,7 +139,7 @@ e5_mult_small = ModelMeta(
     loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="intfloat/multilingual-e5-small",
-        revision="fd1525a9fd15316a2d503bf26ab031a61d056e98", 
+        revision="fd1525a9fd15316a2d503bf26ab031a61d056e98",
         model_prompts=model_prompts,
     ),
     name="intfloat/multilingual-e5-small",
