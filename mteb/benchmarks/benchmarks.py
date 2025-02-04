@@ -645,7 +645,6 @@ MTEB_POL = Benchmark(
                 "SICK-E-PL",
                 # STS
                 "CDSC-R",
-                "STSBenchmarkMultilingualSTS",
                 "SICK-R-PL",
             ],
         )
