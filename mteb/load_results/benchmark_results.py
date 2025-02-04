@@ -291,6 +291,8 @@ class BenchmarkResults(BaseModel):
                         has_scores=bool(task_result.scores),
                     )
                 )
+        if not records:
+            return BenchmarkResults.model_construct(model_results=[])
         task_df = pd.DataFrame.from_records(records)
         model_to_main_revision = {
             meta.name: meta.revision for meta in get_model_metas()

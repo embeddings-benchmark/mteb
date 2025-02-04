@@ -133,7 +133,7 @@ This benchmark was created to account for the fact that many models have now bee
 to tasks in the original MTEB, and contains tasks that are not as frequently used for model training.
 This way the new benchmark and leaderboard can give our users a more realistic expectation of models' generalization performance.
 
-The original MTEB leaderboard is available under the [MTEB(eng, classic)](http://mteb-leaderboard-2-demo.hf.space/?benchmark_name=MTEB%28eng%2C+classic%29) tab.
+The original MTEB leaderboard is available under the [MTEB(eng, classic)](https://huggingface.co/spaces/mteb/leaderboard?benchmark_name=MTEB%28eng%2C+classic%29) tab.
     """,
     citation="",
     contacts=["KennethEnevoldsen", "Muennighoff"],
@@ -212,9 +212,9 @@ MTEB_ENG_CLASSIC = Benchmark(
         )
     ),
     description="""The original English benchmark by Muennighoff et al., (2023).
-This page is an adaptation of the [old MTEB leaderboard](https://huggingface.co/spaces/mteb/leaderboard).
+This page is an adaptation of the [old MTEB leaderboard](https://huggingface.co/spaces/mteb/leaderboard_legacy).
 
-> We recommend that you use [MTEB(eng)](http://mteb-leaderboard-2-demo.hf.space/?benchmark_name=MTEB%28eng%29) instead,
+> We recommend that you use [MTEB(eng)](https://huggingface.co/spaces/mteb/leaderboard?benchmark_name=MTEB%28eng%29) instead,
 as many models have been tuned on MTEB(eng, classic) datasets, and MTEB(eng) might give a more accurate representation of models' generalization performance.
     """,
     citation="""@inproceedings{muennighoff-etal-2023-mteb,
@@ -1163,6 +1163,39 @@ CODE_RAG = Benchmark(
       primaryClass={cs.SE},
       url={https://arxiv.org/abs/2406.14497}, 
     }""",
+)
+
+
+BEIR = Benchmark(
+    name="BEIR",
+    tasks=get_tasks(
+        tasks=[
+            "TRECCOVID",
+            "NFCorpus",
+            "NQ",
+            "HotpotQA",
+            "FiQA2018",
+            "ArguAna",
+            "Touche2020",
+            "CQADupstackRetrieval",
+            "QuoraRetrieval",
+            "DBPedia",
+            "SCIDOCS",
+            "FEVER",
+            "ClimateFEVER",
+            "SciFact",
+        ],
+    )
+    + get_tasks(tasks=["MSMARCO"], languages=["eng"], eval_splits=["dev"]),
+    description="BEIR is a heterogeneous benchmark containing diverse IR tasks. It also provides a common and easy framework for evaluation of your NLP-based retrieval models within the benchmark.",
+    reference="https://arxiv.org/abs/2104.08663",
+    citation="""@article{thakur2021beir,
+  title={Beir: A heterogenous benchmark for zero-shot evaluation of information retrieval models},
+  author={Thakur, Nandan and Reimers, Nils and R{\"u}ckl{\'e}, Andreas and Srivastava, Abhishek and Gurevych, Iryna},
+  journal={arXiv preprint arXiv:2104.08663},
+  year={2021}
+}
+""",
 )
 
 NANOBEIR = Benchmark(

@@ -483,6 +483,7 @@ evaluation.run(model, ...)
 | 👩‍💻 [Adding a benchmark]     | How to add a new benchmark to MTEB and to the leaderboard                           |
 | 🤝 [Contributing]              | How to contribute to MTEB and set it up for development                             |
 | 🌐 [MMTEB]                     | An open-source effort to extend MTEB to cover a broad set of languages              |
+| 🖼️ [MIEB]                      | Extension of MTEB to image embeddings |
 
 [Tasks]: docs/tasks.md
 [Benchmarks]: docs/benchmarks.md
@@ -492,6 +493,7 @@ evaluation.run(model, ...)
 [Adding a benchmark]: docs/adding_a_benchmark.md
 [Leaderboard]: https://huggingface.co/spaces/mteb/leaderboard
 [MMTEB]: docs/mmteb/readme.md
+[MIEB]: docs/mieb.md
 [Reproducible workflows]: docs/reproducible_workflow.md
 
 ## Citing
