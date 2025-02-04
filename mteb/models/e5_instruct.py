@@ -81,7 +81,7 @@ e5_mistral = ModelMeta(
     max_tokens=32768,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=E5_TRAINING_DATA,
+    training_datasets=E5_MISTRAL_TRAINING_DATA,
 )
 
 zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
@@ -113,6 +113,7 @@ zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=True,
     training_datasets={
+        **E5_MISTRAL_TRAINING_DATA,
         # copied from e5
         # source: https://arxiv.org/pdf/2212.03533
         "NQ": ["test"],
