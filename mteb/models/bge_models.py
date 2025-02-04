@@ -511,6 +511,7 @@ bge_base_en = ModelMeta(
     revision="b737bf5dcc6ee8bdc530531266b4804a5d77b5d8",
     release_date="2023-08-05",  # initial commit of hf model.
     n_parameters=109_000_000,
+    memory_usage_mb=390,
     embed_dim=768,
     license="mit",
     max_tokens=512,
