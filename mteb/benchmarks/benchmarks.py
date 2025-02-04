@@ -921,41 +921,44 @@ indic_languages = [
 
 MTEB_INDIC = Benchmark(
     name="MTEB(Indic)",
-    tasks=get_tasks(
-        tasks=[
-            # Bitext
-            "IN22ConvBitextMining",
-            "IN22GenBitextMining",
-            "IndicGenBenchFloresBitextMining",
-            "LinceMTBitextMining",
-            # clustering
-            "SIB200ClusteringS2S",
-            # classification
-            "BengaliSentimentAnalysis",
-            "GujaratiNewsClassification",
-            "HindiDiscourseClassification",
-            "SentimentAnalysisHindi",
-            "MalayalamNewsClassification",
-            "IndicLangClassification",
-            "MTOPIntentClassification",
-            "MultiHateClassification",
-            "TweetSentimentClassification",
-            "NepaliNewsClassification",
-            "PunjabiNewsClassification",
-            "SanskritShlokasClassification",
-            "UrduRomanSentimentClassification",
-            # STS
-            "IndicCrosslingualSTS",
-            # pair classification
-            "XNLI",
-            # retrieval
-            "BelebeleRetrieval",
-            "XQuADRetrieval",
-            # reranking
-            "WikipediaRerankingMultilingual",
-        ],
-        languages=indic_languages,
-        exclusive_language_filter=True,
+    tasks=MTEBTasks(
+        get_tasks(
+            tasks=[
+                # Bitext
+                "IN22ConvBitextMining",
+                "IN22GenBitextMining",
+                "IndicGenBenchFloresBitextMining",
+                "LinceMTBitextMining",
+                # clustering
+                "SIB200ClusteringS2S",
+                # classification
+                "BengaliSentimentAnalysis",
+                "GujaratiNewsClassification",
+                "HindiDiscourseClassification",
+                "SentimentAnalysisHindi",
+                "MalayalamNewsClassification",
+                "IndicLangClassification",
+                "MTOPIntentClassification",
+                "MultiHateClassification",
+                "TweetSentimentClassification",
+                "NepaliNewsClassification",
+                "PunjabiNewsClassification",
+                "SanskritShlokasClassification",
+                "UrduRomanSentimentClassification",
+                # pair classification
+                "XNLI",
+                # retrieval
+                "BelebeleRetrieval",
+                "XQuADRetrieval",
+                # reranking
+                "WikipediaRerankingMultilingual",
+            ],
+            languages=indic_languages,
+            exclusive_language_filter=True,
+        )
+        +
+        # STS
+        (get_task("IndicCrosslingualSTS"),)
     ),
     description="A regional geopolitical text embedding benchmark targetting embedding performance on Indic languages.",
     reference=None,

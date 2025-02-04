@@ -266,6 +266,10 @@ class BenchmarkResults(BaseModel):
             if is_main_revision.sum() > 0:
                 return group[is_main_revision].head(n=1)
             unique_revisions = group["revision"].unique()
+
+            # ensure None/NA revisions is filtered out
+            group["revision"][group["revision"].isna()] = "no_revision_available"
+
             # Filtering out no_revision_available if other revisions are present
             if (len(unique_revisions) > 1) and (
                 "no_revision_available" in unique_revisions
