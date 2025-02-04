@@ -1400,3 +1400,40 @@ CHEMTEB = Benchmark(
     year={2024}
 }""",
 )
+
+MTEB_HINDI = Benchmark(
+    name="MTEB(Hindi)",
+    tasks=get_tasks(
+        languages=["hin"],
+        tasks=[
+            # clustering
+            "IndicReviewsClusteringP2P",
+            "SIB200ClusteringS2S",
+            # classification
+            "MassiveIntentClassification",
+            "MassiveScenarioClassification",
+            "MultiHateClassification",
+            "SIB200Classification",
+            "TweetSentimentClassification",
+            "IndicSentimentClassification",
+            # STS
+            "SemRel24STS",
+            # pair classification
+            "XNLI",
+            # retrieval
+            "BelebeleRetrieval",
+            "IndicQARetrieval",
+            "MintakaRetrieval",
+            "MultiLongDocRetrieval",
+            # reranking
+            "WikipediaRerankingMultilingual",
+        ],
+        exclusive_language_filter=True,
+        eval_splits=["test"],
+    ),
+
+    description="The Hindi Leaderboard benchmark extends the MTEB framework by incorporating Hindi-specific datasets and tasks derived from existing MTEB data. It evaluates text embedding models on a variety of tasks, including text classification, semantic similarity, and information retrieval, with a focus on Hindi language performance. This benchmark aims to provide a standardized evaluation platform to advance research and innovation in Hindi NLP, leveraging pre-existing datasets to ensure consistency and comparability across models.",
+    reference=None,
+    citation=None,
+    contacts=["ingo-iitgn", "SaileshP97"],
+)
