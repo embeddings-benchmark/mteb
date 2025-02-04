@@ -3,8 +3,7 @@ from __future__ import annotations
 from functools import partial
 
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
-
-from .e5_instruct import E5_MISTRAL_TRAINING_DATA
+from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
 
 model_prompts = {"query": "Represent this sentence for searching relevant passages: "}
 model_prompts_zh = {"query": "为这个句子生成表示以用于检索相关文章："}
@@ -304,6 +303,7 @@ bge_small_en_v1_5 = ModelMeta(
     revision="5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
     release_date="2023-09-12",  # initial commit of hf model.
     n_parameters=24_000_000,
+    memory_usage_mb=127,
     embed_dim=512,
     license="mit",
     max_tokens=512,
@@ -329,6 +329,7 @@ bge_base_en_v1_5 = ModelMeta(
     revision="a5beb1e3e68b9ab74eb54cfd186867f64f240e1a",
     release_date="2023-09-11",  # initial commit of hf model.
     n_parameters=438_000_000,
+    memory_usage_mb=1671,
     embed_dim=768,
     license="mit",
     max_tokens=512,
@@ -354,6 +355,7 @@ bge_large_en_v1_5 = ModelMeta(
     revision="d4aa6901d3a41ba39fb536a557fa166f842b0e09",
     release_date="2023-09-12",  # initial commit of hf model.
     n_parameters=1_340_000_000,
+    memory_usage_mb=5112,
     embed_dim=1024,
     license="mit",
     max_tokens=512,
@@ -379,6 +381,7 @@ bge_small_zh_v1_5 = ModelMeta(
     revision="7999e1d3359715c523056ef9478215996d62a620",
     release_date="2023-09-12",  # initial commit of hf model.
     n_parameters=24_000_000,
+    memory_usage_mb=91,
     embed_dim=512,
     license="mit",
     max_tokens=512,
@@ -404,6 +407,7 @@ bge_base_zh_v1_5 = ModelMeta(
     revision="f03589ceff5aac7111bd60cfc7d497ca17ecac65",
     release_date="2023-09-11",  # initial commit of hf model.
     n_parameters=438_000_000,
+    memory_usage_mb=1671,
     embed_dim=768,
     license="mit",
     max_tokens=512,
@@ -429,6 +433,7 @@ bge_large_zh_v1_5 = ModelMeta(
     revision="79e7739b6ab944e86d6171e44d24c997fc1e0116",
     release_date="2023-09-12",  # initial commit of hf model.
     n_parameters=1_340_000_000,
+    memory_usage_mb=5112,
     embed_dim=1024,
     license="mit",
     max_tokens=512,
@@ -453,6 +458,7 @@ bge_m3 = ModelMeta(
     revision="5617a9f61b028005a4858fdac845db406aefb181",
     release_date="2024-06-28",
     n_parameters=568_000_000,
+    memory_usage_mb=2167,
     embed_dim=4096,
     license="mit",
     max_tokens=8194,
@@ -487,6 +493,7 @@ bge_multilingual_gemma2 = ModelMeta(
     revision="992e13d8984fde2c31ef8a3cb2c038aeec513b8a",
     release_date="2024-07-25",  # initial commit of hf model.
     n_parameters=9.24 * 1e9,
+    memory_usage_mb=35254,
     embed_dim=3584,  # from old C-MTEB leaderboard
     license="gemma",
     max_tokens=8192,  # from old C-MTEB leaderboard
@@ -563,6 +570,7 @@ bge_en_icl = ModelMeta(
     revision="971c7e1445cc86656ca0bd85ed770b8675a40bb5",
     release_date="2024-07-25",  # initial commit of hf model.
     n_parameters=7.11 * 1e9,
+    memory_usage_mb=27125,
     embed_dim=4096,
     license="apache-2",
     max_tokens=32768,

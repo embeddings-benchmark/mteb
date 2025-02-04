@@ -1,11 +1,15 @@
 from __future__ import annotations
 
 import logging
-from functools import cached_property, partial
+from functools import partial
 from typing import TYPE_CHECKING, Any, Callable, Literal
 
 from huggingface_hub import get_safetensors_metadata
-from huggingface_hub.errors import NotASafetensorsRepoError, SafetensorsParsingError
+from huggingface_hub.errors import (
+    GatedRepoError,
+    NotASafetensorsRepoError,
+    SafetensorsParsingError,
+)
 from pydantic import BaseModel, ConfigDict
 
 from mteb.abstasks.AbsTask import AbsTask
@@ -61,6 +65,7 @@ class ModelMeta(BaseModel):
         name: The name of the model, ideally the name on huggingface.
         n_parameters: The number of parameters in the model, e.g. 7_000_000 for a 7M parameter model. Can be None if the the number of parameters is not known (e.g. for proprietary models) or
             if the loader returns a SentenceTransformer model from which it can be derived.
+        model_memory_mb: The memory usage of the model in MB. Can be None if the memory usage is not known (e.g. for proprietary models). To calculate it use the `calculate_memory_usage_mb` method.
         max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
             models).
         embed_dim: The dimension of the embeddings produced by the model. Currently all models are assumed to produce fixed-size embeddings.
@@ -92,6 +97,7 @@ class ModelMeta(BaseModel):
     languages: list[ISO_LANGUAGE_SCRIPT] | None
     loader: Callable[..., Encoder] | None = None
     n_parameters: int | None
+    memory_usage_mb: float | None
     max_tokens: float | None
     embed_dim: int | None
     license: str | None
@@ -149,8 +155,7 @@ class ModelMeta(BaseModel):
         intersection = model_datasets & benchmark_datasets
         return len(intersection) == 0
 
-    @cached_property
-    def memory_usage_mb(self) -> float | None:
+    def calculate_memory_usage_mb(self) -> int | None:
         """Calculates the memory usage (in FP32) of the model in MB."""
         if "API" in self.framework:
             return None
@@ -175,9 +180,9 @@ class ModelMeta(BaseModel):
                     parameters * dtype_size_map.get(dtype, 4)
                     for dtype, parameters in safetensors_metadata.parameter_count.items()
                 )
-                return total_memory_bytes / MB  # Convert to MB
+                return round(total_memory_bytes / MB)  # Convert to MB
 
-        except (NotASafetensorsRepoError, SafetensorsParsingError):
+        except (NotASafetensorsRepoError, SafetensorsParsingError, GatedRepoError):
             pass
         if self.n_parameters is None:
             return None
@@ -186,4 +191,4 @@ class ModelMeta(BaseModel):
 
         # Convert to MB
         model_memory_mb = model_memory_bytes / MB
-        return model_memory_mb
+        return round(model_memory_mb)
