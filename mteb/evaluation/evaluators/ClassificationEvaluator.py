@@ -42,7 +42,7 @@ class kNNClassificationEvaluator(Evaluator):
         super().__init__(**kwargs)
         if limit is not None:
             warnings.warn(
-                "Limiting the number of samples for evaluation will be removed in v2.0.0.",
+                "Limiting the number of samples with `limit` for evaluation will be removed in v2.0.0.",
                 DeprecationWarning,
             )
             sentences_train = sentences_train[:limit]
@@ -119,7 +119,7 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         super().__init__(**kwargs)
         if limit is not None:
             warnings.warn(
-                "Limiting the number of samples for evaluation will be removed in v2.0.0.",
+                "Limiting the number of samples with `limit` for evaluation will be removed in v2.0.0.",
                 DeprecationWarning,
             )
 
@@ -279,7 +279,7 @@ class logRegClassificationEvaluator(Evaluator):
 
         if limit is not None:
             warnings.warn(
-                "Limiting the number of samples for evaluation will be removed in v2.0.0.",
+                "Limiting the number of samples with `limit` for evaluation will be removed in v2.0.0.",
                 DeprecationWarning,
             )
 

@@ -106,7 +106,7 @@ class AbsTaskMultilabelClassification(AbsTask):
 
         if n_experiments:
             warnings.warn(
-                "Passing n_experiments to AbsTaskMultilabelClassification is deprecated and will be removed in v2.0.0.",
+                "Passing `n_experiments` to AbsTaskMultilabelClassification is deprecated and will be removed in v2.0.0.",
                 DeprecationWarning,
             )
         # Bootstrap parameters
@@ -137,7 +137,7 @@ class AbsTaskMultilabelClassification(AbsTask):
 
         if train_split != "train":
             warnings.warn(
-                "Passing train_split to AbsTaskClassification.evaluate is deprecated and will be removed in v2.0.0.",
+                "Passing `train_split` to AbsTaskClassification.evaluate is deprecated and will be removed in v2.0.0.",
                 DeprecationWarning,
             )
 

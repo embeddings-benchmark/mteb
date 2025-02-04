@@ -10,7 +10,9 @@ class MultilingualTask(MultiSubsetLoader, AbsTask):
     def __init__(self, hf_subsets: list[str] | None = None, **kwargs):
         super().__init__(**kwargs)
         warnings.warn(
-            "`MultilingualTask` will be removed in v2.0.0.", DeprecationWarning
+            "`MultilingualTask` will be removed in v2.0. In the future, checking whether a task is multilingual"
+            " will be based solely on `metadata.eval_langs`, which should be a dictionary for multilingual tasks.",
+            DeprecationWarning,
         )
         if isinstance(hf_subsets, list):
             hf_subsets = [

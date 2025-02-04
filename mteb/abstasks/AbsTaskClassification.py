@@ -78,14 +78,14 @@ class AbsTaskClassification(AbsTask):
         super().__init__(**kwargs)
         if method != "logReg":
             warnings.warn(
-                "Passing method to AbsTaskClassification is deprecated and will be removed in v2.0.0.",
+                "Passing `method` to AbsTaskClassification is deprecated and will be removed in v2.0.0.",
                 DeprecationWarning,
             )
         self.method = method
 
         if n_experiments:
             warnings.warn(
-                "Passing n_experiments to AbsTaskClassification is deprecated and will be removed in v2.0.0.",
+                "Passing `n_experiments` to AbsTaskClassification is deprecated and will be removed in v2.0.0.",
                 DeprecationWarning,
             )
 
@@ -98,7 +98,7 @@ class AbsTaskClassification(AbsTask):
 
         if k != 3:
             warnings.warn(
-                "Passing k to AbsTaskClassification is deprecated and will be removed in v2.0.0.",
+                "Passing `k` to AbsTaskClassification is deprecated and will be removed in v2.0.0.",
                 DeprecationWarning,
             )
         # kNN parameters
@@ -122,7 +122,7 @@ class AbsTaskClassification(AbsTask):
 
         if train_split != "train":
             warnings.warn(
-                "Passing train_split to AbsTaskClassification.evaluate is deprecated and will be removed in v2.0.0.",
+                "Passing `train_split` to AbsTaskClassification.evaluate is deprecated and will be removed in v2.0.0.",
                 DeprecationWarning,
             )
 
