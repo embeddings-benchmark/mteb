@@ -457,10 +457,7 @@ integrate build their own benchmarks or integrate custom tasks into existing ben
 
 Running the leaderboard is quite easy. Simply run:
 ```py
-from mteb.leaderboard import demo
-
-demo.launch()
-```
+python -m mteb.leaderboard.app
 
 The leaderboard requires gradio install, which can be installed using `pip install mteb[gradio]` and requires python >3.10.
 
