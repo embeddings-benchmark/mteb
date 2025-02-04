@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
+from functools import cached_property, partial
 from typing import TYPE_CHECKING, Any, Callable, Literal
 
+from huggingface_hub import get_safetensors_metadata
+from huggingface_hub.errors import NotASafetensorsRepoError, SafetensorsParsingError
 from pydantic import BaseModel, ConfigDict
 
 from mteb.abstasks.AbsTask import AbsTask
@@ -147,14 +149,41 @@ class ModelMeta(BaseModel):
         intersection = model_datasets & benchmark_datasets
         return len(intersection) == 0
 
-    @property
-    def memory_usage(self) -> float | None:
+    @cached_property
+    def memory_usage_mb(self) -> float | None:
         """Calculates the memory usage (in FP32) of the model in MB."""
+        if "API" in self.framework:
+            return None
+
+        MB = 1024**2
+        try:
+            safetensors_metadata = get_safetensors_metadata(self.name)
+            if len(safetensors_metadata.parameter_count) >= 0:
+                dtype_size_map = {
+                    "F64": 8,  # 64-bit float
+                    "F32": 4,  # 32-bit float (FP32)
+                    "F16": 2,  # 16-bit float (FP16)
+                    "BF16": 2,  # BFloat16
+                    "I64": 8,  # 64-bit integer
+                    "I32": 4,  # 32-bit integer
+                    "I16": 2,  # 16-bit integer
+                    "I8": 1,  # 8-bit integer
+                    "U8": 1,  # Unsigned 8-bit integer
+                    "BOOL": 1,  # Boolean (assuming 1 byte per value)
+                }
+                total_memory_bytes = sum(
+                    parameters * dtype_size_map.get(dtype, 4)
+                    for dtype, parameters in safetensors_metadata.parameter_count.items()
+                )
+                return total_memory_bytes / MB  # Convert to MB
+
+        except (NotASafetensorsRepoError, SafetensorsParsingError):
+            pass
         if self.n_parameters is None:
             return None
         # Model memory in bytes. For FP32 each parameter is 4 bytes.
-        model_memory_bytes = self.num_params * 4
+        model_memory_bytes = self.n_parameters * 4
 
         # Convert to MB
-        model_memory_mb = model_memory_bytes / (1024**2)
+        model_memory_mb = model_memory_bytes / MB
         return model_memory_mb
