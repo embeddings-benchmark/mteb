@@ -23,12 +23,15 @@ bge_m3_training_data = {
     "MSMARCOHardNegatives": ["train"],
     "NanoMSMARCORetrieval": ["train"],
     "MSMARCO-PL": ["train"],  # translation not trained on
+    "mMARCO-NL": ["train"],  # translation not trained on
     "NQ": ["train"],
+    "NQ-NL": ["train"],  # translation not trained on
     "NQHardNegatives": ["train"],
     "NanoNQRetrieval": ["train"],
     "NQ-PL": ["train"],  # translation not trained on
     "HotpotQA": ["train"],
     "HotpotQA-PL": ["train"],  # translation not trained on
+    "HotpotQA-NL": ["train"],  # translation not trained on
     "HotpotQAHardNegatives": ["train"],
     "T2Retrieval": ["train"],
     "DuReader": ["train"],
@@ -58,6 +61,7 @@ bge_m3_training_data = {
 bge_training_data = {
     # source: https://data.baai.ac.cn/details/BAAI-MTP
     "NQ": ["test"],
+    "NQ-NL": ["test"],  # translation not trained on
     "NQHardNegatives": ["test"],
     "AmazonReviewsClassification": [
         "validation",
@@ -308,7 +312,6 @@ bgem3_languages = [
     # yue
     "zho_Hans",  # zh
 ]
-
 
 bge_small_en_v1_5 = ModelMeta(
     loader=partial(  # type: ignore
@@ -641,7 +644,6 @@ bge_m3 = ModelMeta(
     training_datasets=bge_m3_training_data,
 )
 
-
 bge_multilingual_gemma2 = ModelMeta(
     loader=partial(  # type: ignore
         sentence_transformers_loader,
@@ -686,11 +688,17 @@ bge_full_data = {
     # TriviaQA
     # QuoraDuplicateQuestions
     "HotpotQA": ["train"],
+    "HotpotQA-NL": ["train"],  # translation not trained on
     "FEVER": ["train"],
+    "FEVER-NL": ["train"],  # translation not trained on
     "MSMARCO": ["train"],
+    "mMARCO-NL": ["train"],  # translation not trained on
     "NQ": ["train"],
+    "NQ-NL": ["train"],  # translation not trained on
     "ArguAna": ["train"],
+    "ArguAna-NL": ["train"],  # translation not trained on
     "FiQA2018": ["train"],
+    "FiQA2018-NL": ["train"],  # translation not trained on
     # |Reranking|
     "SciDocsReranking": ["train"],
     "StackOverflowDupQuestions": ["train"],
