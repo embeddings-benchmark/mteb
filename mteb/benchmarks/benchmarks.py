@@ -516,7 +516,6 @@ MTEB_FRA = Benchmark(
                 "MLSUMClusteringP2P",
                 "MLSUMClusteringS2S",
                 # Pair Classification
-                "OpusparcusPC",
                 "PawsXPairClassification",
                 # Reranking
                 "AlloprofReranking",
