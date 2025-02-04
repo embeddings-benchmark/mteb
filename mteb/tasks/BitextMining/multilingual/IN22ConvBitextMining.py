@@ -5,7 +5,6 @@ from typing import Any
 import datasets
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = [
@@ -67,7 +66,7 @@ def check_uniques(example, uniques):
         return False
 
 
-class IN22ConvBitextMining(AbsTaskBitextMining, MultilingualTask):
+class IN22ConvBitextMining(AbsTaskBitextMining):
     parallel_subsets = True
     metadata = TaskMetadata(
         name="IN22ConvBitextMining",

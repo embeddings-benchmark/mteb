@@ -4,7 +4,6 @@ from hashlib import sha256
 
 import datasets
 
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
@@ -25,7 +24,7 @@ _LANGUAGES = {
 }
 
 
-class XQuADRetrieval(MultilingualTask, AbsTaskRetrieval):
+class XQuADRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="XQuADRetrieval",
         dataset={

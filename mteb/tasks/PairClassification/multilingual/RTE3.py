@@ -3,7 +3,6 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGS = {
@@ -14,7 +13,7 @@ _LANGS = {
 }
 
 
-class RTE3(MultilingualTask, AbsTaskPairClassification):
+class RTE3(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="RTE3",
         dataset={

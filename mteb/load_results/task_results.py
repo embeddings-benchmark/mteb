@@ -540,7 +540,7 @@ class TaskResult(BaseModel):
         if task is None:
             task = get_task(self.task_name)
         splits = task.metadata.eval_splits
-        if task.is_multilingual:
+        if task.metadata.is_multilingual:
             hf_subsets = getattr(
                 task, "hf_subsets", task.metadata.hf_subsets_to_langscripts.keys()
             )

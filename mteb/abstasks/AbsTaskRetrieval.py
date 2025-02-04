@@ -178,7 +178,7 @@ class AbsTaskRetrieval(AbsTask):
                 else:
                     self.top_ranked[split] = top_ranked
 
-        if self.is_multilingual:
+        if self.metadata.is_multilingual:
             for lang in self.metadata.eval_langs:
                 for split in eval_splits:
                     process_data(split, lang)
@@ -204,7 +204,7 @@ class AbsTaskRetrieval(AbsTask):
         )
 
         scores = {}
-        hf_subsets = list(self.hf_subsets) if self.is_multilingual else ["default"]
+        hf_subsets = self.hf_subsets
         if subsets_to_run is not None:
             hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
 
@@ -515,7 +515,7 @@ class AbsTaskRetrieval(AbsTask):
                 return text
             return f"{text.get('title', '')} {text.get('text', '')}".strip()
 
-        if self.is_multilingual:
+        if self.metadata.is_multilingual:
             for config in self.queries:
                 logger.info(f"Converting {config} of {self.metadata.name}")
 

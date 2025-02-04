@@ -5,7 +5,6 @@ from collections import defaultdict
 
 import datasets
 
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
@@ -47,7 +46,7 @@ _CITATION = """@article{10.1162/tacl_a_00595,
 }"""
 
 
-class MIRACLReranking(AbsTaskReranking, MultilingualTask):
+class MIRACLReranking(AbsTaskReranking):
     metadata = TaskMetadata(
         name="MIRACLReranking",
         description="MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval dataset that focuses on search across 18 different languages.",
@@ -121,8 +120,7 @@ class MIRACLReranking(AbsTaskReranking, MultilingualTask):
         self.relevant_docs = defaultdict(lambda: defaultdict(lambda: defaultdict(dict)))
         self.top_ranked = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
 
-        hf_subsets = list(self.hf_subsets) if self.is_multilingual else ["default"]
-        for hf_subset in hf_subsets:
+        for hf_subset in self.hf_subsets:
             if "name" in self.metadata.dataset:
                 cur_dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
                 assert (

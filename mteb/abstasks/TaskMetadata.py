@@ -446,5 +446,15 @@ class TaskMetadata(BaseModel):
             n_samples[subset] = subset_value["num_samples"]
         return n_samples
 
+    @property
+    def hf_subsets(self) -> list[str]:
+        """Return the huggingface subsets."""
+        return list(self.hf_subsets_to_langscripts.keys())
+
+    @property
+    def is_multilingual(self) -> bool:
+        """Check if the task is multilingual."""
+        return isinstance(self.eval_langs, dict)
+
     def __hash__(self) -> int:
         return hash(self.model_dump_json())
