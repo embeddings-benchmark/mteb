@@ -3,11 +3,9 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-# Add at the top with other imports
 import pytrec_eval
 import numpy as np
 
-import numpy as np
 import torch
 import tqdm
 from sklearn.metrics import average_precision_score
