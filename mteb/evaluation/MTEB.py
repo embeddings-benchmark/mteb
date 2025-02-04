@@ -114,7 +114,7 @@ class MTEB:
             )
         if version is not None:
             warnings.warn(
-                "The `version` argument is deprecated and will be removed in the next release."
+                "The `version` argument is deprecated and will be removed in the 2.0 release."
             )
         task_contains_strings = any(isinstance(x, str) for x in tasks or [])
         if task_contains_strings:
