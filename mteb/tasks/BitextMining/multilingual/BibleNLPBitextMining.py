@@ -5,7 +5,6 @@ from typing import Any
 import datasets
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = [
@@ -859,7 +858,7 @@ def extend_lang_pairs_english_centric() -> dict[str, list[str]]:
 _LANGUAGES_MAPPING = extend_lang_pairs_english_centric()
 
 
-class BibleNLPBitextMining(AbsTaskBitextMining, MultilingualTask):
+class BibleNLPBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="BibleNLPBitextMining",
         dataset={

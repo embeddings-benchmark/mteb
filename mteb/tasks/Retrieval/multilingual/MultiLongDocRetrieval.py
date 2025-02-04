@@ -3,7 +3,6 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import *
@@ -60,7 +59,7 @@ def load_mldr_data(
     return corpus, queries, relevant_docs
 
 
-class MultiLongDocRetrieval(MultilingualTask, AbsTaskRetrieval):
+class MultiLongDocRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MultiLongDocRetrieval",
         description="""Multi Long Doc Retrieval (MLDR) 'is curated by the multilingual articles from Wikipedia, Wudao and mC4 (see Table 7), and NarrativeQA (Kocˇisky ́ et al., 2018; Gu ̈nther et al., 2023), which is only for English.' (Chen et al., 2024). 

@@ -4,7 +4,6 @@ import datasets
 import numpy as np
 
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -27,7 +26,7 @@ _LANGUAGES = {
 }
 
 
-class MasakhaNEWSClusteringS2S(AbsTaskClustering, MultilingualTask):
+class MasakhaNEWSClusteringS2S(AbsTaskClustering):
     metadata = TaskMetadata(
         name="MasakhaNEWSClusteringS2S",
         dataset={

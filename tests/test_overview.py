@@ -76,7 +76,7 @@ def test_get_tasks_filtering():
     tasks = get_tasks(languages=["eng"])
 
     for task in tasks:
-        if task.is_multilingual:
+        if task.metadata.is_multilingual:
             assert isinstance(task.metadata.eval_langs, dict)
 
             for hf_subset in task.hf_subsets:

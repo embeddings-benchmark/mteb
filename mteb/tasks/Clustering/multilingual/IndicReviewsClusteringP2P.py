@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -21,7 +20,7 @@ _LANGUAGES = {
 }
 
 
-class IndicReviewsClusteringP2P(AbsTaskClustering, MultilingualTask):
+class IndicReviewsClusteringP2P(AbsTaskClustering):
     metadata = TaskMetadata(
         name="IndicReviewsClusteringP2P",
         dataset={

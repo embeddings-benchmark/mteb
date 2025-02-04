@@ -76,7 +76,7 @@ evaluation = MTEB(tasks=[SciDocsReranking()])
 evaluation.run(model)
 ```
 
-> **Note:** for multilingual / crosslingual tasks, make sure your class also inherits from the `MultilingualTask` class like in [this](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/tasks/Classification/multilingual/MTOPIntentClassification.py) example.
+> **Note:** for multilingual / crosslingual tasks, make sure you've specified `eval_langs` as a dictionary, as shown in [this example](../mteb/tasks/Classification/multilingual/MTOPIntentClassification.py).
 
 
 

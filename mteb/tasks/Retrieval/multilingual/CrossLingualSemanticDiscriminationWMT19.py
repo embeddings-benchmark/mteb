@@ -3,7 +3,6 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -30,7 +29,7 @@ def extend_lang_pairs() -> dict[str, list[str]]:
 _EVAL_LANGS = extend_lang_pairs()
 
 
-class CrossLingualSemanticDiscriminationWMT19(AbsTaskRetrieval, MultilingualTask):
+class CrossLingualSemanticDiscriminationWMT19(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CrossLingualSemanticDiscriminationWMT19",
         dataset={

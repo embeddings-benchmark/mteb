@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks import MultilingualTask
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
@@ -110,7 +109,7 @@ class MockClassificationTask(AbsTaskClassification):
         self.data_loaded = True
 
 
-class MockMultilingualClassificationTask(AbsTaskClassification, MultilingualTask):
+class MockMultilingualClassificationTask(AbsTaskClassification):
     expected_stats = {
         "test": {
             "num_samples": 4,
@@ -282,7 +281,7 @@ class MockBitextMiningTask(AbsTaskBitextMining):
         self.data_loaded = True
 
 
-class MockMultilingualBitextMiningTask(AbsTaskBitextMining, MultilingualTask):
+class MockMultilingualBitextMiningTask(AbsTaskBitextMining):
     expected_stats = {
         "test": {
             "num_samples": 4,
@@ -358,7 +357,7 @@ class MockMultilingualBitextMiningTask(AbsTaskBitextMining, MultilingualTask):
         self.data_loaded = True
 
 
-class MockMultilingualParallelBitextMiningTask(AbsTaskBitextMining, MultilingualTask):
+class MockMultilingualParallelBitextMiningTask(AbsTaskBitextMining):
     parallel_subsets = True
     expected_stats = {
         "test": {
@@ -482,7 +481,7 @@ class MockClusteringTask(AbsTaskClustering):
         self.data_loaded = True
 
 
-class MockMultilingualClusteringTask(AbsTaskClustering, MultilingualTask):
+class MockMultilingualClusteringTask(AbsTaskClustering):
     expected_stats = {
         "test": {
             "num_samples": 2,
@@ -609,7 +608,7 @@ class MockClusteringFastTask(AbsTaskClusteringFast):
         self.data_loaded = True
 
 
-class MockMultilingualClusteringFastTask(AbsTaskClusteringFast, MultilingualTask):
+class MockMultilingualClusteringFastTask(AbsTaskClusteringFast):
     max_document_to_embed = 3
     max_fraction_of_documents_to_embed = None
     expected_stats = {
@@ -739,9 +738,7 @@ class MockPairClassificationTask(AbsTaskPairClassification):
         self.data_loaded = True
 
 
-class MockMultilingualPairClassificationTask(
-    AbsTaskPairClassification, MultilingualTask
-):
+class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
     expected_stats = {
         "test": {
             "num_samples": 4,
@@ -879,7 +876,7 @@ class MockSTSTask(AbsTaskSTS):
     max_score = 1
 
 
-class MockMultilingualSTSTask(AbsTaskSTS, MultilingualTask):
+class MockMultilingualSTSTask(AbsTaskSTS):
     expected_stats = {
         "test": {
             "num_samples": 4,
@@ -1028,7 +1025,7 @@ class MockSummarizationTask(AbsTaskSummarization):
     max_score = 1
 
 
-class MockMultilingualSummarizationTask(AbsTaskSummarization, MultilingualTask):
+class MockMultilingualSummarizationTask(AbsTaskSummarization):
     expected_stats = {
         "test": {
             "num_samples": 4,
@@ -1203,7 +1200,7 @@ class MockRerankingTask(AbsTaskReranking):
         self.data_loaded = True
 
 
-class MockMultilingualRerankingTask(AbsTaskReranking, MultilingualTask):
+class MockMultilingualRerankingTask(AbsTaskReranking):
     expected_stats = {
         "test": {
             "num_samples": 8,
@@ -1451,7 +1448,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
         self.data_loaded = True
 
 
-class MockMultilingualRetrievalTask(AbsTaskRetrieval, MultilingualTask):
+class MockMultilingualRetrievalTask(AbsTaskRetrieval):
     expected_stats = {
         "val": {
             "num_samples": 8,
@@ -1747,9 +1744,7 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
         self.data_loaded = True
 
 
-class MockMultilingualMultilabelClassification(
-    AbsTaskMultilabelClassification, MultilingualTask
-):
+class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
     expected_stats = {
         "test": {
             "num_samples": 12,
@@ -2023,7 +2018,7 @@ class MockInstructionReranking(AbsTaskReranking):
         self.data_loaded = True
 
 
-class MockMultilingualInstructionRetrieval(AbsTaskRetrieval, MultilingualTask):
+class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 8,
@@ -2170,7 +2165,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval, MultilingualTask):
         self.top_ranked = None
 
 
-class MockMultilingualInstructionReranking(AbsTaskReranking, MultilingualTask):
+class MockMultilingualInstructionReranking(AbsTaskReranking):
     expected_stats = {
         "test": {
             "num_samples": 8,

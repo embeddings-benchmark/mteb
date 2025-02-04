@@ -8,7 +8,7 @@ import aiohttp
 import pytest
 
 import mteb
-from mteb.abstasks import AbsTask, MultilingualTask
+from mteb.abstasks import AbsTask
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.AbsTaskSpeedTask import AbsTaskSpeedTask
@@ -33,7 +33,7 @@ def test_load_data(
         isinstance(task, AbsTaskRetrieval)
         or isinstance(task, AbsTaskReranking)
         or isinstance(task, AbsTaskSpeedTask)
-        or isinstance(task, MultilingualTask)
+        or task.metadata.is_multilingual
     ):
         pytest.skip()
     with patch.object(task, "dataset_transform") as mock_dataset_transform:
@@ -41,7 +41,7 @@ def test_load_data(
         mock_load_dataset.assert_called()
 
         # They don't yet but should they so they can be expanded more easily?
-        if not task.is_multilingual:
+        if not task.metadata.is_multilingual:
             mock_dataset_transform.assert_called_once()
 
 

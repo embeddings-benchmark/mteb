@@ -101,7 +101,7 @@ class MTEB:
                     category = f", [italic grey39]{task.metadata.category}[/]"
                     multilingual = (
                         f", [italic red]multilingual {len(task.hf_subsets)} / {len(task.metadata.eval_langs)} Subsets[/]"
-                        if task.is_multilingual
+                        if task.metadata.is_multilingual
                         else ""
                     )
                     console.print(f"{prefix}{name}{category}{multilingual}")
@@ -352,11 +352,7 @@ class MTEB:
             task_eval_splits = (
                 eval_splits if eval_splits is not None else task.eval_splits
             )
-            task_subsets = (
-                task.hf_subsets
-                if task.hf_subsets
-                else list(task.metadata.hf_subsets_to_langscripts.keys())
-            )
+            task_subsets = task.hf_subsets
 
             existing_results = None
             save_path = None

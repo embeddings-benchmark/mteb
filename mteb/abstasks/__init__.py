@@ -12,7 +12,6 @@ from .AbsTaskRetrieval import AbsTaskRetrieval
 from .AbsTaskSpeedTask import AbsTaskSpeedTask
 from .AbsTaskSTS import AbsTaskSTS
 from .AbsTaskSummarization import AbsTaskSummarization
-from .MultilingualTask import MultilingualTask
 from .TaskMetadata import TaskMetadata
 
 __all__ = [
@@ -28,6 +27,5 @@ __all__ = [
     "AbsTaskSpeedTask",
     "AbsTaskSTS",
     "AbsTaskSummarization",
-    "MultilingualTask",
     "TaskMetadata",
 ]

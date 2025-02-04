@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -18,7 +17,7 @@ _LANGUAGES = {
 }
 
 
-class NusaParagraphEmotionClassification(MultilingualTask, AbsTaskClassification):
+class NusaParagraphEmotionClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="NusaParagraphEmotionClassification",
         dataset={
