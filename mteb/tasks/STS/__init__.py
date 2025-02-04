@@ -12,6 +12,7 @@ from .eng import (
     STSBenchmarkSTS,
 )
 from .fao import FaroeseSTS
+from .fas import Farsick, Query2Query, SynPerSTS
 from .fin import FinParaSTS
 from .fra import SickFrSTS
 from .jpn import JSICK, JSTS
@@ -54,6 +55,9 @@ __all__ = [
     "SickrSTS",
     "STS16STS",
     "STS14STS",
+    "Farsick",
+    "Query2Query",
+    "SynPerSTS",
     "FaroeseSTS",
     "JSICK",
     "JSTS",

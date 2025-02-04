@@ -21,14 +21,14 @@ class NQ(AbsTaskRetrieval):
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
-        bibtex_citation="""@article{47761,title    = {Natural Questions: a Benchmark for Question Answering Research},
-        author    = {Tom Kwiatkowski and Jennimaria Palomaki and Olivia Redfield and Michael Collins and Ankur Parikh 
+        domains=["Written", "Encyclopaedic"],
+        task_subtypes=["Question answering"],
+        license="cc-by-nc-sa-3.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation="""@article{47761,title	= {Natural Questions: a Benchmark for Question Answering Research},
+        author	= {Tom Kwiatkowski and Jennimaria Palomaki and Olivia Redfield and Michael Collins and Ankur Parikh 
         and Chris Alberti and Danielle Epstein and Illia Polosukhin and Matthew Kelcey and Jacob Devlin and Kenton Lee 
         and Kristina N. Toutanova and Llion Jones and Ming-Wei Chang and Andrew Dai and Jakob Uszkoreit and Quoc Le 
         and Slav Petrov},year    = {2019},journal    = {Transactions of the Association of Computational 

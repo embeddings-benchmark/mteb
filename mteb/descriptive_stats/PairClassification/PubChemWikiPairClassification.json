@@ -1,0 +1,290 @@
+{
+    "test": {
+        "num_samples": 11023,
+        "number_of_characters": 8850978,
+        "unique_pairs": 11017,
+        "min_sentence1_length": 21,
+        "avg_sentence1_length": 394.76367595028574,
+        "max_sentence1_length": 5088,
+        "unique_sentence1": 5078,
+        "min_sentence2_length": 13,
+        "avg_sentence2_length": 408.1917808219178,
+        "max_sentence2_length": 6946,
+        "unique_sentence2": 9518,
+        "unique_labels": 2,
+        "labels": {
+            "0": {
+                "count": 9914
+            },
+            "1": {
+                "count": 1109
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "de": {
+                "num_samples": 1554,
+                "number_of_characters": 1135687,
+                "unique_pairs": 1554,
+                "min_sentence1_length": 26,
+                "avg_sentence1_length": 374.6756756756757,
+                "max_sentence1_length": 5088,
+                "unique_sentence1": 1483,
+                "min_sentence2_length": 34,
+                "avg_sentence2_length": 356.13963963963965,
+                "max_sentence2_length": 2441,
+                "unique_sentence2": 1357,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 1398
+                    },
+                    "1": {
+                        "count": 156
+                    }
+                }
+            },
+            "nl": {
+                "num_samples": 905,
+                "number_of_characters": 849823,
+                "unique_pairs": 904,
+                "min_sentence1_length": 23,
+                "avg_sentence1_length": 411.2364640883978,
+                "max_sentence1_length": 5088,
+                "unique_sentence1": 869,
+                "min_sentence2_length": 33,
+                "avg_sentence2_length": 527.7944751381216,
+                "max_sentence2_length": 2291,
+                "unique_sentence2": 787,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 91
+                    },
+                    "0": {
+                        "count": 814
+                    }
+                }
+            },
+            "zh": {
+                "num_samples": 1442,
+                "number_of_characters": 734124,
+                "unique_pairs": 1442,
+                "min_sentence1_length": 23,
+                "avg_sentence1_length": 373.0929264909847,
+                "max_sentence1_length": 5088,
+                "unique_sentence1": 1358,
+                "min_sentence2_length": 13,
+                "avg_sentence2_length": 136.00832177531206,
+                "max_sentence2_length": 889,
+                "unique_sentence2": 1274,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 1297
+                    },
+                    "1": {
+                        "count": 145
+                    }
+                }
+            },
+            "fr": {
+                "num_samples": 1356,
+                "number_of_characters": 1243355,
+                "unique_pairs": 1353,
+                "min_sentence1_length": 23,
+                "avg_sentence1_length": 387.4092920353982,
+                "max_sentence1_length": 3478,
+                "unique_sentence1": 1293,
+                "min_sentence2_length": 30,
+                "avg_sentence2_length": 529.5191740412979,
+                "max_sentence2_length": 3516,
+                "unique_sentence2": 1159,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 136
+                    },
+                    "0": {
+                        "count": 1220
+                    }
+                }
+            },
+            "es": {
+                "num_samples": 1231,
+                "number_of_characters": 1252739,
+                "unique_pairs": 1229,
+                "min_sentence1_length": 21,
+                "avg_sentence1_length": 391.6490658001625,
+                "max_sentence1_length": 3437,
+                "unique_sentence1": 1175,
+                "min_sentence2_length": 50,
+                "avg_sentence2_length": 626.0105605199025,
+                "max_sentence2_length": 6946,
+                "unique_sentence2": 1052,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 1107
+                    },
+                    "1": {
+                        "count": 124
+                    }
+                }
+            },
+            "pt": {
+                "num_samples": 998,
+                "number_of_characters": 941109,
+                "unique_pairs": 998,
+                "min_sentence1_length": 25,
+                "avg_sentence1_length": 409.17835671342687,
+                "max_sentence1_length": 2524,
+                "unique_sentence1": 950,
+                "min_sentence2_length": 25,
+                "avg_sentence2_length": 533.816633266533,
+                "max_sentence2_length": 3630,
+                "unique_sentence2": 864,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 898
+                    },
+                    "1": {
+                        "count": 100
+                    }
+                }
+            },
+            "ms": {
+                "num_samples": 192,
+                "number_of_characters": 227803,
+                "unique_pairs": 192,
+                "min_sentence1_length": 30,
+                "avg_sentence1_length": 477.640625,
+                "max_sentence1_length": 3161,
+                "unique_sentence1": 186,
+                "min_sentence2_length": 135,
+                "avg_sentence2_length": 708.8333333333334,
+                "max_sentence2_length": 3820,
+                "unique_sentence2": 160,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 172
+                    },
+                    "1": {
+                        "count": 20
+                    }
+                }
+            },
+            "ko": {
+                "num_samples": 554,
+                "number_of_characters": 415390,
+                "unique_pairs": 554,
+                "min_sentence1_length": 24,
+                "avg_sentence1_length": 444.1750902527076,
+                "max_sentence1_length": 3547,
+                "unique_sentence1": 526,
+                "min_sentence2_length": 27,
+                "avg_sentence2_length": 305.62635379061373,
+                "max_sentence2_length": 2550,
+                "unique_sentence2": 470,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 498
+                    },
+                    "1": {
+                        "count": 56
+                    }
+                }
+            },
+            "tr": {
+                "num_samples": 518,
+                "number_of_characters": 582769,
+                "unique_pairs": 518,
+                "min_sentence1_length": 23,
+                "avg_sentence1_length": 491.6988416988417,
+                "max_sentence1_length": 4658,
+                "unique_sentence1": 493,
+                "min_sentence2_length": 54,
+                "avg_sentence2_length": 633.3378378378378,
+                "max_sentence2_length": 3949,
+                "unique_sentence2": 452,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 466
+                    },
+                    "1": {
+                        "count": 52
+                    }
+                }
+            },
+            "hi": {
+                "num_samples": 228,
+                "number_of_characters": 168480,
+                "unique_pairs": 228,
+                "min_sentence1_length": 27,
+                "avg_sentence1_length": 405.859649122807,
+                "max_sentence1_length": 4236,
+                "unique_sentence1": 217,
+                "min_sentence2_length": 17,
+                "avg_sentence2_length": 333.0877192982456,
+                "max_sentence2_length": 4760,
+                "unique_sentence2": 188,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 205
+                    },
+                    "1": {
+                        "count": 23
+                    }
+                }
+            },
+            "cs": {
+                "num_samples": 611,
+                "number_of_characters": 520475,
+                "unique_pairs": 611,
+                "min_sentence1_length": 24,
+                "avg_sentence1_length": 387.6317512274959,
+                "max_sentence1_length": 3760,
+                "unique_sentence1": 579,
+                "min_sentence2_length": 55,
+                "avg_sentence2_length": 464.20949263502456,
+                "max_sentence2_length": 2351,
+                "unique_sentence2": 521,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 549
+                    },
+                    "1": {
+                        "count": 62
+                    }
+                }
+            },
+            "ja": {
+                "num_samples": 1434,
+                "number_of_characters": 779224,
+                "unique_pairs": 1434,
+                "min_sentence1_length": 21,
+                "avg_sentence1_length": 363.5976290097629,
+                "max_sentence1_length": 2160,
+                "unique_sentence1": 1369,
+                "min_sentence2_length": 29,
+                "avg_sentence2_length": 179.79428172942818,
+                "max_sentence2_length": 1072,
+                "unique_sentence2": 1234,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 1290
+                    },
+                    "1": {
+                        "count": 144
+                    }
+                }
+            }
+        }
+    }
+}

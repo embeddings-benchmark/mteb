@@ -26,6 +26,10 @@ from .TwentyNewsgroupsClustering import (
     TwentyNewsgroupsClusteringFast,
 )
 from .WikiCitiesClustering import WikiCitiesClustering
+from .WikipediaChemistrySpecialtiesClustering import (
+    WikipediaChemistrySpecialtiesClustering,
+)
+from .WikipediaChemistryTopicsClustering import WikipediaChemistryTopicsClustering
 
 __all__ = [
     "MedrxivClusteringS2S",
@@ -41,6 +45,7 @@ __all__ = [
     "ArxivClusteringP2PFast",
     "MedrxivClusteringP2P",
     "MedrxivClusteringP2PFast",
+    "WikipediaChemistryTopicsClustering",
     "WikiCitiesClustering",
     "BiorxivClusteringP2P",
     "BiorxivClusteringP2PFast",
@@ -48,6 +53,7 @@ __all__ = [
     "TwentyNewsgroupsClusteringFast",
     "ArXivHierarchicalClusteringP2P",
     "ArXivHierarchicalClusteringS2S",
+    "WikipediaChemistrySpecialtiesClustering",
     "BigPatentClustering",
     "BigPatentClusteringFast",
     "StackExchangeClusteringP2P",

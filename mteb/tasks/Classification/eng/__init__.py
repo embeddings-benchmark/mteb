@@ -125,12 +125,53 @@ from .LegalBenchClassification import (
 from .NewsClassification import NewsClassification
 from .PatentClassification import PatentClassification
 from .PoemSentimentClassification import PoemSentimentClassification
+from .SDSEyeProtectionClassification import SDSEyeProtectionClassification
+from .SDSGlovesClassification import SDSGlovesClassification
 from .ToxicChatClassification import ToxicChatClassification
 from .ToxicConversationsClassification import ToxicConversationsClassification
 from .TweetSentimentExtractionClassification import (
     TweetSentimentExtractionClassification,
 )
 from .TweetTopicSingleClassification import TweetTopicSingleClassification
+from .WikipediaBiolumNeurochemClassification import (
+    WikipediaBiolumNeurochemClassification,
+)
+from .WikipediaBioMetChemClassification import WikipediaBioMetChemClassification
+from .WikipediaChemEngSpecialtiesClassification import (
+    WikipediaChemEngSpecialtiesClassification,
+)
+from .WikipediaChemFieldsClassification import WikipediaChemFieldsClassification
+from .WikipediaChemistryTopicsClassification import (
+    WikipediaChemistryTopicsClassification,
+)
+from .WikipediaCompChemSpectroscopyClassification import (
+    WikipediaCompChemSpectroscopyClassification,
+)
+from .WikipediaCryobiologySeparationClassification import (
+    WikipediaCryobiologySeparationClassification,
+)
+from .WikipediaCrystallographyAnalyticalClassification import (
+    WikipediaCrystallographyAnalyticalClassification,
+)
+from .WikipediaGreenhouseEnantiopureClassification import (
+    WikipediaGreenhouseEnantiopureClassification,
+)
+from .WikipediaIsotopesFissionClassification import (
+    WikipediaIsotopesFissionClassification,
+)
+from .WikipediaLuminescenceClassification import WikipediaLuminescenceClassification
+from .WikipediaOrganicInorganicClassification import (
+    WikipediaOrganicInorganicClassification,
+)
+from .WikipediaSaltsSemiconductorsClassification import (
+    WikipediaSaltsSemiconductorsClassification,
+)
+from .WikipediaSolidStateColloidalClassification import (
+    WikipediaSolidStateColloidalClassification,
+)
+from .WikipediaTheoreticalAppliedClassification import (
+    WikipediaTheoreticalAppliedClassification,
+)
 from .YahooAnswersTopicsClassification import YahooAnswersTopicsClassification
 from .YelpReviewFullClassification import YelpReviewFullClassification
 
@@ -248,20 +289,37 @@ __all__ = [
     "TextualismToolPlainLegalBenchClassification",
     "UCCVCommonLawLegalBenchClassification",
     "UnfairTOSLegalBenchClassification",
+    "WikipediaChemEngSpecialtiesClassification",
     "FinancialPhrasebankClassification",
     "DBpediaClassification",
+    "WikipediaBiolumNeurochemClassification",
+    "WikipediaBioMetChemClassification",
+    "WikipediaIsotopesFissionClassification",
+    "WikipediaLuminescenceClassification",
+    "WikipediaChemFieldsClassification",
     "FrenkEnClassification",
     "TweetTopicSingleClassification",
+    "WikipediaOrganicInorganicClassification",
+    "WikipediaCrystallographyAnalyticalClassification",
+    "WikipediaTheoreticalAppliedClassification",
+    "WikipediaSaltsSemiconductorsClassification",
     "AmazonPolarityClassification",
     "NewsClassification",
     "ToxicChatClassification",
+    "SDSEyeProtectionClassification",
     "YelpReviewFullClassification",
+    "WikipediaGreenhouseEnantiopureClassification",
+    "WikipediaSolidStateColloidalClassification",
     "ToxicConversationsClassification",
     "TweetSentimentExtractionClassification",
     "PatentClassification",
     "ImdbClassification",
+    "SDSGlovesClassification",
+    "WikipediaCompChemSpectroscopyClassification",
     "ArxivClassification",
     "EmotionClassification",
     "PoemSentimentClassification",
     "Banking77Classification",
+    "WikipediaCryobiologySeparationClassification",
+    "WikipediaChemistryTopicsClassification",
 ]

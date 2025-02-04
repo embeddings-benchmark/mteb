@@ -5,11 +5,24 @@ from .ces import CTKFactsNLI
 from .deu import FalseFriendsDeEnPC
 from .eng import (
     LegalBenchPC,
+    PubChemAISentenceParaphrasePC,
+    PubChemSMILESPC,
+    PubChemSynonymPC,
+    PubChemWikiParagraphsPC,
     SprintDuplicateQuestionsPC,
     TwitterSemEval2015PC,
     TwitterURLCorpusPC,
 )
-from .fas import FarsTail
+from .fas import (
+    CExaPPC,
+    FarsiParaphraseDetection,
+    FarsTail,
+    ParsinluEntail,
+    ParsinluQueryParaphPC,
+    SynPerChatbotRAGFAQPC,
+    SynPerQAPC,
+    SynPerTextKeywordsPC,
+)
 from .hye import ArmenianParaphrasePC
 from .ind import IndoNLI
 from .kor import KlueNLI
@@ -20,6 +33,7 @@ from .multilingual import (
     IndicXnliPairClassification,
     OpusparcusPC,
     PawsXPairClassification,
+    PubChemWikiPairClassification,
     XStance,
 )
 from .pol import CdscePC, PpcPC, PscPC, SickePLPC
@@ -41,16 +55,28 @@ __all__ = [
     "ArEntail",
     "ArmenianParaphrasePC",
     "CTKFactsNLI",
+    "PubChemSMILESPC",
+    "PubChemSynonymPC",
     "LegalBenchPC",
     "TwitterSemEval2015PC",
+    "PubChemWikiParagraphsPC",
     "TwitterURLCorpusPC",
     "SprintDuplicateQuestionsPC",
+    "PubChemAISentenceParaphrasePC",
     "FarsTail",
+    "CExaPPC",
+    "FarsiParaphraseDetection",
+    "ParsinluEntail",
+    "ParsinluQueryParaphPC",
+    "SynPerChatbotRAGFAQPC",
+    "SynPerQAPC",
+    "SynPerTextKeywordsPC",
     "KlueNLI",
     "IndicXnliPairClassification",
     "OpusparcusPC",
     "PawsXPairClassification",
     "RTE3",
+    "PubChemWikiPairClassification",
     "XStance",
     "XNLI",
     "XNLIV2",
