@@ -30,8 +30,4 @@ class OxfordFlowersClassification(AbsTaskImageClassification):
         modalities=["image"],
         sample_creation="found",
         bibtex_citation="""d""",
-        descriptive_stats={
-            "n_samples": {"test": 400000},
-            "avg_character_length": {"test": 431.4},
-        },
     )

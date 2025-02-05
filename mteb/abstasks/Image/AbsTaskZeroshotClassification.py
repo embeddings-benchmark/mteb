@@ -16,7 +16,7 @@ class AbsTaskZeroshotClassification(AbsTask):
     """Abstract class for ZeroshotClassification tasks
     The similarity between an images and candidate text prompts, such as this is a dog/this is a cat.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns:
         image: list of Image.Image
         labels: list of int
     """

@@ -47,10 +47,6 @@ class STL10Classification(AbsTaskZeroshotClassification):
         url = 	 {https://proceedings.mlr.press/v15/coates11a.html},
         }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 8000},
-            "avg_character_length": {"test": 431.4},
-        },
     )
 
     def get_candidate_labels(self) -> list[str]:

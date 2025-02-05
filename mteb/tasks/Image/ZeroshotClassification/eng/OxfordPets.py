@@ -41,10 +41,6 @@ class OxfordPetsClassification(AbsTaskZeroshotClassification):
             url={https://arxiv.org/abs/1306.5151}, 
         }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 3669},
-            "avg_character_length": {"test": 431.4},
-        },
     )
 
     def get_candidate_labels(self) -> list[str]:

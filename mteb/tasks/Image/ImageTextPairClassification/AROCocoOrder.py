@@ -48,8 +48,4 @@ class AROCocoOrder(AbsTaskImageTextPairClassification):
   volume={36},
   year={2024}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 25010},
-            "avg_character_length": {"test": 1},
-        },
     )

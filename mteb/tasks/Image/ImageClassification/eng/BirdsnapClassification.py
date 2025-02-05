@@ -37,10 +37,6 @@ class BirdsnapClassification(AbsTaskImageClassification):
         year = {2014}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 1851},
-            "avg_character_length": {"test": 431.4},
-        },
     )
 
     # Override default column name in the subclass

@@ -33,8 +33,5 @@ class METI2IRetrieval(AbsTaskAny2AnyRetrieval):
   year={2021}
 }
         """,
-        descriptive_stats={
-            # "n_samples": {"default": 397121},
-        },
     )
     skip_first_result = True

@@ -12,7 +12,6 @@ from .AbsTaskRetrieval import AbsTaskRetrieval
 from .AbsTaskSpeedTask import AbsTaskSpeedTask
 from .AbsTaskSTS import AbsTaskSTS
 from .AbsTaskSummarization import AbsTaskSummarization
-from .TaskMetadata import TaskMetadata
 
 # todo todo todo
 from .Image.AbsTaskAny2AnyMultiChoice import *
@@ -25,7 +24,7 @@ from .Image.AbsTaskImageTextPairClassification import *
 from .Image.AbsTaskVisualSTS import *
 from .Image.AbsTaskZeroshotClassification import *
 from .MultilingualTask import *
-
+from .TaskMetadata import TaskMetadata
 
 __all__ = [
     "AbsTask",

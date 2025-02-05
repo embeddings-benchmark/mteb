@@ -36,16 +36,4 @@ class NIGHTSI2IRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={
             "query": "Find a day-to-day image that looks similar to the provided image."
         },
-        descriptive_stats={
-            "n_samples": {"test": 2120},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 0.0,
-                    "num_documents": 40038,
-                    "num_queries": 2120,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )

@@ -37,16 +37,4 @@ class Fashion200kT2IRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={
             "query": "Based on the following fashion description, retrieve the best matching image."
         },
-        descriptive_stats={
-            "n_samples": {"test": 1719},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 30.94235294117647,
-                    "average_query_length": 131.56569965870307,
-                    "num_documents": 201824,
-                    "num_queries": 1719,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )

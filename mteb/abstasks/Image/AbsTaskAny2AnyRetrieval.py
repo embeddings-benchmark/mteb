@@ -214,9 +214,9 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
-        dataset_path = self.metadata_dict["dataset"]["path"]
+        dataset_path = self.metadata.dataset["path"]
 
-        for split in kwargs.get("eval_splits", self.metadata_dict["eval_splits"]):
+        for split in kwargs.get("eval_splits", self.metadata.eval_splits):
             corpus, queries, qrels = HFDataLoader(
                 hf_repo=dataset_path,
                 streaming=False,
@@ -378,9 +378,7 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
         self.load_data()
 
         all_details = {}
-        pbar_split = tqdm.tqdm(
-            self.metadata_dict["eval_splits"], desc="Processing Splits..."
-        )
+        pbar_split = tqdm.tqdm(self.metadata.eval_splits, desc="Processing Splits...")
         for split in pbar_split:
             pbar_split.set_postfix_str(f"Split: {split}")
             logger.info(f"Processing metadata for split {split}")

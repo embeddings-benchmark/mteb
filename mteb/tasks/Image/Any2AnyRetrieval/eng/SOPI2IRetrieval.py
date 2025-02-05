@@ -34,17 +34,5 @@ class SOPI2IRetrieval(AbsTaskAny2AnyRetrieval):
   year={2016}
 }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 120053},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 0.0,
-                    "num_documents": 120053,
-                    "num_queries": 120053,
-                    "average_relevant_docs_per_query": 7,
-                }
-            },
-        },
     )
     skip_first_result = True

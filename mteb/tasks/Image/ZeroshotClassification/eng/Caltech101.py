@@ -44,10 +44,6 @@ class Caltech101Classification(AbsTaskZeroshotClassification):
         keywords={Bayesian methods;Testing;Humans;Maximum likelihood estimation;Assembly;Shape;Machine vision;Image recognition;Parameter estimation;Image databases},
         doi={10.1109/CVPR.2004.383}}
         """,
-        descriptive_stats={
-            "n_samples": {"test": 6084},
-            "avg_character_length": {"test": 431.4},
-        },
     )
 
     def get_candidate_labels(self) -> list[str]:

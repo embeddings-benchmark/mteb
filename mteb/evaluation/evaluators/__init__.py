@@ -9,14 +9,6 @@ from .ClassificationEvaluator import (
 )
 from .ClusteringEvaluator import ClusteringEvaluator
 from .Evaluator import Evaluator
-from .model_classes import DenseRetrievalExactSearch, corpus_to_str
-from .PairClassificationEvaluator import PairClassificationEvaluator
-from .RetrievalEvaluator import RetrievalEvaluator
-from .STSEvaluator import STSEvaluator
-from .SummarizationEvaluator import (
-    DeprecatedSummarizationEvaluator,
-    SummarizationEvaluator,
-)
 
 # TODO TODO
 from .Image.Any2AnyMultiChoiceEvaluator import *
@@ -27,7 +19,14 @@ from .Image.ClusteringEvaluator import *
 from .Image.ImageTextPairClassificationEvaluator import *
 from .Image.VisualSTSEvaluator import *
 from .Image.ZeroshotClassificationEvaluator import *
-
+from .model_classes import DenseRetrievalExactSearch, corpus_to_str
+from .PairClassificationEvaluator import PairClassificationEvaluator
+from .RetrievalEvaluator import RetrievalEvaluator
+from .STSEvaluator import STSEvaluator
+from .SummarizationEvaluator import (
+    DeprecatedSummarizationEvaluator,
+    SummarizationEvaluator,
+)
 
 __all__ = [
     "Evaluator",

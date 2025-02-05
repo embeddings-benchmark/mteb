@@ -40,8 +40,4 @@ class AROVisualRelation(AbsTaskImageTextPairClassification):
   booktitle={The Eleventh International Conference on Learning Representations},
   year={2023}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 23937},
-            "avg_character_length": {"test": 1},
-        },
     )

@@ -54,10 +54,6 @@ abstract="We propose a new model for digital pathology segmentation, based on th
 isbn="978-3-030-00934-2"
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 32768},
-            "avg_character_length": {"test": 0},
-        },
     )
     image_column_name = "webp"
     label_column_name = "cls"

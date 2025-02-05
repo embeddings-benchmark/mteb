@@ -187,7 +187,6 @@ class TaskResult(BaseModel):
                     raise ValueError("Scores should be a dictionary")
                 cls._validate_scores_dict(hf_subset_score)
         return v
-        domains=["Written", "Non-fiction"],
 
     @staticmethod
     def _validate_scores_dict(scores: ScoresDict) -> None:

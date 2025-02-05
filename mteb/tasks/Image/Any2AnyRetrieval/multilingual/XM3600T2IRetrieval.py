@@ -3,7 +3,6 @@ from __future__ import annotations
 from datasets import Dataset, DatasetDict, load_dataset
 
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -119,7 +118,7 @@ def _load_xm3600_data(
     return corpus, queries, relevant_docs
 
 
-class XM3600T2IRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
+class XM3600T2IRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="XM3600T2IRetrieval",
         description="Retrieve images based on multilingual descriptions.",
@@ -149,258 +148,6 @@ class XM3600T2IRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
   pages={715--729},
   year={2022}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "ar": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "bn": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "cs": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "da": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "de": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "el": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "en": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "es": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "fa": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "fi": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "fil": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "fr": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "he": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "hi": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "hr": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "hu": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "id": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "it": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "ja": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "ko": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "mi": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "nl": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "pl": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "pt": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "quz": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "ro": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "ru": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "sv": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "sw": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "te": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "th": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "tr": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "uk": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "vi": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                    "zh": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 7200,
-                        "num_queries": 3600,
-                        "average_relevant_docs_per_query": 2.0,
-                    },
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -408,11 +155,11 @@ class XM3600T2IRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_xm3600_data(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             langs=self.hf_subsets,
-            splits=self.metadata_dict["eval_splits"],
+            splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True

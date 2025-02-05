@@ -18,7 +18,7 @@ class AbsTaskAny2TextMultipleChoice(AbsTask):
     This task assess interleaved encoding of queries,
     the similarity computed between the queries and the candidate choices is ranked.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset.
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset.
     """
 
     query_modalities: list[str] | str = ["image", "text"]

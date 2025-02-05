@@ -48,16 +48,4 @@ class ReMuQIT2TRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={
             "query": "Retrieve a fact-based paragraph that provides an answer to the given query about the image."
         },
-        descriptive_stats={
-            "n_samples": {"test": 3609},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 208.18675158868538,
-                    "average_query_length": 73.85508451094486,
-                    "num_documents": 138794,
-                    "num_queries": 3609,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
