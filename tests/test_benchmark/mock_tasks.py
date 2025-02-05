@@ -2344,19 +2344,19 @@ class MockMultilingualInstructionReranking(AbsTaskReranking):
 
 
 class MockMultiChoiceTask(AbsTaskAny2AnyMultiChoice):
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "average_question_length": 26.0,
+            "average_choice_length": 30.5,
+            "unique_labels": 2,
+            "labels": {"1": {"count": 1}, "0": {"count": 1}},
+        }
+    }
     metadata = TaskMetadata(
         type="Any2AnyMultiChoice",
         name="MockMultiChoice",
         main_score="accuracy",
-        descriptive_stats={
-            "test": {
-                "num_samples": 2,
-                "average_question_length": 26.0,
-                "average_choice_length": 30.5,
-                "unique_labels": 2,
-                "labels": {"1": {"count": 1}, "0": {"count": 1}},
-            }
-        },
         **general_args,  # type: ignore
     )
     metadata.modalities = ["image", "text"]
@@ -2402,35 +2402,35 @@ class MockMultiChoiceTask(AbsTaskAny2AnyMultiChoice):
 
 
 class MockMultilingualMultiChoiceTask(AbsTaskAny2AnyMultiChoice):
+    expected_stats = {
+        "test": {
+            "num_samples": 4,
+            "average_question_length": 26.0,
+            "average_choice_length": 30.5,
+            "unique_labels": 2,
+            "labels": {"1": {"count": 2}, "0": {"count": 2}},
+            "hf_subset_descriptive_stats": {
+                "eng": {
+                    "num_samples": 2,
+                    "average_question_length": 26.0,
+                    "average_choice_length": 30.5,
+                    "unique_labels": 2,
+                    "labels": {"1": {"count": 1}, "0": {"count": 1}},
+                },
+                "fra": {
+                    "num_samples": 2,
+                    "average_question_length": 26.0,
+                    "average_choice_length": 30.5,
+                    "unique_labels": 2,
+                    "labels": {"1": {"count": 1}, "0": {"count": 1}},
+                },
+            },
+        }
+    }
     metadata = TaskMetadata(
         type="Any2AnyMultiChoice",
         name="MockMultilingualMultiChoice",
         main_score="accuracy",
-        descriptive_stats={
-            "test": {
-                "num_samples": 4,
-                "average_question_length": 26.0,
-                "average_choice_length": 30.5,
-                "unique_labels": 2,
-                "labels": {"1": {"count": 2}, "0": {"count": 2}},
-                "hf_subset_descriptive_stats": {
-                    "eng": {
-                        "num_samples": 2,
-                        "average_question_length": 26.0,
-                        "average_choice_length": 30.5,
-                        "unique_labels": 2,
-                        "labels": {"1": {"count": 1}, "0": {"count": 1}},
-                    },
-                    "fra": {
-                        "num_samples": 2,
-                        "average_question_length": 26.0,
-                        "average_choice_length": 30.5,
-                        "unique_labels": 2,
-                        "labels": {"1": {"count": 1}, "0": {"count": 1}},
-                    },
-                },
-            }
-        },
         **general_args,  # type: ignore
     )
     metadata.eval_langs = multilingual_eval_langs
@@ -2490,19 +2490,20 @@ class MockMultilingualMultiChoiceTask(AbsTaskAny2AnyMultiChoice):
 
 
 class MockAny2AnyRetrievalI2TTask(AbsTaskAny2AnyRetrieval):
+    expected_stats = {
+        "test": {
+            "average_document_length": 30.0,
+            "average_query_length": 26.0,
+            "num_documents": 2,
+            "num_queries": 2,
+            "average_relevant_docs_per_query": 1.0,
+        }
+    }
+
     metadata = TaskMetadata(
         type="Any2AnyRetrieval",
         name="MockAny2AnyRetrievalI2T",
         main_score="ndcg_at_10",
-        descriptive_stats={
-            "test": {
-                "average_document_length": 30.0,
-                "average_query_length": 26.0,
-                "num_documents": 2,
-                "num_queries": 2,
-                "average_relevant_docs_per_query": 1.0,
-            }
-        },
         **general_args,  # type: ignore
     )
     metadata.modalities = ["image", "text"]
@@ -2546,19 +2547,19 @@ class MockAny2AnyRetrievalI2TTask(AbsTaskAny2AnyRetrieval):
 
 
 class MockAny2AnyRetrievalT2ITask(AbsTaskAny2AnyRetrieval):
+    expected_stats = {
+        "test": {
+            "average_document_length": 30.0,
+            "average_query_length": 26.0,
+            "num_documents": 2,
+            "num_queries": 2,
+            "average_relevant_docs_per_query": 1.0,
+        }
+    }
     metadata = TaskMetadata(
         type="Any2AnyRetrieval",
         name="MockAny2AnyRetrievalT2I",
         main_score="ndcg_at_10",
-        descriptive_stats={
-            "test": {
-                "average_document_length": 30.0,
-                "average_query_length": 26.0,
-                "num_documents": 2,
-                "num_queries": 2,
-                "average_relevant_docs_per_query": 1.0,
-            }
-        },
         **general_args,  # type: ignore
     )
     metadata.modalities = ["image", "text"]
@@ -2602,15 +2603,16 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskAny2AnyRetrieval):
 
 
 class MockTextMultipleChoiceTask(AbsTaskAny2TextMultipleChoice):
+    expected_stats = {
+        "test": {
+            # TODO: Add descriptive stats
+        }
+    }
+
     metadata = TaskMetadata(
         type="Any2TextMutipleChoice",
         name="MockTextMultipleChoice",
         main_score="accuracy",
-        descriptive_stats={
-            "test": {
-                # TODO: Add descriptive stats
-            }
-        },
         **general_args,  # type: ignore
     )
     metadata.modalities = ["text", "image"]
@@ -2641,24 +2643,25 @@ class MockTextMultipleChoiceTask(AbsTaskAny2TextMultipleChoice):
 
 
 class MockImageClassificationTask(AbsTaskImageClassification):
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "average_image_size": 26.0,
+            "unique_labels": 2,
+            "labels": {"1": {"count": 1}, "0": {"count": 1}},
+        },
+        "train": {
+            "num_samples": 10,
+            "average_image_size": 26.0,
+            "unique_labels": 2,
+            "labels": {"1": {"count": 5}, "0": {"count": 5}},
+        },
+    }
+
     metadata = TaskMetadata(
         type="ImageClassification",
         name="MockImageClassification",
         main_score="accuracy",
-        descriptive_stats={
-            "test": {
-                "num_samples": 2,
-                "average_image_size": 26.0,
-                "unique_labels": 2,
-                "labels": {"1": {"count": 1}, "0": {"count": 1}},
-            },
-            "train": {
-                "num_samples": 10,
-                "average_image_size": 26.0,
-                "unique_labels": 2,
-                "labels": {"1": {"count": 5}, "0": {"count": 5}},
-            },
-        },
         **general_args,  # type: ignore
     )
     metadata.modalities = ["image"]
@@ -2694,24 +2697,24 @@ class MockImageClassificationTask(AbsTaskImageClassification):
 
 
 class MockImageClassificationKNNPTTask(AbsTaskImageClassification):
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "average_image_size": 26.0,
+            "unique_labels": 2,
+            "labels": {"1": {"count": 1}, "0": {"count": 1}},
+        },
+        "train": {
+            "num_samples": 10,
+            "average_image_size": 26.0,
+            "unique_labels": 2,
+            "labels": {"1": {"count": 5}, "0": {"count": 5}},
+        },
+    }
     metadata = TaskMetadata(
         type="ImageClassification",
         name="MockImageClassificationKNNPT",
         main_score="accuracy",
-        descriptive_stats={
-            "test": {
-                "num_samples": 2,
-                "average_image_size": 26.0,
-                "unique_labels": 2,
-                "labels": {"1": {"count": 1}, "0": {"count": 1}},
-            },
-            "train": {
-                "num_samples": 10,
-                "average_image_size": 26.0,
-                "unique_labels": 2,
-                "labels": {"1": {"count": 5}, "0": {"count": 5}},
-            },
-        },
         **general_args,  # type: ignore
     )
     metadata.modalities = ["image"]
@@ -2749,11 +2752,8 @@ class MockImageClassificationKNNPTTask(AbsTaskImageClassification):
 
 
 class MockImageClassificationKNNTask(AbsTaskImageClassification):
-    metadata = TaskMetadata(
-        type="ImageClassification",
-        name="MockImageClassificationKNN",
-        main_score="accuracy",
-        descriptive_stats={
+    expected_stats = (
+        {
             "test": {
                 "num_samples": 2,
                 "average_image_size": 26.0,
@@ -2767,6 +2767,12 @@ class MockImageClassificationKNNTask(AbsTaskImageClassification):
                 "labels": {"1": {"count": 5}, "0": {"count": 5}},
             },
         },
+    )
+
+    metadata = TaskMetadata(
+        type="ImageClassification",
+        name="MockImageClassificationKNN",
+        main_score="accuracy",
         **general_args,  # type: ignore
     )
     metadata.modalities = ["image"]
@@ -2804,52 +2810,52 @@ class MockImageClassificationKNNTask(AbsTaskImageClassification):
 class MockMultilingualImageClassificationTask(AbsTaskImageClassification):
     n_experiments = 1
     samples_per_label = 5
+    expected_stats = {
+        "test": {
+            "num_samples": 4,
+            "average_image_size": 26.0,
+            "unique_labels": 2,
+            "labels": {"1": {"count": 2}, "0": {"count": 2}},
+            "hf_subset_descriptive_stats": {
+                "eng": {
+                    "num_samples": 2,
+                    "average_image_size": 26.0,
+                    "unique_labels": 2,
+                    "labels": {"1": {"count": 1}, "0": {"count": 1}},
+                },
+                "fra": {
+                    "num_samples": 2,
+                    "average_image_size": 26.0,
+                    "unique_labels": 2,
+                    "labels": {"1": {"count": 1}, "0": {"count": 1}},
+                },
+            },
+        },
+        "train": {
+            "num_samples": 20,
+            "average_image_size": 26.0,
+            "unique_labels": 2,
+            "labels": {"1": {"count": 10}, "0": {"count": 10}},
+            "hf_subset_descriptive_stats": {
+                "eng": {
+                    "num_samples": 10,
+                    "average_image_size": 26.0,
+                    "unique_labels": 2,
+                    "labels": {"1": {"count": 5}, "0": {"count": 5}},
+                },
+                "fra": {
+                    "num_samples": 10,
+                    "average_image_size": 26.0,
+                    "unique_labels": 2,
+                    "labels": {"1": {"count": 5}, "0": {"count": 5}},
+                },
+            },
+        },
+    }
     metadata = TaskMetadata(
         type="ImageClassification",
         name="MockMultilingualImageClassification",
         main_score="accuracy",
-        descriptive_stats={
-            "test": {
-                "num_samples": 4,
-                "average_image_size": 26.0,
-                "unique_labels": 2,
-                "labels": {"1": {"count": 2}, "0": {"count": 2}},
-                "hf_subset_descriptive_stats": {
-                    "eng": {
-                        "num_samples": 2,
-                        "average_image_size": 26.0,
-                        "unique_labels": 2,
-                        "labels": {"1": {"count": 1}, "0": {"count": 1}},
-                    },
-                    "fra": {
-                        "num_samples": 2,
-                        "average_image_size": 26.0,
-                        "unique_labels": 2,
-                        "labels": {"1": {"count": 1}, "0": {"count": 1}},
-                    },
-                },
-            },
-            "train": {
-                "num_samples": 20,
-                "average_image_size": 26.0,
-                "unique_labels": 2,
-                "labels": {"1": {"count": 10}, "0": {"count": 10}},
-                "hf_subset_descriptive_stats": {
-                    "eng": {
-                        "num_samples": 10,
-                        "average_image_size": 26.0,
-                        "unique_labels": 2,
-                        "labels": {"1": {"count": 5}, "0": {"count": 5}},
-                    },
-                    "fra": {
-                        "num_samples": 10,
-                        "average_image_size": 26.0,
-                        "unique_labels": 2,
-                        "labels": {"1": {"count": 5}, "0": {"count": 5}},
-                    },
-                },
-            },
-        },
         **general_args,  # type: ignore
     )
     metadata.modalities = ["image"]
@@ -2887,18 +2893,19 @@ class MockMultilingualImageClassificationTask(AbsTaskImageClassification):
 
 
 class MockImageClusteringTask(AbsTaskImageClustering):
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "average_image_size": 26.0,
+            "unique_labels": 2,
+            "labels": {"1": {"count": 1}, "0": {"count": 1}},
+        }
+    }
+
     metadata = TaskMetadata(
         type="ImageClustering",
         name="MockImageClustering",
         main_score="nmi",
-        descriptive_stats={
-            "test": {
-                "num_samples": 2,
-                "average_image_size": 26.0,
-                "unique_labels": 2,
-                "labels": {"1": {"count": 1}, "0": {"count": 1}},
-            }
-        },
         **general_args,  # type: ignore
     )
     metadata.modalities = ["image"]
@@ -2924,19 +2931,20 @@ class MockImageClusteringTask(AbsTaskImageClustering):
 
 
 class MockImageMultilabelClassificationTask(AbsTaskImageMultilabelClassification):
+    expected_stats = {
+        "test": {
+            "average_image_size": 26.0,
+            "average_label_per_image": 2.0,
+            "num_samples": 6,
+            "unique_labels": 2,
+            "labels": {"0": {"count": 6}, "1": {"count": 6}},
+        }
+    }
+
     metadata = TaskMetadata(
         type="ImageMultilabelClassification",
         name="MockImageMultilabelClassification",
         main_score="accuracy",
-        descriptive_stats={
-            "test": {
-                "average_image_size": 26.0,
-                "average_label_per_image": 2.0,
-                "num_samples": 6,
-                "unique_labels": 2,
-                "labels": {"0": {"count": 6}, "1": {"count": 6}},
-            }
-        },
         **general_args,  # type: ignore
     )
     metadata.modalities = ["image"]
@@ -2973,35 +2981,35 @@ class MockImageMultilabelClassificationTask(AbsTaskImageMultilabelClassification
 class MockMultilingualImageMultilabelClassificationTask(
     AbsTaskImageMultilabelClassification
 ):
+    expected_stats = {
+        "test": {
+            "average_image_size": 26.0,
+            "average_label_per_image": 2.0,
+            "num_samples": 12,
+            "unique_labels": 2,
+            "labels": {"0": {"count": 12}, "1": {"count": 12}},
+            "hf_subset_descriptive_stats": {
+                "eng": {
+                    "average_image_size": 26.0,
+                    "average_label_per_image": 2.0,
+                    "num_samples": 6,
+                    "unique_labels": 2,
+                    "labels": {"0": {"count": 6}, "1": {"count": 6}},
+                },
+                "fra": {
+                    "average_image_size": 26.0,
+                    "average_label_per_image": 2.0,
+                    "num_samples": 6,
+                    "unique_labels": 2,
+                    "labels": {"0": {"count": 6}, "1": {"count": 6}},
+                },
+            },
+        }
+    }
     metadata = TaskMetadata(
         type="ImageMultilabelClassification",
         name="MockMultilingualImageMultilabelClassification",
         main_score="accuracy",
-        descriptive_stats={
-            "test": {
-                "average_image_size": 26.0,
-                "average_label_per_image": 2.0,
-                "num_samples": 12,
-                "unique_labels": 2,
-                "labels": {"0": {"count": 12}, "1": {"count": 12}},
-                "hf_subset_descriptive_stats": {
-                    "eng": {
-                        "average_image_size": 26.0,
-                        "average_label_per_image": 2.0,
-                        "num_samples": 6,
-                        "unique_labels": 2,
-                        "labels": {"0": {"count": 6}, "1": {"count": 6}},
-                    },
-                    "fra": {
-                        "average_image_size": 26.0,
-                        "average_label_per_image": 2.0,
-                        "num_samples": 6,
-                        "unique_labels": 2,
-                        "labels": {"0": {"count": 6}, "1": {"count": 6}},
-                    },
-                },
-            }
-        },
         **general_args,  # type: ignore
     )
     metadata.modalities = ["image"]
@@ -3039,19 +3047,20 @@ class MockMultilingualImageMultilabelClassificationTask(
 
 
 class MockImageTextPairClassificationTask(AbsTaskImageTextPairClassification):
+    expected_stats = {
+        "test": {
+            "average_image_size": 26.0,
+            "average_text_length": 30.0,
+            "num_samples": 2,
+            "unique_labels": 2,
+            "labels": {"1": {"count": 1}, "0": {"count": 1}},
+        }
+    }
+
     metadata = TaskMetadata(
         type="ImageTextPairClassification",
         name="MockImageTextPairClassification",
         main_score="text_acc",
-        descriptive_stats={
-            "test": {
-                "average_image_size": 26.0,
-                "average_text_length": 30.0,
-                "num_samples": 2,
-                "unique_labels": 2,
-                "labels": {"1": {"count": 1}, "0": {"count": 1}},
-            }
-        },
         **general_args,  # type: ignore
     )
     metadata.modalities = ["image", "text"]
@@ -3080,35 +3089,36 @@ class MockImageTextPairClassificationTask(AbsTaskImageTextPairClassification):
 class MockMultilingualImageTextPairClassificationTask(
     AbsTaskImageTextPairClassification
 ):
+    expected_stats = {
+        "test": {
+            "average_image_size": 26.0,
+            "average_text_length": 30.0,
+            "num_samples": 4,
+            "unique_labels": 2,
+            "labels": {"1": {"count": 2}, "0": {"count": 2}},
+            "hf_subset_descriptive_stats": {
+                "eng": {
+                    "average_image_size": 26.0,
+                    "average_text_length": 30.0,
+                    "num_samples": 2,
+                    "unique_labels": 2,
+                    "labels": {"1": {"count": 1}, "0": {"count": 1}},
+                },
+                "fra": {
+                    "average_image_size": 26.0,
+                    "average_text_length": 30.0,
+                    "num_samples": 2,
+                    "unique_labels": 2,
+                    "labels": {"1": {"count": 1}, "0": {"count": 1}},
+                },
+            },
+        }
+    }
+
     metadata = TaskMetadata(
         type="ImageTextPairClassification",
         name="MockMultilingualImageTextPairClassification",
         main_score="accuracy",
-        descriptive_stats={
-            "test": {
-                "average_image_size": 26.0,
-                "average_text_length": 30.0,
-                "num_samples": 4,
-                "unique_labels": 2,
-                "labels": {"1": {"count": 2}, "0": {"count": 2}},
-                "hf_subset_descriptive_stats": {
-                    "eng": {
-                        "average_image_size": 26.0,
-                        "average_text_length": 30.0,
-                        "num_samples": 2,
-                        "unique_labels": 2,
-                        "labels": {"1": {"count": 1}, "0": {"count": 1}},
-                    },
-                    "fra": {
-                        "average_image_size": 26.0,
-                        "average_text_length": 30.0,
-                        "num_samples": 2,
-                        "unique_labels": 2,
-                        "labels": {"1": {"count": 1}, "0": {"count": 1}},
-                    },
-                },
-            }
-        },
         **general_args,  # type: ignore
     )
     metadata.modalities = ["image", "text"]
@@ -3141,18 +3151,19 @@ class MockMultilingualImageTextPairClassificationTask(
 
 
 class MockVisualSTSTask(AbsTaskVisualSTS):
+    expected_stats = {
+        "test": {
+            "average_image_size": 26.0,
+            "average_text_length": 30.0,
+            "num_samples": 2,
+            "average_score": 0.5,
+        }
+    }
+
     metadata = TaskMetadata(
         type="VisualSTS",
         name="MockVisualSTS",
         main_score="cosine_spearman",
-        descriptive_stats={
-            "test": {
-                "average_image_size": 26.0,
-                "average_text_length": 30.0,
-                "num_samples": 2,
-                "average_score": 0.5,
-            }
-        },
         **general_args,  # type: ignore
     )
     metadata.modalities = ["image", "text"]
@@ -3180,18 +3191,19 @@ class MockVisualSTSTask(AbsTaskVisualSTS):
 
 
 class MockZeroshotClassificationTask(AbsTaskZeroshotClassification):
+    expected_stats = {
+        "test": {
+            "average_text_length": 26.0,
+            "num_samples": 2,
+            "unique_labels": 2,
+            "labels": {"1": {"count": 1}, "0": {"count": 1}},
+        }
+    }
+
     metadata = TaskMetadata(
         type="ZeroShotClassification",
         name="MockZeroshotClassification",
         main_score="accuracy",
-        descriptive_stats={
-            "test": {
-                "average_text_length": 26.0,
-                "num_samples": 2,
-                "unique_labels": 2,
-                "labels": {"1": {"count": 1}, "0": {"count": 1}},
-            }
-        },
         **general_args,  # type: ignore
     )
     metadata.modalities = ["image", "text"]
