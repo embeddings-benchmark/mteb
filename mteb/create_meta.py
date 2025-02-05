@@ -82,7 +82,7 @@ def get_task_results(results_folder: Path) -> list[TaskResult]:
     json_files = [
         r
         for r in results_folder.glob("*.json")
-        if r.is_file() and r.name != "model_meta.json"
+        if r.is_file() and r.name != "model_meta.json" and "predictions" not in r.name
     ]
     task_results = [TaskResult.from_disk(path) for path in json_files]
     task_results = [
