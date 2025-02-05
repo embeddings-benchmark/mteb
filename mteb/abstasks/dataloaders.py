@@ -147,7 +147,7 @@ class RetrievalDataLoader:
             self.hf_repo+"-qrels",
             name=config,
             trust_remote_code=self.trust_remote_code,
-            revision=self.revision,
+            # revision=self.revision,
         )[split]
 
         features = Features(
