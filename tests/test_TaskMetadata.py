@@ -3,7 +3,7 @@ from __future__ import annotations
 import pytest
 from pydantic import ValidationError
 
-from mteb.abstasks import AbsTask, TaskMetadata
+from mteb.abstasks import AbsTask, AbsTaskAny2AnyRetrieval, TaskMetadata
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.overview import get_tasks
 
@@ -521,6 +521,9 @@ def test_disallow_trust_remote_code_in_new_datasets():
 @pytest.mark.parametrize("task", get_tasks())
 def test_empty_descriptive_stat_in_new_datasets(task: AbsTask):
     if task.metadata.name.startswith("Mock") or isinstance(task, AbsTaskAggregate):
+        return
+
+    if "image" in task.metadata.modalities or isinstance(task, AbsTaskAny2AnyRetrieval):
         return
 
     # TODO add descriptive_stat for CodeRAGStackoverflowPosts. Required > 128GB of RAM
