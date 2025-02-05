@@ -249,7 +249,7 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
         )
 
         scores = {}
-        hf_subsets = list(self.hf_subsets) if self.is_multilingual else ["default"]
+        hf_subsets = self.hf_subsets
 
         for hf_subset in hf_subsets:
             logger.info(f"Subset: {hf_subset}")
@@ -383,7 +383,7 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
             pbar_split.set_postfix_str(f"Split: {split}")
             logger.info(f"Processing metadata for split {split}")
             all_details[split] = {}
-            if self.is_multilingual:
+            if self.metadata.is_multilingual:
                 pbar_lang = tqdm.tqdm(
                     self.relevant_docs.keys(), desc="Processing Languages..."
                 )

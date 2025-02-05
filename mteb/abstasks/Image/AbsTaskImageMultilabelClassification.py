@@ -104,7 +104,7 @@ class AbsTaskImageMultilabelClassification(AbsTask):
             self.load_data()
 
         scores = {}
-        hf_subsets = list(self.dataset) if self.is_multilingual else ["default"]
+        hf_subsets = self.hf_subsets
 
         for hf_subset in hf_subsets:
             logger.info(
