@@ -20,23 +20,29 @@ nvidia_training_datasets = {
     # source: https://arxiv.org/pdf/2405.17428
     "ArguAna": ["train"],
     "ArguAna-PL": ["train"],
+    "ArguAna-NL": ["train"],  # translation not trained on
     "NanoArguAnaRetrieval": ["train"],
     "HotpotQA": ["train"],
     "HotpotQA-PL": ["train"],  # translation not trained on
+    "HotpotQA-NL": ["train"],  # translation not trained on
     "HotpotQAHardNegatives": ["train"],
     "MSMARCO": ["train"],
     "MSMARCOHardNegatives": ["train"],
     "NanoMSMARCORetrieval": ["train"],
     "MSMARCO-PL": ["train"],  # translation not trained on
+    "mMARCO-NL": ["train"],  # translation not trained on
     "NQ": ["train"],
     "NQHardNegatives": ["train"],
     "NanoNQRetrieval": ["train"],
     "NQ-PL": ["train"],  # translation not trained on
+    "NQ-NL": ["train"],  # translation not trained on
     "FEVER": ["train"],
+    "FEVER-NL": ["train"],  # translation not trained on
     "FEVERHardNegatives": ["train"],
     "NanoFEVERRetrieval": ["train"],
     "FiQA2018": ["train"],
     "FiQA2018-PL": ["train"],  # translation not trained on
+    "FiQA2018-NL": ["train"],  # translation not trained on
     "STS12": ["train"],
     "STS22": ["train"],
     "AmazonReviewsClassification": ["train"],

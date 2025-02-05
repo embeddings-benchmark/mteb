@@ -10,15 +10,16 @@ from .instruct_wrapper import instruct_wrapper
 
 logger = logging.getLogger(__name__)
 
-
 GRIT_LM_TRAINING_DATA = {
     **E5_TRAINING_DATA,  # source https://arxiv.org/pdf/2402.09906
     # also uses medi2 which contains fever and hotpotqa:
     "FEVER": ["train"],
     "FEVERHardNegatives": ["train"],
+    "FEVER-NL": ["train"],  # translation not trained on
     "HotpotQA": ["train"],
     "HotpotQAHardNegatives": ["train"],
     "HotpotQA-PL": ["train"],  # translation not trained on
+    "HotpotQA-NL": ["train"],  # translation not trained on
 }
 
 
@@ -54,6 +55,7 @@ gritlm7b = ModelMeta(
     public_training_code="https://github.com/ContextualAI/gritlm",
     public_training_data=None,
 )
+
 gritlm8x7b = ModelMeta(
     loader=partial(  # type: ignore
         instruct_wrapper,

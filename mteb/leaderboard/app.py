@@ -5,7 +5,6 @@ import json
 import logging
 import tempfile
 import time
-import typing
 from pathlib import Path
 from typing import Literal
 from urllib.parse import urlencode
@@ -15,12 +14,45 @@ import pandas as pd
 from gradio_rangeslider import RangeSlider
 
 import mteb
-from mteb.abstasks.TaskMetadata import TASK_TYPE
 from mteb.caching import json_cache
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
 from mteb.leaderboard.table import scores_to_tables
 
 logger = logging.getLogger(__name__)
+
+acknowledgment_md = """
+### Acknowledgment
+We thank [ServiceNow](https://www.servicenow.com/), [Contextual AI](https://contextual.ai/) and [Hugging Face](https://huggingface.co/) for their generous sponsorship. If you'd like to sponsor us, please get in [touch](mailto:n.muennighoff@gmail.com).
+
+<div class="sponsor-image-about" style="display: flex; align-items: center; gap: 10px;">
+    <a href="https://www.servicenow.com/">
+        <img src="https://play-lh.googleusercontent.com/HdfHZ5jnfMM1Ep7XpPaVdFIVSRx82wKlRC_qmnHx9H1E4aWNp4WKoOcH0x95NAnuYg" width="60" height="55" style="padding: 10px;">
+    </a>
+    <a href="https://contextual.ai/">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQd4EDMoZLFRrIjVBrSXOQYGcmvUJ3kL4U2usvjuKPla-LoRTZtLzFnb_Cu5tXzRI7DNBo&usqp=CAU" width="60" height="55" style="padding: 10px;">
+    </a>
+    <a href="https://huggingface.co">
+        <img src="https://raw.githubusercontent.com/embeddings-benchmark/mteb/main/docs/images/hf_logo.png" width="60" height="55" style="padding: 10px;">
+    </a>
+</div>
+
+We also thank the following companies which provide API credits to evaluate their models: [OpenAI](https://openai.com/), [Voyage AI](https://www.voyageai.com/)
+"""
+
+MMTEB_TASK_TYPES = [  # TEMPORARY FIX: when adding MIEB to the leaderboard, this can probably be replaced with TASK_TYPE
+    "BitextMining",
+    "Classification",
+    "MultilabelClassification",
+    "Clustering",
+    "PairClassification",
+    "Reranking",
+    "Retrieval",
+    "STS",
+    "Summarization",
+    "InstructionRetrieval",
+    "Speed",
+]
+
 
 ALL_MODELS = {meta.name for meta in mteb.get_model_metas()}
 
@@ -208,7 +240,7 @@ lang_select = gr.Dropdown(
 )
 type_select = gr.Dropdown(
     all_results.task_types,
-    value=sorted(typing.get_args(TASK_TYPE)),
+    value=sorted(MMTEB_TASK_TYPES),
     multiselect=True,
     label="Task Type",
     info="Select task types to include.",
@@ -640,6 +672,7 @@ Based on community feedback and research findings, This definition could change 
         outputs=[summary_table, per_task_table],
     )
 
+    gr.Markdown(acknowledgment_md, elem_id="ack_markdown")
 
 if __name__ == "__main__":
     demo.launch()
