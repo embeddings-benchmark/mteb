@@ -47,7 +47,9 @@ class RetrievalDataLoader:
         | dict[str, dict[str, float]]
         | None,  # top_ranked (optional)
     ]:
-        configs = get_dataset_config_names(self.hf_repo, self.revision, trust_remote_code=self.trust_remote_code)
+        configs = get_dataset_config_names(
+            self.hf_repo, self.revision, trust_remote_code=self.trust_remote_code
+        )
 
         logger.info("Loading Corpus...")
         self._load_corpus(self.config)
@@ -144,7 +146,7 @@ class RetrievalDataLoader:
         config = f"{config}-qrels" if config is not None else "default"
 
         qrels_ds = load_dataset(
-            self.hf_repo+"-qrels",
+            self.hf_repo + "-qrels",
             name=config,
             trust_remote_code=self.trust_remote_code,
             # revision=self.revision,

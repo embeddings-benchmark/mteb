@@ -11,9 +11,8 @@ class HotpotQAPL(AbsTaskRetrieval):
         description="HotpotQA is a question answering dataset featuring natural, multi-hop questions, with strong supervision for supporting facts to enable more explainable question answering systems.",
         reference="https://hotpotqa.github.io/",
         dataset={
-            "path": "clarin-knext/hotpotqa-pl",
-            "revision": "a0bd479ac97b4ccb5bd6ce320c415d0bb4beb907",
-            "trust_remote_code": True,
+            "path": "mteb/HotpotQA-PL",
+            "revision": "49835d4dc7312e5d8df554462438f0b65c8ef6a6",
         },
         type="Retrieval",
         category="s2p",

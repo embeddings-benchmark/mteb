@@ -11,9 +11,8 @@ class NQPL(AbsTaskRetrieval):
         description="Natural Questions: A Benchmark for Question Answering Research",
         reference="https://ai.google.com/research/NaturalQuestions/",
         dataset={
-            "path": "clarin-knext/nq-pl",
-            "revision": "f171245712cf85dd4700b06bef18001578d0ca8d",
-            "trust_remote_code": True,
+            "path": "mteb/NQ-PL",
+            "revision": "b784c0399830a24e4ce0f9df2bb5b6be7fc8b246",
         },
         type="Retrieval",
         category="s2p",

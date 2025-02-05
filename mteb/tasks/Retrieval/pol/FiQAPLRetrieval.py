@@ -13,9 +13,8 @@ class FiQAPLRetrieval(AbsTaskRetrieval):
         description="Financial Opinion Mining and Question Answering",
         reference="https://sites.google.com/view/fiqa/",
         dataset={
-            "path": "clarin-knext/fiqa-pl",
-            "revision": "2e535829717f8bf9dc829b7f911cc5bbd4e6608e",
-            "trust_remote_code": True,
+            "path": "mteb/FiQA-PL",
+            "revision": "788508256800f93c2ad033e96243bc801f9ee525",
         },
         type="Retrieval",
         category="s2p",
