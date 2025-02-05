@@ -78,7 +78,7 @@ class AbsTaskSpeedTask(AbsTask):
                 list_gpus.append(
                     {
                         "gpu_name": gpu.name,
-                        "gpu_total_memory": f"{gpu.memoryTotal/1024.0} GB",
+                        "gpu_total_memory": f"{gpu.memoryTotal / 1024.0} GB",
                     }
                 )
             info["gpu_info"] = list_gpus

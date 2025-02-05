@@ -109,12 +109,15 @@ arctic_embed_xs = ModelMeta(
         # splits not specified to assuming everything
         # in MTEB
         "NQ": ["test"],
+        "NQ-NL": ["test"],  # translated from NQ (not trained on)
         "NQHardNegatives": ["test"],
         "NQ-PL": ["test"],
         "HotPotQA": ["test"],  # translated, not trained on
         "HotPotQAHardNegatives": ["test"],
         "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
+        "HotpotQA-NL": ["test"],  # translated from hotpotQA (not trained on)
         "FEVER": ["test"],
+        "FEVER-NL": ["test"],  # translated from FEVER (not trained on)
         "FEVERHardNegatives": ["test"],
         # not in MTEB
         # trained on stack exchange (title-body)
@@ -160,11 +163,14 @@ arctic_embed_s = ModelMeta(
         # splits not specified to assuming everything
         # in MTEB
         "NQ": ["test"],
+        "NQ-NL": ["test"],  # translated from NQ (not trained on)
         "NQHardNegatives": ["test"],
         "HotPotQA": ["test"],
         "HotPotQAHardNegatives": ["test"],
         "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
+        "HotpotQA-NL": ["test"],  # translated from hotpotQA (not trained on)
         "FEVER": ["test"],
+        "FEVER-NL": ["test"],  # translated from FEVER (not trained on)
         "FEVERHardNegatives": ["test"],
         # not in MTEB
         # trained on stack exchange (title-body)
@@ -210,11 +216,14 @@ arctic_embed_m = ModelMeta(
         # splits not specified to assuming everything
         # in MTEB
         "NQ": ["test"],
+        "NQ-NL": ["test"],  # translated from NQ (not trained on)
         "NQHardNegatives": ["test"],
         "HotPotQA": ["test"],
         "HotPotQAHardNegatives": ["test"],
         "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
+        "HotpotQA-NL": ["test"],  # translated from hotpotQA (not trained on)
         "FEVER": ["test"],
+        "FEVER-NL": ["test"],  # translated from FEVER (not trained on)
         "FEVERHardNegatives": ["test"],
         # not in MTEB
         # trained on stack exchange (title-body)
@@ -260,11 +269,14 @@ arctic_embed_m_long = ModelMeta(
         # splits not specified to assuming everything
         # in MTEB
         "NQ": ["test"],
+        "NQ-NL": ["test"],  # translated from NQ (not trained on)
         "NQHardNegatives": ["test"],
         "HotPotQA": ["test"],
         "HotPotQAHardNegatives": ["test"],
         "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
+        "HotpotQA-NL": ["test"],  # translated from hotpotQA (not trained on)
         "FEVER": ["test"],
+        "FEVER-NL": ["test"],  # translated from FEVER (not trained on)
         "FEVERHardNegatives": ["test"],
         # trained on stack exchange, unsure if sources match
         # not in MTEB
@@ -310,11 +322,14 @@ arctic_embed_l = ModelMeta(
         # splits not specified to assuming everything
         # in MTEB
         "NQ": ["test"],
+        "NQ-NL": ["test"],  # translated from NQ (not trained on)
         "NQHardNegatives": ["test"],
         "HotPotQA": ["test"],
         "HotPotQAHardNegatives": ["test"],
         "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
+        "HotpotQA-NL": ["test"],  # translated from hotpotQA (not trained on)
         "FEVER": ["test"],
+        "FEVER-NL": ["test"],  # translated from FEVER (not trained on)
         "FEVERHardNegatives": ["test"],
         # not in MTEB
         # trained on stack exchange (title-body)

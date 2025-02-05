@@ -133,7 +133,7 @@ class AbsTaskImageClassification(AbsTask):
         )  # we store idxs to make the shuffling reproducible
         for i in range(self.n_experiments):
             logger.info(
-                "=" * 10 + f" Experiment {i+1}/{self.n_experiments} " + "=" * 10
+                "=" * 10 + f" Experiment {i + 1}/{self.n_experiments} " + "=" * 10
             )
             # Bootstrap `self.samples_per_label` samples per label for each split
             undersampled_train, idxs = self._undersample_data(
