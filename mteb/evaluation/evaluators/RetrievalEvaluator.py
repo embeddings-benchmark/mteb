@@ -6,7 +6,6 @@ from typing import Any
 from .Evaluator import Evaluator
 from .model_classes import (
     DenseRetrievalExactSearch,
-    DRESModel,
     is_cross_encoder_compatible,
 )
 from .utils import (
@@ -44,7 +43,7 @@ class RetrievalEvaluator(Evaluator):
             self.is_cross_encoder = True
         else:
             self.retriever = DenseRetrievalExactSearch(
-                DRESModel(retriever), encode_kwargs=encode_kwargs, **kwargs
+                retriever, encode_kwargs=encode_kwargs, **kwargs
             )
         self.k_values = k_values
         self.top_k = (
@@ -58,6 +57,7 @@ class RetrievalEvaluator(Evaluator):
         queries: dict[str, str],
         instructions: dict[str, str] | None = None,
         qid: str | None = None,
+        top_ranked: dict[str, list[str]] | None = None,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
         if not self.retriever:
@@ -73,10 +73,10 @@ class RetrievalEvaluator(Evaluator):
                 corpus, queries, self.top_k, instructions=instructions, **kwargs
             )
         elif (
-            hasattr(self.retriever.model.model, "mteb_model_meta")
-            and self.retriever.model.model.mteb_model_meta.name == "bm25s"
+            hasattr(self.retriever.model, "mteb_model_meta")
+            and self.retriever.model.mteb_model_meta.name == "bm25s"
         ):
-            return self.retriever.model.model.search(
+            return self.retriever.model.search(
                 corpus,
                 queries,
                 self.top_k,
@@ -91,6 +91,7 @@ class RetrievalEvaluator(Evaluator):
                 queries,
                 self.top_k,
                 instructions=instructions,
+                top_ranked=top_ranked,
                 request_qid=qid,
                 task_name=self.task_name,
                 **kwargs,

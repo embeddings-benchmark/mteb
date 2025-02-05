@@ -1,0 +1,43 @@
+{
+    "test": {
+        "num_samples": 1,
+        "number_of_characters": 2105,
+        "min_text_length": 2105,
+        "average_text_length": 2105.0,
+        "max_text_length": 2105,
+        "unique_texts": 2105,
+        "min_labels_per_text": 142,
+        "average_labels_per_text": 2105.0,
+        "max_labels_per_text": 335,
+        "unique_labels": 9,
+        "labels": {
+            "Luminescence": {
+                "count": 217
+            },
+            "Cryobiology": {
+                "count": 281
+            },
+            "Tissue Engineering": {
+                "count": 335
+            },
+            "Nuclear Fusion": {
+                "count": 247
+            },
+            "Acids + Bases": {
+                "count": 142
+            },
+            "Separation Processes": {
+                "count": 255
+            },
+            "Carbohydrates": {
+                "count": 202
+            },
+            "Magnetic Ordering": {
+                "count": 224
+            },
+            "Ultraviolet Radiation": {
+                "count": 202
+            }
+        }
+    }
+}

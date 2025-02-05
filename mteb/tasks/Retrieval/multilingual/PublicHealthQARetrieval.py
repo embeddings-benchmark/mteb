@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
@@ -63,7 +62,7 @@ def _load_publichealthqa_data(
     return corpus, queries, relevant_docs
 
 
-class PublicHealthQARetrieval(MultilingualTask, AbsTaskRetrieval):
+class PublicHealthQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="PublicHealthQA",
         description="A multilingual dataset for public health question answering, based on FAQ sourced from CDC and WHO.",
@@ -87,12 +86,12 @@ class PublicHealthQARetrieval(MultilingualTask, AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation="""
 @misc {xing_han_lu_2024,
-	author       = { {Xing Han Lu} },
-	title        = { publichealth-qa (Revision 3b67b6b) },
-	year         = 2024,
-	url          = { https://huggingface.co/datasets/xhluca/publichealth-qa },
-	doi          = { 10.57967/hf/2247 },
-	publisher    = { Hugging Face }
+    author       = { {Xing Han Lu} },
+    title        = { publichealth-qa (Revision 3b67b6b) },
+    year         = 2024,
+    url          = { https://huggingface.co/datasets/xhluca/publichealth-qa },
+    doi          = { 10.57967/hf/2247 },
+    publisher    = { Hugging Face }
 }
 """,
     )

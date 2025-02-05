@@ -18,6 +18,7 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 
 import mteb
 from mteb.abstasks.AbsTask import ScoresDict
+from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import (
@@ -36,6 +37,8 @@ logger = logging.getLogger(__name__)
 
 
 class MTEB:
+    tasks: list[AbsTask]
+
     def __init__(
         self,
         tasks: Iterable[AbsTask | Benchmark],
@@ -98,7 +101,7 @@ class MTEB:
                     category = f", [italic grey39]{task.metadata.category}[/]"
                     multilingual = (
                         f", [italic red]multilingual {len(task.hf_subsets)} / {len(task.metadata.eval_langs)} Subsets[/]"
-                        if task.is_multilingual
+                        if task.metadata.is_multilingual
                         else ""
                     )
                     console.print(f"{prefix}{name}{category}{multilingual}")
@@ -316,6 +319,29 @@ class MTEB:
                 f"\n\n********************** Evaluating {task.metadata.name} **********************"
             )
 
+            if isinstance(task, AbsTaskAggregate):
+                self_ = MTEB(tasks=task.metadata.tasks)
+                task_results = self_.run(
+                    model,
+                    verbosity=verbosity - 1,
+                    output_folder=output_folder,
+                    eval_splits=eval_splits,
+                    eval_subsets=eval_subsets,
+                    overwrite_results=overwrite_results,
+                    raise_error=raise_error,
+                    co2_tracker=co2_tracker,
+                    encode_kwargs=encode_kwargs,
+                    **kwargs,
+                )
+                new_results = task.combine_task_results(task_results)
+                evaluation_results.append(new_results)
+
+                if output_path:
+                    save_path = output_path / f"{task.metadata.name}.json"
+                    new_results.to_disk(save_path)
+                del self.tasks[0]
+                continue
+
             if "bm25s" in meta.name and task.metadata.type != "Retrieval":
                 logger.warning(
                     f"bm25s only supports Retrieval tasks, but the task type is {task.metadata.type}. Skipping task."
@@ -326,7 +352,7 @@ class MTEB:
             task_eval_splits = (
                 eval_splits if eval_splits is not None else task.eval_splits
             )
-            task_subsets = list(task.metadata.hf_subsets_to_langscripts.keys())
+            task_subsets = task.hf_subsets
 
             existing_results = None
             save_path = None
@@ -340,7 +366,7 @@ class MTEB:
 
             if output_path:
                 kwargs["output_folder"] = output_folder  # needed for retrieval tasks
-                save_path = output_path / f"{task.metadata.name}{task.save_suffix}.json"
+                save_path = output_path / f"{task.metadata.name}.json"
                 if save_path.exists():
                     existing_results = TaskResult.from_disk(save_path)
 

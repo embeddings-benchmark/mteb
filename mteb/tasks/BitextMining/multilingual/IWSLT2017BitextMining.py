@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -34,7 +33,7 @@ _LANGUAGES = {
 _SPLITS = ["validation"]
 
 
-class IWSLT2017BitextMining(AbsTaskBitextMining, MultilingualTask):
+class IWSLT2017BitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="IWSLT2017BitextMining",
         dataset={

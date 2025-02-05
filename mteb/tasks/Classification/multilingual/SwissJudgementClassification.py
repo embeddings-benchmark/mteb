@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class SwissJudgementClassification(MultilingualTask, AbsTaskClassification):
+class SwissJudgementClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SwissJudgementClassification",
         description="Multilingual, diachronic dataset of Swiss Federal Supreme Court cases annotated with the respective binarized judgment outcome (approval/dismissal)",

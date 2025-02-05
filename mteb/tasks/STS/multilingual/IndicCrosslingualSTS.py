@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -20,7 +19,7 @@ _LANGUAGES = {
 }
 
 
-class IndicCrosslingualSTS(AbsTaskSTS, MultilingualTask):
+class IndicCrosslingualSTS(AbsTaskSTS):
     metadata = TaskMetadata(
         name="IndicCrosslingualSTS",
         dataset={

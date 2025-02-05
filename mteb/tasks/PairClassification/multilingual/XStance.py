@@ -2,13 +2,12 @@ from __future__ import annotations
 
 from datasets import load_dataset
 
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 
-class XStance(MultilingualTask, AbsTaskPairClassification):
+class XStance(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="XStance",
         dataset={

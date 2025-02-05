@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from .dan import BornholmBitextMining
+from .eng import PubChemSMILESBitextMining
 from .kat import TbilisiCityHallBitextMining
 from .multilingual import (
     BibleNLPBitextMining,
@@ -30,6 +31,7 @@ __all__ = [
     "VieMedEVBitextMining",
     "BornholmBitextMining",
     "SRNCorpusBitextMining",
+    "PubChemSMILESBitextMining",
     "IN22ConvBitextMining",
     "IN22GenBitextMining",
     "BUCCBitextMining",

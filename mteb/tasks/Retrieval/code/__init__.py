@@ -4,6 +4,12 @@ from .AppsRetrieval import AppsRetrieval
 from .CodeEditSearchRetrieval import CodeEditSearchRetrieval
 from .CodeFeedbackMTRetrieval import CodeFeedbackMT
 from .CodeFeedbackSTRetrieval import CodeFeedbackST
+from .CodeRAG import (
+    CodeRAGLibraryDocumentationSolutionsRetrieval,
+    CodeRAGOnlineTutorialsRetrieval,
+    CodeRAGProgrammingSolutionsRetrieval,
+    CodeRAGStackoverflowPostsRetrieval,
+)
 from .CodeSearchNetCCRetrieval import CodeSearchNetCCRetrieval
 from .CodeSearchNetRetrieval import CodeSearchNetRetrieval
 from .CodeTransOceanContestRetrieval import CodeTransOceanContestRetrieval
@@ -17,6 +23,10 @@ __all__ = [
     "CodeTransOceanContestRetrieval",
     "CodeTransOceanDLRetrieval",
     "CodeFeedbackMT",
+    "CodeRAGLibraryDocumentationSolutionsRetrieval",
+    "CodeRAGOnlineTutorialsRetrieval",
+    "CodeRAGProgrammingSolutionsRetrieval",
+    "CodeRAGStackoverflowPostsRetrieval",
     "CodeSearchNetCCRetrieval",
     "StackOverflowQARetrieval",
     "CodeFeedbackST",

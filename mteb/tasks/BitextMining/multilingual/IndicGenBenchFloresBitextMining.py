@@ -5,7 +5,6 @@ from typing import Any
 import datasets
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = [
@@ -97,7 +96,7 @@ def get_lang_pairs() -> dict[str, list[str]]:
 _LANGUAGES_MAPPING = get_lang_pairs()
 
 
-class IndicGenBenchFloresBitextMining(AbsTaskBitextMining, MultilingualTask):
+class IndicGenBenchFloresBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="IndicGenBenchFloresBitextMining",
         dataset={

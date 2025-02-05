@@ -68,12 +68,12 @@ class AbsTaskBitextMining(AbsTask):
         subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any] = {},
-        **kwargs,
+        **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         if not self.data_loaded:
             self.load_data()
 
-        hf_subsets = list(self.dataset) if self.is_multilingual else ["default"]
+        hf_subsets = self.hf_subsets
 
         # If subsets_to_run is specified, filter the hf_subsets accordingly
         if subsets_to_run is not None:
@@ -191,7 +191,7 @@ class AbsTaskBitextMining(AbsTask):
         )
 
     def _push_dataset_to_hub(self, repo_name: str) -> None:
-        if self.is_multilingual:
+        if self.metadata.is_multilingual:
             for config in self.metadata.eval_langs:
                 logger.info(f"Converting {config} of {self.metadata.name}")
 

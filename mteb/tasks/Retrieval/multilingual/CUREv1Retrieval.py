@@ -7,7 +7,6 @@ from datasets import DatasetDict, load_dataset
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ....abstasks.MultilingualTask import MultilingualTask
 
 _LANGUAGES = {
     "en": ["eng-Latn", "eng-Latn"],
@@ -34,7 +33,7 @@ class CUREv1Splits(str, Enum):
         return sorted(cls._member_names_)
 
 
-class CUREv1Retrieval(MultilingualTask, AbsTaskRetrieval):
+class CUREv1Retrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         dataset={
             "path": "clinia/CUREv1",

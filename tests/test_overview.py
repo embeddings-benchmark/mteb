@@ -20,7 +20,7 @@ def test_get_tasks_size_differences():
     )
 
 
-@pytest.mark.parametrize("task_name", ["BornholmBitextMining"])
+@pytest.mark.parametrize("task_name", ["BornholmBitextMining", "CQADupstackRetrieval"])
 @pytest.mark.parametrize("eval_splits", [["test"], None])
 def test_get_task(task_name: str, eval_splits: list[str] | None):
     task = get_task(task_name, eval_splits=eval_splits)
@@ -76,7 +76,7 @@ def test_get_tasks_filtering():
     tasks = get_tasks(languages=["eng"])
 
     for task in tasks:
-        if task.is_multilingual:
+        if task.metadata.is_multilingual:
             assert isinstance(task.metadata.eval_langs, dict)
 
             for hf_subset in task.hf_subsets:
