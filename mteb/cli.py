@@ -80,6 +80,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import warnings
 from pathlib import Path
 
 import torch
@@ -368,7 +369,7 @@ def main():
 
     # If no subcommand is provided, default to run with a deprecation warning
     if not hasattr(args, "func"):
-        logger.warning(
+        warnings.warn(
             "Using `mteb` without a subcommand is deprecated. Use `mteb run` instead.",
             DeprecationWarning,
         )

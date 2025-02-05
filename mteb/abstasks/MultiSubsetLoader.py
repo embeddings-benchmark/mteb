@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import warnings
+
 import datasets
 
 
@@ -8,6 +10,9 @@ class MultiSubsetLoader:
         """Load dataset containing multiple subsets from HuggingFace hub"""
         if self.data_loaded:
             return
+        warnings.warn(
+            "`MultiSubsetLoader` will be removed in v2.0.0.", DeprecationWarning
+        )
 
         if hasattr(self, "fast_loading") and self.fast_loading:
             self.fast_load()
