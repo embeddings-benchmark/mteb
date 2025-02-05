@@ -183,7 +183,7 @@ class AbsTaskImageMultilabelClassification(AbsTask):
         for i_experiment, sample_indices in enumerate(train_samples):
             logger.info(
                 "=" * 10
-                + f" Experiment {i_experiment+1}/{self.n_experiments} "
+                + f" Experiment {i_experiment + 1}/{self.n_experiments} "
                 + "=" * 10
             )
             X_train = np.stack([unique_train_embeddings[idx] for idx in sample_indices])
