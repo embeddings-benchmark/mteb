@@ -6,12 +6,22 @@ import mteb
 from mteb.abstasks import AbsTask
 
 from .mock_tasks import (
+    MockAny2AnyRetrievalI2TTask,
+    MockAny2AnyRetrievalT2ITask,
     MockBitextMiningTask,
     MockClassificationTask,
     MockClusteringFastTask,
     MockClusteringTask,
     MockInstructionReranking,
     MockInstructionRetrieval,
+    MockImageClassificationKNNPTTask,
+    MockImageClassificationKNNTask,
+    MockImageClassificationTask,
+    MockImageClusteringTask,
+    MockImageMultilabelClassificationTask,
+    MockImageTextPairClassificationTask,
+    MockInstructionRetrival,
+    MockMultiChoiceTask,
     MockMultilabelClassification,
     MockMultilingualBitextMiningTask,
     MockMultilingualClassificationTask,
@@ -19,6 +29,11 @@ from .mock_tasks import (
     MockMultilingualClusteringTask,
     MockMultilingualInstructionReranking,
     MockMultilingualInstructionRetrieval,
+    MockMultilingualImageClassificationTask,
+    MockMultilingualImageMultilabelClassificationTask,
+    MockMultilingualImageTextPairClassificationTask,
+    MockMultilingualInstructionRetrival,
+    MockMultilingualMultiChoiceTask,
     MockMultilingualMultilabelClassification,
     MockMultilingualPairClassificationTask,
     MockMultilingualParallelBitextMiningTask,
@@ -31,6 +46,9 @@ from .mock_tasks import (
     MockRetrievalTask,
     MockSTSTask,
     MockSummarizationTask,
+    MockTextMultipleChoiceTask,
+    MockVisualSTSTask,
+    MockZeroshotClassificationTask,
 )
 
 TASK_TEST_GRID = (
@@ -93,3 +111,30 @@ MOCK_TASK_TEST_GRID_AS_STRING = [
 ]
 
 MOCK_TASK_REGISTRY = {task.metadata.name: type(task) for task in MOCK_TASK_TEST_GRID}
+
+MOCK_MIEB_TASK_GRID = [
+    MockAny2AnyRetrievalI2TTask(),
+    MockAny2AnyRetrievalT2ITask(),
+    MockTextMultipleChoiceTask(),
+    MockMultiChoiceTask(),
+    MockImageClassificationTask(),
+    MockImageClassificationKNNPTTask(),
+    MockImageClassificationKNNTask(),
+    MockImageClusteringTask(),
+    MockImageTextPairClassificationTask(),
+    MockVisualSTSTask(),
+    MockZeroshotClassificationTask(),
+    MockImageMultilabelClassificationTask(),
+    MockMultilingualImageClassificationTask(),
+    MockMultilingualImageTextPairClassificationTask(),
+    MockMultilingualMultiChoiceTask(),
+    MockMultilingualImageMultilabelClassificationTask(),
+]
+
+MOCK_MIEB_TASK_GRID_AS_STRING = [
+    t.metadata.name if isinstance(t, AbsTask) else t for t in MOCK_MIEB_TASK_GRID
+]
+
+MOCK_MIEB_TASK_REGISTRY = {
+    task.metadata.name: type(task) for task in MOCK_MIEB_TASK_GRID
+}

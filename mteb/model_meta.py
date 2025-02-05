@@ -13,6 +13,7 @@ from mteb.encoder_interface import Encoder
 from mteb.evaluation.evaluators.utils import cos_sim, dot_score, max_sim
 
 from .languages import ISO_LANGUAGE_SCRIPT
+from .modalities import MODALITIES
 
 if TYPE_CHECKING:
     from .models.sentence_transformer_wrapper import SentenceTransformerWrapper
@@ -83,6 +84,7 @@ class ModelMeta(BaseModel):
             a benchmark as well as mark dataset contaminations.
         adapted_from: Name of the model from which this model is adapted from. For quantizations, fine-tunes, long doc extensions, etc.
         superseded_by: Name of the model that supersedes this model, e.g. nvidia/NV-Embed-v2 supersedes v1.
+        modalities: A list of strings representing the modalities the model supports. Default is ["text].
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -106,6 +108,7 @@ class ModelMeta(BaseModel):
     training_datasets: dict[str, list[str]] | None
     adapted_from: str | None = None
     superseded_by: str | None = None
+    modalities: list[MODALITIES] = ["text"]
     citation: str | None = None
 
     def get_similarity_function(self) -> Callable[[np.ndarray, np.ndarray], np.ndarray]:

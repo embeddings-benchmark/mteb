@@ -14,6 +14,19 @@ from .AbsTaskSTS import AbsTaskSTS
 from .AbsTaskSummarization import AbsTaskSummarization
 from .TaskMetadata import TaskMetadata
 
+# todo todo todo
+from .Image.AbsTaskAny2AnyMultiChoice import *
+from .Image.AbsTaskAny2AnyRetrieval import *
+from .Image.AbsTaskAny2TextMultipleChoice import *
+from .Image.AbsTaskImageClassification import *
+from .Image.AbsTaskImageClustering import *
+from .Image.AbsTaskImageMultilabelClassification import *
+from .Image.AbsTaskImageTextPairClassification import *
+from .Image.AbsTaskVisualSTS import *
+from .Image.AbsTaskZeroshotClassification import *
+from .MultilingualTask import *
+
+
 __all__ = [
     "AbsTask",
     "AbsTaskBitextMining",

@@ -96,7 +96,10 @@ promptriever_llama3 = ModelMeta(
     languages=["eng_Latn"],
     open_weights=True,
     revision="48d6d0fc4e02fb1269b36940650a1b7233035cbb-2ead22cfb1b0e0c519c371c63c2ab90ffc511b8a",  # base-peft revision
-    training_datasets={"samaya-ai/msmarco-w-instructions": ["train"]},
+    training_datasets={
+        "samaya-ai/msmarco-w-instructions": ["train"],
+        "mMARCO-NL": ["train"],  # translation not trained on
+    },
     release_date="2024-09-15",
     n_parameters=8_000_000,
     max_tokens=8192,
@@ -110,7 +113,6 @@ promptriever_llama3 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
 )
-
 
 promptriever_llama3_instruct = ModelMeta(
     loader=_loader(
@@ -129,7 +131,10 @@ promptriever_llama3_instruct = ModelMeta(
     n_parameters=8_000_000,
     max_tokens=8192,
     embed_dim=4096,
-    training_datasets={"samaya-ai/msmarco-w-instructions": ["train"]},
+    training_datasets={
+        "samaya-ai/msmarco-w-instructions": ["train"],
+        "mMARCO-NL": ["train"],  # translation not trained on
+    },
     license="apache-2.0",
     reference="https://huggingface.co/samaya-ai/promptriever-llama3.1-8b-instruct-v1",
     similarity_fn_name="cosine",
@@ -155,7 +160,10 @@ promptriever_mistral_v1 = ModelMeta(
     revision="7231864981174d9bee8c7687c24c8344414eae6b-876d63e49b6115ecb6839893a56298fadee7e8f5",  # base-peft revision
     release_date="2024-09-15",
     n_parameters=7_000_000,
-    training_datasets={"samaya-ai/msmarco-w-instructions": ["train"]},
+    training_datasets={
+        "samaya-ai/msmarco-w-instructions": ["train"],
+        "mMARCO-NL": ["train"],  # translation not trained on
+    },
     max_tokens=4096,
     embed_dim=4096,
     license="apache-2.0",

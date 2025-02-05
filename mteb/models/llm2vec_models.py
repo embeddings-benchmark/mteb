@@ -25,11 +25,13 @@ llm2vec_supervised_training_data = {
     # splits assumed but unkown
     "HotpotQA": ["train"],
     "HotpotQA-PL": ["train"],  # translation not trained on
+    "HotpotQA-NL": ["train"],  # translation not trained on
     "HotpotQAHardNegatives": ["train"],
     "MSMARCO": ["train"],
     "MSMARCOHardNegatives": ["train"],
     "NanoMSMARCORetrieval": ["train"],
     "MSMARCO-PL": ["train"],  # translation not trained on
+    "mMARCO-NL": ["train"],  # translation not trained on
     "MIRACLRetrieval": ["train"],
     "MIRACLRetrievalHardNegatives": ["train"],
     "MIRACLReranking": ["train"],
@@ -37,9 +39,11 @@ llm2vec_supervised_training_data = {
     "NQHardNegatives": ["train"],
     "NanoNQRetrieval": ["train"],
     "NQ-PL": ["train"],  # translation not trained on
+    "NQ-NL": ["train"],  # translation not trained on
     "FEVER": ["train"],
     "FEVERHardNegatives": ["train"],
     "NanoFEVERRetrieval": ["train"],
+    "FEVER-NL": ["train"],  # translation not trained on
     "MrTidyRetrieval": ["train"],
     "T2Reranking": ["train"],
 }
@@ -126,7 +130,8 @@ llm2vec_llama3_8b_supervised = ModelMeta(
     name="McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-supervised",
     languages=["eng_Latn"],
     open_weights=True,
-    revision="baa8ebf04a1c2500e61288e7dad65e8ae42601a7",  # TODO: Not sure what to put here as a model is made of two peft repos, each with a different revision
+    revision="baa8ebf04a1c2500e61288e7dad65e8ae42601a7",
+    # TODO: Not sure what to put here as a model is made of two peft repos, each with a different revision
     release_date="2024-04-09",
     n_parameters=7_505_000_000,
     max_tokens=8192,
@@ -168,7 +173,6 @@ llm2vec_llama3_8b_unsupervised = ModelMeta(
     training_datasets={},
     public_training_data=None,
 )
-
 
 llm2vec_mistral7b_supervised = ModelMeta(
     loader=_loader(

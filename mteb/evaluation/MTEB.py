@@ -37,6 +37,7 @@ logger = logging.getLogger(__name__)
 
 
 class MTEB:
+    _tasks: Iterable[str | AbsTask] | None
     tasks: list[AbsTask]
 
     def __init__(

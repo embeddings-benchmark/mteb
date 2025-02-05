@@ -234,10 +234,12 @@ jina_embeddings_v3 = ModelMeta(
         "MSMARCO": ["train"],
         "MSMARCOHardNegatives": ["train"],
         "NanoMSMARCORetrieval": ["train"],
+        "mMARCO-NL": ["train"],  # translation not trained on
         "NQ": ["train"],
         "NQHardNegatives": ["train"],
         "NanoNQRetrieval": ["train"],
         "NQ-PL": ["train"],  # translation not trained on
+        "NQ-NL": ["train"],  # translation not trained on
         # oasst1, oasst2
     },
     adapted_from="XLM-RoBERTa",
@@ -253,7 +255,6 @@ jina_embeddings_v3 = ModelMeta(
     }
     """,
 )
-
 
 jina_embeddings_v2_base_en = ModelMeta(
     loader=partial(

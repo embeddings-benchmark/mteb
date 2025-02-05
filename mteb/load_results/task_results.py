@@ -187,6 +187,7 @@ class TaskResult(BaseModel):
                     raise ValueError("Scores should be a dictionary")
                 cls._validate_scores_dict(hf_subset_score)
         return v
+        domains=["Written", "Non-fiction"],
 
     @staticmethod
     def _validate_scores_dict(scores: ScoresDict) -> None:
@@ -527,6 +528,7 @@ class TaskResult(BaseModel):
 
         if task is None:
             task = get_task(self.task_name)
+
         splits = task.metadata.eval_splits
         hf_subsets = set(task.hf_subsets)
 

@@ -61,7 +61,6 @@ gte_Qwen2_7B_instruct = ModelMeta(
     max_tokens=131072,
 )
 
-
 gte_Qwen1_5_7B_instruct = ModelMeta(
     loader=partial(  # type: ignore
         instruct_wrapper,
@@ -91,7 +90,6 @@ gte_Qwen1_5_7B_instruct = ModelMeta(
     public_training_data=None,
     training_datasets=None,
 )
-
 
 gte_Qwen2_1_5B_instruct = ModelMeta(
     loader=partial(  # type: ignore
@@ -274,10 +272,14 @@ gte_multi_training_data = {
     "DuReader": ["train"],
     "MMarcoReranking": ["train"],
     "CMedQAv2-reranking": ["train"],
+    "NQ-NL": ["train"],  # translation not trained on
     "NQ": ["train"],
     "MSMARCO": ["train"],
+    "mMARCO-NL": ["train"],  # translation not trained on
     "HotpotQA": ["train"],
+    "HotpotQA-NL": ["train"],
     "FEVER": ["train"],
+    "FEVER-NL": ["train"],
     "MIRACLReranking": ["train"],
     "MrTidyRetrieval": ["train"],
     "MultiLongDocRetrieval": ["train"],
