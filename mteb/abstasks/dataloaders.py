@@ -19,11 +19,13 @@ class RetrievalDataLoader:
 
     def __init__(
         self,
-        hf_repo: str | None = None,
+        hf_repo: str,
+        revision: str,
         trust_remote_code: bool = False,
         split: str = "test",
         config: str | None = None,
     ):
+        self.revision = revision
         self.corpus = {}
         self.queries = {}
         self.qrels = {}
@@ -45,7 +47,7 @@ class RetrievalDataLoader:
         | dict[str, dict[str, float]]
         | None,  # top_ranked (optional)
     ]:
-        configs = get_dataset_config_names(self.hf_repo)
+        configs = get_dataset_config_names(self.hf_repo, self.revision, trust_remote_code=self.trust_remote_code)
 
         logger.info("Loading Corpus...")
         self._load_corpus(self.config)
@@ -108,6 +110,7 @@ class RetrievalDataLoader:
             self.hf_repo,
             config,
             trust_remote_code=self.trust_remote_code,
+            revision=self.revision,
         )
         corpus_ds = next(iter(corpus_ds.values()))  # get first split
         corpus_ds = corpus_ds.cast_column("_id", Value("string"))
@@ -127,6 +130,7 @@ class RetrievalDataLoader:
             self.hf_repo,
             config,
             trust_remote_code=self.trust_remote_code,
+            revision=self.revision,
         )
         queries_ds = next(iter(queries_ds.values()))  # get first split
         queries_ds = queries_ds.cast_column("_id", Value("string"))
@@ -140,9 +144,10 @@ class RetrievalDataLoader:
         config = f"{config}-qrels" if config is not None else "default"
 
         qrels_ds = load_dataset(
-            self.hf_repo,
+            self.hf_repo+"-qrels",
             name=config,
             trust_remote_code=self.trust_remote_code,
+            revision=self.revision,
         )[split]
 
         features = Features(
@@ -161,6 +166,7 @@ class RetrievalDataLoader:
             self.hf_repo,
             config,
             trust_remote_code=self.trust_remote_code,
+            revision=self.revision,
         )
 
         top_ranked_ds = next(iter(top_ranked_ds.values()))  # get first split
@@ -198,6 +204,7 @@ class RetrievalDataLoader:
             self.hf_repo,
             config,
             trust_remote_code=self.trust_remote_code,
+            revision=self.revision,
         )
         instructions_ds = next(iter(instructions_ds.values()))
         instructions_ds = instructions_ds.cast_column("query-id", Value("string"))

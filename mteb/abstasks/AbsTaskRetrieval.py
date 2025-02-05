@@ -143,11 +143,13 @@ class AbsTaskRetrieval(AbsTask):
         dataset_path = self.metadata.dataset["path"]
         eval_splits = kwargs.get("eval_splits", self.metadata.eval_splits)
         trust_remote_code = self.metadata.dataset.get("trust_remote_code", False)
+        revision = self.metadata.dataset["revision"]
 
         def process_data(split: str, lang: str | None = None):
             """Helper function to load and process data for a given split and language"""
             corpus, queries, qrels, instructions, top_ranked = RetrievalDataLoader(
                 hf_repo=dataset_path,
+                revision=revision,
                 trust_remote_code=trust_remote_code,
                 split=split,
                 config=lang,
