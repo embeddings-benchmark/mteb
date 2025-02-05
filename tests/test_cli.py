@@ -17,18 +17,18 @@ def test_available_tasks():
     command = f"{sys.executable} -m mteb available_tasks"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
-    assert "Banking77Classification" in result.stdout, (
-        "Sample task Banking77Classification task not found in available tasks"
-    )
+    assert (
+        "Banking77Classification" in result.stdout
+    ), "Sample task Banking77Classification task not found in available tasks"
 
 
 def test_available_benchmarks():
     command = f"{sys.executable} -m mteb available_benchmarks"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
-    assert "MTEB(eng, classic)" in result.stdout, (
-        "Sample benchmark MTEB(eng, classic) task not found in available benchmarks"
-    )
+    assert (
+        "MTEB(eng, classic)" in result.stdout
+    ), "Sample benchmark MTEB(eng, classic) task not found in available benchmarks"
 
 
 run_task_fixures = [
@@ -75,12 +75,12 @@ def test_run_task(
         f"tests/results/test_model/{model_name_as_path}/{model_revision}"
     )
     assert results_path.exists(), "Output folder not created"
-    assert "model_meta.json" in [f.name for f in list(results_path.glob("*.json"))], (
-        "model_meta.json not found in output folder"
-    )
-    assert f"{task_name}.json" in [f.name for f in list(results_path.glob("*.json"))], (
-        f"{task_name} not found in output folder"
-    )
+    assert "model_meta.json" in [
+        f.name for f in list(results_path.glob("*.json"))
+    ], "model_meta.json not found in output folder"
+    assert f"{task_name}.json" in [
+        f.name for f in list(results_path.glob("*.json"))
+    ], f"{task_name} not found in output folder"
 
 
 def test_create_meta():
@@ -117,9 +117,9 @@ def test_create_meta():
     for key in frontmatter_gold:
         assert key in frontmatter, f"Key {key} not found in output"
 
-        assert frontmatter[key] == frontmatter_gold[key], (
-            f"Value for {key} does not match"
-        )
+        assert (
+            frontmatter[key] == frontmatter_gold[key]
+        ), f"Value for {key} does not match"
 
     # ensure that the command line interface works as well
     command = f"{sys.executable} -m mteb create_meta --results_folder {results} --output_path {output_path} --overwrite"
@@ -178,9 +178,9 @@ def test_create_meta_from_existing(existing_readme_name: str, gold_readme_name: 
     for key in frontmatter_gold:
         assert key in frontmatter, f"Key {key} not found in output"
 
-        assert frontmatter[key] == frontmatter_gold[key], (
-            f"Value for {key} does not match"
-        )
+        assert (
+            frontmatter[key] == frontmatter_gold[key]
+        ), f"Value for {key} does not match"
     assert readme_output == gold_readme
     # ensure that the command line interface works as well
     command = f"{sys.executable} -m mteb create_meta --results_folder {results} --output_path {output_path} --from_existing {existing_readme} --overwrite"

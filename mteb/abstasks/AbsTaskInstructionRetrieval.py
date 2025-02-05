@@ -374,9 +374,9 @@ class AbsTaskInstructionRetrieval(AbsTask):
                 doc["id"]: {"title": doc["title"], "text": doc["text"]}
                 for doc in corpus
             }
-            assert len(top_ranked) == len(queries), (
-                f"Top ranked not loaded properly! Expected {len(self.queries)} but got {len(self.top_ranked)}."
-            )
+            assert (
+                len(top_ranked) == len(queries)
+            ), f"Top ranked not loaded properly! Expected {len(self.queries)} but got {len(self.top_ranked)}."
 
             (
                 self.corpus[split],
