@@ -119,6 +119,7 @@ class ModelMeta(BaseModel):
     def validate_similarity_fn_name(cls, value):
         """Converts the similarity function name to the corresponding enum value.
         sentence_transformers uses Literal['cosine', 'dot', 'euclidean', 'manhattan'] for similarity_fn_name
+        pylate uses Literal['MaxSim'] for similarity_fn_name
         """
         if type(value) is ScoringFunction or value is None:
             return value
