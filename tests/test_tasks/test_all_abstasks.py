@@ -15,7 +15,6 @@ from mteb.abstasks.AbsTaskSpeedTask import AbsTaskSpeedTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.MultiSubsetLoader import MultiSubsetLoader
 from mteb.overview import TASKS_REGISTRY, get_tasks
 
 from ..test_benchmark.task_grid import (
@@ -41,7 +40,6 @@ def test_load_data(
         isinstance(task, AbsTaskRetrieval)
         or isinstance(task, AbsTaskReranking)
         or isinstance(task, AbsTaskAny2AnyRetrieval)
-        or isinstance(task, MultiSubsetLoader)
         or isinstance(task, AbsTaskSpeedTask)
         or isinstance(task, AbsTaskAny2AnyMultiChoice)
         or task.metadata.is_multilingual
