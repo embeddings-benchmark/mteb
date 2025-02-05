@@ -4,6 +4,27 @@ from functools import partial
 
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
+mini_gte_datasets = {
+    "MSMARCO": ["train"],
+    "MSMARCOHardNegatives": ["train"],
+    "NanoMSMARCORetrieval": ["train"],
+    "NQ": ["train"],
+    "NQHardNegatives": ["train"],
+    "NanoNQRetrieval": ["train"],
+    "HotPotQA": ["train"],
+    "HotPotQAHardNegatives": ["train"],
+    "FEVER": ["train"],
+    "FEVERHardNegatives": ["train"],
+    # Other Datasets (see GTE-series)
+    # TriviaQA
+    # SNLI
+    # MNLI
+    # QuoraDuplicateQuestions
+    # StackExchange
+    # MEDI
+    # BERRI
+}
+
 mini_gte = ModelMeta(
     loader=partial(  # type: ignore
         sentence_transformers_loader,
@@ -25,6 +46,6 @@ mini_gte = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,  # Not released yet
+    training_datasets=mini_gte_datasets,
     adapted_from="distilbert/distilbert-base-uncased",
 )
