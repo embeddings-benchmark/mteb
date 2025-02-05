@@ -510,24 +510,24 @@ MTEB_ARA = Benchmark(
     name="MTEB(ara)",
     tasks=MTEBTasks(
         get_tasks(
-            languages=["ar"],
+            languages=["ara"],
             tasks=[
                 "XNLI",
                 "MIRACLRetrievalHardNegatives",
                 "MassiveIntentClassification",
                 "MultiHateClassification",
                 "MLQARetrieval",
-                "STS17.v2",
+                "STS17",
+                "STS22.v2",
                 "MassiveScenarioClassification",
                 "TweetSentimentClassification",
             ],
-            languages = ["ara"]
         )
     ),
-    description = "MTEB-Arabic, a benchmark for text embedding performance evaluation in the arabic language",
-    reference = None,
-    citation = None,
-    contacts = ["haytamdon"]
+    description="MTEB-Arabic, a benchmark for text embedding performance evaluation in the arabic language",
+    reference=None,
+    citation=None,
+    contacts=["haytamdon"],
 )
 
 MTEB_FRA = Benchmark(
