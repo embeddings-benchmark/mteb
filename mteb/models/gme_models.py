@@ -6,7 +6,6 @@ from mteb.model_meta import ModelMeta
 
 logger = logging.getLogger(__name__)
 
-
 gme_qwen2_vl_2b_instruct = ModelMeta(
     loader=None,
     name="Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
@@ -29,6 +28,7 @@ gme_qwen2_vl_2b_instruct = ModelMeta(
         # source: https://arxiv.org/pdf/2412.16855
         "MSMARCO": ["train"],
         "MSMARCO.v2": ["train"],
+        "mMARCO-NL": ["train"],  # translation not trained on
     },
     public_training_code=None,
     public_training_data=None,
@@ -56,6 +56,7 @@ gme_qwen2_vl_7b_instruct = ModelMeta(
         # source: https://arxiv.org/pdf/2412.16855
         "MSMARCO": ["train"],
         "MSMARCO.v2": ["train"],
+        "mMARCO-NL": ["train"],  # translation not trained on
     },
     public_training_code=None,
     public_training_data=None,
