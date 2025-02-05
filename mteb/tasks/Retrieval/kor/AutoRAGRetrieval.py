@@ -22,7 +22,7 @@ class AutoRAGRetrieval(AbsTaskRetrieval):
         eval_langs=["kor-Hang"],
         main_score="ndcg_at_10",
         date=("2024-08-03", "2024-08-03"),
-        domains=["Government", "Medical", "Legal", "Social"],
+        domains=["Government", "Medical", "Legal", "Social", "Financial"],
         task_subtypes=["Article retrieval"],
         license="mit",
         annotations_creators="human-annotated",

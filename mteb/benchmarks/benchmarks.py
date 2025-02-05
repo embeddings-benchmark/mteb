@@ -133,7 +133,7 @@ This benchmark was created to account for the fact that many models have now bee
 to tasks in the original MTEB, and contains tasks that are not as frequently used for model training.
 This way the new benchmark and leaderboard can give our users a more realistic expectation of models' generalization performance.
 
-The original MTEB leaderboard is available under the [MTEB(eng, classic)](http://mteb-leaderboard-2-demo.hf.space/?benchmark_name=MTEB%28eng%2C+classic%29) tab.
+The original MTEB leaderboard is available under the [MTEB(eng, classic)](https://huggingface.co/spaces/mteb/leaderboard?benchmark_name=MTEB%28eng%2C+classic%29) tab.
     """,
     citation="",
     contacts=["KennethEnevoldsen", "Muennighoff"],
@@ -154,18 +154,7 @@ MTEB_ENG_CLASSIC = Benchmark(
                 "Banking77Classification",
                 "BiorxivClusteringP2P",
                 "BiorxivClusteringS2S",
-                "CQADupstackAndroidRetrieval",
-                "CQADupstackEnglishRetrieval",
-                "CQADupstackGamingRetrieval",
-                "CQADupstackGisRetrieval",
-                "CQADupstackMathematicaRetrieval",
-                "CQADupstackPhysicsRetrieval",
-                "CQADupstackProgrammersRetrieval",
-                "CQADupstackStatsRetrieval",
-                "CQADupstackTexRetrieval",
-                "CQADupstackUnixRetrieval",
-                "CQADupstackWebmastersRetrieval",
-                "CQADupstackWordpressRetrieval",
+                "CQADupstackRetrieval",
                 "ClimateFEVER",
                 "DBPedia",
                 "EmotionClassification",
@@ -223,9 +212,9 @@ MTEB_ENG_CLASSIC = Benchmark(
         )
     ),
     description="""The original English benchmark by Muennighoff et al., (2023).
-This page is an adaptation of the [old MTEB leaderboard](https://huggingface.co/spaces/mteb/leaderboard).
+This page is an adaptation of the [old MTEB leaderboard](https://huggingface.co/spaces/mteb/leaderboard_legacy).
 
-> We recommend that you use [MTEB(eng)](http://mteb-leaderboard-2-demo.hf.space/?benchmark_name=MTEB%28eng%29) instead,
+> We recommend that you use [MTEB(eng)](https://huggingface.co/spaces/mteb/leaderboard?benchmark_name=MTEB%28eng%29) instead,
 as many models have been tuned on MTEB(eng, classic) datasets, and MTEB(eng) might give a more accurate representation of models' generalization performance.
     """,
     citation="""@inproceedings{muennighoff-etal-2023-mteb,
@@ -432,13 +421,12 @@ SEB = Benchmark(
     ),
     description="A curated selection of tasks coverering the Scandinavian languages; Danish, Swedish and Norwegian, including Bokmål and Nynorsk.",
     reference="https://kennethenevoldsen.github.io/scandinavian-embedding-benchmark/",
-    citation="""@misc{enevoldsen2024scandinavian,
-      title={The Scandinavian Embedding Benchmarks: Comprehensive Assessment of Multilingual and Monolingual Text Embedding}, 
-      author={Kenneth Enevoldsen and Márton Kardos and Niklas Muennighoff and Kristoffer Laigaard Nielbo},
-      year={2024},
-      eprint={2406.02396},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+    citation="""@inproceedings{enevoldsen2024scandinavian,
+  title={The Scandinavian Embedding Benchmarks: Comprehensive Assessment of Multilingual and Monolingual Text Embedding},
+  author={Enevoldsen, Kenneth and Kardos, M{\'a}rton and Muennighoff, Niklas and Nielbo, Kristoffer},
+  booktitle={Advances in Neural Information Processing Systems},
+  year={2024},
+  url={https://nips.cc/virtual/2024/poster/97869}
 }""",
     contacts=["KennethEnevoldsen", "x-tabdeveloping", "Samoed"],
 )
@@ -528,7 +516,6 @@ MTEB_FRA = Benchmark(
                 "MLSUMClusteringP2P",
                 "MLSUMClusteringS2S",
                 # Pair Classification
-                "OpusparcusPC",
                 "PawsXPairClassification",
                 # Reranking
                 "AlloprofReranking",
@@ -658,7 +645,6 @@ MTEB_POL = Benchmark(
                 "SICK-E-PL",
                 # STS
                 "CDSC-R",
-                "STSBenchmarkMultilingualSTS",
                 "SICK-R-PL",
             ],
         )
@@ -1153,6 +1139,63 @@ BRIGHT = Benchmark(
 }""",
 )
 
+
+CODE_RAG = Benchmark(
+    name="CodeRAG",
+    tasks=get_tasks(
+        tasks=[
+            "CodeRAGLibraryDocumentationSolutions",
+            "CodeRAGOnlineTutorials",
+            "CodeRAGProgrammingSolutions",
+            "CodeRAGStackoverflowPosts",
+        ],
+    ),
+    description="A benchmark for evaluating code retrieval augmented generation, testing models' ability to retrieve relevant programming solutions, tutorials and documentation.",
+    reference="https://arxiv.org/abs/2406.14497",
+    citation="""@misc{wang2024coderagbenchretrievalaugmentcode,
+      title={CodeRAG-Bench: Can Retrieval Augment Code Generation?}, 
+      author={Zora Zhiruo Wang and Akari Asai and Xinyan Velocity Yu and Frank F. Xu and Yiqing Xie and Graham Neubig and Daniel Fried},
+      year={2024},
+      eprint={2406.14497},
+      archivePrefix={arXiv},
+      primaryClass={cs.SE},
+      url={https://arxiv.org/abs/2406.14497}, 
+    }""",
+)
+
+
+BEIR = Benchmark(
+    name="BEIR",
+    tasks=get_tasks(
+        tasks=[
+            "TRECCOVID",
+            "NFCorpus",
+            "NQ",
+            "HotpotQA",
+            "FiQA2018",
+            "ArguAna",
+            "Touche2020",
+            "CQADupstackRetrieval",
+            "QuoraRetrieval",
+            "DBPedia",
+            "SCIDOCS",
+            "FEVER",
+            "ClimateFEVER",
+            "SciFact",
+        ],
+    )
+    + get_tasks(tasks=["MSMARCO"], languages=["eng"], eval_splits=["dev"]),
+    description="BEIR is a heterogeneous benchmark containing diverse IR tasks. It also provides a common and easy framework for evaluation of your NLP-based retrieval models within the benchmark.",
+    reference="https://arxiv.org/abs/2104.08663",
+    citation="""@article{thakur2021beir,
+  title={Beir: A heterogenous benchmark for zero-shot evaluation of information retrieval models},
+  author={Thakur, Nandan and Reimers, Nils and R{\"u}ckl{\'e}, Andreas and Srivastava, Abhishek and Gurevych, Iryna},
+  journal={arXiv preprint arXiv:2104.08663},
+  year={2021}
+}
+""",
+)
+
 NANOBEIR = Benchmark(
     name="NanoBEIR",
     tasks=get_tasks(
@@ -1230,5 +1273,164 @@ C_MTEB = Benchmark(
       eprint={2309.07597},
       archivePrefix={arXiv},
       primaryClass={cs.CL}
+}""",
+)
+
+FA_MTEB = Benchmark(
+    name="FaMTEB(fas, beta)",
+    tasks=get_tasks(
+        languages=["fas"],
+        tasks=[
+            # Classification
+            "PersianFoodSentimentClassification",
+            "SynPerChatbotConvSAClassification",
+            "SynPerChatbotConvSAToneChatbotClassification",
+            "SynPerChatbotConvSAToneUserClassification",
+            "SynPerChatbotSatisfactionLevelClassification",
+            "SynPerChatbotRAGToneChatbotClassification",
+            "SynPerChatbotRAGToneUserClassification",
+            "SynPerChatbotToneChatbotClassification",
+            "SynPerChatbotToneUserClassification",
+            "PersianTextTone",
+            "SIDClassification",
+            "DeepSentiPers",
+            "PersianTextEmotion",
+            "SentimentDKSF",
+            "NLPTwitterAnalysisClassification",
+            "DigikalamagClassification",
+            "MassiveIntentClassification",
+            "MassiveScenarioClassification",
+            # Clustering
+            "BeytooteClustering",
+            "DigikalamagClustering",
+            "HamshahriClustring",
+            "NLPTwitterAnalysisClustering",
+            "SIDClustring",
+            # PairClassification
+            "FarsTail",
+            "CExaPPC",
+            "SynPerChatbotRAGFAQPC",
+            "FarsiParaphraseDetection",
+            "SynPerTextKeywordsPC",
+            "SynPerQAPC",
+            "ParsinluEntail",
+            "ParsinluQueryParaphPC",
+            # Reranking
+            "MIRACLReranking",
+            "WikipediaRerankingMultilingual",
+            # Retrieval
+            "SynPerQARetrieval",
+            "SynPerChatbotTopicsRetrieval",
+            "SynPerChatbotRAGTopicsRetrieval",
+            "SynPerChatbotRAGFAQRetrieval",
+            "PersianWebDocumentRetrieval",
+            "WikipediaRetrievalMultilingual",
+            "MIRACLRetrieval",
+            "ClimateFEVER-Fa",
+            "DBPedia-Fa",
+            "HotpotQA-Fa",
+            "MSMARCO-Fa",
+            "NQ-Fa",
+            "ArguAna-Fa",
+            "CQADupstackRetrieval-Fa",
+            "FiQA2018-Fa",
+            "NFCorpus-Fa",
+            "QuoraRetrieval-Fa",
+            "SCIDOCS-Fa",
+            "SciFact-Fa",
+            "TRECCOVID-Fa",
+            "Touche2020-Fa",
+            # STS
+            "Farsick",
+            "SynPerSTS",
+            "Query2Query",
+            # SummaryRetrieval
+            "SAMSumFa",
+            "SynPerChatbotSumSRetrieval",
+            "SynPerChatbotRAGSumSRetrieval",
+        ],
+    ),
+    description="Main Persian (Farsi) benchmarks from MTEB",
+    reference=None,
+    citation=None,
+    contacts=["mehran-sarmadi", "ERfun", "morteza20"],
+)
+
+CHEMTEB = Benchmark(
+    name="ChemTEB",
+    tasks=get_tasks(
+        tasks=[
+            "PubChemSMILESBitextMining",
+            "SDSEyeProtectionClassification",
+            "SDSGlovesClassification",
+            "WikipediaBioMetChemClassification",
+            "WikipediaGreenhouseEnantiopureClassification",
+            "WikipediaSolidStateColloidalClassification",
+            "WikipediaOrganicInorganicClassification",
+            "WikipediaCryobiologySeparationClassification",
+            "WikipediaChemistryTopicsClassification",
+            "WikipediaTheoreticalAppliedClassification",
+            "WikipediaChemFieldsClassification",
+            "WikipediaLuminescenceClassification",
+            "WikipediaIsotopesFissionClassification",
+            "WikipediaSaltsSemiconductorsClassification",
+            "WikipediaBiolumNeurochemClassification",
+            "WikipediaCrystallographyAnalyticalClassification",
+            "WikipediaCompChemSpectroscopyClassification",
+            "WikipediaChemEngSpecialtiesClassification",
+            "WikipediaChemistryTopicsClustering",
+            "WikipediaSpecialtiesInChemistryClustering",
+            "PubChemAISentenceParaphrasePC",
+            "PubChemSMILESPC",
+            "PubChemSynonymPC",
+            "PubChemWikiParagraphsPC",
+            "PubChemWikiPairClassification",
+            "ChemNQRetrieval",
+            "ChemHotpotQARetrieval",
+        ],
+    ),
+    description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
+    reference="https://arxiv.org/abs/2412.00532",
+    citation="""@article{kasmaee2024chemteb,
+    title={ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
+    author={Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
+    journal={arXiv preprint arXiv:2412.00532},
+    year={2024}
+}""",
+)
+
+BEIR_NL = Benchmark(
+    name="BEIR-NL",
+    tasks=get_tasks(
+        tasks=[
+            "ArguAna-NL",
+            "CQADupstack-NL",
+            "FEVER-NL",
+            "NQ-NL",
+            "Touche2020-NL",
+            "FiQA2018-NL",
+            "Quora-NL",
+            "HotpotQA-NL",
+            "SCIDOCS-NL",
+            "ClimateFEVER-NL",
+            "mMARCO-NL",
+            "SciFact-NL",
+            "DBPedia-NL",
+            "NFCorpus-NL",
+            "TRECCOVID-NL",
+        ],
+    ),
+    description="BEIR-NL is a Dutch adaptation of the publicly available BEIR benchmark, created through automated "
+    "translation.",
+    reference="https://arxiv.org/abs/2412.08329",
+    contacts=["nikolay-banar"],
+    citation="""@misc{banar2024beirnlzeroshotinformationretrieval,
+    title={BEIR-NL: Zero-shot Information Retrieval Benchmark for the Dutch Language}, 
+     author={Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
+     year={2024},
+     eprint={2412.08329},
+     archivePrefix={arXiv},
+     primaryClass={cs.CL},
+     url={https://arxiv.org/abs/2412.08329}, 
 }""",
 )
