@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 
 from .bge_models import bge_full_data
 
@@ -20,7 +20,7 @@ cde_small_v1 = ModelMeta(
     max_tokens=512,
     embed_dim=768,
     license="mit",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers"],
     reference="https://huggingface.co/jxm/cde-small-v1",
     use_instructions=True,
@@ -42,7 +42,7 @@ cde_small_v2 = ModelMeta(
     max_tokens=512,
     embed_dim=768,
     license="mit",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers"],
     reference="https://huggingface.co/jxm/cde-small-v1",
     use_instructions=True,

@@ -3,7 +3,7 @@ from __future__ import annotations
 from functools import partial
 
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.instruct_wrapper import instruct_wrapper
 
 from .e5_instruct import E5_MISTRAL_TRAINING_DATA
@@ -51,7 +51,7 @@ SFR_Embedding_2_R = ModelMeta(
     license="cc-by-nc-4.0",
     max_tokens=32768,
     reference="https://huggingface.co/Salesforce/SFR-Embedding-2_R",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from="intfloat/e5-mistral-7b-instruct",
@@ -89,7 +89,7 @@ SFR_Embedding_Mistral = ModelMeta(
     license="cc-by-nc-4.0",
     max_tokens=32768,
     reference="https://huggingface.co/Salesforce/SFR-Embedding-Mistral",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,

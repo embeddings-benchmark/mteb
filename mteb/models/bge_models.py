@@ -2,7 +2,11 @@ from __future__ import annotations
 
 from functools import partial
 
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import (
+    ModelMeta,
+    ScoringFunction,
+    sentence_transformers_loader,
+)
 
 from .e5_instruct import E5_MISTRAL_TRAINING_DATA
 
@@ -316,7 +320,7 @@ bge_small_en_v1_5 = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/BAAI/bge-small-en-v1.5",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
@@ -342,7 +346,7 @@ bge_base_en_v1_5 = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/BAAI/bge-base-en-v1.5",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,  # seemingly released (at least for some models, but the link is broken
@@ -368,7 +372,7 @@ bge_large_en_v1_5 = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/BAAI/bge-large-en-v1.5",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     citation=BGE_15_CITATION,
@@ -394,7 +398,7 @@ bge_small_zh_v1_5 = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/BAAI/bge-small-zh-v1.5",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
@@ -419,7 +423,7 @@ bge_base_zh_v1_5 = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/BAAI/bge-base-zh-v1.5",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
@@ -444,7 +448,7 @@ bge_large_zh_v1_5 = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/BAAI/bge-large-zh-v1.5",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
@@ -468,7 +472,7 @@ bge_m3 = ModelMeta(
     license="mit",
     max_tokens=8194,
     reference="https://huggingface.co/BAAI/bge-m3",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -502,7 +506,7 @@ bge_multilingual_gemma2 = ModelMeta(
     license="gemma",
     max_tokens=8192,  # from old C-MTEB leaderboard
     reference="https://huggingface.co/BAAI/bge-multilingual-gemma2",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -578,7 +582,7 @@ bge_en_icl = ModelMeta(
     license="apache-2",
     max_tokens=32768,
     reference="https://huggingface.co/BAAI/bge-en-icl",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code="https://github.com/FlagOpen/FlagEmbedding",

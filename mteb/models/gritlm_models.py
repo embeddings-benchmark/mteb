@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from functools import partial
 
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 
 from .e5_models import E5_TRAINING_DATA
 from .instruct_wrapper import instruct_wrapper
@@ -59,7 +59,7 @@ gritlm7b = ModelMeta(
     license="apache-2.0",
     max_tokens=4096,
     reference="https://huggingface.co/GritLM/GritLM-7B",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["GritLM", "PyTorch"],
     use_instructions=True,
     training_datasets=GRIT_LM_TRAINING_DATA,
@@ -86,7 +86,7 @@ gritlm8x7b = ModelMeta(
     license="apache-2.0",
     max_tokens=4096,
     reference="https://huggingface.co/GritLM/GritLM-8x7B",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["GritLM", "PyTorch"],
     use_instructions=True,
     training_datasets=GRIT_LM_TRAINING_DATA,

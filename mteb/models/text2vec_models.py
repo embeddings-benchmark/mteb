@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 
 # I couldn't find the large model on HF for some reason
 text2vec_base_chinese = ModelMeta(
@@ -16,7 +16,7 @@ text2vec_base_chinese = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/shibing624/text2vec-base-chinese",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,
@@ -42,7 +42,7 @@ text2vec_base_chinese_paraphrase = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/shibing624/text2vec-base-chinese-paraphrase",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,
@@ -84,7 +84,7 @@ text2vec_base_multilingual = ModelMeta(
     license="apache-2.0",
     max_tokens=256,
     reference="https://huggingface.co/shibing624/text2vec-base-chinese-paraphrase",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,

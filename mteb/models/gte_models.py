@@ -5,7 +5,11 @@ from functools import partial
 import torch
 
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import (
+    ModelMeta,
+    ScoringFunction,
+    sentence_transformers_loader,
+)
 from mteb.models.instruct_wrapper import instruct_wrapper
 
 
@@ -51,7 +55,7 @@ gte_Qwen2_7B_instruct = ModelMeta(
     embed_dim=3584,
     license="apache-2.0",
     reference="https://huggingface.co/Alibaba-NLP/gte-Qwen2-7B-instruct",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     citation=GTE_CITATION,
@@ -84,7 +88,7 @@ gte_Qwen1_5_7B_instruct = ModelMeta(
     license="apache-2.0",
     max_tokens=32768,
     reference="https://huggingface.co/Alibaba-NLP/gte-Qwen1.5-7B-instruct",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
@@ -115,7 +119,7 @@ gte_Qwen2_1_5B_instruct = ModelMeta(
     license="apache-2.0",
     max_tokens=131072,
     reference="https://huggingface.co/Alibaba-NLP/gte-Qwen2-1.5B-instruct",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
@@ -139,7 +143,7 @@ gte_small_zh = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/thenlper/gte-small-zh",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -163,7 +167,7 @@ gte_base_zh = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/thenlper/gte-base-zh",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -187,7 +191,7 @@ gte_large_zh = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/thenlper/gte-large-zh",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -304,7 +308,7 @@ gte_multilingual_base = ModelMeta(
     license="apache-2",
     max_tokens=8192,
     reference="https://huggingface.co/Alibaba-NLP/gte-multilingual-base",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,

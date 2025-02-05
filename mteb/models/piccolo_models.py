@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 
 piccolo_base_zh = ModelMeta(
     name="sensenova/piccolo-base-zh",
@@ -15,7 +15,7 @@ piccolo_base_zh = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/sensenova/piccolo-base-zh",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,
@@ -37,7 +37,7 @@ piccolo_large_zh_v2 = ModelMeta(
     license="not specified",
     max_tokens=512,
     reference="https://huggingface.co/sensenova/piccolo-large-zh-v2",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,

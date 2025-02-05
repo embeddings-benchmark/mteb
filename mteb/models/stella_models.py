@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from functools import partial
 
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.instruct_wrapper import instruct_wrapper
 
 stella_en_400M = ModelMeta(
@@ -25,7 +25,7 @@ stella_en_400M = ModelMeta(
     max_tokens=8192,
     embed_dim=4096,
     license="mit",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch", "GritLM"],
     reference="https://huggingface.co/dunzhang/stella_en_400M_v5",
     training_datasets=None,
@@ -53,7 +53,7 @@ stella_en_1_5b = ModelMeta(
     max_tokens=131072,
     embed_dim=8960,
     license="mit",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch", "GritLM"],
     reference="https://huggingface.co/dunzhang/stella_en_1.5B_v5",
     # will be at https://github.com/NLPJCL/RAG-Retrieval
@@ -73,7 +73,7 @@ stella_large_zh_v3_1792d = ModelMeta(
     license="not specified",
     max_tokens=512,
     reference="https://huggingface.co/dunzhang/stella-large-zh-v3-1792d",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by="dunzhang/stella-mrl-large-zh-v3.5-1792d",
@@ -98,7 +98,7 @@ stella_base_zh_v3_1792d = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/infgrad/stella-base-zh-v3-1792d",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,
@@ -124,7 +124,7 @@ stella_mrl_large_zh_v3_5_1792d = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/dunzhang/stella-large-zh-v3-1792d",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,
@@ -145,7 +145,7 @@ zpoint_large_embedding_zh = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/iampanda/zpoint_large_embedding_zh",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,

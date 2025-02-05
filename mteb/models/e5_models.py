@@ -3,7 +3,11 @@ from __future__ import annotations
 from functools import partial
 
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import (
+    ModelMeta,
+    ScoringFunction,
+    sentence_transformers_loader,
+)
 
 E5_PAPER_RELEASE_DATE = "2024-02-08"
 XLMR_LANGUAGES = [
@@ -171,7 +175,7 @@ e5_mult_small = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/intfloat/multilingual-e5-small",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     citation=MULTILINGUAL_E5_CITATION,
@@ -196,7 +200,7 @@ e5_mult_base = ModelMeta(
     license="mit",
     max_tokens=514,
     reference="https://huggingface.co/intfloat/multilingual-e5-base",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
@@ -222,7 +226,7 @@ e5_mult_large = ModelMeta(
     license="mit",
     max_tokens=514,
     reference="https://huggingface.co/intfloat/multilingual-e5-large",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
@@ -247,7 +251,7 @@ e5_eng_small_v2 = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/intfloat/e5-small-v2",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
@@ -273,7 +277,7 @@ e5_eng_small = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/intfloat/e5-small",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
@@ -299,7 +303,7 @@ e5_eng_base_v2 = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/intfloat/e5-base-v2",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     superseded_by=None,
@@ -327,7 +331,7 @@ e5_eng_large_v2 = ModelMeta(
     license="mit",
     max_tokens=514,
     reference="https://huggingface.co/intfloat/e5-large-v2",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     superseded_by=None,
@@ -355,7 +359,7 @@ e5_large = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/intfloat/e5-large",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     superseded_by="intfloat/e5-large-v2",
@@ -383,7 +387,7 @@ e5_base = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/intfloat/e5-base",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     superseded_by="intfloat/e5-base-v2",

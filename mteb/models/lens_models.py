@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 
 from .bge_models import bge_full_data
 
@@ -15,7 +15,7 @@ lens_d4000 = ModelMeta(
     embed_dim=4000,
     license="apache-2.0",
     reference="https://huggingface.co/yibinlei/LENS-d4000",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch"],
     use_instructions=True,
     public_training_code=None,
@@ -35,7 +35,7 @@ lens_d8000 = ModelMeta(
     embed_dim=8000,
     license="apache-2.0",
     reference="https://huggingface.co/yibinlei/LENS-d8000",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch"],
     use_instructions=True,
     public_training_code=None,

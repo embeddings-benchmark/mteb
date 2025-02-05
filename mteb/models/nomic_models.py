@@ -12,7 +12,7 @@ from packaging.version import Version
 
 import mteb
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 
 from .sentence_transformer_wrapper import SentenceTransformerWrapper
 
@@ -206,7 +206,7 @@ nomic_embed_v1_5 = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/nomic-ai/nomic-embed-text-v1.5",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from=None,
@@ -234,7 +234,7 @@ nomic_embed_v1 = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/nomic-ai/nomic-embed-text-v1",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     citation=NOMIC_CITATION,
@@ -263,7 +263,7 @@ nomic_embed_v1_ablated = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/nomic-ai/nomic-embed-text-v1-ablated",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from=None,
@@ -292,7 +292,7 @@ nomic_embed_v1_unsupervised = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/nomic-ai/nomic-embed-text-v1-unsupervised",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from=None,
@@ -322,7 +322,7 @@ nomic_modern_bert_embed = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/nomic-ai/modernbert-embed-base",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from="answerdotai/ModernBERT-base",
