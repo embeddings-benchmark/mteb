@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import warnings
 from typing import Any
 
 from datasets import Dataset
@@ -70,6 +71,10 @@ class AbsTaskReranking(AbsTask):
     abstask_prompt = "Retrieve text based on user query."
 
     def __init__(self, **kwargs):
+        warnings.warn(
+            "`AbsTaskReranking` will be merged with AbsTaskRetrieval in v2.0.0.",
+            DeprecationWarning,
+        )
         super().__init__(**kwargs)
 
     def _evaluate_subset(

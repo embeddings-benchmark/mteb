@@ -16,28 +16,11 @@ import mteb
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
-from .instructions import DEFAULT_PROMPTS, TASKNAME2INSTRUCTIONS
-
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
 HF_GME_QWEN2VL_2B = "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
 HF_GME_QWEN2VL_7B = "Alibaba-NLP/gme-Qwen2-VL-7B-Instruct"
-
-
-def get_gme_instruction(task_name: str, is_query: bool = True) -> str:
-    # TODO Prompts for other multimodal tasks.
-    if task_name in TASKNAME2INSTRUCTIONS:
-        prompt = TASKNAME2INSTRUCTIONS[task_name]
-        if isinstance(prompt, tuple):
-            prompt = prompt[0] if is_query else prompt[1]
-    else:
-        meta = mteb.get_task(task_name).metadata
-        prompt = DEFAULT_PROMPTS.get(meta.type, None)
-
-    if isinstance(prompt, str) and prompt[-1] != ".":
-        prompt += "."
-    return prompt
 
 
 class Encoder(torch.nn.Module):
@@ -223,6 +206,22 @@ class GmeQwen2VL:
         probs = (logits * 100).softmax(dim=-1)
         return probs
 
+    ## FIXME: Might want to subclass from Wrapper.
+    def get_instruction(task_name: str, prompt_type: PromptType | None) -> str:
+        """Get the instruction/prompt to be used for encoding sentences."""
+        task = mteb.get_task(task_name=task_name)
+        task_metadata = task.metadata
+        if isinstance(task_metadata.prompt, dict) and prompt_type:
+            if task_metadata.prompt.get(prompt_type.value):
+                return task_metadata.prompt[prompt_type.value]
+            logger.warning(
+                f"Prompt type '{prompt_type}' not found in task metadata for task '{task_name}'."
+            )
+            return ""
+        if task_metadata.prompt:
+            return task_metadata.prompt
+        return task.abstask_prompt
+
     def get_fused_embeddings(
         self,
         texts: list[str] | None = None,
@@ -236,7 +235,10 @@ class GmeQwen2VL:
         if prompt_type == PromptType.passage:
             instruction = None
         elif instruction is None:
-            instruction = get_gme_instruction(task_name)
+            instruction = self.get_instruction(task_name, prompt_type)
+            # NOTE: copied from the old get_gme_instruction function.
+            if isinstance(instruction, str) and instruction[-1] != ".":
+                instruction += "."
         self.model = self.model.to(self.device)
 
         if isinstance(images, DataLoader):
