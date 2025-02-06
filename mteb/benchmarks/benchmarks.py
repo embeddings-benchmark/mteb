@@ -1400,3 +1400,23 @@ CHEMTEB = Benchmark(
     year={2024}
 }""",
 )
+
+BUILT_MTEB = Benchmark(
+    name="BuiltBench(eng)",
+    tasks=get_tasks(
+        tasks=[
+            "BuiltBenchClusteringP2P",
+            "BuiltBenchClusteringS2S",
+            "BuiltBenchRetrieval",
+            "BuiltBenchReranking",
+        ],
+    ),
+    description="\"Built-Bench\" is an ongoing effort aimed at evaluating text embedding models in the context of buit asset management, spanning over various dicsiplines such as architeture, engineering, constrcution, and operations management of the built environment.",
+    reference="https://arxiv.org/abs/2411.12056",
+    citation="""@article{shahinmoghadam2024benchmarking,
+    title={Benchmarking pre-trained text embedding models in aligning built asset information},
+    author={Shahinmoghadam, Mehrzad and Motamedi, Ali},
+    journal={arXiv preprint arXiv:2411.12056},
+    year={2024}
+}""",
+)
