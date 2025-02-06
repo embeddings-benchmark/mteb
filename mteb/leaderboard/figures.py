@@ -80,7 +80,7 @@ def add_size_guide(fig: go.Figure):
     fig.add_annotation(
         text="<b>Embedding Size</b>",
         font=dict(size=16),
-        x=np.log10(10*1e6),
+        x=np.log10(10 * 1e6),
         y=10,
         showarrow=False,
         opacity=0.3,
