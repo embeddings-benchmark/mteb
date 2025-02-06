@@ -1453,4 +1453,5 @@ BUILT_MTEB = Benchmark(
     journal={arXiv preprint arXiv:2411.12056},
     year={2024}
 }""",
+    contacts=["mehrzadshm"],
 )
