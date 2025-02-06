@@ -14,6 +14,7 @@ rubert_tiny = ModelMeta(
     revision="5441c5ea8026d4f6d7505ec004845409f1259fb1",
     release_date="2021-05-24",
     n_parameters=11_900_000,
+    memory_usage_mb=45,
     embed_dim=312,
     license="mit",
     max_tokens=512,
@@ -315,6 +316,7 @@ rubert_tiny_turbo = ModelMeta(
     revision="8ce0cf757446ce9bb2d5f5a4ac8103c7a1049054",
     release_date="2024-06-21",
     n_parameters=29_200_000,
+    memory_usage_mb=111,
     embed_dim=312,
     license="mit",
     max_tokens=2048,
@@ -324,7 +326,7 @@ rubert_tiny_turbo = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,  # source model in unknown
+    training_datasets=None,
     # Not MTEB: {"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
     adapted_from="cointegrated/rubert-tiny2",
 )
