@@ -146,10 +146,10 @@ class RetrievalDataLoader:
         config = f"{config}-qrels" if config is not None else "default"
 
         qrels_ds = load_dataset(
-            self.hf_repo + "-qrels",
+            self.hf_repo,
             name=config,
             trust_remote_code=self.trust_remote_code,
-            # revision=self.revision,
+            revision=self.revision,
         )[split]
 
         features = Features(

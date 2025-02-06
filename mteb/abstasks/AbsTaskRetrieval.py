@@ -511,10 +511,14 @@ class AbsTaskRetrieval(AbsTask):
         )
 
     def _push_dataset_to_hub(self, repo_name: str) -> None:
-        def format_text_field(text) -> str:
+        def format_text_field(text: str | dict[str, str]) -> str:
             if isinstance(text, str):
                 return text
-            return f"{text.get('title', '')} {text.get('text', '')}".strip()
+            return (
+                f"{text['title']} {text['text']}".strip()
+                if text.get("title", None) is not None
+                else text["text"]
+            )
 
         def push_section(
             data: dict[str, dict[Any, Any]],
@@ -542,9 +546,7 @@ class AbsTaskRetrieval(AbsTask):
                     lambda idx, text: {
                         "_id": idx,
                         "text": format_text_field(text),
-                        "title": text.get("title", "")
-                        if isinstance(text, dict)
-                        else "",
+                        "title": "",
                     },
                 )
                 # Handle relevant_docs separately since one entry expands to multiple records.

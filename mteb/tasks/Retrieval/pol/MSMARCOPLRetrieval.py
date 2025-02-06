@@ -13,9 +13,8 @@ class MSMARCOPL(AbsTaskRetrieval):
         description="MS MARCO is a collection of datasets focused on deep learning in search",
         reference="https://microsoft.github.io/msmarco/",
         dataset={
-            "path": "clarin-knext/msmarco-pl",
-            "revision": "8634c07806d5cce3a6138e260e59b81760a0a640",
-            "trust_remote_code": True,
+            "path": "mteb/MSMARCO-PL",
+            "revision": "a4c521ec67407f75c0df31815d2032f0e232c6a7",
         },
         type="Retrieval",
         category="s2p",
