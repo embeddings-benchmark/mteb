@@ -344,7 +344,7 @@ def test_filled_metadata_is_filled():
 
 
 def test_all_metadata_is_filled_and_valid():
-    all_tasks = get_tasks()
+    all_tasks = get_tasks(exclude_superseded=True)
 
     unfilled_metadata = []
     for task in all_tasks:
@@ -511,14 +511,14 @@ def test_disallow_trust_remote_code_in_new_datasets():
 
     exceptions = []
 
-    for task in get_tasks():
+    for task in get_tasks(exclude_superseded=False):
         if task.metadata.dataset.get("trust_remote_code", False):
             assert (
                 task.metadata.name not in exceptions
             ), f"Dataset {task.metadata.name} should not trust remote code"
 
 
-@pytest.mark.parametrize("task", get_tasks())
+@pytest.mark.parametrize("task", get_tasks(exclude_superseded=False))
 def test_empty_descriptive_stat_in_new_datasets(task: AbsTask):
     if task.metadata.name.startswith("Mock") or isinstance(task, AbsTaskAggregate):
         return
