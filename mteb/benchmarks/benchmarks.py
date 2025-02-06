@@ -516,7 +516,6 @@ MTEB_FRA = Benchmark(
                 "MLSUMClusteringP2P",
                 "MLSUMClusteringS2S",
                 # Pair Classification
-                "OpusparcusPC",
                 "PawsXPairClassification",
                 # Reranking
                 "AlloprofReranking",
@@ -646,7 +645,6 @@ MTEB_POL = Benchmark(
                 "SICK-E-PL",
                 # STS
                 "CDSC-R",
-                "STSBenchmarkMultilingualSTS",
                 "SICK-R-PL",
             ],
         )
@@ -1398,6 +1396,42 @@ CHEMTEB = Benchmark(
     author={Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
     journal={arXiv preprint arXiv:2412.00532},
     year={2024}
+}""",
+)
+
+BEIR_NL = Benchmark(
+    name="BEIR-NL",
+    tasks=get_tasks(
+        tasks=[
+            "ArguAna-NL",
+            "CQADupstack-NL",
+            "FEVER-NL",
+            "NQ-NL",
+            "Touche2020-NL",
+            "FiQA2018-NL",
+            "Quora-NL",
+            "HotpotQA-NL",
+            "SCIDOCS-NL",
+            "ClimateFEVER-NL",
+            "mMARCO-NL",
+            "SciFact-NL",
+            "DBPedia-NL",
+            "NFCorpus-NL",
+            "TRECCOVID-NL",
+        ],
+    ),
+    description="BEIR-NL is a Dutch adaptation of the publicly available BEIR benchmark, created through automated "
+    "translation.",
+    reference="https://arxiv.org/abs/2412.08329",
+    contacts=["nikolay-banar"],
+    citation="""@misc{banar2024beirnlzeroshotinformationretrieval,
+    title={BEIR-NL: Zero-shot Information Retrieval Benchmark for the Dutch Language}, 
+     author={Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
+     year={2024},
+     eprint={2412.08329},
+     archivePrefix={arXiv},
+     primaryClass={cs.CL},
+     url={https://arxiv.org/abs/2412.08329}, 
 }""",
 )
 

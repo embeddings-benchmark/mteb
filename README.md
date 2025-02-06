@@ -447,6 +447,23 @@ model_w_contamination = ModelMeta(
 </details>
 
 <details>
+  <summary>  Running the leaderboard locally </summary>
+
+
+### Running the Leaderboard
+
+It is possible to completely deploy the leaderboard locally or self-host it. This can e.g. be relevant for companies that might want to
+integrate build their own benchmarks or integrate custom tasks into existing benchmarks. 
+
+Running the leaderboard is quite easy. Simply run:
+```py
+python -m mteb.leaderboard.app
+
+The leaderboard requires gradio install, which can be installed using `pip install mteb[gradio]` and requires python >3.10.
+
+</details>
+
+<details>
   <summary>  Caching Embeddings To Re-Use Them </summary>
 
 
