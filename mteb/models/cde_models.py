@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 
 from mteb.model_meta import ModelMeta
+from mteb.models.no_model_implementation import no_model_implementation_available
 
 from .bge_models import bge_full_data
 
@@ -10,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 cde_small_v1 = ModelMeta(
-    loader=None,  # I will leave this at None for now,
+    loader=no_model_implementation_available,
     name="jxm/cde-small-v1",
     languages=["eng_Latn"],
     open_weights=True,
@@ -32,7 +33,7 @@ cde_small_v1 = ModelMeta(
 )
 
 cde_small_v2 = ModelMeta(
-    loader=None,  # I will leave this at None for now,
+    loader=no_model_implementation_available,
     name="jxm/cde-small-v2",
     languages=["eng_Latn"],
     open_weights=True,
