@@ -5,7 +5,6 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class BuiltBenchClusteringS2S(AbsTaskClustering):
-    superseded_by = None
     metadata = TaskMetadata(
         name="BuiltBenchClusteringS2S",
         description="Clustering of built asset names/titles based on categories identified within industry classification systems such as IFC, Uniclass, etc.",
