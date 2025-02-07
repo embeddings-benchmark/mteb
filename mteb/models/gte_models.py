@@ -323,6 +323,7 @@ gte_modernbert_base = ModelMeta(
     revision="7ca8b4ca700621b67618669f5378fe5f5820b8e4",
     release_date="2025-01-21",  # initial commit of hf model.
     n_parameters=149 * 1e6,
+    memory_usage_mb=284,
     embed_dim=768,
     license="apache-2",
     max_tokens=8192,
