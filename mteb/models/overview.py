@@ -254,6 +254,7 @@ empty_model_meta = ModelMeta(
     languages=None,
     release_date=None,
     n_parameters=None,
+    memory_usage_mb=None,
     max_tokens=None,
     embed_dim=None,
     license=None,

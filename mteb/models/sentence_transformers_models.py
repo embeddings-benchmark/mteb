@@ -307,6 +307,7 @@ contriever = ModelMeta(
     revision="abe8c1493371369031bcb1e02acb754cf4e162fa",
     release_date="2022-06-25",  # release date of model on HF
     n_parameters=150_000_000,
+    memory_usage_mb=572,
     embed_dim=768,
     license=None,
     max_tokens=512,

@@ -176,6 +176,7 @@ user_bge_m3 = ModelMeta(
     revision="0cc6cfe48e260fb0474c753087a69369e88709ae",
     release_date="2024-07-05",
     n_parameters=359_026_688,
+    memory_usage_mb=1370,
     embed_dim=1024,
     license="apache-2.0",
     max_tokens=8194,

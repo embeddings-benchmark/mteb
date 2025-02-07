@@ -98,6 +98,7 @@ arctic_m_v1_5 = ModelMeta(
     open_weights=True,
     framework=["Sentence Transformers", "PyTorch"],
     n_parameters=109_000_000,
+    memory_usage_mb=415,
     max_tokens=512,
     embed_dim=768,
     license="apache-2.0",
