@@ -10,6 +10,7 @@ from mteb.abstasks.AbsTask import AbsTask
 from mteb.load_results.benchmark_results import BenchmarkResults
 from mteb.load_results.load_results import load_results
 from mteb.overview import MTEBTasks, get_task, get_tasks
+from mteb.tasks.Retrieval.lotte.LoTTERetrieval import LoTTERetrieval
 
 http_url_adapter = TypeAdapter(AnyUrl)
 UrlString = Annotated[
@@ -1433,4 +1434,19 @@ BEIR_NL = Benchmark(
      primaryClass={cs.CL},
      url={https://arxiv.org/abs/2412.08329}, 
 }""",
+)
+
+
+MTEB_LOTTE = Benchmark(
+    name="LoTTE",
+    tasks=MTEBTasks([LoTTERetrieval()]),
+    description="LoTTE (Long-Tail Topic-stratified Evaluation for IR) featuring domain-specific datasets from StackExchange spanning writing, recreation, science, technology, and lifestyle.",
+    reference="https://github.com/stanford-futuredata/ColBERT/blob/main/LoTTE.md",
+    citation="""@article{santhanam2021colbertv2,
+        title={ColBERTv2: Effective and Efficient Retrieval via Lightweight Late Interaction},
+        author={Santhanam, Keshav and Khattab, Omar and Saad-Falcon, Jon and Potts, Christopher and Zaharia, Matei},
+        journal={arXiv preprint arXiv:2112.01488},
+        year={2021}
+    }""",
+    contacts=["agu18dec"],
 )
