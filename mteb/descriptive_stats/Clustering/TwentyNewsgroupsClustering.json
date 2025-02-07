@@ -1,0 +1,76 @@
+{
+    "test": {
+        "num_samples": 10,
+        "number_of_characters": 59545,
+        "min_text_length": 1000,
+        "average_text_length": 5954.5,
+        "max_text_length": 10909,
+        "unique_texts": 5242,
+        "min_labels_per_text": 2082,
+        "average_labels_per_text": 5954.5,
+        "max_labels_per_text": 3236,
+        "unique_labels": 20,
+        "labels": {
+            "12": {
+                "count": 3137
+            },
+            "6": {
+                "count": 3070
+            },
+            "0": {
+                "count": 2613
+            },
+            "2": {
+                "count": 3155
+            },
+            "10": {
+                "count": 3220
+            },
+            "17": {
+                "count": 2986
+            },
+            "14": {
+                "count": 3106
+            },
+            "13": {
+                "count": 3055
+            },
+            "1": {
+                "count": 3056
+            },
+            "16": {
+                "count": 2911
+            },
+            "9": {
+                "count": 2984
+            },
+            "3": {
+                "count": 3070
+            },
+            "15": {
+                "count": 3090
+            },
+            "7": {
+                "count": 3036
+            },
+            "5": {
+                "count": 3124
+            },
+            "11": {
+                "count": 3236
+            },
+            "18": {
+                "count": 2483
+            },
+            "8": {
+                "count": 3090
+            },
+            "19": {
+                "count": 2082
+            },
+            "4": {
+                "count": 3041
+            }
+        }
+    }
+}

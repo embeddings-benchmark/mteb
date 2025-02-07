@@ -181,6 +181,8 @@ _HISTORIC_DATASETS = [
     "SynPerChatbotConvSAClassification",
     "CQADupstackRetrieval-Fa",
     "IndicXnliPairClassification",
+    "WikiClusteringP2P",
+    "VGClustering",
 ]
 
 
@@ -343,24 +345,13 @@ def test_filled_metadata_is_filled():
     )
 
 
-def test_all_metadata_is_filled_and_valid():
-    all_tasks = get_tasks()
-
-    unfilled_metadata = []
-    for task in all_tasks:
-        if (
-            task.metadata.name not in _HISTORIC_DATASETS
-            and task.metadata.name.replace("HardNegatives", "")
-            not in _HISTORIC_DATASETS
-        ):
-            if not task.metadata.is_filled() and (
-                not task.metadata.validate_metadata()
-            ):
-                unfilled_metadata.append(task.metadata.name)
-    if unfilled_metadata:
-        raise ValueError(
-            f"The metadata of the following datasets is not filled: {unfilled_metadata}"
-        )
+@pytest.mark.parametrize("task", get_tasks(exclude_superseded=False))
+def test_all_metadata_is_filled_and_valid(task: AbsTask):
+    if task.metadata.name.replace("HardNegatives", "") not in _HISTORIC_DATASETS:
+        task.metadata.validate_metadata()
+        assert (
+            task.metadata.is_filled()
+        ), f"Metadata for {task.metadata.name} is not filled"
 
 
 def test_disallow_trust_remote_code_in_new_datasets():
@@ -511,14 +502,14 @@ def test_disallow_trust_remote_code_in_new_datasets():
 
     exceptions = []
 
-    for task in get_tasks():
+    for task in get_tasks(exclude_superseded=False):
         if task.metadata.dataset.get("trust_remote_code", False):
             assert (
                 task.metadata.name not in exceptions
             ), f"Dataset {task.metadata.name} should not trust remote code"
 
 
-@pytest.mark.parametrize("task", get_tasks())
+@pytest.mark.parametrize("task", get_tasks(exclude_superseded=False))
 def test_empty_descriptive_stat_in_new_datasets(task: AbsTask):
     if task.metadata.name.startswith("Mock") or isinstance(task, AbsTaskAggregate):
         return
