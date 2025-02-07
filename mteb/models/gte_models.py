@@ -316,6 +316,6 @@ gte_modernbert_base = ModelMeta(
     use_instructions=False,
     public_training_code=None,  # couldn't find
     public_training_data=None,
-    training_datasets=gte_multi_training_data, #English part of gte_multi_training_data,
+    training_datasets=gte_multi_training_data,  #English part of gte_multi_training_data,
 )
 
