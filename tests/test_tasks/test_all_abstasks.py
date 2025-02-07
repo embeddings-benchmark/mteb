@@ -19,7 +19,11 @@ from ..test_benchmark.task_grid import MOCK_TASK_TEST_GRID_AS_STRING
 
 logging.basicConfig(level=logging.INFO)
 
-tasks = [t for t in get_tasks() if t.metadata.name not in MOCK_TASK_TEST_GRID_AS_STRING]
+tasks = [
+    t
+    for t in get_tasks(exclude_superseded=False)
+    if t.metadata.name not in MOCK_TASK_TEST_GRID_AS_STRING
+]
 
 
 @pytest.mark.parametrize("task", tasks)
@@ -70,28 +74,34 @@ async def check_datasets_are_available_on_hf(tasks):
     for task, ds_exists in zip(tasks, datasets_exists):
         if not ds_exists:
             does_not_exist.append(
-                (task.metadata.dataset["path"], task.metadata.dataset["revision"])
+                (
+                    task.metadata.name,
+                    task.metadata.dataset["path"],
+                    task.metadata.dataset["revision"],
+                )
             )
 
     if does_not_exist:
         pretty_print = "\n".join(
-            [f"{ds[0]} - revision {ds[1]}" for ds in does_not_exist]
+            [
+                f"Name: {ds[0]} - repo {ds[1]} - revision {ds[2]}"
+                for ds in does_not_exist
+            ]
         )
         assert False, f"Datasets not available on Hugging Face:\n{pretty_print}"
 
 
 def test_dataset_availability():
     """Checks if the datasets are available on Hugging Face using both their name and revision."""
-    tasks = get_tasks()
-    # do not check aggregated tasks as they don't have a dataset
-    tasks = [t for t in tasks if not isinstance(t, AbsTaskAggregate)]
+    tasks = get_tasks(exclude_superseded=False)
     tasks = [
         t
         for t in tasks
-        if t.metadata.name not in MOCK_TASK_TEST_GRID_AS_STRING
-        if t.metadata.name not in MOCK_TASK_TEST_GRID_AS_STRING
-        and t.metadata.name
-        != "AfriSentiLangClassification"  # HOTFIX: Issue#1777. Remove this line when issue is resolved.
+        # HOTFIX: Issue#1777. Remove this line when issue is resolved.
+        if t.metadata.name != "AfriSentiLangClassification"
+        # do not check aggregated tasks as they don't have a dataset
+        and not isinstance(t, AbsTaskAggregate)
+        and t.metadata.name not in MOCK_TASK_TEST_GRID_AS_STRING
     ]
     asyncio.run(check_datasets_are_available_on_hf(tasks))
 

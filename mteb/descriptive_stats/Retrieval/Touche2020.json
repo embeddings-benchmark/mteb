@@ -1,0 +1,31 @@
+{
+    "test": {
+        "num_samples": 382594,
+        "number_of_characters": 658107591,
+        "num_documents": 382545,
+        "min_document_length": 3,
+        "average_document_length": 1720.3347658445412,
+        "max_document_length": 106072,
+        "unique_documents": 382545,
+        "num_queries": 49,
+        "min_query_length": 16,
+        "average_query_length": 43.42857142857143,
+        "max_query_length": 83,
+        "unique_queries": 49,
+        "none_queries": 0,
+        "num_relevant_docs": 2214,
+        "min_relevant_docs_per_query": 40,
+        "average_relevant_docs_per_query": 19.020408163265305,
+        "max_relevant_docs_per_query": 52,
+        "unique_relevant_docs": 2099,
+        "num_instructions": null,
+        "min_instruction_length": null,
+        "average_instruction_length": null,
+        "max_instruction_length": null,
+        "unique_instructions": null,
+        "num_top_ranked": null,
+        "min_top_ranked_per_query": null,
+        "average_top_ranked_per_query": null,
+        "max_top_ranked_per_query": null
+    }
+}

@@ -1,0 +1,55 @@
+{
+    "test": {
+        "num_samples": 4,
+        "number_of_characters": 2048,
+        "min_text_length": 512,
+        "average_text_length": 512.0,
+        "max_text_length": 512,
+        "unique_texts": 2048,
+        "min_labels_per_text": 2,
+        "average_labels_per_text": 512.0,
+        "max_labels_per_text": 1070,
+        "unique_labels": 13,
+        "labels": {
+            "nyheter": {
+                "count": 1070
+            },
+            "rampelys": {
+                "count": 242
+            },
+            "musikk": {
+                "count": 32
+            },
+            "sport": {
+                "count": 596
+            },
+            "reise": {
+                "count": 19
+            },
+            "forbruker": {
+                "count": 47
+            },
+            "mat-og-drikke": {
+                "count": 4
+            },
+            "helse": {
+                "count": 9
+            },
+            "bil-og-motor": {
+                "count": 9
+            },
+            "film": {
+                "count": 9
+            },
+            "teknologi": {
+                "count": 6
+            },
+            "dinepenger": {
+                "count": 2
+            },
+            "spill": {
+                "count": 3
+            }
+        }
+    }
+}
