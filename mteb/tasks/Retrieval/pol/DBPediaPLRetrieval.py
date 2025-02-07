@@ -11,9 +11,8 @@ class DBPediaPL(AbsTaskRetrieval):
         description="DBpedia-Entity is a standard test collection for entity search over the DBpedia knowledge base",
         reference="https://github.com/iai-group/DBpedia-Entity/",
         dataset={
-            "path": "clarin-knext/dbpedia-pl",
-            "revision": "76afe41d9af165cc40999fcaa92312b8b012064a",
-            "trust_remote_code": True,
+            "path": "mteb/DBPedia-PL",
+            "revision": "02df64930a070bf7cc14f9a1bd52d996b567eea5",
         },
         type="Retrieval",
         category="s2p",

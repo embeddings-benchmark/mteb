@@ -1436,3 +1436,38 @@ BEIR_NL = Benchmark(
      url={https://arxiv.org/abs/2412.08329},
 }""",
 )
+
+BEIR_PL = Benchmark(
+    name="BEIR-PL",
+    tasks=get_tasks(
+        languages=["pol"],
+        tasks=[
+            "MSMARCO-PL",
+            "TRECCOVID-PL",
+            "NFCorpus-PL",
+            "NQ-PL",
+            "HotpotQA-PL",
+            "FiQA-PL",
+            "ArguAna-PL",
+            "Touche2020-PL",
+            "CQADupstackRetrieval-PL",
+            "Quora-PL",
+            "DBPedia-PL",
+            "SCIDOCS-PL",
+            "SciFact-PL",
+        ],
+        eval_splits=["test"],
+    ),
+    description="BEIR-PL is a benchmark for evaluating text embedding models on Polish language data.",
+    reference="https://arxiv.org/abs/2305.19840",
+    citation="""
+    @misc{wojtasik2024beirplzeroshotinformation,
+          title={BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
+          author={Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
+          year={2024},
+          eprint={2305.19840},
+          archivePrefix={arXiv},
+          primaryClass={cs.IR},
+          url={https://arxiv.org/abs/2305.19840},
+}""",
+)

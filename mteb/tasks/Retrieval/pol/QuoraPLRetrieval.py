@@ -11,9 +11,8 @@ class QuoraPLRetrieval(AbsTaskRetrieval):
         description="QuoraRetrieval is based on questions that are marked as duplicates on the Quora platform. Given a question, find other (duplicate) questions.",
         reference="https://quoradata.quora.com/First-Quora-Dataset-Release-Question-Pairs",
         dataset={
-            "path": "clarin-knext/quora-pl",
-            "revision": "0be27e93455051e531182b85e85e425aba12e9d4",
-            "trust_remote_code": True,
+            "path": "mteb/Quora-PL",
+            "revision": "be9af3403db0afb13aa0837a047271b6eb073c58",
         },
         type="Retrieval",
         category="s2s",
