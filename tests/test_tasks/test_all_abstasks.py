@@ -93,7 +93,7 @@ async def check_datasets_are_available_on_hf(tasks):
 
 def test_dataset_availability():
     """Checks if the datasets are available on Hugging Face using both their name and revision."""
-    tasks = get_tasks(exclude_superseded=True)
+    tasks = get_tasks(exclude_superseded=False)
     tasks = [
         t
         for t in tasks
