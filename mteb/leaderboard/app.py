@@ -185,6 +185,7 @@ def filter_models(
         use_instructions=instructions,
         frameworks=compatibility,
         n_parameters_range=(lower, upper),
+        allow_no_n_parameters=True,
     )
     tasks = mteb.get_tasks(tasks=task_select)
     models_to_keep = set()
