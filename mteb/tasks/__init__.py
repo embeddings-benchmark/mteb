@@ -724,6 +724,7 @@ from .Retrieval import (
     TopiOCQARetrievalHardNegatives,
     Touche2020,
     Touche2020Fa,
+    Touche2020PL,
     Touche2020v3Retrieval,
     TRECCOVIDFa,
     TurHistQuadRetrieval,
@@ -1561,4 +1562,5 @@ __all__ = [
     "RuBQReranking",
     "SyntecReranking",
     "AlloprofReranking",
+    "Touche2020PL",
 ]

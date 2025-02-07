@@ -1382,7 +1382,7 @@ BEIR_PL = Benchmark(
             "HotpotQA-PL",
             "FiQA-PL",
             "ArguAna-PL",
-            # "Touche2020-PL", # qrels not presented in HF
+            "Touche2020-PL",
             "CQADupstackRetrieval-PL",
             "Quora-PL",
             "DBPedia-PL",

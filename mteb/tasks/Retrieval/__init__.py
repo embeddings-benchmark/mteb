@@ -217,6 +217,7 @@ from .pol import (
     QuoraPLRetrieval,
     QuoraPLRetrievalHardNegatives,
     SciFactPL,
+    Touche2020PL,
 )
 from .rus import RiaNewsRetrieval, RiaNewsRetrievalHardNegatives, RuBQRetrieval
 from .slk import SKQuadRetrieval, SlovakSumRetrieval
@@ -469,4 +470,5 @@ __all__ = [
     "BSARDRetrieval",
     "SyntecRetrieval",
     "FQuADRetrieval",
+    "Touche2020PL",
 ]

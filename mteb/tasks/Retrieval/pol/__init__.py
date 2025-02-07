@@ -24,6 +24,7 @@ from .NQPLRetrieval import NQPL, NQPLHardNegatives
 from .QuoraPLRetrieval import QuoraPLRetrieval, QuoraPLRetrievalHardNegatives
 from .SCIDOCSPLRetrieval import SCIDOCSPL
 from .SciFactPLRetrieval import SciFactPL
+from .Touche2020PLRetrieval import Touche2020PL
 from .TRECCOVIDPLRetrieval import TRECCOVIDPL
 
 __all__ = [
@@ -55,4 +56,5 @@ __all__ = [
     "DBPediaPLHardNegatives",
     "HotpotQAPL",
     "HotpotQAPLHardNegatives",
+    "Touche2020PL",
 ]
