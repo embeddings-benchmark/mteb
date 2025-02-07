@@ -11,9 +11,8 @@ class SciFactPL(AbsTaskRetrieval):
         description="SciFact verifies scientific claims using evidence from the research literature containing scientific paper abstracts.",
         reference="https://github.com/allenai/scifact",
         dataset={
-            "path": "clarin-knext/scifact-pl",
-            "revision": "47932a35f045ef8ed01ba82bf9ff67f6e109207e",
-            "trust_remote_code": True,
+            "path": "mteb/SciFact-PL",
+            "revision": "d9707265734052a21d5892b6300ca11028fa067b",
         },
         type="Retrieval",
         category="s2p",

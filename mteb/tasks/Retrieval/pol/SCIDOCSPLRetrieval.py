@@ -11,9 +11,8 @@ class SCIDOCSPL(AbsTaskRetrieval):
         description="SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation prediction, to document classification and recommendation.",
         reference="https://allenai.org/data/scidocs",
         dataset={
-            "path": "clarin-knext/scidocs-pl",
-            "revision": "45452b03f05560207ef19149545f168e596c9337",
-            "trust_remote_code": True,
+            "path": "mteb/SCIDOCS-PL",
+            "revision": "de1caaae2a2880b02023b7fdd36fad58e2470cc1",
         },
         type="Retrieval",
         category="s2p",

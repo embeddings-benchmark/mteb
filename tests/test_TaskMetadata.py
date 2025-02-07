@@ -181,6 +181,7 @@ _HISTORIC_DATASETS = [
     "SynPerChatbotConvSAClassification",
     "CQADupstackRetrieval-Fa",
     "IndicXnliPairClassification",
+    "CQADupstackRetrieval-PL",
     "WikiClusteringP2P",
     "VGClustering",
 ]

@@ -5,14 +5,14 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class TRECCOVIDPL(AbsTaskRetrieval):
+class Touche2020PL(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="TRECCOVID-PL",
-        description="TRECCOVID is an ad-hoc search challenge based on the COVID-19 dataset containing scientific articles related to the COVID-19 pandemic.",
-        reference="https://ir.nist.gov/covidSubmit/index.html",
+        name="Touche2020-PL",
+        description="Touché Task 1: Argument Retrieval for Controversial Questions",
+        reference="https://webis.de/events/touche-20/shared-task-1.html",
         dataset={
-            "path": "mteb/TRECCOVID-PL",
-            "revision": "1e710582482d4199ff690e5dd2491a70627523f5",
+            "path": "mteb/Touche2020-PL",
+            "revision": "ec535fbc3776cfc96d72ad0cb5e8f81e74b2fd4e",
         },
         type="Retrieval",
         category="s2p",
@@ -21,11 +21,11 @@ class TRECCOVIDPL(AbsTaskRetrieval):
         eval_langs=["pol-Latn"],
         main_score="ndcg_at_10",
         date=(
-            "2019-12-01",
-            "2022-12-31",
-        ),  # approximate date of covid pandemic start and end (best guess)
-        domains=["Academic", "Medical", "Non-fiction", "Written"],
-        task_subtypes=["Article retrieval"],
+            "2020-09-23",
+            "2020-09-23",
+        ),
+        domains=["Academic"],
+        task_subtypes=["Question answering"],
         license="not specified",
         annotations_creators="derived",
         dialect=[],
