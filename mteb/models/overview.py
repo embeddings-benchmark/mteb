@@ -154,7 +154,7 @@ def get_model_metas(
     zero_shot_on: list[AbsTask] | None = None,
 ) -> list[ModelMeta]:
     """Load all models' metadata that fit the specified criteria.
-    
+
     Args:
         model_names: A list of model names to filter by. If None, all models are included.
         languages: A list of languages to filter by. If None, all languages are included.
@@ -189,12 +189,11 @@ def get_model_metas(
         lower, upper = n_parameters_range
         n_parameters = model_meta.n_parameters
 
-
         if n_parameters is not None:
             if upper is not None and n_parameters > upper:
-                    continue
+                continue
             if lower is not None and n_parameters < lower:
-                    continue
+                continue
         else:
             if not allow_no_n_parameters:
                 continue
