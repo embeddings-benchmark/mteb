@@ -422,25 +422,24 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
 A model is considered zero-shot if it is not trained on any splits of the datasets used to derive the tasks.
 E.g., if a model is trained on Natural Questions, it cannot be considered zero-shot on benchmarks containing the task “NQ” which is derived from Natural Questions.
 This definition creates a few edge cases. For instance, multiple models are typically trained on Wikipedia title and body pairs, but we do not define this as leakage on, e.g., “WikipediaRetrievalMultilingual” and “WikiClusteringP2P” as these datasets are not based on title-body pairs.
-Distilled, further fine-tunes or in other ways, derivative models inherit the datasets of their parent models.
+Distilled, further fine-tunes, or in other ways, derivative models inherit the datasets of their parent models.
 Based on community feedback and research findings, This definition could change in the future.
             """
             )
         with gr.Accordion(
-            "Why is a model is missing or not showing up?",
+            "Why is a model missing or not showing up?",
             open=False,
         ):
             gr.Markdown(
                 """
-There is multiple reasons why a model might not show up in the leaderboard. Here is a few common reasons:
+Possible reasons why a model may not show up in the leaderboard:
 
-- **Filter Setting**: It is being filtered out with your current filter. By default we do not show models that are not zero-shot on the benchmark. 
+- **Filter Setting**: It is being filtered out with your current filter. By default, we do not show models that are not zero-shot on the benchmark. 
 You can change this setting in the model selection panel.
-- **Removed Derivatives**: While the previous models showed many variant of a models (e.g. quantized, varying embedding sizes) as separate models, we now only show the original model.
-- **Missing Results**: The model might not have been run on the tasks in the benchmark. We only display models that have been run on at least one tasks 
-in the benchmark. For visualizations which require the mean across all tasks, we only display models that have been run on all tasks in the benchmark. 
-You can see existing results the [results repository](https://github.com/embeddings-benchmark/results). This is also where new results are added using a PR.
-- **Missing Metadata**: Currently the we only show models for which we have metadata on in [mteb](https://github.com/embeddings-benchmark/mteb).
+- **Missing Results**: The model may not have been run on the tasks in the benchmark. We only display models that have been run on at least one task 
+in the benchmark. For visualizations that require the mean across all tasks, we only display models that have been run on all tasks in the benchmark. 
+You can see existing results in the [results repository](https://github.com/embeddings-benchmark/results). This is also where new results are added via PR.
+- **Missing Metadata**: Currently, we only show models for which we have metadata in [mteb](https://github.com/embeddings-benchmark/mteb).
 You can follow this guide on how to add a [model](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_model.md) and 
 see existing implementations [here](https://github.com/embeddings-benchmark/mteb/tree/main/mteb/models).
             """
