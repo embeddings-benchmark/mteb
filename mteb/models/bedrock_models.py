@@ -13,9 +13,8 @@ from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.cohere_models import model_prompts as cohere_model_prompts
 from mteb.models.cohere_models import supported_languages as cohere_supported_languages
+from mteb.models.wrapper import Wrapper
 from mteb.requires_package import requires_package
-
-from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
@@ -174,6 +173,7 @@ amazon_titan_embed_text_v1 = ModelMeta(
     embed_dim=1536,
     open_weights=False,
     n_parameters=None,
+    memory_usage_mb=None,
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
@@ -199,6 +199,7 @@ amazon_titan_embed_text_v2 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
+    memory_usage_mb=None,
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
@@ -226,6 +227,7 @@ cohere_embed_english_v3 = ModelMeta(
     revision="1",
     release_date="2023-11-02",
     n_parameters=None,
+    memory_usage_mb=None,
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
@@ -252,6 +254,7 @@ cohere_embed_multilingual_v3 = ModelMeta(
     revision="1",
     release_date="2023-11-02",
     n_parameters=None,
+    memory_usage_mb=None,
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,

@@ -370,6 +370,7 @@ def test_reranker_same_ndcg1(tmp_path: Path):
         revision=ce_revision,
         release_date="2021-04-15",
         n_parameters=None,
+        memory_usage_mb=None,
         max_tokens=None,
         embed_dim=None,
         license=None,

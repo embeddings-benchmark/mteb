@@ -199,6 +199,7 @@ e5_v = ModelMeta(
     release_date="2024-07-17",
     modalities=["image", "text"],
     n_parameters=8_360_000_000,
+    memory_usage_mb=15936,
     max_tokens=8192,
     embed_dim=4096,
     license=None,

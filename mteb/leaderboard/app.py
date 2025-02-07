@@ -156,7 +156,7 @@ def update_task_info(task_names: str) -> gr.DataFrame:
 
 
 # Model sizes in million parameters
-MIN_MODEL_SIZE, MAX_MODEL_SIZE = 0, 10_000
+MIN_MODEL_SIZE, MAX_MODEL_SIZE = 0, 100_000
 
 
 def filter_models(
@@ -203,7 +203,7 @@ def filter_models(
 logger.info("Loading all benchmark results")
 all_results = load_results()
 
-benchmarks = mteb.get_benchmarks()
+benchmarks = sorted(mteb.get_benchmarks(), key=lambda x: x.name)
 all_benchmark_results = {
     benchmark.name: benchmark.load_results(base_results=all_results).join_revisions()
     for benchmark in benchmarks
@@ -274,6 +274,8 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
     ## MMTEB: Massive Multilingual Text Embedding Benchmark
 
     The MMTEB leaderboard compares text embedding models on 1000+ languages. Check out the [paper](https://openreview.net/pdf?id=zl3pfz4VCV) for details on datasets, languages and tasks. And you can contribute! 🤗 To add a model, please refer to the documentation in the [GitHub repository](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_model.md). Also check out [MTEB Arena](https://huggingface.co/spaces/mteb/arena) ⚔️
+    
+    > Looking for the previous MTEB leaderboard? We have made it available [here](https://huggingface.co/spaces/mteb/leaderboard_legacy). Though it will no longer be updated.
     """
     )
 
@@ -399,6 +401,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
         download_summary.click(
             download_table, inputs=[summary_table], outputs=[download_summary]
         )
+
         with gr.Accordion(
             "What do aggregate measures (Rank(Borda), Mean(Task), etc.) mean?",
             open=False,
@@ -421,8 +424,26 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
 A model is considered zero-shot if it is not trained on any splits of the datasets used to derive the tasks.
 E.g., if a model is trained on Natural Questions, it cannot be considered zero-shot on benchmarks containing the task “NQ” which is derived from Natural Questions.
 This definition creates a few edge cases. For instance, multiple models are typically trained on Wikipedia title and body pairs, but we do not define this as leakage on, e.g., “WikipediaRetrievalMultilingual” and “WikiClusteringP2P” as these datasets are not based on title-body pairs.
-Distilled, further fine-tunes or in other ways, derivative models inherit the datasets of their parent models.
+Distilled, further fine-tunes, or in other ways, derivative models inherit the datasets of their parent models.
 Based on community feedback and research findings, This definition could change in the future.
+            """
+            )
+        with gr.Accordion(
+            "Why is a model missing or not showing up?",
+            open=False,
+        ):
+            gr.Markdown(
+                """
+Possible reasons why a model may not show up in the leaderboard:
+
+- **Filter Setting**: It is being filtered out with your current filter. By default, we do not show models that are not zero-shot on the benchmark. 
+You can change this setting in the model selection panel.
+- **Missing Results**: The model may not have been run on the tasks in the benchmark. We only display models that have been run on at least one task 
+in the benchmark. For visualizations that require the mean across all tasks, we only display models that have been run on all tasks in the benchmark. 
+You can see existing results in the [results repository](https://github.com/embeddings-benchmark/results). This is also where new results are added via PR.
+- **Missing Metadata**: Currently, we only show models for which we have metadata in [mteb](https://github.com/embeddings-benchmark/mteb).
+You can follow this guide on how to add a [model](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_model.md) and 
+see existing implementations [here](https://github.com/embeddings-benchmark/mteb/tree/main/mteb/models).
             """
             )
     with gr.Tab("Performance per task"):

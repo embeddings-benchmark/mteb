@@ -517,7 +517,6 @@ MTEB_FRA = Benchmark(
                 "MLSUMClusteringP2P",
                 "MLSUMClusteringS2S",
                 # Pair Classification
-                "OpusparcusPC",
                 "PawsXPairClassification",
                 # Reranking
                 "AlloprofReranking",
@@ -647,7 +646,6 @@ MTEB_POL = Benchmark(
                 "SICK-E-PL",
                 # STS
                 "CDSC-R",
-                "STSBenchmarkMultilingualSTS",
                 "SICK-R-PL",
             ],
         )
