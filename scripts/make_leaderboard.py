@@ -50,7 +50,7 @@ def load_leaderboard(
 
     # Load all results from the specified repository
     benchmark_results = load_results(
-        results_repo=results_repo or "https://github.com/Pringled/mteb-results",
+        results_repo=results_repo,
         only_main_score=True,
     )
 
