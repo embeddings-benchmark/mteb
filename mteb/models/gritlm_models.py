@@ -10,7 +10,6 @@ from .instruct_wrapper import instruct_wrapper
 
 logger = logging.getLogger(__name__)
 
-
 GRIT_LM_TRAINING_DATA = {
     **E5_MISTRAL_TRAINING_DATA,  # source https://arxiv.org/pdf/2402.09906
     # Note that some models in their ablations also use MEDI2 but not the main GritLM-7B & GritLM-8x7B models
@@ -49,6 +48,7 @@ gritlm7b = ModelMeta(
     public_training_code="https://github.com/ContextualAI/gritlm",
     public_training_data=None,
 )
+
 gritlm8x7b = ModelMeta(
     loader=partial(  # type: ignore
         instruct_wrapper,
