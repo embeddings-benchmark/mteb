@@ -636,7 +636,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [SCDDVerificationLegalBenchClassification](https://huggingface.co/datasets/nguha/legalbench) (Neel Guha, 2023) | ['eng'] | Classification | s2s | [Legal, Written] | None | None |
 | [SCIDOCS](https://allenai.org/data/scidocs) (Arman Cohan, 2020) | ['eng'] | Retrieval | s2p | [Academic, Non-fiction, Written] | None | None |
 | [SCIDOCS-Fa](https://huggingface.co/datasets/MCINext/scidocs-fa) | ['fas'] | Retrieval | s2p | [Academic] | None | None |
-| [SCIDOCS-NL](https://huggingface.co/datasets/clips/beir-nl-scidocs) (Nikolay Banar, 2024) | ['eng'] | Retrieval | s2p | [Academic, Non-fiction, Written] | None | None |
+| [SCIDOCS-NL](https://huggingface.co/datasets/clips/beir-nl-scidocs) (Nikolay Banar, 2024) | ['nld'] | Retrieval | s2p | [Academic, Non-fiction, Written] | None | None |
 | [SCIDOCS-PL](https://allenai.org/data/scidocs) (Konrad Wojtasik, 2024) | ['pol'] | Retrieval | s2p |  | None | None |
 | [SDSEyeProtectionClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Classification | s2p | [Chemistry] | None | None |
 | [SDSGlovesClassification](https://arxiv.org/abs/2412.00532) (Kasmaee et al., 2024) | ['eng'] | Classification | s2p | [Chemistry] | None | None |
@@ -1174,7 +1174,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | Modern Greek (1453-) | Indo-European | 0 | 2 | 0 | 3 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 0 | 3 | 0 | 0 | 0 | 0 | 0 | 18 |
 | emi | Mussau-Emira | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | emp | Northern Emberá | Chocoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| eng | English | Indo-European | 9 | 62 | 4 | 17 | 160 | 18 | 21 | 5 | 1 | 6 | 3 | 1 | 13 | 8 | 109 | 13 | 2 | 1 | 7 | 24 | 484 |
+| eng | English | Indo-European | 9 | 62 | 4 | 17 | 160 | 18 | 21 | 5 | 1 | 6 | 3 | 1 | 13 | 8 | 108 | 13 | 2 | 1 | 7 | 24 | 483 |
 | enq | Enga | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | epo | Esperanto | Artificial Language | 0 | 0 | 0 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | eri | Ogea | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1563,7 +1563,7 @@ The following tables give you an overview of the tasks in MTEB.
 | nij | Ngaju | Austronesian | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
 | nin | Ninzo | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | nko | Nkonya | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nld | Dutch | Indo-European | 0 | 1 | 0 | 6 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 1 | 28 | 2 | 0 | 0 | 2 | 0 | 49 |
+| nld | Dutch | Indo-European | 0 | 1 | 0 | 6 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 1 | 29 | 2 | 0 | 0 | 2 | 0 | 50 |
 | nlg | Gela | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | nna | Nyangumarta | Pama-Nyungan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | nno | Norwegian Nynorsk | Unclassified | 0 | 0 | 0 | 4 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
