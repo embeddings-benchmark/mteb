@@ -5,21 +5,14 @@ from functools import partial
 
 from mteb.model_meta import ModelMeta
 
-from .e5_models import E5_TRAINING_DATA
+from .e5_instruct import E5_MISTRAL_TRAINING_DATA
 from .instruct_wrapper import instruct_wrapper
 
 logger = logging.getLogger(__name__)
 
 GRIT_LM_TRAINING_DATA = {
-    **E5_TRAINING_DATA,  # source https://arxiv.org/pdf/2402.09906
-    # also uses medi2 which contains fever and hotpotqa:
-    "FEVER": ["train"],
-    "FEVERHardNegatives": ["train"],
-    "FEVER-NL": ["train"],  # translation not trained on
-    "HotpotQA": ["train"],
-    "HotpotQAHardNegatives": ["train"],
-    "HotpotQA-PL": ["train"],  # translation not trained on
-    "HotpotQA-NL": ["train"],  # translation not trained on
+    **E5_MISTRAL_TRAINING_DATA,  # source https://arxiv.org/pdf/2402.09906
+    # Note that some models in their ablations also use MEDI2 but not the main GritLM-7B & GritLM-8x7B models
 }
 
 
