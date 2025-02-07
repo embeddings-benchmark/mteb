@@ -2,7 +2,7 @@
 
 The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/leaderboard). To submit to it:
 
-1. **Add meta information about your model to [model dir](../mteb/models/)**.
+1. **Add meta information about your model to [model dir](../mteb/models/)**. See the docstring of ModelMeta for meta data details.
    ```python
    from mteb.model_meta import ModelMeta
     
