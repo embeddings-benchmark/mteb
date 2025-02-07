@@ -144,6 +144,7 @@ align_base = ModelMeta(
     release_date="2023-02-24",
     modalities=["image", "text"],
     n_parameters=176_000_000,
+    memory_usage_mb=671,
     max_tokens=64,
     embed_dim=768,
     license=None,

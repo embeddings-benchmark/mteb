@@ -159,6 +159,7 @@ jina_clip_v1 = ModelMeta(
     release_date="2024-05-30",
     modalities=["image", "text"],
     n_parameters=223_000_000,
+    memory_usage_mb=849,
     max_tokens=8192,
     embed_dim=768,
     license="apache-2.0",

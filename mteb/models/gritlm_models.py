@@ -4,9 +4,8 @@ import logging
 from functools import partial
 
 from mteb.model_meta import ModelMeta
-
-from .e5_instruct import E5_MISTRAL_TRAINING_DATA
-from .instruct_wrapper import instruct_wrapper
+from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
+from mteb.models.instruct_wrapper import instruct_wrapper
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +35,7 @@ gritlm7b = ModelMeta(
     revision="13f00a0e36500c80ce12870ea513846a066004af",
     release_date="2024-02-15",
     n_parameters=7_240_000_000,
+    memory_usage_mb=13813,
     embed_dim=4096,
     license="apache-2.0",
     max_tokens=4096,
@@ -63,6 +63,7 @@ gritlm8x7b = ModelMeta(
     revision="7f089b13e3345510281733ca1e6ff871b5b4bc76",
     release_date="2024-02-15",
     n_parameters=57_920_000_000,
+    memory_usage_mb=89079,
     embed_dim=4096,
     license="apache-2.0",
     max_tokens=4096,
