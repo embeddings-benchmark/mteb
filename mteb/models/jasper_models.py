@@ -14,6 +14,7 @@ from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.nvidia_models import nvidia_training_datasets
 from mteb.models.wrapper import Wrapper
+from mteb.model_meta import ModelMeta, ScoringFunction
 
 logger = logging.getLogger(__name__)
 
@@ -85,7 +86,7 @@ jasper_en_v1 = ModelMeta(
     embed_dim=8960,
     license="apache-2.0",
     reference="https://huggingface.co/infgrad/jasper_en_vision_language_v1/tree/main",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from=None,

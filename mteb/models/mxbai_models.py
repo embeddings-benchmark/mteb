@@ -2,7 +2,11 @@ from __future__ import annotations
 
 from functools import partial
 
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import (
+    ModelMeta,
+    ScoringFunction,
+    sentence_transformers_loader,
+)
 
 mxbai_embed_large_v1 = ModelMeta(
     loader=partial(  # type: ignore
@@ -24,7 +28,7 @@ mxbai_embed_large_v1 = ModelMeta(
     embed_dim=1024,
     license="apache-2.0",
     reference="https://huggingface.co/mixedbread-ai/mxbai-embed-large-v1",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     citation="""

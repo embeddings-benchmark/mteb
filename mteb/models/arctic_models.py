@@ -2,7 +2,11 @@ from __future__ import annotations
 
 from functools import partial
 
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import (
+    ModelMeta,
+    ScoringFunction,
+    sentence_transformers_loader,
+)
 
 LANGUAGES_V2_0 = [
     "afr_Latn",
@@ -103,7 +107,7 @@ arctic_m_v1_5 = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-m-v1.5",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     adapted_from=None,
     superseded_by=None,
@@ -163,7 +167,7 @@ arctic_embed_xs = ModelMeta(
     embed_dim=384,
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-xs",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     adapted_from="sentence-transformers/all-MiniLM-L6-v2",
     superseded_by=None,
@@ -218,7 +222,7 @@ arctic_embed_s = ModelMeta(
     embed_dim=384,
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-s",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     adapted_from="intfloat/e5-small-unsupervised",
     superseded_by=None,
@@ -272,7 +276,7 @@ arctic_embed_m = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-m",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     adapted_from="intfloat/e5-base-unsupervised",
     superseded_by="Snowflake/snowflake-arctic-embed-m-v1.5",
@@ -326,7 +330,7 @@ arctic_embed_m_long = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-m-long",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     adapted_from="nomic-ai/nomic-embed-text-v1-unsupervised",
     superseded_by="Snowflake/snowflake-arctic-embed-m-v2.0",
@@ -380,7 +384,7 @@ arctic_embed_l = ModelMeta(
     embed_dim=1024,
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-l",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     adapted_from="intfloat/e5-base-unsupervised",
     superseded_by="Snowflake/snowflake-arctic-embed-l-v2.0",
@@ -436,7 +440,7 @@ arctic_embed_m_v1_5 = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-m-v1.5",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     adapted_from=None,
     superseded_by="Snowflake/snowflake-arctic-embed-m-v2.0",
@@ -464,7 +468,7 @@ arctic_embed_m_v2_0 = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-m-v2.0",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     adapted_from="Alibaba-NLP/gte-multilingual-base",
     superseded_by=None,
@@ -514,7 +518,7 @@ arctic_embed_l_v2_0 = ModelMeta(
     embed_dim=1024,
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-l-v2.0",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     adapted_from="BAAI/bge-m3-retromae",
     superseded_by=None,

@@ -2,7 +2,11 @@ from __future__ import annotations
 
 from functools import partial
 
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import (
+    ModelMeta,
+    ScoringFunction,
+    sentence_transformers_loader,
+)
 
 GRANITE_LANGUAGES = [
     "ara_Latn",
@@ -101,7 +105,7 @@ granite_107m_multilingual = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/ibm-granite/granite-embedding-107m-multilingual",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     adapted_from=None,
     superseded_by=None,
@@ -128,7 +132,7 @@ granite_278m_multilingual = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/ibm-granite/granite-embedding-278m-multilingual",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     adapted_from=None,
     superseded_by=None,
@@ -155,7 +159,7 @@ granite_30m_english = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/ibm-granite/granite-embedding-30m-english",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     adapted_from=None,
     superseded_by=None,
@@ -182,7 +186,7 @@ granite_125m_english = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/ibm-granite/granite-embedding-125m-english",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     adapted_from=None,
     superseded_by=None,

@@ -10,7 +10,7 @@ from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.repllama_models import RepLLaMAWrapper, model_prompts
 from mteb.models.wrapper import Wrapper
-
+from mteb.model_meta import ModelMeta, ScoringFunction
 logger = logging.getLogger(__name__)
 
 
@@ -75,7 +75,7 @@ promptriever_llama2 = ModelMeta(
     license="apache-2.0",
     training_datasets={"samaya-ai/msmarco-w-instructions": ["train"]},
     reference="https://huggingface.co/samaya-ai/promptriever-llama2-7b-v1",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
     citation=PROMPTRIEVER_CITATION,
@@ -107,7 +107,7 @@ promptriever_llama3 = ModelMeta(
     embed_dim=4096,
     license="apache-2.0",
     reference="https://huggingface.co/samaya-ai/promptriever-llama3.1-8b-v1",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
     citation=PROMPTRIEVER_CITATION,
@@ -139,7 +139,7 @@ promptriever_llama3_instruct = ModelMeta(
     },
     license="apache-2.0",
     reference="https://huggingface.co/samaya-ai/promptriever-llama3.1-8b-instruct-v1",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
     citation=PROMPTRIEVER_CITATION,
@@ -171,7 +171,7 @@ promptriever_mistral_v1 = ModelMeta(
     embed_dim=4096,
     license="apache-2.0",
     reference="https://huggingface.co/samaya-ai/promptriever-mistral-v0.1-7b-v1",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
     citation=PROMPTRIEVER_CITATION,

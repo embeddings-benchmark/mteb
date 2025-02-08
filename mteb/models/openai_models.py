@@ -9,6 +9,7 @@ import tqdm
 
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.requires_package import requires_package
 
 logger = logging.getLogger(__name__)
@@ -132,7 +133,7 @@ text_embedding_3_small = ModelMeta(
     memory_usage_mb=None,
     license=None,
     reference="https://openai.com/index/new-embedding-models-and-api-updates/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=False,
     public_training_code=None,

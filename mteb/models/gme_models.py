@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +18,7 @@ gme_qwen2_vl_2b_instruct = ModelMeta(
     max_tokens=32768,
     embed_dim=1536,
     license="mit",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch"],
     reference="https://huggingface.co/Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
     use_instructions=True,
@@ -47,7 +47,7 @@ gme_qwen2_vl_7b_instruct = ModelMeta(
     max_tokens=32768,
     embed_dim=3584,
     license="mit",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch"],
     reference="https://huggingface.co/Alibaba-NLP/gme-Qwen2-VL-7B-Instruct",
     use_instructions=True,

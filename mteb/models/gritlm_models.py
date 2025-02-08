@@ -6,6 +6,10 @@ from functools import partial
 from mteb.model_meta import ModelMeta
 from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
 from mteb.models.instruct_wrapper import instruct_wrapper
+from mteb.model_meta import ModelMeta, ScoringFunction
+
+from .e5_models import E5_TRAINING_DATA
+from .instruct_wrapper import instruct_wrapper
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +56,7 @@ gritlm7b = ModelMeta(
     license="apache-2.0",
     max_tokens=4096,
     reference="https://huggingface.co/GritLM/GritLM-7B",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["GritLM", "PyTorch"],
     use_instructions=True,
     training_datasets=GRIT_LM_TRAINING_DATA,
@@ -81,7 +85,7 @@ gritlm8x7b = ModelMeta(
     license="apache-2.0",
     max_tokens=4096,
     reference="https://huggingface.co/GritLM/GritLM-8x7B",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["GritLM", "PyTorch"],
     use_instructions=True,
     training_datasets=GRIT_LM_TRAINING_DATA,
