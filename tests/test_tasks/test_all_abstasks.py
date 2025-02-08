@@ -29,7 +29,7 @@ ALL_MOCK_TASKS = MOCK_TASK_TEST_GRID_AS_STRING + MOCK_MIEB_TASK_GRID_AS_STRING
 tasks = [
     t
     for t in get_tasks(exclude_superseded=False)
-    if t.metadata.name not in MOCK_TASK_TEST_GRID_AS_STRING
+    if t.metadata.name not in ALL_MOCK_TASKS
 ]
 
 
@@ -110,7 +110,7 @@ def test_dataset_availability():
         if t.metadata.name != "AfriSentiLangClassification"
         # do not check aggregated tasks as they don't have a dataset
         and not isinstance(t, AbsTaskAggregate)
-        and t.metadata.name not in MOCK_TASK_TEST_GRID_AS_STRING
+        and t.metadata.name not in ALL_MOCK_TASKS
     ]
     asyncio.run(check_datasets_are_available_on_hf(tasks))
 
