@@ -91,7 +91,7 @@ class ClimateFEVERRetrievalv2(AbsTaskRetrieval):
         main_score="ndcg_at_10",
         date=("2020-12-11", "2020-12-11"),
         domains=["Academic", "Written"],
-        task_subtypes=["Question answering"],
+        task_subtypes=["Claim Verification"],
         license="cc-by-sa-4.0",
         annotations_creators="human-annotated",
         dialect=[],
