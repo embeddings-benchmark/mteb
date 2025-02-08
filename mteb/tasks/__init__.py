@@ -484,6 +484,11 @@ from .PairClassification import (
     XStance,
 )
 from .Reranking import (
+    BIRCODorisMaeReranking,  # Add these
+    BIRCOArguAnaReranking,
+    BIRCOClinicalTrialReranking,
+    BIRCOWhatsThatBookReranking,
+    BIRCORelicReranking,
     AlloprofReranking,
     AskUbuntuDupQuestions,
     CMedQAv1,
@@ -794,6 +799,11 @@ from .SummaryRetrieval import (
 )
 
 __all__ = [
+    "BIRCODorisMaeReranking",
+    "BIRCOArguAnaReranking",
+    "BIRCOClinicalTrialReranking", 
+    "BIRCOWhatsThatBookReranking",
+    "BIRCORelicReranking",
     "CLSClusteringFastP2P",
     "CLSClusteringFastS2S",
     "CLSClusteringP2P",
