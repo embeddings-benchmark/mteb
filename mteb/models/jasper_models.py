@@ -11,10 +11,9 @@ from sentence_transformers import SentenceTransformer
 
 import mteb
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.nvidia_models import nvidia_training_datasets
 from mteb.models.wrapper import Wrapper
-from mteb.model_meta import ModelMeta, ScoringFunction
 
 logger = logging.getLogger(__name__)
 

@@ -7,10 +7,10 @@ import numpy as np
 import torch
 
 from mteb.encoder_interface import Encoder, PromptType
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.repllama_models import RepLLaMAWrapper, model_prompts
 from mteb.models.wrapper import Wrapper
-from mteb.model_meta import ModelMeta, ScoringFunction
+
 logger = logging.getLogger(__name__)
 
 

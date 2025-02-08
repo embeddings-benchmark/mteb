@@ -12,11 +12,8 @@ from packaging.version import Version
 
 import mteb
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 from mteb.model_meta import ModelMeta, ScoringFunction
-
-from .sentence_transformer_wrapper import SentenceTransformerWrapper
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 
 logger = logging.getLogger(__name__)
 

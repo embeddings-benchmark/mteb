@@ -3,9 +3,8 @@ from __future__ import annotations
 from functools import partial
 
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
-from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
 from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
 from mteb.models.instruct_wrapper import instruct_wrapper
 
 

@@ -4,13 +4,12 @@ from __future__ import annotations
 
 from functools import partial
 
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
-from mteb.models.bge_models import bge_m3_training_data
 from mteb.model_meta import (
     ModelMeta,
     ScoringFunction,
     sentence_transformers_loader,
 )
+from mteb.models.bge_models import bge_m3_training_data
 
 rubert_tiny = ModelMeta(
     name="cointegrated/rubert-tiny",

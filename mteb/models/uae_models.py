@@ -9,9 +9,8 @@ import numpy as np
 import torch
 
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
-from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 
 logger = logging.getLogger(__name__)
 

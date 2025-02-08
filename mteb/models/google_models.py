@@ -8,9 +8,6 @@ import tqdm
 
 from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
-
-from .wrapper import Wrapper
-from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
 
 MULTILINGUAL_EVALUATED_LANGUAGES = [

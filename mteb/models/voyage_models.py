@@ -8,7 +8,6 @@ import numpy as np
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
-from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
 from mteb.requires_package import requires_package
 

@@ -4,17 +4,13 @@ from functools import partial
 
 import torch
 
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.e5_models import (
     E5_PAPER_RELEASE_DATE,
     E5_TRAINING_DATA,
     XLMR_LANGUAGES,
 )
 from mteb.models.instruct_wrapper import instruct_wrapper
-from mteb.model_meta import ModelMeta, ScoringFunction
-
-from .e5_models import E5_PAPER_RELEASE_DATE, E5_TRAINING_DATA, XLMR_LANGUAGES
-from .instruct_wrapper import instruct_wrapper
 
 MISTRAL_LANGUAGES = ["eng_Latn", "fra_Latn", "deu_Latn", "ita_Latn", "spa_Latn"]
 

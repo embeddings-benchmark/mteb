@@ -3,13 +3,9 @@ from __future__ import annotations
 import logging
 from functools import partial
 
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
 from mteb.models.instruct_wrapper import instruct_wrapper
-from mteb.model_meta import ModelMeta, ScoringFunction
-
-from .e5_models import E5_TRAINING_DATA
-from .instruct_wrapper import instruct_wrapper
 
 logger = logging.getLogger(__name__)
 

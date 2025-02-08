@@ -10,9 +10,6 @@ import torch
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
-
-from .wrapper import Wrapper
-from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
 
 logger = logging.getLogger(__name__)

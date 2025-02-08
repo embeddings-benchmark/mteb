@@ -7,9 +7,8 @@ from typing import Any
 import numpy as np
 import tqdm
 
-from mteb.model_meta import ModelMeta
-from mteb.models.wrapper import Wrapper
 from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.wrapper import Wrapper
 from mteb.requires_package import requires_package
 
 logger = logging.getLogger(__name__)

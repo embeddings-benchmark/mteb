@@ -2,11 +2,8 @@ from __future__ import annotations
 
 import logging
 
-from mteb.model_meta import ModelMeta
-from mteb.models.bge_models import bge_full_data
 from mteb.model_meta import ModelMeta, ScoringFunction
-
-from .bge_models import bge_full_data
+from mteb.models.bge_models import bge_full_data
 
 logger = logging.getLogger(__name__)
 

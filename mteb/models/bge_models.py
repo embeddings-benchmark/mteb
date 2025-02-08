@@ -2,15 +2,12 @@ from __future__ import annotations
 
 from functools import partial
 
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
-from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
 from mteb.model_meta import (
     ModelMeta,
     ScoringFunction,
     sentence_transformers_loader,
 )
-
-from .e5_instruct import E5_MISTRAL_TRAINING_DATA
+from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
 
 model_prompts = {"query": "Represent this sentence for searching relevant passages: "}
 BGE_15_CITATION = """@misc{bge_embedding,

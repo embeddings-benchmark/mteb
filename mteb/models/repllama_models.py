@@ -10,13 +10,11 @@ import tqdm
 from transformers import AutoModel, AutoTokenizer
 
 from mteb.encoder_interface import Encoder, PromptType
-from mteb.model_meta import ModelMeta
-from mteb.models.wrapper import Wrapper
 from mteb.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
-
+from mteb.models.wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
