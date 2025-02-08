@@ -12,18 +12,17 @@ from .AbsTaskRetrieval import AbsTaskRetrieval
 from .AbsTaskSpeedTask import AbsTaskSpeedTask
 from .AbsTaskSTS import AbsTaskSTS
 from .AbsTaskSummarization import AbsTaskSummarization
-
-# todo todo todo
-from .Image.AbsTaskAny2AnyMultiChoice import *
-from .Image.AbsTaskAny2AnyRetrieval import *
-from .Image.AbsTaskAny2TextMultipleChoice import *
-from .Image.AbsTaskImageClassification import *
-from .Image.AbsTaskImageClustering import *
-from .Image.AbsTaskImageMultilabelClassification import *
-from .Image.AbsTaskImageTextPairClassification import *
-from .Image.AbsTaskVisualSTS import *
-from .Image.AbsTaskZeroshotClassification import *
-from .MultilingualTask import *
+from .Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
+from .Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from .Image.AbsTaskAny2TextMultipleChoice import AbsTaskAny2TextMultipleChoice
+from .Image.AbsTaskImageClassification import AbsTaskImageClassification
+from .Image.AbsTaskImageClustering import AbsTaskImageClustering
+from .Image.AbsTaskImageMultilabelClassification import (
+    AbsTaskImageMultilabelClassification,
+)
+from .Image.AbsTaskImageTextPairClassification import AbsTaskImageTextPairClassification
+from .Image.AbsTaskVisualSTS import AbsTaskVisualSTS
+from .Image.AbsTaskZeroshotClassification import AbsTaskZeroshotClassification
 from .TaskMetadata import TaskMetadata
 
 __all__ = [
@@ -40,4 +39,13 @@ __all__ = [
     "AbsTaskSTS",
     "AbsTaskSummarization",
     "TaskMetadata",
+    "AbsTaskAny2AnyMultiChoice",
+    "AbsTaskAny2AnyRetrieval",
+    "AbsTaskAny2TextMultipleChoice",
+    "AbsTaskImageClassification",
+    "AbsTaskImageClustering",
+    "AbsTaskImageMultilabelClassification",
+    "AbsTaskImageTextPairClassification",
+    "AbsTaskVisualSTS",
+    "AbsTaskZeroshotClassification",
 ]
