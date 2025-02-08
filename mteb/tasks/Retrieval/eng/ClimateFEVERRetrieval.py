@@ -74,7 +74,7 @@ class ClimateFEVERHardNegatives(AbsTaskRetrieval):
     )
 
 
-class ClimateFEVERv2(AbsTaskRetrieval):
+class ClimateFEVERRetrievalv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="ClimateFEVER.v2",
         description="CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change. ",
