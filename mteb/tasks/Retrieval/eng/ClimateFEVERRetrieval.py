@@ -60,7 +60,7 @@ class ClimateFEVERHardNegatives(AbsTaskRetrieval):
         domains=None,
         task_subtypes=None,
         license=None,
-        annotations_creators=None,
+        annotations_creators="human-annotated",
         dialect=None,
         sample_creation=None,
         bibtex_citation="""@misc{diggelmann2021climatefever,
