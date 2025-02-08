@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from functools import partial
 
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerWrapper,
 )
@@ -122,7 +122,7 @@ all_MiniLM_L6_v2 = ModelMeta(
     license="apache-2.0",
     max_tokens=256,
     reference="https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,
@@ -144,7 +144,7 @@ all_MiniLM_L12_v2 = ModelMeta(
     license="apache-2.0",
     max_tokens=256,
     reference="https://huggingface.co/sentence-transformers/all-MiniLM-L12-v2",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,
@@ -166,7 +166,7 @@ paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,
@@ -188,7 +188,7 @@ paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,
@@ -221,7 +221,7 @@ labse = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/sentence-transformers/LaBSE",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,
@@ -251,7 +251,7 @@ multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/sentence-transformers/multi-qa-MiniLM-L6-cos-v1",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,
@@ -273,7 +273,7 @@ all_mpnet_base_v2 = ModelMeta(
     license="apache-2.0",
     max_tokens=384,
     reference="https://huggingface.co/sentence-transformers/all-mpnet-base-v2",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,
@@ -289,7 +289,7 @@ contriever = ModelMeta(
         SentenceTransformerWrapper,
         model="facebook/contriever-msmarco",
         revision="abe8c1493371369031bcb1e02acb754cf4e162fa",
-        similarity_fn_name="dot",
+        similarity_fn_name=ScoringFunction.DOT_PRODUCT,
     ),
     name="facebook/contriever-msmarco",
     languages=["eng-Latn"],
@@ -301,7 +301,7 @@ contriever = ModelMeta(
     license=None,
     max_tokens=512,
     reference="https://huggingface.co/facebook/contriever-msmarco",
-    similarity_fn_name="dot",
+    similarity_fn_name=ScoringFunction.DOT_PRODUCT,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     citation="""
@@ -328,7 +328,7 @@ microllama_text_embedding = ModelMeta(
     license="apache-2.0",
     max_tokens=2048,
     reference="https://huggingface.co/keeeeenw/MicroLlama-text-embedding",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,

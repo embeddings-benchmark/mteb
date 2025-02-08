@@ -9,7 +9,7 @@ import numpy as np
 import torch
 from sentence_transformers import __version__ as st_version
 
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 
 from ..encoder_interface import PromptType
 from .sentence_transformer_wrapper import SentenceTransformerWrapper
@@ -218,7 +218,7 @@ jina_embeddings_v3 = ModelMeta(
     max_tokens=8194,
     embed_dim=4096,
     license="cc-by-nc-4.0",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     reference="https://huggingface.co/jinaai/jina-embeddings-v3",
@@ -272,7 +272,7 @@ jina_embeddings_v2_base_en = ModelMeta(
     license="apache-2.0",
     max_tokens=8192,
     reference="https://huggingface.co/jinaai/jina-embeddings-v2-base-en",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,
@@ -299,7 +299,7 @@ jina_embeddings_v2_small_en = ModelMeta(
     license="apache-2.0",
     max_tokens=8192,
     reference="https://huggingface.co/jinaai/jina-embeddings-v2-small-en",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,
@@ -326,7 +326,7 @@ jina_embedding_b_en_v1 = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/jinaai/jina-embedding-b-en-v1",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by="jinaai/jina-embeddings-v2-base-en",
@@ -353,7 +353,7 @@ jina_embedding_s_en_v1 = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/jinaai/jina-embedding-s-en-v1",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by="jinaai/jina-embeddings-v2-small-en",

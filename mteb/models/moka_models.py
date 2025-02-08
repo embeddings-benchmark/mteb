@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 
 sent_trf_training_dataset = {
     # derived from datasheets
@@ -91,7 +91,7 @@ m3e_base = ModelMeta(
     license="unspecified-noncommercial",
     max_tokens=512,
     reference="https://huggingface.co/moka-ai/m3e-base",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,
@@ -113,7 +113,7 @@ m3e_small = ModelMeta(
     license="unspecified-noncommercial",
     max_tokens=512,
     reference="https://huggingface.co/moka-ai/m3e-small",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,
@@ -136,7 +136,7 @@ m3e_large = ModelMeta(
     license="unspecified-noncommercial",
     max_tokens=512,
     reference="https://huggingface.co/moka-ai/m3e-large",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,

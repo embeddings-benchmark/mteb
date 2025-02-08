@@ -4,7 +4,7 @@ import logging
 from functools import partial
 
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
 
 logger = logging.getLogger(__name__)
@@ -87,7 +87,7 @@ NV_embed_v2 = ModelMeta(
     license="cc-by-nc-4.0",
     max_tokens=32768,
     reference="https://huggingface.co/nvidia/NV-Embed-v2",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     training_datasets=nvidia_training_datasets,
@@ -117,7 +117,7 @@ NV_embed_v1 = ModelMeta(
     license="cc-by-nc-4.0",
     max_tokens=32768,
     reference="https://huggingface.co/nvidia/NV-Embed-v1",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     training_datasets=nvidia_training_datasets,

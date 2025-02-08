@@ -7,7 +7,7 @@ import numpy as np
 import torch
 
 from mteb.encoder_interface import Encoder, PromptType
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 
 from .wrapper import Wrapper
 
@@ -133,7 +133,7 @@ llm2vec_llama3_8b_supervised = ModelMeta(
     embed_dim=4096,
     license="mit",
     reference="https://huggingface.co/McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-supervised",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
@@ -160,7 +160,7 @@ llm2vec_llama3_8b_unsupervised = ModelMeta(
     embed_dim=4096,
     license="mit",
     reference="https://huggingface.co/McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-unsup-simcse",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
     citation=LLM2VEC_CITATION,
@@ -188,7 +188,7 @@ llm2vec_mistral7b_supervised = ModelMeta(
     embed_dim=4096,
     license="mit",
     reference="https://huggingface.co/McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp-supervised",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
     citation=LLM2VEC_CITATION,
@@ -215,7 +215,7 @@ llm2vec_mistral7b_unsupervised = ModelMeta(
     embed_dim=4096,
     license="mit",
     reference="https://huggingface.co/McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp-unsup-simcse",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
     citation=LLM2VEC_CITATION,
@@ -242,7 +242,7 @@ llm2vec_llama2_7b_supervised = ModelMeta(
     embed_dim=4096,
     license="mit",
     reference="https://huggingface.co/McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp-supervised",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
     citation=LLM2VEC_CITATION,
@@ -269,7 +269,7 @@ llm2vec_llama2_7b_unsupervised = ModelMeta(
     embed_dim=4096,
     license="mit",
     reference="https://huggingface.co/McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp-unsup-simcse",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
@@ -296,7 +296,7 @@ llm2vec_sheared_llama_supervised = ModelMeta(
     embed_dim=4096,
     license="mit",
     reference="https://huggingface.co/McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp-supervised",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
     citation=LLM2VEC_CITATION,
@@ -323,7 +323,7 @@ llm2vec_sheared_llama_unsupervised = ModelMeta(
     embed_dim=4096,
     license="mit",
     reference="https://huggingface.co/McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp-unsup-simcse",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
     citation=LLM2VEC_CITATION,

@@ -10,7 +10,10 @@ import tqdm
 from transformers import AutoModel, AutoTokenizer
 
 from mteb.encoder_interface import Encoder, PromptType
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import (
+    ModelMeta,
+    ScoringFunction,
+)
 
 from .wrapper import Wrapper
 
@@ -167,7 +170,7 @@ repllama_llama2_original = ModelMeta(
     embed_dim=4096,
     license="apache-2.0",
     reference="https://huggingface.co/samaya-ai/castorini/repllama-v1-7b-lora-passage",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
     citation=REPLLAMA_CITATION,
@@ -195,7 +198,7 @@ repllama_llama2_reproduced = ModelMeta(
     embed_dim=4096,
     license="apache-2.0",
     reference="https://huggingface.co/samaya-ai/RepLLaMA-reproduced",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
     citation=REPLLAMA_CITATION,
