@@ -63,6 +63,7 @@ from .eng.LEMBQMSumRetrieval import *
 from .eng.LEMBSummScreenFDRetrieval import *
 from .eng.LEMBWikimQARetrieval import *
 from .eng.LitSearchRetrieval import *
+from .eng.LoTTERetrieval import *
 from .eng.MedicalQARetrieval import *
 from .eng.MLQuestions import *
 from .eng.MSMARCORetrieval import *

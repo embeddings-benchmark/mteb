@@ -10,7 +10,6 @@ from mteb.abstasks.AbsTask import AbsTask
 from mteb.load_results.benchmark_results import BenchmarkResults
 from mteb.load_results.load_results import load_results
 from mteb.overview import MTEBTasks, get_task, get_tasks
-from mteb.tasks.Retrieval.eng.LoTTERetrieval import LoTTERetrieval
 
 http_url_adapter = TypeAdapter(AnyUrl)
 UrlString = Annotated[
@@ -1438,7 +1437,7 @@ BEIR_NL = Benchmark(
 
 MTEB_LOTTE = Benchmark(
     name="LoTTE",
-    tasks=MTEBTasks([LoTTERetrieval()]),
+    tasks=MTEBTasks(get_tasks(tasks=["LoTTE"])),
     description=(
         "LoTTE (Long-Tail Topic-stratified Evaluation for IR) is designed to evaluate retrieval models "
         "on underrepresented, long-tail topics. Unlike MSMARCO or BEIR, LoTTE features domain-specific queries and "
