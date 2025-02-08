@@ -29,6 +29,7 @@ from mteb.models import (
     e5_models,
     e5_v,
     evaclip_models,
+    fa_models,
     gme_models,
     google_models,
     gritlm_models,
@@ -132,6 +133,7 @@ model_modules = [
     text2vec_models,
     uae_models,
     voyage_models,
+    fa_models,
 ]
 MODEL_REGISTRY = {}
 
