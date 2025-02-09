@@ -1,7 +1,26 @@
-# BIRCO_Reranking.py
-
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.TaskMetadata import TaskMetadata
+
+# Optional: Extract the transformation logic as a function.
+def birco_transform(hf_dataset, default_instruction=""):
+    queries = {}
+    corpus = {}
+    qrels = {}
+    instructions = {}
+    
+    # For each record, build the standard dictionaries.
+    for record in hf_dataset:
+        qid = record["query_id"]
+        queries[qid] = record["query_text"]
+        qrels[qid] = record["relevance"]
+        # Use the provided default instruction.
+        instructions[qid] = default_instruction
+        for doc in record["corpus"]:
+            cid = doc["corpus_id"]
+            if cid not in corpus:
+                corpus[cid] = doc["corpus_text"]
+    return {"queries": queries, "corpus": corpus, "qrels": qrels, "instructions": instructions}
+
 
 class BIRCORerankingBase(AbsTaskReranking):
     """
@@ -15,24 +34,9 @@ class BIRCORerankingBase(AbsTaskReranking):
     Also uses an instruction stored in metadata (metadata.instruction).
     """
     def dataset_transform(self, hf_dataset):
-        queries = {}
-        corpus = {}
-        qrels = {}
-        instructions = {}
-        
-        # For each record, build the standard dictionaries.
-        for record in hf_dataset:
-            qid = record["query_id"]
-            queries[qid] = record["query_text"]
-            qrels[qid] = record["relevance"]
-            # Use the instruction defined in metadata (if provided); otherwise, use an empty string.
-            instructions[qid] = getattr(self.metadata, "instruction", "")
-            for doc in record["corpus"]:
-                cid = doc["corpus_id"]
-                if cid not in corpus:
-                    corpus[cid] = doc["corpus_text"]
-                    
-        return {"queries": queries, "corpus": corpus, "qrels": qrels, "instructions": instructions}
+        # Use the standalone function for easier debugging.
+        default_inst = getattr(self.metadata, "instruction", "")
+        return birco_transform(hf_dataset, default_inst)
 
 
 class BIRCODorisMaeReranking(BIRCORerankingBase):
@@ -50,7 +54,7 @@ class BIRCODorisMaeReranking(BIRCORerankingBase):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        dataset={"path": "mteb/BIRCO-DorisMae-Test", "revision": "latest"},
+        dataset={"path": "mteb/BIRCO-DorisMae-Test", "revision": "exact-commit-hash"},
         date=("2024-01-01", "2024-12-31"),
         domains=["Academic"],
         task_subtypes=["Information Retrieval", "Complex Query"],
@@ -65,7 +69,6 @@ class BIRCODorisMaeReranking(BIRCORerankingBase):
   howpublished={\\url{https://github.com/BIRCO-benchmark/BIRCO}},
 }"""
     )
-    # Add the task-specific instruction to metadata.
     metadata.instruction = (
         "The query communicates specific research requirements. "
         "Identify the abstract that best fulfills the research requirements described in the query."
@@ -87,7 +90,7 @@ class BIRCOArguAnaReranking(BIRCORerankingBase):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        dataset={"path": "mteb/BIRCO-ArguAna-Test", "revision": "latest"},
+        dataset={"path": "mteb/BIRCO-ArguAna-Test", "revision": "exact-commit-hash"},
         date=("2024-01-01", "2024-12-31"),
         domains=["Politics", "Debate"],
         task_subtypes=["Information Retrieval", "Counterargument Retrieval"],
@@ -121,7 +124,7 @@ class BIRCOClinicalTrialReranking(BIRCORerankingBase):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        dataset={"path": "mteb/BIRCO-ClinicalTrial-Test", "revision": "latest"},
+        dataset={"path": "mteb/BIRCO-ClinicalTrial-Test", "revision": "exact-commit-hash"},
         date=("2024-01-01", "2024-12-31"),
         domains=["Biomedical"],
         task_subtypes=["Information Retrieval", "Clinical Trial Matching"],
@@ -156,7 +159,7 @@ class BIRCOWhatsThatBookReranking(BIRCORerankingBase):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        dataset={"path": "mteb/BIRCO-WTB-Test", "revision": "latest"},
+        dataset={"path": "mteb/BIRCO-WTB-Test", "revision": "exact-commit-hash"},
         date=("2024-01-01", "2024-12-31"),
         domains=["Literature"],
         task_subtypes=["Information Retrieval", "Ambiguous Query Resolution"],
@@ -191,7 +194,7 @@ class BIRCORelicReranking(BIRCORerankingBase):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        dataset={"path": "mteb/BIRCO-Relic-Test", "revision": "latest"},
+        dataset={"path": "mteb/BIRCO-Relic-Test", "revision": "exact-commit-hash"},
         date=("2024-01-01", "2024-12-31"),
         domains=["Literature"],
         task_subtypes=["Information Retrieval", "Quotation Retrieval"],
