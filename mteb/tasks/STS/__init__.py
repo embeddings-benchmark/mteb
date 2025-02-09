@@ -2,12 +2,14 @@ from __future__ import annotations
 
 from .deu import GermanSTSBenchmarkSTS
 from .eng import (
+    FINAL,
     STS12STS,
     STS13STS,
     STS14STS,
     STS15STS,
     STS16STS,
     BiossesSTS,
+    FinSTS,
     SickrSTS,
     STSBenchmarkSTS,
 )
@@ -73,5 +75,6 @@ __all__ = [
     "RUParaPhraserSTS",
     "RuSTSBenchmarkSTS",
     "SickFrSTS",
+    "FINAL",
+    "FinSTS",
 ]
-

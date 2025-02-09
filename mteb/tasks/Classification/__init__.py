@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-
 from .ara import (
     AJGT,
     HotelReviewSentimentClassification,
@@ -97,7 +96,13 @@ from .eng import (
     Diversity5LegalBenchClassification,
     Diversity6LegalBenchClassification,
     EmotionClassification,
+    ESGClassification,
+    FinancialFraudClassification,
     FinancialPhrasebankClassification,
+    FinSentClassification,
+    FiQAClassification,
+    FLSClassification,
+    FOMCClassification,
     FrenkEnClassification,
     FunctionOfDecisionSectionLegalBenchClassification,
     ImdbClassification,
@@ -151,6 +156,7 @@ from .eng import (
     SCDDVerificationLegalBenchClassification,
     SDSEyeProtectionClassification,
     SDSGlovesClassification,
+    SemEva2017Classification,
     TelemarketingSalesRuleLegalBenchClassification,
     TextualismToolDictionariesLegalBenchClassification,
     TextualismToolPlainLegalBenchClassification,
@@ -309,12 +315,17 @@ from .ukr import UkrFormalityClassification
 from .urd import UrduRomanSentimentClassification
 from .vie import VieStudentFeedbackClassification
 from .zho import (
+    FinChinaSentimentClassification,
+    FinFEClassification,
+    FinNSPClassification,
     IFlyTek,
     JDReview,
     MultilingualSentiment,
     OnlineShopping,
+    OpenFinDataSentimentClassification,
     TNews,
     Waimai,
+    Weibo21Classification,
     YueOpenriceReviewClassification,
 )
 from .zul import IsiZuluNewsClassification
@@ -623,4 +634,16 @@ __all__ = [
     "HindiDiscourseClassification",
     "SentimentAnalysisHindi",
     "MalayalamNewsClassification",
+    "ESGClassification",
+    "FLSClassification",
+    "FOMCClassification",
+    "FiQAClassification",
+    "FinSentClassification",
+    "FinancialFraudClassification",
+    "SemEva2017Classification",
+    "FinChinaSentimentClassification",
+    "FinFEClassification",
+    "FinNSPClassification",
+    "OpenFinDataSentimentClassification",
+    "Weibo21Classification",
 ]

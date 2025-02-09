@@ -3,6 +3,7 @@ from __future__ import annotations
 from .AILACasedocsRetrieval import AILACasedocs
 from .AILAStatutesRetrieval import AILAStatutes
 from .AlphaNLIRetrieval import AlphaNLI
+from .Apple10KRetrieval import Apple10KRetrieval
 from .ARCChallengeRetrieval import ARCChallenge
 from .ArguAnaRetrieval import ArguAna
 from .BrightRetrieval import BrightRetrieval
@@ -25,8 +26,11 @@ from .DBPediaRetrieval import DBPedia, DBPediaHardNegatives
 from .FaithDialRetrieval import FaithDialRetrieval
 from .FeedbackQARetrieval import FeedbackQARetrieval
 from .FEVERRetrieval import FEVER, FEVERHardNegatives
+from .FinanceBenchRetrieval import FinanceBenchRetrieval
+from .FinQARetrieval import FinQARetrieval
 from .FiQA2018Retrieval import FiQA2018
 from .HagridRetrieval import HagridRetrieval
+from .HC3Retrieval import HC3Retrieval
 from .HellaSwagRetrieval import HellaSwag
 from .HotpotQARetrieval import HotpotQA, HotpotQAHardNegatives
 from .LegalBenchConsumerContractsQARetrieval import LegalBenchConsumerContractsQA
@@ -68,6 +72,7 @@ from .SCIDOCSRetrieval import SCIDOCS
 from .SciFactRetrieval import SciFact
 from .SiqaRetrieval import SIQA
 from .SpartQARetrieval import SpartQA
+from .TATQARetrieval import TATQARetrieval
 from .TempReasonL1Retrieval import TempReasonL1
 from .TempReasonL2ContextRetrieval import TempReasonL2Context
 from .TempReasonL2FactRetrieval import TempReasonL2Fact
@@ -75,12 +80,25 @@ from .TempReasonL2PureRetrieval import TempReasonL2Pure
 from .TempReasonL3ContextRetrieval import TempReasonL3Context
 from .TempReasonL3FactRetrieval import TempReasonL3Fact
 from .TempReasonL3PureRetrieval import TempReasonL3Pure
+from .TheGoldmanEnRetrieval import TheGoldmanEnRetrieval
 from .TopiOCQARetrieval import TopiOCQARetrieval, TopiOCQARetrievalHardNegatives
 from .Touche2020Retrieval import Touche2020, Touche2020v3Retrieval
+from .TradeTheEventEncyclopediaRetrieval import TradeTheEventEncyclopediaRetrieval
+from .TradeTheEventNewsRetrieval import TradeTheEventNewsRetrieval
 from .TRECCOVIDRetrieval import TRECCOVID
+from .USNewsRetrieval import USNewsRetrieval
 from .WinoGrandeRetrieval import WinoGrande
 
 __all__ = [
+    "Apple10KRetrieval",
+    "FinanceBenchRetrieval",
+    "FinQARetrieval",
+    "HC3Retrieval",
+    "TATQARetrieval",
+    "TheGoldmanEnRetrieval",
+    "TradeTheEventNewsRetrieval",
+    "TradeTheEventEncyclopediaRetrieval",
+    "USNewsRetrieval",
     "Quail",
     "Touche2020",
     "Touche2020v3Retrieval",
@@ -170,4 +188,3 @@ __all__ = [
     "LEMBNarrativeQARetrieval",
     "CQADupstackProgrammersRetrieval",
 ]
-

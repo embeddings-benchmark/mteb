@@ -86,9 +86,6 @@ class AbsTaskSummarization(AbsTask):
     reference_summaries_column: str = "human_summaries"
     generated_summaries_column: str = "machine_summaries"
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
     # SummEval has DeprecatedSummarizationEvaluator
     evaluator = SummarizationEvaluator
 

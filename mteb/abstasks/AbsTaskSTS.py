@@ -63,10 +63,6 @@ class AbsTaskSTS(AbsTask):
     abstask_prompt = "Retrieve semantically similar text."
     sentence_1_column: str = "sentence1"
     sentence_2_column: str = "sentence2"
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
     min_score: int
     max_score: int
 
@@ -101,12 +97,8 @@ class AbsTaskSTS(AbsTask):
             sentence2 = []
             score = []
             for hf_subset in self.metadata.eval_langs:
-                sentence1.extend(
-                    self.dataset[hf_subset][split][self.sentence_1_column]
-                )
-                sentence2.extend(
-                    self.dataset[hf_subset][split][self.sentence_2_column]
-                )
+                sentence1.extend(self.dataset[hf_subset][split][self.sentence_1_column])
+                sentence2.extend(self.dataset[hf_subset][split][self.sentence_2_column])
                 score.extend(self.dataset[hf_subset][split]["score"])
         else:
             sentence1 = self.dataset[split][self.sentence_1_column]
