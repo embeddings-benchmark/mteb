@@ -13,13 +13,6 @@ from huggingface_hub.errors import (
     SafetensorsParsingError,
 )
 from pydantic import BaseModel, ConfigDict, field_validator
-from huggingface_hub import get_safetensors_metadata
-from huggingface_hub.errors import (
-    GatedRepoError,
-    NotASafetensorsRepoError,
-    SafetensorsParsingError,
-)
-from pydantic import BaseModel, ConfigDict
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.TaskMetadata import STR_DATE, STR_URL
@@ -77,35 +70,35 @@ class ModelMeta(BaseModel):
     """The model metadata object.
 
     Attributes:
-        loader: the function that loads the model. If None it will just default to loading the model using the sentence transformer library.
-        name: The name of the model, ideally the name on huggingface.
-        n_parameters: The number of parameters in the model, e.g. 7_000_000 for a 7M parameter model. Can be None if the number of parameters is not known (e.g. for proprietary models) or
-            if the loader returns a SentenceTransformer model from which it can be derived.
-        memory_usage_mb: The memory usage of the model in MB. Can be None if the memory usage is not known (e.g. for proprietary models). To calculate it use the `calculate_memory_usage_mb` method.
-        max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
-            models).
-        embed_dim: The dimension of the embeddings produced by the model. Currently all models are assumed to produce fixed-size embeddings.
-        revision: The revision number of the model. If None, it is assumed that the metadata (including the loader) is valid for all revisions of the model.
-        release_date: The date the model's revision was released.
-        license: The license under which the model is released. Required if open_weights is True.
-        open_weights: Whether the model is open source or proprietary.
-        public_training_code: A link to the publicly available training code. If None, it is assumed that the training code is not publicly available.
-        public_training_data: A link to the publicly available training data. If None, it is assumed that the training data is not publicly available.
-        similarity_fn_name: The distance metric used by the model.
-        framework: The framework the model is implemented in, can be a list of frameworks e.g. `["Sentence Transformers", "PyTorch"]`.
-        reference: A URL to the model's page on huggingface or another source.
-        languages: The languages the model is intended to be specified as a 3-letter language code followed by a script code e.g., "eng-Latn" for English
-            in the Latin script.
-        use_instructions: Whether the model uses instructions E.g. for prompt-based models. This also includes models that require a specific format for
-            input, such as "query: {document}" or "passage: {document}".
-        training_datasets: A dictionary of datasets that the model was trained on. Names should be names as they appear in `mteb` for example
-\        citation: The citation for the model. This is a bibtex string.
-        training_datasets: A dictionary of datasets that the model was trained on. Names should be names as their appear in `mteb` for example
-            {"ArguAna": ["test"]} if the model is trained on the ArguAna test set. This field is used to determine if a model generalizes zero-shot to
-            a benchmark as well as mark dataset contaminations.
-        adapted_from: Name of the model from which this model is adapted. For quantizations, fine-tunes, long doc extensions, etc.
-        superseded_by: Name of the model that supersedes this model, e.g., nvidia/NV-Embed-v2 supersedes v1.
-        modalities: A list of strings representing the modalities the model supports. Default is ["text"].
+            loader: the function that loads the model. If None it will just default to loading the model using the sentence transformer library.
+            name: The name of the model, ideally the name on huggingface.
+            n_parameters: The number of parameters in the model, e.g. 7_000_000 for a 7M parameter model. Can be None if the number of parameters is not known (e.g. for proprietary models) or
+                if the loader returns a SentenceTransformer model from which it can be derived.
+            memory_usage_mb: The memory usage of the model in MB. Can be None if the memory usage is not known (e.g. for proprietary models). To calculate it use the `calculate_memory_usage_mb` method.
+            max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
+                models).
+            embed_dim: The dimension of the embeddings produced by the model. Currently all models are assumed to produce fixed-size embeddings.
+            revision: The revision number of the model. If None, it is assumed that the metadata (including the loader) is valid for all revisions of the model.
+            release_date: The date the model's revision was released.
+            license: The license under which the model is released. Required if open_weights is True.
+            open_weights: Whether the model is open source or proprietary.
+            public_training_code: A link to the publicly available training code. If None, it is assumed that the training code is not publicly available.
+            public_training_data: A link to the publicly available training data. If None, it is assumed that the training data is not publicly available.
+            similarity_fn_name: The distance metric used by the model.
+            framework: The framework the model is implemented in, can be a list of frameworks e.g. `["Sentence Transformers", "PyTorch"]`.
+            reference: A URL to the model's page on huggingface or another source.
+            languages: The languages the model is intended to be specified as a 3-letter language code followed by a script code e.g., "eng-Latn" for English
+                in the Latin script.
+            use_instructions: Whether the model uses instructions E.g. for prompt-based models. This also includes models that require a specific format for
+                input, such as "query: {document}" or "passage: {document}".
+            training_datasets: A dictionary of datasets that the model was trained on. Names should be names as they appear in `mteb` for example
+            citation: The citation for the model. This is a bibtex string.
+            training_datasets: A dictionary of datasets that the model was trained on. Names should be names as their appear in `mteb` for example
+                {"ArguAna": ["test"]} if the model is trained on the ArguAna test set. This field is used to determine if a model generalizes zero-shot to
+                a benchmark as well as mark dataset contaminations.
+            adapted_from: Name of the model from which this model is adapted. For quantizations, fine-tunes, long doc extensions, etc.
+            superseded_by: Name of the model that supersedes this model, e.g., nvidia/NV-Embed-v2 supersedes v1.
+            modalities: A list of strings representing the modalities the model supports. Default is ["text"].
     """
 
     model_config = ConfigDict(extra="forbid")
