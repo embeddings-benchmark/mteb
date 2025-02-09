@@ -312,5 +312,8 @@ sentence_t5_xxl = ModelMeta(
     use_instructions=False,
     public_training_code="https://arxiv.org/abs/2108.08877",
     public_training_data=None,
-    training_datasets={"Mixed NLI": ["train"]},
+    training_datasets={
+        "SNLI": ["train"],
+        "Community QA": ["train"]
+    } 
 )
