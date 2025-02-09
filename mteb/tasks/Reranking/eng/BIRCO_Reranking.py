@@ -7,13 +7,10 @@ def birco_transform(hf_dataset, default_instruction=""):
     corpus = {}
     qrels = {}
     instructions = {}
-    
-    # For each record, build the standard dictionaries.
     for record in hf_dataset:
         qid = record["query_id"]
         queries[qid] = record["query_text"]
         qrels[qid] = record["relevance"]
-        # Use the provided default instruction.
         instructions[qid] = default_instruction
         for doc in record["corpus"]:
             cid = doc["corpus_id"]
@@ -24,17 +21,10 @@ def birco_transform(hf_dataset, default_instruction=""):
 
 class BIRCORerankingBase(AbsTaskReranking):
     """
-    Base class for all BIRCO reranking tasks.
-    
-    Expects the Hugging Face dataset to have records with keys:
-      - "query_id": str
-      - "query_text": str
-      - "corpus": list of dicts (each with "corpus_id" and "corpus_text")
-      - "relevance": dict mapping corpus_id to an integer relevance score
-    Also uses an instruction stored in metadata (metadata.instruction).
+    Base class for BIRCO reranking tasks.
+    Uses a standard dataset transformation for BIRCO tasks.
     """
     def dataset_transform(self, hf_dataset):
-        # Use the standalone function for easier debugging.
         default_inst = getattr(self.metadata, "instruction", "")
         return birco_transform(hf_dataset, default_inst)
 
@@ -49,24 +39,24 @@ class BIRCODorisMaeReranking(BIRCORerankingBase):
         ),
         reference="https://github.com/BIRCO-benchmark/BIRCO",
         type="Reranking",
-        category="Academic",
+        category="s2p",  # Valid category (sentence-to-paragraph)
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        dataset={"path": "mteb/BIRCO-DorisMae-Test", "revision": "exact-commit-hash"},
+        dataset={"path": "mteb/BIRCO-DorisMae-Test", "revision": "27d9d0022ce22cc770ad0c6cefaf26674d5eb399"},
         date=("2024-01-01", "2024-12-31"),
-        domains=["Academic"],
-        task_subtypes=["Information Retrieval", "Complex Query"],
+        domains=["Academic"],  # TASK_DOMAIN accepts "Academic"
+        task_subtypes=["Scientific Reranking"],  # Valid subtype
         license="cc-by-4.0",
-        annotations_creators="BIRCO authors",
+        annotations_creators="expert-annotated",  # Valid annotator type
         dialect=[],
-        sample_creation="extracted",
+        sample_creation="found",  # Valid sample creation method
         bibtex_citation="""@misc{BIRCO,
   title={BIRCO: A Benchmark of Information Retrieval Tasks with Complex Objectives},
   author={Wang et al.},
   year={2024},
-  howpublished={\\url{https://github.com/BIRCO-benchmark/BIRCO}},
+  howpublished={\\url{https://github.com/BIRCO-benchmark/BIRCO}}
 }"""
     )
     metadata.instruction = (
@@ -85,24 +75,24 @@ class BIRCOArguAnaReranking(BIRCORerankingBase):
         ),
         reference="https://github.com/BIRCO-benchmark/BIRCO",
         type="Reranking",
-        category="Debate",
+        category="s2p",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        dataset={"path": "mteb/BIRCO-ArguAna-Test", "revision": "exact-commit-hash"},
+        dataset={"path": "mteb/BIRCO-ArguAna-Test", "revision": "76f66dcb0253bcacbbfeddce2a53041a765e048c"},
         date=("2024-01-01", "2024-12-31"),
-        domains=["Politics", "Debate"],
-        task_subtypes=["Information Retrieval", "Counterargument Retrieval"],
+        domains=["Debate"],
+        task_subtypes=["Reasoning as Retrieval"],  # Valid subtype
         license="cc-by-4.0",
-        annotations_creators="BIRCO authors",
+        annotations_creators="expert-annotated",
         dialect=[],
-        sample_creation="extracted",
+        sample_creation="found",
         bibtex_citation="""@misc{BIRCO,
   title={BIRCO: A Benchmark of Information Retrieval Tasks with Complex Objectives},
   author={Wang et al.},
   year={2024},
-  howpublished={\\url{https://github.com/BIRCO-benchmark/BIRCO}},
+  howpublished={\\url{https://github.com/BIRCO-benchmark/BIRCO}}
 }"""
     )
     metadata.instruction = (
@@ -115,28 +105,28 @@ class BIRCOClinicalTrialReranking(BIRCORerankingBase):
         name="BIRCO-ClinicalTrial",
         description=(
             "Retrieval task using the Clinical-Trial dataset from BIRCO. This dataset contains 50 queries that are patient case reports. "
-            "Each query has a candidate pool comprising 30-110 clinical trial descriptions. Relevance is graded (0, 1, 2), where 1 and 2 are relevant."
+            "Each query has a candidate pool comprising 30-110 clinical trial descriptions. Relevance is graded (0, 1, 2), where 1 and 2 are considered relevant."
         ),
         reference="https://github.com/BIRCO-benchmark/BIRCO",
         type="Reranking",
-        category="Biomedical",
+        category="s2p",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        dataset={"path": "mteb/BIRCO-ClinicalTrial-Test", "revision": "exact-commit-hash"},
+        dataset={"path": "mteb/BIRCO-ClinicalTrial-Test", "revision": "4f616dc0f2349ba3be31f3202ee4f3baef6438b6"},
         date=("2024-01-01", "2024-12-31"),
-        domains=["Biomedical"],
-        task_subtypes=["Information Retrieval", "Clinical Trial Matching"],
+        domains=["Medical"],  # Valid domain (Medical)
+        task_subtypes=["Article retrieval"],  # Valid subtype
         license="cc-by-4.0",
-        annotations_creators="BIRCO authors",
+        annotations_creators="expert-annotated",
         dialect=[],
-        sample_creation="extracted",
+        sample_creation="found",
         bibtex_citation="""@misc{BIRCO,
   title={BIRCO: A Benchmark of Information Retrieval Tasks with Complex Objectives},
   author={Wang et al.},
   year={2024},
-  howpublished={\\url{https://github.com/BIRCO-benchmark/BIRCO}},
+  howpublished={\\url{https://github.com/BIRCO-benchmark/BIRCO}}
 }"""
     )
     metadata.instruction = (
@@ -154,24 +144,24 @@ class BIRCOWhatsThatBookReranking(BIRCORerankingBase):
         ),
         reference="https://github.com/BIRCO-benchmark/BIRCO",
         type="Reranking",
-        category="Literature",
+        category="s2p",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        dataset={"path": "mteb/BIRCO-WTB-Test", "revision": "exact-commit-hash"},
+        dataset={"path": "mteb/BIRCO-WTB-Test", "revision": "acf9fc30a976378e7cd17a9c3f6c065c2b76e4b5"},
         date=("2024-01-01", "2024-12-31"),
-        domains=["Literature"],
-        task_subtypes=["Information Retrieval", "Ambiguous Query Resolution"],
+        domains=["Fiction"],  # Valid domain (Fiction)
+        task_subtypes=["Article retrieval"],  # Valid subtype
         license="cc-by-4.0",
-        annotations_creators="BIRCO authors",
+        annotations_creators="expert-annotated",
         dialect=[],
-        sample_creation="extracted",
+        sample_creation="found",
         bibtex_citation="""@misc{BIRCO,
   title={BIRCO: A Benchmark of Information Retrieval Tasks with Complex Objectives},
   author={Wang et al.},
   year={2024},
-  howpublished={\\url{https://github.com/BIRCO-benchmark/BIRCO}},
+  howpublished={\\url{https://github.com/BIRCO-benchmark/BIRCO}}
 }"""
     )
     metadata.instruction = (
@@ -183,30 +173,30 @@ class BIRCORelicReranking(BIRCORerankingBase):
     metadata = TaskMetadata(
         name="BIRCO-Relic",
         description=(
-            "Retrieval task using the RELIC dataset from BIRCO. This dataset contains 100 queries that are excerpts from literary analyses "
+            "Retrieval task using the RELIC dataset from BIRCO. This dataset contains 100 queries which are excerpts from literary analyses "
             "with a missing quotation (indicated by [masked sentence(s)]). Each query has a candidate pool of 50 passages. "
             "The objective is to retrieve the passage that best completes the literary analysis."
         ),
         reference="https://github.com/BIRCO-benchmark/BIRCO",
         type="Reranking",
-        category="Literature",
+        category="s2p",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        dataset={"path": "mteb/BIRCO-Relic-Test", "revision": "exact-commit-hash"},
+        dataset={"path": "mteb/BIRCO-Relic-Test", "revision": "f1f127af9f445ec706769f8491ea663525bb5c93"},
         date=("2024-01-01", "2024-12-31"),
-        domains=["Literature"],
-        task_subtypes=["Information Retrieval", "Quotation Retrieval"],
+        domains=["Fiction"],  # Valid domain
+        task_subtypes=["Article retrieval"],  # Valid subtype
         license="cc-by-4.0",
-        annotations_creators="BIRCO authors",
+        annotations_creators="expert-annotated",
         dialect=[],
-        sample_creation="extracted",
+        sample_creation="found",
         bibtex_citation="""@misc{BIRCO,
   title={BIRCO: A Benchmark of Information Retrieval Tasks with Complex Objectives},
   author={Wang et al.},
   year={2024},
-  howpublished={\\url{https://github.com/BIRCO-benchmark/BIRCO}},
+  howpublished={\\url{https://github.com/BIRCO-benchmark/BIRCO}}
 }"""
     )
     metadata.instruction = (
