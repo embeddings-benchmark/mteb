@@ -32,8 +32,7 @@ class LoTTERetrieval(AbsTaskRetrieval):
         category="s2s",
         reference="https://github.com/stanford-futuredata/ColBERT/blob/main/LoTTE.md",
         eval_splits=["test"],
-        eval_langs=["eng-Latn"],
-        eval_langs_per_domain={
+        eval_langs={
             "writing": ["eng-Latn"],
             "recreation": ["eng-Latn"],
             "science": ["eng-Latn"],
