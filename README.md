@@ -448,6 +448,23 @@ model_w_contamination = ModelMeta(
 </details>
 
 <details>
+  <summary>  Running the leaderboard locally </summary>
+
+
+### Running the Leaderboard
+
+It is possible to completely deploy the leaderboard locally or self-host it. This can e.g. be relevant for companies that might want to
+integrate build their own benchmarks or integrate custom tasks into existing benchmarks. 
+
+Running the leaderboard is quite easy. Simply run:
+```py
+python -m mteb.leaderboard.app
+
+The leaderboard requires gradio install, which can be installed using `pip install mteb[gradio]` and requires python >3.10.
+
+</details>
+
+<details>
   <summary>  Caching Embeddings To Re-Use Them </summary>
 
 
@@ -484,6 +501,7 @@ evaluation.run(model, ...)
 | 👩‍💻 [Adding a benchmark]     | How to add a new benchmark to MTEB and to the leaderboard                           |
 | 🤝 [Contributing]              | How to contribute to MTEB and set it up for development                             |
 | 🌐 [MMTEB]                     | An open-source effort to extend MTEB to cover a broad set of languages              |
+| 🖼️ [MIEB]                      | Extension of MTEB to image embeddings |
 
 [Tasks]: docs/tasks.md
 [Benchmarks]: docs/benchmarks.md
@@ -493,6 +511,7 @@ evaluation.run(model, ...)
 [Adding a benchmark]: docs/adding_a_benchmark.md
 [Leaderboard]: https://huggingface.co/spaces/mteb/leaderboard
 [MMTEB]: docs/mmteb/readme.md
+[MIEB]: docs/mieb.md
 [Reproducible workflows]: docs/reproducible_workflow.md
 
 ## Citing

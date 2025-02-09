@@ -29,6 +29,7 @@ text2vec_base_chinese = ModelMeta(
         # - shibing624/nli-zh-all/text2vec-base-chinese-sentence-dataset
         # (Could have overlaps I'm not aware of)
     },
+    memory_usage_mb=390,
 )
 
 text2vec_base_chinese_paraphrase = ModelMeta(
@@ -38,6 +39,7 @@ text2vec_base_chinese_paraphrase = ModelMeta(
     revision="e90c150a9c7fb55a67712a766d6820c55fb83cdd",
     release_date="2023-06-19",
     n_parameters=118 * 1e6,
+    memory_usage_mb=450,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,
@@ -80,6 +82,7 @@ text2vec_base_multilingual = ModelMeta(
     # So probably best not to.
     loader=None,
     n_parameters=118 * 1e6,
+    memory_usage_mb=449,
     embed_dim=384,
     license="apache-2.0",
     max_tokens=256,

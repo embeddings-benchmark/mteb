@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 from mteb.model_meta import ModelMeta, ScoringFunction
-
-from .bge_models import bge_full_data
+from mteb.models.bge_models import bge_full_data
 
 lens_d4000 = ModelMeta(
     loader=None,  # TODO: implement this in the future
@@ -12,6 +11,7 @@ lens_d4000 = ModelMeta(
     revision="e473b33364e6c48a324796fd1411d3b93670c6fe",
     release_date="2025-01-17",
     n_parameters=int(7.11 * 1e9),
+    memory_usage_mb=27125,
     embed_dim=4000,
     license="apache-2.0",
     reference="https://huggingface.co/yibinlei/LENS-d4000",
@@ -32,6 +32,7 @@ lens_d8000 = ModelMeta(
     revision="a0b87bd91cb27b6f2f0b0fe22c28026da1d464ef",
     release_date="2025-01-17",
     n_parameters=int(7.11 * 1e9),
+    memory_usage_mb=27125,
     embed_dim=8000,
     license="apache-2.0",
     reference="https://huggingface.co/yibinlei/LENS-d8000",

@@ -46,7 +46,7 @@ class BrightRetrieval(AbsTaskRetrieval):
         eval_langs=DOMAINS_langs,
         main_score="ndcg_at_10",
         date=("2024-03-01", "2024-06-01"),
-        domains=["Written", "Non-fiction"],
+        domains=["Non-fiction", "Written"],
         task_subtypes=["Article retrieval"],
         license="cc-by-4.0",
         annotations_creators="derived",

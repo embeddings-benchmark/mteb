@@ -29,13 +29,7 @@ class Farsick(AbsTaskSTS):
         sample_creation="found",
         bibtex_citation=""" """,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 1
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 1
 
 
 class SynPerSTS(AbsTaskSTS):
@@ -62,13 +56,7 @@ class SynPerSTS(AbsTaskSTS):
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 1
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 1
 
 
 class Query2Query(AbsTaskSTS):
@@ -95,10 +83,5 @@ class Query2Query(AbsTaskSTS):
         sample_creation="found",
         bibtex_citation=""" """,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 2
-        return metadata_dict
+    min_score = 0
+    max_score = 2

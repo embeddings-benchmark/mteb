@@ -10,8 +10,7 @@ import torch
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
-
-from .wrapper import Wrapper
+from mteb.models.wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
@@ -159,6 +158,7 @@ colbert_v2 = ModelMeta(
     public_training_data=None,
     release_date="2024-09-21",
     n_parameters=110 * 1e6,
+    memory_usage_mb=418,
     max_tokens=180,  # Reduced for Benchmarking - see ColBERT paper
     embed_dim=None,  # Bag of Embeddings (128) for each token
     license="mit",
@@ -170,9 +170,9 @@ colbert_v2 = ModelMeta(
     superseded_by=None,
     training_datasets={
         "MSMARCO": ["train"],  # dev?
+        "mMARCO-NL": ["train"],  # translation not trained on
     },
 )
-
 
 jina_colbert_v2 = ModelMeta(
     loader=partial(
@@ -214,6 +214,7 @@ jina_colbert_v2 = ModelMeta(
     public_training_data=None,
     release_date="2024-08-16",
     n_parameters=559 * 1e6,
+    memory_usage_mb=1067,
     max_tokens=8192,
     embed_dim=None,  # Bag of Embeddings (128) for each token
     license="cc-by-nc-4.0",
@@ -225,6 +226,7 @@ jina_colbert_v2 = ModelMeta(
     superseded_by=None,
     training_datasets={
         "MSMARCO": ["train"],
+        "mMARCO-NL": ["train"],  # translation not trained on
         "DuRetrieval": [],
         "MIRACL": ["train"],
     },

@@ -13,16 +13,23 @@ from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.AbsTaskSpeedTask import AbsTaskSpeedTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
+from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
+from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.overview import TASKS_REGISTRY, get_tasks
 
-from ..test_benchmark.task_grid import MOCK_TASK_TEST_GRID_AS_STRING
+from ..test_benchmark.task_grid import (
+    MOCK_MIEB_TASK_GRID_AS_STRING,
+    MOCK_TASK_TEST_GRID_AS_STRING,
+)
 
 logging.basicConfig(level=logging.INFO)
+
+ALL_MOCK_TASKS = MOCK_TASK_TEST_GRID_AS_STRING + MOCK_MIEB_TASK_GRID_AS_STRING
 
 tasks = [
     t
     for t in get_tasks(exclude_superseded=False)
-    if t.metadata.name not in MOCK_TASK_TEST_GRID_AS_STRING
+    if t.metadata.name not in ALL_MOCK_TASKS
 ]
 
 
@@ -36,7 +43,9 @@ def test_load_data(
     if (
         isinstance(task, AbsTaskRetrieval)
         or isinstance(task, AbsTaskReranking)
+        or isinstance(task, AbsTaskAny2AnyRetrieval)
         or isinstance(task, AbsTaskSpeedTask)
+        or isinstance(task, AbsTaskAny2AnyMultiChoice)
         or task.metadata.is_multilingual
     ):
         pytest.skip()
@@ -101,7 +110,7 @@ def test_dataset_availability():
         if t.metadata.name != "AfriSentiLangClassification"
         # do not check aggregated tasks as they don't have a dataset
         and not isinstance(t, AbsTaskAggregate)
-        and t.metadata.name not in MOCK_TASK_TEST_GRID_AS_STRING
+        and t.metadata.name not in ALL_MOCK_TASKS
     ]
     asyncio.run(check_datasets_are_available_on_hf(tasks))
 

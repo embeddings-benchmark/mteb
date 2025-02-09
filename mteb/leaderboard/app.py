@@ -5,7 +5,6 @@ import json
 import logging
 import tempfile
 import time
-import typing
 from pathlib import Path
 from typing import Literal
 from urllib.parse import urlencode
@@ -15,12 +14,45 @@ import pandas as pd
 from gradio_rangeslider import RangeSlider
 
 import mteb
-from mteb.abstasks.TaskMetadata import TASK_TYPE
 from mteb.caching import json_cache
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
 from mteb.leaderboard.table import scores_to_tables
 
 logger = logging.getLogger(__name__)
+
+acknowledgment_md = """
+### Acknowledgment
+We thank [ServiceNow](https://www.servicenow.com/), [Contextual AI](https://contextual.ai/) and [Hugging Face](https://huggingface.co/) for their generous sponsorship. If you'd like to sponsor us, please get in [touch](mailto:n.muennighoff@gmail.com).
+
+<div class="sponsor-image-about" style="display: flex; align-items: center; gap: 10px;">
+    <a href="https://www.servicenow.com/">
+        <img src="https://play-lh.googleusercontent.com/HdfHZ5jnfMM1Ep7XpPaVdFIVSRx82wKlRC_qmnHx9H1E4aWNp4WKoOcH0x95NAnuYg" width="60" height="55" style="padding: 10px;">
+    </a>
+    <a href="https://contextual.ai/">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQd4EDMoZLFRrIjVBrSXOQYGcmvUJ3kL4U2usvjuKPla-LoRTZtLzFnb_Cu5tXzRI7DNBo&usqp=CAU" width="60" height="55" style="padding: 10px;">
+    </a>
+    <a href="https://huggingface.co">
+        <img src="https://raw.githubusercontent.com/embeddings-benchmark/mteb/main/docs/images/hf_logo.png" width="60" height="55" style="padding: 10px;">
+    </a>
+</div>
+
+We also thank the following companies which provide API credits to evaluate their models: [OpenAI](https://openai.com/), [Voyage AI](https://www.voyageai.com/)
+"""
+
+MMTEB_TASK_TYPES = [  # TEMPORARY FIX: when adding MIEB to the leaderboard, this can probably be replaced with TASK_TYPE
+    "BitextMining",
+    "Classification",
+    "MultilabelClassification",
+    "Clustering",
+    "PairClassification",
+    "Reranking",
+    "Retrieval",
+    "STS",
+    "Summarization",
+    "InstructionRetrieval",
+    "Speed",
+]
+
 
 ALL_MODELS = {meta.name for meta in mteb.get_model_metas()}
 
@@ -124,7 +156,7 @@ def update_task_info(task_names: str) -> gr.DataFrame:
 
 
 # Model sizes in million parameters
-MIN_MODEL_SIZE, MAX_MODEL_SIZE = 0, 10_000
+MIN_MODEL_SIZE, MAX_MODEL_SIZE = 0, 100_000
 
 
 def filter_models(
@@ -138,11 +170,14 @@ def filter_models(
 ):
     lower, upper = model_size
     # Setting to None, when the user doesn't specify anything
-    if (lower == MIN_MODEL_SIZE) and (upper == MAX_MODEL_SIZE):
-        lower, upper = None, None
+    if (lower == MIN_MODEL_SIZE) or (lower is None):
+        lower = None
     else:
         # Multiplying by millions
         lower = lower * 1e6
+    if (upper == MIN_MODEL_SIZE) or (upper is None):
+        upper = None
+    else:
         upper = upper * 1e6
     model_metas = mteb.get_model_metas(
         model_names=model_names,
@@ -168,7 +203,7 @@ def filter_models(
 logger.info("Loading all benchmark results")
 all_results = load_results()
 
-benchmarks = mteb.get_benchmarks()
+benchmarks = sorted(mteb.get_benchmarks(), key=lambda x: x.name)
 all_benchmark_results = {
     benchmark.name: benchmark.load_results(base_results=all_results).join_revisions()
     for benchmark in benchmarks
@@ -208,7 +243,7 @@ lang_select = gr.Dropdown(
 )
 type_select = gr.Dropdown(
     all_results.task_types,
-    value=sorted(typing.get_args(TASK_TYPE)),
+    value=sorted(MMTEB_TASK_TYPES),
     multiselect=True,
     label="Task Type",
     info="Select task types to include.",
@@ -234,11 +269,15 @@ head = """
 """
 
 with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
-    gr.Markdown("""
+    gr.Markdown(
+        """
     ## MMTEB: Massive Multilingual Text Embedding Benchmark
 
     The MMTEB leaderboard compares text embedding models on 1000+ languages. Check out the [paper](https://openreview.net/pdf?id=zl3pfz4VCV) for details on datasets, languages and tasks. And you can contribute! 🤗 To add a model, please refer to the documentation in the [GitHub repository](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_model.md). Also check out [MTEB Arena](https://huggingface.co/spaces/mteb/arena) ⚔️
-    """)
+    
+    > Looking for the previous MTEB leaderboard? We have made it available [here](https://huggingface.co/spaces/mteb/leaderboard_legacy). Though it will no longer be updated.
+    """
+    )
 
     with gr.Row():
         with gr.Column(scale=5):
@@ -326,7 +365,6 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                             maximum=MAX_MODEL_SIZE,
                             value=(MIN_MODEL_SIZE, MAX_MODEL_SIZE),
                             label="Model Size (#M Parameters)",
-                            interactive=True,
                         )
     scores = gr.State(default_scores)
     models = gr.State(filtered_models)
@@ -363,6 +401,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
         download_summary.click(
             download_table, inputs=[summary_table], outputs=[download_summary]
         )
+
         with gr.Accordion(
             "What do aggregate measures (Rank(Borda), Mean(Task), etc.) mean?",
             open=False,
@@ -385,8 +424,26 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
 A model is considered zero-shot if it is not trained on any splits of the datasets used to derive the tasks.
 E.g., if a model is trained on Natural Questions, it cannot be considered zero-shot on benchmarks containing the task “NQ” which is derived from Natural Questions.
 This definition creates a few edge cases. For instance, multiple models are typically trained on Wikipedia title and body pairs, but we do not define this as leakage on, e.g., “WikipediaRetrievalMultilingual” and “WikiClusteringP2P” as these datasets are not based on title-body pairs.
-Distilled, further fine-tunes or in other ways, derivative models inherit the datasets of their parent models.
+Distilled, further fine-tunes, or in other ways, derivative models inherit the datasets of their parent models.
 Based on community feedback and research findings, This definition could change in the future.
+            """
+            )
+        with gr.Accordion(
+            "Why is a model missing or not showing up?",
+            open=False,
+        ):
+            gr.Markdown(
+                """
+Possible reasons why a model may not show up in the leaderboard:
+
+- **Filter Setting**: It is being filtered out with your current filter. By default, we do not show models that are not zero-shot on the benchmark. 
+You can change this setting in the model selection panel.
+- **Missing Results**: The model may not have been run on the tasks in the benchmark. We only display models that have been run on at least one task 
+in the benchmark. For visualizations that require the mean across all tasks, we only display models that have been run on all tasks in the benchmark. 
+You can see existing results in the [results repository](https://github.com/embeddings-benchmark/results). This is also where new results are added via PR.
+- **Missing Metadata**: Currently, we only show models for which we have metadata in [mteb](https://github.com/embeddings-benchmark/mteb).
+You can follow this guide on how to add a [model](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_model.md) and 
+see existing implementations [here](https://github.com/embeddings-benchmark/mteb/tree/main/mteb/models).
             """
             )
     with gr.Tab("Performance per task"):
@@ -571,7 +628,7 @@ Based on community feedback and research findings, This definition could change 
         ],
         outputs=[models],
     )
-    model_size.input(
+    model_size.change(
         update_models,
         inputs=[
             scores,
@@ -640,6 +697,7 @@ Based on community feedback and research findings, This definition could change 
         outputs=[summary_table, per_task_table],
     )
 
+    gr.Markdown(acknowledgment_md, elem_id="ack_markdown")
 
 if __name__ == "__main__":
     demo.launch()

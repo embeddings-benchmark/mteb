@@ -12,6 +12,17 @@ from .AbsTaskRetrieval import AbsTaskRetrieval
 from .AbsTaskSpeedTask import AbsTaskSpeedTask
 from .AbsTaskSTS import AbsTaskSTS
 from .AbsTaskSummarization import AbsTaskSummarization
+from .Image import (
+    AbsTaskAny2AnyMultiChoice,
+    AbsTaskAny2AnyRetrieval,
+    AbsTaskAny2TextMultipleChoice,
+    AbsTaskImageClassification,
+    AbsTaskImageClustering,
+    AbsTaskImageMultilabelClassification,
+    AbsTaskImageTextPairClassification,
+    AbsTaskVisualSTS,
+    AbsTaskZeroshotClassification,
+)
 from .TaskMetadata import TaskMetadata
 
 __all__ = [
@@ -28,4 +39,13 @@ __all__ = [
     "AbsTaskSTS",
     "AbsTaskSummarization",
     "TaskMetadata",
+    "AbsTaskAny2AnyMultiChoice",
+    "AbsTaskAny2AnyRetrieval",
+    "AbsTaskAny2TextMultipleChoice",
+    "AbsTaskImageClassification",
+    "AbsTaskImageClustering",
+    "AbsTaskImageMultilabelClassification",
+    "AbsTaskImageTextPairClassification",
+    "AbsTaskVisualSTS",
+    "AbsTaskZeroshotClassification",
 ]
