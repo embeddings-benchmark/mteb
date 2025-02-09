@@ -5,7 +5,6 @@ from collections import defaultdict
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 DOMAINS_LONG = [
@@ -32,7 +31,7 @@ DOMAINS_langs = {split: ["eng-Latn"] for split in DOMAINS}
 EVAL_SPLITS = ["standard", "long"]
 
 
-class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
+class BrightRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightRetrieval",
         dataset={
@@ -40,18 +39,16 @@ class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
             "revision": "a75a0eb",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
-        description=("Bright retrieval dataset."),
+        description="Bright retrieval dataset.",
         type="Retrieval",
         category="s2p",
         eval_splits=EVAL_SPLITS,
         eval_langs=DOMAINS_langs,
         main_score="ndcg_at_10",
         date=("2024-03-01", "2024-06-01"),
-        form=["written"],
-        domains=["Non-fiction"],
+        domains=["Non-fiction", "Written"],
         task_subtypes=["Article retrieval"],
         license="cc-by-4.0",
-        socioeconomic_status="low",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
@@ -67,13 +64,6 @@ class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
     url={https://arxiv.org/abs/2407.12883}, 
 }
         """,
-        descriptive_stats={
-            "n_samples": {"standard": 1334914, "long": 7048},
-            "avg_character_length": {
-                "standard": 800.3994729248476,
-                "long": 46527.35839954597,
-            },
-        },
     )
 
     def load_bright_data(
@@ -139,10 +129,10 @@ class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = self.load_bright_data(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             domains=DOMAINS,
-            eval_splits=self.metadata_dict["eval_splits"],
+            eval_splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
         self.data_loaded = True

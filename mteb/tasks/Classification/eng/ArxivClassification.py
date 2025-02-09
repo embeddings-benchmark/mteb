@@ -9,9 +9,8 @@ class ArxivClassification(AbsTaskClassification):
         name="ArxivClassification",
         description="Classification Dataset of Arxiv Papers",
         dataset={
-            "path": "ccdv/arxiv-classification",
-            "revision": "f9bd92144ed76200d6eb3ce73a8bd4eba9ffdc85",
-            "trust_remote_code": True,
+            "path": "mteb/ArxivClassification",
+            "revision": "5e80893bf045abefbf8cbe5d713bddc91ae158d5",
         },
         reference="https://ieeexplore.ieee.org/document/8675939",
         type="Classification",
@@ -37,5 +36,4 @@ class ArxivClassification(AbsTaskClassification):
         pages={40707-40718},
         doi={10.1109/ACCESS.2019.2907992}
         }""",
-        descriptive_stats={"n_samples": {"test": 2048}, "avg_character_length": {}},
     )

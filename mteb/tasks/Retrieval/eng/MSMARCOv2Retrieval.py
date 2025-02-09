@@ -21,12 +21,23 @@ class MSMARCOv2(AbsTaskRetrieval):
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
+        domains=[
+            "Encyclopaedic",
+            "Academic",
+            "Blog",
+            "News",
+            "Medical",
+            "Government",
+            "Reviews",
+            "Non-fiction",
+            "Social",
+            "Web",
+        ],
+        task_subtypes=["Question answering"],
+        license="msr-la-nc",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
         bibtex_citation="""@article{DBLP:journals/corr/NguyenRSGTMD16,
           author    = {Tri Nguyen and
                        Mir Rosenberg and
@@ -47,5 +58,4 @@ class MSMARCOv2(AbsTaskRetrieval):
           bibsource = {dblp computer science bibliography, https://dblp.org}
         }
         }""",
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )

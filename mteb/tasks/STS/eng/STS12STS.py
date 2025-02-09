@@ -6,6 +6,9 @@ from ....abstasks.AbsTaskSTS import AbsTaskSTS
 
 
 class STS12STS(AbsTaskSTS):
+    min_score = 0
+    max_score = 5
+
     metadata = TaskMetadata(
         name="STS12",
         dataset={
@@ -40,20 +43,4 @@ numpages = {9},
 location = {Montr\'{e}al, Canada},
 series = {SemEval '12}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 6216},
-            "test": {
-                "num_samples": 3108,
-                "average_sentence1_len": 63.78893178893179,
-                "average_sentence2_len": 65.5926640926641,
-                "avg_score": 3.5060643500643507,
-            },
-        },
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict

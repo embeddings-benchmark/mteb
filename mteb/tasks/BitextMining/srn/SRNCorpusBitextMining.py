@@ -5,7 +5,6 @@ from typing import Any
 import datasets
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -23,7 +22,7 @@ _EVAL_LANGS = {
 }
 
 
-class SRNCorpusBitextMining(AbsTaskBitextMining, MultilingualTask):
+class SRNCorpusBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="SRNCorpusBitextMining",
         dataset={
@@ -46,10 +45,6 @@ class SRNCorpusBitextMining(AbsTaskBitextMining, MultilingualTask):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        descriptive_stats={
-            "n_samples": {"test": _N},
-            "avg_character_length": {"test": 55},
-        },
         bibtex_citation="""
 @article{zwennicker2022towards,
   title={Towards a general purpose machine translation system for Sranantongo},
@@ -75,7 +70,7 @@ class SRNCorpusBitextMining(AbsTaskBitextMining, MultilingualTask):
             dataset = datasets.load_dataset(
                 name="srn-nl_other",
                 split="test",
-                **self.metadata_dict["dataset"],
+                **self.metadata.dataset,
             ).map(lambda batch: _clean_columns(batch, ["nl", "srn"]), batched=True)
             dataset = dataset.rename_columns(
                 {_LANGUAGES[l1]: "sentence1", _LANGUAGES[l2]: "sentence2"}

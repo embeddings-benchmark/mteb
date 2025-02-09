@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class SwissJudgementClassification(MultilingualTask, AbsTaskClassification):
+class SwissJudgementClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="SwissJudgementClassification",
         description="Multilingual, diachronic dataset of Swiss Federal Supreme Court cases annotated with the respective binarized judgment outcome (approval/dismissal)",
@@ -43,10 +42,6 @@ class SwissJudgementClassification(MultilingualTask, AbsTaskClassification):
     primaryClass={cs.CL}
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 2048},
-            "avg_character_length": {"test": 3411.72},
-        },
     )
 
     def dataset_transform(self):
@@ -59,7 +54,6 @@ class SwissJudgementClassification(MultilingualTask, AbsTaskClassification):
                 seed=42,
                 splits=["test"],
                 label="label",
-                n_samples=min(2048, len(dataset["text"])) - 2,
             )
 
             self.dataset[lang]["test"] = subsampled_dataset_dict["test"]

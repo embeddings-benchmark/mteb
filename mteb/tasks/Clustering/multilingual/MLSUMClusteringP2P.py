@@ -6,7 +6,6 @@ from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -21,7 +20,7 @@ _LANGUAGES = {
 N_SAMPLES = 2048
 
 
-class MLSUMClusteringP2P(AbsTaskClustering, MultilingualTask):
+class MLSUMClusteringP2P(AbsTaskClustering):
     superseded_by = "MLSUMClusteringP2P.v2"
     metadata = TaskMetadata(
         name="MLSUMClusteringP2P",
@@ -50,10 +49,6 @@ class MLSUMClusteringP2P(AbsTaskClustering, MultilingualTask):
         journal={arXiv preprint arXiv:2004.14900},
         year={2020}
         }""",
-        descriptive_stats={
-            "n_samples": {"validation": 38561, "test": 41206},
-            "avg_character_length": {"validation": 4613, "test": 4810},
-        },
     )
 
     def load_data(self, **kwargs):
@@ -64,7 +59,7 @@ class MLSUMClusteringP2P(AbsTaskClustering, MultilingualTask):
         for lang in self.hf_subsets:
             self.dataset[lang] = datasets.load_dataset(
                 name=lang,
-                **self.metadata_dict["dataset"],
+                **self.metadata.dataset,
             )
             self.dataset_transform(lang)
         self.data_loaded = True
@@ -93,7 +88,7 @@ class MLSUMClusteringP2P(AbsTaskClustering, MultilingualTask):
         self.dataset[lang] = _dataset
 
 
-class MLSUMClusteringP2PFast(AbsTaskClusteringFast, MultilingualTask):
+class MLSUMClusteringP2PFast(AbsTaskClusteringFast):
     max_document_to_embed = N_SAMPLES
     max_fraction_of_documents_to_embed = None
 
@@ -124,10 +119,6 @@ class MLSUMClusteringP2PFast(AbsTaskClusteringFast, MultilingualTask):
         journal={arXiv preprint arXiv:2004.14900},
         year={2020}
         }""",
-        descriptive_stats={
-            "n_samples": {"validation": N_SAMPLES, "test": N_SAMPLES},
-            "avg_character_length": {"validation": 4613, "test": 4810},
-        },
     )
 
     def load_data(self, **kwargs):
@@ -138,7 +129,7 @@ class MLSUMClusteringP2PFast(AbsTaskClusteringFast, MultilingualTask):
         for lang in self.hf_subsets:
             self.dataset[lang] = datasets.load_dataset(
                 name=lang,
-                **self.metadata_dict["dataset"],
+                **self.metadata.dataset,
             )
             self.dataset_transform(lang)
         self.data_loaded = True

@@ -11,9 +11,8 @@ class NQPL(AbsTaskRetrieval):
         description="Natural Questions: A Benchmark for Question Answering Research",
         reference="https://ai.google.com/research/NaturalQuestions/",
         dataset={
-            "path": "clarin-knext/nq-pl",
-            "revision": "f171245712cf85dd4700b06bef18001578d0ca8d",
-            "trust_remote_code": True,
+            "path": "mteb/NQ-PL",
+            "revision": "b784c0399830a24e4ce0f9df2bb5b6be7fc8b246",
         },
         type="Retrieval",
         category="s2p",
@@ -36,18 +35,6 @@ class NQPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 502.14302128535564,
-                    "average_query_length": 48.31662804171495,
-                    "num_documents": 2681468,
-                    "num_queries": 3452,
-                    "average_relevant_docs_per_query": 1.2169756662804172,
-                }
-            },
-        },
     )
 
 
@@ -82,16 +69,4 @@ class NQPLHardNegatives(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 1000},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 610.7449138094336,
-                    "average_query_length": 48.381,
-                    "num_documents": 184765,
-                    "num_queries": 1000,
-                    "average_relevant_docs_per_query": 1.213,
-                }
-            },
-        },
     )

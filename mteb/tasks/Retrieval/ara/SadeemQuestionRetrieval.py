@@ -38,23 +38,19 @@ class SadeemQuestionRetrieval(AbsTaskRetrieval):
             author = "abubakr.soliman@sadeem.app"
             }
         """,
-        descriptive_stats={
-            "n_samples": {_EVAL_SPLIT: 22979},
-            "avg_character_length": {_EVAL_SPLIT: 500.0},
-        },
     )
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
 
-        query_list = datasets.load_dataset(**self.metadata_dict["dataset"])["queries"]
+        query_list = datasets.load_dataset(**self.metadata.dataset)["queries"]
         queries = {row["query-id"]: row["text"] for row in query_list}
 
-        corpus_list = datasets.load_dataset(**self.metadata_dict["dataset"])["corpus"]
+        corpus_list = datasets.load_dataset(**self.metadata.dataset)["corpus"]
         corpus = {row["corpus-id"]: {"text": row["text"]} for row in corpus_list}
 
-        qrels_list = datasets.load_dataset(**self.metadata_dict["dataset"])["qrels"]
+        qrels_list = datasets.load_dataset(**self.metadata.dataset)["qrels"]
         qrels = {row["query-id"]: {row["corpus-id"]: 1} for row in qrels_list}
 
         self.corpus = {self._EVAL_SPLIT: corpus}

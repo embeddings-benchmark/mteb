@@ -39,18 +39,10 @@ class JSICK(AbsTaskSTS):
             publisher={MIT Press One Broadway, 12th Floor, Cambridge, Massachusetts 02142, USA~…}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 1986},
-            "avg_character_length": {"test": 21.47},
-        },
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 1
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 1
+    max_score = 5
 
     def dataset_transform(self) -> None:
         self.dataset = self.dataset.rename_column("label", "score")

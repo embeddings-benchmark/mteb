@@ -41,18 +41,9 @@ class AfriSentiLangClassification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation="""
         """,
-        descriptive_stats={
-            "n_samples": {"test": 5754},
-            "avg_character_length": {"test": 77.84},
-        },
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["n_experiments"] = 10
-        metadata_dict["samples_per_label"] = 32
-        return metadata_dict
+    samples_per_label = 32
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_column("tweet", "text")

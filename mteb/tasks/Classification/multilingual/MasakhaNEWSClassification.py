@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -24,7 +23,7 @@ _LANGUAGES = {
 }
 
 
-class MasakhaNEWSClassification(AbsTaskClassification, MultilingualTask):
+class MasakhaNEWSClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="MasakhaNEWSClassification",
         dataset={
@@ -54,10 +53,6 @@ class MasakhaNEWSClassification(AbsTaskClassification, MultilingualTask):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 422},
-            "avg_character_length": {"test": 5116.6},
-        },
     )
 
     def dataset_transform(self):

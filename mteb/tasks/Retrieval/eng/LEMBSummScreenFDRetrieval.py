@@ -53,35 +53,23 @@ class LEMBSummScreenFDRetrieval(AbsTaskRetrieval):
                 abstract = "",
             }
         """,
-        descriptive_stats={
-            "n_samples": {_EVAL_SPLIT: 672},
-            "avg_character_length": {
-                "validation": {
-                    "average_document_length": 30854.32738095238,
-                    "average_query_length": 591.4910714285714,
-                    "num_documents": 336,
-                    "num_queries": 336,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
 
-        query_list = datasets.load_dataset(**self.metadata_dict["dataset"])[
+        query_list = datasets.load_dataset(**self.metadata.dataset)[
             "queries"
         ]  # dict_keys(['qid', 'text'])
         queries = {row["qid"]: row["text"] for row in query_list}
 
-        corpus_list = datasets.load_dataset(**self.metadata_dict["dataset"])[
+        corpus_list = datasets.load_dataset(**self.metadata.dataset)[
             "corpus"
         ]  # dict_keys(['doc_id', 'text'])
         corpus = {row["doc_id"]: {"text": row["text"]} for row in corpus_list}
 
-        qrels_list = datasets.load_dataset(**self.metadata_dict["dataset"])[
+        qrels_list = datasets.load_dataset(**self.metadata.dataset)[
             "qrels"
         ]  # dict_keys(['qid', 'doc_id'])
         qrels = {row["qid"]: {row["doc_id"]: 1} for row in qrels_list}

@@ -38,24 +38,10 @@ class SummEvalSummarization(AbsTaskSummarization):
   journal={arXiv preprint arXiv:2007.12626},
   year={2020}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 2800},
-            "test": {
-                "num_samples": 100,
-                "avg_text_len": 2100.35,
-                "avg_human_summaries_len": 11.0,
-                "avg_machine_summaries_len": 16.0,
-                "avg_relevance": 3.7770833333333336,
-            },
-        },
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5
 
 
 class SummEvalSummarizationv2(AbsTaskSummarization):
@@ -86,15 +72,7 @@ class SummEvalSummarizationv2(AbsTaskSummarization):
   journal={arXiv preprint arXiv:2007.12626},
   year={2020}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 2800},
-            "avg_character_length": {"test": 359.8},
-        },
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5

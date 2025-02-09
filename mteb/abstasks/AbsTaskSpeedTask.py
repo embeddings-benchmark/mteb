@@ -24,9 +24,6 @@ class AbsTaskSpeedTask(AbsTask):
     num_loops = 7
     device = "cpu"
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
     def load_data(self, **kwargs):
         """Reads the text 'The Ugly Duckling' as the `test` split with a `text` column."""
         if self.data_loaded:
@@ -78,7 +75,7 @@ class AbsTaskSpeedTask(AbsTask):
                 list_gpus.append(
                     {
                         "gpu_name": gpu.name,
-                        "gpu_total_memory": f"{gpu.memoryTotal/1024.0} GB",
+                        "gpu_total_memory": f"{gpu.memoryTotal / 1024.0} GB",
                     }
                 )
             info["gpu_info"] = list_gpus
@@ -106,10 +103,7 @@ class AbsTaskSpeedTask(AbsTask):
         self._add_main_score(scores)
         return scores
 
-    def _add_main_score(self, scores) -> None:
-        scores["main_score"] = scores[self.metadata.main_score]
-
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> dict[str, float]:
-        pass
+        return {"num_samples": 1}

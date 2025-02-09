@@ -11,9 +11,8 @@ class TRECCOVIDPL(AbsTaskRetrieval):
         description="TRECCOVID is an ad-hoc search challenge based on the COVID-19 dataset containing scientific articles related to the COVID-19 pandemic.",
         reference="https://ir.nist.gov/covidSubmit/index.html",
         dataset={
-            "path": "clarin-knext/trec-covid-pl",
-            "revision": "81bcb408f33366c2a20ac54adafad1ae7e877fdd",
-            "trust_remote_code": True,
+            "path": "mteb/TRECCOVID-PL",
+            "revision": "1e710582482d4199ff690e5dd2491a70627523f5",
         },
         type="Retrieval",
         category="s2p",
@@ -25,7 +24,7 @@ class TRECCOVIDPL(AbsTaskRetrieval):
             "2019-12-01",
             "2022-12-31",
         ),  # approximate date of covid pandemic start and end (best guess)
-        domains=["Academic", "Non-fiction", "Written"],
+        domains=["Academic", "Medical", "Non-fiction", "Written"],
         task_subtypes=["Article retrieval"],
         license="not specified",
         annotations_creators="derived",
@@ -39,16 +38,4 @@ class TRECCOVIDPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1159.8020276422385,
-                    "average_query_length": 69.42,
-                    "num_documents": 171332,
-                    "num_queries": 50,
-                    "average_relevant_docs_per_query": 493.5,
-                }
-            },
-        },
     )

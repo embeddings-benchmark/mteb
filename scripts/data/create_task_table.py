@@ -137,21 +137,16 @@ def get_ds_stats(hf_hub_name):
 # Select all tasks
 for task in MTEB().tasks:
     print("Task: ", task)
-    if "dataset" in task.metadata_dict:
-        hub_name = hub_url = task.metadata_dict["dataset"]["path"]
-        ds_stats = get_ds_stats(hub_name.split("/")[-1])
-    elif "beir_name" in task.metadata_dict:
-        hub_name = hub_url = "BeIR/" + task.metadata_dict.get("beir_name")
-        ds_stats = get_ds_stats_beir("/".join(hub_name.split("/")[1:]))
-        if "cqadupstack" in hub_name:
-            hub_url = "BeIR/cqadupstack-qrels"
+    hub_name = hub_url = task.metadata.dataset["path"]
+    ds_stats = get_ds_stats(hub_name.split("/")[-1])
+
     TABLE_STRING += "\n" + ONE_LINE.format(
-        f"[{task.metadata_dict['name']}]({task.metadata_dict['reference']})",
+        f"[{task.metadata.name}]({task.metadata.reference})",
         f"[{hub_name}](https://huggingface.co/datasets/{hub_url})",
-        task.metadata_dict["description"],
-        task.metadata_dict["type"],
-        task.metadata_dict["category"],
-        len(task.metadata_dict["eval_langs"]),
+        task.metadata.description,
+        task.metadata.type,
+        task.metadata.category,
+        len(task.metadata.eval_langs),
         *ds_stats,
     )
 

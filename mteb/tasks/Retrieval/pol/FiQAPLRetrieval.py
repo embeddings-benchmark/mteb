@@ -13,9 +13,8 @@ class FiQAPLRetrieval(AbsTaskRetrieval):
         description="Financial Opinion Mining and Question Answering",
         reference="https://sites.google.com/view/fiqa/",
         dataset={
-            "path": "clarin-knext/fiqa-pl",
-            "revision": "2e535829717f8bf9dc829b7f911cc5bbd4e6608e",
-            "trust_remote_code": True,
+            "path": "mteb/FiQA-PL",
+            "revision": "788508256800f93c2ad033e96243bc801f9ee525",
         },
         type="Retrieval",
         category="s2p",
@@ -24,12 +23,12 @@ class FiQAPLRetrieval(AbsTaskRetrieval):
         eval_langs=["pol-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
+        domains=["Written", "Financial"],
+        task_subtypes=["Question answering"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
         bibtex_citation="""@inproceedings{
 thakur2021beir,
 title={{BEIR}: A Heterogeneous Benchmark for Zero-shot Evaluation of Information Retrieval Models},
@@ -38,16 +37,4 @@ booktitle={Thirty-fifth Conference on Neural Information Processing Systems Data
 year={2021},
 url={https://openreview.net/forum?id=wCu6T5xFjeJ}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 795.2371699226205,
-                    "average_query_length": 70.00771604938272,
-                    "num_documents": 57638,
-                    "num_queries": 648,
-                    "average_relevant_docs_per_query": 2.632716049382716,
-                }
-            },
-        },
     )

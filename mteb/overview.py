@@ -8,7 +8,7 @@ from collections import Counter
 
 import pandas as pd
 
-from mteb.abstasks import AbsTask
+from mteb.abstasks import AbsTask, AbsTaskMultilabelClassification, AbsTaskReranking
 from mteb.abstasks.TaskMetadata import TASK_CATEGORY, TASK_DOMAIN, TASK_TYPE
 from mteb.languages import (
     ISO_TO_LANGUAGE,
@@ -25,19 +25,34 @@ logger = logging.getLogger(__name__)
 
 
 def create_task_list() -> list[type[AbsTask]]:
-    tasks_categories_cls = list(AbsTask.__subclasses__())
-    tasks = [
-        cls
-        for cat_cls in tasks_categories_cls
-        for cls in cat_cls.__subclasses__()
-        if cat_cls.__name__.startswith("AbsTask")
+    # reranking subclasses retrieval to share methods, but is an abstract task
+    tasks_categories_cls = list(AbsTask.__subclasses__()) + [
+        AbsTaskReranking,
+        AbsTaskMultilabelClassification,
     ]
+    tasks = []
+    for cat_cls in tasks_categories_cls:
+        for cls in cat_cls.__subclasses__():
+            if cat_cls.__name__.startswith("AbsTask") and cls.__name__ not in (
+                "AbsTaskReranking",
+                "AbsTaskMultilabelClassification",
+            ):
+                tasks.append(cls)
     return tasks
 
 
 def create_name_to_task_mapping() -> dict[str, type[AbsTask]]:
     tasks = create_task_list()
-    return {cls.metadata.name: cls for cls in tasks}
+    metadata_names = {}
+    for cls in tasks:
+        if cls.metadata.name in metadata_names:
+            raise ValueError(
+                f"Duplicate task name found: {cls.metadata.name}. Please make sure that all task names are unique."
+            )
+        if "AbsTask" in cls.__name__:
+            continue
+        metadata_names[cls.metadata.name] = cls
+    return metadata_names
 
 
 TASKS_REGISTRY = create_name_to_task_mapping()
@@ -57,7 +72,7 @@ def check_is_valid_language(lang: str) -> None:
         )
 
 
-def filter_superseeded_datasets(tasks: list[AbsTask]) -> list[AbsTask]:
+def filter_superseded_datasets(tasks: list[AbsTask]) -> list[AbsTask]:
     return [t for t in tasks if t.superseded_by is None]
 
 
@@ -109,13 +124,11 @@ class MTEBTasks(tuple):
         return "MTEBTasks" + super().__repr__()
 
     @staticmethod
-    def _extract_property_from_task(task, property):
+    def _extract_property_from_task(task: AbsTask, property: str):
         if hasattr(task.metadata, property):
             return getattr(task.metadata, property)
         elif hasattr(task, property):
             return getattr(task, property)
-        elif property in task.metadata_dict:
-            return task.metadata_dict[property]
         else:
             raise KeyError("Property neither in Task attribute or in task metadata.")
 
@@ -224,29 +237,34 @@ class MTEBTasks(tuple):
 
 
 def get_tasks(
+    tasks: list[str] | None = None,
+    *,
     languages: list[str] | None = None,
     script: list[str] | None = None,
     domains: list[TASK_DOMAIN] | None = None,
     task_types: list[TASK_TYPE] | None = None,
     categories: list[TASK_CATEGORY] | None = None,
-    tasks: list[str] | None = None,
-    exclude_superseeded: bool = True,
+    exclude_superseded: bool = True,
     eval_splits: list[str] | None = None,
+    exclusive_language_filter: bool = False,
 ) -> MTEBTasks:
     """Get a list of tasks based on the specified filters.
 
     Args:
+        tasks: A list of task names to include. If None, all tasks which pass the filters are included.
         languages: A list of languages either specified as 3 letter languages codes (ISO 639-3, e.g. "eng") or as script languages codes e.g.
             "eng-Latn". For multilingual tasks this will also remove languages that are not in the specified list.
-        script: A list of script codes (ISO 15924 codes). If None, all scripts are included. For multilingual tasks this will also remove scripts
+        script: A list of script codes (ISO 15924 codes, e.g. "Latn"). If None, all scripts are included. For multilingual tasks this will also remove scripts
             that are not in the specified list.
-        domains: A list of task domains.
-        task_types: A string specifying the type of task. If None, all tasks are included.
+        domains: A list of task domains, e.g. "Legal", "Medical", "Fiction".
+        task_types: A string specifying the type of task e.g. "Classification" or "Retrieval". If None, all tasks are included.
         categories: A list of task categories these include "s2s" (sentence to sentence), "s2p" (sentence to paragraph) and "p2p" (paragraph to
             paragraph).
-        tasks: A list of task names to include. If None, all tasks which pass the filters are included.
-        exclude_superseeded: A boolean flag to exclude datasets which are superseeded by another.
+        exclude_superseded: A boolean flag to exclude datasets which are superseded by another.
         eval_splits: A list of evaluation splits to include. If None, all splits are included.
+        exclusive_language_filter: Some datasets contains more than one language e.g. for STS22 the subset "de-en" contain eng and deu. If
+            exclusive_language_filter is set to False both of these will be kept, but if set to True only those that contains all the languages
+            specified will be kept.
 
     Returns:
         A list of all initialized tasks objects which pass all of the filters (AND operation).
@@ -254,12 +272,20 @@ def get_tasks(
     Examples:
         >>> get_tasks(languages=["eng", "deu"], script=["Latn"], domains=["Legal"])
         >>> get_tasks(languages=["eng"], script=["Latn"], task_types=["Classification"])
-        >>> get_tasks(languages=["eng"], script=["Latn"], task_types=["Clustering"], exclude_superseeded=False)
+        >>> get_tasks(languages=["eng"], script=["Latn"], task_types=["Clustering"], exclude_superseded=False)
         >>> get_tasks(languages=["eng"], tasks=["WikipediaRetrievalMultilingual"], eval_splits=["test"])
+        >>> get_tasks(tasks=["STS22"], languages=["eng"], exclusive_language_filter=True) # don't include multilingual subsets containing English
     """
     if tasks:
         _tasks = [
-            get_task(task, languages, script, eval_splits=eval_splits) for task in tasks
+            get_task(
+                task,
+                languages,
+                script,
+                eval_splits=eval_splits,
+                exclusive_language_filter=exclusive_language_filter,
+            )
+            for task in tasks
         ]
         return MTEBTasks(_tasks)
 
@@ -278,8 +304,8 @@ def get_tasks(
         _tasks = filter_tasks_by_task_types(_tasks, task_types)
     if categories:
         _tasks = filter_task_by_categories(_tasks, categories)
-    if exclude_superseeded:
-        _tasks = filter_superseeded_datasets(_tasks)
+    if exclude_superseded:
+        _tasks = filter_superseded_datasets(_tasks)
 
     return MTEBTasks(_tasks)
 
@@ -289,6 +315,8 @@ def get_task(
     languages: list[str] | None = None,
     script: list[str] | None = None,
     eval_splits: list[str] | None = None,
+    hf_subsets: list[str] | None = None,
+    exclusive_language_filter: bool = False,
 ) -> AbsTask:
     """Get a task by name.
 
@@ -298,6 +326,10 @@ def get_task(
             "eng-Latn". For multilingual tasks this will also remove languages that are not in the specified list.
         script: A list of script codes (ISO 15924 codes). If None, all scripts are included. For multilingual tasks this will also remove scripts
         eval_splits: A list of evaluation splits to include. If None, all splits are included.
+        hf_subsets: A list of Huggingface subsets to evaluate on.
+        exclusive_language_filter: Some datasets contains more than one language e.g. for STS22 the subset "de-en" contain eng and deu. If
+            exclusive_language_filter is set to False both of these will be kept, but if set to True only those that contains all the languages
+            specified will be kept.
 
     Returns:
         An initialized task object.
@@ -308,9 +340,7 @@ def get_task(
     if task_name not in TASKS_REGISTRY:
         close_matches = difflib.get_close_matches(task_name, TASKS_REGISTRY.keys())
         if close_matches:
-            suggestion = (
-                f"KeyError: '{task_name}' not found. Did you mean: {close_matches[0]}?"
-            )
+            suggestion = f"KeyError: '{task_name}' not found. Did you mean: '{close_matches[0]}'?"
         else:
             suggestion = (
                 f"KeyError: '{task_name}' not found and no similar keys were found."
@@ -319,4 +349,9 @@ def get_task(
     task = TASKS_REGISTRY[task_name]()
     if eval_splits:
         task.filter_eval_splits(eval_splits=eval_splits)
-    return task.filter_languages(languages, script)
+    return task.filter_languages(
+        languages,
+        script,
+        hf_subsets=hf_subsets,
+        exclusive_language_filter=exclusive_language_filter,
+    )

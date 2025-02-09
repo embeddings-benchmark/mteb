@@ -6,6 +6,9 @@ from ....abstasks.AbsTaskSTS import AbsTaskSTS
 
 
 class GermanSTSBenchmarkSTS(AbsTaskSTS):
+    min_score = 0
+    max_score = 5
+
     metadata = TaskMetadata(
         name="GermanSTSBenchmark",
         dataset={
@@ -34,12 +37,4 @@ author={Philip May},
 year={2021},
 url={https://github.com/PhilipMay/stsb-multi-mt}
 }""",
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict

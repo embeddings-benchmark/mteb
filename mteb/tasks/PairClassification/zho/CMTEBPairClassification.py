@@ -35,7 +35,6 @@ class Ocnli(AbsTaskPairClassification):
             primaryClass={cs.CL}
         }""",
         prompt="Retrieve semantically similar text.",
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
     def dataset_transform(self):
@@ -109,7 +108,6 @@ class Cmnli(AbsTaskPairClassification):
             pages = "4762--4772",
         }""",
         prompt="Retrieve semantically similar text.",
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
     def dataset_transform(self):

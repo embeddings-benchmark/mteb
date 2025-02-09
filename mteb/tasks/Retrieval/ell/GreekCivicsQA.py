@@ -32,26 +32,14 @@ class GreekCivicsQA(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
-        descriptive_stats={
-            "n_samples": {"default": 407},
-            "avg_character_length": {
-                "default": {
-                    "average_document_length": 1074.894348894349,
-                    "average_query_length": 77.06142506142506,
-                    "num_documents": 407,
-                    "num_queries": 407,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
         # fetch both subsets of the dataset
-        eval_split = self.metadata_dict["eval_splits"][0]
-        data_raw = datasets.load_dataset(**self.metadata_dict["dataset"])[eval_split]
+        eval_split = self.metadata.eval_splits[0]
+        data_raw = datasets.load_dataset(**self.metadata.dataset)[eval_split]
 
         queries = {eval_split: {}}
         corpus = {eval_split: {}}

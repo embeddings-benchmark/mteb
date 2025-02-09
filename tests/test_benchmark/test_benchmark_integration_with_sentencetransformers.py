@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from pathlib import Path
 
 import pytest
 from sentence_transformers import SentenceTransformer
@@ -22,9 +23,11 @@ logging.basicConfig(level=logging.INFO)
         "average_word_embeddings_levy_dependency",
     ],
 )
-def test_benchmark_sentence_transformer(task: str | AbsTask, model_name: str):
+def test_benchmark_sentence_transformer(
+    task: str | AbsTask, model_name: str, tmp_path: Path
+):
     """Test that a task can be fetched and run"""
     if isinstance(model_name, str):
         model = SentenceTransformer(model_name)
     eval = MTEB(tasks=[task])
-    eval.run(model, output_folder="tests/results", overwrite_results=True)
+    eval.run(model, output_folder=tmp_path.as_posix(), overwrite_results=True)

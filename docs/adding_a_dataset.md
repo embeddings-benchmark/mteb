@@ -37,7 +37,7 @@ class SciDocsReranking(AbsTaskReranking):
         dataset={
             "path": "mteb/scidocs-reranking",
             "revision": "d3c5e1fc0b855ab6097bf1cda04dd73947d7caab",
-        }
+        },
         date=("2000-01-01", "2020-12-31"), # best guess
         domains=["Academic", "Non-fiction", "Domains"],
         task_subtypes=["Scientific Reranking"],
@@ -45,7 +45,6 @@ class SciDocsReranking(AbsTaskReranking):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        descriptive_stats={"n_samples": {"test": 19599}, "avg_character_length": {"test": 69.0}},
         bibtex_citation="""
 @inproceedings{cohan-etal-2020-specter,
     title = "{SPECTER}: Document-level Representation Learning using Citation-informed Transformers",
@@ -73,11 +72,11 @@ class SciDocsReranking(AbsTaskReranking):
 
 # testing the task with a model:
 model = SentenceTransformer("average_word_embeddings_komninos")
-evaluation = MTEB(tasks=[MindSmallReranking()])
+evaluation = MTEB(tasks=[SciDocsReranking()])
 evaluation.run(model)
 ```
 
-> **Note:** for multilingual / crosslingual tasks, make sure your class also inherits from the `MultilingualTask` class like in [this](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/tasks/Classification/multilingual/MTOPIntentClassification.py) example.
+> **Note:** for multilingual / crosslingual tasks, make sure you've specified `eval_langs` as a dictionary, as shown in [this example](../mteb/tasks/Classification/multilingual/MTOPIntentClassification.py).
 
 
 
@@ -109,7 +108,7 @@ class VGClustering(AbsTaskClustering):
         dialect=[],
         text_creation="found",
         bibtex_citation= ... # removed for brevity
-)
+    )
 
     def dataset_transform(self):
         splits = self.description["eval_splits"]

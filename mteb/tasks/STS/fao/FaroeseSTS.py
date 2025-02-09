@@ -41,18 +41,10 @@ class FaroeseSTS(AbsTaskSTS):
             publisher = {Link{\"o}ping University Electronic Press, Sweden},
         }
         """,
-        descriptive_stats={
-            "n_samples": {"train": 729},
-            "avg_character_length": {"train": 43.6},
-        },
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_column("label", "score")

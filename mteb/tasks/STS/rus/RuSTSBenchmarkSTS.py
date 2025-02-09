@@ -34,15 +34,7 @@ author={Philip May},
 year={2021},
 url={https://github.com/PhilipMay/stsb-multi-mt}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 1264},
-            "avg_character_length": {"test": 54.2},
-        },
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5

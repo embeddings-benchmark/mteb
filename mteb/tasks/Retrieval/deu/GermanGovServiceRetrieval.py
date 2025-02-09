@@ -45,18 +45,6 @@ class GermanGovServiceRetrieval(AbsTaskRetrieval):
   url          = {https://huggingface.co/datasets/it-at-m/LHM-Dienstleistungen-QA}
 }""",
         sample_creation="found",
-        descriptive_stats={
-            "n_samples": {"test": 357},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1246.4571428571428,
-                    "average_query_length": 68.17977528089888,
-                    "num_documents": 105,
-                    "num_queries": 356,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     @staticmethod
@@ -68,10 +56,10 @@ class GermanGovServiceRetrieval(AbsTaskRetrieval):
             return
 
         dataset = datasets.load_dataset(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             split=_EVAL_SPLIT,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
         corpus = {}
         queries = {}

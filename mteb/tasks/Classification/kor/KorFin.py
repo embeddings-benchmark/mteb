@@ -18,14 +18,14 @@ class KorFin(AbsTaskClassification):
         type="Classification",
         category="s2s",
         modalities=["text"],
-        eval_splits=["test"],
+        eval_splits=["train"],
         eval_langs=["kor-Hang"],
         main_score="accuracy",
         date=(
             "2022-01-01",
             "2022-12-31",
         ),  # Assumed date based on the citations in the paper
-        domains=["News", "Written"],
+        domains=["News", "Written", "Financial"],
         task_subtypes=["Sentiment/Hate speech"],
         license="cc-by-sa-4.0",
         annotations_creators="expert-annotated",
@@ -39,10 +39,6 @@ class KorFin(AbsTaskClassification):
         year={2023}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 2048},
-            "avg_character_length": {"test": 75.28},
-        },
     )
 
     def dataset_transform(self):
@@ -50,5 +46,5 @@ class KorFin(AbsTaskClassification):
             {"SRC": "text", "SENTIMENT": "label"}
         ).remove_columns(["SID", "TYPE", "ASPECT"])
         self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"]
+            self.dataset, seed=self.seed, splits=self.metadata.eval_splits
         )

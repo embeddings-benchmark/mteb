@@ -56,18 +56,10 @@ class FinParaSTS(AbsTaskSTS):
             abstract = "In this paper, we introduce the first fully manually annotated paraphrase corpus for Finnish containing 53,572 paraphrase pairs harvested from alternative subtitles and news headings. Out of all paraphrase pairs in our corpus 98{\%} are manually classified to be paraphrases at least in their given context, if not in all contexts. Additionally, we establish a manual candidate selection method and demonstrate its feasibility in high quality paraphrase selection in terms of both cost and quality.",
         }        
         """,
-        descriptive_stats={
-            "n_samples": {"test": N_SAMPLES, "validation": N_SAMPLES},
-            "avg_character_length": {"test": 59.0, "validation": 58.8},
-        },
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 2
-        metadata_dict["max_score"] = 4
-        return metadata_dict
+    min_score = 2
+    max_score = 4
 
     def dataset_transform(self):
         self.dataset = self.dataset.shuffle(seed=self.seed)

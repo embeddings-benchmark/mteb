@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -16,7 +15,7 @@ _LANGUAGES = {
 }
 
 
-class IndicNLPNewsClassification(MultilingualTask, AbsTaskClassification):
+class IndicNLPNewsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="IndicNLPNewsClassification",
         dataset={
@@ -45,10 +44,6 @@ class IndicNLPNewsClassification(MultilingualTask, AbsTaskClassification):
     year={2020},
     journal={arXiv preprint arXiv:2005.00085}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 2048},
-            "avg_character_length": {"test": 1169.053974484789},
-        },
     )
 
     def dataset_transform(self):
@@ -61,7 +56,6 @@ class IndicNLPNewsClassification(MultilingualTask, AbsTaskClassification):
             if self.dataset[lang]["test"].num_rows > 2048:
                 self.dataset[lang] = self.stratified_subsampling(
                     self.dataset[lang],
-                    n_samples=2048,
                     seed=self.seed,
                     splits=["test"],
                 )

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -59,7 +58,7 @@ _LANGUAGES = {
 }
 
 
-class MassiveScenarioClassification(MultilingualTask, AbsTaskClassification):
+class MassiveScenarioClassification(AbsTaskClassification):
     fast_loading = True
     metadata = TaskMetadata(
         name="MassiveScenarioClassification",
@@ -91,8 +90,4 @@ class MassiveScenarioClassification(MultilingualTask, AbsTaskClassification):
       primaryClass={cs.CL}
 }""",
         prompt="Given a user utterance as query, find the user scenarios",
-        descriptive_stats={
-            "n_samples": {"validation": 2033, "test": 2974},
-            "avg_character_length": {"validation": 34.8, "test": 34.6},
-        },
     )

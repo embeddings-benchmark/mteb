@@ -3,11 +3,10 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class RomaTalesBitextMining(AbsTaskBitextMining, MultilingualTask):
+class RomaTalesBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="RomaTalesBitextMining",
         dataset={
@@ -33,10 +32,6 @@ class RomaTalesBitextMining(AbsTaskBitextMining, MultilingualTask):
         dialect=["Lovari"],
         sample_creation="created",
         bibtex_citation="",
-        descriptive_stats={
-            "n_samples": {"test": 215},
-            "avg_character_length": {"test": 316.8046511627907},
-        },
     )
 
     def load_data(self, **kwargs):
@@ -46,7 +41,7 @@ class RomaTalesBitextMining(AbsTaskBitextMining, MultilingualTask):
 
         self.dataset = {}
         for lang in self.hf_subsets:
-            self.dataset[lang] = datasets.load_dataset(**self.metadata_dict["dataset"])
+            self.dataset[lang] = datasets.load_dataset(**self.metadata.dataset)
 
         self.dataset_transform()
         self.data_loaded = True

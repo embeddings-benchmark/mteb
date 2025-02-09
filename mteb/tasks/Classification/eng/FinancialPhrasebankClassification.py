@@ -22,7 +22,7 @@ class FinancialPhrasebankClassification(AbsTaskClassification):
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2013-11-01", "2013-11-01"),
-        domains=["News", "Written"],
+        domains=["News", "Written", "Financial"],
         task_subtypes=["Sentiment/Hate speech"],
         license="cc-by-nc-sa-3.0",
         annotations_creators="expert-annotated",
@@ -37,10 +37,6 @@ class FinancialPhrasebankClassification(AbsTaskClassification):
             volume={65}
             }
         """,
-        descriptive_stats={
-            "n_samples": {"train": 4840},
-            "avg_character_length": {"train": 121.96},
-        },
     )
 
     def dataset_transform(self):

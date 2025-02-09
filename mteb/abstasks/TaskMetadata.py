@@ -1,14 +1,17 @@
 from __future__ import annotations
 
+import json
 import logging
 from collections.abc import Mapping
 from datetime import date
+from pathlib import Path
 from typing import Annotated, Any, Union
 
 from pydantic import (
     AnyUrl,
     BaseModel,
     BeforeValidator,
+    ConfigDict,
     TypeAdapter,
     field_validator,
 )
@@ -22,6 +25,7 @@ from ..languages import (
     path_to_lang_codes,
     path_to_lang_scripts,
 )
+from ..modalities import MODALITIES
 
 TASK_SUBTYPE = Literal[
     "Article retrieval",
@@ -29,6 +33,7 @@ TASK_SUBTYPE = Literal[
     "Dialect pairing",
     "Dialog Systems",
     "Discourse coherence",
+    "Duplicate Image Retrieval",
     "Language identification",
     "Linguistic acceptability",
     "Political classification",
@@ -45,6 +50,15 @@ TASK_SUBTYPE = Literal[
     "Counterfactual Detection",
     "Emotion classification",
     "Reasoning as Retrieval",
+    "Rendered Texts Understanding",
+    "Image Text Retrieval",
+    "Object recognition",
+    "Scene recognition",
+    "Caption Pairing",
+    "Emotion recognition",
+    "Textures recognition",
+    "Activity recognition",
+    "Tumor detection",
     "Duplicate Detection",
 ]
 
@@ -62,12 +76,15 @@ TASK_DOMAIN = Literal[
     "Poetry",
     "Religious",
     "Reviews",
+    "Scene",
     "Social",
     "Spoken",
     "Subtitles",
     "Web",
     "Written",
     "Programming",
+    "Chemistry",
+    "Financial",
 ]
 
 SAMPLE_CREATION_METHOD = Literal[
@@ -79,6 +96,8 @@ SAMPLE_CREATION_METHOD = Literal[
     "machine-translated and verified",
     "machine-translated and localized",
     "LM-generated and verified",
+    "rendered",
+    "multiple",
 ]
 
 TASK_TYPE = Literal[
@@ -92,13 +111,32 @@ TASK_TYPE = Literal[
     "STS",
     "Summarization",
     "InstructionRetrieval",
+    "InstructionReranking",
     "Speed",
+    "Any2AnyMultiChoice",
+    "Any2AnyRetrieval",
+    "Any2TextMutipleChoice",
+    "ImageClustering",
+    "ImageClassification",
+    "ImageMultilabelClassification",
+    "ImageTextPairClassification",
+    "VisualSTS",
+    "ZeroShotClassification",
 ]
 
 TASK_CATEGORY = Literal[
     "s2s",  # Sentence-to-sentence
     "s2p",  # Sentence-to-paragraph
     "p2p",  # Paragraph-to-paragraph
+    "t2t",  # specifically for text-only tasks in mieb
+    "i2i",  # image-to-image
+    "i2t",  # image-to-text
+    "t2i",  # text-to-image
+    "it2t",  # image+text-to-text
+    "it2i",  # image+text-to-image
+    "i2it",  # image-to-image+text
+    "t2it",  # text-to-image+text
+    "it2it",  # image+text-to-image+text
 ]
 
 ANNOTATOR_TYPE = Literal[
@@ -164,8 +202,11 @@ LICENSES = (  # this list can be extended as needed
         "cc0-1.0",
         "bsd-3-clause",
         "gpl-3.0",
+        "lgpl-3.0",
         "cdla-sharing-1.0",
         "mpl-2.0",
+        "msr-la-nc",
+        "multiple",
     ]
 )
 
@@ -185,14 +226,41 @@ class PromptDict(TypedDict, total=False):
     passage: str
 
 
+class DescriptiveStatistics(TypedDict):
+    """Class for descriptive statistics."""
+
+    pass
+
+
+METRIC_VALUE = Union[int, float, dict[str, Any]]
+
+
 logger = logging.getLogger(__name__)
+
+
+class MetadataDatasetDict(TypedDict, total=False):
+    """A dictionary containing the dataset path and revision.
+
+    Args:
+        path: The path to the dataset.
+        revision: The revision of the dataset.
+        name: The name the dataset config.
+        split: The split of the dataset.
+        trust_remote_code: Whether to trust the remote code.
+    """
+
+    path: str
+    revision: str
+    name: str
+    split: str
+    trust_remote_code: bool
 
 
 class TaskMetadata(BaseModel):
     """Metadata for a task.
 
     Args:
-        dataset: All arguments to pass to datasets.load_dataset to load the dataset for the task. Refer to https://huggingface.co/docs/datasets/v2.18.0/en/package_reference/loading_methods#datasets.load_dataset
+        dataset: All arguments to pass to [datasets.load_dataset](https://huggingface.co/docs/datasets/v2.18.0/en/package_reference/loading_methods#datasets.load_dataset) to load the dataset for the task.
         name: The name of the task.
         description: A description of the task.
         type: The type of the task. These includes "Classification", "Summarization", "STS", "Retrieval", "Reranking", "Clustering",
@@ -210,6 +278,7 @@ class TaskMetadata(BaseModel):
             "Government", "Legal", "Medical", "Poetry", "Religious", "Reviews", "Web", "Spoken", "Written". A dataset can belong to multiple domains.
         task_subtypes: The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". Feel free to update the list as needed.
         license: The license of the data specified as lowercase, e.g. "cc-by-nc-4.0". If the license is not specified, use "not specified". For custom licenses a URL is used.
+        license: The license of the data specified as lowercase, e.g. "cc-by-nc-4.0". If the license is not specified, use "not specified". For custom licenses a URL is used.
         annotations_creators: The type of the annotators. Includes "expert-annotated" (annotated by experts), "human-annotated" (annotated e.g. by
             mturkers), "derived" (derived from structure in the data).
         dialect: The dialect of the data, if applicable. Ideally specified as a BCP-47 language tag. Empty list if no dialects are present.
@@ -217,19 +286,17 @@ class TaskMetadata(BaseModel):
             "machine-translated and localized".
         prompt: The prompt used for the task. Can be a string or a dictionary containing the query and passage prompts.
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
-        n_samples: The number of samples in the dataset. This should only be for the splits evaluated on. For retrieval tasks, this should be the
-            number of query-document pairs.
-        avg_character_length: The average character length of the samples in the dataset. This should only be for the splits evaluated on. For
-            retrieval tasks, this will be a dict containing the character length of the queries and documents separately, as well as the total number of queries, documents, and relevance judgements per query.
     """
 
-    dataset: dict
+    model_config = ConfigDict(extra="forbid")
+
+    dataset: MetadataDatasetDict
 
     name: str
     description: str
     prompt: str | PromptDict | None = None
     type: TASK_TYPE
-    modalities: list[Literal["text"]] = ["text"]
+    modalities: list[MODALITIES] = ["text"]
     category: TASK_CATEGORY | None = None
     reference: STR_URL | None = None
 
@@ -247,8 +314,6 @@ class TaskMetadata(BaseModel):
 
     sample_creation: SAMPLE_CREATION_METHOD | None = None
     bibtex_citation: str | None = None
-
-    descriptive_stats: dict[METRIC_NAME, dict[SPLIT_NAME, METRIC_VALUE] | None] = {}
 
     def validate_metadata(self) -> None:
         self.dataset_path_is_specified(self.dataset)
@@ -333,6 +398,15 @@ class TaskMetadata(BaseModel):
             )
 
     @property
+    def bcp47_codes(self) -> list[ISO_LANGUAGE_SCRIPT]:
+        """Return the languages and script codes of the dataset formatting in accordance with the BCP-47 standard."""
+        if isinstance(self.eval_langs, dict):
+            return sorted(
+                {lang for langs in self.eval_langs.values() for lang in langs}
+            )
+        return sorted(set(self.eval_langs))
+
+    @property
     def languages(self) -> list[str]:
         """Return the languages of the dataset as iso639-3 codes."""
 
@@ -388,5 +462,52 @@ class TaskMetadata(BaseModel):
             return f"\\cite{{{cite}}}"
         return cite
 
+    @property
+    def descriptive_stats(self) -> dict[str, DescriptiveStatistics] | None:
+        """Return the descriptive statistics for the dataset."""
+        if self.descriptive_stat_path.exists():
+            with self.descriptive_stat_path.open("r") as f:
+                return json.load(f)
+        return None
+
+    @property
+    def descriptive_stat_path(self) -> Path:
+        """Return the path to the descriptive statistics file."""
+        descriptive_stat_base_dir = Path(__file__).parent.parent / "descriptive_stats"
+        if not descriptive_stat_base_dir.exists():
+            descriptive_stat_base_dir.mkdir()
+        task_type_dir = descriptive_stat_base_dir / self.type
+        if not task_type_dir.exists():
+            task_type_dir.mkdir()
+        return task_type_dir / f"{self.name}.json"
+
+    @property
+    def n_samples(self) -> dict[str, int] | None:
+        """Returns the number of samples in the dataset"""
+        stats = self.descriptive_stats
+        if not stats:
+            return None
+
+        n_samples = {}
+        for subset, subset_value in stats.items():
+            if subset == "hf_subset_descriptive_stats":
+                continue
+            n_samples[subset] = subset_value["num_samples"]  # type: ignore
+        return n_samples
+
+    @property
+    def hf_subsets(self) -> list[str]:
+        """Return the huggingface subsets."""
+        return list(self.hf_subsets_to_langscripts.keys())
+
+    @property
+    def is_multilingual(self) -> bool:
+        """Check if the task is multilingual."""
+        return isinstance(self.eval_langs, dict)
+
     def __hash__(self) -> int:
         return hash(self.model_dump_json())
+
+    @property
+    def revision(self) -> str:
+        return self.dataset["revision"]

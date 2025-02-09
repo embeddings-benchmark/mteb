@@ -23,7 +23,7 @@ class CQADupstackProgrammersRetrieval(AbsTaskRetrieval):
         date=None,
         domains=["Programming", "Written", "Non-fiction"],
         task_subtypes=[],
-        license="cc-by-sa-4.0",
+        license="apache-2.0",
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
@@ -44,16 +44,4 @@ acmid = {2838934},
 publisher = {ACM},
 address = {New York, NY, USA},
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1055.7033814022875,
-                    "average_query_length": 55.1837899543379,
-                    "num_documents": 32176,
-                    "num_queries": 876,
-                    "average_relevant_docs_per_query": 1.9121004566210045,
-                }
-            },
-        },
     )

@@ -51,18 +51,10 @@ class RUParaPhraserSTS(AbsTaskSTS):
           organization={Springer}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 1924},
-            "avg_character_length": {"test": 61.25},
-        },
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = -1
-        metadata_dict["max_score"] = 1
-        return metadata_dict
+    min_score = -1
+    max_score = 1
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_columns(

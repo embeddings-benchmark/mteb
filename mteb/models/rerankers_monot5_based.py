@@ -4,11 +4,7 @@ import logging
 from functools import partial
 
 import torch
-from transformers import (
-    AutoModelForCausalLM,
-    AutoModelForSeq2SeqLM,
-    AutoTokenizer,
-)
+from transformers import AutoModelForCausalLM, AutoModelForSeq2SeqLM, AutoTokenizer
 
 from mteb.model_meta import ModelMeta
 from mteb.models.rerankers_custom import RerankerWrapper, _loader
@@ -94,8 +90,10 @@ class MonoT5Reranker(RerankerWrapper):
                 token_true_id = tokenizer.get_vocab()[token_true]
                 return token_false_id, token_true_id
             else:
-                raise Exception(f"We don't know the indexes for the non-relevant/relevant tokens for\
-                        the checkpoint {model_name_or_path} and you did not provide any.")
+                raise Exception(
+                    f"We don't know the indexes for the non-relevant/relevant tokens for\
+                        the checkpoint {model_name_or_path} and you did not provide any."
+                )
         else:
             token_false_id = tokenizer.get_vocab()[token_false]
             token_true_id = tokenizer.get_vocab()[token_true]
@@ -103,7 +101,12 @@ class MonoT5Reranker(RerankerWrapper):
 
     @torch.inference_mode()
     def predict(self, input_to_rerank, **kwargs):
-        queries, passages, instructions = list(zip(*input_to_rerank))
+        inputs = list(zip(*input_to_rerank))
+        if len(input_to_rerank[0]) == 2:
+            queries, passages = inputs
+            instructions = None
+        else:
+            queries, passages, instructions = inputs
 
         if instructions is not None and instructions[0] is not None:
             queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
@@ -192,7 +195,13 @@ Relevant: """
 
     @torch.inference_mode()
     def predict(self, input_to_rerank, **kwargs):
-        queries, passages, instructions = list(zip(*input_to_rerank))
+        inputs = list(zip(*input_to_rerank))
+        if len(input_to_rerank[0]) == 2:
+            queries, passages = inputs
+            instructions = None
+        else:
+            queries, passages, instructions = inputs
+
         if instructions is not None and instructions[0] is not None:
             # logger.info(f"Adding instructions to LLAMA queries")
             queries = [
@@ -276,7 +285,7 @@ Passage: {text}"""
 
 
 monot5_small = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=MonoT5Reranker,
         model_name_or_path="castorini/monot5-small-msmarco-10k",
@@ -287,10 +296,30 @@ monot5_small = ModelMeta(
     open_weights=True,
     revision="77f8e3f7b1eb1afe353aa21a7c3a2fc8feca702e",
     release_date="2022-03-28",
+    n_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
+    framework=["PyTorch"],
+    citation="""@misc{rosa2022parameterleftbehinddistillation,
+      title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval}, 
+      author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
+      year={2022},
+      eprint={2206.02873},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2206.02873}, 
+    }""",
 )
 
 monot5_base = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=MonoT5Reranker,
         model_name_or_path="castorini/monot5-base-msmarco-10k",
@@ -301,10 +330,30 @@ monot5_base = ModelMeta(
     open_weights=True,
     revision="f15657ab3d2a5dd0b9a30c8c0b6a0a73c9cb5884",
     release_date="2022-03-28",
+    citation="""@misc{rosa2022parameterleftbehinddistillation,
+      title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval}, 
+      author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
+      year={2022},
+      eprint={2206.02873},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2206.02873}, 
+    }""",
+    n_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
+    framework=["PyTorch"],
 )
 
 monot5_large = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=MonoT5Reranker,
         model_name_or_path="castorini/monot5-large-msmarco-10k",
@@ -315,10 +364,30 @@ monot5_large = ModelMeta(
     open_weights=True,
     revision="48cfad1d8dd587670393f27ee8ec41fde63e3d98",
     release_date="2022-03-28",
+    n_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
+    framework=["PyTorch"],
+    citation="""@misc{rosa2022parameterleftbehinddistillation,
+      title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval}, 
+      author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
+      year={2022},
+      eprint={2206.02873},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2206.02873}, 
+    }""",
 )
 
 monot5_3b = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=MonoT5Reranker,
         model_name_or_path="castorini/monot5-3b-msmarco-10k",
@@ -329,10 +398,30 @@ monot5_3b = ModelMeta(
     open_weights=True,
     revision="bc0c419a438c81f592f878ce32430a1823f5db6c",
     release_date="2022-03-28",
+    n_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
+    framework=["PyTorch"],
+    citation="""@misc{rosa2022parameterleftbehinddistillation,
+      title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval}, 
+      author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
+      year={2022},
+      eprint={2206.02873},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2206.02873}, 
+    }""",
 )
 
 flant5_base = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=FLANT5Reranker,
         model_name_or_path="google/flan-t5-base",
@@ -343,10 +432,43 @@ flant5_base = ModelMeta(
     open_weights=True,
     revision="7bcac572ce56db69c1ea7c8af255c5d7c9672fc2",
     release_date="2022-10-21",
+    citation="""@misc{10.48550/arxiv.2210.11416,
+      doi = {10.48550/ARXIV.2210.11416},
+      url = {https://arxiv.org/abs/2210.11416},
+      author = {Chung, Hyung Won and Hou, Le and Longpre, Shayne and Zoph, Barret and Tay, Yi and Fedus, William and Li, Eric and Wang, Xuezhi and Dehghani, Mostafa and Brahma, Siddhartha and Webson, Albert and Gu, Shixiang Shane and Dai, Zhuyun and Suzgun, Mirac and Chen, Xinyun and Chowdhery, Aakanksha and Narang, Sharan and Mishra, Gaurav and Yu, Adams and Zhao, Vincent and Huang, Yanping and Dai, Andrew and Yu, Hongkun and Petrov, Slav and Chi, Ed H. and Dean, Jeff and Devlin, Jacob and Roberts, Adam and Zhou, Denny and Le, Quoc V. and Wei, Jason},
+      keywords = {Machine Learning (cs.LG), Computation and Language (cs.CL), FOS: Computer and information sciences, FOS: Computer and information sciences},
+      title = {Scaling Instruction-Finetuned Language Models},
+      publisher = {arXiv},
+      year = {2022},  
+      copyright = {Creative Commons Attribution 4.0 International}
+    }
+    """,
+    training_datasets={
+        "svakulenk0/qrecc": ["train"],
+        "taskmaster2": ["train"],
+        "djaym7/wiki_dialog": ["train"],
+        "deepmind/code_contests": ["train"],
+        "lambada": ["train"],
+        "gsm8k": ["train"],
+        "aqua_rat": ["train"],
+        "esnli": ["train"],
+        "quasc": ["train"],
+        "qed": ["train"],
+    },
+    n_parameters=None,
+    memory_usage_mb=944,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    framework=["PyTorch"],
 )
 
 flant5_large = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=FLANT5Reranker,
         model_name_or_path="google/flan-t5-large",
@@ -357,10 +479,43 @@ flant5_large = ModelMeta(
     open_weights=True,
     revision="0613663d0d48ea86ba8cb3d7a44f0f65dc596a2a",
     release_date="2022-10-21",
+    citation="""@misc{10.48550/arxiv.2210.11416,
+      doi = {10.48550/ARXIV.2210.11416},
+      url = {https://arxiv.org/abs/2210.11416},
+      author = {Chung, Hyung Won and Hou, Le and Longpre, Shayne and Zoph, Barret and Tay, Yi and Fedus, William and Li, Eric and Wang, Xuezhi and Dehghani, Mostafa and Brahma, Siddhartha and Webson, Albert and Gu, Shixiang Shane and Dai, Zhuyun and Suzgun, Mirac and Chen, Xinyun and Chowdhery, Aakanksha and Narang, Sharan and Mishra, Gaurav and Yu, Adams and Zhao, Vincent and Huang, Yanping and Dai, Andrew and Yu, Hongkun and Petrov, Slav and Chi, Ed H. and Dean, Jeff and Devlin, Jacob and Roberts, Adam and Zhou, Denny and Le, Quoc V. and Wei, Jason},
+      keywords = {Machine Learning (cs.LG), Computation and Language (cs.CL), FOS: Computer and information sciences, FOS: Computer and information sciences},
+      title = {Scaling Instruction-Finetuned Language Models},
+      publisher = {arXiv},
+      year = {2022},  
+      copyright = {Creative Commons Attribution 4.0 International}
+    }
+    """,
+    training_datasets={
+        "svakulenk0/qrecc": ["train"],
+        "taskmaster2": ["train"],
+        "djaym7/wiki_dialog": ["train"],
+        "deepmind/code_contests": ["train"],
+        "lambada": ["train"],
+        "gsm8k": ["train"],
+        "aqua_rat": ["train"],
+        "esnli": ["train"],
+        "quasc": ["train"],
+        "qed": ["train"],
+    },
+    n_parameters=None,
+    memory_usage_mb=2987,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    framework=["PyTorch"],
 )
 
 flant5_xl = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=FLANT5Reranker,
         model_name_or_path="google/flan-t5-xl",
@@ -371,10 +526,43 @@ flant5_xl = ModelMeta(
     open_weights=True,
     revision="7d6315df2c2fb742f0f5b556879d730926ca9001",
     release_date="2022-10-21",
+    citation="""@misc{10.48550/arxiv.2210.11416,
+      doi = {10.48550/ARXIV.2210.11416},
+      url = {https://arxiv.org/abs/2210.11416},
+      author = {Chung, Hyung Won and Hou, Le and Longpre, Shayne and Zoph, Barret and Tay, Yi and Fedus, William and Li, Eric and Wang, Xuezhi and Dehghani, Mostafa and Brahma, Siddhartha and Webson, Albert and Gu, Shixiang Shane and Dai, Zhuyun and Suzgun, Mirac and Chen, Xinyun and Chowdhery, Aakanksha and Narang, Sharan and Mishra, Gaurav and Yu, Adams and Zhao, Vincent and Huang, Yanping and Dai, Andrew and Yu, Hongkun and Petrov, Slav and Chi, Ed H. and Dean, Jeff and Devlin, Jacob and Roberts, Adam and Zhou, Denny and Le, Quoc V. and Wei, Jason},
+      keywords = {Machine Learning (cs.LG), Computation and Language (cs.CL), FOS: Computer and information sciences, FOS: Computer and information sciences},
+      title = {Scaling Instruction-Finetuned Language Models},
+      publisher = {arXiv},
+      year = {2022},  
+      copyright = {Creative Commons Attribution 4.0 International}
+    }
+    """,
+    training_datasets={
+        "svakulenk0/qrecc": ["train"],
+        "taskmaster2": ["train"],
+        "djaym7/wiki_dialog": ["train"],
+        "deepmind/code_contests": ["train"],
+        "lambada": ["train"],
+        "gsm8k": ["train"],
+        "aqua_rat": ["train"],
+        "esnli": ["train"],
+        "quasc": ["train"],
+        "qed": ["train"],
+    },
+    n_parameters=None,
+    memory_usage_mb=10871,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    framework=["PyTorch"],
 )
 
 flant5_xxl = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=FLANT5Reranker,
         model_name_or_path="google/flan-t5-xxl",
@@ -385,11 +573,44 @@ flant5_xxl = ModelMeta(
     open_weights=True,
     revision="ae7c9136adc7555eeccc78cdd960dfd60fb346ce",
     release_date="2022-10-21",
+    citation="""@misc{10.48550/arxiv.2210.11416,
+      doi = {10.48550/ARXIV.2210.11416},
+      url = {https://arxiv.org/abs/2210.11416},
+      author = {Chung, Hyung Won and Hou, Le and Longpre, Shayne and Zoph, Barret and Tay, Yi and Fedus, William and Li, Eric and Wang, Xuezhi and Dehghani, Mostafa and Brahma, Siddhartha and Webson, Albert and Gu, Shixiang Shane and Dai, Zhuyun and Suzgun, Mirac and Chen, Xinyun and Chowdhery, Aakanksha and Narang, Sharan and Mishra, Gaurav and Yu, Adams and Zhao, Vincent and Huang, Yanping and Dai, Andrew and Yu, Hongkun and Petrov, Slav and Chi, Ed H. and Dean, Jeff and Devlin, Jacob and Roberts, Adam and Zhou, Denny and Le, Quoc V. and Wei, Jason},
+      keywords = {Machine Learning (cs.LG), Computation and Language (cs.CL), FOS: Computer and information sciences, FOS: Computer and information sciences},
+      title = {Scaling Instruction-Finetuned Language Models},
+      publisher = {arXiv},
+      year = {2022},  
+      copyright = {Creative Commons Attribution 4.0 International}
+    }
+    """,
+    training_datasets={
+        "svakulenk0/qrecc": ["train"],
+        "taskmaster2": ["train"],
+        "djaym7/wiki_dialog": ["train"],
+        "deepmind/code_contests": ["train"],
+        "lambada": ["train"],
+        "gsm8k": ["train"],
+        "aqua_rat": ["train"],
+        "esnli": ["train"],
+        "quasc": ["train"],
+        "qed": ["train"],
+    },
+    n_parameters=None,
+    memory_usage_mb=42980,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    framework=["PyTorch"],
 )
 
 
 llama2_7b = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=LlamaReranker,
         model_name_or_path="meta-llama/Llama-2-7b-hf",
@@ -400,10 +621,30 @@ llama2_7b = ModelMeta(
     open_weights=True,
     revision="01c7f73d771dfac7d292323805ebc428287df4f9",
     release_date="2023-07-18",
+    n_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
+    framework=["PyTorch"],
+    citation="""@misc{touvron2023llama2openfoundation,
+      title={Llama 2: Open Foundation and Fine-Tuned Chat Models}, 
+      author={Hugo Touvron and Louis Martin and Kevin Stone and Peter Albert and Amjad Almahairi and Yasmine Babaei and Nikolay Bashlykov and Soumya Batra and Prajjwal Bhargava and Shruti Bhosale and Dan Bikel and Lukas Blecher and Cristian Canton Ferrer and Moya Chen and Guillem Cucurull and David Esiobu and Jude Fernandes and Jeremy Fu and Wenyin Fu and Brian Fuller and Cynthia Gao and Vedanuj Goswami and Naman Goyal and Anthony Hartshorn and Saghar Hosseini and Rui Hou and Hakan Inan and Marcin Kardas and Viktor Kerkez and Madian Khabsa and Isabel Kloumann and Artem Korenev and Punit Singh Koura and Marie-Anne Lachaux and Thibaut Lavril and Jenya Lee and Diana Liskovich and Yinghai Lu and Yuning Mao and Xavier Martinet and Todor Mihaylov and Pushkar Mishra and Igor Molybog and Yixin Nie and Andrew Poulton and Jeremy Reizenstein and Rashi Rungta and Kalyan Saladi and Alan Schelten and Ruan Silva and Eric Michael Smith and Ranjan Subramanian and Xiaoqing Ellen Tan and Binh Tang and Ross Taylor and Adina Williams and Jian Xiang Kuan and Puxin Xu and Zheng Yan and Iliyan Zarov and Yuchen Zhang and Angela Fan and Melanie Kambadur and Sharan Narang and Aurelien Rodriguez and Robert Stojnic and Sergey Edunov and Thomas Scialom},
+      year={2023},
+      eprint={2307.09288},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2307.09288}, 
+    }""",
 )
 
 llama2_7b_chat = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=LlamaReranker,
         model_name_or_path="meta-llama/Llama-2-7b-chat-hf",
@@ -414,10 +655,30 @@ llama2_7b_chat = ModelMeta(
     open_weights=True,
     revision="f5db02db724555f92da89c216ac04704f23d4590",
     release_date="2023-07-18",
+    citation="""@misc{touvron2023llama2openfoundation,
+      title={Llama 2: Open Foundation and Fine-Tuned Chat Models}, 
+      author={Hugo Touvron and Louis Martin and Kevin Stone and Peter Albert and Amjad Almahairi and Yasmine Babaei and Nikolay Bashlykov and Soumya Batra and Prajjwal Bhargava and Shruti Bhosale and Dan Bikel and Lukas Blecher and Cristian Canton Ferrer and Moya Chen and Guillem Cucurull and David Esiobu and Jude Fernandes and Jeremy Fu and Wenyin Fu and Brian Fuller and Cynthia Gao and Vedanuj Goswami and Naman Goyal and Anthony Hartshorn and Saghar Hosseini and Rui Hou and Hakan Inan and Marcin Kardas and Viktor Kerkez and Madian Khabsa and Isabel Kloumann and Artem Korenev and Punit Singh Koura and Marie-Anne Lachaux and Thibaut Lavril and Jenya Lee and Diana Liskovich and Yinghai Lu and Yuning Mao and Xavier Martinet and Todor Mihaylov and Pushkar Mishra and Igor Molybog and Yixin Nie and Andrew Poulton and Jeremy Reizenstein and Rashi Rungta and Kalyan Saladi and Alan Schelten and Ruan Silva and Eric Michael Smith and Ranjan Subramanian and Xiaoqing Ellen Tan and Binh Tang and Ross Taylor and Adina Williams and Jian Xiang Kuan and Puxin Xu and Zheng Yan and Iliyan Zarov and Yuchen Zhang and Angela Fan and Melanie Kambadur and Sharan Narang and Aurelien Rodriguez and Robert Stojnic and Sergey Edunov and Thomas Scialom},
+      year={2023},
+      eprint={2307.09288},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2307.09288}, 
+    }""",
+    n_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
+    framework=["PyTorch"],
 )
 
 mistral_7b = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=MistralReranker,
         model_name_or_path="mistralai/Mistral-7B-Instruct-v0.2",
@@ -428,10 +689,30 @@ mistral_7b = ModelMeta(
     open_weights=True,
     revision="3ad372fc79158a2148299e3318516c786aeded6c",
     release_date="2023-12-11",
+    n_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
+    framework=["PyTorch"],
+    citation="""@misc{jiang2023mistral7b,
+      title={Mistral 7B}, 
+      author={Albert Q. Jiang and Alexandre Sablayrolles and Arthur Mensch and Chris Bamford and Devendra Singh Chaplot and Diego de las Casas and Florian Bressand and Gianna Lengyel and Guillaume Lample and Lucile Saulnier and Lélio Renard Lavaud and Marie-Anne Lachaux and Pierre Stock and Teven Le Scao and Thibaut Lavril and Thomas Wang and Timothée Lacroix and William El Sayed},
+      year={2023},
+      eprint={2310.06825},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2310.06825}, 
+    }""",
 )
 
 followir_7b = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=FollowIRReranker,
         model_name_or_path="jhu-clsp/FollowIR-7B",
@@ -442,6 +723,27 @@ followir_7b = ModelMeta(
     open_weights=True,
     revision="4d25d437e38b510c01852070c0731e8f6e1875d1",
     release_date="2024-04-29",
+    training_datasets={"jhu-clsp/FollowIR-train": ["train"]},
+    n_parameters=None,
+    memory_usage_mb=13813,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    framework=["PyTorch"],
+    citation="""
+    @misc{weller2024followir,
+      title={FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions}, 
+      author={Orion Weller and Benjamin Chang and Sean MacAvaney and Kyle Lo and Arman Cohan and Benjamin Van Durme and Dawn Lawrie and Luca Soldaini},
+      year={2024},
+      eprint={2403.15246},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR}
+    }
+    """,
 )
 
 
@@ -550,7 +852,7 @@ mt5_languages = [
 ]
 
 mt5_base_mmarco_v2 = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=MonoT5Reranker,
         model_name_or_path="unicamp-dl/mt5-base-mmarco-v2",
@@ -561,10 +863,30 @@ mt5_base_mmarco_v2 = ModelMeta(
     open_weights=True,
     revision="cc0a949b9f21efcaba45c8cabb998ad02ce8d4e7",
     release_date="2022-01-05",
+    citation="""@misc{bonifacio2021mmarco,
+      title={mMARCO: A Multilingual Version of MS MARCO Passage Ranking Dataset}, 
+      author={Luiz Henrique Bonifacio and Vitor Jeronymo and Hugo Queiroz Abonizio and Israel Campiotti and Marzieh Fadaee and  and Roberto Lotufo and Rodrigo Nogueira},
+      year={2021},
+      eprint={2108.13897},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+    }
+    """,
+    training_datasets={"msmarco": ["train"]},
+    n_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    framework=["PyTorch"],
 )
 
 mt5_13b_mmarco_100k = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         _loader,
         wrapper=MonoT5Reranker,
         model_name_or_path="unicamp-dl/mt5-13b-mmarco-100k",
@@ -575,4 +897,15 @@ mt5_13b_mmarco_100k = ModelMeta(
     open_weights=True,
     revision="e1a4317e102a525ea9e16745ad21394a4f1bffbc",
     release_date="2022-11-04",
+    n_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
+    framework=["PyTorch"],
 )

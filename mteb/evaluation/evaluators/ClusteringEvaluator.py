@@ -21,13 +21,9 @@ class ClusteringEvaluator(Evaluator):
         labels,
         task_name: str | None = None,
         clustering_batch_size: int = 500,
-        limit: int | None = None,
         **kwargs,
     ):
         super().__init__(**kwargs)
-        if limit is not None:
-            sentences = sentences[:limit]
-            labels = labels[:limit]
         self.sentences = sentences
         self.labels = labels
         self.clustering_batch_size = clustering_batch_size

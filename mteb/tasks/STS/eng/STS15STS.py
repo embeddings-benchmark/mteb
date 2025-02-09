@@ -43,15 +43,7 @@ class STS15STS(AbsTaskSTS):
     doi = "10.18653/v1/S15-2010",
     pages = "56--63",
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 6000},
-            "avg_character_length": {"test": 57.7},
-        },
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5

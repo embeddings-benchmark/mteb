@@ -42,38 +42,26 @@ class SlovakSumRetrieval(AbsTaskRetrieval):
                 date = {2024},
             }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 600},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 2156.445,
-                    "average_query_length": 143.59833333333333,
-                    "num_documents": 600,
-                    "num_queries": 600,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
-        dataset_path = self.metadata_dict["dataset"]["path"]
-        n_sample = self.metadata_dict["descriptive_stats"]["n_samples"]["test"]
+        dataset_path = self.metadata.dataset["path"]
+        n_sample = 600
 
-        for split in kwargs.get("eval_splits", self.metadata_dict["eval_splits"]):
+        for split in kwargs.get("eval_splits", self.metadata.eval_splits):
             split_ds = datasets.load_dataset(
                 dataset_path, split=f"{split}[:{n_sample}]"
             )
             # Transforming news summary into retrieval task
-            queries = {f"q{e+1}": x["sum"] for e, x in enumerate(split_ds)}
+            queries = {f"q{e + 1}": x["sum"] for e, x in enumerate(split_ds)}
             corpus = {
-                f"d{e+1}": {"title": x["title"], "text": x["text"]}
+                f"d{e + 1}": {"title": x["title"], "text": x["text"]}
                 for e, x in enumerate(split_ds)
             }
-            qrels = {f"q{i+1}": {f"d{i+1}": 1} for i in range(split_ds.shape[0])}
+            qrels = {f"q{i + 1}": {f"d{i + 1}": 1} for i in range(split_ds.shape[0])}
             self.corpus[split], self.queries[split], self.relevant_docs[split] = (
                 corpus,
                 queries,

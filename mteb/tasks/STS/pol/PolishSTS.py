@@ -57,18 +57,10 @@ class SickrPLSTS(AbsTaskSTS):
     ISBN = "979-10-95546-34-4",
 }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 9812},
-            "avg_character_length": {"test": 42.8},
-        },
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 1
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 1
+    max_score = 5
 
 
 class CdscrSTS(AbsTaskSTS):
@@ -111,15 +103,7 @@ class CdscrSTS(AbsTaskSTS):
 }
 
         """,
-        descriptive_stats={
-            "n_samples": {"test": 1000},
-            "avg_character_length": {"test": 75.24},
-        },
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 1
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 1
+    max_score = 5

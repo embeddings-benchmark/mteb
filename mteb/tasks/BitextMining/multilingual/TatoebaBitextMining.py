@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -120,7 +119,7 @@ _LANGUAGES = {
 }
 
 
-class TatoebaBitextMining(AbsTaskBitextMining, MultilingualTask):
+class TatoebaBitextMining(AbsTaskBitextMining):
     fast_loading = True
     metadata = TaskMetadata(
         name="Tatoeba",
@@ -152,8 +151,4 @@ class TatoebaBitextMining(AbsTaskBitextMining, MultilingualTask):
         year = {2021},
         }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 2000},
-            "avg_character_length": {"test": 39.4},
-        },
     )

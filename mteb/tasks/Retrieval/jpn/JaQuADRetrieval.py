@@ -37,26 +37,14 @@ class JaQuADRetrieval(AbsTaskRetrieval):
     archivePrefix={arXiv},
     primaryClass={cs.CL}
 }""",
-        descriptive_stats={
-            "n_samples": {"validation": 2048},
-            "avg_character_length": {
-                "validation": {
-                    "average_document_length": 155.80922362309224,
-                    "average_query_length": 30.826171875,
-                    "num_documents": 3014,
-                    "num_queries": 2048,
-                    "average_relevant_docs_per_query": 2.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
 
-        split = self.metadata_dict["eval_splits"][0]
-        ds = load_dataset(**self.metadata_dict["dataset"], split=split)
+        split = self.metadata.eval_splits[0]
+        ds = load_dataset(**self.metadata.dataset, split=split)
         ds = ds.shuffle(seed=42)
         max_samples = min(2048, len(ds))
         ds = ds.select(

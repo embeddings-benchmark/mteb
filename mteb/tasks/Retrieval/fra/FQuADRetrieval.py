@@ -50,32 +50,13 @@ class FQuADRetrieval(AbsTaskRetrieval):
     doi = "10.18653/v1/2020.findings-emnlp.107",
     pages = "1193--1208",
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 400, "validation": 100},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 896.3308550185874,
-                    "average_query_length": 58.52,
-                    "num_documents": 269,
-                    "num_queries": 400,
-                    "average_relevant_docs_per_query": 1.0,
-                },
-                "validation": {
-                    "average_document_length": 895.1340206185567,
-                    "average_query_length": 54.13,
-                    "num_documents": 97,
-                    "num_queries": 100,
-                    "average_relevant_docs_per_query": 1.0,
-                },
-            },
-        },
     )
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
         dataset_raw = datasets.load_dataset(
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         # set valid_hasAns and test_hasAns as the validation and test splits (only queries with answers)
@@ -92,12 +73,12 @@ class FQuADRetrieval(AbsTaskRetrieval):
             eval_split: {
                 str(i): q["question"] for i, q in enumerate(dataset_raw[eval_split])
             }
-            for eval_split in self.metadata_dict["eval_splits"]
+            for eval_split in self.metadata.eval_splits
         }
 
         self.corpus = {
             eval_split: {str(row["title"]): row for row in dataset_raw[eval_split]}
-            for eval_split in self.metadata_dict["eval_splits"]
+            for eval_split in self.metadata.eval_splits
         }
 
         self.relevant_docs = {
@@ -105,7 +86,7 @@ class FQuADRetrieval(AbsTaskRetrieval):
                 str(i): {str(q["title"]): 1}
                 for i, q in enumerate(dataset_raw[eval_split])
             }
-            for eval_split in self.metadata_dict["eval_splits"]
+            for eval_split in self.metadata.eval_splits
         }
 
         self.data_loaded = True

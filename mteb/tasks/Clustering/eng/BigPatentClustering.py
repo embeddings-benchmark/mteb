@@ -29,7 +29,6 @@ class BigPatentClustering(AbsTaskClustering):
         eval_langs=["eng-Latn"],
         main_score="v_measure",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
@@ -52,7 +51,6 @@ class BigPatentClustering(AbsTaskClustering):
   biburl    = {https://dblp.org/rec/journals/corr/abs-1906-03741.bib},
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }""",
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
 
@@ -99,10 +97,6 @@ class BigPatentClusteringFast(AbsTaskClusteringFast):
   biburl    = {https://dblp.org/rec/journals/corr/abs-1906-03741.bib},
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": NUM_SAMPLES},
-            "avg_character_length": {"test": 30995.5},
-        },
     )
 
     def dataset_transform(self):
@@ -113,5 +107,4 @@ class BigPatentClusteringFast(AbsTaskClusteringFast):
             self.seed,
             self.metadata.eval_splits,
             label="labels",
-            n_samples=NUM_SAMPLES,
         )

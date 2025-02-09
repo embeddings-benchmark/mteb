@@ -49,76 +49,6 @@ class LEMBPasskeyRetrieval(AbsTaskRetrieval):
             year={2024}
             }
         """,
-        descriptive_stats={
-            "n_samples": {
-                "test_256": 150,
-                "test_512": 150,
-                "test_1024": 150,
-                "test_2048": 150,
-                "test_4096": 150,
-                "test_8192": 150,
-                "test_16384": 150,
-                "test_32768": 150,
-            },
-            "avg_character_length": {
-                "test_256": {
-                    "average_document_length": 876.24,
-                    "average_query_length": 38.1,
-                    "num_documents": 100,
-                    "num_queries": 50,
-                    "average_relevant_docs_per_query": 1.0,
-                },
-                "test_512": {
-                    "average_document_length": 1785.2,
-                    "average_query_length": 37.76,
-                    "num_documents": 100,
-                    "num_queries": 50,
-                    "average_relevant_docs_per_query": 1.0,
-                },
-                "test_1024": {
-                    "average_document_length": 3607.18,
-                    "average_query_length": 37.68,
-                    "num_documents": 100,
-                    "num_queries": 50,
-                    "average_relevant_docs_per_query": 1.0,
-                },
-                "test_2048": {
-                    "average_document_length": 7242.2,
-                    "average_query_length": 37.8,
-                    "num_documents": 100,
-                    "num_queries": 50,
-                    "average_relevant_docs_per_query": 1.0,
-                },
-                "test_4096": {
-                    "average_document_length": 14518.16,
-                    "average_query_length": 37.64,
-                    "num_documents": 100,
-                    "num_queries": 50,
-                    "average_relevant_docs_per_query": 1.0,
-                },
-                "test_8192": {
-                    "average_document_length": 29071.16,
-                    "average_query_length": 37.54,
-                    "num_documents": 100,
-                    "num_queries": 50,
-                    "average_relevant_docs_per_query": 1.0,
-                },
-                "test_16384": {
-                    "average_document_length": 58175.16,
-                    "average_query_length": 38.12,
-                    "num_documents": 100,
-                    "num_queries": 50,
-                    "average_relevant_docs_per_query": 1.0,
-                },
-                "test_32768": {
-                    "average_document_length": 116380.16,
-                    "average_query_length": 37.74,
-                    "num_documents": 100,
-                    "num_queries": 50,
-                    "average_relevant_docs_per_query": 1.0,
-                },
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -131,7 +61,7 @@ class LEMBPasskeyRetrieval(AbsTaskRetrieval):
 
         for split in self._EVAL_SPLIT:
             context_length = int(split.split("_")[1])
-            query_list = datasets.load_dataset(**self.metadata_dict["dataset"])[
+            query_list = datasets.load_dataset(**self.metadata.dataset)[
                 "queries"
             ]  # dict_keys(['qid', 'text'])
             query_list = query_list.filter(
@@ -139,7 +69,7 @@ class LEMBPasskeyRetrieval(AbsTaskRetrieval):
             )
             queries = {row["qid"]: row["text"] for row in query_list}
 
-            corpus_list = datasets.load_dataset(**self.metadata_dict["dataset"])[
+            corpus_list = datasets.load_dataset(**self.metadata.dataset)[
                 "corpus"
             ]  # dict_keys(['doc_id', 'text'])
             corpus_list = corpus_list.filter(
@@ -147,7 +77,7 @@ class LEMBPasskeyRetrieval(AbsTaskRetrieval):
             )
             corpus = {row["doc_id"]: {"text": row["text"]} for row in corpus_list}
 
-            qrels_list = datasets.load_dataset(**self.metadata_dict["dataset"])[
+            qrels_list = datasets.load_dataset(**self.metadata.dataset)[
                 "qrels"
             ]  # dict_keys(['qid', 'doc_id'])
             qrels_list = qrels_list.filter(

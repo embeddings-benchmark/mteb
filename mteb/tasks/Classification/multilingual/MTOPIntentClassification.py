@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -14,7 +13,7 @@ _LANGUAGES = {
 }
 
 
-class MTOPIntentClassification(MultilingualTask, AbsTaskClassification):
+class MTOPIntentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="MTOPIntentClassification",
         dataset={
@@ -60,8 +59,4 @@ class MTOPIntentClassification(MultilingualTask, AbsTaskClassification):
 }
 """,
         prompt="Classify the intent of the given utterance in task-oriented conversation",
-        descriptive_stats={
-            "n_samples": {"validation": 2235, "test": 4386},
-            "avg_character_length": {"validation": 36.5, "test": 36.8},
-        },
     )

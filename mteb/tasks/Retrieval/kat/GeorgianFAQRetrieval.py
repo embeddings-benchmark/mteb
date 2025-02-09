@@ -34,18 +34,6 @@ class GeorgianFAQRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         bibtex_citation="",
-        descriptive_stats={
-            "n_samples": {_EVAL_SPLIT: 2566},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 511.24668745128605,
-                    "average_query_length": 61.69551656920078,
-                    "num_documents": 2566,
-                    "num_queries": 2565,
-                    "average_relevant_docs_per_query": 1.0003898635477584,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -57,10 +45,10 @@ class GeorgianFAQRetrieval(AbsTaskRetrieval):
         relevant_docs = {_EVAL_SPLIT: {}}
 
         data = load_dataset(
-            self.metadata_dict["dataset"]["path"],
+            self.metadata.dataset["path"],
             split=_EVAL_SPLIT,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
         question_ids = {
             question: _id for _id, question in enumerate(set(data["question"]))

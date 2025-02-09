@@ -5,7 +5,6 @@ from collections import defaultdict
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import *
@@ -57,7 +56,7 @@ def load_neuclir_data(
     return corpus, queries, relevant_docs
 
 
-class NeuCLIR2022Retrieval(MultilingualTask, AbsTaskRetrieval):
+class NeuCLIR2022Retrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NeuCLIR2022Retrieval",
         description="The task involves identifying and retrieving the documents that are relevant to the queries.",
@@ -86,34 +85,6 @@ class NeuCLIR2022Retrieval(MultilingualTask, AbsTaskRetrieval):
   journal={arXiv preprint arXiv:2304.12367},
   year={2023}
 }""",
-        descriptive_stats={
-            "n_samples": {"fas": 2232130, "zho": 3179323, "rus": 4627657},
-            "avg_character_length": {
-                "test": {
-                    "fas": {
-                        "average_document_length": 2032.093148525817,
-                        "average_query_length": 85.4298245614035,
-                        "num_documents": 2232016,
-                        "num_queries": 114,
-                        "average_relevant_docs_per_query": 12.912280701754385,
-                    },
-                    "rus": {
-                        "average_document_length": 1757.9129983233004,
-                        "average_query_length": 85.58771929824562,
-                        "num_documents": 4627543,
-                        "num_queries": 114,
-                        "average_relevant_docs_per_query": 16.57017543859649,
-                    },
-                    "zho": {
-                        "average_document_length": 743.1426659901881,
-                        "average_query_length": 24.17543859649123,
-                        "num_documents": 3179209,
-                        "num_queries": 114,
-                        "average_relevant_docs_per_query": 18.710526315789473,
-                    },
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -121,11 +92,11 @@ class NeuCLIR2022Retrieval(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = load_neuclir_data(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
-            eval_splits=self.metadata_dict["eval_splits"],
+            eval_splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
         self.data_loaded = True
 
@@ -198,7 +169,7 @@ def load_neuclir_data_hard_negatives(
     return corpus, queries, relevant_docs
 
 
-class NeuCLIR2022RetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
+class NeuCLIR2022RetrievalHardNegatives(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NeuCLIR2022RetrievalHardNegatives",
         description="The task involves identifying and retrieving the documents that are relevant to the queries. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
@@ -227,41 +198,6 @@ class NeuCLIR2022RetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
   journal={arXiv preprint arXiv:2304.12367},
   year={2023}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 2066.9453653646488,
-                    "average_query_length": 63.529411764705884,
-                    "num_documents": 27931,
-                    "num_queries": 136,
-                    "average_relevant_docs_per_query": 40.39705882352941,
-                    "hf_subset_descriptive_stats": {
-                        "fas": {
-                            "average_document_length": 2816.847782031074,
-                            "average_query_length": 83.26666666666667,
-                            "num_documents": 8882,
-                            "num_queries": 45,
-                            "average_relevant_docs_per_query": 32.71111111111111,
-                        },
-                        "rus": {
-                            "average_document_length": 2446.5574277854193,
-                            "average_query_length": 85.56818181818181,
-                            "num_documents": 8724,
-                            "num_queries": 44,
-                            "average_relevant_docs_per_query": 42.93181818181818,
-                        },
-                        "zho": {
-                            "average_document_length": 1101.0984987893462,
-                            "average_query_length": 24.0,
-                            "num_documents": 10325,
-                            "num_queries": 47,
-                            "average_relevant_docs_per_query": 45.38297872340426,
-                        },
-                    },
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -270,11 +206,11 @@ class NeuCLIR2022RetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
 
         self.corpus, self.queries, self.relevant_docs = (
             load_neuclir_data_hard_negatives(
-                path=self.metadata_dict["dataset"]["path"],
+                path=self.metadata.dataset["path"],
                 langs=self.metadata.eval_langs,
-                eval_splits=self.metadata_dict["eval_splits"],
+                eval_splits=self.metadata.eval_splits,
                 cache_dir=kwargs.get("cache_dir", None),
-                revision=self.metadata_dict["dataset"]["revision"],
+                revision=self.metadata.dataset["revision"],
             )
         )
         self.data_loaded = True

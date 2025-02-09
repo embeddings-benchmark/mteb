@@ -4,6 +4,7 @@ import json
 import logging
 from argparse import Namespace
 from collections import defaultdict
+from collections.abc import Iterable
 from functools import cached_property
 from importlib.metadata import version
 from pathlib import Path
@@ -23,24 +24,6 @@ Score = Any
 logger = logging.getLogger(__name__)
 
 
-# Tasks that were completely removed from the MTEB (we generally don't do this anymore instead we supersede tasks)
-class CQADupstackRetrievalDummy:
-    """A dummy task for loading historic results from before v1.11.0"""
-
-    metadata = Namespace(  # type: ignore
-        name="CQADupstackRetrieval",
-        main_score="ndcg_at_10",
-        type="Retrieval",
-        hf_subsets_to_langscripts={
-            "default": ["eng-Latn"],
-        },
-        dataset={
-            "revision": "revision not applicable",
-            "path": "CQADupstackRetrieval_is_a_combined_dataset",
-        },
-    )
-
-
 class ScalaNbClassificationDummy:
     """A dummy task for loading historic results from before v1.11.0"""
 
@@ -52,6 +35,7 @@ class ScalaNbClassificationDummy:
             "default": ["nob-Latn"],
         },
         dataset={"revision": "revision_not_applicable"},
+        revision="revision_not_applicable",
     )
 
 
@@ -66,6 +50,7 @@ class ScalaNnClassificationDummy:
             "default": ["nno-Latn"],
         },
         dataset={"revision": "revision_not_applicable"},
+        revision="revision_not_applicable",
     )
 
 
@@ -80,6 +65,7 @@ class ScalaDaClassificationDummy:
             "default": ["dan-Latn"],
         },
         dataset={"revision": "revision_not_applicable"},
+        revision="revision_not_applicable",
     )
 
 
@@ -94,11 +80,11 @@ class ScalaSvClassificationDummy:
             "default": ["swe-Latn"],
         },
         dataset={"revision": "revision_not_applicable"},
+        revision="revision_not_applicable",
     )
 
 
 outdated_tasks = {
-    "CQADupstackRetrieval": CQADupstackRetrievalDummy,
     "ScalaNbClassification": ScalaNbClassificationDummy,
     "ScalaNnClassification": ScalaNnClassificationDummy,
     "ScalaDaClassification": ScalaDaClassificationDummy,
@@ -156,9 +142,9 @@ class TaskResult(BaseModel):
 
     dataset_revision: str
     task_name: str
-    mteb_version: str
+    mteb_version: str | None
     scores: dict[Split, list[ScoresDict]]
-    evaluation_time: float
+    evaluation_time: float | None
     kg_co2_emissions: float | None = None
 
     @classmethod
@@ -183,7 +169,7 @@ class TaskResult(BaseModel):
                 flat_scores[split].append(_scores)
 
         return TaskResult(
-            dataset_revision=task.metadata.dataset["revision"],
+            dataset_revision=task.metadata.revision,
             task_name=task.metadata.name,
             mteb_version=version("mteb"),
             scores=flat_scores,
@@ -290,13 +276,18 @@ class TaskResult(BaseModel):
                     f"Error loading TaskResult from disk. You can try to load historic data by setting `load_historic_data=True`. Error: {e}"
                 )
 
+        if data["mteb_version"] is None:
+            data.pop("mteb_version")
+
         pre_1_11_load = (
             (
                 "mteb_version" in data
+                and data["mteb_version"] is not None
                 and Version(data["mteb_version"]) < Version("1.11.0")
             )
             or "mteb_version" not in data
         )  # assume it is before 1.11.0 if the version is not present
+
         try:
             obj = cls.model_validate(data)
         except Exception as e:
@@ -307,9 +298,11 @@ class TaskResult(BaseModel):
             )
             obj = cls._convert_from_before_v1_11_0(data)
 
-        pre_v_12_48 = "mteb_version" in data and Version(
-            data["mteb_version"]
-        ) < Version("1.12.48")
+        pre_v_12_48 = (
+            "mteb_version" in data
+            and data["mteb_version"] is not None
+            and Version(data["mteb_version"]) < Version("1.12.48")
+        )
 
         if pre_v_12_48:
             cls._fix_pair_classification_scores(obj)
@@ -383,15 +376,16 @@ class TaskResult(BaseModel):
         main_score = task.metadata.main_score
         for split, split_score in scores.items():
             for hf_subset, hf_subset_scores in split_score.items():
-                if task.metadata.type == "STS":
-                    for name, prev_name in [
-                        ("cosine", "cos_sim"),
-                        ("manhattan", "manhattan"),
-                        ("euclidean", "euclidean"),
-                    ]:
-                        prev_name_scores = hf_subset_scores.pop(
-                            prev_name, {"spearman": "NaN"}
-                        )
+                for name, prev_name in [
+                    ("cosine", "cos_sim"),
+                    ("manhattan", "manhattan"),
+                    ("euclidean", "euclidean"),
+                    ("dot", "dot"),
+                    ("max", "max"),
+                    ("similarity", "similarity"),
+                ]:
+                    prev_name_scores = hf_subset_scores.pop(prev_name, None)
+                    if prev_name_scores is not None:
                         for k, v in prev_name_scores.items():
                             hf_subset_scores[f"{name}_{k}"] = v
 
@@ -464,7 +458,38 @@ class TaskResult(BaseModel):
                         values.append(getter(scores))
                         break
 
-            return aggregation(values)
+        return aggregation(values)
+
+    def get_score_fast(
+        self, splits: Iterable[str] | None = None, languages: str | None = None
+    ) -> float:
+        """Sped up version of get_score that will be used if no aggregation, script or getter needs to be specified."""
+        if splits is None:
+            splits = self.scores.keys()
+        val_sum = 0
+        n_val = 0
+        for split in splits:
+            if split not in self.scores:
+                raise ValueError(f"Split missing from scores: {split}")
+
+            for scores in self.scores[split]:
+                langs = scores["languages"]
+                hf_subset = scores["hf_subset"]
+                main_score = scores.get("main_score", None)
+                if main_score is None:
+                    raise ValueError(f"Missing main score for subset: {hf_subset}")
+                if languages is None:
+                    val_sum += main_score
+                    n_val += 1
+                    continue
+                for lang in langs:
+                    if lang.split("-")[0] in languages:
+                        val_sum += main_score
+                        n_val += 1
+                        break
+        if n_val == 0:
+            raise ValueError("No splits had scores for the specified languages.")
+        return val_sum / n_val
 
     @classmethod
     def from_validated(cls, **data) -> TaskResult:
@@ -473,7 +498,23 @@ class TaskResult(BaseModel):
     def __repr__(self) -> str:
         return f"TaskResult(task_name={self.task_name}, scores=...)"
 
-    def validate_and_filter_scores(self, task: AbsTask | None = None) -> AbsTask:
+    def only_main_score(self) -> TaskResult:
+        new_scores = {}
+        for split in self.scores:
+            new_scores[split] = []
+            for subset_scores in self.scores[split]:
+                new_scores[split].append(
+                    {
+                        "hf_subset": subset_scores.get("hf_subset", "default"),
+                        "main_score": subset_scores.get("main_score", np.nan),
+                        "languages": subset_scores.get("languages", []),
+                    }
+                )
+        new_res = {**self.to_dict(), "scores": new_scores}
+        new_res = TaskResult.from_validated(**new_res)
+        return new_res
+
+    def validate_and_filter_scores(self, task: AbsTask | None = None) -> TaskResult:
         """This ensures that the scores are correct for the given task, by removing any splits besides those specified in the task metadata.
         Additionally it also ensure that all of the splits required as well as the languages are present in the scores.
         Returns new TaskResult object.
@@ -486,14 +527,10 @@ class TaskResult(BaseModel):
 
         if task is None:
             task = get_task(self.task_name)
+
         splits = task.metadata.eval_splits
-        if task.is_multilingual:
-            hf_subsets = getattr(
-                task, "hf_subsets", task.metadata.hf_subsets_to_langscripts.keys()
-            )
-            hf_subsets = set(hf_subsets)
-        else:
-            hf_subsets = {"default"}
+        hf_subsets = set(task.hf_subsets)
+
         new_scores = {}
         seen_splits = set()
         for split in self.scores:
@@ -507,12 +544,21 @@ class TaskResult(BaseModel):
                 new_scores[split].append(_scores)
                 seen_subsets.add(_scores["hf_subset"])
             if seen_subsets != hf_subsets:
-                raise ValueError(
-                    f"Missing subsets {hf_subsets - seen_subsets} for split {split}"
+                missing_subsets = hf_subsets - seen_subsets
+                if len(missing_subsets) > 2:
+                    subset1, subset2 = list(missing_subsets)[:2]
+                    missing_subsets_str = f"{{'{subset1}', '{subset2}', ...}}"
+                else:
+                    missing_subsets_str = str(missing_subsets)
+
+                logger.warning(
+                    f"{task.metadata.name}: Missing subsets {missing_subsets_str} for split {split}"
                 )
             seen_splits.add(split)
         if seen_splits != set(splits):
-            raise ValueError(f"Missing splits {set(splits) - seen_splits}")
+            logger.warning(
+                f"{task.metadata.name}: Missing splits {set(splits) - seen_splits}"
+            )
         new_res = {**self.to_dict(), "scores": new_scores}
         new_res = TaskResult.from_validated(**new_res)
         return new_res

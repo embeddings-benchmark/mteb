@@ -10,10 +10,11 @@ import torch
 from numpy import ndarray
 from sentence_transformers import CrossEncoder, SentenceTransformer
 from torch import Tensor
+from torch.utils.data import DataLoader
 
 import mteb
-from mteb import SentenceTransformerWrapper
 from mteb.encoder_interface import PromptType
+from mteb.models import SentenceTransformerWrapper
 from tests.test_benchmark.task_grid import MOCK_TASK_TEST_GRID
 
 
@@ -33,12 +34,36 @@ class MockTorchEncoder(mteb.Encoder):
         return torch.randn(len(sentences), 10).numpy()
 
 
-class MockTorchbf16Encoder(mteb.Encoder):
+class MockTorchbf16Encoder(SentenceTransformer):
     def __init__(self):
         pass
 
     def encode(self, sentences, prompt_name: str | None = None, **kwargs):
         return torch.randn(len(sentences), 10, dtype=torch.bfloat16)
+
+
+class MockCLIPEncoder:
+    def __init__(self):
+        pass
+
+    def get_text_embeddings(self, texts, **kwargs):
+        return torch.randn(len(texts), 10)
+
+    def get_image_embeddings(self, images, **kwargs):
+        if isinstance(images, DataLoader):
+            all_embeddings = []
+            for batch in images:
+                batch_embeddings = torch.randn(len(batch), 10)
+                all_embeddings.append(batch_embeddings)
+            return torch.cat(all_embeddings, dim=0)
+        else:
+            return torch.randn(len(images), 10)
+
+    def get_fused_embeddings(self, texts, images, **kwargs):
+        return torch.randn(len(texts), 10)
+
+    def calculate_probs(self, text_embeddings, image_embeddings):
+        return torch.randn(image_embeddings.shape[0], text_embeddings.shape[0])
 
 
 class MockSentenceTransformer(SentenceTransformer):
@@ -61,6 +86,7 @@ class MockSentenceTransformer(SentenceTransformer):
         convert_to_tensor: bool = False,
         device: str | None = None,
         normalize_embeddings: bool = False,
+        **kwargs: Any,
     ) -> list[Tensor] | ndarray | Tensor:
         return torch.randn(len(sentences), 10).numpy()
 

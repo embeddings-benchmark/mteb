@@ -5,7 +5,6 @@ from typing import Any
 import datasets
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = [
@@ -97,7 +96,7 @@ def get_lang_pairs() -> dict[str, list[str]]:
 _LANGUAGES_MAPPING = get_lang_pairs()
 
 
-class IndicGenBenchFloresBitextMining(AbsTaskBitextMining, MultilingualTask):
+class IndicGenBenchFloresBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="IndicGenBenchFloresBitextMining",
         dataset={
@@ -128,10 +127,6 @@ class IndicGenBenchFloresBitextMining(AbsTaskBitextMining, MultilingualTask):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
-        descriptive_stats={
-            "n_samples": {"validation": 997, "test": 1012},
-            "avg_character_length": {"validation": 126.25, "test": 130.84},
-        },
     )
 
     def load_data(self, **kwargs: Any) -> None:
@@ -153,7 +148,7 @@ class IndicGenBenchFloresBitextMining(AbsTaskBitextMining, MultilingualTask):
                 language = f"{coded_source_language}_en"
 
             self.dataset[lang] = datasets.load_dataset(
-                **self.metadata_dict["dataset"],
+                **self.metadata.dataset,
                 field="examples",
                 data_files={
                     "validation": f"flores_{language}_dev.json",

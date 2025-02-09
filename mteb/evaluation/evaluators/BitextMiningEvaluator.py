@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
+import numpy as np
 import torch
 import tqdm
 from datasets import Dataset
@@ -31,6 +32,7 @@ class BitextMiningEvaluator(Evaluator):
         self.pairs = pair_columns
         self.n = len(sentences)
         self.sentences = sentences
+        # TODO used only by BUCC
         self.gold = (
             list(zip(range(self.n), range(self.n)))
             if "gold" not in sentences
@@ -44,9 +46,13 @@ class BitextMiningEvaluator(Evaluator):
 
     def compute_metrics(self, model: Encoder, encode_kwargs: dict[str, Any] = {}):
         pair_elements = {p for pair in self.pairs for p in pair}
-        subsets = [
-            col for col in self.sentences.features.keys() if col in pair_elements
-        ]
+        if isinstance(self.sentences, Dataset):
+            subsets = [
+                col for col in self.sentences.features.keys() if col in pair_elements
+            ]
+        else:
+            # BUCC outputs a dict instead of a Dataset
+            subsets = list(pair_elements)
         n_subsets = len(subsets)
 
         embeddings = {}
@@ -62,7 +68,7 @@ class BitextMiningEvaluator(Evaluator):
             tqdm.tqdm(self.pairs, desc="Matching sentences")
         ):
             scores[f"{key1}-{key2}"] = self._compute_metrics(
-                embeddings[key1], embeddings[key2]
+                embeddings[key1], embeddings[key2], model
             )
 
         # in case of default pair unnest the dict
@@ -74,12 +80,15 @@ class BitextMiningEvaluator(Evaluator):
 
     def _compute_metrics(
         self,
-        embeddings1,
-        embeddings2,
-    ):
+        embeddings1: np.ndarray,
+        embeddings2: np.ndarray,
+        model: Encoder,
+    ) -> dict[str, float]:
         # Find nearest neighbors
         logger.info("Finding nearest neighbors...")
-        nearest_neighbors = self._similarity_search(embeddings1, embeddings2, top_k=1)
+        nearest_neighbors = self._similarity_search(
+            embeddings1, embeddings2, model, top_k=1
+        )
 
         # Compute errors
         logger.info("Computing metrics...")
@@ -104,23 +113,23 @@ class BitextMiningEvaluator(Evaluator):
 
     def _similarity_search(
         self,
-        query_embeddings,
-        corpus_embeddings,
+        query_embeddings: np.ndarray,
+        corpus_embeddings: np.ndarray,
+        model: Encoder,
         query_chunk_size: int = 100,
         corpus_chunk_size: int = 500000,
         top_k: int = 10,
-        score_function=cos_sim,
-    ):
+    ) -> list[list[dict[str, float]]]:
         """This function performs a cosine similarity search between a list of query embeddings  and a list of corpus embeddings.
         It can be used for Information Retrieval / Semantic Search for corpora up to about 1 Million entries.
 
         Args:
             query_embeddings: A 2 dimensional tensor with the query embeddings.
             corpus_embeddings: A 2 dimensional tensor with the corpus embeddings.
+            model: The model used to encode the queries and corpus. This is used to check if the embeddings are on the same device and to encode the queries and corpus if they are not already tensors.
             query_chunk_size: Process 100 queries simultaneously. Increasing that value increases the speed, but requires more memory.
             corpus_chunk_size: Scans the corpus 100k entries at a time. Increasing that value increases the speed, but requires more memory.
             top_k: Retrieve top k matching entries.
-            score_function: Function for computing scores. By default, cosine similarity.
 
         Returns:
             Returns a list with one entry for each query. Each entry is a list of dictionaries with the keys 'corpus_id' and 'score', sorted by decreasing cosine similarity scores.
@@ -142,7 +151,7 @@ class BitextMiningEvaluator(Evaluator):
             # Iterate over chunks of the corpus
             for corpus_start_idx in range(0, len(corpus_embeddings), corpus_chunk_size):
                 # Compute cosine similarities
-                cos_scores = score_function(
+                similarity_scores = cos_sim(
                     query_embeddings[
                         query_start_idx : query_start_idx + query_chunk_size
                     ],
@@ -151,10 +160,20 @@ class BitextMiningEvaluator(Evaluator):
                     ],
                 )
 
+                if hasattr(model, "similarity"):
+                    similarity_scores = model.similarity(
+                        query_embeddings[
+                            query_start_idx : query_start_idx + query_chunk_size
+                        ],
+                        corpus_embeddings[
+                            corpus_start_idx : corpus_start_idx + corpus_chunk_size
+                        ],
+                    )
+
                 # Get top-k scores
                 cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
-                    cos_scores,
-                    min(top_k, len(cos_scores[0])),
+                    similarity_scores,
+                    min(top_k, len(similarity_scores[0])),
                     dim=1,
                     largest=True,
                     sorted=False,
@@ -162,7 +181,7 @@ class BitextMiningEvaluator(Evaluator):
                 cos_scores_top_k_values = cos_scores_top_k_values.cpu().tolist()
                 cos_scores_top_k_idx = cos_scores_top_k_idx.cpu().tolist()
 
-                for query_itr in range(len(cos_scores)):
+                for query_itr in range(len(similarity_scores)):
                     for sub_corpus_id, score in zip(
                         cos_scores_top_k_idx[query_itr],
                         cos_scores_top_k_values[query_itr],

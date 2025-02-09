@@ -1,0 +1,830 @@
+{
+    "test": {
+        "num_samples": 65,
+        "number_of_characters": 13000,
+        "min_text_length": 200,
+        "average_text_length": 200.0,
+        "max_text_length": 200,
+        "unique_texts": 12972,
+        "min_labels_per_text": 117,
+        "average_labels_per_text": 200.0,
+        "max_labels_per_text": 2834,
+        "unique_labels": 15,
+        "labels": {
+            "Entertainment": {
+                "count": 2834
+            },
+            "Health/Wellness": {
+                "count": 1066
+            },
+            "Office": {
+                "count": 182
+            },
+            "Hobbies": {
+                "count": 1716
+            },
+            "Building Material": {
+                "count": 117
+            },
+            "Food": {
+                "count": 221
+            },
+            "SPORTS/GAMES": {
+                "count": 208
+            },
+            "Education": {
+                "count": 1196
+            },
+            "Pets": {
+                "count": 1664
+            },
+            "Home": {
+                "count": 1872
+            },
+            "Travel": {
+                "count": 130
+            },
+            "Transportation": {
+                "count": 637
+            },
+            "Baby Products": {
+                "count": 507
+            },
+            "Vehicles": {
+                "count": 117
+            },
+            "Fashion": {
+                "count": 533
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "as": {
+                "num_samples": 5,
+                "number_of_characters": 1000,
+                "min_text_length": 200,
+                "average_text_length": 200.0,
+                "max_text_length": 200,
+                "unique_texts": 997,
+                "min_labels_per_text": 9,
+                "average_labels_per_text": 200.0,
+                "max_labels_per_text": 218,
+                "unique_labels": 15,
+                "labels": {
+                    "Entertainment": {
+                        "count": 218
+                    },
+                    "Health/Wellness": {
+                        "count": 82
+                    },
+                    "Office": {
+                        "count": 14
+                    },
+                    "Hobbies": {
+                        "count": 132
+                    },
+                    "Building Material": {
+                        "count": 9
+                    },
+                    "Food": {
+                        "count": 17
+                    },
+                    "SPORTS/GAMES": {
+                        "count": 16
+                    },
+                    "Education": {
+                        "count": 92
+                    },
+                    "Pets": {
+                        "count": 128
+                    },
+                    "Home": {
+                        "count": 144
+                    },
+                    "Travel": {
+                        "count": 10
+                    },
+                    "Transportation": {
+                        "count": 49
+                    },
+                    "Baby Products": {
+                        "count": 39
+                    },
+                    "Vehicles": {
+                        "count": 9
+                    },
+                    "Fashion": {
+                        "count": 41
+                    }
+                }
+            },
+            "bd": {
+                "num_samples": 5,
+                "number_of_characters": 1000,
+                "min_text_length": 200,
+                "average_text_length": 200.0,
+                "max_text_length": 200,
+                "unique_texts": 998,
+                "min_labels_per_text": 9,
+                "average_labels_per_text": 200.0,
+                "max_labels_per_text": 218,
+                "unique_labels": 15,
+                "labels": {
+                    "Entertainment": {
+                        "count": 218
+                    },
+                    "Health/Wellness": {
+                        "count": 82
+                    },
+                    "Office": {
+                        "count": 14
+                    },
+                    "Hobbies": {
+                        "count": 132
+                    },
+                    "Building Material": {
+                        "count": 9
+                    },
+                    "Food": {
+                        "count": 17
+                    },
+                    "SPORTS/GAMES": {
+                        "count": 16
+                    },
+                    "Education": {
+                        "count": 92
+                    },
+                    "Pets": {
+                        "count": 128
+                    },
+                    "Home": {
+                        "count": 144
+                    },
+                    "Travel": {
+                        "count": 10
+                    },
+                    "Transportation": {
+                        "count": 49
+                    },
+                    "Baby Products": {
+                        "count": 39
+                    },
+                    "Vehicles": {
+                        "count": 9
+                    },
+                    "Fashion": {
+                        "count": 41
+                    }
+                }
+            },
+            "bn": {
+                "num_samples": 5,
+                "number_of_characters": 1000,
+                "min_text_length": 200,
+                "average_text_length": 200.0,
+                "max_text_length": 200,
+                "unique_texts": 998,
+                "min_labels_per_text": 9,
+                "average_labels_per_text": 200.0,
+                "max_labels_per_text": 218,
+                "unique_labels": 15,
+                "labels": {
+                    "Entertainment": {
+                        "count": 218
+                    },
+                    "Health/Wellness": {
+                        "count": 82
+                    },
+                    "Office": {
+                        "count": 14
+                    },
+                    "Hobbies": {
+                        "count": 132
+                    },
+                    "Building Material": {
+                        "count": 9
+                    },
+                    "Food": {
+                        "count": 17
+                    },
+                    "SPORTS/GAMES": {
+                        "count": 16
+                    },
+                    "Education": {
+                        "count": 92
+                    },
+                    "Pets": {
+                        "count": 128
+                    },
+                    "Home": {
+                        "count": 144
+                    },
+                    "Travel": {
+                        "count": 10
+                    },
+                    "Transportation": {
+                        "count": 49
+                    },
+                    "Baby Products": {
+                        "count": 39
+                    },
+                    "Vehicles": {
+                        "count": 9
+                    },
+                    "Fashion": {
+                        "count": 41
+                    }
+                }
+            },
+            "gu": {
+                "num_samples": 5,
+                "number_of_characters": 1000,
+                "min_text_length": 200,
+                "average_text_length": 200.0,
+                "max_text_length": 200,
+                "unique_texts": 997,
+                "min_labels_per_text": 9,
+                "average_labels_per_text": 200.0,
+                "max_labels_per_text": 218,
+                "unique_labels": 15,
+                "labels": {
+                    "Entertainment": {
+                        "count": 218
+                    },
+                    "Health/Wellness": {
+                        "count": 82
+                    },
+                    "Office": {
+                        "count": 14
+                    },
+                    "Hobbies": {
+                        "count": 132
+                    },
+                    "Building Material": {
+                        "count": 9
+                    },
+                    "Food": {
+                        "count": 17
+                    },
+                    "SPORTS/GAMES": {
+                        "count": 16
+                    },
+                    "Education": {
+                        "count": 92
+                    },
+                    "Pets": {
+                        "count": 128
+                    },
+                    "Home": {
+                        "count": 144
+                    },
+                    "Travel": {
+                        "count": 10
+                    },
+                    "Transportation": {
+                        "count": 49
+                    },
+                    "Baby Products": {
+                        "count": 39
+                    },
+                    "Vehicles": {
+                        "count": 9
+                    },
+                    "Fashion": {
+                        "count": 41
+                    }
+                }
+            },
+            "hi": {
+                "num_samples": 5,
+                "number_of_characters": 1000,
+                "min_text_length": 200,
+                "average_text_length": 200.0,
+                "max_text_length": 200,
+                "unique_texts": 998,
+                "min_labels_per_text": 9,
+                "average_labels_per_text": 200.0,
+                "max_labels_per_text": 218,
+                "unique_labels": 15,
+                "labels": {
+                    "Entertainment": {
+                        "count": 218
+                    },
+                    "Health/Wellness": {
+                        "count": 82
+                    },
+                    "Office": {
+                        "count": 14
+                    },
+                    "Hobbies": {
+                        "count": 132
+                    },
+                    "Building Material": {
+                        "count": 9
+                    },
+                    "Food": {
+                        "count": 17
+                    },
+                    "SPORTS/GAMES": {
+                        "count": 16
+                    },
+                    "Education": {
+                        "count": 92
+                    },
+                    "Pets": {
+                        "count": 128
+                    },
+                    "Home": {
+                        "count": 144
+                    },
+                    "Travel": {
+                        "count": 10
+                    },
+                    "Transportation": {
+                        "count": 49
+                    },
+                    "Baby Products": {
+                        "count": 39
+                    },
+                    "Vehicles": {
+                        "count": 9
+                    },
+                    "Fashion": {
+                        "count": 41
+                    }
+                }
+            },
+            "kn": {
+                "num_samples": 5,
+                "number_of_characters": 1000,
+                "min_text_length": 200,
+                "average_text_length": 200.0,
+                "max_text_length": 200,
+                "unique_texts": 998,
+                "min_labels_per_text": 9,
+                "average_labels_per_text": 200.0,
+                "max_labels_per_text": 218,
+                "unique_labels": 15,
+                "labels": {
+                    "Entertainment": {
+                        "count": 218
+                    },
+                    "Health/Wellness": {
+                        "count": 82
+                    },
+                    "Office": {
+                        "count": 14
+                    },
+                    "Hobbies": {
+                        "count": 132
+                    },
+                    "Building Material": {
+                        "count": 9
+                    },
+                    "Food": {
+                        "count": 17
+                    },
+                    "SPORTS/GAMES": {
+                        "count": 16
+                    },
+                    "Education": {
+                        "count": 92
+                    },
+                    "Pets": {
+                        "count": 128
+                    },
+                    "Home": {
+                        "count": 144
+                    },
+                    "Travel": {
+                        "count": 10
+                    },
+                    "Transportation": {
+                        "count": 49
+                    },
+                    "Baby Products": {
+                        "count": 39
+                    },
+                    "Vehicles": {
+                        "count": 9
+                    },
+                    "Fashion": {
+                        "count": 41
+                    }
+                }
+            },
+            "ml": {
+                "num_samples": 5,
+                "number_of_characters": 1000,
+                "min_text_length": 200,
+                "average_text_length": 200.0,
+                "max_text_length": 200,
+                "unique_texts": 998,
+                "min_labels_per_text": 9,
+                "average_labels_per_text": 200.0,
+                "max_labels_per_text": 218,
+                "unique_labels": 15,
+                "labels": {
+                    "Entertainment": {
+                        "count": 218
+                    },
+                    "Health/Wellness": {
+                        "count": 82
+                    },
+                    "Office": {
+                        "count": 14
+                    },
+                    "Hobbies": {
+                        "count": 132
+                    },
+                    "Building Material": {
+                        "count": 9
+                    },
+                    "Food": {
+                        "count": 17
+                    },
+                    "SPORTS/GAMES": {
+                        "count": 16
+                    },
+                    "Education": {
+                        "count": 92
+                    },
+                    "Pets": {
+                        "count": 128
+                    },
+                    "Home": {
+                        "count": 144
+                    },
+                    "Travel": {
+                        "count": 10
+                    },
+                    "Transportation": {
+                        "count": 49
+                    },
+                    "Baby Products": {
+                        "count": 39
+                    },
+                    "Vehicles": {
+                        "count": 9
+                    },
+                    "Fashion": {
+                        "count": 41
+                    }
+                }
+            },
+            "mr": {
+                "num_samples": 5,
+                "number_of_characters": 1000,
+                "min_text_length": 200,
+                "average_text_length": 200.0,
+                "max_text_length": 200,
+                "unique_texts": 998,
+                "min_labels_per_text": 9,
+                "average_labels_per_text": 200.0,
+                "max_labels_per_text": 218,
+                "unique_labels": 15,
+                "labels": {
+                    "Entertainment": {
+                        "count": 218
+                    },
+                    "Health/Wellness": {
+                        "count": 82
+                    },
+                    "Office": {
+                        "count": 14
+                    },
+                    "Hobbies": {
+                        "count": 132
+                    },
+                    "Building Material": {
+                        "count": 9
+                    },
+                    "Food": {
+                        "count": 17
+                    },
+                    "SPORTS/GAMES": {
+                        "count": 16
+                    },
+                    "Education": {
+                        "count": 92
+                    },
+                    "Pets": {
+                        "count": 128
+                    },
+                    "Home": {
+                        "count": 144
+                    },
+                    "Travel": {
+                        "count": 10
+                    },
+                    "Transportation": {
+                        "count": 49
+                    },
+                    "Baby Products": {
+                        "count": 39
+                    },
+                    "Vehicles": {
+                        "count": 9
+                    },
+                    "Fashion": {
+                        "count": 41
+                    }
+                }
+            },
+            "or": {
+                "num_samples": 5,
+                "number_of_characters": 1000,
+                "min_text_length": 200,
+                "average_text_length": 200.0,
+                "max_text_length": 200,
+                "unique_texts": 998,
+                "min_labels_per_text": 9,
+                "average_labels_per_text": 200.0,
+                "max_labels_per_text": 218,
+                "unique_labels": 15,
+                "labels": {
+                    "Entertainment": {
+                        "count": 218
+                    },
+                    "Health/Wellness": {
+                        "count": 82
+                    },
+                    "Office": {
+                        "count": 14
+                    },
+                    "Hobbies": {
+                        "count": 132
+                    },
+                    "Building Material": {
+                        "count": 9
+                    },
+                    "Food": {
+                        "count": 17
+                    },
+                    "SPORTS/GAMES": {
+                        "count": 16
+                    },
+                    "Education": {
+                        "count": 92
+                    },
+                    "Pets": {
+                        "count": 128
+                    },
+                    "Home": {
+                        "count": 144
+                    },
+                    "Travel": {
+                        "count": 10
+                    },
+                    "Transportation": {
+                        "count": 49
+                    },
+                    "Baby Products": {
+                        "count": 39
+                    },
+                    "Vehicles": {
+                        "count": 9
+                    },
+                    "Fashion": {
+                        "count": 41
+                    }
+                }
+            },
+            "pa": {
+                "num_samples": 5,
+                "number_of_characters": 1000,
+                "min_text_length": 200,
+                "average_text_length": 200.0,
+                "max_text_length": 200,
+                "unique_texts": 998,
+                "min_labels_per_text": 9,
+                "average_labels_per_text": 200.0,
+                "max_labels_per_text": 218,
+                "unique_labels": 15,
+                "labels": {
+                    "Entertainment": {
+                        "count": 218
+                    },
+                    "Health/Wellness": {
+                        "count": 82
+                    },
+                    "Office": {
+                        "count": 14
+                    },
+                    "Hobbies": {
+                        "count": 132
+                    },
+                    "Building Material": {
+                        "count": 9
+                    },
+                    "Food": {
+                        "count": 17
+                    },
+                    "SPORTS/GAMES": {
+                        "count": 16
+                    },
+                    "Education": {
+                        "count": 92
+                    },
+                    "Pets": {
+                        "count": 128
+                    },
+                    "Home": {
+                        "count": 144
+                    },
+                    "Travel": {
+                        "count": 10
+                    },
+                    "Transportation": {
+                        "count": 49
+                    },
+                    "Baby Products": {
+                        "count": 39
+                    },
+                    "Vehicles": {
+                        "count": 9
+                    },
+                    "Fashion": {
+                        "count": 41
+                    }
+                }
+            },
+            "ta": {
+                "num_samples": 5,
+                "number_of_characters": 1000,
+                "min_text_length": 200,
+                "average_text_length": 200.0,
+                "max_text_length": 200,
+                "unique_texts": 998,
+                "min_labels_per_text": 9,
+                "average_labels_per_text": 200.0,
+                "max_labels_per_text": 218,
+                "unique_labels": 15,
+                "labels": {
+                    "Entertainment": {
+                        "count": 218
+                    },
+                    "Health/Wellness": {
+                        "count": 82
+                    },
+                    "Office": {
+                        "count": 14
+                    },
+                    "Hobbies": {
+                        "count": 132
+                    },
+                    "Building Material": {
+                        "count": 9
+                    },
+                    "Food": {
+                        "count": 17
+                    },
+                    "SPORTS/GAMES": {
+                        "count": 16
+                    },
+                    "Education": {
+                        "count": 92
+                    },
+                    "Pets": {
+                        "count": 128
+                    },
+                    "Home": {
+                        "count": 144
+                    },
+                    "Travel": {
+                        "count": 10
+                    },
+                    "Transportation": {
+                        "count": 49
+                    },
+                    "Baby Products": {
+                        "count": 39
+                    },
+                    "Vehicles": {
+                        "count": 9
+                    },
+                    "Fashion": {
+                        "count": 41
+                    }
+                }
+            },
+            "te": {
+                "num_samples": 5,
+                "number_of_characters": 1000,
+                "min_text_length": 200,
+                "average_text_length": 200.0,
+                "max_text_length": 200,
+                "unique_texts": 998,
+                "min_labels_per_text": 9,
+                "average_labels_per_text": 200.0,
+                "max_labels_per_text": 218,
+                "unique_labels": 15,
+                "labels": {
+                    "Entertainment": {
+                        "count": 218
+                    },
+                    "Health/Wellness": {
+                        "count": 82
+                    },
+                    "Office": {
+                        "count": 14
+                    },
+                    "Hobbies": {
+                        "count": 132
+                    },
+                    "Building Material": {
+                        "count": 9
+                    },
+                    "Food": {
+                        "count": 17
+                    },
+                    "SPORTS/GAMES": {
+                        "count": 16
+                    },
+                    "Education": {
+                        "count": 92
+                    },
+                    "Pets": {
+                        "count": 128
+                    },
+                    "Home": {
+                        "count": 144
+                    },
+                    "Travel": {
+                        "count": 10
+                    },
+                    "Transportation": {
+                        "count": 49
+                    },
+                    "Baby Products": {
+                        "count": 39
+                    },
+                    "Vehicles": {
+                        "count": 9
+                    },
+                    "Fashion": {
+                        "count": 41
+                    }
+                }
+            },
+            "ur": {
+                "num_samples": 5,
+                "number_of_characters": 1000,
+                "min_text_length": 200,
+                "average_text_length": 200.0,
+                "max_text_length": 200,
+                "unique_texts": 998,
+                "min_labels_per_text": 9,
+                "average_labels_per_text": 200.0,
+                "max_labels_per_text": 218,
+                "unique_labels": 15,
+                "labels": {
+                    "Entertainment": {
+                        "count": 218
+                    },
+                    "Health/Wellness": {
+                        "count": 82
+                    },
+                    "Office": {
+                        "count": 14
+                    },
+                    "Hobbies": {
+                        "count": 132
+                    },
+                    "Building Material": {
+                        "count": 9
+                    },
+                    "Food": {
+                        "count": 17
+                    },
+                    "SPORTS/GAMES": {
+                        "count": 16
+                    },
+                    "Education": {
+                        "count": 92
+                    },
+                    "Pets": {
+                        "count": 128
+                    },
+                    "Home": {
+                        "count": 144
+                    },
+                    "Travel": {
+                        "count": 10
+                    },
+                    "Transportation": {
+                        "count": 49
+                    },
+                    "Baby Products": {
+                        "count": 39
+                    },
+                    "Vehicles": {
+                        "count": 9
+                    },
+                    "Fashion": {
+                        "count": 41
+                    }
+                }
+            }
+        }
+    }
+}

@@ -53,18 +53,6 @@ abstract="This paper describes a new test collection for passage retrieval from 
 isbn="978-3-030-15719-7"
 }
 """,
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 434.5924528301887,
-                    "average_query_length": 67.55688622754491,
-                    "num_documents": 265,
-                    "num_queries": 167,
-                    "average_relevant_docs_per_query": 7.718562874251497,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -74,17 +62,17 @@ isbn="978-3-030-15719-7"
         query_rows = datasets.load_dataset(
             name="queries",
             split="test",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
         corpus_rows = datasets.load_dataset(
             name="corpus.sentences",
             split="test",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
         qrels_rows = datasets.load_dataset(
             name="qrels.s2s",
             split="test",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         self.queries = {"test": {row["_id"]: row["text"] for row in query_rows}}

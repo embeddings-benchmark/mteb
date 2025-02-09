@@ -5,17 +5,16 @@ from collections import Counter, defaultdict
 from typing import Any
 
 import numpy as np
-import tqdm
+from datasets import Dataset, DatasetDict
 
 from mteb.encoder_interface import Encoder
 
 from ..evaluation.evaluators import (
-    kNNClassificationEvaluator,
-    kNNClassificationEvaluatorPytorch,
     logRegClassificationEvaluator,
 )
 from ..load_results.task_results import HFSubset, ScoresDict
-from .AbsTask import AbsTask, DescriptiveStatistics
+from .AbsTask import AbsTask
+from .TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -24,79 +23,80 @@ class ClassificationDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for Classification
 
     Attributes:
-      num_samples: number of samples in the dataset.
-      average_text_length: Average length of text
-      unique_labels: Number of unique labels
-      labels: dict of label frequencies
+        num_samples: number of samples in the dataset.
+        number_of_characters: Total number of symbols in the dataset.
+        number_texts_intersect_with_train: Number of texts in the train split
+
+        min_text_length: Minimum length of text
+        average_text_length: Average length of text
+        max_text_length: Maximum length of text
+        unique_texts: Number of unique texts
+
+        min_labels_per_text: Minimum number of labels per text
+        average_label_per_text: Average number of labels per text
+        max_labels_per_text: Maximum number of labels per text
+        unique_labels: Number of unique labels
+        labels: dict of label frequencies
     """
 
     num_samples: int
+    number_of_characters: int
+    number_texts_intersect_with_train: int | None
+
+    min_text_length: int
     average_text_length: float
+    max_text_length: int
+    unique_texts: int
+
+    min_labels_per_text: int
+    average_label_per_text: float
+    max_labels_per_text: int
     unique_labels: int
     labels: dict[str, dict[str, int]]
 
 
 class AbsTaskClassification(AbsTask):
-    """Abstract class for kNN classification tasks
+    """Abstract class for classification tasks
     The similarity is computed between pairs and the results are ranked.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It
     must contain the following columns:
         text: str
         label: int
+
+    Attributes:
+       samples_per_label: Number of samples to use pr. label. These samples are embedded and a classifier is fit using the labels and samples.
+
     """
 
+    evaluator = logRegClassificationEvaluator
     abstask_prompt = "Classify user passages."
+    samples_per_label: int = 8
+    n_experiments: int = 10
+    k: int = 3
+    train_split = "train"
     sentence_column: str = "text"
-
-
-    def __init__(
-        self,
-        method: str = "logReg",
-        n_experiments: int | None = None,
-        samples_per_label: int | None = None,
-        k: int = 3,
-        **kwargs,
-    ):
-        super().__init__(**kwargs)
-        self.method = method
-
-        # Bootstrap parameters
-        self.n_experiments: int = (  # type: ignore
-            n_experiments
-            if n_experiments is not None
-            else self.metadata_dict.get("n_experiments", 10)
-        )
-        self.samples_per_label: int = (  # type: ignore
-            samples_per_label
-            if samples_per_label is not None
-            else self.metadata_dict.get("samples_per_label", 8)
-        )
-
-        # kNN parameters
-        self.k = k
-
-    def _add_main_score(self, scores: dict[HFSubset, ScoresDict]) -> None:
-        scores["main_score"] = scores[self.metadata.main_score]
 
     def evaluate(
         self,
-        model,
-        eval_split: str = "test",
-        train_split: str = "train",
+        model: Encoder,
+        split: str = "test",
+        subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any] = {},
-        **kwargs,
+        **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         if not self.data_loaded:
             self.load_data()
 
         scores = {}
-        hf_subsets = list(self.dataset) if self.is_multilingual else ["default"]
+        hf_subsets = self.hf_subsets
+        if subsets_to_run is not None:
+            hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
 
         for hf_subset in hf_subsets:
             logger.info(
-                f"\nTask: {self.metadata.name}, split: {eval_split}, subset: {hf_subset}. Running..."
+                f"Task: {self.metadata.name}, split: {split}, subset: {hf_subset}. Running..."
             )
 
             if hf_subset not in self.dataset and hf_subset == "default":
@@ -106,8 +106,7 @@ class AbsTaskClassification(AbsTask):
             scores[hf_subset] = self._evaluate_subset(
                 model,
                 ds,
-                eval_split,
-                train_split,
+                eval_split_name=split,
                 encode_kwargs=encode_kwargs,
                 **kwargs,
             )
@@ -118,14 +117,13 @@ class AbsTaskClassification(AbsTask):
     def _evaluate_subset(
         self,
         model: Encoder,
-        dataset,
-        eval_split: str = "test",
-        train_split: str = "train",
+        dataset: DatasetDict | Dataset,
+        eval_split_name: str,
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ) -> ScoresDict:
-        train_split = dataset[train_split]
-        eval_split = dataset[eval_split]
+        train_split = dataset[self.train_split]
+        eval_split = dataset[eval_split_name]
         params = {"k": self.k}
         params.update(kwargs)
 
@@ -136,7 +134,7 @@ class AbsTaskClassification(AbsTask):
         )  # we store idxs to make the shuffling reproducible
         for i in range(self.n_experiments):
             logger.info(
-                "=" * 10 + f" Experiment {i+1}/{self.n_experiments} " + "=" * 10
+                "=" * 10 + f" Experiment {i + 1}/{self.n_experiments} " + "=" * 10
             )
             # Bootstrap `self.samples_per_label` samples per label for each split
             X_sampled, y_sampled, idxs = self._undersample_data(
@@ -146,40 +144,18 @@ class AbsTaskClassification(AbsTask):
                 idxs,
             )
 
-            if self.method == "kNN":
-                evaluator = kNNClassificationEvaluator(
-                    X_sampled,
-                    y_sampled,
-                    eval_split[self.sentence_column],  # type: ignore
-                    eval_split["label"],  # type: ignore
-                    task_name=self.metadata.name,
-                    encode_kwargs=encode_kwargs,
-                    **params,
-                )
-            elif self.method == "kNN-pytorch":
-                evaluator = kNNClassificationEvaluatorPytorch(
-                    X_sampled,
-                    y_sampled,
-                    eval_split[self.sentence_column],  # type: ignore
-                    eval_split["label"],  # type: ignore
-                    task_name=self.metadata.name,
-                    encode_kwargs=encode_kwargs,
-                    **params,
-                )
-            elif self.method == "logReg":
-                evaluator = logRegClassificationEvaluator(
-                    X_sampled,
-                    y_sampled,
-                    eval_split[self.sentence_column],  # type: ignore
-                    eval_split["label"],  # type: ignore
-                    task_name=self.metadata.name,
-                    encode_kwargs=encode_kwargs,
-                    **params,
-                )
-            else:
-                raise ValueError(f"Method {self.method} not supported")
+            evaluator = self.evaluator(
+                X_sampled,
+                y_sampled,
+                eval_split[self.sentence_column],  # type: ignore
+                eval_split["label"],  # type: ignore
+                task_name=self.metadata.name,
+                **params,
+            )
+            scores_exp, test_cache = evaluator(
+                model, encode_kwargs=encode_kwargs, test_cache=test_cache
+            )
 
-            scores_exp, test_cache = evaluator(model, test_cache=test_cache)
             scores.append(scores_exp)
 
         avg_scores: dict[str, Any] = {
@@ -194,7 +170,8 @@ class AbsTaskClassification(AbsTask):
         y_sampled = []
         if idxs is None:
             idxs = np.arange(len(y))
-        np.random.shuffle(idxs)
+        rng_state = np.random.default_rng(self.seed)
+        rng_state.shuffle(idxs)
         label_counter = defaultdict(int)
         for i in idxs:
             if label_counter[y[i]] < samples_per_label:
@@ -203,67 +180,65 @@ class AbsTaskClassification(AbsTask):
                 label_counter[y[i]] += 1
         return X_sampled, y_sampled, idxs
 
-    def calculate_metadata_metrics(
-        self,
-    ) -> dict[
-        str,
-        ClassificationDescriptiveStatistics
-        | dict[str, ClassificationDescriptiveStatistics],
-    ]:
-        self.load_data()
-
-        # same function from parent class, but added explicitly train to splits
-
-        all_details = {}
-        pbar_split = tqdm.tqdm(
-            self.metadata.eval_splits + ["train"], desc="Processing Splits..."
-        )
-        for split in pbar_split:
-            pbar_split.set_postfix_str(f"Split: {split}")
-            logger.info(f"Processing metadata for split {split}")
-            if self.is_multilingual:
-                all_details[split] = self._calculate_metrics_from_split(
-                    split, compute_overall=True
-                )
-                all_details[split]["hf_subset_descriptive_stats"] = {}
-
-                pbar_subset = tqdm.tqdm(
-                    self.metadata.eval_langs, desc="Processing Languages..."
-                )
-                for hf_subset in pbar_subset:
-                    pbar_subset.set_postfix_str(f"Language: {hf_subset}")
-                    logger.info(f"Processing metadata for language {hf_subset}")
-                    split_details = self._calculate_metrics_from_split(split, hf_subset)
-                    all_details[split][hf_subset] = split_details
-            else:
-                split_details = self._calculate_metrics_from_split(split)
-                all_details[split] = split_details
-
-        return all_details
-
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClassificationDescriptiveStatistics:
+        train_text = []
         if hf_subset:
             text = self.dataset[hf_subset][split][self.sentence_column]
             label = self.dataset[hf_subset][split]["label"]
+            if split != "train":
+                train_text = self.dataset[hf_subset]["train"]["text"]
         elif compute_overall:
             text = []
             label = []
             for hf_subset in self.metadata.eval_langs:
                 text.extend(self.dataset[hf_subset][split][self.sentence_column])
                 label.extend(self.dataset[hf_subset][split]["label"])
+                if split != "train":
+                    train_text.extend(self.dataset[hf_subset]["train"]["text"])
         else:
             text = self.dataset[split][self.sentence_column]
             label = self.dataset[split]["label"]
+            if split != "train":
+                train_text = self.dataset["train"]["text"]
 
-        total_text_len = sum([len(t) for t in text])
-        label_count = Counter(label)
+        text_len = [len(t) for t in text]
+        total_text_len = sum(text_len)
+        if isinstance(label[0], int):
+            label_len = [1] * len(label)
+            total_label_len = len(label)
+            total_labels = label
+        else:
+            # multilabel classification
+            label_len = [len(l) for l in label]
+            total_label_len = sum(label_len)
+            total_labels = []
+            for l in label:
+                total_labels.extend(l if len(l) > 0 else [None])
+        label_count = Counter(total_labels)
+        num_texts_in_train = (
+            len(set(text) & set(train_text)) if split != "train" else None
+        )
         return ClassificationDescriptiveStatistics(
             num_samples=len(text),
+            number_of_characters=total_text_len,
+            number_texts_intersect_with_train=num_texts_in_train,
+            min_text_length=min(text_len),
             average_text_length=total_text_len / len(text),
+            max_text_length=max(text_len),
+            unique_texts=len(set(text)),
+            min_labels_per_text=min(label_len),
+            average_label_per_text=total_label_len / len(label),
+            max_labels_per_text=max(label_len),
             unique_labels=len(label_count),
             labels={
-                str(label): {"count": count} for label, count in label_count.items()
+                str(label): {
+                    "count": value,
+                }
+                for label, value in label_count.items()
             },
         )
+
+    def _push_dataset_to_hub(self, repo_name: str) -> None:
+        self._upload_dataset_to_hub(repo_name, ["text", "label"])

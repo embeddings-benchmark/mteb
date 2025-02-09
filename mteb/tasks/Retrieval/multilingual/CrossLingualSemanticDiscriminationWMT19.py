@@ -3,7 +3,6 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -30,7 +29,7 @@ def extend_lang_pairs() -> dict[str, list[str]]:
 _EVAL_LANGS = extend_lang_pairs()
 
 
-class CrossLingualSemanticDiscriminationWMT19(AbsTaskRetrieval, MultilingualTask):
+class CrossLingualSemanticDiscriminationWMT19(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CrossLingualSemanticDiscriminationWMT19",
         dataset={
@@ -53,32 +52,8 @@ class CrossLingualSemanticDiscriminationWMT19(AbsTaskRetrieval, MultilingualTask
         dialect=[],
         sample_creation="LM-generated and verified",
         bibtex_citation="preprint_coming",
-        descriptive_stats={
-            "n_samples": {"test": 2946},
-            "avg_character_length": {
-                "test": {
-                    "deu-fra": {
-                        "average_document_length": 147.49857433808555,
-                        "average_query_length": 152.95587236931433,
-                        "num_documents": 7365,
-                        "num_queries": 1473,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "fra-deu": {
-                        "average_document_length": 154.21968771215208,
-                        "average_query_length": 145.877800407332,
-                        "num_documents": 7365,
-                        "num_queries": 1473,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                },
-            },
-        },
     )
-
-    def __init__(self, **kwargs):
-        self.num_of_distractors = 4
-        super().__init__(**kwargs)
+    num_of_distractors = 4
 
     def load_data(self, **kwargs):
         """Generic data loader function for original clsd datasets with the format shown in "hf_dataset_link".
@@ -101,7 +76,7 @@ class CrossLingualSemanticDiscriminationWMT19(AbsTaskRetrieval, MultilingualTask
                 lang_pair = _build_lang_pair(langs)
                 dataset_raw[lang_pair] = datasets.load_dataset(
                     name=hf_subset,
-                    **self.metadata_dict["dataset"],
+                    **self.metadata.dataset,
                 )[split]
 
                 queries[lang_pair] = {}

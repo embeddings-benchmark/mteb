@@ -11,9 +11,8 @@ class NFCorpusPL(AbsTaskRetrieval):
         description="NFCorpus: A Full-Text Learning to Rank Dataset for Medical Information Retrieval",
         reference="https://www.cl.uni-heidelberg.de/statnlpgroup/nfcorpus/",
         dataset={
-            "path": "clarin-knext/nfcorpus-pl",
-            "revision": "9a6f9567fda928260afed2de480d79c98bf0bec0",
-            "trust_remote_code": True,
+            "path": "mteb/NFCorpus-PL",
+            "revision": "3f30ff532ac2f61a585673ee7634301ef52b1ad3",
         },
         type="Retrieval",
         category="s2p",
@@ -36,16 +35,4 @@ class NFCorpusPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1652.1926782273604,
-                    "average_query_length": 24.390092879256965,
-                    "num_documents": 3633,
-                    "num_queries": 323,
-                    "average_relevant_docs_per_query": 38.18575851393189,
-                }
-            },
-        },
     )

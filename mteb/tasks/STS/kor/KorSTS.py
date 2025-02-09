@@ -33,15 +33,7 @@ class KorSTS(AbsTaskSTS):
   journal={arXiv preprint arXiv:2004.03289},
   year={2020}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 1379},
-            "avg_character_length": {"test": 29.279433139534884},
-        },
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5

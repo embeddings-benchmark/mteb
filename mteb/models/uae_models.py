@@ -9,9 +9,8 @@ import numpy as np
 import torch
 
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
-
-from .sentence_transformer_wrapper import SentenceTransformerWrapper
+from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +29,7 @@ class UAEWrapper(SentenceTransformerWrapper):
         prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
         if prompt_name:
             logger.info(
-                f"Using prompt_nane={prompt_name} for task={task_name} prompt_type={prompt_type}"
+                f"Using prompt_name={prompt_name} for task={task_name} prompt_type={prompt_type}"
             )
         else:
             logger.info(
@@ -52,7 +51,7 @@ class UAEWrapper(SentenceTransformerWrapper):
 
 
 uae_large_v1 = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         UAEWrapper,
         model="WhereIsAI/UAE-Large-V1",
         revision="369c368f70f16a613f19f5598d4f12d9f44235d4",
@@ -67,12 +66,30 @@ uae_large_v1 = ModelMeta(
     open_weights=True,
     revision="369c368f70f16a613f19f5598d4f12d9f44235d4",
     release_date="2023-12-04",  # initial commit of hf model.
-    n_parameters=335_000,
+    n_parameters=335 * 1e6,
+    memory_usage_mb=1278,
     max_tokens=512,
     embed_dim=1024,
     license="mit",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     reference="https://huggingface.co/WhereIsAI/UAE-Large-V1",
-    use_instructions=False,
+    use_instructions=True,
+    citation="""
+    @article{li2023angle,
+      title={AnglE-optimized Text Embeddings},
+      author={Li, Xianming and Li, Jing},
+      journal={arXiv preprint arXiv:2309.12871},
+      year={2023}
+    }
+    """,
+    training_datasets={
+        # source: https://arxiv.org/pdf/2309.12871
+        # not in MTEB
+        "MNLI": [],
+        "NLI": [],
+        "SNLI": [],
+    },
+    public_training_code=None,
+    public_training_data=None,
 )

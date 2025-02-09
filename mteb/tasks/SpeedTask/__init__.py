@@ -1,4 +1,6 @@
 from __future__ import annotations
 
-from .CPUSpeedTask import *
-from .GPUSpeedTask import *
+from .CPUSpeedTask import CPUSpeedTask
+from .GPUSpeedTask import GPUSpeedTask
+
+__all__ = ["GPUSpeedTask", "CPUSpeedTask"]

@@ -50,28 +50,18 @@ class SickBrSTS(AbsTaskSTS):
   isbn="978-3-319-99722-3"
 }
         """,
-        descriptive_stats={
-            "n_samples": {"test": N_SAMPLES},
-            "avg_character_length": {"test": 54.89},
-        },
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 1
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 1
+    max_score = 5
 
     def dataset_transform(self):
-        for split in self.dataset:
-            self.dataset.update(
-                {
-                    split: self.dataset[split].train_test_split(
-                        test_size=N_SAMPLES, seed=self.seed, label="entailment_label"
-                    )["test"]
-                }
-            )
+        self.dataset = self.stratified_subsampling(
+            self.dataset,
+            seed=42,
+            splits=self.metadata.eval_splits,
+            label="entailment_label",
+        )
 
         self.dataset = self.dataset.rename_columns(
             {

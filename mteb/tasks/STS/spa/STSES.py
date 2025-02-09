@@ -47,15 +47,10 @@ class STSES(AbsTaskSTS):
   year={2014}
 }
 """,
-        descriptive_stats={"n_samples": None, "avg_character_length": None},
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5
 
     def dataset_transform(self):
         data = self.dataset[_EVAL_SPLIT]

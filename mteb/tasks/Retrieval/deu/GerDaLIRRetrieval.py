@@ -44,18 +44,6 @@ class GerDaLIR(AbsTaskRetrieval):
     pages = "123--128",
     abstract = "We present GerDaLIR, a German Dataset for Legal Information Retrieval based on case documents from the open legal information platform Open Legal Data. The dataset consists of 123K queries, each labelled with at least one relevant document in a collection of 131K case documents. We conduct several baseline experiments including BM25 and a state-of-the-art neural re-ranker. With our dataset, we aim to provide a standardized benchmark for German LIR and promote open research in this area. Beyond that, our dataset comprises sufficient training data to be used as a downstream task for German or multilingual language models.",
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 15483.237726805888,
-                    "average_query_length": 1027.3495690356156,
-                    "num_documents": 131445,
-                    "num_queries": 12298,
-                    "average_relevant_docs_per_query": 1.1704342169458448,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -65,17 +53,17 @@ class GerDaLIR(AbsTaskRetrieval):
         query_rows = datasets.load_dataset(
             name="queries",
             split=self._EVAL_SPLIT,
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
         corpus_rows = datasets.load_dataset(
             name="corpus",
             split=self._EVAL_SPLIT,
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
         qrels_rows = datasets.load_dataset(
             name="qrels",
             split=self._EVAL_SPLIT,
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         self.queries = {

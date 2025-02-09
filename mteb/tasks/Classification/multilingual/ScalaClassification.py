@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGS = {
@@ -12,7 +11,7 @@ _LANGS = {
 }
 
 
-class ScalaClassification(AbsTaskClassification, MultilingualTask):
+class ScalaClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="ScalaClassification",
         description="""ScaLa a linguistic acceptability dataset for the mainland Scandinavian languages automatically constructed from dependency annotations in Universal Dependencies Treebanks. 
@@ -52,18 +51,9 @@ class ScalaClassification(AbsTaskClassification, MultilingualTask):
             pages = "185--201",
         }""",
         prompt="Classify passages in Scandinavian Languages based on linguistic acceptability",
-        descriptive_stats={
-            "n_samples": {"test": len(_LANGS) * 1024},
-            "avg_character_length": {"test": 102.72},
-        },
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["n_experiments"] = 10
-        metadata_dict["samples_per_label"] = 32
-        return metadata_dict
+    samples_per_label = 32
 
     def dataset_transform(self):
         for lang in self.dataset.keys():

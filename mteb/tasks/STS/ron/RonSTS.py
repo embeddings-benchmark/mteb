@@ -36,15 +36,7 @@ class RonSTS(AbsTaskSTS):
             year={2021}
             }
             """,
-        descriptive_stats={
-            "n_samples": {"test": 1379},
-            "avg_character_length": {"test": 60.5},
-        },  # avg across sent1 and sent2
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
@@ -25,7 +24,7 @@ _EVAL_LANGS = {
 }
 
 
-class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
+class WikipediaRerankingMultilingual(AbsTaskReranking):
     metadata = TaskMetadata(
         name="WikipediaRerankingMultilingual",
         description="The dataset is derived from Cohere's wikipedia-2023-11 dataset and contains synthetically generated queries.",
@@ -39,7 +38,7 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_EVAL_LANGS,
-        main_score="map",
+        main_score="map_at_1000",
         date=("2023-11-01", "2024-05-15"),
         domains=["Encyclopaedic", "Written"],
         task_subtypes=[],
@@ -52,162 +51,4 @@ class WikipediaRerankingMultilingual(MultilingualTask, AbsTaskReranking):
     title  = "Wikimedia Downloads",
     url    = "https://dumps.wikimedia.org"
 }""",
-        descriptive_stats={
-            "n_samples": {
-                "en": 1500,
-                "de": 1500,
-                "it": 1500,
-                "pt": 1500,
-                "nl": 1500,
-                "cs": 1500,
-                "ro": 1500,
-                "bg": 1500,
-                "sr": 1500,
-                "fi": 1500,
-                "da": 1500,
-                "fa": 1500,
-                "hi": 1500,
-                "bn": 1500,
-                "no": 1500,
-                "sv": 1500,
-            },
-            "test": {
-                "num_samples": 24000,
-                "num_positive": 24000,
-                "num_negative": 24000,
-                "avg_query_len": 59.091208333333334,
-                "avg_positive_len": 1.0,
-                "avg_negative_len": 8.0,
-                "hf_subset_descriptive_stats": {
-                    "bg": {
-                        "num_samples": 1500,
-                        "num_positive": 1500,
-                        "num_negative": 1500,
-                        "avg_query_len": 60.82666666666667,
-                        "avg_positive_len": 1.0,
-                        "avg_negative_len": 8.0,
-                    },
-                    "bn": {
-                        "num_samples": 1500,
-                        "num_positive": 1500,
-                        "num_negative": 1500,
-                        "avg_query_len": 47.266666666666666,
-                        "avg_positive_len": 1.0,
-                        "avg_negative_len": 8.0,
-                    },
-                    "cs": {
-                        "num_samples": 1500,
-                        "num_positive": 1500,
-                        "num_negative": 1500,
-                        "avg_query_len": 56.272,
-                        "avg_positive_len": 1.0,
-                        "avg_negative_len": 8.0,
-                    },
-                    "da": {
-                        "num_samples": 1500,
-                        "num_positive": 1500,
-                        "num_negative": 1500,
-                        "avg_query_len": 56.75066666666667,
-                        "avg_positive_len": 1.0,
-                        "avg_negative_len": 8.0,
-                    },
-                    "de": {
-                        "num_samples": 1500,
-                        "num_positive": 1500,
-                        "num_negative": 1500,
-                        "avg_query_len": 70.004,
-                        "avg_positive_len": 1.0,
-                        "avg_negative_len": 8.0,
-                    },
-                    "en": {
-                        "num_samples": 1500,
-                        "num_positive": 1500,
-                        "num_negative": 1500,
-                        "avg_query_len": 68.372,
-                        "avg_positive_len": 1.0,
-                        "avg_negative_len": 8.0,
-                    },
-                    "fa": {
-                        "num_samples": 1500,
-                        "num_positive": 1500,
-                        "num_negative": 1500,
-                        "avg_query_len": 48.66733333333333,
-                        "avg_positive_len": 1.0,
-                        "avg_negative_len": 8.0,
-                    },
-                    "fi": {
-                        "num_samples": 1500,
-                        "num_positive": 1500,
-                        "num_negative": 1500,
-                        "avg_query_len": 55.343333333333334,
-                        "avg_positive_len": 1.0,
-                        "avg_negative_len": 8.0,
-                    },
-                    "hi": {
-                        "num_samples": 1500,
-                        "num_positive": 1500,
-                        "num_negative": 1500,
-                        "avg_query_len": 50.77733333333333,
-                        "avg_positive_len": 1.0,
-                        "avg_negative_len": 8.0,
-                    },
-                    "it": {
-                        "num_samples": 1500,
-                        "num_positive": 1500,
-                        "num_negative": 1500,
-                        "avg_query_len": 70.05466666666666,
-                        "avg_positive_len": 1.0,
-                        "avg_negative_len": 8.0,
-                    },
-                    "nl": {
-                        "num_samples": 1500,
-                        "num_positive": 1500,
-                        "num_negative": 1500,
-                        "avg_query_len": 65.34466666666667,
-                        "avg_positive_len": 1.0,
-                        "avg_negative_len": 8.0,
-                    },
-                    "pt": {
-                        "num_samples": 1500,
-                        "num_positive": 1500,
-                        "num_negative": 1500,
-                        "avg_query_len": 65.11933333333333,
-                        "avg_positive_len": 1.0,
-                        "avg_negative_len": 8.0,
-                    },
-                    "ro": {
-                        "num_samples": 1500,
-                        "num_positive": 1500,
-                        "num_negative": 1500,
-                        "avg_query_len": 61.973333333333336,
-                        "avg_positive_len": 1.0,
-                        "avg_negative_len": 8.0,
-                    },
-                    "sr": {
-                        "num_samples": 1500,
-                        "num_positive": 1500,
-                        "num_negative": 1500,
-                        "avg_query_len": 55.669333333333334,
-                        "avg_positive_len": 1.0,
-                        "avg_negative_len": 8.0,
-                    },
-                    "no": {
-                        "num_samples": 1500,
-                        "num_positive": 1500,
-                        "num_negative": 1500,
-                        "avg_query_len": 55.288,
-                        "avg_positive_len": 1.0,
-                        "avg_negative_len": 8.0,
-                    },
-                    "sv": {
-                        "num_samples": 1500,
-                        "num_positive": 1500,
-                        "num_negative": 1500,
-                        "avg_query_len": 57.73,
-                        "avg_positive_len": 1.0,
-                        "avg_negative_len": 8.0,
-                    },
-                },
-            },
-        },
     )

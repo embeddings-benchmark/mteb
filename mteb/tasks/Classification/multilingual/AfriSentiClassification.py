@@ -3,7 +3,6 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
@@ -14,7 +13,7 @@ def _transform(dataset, lang):
     return dataset
 
 
-class AfriSentiClassification(MultilingualTask, AbsTaskClassification):
+class AfriSentiClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="AfriSentiClassification",
         description="AfriSenti is the largest sentiment analysis dataset for under-represented African languages.",
@@ -57,10 +56,6 @@ class AfriSentiClassification(MultilingualTask, AbsTaskClassification):
         author=Shamsuddeen Hassan Muhammad and Idris Abdulmumin and Abinew Ali Ayele and Nedjma Ousidhoum and David Ifeoluwa Adelani and Seid Muhie Yimam and Ibrahim Sa'id Ahmad and Meriem Beloucif and Saif Mohammad and Sebastian Ruder and Oumaima Hourrane and Pavel Brazdil and Felermino D'ario M'ario Ant'onio Ali and Davis Davis and Salomey Osei and Bello Shehu Bello and Falalu Ibrahim and Tajuddeen Gwadabe and Samuel Rutunda and Tadesse Belay and Wendimu Baye Messelle and Hailu Beshada Balcha and Sisay Adugna Chala and Hagos Tesfahun Gebremichael and Bernard Opoku and Steven Arthur,
         year=2023
         }""",
-        descriptive_stats={
-            "n_samples": {"test": 2048},
-            "avg_character_length": {"test": 74.77},
-        },
     )
 
     def load_data(self, **kwargs):
@@ -69,7 +64,7 @@ class AfriSentiClassification(MultilingualTask, AbsTaskClassification):
             return
         self.dataset = {}
         for lang in self.hf_subsets:
-            metadata = self.metadata_dict.get("dataset", None)
+            metadata = self.metadata.dataset
             dataset = datasets.load_dataset(name=lang, **metadata)
             self.dataset[lang] = _transform(dataset, lang)
         self.dataset_transform()

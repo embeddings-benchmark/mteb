@@ -3,13 +3,14 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from datasets import Dataset
+from datasets import Dataset, DatasetDict
 
 from mteb.encoder_interface import Encoder
 
 from ..evaluation.evaluators import BitextMiningEvaluator
 from ..load_results.task_results import HFSubset, ScoresDict
-from .AbsTask import AbsTask, DescriptiveStatistics
+from .AbsTask import AbsTask
+from .TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -19,13 +20,32 @@ class BitextDescriptiveStatistics(DescriptiveStatistics):
 
     Attributes:
         num_samples: number of samples in the dataset.
+        number_of_characters: Total number of symbols in the dataset.
+        unique_pairs: Number of duplicate pairs
+
+        min_sentence1_length: Minimum length of sentence1
         average_sentence1_length: Average length of sentence1
+        max_sentence1_length: Maximum length of sentence1
+        unique_sentence1: Number of duplicates in sentence1
+
+        min_sentence2_length: Minimum length of sentence2
         average_sentence2_length: Average length of sentence2
+        max_sentence2_length: Maximum length of sentence2
     """
 
     num_samples: int
+    number_of_characters: int
+    unique_pairs: int
+
+    min_sentence1_length: int
     average_sentence1_length: float
+    max_sentence1_length: int
+    unique_sentence1: int
+
+    min_sentence2_length: int
     average_sentence2_length: float
+    max_sentence2_length: int
+    unique_sentence2: int
 
 
 class AbsTaskBitextMining(AbsTask):
@@ -41,21 +61,23 @@ class AbsTaskBitextMining(AbsTask):
     parallel_subsets = False
     abstask_prompt = "Retrieve parallel sentences."
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
     def evaluate(
         self,
         model: Encoder,
-        split: str,
+        split: str = "test",
+        subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any] = {},
-        **kwargs,
+        **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         if not self.data_loaded:
             self.load_data()
 
-        hf_subsets = list(self.dataset) if self.is_multilingual else ["default"]
+        hf_subsets = self.hf_subsets
+
+        # If subsets_to_run is specified, filter the hf_subsets accordingly
+        if subsets_to_run is not None:
+            hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
 
         scores = {}
         if self.parallel_subsets:
@@ -69,7 +91,7 @@ class AbsTaskBitextMining(AbsTask):
         else:
             for hf_subet in hf_subsets:
                 logger.info(
-                    f"\nTask: {self.metadata.name}, split: {split}, subset: {hf_subet}. Running..."
+                    f"Task: {self.metadata.name}, split: {split}, subset: {hf_subet}. Running..."
                 )
 
                 if hf_subet not in self.dataset and hf_subet == "default":
@@ -78,8 +100,7 @@ class AbsTaskBitextMining(AbsTask):
                     data_split = self.dataset[hf_subet][split]
                 scores[hf_subet] = self._evaluate_subset(
                     model,
-                    data_split,  # type: ignore
-                    subsets=["sentence1", "sentence2"],
+                    data_split,
                     encode_kwargs=encode_kwargs,
                     **kwargs,
                 )
@@ -117,9 +138,6 @@ class AbsTaskBitextMining(AbsTask):
             self._add_main_score(metrics)
         return metrics
 
-    def _add_main_score(self, scores) -> None:
-        scores["main_score"] = scores[self.metadata.main_score]
-
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> BitextDescriptiveStatistics:
@@ -150,11 +168,67 @@ class AbsTaskBitextMining(AbsTask):
             sent_1, sent_2 = pairs_cols[0]
             sentence1 = self.dataset[split][sent_1]
             sentence2 = self.dataset[split][sent_2]
-        total_s1_len = sum([len(s1) for s1 in sentence1])
-        total_s2_len = sum([len(s2) for s2 in sentence2])
+        s1_len = [len(s1) for s1 in sentence1]
+        s2_len = [len(s2) for s2 in sentence2]
+        total_s1_len = sum(s1_len)
+        total_s2_len = sum(s2_len)
 
+        unique_pairs = len(set(zip(sentence1, sentence2)))
+        unique_sentence1 = len(set(sentence1))
+        unique_sentence2 = len(set(sentence2))
         return BitextDescriptiveStatistics(
-            average_sentence1_length=total_s1_len / len(sentence1),
-            average_sentence2_length=total_s2_len / len(sentence2),
             num_samples=len(sentence1),
+            number_of_characters=total_s1_len + total_s2_len,
+            unique_pairs=unique_pairs,
+            min_sentence1_length=min(s1_len),
+            average_sentence1_length=sum(s1_len) / len(sentence1),
+            max_sentence1_length=max(s1_len),
+            unique_sentence1=unique_sentence1,
+            min_sentence2_length=min(s2_len),
+            average_sentence2_length=total_s2_len / len(sentence2),
+            max_sentence2_length=max(s2_len),
+            unique_sentence2=unique_sentence2,
         )
+
+    def _push_dataset_to_hub(self, repo_name: str) -> None:
+        if self.metadata.is_multilingual:
+            for config in self.metadata.eval_langs:
+                logger.info(f"Converting {config} of {self.metadata.name}")
+
+                sentences = {}
+                if self.parallel_subsets:
+                    # If there are parallel subsets, process them
+                    for split in self.dataset:
+                        sent_1, sent_2 = config.split("-")
+                        sentences[split] = Dataset.from_dict(
+                            {
+                                "sentence1": self.dataset[split][sent_1],
+                                "sentence2": self.dataset[split][sent_2],
+                            }
+                        )
+                else:
+                    # Handle the non-parallel subset case
+                    sent_1, sent_2 = self.get_pairs(self.parallel_subsets)[0]
+                    for split in self.dataset[config]:
+                        sentences[split] = Dataset.from_dict(
+                            {
+                                "sentence1": self.dataset[config][split][sent_1],
+                                "sentence2": self.dataset[config][split][sent_2],
+                            }
+                        )
+                sentences = DatasetDict(sentences)
+                sentences.push_to_hub(
+                    repo_name, config, commit_message=f"Add {config} subset"
+                )
+        else:
+            sentences = {}
+            for split in self.dataset:
+                sent_1, sent_2 = self.get_pairs(self.parallel_subsets)[0]
+                sentences[split] = Dataset.from_dict(
+                    {
+                        "sentence1": self.dataset[split][sent_1],
+                        "sentence2": self.dataset[split][sent_2],
+                    }
+                )
+            sentences = DatasetDict(sentences)
+            sentences.push_to_hub(repo_name)

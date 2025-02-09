@@ -13,9 +13,8 @@ class MSMARCOPL(AbsTaskRetrieval):
         description="MS MARCO is a collection of datasets focused on deep learning in search",
         reference="https://microsoft.github.io/msmarco/",
         dataset={
-            "path": "clarin-knext/msmarco-pl",
-            "revision": "8634c07806d5cce3a6138e260e59b81760a0a640",
-            "trust_remote_code": True,
+            "path": "mteb/MSMARCO-PL",
+            "revision": "a4c521ec67407f75c0df31815d2032f0e232c6a7",
         },
         type="Retrieval",
         category="s2p",
@@ -38,18 +37,6 @@ class MSMARCOPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 349.3574939240471,
-                    "average_query_length": 33.02325581395349,
-                    "num_documents": 8841823,
-                    "num_queries": 43,
-                    "average_relevant_docs_per_query": 95.3953488372093,
-                }
-            },
-        },
     )
 
 
@@ -86,16 +73,4 @@ class MSMARCOPLHardNegatives(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 43},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 382.3476426537285,
-                    "average_query_length": 33.02325581395349,
-                    "num_documents": 9481,
-                    "num_queries": 43,
-                    "average_relevant_docs_per_query": 95.3953488372093,
-                }
-            },
-        },
     )

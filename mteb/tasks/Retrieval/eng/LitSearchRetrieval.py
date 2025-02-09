@@ -40,31 +40,19 @@ class LitSearchRetrieval(AbsTaskRetrieval):
         author={Ajith, Anirudh and Xia, Mengzhou and Chevalier, Alexis and Goyal, Tanya and Chen, Danqi and Gao, Tianyu},
         year={2024}
         }""",
-        descriptive_stats={
-            "n_samples": {"test": 597},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 841.2769,
-                    "average_query_length": 141.20,
-                    "num_documents": 64183,
-                    "num_queries": 597,
-                    "average_relevant_docs_per_query": 1.070351,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
-        dataset_path = self.metadata_dict["dataset"]["path"]
+        dataset_path = self.metadata.dataset["path"]
 
         query_ds = datasets.load_dataset(dataset_path, "query")
 
         self.queries["test"] = dict(
             zip(
-                [f"q{x+1}" for x in range(len(query_ds["full"]))],
+                [f"q{x + 1}" for x in range(len(query_ds["full"]))],
                 query_ds["full"]["query"],
             )
         )
@@ -81,7 +69,7 @@ class LitSearchRetrieval(AbsTaskRetrieval):
         }
 
         self.relevant_docs["test"] = {
-            f"q{e+1}": dict(zip([f"d{i}" for i in ids], range(1, len(ids) + 1)))
+            f"q{e + 1}": dict(zip([f"d{i}" for i in ids], range(1, len(ids) + 1)))
             for e, ids in enumerate(query_ds["full"]["corpusids"])
         }
 

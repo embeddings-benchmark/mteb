@@ -39,21 +39,4 @@ class CEDRClassification(AbsTaskMultilabelClassification):
         }
         """,
         prompt="Given a comment as query, find expressed emotions (joy, sadness, surprise, fear, and anger)",
-        descriptive_stats={
-            "n_samples": {"test": 1882},
-            "test": {
-                "average_text_length": 91.20563230605738,
-                "average_label_per_text": 0.620616365568544,
-                "num_samples": 1882,
-                "unique_labels": 6,
-                "labels": {
-                    "null": {"count": 734},
-                    "3": {"count": 141},
-                    "2": {"count": 170},
-                    "1": {"count": 379},
-                    "0": {"count": 353},
-                    "4": {"count": 125},
-                },
-            },
-        },
     )

@@ -40,18 +40,6 @@ class AlloprofRetrieval(AbsTaskRetrieval):
   year = {2023},
   copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
 }""",
-        descriptive_stats={
-            "n_samples": {"train": 2048},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 3505.705399061033,
-                    "average_query_length": 170.71286701208982,
-                    "num_documents": 2556,
-                    "num_queries": 2316,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -60,13 +48,13 @@ class AlloprofRetrieval(AbsTaskRetrieval):
         # fetch both subsets of the dataset
         corpus_raw = datasets.load_dataset(
             name="documents",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
         queries_raw = datasets.load_dataset(
             name="queries",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
-        eval_split = self.metadata_dict["eval_splits"][0]
+        eval_split = self.metadata.eval_splits[0]
         self.queries = {
             eval_split: {str(q["id"]): q["text"] for q in queries_raw[eval_split]}
         }

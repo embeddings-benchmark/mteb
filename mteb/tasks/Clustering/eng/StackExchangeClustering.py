@@ -48,10 +48,6 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
         eprint    = {2104.07081}
         }""",
         prompt="Identify the topic or theme of StackExchange posts based on the titles",
-        descriptive_stats={
-            "n_samples": {"test": 32768},
-            "avg_character_length": {"test": 57.0},
-        },
     )
 
     def dataset_transform(self):
@@ -71,7 +67,6 @@ class StackExchangeClusteringFast(AbsTaskClusteringFast):
             self.seed,
             self.metadata.eval_splits,
             label="labels",
-            n_samples=32768,
         )
         self.max_fraction_of_documents_to_embed = None
 
@@ -92,14 +87,13 @@ class StackExchangeClustering(AbsTaskClustering):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
-        date=None,
-        form=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
+        date=("2021-01-01", "2021-04-14"),
+        domains=["Web", "Written"],
+        task_subtypes=["Thematic clustering"],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
         bibtex_citation="""@article{geigle:2021:arxiv,
         author    = {Gregor Geigle and 
                         Nils Reimers and 
@@ -114,8 +108,4 @@ class StackExchangeClustering(AbsTaskClustering):
         eprint    = {2104.07081}
         }""",
         prompt="Identify the topic or theme of StackExchange posts based on the titles",
-        descriptive_stats={
-            "n_samples": {"test": 373850},
-            "avg_character_length": {"test": 57.0},
-        },
     )

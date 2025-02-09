@@ -4,7 +4,6 @@ import json
 
 import datasets
 
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
@@ -63,7 +62,7 @@ def _load_statcan_data(
     return corpus, queries, relevant_docs
 
 
-class StatcanDialogueDatasetRetrieval(MultilingualTask, AbsTaskRetrieval):
+class StatcanDialogueDatasetRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="StatcanDialogueDatasetRetrieval",
         description="A Dataset for Retrieving Data Tables through Conversations with Genuine Intents, available in English and French.",
@@ -100,43 +99,6 @@ class StatcanDialogueDatasetRetrieval(MultilingualTask, AbsTaskRetrieval):
     pages = "2799--2829",
 }
 """,
-        descriptive_stats={
-            "n_samples": {"dev": 1000, "test": 1011, "corpus": 5907},
-            "avg_character_length": {
-                "dev": {
-                    "english": {
-                        "average_document_length": 6535.865413915693,
-                        "average_query_length": 6.869244935543278,
-                        "num_documents": 5907,
-                        "num_queries": 543,
-                        "average_relevant_docs_per_query": 1.4714548802946592,
-                    },
-                    "french": {
-                        "average_document_length": 7078.072794988996,
-                        "average_query_length": 6.860655737704918,
-                        "num_documents": 5907,
-                        "num_queries": 122,
-                        "average_relevant_docs_per_query": 1.6475409836065573,
-                    },
-                },
-                "test": {
-                    "english": {
-                        "average_document_length": 6535.865413915693,
-                        "average_query_length": 7.650994575045208,
-                        "num_documents": 5907,
-                        "num_queries": 553,
-                        "average_relevant_docs_per_query": 1.573236889692586,
-                    },
-                    "french": {
-                        "average_document_length": 7078.072794988996,
-                        "average_query_length": 5.907407407407407,
-                        "num_documents": 5907,
-                        "num_queries": 108,
-                        "average_relevant_docs_per_query": 1.3055555555555556,
-                    },
-                },
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -144,11 +106,11 @@ class StatcanDialogueDatasetRetrieval(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_statcan_data(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             langs=list(_LANGS.keys()),
-            splits=self.metadata_dict["eval_splits"],
+            splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True

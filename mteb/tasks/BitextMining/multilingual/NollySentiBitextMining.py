@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -12,7 +11,7 @@ _LANGUAGES = {
 }
 
 
-class NollySentiBitextMining(AbsTaskBitextMining, MultilingualTask):
+class NollySentiBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="NollySentiBitextMining",
         dataset={
@@ -43,8 +42,4 @@ class NollySentiBitextMining(AbsTaskBitextMining, MultilingualTask):
             year={2023}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"train": 1640},
-            "avg_character_length": {"train": 135.91},
-        },
     )

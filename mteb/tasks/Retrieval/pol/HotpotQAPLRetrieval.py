@@ -11,9 +11,8 @@ class HotpotQAPL(AbsTaskRetrieval):
         description="HotpotQA is a question answering dataset featuring natural, multi-hop questions, with strong supervision for supporting facts to enable more explainable question answering systems.",
         reference="https://hotpotqa.github.io/",
         dataset={
-            "path": "clarin-knext/hotpotqa-pl",
-            "revision": "a0bd479ac97b4ccb5bd6ce320c415d0bb4beb907",
-            "trust_remote_code": True,
+            "path": "mteb/HotpotQA-PL",
+            "revision": "49835d4dc7312e5d8df554462438f0b65c8ef6a6",
         },
         type="Retrieval",
         category="s2p",
@@ -36,18 +35,6 @@ class HotpotQAPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 292.26835882093405,
-                    "average_query_length": 94.64064821066847,
-                    "num_documents": 5233329,
-                    "num_queries": 7405,
-                    "average_relevant_docs_per_query": 2.0,
-                }
-            },
-        },
     )
 
 
@@ -82,16 +69,4 @@ class HotpotQAPLHardNegatives(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 1000},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 438.3888210025661,
-                    "average_query_length": 95.161,
-                    "num_documents": 212774,
-                    "num_queries": 1000,
-                    "average_relevant_docs_per_query": 2.0,
-                }
-            },
-        },
     )

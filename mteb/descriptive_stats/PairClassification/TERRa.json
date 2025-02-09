@@ -1,0 +1,24 @@
+{
+    "dev": {
+        "num_samples": 307,
+        "number_of_characters": 84848,
+        "unique_pairs": 307,
+        "min_sentence1_length": 39,
+        "avg_sentence1_length": 230.76221498371336,
+        "max_sentence1_length": 717,
+        "unique_sentence1": 282,
+        "min_sentence2_length": 12,
+        "avg_sentence2_length": 45.615635179153095,
+        "max_sentence2_length": 129,
+        "unique_sentence2": 307,
+        "unique_labels": 2,
+        "labels": {
+            "1": {
+                "count": 153
+            },
+            "0": {
+                "count": 154
+            }
+        }
+    }
+}

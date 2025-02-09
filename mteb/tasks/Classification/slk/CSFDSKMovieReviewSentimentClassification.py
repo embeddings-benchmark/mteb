@@ -3,8 +3,6 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-N_SAMPLES = 2048
-
 
 class CSFDSKMovieReviewSentimentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
@@ -38,20 +36,14 @@ class CSFDSKMovieReviewSentimentClassification(AbsTaskClassification):
       primaryClass={cs.CL}
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": N_SAMPLES},
-            "avg_character_length": {"test": 366.2},
-        },
     )
 
-    @property
-    def metadata_dict(self):
-        md = super().metadata_dict
-        # Increase the samples_per_label in order to improve baseline performance
-        md["samples_per_label"] = 20
-        return md
+    # Increase the samples_per_label in order to improve baseline performance
+    samples_per_label = 20
 
     def dataset_transform(self):
+        N_SAMPLES = 2048
+
         self.dataset = self.dataset.rename_columns(
             {"comment": "text", "rating_int": "label"}
         )

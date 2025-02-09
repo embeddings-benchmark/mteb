@@ -21,13 +21,13 @@ class ArxivClusteringS2S(AbsTaskClustering):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
-        date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
+        date=("1991-01-01", "2021-01-01"),  # 1991-01-01 is the first arxiv paper
+        domains=["Academic", "Written"],
+        task_subtypes=[],
+        license="cc0-1.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
         bibtex_citation="""@misc{arxiv_org_submitters_2024,
     title={arXiv Dataset},
     url={https://www.kaggle.com/dsv/7548853},
@@ -37,8 +37,4 @@ class ArxivClusteringS2S(AbsTaskClustering):
     year={2024}
 }""",
         prompt="Identify the main and secondary category of Arxiv papers based on the titles",
-        descriptive_stats={
-            "n_samples": {"test": 732723},
-            "avg_character_length": {"test": 74},
-        },
     )

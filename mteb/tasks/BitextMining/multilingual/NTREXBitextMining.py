@@ -5,7 +5,6 @@ from typing import Any
 import datasets
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _BRIDGE_LANGUAGES = (
@@ -245,7 +244,7 @@ def extend_lang_pairs() -> dict[str, list[str]]:
 _EVAL_LANGS = extend_lang_pairs()
 
 
-class NTREXBitextMining(AbsTaskBitextMining, MultilingualTask):
+class NTREXBitextMining(AbsTaskBitextMining):
     parallel_subsets = True
     metadata = TaskMetadata(
         name="NTREXBitextMining",
@@ -270,10 +269,6 @@ class NTREXBitextMining(AbsTaskBitextMining, MultilingualTask):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="human-translated and localized",
-        descriptive_stats={
-            "n_samples": {"test": _N * len(_EVAL_LANGS)},
-            "avg_character_length": {"test": 120},
-        },
         bibtex_citation="""
 @inproceedings{federmann-etal-2022-ntrex,
     title = "{NTREX}-128 {--} News Test References for {MT} Evaluation of 128 Languages",

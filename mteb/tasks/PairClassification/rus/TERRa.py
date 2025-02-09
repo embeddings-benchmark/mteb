@@ -44,10 +44,6 @@ class TERRa(AbsTaskPairClassification):
         year={2020}
         }""",
         prompt="Given a premise, retrieve a hypothesis that is entailed by the premise",
-        descriptive_stats={
-            "n_samples": {"dev": 307},
-            "avg_character_length": {"dev": 138.2},
-        },
     )
 
     def dataset_transform(self):

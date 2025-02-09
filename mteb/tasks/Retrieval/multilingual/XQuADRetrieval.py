@@ -4,7 +4,6 @@ from hashlib import sha256
 
 import datasets
 
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
@@ -25,7 +24,7 @@ _LANGUAGES = {
 }
 
 
-class XQuADRetrieval(MultilingualTask, AbsTaskRetrieval):
+class XQuADRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="XQuADRetrieval",
         dataset={
@@ -64,97 +63,6 @@ class XQuADRetrieval(MultilingualTask, AbsTaskRetrieval):
       year={2021},
       url={https://openreview.net/forum?id=JH61CD7afTv}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 1190},
-            "avg_character_length": {
-                "validation": {
-                    "ar": {
-                        "average_document_length": 683.4666666666667,
-                        "average_query_length": 53.327993254637434,
-                        "num_documents": 240,
-                        "num_queries": 1186,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "de": {
-                        "average_document_length": 894.0666666666667,
-                        "average_query_length": 69.04318374259103,
-                        "num_documents": 240,
-                        "num_queries": 1181,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "el": {
-                        "average_document_length": 894.3791666666667,
-                        "average_query_length": 68.61317567567568,
-                        "num_documents": 240,
-                        "num_queries": 1184,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "en": {
-                        "average_document_length": 784.8333333333334,
-                        "average_query_length": 61.25063291139241,
-                        "num_documents": 240,
-                        "num_queries": 1185,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "es": {
-                        "average_document_length": 883.8041666666667,
-                        "average_query_length": 68.23817567567568,
-                        "num_documents": 240,
-                        "num_queries": 1184,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "hi": {
-                        "average_document_length": 764.9416666666667,
-                        "average_query_length": 59.684699915469146,
-                        "num_documents": 240,
-                        "num_queries": 1183,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "ro": {
-                        "average_document_length": 878.4458333333333,
-                        "average_query_length": 67.17229729729729,
-                        "num_documents": 240,
-                        "num_queries": 1184,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "ru": {
-                        "average_document_length": 850.1875,
-                        "average_query_length": 64.94261603375527,
-                        "num_documents": 240,
-                        "num_queries": 1185,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "th": {
-                        "average_document_length": 736.7583333333333,
-                        "average_query_length": 55.103389830508476,
-                        "num_documents": 240,
-                        "num_queries": 1180,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "tr": {
-                        "average_document_length": 788.3,
-                        "average_query_length": 60.876689189189186,
-                        "num_documents": 240,
-                        "num_queries": 1184,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "vi": {
-                        "average_document_length": 803.9083333333333,
-                        "average_query_length": 61.62859560067682,
-                        "num_documents": 240,
-                        "num_queries": 1182,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "zh": {
-                        "average_document_length": 252.4,
-                        "average_query_length": 18.460626587637595,
-                        "num_documents": 240,
-                        "num_queries": 1181,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -167,9 +75,9 @@ class XQuADRetrieval(MultilingualTask, AbsTaskRetrieval):
         relevant_docs = {lang: {split: {}} for lang in self.hf_subsets}
 
         for lang in self.hf_subsets:
-            data = datasets.load_dataset(
-                name=f"xquad.{lang}", **self.metadata_dict["dataset"]
-            )[split]
+            data = datasets.load_dataset(name=f"xquad.{lang}", **self.metadata.dataset)[
+                split
+            ]
             data = data.filter(lambda x: x["answers"]["text"] != "")
 
             question_ids = {

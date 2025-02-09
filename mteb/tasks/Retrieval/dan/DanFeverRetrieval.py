@@ -47,18 +47,6 @@ class DanFeverRetrieval(AbsTaskRetrieval):
         prompt={
             "query": "Given a claim in Danish, retrieve documents that support the claim"
         },
-        descriptive_stats={
-            "n_samples": {"train": 8897},
-            "avg_character_length": {
-                "train": {
-                    "average_document_length": 312.1117274167987,
-                    "average_query_length": 50.26957476855484,
-                    "num_documents": 2524,
-                    "num_queries": 6373,
-                    "average_relevant_docs_per_query": 0.48721167425074535,
-                }
-            },
-        },
         task_subtypes=["Claim verification"],
     )
 
@@ -161,18 +149,6 @@ class DanFever(AbsTaskRetrieval):
 """,
         prompt={
             "query": "Given a claim in Danish, retrieve documents that support the claim"
-        },
-        descriptive_stats={
-            "n_samples": {"train": 8897},
-            "avg_character_length": {
-                "train": {
-                    "average_document_length": 312.1117274167987,
-                    "average_query_length": 50.26957476855484,
-                    "num_documents": 2524,
-                    "num_queries": 6373,
-                    "average_relevant_docs_per_query": 0.48721167425074535,
-                }
-            },
         },
         task_subtypes=["Claim verification"],
     )

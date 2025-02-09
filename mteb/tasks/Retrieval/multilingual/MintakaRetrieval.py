@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
@@ -64,7 +63,7 @@ def _load_mintaka_data(
     return corpus, queries, relevant_docs
 
 
-class MintakaRetrieval(MultilingualTask, AbsTaskRetrieval):
+class MintakaRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MintakaRetrieval",
         description="We introduce Mintaka, a complex, natural, and multilingual dataset designed for experimenting with end-to-end question-answering models. Mintaka is composed of 20,000 question-answer pairs collected in English, annotated with Wikidata entities, and translated into Arabic, French, German, Hindi, Italian, Japanese, Portuguese, and Spanish for a total of 180,000 samples. Mintaka includes 8 types of complex questions, including superlative, intersection, and multi-hop questions, which were naturally elicited from crowd workers. ",
@@ -100,69 +99,6 @@ class MintakaRetrieval(MultilingualTask, AbsTaskRetrieval):
     url = "https://aclanthology.org/2022.coling-1.138",
     pages = "1604--1619"
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "ar": {
-                        "average_document_length": 12.736418511066399,
-                        "average_query_length": 55.275533363595095,
-                        "num_documents": 1491,
-                        "num_queries": 2203,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "de": {
-                        "average_document_length": 14.40060422960725,
-                        "average_query_length": 65.41322662173546,
-                        "num_documents": 1655,
-                        "num_queries": 2374,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "es": {
-                        "average_document_length": 14.291789722386296,
-                        "average_query_length": 64.88325082508251,
-                        "num_documents": 1693,
-                        "num_queries": 2424,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "fr": {
-                        "average_document_length": 14.407234539089849,
-                        "average_query_length": 68.88452088452088,
-                        "num_documents": 1714,
-                        "num_queries": 2442,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "hi": {
-                        "average_document_length": 12.71038961038961,
-                        "average_query_length": 58.404637247569184,
-                        "num_documents": 770,
-                        "num_queries": 1337,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "it": {
-                        "average_document_length": 14.365985576923077,
-                        "average_query_length": 64.39707724425887,
-                        "num_documents": 1664,
-                        "num_queries": 2395,
-                        "average_relevant_docs_per_query": 1.0004175365344468,
-                    },
-                    "ja": {
-                        "average_document_length": 9.167713567839195,
-                        "average_query_length": 29.961937716262977,
-                        "num_documents": 1592,
-                        "num_queries": 2312,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "pt": {
-                        "average_document_length": 14.244471744471744,
-                        "average_query_length": 60.42225998300765,
-                        "num_documents": 1628,
-                        "num_queries": 2354,
-                        "average_relevant_docs_per_query": 1.0004248088360237,
-                    },
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -170,12 +106,12 @@ class MintakaRetrieval(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_mintaka_data(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
-            split=self.metadata_dict["eval_splits"][0],
+            split=self.metadata.eval_splits[0],
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
-            trust_remote_code=self.metadata_dict["dataset"]["trust_remote_code"],
+            revision=self.metadata.dataset["revision"],
+            trust_remote_code=self.metadata.dataset["trust_remote_code"],
         )
 
         self.data_loaded = True

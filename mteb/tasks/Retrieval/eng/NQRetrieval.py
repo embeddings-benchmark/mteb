@@ -21,32 +21,20 @@ class NQ(AbsTaskRetrieval):
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
+        domains=["Written", "Encyclopaedic"],
+        task_subtypes=["Question answering"],
+        license="cc-by-nc-sa-3.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
         bibtex_citation="""@article{47761,title	= {Natural Questions: a Benchmark for Question Answering Research},
         author	= {Tom Kwiatkowski and Jennimaria Palomaki and Olivia Redfield and Michael Collins and Ankur Parikh 
         and Chris Alberti and Danielle Epstein and Illia Polosukhin and Matthew Kelcey and Jacob Devlin and Kenton Lee 
         and Kristina N. Toutanova and Llion Jones and Ming-Wei Chang and Andrew Dai and Jakob Uszkoreit and Quoc Le 
-        and Slav Petrov},year	= {2019},journal	= {Transactions of the Association of Computational 
+        and Slav Petrov},year    = {2019},journal    = {Transactions of the Association of Computational 
         Linguistics}}""",
         prompt={
             "query": "Given a question, retrieve Wikipedia passages that answer the question"
-        },
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 492.2287851281462,
-                    "average_query_length": 48.17902665121669,
-                    "num_documents": 2681468,
-                    "num_queries": 3452,
-                    "average_relevant_docs_per_query": 1.2169756662804172,
-                }
-            },
         },
     )
 
@@ -73,22 +61,13 @@ class NQHardNegatives(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@article{47761,title	= {Natural Questions: a Benchmark for Question Answering Research},
-        author	= {Tom Kwiatkowski and Jennimaria Palomaki and Olivia Redfield and Michael Collins and Ankur Parikh 
+        bibtex_citation="""@article{47761,title    = {Natural Questions: a Benchmark for Question Answering Research},
+        author    = {Tom Kwiatkowski and Jennimaria Palomaki and Olivia Redfield and Michael Collins and Ankur Parikh 
         and Chris Alberti and Danielle Epstein and Illia Polosukhin and Matthew Kelcey and Jacob Devlin and Kenton Lee 
         and Kristina N. Toutanova and Llion Jones and Ming-Wei Chang and Andrew Dai and Jakob Uszkoreit and Quoc Le 
-        and Slav Petrov},year	= {2019},journal	= {Transactions of the Association of Computational 
+        and Slav Petrov},year    = {2019},journal    = {Transactions of the Association of Computational 
         Linguistics}}""",
-        descriptive_stats={
-            "n_samples": {"test": 1000},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 602.7903551179953,
-                    "average_query_length": 47.878,
-                    "num_documents": 198779,
-                    "num_queries": 1000,
-                    "average_relevant_docs_per_query": 1.213,
-                }
-            },
+        prompt={
+            "query": "Given a question, retrieve Wikipedia passages that answer the question"
         },
     )

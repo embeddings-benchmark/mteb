@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
@@ -30,6 +29,7 @@ def _load_xmarket_data(
             languages=[lang],
             split=split,
             cache_dir=cache_dir,
+            trust_remote_code=True,
         )
         query_rows = datasets.load_dataset(
             path,
@@ -38,6 +38,7 @@ def _load_xmarket_data(
             revision=revision,
             split=split,
             cache_dir=cache_dir,
+            trust_remote_code=True,
         )
         qrels_rows = datasets.load_dataset(
             path,
@@ -46,6 +47,7 @@ def _load_xmarket_data(
             revision=revision,
             split=split,
             cache_dir=cache_dir,
+            trust_remote_code=True,
         )
 
         corpus[lang][split] = {row["_id"]: row for row in corpus_rows}
@@ -61,7 +63,7 @@ def _load_xmarket_data(
     return corpus, queries, relevant_docs
 
 
-class XMarket(MultilingualTask, AbsTaskRetrieval):
+class XMarket(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="XMarket",
         description="XMarket",
@@ -69,7 +71,6 @@ class XMarket(MultilingualTask, AbsTaskRetrieval):
         dataset={
             "path": "jinaai/xmarket_ml",
             "revision": "dfe57acff5b62c23732a7b7d3e3fb84ff501708b",
-            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",
@@ -93,34 +94,6 @@ class XMarket(MultilingualTask, AbsTaskRetrieval):
    author={Bonab, Hamed and Aliannejadi, Mohammad and Vardasbi, Ali and Kanoulas, Evangelos and Allan, James},
    year={2021},
    month=oct, collection={CIKM ’21} }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "de": {
-                        "average_document_length": 187.4061197288943,
-                        "average_query_length": 15.717612088184294,
-                        "num_documents": 70526,
-                        "num_queries": 4037,
-                        "average_relevant_docs_per_query": 54.3522417636859,
-                    },
-                    "en": {
-                        "average_document_length": 452.792089662076,
-                        "average_query_length": 15.881635344543357,
-                        "num_documents": 218777,
-                        "num_queries": 9099,
-                        "average_relevant_docs_per_query": 85.43719090009891,
-                    },
-                    "es": {
-                        "average_document_length": 279.67909262759923,
-                        "average_query_length": 19.97062937062937,
-                        "num_documents": 39675,
-                        "num_queries": 3575,
-                        "average_relevant_docs_per_query": 36.01006993006993,
-                    },
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -128,11 +101,11 @@ class XMarket(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_xmarket_data(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
-            split=self.metadata_dict["eval_splits"][0],
+            split=self.metadata.eval_splits[0],
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True

@@ -33,7 +33,6 @@ class BlurbsClusteringS2S(AbsTaskClustering):
         eval_langs=["deu-Latn"],
         main_score="v_measure",
         date=None,
-        form=None,
         domains=None,
         task_subtypes=None,
         license=None,
@@ -47,10 +46,6 @@ class BlurbsClusteringS2S(AbsTaskClustering):
   year={2019},
   url={https://api.semanticscholar.org/CorpusID:208334484}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 174637},
-            "avg_character_length": {"test": 23.02},
-        },
     )
 
 
@@ -92,10 +87,6 @@ class BlurbsClusteringS2SFast(AbsTaskClusteringFast):
   year={2019},
   url={https://api.semanticscholar.org/CorpusID:208334484}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": NUM_SAMPLES},
-            "avg_character_length": {"test": 23.02},
-        },
     )
 
     def dataset_transform(self):
@@ -124,5 +115,4 @@ class BlurbsClusteringS2SFast(AbsTaskClusteringFast):
             self.seed,
             self.metadata.eval_splits,
             label="labels",
-            n_samples=NUM_SAMPLES,
         )

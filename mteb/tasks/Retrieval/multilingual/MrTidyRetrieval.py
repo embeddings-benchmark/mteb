@@ -5,7 +5,6 @@ import logging
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _EVAL_LANGS = {
@@ -85,7 +84,7 @@ def _load_data_retrieval(
     return corpus, queries, relevant_docs
 
 
-class MrTidyRetrieval(MultilingualTask, AbsTaskRetrieval):
+class MrTidyRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MrTidyRetrieval",
         description="Mr. TyDi is a multi-lingual benchmark dataset built on TyDi, covering eleven typologically diverse languages. It is designed for monolingual retrieval, specifically to evaluate ranking with learned dense representations.",
@@ -113,7 +112,6 @@ class MrTidyRetrieval(MultilingualTask, AbsTaskRetrieval):
               year={2021},
               journal={arXiv:2108.08787},
         }""",
-        descriptive_stats={},
     )
 
     def load_data(self, **kwargs):
@@ -121,11 +119,11 @@ class MrTidyRetrieval(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_data_retrieval(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             langs=self.hf_subsets,
-            splits=self.metadata_dict["eval_splits"],
+            splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True

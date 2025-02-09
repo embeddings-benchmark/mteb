@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -18,7 +17,7 @@ _LANGUAGES = {
 }
 
 
-class NusaParagraphTopicClassification(MultilingualTask, AbsTaskClassification):
+class NusaParagraphTopicClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="NusaParagraphTopicClassification",
         dataset={
@@ -54,12 +53,4 @@ class NusaParagraphTopicClassification(MultilingualTask, AbsTaskClassification):
             pages = "921--945",
         }
         """,
-        descriptive_stats={
-            "n_samples": {"train": 15516, "validation": 2948, "test": 6250},
-            "avg_character_length": {
-                "train": 740.24,
-                "validation": 740.66,
-                "test": 740.71,
-            },
-        },
     )

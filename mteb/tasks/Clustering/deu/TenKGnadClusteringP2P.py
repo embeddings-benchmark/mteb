@@ -30,10 +30,6 @@ class TenKGnadClusteringP2P(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation=None,
-        descriptive_stats={
-            "n_samples": {"test": 45914},
-            "avg_character_length": {"test": 2641.03},
-        },
     )
 
 
@@ -67,10 +63,6 @@ class TenKGnadClusteringP2PFast(AbsTaskClusteringFast):
         sample_creation="found",
         bibtex_citation=None,  # none found
         # due to duplicates
-        descriptive_stats={
-            "n_samples": {"test": 10275},
-            "avg_character_length": {"test": 2641.03},
-        },
     )
 
     def dataset_transform(self) -> None:

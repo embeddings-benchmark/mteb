@@ -5,7 +5,8 @@ from typing import Any
 
 from ..evaluation.evaluators import STSEvaluator
 from ..load_results.task_results import ScoresDict
-from .AbsTask import AbsTask, DescriptiveStatistics
+from .AbsTask import AbsTask
+from .TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -15,21 +16,45 @@ class STSDescriptiveStatistics(DescriptiveStatistics):
 
     Attributes:
         num_samples: number of samples in the dataset.
+        number_of_characters: Total number of symbols in the dataset.
+        unique_pairs: Number of unique pairs
+
+        min_sentence1_length: Minimum length of sentence1
         average_sentence1_len: Average length of sentence1
+        max_sentence1_length: Maximum length of sentence1
+
+        min_sentence2_length: Minimum length of sentence2
         average_sentence2_len: Average length of sentence2
+        max_sentence2_length: Maximum length of sentence2
+
+        min_score: Minimum score
         avg_score: Average score
+        max_score: Maximum score
     """
 
     num_samples: int
+    number_of_characters: int
+    unique_pairs: int
+
+    min_sentence1_length: int
     average_sentence1_len: float
+    max_sentence1_length: int
+    unique_sentence1: int
+
+    min_sentence2_length: int
     average_sentence2_len: float
+    max_sentence2_length: int
+    unique_sentence2: int
+
+    min_score: float
     avg_score: float
+    max_score: float
 
 
 class AbsTaskSTS(AbsTask):
     """Abstract class for STS experiments.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns::
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns::
         sentence1: str
         sentence2: str
         score: float
@@ -42,13 +67,8 @@ class AbsTaskSTS(AbsTask):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    @property
-    def min_score(self) -> int:
-        return self.metadata_dict["min_score"]
-
-    @property
-    def max_score(self) -> int:
-        return self.metadata_dict["max_score"]
+    min_score: int
+    max_score: int
 
     def _evaluate_subset(
         self, model, data_split, *, encode_kwargs: dict[str, Any] = {}, **kwargs
@@ -68,9 +88,6 @@ class AbsTaskSTS(AbsTask):
 
         self._add_main_score(scores)
         return scores
-
-    def _add_main_score(self, scores: ScoresDict) -> None:
-        scores["main_score"] = scores[self.metadata.main_score]
 
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
@@ -96,12 +113,27 @@ class AbsTaskSTS(AbsTask):
             sentence2 = self.dataset[split][self.sentence_2_column]
             score = self.dataset[split]["score"]
 
-        total_sentence1_len = sum([len(s) for s in sentence1])
-        total_sentence2_len = sum([len(s) for s in sentence2])
+        sentence1_len = [len(s) for s in sentence1]
+        sentence2_len = [len(s) for s in sentence2]
+        total_sentence1_len = sum(sentence1_len)
+        total_sentence2_len = sum(sentence2_len)
         avg_score = sum(score) / len(score)
         return STSDescriptiveStatistics(
             num_samples=len(sentence1),
+            number_of_characters=total_sentence1_len + total_sentence2_len,
+            unique_pairs=len(set(zip(sentence1, sentence2))),
+            min_sentence1_length=min(sentence1_len),
             average_sentence1_len=total_sentence1_len / len(sentence1),
+            max_sentence1_length=max(sentence1_len),
+            unique_sentence1=len(set(sentence1)),
+            min_sentence2_length=min(sentence2_len),
             average_sentence2_len=total_sentence2_len / len(sentence2),
+            max_sentence2_length=max(sentence2_len),
+            unique_sentence2=len(set(sentence2)),
+            min_score=min(score),
             avg_score=avg_score,
+            max_score=max(score),
         )
+
+    def _push_dataset_to_hub(self, repo_name: str) -> None:
+        self._upload_dataset_to_hub(repo_name, ["sentence1", "sentence2", "score"])

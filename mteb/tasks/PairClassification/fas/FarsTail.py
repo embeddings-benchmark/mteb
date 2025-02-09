@@ -36,17 +36,13 @@ class FarsTail(AbsTaskPairClassification):
         publisher={Springer},
         doi={10.1007/s00500-023-08959-3}
         }""",  # after removing neutral
-        descriptive_stats={
-            "n_samples": {"test": 1029},
-            "avg_character_length": {"test": 125.84},
-        },
     )
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
-        path = self.metadata_dict["dataset"]["path"]
-        revision = self.metadata_dict["dataset"]["revision"]
+        path = self.metadata.dataset["path"]
+        revision = self.metadata.dataset["revision"]
         data_files = {
             "test": f"https://huggingface.co/datasets/{path}/resolve/{revision}/data/Test-word.csv"
         }

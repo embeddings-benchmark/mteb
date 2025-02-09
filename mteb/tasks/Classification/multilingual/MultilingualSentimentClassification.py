@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -39,7 +38,7 @@ _LANGUAGES = {
 }
 
 
-class MultilingualSentimentClassification(AbsTaskClassification, MultilingualTask):
+class MultilingualSentimentClassification(AbsTaskClassification):
     fast_loading = True
     metadata = TaskMetadata(
         name="MultilingualSentimentClassification",
@@ -89,10 +88,6 @@ class MultilingualSentimentClassification(AbsTaskClassification, MultilingualTas
             pages = "89--95",
         }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 7000},
-            "avg_character_length": {"test": 56},
-        },
     )
 
     def dataset_transform(self):

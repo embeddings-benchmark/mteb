@@ -9,8 +9,7 @@ import torch
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.encoder_interface import PromptType
-
-from .wrapper import Wrapper
+from mteb.models.wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
@@ -46,12 +45,21 @@ class SentenceTransformerWrapper(Wrapper):
         ):
             try:
                 model_prompts = self.validate_task_to_prompt_name(self.model.prompts)
-            except ValueError:
+            except KeyError:
                 model_prompts = None
+                logger.warning(
+                    "Model prompts are not in the expected format. Ignoring them."
+                )
         elif model_prompts is not None and hasattr(self.model, "prompts"):
             logger.info(f"Model prompts will be overwritten with {model_prompts}")
             self.model.prompts = model_prompts
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
+
+        if isinstance(self.model, CrossEncoder):
+            self.predict = self.handle_instructions_predict
+
+        if hasattr(self.model, "similarity") and callable(self.model.similarity):
+            self.similarity = self.model.similarity
 
     def encode(
         self,
@@ -88,7 +96,7 @@ class SentenceTransformerWrapper(Wrapper):
             )
         if prompt_name:
             logger.info(
-                f"Using prompt_nane={prompt_name} for task={task_name} prompt_type={prompt_type}"
+                f"Using prompt_name={prompt_name} for task={task_name} prompt_type={prompt_type}"
             )
         else:
             logger.info(
@@ -106,7 +114,7 @@ class SentenceTransformerWrapper(Wrapper):
             embeddings = embeddings.cpu().detach().float().numpy()
         return embeddings
 
-    def predict(
+    def _predict(
         self,
         sentences: Sequence[str],
         **kwargs: Any,
@@ -116,3 +124,14 @@ class SentenceTransformerWrapper(Wrapper):
             convert_to_numpy=True,
             **kwargs,
         )
+
+    def handle_instructions_predict(self, sentences, **kwargs):
+        # unzip the queries, corpus, and instruction so we can add the instructions to the queries
+        # as ST models can't take an arg for instructions
+        queries, corpus, instructions = list(zip(*sentences))
+        # combine the queries and instructions
+        queries_with_instructions = [
+            f"{query.strip()} {instruction}".strip() if instruction else query
+            for query, instruction in zip(queries, instructions)
+        ]
+        return self._predict(list(zip(queries_with_instructions, corpus)), **kwargs)

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -19,7 +18,7 @@ _LANGUAGES = {
 }
 
 
-class NusaXBitextMining(AbsTaskBitextMining, MultilingualTask):
+class NusaXBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="NusaXBitextMining",
         dataset={
@@ -58,8 +57,4 @@ class NusaXBitextMining(AbsTaskBitextMining, MultilingualTask):
             primaryClass={cs.CL}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"train": 5500},
-            "avg_character_length": {"train": 157.15},
-        },
     )

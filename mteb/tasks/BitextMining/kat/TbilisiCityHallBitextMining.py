@@ -3,7 +3,6 @@ from __future__ import annotations
 from datasets import DatasetDict, load_dataset
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -18,7 +17,7 @@ _EVAL_LANGS = {
 _EVAL_SPLIT = "test"
 
 
-class TbilisiCityHallBitextMining(AbsTaskBitextMining, MultilingualTask):
+class TbilisiCityHallBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="TbilisiCityHallBitextMining",
         dataset={
@@ -41,10 +40,6 @@ class TbilisiCityHallBitextMining(AbsTaskBitextMining, MultilingualTask):
         annotations_creators="derived",
         dialect=[],
         bibtex_citation="",
-        descriptive_stats={
-            "n_samples": {_EVAL_SPLIT: 1820},
-            "avg_character_length": {_EVAL_SPLIT: 78},
-        },
     )
 
     def load_data(self, **kwargs) -> None:
@@ -55,10 +50,10 @@ class TbilisiCityHallBitextMining(AbsTaskBitextMining, MultilingualTask):
         for lang in self.hf_subsets:
             l1, l2 = lang.split("-")
             dataset = load_dataset(
-                self.metadata_dict["dataset"]["path"],
+                self.metadata.dataset["path"],
                 split=_EVAL_SPLIT,
                 cache_dir=kwargs.get("cache_dir", None),
-                revision=self.metadata_dict["dataset"]["revision"],
+                revision=self.metadata.dataset["revision"],
             )
             dataset = dataset.rename_columns(
                 {_LANGUAGES[l1]: "sentence1", _LANGUAGES[l2]: "sentence2"}
