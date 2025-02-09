@@ -1478,7 +1478,7 @@ FinMTEB = Benchmark(
     tasks=get_tasks(
         languages=["eng", "zho"],
         tasks=[
-            "FinancialPhraseBankClassification",
+            "FinancialPhrasebankClassification",
             "FinSentClassification",
             "FiQAClassification",
             "SemEva2017Classification",
@@ -1505,7 +1505,7 @@ FinMTEB = Benchmark(
             "HeadlineACPairClassification",
             "HeadlinePDDPairClassification",
             "HeadlinePDUPairClassification",
-            "AFQMCPairClassification",
+            "AFQMC",
             "FinFactReranking",
             "FiQA2018Reranking",
             "HC3Reranking",
@@ -1534,7 +1534,7 @@ FinMTEB = Benchmark(
             "FINAL",
             "FinSTS",
             "AFQMC",
-            "BQCorpus",
+            "BQ",
             "Ectsum",
             "FINDsum",
             "FNS2022sum",

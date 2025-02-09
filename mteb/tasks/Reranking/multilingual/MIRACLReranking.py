@@ -123,9 +123,9 @@ class MIRACLReranking(AbsTaskReranking):
         for hf_subset in self.hf_subsets:
             if "name" in self.metadata.dataset:
                 cur_dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
-                assert hf_subset == "default", (
-                    f"Only default subset is supported for {self.metadata.name} since `name` is given in the metadata."
-                )
+                assert (
+                    hf_subset == "default"
+                ), f"Only default subset is supported for {self.metadata.name} since `name` is given in the metadata."
             else:
                 cur_dataset = datasets.load_dataset(
                     **self.metadata.dataset, name=hf_subset
@@ -181,9 +181,9 @@ class MIRACLReranking(AbsTaskReranking):
                     if len(self.top_ranked[hf_subset][split][query_id]) == 0:
                         # give it a negative, even though qrels should be empty since that was how it was done in the original
                         neg_doc = cur_dataset[split]["negative"][idx][0]
-                        assert isinstance(neg_doc, str), (
-                            f"Negative document is not a string: {neg_doc}"
-                        )
+                        assert isinstance(
+                            neg_doc, str
+                        ), f"Negative document is not a string: {neg_doc}"
                         neg_doc_id = f"negative_{query_id}"
                         self.top_ranked[hf_subset][split][query_id].append(neg_doc_id)
                         self.corpus[hf_subset][split][neg_doc_id] = {
