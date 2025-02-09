@@ -295,6 +295,66 @@ microllama_text_embedding = ModelMeta(
     public_training_data=None,
 )
 
+sentence_t5_base = ModelMeta(
+    name="sentence-transformers/sentence-t5-base",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="50c53e206f8b01c9621484a3c0aafce4e55efebf",
+    release_date="2022-02-09",
+    n_parameters=110_000_000,
+    memory_usage_mb=209,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/sentence-transformers/sentence-t5-base",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets={"SNLI": ["train"], "Community QA": ["train"]},
+)
+
+sentence_t5_large = ModelMeta(
+    name="sentence-transformers/sentence-t5-large",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="1fc08ea477205aa54a3e5b13f0971ae16b86410a",
+    release_date="2022-02-09",
+    n_parameters=335_000_000,
+    memory_usage_mb=639,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/sentence-transformers/sentence-t5-large",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets={"SNLI": ["train"], "Community QA": ["train"]},
+)
+
+sentence_t5_xl = ModelMeta(
+    name="sentence-transformers/sentence-t5-xl",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="2965d31b368fb14117688e0bde77cbd720e91f53",
+    release_date="2024-03-27",
+    n_parameters=3_000_000_000,
+    memory_usage_mb=2367,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/sentence-transformers/sentence-t5-xl",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets={"SNLI": ["train"], "Community QA": ["train"]},
+)
+
 sentence_t5_xxl = ModelMeta(
     name="sentence-transformers/sentence-t5-xxl",
     languages=["eng-Latn"],
