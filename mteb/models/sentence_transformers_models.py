@@ -301,7 +301,7 @@ sentence_t5_xxl = ModelMeta(
     open_weights=True,
     revision="4d122282ba80e807e9e6eb8c358269e92796365d",
     release_date="2024-03-27",
-    n_parameters=11_000_000_000, 
+    n_parameters=11_000_000_000,
     memory_usage_mb=9279,
     embed_dim=768,
     license="apache-2.0",
@@ -310,10 +310,7 @@ sentence_t5_xxl = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
-    public_training_code="https://arxiv.org/abs/2108.08877",
+    public_training_code=None,
     public_training_data=None,
-    training_datasets={
-        "SNLI": ["train"],
-        "Community QA": ["train"]
-    } 
+    training_datasets={"SNLI": ["train"], "Community QA": ["train"]},
 )
