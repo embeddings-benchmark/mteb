@@ -1,5 +1,9 @@
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
+from __future__ import annotations
+
 from mteb.abstasks.TaskMetadata import TaskMetadata
+
+from ....abstasks.AbsTaskReranking import AbsTaskReranking
+
 
 # Optional: Extract the transformation logic as a function.
 def birco_transform(hf_dataset, default_instruction=""):
@@ -16,14 +20,19 @@ def birco_transform(hf_dataset, default_instruction=""):
             cid = doc["corpus_id"]
             if cid not in corpus:
                 corpus[cid] = doc["corpus_text"]
-    return {"queries": queries, "corpus": corpus, "qrels": qrels, "instructions": instructions}
+    return {
+        "queries": queries,
+        "corpus": corpus,
+        "qrels": qrels,
+        "instructions": instructions,
+    }
 
 
 class BIRCORerankingBase(AbsTaskReranking):
-    """
-    Base class for BIRCO reranking tasks.
+    """Base class for BIRCO reranking tasks.
     Uses a standard dataset transformation for BIRCO tasks.
     """
+
     def dataset_transform(self, hf_dataset):
         default_inst = getattr(self, "instruction", "")
         return birco_transform(hf_dataset, default_inst)
@@ -44,7 +53,10 @@ class BIRCODorisMaeReranking(BIRCORerankingBase):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        dataset={"path": "mteb/BIRCO-DorisMae-Test", "revision": "27d9d0022ce22cc770ad0c6cefaf26674d5eb399"},
+        dataset={
+            "path": "mteb/BIRCO-DorisMae-Test",
+            "revision": "27d9d0022ce22cc770ad0c6cefaf26674d5eb399",
+        },
         date=("2024-01-01", "2024-12-31"),
         domains=["Academic"],  # TASK_DOMAIN accepts "Academic"
         task_subtypes=["Scientific Reranking"],  # Valid subtype
@@ -80,9 +92,12 @@ class BIRCOArguAnaReranking(BIRCORerankingBase):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        dataset={"path": "mteb/BIRCO-ArguAna-Test", "revision": "76f66dcb0253bcacbbfeddce2a53041a765e048c"},
+        dataset={
+            "path": "mteb/BIRCO-ArguAna-Test",
+            "revision": "76f66dcb0253bcacbbfeddce2a53041a765e048c",
+        },
         date=("2024-01-01", "2024-12-31"),
-        domains=["Written"], # there is no 'Debate' domain
+        domains=["Written"],  # there is no 'Debate' domain
         task_subtypes=["Reasoning as Retrieval"],  # Valid subtype
         license="cc-by-4.0",
         annotations_creators="expert-annotated",
@@ -93,11 +108,9 @@ class BIRCOArguAnaReranking(BIRCORerankingBase):
   author={Wang et al.},
   year={2024},
   howpublished={\\url{https://github.com/BIRCO-benchmark/BIRCO}}
-}"""
+}""",
     )
-    instruction = (
-        "Given a one-paragraph argument, retrieve the passage that contains the counter-argument which directly refutes the query's stance."
-    )
+    instruction = "Given a one-paragraph argument, retrieve the passage that contains the counter-argument which directly refutes the query's stance."
 
 
 class BIRCOClinicalTrialReranking(BIRCORerankingBase):
@@ -114,7 +127,10 @@ class BIRCOClinicalTrialReranking(BIRCORerankingBase):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        dataset={"path": "mteb/BIRCO-ClinicalTrial-Test", "revision": "4f616dc0f2349ba3be31f3202ee4f3baef6438b6"},
+        dataset={
+            "path": "mteb/BIRCO-ClinicalTrial-Test",
+            "revision": "4f616dc0f2349ba3be31f3202ee4f3baef6438b6",
+        },
         date=("2024-01-01", "2024-12-31"),
         domains=["Medical"],  # Valid domain (Medical)
         task_subtypes=["Article retrieval"],  # Valid subtype
@@ -127,11 +143,9 @@ class BIRCOClinicalTrialReranking(BIRCORerankingBase):
   author={Wang et al.},
   year={2024},
   howpublished={\\url{https://github.com/BIRCO-benchmark/BIRCO}}
-}"""
+}""",
     )
-    instruction = (
-        "Given a patient case report, retrieve the clinical trial description that best matches the patient's eligibility criteria."
-    )
+    instruction = "Given a patient case report, retrieve the clinical trial description that best matches the patient's eligibility criteria."
 
 
 class BIRCOWhatsThatBookReranking(BIRCORerankingBase):
@@ -149,7 +163,10 @@ class BIRCOWhatsThatBookReranking(BIRCORerankingBase):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        dataset={"path": "mteb/BIRCO-WTB-Test", "revision": "acf9fc30a976378e7cd17a9c3f6c065c2b76e4b5"},
+        dataset={
+            "path": "mteb/BIRCO-WTB-Test",
+            "revision": "acf9fc30a976378e7cd17a9c3f6c065c2b76e4b5",
+        },
         date=("2024-01-01", "2024-12-31"),
         domains=["Fiction"],  # Valid domain (Fiction)
         task_subtypes=["Article retrieval"],  # Valid subtype
@@ -162,11 +179,9 @@ class BIRCOWhatsThatBookReranking(BIRCORerankingBase):
   author={Wang et al.},
   year={2024},
   howpublished={\\url{https://github.com/BIRCO-benchmark/BIRCO}}
-}"""
+}""",
     )
-    instruction = (
-        "Given an ambiguous description of a book, retrieve the book description that best matches the query."
-    )
+    instruction = "Given an ambiguous description of a book, retrieve the book description that best matches the query."
 
 
 class BIRCORelicReranking(BIRCORerankingBase):
@@ -184,7 +199,10 @@ class BIRCORelicReranking(BIRCORerankingBase):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        dataset={"path": "mteb/BIRCO-Relic-Test", "revision": "f1f127af9f445ec706769f8491ea663525bb5c93"},
+        dataset={
+            "path": "mteb/BIRCO-Relic-Test",
+            "revision": "f1f127af9f445ec706769f8491ea663525bb5c93",
+        },
         date=("2024-01-01", "2024-12-31"),
         domains=["Fiction"],  # Valid domain
         task_subtypes=["Article retrieval"],  # Valid subtype
@@ -197,8 +215,6 @@ class BIRCORelicReranking(BIRCORerankingBase):
   author={Wang et al.},
   year={2024},
   howpublished={\\url{https://github.com/BIRCO-benchmark/BIRCO}}
-}"""
+}""",
     )
-    instruction = (
-        "Given a literary analysis with a missing quotation (marked as [masked sentence(s)]), retrieve the passage that best completes the analysis."
-    )
+    instruction = "Given a literary analysis with a missing quotation (marked as [masked sentence(s)]), retrieve the passage that best completes the analysis."

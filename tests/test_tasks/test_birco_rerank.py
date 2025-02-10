@@ -1,18 +1,25 @@
+from __future__ import annotations
+
 import unittest
-from mteb import MTEB
-from sentence_transformers import SentenceTransformer
+
 from BIRCO_Reranking import (
-    BIRCODorisMaeReranking,
     BIRCOArguAnaReranking,
     BIRCOClinicalTrialReranking,
-    BIRCOWhatsThatBookReranking,
+    BIRCODorisMaeReranking,
     BIRCORelicReranking,
+    BIRCOWhatsThatBookReranking,
 )
+from sentence_transformers import SentenceTransformer
+
+from mteb import MTEB
+
 
 class TestBIRCOTasks(unittest.TestCase):
     def setUp(self):
         # Initialize a reference model for testing
-        self.model = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+        self.model = SentenceTransformer(
+            "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+        )
         # Instantiate the BIRCO tasks
         self.tasks = [
             BIRCODorisMaeReranking(),
@@ -29,6 +36,7 @@ class TestBIRCOTasks(unittest.TestCase):
         for task_name, task_results in results.items():
             self.assertTrue(task_results, f"No results returned for task: {task_name}")
             print(f"Results for {task_name}: {task_results}")
+
 
 if __name__ == "__main__":
     unittest.main()
