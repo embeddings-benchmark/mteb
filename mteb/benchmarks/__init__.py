@@ -12,4 +12,5 @@ __all__ = [
     "BENCHMARK_REGISTRY",
     "get_benchmark",
     "get_benchmarks",
+    "Benchmark",
 ]
