@@ -1,15 +1,14 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
-from dataclasses import dataclass
-from typing import Annotated
+from typing import TYPE_CHECKING, Annotated
 
 from pydantic import AnyUrl, BeforeValidator, TypeAdapter
 
-from mteb.abstasks.AbsTask import AbsTask
-from mteb.load_results.benchmark_results import BenchmarkResults
-from mteb.load_results.load_results import load_results
+from mteb.benchmarks.benchmark import Benchmark
 from mteb.overview import MTEBTasks, get_task, get_tasks
+
+if TYPE_CHECKING:
+    pass
 
 http_url_adapter = TypeAdapter(AnyUrl)
 UrlString = Annotated[
@@ -17,61 +16,8 @@ UrlString = Annotated[
 ]  # Allows the type to be a string, but ensures that the string is a URL
 
 
-@dataclass
-class Benchmark:
-    """A benchmark object intended to run a certain benchmark within MTEB.
-
-    Args:
-        name: The name of the benchmark
-        tasks: The tasks within the benchmark.
-        description: A description of the benchmark, should include its intended goal and potentially a description of its construction
-        reference: A link reference, to a source containing additional information typically to a paper, leaderboard or github.
-        citation: A bibtex citation
-        contacts: The people to contact in case of a problem in the benchmark, preferably a GitHub handle.
-
-    Example:
-        >>> Benchmark(
-        ...     name="MTEB(custom)",
-        ...     tasks=mteb.get_tasks(
-        ...         tasks=["AmazonCounterfactualClassification", "AmazonPolarityClassification"],
-        ...         languages=["eng"],
-        ...     ),
-        ...     description="A custom benchmark"
-        ... )
-    """
-
-    name: str
-    tasks: Sequence[AbsTask]
-    description: str | None = None
-    reference: UrlString | None = None
-    citation: str | None = None
-    contacts: list[str] | None = None
-
-    def __iter__(self):
-        return iter(self.tasks)
-
-    def __len__(self) -> int:
-        return len(self.tasks)
-
-    def __getitem__(self, index):
-        return self.tasks[index]
-
-    def load_results(
-        self, base_results: None | BenchmarkResults = None
-    ) -> BenchmarkResults:
-        if not hasattr(self, "results_cache"):
-            self.results_cache = {}
-        if base_results in self.results_cache:
-            return self.results_cache[base_results]
-        if base_results is None:
-            base_results = load_results()
-        results = base_results.select_tasks(self.tasks)
-        self.results_cache[base_results] = results
-        return results
-
-
 MTEB_EN = Benchmark(
-    name="MTEB(eng)",
+    name="MTEB(eng, v2)",
     tasks=MTEBTasks(
         get_tasks(
             tasks=[
@@ -140,7 +86,7 @@ The original MTEB leaderboard is available under the [MTEB(eng, classic)](https:
 )
 
 MTEB_ENG_CLASSIC = Benchmark(
-    name="MTEB(eng, classic)",
+    name="MTEB(eng, v1)",
     tasks=MTEBTasks(
         get_tasks(
             tasks=[
@@ -237,7 +183,7 @@ We recommend that you use [MTEB(eng)](https://huggingface.co/spaces/mteb/leaderb
 )
 
 MTEB_MAIN_RU = Benchmark(
-    name="MTEB(rus)",
+    name="MTEB(rus, v1)",
     tasks=get_tasks(
         languages=["rus"],
         tasks=[
@@ -288,7 +234,7 @@ MTEB_MAIN_RU = Benchmark(
 )
 
 MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
-    name="MTEB(Retrieval w/Instructions)",
+    name="FollowIR",
     tasks=get_tasks(
         tasks=[
             "Robust04InstructionRetrieval",
@@ -309,7 +255,7 @@ MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
 )
 
 MTEB_RETRIEVAL_LAW = Benchmark(
-    name="MTEB(law)",  # This benchmark is likely in the need of an update
+    name="MTEB(law, v1)",  # This benchmark is likely in the need of an update
     tasks=get_tasks(
         tasks=[
             "AILACasedocs",
@@ -328,7 +274,7 @@ MTEB_RETRIEVAL_LAW = Benchmark(
 )
 
 MTEB_RETRIEVAL_MEDICAL = Benchmark(
-    name="MTEB(Medical)",
+    name="MTEB(Medical, v1)",
     tasks=get_tasks(
         tasks=[
             "CUREv1",
@@ -379,7 +325,7 @@ MTEB_MINERS_BITEXT_MINING = Benchmark(
 )
 
 SEB = Benchmark(
-    name="MTEB(Scandinavian)",
+    name="MTEB(Scandinavian, v1)",
     tasks=get_tasks(
         tasks=[
             # Bitext
@@ -493,7 +439,7 @@ RAR_b = Benchmark(
 )
 
 MTEB_FRA = Benchmark(
-    name="MTEB(fra)",
+    name="MTEB(fra, v1)",
     tasks=MTEBTasks(
         get_tasks(
             languages=["fra"],
@@ -546,9 +492,8 @@ MTEB_FRA = Benchmark(
     contacts=["imenelydiaker"],
 )
 
-
 MTEB_DEU = Benchmark(
-    name="MTEB(deu)",
+    name="MTEB(deu, v1)",
     tasks=get_tasks(
         languages=["deu"],
         exclusive_language_filter=True,
@@ -594,9 +539,8 @@ MTEB_DEU = Benchmark(
     contacts=["slvnwhrl"],
 )
 
-
 MTEB_KOR = Benchmark(
-    name="MTEB(kor)",
+    name="MTEB(kor, v1)",
     tasks=get_tasks(
         languages=["kor"],
         tasks=[  # @KennethEnevoldsen: We could probably expand this to a more solid benchamrk, but for now I have left it as is.
@@ -617,9 +561,8 @@ MTEB_KOR = Benchmark(
     citation=None,
 )
 
-
 MTEB_POL = Benchmark(
-    name="MTEB(pol)",
+    name="MTEB(pol, v1)",
     tasks=MTEBTasks(
         get_tasks(
             languages=["pol"],
@@ -664,7 +607,7 @@ two novel clustering tasks.""",  # Rephrased from the abstract
 )
 
 MTEB_code = Benchmark(
-    name="MTEB(code)",
+    name="MTEB(code, v1)",
     tasks=get_tasks(
         tasks=[
             # Retrieval
@@ -702,9 +645,8 @@ MTEB_code = Benchmark(
     citation=None,
 )
 
-
 MTEB_multilingual = Benchmark(
-    name="MTEB(Multilingual)",
+    name="MTEB(Multilingual, v1)",
     tasks=get_tasks(
         tasks=[
             "BornholmBitextMining",
@@ -848,7 +790,7 @@ MTEB_multilingual = Benchmark(
 )
 
 MTEB_JPN = Benchmark(
-    name="MTEB(jpn)",
+    name="MTEB(jpn, v1)",
     tasks=get_tasks(
         languages=["jpn"],
         tasks=[
@@ -916,7 +858,7 @@ indic_languages = [
 ]
 
 MTEB_INDIC = Benchmark(
-    name="MTEB(Indic)",
+    name="MTEB(Indic, v1)",
     tasks=get_tasks(
         tasks=[
             # Bitext
@@ -1004,7 +946,7 @@ eu_languages = [
 ]
 
 MTEB_EU = Benchmark(
-    name="MTEB(Europe)",
+    name="MTEB(Europe, v1)",
     tasks=get_tasks(
         tasks=[
             "BornholmBitextMining",
@@ -1137,7 +1079,6 @@ BRIGHT = Benchmark(
 }""",
 )
 
-
 CODE_RAG = Benchmark(
     name="CodeRAG",
     tasks=get_tasks(
@@ -1160,7 +1101,6 @@ CODE_RAG = Benchmark(
       url={https://arxiv.org/abs/2406.14497}, 
     }""",
 )
-
 
 BEIR = Benchmark(
     name="BEIR",
@@ -1219,7 +1159,7 @@ NANOBEIR = Benchmark(
 )
 
 C_MTEB = Benchmark(
-    name="MTEB(Chinese)",
+    name="MTEB(cmn, v1)",
     tasks=MTEBTasks(
         get_tasks(
             tasks=[
@@ -1275,7 +1215,7 @@ C_MTEB = Benchmark(
 )
 
 FA_MTEB = Benchmark(
-    name="FaMTEB(fas, beta)",
+    name="MTEB(fas, beta)",
     tasks=get_tasks(
         languages=["fas"],
         tasks=[
