@@ -62,6 +62,7 @@ from mteb.models import (
     salesforce_models,
     sentence_transformers_models,
     siglip_models,
+    sonar_models,
     stella_models,
     text2vec_models,
     uae_models,
@@ -129,6 +130,7 @@ model_modules = [
     vlm2vec_models,
     voyage_v,
     stella_models,
+    sonar_models,
     text2vec_models,
     uae_models,
     voyage_models,
@@ -150,7 +152,18 @@ def get_model_metas(
     use_instructions: bool | None = None,
     zero_shot_on: list[AbsTask] | None = None,
 ) -> list[ModelMeta]:
-    """Load all models' metadata that fit the specified criteria."""
+    """Load all models' metadata that fit the specified criteria.
+
+    Args:
+        model_names: A list of model names to filter by. If None, all models are included.
+        languages: A list of languages to filter by. If None, all languages are included.
+        open_weights: Whether to filter by models with open weights. If None this filter is ignored.
+        frameworks: A list of frameworks to filter by. If None, all frameworks are included.
+        n_parameters_range: A tuple of lower and upper bounds of the number of parameters to filter by. 
+            If (None, None), this filter is ignored.
+        use_instructions: Whether to filter by models that use instructions. If None, all models are included.
+        zero_shot_on: A list of tasks on which the model is zero-shot. If None this filter is ignored.
+    """
     res = []
     model_names = set(model_names) if model_names is not None else None
     languages = set(languages) if languages is not None else None
@@ -171,14 +184,17 @@ def get_model_metas(
             model_meta.use_instructions != use_instructions
         ):
             continue
+
         lower, upper = n_parameters_range
         n_parameters = model_meta.n_parameters
+
         if upper is not None:
             if (n_parameters is None) or (n_parameters > upper):
                 continue
         if lower is not None:
             if (n_parameters is None) or (n_parameters < lower):
                 continue
+
         if zero_shot_on is not None:
             if not model_meta.is_zero_shot_on(zero_shot_on):
                 continue
@@ -254,7 +270,7 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
             # TODO: We need a mapping between conflicting language codes
             languages=None,
             license=card_data.get("license", None),
-            framework=frameworks,
+            framework=frameworks,  # type: ignore
             training_datasets=card_data.get("datasets", None),
             similarity_fn_name=None,
             n_parameters=None,
