@@ -203,7 +203,7 @@ def test_benchmark_names_must_be_unique():
 
 
 @pytest.mark.parametrize(
-    "name", ["MTEB(eng, classic)", "MTEB(rus)", "MTEB(Scandinavian)"]
+    "name", ["MTEB(eng, v1)", "MTEB(rus, v1)", "MTEB(Scandinavian, v1)"]
 )
 def test_get_benchmark(name):
     benchmark = mteb.get_benchmark(benchmark_name=name)
