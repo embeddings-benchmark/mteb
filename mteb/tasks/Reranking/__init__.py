@@ -3,6 +3,11 @@ from __future__ import annotations
 from .ara import NamaaMrTydiReranking
 from .eng import (
     AskUbuntuDupQuestions,
+    BIRCOArguAnaReranking,
+    BIRCOClinicalTrialReranking,
+    BIRCODorisMaeReranking,
+    BIRCORelicReranking,
+    BIRCOWhatsThatBookReranking,
     MindSmallReranking,
     NevIR,
     SciDocsReranking,
@@ -16,6 +21,11 @@ from .rus import RuBQReranking
 from .zho import CMedQAv1, CMedQAv2, MMarcoReranking, T2Reranking
 
 __all__ = [
+    "BIRCODorisMaeReranking",
+    "BIRCOArguAnaReranking",
+    "BIRCOClinicalTrialReranking",
+    "BIRCOWhatsThatBookReranking",
+    "BIRCORelicReranking",
     "CMedQAv1",
     "CMedQAv2",
     "MMarcoReranking",
