@@ -25,7 +25,7 @@ class BIRCORerankingBase(AbsTaskReranking):
     Uses a standard dataset transformation for BIRCO tasks.
     """
     def dataset_transform(self, hf_dataset):
-        default_inst = getattr(self.metadata, "instruction", "")
+        default_inst = getattr(self, "instruction", "")
         return birco_transform(hf_dataset, default_inst)
 
 
@@ -57,9 +57,9 @@ class BIRCODorisMaeReranking(BIRCORerankingBase):
   author={Wang et al.},
   year={2024},
   howpublished={\\url{https://github.com/BIRCO-benchmark/BIRCO}}
-}"""
+}""",
     )
-    metadata.instruction = (
+    instruction = (
         "The query communicates specific research requirements. "
         "Identify the abstract that best fulfills the research requirements described in the query."
     )
@@ -82,7 +82,7 @@ class BIRCOArguAnaReranking(BIRCORerankingBase):
         main_score="ndcg_at_10",
         dataset={"path": "mteb/BIRCO-ArguAna-Test", "revision": "76f66dcb0253bcacbbfeddce2a53041a765e048c"},
         date=("2024-01-01", "2024-12-31"),
-        domains=["Debate"],
+        domains=["Written"], # there is no 'Debate' domain
         task_subtypes=["Reasoning as Retrieval"],  # Valid subtype
         license="cc-by-4.0",
         annotations_creators="expert-annotated",
@@ -95,7 +95,7 @@ class BIRCOArguAnaReranking(BIRCORerankingBase):
   howpublished={\\url{https://github.com/BIRCO-benchmark/BIRCO}}
 }"""
     )
-    metadata.instruction = (
+    instruction = (
         "Given a one-paragraph argument, retrieve the passage that contains the counter-argument which directly refutes the query's stance."
     )
 
@@ -129,7 +129,7 @@ class BIRCOClinicalTrialReranking(BIRCORerankingBase):
   howpublished={\\url{https://github.com/BIRCO-benchmark/BIRCO}}
 }"""
     )
-    metadata.instruction = (
+    instruction = (
         "Given a patient case report, retrieve the clinical trial description that best matches the patient's eligibility criteria."
     )
 
@@ -164,7 +164,7 @@ class BIRCOWhatsThatBookReranking(BIRCORerankingBase):
   howpublished={\\url{https://github.com/BIRCO-benchmark/BIRCO}}
 }"""
     )
-    metadata.instruction = (
+    instruction = (
         "Given an ambiguous description of a book, retrieve the book description that best matches the query."
     )
 
@@ -199,6 +199,6 @@ class BIRCORelicReranking(BIRCORerankingBase):
   howpublished={\\url{https://github.com/BIRCO-benchmark/BIRCO}}
 }"""
     )
-    metadata.instruction = (
+    instruction = (
         "Given a literary analysis with a missing quotation (marked as [masked sentence(s)]), retrieve the passage that best completes the analysis."
     )
