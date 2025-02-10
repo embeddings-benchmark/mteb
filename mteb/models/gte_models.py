@@ -303,3 +303,27 @@ gte_multilingual_base = ModelMeta(
     public_training_data=None,  # couldn't find
     training_datasets=gte_multi_training_data,
 )
+
+gte_modernbert_base = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="Alibaba-NLP/gte-modernbert-base",
+        revision="7ca8b4ca700621b67618669f5378fe5f5820b8e4",
+    ),
+    name="Alibaba-NLP/gte-modernbert-base",
+    languages=["eng_Latn"],
+    open_weights=True,
+    revision="7ca8b4ca700621b67618669f5378fe5f5820b8e4",
+    release_date="2025-01-21",  # initial commit of hf model.
+    n_parameters=149 * 1e6,
+    embed_dim=768,
+    license="apache-2",
+    max_tokens=8192,
+    reference="https://huggingface.co/Alibaba-NLP/gte-modernbert-base",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code=None,  # couldn't find
+    public_training_data=None,
+    training_datasets=gte_multi_training_data,  # English part of gte_multi_training_data,
+)
