@@ -89,7 +89,7 @@ class ClimateFEVERRetrievalv2(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=("2020-12-11", "2020-12-11"),
+        date=("2001-01-01", "2020-12-31"), # launch of wiki -> paper publication
         domains=["Academic", "Written"],
         task_subtypes=["Claim Verification"],
         license="cc-by-sa-4.0",
