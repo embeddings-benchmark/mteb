@@ -60,8 +60,8 @@ def get_benchmark(
     benchmark_name: str,
 ) -> Benchmark:
     if benchmark_name in PREVIOUS_BENCHMARK_NAMES:
-        logger.warning(
-            f"Using the previous benchmark name '{benchmark_name}' is deprecated. Please use '{PREVIOUS_BENCHMARK_NAMES[benchmark_name]}' instead."
+        warnings.warn(
+            f"Using the previous benchmark name '{benchmark_name}' is deprecated. Please use '{PREVIOUS_BENCHMARK_NAMES[benchmark_name]}' instead.", DeprecationWarning
         )
         benchmark_name = PREVIOUS_BENCHMARK_NAMES[benchmark_name]
     if benchmark_name not in BENCHMARK_REGISTRY:
