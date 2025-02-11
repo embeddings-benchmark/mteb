@@ -5,29 +5,6 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
 
 
-# Optional: Extract the transformation logic as a function.
-def birco_transform(hf_dataset, default_instruction=""):
-    queries = {}
-    corpus = {}
-    qrels = {}
-    instructions = {}
-    for record in hf_dataset:
-        qid = record["query_id"]
-        queries[qid] = record["query_text"]
-        qrels[qid] = record["relevance"]
-        instructions[qid] = default_instruction
-        for doc in record["corpus"]:
-            cid = doc["corpus_id"]
-            if cid not in corpus:
-                corpus[cid] = doc["corpus_text"]
-    return {
-        "queries": queries,
-        "corpus": corpus,
-        "qrels": qrels,
-        "instructions": instructions,
-    }
-
-
 class BIRCOArguAnaReranking(AbsTaskReranking):
     metadata = TaskMetadata(
         name="BIRCO-ArguAna",
@@ -45,7 +22,7 @@ class BIRCOArguAnaReranking(AbsTaskReranking):
         main_score="ndcg_at_10",
         dataset={
             "path": "mteb/BIRCO-ArguAna-Test",
-            "revision": "76f66dcb0253bcacbbfeddce2a53041a765e048c",
+            "revision": "3bff2aa80baf21d0a6b3de837c5d0143bd2df23d",
         },
         date=("2024-01-01", "2024-12-31"),
         domains=["Written"],  # there is no 'Debate' domain
@@ -54,14 +31,14 @@ class BIRCOArguAnaReranking(AbsTaskReranking):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{BIRCO,
-  title={BIRCO: A Benchmark of Information Retrieval Tasks with Complex Objectives},
-  author={Wang et al.},
-  year={2024},
-  howpublished={\\url{https://github.com/BIRCO-benchmark/BIRCO}}
-}""",
+        prompt="Given a one-paragraph argument, retrieve the passage that contains the counter-argument which directly refutes the query's stance.",
+        bibtex_citation="""@misc{wang2024bircobenchmarkinformationretrieval,
+            title={BIRCO: A Benchmark of Information Retrieval Tasks with Complex Objectives}, 
+            author={Xiaoyue Wang and Jianyou Wang and Weili Cao and Kaicheng Wang and Ramamohan Paturi and Leon Bergen},
+            year={2024},
+            eprint={2402.14151},
+            archivePrefix={arXiv},
+            primaryClass={cs.IR},
+            url={https://arxiv.org/abs/2402.14151}, 
+        }""",
     )
-    instruction = "Given a one-paragraph argument, retrieve the passage that contains the counter-argument which directly refutes the query's stance."
-
-    def dataset_transform(self, hf_dataset):
-        return birco_transform(hf_dataset, self.instruction)

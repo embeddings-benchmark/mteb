@@ -5,29 +5,6 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
 
 
-# Optional: Extract the transformation logic as a function.
-def birco_transform(hf_dataset, default_instruction=""):
-    queries = {}
-    corpus = {}
-    qrels = {}
-    instructions = {}
-    for record in hf_dataset:
-        qid = record["query_id"]
-        queries[qid] = record["query_text"]
-        qrels[qid] = record["relevance"]
-        instructions[qid] = default_instruction
-        for doc in record["corpus"]:
-            cid = doc["corpus_id"]
-            if cid not in corpus:
-                corpus[cid] = doc["corpus_text"]
-    return {
-        "queries": queries,
-        "corpus": corpus,
-        "qrels": qrels,
-        "instructions": instructions,
-    }
-
-
 class BIRCOWhatsThatBookReranking(AbsTaskReranking):
     metadata = TaskMetadata(
         name="BIRCO-WTB",
@@ -45,7 +22,7 @@ class BIRCOWhatsThatBookReranking(AbsTaskReranking):
         main_score="ndcg_at_10",
         dataset={
             "path": "mteb/BIRCO-WTB-Test",
-            "revision": "acf9fc30a976378e7cd17a9c3f6c065c2b76e4b5",
+            "revision": "9cffca4a108c27cb19bd388aa3f3b22efb1ae774",
         },
         date=("2024-01-01", "2024-12-31"),
         domains=["Fiction"],  # Valid domain (Fiction)
@@ -54,14 +31,14 @@ class BIRCOWhatsThatBookReranking(AbsTaskReranking):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{BIRCO,
-  title={BIRCO: A Benchmark of Information Retrieval Tasks with Complex Objectives},
-  author={Wang et al.},
-  year={2024},
-  howpublished={\\url{https://github.com/BIRCO-benchmark/BIRCO}}
-}""",
+        prompt="Given an ambiguous description of a book, retrieve the book description that best matches the query.",
+        bibtex_citation="""@misc{wang2024bircobenchmarkinformationretrieval,
+            title={BIRCO: A Benchmark of Information Retrieval Tasks with Complex Objectives}, 
+            author={Xiaoyue Wang and Jianyou Wang and Weili Cao and Kaicheng Wang and Ramamohan Paturi and Leon Bergen},
+            year={2024},
+            eprint={2402.14151},
+            archivePrefix={arXiv},
+            primaryClass={cs.IR},
+            url={https://arxiv.org/abs/2402.14151}, 
+        }""",
     )
-    instruction = "Given an ambiguous description of a book, retrieve the book description that best matches the query."
-
-    def dataset_transform(self, hf_dataset):
-        return birco_transform(hf_dataset, self.instruction)
