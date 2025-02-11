@@ -44,7 +44,7 @@ SFR_Embedding_2_R = ModelMeta(
     ),
     name="Salesforce/SFR-Embedding-2_R",
     languages=["eng_Latn"],
-    open_weights=True, 
+    open_weights=True,
     revision="91762139d94ed4371a9fa31db5551272e0b83818",
     release_date="2024-06-14",  # initial commit of hf model.
     n_parameters=7_110_000_000,
