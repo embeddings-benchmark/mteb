@@ -63,6 +63,7 @@ def get_benchmark(
         logger.warning(
             f"Using the previous benchmark name '{benchmark_name}' is deprecated. Please use '{PREVIOUS_BENCHMARK_NAMES[benchmark_name]}' instead."
         )
+        benchmark_name = PREVIOUS_BENCHMARK_NAMES[benchmark_name]
     if benchmark_name not in BENCHMARK_REGISTRY:
         close_matches = difflib.get_close_matches(
             benchmark_name, BENCHMARK_REGISTRY.keys()
