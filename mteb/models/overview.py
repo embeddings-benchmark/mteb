@@ -159,7 +159,7 @@ def get_model_metas(
         languages: A list of languages to filter by. If None, all languages are included.
         open_weights: Whether to filter by models with open weights. If None this filter is ignored.
         frameworks: A list of frameworks to filter by. If None, all frameworks are included.
-        n_parameters_range: A tuple of lower and upper bounds of the number of parameters to filter by. 
+        n_parameters_range: A tuple of lower and upper bounds of the number of parameters to filter by.
             If (None, None), this filter is ignored.
         use_instructions: Whether to filter by models that use instructions. If None, all models are included.
         zero_shot_on: A list of tasks on which the model is zero-shot. If None this filter is ignored.
