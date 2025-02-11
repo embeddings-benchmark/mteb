@@ -61,14 +61,24 @@ class LoTTERetrieval(MultilingualTask, AbsTaskRetrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+    # Override hf_subsets property to allow assignment without error.
+    @property
+    def hf_subsets(self) -> list[str]:
+        # Return the list of domain keys from eval_langs.
+        return list(self.metadata.eval_langs.keys())
+
+    @hf_subsets.setter
+    def hf_subsets(self, value):
+        # Simply ignore any attempted assignment.
+        pass
+
     def load_data(self, eval_splits: list | None = None, **kwargs) -> dict:
         """Custom load_data that:
         - Auto-downloads and extracts the dataset if not present.
         - Iterates over domains first and then over splits.
-        - Loads corpus (collection.tsv), queries (questions.search.tsv and questions.forum.tsv),
+        - Loads corpus (collection.tsv or metadata.jsonl), queries (questions.search.tsv and questions.forum.tsv),
           and qrels (qas.search.jsonl and qas.forum.jsonl) for each domain and split.
-        - Converts the qrels answer_pids from a list to a dict mapping each doc_id to a relevance score (1).
-        - Merges the per-domain data into dictionaries keyed by domain.
+        - Stores data in dictionaries keyed by domain.
         """
         if self.data_loaded:
             return {
@@ -113,6 +123,7 @@ class LoTTERetrieval(MultilingualTask, AbsTaskRetrieval):
             for split in splits:
                 domain_path = dataset_path / domain / split
                 corpus_file = domain_path / "collection.tsv"
+                metadata_file = domain_path / "metadata.jsonl"
                 search_queries_file = domain_path / "questions.search.tsv"
                 forum_queries_file = domain_path / "questions.forum.tsv"
                 search_qas_file = domain_path / "qas.search.jsonl"
@@ -120,6 +131,7 @@ class LoTTERetrieval(MultilingualTask, AbsTaskRetrieval):
 
                 logger.info(f"Checking files in {domain_path}:")
                 logger.info(f"  Corpus file exists: {corpus_file.exists()}")
+                logger.info(f"  Metadata file exists: {metadata_file.exists()}")
                 logger.info(
                     f"  Search queries file exists: {search_queries_file.exists()}"
                 )
@@ -129,36 +141,50 @@ class LoTTERetrieval(MultilingualTask, AbsTaskRetrieval):
                 logger.info(f"  Search QAs file exists: {search_qas_file.exists()}")
                 logger.info(f"  Forum QAs file exists: {forum_qas_file.exists()}")
 
+                # Load corpus: try collection.tsv first, then metadata.jsonl.
                 if corpus_file.exists():
                     with open(corpus_file, encoding="utf-8") as f:
-                        # Each line: doc_id<TAB>text
                         self.corpus[domain][split] = dict(
-                            line.strip().split("\t", 1) for line in f
+                            line.strip().split("\t", 1) for line in f if line.strip()
                         )
+                elif metadata_file.exists():
+                    corpus = {}
+                    with open(metadata_file, encoding="utf-8") as f:
+                        for line in f:
+                            try:
+                                obj = json.loads(line)
+                                doc_id = obj.get("pid") or obj.get("id")
+                                text = obj.get("text") or obj.get("body")
+                                if doc_id and text:
+                                    corpus[doc_id] = text
+                            except Exception as e:
+                                logger.error(f"Error parsing {metadata_file}: {e}")
+                    self.corpus[domain][split] = corpus
+                else:
+                    logger.warning(f"No corpus file found for {domain} {split}.")
 
+                # Load search queries.
                 if search_queries_file.exists():
                     with open(search_queries_file, encoding="utf-8") as f:
                         self.queries[domain][split] = dict(
-                            line.strip().split("\t", 1) for line in f
+                            line.strip().split("\t", 1) for line in f if line.strip()
                         )
-
+                # Load forum queries.
                 if forum_queries_file.exists():
                     with open(forum_queries_file, encoding="utf-8") as f:
-                        # Store forum queries under a distinct key.
                         self.queries[domain][f"{split}.forum"] = dict(
-                            line.strip().split("\t", 1) for line in f
+                            line.strip().split("\t", 1) for line in f if line.strip()
                         )
-
+                # Load qrels (search QAs).
                 if search_qas_file.exists():
                     with open(search_qas_file, encoding="utf-8") as f:
-                        # Convert the answer_pids list into a dictionary: {doc_id: 1}
                         self.relevant_docs[domain][split] = {
                             str(obj["qid"]): {
                                 str(pid): 1 for pid in obj.get("answer_pids", [])
                             }
                             for obj in map(json.loads, f)
                         }
-
+                # Load qrels (forum QAs).
                 if forum_qas_file.exists():
                     with open(forum_qas_file, encoding="utf-8") as f:
                         self.relevant_docs[domain][f"{split}.forum"] = {
@@ -176,32 +202,15 @@ class LoTTERetrieval(MultilingualTask, AbsTaskRetrieval):
         }
 
     def dataset_transform(self, data: dict) -> dict:
-        """Merge the per-domain data for the chosen split across all domains.
-        This produces a merged view with keys "queries", "corpus", and "relevant".
+        """Merge the per-domain data for the chosen split into a merged view.
+        Returns a dictionary keyed by domain (i.e. preserving per-domain structure).
         """
         split = self.metadata.eval_splits[0]
-        merged_queries = {}
-        merged_corpus = {}
-        merged_relevant = {}
-        for domain in self.queries:
-            if split in self.queries[domain]:
-                merged_queries.update(self.queries[domain][split])
-            for key, value in self.queries[domain].items():
-                if key.startswith(split) and key != split:
-                    merged_queries.update(value)
-        for domain in self.corpus:
-            if split in self.corpus[domain]:
-                merged_corpus.update(self.corpus[domain][split])
-        for domain in self.relevant_docs:
-            if split in self.relevant_docs[domain]:
-                merged_relevant.update(self.relevant_docs[domain][split])
-            for key, value in self.relevant_docs[domain].items():
-                if key.startswith(split) and key != split:
-                    merged_relevant.update(value)
-        return {
-            split: {
-                "queries": merged_queries,
-                "corpus": merged_corpus,
-                "relevant": merged_relevant,
+        transformed = {}
+        for domain in self.hf_subsets:
+            transformed[domain] = {
+                "queries": self.queries.get(domain, {}).get(split, {}),
+                "corpus": self.corpus.get(domain, {}).get(split, {}),
+                "relevant": self.relevant_docs.get(domain, {}).get(split, {}),
             }
-        }
+        return transformed
