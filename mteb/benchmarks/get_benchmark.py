@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import difflib
 import logging
+import warnings
 
 import mteb.benchmarks.benchmarks as benchmark_module
 from mteb.benchmarks.benchmarks import (
@@ -61,7 +62,8 @@ def get_benchmark(
 ) -> Benchmark:
     if benchmark_name in PREVIOUS_BENCHMARK_NAMES:
         warnings.warn(
-            f"Using the previous benchmark name '{benchmark_name}' is deprecated. Please use '{PREVIOUS_BENCHMARK_NAMES[benchmark_name]}' instead.", DeprecationWarning
+            f"Using the previous benchmark name '{benchmark_name}' is deprecated. Please use '{PREVIOUS_BENCHMARK_NAMES[benchmark_name]}' instead.",
+            DeprecationWarning,
         )
         benchmark_name = PREVIOUS_BENCHMARK_NAMES[benchmark_name]
     if benchmark_name not in BENCHMARK_REGISTRY:
