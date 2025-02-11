@@ -240,7 +240,6 @@ class BenchmarkResults(BaseModel):
             open_weights=open_weights,
             frameworks=frameworks,
             n_parameters_range=n_parameters_range,
-            allow_no_n_parameters=True,
             use_instructions=use_instructions,
             zero_shot_on=zero_shot_on,
         )
