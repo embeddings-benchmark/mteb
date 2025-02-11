@@ -191,8 +191,7 @@ def get_model_metas(
         if upper is not None:
             if (n_parameters is None) or (n_parameters > upper):
                 continue
-        if lower is not None:
-            if (n_parameters is None) or (n_parameters < lower):
+            if lower is not None and n_parameters < lower:
                 continue
 
         if zero_shot_on is not None:
