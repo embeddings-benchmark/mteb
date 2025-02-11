@@ -91,7 +91,7 @@ class ClimateFEVERRetrievalv2(AbsTaskRetrieval):
         main_score="ndcg_at_10",
         date=("2001-01-01", "2020-12-31"), # launch of wiki -> paper publication
         domains=["Academic", "Written"],
-        task_subtypes=["Claim Verification"],
+        task_subtypes=["Claim verification"],
         license="cc-by-sa-4.0",
         annotations_creators="human-annotated",
         dialect=[],
