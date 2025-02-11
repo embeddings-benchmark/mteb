@@ -507,7 +507,7 @@ RAR_b = Benchmark(
 )
 
 MTEB_ARA = Benchmark(
-    name="MTEB(ara)",
+    name="MTEB(ara, v1)",
     tasks=MTEBTasks(
         get_tasks(
             languages=["ara"],
