@@ -9,7 +9,7 @@ from mteb.evaluation.evaluators.SummarizationEvaluator import (
 
 class SummEvalFrSummarization(AbsTaskSummarization):
     superseded_by = "SummEvalFrSummarization.v2"
-    evalutor = DeprecatedSummarizationEvaluator
+    evaluator = DeprecatedSummarizationEvaluator
     metadata = TaskMetadata(
         name="SummEvalFr",
         description="News Article Summary Semantic Similarity Estimation translated from english to french with DeepL.",

@@ -102,7 +102,7 @@ class AbsTaskSummarization(AbsTask):
             for x in data_split["relevance"]
         ]
 
-        evaluator = self.evalutor(
+        evaluator = self.evaluator(
             machine_summaries=data_split[self.generated_summaries_column],
             human_summaries=data_split[self.reference_summaries_column],
             texts=data_split["text"],
