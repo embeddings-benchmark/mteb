@@ -80,7 +80,7 @@ class ClimateFEVERRetrievalv2(AbsTaskRetrieval):
         description="CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change. ",
         reference="https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html",
         dataset={
-            "path": "Mina76/climate-fever",
+            "path": "mteb/climate-fever-v2",
             "revision": "e438c9586767800aeb10dbe8a245c41dbea4e5f4",
         },
         type="Retrieval",
