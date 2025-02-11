@@ -20,11 +20,11 @@ lint-check:
 
 test:
 	@echo "--- 🧪 Running tests ---"
-	pytest -n auto --durations=5
+	pytest -n auto --durations=5 --reruns 3 --only-rerun requests.exceptions.ReadTimeout 
 
 test-with-coverage:
 	@echo "--- 🧪 Running tests with coverage ---"
-	pytest -n auto --durations=5 --cov-report=term-missing --cov-config=pyproject.toml --cov=mteb
+	pytest -n auto --durations=5 --cov-report=term-missing --cov-config=pyproject.toml --cov=mteb --reruns 3 --only-rerun requests.exceptions.ReadTimeout 
 
 pr:
 	@echo "--- 🚀 Running requirements for a PR ---"
