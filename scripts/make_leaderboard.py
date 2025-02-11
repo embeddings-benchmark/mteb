@@ -52,6 +52,7 @@ def load_leaderboard(
     benchmark_results = load_results(
         results_repo=results_repo,
         only_main_score=True,
+        require_model_meta=False,
     )
 
     # Filter results for the selected benchmark
