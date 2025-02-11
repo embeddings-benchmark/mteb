@@ -3,8 +3,8 @@ from __future__ import annotations
 import logging
 
 from mteb.model_meta import ModelMeta
-from mteb.models.no_model_implementation import no_model_implementation_available
 from mteb.models.bge_models import bge_full_data
+from mteb.models.no_model_implementation import no_model_implementation_available
 
 logger = logging.getLogger(__name__)
 
