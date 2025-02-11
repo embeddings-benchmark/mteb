@@ -8,8 +8,7 @@ import tqdm
 
 from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
-
-from .wrapper import Wrapper
+from mteb.models.wrapper import Wrapper
 
 MULTILINGUAL_EVALUATED_LANGUAGES = [
     "arb_Arab",
@@ -145,6 +144,7 @@ google_text_emb_004 = ModelMeta(
     revision="1",  # revision is intended for implementation
     release_date="2024-05-14",
     n_parameters=None,
+    memory_usage_mb=None,
     max_tokens=2048,
     embed_dim=768,
     license=None,
@@ -169,6 +169,7 @@ google_text_emb_005 = ModelMeta(
     revision="1",  # revision is intended for implementation
     release_date="2024-11-18",
     n_parameters=None,
+    memory_usage_mb=None,
     max_tokens=2048,
     embed_dim=768,
     license=None,
@@ -193,6 +194,7 @@ google_text_multilingual_emb_002 = ModelMeta(
     revision="1",  # revision is intended for implementation
     release_date="2024-05-14",
     n_parameters=None,
+    memory_usage_mb=None,
     max_tokens=2048,
     embed_dim=768,
     license=None,

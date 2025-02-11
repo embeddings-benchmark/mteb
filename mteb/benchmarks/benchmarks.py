@@ -213,9 +213,7 @@ MTEB_ENG_CLASSIC = Benchmark(
     ),
     description="""The original English benchmark by Muennighoff et al., (2023).
 This page is an adaptation of the [old MTEB leaderboard](https://huggingface.co/spaces/mteb/leaderboard_legacy).
-
-> We recommend that you use [MTEB(eng)](https://huggingface.co/spaces/mteb/leaderboard?benchmark_name=MTEB%28eng%29) instead,
-as many models have been tuned on MTEB(eng, classic) datasets, and MTEB(eng) might give a more accurate representation of models' generalization performance.
+We recommend that you use [MTEB(eng)](https://huggingface.co/spaces/mteb/leaderboard?benchmark_name=MTEB%28eng%29) instead as it uses updated versions of the task making it notably faster to run and resolves [a known bug](https://github.com/embeddings-benchmark/mteb/issues/1156) in existing tasks. This benchmark also removes datasets common for fine-tuning such as MSMARCO, which makes model performance scores more comparable. However, generally, both benchmarks provide similar estimates.
     """,
     citation="""@inproceedings{muennighoff-etal-2023-mteb,
     title = "{MTEB}: Massive Text Embedding Benchmark",
