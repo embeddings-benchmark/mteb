@@ -153,3 +153,7 @@ tag_format = "{version}"
 major_types = ["breaking"]
 minor_types = ["feat"]
 patch_types = ["fix", "perf"]
+
+
+[tool.pytest.ini_options]
+addopts = "--reruns 3 --only-rerun requests.exceptions.ReadTimeout --durations=5"
