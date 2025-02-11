@@ -99,7 +99,7 @@ def download_table(table: pd.DataFrame) -> str:
 
 def update_citation(benchmark_name: str) -> str:
     benchmark = mteb.get_benchmark(benchmark_name)
-    if str(benchmark.citation) != "None":
+    if benchmark.citation is not None:
         citation = f"```bibtex\n{benchmark.citation}\n```"
     else:
         citation = ""
@@ -119,7 +119,7 @@ def update_description(
     description += f" - **Number of datasets**: {n_tasks}\n"
     description += f" - **Number of task types**: {n_task_types}\n"
     description += f" - **Number of domains**: {n_domains}\n"
-    if str(benchmark.reference) != "None":
+    if benchmark.reference is not None:
         description += f"\n[Click for More Info]({benchmark.reference})"
 
     return description
