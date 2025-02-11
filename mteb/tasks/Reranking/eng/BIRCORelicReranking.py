@@ -17,7 +17,7 @@ class BIRCORelicReranking(AbsTaskReranking):
         type="Reranking",
         category="s2p",
         modalities=["text"],
-        eval_splits=["test"],
+        eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         dataset={

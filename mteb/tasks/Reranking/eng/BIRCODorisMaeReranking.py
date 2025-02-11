@@ -17,7 +17,7 @@ class BIRCODorisMaeReranking(AbsTaskReranking):
         type="Reranking",
         category="s2s",  # MTEB standard category
         modalities=["text"],
-        eval_splits=["test"],
+        eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         dataset={
