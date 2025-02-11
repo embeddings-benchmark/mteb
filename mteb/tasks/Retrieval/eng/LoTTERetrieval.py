@@ -1,16 +1,18 @@
 from __future__ import annotations
-from pathlib import Path
-import os
-import urllib.request
-import tarfile
+
 import json
 import logging
+import os
+import tarfile
+import urllib.request
+from pathlib import Path
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 logger = logging.getLogger(__name__)
+
 
 class LoTTERetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -60,14 +62,13 @@ class LoTTERetrieval(MultilingualTask, AbsTaskRetrieval):
         super().__init__(**kwargs)
 
     def load_data(self, eval_splits: list | None = None, **kwargs) -> dict:
-        """
-        Custom load_data that:
-          - Auto-downloads and extracts the dataset if not present.
-          - Iterates over domains first and then over splits.
-          - Loads corpus (collection.tsv), queries (questions.search.tsv and questions.forum.tsv),
-            and qrels (qas.search.jsonl and qas.forum.jsonl) for each domain and split.
-          - Converts the qrels answer_pids from a list to a dict mapping each doc_id to a relevance score (1).
-          - Merges the per-domain data into dictionaries keyed by domain.
+        """Custom load_data that:
+        - Auto-downloads and extracts the dataset if not present.
+        - Iterates over domains first and then over splits.
+        - Loads corpus (collection.tsv), queries (questions.search.tsv and questions.forum.tsv),
+          and qrels (qas.search.jsonl and qas.forum.jsonl) for each domain and split.
+        - Converts the qrels answer_pids from a list to a dict mapping each doc_id to a relevance score (1).
+        - Merges the per-domain data into dictionaries keyed by domain.
         """
         if self.data_loaded:
             return {
@@ -83,8 +84,12 @@ class LoTTERetrieval(MultilingualTask, AbsTaskRetrieval):
         if not dataset_path.exists():
             url = dataset_info.get("url")
             if not url:
-                raise ValueError("No URL provided in metadata.dataset to download the dataset.")
-            logger.info(f"Dataset path {dataset_path} not found. Downloading from {url}...")
+                raise ValueError(
+                    "No URL provided in metadata.dataset to download the dataset."
+                )
+            logger.info(
+                f"Dataset path {dataset_path} not found. Downloading from {url}..."
+            )
             dataset_path.parent.mkdir(parents=True, exist_ok=True)
             tar_file = dataset_path.parent / "lotte.tar.gz"
             urllib.request.urlretrieve(url, tar_file)
@@ -100,7 +105,9 @@ class LoTTERetrieval(MultilingualTask, AbsTaskRetrieval):
         # Initialize dictionaries keyed by domain.
         self.corpus = {domain: {split: {} for split in splits} for domain in domains}
         self.queries = {domain: {split: {} for split in splits} for domain in domains}
-        self.relevant_docs = {domain: {split: {} for split in splits} for domain in domains}
+        self.relevant_docs = {
+            domain: {split: {} for split in splits} for domain in domains
+        }
 
         for domain in domains:
             for split in splits:
@@ -113,8 +120,12 @@ class LoTTERetrieval(MultilingualTask, AbsTaskRetrieval):
 
                 logger.info(f"Checking files in {domain_path}:")
                 logger.info(f"  Corpus file exists: {corpus_file.exists()}")
-                logger.info(f"  Search queries file exists: {search_queries_file.exists()}")
-                logger.info(f"  Forum queries file exists: {forum_queries_file.exists()}")
+                logger.info(
+                    f"  Search queries file exists: {search_queries_file.exists()}"
+                )
+                logger.info(
+                    f"  Forum queries file exists: {forum_queries_file.exists()}"
+                )
                 logger.info(f"  Search QAs file exists: {search_qas_file.exists()}")
                 logger.info(f"  Forum QAs file exists: {forum_qas_file.exists()}")
 
@@ -142,14 +153,18 @@ class LoTTERetrieval(MultilingualTask, AbsTaskRetrieval):
                     with open(search_qas_file, encoding="utf-8") as f:
                         # Convert the answer_pids list into a dictionary: {doc_id: 1}
                         self.relevant_docs[domain][split] = {
-                            str(obj["qid"]): {str(pid): 1 for pid in obj.get("answer_pids", [])}
+                            str(obj["qid"]): {
+                                str(pid): 1 for pid in obj.get("answer_pids", [])
+                            }
                             for obj in map(json.loads, f)
                         }
 
                 if forum_qas_file.exists():
                     with open(forum_qas_file, encoding="utf-8") as f:
                         self.relevant_docs[domain][f"{split}.forum"] = {
-                            str(obj["qid"]): {str(pid): 1 for pid in obj.get("answer_pids", [])}
+                            str(obj["qid"]): {
+                                str(pid): 1 for pid in obj.get("answer_pids", [])
+                            }
                             for obj in map(json.loads, f)
                         }
 
@@ -161,8 +176,7 @@ class LoTTERetrieval(MultilingualTask, AbsTaskRetrieval):
         }
 
     def dataset_transform(self, data: dict) -> dict:
-        """
-        Merge the per-domain data for the chosen split across all domains.
+        """Merge the per-domain data for the chosen split across all domains.
         This produces a merged view with keys "queries", "corpus", and "relevant".
         """
         split = self.metadata.eval_splits[0]
