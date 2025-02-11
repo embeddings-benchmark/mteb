@@ -116,7 +116,7 @@ def update_description(
     n_tasks = len(benchmark.tasks)
     n_domains = len(domains)
     description += f" - **Number of languages**: {n_languages}\n"
-    description += f" - **Number of datasets**: {n_tasks}\n"
+    description += f" - **Number of tasks**: {n_tasks}\n"
     description += f" - **Number of task types**: {n_task_types}\n"
     description += f" - **Number of domains**: {n_domains}\n"
     if benchmark.reference is not None:
@@ -164,7 +164,7 @@ def filter_models(
     task_select: list[str],
     availability: bool | None,
     compatibility: list[str],
-    instructions: bool | None,
+    instructions: bool | NoNumber of datasetsne,
     model_size: tuple[int | None, int | None],
     zero_shot_setting: Literal["hard", "soft", "off"],
 ):
