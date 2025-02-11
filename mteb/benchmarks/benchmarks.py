@@ -524,7 +524,7 @@ MTEB_ARA = Benchmark(
             ],
         )
     ),
-    description="MTEB-Arabic, a benchmark for text embedding performance evaluation in the arabic language",
+    description="A benchmark for text embedding performance evaluation in the Arabic language.",
     reference=None,
     citation=None,
     contacts=["haytamdon"],
