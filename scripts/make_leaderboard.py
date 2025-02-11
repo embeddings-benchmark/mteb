@@ -32,7 +32,7 @@ def load_leaderboard(
         benchmark_name: Name of the benchmark (e.g., "MTEB(eng)").
         models: List of model names to include. Default is None (all models).
         results_repo: Path to results repo (local or remote). Default is None (default repo).
-        save_path: (Optional) Path to save the leaderboard as CSV.
+        save_path: Path to save the leaderboard as CSV.
 
     Returns:
         summary_df: Leaderboard summary table.
