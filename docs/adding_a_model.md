@@ -2,7 +2,7 @@
 
 The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/leaderboard). To submit to it:
 
-1. **Add meta information about your model to [model dir](../mteb/models/)**.
+1. **Add meta information about your model to [model dir](../mteb/models/)**. See the docstring of ModelMeta for meta data details.
    ```python
    from mteb.model_meta import ModelMeta
     
@@ -13,6 +13,7 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
        revision="5617a9f61b028005a4858fdac845db406aefb181",
        release_date="2024-06-28",
        n_parameters=568_000_000,
+       memory_usage_mb=2167,
        embed_dim=4096,
        license="mit",
        max_tokens=8194,
@@ -25,7 +26,7 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
        training_datasets={"your_dataset": ["train"]},
    )
    ```
-   By default, the model will run using the [`sentence_transformers_loader`](../mteb/models/sentence_transformer_wrapper.py) loader function. If you need to use a custom implementation, you can specify the `loader` parameter in the `ModelMeta` class. For example:
+   To calculate `memory_usage_mb` you can run `model_meta.memory_usage_mb()`. By default, the model will run using the [`sentence_transformers_loader`](../mteb/models/sentence_transformer_wrapper.py) loader function. If you need to use a custom implementation, you can specify the `loader` parameter in the `ModelMeta` class. For example:
    ```python
    from mteb.models.wrapper import Wrapper
    from mteb.encoder_interface import PromptType

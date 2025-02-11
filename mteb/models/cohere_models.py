@@ -9,8 +9,7 @@ import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
-
-from .wrapper import Wrapper
+from mteb.models.wrapper import Wrapper
 
 supported_languages = [
     "afr-Latn",
@@ -227,6 +226,7 @@ cohere_mult_3 = ModelMeta(
     revision="1",
     release_date="2023-11-02",
     n_parameters=None,
+    memory_usage_mb=None,
     max_tokens=None,
     embed_dim=512,
     reference="https://cohere.com/blog/introducing-embed-v3",
@@ -252,6 +252,7 @@ cohere_eng_3 = ModelMeta(
     revision="1",
     release_date="2023-11-02",
     n_parameters=None,
+    memory_usage_mb=None,
     max_tokens=512,
     embed_dim=1024,
     license=None,
@@ -276,6 +277,7 @@ cohere_mult_light_3 = ModelMeta(
     reference="https://cohere.com/blog/introducing-embed-v3",
     release_date="2023-11-02",
     n_parameters=None,
+    memory_usage_mb=None,
     max_tokens=512,
     embed_dim=384,
     license=None,
@@ -300,6 +302,7 @@ cohere_eng_light_3 = ModelMeta(
     revision="1",
     release_date="2023-11-02",
     n_parameters=None,
+    memory_usage_mb=None,
     max_tokens=512,
     embed_dim=384,
     license=None,

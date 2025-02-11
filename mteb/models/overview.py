@@ -29,6 +29,7 @@ from mteb.models import (
     e5_models,
     e5_v,
     evaclip_models,
+    fa_models,
     gme_models,
     google_models,
     gritlm_models,
@@ -134,6 +135,7 @@ model_modules = [
     text2vec_models,
     uae_models,
     voyage_models,
+    fa_models,
 ]
 MODEL_REGISTRY = {}
 
@@ -273,6 +275,7 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
             training_datasets=card_data.get("datasets", None),
             similarity_fn_name=None,
             n_parameters=None,
+            memory_usage_mb=None,
             max_tokens=None,
             embed_dim=None,
             open_weights=True,
@@ -288,6 +291,7 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
             languages=None,
             release_date=None,
             n_parameters=None,
+            memory_usage_mb=None,
             max_tokens=None,
             embed_dim=None,
             license=None,
@@ -321,6 +325,7 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
             framework=["Sentence Transformers"],
             similarity_fn_name=model.similarity_fn_name,
             n_parameters=None,
+            memory_usage_mb=None,
             max_tokens=None,
             embed_dim=None,
             license=None,
@@ -340,6 +345,7 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
             languages=None,
             release_date=None,
             n_parameters=None,
+            memory_usage_mb=None,
             max_tokens=None,
             embed_dim=None,
             license=None,
