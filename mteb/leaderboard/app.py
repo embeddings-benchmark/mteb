@@ -164,7 +164,7 @@ def filter_models(
     task_select: list[str],
     availability: bool | None,
     compatibility: list[str],
-    instructions: bool | NoNumber of datasetsne,
+    instructions: bool | None,
     model_size: tuple[int | None, int | None],
     zero_shot_setting: Literal["hard", "soft", "off"],
 ):
