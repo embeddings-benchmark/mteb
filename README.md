@@ -162,7 +162,7 @@ For instance to select the 56 English datasets that form the "Overall MTEB Engli
 
 ```python
 import mteb
-benchmark = mteb.get_benchmark("MTEB(eng, classic)")
+benchmark = mteb.get_benchmark("MTEB(eng, v1)")
 evaluation = mteb.MTEB(tasks=benchmark)
 ```
 
@@ -173,7 +173,7 @@ import mteb
 benchmarks = mteb.get_benchmarks()
 ```
 
-Generally we use the naming scheme for benchmarks `MTEB(*)`, where the "*" denotes the target of the benchmark. In the case of a language, we use the three-letter language code. For large groups of languages, we use the group notation, e.g., `MTEB(Scandinavian)` for Scandinavian languages. External benchmarks implemented in MTEB like `CoIR` use their original name. When using a benchmark from MTEB please cite `mteb` along with the citations of the benchmark which you can access using:
+Generally we use the naming scheme for benchmarks `MTEB(*)`, where the "*" denotes the target of the benchmark. In the case of a language, we use the three-letter language code. For large groups of languages, we use the group notation, e.g., `MTEB(Scandinavian, v1)` for Scandinavian languages. External benchmarks implemented in MTEB like `CoIR` use their original name. When using a benchmark from MTEB please cite `mteb` along with the citations of the benchmark which you can access using:
 
 ```python
 benchmark.citation

@@ -255,7 +255,7 @@ MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
 )
 
 MTEB_RETRIEVAL_LAW = Benchmark(
-    name="MTEB(law, v1)",  # This benchmark is likely in the need of an update
+    name="MTEB(Law, v1)",  # This benchmark is likely in the need of an update
     tasks=get_tasks(
         tasks=[
             "AILACasedocs",
@@ -607,7 +607,7 @@ two novel clustering tasks.""",  # Rephrased from the abstract
 )
 
 MTEB_code = Benchmark(
-    name="MTEB(code, v1)",
+    name="MTEB(Code, v1)",
     tasks=get_tasks(
         tasks=[
             # Retrieval

@@ -14,6 +14,7 @@ import pandas as pd
 from gradio_rangeslider import RangeSlider
 
 import mteb
+from mteb.benchmarks.benchmarks import MTEB_multilingual
 from mteb.caching import json_cache
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
 from mteb.leaderboard.table import scores_to_tables
@@ -83,7 +84,7 @@ def produce_benchmark_link(benchmark_name: str, request: gr.Request) -> str:
     return md
 
 
-DEFAULT_BENCHMARK_NAME = "MTEB(Multilingual)"
+DEFAULT_BENCHMARK_NAME = MTEB_multilingual.name
 
 
 def set_benchmark_on_load(request: gr.Request):
