@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import difflib
+import logging
 
 import mteb.benchmarks.benchmarks as benchmark_module
 from mteb.benchmarks.benchmarks import (
@@ -24,6 +25,8 @@ from mteb.benchmarks.benchmarks import (
     MTEB_code,
     MTEB_multilingual,
 )
+
+logger = logging.getLogger(__name__)
 
 BENCHMARK_REGISTRY = {
     inst.name: inst
@@ -56,6 +59,10 @@ PREVIOUS_BENCHMARK_NAMES = {
 def get_benchmark(
     benchmark_name: str,
 ) -> Benchmark:
+    if benchmark_name in PREVIOUS_BENCHMARK_NAMES:
+        logger.warning(
+            f"Using the previous benchmark name '{benchmark_name}' is deprecated. Please use '{PREVIOUS_BENCHMARK_NAMES[benchmark_name]}' instead."
+        )
     if benchmark_name not in BENCHMARK_REGISTRY:
         close_matches = difflib.get_close_matches(
             benchmark_name, BENCHMARK_REGISTRY.keys()
@@ -73,4 +80,4 @@ def get_benchmarks(
 ) -> list[Benchmark]:
     if names is None:
         names = list(BENCHMARK_REGISTRY.keys())
-    return [BENCHMARK_REGISTRY[name] for name in names]
+    return [get_benchmark(name) for name in names]
