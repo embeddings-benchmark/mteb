@@ -2722,7 +2722,7 @@ class MockMultilingualImageMultilabelClassificationTask(
 
 class MockImageTextPairClassificationTask(AbsTaskImageTextPairClassification):
     metadata = TaskMetadata(
-        type="ImageTextPairClassification",
+        type="CompositionalityEvaluation",
         name="MockImageTextPairClassification",
         main_score="text_acc",
         descriptive_stats={
@@ -2763,7 +2763,7 @@ class MockMultilingualImageTextPairClassificationTask(
     AbsTaskImageTextPairClassification, MultilingualTask
 ):
     metadata = TaskMetadata(
-        type="ImageTextPairClassification",
+        type="CompositionalityEvaluation",
         name="MockMultilingualImageTextPairClassification",
         main_score="accuracy",
         descriptive_stats={

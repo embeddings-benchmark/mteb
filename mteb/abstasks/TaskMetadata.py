@@ -118,9 +118,10 @@ TASK_TYPE = Literal[
     "ImageClustering",
     "ImageClassification",
     "ImageMultilabelClassification",
-    "ImageTextPairClassification",
+    "CompositionalityEvaluation",
     "VisualSTS",
     "ZeroShotClassification",
+    "DocumentUnderstanding",
 ]
 
 

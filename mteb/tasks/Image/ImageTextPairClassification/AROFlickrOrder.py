@@ -25,7 +25,7 @@ class AROFlickrOrder(AbsTaskImageTextPairClassification):
             "path": "gowitheflow/ARO-Flickr-Order",
             "revision": "1f9485f69c87947812378a1aedf86410c86a0aa8",
         },
-        type="ImageTextPairClassification",
+        type="CompositionalityEvaluation",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

@@ -64,9 +64,10 @@ for model_name in [
             "ImageClustering",
             "ImageClassification",
             "ImageMultilabelClassification",
-            "ImageTextPairClassification",
+            "CompositionalityEvaluation",
             "VisualSTS",
             "ZeroShotClassification",
+            "DocumentUnderstanding",
         ]
     )
     # get i-only tasks for i-only models.
