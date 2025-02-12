@@ -1079,6 +1079,28 @@ BRIGHT = Benchmark(
 }""",
 )
 
+
+BRIGHT = Benchmark(
+    name="BRIGHT (long)",
+    tasks=MTEBTasks((get_task("BrightRetrieval", eval_splits=["long"]),)),
+    description="""BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
+    BRIGHT is the first text retrieval
+    benchmark that requires intensive reasoning to retrieve relevant documents with
+    a dataset consisting of 1,384 real-world queries spanning diverse domains, such as
+    economics, psychology, mathematics, and coding. These queries are drawn from
+    naturally occurring and carefully curated human data.
+
+    This is the long version of the benchmark, which only filter longer documents.
+    """,
+    reference="https://brightbenchmark.github.io/",
+    citation="""@article{su2024bright,
+  title={Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
+  author={Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
+  journal={arXiv preprint arXiv:2407.12883},
+  year={2024}
+}""",
+)
+
 CODE_RAG = Benchmark(
     name="CodeRAG",
     tasks=get_tasks(
