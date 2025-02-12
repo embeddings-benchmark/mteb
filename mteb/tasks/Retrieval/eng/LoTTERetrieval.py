@@ -32,8 +32,8 @@ class LoTTERetrieval(MultilingualTask, AbsTaskRetrieval):
         modalities=["text"],
         category="s2s",
         reference="https://github.com/stanford-futuredata/ColBERT/blob/main/LoTTE.md",
-        eval_splits=["test"],  # we only load "test" for evaluation
-        # For multilingual tasks, eval_langs is a dict mapping each domain to its language list.
+        eval_splits=["test"],  # we assume evaluation is on the "test" split
+        # For multilingual tasks, eval_langs is a dict mapping each domain to its language(s)
         eval_langs={
             "writing": ["eng-Latn"],
             "recreation": ["eng-Latn"],
@@ -61,7 +61,7 @@ class LoTTERetrieval(MultilingualTask, AbsTaskRetrieval):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    # Override hf_subsets property to return domain names.
+    # Override hf_subsets to return the domain names
     @property
     def hf_subsets(self) -> list[str]:
         return list(self.metadata.eval_langs.keys())
@@ -70,18 +70,19 @@ class LoTTERetrieval(MultilingualTask, AbsTaskRetrieval):
     def hf_subsets(self, value):
         pass
 
-    def load_data(self, eval_splits: list | None = None, **kwargs) -> dict:
+    def load_data(
+        self, eval_splits: list | None = None, sample_limit: dict = None, **kwargs
+    ) -> dict:
         """Custom load_data that:
         - Downloads and extracts the dataset if not present.
-        - Iterates over each domain (e.g., "writing", "recreation", etc.) in the "test" split.
+        - Loads data only for the "test" split.
         - For each domain, loads:
-            * Corpus from collection.tsv if available, else metadata.jsonl.
-            * Queries: loads search queries and forum queries into separate dictionaries.
-            * Qrels (relevant docs): loads search QAs and forum QAs into separate dictionaries,
-              converting answer lists into dictionaries (with value 1).
-        - Stores the data per domain.
+            * Corpus from collection.tsv (or, if absent, from metadata.jsonl)
+            * Search queries from questions.search.tsv
+            * Forum queries from questions.forum.tsv
+            * Qrels (relevant docs) from qas.search.jsonl and qas.forum.jsonl
+        - Flattens the structure so that the final dictionaries are keyed by "domain_search" and "domain_forum".
         """
-        # We assume evaluation is on the "test" split.
         split = "test"
         if self.data_loaded:
             return {
@@ -89,10 +90,11 @@ class LoTTERetrieval(MultilingualTask, AbsTaskRetrieval):
                 "corpus": self.corpus,
                 "relevant_docs": self.relevant_docs,
             }
+
         dataset_info = self.metadata.dataset
         dataset_path = Path(dataset_info["path"])
 
-        # Auto-download and extract if dataset is not present.
+        # Download and extract if necessary.
         if not dataset_path.exists():
             url = dataset_info.get("url")
             if not url:
@@ -111,13 +113,12 @@ class LoTTERetrieval(MultilingualTask, AbsTaskRetrieval):
             os.remove(tar_file)
             logger.info("Dataset downloaded and extracted.")
 
-        # Define expected domains.
         domains = ["writing", "recreation", "science", "technology", "lifestyle"]
 
-        # Initialize dictionaries keyed by domain.
-        self.corpus = {domain: {} for domain in domains}
-        self.queries = {domain: {} for domain in domains}
-        self.relevant_docs = {domain: {} for domain in domains}
+        # Temporary dictionaries to hold per-domain data.
+        corpus_per_domain = {}
+        queries_per_domain = {}
+        relevant_docs_per_domain = {}
 
         for domain in domains:
             domain_path = dataset_path / domain / split
@@ -136,14 +137,14 @@ class LoTTERetrieval(MultilingualTask, AbsTaskRetrieval):
             logger.info(f"  Search QAs file exists: {search_qas_file.exists()}")
             logger.info(f"  Forum QAs file exists: {forum_qas_file.exists()}")
 
-            # Load corpus: prefer collection.tsv; otherwise, use metadata.jsonl.
+            # Load corpus.
+            corpus = {}
             if corpus_file.exists():
                 with open(corpus_file, encoding="utf-8") as f:
-                    self.corpus[domain] = dict(
+                    corpus = dict(
                         line.strip().split("\t", 1) for line in f if line.strip()
                     )
             elif metadata_file.exists():
-                corpus = {}
                 with open(metadata_file, encoding="utf-8") as f:
                     for line in f:
                         try:
@@ -154,11 +155,11 @@ class LoTTERetrieval(MultilingualTask, AbsTaskRetrieval):
                                 corpus[doc_id] = text
                         except Exception as e:
                             logger.error(f"Error parsing {metadata_file}: {e}")
-                self.corpus[domain] = corpus
             else:
                 logger.warning(f"No corpus file found for {domain} {split}.")
+            corpus_per_domain[domain] = corpus
 
-            # Load queries: merge search and forum queries into two separate keys.
+            # Load queries.
             queries = {}
             if search_queries_file.exists():
                 with open(search_queries_file, encoding="utf-8") as f:
@@ -170,9 +171,9 @@ class LoTTERetrieval(MultilingualTask, AbsTaskRetrieval):
                     queries["forum"] = dict(
                         line.strip().split("\t", 1) for line in f if line.strip()
                     )
-            self.queries[domain] = queries
+            queries_per_domain[domain] = queries
 
-            # Load qrels (relevant docs): merge search and forum QAs into separate keys.
+            # Load qrels.
             qrels = {}
             if search_qas_file.exists():
                 with open(search_qas_file, encoding="utf-8") as f:
@@ -190,17 +191,48 @@ class LoTTERetrieval(MultilingualTask, AbsTaskRetrieval):
                         }
                         for obj in map(json.loads, f)
                     }
-            self.relevant_docs[domain] = qrels
+            relevant_docs_per_domain[domain] = qrels
+
+        # Flatten the dictionaries: create keys like "writing_search", "writing_forum", etc.
+        final_corpus = {}
+        final_queries = {}
+        final_relevant_docs = {}
+        for domain in domains:
+            if corpus_per_domain.get(domain):
+                # If corpus exists, replicate it for both search and forum if either queries exist.
+                if "search" in queries_per_domain.get(domain, {}):
+                    final_corpus[f"{domain}_search"] = corpus_per_domain[domain]
+                if "forum" in queries_per_domain.get(domain, {}):
+                    final_corpus[f"{domain}_forum"] = corpus_per_domain[domain]
+            if queries_per_domain.get(domain):
+                if "search" in queries_per_domain[domain]:
+                    final_queries[f"{domain}_search"] = queries_per_domain[domain][
+                        "search"
+                    ]
+                if "forum" in queries_per_domain[domain]:
+                    final_queries[f"{domain}_forum"] = queries_per_domain[domain][
+                        "forum"
+                    ]
+            if relevant_docs_per_domain.get(domain):
+                if "search" in relevant_docs_per_domain[domain]:
+                    final_relevant_docs[f"{domain}_search"] = relevant_docs_per_domain[
+                        domain
+                    ]["search"]
+                if "forum" in relevant_docs_per_domain[domain]:
+                    final_relevant_docs[f"{domain}_forum"] = relevant_docs_per_domain[
+                        domain
+                    ]["forum"]
 
         self.data_loaded = True
+        self.corpus = final_corpus
+        self.queries = final_queries
+        self.relevant_docs = final_relevant_docs
         return {
-            "queries": self.queries,
-            "corpus": self.corpus,
-            "relevant_docs": self.relevant_docs,
+            "queries": final_queries,
+            "corpus": final_corpus,
+            "relevant_docs": final_relevant_docs,
         }
 
-    def dataset_transform(self, data: dict) -> dict:
-        """For evaluation, return the per-domain structure without merging.
-        Each domain is a separate hf_subset.
-        """
-        return data
+    # def dataset_transform(self, data: dict) -> dict:
+    #     """For evaluation, return the flattened view (already flat)."""
+    #     return data
