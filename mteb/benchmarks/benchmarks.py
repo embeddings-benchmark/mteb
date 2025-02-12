@@ -1080,17 +1080,17 @@ BRIGHT = Benchmark(
 )
 
 
-BRIGHT = Benchmark(
+BRIGHT_LONG = Benchmark(
     name="BRIGHT (long)",
     tasks=MTEBTasks((get_task("BrightRetrieval", eval_splits=["long"]),)),
     description="""BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
-    BRIGHT is the first text retrieval
-    benchmark that requires intensive reasoning to retrieve relevant documents with
-    a dataset consisting of 1,384 real-world queries spanning diverse domains, such as
-    economics, psychology, mathematics, and coding. These queries are drawn from
-    naturally occurring and carefully curated human data.
+BRIGHT is the first text retrieval
+benchmark that requires intensive reasoning to retrieve relevant documents with
+a dataset consisting of 1,384 real-world queries spanning diverse domains, such as
+economics, psychology, mathematics, and coding. These queries are drawn from
+naturally occurring and carefully curated human data.
 
-    This is the long version of the benchmark, which only filter longer documents.
+This is the long version of the benchmark, which only filter longer documents.
     """,
     reference="https://brightbenchmark.github.io/",
     citation="""@article{su2024bright,
