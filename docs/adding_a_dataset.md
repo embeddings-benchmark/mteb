@@ -180,6 +180,7 @@ The domains follow the categories used in the [Universal Dependencies project](h
 | Religious     | Religious text e.g. bibles                                       |
 | Blog          | [Blogpost, weblog etc.](https://en.wikipedia.org/wiki/Blog)      |
 | Fiction       | Works of [fiction](https://en.wikipedia.org/wiki/Fiction)        |
+| Finance       | Financial documents, reports etc.                                |
 | Government    | Governmental communication, websites or similar                  |
 | Legal         | Legal documents, laws etc.                                       |
 | Medical       | doctors notes, medical procedures or similar                     |

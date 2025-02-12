@@ -68,6 +68,7 @@ TASK_DOMAIN = Literal[
     "Constructed",
     "Encyclopaedic",
     "Fiction",
+    "Finance",
     "Government",
     "Legal",
     "Medical",
@@ -207,6 +208,7 @@ LICENSES = (  # this list can be extended as needed
         "mpl-2.0",
         "msr-la-nc",
         "multiple",
+        "acm"
     ]
 )
 
@@ -274,7 +276,7 @@ class TaskMetadata(BaseModel):
             huggingface dataset contain different languages).
         main_score: The main score used for evaluation.
         date: The date when the data was collected. Specified as a tuple of two dates.
-        domains: The domains of the data. These includes "Non-fiction", "Social", "Fiction", "News", "Academic", "Blog", "Encyclopaedic",
+        domains: The domains of the data. These includes "Non-fiction", "Social", "Fiction", "Finance", "News", "Academic", "Blog", "Encyclopaedic",
             "Government", "Legal", "Medical", "Poetry", "Religious", "Reviews", "Web", "Spoken", "Written". A dataset can belong to multiple domains.
         task_subtypes: The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". Feel free to update the list as needed.
         license: The license of the data specified as lowercase, e.g. "cc-by-nc-4.0". If the license is not specified, use "not specified". For custom licenses a URL is used.

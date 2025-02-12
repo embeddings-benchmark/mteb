@@ -76,7 +76,6 @@ class AbsTaskClassification(AbsTask):
     k: int = 3
     train_split = "train"
     sentence_column: str = "text"
-
     def evaluate(
         self,
         model: Encoder,

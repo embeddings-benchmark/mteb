@@ -19,8 +19,8 @@ class FNS2022sum(AbsTaskSTS):
         eval_langs=["eng-Latn"],
         main_score="cosine_spearman",
     )
-    reference_summaries_column = "text"
-    generated_summaries_column = "summary"
+    sentence_1_column = "text"
+    sentence_2_column = "summary"
 
     @property
     def metadata_dict(self) -> dict[str, str]:

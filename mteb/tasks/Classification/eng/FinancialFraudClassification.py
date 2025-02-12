@@ -15,9 +15,31 @@ class FinancialFraudClassification(AbsTaskClassification):
         },
         type="Classification",
         category="s2s",
+        modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
+        date=("1999-01-01", "2019-12-31"),
+        domains=["Finance"],
+        task_subtypes=[],
+        license="mit",
+        annotations_creators="derived",
+        bibtex_citation="""@mastersthesis{kedia2023enhancing,
+            author = {Kedia, Amit Shushil},
+            title = {Enhancing Financial Fraud Detection: A Comparative Analysis of Large Language Models and Traditional Machine Learning and Deep Learning Approaches},
+            school = {Brunel University London},
+            year = {2023},
+            address = {Uxbridge, Middlesex UB8 3PH, United Kingdom},
+            type = {MSc Thesis},
+            department = {Department of Computer Science},
+            program = {MSc Data Science and Analytics}
+        }""",
+        descriptive_stats={
+            "num_samples": {"test": 51},
+            "average_text_length": {"test": 1096025.2156862745},
+            "unique_labels": {"test": 2},
+            "labels": {"test": {"0": {"count": 32}, "1": {"count": 19}}},
+        },
     )
 
     def dataset_transform(self):
