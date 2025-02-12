@@ -9,7 +9,7 @@ from mteb.evaluation.evaluators.SummarizationEvaluator import (
 
 class SummEvalSummarization(AbsTaskSummarization):
     superseded_by = "SummEvalSummarization.v2"
-    evalutor = DeprecatedSummarizationEvaluator
+    evaluator = DeprecatedSummarizationEvaluator
 
     metadata = TaskMetadata(
         name="SummEval",

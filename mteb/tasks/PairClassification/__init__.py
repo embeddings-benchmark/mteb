@@ -4,6 +4,9 @@ from .ara import ArEntail
 from .ces import CTKFactsNLI
 from .deu import FalseFriendsDeEnPC
 from .eng import (
+    HeadlineACPairClassification,
+    HeadlinePDDPairClassification,
+    HeadlinePDUPairClassification,
     LegalBenchPC,
     PubChemAISentenceParaphrasePC,
     PubChemSMILESPC,
@@ -39,7 +42,7 @@ from .multilingual import (
 from .pol import CdscePC, PpcPC, PscPC, SickePLPC
 from .por import Assin2RTE, SickBrPC
 from .rus import TERRa
-from .zho import Cmnli, Ocnli
+from .zho import AFQMCPairClassification, Cmnli, Ocnli
 
 __all__ = [
     "Cmnli",
@@ -81,4 +84,8 @@ __all__ = [
     "XNLI",
     "XNLIV2",
     "TERRa",
+    "HeadlineACPairClassification",
+    "HeadlinePDDPairClassification",
+    "HeadlinePDUPairClassification",
+    "AFQMCPairClassification",
 ]

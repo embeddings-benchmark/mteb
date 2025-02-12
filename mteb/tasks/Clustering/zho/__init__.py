@@ -10,8 +10,12 @@ from .CMTEBClustering import (
     ThuNewsClusteringP2P,
     ThuNewsClusteringS2S,
 )
+from .FinNLClustering import FinNLClustering
+from .MInDS14ZhClustering import MInDS14ZhClustering
 
 __all__ = [
+    "FinNLClustering",
+    "MInDS14ZhClustering",
     "CLSClusteringFastP2P",
     "CLSClusteringFastS2S",
     "CLSClusteringP2P",

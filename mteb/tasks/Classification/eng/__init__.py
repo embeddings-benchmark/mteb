@@ -5,7 +5,13 @@ from .ArxivClassification import ArxivClassification
 from .Banking77Classification import Banking77Classification
 from .DBpediaClassification import DBpediaClassification
 from .EmotionClassification import EmotionClassification
+from .ESGClassification import ESGClassification
+from .FinancialFraudClassification import FinancialFraudClassification
 from .FinancialPhrasebankClassification import FinancialPhrasebankClassification
+from .FinSentClassification import FinSentClassification
+from .FiQAClassification import FiQAClassification
+from .FLSClassification import FLSClassification
+from .FOMCClassification import FOMCClassification
 from .FrenkEnClassification import FrenkEnClassification
 from .ImdbClassification import ImdbClassification
 from .LegalBenchClassification import (
@@ -127,6 +133,7 @@ from .PatentClassification import PatentClassification
 from .PoemSentimentClassification import PoemSentimentClassification
 from .SDSEyeProtectionClassification import SDSEyeProtectionClassification
 from .SDSGlovesClassification import SDSGlovesClassification
+from .SemEva2017Classification import SemEva2017Classification
 from .ToxicChatClassification import ToxicChatClassification
 from .ToxicConversationsClassification import ToxicConversationsClassification
 from .TweetSentimentExtractionClassification import (
@@ -176,6 +183,13 @@ from .YahooAnswersTopicsClassification import YahooAnswersTopicsClassification
 from .YelpReviewFullClassification import YelpReviewFullClassification
 
 __all__ = [
+    "ESGClassification",
+    "FinancialFraudClassification",
+    "FinSentClassification",
+    "FiQAClassification",
+    "FLSClassification",
+    "FOMCClassification",
+    "SemEva2017Classification",
     "YahooAnswersTopicsClassification",
     "CUADAffiliateLicenseLicenseeLegalBenchClassification",
     "CUADAffiliateLicenseLicensorLegalBenchClassification",

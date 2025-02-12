@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from .BiossesSTS import BiossesSTS
+from .FINAL import FINAL
+from .FinSTS import FinSTS
 from .SickrSTS import SickrSTS
 from .STS12STS import STS12STS
 from .STS13STS import STS13STS
@@ -18,4 +20,6 @@ __all__ = [
     "SickrSTS",
     "STS16STS",
     "STS14STS",
+    "FINAL",
+    "FinSTS",
 ]

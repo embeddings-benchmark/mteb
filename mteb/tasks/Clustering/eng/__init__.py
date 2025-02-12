@@ -9,8 +9,13 @@ from .ArXivHierarchicalClustering import (
 from .BigPatentClustering import BigPatentClustering, BigPatentClusteringFast
 from .BiorxivClusteringP2P import BiorxivClusteringP2P, BiorxivClusteringP2PFast
 from .BiorxivClusteringS2S import BiorxivClusteringS2S, BiorxivClusteringS2SFast
+from .ComplaintsClustering import ComplaintsClustering
+from .FinanceArxivP2PClustering import FinanceArxivP2PClustering
+from .FinanceArxivS2SClustering import FinanceArxivS2SClustering
 from .MedrxivClusteringP2P import MedrxivClusteringP2P, MedrxivClusteringP2PFast
 from .MedrxivClusteringS2S import MedrxivClusteringS2S, MedrxivClusteringS2SFast
+from .MInDS14EnClustering import MInDS14EnClustering
+from .PiiClustering import PiiClustering
 from .RedditClustering import RedditClustering, RedditFastClusteringS2S
 from .RedditClusteringP2P import RedditClusteringP2P, RedditFastClusteringP2P
 from .StackExchangeClustering import (
@@ -26,12 +31,19 @@ from .TwentyNewsgroupsClustering import (
     TwentyNewsgroupsClusteringFast,
 )
 from .WikiCitiesClustering import WikiCitiesClustering
+from .WikiCompany2IndustryClustering import WikiCompany2IndustryClustering
 from .WikipediaChemistrySpecialtiesClustering import (
     WikipediaChemistrySpecialtiesClustering,
 )
 from .WikipediaChemistryTopicsClustering import WikipediaChemistryTopicsClustering
 
 __all__ = [
+    "ComplaintsClustering",
+    "FinanceArxivS2SClustering",
+    "FinanceArxivP2PClustering",
+    "MInDS14EnClustering",
+    "PiiClustering",
+    "WikiCompany2IndustryClustering",
     "MedrxivClusteringS2S",
     "MedrxivClusteringS2SFast",
     "BiorxivClusteringS2S",

@@ -75,7 +75,7 @@ class AbsTaskClassification(AbsTask):
     n_experiments: int = 10
     k: int = 3
     train_split = "train"
-
+    sentence_column: str = "text"
     def evaluate(
         self,
         model: Encoder,
@@ -137,7 +137,7 @@ class AbsTaskClassification(AbsTask):
             )
             # Bootstrap `self.samples_per_label` samples per label for each split
             X_sampled, y_sampled, idxs = self._undersample_data(
-                train_split["text"],  # type: ignore
+                train_split[self.sentence_column],  # type: ignore
                 train_split["label"],  # type: ignore
                 self.samples_per_label,
                 idxs,
@@ -146,7 +146,7 @@ class AbsTaskClassification(AbsTask):
             evaluator = self.evaluator(
                 X_sampled,
                 y_sampled,
-                eval_split["text"],  # type: ignore
+                eval_split[self.sentence_column],  # type: ignore
                 eval_split["label"],  # type: ignore
                 task_name=self.metadata.name,
                 **params,
@@ -154,6 +154,7 @@ class AbsTaskClassification(AbsTask):
             scores_exp, test_cache = evaluator(
                 model, encode_kwargs=encode_kwargs, test_cache=test_cache
             )
+
             scores.append(scores_exp)
 
         avg_scores: dict[str, Any] = {
@@ -183,7 +184,7 @@ class AbsTaskClassification(AbsTask):
     ) -> ClassificationDescriptiveStatistics:
         train_text = []
         if hf_subset:
-            text = self.dataset[hf_subset][split]["text"]
+            text = self.dataset[hf_subset][split][self.sentence_column]
             label = self.dataset[hf_subset][split]["label"]
             if split != "train":
                 train_text = self.dataset[hf_subset]["train"]["text"]
@@ -191,12 +192,12 @@ class AbsTaskClassification(AbsTask):
             text = []
             label = []
             for hf_subset in self.metadata.eval_langs:
-                text.extend(self.dataset[hf_subset][split]["text"])
+                text.extend(self.dataset[hf_subset][split][self.sentence_column])
                 label.extend(self.dataset[hf_subset][split]["label"])
                 if split != "train":
                     train_text.extend(self.dataset[hf_subset]["train"]["text"])
         else:
-            text = self.dataset[split]["text"]
+            text = self.dataset[split][self.sentence_column]
             label = self.dataset[split]["label"]
             if split != "train":
                 train_text = self.dataset["train"]["text"]

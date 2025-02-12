@@ -82,6 +82,10 @@ class AbsTaskSummarization(AbsTask):
     abstask_prompt = (
         "Given a news summary, retrieve other semantically similar summaries."
     )
+
+    reference_summaries_column: str = "human_summaries"
+    generated_summaries_column: str = "machine_summaries"
+
     # SummEval has DeprecatedSummarizationEvaluator
     evaluator = SummarizationEvaluator
 
@@ -97,9 +101,10 @@ class AbsTaskSummarization(AbsTask):
             (np.array(x) - self.min_score) / (self.max_score - self.min_score)
             for x in data_split["relevance"]
         ]
+
         evaluator = self.evaluator(
-            machine_summaries=data_split["machine_summaries"],
-            human_summaries=data_split["human_summaries"],
+            machine_summaries=data_split[self.generated_summaries_column],
+            human_summaries=data_split[self.reference_summaries_column],
             texts=data_split["text"],
             gold_scores=normalized_scores,
             task_name=self.metadata.name,
@@ -114,8 +119,12 @@ class AbsTaskSummarization(AbsTask):
     ) -> SummarizationDescriptiveStatistics:
         if hf_subset:
             text = self.dataset[hf_subset][split]["text"]
-            human_summaries = self.dataset[hf_subset][split]["human_summaries"]
-            machine_summaries = self.dataset[hf_subset][split]["machine_summaries"]
+            human_summaries = self.dataset[hf_subset][split][
+                self.reference_summaries_column
+            ]
+            machine_summaries = self.dataset[hf_subset][split][
+                self.generated_summaries_column
+            ]
             relevance = self.dataset[hf_subset][split]["relevance"]
         elif compute_overall:
             text = []
@@ -126,16 +135,16 @@ class AbsTaskSummarization(AbsTask):
             for hf_subset in self.metadata.eval_langs:
                 text.extend(self.dataset[hf_subset][split]["text"])
                 human_summaries.extend(
-                    self.dataset[hf_subset][split]["human_summaries"]
+                    self.dataset[hf_subset][split][self.reference_summaries_column]
                 )
                 machine_summaries.extend(
-                    self.dataset[hf_subset][split]["machine_summaries"]
+                    self.dataset[hf_subset][split][self.generated_summaries_column]
                 )
                 relevance.extend(self.dataset[hf_subset][split]["relevance"])
         else:
             text = self.dataset[split]["text"]
-            human_summaries = self.dataset[split]["human_summaries"]
-            machine_summaries = self.dataset[split]["machine_summaries"]
+            human_summaries = self.dataset[split][self.reference_summaries_column]
+            machine_summaries = self.dataset[split][self.generated_summaries_column]
             relevance = self.dataset[split]["relevance"]
 
         all_human_summaries = []
