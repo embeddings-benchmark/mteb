@@ -5,7 +5,10 @@ from functools import partial
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
-from mteb.models.instruct_wrapper import instruct_wrapper
+from mteb.models.instruct_wrapper import (
+    InstructSentenceTransformerWrapper,
+    instruct_wrapper,
+)
 
 
 def instruction_template(
@@ -64,7 +67,7 @@ SFR_Embedding_2_R = ModelMeta(
 
 SFR_Embedding_Code_2B_R = ModelMeta(
     loader=partial(  # type: ignore
-        instruct_wrapper,
+        InstructSentenceTransformerWrapper,
         model_name_or_path="Salesforce/SFR-Embedding-Code-2B_R",
         instruction_template=instruction_template,
         attn="cccc",
