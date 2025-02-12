@@ -91,7 +91,7 @@ def set_benchmark_on_load(request: gr.Request):
     return query_params.get("benchmark_name", DEFAULT_BENCHMARK_NAME)
 
 
-def download_table(table: pd.DataFrame) -> Path:
+def download_table(table: pd.DataFrame) -> str:
     file = tempfile.NamedTemporaryFile(delete=False, suffix=".csv")
     table.to_csv(file)
     return file.name
@@ -99,7 +99,7 @@ def download_table(table: pd.DataFrame) -> Path:
 
 def update_citation(benchmark_name: str) -> str:
     benchmark = mteb.get_benchmark(benchmark_name)
-    if str(benchmark.citation) != "None":
+    if benchmark.citation is not None:
         citation = f"```bibtex\n{benchmark.citation}\n```"
     else:
         citation = ""
@@ -116,10 +116,10 @@ def update_description(
     n_tasks = len(benchmark.tasks)
     n_domains = len(domains)
     description += f" - **Number of languages**: {n_languages}\n"
-    description += f" - **Number of datasets**: {n_tasks}\n"
+    description += f" - **Number of tasks**: {n_tasks}\n"
     description += f" - **Number of task types**: {n_task_types}\n"
     description += f" - **Number of domains**: {n_domains}\n"
-    if str(benchmark.reference) != "None":
+    if benchmark.reference is not None:
         description += f"\n[Click for More Info]({benchmark.reference})"
 
     return description
@@ -160,13 +160,13 @@ MIN_MODEL_SIZE, MAX_MODEL_SIZE = 0, 100_000
 
 
 def filter_models(
-    model_names,
-    task_select,
-    availability,
-    compatibility,
-    instructions,
-    model_size,
-    zero_shot_setting,
+    model_names: list[str],
+    task_select: list[str],
+    availability: bool | None,
+    compatibility: list[str],
+    instructions: bool | None,
+    model_size: tuple[int | None, int | None],
+    zero_shot_setting: Literal["hard", "soft", "off"],
 ):
     lower, upper = model_size
     # Setting to None, when the user doesn't specify anything
@@ -175,7 +175,7 @@ def filter_models(
     else:
         # Multiplying by millions
         lower = lower * 1e6
-    if (upper == MIN_MODEL_SIZE) or (upper is None):
+    if (upper == MAX_MODEL_SIZE) or (upper is None):
         upper = None
     else:
         upper = upper * 1e6
@@ -186,10 +186,9 @@ def filter_models(
         frameworks=compatibility,
         n_parameters_range=(lower, upper),
     )
-    tasks = mteb.get_tasks(tasks=task_select)
     models_to_keep = set()
     for model_meta in model_metas:
-        is_model_zero_shot = model_meta.is_zero_shot_on(tasks)
+        is_model_zero_shot = model_meta.is_zero_shot_on(task_select)
         if is_model_zero_shot is None:
             if zero_shot_setting == "hard":
                 continue
