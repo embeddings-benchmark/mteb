@@ -116,7 +116,7 @@ def update_description(
     n_tasks = len(benchmark.tasks)
     n_domains = len(domains)
     description += f" - **Number of languages**: {n_languages}\n"
-    description += f" - **Number of datasets**: {n_tasks}\n"
+    description += f" - **Number of tasks**: {n_tasks}\n"
     description += f" - **Number of task types**: {n_task_types}\n"
     description += f" - **Number of domains**: {n_domains}\n"
     if str(benchmark.reference) != "None":
@@ -413,6 +413,21 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
     **Mean(Task)**: This is a naïve average computed across all the tasks within the benchmark. This score is simple to understand and is continuous as opposed to the Borda rank. However, the mean can overvalue tasks with higher variance in its scores. 
 
     **Mean(TaskType)**: This is a weighted average across different task categories, such as classification or retrieval. It is computed by first computing the average by task category and then computing the average on each category. Similar to the Mean(Task) this measure is continuous and tends to overvalue tasks with higher variance. This score also prefers models that perform well across all task categories.
+            """
+            )
+        with gr.Accordion(
+            "What does the Columns mean?",
+            open=False,
+        ):
+            gr.Markdown(
+                """
+- **Rank(Borda)**: The rank of the model based on the [Borda count](https://en.wikipedia.org/wiki/Borda_count). A lower value is better. Using a Borda rank ensures that the score isn't heavily influences by tasks which have scores that very significantly. 
+- **Number of Parameters**: This is the total number of parameters in the model including embedding parameters. A higher value means the model requires more CPU/GPU memory to run; thus, less is generally desirable.
+- **Embedding Dimension**: This is the vector dimension of the embeddings that the model produces. When saving embeddings to disk, a higher dimension will require more space, thus less is usually desirable.
+- **Max tokens**: This refers to how many tokens (=word pieces) the model can process. Generally, a larger value is desirable.
+- **Zero-shot**: This indicates if the model is zero-shot on the benchmark. For more information on zero-shot see the info-box below.
+- **Mean(Task)**: This is the average score across all tasks in the benchmark. A higher value is better. The mean is simple to understand and is continuous as opposed to the Borda rank. However, the mean can overvalue tasks with higher variance.
+- **Mean(TaskType)**: This is the average score across all task types in the benchmark. This means that each task type is weighted equally. A higher value is better. As opposed to Mean(Task) this score prefers models that perform well across all task types.
             """
             )
         with gr.Accordion(
