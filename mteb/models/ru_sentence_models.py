@@ -355,39 +355,6 @@ labse_ru_turbo = ModelMeta(
 )
 
 rosberta_prompts = {
-    # Classification
-    "CEDRClassification": "classification: ",
-    "GeoreviewClassification": "classification: ",
-    "HeadlineClassification": "clustering: ",
-    "InappropriatenessClassification": "clustering: ",
-    "KinopoiskClassification": "classification: ",
-    "MassiveIntentClassification": "classification: ",
-    "MassiveScenarioClassification": "clustering: ",
-    "RuReviewsClassification": "classification: ",
-    "RuSciBenchGRNTIClassification": "clustering: ",
-    "RuSciBenchOECDClassification": "clustering: ",
-    "SensitiveTopicsClassification": "clustering: ",
-    # Clustering
-    "GeoreviewClusteringP2P": "clustering: ",
-    "RuSciBenchGRNTIClusteringP2P": "clustering: ",
-    "RuSciBenchOECDClusteringP2P": "clustering: ",
-    # STS & NLI
-    "TERRa": "classification: ",
-    "RUParaPhraserSTS": "classification: ",
-    "RuSTSBenchmarkSTS": "classification: ",
-    "STS22": "clustering: ",
-    # Reranking
-    f"MIRACLReranking-{PromptType.query.value}": "search_query: ",
-    f"MIRACLReranking-{PromptType.passage.value}": "search_document: ",
-    f"RuBQReranking-{PromptType.query.value}": "search_query: ",
-    f"RuBQReranking-{PromptType.passage.value}": "search_document: ",
-    # Retrieval
-    f"MIRACLRetrieval-{PromptType.query.value}": "search_query: ",
-    f"MIRACLRetrieval-{PromptType.passage.value}": "search_document: ",
-    f"RiaNewsRetrieval-{PromptType.query.value}": "search_query: ",
-    f"RiaNewsRetrieval-{PromptType.passage.value}": "search_document: ",
-    f"RuBQRetrieval-{PromptType.query.value}": "search_query: ",
-    f"RuBQRetrieval-{PromptType.passage.value}": "search_document: ",
     # Default
     "Classification": "classification: ",
     "MultilabelClassification": "classification: ",
@@ -400,6 +367,14 @@ rosberta_prompts = {
     "Summarization": "classification: ",
     PromptType.query.value: "search_query: ",
     PromptType.passage.value: "search_document: ",
+    # Override some prompts for ruMTEB tasks
+    "HeadlineClassification": "clustering: ",
+    "InappropriatenessClassification": "clustering: ",
+    "MassiveScenarioClassification": "clustering: ",
+    "RuSciBenchGRNTIClassification": "clustering: ",
+    "RuSciBenchOECDClassification": "clustering: ",
+    "SensitiveTopicsClassification": "clustering: ",
+    "STS22": "clustering: ",
 }
 
 rosberta_ru_en = ModelMeta(
@@ -446,7 +421,19 @@ rosberta_ru_en = ModelMeta(
 )
 
 frida_prompts = {
-    # Classification
+    # Default
+    "Classification": "categorize: ",
+    "MultilabelClassification": "categorize: ",
+    "Clustering": "categorize_topic: ",
+    "PairClassification": "paraphrase: ",
+    "Reranking": "paraphrase: ",
+    f"Reranking-{PromptType.query.value}": "search_query: ",
+    f"Reranking-{PromptType.passage.value}": "search_document: ",
+    "STS": "paraphrase: ",
+    "Summarization": "categorize: ",
+    PromptType.query.value: "search_query: ",
+    PromptType.passage.value: "search_document: ",
+    # Override some prompts for ruMTEB tasks
     "CEDRClassification": "categorize_sentiment: ",
     "GeoreviewClassification": "categorize_sentiment: ",
     "HeadlineClassification": "categorize_topic: ",
@@ -458,38 +445,8 @@ frida_prompts = {
     "RuSciBenchGRNTIClassification": "categorize_topic: ",
     "RuSciBenchOECDClassification": "categorize_topic: ",
     "SensitiveTopicsClassification": "categorize_topic: ",
-    # Clustering
-    "GeoreviewClusteringP2P": "categorize_topic: ",
-    "RuSciBenchGRNTIClusteringP2P": "categorize_topic: ",
-    "RuSciBenchOECDClusteringP2P": "categorize_topic: ",
-    # STS & NLI
-    "RUParaPhraserSTS": "paraphrase: ",
-    "RuSTSBenchmarkSTS": "paraphrase: ",
-    "STS22": "paraphrase: ",
     "TERRa": "categorize_entailment: ",
-    # Reranking
-    f"MIRACLReranking-{PromptType.query.value}": "search_query: ",
-    f"MIRACLReranking-{PromptType.passage.value}": "search_document: ",
-    f"RuBQReranking-{PromptType.query.value}": "search_query: ",
-    f"RuBQReranking-{PromptType.passage.value}": "search_document: ",
-    # Retrieval
-    f"MIRACLRetrieval-{PromptType.query.value}": "search_query: ",
-    f"MIRACLRetrieval-{PromptType.passage.value}": "search_document: ",
     "RiaNewsRetrieval": "categorize: ",
-    f"RuBQRetrieval-{PromptType.query.value}": "search_query: ",
-    f"RuBQRetrieval-{PromptType.passage.value}": "search_document: ",
-    # Default
-    "Classification": "categorize: ",
-    "MultilabelClassification": "categorize: ",
-    "Clustering": "categorize: ",
-    "PairClassification": "paraphrase: ",
-    "Reranking": "paraphrase: ",
-    f"Reranking-{PromptType.query.value}": "search_query: ",
-    f"Reranking-{PromptType.passage.value}": "search_document: ",
-    "STS": "paraphrase: ",
-    "Summarization": "categorize: ",
-    PromptType.query.value: "search_query: ",
-    PromptType.passage.value: "search_document: ",
 }
 
 frida_training_datasets = {
