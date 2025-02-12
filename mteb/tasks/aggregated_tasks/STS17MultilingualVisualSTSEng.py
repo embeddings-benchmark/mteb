@@ -11,7 +11,7 @@ task_list_sts17: list[AbsTask] = [
 
 class STS17MultilingualVisualSTSEng(AbsTaskAggregate):
     metadata = AggregateTaskMetadata(
-        name="STS17MultilingualVisualSTSEng",
+        name="VisualSTS17-Eng",
         description="STS17MultilingualVisualSTS English only.",
         reference="https://arxiv.org/abs/2402.08183/",
         tasks=task_list_sts17,
