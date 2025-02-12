@@ -181,6 +181,10 @@ _HISTORIC_DATASETS = [
     "TenKGnadClusteringS2S.v2",
     "SynPerChatbotConvSAClassification",
     "CQADupstackRetrieval-Fa",
+    "VisualSTS17-Eng",
+    "VisualSTS17-Multilingual",
+    "VisualSTS-b-Eng",
+    "VisualSTS-b-Multilingual",
 ]
 
 
