@@ -1510,8 +1510,6 @@ MIEB = Benchmark(
             "STS14VisualSTS",
             "STS15VisualSTS",
             "STS16VisualSTS",
-            "STS17MultilingualVisualSTS",
-            "STSBenchmarkMultilingualSTS",
             # Any2AnyRetrieval
             "BLINKIT2IMultiChoice",
             "BLINKIT2IRetrieval",
@@ -1575,6 +1573,29 @@ MIEB = Benchmark(
             "XFlickr30kCoT2IRetrieval",
             "XM3600T2IRetrieval",
         ],
+    )
+    + (
+        get_task(task_name="STS17MultilingualVisualSTS", hf_subsets=["en-en"]),
+        get_task(
+            task_name="STS17MultilingualVisualSTS",
+            hf_subsets=[
+                "ko-ko",
+                "ar-ar",
+                "en-ar",
+                "en-de",
+                "en-tr",
+                "es-en",
+                "es-es",
+                "fr-en",
+                "it-en",
+                "nl-en",
+            ],
+        ),
+    )
+    + get_tasks(tasks=["STSBenchmarkMultilingualSTS"], languages=["eng"])
+    + get_tasks(
+        tasks=["STSBenchmarkMultilingualSTS"],
+        languages=["cmn", "deu", "fra", "ita", "nld", "pol", "por", "rus", "spa"],
     ),
     description="MIEB is a comprehensive image embeddings benchmark, spanning 8 task categories, covering 129 tasks and a total of 38 languages.",
     reference="",
