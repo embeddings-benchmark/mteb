@@ -114,7 +114,7 @@ TASK_TYPE = Literal[
     "Speed",
     "Any2AnyMultiChoice",
     "Any2AnyRetrieval",
-    "Any2TextMutipleChoice",
+    "VisionCentric",
     "ImageClustering",
     "ImageClassification",
     "ImageMultilabelClassification",

@@ -2283,7 +2283,7 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskAny2AnyRetrieval):
 
 class MockTextMultipleChoiceTask(AbsTaskAny2TextMultipleChoice):
     metadata = TaskMetadata(
-        type="Any2TextMutipleChoice",
+        type="VisionCentric",
         name="MockTextMultipleChoice",
         main_score="accuracy",
         descriptive_stats={
