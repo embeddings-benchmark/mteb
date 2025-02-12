@@ -18,8 +18,12 @@ from mteb.benchmarks.benchmarks import MTEB_multilingual
 from mteb.caching import json_cache
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
 from mteb.leaderboard.table import scores_to_tables
-from mteb.leaderboard.utils import (MAX_MODEL_SIZE, MIN_MODEL_SIZE,
-                                    filter_models, load_results)
+from mteb.leaderboard.utils import (
+    MAX_MODEL_SIZE,
+    MIN_MODEL_SIZE,
+    filter_models,
+    load_results,
+)
 
 logger = logging.getLogger(__name__)
 

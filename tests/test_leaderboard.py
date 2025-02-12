@@ -3,8 +3,7 @@ from __future__ import annotations
 import pandas as pd
 import pytest
 
-from mteb.benchmarks import (MTEB_EN, MTEB_ENG_CLASSIC, Benchmark,
-                             MTEB_multilingual)
+from mteb.benchmarks import MTEB_EN, MTEB_ENG_CLASSIC, Benchmark, MTEB_multilingual
 from mteb.leaderboard.table import scores_to_tables
 from mteb.leaderboard.utils import filter_models, load_results
 
