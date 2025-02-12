@@ -94,7 +94,7 @@ class ModelMeta(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    name: str
+    name: str | None
     revision: str | None
     release_date: STR_DATE | None
     languages: list[ISO_LANGUAGE_SCRIPT] | None
