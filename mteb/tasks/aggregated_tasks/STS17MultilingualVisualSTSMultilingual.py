@@ -2,11 +2,11 @@ from __future__ import annotations
 
 from mteb.abstasks import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate, AggregateTaskMetadata
-from mteb.overview import get_task
+from mteb.tasks.Image.VisualSTS import STS17MultilingualVisualSTS
 
 task_list_sts17: list[AbsTask] = [
-    get_task(
-        task_name="STS17MultilingualVisualSTS",
+    STS17MultilingualVisualSTS().filter_languages(
+        languages=["eng"],
         hf_subsets=[
             "ko-ko",
             "ar-ar",
@@ -31,6 +31,7 @@ class STS17MultilingualVisualSTSMultilingual(AbsTaskAggregate):
         tasks=task_list_sts17,
         main_score="cosine_spearman",
         type="VisualSTS",
+        eval_splits=["test"],
         bibtex_citation="""@article{xiao2024pixel,
   title={Pixel Sentence Representation Learning},
   author={Xiao, Chenghao and Huang, Zhuoxu and Chen, Danlu and Hudson, G Thomas and Li, Yizhi and Duan, Haoran and Lin, Chenghua and Fu, Jie and Han, Jungong and Moubayed, Noura Al},
