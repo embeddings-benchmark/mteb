@@ -416,21 +416,6 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             """
             )
         with gr.Accordion(
-            "What does the Columns mean?",
-            open=False,
-        ):
-            gr.Markdown(
-                """
-- **Rank(Borda)**: The rank of the model based on the [Borda count](https://en.wikipedia.org/wiki/Borda_count). A lower value is better. Using a Borda rank ensures that the score isn't heavily influences by tasks which have scores that very significantly. 
-- **Number of Parameters**: This is the total number of parameters in the model including embedding parameters. A higher value means the model requires more CPU/GPU memory to run; thus, less is generally desirable.
-- **Embedding Dimension**: This is the vector dimension of the embeddings that the model produces. When saving embeddings to disk, a higher dimension will require more space, thus less is usually desirable.
-- **Max tokens**: This refers to how many tokens (=word pieces) the model can process. Generally, a larger value is desirable.
-- **Zero-shot**: This indicates if the model is zero-shot on the benchmark. For more information on zero-shot see the info-box below.
-- **Mean(Task)**: This is the average score across all tasks in the benchmark. A higher value is better. The mean is simple to understand and is continuous as opposed to the Borda rank. However, the mean can overvalue tasks with higher variance.
-- **Mean(TaskType)**: This is the average score across all task types in the benchmark. This means that each task type is weighted equally. A higher value is better. As opposed to Mean(Task) this score prefers models that perform well across all task types.
-            """
-            )
-        with gr.Accordion(
             "What does zero-shot mean?",
             open=False,
         ):
@@ -441,6 +426,18 @@ E.g., if a model is trained on Natural Questions, it cannot be considered zero-s
 This definition creates a few edge cases. For instance, multiple models are typically trained on Wikipedia title and body pairs, but we do not define this as leakage on, e.g., “WikipediaRetrievalMultilingual” and “WikiClusteringP2P” as these datasets are not based on title-body pairs.
 Distilled, further fine-tunes, or in other ways, derivative models inherit the datasets of their parent models.
 Based on community feedback and research findings, This definition could change in the future.
+            """
+            )
+        with gr.Accordion(
+            "What does the other columns mean?",
+            open=False,
+        ):
+            gr.Markdown(
+                """
+- **Number of Parameters**: This is the total number of parameters in the model including embedding parameters. A higher value means the model requires more CPU/GPU memory to run; thus, less is generally desirable.
+- **Embedding Dimension**: This is the vector dimension of the embeddings that the model produces. When saving embeddings to disk, a higher dimension will require more space, thus less is usually desirable.
+- **Max tokens**: This refers to how many tokens (=word pieces) the model can process. Generally, a larger value is desirable.
+- **Zero-shot**: This indicates if the model is zero-shot on the benchmark. For more information on zero-shot see the info-box below.
             """
             )
         with gr.Accordion(
