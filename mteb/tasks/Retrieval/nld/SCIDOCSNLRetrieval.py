@@ -21,7 +21,7 @@ class SCIDOCSNL(AbsTaskRetrieval):
         category="s2p",
         modalities=["text"],
         eval_splits=["test"],
-        eval_langs=["eng-Latn"],
+        eval_langs=["nld-Latn"],
         main_score="ndcg_at_10",
         date=("2020-05-01", "2020-05-01"),  # best guess: based on submission date
         domains=["Academic", "Written", "Non-fiction"],

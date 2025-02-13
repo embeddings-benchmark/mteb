@@ -60,7 +60,7 @@ models_to_annotate = [
 
 
 def add_size_guide(fig: go.Figure):
-    xpos = [5 * 1e9] * 4
+    xpos = [2 * 1e6] * 4
     ypos = [7.8, 8.5, 9, 10]
     sizes = [256, 1024, 2048, 4096]
     fig.add_trace(
@@ -78,25 +78,13 @@ def add_size_guide(fig: go.Figure):
         )
     )
     fig.add_annotation(
-        text="<b>Embedding Size:</b>",
+        text="<b>Embedding Size</b>",
         font=dict(size=16),
-        x=np.log10(1.5e9),
+        x=np.log10(10 * 1e6),
         y=10,
         showarrow=False,
         opacity=0.3,
     )
-    for x, y, size in zip(xpos, np.linspace(7.5, 14, 4), sizes):
-        fig.add_annotation(
-            text=f"<b>{size}</b>",
-            font=dict(size=12),
-            x=np.log10(x),
-            y=y,
-            showarrow=True,
-            ay=0,
-            ax=50,
-            opacity=0.3,
-            arrowwidth=2,
-        )
     return fig
 
 
@@ -127,7 +115,6 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
         size="sqrt(dim)",
         color="Log(Tokens)",
         range_color=[2, 5],
-        range_x=[8 * 1e6, 11 * 1e9],
         range_y=[min(0, min_score * 1.25), max_score * 1.25],
         hover_data={
             "Max Tokens": True,

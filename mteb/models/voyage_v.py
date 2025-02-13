@@ -247,6 +247,7 @@ voyage_v = ModelMeta(
     revision="1",
     release_date="2024-11-10",
     n_parameters=None,
+    memory_usage_mb=None,
     max_tokens=None,
     embed_dim=1024,
     license=None,

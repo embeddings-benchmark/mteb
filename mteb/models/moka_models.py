@@ -88,6 +88,7 @@ m3e_base = ModelMeta(
     revision="764b537a0e50e5c7d64db883f2d2e051cbe3c64c",
     release_date="2023-06-06",  # first commit
     n_parameters=102 * 1e6,
+    memory_usage_mb=390,
     embed_dim=768,
     # They don't give a specific license but commercial use is not allowed
     license="unspecified-noncommercial",
@@ -109,7 +110,8 @@ m3e_small = ModelMeta(
     open_weights=True,
     revision="44c696631b2a8c200220aaaad5f987f096e986df",
     release_date="2023-06-02",  # first commit
-    n_parameters=None,  # Can't be seen on HF page
+    n_parameters=None,
+    memory_usage_mb=None,  # Can't be seen on HF page
     embed_dim=512,
     # They don't give a specific license but commercial use is not allowed
     license="unspecified-noncommercial",
@@ -131,7 +133,8 @@ m3e_large = ModelMeta(
     open_weights=True,
     revision="12900375086c37ba5d83d1e417b21dc7d1d1f388",
     release_date="2023-06-21",  # first commit
-    n_parameters=None,  # Can't be seen on HF page
+    n_parameters=None,
+    memory_usage_mb=None,  # Can't be seen on HF page
     embed_dim=768,
     # They don't give a specific license but commercial use is not allowed
     license="unspecified-noncommercial",
