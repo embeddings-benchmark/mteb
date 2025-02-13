@@ -232,9 +232,6 @@ class DescriptiveStatistics(TypedDict):
     pass
 
 
-METRIC_VALUE = Union[int, float, dict[str, Any]]
-
-
 logger = logging.getLogger(__name__)
 
 
@@ -290,7 +287,7 @@ class TaskMetadata(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    dataset: MetadataDatasetDict
+    dataset: dict[str, Any] # MetadataDatasetDict
 
     name: str
     description: str
