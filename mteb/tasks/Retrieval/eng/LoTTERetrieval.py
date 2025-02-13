@@ -9,7 +9,6 @@ from collections import defaultdict
 from pathlib import Path
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 logger = logging.getLogger(__name__)
@@ -19,7 +18,7 @@ DOMAINS_TYPES = ["search", "forum"]
 HF_SUBSETS = [f"{d}_{t}" for d in DOMAINS for t in DOMAINS_TYPES]
 
 
-class LoTTERetrieval(MultilingualTask, AbsTaskRetrieval):
+class LoTTERetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="LoTTE",
         dataset={
@@ -37,8 +36,7 @@ class LoTTERetrieval(MultilingualTask, AbsTaskRetrieval):
         modalities=["text"],
         category="s2s",
         reference="https://github.com/stanford-futuredata/ColBERT/blob/main/LoTTE.md",
-        eval_splits=["test", "dev"],  # we assume evaluation is on the "test" split
-        # For multilingual tasks, eval_langs is a dict mapping each domain to its language(s)
+        eval_splits=["test", "dev"],
         eval_langs={domain: ["eng-Latn"] for domain in HF_SUBSETS},
         main_score="precision_at_5",
         date=("2021-12-02", "2022-06-10"),
@@ -68,7 +66,6 @@ class LoTTERetrieval(MultilingualTask, AbsTaskRetrieval):
             pages = "3715--3734",
             abstract = "Neural information retrieval (IR) has greatly advanced search and other knowledge-intensive language tasks. While many neural IR methods encode queries and documents into single-vector representations, late interaction models produce multi-vector representations at the granularity of each token and decompose relevance modeling into scalable token-level computations. This decomposition has been shown to make late interaction more effective, but it inflates the space footprint of these models by an order of magnitude. In this work, we introduce ColBERTv2, a retriever that couples an aggressive residual compression mechanism with a denoised supervision strategy to simultaneously improve the quality and space footprint of late interaction. We evaluate ColBERTv2 across a wide range of benchmarks, establishing state-of-the-art quality within and outside the training domain while reducing the space footprint of late interaction models by 6{--}10x."
         }""",
-        prompt=None,
     )
 
     def load_data(
