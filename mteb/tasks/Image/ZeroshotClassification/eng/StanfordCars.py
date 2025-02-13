@@ -6,7 +6,7 @@ from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class StanfordCarsClassification(AbsTaskZeroshotClassification):
+class StanfordCarsZeroshotClassification(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
         name="StanfordCarsZeroShot",
         description="Classifying car images from 96 makes.",
