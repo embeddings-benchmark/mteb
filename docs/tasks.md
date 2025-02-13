@@ -430,7 +430,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [MLSUMClusteringS2S.v2](https://huggingface.co/datasets/mteb/mlsum) (Scialom et al., 2020) | ['deu', 'fra', 'rus', 'spa'] | Clustering | s2s | [News, Written] | None | None |
 | [MMarcoReranking](https://github.com/unicamp-dl/mMARCO) (Luiz Henrique Bonifacio, 2021) | ['cmn'] | Reranking | s2s |  | None | None |
 | [MMarcoRetrieval](https://arxiv.org/abs/2309.07597) (Shitao Xiao, 2024) | ['cmn'] | Retrieval | s2p |  | None | None |
-| [MNIST](https://en.wikipedia.org/wiki/MNIST_database) (LeCun et al., 2010) | ['eng'] | ImageClassification | i2i | [Encyclopaedic] | None | None |
+| [MNIST](https://en.wikipedia.org/wiki/MNIST_database) (LeCun et al., 2010) | ['eng'] | ImageClassification | i2i | [Encyclopaedic] | {'test': 10000} | {'test': {'num_samples': 10000, 'unique_num_labels': 10, 'min_image_width': 28, 'average_image_width': 28.0, 'max_image_width': 28, 'min_image_height': 28, 'average_image_height': 28.0, 'max_image_height': 28, 'labels': {'7': {'count': 1028}, '2': {'count': 1032}, '1': {'count': 1135}, '0': {'count': 980}, '4': {'count': 982}, '9': {'count': 1009}, '5': {'count': 892}, '6': {'count': 958}, '3': {'count': 1010}, '8': {'count': 974}}}} |
 | [MNISTZeroShot](https://en.wikipedia.org/wiki/MNIST_database) (LeCun et al., 2010) | ['eng'] | ZeroShotClassification | i2t | [Encyclopaedic] | None | None |
 | [MSCOCOI2TRetrieval](https://link.springer.com/chapter/10.1007/978-3-319-10602-1_48) (Lin et al., 2014) | ['eng'] | Any2AnyRetrieval | i2t | [Encyclopaedic] | None | None |
 | [MSCOCOT2IRetrieval](https://link.springer.com/chapter/10.1007/978-3-319-10602-1_48) (Lin et al., 2014) | ['eng'] | Any2AnyRetrieval | t2i | [Encyclopaedic] | None | None |
