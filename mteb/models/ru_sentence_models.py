@@ -4,9 +4,12 @@ from __future__ import annotations
 
 from functools import partial
 
+import torch
+
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 from mteb.models.bge_models import bge_m3_training_data
+from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
 
 rubert_tiny = ModelMeta(
     name="cointegrated/rubert-tiny",
@@ -569,7 +572,7 @@ giga_embeddings = ModelMeta(
         instruction_template="Instruct: {instruction}\nQuery: ",
         apply_instruction_to_passages=False,
         model_kwargs={
-            "torch_dtype": torch.float16,
+            "torch_dtype": torch.bfloat16,
         },
     ),
     name="ai-sage/Giga-Embeddings-instruct",
@@ -578,7 +581,7 @@ giga_embeddings = ModelMeta(
     revision="646f5ff3587e74a18141c8d6b60d1cffd5897b92",
     release_date="2024-12-13",
     n_parameters=2_530_000_000,
-    memory_usage=None,
+    memory_usage_mb=9649,
     embed_dim=2048,
     license="mit",
     max_tokens=32768,
@@ -586,4 +589,7 @@ giga_embeddings = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
 )
