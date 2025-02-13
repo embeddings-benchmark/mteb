@@ -1060,9 +1060,7 @@ LONG_EMBED = Benchmark(
 
 BRIGHT = Benchmark(
     name="BRIGHT",
-    tasks=get_tasks(
-        tasks=["BrightRetrieval"],
-    ),
+    tasks=get_tasks(tasks=["BrightRetrieval"], eval_splits=["standard"]),
     description="""BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
     BRIGHT is the first text retrieval
     benchmark that requires intensive reasoning to retrieve relevant documents with
@@ -1082,7 +1080,7 @@ BRIGHT = Benchmark(
 
 BRIGHT_LONG = Benchmark(
     name="BRIGHT (long)",
-    tasks=MTEBTasks((get_task("BrightRetrieval", eval_splits=["long"]),)),
+    tasks=get_tasks(tasks=["BrightRetrieval"], eval_splits=["long"]),
     description="""BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
 BRIGHT is the first text retrieval
 benchmark that requires intensive reasoning to retrieve relevant documents with
