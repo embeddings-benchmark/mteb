@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from collections import defaultdict
+from collections import Counter, defaultdict
 from typing import Any
 
 import numpy as np
@@ -29,18 +29,19 @@ class ImageClassificationDescriptiveStatistics(DescriptiveStatistics):
     Attributes:
         num_samples: number of samples in the dataset.
 
-        min_sentence1_length: Minimum length of sentence1
-        average_sentence1_length: Average length of sentence1
-        max_sentence1_length: Maximum length of sentence1
-        unique_sentence1: Number of duplicates in sentence1
+        min_image_width: Minimum width of images
+        average_image_width: Average width of images
+        max_image_width: Maximum width of images
 
-        min_sentence2_length: Minimum length of sentence2
-        average_sentence2_length: Average length of sentence2
-        max_sentence2_length: Maximum length of sentence2
+        min_image_height: Minimum height of images
+        average_image_height: Average height of images
+        max_image_height: Maximum height of images
+
+        unique_labels: Number of unique labels
+        labels: dict of label frequencies
     """
 
     num_samples: int
-    unique_num_labels: int
 
     min_image_width: float
     average_image_width: float
@@ -49,6 +50,9 @@ class ImageClassificationDescriptiveStatistics(DescriptiveStatistics):
     min_image_height: float
     average_image_height: float
     max_image_height: float
+
+    unique_num_labels: int
+    labels: dict[str, dict[str, int]]
 
 
 class AbsTaskImageClassification(AbsTask):
@@ -118,6 +122,7 @@ class AbsTaskImageClassification(AbsTask):
 
         num_samples = len(labels)
         unique_num_labels = len(set(labels))
+        label_count = Counter(labels)
 
         img_widths, img_heights = [], []
         for img in imgs:
@@ -134,6 +139,9 @@ class AbsTaskImageClassification(AbsTask):
             min_image_height=min(img_heights),
             average_image_height=sum(img_heights) / len(img_heights),
             max_image_height=max(img_heights),
+            labels={
+                str(label): {"count": count} for label, count in label_count.items()
+            },
         )
 
     def evaluate(
