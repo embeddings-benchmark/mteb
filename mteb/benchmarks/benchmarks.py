@@ -1500,7 +1500,6 @@ MTEB_LOTTE = Benchmark(
         url = "https://aclanthology.org/2022.naacl-main.272/",
         doi = "10.18653/v1/2022.naacl-main.272",
         pages = "3715--3734",
-        abstract = "Neural information retrieval (IR) has greatly advanced search and other knowledge-intensive language tasks. While many neural IR methods encode queries and documents into single-vector representations, late interaction models produce multi-vector representations at the granularity of each token and decompose relevance modeling into scalable token-level computations. This decomposition has been shown to make late interaction more effective, but it inflates the space footprint of these models by an order of magnitude. In this work, we introduce ColBERTv2, a retriever that couples an aggressive residual compression mechanism with a denoised supervision strategy to simultaneously improve the quality and space footprint of late interaction. We evaluate ColBERTv2 across a wide range of benchmarks, establishing state-of-the-art quality within and outside the training domain while reducing the space footprint of late interaction models by 6{--}10x."
     }""",
     contacts=["agu18dec"],
 )
