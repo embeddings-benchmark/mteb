@@ -49,23 +49,6 @@ def split_on_capital(s: str) -> str:
     return " ".join(re.findall(r"[A-Z]?[a-z]+|[A-Z]+(?=[A-Z]|$)", s))
 
 
-def get_column_widths(df: pd.DataFrame) -> list[str]:
-    widths = []
-    for column_name in df.columns:
-        column_word_lengths = [len(word) for word in column_name.split()]
-        if is_numeric_dtype(df[column_name]):
-            value_lengths = [len(f"{value:.2f}") for value in df[column_name]]
-        else:
-            value_lengths = [len(str(value)) for value in df[column_name]]
-        try:
-            max_length = max(max(column_word_lengths), max(value_lengths))
-            n_pixels = 35 + (max_length * 12.5)
-            widths.append(f"{n_pixels}px")
-        except Exception:
-            widths.append("50px")
-    return widths
-
-
 def get_column_types(df: pd.DataFrame) -> list[str]:
     types = []
     for column_name in df.columns:
@@ -212,10 +195,6 @@ def scores_to_tables(
         }
     )
     joint_table.insert(0, "Rank (Borda)", joint_table.pop("borda_rank"))
-    column_widths = get_column_widths(joint_table)
-    task_column_widths = get_column_widths(per_task)
-    # overriding for model name
-    column_widths[1] = "250px"
     column_types = get_column_types(joint_table)
     # setting model name column to markdown
     column_types[1] = "markdown"
@@ -240,12 +219,9 @@ def scores_to_tables(
     return (
         gr.DataFrame(
             joint_table_style,
-            column_widths=column_widths,
             datatype=column_types,
             interactive=False,
-            wrap=True,
+            pinned_columns=2,
         ),
-        gr.DataFrame(
-            per_task_style, column_widths=task_column_widths, interactive=False
-        ),
+        gr.DataFrame(per_task_style, interactive=False, pinned_columns=1),
     )
