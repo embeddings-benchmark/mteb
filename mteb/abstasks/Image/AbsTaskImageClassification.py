@@ -16,10 +16,39 @@ from ...evaluation.evaluators import (
     ImagelogRegClassificationEvaluator,
 )
 from ..AbsTask import AbsTask, ScoresDict
+from ..TaskMetadata import DescriptiveStatistics
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 logger = logging.getLogger(__name__)
+
+
+class ImageClassificationDescriptiveStatistics(DescriptiveStatistics):
+    """Descriptive statistics for ImageClassification
+
+    Attributes:
+        num_samples: number of samples in the dataset.
+
+        min_sentence1_length: Minimum length of sentence1
+        average_sentence1_length: Average length of sentence1
+        max_sentence1_length: Maximum length of sentence1
+        unique_sentence1: Number of duplicates in sentence1
+
+        min_sentence2_length: Minimum length of sentence2
+        average_sentence2_length: Average length of sentence2
+        max_sentence2_length: Maximum length of sentence2
+    """
+
+    num_samples: int
+    unique_num_labels: int
+
+    min_image_width: float
+    average_image_width: float
+    max_image_width: float
+
+    min_image_height: float
+    average_image_height: float
+    max_image_height: float
 
 
 class AbsTaskImageClassification(AbsTask):
@@ -73,8 +102,39 @@ class AbsTaskImageClassification(AbsTask):
 
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
-    ):
-        pass
+    ) -> ImageClassificationDescriptiveStatistics:
+        if hf_subset:
+            imgs = self.dataset[hf_subset][split][self.image_column_name]
+            labels = self.dataset[hf_subset][split][self.label_column_name]
+        elif compute_overall:
+            imgs = []
+            labels = []
+            for hf_subset in self.metadata.eval_langs:
+                imgs.extend(self.dataset[hf_subset][split][self.image_column_name])
+                labels.extend(self.dataset[hf_subset][split][self.label_column_name])
+        else:
+            imgs = self.dataset[split][self.image_column_name]
+            labels = self.dataset[split][self.label_column_name]
+
+        num_samples = len(labels)
+        unique_num_labels = len(set(labels))
+
+        img_widths, img_heights = [], []
+        for img in imgs:
+            width, height = img.size
+            img_heights.append(height)
+            img_widths.append(width)
+
+        return ImageClassificationDescriptiveStatistics(
+            num_samples=num_samples,
+            unique_num_labels=unique_num_labels,
+            min_image_width=min(img_widths),
+            average_image_width=sum(img_widths) / len(img_widths),
+            max_image_width=max(img_widths),
+            min_image_height=min(img_heights),
+            average_image_height=sum(img_heights) / len(img_heights),
+            max_image_height=max(img_heights),
+        )
 
     def evaluate(
         self,
