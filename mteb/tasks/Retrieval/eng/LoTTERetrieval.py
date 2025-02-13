@@ -203,19 +203,33 @@ class LoTTERetrieval(MultilingualTask, AbsTaskRetrieval):
                 current_relevant_docs = relevant_docs_per_domain[domain][split]
                 # If corpus exists, replicate it for both search and forum if either queries exist.
                 if "search" in current_queries:
-                    final_corpus.setdefault(f"{domain}_search", {})[split] = current_corpus
+                    final_corpus.setdefault(f"{domain}_search", {})[split] = (
+                        current_corpus
+                    )
                 if "forum" in current_queries:
-                    final_corpus.setdefault(f"{domain}_forum", {})[split] = current_corpus
+                    final_corpus.setdefault(f"{domain}_forum", {})[split] = (
+                        current_corpus
+                    )
 
                 if "search" in current_queries:
-                    final_queries.setdefault(f"{domain}_search", {})[split] = current_queries["search"]
+                    final_queries.setdefault(f"{domain}_search", {})[split] = (
+                        current_queries["search"]
+                    )
                 if "forum" in current_queries:
-                    final_queries.setdefault(f"{domain}_forum", {})[split] = current_queries["forum"]
+                    final_queries.setdefault(f"{domain}_forum", {})[split] = (
+                        current_queries["forum"]
+                    )
 
                 if "search" in current_relevant_docs:
-                    final_relevant_docs.setdefault(f"{domain}_search", {})[split] = current_relevant_docs["search"]
-                if "forum" in current_relevant_docs:  # Ensure we're checking current_relevant_docs for "forum"
-                    final_relevant_docs.setdefault(f"{domain}_forum", {})[split] = current_relevant_docs["forum"]
+                    final_relevant_docs.setdefault(f"{domain}_search", {})[split] = (
+                        current_relevant_docs["search"]
+                    )
+                if (
+                    "forum" in current_relevant_docs
+                ):  # Ensure we're checking current_relevant_docs for "forum"
+                    final_relevant_docs.setdefault(f"{domain}_forum", {})[split] = (
+                        current_relevant_docs["forum"]
+                    )
 
         self.data_loaded = True
         self.corpus = final_corpus
