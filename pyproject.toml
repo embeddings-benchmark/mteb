@@ -161,5 +161,6 @@ addopts = """
             --only-rerun requests.exceptions.ReadTimeout 
             --only-rerun huggingface_hub.errors.HfHubHTTPError 
             --only-rerun huggingface_hub.errors.LocalEntryNotFoundError
+            --only-rerun FileNotFoundError
             --durations=5
         """
