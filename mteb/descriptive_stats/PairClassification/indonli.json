@@ -1,0 +1,24 @@
+{
+    "test_expert": {
+        "num_samples": 2040,
+        "number_of_characters": 595178,
+        "unique_pairs": 2040,
+        "min_sentence1_length": 32,
+        "avg_sentence1_length": 226.04166666666666,
+        "max_sentence1_length": 916,
+        "unique_sentence1": 514,
+        "min_sentence2_length": 15,
+        "avg_sentence2_length": 65.71225490196079,
+        "max_sentence2_length": 267,
+        "unique_sentence2": 2035,
+        "unique_labels": 2,
+        "labels": {
+            "0": {
+                "count": 999
+            },
+            "1": {
+                "count": 1041
+            }
+        }
+    }
+}

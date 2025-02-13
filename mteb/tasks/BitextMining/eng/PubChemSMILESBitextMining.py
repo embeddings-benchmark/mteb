@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 COL_MAPPING = {
@@ -19,7 +18,7 @@ EVAL_LANGS = {
 }
 
 
-class PubChemSMILESBitextMining(MultilingualTask, AbsTaskBitextMining):
+class PubChemSMILESBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="PubChemSMILESBitextMining",
         dataset={

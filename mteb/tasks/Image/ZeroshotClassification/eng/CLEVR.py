@@ -36,10 +36,6 @@ booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern R
 month = {July},
 year = {2017}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 15000},
-            "avg_character_length": {"test": 0},
-        },
     )
 
     image_column_name: str = "webp"
@@ -88,10 +84,6 @@ booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern R
 month = {July},
 year = {2017}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 15000},
-            "avg_character_length": {"test": 0},
-        },
     )
 
     image_column_name: str = "webp"

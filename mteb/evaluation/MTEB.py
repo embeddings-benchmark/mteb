@@ -4,30 +4,34 @@ import json
 import logging
 import os
 import traceback
-import warnings
-from collections.abc import Iterable, Sequence
-from copy import copy, deepcopy
+from collections.abc import Iterable
+from copy import deepcopy
 from datetime import datetime
 from itertools import chain
 from pathlib import Path
 from time import time
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import datasets
+from codecarbon import EmissionsTracker
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
+import mteb
 from mteb.abstasks.AbsTask import ScoresDict
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
-from mteb.models import model_meta_from_sentence_transformers
+from mteb.models import (
+    model_meta_from_cross_encoder,
+    model_meta_from_sentence_transformers,
+)
 
-from ..abstasks import *
-from ..abstasks import AbsTask
+from ..abstasks.AbsTask import AbsTask
 from ..load_results.task_results import TaskResult
 from ..models.sentence_transformer_wrapper import SentenceTransformerWrapper
-from ..tasks import *
-from . import LangMapping
+
+if TYPE_CHECKING:
+    from mteb.benchmarks import Benchmark
 
 logger = logging.getLogger(__name__)
 
@@ -38,123 +42,41 @@ class MTEB:
 
     def __init__(
         self,
-        tasks: Sequence[str | AbsTask] | None = None,
+        tasks: Iterable[AbsTask | Benchmark],
         *,
-        task_types: list[str] | None = None,
-        task_categories: list[str] | None = None,
-        task_langs: list[str] | None = None,
-        version=None,
         err_logs_path: str = "error_logs.txt",
-        **kwargs,
     ):
         """Create an Evaluation pipeline, based on the provided tasks.
 
         Args:
-            tasks: List of tasks to be evaluated.
-            task_types: Will be deprecated we recommend that you use `mteb.get_tasks()` to filter tasks. List of task types (Clustering, Retrieval..) to be
-                evaluated. If None, all tasks will be evaluated
-            task_categories: Will be deprecated we recommend that you use `mteb.get_tasks()` to filter tasks. List of task categories (s2s, p2p..) to be
-                evaluated. If None, all tasks will be evaluated
-            task_langs: Will be deprecated we recommend that you use `mteb.get_tasks()` to filter tasks. List of languages to be evaluated. if None, all
-                languages will be evaluated. ["eng-Latn", "deu_Latn"] will evaluate on all tasks with these languages.
-            version: Will be deprecated. Version of the benchmark to use. If None, latest is used
+            tasks: List of tasks or benchmarks to be evaluated, e.g. tasks returned by
+                `mteb.get_tasks(["task1","task2"]) or `mteb.get_benchmark("MTEB(eng, classic)").
             err_logs_path: Path to save error logs.
-            kwargs: Additional arguments to be passed to the tasks
         """
         from mteb.benchmarks import Benchmark
 
-        self.deprecation_warning(
-            task_types, task_categories, task_langs, tasks, version
-        )
-        if tasks is not None:
-            self._tasks = tasks
-            if isinstance(tasks[0], Benchmark):
-                self.benchmarks = tasks
-                self._tasks = self._tasks = list(chain.from_iterable(tasks))  # type: ignore
-            assert (
-                task_types is None and task_categories is None
-            ), "Cannot specify both `tasks` and `task_types`/`task_categories`"
-        else:
-            self._task_types = task_types
-            self._task_categories = task_categories
-            self._tasks = None
+        self.tasks = list(tasks)
+        if len(self.tasks) > 0 and isinstance(self.tasks[0], Benchmark):
+            self.benchmarks = tasks
+            self.tasks = list(chain.from_iterable(self.tasks))
 
-        self._task_langs = task_langs if task_langs is not None else []
-        if isinstance(self._task_langs, str):
-            self._task_langs = [self._task_langs]
-
-        self._extend_lang_code()
-        self._extend_lang_pairs()  # add all possible pairs
-
-        self._version = version
         self.err_logs_path = err_logs_path
-
         self.last_evaluated_splits = {}
-
-        self.select_tasks(**kwargs)
-
-    def deprecation_warning(
-        self, task_types, task_categories, task_langs, tasks, version
-    ):
-        if task_types is not None:
-            warnings.warn(
-                "The `task_types` argument is deprecated and will be removed in the 2.0 release. "
-                + "Please use `tasks = mteb.get_tasks(... task_types = [...])` to filter tasks instead."
-            )
-        if task_categories is not None:
-            warnings.warn(
-                "The `task_categories` argument is deprecated and will be removed in the 2.0 release. "
-                + "Please use `tasks = mteb.get_tasks(... categories = [...])` to filter tasks instead."
-            )
-        if task_langs is not None:
-            warnings.warn(
-                "The `task_langs` argument is deprecated and will be removed in the 2.0 release. "
-                + "Please use `tasks = mteb.get_tasks(... languages = [...])` to filter tasks instead. "
-                + "Note that this uses 3 letter language codes (ISO 639-3)."
-            )
-        if version is not None:
-            warnings.warn(
-                "The `version` argument is deprecated and will be removed in the 2.0 release."
-            )
-        task_contains_strings = any(isinstance(x, str) for x in tasks or [])
-        if task_contains_strings:
-            warnings.warn(
-                "Passing task names as strings is deprecated and will be removed in 2.0 release. "
-                + "Please use `tasks = mteb.get_tasks(tasks=[...])` method to get tasks instead."
-            )
 
     @property
     def available_tasks(self):
-        return [x.metadata_dict["name"] for x in self.tasks_cls]
+        return [x.metadata.name for x in self.tasks]
 
     @property
     def available_task_types(self):
         # sort the task types
-        return sorted({x.metadata_dict["type"] for x in self.tasks_cls})
+        return sorted({x.metadata.type for x in self.tasks})
 
     @property
     def available_task_categories(self):
-        return {x.metadata_dict["category"] for x in self.tasks_cls}
+        return {x.metadata.category for x in self.tasks}
 
-    def _extend_lang_code(self):
-        # add all possible language codes
-        for lang in set(self._task_langs):
-            if lang in LangMapping.LANG_MAPPING:
-                self._task_langs += LangMapping.LANG_MAPPING[lang]
-
-    def _extend_lang_pairs(self):
-        # add all possible language pairs
-        langs = set(self._task_langs)
-        for x in langs:
-            if "-" not in x:
-                for y in langs:
-                    if "-" not in y:
-                        pair = f"{x}-{y}"
-                        if pair not in langs:
-                            self._task_langs.append(pair)
-        return
-
-    def _display_tasks(self, task_list, name=None):
+    def _display_tasks(self, task_list: Iterable[AbsTask], name: str | None = None):
         from rich.console import Console
 
         # disable logging for other ranks
@@ -180,7 +102,7 @@ class MTEB:
                     category = f", [italic grey39]{task.metadata.category}[/]"
                     multilingual = (
                         f", [italic red]multilingual {len(task.hf_subsets)} / {len(task.metadata.eval_langs)} Subsets[/]"
-                        if task.is_multilingual
+                        if task.metadata.is_multilingual
                         else ""
                     )
                     console.print(f"{prefix}{name}{category}{multilingual}")
@@ -218,79 +140,19 @@ class MTEB:
     @classmethod
     def mteb_tasks(cls):
         """Get all tasks available in the MTEB."""
-        instance = cls()
-        instance._display_tasks(instance.tasks_cls, name="MTEB tasks")
+        tasks = mteb.get_tasks()
+        instance = cls(tasks)
+        instance._display_tasks(tasks, name="MTEB tasks")
 
     def print_selected_tasks(self):
         """Print the selected tasks."""
         self._display_tasks(self.tasks, name="Selected tasks")
 
-    def select_tasks(self, **kwargs):
-        """Select the tasks to be evaluated."""
-        # Get all existing tasks
-        tasks_categories_cls = list(AbsTask.__subclasses__())
-        self.tasks_cls = [
-            cls(hf_subsets=self._task_langs, **kwargs)
-            for cat_cls in tasks_categories_cls
-            for cls in cat_cls.__subclasses__()
-            if cat_cls.__name__.startswith("AbsTask")
-        ]
-
-        # If `task_list` is specified, select list of tasks
-        if self._tasks is not None:
-            self.tasks = list(
-                filter(
-                    lambda x: (x.metadata_dict["name"] in self._tasks), self.tasks_cls
-                )
-            )
-            if len(self.tasks) != len(self._tasks):
-                tasks_known = {x.metadata_dict["name"] for x in self.tasks_cls}
-                tasks_unknown = {
-                    x for x in self._tasks if isinstance(x, str)
-                } - tasks_known
-                if tasks_unknown:
-                    unknown_str, known_str = (
-                        ",".join(sorted(tasks_unknown)),
-                        ",".join(sorted(tasks_known)),
-                    )
-                    logger.warning(
-                        f"WARNING: Unknown tasks: {unknown_str}. Known tasks: {known_str}."
-                    )
-            # add task if subclass of mteb.tasks
-            self.tasks.extend([x for x in self._tasks if isinstance(x, (AbsTask))])
-            return
-
-        # Otherwise use filters to select tasks
-        filtered_tasks = filter(
-            lambda x: (self._task_types is None)
-            or (x.metadata_dict["type"] in self._task_types),
-            self.tasks_cls,
-        )
-        filtered_tasks = filter(
-            lambda x: (self._task_categories is None)
-            or (x.metadata_dict["category"] in self._task_categories),
-            filtered_tasks,
-        )
-        filtered_tasks = filter(
-            lambda x: (self._version is None)
-            or (x.metadata_dict["version"] >= self._version),
-            filtered_tasks,
-        )
-        # keep only tasks with at least one language in the filter
-        filtered_tasks = filter(
-            lambda x: (not (self._task_langs))
-            or (len(set(x.metadata_dict["eval_langs"]) & set(self._task_langs)) > 0),
-            filtered_tasks,
-        )
-
-        # Get final list of tasks
-        self.tasks = list(filtered_tasks)
-
     def load_tasks_data(self):
         """Load datasets for the selected tasks."""
         logger.info(f"\n\n## Loading datasets for {len(self.tasks)} tasks")
         for task in self.tasks:
-            logger.info(f"\n# Loading dataset for {task.metadata_dict['name']}")
+            logger.info(f"\n# Loading dataset for {task.metadata.name}")
             task.load_data()
 
     @staticmethod
@@ -298,7 +160,6 @@ class MTEB:
         task: AbsTask,
         model: Encoder,
         split: str,
-        output_folder: str | None,
         subsets_to_run: list[str] | None = None,
         *,
         encode_kwargs: dict[str, Any],
@@ -309,7 +170,6 @@ class MTEB:
             model,
             split,
             subsets_to_run=subsets_to_run,
-            output_folder=output_folder,
             encode_kwargs=encode_kwargs,
             **kwargs,
         )
@@ -389,7 +249,7 @@ class MTEB:
         eval_subsets: list[str] | None = None,
         overwrite_results: bool = False,
         raise_error: bool = True,
-        co2_tracker: bool = False,
+        co2_tracker: bool = True,
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ) -> list[TaskResult]:
@@ -415,13 +275,6 @@ class MTEB:
         Returns:
             A list of TaskResult objects, one for each task evaluated.
         """
-        if "batch_size" in kwargs:
-            logger.warning(
-                "The `batch_size` argument is deprecated and will be removed in the next release. "
-                + "Please use `encode_kwargs = {'batch_size': ...}` to set the batch size instead."
-            )
-            encode_kwargs["batch_size"] = kwargs["batch_size"]
-
         # update logging to account for different levels of Verbosity (similar to the command line)
 
         if verbosity == 0:
@@ -454,8 +307,8 @@ class MTEB:
             self.print_selected_tasks()
 
         evaluation_results = []
-        original_tasks = (
-            self.tasks.copy()
+        original_tasks = deepcopy(
+            self.tasks
         )  # save them in case we re-use the object (e.g. for reranking)
 
         # To evaluate missing splits, we keep track of the task name and the corresponding splits.
@@ -500,11 +353,7 @@ class MTEB:
             task_eval_splits = (
                 eval_splits if eval_splits is not None else task.eval_splits
             )
-            task_subsets = (
-                task.hf_subsets
-                if task.hf_subsets
-                else list(task.metadata.hf_subsets_to_langscripts.keys())
-            )
+            task_subsets = task.hf_subsets
 
             existing_results = None
             save_path = None
@@ -517,7 +366,8 @@ class MTEB:
             )
 
             if output_path:
-                save_path = output_path / f"{task.metadata.name}{task.save_suffix}.json"
+                kwargs["output_folder"] = output_folder  # needed for retrieval tasks
+                save_path = output_path / f"{task.metadata.name}.json"
                 if save_path.exists():
                     existing_results = TaskResult.from_disk(save_path)
 
@@ -588,20 +438,19 @@ class MTEB:
                         subsets_to_run = ["default"]
 
                     if co2_tracker:
-                        try:
-                            from codecarbon import EmissionsTracker
-                        except ImportError:
-                            raise ImportError(
-                                "To use the CO2 emissions tracker, please install codecarbon using 'pip install codecarbon'"
-                            )
+                        logger.warning(
+                            "Evaluating multiple MTEB runs simultaniously will produce incorrect CO₂ results"
+                        )
                         with EmissionsTracker(
-                            save_to_file=False, save_to_api=False, logging_logger=logger
+                            save_to_file=False,
+                            save_to_api=False,
+                            logging_logger=logger,
+                            allow_multiple_runs=True,
                         ) as tracker:
                             results, tick, tock = self._run_eval(
                                 task,
                                 model,
                                 split,
-                                output_folder,
                                 encode_kwargs=encode_kwargs,
                                 subsets_to_run=subsets_to_run,
                                 **kwargs,
@@ -615,14 +464,13 @@ class MTEB:
                             task,
                             model,
                             split,
-                            output_folder,
                             subsets_to_run=subsets_to_run,
                             encode_kwargs=encode_kwargs,
                             **kwargs,
                         )
 
                     logger.info(
-                        f"Evaluation for {task.metadata_dict['name']} on {split} took {tock - tick:.2f} seconds"
+                        f"Evaluation for {task.metadata.name} on {split} took {tock - tick:.2f} seconds"
                     )
                     evaluation_time += tock - tick
 
@@ -654,16 +502,14 @@ class MTEB:
                 evaluation_results.append(merged_results)
 
             except Exception as e:
-                logger.error(
-                    f"Error while evaluating {task.metadata_dict['name']}: {e}"
-                )
+                logger.error(f"Error while evaluating {task.metadata.name}: {e}")
                 if raise_error:
                     raise e
                 logger.error(
                     f"Please check all the error logs at: {self.err_logs_path}"
                 )
                 with open(self.err_logs_path, "a") as f_out:
-                    f_out.write(f"{datetime.now()} >>> {task.metadata_dict['name']}\n")
+                    f_out.write(f"{datetime.now()} >>> {task.metadata.name}\n")
                     f_out.write(traceback.format_exc())
                     f_out.write("\n\n")
 
@@ -679,7 +525,7 @@ class MTEB:
             meta = model.mteb_model_meta  # type: ignore
         else:
             try:
-                meta = model_meta_from_sentence_transformers(model)  # type: ignore
+                meta = MTEB._get_model_meta(model)
             except AttributeError:
                 logger.warning(
                     "Could not find model metadata. Please set the model.mteb_model_meta attribute or if you are using "
@@ -694,7 +540,7 @@ class MTEB:
                 )
 
         # create a copy of the meta to avoid modifying the original object
-        meta = copy(meta)
+        meta = deepcopy(meta)
         meta.revision = meta.revision or "no_revision_available"
         meta.name = meta.name or "no_model_name_available"
 
@@ -781,3 +627,11 @@ class MTEB:
                     missing_evaluations[split]["missing_subsets"] = missing_subsets
 
         return missing_evaluations
+
+    @staticmethod
+    def _get_model_meta(model: Encoder) -> ModelMeta:
+        if isinstance(model, CrossEncoder):
+            meta = model_meta_from_cross_encoder(model)
+        else:
+            meta = model_meta_from_sentence_transformers(model)
+        return meta

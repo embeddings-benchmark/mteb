@@ -26,7 +26,7 @@
 </h4>
 
 <h3 align="center">
-    <a href="https://huggingface.co/spaces/mteb/leaderboard"><img style="float: middle; padding: 10px 10px 10px 10px;" width="60" height="55" src="./docs/images/hf_logo.png" /></a>
+    <a href="https://huggingface.co/spaces/mteb/leaderboard"><img style="float: middle; padding: 10px 10px 10px 10px;" width="60" height="55" src="./docs/images/logos/hf_logo.png" /></a>
 </h3>
 
 
@@ -79,6 +79,7 @@ In prompts the key can be:
    8. `STS`
    9. `Summarization`
    10. `InstructionRetrieval`
+   11. `InstructionReranking`
 3. Pair of task type and prompt type like `Retrival-query` - these prompts will be used in all classification tasks
 4. Task name - these prompts will be used in the specific task
 5. Pair of task name and prompt type like `NFCorpus-query` - these prompts will be used in the specific task
@@ -515,17 +516,25 @@ evaluation.run(model, ...)
 
 ## Citing
 
-MTEB was introduced in "[MTEB: Massive Text Embedding Benchmark](https://arxiv.org/abs/2210.07316)", feel free to cite:
+MTEB was introduced in "[MTEB: Massive Text Embedding Benchmark](https://aclanthology.org/2023.eacl-main.148/)", feel free to cite:
 
 ```bibtex
-@article{muennighoff2022mteb,
-  doi = {10.48550/ARXIV.2210.07316},
-  url = {https://arxiv.org/abs/2210.07316},
-  author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Lo{\"\i}c and Reimers, Nils},
-  title = {MTEB: Massive Text Embedding Benchmark},
-  publisher = {arXiv},
-  journal={arXiv preprint arXiv:2210.07316},  
-  year = {2022}
+@inproceedings{muennighoff-etal-2023-mteb,
+    title = "{MTEB}: Massive Text Embedding Benchmark",
+    author = "Muennighoff, Niklas  and
+      Tazi, Nouamane  and
+      Magne, Loic  and
+      Reimers, Nils",
+    editor = "Vlachos, Andreas  and
+      Augenstein, Isabelle",
+    booktitle = "Proceedings of the 17th Conference of the European Chapter of the Association for Computational Linguistics",
+    month = may,
+    year = "2023",
+    address = "Dubrovnik, Croatia",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2023.eacl-main.148",
+    doi = "10.18653/v1/2023.eacl-main.148",
+    pages = "2014--2037",
 }
 ```
 

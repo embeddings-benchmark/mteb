@@ -19,7 +19,7 @@ class StackOverflowDupQuestions(AbsTaskReranking):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2014-01-21", "2018-01-01"),
         domains=["Written", "Blog", "Programming"],
         task_subtypes=["Question answering"],

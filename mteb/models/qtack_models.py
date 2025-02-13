@@ -37,6 +37,7 @@ mini_gte = ModelMeta(
     revision="7fbe6f9b4cc42615e0747299f837ad7769025492",
     release_date="2025-01-28",
     n_parameters=66.3 * 1e6,
+    memory_usage_mb=253,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,

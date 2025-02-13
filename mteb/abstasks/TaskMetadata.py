@@ -11,6 +11,7 @@ from pydantic import (
     AnyUrl,
     BaseModel,
     BeforeValidator,
+    ConfigDict,
     TypeAdapter,
     field_validator,
 )
@@ -84,8 +85,6 @@ TASK_DOMAIN = Literal[
     "Programming",
     "Chemistry",
     "Financial",
-    "Chemistry",
-    "Financial",
 ]
 
 SAMPLE_CREATION_METHOD = Literal[
@@ -100,6 +99,7 @@ SAMPLE_CREATION_METHOD = Literal[
     "rendered",
     "multiple",
 ]
+
 TASK_TYPE = Literal[
     "BitextMining",
     "Classification",
@@ -111,6 +111,7 @@ TASK_TYPE = Literal[
     "STS",
     "Summarization",
     "InstructionRetrieval",
+    "InstructionReranking",
     "Speed",
     "Any2AnyMultiChoice",
     "Any2AnyRetrieval",
@@ -122,7 +123,6 @@ TASK_TYPE = Literal[
     "VisualSTS",
     "ZeroShotClassification",
 ]
-
 
 TASK_CATEGORY = Literal[
     "s2s",  # Sentence-to-sentence
@@ -202,6 +202,7 @@ LICENSES = (  # this list can be extended as needed
         "cc0-1.0",
         "bsd-3-clause",
         "gpl-3.0",
+        "lgpl-3.0",
         "cdla-sharing-1.0",
         "mpl-2.0",
         "msr-la-nc",
@@ -237,11 +238,29 @@ METRIC_VALUE = Union[int, float, dict[str, Any]]
 logger = logging.getLogger(__name__)
 
 
+class MetadataDatasetDict(TypedDict, total=False):
+    """A dictionary containing the dataset path and revision.
+
+    Args:
+        path: The path to the dataset.
+        revision: The revision of the dataset.
+        name: The name the dataset config.
+        split: The split of the dataset.
+        trust_remote_code: Whether to trust the remote code.
+    """
+
+    path: str
+    revision: str
+    name: str
+    split: str
+    trust_remote_code: bool
+
+
 class TaskMetadata(BaseModel):
     """Metadata for a task.
 
     Args:
-        dataset: All arguments to pass to datasets.load_dataset to load the dataset for the task. Refer to https://huggingface.co/docs/datasets/v2.18.0/en/package_reference/loading_methods#datasets.load_dataset
+        dataset: All arguments to pass to [datasets.load_dataset](https://huggingface.co/docs/datasets/v2.18.0/en/package_reference/loading_methods#datasets.load_dataset) to load the dataset for the task.
         name: The name of the task.
         description: A description of the task.
         type: The type of the task. These includes "Classification", "Summarization", "STS", "Retrieval", "Reranking", "Clustering",
@@ -266,12 +285,12 @@ class TaskMetadata(BaseModel):
         sample_creation: The method of text creation. Includes "found", "created", "machine-translated", "machine-translated and verified", and
             "machine-translated and localized".
         prompt: The prompt used for the task. Can be a string or a dictionary containing the query and passage prompts.
-        prompt: The prompt used for the task. Can be a string or a dictionary containing the query and passage prompts.
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
     """
 
-    dataset: dict[str, Any]
-    dataset: dict[str, Any]
+    model_config = ConfigDict(extra="forbid")
+
+    dataset: MetadataDatasetDict
 
     name: str
     description: str
@@ -475,6 +494,16 @@ class TaskMetadata(BaseModel):
                 continue
             n_samples[subset] = subset_value["num_samples"]  # type: ignore
         return n_samples
+
+    @property
+    def hf_subsets(self) -> list[str]:
+        """Return the huggingface subsets."""
+        return list(self.hf_subsets_to_langscripts.keys())
+
+    @property
+    def is_multilingual(self) -> bool:
+        """Check if the task is multilingual."""
+        return isinstance(self.eval_langs, dict)
 
     def __hash__(self) -> int:
         return hash(self.model_dump_json())

@@ -4,7 +4,7 @@ import logging
 from functools import partial
 
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
 
 logger = logging.getLogger(__name__)
@@ -89,11 +89,12 @@ NV_embed_v2 = ModelMeta(
     revision="7604d305b621f14095a1aa23d351674c2859553a",
     release_date="2024-09-09",  # initial commit of hf model.
     n_parameters=7_850_000_000,
+    memory_usage_mb=14975,
     embed_dim=4096,
     license="cc-by-nc-4.0",
     max_tokens=32768,
     reference="https://huggingface.co/nvidia/NV-Embed-v2",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     training_datasets=nvidia_training_datasets,
@@ -119,11 +120,12 @@ NV_embed_v1 = ModelMeta(
     revision="570834afd5fef5bf3a3c2311a2b6e0a66f6f4f2c",
     release_date="2024-09-13",  # initial commit of hf model.
     n_parameters=7_850_000_000,
+    memory_usage_mb=29945,
     embed_dim=4096,
     license="cc-by-nc-4.0",
     max_tokens=32768,
     reference="https://huggingface.co/nvidia/NV-Embed-v1",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     training_datasets=nvidia_training_datasets,

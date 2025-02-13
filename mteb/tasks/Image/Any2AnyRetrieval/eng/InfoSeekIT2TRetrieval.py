@@ -37,16 +37,4 @@ class InfoSeekIT2TRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={
             "query": "Find a paragraph from Wikipedia that answers my question about this image."
         },
-        descriptive_stats={
-            "n_samples": {"test": 11323},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 0.0,
-                    "num_documents": 611651,
-                    "num_queries": 11323,
-                    "average_relevant_docs_per_query": 6.5,
-                }
-            },
-        },
     )

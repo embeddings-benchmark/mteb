@@ -7,10 +7,9 @@ from typing import Any
 import numpy as np
 import tqdm
 
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.wrapper import Wrapper
 from mteb.requires_package import requires_package
-
-from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
@@ -130,9 +129,10 @@ text_embedding_3_small = ModelMeta(
     embed_dim=1536,
     open_weights=False,
     n_parameters=None,
+    memory_usage_mb=None,
     license=None,
     reference="https://openai.com/index/new-embedding-models-and-api-updates/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=False,
     public_training_code=None,
@@ -157,6 +157,7 @@ text_embedding_3_large = ModelMeta(
     framework=["API"],
     use_instructions=False,
     n_parameters=None,
+    memory_usage_mb=None,
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,
@@ -181,6 +182,7 @@ text_embedding_ada_002 = ModelMeta(
     framework=["API"],
     use_instructions=False,
     n_parameters=None,
+    memory_usage_mb=None,
     public_training_code=None,
     public_training_data=None,  # assumed
     training_datasets=None,

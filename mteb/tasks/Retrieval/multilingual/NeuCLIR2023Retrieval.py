@@ -5,7 +5,6 @@ from collections import defaultdict
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import *
@@ -56,7 +55,7 @@ def load_neuclir_data(
     return corpus, queries, relevant_docs
 
 
-class NeuCLIR2023Retrieval(MultilingualTask, AbsTaskRetrieval):
+class NeuCLIR2023Retrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NeuCLIR2023Retrieval",
         description="The task involves identifying and retrieving the documents that are relevant to the queries.",
@@ -94,11 +93,11 @@ class NeuCLIR2023Retrieval(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = load_neuclir_data(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
-            eval_splits=self.metadata_dict["eval_splits"],
+            eval_splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
         self.data_loaded = True
 
@@ -171,7 +170,7 @@ def load_neuclir_data_hard_negatives(
     return corpus, queries, relevant_docs
 
 
-class NeuCLIR2023RetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
+class NeuCLIR2023RetrievalHardNegatives(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NeuCLIR2023RetrievalHardNegatives",
         description="The task involves identifying and retrieving the documents that are relevant to the queries. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
@@ -210,11 +209,11 @@ class NeuCLIR2023RetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
 
         self.corpus, self.queries, self.relevant_docs = (
             load_neuclir_data_hard_negatives(
-                path=self.metadata_dict["dataset"]["path"],
+                path=self.metadata.dataset["path"],
                 langs=self.metadata.eval_langs,
-                eval_splits=self.metadata_dict["eval_splits"],
+                eval_splits=self.metadata.eval_splits,
                 cache_dir=kwargs.get("cache_dir", None),
-                revision=self.metadata_dict["dataset"]["revision"],
+                revision=self.metadata.dataset["revision"],
             )
         )
         self.data_loaded = True

@@ -11,10 +11,9 @@ from sentence_transformers import SentenceTransformer
 
 import mteb
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
-
-from .nvidia_models import nvidia_training_datasets
-from .wrapper import Wrapper
+from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.nvidia_models import nvidia_training_datasets
+from mteb.models.wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
@@ -81,11 +80,12 @@ jasper_en_v1 = ModelMeta(
     revision="d6330ce98f8a0d741e781df845904c9484f00efa",
     release_date="2024-12-11",  # first commit
     n_parameters=1_999_000_000,
+    memory_usage_mb=3802,
     max_tokens=131072,
     embed_dim=8960,
     license="apache-2.0",
     reference="https://huggingface.co/infgrad/jasper_en_vision_language_v1/tree/main",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from=None,

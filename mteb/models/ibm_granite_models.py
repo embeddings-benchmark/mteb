@@ -2,7 +2,11 @@ from __future__ import annotations
 
 from functools import partial
 
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import (
+    ModelMeta,
+    ScoringFunction,
+    sentence_transformers_loader,
+)
 
 GRANITE_LANGUAGES = [
     "ara_Latn",
@@ -96,11 +100,12 @@ granite_107m_multilingual = ModelMeta(
     revision="47db56afe692f731540413c67dd818ff492277e7",
     release_date="2024-12-18",
     n_parameters=107_000_000,
+    memory_usage_mb=204,
     embed_dim=384,
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/ibm-granite/granite-embedding-107m-multilingual",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     adapted_from=None,
     superseded_by=None,
@@ -122,11 +127,12 @@ granite_278m_multilingual = ModelMeta(
     revision="84e3546b88b0cb69f8078608a1df558020bcbf1f",
     release_date="2024-12-18",
     n_parameters=278_000_000,
+    memory_usage_mb=530,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/ibm-granite/granite-embedding-278m-multilingual",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     adapted_from=None,
     superseded_by=None,
@@ -148,11 +154,12 @@ granite_30m_english = ModelMeta(
     revision="eddbb57470f896b5f8e2bfcb823d8f0e2d2024a5",
     release_date="2024-12-18",
     n_parameters=30_000_000,
+    memory_usage_mb=58,
     embed_dim=384,
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/ibm-granite/granite-embedding-30m-english",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     adapted_from=None,
     superseded_by=None,
@@ -174,11 +181,12 @@ granite_125m_english = ModelMeta(
     revision="e48d3a5b47eaa18e3fe07d4676e187fd80f32730",
     release_date="2024-12-18",
     n_parameters=125_000_000,
+    memory_usage_mb=238,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/ibm-granite/granite-embedding-125m-english",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     adapted_from=None,
     superseded_by=None,

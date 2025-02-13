@@ -36,16 +36,4 @@ class WebQAT2TRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={
             "query": "Retrieve passages from Wikipedia that provide answers to the following question."
         },
-        descriptive_stats={
-            "n_samples": {"test": 2455},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 0.0,
-                    "num_documents": 544457,
-                    "num_queries": 2455,
-                    "average_relevant_docs_per_query": 2.0,
-                }
-            },
-        },
     )

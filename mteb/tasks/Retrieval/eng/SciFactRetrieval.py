@@ -10,7 +10,7 @@ class SciFact(AbsTaskRetrieval):
         name="SciFact",
         dataset={
             "path": "mteb/scifact",
-            "revision": "0228b52cf27578f30900b9e5271d331663a030d7",
+            "revision": "d56462d0e63a25450459c4f213e49ffdb866f7f9",
         },
         description="SciFact verifies scientific claims using evidence from the research literature containing scientific paper abstracts.",
         reference="https://github.com/allenai/scifact",

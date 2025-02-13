@@ -3,10 +3,8 @@ from __future__ import annotations
 import logging
 from functools import partial
 
-from mteb.evaluation.evaluators.RetrievalEvaluator import DRESModel
 from mteb.model_meta import ModelMeta
-
-from .wrapper import Wrapper
+from mteb.models.wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +18,7 @@ def bm25_loader(**kwargs):
             "bm25s or PyStemmer is not installed. Please install it with `pip install mteb[bm25s]`."
         )
 
-    class BM25Search(DRESModel, Wrapper):
+    class BM25Search(Wrapper):
         """BM25 search"""
 
         def __init__(
@@ -30,13 +28,7 @@ def bm25_loader(**kwargs):
             stemmer_language: str | None = "english",
             **kwargs,
         ):
-            super().__init__(
-                model=None,
-                batch_size=1,
-                corpus_chunk_size=1,
-                previous_results=previous_results,
-                **kwargs,
-            )
+            self.model = None
 
             self.stopwords = stopwords
             self.stemmer = (
@@ -52,8 +44,6 @@ def bm25_loader(**kwargs):
             corpus: dict[str, dict[str, str]],
             queries: dict[str, str | list[str]],
             top_k: int,
-            score_function: str,
-            return_sorted: bool = False,
             **kwargs,
         ) -> dict[str, dict[str, float]]:
             logger.info("Encoding Corpus...")
@@ -131,6 +121,7 @@ bm25_s = ModelMeta(
     revision="0_1_10",
     release_date="2024-07-10",  ## release of version 0.1.10
     n_parameters=None,
+    memory_usage_mb=None,
     embed_dim=None,
     license=None,
     max_tokens=None,

@@ -13,9 +13,8 @@ class ArguAnaPL(AbsTaskRetrieval):
         description="ArguAna-PL",
         reference="https://huggingface.co/datasets/clarin-knext/arguana-pl",
         dataset={
-            "path": "clarin-knext/arguana-pl",
-            "revision": "63fc86750af76253e8c760fc9e534bbf24d260a2",
-            "trust_remote_code": True,
+            "path": "mteb/ArguAna-PL",
+            "revision": "0019de73979daf75f6526a0fc5ef77ebce27b8f9",
         },
         type="Retrieval",
         category="s2p",

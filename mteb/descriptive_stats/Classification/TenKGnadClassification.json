@@ -1,0 +1,80 @@
+{
+    "test": {
+        "num_samples": 1028,
+        "number_of_characters": 2700877,
+        "number_texts_intersect_with_train": 1,
+        "min_text_length": 67,
+        "average_text_length": 2627.3122568093386,
+        "max_text_length": 32600,
+        "unique_text": 1028,
+        "unique_labels": 9,
+        "labels": {
+            "3": {
+                "count": 141
+            },
+            "4": {
+                "count": 120
+            },
+            "0": {
+                "count": 168
+            },
+            "2": {
+                "count": 151
+            },
+            "1": {
+                "count": 168
+            },
+            "7": {
+                "count": 57
+            },
+            "5": {
+                "count": 102
+            },
+            "8": {
+                "count": 54
+            },
+            "6": {
+                "count": 67
+            }
+        }
+    },
+    "train": {
+        "num_samples": 9245,
+        "number_of_characters": 23923005,
+        "number_texts_intersect_with_train": null,
+        "min_text_length": 25,
+        "average_text_length": 2587.6695511087073,
+        "max_text_length": 22120,
+        "unique_text": 9244,
+        "unique_labels": 9,
+        "labels": {
+            "4": {
+                "count": 1081
+            },
+            "8": {
+                "count": 485
+            },
+            "0": {
+                "count": 1509
+            },
+            "3": {
+                "count": 1270
+            },
+            "5": {
+                "count": 913
+            },
+            "6": {
+                "count": 601
+            },
+            "2": {
+                "count": 1360
+            },
+            "1": {
+                "count": 1510
+            },
+            "7": {
+                "count": 516
+            }
+        }
+    }
+}

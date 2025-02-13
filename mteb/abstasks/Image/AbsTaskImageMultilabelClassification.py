@@ -51,7 +51,7 @@ class AbsTaskImageMultilabelClassification(AbsTask):
     """Abstract class for image multioutput classification tasks
     The similarity is computed between pairs and the results are ranked.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns:
         image: list[PIL.Image]
         labels: list[Hashable]
     """
@@ -104,7 +104,7 @@ class AbsTaskImageMultilabelClassification(AbsTask):
             self.load_data()
 
         scores = {}
-        hf_subsets = list(self.dataset) if self.is_multilingual else ["default"]
+        hf_subsets = self.hf_subsets
 
         for hf_subset in hf_subsets:
             logger.info(

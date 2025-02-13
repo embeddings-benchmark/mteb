@@ -36,16 +36,4 @@ class MSCOCOT2IRetrieval(AbsTaskAny2AnyRetrieval):
         organization={Springer}
         }""",
         prompt={"query": "Identify the image showcasing the described everyday scene."},
-        descriptive_stats={
-            "n_samples": {"test": 24809},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 0.0,
-                    "num_documents": 5000,
-                    "num_queries": 24809,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )

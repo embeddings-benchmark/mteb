@@ -3,13 +3,12 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGS = ["python", "javascript", "go", "ruby", "java", "php"]
 
 
-class CodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
+class CodeSearchNetRetrieval(AbsTaskRetrieval):
     _EVAL_SPLIT = "test"
     metadata = TaskMetadata(
         name="CodeSearchNetRetrieval",
@@ -43,7 +42,7 @@ class CodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
             split=self._EVAL_SPLIT,
             trust_remote_code=True,
             streaming=True,
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
         data = data.shuffle(seed=42)
 

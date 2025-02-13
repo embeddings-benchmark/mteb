@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskReranking import AbsTaskReranking
@@ -29,7 +27,7 @@ class WebLINXCandidatesReranking(AbsTaskReranking):
             "test_web",
         ],
         eval_langs=["eng-Latn"],
-        main_score="mrr",
+        main_score="mrr_at_10",
         date=("2023-03-01", "2023-10-30"),
         domains=["Academic", "Web", "Written"],
         task_subtypes=["Code retrieval", "Conversational retrieval"],
@@ -48,22 +46,3 @@ class WebLINXCandidatesReranking(AbsTaskReranking):
 }
         """,
     )
-
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self._datasets = {}
-
-        for split in self.metadata.eval_splits:
-            self._datasets[split] = datasets.load_dataset(
-                split=split, **self.metadata_dict["dataset"]
-            )
-
-        self.dataset = datasets.DatasetDict(
-            {split: self._datasets[split] for split in self.metadata.eval_splits}
-        )
-
-        self.dataset_transform()
-
-        self.data_loaded = True

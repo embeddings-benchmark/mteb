@@ -3,11 +3,10 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class DiaBLaBitextMining(AbsTaskBitextMining, MultilingualTask):
+class DiaBLaBitextMining(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="DiaBlaBitextMining",
         dataset={
@@ -52,7 +51,7 @@ class DiaBLaBitextMining(AbsTaskBitextMining, MultilingualTask):
         self.dataset = {}
 
         for lang in self.hf_subsets:
-            self.dataset[lang] = datasets.load_dataset(**self.metadata_dict["dataset"])
+            self.dataset[lang] = datasets.load_dataset(**self.metadata.dataset)
 
         self.dataset_transform()
         self.data_loaded = True

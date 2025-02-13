@@ -2,13 +2,12 @@ from __future__ import annotations
 
 from datasets import load_dataset
 
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 
-class XStance(MultilingualTask, AbsTaskPairClassification):
+class XStance(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="XStance",
         dataset={
@@ -56,9 +55,13 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
 
         max_n_samples = 2048
         self.dataset = {}
-        path = self.metadata_dict["dataset"]["path"]
-        revision = self.metadata_dict["dataset"]["revision"]
-        raw_dataset = load_dataset(path, revision=revision, trust_remote_code=True)
+        path = self.metadata.dataset["path"]
+        revision = self.metadata.dataset["revision"]
+        raw_dataset = load_dataset(
+            path,
+            revision=revision,
+            trust_remote_code=self.metadata.dataset["trust_remote_code"],
+        )
 
         def convert_example(example):
             return {
@@ -69,7 +72,7 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
 
         for lang in self.metadata.eval_langs:
             self.dataset[lang] = {}
-            for split in self.metadata_dict["eval_splits"]:
+            for split in self.metadata.eval_splits:
                 # filter by language
                 self.dataset[lang][split] = raw_dataset[split].filter(
                     lambda row: row["language"] == lang
@@ -83,9 +86,13 @@ class XStance(MultilingualTask, AbsTaskPairClassification):
                     )
 
                 # convert examples
-                self.dataset[lang][split] = self.dataset[lang][split].map(
-                    convert_example,
-                    remove_columns=self.dataset[lang][split].column_names,
+                self.dataset[lang][split] = (
+                    self.dataset[lang][split]
+                    .map(
+                        convert_example,
+                        remove_columns=self.dataset[lang][split].column_names,
+                    )
+                    .to_dict()
                 )
 
         self.dataset_transform()

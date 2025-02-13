@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -19,7 +18,7 @@ _LANGUAGES = {
 }
 
 
-class STS17Crosslingual(AbsTaskSTS, MultilingualTask):
+class STS17Crosslingual(AbsTaskSTS):
     fast_loading = True
     metadata = TaskMetadata(
         name="STS17",
@@ -67,9 +66,5 @@ class STS17Crosslingual(AbsTaskSTS, MultilingualTask):
 }""",
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5

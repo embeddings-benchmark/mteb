@@ -49,12 +49,8 @@ class ATEC(AbsTaskSTS):
 }""",
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 1
-        return metadata_dict
+    min_score = 0
+    max_score = 1
 
 
 class BQ(AbsTaskSTS):
@@ -90,12 +86,8 @@ class BQ(AbsTaskSTS):
 }""",
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 1
-        return metadata_dict
+    min_score = 0
+    max_score = 1
 
 
 class LCQMC(AbsTaskSTS):
@@ -131,12 +123,8 @@ class LCQMC(AbsTaskSTS):
 }""",
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 1
-        return metadata_dict
+    min_score = 0
+    max_score = 1
 
 
 class PAWSX(AbsTaskSTS):
@@ -172,12 +160,8 @@ class PAWSX(AbsTaskSTS):
 }""",
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 1
-        return metadata_dict
+    min_score = 0
+    max_score = 1
 
 
 class STSB(AbsTaskSTS):
@@ -213,12 +197,8 @@ class STSB(AbsTaskSTS):
 }""",
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5
 
 
 class AFQMC(AbsTaskSTS):
@@ -265,12 +245,8 @@ class AFQMC(AbsTaskSTS):
 }""",
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 1
-        return metadata_dict
+    min_score = 0
+    max_score = 1
 
 
 class QBQTC(AbsTaskSTS):
@@ -298,9 +274,5 @@ class QBQTC(AbsTaskSTS):
         bibtex_citation=None,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 2
-        return metadata_dict
+    min_score = 0
+    max_score = 2

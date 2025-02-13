@@ -4,9 +4,12 @@ from __future__ import annotations
 
 from functools import partial
 
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
-
-from .bge_models import bge_m3_training_data
+from mteb.model_meta import (
+    ModelMeta,
+    ScoringFunction,
+    sentence_transformers_loader,
+)
+from mteb.models.bge_models import bge_m3_training_data
 
 rubert_tiny = ModelMeta(
     name="cointegrated/rubert-tiny",
@@ -15,11 +18,12 @@ rubert_tiny = ModelMeta(
     revision="5441c5ea8026d4f6d7505ec004845409f1259fb1",
     release_date="2021-05-24",
     n_parameters=11_900_000,
+    memory_usage_mb=45,
     embed_dim=312,
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/cointegrated/rubert-tiny",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code="https://gist.github.com/avidale/7bc6350f26196918bf339c01261f5c60",
@@ -38,11 +42,12 @@ rubert_tiny2 = ModelMeta(
     revision="dad72b8f77c5eef6995dd3e4691b758ba56b90c3",
     release_date="2021-10-28",
     n_parameters=29_400_000,
+    memory_usage_mb=112,
     embed_dim=312,
     license="mit",
     max_tokens=2048,
     reference="https://huggingface.co/cointegrated/rubert-tiny2",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code="https://colab.research.google.com/drive/1mSWfIQ6PIlteLVZ9DKKpcorycgLIKZLf?usp=sharing",
@@ -62,11 +67,12 @@ sbert_large_nlu_ru = ModelMeta(
     revision="af977d5dfa46a3635e29bf0ef383f2df2a08d47a",
     release_date="2020-11-20",
     n_parameters=427_000_000,
+    memory_usage_mb=1629,
     embed_dim=1024,
     license="mit",
     max_tokens=512,  # best guess
     reference="https://huggingface.co/ai-forever/sbert_large_nlu_ru",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -81,11 +87,12 @@ sbert_large_mt_nlu_ru = ModelMeta(
     revision="05300876c2b83f46d3ddd422a7f17e45cf633bb0",
     release_date="2021-05-18",
     n_parameters=427_000_000,
+    memory_usage_mb=1629,
     embed_dim=1024,
     license="Not specified",
     max_tokens=512,  # best guess
     reference="https://huggingface.co/ai-forever/sbert_large_mt_nlu_ru",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -109,14 +116,23 @@ user_base_ru = ModelMeta(
     revision="436a489a2087d61aa670b3496a9915f84e46c861",
     release_date="2024-06-10",
     n_parameters=427_000_000,
+    memory_usage_mb=473,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/deepvk/USER-base",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     adapted_from="https://huggingface.co/deepvk/deberta-v1-base",
     use_instructions=True,
+    citation="""@misc{deepvk2024user,
+        title={USER: Universal Sentence Encoder for Russian},
+        author={Malashenko, Boris and  Zemerov, Anton and Spirin, Egor},
+        url={https://huggingface.co/datasets/deepvk/USER-base},
+        publisher={Hugging Face}
+        year={2024},
+    }
+    """,
     training_datasets={
         "BibleNLPBitextMining": ["train"],
         # https://github.com/unicamp-dl/mMARCO
@@ -164,11 +180,68 @@ user_bge_m3 = ModelMeta(
     revision="0cc6cfe48e260fb0474c753087a69369e88709ae",
     release_date="2024-07-05",
     n_parameters=359_026_688,
+    memory_usage_mb=1370,
     embed_dim=1024,
     license="apache-2.0",
     max_tokens=8194,
     reference="https://huggingface.co/deepvk/USER-base",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch"],
+    adapted_from="https://huggingface.co/BAAI/bge-m3",
+    use_instructions=False,
+    training_datasets={
+        "BibleNLPBitextMining": ["train"],
+        # https://github.com/unicamp-dl/mMARCO
+        # deepvk/ru-HNP
+        # deepvk/ru-WANLI
+        # MedNLI
+        # RCB
+        "TERRa": ["train"],
+        # Tapaco
+        # Opus100
+        # BiblePar
+        # RudetoxifierDataDetox
+        # RuParadetox
+        "MIRACL": ["train"],
+        # MLDR
+        # Lenta
+        "MLSUMClusteringP2P": ["train"],
+        "MLSUMClusteringP2P.v2": ["train"],
+        "MLSUMClusteringS2S": ["train"],
+        "MLSUMClusteringS2S.v2": ["train"],
+        "MrTidyRetrieval": ["train"],
+        # "Panorama"
+        # PravoIsrael
+        # xlsum
+        # Fialka-v1
+        # RussianKeywords
+        # Gazeta
+        # Gsm8k-ru
+        # DSumRu
+        # SummDialogNews
+    },
+    public_training_code=None,
+    public_training_data=None,
+)
+
+user_bge_m3 = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="deepvk/USER-bge-m3",
+        revision="0cc6cfe48e260fb0474c753087a69369e88709ae",
+    ),
+    name="deepvk/USER-bge-m3",
+    languages=["rus_Cyrl"],
+    open_weights=True,
+    revision="0cc6cfe48e260fb0474c753087a69369e88709ae",
+    release_date="2024-07-05",
+    n_parameters=359_026_688,
+    memory_usage_mb=1370,
+    embed_dim=1024,
+    license="apache-2.0",
+    max_tokens=8194,
+    reference="https://huggingface.co/deepvk/USER-base",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     adapted_from="https://huggingface.co/BAAI/bge-m3",
     use_instructions=False,
@@ -206,11 +279,12 @@ deberta_v1_ru = ModelMeta(
     revision="bdd30b0e19757e6940c92c7aff19e8fc0a60dff4",
     release_date="2023-02-07",
     n_parameters=124_000_000,
+    memory_usage_mb=473,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/deepvk/deberta-v1-base",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     # Wikipedia, Books, Twitter comments, Pikabu, Proza.ru, Film subtitles, News websites, and Social corpus
@@ -226,16 +300,26 @@ rubert_base_cased = ModelMeta(
     revision="4036cab694767a299f2b9e6492909664d9414229",
     release_date="2020-03-04",
     n_parameters=1280_000_000,
+    memory_usage_mb=4883,
     embed_dim=768,
     license="Not specified",
     max_tokens=512,
     reference="https://huggingface.co/DeepPavlov/rubert-base-cased",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
+    citation="""@misc{kuratov2019adaptationdeepbidirectionalmultilingual,
+      title={Adaptation of Deep Bidirectional Multilingual Transformers for Russian Language}, 
+      author={Yuri Kuratov and Mikhail Arkhipov},
+      year={2019},
+      eprint={1905.07213},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/1905.07213}, 
+    }""",
 )
 
 distilrubert_small_cased_conversational = ModelMeta(
@@ -245,16 +329,27 @@ distilrubert_small_cased_conversational = ModelMeta(
     revision="e348066b4a7279b97138038299bddc6580a9169a",
     release_date="2022-06-28",
     n_parameters=107_000_000,
+    memory_usage_mb=408,
     embed_dim=768,
     license="Not specified",
     max_tokens=512,
     reference="https://huggingface.co/DeepPavlov/distilrubert-small-cased-conversational",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
+    citation="""@misc{https://doi.org/10.48550/arxiv.2205.02340,
+      doi = {10.48550/ARXIV.2205.02340},
+      url = {https://arxiv.org/abs/2205.02340},
+      author = {Kolesnikova, Alina and Kuratov, Yuri and Konovalov, Vasily and Burtsev, Mikhail},
+      keywords = {Computation and Language (cs.CL), Machine Learning (cs.LG), FOS: Computer and information sciences, FOS: Computer and information sciences},
+      title = {Knowledge Distillation of Russian Language Models with Reduction of Vocabulary},
+      publisher = {arXiv},
+      year = {2022},
+      copyright = {arXiv.org perpetual, non-exclusive license}
+    }""",
 )
 
 rubert_base_cased_sentence = ModelMeta(
@@ -264,11 +359,12 @@ rubert_base_cased_sentence = ModelMeta(
     revision="78b5122d6365337dd4114281b0d08cd1edbb3bc8",
     release_date="2020-03-04",
     n_parameters=107_000_000,
+    memory_usage_mb=408,
     embed_dim=768,
     license="Not specified",
     max_tokens=512,
     reference="https://huggingface.co/DeepPavlov/rubert-base-cased-sentence",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -286,11 +382,12 @@ labse_en_ru = ModelMeta(
     revision="cf0714e606d4af551e14ad69a7929cd6b0da7f7e",
     release_date="2021-06-10",
     n_parameters=129_000_000,
+    memory_usage_mb=492,
     embed_dim=768,
     license="Not specified",
     max_tokens=512,
     reference="https://huggingface.co/cointegrated/LaBSE-en-ru",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code="https://colab.research.google.com/drive/1dnPRn0-ugj3vZgSpyCC9sgslM2SuSfHy?usp=sharing",
@@ -306,16 +403,17 @@ rubert_tiny_turbo = ModelMeta(
     revision="8ce0cf757446ce9bb2d5f5a4ac8103c7a1049054",
     release_date="2024-06-21",
     n_parameters=29_200_000,
+    memory_usage_mb=111,
     embed_dim=312,
     license="mit",
     max_tokens=2048,
     reference="https://huggingface.co/sergeyzh/rubert-tiny-turbo",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,  # source model in unknown
+    training_datasets=None,
     # Not MTEB: {"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
     adapted_from="cointegrated/rubert-tiny2",
 )
@@ -327,11 +425,12 @@ labse_ru_turbo = ModelMeta(
     revision="1940b046c6b5e125df11722b899130329d0a46da",
     release_date="2024-06-27",
     n_parameters=129_000_000,
+    memory_usage_mb=490,
     embed_dim=768,
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/sergeyzh/LaBSE-ru-turbo",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     training_datasets=None,
@@ -361,10 +460,11 @@ rosberta_ru_en = ModelMeta(
     release_date="2024-07-29",
     use_instructions=True,
     n_parameters=404_000_000,
+    memory_usage_mb=1540,
     max_tokens=514,
     embed_dim=1024,
     license="mit",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     adapted_from="ai-forever/ruRoberta-large",
     training_datasets={
         # https://huggingface.co/ai-forever/ruRoberta-large
@@ -384,4 +484,14 @@ rosberta_ru_en = ModelMeta(
     public_training_data=None,
     public_training_code=None,
     framework=["Sentence Transformers", "PyTorch"],
+    citation="""@misc{snegirev2024russianfocusedembeddersexplorationrumteb,
+      title={The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design}, 
+      author={Artem Snegirev and Maria Tikhonova and Anna Maksimova and Alena Fenogenova and Alexander Abramov},
+      year={2024},
+      eprint={2408.12503},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2408.12503}, 
+    }
+    """,
 )

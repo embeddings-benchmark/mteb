@@ -21,7 +21,7 @@ class AlloprofReranking(AbsTaskReranking):
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
-        main_score="map",
+        main_score="map_at_1000",
         date=("2020-01-01", "2023-04-14"),  # supposition
         domains=["Web", "Academic", "Written"],
         task_subtypes=None,
@@ -47,11 +47,11 @@ class AlloprofReranking(AbsTaskReranking):
 
         self.dataset = datasets.load_dataset(
             name="queries",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
             split=self.metadata.eval_splits[0],
         )
         documents = datasets.load_dataset(
-            name="documents", **self.metadata_dict["dataset"], split="test"
+            name="documents", **self.metadata.dataset, split="test"
         )
         # replace documents ids in positive and negative column by their respective texts
         doc_id2txt = dict(list(zip(documents["doc_id"], documents["text"])))
@@ -65,5 +65,8 @@ class AlloprofReranking(AbsTaskReranking):
         self.dataset = datasets.DatasetDict({"test": self.dataset})
 
         self.dataset_transform()
+
+        # now convert to the new format
+        self.transform_old_dataset_format(self.dataset)
 
         self.data_loaded = True

@@ -8,7 +8,7 @@ import iso639
 from huggingface_hub import HfApi, ModelCard, hf_hub_download
 from tqdm import tqdm
 
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 
 to_keep = [
     "Haon-Chen/speed-embedding-7b-instruct",
@@ -226,7 +226,7 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
             superseded_by=None,
             max_tokens=get_max_token(model_name),
             embed_dim=n_dimensions,
-            similarity_fn_name="cosine",
+            similarity_fn_name=ScoringFunction.COSINE,
             reference=f"https://huggingface.co/{model_name}",
         )
     except Exception as e:
@@ -259,7 +259,7 @@ def code_from_meta(meta: ModelMeta) -> str:
 def main():
     out_path = Path("mteb/models/misc_models.py")
     with open(out_path, "w") as out_file:
-        out_file.write("from mteb.model_meta import ModelMeta\n\n")
+        out_file.write("from mteb.model_meta import ModelMeta, ScoringFunction\n\n")
         for model in tqdm(to_keep, desc="Generating metadata for all models."):
             meta = model_meta_from_hf_hub(model)
             out_file.write(code_from_meta(meta))

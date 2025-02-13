@@ -1,10 +1,17 @@
-"""Command line interface for various MTEB.
+"""This is the command line interface for `mteb`.
 
-MTEB is a benchmark for evaluating the quality of embeddings in various tasks. It supports the following commands:
+`mteb` is a toolkit for evaluating the quality of embedding models on various benchmarks. It supports the following commands:
 
-- mteb run: Runs a model on a set of tasks
-- mteb available_tasks: Lists the available tasks within MTEB
-- mteb create_meta: Creates the metadata for a model card from a folder of results
+- `mteb run`: Runs a model on a set of tasks
+- `mteb available_tasks`: Lists the available tasks within MTEB
+- `mteb available_benchmarks`: Lists the available benchmarks
+- `mteb create_meta`: Creates the metadata for a model card from a folder of results
+
+In the following we outline some sample use cases, but if you want to learn more about the arguments for each command you can run:
+
+```
+mteb {command} --help
+```
 
 ## Running Models on Tasks
 
@@ -80,7 +87,6 @@ from __future__ import annotations
 import argparse
 import json
 import logging
-import warnings
 from pathlib import Path
 
 import torch
@@ -143,12 +149,14 @@ def run(args: argparse.Namespace) -> None:
         args.save_predictions if hasattr(args, "save_predictions") else False
     )
 
+    enable_co2_tracker = not args.disable_co2_tracker
+
     eval.run(
         model,
         verbosity=args.verbosity,
         output_folder=args.output_folder,
         eval_splits=args.eval_splits,
-        co2_tracker=args.co2_tracker,
+        co2_tracker=enable_co2_tracker,
         overwrite_results=args.overwrite,
         encode_kwargs=encode_kwargs,
         save_predictions=save_predictions,
@@ -264,10 +272,10 @@ def add_run_parser(subparsers) -> None:
         "-v", "--verbosity", type=int, default=2, help="Verbosity level"
     )
     parser.add_argument(
-        "--co2_tracker",
-        type=bool,
+        "--disable_co2_tracker",
+        action="store_true",
         default=False,
-        help="Enable CO₂ tracker, disabled by default",
+        help="Disable CO₂ tracker, enabled by default",
     )
     parser.add_argument(
         "--eval_splits",
@@ -366,26 +374,7 @@ def main():
     add_create_meta_parser(subparsers)
 
     args = parser.parse_args()
-
-    # If no subcommand is provided, default to run with a deprecation warning
-    if not hasattr(args, "func"):
-        warnings.warn(
-            "Using `mteb` without a subcommand is deprecated. Use `mteb run` instead.",
-            DeprecationWarning,
-        )
-        # Set default arguments for 'run' if no subcommand is provided
-        default_args = parser.parse_args(
-            ["run"]
-            + list(map(str, args._get_args()))
-            + [
-                f"--{k}" if v is None else f"--{k}={v}"
-                for k, v in vars(args).items()
-                if k != "func"
-            ]
-        )
-        default_args.func(default_args)
-    else:
-        args.func(args)
+    args.func(args)
 
 
 if __name__ == "__main__":

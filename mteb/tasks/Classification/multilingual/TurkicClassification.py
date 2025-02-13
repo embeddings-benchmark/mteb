@@ -6,11 +6,10 @@ import datasets
 from datasets import DatasetDict
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class TurkicClassification(MultilingualTask, AbsTaskClassification):
+class TurkicClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TurkicClassification",
         description="A dataset of news classification in three Turkic languages.",
@@ -57,8 +56,7 @@ class TurkicClassification(MultilingualTask, AbsTaskClassification):
         if self.data_loaded:
             return
         dataset = {}
-        metadata = self.metadata_dict.get("dataset", None)
-        full_dataset = datasets.load_dataset(**metadata)
+        full_dataset = datasets.load_dataset(**self.metadata.dataset)
         full_dataset = full_dataset.rename_columns(
             {"processed_text": "text", "category": "label"}
         )

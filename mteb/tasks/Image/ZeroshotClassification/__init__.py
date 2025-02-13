@@ -1,24 +1,55 @@
 from __future__ import annotations
 
-from .eng.Birdsnap import *
-from .eng.Caltech101 import *
-from .eng.CIFAR import *
-from .eng.CLEVR import *
-from .eng.Country211 import *
-from .eng.DTD import *
-from .eng.EuroSAT import *
-from .eng.FER2013 import *
-from .eng.FGVCAircraft import *
-from .eng.Food101 import *
-from .eng.GTSRB import *
-from .eng.Imagenet1k import *
-from .eng.MNIST import *
-from .eng.OxfordPets import *
-from .eng.PatchCamelyon import *
-from .eng.RenderedSST2 import *
-from .eng.RESISC45 import *
-from .eng.SciMMIR import *
-from .eng.StanfordCars import *
-from .eng.STL10 import *
-from .eng.SUN397 import *
-from .eng.UCF101 import *
+from .eng import (
+    CLEVR,
+    BirdsnapClassification,
+    Caltech101Classification,
+    CIFAR10ZeroShotClassification,
+    CIFAR100ZeroShotClassification,
+    CLEVRCount,
+    Country211Classification,
+    DTDClassification,
+    EuroSATClassification,
+    FER2013Classification,
+    FGVCAircraftClassification,
+    Food101Classification,
+    GTSRBClassification,
+    Imagenet1kClassification,
+    MNISTClassification,
+    OxfordPetsClassification,
+    PatchCamelyonClassification,
+    RenderedSST2,
+    RESISC45Classification,
+    SciMMIR,
+    StanfordCarsClassification,
+    STL10Classification,
+    SUN397Classification,
+    UCF101Classification,
+)
+
+__all__ = [
+    "MNISTClassification",
+    "CLEVR",
+    "CLEVRCount",
+    "SciMMIR",
+    "PatchCamelyonClassification",
+    "OxfordPetsClassification",
+    "EuroSATClassification",
+    "StanfordCarsClassification",
+    "CIFAR100ZeroShotClassification",
+    "CIFAR10ZeroShotClassification",
+    "Country211Classification",
+    "Food101Classification",
+    "SUN397Classification",
+    "GTSRBClassification",
+    "Imagenet1kClassification",
+    "DTDClassification",
+    "RESISC45Classification",
+    "STL10Classification",
+    "Caltech101Classification",
+    "BirdsnapClassification",
+    "RenderedSST2",
+    "UCF101Classification",
+    "FER2013Classification",
+    "FGVCAircraftClassification",
+]

@@ -40,8 +40,4 @@ class RESISC45Classification(AbsTaskImageClassification):
         keywords={Remote sensing;Benchmark testing;Spatial resolution;Social network services;Satellites;Image analysis;Machine learning;Unsupervised learning;Classification;Benchmark data set;deep learning;handcrafted features;remote sensing image;scene classification;unsupervised feature learning},
         doi={10.1109/JPROC.2017.2675998}}
         """,
-        descriptive_stats={
-            "n_samples": {"test": 6300},
-            "avg_character_length": {"test": 256},
-        },
     )

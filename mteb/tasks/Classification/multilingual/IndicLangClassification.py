@@ -110,9 +110,7 @@ class IndicLangClassification(AbsTaskClassification):
 
         labels = sorted(_LANGUAGES.keys())
 
-        data = datasets.load_dataset(**self.metadata_dict["dataset"])["train"]["data"][
-            0
-        ]
+        data = datasets.load_dataset(**self.metadata.dataset)["train"]["data"][0]
 
         dataset = {"train": [], "test": []}
         for lang, lang_code in LANG_MAP.items():

@@ -6,7 +6,7 @@ from functools import lru_cache
 from typing import Any
 
 from huggingface_hub import ModelCard
-from sentence_transformers import SentenceTransformer
+from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.encoder_interface import Encoder
@@ -130,6 +130,8 @@ model_modules = [
     voyage_v,
     stella_models,
     text2vec_models,
+    stella_models,
+    bedrock_models,
     uae_models,
     voyage_models,
 ]
@@ -201,9 +203,17 @@ def get_model(model_name: str, revision: str | None = None, **kwargs: Any) -> En
     model = meta.load_model(**kwargs)
 
     # If revision not available in the modelmeta, try to extract it from sentence-transformers
-    if meta.revision is None and isinstance(model, SentenceTransformer):
-        _meta = model_meta_from_sentence_transformers(model)
-        meta.revision = _meta.revision if _meta.revision else meta.revision
+    if isinstance(model.model, SentenceTransformer):
+        _meta = model_meta_from_sentence_transformers(model.model)
+        if meta.revision is None:
+            meta.revision = _meta.revision if _meta.revision else meta.revision
+        if not meta.similarity_fn_name:
+            meta.similarity_fn_name = _meta.similarity_fn_name
+
+    elif isinstance(model, CrossEncoder):
+        _meta = model_meta_from_cross_encoder(model.model)
+        if meta.revision is None:
+            meta.revision = _meta.revision if _meta.revision else meta.revision
 
     model.mteb_model_meta = meta  # type: ignore
     return model
@@ -238,6 +248,26 @@ def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
     return meta
 
 
+empty_model_meta = ModelMeta(
+    name=None,
+    revision=None,
+    languages=None,
+    release_date=None,
+    n_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    similarity_fn_name=None,
+    use_instructions=None,
+    training_datasets=None,
+    framework=[],
+)
+
+
 @lru_cache
 def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
     try:
@@ -258,6 +288,7 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
             training_datasets=card_data.get("datasets", None),
             similarity_fn_name=None,
             n_parameters=None,
+            memory_usage_mb=None,
             max_tokens=None,
             embed_dim=None,
             open_weights=True,
@@ -267,23 +298,39 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
         )
     except Exception as e:
         logger.warning(f"Failed to extract metadata from model: {e}.")
-        return ModelMeta(
-            name=model_name,
-            revision=None,
-            languages=None,
+        meta = empty_model_meta
+        meta.name = model_name
+        return meta
+
+
+def model_meta_from_cross_encoder(model: CrossEncoder) -> ModelMeta:
+    try:
+        name = model.model.name_or_path
+
+        meta = ModelMeta(
+            name=name,
+            revision=model.config._commit_hash,
             release_date=None,
+            languages=None,
+            framework=["Sentence Transformers"],
+            similarity_fn_name=None,
             n_parameters=None,
+            memory_usage_mb=None,
             max_tokens=None,
             embed_dim=None,
             license=None,
             open_weights=True,
             public_training_code=None,
             public_training_data=None,
-            similarity_fn_name=None,
             use_instructions=None,
             training_datasets=None,
-            framework=[],
         )
+    except AttributeError as e:
+        logger.warning(
+            f"Failed to extract metadata from model: {e}. Upgrading to sentence-transformers v3.0.0 or above is recommended."
+        )
+        meta = empty_model_meta
+    return meta
 
 
 def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMeta:
@@ -298,6 +345,7 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
             if isinstance(model.model_card_data.language, str)
             else model.model_card_data.language
         )
+        embeddings_dim = model.get_sentence_embedding_dimension()
         meta = ModelMeta(
             name=name,
             revision=model.model_card_data.base_model_revision,
@@ -306,8 +354,9 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
             framework=["Sentence Transformers"],
             similarity_fn_name=model.similarity_fn_name,
             n_parameters=None,
+            memory_usage_mb=None,
             max_tokens=None,
-            embed_dim=None,
+            embed_dim=embeddings_dim,
             license=None,
             open_weights=True,
             public_training_code=None,
@@ -319,21 +368,5 @@ def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMe
         logger.warning(
             f"Failed to extract metadata from model: {e}. Upgrading to sentence-transformers v3.0.0 or above is recommended."
         )
-        meta = ModelMeta(
-            name=None,
-            revision=None,
-            languages=None,
-            release_date=None,
-            n_parameters=None,
-            max_tokens=None,
-            embed_dim=None,
-            license=None,
-            open_weights=True,
-            public_training_code=None,
-            public_training_data=None,
-            similarity_fn_name=None,
-            use_instructions=None,
-            training_datasets=None,
-            framework=[],
-        )
+        meta = empty_model_meta
     return meta

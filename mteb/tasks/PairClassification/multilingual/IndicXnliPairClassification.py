@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from mteb.abstasks import AbsTaskPairClassification, MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
+
+from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 _LANGUAGES = {
     "as": ["asm-Beng"],
@@ -18,7 +19,7 @@ _LANGUAGES = {
 }
 
 
-class IndicXnliPairClassification(AbsTaskPairClassification, MultilingualTask):
+class IndicXnliPairClassification(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="IndicXnliPairClassification",
         dataset={
@@ -56,7 +57,7 @@ class IndicXnliPairClassification(AbsTaskPairClassification, MultilingualTask):
             author = {Aggarwal, Divyanshu and Gupta, Vivek and Kunchukuttan, Anoop},
             title = {IndicXNLI: Evaluating Multilingual Inference for Indian Languages}, 
             publisher = {arXiv},
-            year = {2022},        
+            year = {2022},
             copyright = {Creative Commons Attribution 4.0 International}
         }
         """,

@@ -3,7 +3,6 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -16,7 +15,7 @@ _LANGUAGES = {
 }
 
 
-class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
+class OpusparcusPC(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="OpusparcusPC",
         dataset={
@@ -58,7 +57,7 @@ class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
             self.dataset[lang] = datasets.load_dataset(
                 lang=lang,
                 quality=100,
-                **self.metadata_dict["dataset"],
+                **self.metadata.dataset,
             )
             self.dataset_transform(lang)
         self.data_loaded = True
@@ -83,4 +82,4 @@ class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
             new_dict["labels"] = [labels]
             new_dict["sentence1"] = [sent1]
             new_dict["sentence2"] = [sent2]
-            self.dataset[lang][split] = datasets.Dataset.from_dict(new_dict)
+            self.dataset[lang][split] = new_dict

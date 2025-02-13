@@ -2,7 +2,11 @@ from __future__ import annotations
 
 from functools import partial
 
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import (
+    ModelMeta,
+    ScoringFunction,
+    sentence_transformers_loader,
+)
 
 inf_retriever_v1 = ModelMeta(
     loader=partial(  # type: ignore
@@ -17,11 +21,12 @@ inf_retriever_v1 = ModelMeta(
     revision="cb70ca7c31dfa866b2eff2dad229c144d8ddfd91",
     release_date="2024-12-24",  # initial commit of hf model.
     n_parameters=7_069_121_024,
+    memory_usage_mb=13483,
     embed_dim=3584,
     license="apache-2.0",
     max_tokens=32768,
     reference="https://huggingface.co/infly/inf-retriever-v1",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from="Alibaba-NLP/gte-Qwen2-7B-instruct",

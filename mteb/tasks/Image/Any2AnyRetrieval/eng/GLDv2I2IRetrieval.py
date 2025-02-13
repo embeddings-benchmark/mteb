@@ -35,16 +35,4 @@ year = {2020}
 }
 
 """,
-        descriptive_stats={
-            "n_samples": {"test": 1129},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 0.0,
-                    "num_documents": 847728,
-                    "num_queries": 1129,
-                    "average_relevant_docs_per_query": 13.49,
-                }
-            },
-        },
     )

@@ -11,9 +11,8 @@ class TRECCOVIDPL(AbsTaskRetrieval):
         description="TRECCOVID is an ad-hoc search challenge based on the COVID-19 dataset containing scientific articles related to the COVID-19 pandemic.",
         reference="https://ir.nist.gov/covidSubmit/index.html",
         dataset={
-            "path": "clarin-knext/trec-covid-pl",
-            "revision": "81bcb408f33366c2a20ac54adafad1ae7e877fdd",
-            "trust_remote_code": True,
+            "path": "mteb/TRECCOVID-PL",
+            "revision": "1e710582482d4199ff690e5dd2491a70627523f5",
         },
         type="Retrieval",
         category="s2p",

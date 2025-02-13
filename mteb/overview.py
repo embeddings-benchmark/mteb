@@ -8,7 +8,7 @@ from collections import Counter
 
 import pandas as pd
 
-from mteb.abstasks import AbsTask
+from mteb.abstasks import AbsTask, AbsTaskMultilabelClassification, AbsTaskReranking
 from mteb.abstasks.TaskMetadata import TASK_CATEGORY, TASK_DOMAIN, TASK_TYPE
 from mteb.languages import (
     ISO_TO_LANGUAGE,
@@ -25,19 +25,34 @@ logger = logging.getLogger(__name__)
 
 
 def create_task_list() -> list[type[AbsTask]]:
-    tasks_categories_cls = list(AbsTask.__subclasses__())
-    tasks = [
-        cls
-        for cat_cls in tasks_categories_cls
-        for cls in cat_cls.__subclasses__()
-        if cat_cls.__name__.startswith("AbsTask")
+    # reranking subclasses retrieval to share methods, but is an abstract task
+    tasks_categories_cls = list(AbsTask.__subclasses__()) + [
+        AbsTaskReranking,
+        AbsTaskMultilabelClassification,
     ]
+    tasks = []
+    for cat_cls in tasks_categories_cls:
+        for cls in cat_cls.__subclasses__():
+            if cat_cls.__name__.startswith("AbsTask") and cls.__name__ not in (
+                "AbsTaskReranking",
+                "AbsTaskMultilabelClassification",
+            ):
+                tasks.append(cls)
     return tasks
 
 
 def create_name_to_task_mapping() -> dict[str, type[AbsTask]]:
     tasks = create_task_list()
-    return {cls.metadata.name: cls for cls in tasks}
+    metadata_names = {}
+    for cls in tasks:
+        if cls.metadata.name in metadata_names:
+            raise ValueError(
+                f"Duplicate task name found: {cls.metadata.name}. Please make sure that all task names are unique."
+            )
+        if "AbsTask" in cls.__name__:
+            continue
+        metadata_names[cls.metadata.name] = cls
+    return metadata_names
 
 
 TASKS_REGISTRY = create_name_to_task_mapping()
@@ -109,13 +124,11 @@ class MTEBTasks(tuple):
         return "MTEBTasks" + super().__repr__()
 
     @staticmethod
-    def _extract_property_from_task(task, property):
+    def _extract_property_from_task(task: AbsTask, property: str):
         if hasattr(task.metadata, property):
             return getattr(task.metadata, property)
         elif hasattr(task, property):
             return getattr(task, property)
-        elif property in task.metadata_dict:
-            return task.metadata_dict[property]
         else:
             raise KeyError("Property neither in Task attribute or in task metadata.")
 
@@ -224,12 +237,13 @@ class MTEBTasks(tuple):
 
 
 def get_tasks(
+    tasks: list[str] | None = None,
+    *,
     languages: list[str] | None = None,
     script: list[str] | None = None,
     domains: list[TASK_DOMAIN] | None = None,
     task_types: list[TASK_TYPE] | None = None,
     categories: list[TASK_CATEGORY] | None = None,
-    tasks: list[str] | None = None,
     exclude_superseded: bool = True,
     eval_splits: list[str] | None = None,
     exclusive_language_filter: bool = False,
@@ -237,15 +251,15 @@ def get_tasks(
     """Get a list of tasks based on the specified filters.
 
     Args:
+        tasks: A list of task names to include. If None, all tasks which pass the filters are included.
         languages: A list of languages either specified as 3 letter languages codes (ISO 639-3, e.g. "eng") or as script languages codes e.g.
             "eng-Latn". For multilingual tasks this will also remove languages that are not in the specified list.
-        script: A list of script codes (ISO 15924 codes). If None, all scripts are included. For multilingual tasks this will also remove scripts
+        script: A list of script codes (ISO 15924 codes, e.g. "Latn"). If None, all scripts are included. For multilingual tasks this will also remove scripts
             that are not in the specified list.
-        domains: A list of task domains.
-        task_types: A string specifying the type of task. If None, all tasks are included.
+        domains: A list of task domains, e.g. "Legal", "Medical", "Fiction".
+        task_types: A string specifying the type of task e.g. "Classification" or "Retrieval". If None, all tasks are included.
         categories: A list of task categories these include "s2s" (sentence to sentence), "s2p" (sentence to paragraph) and "p2p" (paragraph to
             paragraph).
-        tasks: A list of task names to include. If None, all tasks which pass the filters are included.
         exclude_superseded: A boolean flag to exclude datasets which are superseded by another.
         eval_splits: A list of evaluation splits to include. If None, all splits are included.
         exclusive_language_filter: Some datasets contains more than one language e.g. for STS22 the subset "de-en" contain eng and deu. If
@@ -326,9 +340,7 @@ def get_task(
     if task_name not in TASKS_REGISTRY:
         close_matches = difflib.get_close_matches(task_name, TASKS_REGISTRY.keys())
         if close_matches:
-            suggestion = (
-                f"KeyError: '{task_name}' not found. Did you mean: {close_matches[0]}?"
-            )
+            suggestion = f"KeyError: '{task_name}' not found. Did you mean: '{close_matches[0]}'?"
         else:
             suggestion = (
                 f"KeyError: '{task_name}' not found and no similar keys were found."

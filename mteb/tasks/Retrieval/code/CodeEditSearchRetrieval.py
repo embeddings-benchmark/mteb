@@ -3,7 +3,6 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGS = [
@@ -23,7 +22,7 @@ _LANGS = [
 ]
 
 
-class CodeEditSearchRetrieval(MultilingualTask, AbsTaskRetrieval):
+class CodeEditSearchRetrieval(AbsTaskRetrieval):
     _EVAL_SPLIT = "train"
     metadata = TaskMetadata(
         name="CodeEditSearchRetrieval",
@@ -58,7 +57,7 @@ class CodeEditSearchRetrieval(MultilingualTask, AbsTaskRetrieval):
             data = datasets.load_dataset(
                 split=self._EVAL_SPLIT,
                 data_dir=lang,
-                **self.metadata_dict["dataset"],
+                **self.metadata.dataset,
             )
             for row in data:
                 lang_subs[lang].append(row)

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -20,7 +19,7 @@ _LANGUAGES = {
 }
 
 
-class PubChemWikiPairClassification(AbsTaskPairClassification, MultilingualTask):
+class PubChemWikiPairClassification(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="PubChemWikiPairClassification",
         dataset={

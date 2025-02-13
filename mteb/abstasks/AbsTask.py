@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 import logging
 import random
-import warnings
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from copy import copy
@@ -13,6 +12,7 @@ import datasets
 import numpy as np
 import torch
 import tqdm
+import transformers
 from datasets import Dataset, DatasetDict
 from sklearn.preprocessing import MultiLabelBinarizer
 
@@ -25,6 +25,13 @@ logger = logging.getLogger(__name__)
 
 ScoresDict = dict[str, Any]
 # ^ e.g {'main_score': 0.5, 'hf_subset': 'en-de', 'languages': ['eng-Latn', 'deu-Latn']}
+
+
+def set_seed(seed: int) -> tuple[random.Random, np.random.Generator]:
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    transformers.set_seed(seed)
+    return random.Random(seed), np.random.default_rng(seed)
 
 
 def _multilabel_subsampling(
@@ -57,28 +64,40 @@ def _multilabel_subsampling(
 
 
 class AbsTask(ABC):
+    """The abstract class for the tasks
+
+    Attributes:
+        metadata: The metadata describing the task
+        dataset: The dataset represented as a dictionary on the form {"hf subset": {"split": Dataset}} where "split" is the dataset split (e.g. "test")
+            and Dataset is a datasets.Dataset objedct. "hf subset" is the data subset on Huggingface typically used to denote the language e.g.
+            datasets.load_dataset("data", "en"). If the dataset does not have a subset this is simply "default".
+        abstask_prompt: The potential prompt of the abstask
+        superseded_by: Denotes the task that this task is superseeded by. Used to issue warning to users of outdated datasets, while maintaining
+            reproducibility of existing benchmarks.
+        fast_loading: (Not recommended to use) Denotes if the task should be loaded using the fast loading method.
+            This is only possible if the dataset have a "default" config. We don't recommend to use this method, and suggest to use different subsets for loading datasets.
+            This was used only for historical reasons and will be removed in the future.
+    """
+
     metadata: TaskMetadata
     abstask_prompt: str | None = None
     _eval_splits: list[str] | None = None
-    superseded_by: None | str = None
+    superseded_by: str | None = None
     dataset: dict[HFSubset, DatasetDict] | None = None  # type: ignore
     data_loaded: bool = False
-    is_multilingual: bool = False
-    hf_subsets: list[HFSubset]
+    hf_subsets: list[HFSubset] | None = None
+    fast_loading: bool = False
 
     def __init__(self, seed: int = 42, **kwargs: Any):
-        self.save_suffix = kwargs.get("save_suffix", "")
-        if self.save_suffix:
-            warnings.warn(
-                "`save_suffix` will be removed in v2.0.0.", DeprecationWarning
-            )
+        """The init function. This is called primarily to set the seed.
 
+        Args:
+            seed: An integer seed.
+            kwargs: arguments passed to subclasses.
+        """
         self.seed = seed
-        random.seed(self.seed)
-        np.random.seed(self.seed)
-        torch.manual_seed(self.seed)
-        torch.cuda.manual_seed_all(self.seed)
-        self.hf_subsets = list(self.metadata.hf_subsets_to_langscripts.keys())
+        self.rng_state, self.np_rng = set_seed(seed)
+        self.hf_subsets = self.metadata.hf_subsets
 
     def check_if_dataset_is_superseded(self):
         """Check if the dataset is superseded by a newer version"""
@@ -88,8 +107,10 @@ class AbsTask(ABC):
             )
 
     def dataset_transform(self):
-        """Transform operations applied to the dataset after loading.
-        Override this method if your dataset requires any transformation.
+        """A transform operations applied to the dataset after loading.
+
+        This method is useful when the dataset from Huggingface is not in an `mteb` compatible format.
+        Override this method if your dataset requires additional transformation.
         """
         pass
 
@@ -128,7 +149,7 @@ class AbsTask(ABC):
 
         for hf_subset in hf_subsets:
             logger.info(
-                f"\nTask: {self.metadata_dict['name']}, split: {split}, subset: {hf_subset}. Running..."
+                f"\nTask: {self.metadata.name}, split: {split}, subset: {hf_subset}. Running..."
             )
             if hf_subset not in self.dataset and hf_subset == "default":
                 data_split = self.dataset[split]
@@ -137,6 +158,7 @@ class AbsTask(ABC):
             scores[hf_subset] = self._evaluate_subset(
                 model, data_split, encode_kwargs=encode_kwargs, **kwargs
             )
+            self._add_main_score(scores[hf_subset])
         return scores
 
     @abstractmethod
@@ -197,16 +219,53 @@ class AbsTask(ABC):
         return dataset_dict
 
     def load_data(self, **kwargs):
-        """Load dataset from HuggingFace hub"""
+        """Loads dataset from HuggingFace hub
+
+        This is the main loading function for Task. Do not overwrite this, instead we recommend using `dataset_transform`, which is called after the
+        dataset is loaded using `datasets.load_dataset`.
+        """
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])  # type: ignore
+        if self.metadata.is_multilingual:
+            if self.fast_loading:
+                self.fast_load()
+            else:
+                self.dataset = {}
+                for hf_subset in self.hf_subsets:
+                    self.dataset[hf_subset] = datasets.load_dataset(
+                        name=hf_subset,
+                        **self.metadata.dataset,
+                    )
+        else:
+            # some of monolingual datasets explicitly adding the split name to the dataset name
+            self.dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
         self.dataset_transform()
         self.data_loaded = True
+
+    def fast_load(self, **kwargs):
+        """Load all subsets at once, then group by language with Polars. Using fast loading has two requirements:
+        - Each row in the dataset should have a 'lang' feature giving the corresponding language/language pair
+        - The datasets must have a 'default' config that loads all the subsets of the dataset (see https://huggingface.co/docs/datasets/en/repository_structure#configurations)
+        """
+        self.dataset = {}
+        merged_dataset = datasets.load_dataset(
+            **self.metadata.dataset
+        )  # load "default" subset
+        for split in merged_dataset.keys():
+            df_split = merged_dataset[split].to_polars()
+            df_grouped = dict(df_split.group_by(["lang"]))
+            for lang in set(df_split["lang"].unique()) & set(self.hf_subsets):
+                self.dataset.setdefault(lang, {})
+                self.dataset[lang][split] = datasets.Dataset.from_polars(
+                    df_grouped[(lang,)].drop("lang")
+                )  # Remove lang column and convert back to HF datasets, not strictly necessary but better for compatibility
+        for lang, subset in self.dataset.items():
+            self.dataset[lang] = datasets.DatasetDict(subset)
 
     def calculate_metadata_metrics(
         self, overwrite_results: bool = False
     ) -> dict[str, DescriptiveStatistics | dict[str, DescriptiveStatistics]]:
+        """Calculates descriptive statistics from the dataset by calling `_calculate_metrics_from_split`."""
         if self.metadata.descriptive_stat_path.exists() and not overwrite_results:
             logger.info("Loading metadata descriptive statistics from cache.")
             return self.metadata.descriptive_stats
@@ -223,14 +282,14 @@ class AbsTask(ABC):
         for split in pbar_split:
             pbar_split.set_postfix_str(f"Split: {split}")
             logger.info(f"Processing metadata for split {split}")
-            if self.is_multilingual:
+            if self.metadata.is_multilingual:
                 descriptive_stats[split] = self._calculate_metrics_from_split(
                     split, compute_overall=True
                 )
                 descriptive_stats[split][hf_subset_stat] = {}
 
                 pbar_subsets = tqdm.tqdm(
-                    self.metadata.hf_subsets_to_langscripts,
+                    self.metadata.hf_subsets,
                     desc="Processing Languages...",
                 )
                 for hf_subset in pbar_subsets:
@@ -252,14 +311,6 @@ class AbsTask(ABC):
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> DescriptiveStatistics:
         raise NotImplementedError
-
-    @property
-    def metadata_dict(self) -> dict[str, Any]:
-        warnings.warn(
-            "`metadata_dict` will be removed in v2.0. Use task.metadata instead.",
-            DeprecationWarning,
-        )
-        return dict(self.metadata)
 
     @property
     def languages(self) -> list[str]:
@@ -323,6 +374,45 @@ class AbsTask(ABC):
 
         self.hf_subsets = subsets_to_keep
         return self
+
+    def _add_main_score(self, scores: dict[HFSubset, ScoresDict]) -> None:
+        scores["main_score"] = scores[self.metadata.main_score]
+
+    def _upload_dataset_to_hub(self, repo_name: str, fields: list[str]) -> None:
+        if self.metadata.is_multilingual:
+            for config in self.metadata.eval_langs:
+                logger.info(f"Converting {config} of {self.metadata.name}")
+                sentences = {}
+                for split in self.dataset[config]:
+                    sentences[split] = Dataset.from_dict(
+                        {field: self.dataset[config][split][field] for field in fields}
+                    )
+                sentences = DatasetDict(sentences)
+                sentences.push_to_hub(
+                    repo_name, config, commit_message=f"Add {config} dataset"
+                )
+        else:
+            sentences = {}
+            for split in self.dataset:
+                sentences[split] = Dataset.from_dict(
+                    {field: self.dataset[split][field] for field in fields}
+                )
+            sentences = DatasetDict(sentences)
+            sentences.push_to_hub(repo_name, commit_message="Add dataset")
+
+    def _push_dataset_to_hub(self, repo_name: str) -> None:
+        raise NotImplementedError
+
+    def push_dataset_to_hub(self, repo_name: str) -> None:
+        """Push the dataset to the HuggingFace Hub.
+
+        Args:
+            repo_name: The name of the repository to push the dataset to.
+        """
+        if not self.data_loaded:
+            self.load_data()
+
+        self._push_dataset_to_hub(repo_name)
 
     @property
     def eval_splits(self) -> list[str]:

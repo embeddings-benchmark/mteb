@@ -9,8 +9,7 @@ import torch
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.encoder_interface import PromptType
-
-from .wrapper import Wrapper
+from mteb.models.wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
@@ -57,7 +56,7 @@ class SentenceTransformerWrapper(Wrapper):
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
 
         if isinstance(self.model, CrossEncoder):
-            self.predict = self._predict
+            self.predict = self.handle_instructions_predict
 
         if hasattr(self.model, "similarity") and callable(self.model.similarity):
             self.similarity = self.model.similarity
@@ -125,3 +124,14 @@ class SentenceTransformerWrapper(Wrapper):
             convert_to_numpy=True,
             **kwargs,
         )
+
+    def handle_instructions_predict(self, sentences, **kwargs):
+        # unzip the queries, corpus, and instruction so we can add the instructions to the queries
+        # as ST models can't take an arg for instructions
+        queries, corpus, instructions = list(zip(*sentences))
+        # combine the queries and instructions
+        queries_with_instructions = [
+            f"{query.strip()} {instruction}".strip() if instruction else query
+            for query, instruction in zip(queries, instructions)
+        ]
+        return self._predict(list(zip(queries_with_instructions, corpus)), **kwargs)

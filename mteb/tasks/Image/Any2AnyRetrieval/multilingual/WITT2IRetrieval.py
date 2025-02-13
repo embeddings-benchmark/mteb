@@ -3,7 +3,6 @@ from __future__ import annotations
 from datasets import Dataset, DatasetDict, load_dataset
 
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -91,7 +90,7 @@ def _load_wit_data(
     return corpus, queries, relevant_docs
 
 
-class WITT2IRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
+class WITT2IRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="WITT2IRetrieval",
         description="Retrieve images based on multilingual descriptions.",
@@ -122,90 +121,6 @@ class WITT2IRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
   year={2022},
   organization={PMLR}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "ar": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 792,
-                        "num_queries": 890,
-                        "average_relevant_docs_per_query": 0.89,
-                    },
-                    "bg": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 806,
-                        "num_queries": 890,
-                        "average_relevant_docs_per_query": 0.91,
-                    },
-                    "da": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 814,
-                        "num_queries": 890,
-                        "average_relevant_docs_per_query": 0.91,
-                    },
-                    "el": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 541,
-                        "num_queries": 890,
-                        "average_relevant_docs_per_query": 0.61,
-                    },
-                    "et": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 780,
-                        "num_queries": 890,
-                        "average_relevant_docs_per_query": 0.88,
-                    },
-                    "id": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 854,
-                        "num_queries": 890,
-                        "average_relevant_docs_per_query": 0.96,
-                    },
-                    "ja": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 842,
-                        "num_queries": 890,
-                        "average_relevant_docs_per_query": 0.95,
-                    },
-                    "ko": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 889,
-                        "num_queries": 890,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "tr": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 681,
-                        "num_queries": 890,
-                        "average_relevant_docs_per_query": 0.77,
-                    },
-                    "vi": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 869,
-                        "num_queries": 890,
-                        "average_relevant_docs_per_query": 0.98,
-                    },
-                    "en": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 685,
-                        "num_queries": 890,
-                        "average_relevant_docs_per_query": 0.77,
-                    },
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -213,11 +128,11 @@ class WITT2IRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_wit_data(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             langs=self.hf_subsets,
-            splits=self.metadata_dict["eval_splits"],
+            splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True

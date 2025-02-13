@@ -37,8 +37,4 @@ class MNISTClassification(AbsTaskImageClassification):
         year={2010}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 10000},
-            "avg_character_length": {"test": 431.4},
-        },
     )

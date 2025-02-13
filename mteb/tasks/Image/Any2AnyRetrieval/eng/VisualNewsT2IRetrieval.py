@@ -36,16 +36,4 @@ class VisualNewsT2IRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={
             "query": "Identify the news-related image in line with the described event."
         },
-        descriptive_stats={
-            "n_samples": {"test": 19995},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 0.0,
-                    "num_documents": 542246,
-                    "num_queries": 19995,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )

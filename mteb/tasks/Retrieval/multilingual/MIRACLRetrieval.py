@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
@@ -97,7 +96,7 @@ def _load_miracl_data(
     return corpus, queries, relevant_docs
 
 
-class MIRACLRetrieval(MultilingualTask, AbsTaskRetrieval):
+class MIRACLRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MIRACLRetrieval",
         description="MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval dataset that focuses on search across 18 different languages.",
@@ -143,11 +142,11 @@ class MIRACLRetrieval(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_miracl_data(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             langs=self.hf_subsets,
-            splits=self.metadata_dict["eval_splits"],
+            splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True
@@ -285,7 +284,7 @@ def _load_miracl_data_hard_negatives(
     return corpus, queries, relevant_docs
 
 
-class MIRACLRetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
+class MIRACLRetrievalHardNegatives(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MIRACLRetrievalHardNegatives",
         description="MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval dataset that focuses on search across 18 different languages. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct.",
@@ -329,11 +328,11 @@ class MIRACLRetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
 
         self.corpus, self.queries, self.relevant_docs = (
             _load_miracl_data_hard_negatives(
-                path=self.metadata_dict["dataset"]["path"],
+                path=self.metadata.dataset["path"],
                 langs=self.hf_subsets,
-                splits=self.metadata_dict["eval_splits"],
+                splits=self.metadata.eval_splits,
                 cache_dir=kwargs.get("cache_dir", None),
-                revision=self.metadata_dict["dataset"]["revision"],
+                revision=self.metadata.dataset["revision"],
             )
         )
 

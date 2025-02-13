@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
@@ -64,7 +63,7 @@ def _load_mintaka_data(
     return corpus, queries, relevant_docs
 
 
-class MintakaRetrieval(MultilingualTask, AbsTaskRetrieval):
+class MintakaRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MintakaRetrieval",
         description="We introduce Mintaka, a complex, natural, and multilingual dataset designed for experimenting with end-to-end question-answering models. Mintaka is composed of 20,000 question-answer pairs collected in English, annotated with Wikidata entities, and translated into Arabic, French, German, Hindi, Italian, Japanese, Portuguese, and Spanish for a total of 180,000 samples. Mintaka includes 8 types of complex questions, including superlative, intersection, and multi-hop questions, which were naturally elicited from crowd workers. ",
@@ -107,12 +106,12 @@ class MintakaRetrieval(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_mintaka_data(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
-            split=self.metadata_dict["eval_splits"][0],
+            split=self.metadata.eval_splits[0],
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
-            trust_remote_code=self.metadata_dict["dataset"]["trust_remote_code"],
+            revision=self.metadata.dataset["revision"],
+            trust_remote_code=self.metadata.dataset["trust_remote_code"],
         )
 
         self.data_loaded = True

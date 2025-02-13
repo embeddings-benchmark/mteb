@@ -1,29 +1,84 @@
 from __future__ import annotations
 
-from .ara.ArEntail import *
-from .ces.CTKFactsNLI import *
-from .deu.FalseFriendsDeEnPC import *
-from .eng.LegalBenchPC import *
-from .eng.PubChemAISentenceParaphrasePC import *
-from .eng.PubChemSMILESPC import *
-from .eng.PubChemSynonymPC import *
-from .eng.PubChemWikiParagraphsPC import *
-from .eng.SprintDuplicateQuestionsPC import *
-from .eng.TwitterSemEval2015PC import *
-from .eng.TwitterURLCorpusPC import *
-from .fas.FaMTEBPairClassification import *
-from .fas.FarsTail import *
-from .hye.ArmenianParaphrasePC import *
-from .ind.IndoNLI import *
-from .kor.KlueNLI import *
-from .multilingual.OpusparcusPC import *
-from .multilingual.PawsXPairClassification import *
-from .multilingual.PubChemWikiPairClassification import *
-from .multilingual.RTE3 import *
-from .multilingual.XNLI import *
-from .multilingual.XStance import *
-from .pol.PolishPC import *
-from .por.Assin2RTE import *
-from .por.SickBrPC import *
-from .rus.TERRa import *
-from .zho.CMTEBPairClassification import *
+from .ara import ArEntail
+from .ces import CTKFactsNLI
+from .deu import FalseFriendsDeEnPC
+from .eng import (
+    LegalBenchPC,
+    PubChemAISentenceParaphrasePC,
+    PubChemSMILESPC,
+    PubChemSynonymPC,
+    PubChemWikiParagraphsPC,
+    SprintDuplicateQuestionsPC,
+    TwitterSemEval2015PC,
+    TwitterURLCorpusPC,
+)
+from .fas import (
+    CExaPPC,
+    FarsiParaphraseDetection,
+    FarsTail,
+    ParsinluEntail,
+    ParsinluQueryParaphPC,
+    SynPerChatbotRAGFAQPC,
+    SynPerQAPC,
+    SynPerTextKeywordsPC,
+)
+from .hye import ArmenianParaphrasePC
+from .ind import IndoNLI
+from .kor import KlueNLI
+from .multilingual import (
+    RTE3,
+    XNLI,
+    XNLIV2,
+    IndicXnliPairClassification,
+    OpusparcusPC,
+    PawsXPairClassification,
+    PubChemWikiPairClassification,
+    XStance,
+)
+from .pol import CdscePC, PpcPC, PscPC, SickePLPC
+from .por import Assin2RTE, SickBrPC
+from .rus import TERRa
+from .zho import Cmnli, Ocnli
+
+__all__ = [
+    "Cmnli",
+    "Ocnli",
+    "Assin2RTE",
+    "SickBrPC",
+    "CdscePC",
+    "PpcPC",
+    "PscPC",
+    "SickePLPC",
+    "IndoNLI",
+    "FalseFriendsDeEnPC",
+    "ArEntail",
+    "ArmenianParaphrasePC",
+    "CTKFactsNLI",
+    "PubChemSMILESPC",
+    "PubChemSynonymPC",
+    "LegalBenchPC",
+    "TwitterSemEval2015PC",
+    "PubChemWikiParagraphsPC",
+    "TwitterURLCorpusPC",
+    "SprintDuplicateQuestionsPC",
+    "PubChemAISentenceParaphrasePC",
+    "FarsTail",
+    "CExaPPC",
+    "FarsiParaphraseDetection",
+    "ParsinluEntail",
+    "ParsinluQueryParaphPC",
+    "SynPerChatbotRAGFAQPC",
+    "SynPerQAPC",
+    "SynPerTextKeywordsPC",
+    "KlueNLI",
+    "IndicXnliPairClassification",
+    "OpusparcusPC",
+    "PawsXPairClassification",
+    "RTE3",
+    "PubChemWikiPairClassification",
+    "XStance",
+    "XNLI",
+    "XNLIV2",
+    "TERRa",
+]

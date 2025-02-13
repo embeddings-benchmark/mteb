@@ -1,17 +1,15 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class AmazonCounterfactualClassification(MultilingualTask, AbsTaskClassification):
+class AmazonCounterfactualClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="AmazonCounterfactualClassification",
         dataset={
             "path": "mteb/amazon_counterfactual",
-            "revision": "e8379541af4e31359cca9fbcf4b00f2671dba205",
-            "trust_remote_code": True,
+            "revision": "1f7e6a9d6fa6e64c53d146e428565640410c0df1",
         },
         description=(
             "A collection of Amazon customer reviews annotated for counterfactual detection pair classification."

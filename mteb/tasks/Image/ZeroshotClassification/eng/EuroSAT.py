@@ -42,10 +42,6 @@ class EuroSATClassification(AbsTaskZeroshotClassification):
         keywords={Satellites;Earth;Remote sensing;Machine learning;Spatial resolution;Feature extraction;Benchmark testing;Dataset;deep convolutional neural network;deep learning;earth observation;land cover classification;land use classification;machine learning;remote sensing;satellite image classification;satellite images},
         doi={10.1109/JSTARS.2019.2918242}}
         """,
-        descriptive_stats={
-            "n_samples": {"test": 5400},
-            "avg_character_length": {"test": 431.4},
-        },
     )
 
     def get_candidate_labels(self) -> list[str]:

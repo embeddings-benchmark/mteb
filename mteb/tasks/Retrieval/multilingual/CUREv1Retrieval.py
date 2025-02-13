@@ -7,7 +7,6 @@ from datasets import DatasetDict, load_dataset
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ....abstasks.MultilingualTask import MultilingualTask
 
 _LANGUAGES = {
     "en": ["eng-Latn", "eng-Latn"],
@@ -34,7 +33,7 @@ class CUREv1Splits(str, Enum):
         return sorted(cls._member_names_)
 
 
-class CUREv1Retrieval(MultilingualTask, AbsTaskRetrieval):
+class CUREv1Retrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         dataset={
             "path": "clinia/CUREv1",
@@ -64,8 +63,8 @@ class CUREv1Retrieval(MultilingualTask, AbsTaskRetrieval):
 
     def _load_corpus(self, split: str, cache_dir: str | None = None):
         ds = load_dataset(
-            path=self.metadata_dict["dataset"]["path"],
-            revision=self.metadata_dict["dataset"]["revision"],
+            path=self.metadata.dataset["path"],
+            revision=self.metadata.dataset["revision"],
             name="corpus",
             split=split,
             cache_dir=cache_dir,
@@ -79,8 +78,8 @@ class CUREv1Retrieval(MultilingualTask, AbsTaskRetrieval):
 
     def _load_qrels(self, split: str, cache_dir: str | None = None):
         ds = load_dataset(
-            path=self.metadata_dict["dataset"]["path"],
-            revision=self.metadata_dict["dataset"]["revision"],
+            path=self.metadata.dataset["path"],
+            revision=self.metadata.dataset["revision"],
             name="qrels",
             split=split,
             cache_dir=cache_dir,
@@ -100,8 +99,8 @@ class CUREv1Retrieval(MultilingualTask, AbsTaskRetrieval):
 
     def _load_queries(self, split: str, language: str, cache_dir: str | None = None):
         ds = load_dataset(
-            path=self.metadata_dict["dataset"]["path"],
-            revision=self.metadata_dict["dataset"]["revision"],
+            path=self.metadata.dataset["path"],
+            revision=self.metadata.dataset["revision"],
             name=f"queries-{language}",
             split=split,
             cache_dir=cache_dir,

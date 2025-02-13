@@ -57,18 +57,12 @@ class AbsTaskClustering(AbsTask):
     """Abstract class for Clustering tasks
     The similarity is computed between pairs and the results are ranked.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns:
         sentences: list of str
         labels: list of str
     """
 
     abstask_prompt = "Identify categories in user passages."
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def _add_main_score(self, scores) -> None:
-        scores["main_score"] = scores[self.metadata.main_score]
 
     def _evaluate_subset(
         self,
@@ -141,3 +135,6 @@ class AbsTaskClustering(AbsTask):
                 for label, value in label_counter.items()
             },
         )
+
+    def _push_dataset_to_hub(self, repo_name: str) -> None:
+        self._upload_dataset_to_hub(repo_name, ["sentences", "labels"])

@@ -17,6 +17,7 @@ class STSDescriptiveStatistics(DescriptiveStatistics):
     Attributes:
         num_samples: number of samples in the dataset.
         number_of_characters: Total number of symbols in the dataset.
+        unique_pairs: Number of unique pairs
 
         min_sentence1_length: Minimum length of sentence1
         average_sentence1_len: Average length of sentence1
@@ -33,6 +34,7 @@ class STSDescriptiveStatistics(DescriptiveStatistics):
 
     num_samples: int
     number_of_characters: int
+    unique_pairs: int
 
     min_sentence1_length: int
     average_sentence1_len: float
@@ -52,24 +54,15 @@ class STSDescriptiveStatistics(DescriptiveStatistics):
 class AbsTaskSTS(AbsTask):
     """Abstract class for STS experiments.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns::
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns::
         sentence1: str
         sentence2: str
         score: float
     """
 
     abstask_prompt = "Retrieve semantically similar text."
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    @property
-    def min_score(self) -> int:
-        return self.metadata_dict["min_score"]
-
-    @property
-    def max_score(self) -> int:
-        return self.metadata_dict["max_score"]
+    min_score: int
+    max_score: int
 
     def _evaluate_subset(
         self, model, data_split, *, encode_kwargs: dict[str, Any] = {}, **kwargs
@@ -89,9 +82,6 @@ class AbsTaskSTS(AbsTask):
 
         self._add_main_score(scores)
         return scores
-
-    def _add_main_score(self, scores: ScoresDict) -> None:
-        scores["main_score"] = scores[self.metadata.main_score]
 
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
@@ -121,6 +111,7 @@ class AbsTaskSTS(AbsTask):
         return STSDescriptiveStatistics(
             num_samples=len(sentence1),
             number_of_characters=total_sentence1_len + total_sentence2_len,
+            unique_pairs=len(set(zip(sentence1, sentence2))),
             min_sentence1_length=min(sentence1_len),
             average_sentence1_len=total_sentence1_len / len(sentence1),
             max_sentence1_length=max(sentence1_len),
@@ -133,3 +124,6 @@ class AbsTaskSTS(AbsTask):
             avg_score=avg_score,
             max_score=max(score),
         )
+
+    def _push_dataset_to_hub(self, repo_name: str) -> None:
+        self._upload_dataset_to_hub(repo_name, ["sentence1", "sentence2", "score"])
