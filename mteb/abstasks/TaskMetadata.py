@@ -287,7 +287,7 @@ class TaskMetadata(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    dataset: dict[str, Any] # MetadataDatasetDict
+    dataset: MetadataDatasetDict
 
     name: str
     description: str
