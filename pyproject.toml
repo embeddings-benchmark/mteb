@@ -163,4 +163,12 @@ addopts = """
             --only-rerun huggingface_hub.errors.LocalEntryNotFoundError
             --only-rerun FileNotFoundError
             --durations=5
+            --reruns-delay 10
         """
+# --reruns 3 -> # Retry failed tests 3 times
+# requests.exceptions.ReadTimeout -> # HF Read timed out -> https://github.com/embeddings-benchmark/mteb/actions/runs/13275350693/job/37093688544
+# huggingface_hub.errors.HfHubHTTPError -> # HF is unavailable, e.g. seen here: https://github.com/embeddings-benchmark/mteb/actions/runs/13275350693/job/37093688544
+# huggingface_hub.errors.LocalEntryNotFoundError -> # Gateway Time-out from HF, e.g. seen here: https://github.com/embeddings-benchmark/mteb/actions/runs/13275350693/job/37093688544
+# FileNotFoundError -> HF Cache is broken:  https://github.com/embeddings-benchmark/mteb/actions/runs/13302915091/job/37147507251?pr=2029
+# --durations=5 -> Show the 5 slowest tests
+# --reruns-delay 10 -> Delay between reruns in seconds to avoid running into the same issue again
