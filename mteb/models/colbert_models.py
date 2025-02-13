@@ -10,8 +10,7 @@ import torch
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
-
-from .wrapper import Wrapper
+from mteb.models.wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
@@ -152,9 +151,11 @@ colbert_v2 = ModelMeta(
     languages=["eng_Latn"],
     open_weights=True,
     revision="c1e84128e85ef755c096a95bdb06b47793b13acf",
-    public_training_code=True,
+    public_training_code=None,
+    public_training_data=None,
     release_date="2024-09-21",
     n_parameters=110 * 1e6,
+    memory_usage_mb=418,
     max_tokens=180,  # Reduced for Benchmarking - see ColBERT paper
     embed_dim=None,  # Bag of Embeddings (128) for each token
     license="mit",
@@ -164,8 +165,11 @@ colbert_v2 = ModelMeta(
     use_instructions=False,
     adapted_from=None,
     superseded_by=None,
+    training_datasets={
+        "MSMARCO": ["train"],  # dev?
+        "mMARCO-NL": ["train"],  # translation not trained on
+    },
 )
-
 
 jina_colbert_v2 = ModelMeta(
     loader=partial(
@@ -203,9 +207,11 @@ jina_colbert_v2 = ModelMeta(
     ],
     open_weights=True,
     revision="4cf816e5e2b03167b132a3c847a9ecd48ba708e1",
-    public_training_code=False,
+    public_training_code=None,
+    public_training_data=None,
     release_date="2024-08-16",
     n_parameters=559 * 1e6,
+    memory_usage_mb=1067,
     max_tokens=8192,
     embed_dim=None,  # Bag of Embeddings (128) for each token
     license="cc-by-nc-4.0",
@@ -215,4 +221,10 @@ jina_colbert_v2 = ModelMeta(
     use_instructions=False,
     adapted_from=None,
     superseded_by=None,
+    training_datasets={
+        "MSMARCO": ["train"],
+        "mMARCO-NL": ["train"],  # translation not trained on
+        "DuRetrieval": [],
+        "MIRACL": ["train"],
+    },
 )

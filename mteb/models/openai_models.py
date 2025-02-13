@@ -8,9 +8,8 @@ import numpy as np
 import tqdm
 
 from mteb.model_meta import ModelMeta
+from mteb.models.wrapper import Wrapper
 from mteb.requires_package import requires_package
-
-from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +24,7 @@ class OpenAIWrapper(Wrapper):
         **kwargs,
     ) -> None:
         """Wrapper for OpenAIs embedding API.
-        To handle documents larger than 8192 tokens, we truncate the document to the specified sequence length.
+        To handle documents larger than 8191 tokens, we truncate the document to the specified sequence length.
         """
         requires_package(self, "openai", "Openai text embedding")
         from openai import OpenAI
@@ -120,33 +119,36 @@ text_embedding_3_small = ModelMeta(
     revision="2",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
-    loader=partial(
+    loader=partial(  # type: ignore
         OpenAIWrapper,
         model_name="text-embedding-3-small",
         tokenizer_name="cl100k_base",
-        max_tokens=8192,
+        max_tokens=8191,
     ),
     max_tokens=8191,
     embed_dim=1536,
     open_weights=False,
     n_parameters=None,
-    memory_usage=None,
+    memory_usage_mb=None,
     license=None,
     reference="https://openai.com/index/new-embedding-models-and-api-updates/",
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,  # assumed
+    training_datasets=None,
 )
 text_embedding_3_large = ModelMeta(
     name="openai/text-embedding-3-large",
     revision="2",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
-    loader=partial(
+    loader=partial(  # type: ignore
         OpenAIWrapper,
         model_name="text-embedding-3-large",
         tokenizer_name="cl100k_base",
-        max_tokens=8192,
+        max_tokens=8191,
     ),
     max_tokens=8191,
     embed_dim=3072,
@@ -155,18 +157,23 @@ text_embedding_3_large = ModelMeta(
     framework=["API"],
     use_instructions=False,
     n_parameters=None,
-    memory_usage=None,
+    memory_usage_mb=None,
+    public_training_code=None,
+    public_training_data=None,  # assumed
+    training_datasets=None,
+    license=None,
+    similarity_fn_name=None,
 )
 text_embedding_ada_002 = ModelMeta(
     name="openai/text-embedding-ada-002",
     revision="2",
     release_date="2022-12-15",
     languages=None,  # supported languages not specified
-    loader=partial(
+    loader=partial(  # type: ignore
         OpenAIWrapper,
         model_name="text-embedding-ada-002",
         tokenizer_name="cl100k_base",
-        max_tokens=8192,
+        max_tokens=8191,
     ),
     reference="https://openai.com/index/new-and-improved-embedding-model/",
     max_tokens=8191,
@@ -175,5 +182,10 @@ text_embedding_ada_002 = ModelMeta(
     framework=["API"],
     use_instructions=False,
     n_parameters=None,
-    memory_usage=None,
+    memory_usage_mb=None,
+    public_training_code=None,
+    public_training_data=None,  # assumed
+    training_datasets=None,
+    license=None,
+    similarity_fn_name=None,
 )

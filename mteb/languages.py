@@ -5,6 +5,7 @@ Script codes (ISO 15924) obtained from: https://unicode.org/iso15924/iso15924.tx
 from __future__ import annotations
 
 import json
+from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -81,5 +82,19 @@ class LanguageScripts:
             return True
         return False
 
+    def contains_languages(self, languages: Iterable[str]) -> bool:
+        """Whether is contains all of the languages"""
+        for l in languages:
+            if not self.contains_language(l):
+                return False
+        return True
+
     def contains_script(self, script: str) -> bool:
         return script in self.scripts
+
+    def contains_scripts(self, scripts: Iterable[str]) -> bool:
+        """Whether is contains all of the scripts"""
+        for s in scripts:
+            if not self.contains_script(s):
+                return False
+        return True

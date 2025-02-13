@@ -53,6 +53,9 @@ class HagridRetrieval(AbsTaskRetrieval):
             "miracl/hagrid",
             split=self.metadata.eval_splits[0],
             revision=self.metadata_dict["dataset"].get("revision", None),
+            trust_remote_code=self.metadata_dict["dataset"].get(
+                "trust_remote_code", False
+            ),
         )
         proc_data = self.preprocess_data(data)
 

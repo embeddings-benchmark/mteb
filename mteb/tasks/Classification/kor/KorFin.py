@@ -25,7 +25,7 @@ class KorFin(AbsTaskClassification):
             "2022-01-01",
             "2022-12-31",
         ),  # Assumed date based on the citations in the paper
-        domains=["News", "Written"],
+        domains=["News", "Written", "Financial"],
         task_subtypes=["Sentiment/Hate speech"],
         license="cc-by-sa-4.0",
         annotations_creators="expert-annotated",

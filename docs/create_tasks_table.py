@@ -50,7 +50,9 @@ def task_to_markdown_row(task: mteb.AbsTask) -> str:
         f"[{name}]({task.metadata.reference})" if task.metadata.reference else name
     )
     domains = (
-        "[" + ", ".join(task.metadata.domains) + "]" if task.metadata.domains else ""
+        "[" + ", ".join(sorted(task.metadata.domains)) + "]"
+        if task.metadata.domains
+        else ""
     )
     n_samples = task.metadata.n_samples
     dataset_statistics = round_floats_in_dict(task.metadata.descriptive_stats)

@@ -9,8 +9,7 @@ import torch
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.encoder_interface import PromptType
-
-from .wrapper import Wrapper
+from mteb.models.wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +58,7 @@ class SentenceTransformerWrapper(Wrapper):
         if isinstance(self.model, CrossEncoder):
             self.predict = self._predict
 
-        if hasattr(self.model, "similarity"):
+        if hasattr(self.model, "similarity") and callable(self.model.similarity):
             self.similarity = self.model.similarity
 
     def encode(

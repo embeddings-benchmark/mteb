@@ -10,8 +10,7 @@ import torch
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
-
-from .sentence_transformer_wrapper import SentenceTransformerWrapper
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 
 logger = logging.getLogger(__name__)
 
@@ -67,7 +66,8 @@ uae_large_v1 = ModelMeta(
     open_weights=True,
     revision="369c368f70f16a613f19f5598d4f12d9f44235d4",
     release_date="2023-12-04",  # initial commit of hf model.
-    n_parameters=335_000,
+    n_parameters=335 * 1e6,
+    memory_usage_mb=1278,
     max_tokens=512,
     embed_dim=1024,
     license="mit",
@@ -75,4 +75,13 @@ uae_large_v1 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     reference="https://huggingface.co/WhereIsAI/UAE-Large-V1",
     use_instructions=True,
+    training_datasets={
+        # source: https://arxiv.org/pdf/2309.12871
+        # not in MTEB
+        "MNLI": [],
+        "NLI": [],
+        "SNLI": [],
+    },
+    public_training_code=None,
+    public_training_data=None,
 )

@@ -9,8 +9,7 @@ import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
-
-from .wrapper import Wrapper
+from mteb.models.wrapper import Wrapper
 
 supported_languages = [
     "afr-Latn",
@@ -227,7 +226,7 @@ cohere_mult_3 = ModelMeta(
     revision="1",
     release_date="2023-11-02",
     n_parameters=None,
-    memory_usage=None,
+    memory_usage_mb=None,
     max_tokens=None,
     embed_dim=512,
     reference="https://cohere.com/blog/introducing-embed-v3",
@@ -235,6 +234,9 @@ cohere_mult_3 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,  # assumed
+    training_datasets=None,
 )
 
 cohere_eng_3 = ModelMeta(
@@ -250,13 +252,16 @@ cohere_eng_3 = ModelMeta(
     revision="1",
     release_date="2023-11-02",
     n_parameters=None,
-    memory_usage=None,
+    memory_usage_mb=None,
     max_tokens=512,
     embed_dim=1024,
     license=None,
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,  # assumed
+    training_datasets=None,
 )
 
 cohere_mult_light_3 = ModelMeta(
@@ -272,13 +277,16 @@ cohere_mult_light_3 = ModelMeta(
     reference="https://cohere.com/blog/introducing-embed-v3",
     release_date="2023-11-02",
     n_parameters=None,
-    memory_usage=None,
+    memory_usage_mb=None,
     max_tokens=512,
     embed_dim=384,
     license=None,
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,  # assumed
+    training_datasets=None,
 )
 
 cohere_eng_light_3 = ModelMeta(
@@ -294,11 +302,14 @@ cohere_eng_light_3 = ModelMeta(
     revision="1",
     release_date="2023-11-02",
     n_parameters=None,
-    memory_usage=None,
+    memory_usage_mb=None,
     max_tokens=512,
     embed_dim=384,
     license=None,
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,  # assumed
+    training_datasets=None,
 )
