@@ -429,6 +429,18 @@ Based on community feedback and research findings, This definition could change 
             """
             )
         with gr.Accordion(
+            "What does the other columns mean?",
+            open=False,
+        ):
+            gr.Markdown(
+                """
+- **Number of Parameters**: This is the total number of parameters in the model including embedding parameters. A higher value means the model requires more CPU/GPU memory to run; thus, less is generally desirable.
+- **Embedding Dimension**: This is the vector dimension of the embeddings that the model produces. When saving embeddings to disk, a higher dimension will require more space, thus less is usually desirable.
+- **Max tokens**: This refers to how many tokens (=word pieces) the model can process. Generally, a larger value is desirable.
+- **Zero-shot**: This indicates if the model is zero-shot on the benchmark. For more information on zero-shot see the info-box below.
+            """
+            )
+        with gr.Accordion(
             "Why is a model missing or not showing up?",
             open=False,
         ):
