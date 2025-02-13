@@ -221,7 +221,7 @@ def scores_to_tables(
             joint_table_style,
             datatype=column_types,
             interactive=False,
-            pinned_columns=2,
+            pinned_columns=3,
         ),
         gr.DataFrame(per_task_style, interactive=False, pinned_columns=1),
     )
