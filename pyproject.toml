@@ -156,4 +156,4 @@ patch_types = ["fix", "perf"]
 
 
 [tool.pytest.ini_options]
-addopts = "--reruns 3 --only-rerun requests.exceptions.ReadTimeout --durations=5"
+addopts = "--reruns 3 --only-rerun requests.exceptions.ReadTimeout --only-rerun huggingface_hub.errors.HfHubHTTPError --durations=5"
