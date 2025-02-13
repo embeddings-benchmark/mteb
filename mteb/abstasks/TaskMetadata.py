@@ -101,7 +101,7 @@ SAMPLE_CREATION_METHOD = Literal[
     "multiple",
 ]
 
-MIEB_TASK_TYPE = Literal[
+MIEB_TASK_TYPE = (
     "Any2AnyMultiChoice",
     "Any2AnyRetrieval",
     "Any2TextMutipleChoice",
@@ -111,9 +111,9 @@ MIEB_TASK_TYPE = Literal[
     "ImageTextPairClassification",
     "VisualSTS",
     "ZeroShotClassification",
-]
+)
 
-MMTEB_TASK_TYPE = Literal[
+TASK_TYPE = (
     "BitextMining",
     "Classification",
     "MultilabelClassification",
@@ -125,9 +125,9 @@ MMTEB_TASK_TYPE = Literal[
     "Summarization",
     "InstructionRetrieval",
     "Speed",
-]
+) + MIEB_TASK_TYPE
 
-TASK_TYPE = Union[MMTEB_TASK_TYPE, MIEB_TASK_TYPE]
+TASK_TYPE = Literal[TASK_TYPE]
 
 
 TASK_CATEGORY = Literal[
