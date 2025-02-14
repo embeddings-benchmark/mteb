@@ -5,13 +5,14 @@ from pathlib import Path
 
 import pytest
 
-from scripts.generate_metadata import get_base_model, main
+from scripts.generate_metadata import get_base_model
+from scripts.generate_metadata import main as generate_metadata_main
 
 
 def test_create_model_meta_embedding_models_from_hf(tmp_path: Path):
     models = ["intfloat/multilingual-e5-large", "intfloat/multilingual-e5-small"]
     tmp_path = tmp_path / "new_models.py"
-    main(tmp_path, models)
+    generate_metadata_main(tmp_path, models)
 
     assert tmp_path.exists()
     assert tmp_path.read_text().startswith("from mteb.model_meta import ModelMeta")
@@ -43,5 +44,5 @@ def test_get_base_model_name_is_the_same():
 def test_create_model_meta_cross_encoder_models_from_hf(tmp_path: Path):
     models = ["intfloat/multilingual-e5-cross-encoder"]
     tmp_path = tmp_path / "new_models.py"
-    main(tmp_path, models)
+    generate_metadata_main(tmp_path, models)
     assert True
