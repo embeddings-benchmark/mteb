@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import json
+import logging
 from pathlib import Path
 
 import iso639
 from huggingface_hub import HfApi, ModelCard, hf_hub_download
 from tqdm import tqdm
-import logging
+
 from mteb.model_meta import ModelMeta
 
 to_keep = [
