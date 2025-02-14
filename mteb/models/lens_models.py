@@ -3,6 +3,7 @@ from __future__ import annotations
 from mteb.model_meta import ModelMeta
 from mteb.models.bge_models import bge_full_data
 
+
 lens_d4000 = ModelMeta(
     loader=None,  # TODO: implement this in the future
     name="yibinlei/LENS-d4000",
