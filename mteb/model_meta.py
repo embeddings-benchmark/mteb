@@ -89,7 +89,7 @@ class ModelMeta(BaseModel):
             a benchmark as well as mark dataset contaminations.
         adapted_from: Name of the model from which this model is adapted. For quantizations, fine-tunes, long doc extensions, etc.
         superseded_by: Name of the model that supersedes this model, e.g., nvidia/NV-Embed-v2 supersedes v1.
-        is_cross_encoder: Whether the model is a cross-encoder or not. If None it is assumed that the model is not a cross-encoder.
+        is_cross_encoder: Whether the model can act as a cross-encoder or not.
         modalities: A list of strings representing the modalities the model supports. Default is ["text"].
     """
 
