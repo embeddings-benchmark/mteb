@@ -94,6 +94,7 @@ arctic_embed_xs = ModelMeta(
     open_weights=True,
     framework=["Sentence Transformers", "PyTorch"],
     n_parameters=22_600_000,
+    memory_usage_mb=86,
     max_tokens=512,
     embed_dim=384,
     license="apache-2.0",
@@ -109,12 +110,15 @@ arctic_embed_xs = ModelMeta(
         # splits not specified to assuming everything
         # in MTEB
         "NQ": ["test"],
+        "NQ-NL": ["test"],  # translated from NQ (not trained on)
         "NQHardNegatives": ["test"],
         "NQ-PL": ["test"],
         "HotPotQA": ["test"],  # translated, not trained on
         "HotPotQAHardNegatives": ["test"],
         "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
+        "HotpotQA-NL": ["test"],  # translated from hotpotQA (not trained on)
         "FEVER": ["test"],
+        "FEVER-NL": ["test"],  # translated from FEVER (not trained on)
         "FEVERHardNegatives": ["test"],
         # not in MTEB
         # trained on stack exchange (title-body)
@@ -145,6 +149,7 @@ arctic_embed_s = ModelMeta(
     open_weights=True,
     framework=["Sentence Transformers", "PyTorch"],
     n_parameters=32_200_000,
+    memory_usage_mb=127,
     max_tokens=512,
     embed_dim=384,
     license="apache-2.0",
@@ -160,11 +165,14 @@ arctic_embed_s = ModelMeta(
         # splits not specified to assuming everything
         # in MTEB
         "NQ": ["test"],
+        "NQ-NL": ["test"],  # translated from NQ (not trained on)
         "NQHardNegatives": ["test"],
         "HotPotQA": ["test"],
         "HotPotQAHardNegatives": ["test"],
         "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
+        "HotpotQA-NL": ["test"],  # translated from hotpotQA (not trained on)
         "FEVER": ["test"],
+        "FEVER-NL": ["test"],  # translated from FEVER (not trained on)
         "FEVERHardNegatives": ["test"],
         # not in MTEB
         # trained on stack exchange (title-body)
@@ -195,6 +203,7 @@ arctic_embed_m = ModelMeta(
     open_weights=True,
     framework=["Sentence Transformers", "PyTorch"],
     n_parameters=109_000_000,
+    memory_usage_mb=415,
     max_tokens=512,
     embed_dim=768,
     license="apache-2.0",
@@ -210,11 +219,14 @@ arctic_embed_m = ModelMeta(
         # splits not specified to assuming everything
         # in MTEB
         "NQ": ["test"],
+        "NQ-NL": ["test"],  # translated from NQ (not trained on)
         "NQHardNegatives": ["test"],
         "HotPotQA": ["test"],
         "HotPotQAHardNegatives": ["test"],
         "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
+        "HotpotQA-NL": ["test"],  # translated from hotpotQA (not trained on)
         "FEVER": ["test"],
+        "FEVER-NL": ["test"],  # translated from FEVER (not trained on)
         "FEVERHardNegatives": ["test"],
         # not in MTEB
         # trained on stack exchange (title-body)
@@ -245,6 +257,7 @@ arctic_embed_m_long = ModelMeta(
     open_weights=True,
     framework=["Sentence Transformers", "PyTorch"],
     n_parameters=137_000_000,
+    memory_usage_mb=522,
     max_tokens=2048,
     embed_dim=768,
     license="apache-2.0",
@@ -260,11 +273,14 @@ arctic_embed_m_long = ModelMeta(
         # splits not specified to assuming everything
         # in MTEB
         "NQ": ["test"],
+        "NQ-NL": ["test"],  # translated from NQ (not trained on)
         "NQHardNegatives": ["test"],
         "HotPotQA": ["test"],
         "HotPotQAHardNegatives": ["test"],
         "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
+        "HotpotQA-NL": ["test"],  # translated from hotpotQA (not trained on)
         "FEVER": ["test"],
+        "FEVER-NL": ["test"],  # translated from FEVER (not trained on)
         "FEVERHardNegatives": ["test"],
         # trained on stack exchange, unsure if sources match
         # not in MTEB
@@ -295,6 +311,7 @@ arctic_embed_l = ModelMeta(
     open_weights=True,
     framework=["Sentence Transformers", "PyTorch"],
     n_parameters=335_000_000,
+    memory_usage_mb=1274,
     max_tokens=512,
     embed_dim=1024,
     license="apache-2.0",
@@ -310,11 +327,14 @@ arctic_embed_l = ModelMeta(
         # splits not specified to assuming everything
         # in MTEB
         "NQ": ["test"],
+        "NQ-NL": ["test"],  # translated from NQ (not trained on)
         "NQHardNegatives": ["test"],
         "HotPotQA": ["test"],
         "HotPotQAHardNegatives": ["test"],
         "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
+        "HotpotQA-NL": ["test"],  # translated from hotpotQA (not trained on)
         "FEVER": ["test"],
+        "FEVER-NL": ["test"],  # translated from FEVER (not trained on)
         "FEVERHardNegatives": ["test"],
         # not in MTEB
         # trained on stack exchange (title-body)
@@ -347,6 +367,7 @@ arctic_embed_m_v1_5 = ModelMeta(
     open_weights=True,
     framework=["Sentence Transformers", "PyTorch"],
     n_parameters=109_000_000,
+    memory_usage_mb=415,
     max_tokens=512,
     embed_dim=768,
     license="apache-2.0",
@@ -374,6 +395,7 @@ arctic_embed_m_v2_0 = ModelMeta(
     open_weights=True,
     framework=["Sentence Transformers", "PyTorch"],
     n_parameters=305_000_000,
+    memory_usage_mb=1165,
     max_tokens=8192,
     embed_dim=768,
     license="apache-2.0",
@@ -423,6 +445,7 @@ arctic_embed_l_v2_0 = ModelMeta(
     open_weights=True,
     framework=["Sentence Transformers", "PyTorch"],
     n_parameters=568_000_000,
+    memory_usage_mb=2166,
     max_tokens=8192,
     embed_dim=1024,
     license="apache-2.0",

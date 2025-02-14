@@ -162,7 +162,7 @@ For instance to select the 56 English datasets that form the "Overall MTEB Engli
 
 ```python
 import mteb
-benchmark = mteb.get_benchmark("MTEB(eng, classic)")
+benchmark = mteb.get_benchmark("MTEB(eng, v1)")
 evaluation = mteb.MTEB(tasks=benchmark)
 ```
 
@@ -173,7 +173,7 @@ import mteb
 benchmarks = mteb.get_benchmarks()
 ```
 
-Generally we use the naming scheme for benchmarks `MTEB(*)`, where the "*" denotes the target of the benchmark. In the case of a language, we use the three-letter language code. For large groups of languages, we use the group notation, e.g., `MTEB(Scandinavian)` for Scandinavian languages. External benchmarks implemented in MTEB like `CoIR` use their original name. When using a benchmark from MTEB please cite `mteb` along with the citations of the benchmark which you can access using:
+Generally we use the naming scheme for benchmarks `MTEB(*)`, where the "*" denotes the target of the benchmark. In the case of a language, we use the three-letter language code. For large groups of languages, we use the group notation, e.g., `MTEB(Scandinavian, v1)` for Scandinavian languages. External benchmarks implemented in MTEB like `CoIR` use their original name. When using a benchmark from MTEB please cite `mteb` along with the citations of the benchmark which you can access using:
 
 ```python
 benchmark.citation
@@ -447,6 +447,24 @@ model_w_contamination = ModelMeta(
 </details>
 
 <details>
+  <summary>  Running the leaderboard locally </summary>
+
+
+### Running the Leaderboard
+
+It is possible to completely deploy the leaderboard locally or self-host it. This can e.g. be relevant for companies that might want to
+integrate build their own benchmarks or integrate custom tasks into existing benchmarks. 
+
+Running the leaderboard is quite easy. Simply run:
+```py
+python -m mteb.leaderboard.app
+```
+
+The leaderboard requires gradio install, which can be installed using `pip install mteb[gradio]` and requires python >3.10.
+
+</details>
+
+<details>
   <summary>  Caching Embeddings To Re-Use Them </summary>
 
 
@@ -483,6 +501,7 @@ evaluation.run(model, ...)
 | 👩‍💻 [Adding a benchmark]     | How to add a new benchmark to MTEB and to the leaderboard                           |
 | 🤝 [Contributing]              | How to contribute to MTEB and set it up for development                             |
 | 🌐 [MMTEB]                     | An open-source effort to extend MTEB to cover a broad set of languages              |
+| 🖼️ [MIEB]                      | Extension of MTEB to image embeddings |
 
 [Tasks]: docs/tasks.md
 [Benchmarks]: docs/benchmarks.md
@@ -492,6 +511,7 @@ evaluation.run(model, ...)
 [Adding a benchmark]: docs/adding_a_benchmark.md
 [Leaderboard]: https://huggingface.co/spaces/mteb/leaderboard
 [MMTEB]: docs/mmteb/readme.md
+[MIEB]: docs/mieb.md
 [Reproducible workflows]: docs/reproducible_workflow.md
 
 ## Citing

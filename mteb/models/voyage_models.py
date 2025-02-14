@@ -8,9 +8,8 @@ import numpy as np
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
+from mteb.models.wrapper import Wrapper
 from mteb.requires_package import requires_package
-
-from .wrapper import Wrapper
 
 VOYAGE_TRAINING_DATA = {
     # Self-reported (message from VoyageAI member)
@@ -156,6 +155,7 @@ voyage_large_2_instruct = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
+    memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/05/05/voyage-large-2-instruct-instruction-tuned-and-rank-1-on-mteb/",
     similarity_fn_name="cosine",
@@ -180,6 +180,7 @@ voyage_finance_2 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
+    memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/06/03/domain-specific-embeddings-finance-edition-voyage-finance-2/",
     similarity_fn_name="cosine",
@@ -204,6 +205,7 @@ voyage_law_2 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
+    memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/04/15/domain-specific-embeddings-and-retrieval-legal-edition-voyage-law-2/",
     similarity_fn_name="cosine",
@@ -228,6 +230,7 @@ voyage_code_2 = ModelMeta(
     embed_dim=1536,
     open_weights=False,
     n_parameters=None,
+    memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/01/23/voyage-code-2-elevate-your-code-retrieval/",
     similarity_fn_name="cosine",
@@ -237,6 +240,32 @@ voyage_code_2 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
 )
+
+voyage_code_2 = ModelMeta(
+    name="voyageai/voyage-code-3",
+    revision="1",
+    release_date="2024-12-04",
+    languages=None,  # supported languages not specified
+    loader=partial(  # type: ignore
+        VoyageWrapper,
+        model_name="voyage-code-3",
+        model_prompts=model_prompts,
+    ),
+    max_tokens=32000,
+    embed_dim=1024,
+    open_weights=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://blog.voyageai.com/2024/12/04/voyage-code-3/",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    training_datasets=None,  # Not known
+    public_training_code=None,
+    public_training_data=None,
+)
+
 
 voyage_large_2 = ModelMeta(
     name="voyage-large-2",  # Date of publication of this post https://blog.voyageai.com/2023/10/29/voyage-embeddings/
@@ -252,6 +281,7 @@ voyage_large_2 = ModelMeta(
     embed_dim=1536,
     open_weights=False,
     n_parameters=None,
+    memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2023/10/29/voyage-embeddings/",
     similarity_fn_name="cosine",
@@ -276,6 +306,7 @@ voyage_2 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
+    memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2023/10/29/voyage-embeddings/",
     similarity_fn_name="cosine",
@@ -299,6 +330,7 @@ voyage_multilingual_2 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
+    memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/06/10/voyage-multilingual-2-multilingual-embedding-model/",
     similarity_fn_name="cosine",
@@ -323,6 +355,7 @@ voyage_3 = ModelMeta(
     embed_dim=1024,
     open_weights=False,
     n_parameters=None,
+    memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/09/18/voyage-3/",
     similarity_fn_name="cosine",
@@ -347,6 +380,7 @@ voyage_3_lite = ModelMeta(
     embed_dim=512,
     open_weights=False,
     n_parameters=None,
+    memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/09/18/voyage-3/",
     similarity_fn_name="cosine",
@@ -356,7 +390,6 @@ voyage_3_lite = ModelMeta(
     public_training_code=None,
     public_training_data=None,
 )
-
 
 voyage_3_exp = ModelMeta(
     name="voyageai/voyage-3-m-exp",
@@ -372,6 +405,7 @@ voyage_3_exp = ModelMeta(
     embed_dim=2048,
     open_weights=False,
     n_parameters=int(6918 * 1e6),
+    memory_usage_mb=None,
     license=None,
     reference="https://huggingface.co/voyageai/voyage-3-m-exp",
     similarity_fn_name="cosine",
@@ -381,23 +415,29 @@ voyage_3_exp = ModelMeta(
         # MTEB(eng, classic) training data:
         "ArguAna": ["train"],
         "ArguAna-PL": ["train"],
+        "ArguAna-NL": ["train"],  # translation not trained on
         "NanoArguAnaRetrieval": ["train"],
         "HotpotQA": ["train"],
         "HotpotQA-PL": ["train"],  # translation not trained on
+        "HotpotQA-NL": ["train"],  # translation not trained on
         "HotpotQAHardNegatives": ["train"],
         "MSMARCO": ["train"],
         "MSMARCOHardNegatives": ["train"],
         "NanoMSMARCORetrieval": ["train"],
         "MSMARCO-PL": ["train"],  # translation not trained on
+        "mMARCO-NL": ["train"],  # translation not trained on
         "NQ": ["train"],
         "NQHardNegatives": ["train"],
         "NanoNQRetrieval": ["train"],
         "NQ-PL": ["train"],  # translation not trained on
+        "NQ-NL": ["train"],  # translation not trained on
         "FEVER": ["train"],
         "FEVERHardNegatives": ["train"],
         "NanoFEVERRetrieval": ["train"],
+        "FEVER-NL": ["train"],  # translation not trained on
         "FiQA2018": ["train"],
         "FiQA2018-PL": ["train"],  # translation not trained on
+        "FiQA2018-NL": ["train"],  # translation not trained on
         "STS12": ["train"],
         "STS22": ["train"],
         "AmazonReviewsClassification": ["train"],
