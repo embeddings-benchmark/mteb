@@ -67,15 +67,20 @@ class AbsTaskBitextMining(AbsTask):
     def evaluate(
         self,
         model: Encoder,
-        split: str,
+        split: str = "test",
+        subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any] = {},
-        **kwargs,
+        **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         if not self.data_loaded:
             self.load_data()
 
         hf_subsets = list(self.dataset) if self.is_multilingual else ["default"]
+
+        # If subsets_to_run is specified, filter the hf_subsets accordingly
+        if subsets_to_run is not None:
+            hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
 
         scores = {}
         if self.parallel_subsets:

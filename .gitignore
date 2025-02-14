@@ -145,3 +145,10 @@ tests/create_meta/model_card.md
 # removed results from mteb repo they are now available at: https://github.com/embeddings-benchmark/results
 results/
 uv.lock
+
+# model loading tests
+model_names.txt
+mteb/leaderboard/__cached_results.json
+
+# gradio
+.gradio/

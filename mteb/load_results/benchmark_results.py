@@ -3,9 +3,9 @@ from __future__ import annotations
 import json
 import warnings
 from collections import defaultdict
-from collections.abc import Iterable
+from collections.abc import Iterable, Sequence
 from pathlib import Path
-from typing import Any, Callable, Literal, Optional
+from typing import Any, Callable, Literal
 
 import numpy as np
 import pandas as pd
@@ -69,7 +69,7 @@ class ModelResult(BaseModel):
             task_results=new_task_results,
         )
 
-    def select_tasks(self, tasks: list[AbsTask]) -> ModelResult:
+    def select_tasks(self, tasks: Sequence[AbsTask]) -> ModelResult:
         task_name_to_task = {task.metadata.name: task for task in tasks}
         new_task_results = [
             task_res.validate_and_filter_scores(task_name_to_task[task_res.task_name])
@@ -87,21 +87,35 @@ class ModelResult(BaseModel):
         splits: list[Split] | None = None,
         languages: list[ISO_LANGUAGE | ISO_LANGUAGE_SCRIPT] | None = None,
         scripts: list[ISO_LANGUAGE_SCRIPT] | None = None,
-        getter: Callable[[ScoresDict], Score] = lambda scores: scores["main_score"],
-        aggregation: Callable[[list[Score]], Any] = np.mean,
+        getter: Callable[[ScoresDict], Score] | None = None,
+        aggregation: Callable[[list[Score]], Any] | None = None,
         format: Literal["wide", "long"] = "wide",
     ) -> dict | list:
+        if (getter is not None) or (aggregation is not None) or (scripts is not None):
+            use_fast = False
+            getter = (
+                getter if getter is not None else lambda scores: scores["main_score"]
+            )
+            aggregation = aggregation if aggregation is not None else np.mean
+        else:
+            use_fast = True
         if format == "wide":
             scores = {}
             for res in self.task_results:
                 try:
-                    scores[res.task_name] = res.get_score(
-                        splits=splits,
-                        languages=languages,
-                        scripts=scripts,
-                        getter=getter,
-                        aggregation=aggregation,
-                    )
+                    if use_fast:
+                        scores[res.task_name] = res.get_score_fast(
+                            splits=splits,  # type: ignore
+                            languages=languages,  # type: ignore
+                        )
+                    else:
+                        scores[res.task_name] = res.get_score(
+                            splits=splits,
+                            languages=languages,
+                            aggregation=aggregation,  # type: ignore
+                            getter=getter,  # type: ignore
+                            scripts=scripts,
+                        )
                 except Exception as e:
                     warnings.warn(
                         f"Couldn't get scores for {res.task_name} due to {e}."
@@ -111,16 +125,23 @@ class ModelResult(BaseModel):
             entries = []
             for task_res in self.task_results:
                 try:
+                    if use_fast:
+                        score = task_res.get_score_fast(
+                            splits=splits, languages=languages
+                        )
+                    else:
+                        score = task_res.get_score(
+                            splits=splits,
+                            languages=languages,
+                            aggregation=aggregation,
+                            getter=getter,
+                            scripts=scripts,
+                        )
                     entry = dict(  # noqa
                         model_name=self.model_name,
                         model_revision=self.model_revision,
                         task_name=task_res.task_name,
-                        score=task_res.get_score(
-                            splits=splits,
-                            languages=languages,
-                            getter=getter,
-                            aggregation=aggregation,
-                        ),
+                        score=score,
                         mteb_version=task_res.mteb_version,
                         dataset_revision=task_res.dataset_revision,
                         evaluation_time=task_res.evaluation_time,
@@ -195,7 +216,7 @@ class BenchmarkResults(BaseModel):
             model_results=[res for res in model_results if res.task_results]
         )
 
-    def select_tasks(self, tasks: list[AbsTask]) -> BenchmarkResults:
+    def select_tasks(self, tasks: Sequence[AbsTask]) -> BenchmarkResults:
         new_model_results = [
             model_res.select_tasks(tasks) for model_res in self.model_results
         ]
@@ -209,6 +230,7 @@ class BenchmarkResults(BaseModel):
         frameworks: Iterable[str] | None = None,
         n_parameters_range: tuple[int | None, int | None] = (None, None),
         use_instructions: bool | None = None,
+        zero_shot_on: list[AbsTask] | None = None,
     ) -> BenchmarkResults:
         # if model_names is None:
         #     model_names = [model_res.model_name for model_res in self]
@@ -219,6 +241,7 @@ class BenchmarkResults(BaseModel):
             frameworks=frameworks,
             n_parameters_range=n_parameters_range,
             use_instructions=use_instructions,
+            zero_shot_on=zero_shot_on,
         )
         models = {meta.name for meta in model_metas}
         # model_revision_pairs = {(meta.name, meta.revision) for meta in model_metas}
@@ -229,16 +252,26 @@ class BenchmarkResults(BaseModel):
         return type(self).model_construct(model_results=new_model_results)
 
     def join_revisions(self):
-        def parse_version(version_str: str) -> Optional[Version]:
+        def parse_version(version_str: str) -> Version | None:
             try:
                 return Version(version_str)
             except (InvalidVersion, TypeError):
                 return None
 
         def keep_best(group: pd.DataFrame) -> pd.DataFrame:
+            # Filtering out task_results where no scores are present
+            group = group[group["has_scores"]]
             is_main_revision = group["revision"] == group["main_revision"]
-            if is_main_revision.sum() == 1:
-                return group[is_main_revision]
+            # If the main revision is present we select that
+            if is_main_revision.sum() > 0:
+                return group[is_main_revision].head(n=1)
+            unique_revisions = group["revision"].unique()
+            # Filtering out no_revision_available if other revisions are present
+            if (len(unique_revisions) > 1) and (
+                "no_revision_available" in unique_revisions
+            ):
+                group = group[group["revision"] != "no_revision_available"]
+            # If there are any not-NA mteb versions, we select the latest one
             if group["mteb_version"].notna().any():
                 group = group.dropna(subset=["mteb_version"])
                 group = group.sort_values("mteb_version", ascending=False)
@@ -255,8 +288,11 @@ class BenchmarkResults(BaseModel):
                         task_name=task_result.task_name,
                         mteb_version=task_result.mteb_version,
                         task_result=task_result,
+                        has_scores=bool(task_result.scores),
                     )
                 )
+        if not records:
+            return BenchmarkResults.model_construct(model_results=[])
         task_df = pd.DataFrame.from_records(records)
         model_to_main_revision = {
             meta.name: meta.revision for meta in get_model_metas()
@@ -283,8 +319,8 @@ class BenchmarkResults(BaseModel):
         splits: list[Split] | None = None,
         languages: list[ISO_LANGUAGE | ISO_LANGUAGE_SCRIPT] | None = None,
         scripts: list[ISO_LANGUAGE_SCRIPT] | None = None,
-        getter: Callable[[ScoresDict], Score] = lambda scores: scores["main_score"],
-        aggregation: Callable[[list[Score]], Any] = np.mean,
+        getter: Callable[[ScoresDict], Score] | None = None,
+        aggregation: Callable[[list[Score]], Any] | None = None,
         format: Literal["wide", "long"] = "wide",
     ) -> list[dict]:
         entries = []
@@ -359,7 +395,7 @@ class BenchmarkResults(BaseModel):
         return self.model_dump()
 
     @classmethod
-    def from_dict(cls, data: dict) -> TaskResult:
+    def from_dict(cls, data: dict) -> BenchmarkResults:
         return cls.model_validate(data)
 
     def to_disk(self, path: Path | str) -> None:

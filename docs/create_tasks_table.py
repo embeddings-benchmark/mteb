@@ -50,7 +50,9 @@ def task_to_markdown_row(task: mteb.AbsTask) -> str:
         f"[{name}]({task.metadata.reference})" if task.metadata.reference else name
     )
     domains = (
-        "[" + ", ".join(task.metadata.domains) + "]" if task.metadata.domains else ""
+        "[" + ", ".join(sorted(task.metadata.domains)) + "]"
+        if task.metadata.domains
+        else ""
     )
     n_samples = task.metadata.n_samples
     dataset_statistics = round_floats_in_dict(task.metadata.descriptive_stats)
@@ -131,14 +133,14 @@ def insert_tables(
     file_path: str, tables: list[str], tags: list[str] = ["TASKS TABLE"]
 ) -> None:
     """Insert tables within <!-- TABLE START --> and <!-- TABLE END --> or similar tags."""
-    md = Path(file_path).read_text()
+    md = Path(file_path).read_text(encoding="utf-8")
 
     for table, tag in zip(tables, tags):
         start = f"<!-- {tag} START -->"
         end = f"<!-- {tag} END -->"
         md = md.replace(md[md.index(start) + len(start) : md.index(end)], table)
 
-    Path(file_path).write_text(md)
+    Path(file_path).write_text(md, encoding="utf-8")
 
 
 def main():

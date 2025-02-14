@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import warnings
 from collections import defaultdict
 from pathlib import Path
 from time import time
@@ -44,6 +45,10 @@ class HFDataLoader:
             # By default fetch qrels from same repo not a second repo with "-qrels" like in original
             self.hf_repo_qrels = hf_repo_qrels if hf_repo_qrels else hf_repo
         else:
+            warnings.warn(
+                "Loading from local files will be removed in v2.0.0.",
+                DeprecationWarning,
+            )
             # data folder would contain these files:
             # (1) fiqa/corpus.jsonl  (format: jsonlines)
             # (2) fiqa/queries.jsonl (format: jsonlines)
@@ -304,6 +309,7 @@ class AbsTaskRetrieval(AbsTask):
         self,
         model,
         split: str = "test",
+        subsets_to_run: list[HFSubset] | None = None,
         *,
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
@@ -317,6 +323,8 @@ class AbsTaskRetrieval(AbsTask):
 
         scores = {}
         hf_subsets = list(self.hf_subsets) if self.is_multilingual else ["default"]
+        if subsets_to_run is not None:
+            hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
 
         for hf_subset in hf_subsets:
             logger.info(f"Subset: {hf_subset}")

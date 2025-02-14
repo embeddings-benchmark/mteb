@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import warnings
 from collections import defaultdict
 from time import time
 from typing import Any
@@ -319,6 +320,10 @@ class AbsTaskInstructionRetrieval(AbsTask):
         self.do_length_ablation = kwargs.get("do_length_ablation", False)
         if self.do_length_ablation:
             logger.info("Running length ablation also...")
+        warnings.warn(
+            "`AbsTaskInstructionRetrieval` will be merged with Retrieval in v2.0.0.",
+            DeprecationWarning,
+        )
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -516,6 +521,7 @@ class AbsTaskInstructionRetrieval(AbsTask):
         self,
         model: Encoder,
         split: str = "test",
+        subsets_to_run: list[str] | None = None,
         *,
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
@@ -528,7 +534,11 @@ class AbsTaskInstructionRetrieval(AbsTask):
         )
         scores = {}
         if self.is_multilingual:
-            for lang in self.hf_subsets:
+            hf_subsets = self.hf_subsets
+            if subsets_to_run is not None:
+                hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
+
+            for lang in hf_subsets:
                 logger.info(f"Language: {lang}")
                 scores[lang] = self._evaluate_subset_lang(
                     retriever,

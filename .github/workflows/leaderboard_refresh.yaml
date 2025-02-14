@@ -1,0 +1,16 @@
+name: Daily Space Rebuild
+on:
+  schedule:
+    # Runs at midnight Pacific Time (8 AM UTC)
+    - cron: '0 8 * * *'
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Factory Rebuild
+        run: |
+          curl -X POST \
+            "https://huggingface.co/api/spaces/mteb/leaderboard_2_demo/restart?factory=true" \
+            -H "Authorization: Bearer ${{ secrets.HF_TOKEN }}"

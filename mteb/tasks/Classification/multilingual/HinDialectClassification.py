@@ -3,29 +3,29 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-_LANGUAGES = {
-    "pan": ["pan-Guru"],
-    "bgc": ["bgc-Deva"],
-    "mag": ["mag-Deva"],
-    "bns": ["bns-Deva"],
-    "kfq": ["kfg-Deva"],
-    "noe": ["noe-Deva"],
-    "bhb": ["bhb-Deva"],
-    "bho": ["bho-Deva"],
-    "gbm": ["gbm-Deva"],
-    "mup": ["mup-Deva"],
-    "anp": ["anp-Deva"],
-    "hne": ["hne-Deva"],
-    "bra": ["bra-Deva"],
-    "raj": ["raj-Deva"],
-    "awa": ["awa-Deva"],
-    "guj": ["guj-Gujr"],
-    "ben": ["ben-Beng"],
-    "bhd": ["bhd-Deva"],
-    "kfy": ["kfy-Deva"],
-    "mar": ["mar-Deva"],
-    "bjj": ["bjj-Deva"],
-}
+_LANGUAGES = [
+    "pan-Guru",
+    "bgc-Deva",
+    "mag-Deva",
+    "bns-Deva",
+    "kfg-Deva",
+    "noe-Deva",
+    "bhb-Deva",
+    "bho-Deva",
+    "gbm-Deva",
+    "mup-Deva",
+    "anp-Deva",
+    "hne-Deva",
+    "bra-Deva",
+    "raj-Deva",
+    "awa-Deva",
+    "guj-Gujr",
+    "ben-Beng",
+    "bhd-Deva",
+    "kfy-Deva",
+    "mar-Deva",
+    "bjj-Deva",
+]
 
 
 class HinDialectClassification(AbsTaskClassification):
