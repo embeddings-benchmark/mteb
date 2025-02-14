@@ -1,13 +1,12 @@
 from __future__ import annotations
 
 import json
-import warnings
 from pathlib import Path
 
 import iso639
 from huggingface_hub import HfApi, ModelCard, hf_hub_download
 from tqdm import tqdm
-
+import logging
 from mteb.model_meta import ModelMeta
 
 to_keep = [
@@ -137,7 +136,7 @@ def convert_code(code: str) -> str | None:
         script = lang_to_script[lang_code]
         return f"{lang_code}_{script}"
     except Exception as e:
-        print(f"Couldn't convert {code}, reason: {e}")
+        logging.warning(f"Couldn't convert {code}, reason: {e}")
         return None
 
 
@@ -153,7 +152,7 @@ def get_embedding_dimensions(model_name: str) -> int | None:
             pooling_config = json.loads(in_file.read())
             return pooling_config.get("word_embedding_dimension", None)
     except Exception as e:
-        print(f"Couldn't get embedding size for {model_name}, reason: {e}")
+        logging.warning(f"Couldn't get embedding size for {model_name}, reason: {e}")
         return None
 
 
@@ -164,7 +163,7 @@ def get_max_token(model_name: str) -> int | None:
             config = json.loads(in_file.read())
             return config.get("max_position_embeddings", None)
     except Exception as e:
-        print(f"Couldn't get embedding size for {model_name}, reason: {e}")
+        logging.warning(f"Couldn't get embedding size for {model_name}, reason: {e}")
         return None
 
 
@@ -178,14 +177,16 @@ def get_base_model(model_name: str) -> str | None:
             config = json.loads(in_file.read())
             base_model = config.get("_name_or_path", None)
             if base_model in BASE_MODEL_ERRORS:
-                print(f"Base model error for {model_name} with base model {base_model}")
+                logging.warning(
+                    f"Base model error for {model_name} with base model {base_model}"
+                )
                 return None
             if base_model != model_name:
                 return base_model
             else:
                 return None
     except Exception as e:
-        print(f"Couldn't get base model for {model_name}, reason: {e}")
+        logging.warning(f"Couldn't get base model for {model_name}, reason: {e}")
         return None
 
 
@@ -221,7 +222,7 @@ def model_meta_from_hf_hub_embedding(model_name: str) -> ModelMeta:
         try:
             n_parameters = repo_info.safetensors.total
         except Exception as e:
-            print(f"Couldn't get model size for {model_name}, reason: {e}")
+            logging.warning(f"Couldn't get model size for {model_name}, reason: {e}")
             n_parameters = None
         n_dimensions = get_embedding_dimensions(model_name)
         datasets = card_data.get("datasets", None)
@@ -251,7 +252,7 @@ def model_meta_from_hf_hub_embedding(model_name: str) -> ModelMeta:
             use_instructions=None,
         )
     except Exception as e:
-        warnings.warn(f"Failed to extract metadata from model: {e}.")
+        logging.error(f"Failed to extract metadata from model: {e}.")
         return ModelMeta(
             name=model_name,
             revision=None,
