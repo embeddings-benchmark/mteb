@@ -5,7 +5,10 @@ from functools import partial
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
-from mteb.models.instruct_wrapper import instruct_wrapper
+from mteb.models.instruct_wrapper import (
+    InstructSentenceTransformerWrapper,
+    instruct_wrapper,
+)
 
 
 def instruction_template(
@@ -60,6 +63,37 @@ SFR_Embedding_2_R = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=SFR_TRAINING_DATA,
+)
+
+SFR_Embedding_Code_2B_R = ModelMeta(
+    loader=partial(  # type: ignore
+        InstructSentenceTransformerWrapper,
+        model_name_or_path="Salesforce/SFR-Embedding-Code-2B_R",
+        instruction_template=instruction_template,
+        attn="cccc",
+        pooling_method="lasttoken",
+        mode="embedding",
+        torch_dtype="auto",
+        normalized=True,
+    ),
+    name="Salesforce/SFR-Embedding-Code-2B_R",
+    languages=["eng_Latn"],
+    open_weights=True,
+    revision="c73d8631a005876ed5abde34db514b1fb6566973",
+    release_date="2025-01-17",  # initial commit of hf model.
+    n_parameters=2_610_000_000,
+    memory_usage_mb=4986,
+    embed_dim=2304,
+    license="cc-by-nc-4.0",
+    max_tokens=8192,
+    reference="https://huggingface.co/Salesforce/SFR-Embedding-Code-2B_R",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    adapted_from="google/gemma-2-2b-it",
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
 )
 
 SFR_Embedding_Mistral = ModelMeta(

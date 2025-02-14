@@ -12,7 +12,6 @@ from sentence_transformers import SentenceTransformer
 
 import mteb
 import mteb.overview
-from mteb.benchmarks.benchmarks import Benchmark
 from mteb.create_meta import generate_readme
 
 from .mock_models import (
@@ -167,7 +166,7 @@ def test_encode_kwargs_passed_to_all_encodes(task_name: str | mteb.AbsTask):
 @pytest.mark.parametrize("model", [MockNumpyEncoder()])
 def test_run_using_benchmark(model: mteb.Encoder):
     """Test that a benchmark object can be run using the MTEB class."""
-    bench = Benchmark(
+    bench = mteb.Benchmark(
         name="test_bench", tasks=mteb.get_tasks(tasks=["STS12", "SummEval"])
     )
 
@@ -181,7 +180,9 @@ def test_run_using_benchmark(model: mteb.Encoder):
 def test_run_using_list_of_benchmark(model: mteb.Encoder):
     """Test that a list of benchmark objects can be run using the MTEB class."""
     bench = [
-        Benchmark(name="test_bench", tasks=mteb.get_tasks(tasks=["STS12", "SummEval"]))
+        mteb.Benchmark(
+            name="test_bench", tasks=mteb.get_tasks(tasks=["STS12", "SummEval"])
+        )
     ]
 
     eval = mteb.MTEB(tasks=bench)
@@ -196,13 +197,13 @@ def test_benchmark_names_must_be_unique():
     names = [
         inst.name
         for nam, inst in benchmark_module.__dict__.items()
-        if isinstance(inst, Benchmark)
+        if isinstance(inst, mteb.Benchmark)
     ]
     assert len(names) == len(set(names))
 
 
 @pytest.mark.parametrize(
-    "name", ["MTEB(eng, classic)", "MTEB(rus)", "MTEB(Scandinavian)"]
+    "name", ["MTEB(eng, v1)", "MTEB(rus, v1)", "MTEB(Scandinavian, v1)"]
 )
 def test_get_benchmark(name):
     benchmark = mteb.get_benchmark(benchmark_name=name)

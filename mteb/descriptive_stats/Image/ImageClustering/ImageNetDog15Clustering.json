@@ -1,0 +1,59 @@
+{
+    "test": {
+        "num_samples": 1076,
+        "unique_num_labels": 15,
+        "min_image_width": 224,
+        "average_image_width": 224.0,
+        "max_image_width": 224,
+        "min_image_height": 224,
+        "average_image_height": 224.0,
+        "max_image_height": 224,
+        "labels": {
+            "0": {
+                "count": 152
+            },
+            "1": {
+                "count": 88
+            },
+            "2": {
+                "count": 75
+            },
+            "3": {
+                "count": 96
+            },
+            "4": {
+                "count": 57
+            },
+            "5": {
+                "count": 50
+            },
+            "6": {
+                "count": 52
+            },
+            "7": {
+                "count": 50
+            },
+            "8": {
+                "count": 50
+            },
+            "9": {
+                "count": 50
+            },
+            "10": {
+                "count": 53
+            },
+            "11": {
+                "count": 57
+            },
+            "12": {
+                "count": 50
+            },
+            "13": {
+                "count": 100
+            },
+            "14": {
+                "count": 96
+            }
+        }
+    }
+}
