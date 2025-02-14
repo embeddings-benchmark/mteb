@@ -77,7 +77,7 @@ class ClimateFEVERHardNegatives(AbsTaskRetrieval):
 class ClimateFEVERRetrievalv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="ClimateFEVER.v2",
-        description="CLIMATE-FEVER is a dataset adopting the FEVER methodology that consists of 1,535 real-world claims regarding climate-change. ",
+        description="CLIMATE-FEVER is a dataset following the FEVER methodology, containing 1,535 real-world climate change claims. This updated version addresses corpus mismatches and qrel inconsistencies in MTEB, restoring labels while refining corpus-query alignment for better accuracy. ",
         reference="https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html",
         dataset={
             "path": "mteb/climate-fever-v2",
@@ -89,7 +89,7 @@ class ClimateFEVERRetrievalv2(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=("2001-01-01", "2020-12-31"), # launch of wiki -> paper publication
+        date=("2001-01-01", "2020-12-31"),  # launch of wiki -> paper publication
         domains=["Academic", "Written"],
         task_subtypes=["Claim verification"],
         license="cc-by-sa-4.0",
