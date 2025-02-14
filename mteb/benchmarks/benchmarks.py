@@ -1582,7 +1582,7 @@ MIEB_LITE = Benchmark(
             "STS13VisualSTS",
             "STS15VisualSTS",
             "STS17MultilingualVisualSTS",
-            "STSBenchmarkMultilingualSTS",
+            "STSBenchmarkMultilingualVisualSTS",
             # Any2AnyRetrieval
             "BLINKIT2IMultiChoice",
             "CIRRIT2IRetrieval",
