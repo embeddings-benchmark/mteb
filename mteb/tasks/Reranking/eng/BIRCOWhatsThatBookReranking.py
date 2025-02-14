@@ -17,12 +17,12 @@ class BIRCOWhatsThatBookReranking(AbsTaskReranking):
         type="Reranking",
         category="s2p",
         modalities=["text"],
-        eval_splits=["train"],
+        eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         dataset={
             "path": "mteb/BIRCO-WTB-Test",
-            "revision": "9cffca4a108c27cb19bd388aa3f3b22efb1ae774",
+            "revision": "9e09145ccf6183f2b8f892850201db37d444dabe",
         },
         date=("2024-01-01", "2024-12-31"),
         domains=["Fiction"],  # Valid domain (Fiction)

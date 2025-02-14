@@ -17,12 +17,12 @@ class BIRCOArguAnaReranking(AbsTaskReranking):
         type="Reranking",
         category="s2p",
         modalities=["text"],
-        eval_splits=["train"],
+        eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         dataset={
             "path": "mteb/BIRCO-ArguAna-Test",
-            "revision": "3bff2aa80baf21d0a6b3de837c5d0143bd2df23d",
+            "revision": "51607bc06821c0e93d24ebeef1af85cfceddca0e",
         },
         date=("2024-01-01", "2024-12-31"),
         domains=["Written"],  # there is no 'Debate' domain

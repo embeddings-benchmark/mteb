@@ -17,12 +17,12 @@ class BIRCORelicReranking(AbsTaskReranking):
         type="Reranking",
         category="s2p",
         modalities=["text"],
-        eval_splits=["train"],
+        eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         dataset={
             "path": "mteb/BIRCO-Relic-Test",
-            "revision": "a89fb735069847f87a93195981d598e880d9084f",
+            "revision": "57226113a87b3bba909f9c5ae5f5e5e8f29b946e",
         },
         date=("2024-01-01", "2024-12-31"),
         domains=["Fiction"],  # Valid domain

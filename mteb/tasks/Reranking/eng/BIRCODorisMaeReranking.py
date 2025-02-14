@@ -17,12 +17,12 @@ class BIRCODorisMaeReranking(AbsTaskReranking):
         type="Reranking",
         category="s2s",  # MTEB standard category
         modalities=["text"],
-        eval_splits=["train"],
+        eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         dataset={
             "path": "mteb/BIRCO-DorisMae-Test",
-            "revision": "4831ed76e06c25321c58f02f64a5ea3bacd3991f",
+            "revision": "dfd65f555399536ae731d90d5adc9abfa466c235",
         },
         date=("2024-01-01", "2024-12-31"),
         domains=["Academic"],  # Valid combination
