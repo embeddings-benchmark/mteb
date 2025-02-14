@@ -232,9 +232,6 @@ class DescriptiveStatistics(TypedDict):
     pass
 
 
-METRIC_VALUE = Union[int, float, dict[str, Any]]
-
-
 logger = logging.getLogger(__name__)
 
 

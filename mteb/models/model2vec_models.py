@@ -34,7 +34,7 @@ class Model2VecWrapper(Wrapper):
             ) from e
 
         self.model_name = model_name
-        self.static_model = StaticModel.from_pretrained(self.model_name)
+        self.model = StaticModel.from_pretrained(self.model_name)
 
     def encode(
         self,
@@ -50,7 +50,7 @@ class Model2VecWrapper(Wrapper):
         Returns:
             The encoded sentences.
         """
-        return self.static_model.encode(sentences).astype(np.float32)
+        return self.model.encode(sentences).astype(np.float32)
 
 
 m2v_base_glove_subword = ModelMeta(

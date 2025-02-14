@@ -1471,3 +1471,35 @@ BEIR_PL = Benchmark(
           url={https://arxiv.org/abs/2305.19840},
 }""",
 )
+
+MTEB_LOTTE = Benchmark(
+    name="LoTTE",
+    tasks=MTEBTasks(get_tasks(tasks=["LoTTE"], eval_splits=["dev"])),
+    description=(
+        "LoTTE (Long-Tail Topic-stratified Evaluation for IR) is designed to evaluate retrieval models "
+        "on underrepresented, long-tail topics. Unlike MSMARCO or BEIR, LoTTE features domain-specific queries and "
+        "passages from StackExchange (covering writing, recreation, science, technology, and lifestyle), providing "
+        "a challenging out-of-domain generalization benchmark."
+    ),
+    reference="https://github.com/stanford-futuredata/ColBERT/blob/main/LoTTE.md",
+    citation="""@inproceedings{santhanam-etal-2022-colbertv2,
+        title = "{C}ol{BERT}v2: Effective and Efficient Retrieval via Lightweight Late Interaction",
+        author = "Santhanam, Keshav  and
+          Khattab, Omar  and
+          Saad-Falcon, Jon  and
+          Potts, Christopher  and
+          Zaharia, Matei",
+        editor = "Carpuat, Marine  and
+          de Marneffe, Marie-Catherine  and
+          Meza Ruiz, Ivan Vladimir",
+        booktitle = "Proceedings of the 2022 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies",
+        month = jul,
+        year = "2022",
+        address = "Seattle, United States",
+        publisher = "Association for Computational Linguistics",
+        url = "https://aclanthology.org/2022.naacl-main.272/",
+        doi = "10.18653/v1/2022.naacl-main.272",
+        pages = "3715--3734",
+    }""",
+    contacts=["agu18dec"],
+)

@@ -659,6 +659,7 @@ from .Retrieval import (
     LEMBSummScreenFDRetrieval,
     LEMBWikimQARetrieval,
     LitSearchRetrieval,
+    LoTTERetrieval,
     MedicalQARetrieval,
     MedicalRetrieval,
     MintakaRetrieval,
@@ -1738,4 +1739,5 @@ __all__ = [
     "SyntecReranking",
     "AlloprofReranking",
     "Touche2020PL",
+    "LoTTERetrieval",
 ]

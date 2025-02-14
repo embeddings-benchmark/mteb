@@ -79,6 +79,7 @@ from .eng import (
     LEMBSummScreenFDRetrieval,
     LEMBWikimQARetrieval,
     LitSearchRetrieval,
+    LoTTERetrieval,
     MedicalQARetrieval,
     MLQuestionsRetrieval,
     MSMARCOHardNegatives,
@@ -525,4 +526,5 @@ __all__ = [
     "SyntecRetrieval",
     "FQuADRetrieval",
     "Touche2020PL",
+    "LoTTERetrieval",
 ]
