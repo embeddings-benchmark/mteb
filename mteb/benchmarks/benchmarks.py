@@ -1,15 +1,14 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
-from dataclasses import dataclass
-from typing import Annotated
+from typing import TYPE_CHECKING, Annotated
 
 from pydantic import AnyUrl, BeforeValidator, TypeAdapter
 
-from mteb.abstasks.AbsTask import AbsTask
-from mteb.load_results.benchmark_results import BenchmarkResults
-from mteb.load_results.load_results import load_results
+from mteb.benchmarks.benchmark import Benchmark
 from mteb.overview import MTEBTasks, get_task, get_tasks
+
+if TYPE_CHECKING:
+    pass
 
 http_url_adapter = TypeAdapter(AnyUrl)
 UrlString = Annotated[
@@ -17,61 +16,8 @@ UrlString = Annotated[
 ]  # Allows the type to be a string, but ensures that the string is a URL
 
 
-@dataclass
-class Benchmark:
-    """A benchmark object intended to run a certain benchmark within MTEB.
-
-    Args:
-        name: The name of the benchmark
-        tasks: The tasks within the benchmark.
-        description: A description of the benchmark, should include its intended goal and potentially a description of its construction
-        reference: A link reference, to a source containing additional information typically to a paper, leaderboard or github.
-        citation: A bibtex citation
-        contacts: The people to contact in case of a problem in the benchmark, preferably a GitHub handle.
-
-    Example:
-        >>> Benchmark(
-        ...     name="MTEB(custom)",
-        ...     tasks=mteb.get_tasks(
-        ...         tasks=["AmazonCounterfactualClassification", "AmazonPolarityClassification"],
-        ...         languages=["eng"],
-        ...     ),
-        ...     description="A custom benchmark"
-        ... )
-    """
-
-    name: str
-    tasks: Sequence[AbsTask]
-    description: str | None = None
-    reference: UrlString | None = None
-    citation: str | None = None
-    contacts: list[str] | None = None
-
-    def __iter__(self):
-        return iter(self.tasks)
-
-    def __len__(self) -> int:
-        return len(self.tasks)
-
-    def __getitem__(self, index):
-        return self.tasks[index]
-
-    def load_results(
-        self, base_results: None | BenchmarkResults = None
-    ) -> BenchmarkResults:
-        if not hasattr(self, "results_cache"):
-            self.results_cache = {}
-        if base_results in self.results_cache:
-            return self.results_cache[base_results]
-        if base_results is None:
-            base_results = load_results()
-        results = base_results.select_tasks(self.tasks)
-        self.results_cache[base_results] = results
-        return results
-
-
 MTEB_EN = Benchmark(
-    name="MTEB(eng)",
+    name="MTEB(eng, v2)",
     tasks=MTEBTasks(
         get_tasks(
             tasks=[
@@ -133,14 +79,14 @@ This benchmark was created to account for the fact that many models have now bee
 to tasks in the original MTEB, and contains tasks that are not as frequently used for model training.
 This way the new benchmark and leaderboard can give our users a more realistic expectation of models' generalization performance.
 
-The original MTEB leaderboard is available under the [MTEB(eng, classic)](http://mteb-leaderboard-2-demo.hf.space/?benchmark_name=MTEB%28eng%2C+classic%29) tab.
+The original MTEB leaderboard is available under the [MTEB(eng, classic)](https://huggingface.co/spaces/mteb/leaderboard?benchmark_name=MTEB%28eng%2C+classic%29) tab.
     """,
     citation="",
     contacts=["KennethEnevoldsen", "Muennighoff"],
 )
 
 MTEB_ENG_CLASSIC = Benchmark(
-    name="MTEB(eng, classic)",
+    name="MTEB(eng, v1)",
     tasks=MTEBTasks(
         get_tasks(
             tasks=[
@@ -154,18 +100,7 @@ MTEB_ENG_CLASSIC = Benchmark(
                 "Banking77Classification",
                 "BiorxivClusteringP2P",
                 "BiorxivClusteringS2S",
-                "CQADupstackAndroidRetrieval",
-                "CQADupstackEnglishRetrieval",
-                "CQADupstackGamingRetrieval",
-                "CQADupstackGisRetrieval",
-                "CQADupstackMathematicaRetrieval",
-                "CQADupstackPhysicsRetrieval",
-                "CQADupstackProgrammersRetrieval",
-                "CQADupstackStatsRetrieval",
-                "CQADupstackTexRetrieval",
-                "CQADupstackUnixRetrieval",
-                "CQADupstackWebmastersRetrieval",
-                "CQADupstackWordpressRetrieval",
+                "CQADupstackRetrieval",
                 "ClimateFEVER",
                 "DBPedia",
                 "EmotionClassification",
@@ -223,10 +158,8 @@ MTEB_ENG_CLASSIC = Benchmark(
         )
     ),
     description="""The original English benchmark by Muennighoff et al., (2023).
-This page is an adaptation of the [old MTEB leaderboard](https://huggingface.co/spaces/mteb/leaderboard).
-
-> We recommend that you use [MTEB(eng)](http://mteb-leaderboard-2-demo.hf.space/?benchmark_name=MTEB%28eng%29) instead,
-as many models have been tuned on MTEB(eng, classic) datasets, and MTEB(eng) might give a more accurate representation of models' generalization performance.
+This page is an adaptation of the [old MTEB leaderboard](https://huggingface.co/spaces/mteb/leaderboard_legacy).
+We recommend that you use [MTEB(eng)](https://huggingface.co/spaces/mteb/leaderboard?benchmark_name=MTEB%28eng%29) instead as it uses updated versions of the task making it notably faster to run and resolves [a known bug](https://github.com/embeddings-benchmark/mteb/issues/1156) in existing tasks. This benchmark also removes datasets common for fine-tuning such as MSMARCO, which makes model performance scores more comparable. However, generally, both benchmarks provide similar estimates.
     """,
     citation="""@inproceedings{muennighoff-etal-2023-mteb,
     title = "{MTEB}: Massive Text Embedding Benchmark",
@@ -250,7 +183,7 @@ as many models have been tuned on MTEB(eng, classic) datasets, and MTEB(eng) mig
 )
 
 MTEB_MAIN_RU = Benchmark(
-    name="MTEB(rus)",
+    name="MTEB(rus, v1)",
     tasks=get_tasks(
         languages=["rus"],
         tasks=[
@@ -301,7 +234,7 @@ MTEB_MAIN_RU = Benchmark(
 )
 
 MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
-    name="MTEB(Retrieval w/Instructions)",
+    name="FollowIR",
     tasks=get_tasks(
         tasks=[
             "Robust04InstructionRetrieval",
@@ -322,7 +255,7 @@ MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
 )
 
 MTEB_RETRIEVAL_LAW = Benchmark(
-    name="MTEB(law)",  # This benchmark is likely in the need of an update
+    name="MTEB(Law, v1)",  # This benchmark is likely in the need of an update
     tasks=get_tasks(
         tasks=[
             "AILACasedocs",
@@ -341,7 +274,7 @@ MTEB_RETRIEVAL_LAW = Benchmark(
 )
 
 MTEB_RETRIEVAL_MEDICAL = Benchmark(
-    name="MTEB(Medical)",
+    name="MTEB(Medical, v1)",
     tasks=get_tasks(
         tasks=[
             "CUREv1",
@@ -392,7 +325,7 @@ MTEB_MINERS_BITEXT_MINING = Benchmark(
 )
 
 SEB = Benchmark(
-    name="MTEB(Scandinavian)",
+    name="MTEB(Scandinavian, v1)",
     tasks=get_tasks(
         tasks=[
             # Bitext
@@ -432,13 +365,12 @@ SEB = Benchmark(
     ),
     description="A curated selection of tasks coverering the Scandinavian languages; Danish, Swedish and Norwegian, including Bokmål and Nynorsk.",
     reference="https://kennethenevoldsen.github.io/scandinavian-embedding-benchmark/",
-    citation="""@misc{enevoldsen2024scandinavian,
-      title={The Scandinavian Embedding Benchmarks: Comprehensive Assessment of Multilingual and Monolingual Text Embedding}, 
-      author={Kenneth Enevoldsen and Márton Kardos and Niklas Muennighoff and Kristoffer Laigaard Nielbo},
-      year={2024},
-      eprint={2406.02396},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+    citation="""@inproceedings{enevoldsen2024scandinavian,
+  title={The Scandinavian Embedding Benchmarks: Comprehensive Assessment of Multilingual and Monolingual Text Embedding},
+  author={Enevoldsen, Kenneth and Kardos, M{\'a}rton and Muennighoff, Niklas and Nielbo, Kristoffer},
+  booktitle={Advances in Neural Information Processing Systems},
+  year={2024},
+  url={https://nips.cc/virtual/2024/poster/97869}
 }""",
     contacts=["KennethEnevoldsen", "x-tabdeveloping", "Samoed"],
 )
@@ -507,7 +439,7 @@ RAR_b = Benchmark(
 )
 
 MTEB_FRA = Benchmark(
-    name="MTEB(fra)",
+    name="MTEB(fra, v1)",
     tasks=MTEBTasks(
         get_tasks(
             languages=["fra"],
@@ -528,7 +460,6 @@ MTEB_FRA = Benchmark(
                 "MLSUMClusteringP2P",
                 "MLSUMClusteringS2S",
                 # Pair Classification
-                "OpusparcusPC",
                 "PawsXPairClassification",
                 # Reranking
                 "AlloprofReranking",
@@ -561,9 +492,8 @@ MTEB_FRA = Benchmark(
     contacts=["imenelydiaker"],
 )
 
-
 MTEB_DEU = Benchmark(
-    name="MTEB(deu)",
+    name="MTEB(deu, v1)",
     tasks=get_tasks(
         languages=["deu"],
         exclusive_language_filter=True,
@@ -609,9 +539,8 @@ MTEB_DEU = Benchmark(
     contacts=["slvnwhrl"],
 )
 
-
 MTEB_KOR = Benchmark(
-    name="MTEB(kor)",
+    name="MTEB(kor, v1)",
     tasks=get_tasks(
         languages=["kor"],
         tasks=[  # @KennethEnevoldsen: We could probably expand this to a more solid benchamrk, but for now I have left it as is.
@@ -632,9 +561,8 @@ MTEB_KOR = Benchmark(
     citation=None,
 )
 
-
 MTEB_POL = Benchmark(
-    name="MTEB(pol)",
+    name="MTEB(pol, v1)",
     tasks=MTEBTasks(
         get_tasks(
             languages=["pol"],
@@ -658,7 +586,6 @@ MTEB_POL = Benchmark(
                 "SICK-E-PL",
                 # STS
                 "CDSC-R",
-                "STSBenchmarkMultilingualSTS",
                 "SICK-R-PL",
             ],
         )
@@ -680,7 +607,7 @@ two novel clustering tasks.""",  # Rephrased from the abstract
 )
 
 MTEB_code = Benchmark(
-    name="MTEB(code)",
+    name="MTEB(Code, v1)",
     tasks=get_tasks(
         tasks=[
             # Retrieval
@@ -718,9 +645,8 @@ MTEB_code = Benchmark(
     citation=None,
 )
 
-
 MTEB_multilingual = Benchmark(
-    name="MTEB(Multilingual)",
+    name="MTEB(Multilingual, v1)",
     tasks=get_tasks(
         tasks=[
             "BornholmBitextMining",
@@ -864,7 +790,7 @@ MTEB_multilingual = Benchmark(
 )
 
 MTEB_JPN = Benchmark(
-    name="MTEB(jpn)",
+    name="MTEB(jpn, v1)",
     tasks=get_tasks(
         languages=["jpn"],
         tasks=[
@@ -932,7 +858,7 @@ indic_languages = [
 ]
 
 MTEB_INDIC = Benchmark(
-    name="MTEB(Indic)",
+    name="MTEB(Indic, v1)",
     tasks=get_tasks(
         tasks=[
             # Bitext
@@ -1020,7 +946,7 @@ eu_languages = [
 ]
 
 MTEB_EU = Benchmark(
-    name="MTEB(Europe)",
+    name="MTEB(Europe, v1)",
     tasks=get_tasks(
         tasks=[
             "BornholmBitextMining",
@@ -1134,9 +1060,7 @@ LONG_EMBED = Benchmark(
 
 BRIGHT = Benchmark(
     name="BRIGHT",
-    tasks=get_tasks(
-        tasks=["BrightRetrieval"],
-    ),
+    tasks=get_tasks(tasks=["BrightRetrieval"], eval_splits=["standard"]),
     description="""BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
     BRIGHT is the first text retrieval
     benchmark that requires intensive reasoning to retrieve relevant documents with
@@ -1151,6 +1075,83 @@ BRIGHT = Benchmark(
   journal={arXiv preprint arXiv:2407.12883},
   year={2024}
 }""",
+)
+
+
+BRIGHT_LONG = Benchmark(
+    name="BRIGHT (long)",
+    tasks=get_tasks(tasks=["BrightRetrieval"], eval_splits=["long"]),
+    description="""BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
+BRIGHT is the first text retrieval
+benchmark that requires intensive reasoning to retrieve relevant documents with
+a dataset consisting of 1,384 real-world queries spanning diverse domains, such as
+economics, psychology, mathematics, and coding. These queries are drawn from
+naturally occurring and carefully curated human data.
+
+This is the long version of the benchmark, which only filter longer documents.
+    """,
+    reference="https://brightbenchmark.github.io/",
+    citation="""@article{su2024bright,
+  title={Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
+  author={Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
+  journal={arXiv preprint arXiv:2407.12883},
+  year={2024}
+}""",
+)
+
+CODE_RAG = Benchmark(
+    name="CodeRAG",
+    tasks=get_tasks(
+        tasks=[
+            "CodeRAGLibraryDocumentationSolutions",
+            "CodeRAGOnlineTutorials",
+            "CodeRAGProgrammingSolutions",
+            "CodeRAGStackoverflowPosts",
+        ],
+    ),
+    description="A benchmark for evaluating code retrieval augmented generation, testing models' ability to retrieve relevant programming solutions, tutorials and documentation.",
+    reference="https://arxiv.org/abs/2406.14497",
+    citation="""@misc{wang2024coderagbenchretrievalaugmentcode,
+      title={CodeRAG-Bench: Can Retrieval Augment Code Generation?}, 
+      author={Zora Zhiruo Wang and Akari Asai and Xinyan Velocity Yu and Frank F. Xu and Yiqing Xie and Graham Neubig and Daniel Fried},
+      year={2024},
+      eprint={2406.14497},
+      archivePrefix={arXiv},
+      primaryClass={cs.SE},
+      url={https://arxiv.org/abs/2406.14497}, 
+    }""",
+)
+
+BEIR = Benchmark(
+    name="BEIR",
+    tasks=get_tasks(
+        tasks=[
+            "TRECCOVID",
+            "NFCorpus",
+            "NQ",
+            "HotpotQA",
+            "FiQA2018",
+            "ArguAna",
+            "Touche2020",
+            "CQADupstackRetrieval",
+            "QuoraRetrieval",
+            "DBPedia",
+            "SCIDOCS",
+            "FEVER",
+            "ClimateFEVER",
+            "SciFact",
+        ],
+    )
+    + get_tasks(tasks=["MSMARCO"], languages=["eng"], eval_splits=["dev"]),
+    description="BEIR is a heterogeneous benchmark containing diverse IR tasks. It also provides a common and easy framework for evaluation of your NLP-based retrieval models within the benchmark.",
+    reference="https://arxiv.org/abs/2104.08663",
+    citation="""@article{thakur2021beir,
+  title={Beir: A heterogenous benchmark for zero-shot evaluation of information retrieval models},
+  author={Thakur, Nandan and Reimers, Nils and R{\"u}ckl{\'e}, Andreas and Srivastava, Abhishek and Gurevych, Iryna},
+  journal={arXiv preprint arXiv:2104.08663},
+  year={2021}
+}
+""",
 )
 
 NANOBEIR = Benchmark(
@@ -1178,7 +1179,7 @@ NANOBEIR = Benchmark(
 )
 
 C_MTEB = Benchmark(
-    name="MTEB(Chinese)",
+    name="MTEB(cmn, v1)",
     tasks=MTEBTasks(
         get_tasks(
             tasks=[
@@ -1233,6 +1234,86 @@ C_MTEB = Benchmark(
 }""",
 )
 
+FA_MTEB = Benchmark(
+    name="MTEB(fas, beta)",
+    tasks=get_tasks(
+        languages=["fas"],
+        tasks=[
+            # Classification
+            "PersianFoodSentimentClassification",
+            "SynPerChatbotConvSAClassification",
+            "SynPerChatbotConvSAToneChatbotClassification",
+            "SynPerChatbotConvSAToneUserClassification",
+            "SynPerChatbotSatisfactionLevelClassification",
+            "SynPerChatbotRAGToneChatbotClassification",
+            "SynPerChatbotRAGToneUserClassification",
+            "SynPerChatbotToneChatbotClassification",
+            "SynPerChatbotToneUserClassification",
+            "PersianTextTone",
+            "SIDClassification",
+            "DeepSentiPers",
+            "PersianTextEmotion",
+            "SentimentDKSF",
+            "NLPTwitterAnalysisClassification",
+            "DigikalamagClassification",
+            "MassiveIntentClassification",
+            "MassiveScenarioClassification",
+            # Clustering
+            "BeytooteClustering",
+            "DigikalamagClustering",
+            "HamshahriClustring",
+            "NLPTwitterAnalysisClustering",
+            "SIDClustring",
+            # PairClassification
+            "FarsTail",
+            "CExaPPC",
+            "SynPerChatbotRAGFAQPC",
+            "FarsiParaphraseDetection",
+            "SynPerTextKeywordsPC",
+            "SynPerQAPC",
+            "ParsinluEntail",
+            "ParsinluQueryParaphPC",
+            # Reranking
+            "MIRACLReranking",
+            "WikipediaRerankingMultilingual",
+            # Retrieval
+            "SynPerQARetrieval",
+            "SynPerChatbotTopicsRetrieval",
+            "SynPerChatbotRAGTopicsRetrieval",
+            "SynPerChatbotRAGFAQRetrieval",
+            "PersianWebDocumentRetrieval",
+            "WikipediaRetrievalMultilingual",
+            "MIRACLRetrieval",
+            "ClimateFEVER-Fa",
+            "DBPedia-Fa",
+            "HotpotQA-Fa",
+            "MSMARCO-Fa",
+            "NQ-Fa",
+            "ArguAna-Fa",
+            "CQADupstackRetrieval-Fa",
+            "FiQA2018-Fa",
+            "NFCorpus-Fa",
+            "QuoraRetrieval-Fa",
+            "SCIDOCS-Fa",
+            "SciFact-Fa",
+            "TRECCOVID-Fa",
+            "Touche2020-Fa",
+            # STS
+            "Farsick",
+            "SynPerSTS",
+            "Query2Query",
+            # SummaryRetrieval
+            "SAMSumFa",
+            "SynPerChatbotSumSRetrieval",
+            "SynPerChatbotRAGSumSRetrieval",
+        ],
+    ),
+    description="Main Persian (Farsi) benchmarks from MTEB",
+    reference=None,
+    citation=None,
+    contacts=["mehran-sarmadi", "ERfun", "morteza20"],
+)
+
 CHEMTEB = Benchmark(
     name="ChemTEB",
     tasks=get_tasks(
@@ -1268,11 +1349,46 @@ CHEMTEB = Benchmark(
     ),
     description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
     reference="https://arxiv.org/abs/2412.00532",
-    citation="""
-    @article{kasmaee2024chemteb,
+    citation="""@article{kasmaee2024chemteb,
     title={ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
     author={Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
     journal={arXiv preprint arXiv:2412.00532},
     year={2024}
+}""",
+)
+
+BEIR_NL = Benchmark(
+    name="BEIR-NL",
+    tasks=get_tasks(
+        tasks=[
+            "ArguAna-NL",
+            "CQADupstack-NL",
+            "FEVER-NL",
+            "NQ-NL",
+            "Touche2020-NL",
+            "FiQA2018-NL",
+            "Quora-NL",
+            "HotpotQA-NL",
+            "SCIDOCS-NL",
+            "ClimateFEVER-NL",
+            "mMARCO-NL",
+            "SciFact-NL",
+            "DBPedia-NL",
+            "NFCorpus-NL",
+            "TRECCOVID-NL",
+        ],
+    ),
+    description="BEIR-NL is a Dutch adaptation of the publicly available BEIR benchmark, created through automated "
+    "translation.",
+    reference="https://arxiv.org/abs/2412.08329",
+    contacts=["nikolay-banar"],
+    citation="""@misc{banar2024beirnlzeroshotinformationretrieval,
+    title={BEIR-NL: Zero-shot Information Retrieval Benchmark for the Dutch Language}, 
+     author={Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
+     year={2024},
+     eprint={2412.08329},
+     archivePrefix={arXiv},
+     primaryClass={cs.CL},
+     url={https://arxiv.org/abs/2412.08329}, 
 }""",
 )

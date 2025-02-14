@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import warnings
 from collections import defaultdict
-from collections.abc import Iterable
+from collections.abc import Iterable, Sequence
 from pathlib import Path
 from typing import Any, Callable, Literal
 
@@ -69,7 +69,7 @@ class ModelResult(BaseModel):
             task_results=new_task_results,
         )
 
-    def select_tasks(self, tasks: list[AbsTask]) -> ModelResult:
+    def select_tasks(self, tasks: Sequence[AbsTask]) -> ModelResult:
         task_name_to_task = {task.metadata.name: task for task in tasks}
         new_task_results = [
             task_res.validate_and_filter_scores(task_name_to_task[task_res.task_name])
@@ -105,15 +105,15 @@ class ModelResult(BaseModel):
                 try:
                     if use_fast:
                         scores[res.task_name] = res.get_score_fast(
-                            splits=splits,
-                            languages=languages,
+                            splits=splits,  # type: ignore
+                            languages=languages,  # type: ignore
                         )
                     else:
                         scores[res.task_name] = res.get_score(
                             splits=splits,
                             languages=languages,
-                            aggregation=aggregation,
-                            getter=getter,
+                            aggregation=aggregation,  # type: ignore
+                            getter=getter,  # type: ignore
                             scripts=scripts,
                         )
                 except Exception as e:
@@ -216,7 +216,7 @@ class BenchmarkResults(BaseModel):
             model_results=[res for res in model_results if res.task_results]
         )
 
-    def select_tasks(self, tasks: list[AbsTask]) -> BenchmarkResults:
+    def select_tasks(self, tasks: Sequence[AbsTask]) -> BenchmarkResults:
         new_model_results = [
             model_res.select_tasks(tasks) for model_res in self.model_results
         ]
@@ -259,6 +259,8 @@ class BenchmarkResults(BaseModel):
                 return None
 
         def keep_best(group: pd.DataFrame) -> pd.DataFrame:
+            # Filtering out task_results where no scores are present
+            group = group[group["has_scores"]]
             is_main_revision = group["revision"] == group["main_revision"]
             # If the main revision is present we select that
             if is_main_revision.sum() > 0:
@@ -286,8 +288,11 @@ class BenchmarkResults(BaseModel):
                         task_name=task_result.task_name,
                         mteb_version=task_result.mteb_version,
                         task_result=task_result,
+                        has_scores=bool(task_result.scores),
                     )
                 )
+        if not records:
+            return BenchmarkResults.model_construct(model_results=[])
         task_df = pd.DataFrame.from_records(records)
         model_to_main_revision = {
             meta.name: meta.revision for meta in get_model_metas()
@@ -314,8 +319,8 @@ class BenchmarkResults(BaseModel):
         splits: list[Split] | None = None,
         languages: list[ISO_LANGUAGE | ISO_LANGUAGE_SCRIPT] | None = None,
         scripts: list[ISO_LANGUAGE_SCRIPT] | None = None,
-        getter: Callable[[ScoresDict], Score] = None,
-        aggregation: Callable[[list[Score]], Any] = None,
+        getter: Callable[[ScoresDict], Score] | None = None,
+        aggregation: Callable[[list[Score]], Any] | None = None,
         format: Literal["wide", "long"] = "wide",
     ) -> list[dict]:
         entries = []
@@ -390,7 +395,7 @@ class BenchmarkResults(BaseModel):
         return self.model_dump()
 
     @classmethod
-    def from_dict(cls, data: dict) -> TaskResult:
+    def from_dict(cls, data: dict) -> BenchmarkResults:
         return cls.model_validate(data)
 
     def to_disk(self, path: Path | str) -> None:

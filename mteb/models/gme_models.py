@@ -6,7 +6,6 @@ from mteb.model_meta import ModelMeta
 
 logger = logging.getLogger(__name__)
 
-
 gme_qwen2_vl_2b_instruct = ModelMeta(
     loader=None,
     name="Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
@@ -15,6 +14,7 @@ gme_qwen2_vl_2b_instruct = ModelMeta(
     revision="cfeb66885b598de483cc04eb08c7d9da534d7afe",
     release_date="2024-12-21",
     n_parameters=int(2.21 * 1e9),
+    memory_usage_mb=8427,
     max_tokens=32768,
     embed_dim=1536,
     license="mit",
@@ -29,6 +29,7 @@ gme_qwen2_vl_2b_instruct = ModelMeta(
         # source: https://arxiv.org/pdf/2412.16855
         "MSMARCO": ["train"],
         "MSMARCO.v2": ["train"],
+        "mMARCO-NL": ["train"],  # translation not trained on
     },
     public_training_code=None,
     public_training_data=None,
@@ -42,6 +43,7 @@ gme_qwen2_vl_7b_instruct = ModelMeta(
     revision="d42eca5a540526cfa982a349724b24b25c12a95e",
     release_date="2024-12-21",
     n_parameters=int(8.29 * 1e9),
+    memory_usage_mb=8427,
     max_tokens=32768,
     embed_dim=3584,
     license="mit",
@@ -56,6 +58,7 @@ gme_qwen2_vl_7b_instruct = ModelMeta(
         # source: https://arxiv.org/pdf/2412.16855
         "MSMARCO": ["train"],
         "MSMARCO.v2": ["train"],
+        "mMARCO-NL": ["train"],  # translation not trained on
     },
     public_training_code=None,
     public_training_data=None,
