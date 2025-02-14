@@ -251,6 +251,7 @@ def model_meta_from_hf_hub_embedding(model_name: str) -> ModelMeta:
             public_training_code=None,
             public_training_data=None,
             use_instructions=None,
+            memory_usage_mb=None,
         )
     except Exception as e:
         logging.error(f"Failed to extract metadata from model: {e}.")
@@ -270,6 +271,7 @@ def model_meta_from_hf_hub_embedding(model_name: str) -> ModelMeta:
             use_instructions=None,
             public_training_data=None,
             public_training_code=None,
+            memory_usage_mb=None,
         )
 
 
