@@ -184,6 +184,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [ClimateFEVER](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html) (Thomas Diggelmann, 2021) | ['eng'] | Retrieval | s2p | [Encyclopaedic, Written] | None | None |
 | [ClimateFEVER-Fa](https://huggingface.co/datasets/MCINext/climate-fever-fa) | ['fas'] | Retrieval | s2p | [Web] | None | None |
 | [ClimateFEVER-NL](https://huggingface.co/datasets/clips/beir-nl-climate-fever) (Nikolay Banar, 2024) | ['nld'] | Retrieval | s2p | [Encyclopaedic, Written] | None | None |
+| [ClimateFEVER.v2](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html) (Thomas Diggelmann, 2021) | ['eng'] | Retrieval | s2p | [Academic, Written] | None | None |
 | [ClimateFEVERHardNegatives](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html) (Thomas Diggelmann, 2021) | ['eng'] | Retrieval | s2p | [Encyclopaedic, Written] | None | None |
 | [CmedqaRetrieval](https://aclanthology.org/2022.emnlp-main.357.pdf) | ['cmn'] | Retrieval | s2p | [Medical, Written] | None | None |
 | [Cmnli](https://huggingface.co/datasets/clue/viewer/cmnli) | ['cmn'] | PairClassification | s2s |  | None | None |
@@ -1174,7 +1175,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | Modern Greek (1453-) | Indo-European | 0 | 2 | 0 | 3 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 0 | 3 | 0 | 0 | 0 | 0 | 0 | 18 |
 | emi | Mussau-Emira | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | emp | Northern Emberá | Chocoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| eng | English | Indo-European | 9 | 62 | 4 | 17 | 160 | 18 | 21 | 5 | 1 | 6 | 3 | 1 | 13 | 8 | 108 | 13 | 2 | 1 | 7 | 24 | 483 |
+| eng | English | Indo-European | 9 | 62 | 4 | 17 | 160 | 18 | 21 | 5 | 1 | 6 | 3 | 1 | 13 | 8 | 109 | 13 | 2 | 1 | 7 | 24 | 484 |
 | enq | Enga | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | epo | Esperanto | Artificial Language | 0 | 0 | 0 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | eri | Ogea | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1947,7 +1948,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | Yatee Zapotec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zul | Zulu | Atlantic-Congo | 0 | 0 | 0 | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 7 |
 | zyp | Zyphe Chin | Sino-Tibetan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| Total | None | None | None | 9 | 114 | 4 | 1398 | 836 | 311 | 21 | 5 | 1 | 6 | 3 | 28 | 91 | 55 | 534 | 88 | 2 | 2 | 24 | 24 |
+| Total | None | None | None | 9 | 114 | 4 | 1398 | 836 | 311 | 21 | 5 | 1 | 6 | 3 | 28 | 91 | 55 | 535 | 88 | 2 | 2 | 24 | 24 |
 <!-- TASK LANG TABLE END -->
 
 </details>
