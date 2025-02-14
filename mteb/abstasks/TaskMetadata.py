@@ -25,6 +25,7 @@ from ..languages import (
     path_to_lang_codes,
     path_to_lang_scripts,
 )
+from ..modalities import MODALITIES
 
 TASK_SUBTYPE = Literal[
     "Article retrieval",
@@ -32,6 +33,7 @@ TASK_SUBTYPE = Literal[
     "Dialect pairing",
     "Dialog Systems",
     "Discourse coherence",
+    "Duplicate Image Retrieval",
     "Language identification",
     "Linguistic acceptability",
     "Political classification",
@@ -48,6 +50,15 @@ TASK_SUBTYPE = Literal[
     "Counterfactual Detection",
     "Emotion classification",
     "Reasoning as Retrieval",
+    "Rendered Texts Understanding",
+    "Image Text Retrieval",
+    "Object recognition",
+    "Scene recognition",
+    "Caption Pairing",
+    "Emotion recognition",
+    "Textures recognition",
+    "Activity recognition",
+    "Tumor detection",
     "Duplicate Detection",
 ]
 
@@ -65,6 +76,7 @@ TASK_DOMAIN = Literal[
     "Poetry",
     "Religious",
     "Reviews",
+    "Scene",
     "Social",
     "Spoken",
     "Subtitles",
@@ -84,6 +96,7 @@ SAMPLE_CREATION_METHOD = Literal[
     "machine-translated and verified",
     "machine-translated and localized",
     "LM-generated and verified",
+    "rendered",
     "multiple",
 ]
 
@@ -100,13 +113,30 @@ TASK_TYPE = Literal[
     "InstructionRetrieval",
     "InstructionReranking",
     "Speed",
+    "Any2AnyMultiChoice",
+    "Any2AnyRetrieval",
+    "Any2TextMutipleChoice",
+    "ImageClustering",
+    "ImageClassification",
+    "ImageMultilabelClassification",
+    "ImageTextPairClassification",
+    "VisualSTS",
+    "ZeroShotClassification",
 ]
-
 
 TASK_CATEGORY = Literal[
     "s2s",  # Sentence-to-sentence
     "s2p",  # Sentence-to-paragraph
     "p2p",  # Paragraph-to-paragraph
+    "t2t",  # specifically for text-only tasks in mieb
+    "i2i",  # image-to-image
+    "i2t",  # image-to-text
+    "t2i",  # text-to-image
+    "it2t",  # image+text-to-text
+    "it2i",  # image+text-to-image
+    "i2it",  # image-to-image+text
+    "t2it",  # text-to-image+text
+    "it2it",  # image+text-to-image+text
 ]
 
 ANNOTATOR_TYPE = Literal[
@@ -179,7 +209,7 @@ LICENSES = (  # this list can be extended as needed
         "multiple",
     ]
 )
-MODALITIES = Literal["text"]
+
 METRIC_NAME = str
 METRIC_VALUE = Union[int, float, dict[str, Any]]
 
@@ -244,6 +274,7 @@ class TaskMetadata(BaseModel):
         domains: The domains of the data. These includes "Non-fiction", "Social", "Fiction", "News", "Academic", "Blog", "Encyclopaedic",
             "Government", "Legal", "Medical", "Poetry", "Religious", "Reviews", "Web", "Spoken", "Written". A dataset can belong to multiple domains.
         task_subtypes: The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". Feel free to update the list as needed.
+        license: The license of the data specified as lowercase, e.g. "cc-by-nc-4.0". If the license is not specified, use "not specified". For custom licenses a URL is used.
         license: The license of the data specified as lowercase, e.g. "cc-by-nc-4.0". If the license is not specified, use "not specified". For custom licenses a URL is used.
         annotations_creators: The type of the annotators. Includes "expert-annotated" (annotated by experts), "human-annotated" (annotated e.g. by
             mturkers), "derived" (derived from structure in the data).

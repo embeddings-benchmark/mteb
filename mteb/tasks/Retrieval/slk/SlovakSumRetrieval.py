@@ -56,12 +56,12 @@ class SlovakSumRetrieval(AbsTaskRetrieval):
                 dataset_path, split=f"{split}[:{n_sample}]"
             )
             # Transforming news summary into retrieval task
-            queries = {f"q{e+1}": x["sum"] for e, x in enumerate(split_ds)}
+            queries = {f"q{e + 1}": x["sum"] for e, x in enumerate(split_ds)}
             corpus = {
-                f"d{e+1}": {"title": x["title"], "text": x["text"]}
+                f"d{e + 1}": {"title": x["title"], "text": x["text"]}
                 for e, x in enumerate(split_ds)
             }
-            qrels = {f"q{i+1}": {f"d{i+1}": 1} for i in range(split_ds.shape[0])}
+            qrels = {f"q{i + 1}": {f"d{i + 1}": 1} for i in range(split_ds.shape[0])}
             self.corpus[split], self.queries[split], self.relevant_docs[split] = (
                 corpus,
                 queries,

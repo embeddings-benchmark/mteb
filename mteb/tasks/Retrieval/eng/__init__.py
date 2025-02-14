@@ -39,6 +39,7 @@ from .LEMBQMSumRetrieval import LEMBQMSumRetrieval
 from .LEMBSummScreenFDRetrieval import LEMBSummScreenFDRetrieval
 from .LEMBWikimQARetrieval import LEMBWikimQARetrieval
 from .LitSearchRetrieval import LitSearchRetrieval
+from .LoTTERetrieval import LoTTERetrieval
 from .MedicalQARetrieval import MedicalQARetrieval
 from .MLQuestions import MLQuestionsRetrieval
 from .MSMARCORetrieval import MSMARCO, MSMARCOHardNegatives
@@ -169,4 +170,5 @@ __all__ = [
     "LEMBSummScreenFDRetrieval",
     "LEMBNarrativeQARetrieval",
     "CQADupstackProgrammersRetrieval",
+    "LoTTERetrieval",
 ]

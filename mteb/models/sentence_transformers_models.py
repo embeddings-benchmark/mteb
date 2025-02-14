@@ -83,10 +83,12 @@ sent_trf_training_dataset = {
     "MSMARCOHardNegatives": ["train"],
     "NanoMSMARCORetrieval": ["train"],
     "MSMARCO-PL": ["train"],  # translation not trained on
+    "mMARCO-NL": ["train"],  # translation not trained on
     "NQ": ["train"],
     "NQHardNegatives": ["train"],
     "NanoNQRetrieval": ["train"],
     "NQ-PL": ["train"],  # translation not trained on
+    "NQ-NL": ["train"],  # translation not trained on
     # not in MTEB
     # "s2orc": ["train"],
     # "flax-sentence-embeddings/stackexchange_xml": ["train"],
@@ -118,6 +120,7 @@ all_MiniLM_L6_v2 = ModelMeta(
     revision="8b3219a92973c328a8e22fadcfa821b5dc75636a",
     release_date="2021-08-30",
     n_parameters=22_700_000,
+    memory_usage_mb=87,
     embed_dim=384,
     license="apache-2.0",
     max_tokens=256,
@@ -140,6 +143,7 @@ all_MiniLM_L12_v2 = ModelMeta(
     revision="364dd28d28dcd3359b537f3cf1f5348ba679da62",
     release_date="2021-08-30",
     n_parameters=33_400_000,
+    memory_usage_mb=127,
     embed_dim=384,
     license="apache-2.0",
     max_tokens=256,
@@ -162,6 +166,7 @@ paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
     revision="bf3bf13ab40c3157080a7ab344c831b9ad18b5eb",
     release_date="2019-11-01",  # release date of paper
     n_parameters=118_000_000,
+    memory_usage_mb=449,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,
@@ -184,6 +189,7 @@ paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
     revision="79f2382ceacceacdf38563d7c5d16b9ff8d725d6",
     release_date="2019-11-01",  # release date of paper
     n_parameters=278_000_000,
+    memory_usage_mb=1061,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,
@@ -217,6 +223,7 @@ labse = ModelMeta(
     revision="e34fab64a3011d2176c99545a93d5cbddc9a91b7",
     release_date="2019-11-01",  # release date of paper
     n_parameters=471_000_000,
+    memory_usage_mb=1796,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,
@@ -226,7 +233,8 @@ labse = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
-    training_datasets=None,  # scraped and mined webdata including CC, wiki, see section 3.1 https://aclanthology.org/2022.acl-long.62.pdf
+    training_datasets=None,
+    # scraped and mined webdata including CC, wiki, see section 3.1 https://aclanthology.org/2022.acl-long.62.pdf
     public_training_code="https://www.kaggle.com/models/google/labse/tensorFlow2/labse/2?tfhub-redirect=true",
     citation="""@misc{feng2022languageagnosticbertsentenceembedding,
       title={Language-agnostic BERT Sentence Embedding}, 
@@ -247,6 +255,7 @@ multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
     revision="b207367332321f8e44f96e224ef15bc607f4dbf0",
     release_date="2021-08-30",
     n_parameters=22_700_000,
+    memory_usage_mb=87,
     embed_dim=384,
     license="apache-2.0",
     max_tokens=512,
@@ -269,6 +278,7 @@ all_mpnet_base_v2 = ModelMeta(
     revision="9a3225965996d404b775526de6dbfe85d3368642",
     release_date="2021-08-30",
     n_parameters=109_000_000,
+    memory_usage_mb=418,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=384,
@@ -297,6 +307,7 @@ contriever = ModelMeta(
     revision="abe8c1493371369031bcb1e02acb754cf4e162fa",
     release_date="2022-06-25",  # release date of model on HF
     n_parameters=150_000_000,
+    memory_usage_mb=572,
     embed_dim=768,
     license=None,
     max_tokens=512,
@@ -324,6 +335,7 @@ microllama_text_embedding = ModelMeta(
     revision="98f70f14cdf12d7ea217ed2fd4e808b0195f1e7e",
     release_date="2024-11-10",
     n_parameters=272_000_000,
+    memory_usage_mb=1037,
     embed_dim=1024,
     license="apache-2.0",
     max_tokens=2048,
@@ -338,6 +350,7 @@ microllama_text_embedding = ModelMeta(
         "NQHardNegatives": ["train"],
         "NanoNQRetrieval": ["train"],
         "NQ-PL": ["train"],  # translation not trained on
+        "NQ-NL": ["train"],  # translation not trained on
         # not in MTEB
         # "sentence-transformers/all-nli": ["train"],
         # "sentence-transformers/stsb": ["train"],

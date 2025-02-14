@@ -9,6 +9,18 @@ from .ClassificationEvaluator import (
 )
 from .ClusteringEvaluator import ClusteringEvaluator
 from .Evaluator import Evaluator
+from .Image import (
+    Any2AnyMultiChoiceEvaluator,
+    Any2AnyRetrievalEvaluator,
+    Any2TextMultipleChoiceEvaluator,
+    ImageClusteringEvaluator,
+    ImagekNNClassificationEvaluator,
+    ImagekNNClassificationEvaluatorPytorch,
+    ImagelogRegClassificationEvaluator,
+    ImageTextPairClassificationEvaluator,
+    VisualSTSEvaluator,
+    ZeroshotClassificationEvaluator,
+)
 from .model_classes import DenseRetrievalExactSearch, corpus_to_str
 from .PairClassificationEvaluator import PairClassificationEvaluator
 from .RetrievalEvaluator import RetrievalEvaluator
@@ -33,4 +45,14 @@ __all__ = [
     "kNNClassificationEvaluatorPytorch",
     "logRegClassificationEvaluator",
     "dot_distance",
+    "Any2AnyMultiChoiceEvaluator",
+    "Any2AnyRetrievalEvaluator",
+    "Any2TextMultipleChoiceEvaluator",
+    "ImagekNNClassificationEvaluator",
+    "ImagelogRegClassificationEvaluator",
+    "ImagekNNClassificationEvaluatorPytorch",
+    "ImageClusteringEvaluator",
+    "ImageTextPairClassificationEvaluator",
+    "VisualSTSEvaluator",
+    "ZeroshotClassificationEvaluator",
 ]

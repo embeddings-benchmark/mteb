@@ -57,15 +57,18 @@ granite_training_data = {
     # Machine Translations of SPECTER citation triplets
     # Natural Questions (NQ)
     "NQ": ["test"],
+    "NQ-NL": ["test"],  # translation not trained on
     "NQHardNegatives": ["test"],
     # SQuAD2.0
     # HotpotQA
     "HotPotQA": ["test"],
     "HotPotQAHardNegatives": ["test"],
     "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
+    "HotpotQA-NL": ["test"],  # translated from hotpotQA (not trained on)
     # Fever
     "FEVER": ["test"],
     "FEVERHardNegatives": ["test"],
+    "FEVER-NL": ["test"],  # translated from hotpotQA (not trained on)
     # PubMed
     # Multilingual Miracl Triples
     "MIRACLRetrieval": ["train"],
@@ -76,6 +79,7 @@ granite_training_data = {
     # Sadeeem Question Asnwering
     # DBPedia Title-Body Pairs
     "DBPedia": ["train"],
+    "DBPedia-NL": ["train"],  # translated from hotpotQA (not trained on)
     # Synthetic: English Query-Wikipedia Passage
     # Synthetic: English Fact Verification
     # Synthetic: Multilingual Query-Wikipedia Passage
@@ -96,6 +100,7 @@ granite_107m_multilingual = ModelMeta(
     revision="47db56afe692f731540413c67dd818ff492277e7",
     release_date="2024-12-18",
     n_parameters=107_000_000,
+    memory_usage_mb=204,
     embed_dim=384,
     license="apache-2.0",
     max_tokens=512,
@@ -122,6 +127,7 @@ granite_278m_multilingual = ModelMeta(
     revision="84e3546b88b0cb69f8078608a1df558020bcbf1f",
     release_date="2024-12-18",
     n_parameters=278_000_000,
+    memory_usage_mb=530,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,
@@ -148,6 +154,7 @@ granite_30m_english = ModelMeta(
     revision="eddbb57470f896b5f8e2bfcb823d8f0e2d2024a5",
     release_date="2024-12-18",
     n_parameters=30_000_000,
+    memory_usage_mb=58,
     embed_dim=384,
     license="apache-2.0",
     max_tokens=512,
@@ -174,6 +181,7 @@ granite_125m_english = ModelMeta(
     revision="e48d3a5b47eaa18e3fe07d4676e187fd80f32730",
     release_date="2024-12-18",
     n_parameters=125_000_000,
+    memory_usage_mb=238,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,

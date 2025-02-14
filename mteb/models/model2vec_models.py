@@ -8,9 +8,8 @@ from typing import Any
 import numpy as np
 
 from mteb.model_meta import ModelMeta, ScoringFunction
-
-from .bge_models import bge_training_data
-from .wrapper import Wrapper
+from mteb.models.bge_models import bge_training_data
+from mteb.models.wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +34,7 @@ class Model2VecWrapper(Wrapper):
             ) from e
 
         self.model_name = model_name
-        self.static_model = StaticModel.from_pretrained(self.model_name)
+        self.model = StaticModel.from_pretrained(self.model_name)
 
     def encode(
         self,
@@ -51,7 +50,7 @@ class Model2VecWrapper(Wrapper):
         Returns:
             The encoded sentences.
         """
-        return self.static_model.encode(sentences).astype(np.float32)
+        return self.model.encode(sentences).astype(np.float32)
 
 
 m2v_base_glove_subword = ModelMeta(
@@ -65,6 +64,7 @@ m2v_base_glove_subword = ModelMeta(
     revision="5f4f5ca159b7321a8b39739bba0794fa0debddf4",
     release_date="2024-09-21",
     n_parameters=int(103 * 1e6),
+    memory_usage_mb=391,
     max_tokens=np.inf,  # Theoretically infinite
     embed_dim=256,
     license="mit",
@@ -91,6 +91,7 @@ m2v_base_glove = ModelMeta(
     revision="38ebd7f10f71e67fa8db898290f92b82e9cfff2b",
     release_date="2024-09-21",
     n_parameters=int(102 * 1e6),
+    memory_usage_mb=391,
     max_tokens=np.inf,
     embed_dim=256,
     license="mit",
@@ -116,6 +117,7 @@ m2v_base_output = ModelMeta(
     revision="02460ae401a22b09d2c6652e23371398329551e2",
     release_date="2024-09-21",
     n_parameters=int(7.56 * 1e6),
+    memory_usage_mb=29,
     max_tokens=np.inf,
     embed_dim=256,
     license="mit",
@@ -141,6 +143,7 @@ m2v_multilingual_output = ModelMeta(
     revision="2cf4ec4e1f51aeca6c55cf9b93097d00711a6305",
     release_date="2024-09-21",
     n_parameters=int(128 * 1e6),
+    memory_usage_mb=489,
     max_tokens=np.inf,
     embed_dim=256,
     license="mit",
@@ -166,6 +169,7 @@ potion_base_2m = ModelMeta(
     revision="86db093558fbced2072b929eb1690bce5272bd4b",
     release_date="2024-10-29",
     n_parameters=2 * 1e6,
+    memory_usage_mb=7,
     max_tokens=np.inf,
     embed_dim=64,
     license="mit",
@@ -191,6 +195,7 @@ potion_base_4m = ModelMeta(
     revision="81b1802ada41afcd0987a37dc15e569c9fa76f04",
     release_date="2024-10-29",
     n_parameters=3.78 * 1e6,
+    memory_usage_mb=14,
     max_tokens=np.inf,
     embed_dim=128,
     license="mit",
@@ -216,6 +221,7 @@ potion_base_8m = ModelMeta(
     revision="dcbec7aa2d52fc76754ac6291803feedd8c619ce",
     release_date="2024-10-29",
     n_parameters=7.56 * 1e6,
+    memory_usage_mb=29,
     max_tokens=np.inf,
     embed_dim=256,
     license="mit",

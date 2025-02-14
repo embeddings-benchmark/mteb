@@ -6,10 +6,11 @@ from typing import Annotated
 
 from pydantic import AnyUrl, BeforeValidator, TypeAdapter
 
+from mteb import get_tasks
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.load_results.benchmark_results import BenchmarkResults
 from mteb.load_results.load_results import load_results
-from mteb.overview import MTEBTasks, get_task, get_tasks
+from mteb.overview import MTEBTasks, get_task
 
 http_url_adapter = TypeAdapter(AnyUrl)
 UrlString = Annotated[
@@ -21,7 +22,7 @@ UrlString = Annotated[
 class Benchmark:
     """A benchmark object intended to run a certain benchmark within MTEB.
 
-    Attributes:
+    Args:
         name: The name of the benchmark
         tasks: The tasks within the benchmark.
         description: A description of the benchmark, should include its intended goal and potentially a description of its construction
@@ -133,7 +134,7 @@ This benchmark was created to account for the fact that many models have now bee
 to tasks in the original MTEB, and contains tasks that are not as frequently used for model training.
 This way the new benchmark and leaderboard can give our users a more realistic expectation of models' generalization performance.
 
-The original MTEB leaderboard is available under the [MTEB(eng, classic)](http://mteb-leaderboard-2-demo.hf.space/?benchmark_name=MTEB%28eng%2C+classic%29) tab.
+The original MTEB leaderboard is available under the [MTEB(eng, classic)](https://huggingface.co/spaces/mteb/leaderboard?benchmark_name=MTEB%28eng%2C+classic%29) tab.
     """,
     citation="",
     contacts=["KennethEnevoldsen", "Muennighoff"],
@@ -212,9 +213,9 @@ MTEB_ENG_CLASSIC = Benchmark(
         )
     ),
     description="""The original English benchmark by Muennighoff et al., (2023).
-This page is an adaptation of the [old MTEB leaderboard](https://huggingface.co/spaces/mteb/leaderboard).
+This page is an adaptation of the [old MTEB leaderboard](https://huggingface.co/spaces/mteb/leaderboard_legacy).
 
-> We recommend that you use [MTEB(eng)](http://mteb-leaderboard-2-demo.hf.space/?benchmark_name=MTEB%28eng%29) instead,
+> We recommend that you use [MTEB(eng)](https://huggingface.co/spaces/mteb/leaderboard?benchmark_name=MTEB%28eng%29) instead,
 as many models have been tuned on MTEB(eng, classic) datasets, and MTEB(eng) might give a more accurate representation of models' generalization performance.
     """,
     citation="""@inproceedings{muennighoff-etal-2023-mteb,
@@ -278,13 +279,13 @@ MTEB_MAIN_RU = Benchmark(
     description="A Russian version of the Massive Text Embedding Benchmark with a number of novel Russian tasks in all task categories of the original MTEB.",
     reference="https://aclanthology.org/2023.eacl-main.148/",
     citation="""@misc{snegirev2024russianfocusedembeddersexplorationrumteb,
-      title={The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design}, 
+      title={The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design},
       author={Artem Snegirev and Maria Tikhonova and Anna Maksimova and Alena Fenogenova and Alexander Abramov},
       year={2024},
       eprint={2408.12503},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2408.12503}, 
+      url={https://arxiv.org/abs/2408.12503},
 }
 """,
 )
@@ -301,7 +302,7 @@ MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
     description="Retrieval w/Instructions is the task of finding relevant documents for a query that has detailed instructions.",
     reference="https://arxiv.org/abs/2403.15246",
     citation="""@misc{weller2024followir,
-      title={FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions}, 
+      title={FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions},
       author={Orion Weller and Benjamin Chang and Sean MacAvaney and Kyle Lo and Arman Cohan and Benjamin Van Durme and Dawn Lawrie and Luca Soldaini},
       year={2024},
       eprint={2403.15246},
@@ -450,13 +451,13 @@ CoIR = Benchmark(
     description="CoIR: A Comprehensive Benchmark for Code Information Retrieval Models",
     reference="https://github.com/CoIR-team/coir",
     citation="""@misc{li2024coircomprehensivebenchmarkcode,
-      title={CoIR: A Comprehensive Benchmark for Code Information Retrieval Models}, 
+      title={CoIR: A Comprehensive Benchmark for Code Information Retrieval Models},
       author={Xiangyang Li and Kuicai Dong and Yi Quan Lee and Wei Xia and Yichun Yin and Hao Zhang and Yong Liu and Yasheng Wang and Ruiming Tang},
       year={2024},
       eprint={2407.02883},
       archivePrefix={arXiv},
       primaryClass={cs.IR},
-      url={https://arxiv.org/abs/2407.02883}, 
+      url={https://arxiv.org/abs/2407.02883},
     }""",
 )
 
@@ -516,7 +517,6 @@ MTEB_FRA = Benchmark(
                 "MLSUMClusteringP2P",
                 "MLSUMClusteringS2S",
                 # Pair Classification
-                "OpusparcusPC",
                 "PawsXPairClassification",
                 # Reranking
                 "AlloprofReranking",
@@ -538,13 +538,13 @@ MTEB_FRA = Benchmark(
     description="MTEB-French, a French expansion of the original benchmark with high-quality native French datasets.",
     reference="https://arxiv.org/abs/2405.20468",
     citation="""@misc{ciancone2024mtebfrenchresourcesfrenchsentence,
-      title={MTEB-French: Resources for French Sentence Embedding Evaluation and Analysis}, 
+      title={MTEB-French: Resources for French Sentence Embedding Evaluation and Analysis},
       author={Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
       year={2024},
       eprint={2405.20468},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2405.20468}, 
+      url={https://arxiv.org/abs/2405.20468},
 }""",
     contacts=["imenelydiaker"],
 )
@@ -586,13 +586,13 @@ MTEB_DEU = Benchmark(
     description="A benchmark for text-embedding performance in German.",
     reference="https://arxiv.org/html/2401.02709v1",
     citation="""@misc{wehrli2024germantextembeddingclustering,
-      title={German Text Embedding Clustering Benchmark}, 
+      title={German Text Embedding Clustering Benchmark},
       author={Silvan Wehrli and Bert Arnrich and Christopher Irrgang},
       year={2024},
       eprint={2401.02709},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2401.02709}, 
+      url={https://arxiv.org/abs/2401.02709},
 }""",
     contacts=["slvnwhrl"],
 )
@@ -646,7 +646,6 @@ MTEB_POL = Benchmark(
                 "SICK-E-PL",
                 # STS
                 "CDSC-R",
-                "STSBenchmarkMultilingualSTS",
                 "SICK-R-PL",
             ],
         )
@@ -1156,14 +1155,47 @@ CODE_RAG = Benchmark(
     description="A benchmark for evaluating code retrieval augmented generation, testing models' ability to retrieve relevant programming solutions, tutorials and documentation.",
     reference="https://arxiv.org/abs/2406.14497",
     citation="""@misc{wang2024coderagbenchretrievalaugmentcode,
-      title={CodeRAG-Bench: Can Retrieval Augment Code Generation?}, 
+      title={CodeRAG-Bench: Can Retrieval Augment Code Generation?},
       author={Zora Zhiruo Wang and Akari Asai and Xinyan Velocity Yu and Frank F. Xu and Yiqing Xie and Graham Neubig and Daniel Fried},
       year={2024},
       eprint={2406.14497},
       archivePrefix={arXiv},
       primaryClass={cs.SE},
-      url={https://arxiv.org/abs/2406.14497}, 
+      url={https://arxiv.org/abs/2406.14497},
     }""",
+)
+
+
+BEIR = Benchmark(
+    name="BEIR",
+    tasks=get_tasks(
+        tasks=[
+            "TRECCOVID",
+            "NFCorpus",
+            "NQ",
+            "HotpotQA",
+            "FiQA2018",
+            "ArguAna",
+            "Touche2020",
+            "CQADupstackRetrieval",
+            "QuoraRetrieval",
+            "DBPedia",
+            "SCIDOCS",
+            "FEVER",
+            "ClimateFEVER",
+            "SciFact",
+        ],
+    )
+    + get_tasks(tasks=["MSMARCO"], languages=["eng"], eval_splits=["dev"]),
+    description="BEIR is a heterogeneous benchmark containing diverse IR tasks. It also provides a common and easy framework for evaluation of your NLP-based retrieval models within the benchmark.",
+    reference="https://arxiv.org/abs/2104.08663",
+    citation="""@article{thakur2021beir,
+  title={Beir: A heterogenous benchmark for zero-shot evaluation of information retrieval models},
+  author={Thakur, Nandan and Reimers, Nils and R{\"u}ckl{\'e}, Andreas and Srivastava, Abhishek and Gurevych, Iryna},
+  journal={arXiv preprint arXiv:2104.08663},
+  year={2021}
+}
+""",
 )
 
 NANOBEIR = Benchmark(
@@ -1237,7 +1269,7 @@ C_MTEB = Benchmark(
     description="The Chinese Massive Text Embedding Benchmark (C-MTEB) is a comprehensive benchmark for Chinese text embeddings covering 6 tasks and 35 datasets.",
     reference="https://github.com/FlagOpen/FlagEmbedding/tree/master/research/C_MTEB",
     citation="""@misc{c-pack,
-      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, 
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding},
       author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff},
       year={2023},
       eprint={2309.07597},
@@ -1361,12 +1393,47 @@ CHEMTEB = Benchmark(
     ),
     description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
     reference="https://arxiv.org/abs/2412.00532",
-    citation="""
-    @article{kasmaee2024chemteb,
+    citation="""@article{kasmaee2024chemteb,
     title={ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
     author={Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
     journal={arXiv preprint arXiv:2412.00532},
     year={2024}
+}""",
+)
+
+BEIR_NL = Benchmark(
+    name="BEIR-NL",
+    tasks=get_tasks(
+        tasks=[
+            "ArguAna-NL",
+            "CQADupstack-NL",
+            "FEVER-NL",
+            "NQ-NL",
+            "Touche2020-NL",
+            "FiQA2018-NL",
+            "Quora-NL",
+            "HotpotQA-NL",
+            "SCIDOCS-NL",
+            "ClimateFEVER-NL",
+            "mMARCO-NL",
+            "SciFact-NL",
+            "DBPedia-NL",
+            "NFCorpus-NL",
+            "TRECCOVID-NL",
+        ],
+    ),
+    description="BEIR-NL is a Dutch adaptation of the publicly available BEIR benchmark, created through automated "
+    "translation.",
+    reference="https://arxiv.org/abs/2412.08329",
+    contacts=["nikolay-banar"],
+    citation="""@misc{banar2024beirnlzeroshotinformationretrieval,
+    title={BEIR-NL: Zero-shot Information Retrieval Benchmark for the Dutch Language},
+     author={Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
+     year={2024},
+     eprint={2412.08329},
+     archivePrefix={arXiv},
+     primaryClass={cs.CL},
+     url={https://arxiv.org/abs/2412.08329},
 }""",
 )
 
@@ -1403,4 +1470,36 @@ BEIR_PL = Benchmark(
           primaryClass={cs.IR},
           url={https://arxiv.org/abs/2305.19840},
 }""",
+)
+
+MTEB_LOTTE = Benchmark(
+    name="LoTTE",
+    tasks=MTEBTasks(get_tasks(tasks=["LoTTE"], eval_splits=["dev"])),
+    description=(
+        "LoTTE (Long-Tail Topic-stratified Evaluation for IR) is designed to evaluate retrieval models "
+        "on underrepresented, long-tail topics. Unlike MSMARCO or BEIR, LoTTE features domain-specific queries and "
+        "passages from StackExchange (covering writing, recreation, science, technology, and lifestyle), providing "
+        "a challenging out-of-domain generalization benchmark."
+    ),
+    reference="https://github.com/stanford-futuredata/ColBERT/blob/main/LoTTE.md",
+    citation="""@inproceedings{santhanam-etal-2022-colbertv2,
+        title = "{C}ol{BERT}v2: Effective and Efficient Retrieval via Lightweight Late Interaction",
+        author = "Santhanam, Keshav  and
+          Khattab, Omar  and
+          Saad-Falcon, Jon  and
+          Potts, Christopher  and
+          Zaharia, Matei",
+        editor = "Carpuat, Marine  and
+          de Marneffe, Marie-Catherine  and
+          Meza Ruiz, Ivan Vladimir",
+        booktitle = "Proceedings of the 2022 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies",
+        month = jul,
+        year = "2022",
+        address = "Seattle, United States",
+        publisher = "Association for Computational Linguistics",
+        url = "https://aclanthology.org/2022.naacl-main.272/",
+        doi = "10.18653/v1/2022.naacl-main.272",
+        pages = "3715--3734",
+    }""",
+    contacts=["agu18dec"],
 )

@@ -5,23 +5,26 @@ from functools import partial
 import torch
 
 from mteb.model_meta import ModelMeta, ScoringFunction
-
-from .e5_models import E5_PAPER_RELEASE_DATE, E5_TRAINING_DATA, XLMR_LANGUAGES
-from .instruct_wrapper import instruct_wrapper
+from mteb.models.e5_models import (
+    E5_PAPER_RELEASE_DATE,
+    E5_TRAINING_DATA,
+    XLMR_LANGUAGES,
+)
+from mteb.models.instruct_wrapper import instruct_wrapper
 
 MISTRAL_LANGUAGES = ["eng_Latn", "fra_Latn", "deu_Latn", "ita_Latn", "spa_Latn"]
 
-
 E5_INSTRUCTION = "Instruct: {instruction}\nQuery: "
-
 
 E5_MISTRAL_TRAINING_DATA = {
     **E5_TRAINING_DATA,
     "FEVER": ["train"],
     "FEVERHardNegatives": ["train"],
+    "FEVER-NL": ["train"],  # translation not trained on
     "HotpotQA": ["train"],
     "HotpotQAHardNegatives": ["train"],
     "HotpotQA-PL": ["train"],  # translation not trained on
+    "HotpotQA-NL": ["train"],  # translation not trained on
 }
 
 e5_instruct = ModelMeta(
@@ -45,6 +48,7 @@ e5_instruct = ModelMeta(
     use_instructions=True,
     reference="https://huggingface.co/intfloat/multilingual-e5-large-instruct",
     n_parameters=560_000_000,
+    memory_usage_mb=1068,
     embed_dim=1024,
     license="mit",
     max_tokens=514,
@@ -82,6 +86,7 @@ e5_mistral = ModelMeta(
     use_instructions=True,
     reference="https://huggingface.co/intfloat/e5-mistral-7b-instruct",
     n_parameters=7_111_000_000,
+    memory_usage_mb=13563,
     embed_dim=4096,
     license="mit",
     max_tokens=32768,
@@ -102,7 +107,7 @@ e5_mistral = ModelMeta(
     """,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=E5_TRAINING_DATA,
+    training_datasets=E5_MISTRAL_TRAINING_DATA,
 )
 
 zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
@@ -123,6 +128,7 @@ zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
     release_date="2024-08-30",
     languages=["eng_Latn"],
     n_parameters=7110660096,
+    memory_usage_mb=13563,
     max_tokens=32768.0,
     embed_dim=4096,
     license="mit",
@@ -134,11 +140,14 @@ zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
     similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets={
+        **E5_MISTRAL_TRAINING_DATA,
         # copied from e5
         # source: https://arxiv.org/pdf/2212.03533
         "NQ": ["test"],
+        "NQ-NL": ["test"],  # translation not trained on
         "NQHardNegatives": ["test"],
         "MSMARCO": ["train"],  # dev?
+        "mMARCO-NL": ["train"],  # translation not trained on
         # source: https://www.zeta-alpha.com/post/fine-tuning-an-llm-for-state-of-the-art-retrieval-zeta-alpha-s-top-10-submission-to-the-the-mteb-be
         # "Arguana",
         # "FEVER",
