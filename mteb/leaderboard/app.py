@@ -245,7 +245,7 @@ lang_select = gr.Dropdown(
 )
 type_select = gr.Dropdown(
     sorted(get_args(TASK_TYPE)),
-    value=sorted(default_results.languages),
+    value=sorted(default_results.task_types),
     multiselect=True,
     label="Task Type",
     info="Select task types to include.",
