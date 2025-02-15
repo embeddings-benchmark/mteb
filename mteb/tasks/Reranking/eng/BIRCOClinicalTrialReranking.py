@@ -41,9 +41,3 @@ class BIRCOClinicalTrialReranking(AbsTaskReranking):
             url={https://arxiv.org/abs/2402.14151}, 
         }""",
     )
-
-    def evaluate(self, model, **kwargs):
-        # Calculate metadata metrics first
-        self.calculate_metadata_metrics()
-        # Existing evaluation code
-        return super().evaluate(model, **kwargs)
