@@ -21,7 +21,7 @@ class BIRCOClinicalTrialReranking(AbsTaskReranking):
         main_score="ndcg_at_10",
         dataset={
             "path": "mteb/BIRCO-ClinicalTrial-Test",
-            "revision": "bb4c3f4fe523539795ffb25fad5a53dabed76702",
+            "revision": "023e7271b234db5cfdbc7e385a21afc6b0081a72",
         },
         date=("2024-01-01", "2024-12-31"),
         domains=["Medical"],  # Valid domain (Medical)
@@ -41,3 +41,9 @@ class BIRCOClinicalTrialReranking(AbsTaskReranking):
             url={https://arxiv.org/abs/2402.14151}, 
         }""",
     )
+
+    def evaluate(self, model, **kwargs):
+        # Calculate metadata metrics first
+        self.calculate_metadata_metrics()
+        # Existing evaluation code
+        return super().evaluate(model, **kwargs)

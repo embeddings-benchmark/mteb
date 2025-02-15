@@ -22,7 +22,7 @@ class BIRCODorisMaeReranking(AbsTaskReranking):
         main_score="ndcg_at_10",
         dataset={
             "path": "mteb/BIRCO-DorisMae-Test",
-            "revision": "dfd65f555399536ae731d90d5adc9abfa466c235",
+            "revision": "2429b297e5d73663d20bc885064e5599bb29d74a",
         },
         date=("2024-01-01", "2024-12-31"),
         domains=["Academic"],  # Valid combination

@@ -22,7 +22,7 @@ class BIRCOWhatsThatBookReranking(AbsTaskReranking):
         main_score="ndcg_at_10",
         dataset={
             "path": "mteb/BIRCO-WTB-Test",
-            "revision": "9e09145ccf6183f2b8f892850201db37d444dabe",
+            "revision": "6b1f3185601b9d69a915b123472a10d4f935da97",
         },
         date=("2024-01-01", "2024-12-31"),
         domains=["Fiction"],  # Valid domain (Fiction)
@@ -42,3 +42,4 @@ class BIRCOWhatsThatBookReranking(AbsTaskReranking):
             url={https://arxiv.org/abs/2402.14151}, 
         }""",
     )
+
