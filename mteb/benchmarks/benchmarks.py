@@ -1538,7 +1538,9 @@ MIEB = Benchmark(
             "XM3600T2IRetrieval",
         ],
     ),
-    description="MIEB is a comprehensive image embeddings benchmark, spanning 8 task categories, covering 129 tasks and a total of 38 languages.",
+    description="""MIEB is a comprehensive image embeddings benchmark, spanning 8 task categories, covering 129 tasks and a total of 38 languages. 
+    In addition to image classification (zero shot and linear probing), clustering, retrieval, MIEB includes tasks in compositionality evaluation, 
+    document undestanding, visual STS, and CV-centric tasks. """,
     reference="",
     contacts=["gowitheflow-1998", "isaac-chung"],
     citation="",
