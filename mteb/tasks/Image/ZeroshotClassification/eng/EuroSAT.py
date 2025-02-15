@@ -6,7 +6,7 @@ from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class EuroSATClassification(AbsTaskZeroshotClassification):
+class EuroSATZeroshotClassification(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
         name="EuroSATZeroShot",
         description="Classifying satellite images.",

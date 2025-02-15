@@ -14,6 +14,7 @@ import pandas as pd
 from gradio_rangeslider import RangeSlider
 
 import mteb
+from mteb.benchmarks.benchmarks import MTEB_multilingual
 from mteb.caching import json_cache
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
 from mteb.leaderboard.table import scores_to_tables
@@ -83,7 +84,7 @@ def produce_benchmark_link(benchmark_name: str, request: gr.Request) -> str:
     return md
 
 
-DEFAULT_BENCHMARK_NAME = "MTEB(Multilingual)"
+DEFAULT_BENCHMARK_NAME = MTEB_multilingual.name
 
 
 def set_benchmark_on_load(request: gr.Request):
@@ -91,7 +92,7 @@ def set_benchmark_on_load(request: gr.Request):
     return query_params.get("benchmark_name", DEFAULT_BENCHMARK_NAME)
 
 
-def download_table(table: pd.DataFrame) -> Path:
+def download_table(table: pd.DataFrame) -> str:
     file = tempfile.NamedTemporaryFile(delete=False, suffix=".csv")
     table.to_csv(file)
     return file.name
@@ -99,7 +100,7 @@ def download_table(table: pd.DataFrame) -> Path:
 
 def update_citation(benchmark_name: str) -> str:
     benchmark = mteb.get_benchmark(benchmark_name)
-    if str(benchmark.citation) != "None":
+    if benchmark.citation is not None:
         citation = f"```bibtex\n{benchmark.citation}\n```"
     else:
         citation = ""
@@ -116,10 +117,10 @@ def update_description(
     n_tasks = len(benchmark.tasks)
     n_domains = len(domains)
     description += f" - **Number of languages**: {n_languages}\n"
-    description += f" - **Number of datasets**: {n_tasks}\n"
+    description += f" - **Number of tasks**: {n_tasks}\n"
     description += f" - **Number of task types**: {n_task_types}\n"
     description += f" - **Number of domains**: {n_domains}\n"
-    if str(benchmark.reference) != "None":
+    if benchmark.reference is not None:
         description += f"\n[Click for More Info]({benchmark.reference})"
 
     return description
@@ -160,13 +161,13 @@ MIN_MODEL_SIZE, MAX_MODEL_SIZE = 0, 100_000
 
 
 def filter_models(
-    model_names,
-    task_select,
-    availability,
-    compatibility,
-    instructions,
-    model_size,
-    zero_shot_setting,
+    model_names: list[str],
+    task_select: list[str],
+    availability: bool | None,
+    compatibility: list[str],
+    instructions: bool | None,
+    model_size: tuple[int | None, int | None],
+    zero_shot_setting: Literal["hard", "soft", "off"],
 ):
     lower, upper = model_size
     # Setting to None, when the user doesn't specify anything
@@ -175,7 +176,7 @@ def filter_models(
     else:
         # Multiplying by millions
         lower = lower * 1e6
-    if (upper == MIN_MODEL_SIZE) or (upper is None):
+    if (upper == MAX_MODEL_SIZE) or (upper is None):
         upper = None
     else:
         upper = upper * 1e6
@@ -186,10 +187,9 @@ def filter_models(
         frameworks=compatibility,
         n_parameters_range=(lower, upper),
     )
-    tasks = mteb.get_tasks(tasks=task_select)
     models_to_keep = set()
     for model_meta in model_metas:
-        is_model_zero_shot = model_meta.is_zero_shot_on(tasks)
+        is_model_zero_shot = model_meta.is_zero_shot_on(task_select)
         if is_model_zero_shot is None:
             if zero_shot_setting == "hard":
                 continue
@@ -203,7 +203,7 @@ def filter_models(
 logger.info("Loading all benchmark results")
 all_results = load_results()
 
-benchmarks = mteb.get_benchmarks()
+benchmarks = sorted(mteb.get_benchmarks(), key=lambda x: x.name)
 all_benchmark_results = {
     benchmark.name: benchmark.load_results(base_results=all_results).join_revisions()
     for benchmark in benchmarks
@@ -274,6 +274,8 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
     ## MMTEB: Massive Multilingual Text Embedding Benchmark
 
     The MMTEB leaderboard compares text embedding models on 1000+ languages. Check out the [paper](https://openreview.net/pdf?id=zl3pfz4VCV) for details on datasets, languages and tasks. And you can contribute! 🤗 To add a model, please refer to the documentation in the [GitHub repository](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_model.md). Also check out [MTEB Arena](https://huggingface.co/spaces/mteb/arena) ⚔️
+    
+    > Looking for the previous MTEB leaderboard? We have made it available [here](https://huggingface.co/spaces/mteb/leaderboard_legacy). Though it will no longer be updated.
     """
     )
 
@@ -422,25 +424,36 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
 A model is considered zero-shot if it is not trained on any splits of the datasets used to derive the tasks.
 E.g., if a model is trained on Natural Questions, it cannot be considered zero-shot on benchmarks containing the task “NQ” which is derived from Natural Questions.
 This definition creates a few edge cases. For instance, multiple models are typically trained on Wikipedia title and body pairs, but we do not define this as leakage on, e.g., “WikipediaRetrievalMultilingual” and “WikiClusteringP2P” as these datasets are not based on title-body pairs.
-Distilled, further fine-tunes or in other ways, derivative models inherit the datasets of their parent models.
+Distilled, further fine-tunes, or in other ways, derivative models inherit the datasets of their parent models.
 Based on community feedback and research findings, This definition could change in the future.
             """
             )
         with gr.Accordion(
-            "Why is a model is missing or not showing up?",
+            "What does the other columns mean?",
             open=False,
         ):
             gr.Markdown(
                 """
-There is multiple reasons why a model might not show up in the leaderboard. Here is a few common reasons:
+- **Number of Parameters**: This is the total number of parameters in the model including embedding parameters. A higher value means the model requires more CPU/GPU memory to run; thus, less is generally desirable.
+- **Embedding Dimension**: This is the vector dimension of the embeddings that the model produces. When saving embeddings to disk, a higher dimension will require more space, thus less is usually desirable.
+- **Max tokens**: This refers to how many tokens (=word pieces) the model can process. Generally, a larger value is desirable.
+- **Zero-shot**: This indicates if the model is zero-shot on the benchmark. For more information on zero-shot see the info-box below.
+            """
+            )
+        with gr.Accordion(
+            "Why is a model missing or not showing up?",
+            open=False,
+        ):
+            gr.Markdown(
+                """
+Possible reasons why a model may not show up in the leaderboard:
 
-- **Filter Setting**: It is being filtered out with your current filter. By default we do not show models that are not zero-shot on the benchmark. 
+- **Filter Setting**: It is being filtered out with your current filter. By default, we do not show models that are not zero-shot on the benchmark. 
 You can change this setting in the model selection panel.
-- **Removed Derivatives**: While the previous models showed many variant of a models (e.g. quantized, varying embedding sizes) as separate models, we now only show the original model.
-- **Missing Results**: The model might not have been run on the tasks in the benchmark. We only display models that have been run on at least one tasks 
-in the benchmark. For visualizations which require the mean across all tasks, we only display models that have been run on all tasks in the benchmark. 
-You can see existing results the [results repository](https://github.com/embeddings-benchmark/results). This is also where new results are added using a PR.
-- **Missing Metadata**: Currently the we only show models for which we have metadata on in [mteb](https://github.com/embeddings-benchmark/mteb).
+- **Missing Results**: The model may not have been run on the tasks in the benchmark. We only display models that have been run on at least one task 
+in the benchmark. For visualizations that require the mean across all tasks, we only display models that have been run on all tasks in the benchmark. 
+You can see existing results in the [results repository](https://github.com/embeddings-benchmark/results). This is also where new results are added via PR.
+- **Missing Metadata**: Currently, we only show models for which we have metadata in [mteb](https://github.com/embeddings-benchmark/mteb).
 You can follow this guide on how to add a [model](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_model.md) and 
 see existing implementations [here](https://github.com/embeddings-benchmark/mteb/tree/main/mteb/models).
             """

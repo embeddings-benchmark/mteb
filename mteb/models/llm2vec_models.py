@@ -8,8 +8,7 @@ import torch
 
 from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
-
-from .wrapper import Wrapper
+from mteb.models.wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
@@ -122,6 +121,7 @@ llm2vec_llama3_8b_supervised = ModelMeta(
     # TODO: Not sure what to put here as a model is made of two peft repos, each with a different revision
     release_date="2024-04-09",
     n_parameters=7_505_000_000,
+    memory_usage_mb=28629,
     max_tokens=8192,
     embed_dim=4096,
     license="mit",
@@ -148,6 +148,7 @@ llm2vec_llama3_8b_unsupervised = ModelMeta(
     revision="1cb7b735326d13a8541db8f57f35da5373f5e9c6",
     release_date="2024-04-09",
     n_parameters=7_505_000_000,
+    memory_usage_mb=28629,
     max_tokens=8192,
     embed_dim=4096,
     license="mit",
@@ -174,6 +175,7 @@ llm2vec_mistral7b_supervised = ModelMeta(
     revision="0ae69bdd5816105778b971c3138e8f8a18eaa3ae",
     release_date="2024-04-09",
     n_parameters=7_111_000_000,
+    memory_usage_mb=27126,
     max_tokens=32768,
     embed_dim=4096,
     license="mit",
@@ -200,6 +202,7 @@ llm2vec_mistral7b_unsupervised = ModelMeta(
     revision="2c055a5d77126c0d3dc6cd8ffa30e2908f4f45f8",
     release_date="2024-04-09",
     n_parameters=7_111_000_000,
+    memory_usage_mb=27126,
     max_tokens=32768,
     embed_dim=4096,
     license="mit",
@@ -226,6 +229,7 @@ llm2vec_llama2_7b_supervised = ModelMeta(
     revision="2c055a5d77126c0d3dc6cd8ffa30e2908f4f45f8",
     release_date="2024-04-09",
     n_parameters=7_111_000_000,
+    memory_usage_mb=27126,
     max_tokens=32768,
     embed_dim=4096,
     license="mit",
@@ -252,6 +256,7 @@ llm2vec_llama2_7b_unsupervised = ModelMeta(
     revision="a76944871d169ebe7c97eb921764cd063afed785",
     release_date="2024-04-09",
     n_parameters=7_111_000_000,
+    memory_usage_mb=27126,
     max_tokens=32768,
     embed_dim=4096,
     license="mit",
@@ -278,6 +283,7 @@ llm2vec_sheared_llama_supervised = ModelMeta(
     revision="a5943d406c6b016fef3f07906aac183cf1a0b47d",
     release_date="2024-04-09",
     n_parameters=7_111_000_000,
+    memory_usage_mb=27126,
     max_tokens=32768,
     embed_dim=4096,
     license="mit",
@@ -304,6 +310,7 @@ llm2vec_sheared_llama_unsupervised = ModelMeta(
     revision="a5943d406c6b016fef3f07906aac183cf1a0b47d",
     release_date="2024-04-09",
     n_parameters=7_111_000_000,
+    memory_usage_mb=27126,
     max_tokens=32768,
     embed_dim=4096,
     license="mit",

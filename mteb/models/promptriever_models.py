@@ -8,9 +8,8 @@ import torch
 
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
-
-from .repllama_models import RepLLaMAWrapper
-from .wrapper import Wrapper
+from mteb.models.repllama_models import RepLLaMAWrapper
+from mteb.models.wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +54,8 @@ promptriever_llama2 = ModelMeta(
     open_weights=True,
     revision="01c7f73d771dfac7d292323805ebc428287df4f9-30b14e3813c0fa45facfd01a594580c3fe5ecf23",  # base-peft revision
     release_date="2024-09-15",
-    n_parameters=7_000_000,
+    n_parameters=7_000_000_000,
+    memory_usage_mb=27,
     max_tokens=4096,
     embed_dim=4096,
     license="apache-2.0",
@@ -85,7 +85,8 @@ promptriever_llama3 = ModelMeta(
         "mMARCO-NL": ["train"],  # translation not trained on
     },
     release_date="2024-09-15",
-    n_parameters=8_000_000,
+    n_parameters=8_000_000_000,
+    memory_usage_mb=31,
     max_tokens=8192,
     embed_dim=4096,
     license="apache-2.0",
@@ -110,7 +111,8 @@ promptriever_llama3_instruct = ModelMeta(
     open_weights=True,
     revision="5206a32e0bd3067aef1ce90f5528ade7d866253f-8b677258615625122c2eb7329292b8c402612c21",  # base-peft revision
     release_date="2024-09-15",
-    n_parameters=8_000_000,
+    n_parameters=8_000_000_000,
+    memory_usage_mb=31,
     max_tokens=8192,
     embed_dim=4096,
     training_datasets={
@@ -139,7 +141,8 @@ promptriever_mistral_v1 = ModelMeta(
     open_weights=True,
     revision="7231864981174d9bee8c7687c24c8344414eae6b-876d63e49b6115ecb6839893a56298fadee7e8f5",  # base-peft revision
     release_date="2024-09-15",
-    n_parameters=7_000_000,
+    n_parameters=7_000_000_000,
+    memory_usage_mb=27,
     training_datasets={
         "samaya-ai/msmarco-w-instructions": ["train"],
         "mMARCO-NL": ["train"],  # translation not trained on

@@ -17,6 +17,7 @@ inf_retriever_v1 = ModelMeta(
     revision="cb70ca7c31dfa866b2eff2dad229c144d8ddfd91",
     release_date="2024-12-24",  # initial commit of hf model.
     n_parameters=7_069_121_024,
+    memory_usage_mb=13483,
     embed_dim=3584,
     license="apache-2.0",
     max_tokens=32768,
