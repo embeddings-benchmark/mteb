@@ -1406,7 +1406,7 @@ BUILT_MTEB = Benchmark(
             "BuiltBenchReranking",
         ],
     ),
-    description="\"Built-Bench\" is an ongoing effort aimed at evaluating text embedding models in the context of buit asset management, spanning over various dicsiplines such as architeture, engineering, constrcution, and operations management of the built environment.",
+    description="\"Built-Bench\" is an ongoing effort aimed at evaluating text embedding models in the context of built asset management, spanning over various dicsiplines such as architeture, engineering, constrcution, and operations management of the built environment.",
     reference="https://arxiv.org/abs/2411.12056",
     citation="""@article{shahinmoghadam2024benchmarking,
     title={Benchmarking pre-trained text embedding models in aligning built asset information},
