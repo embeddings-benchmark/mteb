@@ -68,6 +68,8 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         train_split = dataset[self.train_split]
         eval_split = dataset[eval_split_name]
 
+        model.load_task_sample(train_split["text"], self.metadata.name, **encode_kwargs)
+
         scores = []
         # Bootstrap sample indices from training set for each experiment
         train_samples = []

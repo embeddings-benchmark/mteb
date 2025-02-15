@@ -142,6 +142,7 @@ class AbsTaskClassification(AbsTask):
                 self.samples_per_label,
                 idxs,
             )
+            model.load_task_sample(X_sampled, self.metadata.name, **encode_kwargs)
 
             evaluator = self.evaluator(
                 X_sampled,

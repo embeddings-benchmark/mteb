@@ -11,6 +11,7 @@ from typing import Any, Callable
 from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.TaskMetadata import HFSubset
+from ..encoder_interface import PromptType
 
 from ..evaluation.evaluators import RetrievalEvaluator
 from ..evaluation.evaluators.utils import make_score_dict
@@ -18,6 +19,7 @@ from ..load_results.task_results import ScoresDict
 from .AbsTask import AbsTask
 from .dataloaders import RetrievalDataLoader
 from .TaskMetadata import DescriptiveStatistics
+from ..models.wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
@@ -280,6 +282,12 @@ class AbsTaskRetrieval(AbsTask):
         Returns:
             ScoresDict: Evaluation scores
         """
+
+        if isinstance(retriever.retriever.model, Wrapper):
+            retriever.retriever.model.load_task_sample(
+                list(corpus.values()), task_name=self.metadata.name, prompt_type=PromptType.passage, **retriever.retriever.encode_kwargs
+            )
+
         if not results:
             # perform the retrieval here
             start_time = time()

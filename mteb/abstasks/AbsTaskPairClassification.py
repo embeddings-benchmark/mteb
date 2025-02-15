@@ -79,6 +79,9 @@ class AbsTaskPairClassification(AbsTask):
         logging.getLogger(
             "sentence_transformers.evaluation.PairClassificationEvaluator"
         ).setLevel(logging.WARN)
+        sentences = [row for col in ["sentence1", "sentence2"] for row in data_split[col]]
+        model.load_task_sample(sentences, self.metadata.name, **encode_kwargs)
+
         evaluator = PairClassificationEvaluator(
             data_split["sentence1"],
             data_split["sentence2"],

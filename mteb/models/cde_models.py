@@ -1,19 +1,93 @@
 from __future__ import annotations
 
 import logging
+from functools import partial
+from math import ceil
+from typing import Any, Sequence
 
+import numpy as np
+import torch
+
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
+from mteb.encoder_interface import PromptType
+from mteb.model_meta import ModelMeta
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.bge_models import bge_full_data
 
 logger = logging.getLogger(__name__)
 
 
+class CDEWrapper(SentenceTransformerWrapper):
+    dataset_embeddings: torch.Tensor = None
+    sentence_fraction: float = 0.1
+    max_sentences: int = 1000
+
+    def encode(
+            self,
+            sentences: Sequence[str],
+            *,
+            task_name: str,
+            prompt_type: PromptType | None = None,
+            **kwargs: Any,
+    ) -> np.ndarray:
+        prompt_name = self.get_prompt_name(
+            self.model_prompts, task_name, prompt_type
+        )
+        if prompt_name:
+            logger.info(
+                f"Using prompt_name={prompt_name} for task={task_name} prompt_type={prompt_type}"
+            )
+        else:
+            logger.info(
+                f"No model prompts found for task={task_name} prompt_type={prompt_type}"
+            )
+        logger.info(f"Encoding {len(sentences)} sentences.")
+        if self.dataset_embeddings is None:
+            raise ValueError("Dataset embeddings are not loaded")
+
+        embeddings = self.model.encode(
+            sentences,
+            prompt_name=prompt_name,
+            dataset_embeddings=self.dataset_embeddings,
+            **kwargs,
+        )
+        if isinstance(embeddings, torch.Tensor):
+            # sometimes in kwargs can be return_tensors=True
+            embeddings = embeddings.cpu().detach().float().numpy()
+        return embeddings
+
+    def load_task_sample(self, sentences: Sequence[str], task_name: str, prompt_type: PromptType | None = None, **kwargs: Any) -> None:
+        logger.info(f"Loading dataset embeddings for task {task_name}. Prompt type: {prompt_type}")
+        used_sentences = np.random.choice(
+            sentences, size=min(ceil(len(sentences) * self.sentence_fraction), self.max_sentences)
+        )
+        self.dataset_embeddings = self.model.encode(
+            used_sentences,
+            # prompt_name=self.get_prompt_name(
+            #     self.model_prompts, task_name, prompt_type
+            # ),
+            convert_to_tensor=True,
+            **kwargs,
+        )
+
+
+cde_model_prompts = {
+    PromptType.query.value: "search_query: ",
+    PromptType.passage.value: "search_document: ",
+}
+
 cde_small_v1 = ModelMeta(
-    loader=None,  # I will leave this at None for now,
+    loader=partial(
+        CDEWrapper,
+        model="jxm/cde-small-v1",
+        # revision="7017cdcb2abeccc8e9abd1c2379eb0e05121eec8",
+        model_prompts=cde_model_prompts,
+        trust_remote_code=True,
+    ),
     name="jxm/cde-small-v1",
     languages=["eng_Latn"],
     open_weights=True,
-    revision="8d5736163718a8b65cd787b75ed61020d18bad3c",
+    revision="7017cdcb2abeccc8e9abd1c2379eb0e05121eec8",
     release_date="2024-09-24",
     n_parameters=int(281 * 1e6),
     memory_usage_mb=1072,  # Though the second-stage model is only 140M
@@ -32,7 +106,13 @@ cde_small_v1 = ModelMeta(
 )
 
 cde_small_v2 = ModelMeta(
-    loader=None,  # I will leave this at None for now,
+    loader=partial(
+        CDEWrapper,
+        model="jxm/cde-small-v2",
+        # revision="a7e5882ad52c27ea2831fc8258f24379c25cb459",
+        model_prompts=cde_model_prompts,
+        trust_remote_code=True,
+    ),
     name="jxm/cde-small-v2",
     languages=["eng_Latn"],
     open_weights=True,
