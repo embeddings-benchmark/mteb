@@ -68,6 +68,10 @@ The following tables give you an overview of the tasks in MTEB.
 | [BornholmBitextMining](https://aclanthology.org/W19-6138/) | ['dan'] | BitextMining | s2s | [Fiction, Social, Web, Written] | {'test': 500} | {'test': {'num_samples': 500, 'number_of_characters': 44361, 'unique_pairs': 500, 'min_sentence1_length': 1, 'average_sentence1_length': 49.83, 'max_sentence1_length': 555, 'unique_sentence1': 497, 'min_sentence2_length': 5, 'average_sentence2_length': 38.89, 'max_sentence2_length': 453, 'unique_sentence2': 491}} |
 | [BrazilianToxicTweetsClassification](https://paperswithcode.com/dataset/told-br) (Joao Augusto Leite and                         Diego F. Silva and                         Kalina Bontcheva and                         Carolina Scarton, 2020) | ['por'] | MultilabelClassification | s2s | [Constructed, Written] | None | None |
 | [BrightRetrieval](https://huggingface.co/datasets/xlangai/BRIGHT) (Hongjin Su, 2024) | ['eng'] | Retrieval | s2p | [Non-fiction, Written] | None | None |
+| [BuiltBenchClusteringP2P](https://arxiv.org/abs/2411.12056) (Shahinmoghadam et al., 2024) | ['eng'] | Clustering | p2p | [Engineering, Written] | None | None |
+| [BuiltBenchClusteringS2S](https://arxiv.org/abs/2411.12056) (Shahinmoghadam et al., 2024) | ['eng'] | Clustering | s2s | [Engineering, Written] | None | None |
+| [BuiltBenchReranking](https://arxiv.org/abs/2411.12056) (Shahinmoghadam et al., 2024) | ['eng'] | Reranking | p2p | [Engineering, Written] | None | None |
+| [BuiltBenchRetrieval](https://arxiv.org/abs/2411.12056) (Shahinmoghadam et al., 2024) | ['eng'] | Retrieval | p2p | [Engineering, Written] | None | None |
 | [BulgarianStoreReviewSentimentClassfication](https://doi.org/10.7910/DVN/TXIK9P) (Georgieva-Trifonova et al., 2018) | ['bul'] | Classification | s2s | [Reviews, Written] | None | None |
 | [CBD](http://2019.poleval.pl/files/poleval2019.pdf) | ['pol'] | Classification | s2s | [Social, Written] | None | None |
 | [CDSC-E](https://aclanthology.org/P17-1073.pdf) | ['pol'] | PairClassification | s2s | [Written] | None | None |
@@ -184,6 +188,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [ClimateFEVER](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html) (Thomas Diggelmann, 2021) | ['eng'] | Retrieval | s2p | [Encyclopaedic, Written] | None | None |
 | [ClimateFEVER-Fa](https://huggingface.co/datasets/MCINext/climate-fever-fa) | ['fas'] | Retrieval | s2p | [Web] | None | None |
 | [ClimateFEVER-NL](https://huggingface.co/datasets/clips/beir-nl-climate-fever) (Nikolay Banar, 2024) | ['nld'] | Retrieval | s2p | [Encyclopaedic, Written] | None | None |
+| [ClimateFEVER.v2](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html) (Thomas Diggelmann, 2021) | ['eng'] | Retrieval | s2p | [Academic, Written] | None | None |
 | [ClimateFEVERHardNegatives](https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html) (Thomas Diggelmann, 2021) | ['eng'] | Retrieval | s2p | [Encyclopaedic, Written] | None | None |
 | [CmedqaRetrieval](https://aclanthology.org/2022.emnlp-main.357.pdf) | ['cmn'] | Retrieval | s2p | [Medical, Written] | None | None |
 | [Cmnli](https://huggingface.co/datasets/clue/viewer/cmnli) | ['cmn'] | PairClassification | s2s |  | None | None |
@@ -1174,7 +1179,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | Modern Greek (1453-) | Indo-European | 0 | 2 | 0 | 3 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 0 | 3 | 0 | 0 | 0 | 0 | 0 | 18 |
 | emi | Mussau-Emira | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | emp | Northern Emberá | Chocoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| eng | English | Indo-European | 9 | 62 | 4 | 17 | 160 | 18 | 21 | 5 | 1 | 6 | 3 | 1 | 13 | 8 | 108 | 13 | 2 | 1 | 7 | 24 | 483 |
+| eng | English | Indo-European | 9 | 62 | 4 | 17 | 160 | 20 | 21 | 5 | 1 | 6 | 3 | 1 | 13 | 9 | 110 | 13 | 2 | 1 | 7 | 24 | 488 |
 | enq | Enga | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | epo | Esperanto | Artificial Language | 0 | 0 | 0 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | eri | Ogea | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1947,7 +1952,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | Yatee Zapotec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zul | Zulu | Atlantic-Congo | 0 | 0 | 0 | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 7 |
 | zyp | Zyphe Chin | Sino-Tibetan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| Total | None | None | None | 9 | 114 | 4 | 1398 | 836 | 311 | 21 | 5 | 1 | 6 | 3 | 28 | 91 | 55 | 534 | 88 | 2 | 2 | 24 | 24 |
+| Total | None | None | None | 9 | 114 | 4 | 1398 | 836 | 313 | 21 | 5 | 1 | 6 | 3 | 28 | 91 | 56 | 536 | 88 | 2 | 2 | 24 | 24 |
 <!-- TASK LANG TABLE END -->
 
 </details>

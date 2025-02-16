@@ -859,41 +859,44 @@ indic_languages = [
 
 MTEB_INDIC = Benchmark(
     name="MTEB(Indic, v1)",
-    tasks=get_tasks(
-        tasks=[
-            # Bitext
-            "IN22ConvBitextMining",
-            "IN22GenBitextMining",
-            "IndicGenBenchFloresBitextMining",
-            "LinceMTBitextMining",
-            # clustering
-            "SIB200ClusteringS2S",
-            # classification
-            "BengaliSentimentAnalysis",
-            "GujaratiNewsClassification",
-            "HindiDiscourseClassification",
-            "SentimentAnalysisHindi",
-            "MalayalamNewsClassification",
-            "IndicLangClassification",
-            "MTOPIntentClassification",
-            "MultiHateClassification",
-            "TweetSentimentClassification",
-            "NepaliNewsClassification",
-            "PunjabiNewsClassification",
-            "SanskritShlokasClassification",
-            "UrduRomanSentimentClassification",
-            # STS
-            "IndicCrosslingualSTS",
-            # pair classification
-            "XNLI",
-            # retrieval
-            "BelebeleRetrieval",
-            "XQuADRetrieval",
-            # reranking
-            "WikipediaRerankingMultilingual",
-        ],
-        languages=indic_languages,
-        exclusive_language_filter=True,
+    tasks=MTEBTasks(
+        get_tasks(
+            tasks=[
+                # Bitext
+                "IN22ConvBitextMining",
+                "IN22GenBitextMining",
+                "IndicGenBenchFloresBitextMining",
+                "LinceMTBitextMining",
+                # clustering
+                "SIB200ClusteringS2S",
+                # classification
+                "BengaliSentimentAnalysis",
+                "GujaratiNewsClassification",
+                "HindiDiscourseClassification",
+                "SentimentAnalysisHindi",
+                "MalayalamNewsClassification",
+                "IndicLangClassification",
+                "MTOPIntentClassification",
+                "MultiHateClassification",
+                "TweetSentimentClassification",
+                "NepaliNewsClassification",
+                "PunjabiNewsClassification",
+                "SanskritShlokasClassification",
+                "UrduRomanSentimentClassification",
+                # pair classification
+                "XNLI",
+                # retrieval
+                "BelebeleRetrieval",
+                "XQuADRetrieval",
+                # reranking
+                "WikipediaRerankingMultilingual",
+            ],
+            languages=indic_languages,
+            exclusive_language_filter=True,
+        )
+        +
+        # STS
+        (get_task("IndicCrosslingualSTS"),)
     ),
     description="A regional geopolitical text embedding benchmark targetting embedding performance on Indic languages.",
     reference=None,
@@ -1667,4 +1670,25 @@ MIEB_LITE = Benchmark(
     reference="",
     contacts=["gowitheflow-1998", "isaac-chung"],
     citation="",
+)
+
+BUILT_MTEB = Benchmark(
+    name="BuiltBench(eng)",
+    tasks=get_tasks(
+        tasks=[
+            "BuiltBenchClusteringP2P",
+            "BuiltBenchClusteringS2S",
+            "BuiltBenchRetrieval",
+            "BuiltBenchReranking",
+        ],
+    ),
+    description='"Built-Bench" is an ongoing effort aimed at evaluating text embedding models in the context of built asset management, spanning over various dicsiplines such as architeture, engineering, constrcution, and operations management of the built environment.',
+    reference="https://arxiv.org/abs/2411.12056",
+    citation="""@article{shahinmoghadam2024benchmarking,
+    title={Benchmarking pre-trained text embedding models in aligning built asset information},
+    author={Shahinmoghadam, Mehrzad and Motamedi, Ali},
+    journal={arXiv preprint arXiv:2411.12056},
+    year={2024}
+}""",
+    contacts=["mehrzadshm"],
 )
