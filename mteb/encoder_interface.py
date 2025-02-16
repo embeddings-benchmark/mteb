@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence
 from enum import Enum
 from typing import Any, Protocol, Union, runtime_checkable
 
@@ -204,4 +204,48 @@ class ImageEncoder:
         # fusion_mode: str="sum", # will remove this as it should be required in the interface
         **kwargs: Any,
     ) -> np.ndarray:
+        pass
+
+
+class MultiModalEncoder:
+    """Extending the MTEB encoder interface to cover image, audio, and mixed modality cases.
+    """
+
+    def __init__(self, device: str | None, **kwargs: Any):
+        pass
+
+    def encode(
+        self,
+        inputs: Iterable[str] # text
+        | Iterable[Image.Image] # images
+        | DataLoader #image data loader
+        | Iterable[tuple[Image.Image, str]] # image and text
+        | Iterable[tuple[DataLoader, list[str]]] # image dataloader and text
+        | Iterable[tuple[list[Image.Image], str]] # images and text
+        
+        | Iterable[Any],
+        *,
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> np.ndarray:
+        """The encode method handles all input modalities.
+        # single modalities
+        text: Iterable[str]
+        images: Iterable[Image.Image]
+        audio: Iterable[audio]
+
+        # current mixed cases from MIEB
+        image_and_text: Iterable[tuple[Image.Image, str]]
+        image_dataloader_and_text: Iterable[tuple[DataLoader, list[str]]]
+        images_and_text: Iterable[tuple[list[Image.Image], str]]
+
+        # potential MAEB mixed case
+        audio_and_text: Iterable[tuple[audio,text]
+
+        mixed: image_and_text | image_dataloader_and_text | images_and_text | audio_and_text
+
+        # All together
+        inputs: text | images | audio | mixed
+        """
         pass
