@@ -1667,7 +1667,7 @@ MIEB_LITE = Benchmark(
         ],
     ),
     description="""MIEB(lite) is a comprehensive image embeddings benchmark, spanning 9 task types, covering 51 tasks. 
-    This is a lite version of MIEB(Multilingual) and it's designed to be run at a fraction of the cost while maintaining
+    This is a lite version of MIEB(Multilingual), designed to be run at a fraction of the cost while maintaining
     relative rank of models.""",
     reference="",
     contacts=["gowitheflow-1998", "isaac-chung"],
