@@ -1,18 +1,18 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Sequence
 from functools import partial
 from math import ceil
-from typing import Any, Sequence
+from typing import Any
 
 import numpy as np
 import torch
 
-from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.bge_models import bge_full_data
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 
 logger = logging.getLogger(__name__)
 
@@ -23,16 +23,14 @@ class CDEWrapper(SentenceTransformerWrapper):
     max_sentences: int = 1000
 
     def encode(
-            self,
-            sentences: Sequence[str],
-            *,
-            task_name: str,
-            prompt_type: PromptType | None = None,
-            **kwargs: Any,
+        self,
+        sentences: Sequence[str],
+        *,
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
     ) -> np.ndarray:
-        prompt_name = self.get_prompt_name(
-            self.model_prompts, task_name, prompt_type
-        )
+        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
         if prompt_name:
             logger.info(
                 f"Using prompt_name={prompt_name} for task={task_name} prompt_type={prompt_type}"
@@ -56,16 +54,27 @@ class CDEWrapper(SentenceTransformerWrapper):
             embeddings = embeddings.cpu().detach().float().numpy()
         return embeddings
 
-    def load_task_sample(self, sentences: Sequence[str], task_name: str, prompt_type: PromptType | None = None, **kwargs: Any) -> None:
-        logger.info(f"Loading dataset embeddings for task {task_name}. Prompt type: {prompt_type}")
+    def load_task_sample(
+        self,
+        sentences: Sequence[str],
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> None:
+        logger.info(
+            f"Loading dataset embeddings for task {task_name}. Prompt type: {prompt_type}"
+        )
+        if isinstance(sentences[0], list):
+            sentences = [s for sentences_list in sentences for s in sentences_list]
         used_sentences = np.random.choice(
-            sentences, size=min(ceil(len(sentences) * self.sentence_fraction), self.max_sentences)
+            sentences,
+            size=min(ceil(len(sentences) * self.sentence_fraction), self.max_sentences),
         )
         self.dataset_embeddings = self.model.encode(
             used_sentences,
-            # prompt_name=self.get_prompt_name(
-            #     self.model_prompts, task_name, prompt_type
-            # ),
+            prompt_name=self.get_prompt_name(
+                self.model_prompts, task_name, prompt_type
+            ),
             convert_to_tensor=True,
             **kwargs,
         )
