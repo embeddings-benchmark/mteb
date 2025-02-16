@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence
 from enum import Enum
 from typing import Any, Protocol, Union, runtime_checkable
 
@@ -10,6 +10,9 @@ from PIL import Image
 from torch.utils.data import DataLoader
 
 Corpus = Union[list[dict[str, str]], dict[str, list[str]]]
+
+AudioData = Union[np.ndarray, torch.Tensor]
+AudioBatch = Union[Iterable[AudioData], DataLoader, Iterable[tuple[AudioData, str]]]
 
 
 class PromptType(str, Enum):
@@ -202,6 +205,40 @@ class ImageEncoder:
         | DataLoader
         | None = None,  # the requirement for these two to be the same seems odd (docs without images, images without associated text, docs with multiple images)
         # fusion_mode: str="sum", # will remove this as it should be required in the interface
+        **kwargs: Any,
+    ) -> np.ndarray:
+        pass
+
+
+class AudioEncoder:
+    """Interface for audio encoders."""
+
+    def __init__(
+        self, device: str | None = None, sample_rate: int = 16000, **kwargs: Any
+    ):
+        self.device = device
+        self.sample_rate = sample_rate
+
+    def encode(
+        self,
+        sentences: Sequence[str],
+        *,
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> np.ndarray:
+        pass
+
+    def get_audio_embeddings(self, audio: AudioBatch, **kwargs: Any) -> np.ndarray:
+        pass
+
+    def get_text_embeddings(self, texts: list[str], **kwargs: Any) -> np.ndarray:
+        pass
+
+    def get_fused_embeddings(
+        self,
+        audio: AudioBatch | None = None,
+        texts: list[str] | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
         pass
