@@ -19,8 +19,10 @@ logger = logging.getLogger(__name__)
 
 class CDEWrapper(SentenceTransformerWrapper):
     dataset_embeddings: torch.Tensor = None
-    sentence_fraction: float = 0.1
-    max_sentences: int = 1000
+
+    def __init__(self, *args, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self.max_sentences = self.model.config.transductive_corpus_size
 
     def encode(
         self,
@@ -66,12 +68,11 @@ class CDEWrapper(SentenceTransformerWrapper):
         )
         if isinstance(sentences[0], list):
             sentences = [s for sentences_list in sentences for s in sentences_list]
-        used_sentences = np.random.choice(
-            sentences,
-            size=min(ceil(len(sentences) * self.sentence_fraction), self.max_sentences),
-        )
+        # We need to sample with replacement if the minicorpus needs to be bigger than the number of sentences
+        is_replace = len(sentences) < self.max_sentences
+        minicorpus = np.random.choice(sentences, size=self.max_sentences, replace=is_replace)
         self.dataset_embeddings = self.model.encode(
-            used_sentences,
+            minicorpus,
             prompt_name=self.get_prompt_name(
                 self.model_prompts, task_name, prompt_type
             ),
