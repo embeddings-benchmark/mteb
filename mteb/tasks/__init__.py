@@ -487,6 +487,11 @@ from .PairClassification import (
 from .Reranking import (
     AlloprofReranking,
     AskUbuntuDupQuestions,
+    BIRCOArguAnaReranking,
+    BIRCOClinicalTrialReranking,
+    BIRCODorisMaeReranking,  # Add these
+    BIRCORelicReranking,
+    BIRCOWhatsThatBookReranking,
     CMedQAv1,
     CMedQAv2,
     ESCIReranking,
@@ -943,6 +948,11 @@ __all__ = [
     # "XFlickr30kCoT2IRetrieval",
     # "WITT2IRetrieval",
     # "XM3600T2IRetrieval",
+    "BIRCODorisMaeReranking",
+    "BIRCOArguAnaReranking",
+    "BIRCOClinicalTrialReranking",
+    "BIRCOWhatsThatBookReranking",
+    "BIRCORelicReranking",
     "CLSClusteringFastP2P",
     "CLSClusteringFastS2S",
     "CLSClusteringP2P",
