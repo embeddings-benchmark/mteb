@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence
 from enum import Enum
 from typing import Any, Protocol, Union, runtime_checkable
 
@@ -11,6 +11,9 @@ from PIL import Image
 from torch.utils.data import DataLoader
 
 Corpus = Union[list[dict[str, str]], dict[str, list[str]]]
+
+AudioData = Union[np.ndarray, torch.Tensor]
+AudioBatch = Union[Iterable[AudioData], DataLoader, Iterable[tuple[AudioData, str]]]
 
 
 class PromptType(str, Enum):
