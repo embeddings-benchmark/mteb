@@ -227,6 +227,8 @@ filtered_models = filter_models(
 summary_table, per_task_table = scores_to_tables(
     [entry for entry in default_scores if entry["model_name"] in filtered_models]
 )
+summary_table.frozen_cols = 2  # Freeze 'Rank' and 'Model' columns
+per_task_table.frozen_cols = 1  # Freeze the 'Model' column
 
 benchmark_select = gr.Dropdown(
     [bench.name for bench in benchmarks],
