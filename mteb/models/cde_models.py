@@ -8,6 +8,7 @@ from typing import Any
 
 import numpy as np
 import torch
+from transformers import AutoConfig
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
@@ -20,9 +21,10 @@ logger = logging.getLogger(__name__)
 class CDEWrapper(SentenceTransformerWrapper):
     dataset_embeddings: torch.Tensor = None
 
-    def __init__(self, *args, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
-        self.max_sentences = self.model.config.transductive_corpus_size
+    def __init__(self, model: str, *args, **kwargs: Any) -> None:
+        super().__init__(model, *args, **kwargs)
+        model_config = AutoConfig.from_pretrained(model, trust_remote_code=True)
+        self.max_sentences = model_config.transductive_corpus_size
 
     def encode(
         self,
