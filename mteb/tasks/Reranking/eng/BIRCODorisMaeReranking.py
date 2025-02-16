@@ -22,12 +22,12 @@ class BIRCODorisMaeReranking(AbsTaskReranking):
         main_score="ndcg_at_10",
         dataset={
             "path": "mteb/BIRCO-DorisMae-Test",
-            "revision": "2429b297e5d73663d20bc885064e5599bb29d74a",
+            "revision": "010fedd0de72e8b77388ea5b1d563d638d5900e5a",
         },
         date=("2024-01-01", "2024-12-31"),
         domains=["Academic"],  # Valid combination
         task_subtypes=["Scientific Reranking"],  # MTEB-approved subtype
-        license="https://creativecommons.org/licenses/by/4.0/",  # Full URL
+        license="cc-by-4.0",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",

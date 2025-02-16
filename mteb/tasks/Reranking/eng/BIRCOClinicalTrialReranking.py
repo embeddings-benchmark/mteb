@@ -21,7 +21,7 @@ class BIRCOClinicalTrialReranking(AbsTaskReranking):
         main_score="ndcg_at_10",
         dataset={
             "path": "mteb/BIRCO-ClinicalTrial-Test",
-            "revision": "023e7271b234db5cfdbc7e385a21afc6b0081a72",
+            "revision": "ef7b3a7f08dd2f0f7bdf0cf23391f8a1a26ad477",
         },
         date=("2024-01-01", "2024-12-31"),
         domains=["Medical"],  # Valid domain (Medical)

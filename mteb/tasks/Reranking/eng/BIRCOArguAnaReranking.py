@@ -22,7 +22,7 @@ class BIRCOArguAnaReranking(AbsTaskReranking):
         main_score="ndcg_at_10",
         dataset={
             "path": "mteb/BIRCO-ArguAna-Test",
-            "revision": "08696b2afc54b1c622d1dfbd6606602a0727110f",
+            "revision": "0229bee36500c92028874b55b5a1d08e5ee37bb9",
         },
         date=("2024-01-01", "2024-12-31"),
         domains=["Written"],  # there is no 'Debate' domain

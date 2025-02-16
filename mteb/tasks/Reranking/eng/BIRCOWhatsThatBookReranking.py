@@ -22,7 +22,7 @@ class BIRCOWhatsThatBookReranking(AbsTaskReranking):
         main_score="ndcg_at_10",
         dataset={
             "path": "mteb/BIRCO-WTB-Test",
-            "revision": "6b1f3185601b9d69a915b123472a10d4f935da97",
+            "revision": "ea824f8065fa62e2e770a8a201c20b03abf87540",
         },
         date=("2024-01-01", "2024-12-31"),
         domains=["Fiction"],  # Valid domain (Fiction)

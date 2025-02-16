@@ -22,7 +22,7 @@ class BIRCORelicReranking(AbsTaskReranking):
         main_score="ndcg_at_10",
         dataset={
             "path": "mteb/BIRCO-Relic-Test",
-            "revision": "7480f22df270824febb4a606be64e09a72f24cba",
+            "revision": "3d593fde907860102a282b4a6ea7fb1e1f1f83dd",
         },
         date=("2024-01-01", "2024-12-31"),
         domains=["Fiction"],  # Valid domain
