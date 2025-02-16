@@ -63,7 +63,13 @@ class Encoder(Protocol):
         """
         ...
 
-    def load_task_sample(self, sentences: Sequence[str], task_name: str, prompt_type: PromptType | None = None, **kwargs: Any) -> None:
+    def load_task_sample(
+        self,
+        sentences: Sequence[str],
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> None:
         """Load a sample of the task to be used for encoding. This is used for cde models.
 
         Args:
@@ -71,6 +77,7 @@ class Encoder(Protocol):
             task_name: The name of the task. Sentence-transformers uses this to
                 determine which prompt to use from a specified dictionary.
             prompt_type: The name type of prompt. (query or passage)
+            kwargs: Additional arguments to pass to the encoder.
         """
         ...
 

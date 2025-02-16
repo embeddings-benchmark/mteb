@@ -73,7 +73,9 @@ class AbsTaskClustering(AbsTask):
         **kwargs,
     ) -> ScoresDict:
         v_measures = []
-        model.load_task_sample(dataset["sentences"], self.metadata.name, **encode_kwargs)
+        model.load_task_sample(
+            dataset["sentences"], self.metadata.name, **encode_kwargs
+        )
         for cluster_set in tqdm.tqdm(dataset, desc="Clustering"):
             evaluator = ClusteringEvaluator(
                 cluster_set["sentences"],  # type: ignore
