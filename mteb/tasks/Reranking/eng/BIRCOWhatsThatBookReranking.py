@@ -42,4 +42,3 @@ class BIRCOWhatsThatBookReranking(AbsTaskReranking):
             url={https://arxiv.org/abs/2402.14151}, 
         }""",
     )
-
