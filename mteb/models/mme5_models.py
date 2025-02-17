@@ -7,11 +7,10 @@ import torch
 from PIL import Image
 from tqdm import tqdm
 
-from src.model import MMEBModel
-from src.arguments import ModelArguments
-from src.utils import load_processor
+from mmE5.src.model import MMEBModel
+from mmE5.src.arguments import ModelArguments
+from mmE5.src.utils import load_processor
 
-from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
 
