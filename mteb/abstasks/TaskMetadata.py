@@ -112,7 +112,7 @@ MIEB_TASK_TYPE = (
     "DocumentUnderstanding",
     "VisualSTS",
     "ZeroShotClassification",
-    "CompositionalityEvaluation",
+    "Compositionality",
 )
 
 TASK_TYPE = (

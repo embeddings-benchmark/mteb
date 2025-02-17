@@ -20,7 +20,7 @@ class SugarCrepe(AbsTaskImageTextPairClassification):
             "path": "yjkimstats/SUGARCREPE_fmt",
             "revision": "134abf9ade6a32f9fdae0e89022ff227a70b87e5",
         },
-        type="CompositionalityEvaluation",
+        type="Compositionality",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

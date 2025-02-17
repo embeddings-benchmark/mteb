@@ -25,7 +25,7 @@ class AROCocoOrder(AbsTaskImageTextPairClassification):
             "path": "gowitheflow/ARO-COCO-order",
             "revision": "853ec8757226585a38a80886c51fe0f3f268787c",
         },
-        type="CompositionalityEvaluation",
+        type="Compositionality",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

@@ -18,7 +18,7 @@ class Winoground(AbsTaskImageTextPairClassification):
             "path": "facebook/winoground",
             "revision": "b400e173549071916ad1b3d449293bc8d8b4b763",
         },
-        type="CompositionalityEvaluation",
+        type="Compositionality",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
