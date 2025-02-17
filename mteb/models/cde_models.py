@@ -11,6 +11,7 @@ import torch
 from transformers import AutoConfig
 
 from mteb.encoder_interface import PromptType
+from mteb.evaluation import corpus_to_str
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.bge_models import bge_full_data
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
@@ -73,11 +74,13 @@ class CDEWrapper(SentenceTransformerWrapper):
         # We need to sample with replacement if the minicorpus needs to be bigger than the number of sentences
         is_replace = len(sentences) < self.max_sentences
         minicorpus = np.random.choice(sentences, size=self.max_sentences, replace=is_replace)
+        prompt_name= self.get_prompt_name(
+            self.model_prompts, task_name, prompt_type
+        )
+
         self.dataset_embeddings = self.model.encode(
-            minicorpus,
-            prompt_name=self.get_prompt_name(
-                self.model_prompts, task_name, prompt_type
-            ),
+            corpus_to_str(minicorpus),
+            prompt_name=prompt_name,
             convert_to_tensor=True,
             **kwargs,
         )
