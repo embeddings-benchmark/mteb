@@ -44,6 +44,28 @@ class MockTorchbf16Encoder(SentenceTransformer):
 
 
 class MockCLIPEncoder:
+    mteb_model_meta = ModelMeta(
+        name="MockCLIPModel",
+        languages=["eng_Latn"],
+        revision="3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+        release_date="2021-02-06",
+        modalities=["image", "text"],
+        n_parameters=86_600_000,
+        memory_usage_mb=330,
+        max_tokens=None,
+        embed_dim=768,
+        license=None,
+        open_weights=True,
+        public_training_code=None,
+        public_training_data=None,
+        framework=["PyTorch"],
+        reference="https://huggingface.co/openai/clip-vit-base-patch32",
+        similarity_fn_name=None,
+        use_instructions=False,
+        training_datasets=None,
+    )
+    model_card_data = mteb_model_meta
+
     def __init__(self):
         pass
 

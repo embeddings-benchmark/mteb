@@ -17,6 +17,7 @@ from mteb.create_meta import generate_readme
 from mteb.evaluation.MTEB import logger
 
 from .mock_models import (
+    MockCLIPEncoder,
     MockMocoEncoder,
     MockNumpyEncoder,
     MockSentenceTransformer,
@@ -25,6 +26,7 @@ from .mock_models import (
     MockTorchEncoder,
 )
 from .mock_tasks import (
+    MockImageClusteringTask,
     MockImageTextPairClassificationTask,
     MockInstructionRetrival,
     MockMultilingualInstructionRetrival,
@@ -357,4 +359,16 @@ def test_task_modality_filtering(mock_logger, task):
     )
     mock_logger.assert_called_with(
         f"MockMocoModel only supports ['image'], but the task modalities are [{task_modalities}]."
+    )
+
+
+@pytest.mark.parametrize("task", [MockImageClusteringTask()])
+def test_task_modality_filtering_model_modalities_more_than_task_modalities(task):
+    eval = mteb.MTEB(tasks=[task])
+
+    # Run the evaluation
+    eval.run(
+        model=MockCLIPEncoder(),
+        output_folder="tests/results",
+        overwrite_results=True,
     )
