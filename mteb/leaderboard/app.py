@@ -716,7 +716,6 @@ see existing implementations [here](https://github.com/embeddings-benchmark/mteb
         models_to_keep,
         benchmark_name: str,
     ):
-        print("Search query: ", str(search_query))
         start_time = time.time()
         tasks = set(tasks)
         benchmark = mteb.get_benchmark(benchmark_name)
