@@ -65,9 +65,7 @@ class CDEWrapper(SentenceTransformerWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> None:
-        logger.info(
-            f"Loading dataset embeddings for task {task_name}. Prompt type: {prompt_type}"
-        )
+        logger.info(f"Loading dataset embeddings for task {task_name}.")
         if isinstance(sentences[0], list):
             sentences = [s for sentences_list in sentences for s in sentences_list]
         # We need to sample with replacement if the minicorpus needs to be bigger than the number of sentences
@@ -75,11 +73,12 @@ class CDEWrapper(SentenceTransformerWrapper):
         minicorpus = np.random.choice(
             sentences, size=self.max_sentences, replace=is_replace
         )
-        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
-
+        minicorpus = corpus_to_str(minicorpus)
+        if isinstance(minicorpus[0], dict):
+            minicorpus = [d["text"] for d in minicorpus]
         self.dataset_embeddings = self.model.encode(
             corpus_to_str(minicorpus),
-            prompt_name=prompt_name,
+            prompt_name=PromptType.passage.value,
             convert_to_tensor=True,
             **kwargs,
         )
