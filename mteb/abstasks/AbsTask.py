@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import logging
 import random
+import warnings
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from copy import copy
@@ -67,6 +68,10 @@ class AbsTask(ABC):
 
     def __init__(self, seed: int = 42, **kwargs: Any):
         self.save_suffix = kwargs.get("save_suffix", "")
+        if self.save_suffix:
+            warnings.warn(
+                "`save_suffix` will be removed in v2.0.0.", DeprecationWarning
+            )
 
         self.seed = seed
         random.seed(self.seed)
@@ -250,6 +255,10 @@ class AbsTask(ABC):
 
     @property
     def metadata_dict(self) -> dict[str, Any]:
+        warnings.warn(
+            "`metadata_dict` will be removed in v2.0. Use task.metadata instead.",
+            DeprecationWarning,
+        )
         return dict(self.metadata)
 
     @property

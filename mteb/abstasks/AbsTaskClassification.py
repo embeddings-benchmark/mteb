@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import warnings
 from collections import Counter, defaultdict
 from typing import Any
 
@@ -75,7 +76,18 @@ class AbsTaskClassification(AbsTask):
         **kwargs,
     ):
         super().__init__(**kwargs)
+        if method != "logReg":
+            warnings.warn(
+                "Passing `method` to AbsTaskClassification is deprecated and will be removed in v2.0.0.",
+                DeprecationWarning,
+            )
         self.method = method
+
+        if n_experiments:
+            warnings.warn(
+                "Passing `n_experiments` to AbsTaskClassification is deprecated and will be removed in v2.0.0.",
+                DeprecationWarning,
+            )
 
         # Bootstrap parameters
         self.n_experiments: int = (  # type: ignore
@@ -84,6 +96,11 @@ class AbsTaskClassification(AbsTask):
             else self.metadata_dict.get("n_experiments", 10)
         )
 
+        if k != 3:
+            warnings.warn(
+                "Passing `k` to AbsTaskClassification is deprecated and will be removed in v2.0.0.",
+                DeprecationWarning,
+            )
         # kNN parameters
         self.k = k
 
@@ -102,6 +119,12 @@ class AbsTaskClassification(AbsTask):
     ) -> dict[HFSubset, ScoresDict]:
         if not self.data_loaded:
             self.load_data()
+
+        if train_split != "train":
+            warnings.warn(
+                "Passing `train_split` to AbsTaskClassification.evaluate is deprecated and will be removed in v2.0.0.",
+                DeprecationWarning,
+            )
 
         scores = {}
         hf_subsets = list(self.dataset) if self.is_multilingual else ["default"]
@@ -150,7 +173,7 @@ class AbsTaskClassification(AbsTask):
         )  # we store idxs to make the shuffling reproducible
         for i in range(self.n_experiments):
             logger.info(
-                "=" * 10 + f" Experiment {i+1}/{self.n_experiments} " + "=" * 10
+                "=" * 10 + f" Experiment {i + 1}/{self.n_experiments} " + "=" * 10
             )
             # Bootstrap `self.samples_per_label` samples per label for each split
             X_sampled, y_sampled, idxs = self._undersample_data(

@@ -22,7 +22,7 @@ class FinancialPhrasebankClassification(AbsTaskClassification):
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2013-11-01", "2013-11-01"),
-        domains=["News", "Written"],
+        domains=["News", "Written", "Financial"],
         task_subtypes=["Sentiment/Hate speech"],
         license="cc-by-nc-sa-3.0",
         annotations_creators="expert-annotated",

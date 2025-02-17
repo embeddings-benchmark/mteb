@@ -11,8 +11,7 @@ from transformers import AutoModel, AutoTokenizer
 
 from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
-
-from .wrapper import Wrapper
+from mteb.models.wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
@@ -140,8 +139,12 @@ repllama_llama2_original = ModelMeta(
     open_weights=True,
     revision="01c7f73d771dfac7d292323805ebc428287df4f9-6097554dfe6e7d93e92f55010b678bcca1e233a8",  # base-peft revision
     release_date="2023-10-11",
-    training_datasets={"Tevatron/msmarco-passage-aug": ["train"]},
+    training_datasets={
+        "Tevatron/msmarco-passage-aug": ["train"],
+        "mMARCO-NL": ["train"],  # translation not trained on
+    },
     n_parameters=7_000_000,
+    memory_usage_mb=27,
     max_tokens=4096,
     embed_dim=4096,
     license="apache-2.0",
@@ -169,6 +172,7 @@ repllama_llama2_reproduced = ModelMeta(
     revision="01c7f73d771dfac7d292323805ebc428287df4f9-ad5c1d0938a1e02954bcafb4d811ba2f34052e71",  # base-peft revision
     release_date="2024-09-15",
     n_parameters=7_000_000,
+    memory_usage_mb=27,
     max_tokens=4096,
     embed_dim=4096,
     license="apache-2.0",

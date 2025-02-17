@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import warnings
 from typing import Any
 
 import numpy as np
@@ -40,6 +41,10 @@ class kNNClassificationEvaluator(Evaluator):
     ):
         super().__init__(**kwargs)
         if limit is not None:
+            warnings.warn(
+                "Limiting the number of samples with `limit` for evaluation will be removed in v2.0.0.",
+                DeprecationWarning,
+            )
             sentences_train = sentences_train[:limit]
             y_train = y_train[:limit]
             sentences_test = sentences_test[:limit]
@@ -113,6 +118,11 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
     ):
         super().__init__(**kwargs)
         if limit is not None:
+            warnings.warn(
+                "Limiting the number of samples with `limit` for evaluation will be removed in v2.0.0.",
+                DeprecationWarning,
+            )
+
             sentences_train = sentences_train[:limit]
             y_train = y_train[:limit]
             sentences_test = sentences_test[:limit]
@@ -268,6 +278,11 @@ class logRegClassificationEvaluator(Evaluator):
             self.encode_kwargs["batch_size"] = 32
 
         if limit is not None:
+            warnings.warn(
+                "Limiting the number of samples with `limit` for evaluation will be removed in v2.0.0.",
+                DeprecationWarning,
+            )
+
             sentences_train = sentences_train[:limit]
             y_train = y_train[:limit]
             sentences_test = sentences_test[:limit]
