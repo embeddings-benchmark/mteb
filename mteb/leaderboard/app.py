@@ -560,7 +560,13 @@ see existing implementations [here](https://github.com/embeddings-benchmark/mteb
 
     @cachetools.cached(
         cache={},
-        key=lambda scores, tasks, availability, compatibility, instructions, model_size, zero_shot: hash(
+        key=lambda scores,
+        tasks,
+        availability,
+        compatibility,
+        instructions,
+        model_size,
+        zero_shot: hash(
             (
                 id(scores),
                 hash(tuple(tasks)),
