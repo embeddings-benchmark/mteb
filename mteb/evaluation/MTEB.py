@@ -497,6 +497,15 @@ class MTEB:
                 del self.tasks[0]  # empty memory
                 continue
 
+            # skip evaluation if the model does not support the task modalities.
+            task_modalities = "".join(sorted(task.metadata.modalities))
+            if "".join(sorted(meta.modalities)) != task_modalities:
+                logger.info(
+                    f"{meta.name} only supports {meta.modalities}, but the task modalities are {task.metadata.modalities}."
+                )
+                del self.tasks[0]  # empty memory
+                continue
+
             task_eval_splits = (
                 eval_splits if eval_splits is not None else task.eval_splits
             )
