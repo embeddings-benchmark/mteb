@@ -43,3 +43,7 @@ model-load-test:
 	pip install ".[dev, speedtask, pylate,gritlm,xformers,model2vec]"
 	python scripts/extract_model_names.py $(BASE_BRANCH) --return_one_model_name_per_file
 	python tests/test_models/model_loading.py --model_name_file scripts/model_names.txt
+
+run-leaderboard:
+	@echo "--- 🚀 Running leaderboard locally ---"
+	python -m mteb.leaderboard.app
