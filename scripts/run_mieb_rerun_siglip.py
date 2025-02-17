@@ -21,7 +21,7 @@ for model_name in [
             "ImageClustering",
             "ImageClassification",
             "ImageMultilabelClassification",
-            "CompositionalityEvaluation",
+            "Compositionality",
             # "VisualSTS",  # visual sts does not need rerun as will be the same after fixed.
             "ZeroShotClassification",
             "DocumentUnderstanding",

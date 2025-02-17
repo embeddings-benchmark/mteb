@@ -64,7 +64,7 @@ for model_name in [
             "ImageClustering",
             "ImageClassification",
             "ImageMultilabelClassification",
-            "CompositionalityEvaluation",
+            "Compositionality",
             "VisualSTS",
             "ZeroShotClassification",
             "DocumentUnderstanding",
