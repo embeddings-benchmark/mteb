@@ -41,7 +41,7 @@ def test_mulitple_mteb_tasks(
 ):
     """Test that multiple tasks can be run"""
     eval = mteb.MTEB(tasks=tasks)
-    eval.run(model, output_folder=str(tmp_path), overwrite_results=True)
+    eval.run(model, output_folder=tmp_path.as_posix(), overwrite_results=True)
 
     # ensure that we can generate a readme from the output folder
     generate_readme(tmp_path)
@@ -56,7 +56,9 @@ def test_mulitple_mteb_tasks(
         MockTorchbf16Encoder(),
     ],
 )
-def test_benchmark_encoders_on_task(task: str | mteb.AbsTask, model: mteb.Encoder):
+def test_benchmark_encoders_on_task(
+    task: str | mteb.AbsTask, model: mteb.Encoder, tmp_path: Path
+):
     """Test that a task can be fetched and run using a variety of encoders"""
     if isinstance(task, str):
         tasks = mteb.get_tasks(tasks=[task])
@@ -64,7 +66,7 @@ def test_benchmark_encoders_on_task(task: str | mteb.AbsTask, model: mteb.Encode
         tasks = [task]
 
     eval = mteb.MTEB(tasks=tasks)
-    eval.run(model, output_folder="tests/results", overwrite_results=True)
+    eval.run(model, output_folder=tmp_path.as_posix(), overwrite_results=True)
 
 
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID[:1])
@@ -90,7 +92,9 @@ def test_reload_results(task: str | mteb.AbsTask, model: mteb.Encoder, tmp_path:
 
 
 @pytest.mark.parametrize("task_name", MOCK_TASK_TEST_GRID)
-def test_prompt_name_passed_to_all_encodes(task_name: str | mteb.AbsTask):
+def test_prompt_name_passed_to_all_encodes(
+    task_name: str | mteb.AbsTask, tmp_path: Path
+):
     """Test that all tasks correctly pass down the prompt_name to the encoder which supports it, and that the encoder which does not support it does not
     receive it.
     """
@@ -123,17 +127,19 @@ def test_prompt_name_passed_to_all_encodes(task_name: str | mteb.AbsTask):
 
     eval.run(
         model,
-        output_folder="tests/results",
+        output_folder=tmp_path.as_posix(),
         overwrite_results=True,
     )
     # Test that the task_name is not passed down to the encoder
     model = EncoderWithoutInstructions("average_word_embeddings_levy_dependency")
     assert model.prompts == {}, "The encoder should not have any prompts"
-    eval.run(model, output_folder="tests/results", overwrite_results=True)
+    eval.run(model, output_folder=tmp_path.as_posix(), overwrite_results=True)
 
 
 @pytest.mark.parametrize("task_name", MOCK_TASK_TEST_GRID)
-def test_encode_kwargs_passed_to_all_encodes(task_name: str | mteb.AbsTask):
+def test_encode_kwargs_passed_to_all_encodes(
+    task_name: str | mteb.AbsTask, tmp_path: Path
+):
     """Test that all tasks correctly pass down the encode_kwargs to the encoder."""
     my_encode_kwargs = {"no_one_uses_this_args": "but_its_here"}
 
@@ -157,14 +163,14 @@ def test_encode_kwargs_passed_to_all_encodes(task_name: str | mteb.AbsTask):
     model = MockEncoderWithKwargs()
     eval.run(
         model,
-        output_folder="tests/results",
+        output_folder=tmp_path.as_posix(),
         overwrite_results=True,
         encode_kwargs=my_encode_kwargs,
     )
 
 
 @pytest.mark.parametrize("model", [MockNumpyEncoder()])
-def test_run_using_benchmark(model: mteb.Encoder):
+def test_run_using_benchmark(model: mteb.Encoder, tmp_path: Path):
     """Test that a benchmark object can be run using the MTEB class."""
     bench = mteb.Benchmark(
         name="test_bench", tasks=mteb.get_tasks(tasks=["STS12", "SummEval"])
@@ -172,12 +178,12 @@ def test_run_using_benchmark(model: mteb.Encoder):
 
     eval = mteb.MTEB(tasks=bench)
     eval.run(
-        model, output_folder="tests/results", overwrite_results=True
+        model, output_folder=tmp_path.as_posix(), overwrite_results=True
     )  # we just want to test that it runs
 
 
 @pytest.mark.parametrize("model", [MockNumpyEncoder()])
-def test_run_using_list_of_benchmark(model: mteb.Encoder):
+def test_run_using_list_of_benchmark(model: mteb.Encoder, tmp_path: Path):
     """Test that a list of benchmark objects can be run using the MTEB class."""
     bench = [
         mteb.Benchmark(
@@ -187,7 +193,7 @@ def test_run_using_list_of_benchmark(model: mteb.Encoder):
 
     eval = mteb.MTEB(tasks=bench)
     eval.run(
-        model, output_folder="tests/results", overwrite_results=True
+        model, output_folder=tmp_path.as_posix(), overwrite_results=True
     )  # we just want to test that it runs
 
 
@@ -213,7 +219,7 @@ def test_get_benchmark(name):
 @pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)
 @pytest.mark.parametrize("is_task_name", [True, False])
 def test_prompt_name_passed_to_all_encodes_with_prompts(
-    task: mteb.AbsTask | str, is_task_name: bool
+    task: mteb.AbsTask | str, is_task_name: bool, tmp_path: Path
 ):
     """Test that all tasks and task_types correctly pass down the prompt_name to the encoder with prompts."""
     _task_name = task.metadata.name if isinstance(task, mteb.AbsTask) else task
@@ -242,7 +248,7 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
     )
     eval.run(
         model,
-        output_folder="tests/results",
+        output_folder=tmp_path.as_posix(),
         overwrite_results=True,
     )
 
@@ -259,7 +265,7 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
     model = MockSentenceTransformerWrapper(MockEncoderWithExistingPrompts())
     eval.run(
         model,
-        output_folder="tests/results",
+        output_folder=tmp_path.as_posix(),
         overwrite_results=True,
     )
 
@@ -277,7 +283,7 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
 )
 @pytest.mark.parametrize("is_task_name", [True, False])
 def test_model_query_passage_prompts_task_type(
-    task: mteb.AbsTask | str, is_task_name: bool
+    task: mteb.AbsTask | str, is_task_name: bool, tmp_path: Path
 ):
     """Test that the model with prompts is correctly called."""
     tasks = [task]
@@ -317,7 +323,7 @@ def test_model_query_passage_prompts_task_type(
     eval.run(
         model,
         model_prompts=prompt_list,
-        output_folder="tests/results",
+        output_folder=tmp_path.as_posix(),
         overwrite_results=True,
     )
     model = MockSentenceTransformerWrapper(
@@ -327,6 +333,6 @@ def test_model_query_passage_prompts_task_type(
     eval.run(
         model,
         model_prompts=prompt_list,
-        output_folder="tests/results",
+        output_folder=tmp_path.as_posix(),
         overwrite_results=True,
     )
