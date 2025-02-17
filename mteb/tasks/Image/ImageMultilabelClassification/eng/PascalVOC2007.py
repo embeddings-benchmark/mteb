@@ -6,7 +6,7 @@ from mteb.abstasks.Image.AbsTaskImageMultilabelClassification import (
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-# NOTE: In the paper, this is grouped with linear probe tasks. 
+# NOTE: In the paper, this is grouped with linear probe tasks.
 # See https://github.com/embeddings-benchmark/mteb/pull/2035#issuecomment-2661626309.
 class VOC2007Classification(AbsTaskImageMultilabelClassification):
     metadata = TaskMetadata(
