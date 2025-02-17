@@ -277,7 +277,6 @@ class TaskMetadata(BaseModel):
     """
 
     dataset: dict[str, Any]
-    dataset: dict[str, Any]
 
     name: str
     description: str
