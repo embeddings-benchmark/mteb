@@ -1217,6 +1217,7 @@ C_MTEB = Benchmark(
         )
         + get_tasks(
             tasks=[
+                "MultilingualSentiment",
                 "ATEC",
                 "BQ",
                 "STSB",
