@@ -19,6 +19,7 @@ from ..TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
+
 class AudioClassificationDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for AudioClassification
 
@@ -56,10 +57,10 @@ class AbsTaskAudioClassification(AbsTask):
     Attributes:
        samples_per_label: Number of samples to use pr. label. These samples are embedded and a classifier is fit using the labels and samples.
     """
+
     audio_column_name: str = "audio"
     label_column_name: str = "labels"
     samples_per_label: int = 8
-
 
     def __init__(
         self,

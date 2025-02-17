@@ -38,7 +38,7 @@ class AudioDataset(torch.utils.data.Dataset):
         self,
         hf_dataset: Any,
         audio_column_name: str = "audio",
-        transform: torch.nn.Module | None = None, # anything from torchaudio.transforms
+        transform: torch.nn.Module | None = None,  # anything from torchaudio.transforms
     ) -> None:
         self.dataset = hf_dataset
         self.transform = transform
