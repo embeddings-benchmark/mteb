@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from collections.abc import Sequence
 from functools import partial
-from math import ceil
 from typing import Any
 
 import numpy as np
@@ -73,10 +72,10 @@ class CDEWrapper(SentenceTransformerWrapper):
             sentences = [s for sentences_list in sentences for s in sentences_list]
         # We need to sample with replacement if the minicorpus needs to be bigger than the number of sentences
         is_replace = len(sentences) < self.max_sentences
-        minicorpus = np.random.choice(sentences, size=self.max_sentences, replace=is_replace)
-        prompt_name= self.get_prompt_name(
-            self.model_prompts, task_name, prompt_type
+        minicorpus = np.random.choice(
+            sentences, size=self.max_sentences, replace=is_replace
         )
+        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
 
         self.dataset_embeddings = self.model.encode(
             corpus_to_str(minicorpus),
