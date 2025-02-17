@@ -65,7 +65,12 @@ class CDEWrapper(SentenceTransformerWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> None:
-        logger.info(f"Loading dataset embeddings for task {task_name}.")
+        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+
+        logger.info(
+            f"Loading dataset embeddings for task {task_name}. "
+            f"Prompt name: {prompt_name}. Prompt value {self.model_prompts.get(task_name, None)}"
+        )
         if isinstance(sentences[0], list):
             sentences = [s for sentences_list in sentences for s in sentences_list]
         # We need to sample with replacement if the minicorpus needs to be bigger than the number of sentences
@@ -78,13 +83,21 @@ class CDEWrapper(SentenceTransformerWrapper):
             minicorpus = [d["text"] for d in minicorpus]
         self.dataset_embeddings = self.model.encode(
             corpus_to_str(minicorpus),
-            prompt_name=PromptType.passage.value,
+            prompt_name=prompt_name,
             convert_to_tensor=True,
             **kwargs,
         )
 
 
 cde_model_prompts = {
+    # same as for nomic models
+    "Classification": "classification: ",
+    "MultilabelClassification": "classification: ",
+    "Clustering": "clustering: ",
+    "PairClassification": "classification: ",
+    "Reranking": "classification: ",
+    "STS": "classification: ",
+    "Summarization": "classification: ",
     PromptType.query.value: "search_query: ",
     PromptType.passage.value: "search_document: ",
 }
