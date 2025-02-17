@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
+from unittest.mock import patch
 
 import numpy as np
 import pytest
@@ -15,6 +16,7 @@ import mteb.overview
 from mteb.create_meta import generate_readme
 
 from .mock_models import (
+    MockMocoEncoder,
     MockNumpyEncoder,
     MockSentenceTransformer,
     MockSentenceTransformerWrapper,
@@ -22,6 +24,7 @@ from .mock_models import (
     MockTorchEncoder,
 )
 from .mock_tasks import (
+    MockImageTextPairClassificationTask,
     MockInstructionRetrival,
     MockMultilingualInstructionRetrival,
     MockMultilingualRerankingTask,
@@ -329,4 +332,29 @@ def test_model_query_passage_prompts_task_type(
         model_prompts=prompt_list,
         output_folder="tests/results",
         overwrite_results=True,
+    )
+
+
+# NOTE: Covers image and image-text tasks. Can be extended to cover new mixed-modality task types.
+@pytest.mark.parametrize(
+    "task", [MockImageTextPairClassificationTask(), MockRetrievalTask()]
+)
+@patch("mteb.evaluation.MTEB.logger")
+def test_task_modality_filtering(mock_logger, task):
+    eval = mteb.MTEB(tasks=[task])
+
+    # Run the evaluation
+    with patch.object(mock_logger, "info") as mock_info:
+        eval.run(
+            model=MockMocoEncoder(),
+            output_folder="tests/results",
+            overwrite_results=True,
+        )
+
+    # Check that the task was skipped and the correct log message was generated
+    task_modalities = ", ".join(
+        f"'{modality}'" for modality in sorted(task.metadata.modalities)
+    )
+    mock_info.assert_called_with(
+        f"MockMocoModel only supports ['image'], but the task modalities are [{task_modalities}]."
     )
