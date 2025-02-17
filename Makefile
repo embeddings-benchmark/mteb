@@ -20,11 +20,11 @@ lint-check:
 
 test:
 	@echo "--- 🧪 Running tests ---"
-	pytest -n auto --durations=5
+	pytest -n auto 
 
 test-with-coverage:
 	@echo "--- 🧪 Running tests with coverage ---"
-	pytest -n auto --durations=5 --cov-report=term-missing --cov-config=pyproject.toml --cov=mteb
+	pytest -n auto --cov-report=term-missing --cov-config=pyproject.toml --cov=mteb 
 
 pr:
 	@echo "--- 🚀 Running requirements for a PR ---"
@@ -43,3 +43,7 @@ model-load-test:
 	pip install ".[dev, speedtask, pylate,gritlm,xformers,model2vec]"
 	python scripts/extract_model_names.py $(BASE_BRANCH) --return_one_model_name_per_file
 	python tests/test_models/model_loading.py --model_name_file scripts/model_names.txt
+
+run-leaderboard:
+	@echo "--- 🚀 Running leaderboard locally ---"
+	python -m mteb.leaderboard.app

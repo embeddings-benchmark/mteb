@@ -241,7 +241,7 @@ voyage_code_2 = ModelMeta(
     public_training_data=None,
 )
 
-voyage_code_2 = ModelMeta(
+voyage_code_3 = ModelMeta(
     name="voyageai/voyage-code-3",
     revision="1",
     release_date="2024-12-04",

@@ -6,7 +6,7 @@ from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class FER2013Classification(AbsTaskZeroshotClassification):
+class FER2013ZeroshotClassification(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
         name="FER2013ZeroShot",
         description="Classifying facial emotions.",

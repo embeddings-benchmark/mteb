@@ -859,41 +859,44 @@ indic_languages = [
 
 MTEB_INDIC = Benchmark(
     name="MTEB(Indic, v1)",
-    tasks=get_tasks(
-        tasks=[
-            # Bitext
-            "IN22ConvBitextMining",
-            "IN22GenBitextMining",
-            "IndicGenBenchFloresBitextMining",
-            "LinceMTBitextMining",
-            # clustering
-            "SIB200ClusteringS2S",
-            # classification
-            "BengaliSentimentAnalysis",
-            "GujaratiNewsClassification",
-            "HindiDiscourseClassification",
-            "SentimentAnalysisHindi",
-            "MalayalamNewsClassification",
-            "IndicLangClassification",
-            "MTOPIntentClassification",
-            "MultiHateClassification",
-            "TweetSentimentClassification",
-            "NepaliNewsClassification",
-            "PunjabiNewsClassification",
-            "SanskritShlokasClassification",
-            "UrduRomanSentimentClassification",
-            # STS
-            "IndicCrosslingualSTS",
-            # pair classification
-            "XNLI",
-            # retrieval
-            "BelebeleRetrieval",
-            "XQuADRetrieval",
-            # reranking
-            "WikipediaRerankingMultilingual",
-        ],
-        languages=indic_languages,
-        exclusive_language_filter=True,
+    tasks=MTEBTasks(
+        get_tasks(
+            tasks=[
+                # Bitext
+                "IN22ConvBitextMining",
+                "IN22GenBitextMining",
+                "IndicGenBenchFloresBitextMining",
+                "LinceMTBitextMining",
+                # clustering
+                "SIB200ClusteringS2S",
+                # classification
+                "BengaliSentimentAnalysis",
+                "GujaratiNewsClassification",
+                "HindiDiscourseClassification",
+                "SentimentAnalysisHindi",
+                "MalayalamNewsClassification",
+                "IndicLangClassification",
+                "MTOPIntentClassification",
+                "MultiHateClassification",
+                "TweetSentimentClassification",
+                "NepaliNewsClassification",
+                "PunjabiNewsClassification",
+                "SanskritShlokasClassification",
+                "UrduRomanSentimentClassification",
+                # pair classification
+                "XNLI",
+                # retrieval
+                "BelebeleRetrieval",
+                "XQuADRetrieval",
+                # reranking
+                "WikipediaRerankingMultilingual",
+            ],
+            languages=indic_languages,
+            exclusive_language_filter=True,
+        )
+        +
+        # STS
+        (get_task("IndicCrosslingualSTS"),)
     ),
     description="A regional geopolitical text embedding benchmark targetting embedding performance on Indic languages.",
     reference=None,
@@ -1060,15 +1063,35 @@ LONG_EMBED = Benchmark(
 
 BRIGHT = Benchmark(
     name="BRIGHT",
-    tasks=get_tasks(
-        tasks=["BrightRetrieval"],
-    ),
+    tasks=get_tasks(tasks=["BrightRetrieval"], eval_splits=["standard"]),
     description="""BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
     BRIGHT is the first text retrieval
     benchmark that requires intensive reasoning to retrieve relevant documents with
     a dataset consisting of 1,384 real-world queries spanning diverse domains, such as
     economics, psychology, mathematics, and coding. These queries are drawn from
     naturally occurring and carefully curated human data.
+    """,
+    reference="https://brightbenchmark.github.io/",
+    citation="""@article{su2024bright,
+  title={Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
+  author={Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
+  journal={arXiv preprint arXiv:2407.12883},
+  year={2024}
+}""",
+)
+
+
+BRIGHT_LONG = Benchmark(
+    name="BRIGHT (long)",
+    tasks=get_tasks(tasks=["BrightRetrieval"], eval_splits=["long"]),
+    description="""BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
+BRIGHT is the first text retrieval
+benchmark that requires intensive reasoning to retrieve relevant documents with
+a dataset consisting of 1,384 real-world queries spanning diverse domains, such as
+economics, psychology, mathematics, and coding. These queries are drawn from
+naturally occurring and carefully curated human data.
+
+This is the long version of the benchmark, which only filter longer documents.
     """,
     reference="https://brightbenchmark.github.io/",
     citation="""@article{su2024bright,
@@ -1371,4 +1394,25 @@ BEIR_NL = Benchmark(
      primaryClass={cs.CL},
      url={https://arxiv.org/abs/2412.08329}, 
 }""",
+)
+
+BUILT_MTEB = Benchmark(
+    name="BuiltBench(eng)",
+    tasks=get_tasks(
+        tasks=[
+            "BuiltBenchClusteringP2P",
+            "BuiltBenchClusteringS2S",
+            "BuiltBenchRetrieval",
+            "BuiltBenchReranking",
+        ],
+    ),
+    description='"Built-Bench" is an ongoing effort aimed at evaluating text embedding models in the context of built asset management, spanning over various dicsiplines such as architeture, engineering, constrcution, and operations management of the built environment.',
+    reference="https://arxiv.org/abs/2411.12056",
+    citation="""@article{shahinmoghadam2024benchmarking,
+    title={Benchmarking pre-trained text embedding models in aligning built asset information},
+    author={Shahinmoghadam, Mehrzad and Motamedi, Ali},
+    journal={arXiv preprint arXiv:2411.12056},
+    year={2024}
+}""",
+    contacts=["mehrzadshm"],
 )
