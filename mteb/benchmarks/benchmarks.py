@@ -1217,12 +1217,17 @@ C_MTEB = Benchmark(
         )
         + get_tasks(
             tasks=[
-                "MultilingualSentiment",
                 "ATEC",
                 "BQ",
                 "STSB",
             ],
             eval_splits=["test"],
+        )
+        + get_tasks(
+            tasks=[
+                "MultilingualSentiment",
+            ],
+            eval_splits=["validation"],
         )
     ),
     description="The Chinese Massive Text Embedding Benchmark (C-MTEB) is a comprehensive benchmark for Chinese text embeddings covering 6 tasks and 35 datasets.",
