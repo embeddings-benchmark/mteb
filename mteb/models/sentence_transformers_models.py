@@ -392,8 +392,8 @@ gtr_t5_large = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={
-        "MS MARCO": ["train"],
-        "Google Natural Questions": ["train"],
+        "MSMARCO": ["train"],
+        "NQ": ["train"],
         "Community QA": ["train"],
     },
 )
@@ -416,8 +416,8 @@ gtr_t5_xl = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={
-        "MS MARCO": ["train"],
-        "Google Natural Questions": ["train"],
+        "MSMARCO": ["train"],
+        "NQ": ["train"],
         "Community QA": ["train"],
     },
 )
@@ -440,8 +440,8 @@ gtr_t5_xxl = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={
-        "MS MARCO": ["train"],
-        "Google Natural Questions": ["train"],
+        "MSMARCO": ["train"],
+        "NQ": ["train"],
         "Community QA": ["train"],
     },
 )
@@ -464,8 +464,8 @@ gtr_t5_base = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={
-        "MS MARCO": ["train"],
-        "Google Natural Questions": ["train"],
+        "MSMARCO": ["train"],
+        "NQ": ["train"],
         "Community QA": ["train"],
     },
 )
