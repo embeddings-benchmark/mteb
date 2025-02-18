@@ -392,8 +392,16 @@ gtr_t5_large = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={
-        "MS MARCO": ["train"],
-        "Google Natural Questions": ["train"],
+        "MSMARCO": ["train"],
+        "MSMARCOHardNegatives": ["train"],
+        "NanoMSMARCORetrieval": ["train"],
+        "MSMARCO-PL": ["train"],  # translation not trained on
+        "mMARCO-NL": ["train"],  # translation not trained on
+        "NQ": ["train"],
+        "NQ-NL": ["train"],  # translation not trained on
+        "NQHardNegatives": ["train"],
+        "NanoNQRetrieval": ["train"],
+        "NQ-PL": ["train"],  # translation not trained on
         "Community QA": ["train"],
     },
 )
@@ -416,8 +424,16 @@ gtr_t5_xl = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={
-        "MS MARCO": ["train"],
-        "Google Natural Questions": ["train"],
+        "MSMARCO": ["train"],
+        "MSMARCOHardNegatives": ["train"],
+        "NanoMSMARCORetrieval": ["train"],
+        "MSMARCO-PL": ["train"],  # translation not trained on
+        "mMARCO-NL": ["train"],  # translation not trained on
+        "NQ": ["train"],
+        "NQ-NL": ["train"],  # translation not trained on
+        "NQHardNegatives": ["train"],
+        "NanoNQRetrieval": ["train"],
+        "NQ-PL": ["train"],  # translation not trained on
         "Community QA": ["train"],
     },
 )
@@ -440,8 +456,16 @@ gtr_t5_xxl = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={
-        "MS MARCO": ["train"],
-        "Google Natural Questions": ["train"],
+        "MSMARCO": ["train"],
+        "MSMARCOHardNegatives": ["train"],
+        "NanoMSMARCORetrieval": ["train"],
+        "MSMARCO-PL": ["train"],  # translation not trained on
+        "mMARCO-NL": ["train"],  # translation not trained on
+        "NQ": ["train"],
+        "NQ-NL": ["train"],  # translation not trained on
+        "NQHardNegatives": ["train"],
+        "NanoNQRetrieval": ["train"],
+        "NQ-PL": ["train"],  # translation not trained on
         "Community QA": ["train"],
     },
 )
@@ -464,8 +488,16 @@ gtr_t5_base = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={
-        "MS MARCO": ["train"],
-        "Google Natural Questions": ["train"],
+        "MSMARCO": ["train"],
+        "MSMARCOHardNegatives": ["train"],
+        "NanoMSMARCORetrieval": ["train"],
+        "MSMARCO-PL": ["train"],  # translation not trained on
+        "mMARCO-NL": ["train"],  # translation not trained on
+        "NQ": ["train"],
+        "NQ-NL": ["train"],  # translation not trained on
+        "NQHardNegatives": ["train"],
+        "NanoNQRetrieval": ["train"],
+        "NQ-PL": ["train"],  # translation not trained on
         "Community QA": ["train"],
     },
 )
