@@ -381,7 +381,7 @@ gtr_t5_large = ModelMeta(
     revision="a2c8ac47f998531948d4cbe32a0b577a7037a5e3",
     release_date="2022-02-09",
     n_parameters=335_000_000,
-    memory_usage_mb=None,
+    memory_usage_mb=639,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,
@@ -391,7 +391,11 @@ gtr_t5_large = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets={
+        "MS MARCO": ["train"],
+        "Google Natural Questions": ["train"],
+        "Community QA": ["train"],
+    },
 )
 
 gtr_t5_xl = ModelMeta(
@@ -401,7 +405,7 @@ gtr_t5_xl = ModelMeta(
     revision="23a8d667a1ad2578af181ce762867003c498d1bf",
     release_date="2022-02-09",
     n_parameters=1_240_000_000,
-    memory_usage_mb=None,
+    memory_usage_mb=2367,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,
@@ -411,7 +415,11 @@ gtr_t5_xl = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets={
+        "MS MARCO": ["train"],
+        "Google Natural Questions": ["train"],
+        "Community QA": ["train"],
+    },
 )
 
 gtr_t5_xxl = ModelMeta(
@@ -421,7 +429,7 @@ gtr_t5_xxl = ModelMeta(
     revision="73f2a9156a3dcc2194dfdb2bf201cd7d17e17884",
     release_date="2022-02-09",
     n_parameters=4_860_000_000,
-    memory_usage_mb=None,
+    memory_usage_mb=9279,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,
@@ -431,7 +439,11 @@ gtr_t5_xxl = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets={
+        "MS MARCO": ["train"],
+        "Google Natural Questions": ["train"],
+        "Community QA": ["train"],
+    },
 )
 
 gtr_t5_base = ModelMeta(
@@ -441,7 +453,7 @@ gtr_t5_base = ModelMeta(
     revision="7027e9594267928589816394bdd295273ddc0739",
     release_date="2022-02-09",
     n_parameters=110_000_000,
-    memory_usage_mb=None,
+    memory_usage_mb=209,
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,
@@ -451,5 +463,9 @@ gtr_t5_base = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets={
+        "MS MARCO": ["train"],
+        "Google Natural Questions": ["train"],
+        "Community QA": ["train"],
+    },
 )
