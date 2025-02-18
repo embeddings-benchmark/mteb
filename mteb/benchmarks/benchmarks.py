@@ -79,7 +79,7 @@ This benchmark was created to account for the fact that many models have now bee
 to tasks in the original MTEB, and contains tasks that are not as frequently used for model training.
 This way the new benchmark and leaderboard can give our users a more realistic expectation of models' generalization performance.
 
-The original MTEB leaderboard is available under the [MTEB(eng, classic)](https://huggingface.co/spaces/mteb/leaderboard?benchmark_name=MTEB%28eng%2C+classic%29) tab.
+The original MTEB leaderboard is available under the [MTEB(eng, v1)](http://mteb-leaderboard.hf.space/?benchmark_name=MTEB%28eng%2C+v1%29) tab.
     """,
     citation="",
     contacts=["KennethEnevoldsen", "Muennighoff"],
