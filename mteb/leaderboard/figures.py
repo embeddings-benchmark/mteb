@@ -56,6 +56,7 @@ models_to_annotate = [
     "GritLM-7B",
     "LaBSE",
     "multilingual-e5-large-instruct",
+    "laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K",
 ]
 
 
