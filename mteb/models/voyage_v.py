@@ -242,7 +242,7 @@ def voyage_v_loader(**kwargs):
 
 voyage_v = ModelMeta(
     loader=partial(voyage_v_loader, model_name="voyage-multimodal-3"),
-    name="voyage-multimodal-3",
+    name="voyageai/voyage-multimodal-3",
     languages=[],  # Unknown
     revision="1",
     release_date="2024-11-10",

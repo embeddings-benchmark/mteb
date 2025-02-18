@@ -1215,12 +1215,18 @@ C_MTEB = Benchmark(
                 "JDReview",
             ],
         )
-        + get_tasks(tasks=["MultilingualSentiment"], eval_splits=["test"])
         + get_tasks(
             tasks=[
+                "MultilingualSentiment",
                 "ATEC",
                 "BQ",
                 "STSB",
+            ],
+            eval_splits=["test"],
+        )
+        + get_tasks(
+            tasks=[
+                "MultilingualSentiment",
             ],
             eval_splits=["validation"],
         )

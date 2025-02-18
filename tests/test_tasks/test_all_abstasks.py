@@ -91,6 +91,12 @@ async def check_datasets_are_available_on_hf(tasks):
         assert False, f"Datasets not available on Hugging Face:\n{pretty_print}"
 
 
+@pytest.mark.flaky(
+    reruns=3,
+    reruns_delay=5,
+    only_rerun=["AssertionError"],
+    reason="May fail due to network issues",
+)
 def test_dataset_availability():
     """Checks if the datasets are available on Hugging Face using both their name and revision."""
     tasks = MTEB().tasks_cls
