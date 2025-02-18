@@ -1,0 +1,146 @@
+{
+    "test": {
+        "num_samples": 12630,
+        "unique_num_labels": 43,
+        "min_image_width": 25,
+        "average_image_width": 50.50775930324624,
+        "max_image_width": 266,
+        "min_image_height": 25,
+        "average_image_height": 50.36444972288203,
+        "max_image_height": 232,
+        "min_label_text_length": 43,
+        "average_label_text_length": 88.23255813953489,
+        "max_label_text_length": 116,
+        "labels": {
+            "16": {
+                "count": 150
+            },
+            "1": {
+                "count": 720
+            },
+            "38": {
+                "count": 690
+            },
+            "33": {
+                "count": 210
+            },
+            "11": {
+                "count": 420
+            },
+            "18": {
+                "count": 390
+            },
+            "12": {
+                "count": 690
+            },
+            "25": {
+                "count": 480
+            },
+            "35": {
+                "count": 390
+            },
+            "7": {
+                "count": 450
+            },
+            "23": {
+                "count": 150
+            },
+            "4": {
+                "count": 660
+            },
+            "9": {
+                "count": 480
+            },
+            "21": {
+                "count": 90
+            },
+            "20": {
+                "count": 90
+            },
+            "27": {
+                "count": 60
+            },
+            "3": {
+                "count": 450
+            },
+            "13": {
+                "count": 720
+            },
+            "10": {
+                "count": 660
+            },
+            "5": {
+                "count": 630
+            },
+            "17": {
+                "count": 360
+            },
+            "34": {
+                "count": 120
+            },
+            "2": {
+                "count": 750
+            },
+            "8": {
+                "count": 450
+            },
+            "30": {
+                "count": 150
+            },
+            "24": {
+                "count": 90
+            },
+            "15": {
+                "count": 210
+            },
+            "26": {
+                "count": 180
+            },
+            "28": {
+                "count": 150
+            },
+            "22": {
+                "count": 120
+            },
+            "14": {
+                "count": 270
+            },
+            "32": {
+                "count": 60
+            },
+            "29": {
+                "count": 90
+            },
+            "6": {
+                "count": 150
+            },
+            "36": {
+                "count": 120
+            },
+            "40": {
+                "count": 90
+            },
+            "41": {
+                "count": 60
+            },
+            "31": {
+                "count": 270
+            },
+            "19": {
+                "count": 60
+            },
+            "0": {
+                "count": 60
+            },
+            "39": {
+                "count": 90
+            },
+            "42": {
+                "count": 90
+            },
+            "37": {
+                "count": 60
+            }
+        }
+    }
+}
