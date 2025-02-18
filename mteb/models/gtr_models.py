@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from mteb.model_meta import ModelMeta
 
 gtr_t5_large = ModelMeta(
