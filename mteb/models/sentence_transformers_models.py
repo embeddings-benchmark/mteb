@@ -437,7 +437,6 @@ gtr_t5_xl = ModelMeta(
         "Community QA": ["train"],
     },
 )
-
 gtr_t5_xxl = ModelMeta(
     name="sentence-transformers/gtr-t5-xxl",
     languages=["eng-Latn"],  # in format eng-Latn
