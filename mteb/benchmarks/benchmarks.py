@@ -1543,7 +1543,7 @@ MIEB_ENG = Benchmark(
             languages=["eng"],
         ),
     ),
-    description="""MIEB(eng) is a comprehensive image embeddings benchmark, spanning 10 task types, covering 126 tasks. 
+    description="""MIEB(eng) is a comprehensive image embeddings benchmark, spanning 8 task types, covering 126 tasks. 
     In addition to image classification (zero shot and linear probing), clustering, retrieval, MIEB includes tasks in compositionality evaluation, 
     document undestanding, visual STS, and CV-centric tasks.""",
     reference="",
@@ -1593,7 +1593,7 @@ MIEB_MULTILINGUAL = Benchmark(
             ],
         ),
     ),
-    description="""MIEB(Multilingual) is a comprehensive image embeddings benchmark, spanning 10 task types, covering 129 tasks and a total of 39 languages. 
+    description="""MIEB(Multilingual) is a comprehensive image embeddings benchmark, spanning 8 task types, covering 129 tasks and a total of 39 languages. 
     In addition to image classification (zero shot and linear probing), clustering, retrieval, MIEB includes tasks in compositionality evaluation, 
     document undestanding, visual STS, and CV-centric tasks. This benchmark consists of MIEB(eng) + 3 multilingual retrieval 
     datasets + the multilingual parts of VisualSTS-b and VisualSTS-16.""",
@@ -1666,7 +1666,7 @@ MIEB_LITE = Benchmark(
             "XM3600T2IRetrieval",
         ],
     ),
-    description="""MIEB(lite) is a comprehensive image embeddings benchmark, spanning 9 task types, covering 51 tasks. 
+    description="""MIEB(lite) is a comprehensive image embeddings benchmark, spanning 8 task types, covering 51 tasks. 
     This is a lite version of MIEB(Multilingual), designed to be run at a fraction of the cost while maintaining
     relative rank of models.""",
     reference="",
