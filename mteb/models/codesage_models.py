@@ -109,5 +109,7 @@ codesage_model_meta = ModelMeta(
     reference="https://huggingface.co/codesage/codesage-large-v2",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets=None,
+    training_datasets={
+        "TheStack.v2" : ["train"],
+    },
 )
