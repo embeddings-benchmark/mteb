@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from datasets import Dataset, Audio
+from datasets import Dataset
 
 from mteb.abstasks.TaskMetadata import HFSubset
 
@@ -23,7 +23,7 @@ class AbsTaskAudioClustering(AbsTask):
         label: int
     """
 
-    image_column_name: str = "audio"
+    audio_column_name: str = "audio"
     label_column_name: str = "label"
 
     def __init__(self, **kwargs):

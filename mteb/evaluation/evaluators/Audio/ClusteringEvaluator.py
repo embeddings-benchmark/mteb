@@ -5,14 +5,12 @@ from typing import Any
 
 import sklearn
 import sklearn.cluster
-from PIL import Image
+from datasets import Audio
 from scipy.optimize import linear_sum_assignment
 from sklearn import metrics
 
 from mteb.encoder_interface import Encoder
 from mteb.evaluation.evaluators.Evaluator import Evaluator
-
-from datasets import Audio
 
 logger = logging.getLogger(__name__)
 

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .Audio.ClusteringEvaluator import *
 from .BitextMiningEvaluator import *
 from .ClassificationEvaluator import *
 from .ClusteringEvaluator import *
@@ -16,4 +17,3 @@ from .RerankingEvaluator import *
 from .RetrievalEvaluator import *
 from .STSEvaluator import *
 from .SummarizationEvaluator import *
-from .Audio.ClusteringEvaluator import *
