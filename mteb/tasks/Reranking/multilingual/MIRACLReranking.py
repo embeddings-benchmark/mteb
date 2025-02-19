@@ -130,7 +130,10 @@ class MIRACLReranking(AbsTaskReranking):
                 cur_dataset = datasets.load_dataset(
                     **self.metadata.dataset, name=hf_subset, split=_EVAL_SPLIT,
                 )  # type: ignore
-
+            print(cur_dataset)
+            cur_dataset = {
+                _EVAL_SPLIT: cur_dataset,
+            }
             for split in cur_dataset:
                 # Create an enumerated dataset to pass indices
                 enumerated_dataset = datasets.Dataset.from_dict(
