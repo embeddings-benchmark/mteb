@@ -16,3 +16,4 @@ from .RerankingEvaluator import *
 from .RetrievalEvaluator import *
 from .STSEvaluator import *
 from .SummarizationEvaluator import *
+from .Audio.ClusteringEvaluator import *

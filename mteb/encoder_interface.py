@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence
 from enum import Enum
 from typing import Any, Protocol, Union, runtime_checkable
 
@@ -8,9 +8,9 @@ import numpy as np
 import torch
 from PIL import Image
 from torch.utils.data import DataLoader
+from datasets import Audio
 
 Corpus = Union[list[dict[str, str]], dict[str, list[str]]]
-
 
 class PromptType(str, Enum):
     query = "query"
@@ -203,5 +203,58 @@ class ImageEncoder:
         | None = None,  # the requirement for these two to be the same seems odd (docs without images, images without associated text, docs with multiple images)
         # fusion_mode: str="sum", # will remove this as it should be required in the interface
         **kwargs: Any,
+    ) -> np.ndarray:
+        pass
+
+class AudioEncoder:
+    """Interface for audio encoder designed based on <?>.
+        There is not a perfect 1-1 match, e.g. device can be None here.
+        The intention here is to define the current interface and adapt to as close to MTEB as possible
+        and align as much as possible with sentencetransformers.
+        """
+
+    def __init__(
+            self,
+            device: str | None,
+            **kwargs: Any,
+    ):
+        pass
+
+    def encode(  # current a 1-1 match with Encoder.encode
+            self,
+            sentences: Sequence[str],
+            *,
+            task_name: str,
+            prompt_type: PromptType | None = None,
+            **kwargs: Any,
+    ) -> np.ndarray:
+        pass
+
+    def get_audio_embeddings(
+            # Seems like sentence transformers use a singular encode for both images and text. Not sure if we want to do the same.
+            # If not it might be ideal to redefine Encoder.encode
+            self,
+            audio: list[Audio] | DataLoader,
+            **kwargs,
+            # removed batch_size, it is not required that it will accept kwargs
+    ) -> np.ndarray:  # added standard output (I believe we actually expect tensors in the code, but would like to be consistent)
+        pass
+
+    def get_text_embeddings(  # any reason for this?
+            self,
+            texts: list[str],
+            **kwargs,
+    ) -> np.ndarray:
+        pass
+
+    def get_fused_embeddings(  # hmm what if I have a document with images at specific positions?
+            self,
+            texts: list[str] | None = None,
+            audio: list[Audio]
+                    | DataLoader
+                    | None = None,
+            # the requirement for these two to be the same seems odd (docs without images, images without associated text, docs with multiple images)
+            # fusion_mode: str="sum", # will remove this as it should be required in the interface
+            **kwargs: Any,
     ) -> np.ndarray:
         pass

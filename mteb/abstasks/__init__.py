@@ -23,3 +23,4 @@ from .Image.AbsTaskImageTextPairClassification import *
 from .Image.AbsTaskVisualSTS import *
 from .Image.AbsTaskZeroshotClassification import *
 from .MultilingualTask import *
+from .Audio.AbsTaskAudioClustering import *
