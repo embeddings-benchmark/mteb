@@ -280,7 +280,9 @@ gte_multi_training_data = {
     "MultiLongDocRetrieval": ["train"],
     "MIRACLReranking": ["train"],
     "MIRACLRetrieval": ["train"],
-    "MIRACLRetrievalHardNegatives": ["train"], # https://arxiv.org/pdf/2407.19669, Table 11
+    "MIRACLRetrievalHardNegatives": [
+        "train"
+    ],  # https://arxiv.org/pdf/2407.19669, Table 11
     # not in MTEB:
     #   - TriviaQA
     #   - SQuAD
