@@ -276,7 +276,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
         """
     ## Embedding Leaderboard
 
-    This leaderboard compares 100+ text and image embedding models across 1000+ languages. We refer to the publication of each selectable benchmark for details on metrics, datasets, tasks, and languages. Anyone is welcome [to add a model](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_model.md), [add benchmarks](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_benchmark.md) or [propose other changes to the leaderboard](https://github.com/embeddings-benchmark/mteb/tree/main/mteb/leaderboard) 🤗 Also, check out [MTEB Arena](https://huggingface.co/spaces/mteb/arena) ⚔️
+    This leaderboard compares 100+ text and image (soon) embedding models across 1000+ languages. We refer to the publication of each selectable benchmark for details on metrics, languages, tasks, and task types. Anyone is welcome [to add a model](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_model.md), [add benchmarks](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_benchmark.md), [help us improve zero-shot annotations](https://github.com/embeddings-benchmark/mteb/blob/06489abca007261c7e6b11f36d4844c5ed5efdcb/mteb/models/bge_models.py#L91) or [propose other changes to the leaderboard](https://github.com/embeddings-benchmark/mteb/tree/main/mteb/leaderboard) 🤗 Also, check out [MTEB Arena](https://huggingface.co/spaces/mteb/arena) ⚔️
     
     > Looking for the previous MTEB leaderboard? We have made it available [here](https://huggingface.co/spaces/mteb/leaderboard_legacy) but it will no longer be updated.
     """
@@ -411,7 +411,7 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
         ):
             gr.Markdown(
                 """
-    **Rank(borda)** is computed based on the [borda count](https://en.wikipedia.org/wiki/Borda_count), where each task is treated as a preference voter, which gives votes on the models in accordance with their relative performance on the task. The best model obtains the highest number of votes. The model with the highest number of votes across tasks obtains the highest rank. The Borda rank tends to prefer models that perform well broadly across tasks. However, given that it is a rank it can be unclear if the two models perform similarly.
+    **Rank(borda)** is computed based on the [borda count](https://en.wikipedia.org/wiki/Borda_count), where each task is treated as a preference voter, which gives votes on the models per their relative performance on the task. The best model obtains the highest number of votes. The model with the highest number of votes across tasks obtains the highest rank. The Borda rank tends to prefer models that perform well broadly across tasks. However, given that it is a rank it can be unclear if the two models perform similarly.
 
     **Mean(Task)**: This is a naïve average computed across all the tasks within the benchmark. This score is simple to understand and is continuous as opposed to the Borda rank. However, the mean can overvalue tasks with higher variance in its scores. 
 
@@ -428,11 +428,11 @@ A model is considered zero-shot if it is not trained on any splits of the datase
 E.g., if a model is trained on Natural Questions, it cannot be considered zero-shot on benchmarks containing the task “NQ” which is derived from Natural Questions.
 This definition creates a few edge cases. For instance, multiple models are typically trained on Wikipedia title and body pairs, but we do not define this as leakage on, e.g., “WikipediaRetrievalMultilingual” and “WikiClusteringP2P” as these datasets are not based on title-body pairs.
 Distilled, further fine-tunes, or in other ways, derivative models inherit the datasets of their parent models.
-Based on community feedback and research findings, This definition could change in the future.
+Based on community feedback and research findings, this definition may change in the future. Please open a PR if you notice any mistakes or want to help us refine annotations, see [GitHub](https://github.com/embeddings-benchmark/mteb/blob/06489abca007261c7e6b11f36d4844c5ed5efdcb/mteb/models/bge_models.py#L91).
             """
             )
         with gr.Accordion(
-            "What does the other columns mean?",
+            "What do the other columns mean?",
             open=False,
         ):
             gr.Markdown(
@@ -440,7 +440,7 @@ Based on community feedback and research findings, This definition could change 
 - **Number of Parameters**: This is the total number of parameters in the model including embedding parameters. A higher value means the model requires more CPU/GPU memory to run; thus, less is generally desirable.
 - **Embedding Dimension**: This is the vector dimension of the embeddings that the model produces. When saving embeddings to disk, a higher dimension will require more space, thus less is usually desirable.
 - **Max tokens**: This refers to how many tokens (=word pieces) the model can process. Generally, a larger value is desirable.
-- **Zero-shot**: This indicates if the model is zero-shot on the benchmark. For more information on zero-shot see the info-box below.
+- **Zero-shot**: This indicates if the model is zero-shot on the benchmark. For more information on zero-shot see the info box above.
             """
             )
         with gr.Accordion(
@@ -790,7 +790,7 @@ for benchmark in benchmarks:
         model_size=(MIN_MODEL_SIZE, MAX_MODEL_SIZE),
         zero_shot="soft",
     )
-    # We have to call this both on the filtered and unfiltered task, because the callbacks
+    # We have to call this both on the filtered and unfiltered task because the callbacks
     # also gets called twice for some reason
     update_tables(bench_scores, "", bench_tasks, filtered_models, benchmark.name)
     filtered_tasks = update_task_list(
