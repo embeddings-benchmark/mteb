@@ -128,7 +128,7 @@ class MIRACLReranking(AbsTaskReranking):
                 ), f"Only default subset is supported for {self.metadata.name} since `name` is given in the metadata."
             else:
                 cur_dataset = datasets.load_dataset(
-                    **self.metadata.dataset, name=hf_subset
+                    **self.metadata.dataset, name=hf_subset, split=_EVAL_SPLIT,
                 )  # type: ignore
 
             for split in cur_dataset:
