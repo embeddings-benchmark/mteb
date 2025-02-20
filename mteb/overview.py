@@ -289,6 +289,9 @@ def get_tasks(
     if task_types:
         _tasks = filter_tasks_by_task_types(_tasks, task_types)
     if categories:
+        logger.warning(
+            "`s2p`, `p2p`, and `s2s` will be removed and replaced by `t2t` in v2.0.0."
+        )
         _tasks = filter_task_by_categories(_tasks, categories)
     if exclude_superseded:
         _tasks = filter_superseded_datasets(_tasks)
