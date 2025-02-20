@@ -267,7 +267,7 @@ all_mpnet_base_v2 = ModelMeta(
 
 static_multi_datasets = {
     # wikititles
-    # taboeba
+    "TatoebaBitextMining": [],
     # talks
     # europarl
     # global_voices
