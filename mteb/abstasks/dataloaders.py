@@ -111,10 +111,10 @@ class RetrievalDataLoader:
         corpus_ds = load_dataset(
             self.hf_repo,
             config,
+            split=self.split,
             trust_remote_code=self.trust_remote_code,
             revision=self.revision,
         )
-        corpus_ds = next(iter(corpus_ds.values()))  # get first split
         corpus_ds = corpus_ds.cast_column("_id", Value("string"))
         corpus_ds = corpus_ds.rename_column("_id", "id")
         corpus_ds = corpus_ds.remove_columns(
@@ -131,10 +131,10 @@ class RetrievalDataLoader:
         queries_ds = load_dataset(
             self.hf_repo,
             config,
+            split=self.split,
             trust_remote_code=self.trust_remote_code,
             revision=self.revision,
         )
-        queries_ds = next(iter(queries_ds.values()))  # get first split
         queries_ds = queries_ds.cast_column("_id", Value("string"))
         queries_ds = queries_ds.rename_column("_id", "id")
         queries_ds = queries_ds.remove_columns(
@@ -148,9 +148,10 @@ class RetrievalDataLoader:
         qrels_ds = load_dataset(
             self.hf_repo,
             name=config,
+            split=split,
             trust_remote_code=self.trust_remote_code,
             revision=self.revision,
-        )[split]
+        )
 
         features = Features(
             {
@@ -167,11 +168,11 @@ class RetrievalDataLoader:
         top_ranked_ds = load_dataset(
             self.hf_repo,
             config,
+            split=self.split,
             trust_remote_code=self.trust_remote_code,
             revision=self.revision,
         )
 
-        top_ranked_ds = next(iter(top_ranked_ds.values()))  # get first split
         if (
             "query-id" in top_ranked_ds.column_names
             and "corpus-ids" in top_ranked_ds.column_names
@@ -205,10 +206,10 @@ class RetrievalDataLoader:
         instructions_ds = load_dataset(
             self.hf_repo,
             config,
+            split=self.split,
             trust_remote_code=self.trust_remote_code,
             revision=self.revision,
         )
-        instructions_ds = next(iter(instructions_ds.values()))
         instructions_ds = instructions_ds.cast_column("query-id", Value("string"))
         instructions_ds = instructions_ds.cast_column("instruction", Value("string"))
         instructions_ds = instructions_ds.remove_columns(
