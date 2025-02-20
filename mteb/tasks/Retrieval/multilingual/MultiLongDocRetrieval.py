@@ -70,7 +70,7 @@ class MultiLongDocRetrieval(AbsTaskRetrieval):
             "revision": "d67138e705d963e346253a80e59676ddb418810a",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["dev", "test"],
         eval_langs=_LANGUAGES,

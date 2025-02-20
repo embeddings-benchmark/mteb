@@ -71,7 +71,7 @@ class PublicHealthQARetrieval(AbsTaskRetrieval):
             "revision": "main",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_LANGS,

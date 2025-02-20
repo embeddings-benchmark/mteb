@@ -73,7 +73,7 @@ class XMarket(AbsTaskRetrieval):
             "revision": "dfe57acff5b62c23732a7b7d3e3fb84ff501708b",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_EVAL_LANGS,

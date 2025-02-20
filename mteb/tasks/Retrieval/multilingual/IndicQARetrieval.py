@@ -29,7 +29,7 @@ class IndicQARetrieval(AbsTaskRetrieval):
         description="IndicQA is a manually curated cloze-style reading comprehension dataset that can be used for evaluating question-answering models in 11 Indic languages. It is repurposed retrieving relevant context for each question.",
         reference="https://arxiv.org/abs/2212.05409",
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,

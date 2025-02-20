@@ -15,7 +15,7 @@ class NevIR(AbsTaskReranking):
             "revision": "eab99575c01c6a8e39f8d2adc6e3c3adcfe84413",
         },
         type="Reranking",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

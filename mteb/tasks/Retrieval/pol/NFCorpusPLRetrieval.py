@@ -15,7 +15,7 @@ class NFCorpusPL(AbsTaskRetrieval):
             "revision": "3f30ff532ac2f61a585673ee7634301ef52b1ad3",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],

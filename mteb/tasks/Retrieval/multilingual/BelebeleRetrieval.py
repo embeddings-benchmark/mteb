@@ -188,7 +188,7 @@ class BelebeleRetrieval(AbsTaskRetrieval):
             + "(including 115 distinct languages and their scripts)"
         ),
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_LANGUAGES_MAPPING,

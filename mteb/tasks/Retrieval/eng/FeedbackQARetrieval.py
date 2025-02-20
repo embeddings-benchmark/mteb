@@ -17,7 +17,7 @@ class FeedbackQARetrieval(AbsTaskRetrieval):
             "revision": "1ee1cd0",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

@@ -14,7 +14,7 @@ class SAMSumFa(AbsTaskBitextMining):
             "revision": "fd981d78a0ab82c20d2e693a8b3929c5d71b0743",
         },
         type="BitextMining",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
