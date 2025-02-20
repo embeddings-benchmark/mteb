@@ -192,50 +192,24 @@ class IterativeStratification(_BaseKFold):
                 1 / float(self.n_splits) for _ in range(self.n_splits)
             ]
 
-    def _prepare_stratification(self, y):
+    def _prepare_stratification(self, y: np.ndarray) -> tuple:
         """Prepares variables for performing stratification
 
         For the purpose of clarity, the type Combination denotes list[int], :code:`(self.order)` and represents a
         label combination of the order we want to preserve among folds in stratification. The total number of
         combinations present in :code:`(y)` will be denoted as :code:`(n_combinations)`.
 
-        Sets
-        ----
-
-        self.n_samples, self.n_labels : int, int
-            shape of y
-
-        self.desired_samples_per_fold: np.array[Float], :code:`(n_splits)`
-            number of samples desired per fold
-
-        self.desired_samples_per_combination_per_fold: dict[Combination, np.array[Float]], :code:`(n_combinations, n_splits)`
-            number of samples evidencing each combination desired per each fold
-
-        Parameters
-        ----------
-
-        y : output matrix or array of arrays (n_samples, n_labels)
+        Arguments:
+            y: output matrix or array of arrays (n_samples, n_labels)
 
         Returns:
-        -------
-        rows : list[list[int]], :code:`(n_samples, n_labels)`
-            list of label indices assigned to each sample
-
-        rows_used : dict[int, bool], :code:`(n_samples)`
-            boolean map from a given sample index to boolean value whether it has been already assigned to a fold or not
-
-        all_combinations :  list[Combination], :code:`(n_combinations)`
-            list of all label combinations of order self.order present in y
-
-        per_row_combinations : list[Combination], :code:`(n_samples)`
-            list of all label combinations of order self.order present in y per row
-
-        samples_with_combination : dict[Combination, list[int]], :code:`(n_combinations)`
-            map from each label combination present in y to list of sample indexes that have this combination assigned
-
-        folds: list[list[int]] (n_splits)
-            list of lists to be populated with samples
-
+            A tuple containing the following elements:
+            - rows : list[list[int]], :code:`(n_samples, n_labels)` list of label indices assigned to each sample
+            - rows_used : dict[int, bool], :code:`(n_samples)` boolean map from a given sample index to boolean value whether it has been already assigned to a fold or not
+            - all_combinations :  list[Combination], :code:`(n_combinations)` list of all label combinations of order self.order present in y
+            - per_row_combinations : list[Combination], :code:`(n_samples)` list of all label combinations of order self.order present in y per row
+            - samples_with_combination : dict[Combination, list[int]], :code:`(n_combinations)` map from each label combination present in y to list of sample indexes that have this combination assigned
+            - folds: list[list[int]] (n_splits) list of lists to be populated with samples
         """
         self.n_samples, self.n_labels = y.shape
         self.desired_samples_per_fold = np.array(
