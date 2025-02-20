@@ -14,7 +14,7 @@ class TurkishProductSentimentClassification(AbsTaskClassification):
             "revision": "ad861e463abda351ff65ca5ac0cc5985afe9eb99",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["tur-Latn"],

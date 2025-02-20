@@ -17,7 +17,7 @@ class JaQuADRetrieval(AbsTaskRetrieval):
         description="Human-annotated question-answer pairs for Japanese wikipedia pages.",
         reference="https://arxiv.org/abs/2202.01764",
         type="Retrieval",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation"],
         eval_langs=["jpn-Jpan"],

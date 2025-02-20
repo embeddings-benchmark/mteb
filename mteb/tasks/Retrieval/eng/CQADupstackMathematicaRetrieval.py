@@ -15,7 +15,7 @@ class CQADupstackMathematicaRetrieval(AbsTaskRetrieval):
             "revision": "90fceea13679c63fe563ded68f3b6f06e50061de",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

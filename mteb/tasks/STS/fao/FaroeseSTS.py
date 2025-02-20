@@ -15,7 +15,7 @@ class FaroeseSTS(AbsTaskSTS):
         description="Semantic Text Similarity (STS) corpus for Faroese.",
         reference="https://aclanthology.org/2023.nodalida-1.74.pdf",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["fao-Latn"],

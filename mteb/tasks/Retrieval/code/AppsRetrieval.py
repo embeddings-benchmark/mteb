@@ -16,7 +16,7 @@ class AppsRetrieval(AbsTaskRetrieval):
             "revision": "f22508f96b7a36c2415181ed8bb76f76e04ae2d5",
         },
         type="Retrieval",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["eng-Latn", "python-Code"],

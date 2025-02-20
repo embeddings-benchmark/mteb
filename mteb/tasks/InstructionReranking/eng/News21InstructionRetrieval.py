@@ -15,7 +15,7 @@ class News21InstructionRetrieval(AbsTaskReranking):
             "revision": "39db677749b3b783bb277d0e2d4712f5f133f52b",
         },
         type="InstructionReranking",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

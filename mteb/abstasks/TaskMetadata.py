@@ -125,10 +125,7 @@ TASK_TYPE = Literal[
 ]
 
 TASK_CATEGORY = Literal[
-    "s2s",  # Sentence-to-sentence
-    "s2p",  # Sentence-to-paragraph
-    "p2p",  # Paragraph-to-paragraph
-    "t2t",  # specifically for text-only tasks in mieb
+    "t2t",
     "i2i",  # image-to-image
     "i2t",  # image-to-text
     "t2i",  # text-to-image
@@ -262,7 +259,7 @@ class TaskMetadata(BaseModel):
         description: A description of the task.
         type: The type of the task. These includes "Classification", "Summarization", "STS", "Retrieval", "Reranking", "Clustering",
             "PairClassification", "BitextMining". The type should match the abstask type.
-        category: The category of the task. E.g. includes "s2s", "s2p", "p2p" (s=sentence, p=paragraph).
+        category: The category of the task. E.g. includes "t2t" (text to text), "t2i" (text to image).
         reference: A URL to the documentation of the task. E.g. a published paper.
         eval_splits: The splits of the dataset used for evaluation.
         eval_langs: The languages of the dataset used for evaluation. Langauges follows a ETF BCP 47 standard consisting of "{language}-{script}"

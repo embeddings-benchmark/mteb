@@ -19,7 +19,7 @@ class CQADupstackAndroidNLRetrieval(AbsTaskRetrieval):
             "split": "android",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nld-Latn"],

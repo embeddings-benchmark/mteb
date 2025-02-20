@@ -18,7 +18,7 @@ class DummyTask(AbsTask):
         description="dummy task for testing",
         dataset={"revision": "1.0", "path": "dummy_dataset"},
         type="Classification",
-        category="p2p",
+        category="t2t",
         eval_langs={
             "en-de": ["eng-Latn", "deu-Latn"],
             "en-fr": ["eng-Latn", "fra-Latn"],

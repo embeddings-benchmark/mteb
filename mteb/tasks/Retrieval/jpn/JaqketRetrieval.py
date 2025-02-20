@@ -14,7 +14,7 @@ class JaqketRetrieval(AbsTaskRetrieval):
         description="JAQKET (JApanese Questions on Knowledge of EnTities) is a QA dataset that is created based on quiz questions.",
         reference="https://github.com/kumapo/JAQKET-dataset",
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["jpn-Jpan"],

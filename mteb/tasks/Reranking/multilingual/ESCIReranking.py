@@ -33,7 +33,7 @@ class ESCIReranking(AbsTaskReranking):
             "revision": "237f74be0503482b4e8bc1b83778c7a87ea93fd8",
         },
         type="Reranking",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_LANGUAGES,

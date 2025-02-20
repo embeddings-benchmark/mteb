@@ -15,7 +15,7 @@ class MultiEURLEXMultilabelClassification(AbsTaskMultilabelClassification):
         },
         description="EU laws in 23 EU languages containing gold labels.",
         reference="https://huggingface.co/datasets/coastalcph/multi_eurlex",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         type="MultilabelClassification",
         eval_splits=["test"],

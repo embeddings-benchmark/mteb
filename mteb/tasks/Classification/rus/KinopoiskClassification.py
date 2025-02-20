@@ -14,7 +14,7 @@ class KinopoiskClassification(AbsTaskClassification):
         description="Kinopoisk review sentiment classification",
         reference="https://www.dialog-21.ru/media/1226/blinovpd.pdf",
         type="Classification",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],

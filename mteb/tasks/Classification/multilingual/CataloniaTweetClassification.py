@@ -24,7 +24,7 @@ class CataloniaTweetClassification(AbsTaskClassification):
             "revision": "cf24d44e517efa534f048e5fc5981f399ed25bee",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=_LANGS,

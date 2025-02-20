@@ -15,7 +15,7 @@ class WikiCitiesClustering(AbsTaskClustering):
             "revision": "ddc9ee9242fa65332597f70e967ecc38b9d734fa",
         },
         type="Clustering",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

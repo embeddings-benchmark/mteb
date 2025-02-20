@@ -26,7 +26,7 @@ class TbilisiCityHallBitextMining(AbsTaskBitextMining):
         },
         description="Parallel news titles from the Tbilisi City Hall website (https://tbilisi.gov.ge/).",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_EVAL_LANGS,

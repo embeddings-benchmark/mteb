@@ -15,7 +15,7 @@ class KorSTS(AbsTaskSTS):
         description="Benchmark dataset for STS in Korean. Created by machine translation and human post editing of the STS-B dataset.",
         reference="https://arxiv.org/abs/2004.03289",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["kor-Hang"],

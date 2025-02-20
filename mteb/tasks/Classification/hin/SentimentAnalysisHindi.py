@@ -14,7 +14,7 @@ class SentimentAnalysisHindi(AbsTaskClassification):
             "revision": "1beac1b941da76a9c51e3e5b39d230fde9a80983",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["hin-Deva"],

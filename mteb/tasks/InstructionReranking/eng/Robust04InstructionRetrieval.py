@@ -15,7 +15,7 @@ class Robust04InstructionRetrieval(AbsTaskReranking):
             "revision": "0a3efedfcac0a7f859c46cff3a0fac0f8747b28f",
         },
         type="InstructionReranking",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

@@ -15,7 +15,7 @@ class STS16STS(AbsTaskSTS):
         description="SemEval-2016 Task 4",
         reference="https://www.aclweb.org/anthology/S16-1001",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

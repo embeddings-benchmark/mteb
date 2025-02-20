@@ -14,7 +14,7 @@ class TweetSentimentExtractionClassification(AbsTaskClassification):
             "revision": "d604517c81ca91fe16a244d1248fc021f9ecee7a",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

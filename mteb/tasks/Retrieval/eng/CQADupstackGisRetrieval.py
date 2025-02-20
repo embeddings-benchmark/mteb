@@ -15,7 +15,7 @@ class CQADupstackGisRetrieval(AbsTaskRetrieval):
             "revision": "5003b3064772da1887988e05400cf3806fe491f2",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

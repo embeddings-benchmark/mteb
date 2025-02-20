@@ -9,7 +9,6 @@ import numpy as np
 import torch
 from sentence_transformers import SentenceTransformer
 
-import mteb
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.nvidia_models import nvidia_training_datasets
@@ -40,11 +39,10 @@ class JasperWrapper(Wrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        task = mteb.get_task(task_name=task_name)
         instruction = self.get_task_instruction(task_name, prompt_type)
 
         # to passage prompts won't be applied to passages
-        if prompt_type == PromptType.passage and task.metadata.type == "s2p":
+        if prompt_type == PromptType.passage:
             instruction = None
 
         embeddings = self.model.encode(

@@ -22,7 +22,7 @@ class SlovakSumRetrieval(AbsTaskRetrieval):
             "revision": "85d6b32f2762313714618171b9d1a65eb7408835",
         },
         type="Retrieval",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["slk-Latn"],

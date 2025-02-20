@@ -33,7 +33,7 @@ class SRNCorpusBitextMining(AbsTaskBitextMining):
         description="SRNCorpus is a machine translation corpus for creole language Sranantongo and Dutch.",
         reference="https://arxiv.org/abs/2212.06383",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=_SPLIT,
         eval_langs=_EVAL_LANGS,

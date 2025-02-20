@@ -14,7 +14,7 @@ class Assin2STS(AbsTaskSTS):
         description="Semantic Textual Similarity part of the ASSIN 2, an evaluation shared task collocated with STIL 2019.",
         reference="https://link.springer.com/chapter/10.1007/978-3-030-41505-1_39",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["por-Latn"],

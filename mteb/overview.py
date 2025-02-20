@@ -258,8 +258,7 @@ def get_tasks(
             that are not in the specified list.
         domains: A list of task domains, e.g. "Legal", "Medical", "Fiction".
         task_types: A string specifying the type of task e.g. "Classification" or "Retrieval". If None, all tasks are included.
-        categories: A list of task categories these include "s2s" (sentence to sentence), "s2p" (sentence to paragraph) and "p2p" (paragraph to
-            paragraph).
+        categories: A list of task categories these include "t2t" (text to text), "t2i" (text to image). See TaskMetadata for the full list.
         exclude_superseded: A boolean flag to exclude datasets which are superseded by another.
         eval_splits: A list of evaluation splits to include. If None, all splits are included.
         exclusive_language_filter: Some datasets contains more than one language e.g. for STS22 the subset "de-en" contain eng and deu. If

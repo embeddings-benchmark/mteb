@@ -16,7 +16,7 @@ class RuSTSBenchmarkSTS(AbsTaskSTS):
         + "The dataset was checked with RuCOLA model to ensure that the translation is good and filtered.",
         reference="https://github.com/PhilipMay/stsb-multi-mt/",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],

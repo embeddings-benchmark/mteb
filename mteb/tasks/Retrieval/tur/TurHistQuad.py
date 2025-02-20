@@ -16,7 +16,7 @@ class TurHistQuadRetrieval(AbsTaskRetrieval):
         description="Question Answering dataset on Ottoman History in Turkish",
         reference="https://github.com/okanvk/Turkish-Reading-Comprehension-Question-Answering-Dataset",
         type="Retrieval",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["tur-Latn"],

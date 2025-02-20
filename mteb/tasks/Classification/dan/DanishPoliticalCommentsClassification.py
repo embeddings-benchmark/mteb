@@ -15,7 +15,7 @@ class DanishPoliticalCommentsClassification(AbsTaskClassification):
         description="A dataset of Danish political comments rated for sentiment",
         reference="https://huggingface.co/datasets/danish_political_comments",
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["dan-Latn"],

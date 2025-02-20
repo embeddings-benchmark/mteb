@@ -15,7 +15,7 @@ class SciDocsReranking(AbsTaskReranking):
             "revision": "d3c5e1fc0b855ab6097bf1cda04dd73947d7caab",
         },
         type="Reranking",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

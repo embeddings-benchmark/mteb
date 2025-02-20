@@ -15,7 +15,7 @@ class CQADupstackPhysicsRetrieval(AbsTaskRetrieval):
             "revision": "79531abbd1fb92d06c6d6315a0cbbbf5bb247ea4",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

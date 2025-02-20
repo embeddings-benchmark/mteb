@@ -16,7 +16,7 @@ class PersianFoodSentimentClassification(AbsTaskClassification):
             "revision": "92ba517dfd22f6334111ad84154d16a2890f5b1d",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["fas-Arab"],

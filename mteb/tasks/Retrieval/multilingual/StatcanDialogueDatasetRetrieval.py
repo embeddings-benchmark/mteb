@@ -71,7 +71,7 @@ class StatcanDialogueDatasetRetrieval(AbsTaskRetrieval):
             "revision": "7a26938c93e99e0759a1df416896bb72527e2f33",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=_EVAL_SPLITS,
         eval_langs=_LANGS,

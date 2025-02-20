@@ -15,7 +15,7 @@ class AskUbuntuDupQuestions(AbsTaskReranking):
             "revision": "c5691e3c48741d5f83b5cc8e630653d7a8cfc048",
         },
         type="Reranking",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

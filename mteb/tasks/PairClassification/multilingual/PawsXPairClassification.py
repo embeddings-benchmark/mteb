@@ -15,7 +15,7 @@ class PawsXPairClassification(AbsTaskPairClassification):
         },
         description="{PAWS-X: A Cross-lingual Adversarial Dataset for Paraphrase Identification",
         reference="https://arxiv.org/abs/1908.11828",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         type="PairClassification",
         eval_splits=["test", "validation"],

@@ -41,7 +41,7 @@ class BrightRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
         description="Bright retrieval dataset.",
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         eval_splits=EVAL_SPLITS,
         eval_langs=DOMAINS_langs,
         main_score="ndcg_at_10",

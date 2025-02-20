@@ -15,7 +15,7 @@ class RuBQReranking(AbsTaskReranking):
         description="Paragraph reranking based on RuBQ 2.0. Give paragraphs that answer the question higher scores.",
         reference="https://openreview.net/pdf?id=P5UQFFoQ4PJ",
         type="Reranking",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],

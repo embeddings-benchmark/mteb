@@ -44,7 +44,7 @@ general_args = {
         "path": "NA",
         "revision": "NA",
     },
-    "category": "s2s",
+    "category": "t2t",
     "eval_splits": ["test"],
     "eval_langs": ["eng-Latn"],
     "date": ("2022-12-22", "2022-12-22"),

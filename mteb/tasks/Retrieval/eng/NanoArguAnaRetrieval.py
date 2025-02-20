@@ -18,7 +18,7 @@ class NanoArguAnaRetrieval(AbsTaskRetrieval):
             "revision": "8f4a982d470a32c45817738b9d29042ca55d75ad",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["eng-Latn"],

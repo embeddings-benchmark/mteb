@@ -870,7 +870,7 @@ class BibleNLPBitextMining(AbsTaskBitextMining):
         description="Partial Bible translations in 829 languages, aligned by verse.",
         reference="https://arxiv.org/abs/2304.09919",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=_SPLIT,
         eval_langs=_LANGUAGES_MAPPING,

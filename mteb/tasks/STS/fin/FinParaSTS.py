@@ -19,7 +19,7 @@ class FinParaSTS(AbsTaskSTS):
         description="Finnish paraphrase-based semantic similarity corpus",
         reference="https://huggingface.co/datasets/TurkuNLP/turku_paraphrase_corpus",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["fin-Latn"],

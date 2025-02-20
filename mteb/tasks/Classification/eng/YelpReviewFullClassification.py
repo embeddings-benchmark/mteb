@@ -14,7 +14,7 @@ class YelpReviewFullClassification(AbsTaskClassification):
             "revision": "c1f9ee939b7d05667af864ee1cb066393154bf85",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

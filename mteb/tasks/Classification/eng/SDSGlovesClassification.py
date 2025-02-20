@@ -14,7 +14,7 @@ class SDSGlovesClassification(AbsTaskClassification):
             "revision": "c723236c5ec417d79512e6104aca9d2cd88168f6",
         },
         type="Classification",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

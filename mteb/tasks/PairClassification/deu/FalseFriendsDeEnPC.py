@@ -15,7 +15,7 @@ class FalseFriendsDeEnPC(AbsTaskPairClassification):
             "revision": "15d6c030d3336cbb09de97b2cefc46db93262d40",
         },
         type="PairClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],

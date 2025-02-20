@@ -19,7 +19,7 @@ class GreekCivicsQA(AbsTaskRetrieval):
             "revision": "a04523a3c83153be07a8945bb1fb351cbbcef90b",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["default"],
         eval_langs=["ell-Grek"],

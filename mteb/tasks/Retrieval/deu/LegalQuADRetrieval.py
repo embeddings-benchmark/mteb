@@ -15,7 +15,7 @@ class LegalQuAD(AbsTaskRetrieval):
             "revision": "37aa6cfb01d48960b0f8e3f17d6e3d99bf1ebc3e",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],

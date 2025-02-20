@@ -15,7 +15,7 @@ class InstructIR(AbsTaskRetrieval):
             "revision": "42c3afabe480643b755a7099dbf0f9ebeedaf6ca",
         },
         type="Reranking",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

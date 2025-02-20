@@ -21,7 +21,7 @@ class NanoFEVERRetrieval(AbsTaskRetrieval):
             "revision": "a8bfdf1bf15181167a7e22e69cf8754bdea9b4c8",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["eng-Latn"],

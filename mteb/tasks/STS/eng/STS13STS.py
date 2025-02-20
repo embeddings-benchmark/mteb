@@ -18,7 +18,7 @@ class STS13STS(AbsTaskSTS):
         description="SemEval STS 2013 dataset.",
         reference="https://www.aclweb.org/anthology/S13-1004/",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
