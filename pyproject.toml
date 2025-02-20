@@ -54,7 +54,7 @@ mteb = "mteb.cli:main"
 
 [project.optional-dependencies]
 dev = [
-"ruff==0.6.4", # locked so we don't get PRs which fail only due to a lint update
+"ruff==0.9.7", # locked so we don't get PRs which fail only due to a lint update
 "pytest>=8.3.4",
 "pytest-xdist>=3.6.1",
 "pytest-coverage>=0.0",
