@@ -35,6 +35,7 @@ from mteb.models import (
     nvidia_models,
     openai_models,
     promptriever_models,
+    re2_models,
     repllama_models,
     rerankers_custom,
     rerankers_monot5_based,
@@ -42,6 +43,7 @@ from mteb.models import (
     salesforce_models,
     sentence_transformers_models,
     stella_models,
+    tart_models,
     uae_models,
     voyage_models,
 )
@@ -72,6 +74,7 @@ model_modules = [
     nvidia_models,
     openai_models,
     promptriever_models,
+    re2_models,
     repllama_models,
     rerankers_custom,
     rerankers_monot5_based,
@@ -86,6 +89,7 @@ model_modules = [
     jasper_models,
     uae_models,
     stella_models,
+    tart_models,
     uae_models,
     voyage_models,
 ]

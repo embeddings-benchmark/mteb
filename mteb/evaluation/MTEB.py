@@ -468,7 +468,7 @@ class MTEB:
                 f"\n\n********************** Evaluating {task.metadata.name} **********************"
             )
 
-            if "bm25s" in meta.name and task.metadata.type != "Retrieval":
+            if "bm25s" in meta.name and task.metadata.type not in ["Retrieval", "Reranking", "InstructionReranking", "InstructionRetrieval"]:
                 logger.warning(
                     f"bm25s only supports Retrieval tasks, but the task type is {task.metadata.type}. Skipping task."
                 )

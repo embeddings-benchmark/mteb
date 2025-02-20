@@ -397,45 +397,77 @@ class DenseRetrievalExactSearch:
         queries: dict[str, str | list[str]],
         top_k: int,
         instructions: dict[str, str] | None = None,
+        top_ranked: dict[str, list[str]] | None = None,
         **kwargs,
+
     ) -> dict[str, dict[str, float]]:
         """This function provides support for reranker (or cross-encoder) models that encoder query and document at the same time (typically with attention).
         Some notable examples include MonoBERT, MonoT5, RankLlama, etc.
-        Note: you must provide the path to the results to rerank to the __init__ function as `previous_results` or else rerank all documents in the corpus
+
+        Note for retrieval tasks: you must provide the path to the results to rerank to the init function as previous_results or else rerank all documents in the corpus
+        Note for reranking tasks: if you provide previous_results it will override the top_ranked argument, otherwise it will rerank the top_ranked documents
+        
+        Args:
+            corpus: Dictionary mapping corpus IDs to document dictionaries
+            queries: Dictionary mapping query IDs to query strings or conversation histories
+            top_k: Number of top results to return
+            instructions: Optional instructions to append to queries
+            top_ranked: Optional dict mapping query IDs to lists of pre-ranked corpus IDs
+            **kwargs: Additional keyword arguments
         """
         pairs = []  # create the pairs for reranking
+
+        # figure out which way to rerank
+        if self.previous_results is not None:
+            logger.info("NOTE: using previous results for reranking")
+            strategy = "previous_results"
+        elif top_ranked is not None:
+            logger.info("NOTE: using top_ranked documents for reranking")
+            strategy = "top_ranked"
+        else:
+            logger.info("NOTE: reranking all documents in the corpus")
+            strategy = "all"
+
         for qid in queries.keys():
-            if self.previous_results is None:
-                # try to use all of them
-                logging.info(
-                    f"previous_results is None. Using all the documents to rerank: {len(corpus)}"
-                )
-                q_results = {doc_id: 0.0 for doc_id in corpus.keys()}
-            else:
-                q_results = self.previous_results[qid]
-            # take the top-k only
-            q_results_sorted = dict(
-                sorted(q_results.items(), key=lambda item: item[1], reverse=True)
-            )
-            top_n = [k for k, v in list(q_results_sorted.items())[:top_k]]
+            # Process the query - handle both string and conversation history
             query = queries[qid]
             query = (
                 self.convert_conv_history_to_query(self.model, [query])[0]
                 if isinstance(query, list)
                 else query
             )
-            for doc_id in top_n:
-                pairs.append(
-                    (
-                        query,
-                        corpus[doc_id],
-                        instructions[qid] if instructions is not None else None,
-                        qid,
-                        doc_id,
-                    )
-                )
+            
+            if strategy == "previous_results":
+                # Use previous results with scores
+                q_results = self.previous_results[qid]
+            elif strategy == "top_ranked":
+                # Convert top_ranked list to dict with dummy scores
+                q_results = {doc_id: 0.0 for doc_id in top_ranked[qid]}
+            else:
+                assert strategy == "all"
+                # No previous results or top_ranked, use all documents
+                q_results = {doc_id: 0.0 for doc_id in corpus.keys()}
 
-        logger.info(f"Reranking the top {top_k} in batches... This might take a while!")
+            # Sort by score (needed for previous_results case) and take top-k
+            q_results_sorted = dict(
+                sorted(q_results.items(), key=lambda item: item[1], reverse=True)
+            )
+            top_n = [k for k, v in list(q_results_sorted.items())[:top_k]]
+            
+            # Create pairs for reranking
+            for doc_id in top_n:
+                if doc_id in corpus:  # Ensure document exists in corpus
+                    pairs.append(
+                        (
+                            query,
+                            corpus[doc_id],
+                            instructions[qid] if instructions is not None else None,
+                            qid,
+                            doc_id,
+                        )
+                    )
+
+        logger.info(f"Reranking {len(pairs)} pairs in batches of {self.batch_size}...")
         itr = range(0, len(pairs), self.batch_size)
 
         results = {qid: {} for qid in queries.keys()}

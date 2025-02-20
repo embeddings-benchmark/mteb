@@ -82,6 +82,7 @@ class RetrievalEvaluator(Evaluator):
                 self.top_k,
                 task_name=self.task_name,  # type: ignore
                 instructions=instructions,
+                score_function=None,
                 **kwargs,
             )
         else:
@@ -159,7 +160,11 @@ class RetrievalEvaluator(Evaluator):
         ]:
             metric_scores = top_k_accuracy(qrels, results, k_values, output_type)
 
-        naucs = evaluate_abstention(results, metric_scores)
+        try:
+            naucs = evaluate_abstention(results, metric_scores)
+        except Exception as e:
+            print(e)
+            naucs = {}
         metric_scores_avg = {k: sum(v) / len(v) for k, v in metric_scores.items()}
 
         return metric_scores_avg, naucs

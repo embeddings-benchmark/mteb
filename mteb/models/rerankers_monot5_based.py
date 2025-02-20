@@ -108,6 +108,9 @@ class MonoT5Reranker(RerankerWrapper):
         else:
             queries, passages, instructions = inputs
 
+        if isinstance(passages, dict):
+            passages = [item["title"] + " " + item["text"] for item in passages]
+
         if instructions is not None and instructions[0] is not None:
             queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
 
@@ -201,6 +204,9 @@ Relevant: """
             instructions = None
         else:
             queries, passages, instructions = inputs
+
+        if isinstance(passages, list):
+            passages = [item["title"] + " " + item["text"] for item in passages]
 
         if instructions is not None and instructions[0] is not None:
             # logger.info(f"Adding instructions to LLAMA queries")

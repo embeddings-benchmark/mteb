@@ -258,7 +258,7 @@ def top_k_accuracy(
     if output_type == "mean":
         for k in k_values:
             top_k_acc[f"Accuracy@{k}"] = round(
-                top_k_acc[f"Accuracy@{k}"] / len(qrels), 5
+                [f"Accuracy@{k}"] / len(qrels), 5
             )
             logging.info("Accuracy@{}: {:.4f}".format(k, top_k_acc[f"Accuracy@{k}"]))
 
@@ -266,6 +266,115 @@ def top_k_accuracy(
         pass
 
     return top_k_acc
+
+
+def binary_accuracy_at_k(
+    qrels: dict[str, dict[str, int]], 
+    results: dict[str, dict[str, float]], 
+    k_values: list[int],
+    threshold: float = 0.5
+) -> dict[str, float]:
+    """
+    Compute BinaryAccuracy@k for multiple k values:
+    1. Calculate accuracy per query
+    2. For each query calculate accuracy@k
+    3. Average across queries for final score
+    4. Calculate total accuracy pooling all predictions together
+    
+    Args:
+        qrels: Dict of query_id -> {doc_id: relevance_score}
+            where relevance_score > 0 means relevant (true)
+        results: Dict of query_id -> {doc_id: prediction_score}
+            where prediction_score > threshold means predicted true
+        k_values: List of k values to compute accuracy for
+        threshold: Score threshold for binary prediction (default: 0.5)
+        
+    Returns:
+        dict: Dictionary with:
+            - 'BinaryAccuracy@k': Average of per-query accuracies
+            - 'TotalBinaryAccuracy@k': Accuracy across all predictions
+    """
+    if not qrels or not results:
+        raise ValueError("qrels and results cannot be empty")
+    if not k_values:
+        raise ValueError("k_values cannot be empty")
+    if any(k < 1 for k in k_values):
+        raise ValueError("all k values must be positive")
+        
+    # Initialize structures
+    query_accuracies = {f"BinaryAccuracy@{k}": [] for k in k_values}
+    total_correct = {f"TotalBinaryAccuracy@{k}": 0 for k in k_values}
+    total_predictions = {f"TotalBinaryAccuracy@{k}": 0 for k in k_values}
+    max_k = max(k_values)
+    
+    # For each query
+    for query_id, doc_scores in results.items():
+        if query_id not in qrels:
+            continue
+            
+        # Sort by score and get top k predictions
+        top_k_pairs = sorted(
+            doc_scores.items(), 
+            key=lambda x: x[1], 
+            reverse=True
+        )[:max_k]
+        
+        # Convert predictions to binary using threshold
+        predictions = {
+            doc_id: (score > threshold) 
+            for doc_id, score in top_k_pairs
+        }
+        
+        # Get true labels
+        true_labels = {
+            doc_id: (rel > 0)
+            for doc_id, rel in qrels[query_id].items()
+        }
+        
+        # Calculate accuracy for each k for this query
+        for k in k_values:
+            k_predictions = dict(list(predictions.items())[:k])
+            
+            # Skip if no predictions for this k
+            if not k_predictions:
+                continue
+            
+            # Count correct predictions for this query
+            correct = sum(
+                1 for doc_id, pred in k_predictions.items()
+                if doc_id in true_labels and pred == true_labels[doc_id]
+            )
+            
+            # Store per-query accuracy
+            query_accuracy = correct / len(k_predictions)
+            query_accuracies[f"BinaryAccuracy@{k}"].append(query_accuracy)
+            
+            # Add to totals for pooled accuracy
+            total_correct[f"TotalBinaryAccuracy@{k}"] += correct
+            total_predictions[f"TotalBinaryAccuracy@{k}"] += len(k_predictions)
+    
+    # Calculate both types of accuracy
+    final_metrics = {}
+    
+    # Average of per-query accuracies
+    for k in k_values:
+        accuracies = query_accuracies[f"BinaryAccuracy@{k}"]
+        if accuracies:
+            final_metrics[f"BinaryAccuracy@{k}"] = sum(accuracies) / len(accuracies)
+        else:
+            final_metrics[f"BinaryAccuracy@{k}"] = 0.0
+            
+    # Total pooled accuracy
+    for k in k_values:
+        if total_predictions[f"TotalBinaryAccuracy@{k}"] > 0:
+            final_metrics[f"TotalBinaryAccuracy@{k}"] = (
+                total_correct[f"TotalBinaryAccuracy@{k}"] / 
+                total_predictions[f"TotalBinaryAccuracy@{k}"]
+            )
+        else:
+            final_metrics[f"TotalBinaryAccuracy@{k}"] = 0.0
+            
+    return final_metrics
 
 
 def get_rank_from_dict(
@@ -581,6 +690,10 @@ def add_task_specific_scores(
         take_max_over_subqueries = max_over_subqueries(qrels, results, k_values)
         task_scores.update(take_max_over_subqueries)
 
+    if task_name in ["MiniDL19"]:
+        accuracy_scores = binary_accuracy_at_k(qrels, results, k_values)
+        task_scores.update(accuracy_scores)
+
     return task_scores
 
 
@@ -760,9 +873,13 @@ def calculate_retrieval_scores(results, qrels, k_values):
         all_precisions,
     ) = parse_metrics_from_scores(scores, k_values)
 
-    naucs = evaluate_abstention(
-        results, {**all_ndcgs, **all_aps, **all_recalls, **all_precisions}
-    )
+    try:
+        naucs = evaluate_abstention(
+            results, {**all_ndcgs, **all_aps, **all_recalls, **all_precisions}
+        )
+    except Exception as e:
+        print(e)
+        naucs = {}
 
     return scores, ndcg, _map, recall, precision, naucs
 

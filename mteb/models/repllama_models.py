@@ -11,13 +11,14 @@ from transformers import AutoModel, AutoTokenizer
 
 from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
+from mteb.models.rerankers_custom import RerankerWrapper
 
 from .wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
 
-class RepLLaMAWrapper(Wrapper):
+class RepLLaMAWrapper(RerankerWrapper):
     def __init__(
         self,
         base_model_name_or_path: str,

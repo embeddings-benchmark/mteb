@@ -138,7 +138,7 @@ class mFollowIRCrossLingual(MultilingualTask, AbsTaskReranking):
             "path": "jhu-clsp/mFollowIR-cross-lingual-parquet-mteb",
             "revision": "6b01566619233a0c35d135123510b6b02c258ff5",
         },
-        type="Retrieval",
+        type="InstructionReranking",
         category="s2p",
         modalities=["text"],
         eval_splits=[EVAL_SPLIT],
@@ -180,7 +180,7 @@ class mFollowIRCrossLingual(MultilingualTask, AbsTaskReranking):
         self.data_loaded = True
 
 
-class mFollowIR(AbsTaskReranking, MultilingualTask):
+class mFollowIR(MultilingualTask, AbsTaskReranking):
     metadata = TaskMetadata(
         name="mFollowIR",
         description="This tasks measures retrieval instruction following ability on NeuCLIR narratives for the mFollowIR benchmark on the Farsi, Russian, and Chinese languages.",
@@ -189,7 +189,7 @@ class mFollowIR(AbsTaskReranking, MultilingualTask):
             "path": "jhu-clsp/mFollowIR-parquet-mteb",
             "revision": "09eecbe45c54b4a6dfb8e68e345cae77337768e2",
         },
-        type="Retrieval",
+        type="InstructionReranking",
         category="s2p",
         modalities=["text"],
         eval_splits=[EVAL_SPLIT],

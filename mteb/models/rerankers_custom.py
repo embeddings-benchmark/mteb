@@ -81,6 +81,9 @@ class BGEReranker(RerankerWrapper):
             assert len(instructions) == len(queries)
             queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
 
+        if isinstance(passages[0], dict):
+            passages = [v["title"] + " " + v["text"] for v in passages]
+
         assert len(queries) == len(passages)
         query_passage_tuples = list(zip(queries, passages))
         scores = self.model.compute_score(query_passage_tuples, normalize=True)
@@ -173,6 +176,9 @@ class JinaReranker(RerankerWrapper):
 
         if instructions is not None and instructions[0] is not None:
             queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
+
+        if isinstance(passages[0], dict):
+            passages = [v["title"] + " " + v["text"] for v in passages]
 
         if self.first_print:
             logger.info(f"Using {queries[0]}")
