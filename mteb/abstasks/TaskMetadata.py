@@ -100,6 +100,7 @@ SAMPLE_CREATION_METHOD = Literal[
     "rendered",
     "multiple",
 ]
+
 TASK_TYPE = Literal[
     "BitextMining",
     "Classification",
@@ -113,15 +114,6 @@ TASK_TYPE = Literal[
     "InstructionRetrieval",
     "InstructionReranking",
     "Speed",
-    "Any2AnyMultiChoice",
-    "Any2AnyRetrieval",
-    "Any2TextMutipleChoice",
-    "ImageClustering",
-    "ImageClassification",
-    "ImageMultilabelClassification",
-    "ImageTextPairClassification",
-    "VisualSTS",
-    "ZeroShotClassification",
 ]
 
 TASK_CATEGORY = Literal[
@@ -282,8 +274,9 @@ class TaskMetadata(BaseModel):
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
     """
 
-    dataset: dict[str, Any]
-    dataset: dict[str, Any]
+    model_config = ConfigDict(extra="forbid")
+
+    dataset: MetadataDatasetDict
 
     name: str
     description: str
@@ -467,11 +460,9 @@ class TaskMetadata(BaseModel):
     def descriptive_stat_path(self) -> Path:
         """Return the path to the descriptive statistics file."""
         descriptive_stat_base_dir = Path(__file__).parent.parent / "descriptive_stats"
-        if self.type in MIEB_TASK_TYPE:
-            descriptive_stat_base_dir = descriptive_stat_base_dir / "Image"
-        task_type_dir = descriptive_stat_base_dir / self.type
         if not descriptive_stat_base_dir.exists():
             descriptive_stat_base_dir.mkdir()
+        task_type_dir = descriptive_stat_base_dir / self.type
         if not task_type_dir.exists():
             task_type_dir.mkdir()
         return task_type_dir / f"{self.name}.json"

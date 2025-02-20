@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from mteb.benchmarks.benchmark import Benchmark
 from mteb.benchmarks.benchmarks import (
     BRIGHT,
     LONG_EMBED,
@@ -22,7 +23,6 @@ from mteb.benchmarks.benchmarks import (
     MTEB_code,
     MTEB_multilingual,
 )
-from mteb.benchmarks.benchmark import Benchmark
 from mteb.benchmarks.get_benchmark import (
     BENCHMARK_REGISTRY,
     get_benchmark,

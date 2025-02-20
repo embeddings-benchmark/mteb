@@ -284,7 +284,7 @@ def code_from_meta(meta: ModelMeta) -> str:
 def main(out_path: Path, model_names: list[str] = to_keep):
     with open(out_path, "w") as out_file:
         out_file.write("from mteb.model_meta import ModelMeta, ScoringFunction\n\n")
-        for model_names in tqdm(to_keep, desc="Generating metadata for all models."):
+        for model in tqdm(model_names, desc="Generating metadata for all models."):
             meta = model_meta_from_hf_hub_embedding(model)
             out_file.write(code_from_meta(meta))
 
