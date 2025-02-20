@@ -533,7 +533,7 @@ flant5_xxl = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch"],
-    is_cross_encoder=None,
+    is_cross_encoder=True,
 )
 
 
@@ -560,7 +560,7 @@ llama2_7b = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
-    is_cross_encoder=None,
+    is_cross_encoder=True,
 )
 
 llama2_7b_chat = ModelMeta(
@@ -586,7 +586,7 @@ llama2_7b_chat = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
-    is_cross_encoder=None,
+    is_cross_encoder=True,
 )
 
 mistral_7b = ModelMeta(
@@ -612,7 +612,7 @@ mistral_7b = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
-    is_cross_encoder=None,
+    is_cross_encoder=True,
 )
 
 followir_7b = ModelMeta(
