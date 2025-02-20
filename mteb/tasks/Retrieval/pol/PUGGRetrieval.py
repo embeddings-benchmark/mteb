@@ -26,7 +26,7 @@ class PUGGRetrieval(AbsTaskRetrieval):
         license="cc-by-sa-4.0",
         annotations_creators="human-annotated",
         dialect=[],
-        sample_creation="multiple", 
+        sample_creation="multiple",
         bibtex_citation=""""@inproceedings{sawczyn-etal-2024-developing,
     title = "Developing {PUGG} for {P}olish: A Modern Approach to {KBQA}, {MRC}, and {IR} Dataset Construction",
     author = "Sawczyn, Albert  and
@@ -52,4 +52,3 @@ class PUGGRetrieval(AbsTaskRetrieval):
 
 }""",
     )
-

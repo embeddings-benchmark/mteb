@@ -174,11 +174,11 @@ from .pol.HotpotQAPLRetrieval import *
 from .pol.MSMARCOPLRetrieval import *
 from .pol.NFCorpusPLRetrieval import *
 from .pol.NQPLRetrieval import *
+from .pol.PUGGRetrieval import *
 from .pol.QuoraPLRetrieval import *
 from .pol.SCIDOCSPLRetrieval import *
 from .pol.SciFactPLRetrieval import *
 from .pol.TRECCOVIDPLRetrieval import *
-from .pol.PUGGRetrieval import *
 from .rus.RiaNewsRetrieval import *
 from .rus.RuBQRetrieval import *
 from .slk.SKQuadRetrieval import *
