@@ -66,7 +66,7 @@ class BigPatentClusteringFast(AbsTaskClusteringFast):
             "revision": "58a863a958586a5d6ba51088b94ac74a46aa864f",
         },
         type="Clustering",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

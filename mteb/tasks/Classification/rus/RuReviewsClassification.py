@@ -14,7 +14,7 @@ class RuReviewsClassification(AbsTaskClassification):
         description="Product review classification (3-point scale) based on RuRevies dataset",
         reference="https://github.com/sismetanin/rureviews",
         type="Classification",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],

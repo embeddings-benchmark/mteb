@@ -144,7 +144,7 @@ class PacClassification(AbsTaskClassification):
             "trust_remote_code": True,
         },
         type="Classification",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],

@@ -16,7 +16,7 @@ class TV2Nordretrieval(AbsTaskRetrieval):
         description="News Article and corresponding summaries extracted from the Danish newspaper TV2 Nord.",
         reference="https://huggingface.co/datasets/alexandrainst/nordjylland-news-summarization",
         type="Retrieval",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["dan-Latn"],

@@ -37,7 +37,7 @@ class MasakhaNEWSClusteringP2P(AbsTaskClustering):
             "trust_remote_code": True,
         },
         type="Clustering",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
