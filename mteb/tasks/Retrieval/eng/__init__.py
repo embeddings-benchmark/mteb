@@ -6,6 +6,7 @@ from .AlphaNLIRetrieval import AlphaNLI
 from .ARCChallengeRetrieval import ARCChallenge
 from .ArguAnaRetrieval import ArguAna
 from .BrightRetrieval import BrightRetrieval
+from .BuiltBenchRetrieval import BuiltBenchRetrieval
 from .ChemHotpotQARetrieval import ChemHotpotQARetrieval
 from .ChemNQRetrieval import ChemNQRetrieval
 from .ClimateFEVERRetrieval import ClimateFEVER, ClimateFEVERHardNegatives
@@ -171,4 +172,5 @@ __all__ = [
     "LEMBNarrativeQARetrieval",
     "CQADupstackProgrammersRetrieval",
     "LoTTERetrieval",
+    "BuiltBenchRetrieval",
 ]

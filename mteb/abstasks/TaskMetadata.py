@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import logging
 from collections.abc import Mapping
 from datetime import date
@@ -101,7 +100,20 @@ SAMPLE_CREATION_METHOD = Literal[
     "multiple",
 ]
 
-TASK_TYPE = Literal[
+
+MIEB_TASK_TYPE = (
+    "Any2AnyMultiChoice",
+    "Any2AnyRetrieval",
+    "Any2TextMutipleChoice",
+    "ImageClustering",
+    "ImageClassification",
+    "ImageMultilabelClassification",
+    "ImageTextPairClassification",
+    "VisualSTS",
+    "ZeroShotClassification",
+)
+
+_task_types = (
     "BitextMining",
     "Classification",
     "MultilabelClassification",
@@ -114,7 +126,9 @@ TASK_TYPE = Literal[
     "InstructionRetrieval",
     "InstructionReranking",
     "Speed",
-]
+) + MIEB_TASK_TYPE
+
+TASK_TYPE = Literal[_task_types]
 
 TASK_CATEGORY = Literal[
     "t2t",
@@ -449,12 +463,17 @@ class TaskMetadata(BaseModel):
         return cite
 
     @property
-    def descriptive_stats(self) -> dict[str, DescriptiveStatistics] | None:
-        """Return the descriptive statistics for the dataset."""
-        if self.descriptive_stat_path.exists():
-            with self.descriptive_stat_path.open("r") as f:
-                return json.load(f)
-        return None
+    def descriptive_stat_path(self) -> Path:
+        """Return the path to the descriptive statistics file."""
+        descriptive_stat_base_dir = Path(__file__).parent.parent / "descriptive_stats"
+        if self.type in MIEB_TASK_TYPE:
+            descriptive_stat_base_dir = descriptive_stat_base_dir / "Image"
+        task_type_dir = descriptive_stat_base_dir / self.type
+        if not descriptive_stat_base_dir.exists():
+            descriptive_stat_base_dir.mkdir()
+        if not task_type_dir.exists():
+            task_type_dir.mkdir()
+        return task_type_dir / f"{self.name}.json"
 
     @property
     def descriptive_stat_path(self) -> Path:

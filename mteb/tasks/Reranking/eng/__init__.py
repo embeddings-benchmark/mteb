@@ -11,6 +11,7 @@ from .NevIR import NevIR
 from .SciDocsReranking import SciDocsReranking
 from .StackOverflowDupQuestions import StackOverflowDupQuestions
 from .WebLINXCandidatesReranking import WebLINXCandidatesReranking
+from .BuiltBenchReranking import BuiltBenchReranking
 
 __all__ = [
     "AskUbuntuDupQuestions",
@@ -24,4 +25,5 @@ __all__ = [
     "NevIR",
     "MindSmallReranking",
     "SciDocsReranking",
+    "BuiltBenchReranking",
 ]

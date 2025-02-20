@@ -8,6 +8,7 @@ from .eng import (
     BIRCODorisMaeReranking,
     BIRCORelicReranking,
     BIRCOWhatsThatBookReranking,
+    BuiltBenchReranking,
     MindSmallReranking,
     NevIR,
     SciDocsReranking,
@@ -44,4 +45,5 @@ __all__ = [
     "RuBQReranking",
     "SyntecReranking",
     "AlloprofReranking",
+    "BuiltBenchReranking",
 ]

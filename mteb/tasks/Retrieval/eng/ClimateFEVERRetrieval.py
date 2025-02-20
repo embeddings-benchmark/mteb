@@ -84,7 +84,7 @@ class ClimateFEVERRetrievalv2(AbsTaskRetrieval):
             "revision": "e438c9586767800aeb10dbe8a245c41dbea4e5f4",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

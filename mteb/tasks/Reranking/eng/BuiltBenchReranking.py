@@ -15,7 +15,7 @@ class BuiltBenchReranking(AbsTaskReranking):
             "revision": "fd33b0b3454deb256be06a57e8147b32ba078ff9",
         },
         type="Reranking",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

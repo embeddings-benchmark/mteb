@@ -43,6 +43,7 @@ from .eng import (
     ARCChallenge,
     ArguAna,
     BrightRetrieval,
+    BuiltBenchRetrieval,
     ChemHotpotQARetrieval,
     ChemNQRetrieval,
     ClimateFEVER,
@@ -527,4 +528,5 @@ __all__ = [
     "FQuADRetrieval",
     "Touche2020PL",
     "LoTTERetrieval",
+    "BuiltBenchRetrieval",
 ]

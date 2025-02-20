@@ -22,6 +22,8 @@ from .eng import (
     BiorxivClusteringP2PFast,
     BiorxivClusteringS2S,
     BiorxivClusteringS2SFast,
+    BuiltBenchClusteringP2P,
+    BuiltBenchClusteringS2S,
     MedrxivClusteringP2P,
     MedrxivClusteringP2PFast,
     MedrxivClusteringS2S,
@@ -192,4 +194,6 @@ __all__ = [
     "AlloProfClusteringS2SFast",
     "AlloProfClusteringP2P",
     "AlloProfClusteringP2PFast",
+    "BuiltBenchClusteringP2P",
+    "BuiltBenchClusteringS2S",
 ]

@@ -15,7 +15,7 @@ class BuiltBenchRetrieval(AbsTaskRetrieval):
             "revision": "ae611238a58dae85f3130563fe9f9e995444a8d6",
         },
         type="Retrieval",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
