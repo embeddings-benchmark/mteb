@@ -41,7 +41,6 @@ def test_load_data(
     # TODO: We skip because this load_data is completely different.
     if (
         isinstance(task, AbsTaskRetrieval)
-        or isinstance(task, AbsTaskRetrieval)
         or isinstance(task, AbsTaskAny2AnyRetrieval)
         or isinstance(task, AbsTaskSpeedTask)
         or isinstance(task, AbsTaskAny2AnyMultiChoice)
