@@ -46,7 +46,7 @@ class AbsTaskAudioClustering(AbsTask):
         **kwargs,
     ) -> ScoresDict:
         evaluator = AudioClusteringEvaluator(
-            dataset[self.image_column_name],
+            dataset[self.audio_column_name],
             dataset[self.label_column_name],
             task_name=self.metadata.name,
             **kwargs,
