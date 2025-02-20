@@ -776,3 +776,26 @@ bge_en_icl = ModelMeta(
     },
     adapted_from="intfloat/e5-mistral-7b-instruct",
 )
+
+manu__bge_m3_custom_fr = ModelMeta(
+    name="manu/bge-m3-custom-fr",
+    revision="ed3ef88678ba83ddf4c0fab71a93cb90d89a9078",
+    release_date="2024-04-11",
+    languages=None,
+    loader=None,
+    n_parameters=567754752,
+    memory_usage_mb=2166,
+    max_tokens=8194.0,
+    embed_dim=1024,
+    license=None,
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch", "Sentence Transformers"],
+    reference="https://huggingface.co/manu/bge-m3-custom-fr",
+    similarity_fn_name="cosine",
+    use_instructions=None,
+    training_datasets=bge_m3_training_data,
+    adapted_from="BAAI/bge-m3",
+    superseded_by=None,
+)
