@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from collections import defaultdict
 
-from datasets import Features, Sequence, Value, get_dataset_config_names, load_dataset
+from datasets import Features, Sequence, Value, get_dataset_config_names, get_dataset_split_names, load_dataset
 
 logger = logging.getLogger(__name__)
 
@@ -73,7 +73,7 @@ class RetrievalDataLoader:
                 f"Instructions loaded: {len(self.instructions) if self.instructions else 0}"
             )
 
-        self._load_qrels(self.split, self.config)
+        self._load_qrels(self.config)
         # filter queries with no qrels
         qrels_dict = defaultdict(dict)
 
@@ -106,12 +106,23 @@ class RetrievalDataLoader:
 
         return self.corpus
 
+    def get_split(self, config: str) -> str:
+        splits = get_dataset_split_names(
+            self.hf_repo,
+            revision=self.revision,
+            config_name=config,
+        )
+        if self.split in splits:
+            return self.split
+        if len(splits) == 1:
+            return splits[0]
+
     def _load_corpus(self, config: str | None = None):
         config = f"{config}-corpus" if config is not None else "corpus"
         corpus_ds = load_dataset(
             self.hf_repo,
             config,
-            split=self.split,
+            split=self.get_split(config),
             trust_remote_code=self.trust_remote_code,
             revision=self.revision,
         )
@@ -131,7 +142,7 @@ class RetrievalDataLoader:
         queries_ds = load_dataset(
             self.hf_repo,
             config,
-            split=self.split,
+            split=self.get_split(config),
             trust_remote_code=self.trust_remote_code,
             revision=self.revision,
         )
@@ -142,13 +153,13 @@ class RetrievalDataLoader:
         )
         self.queries = queries_ds
 
-    def _load_qrels(self, split: str, config: str | None = None):
+    def _load_qrels(self, config: str | None = None):
         config = f"{config}-qrels" if config is not None else "default"
 
         qrels_ds = load_dataset(
             self.hf_repo,
             name=config,
-            split=split,
+            split=self.get_split(config),
             trust_remote_code=self.trust_remote_code,
             revision=self.revision,
         )
@@ -168,7 +179,7 @@ class RetrievalDataLoader:
         top_ranked_ds = load_dataset(
             self.hf_repo,
             config,
-            split=self.split,
+            split=self.get_split(config),
             trust_remote_code=self.trust_remote_code,
             revision=self.revision,
         )
@@ -206,7 +217,7 @@ class RetrievalDataLoader:
         instructions_ds = load_dataset(
             self.hf_repo,
             config,
-            split=self.split,
+            split=self.get_split(config),
             trust_remote_code=self.trust_remote_code,
             revision=self.revision,
         )
