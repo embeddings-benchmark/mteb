@@ -1,11 +1,6 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import Any
-
-import torch
-from tqdm import tqdm
-from transformers import AutoModel, AutoTokenizer
 
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
@@ -17,80 +12,6 @@ codesage_languages = [
     "java-Code",
     "php-Code",
 ]
-
-
-class CodeSageModelWrapper:
-    """A wrapper for the codesage/codesage-large-v2 model.
-
-    This model is designed to generate code embeddings.
-    Note: CodeSage requires adding an EOS token at the end of each tokenized sequence.
-    """
-
-    def __init__(
-        self,
-        checkpoint: str = "codesage/codesage-large-v2",
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
-        **kwargs: Any,
-    ):
-        self.checkpoint = checkpoint
-        self.device = device
-        # Note: 'add_eos_token=True' ensures that the EOS token is appended to every sequence.
-        self.tokenizer = AutoTokenizer.from_pretrained(
-            checkpoint, trust_remote_code=True, add_eos_token=True
-        )
-        self.model = AutoModel.from_pretrained(checkpoint, trust_remote_code=True).to(
-            self.device
-        )
-        self.model.eval()
-
-    def preprocess(self, texts: list[str], **kwargs: Any):
-        """Tokenizes a list of code strings."""
-        inputs = self.tokenizer(
-            texts,
-            return_tensors="pt",
-            padding=True,
-            truncation=True,
-            add_special_tokens=True,
-        )
-        return {k: v.to(self.device) for k, v in inputs.items()}
-
-    def get_code_embeddings(
-        self,
-        texts: list[str],
-        batch_size: int = 8,
-        **kwargs: Any,
-    ):
-        """Computes code embeddings for a list of code strings.
-        This method tokenizes the input, passes it through the model,
-        and performs mean pooling over token embeddings.
-        """
-        all_embeddings = []
-        with torch.no_grad():
-            for i in tqdm(range(0, len(texts), batch_size), desc="Code Embeddings"):
-                batch_texts = texts[i : i + batch_size]
-                inputs = self.preprocess(batch_texts, **kwargs)
-                # Model returns a tuple; we take the first element (last hidden state)
-                outputs = self.model(**inputs)[
-                    0
-                ]  # shape: (batch_size, seq_len, hidden_size)
-                # Mean pooling over the token dimension
-                attention_mask = inputs.get("attention_mask")
-                if attention_mask is not None:
-                    attention_mask = attention_mask.unsqueeze(-1)
-                    sum_embeddings = (outputs * attention_mask).sum(dim=1)
-                    lengths = attention_mask.sum(dim=1)
-                    embeddings = sum_embeddings / lengths.clamp(min=1e-9)
-                else:
-                    embeddings = outputs.mean(dim=1)
-                all_embeddings.append(embeddings.cpu())
-        return torch.cat(all_embeddings, dim=0)
-
-    def compute_similarity(self, emb1: torch.Tensor, emb2: torch.Tensor):
-        """Computes cosine similarity between two sets of embeddings."""
-        emb1_norm = emb1 / emb1.norm(dim=-1, keepdim=True)
-        emb2_norm = emb2 / emb2.norm(dim=-1, keepdim=True)
-        return torch.matmul(emb1_norm, emb2_norm.T)
-
 
 codesage_large = ModelMeta(
     loader=partial(
