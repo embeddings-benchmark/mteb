@@ -8,7 +8,7 @@ from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class PatchCamelyonClassification(AbsTaskZeroshotClassification):
+class PatchCamelyonZeroshotClassification(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
         name="PatchCamelyonZeroShot",
         description="""Histopathology diagnosis classification dataset.""",

@@ -125,7 +125,7 @@ gte_small_zh = ModelMeta(
     open_weights=True,
     revision="af7bd46fbb00b3a6963c8dd7f1786ddfbfbe973a",
     release_date="2023-11-08",  # initial commit of hf model.
-    n_parameters=30.3 * 1e6,
+    n_parameters=int(30.3 * 1e6),
     memory_usage_mb=58,
     embed_dim=1024,
     license="mit",
@@ -150,7 +150,7 @@ gte_base_zh = ModelMeta(
     open_weights=True,
     revision="71ab7947d6fac5b64aa299e6e40e6c2b2e85976c",
     release_date="2023-11-08",  # initial commit of hf model.
-    n_parameters=102 * 1e6,
+    n_parameters=int(102 * 1e6),
     memory_usage_mb=195,
     embed_dim=1024,
     license="mit",
@@ -175,7 +175,7 @@ gte_large_zh = ModelMeta(
     open_weights=True,
     revision="64c364e579de308104a9b2c170ca009502f4f545",
     release_date="2023-11-08",  # initial commit of hf model.
-    n_parameters=326 * 1e6,
+    n_parameters=int(326 * 1e6),
     memory_usage_mb=621,
     embed_dim=1024,
     license="mit",
@@ -276,9 +276,13 @@ gte_multi_training_data = {
     "HotpotQA-NL": ["train"],
     "FEVER": ["train"],
     "FEVER-NL": ["train"],
-    "MIRACLReranking": ["train"],
     "MrTidyRetrieval": ["train"],
     "MultiLongDocRetrieval": ["train"],
+    "MIRACLReranking": ["train"],
+    "MIRACLRetrieval": ["train"],
+    "MIRACLRetrievalHardNegatives": [
+        "train"
+    ],  # https://arxiv.org/pdf/2407.19669, Table 11
     # not in MTEB:
     #   - TriviaQA
     #   - SQuAD
@@ -297,7 +301,7 @@ gte_multilingual_base = ModelMeta(
     open_weights=True,
     revision="ca1791e0bcc104f6db161f27de1340241b13c5a4",
     release_date="2024-07-20",  # initial commit of hf model.
-    n_parameters=305 * 1e6,
+    n_parameters=int(305 * 1e6),
     memory_usage_mb=582,
     embed_dim=1024,
     license="apache-2",
@@ -322,7 +326,7 @@ gte_modernbert_base = ModelMeta(
     open_weights=True,
     revision="7ca8b4ca700621b67618669f5378fe5f5820b8e4",
     release_date="2025-01-21",  # initial commit of hf model.
-    n_parameters=149 * 1e6,
+    n_parameters=int(149 * 1e6),
     memory_usage_mb=284,
     embed_dim=768,
     license="apache-2",
@@ -334,4 +338,27 @@ gte_modernbert_base = ModelMeta(
     public_training_code=None,  # couldn't find
     public_training_data=None,
     training_datasets=gte_multi_training_data,  # English part of gte_multi_training_data,
+)
+
+
+gte_base_en_v15 = ModelMeta(
+    name="Alibaba-NLP/gte-base-en-v1.5",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="a829fd0e060bb84554da0dfd354d0de0f7712b7f",  # can be any
+    release_date="2024-06-20",  # initial commit of hf model
+    n_parameters=137_000_000,
+    memory_usage_mb=None,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=8192,
+    reference="https://huggingface.co/Alibaba-NLP/gte-base-en-v1.5",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    superseded_by=None,
+    adapted_from=None,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
 )
