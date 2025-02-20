@@ -14,7 +14,7 @@ class SiswatiNewsClassification(AbsTaskClassification):
             "revision": "f5502326c4e48adc99b18b1582f68b8fb5e7ec30",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ssw-Latn"],

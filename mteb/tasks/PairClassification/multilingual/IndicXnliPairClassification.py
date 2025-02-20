@@ -37,7 +37,7 @@ class IndicXnliPairClassification(AbsTaskPairClassification):
         over eleven Indic languages. 
         """,
         reference="https://gem-benchmark.com/data_cards/opusparcus",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         type="PairClassification",
         eval_splits=["test"],

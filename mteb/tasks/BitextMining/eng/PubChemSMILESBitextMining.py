@@ -28,7 +28,7 @@ class PubChemSMILESBitextMining(AbsTaskBitextMining):
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
         reference="https://arxiv.org/abs/2412.00532",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=EVAL_LANGS,

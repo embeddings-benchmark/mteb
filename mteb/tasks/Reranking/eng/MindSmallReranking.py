@@ -24,7 +24,7 @@ class MindSmallReranking(AbsTaskReranking):
             "revision": "59042f120c80e8afa9cdbb224f67076cec0fc9a7",
         },
         type="Reranking",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

@@ -15,7 +15,7 @@ class BIRCODorisMaeReranking(AbsTaskReranking):
         ),
         reference="https://github.com/BIRCO-benchmark/BIRCO",
         type="Reranking",
-        category="s2s",  # MTEB standard category
+        category="t2t",  # MTEB standard category
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

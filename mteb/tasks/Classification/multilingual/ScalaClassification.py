@@ -22,7 +22,7 @@ class ScalaClassification(AbsTaskClassification):
             "revision": "ec85bb6c69679ed15ac66c0bf6e180bf563eb137",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGS,

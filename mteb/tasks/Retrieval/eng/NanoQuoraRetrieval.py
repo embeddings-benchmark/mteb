@@ -20,7 +20,7 @@ class NanoQuoraRetrieval(AbsTaskRetrieval):
             "revision": "2ab2d73e6c862026282808b913a34f4136928545",
         },
         type="Retrieval",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["eng-Latn"],

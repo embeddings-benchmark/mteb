@@ -18,7 +18,7 @@ class PhincBitextMining(AbsTaskBitextMining):
         description="Phinc is a parallel corpus for machine translation pairing code-mixed Hinglish (a fusion of Hindi and English commonly used in modern India) with human-generated English translations.",
         reference="https://huggingface.co/datasets/veezbo/phinc",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=_LANGUAGES,

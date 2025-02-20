@@ -15,7 +15,7 @@ class RUParaPhraserSTS(AbsTaskSTS):
         description="ParaPhraser is a news headlines corpus with precise, near and non-paraphrases.",
         reference="https://aclanthology.org/2020.ngt-1.6",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],

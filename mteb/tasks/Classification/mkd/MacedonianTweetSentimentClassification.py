@@ -14,7 +14,7 @@ class MacedonianTweetSentimentClassification(AbsTaskClassification):
             "revision": "957e075ba35e4417ba7837987fd7053a6533a1a2",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         date=["2014-11-01", "2015-04-01"],
         eval_splits=["test"],

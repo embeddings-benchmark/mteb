@@ -66,7 +66,7 @@ class SNLHierarchicalClusteringS2S(AbsTaskClusteringFast):
         description="Webscrabed articles from the Norwegian lexicon 'Det Store Norske Leksikon'. Uses articles categories as clusters.",
         reference="https://huggingface.co/datasets/navjordj/SNL_summarization",
         type="Clustering",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nob-Latn"],

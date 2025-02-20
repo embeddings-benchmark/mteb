@@ -16,7 +16,7 @@ class FilipinoHateSpeechClassification(AbsTaskClassification):
             "revision": "087a17c0b7f9a78901c88aea00ad2892a319fdac",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         date=("2019-08-01", "2019-08-01"),
         eval_splits=["validation", "test"],

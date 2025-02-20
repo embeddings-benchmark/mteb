@@ -23,7 +23,7 @@ class BigPatentClustering(AbsTaskClustering):
             "revision": "62d5330920bca426ce9d3c76ea914f15fc83e891",
         },
         type="Clustering",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

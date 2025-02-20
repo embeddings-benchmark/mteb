@@ -15,7 +15,7 @@ class SickrSTS(AbsTaskSTS):
         description="Semantic Textual Similarity SICK-R dataset",
         reference="https://aclanthology.org/L14-1314/",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

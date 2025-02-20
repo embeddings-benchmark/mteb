@@ -43,7 +43,7 @@ class PubChemSMILESPC(AbsTaskPairClassification):
             "revision": "7ba40b69f5fe6ffe4cc189aac9e1710913c73c8a",
         },
         type="PairClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

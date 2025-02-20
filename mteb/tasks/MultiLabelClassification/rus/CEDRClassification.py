@@ -16,7 +16,7 @@ class CEDRClassification(AbsTaskMultilabelClassification):
         description="Classification of sentences by emotions, labeled into 5 categories (joy, sadness, surprise, fear, and anger).",
         reference="https://www.sciencedirect.com/science/article/pii/S1877050921013247",
         type="MultilabelClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],

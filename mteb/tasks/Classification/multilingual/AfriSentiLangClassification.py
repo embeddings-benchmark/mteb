@@ -14,7 +14,7 @@ class AfriSentiLangClassification(AbsTaskClassification):
         },
         reference="https://huggingface.co/datasets/HausaNLP/afrisenti-lid-data/",
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=[

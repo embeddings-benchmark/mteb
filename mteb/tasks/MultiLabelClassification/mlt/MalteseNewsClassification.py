@@ -21,7 +21,7 @@ class MalteseNewsClassification(AbsTaskMultilabelClassification):
             "revision": "6bb0321659c4f07c4c2176c30c98c971be6571b4",
         },
         type="MultilabelClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["mlt-Latn"],

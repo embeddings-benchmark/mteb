@@ -14,7 +14,7 @@ class CSFDCZMovieReviewSentimentClassification(AbsTaskClassification):
             "revision": "dd2ede6faaea338ef6b1e2966f06808656975a23",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         date=("2002-06-28", "2020-03-13"),
         eval_splits=["test"],

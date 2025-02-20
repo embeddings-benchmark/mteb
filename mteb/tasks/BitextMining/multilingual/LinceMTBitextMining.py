@@ -18,7 +18,7 @@ class LinceMTBitextMining(AbsTaskBitextMining):
         description="LinceMT is a parallel corpus for machine translation pairing code-mixed Hinglish (a fusion of Hindi and English commonly used in modern India) with human-generated English translations.",
         reference="https://ritual.uh.edu/lince/",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=_LANGUAGES,

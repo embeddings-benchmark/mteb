@@ -19,7 +19,7 @@ class GermanSTSBenchmarkSTS(AbsTaskSTS):
         + "Translations were originally done by T-Systems on site services GmbH.",
         reference="https://github.com/t-systems-on-site-services-gmbh/german-STSbenchmark",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["deu-Latn"],

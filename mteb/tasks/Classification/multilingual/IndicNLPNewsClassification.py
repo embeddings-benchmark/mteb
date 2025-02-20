@@ -25,7 +25,7 @@ class IndicNLPNewsClassification(AbsTaskClassification):
         description="A News classification dataset in multiple Indian regional languages.",
         reference="https://github.com/AI4Bharat/indicnlp_corpus#indicnlp-news-article-classification-dataset",
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,

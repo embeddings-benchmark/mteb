@@ -15,7 +15,7 @@ class SickFrSTS(AbsTaskSTS):
         description="SICK dataset french version",
         reference="https://huggingface.co/datasets/Lajavaness/SICK-fr",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["fra-Latn"],

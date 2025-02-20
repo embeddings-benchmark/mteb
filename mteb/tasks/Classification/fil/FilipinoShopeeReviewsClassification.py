@@ -15,7 +15,7 @@ class FilipinoShopeeReviewsClassification(AbsTaskClassification):
         },
         type="Classification",
         task_subtypes=["Sentiment/Hate speech"],
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["fil-Latn"],

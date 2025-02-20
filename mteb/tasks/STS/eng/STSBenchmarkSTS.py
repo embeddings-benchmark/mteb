@@ -18,7 +18,7 @@ class STSBenchmarkSTS(AbsTaskSTS):
         description="Semantic Textual Similarity Benchmark (STSbenchmark) dataset.",
         reference="https://github.com/PhilipMay/stsb-multi-mt/",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

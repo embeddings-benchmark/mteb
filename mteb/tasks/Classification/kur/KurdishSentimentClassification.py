@@ -14,7 +14,7 @@ class KurdishSentimentClassification(AbsTaskClassification):
             "revision": "f334d90a9f68cc3af78cc2a2ece6a3b69408124c",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["kur-Arab"],

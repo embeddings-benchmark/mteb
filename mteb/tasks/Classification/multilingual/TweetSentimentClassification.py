@@ -25,7 +25,7 @@ class TweetSentimentClassification(AbsTaskClassification):
         },
         description="A multilingual Sentiment Analysis dataset consisting of tweets in 8 different languages.",
         reference="https://aclanthology.org/2022.lrec-1.27",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         type="Classification",
         eval_splits=["test"],

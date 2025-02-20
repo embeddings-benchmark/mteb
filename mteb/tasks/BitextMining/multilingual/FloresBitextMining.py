@@ -246,7 +246,7 @@ class FloresBitextMining(AbsTaskBitextMining):
         description="FLORES is a benchmark dataset for machine translation between English and low-resource languages.",
         reference="https://huggingface.co/datasets/facebook/flores",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=_SPLIT,
         eval_langs=_LANGUAGES_MAPPING,

@@ -542,7 +542,7 @@ class QuoraRetrievalFa(AbsTaskRetrieval):
             "revision": "1a43f4f5dcd71e6b14b275ae82c3237cdd4fd5fd",
         },
         type="Retrieval",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],

@@ -57,7 +57,7 @@ class MIRACLReranking(AbsTaskReranking):
             "trust_remote_code": True,
         },
         type="Reranking",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_LANGUAGES,

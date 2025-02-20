@@ -18,7 +18,7 @@ class STS12STS(AbsTaskSTS):
         description="SemEval-2012 Task 6.",
         reference="https://www.aclweb.org/anthology/S12-1051.pdf",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

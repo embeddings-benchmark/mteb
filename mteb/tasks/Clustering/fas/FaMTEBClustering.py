@@ -151,7 +151,7 @@ class NLPTwitterAnalysisClustering(AbsTaskClusteringFast):
             "revision": "4ceb1312583fd2c7c73ad2d550b726124dcd39a0",
         },
         type="Clustering",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
