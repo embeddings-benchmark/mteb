@@ -27,7 +27,7 @@ class AudioClusteringEvaluator(Evaluator):
     ):
         super().__init__(**kwargs)
         if limit is not None:
-            audio = Audio[:limit]
+            audio = audio[:limit]
             labels = labels[:limit]
         self.audio = audio
         self.labels = labels
