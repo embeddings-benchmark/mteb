@@ -10,6 +10,7 @@ from mteb.abstasks import MultilingualTask
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from mteb.abstasks.Audio.AbsTaskAudioClustering import AbsTaskAudioClustering
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 from mteb.abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
 from mteb.abstasks.AbsTaskMultilabelClassification import (
@@ -471,6 +472,53 @@ class MockClusteringTask(AbsTaskClustering):
                     {
                         "sentences": sentences,
                         "labels": labels,
+                    }
+                ),
+            }
+        )
+        self.data_loaded = True
+
+class MockAudioClusteringTask(AbsTaskAudioClustering):
+    expected_stats = {
+        "test": {
+            "num_samples": 3, 
+            "number_of_samples": 3,
+            "min_audio_length": 16000,  # sr = 16000
+            "average_audio_length": 16000, # 1s
+            "max_audio_length": 16000, # 1s
+            "unique_audios": 3,
+            "min_labels_per_audio": 1,
+            "average_labels_per_audio": 1.0, 
+            "max_labels_per_audio": 1,
+            "unique_labels": 3,
+            "labels": {"0": {"count": 1}, "1": {"count": 1}, "2": {"count": 1}},
+        }
+    }
+
+    metadata = TaskMetadata(
+        type="Clustering",
+        name="MockAudioClusteringTask",
+        main_score="v_measure",
+        **general_args,  
+    )
+
+    def load_data(self, **kwargs):
+        mock_audio = [
+            {
+                "array": np.random.rand(16000),  # 1s
+                "sampling_rate": 16000
+            } for _ in range(3)
+        ]
+        
+    
+        labels = [0, 1, 2] 
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "audio": mock_audio, 
+                        "labels": labels,  
                     }
                 ),
             }

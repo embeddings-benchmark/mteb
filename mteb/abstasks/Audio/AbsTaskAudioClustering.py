@@ -24,7 +24,7 @@ class AbsTaskAudioClustering(AbsTask):
     """
 
     audio_column_name: str = "audio"
-    label_column_name: str = "label"
+    label_column_name: str = "labels"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

@@ -18,6 +18,7 @@ from .mock_tasks import (
     MockClassificationTask,
     MockClusteringFastTask,
     MockClusteringTask,
+    MockAudioClusteringTask,
     MockImageClassificationKNNPTTask,
     MockImageClassificationKNNTask,
     MockImageClassificationTask,
@@ -133,6 +134,10 @@ MOCK_MIEB_TASK_GRID = [
     MockMultilingualImageTextPairClassificationTask(),
     MockMultilingualMultiChoiceTask(),
     MockMultilingualImageMultilabelClassificationTask(),
+]
+
+MOCK_MAEB_TASK_GRID = [
+    MockAudioClusteringTask()
 ]
 
 MOCK_MIEB_TASK_GRID_AS_STRING = [
