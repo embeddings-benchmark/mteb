@@ -12,9 +12,9 @@ from torch.utils.data import DataLoader
 from tqdm.autonotebook import tqdm
 from transformers import AutoModelForVision2Seq, AutoProcessor
 
-import mteb
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
+from mteb.models.wrapper import Wrapper
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
@@ -130,7 +130,7 @@ class Encoder(torch.nn.Module):
         return embeddings
 
 
-class GmeQwen2VL:
+class GmeQwen2VL(Wrapper):
     def __init__(
         self,
         model_name: str = HF_GME_QWEN2VL_2B,
@@ -168,8 +168,7 @@ class GmeQwen2VL:
         )
 
     def encode_queries(self, queries: list[str], **kwargs):
-        kwargs.update(prompt_type=PromptType.query)
-        embeddings = self.encode(queries, **kwargs)
+        embeddings = self.encode(queries, prompt_type=PromptType.query, **kwargs)
         return embeddings
 
     def encode_corpus(self, corpus: list[dict[str, str]], **kwargs):
@@ -187,8 +186,7 @@ class GmeQwen2VL:
                 else doc["text"].strip()
                 for doc in corpus
             ]
-        kwargs.update(prompt_type=PromptType.passage)
-        embeddings = self.encode(sentences, is_query=False, **kwargs)
+        embeddings = self.encode(sentences, prompt_type=PromptType.passage**kwargs)
         return embeddings
 
     def get_image_embeddings(self, images: list[Image.Image] | DataLoader, **kwargs):
@@ -205,22 +203,6 @@ class GmeQwen2VL:
         logits = torch.matmul(image_embeddings, text_embeddings.T)
         probs = (logits * 100).softmax(dim=-1)
         return probs
-
-    ## FIXME: Might want to subclass from Wrapper.
-    def get_instruction(task_name: str, prompt_type: PromptType | None) -> str:
-        """Get the instruction/prompt to be used for encoding sentences."""
-        task = mteb.get_task(task_name=task_name)
-        task_metadata = task.metadata
-        if isinstance(task_metadata.prompt, dict) and prompt_type:
-            if task_metadata.prompt.get(prompt_type.value):
-                return task_metadata.prompt[prompt_type.value]
-            logger.warning(
-                f"Prompt type '{prompt_type}' not found in task metadata for task '{task_name}'."
-            )
-            return ""
-        if task_metadata.prompt:
-            return task_metadata.prompt
-        return task.abstask_prompt
 
     def get_fused_embeddings(
         self,

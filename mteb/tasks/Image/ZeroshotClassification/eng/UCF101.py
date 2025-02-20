@@ -6,7 +6,7 @@ from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class UCF101Classification(AbsTaskZeroshotClassification):
+class UCF101ZeroshotClassification(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
         name="UCF101ZeroShot",
         description="""UCF101 is an action recognition data set of realistic

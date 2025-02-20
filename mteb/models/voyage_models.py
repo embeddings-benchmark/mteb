@@ -241,6 +241,32 @@ voyage_code_2 = ModelMeta(
     public_training_data=None,
 )
 
+voyage_code_3 = ModelMeta(
+    name="voyageai/voyage-code-3",
+    revision="1",
+    release_date="2024-12-04",
+    languages=None,  # supported languages not specified
+    loader=partial(  # type: ignore
+        VoyageWrapper,
+        model_name="voyage-code-3",
+        model_prompts=model_prompts,
+    ),
+    max_tokens=32000,
+    embed_dim=1024,
+    open_weights=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://blog.voyageai.com/2024/12/04/voyage-code-3/",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    training_datasets=None,  # Not known
+    public_training_code=None,
+    public_training_data=None,
+)
+
+
 voyage_large_2 = ModelMeta(
     name="voyage-large-2",  # Date of publication of this post https://blog.voyageai.com/2023/10/29/voyage-embeddings/
     revision="1",

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import itertools
 import logging
-from collections import defaultdict
+from collections import Counter, defaultdict
 from typing import Any
 
 import numpy as np
@@ -17,8 +17,47 @@ from mteb.abstasks.TaskMetadata import HFSubset
 
 from ...encoder_interface import Encoder
 from ..AbsTask import AbsTask, ScoresDict
+from ..TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
+
+
+class ImageMultilabelClassificationDescriptiveStatistics(DescriptiveStatistics):
+    """Descriptive statistics for ImageMultilabelClassification
+
+    Attributes:
+        num_samples: number of samples in the dataset.
+
+        min_image_width: Minimum width of images
+        average_image_width: Average width of images
+        max_image_width: Maximum width of images
+
+        min_image_height: Minimum height of images
+        average_image_height: Average height of images
+        max_image_height: Maximum height of images
+
+        min_labels_per_sample: Minimum number of labels per sample
+        average_label_per_sample: Average number of labels per sample
+        max_labels_per_sample: Maximum number of labels per sample
+        unique_labels: Number of unique labels
+        labels: dict of label frequencies
+    """
+
+    num_samples: int
+
+    min_image_width: float
+    average_image_width: float
+    max_image_width: float
+
+    min_image_height: float
+    average_image_height: float
+    max_image_height: float
+
+    min_labels_per_sample: int
+    average_label_per_sample: float
+    max_labels_per_sample: int
+    unique_num_labels: int
+    labels: dict[str, dict[str, int]]
 
 
 def evaluate_classifier(
@@ -88,8 +127,51 @@ class AbsTaskImageMultilabelClassification(AbsTask):
 
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
-    ):
-        pass
+    ) -> ImageMultilabelClassificationDescriptiveStatistics:
+        if hf_subset:
+            imgs = self.dataset[hf_subset][split][self.image_column_name]
+            labels = self.dataset[hf_subset][split][self.label_column_name]
+        elif compute_overall:
+            imgs = []
+            labels = []
+            for hf_subset in self.metadata.eval_langs:
+                imgs.extend(self.dataset[hf_subset][split][self.image_column_name])
+                labels.extend(self.dataset[hf_subset][split][self.label_column_name])
+        else:
+            imgs = self.dataset[split][self.image_column_name]
+            labels = self.dataset[split][self.label_column_name]
+
+        num_samples = len(labels)
+
+        label_len = [len(l) for l in labels]
+        total_label_len = sum(label_len)
+        total_labels = []
+        for l in labels:
+            total_labels.extend(l if len(l) > 0 else [None])
+        label_count = Counter(total_labels)
+
+        img_widths, img_heights = [], []
+        for img in imgs:
+            width, height = img.size
+            img_heights.append(height)
+            img_widths.append(width)
+
+        return ImageMultilabelClassificationDescriptiveStatistics(
+            num_samples=num_samples,
+            min_image_width=min(img_widths),
+            average_image_width=sum(img_widths) / len(img_widths),
+            max_image_width=max(img_widths),
+            min_image_height=min(img_heights),
+            average_image_height=sum(img_heights) / len(img_heights),
+            max_image_height=max(img_heights),
+            min_labels_per_sample=min(label_len),
+            average_label_per_sample=total_label_len / len(labels),
+            max_labels_per_sample=max(label_len),
+            unique_num_labels=len(label_count),
+            labels={
+                str(label): {"count": count} for label, count in label_count.items()
+            },
+        )
 
     def evaluate(
         self,

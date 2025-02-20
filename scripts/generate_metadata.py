@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-import warnings
+import logging
 from pathlib import Path
 
 import iso639
@@ -137,7 +137,7 @@ def convert_code(code: str) -> str | None:
         script = lang_to_script[lang_code]
         return f"{lang_code}_{script}"
     except Exception as e:
-        print(f"Couldn't convert {code}, reason: {e}")
+        logging.warning(f"Couldn't convert {code}, reason: {e}")
         return None
 
 
@@ -153,7 +153,7 @@ def get_embedding_dimensions(model_name: str) -> int | None:
             pooling_config = json.loads(in_file.read())
             return pooling_config.get("word_embedding_dimension", None)
     except Exception as e:
-        print(f"Couldn't get embedding size for {model_name}, reason: {e}")
+        logging.warning(f"Couldn't get embedding size for {model_name}, reason: {e}")
         return None
 
 
@@ -164,8 +164,11 @@ def get_max_token(model_name: str) -> int | None:
             config = json.loads(in_file.read())
             return config.get("max_position_embeddings", None)
     except Exception as e:
-        print(f"Couldn't get embedding size for {model_name}, reason: {e}")
+        logging.warning(f"Couldn't get embedding size for {model_name}, reason: {e}")
         return None
+
+
+BASE_MODEL_ERRORS = ["tmp/"]
 
 
 def get_base_model(model_name: str) -> str | None:
@@ -174,35 +177,53 @@ def get_base_model(model_name: str) -> str | None:
         with open(file_path) as in_file:
             config = json.loads(in_file.read())
             base_model = config.get("_name_or_path", None)
+            if base_model in BASE_MODEL_ERRORS:
+                logging.warning(
+                    f"Base model error for {model_name} with base model {base_model}"
+                )
+                return None
             if base_model != model_name:
                 return base_model
             else:
                 return None
     except Exception as e:
-        print(f"Couldn't get base model for {model_name}, reason: {e}")
+        logging.warning(f"Couldn't get base model for {model_name}, reason: {e}")
         return None
 
 
-def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
+def load_model_card(model_name: str) -> dict:
+    card = ModelCard.load(model_name)
+    return card.data.to_dict()
+
+
+def get_language_from_card(card_data: dict) -> str | None:
+    languages = card_data.get("language", None)
+    if isinstance(languages, str):
+        languages = [languages]
+    if languages is not None:
+        languages = [convert_code(l) for l in languages]
+        languages = [l for l in languages if l is not None]
+    return languages
+
+
+def model_meta_from_hf_hub_cross_encoder(model_name: str) -> ModelMeta:
+    pass
+
+
+def model_meta_from_hf_hub_embedding(model_name: str) -> ModelMeta:
     try:
-        card = ModelCard.load(model_name)
-        card_data = card.data.to_dict()
+        card_data = load_model_card(model_name)
         frameworks = ["PyTorch"]
         if card_data.get("library_name", None) == "sentence-transformers":
             frameworks.append("Sentence Transformers")
-        languages = card_data.get("language", None)
-        if isinstance(languages, str):
-            languages = [languages]
-        if languages is not None:
-            languages = [convert_code(l) for l in languages]
-            languages = [l for l in languages if l is not None]
+        languages = get_language_from_card(card_data)
         repo_info = api.repo_info(model_name)
         revision = repo_info.sha
         release_date = repo_info.created_at.strftime("%Y-%m-%d")
         try:
             n_parameters = repo_info.safetensors.total
         except Exception as e:
-            print(f"Couldn't get model size for {model_name}, reason: {e}")
+            logging.warning(f"Couldn't get model size for {model_name}, reason: {e}")
             n_parameters = None
         n_dimensions = get_embedding_dimensions(model_name)
         datasets = card_data.get("datasets", None)
@@ -223,14 +244,17 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
             adapted_from=get_base_model(model_name),
             training_datasets=training_datasets,
             open_weights=True,
-            superseded_by=None,
             max_tokens=get_max_token(model_name),
             embed_dim=n_dimensions,
             similarity_fn_name=ScoringFunction.COSINE,
             reference=f"https://huggingface.co/{model_name}",
+            public_training_code=None,
+            public_training_data=None,
+            use_instructions=None,
+            memory_usage_mb=None,
         )
     except Exception as e:
-        warnings.warn(f"Failed to extract metadata from model: {e}.")
+        logging.error(f"Failed to extract metadata from model: {e}.")
         return ModelMeta(
             name=model_name,
             revision=None,
@@ -241,12 +265,13 @@ def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
             embed_dim=None,
             license=None,
             open_weights=True,
-            public_training_code=None,
-            public_training_data=None,
             similarity_fn_name=None,
-            use_instructions=None,
             training_datasets=None,
-            frameworks=[],
+            framework=[],
+            use_instructions=None,
+            public_training_data=None,
+            public_training_code=None,
+            memory_usage_mb=None,
         )
 
 
@@ -256,14 +281,15 @@ def code_from_meta(meta: ModelMeta) -> str:
     return template.format(variable_name=variable_name, meta=meta.__repr__())
 
 
-def main():
-    out_path = Path("mteb/models/misc_models.py")
+def main(out_path: Path, model_names: list[str] = to_keep):
     with open(out_path, "w") as out_file:
         out_file.write("from mteb.model_meta import ModelMeta, ScoringFunction\n\n")
-        for model in tqdm(to_keep, desc="Generating metadata for all models."):
-            meta = model_meta_from_hf_hub(model)
+        for model_names in tqdm(to_keep, desc="Generating metadata for all models."):
+            meta = model_meta_from_hf_hub_embedding(model)
             out_file.write(code_from_meta(meta))
 
 
 if __name__ == "__main__":
-    main()
+    out_path = Path("mteb/models/new_tmp.py")
+    model_names = ["jinaai/jina-reranker-v2-base-multilingual"]
+    main(out_path, model_names)

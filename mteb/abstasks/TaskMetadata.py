@@ -67,6 +67,7 @@ TASK_DOMAIN = Literal[
     "Blog",
     "Constructed",
     "Encyclopaedic",
+    "Engineering",
     "Fiction",
     "Government",
     "Legal",
@@ -99,7 +100,6 @@ SAMPLE_CREATION_METHOD = Literal[
     "rendered",
     "multiple",
 ]
-
 TASK_TYPE = Literal[
     "BitextMining",
     "Classification",
@@ -190,6 +190,7 @@ LICENSES = (  # this list can be extended as needed
         "cc-by-nc-sa-3.0",
         "cc-by-nc-sa-4.0",
         "cc-by-nc-nd-4.0",
+        "cc-by-nd-4.0",
         "openrail",
         "openrail++",
         "odc-by",
@@ -272,7 +273,6 @@ class TaskMetadata(BaseModel):
             "Government", "Legal", "Medical", "Poetry", "Religious", "Reviews", "Web", "Spoken", "Written". A dataset can belong to multiple domains.
         task_subtypes: The subtypes of the task. E.g. includes "Sentiment/Hate speech", "Thematic Clustering". Feel free to update the list as needed.
         license: The license of the data specified as lowercase, e.g. "cc-by-nc-4.0". If the license is not specified, use "not specified". For custom licenses a URL is used.
-        license: The license of the data specified as lowercase, e.g. "cc-by-nc-4.0". If the license is not specified, use "not specified". For custom licenses a URL is used.
         annotations_creators: The type of the annotators. Includes "expert-annotated" (annotated by experts), "human-annotated" (annotated e.g. by
             mturkers), "derived" (derived from structure in the data).
         dialect: The dialect of the data, if applicable. Ideally specified as a BCP-47 language tag. Empty list if no dialects are present.
@@ -282,9 +282,8 @@ class TaskMetadata(BaseModel):
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
     """
 
-    model_config = ConfigDict(extra="forbid")
-
-    dataset: MetadataDatasetDict
+    dataset: dict[str, Any]
+    dataset: dict[str, Any]
 
     name: str
     description: str
@@ -468,9 +467,11 @@ class TaskMetadata(BaseModel):
     def descriptive_stat_path(self) -> Path:
         """Return the path to the descriptive statistics file."""
         descriptive_stat_base_dir = Path(__file__).parent.parent / "descriptive_stats"
+        if self.type in MIEB_TASK_TYPE:
+            descriptive_stat_base_dir = descriptive_stat_base_dir / "Image"
+        task_type_dir = descriptive_stat_base_dir / self.type
         if not descriptive_stat_base_dir.exists():
             descriptive_stat_base_dir.mkdir()
-        task_type_dir = descriptive_stat_base_dir / self.type
         if not task_type_dir.exists():
             task_type_dir.mkdir()
         return task_type_dir / f"{self.name}.json"

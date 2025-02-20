@@ -529,7 +529,8 @@ class TaskResult(BaseModel):
             task = get_task(self.task_name)
 
         splits = task.metadata.eval_splits
-        hf_subsets = set(task.hf_subsets)
+        hf_subsets = task.hf_subsets
+        hf_subsets = set(hf_subsets)
 
         new_scores = {}
         seen_splits = set()

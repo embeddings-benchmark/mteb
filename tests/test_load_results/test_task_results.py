@@ -46,11 +46,11 @@ class DummyTask(AbsTask):
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall=False
     ) -> dict[str, float]:
-        pass
+        return {}
 
 
-def test_mteb_results():
-    """Test TaskResult class (this is the same as the example in the docstring)"""
+@pytest.fixture()
+def task_result():
     scores = {
         "train": {
             "en-de": {
@@ -64,13 +64,19 @@ def test_mteb_results():
 
     evaluation_time = 100
 
-    mteb_results = TaskResult.from_task_results(
+    return TaskResult.from_task_results(
         task=DummyTask(), scores=scores, evaluation_time=evaluation_time
     )
 
-    assert mteb_results.get_score() == 0.55
-    assert mteb_results.get_score(languages=["eng"]) == 0.55
-    assert mteb_results.get_score(languages=["fra"]) == 0.6
+
+def test_task_results_get_score(task_result: TaskResult):
+    """Test TaskResult class (this is the same as the example in the docstring)"""
+    assert task_result.get_score() == 0.55
+    assert task_result.get_score(languages=["eng"]) == 0.55
+    assert task_result.get_score(languages=["fra"]) == 0.6
+
+
+def test_task_results_to_dict(task_result: TaskResult):
     dict_repr = {
         "dataset_revision": "1.0",
         "task_name": "dummy_task",
@@ -92,7 +98,52 @@ def test_mteb_results():
             ]
         },
     }
-    assert mteb_results.to_dict() == dict_repr
+    assert task_result.to_dict() == dict_repr
+
+
+def test_task_results_validate_and_filter():
+    scores = {
+        "train": {
+            "en-de": {
+                "main_score": 0.5,
+            },
+            "en-fr": {
+                "main_score": 0.6,
+            },
+        },
+        "test": {
+            "en-de": {
+                "main_score": 0.3,
+            },
+            "en-fr": {
+                "main_score": 0.4,
+            },
+        },
+    }
+
+    evaluation_time = 100
+
+    res = TaskResult.from_task_results(
+        task=DummyTask(), scores=scores, evaluation_time=evaluation_time
+    )
+
+    task = DummyTask()
+    task._eval_splits = ["train", "test"]
+    res1 = res.validate_and_filter_scores(task=task)
+
+    assert res1.scores.keys() == {"train", "test"}
+    assert res1.get_score() == (0.5 + 0.6 + 0.3 + 0.4) / 4
+
+    task._eval_splits = ["test"]
+    res2 = res.validate_and_filter_scores(task=task)
+    assert res2.scores.keys() == {"test"}
+    assert res2.get_score() == (0.3 + 0.4) / 2  # only test scores
+
+    task.hf_subsets = ["en-de"]
+    task._eval_splits = ["train", "test"]
+    res3 = res.validate_and_filter_scores(task=task)
+    assert res3.scores.keys() == {"train", "test"}
+    assert res3.get_score() == (0.5 + 0.3) / 2  # only en-de scores
 
 
 @pytest.mark.parametrize(
