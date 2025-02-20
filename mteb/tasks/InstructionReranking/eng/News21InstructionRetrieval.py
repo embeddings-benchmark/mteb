@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class News21InstructionRetrieval(AbsTaskReranking):
+class News21InstructionRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="News21InstructionRetrieval",
         description="Measuring retrieval instruction following ability on News21 narratives for the FollowIR benchmark.",

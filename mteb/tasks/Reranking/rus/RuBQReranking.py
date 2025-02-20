@@ -2,15 +2,15 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class RuBQReranking(AbsTaskReranking):
+class RuBQReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="RuBQReranking",
         dataset={
-            "path": "ai-forever/rubq-reranking",
-            "revision": "2e96b8f098fa4b0950fc58eacadeb31c0d0c7fa2",
+            "path": "mteb/RuBQReranking",
+            "revision": "e8233e2234f8b24ab47f203b69d1161c3c0bc5a1",
         },
         description="Paragraph reranking based on RuBQ 2.0. Give paragraphs that answer the question higher scores.",
         reference="https://openreview.net/pdf?id=P5UQFFoQ4PJ",

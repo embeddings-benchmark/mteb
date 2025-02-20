@@ -9,7 +9,6 @@ import pytest
 
 import mteb
 from mteb.abstasks import AbsTask
-from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.AbsTaskSpeedTask import AbsTaskSpeedTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
@@ -42,7 +41,7 @@ def test_load_data(
     # TODO: We skip because this load_data is completely different.
     if (
         isinstance(task, AbsTaskRetrieval)
-        or isinstance(task, AbsTaskReranking)
+        or isinstance(task, AbsTaskRetrieval)
         or isinstance(task, AbsTaskAny2AnyRetrieval)
         or isinstance(task, AbsTaskSpeedTask)
         or isinstance(task, AbsTaskAny2AnyMultiChoice)

@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class Robust04InstructionRetrieval(AbsTaskReranking):
+class Robust04InstructionRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Robust04InstructionRetrieval",
         description="Measuring retrieval instruction following ability on Robust04 narratives for the FollowIR benchmark.",

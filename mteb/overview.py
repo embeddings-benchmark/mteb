@@ -8,7 +8,7 @@ from collections import Counter
 
 import pandas as pd
 
-from mteb.abstasks import AbsTask, AbsTaskMultilabelClassification, AbsTaskReranking
+from mteb.abstasks import AbsTask, AbsTaskMultilabelClassification, AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TASK_CATEGORY, TASK_DOMAIN, TASK_TYPE
 from mteb.languages import (
     ISO_TO_LANGUAGE,
@@ -27,14 +27,14 @@ logger = logging.getLogger(__name__)
 def create_task_list() -> list[type[AbsTask]]:
     # reranking subclasses retrieval to share methods, but is an abstract task
     tasks_categories_cls = list(AbsTask.__subclasses__()) + [
-        AbsTaskReranking,
+        AbsTaskRetrieval,
         AbsTaskMultilabelClassification,
     ]
     tasks = []
     for cat_cls in tasks_categories_cls:
         for cls in cat_cls.__subclasses__():
             if cat_cls.__name__.startswith("AbsTask") and cls.__name__ not in (
-                "AbsTaskReranking",
+                "AbsTaskRetrieval",
                 "AbsTaskMultilabelClassification",
             ):
                 tasks.append(cls)

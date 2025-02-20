@@ -6,7 +6,7 @@ import datasets
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 logger = getLogger(__name__)
 
@@ -128,7 +128,7 @@ def load_data(
     return (corpus, queries, instructions, relevant_docs, top_ranked)
 
 
-class mFollowIRCrossLingual(AbsTaskReranking):
+class mFollowIRCrossLingual(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="mFollowIRCrossLingual",
         description="This tasks measures retrieval instruction following ability on NeuCLIR narratives for the mFollowIR benchmark on the Farsi, Russian, and Chinese languages with English queries/instructions.",
@@ -179,7 +179,7 @@ class mFollowIRCrossLingual(AbsTaskReranking):
         self.data_loaded = True
 
 
-class mFollowIR(AbsTaskReranking):
+class mFollowIR(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="mFollowIR",
         description="This tasks measures retrieval instruction following ability on NeuCLIR narratives for the mFollowIR benchmark on the Farsi, Russian, and Chinese languages.",

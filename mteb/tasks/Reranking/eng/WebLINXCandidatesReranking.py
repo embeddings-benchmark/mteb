@@ -2,18 +2,17 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class WebLINXCandidatesReranking(AbsTaskReranking):
+class WebLINXCandidatesReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="WebLINXCandidatesReranking",
         description="WebLINX is a large-scale benchmark of 100K interactions across 2300 expert demonstrations of conversational web navigation. The reranking task focuses on finding relevant elements at every given step in the trajectory.",
         reference="https://mcgill-nlp.github.io/weblinx",
         dataset={
-            "path": "McGill-NLP/WebLINX",
-            "name": "reranking",
-            "revision": "ed1c933c2b3617e5700d8a7ebe07f5975969a453",
+            "path": "mteb/WebLINXCandidatesReranking",
+            "revision": "107fdc2402d2c4bfb2a720dfcfe1f6ff9d21151b",
         },
         type="Reranking",
         category="p2p",
