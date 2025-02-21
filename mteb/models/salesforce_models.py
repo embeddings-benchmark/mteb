@@ -73,7 +73,7 @@ SFR_Embedding_2_R = ModelMeta(
 SFR_Embedding_Code_2B_R = ModelMeta(
     loader=partial(  # type: ignore
         InstructSentenceTransformerWrapper,
-        model_name_or_path="Salesforce/SFR-Embedding-Code-2B_R",
+        model_name="Salesforce/SFR-Embedding-Code-2B_R",
         instruction_template=instruction_template,
         attn="cccc",
         pooling_method="lasttoken",
