@@ -14,10 +14,10 @@ class FSD50KClassification(AbsTaskAudioClassification):
             "revision": "67e4d8c2570caef0f90d48fdb756b337875d91db",
         },
         type="AudioClassification",
-        category="a2a",  # TODO: DOES THIS CATEGORY EXIST?
+        category="a2a",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="accuracy",
+        main_score="accuracy",  # restart from here..
         date=(
             "2008-01-01",
             "2009-01-01",
