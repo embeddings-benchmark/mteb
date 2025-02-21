@@ -17,7 +17,7 @@ class FSD50KClassification(AbsTaskAudioMultilabelClassification):
         category="a2a",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="??",  # restart from here..
+        main_score="mAP",
         date=(
             "2022-05-06",
             ""
