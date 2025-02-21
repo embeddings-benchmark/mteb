@@ -10,7 +10,6 @@ from mteb.abstasks import MultilingualTask
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.Audio.AbsTaskAudioClustering import AbsTaskAudioClustering
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 from mteb.abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
 from mteb.abstasks.AbsTaskMultilabelClassification import (
@@ -21,6 +20,8 @@ from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
 from mteb.abstasks.AbsTaskSummarization import AbsTaskSummarization
+from mteb.abstasks.Audio.AbsTaskAudioClassification import AbsTaskAudioClassification
+from mteb.abstasks.Audio.AbsTaskAudioClustering import AbsTaskAudioClustering
 from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.Image.AbsTaskAny2TextMultipleChoice import (
@@ -478,17 +479,18 @@ class MockClusteringTask(AbsTaskClustering):
         )
         self.data_loaded = True
 
+
 class MockAudioClusteringTask(AbsTaskAudioClustering):
     expected_stats = {
         "test": {
-            "num_samples": 3, 
+            "num_samples": 3,
             "number_of_samples": 3,
             "min_audio_length": 16000,  # sr = 16000
-            "average_audio_length": 16000, # 1s
-            "max_audio_length": 16000, # 1s
+            "average_audio_length": 16000,  # 1s
+            "max_audio_length": 16000,  # 1s
             "unique_audios": 3,
             "min_labels_per_audio": 1,
-            "average_labels_per_audio": 1.0, 
+            "average_labels_per_audio": 1.0,
             "max_labels_per_audio": 1,
             "unique_labels": 3,
             "labels": {"0": {"count": 1}, "1": {"count": 1}, "2": {"count": 1}},
@@ -499,31 +501,122 @@ class MockAudioClusteringTask(AbsTaskAudioClustering):
         type="Clustering",
         name="MockAudioClusteringTask",
         main_score="v_measure",
-        **general_args,  
+        **general_args,
     )
 
     def load_data(self, **kwargs):
         mock_audio = [
             {
                 "array": np.random.rand(16000),  # 1s
-                "sampling_rate": 16000
-            } for _ in range(3)
+                "sampling_rate": 16000,
+            }
+            for _ in range(3)
         ]
-        
-    
-        labels = [0, 1, 2] 
+
+        labels = [0, 1, 2]
 
         self.dataset = DatasetDict(
             {
                 "test": Dataset.from_dict(
                     {
-                        "audio": mock_audio, 
-                        "labels": labels,  
+                        "audio": mock_audio,
+                        "labels": labels,
                     }
                 ),
             }
         )
         self.data_loaded = True
+
+
+class MockAudioClassificationTask(AbsTaskAudioClassification):
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "total_duration": 2.0,  # 2 samples * 1s each
+            "min_duration": 1.0,
+            "avg_duration": 1.0,
+            "max_duration": 1.0,
+            "sample_rate": 16000,
+            "unique_labels": 2,
+            "labels": {"0": {"count": 1}, "1": {"count": 1}},
+        },
+        "train": {
+            "num_samples": 10,
+            "total_duration": 10.0,
+            "min_duration": 1.0,
+            "avg_duration": 1.0,
+            "max_duration": 1.0,
+            "sample_rate": 16000,
+            "unique_labels": 2,
+            "labels": {"0": {"count": 5}, "1": {"count": 5}},
+        },
+    }
+
+    metadata = TaskMetadata(
+        type="AudioClassification",
+        name="MockAudioClassification",
+        main_score="accuracy",
+        **general_args,
+    )
+
+    def __init__(self, **kwargs):
+        super().__init__(n_experiments=1, samples_per_label=5, **kwargs)
+
+    def load_data(self, **kwargs):
+        mock_audio = [
+            {
+                "array": np.random.rand(16000),  # 1s audio
+                "sampling_rate": 16000,
+            }
+            for _ in range(2)
+        ]
+        labels = [0, 1]
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict({"audio": mock_audio, "labels": labels}),
+                "train": Dataset.from_dict(
+                    {"audio": mock_audio * 5, "labels": labels * 5}
+                ),
+            }
+        )
+        self.data_loaded = True
+
+
+class MockAudioClassificationKNNTask(MockAudioClassificationTask):
+    metadata = TaskMetadata(
+        type="AudioClassification",
+        name="MockAudioClassificationKNN",
+        main_score="accuracy",
+        **general_args,
+    )
+
+    def __init__(self, **kwargs):
+        super().__init__(method="kNN", **kwargs)
+
+
+class MockAudioClassificationKNNPTTask(MockAudioClassificationTask):
+    metadata = TaskMetadata(
+        type="AudioClassification",
+        name="MockAudioClassificationKNNPT",
+        main_score="accuracy",
+        **general_args,
+    )
+
+    def __init__(self, **kwargs):
+        super().__init__(method="kNN-pytorch", **kwargs)
+
+
+class MockAudioClassificationLogRegTask(MockAudioClassificationTask):
+    metadata = TaskMetadata(
+        type="AudioClassification",
+        name="MockAudioClassificationLogReg",
+        main_score="accuracy",
+        **general_args,
+    )
+
+    def __init__(self, **kwargs):
+        super().__init__(method="logReg", **kwargs)
 
 
 class MockMultilingualClusteringTask(AbsTaskClustering, MultilingualTask):
