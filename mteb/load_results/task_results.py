@@ -528,7 +528,7 @@ class TaskResult(BaseModel):
         if task is None:
             task = get_task(self.task_name)
 
-        splits = task.metadata.eval_splits
+        splits = task.eval_splits
         hf_subsets = task.hf_subsets
         hf_subsets = set(hf_subsets)
 

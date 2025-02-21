@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import logging
 from collections.abc import Mapping
 from datetime import date
@@ -463,6 +464,14 @@ class TaskMetadata(BaseModel):
         return cite
 
     @property
+    def descriptive_stats(self) -> dict[str, DescriptiveStatistics] | None:
+        """Return the descriptive statistics for the dataset."""
+        if self.descriptive_stat_path.exists():
+            with self.descriptive_stat_path.open("r") as f:
+                return json.load(f)
+        return None
+
+    @property
     def descriptive_stat_path(self) -> Path:
         """Return the path to the descriptive statistics file."""
         descriptive_stat_base_dir = Path(__file__).parent.parent / "descriptive_stats"
@@ -471,17 +480,6 @@ class TaskMetadata(BaseModel):
         task_type_dir = descriptive_stat_base_dir / self.type
         if not descriptive_stat_base_dir.exists():
             descriptive_stat_base_dir.mkdir()
-        if not task_type_dir.exists():
-            task_type_dir.mkdir()
-        return task_type_dir / f"{self.name}.json"
-
-    @property
-    def descriptive_stat_path(self) -> Path:
-        """Return the path to the descriptive statistics file."""
-        descriptive_stat_base_dir = Path(__file__).parent.parent / "descriptive_stats"
-        if not descriptive_stat_base_dir.exists():
-            descriptive_stat_base_dir.mkdir()
-        task_type_dir = descriptive_stat_base_dir / self.type
         if not task_type_dir.exists():
             task_type_dir.mkdir()
         return task_type_dir / f"{self.name}.json"

@@ -1,0 +1,3 @@
+from mteb.model_meta import ModelMeta, ScoringFunction
+
+jinaai__jina_reranker_v2_base_multilingual =ModelMeta(name='jinaai/jina-reranker-v2-base-multilingual', revision='eed787badf7784e1a25c0eaa428627c8cbef511e', release_date='2024-06-19', languages=[], loader=None, n_parameters=278437633, memory_usage_mb=None, max_tokens=1026.0, embed_dim=None, license='cc-by-nc-4.0', open_weights=True, public_training_code=None, public_training_data=None, framework=['PyTorch'], reference='https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual', similarity_fn_name=<ScoringFunction.COSINE: 'cosine'>, use_instructions=None, training_datasets=None, adapted_from=None, superseded_by=None, modalities=['text'], citation=None)

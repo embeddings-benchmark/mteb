@@ -278,7 +278,10 @@ def model_meta_from_hf_hub_embedding(model_name: str) -> ModelMeta:
 def code_from_meta(meta: ModelMeta) -> str:
     template = "{variable_name} ={meta}\n"
     variable_name = meta.name.replace("/", "__").replace("-", "_").replace(".", "_")
-    return template.format(variable_name=variable_name, meta=meta.__repr__())
+    args_def = meta.__repr__().replace(  # hack to get the repr to work
+        "<ScoringFunction.COSINE: 'cosine'>", "ScoringFunction.COSINE"
+    )
+    return template.format(variable_name=variable_name, meta=args_def)
 
 
 def main(out_path: Path, model_names: list[str] = to_keep):

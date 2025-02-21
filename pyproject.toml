@@ -60,7 +60,7 @@ dev = [
     "pytest-xdist>=3.6.1",
     "pytest-coverage>=0.0",
     "pytest-rerunfailures>=15.0",
-    "iso639>=0.1.4" # used for tests/scripts/test_generate_model_meta.py
+    "python-iso639>=2025.2.18" # used for tests/scripts/test_generate_model_meta.py
 ]
 docs = [
   "mkdocs>=1.6.1",
