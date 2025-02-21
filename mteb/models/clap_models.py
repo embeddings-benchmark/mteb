@@ -104,5 +104,5 @@ clap_htsat_unfused = ModelMeta(
     reference="https://huggingface.co/laion/clap-htsat-unfused",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets=["LAION-Audio-630K"],
+    training_datasets={"LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]}
 )
