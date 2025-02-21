@@ -583,28 +583,28 @@ class MockAudioClassificationTask(AbsTaskAudioClassification):
         self.data_loaded = True
 
 
-class MockAudioClassificationKNNTask(MockAudioClassificationTask):
-    metadata = TaskMetadata(
-        type="AudioClassification",
-        name="MockAudioClassificationKNN",
-        main_score="accuracy",
-        **general_args,
-    )
+# class MockAudioClassificationKNNTask(MockAudioClassificationTask):
+#     metadata = TaskMetadata(
+#         type="AudioClassification",
+#         name="MockAudioClassificationKNN",
+#         main_score="accuracy",
+#         **general_args,
+#     )
 
-    def __init__(self, **kwargs):
-        super().__init__(method="kNN", **kwargs)
+#     def __init__(self, **kwargs):
+#         super().__init__(method="kNN", **kwargs)
 
 
-class MockAudioClassificationKNNPTTask(MockAudioClassificationTask):
-    metadata = TaskMetadata(
-        type="AudioClassification",
-        name="MockAudioClassificationKNNPT",
-        main_score="accuracy",
-        **general_args,
-    )
+# class MockAudioClassificationKNNPTTask(MockAudioClassificationTask):
+#     metadata = TaskMetadata(
+#         type="AudioClassification",
+#         name="MockAudioClassificationKNNPT",
+#         main_score="accuracy",
+#         **general_args,
+#     )
 
-    def __init__(self, **kwargs):
-        super().__init__(method="kNN-pytorch", **kwargs)
+#     def __init__(self, **kwargs):
+#         super().__init__(method="kNN-pytorch", **kwargs)
 
 
 class MockAudioClassificationLogRegTask(MockAudioClassificationTask):
