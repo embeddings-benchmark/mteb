@@ -59,6 +59,7 @@ TASK_SUBTYPE = Literal[
     "Activity recognition",
     "Tumor detection",
     "Duplicate Detection",
+    "Environment Sound Classification"
 ]
 
 TASK_DOMAIN = Literal[
@@ -121,6 +122,7 @@ TASK_TYPE = Literal[
     "ImageTextPairClassification",
     "VisualSTS",
     "ZeroShotClassification",
+    "AudioMultilabelClassification"
 ]
 
 
