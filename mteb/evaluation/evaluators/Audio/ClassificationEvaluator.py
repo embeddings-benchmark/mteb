@@ -13,12 +13,8 @@ from sklearn.metrics import (
     average_precision_score,
     f1_score,
 )
-from sklearn.neighbors import KNeighborsClassifier
-from torch import Tensor
 from torch.utils.data import DataLoader
 from torchaudio import transforms
-
-from mteb.encoder_interface import AudioEncoder
 
 from ..Evaluator import Evaluator
 
