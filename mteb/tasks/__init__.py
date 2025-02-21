@@ -21,3 +21,4 @@ from .SpeedTask import *
 from .STS import *
 from .Summarization import *
 from .SummaryRetrieval import *
+from .Audio.AudioMultilabelClassification import *

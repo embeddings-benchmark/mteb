@@ -13,17 +13,17 @@ class FSD50KClassification(AbsTaskAudioMultilabelClassification):
             "path": "Fhrozen/FSD50k",
             "revision": "67e4d8c2570caef0f90d48fdb756b337875d91db",
         },
-        type="AudioClassification",
+        type="AudioMultilabelClassification",
         category="a2a",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="mAP",
         date=(
             "2022-05-06",
-            ""
+            "2022-05-06"
         ),  # Estimated date when this dataset was committed, what should be the second tuple?
         domains=["Web"],  # obtained from Freesound - online collaborative platform
-        task_subtypes=["Environmental Sound Classification"],
+        task_subtypes=["Environment Sound Classification"],
         license="cc-by-4.0",
         annotations_creators="human-annotated",
         dialect=[],

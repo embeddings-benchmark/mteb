@@ -128,12 +128,12 @@ wav2vec2_xlsr_300m = ModelMeta(
     license="Apache-2.0",
     open_weights=True,
     public_training_code="https://github.com/pytorch/fairseq",
-    public_training_data="VoxPopuli, MLS, CommonVoice, BABEL, VoxLingua107",
+    public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/facebook/wav2vec2-xls-r-300m",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets=["VoxPopuli", "MLS", "CommonVoice", "BABEL", "VoxLingua107"],
+    training_datasets={},
 )
 
 wav2vec2_xlsr_300m_phoneme = ModelMeta(
@@ -173,12 +173,12 @@ wav2vec2_xlsr_1b = ModelMeta(
     license="Apache-2.0",
     open_weights=True,
     public_training_code="https://github.com/pytorch/fairseq",
-    public_training_data="VoxPopuli, MLS, CommonVoice, BABEL, VoxLingua107",
+    public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/facebook/wav2vec2-xls-r-1b",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets=["VoxPopuli", "MLS", "CommonVoice", "BABEL", "VoxLingua107"],
+    training_datasets=None,
 )
 
 wav2vec2_xlsr_2b = ModelMeta(
@@ -195,12 +195,12 @@ wav2vec2_xlsr_2b = ModelMeta(
     license="Apache-2.0",
     open_weights=True,
     public_training_code="https://github.com/pytorch/fairseq",
-    public_training_data="VoxPopuli, MLS, CommonVoice, BABEL, VoxLingua107",
+    public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/facebook/wav2vec2-xls-r-2b",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets=["VoxPopuli", "MLS", "CommonVoice", "BABEL", "VoxLingua107"],
+    training_datasets=None,
 )
 
 wav2vec2_xlsr_2b_translation = ModelMeta(
@@ -219,10 +219,10 @@ wav2vec2_xlsr_2b_translation = ModelMeta(
     license="Apache-2.0",
     open_weights=True,
     public_training_code=None,
-    public_training_data="CoVoST-2",
+    public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/facebook/wav2vec2-xls-r-2b-21-to-en",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets=["CoVoST-2"],
+    training_datasets=None,
 )
