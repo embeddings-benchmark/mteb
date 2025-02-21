@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+from typing import get_args
+
 import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+
+from mteb.abstasks.TaskMetadata import TASK_TYPE
 
 
 def text_plot(text: str):
@@ -169,21 +173,10 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
 
 
 TOP_N = 5
-task_types = [
-    "BitextMining",
-    "Classification",
-    "MultilabelClassification",
-    "Clustering",
-    "PairClassification",
-    "Reranking",
-    "Retrieval",
-    "STS",
-    "Summarization",
-    # "InstructionRetrieval",
-    # Not displayed, because the scores are negative,
-    # doesn't work well with the radar chart.
-    "Speed",
-]
+task_types = sorted(get_args(TASK_TYPE))
+task_types.remove("InstructionRetrieval")
+# Not displayed, because the scores are negative,
+# doesn't work well with the radar chart.
 
 line_colors = [
     "#EE4266",

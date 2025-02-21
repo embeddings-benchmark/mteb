@@ -42,20 +42,6 @@ We thank [ServiceNow](https://www.servicenow.com/), [Contextual AI](https://cont
 We also thank the following companies which provide API credits to evaluate their models: [OpenAI](https://openai.com/), [Voyage AI](https://www.voyageai.com/)
 """
 
-MMTEB_TASK_TYPES = [  # TEMPORARY FIX: when adding MIEB to the leaderboard, this can probably be replaced with TASK_TYPE
-    "BitextMining",
-    "Classification",
-    "MultilabelClassification",
-    "Clustering",
-    "PairClassification",
-    "Reranking",
-    "Retrieval",
-    "STS",
-    "Summarization",
-    "InstructionRetrieval",
-    "Speed",
-]
-
 
 ALL_MODELS = {meta.name for meta in mteb.get_model_metas()}
 
