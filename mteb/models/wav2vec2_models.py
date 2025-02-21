@@ -119,7 +119,7 @@ wav2vec2_xlsr_300m = ModelMeta(
     loader=partial(Wav2Vec2AudioWrapper, model_name="facebook/wav2vec2-xls-r-300m"),
     name="facebook/wav2vec2-xls-r-300m",
     languages=["multilingual"],
-    revision="main",
+    revision="1a640f32ac3e39899438a2931f9924c02f080a54",
     release_date="2021-10-13",
     modalities=["audio"],
     n_parameters=300_000_000,
