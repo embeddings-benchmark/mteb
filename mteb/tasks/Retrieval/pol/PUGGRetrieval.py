@@ -17,6 +17,7 @@ class PUGGRetrieval(AbsTaskRetrieval):
         },
         type="Retrieval",
         category="s2p",
+        date=("2023-01-01", "2024-01-01"),
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
