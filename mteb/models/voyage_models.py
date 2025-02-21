@@ -98,7 +98,8 @@ class VoyageWrapper(Wrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        input_type = self.model_prompts.get(prompt_type.value, "document")
+        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+        input_type = prompt_name if prompt_name is not None else "document"
         return self._batched_encode(sentences, batch_size, input_type)
 
     def _batched_encode(
