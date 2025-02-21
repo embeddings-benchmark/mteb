@@ -137,6 +137,14 @@ TASK_CATEGORY = Literal[
     "i2it",  # image-to-image+text
     "t2it",  # text-to-image+text
     "it2it",  # image+text-to-image+text
+    "a2a",   # audio to audio
+    "a2t", # audio to text
+    "t2a", # text to audio
+    "at2t",  # audio+text-to-text
+    "at2a",  # audio+text-to-audio
+    "a2at",  # audio-to-audio+text
+    "t2at",  # text-to-audio+text
+    "at2at",  # audio+text-to-audio+text
 ]
 
 ANNOTATOR_TYPE = Literal[

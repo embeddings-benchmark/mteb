@@ -66,6 +66,30 @@ class MockCLIPEncoder:
         return torch.randn(image_embeddings.shape[0], text_embeddings.shape[0])
 
 
+class MockAudioEncoder:
+    def __init__(self):
+        self.embedding_dim = 768
+
+    def get_audio_embeddings(
+        self,
+        audio,  # list
+        **kwargs,
+    ) -> np.ndarray:
+        return np.random.rand(len(audio), self.embedding_dim)
+
+    def get_text_embeddings(
+        self,
+        texts,  # list
+        **kwargs,
+    ) -> np.ndarray:
+        pass
+
+    def calculate_probs(
+        self, text_embeddings: np.ndarray, audio_embeddings: np.ndarray
+    ) -> np.ndarray:
+        pass
+
+
 class MockSentenceTransformer(SentenceTransformer):
     """A mock implementation of the SentenceTransformer intended to implement just the encode, method using the same arguments."""
 

@@ -41,6 +41,7 @@ dependencies = [
     "eval_type_backport>=0.0.0",
     "polars>=0.20.22",
     "torchvision>0.0.0",
+    "torchaudio>0.0.0",
 ]
 
 
