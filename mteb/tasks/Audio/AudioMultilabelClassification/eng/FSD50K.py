@@ -48,4 +48,4 @@ class FSD50KClassification(AbsTaskAudioMultilabelClassification):
 
     audio_column_name: str = "audio"
     label_column_name: str = "label"
-    samples_per_label: int = 8  # dunno what this is?
+    samples_per_label: int = 8
