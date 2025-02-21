@@ -6,12 +6,12 @@ from .BIRCOClinicalTrialReranking import BIRCOClinicalTrialReranking
 from .BIRCODorisMaeReranking import BIRCODorisMaeReranking
 from .BIRCORelicReranking import BIRCORelicReranking
 from .BIRCOWhatsThatBookReranking import BIRCOWhatsThatBookReranking
+from .BuiltBenchReranking import BuiltBenchReranking
 from .MindSmallReranking import MindSmallReranking
 from .NevIR import NevIR
 from .SciDocsReranking import SciDocsReranking
 from .StackOverflowDupQuestions import StackOverflowDupQuestions
 from .WebLINXCandidatesReranking import WebLINXCandidatesReranking
-from .BuiltBenchReranking import BuiltBenchReranking
 
 __all__ = [
     "AskUbuntuDupQuestions",
