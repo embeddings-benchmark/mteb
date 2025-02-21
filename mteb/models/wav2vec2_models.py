@@ -46,11 +46,11 @@ class Wav2Vec2AudioWrapper:
 
         if isinstance(batch, tuple):  # Handle (audio, metadata) tuples
             for audio, _ in batch:
-                waveforms.append(self._convert_audio(audio))
+                waveforms.append(self._convert_audio_from_numpy(audio))
         else:
             for item in batch:
                 if isinstance(item, (np.ndarray, torch.Tensor)):
-                    waveforms.append(self._convert_audio(item))
+                    waveforms.append(self._convert_audio_from_numpy(item))
                 elif isinstance(item, str):
                     waveforms.append(self._load_audio_file(item))
 
