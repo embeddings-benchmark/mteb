@@ -10,8 +10,6 @@ from mteb.abstasks.TaskMetadata import HFSubset
 
 from ...encoder_interface import AudioEncoder
 from ...evaluation.evaluators import (
-    AudiokNNClassificationEvaluator,
-    AudiokNNClassificationEvaluatorPytorch,
     AudiologRegClassificationEvaluator,
 )
 from ..AbsTask import AbsTask, ScoresDict
