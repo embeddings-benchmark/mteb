@@ -342,6 +342,7 @@ class AudiologRegClassificationEvaluator(Evaluator):
         self.max_iter = max_iter
         self.task_name = task_name
 
+    
     def __call__(self, model, test_cache=None):
         scores = {}
         clf = LogisticRegression(

@@ -72,6 +72,7 @@ from mteb.models import (
     voyage_models,
     voyage_v,
     wav2vec2_models,
+    clap_models
 )
 
 logger = logging.getLogger(__name__)
@@ -138,6 +139,7 @@ model_modules = [
     voyage_models,
     fa_models,
     wav2vec2_models,
+    clap_models
 ]
 MODEL_REGISTRY = {}
 
