@@ -27,6 +27,7 @@ OLD_FORMAT_RERANKING_TASKS = [
     "CMedQAv1-reranking",
     "CMedQAv2-reranking",
     "NamaaMrTydiReranking",
+    "BuiltBenchReranking",
 ]
 
 
