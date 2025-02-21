@@ -1,0 +1,32 @@
+{
+    "test": {
+        "num_samples": 16263,
+        "unique_num_labels": 5,
+        "min_image_width": 44,
+        "average_image_width": 706.74875484228,
+        "max_image_width": 1607,
+        "min_image_height": 37,
+        "average_image_height": 396.70890979524074,
+        "max_image_height": 1439,
+        "min_label_text_length": 18,
+        "average_label_text_length": 22.4,
+        "max_label_text_length": 27,
+        "labels": {
+            "0": {
+                "count": 9488
+            },
+            "4": {
+                "count": 4229
+            },
+            "3": {
+                "count": 543
+            },
+            "2": {
+                "count": 467
+            },
+            "1": {
+                "count": 1536
+            }
+        }
+    }
+}

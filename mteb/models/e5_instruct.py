@@ -25,6 +25,9 @@ E5_MISTRAL_TRAINING_DATA = {
     "HotpotQAHardNegatives": ["train"],
     "HotpotQA-PL": ["train"],  # translation not trained on
     "HotpotQA-NL": ["train"],  # translation not trained on
+    "MIRACLRetrieval": ["train"],
+    "MIRACLRetrievalHardNegatives": ["train"],
+    "MIRACLReranking": ["train"],  # https://arxiv.org/pdf/2402.09906, section M
 }
 
 e5_instruct = ModelMeta(
@@ -163,6 +166,9 @@ zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
         "STS12": ["train"],
         "STS22": ["train"],
         "STSBenchmark": ["train"],
+        "MIRACLRetrieval": ["train"],
+        "MIRACLRetrievalHardNegatives": ["train"],
+        "MIRACLReranking": ["train"],  # https://arxiv.org/pdf/2402.05672, table 2
     },
     adapted_from="intfloat/e5-mistral-7b-instruct",
     superseded_by=None,

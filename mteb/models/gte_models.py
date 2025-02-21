@@ -276,9 +276,13 @@ gte_multi_training_data = {
     "HotpotQA-NL": ["train"],
     "FEVER": ["train"],
     "FEVER-NL": ["train"],
-    "MIRACLReranking": ["train"],
     "MrTidyRetrieval": ["train"],
     "MultiLongDocRetrieval": ["train"],
+    "MIRACLReranking": ["train"],
+    "MIRACLRetrieval": ["train"],
+    "MIRACLRetrievalHardNegatives": [
+        "train"
+    ],  # https://arxiv.org/pdf/2407.19669, Table 11
     # not in MTEB:
     #   - TriviaQA
     #   - SQuAD
