@@ -11,10 +11,10 @@ class FSD50KClassification(AbsTaskAudioClassification):
         reference="https://huggingface.co/datasets/Fhrozen/FSD50k",
         dataset={
             "path": "Fhrozen/FSD50k",
-            "revision": "0b2714987fa478483af9968de7c934580d0bb9a2",
+            "revision": "67e4d8c2570caef0f90d48fdb756b337875d91db",
         },
-        type="ImageClassification",
-        category="i2i",
+        type="AudioClassification",
+        category="a2a",  # TODO: DOES THIS CATEGORY EXIST?
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
