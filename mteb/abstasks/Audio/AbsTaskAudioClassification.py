@@ -190,27 +190,27 @@ class AbsTaskAudioClassification(AbsTask):
                 idxs=idxs,
             )
 
-            if self.method == "kNN":
-                evaluator = AudiokNNClassificationEvaluator(
-                    undersampled_train,
-                    eval_split,
-                    self.audio_column_name,
-                    self.label_column_name,
-                    task_name=self.metadata.name,
-                    encode_kwargs=encode_kwargs,
-                    **params,
-                )
-            elif self.method == "kNN-pytorch":
-                evaluator = AudiokNNClassificationEvaluatorPytorch(
-                    undersampled_train,
-                    eval_split,
-                    self.audio_column_name,
-                    self.label_column_name,
-                    task_name=self.metadata.name,
-                    encode_kwargs=encode_kwargs,
-                    **params,
-                )
-            elif self.method == "logReg":
+            # if self.method == "kNN":
+            #     evaluator = AudiokNNClassificationEvaluator(
+            #         undersampled_train,
+            #         eval_split,
+            #         self.audio_column_name,
+            #         self.label_column_name,
+            #         task_name=self.metadata.name,
+            #         encode_kwargs=encode_kwargs,
+            #         **params,
+            #     )
+            # elif self.method == "kNN-pytorch":
+            #     evaluator = AudiokNNClassificationEvaluatorPytorch(
+            #         undersampled_train,
+            #         eval_split,
+            #         self.audio_column_name,
+            #         self.label_column_name,
+            #         task_name=self.metadata.name,
+            #         encode_kwargs=encode_kwargs,
+            #         **params,
+            #     )
+            if self.method == "logReg":
                 evaluator = AudiologRegClassificationEvaluator(
                     undersampled_train,
                     eval_split,
