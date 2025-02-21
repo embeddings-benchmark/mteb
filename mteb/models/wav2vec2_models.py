@@ -56,7 +56,7 @@ class Wav2Vec2AudioWrapper:
 
         return waveforms
 
-    def _convert_audio(self, audio: AudioData) -> torch.Tensor:
+    def _convert_audio_from_numpy(self, audio: AudioData) -> torch.Tensor:
         if isinstance(audio, np.ndarray):
             audio = torch.from_numpy(audio)
         return audio.squeeze()
