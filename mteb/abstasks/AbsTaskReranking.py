@@ -65,6 +65,7 @@ class AbsTaskReranking(AbsTaskRetrieval):
 
     def transform_old_dataset_format(self, given_dataset=None):
         """Transform the old format to the new format using HF datasets mapping. This is a one-time transformation for datasets which are in the old format.
+
         Args:
             given_dataset (Dataset, optional): The dataset to transform. Defaults to None. This is helpful for some older datasets which are loaded with custom code, but need to be transformed still.
         """
@@ -87,9 +88,9 @@ class AbsTaskReranking(AbsTaskRetrieval):
                 cur_dataset = given_dataset
             elif "name" in self.metadata.dataset:
                 cur_dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
-                assert (
-                    hf_subset == "default"
-                ), f"Only default subset is supported for {self.metadata.name} since `name` is given in the metadata."
+                assert hf_subset == "default", (
+                    f"Only default subset is supported for {self.metadata.name} since `name` is given in the metadata."
+                )
             else:
                 cur_dataset = datasets.load_dataset(
                     **self.metadata.dataset, name=hf_subset
