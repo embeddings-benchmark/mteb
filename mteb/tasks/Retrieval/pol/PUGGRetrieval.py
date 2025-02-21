@@ -12,11 +12,11 @@ class PUGGRetrieval(AbsTaskRetrieval):
         reference="https://aclanthology.org/2024.findings-acl.652/",
         dataset={
             "path": "clarin-pl/PUGG_IR",
-            "revision": "97efd366a09cfdadd1103793b09a734d9d95cbeb",
+            "revision": "48eff464950391ce7a3d58f37355fceccf613725",
             "trust_remote_code": True,
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         date=("2023-01-01", "2024-01-01"),
         modalities=["text"],
         eval_splits=["test"],
