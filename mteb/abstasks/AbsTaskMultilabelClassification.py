@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import itertools
 import logging
+import warnings
 from collections import Counter, defaultdict
 from typing import Any
 
@@ -103,6 +104,11 @@ class AbsTaskMultilabelClassification(AbsTask):
         super().__init__(**kwargs)
         self.batch_size = batch_size
 
+        if n_experiments:
+            warnings.warn(
+                "Passing `n_experiments` to AbsTaskMultilabelClassification is deprecated and will be removed in v2.0.0.",
+                DeprecationWarning,
+            )
         # Bootstrap parameters
         self.n_experiments = n_experiments or getattr(self, "n_experiments", 10)
 
@@ -128,6 +134,12 @@ class AbsTaskMultilabelClassification(AbsTask):
     ) -> dict[HFSubset, ScoresDict]:
         if not self.data_loaded:
             self.load_data()
+
+        if train_split != "train":
+            warnings.warn(
+                "Passing `train_split` to AbsTaskClassification.evaluate is deprecated and will be removed in v2.0.0.",
+                DeprecationWarning,
+            )
 
         scores = {}
         hf_subsets = list(self.dataset) if self.is_multilingual else ["default"]
@@ -215,7 +227,7 @@ class AbsTaskMultilabelClassification(AbsTask):
         for i_experiment, sample_indices in enumerate(train_samples):
             logger.info(
                 "=" * 10
-                + f" Experiment {i_experiment+1}/{self.n_experiments} "
+                + f" Experiment {i_experiment + 1}/{self.n_experiments} "
                 + "=" * 10
             )
             X_train = np.stack([unique_train_embeddings[idx] for idx in sample_indices])

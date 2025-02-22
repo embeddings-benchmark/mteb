@@ -20,23 +20,29 @@ nvidia_training_datasets = {
     # source: https://arxiv.org/pdf/2405.17428
     "ArguAna": ["train"],
     "ArguAna-PL": ["train"],
+    "ArguAna-NL": ["train"],  # translation not trained on
     "NanoArguAnaRetrieval": ["train"],
     "HotpotQA": ["train"],
     "HotpotQA-PL": ["train"],  # translation not trained on
+    "HotpotQA-NL": ["train"],  # translation not trained on
     "HotpotQAHardNegatives": ["train"],
     "MSMARCO": ["train"],
     "MSMARCOHardNegatives": ["train"],
     "NanoMSMARCORetrieval": ["train"],
     "MSMARCO-PL": ["train"],  # translation not trained on
+    "mMARCO-NL": ["train"],  # translation not trained on
     "NQ": ["train"],
     "NQHardNegatives": ["train"],
     "NanoNQRetrieval": ["train"],
     "NQ-PL": ["train"],  # translation not trained on
+    "NQ-NL": ["train"],  # translation not trained on
     "FEVER": ["train"],
+    "FEVER-NL": ["train"],  # translation not trained on
     "FEVERHardNegatives": ["train"],
     "NanoFEVERRetrieval": ["train"],
     "FiQA2018": ["train"],
     "FiQA2018-PL": ["train"],  # translation not trained on
+    "FiQA2018-NL": ["train"],  # translation not trained on
     "STS12": ["train"],
     "STS22": ["train"],
     "AmazonReviewsClassification": ["train"],
@@ -68,7 +74,7 @@ nvidia_training_datasets = {
 NV_embed_v2 = ModelMeta(
     loader=partial(  # type: ignore
         InstructSentenceTransformerWrapper,
-        model="nvidia/NV-Embed-v2",
+        model_name="nvidia/NV-Embed-v2",
         revision="7604d305b621f14095a1aa23d351674c2859553a",
         instruction_template=instruction_template,
         trust_remote_code=True,
@@ -83,6 +89,7 @@ NV_embed_v2 = ModelMeta(
     revision="7604d305b621f14095a1aa23d351674c2859553a",
     release_date="2024-09-09",  # initial commit of hf model.
     n_parameters=7_850_000_000,
+    memory_usage_mb=14975,
     embed_dim=4096,
     license="cc-by-nc-4.0",
     max_tokens=32768,
@@ -98,7 +105,7 @@ NV_embed_v2 = ModelMeta(
 NV_embed_v1 = ModelMeta(
     loader=partial(  # type: ignore
         InstructSentenceTransformerWrapper,
-        model="nvidia/NV-Embed-v1",
+        model_name="nvidia/NV-Embed-v1",
         revision="7604d305b621f14095a1aa23d351674c2859553a",
         instruction_template=instruction_template,
         trust_remote_code=True,
@@ -113,6 +120,7 @@ NV_embed_v1 = ModelMeta(
     revision="570834afd5fef5bf3a3c2311a2b6e0a66f6f4f2c",
     release_date="2024-09-13",  # initial commit of hf model.
     n_parameters=7_850_000_000,
+    memory_usage_mb=29945,
     embed_dim=4096,
     license="cc-by-nc-4.0",
     max_tokens=32768,

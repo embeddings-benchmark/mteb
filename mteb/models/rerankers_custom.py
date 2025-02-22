@@ -206,6 +206,7 @@ monobert_large = ModelMeta(
     revision="0a97706f3827389da43b83348d5d18c9d53876fa",
     release_date="2020-05-28",
     n_parameters=None,
+    memory_usage_mb=None,
     max_tokens=None,
     embed_dim=None,
     license=None,
@@ -215,6 +216,7 @@ monobert_large = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["Sentence Transformers", "PyTorch"],
+    is_cross_encoder=True,
 )
 
 # languages unclear: https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual/discussions/28
@@ -231,6 +233,7 @@ jina_reranker_multilingual = ModelMeta(
     revision="126747772a932960028d9f4dc93bd5d9c4869be4",
     release_date="2024-09-26",
     n_parameters=None,
+    memory_usage_mb=531,
     max_tokens=None,
     embed_dim=None,
     license=None,
@@ -240,6 +243,7 @@ jina_reranker_multilingual = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["Sentence Transformers", "PyTorch"],
+    is_cross_encoder=True,
 )
 
 bge_reranker_v2_m3 = ModelMeta(
@@ -288,6 +292,7 @@ bge_reranker_v2_m3 = ModelMeta(
     revision="953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e",
     release_date="2024-06-24",
     n_parameters=None,
+    memory_usage_mb=2166,
     max_tokens=None,
     embed_dim=None,
     license=None,
@@ -297,4 +302,5 @@ bge_reranker_v2_m3 = ModelMeta(
     use_instructions=None,
     training_datasets=bge_m3_training_data,
     framework=["Sentence Transformers", "PyTorch"],
+    is_cross_encoder=True,
 )

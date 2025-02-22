@@ -24,6 +24,7 @@ from ..languages import (
     path_to_lang_codes,
     path_to_lang_scripts,
 )
+from ..modalities import MODALITIES
 
 TASK_SUBTYPE = Literal[
     "Article retrieval",
@@ -31,6 +32,7 @@ TASK_SUBTYPE = Literal[
     "Dialect pairing",
     "Dialog Systems",
     "Discourse coherence",
+    "Duplicate Image Retrieval",
     "Language identification",
     "Linguistic acceptability",
     "Political classification",
@@ -47,6 +49,15 @@ TASK_SUBTYPE = Literal[
     "Counterfactual Detection",
     "Emotion classification",
     "Reasoning as Retrieval",
+    "Rendered Texts Understanding",
+    "Image Text Retrieval",
+    "Object recognition",
+    "Scene recognition",
+    "Caption Pairing",
+    "Emotion recognition",
+    "Textures recognition",
+    "Activity recognition",
+    "Tumor detection",
     "Duplicate Detection",
 ]
 
@@ -55,6 +66,7 @@ TASK_DOMAIN = Literal[
     "Blog",
     "Constructed",
     "Encyclopaedic",
+    "Engineering",
     "Fiction",
     "Government",
     "Legal",
@@ -64,6 +76,7 @@ TASK_DOMAIN = Literal[
     "Poetry",
     "Religious",
     "Reviews",
+    "Scene",
     "Social",
     "Spoken",
     "Subtitles",
@@ -71,6 +84,9 @@ TASK_DOMAIN = Literal[
     "Written",
     "Programming",
     "Chemistry",
+    "Financial",
+    "Chemistry",
+    "Financial",
 ]
 
 SAMPLE_CREATION_METHOD = Literal[
@@ -82,9 +98,23 @@ SAMPLE_CREATION_METHOD = Literal[
     "machine-translated and verified",
     "machine-translated and localized",
     "LM-generated and verified",
+    "rendered",
+    "multiple",
 ]
 
-TASK_TYPE = Literal[
+MIEB_TASK_TYPE = (
+    "Any2AnyMultiChoice",
+    "Any2AnyRetrieval",
+    "Any2TextMutipleChoice",
+    "ImageClustering",
+    "ImageClassification",
+    "ImageMultilabelClassification",
+    "ImageTextPairClassification",
+    "VisualSTS",
+    "ZeroShotClassification",
+)
+
+TASK_TYPE = (
     "BitextMining",
     "Classification",
     "MultilabelClassification",
@@ -96,12 +126,24 @@ TASK_TYPE = Literal[
     "Summarization",
     "InstructionRetrieval",
     "Speed",
-]
+) + MIEB_TASK_TYPE
+
+TASK_TYPE = Literal[TASK_TYPE]
+
 
 TASK_CATEGORY = Literal[
     "s2s",  # Sentence-to-sentence
     "s2p",  # Sentence-to-paragraph
     "p2p",  # Paragraph-to-paragraph
+    "t2t",  # specifically for text-only tasks in mieb
+    "i2i",  # image-to-image
+    "i2t",  # image-to-text
+    "t2i",  # text-to-image
+    "it2t",  # image+text-to-text
+    "it2i",  # image+text-to-image
+    "i2it",  # image-to-image+text
+    "t2it",  # text-to-image+text
+    "it2it",  # image+text-to-image+text
 ]
 
 ANNOTATOR_TYPE = Literal[
@@ -158,6 +200,7 @@ LICENSES = (  # this list can be extended as needed
         "cc-by-nc-sa-3.0",
         "cc-by-nc-sa-4.0",
         "cc-by-nc-nd-4.0",
+        "cc-by-nd-4.0",
         "openrail",
         "openrail++",
         "odc-by",
@@ -169,6 +212,8 @@ LICENSES = (  # this list can be extended as needed
         "gpl-3.0",
         "cdla-sharing-1.0",
         "mpl-2.0",
+        "msr-la-nc",
+        "multiple",
     ]
 )
 
@@ -192,6 +237,9 @@ class DescriptiveStatistics(TypedDict):
     """Class for descriptive statistics."""
 
     pass
+
+
+METRIC_VALUE = Union[int, float, dict[str, Any]]
 
 
 logger = logging.getLogger(__name__)
@@ -228,13 +276,13 @@ class TaskMetadata(BaseModel):
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
     """
 
-    dataset: dict
+    dataset: dict[str, Any]
 
     name: str
     description: str
     prompt: str | PromptDict | None = None
     type: TASK_TYPE
-    modalities: list[Literal["text"]] = ["text"]
+    modalities: list[MODALITIES] = ["text"]
     category: TASK_CATEGORY | None = None
     reference: STR_URL | None = None
 
@@ -336,6 +384,15 @@ class TaskMetadata(BaseModel):
             )
 
     @property
+    def bcp47_codes(self) -> list[ISO_LANGUAGE_SCRIPT]:
+        """Return the languages and script codes of the dataset formatting in accordance with the BCP-47 standard."""
+        if isinstance(self.eval_langs, dict):
+            return sorted(
+                {lang for langs in self.eval_langs.values() for lang in langs}
+            )
+        return sorted(set(self.eval_langs))
+
+    @property
     def languages(self) -> list[str]:
         """Return the languages of the dataset as iso639-3 codes."""
 
@@ -403,9 +460,11 @@ class TaskMetadata(BaseModel):
     def descriptive_stat_path(self) -> Path:
         """Return the path to the descriptive statistics file."""
         descriptive_stat_base_dir = Path(__file__).parent.parent / "descriptive_stats"
+        if self.type in MIEB_TASK_TYPE:
+            descriptive_stat_base_dir = descriptive_stat_base_dir / "Image"
+        task_type_dir = descriptive_stat_base_dir / self.type
         if not descriptive_stat_base_dir.exists():
             descriptive_stat_base_dir.mkdir()
-        task_type_dir = descriptive_stat_base_dir / self.type
         if not task_type_dir.exists():
             task_type_dir.mkdir()
         return task_type_dir / f"{self.name}.json"
@@ -421,8 +480,12 @@ class TaskMetadata(BaseModel):
         for subset, subset_value in stats.items():
             if subset == "hf_subset_descriptive_stats":
                 continue
-            n_samples[subset] = subset_value["num_samples"]
+            n_samples[subset] = subset_value["num_samples"]  # type: ignore
         return n_samples
 
     def __hash__(self) -> int:
         return hash(self.model_dump_json())
+
+    @property
+    def revision(self) -> str:
+        return self.dataset["revision"]

@@ -371,8 +371,9 @@ class DRESModel:
     mteb_model_meta: ModelMeta | None
 
     def __init__(self, model, **kwargs):
-        self.model = model
+        self.model: Any = model
         self.use_sbert_model = isinstance(model, SentenceTransformer)
+        self.device = model.device if hasattr(model, "device") else None
         self.save_corpus_embeddings = kwargs.get("save_corpus_embeddings", False)
         self.corpus_embeddings = {}
 

@@ -148,3 +148,7 @@ uv.lock
 
 # model loading tests
 model_names.txt
+mteb/leaderboard/__cached_results.json
+
+# gradio
+.gradio/
