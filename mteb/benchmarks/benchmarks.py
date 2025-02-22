@@ -512,7 +512,7 @@ MTEB_ARA = Benchmark(
         get_tasks(
             languages=["ara"],
             tasks=[
-                #Classification
+                # Classification
                 "AJGT",
                 "HotelReviewSentimentClassification",
                 "LanguageClassification",
@@ -543,7 +543,7 @@ MTEB_ARA = Benchmark(
                 "SadeemQuestionRetrieval",
                 "XPQARetrieval",
                 "MIRACLRetrievalHardNegatives",
-                #STS
+                # STS
                 "STS17",
                 "STS22.v2",
             ],
