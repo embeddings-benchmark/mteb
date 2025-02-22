@@ -53,7 +53,7 @@ class Wav2vec2Wrapper(AudioEncoder):
             # Preprocess batch
             inputs = self.feature_extractor(
                 audio_data,
-                sampling_rate=sampling_rates,
+                sampling_rate=sampling_rates[0],
                 padding=True,
                 return_tensors="pt"
             )
