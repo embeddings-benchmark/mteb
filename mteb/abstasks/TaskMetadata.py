@@ -59,6 +59,7 @@ TASK_SUBTYPE = Literal[
     "Activity recognition",
     "Tumor detection",
     "Duplicate Detection",
+    "Voice Gender Clustering",
 ]
 
 TASK_DOMAIN = Literal[
@@ -101,6 +102,7 @@ SAMPLE_CREATION_METHOD = Literal[
     "multiple",
 ]
 TASK_TYPE = Literal[
+    "AudioClustering",
     "BitextMining",
     "Classification",
     "MultilabelClassification",
