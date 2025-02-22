@@ -512,15 +512,40 @@ MTEB_ARA = Benchmark(
         get_tasks(
             languages=["ara"],
             tasks=[
-                "XNLI",
-                "MIRACLRetrievalHardNegatives",
+                #Classification
+                "AJGT",
+                "HotelReviewSentimentClassification",
+                "LanguageClassification",
                 "MassiveIntentClassification",
                 "MultiHateClassification",
+                "MultilingualSentimentClassification",
+                "OnlineStoreReviewSentimentClassification",
+                "RestaurantReviewSentimentClassification",
+                "TweetEmotionClassification",
+                "TweetSarcasmClassification",
+                "TweetSentimentClassification",
+                "MassiveScenarioClassification",
+                # Pair Classification
+                "ArEntail",
+                "XNLI",
+                # BitextMining
+                "IWSLT2017BitextMining",
+                # Reranking
+                "MIRACLReranking",
+                "NamaaMrTydiReranking",
+                # Retrieval
+                "MIRACLRetrieval",
                 "MLQARetrieval",
+                "MintakaRetrieval",
+                "MrTidyRetrieval",
+                "MultiLongDocRetrieval",
+                "PublicHealthQA",
+                "SadeemQuestionRetrieval",
+                "XPQARetrieval",
+                "MIRACLRetrievalHardNegatives",
+                #STS
                 "STS17",
                 "STS22.v2",
-                "MassiveScenarioClassification",
-                "TweetSentimentClassification",
             ],
         )
     ),
