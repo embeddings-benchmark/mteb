@@ -4,7 +4,17 @@ from mteb.model_meta import ModelMeta
 
 Qodo_Embed = ModelMeta(
     name="Qodo/Qodo-Embed-1-1.5B",
-    languages=None,  # in format eng-Latn
+    languages=[
+        "python-Code",
+        "c++-Code",
+        "c#-Code",
+        "go-Code",
+        "java-Code",
+        "Javascript-Code",
+        "php-Code",
+        "ruby-Code",
+        "typescript-Code",
+    ],
     open_weights=True,
     revision="84bbef079b32e8823ec226d4e9e92902706b0eb6",
     release_date="2025-02-19",
