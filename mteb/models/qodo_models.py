@@ -20,4 +20,5 @@ Qodo_Embed = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
+    adapted_from="Alibaba-NLP/gte-Qwen2-1.5B-instruct",
 )
