@@ -2,7 +2,7 @@ import mteb
 from mteb.tasks.Audio.Clustering.eng.VoiceGender import VoiceGenderClustering
 
 # model_name = "facebook/wav2vec2-large-xlsr-53"
-model_name = "facebook/wav2vec2-base"
+model_name = "microsoft/wavlm-base-sd"
 
 model = mteb.get_model(model_name, revision="main")
 print(f"Loaded model type: {type(model)}")

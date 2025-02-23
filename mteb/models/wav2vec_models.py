@@ -10,12 +10,14 @@ from datasets import Audio
 class Wav2vec2Wrapper(AudioEncoder):
     def __init__(
         self, 
+        model_name: str,
+        revision: str,
         device: str | None = None,
         **kwargs
     ):
         super().__init__(device=device, **kwargs)
-        self.model_name = kwargs.get('model_name', 'facebook/wav2vec2-base')
-        self.model_revision = kwargs.get('model_revision', None)
+        self.model_name = model_name
+        self.model_revision = revision
         
         self.model = Wav2Vec2Model.from_pretrained(
             self.model_name, 
@@ -29,16 +31,15 @@ class Wav2vec2Wrapper(AudioEncoder):
         
         if device:
             self.model = self.model.to(device)
-        print("Wav2vec initialized!!")
+        print("Wav2vec initialized.")
         
     def get_audio_embeddings(
         self, 
         audio_files: list[Audio] | Audio, 
+        batch_size: int = 32,
         **kwargs
     ) -> np.ndarray:
-        
-        batch_size = kwargs.get('batch_size', 32)
-        
+                
         if not isinstance(audio_files, list):
             audio_files = [audio_files]
             
@@ -85,7 +86,8 @@ class Wav2vec2Wrapper(AudioEncoder):
         prompt_type: PromptType | None = None,
         **kwargs
     ) -> np.ndarray:
-        print("Calling encode")
+
+
         return self.get_audio_embeddings(audio_files, **kwargs)
 
 
@@ -93,7 +95,7 @@ class Wav2vec2Wrapper(AudioEncoder):
 wav2vec2_base = ModelMeta(
     loader=partial(Wav2vec2Wrapper, model_name="facebook/wav2vec2-base"),
     name="facebook/wav2vec2-base",
-    languages=["en"],
+    languages=["eng"],
     open_weights=True,
     revision="main",         
     release_date="2020-10-26",
@@ -116,7 +118,7 @@ wav2vec2_base = ModelMeta(
 wav2vec2_base_960h = ModelMeta(
     loader=partial(Wav2vec2Wrapper, model_name="facebook/wav2vec2-base-960h"),
     name="facebook/wav2vec2-base-960h",
-    languages=["en"],
+    languages=["eng"],
     open_weights=True,
     revision="main",
     release_date="2020-10-26",
@@ -139,7 +141,7 @@ wav2vec2_base_960h = ModelMeta(
 wav2vec2_large = ModelMeta(
     loader=partial(Wav2vec2Wrapper, model_name="facebook/wav2vec2-large"),
     name="facebook/wav2vec2-large",
-    languages=["en"],
+    languages=["eng"],
     open_weights=True,
     revision="main",
     release_date="2020-10-26",
@@ -162,7 +164,7 @@ wav2vec2_large = ModelMeta(
 wav2vec2_large_xlsr_53 = ModelMeta(
     loader=partial(Wav2vec2Wrapper, model_name="facebook/wav2vec2-large-xlsr-53"),
     name="facebook/wav2vec2-large-xlsr-53",
-    languages=["en"],
+    languages=["multilingual"],
     open_weights=True,
     revision="main",
     release_date="2020-10-26",
@@ -185,7 +187,7 @@ wav2vec2_large_xlsr_53 = ModelMeta(
 wav2vec2_lv_60_espeak_cv_ft = ModelMeta(
     loader=partial(Wav2vec2Wrapper, model_name="facebook/wav2vec2-lv-60-espeak-cv-ft"),
     name="facebook/wav2vec2-lv-60-espeak-cv-ft",
-    languages=["en"],
+    languages=["multilingual"],
     open_weights=True,
     revision="main",
     release_date="2020-10-26",
