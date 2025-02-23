@@ -22,21 +22,22 @@ from .rus import RuBQReranking
 from .zho import CMedQAv1, CMedQAv2, MMarcoReranking, T2Reranking
 
 __all__ = [
-    "BIRCODorisMaeReranking",
-    "BIRCOArguAnaReranking",
-    "BIRCOClinicalTrialReranking",
-    "BIRCOWhatsThatBookReranking",
-    "BIRCORelicReranking",
     "CMedQAv1",
     "CMedQAv2",
     "MMarcoReranking",
     "T2Reranking",
     "NamaaMrTydiReranking",
+    "BIRCODorisMaeReranking",
     "AskUbuntuDupQuestions",
     "WebLINXCandidatesReranking",
     "StackOverflowDupQuestions",
+    "BIRCORelicReranking",
+    "BIRCOArguAnaReranking",
     "NevIR",
     "MindSmallReranking",
+    "BIRCOWhatsThatBookReranking",
+    "BuiltBenchReranking",
+    "BIRCOClinicalTrialReranking",
     "SciDocsReranking",
     "VoyageMMarcoReranking",
     "MIRACLReranking",
@@ -45,5 +46,4 @@ __all__ = [
     "RuBQReranking",
     "SyntecReranking",
     "AlloprofReranking",
-    "BuiltBenchReranking",
 ]

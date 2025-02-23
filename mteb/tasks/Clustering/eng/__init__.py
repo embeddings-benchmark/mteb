@@ -34,6 +34,7 @@ from .WikipediaChemistrySpecialtiesClustering import (
 from .WikipediaChemistryTopicsClustering import WikipediaChemistryTopicsClustering
 
 __all__ = [
+    "BuiltBenchClusteringP2P",
     "MedrxivClusteringS2S",
     "MedrxivClusteringS2SFast",
     "BiorxivClusteringS2S",
@@ -55,6 +56,7 @@ __all__ = [
     "TwentyNewsgroupsClusteringFast",
     "ArXivHierarchicalClusteringP2P",
     "ArXivHierarchicalClusteringS2S",
+    "BuiltBenchClusteringS2S",
     "WikipediaChemistrySpecialtiesClustering",
     "BigPatentClustering",
     "BigPatentClusteringFast",
@@ -62,6 +64,4 @@ __all__ = [
     "StackExchangeClusteringP2PFast",
     "RedditClusteringP2P",
     "RedditFastClusteringP2P",
-    "BuiltBenchClusteringP2P",
-    "BuiltBenchClusteringS2S",
 ]

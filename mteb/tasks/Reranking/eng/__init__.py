@@ -14,16 +14,16 @@ from .StackOverflowDupQuestions import StackOverflowDupQuestions
 from .WebLINXCandidatesReranking import WebLINXCandidatesReranking
 
 __all__ = [
-    "AskUbuntuDupQuestions",
     "BIRCODorisMaeReranking",
-    "BIRCOArguAnaReranking",
-    "BIRCOClinicalTrialReranking",
-    "BIRCOWhatsThatBookReranking",
-    "BIRCORelicReranking",
+    "AskUbuntuDupQuestions",
     "WebLINXCandidatesReranking",
     "StackOverflowDupQuestions",
+    "BIRCORelicReranking",
+    "BIRCOArguAnaReranking",
     "NevIR",
     "MindSmallReranking",
-    "SciDocsReranking",
+    "BIRCOWhatsThatBookReranking",
     "BuiltBenchReranking",
+    "BIRCOClinicalTrialReranking",
+    "SciDocsReranking",
 ]
