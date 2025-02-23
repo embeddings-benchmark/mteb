@@ -29,7 +29,7 @@ class Wav2vec2Wrapper(AudioEncoder):
         
         if device:
             self.model = self.model.to(device)
-        print("Wav2vec initialized")
+        print("Wav2vec initialized!!")
         
     def get_audio_embeddings(
         self, 
@@ -63,9 +63,16 @@ class Wav2vec2Wrapper(AudioEncoder):
             
             # Get embeddings
             with torch.no_grad():
-                outputs = self.model(**inputs)
-                
-            batch_embeddings = outputs.last_hidden_state.mean(dim=1).cpu().numpy()
+                outputs = self.model(
+                    input_values=inputs["input_values"], 
+                    output_hidden_states=True,
+                    return_dict=True
+                )
+
+
+            hidden_states = outputs.hidden_states[-1]
+            # print(hidden_states.shape)
+            batch_embeddings = hidden_states.mean(dim=1).cpu().numpy()
             all_embeddings.append(batch_embeddings)
             
         return np.vstack(all_embeddings)
@@ -78,6 +85,7 @@ class Wav2vec2Wrapper(AudioEncoder):
         prompt_type: PromptType | None = None,
         **kwargs
     ) -> np.ndarray:
+        print("Calling encode")
         return self.get_audio_embeddings(audio_files, **kwargs)
 
 
@@ -103,3 +111,97 @@ wav2vec2_base = ModelMeta(
     training_datasets=None,    
     modalities=["audio"]
 )
+
+
+wav2vec2_base_960h = ModelMeta(
+    loader=partial(Wav2vec2Wrapper, model_name="facebook/wav2vec2-base-960h"),
+    name="facebook/wav2vec2-base-960h",
+    languages=["en"],
+    open_weights=True,
+    revision="main",
+    release_date="2020-10-26",
+    max_tokens=float("inf"),
+    n_parameters=95_000_000,  # 95 million parameters
+    memory_usage_mb=360,      # Approximate memory usage
+    embed_dim=768,            # Embedding dimension
+    license="Apache-2.0",
+    reference="https://huggingface.co/facebook/wav2vec2-base-960h",
+    similarity_fn_name="cosine",
+    framework=["PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    modalities=["audio"]
+)
+
+
+wav2vec2_large = ModelMeta(
+    loader=partial(Wav2vec2Wrapper, model_name="facebook/wav2vec2-large"),
+    name="facebook/wav2vec2-large",
+    languages=["en"],
+    open_weights=True,
+    revision="main",
+    release_date="2020-10-26",
+    max_tokens=float("inf"),
+    n_parameters=317_000_000, 
+    memory_usage_mb=1_209, 
+    embed_dim=1_024, 
+    license="Apache-2.0",
+    reference="https://huggingface.co/facebook/wav2vec2-large",
+    similarity_fn_name="cosine",
+    framework=["PyTorch"],
+    use_instructions=False,
+    public_training_code=None, 
+    public_training_data=None,
+    training_datasets=None,
+    modalities=["audio"]
+)
+
+
+wav2vec2_large_xlsr_53 = ModelMeta(
+    loader=partial(Wav2vec2Wrapper, model_name="facebook/wav2vec2-large-xlsr-53"),
+    name="facebook/wav2vec2-large-xlsr-53",
+    languages=["en"],
+    open_weights=True,
+    revision="main",
+    release_date="2020-10-26",
+    max_tokens=float("inf"),
+    n_parameters=317_000_000,  
+    memory_usage_mb=1_209,     
+    embed_dim=1_024,           
+    license="Apache-2.0",
+    reference="https://huggingface.co/facebook/wav2vec2-large-xlsr-53",
+    similarity_fn_name="cosine",
+    framework=["PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    modalities=["audio"]
+)
+
+
+wav2vec2_lv_60_espeak_cv_ft = ModelMeta(
+    loader=partial(Wav2vec2Wrapper, model_name="facebook/wav2vec2-lv-60-espeak-cv-ft"),
+    name="facebook/wav2vec2-lv-60-espeak-cv-ft",
+    languages=["en"],
+    open_weights=True,
+    revision="main",
+    release_date="2020-10-26",
+    max_tokens=float("inf"),
+    n_parameters=317_000_000,  # 317 million parameters
+    memory_usage_mb=1_209,     # Approximate memory usage
+    embed_dim=1_024,           # Embedding dimension
+    license="Apache-2.0",
+    reference="https://huggingface.co/facebook/wav2vec2-lv-60-espeak-cv-ft",
+    similarity_fn_name="cosine",
+    framework=["PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    modalities=["audio"]
+)
+
+# print(f"wav2vec2_lv_60_espeak_cv_ft: {wav2vec2_lv_60_espeak_cv_ft.calculate_memory_usage_mb()}")
