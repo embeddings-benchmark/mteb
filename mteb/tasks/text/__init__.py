@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from .BitextMining import (
+from .bitext_mining import (
     BibleNLPBitextMining,
     BornholmBitextMining,
     BUCCBitextMining,
@@ -25,7 +25,7 @@ from .BitextMining import (
     TbilisiCityHallBitextMining,
     VieMedEVBitextMining,
 )
-from .Classification import (
+from .classification import (
     AJGT,
     AfriSentiClassification,
     AfriSentiLangClassification,
@@ -330,7 +330,7 @@ from .Classification import (
     YelpReviewFullClassification,
     YueOpenriceReviewClassification,
 )
-from .Clustering import (
+from .clustering import (
     AlloProfClusteringP2P,
     AlloProfClusteringP2PFast,
     AlloProfClusteringS2S,
@@ -420,15 +420,15 @@ from .Clustering import (
     WikipediaChemistrySpecialtiesClustering,
     WikipediaChemistryTopicsClustering,
 )
-from .InstructionReranking import (
+from .instruction_reranking import (
     Core17InstructionRetrieval,
     News21InstructionRetrieval,
     Robust04InstructionRetrieval,
     mFollowIR,
     mFollowIRCrossLingual,
 )
-from .InstructionRetrieval import InstructIR
-from .MultiLabelClassification import (
+from .instruction_retrieval import InstructIR
+from .multilabel_classification import (
     BrazilianToxicTweetsClassification,
     CEDRClassification,
     KorHateSpeechMLClassification,
@@ -436,7 +436,7 @@ from .MultiLabelClassification import (
     MultiEURLEXMultilabelClassification,
     SensitiveTopicsClassification,
 )
-from .PairClassification import (
+from .pair_classification import (
     RTE3,
     XNLI,
     XNLIV2,
@@ -477,7 +477,7 @@ from .PairClassification import (
     TwitterURLCorpusPC,
     XStance,
 )
-from .Reranking import (
+from .reranking import (
     AlloprofReranking,
     AskUbuntuDupQuestions,
     BIRCOArguAnaReranking,
@@ -502,7 +502,7 @@ from .Reranking import (
     WebLINXCandidatesReranking,
     WikipediaRerankingMultilingual,
 )
-from .Retrieval import (
+from .retrieval import (
     FEVER,
     FEVERNL,
     MMMARCONL,
@@ -752,8 +752,8 @@ from .Retrieval import (
     XPQARetrieval,
     XQuADRetrieval,
 )
-from .SpeedTask import CPUSpeedTask, GPUSpeedTask
-from .STS import (
+from .speed_task import CPUSpeedTask, GPUSpeedTask
+from .sts import (
     AFQMC,
     ATEC,
     BQ,
@@ -795,13 +795,13 @@ from .STS import (
     STSBenchmarkSTS,
     SynPerSTS,
 )
-from .Summarization import (
+from .summarization import (
     SummEvalFrSummarization,
     SummEvalFrSummarizationv2,
     SummEvalSummarization,
     SummEvalSummarizationv2,
 )
-from .SummaryRetrieval import (
+from .summary_retrieval import (
     SAMSumFa,
     SynPerChatbotRAGSumSRetrieval,
     SynPerChatbotSumSRetrieval,
