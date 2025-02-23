@@ -9,7 +9,7 @@ from .SynPerChatbotConvSAClassification import SynPerChatbotConvSAClassification
 __all__ = [
     "CQADupstackRetrieval",
     "CQADupstackRetrievalFa",
-    "CQADupstackRetrievalPL",
     "CQADupstackNLRetrieval",
+    "CQADupstackRetrievalPL",
     "SynPerChatbotConvSAClassification",
 ]

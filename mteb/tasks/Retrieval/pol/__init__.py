@@ -52,9 +52,9 @@ __all__ = [
     "TRECCOVIDPL",
     "NQPL",
     "NQPLHardNegatives",
+    "Touche2020PL",
     "DBPediaPL",
     "DBPediaPLHardNegatives",
     "HotpotQAPL",
     "HotpotQAPLHardNegatives",
-    "Touche2020PL",
 ]

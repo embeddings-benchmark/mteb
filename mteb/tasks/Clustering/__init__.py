@@ -139,6 +139,7 @@ __all__ = [
     "BlurbsClusteringP2P",
     "BlurbsClusteringP2PFast",
     "RomaniBibleClustering",
+    "BuiltBenchClusteringP2P",
     "MedrxivClusteringS2S",
     "MedrxivClusteringS2SFast",
     "BiorxivClusteringS2S",
@@ -160,6 +161,7 @@ __all__ = [
     "TwentyNewsgroupsClusteringFast",
     "ArXivHierarchicalClusteringP2P",
     "ArXivHierarchicalClusteringS2S",
+    "BuiltBenchClusteringS2S",
     "WikipediaChemistrySpecialtiesClustering",
     "BigPatentClustering",
     "BigPatentClusteringFast",
@@ -194,6 +196,4 @@ __all__ = [
     "AlloProfClusteringS2SFast",
     "AlloProfClusteringP2P",
     "AlloProfClusteringP2PFast",
-    "BuiltBenchClusteringP2P",
-    "BuiltBenchClusteringS2S",
 ]
