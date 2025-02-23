@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 from mteb import TaskMetadata
-from mteb.abstasks import AbsTaskRetrieval
+from mteb.abstasks.text.abs_text_retrieval import AbsTextRetrieval
 
 
-class CQADupstackWordpressRetrievalPL(AbsTaskRetrieval):
+class CQADupstackWordpressRetrievalPL(AbsTextRetrieval):
     metadata = TaskMetadata(
         name="CQADupstack-Wordpress-PL",
         description="CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset",
@@ -37,7 +37,7 @@ class CQADupstackWordpressRetrievalPL(AbsTaskRetrieval):
     )
 
 
-class CQADupstackWebmastersRetrievalPL(AbsTaskRetrieval):
+class CQADupstackWebmastersRetrievalPL(AbsTextRetrieval):
     metadata = TaskMetadata(
         name="CQADupstack-Webmasters-PL",
         description="CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset",
@@ -70,7 +70,7 @@ class CQADupstackWebmastersRetrievalPL(AbsTaskRetrieval):
     )
 
 
-class CQADupstackUnixRetrievalPL(AbsTaskRetrieval):
+class CQADupstackUnixRetrievalPL(AbsTextRetrieval):
     metadata = TaskMetadata(
         name="CQADupstack-Unix-PL",
         description="CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset",
@@ -103,7 +103,7 @@ class CQADupstackUnixRetrievalPL(AbsTaskRetrieval):
     )
 
 
-class CQADupstackTexRetrievalPL(AbsTaskRetrieval):
+class CQADupstackTexRetrievalPL(AbsTextRetrieval):
     metadata = TaskMetadata(
         name="CQADupstack-Tex-PL",
         description="CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset",
@@ -136,7 +136,7 @@ class CQADupstackTexRetrievalPL(AbsTaskRetrieval):
     )
 
 
-class CQADupstackStatsRetrievalPL(AbsTaskRetrieval):
+class CQADupstackStatsRetrievalPL(AbsTextRetrieval):
     metadata = TaskMetadata(
         name="CQADupstack-Stats-PL",
         description="CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset",
@@ -169,7 +169,7 @@ class CQADupstackStatsRetrievalPL(AbsTaskRetrieval):
     )
 
 
-class CQADupstackProgrammersRetrievalPL(AbsTaskRetrieval):
+class CQADupstackProgrammersRetrievalPL(AbsTextRetrieval):
     metadata = TaskMetadata(
         name="CQADupstack-Programmers-PL",
         description="CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset",
@@ -202,7 +202,7 @@ class CQADupstackProgrammersRetrievalPL(AbsTaskRetrieval):
     )
 
 
-class CQADupstackPhysicsRetrievalPL(AbsTaskRetrieval):
+class CQADupstackPhysicsRetrievalPL(AbsTextRetrieval):
     metadata = TaskMetadata(
         name="CQADupstack-Physics-PL",
         description="CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset",
@@ -235,7 +235,7 @@ class CQADupstackPhysicsRetrievalPL(AbsTaskRetrieval):
     )
 
 
-class CQADupstackMathematicaRetrievalPL(AbsTaskRetrieval):
+class CQADupstackMathematicaRetrievalPL(AbsTextRetrieval):
     metadata = TaskMetadata(
         name="CQADupstack-Mathematica-PL",
         description="CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset",
@@ -268,7 +268,7 @@ class CQADupstackMathematicaRetrievalPL(AbsTaskRetrieval):
     )
 
 
-class CQADupstackGisRetrievalPL(AbsTaskRetrieval):
+class CQADupstackGisRetrievalPL(AbsTextRetrieval):
     metadata = TaskMetadata(
         name="CQADupstack-Gis-PL",
         description="CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset",
@@ -301,7 +301,7 @@ class CQADupstackGisRetrievalPL(AbsTaskRetrieval):
     )
 
 
-class CQADupstackGamingRetrievalPL(AbsTaskRetrieval):
+class CQADupstackGamingRetrievalPL(AbsTextRetrieval):
     metadata = TaskMetadata(
         name="CQADupstack-Gaming-PL",
         description="CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset",
@@ -334,7 +334,7 @@ class CQADupstackGamingRetrievalPL(AbsTaskRetrieval):
     )
 
 
-class CQADupstackEnglishRetrievalPL(AbsTaskRetrieval):
+class CQADupstackEnglishRetrievalPL(AbsTextRetrieval):
     metadata = TaskMetadata(
         name="CQADupstack-English-PL",
         description="CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset",
@@ -367,7 +367,7 @@ class CQADupstackEnglishRetrievalPL(AbsTaskRetrieval):
     )
 
 
-class CQADupstackAndroidRetrievalPL(AbsTaskRetrieval):
+class CQADupstackAndroidRetrievalPL(AbsTextRetrieval):
     metadata = TaskMetadata(
         name="CQADupstack-Android-PL",
         description="CQADupStack: A Stack Exchange Question Duplicate Pairs Dataset",

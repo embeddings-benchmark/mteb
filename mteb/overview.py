@@ -26,16 +26,18 @@ logger = logging.getLogger(__name__)
 
 def create_task_list() -> list[type[AbsTask]]:
     # reranking subclasses retrieval to share methods, but is an abstract task
-    tasks_categories_cls = list(AbsTask.__subclasses__()) + [
+    abs_sub_subclasses = [
         AbsTextReranking,
         AbsTextMultilabelClassification,
     ]
+    str_abs_sub_subclasses = {cls.__name__ for cls in abs_sub_subclasses}
+    tasks_categories_cls = list(AbsTask.__subclasses__()) + abs_sub_subclasses
     tasks = []
     for cat_cls in tasks_categories_cls:
         for cls in cat_cls.__subclasses__():
-            if cat_cls.__name__.startswith("AbsTask") and cls.__name__ not in (
-                "AbsTaskReranking",
-                "AbsTaskMultilabelClassification",
+            if (
+                cat_cls.__name__.startswith("Abs")
+                and cls.__name__ not in str_abs_sub_subclasses
             ):
                 tasks.append(cls)
     return tasks
@@ -49,7 +51,7 @@ def create_name_to_task_mapping() -> dict[str, type[AbsTask]]:
             raise ValueError(
                 f"Duplicate task name found: {cls.metadata.name}. Please make sure that all task names are unique."
             )
-        if "AbsTask" in cls.__name__:
+        if cls.__name__.startswith("Abs"):
             continue
         metadata_names[cls.metadata.name] = cls
     return metadata_names

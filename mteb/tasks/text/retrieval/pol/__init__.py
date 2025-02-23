@@ -1,6 +1,20 @@
 from __future__ import annotations
 
 from .ArguAnaPLRetrieval import ArguAnaPL
+from .CqadupstackPLRetrieval import (
+    CQADupstackAndroidRetrievalPL,
+    CQADupstackEnglishRetrievalPL,
+    CQADupstackGamingRetrievalPL,
+    CQADupstackGisRetrievalPL,
+    CQADupstackMathematicaRetrievalPL,
+    CQADupstackPhysicsRetrievalPL,
+    CQADupstackProgrammersRetrievalPL,
+    CQADupstackStatsRetrievalPL,
+    CQADupstackTexRetrievalPL,
+    CQADupstackUnixRetrievalPL,
+    CQADupstackWebmastersRetrievalPL,
+    CQADupstackWordpressRetrievalPL,
+)
 from .DBPediaPLRetrieval import DBPediaPL, DBPediaPLHardNegatives
 from .FiQAPLRetrieval import FiQAPLRetrieval
 from .HotpotQAPLRetrieval import HotpotQAPL, HotpotQAPLHardNegatives
@@ -15,6 +29,18 @@ from .TRECCOVIDPLRetrieval import TRECCOVIDPL
 
 __all__ = [
     "ArguAnaPL",
+    "CQADupstackAndroidRetrievalPL",
+    "CQADupstackEnglishRetrievalPL",
+    "CQADupstackGamingRetrievalPL",
+    "CQADupstackGisRetrievalPL",
+    "CQADupstackMathematicaRetrievalPL",
+    "CQADupstackPhysicsRetrievalPL",
+    "CQADupstackProgrammersRetrievalPL",
+    "CQADupstackStatsRetrievalPL",
+    "CQADupstackTexRetrievalPL",
+    "CQADupstackUnixRetrievalPL",
+    "CQADupstackWebmastersRetrievalPL",
+    "CQADupstackWordpressRetrievalPL",
     "DBPediaPL",
     "DBPediaPLHardNegatives",
     "FiQAPLRetrieval",
