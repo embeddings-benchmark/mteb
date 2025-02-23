@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
+import numpy as np
 import sklearn
 import sklearn.cluster
 from datasets import Audio
@@ -23,6 +24,7 @@ class AudioClusteringEvaluator(Evaluator):
         task_name: str | None = None,
         clustering_batch_size: int = 500,
         limit: int | None = None,
+        cluster_algo: str = "KMeans",
         **kwargs,
     ):
         super().__init__(**kwargs)
@@ -33,6 +35,7 @@ class AudioClusteringEvaluator(Evaluator):
         self.labels = labels
         self.clustering_batch_size = clustering_batch_size
         self.task_name = task_name
+        self.cluster_algo = cluster_algo
 
     def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}):
         if "batch_size" not in encode_kwargs:
@@ -44,11 +47,21 @@ class AudioClusteringEvaluator(Evaluator):
         )
 
         logger.info("Fitting Mini-Batch K-Means model...")
-        clustering_model = sklearn.cluster.MiniBatchKMeans(
-            n_clusters=len(set(self.labels)),
-            batch_size=self.clustering_batch_size,
-            n_init="auto",
-        )
+        if self.cluster_algo == "Kmeans":
+            logger.info("Fitting Mini-Batch K-Means model...")
+            clustering_model = sklearn.cluster.MiniBatchKMeans(
+                n_clusters=len(set(self.labels)),
+                batch_size=self.clustering_batch_size,
+                n_init="auto",
+            )
+        elif self.cluster_algo == "DBSCAN":
+            # need to plot out the distribution of the embeddings to decide on parameters for DBSCAN
+            logger.info("Fitting DBSCAN model...")
+            clustering_model = sklearn.cluster.DBSCAN(eps=0.5, min_samples=3, metric="euclidean")
+        elif self.cluster_algo == "Agg":
+            logger.info("Fitting Agglomerative model...")
+            clustering_model = sklearn.cluster.AgglomerativeClustering(n_clusters=len(set(self.labels)))
+
         clustering_model.fit(audio_embeddings)
         cluster_assignment = clustering_model.labels_
 
@@ -61,6 +74,8 @@ class AudioClusteringEvaluator(Evaluator):
 
         matrix = metrics.confusion_matrix(self.labels, cluster_assignment)
 
+        silhouette = np.float64(metrics.silhouette_score(audio_embeddings, cluster_assignment, metric='euclidean'))
+        print(self.cluster_algo)
         # get linear sum assignment
         row_ind, col_ind = linear_sum_assignment(matrix, maximize=True)
         total_correct = matrix[row_ind, col_ind].sum()
@@ -71,4 +86,5 @@ class AudioClusteringEvaluator(Evaluator):
             "nmi": nmi,
             "ari": ari,
             "cluster_accuracy": clustering_accuracy,
+            "silhouette": silhouette,
         }

@@ -31,8 +31,9 @@ class VoiceGenderClustering(AbsTaskAudioClustering):
 
 if __name__ == "__main__":
     model_name = "facebook/wav2vec2-base"
-    model = mteb.get_model(model_name, revision="main")
+    #model_name = "facebook/wav2vec2-large-xlsr-53"
+    model = mteb.get_model(model_name)
     print(f"Loaded model type: {type(model)}")
     evaluation = mteb.MTEB(tasks=[VoiceGenderClustering()])
-    results = evaluation.run(model, output_folder=f"results/{model_name}")
+    results = evaluation.run(model, output_folder=f"results/{model_name}", overwrite_results=True, cluster_algo="DBSCAN")
     print(results)
