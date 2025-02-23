@@ -1,20 +1,11 @@
 from __future__ import annotations
 
-from .AbsTask import AbsTask
-from .AbsTaskBitextMining import AbsTaskBitextMining
-from .AbsTaskClassification import AbsTaskClassification
-from .AbsTaskClustering import AbsTaskClustering
-from .AbsTaskClusteringFast import AbsTaskClusteringFast
-from .AbsTaskMultilabelClassification import AbsTaskMultilabelClassification
-from .AbsTaskPairClassification import AbsTaskPairClassification
-from .AbsTaskReranking import AbsTaskReranking
-from .AbsTaskRetrieval import AbsTaskRetrieval
-from .AbsTaskSpeedTask import AbsTaskSpeedTask
-from .AbsTaskSTS import AbsTaskSTS
-from .AbsTaskSummarization import AbsTaskSummarization
-from .Image import (
+from .abs_task import AbsTask
+from .any_modality import (
     AbsTaskAny2AnyMultiChoice,
     AbsTaskAny2AnyRetrieval,
+)
+from .image import (
     AbsTaskAny2TextMultipleChoice,
     AbsTaskImageClassification,
     AbsTaskImageClustering,
@@ -23,21 +14,34 @@ from .Image import (
     AbsTaskVisualSTS,
     AbsTaskZeroshotClassification,
 )
-from .TaskMetadata import TaskMetadata
+from .task_metadata import TaskMetadata
+from .text import (
+    AbsTextBitextMining,
+    AbsTextClassification,
+    AbsTextClustering,
+    AbsTextClusteringFast,
+    AbsTextMultilabelClassification,
+    AbsTextPairClassification,
+    AbsTextReranking,
+    AbsTextRetrieval,
+    AbsTextSpeedTask,
+    AbsTextSTS,
+    AbsTextSummarization,
+)
 
 __all__ = [
     "AbsTask",
-    "AbsTaskBitextMining",
-    "AbsTaskClassification",
-    "AbsTaskClustering",
-    "AbsTaskClusteringFast",
-    "AbsTaskMultilabelClassification",
-    "AbsTaskPairClassification",
-    "AbsTaskReranking",
-    "AbsTaskRetrieval",
-    "AbsTaskSpeedTask",
-    "AbsTaskSTS",
-    "AbsTaskSummarization",
+    "AbsTextBitextMining",
+    "AbsTextClassification",
+    "AbsTextClustering",
+    "AbsTextClusteringFast",
+    "AbsTextMultilabelClassification",
+    "AbsTextPairClassification",
+    "AbsTextReranking",
+    "AbsTextRetrieval",
+    "AbsTextSpeedTask",
+    "AbsTextSTS",
+    "AbsTextSummarization",
     "TaskMetadata",
     "AbsTaskAny2AnyMultiChoice",
     "AbsTaskAny2AnyRetrieval",

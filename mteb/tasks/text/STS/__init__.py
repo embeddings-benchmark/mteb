@@ -1,0 +1,76 @@
+from __future__ import annotations
+
+from .deu import GermanSTSBenchmarkSTS
+from .eng import (
+    STS12STS,
+    STS13STS,
+    STS14STS,
+    STS15STS,
+    STS16STS,
+    BiossesSTS,
+    SickrSTS,
+    STSBenchmarkSTS,
+)
+from .fao import FaroeseSTS
+from .fas import Farsick, Query2Query, SynPerSTS
+from .fin import FinParaSTS
+from .fra import SickFrSTS
+from .jpn import JSICK, JSTS
+from .kor import KlueSTS, KorSTS
+from .multilingual import (
+    IndicCrosslingualSTS,
+    SemRel24STS,
+    STS17Crosslingual,
+    STS22CrosslingualSTS,
+    STS22CrosslingualSTSv2,
+    STSBenchmarkMultilingualSTS,
+)
+from .pol import CdscrSTS, SickrPLSTS
+from .por import Assin2STS, SickBrSTS
+from .ron import RonSTS
+from .rus import RUParaPhraserSTS, RuSTSBenchmarkSTS
+from .spa import STSES
+from .zho import AFQMC, ATEC, BQ, LCQMC, PAWSX, QBQTC, STSB
+
+__all__ = [
+    "AFQMC",
+    "ATEC",
+    "Assin2STS",
+    "BQ",
+    "BiossesSTS",
+    "CdscrSTS",
+    "FaroeseSTS",
+    "Farsick",
+    "FinParaSTS",
+    "GermanSTSBenchmarkSTS",
+    "IndicCrosslingualSTS",
+    "JSICK",
+    "JSTS",
+    "KlueSTS",
+    "KorSTS",
+    "LCQMC",
+    "PAWSX",
+    "QBQTC",
+    "Query2Query",
+    "RUParaPhraserSTS",
+    "RonSTS",
+    "RuSTSBenchmarkSTS",
+    "STS12STS",
+    "STS13STS",
+    "STS14STS",
+    "STS15STS",
+    "STS16STS",
+    "STS17Crosslingual",
+    "STS22CrosslingualSTS",
+    "STS22CrosslingualSTSv2",
+    "STSB",
+    "STSBenchmarkMultilingualSTS",
+    "STSBenchmarkSTS",
+    "STSES",
+    "SemRel24STS",
+    "SickBrSTS",
+    "SickFrSTS",
+    "SickrPLSTS",
+    "SickrSTS",
+    "SynPerSTS",
+]

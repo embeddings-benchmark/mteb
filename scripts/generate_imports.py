@@ -29,7 +29,7 @@ def find_task_classes_in_module(full_module_name):
             and not isinstance(obj, types.GenericAlias)
             and issubclass(obj, AbsTask)
             and obj is not AbsTask
-            and not obj.__name__.startswith("AbsTask")
+            and not obj.__name__.startswith("Abs")
         ):
             if is_module_aggregated:
                 if issubclass(obj, AbsTaskAggregate):
@@ -91,7 +91,7 @@ for root, dirs, files in os.walk(BASE_DIR, topdown=False):
                 import_lines.append(sub_import_line)
                 all_classes.extend(sub_all)
     # Deduplicate classes
-    all_classes = list(
+    all_classes = sorted(
         dict.fromkeys(all_classes)
     )  # preserves order while removing duplicates
 

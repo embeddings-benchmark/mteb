@@ -19,33 +19,34 @@ To add a new task, you need to implement a new class that inherits from the `Abs
 
 ```python
 from mteb import MTEB
-from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
+from mteb.abstasks.text.abs_text_reranking import AbsTextReranking
 from sentence_transformers import SentenceTransformer
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
 
-class SciDocsReranking(AbsTaskReranking):
-    metadata = TaskMetadata(
-        name="SciDocsRR",
-        description="Ranking of related scientific papers based on their title.",
-        reference="https://allenai.org/data/scidocs",
-        type="Reranking",
-        category="t2t",
-        modalities=["text"],
-        eval_splits=["test"],
-        eval_langs=["eng-Latn"],
-        main_score="map",
-        dataset={
-            "path": "mteb/scidocs-reranking",
-            "revision": "d3c5e1fc0b855ab6097bf1cda04dd73947d7caab",
-        },
-        date=("2000-01-01", "2020-12-31"), # best guess
-        domains=["Academic", "Non-fiction", "Domains"],
-        task_subtypes=["Scientific Reranking"],
-        license="cc-by-4.0",
-        annotations_creators="derived",
-        dialect=[],
-        sample_creation="found",
-        bibtex_citation="""
+
+class SciDocsReranking(AbsTextReranking):
+  metadata = TaskMetadata(
+    name="SciDocsRR",
+    description="Ranking of related scientific papers based on their title.",
+    reference="https://allenai.org/data/scidocs",
+    type="Reranking",
+    category="t2t",
+    modalities=["text"],
+    eval_splits=["test"],
+    eval_langs=["eng-Latn"],
+    main_score="map",
+    dataset={
+      "path": "mteb/scidocs-reranking",
+      "revision": "d3c5e1fc0b855ab6097bf1cda04dd73947d7caab",
+    },
+    date=("2000-01-01", "2020-12-31"),  # best guess
+    domains=["Academic", "Non-fiction", "Domains"],
+    task_subtypes=["Scientific Reranking"],
+    license="cc-by-4.0",
+    annotations_creators="derived",
+    dialect=[],
+    sample_creation="found",
+    bibtex_citation="""
 @inproceedings{cohan-etal-2020-specter,
     title = "{SPECTER}: Document-level Representation Learning using Citation-informed Transformers",
     author = "Cohan, Arman  and
@@ -68,7 +69,8 @@ class SciDocsReranking(AbsTaskReranking):
     abstract = "Representation learning is a critical ingredient for natural language processing systems. Recent Transformer language models like BERT learn powerful textual representations, but these models are targeted towards token- and sentence-level training objectives and do not leverage information on inter-document relatedness, which limits their document-level representation power. For applications on scientific documents, such as classification and recommendation, accurate embeddings of documents are a necessity. We propose SPECTER, a new method to generate document-level embedding of scientific papers based on pretraining a Transformer language model on a powerful signal of document-level relatedness: the citation graph. Unlike existing pretrained language models, Specter can be easily applied to downstream applications without task-specific fine-tuning. Additionally, to encourage further research on document-level models, we introduce SciDocs, a new evaluation benchmark consisting of seven document-level tasks ranging from citation prediction, to document classification and recommendation. We show that Specter outperforms a variety of competitive baselines on the benchmark.",
 }
 """,
-)
+  )
+
 
 # testing the task with a model:
 model = SentenceTransformer("average_word_embeddings_komninos")
@@ -76,7 +78,7 @@ evaluation = MTEB(tasks=[SciDocsReranking()])
 evaluation.run(model)
 ```
 
-> **Note:** for multilingual / crosslingual tasks, make sure you've specified `eval_langs` as a dictionary, as shown in [this example](../mteb/tasks/Classification/multilingual/MTOPIntentClassification.py).
+> **Note:** for multilingual / crosslingual tasks, make sure you've specified `eval_langs` as a dictionary, as shown in [this example](../mteb/tasks/text/Classification/multilingual/MTOPIntentClassification.py).
 
 
 

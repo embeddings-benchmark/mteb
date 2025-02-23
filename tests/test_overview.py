@@ -4,8 +4,8 @@ import pytest
 
 import mteb
 from mteb import get_task, get_tasks
-from mteb.abstasks.AbsTask import AbsTask
-from mteb.abstasks.TaskMetadata import TASK_DOMAIN, TASK_TYPE
+from mteb.abstasks.abs_task import AbsTask
+from mteb.abstasks.task_metadata import TASK_DOMAIN, TASK_TYPE
 from mteb.overview import MTEBTasks
 
 

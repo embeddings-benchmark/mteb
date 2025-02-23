@@ -14,8 +14,8 @@ from huggingface_hub.errors import (
 )
 from pydantic import BaseModel, ConfigDict, field_validator
 
-from mteb.abstasks.AbsTask import AbsTask
-from mteb.abstasks.TaskMetadata import STR_DATE, STR_URL
+from mteb.abstasks.abs_task import AbsTask
+from mteb.abstasks.task_metadata import STR_DATE, STR_URL
 from mteb.encoder_interface import Encoder
 from mteb.evaluation.evaluators.utils import cos_sim, dot_score, max_sim
 

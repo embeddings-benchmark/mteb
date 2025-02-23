@@ -9,12 +9,12 @@ import pytest
 
 import mteb
 from mteb.abstasks import AbsTask
-from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
-from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.AbsTaskSpeedTask import AbsTaskSpeedTask
+from mteb.abstasks.abstasks.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
-from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.Image import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.text.abs_text_reranking import AbsTextReranking
+from mteb.abstasks.text.abs_text_retrieval import AbsTextRetrieval
+from mteb.abstasks.text.abs_text_speed import AbsTextSpeedTask
 from mteb.overview import TASKS_REGISTRY, get_tasks
 
 from ..test_benchmark.task_grid import (
@@ -41,10 +41,10 @@ def test_load_data(
 ):
     # TODO: We skip because this load_data is completely different.
     if (
-        isinstance(task, AbsTaskRetrieval)
-        or isinstance(task, AbsTaskReranking)
+        isinstance(task, AbsTextRetrieval)
+        or isinstance(task, AbsTextReranking)
         or isinstance(task, AbsTaskAny2AnyRetrieval)
-        or isinstance(task, AbsTaskSpeedTask)
+        or isinstance(task, AbsTextSpeedTask)
         or isinstance(task, AbsTaskAny2AnyMultiChoice)
         or task.metadata.is_multilingual
     ):
@@ -76,7 +76,7 @@ async def check_datasets_are_available_on_hf(tasks):
                 task.metadata.dataset["revision"],
             )
             for task in tasks
-            if not isinstance(task, AbsTaskSpeedTask)
+            if not isinstance(task, AbsTextSpeedTask)
         ]
         datasets_exists = await asyncio.gather(*tasks_checks)
 
@@ -119,6 +119,6 @@ def test_superseded_dataset_exists():
     tasks = mteb.get_tasks(exclude_superseded=False)
     for task in tasks:
         if task.superseded_by:
-            assert (
-                task.superseded_by in TASKS_REGISTRY
-            ), f"{task} is superseded by {task.superseded_by} but {task.superseded_by} is not in the TASKS_REGISTRY"
+            assert task.superseded_by in TASKS_REGISTRY, (
+                f"{task} is superseded by {task.superseded_by} but {task.superseded_by} is not in the TASKS_REGISTRY"
+            )

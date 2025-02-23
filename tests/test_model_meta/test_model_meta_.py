@@ -10,7 +10,7 @@ import mteb
 from mteb import MTEB
 from mteb.abstasks import AbsTask
 from mteb.model_meta import ScoringFunction
-from tests.test_benchmark.mock_tasks import MockRetrievalTask
+from tests.test_benchmark.mock_tasks import MockRetrievalText
 
 
 def test_create_model_meta_from_sentence_transformers():
@@ -39,7 +39,7 @@ def test_create_model_meta_from_cross_encoder():
     assert meta.revision == revision
 
 
-@pytest.mark.parametrize("task", [MockRetrievalTask()])
+@pytest.mark.parametrize("task", [MockRetrievalText()])
 def test_output_folder_model_meta(task: AbsTask, tmp_path: Path):
     mteb = MTEB(tasks=[task])
     model_name = "cross-encoder/ms-marco-TinyBERT-L-2-v2"

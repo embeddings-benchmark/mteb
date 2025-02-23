@@ -53,7 +53,7 @@ class ImageDataset(torch.utils.data.Dataset):
         if isinstance(image, bytes):
             image = Image.open(io.BytesIO(image))
         else:
-            # Assume the image is already in a usable format (e.g., PIL Image)
+            # Assume the image is already in a usable format (e.g., PIL image)
             image = image
         if image.mode != "RGB":
             image = image.convert("RGB")

@@ -278,12 +278,13 @@ To evaluate on a custom task, you can run the following code on your custom task
 
 ```python
 from mteb import MTEB
-from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
+from mteb.abstasks.text.abs_text_reranking import AbsTextReranking
 from sentence_transformers import SentenceTransformer
 
 
-class MyCustomTask(AbsTaskReranking):
-    ...
+class MyCustomTask(AbsTextReranking):
+   ...
+
 
 model = SentenceTransformer("average_word_embeddings_komninos")
 evaluation = MTEB(tasks=[MyCustomTask()])

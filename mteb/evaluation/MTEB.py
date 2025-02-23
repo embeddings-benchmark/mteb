@@ -17,7 +17,7 @@ from codecarbon import EmissionsTracker
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 import mteb
-from mteb.abstasks.AbsTask import ScoresDict
+from mteb.abstasks.abs_task import ScoresDict
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
@@ -26,7 +26,7 @@ from mteb.models import (
     model_meta_from_sentence_transformers,
 )
 
-from ..abstasks.AbsTask import AbsTask
+from ..abstasks.abs_task import AbsTask
 from ..load_results.task_results import TaskResult
 from ..models.sentence_transformer_wrapper import SentenceTransformerWrapper
 

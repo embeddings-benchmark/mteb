@@ -12,8 +12,8 @@ import pandas as pd
 from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict
 
-from mteb.abstasks.AbsTask import AbsTask, ScoresDict
-from mteb.abstasks.TaskMetadata import ISO_LANGUAGE_SCRIPT, TASK_DOMAIN, TASK_TYPE
+from mteb.abstasks.abs_task import AbsTask, ScoresDict
+from mteb.abstasks.task_metadata import ISO_LANGUAGE_SCRIPT, TASK_DOMAIN, TASK_TYPE
 from mteb.languages import ISO_LANGUAGE
 from mteb.load_results.task_results import TaskResult
 from mteb.models.overview import get_model_metas

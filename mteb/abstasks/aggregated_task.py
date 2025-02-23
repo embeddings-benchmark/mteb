@@ -5,17 +5,17 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
-from mteb.abstasks.AbsTask import AbsTask
+from mteb.abstasks.abs_task import AbsTask
 from mteb.abstasks.aggregate_task_metadata import AggregateTaskMetadata
 
 if TYPE_CHECKING:
     from datasets import Dataset, DatasetDict
 
-    from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset
+    from mteb.abstasks.task_metadata import DescriptiveStatistics, HFSubset
     from mteb.encoder_interface import Encoder
     from mteb.load_results.task_results import TaskResult
 
-    from .AbsTask import ScoresDict
+    from .abs_task import ScoresDict
 
 logger = logging.getLogger(__name__)
 

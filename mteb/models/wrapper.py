@@ -4,7 +4,7 @@ import logging
 from typing import Callable, get_args
 
 import mteb
-from mteb.abstasks.TaskMetadata import TASK_TYPE
+from mteb.abstasks.task_metadata import TASK_TYPE
 from mteb.encoder_interface import PromptType
 
 logger = logging.getLogger(__name__)

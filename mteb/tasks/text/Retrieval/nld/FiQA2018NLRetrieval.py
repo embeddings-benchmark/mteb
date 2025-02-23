@@ -1,0 +1,40 @@
+from __future__ import annotations
+
+from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.text.abs_text_retrieval import AbsTextRetrieval
+
+
+class FiQA2018NL(AbsTextRetrieval):
+    ignore_identical_ids = True
+
+    metadata = TaskMetadata(
+        name="FiQA2018-NL",
+        description="Financial Opinion Mining and Question Answering. FiQA2018-NL is a Dutch translation",
+        reference="https://huggingface.co/datasets/clips/beir-nl-fiqa",
+        dataset={
+            "path": "clips/beir-nl-fiqa",
+            "revision": "a66648414dbbcd03e3eda02988c428be78097fd0",
+        },
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["nld-Latn"],
+        main_score="ndcg_at_10",
+        date=("2018-04-01", "2018-04-01"),  # best guess: based on publication date
+        domains=["Written", "Non-fiction"],
+        task_subtypes=["Question answering"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="machine-translated and verified",  # manually checked a small subset
+        bibtex_citation="""@misc{banar2024beirnlzeroshotinformationretrieval,
+    title={BEIR-NL: Zero-shot Information Retrieval Benchmark for the Dutch Language}, 
+     author={Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
+     year={2024},
+     eprint={2412.08329},
+     archivePrefix={arXiv},
+     primaryClass={cs.CL},
+     url={https://arxiv.org/abs/2412.08329}, 
+}""",
+    )

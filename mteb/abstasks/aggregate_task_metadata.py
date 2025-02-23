@@ -6,8 +6,8 @@ from typing import Any
 
 from pydantic import ConfigDict, model_validator
 
-from mteb.abstasks.AbsTask import AbsTask
-from mteb.abstasks.TaskMetadata import (
+from mteb.abstasks.abs_task import AbsTask
+from mteb.abstasks.task_metadata import (
     ANNOTATOR_TYPE,
     LANGUAGES,
     LICENSES,

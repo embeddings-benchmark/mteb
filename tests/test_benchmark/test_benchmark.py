@@ -26,10 +26,10 @@ from .mock_models import (
 from .mock_tasks import (
     MockInstructionRetrieval,
     MockMultilingualInstructionRetrieval,
-    MockMultilingualRerankingTask,
-    MockMultilingualRetrievalTask,
-    MockRerankingTask,
-    MockRetrievalTask,
+    MockMultilingualRerankingText,
+    MockMultilingualRetrievalText,
+    MockRerankingText,
+    MockRetrievalText,
 )
 from .task_grid import MOCK_TASK_TEST_GRID
 
@@ -69,7 +69,7 @@ def test_benchmark_encoders_on_task(
     eval.run(model, output_folder=tmp_path.as_posix())
 
 
-@pytest.mark.parametrize("task", [MockMultilingualRetrievalTask()])
+@pytest.mark.parametrize("task", [MockMultilingualRetrievalText()])
 @pytest.mark.parametrize(
     "model",
     [MockSentenceTransformer()],
@@ -286,12 +286,12 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
 @pytest.mark.parametrize(
     "task",
     [
-        MockRerankingTask(),
-        MockMultilingualRerankingTask(),
+        MockRerankingText(),
+        MockMultilingualRerankingText(),
         MockInstructionRetrieval(),
         MockMultilingualInstructionRetrieval(),
-        MockRetrievalTask(),
-        MockMultilingualRetrievalTask(),
+        MockRetrievalText(),
+        MockMultilingualRetrievalText(),
     ],
 )
 @pytest.mark.parametrize("is_task_name", [True, False])

@@ -123,7 +123,7 @@ def blip2_loader(**kwargs):
                     # check dataloader batch size is the same as batch size
                     if images.batch_size != batch_size:
                         raise ValueError(
-                            "Image DataLoader batch size must be the same as the given batch size: "
+                            "image DataLoader batch size must be the same as the given batch size: "
                             + str(batch_size)
                         )
                     for batch_images, i in tqdm(

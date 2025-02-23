@@ -8,7 +8,7 @@ from typing import Any
 from huggingface_hub import ModelCard
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
-from mteb.abstasks.AbsTask import AbsTask
+from mteb.abstasks.abs_task import AbsTask
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import (

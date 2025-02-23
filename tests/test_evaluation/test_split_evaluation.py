@@ -7,9 +7,9 @@ from tests.test_benchmark.mock_models import (
     MockSentenceTransformer,
 )
 from tests.test_benchmark.mock_tasks import (
-    MockMultilingualRetrievalTask,
-    MockMultilingualSTSTask,
-    MockRetrievalTask,
+    MockMultilingualRetrievalText,
+    MockMultilingualSTSText,
+    MockRetrievalText,
 )
 
 
@@ -20,12 +20,12 @@ def model():
 
 @pytest.fixture
 def tasks():
-    return [MockRetrievalTask()]
+    return [MockRetrievalText()]
 
 
 @pytest.fixture
 def multilingual_tasks():
-    return [MockMultilingualRetrievalTask()]
+    return [MockMultilingualRetrievalText()]
 
 
 def test_all_splits_evaluated(model, tasks, tmp_path):
@@ -367,7 +367,7 @@ def test_all_splits_subsets_evaluated_with_overwrite(
 
 def test_splits_evaluated_with_prefiltering():
     """Test that the evaluation only runs on the specified languages. Issue https://github.com/embeddings-benchmark/mteb/pull/1787#issuecomment-2598205049"""
-    task = MockMultilingualSTSTask().filter_languages(languages=["fra"])
+    task = MockMultilingualSTSText().filter_languages(languages=["fra"])
 
     evaluation = MTEB(tasks=[task])
 

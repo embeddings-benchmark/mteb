@@ -6,36 +6,36 @@ import numpy as np
 from datasets import Dataset, DatasetDict
 from PIL import Image
 
-from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
-from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
-from mteb.abstasks.AbsTaskMultilabelClassification import (
-    AbsTaskMultilabelClassification,
-)
-from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
-from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
-from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
-from mteb.abstasks.AbsTaskSummarization import AbsTaskSummarization
-from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
-from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.Image.AbsTaskAny2TextMultipleChoice import (
-    AbsTaskAny2TextMultipleChoice,
-)
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
-from mteb.abstasks.Image.AbsTaskImageClustering import AbsTaskImageClustering
-from mteb.abstasks.Image.AbsTaskImageMultilabelClassification import (  # noqa
-    AbsTaskImageMultilabelClassification,
-)
-from mteb.abstasks.Image.AbsTaskImageTextPairClassification import (
+from mteb.abstasks.abstasks.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
+from mteb.abstasks.Image import (
+    AbsTaskAny2AnyRetrieval,
+    AbsTaskImageClassification,
+    AbsTaskImageClustering,
     AbsTaskImageTextPairClassification,
 )
-from mteb.abstasks.Image.AbsTaskVisualSTS import AbsTaskVisualSTS
-from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
+from mteb.abstasks.image.AbsTaskAny2TextMultipleChoice import (
+    AbsTaskAny2TextMultipleChoice,
+)
+from mteb.abstasks.image.AbsTaskImageMultilabelClassification import (  # noqa
+    AbsTaskImageMultilabelClassification,
+)
+from mteb.abstasks.image.AbsTaskVisualSTS import AbsTaskVisualSTS
+from mteb.abstasks.image.AbsTaskZeroshotClassification import (
     AbsTaskZeroshotClassification,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.abstasks.text.abs_bitext_mining import AbsTextBitextMining
+from mteb.abstasks.text.abs_text_classification import AbsTextClassification
+from mteb.abstasks.text.abs_text_clustering import AbsTextClustering
+from mteb.abstasks.text.abs_text_clustering_fast import AbsTextClusteringFast
+from mteb.abstasks.text.abs_text_multilabel_classification import (
+    AbsTextMultilabelClassification,
+)
+from mteb.abstasks.text.abs_text_pair_classification import AbsTextPairClassification
+from mteb.abstasks.text.abs_text_reranking import AbsTextReranking
+from mteb.abstasks.text.abs_text_retrieval import AbsTextRetrieval
+from mteb.abstasks.text.abs_text_sts import AbsTextSTS
+from mteb.abstasks.text.abs_text_summarization import AbsTextSummarization
 
 general_args = {
     "description": "a mock task for testing",
@@ -64,7 +64,7 @@ multilingual_eval_langs = {
 }
 
 
-class MockClassificationTask(AbsTaskClassification):
+class MockClassificationText(AbsTextClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
@@ -128,7 +128,7 @@ class MockClassificationTask(AbsTaskClassification):
         self.data_loaded = True
 
 
-class MockMultilingualClassificationTask(AbsTaskClassification):
+class MockMultilingualClassificationText(AbsTextClassification):
     expected_stats = {
         "test": {
             "num_samples": 4,
@@ -256,7 +256,7 @@ class MockMultilingualClassificationTask(AbsTaskClassification):
         self.data_loaded = True
 
 
-class MockBitextMiningTask(AbsTaskBitextMining):
+class MockBitextMiningText(AbsTextBitextMining):
     expected_stats = {
         "test": {
             "num_samples": 2,
@@ -300,7 +300,7 @@ class MockBitextMiningTask(AbsTaskBitextMining):
         self.data_loaded = True
 
 
-class MockMultilingualBitextMiningTask(AbsTaskBitextMining):
+class MockMultilingualBitextMiningText(AbsTextBitextMining):
     expected_stats = {
         "test": {
             "num_samples": 4,
@@ -376,7 +376,7 @@ class MockMultilingualBitextMiningTask(AbsTaskBitextMining):
         self.data_loaded = True
 
 
-class MockMultilingualParallelBitextMiningTask(AbsTaskBitextMining):
+class MockMultilingualParallelBitextMiningText(AbsTextBitextMining):
     parallel_subsets = True
     expected_stats = {
         "test": {
@@ -453,7 +453,7 @@ class MockMultilingualParallelBitextMiningTask(AbsTaskBitextMining):
         self.data_loaded = True
 
 
-class MockClusteringTask(AbsTaskClustering):
+class MockClusteringText(AbsTextClustering):
     expected_stats = {
         "test": {
             "num_samples": 1,
@@ -500,7 +500,7 @@ class MockClusteringTask(AbsTaskClustering):
         self.data_loaded = True
 
 
-class MockMultilingualClusteringTask(AbsTaskClustering):
+class MockMultilingualClusteringText(AbsTextClustering):
     expected_stats = {
         "test": {
             "num_samples": 2,
@@ -580,7 +580,7 @@ class MockMultilingualClusteringTask(AbsTaskClustering):
         self.data_loaded = True
 
 
-class MockClusteringFastTask(AbsTaskClusteringFast):
+class MockClusteringFastText(AbsTextClusteringFast):
     max_document_to_embed = 3
     max_fraction_of_documents_to_embed = None
     expected_stats = {
@@ -627,7 +627,7 @@ class MockClusteringFastTask(AbsTaskClusteringFast):
         self.data_loaded = True
 
 
-class MockMultilingualClusteringFastTask(AbsTaskClusteringFast):
+class MockMultilingualClusteringFastText(AbsTextClusteringFast):
     max_document_to_embed = 3
     max_fraction_of_documents_to_embed = None
     expected_stats = {
@@ -707,7 +707,7 @@ class MockMultilingualClusteringFastTask(AbsTaskClusteringFast):
         self.data_loaded = True
 
 
-class MockPairClassificationTask(AbsTaskPairClassification):
+class MockPairClassificationText(AbsTextPairClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
@@ -757,7 +757,7 @@ class MockPairClassificationTask(AbsTaskPairClassification):
         self.data_loaded = True
 
 
-class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
+class MockMultilingualPairClassificationText(AbsTextPairClassification):
     expected_stats = {
         "test": {
             "num_samples": 4,
@@ -843,7 +843,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
         self.data_loaded = True
 
 
-class MockSTSTask(AbsTaskSTS):
+class MockSTSText(AbsTextSTS):
     expected_stats = {
         "test": {
             "num_samples": 2,
@@ -895,7 +895,7 @@ class MockSTSTask(AbsTaskSTS):
     max_score = 1
 
 
-class MockMultilingualSTSTask(AbsTaskSTS):
+class MockMultilingualSTSText(AbsTextSTS):
     expected_stats = {
         "test": {
             "num_samples": 4,
@@ -984,7 +984,7 @@ class MockMultilingualSTSTask(AbsTaskSTS):
     max_score = 1
 
 
-class MockSummarizationTask(AbsTaskSummarization):
+class MockSummarizationText(AbsTextSummarization):
     expected_stats = {
         "test": {
             "num_samples": 2,
@@ -1044,7 +1044,7 @@ class MockSummarizationTask(AbsTaskSummarization):
     max_score = 1
 
 
-class MockMultilingualSummarizationTask(AbsTaskSummarization):
+class MockMultilingualSummarizationText(AbsTextSummarization):
     expected_stats = {
         "test": {
             "num_samples": 4,
@@ -1148,7 +1148,7 @@ class MockMultilingualSummarizationTask(AbsTaskSummarization):
     max_score = 1
 
 
-class MockRerankingTask(AbsTaskReranking):
+class MockRerankingText(AbsTextReranking):
     expected_stats = {
         "test": {
             "num_samples": 4,
@@ -1219,7 +1219,7 @@ class MockRerankingTask(AbsTaskReranking):
         self.data_loaded = True
 
 
-class MockMultilingualRerankingTask(AbsTaskReranking):
+class MockMultilingualRerankingText(AbsTextReranking):
     expected_stats = {
         "test": {
             "num_samples": 8,
@@ -1360,7 +1360,7 @@ class MockMultilingualRerankingTask(AbsTaskReranking):
         self.data_loaded = True
 
 
-class MockRetrievalTask(AbsTaskRetrieval):
+class MockRetrievalText(AbsTextRetrieval):
     expected_stats = {
         "val": {
             "num_samples": 4,
@@ -1467,7 +1467,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
         self.data_loaded = True
 
 
-class MockMultilingualRetrievalTask(AbsTaskRetrieval):
+class MockMultilingualRetrievalText(AbsTextRetrieval):
     expected_stats = {
         "val": {
             "num_samples": 8,
@@ -1700,7 +1700,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
         self.data_loaded = True
 
 
-class MockMultilabelClassification(AbsTaskMultilabelClassification):
+class MockMultilabelClassification(AbsTextMultilabelClassification):
     expected_stats = {
         "test": {
             "num_samples": 6,
@@ -1763,7 +1763,7 @@ class MockMultilabelClassification(AbsTaskMultilabelClassification):
         self.data_loaded = True
 
 
-class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
+class MockMultilingualMultilabelClassification(AbsTextMultilabelClassification):
     expected_stats = {
         "test": {
             "num_samples": 12,
@@ -1892,7 +1892,7 @@ class MockMultilingualMultilabelClassification(AbsTaskMultilabelClassification):
         self.data_loaded = True
 
 
-class MockInstructionRetrieval(AbsTaskRetrieval):
+class MockInstructionRetrieval(AbsTextRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
@@ -1962,7 +1962,7 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
         self.data_loaded = True
 
 
-class MockInstructionReranking(AbsTaskReranking):
+class MockInstructionReranking(AbsTextReranking):
     expected_stats = {
         "test": {
             "num_samples": 4,
@@ -2037,7 +2037,7 @@ class MockInstructionReranking(AbsTaskReranking):
         self.data_loaded = True
 
 
-class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
+class MockMultilingualInstructionRetrieval(AbsTextRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 8,
@@ -2184,7 +2184,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
         self.top_ranked = None
 
 
-class MockMultilingualInstructionReranking(AbsTaskReranking):
+class MockMultilingualInstructionReranking(AbsTextReranking):
     expected_stats = {
         "test": {
             "num_samples": 8,

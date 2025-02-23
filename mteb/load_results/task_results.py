@@ -14,8 +14,8 @@ import numpy as np
 from packaging.version import Version
 from pydantic import BaseModel, field_validator
 
-from mteb.abstasks.AbsTask import AbsTask, ScoresDict
-from mteb.abstasks.TaskMetadata import ISO_LANGUAGE_SCRIPT, HFSubset
+from mteb.abstasks.abs_task import AbsTask, ScoresDict
+from mteb.abstasks.task_metadata import ISO_LANGUAGE_SCRIPT, HFSubset
 from mteb.languages import ISO_LANGUAGE, LanguageScripts
 
 Split = str

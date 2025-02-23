@@ -9,12 +9,12 @@ import mteb
 from mteb import MTEB
 from mteb.abstasks import AbsTask
 
-from .mock_tasks import MockRetrievalTask
+from .mock_tasks import MockRetrievalText
 
 
 @pytest.mark.skipif(sys.version_info < (3, 10), reason="Requires Python 3.10 or higher")
 @pytest.mark.parametrize("model", ["colbert-ir/colbertv2.0"])
-@pytest.mark.parametrize("task", [MockRetrievalTask()])
+@pytest.mark.parametrize("task", [MockRetrievalText()])
 def test_colbert_model_e2e(task: AbsTask, model: str, tmp_path: Path):
     pytest.importorskip("pylate", reason="pylate not installed")
     eval_splits = ["test"]
