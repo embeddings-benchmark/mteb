@@ -70,7 +70,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [BrightRetrieval](https://huggingface.co/datasets/xlangai/BRIGHT) (Hongjin Su, 2024) | ['eng'] | Retrieval | s2p | [Non-fiction, Written] | None | None |
 | [BuiltBenchClusteringP2P](https://arxiv.org/abs/2411.12056) (Shahinmoghadam et al., 2024) | ['eng'] | Clustering | p2p | [Engineering, Written] | None | None |
 | [BuiltBenchClusteringS2S](https://arxiv.org/abs/2411.12056) (Shahinmoghadam et al., 2024) | ['eng'] | Clustering | s2s | [Engineering, Written] | None | None |
-| [BuiltBenchReranking](https://arxiv.org/abs/2411.12056) (Shahinmoghadam et al., 2024) | ['eng'] | Reranking | p2p | [Engineering, Written] | None | None |
+| [BuiltBenchReranking](https://arxiv.org/abs/2411.12056) (Shahinmoghadam et al., 2024) | ['eng'] | Reranking | p2p | [Engineering, Written] | {'test': 179} | {'test': {'num_samples': 179, 'number_of_characters': 1572224, 'num_positive': 1253, 'num_negative': 3759, 'min_query_length': 35, 'avg_query_length': 140.44, 'max_query_length': 307, 'unique_query': 82, 'min_positive_length': 190, 'avg_positive_length': 311.32, 'max_positive_length': 477, 'unique_positive': 1253, 'min_negative_length': 166, 'avg_negative_length': 307.79, 'max_negative_length': 508, 'unique_negative': 2241}} |
 | [BuiltBenchRetrieval](https://arxiv.org/abs/2411.12056) (Shahinmoghadam et al., 2024) | ['eng'] | Retrieval | p2p | [Engineering, Written] | None | None |
 | [BulgarianStoreReviewSentimentClassfication](https://doi.org/10.7910/DVN/TXIK9P) (Georgieva-Trifonova et al., 2018) | ['bul'] | Classification | s2s | [Reviews, Written] | None | None |
 | [CBD](http://2019.poleval.pl/files/poleval2019.pdf) | ['pol'] | Classification | s2s | [Social, Written] | None | None |

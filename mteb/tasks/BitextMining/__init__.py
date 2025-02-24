@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from .dan.BornholmskBitextMining import *
 from .eng.PubChemSMILESBitextMining import *
+from .fas.FaMTEBSummaryRetrieval import *
 from .kat.TbilisiCityHallBitextMining import *
 from .multilingual.BibleNLPBitextMining import *
 from .multilingual.BUCCBitextMining import *
