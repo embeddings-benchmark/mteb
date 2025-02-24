@@ -67,8 +67,20 @@ nvidia_training_datasets = {
     "MedrxivClusteringS2S.v2": ["train"],
     "TwentyNewsgroupsClustering": ["train"],
     "TwentyNewsgroupsClustering.v2": ["train"],
+    "StackExchangeClustering": ["train"],
+    "StackExchangeClustering.v2": ["train"],
+    "StackExchangeClusteringP2P": ["train"],
+    "StackExchangeClusteringP2P.v2": ["train"],
+    "RedditClustering": ["train"],
+    "RedditClustering.v2": ["train"],
+    "RedditClusteringP2P": ["train"],
+    "RedditClusteringP2P.v2": ["train"],
     "STSBenchmark": ["train"],
     "STSBenchmarkMultilingualSTS": ["train"],  # translated, not trained on
+    "MIRACLRetrieval": ["train"],
+    "MIRACLRetrievalHardNegatives": ["train"],
+    "MIRACLReranking": ["train"],
+    "MrTidyRetrieval": ["train"],
 }
 
 NV_embed_v2 = ModelMeta(
