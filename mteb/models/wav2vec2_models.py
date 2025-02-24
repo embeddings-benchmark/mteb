@@ -69,8 +69,7 @@ WAV2VEC2_LANGUAGES = [
     "fao_Latn",
     "grn_Latn",
     "hat_Latn",
-    "haw_Latn"
-    "ina_Latn",
+    "haw_Latn" "ina_Latn",
     "kin_Latn",
 ]
 
