@@ -14,7 +14,7 @@ class ItaCaseholdClassification(AbsTaskClassification):
         description="An Italian Dataset consisting of 1101 pairs of judgments and their official holdings between the years 2019 and 2022 from the archives of Italian Administrative Justice categorized with 64 subjects.",
         reference="https://doi.org/10.1145/3594536.3595177",
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ita-Latn"],

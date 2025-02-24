@@ -1,0 +1,1086 @@
+{
+    "test": {
+        "num_samples": 49450,
+        "number_of_characters": 11764042,
+        "number_texts_intersect_with_train": 7395,
+        "min_text_length": 1,
+        "average_text_length": 237.8977148634985,
+        "max_text_length": 37249,
+        "unique_text": 49415,
+        "unique_labels": 2,
+        "labels": {
+            "1": {
+                "count": 30554
+            },
+            "0": {
+                "count": 18896
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "urd": {
+                "num_samples": 294,
+                "number_of_characters": 24186,
+                "number_texts_intersect_with_train": 0,
+                "min_text_length": 8,
+                "average_text_length": 82.26530612244898,
+                "max_text_length": 157,
+                "unique_text": 294,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 143
+                    },
+                    "0": {
+                        "count": 151
+                    }
+                }
+            },
+            "vie": {
+                "num_samples": 685,
+                "number_of_characters": 75578,
+                "number_texts_intersect_with_train": 11,
+                "min_text_length": 3,
+                "average_text_length": 110.33284671532847,
+                "max_text_length": 2753,
+                "unique_text": 685,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 352
+                    },
+                    "0": {
+                        "count": 333
+                    }
+                }
+            },
+            "dza": {
+                "num_samples": 92,
+                "number_of_characters": 5630,
+                "number_texts_intersect_with_train": 0,
+                "min_text_length": 9,
+                "average_text_length": 61.19565217391305,
+                "max_text_length": 225,
+                "unique_text": 92,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 59
+                    },
+                    "0": {
+                        "count": 33
+                    }
+                }
+            },
+            "tha": {
+                "num_samples": 2344,
+                "number_of_characters": 185436,
+                "number_texts_intersect_with_train": 0,
+                "min_text_length": 1,
+                "average_text_length": 79.11092150170649,
+                "max_text_length": 1978,
+                "unique_text": 2344,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 1388
+                    },
+                    "1": {
+                        "count": 956
+                    }
+                }
+            },
+            "tur": {
+                "num_samples": 211,
+                "number_of_characters": 12960,
+                "number_texts_intersect_with_train": 0,
+                "min_text_length": 12,
+                "average_text_length": 61.4218009478673,
+                "max_text_length": 373,
+                "unique_text": 211,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 125
+                    },
+                    "0": {
+                        "count": 86
+                    }
+                }
+            },
+            "slk": {
+                "num_samples": 1042,
+                "number_of_characters": 95814,
+                "number_texts_intersect_with_train": 51,
+                "min_text_length": 1,
+                "average_text_length": 91.95201535508637,
+                "max_text_length": 1020,
+                "unique_text": 1042,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 128
+                    },
+                    "1": {
+                        "count": 914
+                    }
+                }
+            },
+            "nor": {
+                "num_samples": 417,
+                "number_of_characters": 42489,
+                "number_texts_intersect_with_train": 1,
+                "min_text_length": 11,
+                "average_text_length": 101.89208633093526,
+                "max_text_length": 333,
+                "unique_text": 417,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 118
+                    },
+                    "1": {
+                        "count": 299
+                    }
+                }
+            },
+            "spa": {
+                "num_samples": 296,
+                "number_of_characters": 26022,
+                "number_texts_intersect_with_train": 0,
+                "min_text_length": 5,
+                "average_text_length": 87.91216216216216,
+                "max_text_length": 636,
+                "unique_text": 296,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 244
+                    },
+                    "0": {
+                        "count": 52
+                    }
+                }
+            },
+            "rus": {
+                "num_samples": 867,
+                "number_of_characters": 2823548,
+                "number_texts_intersect_with_train": 6,
+                "min_text_length": 51,
+                "average_text_length": 3256.6874279123413,
+                "max_text_length": 37249,
+                "unique_text": 867,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 582
+                    },
+                    "0": {
+                        "count": 285
+                    }
+                }
+            },
+            "mlt": {
+                "num_samples": 171,
+                "number_of_characters": 22643,
+                "number_texts_intersect_with_train": 0,
+                "min_text_length": 13,
+                "average_text_length": 132.41520467836258,
+                "max_text_length": 2037,
+                "unique_text": 171,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 60
+                    },
+                    "0": {
+                        "count": 111
+                    }
+                }
+            },
+            "kor": {
+                "num_samples": 2667,
+                "number_of_characters": 93842,
+                "number_texts_intersect_with_train": 3,
+                "min_text_length": 1,
+                "average_text_length": 35.186351706036746,
+                "max_text_length": 143,
+                "unique_text": 2667,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 1365
+                    },
+                    "1": {
+                        "count": 1302
+                    }
+                }
+            },
+            "ind": {
+                "num_samples": 2266,
+                "number_of_characters": 446547,
+                "number_texts_intersect_with_train": 0,
+                "min_text_length": 3,
+                "average_text_length": 197.0639894086496,
+                "max_text_length": 526,
+                "unique_text": 2266,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 1467
+                    },
+                    "0": {
+                        "count": 799
+                    }
+                }
+            },
+            "heb": {
+                "num_samples": 2305,
+                "number_of_characters": 262910,
+                "number_texts_intersect_with_train": 1053,
+                "min_text_length": 3,
+                "average_text_length": 114.06073752711497,
+                "max_text_length": 2763,
+                "unique_text": 2305,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 1578
+                    },
+                    "0": {
+                        "count": 727
+                    }
+                }
+            },
+            "jpn": {
+                "num_samples": 2552,
+                "number_of_characters": 420128,
+                "number_texts_intersect_with_train": 1389,
+                "min_text_length": 20,
+                "average_text_length": 164.6269592476489,
+                "max_text_length": 1407,
+                "unique_text": 2552,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 1618
+                    },
+                    "0": {
+                        "count": 934
+                    }
+                }
+            },
+            "ell": {
+                "num_samples": 767,
+                "number_of_characters": 158317,
+                "number_texts_intersect_with_train": 212,
+                "min_text_length": 6,
+                "average_text_length": 206.41069100391135,
+                "max_text_length": 1014,
+                "unique_text": 761,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 400
+                    },
+                    "1": {
+                        "count": 367
+                    }
+                }
+            },
+            "deu": {
+                "num_samples": 1490,
+                "number_of_characters": 498076,
+                "number_texts_intersect_with_train": 6,
+                "min_text_length": 13,
+                "average_text_length": 334.2791946308725,
+                "max_text_length": 12036,
+                "unique_text": 1487,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 1277
+                    },
+                    "1": {
+                        "count": 213
+                    }
+                }
+            },
+            "eng": {
+                "num_samples": 1821,
+                "number_of_characters": 187754,
+                "number_texts_intersect_with_train": 2,
+                "min_text_length": 5,
+                "average_text_length": 103.10488742449203,
+                "max_text_length": 256,
+                "unique_text": 1821,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 909
+                    },
+                    "0": {
+                        "count": 912
+                    }
+                }
+            },
+            "fin": {
+                "num_samples": 1267,
+                "number_of_characters": 98192,
+                "number_texts_intersect_with_train": 22,
+                "min_text_length": 2,
+                "average_text_length": 77.49960536700868,
+                "max_text_length": 3264,
+                "unique_text": 1257,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 703
+                    },
+                    "1": {
+                        "count": 564
+                    }
+                }
+            },
+            "hrv": {
+                "num_samples": 437,
+                "number_of_characters": 66150,
+                "number_texts_intersect_with_train": 1,
+                "min_text_length": 7,
+                "average_text_length": 151.37299771167048,
+                "max_text_length": 1037,
+                "unique_text": 437,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 341
+                    },
+                    "0": {
+                        "count": 96
+                    }
+                }
+            },
+            "zho": {
+                "num_samples": 4896,
+                "number_of_characters": 636279,
+                "number_texts_intersect_with_train": 3482,
+                "min_text_length": 2,
+                "average_text_length": 129.95894607843138,
+                "max_text_length": 1431,
+                "unique_text": 4896,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 2975
+                    },
+                    "0": {
+                        "count": 1921
+                    }
+                }
+            },
+            "cmn": {
+                "num_samples": 8915,
+                "number_of_characters": 1432948,
+                "number_texts_intersect_with_train": 941,
+                "min_text_length": 3,
+                "average_text_length": 160.7344924284913,
+                "max_text_length": 248,
+                "unique_text": 8913,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 7642
+                    },
+                    "0": {
+                        "count": 1273
+                    }
+                }
+            },
+            "bul": {
+                "num_samples": 1673,
+                "number_of_characters": 77419,
+                "number_texts_intersect_with_train": 172,
+                "min_text_length": 1,
+                "average_text_length": 46.27555289898386,
+                "max_text_length": 140,
+                "unique_text": 1672,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 1334
+                    },
+                    "0": {
+                        "count": 339
+                    }
+                }
+            },
+            "eus": {
+                "num_samples": 227,
+                "number_of_characters": 13419,
+                "number_texts_intersect_with_train": 0,
+                "min_text_length": 10,
+                "average_text_length": 59.11453744493392,
+                "max_text_length": 234,
+                "unique_text": 227,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 35
+                    },
+                    "1": {
+                        "count": 192
+                    }
+                }
+            },
+            "uig": {
+                "num_samples": 841,
+                "number_of_characters": 206190,
+                "number_texts_intersect_with_train": 22,
+                "min_text_length": 11,
+                "average_text_length": 245.17241379310346,
+                "max_text_length": 1354,
+                "unique_text": 829,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 741
+                    },
+                    "0": {
+                        "count": 100
+                    }
+                }
+            },
+            "bam": {
+                "num_samples": 673,
+                "number_of_characters": 19801,
+                "number_texts_intersect_with_train": 0,
+                "min_text_length": 4,
+                "average_text_length": 29.421991084695392,
+                "max_text_length": 290,
+                "unique_text": 673,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 493
+                    },
+                    "0": {
+                        "count": 180
+                    }
+                }
+            },
+            "pol": {
+                "num_samples": 480,
+                "number_of_characters": 363268,
+                "number_texts_intersect_with_train": 0,
+                "min_text_length": 211,
+                "average_text_length": 756.8083333333333,
+                "max_text_length": 3917,
+                "unique_text": 480,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 271
+                    },
+                    "1": {
+                        "count": 209
+                    }
+                }
+            },
+            "cym": {
+                "num_samples": 2048,
+                "number_of_characters": 2784179,
+                "number_texts_intersect_with_train": 19,
+                "min_text_length": 66,
+                "average_text_length": 1359.46240234375,
+                "max_text_length": 6351,
+                "unique_text": 2048,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 1024
+                    },
+                    "0": {
+                        "count": 1024
+                    }
+                }
+            },
+            "ara": {
+                "num_samples": 706,
+                "number_of_characters": 50229,
+                "number_texts_intersect_with_train": 0,
+                "min_text_length": 4,
+                "average_text_length": 71.14589235127478,
+                "max_text_length": 2096,
+                "unique_text": 706,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 351
+                    },
+                    "0": {
+                        "count": 355
+                    }
+                }
+            },
+            "fas": {
+                "num_samples": 7000,
+                "number_of_characters": 634088,
+                "number_texts_intersect_with_train": 0,
+                "min_text_length": 13,
+                "average_text_length": 90.584,
+                "max_text_length": 834,
+                "unique_text": 7000,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 3500
+                    },
+                    "0": {
+                        "count": 3500
+                    }
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 243325,
+        "number_of_characters": 63920925,
+        "number_texts_intersect_with_train": null,
+        "min_text_length": 1,
+        "average_text_length": 262.69772937429366,
+        "max_text_length": 390168,
+        "unique_text": 240760,
+        "unique_labels": 2,
+        "labels": {
+            "0": {
+                "count": 101833
+            },
+            "1": {
+                "count": 141492
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "urd": {
+                "num_samples": 685,
+                "number_of_characters": 56821,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 11,
+                "average_text_length": 82.95036496350365,
+                "max_text_length": 155,
+                "unique_text": 684,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 348
+                    },
+                    "1": {
+                        "count": 337
+                    }
+                }
+            },
+            "vie": {
+                "num_samples": 2384,
+                "number_of_characters": 251071,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 2,
+                "average_text_length": 105.31501677852349,
+                "max_text_length": 1532,
+                "unique_text": 2367,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 1186
+                    },
+                    "0": {
+                        "count": 1198
+                    }
+                }
+            },
+            "dza": {
+                "num_samples": 564,
+                "number_of_characters": 38627,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 9,
+                "average_text_length": 68.48758865248227,
+                "max_text_length": 395,
+                "unique_text": 563,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 274
+                    },
+                    "1": {
+                        "count": 290
+                    }
+                }
+            },
+            "tha": {
+                "num_samples": 8103,
+                "number_of_characters": 595292,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 1,
+                "average_text_length": 73.46563001357522,
+                "max_text_length": 1626,
+                "unique_text": 8102,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 3363
+                    },
+                    "0": {
+                        "count": 4740
+                    }
+                }
+            },
+            "tur": {
+                "num_samples": 4486,
+                "number_of_characters": 724148,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 3,
+                "average_text_length": 161.42398573339278,
+                "max_text_length": 1816,
+                "unique_text": 4431,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 2311
+                    },
+                    "0": {
+                        "count": 2175
+                    }
+                }
+            },
+            "slk": {
+                "num_samples": 3560,
+                "number_of_characters": 313145,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 1,
+                "average_text_length": 87.96207865168539,
+                "max_text_length": 1040,
+                "unique_text": 3560,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 3026
+                    },
+                    "0": {
+                        "count": 534
+                    }
+                }
+            },
+            "nor": {
+                "num_samples": 2675,
+                "number_of_characters": 262617,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 1,
+                "average_text_length": 98.17457943925234,
+                "max_text_length": 421,
+                "unique_text": 2669,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 909
+                    },
+                    "1": {
+                        "count": 1766
+                    }
+                }
+            },
+            "spa": {
+                "num_samples": 1029,
+                "number_of_characters": 87318,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 5,
+                "average_text_length": 84.85714285714286,
+                "max_text_length": 608,
+                "unique_text": 1029,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 851
+                    },
+                    "0": {
+                        "count": 178
+                    }
+                }
+            },
+            "rus": {
+                "num_samples": 2938,
+                "number_of_characters": 11486879,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 35,
+                "average_text_length": 3909.7614023144997,
+                "max_text_length": 390168,
+                "unique_text": 2934,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 996
+                    },
+                    "1": {
+                        "count": 1942
+                    }
+                }
+            },
+            "mlt": {
+                "num_samples": 595,
+                "number_of_characters": 73363,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 10,
+                "average_text_length": 123.29915966386555,
+                "max_text_length": 1260,
+                "unique_text": 595,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 182
+                    },
+                    "0": {
+                        "count": 413
+                    }
+                }
+            },
+            "kor": {
+                "num_samples": 36000,
+                "number_of_characters": 1290066,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 1,
+                "average_text_length": 35.835166666666666,
+                "max_text_length": 146,
+                "unique_text": 35992,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 17897
+                    },
+                    "0": {
+                        "count": 18103
+                    }
+                }
+            },
+            "ind": {
+                "num_samples": 7926,
+                "number_of_characters": 1578732,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 3,
+                "average_text_length": 199.18395155185465,
+                "max_text_length": 567,
+                "unique_text": 7926,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 5129
+                    },
+                    "0": {
+                        "count": 2797
+                    }
+                }
+            },
+            "heb": {
+                "num_samples": 6621,
+                "number_of_characters": 721542,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 2,
+                "average_text_length": 108.9777979157227,
+                "max_text_length": 4767,
+                "unique_text": 6621,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 4679
+                    },
+                    "0": {
+                        "count": 1942
+                    }
+                }
+            },
+            "jpn": {
+                "num_samples": 9831,
+                "number_of_characters": 1697449,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 17,
+                "average_text_length": 172.66290306174346,
+                "max_text_length": 1587,
+                "unique_text": 9831,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 6080
+                    },
+                    "0": {
+                        "count": 3751
+                    }
+                }
+            },
+            "ell": {
+                "num_samples": 5936,
+                "number_of_characters": 2083879,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 6,
+                "average_text_length": 351.05778301886795,
+                "max_text_length": 4992,
+                "unique_text": 3968,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 716
+                    },
+                    "1": {
+                        "count": 5220
+                    }
+                }
+            },
+            "deu": {
+                "num_samples": 6444,
+                "number_of_characters": 1855246,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 8,
+                "average_text_length": 287.90285536933584,
+                "max_text_length": 15575,
+                "unique_text": 6207,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 1216
+                    },
+                    "0": {
+                        "count": 5228
+                    }
+                }
+            },
+            "eng": {
+                "num_samples": 6920,
+                "number_of_characters": 716918,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 5,
+                "average_text_length": 103.60086705202312,
+                "max_text_length": 283,
+                "unique_text": 6911,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 3610
+                    },
+                    "0": {
+                        "count": 3310
+                    }
+                }
+            },
+            "fin": {
+                "num_samples": 4432,
+                "number_of_characters": 353568,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 1,
+                "average_text_length": 79.77617328519855,
+                "max_text_length": 8973,
+                "unique_text": 4349,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 1880
+                    },
+                    "0": {
+                        "count": 2552
+                    }
+                }
+            },
+            "hrv": {
+                "num_samples": 1507,
+                "number_of_characters": 243021,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 2,
+                "average_text_length": 161.26144658261447,
+                "max_text_length": 1851,
+                "unique_text": 1503,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 1148
+                    },
+                    "0": {
+                        "count": 359
+                    }
+                }
+            },
+            "zho": {
+                "num_samples": 12348,
+                "number_of_characters": 1615558,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 2,
+                "average_text_length": 130.8356009070295,
+                "max_text_length": 4722,
+                "unique_text": 12348,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 7400
+                    },
+                    "0": {
+                        "count": 4948
+                    }
+                }
+            },
+            "cmn": {
+                "num_samples": 28204,
+                "number_of_characters": 4518788,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 2,
+                "average_text_length": 160.21798326478515,
+                "max_text_length": 266,
+                "unique_text": 28198,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 23945
+                    },
+                    "0": {
+                        "count": 4259
+                    }
+                }
+            },
+            "bul": {
+                "num_samples": 5412,
+                "number_of_characters": 260756,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 1,
+                "average_text_length": 48.18107908351811,
+                "max_text_length": 134,
+                "unique_text": 5407,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 4587
+                    },
+                    "0": {
+                        "count": 825
+                    }
+                }
+            },
+            "eus": {
+                "num_samples": 789,
+                "number_of_characters": 48794,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 6,
+                "average_text_length": 61.842839036755386,
+                "max_text_length": 446,
+                "unique_text": 789,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 668
+                    },
+                    "0": {
+                        "count": 121
+                    }
+                }
+            },
+            "uig": {
+                "num_samples": 1962,
+                "number_of_characters": 483107,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 16,
+                "average_text_length": 246.23190621814476,
+                "max_text_length": 1288,
+                "unique_text": 1923,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 1709
+                    },
+                    "0": {
+                        "count": 253
+                    }
+                }
+            },
+            "bam": {
+                "num_samples": 1569,
+                "number_of_characters": 44912,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 3,
+                "average_text_length": 28.62460165710644,
+                "max_text_length": 686,
+                "unique_text": 1569,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 1170
+                    },
+                    "0": {
+                        "count": 399
+                    }
+                }
+            },
+            "pol": {
+                "num_samples": 3737,
+                "number_of_characters": 2909471,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 47,
+                "average_text_length": 778.5579341717955,
+                "max_text_length": 10735,
+                "unique_text": 3737,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 1553
+                    },
+                    "0": {
+                        "count": 2184
+                    }
+                }
+            },
+            "cym": {
+                "num_samples": 17500,
+                "number_of_characters": 24364519,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 34,
+                "average_text_length": 1392.2582285714286,
+                "max_text_length": 13751,
+                "unique_text": 17395,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 8750
+                    },
+                    "0": {
+                        "count": 8750
+                    }
+                }
+            },
+            "ara": {
+                "num_samples": 2468,
+                "number_of_characters": 163891,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 1,
+                "average_text_length": 66.40640194489465,
+                "max_text_length": 954,
+                "unique_text": 2468,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 1247
+                    },
+                    "0": {
+                        "count": 1221
+                    }
+                }
+            },
+            "fas": {
+                "num_samples": 56700,
+                "number_of_characters": 5081427,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 11,
+                "average_text_length": 89.61952380952381,
+                "max_text_length": 1700,
+                "unique_text": 56700,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 28350
+                    },
+                    "1": {
+                        "count": 28350
+                    }
+                }
+            }
+        }
+    }
+}

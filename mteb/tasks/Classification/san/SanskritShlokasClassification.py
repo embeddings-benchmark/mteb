@@ -14,7 +14,7 @@ class SanskritShlokasClassification(AbsTaskClassification):
             "revision": "5a79d6472db143690c7ce6e974995d3610eee7f0",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         date=("2019-01-01", "2020-01-01"),
         eval_splits=["train", "validation"],

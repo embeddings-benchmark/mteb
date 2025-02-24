@@ -14,7 +14,7 @@ class SickrPLSTS(AbsTaskSTS):
         description="Polish version of SICK dataset for textual relatedness.",
         reference="https://aclanthology.org/2020.lrec-1.207",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
@@ -59,12 +59,8 @@ class SickrPLSTS(AbsTaskSTS):
         """,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 1
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 1
+    max_score = 5
 
 
 class CdscrSTS(AbsTaskSTS):
@@ -77,7 +73,7 @@ class CdscrSTS(AbsTaskSTS):
         description="Compositional Distributional Semantics Corpus for textual relatedness.",
         reference="https://aclanthology.org/P17-1073.pdf",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
@@ -109,9 +105,5 @@ class CdscrSTS(AbsTaskSTS):
         """,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 1
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 1
+    max_score = 5

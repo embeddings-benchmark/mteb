@@ -14,7 +14,7 @@ class EstonianValenceClassification(AbsTaskClassification):
         description="Dataset containing annotated Estonian news data from the Postimees and Õhtuleht newspapers.",
         reference="https://figshare.com/articles/dataset/Estonian_Valence_Corpus_Eesti_valentsikorpus/24517054",
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["est-Latn"],

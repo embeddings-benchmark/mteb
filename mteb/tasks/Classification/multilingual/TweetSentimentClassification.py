@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -16,7 +15,7 @@ _LANGUAGES = {
 }
 
 
-class TweetSentimentClassification(MultilingualTask, AbsTaskClassification):
+class TweetSentimentClassification(AbsTaskClassification):
     fast_loading = True
     metadata = TaskMetadata(
         name="TweetSentimentClassification",
@@ -26,7 +25,7 @@ class TweetSentimentClassification(MultilingualTask, AbsTaskClassification):
         },
         description="A multilingual Sentiment Analysis dataset consisting of tweets in 8 different languages.",
         reference="https://aclanthology.org/2022.lrec-1.27",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         type="Classification",
         eval_splits=["test"],

@@ -1,0 +1,68 @@
+{
+    "test": {
+        "num_samples": 367,
+        "number_of_characters": 202245,
+        "number_texts_intersect_with_train": 0,
+        "min_text_length": 31,
+        "average_text_length": 551.0762942779292,
+        "max_text_length": 2437,
+        "unique_text": 367,
+        "unique_labels": 7,
+        "labels": {
+            "Facts": {
+                "count": 49
+            },
+            "Procedural History": {
+                "count": 58
+            },
+            "Issue": {
+                "count": 51
+            },
+            "Rule": {
+                "count": 56
+            },
+            "Analysis": {
+                "count": 56
+            },
+            "Conclusion": {
+                "count": 50
+            },
+            "Decree": {
+                "count": 47
+            }
+        }
+    },
+    "train": {
+        "num_samples": 7,
+        "number_of_characters": 1447,
+        "number_texts_intersect_with_train": null,
+        "min_text_length": 52,
+        "average_text_length": 206.71428571428572,
+        "max_text_length": 302,
+        "unique_text": 7,
+        "unique_labels": 7,
+        "labels": {
+            "Facts": {
+                "count": 1
+            },
+            "Procedural History": {
+                "count": 1
+            },
+            "Issue": {
+                "count": 1
+            },
+            "Rule": {
+                "count": 1
+            },
+            "Analysis": {
+                "count": 1
+            },
+            "Conclusion": {
+                "count": 1
+            },
+            "Decree": {
+                "count": 1
+            }
+        }
+    }
+}

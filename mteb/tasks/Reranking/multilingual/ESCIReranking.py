@@ -2,8 +2,7 @@ from __future__ import annotations
 
 import logging
 
-from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
-from mteb.abstasks.MultilingualTask import MultilingualTask
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 logger = logging.getLogger(__name__)
@@ -24,21 +23,21 @@ _CITATION = """@article{reddy2022shopping,
 }"""
 
 
-class ESCIReranking(MultilingualTask, AbsTaskReranking):
+class ESCIReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="ESCIReranking",
         description="",
         reference="https://github.com/amazon-science/esci-data/",
         dataset={
-            "path": "mteb/esci",
-            "revision": "237f74be0503482b4e8bc1b83778c7a87ea93fd8",
+            "path": "mteb/ESCIReranking",
+            "revision": "dc2cfaf4fcbf238806a02ae8607786e88112463e",
         },
         type="Reranking",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_LANGUAGES,
-        main_score="map",
+        main_score="map_at_1000",
         date=("2022-06-14", "2022-06-14"),
         domains=["Written"],
         task_subtypes=[],

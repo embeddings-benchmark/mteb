@@ -25,14 +25,9 @@ class STSEvaluator(Evaluator):
         sentences2,
         gold_scores,
         task_name: str | None = None,
-        limit: int | None = None,
         **kwargs,
     ):
         super().__init__(**kwargs)
-        if limit is not None:
-            sentences1 = sentences1[:limit]
-            sentences2 = sentences2[:limit]
-            gold_scores = gold_scores[:limit]
         self.sentences1 = sentences1
         self.sentences2 = sentences2
         self.gold_scores = gold_scores

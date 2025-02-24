@@ -76,7 +76,7 @@ def test_get_tasks_filtering():
     tasks = get_tasks(languages=["eng"])
 
     for task in tasks:
-        if task.is_multilingual:
+        if task.metadata.is_multilingual:
             assert isinstance(task.metadata.eval_langs, dict)
 
             for hf_subset in task.hf_subsets:
@@ -98,8 +98,3 @@ def test_MTEBTasks(
     # check for header of a table
     n_langs = len(tasks)
     assert len(tasks.to_markdown().split("\n")) - 3 == n_langs
-
-
-def test_all_tasks_fetch():
-    """Test that all tasks can be fetched"""
-    mteb.MTEB.mteb_tasks()

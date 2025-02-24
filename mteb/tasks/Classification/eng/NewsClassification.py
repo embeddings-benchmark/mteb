@@ -14,7 +14,7 @@ class NewsClassification(AbsTaskClassification):
         },
         reference="https://arxiv.org/abs/1509.01626",
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

@@ -2,7 +2,42 @@ from __future__ import annotations
 
 from functools import partial
 
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import (
+    ModelMeta,
+    ScoringFunction,
+    sentence_transformers_loader,
+)
+
+inf_retreiver_v1_training_data = {
+    # eng_Latn
+    "ArguAna": ["train"],
+    "CQADupstackRetrieval": ["train"],
+    "ClimateFEVER": ["train"],
+    "DBPedia": ["train"],
+    "FEVER": ["train"],
+    "FiQA2018": ["train"],
+    "HotpotQA": ["train"],
+    "MSMARCO": ["train"],
+    "NFCorpus": ["train"],
+    "NQ": ["train"],
+    "QuoraRetrieval": ["train"],
+    "SCIDOCS": ["train"],
+    "SciFact": ["train"],
+    "TRECCOVID": ["train"],
+    "Touche2020": ["train"],
+    ## and other private data of INF TECH (not in MTEB),
+    #
+    # zho_Hans
+    "CmedqaRetrieval": ["train"],
+    "CovidRetrieval": ["train"],
+    "DuRetrieval": ["train"],
+    "EcomRetrieval": ["train"],
+    "MMarcoRetrieval": ["train"],
+    "MedicalRetrieval": ["train"],
+    "T2Retrieval": ["train"],
+    "VideoRetrieval": ["train"],
+    ## and other private data of INF TECH (not in MTEB),
+}
 
 inf_retreiver_v1_training_data = {
     # eng_Latn
@@ -53,7 +88,7 @@ inf_retriever_v1 = ModelMeta(
     license="apache-2.0",
     max_tokens=32768,
     reference="https://huggingface.co/infly/inf-retriever-v1",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from="Alibaba-NLP/gte-Qwen2-7B-instruct",

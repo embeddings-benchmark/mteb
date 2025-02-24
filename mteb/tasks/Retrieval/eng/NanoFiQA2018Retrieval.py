@@ -18,7 +18,7 @@ class NanoFiQA2018Retrieval(AbsTaskRetrieval):
             "revision": "4163ba032953d5044a7a6244261413f609c14342",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["eng-Latn"],

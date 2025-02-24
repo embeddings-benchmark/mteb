@@ -19,7 +19,7 @@ class IndonesianMongabayConservationClassification(AbsTaskClassification):
             "revision": "c9e9f2c09836bfec57c543ab65983f3398e9657a",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         date=("2012-01-01", "2023-12-31"),
         eval_splits=["validation", "test"],
@@ -57,7 +57,7 @@ class IndonesianMongabayConservationClassification(AbsTaskClassification):
     )
 
     def dataset_transform(self):
-        splits = self.metadata_dict["eval_splits"]
+        splits = self.metadata.eval_splits
         class_labels = ["positif", "netral", "negatif"]
 
         ds = {}

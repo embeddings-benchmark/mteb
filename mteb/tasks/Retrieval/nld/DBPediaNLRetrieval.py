@@ -15,7 +15,7 @@ class DBPediaNL(AbsTaskRetrieval):
             "revision": "e9c354ce0dfabd13e8808a052d0da2ace95cbef6",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nld-Latn"],

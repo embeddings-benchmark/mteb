@@ -14,7 +14,7 @@ class RomaniBibleClustering(AbsTaskClustering):
             "revision": "97fae0e80a8d275bc685dcb3da08972af542ad6e",
         },
         type="Clustering",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rom-Latn"],

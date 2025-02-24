@@ -14,7 +14,7 @@ class WikipediaCrystallographyAnalyticalClassification(AbsTaskClassification):
             "revision": "740565a6a853aaed1114a13bdfd5fd46857b4f11",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

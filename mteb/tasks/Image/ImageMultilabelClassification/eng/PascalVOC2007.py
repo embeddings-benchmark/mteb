@@ -44,10 +44,6 @@ class VOC2007Classification(AbsTaskImageMultilabelClassification):
             pages = "303--338",
         }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 4952},
-            "avg_character_length": {"test": 431.4},
-        },
     )
 
     # Override default column name in the subclass

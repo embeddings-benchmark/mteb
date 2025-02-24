@@ -18,7 +18,7 @@ class NanoSciFactRetrieval(AbsTaskRetrieval):
             "revision": "309f1d1ae3ae2e092444a8a0c25bed59b82318bc",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["eng-Latn"],

@@ -72,6 +72,32 @@ class PairClassificationEvaluator(Evaluator):
         scores["main_score"] = main_score
         return scores
 
+    @staticmethod
+    def _encode_unique_texts(
+        all_texts: list[str],
+        model: Encoder,
+        task_name: str | None,
+        **encode_kwargs: Any,
+    ):
+        index_map, all_unique_texts, all_texts_indexes = {}, [], []
+        for text in all_texts:
+            text_hash = hash(text)
+            if text_hash not in index_map:
+                index_map[text_hash] = len(all_unique_texts)
+                all_unique_texts.append(text)
+            all_texts_indexes.append(index_map[text_hash])
+        logger.warning(
+            f"A total on {len(all_texts) - len(all_unique_texts)}/{len(all_texts)} duplicate texts were found during encoding. Only encoding unique text and duplicating embeddings across."
+        )
+        all_unique_texts_embs = np.asarray(
+            model.encode(
+                all_unique_texts,
+                task_name=task_name,
+                **encode_kwargs,
+            )
+        )
+        return all_unique_texts_embs[all_texts_indexes]
+
     def compute_metrics(
         self,
         model: Encoder | EncoderWithSimilarity,
@@ -81,22 +107,16 @@ class PairClassificationEvaluator(Evaluator):
         if "batch_size" not in encode_kwargs:
             encode_kwargs["batch_size"] = 32
 
-        sentences = list(set(self.sentences1 + self.sentences2))
-
-        total_sents = len(self.sentences1) + len(self.sentences2)
-        n_duplicates = total_sents - len(sentences)
-        if n_duplicates:
-            logger.warning(
-                f"Found {n_duplicates}/{total_sents} duplicates in the input data. Only encoding unique sentences."
-            )
-        embeddings = model.encode(
-            sentences,
+        all_sentences = self.sentences1 + self.sentences2
+        len_sentences1 = len(self.sentences1)
+        embeddings = self._encode_unique_texts(
+            all_sentences,
+            model,
             task_name=self.task_name,
             **encode_kwargs,
         )
-        emb_dict = dict(zip(sentences, embeddings))
-        embeddings1 = [emb_dict[sent] for sent in self.sentences1]
-        embeddings2 = [emb_dict[sent] for sent in self.sentences2]
+        embeddings1 = embeddings[:len_sentences1]
+        embeddings2 = embeddings[len_sentences1:]
 
         logger.info("Computing similarity distances.")
         cosine_scores = 1 - paired_cosine_distances(embeddings1, embeddings2)

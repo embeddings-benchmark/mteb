@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -15,7 +14,7 @@ _LANGUAGES = {
 _SPLITS = ["test"]
 
 
-class BUCCBitextMiningFast(AbsTaskBitextMining, MultilingualTask):
+class BUCCBitextMiningFast(AbsTaskBitextMining):
     fast_loading = True
     metadata = TaskMetadata(
         name="BUCC.v2",
@@ -26,7 +25,7 @@ class BUCCBitextMiningFast(AbsTaskBitextMining, MultilingualTask):
         description="BUCC bitext mining dataset",
         reference="https://comparable.limsi.fr/bucc2018/bucc2018-task.html",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=_SPLITS,
         eval_langs=_LANGUAGES,

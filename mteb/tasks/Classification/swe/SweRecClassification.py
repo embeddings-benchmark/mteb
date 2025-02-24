@@ -14,7 +14,7 @@ class SweRecClassification(AbsTaskClassification):
             "revision": "b07c6ce548f6a7ac8d546e1bbe197a0086409190",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["swe-Latn"],

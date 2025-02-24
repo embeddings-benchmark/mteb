@@ -47,19 +47,39 @@ class Encoder(Protocol):
             sentences: The sentences to encode.
             task_name: The name of the task. Sentence-transformers uses this to
                 determine which prompt to use from a specified dictionary.
+                The order of priorities for prompt selection are:
+                    1. Composed prompt of task name + prompt type (query or passage)
+                    2. Specific task prompt
+                    3. Composed prompt of task type + prompt type (query or passage)
+                    4. Specific task type prompt
+                    5. Specific prompt type (query or passage)
             prompt_type: The name type of prompt. (query or passage)
             **kwargs: Additional arguments to pass to the encoder.
 
-            The order of priorities for prompt selection are:
-                1. Composed prompt of task name + prompt type (query or passage)
-                2. Specific task prompt
-                3. Composed prompt of task type + prompt type (query or passage)
-                4. Specific task type prompt
-                5. Specific prompt type (query or passage)
 
 
         Returns:
             The encoded sentences.
+        """
+        ...
+
+
+class EncoderWithQueryInstructionFormatting(Protocol):
+    """Optional protocol for encoders that support combining queries with instructions in a model-specific way. If not implemented, MTEB will use the default query instruction formatting ({query} {instruction})."""
+
+    def combine_query_and_instruction(
+        self,
+        query: str,
+        instruction: str,
+    ) -> str:
+        """Combines a query with an instruction.
+
+        Args:
+            query: The query text to combine.
+            instruction: The instruction text to combine with the query.
+
+        Returns:
+            The combined query and instruction text.
         """
         ...
 

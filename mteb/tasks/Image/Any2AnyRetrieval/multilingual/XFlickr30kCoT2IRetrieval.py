@@ -3,7 +3,6 @@ from __future__ import annotations
 from datasets import DatasetDict, load_dataset
 
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -74,7 +73,7 @@ def _load_xflickrco_data(
     return corpus, queries, relevant_docs
 
 
-class XFlickr30kCoT2IRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
+class XFlickr30kCoT2IRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="XFlickr30kCoT2IRetrieval",
         description="Retrieve images based on multilingual descriptions.",
@@ -105,69 +104,6 @@ class XFlickr30kCoT2IRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
   year={2022},
   organization={PMLR}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "de": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 2000,
-                        "num_queries": 2000,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "en": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 2000,
-                        "num_queries": 2000,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "es": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 2000,
-                        "num_queries": 2000,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "id": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 2000,
-                        "num_queries": 2000,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "ja": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 2000,
-                        "num_queries": 2000,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "ru": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 2000,
-                        "num_queries": 2000,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "tr": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 2000,
-                        "num_queries": 2000,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                    "zh": {
-                        "average_document_length": 0.0,
-                        "average_query_length": 0.0,
-                        "num_documents": 2000,
-                        "num_queries": 2000,
-                        "average_relevant_docs_per_query": 1.0,
-                    },
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -175,11 +111,11 @@ class XFlickr30kCoT2IRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_xflickrco_data(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             langs=self.hf_subsets,
-            splits=self.metadata_dict["eval_splits"],
+            splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True

@@ -1,0 +1,34 @@
+{
+    "validation": {
+        "num_samples": 1458,
+        "number_of_characters": 64295,
+        "unique_pairs": 1455,
+        "min_sentence1_length": 4,
+        "average_sentence1_len": 21.980109739369,
+        "max_sentence1_length": 99,
+        "unique_sentence1": 1427,
+        "min_sentence2_length": 5,
+        "average_sentence2_len": 22.117969821673526,
+        "max_sentence2_length": 106,
+        "unique_sentence2": 1415,
+        "min_score": 0,
+        "avg_score": 2.00480109739369,
+        "max_score": 5
+    },
+    "test": {
+        "num_samples": 1361,
+        "number_of_characters": 51020,
+        "unique_pairs": 1354,
+        "min_sentence1_length": 4,
+        "average_sentence1_len": 18.857457751653197,
+        "max_sentence1_length": 113,
+        "unique_sentence1": 1225,
+        "min_sentence2_length": 3,
+        "average_sentence2_len": 18.62968405584129,
+        "max_sentence2_length": 127,
+        "unique_sentence2": 1298,
+        "min_score": 0,
+        "avg_score": 2.3115356355620866,
+        "max_score": 5
+    }
+}

@@ -42,8 +42,4 @@ version train/test list.""",
       primaryClass={cs.CV},
       url={https://arxiv.org/abs/1212.0402}, 
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 697222},
-            "avg_character_length": {"test": 0},
-        },
     )

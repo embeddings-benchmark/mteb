@@ -20,7 +20,7 @@ class NanoHotpotQARetrieval(AbsTaskRetrieval):
             "revision": "d79c0cdda980aba54842756770928035e1b61a51",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["eng-Latn"],

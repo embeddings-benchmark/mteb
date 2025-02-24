@@ -43,8 +43,4 @@ class Winoground(AbsTaskImageTextPairClassification):
             primaryClass={cs.CV},
             url={https://arxiv.org/abs/2204.03162}, 
         }""",
-        descriptive_stats={
-            "n_samples": {"test": 400},
-            "avg_character_length": {"test": 431.4},
-        },
     )

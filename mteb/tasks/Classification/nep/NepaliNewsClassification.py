@@ -14,7 +14,7 @@ class NepaliNewsClassification(AbsTaskClassification):
             "revision": "79125f20d858a08f71ec4923169a6545221725c4",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         date=("2019-01-01", "2020-01-01"),
         eval_splits=["train"],

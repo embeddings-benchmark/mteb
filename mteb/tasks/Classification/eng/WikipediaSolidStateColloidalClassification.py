@@ -14,7 +14,7 @@ class WikipediaSolidStateColloidalClassification(AbsTaskClassification):
             "revision": "7d8df44e588b6143d4856c781f72f919fa0599a7",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

@@ -18,7 +18,7 @@ class AbsTaskImageTextPairClassification(AbsTask):
     The similarity is computed between pairs and the results are ranked.
     Note that the number of images and the number of captions can be different.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns:
         images: List[List[Image.Image]]
         captions: List[List[str]]
     """

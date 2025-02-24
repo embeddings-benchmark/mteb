@@ -8,7 +8,7 @@ class TUBerlinT2IRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="TUBerlinT2IRetrieval",
         description="Retrieve sketch images based on text descriptions.",
-        reference="https://dl.acm.org/doi/pdf/10.1145/2185520.2185540?casa_token=tq-eUx5UROYAAAAA:_694nPzE7tali6LCkxQc0M-mlo9xslasPMcVnFPMy9tDfvt7lg7p1RTe-k8VWCjuv9gmkQqasKUZ",
+        reference="https://dl.acm.org/doi/pdf/10.1145/2185520.2185540",
         dataset={
             "path": "gowitheflow/tu-berlin",
             "revision": "0cd78cd1ddbd3cafa9f319c638ebd77836ec9ff6",
@@ -37,16 +37,4 @@ class TUBerlinT2IRetrieval(AbsTaskAny2AnyRetrieval):
   year={2012},
   publisher={Acm New York, NY, USA}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 250},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 7.24,
-                    "num_documents": 20000,
-                    "num_queries": 250,
-                    "average_relevant_docs_per_query": 80.0,
-                }
-            },
-        },
     )

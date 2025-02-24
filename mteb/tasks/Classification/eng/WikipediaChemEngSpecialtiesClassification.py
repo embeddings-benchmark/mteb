@@ -14,7 +14,7 @@ class WikipediaChemEngSpecialtiesClassification(AbsTaskClassification):
             "revision": "f81a76a2fb690e5d5bd7a26dd07e85cdf8405dfb",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

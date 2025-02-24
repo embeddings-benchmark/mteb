@@ -15,7 +15,7 @@ class KlueNLI(AbsTaskPairClassification):
         description="Textual Entailment between a hypothesis sentence and a premise sentence. Part of the Korean Language Understanding Evaluation (KLUE).",
         reference="https://arxiv.org/abs/2105.09680",
         type="PairClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation"],
         eval_langs=["kor-Hang"],

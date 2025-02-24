@@ -15,7 +15,7 @@ class STS14STS(AbsTaskSTS):
         description="SemEval STS 2014 dataset. Currently only the English dataset",
         reference="https://www.aclweb.org/anthology/S14-1002",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -47,9 +47,5 @@ class STS14STS(AbsTaskSTS):
 }""",
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5

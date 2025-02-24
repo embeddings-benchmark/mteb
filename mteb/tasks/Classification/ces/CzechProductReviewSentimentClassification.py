@@ -14,7 +14,7 @@ class CzechProductReviewSentimentClassification(AbsTaskClassification):
             "revision": "2e6fedf42c9c104e83dfd95c3a453721e683e244",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ces-Latn"],

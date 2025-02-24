@@ -14,7 +14,7 @@ class EmotionClassification(AbsTaskClassification):
             "revision": "4f58c6b202a23cf9a4da393831edf4f9183cad37",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

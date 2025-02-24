@@ -14,7 +14,7 @@ class TurkishMovieSentimentClassification(AbsTaskClassification):
             "revision": "409a4415cce5f6bcfca6d5f3ca3c408211ca00b3",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["tur-Latn"],
