@@ -127,6 +127,7 @@ TASK_TYPE = Literal[
 
 
 TASK_CATEGORY = Literal[
+    "a2a",  # Audio-to-audio
     "s2s",  # Sentence-to-sentence
     "s2p",  # Sentence-to-paragraph
     "p2p",  # Paragraph-to-paragraph
