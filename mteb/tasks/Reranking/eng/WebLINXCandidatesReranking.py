@@ -15,7 +15,7 @@ class WebLINXCandidatesReranking(AbsTaskRetrieval):
             "revision": "107fdc2402d2c4bfb2a720dfcfe1f6ff9d21151b",
         },
         type="Reranking",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[
             "validation",

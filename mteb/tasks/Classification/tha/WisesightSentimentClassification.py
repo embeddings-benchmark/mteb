@@ -14,7 +14,7 @@ class WisesightSentimentClassification(AbsTaskClassification):
             "revision": "727ea9bd253f9eedf16aebec6ac3f07791fb3db2",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["tha-Thai"],

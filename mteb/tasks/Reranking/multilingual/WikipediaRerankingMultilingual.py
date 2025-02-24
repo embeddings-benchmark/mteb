@@ -34,7 +34,7 @@ class WikipediaRerankingMultilingual(AbsTaskRetrieval):
             "revision": "803771c366038ed587b21e3d8fe25f8f73134fad",
         },
         type="Reranking",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_EVAL_LANGS,

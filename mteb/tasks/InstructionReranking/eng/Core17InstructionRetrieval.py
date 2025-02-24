@@ -15,7 +15,7 @@ class Core17InstructionRetrieval(AbsTaskRetrieval):
             "revision": "7030c7efc3585d9020f243b12862997889243b78",
         },
         type="InstructionReranking",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

@@ -23,7 +23,7 @@ class MindSmallReranking(AbsTaskRetrieval):
             "revision": "227478e3235572039f4f7661840e059f31ef6eb1",
         },
         type="Reranking",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
+from unittest.mock import patch
 
 import numpy as np
 import pytest
@@ -13,10 +14,12 @@ from sentence_transformers import SentenceTransformer
 import mteb
 import mteb.overview
 from mteb.abstasks import AbsTask
-from mteb.benchmarks.benchmarks import Benchmark
 from mteb.create_meta import generate_readme
+from mteb.evaluation.MTEB import logger
 
 from .mock_models import (
+    MockCLIPEncoder,
+    MockMocoEncoder,
     MockNumpyEncoder,
     MockSentenceTransformer,
     MockSentenceTransformerWrapper,
@@ -24,6 +27,8 @@ from .mock_models import (
     MockTorchEncoder,
 )
 from .mock_tasks import (
+    MockImageClusteringTask,
+    MockImageTextPairClassificationTask,
     MockInstructionRetrieval,
     MockMultilingualInstructionRetrieval,
     MockMultilingualRerankingTask,
@@ -188,7 +193,7 @@ def test_encode_kwargs_passed_to_all_encodes(task_name: str | AbsTask, tmp_path:
 @pytest.mark.parametrize("model", [MockNumpyEncoder()])
 def test_run_using_benchmark(model: mteb.Encoder, tmp_path: Path):
     """Test that a benchmark object can be run using the MTEB class."""
-    bench = Benchmark(
+    bench = mteb.Benchmark(
         name="test_bench", tasks=mteb.get_tasks(tasks=["STS12", "SummEval"])
     )
 
@@ -202,12 +207,14 @@ def test_run_using_benchmark(model: mteb.Encoder, tmp_path: Path):
 def test_run_using_list_of_benchmark(model: mteb.Encoder, tmp_path: Path):
     """Test that a list of benchmark objects can be run using the MTEB class."""
     bench = [
-        Benchmark(name="test_bench", tasks=mteb.get_tasks(tasks=["STS12", "SummEval"]))
+        mteb.Benchmark(
+            name="test_bench", tasks=mteb.get_tasks(tasks=["STS12", "SummEval"])
+        )
     ]
 
     eval = mteb.MTEB(tasks=bench)
     eval.run(
-        model, output_folder=tmp_path.as_posix()
+        model, output_folder=tmp_path.as_posix(), overwrite_results=True
     )  # we just want to test that it runs
 
 
@@ -217,13 +224,13 @@ def test_benchmark_names_must_be_unique():
     names = [
         inst.name
         for nam, inst in benchmark_module.__dict__.items()
-        if isinstance(inst, Benchmark)
+        if isinstance(inst, mteb.Benchmark)
     ]
     assert len(names) == len(set(names))
 
 
 @pytest.mark.parametrize(
-    "name", ["MTEB(eng, classic)", "MTEB(rus)", "MTEB(Scandinavian)"]
+    "name", ["MTEB(eng, v1)", "MTEB(rus, v1)", "MTEB(Scandinavian, v1)"]
 )
 def test_get_benchmark(name):
     benchmark = mteb.get_benchmark(benchmark_name=name)
@@ -263,6 +270,7 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
     eval.run(
         model,
         output_folder=tmp_path.as_posix(),
+        overwrite_results=True,
     )
 
     class MockEncoderWithExistingPrompts(mteb.Encoder):
@@ -346,4 +354,41 @@ def test_model_query_passage_prompts_task_type(
         model,
         model_prompts=prompt_list,
         output_folder=tmp_path.as_posix(),
+        overwrite_results=True,
+    )
+
+
+# NOTE: Covers image and image-text tasks. Can be extended to cover new mixed-modality task types.
+@pytest.mark.parametrize(
+    "task", [MockImageTextPairClassificationTask(), MockRetrievalTask()]
+)
+@patch.object(logger, "info")
+def test_task_modality_filtering(mock_logger, task):
+    eval = mteb.MTEB(tasks=[task])
+
+    # Run the evaluation
+    eval.run(
+        model=MockMocoEncoder(),
+        output_folder="tests/results",
+        overwrite_results=True,
+    )
+
+    # Check that the task was skipped and the correct log message was generated
+    task_modalities = ", ".join(
+        f"'{modality}'" for modality in sorted(task.metadata.modalities)
+    )
+    mock_logger.assert_called_with(
+        f"MockMocoModel only supports ['image'], but the task modalities are [{task_modalities}]."
+    )
+
+
+@pytest.mark.parametrize("task", [MockImageClusteringTask()])
+def test_task_modality_filtering_model_modalities_more_than_task_modalities(task):
+    eval = mteb.MTEB(tasks=[task])
+
+    # Run the evaluation
+    eval.run(
+        model=MockCLIPEncoder(),
+        output_folder="tests/results",
+        overwrite_results=True,
     )

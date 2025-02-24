@@ -24,7 +24,7 @@ class MLQuestionsRetrieval(AbsTaskRetrieval):
             + "It consists of ML questions along with passages from Wikipedia machine learning pages (https://en.wikipedia.org/wiki/Category:Machine_learning)"
         ),
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["dev", "test"],
         eval_langs=["eng-Latn"],

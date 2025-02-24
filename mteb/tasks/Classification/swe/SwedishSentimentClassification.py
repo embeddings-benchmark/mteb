@@ -14,7 +14,7 @@ class SwedishSentimentClassification(AbsTaskClassification):
             "revision": "39e35f55d58338ebd602f8d83b52cfe027f5146a",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["swe-Latn"],

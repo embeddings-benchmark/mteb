@@ -16,7 +16,7 @@ class JSTS(AbsTaskSTS):
         + "(Miyazaki and Shimizu, 2016) and annotated by crowdsource annotators.",
         reference="https://aclanthology.org/2022.lrec-1.317.pdf#page=2.00",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation"],
         eval_langs=["jpn-Jpan"],

@@ -23,7 +23,7 @@ class MTOPDomainClassification(AbsTaskClassification):
         },
         description="MTOP: Multilingual Task-Oriented Semantic Parsing",
         reference="https://arxiv.org/pdf/2008.09335.pdf",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         type="Classification",
         eval_splits=["validation", "test"],

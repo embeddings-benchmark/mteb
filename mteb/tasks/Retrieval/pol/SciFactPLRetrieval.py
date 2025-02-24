@@ -15,7 +15,7 @@ class SciFactPL(AbsTaskRetrieval):
             "revision": "d9707265734052a21d5892b6300ca11028fa067b",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],

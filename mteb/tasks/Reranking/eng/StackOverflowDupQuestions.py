@@ -15,7 +15,7 @@ class StackOverflowDupQuestions(AbsTaskRetrieval):
             "revision": "5debda000fe8e27ebb5c123d38081f92e1847a59",
         },
         type="Reranking",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

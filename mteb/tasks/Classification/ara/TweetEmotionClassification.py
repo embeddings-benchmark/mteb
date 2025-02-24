@@ -14,7 +14,7 @@ class TweetEmotionClassification(AbsTaskClassification):
         description="A dataset of 10,000 tweets that was created with the aim of covering the most frequently used emotion categories in Arabic tweets.",
         reference="https://link.springer.com/chapter/10.1007/978-3-319-77116-8_8",
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ara-Arab"],

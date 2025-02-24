@@ -107,7 +107,7 @@ class IndicGenBenchFloresBitextMining(AbsTaskBitextMining):
         description="Flores-IN dataset is an extension of Flores dataset released as a part of the IndicGenBench by Google",
         reference="https://github.com/google-research-datasets/indic-gen-bench/",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=_SPLIT,
         eval_langs=_LANGUAGES_MAPPING,

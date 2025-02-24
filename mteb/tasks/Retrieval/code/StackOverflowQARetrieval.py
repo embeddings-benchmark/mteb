@@ -16,7 +16,7 @@ class StackOverflowQARetrieval(AbsTaskRetrieval):
             "revision": "db8f169f3894c14a00251061f957b2063eef2bd5",
         },
         type="Retrieval",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["eng-Latn"],

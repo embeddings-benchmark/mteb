@@ -28,7 +28,7 @@ class TopiOCQARetrieval(AbsTaskRetrieval):
             + "It consists of conversation histories along with manually labelled relevant/gold passage."
         ),
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation"],
         eval_langs=["eng-Latn"],
@@ -112,7 +112,7 @@ class TopiOCQARetrievalHardNegatives(AbsTaskRetrieval):
             + "It consists of conversation histories along with manually labelled relevant/gold passage. The hard negative version has been created by pooling the 250 top documents per query from BM25, e5-multilingual-large and e5-mistral-instruct."
         ),
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation"],
         eval_langs=["eng-Latn"],

@@ -28,7 +28,7 @@ class NusaTranslationBitextMining(AbsTaskBitextMining):
         description="NusaTranslation is a parallel dataset for machine translation on 11 Indonesia languages and English.",
         reference="https://huggingface.co/datasets/indonlp/nusatranslation_mt",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=_LANGUAGES,

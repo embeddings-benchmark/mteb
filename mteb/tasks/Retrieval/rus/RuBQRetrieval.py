@@ -17,7 +17,7 @@ class RuBQRetrieval(AbsTaskRetrieval):
         description="Paragraph retrieval based on RuBQ 2.0. Retrieve paragraphs from Wikipedia that answer the question.",
         reference="https://openreview.net/pdf?id=P5UQFFoQ4PJ",
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],

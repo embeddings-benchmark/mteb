@@ -14,7 +14,7 @@ class VoyageMMarcoReranking(AbsTaskRetrieval):
             "revision": "bd2050c52b480e48c51372b4ec98a1cbbc4515f2",
         },
         type="Reranking",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["jpn-Jpan"],

@@ -15,7 +15,7 @@ class AlloprofReranking(AbsTaskRetrieval):
             "revision": "a7d2d793f2e5ba55139bb10088c2e8ee2df2ce02",
         },
         type="Reranking",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fra-Latn"],

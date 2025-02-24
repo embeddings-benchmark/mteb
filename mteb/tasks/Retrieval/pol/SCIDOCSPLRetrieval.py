@@ -15,7 +15,7 @@ class SCIDOCSPL(AbsTaskRetrieval):
             "revision": "de1caaae2a2880b02023b7fdd36fad58e2470cc1",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],

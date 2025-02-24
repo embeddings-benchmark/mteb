@@ -16,7 +16,7 @@ class NorQuadRetrieval(AbsTaskRetrieval):
         description="Human-created question for Norwegian wikipedia passages.",
         reference="https://aclanthology.org/2023.nodalida-1.17/",
         type="Retrieval",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nob-Latn"],

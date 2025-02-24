@@ -53,7 +53,7 @@ class MIRACLReranking(AbsTaskRetrieval):
             "revision": "d11a14c74e8bd448cedab0c1d9a720040535f228",
         },
         type="Reranking",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_LANGUAGES,

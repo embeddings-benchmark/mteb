@@ -20,7 +20,7 @@ class NanoSCIDOCSRetrieval(AbsTaskRetrieval):
             "revision": "484eb90549fc3f0b9c42b3551e80ceb999515537",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["eng-Latn"],

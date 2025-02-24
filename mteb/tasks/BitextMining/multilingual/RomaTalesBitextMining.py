@@ -16,7 +16,7 @@ class RomaTalesBitextMining(AbsTaskBitextMining):
         description="Parallel corpus of Roma Tales in Lovari with Hungarian translations.",
         reference="https://idoc.pub/documents/idocpub-zpnxm9g35ylv",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs={"rom-hun": ["rom-Latn", "hun-Latn"]},

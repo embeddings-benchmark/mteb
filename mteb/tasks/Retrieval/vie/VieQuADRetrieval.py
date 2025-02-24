@@ -21,7 +21,7 @@ class VieQuADRetrieval(AbsTaskRetrieval):
             "revision": "406f09a45cc106a8f7b7fd0c25078883fe58cb1f",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation"],
         eval_langs=["vie-Latn"],

@@ -20,7 +20,7 @@ class GeorgianFAQRetrieval(AbsTaskRetrieval):
             "Frequently asked questions (FAQs) and answers mined from Georgian websites via Common Crawl."
         ),
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["kat-Geor"],

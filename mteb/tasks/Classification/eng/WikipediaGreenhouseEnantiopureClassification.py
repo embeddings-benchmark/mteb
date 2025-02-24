@@ -14,7 +14,7 @@ class WikipediaGreenhouseEnantiopureClassification(AbsTaskClassification):
             "revision": "0cfc1a83b6ed832454e8f4f93f7a0e26208274d9",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

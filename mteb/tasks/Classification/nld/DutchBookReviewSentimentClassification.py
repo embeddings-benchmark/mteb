@@ -14,7 +14,7 @@ class DutchBookReviewSentimentClassification(AbsTaskClassification):
             "revision": "1c2815ad38cf4794eb8d678fb08f569ea79392f6",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         date=("2019-10-04", "2019-10-04"),
         eval_splits=["test"],

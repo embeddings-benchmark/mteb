@@ -90,7 +90,7 @@ class MLQARetrieval(AbsTaskRetrieval):
             "trust_remote_code": True,
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=_EVAL_LANGS,

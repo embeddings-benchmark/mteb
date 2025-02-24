@@ -22,7 +22,7 @@ class NarrativeQARetrieval(AbsTaskRetrieval):
             + "realistic QA instances collected from literature (fiction and non-fiction) and movie scripts. "
         ),
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["eng-Latn"],

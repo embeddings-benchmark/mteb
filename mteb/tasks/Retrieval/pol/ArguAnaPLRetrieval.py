@@ -17,7 +17,7 @@ class ArguAnaPL(AbsTaskRetrieval):
             "revision": "0019de73979daf75f6526a0fc5ef77ebce27b8f9",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],

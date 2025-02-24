@@ -15,7 +15,7 @@ class LegalSummarization(AbsTaskRetrieval):
             "revision": "3bb1a05c66872889662af04c5691c14489cebd72",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

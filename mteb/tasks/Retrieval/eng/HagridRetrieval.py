@@ -24,7 +24,7 @@ class HagridRetrieval(AbsTaskRetrieval):
             + "along with a set of manually labelled relevant passages"
         ),
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["dev"],
         eval_langs=["eng-Latn"],

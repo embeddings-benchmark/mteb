@@ -36,7 +36,7 @@ class SemRel24STS(AbsTaskSTS):
         ),
         reference="https://huggingface.co/datasets/SemRel/SemRel2024",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=_SPLITS,
         eval_langs=_LANGUAGES,

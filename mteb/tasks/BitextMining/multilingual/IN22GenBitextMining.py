@@ -64,7 +64,7 @@ class IN22GenBitextMining(AbsTaskBitextMining):
         description="IN22-Gen is a n-way parallel general-purpose multi-domain benchmark dataset for machine translation spanning English and 22 Indic languages.",
         reference="https://huggingface.co/datasets/ai4bharat/IN22-Gen",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=_SPLIT,
         eval_langs=_LANGUAGES_MAPPING,

@@ -15,7 +15,7 @@ class STS14STS(AbsTaskSTS):
         description="SemEval STS 2014 dataset. Currently only the English dataset",
         reference="https://www.aclweb.org/anthology/S14-1002",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

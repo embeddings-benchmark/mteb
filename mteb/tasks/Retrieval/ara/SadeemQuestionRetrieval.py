@@ -20,7 +20,7 @@ class SadeemQuestionRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/sadeem-ai/sadeem-ar-eval-retrieval-questions",
         description="SadeemQuestion: A Benchmark Data Set for Community Question-Retrieval Research",
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["ara-Arab"],

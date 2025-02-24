@@ -15,7 +15,7 @@ class BiossesSTS(AbsTaskSTS):
         description="Biomedical Semantic Similarity Estimation.",
         reference="https://tabilab.cmpe.boun.edu.tr/BIOSSES/DataSet.html",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

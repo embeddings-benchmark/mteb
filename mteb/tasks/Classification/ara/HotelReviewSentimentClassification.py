@@ -14,7 +14,7 @@ class HotelReviewSentimentClassification(AbsTaskClassification):
         description="HARD is a dataset of Arabic hotel reviews collected from the Booking.com website.",
         reference="https://link.springer.com/chapter/10.1007/978-3-319-67056-0_3",
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ara-Arab"],

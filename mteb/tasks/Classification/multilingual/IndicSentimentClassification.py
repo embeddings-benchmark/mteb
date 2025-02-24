@@ -30,7 +30,7 @@ class IndicSentimentClassification(AbsTaskClassification):
         },
         description="A new, multilingual, and n-way parallel dataset for sentiment analysis in 13 Indic languages.",
         reference="https://arxiv.org/abs/2212.05409",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         type="Classification",
         eval_splits=["test"],

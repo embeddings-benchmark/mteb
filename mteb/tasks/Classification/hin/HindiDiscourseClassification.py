@@ -15,7 +15,7 @@ class HindiDiscourseClassification(AbsTaskClassification):
         description="A Hindi Discourse dataset in Hindi with values for coherence.",
         reference="https://aclanthology.org/2020.lrec-1.149/",
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["hin-Deva"],

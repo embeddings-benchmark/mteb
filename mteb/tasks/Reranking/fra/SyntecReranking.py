@@ -15,7 +15,7 @@ class SyntecReranking(AbsTaskRetrieval):
             "revision": "fd3b5633e0e2fec4b744e1d0d6c8bade30ef147e",
         },
         type="Reranking",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fra-Latn"],

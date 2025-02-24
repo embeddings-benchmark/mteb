@@ -14,7 +14,7 @@ class NorwegianCourtsBitextMining(AbsTaskBitextMining):
         description="Nynorsk and Bokmål parallel corpus from Norwegian courts. Norwegian courts have two standardised written languages. Bokmål is a variant closer to Danish, while Nynorsk was created to resemble regional dialects of Norwegian.",
         reference="https://opus.nlpl.eu/index.php",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nob-Latn", "nno-Latn"],

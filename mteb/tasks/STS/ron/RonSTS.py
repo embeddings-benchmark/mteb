@@ -16,7 +16,7 @@ class RonSTS(AbsTaskSTS):
         description="High-quality Romanian translation of STSBenchmark.",
         reference="https://openreview.net/forum?id=JH61CD7afTv",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ron-Latn"],

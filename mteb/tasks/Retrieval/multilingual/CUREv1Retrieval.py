@@ -43,7 +43,7 @@ class CUREv1Retrieval(AbsTaskRetrieval):
         description="Collection of query-passage pairs curated by medical professionals, across 10 disciplines and 3 cross-lingual settings.",
         type="Retrieval",
         modalities=["text"],
-        category="s2p",
+        category="t2t",
         reference="https://huggingface.co/datasets/clinia/CUREv1",
         eval_splits=CUREv1Splits.names(),
         eval_langs=_LANGUAGES,

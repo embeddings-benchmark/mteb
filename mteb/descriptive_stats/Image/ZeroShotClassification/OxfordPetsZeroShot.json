@@ -1,0 +1,128 @@
+{
+    "test": {
+        "num_samples": 3669,
+        "unique_num_labels": 37,
+        "min_image_width": 137,
+        "average_image_width": 443.4600708639956,
+        "max_image_width": 1646,
+        "min_image_height": 103,
+        "average_image_height": 399.3780321613519,
+        "max_image_height": 2160,
+        "min_label_text_length": 32,
+        "average_label_text_length": 40.67567567567568,
+        "max_label_text_length": 55,
+        "labels": {
+            "0": {
+                "count": 98
+            },
+            "1": {
+                "count": 100
+            },
+            "2": {
+                "count": 100
+            },
+            "3": {
+                "count": 100
+            },
+            "4": {
+                "count": 100
+            },
+            "5": {
+                "count": 100
+            },
+            "6": {
+                "count": 100
+            },
+            "7": {
+                "count": 88
+            },
+            "8": {
+                "count": 99
+            },
+            "9": {
+                "count": 100
+            },
+            "10": {
+                "count": 100
+            },
+            "11": {
+                "count": 97
+            },
+            "12": {
+                "count": 100
+            },
+            "13": {
+                "count": 100
+            },
+            "14": {
+                "count": 100
+            },
+            "15": {
+                "count": 100
+            },
+            "16": {
+                "count": 100
+            },
+            "17": {
+                "count": 100
+            },
+            "18": {
+                "count": 99
+            },
+            "19": {
+                "count": 100
+            },
+            "20": {
+                "count": 100
+            },
+            "21": {
+                "count": 100
+            },
+            "22": {
+                "count": 100
+            },
+            "23": {
+                "count": 100
+            },
+            "24": {
+                "count": 100
+            },
+            "25": {
+                "count": 100
+            },
+            "26": {
+                "count": 100
+            },
+            "27": {
+                "count": 100
+            },
+            "28": {
+                "count": 100
+            },
+            "29": {
+                "count": 100
+            },
+            "30": {
+                "count": 99
+            },
+            "31": {
+                "count": 100
+            },
+            "32": {
+                "count": 100
+            },
+            "33": {
+                "count": 100
+            },
+            "34": {
+                "count": 89
+            },
+            "35": {
+                "count": 100
+            },
+            "36": {
+                "count": 100
+            }
+        }
+    }
+}

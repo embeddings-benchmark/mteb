@@ -14,7 +14,7 @@ class MedicalQARetrieval(AbsTaskRetrieval):
             "revision": "ae763399273d8b20506b80cf6f6f9a31a6a2b238",
         },
         type="Retrieval",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

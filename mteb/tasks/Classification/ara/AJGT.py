@@ -14,7 +14,7 @@ class AJGT(AbsTaskClassification):
         description="Arabic Jordanian General Tweets (AJGT) Corpus consisted of 1,800 tweets annotated as positive and negative. Modern Standard Arabic (MSA) or Jordanian dialect.",
         reference="https://link.springer.com/chapter/10.1007/978-3-319-60042-0_66/",
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ara-Arab"],

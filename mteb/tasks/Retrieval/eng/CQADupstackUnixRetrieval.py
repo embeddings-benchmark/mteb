@@ -15,7 +15,7 @@ class CQADupstackUnixRetrieval(AbsTaskRetrieval):
             "revision": "6c6430d3a6d36f8d2a829195bc5dc94d7e063e53",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

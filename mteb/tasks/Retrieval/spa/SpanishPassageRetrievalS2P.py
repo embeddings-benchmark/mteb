@@ -18,7 +18,7 @@ class SpanishPassageRetrievalS2P(AbsTaskRetrieval):
             "trust_remote_code": True,
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["spa-Latn"],

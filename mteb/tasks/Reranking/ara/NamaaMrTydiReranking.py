@@ -15,7 +15,7 @@ class NamaaMrTydiReranking(AbsTaskRetrieval):
             "revision": "4d574b8caf8463c741b84a293aea8ace67801cdc",
         },
         type="Reranking",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ara-Arab"],

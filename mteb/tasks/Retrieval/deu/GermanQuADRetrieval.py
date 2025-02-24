@@ -37,7 +37,7 @@ class GermanQuADRetrieval(AbsTaskRetrieval):
             "revision": "f5c87ae5a2e7a5106606314eef45255f03151bb3",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],

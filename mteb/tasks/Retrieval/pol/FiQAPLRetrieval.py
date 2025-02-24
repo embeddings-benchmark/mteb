@@ -17,7 +17,7 @@ class FiQAPLRetrieval(AbsTaskRetrieval):
             "revision": "788508256800f93c2ad033e96243bc801f9ee525",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],

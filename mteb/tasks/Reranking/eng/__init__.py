@@ -6,6 +6,7 @@ from .BIRCOClinicalTrialReranking import BIRCOClinicalTrialReranking
 from .BIRCODorisMaeReranking import BIRCODorisMaeReranking
 from .BIRCORelicReranking import BIRCORelicReranking
 from .BIRCOWhatsThatBookReranking import BIRCOWhatsThatBookReranking
+from .BuiltBenchReranking import BuiltBenchReranking
 from .MindSmallReranking import MindSmallReranking
 from .NevIR import NevIR
 from .SciDocsReranking import SciDocsReranking
@@ -13,15 +14,16 @@ from .StackOverflowDupQuestions import StackOverflowDupQuestions
 from .WebLINXCandidatesReranking import WebLINXCandidatesReranking
 
 __all__ = [
-    "AskUbuntuDupQuestions",
     "BIRCODorisMaeReranking",
-    "BIRCOArguAnaReranking",
-    "BIRCOClinicalTrialReranking",
-    "BIRCOWhatsThatBookReranking",
-    "BIRCORelicReranking",
+    "AskUbuntuDupQuestions",
     "WebLINXCandidatesReranking",
     "StackOverflowDupQuestions",
+    "BIRCORelicReranking",
+    "BIRCOArguAnaReranking",
     "NevIR",
     "MindSmallReranking",
+    "BIRCOWhatsThatBookReranking",
+    "BuiltBenchReranking",
+    "BIRCOClinicalTrialReranking",
     "SciDocsReranking",
 ]

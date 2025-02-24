@@ -18,7 +18,7 @@ class NanoNFCorpusRetrieval(AbsTaskRetrieval):
             "revision": "dd542a7efb9ad2136b9e00768b60fca9038f8156",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["eng-Latn"],

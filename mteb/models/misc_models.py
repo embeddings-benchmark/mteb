@@ -680,6 +680,7 @@ manu__bge_m3_custom_fr = ModelMeta(
     adapted_from="data/bge-m3-custom",
     superseded_by=None,
 )
+
 manu__sentence_croissant_alpha_v0_2 = ModelMeta(
     name="manu/sentence_croissant_alpha_v0.2",
     revision="4610b8cea65d7dd59e0b04af50753933fe5b29b2",

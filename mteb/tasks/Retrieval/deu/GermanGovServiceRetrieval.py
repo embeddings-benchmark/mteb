@@ -21,7 +21,7 @@ class GermanGovServiceRetrieval(AbsTaskRetrieval):
             "revision": "ed40131b56ce86ce3666f2942953595dd9d29608",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["deu-Latn"],

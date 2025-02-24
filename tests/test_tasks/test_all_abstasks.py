@@ -98,6 +98,12 @@ async def check_datasets_are_available_on_hf(tasks):
         assert False, f"Datasets not available on Hugging Face:\n{pretty_print}"
 
 
+@pytest.mark.flaky(
+    reruns=3,
+    reruns_delay=5,
+    only_rerun=["AssertionError"],
+    reason="May fail due to network issues",
+)
 def test_dataset_availability():
     """Checks if the datasets are available on Hugging Face using both their name and revision."""
     tasks = get_tasks(exclude_superseded=False)
@@ -117,6 +123,6 @@ def test_superseded_dataset_exists():
     tasks = mteb.get_tasks(exclude_superseded=False)
     for task in tasks:
         if task.superseded_by:
-            assert (
-                task.superseded_by in TASKS_REGISTRY
-            ), f"{task} is superseded by {task.superseded_by} but {task.superseded_by} is not in the TASKS_REGISTRY"
+            assert task.superseded_by in TASKS_REGISTRY, (
+                f"{task} is superseded by {task.superseded_by} but {task.superseded_by} is not in the TASKS_REGISTRY"
+            )

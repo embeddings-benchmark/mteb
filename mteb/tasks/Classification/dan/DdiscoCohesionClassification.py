@@ -14,7 +14,7 @@ class DdiscoCohesionClassification(AbsTaskClassification):
         description="A Danish Discourse dataset with values for coherence and source (Wikipedia or Reddit)",
         reference="https://aclanthology.org/2022.lrec-1.260/",
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["dan-Latn"],

@@ -14,7 +14,7 @@ class TenKGnadClassification(AbsTaskClassification):
             "revision": "ae9862bbcddc27b4bd93e2a7b463b7b5d05c6c55",
         },
         type="Classification",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],

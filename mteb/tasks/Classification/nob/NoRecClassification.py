@@ -15,7 +15,7 @@ class NoRecClassification(AbsTaskClassification):
             "revision": "5b740b7c42c73d586420812a35745fc37118862f",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nob-Latn"],

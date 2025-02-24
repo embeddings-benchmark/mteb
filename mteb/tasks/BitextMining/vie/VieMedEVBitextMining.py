@@ -21,7 +21,7 @@ class VieMedEVBitextMining(AbsTaskBitextMining):
         description="A high-quality Vietnamese-English parallel data from the medical domain for machine translation",
         reference="https://aclanthology.org/2015.iwslt-evaluation.11/",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn", "vie-Latn"],
@@ -54,9 +54,9 @@ class VieMedEVBitextMining(AbsTaskBitextMining):
         # Pairs are in two halves
         en_sentences = all_texts[:mid_index]
         vie_sentences = all_texts[mid_index:]
-        assert len(en_sentences) == len(
-            vie_sentences
-        ), "The split does not result in equal halves."
+        assert len(en_sentences) == len(vie_sentences), (
+            "The split does not result in equal halves."
+        )
 
         # Downsample
         indices = list(range(len(en_sentences)))
@@ -64,9 +64,9 @@ class VieMedEVBitextMining(AbsTaskBitextMining):
         sample_indices = indices[:TEST_SAMPLES]
         en_sentences = [en_sentences[i] for i in sample_indices]
         vie_sentences = [vie_sentences[i] for i in sample_indices]
-        assert (
-            len(en_sentences) == len(vie_sentences) == TEST_SAMPLES
-        ), f"Exceeded {TEST_SAMPLES} samples for 'test' split."
+        assert len(en_sentences) == len(vie_sentences) == TEST_SAMPLES, (
+            f"Exceeded {TEST_SAMPLES} samples for 'test' split."
+        )
 
         # Return dataset
         ds["test"] = datasets.Dataset.from_dict(

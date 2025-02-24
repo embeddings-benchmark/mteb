@@ -360,3 +360,209 @@ microllama_text_embedding = ModelMeta(
     public_training_code=None,
     public_training_data=None,
 )
+
+sentence_t5_base = ModelMeta(
+    name="sentence-transformers/sentence-t5-base",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="50c53e206f8b01c9621484a3c0aafce4e55efebf",
+    release_date="2022-02-09",
+    n_parameters=110_000_000,
+    memory_usage_mb=209,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/sentence-transformers/sentence-t5-base",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets={"SNLI": ["train"], "Community QA": ["train"]},
+)
+
+sentence_t5_large = ModelMeta(
+    name="sentence-transformers/sentence-t5-large",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="1fc08ea477205aa54a3e5b13f0971ae16b86410a",
+    release_date="2022-02-09",
+    n_parameters=335_000_000,
+    memory_usage_mb=639,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/sentence-transformers/sentence-t5-large",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets={"SNLI": ["train"], "Community QA": ["train"]},
+)
+
+sentence_t5_xl = ModelMeta(
+    name="sentence-transformers/sentence-t5-xl",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="2965d31b368fb14117688e0bde77cbd720e91f53",
+    release_date="2024-03-27",
+    n_parameters=3_000_000_000,
+    memory_usage_mb=2367,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/sentence-transformers/sentence-t5-xl",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets={"SNLI": ["train"], "Community QA": ["train"]},
+)
+
+sentence_t5_xxl = ModelMeta(
+    name="sentence-transformers/sentence-t5-xxl",
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="4d122282ba80e807e9e6eb8c358269e92796365d",
+    release_date="2024-03-27",
+    n_parameters=11_000_000_000,
+    memory_usage_mb=9279,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/sentence-transformers/sentence-t5-xxl",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets={"SNLI": ["train"], "Community QA": ["train"]},
+)
+gtr_t5_large = ModelMeta(
+    name="sentence-transformers/gtr-t5-large",
+    languages=["eng-Latn"],  # in format eng-Latn
+    open_weights=True,
+    revision="a2c8ac47f998531948d4cbe32a0b577a7037a5e3",
+    release_date="2022-02-09",
+    n_parameters=335_000_000,
+    memory_usage_mb=639,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/sentence-transformers/gtr-t5-large",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets={
+        "MSMARCO": ["train"],
+        "MSMARCOHardNegatives": ["train"],
+        "NanoMSMARCORetrieval": ["train"],
+        "MSMARCO-PL": ["train"],  # translation not trained on
+        "mMARCO-NL": ["train"],  # translation not trained on
+        "NQ": ["train"],
+        "NQ-NL": ["train"],  # translation not trained on
+        "NQHardNegatives": ["train"],
+        "NanoNQRetrieval": ["train"],
+        "NQ-PL": ["train"],  # translation not trained on
+        "Community QA": ["train"],
+    },
+)
+
+gtr_t5_xl = ModelMeta(
+    name="sentence-transformers/gtr-t5-xl",
+    languages=["eng-Latn"],  # in format eng-Latn
+    open_weights=True,
+    revision="23a8d667a1ad2578af181ce762867003c498d1bf",
+    release_date="2022-02-09",
+    n_parameters=1_240_000_000,
+    memory_usage_mb=2367,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/sentence-transformers/gtr-t5-xl",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets={
+        "MSMARCO": ["train"],
+        "MSMARCOHardNegatives": ["train"],
+        "NanoMSMARCORetrieval": ["train"],
+        "MSMARCO-PL": ["train"],  # translation not trained on
+        "mMARCO-NL": ["train"],  # translation not trained on
+        "NQ": ["train"],
+        "NQ-NL": ["train"],  # translation not trained on
+        "NQHardNegatives": ["train"],
+        "NanoNQRetrieval": ["train"],
+        "NQ-PL": ["train"],  # translation not trained on
+        "Community QA": ["train"],
+    },
+)
+gtr_t5_xxl = ModelMeta(
+    name="sentence-transformers/gtr-t5-xxl",
+    languages=["eng-Latn"],  # in format eng-Latn
+    open_weights=True,
+    revision="73f2a9156a3dcc2194dfdb2bf201cd7d17e17884",
+    release_date="2022-02-09",
+    n_parameters=4_860_000_000,
+    memory_usage_mb=9279,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/sentence-transformers/gtr-t5-xxl",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets={
+        "MSMARCO": ["train"],
+        "MSMARCOHardNegatives": ["train"],
+        "NanoMSMARCORetrieval": ["train"],
+        "MSMARCO-PL": ["train"],  # translation not trained on
+        "mMARCO-NL": ["train"],  # translation not trained on
+        "NQ": ["train"],
+        "NQ-NL": ["train"],  # translation not trained on
+        "NQHardNegatives": ["train"],
+        "NanoNQRetrieval": ["train"],
+        "NQ-PL": ["train"],  # translation not trained on
+        "Community QA": ["train"],
+    },
+)
+
+gtr_t5_base = ModelMeta(
+    name="sentence-transformers/gtr-t5-base",
+    languages=["eng-Latn"],  # in format eng-Latn
+    open_weights=True,
+    revision="7027e9594267928589816394bdd295273ddc0739",
+    release_date="2022-02-09",
+    n_parameters=110_000_000,
+    memory_usage_mb=209,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=512,
+    reference="https://huggingface.co/sentence-transformers/gtr-t5-base",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets={
+        "MSMARCO": ["train"],
+        "MSMARCOHardNegatives": ["train"],
+        "NanoMSMARCORetrieval": ["train"],
+        "MSMARCO-PL": ["train"],  # translation not trained on
+        "mMARCO-NL": ["train"],  # translation not trained on
+        "NQ": ["train"],
+        "NQ-NL": ["train"],  # translation not trained on
+        "NQHardNegatives": ["train"],
+        "NanoNQRetrieval": ["train"],
+        "NQ-PL": ["train"],  # translation not trained on
+        "Community QA": ["train"],
+    },
+)

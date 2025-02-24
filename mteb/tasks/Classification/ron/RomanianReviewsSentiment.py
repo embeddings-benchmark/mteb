@@ -15,7 +15,7 @@ class RomanianReviewsSentiment(AbsTaskClassification):
             "trust_remote_code": True,
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         date=("2020-01-01", "2021-01-11"),
         eval_splits=["test"],

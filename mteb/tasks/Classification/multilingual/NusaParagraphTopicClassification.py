@@ -26,7 +26,7 @@ class NusaParagraphTopicClassification(AbsTaskClassification):
         },
         description="NusaParagraphTopicClassification is a multi-class topic classification on 10 Indonesian languages.",
         reference="https://github.com/IndoNLP/nusa-writes",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         type="Classification",
         eval_splits=["test"],

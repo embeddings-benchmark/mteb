@@ -34,7 +34,7 @@ class XQuADRetrieval(AbsTaskRetrieval):
         description="XQuAD is a benchmark dataset for evaluating cross-lingual question answering performance. It is repurposed retrieving relevant context for each question.",
         reference="https://huggingface.co/datasets/xquad",
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation"],
         eval_langs=_LANGUAGES,

@@ -39,7 +39,7 @@ class CrossLingualSemanticDiscriminationWMT21(AbsTaskRetrieval):
         description="Evaluate a multilingual embedding model based on its ability to discriminate against the original parallel pair against challenging distractors - spawning from WMT21 DE-FR test set",
         reference="https://huggingface.co/datasets/Andrianos/clsd_wmt19_21",
         type="Retrieval",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_EVAL_LANGS,

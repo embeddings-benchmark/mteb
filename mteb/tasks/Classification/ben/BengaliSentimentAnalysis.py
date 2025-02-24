@@ -14,7 +14,7 @@ class BengaliSentimentAnalysis(AbsTaskClassification):
             "revision": "a4b3685b1854cc26c554dda4c7cb918a36a6fb6c",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ben-Beng"],

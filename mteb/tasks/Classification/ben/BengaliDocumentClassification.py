@@ -14,7 +14,7 @@ class BengaliDocumentClassification(AbsTaskClassification):
             "revision": "1c6e67433da618073295b7c90f1c55fa8e78f35c",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ben-Beng"],

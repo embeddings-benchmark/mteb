@@ -14,7 +14,7 @@ class PatentClassification(AbsTaskClassification):
         },
         reference="https://aclanthology.org/P19-1212.pdf",
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

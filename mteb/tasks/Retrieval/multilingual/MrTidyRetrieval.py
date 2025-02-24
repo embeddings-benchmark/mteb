@@ -94,7 +94,7 @@ class MrTidyRetrieval(AbsTaskRetrieval):
             "revision": "fc24a3ce8f09746410daee3d5cd823ff7a0675b7",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_EVAL_LANGS,

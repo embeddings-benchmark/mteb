@@ -19,7 +19,7 @@ class CodeSearchNetRetrieval(AbsTaskRetrieval):
             "revision": "fdc6a9e39575768c27eb8a2a5f702bf846eb4759",
         },
         type="Retrieval",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs={lang: [lang + "-Code"] for lang in _LANGS},
