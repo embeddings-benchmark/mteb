@@ -13,9 +13,9 @@ from transformers import Wav2Vec2FeatureExtractor, Wav2Vec2ForCTC
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
 from mteb.model_meta import ModelMeta
+from mteb.models.wrapper import Wrapper
 
-
-class Wav2Vec2AudioWrapper:
+class Wav2Vec2AudioWrapper(Wrapper):
     def __init__(
         self,
         model_name: str = "facebook/wav2vec2-xls-r-300m",
