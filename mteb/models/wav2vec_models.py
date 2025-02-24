@@ -71,8 +71,8 @@ class Wav2vec2Wrapper(AudioEncoder):
                     return_dict=True
                 )
 
-            hidden_states = outputs.hidden_states[-1]
-            # print(hidden_states.shape)
+            hidden_states = outputs.hidden_states[6]
+            print(hidden_states.shape)
             batch_embeddings = hidden_states.mean(dim=1).cpu().numpy()
             all_embeddings.append(batch_embeddings)
 
