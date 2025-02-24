@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-import asyncio
 import logging
 from unittest.mock import Mock, patch
 
-import aiohttp
 import pytest
+import requests
 
 import mteb
 from mteb.abstasks import AbsTask
@@ -32,6 +31,17 @@ tasks = [
 ]
 
 
+dataset_revisions = list(
+    {  # deduplicate as multiple tasks rely on the same dataset (save us at least 100 test cases)
+        (t.metadata.dataset["path"], t.metadata.dataset["revision"])
+        for t in mteb.get_tasks(exclude_superseded=False)
+        if not isinstance(t, (AbsTaskAggregate, AbsTaskSpeedTask))
+        and t.metadata.name != "AfriSentiLangClassification"
+        and t.metadata.name not in ALL_MOCK_TASKS
+    }
+)
+
+
 @pytest.mark.parametrize("task", tasks)
 @patch("datasets.load_dataset")
 @patch("datasets.concatenate_datasets")
@@ -56,67 +66,21 @@ def test_load_data(
             mock_dataset_transform.assert_called_once()
 
 
-async def check_dataset_on_hf(
-    session: aiohttp.ClientSession, dataset: str, revision: str
-) -> bool:
-    url = f"https://huggingface.co/datasets/{dataset}/tree/{revision}"
-    async with session.head(url) as response:
-        return response.status == 200
-
-
-async def check_datasets_are_available_on_hf(tasks):
-    does_not_exist = []
-    async with aiohttp.ClientSession() as session:
-        tasks_checks = [
-            check_dataset_on_hf(
-                session,
-                task.metadata.dataset["path"],
-                task.metadata.dataset["revision"],
-            )
-            for task in tasks
-            if not isinstance(task, AbsTaskSpeedTask)
-        ]
-        datasets_exists = await asyncio.gather(*tasks_checks)
-
-    for task, ds_exists in zip(tasks, datasets_exists):
-        if not ds_exists:
-            does_not_exist.append(
-                (
-                    task.metadata.name,
-                    task.metadata.dataset["path"],
-                    task.metadata.dataset["revision"],
-                )
-            )
-
-    if does_not_exist:
-        pretty_print = "\n".join(
-            [
-                f"Name: {ds[0]} - repo {ds[1]} - revision {ds[2]}"
-                for ds in does_not_exist
-            ]
-        )
-        assert False, f"Datasets not available on Hugging Face:\n{pretty_print}"
-
-
 @pytest.mark.flaky(
     reruns=3,
     reruns_delay=5,
     only_rerun=["AssertionError"],
     reason="May fail due to network issues",
 )
-def test_dataset_availability():
-    """Checks if the datasets are available on Hugging Face using both their name and revision."""
-    tasks = get_tasks(exclude_superseded=False)
-    tasks = [
-        t
-        for t in tasks
-        # HOTFIX: Issue#1777. Remove this line when issue is resolved.
-        if t.metadata.name != "AfriSentiLangClassification"
-        # do not check aggregated tasks as they don't have a dataset
-        and not isinstance(t, AbsTaskAggregate)
-        and t.metadata.name not in ALL_MOCK_TASKS
-    ]
-    asyncio.run(check_datasets_are_available_on_hf(tasks))
+@pytest.mark.parametrize("dataset_revision", dataset_revisions)
+def test_dataset_on_hf(dataset_revision: tuple[str, str]):
+    dataset, revision = dataset_revision
+    url = f"https://huggingface.co/datasets/{dataset}/tree/{revision}"
+    response = requests.head(url)
+
+    assert response.status_code == 200, (
+        f"Dataset {dataset} - {revision} not available. Status code: {response.status_code}"
+    )
 
 
 def test_superseded_dataset_exists():
