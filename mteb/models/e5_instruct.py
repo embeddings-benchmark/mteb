@@ -7,7 +7,7 @@ import torch
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.e5_models import (
     E5_PAPER_RELEASE_DATE,
-    E5_TRAINING_DATA,
+    ME5_TRAINING_DATA,
     XLMR_LANGUAGES,
 )
 from mteb.models.instruct_wrapper import instruct_wrapper
@@ -17,7 +17,7 @@ MISTRAL_LANGUAGES = ["eng_Latn", "fra_Latn", "deu_Latn", "ita_Latn", "spa_Latn"]
 E5_INSTRUCTION = "Instruct: {instruction}\nQuery: "
 
 E5_MISTRAL_TRAINING_DATA = {
-    **E5_TRAINING_DATA,
+    **ME5_TRAINING_DATA,
     "FEVER": ["train"],
     "FEVERHardNegatives": ["train"],
     "FEVER-NL": ["train"],  # translation not trained on
@@ -63,7 +63,7 @@ e5_instruct = ModelMeta(
     }""",
     public_training_code=None,
     public_training_data=None,
-    training_datasets=E5_TRAINING_DATA,
+    training_datasets=ME5_TRAINING_DATA,
 )
 
 e5_mistral = ModelMeta(

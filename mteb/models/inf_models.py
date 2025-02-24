@@ -39,6 +39,37 @@ inf_retreiver_v1_training_data = {
     ## and other private data of INF TECH (not in MTEB),
 }
 
+inf_retreiver_v1_training_data = {
+    # eng_Latn
+    "ArguAna": ["train"],
+    "CQADupstackRetrieval": ["train"],
+    "ClimateFEVER": ["train"],
+    "DBPedia": ["train"],
+    "FEVER": ["train"],
+    "FiQA2018": ["train"],
+    "HotpotQA": ["train"],
+    "MSMARCO": ["train"],
+    "NFCorpus": ["train"],
+    "NQ": ["train"],
+    "QuoraRetrieval": ["train"],
+    "SCIDOCS": ["train"],
+    "SciFact": ["train"],
+    "TRECCOVID": ["train"],
+    "Touche2020": ["train"],
+    ## and other private data of INF TECH (not in MTEB),
+    #
+    # zho_Hans
+    "CmedqaRetrieval": ["train"],
+    "CovidRetrieval": ["train"],
+    "DuRetrieval": ["train"],
+    "EcomRetrieval": ["train"],
+    "MMarcoRetrieval": ["train"],
+    "MedicalRetrieval": ["train"],
+    "T2Retrieval": ["train"],
+    "VideoRetrieval": ["train"],
+    ## and other private data of INF TECH (not in MTEB),
+}
+
 inf_retriever_v1 = ModelMeta(
     loader=partial(  # type: ignore
         sentence_transformers_loader,
