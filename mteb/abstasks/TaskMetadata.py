@@ -60,6 +60,7 @@ TASK_SUBTYPE = Literal[
     "Tumor detection",
     "Duplicate Detection",
     "Voice Gender Clustering",
+    "Voice Emotion Clustering",
 ]
 
 TASK_DOMAIN = Literal[

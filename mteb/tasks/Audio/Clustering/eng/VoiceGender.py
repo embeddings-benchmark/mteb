@@ -36,7 +36,7 @@ if __name__ == "__main__":
     print(f"Loaded model type: {type(model)}")
     evaluation = mteb.MTEB(tasks=[VoiceGenderClustering()])
     cluster_algo = "Kmeans"
-    results = evaluation.run(model, output_folder=f"results/{cluster_algo}/{model_name}", overwrite_results=True, cluster_algo=cluster_algo)
+    results = evaluation.run(model, output_folder=f"results_Gender/{cluster_algo}/{model_name}", overwrite_results=True, cluster_algo=cluster_algo)
     print(results)
     
     # from datasets import load_dataset
