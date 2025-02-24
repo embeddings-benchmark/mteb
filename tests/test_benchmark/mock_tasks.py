@@ -14,7 +14,6 @@ from mteb.abstasks.AbsTaskMultilabelClassification import (
     AbsTaskMultilabelClassification,
 )
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
-from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
 from mteb.abstasks.AbsTaskSummarization import AbsTaskSummarization
@@ -1148,7 +1147,7 @@ class MockMultilingualSummarizationTask(AbsTaskSummarization):
     max_score = 1
 
 
-class MockRerankingTask(AbsTaskReranking):
+class MockRerankingTask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
@@ -1219,7 +1218,7 @@ class MockRerankingTask(AbsTaskReranking):
         self.data_loaded = True
 
 
-class MockMultilingualRerankingTask(AbsTaskReranking):
+class MockMultilingualRerankingTask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 8,
@@ -1962,7 +1961,7 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
         self.data_loaded = True
 
 
-class MockInstructionReranking(AbsTaskReranking):
+class MockInstructionReranking(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
@@ -2184,7 +2183,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
         self.top_ranked = None
 
 
-class MockMultilingualInstructionReranking(AbsTaskReranking):
+class MockMultilingualInstructionReranking(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 8,

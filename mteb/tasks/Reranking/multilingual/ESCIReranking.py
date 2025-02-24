@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 
-from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 logger = logging.getLogger(__name__)
@@ -23,14 +23,14 @@ _CITATION = """@article{reddy2022shopping,
 }"""
 
 
-class ESCIReranking(AbsTaskReranking):
+class ESCIReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="ESCIReranking",
         description="",
         reference="https://github.com/amazon-science/esci-data/",
         dataset={
-            "path": "mteb/esci",
-            "revision": "237f74be0503482b4e8bc1b83778c7a87ea93fd8",
+            "path": "mteb/ESCIReranking",
+            "revision": "dc2cfaf4fcbf238806a02ae8607786e88112463e",
         },
         type="Reranking",
         category="t2t",

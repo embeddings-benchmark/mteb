@@ -7,21 +7,20 @@ import tqdm
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-class MindSmallReranking(AbsTaskReranking):
+class MindSmallReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MindSmallReranking",
         description="Microsoft News Dataset: A Large-Scale English Dataset for News Recommendation Research",
         reference="https://msnews.github.io/assets/doc/ACL2020_MIND.pdf",
         dataset={
-            "path": "mteb/mind_small",
-            "revision": "59042f120c80e8afa9cdbb224f67076cec0fc9a7",
+            "path": "mteb/MindSmallReranking",
+            "revision": "227478e3235572039f4f7661840e059f31ef6eb1",
         },
         type="Reranking",
         category="t2t",

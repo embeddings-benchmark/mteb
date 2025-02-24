@@ -10,25 +10,7 @@ from .AbsTaskRetrieval import AbsTaskRetrieval
 
 logger = logging.getLogger(__name__)
 
-OLD_FORMAT_RERANKING_TASKS = [
-    "MindSmallReranking",
-    "SciDocsRR",
-    "StackOverflowDupQuestions",
-    "WebLINXCandidatesReranking",
-    "AlloprofReranking",
-    "SyntecReranking",
-    "VoyageMMarcoReranking",
-    "ESCIReranking",
-    "MIRACLReranking",
-    "WikipediaRerankingMultilingual",
-    "RuBQReranking",
-    "T2Reranking",
-    "MMarcoReranking",
-    "CMedQAv1-reranking",
-    "CMedQAv2-reranking",
-    "NamaaMrTydiReranking",
-    "BuiltBenchReranking",
-]
+OLD_FORMAT_RERANKING_TASKS = []
 
 
 class AbsTaskReranking(AbsTaskRetrieval):
@@ -86,7 +68,6 @@ class AbsTaskReranking(AbsTaskRetrieval):
 
         Args:
             given_dataset (Dataset, optional): The dataset to transform. Defaults to None. This is helpful for some older datasets which are loaded with custom code, but need to be transformed still.
-
         """
         if self.metadata.name not in OLD_FORMAT_RERANKING_TASKS:
             return

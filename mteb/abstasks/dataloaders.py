@@ -3,7 +3,14 @@ from __future__ import annotations
 import logging
 from collections import defaultdict
 
-from datasets import Features, Sequence, Value, get_dataset_config_names, load_dataset
+from datasets import (
+    Features,
+    Sequence,
+    Value,
+    get_dataset_config_names,
+    get_dataset_split_names,
+    load_dataset,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -73,7 +80,7 @@ class RetrievalDataLoader:
                 f"Instructions loaded: {len(self.instructions) if self.instructions else 0}"
             )
 
-        self._load_qrels(self.split, self.config)
+        self._load_qrels(self.config)
         # filter queries with no qrels
         qrels_dict = defaultdict(dict)
 
@@ -106,15 +113,26 @@ class RetrievalDataLoader:
 
         return self.corpus
 
+    def get_split(self, config: str) -> str:
+        splits = get_dataset_split_names(
+            self.hf_repo,
+            revision=self.revision,
+            config_name=config,
+        )
+        if self.split in splits:
+            return self.split
+        if len(splits) == 1:
+            return splits[0]
+
     def _load_corpus(self, config: str | None = None):
         config = f"{config}-corpus" if config is not None else "corpus"
         corpus_ds = load_dataset(
             self.hf_repo,
             config,
+            split=self.get_split(config),
             trust_remote_code=self.trust_remote_code,
             revision=self.revision,
         )
-        corpus_ds = next(iter(corpus_ds.values()))  # get first split
         corpus_ds = corpus_ds.cast_column("_id", Value("string"))
         corpus_ds = corpus_ds.rename_column("_id", "id")
         corpus_ds = corpus_ds.remove_columns(
@@ -131,10 +149,10 @@ class RetrievalDataLoader:
         queries_ds = load_dataset(
             self.hf_repo,
             config,
+            split=self.get_split(config),
             trust_remote_code=self.trust_remote_code,
             revision=self.revision,
         )
-        queries_ds = next(iter(queries_ds.values()))  # get first split
         queries_ds = queries_ds.cast_column("_id", Value("string"))
         queries_ds = queries_ds.rename_column("_id", "id")
         queries_ds = queries_ds.remove_columns(
@@ -142,15 +160,16 @@ class RetrievalDataLoader:
         )
         self.queries = queries_ds
 
-    def _load_qrels(self, split: str, config: str | None = None):
+    def _load_qrels(self, config: str | None = None):
         config = f"{config}-qrels" if config is not None else "default"
 
         qrels_ds = load_dataset(
             self.hf_repo,
             name=config,
+            split=self.get_split(config),
             trust_remote_code=self.trust_remote_code,
             revision=self.revision,
-        )[split]
+        )
 
         features = Features(
             {
@@ -167,11 +186,11 @@ class RetrievalDataLoader:
         top_ranked_ds = load_dataset(
             self.hf_repo,
             config,
+            split=self.get_split(config),
             trust_remote_code=self.trust_remote_code,
             revision=self.revision,
         )
 
-        top_ranked_ds = next(iter(top_ranked_ds.values()))  # get first split
         if (
             "query-id" in top_ranked_ds.column_names
             and "corpus-ids" in top_ranked_ds.column_names
@@ -205,10 +224,10 @@ class RetrievalDataLoader:
         instructions_ds = load_dataset(
             self.hf_repo,
             config,
+            split=self.get_split(config),
             trust_remote_code=self.trust_remote_code,
             revision=self.revision,
         )
-        instructions_ds = next(iter(instructions_ds.values()))
         instructions_ds = instructions_ds.cast_column("query-id", Value("string"))
         instructions_ds = instructions_ds.cast_column("instruction", Value("string"))
         instructions_ds = instructions_ds.remove_columns(

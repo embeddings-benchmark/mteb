@@ -1,18 +1,17 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class VoyageMMarcoReranking(AbsTaskReranking):
+class VoyageMMarcoReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="VoyageMMarcoReranking",
         description="a hard-negative augmented version of the Japanese MMARCO dataset as used in Voyage AI Evaluation Suite",
         reference="https://arxiv.org/abs/2312.16144",
         dataset={
-            "path": "bclavie/mmarco-japanese-hard-negatives",
-            "revision": "e25c91bc31859606507a968559ab1de0f472d007",
+            "path": "mteb/VoyageMMarcoReranking",
+            "revision": "bd2050c52b480e48c51372b4ec98a1cbbc4515f2",
         },
         type="Reranking",
         category="t2t",
@@ -35,24 +34,3 @@ class VoyageMMarcoReranking(AbsTaskReranking):
       eprint={2312.16144},
       archivePrefix={arXiv},}""",
     )
-
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        # since AbsTaskReranking has no `load_data` method, we call the parent class method
-        super(AbsTaskRetrieval, self).load_data(**kwargs)
-
-        # now fix the column names
-        self.dataset = self.dataset.rename_column(
-            "positives", "positive"
-        ).rename_column("negatives", "negative")
-        # 391,061 dataset size
-        self.dataset["test"] = self.dataset.pop("train").train_test_split(
-            test_size=2048, seed=self.seed
-        )["test"]
-
-        # now convert to the new format
-        self.transform_old_dataset_format(self.dataset)
-
-        self.data_loaded = True

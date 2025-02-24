@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class BIRCOArguAnaReranking(AbsTaskReranking):
+class BIRCOArguAnaReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BIRCO-ArguAna",
         description=(
