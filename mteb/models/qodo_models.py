@@ -47,7 +47,7 @@ Qodo_Embed_1_7B = ModelMeta(
         "typescript-Code",
     ],
     open_weights=True,
-    revision="84bbef079b32e8823ec226d4e9e92902706b0eb6",
+    revision="f9edd9bf7f687c0e832424058e265120f603cd81",
     release_date="2025-02-24",
     n_parameters=7_613_000_000,
     memory_usage_mb=29040,
