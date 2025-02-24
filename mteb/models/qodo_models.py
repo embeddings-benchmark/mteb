@@ -63,5 +63,3 @@ Qodo_Embed_1_7B = ModelMeta(
     training_datasets=None,
     adapted_from="Alibaba-NLP/gte-Qwen2-7B-instruct",
 )
-
-
