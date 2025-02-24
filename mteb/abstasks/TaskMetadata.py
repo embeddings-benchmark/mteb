@@ -105,6 +105,7 @@ SAMPLE_CREATION_METHOD = Literal[
 MIEB_TASK_TYPE = (
     "Any2AnyMultiChoice",
     "Any2AnyRetrieval",
+    "Any2AnyMultilingualRetrieval",
     "VisionCentric",
     "ImageClustering",
     "ImageClassification",
