@@ -69,8 +69,9 @@ WAV2VEC2_LANGUAGES = [
     "grn",
     "hat",
     "ina",
-    "kin"
+    "kin",
 ]
+
 
 class Wav2Vec2AudioWrapper(Wrapper):
     def __init__(
