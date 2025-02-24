@@ -20,7 +20,7 @@ from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
 from mteb.abstasks.AbsTaskSummarization import AbsTaskSummarization
-from mteb.abstasks.Audio.AbsTaskAudioClassification import AbsTaskAudioClassification
+from mteb.abstasks.Audio.AbsTaskAudioMultilabelClassification import AbsTaskAudioMultilabelClassification
 from mteb.abstasks.Audio.AbsTaskAudioClustering import AbsTaskAudioClustering
 from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
@@ -528,7 +528,7 @@ class MockAudioClusteringTask(AbsTaskAudioClustering):
         self.data_loaded = True
 
 
-class MockAudioClassificationTask(AbsTaskAudioClassification):
+class MockAudioMultilabelClassificationTask(AbsTaskAudioMultilabelClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
@@ -553,8 +553,8 @@ class MockAudioClassificationTask(AbsTaskAudioClassification):
     }
 
     metadata = TaskMetadata(
-        type="AudioClassification",
-        name="MockAudioClassification",
+        type="AudioMultilabelClassification",
+        name="MockAudioMultilabelClassification",
         main_score="accuracy",
         **general_args,
     )
@@ -583,34 +583,10 @@ class MockAudioClassificationTask(AbsTaskAudioClassification):
         self.data_loaded = True
 
 
-# class MockAudioClassificationKNNTask(MockAudioClassificationTask):
-#     metadata = TaskMetadata(
-#         type="AudioClassification",
-#         name="MockAudioClassificationKNN",
-#         main_score="accuracy",
-#         **general_args,
-#     )
-
-#     def __init__(self, **kwargs):
-#         super().__init__(method="kNN", **kwargs)
-
-
-# class MockAudioClassificationKNNPTTask(MockAudioClassificationTask):
-#     metadata = TaskMetadata(
-#         type="AudioClassification",
-#         name="MockAudioClassificationKNNPT",
-#         main_score="accuracy",
-#         **general_args,
-#     )
-
-#     def __init__(self, **kwargs):
-#         super().__init__(method="kNN-pytorch", **kwargs)
-
-
-class MockAudioClassificationLogRegTask(MockAudioClassificationTask):
+class MockAudioMultilabelClassificationLogRegTask(MockAudioMultilabelClassificationTask):
     metadata = TaskMetadata(
-        type="AudioClassification",
-        name="MockAudioClassificationLogReg",
+        type="AudioMultilabelClassification",
+        name="MockAudioMultilabelClassificationLogReg",
         main_score="accuracy",
         **general_args,
     )
