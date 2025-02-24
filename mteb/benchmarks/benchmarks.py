@@ -1453,7 +1453,6 @@ MIEB_common_tasks = [
     "PatchCamelyonZeroShot",
     "RenderedSST2",
     "RESISC45ZeroShot",
-    "SciMMIR",
     "StanfordCarsZeroShot",
     "STL10ZeroShot",
     "SUN397ZeroShot",
@@ -1463,6 +1462,10 @@ MIEB_common_tasks = [
     "CVBenchRelation",
     "CVBenchDepth",
     "CVBenchDistance",
+    # Any2AnyMultipleChoice
+    "BLINKIT2IMultiChoice",
+    "BLINKIT2TMultiChoice",
+    "ImageCoDeT2IMultiChoice",
     # ImageTextPairClassification
     "AROCocoOrder",
     "AROFlickrOrder",
@@ -1477,9 +1480,7 @@ MIEB_common_tasks = [
     "STS15VisualSTS",
     "STS16VisualSTS",
     # Any2AnyRetrieval
-    "BLINKIT2IMultiChoice",
     "BLINKIT2IRetrieval",
-    "BLINKIT2TMultiChoice",
     "BLINKIT2TRetrieval",
     "CIRRIT2IRetrieval",
     "CUB200I2IRetrieval",
@@ -1618,6 +1619,7 @@ MIEB_LITE = Benchmark(
             "EuroSAT",
             "GTSRB",
             "OxfordPets",
+            "PatchCamelyon",
             "RESISC45",
             "SUN397",
             # Clustering
@@ -1636,6 +1638,9 @@ MIEB_LITE = Benchmark(
             "CVBenchRelation",
             "CVBenchDepth",
             "CVBenchDistance",
+            # Any2AnyMultipleChoice
+            "BLINKIT2IMultiChoice",
+            "ImageCoDeT2IMultiChoice",
             # ImageTextPairClassification
             "AROCocoOrder",
             "AROFlickrOrder",
@@ -1648,13 +1653,10 @@ MIEB_LITE = Benchmark(
             "STS17MultilingualVisualSTS",
             "STSBenchmarkMultilingualVisualSTS",
             # Any2AnyRetrieval
-            "BLINKIT2IMultiChoice",
             "CIRRIT2IRetrieval",
             "CUB200I2IRetrieval",
-            "EDIST2ITRetrieval",
             "Fashion200kI2TRetrieval",
             "HatefulMemesI2TRetrieval",
-            "ImageCoDeT2IMultiChoice",
             "InfoSeekIT2TRetrieval",
             "NIGHTSI2IRetrieval",
             "OVENIT2TRetrieval",
