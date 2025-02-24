@@ -20,7 +20,7 @@ class LEMBSummScreenFDRetrieval(AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/dwzhu/LongEmbed",
         description=("summ_screen_fd subset of dwzhu/LongEmbed dataset."),
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["eng-Latn"],

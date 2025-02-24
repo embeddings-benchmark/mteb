@@ -160,6 +160,10 @@ ME5_TRAINING_DATA = {
     "HotpotQAHardNegatives": ["train"],
     "HotpotQA-PL": ["train"],  # translation not trained on
     "HotpotQA-NL": ["train"],  # translation not trained on
+    "MIRACLRetrieval": ["train"],
+    "MIRACLRetrievalHardNegatives": ["train"],
+    "MIRACLReranking": ["train"],
+    "MrTidyRetrieval": ["train"],
 }
 
 e5_mult_small = ModelMeta(

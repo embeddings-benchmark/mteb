@@ -68,7 +68,7 @@ def _model_name_and_revision(
     model_meta = revision_path / "model_meta.json"
     model_path = revision_path.parent
     if not model_meta.exists() and fallback_to_path:
-        logger.warning(
+        logger.info(
             f"model_meta.json not found in {revision_path}, extracting model_name and revision from the path"
         )
         model_name, revision = model_path.name, revision_path.name

@@ -7,7 +7,6 @@ from .AbsTaskClustering import AbsTaskClustering
 from .AbsTaskClusteringFast import AbsTaskClusteringFast
 from .AbsTaskMultilabelClassification import AbsTaskMultilabelClassification
 from .AbsTaskPairClassification import AbsTaskPairClassification
-from .AbsTaskReranking import AbsTaskReranking
 from .AbsTaskRetrieval import AbsTaskRetrieval
 from .AbsTaskSpeedTask import AbsTaskSpeedTask
 from .AbsTaskSTS import AbsTaskSTS
@@ -33,7 +32,6 @@ __all__ = [
     "AbsTaskClusteringFast",
     "AbsTaskMultilabelClassification",
     "AbsTaskPairClassification",
-    "AbsTaskReranking",
     "AbsTaskRetrieval",
     "AbsTaskSpeedTask",
     "AbsTaskSTS",

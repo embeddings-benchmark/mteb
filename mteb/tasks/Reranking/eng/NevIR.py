@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class NevIR(AbsTaskReranking):
+class NevIR(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="NevIR",
         description="Paired evaluation of real world negation in retrieval, with questions and passages. Since models generally prefer one passage over the other always, there are two questions that the model must get right to understand the negation (hence the `paired_accuracy` metric).",
@@ -15,7 +15,7 @@ class NevIR(AbsTaskReranking):
             "revision": "eab99575c01c6a8e39f8d2adc6e3c3adcfe84413",
         },
         type="Reranking",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

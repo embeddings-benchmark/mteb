@@ -14,7 +14,7 @@ class UrduRomanSentimentClassification(AbsTaskClassification):
             "revision": "905c1121c002c4b9adc4ebc5faaf4d6f50d1b1ee",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         date=("2018-01-01", "2018-08-28"),
         eval_splits=["train"],

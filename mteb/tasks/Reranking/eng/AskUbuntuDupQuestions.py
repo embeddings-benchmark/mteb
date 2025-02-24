@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class AskUbuntuDupQuestions(AbsTaskReranking):
+class AskUbuntuDupQuestions(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="AskUbuntuDupQuestions",
         description="AskUbuntu Question Dataset - Questions from AskUbuntu with manual annotations marking pairs of questions as similar or non-similar",
@@ -15,7 +15,7 @@ class AskUbuntuDupQuestions(AbsTaskReranking):
             "revision": "c5691e3c48741d5f83b5cc8e630653d7a8cfc048",
         },
         type="Reranking",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

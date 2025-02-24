@@ -29,7 +29,7 @@ class STS17Crosslingual(AbsTaskSTS):
         description="Semeval-2017 task 1: Semantic textual similarity-multilingual and cross-lingual focused evaluation",
         reference="https://alt.qcri.org/semeval2017/task1/",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,

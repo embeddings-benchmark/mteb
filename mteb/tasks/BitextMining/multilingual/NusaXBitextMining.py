@@ -28,7 +28,7 @@ class NusaXBitextMining(AbsTaskBitextMining):
         description="NusaX is a parallel dataset for machine translation and sentiment analysis on 11 Indonesia languages and English.",
         reference="https://huggingface.co/datasets/indonlp/NusaX-senti/",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=_LANGUAGES,

@@ -30,7 +30,7 @@ class XNLI(AbsTaskPairClassification):
         },
         description="",
         reference="https://aclanthology.org/D18-1269/",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         type="PairClassification",
         eval_splits=["test", "validation"],
@@ -117,7 +117,7 @@ class XNLIV2(AbsTaskPairClassification):
         with languages that were not part of the original XNLI plus three (verified) languages that are not strongly covered in MTEB
         """,
         reference="https://arxiv.org/pdf/2301.06527",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         type="PairClassification",
         eval_splits=["test"],

@@ -21,7 +21,7 @@ class BrazilianToxicTweetsClassification(AbsTaskMultilabelClassification):
             "revision": "f333c1fcfa3ab43f008a327c8bd0140441354d34",
         },
         type="MultilabelClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["por-Latn"],

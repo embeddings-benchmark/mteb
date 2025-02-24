@@ -19,7 +19,7 @@ class CQADupstackWebmastersNLRetrieval(AbsTaskRetrieval):
             "split": "webmasters",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nld-Latn"],

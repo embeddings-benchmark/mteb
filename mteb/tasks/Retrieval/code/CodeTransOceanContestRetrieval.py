@@ -16,7 +16,7 @@ class CodeTransOceanContestRetrieval(AbsTaskRetrieval):
             "revision": "20da4eb20a4b17300c0986ee148c90867a7f2a4d",
         },
         type="Retrieval",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["python-Code", "c++-Code"],

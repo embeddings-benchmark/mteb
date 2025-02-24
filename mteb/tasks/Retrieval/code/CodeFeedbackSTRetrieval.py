@@ -16,7 +16,7 @@ class CodeFeedbackST(AbsTaskRetrieval):
             "revision": "d213819e87aab9010628da8b73ab4eb337c89340",
         },
         type="Retrieval",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["eng-Latn"],

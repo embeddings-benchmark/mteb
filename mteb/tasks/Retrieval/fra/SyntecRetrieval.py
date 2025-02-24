@@ -19,7 +19,7 @@ class SyntecRetrieval(AbsTaskRetrieval):
             "revision": "19661ccdca4dfc2d15122d776b61685f48c68ca9",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=_EVAL_SPLITS,
         eval_langs=["fra-Latn"],

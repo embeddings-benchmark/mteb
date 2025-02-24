@@ -14,7 +14,7 @@ class FrenchBookReviews(AbsTaskClassification):
         description="It is a French book reviews dataset containing a huge number of reader reviews on French books. Each review is pared with a rating that ranges from 0.5 to 5 (with 0.5 increment).",
         reference="https://huggingface.co/datasets/Abirate/french_book_reviews",
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["fra-Latn"],

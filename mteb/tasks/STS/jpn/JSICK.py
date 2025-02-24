@@ -16,7 +16,7 @@ class JSICK(AbsTaskSTS):
         description="JSICK is the Japanese NLI and STS dataset by manually translating the English dataset SICK (Marelli et al., 2014) into Japanese.",
         reference="https://github.com/sbintuitions/JMTEB",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["jpn-Jpan"],

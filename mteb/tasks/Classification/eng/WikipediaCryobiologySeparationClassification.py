@@ -14,7 +14,7 @@ class WikipediaCryobiologySeparationClassification(AbsTaskClassification):
             "revision": "858633e882dadd1ec6a0d220f7549bcafd379236",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

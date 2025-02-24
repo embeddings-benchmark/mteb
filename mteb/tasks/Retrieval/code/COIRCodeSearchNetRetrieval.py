@@ -83,7 +83,7 @@ class COIRCodeSearchNetRetrieval(AbsTaskRetrieval):
             "revision": "4adc7bc41202b5c13543c9c886a25f340634dab3",
         },
         type="Retrieval",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs={lang: [lang + "-Code"] for lang in _LANGS},

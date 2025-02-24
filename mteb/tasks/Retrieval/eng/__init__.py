@@ -6,9 +6,14 @@ from .AlphaNLIRetrieval import AlphaNLI
 from .ARCChallengeRetrieval import ARCChallenge
 from .ArguAnaRetrieval import ArguAna
 from .BrightRetrieval import BrightRetrieval
+from .BuiltBenchRetrieval import BuiltBenchRetrieval
 from .ChemHotpotQARetrieval import ChemHotpotQARetrieval
 from .ChemNQRetrieval import ChemNQRetrieval
-from .ClimateFEVERRetrieval import ClimateFEVER, ClimateFEVERHardNegatives
+from .ClimateFEVERRetrieval import (
+    ClimateFEVER,
+    ClimateFEVERHardNegatives,
+    ClimateFEVERRetrievalv2,
+)
 from .CQADupstackAndroidRetrieval import CQADupstackAndroidRetrieval
 from .CQADupstackEnglishRetrieval import CQADupstackEnglishRetrieval
 from .CQADupstackGamingRetrieval import CQADupstackGamingRetrieval
@@ -115,11 +120,14 @@ __all__ = [
     "RARbCode",
     "LEMBQMSumRetrieval",
     "TempReasonL3Context",
+    "BuiltBenchRetrieval",
+    "LoTTERetrieval",
     "AILAStatutes",
     "TopiOCQARetrieval",
     "TopiOCQARetrievalHardNegatives",
     "ClimateFEVER",
     "ClimateFEVERHardNegatives",
+    "ClimateFEVERRetrievalv2",
     "CQADupstackWordpressRetrieval",
     "CQADupstackEnglishRetrieval",
     "NanoTouche2020Retrieval",
@@ -170,5 +178,4 @@ __all__ = [
     "LEMBSummScreenFDRetrieval",
     "LEMBNarrativeQARetrieval",
     "CQADupstackProgrammersRetrieval",
-    "LoTTERetrieval",
 ]

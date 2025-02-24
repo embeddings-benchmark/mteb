@@ -30,7 +30,7 @@ class IndicReviewsClusteringP2P(AbsTaskClustering):
         description="Clustering of reviews from IndicSentiment dataset. Clustering of 14 sets on the generic categories label.",
         reference="https://arxiv.org/abs/2212.05409",
         type="Clustering",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,

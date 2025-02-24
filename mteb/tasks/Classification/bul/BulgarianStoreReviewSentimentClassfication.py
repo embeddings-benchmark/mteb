@@ -14,7 +14,7 @@ class BulgarianStoreReviewSentimentClassfication(AbsTaskClassification):
             "revision": "701984d6c6efea0e14a1c7850ef70e464c5577c0",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         date=("2018-05-14", "2018-05-14"),
         eval_splits=["test"],

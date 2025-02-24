@@ -2,20 +2,20 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class StackOverflowDupQuestions(AbsTaskReranking):
+class StackOverflowDupQuestions(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="StackOverflowDupQuestions",
         description="Stack Overflow Duplicate Questions Task for questions with the tags Java, JavaScript and Python",
         reference="https://www.microsoft.com/en-us/research/uploads/prod/2019/03/nl4se18LinkSO.pdf",
         dataset={
-            "path": "mteb/stackoverflowdupquestions-reranking",
-            "revision": "e185fbe320c72810689fc5848eb6114e1ef5ec69",
+            "path": "mteb/StackOverflowDupQuestions",
+            "revision": "5debda000fe8e27ebb5c123d38081f92e1847a59",
         },
         type="Reranking",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

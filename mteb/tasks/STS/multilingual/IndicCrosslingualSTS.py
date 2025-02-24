@@ -29,7 +29,7 @@ class IndicCrosslingualSTS(AbsTaskSTS):
         description="This is a Semantic Textual Similarity testset between English and 12 high-resource Indic languages.",
         reference="https://huggingface.co/datasets/jaygala24/indic_sts",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,

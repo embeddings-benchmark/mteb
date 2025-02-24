@@ -14,14 +14,49 @@ class VisualSTSDescriptiveStatistics(DescriptiveStatistics):
 
     Attributes:
         num_samples: number of samples in the dataset
+
+        min_image1_width: Minimum width of images1
+        average_image1_width: Average width of images1
+        max_image1_width: Maximum width of images1
+
+        min_image1_height: Minimum height of images1
+        average_image1_height: Average height of images1
+        max_image1_height: Maximum height of images1
+
+        min_image2_width: Minimum width of images2
+        average_image2_width: Average width of images2
+        max_image2_width: Maximum width of images2
+
+        min_image2_height: Minimum height of images2
+        average_image2_height: Average height of images2
+        max_image2_height: Maximum height of images2
+
+        min_score: Minimum score
         avg_score: Average score
+        max_score: Maximum score
     """
 
-    # TODO: what are useful stats for visual STS tasks?
-    # average_pixel_width; average_pixel_height; average non-white boxes?
-
     num_samples: int
+
+    min_image1_width: float
+    average_image1_width: float
+    max_image1_width: float
+
+    min_image1_height: float
+    average_image1_height: float
+    max_image1_height: float
+
+    min_image2_width: float
+    average_image2_width: float
+    max_image2_width: float
+
+    min_image2_height: float
+    average_image2_height: float
+    max_image2_height: float
+
+    min_score: float
     avg_score: float
+    max_score: float
 
 
 class AbsTaskVisualSTS(AbsTask):
@@ -63,16 +98,52 @@ class AbsTaskVisualSTS(AbsTask):
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> VisualSTSDescriptiveStatistics:
         if hf_subset:
+            images1 = self.dataset[hf_subset][split][self.sentences_column_names[0]]
+            images2 = self.dataset[hf_subset][split][self.sentences_column_names[1]]
             score = self.dataset[hf_subset][split]["score"]
         elif compute_overall:
+            images1, images2 = [], []
             score = []
             for hf_subset in self.metadata.eval_langs:
+                images1.extend(
+                    self.dataset[hf_subset][split][self.sentences_column_names[0]]
+                )
+                images2.extend(
+                    self.dataset[hf_subset][split][self.sentences_column_names[1]]
+                )
                 score.extend(self.dataset[hf_subset][split]["score"])
         else:
+            images1 = self.dataset[split][self.sentences_column_names[0]]
+            images2 = self.dataset[split][self.sentences_column_names[1]]
             score = self.dataset[split]["score"]
 
-        avg_score = sum(score) / len(score)
+        img_widths1, img_heights1 = [], []
+        for img in images1:
+            width, height = img.size
+            img_heights1.append(height)
+            img_widths1.append(width)
+
+        img_widths2, img_heights2 = [], []
+        for img in images1:
+            width, height = img.size
+            img_heights2.append(height)
+            img_widths2.append(width)
+
         return VisualSTSDescriptiveStatistics(
             num_samples=len(score),
-            avg_score=avg_score,
+            min_image1_width=min(img_widths1),
+            average_image1_width=sum(img_widths1) / len(img_widths1),
+            max_image1_width=max(img_widths1),
+            min_image1_height=min(img_heights1),
+            average_image1_height=sum(img_heights1) / len(img_heights1),
+            max_image1_height=max(img_widths1),
+            min_image2_width=min(img_widths2),
+            average_image2_width=sum(img_widths2) / len(img_widths2),
+            max_image2_width=max(img_widths2),
+            min_image2_height=min(img_heights2),
+            average_image2_height=sum(img_heights2) / len(img_heights2),
+            max_image2_height=max(img_widths2),
+            min_score=min(score),
+            avg_score=sum(score) / len(score),
+            max_score=max(score),
         )

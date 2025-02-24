@@ -15,7 +15,7 @@ class LegalBenchConsumerContractsQA(AbsTaskRetrieval):
             "revision": "b23590301ec94e8087e2850b21d43d4956b1cca9",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

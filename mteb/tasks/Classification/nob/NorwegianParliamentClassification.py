@@ -15,7 +15,7 @@ class NorwegianParliamentClassification(AbsTaskClassification):
             "trust_remote_code": True,
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test", "validation"],
         eval_langs=["nob-Latn"],

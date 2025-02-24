@@ -15,7 +15,7 @@ class NQNL(AbsTaskRetrieval):
         description="NQ-NL is a translation of NQ",
         reference="https://huggingface.co/datasets/clips/beir-nl-nq",
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nld-Latn"],

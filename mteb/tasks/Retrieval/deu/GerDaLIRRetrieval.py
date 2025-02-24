@@ -19,7 +19,7 @@ class GerDaLIR(AbsTaskRetrieval):
             "trust_remote_code": True,
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["deu-Latn"],

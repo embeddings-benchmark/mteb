@@ -15,7 +15,7 @@ class AILACasedocs(AbsTaskRetrieval):
             "revision": "4106e6bcc72e0698d714ea8b101355e3e238431a",
         },
         type="Retrieval",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

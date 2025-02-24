@@ -34,7 +34,7 @@ class WikipediaRetrievalMultilingual(AbsTaskRetrieval):
             "revision": "5f6c91d21f2f5b9afb663858d19848fbd223c775",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_EVAL_LANGS,

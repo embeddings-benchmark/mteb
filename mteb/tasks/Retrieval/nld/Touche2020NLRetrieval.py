@@ -14,7 +14,7 @@ class Touche2020NL(AbsTaskRetrieval):
             "revision": "b69e63cbe72c5ce0489f69e88c35f51f13a3f993",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nld-Latn"],

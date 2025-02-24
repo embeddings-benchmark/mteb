@@ -8,7 +8,8 @@ from collections import Counter
 
 import pandas as pd
 
-from mteb.abstasks import AbsTask, AbsTaskMultilabelClassification, AbsTaskReranking
+from mteb.abstasks import AbsTask, AbsTaskMultilabelClassification
+from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.TaskMetadata import TASK_CATEGORY, TASK_DOMAIN, TASK_TYPE
 from mteb.languages import (
     ISO_TO_LANGUAGE,
@@ -27,15 +28,15 @@ logger = logging.getLogger(__name__)
 def create_task_list() -> list[type[AbsTask]]:
     # reranking subclasses retrieval to share methods, but is an abstract task
     tasks_categories_cls = list(AbsTask.__subclasses__()) + [
-        AbsTaskReranking,
         AbsTaskMultilabelClassification,
+        AbsTaskReranking,
     ]
     tasks = []
     for cat_cls in tasks_categories_cls:
         for cls in cat_cls.__subclasses__():
             if cat_cls.__name__.startswith("AbsTask") and cls.__name__ not in (
-                "AbsTaskReranking",
                 "AbsTaskMultilabelClassification",
+                "AbsTaskReranking",
             ):
                 tasks.append(cls)
     return tasks
@@ -258,8 +259,7 @@ def get_tasks(
             that are not in the specified list.
         domains: A list of task domains, e.g. "Legal", "Medical", "Fiction".
         task_types: A string specifying the type of task e.g. "Classification" or "Retrieval". If None, all tasks are included.
-        categories: A list of task categories these include "s2s" (sentence to sentence), "s2p" (sentence to paragraph) and "p2p" (paragraph to
-            paragraph).
+        categories: A list of task categories these include "t2t" (text to text), "t2i" (text to image). See TaskMetadata for the full list.
         exclude_superseded: A boolean flag to exclude datasets which are superseded by another.
         eval_splits: A list of evaluation splits to include. If None, all splits are included.
         exclusive_language_filter: Some datasets contains more than one language e.g. for STS22 the subset "de-en" contain eng and deu. If
@@ -303,6 +303,9 @@ def get_tasks(
     if task_types:
         _tasks = filter_tasks_by_task_types(_tasks, task_types)
     if categories:
+        logger.warning(
+            "`s2p`, `p2p`, and `s2s` will be removed and replaced by `t2t` in v2.0.0."
+        )
         _tasks = filter_task_by_categories(_tasks, categories)
     if exclude_superseded:
         _tasks = filter_superseded_datasets(_tasks)

@@ -18,7 +18,7 @@ class STSES(AbsTaskSTS):
         description="Spanish test sets from SemEval-2014 (Agirre et al., 2014) and SemEval-2015 (Agirre et al., 2015)",
         reference="https://huggingface.co/datasets/PlanTL-GOB-ES/sts-es",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["spa-Latn"],

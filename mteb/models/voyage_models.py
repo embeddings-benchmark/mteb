@@ -98,7 +98,8 @@ class VoyageWrapper(Wrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        input_type = self.model_prompts.get(prompt_type.value, "document")
+        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+        input_type = prompt_name if prompt_name is not None else "document"
         return self._batched_encode(sentences, batch_size, input_type)
 
     def _batched_encode(
@@ -240,6 +241,32 @@ voyage_code_2 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
 )
+
+voyage_code_3 = ModelMeta(
+    name="voyageai/voyage-code-3",
+    revision="1",
+    release_date="2024-12-04",
+    languages=None,  # supported languages not specified
+    loader=partial(  # type: ignore
+        VoyageWrapper,
+        model_name="voyage-code-3",
+        model_prompts=model_prompts,
+    ),
+    max_tokens=32000,
+    embed_dim=1024,
+    open_weights=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://blog.voyageai.com/2024/12/04/voyage-code-3/",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    training_datasets=None,  # Not known
+    public_training_code=None,
+    public_training_data=None,
+)
+
 
 voyage_large_2 = ModelMeta(
     name="voyage-large-2",  # Date of publication of this post https://blog.voyageai.com/2023/10/29/voyage-embeddings/
@@ -386,12 +413,62 @@ voyage_3_exp = ModelMeta(
     framework=["API"],
     use_instructions=True,
     training_datasets={
-        # MTEB(eng, classic) training data:
+        # MTEB(eng, v1) training data:
+        "AmazonPolarityClassification": ["train"],
+        "AmazonReviewsClassification": ["train"],
         "ArguAna": ["train"],
+        "ArxivClusteringP2P": ["train"],
+        "ArxivClusteringS2S": ["train"],
+        "AskUbuntuDupQuestions": ["train"],
+        "BIOSSES": ["train"],
+        "Banking77Classification": ["train"],
+        "BiorxivClusteringP2P": ["train"],
+        "BiorxivClusteringS2S": ["train"],
+        "CQADupstackRetrieval": ["train"],
+        "ClimateFEVER": ["train"],
+        "DBPedia": ["train"],
+        "EmotionClassification": ["train"],
+        "FEVER": ["train"],
+        "FiQA2018": ["train"],
+        "HotpotQA": ["train"],
+        "ImdbClassification": ["train"],
+        "MTOPDomainClassification": ["train"],
+        "MTOPIntentClassification": ["train"],
+        "MassiveIntentClassification": ["train"],
+        "MassiveScenarioClassification": ["train"],
+        "MedrxivClusteringP2P": ["train"],
+        "MedrxivClusteringS2S": ["train"],
+        "MindSmallReranking": ["train"],
+        "NFCorpus": ["train"],
+        "NQ": ["train"],
+        "QuoraRetrieval": ["train"],
+        "RedditClustering": ["train"],
+        "RedditClusteringP2P": ["train"],
+        "SCIDOCS": ["train"],
+        "SICK-R": ["train"],
+        "STS12": ["train"],
+        "STS13": ["train"],
+        "STS14": ["train"],
+        "STS15": ["train"],
+        "STS16": ["train"],
+        "STSBenchmark": ["train"],
+        "SciDocsRR": ["train"],
+        "SciFact": ["train"],
+        "SprintDuplicateQuestions": ["train"],
+        "StackExchangeClustering": ["train"],
+        "StackExchangeClusteringP2P": ["train"],
+        "StackOverflowDupQuestions": ["train"],
+        "SummEval": ["train"],
+        "TRECCOVID": ["train"],
+        "Touche2020": ["train"],
+        "ToxicConversationsClassification": ["train"],
+        "TweetSentimentExtractionClassification": ["train"],
+        "TwentyNewsgroupsClustering": ["train"],
+        "TwitterSemEval2015": ["train"],
+        "TwitterURLCorpus": ["train"],
         "ArguAna-PL": ["train"],
         "ArguAna-NL": ["train"],  # translation not trained on
         "NanoArguAnaRetrieval": ["train"],
-        "HotpotQA": ["train"],
         "HotpotQA-PL": ["train"],  # translation not trained on
         "HotpotQA-NL": ["train"],  # translation not trained on
         "HotpotQAHardNegatives": ["train"],
@@ -400,43 +477,24 @@ voyage_3_exp = ModelMeta(
         "NanoMSMARCORetrieval": ["train"],
         "MSMARCO-PL": ["train"],  # translation not trained on
         "mMARCO-NL": ["train"],  # translation not trained on
-        "NQ": ["train"],
         "NQHardNegatives": ["train"],
         "NanoNQRetrieval": ["train"],
         "NQ-PL": ["train"],  # translation not trained on
         "NQ-NL": ["train"],  # translation not trained on
-        "FEVER": ["train"],
         "FEVERHardNegatives": ["train"],
         "NanoFEVERRetrieval": ["train"],
         "FEVER-NL": ["train"],  # translation not trained on
-        "FiQA2018": ["train"],
         "FiQA2018-PL": ["train"],  # translation not trained on
         "FiQA2018-NL": ["train"],  # translation not trained on
-        "STS12": ["train"],
         "STS22": ["train"],
-        "AmazonReviewsClassification": ["train"],
         "AmazonCounterfactualClassification": ["train"],
-        "Banking77Classification": ["train"],
-        "EmotionClassification": ["train"],
-        "ImdbClassification": ["train"],
-        "MTOPIntentClassification": ["train"],
-        "ToxicConversationsClassification": ["train"],
-        "TweetSentimentExtractionClassification": ["train"],
-        "ArxivClusteringP2P": ["train"],
         "ArxivClusteringP2P.v2": ["train"],
-        "ArxivClusteringS2S": ["train"],
         "ArxivClusteringS2S.v2": ["train"],
-        "BiorxivClusteringP2P": ["train"],
         "BiorxivClusteringP2P.v2": ["train"],
-        "BiorxivClusteringS2S": ["train"],
         "BiorxivClusteringS2S.v2": ["train"],
-        "MedrxivClusteringP2P": ["train"],
         "MedrxivClusteringP2P.v2": ["train"],
-        "MedrxivClusteringS2S": ["train"],
         "MedrxivClusteringS2S.v2": ["train"],
-        "TwentyNewsgroupsClustering": ["train"],
         "TwentyNewsgroupsClustering.v2": ["train"],
-        "STSBenchmark": ["train"],
         "STSBenchmarkMultilingualSTS": ["train"],  # translated, not trained on
     },
     public_training_code=None,

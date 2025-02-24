@@ -21,7 +21,7 @@ class NollySentiBitextMining(AbsTaskBitextMining):
         description="NollySenti is Nollywood movie reviews for five languages widely spoken in Nigeria (English, Hausa, Igbo, Nigerian-Pidgin, and Yoruba.",
         reference="https://github.com/IyanuSh/NollySenti",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=_LANGUAGES,

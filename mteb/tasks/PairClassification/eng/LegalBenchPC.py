@@ -72,7 +72,7 @@ class LegalBenchPC(AbsTaskPairClassification):
             "trust_remote_code": True,
         },
         type="PairClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

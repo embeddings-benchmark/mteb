@@ -6,7 +6,7 @@ from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class MNISTClassification(AbsTaskZeroshotClassification):
+class MNISTZeroshotClassification(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
         name="MNISTZeroShot",
         description="Classifying handwritten digits.",

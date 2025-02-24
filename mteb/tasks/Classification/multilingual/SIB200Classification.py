@@ -219,7 +219,7 @@ class SIB200Classification(AbsTaskClassification):
             "revision": "a74d7350ea12af010cfb1c21e34f1f81fd2e615b",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train", "validation", "test"],
         eval_langs=_LANGS,

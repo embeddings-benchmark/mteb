@@ -14,7 +14,7 @@ class WikipediaCompChemSpectroscopyClassification(AbsTaskClassification):
             "revision": "474d706a22b0451b5846d623aa4b4234ba5b0513",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

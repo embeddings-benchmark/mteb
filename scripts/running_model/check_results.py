@@ -175,9 +175,9 @@ mteb_results = _mteb_results
 # [t.task_name for t in mteb_results['GritLM/GritLM-7B']["13f00a0e36500c80ce12870ea513846a066004af"] if t.task_name == "SemRel24STS"]
 # it is there
 
-assert [
-    len(revisions.keys()) == 1 for model, revisions in mteb_results.items()
-], "Some models have more than one revision"
+assert [len(revisions.keys()) == 1 for model, revisions in mteb_results.items()], (
+    "Some models have more than one revision"
+)
 
 results_df = results_to_dataframe(mteb_results)
 

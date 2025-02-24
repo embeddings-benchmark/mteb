@@ -33,7 +33,7 @@ class CodeEditSearchRetrieval(AbsTaskRetrieval):
             "revision": "4e51c66e0939303f6928472f13ad0848b2a3f4c0",
         },
         type="Retrieval",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs={lang: [lang + "-Code"] for lang in _LANGS},

@@ -18,7 +18,7 @@ class NanoTouche2020Retrieval(AbsTaskRetrieval):
             "revision": "0d2f26ed8c5ad309f95c7f9499c70a40e140fccd",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["eng-Latn"],

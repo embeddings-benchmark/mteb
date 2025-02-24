@@ -10,24 +10,7 @@ from .AbsTaskRetrieval import AbsTaskRetrieval
 
 logger = logging.getLogger(__name__)
 
-OLD_FORMAT_RERANKING_TASKS = [
-    "MindSmallReranking",
-    "SciDocsRR",
-    "StackOverflowDupQuestions",
-    "WebLINXCandidatesReranking",
-    "AlloprofReranking",
-    "SyntecReranking",
-    "VoyageMMarcoReranking",
-    "ESCIReranking",
-    "MIRACLReranking",
-    "WikipediaRerankingMultilingual",
-    "RuBQReranking",
-    "T2Reranking",
-    "MMarcoReranking",
-    "CMedQAv1-reranking",
-    "CMedQAv2-reranking",
-    "NamaaMrTydiReranking",
-]
+OLD_FORMAT_RERANKING_TASKS = []
 
 
 class AbsTaskReranking(AbsTaskRetrieval):
@@ -85,7 +68,6 @@ class AbsTaskReranking(AbsTaskRetrieval):
 
         Args:
             given_dataset (Dataset, optional): The dataset to transform. Defaults to None. This is helpful for some older datasets which are loaded with custom code, but need to be transformed still.
-
         """
         if self.metadata.name not in OLD_FORMAT_RERANKING_TASKS:
             return
@@ -106,9 +88,9 @@ class AbsTaskReranking(AbsTaskRetrieval):
                 cur_dataset = given_dataset
             elif "name" in self.metadata.dataset:
                 cur_dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
-                assert (
-                    hf_subset == "default"
-                ), f"Only default subset is supported for {self.metadata.name} since `name` is given in the metadata."
+                assert hf_subset == "default", (
+                    f"Only default subset is supported for {self.metadata.name} since `name` is given in the metadata."
+                )
             else:
                 cur_dataset = datasets.load_dataset(
                     **self.metadata.dataset, name=hf_subset

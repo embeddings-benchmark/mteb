@@ -33,7 +33,7 @@ class STSBenchmarkMultilingualSTS(AbsTaskSTS):
         ),
         reference="https://github.com/PhilipMay/stsb-multi-mt/",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=_SPLITS,
         eval_langs=_LANGUAGES,

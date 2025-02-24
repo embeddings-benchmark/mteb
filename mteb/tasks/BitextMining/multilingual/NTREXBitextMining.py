@@ -256,7 +256,7 @@ class NTREXBitextMining(AbsTaskBitextMining):
         description="NTREX is a News Test References dataset for Machine Translation Evaluation, covering translation from English into 128 languages. We select language pairs according to the M2M-100 language grouping strategy, resulting in 1916 directions.",
         reference="https://huggingface.co/datasets/davidstap/NTREX",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=_SPLIT,
         eval_langs=_EVAL_LANGS,

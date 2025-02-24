@@ -14,7 +14,7 @@ class MalayalamNewsClassification(AbsTaskClassification):
             "revision": "666f63bba2387456d8f846ea4d0565181bd47b81",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],

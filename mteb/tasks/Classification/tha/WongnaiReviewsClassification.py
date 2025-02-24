@@ -14,7 +14,7 @@ class WongnaiReviewsClassification(AbsTaskClassification):
             "revision": "cd351eb26093aa4b232a2390a0da35e7fab21655",
         },
         type="Classification",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["tha-Thai"],

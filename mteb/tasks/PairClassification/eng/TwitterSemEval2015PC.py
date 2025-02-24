@@ -14,7 +14,7 @@ class TwitterSemEval2015PC(AbsTaskPairClassification):
         },
         description="Paraphrase-Pairs of Tweets from the SemEval 2015 workshop.",
         reference="https://alt.qcri.org/semeval2015/task1/",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         type="PairClassification",
         eval_splits=["test"],

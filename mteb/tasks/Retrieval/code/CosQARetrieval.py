@@ -16,7 +16,7 @@ class CosQARetrieval(AbsTaskRetrieval):
             "revision": "bc5efb7e9d437246ce393ed19d772e08e4a79535",
         },
         type="Retrieval",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["eng-Latn", "python-Code"],

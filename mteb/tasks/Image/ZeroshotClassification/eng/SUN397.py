@@ -6,7 +6,7 @@ from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class SUN397Classification(AbsTaskZeroshotClassification):
+class SUN397ZeroshotClassification(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
         name="SUN397ZeroShot",
         description="Large scale scene recognition in 397 categories.",

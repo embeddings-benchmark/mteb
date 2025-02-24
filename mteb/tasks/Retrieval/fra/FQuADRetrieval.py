@@ -19,7 +19,7 @@ class FQuADRetrieval(AbsTaskRetrieval):
             "revision": "5384ce827bbc2156d46e6fcba83d75f8e6e1b4a6",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=_EVAL_SPLITS,
         eval_langs=["fra-Latn"],

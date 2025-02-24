@@ -23,7 +23,7 @@ class LoTTERetrieval(AbsTaskRetrieval):
         ),
         type="Retrieval",
         modalities=["text"],
-        category="s2s",
+        category="t2t",
         reference="https://github.com/stanford-futuredata/ColBERT/blob/main/LoTTE.md",
         eval_splits=["test", "dev"],
         eval_langs={domain: ["eng-Latn"] for domain in HF_SUBSETS},

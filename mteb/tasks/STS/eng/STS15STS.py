@@ -15,7 +15,7 @@ class STS15STS(AbsTaskSTS):
         description="SemEval STS 2015 dataset",
         reference="https://www.aclweb.org/anthology/S15-2010",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

@@ -1,23 +1,21 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class SyntecReranking(AbsTaskReranking):
+class SyntecReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SyntecReranking",
         description="This dataset has been built from the Syntec Collective bargaining agreement.",
         reference="https://huggingface.co/datasets/lyon-nlp/mteb-fr-reranking-syntec-s2p",
         dataset={
-            "path": "lyon-nlp/mteb-fr-reranking-syntec-s2p",
-            "revision": "daf0863838cd9e3ba50544cdce3ac2b338a1b0ad",
+            "path": "mteb/SyntecReranking",
+            "revision": "fd3b5633e0e2fec4b744e1d0d6c8bade30ef147e",
         },
         type="Reranking",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fra-Latn"],
@@ -38,33 +36,3 @@ class SyntecReranking(AbsTaskReranking):
       primaryClass={cs.CL}
 }""",
     )
-
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.dataset = datasets.load_dataset(
-            name="queries",
-            **self.metadata.dataset,
-            split=self.metadata.eval_splits[0],
-        )
-        documents = datasets.load_dataset(
-            name="documents", **self.metadata.dataset, split="test"
-        )
-        # replace documents ids in positive and negative column by their respective texts
-        doc_id2txt = dict(list(zip(documents["doc_id"], documents["text"])))
-
-        self.dataset = self.dataset.map(
-            lambda x: {
-                "positive": [doc_id2txt[docid] for docid in x["positive"]],
-                "negative": [doc_id2txt[docid] for docid in x["negative"]],
-            }
-        )
-        self.dataset = datasets.DatasetDict({"test": self.dataset})
-
-        self.dataset_transform()
-
-        # now convert to the new format
-        self.transform_old_dataset_format(self.dataset)
-
-        self.data_loaded = True

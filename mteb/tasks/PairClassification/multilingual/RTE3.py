@@ -22,7 +22,7 @@ class RTE3(AbsTaskPairClassification):
         },
         description="Recognising Textual Entailment Challenge (RTE-3) aim to provide the NLP community with a benchmark to test progress in recognizing textual entailment",
         reference="https://aclanthology.org/W07-1401/",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         type="PairClassification",
         eval_splits=["test"],

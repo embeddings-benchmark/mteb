@@ -16,7 +16,7 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
         description="Danish question asked on Twitter with the Hashtag #Twitterhjerne ('Twitter brain') and their corresponding answer.",
         reference="https://huggingface.co/datasets/sorenmulli/da-hashtag-twitterhjerne",
         type="Retrieval",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["dan-Latn"],

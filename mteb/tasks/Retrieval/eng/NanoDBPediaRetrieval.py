@@ -18,7 +18,7 @@ class NanoDBPediaRetrieval(AbsTaskRetrieval):
             "revision": "438f1c25129f05db6238699b5afdc9c6b58d2096",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["eng-Latn"],

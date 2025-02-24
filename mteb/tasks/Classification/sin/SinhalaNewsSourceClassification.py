@@ -14,7 +14,7 @@ class SinhalaNewsSourceClassification(AbsTaskClassification):
         },
         reference="https://huggingface.co/datasets/NLPC-UOM/Sinhala-News-Source-classification",
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["sin-Sinh"],

@@ -6,7 +6,7 @@ import datasets
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 logger = getLogger(__name__)
 
@@ -128,7 +128,7 @@ def load_data(
     return (corpus, queries, instructions, relevant_docs, top_ranked)
 
 
-class mFollowIRCrossLingual(AbsTaskReranking):
+class mFollowIRCrossLingual(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="mFollowIRCrossLingual",
         description="This tasks measures retrieval instruction following ability on NeuCLIR narratives for the mFollowIR benchmark on the Farsi, Russian, and Chinese languages with English queries/instructions.",
@@ -138,7 +138,7 @@ class mFollowIRCrossLingual(AbsTaskReranking):
             "revision": "6b01566619233a0c35d135123510b6b02c258ff5",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[EVAL_SPLIT],
         eval_langs=_CLIR_LANGS,
@@ -179,7 +179,7 @@ class mFollowIRCrossLingual(AbsTaskReranking):
         self.data_loaded = True
 
 
-class mFollowIR(AbsTaskReranking):
+class mFollowIR(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="mFollowIR",
         description="This tasks measures retrieval instruction following ability on NeuCLIR narratives for the mFollowIR benchmark on the Farsi, Russian, and Chinese languages.",
@@ -189,7 +189,7 @@ class mFollowIR(AbsTaskReranking):
             "revision": "09eecbe45c54b4a6dfb8e68e345cae77337768e2",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[EVAL_SPLIT],
         eval_langs=_LANGUAGES,
