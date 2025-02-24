@@ -10,9 +10,7 @@ from .AbsTaskRetrieval import AbsTaskRetrieval
 
 logger = logging.getLogger(__name__)
 
-OLD_FORMAT_RERANKING_TASKS = [
-    "BuiltBenchReranking",
-]
+OLD_FORMAT_RERANKING_TASKS = []
 
 
 class AbsTaskReranking(AbsTaskRetrieval):

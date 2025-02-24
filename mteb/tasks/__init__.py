@@ -27,7 +27,10 @@ from .BitextMining import (
     PhincBitextMining,
     PubChemSMILESBitextMining,
     RomaTalesBitextMining,
+    SAMSumFa,
     SRNCorpusBitextMining,
+    SynPerChatbotRAGSumSRetrieval,
+    SynPerChatbotSumSRetrieval,
     TatoebaBitextMining,
     TbilisiCityHallBitextMining,
     VieMedEVBitextMining,
@@ -966,11 +969,6 @@ from .Summarization import (
     SummEvalSummarization,
     SummEvalSummarizationv2,
 )
-from .SummaryRetrieval import (
-    SAMSumFa,
-    SynPerChatbotRAGSumSRetrieval,
-    SynPerChatbotSumSRetrieval,
-)
 
 __all__ = [
     "VOC2007Classification",
@@ -1224,6 +1222,9 @@ __all__ = [
     "BornholmBitextMining",
     "SRNCorpusBitextMining",
     "PubChemSMILESBitextMining",
+    "SAMSumFa",
+    "SynPerChatbotRAGSumSRetrieval",
+    "SynPerChatbotSumSRetrieval",
     "IN22ConvBitextMining",
     "IN22GenBitextMining",
     "BUCCBitextMining",
@@ -1852,9 +1853,6 @@ __all__ = [
     "BSARDRetrieval",
     "SyntecRetrieval",
     "FQuADRetrieval",
-    "SAMSumFa",
-    "SynPerChatbotRAGSumSRetrieval",
-    "SynPerChatbotSumSRetrieval",
     "AFQMC",
     "ATEC",
     "BQ",
