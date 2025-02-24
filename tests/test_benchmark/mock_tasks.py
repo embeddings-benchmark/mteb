@@ -2824,7 +2824,7 @@ class MockMultilingualImageTextPairClassificationTask(
 
 class MockVisualSTSTask(AbsTaskVisualSTS):
     metadata = TaskMetadata(
-        type="VisualSTS",
+        type="VisualSTS(eng)",
         name="MockVisualSTS",
         main_score="cosine_spearman",
         descriptive_stats={
