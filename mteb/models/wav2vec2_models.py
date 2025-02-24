@@ -15,6 +15,7 @@ from mteb.encoder_interface import AudioBatch, AudioData, PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
 
+# ISO 639-3 codes for languages supported by wav2vec2 models
 WAV2VEC2_LANGUAGES = [
     "afr_Latn",
     "sqi_Latn",
@@ -60,16 +61,17 @@ WAV2VEC2_LANGUAGES = [
     "kan_Latn",
     "kaz_Latn",
     "kir_Latn",
-    "abk",
-    "bak",
-    "ceb",
-    "chv",
-    "div",
-    "fao",
-    "grn",
-    "hat",
-    "ina",
-    "kin",
+    "abk_Cyrl",
+    "bak_Cyrl",
+    "ceb_Latn",
+    "chv_Cyrl",
+    "div_Thaa",
+    "fao_Latn",
+    "grn_Latn",
+    "hat_Latn",
+    "haw_Latn"
+    "ina_Latn",
+    "kin_Latn",
 ]
 
 
