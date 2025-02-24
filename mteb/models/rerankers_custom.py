@@ -85,9 +85,9 @@ class BGEReranker(RerankerWrapper):
         assert len(queries) == len(passages)
         query_passage_tuples = list(zip(queries, passages))
         scores = self.model.compute_score(query_passage_tuples, normalize=True)
-        assert len(scores) == len(
-            queries
-        ), f"Expected {len(queries)} scores, got {len(scores)}"
+        assert len(scores) == len(queries), (
+            f"Expected {len(queries)} scores, got {len(scores)}"
+        )
         return scores
 
 
@@ -216,6 +216,7 @@ monobert_large = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["Sentence Transformers", "PyTorch"],
+    is_cross_encoder=True,
 )
 
 # languages unclear: https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual/discussions/28
@@ -242,6 +243,7 @@ jina_reranker_multilingual = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["Sentence Transformers", "PyTorch"],
+    is_cross_encoder=True,
 )
 
 bge_reranker_v2_m3 = ModelMeta(
@@ -300,4 +302,5 @@ bge_reranker_v2_m3 = ModelMeta(
     use_instructions=None,
     training_datasets=bge_m3_training_data,
     framework=["Sentence Transformers", "PyTorch"],
+    is_cross_encoder=True,
 )

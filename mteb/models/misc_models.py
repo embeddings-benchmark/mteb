@@ -654,28 +654,7 @@ consciousAI__cai_stellaris_text_embeddings = ModelMeta(
     adapted_from="/root/.cache/torch/sentence_transformers/sentence-transformers_all-mpnet-base-v1/",
     superseded_by=None,
 )
-manu__bge_m3_custom_fr = ModelMeta(
-    name="manu/bge-m3-custom-fr",
-    revision="ed3ef88678ba83ddf4c0fab71a93cb90d89a9078",
-    release_date="2024-04-11",
-    languages=None,
-    loader=None,
-    n_parameters=567754752,
-    memory_usage_mb=2166,
-    max_tokens=8194.0,
-    embed_dim=1024,
-    license=None,
-    open_weights=True,
-    public_training_code=None,
-    public_training_data=None,
-    framework=["PyTorch", "Sentence Transformers"],
-    reference="https://huggingface.co/manu/bge-m3-custom-fr",
-    similarity_fn_name="cosine",
-    use_instructions=None,
-    training_datasets=None,
-    adapted_from="data/bge-m3-custom",
-    superseded_by=None,
-)
+
 manu__sentence_croissant_alpha_v0_2 = ModelMeta(
     name="manu/sentence_croissant_alpha_v0.2",
     revision="4610b8cea65d7dd59e0b04af50753933fe5b29b2",

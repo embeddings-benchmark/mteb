@@ -30,6 +30,11 @@ SFR_TRAINING_DATA = {  # inherits from e5
     "HotpotQAHardNegatives": ["train"],
     "HotpotQA-PL": ["train"],  # translation not trained on
     "HotpotQA-NL": ["train"],  # translation not trained on
+    # source: https://github.com/embeddings-benchmark/leaderboard/issues/41
+    # qoute: In the realm of Semantic Textual Similarity (STS), it is trained on STS12, STS22, and STSBenchmark
+    "STS12": ["train"],
+    "STS22": ["train"],
+    "STSBenchmark": ["train"],
 }
 
 SFR_Embedding_2_R = ModelMeta(
@@ -68,7 +73,7 @@ SFR_Embedding_2_R = ModelMeta(
 SFR_Embedding_Code_2B_R = ModelMeta(
     loader=partial(  # type: ignore
         InstructSentenceTransformerWrapper,
-        model_name_or_path="Salesforce/SFR-Embedding-Code-2B_R",
+        model_name="Salesforce/SFR-Embedding-Code-2B_R",
         instruction_template=instruction_template,
         attn="cccc",
         pooling_method="lasttoken",
