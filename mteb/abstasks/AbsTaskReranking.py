@@ -27,6 +27,7 @@ OLD_FORMAT_RERANKING_TASKS = [
     "CMedQAv1-reranking",
     "CMedQAv2-reranking",
     "NamaaMrTydiReranking",
+    "BuiltBenchReranking",
 ]
 
 
@@ -106,9 +107,9 @@ class AbsTaskReranking(AbsTaskRetrieval):
                 cur_dataset = given_dataset
             elif "name" in self.metadata.dataset:
                 cur_dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
-                assert (
-                    hf_subset == "default"
-                ), f"Only default subset is supported for {self.metadata.name} since `name` is given in the metadata."
+                assert hf_subset == "default", (
+                    f"Only default subset is supported for {self.metadata.name} since `name` is given in the metadata."
+                )
             else:
                 cur_dataset = datasets.load_dataset(
                     **self.metadata.dataset, name=hf_subset

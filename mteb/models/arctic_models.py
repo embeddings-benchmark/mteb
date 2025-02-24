@@ -87,7 +87,7 @@ LANGUAGES_V2_0 = [
 
 
 arctic_m_v1_5 = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="Snowflake/snowflake-arctic-embed-m-v1.5",
         revision="97eab2e17fcb7ccb8bb94d6e547898fa1a6a0f47",
@@ -148,9 +148,44 @@ arctic_m_v1_5 = ModelMeta(
     },  # also use synthetic
 )
 
+arctic_v1_training_datasets = {
+    # source: https://arxiv.org/pdf/2405.05374
+    # splits not specified to assuming everything
+    # in MTEB
+    "NQ": ["test"],
+    "NQ-NL": ["test"],  # translated from NQ (not trained on)
+    "NQHardNegatives": ["test"],
+    "NQ-PL": ["test"],
+    "HotPotQA": ["test"],  # translated, not trained on
+    "HotPotQAHardNegatives": ["test"],
+    "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
+    "HotpotQA-NL": ["test"],  # translated from hotpotQA (not trained on)
+    "FEVER": ["test"],
+    "FEVER-NL": ["test"],  # translated from FEVER (not trained on)
+    "FEVERHardNegatives": ["test"],
+    # not in MTEB
+    # trained on stack exchange (title-body)
+    # "stackexchange": [],
+    # potentially means that:
+    # "StackExchangeClusteringP2P": ["test"],
+    # "StackExchangeClusteringP2P.v2": ["test"],
+    # "StackExchangeClustering": ["test"],
+    # "StackExchangeClustering.v2": ["test"],
+    # not in MTEB
+    # "paq": [],
+    # "s2orc": [],
+    # "other": [],  # undisclosed including webdata
+}  # also use synthetic
+
+arctic_v2_training_datasets = {
+    **arctic_v1_training_datasets,
+    "MIRACLRetrieval": ["train"],
+    "MIRACLRetrievalHardNegatives": ["train"],
+    "MIRACLReranking": ["train"],
+}
 
 arctic_embed_xs = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="Snowflake/snowflake-arctic-embed-xs",
         revision="742da4f66e1823b5b4dbe6c320a1375a1fd85f9e",
@@ -173,39 +208,12 @@ arctic_embed_xs = ModelMeta(
     superseded_by=None,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={
-        # source: https://arxiv.org/pdf/2405.05374
-        # splits not specified to assuming everything
-        # in MTEB
-        "NQ": ["test"],
-        "NQ-NL": ["test"],  # translated from NQ (not trained on)
-        "NQHardNegatives": ["test"],
-        "NQ-PL": ["test"],
-        "HotPotQA": ["test"],  # translated, not trained on
-        "HotPotQAHardNegatives": ["test"],
-        "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
-        "HotpotQA-NL": ["test"],  # translated from hotpotQA (not trained on)
-        "FEVER": ["test"],
-        "FEVER-NL": ["test"],  # translated from FEVER (not trained on)
-        "FEVERHardNegatives": ["test"],
-        # not in MTEB
-        # trained on stack exchange (title-body)
-        # "stackexchange": [],
-        # potentially means that:
-        # "StackExchangeClusteringP2P": ["test"],
-        # "StackExchangeClusteringP2P.v2": ["test"],
-        # "StackExchangeClustering": ["test"],
-        # "StackExchangeClustering.v2": ["test"],
-        # not in MTEB
-        # "paq": [],
-        # "s2orc": [],
-        # "other": [],  # undisclosed including webdata
-    },  # also use synthetic
+    training_datasets=arctic_v1_training_datasets,
 )
 
 
 arctic_embed_s = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="Snowflake/snowflake-arctic-embed-s",
         revision="d3c1d2d433dd0fdc8e9ca01331a5f225639e798f",
@@ -228,38 +236,12 @@ arctic_embed_s = ModelMeta(
     superseded_by=None,
     public_training_code=None,
     public_training_data=None,  # couldn't find
-    training_datasets={
-        # source: https://arxiv.org/pdf/2405.05374
-        # splits not specified to assuming everything
-        # in MTEB
-        "NQ": ["test"],
-        "NQ-NL": ["test"],  # translated from NQ (not trained on)
-        "NQHardNegatives": ["test"],
-        "HotPotQA": ["test"],
-        "HotPotQAHardNegatives": ["test"],
-        "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
-        "HotpotQA-NL": ["test"],  # translated from hotpotQA (not trained on)
-        "FEVER": ["test"],
-        "FEVER-NL": ["test"],  # translated from FEVER (not trained on)
-        "FEVERHardNegatives": ["test"],
-        # not in MTEB
-        # trained on stack exchange (title-body)
-        # "stackexchange": [],
-        # potentially means that:
-        # "StackExchangeClusteringP2P": ["test"],
-        # "StackExchangeClusteringP2P.v2": ["test"],
-        # "StackExchangeClustering": ["test"],
-        # "StackExchangeClustering.v2": ["test"],
-        # not in MTEB
-        # "paq": [],
-        # "s2orc": [],
-        # "other": [],  # undisclosed including webdata
-    },  # also use synthetic
+    training_datasets=arctic_v1_training_datasets,
 )
 
 
 arctic_embed_m = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="Snowflake/snowflake-arctic-embed-m",
         revision="cc17beacbac32366782584c8752220405a0f3f40",
@@ -282,37 +264,11 @@ arctic_embed_m = ModelMeta(
     superseded_by="Snowflake/snowflake-arctic-embed-m-v1.5",
     public_training_code=None,
     public_training_data=None,  # couldn't find
-    training_datasets={
-        # source: https://arxiv.org/pdf/2405.05374
-        # splits not specified to assuming everything
-        # in MTEB
-        "NQ": ["test"],
-        "NQ-NL": ["test"],  # translated from NQ (not trained on)
-        "NQHardNegatives": ["test"],
-        "HotPotQA": ["test"],
-        "HotPotQAHardNegatives": ["test"],
-        "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
-        "HotpotQA-NL": ["test"],  # translated from hotpotQA (not trained on)
-        "FEVER": ["test"],
-        "FEVER-NL": ["test"],  # translated from FEVER (not trained on)
-        "FEVERHardNegatives": ["test"],
-        # not in MTEB
-        # trained on stack exchange (title-body)
-        # "stackexchange": [],
-        # potentially means that:
-        # "StackExchangeClusteringP2P": ["test"],
-        # "StackExchangeClusteringP2P.v2": ["test"],
-        # "StackExchangeClustering": ["test"],
-        # "StackExchangeClustering.v2": ["test"],
-        # not in MTEB
-        # "paq": [],
-        # "s2orc": [],
-        # "other": [],  # undisclosed including webdata
-    },  # also use synthetic
+    training_datasets=arctic_v1_training_datasets,
 )
 
 arctic_embed_m_long = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="Snowflake/snowflake-arctic-embed-m-long",
         revision="89d0f6ab196eead40b90cb6f9fefec01a908d2d1",
@@ -336,38 +292,11 @@ arctic_embed_m_long = ModelMeta(
     superseded_by="Snowflake/snowflake-arctic-embed-m-v2.0",
     public_training_code=None,
     public_training_data=None,  # couldn't find
-    training_datasets={
-        # source: https://arxiv.org/pdf/2405.05374
-        # splits not specified to assuming everything
-        # in MTEB
-        "NQ": ["test"],
-        "NQ-NL": ["test"],  # translated from NQ (not trained on)
-        "NQHardNegatives": ["test"],
-        "HotPotQA": ["test"],
-        "HotPotQAHardNegatives": ["test"],
-        "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
-        "HotpotQA-NL": ["test"],  # translated from hotpotQA (not trained on)
-        "FEVER": ["test"],
-        "FEVER-NL": ["test"],  # translated from FEVER (not trained on)
-        "FEVERHardNegatives": ["test"],
-        # trained on stack exchange, unsure if sources match
-        # not in MTEB
-        # trained on stack exchange (title-body)
-        # "stackexchange": [],
-        # potentially means that:
-        # "StackExchangeClusteringP2P": ["test"],
-        # "StackExchangeClusteringP2P.v2": ["test"],
-        # "StackExchangeClustering": ["test"],
-        # "StackExchangeClustering.v2": ["test"],
-        # not in MTEB
-        # "paq": [],
-        # "s2orc": [],
-        # "other": [],  # undisclosed including webdata
-    },  # also use synthetic
+    training_datasets=arctic_v1_training_datasets,
 )
 
 arctic_embed_l = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="Snowflake/snowflake-arctic-embed-l",
         revision="9a9e5834d2e89cdd8bb72b64111dde496e4fe78c",
@@ -390,37 +319,11 @@ arctic_embed_l = ModelMeta(
     superseded_by="Snowflake/snowflake-arctic-embed-l-v2.0",
     public_training_code=None,
     public_training_data=None,  # couldn't find
-    training_datasets={
-        # source: https://arxiv.org/pdf/2405.05374
-        # splits not specified to assuming everything
-        # in MTEB
-        "NQ": ["test"],
-        "NQ-NL": ["test"],  # translated from NQ (not trained on)
-        "NQHardNegatives": ["test"],
-        "HotPotQA": ["test"],
-        "HotPotQAHardNegatives": ["test"],
-        "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
-        "HotpotQA-NL": ["test"],  # translated from hotpotQA (not trained on)
-        "FEVER": ["test"],
-        "FEVER-NL": ["test"],  # translated from FEVER (not trained on)
-        "FEVERHardNegatives": ["test"],
-        # not in MTEB
-        # trained on stack exchange (title-body)
-        # "stackexchange": [],
-        # potentially means that:
-        # "StackExchangeClusteringP2P": ["test"],
-        # "StackExchangeClusteringP2P.v2": ["test"],
-        # "StackExchangeClustering": ["test"],
-        # "StackExchangeClustering.v2": ["test"],
-        # not in MTEB
-        # "paq": [],
-        # "s2orc": [],
-        # "other": [],  # undisclosed including webdata
-    },  # also use synthetic
+    training_datasets=arctic_v1_training_datasets,
 )
 
 arctic_embed_m_v1_5 = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="Snowflake/snowflake-arctic-embed-m-v1.5",
         revision="97eab2e17fcb7ccb8bb94d6e547898fa1a6a0f47",
@@ -446,11 +349,11 @@ arctic_embed_m_v1_5 = ModelMeta(
     superseded_by="Snowflake/snowflake-arctic-embed-m-v2.0",
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=arctic_v1_training_datasets,
 )
 
 arctic_embed_m_v2_0 = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="Snowflake/snowflake-arctic-embed-m-v2.0",
         revision="f2a7d59d80dfda5b1d14f096f3ce88bb6bf9ebdc",
@@ -474,34 +377,11 @@ arctic_embed_m_v2_0 = ModelMeta(
     superseded_by=None,
     public_training_code=None,
     public_training_data=None,  # couldn't find
-    training_datasets={
-        # source: https://arxiv.org/pdf/2405.05374
-        # splits not specified to assuming everything
-        # in MTEB
-        "NQ": ["test"],
-        "NQHardNegatives": ["test"],
-        "HotPotQA": ["test"],
-        "HotPotQAHardNegatives": ["test"],
-        "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
-        "FEVER": ["test"],
-        "FEVERHardNegatives": ["test"],
-        # not in MTEB
-        # trained on stack exchange (title-body)
-        # "stackexchange": [],
-        # potentially means that:
-        # "StackExchangeClusteringP2P": ["test"],
-        # "StackExchangeClusteringP2P.v2": ["test"],
-        # "StackExchangeClustering": ["test"],
-        # "StackExchangeClustering.v2": ["test"],
-        # not in MTEB
-        # "paq": [],
-        # "s2orc": [],
-        # "other": [],  # undisclosed including webdata
-    },  # also use synthetic
+    training_datasets=arctic_v2_training_datasets,
 )
 
 arctic_embed_l_v2_0 = ModelMeta(
-    loader=partial(
+    loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="Snowflake/snowflake-arctic-embed-l-v2.0",
         revision="edc2df7b6c25794b340229ca082e7c78782e6374",
@@ -524,28 +404,5 @@ arctic_embed_l_v2_0 = ModelMeta(
     superseded_by=None,
     public_training_code=None,
     public_training_data=None,  # couldn't find
-    training_datasets={
-        # source: https://arxiv.org/pdf/2405.05374
-        # splits not specified to assuming everything
-        # in MTEB
-        "NQ": ["test"],
-        "NQHardNegatives": ["test"],
-        "HotPotQA": ["test"],
-        "HotPotQAHardNegatives": ["test"],
-        "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
-        "FEVER": ["test"],
-        "FEVERHardNegatives": ["test"],
-        # not in MTEB
-        # trained on stack exchange (title-body)
-        # "stackexchange": [],
-        # potentially means that:
-        # "StackExchangeClusteringP2P": ["test"],
-        # "StackExchangeClusteringP2P.v2": ["test"],
-        # "StackExchangeClustering": ["test"],
-        # "StackExchangeClustering.v2": ["test"],
-        # not in MTEB
-        # "paq": [],
-        # "s2orc": [],
-        # "other": [],  # undisclosed including webdata
-    },  # also use synthetic
+    training_datasets=arctic_v2_training_datasets,
 )

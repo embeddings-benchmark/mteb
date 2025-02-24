@@ -4,12 +4,16 @@ from __future__ import annotations
 
 from functools import partial
 
+import torch
+
+from mteb.encoder_interface import PromptType
 from mteb.model_meta import (
     ModelMeta,
     ScoringFunction,
     sentence_transformers_loader,
 )
 from mteb.models.bge_models import bge_m3_training_data
+from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
 
 rubert_tiny = ModelMeta(
     name="cointegrated/rubert-tiny",
@@ -440,18 +444,35 @@ labse_ru_turbo = ModelMeta(
     public_training_data=None,
 )
 
+rosberta_prompts = {
+    # Default
+    "Classification": "classification: ",
+    "MultilabelClassification": "classification: ",
+    "Clustering": "clustering: ",
+    "PairClassification": "classification: ",
+    "Reranking": "classification: ",
+    f"Reranking-{PromptType.query.value}": "search_query: ",
+    f"Reranking-{PromptType.passage.value}": "search_document: ",
+    "STS": "classification: ",
+    "Summarization": "classification: ",
+    PromptType.query.value: "search_query: ",
+    PromptType.passage.value: "search_document: ",
+    # Override some prompts for ruMTEB tasks
+    "HeadlineClassification": "clustering: ",
+    "InappropriatenessClassification": "clustering: ",
+    "MassiveScenarioClassification": "clustering: ",
+    "RuSciBenchGRNTIClassification": "clustering: ",
+    "RuSciBenchOECDClassification": "clustering: ",
+    "SensitiveTopicsClassification": "clustering: ",
+    "STS22": "clustering: ",
+}
 
 rosberta_ru_en = ModelMeta(
     loader=partial(  # type: ignore
         sentence_transformers_loader,
         model_name="ai-forever/ru-en-RoSBERTa",
         revision="89fb1651989adbb1cfcfdedafd7d102951ad0555",
-        model_prompts={
-            "Classification": "classification: ",
-            "Clustering": "clustering: ",
-            "query": "search_query: ",
-            "passage": "search_document: ",
-        },
+        model_prompts=rosberta_prompts,
     ),
     name="ai-forever/ru-en-RoSBERTa",
     languages=["rus_Cyrl"],
@@ -459,9 +480,10 @@ rosberta_ru_en = ModelMeta(
     revision="89fb1651989adbb1cfcfdedafd7d102951ad0555",
     release_date="2024-07-29",
     use_instructions=True,
+    reference="https://huggingface.co/ai-forever/ru-en-RoSBERTa",
     n_parameters=404_000_000,
     memory_usage_mb=1540,
-    max_tokens=514,
+    max_tokens=512,
     embed_dim=1024,
     license="mit",
     similarity_fn_name=ScoringFunction.COSINE,
@@ -480,6 +502,8 @@ rosberta_ru_en = ModelMeta(
         "LanguageClassification": [],  # XNLI
         "MIRACLReranking": ["train"],
         "MIRACLRetrieval": ["train"],
+        "MIRACLRetrievalHardNegatives": ["train"],
+        "MrTidyRetrieval": ["train"],
     },
     public_training_data=None,
     public_training_code=None,
@@ -494,4 +518,175 @@ rosberta_ru_en = ModelMeta(
       url={https://arxiv.org/abs/2408.12503}, 
     }
     """,
+)
+
+frida_prompts = {
+    # Default
+    "Classification": "categorize: ",
+    "MultilabelClassification": "categorize: ",
+    "Clustering": "categorize_topic: ",
+    "PairClassification": "paraphrase: ",
+    "Reranking": "paraphrase: ",
+    f"Reranking-{PromptType.query.value}": "search_query: ",
+    f"Reranking-{PromptType.passage.value}": "search_document: ",
+    "STS": "paraphrase: ",
+    "Summarization": "categorize: ",
+    PromptType.query.value: "search_query: ",
+    PromptType.passage.value: "search_document: ",
+    # Override some prompts for ruMTEB tasks
+    "CEDRClassification": "categorize_sentiment: ",
+    "GeoreviewClassification": "categorize_sentiment: ",
+    "HeadlineClassification": "categorize_topic: ",
+    "InappropriatenessClassification": "categorize_topic: ",
+    "KinopoiskClassification": "categorize_sentiment: ",
+    "MassiveIntentClassification": "paraphrase: ",
+    "MassiveScenarioClassification": "paraphrase: ",
+    "RuReviewsClassification": "categorize_sentiment: ",
+    "RuSciBenchGRNTIClassification": "categorize_topic: ",
+    "RuSciBenchOECDClassification": "categorize_topic: ",
+    "SensitiveTopicsClassification": "categorize_topic: ",
+    "TERRa": "categorize_entailment: ",
+    "RiaNewsRetrieval": "categorize: ",
+}
+
+frida_training_datasets = {
+    # Fine-tune sets
+    # Retrieval
+    "MIRACLReranking": ["train"],
+    "MIRACLRetrieval": ["train"],
+    "MIRACLRetrievalHardNegatives": ["train"],
+    "MrTidyRetrieval": ["train"],
+    "MSMARCO": ["train"],
+    "MSMARCOHardNegatives": ["train"],
+    "NanoMSMARCORetrieval": ["train"],
+    "NQ": ["train"],
+    "NQHardNegatives": ["train"],
+    "NanoNQRetrieval": ["train"],
+    # STS
+    "STS12": ["train"],
+    "STS22": ["train"],
+    "STSBenchmark": ["train"],
+    "STSBenchmarkMultilingualSTS": ["train"],  # translation not trained on
+    "RUParaPhraserSTS": ["train"],
+    # Classification & Clustering
+    "AmazonCounterfactualClassification": ["train"],
+    "AmazonPolarityClassification": ["train"],
+    "AmazonReviewsClassification": ["train"],
+    "ArxivClusteringP2P.v2": ["train"],
+    "ArxivClusteringP2P": ["train"],
+    "Banking77Classification": ["train"],
+    "BiorxivClusteringP2P.v2": ["train"],
+    "BiorxivClusteringP2P": ["train"],
+    "CEDRClassification": ["train"],
+    "DBpediaClassification": ["train"],
+    "EmotionClassification": ["train"],
+    "FinancialPhrasebankClassification": ["train"],
+    "FrenkEnClassification": ["train"],
+    "GeoreviewClassification": ["train"],
+    "GeoreviewClusteringP2P": ["train"],
+    "HeadlineClassification": ["train"],
+    "ImdbClassification": ["train"],
+    "InappropriatenessClassification": ["train"],
+    "KinopoiskClassification": ["train"],
+    "MasakhaNEWSClassification": ["train"],
+    "MassiveIntentClassification": ["train"],
+    "MassiveScenarioClassification": ["train"],
+    "MedrxivClusteringP2P.v2": ["train"],
+    "MedrxivClusteringP2P": ["train"],
+    "MTOPDomainClassification": ["train"],
+    "MTOPIntentClassification": ["train"],
+    "MultiHateClassification": ["train"],
+    "MultilingualSentimentClassification": ["train"],
+    "NewsClassification": ["train"],
+    "NusaX-senti": ["train"],
+    "PoemSentimentClassification": ["train"],
+    "RuReviewsClassification": ["train"],
+    "RuSciBenchGRNTIClassification": ["train"],
+    "RuSciBenchOECDClassification": ["train"],
+    "SensitiveTopicsClassification": ["train"],
+    "SIB200Classification": ["train"],
+    "ToxicChatClassification": ["train"],
+    "ToxicConversationsClassification": ["train"],
+    "TweetSentimentClassification": ["train"],
+    "TweetSentimentExtractionClassification": ["train"],
+    "TweetTopicSingleClassification": ["train"],
+    "YahooAnswersTopicsClassification": ["train"],
+    "YelpReviewFullClassification": ["train"],
+    # Pre-train sets (not mentioned above)
+    # https://github.com/nomic-ai/contrastors/blob/5f7b461e5a13b5636692d1c9f1141b27232fe966/src/contrastors/configs/data/contrastive_pretrain.yaml
+    # reddit_title_body
+    "RedditClustering": [],
+    "RedditClusteringP2P": [],
+    "RedditClustering.v2": [],
+    # codesearch
+    "CodeSearchNetCCRetrieval": [],
+    "COIRCodeSearchNetRetrieval": [],
+    # stackexchange_body_body
+    "StackExchangeClustering.v2": [],
+    "StackExchangeClusteringP2P.v2": [],
+    # wikipedia
+    "WikipediaRetrievalMultilingual": [],
+    "WikipediaRerankingMultilingual": [],
+    # quora
+    "QuoraRetrieval": [],
+    "NanoQuoraRetrieval": [],
+    "Quora-NL": [],  # translation not trained on
+}
+
+frida = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="ai-forever/FRIDA",
+        revision="7292217af9a9e6dbf07048f76b434ad1e2aa8b76",
+        model_prompts=frida_prompts,
+    ),
+    name="ai-forever/FRIDA",
+    languages=["rus_Cyrl"],
+    open_weights=True,
+    revision="7292217af9a9e6dbf07048f76b434ad1e2aa8b76",
+    release_date="2024-12-29",
+    use_instructions=True,
+    reference="https://huggingface.co/ai-forever/FRIDA",
+    n_parameters=823_000_000,
+    memory_usage_mb=3141,
+    max_tokens=512,
+    embed_dim=1536,
+    license="mit",
+    similarity_fn_name="cosine",
+    adapted_from="ai-forever/FRED-T5-1.7B",
+    training_datasets=frida_training_datasets,
+    public_training_data=None,
+    public_training_code=None,
+    framework=["Sentence Transformers", "PyTorch"],
+)
+
+giga_embeddings = ModelMeta(
+    loader=partial(
+        InstructSentenceTransformerWrapper,
+        model_name="ai-sage/Giga-Embeddings-instruct",
+        revision="646f5ff3587e74a18141c8d6b60d1cffd5897b92",
+        trust_remote_code=True,
+        instruction_template="Instruct: {instruction}\nQuery: ",
+        apply_instruction_to_passages=False,
+        model_kwargs={
+            "torch_dtype": torch.bfloat16,
+        },
+    ),
+    name="ai-sage/Giga-Embeddings-instruct",
+    languages=["eng_Latn", "rus_Cyrl"],
+    open_weights=True,
+    revision="646f5ff3587e74a18141c8d6b60d1cffd5897b92",
+    release_date="2024-12-13",
+    n_parameters=2_530_000_000,
+    memory_usage_mb=9649,
+    embed_dim=2048,
+    license="mit",
+    max_tokens=32768,
+    reference="https://huggingface.co/ai-sage/Giga-Embeddings-instruct",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
 )

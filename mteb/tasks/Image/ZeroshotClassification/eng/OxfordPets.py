@@ -6,7 +6,7 @@ from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class OxfordPetsClassification(AbsTaskZeroshotClassification):
+class OxfordPetsZeroshotClassification(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
         name="OxfordPetsZeroShot",
         description="Classifying animal images.",
