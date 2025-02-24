@@ -1617,6 +1617,8 @@ MIEB_LITE = Benchmark(
             # VisualSTS
             "STS13VisualSTS",
             "STS15VisualSTS",
+            "STS17MultilingualVisualSTS",
+            "STSBenchmarkMultilingualVisualSTS",
             # Any2AnyRetrieval
             "CIRRIT2IRetrieval",
             "CUB200I2IRetrieval",
