@@ -16,7 +16,7 @@ class FSD50KClassification(AbsTaskAudioMultilabelClassification):
             "revision": "67e4d8c2570caef0f90d48fdb756b337875d91db",
         },
         type="AudioMultilabelClassification",
-        category="a2a",
+        category="a2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="mAP",
