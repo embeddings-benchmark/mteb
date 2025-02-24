@@ -39,7 +39,6 @@ class WavlmWrapper(AudioEncoder):
         **kwargs
     ) -> np.ndarray:
         
-        batch_size = kwargs.get('batch_size', 32)
         
         if not isinstance(audio_files, list):
             audio_files = [audio_files]
