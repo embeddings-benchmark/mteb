@@ -20,8 +20,10 @@ from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
 from mteb.abstasks.AbsTaskSummarization import AbsTaskSummarization
-from mteb.abstasks.Audio.AbsTaskAudioMultilabelClassification import AbsTaskAudioMultilabelClassification
 from mteb.abstasks.Audio.AbsTaskAudioClustering import AbsTaskAudioClustering
+from mteb.abstasks.Audio.AbsTaskAudioMultilabelClassification import (
+    AbsTaskAudioMultilabelClassification,
+)
 from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.Image.AbsTaskAny2TextMultipleChoice import (
@@ -583,7 +585,9 @@ class MockAudioMultilabelClassificationTask(AbsTaskAudioMultilabelClassification
         self.data_loaded = True
 
 
-class MockAudioMultilabelClassificationLogRegTask(MockAudioMultilabelClassificationTask):
+class MockAudioMultilabelClassificationLogRegTask(
+    MockAudioMultilabelClassificationTask
+):
     metadata = TaskMetadata(
         type="AudioMultilabelClassification",
         name="MockAudioMultilabelClassificationLogReg",
