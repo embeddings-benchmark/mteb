@@ -111,7 +111,8 @@ MIEB_TASK_TYPE = (
     "ImageClassification",
     "ImageMultilabelClassification",
     "DocumentUnderstanding",
-    "VisualSTS",
+    "VisualSTS(eng)",
+    "VisualSTS(multi)",
     "ZeroShotClassification",
     "Compositionality",
 )

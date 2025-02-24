@@ -34,7 +34,7 @@ class STSBenchmarkMultilingualVisualSTS(AbsTaskVisualSTS, MultilingualTask):
             + "built upon multi-sts created by Philip May"
         ),
         reference="https://arxiv.org/abs/2402.08183/",
-        type="VisualSTS",
+        type="VisualSTS(multi)",
         category="i2i",
         modalities=["image"],
         eval_splits=_SPLITS,

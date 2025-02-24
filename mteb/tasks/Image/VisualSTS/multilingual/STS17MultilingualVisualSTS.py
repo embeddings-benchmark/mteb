@@ -33,7 +33,7 @@ class STS17MultilingualVisualSTS(AbsTaskVisualSTS, MultilingualTask):
             + "rendered into images."
         ),
         reference="https://arxiv.org/abs/2402.08183/",
-        type="VisualSTS",
+        type="VisualSTS(multi)",
         category="i2i",
         modalities=["image"],
         eval_splits=_SPLITS,

@@ -1541,14 +1541,11 @@ MIEB_common_tasks = [
 MIEB_ENG = Benchmark(
     name="MIEB(eng)",
     tasks=get_tasks(
-        tasks=MIEB_common_tasks,
-    )
-    + (
-        get_task("STS17MultilingualVisualSTS", languages=["eng"], hf_subsets=["en-en"]),
-        get_task(
-            "STSBenchmarkMultilingualVisualSTS",
-            languages=["eng"],
-        ),
+        tasks=MIEB_common_tasks
+        + [
+            "VisualSTS17Eng",
+            "VisualSTS-b-Eng",
+        ],
     ),
     description="""MIEB(eng) is a comprehensive image embeddings benchmark, spanning 8 task types, covering 126 tasks. 
     In addition to image classification (zero shot and linear probing), clustering, retrieval, MIEB includes tasks in compositionality evaluation, 
@@ -1566,39 +1563,9 @@ MIEB_MULTILINGUAL = Benchmark(
             "WITT2IRetrieval",
             "XFlickr30kCoT2IRetrieval",
             "XM3600T2IRetrieval",
+            "VisualSTS17Multilingual",
+            "VisualSTS-b-Multilingual",
         ],
-    )
-    + (
-        get_task(
-            "STS17MultilingualVisualSTS",
-            hf_subsets=[
-                "ko-ko",
-                "ar-ar",
-                "en-ar",
-                "en-de",
-                "en-tr",
-                "es-en",
-                "es-es",
-                "fr-en",
-                "it-en",
-                "nl-en",
-            ],
-        ),
-        get_task(
-            "STSBenchmarkMultilingualVisualSTS",
-            languages=[
-                "eng",
-                "deu",
-                "spa",
-                "fra",
-                "ita",
-                "nld",
-                "pol",
-                "por",
-                "rus",
-                "cmn",
-            ],
-        ),
     ),
     description="""MIEB(Multilingual) is a comprehensive image embeddings benchmark, spanning 8 task types, covering 129 tasks and a total of 39 languages. 
     In addition to image classification (zero shot and linear probing), clustering, retrieval, MIEB includes tasks in compositionality evaluation, 
