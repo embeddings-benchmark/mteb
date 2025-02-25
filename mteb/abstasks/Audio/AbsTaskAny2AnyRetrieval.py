@@ -8,10 +8,9 @@ from pathlib import Path
 from time import time
 from typing import Any
 
+import torch
 import tqdm
 from datasets import Features, Value, load_dataset
-import torch
-import torchaudio
 
 from ...evaluation.evaluators import Any2AnyRetrievalEvaluator
 from ..AbsTask import AbsTask, ScoresDict
@@ -43,9 +42,15 @@ class HFDataLoader:
             if prefix:
                 query_file = prefix + "-" + query_file
                 qrels_folder = prefix + "-" + qrels_folder
-            self.corpus_file = os.path.join(data_folder, corpus_file) if data_folder else corpus_file
-            self.query_file = os.path.join(data_folder, query_file) if data_folder else query_file
-            self.qrels_folder = os.path.join(data_folder, qrels_folder) if data_folder else None
+            self.corpus_file = (
+                os.path.join(data_folder, corpus_file) if data_folder else corpus_file
+            )
+            self.query_file = (
+                os.path.join(data_folder, query_file) if data_folder else query_file
+            )
+            self.qrels_folder = (
+                os.path.join(data_folder, qrels_folder) if data_folder else None
+            )
             self.qrels_file = qrels_file
         self.streaming = streaming
         self.keep_in_memory = keep_in_memory
@@ -57,7 +62,9 @@ class HFDataLoader:
         if not fIn.endswith(ext):
             raise ValueError(f"File {fIn} must have extension {ext}")
 
-    def load(self, split="test") -> tuple[
+    def load(
+        self, split="test"
+    ) -> tuple[
         dict[str, dict[str, str | torch.Tensor]],
         dict[str, dict[str, str | torch.Tensor]],
         dict[str, dict[str, int]],
@@ -71,7 +78,9 @@ class HFDataLoader:
         if not len(self.corpus):
             logger.info("Loading Corpus...")
             self._load_corpus()
-            logger.info("Loaded %d Documents for %s split.", len(self.corpus), split.upper())
+            logger.info(
+                "Loaded %d Documents for %s split.", len(self.corpus), split.upper()
+            )
             logger.info("Doc Example: %s", self.corpus[0])
 
         if not len(self.queries):
@@ -80,8 +89,10 @@ class HFDataLoader:
 
         self._load_qrels(split)
         qrels_dict = defaultdict(dict)
+
         def qrels_dict_init(row):
             qrels_dict[row["query-id"]][row["corpus-id"]] = int(row["score"])
+
         self.qrels.map(qrels_dict_init)
         self.qrels = qrels_dict
         self.queries = self.queries.filter(lambda x: x["id"] in self.qrels)
@@ -150,18 +161,21 @@ class HFDataLoader:
             )
         if "Q0" in qrels_ds.column_names:
             qrels_ds = qrels_ds.remove_columns("Q0")
-        features = Features({
-            "query-id": Value("string"),
-            "corpus-id": Value("string"),
-            "score": Value("float"),
-        })
-        qrels_ds = qrels_ds.select_columns(["query-id", "corpus-id", "score"]).cast(features)
+        features = Features(
+            {
+                "query-id": Value("string"),
+                "corpus-id": Value("string"),
+                "score": Value("float"),
+            }
+        )
+        qrels_ds = qrels_ds.select_columns(["query-id", "corpus-id", "score"]).cast(
+            features
+        )
         self.qrels = qrels_ds
 
 
 class AbsTaskAny2AnyRetrieval(AbsTask):
-    """
-    Abstract class for audio-text retrieval experiments.
+    """Abstract class for audio-text retrieval experiments.
 
     Child-classes must implement:
       - self.corpus: dict[str, dict[str, str]]
@@ -190,7 +204,9 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
                 keep_in_memory=False,
             ).load(split=split)
             self.corpus[split], self.queries[split], self.relevant_docs[split] = (
-                corpus, queries, qrels
+                corpus,
+                queries,
+                qrels,
             )
         self.data_loaded = True
 
@@ -249,10 +265,16 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
             if top_k is not None:
                 for qid in list(results.keys()):
                     doc_ids = set(
-                        sorted(results[qid], key=lambda x: results[qid][x], reverse=True)[:top_k]
+                        sorted(
+                            results[qid], key=lambda x: results[qid][x], reverse=True
+                        )[:top_k]
                     )
-                    results[qid] = {k: v for k, v in results[qid].items() if k in doc_ids}
-            predictions_path = output_folder / f"{self.metadata.name}_{hf_subset}_predictions.json"
+                    results[qid] = {
+                        k: v for k, v in results[qid].items() if k in doc_ids
+                    }
+            predictions_path = (
+                output_folder / f"{self.metadata.name}_{hf_subset}_predictions.json"
+            )
             with open(predictions_path, "w") as f:
                 json.dump(results, f)
 
@@ -295,14 +317,20 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
                     results[qid] = dict(sorted_docs)
             for qid, retrieved_docs in results.items():
                 expected_docs = relevant_docs[qid]
-                false_positives = [doc for doc in retrieved_docs if doc not in expected_docs]
-                false_negatives = [doc for doc in expected_docs if doc not in retrieved_docs]
+                false_positives = [
+                    doc for doc in retrieved_docs if doc not in expected_docs
+                ]
+                false_negatives = [
+                    doc for doc in expected_docs if doc not in retrieved_docs
+                ]
                 if false_positives or false_negatives:
                     errors[qid] = {
                         "false_positives": false_positives,
                         "false_negatives": false_negatives,
                     }
-            errors_path = output_folder / f"{self.metadata.name}_{hf_subset}_errors.json"
+            errors_path = (
+                output_folder / f"{self.metadata.name}_{hf_subset}_errors.json"
+            )
             with open(errors_path, "w") as f:
                 json.dump(errors, f)
 
@@ -319,13 +347,17 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
     def calculate_metadata_metrics(self) -> None:
         self.load_data()
         all_details = {}
-        pbar_split = tqdm.tqdm(self.metadata_dict["eval_splits"], desc="Processing Splits...")
+        pbar_split = tqdm.tqdm(
+            self.metadata_dict["eval_splits"], desc="Processing Splits..."
+        )
         for split in pbar_split:
             pbar_split.set_postfix_str(f"Split: {split}")
             logger.info(f"Processing metadata for split {split}")
             all_details[split] = {}
             if self.is_multilingual:
-                pbar_lang = tqdm.tqdm(self.relevant_docs.keys(), desc="Processing Languages...")
+                pbar_lang = tqdm.tqdm(
+                    self.relevant_docs.keys(), desc="Processing Languages..."
+                )
                 for lang in pbar_lang:
                     pbar_lang.set_postfix_str(f"Language: {lang}")
                     logger.info(f"Processing metadata for language {lang}")
@@ -358,7 +390,9 @@ def process_language(relevant_docs, queries, corpus, lang=None):
     logger.info(f"Average query length{language_description} is {query_len}")
     logger.info(f"Number of documents{language_description} is {num_documents}")
     logger.info(f"Number of queries{language_description} is {num_queries}")
-    logger.info(f"Average relevant docs per query{language_description} is {qrels_per_doc}")
+    logger.info(
+        f"Average relevant docs per query{language_description} is {qrels_per_doc}"
+    )
     return {
         "average_document_length": doc_len,
         "average_query_length": query_len,
