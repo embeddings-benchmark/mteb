@@ -2283,7 +2283,7 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskAny2AnyRetrieval):
 
 class MockTextMultipleChoiceTask(AbsTaskAny2TextMultipleChoice):
     metadata = TaskMetadata(
-        type="Any2TextMutipleChoice",
+        type="VisionCentric",
         name="MockTextMultipleChoice",
         main_score="accuracy",
         descriptive_stats={
@@ -2722,7 +2722,7 @@ class MockMultilingualImageMultilabelClassificationTask(
 
 class MockImageTextPairClassificationTask(AbsTaskImageTextPairClassification):
     metadata = TaskMetadata(
-        type="ImageTextPairClassification",
+        type="Compositionality",
         name="MockImageTextPairClassification",
         main_score="text_acc",
         descriptive_stats={
@@ -2763,7 +2763,7 @@ class MockMultilingualImageTextPairClassificationTask(
     AbsTaskImageTextPairClassification, MultilingualTask
 ):
     metadata = TaskMetadata(
-        type="ImageTextPairClassification",
+        type="Compositionality",
         name="MockMultilingualImageTextPairClassification",
         main_score="accuracy",
         descriptive_stats={
@@ -2824,7 +2824,7 @@ class MockMultilingualImageTextPairClassificationTask(
 
 class MockVisualSTSTask(AbsTaskVisualSTS):
     metadata = TaskMetadata(
-        type="VisualSTS",
+        type="VisualSTS(eng)",
         name="MockVisualSTS",
         main_score="cosine_spearman",
         descriptive_stats={
