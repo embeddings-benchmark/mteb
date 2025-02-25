@@ -12,12 +12,12 @@ class ESC50ZeroshotClassification(AbsTaskZeroshotClassification):
         description="5-second clips of common environmental sounds, 50 classes",
         reference="https://dl.acm.org/doi/10.1145/2733373.2806390",
         dataset={
-            "path": "karolpiczak/ESC-50"
+            "path": "ashraq/esc50"
         },
         type="ZeroShotClassification",
         category="a2t",
         eval_splits=["train"],
-        eval_langs=["eng"],
+        eval_langs=["eng-latn"],
         main_score="accuracy",
         domains=["Scene"],
         task_subtypes=["Scene recognition"],
@@ -48,7 +48,8 @@ class ESC50ZeroshotClassification(AbsTaskZeroshotClassification):
     label_column_name: str = "category"
 
     def get_candidate_labels(self) -> list[str]:
-        return [
-            f"a sound of a {name}."
-            for name in self.dataset["train"].features[self.label_column_name].names
-        ]
+
+        unique_categories = set(example[self.label_column_name] for example in self.dataset["train"])
+
+        return [f"a sound of a {name}." 
+                for name in unique_categories]
