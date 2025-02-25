@@ -8,8 +8,8 @@ from datasets import Dataset
 from mteb.abstasks.TaskMetadata import HFSubset
 
 from ...encoder_interface import Encoder
-from ...evaluation.evaluators import AudioClusteringEvaluator
 from ..AbsTask import AbsTask, ScoresDict
+from ..evaluation.evaluators import ZeroshotAudioClassificationEvaluator
 
 logger = logging.getLogger(__name__)
 
@@ -17,10 +17,6 @@ logger = logging.getLogger(__name__)
 class AbsTaskZeroshotAudioClassification(AbsTask):
     """Abstract class for Zero Shot Audio Classification tasks
     The similarity is computed between pairs and the results are ranked.
-
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
-        audio: datasets.Audio
-        label: int
     """
 
     audio_column_name: str = "audio"
@@ -45,15 +41,21 @@ class AbsTaskZeroshotAudioClassification(AbsTask):
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ) -> ScoresDict:
+        candidate_labels = self.get_candidate_labels()
         evaluator = ZeroshotAudioClassificationEvaluator(
-            dataset[self.audio_column_name],
+            dataset,
+            self.audio_column_name,
+            # dataset[self.image_column_name],#broken into dataset and self.image_column_name
             dataset[self.label_column_name],
+            candidate_labels,
             task_name=self.metadata.name,
             **kwargs,
         )
         metrics = evaluator(model, encode_kwargs=encode_kwargs)
-        self._add_main_score(metrics)
-        return metrics
+
+        scores = {"accuracy": metrics["accuracy"]}
+        self._add_main_score(scores)
+        return scores
 
     def get_candidate_labels(self) -> list[str]:
         """Return the text candidates for zeroshot classification"""
