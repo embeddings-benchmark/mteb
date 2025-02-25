@@ -439,6 +439,10 @@ class DenseRetrievalExactSearch:
             
             if strategy == "previous_results":
                 # Use previous results with scores
+                if qid not in self.previous_results:
+                    print(f"WARNING: No previous results found for query {qid}")
+                    print(self.previous_results.keys())
+                    print(queries)
                 q_results = self.previous_results[qid]
             elif strategy == "top_ranked":
                 # Convert top_ranked list to dict with dummy scores
