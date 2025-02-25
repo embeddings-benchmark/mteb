@@ -21,6 +21,7 @@ class STS17MultilingualVisualSTSEng(AbsTaskAggregate):
         license="not specified",
         annotations_creators="human-annotated",
         dialect=[""],
+        eval_langs=["eng-Latn"],
         sample_creation="rendered",
         main_score="cosine_spearman",
         type="VisualSTS(eng)",
@@ -36,7 +37,7 @@ class STS17MultilingualVisualSTSEng(AbsTaskAggregate):
 
 task_list_sts17_multi: list[AbsTask] = [
     STS17MultilingualVisualSTS().filter_languages(
-        languages=["eng"],
+        languages=["ara", "eng", "spa", "kor"],
         hf_subsets=[
             "ko-ko",
             "ar-ar",
@@ -67,6 +68,18 @@ class STS17MultilingualVisualSTSMultilingual(AbsTaskAggregate):
         main_score="cosine_spearman",
         type="VisualSTS(multi)",
         eval_splits=["test"],
+        eval_langs=[
+            "eng-Latn",
+            "spa-Latn",
+            "nld-Latn",
+            "deu-Latn",
+            "fra-Latn",
+            "ita-Latn",
+            "eng-Latn",
+            "tur-Latn",
+            "ara-Arab",
+            "kor-Hang",
+        ],
         bibtex_citation="""@article{xiao2024pixel,
   title={Pixel Sentence Representation Learning},
   author={Xiao, Chenghao and Huang, Zhuoxu and Chen, Danlu and Hudson, G Thomas and Li, Yizhi and Duan, Haoran and Lin, Chenghua and Fu, Jie and Han, Jungong and Moubayed, Noura Al},
