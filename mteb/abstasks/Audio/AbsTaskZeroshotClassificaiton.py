@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from collections import Counter
 from typing import Any
 
 from datasets import Dataset
@@ -9,7 +8,6 @@ from datasets import Dataset
 from ...encoder_interface import Encoder
 from ...evaluation.evaluators import AudioZeroshotClassificationEvaluator
 from ..AbsTask import AbsTask, ScoresDict
-from ..TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -45,12 +43,7 @@ class AbsTaskZeroshotClassification(AbsTask):
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ) -> ScoresDict:
-
         candidate_labels = self.get_candidate_labels()
-
-        print("lbl columnb name: ",self.label_column_name)
-        print("labels??: ", dataset[self.label_column_name])
-
 
         evaluator = AudioZeroshotClassificationEvaluator(
             dataset,
@@ -66,10 +59,6 @@ class AbsTaskZeroshotClassification(AbsTask):
         self._add_main_score(scores)
         return scores
 
-
     def get_candidate_labels(self) -> list[str]:
         """Return the text candidates for zeroshot classification"""
-        
-        
-        
         raise NotImplementedError("This method should be overridden by subclasses")

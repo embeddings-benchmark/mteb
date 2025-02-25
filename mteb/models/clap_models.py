@@ -1,18 +1,19 @@
 from __future__ import annotations
 
+from collections.abc import Iterable
 from functools import partial
-from typing import Any, Iterable
+from typing import Any
 
 import numpy as np
 import torch
+import torchaudio
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import ClapProcessor, ClapModel
+from transformers import ClapModel, ClapProcessor, pipeline
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
-import torchaudio
 from mteb.model_meta import ModelMeta
-from transformers import pipeline
+
 
 class ClapZeroShotWrapper:
     def __init__(
@@ -28,9 +29,7 @@ class ClapZeroShotWrapper:
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
 
         self.pipeline = pipeline(
-            task="zero-shot-audio-classification",
-            model=model_name,
-            device=device
+            task="zero-shot-audio-classification", model=model_name, device=device
         )
 
     def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
@@ -38,15 +37,15 @@ class ClapZeroShotWrapper:
 
         if isinstance(audio, DataLoader):
             for batch in audio:
-                
                 processed_audio.extend(self._handle_batch(batch))
         else:
             processed_audio = self._handle_batch(audio)
 
         return processed_audio
 
-
-    def _handle_batch(self, batch: AudioData | Iterable[tuple[AudioData, str]]) -> list[torch.Tensor]:
+    def _handle_batch(
+        self, batch: AudioData | Iterable[tuple[AudioData, str]]
+    ) -> list[torch.Tensor]:
         waveforms = []
 
         if isinstance(batch, tuple):  # Handle (audio, metadata) tuples
@@ -55,19 +54,22 @@ class ClapZeroShotWrapper:
         else:
             for item in batch:
                 if isinstance(item, dict):
-                    if 'array' in item:
-                        audio = item['array']
+                    if "array" in item:
+                        audio = item["array"]
                         # Convert to torch tensor and ensure float32
-                        audio = torch.from_numpy(audio).float() if isinstance(audio, np.ndarray) else audio.float()
-                        if item['sampling_rate'] != self.sampling_rate:
+                        audio = (
+                            torch.from_numpy(audio).float()
+                            if isinstance(audio, np.ndarray)
+                            else audio.float()
+                        )
+                        if item["sampling_rate"] != self.sampling_rate:
                             resampler = torchaudio.transforms.Resample(
-                                item['sampling_rate'], 
-                                self.sampling_rate
+                                item["sampling_rate"], self.sampling_rate
                             )
                             audio = resampler(audio)
                         waveforms.append(self._convert_audio(audio))
-                    elif 'path' in item:
-                        waveforms.append(self._load_audio_file(item['path']))
+                    elif "path" in item:
+                        waveforms.append(self._load_audio_file(item["path"]))
                 elif isinstance(item, (np.ndarray, torch.Tensor)):
                     waveforms.append(self._convert_audio(item))
                 elif isinstance(item, str):
@@ -87,6 +89,7 @@ class ClapZeroShotWrapper:
             resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
             waveform = resampler(waveform)
         return waveform.squeeze()
+
     def _convert_audio(self, audio: AudioData) -> torch.Tensor:
         if isinstance(audio, np.ndarray):
             audio = torch.from_numpy(audio)
@@ -98,9 +101,7 @@ class ClapZeroShotWrapper:
             resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
             waveform = resampler(waveform)
         return waveform.squeeze()
-        # Similar to Wav2Vec2AudioWrapper's _handle_batch
-        # Process audio data into format expected by CLAP
-        
+
     def get_audio_embeddings(
         self,
         audio: AudioBatch,
@@ -108,7 +109,7 @@ class ClapZeroShotWrapper:
     ) -> np.ndarray:
         all_features = []
         target_sampling_rate = 48000  # CLAP's expected sampling rate
-        
+
         if isinstance(audio, DataLoader):
             # Process all batches
             for batch in tqdm(audio, desc="Processing audio batches"):
@@ -116,38 +117,44 @@ class ClapZeroShotWrapper:
                 # Process each item in the batch individually to avoid memory issues
                 for item in batch:
                     inputs = self.pipeline.feature_extractor(
-                        [item['array']], 
+                        [item["array"]],
                         sampling_rate=target_sampling_rate,
-                        return_tensors="pt", 
-                        padding=True
+                        return_tensors="pt",
+                        padding=True,
                     )
                     inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                    
+
                     with torch.no_grad():
-                        audio_features = self.pipeline.model.get_audio_features(**inputs)
-                        audio_features = audio_features / audio_features.norm(dim=-1, keepdim=True)
+                        audio_features = self.pipeline.model.get_audio_features(
+                            **inputs
+                        )
+                        audio_features = audio_features / audio_features.norm(
+                            dim=-1, keepdim=True
+                        )
                         batch_features.append(audio_features.cpu().numpy())
-                
+
                 all_features.extend(batch_features)
-            
+
             return np.vstack(all_features)
         else:
             # Process single batch
             batch_features = []
             for item in audio:
                 inputs = self.pipeline.feature_extractor(
-                    [item['array']], 
+                    [item["array"]],
                     sampling_rate=target_sampling_rate,
-                    return_tensors="pt", 
-                    padding=True
+                    return_tensors="pt",
+                    padding=True,
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                
+
                 with torch.no_grad():
                     audio_features = self.pipeline.model.get_audio_features(**inputs)
-                    audio_features = audio_features / audio_features.norm(dim=-1, keepdim=True)
+                    audio_features = audio_features / audio_features.norm(
+                        dim=-1, keepdim=True
+                    )
                     batch_features.append(audio_features.cpu().numpy())
-            
+
             return np.vstack(batch_features)
 
     def get_text_embeddings(
@@ -157,12 +164,12 @@ class ClapZeroShotWrapper:
     ) -> np.ndarray:
         inputs = self.processor(text=texts, return_tensors="pt", padding=True)
         inputs = {k: v.to(self.device) for k, v in inputs.items()}
-        
+
         with torch.no_grad():
             text_features = self.model.get_text_features(**inputs)
             # Normalize embeddings
             text_features = text_features / text_features.norm(dim=-1, keepdim=True)
-            
+
         return text_features.cpu().numpy()
 
     def encode(
@@ -176,6 +183,7 @@ class ClapZeroShotWrapper:
         if isinstance(inputs[0], str):
             return self.get_text_embeddings(inputs)
         return self.get_audio_embeddings(inputs)
+
 
 # Model metadata
 clap_htsat_unfused = ModelMeta(
@@ -197,5 +205,5 @@ clap_htsat_unfused = ModelMeta(
     reference="https://huggingface.co/laion/clap-htsat-unfused",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets={"LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]}
+    training_datasets={"LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]},
 )
