@@ -1642,7 +1642,7 @@ MIEB_LITE = Benchmark(
             "XM3600T2IRetrieval",
         ],
     ),
-    description="""MIEB(lite) is a comprehensive image embeddings benchmark, spanning 8 task types, covering 51 tasks. 
+    description="""MIEB(lite) is a comprehensive image embeddings benchmark, spanning 10 task types, covering 51 tasks. 
     This is a lite version of MIEB(Multilingual), designed to be run at a fraction of the cost while maintaining
     relative rank of models.""",
     reference="",
