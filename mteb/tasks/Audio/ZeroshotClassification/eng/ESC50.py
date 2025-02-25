@@ -1,27 +1,25 @@
 from __future__ import annotations
 
 from mteb.abstasks.Audio.AbsTaskZeroshotAudioClassification import (
-    AbsTaskZeroshotClassification,
+    AbsTaskZeroshotAudioClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class ESC50ZeroshotClassification(AbsTaskZeroshotClassification):
+class ESC50ZeroshotClassification(AbsTaskZeroshotAudioClassification):
     metadata = TaskMetadata(
         name="ESC50ZeroShot",
         description="5-second clips of common environmental sounds, 50 classes",
         reference="https://dl.acm.org/doi/10.1145/2733373.2806390",
-        dataset={
-            "path": "ashraq/esc50"
-        },
+        dataset={"path": "ashraq/esc50", "revision": "5c72356dbaaa04826a28c94283a15b112ddeca02"},
         type="ZeroShotClassification",
-        category="a2t",
+        category="t2t", #not actually t2t, put it to avoid errors
         eval_splits=["train"],
         eval_langs=["eng-latn"],
         main_score="accuracy",
         domains=["Scene"],
         task_subtypes=["Scene recognition"],
-        license="cc-by-nc-3.0",
+        license="cc-by-nc-4.0",
         annotations_creators="human-annotated",
         modalities=["audio", "text"],
         sample_creation="found",
@@ -38,9 +36,7 @@ class ESC50ZeroshotClassification(AbsTaskZeroshotClassification):
         pages = {1015--1018}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"train": 2000}
-        },
+        descriptive_stats={"n_samples": {"train": 2000}},
     )
 
     # Override default column name in the subclass
@@ -48,8 +44,7 @@ class ESC50ZeroshotClassification(AbsTaskZeroshotClassification):
     label_column_name: str = "category"
 
     def get_candidate_labels(self) -> list[str]:
-
-        unique_categories = set(example[self.label_column_name] for example in self.dataset["train"])
-
-        return [f"a sound of a {name}." 
-                for name in unique_categories]
+        return [
+            f"a sound of a {name}."
+            for name in sorted(list(set(self.dataset["train"][self.label_column_name])))
+        ]

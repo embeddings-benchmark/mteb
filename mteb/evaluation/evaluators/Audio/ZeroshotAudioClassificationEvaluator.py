@@ -17,15 +17,19 @@ from ..Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_AUDIO_TRANSFORM = lambda x: x
+def id(x):
+    return x
+
+DEFAULT_AUDIO_TRANSFORM = id
 
 
 # pasted audio dataset into this
 class AudioDataset(torch.utils.data.Dataset):
-    def __init__(self, hf_dataset, audio_column_name: str = "audio", transform=None):
+    def __init__(self, hf_dataset, audio_column_name: str = "audio", sampling_rate: int = 48000, transform=None):
         self.dataset = hf_dataset
         self.transform = transform or DEFAULT_AUDIO_TRANSFORM
         self.audio_column_name = audio_column_name
+        self.sampling_rate = sampling_rate
 
     def __len__(self):
         return len(self.dataset)
@@ -45,15 +49,11 @@ class AudioDataset(torch.utils.data.Dataset):
         return waveform
 
 
-def custom_collate_fn(batch):
-    return batch
-
-
 class ZeroshotAudioClassificationEvaluator(Evaluator):
     def __init__(
         self,
         dataset,
-        image_column_name: str,
+        audio_column_name: str,
         labels: list[int],
         candidate_labels: list[str],
         task_name: str | None = None,
@@ -61,9 +61,9 @@ class ZeroshotAudioClassificationEvaluator(Evaluator):
     ):
         super().__init__(**kwargs)
         self.dataset = AudioDataset(
-            dataset, image_column_name=image_column_name, transform=None
+            dataset, audio_column_name=audio_column_name, transform=None
         )
-        self.image_column_name = image_column_name
+        self.audio_column_name = audio_column_name
         self.labels = labels
         self.candidate_labels = candidate_labels
         self.task_name = task_name
@@ -72,20 +72,12 @@ class ZeroshotAudioClassificationEvaluator(Evaluator):
         if "batch_size" not in encode_kwargs:
             encode_kwargs["batch_size"] = 32
 
-        dataloader = DataLoader(
-            self.dataset,
-            batch_size=encode_kwargs["batch_size"],
-            shuffle=False,
-            collate_fn=custom_collate_fn,
-            num_workers=min(math.floor(os.cpu_count() / 2), 16),
-        )
-
         text_embeddings = model.get_text_embeddings(
             self.candidate_labels, batch_size=encode_kwargs["batch_size"]
         )
 
         audio_embeddings = model.get_audio_embeddings(
-            dataloader, batch_size=encode_kwargs["batch_size"]
+            self.dataset, sampling_rate=self.dataset.sampling_rate, batch_size=encode_kwargs["batch_size"]
         )
 
         probs = model.calculate_probs(text_embeddings, audio_embeddings)

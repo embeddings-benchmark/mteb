@@ -1,9 +1,12 @@
+from __future__ import annotations
+
+from mteb import get_model, get_tasks
 from mteb.evaluation import MTEB
-from mteb import get_tasks, get_model
 
-model_name = "facebook/wav2vec2-base-960h"
-model = get_model(model_name=model_name)
+model_name = "laion/clap-htsat-unfused"
+model = get_model(model_name)
 
-tasks = get_tasks(tasks=["CIFAR10ZeroShot"])
+tasks = get_tasks(tasks=["ESC50ZeroShot"])
 evaluation = MTEB(tasks=tasks)
 results = evaluation.run(model)
+print(results[-1].to_dict())

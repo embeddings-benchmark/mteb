@@ -20,6 +20,7 @@ from mteb.models import (
     blip_models,
     bm25,
     cde_models,
+    clap_models,
     clip_models,
     cohere_models,
     cohere_v,
@@ -136,6 +137,7 @@ model_modules = [
     uae_models,
     voyage_models,
     fa_models,
+    clap_models,
 ]
 MODEL_REGISTRY = {}
 
@@ -236,6 +238,7 @@ def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
     Returns:
         A model metadata object
     """
+    print(model_name, model_name in MODEL_REGISTRY)
     if model_name in MODEL_REGISTRY:
         if revision and (not MODEL_REGISTRY[model_name].revision == revision):
             raise ValueError(

@@ -8,8 +8,8 @@ from datasets import Dataset
 from mteb.abstasks.TaskMetadata import HFSubset
 
 from ...encoder_interface import Encoder
+from ...evaluation.evaluators import ZeroshotAudioClassificationEvaluator
 from ..AbsTask import AbsTask, ScoresDict
-from ..evaluation.evaluators import ZeroshotAudioClassificationEvaluator
 
 logger = logging.getLogger(__name__)
 
