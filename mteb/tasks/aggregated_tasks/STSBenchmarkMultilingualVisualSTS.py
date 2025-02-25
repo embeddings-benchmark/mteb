@@ -5,9 +5,9 @@ from mteb.abstasks.aggregated_task import AbsTaskAggregate, AggregateTaskMetadat
 from mteb.tasks.Image.VisualSTS import STSBenchmarkMultilingualVisualSTS
 
 task_list_stsb: list[AbsTask] = [
-    STSBenchmarkMultilingualVisualSTS()
-    .filter_eval_splits(["test"])
-    .filter_languages(languages=["eng"])
+    STSBenchmarkMultilingualVisualSTS().filter_languages(
+        languages=["eng"], hf_subsets=["en"]
+    )
 ]
 
 
@@ -25,6 +25,7 @@ class STSBenchmarkMultilingualVisualSTSEng(AbsTaskAggregate):
         main_score="cosine_spearman",
         type="VisualSTS(eng)",
         eval_splits=["test"],
+        eval_langs=["eng-Latn"],
         bibtex_citation="""@article{xiao2024pixel,
   title={Pixel Sentence Representation Learning},
   author={Xiao, Chenghao and Huang, Zhuoxu and Chen, Danlu and Hudson, G Thomas and Li, Yizhi and Duan, Haoran and Lin, Chenghua and Fu, Jie and Han, Jungong and Moubayed, Noura Al},
@@ -35,9 +36,7 @@ class STSBenchmarkMultilingualVisualSTSEng(AbsTaskAggregate):
 
 
 task_list_multi: list[AbsTask] = [
-    STSBenchmarkMultilingualVisualSTS()
-    .filter_eval_splits(["test"])
-    .filter_languages(
+    STSBenchmarkMultilingualVisualSTS().filter_languages(
         languages=[
             "deu",
             "spa",
@@ -48,6 +47,17 @@ task_list_multi: list[AbsTask] = [
             "por",
             "rus",
             "cmn",
+        ],
+        hf_subsets=[
+            "de",
+            "es",
+            "fr",
+            "it",
+            "nl",
+            "pl",
+            "pt",
+            "ru",
+            "zh",
         ],
     )
 ]
@@ -67,6 +77,17 @@ class STSBenchmarkMultilingualVisualSTSMultilingual(AbsTaskAggregate):
         main_score="cosine_spearman",
         type="VisualSTS(multi)",
         eval_splits=["test"],
+        eval_langs=[
+            "deu-Latn",
+            "spa-Latn",
+            "fra-Latn",
+            "ita-Latn",
+            "nld-Latn",
+            "pol-Latn",
+            "por-Latn",
+            "rus-Cyrl",
+            "cmn-Hans",
+        ],
         bibtex_citation="""@article{xiao2024pixel,
   title={Pixel Sentence Representation Learning},
   author={Xiao, Chenghao and Huang, Zhuoxu and Chen, Danlu and Hudson, G Thomas and Li, Yizhi and Duan, Haoran and Lin, Chenghua and Fu, Jie and Han, Jungong and Moubayed, Noura Al},
