@@ -42,9 +42,14 @@ class PairClassificationEvaluator(Evaluator):
         sentences2,
         labels,
         task_name: str | None = None,
+        limit: int | None = None,
         **kwargs,
     ):
         super().__init__(**kwargs)
+        if limit:
+            sentences1 = sentences1[:limit]
+            sentences2 = sentences2[:limit]
+            labels = labels[:limit]
         self.sentences1 = sentences1
         self.sentences2 = sentences2
         self.labels = labels
@@ -99,6 +104,9 @@ class PairClassificationEvaluator(Evaluator):
         *,
         encode_kwargs: dict[str, Any] = {},
     ):
+        if "batch_size" not in encode_kwargs:
+            encode_kwargs["batch_size"] = 32
+
         all_sentences = self.sentences1 + self.sentences2
         len_sentences1 = len(self.sentences1)
         embeddings = self._encode_unique_texts(
