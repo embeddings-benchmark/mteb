@@ -170,7 +170,7 @@ def filter_models(
     compatibility: list[str],
     instructions: bool | None,
     model_size: tuple[int | None, int | None],
-    zero_shot_setting: Literal["hard", "soft", "off"],
+    zero_shot_setting: Literal["only_zero_shot", "allow_all", "remove_unknown"],
 ):
     lower, upper = model_size
     # Setting to None, when the user doesn't specify anything
@@ -194,10 +194,10 @@ def filter_models(
     for model_meta in model_metas:
         is_model_zero_shot = model_meta.is_zero_shot_on(task_select)
         if is_model_zero_shot is None:
-            if zero_shot_setting == "hard":
+            if zero_shot_setting in ["remove_unknown", "only_zero_shot"]:
                 continue
         elif not is_model_zero_shot:
-            if zero_shot_setting != "off":
+            if zero_shot_setting == "only_zero_shot":
                 continue
         models_to_keep.add(model_meta.name)
     return list(models_to_keep)
@@ -224,7 +224,7 @@ filtered_models = filter_models(
     compatibility=[],
     instructions=None,
     model_size=(MIN_MODEL_SIZE, MAX_MODEL_SIZE),
-    zero_shot_setting="soft",
+    zero_shot_setting="allow_all",
 )
 
 summary_table, per_task_table = scores_to_tables(
@@ -354,12 +354,12 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                             [
                                 (
                                     "Only Zero-shot",
-                                    "hard",
+                                    "only_zero_shot",
                                 ),
-                                ("Allow Unknown", "soft"),
-                                ("Allow all", "off"),
+                                ("Remove Unknown", "remove_unknown"),
+                                ("Allow All", "allow_all"),
                             ],
-                            value="soft",
+                            value="allow_all",
                             label="Zero-shot",
                             interactive=True,
                         )
@@ -392,13 +392,6 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                     "*We only display models that have been run on all task types in the benchmark*"
                 )
     with gr.Tab("Summary"):
-        gr.Markdown(
-            """
-            ✅ - Model is zero-shot on the benchmark <br>
-            ⚠️  - Training data unknown <br>
-            ❌ - Model is **NOT** zero-shot on the benchmark
-        """
-        )
         summary_table.render()
         download_summary = gr.DownloadButton("Download Table")
         download_summary.click(
@@ -425,7 +418,9 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             gr.Markdown(
                 """
 A model is considered zero-shot if it is not trained on any splits of the datasets used to derive the tasks.
-E.g., if a model is trained on Natural Questions, it cannot be considered zero-shot on benchmarks containing the task “NQ” which is derived from Natural Questions.
+The percentages in the table indicate what portion of the benchmark can be considered out-of-distribution for a given model.
+100% means the model has not been trained on any of the datasets in a given benchmark, and therefore the benchmark score can be interpreted as the model's overall generalization performance,
+while 50% means the model has been finetuned on half of the tasks in the benchmark, thereby indicating that the benchmark results should be interpreted with a pinch of salt.
 This definition creates a few edge cases. For instance, multiple models are typically trained on Wikipedia title and body pairs, but we do not define this as leakage on, e.g., “WikipediaRetrievalMultilingual” and “WikiClusteringP2P” as these datasets are not based on title-body pairs.
 Distilled, further fine-tunes, or in other ways, derivative models inherit the datasets of their parent models.
 Based on community feedback and research findings, this definition may change in the future. Please open a PR if you notice any mistakes or want to help us refine annotations, see [GitHub](https://github.com/embeddings-benchmark/mteb/blob/06489abca007261c7e6b11f36d4844c5ed5efdcb/mteb/models/bge_models.py#L91).
@@ -600,7 +595,7 @@ see existing implementations [here](https://github.com/embeddings-benchmark/mteb
         compatibility: list[str],
         instructions: bool | None,
         model_size: tuple[int, int],
-        zero_shot: Literal["hard", "soft", "off"],
+        zero_shot: Literal["allow_all", "remove_unknown", "only_zero_shot"],
     ):
         start_time = time.time()
         model_names = list({entry["model_name"] for entry in scores})
@@ -788,7 +783,7 @@ for benchmark in benchmarks:
         compatibility=[],
         instructions=None,
         model_size=(MIN_MODEL_SIZE, MAX_MODEL_SIZE),
-        zero_shot="soft",
+        zero_shot="allow_all",
     )
     # We have to call this both on the filtered and unfiltered task because the callbacks
     # also gets called twice for some reason
