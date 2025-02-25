@@ -42,7 +42,7 @@ class STSBenchmarkMultilingualVisualSTS(AbsTaskVisualSTS, MultilingualTask):
         main_score="cosine_spearman",
         date=("2012-01-01", "2017-12-31"),
         domains=["News", "Social", "Web", "Spoken", "Written"],
-        task_subtypes=[],
+        task_subtypes=["Rendered semantic textual similarity"],
         license="not specified",
         annotations_creators="human-annotated",
         dialect=[],

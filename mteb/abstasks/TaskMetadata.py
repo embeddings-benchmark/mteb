@@ -59,6 +59,7 @@ TASK_SUBTYPE = Literal[
     "Activity recognition",
     "Tumor detection",
     "Duplicate Detection",
+    "Rendered semantic textual similarity",
 ]
 
 TASK_DOMAIN = Literal[
