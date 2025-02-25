@@ -176,9 +176,7 @@ class ModelMeta(BaseModel):
             benchmark_datasets = set(tasks)
         else:
             tasks = cast(Sequence[AbsTask], tasks)
-            benchmark_datasets = set()
-            for task in tasks:
-                benchmark_datasets.add(task.metadata.name)
+            benchmark_datasets = {task.metadata.name for task in tasks}
         overlap = model_datasets & benchmark_datasets
         perc_overlap = 100 * (len(overlap) / len(benchmark_datasets))
         return int(100 - perc_overlap)
