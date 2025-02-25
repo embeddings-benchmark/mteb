@@ -4,6 +4,11 @@ on:
     # Runs at midnight Pacific Time (8 AM UTC)
     - cron: '0 8 * * *'
   workflow_dispatch:  # Allows manual triggering
+  push:
+    branches:
+      - main
+    paths:
+      - mteb/leaderboard/*
 
 jobs:
   rebuild:
