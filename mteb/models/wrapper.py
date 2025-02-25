@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Sequence
-from typing import Any, Callable, get_args
+from typing import Callable, get_args
 
 import mteb
 from mteb.abstasks.TaskMetadata import TASK_TYPE
@@ -122,12 +121,3 @@ class Wrapper:
         if self.instruction_template:
             return self.format_instruction(instruction)
         return instruction
-
-    def load_task_sample(
-        self,
-        sentences: Sequence[str],
-        task_name: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ) -> None:
-        pass

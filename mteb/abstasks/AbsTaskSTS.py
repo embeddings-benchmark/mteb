@@ -70,11 +70,6 @@ class AbsTaskSTS(AbsTask):
         def normalize(x):
             return (x - self.min_score) / (self.max_score - self.min_score)
 
-        sentences = [
-            row[col] for col in ["sentence1", "sentence2"] for row in data_split
-        ]
-        model.load_task_sample(sentences, self.metadata.name, **encode_kwargs)
-
         normalized_scores = list(map(normalize, data_split["score"]))
         evaluator = STSEvaluator(
             data_split["sentence1"],

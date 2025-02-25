@@ -274,6 +274,7 @@ class logRegClassificationEvaluator(Evaluator):
         X_train = model.encode(
             self.sentences_train,
             task_name=self.task_name,
+            task_sample_data=self.sentences_train,
             **encode_kwargs,
         )
         if test_cache is None:

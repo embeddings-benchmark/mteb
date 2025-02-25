@@ -130,13 +130,6 @@ class AbsTaskBitextMining(AbsTask):
             pair_columns=pairs,  # type: ignore
             **kwargs,
         )
-        sentences = [row[col] for col in pairs[0] for row in data_split]
-
-        model.load_task_sample(
-            sentences,
-            task_name=self.metadata.name,
-            **encode_kwargs,
-        )
         metrics = evaluator(model, encode_kwargs=encode_kwargs)
         if parallel:
             for v in metrics.values():

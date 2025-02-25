@@ -97,7 +97,6 @@ class AbsTaskSummarization(AbsTask):
             (np.array(x) - self.min_score) / (self.max_score - self.min_score)
             for x in data_split["relevance"]
         ]
-        model.load_task_sample(data_split["text"], self.metadata.name, **encode_kwargs)
         evaluator = self.evaluator(
             machine_summaries=data_split["machine_summaries"],
             human_summaries=data_split["human_summaries"],

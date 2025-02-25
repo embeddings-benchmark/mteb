@@ -175,9 +175,6 @@ class AbsTaskClusteringFast(AbsTask):
                 range(len(dataset)), k=max_documents_to_embed
             )
             downsampled_dataset = dataset.select(example_indices)  # type: ignore
-        model.load_task_sample(
-            downsampled_dataset["sentences"], self.metadata.name, **encode_kwargs
-        )
 
         embeddings = model.encode(
             downsampled_dataset["sentences"],  # type: ignore

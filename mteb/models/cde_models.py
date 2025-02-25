@@ -9,6 +9,7 @@ import numpy as np
 import torch
 from transformers import AutoConfig
 
+import mteb
 from mteb.encoder_interface import PromptType
 from mteb.evaluation import corpus_to_str
 from mteb.model_meta import ModelMeta, ScoringFunction
@@ -32,8 +33,10 @@ class CDEWrapper(SentenceTransformerWrapper):
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
+        task_sample_data: Sequence[str] | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
+        self.load_task_sample(sentences, task_name, task_sample_data, **kwargs)
         prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
         if prompt_name:
             logger.info(
@@ -62,10 +65,43 @@ class CDEWrapper(SentenceTransformerWrapper):
         self,
         sentences: Sequence[str],
         task_name: str,
-        prompt_type: PromptType | None = None,
+        task_sample_data: Sequence[str] | None = None,
         **kwargs: Any,
     ) -> None:
-        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+        task = mteb.get_task(task_name)
+        task_types_with_sample_data = (
+            "Classification",
+            "MultilabelClassification",
+            "Summarization",
+        )
+        retrieval_task_types = (
+            "Retrieval",
+            "Reranking",
+            "InstructionRetrieval",
+            "InstructionReranking",
+        )
+        if task.metadata.type in (
+            "BitextMining",
+            "PairClassification",
+            "Clustering",
+            "STS",
+            "Summarization",
+        ):
+            prompt_name = self.get_prompt_name(self.model_prompts, task_name, None)
+        elif task.metadata.type in task_types_with_sample_data + retrieval_task_types:
+            if task_sample_data is None:
+                return
+            sentences = task_sample_data
+            prompt_type = (
+                PromptType.passage
+                if task.metadata.type in retrieval_task_types
+                else None
+            )
+            prompt_name = self.get_prompt_name(
+                self.model_prompts, task_name, prompt_type
+            )
+        else:
+            raise ValueError(f"Unknown task type {task.metadata.type}")
 
         logger.info(
             f"Loading dataset embeddings for task {task_name}. "
@@ -106,6 +142,7 @@ cde_small_v1 = ModelMeta(
     loader=partial(
         CDEWrapper,
         model="jxm/cde-small-v1",
+        # https://huggingface.co/jxm/cde-small-v2/discussions/9
         # revision="7017cdcb2abeccc8e9abd1c2379eb0e05121eec8",
         model_prompts=cde_model_prompts,
         trust_remote_code=True,
@@ -135,6 +172,7 @@ cde_small_v2 = ModelMeta(
     loader=partial(
         CDEWrapper,
         model="jxm/cde-small-v2",
+        # https://huggingface.co/jxm/cde-small-v2/discussions/9
         # revision="a7e5882ad52c27ea2831fc8258f24379c25cb459",
         model_prompts=cde_model_prompts,
         trust_remote_code=True,
