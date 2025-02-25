@@ -224,7 +224,6 @@ class DenseRetrievalExactSearch:
             task_name=task_name,
             prompt_type=PromptType.passage,
             request_qid=request_qid,
-            task_sample_data=unique_docs,
             **self.encode_kwargs,
         )
 

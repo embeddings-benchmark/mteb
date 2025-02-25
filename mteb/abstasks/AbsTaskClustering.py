@@ -73,7 +73,6 @@ class AbsTaskClustering(AbsTask):
         **kwargs,
     ) -> ScoresDict:
         v_measures = []
-
         for cluster_set in tqdm.tqdm(dataset, desc="Clustering"):
             evaluator = ClusteringEvaluator(
                 cluster_set["sentences"],  # type: ignore

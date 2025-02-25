@@ -9,7 +9,6 @@ import numpy as np
 import torch
 from transformers import AutoConfig
 
-import mteb
 from mteb.encoder_interface import PromptType
 from mteb.evaluation import corpus_to_str
 from mteb.model_meta import ModelMeta, ScoringFunction
@@ -20,7 +19,19 @@ logger = logging.getLogger(__name__)
 
 
 class CDEWrapper(SentenceTransformerWrapper):
-    dataset_embeddings: torch.Tensor = None
+    dataset_embeddings: torch.Tensor | None = None
+    prev_task_name: str | None = None
+    task_types_with_sample_data = (
+        "Classification",
+        "MultilabelClassification",
+        "Summarization",
+    )
+    retrieval_task_types = (
+        "Retrieval",
+        "Reranking",
+        "InstructionRetrieval",
+        "InstructionReranking",
+    )
 
     def __init__(self, model: str, *args, **kwargs: Any) -> None:
         super().__init__(model, *args, **kwargs)
@@ -33,10 +44,10 @@ class CDEWrapper(SentenceTransformerWrapper):
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
-        task_sample_data: Sequence[str] | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        self.load_task_sample(sentences, task_name, task_sample_data, **kwargs)
+        self.load_task_sample(sentences, task_name, prompt_type, **kwargs)
+
         prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
         if prompt_name:
             logger.info(
@@ -59,50 +70,18 @@ class CDEWrapper(SentenceTransformerWrapper):
         if isinstance(embeddings, torch.Tensor):
             # sometimes in kwargs can be return_tensors=True
             embeddings = embeddings.cpu().detach().float().numpy()
+
+        self.prev_task_name = task_name
         return embeddings
 
     def load_task_sample(
         self,
         sentences: Sequence[str],
         task_name: str,
-        task_sample_data: Sequence[str] | None = None,
+        prompt_type: PromptType | None,
         **kwargs: Any,
     ) -> None:
-        task = mteb.get_task(task_name)
-        task_types_with_sample_data = (
-            "Classification",
-            "MultilabelClassification",
-            "Summarization",
-        )
-        retrieval_task_types = (
-            "Retrieval",
-            "Reranking",
-            "InstructionRetrieval",
-            "InstructionReranking",
-        )
-        if task.metadata.type in (
-            "BitextMining",
-            "PairClassification",
-            "Clustering",
-            "STS",
-            "Summarization",
-        ):
-            prompt_name = self.get_prompt_name(self.model_prompts, task_name, None)
-        elif task.metadata.type in task_types_with_sample_data + retrieval_task_types:
-            if task_sample_data is None:
-                return
-            sentences = task_sample_data
-            prompt_type = (
-                PromptType.passage
-                if task.metadata.type in retrieval_task_types
-                else None
-            )
-            prompt_name = self.get_prompt_name(
-                self.model_prompts, task_name, prompt_type
-            )
-        else:
-            raise ValueError(f"Unknown task type {task.metadata.type}")
-
+        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
         logger.info(
             f"Loading dataset embeddings for task {task_name}. "
             f"Prompt name: {prompt_name}. Prompt value {self.model_prompts.get(task_name, None)}"

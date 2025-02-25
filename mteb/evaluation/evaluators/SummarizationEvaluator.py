@@ -81,7 +81,6 @@ class SummarizationEvaluator(Evaluator):
                 for summary in human_summaries
             ],
             task_name=self.task_name,
-            task_sample_data=self.texts,
             **encode_kwargs,
         )
 
@@ -241,7 +240,6 @@ class DeprecatedSummarizationEvaluator(Evaluator):
                 for summary in human_summaries
             ],
             task_name=self.task_name,
-            task_sample_data=self.texts,
             **encode_kwargs,
         )
 
