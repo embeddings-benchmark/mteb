@@ -1465,8 +1465,8 @@ MIEB_common_tasks = [
     # Any2AnyMultipleChoice
     "BLINKIT2IMultiChoice",
     "BLINKIT2TMultiChoice",
+    # Compositionality
     "ImageCoDeT2IMultiChoice",
-    # ImageTextPairClassification
     "AROCocoOrder",
     "AROFlickrOrder",
     "AROVisualAttribution",
@@ -1496,7 +1496,6 @@ MIEB_common_tasks = [
     "HatefulMemesI2TRetrieval",
     "HatefulMemesT2IRetrieval",
     "ImageCoDeT2IRetrieval",
-    "ImageCoDeT2IMultiChoice",
     "InfoSeekIT2ITRetrieval",
     "InfoSeekIT2TRetrieval",
     "MemotionI2TRetrieval",
@@ -1547,7 +1546,7 @@ MIEB_ENG = Benchmark(
             "VisualSTS-b-Eng",
         ],
     ),
-    description="""MIEB(eng) is a comprehensive image embeddings benchmark, spanning 8 task types, covering 126 tasks. 
+    description="""MIEB(eng) is a comprehensive image embeddings benchmark, spanning 8 task types, covering 125 tasks. 
     In addition to image classification (zero shot and linear probing), clustering, retrieval, MIEB includes tasks in compositionality evaluation, 
     document undestanding, visual STS, and CV-centric tasks.""",
     reference="",
@@ -1569,7 +1568,7 @@ MIEB_MULTILINGUAL = Benchmark(
             "VisualSTS-b-Multilingual",
         ],
     ),
-    description="""MIEB(Multilingual) is a comprehensive image embeddings benchmark, spanning 8 task types, covering 129 tasks and a total of 39 languages. 
+    description="""MIEB(Multilingual) is a comprehensive image embeddings benchmark, spanning 10 task types, covering 130 tasks and a total of 39 languages. 
     In addition to image classification (zero shot and linear probing), clustering, retrieval, MIEB includes tasks in compositionality evaluation, 
     document undestanding, visual STS, and CV-centric tasks. This benchmark consists of MIEB(eng) + 3 multilingual retrieval 
     datasets + the multilingual parts of VisualSTS-b and VisualSTS-16.""",
