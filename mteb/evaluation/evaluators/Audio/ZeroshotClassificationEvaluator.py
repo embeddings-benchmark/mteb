@@ -10,6 +10,7 @@ from sklearn import metrics
 from torch.utils.data import DataLoader
 import torchaudio
 import io
+import numpy as np
 
 
 from mteb.encoder_interface import Encoder
@@ -50,75 +51,7 @@ def custom_collate_fn(batch):
     return batch
 
 
-class ZeroshotClassificationEvaluator(Evaluator):
-    def __init__(
-        self,
-        dataset,
-        audio_column_name: str,
-        labels: list[int],  # Ground truth label indices
-        candidate_labels: list[str],  # Text descriptions for zero-shot classes
-        task_name: str | None = None,
-        transform=None,
-        batch_size: int = 32,
-        **kwargs,
-    ):
-        """Initialize zero-shot audio classification evaluator.
-        
-        Args:
-            dataset: HuggingFace dataset containing audio data
-            audio_column_name: Name of column containing audio data
-            labels: Ground truth labels (as indices into candidate_labels)
-            candidate_labels: List of text descriptions for possible classes
-            task_name: Optional name of the task
-            transform: Optional audio transforms
-            batch_size: Batch size for processing
-        """
-        super().__init__( **kwargs)
-        self.dataset = AudioDataset(
-            dataset, 
-            audio_column_name=audio_column_name, 
-            transform=transform
-        )
-        self.labels = labels
-        self.candidate_labels = candidate_labels
-        self.task_name = task_name
-
-    def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}) -> dict[str, float]:
-        """Evaluate zero-shot classification performance.
-        
-        Args:
-            model: An encoder model (like ClapZeroShotWrapper)
-            encode_kwargs: Additional encoding arguments
-            
-        Returns:
-            Dictionary containing accuracy metric
-        """
-        logger.info("Getting text embeddings for candidate labels...")
-        text_embeddings = model.get_text_embeddings(self.candidate_labels)
-        
-        logger.info("Processing audio data...")
-        dataloader = DataLoader(
-            self.dataset,
-            batch_size=encode_kwargs.get("batch_size", self.batch_size),
-            collate_fn=custom_collate_fn
-        )
-        
-        # Get audio embeddings
-        audio_embeddings = model.get_audio_embeddings(dataloader)
-        
-        # Calculate similarity scores
-        similarity = torch.from_numpy(audio_embeddings) @ torch.from_numpy(text_embeddings).T
-        
-        # Get predictions
-        predictions = similarity.argmax(dim=1).cpu().numpy()
-        
-        # Calculate accuracy
-        accuracy = metrics.accuracy_score(self.labels, predictions)
-        
-        return {"accuracy": accuracy}
-
-
-class ZeroshotClassificationEvaluator(Evaluator):
+class AudioZeroshotClassificationEvaluator(Evaluator):
     def __init__(
         self,
         dataset,
@@ -153,6 +86,12 @@ class ZeroshotClassificationEvaluator(Evaluator):
     def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}) -> dict[str, float]:
         """Evaluate zero-shot classification performance."""
         logger.info("Getting text embeddings for candidate labels...")
+
+
+        print(self.candidate_labels)
+
+        # assert False
+
         text_embeddings = model.get_text_embeddings(self.candidate_labels)
         
         logger.info("Processing audio data...")
@@ -162,23 +101,56 @@ class ZeroshotClassificationEvaluator(Evaluator):
             collate_fn=custom_collate_fn,
             num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
-        
-        # Get audio embeddings
+
+        # self.labels = self.labels['target']
+
         audio_embeddings = model.get_audio_embeddings(dataloader)
         
+        print("audio_embeddings: ", audio_embeddings.shape)
+
         # Calculate similarity scores
         similarity = torch.from_numpy(audio_embeddings) @ torch.from_numpy(text_embeddings).T
         
         # Get predictions
+        print("prev: ",similarity.shape)
+        
         predictions = similarity.argmax(dim=1).cpu().numpy()
         
+        predictions = [int(i) for i in predictions]
+
+        # print("next: ",predictions.shape)
+        # print(len(self.labels))
+
+
+        # print(self.labels.keys(), predictions.shape)
+
+        # print(list(predictions))
+
+        predictions = np.array([int(p) for p in predictions])
+        self.labels = np.array([int(l) for l in self.labels])
+
+
+        print("------")
+        print(self.labels)
+        print("------")
+        print(predictions)
+        print("------")
+
+        a = 0
+        for i in range(len(predictions)):
+            if predictions[i]==self.labels[i]:
+                a+=1
+        print(a/len(predictions))
+
+
+
         # Calculate metrics
         scores = {
             "accuracy": metrics.accuracy_score(self.labels, predictions),
             "f1_macro": metrics.f1_score(self.labels, predictions, average="macro"),
             "f1_weighted": metrics.f1_score(self.labels, predictions, average="weighted")
         }
+
+        print("Accuracy calculated:", scores["accuracy"])
         
-        
-            
         return scores

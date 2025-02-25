@@ -7,7 +7,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class ESC50Classification(AbsTaskAudioMultilabelClassification):
     
     metadata = TaskMetadata(
-    name="ESC50",
+    name="ESC50_MultiLabel",
     description="Environmental Sound Classification Dataset.",
     reference="https://huggingface.co/datasets/ashraq/esc50",  # Replace with actual dataset URL
     dataset={
@@ -16,7 +16,7 @@ class ESC50Classification(AbsTaskAudioMultilabelClassification):
     },
     type="AudioMultilabelClassification",
     category="a2a",
-    eval_splits=["test"],
+    eval_splits=["train"],
     eval_langs=["eng-Latn"],
     main_score="mAP",
     date=(

@@ -22,3 +22,4 @@ from .STS import *
 from .Summarization import *
 from .SummaryRetrieval import *
 from .Audio.AudioMultilabelClassification import *
+from .Audio.AudioZeroshotClassification import *

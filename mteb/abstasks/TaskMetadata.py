@@ -125,6 +125,7 @@ TASK_TYPE = Literal[
     "AudioClustering",
     "AudioClassification",
     "AudioMultilabelClassification",
+    "AudioZeroshotClassification",
 ]
 
 

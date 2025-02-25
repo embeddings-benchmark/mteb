@@ -7,7 +7,7 @@ from typing import Any
 from datasets import Dataset
 
 from ...encoder_interface import Encoder
-from ...evaluation.evaluators import ZeroshotClassificationEvaluator
+from ...evaluation.evaluators import AudioZeroshotClassificationEvaluator
 from ..AbsTask import AbsTask, ScoresDict
 from ..TaskMetadata import DescriptiveStatistics
 
@@ -23,8 +23,8 @@ class AbsTaskZeroshotClassification(AbsTask):
         labels: list of int
     """
 
-    audio_column_name: str = "image"
-    label_column_name: str = "label"
+    audio_column_name: str = "audio"
+    label_column_name: str = "target"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -47,10 +47,15 @@ class AbsTaskZeroshotClassification(AbsTask):
     ) -> ScoresDict:
 
         candidate_labels = self.get_candidate_labels()
-        evaluator = ZeroshotClassificationEvaluator(
+
+        print("lbl columnb name: ",self.label_column_name)
+        print("labels??: ", dataset[self.label_column_name])
+
+
+        evaluator = AudioZeroshotClassificationEvaluator(
             dataset,
             self.audio_column_name,
-            dataset[self.label_column_name],
+            self.label_column_name,
             candidate_labels,
             task_name=self.metadata.name,
             **kwargs,
