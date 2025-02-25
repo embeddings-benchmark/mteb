@@ -1563,6 +1563,8 @@ MIEB_MULTILINGUAL = Benchmark(
             "WITT2IRetrieval",
             "XFlickr30kCoT2IRetrieval",
             "XM3600T2IRetrieval",
+            "VisualSTS17Eng",
+            "VisualSTS-b-Eng",
             "VisualSTS17Multilingual",
             "VisualSTS-b-Multilingual",
         ],
