@@ -96,9 +96,7 @@ class AudioZeroshotClassificationEvaluator(Evaluator):
         )
 
         audio_embeddings = model.get_audio_embeddings(dataloader)
-
-        print("audio_embeddings: ", audio_embeddings.shape)
-
+        
         # Calculate similarity scores
         similarity = (
             torch.from_numpy(audio_embeddings) @ torch.from_numpy(text_embeddings).T
@@ -114,7 +112,5 @@ class AudioZeroshotClassificationEvaluator(Evaluator):
                 self.labels, predictions, average="weighted"
             ),
         }
-
-        print("Accuracy calculated:", scores["accuracy"])
 
         return scores
