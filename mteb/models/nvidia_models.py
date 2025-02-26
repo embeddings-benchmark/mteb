@@ -41,7 +41,6 @@ nvidia_training_datasets = {
     "FEVERHardNegatives": ["train"],
     "NanoFEVERRetrieval": ["train"],
     "FiQA2018": ["train"],
-    "FiQA2018-PL": ["train"],  # translation not trained on
     "FiQA2018-NL": ["train"],  # translation not trained on
     "STS12": ["train"],
     "STS22": ["train"],

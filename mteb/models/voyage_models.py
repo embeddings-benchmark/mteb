@@ -454,7 +454,6 @@ voyage_3_exp = ModelMeta(
         "FEVERHardNegatives": ["train"],
         "NanoFEVERRetrieval": ["train"],
         "FEVER-NL": ["train"],  # translation not trained on
-        "FiQA2018-PL": ["train"],  # translation not trained on
         "FiQA2018-NL": ["train"],  # translation not trained on
         "BiorxivClusteringP2P.v2": ["train"],
         "BiorxivClusteringS2S.v2": ["train"],
