@@ -53,6 +53,111 @@ Gameselo__STS_multilingual_mpnet_base_v2 = ModelMeta(
     adapted_from="sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     superseded_by=None,
 )
+
+kalm_training_data = {
+    # from technical report
+    # not in MTEB:
+    # ExpertQA
+    # MEDI2BGE
+    # OpenOrca
+    # PAQ
+    # PubMedQA
+    # SearchQA
+    # arxiv_qa
+    # rag-dataset-12000
+    # CC-News
+    # SQuAD 2.0
+    # TriviaQA
+    # WebGPT Comparisons
+    # MultiNLI
+    # NLLB
+    # WikiAnswers
+    # SimCSE NLI
+    # SNLI
+    # Aya Dataset
+    # ----
+    # in MTEB:
+    "CodeFeedbackMT": ["train"],
+    "CodeFeedbackST": ["train"],
+    "eli5": ["train"],
+    "ArxivClusteringP2P": ["train"],
+    "ArxivClusteringS2S": ["train"],
+    "ArxivClusteringP2P.v2": ["train"],
+    "ArxivClusteringS2S.v2": ["train"],
+    "TRECCOVID": ["train"],
+    "DBPedia": ["train"],
+    "ESCIReranking": ["train"],
+    "FEVER": ["train"],
+    "FiQA2018": ["train"],
+    "FEVERHardNegatives": ["train"],
+    "NanoFEVERRetrieval": ["train"],
+    "FEVER-NL": ["train"],  # translation not trained on
+    "FiQA2018-PL": ["train"],  # translation not trained on
+    "FiQA2018-NL": ["train"],  # translation not trained on
+    "HotpotQA-PL": ["train"],  # translation not trained on
+    "HotpotQA-NL": ["train"],  # translation not trained on
+    "HotpotQAHardNegatives": ["train"],
+    "MultiLongDocRetrieval": ["train"],
+    "MSMARCO": ["train"],
+    "MSMARCOHardNegatives": ["train"],
+    "NanoMSMARCORetrieval": ["train"],
+    "MSMARCO-PL": ["train"],  # translation not trained on
+    "mMARCO-NL": ["train"],  # translation not trained on
+    "MSMARCOv2": ["train"],
+    "NFCorpus": ["train"],
+    "SciFact": ["train"],
+    "NQ": ["train"],
+    "NQHardNegatives": ["train"],
+    "NanoNQRetrieval": ["train"],
+    "NQ-PL": ["train"],  # translation not trained on
+    "NQ-NL": ["train"],  # translation not trained on
+    "YahooAnswersTopicsClassification": ["train"],
+    "ContractNLIConfidentialityOfAgreementLegalBenchClassification": ["train"],
+    "ContractNLIExplicitIdentificationLegalBenchClassification": ["train"],
+    "ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification": [
+        "train"
+    ],
+    "ContractNLILimitedUseLegalBenchClassification": ["train"],
+    "ContractNLINoLicensingLegalBenchClassification": ["train"],
+    "ContractNLINoticeOnCompelledDisclosureLegalBenchClassification": ["train"],
+    "ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassification": [
+        "train"
+    ],
+    "ContractNLIPermissibleCopyLegalBenchClassification": ["train"],
+    "ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassification": [
+        "train"
+    ],
+    "ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification": ["train"],
+    "ContractNLIReturnOfConfidentialInformationLegalBenchClassification": ["train"],
+    "ContractNLISharingWithEmployeesLegalBenchClassification": ["train"],
+    "ContractNLISharingWithThirdPartiesLegalBenchClassification": ["train"],
+    "ContractNLISurvivalOfObligationsLegalBenchClassification": ["train"],
+    "QuoraRetrieval": ["train"],
+    "NanoQuoraRetrieval": ["train"],
+    "BiorxivClusteringP2P.v2": ["train"],
+    "BiorxivClusteringS2S.v2": ["train"],
+    "MedrxivClusteringP2P.v2": ["train"],
+    "MedrxivClusteringS2S.v2": ["train"],
+    "Banking77Classification": ["train"],
+    "AmazonPolarityClassification": ["train"],
+    "ImdbClassification": ["train"],
+    "EmotionClassification": ["train"],
+    "TweetSentimentExtractionClassification": ["train"],
+    "ToxicConversationsClassification": ["train"],
+    "MIRACLRetrieval": ["train"],
+    "MIRACLRetrievalHardNegatives": ["train"],
+    "MIRACLReranking": ["train"],
+    "MrTidyRetrieval": ["train"],
+    "PawsXPairClassification": ["train"],
+    "AmazonReviewsClassification": ["train"],
+    "AmazonCounterfactualClassification": ["train"],
+    "MultilingualSentiment": ["train"],
+    "MassiveIntentClassification": ["train"],
+    "MassiveScenarioClassification": ["train"],
+    "MTOPDomainClassification": ["train"],
+    "MTOPIntentClassification": ["train"],
+}
+
 HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1 = ModelMeta(
     name="HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v1",
     revision="45e42c89990c40aca042659133fc8b13c28634b5",
@@ -71,7 +176,7 @@ HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1 = ModelMeta(
     reference="https://huggingface.co/HIT-TMG/KaLM-embedding-multilingual-mini-instruct-v1",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets=kalm_training_data,
     adapted_from="/mnt/shgeminicephfs/wx-dc-plt-hpc/xinshuohu/Output/Embedding/Qwen2-0.5B-eos_mean_pretrain_0806_1e-4_uen_sft_1022_filtered_v2_inst_3node_g8_1e-5_sin-0.1_mrl",
     superseded_by=None,
 )
@@ -93,7 +198,7 @@ HIT_TMG__KaLM_embedding_multilingual_mini_v1 = ModelMeta(
     reference="https://huggingface.co/HIT-TMG/KaLM-embedding-multilingual-mini-v1",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets=kalm_training_data,
     adapted_from="/mnt/shgeminicephfs/wx-dc-plt-hpc/xinshuohu/Output/Embedding/Qwen2-0.5B-eos_mean_pretrain_0806_1e-4_uen_sft_0902_filtered_v2_3node_g8_1e-5_sin-0.1",
     superseded_by=None,
 )
