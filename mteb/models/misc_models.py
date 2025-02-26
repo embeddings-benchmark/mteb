@@ -83,7 +83,6 @@ kalm_training_data = {
     "ArxivClusteringP2P": ["train"],
     "ArxivClusteringS2S": ["train"],
     "ArxivClusteringP2P.v2": ["train"],
-    "ArxivClusteringS2S.v2": ["train"],
     "TRECCOVID": ["train"],
     "DBPedia": ["train"],
     "ESCIReranking": ["train"],
@@ -92,7 +91,6 @@ kalm_training_data = {
     "FEVERHardNegatives": ["train"],
     "NanoFEVERRetrieval": ["train"],
     "FEVER-NL": ["train"],  # translation not trained on
-    "FiQA2018-PL": ["train"],  # translation not trained on
     "FiQA2018-NL": ["train"],  # translation not trained on
     "HotpotQA-PL": ["train"],  # translation not trained on
     "HotpotQA-NL": ["train"],  # translation not trained on
@@ -1359,8 +1357,25 @@ avsolatorio__GIST_Embedding_v0 = ModelMeta(
     reference="https://huggingface.co/avsolatorio/GIST-Embedding-v0",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
-    adapted_from=None,
+    training_datasets={
+        **bge_training_data,
+        # not in mteb:
+        # MEDI
+        # all MTEB CLF datasets that has a train split:
+        "AmazonPolarityClassification": ["train"],
+        "AmazonReviewsClassification": ["train"],
+        "EmotionClassification": ["train"],
+        "ImdbClassification": ["train"],
+        "MTOPDomainClassification": ["train"],
+        "MTOPIntentClassification": ["train"],
+        "MassiveIntentClassification": ["train"],
+        "MassiveScenarioClassification": ["train"],
+        "ToxicConversationsClassification": ["train"],
+        "TweetSentimentExtractionClassification": ["train"],
+        "Banking77Classification": ["train"],
+        "AmazonCounterfactualClassification": ["train"],
+    },
+    adapted_from="BAAI/bge-large-en-v1.5",
     superseded_by=None,
 )
 avsolatorio__GIST_all_MiniLM_L6_v2 = ModelMeta(
