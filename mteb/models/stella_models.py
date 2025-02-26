@@ -4,6 +4,7 @@ from functools import partial
 
 from mteb.model_meta import ModelMeta
 from mteb.models.instruct_wrapper import instruct_wrapper
+from mteb.models.nvidia_models import nvidia_training_datasets
 
 stella_en_400M = ModelMeta(
     # https://huggingface.co/dunzhang/stella_en_400M_v5/discussions/21#671a6205ac1e2416090f2bf4
@@ -57,7 +58,7 @@ stella_en_1_5b = ModelMeta(
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch", "GritLM"],
     reference="https://huggingface.co/dunzhang/stella_en_1.5B_v5",
-    training_datasets=None,
+    training_datasets=nvidia_training_datasets,  # also distilled from gte-qwen (but training data is unknown) #2164
     public_training_code="https://github.com/NovaSearch-Team/RAG-Retrieval/blob/c40f4638b705eb77d88305d2056901ed550f9f4b/rag_retrieval/train/embedding/README.md",
     public_training_data=None,
 )
@@ -121,7 +122,7 @@ stella_mrl_large_zh_v3_5_1792d = ModelMeta(
     open_weights=True,
     revision="17bb1c32a93a8fc5f6fc9e91d5ea86da99983cfe",
     release_date="2024-02-27",
-    n_parameters=326 * 1e6,
+    n_parameters=int(326 * 1e6),
     memory_usage_mb=1242,
     embed_dim=1792,
     license="mit",
@@ -143,7 +144,7 @@ zpoint_large_embedding_zh = ModelMeta(
     open_weights=True,
     revision="b1075144f440ab4409c05622c1179130ebd57d03",
     release_date="2024-06-04",
-    n_parameters=326 * 1e6,
+    n_parameters=int(326 * 1e6),
     memory_usage_mb=1242,
     embed_dim=1792,
     license="mit",
