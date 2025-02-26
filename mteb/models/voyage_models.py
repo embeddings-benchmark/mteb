@@ -472,7 +472,6 @@ voyage_3_exp = ModelMeta(
         "DBPedia": ["train"],
         "TRECCOVID": ["train"],
         "ArxivClusteringP2P.v2": ["train"],
-        "ArxivClusteringS2S.v2": ["train"],
         "STSBenchmarkMultilingualSTS": ["train"],  # translated, not trained on
     },
     public_training_code=None,

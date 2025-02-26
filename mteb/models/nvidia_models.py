@@ -55,7 +55,6 @@ nvidia_training_datasets = {
     "ArxivClusteringP2P": ["train"],
     "ArxivClusteringP2P.v2": ["train"],
     "ArxivClusteringS2S": ["train"],
-    "ArxivClusteringS2S.v2": ["train"],
     "BiorxivClusteringP2P": ["train"],
     "BiorxivClusteringP2P.v2": ["train"],
     "BiorxivClusteringS2S": ["train"],
