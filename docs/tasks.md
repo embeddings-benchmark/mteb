@@ -757,7 +757,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [SynPerChatbotToneUserClassification](https://mcinext.com/) | ['fas'] | Classification | p2p | [Spoken] | None | None |
 | [SynPerChatbotTopicsRetrieval](https://huggingface.co/datasets/MCINext/synthetic-persian-chatbot-topics-retrieval) | ['fas'] | Retrieval | s2p | [Spoken] | None | None |
 | [SynPerQAPC](https://mcinext.com/) | ['fas'] | PairClassification | s2p | [Blog, News, Religious, Web] | None | None |
-| [SynPerQARetrieval](https://huggingface.co/datasets/MCINext/synthetic-persian-qa-retrieval/settings) | ['fas'] | Retrieval | s2p | [Web] | None | None |
+| [SynPerQARetrieval](https://huggingface.co/datasets/MCINext/synthetic-persian-qa-retrieval/) | ['fas'] | Retrieval | s2p | [Web] | None | None |
 | [SynPerSTS](https://mcinext.com/) | ['fas'] | STS | s2s | [Blog, News, Religious, Web] | None | None |
 | [SynPerTextKeywordsPC](https://mcinext.com/) | ['fas'] | PairClassification | s2p | [Blog, News, Religious, Web] | None | None |
 | [SyntecReranking](https://huggingface.co/datasets/lyon-nlp/mteb-fr-reranking-syntec-s2p) (Mathieu Ciancone, 2024) | ['fra'] | Reranking | s2p | [Legal, Written] | None | None |
