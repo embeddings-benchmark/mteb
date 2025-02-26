@@ -55,6 +55,7 @@ class WhisperWrapper(AudioEncoder):
 
             embeddings = encoder_outputs.last_hidden_state
             batch_embeddings = embeddings.mean(dim=1).cpu().numpy()
+            print(batch_embeddings.shape)
             all_embeddings.append(batch_embeddings)
 
         return np.vstack(all_embeddings)
