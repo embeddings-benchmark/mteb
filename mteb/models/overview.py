@@ -71,6 +71,10 @@ from mteb.models import (
     vlm2vec_models,
     voyage_models,
     voyage_v,
+    wav2vec_models,
+    wavlm_models,
+    whisper_models,
+    qwen_models
 )
 
 logger = logging.getLogger(__name__)
@@ -136,6 +140,10 @@ model_modules = [
     uae_models,
     voyage_models,
     fa_models,
+    wav2vec_models,
+    wavlm_models,
+    whisper_models,
+    qwen_models
 ]
 MODEL_REGISTRY = {}
 
