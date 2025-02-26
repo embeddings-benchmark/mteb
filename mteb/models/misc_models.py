@@ -75,11 +75,11 @@ kalm_training_data = {
     # SimCSE NLI
     # SNLI
     # Aya Dataset
+    # eli5
     # ----
     # in MTEB:
     "CodeFeedbackMT": ["train"],
     "CodeFeedbackST": ["train"],
-    "eli5": ["train"],
     "ArxivClusteringP2P": ["train"],
     "ArxivClusteringS2S": ["train"],
     "ArxivClusteringP2P.v2": ["train"],
