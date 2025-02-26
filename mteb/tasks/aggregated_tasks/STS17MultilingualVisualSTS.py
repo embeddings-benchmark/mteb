@@ -12,6 +12,7 @@ task_list_sts17: list[AbsTask] = [
 
 
 class STS17MultilingualVisualSTSEng(AbsTaskAggregate):
+    is_multilingual = (True,)
     metadata = AggregateTaskMetadata(
         name="VisualSTS17Eng",
         description="STS17MultilingualVisualSTS English only.",
@@ -57,6 +58,7 @@ task_list_sts17_multi: list[AbsTask] = [
 
 
 class STS17MultilingualVisualSTSMultilingual(AbsTaskAggregate):
+    is_multilingual = (True,)
     metadata = AggregateTaskMetadata(
         name="VisualSTS17Multilingual",
         description="STS17MultilingualVisualSTS multilingual.",
