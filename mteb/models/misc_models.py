@@ -311,6 +311,15 @@ BeastyZ__e5_R_mistral_7b = ModelMeta(
     adapted_from="intfloat/e5-mistral-7b-instruct",
     superseded_by=None,
 )
+
+bilingual_embedding_training_data = {
+    "STSBenchmark": ["train"],
+    "STSBenchmarkMultilingualSTS": ["train"],
+    "XNLI": ["train"],
+    # not in mteb
+    # SNLI
+}
+
 Lajavaness__bilingual_embedding_base = ModelMeta(
     name="Lajavaness/bilingual-embedding-base",
     revision="0bfc54bb2aa2666dd84715289c7ef58a95eb4d8d",
@@ -334,7 +343,7 @@ Lajavaness__bilingual_embedding_base = ModelMeta(
     reference="https://huggingface.co/Lajavaness/bilingual-embedding-base",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets=bilingual_embedding_training_data,
     adapted_from="dangvantuan/bilingual_impl",
     superseded_by=None,
 )
@@ -361,7 +370,7 @@ Lajavaness__bilingual_embedding_large = ModelMeta(
     reference="https://huggingface.co/Lajavaness/bilingual-embedding-large",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets=bilingual_embedding_training_data,
     adapted_from="dangvantuan/bilingual_impl",
     superseded_by=None,
 )
@@ -388,7 +397,7 @@ Lajavaness__bilingual_embedding_small = ModelMeta(
     reference="https://huggingface.co/Lajavaness/bilingual-embedding-small",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets=bilingual_embedding_training_data,
     adapted_from="dangvantuan/bilingual_impl",
     superseded_by=None,
 )
