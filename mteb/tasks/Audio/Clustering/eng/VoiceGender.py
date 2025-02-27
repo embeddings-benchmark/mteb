@@ -12,7 +12,7 @@ class VoiceGenderClustering(AbsTaskAudioClustering):
         reference="https://huggingface.co/datasets/mmn3690/voice-gender-clustering",
         dataset={
             "path": "mmn3690/voice-gender-clustering",
-            "revision": "main",
+            "revision": "1b202ea7bcd0abd5283e628248803e1569257c80",
         },
         type="AudioClustering",
         category="p2p",
@@ -26,4 +26,5 @@ class VoiceGenderClustering(AbsTaskAudioClustering):
         annotations_creators="derived",
         dialect=[],
         modalities=["audio"],
+        bibtex_citation="""TBD""",
     )
