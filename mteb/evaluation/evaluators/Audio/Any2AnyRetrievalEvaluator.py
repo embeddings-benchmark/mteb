@@ -12,8 +12,8 @@ from typing import Any
 import numpy as np
 import pytrec_eval
 import torch
-from datasets import Dataset
 import torchaudio
+from datasets import Dataset
 from torch.utils.data import DataLoader
 
 from mteb.encoder_interface import Encoder, PromptType
@@ -33,8 +33,10 @@ from ..utils import (
 
 logger = logging.getLogger(__name__)
 
+
 # A default transform for audio; replace with a more meaningful transform as needed.
-DEFAULT_AUDIO_TRANSFORM = lambda x: x
+def DEFAULT_AUDIO_TRANSFORM(x):
+    return x
 
 
 class AudioDataset(torch.utils.data.Dataset):
@@ -342,7 +344,9 @@ class Any2AnyRetrievalEvaluator(Evaluator):
                     if qid == pid:
                         results[qid].pop(pid)
         else:
-            logger.debug("Not ignoring identical query and document ids. Set ignore_identical_ids=True to ignore.")
+            logger.debug(
+                "Not ignoring identical query and document ids. Set ignore_identical_ids=True to ignore."
+            )
 
         all_ndcgs, all_aps, all_recalls, all_precisions, all_cv_recalls = (
             {},
@@ -404,7 +408,9 @@ class Any2AnyRetrievalEvaluator(Evaluator):
             _map[f"MAP@{k}"] = round(sum(_map[f"MAP@{k}"]) / len(scores), 5)
             recall[f"Recall@{k}"] = round(sum(recall[f"Recall@{k}"]) / len(scores), 5)
             precision[f"P@{k}"] = round(sum(precision[f"P@{k}"]) / len(scores), 5)
-            cv_recall[f"CV_Recall@{k}"] = round(sum(cv_recall[f"CV_Recall@{k}"]) / len(scores), 5)
+            cv_recall[f"CV_Recall@{k}"] = round(
+                sum(cv_recall[f"CV_Recall@{k}"]) / len(scores), 5
+            )
 
         naucs = Any2AnyRetrievalEvaluator.evaluate_abstention(
             results,
@@ -427,7 +433,13 @@ class Any2AnyRetrievalEvaluator(Evaluator):
             metric_scores = recall_cap(qrels, results, k_values, output_type)
         elif metric.lower() in ["hole", "hole@k"]:
             metric_scores = hole(qrels, results, k_values, output_type)
-        elif metric.lower() in ["acc", "top_k_acc", "accuracy", "accuracy@k", "top_k_accuracy"]:
+        elif metric.lower() in [
+            "acc",
+            "top_k_acc",
+            "accuracy",
+            "accuracy@k",
+            "top_k_accuracy",
+        ]:
             metric_scores = top_k_accuracy(qrels, results, k_values, output_type)
         naucs = Any2AnyRetrievalEvaluator.evaluate_abstention(results, metric_scores)
         metric_scores_avg = {k: sum(v) / len(v) for k, v in metric_scores.items()}
@@ -460,5 +472,9 @@ class Any2AnyRetrievalEvaluator(Evaluator):
         cv_recalls = {}
         for query_id, relevant_docs in qrels.items():
             retrieved_docs = list(results.get(query_id, {}).keys())[:k]
-            cv_recalls[query_id] = 1.0 if any(doc_id in relevant_docs for doc_id in retrieved_docs) else 0.0
+            cv_recalls[query_id] = (
+                1.0
+                if any(doc_id in relevant_docs for doc_id in retrieved_docs)
+                else 0.0
+            )
         return cv_recalls

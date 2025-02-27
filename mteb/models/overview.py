@@ -11,7 +11,8 @@ from sentence_transformers import SentenceTransformer
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
-from mteb.models import (
+
+from . import (
     align_models,
     arctic_models,
     bedrock_models,
@@ -71,6 +72,7 @@ from mteb.models import (
     vlm2vec_models,
     voyage_models,
     voyage_v,
+    wav2vec_models,
 )
 
 logger = logging.getLogger(__name__)
@@ -136,6 +138,7 @@ model_modules = [
     uae_models,
     voyage_models,
     fa_models,
+    wav2vec_models,
 ]
 MODEL_REGISTRY = {}
 

@@ -72,26 +72,22 @@ class MockAudioEncoder:
 
     def get_audio_embeddings(
         self,
-        audio, # list
+        audio,  # list
         **kwargs,
     ) -> np.ndarray:
-        
         return np.random.rand(len(audio), self.embedding_dim)
 
     def get_text_embeddings(
         self,
-        texts, # list
+        texts,  # list
         **kwargs,
-    ) -> np.ndarray:      
-        pass
-
-    def calculate_probs(
-        self,
-        text_embeddings: np.ndarray,
-        audio_embeddings: np.ndarray
     ) -> np.ndarray:
         pass
 
+    def calculate_probs(
+        self, text_embeddings: np.ndarray, audio_embeddings: np.ndarray
+    ) -> np.ndarray:
+        pass
 
 
 class MockSentenceTransformer(SentenceTransformer):
