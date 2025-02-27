@@ -6,7 +6,7 @@ import logging
 import tempfile
 import time
 from pathlib import Path
-from typing import Literal
+from typing import Literal, get_args
 from urllib.parse import urlencode
 
 import cachetools
@@ -15,7 +15,9 @@ import pandas as pd
 from gradio_rangeslider import RangeSlider
 
 import mteb
+from mteb.abstasks.TaskMetadata import TASK_DOMAIN, TASK_TYPE
 from mteb.benchmarks.benchmarks import MTEB_multilingual
+from mteb.languages import ISO_TO_LANGUAGE
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
 from mteb.leaderboard.table import scores_to_tables
 
@@ -42,20 +44,6 @@ We thank [Google](https://cloud.google.com/), [ServiceNow](https://www.serviceno
 
 We also thank the following companies which provide API credits to evaluate their models: [OpenAI](https://openai.com/), [Voyage AI](https://www.voyageai.com/)
 """
-
-MMTEB_TASK_TYPES = [  # TEMPORARY FIX: when adding MIEB to the leaderboard, this can probably be replaced with TASK_TYPE
-    "BitextMining",
-    "Classification",
-    "MultilabelClassification",
-    "Clustering",
-    "PairClassification",
-    "Reranking",
-    "Retrieval",
-    "STS",
-    "Summarization",
-    "InstructionRetrieval",
-    "Speed",
-]
 
 
 ALL_MODELS = {meta.name for meta in mteb.get_model_metas()}
@@ -238,21 +226,21 @@ benchmark_select = gr.Dropdown(
     info="Select one of our expert-selected benchmarks from MTEB publications.",
 )
 lang_select = gr.Dropdown(
-    all_results.languages,
+    ISO_TO_LANGUAGE,
     value=sorted(default_results.languages),
     multiselect=True,
     label="Language",
     info="Select languages to include.",
 )
 type_select = gr.Dropdown(
-    all_results.task_types,
-    value=sorted(MMTEB_TASK_TYPES),
+    sorted(get_args(TASK_TYPE)),
+    value=sorted(default_results.task_types),
     multiselect=True,
     label="Task Type",
     info="Select task types to include.",
 )
 domain_select = gr.Dropdown(
-    all_results.domains,
+    sorted(get_args(TASK_DOMAIN)),
     value=sorted(default_results.domains),
     multiselect=True,
     label="Domain",

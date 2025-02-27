@@ -8,7 +8,7 @@ class OxfordPetsClassification(AbsTaskImageClassification):
     metadata = TaskMetadata(
         name="OxfordPets",
         description="Classifying animal images.",
-        reference="https://arxiv.org/abs/1306.5151",
+        reference="https://ieeexplore.ieee.org/abstract/document/6248092",
         dataset={
             "path": "isaacchung/OxfordPets",
             "revision": "557b480fae8d69247be74d9503b378a09425096f",
@@ -29,15 +29,16 @@ class OxfordPetsClassification(AbsTaskImageClassification):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@misc{maji2013finegrainedvisualclassificationaircraft,
-            title={Fine-Grained Visual Classification of Aircraft}, 
-            author={Subhransu Maji and Esa Rahtu and Juho Kannala and Matthew Blaschko and Andrea Vedaldi},
-            year={2013},
-            eprint={1306.5151},
-            archivePrefix={arXiv},
-            primaryClass={cs.CV},
-            url={https://arxiv.org/abs/1306.5151}, 
-        }
+        bibtex_citation="""@INPROCEEDINGS{6248092,
+  author={Parkhi, Omkar M and Vedaldi, Andrea and Zisserman, Andrew and Jawahar, C. V.},
+  booktitle={2012 IEEE Conference on Computer Vision and Pattern Recognition}, 
+  title={Cats and dogs}, 
+  year={2012},
+  volume={},
+  number={},
+  pages={3498-3505},
+  keywords={Positron emission tomography;Image segmentation;Cats;Dogs;Layout;Deformable models;Head},
+  doi={10.1109/CVPR.2012.6248092}}
         """,
         descriptive_stats={
             "n_samples": {"test": 3669},

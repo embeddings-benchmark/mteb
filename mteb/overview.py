@@ -8,7 +8,7 @@ from collections import Counter
 
 import pandas as pd
 
-from mteb.abstasks import AbsTask
+from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.TaskMetadata import TASK_CATEGORY, TASK_DOMAIN, TASK_TYPE
 from mteb.languages import (
     ISO_TO_LANGUAGE,
