@@ -15,7 +15,7 @@ class VoiceGenderClustering(AbsTaskAudioClustering):
             "revision": "1b202ea7bcd0abd5283e628248803e1569257c80",
         },
         type="AudioClustering",
-        category="p2p",
+        category="a2a",
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="nmi",
