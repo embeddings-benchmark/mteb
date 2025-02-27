@@ -1,8 +1,7 @@
+from __future__ import annotations
+
 from mteb.abstasks.Audio.AbsTaskAudioClustering import AbsTaskAudioClustering
 from mteb.abstasks.TaskMetadata import TaskMetadata
-import mteb
-from mteb import MTEB
-
 
 
 class VoiceGenderClustering(AbsTaskAudioClustering):
@@ -28,11 +27,3 @@ class VoiceGenderClustering(AbsTaskAudioClustering):
         dialect=[],
         modalities=["audio"],
     )
-
-if __name__ == "__main__":
-    model_name = "facebook/wav2vec2-base"
-    model = mteb.get_model(model_name, revision="main")
-    print(f"Loaded model type: {type(model)}")
-    evaluation = mteb.MTEB(tasks=[VoiceGenderClustering()])
-    results = evaluation.run(model, output_folder=f"results/{model_name}")
-    print(results)
