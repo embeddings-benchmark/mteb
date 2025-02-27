@@ -309,6 +309,7 @@ jina_embeddings_v2_small_en = ModelMeta(
         SentenceTransformerWrapper,
         model_name="jinaai/jina-embeddings-v2-small-en",
         revision="44e7d1d6caec8c883c2d4b207588504d519788d0",
+        trust_remote_code=True,
     ),
     name="jinaai/jina-embeddings-v2-small-en",
     languages=["eng-Latn"],
