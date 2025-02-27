@@ -14,11 +14,11 @@ from mteb.tasks.Clustering.eng.TwentyNewsgroupsClustering import (
 from .mock_tasks import (
     MockAny2AnyRetrievalI2TTask,
     MockAny2AnyRetrievalT2ITask,
+    MockAudioClusteringTask,
     MockBitextMiningTask,
     MockClassificationTask,
     MockClusteringFastTask,
     MockClusteringTask,
-    MockAudioClusteringTask,
     MockImageClassificationKNNPTTask,
     MockImageClassificationKNNTask,
     MockImageClassificationTask,
@@ -136,9 +136,7 @@ MOCK_MIEB_TASK_GRID = [
     MockMultilingualImageMultilabelClassificationTask(),
 ]
 
-MOCK_MAEB_TASK_GRID = [
-    MockAudioClusteringTask()
-]
+MOCK_MAEB_TASK_GRID = [MockAudioClusteringTask()]
 
 MOCK_MIEB_TASK_GRID_AS_STRING = [
     t.metadata.name if isinstance(t, AbsTask) else t for t in MOCK_MIEB_TASK_GRID
