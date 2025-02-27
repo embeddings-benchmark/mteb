@@ -11,7 +11,8 @@ from sentence_transformers import SentenceTransformer
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
-from mteb.models import (
+
+from . import (
     align_models,
     arctic_models,
     bedrock_models,
