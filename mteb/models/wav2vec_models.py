@@ -12,28 +12,26 @@ from mteb.model_meta import ModelMeta
 
 
 class Wav2vec2Wrapper(AudioEncoder):
-    def __init__(self, device: str | None = None, **kwargs):
-        super().__init__(device=device, **kwargs)
-        self.model_name = kwargs.get("model_name", "facebook/wav2vec2-base")
-        self.model_revision = kwargs.get("model_revision", None)
-
-        self.model = Wav2Vec2Model.from_pretrained(
-            self.model_name, revision=self.model_revision
-        )
+    def __init__(
+        self,
+        device: str | None = None,
+        model_name="facebook/wav2vec2-base",
+        model_revision=None,
+        **kwargs,
+    ):
+        self.device = device
+        self.model = Wav2Vec2Model.from_pretrained(model_name, revision=model_revision)
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(
-            self.model_name, revision=self.model_revision
+            model_name, revision=model_revision
         )
         self.embed_dim = self.model.config.hidden_size
 
         if device:
             self.model = self.model.to(device)
-        print("Wav2vec initialized!!")
 
     def get_audio_embeddings(
-        self, audio_files: list[Audio] | Audio, **kwargs
+        self, audio_files: list[Audio] | Audio, batch_size: int = 32, **kwargs
     ) -> np.ndarray:
-        batch_size = kwargs.get("batch_size", 32)
-
         if not isinstance(audio_files, list):
             audio_files = [audio_files]
 
@@ -53,7 +51,7 @@ class Wav2vec2Wrapper(AudioEncoder):
                 return_tensors="pt",
             )
 
-            if hasattr(self, "device") and self.device:
+            if self.device:
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
             # Get embeddings
@@ -65,7 +63,6 @@ class Wav2vec2Wrapper(AudioEncoder):
                 )
 
             hidden_states = outputs.hidden_states[-1]
-            # print(hidden_states.shape)
             batch_embeddings = hidden_states.mean(dim=1).cpu().numpy()
             all_embeddings.append(batch_embeddings)
 
@@ -77,10 +74,10 @@ class Wav2vec2Wrapper(AudioEncoder):
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
+        batch_size: int = 32,
         **kwargs,
     ) -> np.ndarray:
-        print("Calling encode")
-        return self.get_audio_embeddings(audio_files, **kwargs)
+        return self.get_audio_embeddings(audio_files, batch_size=batch_size, **kwargs)
 
 
 wav2vec2_base = ModelMeta(
