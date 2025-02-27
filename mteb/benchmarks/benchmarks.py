@@ -1402,6 +1402,254 @@ BEIR_NL = Benchmark(
 }""",
 )
 
+MIEB_common_tasks = [
+    # Image Classification
+    "Birdsnap",  # fine
+    "Caltech101",  # fine
+    "CIFAR10",  # coarse
+    "CIFAR100",  # fine
+    "Country211",  # fine
+    "DTD",  # coarse
+    "EuroSAT",  # coarse
+    "FER2013",  # coarse
+    "FGVCAircraft",  # fine
+    "Food101Classification",  # fine
+    "GTSRB",  # coarse
+    "Imagenet1k",  # fine
+    "MNIST",  # coarse
+    "OxfordFlowersClassification",  # fine
+    "OxfordPets",  # fine
+    "PatchCamelyon",  # coarse
+    "RESISC45",  # fine
+    "StanfordCars",  # fine
+    "STL10",  # coarse
+    "SUN397",  # fine
+    "UCF101",  # fine
+    # ImageMultiLabelClassification
+    "VOC2007",  # coarse
+    # Clustering
+    "CIFAR10Clustering",
+    "CIFAR100Clustering",
+    "ImageNetDog15Clustering",
+    "ImageNet10Clustering",
+    "TinyImageNetClustering",
+    # ZeroShotClassification
+    "BirdsnapZeroShot",
+    "Caltech101ZeroShot",
+    "CIFAR10ZeroShot",
+    "CIFAR100ZeroShot",
+    "CLEVRZeroShot",
+    "CLEVRCountZeroShot",
+    "Country211ZeroShot",
+    "DTDZeroShot",
+    "EuroSATZeroShot",
+    "FER2013ZeroShot",
+    "FGVCAircraftZeroShot",
+    "Food101ZeroShot",
+    "GTSRBZeroShot",
+    "Imagenet1kZeroShot",
+    "MNISTZeroShot",
+    "OxfordPetsZeroShot",
+    "PatchCamelyonZeroShot",
+    "RenderedSST2",
+    "RESISC45ZeroShot",
+    "StanfordCarsZeroShot",
+    "STL10ZeroShot",
+    "SUN397ZeroShot",
+    "UCF101ZeroShot",
+    # Any2TextMutipleChoice
+    "CVBenchCount",
+    "CVBenchRelation",
+    "CVBenchDepth",
+    "CVBenchDistance",
+    # Any2AnyMultipleChoice
+    "BLINKIT2IMultiChoice",
+    "BLINKIT2TMultiChoice",
+    # Compositionality
+    "ImageCoDeT2IMultiChoice",
+    "AROCocoOrder",
+    "AROFlickrOrder",
+    "AROVisualAttribution",
+    "AROVisualRelation",
+    "SugarCrepe",
+    "Winoground",
+    # VisualSTS
+    "STS12VisualSTS",
+    "STS13VisualSTS",
+    "STS14VisualSTS",
+    "STS15VisualSTS",
+    "STS16VisualSTS",
+    # Any2AnyRetrieval
+    "BLINKIT2IRetrieval",
+    "BLINKIT2TRetrieval",
+    "CIRRIT2IRetrieval",
+    "CUB200I2IRetrieval",
+    "EDIST2ITRetrieval",
+    "Fashion200kI2TRetrieval",
+    "Fashion200kT2IRetrieval",
+    "FashionIQIT2IRetrieval",
+    "Flickr30kI2TRetrieval",
+    "Flickr30kT2IRetrieval",
+    "FORBI2IRetrieval",
+    "GLDv2I2IRetrieval",
+    "GLDv2I2TRetrieval",
+    "HatefulMemesI2TRetrieval",
+    "HatefulMemesT2IRetrieval",
+    "ImageCoDeT2IRetrieval",
+    "InfoSeekIT2ITRetrieval",
+    "InfoSeekIT2TRetrieval",
+    "MemotionI2TRetrieval",
+    "MemotionT2IRetrieval",
+    "METI2IRetrieval",
+    "MSCOCOI2TRetrieval",
+    "MSCOCOT2IRetrieval",
+    "NIGHTSI2IRetrieval",
+    "OVENIT2ITRetrieval",
+    "OVENIT2TRetrieval",
+    "ROxfordEasyI2IMultiChoice",
+    "ROxfordMediumI2IMultiChoice",
+    "ROxfordHardI2IMultiChoice",
+    "RP2kI2IRetrieval",
+    "RParisEasyI2IMultiChoice",
+    "RParisMediumI2IMultiChoice",
+    "RParisHardI2IMultiChoice",
+    "SciMMIRI2TRetrieval",
+    "SciMMIRT2IRetrieval",
+    "SketchyI2IRetrieval",
+    "SOPI2IRetrieval",
+    "StanfordCarsI2IRetrieval",
+    "TUBerlinT2IRetrieval",
+    "VidoreArxivQARetrieval",
+    "VidoreDocVQARetrieval",
+    "VidoreInfoVQARetrieval",
+    "VidoreTabfquadRetrieval",
+    "VidoreTatdqaRetrieval",
+    "VidoreShiftProjectRetrieval",
+    "VidoreSyntheticDocQAAIRetrieval",
+    "VidoreSyntheticDocQAEnergyRetrieval",
+    "VidoreSyntheticDocQAGovernmentReportsRetrieval",
+    "VidoreSyntheticDocQAHealthcareIndustryRetrieval",
+    "VisualNewsI2TRetrieval",
+    "VisualNewsT2IRetrieval",
+    "VizWizIT2TRetrieval",
+    "VQA2IT2TRetrieval",
+    "WebQAT2ITRetrieval",
+    "WebQAT2TRetrieval",
+]
+
+MIEB_ENG = Benchmark(
+    name="MIEB(eng)",
+    tasks=get_tasks(
+        tasks=MIEB_common_tasks
+        + [
+            "VisualSTS17Eng",
+            "VisualSTS-b-Eng",
+        ],
+    ),
+    description="""MIEB(eng) is a comprehensive image embeddings benchmark, spanning 8 task types, covering 125 tasks. 
+    In addition to image classification (zero shot and linear probing), clustering, retrieval, MIEB includes tasks in compositionality evaluation, 
+    document undestanding, visual STS, and CV-centric tasks.""",
+    reference="",
+    contacts=["gowitheflow-1998", "isaac-chung"],
+    citation="",
+)
+
+MIEB_MULTILINGUAL = Benchmark(
+    name="MIEB(Multilingual)",
+    tasks=get_tasks(
+        tasks=MIEB_common_tasks
+        + [
+            "WITT2IRetrieval",
+            "XFlickr30kCoT2IRetrieval",
+            "XM3600T2IRetrieval",
+            "VisualSTS17Eng",
+            "VisualSTS-b-Eng",
+            "VisualSTS17Multilingual",
+            "VisualSTS-b-Multilingual",
+        ],
+    ),
+    description="""MIEB(Multilingual) is a comprehensive image embeddings benchmark, spanning 10 task types, covering 130 tasks and a total of 39 languages. 
+    In addition to image classification (zero shot and linear probing), clustering, retrieval, MIEB includes tasks in compositionality evaluation, 
+    document undestanding, visual STS, and CV-centric tasks. This benchmark consists of MIEB(eng) + 3 multilingual retrieval 
+    datasets + the multilingual parts of VisualSTS-b and VisualSTS-16.""",
+    reference="",
+    contacts=["gowitheflow-1998", "isaac-chung"],
+    citation="",
+)
+
+MIEB_LITE = Benchmark(
+    name="MIEB(lite)",
+    tasks=get_tasks(
+        tasks=[
+            # Image Classification
+            "Country211",
+            "DTD",
+            "EuroSAT",
+            "GTSRB",
+            "OxfordPets",
+            "PatchCamelyon",
+            "RESISC45",
+            "SUN397",
+            # Clustering
+            "ImageNetDog15Clustering",
+            "TinyImageNetClustering",
+            # ZeroShotClassification
+            "CIFAR100ZeroShot",
+            "Country211ZeroShot",
+            "FER2013ZeroShot",
+            "FGVCAircraftZeroShot",
+            "Food101ZeroShot",
+            "OxfordPetsZeroShot",
+            "StanfordCarsZeroShot",
+            # Any2TextMutipleChoice
+            "CVBenchCount",
+            "CVBenchRelation",
+            "CVBenchDepth",
+            "CVBenchDistance",
+            # Any2AnyMultipleChoice
+            "BLINKIT2IMultiChoice",
+            "ImageCoDeT2IMultiChoice",
+            # ImageTextPairClassification
+            "AROCocoOrder",
+            "AROFlickrOrder",
+            "AROVisualAttribution",
+            "AROVisualRelation",
+            "Winoground",
+            # VisualSTS
+            "STS13VisualSTS",
+            "STS15VisualSTS",
+            "STS17MultilingualVisualSTS",
+            "STSBenchmarkMultilingualVisualSTS",
+            # Any2AnyRetrieval
+            "CIRRIT2IRetrieval",
+            "CUB200I2IRetrieval",
+            "Fashion200kI2TRetrieval",
+            "HatefulMemesI2TRetrieval",
+            "InfoSeekIT2TRetrieval",
+            "NIGHTSI2IRetrieval",
+            "OVENIT2TRetrieval",
+            "RP2kI2IRetrieval",
+            "VidoreDocVQARetrieval",
+            "VidoreInfoVQARetrieval",
+            "VidoreTabfquadRetrieval",
+            "VidoreTatdqaRetrieval",
+            "VidoreShiftProjectRetrieval",
+            "VidoreSyntheticDocQAAIRetrieval",
+            "VisualNewsI2TRetrieval",
+            "VQA2IT2TRetrieval",
+            "WebQAT2ITRetrieval",
+            "WITT2IRetrieval",
+            "XM3600T2IRetrieval",
+        ],
+    ),
+    description="""MIEB(lite) is a comprehensive image embeddings benchmark, spanning 10 task types, covering 51 tasks. 
+    This is a lite version of MIEB(Multilingual), designed to be run at a fraction of the cost while maintaining
+    relative rank of models.""",
+    reference="",
+    contacts=["gowitheflow-1998", "isaac-chung"],
+    citation="",
+)
+
 BUILT_MTEB = Benchmark(
     name="BuiltBench(eng)",
     tasks=get_tasks(
