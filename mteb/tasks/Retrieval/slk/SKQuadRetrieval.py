@@ -1,10 +1,7 @@
 from __future__ import annotations
-
 from datasets import load_dataset
-
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
 
 class SKQuadRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -36,17 +33,53 @@ class SKQuadRetrieval(AbsTaskRetrieval):
         bibtex_citation="",
     )
 
+    def load_dataset_and_validate(self, dataset_name, dataset_config, expected_columns, trust_remote_code=False):
+        
+        try:
+            dataset = load_dataset(dataset_name, dataset_config, trust_remote_code=trust_remote_code)
+            print("Dataset loaded successfully.")
+        except Exception as e:
+            print(f"Failed to load dataset: {e}")
+            return None
+
+        
+        for split in dataset.keys():
+            for column in expected_columns:
+                if column not in dataset[split].column_names:
+                    print(f"Expected column '{column}' not found in {split} split")
+                    return self.preprocess_data(dataset, expected_columns)
+
+        return dataset
+
+    def preprocess_data(self, dataset, expected_columns):
+        
+        processed_data = {}
+        for split in dataset.keys():
+            df = dataset[split].to_pandas()
+            for column in expected_columns:
+                if column not in df.columns:
+                    df[column] = None  
+
+            processed_data[split] = df.to_dict(orient="records")
+
+        print("Data preprocessed successfully.")
+        return processed_data
+
     def load_data(self, eval_splits=None, **kwargs):
         """Load and preprocess datasets for retrieval task."""
         eval_splits = eval_splits or ["test"]
 
-        # Load datasets
-        ds_default = load_dataset("TUKE-KEMT/retrieval-skquad", "default")
-        ds_corpus = load_dataset("TUKE-KEMT/retrieval-skquad", "corpus")
-        ds_query = load_dataset("TUKE-KEMT/retrieval-skquad", "queries")
+        # Expected columns for validation
+        expected_columns_default = ["query-id", "corpus-id", "score"]
+        expected_columns_corpus = ["_id", "text", "title"]
+        expected_columns_queries = ["_id", "text"]
+
+        # Load and validate datasets
+        ds_default = self.load_dataset_and_validate("TUKE-KEMT/retrieval-skquad", "default", expected_columns_default)
+        ds_corpus = self.load_dataset_and_validate("TUKE-KEMT/retrieval-skquad", "corpus", expected_columns_corpus)
+        ds_query = self.load_dataset_and_validate("TUKE-KEMT/retrieval-skquad", "queries", expected_columns_queries)
 
         if "test" in eval_splits:
-            # Corpus, Queries, and Relevance dictionary for 'test' split
             self.corpus = {
                 "test": {
                     row["_id"]: {"text": row["text"], "title": row["title"]}
@@ -66,3 +99,12 @@ class SKQuadRetrieval(AbsTaskRetrieval):
             print(
                 f"Data Loaded:\n- Corpus size: {len(self.corpus['test'])}\n- Query size: {len(self.queries['test'])}\n- Relevance entries: {len(self.relevant_docs['test'])}"
             )
+
+def main():
+    # Initialize the SKQuadRetrieval class
+    task = SKQuadRetrieval()
+    # Load data
+    task.load_data()
+
+if __name__ == "__main__":
+    main()
