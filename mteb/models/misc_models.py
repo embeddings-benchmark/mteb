@@ -768,6 +768,14 @@ consciousAI__cai_stellaris_text_embeddings = ModelMeta(
     superseded_by=None,
 )
 
+SENTENCE_CROISSANT_TRAINING_DATA = {
+    "STS12": ["train"],
+    "STSBenchmark": ["train"],
+    "STSBenchmarkMultilingualSTS": ["train"],
+    "QuoraRetrieval": ["train"],
+    "MSMARCO": ["train"],
+    "STSB": ["train"],
+}
 manu__sentence_croissant_alpha_v0_2 = ModelMeta(
     name="manu/sentence_croissant_alpha_v0.2",
     revision="4610b8cea65d7dd59e0b04af50753933fe5b29b2",
@@ -786,7 +794,7 @@ manu__sentence_croissant_alpha_v0_2 = ModelMeta(
     reference="https://huggingface.co/manu/sentence_croissant_alpha_v0.2",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets=SENTENCE_CROISSANT_TRAINING_DATA,
     adapted_from="croissantllm/CroissantCool",
     superseded_by="manu/sentence_croissant_alpha_v0.3",
 )
@@ -808,7 +816,7 @@ manu__sentence_croissant_alpha_v0_3 = ModelMeta(
     reference="https://huggingface.co/manu/sentence_croissant_alpha_v0.3",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets=SENTENCE_CROISSANT_TRAINING_DATA,
     adapted_from="croissantllm/CroissantCool-v0.2",
     superseded_by="manu/sentence_croissant_alpha_v0.4",
 )
@@ -830,7 +838,7 @@ manu__sentence_croissant_alpha_v0_4 = ModelMeta(
     reference="https://huggingface.co/manu/sentence_croissant_alpha_v0.4",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets=SENTENCE_CROISSANT_TRAINING_DATA,
     # Not in MTEB: {"manu/embedding_data_v2_100k": ["train"]},
     adapted_from="croissantllm/CroissantCool-v0.2",
     superseded_by=None,
