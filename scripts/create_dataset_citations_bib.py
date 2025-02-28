@@ -49,8 +49,8 @@ def create_citations_table(tasks: list[mteb.AbsTask]) -> str:
 \\setlength\\extrarowheight{7pt}
 \\begin{longtable}{L{3.5cm}|L{3.0cm}L{1.4cm}L{1.4cm}L{1.4cm}L{1.4cm}L{1.0cm}L{1.0cm}}
 \\toprule
-\\textbf{Dataset} & \\textbf{N. Langs} & \\textbf{Type} & \\textbf{Category} & \\textbf{Domains} & \\textbf{N. Docs} & 
-\\textbf{Avg. Length} \\\\ 
+\\textbf{Dataset} & \\textbf{N. Langs} & \\textbf{Type} & \\textbf{Category} & \\textbf{Domains} & \\textbf{N. Docs} &
+\\textbf{Avg. Length} \\\\
 \\midrule
 \\endhead \\\\"""
     for task in tasks:
