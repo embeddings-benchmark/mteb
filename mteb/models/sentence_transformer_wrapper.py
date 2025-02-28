@@ -10,15 +10,12 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 from torch.utils.data import DataLoader
 
 from mteb.encoder_interface import BatchedInput, PromptType
-from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
 
 class SentenceTransformerWrapper(Wrapper):
-    mteb_model_meta: ModelMeta | None = None
-
     def __init__(
         self,
         model: str | SentenceTransformer | CrossEncoder,
@@ -108,9 +105,11 @@ class SentenceTransformerWrapper(Wrapper):
             )
         logger.info(f"Encoding {len(inputs)} inputs.")
 
-        if self.mteb_model_meta is not None and self.mteb_model_meta.modalities == [
-            "text"
-        ]:
+        if (
+            hasattr(self, "mteb_model_meta")
+            and self.mteb_model_meta is not None
+            and self.mteb_model_meta.modalities == ["text"]
+        ):
             # compatability for multi-modal models, e.g. mmE5
             inputs = [text for batch in inputs for text in batch["text"]]
 

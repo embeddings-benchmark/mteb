@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from collections.abc import Sequence
 from typing import Any, Literal
 
 import numpy as np
@@ -136,7 +135,7 @@ class MockSentenceTransformer(SentenceTransformer):
 
     def encode(
         self,
-        sentences: str | list[str],
+        sentences: DataLoader,
         prompt_name: str | None = None,
         prompt: str | None = None,
         batch_size: int = 32,
@@ -150,7 +149,7 @@ class MockSentenceTransformer(SentenceTransformer):
         normalize_embeddings: bool = False,
         **kwargs: Any,
     ) -> list[Tensor] | ndarray | Tensor:
-        return torch.randn(len(sentences), 10).numpy()
+        return torch.randn(len(sentences.dataset), 10).numpy()
 
 
 class MockSentenceTransformerWrapper(SentenceTransformerWrapper):
@@ -191,7 +190,7 @@ class MockSentenceTransformerWrapper(SentenceTransformerWrapper):
 
     def encode(
         self,
-        sentences: Sequence[str],
+        sentences: DataLoader,
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
