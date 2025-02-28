@@ -5,7 +5,7 @@ import logging
 import os
 from collections import defaultdict
 from pathlib import Path
-from time import time
+from time import asctime, time
 from typing import Any
 
 import tqdm
@@ -96,11 +96,16 @@ class HFDataLoader:
         self._load_qrels(split)
         # filter queries with no qrels
         qrels_dict = defaultdict(dict)
+        logger.info(f"{asctime()} - Done load qrels, before map qrels_dict")
 
-        def qrels_dict_init(row):
-            qrels_dict[row["query-id"]][row["corpus-id"]] = int(row["score"])
+        df = self.qrels.to_pandas()
+        query_ids = df["query-id"].to_numpy()
+        corpus_ids = df["corpus-id"].to_numpy()
+        scores = df["score"].to_numpy()
 
-        self.qrels.map(qrels_dict_init)
+        for q, c, s in zip(query_ids, corpus_ids, scores):
+            qrels_dict[q][c] = int(s)
+        logger.info(f"{asctime()} - Done qrels_dict")
         self.qrels = qrels_dict
         self.queries = self.queries.filter(lambda x: x["id"] in self.qrels)
         logger.info("Loaded %d %s Queries.", len(self.queries), split.upper())
