@@ -38,8 +38,8 @@ class MockTorchbf16Encoder(SentenceTransformer):
     def __init__(self):
         pass
 
-    def encode(self, sentences: DataLoader, prompt_name: str | None = None, **kwargs):
-        return torch.randn(len(sentences.dataset), 10, dtype=torch.bfloat16)
+    def encode(self, sentences: list[str], prompt_name: str | None = None, **kwargs):
+        return torch.randn(len(sentences), 10, dtype=torch.bfloat16)
 
 
 class MockCLIPEncoder:
