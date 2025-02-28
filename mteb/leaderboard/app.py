@@ -247,7 +247,7 @@ domain_select = gr.Dropdown(
     info="Select domains to include.",
 )
 task_select = gr.Dropdown(
-    all_results.task_names,
+    sorted(all_results.task_names),
     value=sorted(default_results.task_names),
     allow_custom_value=True,
     multiselect=True,
