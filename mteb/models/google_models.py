@@ -6,7 +6,7 @@ from typing import Any
 import numpy as np
 import tqdm
 
-from mteb.encoder_interface import Encoder, PromptType
+from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.wrapper import Wrapper
 
@@ -42,7 +42,7 @@ MODEL_PROMPTS = {
 }
 
 
-class GoogleTextEmbeddingModel(Encoder, Wrapper):
+class GoogleTextEmbeddingModel(Wrapper):
     def __init__(
         self,
         model_name: str,

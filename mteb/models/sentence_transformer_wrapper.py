@@ -1,20 +1,24 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence
 from typing import Any
 
 import numpy as np
 import torch
 from sentence_transformers import CrossEncoder, SentenceTransformer
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import PromptType
+from mteb.encoder_interface import BatchedInput, PromptType
+from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
 
 
 class SentenceTransformerWrapper(Wrapper):
+    mteb_model_meta: ModelMeta | None = None
+
     def __init__(
         self,
         model: str | SentenceTransformer | CrossEncoder,
@@ -63,7 +67,7 @@ class SentenceTransformerWrapper(Wrapper):
 
     def encode(
         self,
-        sentences: Sequence[str],
+        inputs: Iterable[BatchedInput] | DataLoader[BatchedInput],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
@@ -72,7 +76,7 @@ class SentenceTransformerWrapper(Wrapper):
         """Encodes the given sentences using the encoder.
 
         Args:
-            sentences: The sentences to encode.
+            inputs: The sentences to encode.
             task_name: The name of the task. Sentence-transformers uses this to
                 determine which prompt to use from a specified dictionary.
             prompt_type: The name type of prompt. (query or passage)
@@ -102,10 +106,19 @@ class SentenceTransformerWrapper(Wrapper):
             logger.info(
                 f"No model prompts found for task={task_name} prompt_type={prompt_type}"
             )
-        logger.info(f"Encoding {len(sentences)} sentences.")
+        logger.info(f"Encoding {len(inputs)} inputs.")
+
+        if self.mteb_model_meta is not None and self.mteb_model_meta.modalities == [
+            "text"
+        ]:
+            # compatability for multi-modal models, e.g. mmE5
+            inputs_ = []
+            for batch in inputs:
+                inputs_.extend(batch["text"])
+            inputs = inputs_
 
         embeddings = self.model.encode(
-            sentences,
+            inputs,
             prompt_name=prompt_name,
             **kwargs,
         )

@@ -13,6 +13,7 @@ from sklearn.metrics.pairwise import (
 
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
 
+from ...data_loading_utils import create_dataloader_from_texts
 from .Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
@@ -40,12 +41,12 @@ class STSEvaluator(Evaluator):
         encode_kwargs: dict[str, Any] = {},
     ):
         embeddings1 = model.encode(
-            self.sentences1,
+            create_dataloader_from_texts(self.sentences1),
             task_name=self.task_name,
             **encode_kwargs,
         )
         embeddings2 = model.encode(
-            self.sentences2,
+            create_dataloader_from_texts(self.sentences2),
             task_name=self.task_name,
             **encode_kwargs,
         )
