@@ -1406,7 +1406,24 @@ avsolatorio__GIST_all_MiniLM_L6_v2 = ModelMeta(
     reference="https://huggingface.co/avsolatorio/GIST-all-MiniLM-L6-v2",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets={
+        **bge_training_data,
+        # not in mteb:
+        # MEDI
+        # all MTEB CLF datasets that has a train split:
+        "AmazonPolarityClassification": ["train"],
+        "AmazonReviewsClassification": ["train"],
+        "EmotionClassification": ["train"],
+        "ImdbClassification": ["train"],
+        "MTOPDomainClassification": ["train"],
+        "MTOPIntentClassification": ["train"],
+        "MassiveIntentClassification": ["train"],
+        "MassiveScenarioClassification": ["train"],
+        "ToxicConversationsClassification": ["train"],
+        "TweetSentimentExtractionClassification": ["train"],
+        "Banking77Classification": ["train"],
+        "AmazonCounterfactualClassification": ["train"],
+    },
     adapted_from=None,
     superseded_by=None,
 )
@@ -1428,7 +1445,24 @@ avsolatorio__GIST_large_Embedding_v0 = ModelMeta(
     reference="https://huggingface.co/avsolatorio/GIST-large-Embedding-v0",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets={
+        **bge_training_data,
+        # not in mteb:
+        # MEDI
+        # all MTEB CLF datasets that has a train split:
+        "AmazonPolarityClassification": ["train"],
+        "AmazonReviewsClassification": ["train"],
+        "EmotionClassification": ["train"],
+        "ImdbClassification": ["train"],
+        "MTOPDomainClassification": ["train"],
+        "MTOPIntentClassification": ["train"],
+        "MassiveIntentClassification": ["train"],
+        "MassiveScenarioClassification": ["train"],
+        "ToxicConversationsClassification": ["train"],
+        "TweetSentimentExtractionClassification": ["train"],
+        "Banking77Classification": ["train"],
+        "AmazonCounterfactualClassification": ["train"],
+    },
     adapted_from=None,
     superseded_by=None,
 )
@@ -1450,7 +1484,24 @@ avsolatorio__GIST_small_Embedding_v0 = ModelMeta(
     reference="https://huggingface.co/avsolatorio/GIST-small-Embedding-v0",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets={
+        **bge_training_data,
+        # not in mteb:
+        # MEDI
+        # all MTEB CLF datasets that has a train split:
+        "AmazonPolarityClassification": ["train"],
+        "AmazonReviewsClassification": ["train"],
+        "EmotionClassification": ["train"],
+        "ImdbClassification": ["train"],
+        "MTOPDomainClassification": ["train"],
+        "MTOPIntentClassification": ["train"],
+        "MassiveIntentClassification": ["train"],
+        "MassiveScenarioClassification": ["train"],
+        "ToxicConversationsClassification": ["train"],
+        "TweetSentimentExtractionClassification": ["train"],
+        "Banking77Classification": ["train"],
+        "AmazonCounterfactualClassification": ["train"],
+    },
     adapted_from=None,
     superseded_by=None,
 )
