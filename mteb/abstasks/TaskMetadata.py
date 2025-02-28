@@ -59,6 +59,7 @@ TASK_SUBTYPE = Literal[
     "Activity recognition",
     "Tumor detection",
     "Duplicate Detection",
+    "Gender Clustering",
 ]
 
 TASK_DOMAIN = Literal[
@@ -101,6 +102,7 @@ SAMPLE_CREATION_METHOD = Literal[
     "multiple",
 ]
 TASK_TYPE = Literal[
+    "AudioClustering",
     "BitextMining",
     "Classification",
     "MultilabelClassification",
@@ -137,6 +139,7 @@ TASK_CATEGORY = Literal[
     "i2it",  # image-to-image+text
     "t2it",  # text-to-image+text
     "it2it",  # image+text-to-image+text
+    "a2a",  # audio-to-audio
 ]
 
 ANNOTATOR_TYPE = Literal[

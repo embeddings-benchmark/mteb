@@ -20,13 +20,18 @@ from mteb.abstasks.MultiSubsetLoader import MultiSubsetLoader
 from mteb.overview import TASKS_REGISTRY
 
 from ..test_benchmark.task_grid import (
+    MOCK_MAEB_TASK_GRID_AS_STRING,
     MOCK_MIEB_TASK_GRID_AS_STRING,
     MOCK_TASK_TEST_GRID_AS_STRING,
 )
 
 logging.basicConfig(level=logging.INFO)
 
-ALL_MOCK_TASKS = MOCK_TASK_TEST_GRID_AS_STRING + MOCK_MIEB_TASK_GRID_AS_STRING
+ALL_MOCK_TASKS = (
+    MOCK_TASK_TEST_GRID_AS_STRING
+    + MOCK_MIEB_TASK_GRID_AS_STRING
+    + MOCK_MAEB_TASK_GRID_AS_STRING
+)
 
 tasks = [t for t in MTEB().tasks_cls if t.metadata.name not in ALL_MOCK_TASKS]
 
@@ -101,6 +106,7 @@ def test_dataset_availability():
         for t in tasks
         if t.metadata.name not in MOCK_TASK_TEST_GRID_AS_STRING
         if t.metadata.name not in MOCK_MIEB_TASK_GRID_AS_STRING
+        if t.metadata.name not in MOCK_MAEB_TASK_GRID_AS_STRING
         and t.metadata.name
         != "AfriSentiLangClassification"  # HOTFIX: Issue#1777. Remove this line when issue is resolved.
     ]
