@@ -7,6 +7,7 @@ import torch
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 from mteb.models.bge_models import bge_m3_training_data, bge_training_data
 from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
+from mteb.models.e5_models import E5_TRAINING_DATA
 from mteb.models.sentence_transformers_models import sent_trf_training_dataset
 
 Haon_Chen__speed_embedding_7b_instruct = ModelMeta(
@@ -962,7 +963,7 @@ sdadas__mmlw_e5_base = ModelMeta(
     reference="https://huggingface.co/sdadas/mmlw-e5-base",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets=E5_TRAINING_DATA,
     adapted_from="intfloat/multilingual-e5-base",
     superseded_by=None,
 )
@@ -1006,7 +1007,7 @@ sdadas__mmlw_e5_large = ModelMeta(
     reference="https://huggingface.co/sdadas/mmlw-e5-large",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets=E5_TRAINING_DATA,
     adapted_from="intfloat/multilingual-e5-large",
     superseded_by=None,
 )
@@ -1028,7 +1029,7 @@ sdadas__mmlw_e5_small = ModelMeta(
     reference="https://huggingface.co/sdadas/mmlw-e5-small",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets=E5_TRAINING_DATA,
     adapted_from="intfloat/multilingual-e5-small",
     superseded_by=None,
 )
@@ -1050,7 +1051,7 @@ sdadas__mmlw_roberta_base = ModelMeta(
     reference="https://huggingface.co/sdadas/mmlw-roberta-base",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets={"MSMARCO": ["train"]},
     adapted_from="sdadas/polish-roberta-base-v2",
     superseded_by=None,
 )
@@ -1072,7 +1073,7 @@ sdadas__mmlw_roberta_large = ModelMeta(
     reference="https://huggingface.co/sdadas/mmlw-roberta-large",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets={"MSMARCO": ["train"]},
     adapted_from="sdadas/polish-roberta-large-v2",
     superseded_by=None,
 )
