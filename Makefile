@@ -1,6 +1,6 @@
 install:
 	@echo "--- 🚀 Installing project dependencies ---"
-	pip install -e ".[dev,docs,bm25s,pylate]"
+	pip install -e ".[dev,docs]"
 
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"
