@@ -12,6 +12,30 @@ from ..AbsTask import AbsTask, ScoresDict
 logger = logging.getLogger(__name__)
 
 
+class ImageTextPairClassificationDescriptiveStatistics:
+    """Descriptive statistics for ImageTextPairClassification
+
+    Attributes:
+        num_samples: number of samples in the dataset.
+        num_images: number of images in the dataset.
+        num_texts: number of texts in the dataset.
+        num_unique_texts: number of unique texts in the dataset.
+
+        min_text_length: Minimum length of texts
+        average_text_length: Average length of texts
+        max_text_length: Maximum length of texts
+    """
+
+    num_samples: int
+    num_images: int
+    num_texts: int
+    num_unique_texts: int
+
+    min_text_length: int
+    average_text_length: float
+    max_text_length: int
+
+
 class AbsTaskImageTextPairClassification(AbsTask):
     """Abstract class for Image Text Pair Classification tasks,
     e.g. Compositionality evaluation.
@@ -35,8 +59,47 @@ class AbsTaskImageTextPairClassification(AbsTask):
 
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
-    ):
-        pass
+    ) -> ImageTextPairClassificationDescriptiveStatistics:
+        dataset = self.dataset if hf_subset is None else self.dataset[hf_subset]
+        num_samples = len(dataset)
+
+        if isinstance(self.images_column_names, str):
+            num_images = [
+                img for sample in dataset for img in sample[self.images_column_names]
+            ]
+        elif isinstance(self.images_column_names, list):
+            num_images = [
+                img
+                for sample in dataset
+                for img_column in self.images_column_names
+                for img in sample[img_column]
+            ]
+
+        if isinstance(self.texts_column_names, str):
+            texts = [
+                text for sample in dataset for text in sample[self.texts_column_names]
+            ]
+            unique_texts = len(set(texts))
+            text_lengths = [len(text) for text in texts]
+        elif isinstance(self.texts_column_names, list):
+            texts = [
+                text
+                for sample in dataset
+                for text_column in self.texts_column_names
+                for text in sample[text_column]
+            ]
+            unique_texts = set(texts)
+            text_lengths = [len(text) for text in texts]
+
+        return ImageTextPairClassificationDescriptiveStatistics(
+            num_samples=num_samples,
+            num_images=num_images,
+            num_texts=len(texts),
+            num_unique_texts=len(unique_texts),
+            min_text_length=min(text_lengths),
+            average_text_length=sum(text_lengths) / len(text_lengths),
+            max_text_length=max(text_lengths),
+        )
 
     def _evaluate_subset(
         self,
