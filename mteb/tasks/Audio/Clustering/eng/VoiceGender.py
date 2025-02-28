@@ -26,6 +26,7 @@ class VoiceGenderClustering(AbsTaskAudioClustering):
         annotations_creators="derived",
         dialect=[],
         modalities=["audio"],
+        sample_creation="found",
         bibtex_citation="""@InProceedings{Chung18b,
               author       = "Chung, J.~S. and Nagrani, A. and Zisserman, A.",
               title        = "VoxCeleb2: Deep Speaker Recognition",
