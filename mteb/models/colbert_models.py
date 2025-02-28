@@ -3,12 +3,13 @@ from __future__ import annotations
 import logging
 from collections.abc import Sequence
 from functools import partial
-from typing import Any
+from typing import Any, Iterable
 
 import numpy as np
 import torch
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import PromptType
+from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.wrapper import Wrapper
 
@@ -59,7 +60,7 @@ class ColBERTWrapper(Wrapper):
 
     def encode(
         self,
-        sentences: Sequence[str],
+        inputs: Iterable[BatchedInput] | DataLoader[BatchedInput],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
@@ -68,7 +69,7 @@ class ColBERTWrapper(Wrapper):
         """Encodes the given sentences using the encoder.
 
         Args:
-            sentences: The sentences to encode.
+            inputs: The inputs to encode.
             task_name: The name of the task. Pylate uses this to
                 determine which prompt to use from a specified dictionary.
             prompt_type: The name type of prompt. (query or passage)
@@ -97,12 +98,15 @@ class ColBERTWrapper(Wrapper):
             logger.info(
                 f"No model prompts found for task={task_name} prompt_type={prompt_type}"
             )
-        logger.info(f"Encoding {len(sentences)} sentences.")
+        logger.info(f"Encoding {len(inputs)} sentences.")
 
         if "request_qid" in kwargs:
             kwargs.pop("request_qid")
+
+        inputs = [text for batch in inputs for text in batch["text"]]
+
         pred = self.model.encode(
-            sentences,
+            inputs,
             prompt_name=prompt_name,
             is_query=True if prompt_type == PromptType.query else False,
             convert_to_tensor=True,

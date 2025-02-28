@@ -135,7 +135,7 @@ class MockSentenceTransformer(SentenceTransformer):
 
     def encode(
         self,
-        sentences: DataLoader,
+        sentences: list[str],
         prompt_name: str | None = None,
         prompt: str | None = None,
         batch_size: int = 32,
@@ -149,7 +149,7 @@ class MockSentenceTransformer(SentenceTransformer):
         normalize_embeddings: bool = False,
         **kwargs: Any,
     ) -> list[Tensor] | ndarray | Tensor:
-        return torch.randn(len(sentences.dataset), 10).numpy()
+        return torch.randn(len(sentences), 10).numpy()
 
 
 class MockSentenceTransformerWrapper(SentenceTransformerWrapper):
