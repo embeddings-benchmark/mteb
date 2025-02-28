@@ -32,13 +32,13 @@ class CQADupstackProgrammersNLRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="machine-translated and verified",  # manually checked a small subset
         bibtex_citation="""@misc{banar2024beirnlzeroshotinformationretrieval,
-    title={BEIR-NL: Zero-shot Information Retrieval Benchmark for the Dutch Language}, 
+    title={BEIR-NL: Zero-shot Information Retrieval Benchmark for the Dutch Language},
      author={Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
      year={2024},
      eprint={2412.08329},
      archivePrefix={arXiv},
      primaryClass={cs.CL},
-     url={https://arxiv.org/abs/2412.08329}, 
+     url={https://arxiv.org/abs/2412.08329},
 }""",
     )
 

@@ -30,13 +30,13 @@ common_args = {
     "sample_creation": "found",
     "bibtex_citation": """
     @misc{wang2024coderagbenchretrievalaugmentcode,
-        title={CodeRAG-Bench: Can Retrieval Augment Code Generation?}, 
+        title={CodeRAG-Bench: Can Retrieval Augment Code Generation?},
         author={Zora Zhiruo Wang and Akari Asai and Xinyan Velocity Yu and Frank F. Xu and Yiqing Xie and Graham Neubig and Daniel Fried},
         year={2024},
         eprint={2406.14497},
         archivePrefix={arXiv},
         primaryClass={cs.SE},
-        url={https://arxiv.org/abs/2406.14497}, 
+        url={https://arxiv.org/abs/2406.14497},
     }
     """,
 }

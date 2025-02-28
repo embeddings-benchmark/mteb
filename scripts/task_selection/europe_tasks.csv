@@ -31,7 +31,7 @@
                        and challenging non-hate, and 11 languages.
                      "
 20,NordicLangClassification,Classification,"{'nob', 'nno', 'dan', 'isl', 'swe'}",['Encyclopaedic'],cc-by-sa-3.0,A dataset for Nordic language identification.
-21,ScalaClassification,Classification,"{'swe', 'dan', 'nob', 'nno'}","['Fiction', 'News', 'Non-fiction', 'Blog', 'Spoken', 'Web', 'Written']",CC BY-SA 4.0,"ScaLa a linguistic acceptability dataset for the mainland Scandinavian languages automatically constructed from dependency annotations in Universal Dependencies Treebanks. 
+21,ScalaClassification,Classification,"{'swe', 'dan', 'nob', 'nno'}","['Fiction', 'News', 'Non-fiction', 'Blog', 'Spoken', 'Web', 'Written']",CC BY-SA 4.0,"ScaLa a linguistic acceptability dataset for the mainland Scandinavian languages automatically constructed from dependency annotations in Universal Dependencies Treebanks.
         Published as part of 'ScandEval: A Benchmark for Scandinavian Natural Language Processing'"
 22,SwissJudgementClassification,Classification,"{'deu', 'fra', 'ita'}","['Legal', 'Written']",CC-BY-4.0,"Multilingual, diachronic dataset of Swiss Federal Supreme Court cases annotated with the respective binarized judgment outcome (approval/dismissal)"
 23,TweetSentimentClassification,Classification,"{'por', 'ita', 'spa', 'fra', 'eng', 'deu'}","['Social', 'Written']",cc-by-3.0,A multilingual Sentiment Analysis dataset consisting of tweets in 8 different languages.
@@ -74,7 +74,7 @@
         Articles. The data was collected from the press_mt subset from Korpus
         Malti v4.0. Article contents were cleaned to filter out JavaScript, CSS,
         & repeated non-Maltese sub-headings. The labels are based on the category
-        field from this corpus. 
+        field from this corpus.
         "
 55,MultiEURLEXMultilabelClassification,MultilabelClassification,"{'fin', 'ces', 'pol', 'swe', 'eng', 'lit', 'slk', 'nld', 'dan', 'ron', 'deu', 'hrv', 'ita', 'slv', 'spa', 'hun', 'est', 'bul', 'mlt', 'por', 'lav', 'ell', 'fra'}","['Legal', 'Government', 'Written']",CC BY-SA 4.0,EU laws in 23 EU languages containing gold labels.
 56,CTKFactsNLI,PairClassification,{'ces'},"['News', 'Written']",CC-BY-SA-3.0,"Czech Natural Language Inference dataset of around 3K evidence-claim pairs labelled with SUPPORTS, REFUTES or NOT ENOUGH INFO veracity labels. Extracted from a round of fact-checking experiments."

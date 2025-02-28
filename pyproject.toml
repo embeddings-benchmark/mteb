@@ -114,7 +114,7 @@ target-version = "py39"
 
 [tool.ruff.lint]
 select = [
-    "F",  # pyflakes rules, 
+    "F",  # pyflakes rules,
     "I",  # sorting for imports
     "E",  # formatting for docs
     "D",  # formatting for docs
@@ -124,7 +124,7 @@ select = [
 ]
 
 
-ignore = ["E501",   # line too long 
+ignore = ["E501",   # line too long
         "E741",     # ambiguous variable name
         "F403",     # undefined import
         "D100",     # Missing docstring in public module
@@ -166,9 +166,9 @@ patch_types = ["fix", "perf"]
 
 [tool.pytest.ini_options]
 addopts = """
-            --reruns 3 
-            --only-rerun requests.exceptions.ReadTimeout 
-            --only-rerun huggingface_hub.errors.HfHubHTTPError 
+            --reruns 3
+            --only-rerun requests.exceptions.ReadTimeout
+            --only-rerun huggingface_hub.errors.HfHubHTTPError
             --only-rerun huggingface_hub.errors.LocalEntryNotFoundError
             --only-rerun FileNotFoundError
             --durations=5

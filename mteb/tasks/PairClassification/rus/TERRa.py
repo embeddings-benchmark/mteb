@@ -30,15 +30,15 @@ class TERRa(AbsTaskPairClassification):
         sample_creation="found",
         bibtex_citation="""@article{shavrina2020russiansuperglue,
         title={RussianSuperGLUE: A Russian Language Understanding Evaluation Benchmark},
-        author={Shavrina, Tatiana 
-                    and Fenogenova, Alena 
-                    and Emelyanov, Anton 
-                    and Shevelev, Denis 
-                    and Artemova, Ekaterina 
-                    and Malykh, Valentin 
-                    and Mikhailov, Vladislav 
-                    and Tikhonova, Maria 
-                    and Chertok, Andrey 
+        author={Shavrina, Tatiana
+                    and Fenogenova, Alena
+                    and Emelyanov, Anton
+                    and Shevelev, Denis
+                    and Artemova, Ekaterina
+                    and Malykh, Valentin
+                    and Mikhailov, Vladislav
+                    and Tikhonova, Maria
+                    and Chertok, Andrey
                     and Evlampiev, Andrey},
         journal={arXiv preprint arXiv:2010.15925},
         year={2020}

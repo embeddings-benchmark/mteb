@@ -6,11 +6,19 @@ repos:
     hooks:
       - id: validate-pyproject
 
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v3.1.0
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
     hooks:
-      - id: prettier
-        types_or: [yaml, json5]
+    -   id: check-yaml
+    -   id: check-json
+    -   id: pretty-format-json
+        args:
+          - "--autofix"
+          - "--indent=4"
+          - "--no-sort-keys"
+    -   id: end-of-file-fixer # generated a lot of changes
+    -   id: trailing-whitespace
+    -   id: check-toml
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.9.6

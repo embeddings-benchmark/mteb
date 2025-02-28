@@ -28,7 +28,7 @@ class News21InstructionRetrieval(AbsTaskInstructionRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation="""@misc{weller2024followir,
-      title={FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions}, 
+      title={FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions},
       author={Orion Weller and Benjamin Chang and Sean MacAvaney and Kyle Lo and Arman Cohan and Benjamin Van Durme and Dawn Lawrie and Luca Soldaini},
       year={2024},
       eprint={2403.15246},

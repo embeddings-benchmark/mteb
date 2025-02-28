@@ -28,7 +28,7 @@ class ArmenianParaphrasePC(AbsTaskPairClassification):
         sample_creation="found",
         bibtex_citation="""
         @misc{malajyan2020arpa,
-            title={ARPA: Armenian Paraphrase Detection Corpus and Models}, 
+            title={ARPA: Armenian Paraphrase Detection Corpus and Models},
             author={Arthur Malajyan and Karen Avetisyan and Tsolak Ghukasyan},
             year={2020},
             eprint={2009.12615},

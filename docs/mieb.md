@@ -1,18 +1,18 @@
 # Welcome to MIEB! 👋
 
-The Massive Image Embedding Benchmark (MIEB) is an image extension of [MTEB](https://arxiv.org/abs/2210.07316) to cover embedding tasks for image-text tasks. 
+The Massive Image Embedding Benchmark (MIEB) is an image extension of [MTEB](https://arxiv.org/abs/2210.07316) to cover embedding tasks for image-text tasks.
 
 ## 🌱 Background
 
-MIEB intends to extend MTEB and MMTEB to cover image representation learning and image-text alignment tasks. 
+MIEB intends to extend MTEB and MMTEB to cover image representation learning and image-text alignment tasks.
 
 ## 🪴 Contributing to MIEB
 
-The FIRST step is to _always_ create an issue in the MTEB repo (this one), and add the `mieb` label. PRs without issues will not be accepted. 
+The FIRST step is to _always_ create an issue in the MTEB repo (this one), and add the `mieb` label. PRs without issues will not be accepted.
 
 There are a few ways for anyone to contribute to MIEB:
 
-  1. Add a dataset as an existing task type. This means that the `AbsTask` already exists, e.g. `AbsTaskImageClassification`, and the effort is solely in adding an instance of it. 
+  1. Add a dataset as an existing task type. This means that the `AbsTask` already exists, e.g. `AbsTaskImageClassification`, and the effort is solely in adding an instance of it.
   2.  Add a model. This could mean either: a) The model wrapper, e.g. `OpenCLIPWrapper`, already exists, and the effort is solely in adding a filled out `ModelMeta` object, and/or b) Add a new model wrapper.
   3. Add a new task type. This means that the existing task types do not cover this new task. An accompanying evaluator should also be implemented.
 
@@ -20,12 +20,12 @@ Let's go through an example.
 
 ## Example
 
-Here is an example implementing a zero-shot image classification from scratch. Let's say we wish to implement CIFAR10 as a task and evaluate an OpenCLIP model on it. 
+Here is an example implementing a zero-shot image classification from scratch. Let's say we wish to implement CIFAR10 as a task and evaluate an OpenCLIP model on it.
 
-To solve this task, we need to encode the `images`, encode the `class label candidates with prompts` (e.g. "this is a dog pic", "this is a cat pic"), and compare them by calculating similarity, and then argmax out the class prediction for each image. We begin by implementing a model wrapper. 
+To solve this task, we need to encode the `images`, encode the `class label candidates with prompts` (e.g. "this is a dog pic", "this is a cat pic"), and compare them by calculating similarity, and then argmax out the class prediction for each image. We begin by implementing a model wrapper.
 
 ### Model Wrapper
-See the [`ImageEncoder` class](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/encoder_interface.py) for more details. The model class implements `get_text_embeddings`, `get_image_embeddings`, and `calculate_probs` methods. 
+See the [`ImageEncoder` class](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/encoder_interface.py) for more details. The model class implements `get_text_embeddings`, `get_image_embeddings`, and `calculate_probs` methods.
 As an example,  [`OpenCLIPWrapper`](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/models/openclip_models.py) is first implemented, with metadata defined below.
 ```python
 class OpenCLIPWrapper:
@@ -64,7 +64,7 @@ class CIFAR10ZeroShotClassification(AbsTaskZeroshotClassification):
 See also [adding a dataset](adding_a_dataset.md) for reference.
 
 ### Putting them all together
-With all these, we can then 
+With all these, we can then
 ```python
 import mteb
 
@@ -86,7 +86,7 @@ Some models require some specific steps before running. Those are collected here
 <details>
     <summary> Vista </summary>
 
-    ## set up VISTA 
+    ## set up VISTA
 
     ```
     git clone https://github.com/FlagOpen/FlagEmbedding.git

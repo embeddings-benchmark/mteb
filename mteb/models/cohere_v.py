@@ -36,7 +36,7 @@ def cohere_v_loader(**kwargs):
             self.client = cohere.ClientV2(api_key)
             self.image_format = "JPEG"
             """ Wrapper for Cohere multimodal embedding model,
-            
+
             do `export COHERE_API_KEY=<Your_Cohere_API_KEY>` before running eval scripts.
             Cohere currently supports 40 images/min, thus time.sleep(1.5) is applied after each image.
             Remove or adjust this after Cohere API changes capacity.

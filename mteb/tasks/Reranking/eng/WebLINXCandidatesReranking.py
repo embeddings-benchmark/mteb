@@ -39,7 +39,7 @@ class WebLINXCandidatesReranking(AbsTaskReranking):
         sample_creation="created",
         bibtex_citation="""
 @misc{lù2024weblinx,
-      title={WebLINX: Real-World Website Navigation with Multi-Turn Dialogue}, 
+      title={WebLINX: Real-World Website Navigation with Multi-Turn Dialogue},
       author={Xing Han Lù and Zdeněk Kasner and Siva Reddy},
       year={2024},
       eprint={2402.05930},

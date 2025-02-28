@@ -33,7 +33,7 @@ class NamaaMrTydiReranking(AbsTaskReranking):
   author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Lo{\"\i}c and Reimers, Nils},
   title = {MTEB: Massive Text Embedding Benchmark},
   publisher = {arXiv},
-  journal={arXiv preprint arXiv:2210.07316},  
+  journal={arXiv preprint arXiv:2210.07316},
   year = {2022}
 }""",
     )

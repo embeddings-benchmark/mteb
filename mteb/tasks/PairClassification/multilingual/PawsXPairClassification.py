@@ -38,7 +38,7 @@ class PawsXPairClassification(MultilingualTask, AbsTaskPairClassification):
         dialect=[],
         sample_creation="human-translated",
         bibtex_citation="""@misc{yang2019pawsx,
-      title={PAWS-X: A Cross-lingual Adversarial Dataset for Paraphrase Identification}, 
+      title={PAWS-X: A Cross-lingual Adversarial Dataset for Paraphrase Identification},
       author={Yinfei Yang and Yuan Zhang and Chris Tar and Jason Baldridge},
       year={2019},
       eprint={1908.11828},

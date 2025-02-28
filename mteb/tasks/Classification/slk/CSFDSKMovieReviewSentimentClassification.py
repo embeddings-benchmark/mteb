@@ -28,7 +28,7 @@ class CSFDSKMovieReviewSentimentClassification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation="""
 @misc{štefánik2023resources,
-      title={Resources and Few-shot Learners for In-context Learning in Slavic Languages}, 
+      title={Resources and Few-shot Learners for In-context Learning in Slavic Languages},
       author={Michal Štefánik and Marek Kadlčík and Piotr Gramacki and Petr Sojka},
       year={2023},
       eprint={2304.01922},

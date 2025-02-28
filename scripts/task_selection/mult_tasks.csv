@@ -35,7 +35,7 @@
         The Korean Sarcasm Dataset was created to detect sarcasm in text, which can significantly alter the original
         meaning of a sentence. 9319 tweets were collected from Twitter and labeled for sarcasm or not_sarcasm. These
         tweets were gathered by querying for: irony sarcastic, and
-        sarcasm. 
+        sarcasm.
         The dataset was created by gathering HTML data from Twitter. Queries for hashtags that include sarcasm
         and variants of it were used to return tweets. It was preprocessed by removing the keyword
         hashtag, urls and mentions of the user to preserve anonymity.
@@ -61,10 +61,10 @@
 38,NordicLangClassification,Classification,"{'isl', 'swe', 'fao', 'nob', 'dan', 'nno'}",['Encyclopaedic'],cc-by-sa-3.0,A dataset for Nordic language identification.
 39,NusaParagraphEmotionClassification,Classification,"{'bew', 'mad', 'bbc', 'sun', 'min', 'bug', 'jav', 'mak', 'rej', 'mui'}","['Non-fiction', 'Fiction', 'Written']",Apache 2.0,NusaParagraphEmotionClassification is a multi-class emotion classification on 10 Indonesian languages from the NusaParagraph dataset.
 40,NusaX-senti,Classification,"{'bjn', 'bbc', 'mad', 'nij', 'ace', 'ind', 'min', 'bug', 'jav', 'eng', 'ban', 'sun'}","['Reviews', 'Web', 'Social', 'Constructed', 'Written']",CC-BY-SA 4.0,"NusaX is a high-quality multilingual parallel corpus that covers 12 languages, Indonesian, English, and 10 Indonesian local languages, namely Acehnese, Balinese, Banjarese, Buginese, Madurese, Minangkabau, Javanese, Ngaju, Sundanese, and Toba Batak. NusaX-Senti is a 3-labels (positive, neutral, negative) sentiment analysis dataset for 10 Indonesian local languages + Indonesian and English."
-41,ScalaClassification,Classification,"{'swe', 'nob', 'dan', 'nno'}","['Fiction', 'News', 'Non-fiction', 'Blog', 'Spoken', 'Web', 'Written']",CC BY-SA 4.0,"ScaLa a linguistic acceptability dataset for the mainland Scandinavian languages automatically constructed from dependency annotations in Universal Dependencies Treebanks. 
+41,ScalaClassification,Classification,"{'swe', 'nob', 'dan', 'nno'}","['Fiction', 'News', 'Non-fiction', 'Blog', 'Spoken', 'Web', 'Written']",CC BY-SA 4.0,"ScaLa a linguistic acceptability dataset for the mainland Scandinavian languages automatically constructed from dependency annotations in Universal Dependencies Treebanks.
         Published as part of 'ScandEval: A Benchmark for Scandinavian Natural Language Processing'"
 42,SwissJudgementClassification,Classification,"{'ita', 'deu', 'fra'}","['Legal', 'Written']",CC-BY-4.0,"Multilingual, diachronic dataset of Swiss Federal Supreme Court cases annotated with the respective binarized judgment outcome (approval/dismissal)"
-43,NepaliNewsClassification,Classification,{'nep'},"['News', 'Written']",CC BY-SA 4.0,A Nepali dataset for 7500 news articles 
+43,NepaliNewsClassification,Classification,{'nep'},"['News', 'Written']",CC BY-SA 4.0,A Nepali dataset for 7500 news articles
 44,OdiaNewsClassification,Classification,{'ory'},"['News', 'Written']",MIT,A Odia dataset for 3-class classification of Odia news articles
 45,PunjabiNewsClassification,Classification,{'pan'},"['News', 'Written']",MIT,A Punjabi dataset for 2-class classification of Punjabi news articles
 46,PolEmo2.0-OUT,Classification,{'pol'},"['Written', 'Social']",cc-by-sa-4.0,"A collection of Polish online reviews from four domains: medicine, hotels, products and school. The PolEmo2.0-OUT task is to predict the sentiment of out-of-domain (products and school) reviews using models train on reviews from medicine and hotels domains."
@@ -129,13 +129,13 @@
         For more details, please refer to the paper about K-MHaS, published at COLING 2022.
         This dataset is based on the Korean online news comments available on Kaggle and Github.
         The unlabeled raw data was collected between January 2018 and June 2020.
-        The language producers are users who left the comments on the Korean online news platform between 2018 and 2020. 
+        The language producers are users who left the comments on the Korean online news platform between 2018 and 2020.
         "
 94,MalteseNewsClassification,MultilabelClassification,{'mlt'},"['Constructed', 'Written']",cc-by-nc-sa-4.0,"A multi-label topic classification dataset for Maltese News
         Articles. The data was collected from the press_mt subset from Korpus
         Malti v4.0. Article contents were cleaned to filter out JavaScript, CSS,
         & repeated non-Maltese sub-headings. The labels are based on the category
-        field from this corpus. 
+        field from this corpus.
         "
 95,MultiEURLEXMultilabelClassification,MultilabelClassification,"{'est', 'ita', 'pol', 'hun', 'dan', 'lit', 'ell', 'slk', 'spa', 'mlt', 'fra', 'ron', 'fin', 'deu', 'nld', 'swe', 'lav', 'ces', 'slv', 'hrv', 'bul', 'por', 'eng'}","['Legal', 'Government', 'Written']",CC BY-SA 4.0,EU laws in 23 EU languages containing gold labels.
 96,BrazilianToxicTweetsClassification,MultilabelClassification,{'por'},"['Constructed', 'Written']",CC BY-SA 4.0,"

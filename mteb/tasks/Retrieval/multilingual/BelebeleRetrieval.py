@@ -203,7 +203,7 @@ class BelebeleRetrieval(MultilingualTask, AbsTaskRetrieval):
         annotations_creators="expert-annotated",
         dialect=[],
         bibtex_citation="""@article{bandarkar2023belebele,
-      title={The Belebele Benchmark: a Parallel Reading Comprehension Dataset in 122 Language Variants}, 
+      title={The Belebele Benchmark: a Parallel Reading Comprehension Dataset in 122 Language Variants},
       author={Lucas Bandarkar and Davis Liang and Benjamin Muller and Mikel Artetxe and Satya Narayan Shukla and Donald Husa and Naman Goyal and Abhinandan Krishnan and Luke Zettlemoyer and Madian Khabsa},
       year={2023},
       journal={arXiv preprint arXiv:2308.16884}
