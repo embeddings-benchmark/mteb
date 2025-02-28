@@ -20,7 +20,7 @@ lint-check:
 
 test:
 	@echo "--- 🧪 Running tests ---"
-	pytest -n auto 
+	pytest -n auto
 
 test-with-coverage:
 	@echo "--- 🧪 Running tests with coverage ---"
@@ -43,6 +43,13 @@ model-load-test:
 	pip install ".[dev, speedtask, pylate,gritlm,xformers,model2vec]"
 	python scripts/extract_model_names.py $(BASE_BRANCH) --return_one_model_name_per_file
 	python tests/test_models/model_loading.py --model_name_file scripts/model_names.txt
+
+
+dataset-load-test:
+	@echo "--- 🚀 Running dataset load test ---"
+	pip install ".[dev, speedtask]"
+	NO_SKIP=1 pytest -n auto tests/test_tasks/test_all_abstasks.py::test_dataset_on_hf
+
 
 run-leaderboard:
 	@echo "--- 🚀 Running leaderboard locally ---"
