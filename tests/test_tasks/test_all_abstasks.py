@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import logging
-from unittest.mock import Mock, patch
 import os
+from unittest.mock import Mock, patch
+
 import pytest
 import requests
 
@@ -65,7 +66,10 @@ def test_load_data(
         if not task.is_multilingual:
             mock_dataset_transform.assert_called_once()
 
-@pytest.mark.skipif(condition=os.getenv("NO_SKIP", 0) == 1, reason="Just in separate CI Job")
+
+@pytest.mark.skipif(
+    condition=os.getenv("NO_SKIP", 0) == 1, reason="Just in separate CI Job"
+)
 @pytest.mark.flaky(
     reruns=3,
     reruns_delay=5,
