@@ -20,6 +20,7 @@ def test_create_model_meta_from_sentence_transformers():
     meta = MTEB.create_model_meta(model)
 
     assert meta.similarity_fn_name == ScoringFunction.COSINE
+    assert meta.similarity_fn_name == "cosine"
     assert meta.embed_dim == model.get_sentence_embedding_dimension()
     assert type(meta.framework) is list
     assert meta.framework[0] == "Sentence Transformers"
@@ -65,6 +66,7 @@ def test_model_meta_colbert():
     meta = MTEB.create_model_meta(model)
 
     assert meta.similarity_fn_name == "MaxSim"
+    assert meta.similarity_fn_name == ScoringFunction.MAX_SIM
     assert type(meta.framework) is list
     assert meta.framework[0] == "Sentence Transformers"
     assert meta.name == model_name
