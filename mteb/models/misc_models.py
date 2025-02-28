@@ -7,6 +7,7 @@ import torch
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 from mteb.models.bge_models import bge_m3_training_data, bge_training_data
 from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
+from mteb.models.e5_models import E5_TRAINING_DATA
 from mteb.models.sentence_transformers_models import sent_trf_training_dataset
 
 Haon_Chen__speed_embedding_7b_instruct = ModelMeta(
@@ -984,8 +985,10 @@ dwzhu__e5_base_4k = ModelMeta(
     reference="https://huggingface.co/dwzhu/e5-base-4k",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
-    adapted_from="/mnt/default/longembed/models/intfloat/e5-base-v2",
+    training_datasets={
+        **E5_TRAINING_DATA,
+    },
+    adapted_from="intfloat/e5-base-v2",
     superseded_by=None,
 )
 sdadas__mmlw_e5_large = ModelMeta(
