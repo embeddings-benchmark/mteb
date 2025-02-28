@@ -1,6 +1,7 @@
 install:
 	@echo "--- 🚀 Installing project dependencies ---"
 	pip install -e ".[dev]"
+	pre-commit install
 
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"
