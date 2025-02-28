@@ -105,13 +105,7 @@ class SentenceTransformerWrapper(Wrapper):
             )
         logger.info(f"Encoding {len(inputs)} inputs.")
 
-        if (
-            hasattr(self, "mteb_model_meta")
-            and self.mteb_model_meta is not None
-            and self.mteb_model_meta.modalities == ["text"]
-        ):
-            # compatability for multi-modal models, e.g. mmE5
-            inputs = [text for batch in inputs for text in batch["text"]]
+        inputs = [text for batch in inputs for text in batch["text"]]
 
         embeddings = self.model.encode(
             inputs,
