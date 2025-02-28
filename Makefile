@@ -47,3 +47,9 @@ model-load-test:
 run-leaderboard:
 	@echo "--- 🚀 Running leaderboard locally ---"
 	python -m mteb.leaderboard.app
+
+
+.PHONY: check
+check: ## Run code quality tools.
+	@echo "--- 🧹 Running code quality tools ---"
+	@pre-commit run -a

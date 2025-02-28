@@ -59,7 +59,8 @@ dev = [
 "pytest-xdist>=3.6.1",
 "pytest-coverage>=0.0",
 "pytest-rerunfailures>=15.0",
-"iso639>=0.1.4" # used for tests/scripts/test_generate_model_meta.py
+"iso639>=0.1.4", # used for tests/scripts/test_generate_model_meta.py
+"pre-commit>=4.1.0",
 ]
 codecarbon = ["codecarbon"]
 speedtask = ["GPUtil>=1.4.0", "psutil>=5.9.8"]

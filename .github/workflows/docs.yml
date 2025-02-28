@@ -47,7 +47,7 @@ jobs:
       - name: Create table
         run: |
           make build-docs
-      
+
       - name: Push table
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -60,4 +60,3 @@ jobs:
             git commit -m "Update tasks table"
             git push
           fi
-          
