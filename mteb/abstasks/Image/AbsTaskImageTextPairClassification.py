@@ -8,11 +8,12 @@ from datasets import Dataset
 from ...encoder_interface import Encoder
 from ...evaluation.evaluators import ImageTextPairClassificationEvaluator
 from ..AbsTask import AbsTask, ScoresDict
+from ..TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
 
-class ImageTextPairClassificationDescriptiveStatistics:
+class ImageTextPairClassificationDescriptiveStatistics(DescriptiveStatistics):
     """Descriptive statistics for ImageTextPairClassification
 
     Attributes:
@@ -61,32 +62,24 @@ class AbsTaskImageTextPairClassification(AbsTask):
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ImageTextPairClassificationDescriptiveStatistics:
         dataset = self.dataset if hf_subset is None else self.dataset[hf_subset]
-        num_samples = len(dataset)
+        num_samples = len(dataset[split])
 
         if isinstance(self.images_column_names, str):
             num_images = [
-                img for sample in dataset for img in sample[self.images_column_names]
+                len(sample[self.images_column_names]) for sample in dataset[split]
             ]
         elif isinstance(self.images_column_names, list):
-            num_images = [
-                img
-                for sample in dataset
-                for img_column in self.images_column_names
-                for img in sample[img_column]
-            ]
+            num_images = sum([len(dataset[split][img_column]) for img_column in self.images_column_names])
 
         if isinstance(self.texts_column_names, str):
             texts = [
-                text for sample in dataset for text in sample[self.texts_column_names]
+                text for text in dataset[split][self.texts_column_names]
             ]
-            unique_texts = len(set(texts))
+            unique_texts = set(texts)
             text_lengths = [len(text) for text in texts]
         elif isinstance(self.texts_column_names, list):
             texts = [
-                text
-                for sample in dataset
-                for text_column in self.texts_column_names
-                for text in sample[text_column]
+                text for text_column in self.texts_column_names for text in dataset[split][text_column]
             ]
             unique_texts = set(texts)
             text_lengths = [len(text) for text in texts]

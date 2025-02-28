@@ -486,6 +486,8 @@ class AbsTaskAny2AnyMultiChoice(AbsTask):
             corpus = self.corpus[split]
             relevant_docs = self.relevant_docs[split]
 
+        print(type(queries), type(corpus), type(relevant_docs))
+
         queries_lens, doc_lens = [], []
         num_query_images = 0
         num_document_images = 0
@@ -656,10 +658,10 @@ def process_language(relevant_docs, queries, corpus, lang=None):
 def calculate_length(queries, corpus):
     queries_lens = []
     doc_lens = []
-    for query in queries.values():
+    for query in queries:
         queries_lens.append(len(query))
 
-    for doc in corpus.values():
+    for doc in corpus:
         if isinstance(doc, Image.Image):
             doc_lens.append(1.0)  # for image append 1. Can perhaps be removed.
 
