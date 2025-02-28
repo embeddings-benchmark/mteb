@@ -23,24 +23,24 @@ class MockNumpyEncoder(mteb.Encoder):
     def __init__(self):
         pass
 
-    def encode(self, sentences, prompt_name: str | None = None, **kwargs):
-        return np.random.rand(len(sentences), 10)
+    def encode(self, sentences: DataLoader, prompt_name: str | None = None, **kwargs):
+        return np.random.rand(len(sentences.dataset), 10)
 
 
 class MockTorchEncoder(mteb.Encoder):
     def __init__(self):
         pass
 
-    def encode(self, sentences, prompt_name: str | None = None, **kwargs):
-        return torch.randn(len(sentences), 10).numpy()
+    def encode(self, sentences: DataLoader, prompt_name: str | None = None, **kwargs):
+        return torch.randn(len(sentences.dataset), 10).numpy()
 
 
 class MockTorchbf16Encoder(SentenceTransformer):
     def __init__(self):
         pass
 
-    def encode(self, sentences, prompt_name: str | None = None, **kwargs):
-        return torch.randn(len(sentences), 10, dtype=torch.bfloat16)
+    def encode(self, sentences: DataLoader, prompt_name: str | None = None, **kwargs):
+        return torch.randn(len(sentences.dataset), 10, dtype=torch.bfloat16)
 
 
 class MockCLIPEncoder:
