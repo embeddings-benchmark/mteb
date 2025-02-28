@@ -81,7 +81,7 @@ class Wav2vec2Wrapper(AudioEncoder):
 
 
 wav2vec2_base = ModelMeta(
-    loader=partial(Wav2vec2Wrapper, model_name="facebook/wav2vec2-base"),
+    loader=partial(Wav2vec2Wrapper, model_name="facebook/wav2vec2-base", model_revision="0b5b8e868dd84f03fd87d01f9c4ff0f080fecfe8"),
     name="facebook/wav2vec2-base",
     languages=["en"],
     open_weights=True,
@@ -104,7 +104,7 @@ wav2vec2_base = ModelMeta(
 
 
 wav2vec2_base_960h = ModelMeta(
-    loader=partial(Wav2vec2Wrapper, model_name="facebook/wav2vec2-base-960h"),
+    loader=partial(Wav2vec2Wrapper, model_name="facebook/wav2vec2-base-960h", model_revision="22aad52d435eb6dbaf354bdad9b0da84ce7d6156"),
     name="facebook/wav2vec2-base-960h",
     languages=["en"],
     open_weights=True,
@@ -127,7 +127,7 @@ wav2vec2_base_960h = ModelMeta(
 
 
 wav2vec2_large = ModelMeta(
-    loader=partial(Wav2vec2Wrapper, model_name="facebook/wav2vec2-large"),
+    loader=partial(Wav2vec2Wrapper, model_name="facebook/wav2vec2-large", model_revision="312b2410566b698c7a649068d413b2067848bd75"),
     name="facebook/wav2vec2-large",
     languages=["en"],
     open_weights=True,
@@ -150,7 +150,7 @@ wav2vec2_large = ModelMeta(
 
 
 wav2vec2_large_xlsr_53 = ModelMeta(
-    loader=partial(Wav2vec2Wrapper, model_name="facebook/wav2vec2-large-xlsr-53"),
+    loader=partial(Wav2vec2Wrapper, model_name="facebook/wav2vec2-large-xlsr-53", model_revision="c3f9d884181a224a6ac87bf8885c84d1cff3384f"),
     name="facebook/wav2vec2-large-xlsr-53",
     languages=["en"],
     open_weights=True,
@@ -173,7 +173,7 @@ wav2vec2_large_xlsr_53 = ModelMeta(
 
 
 wav2vec2_lv_60_espeak_cv_ft = ModelMeta(
-    loader=partial(Wav2vec2Wrapper, model_name="facebook/wav2vec2-lv-60-espeak-cv-ft"),
+    loader=partial(Wav2vec2Wrapper, model_name="facebook/wav2vec2-lv-60-espeak-cv-ft", model_revision="ae45363bf3413b374fecd9dc8bc1df0e24c3b7f4"),
     name="facebook/wav2vec2-lv-60-espeak-cv-ft",
     languages=["en"],
     open_weights=True,
