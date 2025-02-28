@@ -21,7 +21,7 @@ from .Image import (
     VisualSTSEvaluator,
     ZeroshotClassificationEvaluator,
 )
-from .model_classes import DenseRetrievalExactSearch, corpus_to_str
+from .model_classes import DenseRetrievalExactSearch
 from .PairClassificationEvaluator import PairClassificationEvaluator
 from .RetrievalEvaluator import RetrievalEvaluator
 from .STSEvaluator import STSEvaluator
@@ -40,7 +40,6 @@ __all__ = [
     "ClusteringEvaluator",
     "BitextMiningEvaluator",
     "PairClassificationEvaluator",
-    "corpus_to_str",
     "kNNClassificationEvaluator",
     "kNNClassificationEvaluatorPytorch",
     "logRegClassificationEvaluator",

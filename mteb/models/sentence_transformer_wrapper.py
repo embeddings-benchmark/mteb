@@ -112,10 +112,7 @@ class SentenceTransformerWrapper(Wrapper):
             "text"
         ]:
             # compatability for multi-modal models, e.g. mmE5
-            inputs_ = []
-            for batch in inputs:
-                inputs_.extend(batch["text"])
-            inputs = inputs_
+            inputs = [text for batch in inputs for text in batch["text"]]
 
         embeddings = self.model.encode(
             inputs,

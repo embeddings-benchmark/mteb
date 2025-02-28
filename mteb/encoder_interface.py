@@ -30,9 +30,11 @@ class BatchedInput(TypedDict, total=False):
     text: list[str]
     image: list[Image.Image | list[Image.Image]]
     audio: list[list[bytes]]
-    # Retrieval tasks
+    # Retrieval corpus
     title: list[str]
     body: list[str]
+    # Retrieval query
+    query: list[str]
     instruction: list[str]
 
 

@@ -446,7 +446,7 @@ def download(url: str, fname: str):
             bar.update(size)
 
 
-def convert_conv_history_to_query(conversations: list[list[str | dict]]) -> str:
+def convert_conv_history_to_query(conversations: list[list[str | dict]]) -> list[str]:
     conversations_converted = []
 
     for conversation in conversations:
