@@ -104,7 +104,7 @@ class HFDataLoader:
         scores = df["score"].to_numpy()
 
         for q, c, s in zip(query_ids, corpus_ids, scores):
-            qrels_dict[q][c] = s
+            qrels_dict[q][c] = int(s)
         logger.info(f"{asctime()} - Done qrels_dict")
         self.qrels = qrels_dict
         self.queries = self.queries.filter(lambda x: x["id"] in self.qrels)
