@@ -61,25 +61,27 @@ class AbsTaskImageTextPairClassification(AbsTask):
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ImageTextPairClassificationDescriptiveStatistics:
-        dataset = self.dataset if hf_subset is None else self.dataset[hf_subset]
-        num_samples = len(dataset[split])
+        dataset = (
+            self.dataset[split] if hf_subset is None else self.dataset[hf_subset][split]
+        )
+        num_samples = len(dataset)
 
         if isinstance(self.images_column_names, str):
-            num_images = [
-                len(sample[self.images_column_names]) for sample in dataset[split]
-            ]
+            num_images = list(dataset[self.images_column_names])
         elif isinstance(self.images_column_names, list):
-            num_images = sum([len(dataset[split][img_column]) for img_column in self.images_column_names])
+            num_images = sum(
+                [len(dataset[img_column]) for img_column in self.images_column_names]
+            )
 
         if isinstance(self.texts_column_names, str):
-            texts = [
-                text for text in dataset[split][self.texts_column_names]
-            ]
+            texts = list(dataset[self.texts_column_names])
             unique_texts = set(texts)
             text_lengths = [len(text) for text in texts]
         elif isinstance(self.texts_column_names, list):
             texts = [
-                text for text_column in self.texts_column_names for text in dataset[split][text_column]
+                text
+                for text_column in self.texts_column_names
+                for text in dataset[text_column]
             ]
             unique_texts = set(texts)
             text_lengths = [len(text) for text in texts]
