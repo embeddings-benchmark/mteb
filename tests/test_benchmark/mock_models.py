@@ -90,7 +90,7 @@ class MockAudioEncoder:
         texts,
         **kwargs,
     ):
-        return torch.randn(len(texts), self.embedding_dim)
+        return np.random.rand(len(texts), self.embedding_dim)
 
     def calculate_probs(
         self, text_embeddings: np.ndarray, audio_embeddings: np.ndarray

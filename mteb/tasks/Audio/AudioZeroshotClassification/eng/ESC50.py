@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.Audio.AbsTaskZeroshotClassificaiton import (
-    AbsTaskZeroshotClassification,
+from mteb.abstasks.Audio.AbsTaskAudioZeroshotClassification import (
+    AbsTaskAudioZeroshotClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class ESC50ZeroshotClassification(AbsTaskZeroshotClassification):
+class ESC50ZeroshotClassification(AbsTaskAudioZeroshotClassification):
     metadata = TaskMetadata(
         name="ESC50_Zeroshot",
         description="Environmental Sound Classification Dataset.",

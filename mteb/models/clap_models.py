@@ -107,6 +107,7 @@ class ClapZeroShotWrapper:
         audio: AudioBatch,
         **kwargs: Any,
     ) -> np.ndarray:
+        
         all_features = []
         target_sampling_rate = 48000  # CLAP's expected sampling rate
 

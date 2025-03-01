@@ -14,9 +14,10 @@ from mteb.tasks.Clustering.eng.TwentyNewsgroupsClustering import (
 from .mock_tasks import (
     MockAny2AnyRetrievalI2TTask,
     MockAny2AnyRetrievalT2ITask,
-    MockAudioMultilabelClassificationLogRegTask,
-    MockAudioZeroshotClassificationTask,
     MockAudioClusteringTask,
+    MockAudioMultilabelClassificationLogRegTask,
+    MockAudioMultilabelClassificationTask,
+    MockAudioZeroshotClassificationTask,
     MockBitextMiningTask,
     MockClassificationTask,
     MockClusteringFastTask,
@@ -140,8 +141,9 @@ MOCK_MIEB_TASK_GRID = [
 
 MOCK_MAEB_TASK_GRID = [
     MockAudioClusteringTask(),
+    MockAudioMultilabelClassificationTask(),
+    MockAudioMultilabelClassificationLogRegTask(),
     MockAudioZeroshotClassificationTask(),
-    MockAudioMultilabelClassificationLogRegTask()
 ]
 
 

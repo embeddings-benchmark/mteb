@@ -92,6 +92,7 @@ class AudioZeroshotClassificationEvaluator(Evaluator):
 
         print(type(model))
         
+        print(model,type(model))
 
         # assert False
 

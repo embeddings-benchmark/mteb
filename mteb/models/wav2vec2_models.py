@@ -165,6 +165,7 @@ class Wav2Vec2AudioWrapper(Wrapper):
         batch_size: int = 4,
         **kwargs: Any,
     ) -> torch.Tensor:
+        
         processed_audio = self._process_audio(audio)
         all_embeddings = []
 
