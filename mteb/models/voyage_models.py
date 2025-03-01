@@ -474,7 +474,6 @@ voyage_3_exp = ModelMeta(
         "ArxivClusteringP2P.v2": ["train"],
         "STSBenchmarkMultilingualSTS": ["train"],  # translated, not trained on
     },
-
     public_training_code=None,
     public_training_data=None,
 )
