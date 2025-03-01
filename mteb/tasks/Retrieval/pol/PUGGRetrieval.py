@@ -7,7 +7,7 @@ from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 class PUGGRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="PUGG-Retrieval",
+        name="PUGGRetrieval",
         description="Information Retrieval PUGG dataset for the Polish language.",
         reference="https://aclanthology.org/2024.findings-acl.652/",
         dataset={
