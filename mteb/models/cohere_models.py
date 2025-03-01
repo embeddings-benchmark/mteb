@@ -1,13 +1,15 @@
 from __future__ import annotations
 
+from collections.abc import Iterable
 from functools import partial
 from typing import Any
 
 import numpy as np
 import torch
 import tqdm
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import PromptType
+from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.wrapper import Wrapper
 
@@ -180,7 +182,7 @@ class CohereTextEmbeddingModel(Wrapper):
 
     def encode(
         self,
-        sentences: list[str],
+        inputs: Iterable[BatchedInput] | DataLoader[BatchedInput],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
@@ -198,9 +200,10 @@ class CohereTextEmbeddingModel(Wrapper):
             if "show_progress_bar" not in kwargs
             else kwargs.pop("show_progress_bar")
         )
+        inputs = [text for batch in inputs for text in batch["text"]]
 
         return self._embed(
-            sentences,
+            inputs,
             cohere_task_type=cohere_task_type,
             show_progress_bar=show_progress_bar,
         )

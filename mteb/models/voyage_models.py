@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import time
+from collections.abc import Iterable
 from functools import partial, wraps
 from typing import Any, Literal
 
 import numpy as np
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import PromptType
+from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.wrapper import Wrapper
 from mteb.requires_package import requires_package
@@ -91,7 +93,7 @@ class VoyageWrapper(Wrapper):
 
     def encode(
         self,
-        sentences: list[str],
+        inputs: Iterable[BatchedInput] | DataLoader[BatchedInput],
         *,
         batch_size: int = 32,
         task_name: str,
@@ -100,6 +102,7 @@ class VoyageWrapper(Wrapper):
     ) -> np.ndarray:
         prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
         input_type = prompt_name if prompt_name is not None else "document"
+        sentences = [text for batch in inputs for text in batch["text"]]
         return self._batched_encode(sentences, batch_size, input_type)
 
     def _batched_encode(

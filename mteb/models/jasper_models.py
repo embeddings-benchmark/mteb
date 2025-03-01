@@ -1,15 +1,16 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Sequence
+from collections.abc import Iterable
 from functools import partial
 from typing import Any, Callable
 
 import numpy as np
 import torch
 from sentence_transformers import SentenceTransformer
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import PromptType
+from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.nvidia_models import nvidia_training_datasets
 from mteb.models.wrapper import Wrapper
@@ -33,7 +34,7 @@ class JasperWrapper(Wrapper):
 
     def encode(
         self,
-        sentences: Sequence[str],
+        inputs: Iterable[BatchedInput] | DataLoader[BatchedInput],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
@@ -44,9 +45,10 @@ class JasperWrapper(Wrapper):
         # to passage prompts won't be applied to passages
         if prompt_type == PromptType.passage:
             instruction = None
+        inputs = [text for batch in inputs for text in batch["text"]]
 
         embeddings = self.model.encode(
-            sentences,
+            inputs,
             normalize_embeddings=True,
             prompt=instruction,
             **kwargs,

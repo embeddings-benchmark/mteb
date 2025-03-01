@@ -1,14 +1,15 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Sequence
+from collections.abc import Iterable
 from functools import partial
 from typing import Any
 
 import numpy as np
 import torch
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import PromptType
+from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 
@@ -20,13 +21,15 @@ class UAEWrapper(SentenceTransformerWrapper):
 
     def encode(
         self,
-        sentences: Sequence[str],
+        inputs: Iterable[BatchedInput] | DataLoader[BatchedInput],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
         prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+        sentences = [text for batch in inputs for text in batch["text"]]
+
         if prompt_name:
             logger.info(
                 f"Using prompt_name={prompt_name} for task={task_name} prompt_type={prompt_type}"

@@ -1,13 +1,15 @@
 from __future__ import annotations
 
+from collections.abc import Iterable
 from functools import partial
 from typing import Any
 
 import numpy as np
 import torch
+from torch.utils.data import DataLoader
 from transformers import AutoModel, AutoTokenizer
 
-from mteb.encoder_interface import PromptType
+from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.utils import batched
 from mteb.models.wrapper import Wrapper
@@ -34,13 +36,14 @@ class NoInstructWrapper(Wrapper):
 
     def encode(  # type: ignore
         self,
-        sentences: list[str],
+        inputs: Iterable[BatchedInput] | DataLoader[BatchedInput],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
         batch_size: int = 32,
         **kwargs: Any,
     ):
+        sentences = [text for batch in inputs for text in batch["text"]]
         embeddings = []
         for batch in batched(sentences, batch_size):
             # Tokenize the batch

@@ -3,13 +3,15 @@ from __future__ import annotations
 import json
 import logging
 import re
+from collections.abc import Iterable
 from functools import partial
 from typing import Any
 
 import numpy as np
 import tqdm
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import PromptType
+from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.cohere_models import model_prompts as cohere_model_prompts
 from mteb.models.cohere_models import supported_languages as cohere_supported_languages
@@ -51,12 +53,13 @@ class BedrockWrapper(Wrapper):
 
     def encode(
         self,
-        sentences: list[str],
+        inputs: Iterable[BatchedInput] | DataLoader[BatchedInput],
         *,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
+        inputs = [text for batch in inputs for text in batch["text"]]
         requires_package(self, "boto3", "Amazon Bedrock")
         show_progress_bar = (
             False
@@ -64,13 +67,13 @@ class BedrockWrapper(Wrapper):
             else kwargs.pop("show_progress_bar")
         )
         if self._provider == "amazon":
-            return self._encode_amazon(sentences, show_progress_bar)
+            return self._encode_amazon(inputs, show_progress_bar)
         elif self._provider == "cohere":
             prompt_name = self.get_prompt_name(
                 self.model_prompts, task_name, prompt_type
             )
             cohere_task_type = self.model_prompts.get(prompt_name, "search_document")
-            return self._encode_cohere(sentences, cohere_task_type, show_progress_bar)
+            return self._encode_cohere(inputs, cohere_task_type, show_progress_bar)
         else:
             raise ValueError(
                 f"Unknown provider '{self._provider}'. Must be 'amazon' or 'cohere'."
