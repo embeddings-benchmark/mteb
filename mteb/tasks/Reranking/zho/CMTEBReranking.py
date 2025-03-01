@@ -1,17 +1,17 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class T2Reranking(AbsTaskReranking):
+class T2Reranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="T2Reranking",
         description="T2Ranking: A large-scale Chinese Benchmark for Passage Ranking",
         reference="https://arxiv.org/abs/2304.03679",
         dataset={
-            "path": "C-MTEB/T2Reranking",
-            "revision": "76631901a18387f85eaa53e5450019b87ad58ef9",
+            "path": "mteb/T2Reranking",
+            "revision": "a34fe6bc0dff185af1228e49a0f6fb1de1565627",
         },
         type="Reranking",
         category="t2t",
@@ -38,14 +38,14 @@ class T2Reranking(AbsTaskReranking):
     )
 
 
-class MMarcoReranking(AbsTaskReranking):
+class MMarcoReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MMarcoReranking",
         description="mMARCO is a multilingual version of the MS MARCO passage ranking dataset",
         reference="https://github.com/unicamp-dl/mMARCO",
         dataset={
-            "path": "C-MTEB/Mmarco-reranking",
-            "revision": "8e0c766dbe9e16e1d221116a3f36795fbade07f6",
+            "path": "mteb/MMarcoReranking",
+            "revision": "91c0f9d5cbd4cdc7ecd7039c5c2e57740cb62b00",
         },
         type="Reranking",
         category="t2t",
@@ -72,15 +72,15 @@ class MMarcoReranking(AbsTaskReranking):
     )
 
 
-class CMedQAv1(AbsTaskReranking):
+class CMedQAv1(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CMedQAv1-reranking",
         description="Chinese community medical question answering",
         prompt="Given a Chinese community medical question, retrieve replies that best answer the question",
         reference="https://github.com/zhangsheng93/cMedQA",
         dataset={
-            "path": "C-MTEB/CMedQAv1-reranking",
-            "revision": "8d7f1e942507dac42dc58017c1a001c3717da7df",
+            "path": "mteb/CMedQAv1-reranking",
+            "revision": "f77f0345c9b6ac0a2447a3a71483d5b27393cb35",
         },
         type="Reranking",
         category="t2t",
@@ -108,15 +108,15 @@ class CMedQAv1(AbsTaskReranking):
     )
 
 
-class CMedQAv2(AbsTaskReranking):
+class CMedQAv2(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CMedQAv2-reranking",
         description="Chinese community medical question answering",
         prompt="Given a Chinese community medical question, retrieve replies that best answer the question",
         reference="https://github.com/zhangsheng93/cMedQA2",
         dataset={
-            "path": "C-MTEB/CMedQAv2-reranking",
-            "revision": "23d186750531a14a0357ca22cd92d712fd512ea0",
+            "path": "mteb/CMedQAv2-reranking",
+            "revision": "01399b6956a4c6bf9edc5b6b90e176aeeb399686",
         },
         type="Reranking",
         category="t2t",

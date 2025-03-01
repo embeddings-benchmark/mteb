@@ -8,7 +8,7 @@ from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class Country211Classification(AbsTaskZeroshotClassification):
+class Country211ZeroshotClassification(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
         name="Country211ZeroShot",
         description="Classifying images of 211 countries.",

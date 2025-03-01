@@ -1,20 +1,18 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class AlloprofReranking(AbsTaskReranking):
+class AlloprofReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="AlloprofReranking",
         description="This dataset was provided by AlloProf, an organisation in Quebec, Canada offering resources and a help forum curated by a large number of teachers to students on all subjects taught from in primary and secondary school",
         reference="https://huggingface.co/datasets/antoinelb7/alloprof",
         dataset={
-            "path": "lyon-nlp/mteb-fr-reranking-alloprof-s2p",
-            "revision": "65393d0d7a08a10b4e348135e824f385d420b0fd",
+            "path": "mteb/AlloprofReranking",
+            "revision": "a7d2d793f2e5ba55139bb10088c2e8ee2df2ce02",
         },
         type="Reranking",
         category="t2t",
@@ -40,33 +38,3 @@ class AlloprofReranking(AbsTaskReranking):
             copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
             }""",
     )
-
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self.dataset = datasets.load_dataset(
-            name="queries",
-            **self.metadata.dataset,
-            split=self.metadata.eval_splits[0],
-        )
-        documents = datasets.load_dataset(
-            name="documents", **self.metadata.dataset, split="test"
-        )
-        # replace documents ids in positive and negative column by their respective texts
-        doc_id2txt = dict(list(zip(documents["doc_id"], documents["text"])))
-
-        self.dataset = self.dataset.map(
-            lambda x: {
-                "positive": [doc_id2txt[docid] for docid in x["positive"]],
-                "negative": [doc_id2txt[docid] for docid in x["negative"]],
-            }
-        )
-        self.dataset = datasets.DatasetDict({"test": self.dataset})
-
-        self.dataset_transform()
-
-        # now convert to the new format
-        self.transform_old_dataset_format(self.dataset)
-
-        self.data_loaded = True

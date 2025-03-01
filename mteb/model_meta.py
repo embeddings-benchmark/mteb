@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Sequence
 from enum import Enum
 from functools import partial
-from typing import TYPE_CHECKING, Any, Callable, Literal
+from typing import TYPE_CHECKING, Any, Callable, Literal, cast
 
 import numpy as np
 from huggingface_hub import get_safetensors_metadata
@@ -183,17 +184,21 @@ class ModelMeta(BaseModel):
             raise ValueError("Model name is not set")
         return self.name.replace("/", "__").replace(" ", "_")
 
-    def is_zero_shot_on(self, tasks: list[AbsTask]) -> bool | None:
+    def is_zero_shot_on(self, tasks: Sequence[AbsTask] | Sequence[str]) -> bool | None:
         """Indicates whether the given model can be considered
         zero-shot or not on the given tasks.
         Returns None if no training data is specified on the model.
         """
         if self.training_datasets is None:
             return None
-        benchmark_datasets = set()
-        for task in tasks:
-            benchmark_datasets.add(task.metadata.name)
         model_datasets = {ds_name for ds_name, splits in self.training_datasets.items()}
+        if isinstance(tasks[0], str):
+            benchmark_datasets = set(tasks)
+        else:
+            tasks = cast(Sequence[AbsTask], tasks)
+            benchmark_datasets = set()
+            for task in tasks:
+                benchmark_datasets.add(task.metadata.name)
         intersection = model_datasets & benchmark_datasets
         return len(intersection) == 0
 

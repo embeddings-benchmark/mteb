@@ -6,7 +6,7 @@ from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class FGVCAircraftClassification(AbsTaskZeroshotClassification):
+class FGVCAircraftZeroShotClassification(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
         name="FGVCAircraftZeroShot",
         description="Classifying aircraft images from 41 manufacturers and 102 variants.",

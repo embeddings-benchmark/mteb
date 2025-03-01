@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import sys
 from pathlib import Path
 
 import pytest
@@ -21,6 +20,7 @@ def test_create_model_meta_from_sentence_transformers():
     meta = MTEB.create_model_meta(model)
 
     assert meta.similarity_fn_name == ScoringFunction.COSINE
+    assert meta.similarity_fn_name == "cosine"
     assert meta.embed_dim == model.get_sentence_embedding_dimension()
     assert type(meta.framework) is list
     assert meta.framework[0] == "Sentence Transformers"
@@ -57,16 +57,16 @@ def test_output_folder_model_meta(task: AbsTask, tmp_path: Path):
     assert output_path.parent.parent == tmp_path
 
 
-@pytest.mark.skipif(sys.version_info < (3, 10), reason="Requires Python 3.10 or higher")
 def test_model_meta_colbert():
     model_name = "colbert-ir/colbertv2.0"
     colbert_model = pytest.importorskip("pylate.models", reason="pylate not installed")
     revision = "c1e84128e85ef755c096a95bdb06b47793b13acf"
-    model = colbert_model.ColBERT(model_name, revision=revision)
+    model = colbert_model.ColBERT(model_name_or_path=model_name, revision=revision)
 
     meta = MTEB.create_model_meta(model)
 
-    # assert meta.similarity_fn_name == "MaxSim" test with new release of pylate
+    assert meta.similarity_fn_name == "MaxSim"
+    assert meta.similarity_fn_name == ScoringFunction.MAX_SIM
     assert type(meta.framework) is list
     assert meta.framework[0] == "Sentence Transformers"
     assert meta.name == model_name

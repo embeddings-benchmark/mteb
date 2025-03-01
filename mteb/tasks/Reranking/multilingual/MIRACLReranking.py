@@ -1,13 +1,10 @@
 from __future__ import annotations
 
 import logging
-from collections import defaultdict
-
-import datasets
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 logger = logging.getLogger(__name__)
 
@@ -46,15 +43,14 @@ _CITATION = """@article{10.1162/tacl_a_00595,
 }"""
 
 
-class MIRACLReranking(AbsTaskReranking):
+class MIRACLReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MIRACLReranking",
         description="MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval dataset that focuses on search across 18 different languages.",
         reference="https://project-miracl.github.io/",
         dataset={
-            "path": "miracl/mmteb-miracl-reranking",
-            "revision": "6d1962c527217f8927fca80f890f14f36b2802af",
-            "trust_remote_code": True,
+            "path": "mteb/MIRACLReranking",
+            "revision": "d11a14c74e8bd448cedab0c1d9a720040535f228",
         },
         type="Reranking",
         category="t2t",
@@ -74,126 +70,3 @@ class MIRACLReranking(AbsTaskReranking):
             "query": "Given a question, retrieve Wikipedia passages that answer the question"
         },
     )
-
-    def process_example(self, example: dict, split: str, query_idx: int) -> dict:
-        """Process a single example from the dataset. Slightly altered from the original class"""
-        query = example["query"]
-        assert isinstance(query, str)
-        positive_docs = set(example["positive"])
-        candidate_docs = example["candidates"]
-
-        # add four leading zeros
-        # query_id = f"{split}_query{query_idx:04d}"
-        query_id = f"{split}_query{query_idx}"
-
-        # Initialize the structures for this example
-        example_data = {
-            "query_id": query_id,
-            "query": query,
-            "doc_ids": [],
-            "doc_texts": [],
-            "relevance_scores": [],
-        }
-
-        for i, candidate_doc in enumerate(candidate_docs):
-            # format i as a five digit number
-            formatted_i = str(i).zfill(5)
-            doc_id = f"candidate_{query_id}_{formatted_i}"
-            example_data["doc_ids"].append(doc_id)
-            example_data["doc_texts"].append(candidate_doc)
-            if candidate_doc in positive_docs:
-                example_data["relevance_scores"].append(1)
-            else:
-                # this is not technically correct, but was done in the original so keeping it
-                example_data["relevance_scores"].append(0)
-
-        return example_data
-
-    def load_data(self, **kwargs):
-        """Super method to load the data, then convert to the new format. It is almost the same as the above, except there are negatives, positives, and candidates"""
-        logging.info(
-            f"Transforming old format to standard format for {self.metadata.name}"
-        )
-
-        self.corpus = defaultdict(lambda: defaultdict(dict))
-        self.queries = defaultdict(lambda: defaultdict(dict))
-        self.relevant_docs = defaultdict(lambda: defaultdict(lambda: defaultdict(dict)))
-        self.top_ranked = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
-
-        for hf_subset in self.hf_subsets:
-            if "name" in self.metadata.dataset:
-                cur_dataset = datasets.load_dataset(**self.metadata.dataset)  # type: ignore
-                assert (
-                    hf_subset == "default"
-                ), f"Only default subset is supported for {self.metadata.name} since `name` is given in the metadata."
-            else:
-                cur_dataset = datasets.load_dataset(
-                    **self.metadata.dataset, name=hf_subset
-                )  # type: ignore
-
-            for split in cur_dataset:
-                # Create an enumerated dataset to pass indices
-                enumerated_dataset = datasets.Dataset.from_dict(
-                    {
-                        "index": range(len(cur_dataset[split])),
-                        "query": cur_dataset[split]["query"],
-                        "positive": cur_dataset[split]["positive"],
-                        "negative": cur_dataset[split]["negative"],
-                        "candidates": cur_dataset[split]["candidates"],
-                    }
-                )
-
-                # first, only keep those that have positives and negatives
-                enumerated_dataset = enumerated_dataset.filter(
-                    lambda example: len(example["positive"]) > 0
-                    and len(example["negative"]) > 0
-                )
-
-                logger.info(
-                    f"Filtered out {len(cur_dataset[split]) - len(enumerated_dataset)} examples. {len(enumerated_dataset)} examples remaining."
-                )
-
-                # Map the transformation function over the dataset
-                processed_dataset = enumerated_dataset.map(
-                    lambda example, idx: self.process_example(example, split, idx),
-                    with_indices=True,
-                    remove_columns=enumerated_dataset.column_names,
-                )
-
-                # Populate the data structures
-                for idx, item in enumerate(processed_dataset):
-                    query_id = item["query_id"]
-                    self.queries[hf_subset][split][query_id] = item["query"]
-
-                    # Add documents and relevance information
-                    for doc_id, doc_text, relevance in zip(
-                        item["doc_ids"], item["doc_texts"], item["relevance_scores"]
-                    ):
-                        self.corpus[hf_subset][split][doc_id] = {
-                            "text": doc_text,
-                            "_id": doc_id,
-                        }
-                        self.top_ranked[hf_subset][split][query_id].append(doc_id)
-                        self.relevant_docs[hf_subset][split][query_id][doc_id] = (
-                            relevance
-                        )
-
-                    if len(self.top_ranked[hf_subset][split][query_id]) == 0:
-                        # give it a negative, even though qrels should be empty since that was how it was done in the original
-                        neg_doc = cur_dataset[split]["negative"][idx][0]
-                        assert isinstance(
-                            neg_doc, str
-                        ), f"Negative document is not a string: {neg_doc}"
-                        neg_doc_id = f"negative_{query_id}"
-                        self.top_ranked[hf_subset][split][query_id].append(neg_doc_id)
-                        self.corpus[hf_subset][split][neg_doc_id] = {
-                            "text": neg_doc,
-                            "_id": neg_doc_id,
-                        }
-                        assert self.relevant_docs[hf_subset][split][query_id] == {}
-                        logger.warning(
-                            f"Query {query_id} has no relevant documents. Adding a negative example."
-                        )
-
-        self.instructions = None
-        self.data_loaded = True

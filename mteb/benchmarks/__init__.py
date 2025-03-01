@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from mteb.benchmarks.benchmark import Benchmark
 from mteb.benchmarks.benchmarks import (
     BRIGHT,
     LONG_EMBED,
@@ -18,7 +19,6 @@ from mteb.benchmarks.benchmarks import (
     MTEB_RETRIEVAL_MEDICAL,
     MTEB_RETRIEVAL_WITH_INSTRUCTIONS,
     SEB,
-    Benchmark,
     CoIR,
     MTEB_code,
     MTEB_multilingual,
@@ -54,4 +54,8 @@ __all__ = [
     "BENCHMARK_REGISTRY",
     "get_benchmarks",
     "get_benchmark",
+    "BENCHMARK_REGISTRY",
+    "get_benchmark",
+    "get_benchmarks",
+    "Benchmark",
 ]

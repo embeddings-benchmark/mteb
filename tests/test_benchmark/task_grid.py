@@ -56,12 +56,12 @@ TASK_TEST_GRID = (
             "TwentyNewsgroupsClustering",  # clustering and string instead of class
             "TwentyNewsgroupsClustering.v2",  # fast clustering
             "Banking77Classification",  # classification
-            "SciDocsRR",  # reranking
             "FarsTail",  # pair classification
-            "TwitterHjerneRetrieval",  # retrieval
             "BrazilianToxicTweetsClassification",  # multilabel classification
             "FaroeseSTS",  # STS
             "SummEval",  # summarization
+            "TwitterHjerneRetrieval",  # retrieval
+            "SciDocsRR",  # reranking
             "Core17InstructionRetrieval",  # instruction reranking
             "InstructIR",  # instruction retrieval
         ]

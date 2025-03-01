@@ -350,9 +350,9 @@ def test_filled_metadata_is_filled():
 def test_all_metadata_is_filled_and_valid(task: AbsTask):
     if task.metadata.name.replace("HardNegatives", "") not in _HISTORIC_DATASETS:
         task.metadata.validate_metadata()
-        assert (
-            task.metadata.is_filled()
-        ), f"Metadata for {task.metadata.name} is not filled"
+        assert task.metadata.is_filled(), (
+            f"Metadata for {task.metadata.name} is not filled"
+        )
 
 
 def test_disallow_trust_remote_code_in_new_datasets():
@@ -497,17 +497,17 @@ def test_disallow_trust_remote_code_in_new_datasets():
         "IndicXnliPairClassification",
     ]
 
-    assert (
-        136 == len(exceptions)
-    ), "The number of exceptions has changed. Please do not add new datasets to this list."
+    assert 136 == len(exceptions), (
+        "The number of exceptions has changed. Please do not add new datasets to this list."
+    )
 
     exceptions = []
 
     for task in get_tasks(exclude_superseded=False):
         if task.metadata.dataset.get("trust_remote_code", False):
-            assert (
-                task.metadata.name not in exceptions
-            ), f"Dataset {task.metadata.name} should not trust remote code"
+            assert task.metadata.name not in exceptions, (
+                f"Dataset {task.metadata.name} should not trust remote code"
+            )
 
 
 @pytest.mark.parametrize("task", get_tasks(exclude_superseded=False))
@@ -522,7 +522,7 @@ def test_empty_descriptive_stat_in_new_datasets(task: AbsTask):
     if task.metadata.name in ["CodeRAGStackoverflowPosts"]:
         return
 
-    assert (
-        task.metadata.descriptive_stats is not None
-    ), f"Dataset {task.metadata.name} should have descriptive stats. You can add metadata to your task by running `YorTask().calculate_metadata_metrics()`"
+    assert task.metadata.descriptive_stats is not None, (
+        f"Dataset {task.metadata.name} should have descriptive stats. You can add metadata to your task by running `YorTask().calculate_metadata_metrics()`"
+    )
     assert task.metadata.n_samples is not None

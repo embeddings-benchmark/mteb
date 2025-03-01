@@ -20,7 +20,7 @@ class ClimateFEVER(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=None,
+        date=("2001-01-01", "2020-12-31"),  # launch of wiki -> paper publication
         domains=["Encyclopaedic", "Written"],
         task_subtypes=["Claim verification"],
         license="cc-by-sa-4.0",
@@ -56,7 +56,7 @@ class ClimateFEVERHardNegatives(AbsTaskRetrieval):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
-        date=None,
+        date=("2001-01-01", "2020-12-31"),  # launch of wiki -> paper publication
         domains=["Encyclopaedic", "Written"],
         task_subtypes=["Claim verification"],
         license="cc-by-sa-4.0",
@@ -71,4 +71,40 @@ class ClimateFEVERHardNegatives(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
+    )
+
+
+class ClimateFEVERRetrievalv2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="ClimateFEVER.v2",
+        description="CLIMATE-FEVER is a dataset following the FEVER methodology, containing 1,535 real-world climate change claims. This updated version addresses corpus mismatches and qrel inconsistencies in MTEB, restoring labels while refining corpus-query alignment for better accuracy. ",
+        reference="https://www.sustainablefinance.uzh.ch/en/research/climate-fever.html",
+        dataset={
+            "path": "mteb/climate-fever-v2",
+            "revision": "e438c9586767800aeb10dbe8a245c41dbea4e5f4",
+        },
+        type="Retrieval",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        date=("2001-01-01", "2020-12-31"),  # launch of wiki -> paper publication
+        domains=["Academic", "Written"],
+        task_subtypes=["Claim verification"],
+        license="cc-by-sa-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation="""@misc{diggelmann2021climatefever,
+      title={CLIMATE-FEVER: A Dataset for Verification of Real-World Climate Claims}, 
+      author={Thomas Diggelmann and Jordan Boyd-Graber and Jannis Bulian and Massimiliano Ciaramita and Markus Leippold},
+      year={2021},
+      eprint={2012.00614},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}""",
+        prompt={
+            "query": "Given a claim about climate change, retrieve documents that support or refute the claim"
+        },
     )
