@@ -77,7 +77,7 @@ def test_get_tasks_filtering():
 
     for task in tasks:
         if (
-            task.is_multilingual
+            task.metadata.is_multilingual
             and task.metadata.name != "STS17MultilingualVisualSTSEng"
         ):
             assert isinstance(task.metadata.eval_langs, dict)
