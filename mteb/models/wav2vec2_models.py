@@ -99,7 +99,6 @@ class Wav2Vec2AudioWrapper(Wrapper):
 
         return processed_audio
 
-
     def _handle_batch(
         self, batch: AudioData | Iterable[tuple[AudioData, str]]
     ) -> list[torch.Tensor]:
@@ -150,12 +149,13 @@ class Wav2Vec2AudioWrapper(Wrapper):
             waveform = resampler(waveform)
         return waveform.squeeze()
 
-
     def _pad_audio_batch(self, batch):
         max_length = max(audio.shape[0] for audio in batch)  # Find longest audio
-        padded_batch = [torch.nn.functional.pad(audio, (0, max_length - audio.shape[0])) for audio in batch]
+        padded_batch = [
+            torch.nn.functional.pad(audio, (0, max_length - audio.shape[0]))
+            for audio in batch
+        ]
         return torch.stack(padded_batch)
-
 
     def get_audio_embeddings(
         self,
@@ -172,11 +172,11 @@ class Wav2Vec2AudioWrapper(Wrapper):
         with torch.no_grad():
             for i in tqdm(range(0, len(processed_audio), batch_size)):
                 batch = processed_audio[i : i + batch_size]
-                #import pdb; pdb.set_trace()
+                # import pdb; pdb.set_trace()
                 # pre-pad the audio tensors before passing to feature extractor
-                
+
                 batch = self._pad_audio_batch(batch)
-                
+
                 inputs = self.feature_extractor(
                     batch,
                     sampling_rate=self.sampling_rate,
@@ -333,7 +333,6 @@ wav2vec2_base = ModelMeta(
     ),
     name="facebook/wav2vec2-base",
     languages=["en"],
-
     open_weights=True,
     revision="0b5b8e868dd84f03fd87d01f9c4ff0f080fecfe8",
     release_date="2020-10-26",
@@ -361,7 +360,6 @@ wav2vec2_base_960h = ModelMeta(
     ),
     name="facebook/wav2vec2-base-960h",
     languages=["en"],
-
     open_weights=True,
     revision="22aad52d435eb6dbaf354bdad9b0da84ce7d6156",
     release_date="2020-10-26",
@@ -377,7 +375,6 @@ wav2vec2_base_960h = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
-
     modalities=["audio"],
 )
 
@@ -390,7 +387,6 @@ wav2vec2_large = ModelMeta(
     ),
     name="facebook/wav2vec2-large",
     languages=["en"],
-
     open_weights=True,
     revision="312b2410566b698c7a649068d413b2067848bd75",
     release_date="2020-10-26",
@@ -406,7 +402,6 @@ wav2vec2_large = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
-
     modalities=["audio"],
 )
 
@@ -419,7 +414,6 @@ wav2vec2_large_xlsr_53 = ModelMeta(
     ),
     name="facebook/wav2vec2-large-xlsr-53",
     languages=["en"],
-
     open_weights=True,
     revision="c3f9d884181a224a6ac87bf8885c84d1cff3384f",
     release_date="2020-10-26",
@@ -447,7 +441,6 @@ wav2vec2_lv_60_espeak_cv_ft = ModelMeta(
     ),
     name="facebook/wav2vec2-lv-60-espeak-cv-ft",
     languages=["en"],
-
     open_weights=True,
     revision="ae45363bf3413b374fecd9dc8bc1df0e24c3b7f4",
     release_date="2020-10-26",
@@ -465,4 +458,3 @@ wav2vec2_lv_60_espeak_cv_ft = ModelMeta(
     training_datasets=None,
     modalities=["audio"],
 )
-

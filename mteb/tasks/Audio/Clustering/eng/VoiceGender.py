@@ -1,9 +1,8 @@
 from __future__ import annotations
 
+import mteb
 from mteb.abstasks.Audio.AbsTaskAudioClustering import AbsTaskAudioClustering
 from mteb.abstasks.TaskMetadata import TaskMetadata
-import mteb
-from mteb import MTEB
 
 
 class VoiceGenderClustering(AbsTaskAudioClustering):
@@ -15,7 +14,6 @@ class VoiceGenderClustering(AbsTaskAudioClustering):
         dataset={
             "path": "mmn3690/voice-gender-clustering",
             "revision": "1b202ea7bcd0abd5283e628248803e1569257c80",
-
         },
         type="AudioClustering",
         category="a2a",
@@ -37,17 +35,23 @@ class VoiceGenderClustering(AbsTaskAudioClustering):
               year         = "2018
               }""",
     )
-    
+
+
 if __name__ == "__main__":
-    #model_name = "microsoft/wavlm-base"
+    # model_name = "microsoft/wavlm-base"
     model_name = "facebook/wav2vec2-base"
     model = mteb.get_model(model_name)
     print(f"Loaded model type: {type(model)}")
     evaluation = mteb.MTEB(tasks=[VoiceGenderClustering()])
     cluster_algo = "Kmeans"
-    results = evaluation.run(model, output_folder=f"results_Gender/{cluster_algo}/{model_name}", overwrite_results=True, cluster_algo=cluster_algo)
+    results = evaluation.run(
+        model,
+        output_folder=f"results_Gender/{cluster_algo}/{model_name}",
+        overwrite_results=True,
+        cluster_algo=cluster_algo,
+    )
     print(results)
-    
+
     # from datasets import load_dataset
     # dataset = load_dataset("mmn3690/voice-gender-clustering", split="train")
-    # print(dataset["label"]) 
+    # print(dataset["label"])

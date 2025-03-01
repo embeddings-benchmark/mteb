@@ -1,21 +1,29 @@
+from __future__ import annotations
+
 from functools import partial
-from mteb.models.wrapper import Wrapper
-from mteb.encoder_interface import PromptType, AudioEncoder
+
 import numpy as np
 import torch
-import librosa
-from transformers import AutoFeatureExtractor, Qwen2AudioForConditionalGeneration, AutoProcessor
-from mteb.model_meta import ModelMeta
 from datasets import Audio
+from transformers import (
+    AutoProcessor,
+    Qwen2AudioForConditionalGeneration,
+)
+
+from mteb.encoder_interface import AudioEncoder, PromptType
+from mteb.model_meta import ModelMeta
+
 
 class Qwen2AudioWrapper(AudioEncoder):
     def __init__(self, model_name: str, device: str | None = None, **kwargs):
         super().__init__(device=device, **kwargs)
         self.processor = AutoProcessor.from_pretrained("Qwen/Qwen2-Audio-7B")
-        self.model = Qwen2AudioForConditionalGeneration.from_pretrained("Qwen/Qwen2-Audio-7B")
+        self.model = Qwen2AudioForConditionalGeneration.from_pretrained(
+            "Qwen/Qwen2-Audio-7B"
+        )
 
         self.audio_encoder = self.model.audio_tower
-       
+
         if hasattr(self.model.config.audio_config, "d_model"):
             self.embed_dim = self.model.config.audio_config.d_model
         elif hasattr(self.model.config.audio_config, "hidden_size"):
@@ -27,22 +35,25 @@ class Qwen2AudioWrapper(AudioEncoder):
         self.audio_encoder = self.audio_encoder.to(self.device)
         print("Qwen2-Audio initialized. Hiden dim:", self.embed_dim)
 
-    def get_audio_embeddings(self, audio_files: list[Audio] | Audio, batch_size: int = 32, **kwargs) -> np.ndarray:
+    def get_audio_embeddings(
+        self, audio_files: list[Audio] | Audio, batch_size: int = 32, **kwargs
+    ) -> np.ndarray:
         if not isinstance(audio_files, list):
             audio_files = [audio_files]
         all_embeds = []
         for i in range(0, len(audio_files), batch_size):
-            batch = audio_files[i:i + batch_size]
-            audios = [file['array'] for file in batch]
-            sr = batch[0]['sampling_rate']
+            batch = audio_files[i : i + batch_size]
+            audios = [file["array"] for file in batch]
+            sr = batch[0]["sampling_rate"]
 
             prompt = " ".join(["<|AUDIO|>"] * len(batch))
-            inputs = self.processor(text=prompt,
-                                    audios=audios,
-                                    sampling_rate=sr,
-                                    return_tensors="pt",
-                                    padding=True
-                                    )
+            inputs = self.processor(
+                text=prompt,
+                audios=audios,
+                sampling_rate=sr,
+                return_tensors="pt",
+                padding=True,
+            )
 
             input_features = inputs.input_features.to(self.device)
             with torch.no_grad():
@@ -54,7 +65,14 @@ class Qwen2AudioWrapper(AudioEncoder):
 
         return np.vstack(all_embeds)
 
-    def encode(self, audio_files: list[Audio], *, task_name: str, prompt_type: PromptType | None = None, **kwargs) -> np.ndarray:
+    def encode(
+        self,
+        audio_files: list[Audio],
+        *,
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        **kwargs,
+    ) -> np.ndarray:
         return self.get_audio_embeddings(audio_files, **kwargs)
 
 
@@ -77,5 +95,5 @@ qwen2_audio_meta = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
-    modalities=["audio"]
+    modalities=["audio"],
 )

@@ -260,7 +260,9 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
             )
             class_counts = np.sum(y_train, axis=0)
             # import pdb; pdb.set_trace()
-            if np.all(class_counts > 1):  # TODO mandatory check: but not required if we have >1 samples per class (needed for the classifier)
+            if np.all(
+                class_counts > 1
+            ):  # TODO mandatory check: but not required if we have >1 samples per class (needed for the classifier)
                 scores_exp = evaluate_classifier(
                     X_train, y_train, X_test, y_test, self.classifier
                 )
