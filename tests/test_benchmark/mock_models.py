@@ -14,7 +14,7 @@ from torch.utils.data import DataLoader
 
 import mteb
 from mteb import SentenceTransformerWrapper
-from mteb.encoder_interface import PromptType
+from mteb.encoder_interface import AudioBatch, PromptType
 from tests.test_benchmark.task_grid import MOCK_TASK_TEST_GRID
 
 
@@ -72,22 +72,38 @@ class MockAudioEncoder:
 
     def get_audio_embeddings(
         self,
-        audio,  # list
+        audio: AudioBatch,
         **kwargs,
-    ) -> np.ndarray:
-        return np.random.rand(len(audio), self.embedding_dim)
+    ):
+        if isinstance(audio, DataLoader):
+            all_embeddings = []
+            for batch in audio:
+                batch_size = len(batch)
+                all_embeddings.append(np.random.rand(batch_size, self.embedding_dim))
+            return np.concatenate(all_embeddings)
+        else:
+            total_samples = len(audio)
+            return np.random.rand(total_samples, self.embedding_dim)
 
     def get_text_embeddings(
         self,
-        texts,  # list
+        texts,
         **kwargs,
-    ) -> np.ndarray:
-        pass
+    ):
+        return torch.randn(len(texts), self.embedding_dim)
 
     def calculate_probs(
         self, text_embeddings: np.ndarray, audio_embeddings: np.ndarray
-    ) -> np.ndarray:
-        pass
+    ):
+        return torch.randn(text_embeddings.shape[0], audio_embeddings.shape[0])
+
+    def get_fused_embeddings(
+        self,
+        audio: AudioBatch | None = None,
+        texts: list[str] | None = None,
+        **kwargs: Any,
+    ):
+        return torch.randn(len(texts), self.embedding_dim)
 
 
 class MockSentenceTransformer(SentenceTransformer):
