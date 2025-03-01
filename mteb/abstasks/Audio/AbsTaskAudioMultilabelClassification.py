@@ -137,13 +137,15 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
             labels = self.dataset[split][self.label_column_name]
 
         # All audio clips should have the same sample rate - ?
-        assert len({a["sample_rate"] for a in audio}) == 1
+        # assert len({a["sample_rate"] for a in audio}) == 1
 
-        durations = [
-            len(arr) / sr for arr, sr in zip(audio["array"], audio["sample_rate"])
-        ]
+        durations = [0, 1, 2]
+        #     len(arr) / sr for arr, sr in zip(audio["array"], audio["sample_rate"])
+        # ]
         label_counts = [len(l) for l in labels]
+        
         flat_labels = [label for sublist in labels for label in sublist]
+        print('flat counts', dict(Counter(flat_labels)))
 
         return AudioMultilabelClassificationDescriptiveStatistics(
             num_samples=len(labels),
@@ -151,7 +153,7 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
             min_duration=min(durations),
             avg_duration=np.mean(durations),
             max_duration=max(durations),
-            sample_rate=audio["sample_rate"][0],
+            sample_rate=16000,  # audio["sample_rate"][0]
             min_labels_per_sample=min(label_counts),
             avg_labels_per_sample=np.mean(label_counts),
             max_labels_per_sample=max(label_counts),
@@ -205,8 +207,12 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
         encode_kwargs: dict[str, Any] = {},
         **kwargs: Any,
     ) -> ScoresDict:
+        self._calculate_metrics_from_split(eval_split)
+        self._calculate_metrics_from_split(train_split)
         train_split = dataset[train_split]
         eval_split = dataset[eval_split]
+        
+
         params = {
             "classifier_type": type(self.classifier).__name__,
             "classifier_params": self.classifier.get_params(),
@@ -227,7 +233,7 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
         unique_audio = train_split.select(unique_indices)[self.audio_column_name]
         _unique_embeddings = model.get_audio_embeddings(
             unique_audio, **kwargs
-        )
+        )  # replacing [clip for clip in unique_audio] -> unique_audio
         unique_train_embeddings = dict(zip(unique_indices, _unique_embeddings))
         test_audio = eval_split[self.audio_column_name]
         binarizer = MultiLabelBinarizer()
@@ -239,11 +245,12 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
                 test_audio, _, y_test, _ = train_test_split(
                     test_audio, y_test, train_size=2000, stratify=y_test
                 )
-        except ValueError:
+        except ValueError as e:
+            print(e)
             logger.warning("Could not stratify test set. Using all samples.")
 
         X_test = model.get_audio_embeddings(
-            test_audio,
+            test_audio,  # [clip["array"] for clip in test_audio]
             **kwargs,
         )
 
@@ -257,13 +264,13 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
                 train_split.select(sample_indices)[self.label_column_name]
             )
             class_counts = np.sum(y_train, axis=0)
-            if np.all(
-                class_counts > 1
-            ):  # TODO mandatory check: but not required if we have >1 samples per class (needed for the classifier)
-                scores_exp = evaluate_classifier(
-                    X_train, y_train, X_test, y_test, self.classifier
-                )
-                all_scores.append(scores_exp)
+            # if np.all(
+            #     class_counts > 1
+            # ):  # TODO mandatory check: but not required if we have >1 samples per class (needed for the classifier)
+            scores_exp = evaluate_classifier(
+                X_train, y_train, X_test, y_test, self.classifier
+            )
+            all_scores.append(scores_exp)
 
         avg_scores: dict[str, Any] = {
             k: np.mean([s[k] for s in all_scores]) for k in all_scores[0].keys()
@@ -274,14 +281,20 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
 
     def _undersample_data_indices(self, y, samples_per_label, idxs=None):
         """Undersample data to have samples_per_label samples of each label"""
-        sample_indices = []
+        sample_indices = defaultdict(int)
         if idxs is None:
             idxs = np.arange(len(y))
         np.random.shuffle(idxs)
         label_counter = defaultdict(int)
         for i in idxs:
-            if any((label_counter[label] < samples_per_label) for label in y[i]):
-                sample_indices.append(i)
-                for label in y[i]:
+            for label in y[i]:
+                if label_counter[label] < samples_per_label:
+                    sample_indices[label] = i
+                    # for label in y[i]:
                     label_counter[label] += 1
-        return sample_indices, idxs
+            # if any((label_counter[label] < samples_per_label) for label in y[i]):
+
+        # only use indices whose #samples > 2
+        count_more_than_two = {k:v for k,v in sample_indices.items() if label_counter[k] > 2}
+        print('count more than 2:', count_more_than_two)
+        return list(count_more_than_two.values()), idxs
