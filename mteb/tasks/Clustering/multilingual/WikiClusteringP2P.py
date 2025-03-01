@@ -81,6 +81,7 @@ class WikiClusteringFastP2P(AbsTaskClusteringFast, MultilingualTask):
         dialect=[],
         sample_creation="created",
         bibtex_citation="",  # None exists
+        adapted_from=["WikiClusteringP2P"],
     )
 
     def dataset_transform(self):

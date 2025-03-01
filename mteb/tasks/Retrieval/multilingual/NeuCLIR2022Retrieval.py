@@ -199,6 +199,7 @@ class NeuCLIR2022RetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
   journal={arXiv preprint arXiv:2304.12367},
   year={2023}
 }""",
+        adapted_from=["NeuCLIR2022Retrieval"],
     )
 
     def load_data(self, **kwargs):
