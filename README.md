@@ -262,7 +262,7 @@ class CustomModel:
 
 model = CustomModel()
 tasks = mteb.get_tasks(tasks=["Banking77Classification"])
-evaluation = MTEB(tasks=tasks)
+evaluation = mteb.MTEB(tasks=tasks)
 evaluation.run(model)
 ```
 

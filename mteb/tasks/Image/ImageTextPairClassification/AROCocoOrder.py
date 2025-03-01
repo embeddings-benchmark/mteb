@@ -20,12 +20,12 @@ class AROCocoOrder(AbsTaskImageTextPairClassification):
         name="AROCocoOrder",
         description="Compositionality Evaluation of images to their captions."
         + "Each capation has four hard negatives created by order permutations.",
-        reference="https://proceedings.neurips.cc/paper_files/paper/2023/hash/63461de0b4cb760fc498e85b18a7fe81-Abstract-Datasets_and_Benchmarks.html",
+        reference="https://openreview.net/forum?id=KRLUvxh8uaX",
         dataset={
             "path": "gowitheflow/ARO-COCO-order",
             "revision": "853ec8757226585a38a80886c51fe0f3f268787c",
         },
-        type="ImageTextPairClassification",
+        type="Compositionality",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -41,11 +41,10 @@ class AROCocoOrder(AbsTaskImageTextPairClassification):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="created",
-        bibtex_citation="""@article{hsieh2024sugarcrepe,
-  title={Sugarcrepe: Fixing hackable benchmarks for vision-language compositionality},
-  author={Hsieh, Cheng-Yu and Zhang, Jieyu and Ma, Zixian and Kembhavi, Aniruddha and Krishna, Ranjay},
-  journal={Advances in neural information processing systems},
-  volume={36},
-  year={2024}
+        bibtex_citation="""@inproceedings{yuksekgonul2023and,
+  title={When and why vision-language models behave like bags-of-words, and what to do about it?},
+  author={Yuksekgonul, Mert and Bianchi, Federico and Kalluri, Pratyusha and Jurafsky, Dan and Zou, James},
+  booktitle={The Eleventh International Conference on Learning Representations},
+  year={2023}
 }""",
     )

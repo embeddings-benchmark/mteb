@@ -10,7 +10,7 @@ class SynPerQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SynPerQARetrieval",
         description="Synthetic Persian QA Retrieval",
-        reference="https://huggingface.co/datasets/MCINext/synthetic-persian-qa-retrieval/settings",
+        reference="https://huggingface.co/datasets/MCINext/synthetic-persian-qa-retrieval/",
         dataset={
             "path": "MCINext/synthetic-persian-qa-retrieval",
             "revision": "e85114f13f42dc1edc456d58931cc38d44d697cf",

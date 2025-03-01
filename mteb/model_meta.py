@@ -202,6 +202,22 @@ class ModelMeta(BaseModel):
         intersection = model_datasets & benchmark_datasets
         return len(intersection) == 0
 
+    def zero_shot_percentage(
+        self, tasks: Sequence[AbsTask] | Sequence[str]
+    ) -> int | None:
+        """Indicates how out-of-domain the selected tasks are for the given model."""
+        if (self.training_datasets is None) or (not tasks):
+            return None
+        model_datasets = {ds_name for ds_name, splits in self.training_datasets.items()}
+        if isinstance(tasks[0], str):
+            benchmark_datasets = set(tasks)
+        else:
+            tasks = cast(Sequence[AbsTask], tasks)
+            benchmark_datasets = {task.metadata.name for task in tasks}
+        overlap = model_datasets & benchmark_datasets
+        perc_overlap = 100 * (len(overlap) / len(benchmark_datasets))
+        return int(100 - perc_overlap)
+
     def calculate_memory_usage_mb(self) -> int | None:
         """Calculates the memory usage (in FP32) of the model in MB."""
         if "API" in self.framework:

@@ -21,7 +21,6 @@ SFR_TRAINING_DATA = {  # inherits from e5
     **E5_MISTRAL_TRAINING_DATA,
     # From previously released blogpost which now have been taken down:
     "FiQA2018": ["train"],
-    "FiQA2018-PL": ["train"],
     "FiQA2018-NL": ["train"],  # translation not trained on
     "FEVER": ["train"],
     "FEVERHardNegatives": ["train"],

@@ -33,7 +33,7 @@ class STSBenchmarkMultilingualVisualSTS(AbsTaskVisualSTS):
             + "built upon multi-sts created by Philip May"
         ),
         reference="https://arxiv.org/abs/2402.08183/",
-        type="VisualSTS",
+        type="VisualSTS(multi)",
         category="i2i",
         modalities=["image"],
         eval_splits=_SPLITS,
@@ -41,7 +41,7 @@ class STSBenchmarkMultilingualVisualSTS(AbsTaskVisualSTS):
         main_score="cosine_spearman",
         date=("2012-01-01", "2017-12-31"),
         domains=["News", "Social", "Web", "Spoken", "Written"],
-        task_subtypes=[],
+        task_subtypes=["Rendered semantic textual similarity"],
         license="not specified",
         annotations_creators="human-annotated",
         dialect=[],

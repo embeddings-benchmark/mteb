@@ -13,7 +13,7 @@ class STS13VisualSTS(AbsTaskVisualSTS):
         },
         description="SemEval STS 2013 dataset." + "then rendered into images.",
         reference="https://arxiv.org/abs/2402.08183/",
-        type="VisualSTS",
+        type="VisualSTS(eng)",
         category="i2i",
         modalities=["image"],
         eval_splits=["test"],

@@ -6,6 +6,8 @@ from mteb.abstasks.Image.AbsTaskImageMultilabelClassification import (
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
+# NOTE: In the paper, this is grouped with linear probe tasks.
+# See https://github.com/embeddings-benchmark/mteb/pull/2035#issuecomment-2661626309.
 class VOC2007Classification(AbsTaskImageMultilabelClassification):
     metadata = TaskMetadata(
         name="VOC2007",
@@ -17,7 +19,7 @@ class VOC2007Classification(AbsTaskImageMultilabelClassification):
             "revision": "dbafdb9e1506c9c419c5c4672e409463cd21ba50",
             "trust_remote_code": True,
         },
-        type="ImageMultilabelClassification",
+        type="ImageClassification",
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

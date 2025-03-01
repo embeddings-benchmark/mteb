@@ -42,6 +42,17 @@ dataset_revisions = list(
 )
 
 
+dataset_revisions = list(
+    {  # deduplicate as multiple tasks rely on the same dataset (save us at least 100 test cases)
+        (t.metadata.dataset["path"], t.metadata.dataset["revision"])
+        for t in mteb.get_tasks(exclude_superseded=False)
+        if not isinstance(t, (AbsTaskAggregate, AbsTaskSpeedTask))
+        and t.metadata.name != "AfriSentiLangClassification"
+        and t.metadata.name not in ALL_MOCK_TASKS
+    }
+)
+
+
 @pytest.mark.parametrize("task", tasks)
 @patch("datasets.load_dataset")
 @patch("datasets.concatenate_datasets")

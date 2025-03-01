@@ -20,9 +20,6 @@ for model_name in [
     "facebook/dinov2-base",
     "facebook/dinov2-large",
     "facebook/dinov2-giant",
-    "laion/CLIP-ViT-B-32-DataComp.XL-s13B-b90K",
-    "laion/CLIP-ViT-B-16-DataComp.XL-s13B-b90K",
-    "laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K",
     "nyu-visionx/moco-v3-vit-b",
     "nyu-visionx/moco-v3-vit-l",
     "google/siglip-so400m-patch14-224",
@@ -43,36 +40,27 @@ for model_name in [
     "laion/CLIP-ViT-H-14-laion2B-s32B-b79K",
     "laion/CLIP-ViT-L-14-laion2B-s32B-b82K",
     "laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
-    "TIGER-Lab/VLM2Vec-LoRA",
     "TIGER-Lab/VLM2Vec-Full",
+    "TIGER-Lab/VLM2Vec-LoRA",
     "Salesforce/blip-itm-base-coco",
     "Salesforce/blip-itm-large-coco",
     "Salesforce/blip-itm-base-flickr",
     "Salesforce/blip-itm-large-flickr",
-    "EVA02-CLIP-B-16",
-    "EVA02-CLIP-L-14",
-    "EVA02-CLIP-bigE-14",
-    "EVA02-CLIP-bigE-14-plus",
-    # "embed-english-v3.0-v",  # not feasible to run due to the 40 images/min constraint
+    "QuanSun/EVA02-CLIP-B-16",
+    "QuanSun/EVA02-CLIP-L-14",
+    "QuanSun/EVA02-CLIP-bigE-14",
+    "QuanSun/EVA02-CLIP-bigE-14-plus",
+    "voyageai/voyage-multimodal-3",
 ]:
     model = mteb.get_model(model_name)
     tasks = mteb.get_tasks(
-        task_types=[
-            "Any2AnyRetrieval",
-            "Any2AnyMultiChoice",
-            "VisionCentric",
-            "ImageClustering",
-            "ImageClassification",
-            "ImageMultilabelClassification",
-            "Compositionality",
-            "VisualSTS",
-            "ZeroShotClassification",
-            "DocumentUnderstanding",
+        tasks=[
+            "VisualSTS-b-Eng",
+            "VisualSTS-b-Multilingual",
+            "VisualSTS17Eng",
+            "VisualSTS17Multilingual",
         ]
     )
-    # get i-only tasks for i-only models.
-    if ("moco" in model_name) or ("dinov2" in model_name):
-        tasks = [task for task in tasks if "t" not in task.metadata.category]
 
     evaluation = mteb.MTEB(tasks=tasks)
-    results = evaluation.run(model, output_folder="results-mieb-final")
+    results = evaluation.run(model, output_folder="/home/.cache/mteb/results/results")
