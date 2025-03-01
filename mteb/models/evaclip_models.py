@@ -92,7 +92,6 @@ def evaclip_loader(**kwargs):
 
                 with torch.no_grad(), torch.cuda.amp.autocast():
                     for batch in tqdm(images):
-                        # import pdb; pdb.set_trace()
                         inputs = torch.vstack(
                             [
                                 self.img_preprocess(F.to_pil_image(b)).unsqueeze(0)

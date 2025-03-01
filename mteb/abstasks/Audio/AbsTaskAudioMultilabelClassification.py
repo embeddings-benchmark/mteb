@@ -219,15 +219,15 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
         for _ in range(self.n_experiments):
             sample_indices, _ = self._undersample_data_indices(
                 train_split[self.label_column_name], self.samples_per_label, None
-            )
+            )  # TODO samples_per_label: per class label, atleast 8 samples should be in the train split - debug why not?
             train_samples.append(sample_indices)
 
         # Get unique training embeddings
         unique_indices = list(set(itertools.chain.from_iterable(train_samples)))
         unique_audio = train_split.select(unique_indices)[self.audio_column_name]
         _unique_embeddings = model.get_audio_embeddings(
-            [clip["array"] for clip in unique_audio], **kwargs
-        )
+            unique_audio, **kwargs
+        )  # replacing [clip for clip in unique_audio] -> unique_audio
         unique_train_embeddings = dict(zip(unique_indices, _unique_embeddings))
         test_audio = eval_split[self.audio_column_name]
         binarizer = MultiLabelBinarizer()
@@ -243,7 +243,7 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
             logger.warning("Could not stratify test set. Using all samples.")
 
         X_test = model.get_audio_embeddings(
-            [clip["array"] for clip in test_audio],
+            test_audio,  # [clip["array"] for clip in test_audio]
             **kwargs,
         )
 
@@ -256,10 +256,14 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
             y_train = binarizer.transform(
                 train_split.select(sample_indices)[self.label_column_name]
             )
-            scores_exp = evaluate_classifier(
-                X_train, y_train, X_test, y_test, self.classifier
-            )
-            all_scores.append(scores_exp)
+            class_counts = np.sum(y_train, axis=0)
+            if np.all(
+                class_counts > 1
+            ):  # TODO mandatory check: but not required if we have >1 samples per class (needed for the classifier)
+                scores_exp = evaluate_classifier(
+                    X_train, y_train, X_test, y_test, self.classifier
+                )
+                all_scores.append(scores_exp)
 
         avg_scores: dict[str, Any] = {
             k: np.mean([s[k] for s in all_scores]) for k in all_scores[0].keys()

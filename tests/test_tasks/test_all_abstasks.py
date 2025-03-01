@@ -104,9 +104,7 @@ def test_dataset_availability():
     tasks = [
         t
         for t in tasks
-        if t.metadata.name not in MOCK_TASK_TEST_GRID_AS_STRING
-        if t.metadata.name not in MOCK_MIEB_TASK_GRID_AS_STRING
-        if t.metadata.name not in MOCK_MAEB_TASK_GRID_AS_STRING
+        if t.metadata.name not in ALL_MOCK_TASKS
         and t.metadata.name
         != "AfriSentiLangClassification"  # HOTFIX: Issue#1777. Remove this line when issue is resolved.
     ]
@@ -117,6 +115,6 @@ def test_superseded_dataset_exists():
     tasks = mteb.get_tasks(exclude_superseded=False)
     for task in tasks:
         if task.superseded_by:
-            assert task.superseded_by in TASKS_REGISTRY, (
-                f"{task} is superseded by {task.superseded_by} but {task.superseded_by} is not in the TASKS_REGISTRY"
-            )
+            assert (
+                task.superseded_by in TASKS_REGISTRY
+            ), f"{task} is superseded by {task.superseded_by} but {task.superseded_by} is not in the TASKS_REGISTRY"
