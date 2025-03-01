@@ -39,6 +39,7 @@ class NanoSciFactRetrieval(AbsTaskRetrieval):
         prompt={
             "query": "Given a scientific claim, retrieve documents that support or refute the claim"
         },
+        adapted_from=["SciFact"],
     )
 
     def load_data(self, **kwargs):

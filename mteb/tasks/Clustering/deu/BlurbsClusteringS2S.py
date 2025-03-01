@@ -88,6 +88,7 @@ class BlurbsClusteringS2SFast(AbsTaskClusteringFast):
   year={2019},
   url={https://api.semanticscholar.org/CorpusID:208334484}
 }""",
+        adapted_from=["BlurbsClusteringS2S"],
     )
 
     def dataset_transform(self):

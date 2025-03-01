@@ -39,4 +39,5 @@ class DBPediaNL(AbsTaskRetrieval):
         prompt={
             "query": "Given a query, retrieve relevant entity descriptions from DBPedia"
         },
+        adapted_from=["DBPedia"],
     )

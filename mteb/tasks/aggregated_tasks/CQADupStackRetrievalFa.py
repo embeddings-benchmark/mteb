@@ -43,4 +43,5 @@ class CQADupstackRetrievalFa(AbsTaskAggregate):
         type="Retrieval",  # since everything is retrieval - otherwise it would be "Aggregated"
         eval_splits=["test"],
         bibtex_citation=""" """,
+        adapted_from=["CQADupstackRetrieval"],
     )

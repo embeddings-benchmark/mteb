@@ -36,6 +36,7 @@ class NQPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["NQ"],
     )
 
 
@@ -70,4 +71,5 @@ class NQPLHardNegatives(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["NQ"],
     )

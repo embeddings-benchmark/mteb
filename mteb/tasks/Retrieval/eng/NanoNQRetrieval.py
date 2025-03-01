@@ -39,6 +39,7 @@ class NanoNQRetrieval(AbsTaskRetrieval):
         prompt={
             "query": "Given a question, retrieve Wikipedia passages that answer the question"
         },
+        adapted_from=["NQ"],
     )
 
     def load_data(self, **kwargs):

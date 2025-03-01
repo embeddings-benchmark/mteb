@@ -48,6 +48,7 @@ class RedditFastClusteringS2S(AbsTaskClusteringFast):
         eprint    = {2104.07081}
         }""",
         prompt="Identify the topic or theme of Reddit posts based on the titles",
+        adapted_from=["RedditClustering"],
     )
 
     def dataset_transform(self):

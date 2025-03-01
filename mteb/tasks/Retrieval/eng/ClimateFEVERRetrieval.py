@@ -71,6 +71,7 @@ class ClimateFEVERHardNegatives(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
+        adapted_from=["ClimateFEVER"],
     )
 
 
@@ -107,4 +108,5 @@ class ClimateFEVERRetrievalv2(AbsTaskRetrieval):
         prompt={
             "query": "Given a claim about climate change, retrieve documents that support or refute the claim"
         },
+        adapted_from=["ClimateFEVER"],
     )

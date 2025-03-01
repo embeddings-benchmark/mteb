@@ -321,6 +321,7 @@ class MIRACLRetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
     url = {https://doi.org/10.1162/tacl\_a\_00595},
     eprint = {https://direct.mit.edu/tacl/article-pdf/doi/10.1162/tacl\_a\_00595/2157340/tacl\_a\_00595.pdf},
 }""",
+        adapted_from=["MIRACLRetrieval"],
     )
 
     def load_data(self, **kwargs):
