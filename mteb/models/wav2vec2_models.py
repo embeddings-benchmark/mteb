@@ -78,7 +78,7 @@ WAV2VEC2_LANGUAGES = [
 class Wav2Vec2AudioWrapper(Wrapper):
     def __init__(
         self,
-        model_name: str = "facebook/wav2vec2-xls-r-300m",
+        model_name: str = "facebook/wav2vec2-base",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
@@ -322,5 +322,147 @@ wav2vec2_xlsr_2b_translation = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets=None,
+)
+
+
+wav2vec2_base = ModelMeta(
+    loader=partial(
+        Wav2Vec2AudioWrapper,
+        model_name="facebook/wav2vec2-base",
+        model_revision="0b5b8e868dd84f03fd87d01f9c4ff0f080fecfe8",
+    ),
+    name="facebook/wav2vec2-base",
+    languages=["en"],
+
+    open_weights=True,
+    revision="0b5b8e868dd84f03fd87d01f9c4ff0f080fecfe8",
+    release_date="2020-10-26",
+    max_tokens=float("inf"),
+    n_parameters=95_000_000,
+    memory_usage_mb=362,
+    embed_dim=768,
+    license="Apache-2.0",
+    reference="https://huggingface.co/facebook/wav2vec2-base",
+    similarity_fn_name="cosine",
+    framework=["PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    modalities=["audio"],
+)
+
+
+wav2vec2_base_960h = ModelMeta(
+    loader=partial(
+        Wav2Vec2AudioWrapper,
+        model_name="facebook/wav2vec2-base-960h",
+        model_revision="22aad52d435eb6dbaf354bdad9b0da84ce7d6156",
+    ),
+    name="facebook/wav2vec2-base-960h",
+    languages=["en"],
+
+    open_weights=True,
+    revision="22aad52d435eb6dbaf354bdad9b0da84ce7d6156",
+    release_date="2020-10-26",
+    max_tokens=float("inf"),
+    n_parameters=95_000_000,
+    memory_usage_mb=360,
+    embed_dim=768,
+    license="Apache-2.0",
+    reference="https://huggingface.co/facebook/wav2vec2-base-960h",
+    similarity_fn_name="cosine",
+    framework=["PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+
+    modalities=["audio"],
+)
+
+
+wav2vec2_large = ModelMeta(
+    loader=partial(
+        Wav2Vec2AudioWrapper,
+        model_name="facebook/wav2vec2-large",
+        model_revision="312b2410566b698c7a649068d413b2067848bd75",
+    ),
+    name="facebook/wav2vec2-large",
+    languages=["en"],
+
+    open_weights=True,
+    revision="312b2410566b698c7a649068d413b2067848bd75",
+    release_date="2020-10-26",
+    max_tokens=float("inf"),
+    n_parameters=317_000_000,
+    memory_usage_mb=1_209,
+    embed_dim=1_024,
+    license="Apache-2.0",
+    reference="https://huggingface.co/facebook/wav2vec2-large",
+    similarity_fn_name="cosine",
+    framework=["PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+
+    modalities=["audio"],
+)
+
+
+wav2vec2_large_xlsr_53 = ModelMeta(
+    loader=partial(
+        Wav2Vec2AudioWrapper,
+        model_name="facebook/wav2vec2-large-xlsr-53",
+        model_revision="c3f9d884181a224a6ac87bf8885c84d1cff3384f",
+    ),
+    name="facebook/wav2vec2-large-xlsr-53",
+    languages=["en"],
+
+    open_weights=True,
+    revision="c3f9d884181a224a6ac87bf8885c84d1cff3384f",
+    release_date="2020-10-26",
+    max_tokens=float("inf"),
+    n_parameters=317_000_000,
+    memory_usage_mb=1_209,
+    embed_dim=1_024,
+    license="Apache-2.0",
+    reference="https://huggingface.co/facebook/wav2vec2-large-xlsr-53",
+    similarity_fn_name="cosine",
+    framework=["PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    modalities=["audio"],
+)
+
+
+wav2vec2_lv_60_espeak_cv_ft = ModelMeta(
+    loader=partial(
+        Wav2Vec2AudioWrapper,
+        model_name="facebook/wav2vec2-lv-60-espeak-cv-ft",
+        model_revision="ae45363bf3413b374fecd9dc8bc1df0e24c3b7f4",
+    ),
+    name="facebook/wav2vec2-lv-60-espeak-cv-ft",
+    languages=["en"],
+
+    open_weights=True,
+    revision="ae45363bf3413b374fecd9dc8bc1df0e24c3b7f4",
+    release_date="2020-10-26",
+    max_tokens=float("inf"),
+    n_parameters=317_000_000,
+    memory_usage_mb=1_209,
+    embed_dim=1_024,
+    license="Apache-2.0",
+    reference="https://huggingface.co/facebook/wav2vec2-lv-60-espeak-cv-ft",
+    similarity_fn_name="cosine",
+    framework=["PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    modalities=["audio"],
 )
 
