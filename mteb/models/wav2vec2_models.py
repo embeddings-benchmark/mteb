@@ -69,7 +69,8 @@ WAV2VEC2_LANGUAGES = [
     "fao_Latn",
     "grn_Latn",
     "hat_Latn",
-    "haw_Latn" "ina_Latn",
+    "haw_Latn",
+    "ina_Latn",
     "kin_Latn",
 ]
 
@@ -98,6 +99,7 @@ class Wav2Vec2AudioWrapper(Wrapper):
 
         return processed_audio
 
+
     def _handle_batch(
         self, batch: AudioData | Iterable[tuple[AudioData, str]]
     ) -> list[torch.Tensor]:
@@ -108,7 +110,27 @@ class Wav2Vec2AudioWrapper(Wrapper):
                 waveforms.append(self._convert_audio_from_numpy(audio))
         else:
             for item in batch:
-                if isinstance(item, (np.ndarray, torch.Tensor)):
+                # import pdb; pdb.set_trace()
+                if isinstance(item, dict):
+                    if "array" in item:
+                        audio = item["array"]
+                        audio = (
+                            torch.from_numpy(audio).float()
+                            if isinstance(audio, np.ndarray)
+                            else audio.float()
+                        )
+                        # print('before resampling: ', audio.shape)
+                        if item["sampling_rate"] != self.sampling_rate:
+                            # print('resampling..')
+                            resampler = torchaudio.transforms.Resample(
+                                item["sampling_rate"], self.sampling_rate
+                            )
+                            audio = resampler(audio)
+                            # print('after resampling: ', audio.shape, '\n******')
+                        waveforms.append(self._convert_audio_from_numpy(audio))
+                    elif "path" in item:
+                        waveforms.append(self._load_audio_file(item["path"]))
+                elif isinstance(item, (np.ndarray, torch.Tensor)):
                     waveforms.append(self._convert_audio_from_numpy(item))
                 elif isinstance(item, str):
                     waveforms.append(self._load_audio_file(item))
@@ -116,6 +138,7 @@ class Wav2Vec2AudioWrapper(Wrapper):
         return waveforms
 
     def _convert_audio_from_numpy(self, audio: AudioData) -> torch.Tensor:
+        # resampler = torchaudio.transforms.Resample(orig_freq=sample_rate, new_freq=16000)
         if isinstance(audio, np.ndarray):
             audio = torch.from_numpy(audio)
         return audio.squeeze()
@@ -126,6 +149,13 @@ class Wav2Vec2AudioWrapper(Wrapper):
             resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
             waveform = resampler(waveform)
         return waveform.squeeze()
+
+
+    def _pad_audio_batch(self, batch):
+        max_length = max(audio.shape[0] for audio in batch)  # Find longest audio
+        padded_batch = [torch.nn.functional.pad(audio, (0, max_length - audio.shape[0])) for audio in batch]
+        return torch.stack(padded_batch)
+
 
     def get_audio_embeddings(
         self,
@@ -142,6 +172,11 @@ class Wav2Vec2AudioWrapper(Wrapper):
         with torch.no_grad():
             for i in tqdm(range(0, len(processed_audio), batch_size)):
                 batch = processed_audio[i : i + batch_size]
+                #import pdb; pdb.set_trace()
+                # pre-pad the audio tensors before passing to feature extractor
+                
+                batch = self._pad_audio_batch(batch)
+                
                 inputs = self.feature_extractor(
                     batch,
                     sampling_rate=self.sampling_rate,
@@ -150,8 +185,10 @@ class Wav2Vec2AudioWrapper(Wrapper):
                     return_attention_mask=True,
                 ).to(self.device)
 
+                # import pdb; pdb.set_trace()
+
                 outputs = self.model(
-                    inputs.input_values,
+                    inputs.input_values.squeeze(0),
                     attention_mask=inputs.attention_mask,
                     output_hidden_states=True,
                 )
@@ -286,3 +323,4 @@ wav2vec2_xlsr_2b_translation = ModelMeta(
     use_instructions=False,
     training_datasets=None,
 )
+

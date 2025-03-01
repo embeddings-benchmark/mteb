@@ -562,6 +562,7 @@ class MTEB:
 
             try:
                 task.check_if_dataset_is_superseded()
+                # import pdb; pdb.set_trace()
                 task.load_data(**kwargs)
 
                 task_results = {}
@@ -611,6 +612,7 @@ class MTEB:
                             tracker.final_emissions
                         )  # expressed as kilograms of CO₂-equivalents
                     else:
+                        # import pdb; pdb.set_trace()
                         results, tick, tock = self._run_eval(
                             task,
                             model,
