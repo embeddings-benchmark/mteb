@@ -17,6 +17,7 @@ from .mock_tasks import (
     MockAudioClassificationLogRegTask,
     MockAudioClassificationTask,
     MockAudioClusteringTask,
+    MockAudioClusteringTask,
     MockBitextMiningTask,
     MockClassificationTask,
     MockClusteringFastTask,

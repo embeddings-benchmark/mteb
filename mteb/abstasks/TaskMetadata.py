@@ -60,6 +60,8 @@ TASK_SUBTYPE = Literal[
     "Tumor detection",
     "Duplicate Detection",
     "Environment Sound Classification",
+    "Gender Clustering",
+    "Voice Emotion Clustering",
 ]
 
 TASK_DOMAIN = Literal[
@@ -102,6 +104,7 @@ SAMPLE_CREATION_METHOD = Literal[
     "multiple",
 ]
 TASK_TYPE = Literal[
+    "AudioClustering",
     "BitextMining",
     "Classification",
     "MultilabelClassification",
@@ -127,6 +130,7 @@ TASK_TYPE = Literal[
 
 
 TASK_CATEGORY = Literal[
+    "a2a",  # Audio-to-audio
     "s2s",  # Sentence-to-sentence
     "s2p",  # Sentence-to-paragraph
     "p2p",  # Paragraph-to-paragraph
@@ -147,6 +151,7 @@ TASK_CATEGORY = Literal[
     "a2at",  # audio-to-audio+text
     "t2at",  # text-to-audio+text
     "at2at",  # audio+text-to-audio+text
+    "a2a",  # audio-to-audio
 ]
 
 ANNOTATOR_TYPE = Literal[
