@@ -109,7 +109,6 @@ class Wav2Vec2AudioWrapper(Wrapper):
                 waveforms.append(self._convert_audio_from_numpy(audio))
         else:
             for item in batch:
-                # import pdb; pdb.set_trace()
                 if isinstance(item, dict):
                     if "array" in item:
                         audio = item["array"]
@@ -172,7 +171,6 @@ class Wav2Vec2AudioWrapper(Wrapper):
         with torch.no_grad():
             for i in tqdm(range(0, len(processed_audio), batch_size)):
                 batch = processed_audio[i : i + batch_size]
-                # import pdb; pdb.set_trace()
                 # pre-pad the audio tensors before passing to feature extractor
 
                 batch = self._pad_audio_batch(batch)
@@ -184,8 +182,6 @@ class Wav2Vec2AudioWrapper(Wrapper):
                     padding=True,
                     return_attention_mask=True,
                 ).to(self.device)
-
-                # import pdb; pdb.set_trace()
 
                 outputs = self.model(
                     inputs.input_values.squeeze(0),

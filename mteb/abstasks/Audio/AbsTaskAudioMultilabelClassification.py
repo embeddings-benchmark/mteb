@@ -174,8 +174,6 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
         scores = {}
         hf_subsets = list(self.dataset) if self.is_multilingual else ["default"]
 
-        # import pdb; pdb.set_trace()
-
         for hf_subset in hf_subsets:
             logger.info(
                 f"\nTask: {self.metadata.name}, split: {eval_split}, subset: {hf_subset}. Running..."
@@ -234,7 +232,7 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
         test_audio = eval_split[self.audio_column_name]
         binarizer = MultiLabelBinarizer()
         y_test = binarizer.fit_transform(eval_split[self.label_column_name])
-        # import pdb; pdb.set_trace()
+
         # Subsample large test sets
         try:
             if len(test_audio) > 2000:
@@ -259,7 +257,6 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
                 train_split.select(sample_indices)[self.label_column_name]
             )
             class_counts = np.sum(y_train, axis=0)
-            # import pdb; pdb.set_trace()
             if np.all(
                 class_counts > 1
             ):  # TODO mandatory check: but not required if we have >1 samples per class (needed for the classifier)

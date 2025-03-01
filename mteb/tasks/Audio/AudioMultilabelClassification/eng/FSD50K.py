@@ -215,7 +215,6 @@ class FSD50KClassification(AbsTaskAudioMultilabelClassification):
     # "The sound of [class 1], [class 2], .."" -> [<class 1>, <class 2>, ...]
     def dataset_transform(self):
         def update_class_labels(datapoint):
-            # import pdb; pdb.set_trace()
             all_labels = [
                 label for label in FSD50K_CLASS_LABELS if label in datapoint["text"]
             ]
@@ -225,7 +224,6 @@ class FSD50KClassification(AbsTaskAudioMultilabelClassification):
         self.dataset = self.dataset.map(update_class_labels)
         print("train el:", self.dataset["train"][0])
         print("test el:", self.dataset["test"][0])
-        # import pdb; pdb.set_trace()
 
     metadata = TaskMetadata(
         name="FSD50K",

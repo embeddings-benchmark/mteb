@@ -126,7 +126,6 @@ class AbsTask(ABC):
         if subsets_to_run is not None:  # allow overwrites of pre-filtering
             hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
 
-        # import pdb; pdb.set_trace()
         for hf_subset in hf_subsets:
             logger.info(
                 f"\nTask: {self.metadata_dict['name']}, split: {split}, subset: {hf_subset}. Running..."
@@ -202,7 +201,6 @@ class AbsTask(ABC):
         if self.data_loaded:
             return
         self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])  # type: ignore
-        # import pdb; pdb.set_trace()
         self.dataset_transform()
         self.data_loaded = True
 
