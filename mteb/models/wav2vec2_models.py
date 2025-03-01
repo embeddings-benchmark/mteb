@@ -202,7 +202,6 @@ class Wav2Vec2AudioWrapper(Wrapper):
         return self.get_audio_embeddings(inputs, task_name=task_name, **kwargs).numpy()
 
 
-
 wav2vec2_xlsr_300m = ModelMeta(
     loader=partial(Wav2Vec2AudioWrapper, model_name="facebook/wav2vec2-xls-r-300m"),
     name="facebook/wav2vec2-xls-r-300m",

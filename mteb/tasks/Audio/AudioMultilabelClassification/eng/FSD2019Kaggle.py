@@ -50,7 +50,7 @@ class FSD2019KaggleClassification(AbsTaskAudioMultilabelClassification):
         """,
         descriptive_stats={
             "n_samples": {"test": 8961},
-        }
+        },
     )
 
     audio_column_name: str = "audio"
