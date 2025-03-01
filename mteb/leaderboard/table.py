@@ -92,15 +92,10 @@ def format_max_tokens(max_tokens: float | None) -> str:
     return str(int(max_tokens))
 
 
-def get_zero_shot_emoji(model_meta, tasks):
-    if model_meta is None:
-        return "⚠️"
-    is_zero_shot = model_meta.is_zero_shot_on(tasks)
-    if is_zero_shot is None:
-        return "⚠️"
-    if is_zero_shot:
-        return "✅"
-    return "❌"
+def format_zero_shot(zero_shot_percentage: int):
+    if zero_shot_percentage == -1:
+        return "⚠️ NA"
+    return f"{zero_shot_percentage:.0f}%"
 
 
 def scores_to_tables(
@@ -164,8 +159,10 @@ def scores_to_tables(
     )
     tasks = get_tasks(tasks=list(data["task_name"].unique()))
     joint_table.insert(
-        1, "Zero-shot", model_metas.map(lambda m: get_zero_shot_emoji(m, tasks))
+        1, "Zero-shot", model_metas.map(lambda m: m.zero_shot_percentage(tasks))
     )
+    joint_table["Zero-shot"] = joint_table["Zero-shot"].fillna(-1)
+    # joint_table = joint_table[joint_table["Zero-shot"].notna()]
     # Removing HF organization from model
     joint_table["model_name"] = joint_table["model_name"].map(
         lambda name: name.split("/")[-1]
@@ -205,11 +202,18 @@ def scores_to_tables(
             {
                 **{column: "{:.2f}" for column in score_columns},
                 "Rank (Borda)": "{:.0f}",
+                "Zero-shot": format_zero_shot,
             },
             na_rep="",
         )
         .highlight_min("Rank (Borda)", props="font-weight: bold")
         .highlight_max(subset=score_columns, props="font-weight: bold")
+        .background_gradient(
+            cmap="RdYlGn",
+            subset=["Zero-shot"],
+            vmin=50,
+            vmax=100,
+        )
     )
     task_score_columns = per_task.select_dtypes("number").columns
     per_task[task_score_columns] *= 100

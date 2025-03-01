@@ -184,6 +184,8 @@ _HISTORIC_DATASETS = [
     "CQADupstackRetrieval-PL",
     "WikiClusteringP2P",
     "VGClustering",
+    "VisualSTS17Eng",
+    "VisualSTS17Multilingual",
 ]
 
 

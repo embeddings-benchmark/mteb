@@ -60,6 +60,7 @@ TASK_SUBTYPE = Literal[
     "Activity recognition",
     "Tumor detection",
     "Duplicate Detection",
+    "Rendered semantic textual similarity",
 ]
 
 TASK_DOMAIN = Literal[
@@ -105,13 +106,16 @@ SAMPLE_CREATION_METHOD = Literal[
 MIEB_TASK_TYPE = (
     "Any2AnyMultiChoice",
     "Any2AnyRetrieval",
-    "Any2TextMutipleChoice",
+    "Any2AnyMultilingualRetrieval",
+    "VisionCentric",
     "ImageClustering",
     "ImageClassification",
     "ImageMultilabelClassification",
-    "ImageTextPairClassification",
-    "VisualSTS",
+    "DocumentUnderstanding",
+    "VisualSTS(eng)",
+    "VisualSTS(multi)",
     "ZeroShotClassification",
+    "Compositionality",
 )
 
 _task_types = (

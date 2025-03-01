@@ -2609,7 +2609,7 @@ class MockTextMultipleChoiceTask(AbsTaskAny2TextMultipleChoice):
     }
 
     metadata = TaskMetadata(
-        type="Any2TextMutipleChoice",
+        type="VisionCentric",
         name="MockTextMultipleChoice",
         main_score="accuracy",
         **general_args,  # type: ignore
@@ -3057,7 +3057,7 @@ class MockImageTextPairClassificationTask(AbsTaskImageTextPairClassification):
     }
 
     metadata = TaskMetadata(
-        type="ImageTextPairClassification",
+        type="Compositionality",
         name="MockImageTextPairClassification",
         main_score="text_acc",
         **general_args,  # type: ignore
@@ -3115,7 +3115,7 @@ class MockMultilingualImageTextPairClassificationTask(
     }
 
     metadata = TaskMetadata(
-        type="ImageTextPairClassification",
+        type="Compositionality",
         name="MockMultilingualImageTextPairClassification",
         main_score="accuracy",
         **general_args,  # type: ignore
@@ -3160,7 +3160,7 @@ class MockVisualSTSTask(AbsTaskVisualSTS):
     }
 
     metadata = TaskMetadata(
-        type="VisualSTS",
+        type="VisualSTS(eng)",
         name="MockVisualSTS",
         main_score="cosine_spearman",
         **general_args,  # type: ignore

@@ -13,7 +13,7 @@ class STS12VisualSTS(AbsTaskVisualSTS):
         },
         description="SemEval-2012 Task 6." + "then rendered into images.",
         reference="https://arxiv.org/abs/2402.08183/",
-        type="VisualSTS",
+        type="VisualSTS(eng)",
         category="i2i",
         modalities=["image"],
         eval_splits=["test"],

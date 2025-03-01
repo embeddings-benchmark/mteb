@@ -95,7 +95,9 @@ mxbai_embed_xsmall_v1 = ModelMeta(
     superseded_by=None,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets={
+        "MSMARCO": ["train"],
+    },
 )
 
 mxbai_embed_2d_large_v1 = ModelMeta(
@@ -118,7 +120,9 @@ mxbai_embed_2d_large_v1 = ModelMeta(
     superseded_by=None,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets={
+        "MSMARCO": ["train"],
+    },
 )
 
 
@@ -142,5 +146,7 @@ mxbai_embed_xsmall_v1 = ModelMeta(
     superseded_by=None,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets={
+        "MSMARCO": ["train"],
+    },
 )

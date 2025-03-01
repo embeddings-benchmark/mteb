@@ -17,13 +17,14 @@ for model_name in [
         task_types=[
             "Any2AnyRetrieval",
             "Any2AnyMultiChoice",
-            "Any2TextMutipleChoice",
+            "VisionCentric",
             "ImageClustering",
             "ImageClassification",
             "ImageMultilabelClassification",
-            "ImageTextPairClassification",
+            "Compositionality",
             # "VisualSTS",  # visual sts does not need rerun as will be the same after fixed.
             "ZeroShotClassification",
+            "DocumentUnderstanding",
         ]
     )
     evaluation = mteb.MTEB(tasks=tasks)

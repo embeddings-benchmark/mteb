@@ -13,7 +13,7 @@ class BLINKIT2TMultiChoice(AbsTaskAny2AnyMultiChoice):
             "path": "JamieSJS/blink-it2t-multi",
             "revision": "bc8f4c7f62450a4ceb737c8339061cf87aea42d5",
         },
-        type="Any2AnyMultiChoice",
+        type="VisionCentric",
         category="it2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
