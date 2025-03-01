@@ -572,7 +572,7 @@ class MockAudioMultilabelClassificationTask(AbsTaskAudioMultilabelClassification
             }
             for _ in range(2)
         ]
-        labels = [0, 1]
+        labels = [[0], [1]]
 
         self.dataset = DatasetDict(
             {
