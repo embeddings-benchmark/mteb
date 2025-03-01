@@ -60,7 +60,6 @@ TASK_SUBTYPE = Literal[
     "Tumor detection",
     "Duplicate Detection",
     "Gender Clustering",
-    "Voice Emotion Clustering",
 ]
 
 TASK_DOMAIN = Literal[
@@ -128,7 +127,6 @@ TASK_TYPE = Literal[
 
 
 TASK_CATEGORY = Literal[
-    "a2a",  # Audio-to-audio
     "s2s",  # Sentence-to-sentence
     "s2p",  # Sentence-to-paragraph
     "p2p",  # Paragraph-to-paragraph
