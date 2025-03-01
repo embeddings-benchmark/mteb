@@ -174,16 +174,19 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
             self.load_data()
 
         scores = {}
-        hf_subsets = list(self.dataset) if self.is_multilingual else ["default"]
+        hf_subsets = self.hf_subsets
 
         for hf_subset in hf_subsets:
             logger.info(
                 f"\nTask: {self.metadata.name}, split: {eval_split}, subset: {hf_subset}. Running..."
             )
+            print(
+                f"\nTask: {self.metadata.name}, split: {eval_split}, subset: {hf_subset}. Running..."
+            )
 
             if hf_subset not in self.dataset and hf_subset == "default":
                 ds = self.dataset
-            else:
+            else:       
                 ds = self.dataset[hf_subset]
             scores[hf_subset] = self._evaluate_subset(
                 model,
@@ -207,8 +210,11 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
         encode_kwargs: dict[str, Any] = {},
         **kwargs: Any,
     ) -> ScoresDict:
-        self._calculate_metrics_from_split(eval_split)
-        self._calculate_metrics_from_split(train_split)
+        # self._calculate_metrics_from_split(eval_split)
+        # self._calculate_metrics_from_split(train_split)
+
+        print(train_split, eval_split)
+        print(dataset)
         train_split = dataset[train_split]
         eval_split = dataset[eval_split]
         
