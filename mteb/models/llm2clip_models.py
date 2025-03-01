@@ -16,6 +16,7 @@ from mteb.model_meta import ModelMeta
 MODEL2PROCESSOR = {
     "microsoft/LLM2CLIP-Openai-L-14-336": "openai/clip-vit-large-patch14-336",
     "microsoft/LLM2CLIP-Openai-B-16": "openai/clip-vit-base-patch16",
+    "microsoft/LLM2CLIP-Openai-L-14-224": "openai/clip-vit-large-patch14",
 }
 
 
@@ -35,11 +36,17 @@ def llm2clip_loader(**kwargs):
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
             **kwargs: Any,
         ):
+            if model_name not in MODEL2PROCESSOR:
+                raise Exception(f"This model {model_name} is not in the supported mode list: {list(MODEL2PROCESSOR.keys())}.")
+                
             self.device = device
             from huggingface_hub import snapshot_download
 
             model_folder_path = snapshot_download(
                 repo_id=model_name, allow_patterns=["*.json", "*.safetensors"]
+            )
+            snapshot_download(
+                repo_id=MODEL2PROCESSOR[model_name], allow_patterns=["*.json", "*.safetensors"]
             )
             model_name_or_path = Path(model_folder_path)
             self.processor = CLIPImageProcessor.from_pretrained(
@@ -211,6 +218,33 @@ llm2clip_openai_l_14_336 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-336",
+    similarity_fn_name=None,
+    use_instructions=True,
+    training_datasets=None,
+)
+
+## ImportError: This modeling file requires the following packages that were not found in your environment: configuration_clip. Run `pip install configuration_clip`
+# Might be related to https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-336/discussions/2?
+llm2clip_openai_l_14_224 = ModelMeta(
+    loader=partial(
+        llm2clip_loader,
+        model_name="microsoft/LLM2CLIP-Openai-L-14-224",
+    ),
+    name="microsoft/LLM2CLIP-Openai-L-14-224",
+    languages=["eng_Latn"],
+    revision="6b8a11a94ff380fa220dfefe73ac9293d2677575",
+    release_date="2024-11-07",
+    modalities=["image", "text"],
+    n_parameters=578_000_000,
+    memory_usage_mb=None,
+    max_tokens=None,
+    embed_dim=1280,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code="https://github.com/microsoft/LLM2CLIP",
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference="https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-224",
     similarity_fn_name=None,
     use_instructions=True,
     training_datasets=None,
