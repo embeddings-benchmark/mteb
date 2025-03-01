@@ -176,9 +176,6 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
             logger.info(
                 f"\nTask: {self.metadata.name}, split: {eval_split}, subset: {hf_subset}. Running..."
             )
-            print(
-                f"\nTask: {self.metadata.name}, split: {eval_split}, subset: {hf_subset}. Running..."
-            )
 
             if hf_subset not in self.dataset and hf_subset == "default":
                 ds = self.dataset
@@ -239,8 +236,7 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
                 test_audio, _, y_test, _ = train_test_split(
                     test_audio, y_test, train_size=2000, stratify=y_test
                 )
-        except ValueError as e:
-            print(e)
+        except ValueError:
             logger.warning("Could not stratify test set. Using all samples.")
 
         X_test = model.get_audio_embeddings(

@@ -34,27 +34,27 @@ class FSD2019KaggleClassification(AbsTaskAudioMultilabelClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation="""@dataset{eduardo_fonseca_2020_3612637,
-  author       = {Eduardo Fonseca and
-                  Manoj Plakal and
-                  Frederic Font and
-                  Daniel P. W. Ellis and
-                  Xavier Serra},
-  title        = {FSDKaggle2019},
-  month        = jan,
-  year         = 2020,
-  publisher    = {Zenodo},
-  version      = {1.0},
-  doi          = {10.5281/zenodo.3612637},
-  url          = {https://doi.org/10.5281/zenodo.3612637},
-}
+                author       = {Eduardo Fonseca and
+                                Manoj Plakal and
+                                Frederic Font and
+                                Daniel P. W. Ellis and
+                                Xavier Serra},
+                title        = {FSDKaggle2019},
+                month        = jan,
+                year         = 2020,
+                publisher    = {Zenodo},
+                version      = {1.0},
+                doi          = {10.5281/zenodo.3612637},
+                url          = {https://doi.org/10.5281/zenodo.3612637},
+                }
         """,
         descriptive_stats={
             "n_samples": {"test": 8961},
-        },
+        }
     )
 
     audio_column_name: str = "audio"
-    label_column_name: str = "sound"  # "text"
+    label_column_name: str = "sound"
     samples_per_label: int = 8
 
     def load_data(self, **kwargs):
@@ -63,8 +63,6 @@ class FSD2019KaggleClassification(AbsTaskAudioMultilabelClassification):
             return
 
         self.dataset = {}
-        print(self.hf_subsets)
-        self.hf_subsets = ["curated", "noisy"]
         for lang in self.hf_subsets:
             self.dataset[lang] = datasets.load_dataset(
                 name=lang, **self.metadata_dict["dataset"]

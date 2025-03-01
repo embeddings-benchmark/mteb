@@ -79,7 +79,6 @@ class AbsTask(ABC):
         torch.manual_seed(self.seed)
         torch.cuda.manual_seed_all(self.seed)
         self.hf_subsets = list(self.metadata.hf_subsets_to_langscripts.keys())
-        # print(self.hf_subsets)
 
     def check_if_dataset_is_superseded(self):
         """Check if the dataset is superseded by a newer version"""

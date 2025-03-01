@@ -117,14 +117,11 @@ class Wav2Vec2AudioWrapper(Wrapper):
                             if isinstance(audio, np.ndarray)
                             else audio.float()
                         )
-                        # print('before resampling: ', audio.shape)
                         if item["sampling_rate"] != self.sampling_rate:
-                            # print('resampling..')
                             resampler = torchaudio.transforms.Resample(
                                 item["sampling_rate"], self.sampling_rate
                             )
                             audio = resampler(audio)
-                            # print('after resampling: ', audio.shape, '\n******')
                         waveforms.append(self._convert_audio_from_numpy(audio))
                     elif "path" in item:
                         waveforms.append(self._load_audio_file(item["path"]))
@@ -136,7 +133,6 @@ class Wav2Vec2AudioWrapper(Wrapper):
         return waveforms
 
     def _convert_audio_from_numpy(self, audio: AudioData) -> torch.Tensor:
-        # resampler = torchaudio.transforms.Resample(orig_freq=sample_rate, new_freq=16000)
         if isinstance(audio, np.ndarray):
             audio = torch.from_numpy(audio)
         return audio.squeeze()
@@ -171,8 +167,8 @@ class Wav2Vec2AudioWrapper(Wrapper):
         with torch.no_grad():
             for i in tqdm(range(0, len(processed_audio), batch_size)):
                 batch = processed_audio[i : i + batch_size]
-                # pre-pad the audio tensors before passing to feature extractor
 
+                # pre-pad the audio tensors before passing to feature extractor
                 batch = self._pad_audio_batch(batch)
 
                 inputs = self.feature_extractor(
@@ -206,7 +202,7 @@ class Wav2Vec2AudioWrapper(Wrapper):
         return self.get_audio_embeddings(inputs, task_name=task_name, **kwargs).numpy()
 
 
-# VERIFY THE INFO BELOW, i got r1 to write this out as a placeholder,,,,,
+
 wav2vec2_xlsr_300m = ModelMeta(
     loader=partial(Wav2Vec2AudioWrapper, model_name="facebook/wav2vec2-xls-r-300m"),
     name="facebook/wav2vec2-xls-r-300m",
