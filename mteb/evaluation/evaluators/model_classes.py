@@ -13,31 +13,14 @@ import tqdm
 
 from mteb.encoder_interface import Encoder, PromptType
 
+from ...data_loading_utils import (
+    create_dataloader_for_queries,
+    create_dataloader_for_retrieval_corpus,
+    create_dataloader_from_texts,
+)
 from .utils import convert_conv_history_to_query, cos_sim, download
 
 logger = logging.getLogger(__name__)
-
-
-def corpus_to_str(
-    corpus: list[dict[str, str]] | dict[str, list[str]] | list[str],
-) -> list[str]:
-    if isinstance(corpus, dict):
-        sentences = [
-            (corpus["title"][i] + " " + corpus["text"][i]).strip()
-            if "title" in corpus
-            else corpus["text"][i].strip()
-            for i in range(len(corpus["text"]))
-        ]
-    elif isinstance(corpus, list) and isinstance(corpus[0], dict):
-        sentences = [
-            (doc["title"] + " " + doc["text"]).strip()
-            if "title" in doc
-            else doc["text"].strip()
-            for doc in corpus
-        ]
-    else:
-        sentences = corpus
-    return sentences
 
 
 # Adapted from https://github.com/beir-cellar/beir/blob/f062f038c4bfd19a8ca942a9910b1e0d218759d4/beir/retrieval/search/dense/exact_search.py#L12
@@ -73,13 +56,13 @@ class DenseRetrievalExactSearch:
             # custom functions can be used by extending the DenseRetrievalExactSearch class
             self.predict = self.model.predict
 
+        self.combine_query_and_instruction = (
+            lambda query, instruction: f"{query.strip()} {instruction}".strip()
+        )
+
         if hasattr(self.model, "combine_query_and_instruction"):
             self.combine_query_and_instruction = (
                 self.model.combine_query_and_instruction
-            )
-        else:
-            self.combine_query_and_instruction = (
-                lambda query, instruction: f"{query.strip()} {instruction}".strip()
             )
 
     def search(
@@ -110,32 +93,42 @@ class DenseRetrievalExactSearch:
         logger.info("Encoding Queries.")
         query_ids = list(queries.keys())
         self.results = {qid: {} for qid in query_ids}
-        query_ids, queries = zip(*queries.items())
+        query_ids, query_list = zip(*queries.items())
 
+        # Prepare query-instruction pairs if instructions are provided
         if instructions:
-            new_queries = []
-            for q_idx, qid in enumerate(query_ids):
-                new_queries.append(
-                    self.combine_query_and_instruction(
-                        queries[q_idx], instructions[qid]
-                    )
-                )
-            queries = new_queries
+            query_instruction_pairs = [
+                (query_list[q_idx], instructions[qid])
+                for q_idx, qid in enumerate(query_ids)
+            ]
+        else:
+            query_instruction_pairs = [(query, None) for query in query_list]
 
-        # Create mapping of unique queries to their indices
-        unique_queries = []
-        query_to_idx = {}
-        query_idx_mapping = []
+        # Create mapping of unique query-instruction pairs to their indices
+        unique_pairs = []
+        pair_to_idx = {}
+        pair_idx_mapping = []
 
-        for query in queries:
+        for pair in query_instruction_pairs:
+            query, instruction = pair
+            # Create a hashable key for the pair
             query_key = tuple(query) if isinstance(query, list) else query
-            if query_key not in query_to_idx:
-                query_to_idx[query_key] = len(unique_queries)
-                unique_queries.append(query)
-            query_idx_mapping.append(query_to_idx[query_key])
+            pair_key = (query_key, instruction)
 
-        # Encode only unique queries
-        if isinstance(queries[0], list):
+            if pair_key not in pair_to_idx:
+                pair_to_idx[pair_key] = len(unique_pairs)
+                unique_pairs.append(pair)
+            pair_idx_mapping.append(pair_to_idx[pair_key])
+
+        # Extract unique queries and their corresponding instructions
+        unique_queries = [pair[0] for pair in unique_pairs]
+        unique_instructions = (
+            [pair[1] for pair in unique_pairs] if instructions else None
+        )
+
+        # Encode only unique queries using the dataloader
+        if isinstance(query_list[0], list):
+            # For conversations, still use the original encode_conversations method
             unique_query_embeddings = self.encode_conversations(
                 model=self.model,
                 conversations=unique_queries,
@@ -143,15 +136,23 @@ class DenseRetrievalExactSearch:
                 **self.encode_kwargs,
             )
         else:
+            # Create dataloader for text queries with their matched instructions
+            unique_query_dataloader = create_dataloader_for_queries(
+                queries=unique_queries,
+                instructions=unique_instructions,
+                combine_query_and_instruction=self.combine_query_and_instruction
+                if instructions
+                else None,
+            )
+
+            # Encode queries using the model with the dataloader
             unique_query_embeddings = self.model.encode(
-                unique_queries,
+                unique_query_dataloader,
                 task_name=task_name,
                 prompt_type=PromptType.query,
                 **self.encode_kwargs,
             )
-
-        # Map back to original order but reuse embeddings
-        query_embeddings = unique_query_embeddings[query_idx_mapping]
+        query_embeddings = unique_query_embeddings[pair_idx_mapping]
 
         if top_ranked is not None:
             logger.info("Performing reranking on pre-ranked documents...")
@@ -218,9 +219,9 @@ class DenseRetrievalExactSearch:
         doc_id_to_idx = {doc_id: idx for idx, doc_id in enumerate(unique_doc_ids)}
 
         # Encode unique documents only once
-        unique_docs = corpus_to_str([corpus[doc_id] for doc_id in unique_doc_ids])
+        unique_docs = [corpus[doc_id] for doc_id in unique_doc_ids]
         all_doc_embeddings = self.model.encode(
-            unique_docs,
+            create_dataloader_for_retrieval_corpus(unique_docs),
             task_name=task_name,
             prompt_type=PromptType.passage,
             request_qid=request_qid,
@@ -307,7 +308,7 @@ class DenseRetrievalExactSearch:
 
         logger.info("Sorting Corpus by document length (Longest first)...")
         corpus_ids = sorted(corpus, reverse=True)
-        corpus = corpus_to_str([corpus[cid] for cid in corpus_ids])
+        corpus = [corpus[cid] for cid in corpus_ids]
 
         logger.info("Encoding Corpus in batches... Warning: This might take a while!")
         itr = range(0, len(corpus), self.corpus_chunk_size)
@@ -318,7 +319,9 @@ class DenseRetrievalExactSearch:
             corpus_end_idx = min(corpus_start_idx + self.corpus_chunk_size, len(corpus))
             # Encode chunk of corpus
             sub_corpus_embeddings = self.model.encode(
-                corpus[corpus_start_idx:corpus_end_idx],  # type: ignore
+                create_dataloader_for_retrieval_corpus(
+                    corpus[corpus_start_idx:corpus_end_idx]
+                ),  # type: ignore
                 task_name=task_name,
                 prompt_type=PromptType.passage,
                 request_qid=request_qid,
@@ -510,13 +513,16 @@ class DenseRetrievalExactSearch:
         )
         queries = self.convert_conv_history_to_query(model, conversations)  # type: ignore
         return model.encode(
-            queries, task_name=task_name, prompt_type=PromptType.query, **kwargs
+            create_dataloader_from_texts(queries),
+            task_name=task_name,
+            prompt_type=PromptType.query,
+            **kwargs,
         )  # type: ignore
 
     @staticmethod
     def convert_conv_history_to_query(
         model: Encoder, conversations: list[list[str]]
-    ) -> str:
+    ) -> list[str]:
         if callable(getattr(model, "convert_conv_history_to_query", None)):
             return model.convert_conv_history_to_query(conversations)  # type: ignore
         return convert_conv_history_to_query(conversations)  # type: ignore

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Iterable
 from functools import partial
 from typing import Any
 
@@ -9,9 +10,10 @@ import torch
 import torch.nn.functional as F
 import transformers
 from packaging.version import Version
+from torch.utils.data import DataLoader
 
 import mteb
-from mteb.encoder_interface import PromptType
+from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 
@@ -46,7 +48,7 @@ class NomicWrapper(SentenceTransformerWrapper):
 
     def encode(  # type: ignore
         self,
-        sentences: list[str],
+        inputs: Iterable[BatchedInput] | DataLoader[BatchedInput],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
@@ -59,6 +61,8 @@ class NomicWrapper(SentenceTransformerWrapper):
             or PromptType.passage.value
         )
         task = mteb.get_task(task_name)
+        sentences = [text for batch in inputs for text in batch["text"]]
+
         # normalization not applied to classification
         # https://github.com/nomic-ai/contrastors/blob/5f7b461e5a13b5636692d1c9f1141b27232fe966/src/contrastors/eval/mteb_eval/eval_mteb.py#L172
         normalize = task.metadata.type not in (

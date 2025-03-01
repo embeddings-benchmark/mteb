@@ -14,6 +14,7 @@ from sklearn.metrics.pairwise import (
 
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
 
+from ...data_loading_utils import create_dataloader_from_texts
 from .Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
@@ -42,14 +43,9 @@ class PairClassificationEvaluator(Evaluator):
         sentences2,
         labels,
         task_name: str | None = None,
-        limit: int | None = None,
         **kwargs,
     ):
         super().__init__(**kwargs)
-        if limit:
-            sentences1 = sentences1[:limit]
-            sentences2 = sentences2[:limit]
-            labels = labels[:limit]
         self.sentences1 = sentences1
         self.sentences2 = sentences2
         self.labels = labels
@@ -91,7 +87,7 @@ class PairClassificationEvaluator(Evaluator):
         )
         all_unique_texts_embs = np.asarray(
             model.encode(
-                all_unique_texts,
+                create_dataloader_from_texts(all_unique_texts),
                 task_name=task_name,
                 **encode_kwargs,
             )

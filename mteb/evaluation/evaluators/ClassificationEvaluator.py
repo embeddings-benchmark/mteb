@@ -16,6 +16,7 @@ from torch import Tensor
 
 from mteb.encoder_interface import Encoder
 
+from ...data_loading_utils import create_dataloader_from_texts
 from .Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
@@ -58,13 +59,13 @@ class kNNClassificationEvaluator(Evaluator):
         max_f1 = 0
         max_ap = 0
         X_train = model.encode(
-            self.sentences_train,
+            create_dataloader_from_texts(self.sentences_train),
             task_name=self.task_name,
             **encode_kwargs,
         )
         if test_cache is None:
             X_test = model.encode(
-                self.sentences_test,
+                create_dataloader_from_texts(self.sentences_test),
                 task_name=self.task_name,
                 **encode_kwargs,
             )
@@ -126,14 +127,14 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         max_f1 = 0
         max_ap = 0
         X_train = model.encode(
-            self.sentences_train,
+            create_dataloader_from_texts(self.sentences_train),
             task_name=self.task_name,
             **encode_kwargs,
         )
 
         if test_cache is None:
             X_test = model.encode(
-                self.sentences_test,
+                create_dataloader_from_texts(self.sentences_test),
                 task_name=self.task_name,
                 **encode_kwargs,
             )
@@ -272,23 +273,20 @@ class logRegClassificationEvaluator(Evaluator):
             verbose=1 if logger.isEnabledFor(logging.DEBUG) else 0,
         )
         X_train = model.encode(
-            self.sentences_train,
+            create_dataloader_from_texts(self.sentences_train),
             task_name=self.task_name,
             **encode_kwargs,
         )
         if test_cache is None:
-            X_test = model.encode(
-                self.sentences_test,
+            test_cache = model.encode(
+                create_dataloader_from_texts(self.sentences_test),
                 task_name=self.task_name,
                 **encode_kwargs,
             )
-            test_cache = X_test
-        else:
-            X_test = test_cache
         logger.info("Fitting logistic regression classifier...")
         clf.fit(X_train, self.y_train)
         logger.info("Evaluating...")
-        y_pred = clf.predict(X_test)
+        y_pred = clf.predict(test_cache)
         scores["accuracy"] = accuracy_score(self.y_test, y_pred)
         scores["f1"] = f1_score(self.y_test, y_pred, average="macro")
         scores["f1_weighted"] = f1_score(self.y_test, y_pred, average="weighted")

@@ -15,6 +15,7 @@ from sklearn.preprocessing import MultiLabelBinarizer
 
 from mteb.encoder_interface import Encoder
 
+from ..data_loading_utils import create_dataloader_from_texts
 from ..load_results.task_results import ScoresDict
 from .AbsTaskClassification import AbsTaskClassification
 
@@ -81,7 +82,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         unique_train_sentences = train_split.select(unique_train_indices)["text"]
 
         _unique_train_embeddings = model.encode(
-            unique_train_sentences,
+            create_dataloader_from_texts(unique_train_sentences),
             task_name=self.metadata.name,
             **encode_kwargs,
         )
@@ -101,7 +102,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
             logger.warning("Couldn't subsample, continuing with the entire test set.")
 
         X_test = model.encode(
-            test_text,
+            create_dataloader_from_texts(test_text),
             task_name=self.metadata.name,
             **encode_kwargs,
         )

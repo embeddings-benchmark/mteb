@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Iterable
 from typing import Any, Callable
 
 import numpy as np
 import torch
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import Encoder, PromptType
+from mteb.encoder_interface import BatchedInput, Encoder, PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.wrapper import Wrapper
 
@@ -85,13 +87,14 @@ class LLM2VecWrapper(Wrapper):
 
     def encode(
         self,
-        sentences: list[str],
+        inputs: Iterable[BatchedInput] | DataLoader[BatchedInput],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,  # noqa
     ) -> np.ndarray:
         instruction = llm2vec_instruction(self.get_instruction(task_name, prompt_type))
+        sentences = [text for batch in inputs for text in batch["text"]]
 
         sentences = [[instruction, sentence] for sentence in sentences]
         return self.model.encode(sentences, **kwargs)

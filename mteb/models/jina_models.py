@@ -1,15 +1,16 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Sequence
+from collections.abc import Iterable
 from functools import partial
 from typing import Any
 
 import numpy as np
 import torch
 from sentence_transformers import __version__ as st_version
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import PromptType
+from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 
@@ -157,7 +158,7 @@ class JinaWrapper(SentenceTransformerWrapper):
 
     def encode(
         self,
-        sentences: Sequence[str],
+        inputs: Iterable[BatchedInput] | DataLoader[BatchedInput],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
@@ -172,6 +173,8 @@ class JinaWrapper(SentenceTransformerWrapper):
             logger.info(
                 f"No model prompts found for task={task_name} prompt_type={prompt_type}"
             )
+        sentences = [text for batch in inputs for text in batch["text"]]
+
         logger.info(f"Encoding {len(sentences)} sentences.")
 
         jina_task_name = self.model_prompts.get(prompt_name, None)

@@ -11,6 +11,7 @@ from scipy.stats import pearsonr, spearmanr
 
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
 
+from ...data_loading_utils import create_dataloader_from_texts
 from .Evaluator import Evaluator
 from .utils import cos_sim, dot_score
 
@@ -75,22 +76,26 @@ class SummarizationEvaluator(Evaluator):
 
         logger.info("Encoding human summaries...")
         embs_human_summaries_all = model.encode(
-            [
-                summary
-                for human_summaries in self.human_summaries
-                for summary in human_summaries
-            ],
+            create_dataloader_from_texts(
+                [
+                    summary
+                    for human_summaries in self.human_summaries
+                    for summary in human_summaries
+                ]
+            ),
             task_name=self.task_name,
             **encode_kwargs,
         )
 
         logger.info("Encoding machine summaries...")
         embs_machine_summaries_all = model.encode(
-            [
-                summary
-                for machine_summaries in self.machine_summaries
-                for summary in machine_summaries
-            ],
+            create_dataloader_from_texts(
+                [
+                    summary
+                    for machine_summaries in self.machine_summaries
+                    for summary in machine_summaries
+                ]
+            ),
             task_name=self.task_name,
             **encode_kwargs,
         )
@@ -234,22 +239,26 @@ class DeprecatedSummarizationEvaluator(Evaluator):
 
         logger.info("Encoding human summaries...")
         embs_human_summaries_all = model.encode(
-            [
-                summary
-                for human_summaries in self.human_summaries
-                for summary in human_summaries
-            ],
+            create_dataloader_from_texts(
+                [
+                    summary
+                    for human_summaries in self.human_summaries
+                    for summary in human_summaries
+                ]
+            ),
             task_name=self.task_name,
             **encode_kwargs,
         )
 
         logger.info("Encoding machine summaries...")
         embs_machine_summaries_all = model.encode(
-            [
-                summary
-                for machine_summaries in self.machine_summaries
-                for summary in machine_summaries
-            ],
+            create_dataloader_from_texts(
+                [
+                    summary
+                    for machine_summaries in self.machine_summaries
+                    for summary in machine_summaries
+                ]
+            ),
             task_name=self.task_name,
             **encode_kwargs,
         )

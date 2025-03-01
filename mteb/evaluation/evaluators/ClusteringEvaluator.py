@@ -9,6 +9,7 @@ from sklearn import metrics
 
 from mteb.encoder_interface import Encoder
 
+from ...data_loading_utils import create_dataloader_from_texts
 from .Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
@@ -34,7 +35,7 @@ class ClusteringEvaluator(Evaluator):
             encode_kwargs["batch_size"] = 32
 
         corpus_embeddings = model.encode(
-            self.sentences,
+            create_dataloader_from_texts(self.sentences),
             task_name=self.task_name,
             **encode_kwargs,
         )
