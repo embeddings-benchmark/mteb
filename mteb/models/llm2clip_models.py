@@ -38,7 +38,9 @@ def llm2clip_loader(**kwargs):
             self.device = device
             from huggingface_hub import snapshot_download
 
-            model_folder_path = snapshot_download(repo_id=model_name)
+            model_folder_path = snapshot_download(
+                repo_id=model_name, allow_patterns=["*.json", "*.safetensors"]
+            )
             model_name_or_path = Path(model_folder_path)
             self.processor = CLIPImageProcessor.from_pretrained(
                 MODEL2PROCESSOR[model_name]
@@ -199,7 +201,7 @@ llm2clip_openai_l_14_336 = ModelMeta(
     revision="92512331f393a003c3d98404677f991c188162c9",
     release_date="2024-11-07",
     modalities=["image", "text"],
-    n_parameters=None,
+    n_parameters=579_000_000,
     memory_usage_mb=None,
     max_tokens=None,
     embed_dim=1280,
@@ -209,6 +211,31 @@ llm2clip_openai_l_14_336 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-336",
+    similarity_fn_name=None,
+    use_instructions=True,
+    training_datasets=None,
+)
+
+llm2clip_openai_b_16 = ModelMeta(
+    loader=partial(
+        llm2clip_loader,
+        model_name="microsoft/LLM2CLIP-Openai-B-16",
+    ),
+    name="microsoft/LLM2CLIP-Openai-B-16",
+    languages=["eng_Latn"],
+    revision="ecfb347eb3dcfeb2fbc2a2eae7de6ac5a001aaf8",
+    release_date="2024-11-07",
+    modalities=["image", "text"],
+    n_parameters=361_000_000,
+    memory_usage_mb=None,
+    max_tokens=None,
+    embed_dim=1280,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code="https://github.com/microsoft/LLM2CLIP",
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference="https://huggingface.co/microsoft/LLM2CLIP-Openai-B-16",
     similarity_fn_name=None,
     use_instructions=True,
     training_datasets=None,
