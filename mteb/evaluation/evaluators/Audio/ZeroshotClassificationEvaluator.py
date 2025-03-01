@@ -85,6 +85,16 @@ class AudioZeroshotClassificationEvaluator(Evaluator):
         """Evaluate zero-shot classification performance."""
         logger.info("Getting text embeddings for candidate labels...")
 
+        print("Available methods for model:")
+        for method in dir(model):
+            if not method.startswith('_'):  # Skip private/internal methods
+                print(f"- {method}")
+
+        print(type(model))
+        
+
+        # assert False
+
         text_embeddings = model.get_text_embeddings(self.candidate_labels)
 
         logger.info("Processing audio data...")

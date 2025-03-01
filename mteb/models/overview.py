@@ -20,6 +20,7 @@ from mteb.models import (
     blip_models,
     bm25,
     cde_models,
+    clap_models,
     clip_models,
     cohere_models,
     cohere_v,
@@ -72,7 +73,6 @@ from mteb.models import (
     voyage_models,
     voyage_v,
     wav2vec2_models,
-    clap_models
 )
 
 logger = logging.getLogger(__name__)
@@ -139,7 +139,7 @@ model_modules = [
     voyage_models,
     fa_models,
     wav2vec2_models,
-    clap_models
+    clap_models,
 ]
 MODEL_REGISTRY = {}
 

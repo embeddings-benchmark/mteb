@@ -18,7 +18,7 @@ from mteb.model_meta import ModelMeta
 class ClapZeroShotWrapper:
     def __init__(
         self,
-        model_name: str = "laion/clap-htsat-unfused",
+        model_name: str = "laion/clap_htsat_fused",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
@@ -186,9 +186,9 @@ class ClapZeroShotWrapper:
 
 
 # Model metadata
-clap_htsat_unfused = ModelMeta(
-    loader=partial(ClapZeroShotWrapper, model_name="laion/clap-htsat-unfused"),
-    name="laion/clap-htsat-unfused",
+clap_htsat_fused = ModelMeta(
+    loader=partial(ClapZeroShotWrapper, model_name="laion/clap-htsat-fused"),
+    name="laion/clap-htsat-fused",
     languages=["en"],
     revision="main",
     release_date="2023-05-22",
@@ -202,7 +202,7 @@ clap_htsat_unfused = ModelMeta(
     public_training_code="https://github.com/LAION-AI/CLAP",
     public_training_data="LAION-Audio-630K",
     framework=["PyTorch"],
-    reference="https://huggingface.co/laion/clap-htsat-unfused",
+    reference="https://huggingface.co/laion/clap_htsat_fused",
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets={"LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]},

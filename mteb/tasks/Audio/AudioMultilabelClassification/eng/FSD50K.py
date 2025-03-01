@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from mteb.abstasks.Audio.AbsTaskAudioMultilabelClassification import AbsTaskAudioMultilabelClassification
+from mteb.abstasks.Audio.AbsTaskAudioMultilabelClassification import (
+    AbsTaskAudioMultilabelClassification,
+)
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
@@ -11,7 +13,7 @@ class FSD50KClassification(AbsTaskAudioMultilabelClassification):
         reference="https://huggingface.co/datasets/Fhrozen/FSD50k",
         dataset={
             "path": "Fhrozen/FSD50k",
-            "revision": "67e4d8c2570caef0f90d48fdb756b337875d91db",
+            "revision": "e3e2a63ffff66b9a9735524551e3818e96af03ee",
         },
         type="AudioMultilabelClassification",
         category="a2a",
@@ -20,7 +22,7 @@ class FSD50KClassification(AbsTaskAudioMultilabelClassification):
         main_score="mAP",
         date=(
             "2022-05-06",
-            "2022-05-06"
+            "2022-05-06",
         ),  # Estimated date when this dataset was committed, what should be the second tuple?
         domains=["Web"],  # obtained from Freesound - online collaborative platform
         task_subtypes=["Environment Sound Classification"],
@@ -47,4 +49,3 @@ class FSD50KClassification(AbsTaskAudioMultilabelClassification):
     audio_column_name: str = "audio"
     label_column_name: str = "label"
     samples_per_label: int = 8  # dunno what this is?
-
