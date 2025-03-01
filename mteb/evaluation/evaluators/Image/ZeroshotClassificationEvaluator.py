@@ -75,7 +75,7 @@ class ZeroshotClassificationEvaluator(Evaluator):
             self.candidate_labels, batch_size=encode_kwargs["batch_size"]
         )
 
-        image_embeddings = model.get_image_embeddings(
+        image_embeddings = model.get_audio_embeddings(
             dataloader, batch_size=encode_kwargs["batch_size"]
         )
 

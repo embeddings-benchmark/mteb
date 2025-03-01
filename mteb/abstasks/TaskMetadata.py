@@ -59,8 +59,8 @@ TASK_SUBTYPE = Literal[
     "Activity recognition",
     "Tumor detection",
     "Duplicate Detection",
+    "Environment Sound Classification",
     "Gender Clustering",
-    "Voice Emotion Clustering",
 ]
 
 TASK_DOMAIN = Literal[
@@ -124,11 +124,12 @@ TASK_TYPE = Literal[
     "ImageTextPairClassification",
     "VisualSTS",
     "ZeroShotClassification",
+    "AudioMultilabelClassification",
+    "AudioZeroshotClassification",
 ]
 
 
 TASK_CATEGORY = Literal[
-    "a2a",  # Audio-to-audio
     "s2s",  # Sentence-to-sentence
     "s2p",  # Sentence-to-paragraph
     "p2p",  # Paragraph-to-paragraph
@@ -141,6 +142,14 @@ TASK_CATEGORY = Literal[
     "i2it",  # image-to-image+text
     "t2it",  # text-to-image+text
     "it2it",  # image+text-to-image+text
+    "a2a",  # audio to audio
+    "a2t",  # audio to text
+    "t2a",  # text to audio
+    "at2t",  # audio+text-to-text
+    "at2a",  # audio+text-to-audio
+    "a2at",  # audio-to-audio+text
+    "t2at",  # text-to-audio+text
+    "at2at",  # audio+text-to-audio+text
     "a2a",  # audio-to-audio
 ]
 
