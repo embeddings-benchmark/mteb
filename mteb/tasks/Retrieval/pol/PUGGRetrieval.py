@@ -13,7 +13,6 @@ class PUGGRetrieval(AbsTaskRetrieval):
         dataset={
             "path": "clarin-pl/PUGG_IR",
             "revision": "48eff464950391ce7a3d58f37355fceccf613725",
-            "trust_remote_code": True,
         },
         type="Retrieval",
         category="t2t",
