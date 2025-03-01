@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import datasets
+
 from mteb.abstasks.Audio.AbsTaskAudioMultilabelClassification import (
     AbsTaskAudioMultilabelClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
-import datasets
+
 
 class FSD2019KaggleClassification(AbsTaskAudioMultilabelClassification):
     metadata = TaskMetadata(
@@ -13,13 +15,13 @@ class FSD2019KaggleClassification(AbsTaskAudioMultilabelClassification):
         reference="https://huggingface.co/datasets/confit/fsdkaggle2019-parquet",  # "https://huggingface.co/datasets/CLAPv2/FSD50K",
         dataset={
             "path": "confit/fsdkaggle2019-parquet",
-            "revision": "648a5925c8013e345ae5d36bdda220b1d4b07f24"
+            "revision": "648a5925c8013e345ae5d36bdda220b1d4b07f24",
         },  # this is actually used to download the data
         type="AudioMultilabelClassification",
         category="a2t",
         eval_splits=["test"],
         eval_langs={"curated": ["eng-Latn"], "noisy": ["eng-Latn"]},
-        main_score="mAP",
+        main_score="accuracy",
         date=(
             "2020-01-01",
             "2020-01-30",
@@ -48,13 +50,12 @@ class FSD2019KaggleClassification(AbsTaskAudioMultilabelClassification):
         """,
         descriptive_stats={
             "n_samples": {"test": 8961},
-        }
+        },
     )
 
     audio_column_name: str = "audio"
     label_column_name: str = "sound"  # "text"
     samples_per_label: int = 8
-
 
     def load_data(self, **kwargs):
         """Load dataset from HuggingFace hub and convert it to the standard format."""
@@ -65,7 +66,9 @@ class FSD2019KaggleClassification(AbsTaskAudioMultilabelClassification):
         print(self.hf_subsets)
         self.hf_subsets = ["curated", "noisy"]
         for lang in self.hf_subsets:
-            self.dataset[lang] = datasets.load_dataset(name=lang, **self.metadata_dict["dataset"])
+            self.dataset[lang] = datasets.load_dataset(
+                name=lang, **self.metadata_dict["dataset"]
+            )
 
         self.dataset_transform()
         self.data_loaded = True
