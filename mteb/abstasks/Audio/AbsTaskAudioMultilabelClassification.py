@@ -227,7 +227,7 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
         unique_audio = train_split.select(unique_indices)[self.audio_column_name]
         _unique_embeddings = model.get_audio_embeddings(
             unique_audio, **kwargs
-        )  # replacing [clip for clip in unique_audio] -> unique_audio
+        )
         unique_train_embeddings = dict(zip(unique_indices, _unique_embeddings))
         test_audio = eval_split[self.audio_column_name]
         binarizer = MultiLabelBinarizer()
@@ -243,7 +243,7 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
             logger.warning("Could not stratify test set. Using all samples.")
 
         X_test = model.get_audio_embeddings(
-            test_audio,  # [clip["array"] for clip in test_audio]
+            test_audio,
             **kwargs,
         )
 
