@@ -458,7 +458,10 @@ class TaskResult(BaseModel):
         return aggregation(values)
 
     def get_score_fast(
-        self, splits: Iterable[str] | None = None, languages: str | None = None
+        self,
+        splits: Iterable[str] | None = None,
+        languages: str | None = None,
+        subsets: Iterable[str] | None = None,
     ) -> float:
         """Sped up version of get_score that will be used if no aggregation, script or getter needs to be specified."""
         if splits is None:
@@ -475,6 +478,13 @@ class TaskResult(BaseModel):
                 main_score = scores.get("main_score", None)
                 if main_score is None:
                     raise ValueError(f"Missing main score for subset: {hf_subset}")
+                if subsets and hf_subset not in subsets:
+                    continue
+                elif subsets:
+                    val_sum += main_score
+                    n_val += 1
+                    continue
+
                 if languages is None:
                     val_sum += main_score
                     n_val += 1
@@ -483,6 +493,7 @@ class TaskResult(BaseModel):
                     if lang.split("-")[0] in languages:
                         val_sum += main_score
                         n_val += 1
+                        logger.info(f"{val_sum=}, {n_val=}")
                         break
         if n_val == 0:
             raise ValueError("No splits had scores for the specified languages.")

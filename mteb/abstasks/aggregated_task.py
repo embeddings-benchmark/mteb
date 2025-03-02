@@ -35,15 +35,27 @@ class AbsTaskAggregate(AbsTask):
     ) -> dict[str, dict[HFSubset, ScoresDict]]:
         """The function that aggregated scores. Can be redefined to allow for custom aggregations."""
         scores = {}
+        subsets = (
+            self.metadata.eval_langs.keys()
+            if isinstance(self.metadata.eval_langs, dict)
+            else None
+        )
+        eval_langs = (
+            self.metadata.eval_langs.values()
+            if isinstance(self.metadata.eval_langs, dict)
+            else [self.metadata.eval_langs]
+        )
         for split in self.metadata.eval_splits:
             main_scores = []
             for task_res in task_results:
-                main_scores.append(
-                    task_res.get_score_fast(
-                        languages=None,
-                        splits=self.metadata.eval_splits,
+                for langs in eval_langs:
+                    main_scores.append(
+                        task_res.get_score_fast(
+                            languages=[lang.split("-")[0] for lang in langs],
+                            splits=self.metadata.eval_splits,
+                            subsets=subsets,
+                        )
                     )
-                )
             main_score = np.mean(main_scores)
             scores[split] = {
                 "default": {
@@ -64,7 +76,7 @@ class AbsTaskAggregate(AbsTask):
         eval_times = [tr.evaluation_time for tr in task_results if tr.evaluation_time]
         if len(eval_times) != len(task_results):
             logger.info(
-                f"Loaded results does not include runtime. Therefor evaluation of {self.metadata.name} "
+                f"Loaded results does not include runtime. Therefore evaluation of {self.metadata.name} "
                 + "can't be computed. Setting it to None."
             )
             eval_time = np.nan
@@ -76,7 +88,7 @@ class AbsTaskAggregate(AbsTask):
         ]
         if len(kg_co2_emissions_) != len(task_results):
             logger.info(
-                f"Loaded results does not include co2-eq emissions. Therefor evaluation of {self.metadata.name} "
+                f"Loaded results does not include co2-eq emissions. Therefore evaluation of {self.metadata.name} "
                 + "can't be computed. Setting it to None."
             )
             kg_co2_emissions = np.nan

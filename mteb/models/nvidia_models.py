@@ -41,7 +41,6 @@ nvidia_training_datasets = {
     "FEVERHardNegatives": ["train"],
     "NanoFEVERRetrieval": ["train"],
     "FiQA2018": ["train"],
-    "FiQA2018-PL": ["train"],  # translation not trained on
     "FiQA2018-NL": ["train"],  # translation not trained on
     "STS12": ["train"],
     "STS22": ["train"],
@@ -56,7 +55,6 @@ nvidia_training_datasets = {
     "ArxivClusteringP2P": ["train"],
     "ArxivClusteringP2P.v2": ["train"],
     "ArxivClusteringS2S": ["train"],
-    "ArxivClusteringS2S.v2": ["train"],
     "BiorxivClusteringP2P": ["train"],
     "BiorxivClusteringP2P.v2": ["train"],
     "BiorxivClusteringS2S": ["train"],
@@ -67,8 +65,20 @@ nvidia_training_datasets = {
     "MedrxivClusteringS2S.v2": ["train"],
     "TwentyNewsgroupsClustering": ["train"],
     "TwentyNewsgroupsClustering.v2": ["train"],
+    "StackExchangeClustering": ["train"],
+    "StackExchangeClustering.v2": ["train"],
+    "StackExchangeClusteringP2P": ["train"],
+    "StackExchangeClusteringP2P.v2": ["train"],
+    "RedditClustering": ["train"],
+    "RedditClustering.v2": ["train"],
+    "RedditClusteringP2P": ["train"],
+    "RedditClusteringP2P.v2": ["train"],
     "STSBenchmark": ["train"],
     "STSBenchmarkMultilingualSTS": ["train"],  # translated, not trained on
+    "MIRACLRetrieval": ["train"],
+    "MIRACLRetrievalHardNegatives": ["train"],
+    "MIRACLReranking": ["train"],
+    "MrTidyRetrieval": ["train"],
 }
 
 NV_embed_v2 = ModelMeta(

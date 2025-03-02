@@ -49,7 +49,7 @@ gte_Qwen2_7B_instruct = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
-    max_tokens=131072,
+    max_tokens=32_768,
 )
 
 gte_Qwen1_5_7B_instruct = ModelMeta(
@@ -73,7 +73,7 @@ gte_Qwen1_5_7B_instruct = ModelMeta(
     memory_usage_mb=29449,
     embed_dim=4096,
     license="apache-2.0",
-    max_tokens=32768,
+    max_tokens=32_768,
     reference="https://huggingface.co/Alibaba-NLP/gte-Qwen1.5-7B-instruct",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
@@ -104,7 +104,7 @@ gte_Qwen2_1_5B_instruct = ModelMeta(
     memory_usage_mb=6776,
     embed_dim=8960,
     license="apache-2.0",
-    max_tokens=131072,
+    max_tokens=32_768,
     reference="https://huggingface.co/Alibaba-NLP/gte-Qwen2-1.5B-instruct",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
