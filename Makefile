@@ -48,7 +48,7 @@ model-load-test:
 dataset-load-test:
 	@echo "--- 🚀 Running dataset load test ---"
 	pip install ".[dev, speedtask]"
-	NO_SKIP=1 pytest -n auto tests/test_tasks/test_all_abstasks.py::test_dataset_on_hf
+	pytest -n auto -m test_datasets
 
 
 run-leaderboard:
