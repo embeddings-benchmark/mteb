@@ -67,9 +67,7 @@ def test_load_data(
             mock_dataset_transform.assert_called_once()
 
 
-@pytest.mark.skipif(
-    condition=os.getenv("NO_SKIP", 0) == 1, reason="Just in separate CI Job"
-)
+@pytest.mark.test_datasets
 @pytest.mark.flaky(
     reruns=3,
     reruns_delay=5,
