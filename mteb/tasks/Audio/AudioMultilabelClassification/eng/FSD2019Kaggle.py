@@ -2,14 +2,16 @@ from __future__ import annotations
 
 import datasets
 
+from mteb.abstasks import MultilingualTask
 from mteb.abstasks.Audio.AbsTaskAudioMultilabelClassification import (
     AbsTaskAudioMultilabelClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class FSD2019KaggleMultilingualClassification(AbsTaskAudioMultilabelClassification):
-    is_multilingual = True
+class FSD2019KaggleMultilingualClassification(
+    AbsTaskAudioMultilabelClassification, MultilingualTask
+):
     metadata = TaskMetadata(
         name="FSD2019Kaggle",
         description="Multilabel Audio Classification.",
