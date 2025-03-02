@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import numpy as np
+from torch.utils.data import DataLoader
 
 from mteb.evaluation.evaluators import ClusteringEvaluator
 
@@ -10,11 +11,11 @@ class TestClusteringEvaluator:
         class Model:
             def encode(
                 self,
-                sentences: list[str],
+                sentences: DataLoader,
                 task_name: str | None = None,
                 batch_size=32,
             ) -> np.ndarray:
-                return np.eye(len(sentences))
+                return np.eye(len(sentences.dataset))
 
         model = Model()
         sentences = ["dog walked home", "cat walked home", "robot walked to the park"]

@@ -143,11 +143,13 @@ class AbsTaskClassification(AbsTask):
                 idxs,
             )
 
+            train_dataset = Dataset.from_dict(
+                {"text": X_sampled, "label": y_sampled}
+            )
+
             evaluator = self.evaluator(
-                X_sampled,
-                y_sampled,
-                eval_split["text"],  # type: ignore
-                eval_split["label"],  # type: ignore
+                train_dataset,
+                eval_split,
                 task_name=self.metadata.name,
                 **params,
             )
