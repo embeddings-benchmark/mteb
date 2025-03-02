@@ -171,7 +171,6 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
                 model,
                 ds,
                 eval_split,
-                self.train_split,
                 encode_kwargs=encode_kwargs,
                 **kwargs,
             )
