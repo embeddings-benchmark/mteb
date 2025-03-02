@@ -9,6 +9,7 @@ on:
       - main
     paths:
       - mteb/leaderboard/*
+      - mteb/benchmarks/benchmarks.py
 
 jobs:
   rebuild:
