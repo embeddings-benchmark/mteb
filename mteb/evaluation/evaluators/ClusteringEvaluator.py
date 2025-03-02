@@ -5,11 +5,12 @@ from typing import Any
 
 import sklearn
 import sklearn.cluster
+from datasets import Dataset
 from sklearn import metrics
+from torch.utils.data import DataLoader
 
 from mteb.encoder_interface import Encoder
 
-from ...create_dataloaders import create_dataloader_from_texts
 from .Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
@@ -18,15 +19,13 @@ logger = logging.getLogger(__name__)
 class ClusteringEvaluator(Evaluator):
     def __init__(
         self,
-        sentences,
-        labels,
+        dataset: Dataset,
         task_name: str | None = None,
         clustering_batch_size: int = 500,
         **kwargs,
     ):
         super().__init__(**kwargs)
-        self.sentences = sentences
-        self.labels = labels
+        self.dataset = dataset
         self.clustering_batch_size = clustering_batch_size
         self.task_name = task_name
 
@@ -35,14 +34,15 @@ class ClusteringEvaluator(Evaluator):
             encode_kwargs["batch_size"] = 32
 
         corpus_embeddings = model.encode(
-            create_dataloader_from_texts(self.sentences),
+            DataLoader(self.dataset),
             task_name=self.task_name,
             **encode_kwargs,
         )
 
+        labels = self.dataset["labels"]
         logger.info("Fitting Mini-Batch K-Means model...")
         clustering_model = sklearn.cluster.MiniBatchKMeans(
-            n_clusters=len(set(self.labels)),
+            n_clusters=len(set(labels)),
             batch_size=self.clustering_batch_size,
             n_init="auto",
         )
@@ -50,6 +50,6 @@ class ClusteringEvaluator(Evaluator):
         cluster_assignment = clustering_model.labels_
 
         logger.info("Evaluating...")
-        v_measure = metrics.cluster.v_measure_score(self.labels, cluster_assignment)
+        v_measure = metrics.cluster.v_measure_score(labels, cluster_assignment)
 
         return {"v_measure": v_measure}
