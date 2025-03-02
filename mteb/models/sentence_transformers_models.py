@@ -215,7 +215,11 @@ labse = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
-    training_datasets=None,
+    training_datasets={
+        # CommonCrawl
+        # wiki  05-21-2020 dump
+        # The translation corpus is constructed from web pages using a bitext mining system
+    },
     # scraped and mined webdata including CC, wiki, see section 3.1 https://aclanthology.org/2022.acl-long.62.pdf
     public_training_code="https://www.kaggle.com/models/google/labse/tensorFlow2/labse/2?tfhub-redirect=true",
     public_training_data=None,
