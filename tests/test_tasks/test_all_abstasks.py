@@ -5,6 +5,7 @@ from unittest.mock import Mock, patch
 
 import huggingface_hub
 import pytest
+import requests
 
 import mteb
 from mteb import MTEB
@@ -76,12 +77,14 @@ def test_load_data(
 def test_dataset_on_hf(dataset_revision: tuple[str, str]):
     repo_id, revision = dataset_revision
     try:
-        huggingface_hub.dataset_info(repo_id, revision=revision, timeout=60)
+        huggingface_hub.dataset_info(repo_id, revision=revision, timeout=120)
     except (
         huggingface_hub.errors.RepositoryNotFoundError,
         huggingface_hub.errors.RevisionNotFoundError,
     ):
         assert False, f"Dataset {repo_id} - {revision} not available"
+    except requests.exceptions.ReadTimeout:
+        assert False, f"Dataset {repo_id} - {revision} timed out"
 
 
 def test_superseded_dataset_exists():
