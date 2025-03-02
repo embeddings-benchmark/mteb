@@ -218,8 +218,6 @@ labse = ModelMeta(
     training_datasets={
         # CommonCrawl
         # wiki  05-21-2020 dump
-        "WikipediaRetrievalMultilingual": [],
-        "WikipediaRerankingMultilingual": [],
         # The translation corpus is constructed from web pages using a bitext mining system
     },
     # scraped and mined webdata including CC, wiki, see section 3.1 https://aclanthology.org/2022.acl-long.62.pdf
