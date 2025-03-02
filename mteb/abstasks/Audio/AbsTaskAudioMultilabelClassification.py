@@ -96,7 +96,7 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
     label_column_name: str = "labels"
     samples_per_label: int = 8
     n_experiments: int = 10
-    batch_size:int = 32
+    batch_size: int = 32
     train_split: str = "train"
 
     classifier = MultiOutputClassifier(estimator=LogisticRegression())
