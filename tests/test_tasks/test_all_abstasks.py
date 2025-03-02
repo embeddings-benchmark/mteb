@@ -76,7 +76,7 @@ def test_load_data(
 def test_dataset_on_hf(dataset_revision: tuple[str, str]):
     repo_id, revision = dataset_revision
     try:
-        huggingface_hub.dataset_info(repo_id, revision=revision, timeout=5)
+        huggingface_hub.dataset_info(repo_id, revision=revision, timeout=60)
     except (
         huggingface_hub.errors.RepositoryNotFoundError,
         huggingface_hub.errors.RevisionNotFoundError,
