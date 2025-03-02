@@ -100,12 +100,9 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
 
     def __init__(
         self,
-        n_experiments=None,
-        batch_size=32,
         **kwargs,
     ):
         super().__init__(**kwargs)
-        self.batch_size = batch_size
 
         # Bootstrap parameters
         self.n_experiments = n_experiments or getattr(self, "n_experiments", 10)
