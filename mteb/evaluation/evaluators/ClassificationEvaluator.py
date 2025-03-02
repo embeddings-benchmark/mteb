@@ -5,6 +5,7 @@ from typing import Any
 
 import numpy as np
 import torch
+from datasets import Dataset
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
     accuracy_score,
@@ -13,6 +14,7 @@ from sklearn.metrics import (
 )
 from sklearn.neighbors import KNeighborsClassifier
 from torch import Tensor
+from torch.utils.data import DataLoader
 
 from mteb.encoder_interface import Encoder
 
@@ -241,19 +243,15 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
 class logRegClassificationEvaluator(Evaluator):
     def __init__(
         self,
-        sentences_train: list[str],
-        y_train: list[int],
-        sentences_test: list[str],
-        y_test: list[int],
+        train_dataset: Dataset,
+        eval_dataset: Dataset,
         task_name: str,
         max_iter: int = 100,
         **kwargs,
     ):
         super().__init__(**kwargs)
-        self.sentences_train = sentences_train
-        self.y_train = y_train
-        self.sentences_test = sentences_test
-        self.y_test = y_test
+        self.train_dataset = train_dataset
+        self.eval_dataset = eval_dataset
 
         self.max_iter = max_iter
         self.task_name = task_name
@@ -273,29 +271,31 @@ class logRegClassificationEvaluator(Evaluator):
             verbose=1 if logger.isEnabledFor(logging.DEBUG) else 0,
         )
         X_train = model.encode(
-            create_dataloader_from_texts(self.sentences_train),
+            DataLoader(self.train_dataset),
             task_name=self.task_name,
             **encode_kwargs,
         )
         if test_cache is None:
             test_cache = model.encode(
-                create_dataloader_from_texts(self.sentences_test),
+                DataLoader(self.eval_dataset),
                 task_name=self.task_name,
                 **encode_kwargs,
             )
         logger.info("Fitting logistic regression classifier...")
-        clf.fit(X_train, self.y_train)
+        y_train = self.train_dataset["label"]
+        y_test = self.eval_dataset["label"]
+        clf.fit(X_train, y_train)
         logger.info("Evaluating...")
         y_pred = clf.predict(test_cache)
-        scores["accuracy"] = accuracy_score(self.y_test, y_pred)
-        scores["f1"] = f1_score(self.y_test, y_pred, average="macro")
-        scores["f1_weighted"] = f1_score(self.y_test, y_pred, average="weighted")
+        scores["accuracy"] = accuracy_score(y_test, y_pred)
+        scores["f1"] = f1_score(y_test, y_pred, average="macro")
+        scores["f1_weighted"] = f1_score(y_test, y_pred, average="weighted")
 
         # if binary classification
-        if len(np.unique(self.y_train)) == 2:
-            scores["ap"] = average_precision_score(self.y_test, y_pred, average="macro")
+        if len(np.unique(y_test)) == 2:
+            scores["ap"] = average_precision_score(y_test, y_pred, average="macro")
             scores["ap_weighted"] = average_precision_score(
-                self.y_test, y_pred, average="weighted"
+                y_test, y_pred, average="weighted"
             )
 
         return scores, test_cache
