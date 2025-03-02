@@ -48,6 +48,7 @@ class CLSClusteringFastS2S(AbsTaskClusteringFast):
             primaryClass={cs.CL}
         }""",
         prompt="Identify the main category of scholar papers based on the titles",
+        adapted_from=["CLSClusteringS2S"],
     )
 
     def dataset_transform(self):
@@ -104,6 +105,7 @@ class CLSClusteringFastP2P(AbsTaskClusteringFast):
             primaryClass={cs.CL}
         }""",
         prompt="Identify the main category of scholar papers based on the titles and abstracts",
+        adapted_from=["CLSClusteringP2P"],
     )
 
     def dataset_transform(self):
@@ -230,6 +232,7 @@ class ThuNewsClusteringFastS2S(AbsTaskClusteringFast):
   url = {https://github.com/thunlp/THUCTC}
 }""",
         prompt="Identify the topic or theme of the given news articles based on the titles",
+        adapted_from=["ThuNewsClusteringS2S"],
     )
 
     def dataset_transform(self):
@@ -286,6 +289,7 @@ class ThuNewsClusteringFastP2P(AbsTaskClusteringFast):
   url = {https://github.com/thunlp/THUCTC}
 }""",
         prompt="Identify the topic or theme of the given news articles based on the titles and contents",
+        adapted_from=["ThuNewsClusteringP2P"],
     )
 
     def dataset_transform(self):

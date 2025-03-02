@@ -32,6 +32,7 @@ class LivedoorNewsClusteringv2(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
+        adapted_from=["LivedoorNewsClustering"],
     )
 
     def dataset_transform(self):

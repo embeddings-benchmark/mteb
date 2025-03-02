@@ -107,6 +107,7 @@ class AlloProfClusteringP2PFast(AbsTaskClusteringFast):
   copyright = {Creative Commons Attribution Non Commercial Share Alike 4.0 International}
 }
 """,
+        adapted_from=["AlloProfClusteringP2P"],
     )
 
     def create_description(self, example):

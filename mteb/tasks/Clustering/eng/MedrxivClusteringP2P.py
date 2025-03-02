@@ -36,6 +36,7 @@ class MedrxivClusteringP2PFast(AbsTaskClusteringFast):
         sample_creation="created",
         bibtex_citation="",
         prompt="Identify the main category of Medrxiv papers based on the titles and abstracts",
+        adapted_from=["MedrxivClusteringP2P"],
     )
 
     def dataset_transform(self):

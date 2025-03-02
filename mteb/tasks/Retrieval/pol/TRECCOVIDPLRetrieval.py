@@ -39,4 +39,5 @@ class TRECCOVIDPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["TRECCOVID"],
     )

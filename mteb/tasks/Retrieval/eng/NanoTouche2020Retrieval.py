@@ -50,6 +50,7 @@ class NanoTouche2020Retrieval(AbsTaskRetrieval):
         prompt={
             "query": "Given a question, retrieve detailed and persuasive arguments that answer the question"
         },
+        adapted_from=["Touche2020"],
     )
 
     def load_data(self, **kwargs):

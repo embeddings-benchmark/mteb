@@ -41,6 +41,7 @@ class NanoClimateFeverRetrieval(AbsTaskRetrieval):
         prompt={
             "query": "Given a claim about climate change, retrieve documents that support or refute the claim"
         },
+        adapted_from=["ClimateFEVER"],
     )
 
     def load_data(self, **kwargs):
