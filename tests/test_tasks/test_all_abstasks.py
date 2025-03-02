@@ -3,8 +3,8 @@ from __future__ import annotations
 import logging
 from unittest.mock import Mock, patch
 
+import huggingface_hub
 import pytest
-import requests
 
 import mteb
 from mteb import MTEB
@@ -74,13 +74,14 @@ def test_load_data(
 )
 @pytest.mark.parametrize("dataset_revision", dataset_revisions)
 def test_dataset_on_hf(dataset_revision: tuple[str, str]):
-    dataset, revision = dataset_revision
-    url = f"https://huggingface.co/datasets/{dataset}/tree/{revision}"
-    response = requests.head(url)
-
-    assert response.status_code == 200, (
-        f"Dataset {dataset} - {revision} not available. Status code: {response.status_code}"
-    )
+    repo_id, revision = dataset_revision
+    try:
+        huggingface_hub.dataset_info(repo_id, revision=revision, timeout=5)
+    except (
+        huggingface_hub.errors.RepositoryNotFoundError,
+        huggingface_hub.errors.RevisionNotFoundError,
+    ):
+        assert False, f"Dataset {repo_id} - {revision} not available"
 
 
 def test_superseded_dataset_exists():
