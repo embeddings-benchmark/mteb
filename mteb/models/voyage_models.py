@@ -93,7 +93,7 @@ class VoyageWrapper(Wrapper):
 
     def encode(
         self,
-        inputs: Iterable[BatchedInput] | DataLoader[BatchedInput],
+        inputs: DataLoader[BatchedInput],
         *,
         batch_size: int = 32,
         task_name: str,

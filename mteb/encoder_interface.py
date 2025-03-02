@@ -28,7 +28,7 @@ class BatchedInput(TypedDict, total=False):
     """
 
     text: list[str]
-    image: list[Image.Image | list[Image.Image]]
+    image: list[list[Image.Image]]
     audio: list[list[bytes]]
     # Retrieval corpus
     title: list[str]
@@ -56,7 +56,7 @@ class Encoder(Protocol):
 
     def encode(
         self,
-        inputs: Iterable[BatchedInput] | DataLoader[BatchedInput],
+        inputs: DataLoader[BatchedInput],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,

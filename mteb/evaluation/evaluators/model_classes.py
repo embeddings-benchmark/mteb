@@ -13,7 +13,7 @@ import tqdm
 
 from mteb.encoder_interface import Encoder, PromptType
 
-from ...data_loading_utils import (
+from ...create_dataloaders import (
     create_dataloader_for_queries,
     create_dataloader_for_retrieval_corpus,
     create_dataloader_from_texts,

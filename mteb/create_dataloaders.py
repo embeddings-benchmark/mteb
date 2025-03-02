@@ -10,19 +10,19 @@ from mteb.encoder_interface import BatchedInput
 
 
 def create_dataloader(
-    dataset: Dataset, batch_size: int = 32
+    dataset: Dataset, **dataloader_kwargs
 ) -> DataLoader[BatchedInput]:
     """Create a dataloader from a dataset.
 
     Args:
         dataset: The dataset to create a dataloader from.
-        batch_size: The batch size of the dataloader.
+        dataloader_kwargs: Kwargs for the dataloader.
 
     Returns:
         A dataloader with the dataset.
     """
     return torch.utils.data.DataLoader(
-        dataset.with_format("torch"), batch_size=batch_size
+        dataset.with_format("torch"), **dataloader_kwargs
     )
 
 

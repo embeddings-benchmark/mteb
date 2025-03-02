@@ -47,7 +47,7 @@ class OpenAIWrapper(Wrapper):
         return self._encoding.decode(truncated_sentence)
 
     def encode(
-        self, inputs: Iterable[BatchedInput] | DataLoader[BatchedInput], **kwargs: Any
+        self, inputs: DataLoader[BatchedInput], **kwargs: Any
     ) -> np.ndarray:
         requires_package(self, "openai", "Openai text embedding")
 

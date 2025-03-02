@@ -40,7 +40,7 @@ class Model2VecWrapper(Wrapper):
 
     def encode(
         self,
-        inputs: Iterable[BatchedInput] | DataLoader[BatchedInput],
+        inputs: DataLoader[BatchedInput],
         **kwargs: Any,
     ) -> np.ndarray:
         """Encodes the given sentences using the encoder.

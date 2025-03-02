@@ -53,7 +53,7 @@ class BedrockWrapper(Wrapper):
 
     def encode(
         self,
-        inputs: Iterable[BatchedInput] | DataLoader[BatchedInput],
+        inputs: DataLoader[BatchedInput],
         *,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,

@@ -58,7 +58,7 @@ def instruct_wrapper(
 
         def encode(
             self,
-            inputs: Iterable[BatchedInput] | DataLoader[BatchedInput],
+            inputs: DataLoader[BatchedInput],
             *args,
             task_name: str,
             prompt_type: PromptType | None = None,
@@ -131,12 +131,14 @@ class InstructSentenceTransformerWrapper(Wrapper):
 
     def encode(
         self,
-        sentences: Sequence[str],
-        *,
+            inputs: DataLoader[BatchedInput],
+            *,
         task_name: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
+        sentences = [text for batch in inputs for text in batch["text"]]
+
         if self.add_eos_token:
             sentences = [
                 example + self.model.tokenizer.eos_token for example in sentences

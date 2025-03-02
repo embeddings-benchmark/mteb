@@ -158,7 +158,7 @@ class JinaWrapper(SentenceTransformerWrapper):
 
     def encode(
         self,
-        inputs: Iterable[BatchedInput] | DataLoader[BatchedInput],
+        inputs: DataLoader[BatchedInput],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,

@@ -13,7 +13,7 @@ from sklearn.metrics.pairwise import (
 
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
 
-from ...data_loading_utils import create_dataloader_from_texts
+from ...create_dataloaders import create_dataloader_from_texts
 from .Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)

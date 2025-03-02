@@ -11,7 +11,7 @@ from scipy.stats import pearsonr, spearmanr
 
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
 
-from ...data_loading_utils import create_dataloader_from_texts
+from ...create_dataloaders import create_dataloader_from_texts
 from .Evaluator import Evaluator
 from .utils import cos_sim, dot_score
 
