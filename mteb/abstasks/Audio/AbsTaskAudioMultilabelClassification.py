@@ -95,27 +95,18 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
     audio_column_name: str = "audio"
     label_column_name: str = "labels"
     samples_per_label: int = 8
+    n_experiments: int = 10
+    batch_size:int = 32
+    train_split: str = "train"
 
     classifier = MultiOutputClassifier(estimator=LogisticRegression())
 
     def __init__(
         self,
-        n_experiments=None,
-        batch_size=32,
-        **kwargs,
+        **kwargs
     ):
         super().__init__(**kwargs)
-        self.batch_size = batch_size
 
-        # Bootstrap parameters
-        self.n_experiments = n_experiments or getattr(self, "n_experiments", 10)
-
-        # Run metadata validation by instantiating addressing the attribute
-        # This is quite hacky. Ideally, this would be done in the constructor of
-        # each concrete task, but then we have to duplicate the __init__ method's
-        # interface.
-        if hasattr(self, "metadata"):
-            self.metadata
 
     def _add_main_score(self, scores):
         scores["main_score"] = scores[self.metadata.main_score]
