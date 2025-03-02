@@ -278,7 +278,7 @@ class TaskMetadata(BaseModel):
             "machine-translated and localized".
         prompt: The prompt used for the task. Can be a string or a dictionary containing the query and passage prompts.
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
-        adapted_from: Datasets adapted (translated, subtracted, etc.) from other datasets.
+        adapted_from: Datasets adapted (translated, sampled from, etc.) from other datasets.
     """
 
     dataset: dict[str, Any]
