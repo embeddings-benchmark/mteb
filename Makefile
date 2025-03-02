@@ -20,7 +20,7 @@ lint-check:
 
 test:
 	@echo "--- 🧪 Running tests ---"
-	pytest -n auto
+	pytest -n auto -m "not test_datasets"
 
 test-with-coverage:
 	@echo "--- 🧪 Running tests with coverage ---"
