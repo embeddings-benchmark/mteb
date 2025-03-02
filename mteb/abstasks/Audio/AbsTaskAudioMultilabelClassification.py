@@ -101,12 +101,8 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
 
     classifier = MultiOutputClassifier(estimator=LogisticRegression())
 
-    def __init__(
-        self,
-        **kwargs
-    ):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
 
     def _add_main_score(self, scores):
         scores["main_score"] = scores[self.metadata.main_score]
