@@ -6,10 +6,10 @@ from mteb.abstasks.Audio.AbsTaskAudioMultilabelClassification import (
     AbsTaskAudioMultilabelClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.abstasks import MultilingualTask
 
 
-class FSD2019KaggleClassification(AbsTaskAudioMultilabelClassification):
-    is_multilingual = True  # hacky way to pass test
+class FSD2019KaggleClassification(AbsTaskAudioMultilabelClassification, MultilingualTask):
     metadata = TaskMetadata(
         name="FSD2019Kaggle",
         description="Multilabel Audio Classification.",
