@@ -561,9 +561,6 @@ class MockAudioMultilabelClassificationTask(AbsTaskAudioMultilabelClassification
         **general_args,
     )
 
-    def __init__(self, **kwargs):
-        super().__init__(n_experiments=1, samples_per_label=5, **kwargs)
-
     def load_data(self, **kwargs):
         mock_audio = [
             {
