@@ -148,7 +148,6 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
         self,
         model: AudioEncoder,
         eval_split: str = "test",
-        train_split: str = "train",
         *,
         encode_kwargs: dict[str, Any] = {},
         **kwargs: Any,
@@ -172,7 +171,7 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
                 model,
                 ds,
                 eval_split,
-                train_split,
+                self.train_split,
                 encode_kwargs=encode_kwargs,
                 **kwargs,
             )
@@ -185,12 +184,11 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
         model: AudioEncoder,
         dataset,
         eval_split: str = "test",
-        train_split: str = "train",
         *,
         encode_kwargs: dict[str, Any] = {},
         **kwargs: Any,
     ) -> ScoresDict:
-        train_split = dataset[train_split]
+        train_split = dataset[self.train_split]
         eval_split = dataset[eval_split]
 
         params = {
