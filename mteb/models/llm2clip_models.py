@@ -37,8 +37,10 @@ def llm2clip_loader(**kwargs):
             **kwargs: Any,
         ):
             if model_name not in MODEL2PROCESSOR:
-                raise Exception(f"This model {model_name} is not in the supported mode list: {list(MODEL2PROCESSOR.keys())}.")
-                
+                raise Exception(
+                    f"This model {model_name} is not in the supported mode list: {list(MODEL2PROCESSOR.keys())}."
+                )
+
             self.device = device
             from huggingface_hub import snapshot_download
 
@@ -46,7 +48,8 @@ def llm2clip_loader(**kwargs):
                 repo_id=model_name, allow_patterns=["*.json", "*.safetensors"]
             )
             snapshot_download(
-                repo_id=MODEL2PROCESSOR[model_name], allow_patterns=["*.json", "*.safetensors"]
+                repo_id=MODEL2PROCESSOR[model_name],
+                allow_patterns=["*.json", "*.safetensors"],
             )
             model_name_or_path = Path(model_folder_path)
             self.processor = CLIPImageProcessor.from_pretrained(
