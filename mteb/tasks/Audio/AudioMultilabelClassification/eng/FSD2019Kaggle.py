@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks import MultilingualTask
 from mteb.abstasks.Audio.AbsTaskAudioMultilabelClassification import (
     AbsTaskAudioMultilabelClassification,
 )
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
