@@ -40,7 +40,18 @@ def create_name_to_task_mapping() -> dict[str, type[AbsTask]]:
     return {cls.metadata.name: cls for cls in tasks}
 
 
+def create_similar_tasks() -> dict[str, list[str]]:
+    tasks = create_task_list()
+    similar_tasks = defaultdict(list)
+    for task in tasks:
+        if task.metadata.similar_tasks:
+            for similar_task in task.metadata.similar_tasks:
+                similar_tasks[similar_task].append(task.metadata.name)
+    return similar_tasks
+
+
 TASKS_REGISTRY = create_name_to_task_mapping()
+SIMILAR_TASKS = create_similar_tasks()
 
 
 def check_is_valid_script(script: str) -> None:

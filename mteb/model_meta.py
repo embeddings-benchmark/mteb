@@ -152,9 +152,10 @@ class ModelMeta(BaseModel):
         zero-shot or not on the given tasks.
         Returns None if no training data is specified on the model.
         """
-        if self.training_datasets is None:
+        training_datasets = self.get_training_datasets()
+        if training_datasets is None:
             return None
-        model_datasets = {ds_name for ds_name, splits in self.training_datasets.items()}
+        model_datasets = {ds_name for ds_name, splits in training_datasets.items()}
         if isinstance(tasks[0], str):
             benchmark_datasets = set(tasks)
         else:
@@ -164,6 +165,29 @@ class ModelMeta(BaseModel):
                 benchmark_datasets.add(task.metadata.name)
         intersection = model_datasets & benchmark_datasets
         return len(intersection) == 0
+
+    def get_training_datasets(self) -> dict[str, list[str]] | None:
+        """Returns the training datasets of the model."""
+        import mteb
+        from .overview import SIMILAR_TASKS
+
+        if self.training_datasets is None:
+            return None
+        training_datasets = self.training_datasets.copy()
+        if self.adapted_from is not None:
+            try:
+                adapted_from_model = mteb.get_model_meta(self.adapted_from)
+                training_datasets = training_datasets | adapted_from_model.get_training_datasets()
+            except Exception as e:
+                pass
+        for dataset in training_datasets:
+            if dataset in SIMILAR_TASKS:
+                training_datasets |= {
+                    similar_task: ["train"]
+                    for similar_task in SIMILAR_TASKS[dataset]
+                }
+        return training_datasets
+
 
     def zero_shot_percentage(
         self, tasks: Sequence[AbsTask] | Sequence[str]

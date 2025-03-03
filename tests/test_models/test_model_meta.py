@@ -3,6 +3,7 @@ from __future__ import annotations
 import pytest
 
 import mteb
+from mteb import ModelMeta
 
 
 @pytest.mark.parametrize(
@@ -24,3 +25,17 @@ def test_model_memory_usage(model_name: str, expected_memory: int | None):
 def test_model_memory_usage_api_model():
     meta = mteb.get_model_meta("openai/text-embedding-3-large")
     assert meta.memory_usage_mb is None
+
+
+def test_model_similar_tasks():
+    model = ModelMeta(
+        model_id="intfloat/e5-mistral-7b-instruct",
+        memory_usage_mb=13563,
+        similar_tasks=[
+            "BuiltBenchRetrieval",
+            "BuiltBenchReranking",
+            "ClimateFEVER.v2",
+            "ClimateFEVER.v2",
+        ],
+        similar_models=["BAAI/bge-m3"],
+    )

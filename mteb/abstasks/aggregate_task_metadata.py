@@ -56,6 +56,7 @@ class AggregateTaskMetadata(TaskMetadata):
     prompt: None = None
     reference: str | None = None
     bibtex_citation: str | None = None
+    similar_tasks: list[str] | None = None
 
     @property
     def hf_subsets_to_langscripts(self) -> dict[HFSubset, list[ISO_LANGUAGE_SCRIPT]]:
