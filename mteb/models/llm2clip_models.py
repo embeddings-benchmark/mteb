@@ -45,11 +45,11 @@ def llm2clip_loader(**kwargs):
             from huggingface_hub import snapshot_download
 
             model_folder_path = snapshot_download(
-                repo_id=model_name, allow_patterns=["*.json", "*.safetensors"]
+                repo_id=model_name, allow_patterns=["*.json", "*.safetensors", "*.py"]
             )
             snapshot_download(
                 repo_id=MODEL2PROCESSOR[model_name],
-                allow_patterns=["*.json", "*.safetensors"],
+                allow_patterns=["*.json", "*.safetensors", "*.py"],
             )
             model_name_or_path = Path(model_folder_path)
             self.processor = CLIPImageProcessor.from_pretrained(
@@ -201,6 +201,13 @@ def llm2clip_loader(**kwargs):
     return LLM2CLIPWrapper(**kwargs)
 
 
+llm2clip_training_sets = {
+    # CC3M
+    # CC12M
+    # YFCC15M
+    # Recap-DataComp-1B(30M subset)
+}
+
 llm2clip_openai_l_14_336 = ModelMeta(
     loader=partial(
         llm2clip_loader,
@@ -223,7 +230,7 @@ llm2clip_openai_l_14_336 = ModelMeta(
     reference="https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-336",
     similarity_fn_name=None,
     use_instructions=True,
-    training_datasets=None,
+    training_datasets=llm2clip_training_sets,
 )
 
 ## NOTE: https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-224/discussions/1
@@ -249,7 +256,7 @@ llm2clip_openai_l_14_224 = ModelMeta(
     reference="https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-224",
     similarity_fn_name=None,
     use_instructions=True,
-    training_datasets=None,
+    training_datasets=llm2clip_training_sets,
 )
 
 llm2clip_openai_b_16 = ModelMeta(
@@ -274,7 +281,7 @@ llm2clip_openai_b_16 = ModelMeta(
     reference="https://huggingface.co/microsoft/LLM2CLIP-Openai-B-16",
     similarity_fn_name=None,
     use_instructions=True,
-    training_datasets=None,
+    training_datasets=llm2clip_training_sets,
 )
 
 
