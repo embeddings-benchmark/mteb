@@ -15,7 +15,6 @@ from .mock_tasks import (
     MockAny2AnyRetrievalI2TTask,
     MockAny2AnyRetrievalT2ITask,
     MockAudioClusteringTask,
-    MockAudioMultilabelClassificationLogRegTask,
     MockAudioMultilabelClassificationTask,
     MockBitextMiningTask,
     MockClassificationTask,
@@ -141,7 +140,6 @@ MOCK_MIEB_TASK_GRID = [
 MOCK_MAEB_TASK_GRID = [
     MockAudioClusteringTask(),
     MockAudioMultilabelClassificationTask(),
-    MockAudioMultilabelClassificationLogRegTask(),
 ]
 
 
