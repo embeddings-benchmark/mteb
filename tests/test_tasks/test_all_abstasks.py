@@ -5,7 +5,6 @@ from unittest.mock import Mock, patch
 
 import huggingface_hub
 import pytest
-import requests
 
 import mteb
 from mteb import MTEB
