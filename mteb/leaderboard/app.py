@@ -228,6 +228,7 @@ benchmark_select = gr.Dropdown(
 lang_select = gr.Dropdown(
     ISO_TO_LANGUAGE,
     value=sorted(default_results.languages),
+    allow_custom_value=True,
     multiselect=True,
     label="Language",
     info="Select languages to include.",
@@ -558,13 +559,7 @@ see existing implementations [here](https://github.com/embeddings-benchmark/mteb
 
     @cachetools.cached(
         cache={},
-        key=lambda scores,
-        tasks,
-        availability,
-        compatibility,
-        instructions,
-        model_size,
-        zero_shot: hash(
+        key=lambda scores, tasks, availability, compatibility, instructions, model_size, zero_shot: hash(
             (
                 id(scores),
                 hash(tuple(tasks)),
