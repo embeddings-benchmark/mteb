@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import os
 from unittest.mock import Mock, patch
 
 import huggingface_hub
@@ -67,6 +68,7 @@ def test_load_data(
             mock_dataset_transform.assert_called_once()
 
 
+@pytest.mark.test_datasets
 @pytest.mark.flaky(
     reruns=3,
     reruns_delay=5,
