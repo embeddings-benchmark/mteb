@@ -262,7 +262,7 @@ voyage_code_3 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
-    training_datasets=None,  # Not known
+    training_datasets=VOYAGE_TRAINING_DATA,  # src: private communication with Voyage
     public_training_code=None,
     public_training_data=None,
 )

@@ -656,40 +656,6 @@ bge_m3 = ModelMeta(
     training_datasets=bge_m3_training_data,
 )
 
-bge_multilingual_gemma2 = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="BAAI/bge-multilingual-gemma2",
-        revision="992e13d8984fde2c31ef8a3cb2c038aeec513b8a",
-    ),
-    name="BAAI/bge-multilingual-gemma2",
-    languages=[
-        "eng_Latn",
-        "zho_Hans",
-        "kor_Hang",
-        "kor_Latn",
-        "fra_Latn",
-        "jpn_Jpan",
-        "jpn_Latn",
-    ],  # This list is incomlete. Their description says "and more".
-    # I'm also unsure about the scripts.
-    open_weights=True,
-    revision="992e13d8984fde2c31ef8a3cb2c038aeec513b8a",
-    release_date="2024-07-25",  # initial commit of hf model.
-    n_parameters=9.24 * 1e9,
-    memory_usage_mb=35254,
-    embed_dim=3584,  # from old C-MTEB leaderboard
-    license="gemma",
-    max_tokens=8192,  # from old C-MTEB leaderboard
-    reference="https://huggingface.co/BAAI/bge-multilingual-gemma2",
-    similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
-    use_instructions=False,
-    public_training_code=None,
-    public_training_data=None,
-    training_datasets=None,  # not disclosed
-)
-
 # Contents of cfli/bge-full-data
 bge_full_data = {
     # source: https://arxiv.org/pdf/2409.15700
@@ -745,6 +711,46 @@ bge_full_data = {
     "STS22.v2": ["train"],
     "STSBenchmark": ["train"],
 }
+
+
+bge_multilingual_gemma2 = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="BAAI/bge-multilingual-gemma2",
+        revision="992e13d8984fde2c31ef8a3cb2c038aeec513b8a",
+    ),
+    name="BAAI/bge-multilingual-gemma2",
+    languages=[
+        "eng_Latn",
+        "zho_Hans",
+        "kor_Hang",
+        "kor_Latn",
+        "fra_Latn",
+        "jpn_Jpan",
+        "jpn_Latn",
+    ],  # This list is incomlete. Their description says "and more".
+    # I'm also unsure about the scripts.
+    open_weights=True,
+    revision="992e13d8984fde2c31ef8a3cb2c038aeec513b8a",
+    release_date="2024-07-25",  # initial commit of hf model.
+    n_parameters=9.24 * 1e9,
+    memory_usage_mb=35254,
+    embed_dim=3584,  # from old C-MTEB leaderboard
+    license="gemma",
+    max_tokens=8192,  # from old C-MTEB leaderboard
+    reference="https://huggingface.co/BAAI/bge-multilingual-gemma2",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets={
+        **bge_full_data,
+        **bge_m3_training_data,
+        "MIRACLReranking": ["train"],
+        "MrTidyRetrieval": ["train"],
+    },
+)
 
 bge_en_icl = ModelMeta(
     loader=partial(
