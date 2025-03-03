@@ -70,4 +70,5 @@ class NQHardNegatives(AbsTaskRetrieval):
         prompt={
             "query": "Given a question, retrieve Wikipedia passages that answer the question"
         },
+        adapted_from=["NQ"],
     )

@@ -76,6 +76,7 @@ class SummEvalFrSummarizationv2(AbsTaskSummarization):
   journal={arXiv preprint arXiv:2007.12626},
   year={2020}
 }""",
+        adapted_from=["SummEvalFrSummarization"],
     )
 
     @property

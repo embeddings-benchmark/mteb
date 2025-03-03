@@ -346,7 +346,7 @@ SEB = Benchmark(
             "SwedishSentimentClassification",
             "SweRecClassification",
             # Retrieval
-            "DanFEVER",
+            "DanFeverRetrieval",
             "NorQuadRetrieval",
             "SNLRetrieval",
             "SwednRetrieval",

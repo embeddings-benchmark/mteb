@@ -7,6 +7,7 @@ import torch
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 from mteb.models.bge_models import bge_m3_training_data, bge_training_data
 from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
+from mteb.models.e5_models import E5_TRAINING_DATA
 from mteb.models.sentence_transformers_models import sent_trf_training_dataset
 
 Haon_Chen__speed_embedding_7b_instruct = ModelMeta(
@@ -311,6 +312,15 @@ BeastyZ__e5_R_mistral_7b = ModelMeta(
     adapted_from="intfloat/e5-mistral-7b-instruct",
     superseded_by=None,
 )
+
+bilingual_embedding_training_data = {
+    "STSBenchmark": ["train"],
+    "STSBenchmarkMultilingualSTS": ["train"],
+    "XNLI": ["train"],
+    # not in mteb
+    # SNLI
+}
+
 Lajavaness__bilingual_embedding_base = ModelMeta(
     name="Lajavaness/bilingual-embedding-base",
     revision="0bfc54bb2aa2666dd84715289c7ef58a95eb4d8d",
@@ -334,7 +344,7 @@ Lajavaness__bilingual_embedding_base = ModelMeta(
     reference="https://huggingface.co/Lajavaness/bilingual-embedding-base",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets=bilingual_embedding_training_data,
     adapted_from="dangvantuan/bilingual_impl",
     superseded_by=None,
 )
@@ -361,7 +371,7 @@ Lajavaness__bilingual_embedding_large = ModelMeta(
     reference="https://huggingface.co/Lajavaness/bilingual-embedding-large",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets=bilingual_embedding_training_data,
     adapted_from="dangvantuan/bilingual_impl",
     superseded_by=None,
 )
@@ -388,7 +398,7 @@ Lajavaness__bilingual_embedding_small = ModelMeta(
     reference="https://huggingface.co/Lajavaness/bilingual-embedding-small",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets=bilingual_embedding_training_data,
     adapted_from="dangvantuan/bilingual_impl",
     superseded_by=None,
 )
@@ -758,6 +768,14 @@ consciousAI__cai_stellaris_text_embeddings = ModelMeta(
     superseded_by=None,
 )
 
+SENTENCE_CROISSANT_TRAINING_DATA = {
+    "STS12": ["train"],
+    "STSBenchmark": ["train"],
+    "STSBenchmarkMultilingualSTS": ["train"],
+    "QuoraRetrieval": ["train"],
+    "MSMARCO": ["train"],
+    "STSB": ["train"],
+}
 manu__sentence_croissant_alpha_v0_2 = ModelMeta(
     name="manu/sentence_croissant_alpha_v0.2",
     revision="4610b8cea65d7dd59e0b04af50753933fe5b29b2",
@@ -776,7 +794,7 @@ manu__sentence_croissant_alpha_v0_2 = ModelMeta(
     reference="https://huggingface.co/manu/sentence_croissant_alpha_v0.2",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets=SENTENCE_CROISSANT_TRAINING_DATA,
     adapted_from="croissantllm/CroissantCool",
     superseded_by="manu/sentence_croissant_alpha_v0.3",
 )
@@ -798,7 +816,7 @@ manu__sentence_croissant_alpha_v0_3 = ModelMeta(
     reference="https://huggingface.co/manu/sentence_croissant_alpha_v0.3",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets=SENTENCE_CROISSANT_TRAINING_DATA,
     adapted_from="croissantllm/CroissantCool-v0.2",
     superseded_by="manu/sentence_croissant_alpha_v0.4",
 )
@@ -820,7 +838,7 @@ manu__sentence_croissant_alpha_v0_4 = ModelMeta(
     reference="https://huggingface.co/manu/sentence_croissant_alpha_v0.4",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets=SENTENCE_CROISSANT_TRAINING_DATA,
     # Not in MTEB: {"manu/embedding_data_v2_100k": ["train"]},
     adapted_from="croissantllm/CroissantCool-v0.2",
     superseded_by=None,
@@ -953,7 +971,7 @@ sdadas__mmlw_e5_base = ModelMeta(
     reference="https://huggingface.co/sdadas/mmlw-e5-base",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets=E5_TRAINING_DATA,
     adapted_from="intfloat/multilingual-e5-base",
     superseded_by=None,
 )
@@ -975,8 +993,10 @@ dwzhu__e5_base_4k = ModelMeta(
     reference="https://huggingface.co/dwzhu/e5-base-4k",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
-    adapted_from="/mnt/default/longembed/models/intfloat/e5-base-v2",
+    training_datasets={
+        **E5_TRAINING_DATA,
+    },
+    adapted_from="intfloat/e5-base-v2",
     superseded_by=None,
 )
 sdadas__mmlw_e5_large = ModelMeta(
@@ -997,7 +1017,7 @@ sdadas__mmlw_e5_large = ModelMeta(
     reference="https://huggingface.co/sdadas/mmlw-e5-large",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets=E5_TRAINING_DATA,
     adapted_from="intfloat/multilingual-e5-large",
     superseded_by=None,
 )
@@ -1019,7 +1039,7 @@ sdadas__mmlw_e5_small = ModelMeta(
     reference="https://huggingface.co/sdadas/mmlw-e5-small",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets=E5_TRAINING_DATA,
     adapted_from="intfloat/multilingual-e5-small",
     superseded_by=None,
 )
@@ -1041,7 +1061,7 @@ sdadas__mmlw_roberta_base = ModelMeta(
     reference="https://huggingface.co/sdadas/mmlw-roberta-base",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets={"MSMARCO": ["train"]},
     adapted_from="sdadas/polish-roberta-base-v2",
     superseded_by=None,
 )
@@ -1063,7 +1083,7 @@ sdadas__mmlw_roberta_large = ModelMeta(
     reference="https://huggingface.co/sdadas/mmlw-roberta-large",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets={"MSMARCO": ["train"]},
     adapted_from="sdadas/polish-roberta-large-v2",
     superseded_by=None,
 )
@@ -1267,7 +1287,24 @@ avsolatorio__GIST_all_MiniLM_L6_v2 = ModelMeta(
     reference="https://huggingface.co/avsolatorio/GIST-all-MiniLM-L6-v2",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets={
+        **bge_training_data,
+        # not in mteb:
+        # MEDI
+        # all MTEB CLF datasets that has a train split:
+        "AmazonPolarityClassification": ["train"],
+        "AmazonReviewsClassification": ["train"],
+        "EmotionClassification": ["train"],
+        "ImdbClassification": ["train"],
+        "MTOPDomainClassification": ["train"],
+        "MTOPIntentClassification": ["train"],
+        "MassiveIntentClassification": ["train"],
+        "MassiveScenarioClassification": ["train"],
+        "ToxicConversationsClassification": ["train"],
+        "TweetSentimentExtractionClassification": ["train"],
+        "Banking77Classification": ["train"],
+        "AmazonCounterfactualClassification": ["train"],
+    },
     adapted_from=None,
     superseded_by=None,
 )
@@ -1289,7 +1326,24 @@ avsolatorio__GIST_large_Embedding_v0 = ModelMeta(
     reference="https://huggingface.co/avsolatorio/GIST-large-Embedding-v0",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets={
+        **bge_training_data,
+        # not in mteb:
+        # MEDI
+        # all MTEB CLF datasets that has a train split:
+        "AmazonPolarityClassification": ["train"],
+        "AmazonReviewsClassification": ["train"],
+        "EmotionClassification": ["train"],
+        "ImdbClassification": ["train"],
+        "MTOPDomainClassification": ["train"],
+        "MTOPIntentClassification": ["train"],
+        "MassiveIntentClassification": ["train"],
+        "MassiveScenarioClassification": ["train"],
+        "ToxicConversationsClassification": ["train"],
+        "TweetSentimentExtractionClassification": ["train"],
+        "Banking77Classification": ["train"],
+        "AmazonCounterfactualClassification": ["train"],
+    },
     adapted_from=None,
     superseded_by=None,
 )
@@ -1311,7 +1365,24 @@ avsolatorio__GIST_small_Embedding_v0 = ModelMeta(
     reference="https://huggingface.co/avsolatorio/GIST-small-Embedding-v0",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets={
+        **bge_training_data,
+        # not in mteb:
+        # MEDI
+        # all MTEB CLF datasets that has a train split:
+        "AmazonPolarityClassification": ["train"],
+        "AmazonReviewsClassification": ["train"],
+        "EmotionClassification": ["train"],
+        "ImdbClassification": ["train"],
+        "MTOPDomainClassification": ["train"],
+        "MTOPIntentClassification": ["train"],
+        "MassiveIntentClassification": ["train"],
+        "MassiveScenarioClassification": ["train"],
+        "ToxicConversationsClassification": ["train"],
+        "TweetSentimentExtractionClassification": ["train"],
+        "Banking77Classification": ["train"],
+        "AmazonCounterfactualClassification": ["train"],
+    },
     adapted_from=None,
     superseded_by=None,
 )

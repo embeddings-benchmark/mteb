@@ -64,6 +64,7 @@ class TenKGnadClusteringS2SFast(AbsTaskClusteringFast):
         sample_creation="found",
         bibtex_citation=None,  # none found
         # due to duplicates
+        adapted_from=["TenKGnadClusteringS2S"],
     )
 
     def dataset_transform(self) -> None:
