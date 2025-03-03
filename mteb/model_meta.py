@@ -154,6 +154,10 @@ class ModelMeta(BaseModel):
         """
         training_datasets = self.get_training_datasets()
         if training_datasets is None:
+        # If no tasks were specified, we're obviously zero-shot
+        if not tasks:
+            return True
+        if self.training_datasets is None:
             return None
         model_datasets = {ds_name for ds_name, splits in training_datasets.items()}
         if isinstance(tasks[0], str):
