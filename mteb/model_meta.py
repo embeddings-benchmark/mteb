@@ -6,8 +6,11 @@ from functools import partial
 from typing import TYPE_CHECKING, Any, Callable, Literal, cast
 
 from huggingface_hub import get_safetensors_metadata
-from huggingface_hub.errors import (GatedRepoError, NotASafetensorsRepoError,
-                                    SafetensorsParsingError)
+from huggingface_hub.errors import (
+    GatedRepoError,
+    NotASafetensorsRepoError,
+    SafetensorsParsingError,
+)
 from pydantic import BaseModel, ConfigDict
 
 from mteb.abstasks.AbsTask import AbsTask
