@@ -243,13 +243,12 @@ def radar_chart(df: pd.DataFrame) -> go.Figure:
             ),
         ),
         legend=dict(
-            orientation="h",
-            yanchor="bottom",
-            y=-0.6,
+            orientation="v",
+            yanchor="top",
+            y=1.5,
             xanchor="left",
-            x=-0.05,
-            entrywidthmode="fraction",
-            entrywidth=1 / 5,
+            x=1.4,
         ),
+        margin=dict(l=170, r=300, t=100, b=50),
     )
     return fig
