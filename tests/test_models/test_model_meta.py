@@ -27,15 +27,48 @@ def test_model_memory_usage_api_model():
     assert meta.memory_usage_mb is None
 
 
-def test_model_similar_tasks():
-    model = ModelMeta(
-        model_id="intfloat/e5-mistral-7b-instruct",
-        memory_usage_mb=13563,
-        similar_tasks=[
-            "BuiltBenchRetrieval",
-            "BuiltBenchReranking",
-            "ClimateFEVER.v2",
-            "ClimateFEVER.v2",
-        ],
-        similar_models=["BAAI/bge-m3"],
+@pytest.mark.parametrize(
+    "training_datasets",
+    [
+        {"Touche2020": []},  # parent task
+        {"Touche2020-NL": []},  # child task
+    ],
+)
+def test_model_similar_tasks(training_datasets):
+    dummy_model_meta = ModelMeta(
+        name="test_model",
+        revision="test",
+        release_date=None,
+        languages=None,
+        loader=None,
+        n_parameters=None,
+        memory_usage_mb=None,
+        max_tokens=None,
+        embed_dim=None,
+        license=None,
+        open_weights=None,
+        public_training_code=None,
+        public_training_data=None,
+        framework=[],
+        reference=None,
+        similarity_fn_name=None,
+        use_instructions=None,
+        training_datasets=training_datasets,
+        adapted_from=None,
+        superseded_by=None,
     )
+    expected = [
+        "NanoTouche2020Retrieval",
+        "Touche2020",
+        "Touche2020-Fa",
+        "Touche2020-NL",
+        "Touche2020Retrieval.v3",
+    ]
+    assert sorted(dummy_model_meta.get_training_datasets().keys()) == expected
+
+
+def test_model_training_dataset_adapted():
+    model_meta = mteb.get_model_meta("deepvk/USER-bge-m3")
+    assert model_meta.adapted_from == "BAAI/bge-m3"
+    print(model_meta.get_training_datasets())
+    assert "MIRACLRetrieval" in model_meta.get_training_datasets()

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import difflib
 import logging
-from collections import Counter
+from collections import Counter, defaultdict
 
 import pandas as pd
 
@@ -41,11 +41,16 @@ def create_name_to_task_mapping() -> dict[str, type[AbsTask]]:
 
 
 def create_similar_tasks() -> dict[str, list[str]]:
+    """Create a dictionary of similar tasks.
+
+    Returns:
+        Dict with key is parent task and value is list of similar tasks.
+    """
     tasks = create_task_list()
     similar_tasks = defaultdict(list)
     for task in tasks:
-        if task.metadata.similar_tasks:
-            for similar_task in task.metadata.similar_tasks:
+        if task.metadata.adapted_from:
+            for similar_task in task.metadata.adapted_from:
                 similar_tasks[similar_task].append(task.metadata.name)
     return similar_tasks
 
