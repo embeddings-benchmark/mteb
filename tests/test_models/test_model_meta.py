@@ -70,5 +70,6 @@ def test_model_similar_tasks(training_datasets):
 def test_model_training_dataset_adapted():
     model_meta = mteb.get_model_meta("deepvk/USER-bge-m3")
     assert model_meta.adapted_from == "BAAI/bge-m3"
-    print(model_meta.get_training_datasets())
+    # MIRACLRetrieval not in training_datasets of deepvk/USER-bge-m3, but in
+    # training_datasets of BAAI/bge-m3
     assert "MIRACLRetrieval" in model_meta.get_training_datasets()
