@@ -12,7 +12,7 @@ class MusicGenreClustering(AbsTaskAudioClustering):
         reference="https://www-ai.cs.tu-dortmund.de/audio.html",
         dataset={
             "path": "mteb/music-genre",
-            "revision": "1b202ea7bcd0abd5283e628248803e1569257c80",  # change this
+            "revision": "aad0b08ed9aa641a7467ecf72febdb3e46f0a31a",
         },
         type="AudioClustering",
         category="a2t",
