@@ -582,20 +582,6 @@ class MockAudioMultilabelClassificationTask(AbsTaskAudioMultilabelClassification
         self.data_loaded = True
 
 
-class MockAudioMultilabelClassificationLogRegTask(
-    MockAudioMultilabelClassificationTask
-):
-    metadata = TaskMetadata(
-        type="AudioMultilabelClassification",
-        name="MockAudioMultilabelClassificationLogReg",
-        main_score="accuracy",
-        **general_args,
-    )
-
-    def __init__(self, **kwargs):
-        super().__init__(method="logReg", **kwargs)
-
-
 class MockMultilingualClusteringTask(AbsTaskClustering, MultilingualTask):
     expected_stats = {
         "test": {
