@@ -223,8 +223,7 @@ llm2clip_openai_l_14_336 = ModelMeta(
     training_datasets=None,
 )
 
-## ImportError: This modeling file requires the following packages that were not found in your environment: configuration_clip. Run `pip install configuration_clip`
-# Might be related to https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-336/discussions/2?
+## NOTE: https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-224/discussions/1
 llm2clip_openai_l_14_224 = ModelMeta(
     loader=partial(
         llm2clip_loader,
