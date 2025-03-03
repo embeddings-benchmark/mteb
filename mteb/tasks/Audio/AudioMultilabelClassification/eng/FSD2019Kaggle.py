@@ -10,7 +10,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class FSD2019KaggleMultilingualClassification(
-    AbsTaskAudioMultilabelClassification, MultilingualTask
+    MultilingualTask, AbsTaskAudioMultilabelClassification
 ):
     metadata = TaskMetadata(
         name="FSD2019Kaggle",
