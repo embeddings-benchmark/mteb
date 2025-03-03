@@ -152,6 +152,9 @@ class ModelMeta(BaseModel):
         zero-shot or not on the given tasks.
         Returns None if no training data is specified on the model.
         """
+        # If no tasks were specified, we're obviously zero-shot
+        if not tasks:
+            return True
         if self.training_datasets is None:
             return None
         model_datasets = {ds_name for ds_name, splits in self.training_datasets.items()}
