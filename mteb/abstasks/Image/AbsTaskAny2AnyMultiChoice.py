@@ -8,7 +8,6 @@ from pathlib import Path
 from time import time
 from typing import Any
 
-import numpy as np
 import tqdm
 from datasets import Features, Value, load_dataset
 from PIL import Image
@@ -490,16 +489,14 @@ class AbsTaskAny2AnyMultiChoice(AbsTask):
         q_modality = queries[0]["modality"]
         unique_queries = len(set(queries["text"])) if "text" in q_modality else 0
 
-        text_lens = [len(doc["text"]) for doc in corpus if "text" in q_modality]
+        queries_lens = [len(doc["text"]) for doc in corpus if "text" in q_modality]
         num_query_images = sum(1 for doc in corpus if "image" in q_modality)
-        queries_lens = np.array(text_lens)
 
         d_modality = corpus[0]["modality"]
         unique_documents = len(set(corpus["text"])) if "text" in d_modality else 0
 
-        text_lens = [len(doc["text"]) for doc in corpus if "text" in d_modality]
+        doc_lens = [len(doc["text"]) for doc in corpus if "text" in d_modality]
         num_document_images = sum(1 for doc in corpus if "image" in d_modality)
-        doc_lens = np.array(text_lens)
 
         total_doc_len = sum(doc_lens)
         total_query_len = sum(queries_lens)
