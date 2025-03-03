@@ -8,6 +8,7 @@ from pathlib import Path
 from time import time
 from typing import Any
 
+import numpy as np
 import tqdm
 from datasets import Features, Value, load_dataset
 from PIL import Image
@@ -486,29 +487,19 @@ class AbsTaskAny2AnyMultiChoice(AbsTask):
             corpus = self.corpus[split]
             relevant_docs = self.relevant_docs[split]
 
-        queries_lens, doc_lens = [], []
-        num_query_images = 0
-        num_document_images = 0
-
         q_modality = queries[0]["modality"]
         unique_queries = len(set(queries["text"])) if "text" in q_modality else 0
 
-        for query in tqdm.tqdm(queries, desc="queries:"):
-            if "text" in q_modality:
-                text_query = query["text"]
-                queries_lens.append(len(text_query))
-            if "image" in q_modality:
-                num_query_images += 1
+        text_lens = [len(doc["text"]) for doc in corpus if "text" in q_modality]
+        num_query_images = sum(1 for doc in corpus if "image" in q_modality)
+        queries_lens = np.array(text_lens)
 
         d_modality = corpus[0]["modality"]
         unique_documents = len(set(corpus["text"])) if "text" in d_modality else 0
 
-        for doc in tqdm.tqdm(corpus, desc="docs:"):
-            if "text" in d_modality:
-                text_doc = doc["text"]
-                doc_lens.append(len(text_doc))
-            if "image" in d_modality:
-                num_document_images += 1
+        text_lens = [len(doc["text"]) for doc in corpus if "text" in d_modality]
+        num_document_images = sum(1 for doc in corpus if "image" in d_modality)
+        doc_lens = np.array(text_lens)
 
         total_doc_len = sum(doc_lens)
         total_query_len = sum(queries_lens)
