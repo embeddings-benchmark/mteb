@@ -11,7 +11,7 @@ install-for-tests:
 lint:
 	@echo "--- 🧹 Running linters ---"
 	ruff format . 			# running ruff formatting
-	ruff check . --fix  	# running ruff linting
+	ruff check . --fix --exit-non-zero-on-fix  	# running ruff linting # --exit-non-zero-on-fix is used for the pre-commit hook to work
 
 lint-check:
 	@echo "--- 🧹 Check is project is linted ---"
