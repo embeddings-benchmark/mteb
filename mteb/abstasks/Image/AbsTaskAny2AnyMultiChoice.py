@@ -486,8 +486,6 @@ class AbsTaskAny2AnyMultiChoice(AbsTask):
             corpus = self.corpus[split]
             relevant_docs = self.relevant_docs[split]
 
-        print(type(queries), type(corpus), type(relevant_docs))
-
         queries_lens, doc_lens = [], []
         num_query_images = 0
         num_document_images = 0
@@ -586,39 +584,6 @@ class AbsTaskAny2AnyMultiChoice(AbsTask):
             max_relevant_docs_per_query=max(qrels_lengths),
             unique_relevant_docs=unique_qrels,
         )
-
-    def calculate_metadata_metrics(self) -> None:
-        self.load_data()
-
-        all_details = {}
-        pbar_split = tqdm.tqdm(
-            self.metadata_dict["eval_splits"], desc="Processing Splits..."
-        )
-        for split in pbar_split:
-            pbar_split.set_postfix_str(f"Split: {split}")
-            logger.info(f"Processing metadata for split {split}")
-            all_details[split] = {}
-            if self.is_multilingual:
-                pbar_lang = tqdm.tqdm(
-                    self.relevant_docs.keys(), desc="Processing Languages..."
-                )
-                for lang in pbar_lang:
-                    pbar_lang.set_postfix_str(f"Language: {lang}")
-                    logger.info(f"Processing metadata for language {lang}")
-                    split_details = process_language(
-                        self.relevant_docs[lang][split],
-                        self.queries[lang][split],
-                        self.corpus[lang][split],
-                        lang,
-                    )
-                    all_details[split][lang] = split_details
-            else:
-                split_details = process_language(
-                    self.relevant_docs[split], self.queries[split], self.corpus[split]
-                )
-                all_details[split] = split_details
-
-        return all_details
 
 
 def process_language(relevant_docs, queries, corpus, lang=None):
