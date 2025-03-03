@@ -31,8 +31,8 @@ class TurHistQuadRetrieval(AbsTaskRetrieval):
         bibtex_citation="""
             @INPROCEEDINGS{9559013,
                 author={Soygazi, Fatih and Çiftçi, Okan and Kök, Uğurcan and Cengiz, Soner},
-                booktitle={2021 6th International Conference on Computer Science and Engineering (UBMK)}, 
-                title={THQuAD: Turkish Historic Question Answering Dataset for Reading Comprehension}, 
+                booktitle={2021 6th International Conference on Computer Science and Engineering (UBMK)},
+                title={THQuAD: Turkish Historic Question Answering Dataset for Reading Comprehension},
                 year={2021},
                 volume={},
                 number={},

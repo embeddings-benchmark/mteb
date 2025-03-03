@@ -5,7 +5,7 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
 1. **Add meta information about your model to [model dir](../mteb/models/)**. See the docstring of ModelMeta for meta data details.
    ```python
    from mteb.model_meta import ModelMeta
-    
+
    bge_m3 = ModelMeta(
        name="model_name",
        languages=["model_languages"], # in format eng-Latn
@@ -31,12 +31,12 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
    from mteb.models.wrapper import Wrapper
    from mteb.encoder_interface import PromptType
    import numpy as np
-   
+
    class CustomWrapper(Wrapper):
        def __init__(self, model_name, model_revision):
            super().__init__(model_name, model_revision)
            # your custom implementation here
-       
+
        def encode(
             self,
             sentences: list[str],
@@ -52,7 +52,7 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
    ```python
    your_model = ModelMeta(
        loader=partial(
-            CustomWrapper, 
+            CustomWrapper,
             model_name="model_name",
             model_revision="5617a9f61b028005a4858fdac845db406aefb181"
        ),
@@ -70,7 +70,7 @@ import mteb
 model = mteb.get_model("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
 
 tasks = mteb.get_tasks(...) # get specific tasks
-# or 
+# or
 tasks = mteb.get_benchmark("MTEB(eng, classic)") # or use a specific benchmark
 
 evaluation = mteb.MTEB(tasks=tasks)
@@ -95,7 +95,7 @@ To add results to the public leaderboard you can push your results to the [resul
 
 ##### Using Prompts with Sentence Transformers
 
-If your model uses Sentence Transformers and requires different prompts for encoding the queries and corpus, you can take advantage of the `prompts` [parameter](https://sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html#sentence_transformers.SentenceTransformer). 
+If your model uses Sentence Transformers and requires different prompts for encoding the queries and corpus, you can take advantage of the `prompts` [parameter](https://sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html#sentence_transformers.SentenceTransformer).
 
 Internally, `mteb` uses `query` for encoding the queries and `passage` as the prompt names for encoding the corpus. This is aligned with the default names used by Sentence Transformers.
 

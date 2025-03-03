@@ -35,7 +35,7 @@ Add a ModelMeta object to `mteb/models/*`. This object among other things contai
     - `revision`: The revision id of the model
     - `languages`: The list of languages the model is trained on.
     - ...
-  
+
 You may additionally want to specify parameters like whether the model is open-source, framework, etc.
 
 2. **If your model is not compatible with SentenceTransformer**

@@ -37,7 +37,7 @@ class Touche2020(AbsTaskRetrieval):
                   Bondarenko, Alexander and
                   Ajjour, Yamen and
                   Stein, Benno},
-  title        = {{Touché20-Argument-Retrieval-for-Controversial- 
+  title        = {{Touché20-Argument-Retrieval-for-Controversial-
                    Questions}},
   month        = jul,
   year         = 2022,

@@ -2,8 +2,8 @@ name: Daily Space Rebuild
 on:
   schedule:
     # Runs at midnight Pacific Time (8 AM UTC)
-    - cron: '0 8 * * *'
-  workflow_dispatch:  # Allows manual triggering
+    - cron: "0 8 * * *"
+  workflow_dispatch: # Allows manual triggering
 
 jobs:
   rebuild:
