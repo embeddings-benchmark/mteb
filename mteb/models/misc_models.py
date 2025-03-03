@@ -50,7 +50,22 @@ Gameselo__STS_multilingual_mpnet_base_v2 = ModelMeta(
     reference="https://huggingface.co/Gameselo/STS-multilingual-mpnet-base-v2",
     similarity_fn_name="cosine",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets={
+        # Source: https://huggingface.co/datasets/Gameselo/monolingual-wideNLI
+        # https://huggingface.co/Gameselo/STS-multilingual-mpnet-base-v2/discussions/2
+        # It is unclear whether he used all MTEB training sets, or just some of them,
+        # I will append this when he answers
+        # SNLI,
+        # MNLI,
+        # QNLI,
+        # WNLI,
+        # SciTail
+        # Vitamin C
+        "AlphaNLI": ["train"],
+        "FEVER": ["train"],
+        "RTE3": ["train"],
+        "ClimateFEVER": ["train"],
+    },
     adapted_from="sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     superseded_by=None,
 )
