@@ -14,9 +14,9 @@ from mteb.model_meta import ModelMeta
 class WavlmWrapper(AudioEncoder):
     def __init__(
         self,
+        model_name: str,
+        model_revision: str,
         device: str | None = None,
-        model_name: str = "microsoft/wavlm-base",
-        model_revision: str = "",
         **kwargs,
     ):
         super().__init__(device=device, **kwargs)
