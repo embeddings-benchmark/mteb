@@ -209,16 +209,6 @@ class AbsTaskImageClassification(AbsTask):
                     encode_kwargs=encode_kwargs,
                     **params,
                 )
-            elif self.method == "kNN-pytorch":
-                evaluator = ImagekNNClassificationEvaluatorPytorch(
-                    undersampled_train,
-                    eval_split,
-                    self.image_column_name,
-                    self.label_column_name,
-                    task_name=self.metadata.name,
-                    encode_kwargs=encode_kwargs,
-                    **params,
-                )
             elif self.method == "logReg":
                 evaluator = ImagelogRegClassificationEvaluator(
                     undersampled_train,

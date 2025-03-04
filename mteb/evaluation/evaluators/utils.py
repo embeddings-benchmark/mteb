@@ -34,9 +34,7 @@ def use_torch_compile():
     return gpu_ok
 
 
-def cos_sim(
-    a: torch.Tensor | np.ndarray, b: torch.Tensor | np.ndarray
-):  # TODO convert + type
+def cos_sim(a: torch.Tensor | np.ndarray, b: torch.Tensor | np.ndarray) -> torch.Tensor:
     """Calculate pairwise cosine similarities between two sets of vectors.
 
     Computes the cosine similarity cos_sim(a[i], b[j]) for all i and j.
@@ -58,15 +56,13 @@ def cos_sim(
         if len(b_tensor.shape) == 1:
             b_tensor = b_tensor.reshape(1, *b_tensor.shape)
 
-        a_norm = torch.nn.functional.normalize(
-            a_tensor, p=2, dim=1
-        )
+        a_norm = torch.nn.functional.normalize(a_tensor, p=2, dim=1)
         b_norm = torch.nn.functional.normalize(b_tensor, p=2, dim=1)
         return a_norm @ b_norm.transpose(0, 1)
 
     # Compile the core function once
     should_compile = (
-        hasattr(torch, "compile")  # TODO: check is there cases where it wouldn't be?
+        hasattr(torch, "compile")
         and use_torch_compile()
         and (isinstance(a, torch.Tensor) and isinstance(b, torch.Tensor))
     )
@@ -78,9 +74,7 @@ def cos_sim(
         return _cos_sim_core(a, b)
 
 
-def max_sim(
-    a: np.ndarray | torch.Tensor, b: np.ndarray | torch.Tensor
-) -> torch.Tensor
+def max_sim(a: np.ndarray | torch.Tensor, b: np.ndarray | torch.Tensor) -> torch.Tensor:
     """Computes the max-similarity max_sim(a[i], b[j]) for all i and j.
     Works with a Tensor of the shape (batch_size, num_tokens, token_dim)
 
@@ -88,7 +82,7 @@ def max_sim(
         Matrix with res[i][j]  = max_sim(a[i], b[j])
     """  # noqa: D402
     if not isinstance(a, torch.Tensor):
-        a = torch.tensor(a, dtype=torch.float32) # TODO: any reason for 
+        a = torch.tensor(a, dtype=torch.float32)  # TODO: any reason for
 
     if not isinstance(b, torch.Tensor):
         b = torch.tensor(b, dtype=torch.float32)
