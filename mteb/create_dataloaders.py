@@ -9,34 +9,20 @@ from torch.utils.data import DataLoader
 from mteb.encoder_interface import BatchedInput
 
 
-def create_dataloader(
-    dataset: Dataset, **dataloader_kwargs
+def create_dataloader_from_texts(
+    text: list[str], **dataloader_kwargs
 ) -> DataLoader[BatchedInput]:
-    """Create a dataloader from a dataset.
-
-    Args:
-        dataset: The dataset to create a dataloader from.
-        dataloader_kwargs: Kwargs for the dataloader.
-
-    Returns:
-        A dataloader with the dataset.
-    """
-    return torch.utils.data.DataLoader(
-        dataset.with_format("torch"), **dataloader_kwargs
-    )
-
-
-def create_dataloader_from_texts(text: list[str]) -> DataLoader[BatchedInput]:
     """Create a dataloader from a list of text.
 
     Args:
         text: A list of text to create a dataloader from.
+        dataloader_kwargs: Additional arguments to pass to the dataloader.
 
     Returns:
         A dataloader with the text.
     """
     dataset = Dataset.from_dict({"text": text})
-    return create_dataloader(dataset)
+    return torch.utils.data.DataLoader(dataset, **dataloader_kwargs)
 
 
 def corpus_to_dict(
@@ -72,24 +58,26 @@ def corpus_to_dict(
 
 
 def create_dataloader_for_retrieval_corpus(
-    inputs: list[dict[str, str]] | dict[str, list[str]] | list[str],
+    inputs: list[dict[str, str]] | dict[str, list[str]] | list[str], **dataloader_kwargs
 ) -> DataLoader[BatchedInput]:
     """Create a dataloader from a corpus.
 
     Args:
         inputs: Corpus
+        dataloader_kwargs: Additional arguments to pass to the dataloader.
 
     Returns:
         A dataloader with the corpus.
     """
     dataset = Dataset.from_dict(corpus_to_dict(inputs))
-    return create_dataloader(dataset)
+    return torch.utils.data.DataLoader(dataset, **dataloader_kwargs)
 
 
 def create_dataloader_for_queries(
     queries: list[str],
     instructions: list[str] | None = None,
     combine_query_and_instruction: Callable[[str, str], str] | None = None,
+    **dataloader_kwargs,
 ) -> DataLoader[BatchedInput]:
     """Create a dataloader from a list of queries.
 
@@ -97,6 +85,7 @@ def create_dataloader_for_queries(
         queries: A list of queries.
         instructions: A list of instructions. If None, the dataloader will only contain the queries.
         combine_query_and_instruction: A function that combines a query with an instruction. If None, the default function will be used.
+        dataloader_kwargs: Additional arguments to pass to the dataloader.
 
     Returns:
         A dataloader with the queries.
@@ -114,4 +103,4 @@ def create_dataloader_for_queries(
                 "query": queries,
             }
         )
-    return create_dataloader(dataset)
+    return torch.utils.data.DataLoader(dataset, **dataloader_kwargs)

@@ -18,7 +18,6 @@ from torch.utils.data import DataLoader
 
 from mteb.encoder_interface import Encoder
 
-from ...create_dataloaders import create_dataloader_from_texts
 from .Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
@@ -31,19 +30,15 @@ def dot_distance(a: np.ndarray, b: np.ndarray) -> float:
 class kNNClassificationEvaluator(Evaluator):
     def __init__(
         self,
-        sentences_train: list[str],
-        y_train: list[int],
-        sentences_test: list[str],
-        y_test: list[int],
+        train_dataset: Dataset,
+        eval_dataset: Dataset,
         task_name: str,
         k: int = 1,
         **kwargs,
     ):
         super().__init__(**kwargs)
-        self.sentences_train = sentences_train
-        self.y_train = y_train
-        self.sentences_test = sentences_test
-        self.y_test = y_test
+        self.train_dataset = train_dataset
+        self.eval_dataset = eval_dataset
 
         self.task_name = task_name
 
@@ -61,37 +56,40 @@ class kNNClassificationEvaluator(Evaluator):
         max_f1 = 0
         max_ap = 0
         X_train = model.encode(
-            create_dataloader_from_texts(self.sentences_train),
+            DataLoader(self.train_dataset),
             task_name=self.task_name,
             **encode_kwargs,
         )
         if test_cache is None:
             X_test = model.encode(
-                create_dataloader_from_texts(self.sentences_test),
+                DataLoader(self.eval_dataset),
                 task_name=self.task_name,
                 **encode_kwargs,
             )
             test_cache = X_test
         else:
             X_test = test_cache
+
+        y_train = self.train_dataset["label"]
+        y_test = self.eval_dataset["label"]
         for metric in ["cosine", "euclidean"]:  # TODO: "dot"
             knn = KNeighborsClassifier(n_neighbors=self.k, n_jobs=-1, metric=metric)
-            knn.fit(X_train, self.y_train)
+            knn.fit(X_train, y_train)
             y_pred = knn.predict(X_test)
-            accuracy = accuracy_score(self.y_test, y_pred)
-            f1 = f1_score(self.y_test, y_pred, average="macro")
+            accuracy = accuracy_score(y_test, y_pred)
+            f1 = f1_score(y_test, y_pred, average="macro")
             scores["accuracy_" + metric] = accuracy
             scores["f1_" + metric] = f1
             max_accuracy = max(max_accuracy, accuracy)
             max_f1 = max(max_f1, f1)  # type: ignore
             # if binary classification
-            if len(np.unique(self.y_train)) == 2:
-                ap = average_precision_score(self.y_test, y_pred)
+            if len(np.unique(y_train)) == 2:
+                ap = average_precision_score(y_test, y_pred)
                 scores["ap_" + metric] = ap
                 max_ap = max(max_ap, ap)
         scores["accuracy"] = max_accuracy
         scores["f1"] = max_f1
-        if len(np.unique(self.y_train)) == 2:
+        if len(np.unique(y_train)) == 2:
             scores["ap"] = max_ap
         return scores, test_cache
 
@@ -99,20 +97,16 @@ class kNNClassificationEvaluator(Evaluator):
 class kNNClassificationEvaluatorPytorch(Evaluator):
     def __init__(
         self,
-        sentences_train: list[str],
-        y_train: list[int],
-        sentences_test: list[str],
-        y_test: list[int],
+        train_dataset: Dataset,
+        eval_dataset: Dataset,
         task_name: str,
         k: int = 1,
         **kwargs: Any,
     ):
         super().__init__(**kwargs)
 
-        self.sentences_train = sentences_train
-        self.y_train = y_train
-        self.sentences_test = sentences_test
-        self.y_test = y_test
+        self.train_dataset = train_dataset
+        self.eval_dataset = eval_dataset
 
         self.task_name = task_name
         self.k = k
@@ -129,20 +123,23 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
         max_f1 = 0
         max_ap = 0
         X_train = model.encode(
-            create_dataloader_from_texts(self.sentences_train),
+            DataLoader(self.train_dataset),
             task_name=self.task_name,
             **encode_kwargs,
         )
 
         if test_cache is None:
             X_test = model.encode(
-                create_dataloader_from_texts(self.sentences_test),
+                DataLoader(self.eval_dataset),
                 task_name=self.task_name,
                 **encode_kwargs,
             )
             test_cache = X_test
         else:
             X_test = test_cache
+
+        y_train = self.train_dataset["label"]
+        y_test = self.eval_dataset["label"]
         for metric in ["cosine", "euclidean", "dot"]:
             if metric == "cosine":
                 distances = 1 - self._cos_sim(X_test, X_train)
@@ -153,24 +150,24 @@ class kNNClassificationEvaluatorPytorch(Evaluator):
             neigh_indices = torch.topk(
                 distances, k=self.k, dim=1, largest=False
             ).indices
-            y_train = torch.tensor(self.y_train)
+            y_train = torch.tensor(y_train)
             y_pred = torch.mode(
                 y_train[neigh_indices], dim=1
             ).values  # TODO: case where there is no majority
-            accuracy = accuracy_score(self.y_test, y_pred)
-            f1 = f1_score(self.y_test, y_pred, average="macro")
+            accuracy = accuracy_score(y_test, y_pred)
+            f1 = f1_score(y_test, y_pred, average="macro")
             scores["accuracy_" + metric] = accuracy
             scores["f1_" + metric] = f1
             max_accuracy = max(max_accuracy, accuracy)
             max_f1 = max(max_f1, f1)  # type: ignore
             # if binary classification
-            if len(np.unique(self.y_train)) == 2:
-                ap = average_precision_score(self.y_test, y_pred)
+            if len(np.unique(y_train)) == 2:
+                ap = average_precision_score(y_test, y_pred)
                 scores["ap_" + metric] = ap
                 max_ap = max(max_ap, ap)
         scores["accuracy"] = max_accuracy
         scores["f1"] = max_f1
-        if len(np.unique(self.y_train)) == 2:
+        if len(np.unique(y_train)) == 2:
             scores["ap"] = max_ap
         return scores, test_cache
 
