@@ -37,6 +37,7 @@ class MSMARCOPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["MSMARCO"],
     )
 
 
@@ -73,4 +74,5 @@ class MSMARCOPLHardNegatives(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["MSMARCO"],
     )

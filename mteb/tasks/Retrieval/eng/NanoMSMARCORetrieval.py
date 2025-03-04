@@ -53,6 +53,7 @@ class NanoMSMARCORetrieval(AbsTaskRetrieval):
         prompt={
             "query": "Given a web search query, retrieve relevant passages that answer the query"
         },
+        adapted_from=["MSMARCO"],
     )
 
     def load_data(self, **kwargs):

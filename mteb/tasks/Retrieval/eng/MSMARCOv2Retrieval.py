@@ -58,4 +58,5 @@ class MSMARCOv2(AbsTaskRetrieval):
           bibsource = {dblp computer science bibliography, https://dblp.org}
         }
         }""",
+        adapted_from=["MSMARCO"],
     )

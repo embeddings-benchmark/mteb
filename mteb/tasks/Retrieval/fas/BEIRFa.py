@@ -29,6 +29,7 @@ class ArguAnaFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        adapted_from=["ArguAna"],
     )
 
 
@@ -55,6 +56,7 @@ class ClimateFEVERFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        adapted_from=["ClimateFEVER"],
     )
 
 
@@ -81,6 +83,7 @@ class CQADupstackAndroidRetrievalFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        adapted_from=["CQADupstackAndroid"],
     )
 
 
@@ -107,6 +110,7 @@ class CQADupstackEnglishRetrievalFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        adapted_from=["CQADupstackEnglish"],
     )
 
 
@@ -133,6 +137,7 @@ class CQADupstackGamingRetrievalFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        adapted_from=["CQADupstackGamingRetrieval"],
     )
 
 
@@ -159,6 +164,7 @@ class CQADupstackGisRetrievalFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        adapted_from=["CQADupstackGisRetrieval"],
     )
 
 
@@ -185,6 +191,7 @@ class CQADupstackMathematicaRetrievalFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        adapted_from=["CQADupstackMathematicaRetrieval"],
     )
 
 
@@ -211,6 +218,7 @@ class CQADupstackPhysicsRetrievalFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        adapted_from=["CQADupstackPhysicsRetrieval"],
     )
 
 
@@ -237,6 +245,7 @@ class CQADupstackProgrammersRetrievalFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        adapted_from=["CQADupstackProgrammersRetrieval"],
     )
 
 
@@ -263,6 +272,7 @@ class CQADupstackStatsRetrievalFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        adapted_from=["CQADupstackStatsRetrieval"],
     )
 
 
@@ -289,6 +299,7 @@ class CQADupstackTexRetrievalFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        adapted_from=["CQADupstackTexRetrieval"],
     )
 
 
@@ -315,6 +326,7 @@ class CQADupstackUnixRetrievalFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        adapted_from=["CQADupstackUnixRetrieval"],
     )
 
 
@@ -341,6 +353,7 @@ class CQADupstackWebmastersRetrievalFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        adapted_from=["CQADupstackWebmasters"],
     )
 
 
@@ -367,6 +380,7 @@ class CQADupstackWordpressRetrievalFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        adapted_from=["CQADupstackWordpressRetrieval"],
     )
 
 
@@ -393,6 +407,7 @@ class DBPediaFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        adapted_from=["DBPedia"],
     )
 
 
@@ -421,6 +436,7 @@ class FiQA2018Fa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        adapted_from=["FiQA2018"],
     )
 
 
@@ -447,6 +463,7 @@ class HotpotQAFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        adapted_from=["HotpotQA"],
     )
 
 
@@ -475,6 +492,7 @@ class MSMARCOFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        adapted_from=["MSMARCO"],
     )
 
 
@@ -501,6 +519,7 @@ class NFCorpusFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        adapted_from=["NFCorpus"],
     )
 
 
@@ -527,6 +546,7 @@ class NQFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        adapted_from=["NQ"],
     )
 
 
@@ -555,6 +575,7 @@ class QuoraRetrievalFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        adapted_from=["QuoraRetrieval"],
     )
 
 
@@ -581,6 +602,7 @@ class SCIDOCSFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        adapted_from=["SCIDOCS"],
     )
 
 
@@ -607,6 +629,7 @@ class SciFactFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        adapted_from=["SciFact"],
     )
 
 
@@ -633,6 +656,7 @@ class TRECCOVIDFa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        adapted_from=["TRECCOVID"],
     )
 
 
@@ -659,4 +683,5 @@ class Touche2020Fa(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=""" """,
+        adapted_from=["Touche2020"],
     )

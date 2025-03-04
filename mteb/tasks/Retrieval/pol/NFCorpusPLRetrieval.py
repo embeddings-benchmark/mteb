@@ -35,4 +35,5 @@ class NFCorpusPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["NFCorpus"],
     )

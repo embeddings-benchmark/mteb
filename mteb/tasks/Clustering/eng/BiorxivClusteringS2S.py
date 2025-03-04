@@ -32,6 +32,7 @@ class BiorxivClusteringS2SFast(AbsTaskClusteringFast):
         sample_creation="created",
         bibtex_citation="",
         prompt="Identify the main category of Biorxiv papers based on the titles",
+        adapted_from=["BiorxivClusteringS2S"],
     )
 
     def dataset_transform(self):

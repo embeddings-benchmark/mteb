@@ -291,6 +291,7 @@ class TaskMetadata(BaseModel):
             "machine-translated and localized".
         prompt: The prompt used for the task. Can be a string or a dictionary containing the query and passage prompts.
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
+        adapted_from: Datasets adapted (translated, sampled from, etc.) from other datasets.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -319,6 +320,7 @@ class TaskMetadata(BaseModel):
 
     sample_creation: SAMPLE_CREATION_METHOD | None = None
     bibtex_citation: str | None = None
+    adapted_from: list[str] | None = None
 
     def validate_metadata(self) -> None:
         self.dataset_path_is_specified(self.dataset)
@@ -442,7 +444,7 @@ class TaskMetadata(BaseModel):
         return all(
             getattr(self, field_name) is not None
             for field_name in self.model_fields
-            if field_name != "prompt"
+            if field_name not in ["prompt", "adapted_from"]
         )
 
     @property

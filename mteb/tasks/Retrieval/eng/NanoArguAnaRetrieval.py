@@ -41,6 +41,7 @@ class NanoArguAnaRetrieval(AbsTaskRetrieval):
   url = {http://www.cl.uni-heidelberg.de/~riezler/publications/papers/ECIR2016.pdf}
 }""",
         prompt={"query": "Given a claim, find documents that refute the claim"},
+        adapted_from=["ArguAna"],
     )
 
     def load_data(self, **kwargs):

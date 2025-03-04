@@ -228,6 +228,7 @@ benchmark_select = gr.Dropdown(
 lang_select = gr.Dropdown(
     ISO_TO_LANGUAGE,
     value=sorted(default_results.languages),
+    allow_custom_value=True,
     multiselect=True,
     label="Language",
     info="Select languages to include.",

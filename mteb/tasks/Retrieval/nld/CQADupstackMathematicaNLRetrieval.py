@@ -40,6 +40,7 @@ class CQADupstackMathematicaNLRetrieval(AbsTaskRetrieval):
      primaryClass={cs.CL},
      url={https://arxiv.org/abs/2412.08329}, 
 }""",
+        adapted_from=["CQADupstackMathematicaRetrieval"],
     )
 
     def load_data(self, **kwargs):
