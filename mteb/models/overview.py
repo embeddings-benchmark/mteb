@@ -231,7 +231,9 @@ def get_model(model_name: str, revision: str | None = None, **kwargs: Any) -> En
     return model
 
 
-def get_model_meta(model_name: str, revision: str | None = None, mteb_only: bool = False) -> ModelMeta:
+def get_model_meta(
+    model_name: str, revision: str | None = None, mteb_only: bool = False
+) -> ModelMeta:
     """A function to fetch a model metadata object by name.
 
     Args:

@@ -180,7 +180,9 @@ class ModelMeta(BaseModel):
         training_datasets = self.training_datasets.copy()
         if self.adapted_from is not None:
             try:
-                adapted_from_model = mteb.get_model_meta(self.adapted_from, mteb_only=True)
+                adapted_from_model = mteb.get_model_meta(
+                    self.adapted_from, mteb_only=True
+                )
                 adapted_training_datasets = adapted_from_model.get_training_datasets()
                 if adapted_training_datasets is not None:
                     training_datasets |= adapted_training_datasets
