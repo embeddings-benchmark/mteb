@@ -61,6 +61,7 @@ TASK_SUBTYPE = Literal[
     "Duplicate Detection",
     "Environment Sound Classification",
     "Gender Clustering",
+    "Music Clustering",
 ]
 
 TASK_DOMAIN = Literal[
@@ -88,6 +89,7 @@ TASK_DOMAIN = Literal[
     "Financial",
     "Chemistry",
     "Financial",
+    "Music",
 ]
 
 SAMPLE_CREATION_METHOD = Literal[
@@ -150,6 +152,7 @@ TASK_CATEGORY = Literal[
     "t2at",  # text-to-audio+text
     "at2at",  # audio+text-to-audio+text
     "a2a",  # audio-to-audio
+    "a2t",  # audio-to-text
 ]
 
 ANNOTATOR_TYPE = Literal[
