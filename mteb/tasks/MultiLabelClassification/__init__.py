@@ -1,8 +1,16 @@
 from __future__ import annotations
 
-from .kor.KorHateSpeechMLClassification import *
-from .mlt.MalteseNewsClassification import *
-from .multilingual.MultiEURLEXMultilabelClassification import *
-from .por.BrazilianToxicTweetsClassification import *
-from .rus.CEDRClassification import *
-from .rus.SensitiveTopicsClassification import *
+from .kor import KorHateSpeechMLClassification
+from .mlt import MalteseNewsClassification
+from .multilingual import MultiEURLEXMultilabelClassification
+from .por import BrazilianToxicTweetsClassification
+from .rus import CEDRClassification, SensitiveTopicsClassification
+
+__all__ = [
+    "BrazilianToxicTweetsClassification",
+    "MalteseNewsClassification",
+    "KorHateSpeechMLClassification",
+    "MultiEURLEXMultilabelClassification",
+    "SensitiveTopicsClassification",
+    "CEDRClassification",
+]

@@ -14,7 +14,7 @@ class WikipediaBiolumNeurochemClassification(AbsTaskClassification):
             "revision": "2f68b7d34c2be896e46b14533573b366e59e5aae",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

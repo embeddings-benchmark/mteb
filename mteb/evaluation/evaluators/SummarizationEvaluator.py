@@ -26,24 +26,24 @@ logger = logging.getLogger(__name__)
 class SummarizationEvaluator(Evaluator):
     def __init__(
         self,
-        task_name: str | None = None,
-        human_summaries=None,
-        machine_summaries=None,
-        texts=None,
-        gold_scores=None,
-        limit: int | None = None,
+        human_summaries: list[list[str]],
+        machine_summaries: list[list[str]],
+        texts: list[str],
+        gold_scores: list[list[float]],
+        task_name: str,
         **kwargs,
     ):
-        # human_summaries shape: (None, num_human_summaries)
-        # machine_summaries shape: (None, num_machine_summaries)
-        # gold scores shape: (None, num_machine_summaries)
-        # texts: (None,)
+        """Summarization Evaluator
+
+        Args:
+        human_summaries: shape: (-1, num_human_summaries)
+        machine_summaries: shape: (-1, num_machine_summaries)
+        texts: shape: (-1,)
+        gold_scores: shape: (-1, num_machine_summaries)
+        task_name: Name of the task
+        **kwargs: Additional arguments to pass to the Evaluator
+        """
         super().__init__(**kwargs)
-        if limit is not None:
-            human_summaries = human_summaries[:limit]
-            machine_summaries = machine_summaries[:limit]
-            gold_scores = gold_scores[:limit]
-            texts = texts[:limit]
         self.human_summaries = human_summaries
         self.machine_summaries = machine_summaries
         self.texts = texts

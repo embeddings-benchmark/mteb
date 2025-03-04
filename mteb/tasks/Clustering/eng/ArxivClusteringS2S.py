@@ -16,7 +16,7 @@ class ArxivClusteringS2S(AbsTaskClustering):
             "revision": "f910caf1a6075f7329cdf8c1a6135696f37dbd53",
         },
         type="Clustering",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

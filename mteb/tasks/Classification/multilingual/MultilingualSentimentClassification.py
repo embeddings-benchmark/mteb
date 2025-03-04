@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -39,7 +38,7 @@ _LANGUAGES = {
 }
 
 
-class MultilingualSentimentClassification(AbsTaskClassification, MultilingualTask):
+class MultilingualSentimentClassification(AbsTaskClassification):
     fast_loading = True
     metadata = TaskMetadata(
         name="MultilingualSentimentClassification",
@@ -52,7 +51,7 @@ class MultilingualSentimentClassification(AbsTaskClassification, MultilingualTas
                      """,
         reference="https://huggingface.co/datasets/mteb/multilingual-sentiment-classification",
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,

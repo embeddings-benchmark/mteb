@@ -34,16 +34,4 @@ class EDIST2ITRetrieval(AbsTaskAny2AnyRetrieval):
   year={2023}
 }""",
         prompt={"query": "Identify the news photo for the given caption."},
-        descriptive_stats={
-            "n_samples": {"test": 3241},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 0.0,
-                    "num_documents": 1047067,
-                    "num_queries": 3241,
-                    "average_relevant_docs_per_query": 2.57,
-                }
-            },
-        },
     )

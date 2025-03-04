@@ -14,7 +14,7 @@ class WikipediaOrganicInorganicClassification(AbsTaskClassification):
             "revision": "96d1d9b37c4693f74c46c83d63a290573f78d511",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

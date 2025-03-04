@@ -12,7 +12,7 @@ from packaging.version import Version
 
 import mteb
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 
 logger = logging.getLogger(__name__)
@@ -180,6 +180,17 @@ model_prompts = {
     PromptType.passage.value: "search_document: ",
 }
 
+NOMIC_CITATION = """
+@misc{nussbaum2024nomic,
+      title={Nomic Embed: Training a Reproducible Long Context Text Embedder}, 
+      author={Zach Nussbaum and John X. Morris and Brandon Duderstadt and Andriy Mulyar},
+      year={2024},
+      eprint={2402.01613},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+"""
+
 nomic_embed_v1_5 = ModelMeta(
     loader=partial(
         NomicWrapper,
@@ -193,13 +204,14 @@ nomic_embed_v1_5 = ModelMeta(
     open_weights=True,
     revision="b0753ae76394dd36bcfb912a46018088bca48be0",
     release_date="2024-02-10",  # first commit
+    citation=NOMIC_CITATION,
     n_parameters=137_000_000,
     memory_usage_mb=522,
     max_tokens=8192,
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/nomic-ai/nomic-embed-text-v1.5",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from=None,
@@ -228,9 +240,10 @@ nomic_embed_v1 = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/nomic-ai/nomic-embed-text-v1",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    citation=NOMIC_CITATION,
     adapted_from=None,
     superseded_by="nomic-ai/nomic-embed-text-v1.5",
     public_training_code="https://github.com/nomic-ai/contrastors/blob/5f7b461e5a13b5636692d1c9f1141b27232fe966/src/contrastors/configs/train/contrastive_finetune.yaml",
@@ -257,7 +270,7 @@ nomic_embed_v1_ablated = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/nomic-ai/nomic-embed-text-v1-ablated",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from=None,
@@ -286,7 +299,7 @@ nomic_embed_v1_unsupervised = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/nomic-ai/nomic-embed-text-v1-unsupervised",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from=None,
@@ -317,7 +330,7 @@ nomic_modern_bert_embed = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/nomic-ai/modernbert-embed-base",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from="answerdotai/ModernBERT-base",

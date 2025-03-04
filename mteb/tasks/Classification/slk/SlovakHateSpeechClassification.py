@@ -14,7 +14,7 @@ class SlovakHateSpeechClassification(AbsTaskClassification):
             "revision": "f9301b9937128c9c0b636fa6da203aeb046479f4",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         date=("2024-05-25", "2024-06-06"),
         eval_splits=["test"],

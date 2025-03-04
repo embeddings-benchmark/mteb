@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -14,7 +13,7 @@ _LANGUAGES = {
 }
 
 
-class MTOPIntentClassification(MultilingualTask, AbsTaskClassification):
+class MTOPIntentClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="MTOPIntentClassification",
         dataset={
@@ -24,7 +23,7 @@ class MTOPIntentClassification(MultilingualTask, AbsTaskClassification):
         },
         description="MTOP: Multilingual Task-Oriented Semantic Parsing",
         reference="https://arxiv.org/pdf/2008.09335.pdf",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         type="Classification",
         eval_splits=["validation", "test"],

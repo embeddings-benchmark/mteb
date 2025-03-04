@@ -7,7 +7,7 @@ import numpy as np
 import tqdm
 
 from mteb.encoder_interface import Encoder, PromptType
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.wrapper import Wrapper
 
 MULTILINGUAL_EVALUATED_LANGUAGES = [
@@ -149,7 +149,7 @@ google_text_emb_004 = ModelMeta(
     embed_dim=768,
     license=None,
     reference="https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings",
-    similarity_fn_name="cosine",  # assumed
+    similarity_fn_name=ScoringFunction.COSINE,  # assumed
     framework=["API"],
     use_instructions=True,
     public_training_code=None,
@@ -174,7 +174,7 @@ google_text_emb_005 = ModelMeta(
     embed_dim=768,
     license=None,
     reference="https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings",
-    similarity_fn_name="cosine",  # assumed
+    similarity_fn_name=ScoringFunction.COSINE,  # assumed
     framework=["API"],
     use_instructions=True,
     public_training_code=None,
@@ -199,7 +199,7 @@ google_text_multilingual_emb_002 = ModelMeta(
     embed_dim=768,
     license=None,
     reference="https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings",
-    similarity_fn_name="cosine",  # assumed
+    similarity_fn_name=ScoringFunction.COSINE,  # assumed
     framework=["API"],
     use_instructions=True,
     public_training_code=None,

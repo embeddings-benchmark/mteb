@@ -15,7 +15,7 @@ class CQADupstackTexRetrieval(AbsTaskRetrieval):
             "revision": "46989137a86843e03a6195de44b09deda022eec7",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

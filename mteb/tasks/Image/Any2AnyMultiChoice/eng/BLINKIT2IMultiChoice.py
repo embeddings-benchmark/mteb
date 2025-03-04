@@ -34,16 +34,4 @@ class BLINKIT2IMultiChoice(AbsTaskAny2AnyMultiChoice):
   year={2024}
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 534},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 0.0,
-                    "num_documents": 1200,
-                    "num_queries": 534,
-                    "average_relevant_docs_per_query": 1,
-                }
-            },
-        },
     )

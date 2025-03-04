@@ -15,7 +15,7 @@ class KlueTC(AbsTaskClassification):
         description="Topic classification dataset of human-annotated news headlines. Part of the Korean Language Understanding Evaluation (KLUE).",
         reference="https://arxiv.org/abs/2105.09680",
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation"],
         eval_langs=["kor-Hang"],

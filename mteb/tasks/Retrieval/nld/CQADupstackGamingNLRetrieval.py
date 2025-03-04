@@ -19,7 +19,7 @@ class CQADupstackGamingNLRetrieval(AbsTaskRetrieval):
             "split": "gaming",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nld-Latn"],
@@ -51,16 +51,16 @@ class CQADupstackGamingNLRetrieval(AbsTaskRetrieval):
         # fetch both subsets of the dataset, only test split
         corpus_raw = datasets.load_dataset(
             name="corpus",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
         queries_raw = datasets.load_dataset(
             name="queries",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         qrels_raw = datasets.load_dataset(
             name="test",
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         self.queries["test"] = {query["_id"]: query["text"] for query in queries_raw}

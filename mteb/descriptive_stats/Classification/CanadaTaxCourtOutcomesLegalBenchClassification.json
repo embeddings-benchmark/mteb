@@ -1,0 +1,44 @@
+{
+    "test": {
+        "num_samples": 244,
+        "number_of_characters": 151915,
+        "number_texts_intersect_with_train": 0,
+        "min_text_length": 184,
+        "average_text_length": 622.6024590163935,
+        "max_text_length": 3427,
+        "unique_text": 244,
+        "unique_labels": 3,
+        "labels": {
+            "allowed": {
+                "count": 101
+            },
+            "dismissed": {
+                "count": 131
+            },
+            "other": {
+                "count": 12
+            }
+        }
+    },
+    "train": {
+        "num_samples": 6,
+        "number_of_characters": 2855,
+        "number_texts_intersect_with_train": null,
+        "min_text_length": 284,
+        "average_text_length": 475.8333333333333,
+        "max_text_length": 678,
+        "unique_text": 6,
+        "unique_labels": 3,
+        "labels": {
+            "allowed": {
+                "count": 2
+            },
+            "dismissed": {
+                "count": 2
+            },
+            "other": {
+                "count": 2
+            }
+        }
+    }
+}

@@ -37,16 +37,4 @@ class InfoSeekIT2ITRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={
             "query": "Find an image and subject description from Wikipedia that answers my question about this image."
         },
-        descriptive_stats={
-            "n_samples": {"test": 17593},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 0.0,
-                    "num_documents": 481782,
-                    "num_queries": 17593,
-                    "average_relevant_docs_per_query": 7.5,
-                }
-            },
-        },
     )

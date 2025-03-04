@@ -16,7 +16,7 @@ class TRECCOVIDNL(AbsTaskRetrieval):
             "revision": "04dd804c048866b0ab90a55ded77789485828281",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nld-Latn"],

@@ -36,16 +36,4 @@ class OVENIT2ITRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={
             "query": "Retrieve a Wikipedia image-description pair that provides evidence for the question of this image."
         },
-        descriptive_stats={
-            "n_samples": {"test": 14741},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 0.0,
-                    "num_documents": 335135,
-                    "num_queries": 14741,
-                    "average_relevant_docs_per_query": 17.7,
-                }
-            },
-        },
     )

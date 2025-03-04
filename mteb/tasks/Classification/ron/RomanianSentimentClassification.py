@@ -17,7 +17,7 @@ class RomanianSentimentClassification(AbsTaskClassification):
             "trust_remote_code": True,
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         date=("2020-09-18", "2020-09-18"),
         eval_splits=["test"],

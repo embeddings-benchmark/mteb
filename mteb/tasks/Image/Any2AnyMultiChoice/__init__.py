@@ -1,7 +1,25 @@
 from __future__ import annotations
 
-from .eng.BLINKIT2IMultiChoice import *
-from .eng.BLINKIT2TMultiChoice import *
-from .eng.ImageCoDeT2IMultiChoice import *
-from .eng.ROxfordI2IMultiChoice import *
-from .eng.RParisI2IMultiChoice import *
+from .eng import (
+    BLINKIT2IMultiChoice,
+    BLINKIT2TMultiChoice,
+    ImageCoDeT2IMultiChoice,
+    ROxfordEasyI2IMultiChoice,
+    ROxfordHardI2IMultiChoice,
+    ROxfordMediumI2IMultiChoice,
+    RParisEasyI2IMultiChoice,
+    RParisHardI2IMultiChoice,
+    RParisMediumI2IMultiChoice,
+)
+
+__all__ = [
+    "ImageCoDeT2IMultiChoice",
+    "BLINKIT2IMultiChoice",
+    "BLINKIT2TMultiChoice",
+    "ROxfordEasyI2IMultiChoice",
+    "ROxfordHardI2IMultiChoice",
+    "ROxfordMediumI2IMultiChoice",
+    "RParisEasyI2IMultiChoice",
+    "RParisHardI2IMultiChoice",
+    "RParisMediumI2IMultiChoice",
+]

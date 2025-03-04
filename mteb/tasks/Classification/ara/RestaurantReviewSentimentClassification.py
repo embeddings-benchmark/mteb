@@ -14,7 +14,7 @@ class RestaurantReviewSentimentClassification(AbsTaskClassification):
         description="Dataset of 8364 restaurant reviews from qaym.com in Arabic for sentiment analysis",
         reference="https://link.springer.com/chapter/10.1007/978-3-319-18117-2_2",
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ara-Arab"],

@@ -25,7 +25,7 @@ class ToxicChatClassification(AbsTaskClassification):
             "revision": "3e0319203c7162b9c9f8015b594441f979c199bc",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=_EVAL_SPLITS,
         eval_langs=["eng-Latn"],

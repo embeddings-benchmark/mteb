@@ -14,7 +14,7 @@ class MarathiNewsClassification(AbsTaskClassification):
             "revision": "7640cf8132cca1f99995ac71512a670e3c965cf1",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],

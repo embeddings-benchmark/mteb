@@ -42,7 +42,7 @@ class CQADupstackNLRetrieval(AbsTaskAggregate):
         tasks=task_list_cqa,
         main_score="ndcg_at_10",
         type="Retrieval",  # since everything is retrieval - otherwise it would be "Aggregated"
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nld-Latn"],

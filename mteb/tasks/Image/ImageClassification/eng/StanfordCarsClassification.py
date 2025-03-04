@@ -36,8 +36,4 @@ class StanfordCarsClassification(AbsTaskImageClassification):
         url={https://api.semanticscholar.org/CorpusID:16632981}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 8041},
-            "avg_character_length": {"test": 431.4},
-        },
     )
