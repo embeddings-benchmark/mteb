@@ -58,6 +58,14 @@ def parse_float(value) -> float:
         return np.nan
 
 
+def process_max_tokens(x):
+    if pd.isna(x):
+        return "Unknown"
+    if np.isinf(x):
+        return "Infinite"
+    return str(int(x))
+
+
 models_to_annotate = [
     "all-MiniLM-L6-v2",
     "GritLM-7B",
@@ -116,11 +124,7 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
         return go.Figure()
     min_score, max_score = df["Mean (Task)"].min(), df["Mean (Task)"].max()
     df["sqrt(dim)"] = np.sqrt(df["Embedding Dimensions"])
-    df["Max Tokens"] = df["Max Tokens"].apply(
-        lambda x: "Unknown"
-        if pd.isna(x)
-        else ("Infinite" if np.isinf(x) else str(int(x)))
-    )
+    df["Max Tokens"] = df["Max Tokens"].apply(lambda x: process_max_tokens(x))
     fig = px.scatter(
         df,
         x="Number of Parameters",
