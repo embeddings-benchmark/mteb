@@ -241,12 +241,15 @@ def get_model(model_name: str, revision: str | None = None, **kwargs: Any) -> En
     return model
 
 
-def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
+def get_model_meta(
+    model_name: str, revision: str | None = None, fetch_from_hf: bool = True
+) -> ModelMeta:
     """A function to fetch a model metadata object by name.
 
     Args:
         model_name: Name of the model to fetch
         revision: Revision of the model to fetch
+        fetch_from_hf: Whether to fetch the model from HuggingFace Hub if not found in the registry
 
     Returns:
         A model metadata object
@@ -258,6 +261,10 @@ def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
             )
         return MODEL_REGISTRY[model_name]
     else:  # assume it is a sentence-transformers model
+        if not fetch_from_hf:
+            raise ValueError(
+                f"Model {model_name} not found in MTEB registry. Please set fetch_from_hf=False to load it from HuggingFace Hub."
+            )
         logger.info(
             "Model not found in model registry, assuming it is on HF Hub model."
         )

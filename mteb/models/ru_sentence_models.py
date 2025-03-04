@@ -13,6 +13,7 @@ from mteb.model_meta import (
     sentence_transformers_loader,
 )
 from mteb.models.bge_models import bge_m3_training_data
+from mteb.model_meta import ModelMeta, sentence_transformers_loader
 from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
 
 rubert_tiny = ModelMeta(
@@ -251,7 +252,7 @@ user_bge_m3 = ModelMeta(
     reference="https://huggingface.co/deepvk/USER-base",
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
-    adapted_from="https://huggingface.co/BAAI/bge-m3",
+    adapted_from="BAAI/bge-m3",
     use_instructions=False,
     training_datasets={
         "BibleNLPBitextMining": ["train"],
@@ -259,7 +260,6 @@ user_bge_m3 = ModelMeta(
         "MLSUMClusteringP2P.v2": ["train"],
         "MLSUMClusteringS2S": ["train"],
         "MLSUMClusteringS2S.v2": ["train"],
-        **bge_m3_training_data,
         # not MTEB:
         # "deepvk/ru-HNP": ["train"],
         # "deepvk/ru-WANLI": ["train"],
