@@ -12,7 +12,6 @@ from mteb.abstasks.TaskMetadata import HFSubset
 from ...encoder_interface import Encoder
 from ...evaluation.evaluators import (
     ImagekNNClassificationEvaluator,
-    ImagekNNClassificationEvaluatorPytorch,
     ImagelogRegClassificationEvaluator,
 )
 from ..AbsTask import AbsTask, ScoresDict

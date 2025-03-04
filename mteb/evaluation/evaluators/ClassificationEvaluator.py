@@ -4,7 +4,6 @@ import logging
 from typing import Any
 
 import numpy as np
-import torch
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
     accuracy_score,
@@ -90,7 +89,6 @@ class kNNClassificationEvaluator(Evaluator):
         if len(np.unique(self.y_train)) == 2:
             scores["ap"] = max_ap
         return scores, test_cache
-
 
 
 class logRegClassificationEvaluator(Evaluator):
