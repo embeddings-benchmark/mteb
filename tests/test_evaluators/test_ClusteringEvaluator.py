@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import numpy as np
+from datasets import Dataset
 from torch.utils.data import DataLoader
 
 from mteb.evaluation.evaluators import ClusteringEvaluator
@@ -19,7 +20,9 @@ class TestClusteringEvaluator:
 
         model = Model()
         sentences = ["dog walked home", "cat walked home", "robot walked to the park"]
-        clusterer = ClusteringEvaluator(sentences=sentences, labels=[1, 2, 3])
+        labels = [1, 2, 3]
+        dataset = Dataset.from_dict({"text": sentences, "labels": labels})
+        clusterer = ClusteringEvaluator(dataset)
         result = clusterer(model)
 
         assert result == {"v_measure": 1.0}
