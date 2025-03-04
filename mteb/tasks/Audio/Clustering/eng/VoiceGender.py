@@ -18,7 +18,7 @@ class VoiceGenderClustering(AbsTaskAudioClustering):
         category="a2a",
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
-        main_score="clustering_accuracy",
+        main_score="cluster_accuracy",
         date=("2024-01-01", "2024-12-31"),
         domains=["Spoken"],
         task_subtypes=["Gender Clustering"],

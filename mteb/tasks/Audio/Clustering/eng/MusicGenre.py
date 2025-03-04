@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+import librosa
+import numpy as np
+from datasets import Audio
+
 from mteb.abstasks.Audio.AbsTaskAudioClustering import AbsTaskAudioClustering
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -12,13 +16,13 @@ class MusicGenreClustering(AbsTaskAudioClustering):
         reference="https://www-ai.cs.tu-dortmund.de/audio.html",
         dataset={
             "path": "mteb/music-genre",
-            "revision": "aad0b08ed9aa641a7467ecf72febdb3e46f0a31a",
+            "revision": "2ed42a866b5155eb138eb3dc1e68515ccf3c8a50",
         },
         type="AudioClustering",
         category="a2t",
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
-        main_score="clustering_accuracy",
+        main_score="cluster_accuracy",
         date=("2005-01-01", "2005-12-31"),
         domains=["Music"],
         task_subtypes=["Music Clustering"],
@@ -36,3 +40,16 @@ class MusicGenreClustering(AbsTaskAudioClustering):
                         year={2005}
                         }""",
     )
+
+    def dataset_transform(self):
+        self.dataset["train"] = self.dataset["train"].map(
+            lambda example: {
+                "audio": {
+                    "array": np.array(librosa.load(example["audio"]["path"], sr=16000)[0]),
+                    "sampling_rate": 16000,
+                }
+            }
+        )
+        self.dataset["train"] = self.dataset["train"].cast_column(
+            "audio", Audio(sampling_rate=16000)
+        )
