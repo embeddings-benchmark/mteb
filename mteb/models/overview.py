@@ -251,7 +251,7 @@ def get_model_meta(
             )
         return MODEL_REGISTRY[model_name]
     else:  # assume it is a sentence-transformers model
-        if fetch_from_hf:
+        if not fetch_from_hf:
             raise ValueError(
                 f"Model {model_name} not found in MTEB registry. Please set fetch_from_hf=False to load it from HuggingFace Hub."
             )
