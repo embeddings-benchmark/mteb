@@ -6,7 +6,7 @@ import torch
 from datasets import Dataset
 from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import BatchedInput
+from mteb.encoder_interface import BatchedInput, Conversation
 
 
 def create_dataloader_from_texts(
@@ -106,7 +106,7 @@ def create_dataloader_for_queries(
     return torch.utils.data.DataLoader(dataset, **dataloader_kwargs)
 
 
-def convert_conv_history_to_query(conversations: list[list[str | dict]]) -> list[str]:
+def convert_conv_history_to_query(conversations: list[list[str | Conversation]]) -> list[str]:
     conversations_converted = []
 
     for conversation in conversations:
@@ -147,7 +147,7 @@ def convert_conv_history_to_query(conversations: list[list[str | dict]]) -> list
 
 
 def create_dataloader_for_queries_conversation(
-    queries: list[list[str | dict]],
+    queries: list[list[str | Conversation]],
     instructions: list[str] | None = None,
     combine_query_and_instruction: Callable[[str, str], str] | None = None,
     **dataloader_kwargs,
