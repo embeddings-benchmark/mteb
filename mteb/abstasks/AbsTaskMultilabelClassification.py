@@ -9,13 +9,12 @@ import numpy as np
 from datasets import Dataset, DatasetDict
 from sklearn.base import ClassifierMixin, clone
 from sklearn.metrics import f1_score, label_ranking_average_precision_score
-from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
+from torch.utils.data import DataLoader
 
 from mteb.encoder_interface import Encoder
 
-from ..create_dataloaders import create_dataloader_from_texts
 from ..load_results.task_results import ScoresDict
 from .AbsTaskClassification import AbsTaskClassification
 
@@ -79,33 +78,35 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
             train_samples.append(sample_indices)
         # Encode all unique sentences at the indices
         unique_train_indices = list(set(itertools.chain.from_iterable(train_samples)))
-        unique_train_sentences = train_split.select(unique_train_indices)["text"]
+        unique_train_dataset = train_split.select(unique_train_indices)
 
         _unique_train_embeddings = model.encode(
-            create_dataloader_from_texts(unique_train_sentences),
+            DataLoader(unique_train_dataset),
             task_name=self.metadata.name,
             **encode_kwargs,
         )
         unique_train_embeddings = dict(
             zip(unique_train_indices, _unique_train_embeddings)
         )
-        test_text = eval_split["text"]
-        binarizer = MultiLabelBinarizer()
-        y_test = binarizer.fit_transform(eval_split["label"])
         # Stratified subsampling of test set to 2000 examples.
+        test_dataset = eval_split
         try:
-            if len(test_text) > 2000:
-                test_text, _, y_test, _ = train_test_split(
-                    test_text, y_test, stratify=y_test, train_size=2000
+            if len(test_dataset) > 2000:
+                split_dataset = eval_split.train_test_split(
+                    test_size=2000, seed=42, stratify_by_column="label"
                 )
+                test_dataset = split_dataset["test"]
         except ValueError:
             logger.warning("Couldn't subsample, continuing with the entire test set.")
 
         X_test = model.encode(
-            create_dataloader_from_texts(test_text),
+            DataLoader(test_dataset),
             task_name=self.metadata.name,
             **encode_kwargs,
         )
+        binarizer = MultiLabelBinarizer()
+        y_test = binarizer.fit_transform(test_dataset["label"])
+
         for i_experiment, sample_indices in enumerate(train_samples):
             logger.info(
                 "=" * 10
