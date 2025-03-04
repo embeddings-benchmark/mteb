@@ -165,13 +165,13 @@ class AbsTaskClassification(AbsTask):
         """Undersample data to have `samples_per_label` samples of each label.
 
         Args:
-            dataset (Dataset): Hugging Face `datasets.Dataset` containing "text" and "label".
-            samples_per_label (int): Number of samples per label to retain.
-            idxs (list[int] | None): Optional indices to shuffle and sample from.
+            dataset: Hugging Face `datasets.Dataset` containing "text" and "label".
+            samples_per_label: Number of samples per label to retain.
+            idxs: Optional indices to shuffle and sample from.
 
         Returns:
-            Dataset: A new Dataset containing undersampled examples.
-            list[int]: The shuffled indices used for sampling.
+            A new Dataset containing undersampled examples.
+            The shuffled indices used for sampling.
         """
         if idxs is None:
             idxs = list(range(len(dataset)))
