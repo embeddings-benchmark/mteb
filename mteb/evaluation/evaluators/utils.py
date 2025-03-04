@@ -67,7 +67,6 @@ def cos_sim(a: torch.Tensor | np.ndarray, b: torch.Tensor | np.ndarray) -> torch
         and (isinstance(a, torch.Tensor) and isinstance(b, torch.Tensor))
     )
     if should_compile:
-        # TODO: This compiles it every time (is faster?) - we could also create a getter function (so it only happens once)
         _cos_sim_core_compiled = torch.compile(_cos_sim_core)
         return _cos_sim_core_compiled(a, b)
     else:
@@ -82,7 +81,7 @@ def max_sim(a: np.ndarray | torch.Tensor, b: np.ndarray | torch.Tensor) -> torch
         Matrix with res[i][j]  = max_sim(a[i], b[j])
     """  # noqa: D402
     if not isinstance(a, torch.Tensor):
-        a = torch.tensor(a, dtype=torch.float32)  # TODO: any reason for
+        a = torch.tensor(a, dtype=torch.float32)
 
     if not isinstance(b, torch.Tensor):
         b = torch.tensor(b, dtype=torch.float32)
@@ -93,7 +92,7 @@ def max_sim(a: np.ndarray | torch.Tensor, b: np.ndarray | torch.Tensor) -> torch
     if len(b.shape) == 2:
         b = b.reshape(1, *b.shape)
 
-    scores = torch.einsum(  # TODO: how to convert a function to array spec?
+    scores = torch.einsum(
         "ash,bth->abst",
         a,
         b,
@@ -102,7 +101,9 @@ def max_sim(a: np.ndarray | torch.Tensor, b: np.ndarray | torch.Tensor) -> torch
     return scores.max(axis=-1).values.sum(axis=-1)
 
 
-def dot_score(a: torch.Tensor, b: torch.Tensor):  # TODO: Convert
+def dot_score(
+    a: torch.Tensor | np.ndarray, b: torch.Tensor | np.ndarray
+) -> torch.Tensor:
     """Computes the dot-product dot_prod(a[i], b[j]) for all i and j.
     :return: Matrix with res[i][j]  = dot_prod(a[i], b[j])
     """
@@ -123,8 +124,10 @@ def dot_score(a: torch.Tensor, b: torch.Tensor):  # TODO: Convert
 
     # Compile the core function once
     if (
-        hasattr(torch, "compile") and use_torch_compile()
-    ):  # Check if torch.compile is available
+        hasattr(torch, "compile")
+        and use_torch_compile()
+        and isinstance(a, torch.Tensor)
+    ):
         _dot_score_core_compiled = torch.compile(_dot_score_core)
         return _dot_score_core_compiled(a, b)
     else:

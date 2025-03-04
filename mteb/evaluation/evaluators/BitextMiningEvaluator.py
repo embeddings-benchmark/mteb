@@ -32,7 +32,7 @@ class BitextMiningEvaluator(Evaluator):
         self.pairs = pair_columns
         self.n = len(sentences)
         self.sentences = sentences
-        # TODO used only by BUCC
+        # NOTE: used only by BUCC
         self.gold = (
             list(zip(range(self.n), range(self.n)))
             if "gold" not in sentences
