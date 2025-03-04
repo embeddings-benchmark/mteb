@@ -34,7 +34,7 @@ def use_torch_compile():
     return gpu_ok
 
 
-def cos_sim(a: torch.Tensor, b: torch.Tensor):
+def cos_sim(a: torch.Tensor | np.ndarray, b: torch.Tensor | np.ndarray) -> torch.Tensor:
     """Calculate pairwise cosine similarities between two sets of vectors.
 
     Computes the cosine similarity cos_sim(a[i], b[j]) for all i and j.
@@ -52,27 +52,30 @@ def cos_sim(a: torch.Tensor, b: torch.Tensor):
     # The actual function to compile
     def _cos_sim_core(a_tensor, b_tensor):
         if len(a_tensor.shape) == 1:
-            a_tensor = a_tensor.unsqueeze(0)
+            a_tensor = a_tensor.reshape(1, *a_tensor.shape)
         if len(b_tensor.shape) == 1:
-            b_tensor = b_tensor.unsqueeze(0)
+            b_tensor = b_tensor.reshape(1, *b_tensor.shape)
 
         a_norm = torch.nn.functional.normalize(a_tensor, p=2, dim=1)
         b_norm = torch.nn.functional.normalize(b_tensor, p=2, dim=1)
-        return torch.mm(a_norm, b_norm.transpose(0, 1))
+        return a_norm @ b_norm.transpose(0, 1)
 
     # Compile the core function once
-    if (
-        hasattr(torch, "compile") and use_torch_compile()
-    ):  # Check if torch.compile is available
+    should_compile = (
+        hasattr(torch, "compile")
+        and use_torch_compile()
+        and (isinstance(a, torch.Tensor) and isinstance(b, torch.Tensor))
+    )
+    if should_compile:
         _cos_sim_core_compiled = torch.compile(_cos_sim_core)
         return _cos_sim_core_compiled(a, b)
     else:
         return _cos_sim_core(a, b)
 
 
-def max_sim(a: np.ndarray, b: np.ndarray) -> np.ndarray:
+def max_sim(a: np.ndarray | torch.Tensor, b: np.ndarray | torch.Tensor) -> torch.Tensor:
     """Computes the max-similarity max_sim(a[i], b[j]) for all i and j.
-        Works with a Tensor of the shape (batch_size, num_tokens, token_dim)
+    Works with a Tensor of the shape (batch_size, num_tokens, token_dim)
 
     Return:
         Matrix with res[i][j]  = max_sim(a[i], b[j])
@@ -84,10 +87,10 @@ def max_sim(a: np.ndarray, b: np.ndarray) -> np.ndarray:
         b = torch.tensor(b, dtype=torch.float32)
 
     if len(a.shape) == 2:
-        a = a.unsqueeze(0)
+        a = a.reshape(1, *a.shape)  # eq. to a.unsqueeze(0)
 
     if len(b.shape) == 2:
-        b = b.unsqueeze(0)
+        b = b.reshape(1, *b.shape)
 
     scores = torch.einsum(
         "ash,bth->abst",
@@ -98,7 +101,9 @@ def max_sim(a: np.ndarray, b: np.ndarray) -> np.ndarray:
     return scores.max(axis=-1).values.sum(axis=-1)
 
 
-def dot_score(a: torch.Tensor, b: torch.Tensor):
+def dot_score(
+    a: torch.Tensor | np.ndarray, b: torch.Tensor | np.ndarray
+) -> torch.Tensor:
     """Computes the dot-product dot_prod(a[i], b[j]) for all i and j.
     :return: Matrix with res[i][j]  = dot_prod(a[i], b[j])
     """
@@ -115,12 +120,14 @@ def dot_score(a: torch.Tensor, b: torch.Tensor):
         if len(b_tensor.shape) == 1:
             b_tensor = b_tensor.unsqueeze(0)
 
-        return torch.mm(a_tensor, b_tensor.transpose(0, 1))
+        return a_tensor @ b_tensor.transpose(0, 1)
 
     # Compile the core function once
     if (
-        hasattr(torch, "compile") and use_torch_compile()
-    ):  # Check if torch.compile is available
+        hasattr(torch, "compile")
+        and use_torch_compile()
+        and isinstance(a, torch.Tensor)
+    ):
         _dot_score_core_compiled = torch.compile(_dot_score_core)
         return _dot_score_core_compiled(a, b)
     else:
@@ -216,7 +223,7 @@ def hole(
     results: dict[str, dict[str, float]],
     k_values: list[int],
     output_type: str = "mean",
-) -> tuple[dict[str, float]]:
+) -> dict[str, float]:
     Hole = {}
 
     for k in k_values:

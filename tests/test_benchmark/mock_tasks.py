@@ -2695,61 +2695,6 @@ class MockImageClassificationTask(AbsTaskImageClassification):
         self.data_loaded = True
 
 
-class MockImageClassificationKNNPTTask(AbsTaskImageClassification):
-    expected_stats = {
-        "test": {
-            "num_samples": 2,
-            "average_image_size": 26.0,
-            "unique_labels": 2,
-            "labels": {"1": {"count": 1}, "0": {"count": 1}},
-        },
-        "train": {
-            "num_samples": 10,
-            "average_image_size": 26.0,
-            "unique_labels": 2,
-            "labels": {"1": {"count": 5}, "0": {"count": 5}},
-        },
-    }
-    metadata = TaskMetadata(
-        type="ImageClassification",
-        name="MockImageClassificationKNNPT",
-        main_score="accuracy",
-        **general_args,  # type: ignore
-    )
-    metadata.modalities = ["image"]
-    metadata.category = "i2i"
-
-    def __init__(self, **kwargs):
-        super().__init__(
-            method="kNN-pytorch", n_experiments=1, samples_per_label=5, **kwargs
-        )
-
-    def load_data(self, **kwargs):
-        images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
-        labels = [1, 0]
-
-        self.dataset = DatasetDict(
-            {
-                "test": Dataset.from_dict(
-                    {
-                        "image": images,
-                        "label": labels,
-                    }
-                ),
-                "train": Dataset.from_dict(
-                    {
-                        "image": images * 5,
-                        "label": labels * 5,
-                    }
-                ),
-            }
-        )
-        self.data_loaded = True
-
-
 class MockImageClassificationKNNTask(AbsTaskImageClassification):
     expected_stats = (
         {

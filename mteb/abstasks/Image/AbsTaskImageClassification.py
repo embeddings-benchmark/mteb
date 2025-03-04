@@ -12,7 +12,6 @@ from mteb.abstasks.TaskMetadata import HFSubset
 from ...encoder_interface import Encoder
 from ...evaluation.evaluators import (
     ImagekNNClassificationEvaluator,
-    ImagekNNClassificationEvaluatorPytorch,
     ImagelogRegClassificationEvaluator,
 )
 from ..AbsTask import AbsTask, ScoresDict
@@ -201,16 +200,6 @@ class AbsTaskImageClassification(AbsTask):
 
             if self.method == "kNN":
                 evaluator = ImagekNNClassificationEvaluator(
-                    undersampled_train,
-                    eval_split,
-                    self.image_column_name,
-                    self.label_column_name,
-                    task_name=self.metadata.name,
-                    encode_kwargs=encode_kwargs,
-                    **params,
-                )
-            elif self.method == "kNN-pytorch":
-                evaluator = ImagekNNClassificationEvaluatorPytorch(
                     undersampled_train,
                     eval_split,
                     self.image_column_name,
