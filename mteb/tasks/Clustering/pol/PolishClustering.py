@@ -128,6 +128,7 @@ class EightTagsClusteringFast(AbsTaskClusteringFast):
             language = "English",
             ISBN = "979-10-95546-34-4",
         }""",
+        adapted_from=["EightTagsClustering"],
     )
 
     def dataset_transform(self):
@@ -200,6 +201,7 @@ class PlscClusteringS2SFast(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
+        adapted_from=["PlscClusteringS2S"],
     )
 
     def dataset_transform(self):
@@ -281,6 +283,7 @@ class PlscClusteringP2PFast(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
+        adapted_from=["PlscClusteringP2P"],
     )
 
     def dataset_transform(self):

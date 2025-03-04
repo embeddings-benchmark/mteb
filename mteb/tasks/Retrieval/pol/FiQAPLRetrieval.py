@@ -37,4 +37,5 @@ booktitle={Thirty-fifth Conference on Neural Information Processing Systems Data
 year={2021},
 url={https://openreview.net/forum?id=wCu6T5xFjeJ}
 }""",
+        adapted_from=["FiQA2018"],
     )

@@ -41,6 +41,7 @@ url={https://openreview.net/forum?id=wCu6T5xFjeJ}
         prompt={
             "query": "Given a financial question, retrieve user replies that best answer the question"
         },
+        adapted_from=["FiQA2018"],
     )
 
     def load_data(self, **kwargs):

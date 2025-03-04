@@ -50,4 +50,5 @@ class CQADupstackRetrievalPL(AbsTaskAggregate):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["CQADupstackRetrieval"],
     )

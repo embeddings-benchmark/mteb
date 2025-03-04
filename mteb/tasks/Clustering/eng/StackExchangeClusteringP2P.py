@@ -50,6 +50,7 @@ class StackExchangeClusteringP2PFast(AbsTaskClusteringFast):
         eprint    = {2104.07081}
         }""",
         prompt="Identify the topic or theme of StackExchange posts based on the given paragraphs",
+        adapted_from=["StackExchangeClusteringP2P"],
     )
 
     def dataset_transform(self):

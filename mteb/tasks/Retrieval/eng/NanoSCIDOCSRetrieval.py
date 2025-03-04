@@ -41,6 +41,7 @@ class NanoSCIDOCSRetrieval(AbsTaskRetrieval):
         prompt={
             "query": "Given a scientific paper title, retrieve paper abstracts that are cited by the given paper"
         },
+        adapted_from=["SCIDOCS"],
     )
 
     def load_data(self, **kwargs):

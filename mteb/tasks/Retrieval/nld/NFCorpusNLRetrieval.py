@@ -37,4 +37,5 @@ class NFCorpusNL(AbsTaskRetrieval):
      primaryClass={cs.CL},
      url={https://arxiv.org/abs/2412.08329}, 
 }""",
+        adapted_from=["NFCorpus"],
     )

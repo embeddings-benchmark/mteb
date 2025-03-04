@@ -69,4 +69,5 @@ class MIRACLReranking(AbsTaskRetrieval):
         prompt={
             "query": "Given a question, retrieve Wikipedia passages that answer the question"
         },
+        adapted_from=["MIRACLRetrieval"],
     )
