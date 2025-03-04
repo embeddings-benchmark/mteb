@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from .Audio.Any2AnyRetrievalEvaluator import *
+from .Audio.ClassificationEvaluator import *
 from .Audio.ClusteringEvaluator import *
 from .BitextMiningEvaluator import *
 from .ClassificationEvaluator import *

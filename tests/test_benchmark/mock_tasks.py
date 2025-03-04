@@ -21,6 +21,9 @@ from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
 from mteb.abstasks.AbsTaskSummarization import AbsTaskSummarization
 from mteb.abstasks.Audio.AbsTaskAudioClustering import AbsTaskAudioClustering
+from mteb.abstasks.Audio.AbsTaskAudioMultilabelClassification import (
+    AbsTaskAudioMultilabelClassification,
+)
 from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.Image.AbsTaskAny2TextMultipleChoice import (
@@ -521,6 +524,58 @@ class MockAudioClusteringTask(AbsTaskAudioClustering):
                         "audio": mock_audio,
                         "labels": labels,
                     }
+                ),
+            }
+        )
+        self.data_loaded = True
+
+
+class MockAudioMultilabelClassificationTask(AbsTaskAudioMultilabelClassification):
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "total_duration": 2.0,  # 2 samples * 1s each
+            "min_duration": 1.0,
+            "avg_duration": 1.0,
+            "max_duration": 1.0,
+            "sample_rate": 16000,
+            "unique_labels": 2,
+            "labels": {"0": {"count": 1}, "1": {"count": 1}},
+        },
+        "train": {
+            "num_samples": 10,
+            "total_duration": 10.0,
+            "min_duration": 1.0,
+            "avg_duration": 1.0,
+            "max_duration": 1.0,
+            "sample_rate": 16000,
+            "unique_labels": 2,
+            "labels": {"0": {"count": 5}, "1": {"count": 5}},
+        },
+    }
+
+    metadata = TaskMetadata(
+        type="AudioMultilabelClassification",
+        name="MockAudioMultilabelClassification",
+        main_score="accuracy",
+        **general_args,
+    )
+
+    def load_data(self, **kwargs):
+        mock_audio = [
+            {
+                "array": np.random.rand(16000),  # 1s audio
+                "sampling_rate": 16000,
+            }
+            for _ in range(2)
+        ]
+        labels = [[0], [1]]
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict({"audio": mock_audio, "labels": labels}),
+                "train": Dataset.from_dict(
+                    {"audio": mock_audio * 5, "labels": labels * 5}
                 ),
             }
         )
