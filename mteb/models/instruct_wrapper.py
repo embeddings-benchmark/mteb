@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Iterable, Sequence
 from typing import Any, Callable
 
 import numpy as np
@@ -131,8 +130,8 @@ class InstructSentenceTransformerWrapper(Wrapper):
 
     def encode(
         self,
-            inputs: DataLoader[BatchedInput],
-            *,
+        inputs: DataLoader[BatchedInput],
+        *,
         task_name: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Iterable, Sequence
+from collections.abc import Sequence
 from enum import Enum
 from typing import Any, Protocol, TypedDict, Union, runtime_checkable
 

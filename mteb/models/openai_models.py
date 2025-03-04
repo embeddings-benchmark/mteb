@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Iterable
 from functools import partial
 from typing import Any
 
@@ -46,9 +45,7 @@ class OpenAIWrapper(Wrapper):
         truncated_sentence = self._encoding.encode(text)[: self._max_tokens]
         return self._encoding.decode(truncated_sentence)
 
-    def encode(
-        self, inputs: DataLoader[BatchedInput], **kwargs: Any
-    ) -> np.ndarray:
+    def encode(self, inputs: DataLoader[BatchedInput], **kwargs: Any) -> np.ndarray:
         requires_package(self, "openai", "Openai text embedding")
 
         from openai import NotGiven
