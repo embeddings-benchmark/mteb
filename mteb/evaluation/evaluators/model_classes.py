@@ -15,10 +15,10 @@ from mteb.encoder_interface import Encoder, PromptType
 
 from ...create_dataloaders import (
     create_dataloader_for_queries,
+    create_dataloader_for_queries_conversation,
     create_dataloader_for_retrieval_corpus,
-    create_dataloader_from_texts,
 )
-from .utils import convert_conv_history_to_query, cos_sim, download
+from .utils import cos_sim, download
 
 logger = logging.getLogger(__name__)
 
@@ -129,11 +129,12 @@ class DenseRetrievalExactSearch:
         # Encode only unique queries using the dataloader
         if isinstance(query_list[0], list):
             # For conversations, still use the original encode_conversations method
-            unique_query_embeddings = self.encode_conversations(
-                model=self.model,
-                conversations=unique_queries,
-                task_name=task_name,
-                **self.encode_kwargs,
+            unique_query_dataloader = create_dataloader_for_queries_conversation(
+                queries=unique_queries,
+                instructions=unique_instructions,
+                combine_query_and_instruction=self.combine_query_and_instruction
+                if instructions
+                else None,
             )
         else:
             # Create dataloader for text queries with their matched instructions
@@ -145,13 +146,13 @@ class DenseRetrievalExactSearch:
                 else None,
             )
 
-            # Encode queries using the model with the dataloader
-            unique_query_embeddings = self.model.encode(
-                unique_query_dataloader,
-                task_name=task_name,
-                prompt_type=PromptType.query,
-                **self.encode_kwargs,
-            )
+        # Encode queries using the model with the dataloader
+        unique_query_embeddings = self.model.encode(
+            unique_query_dataloader,
+            task_name=task_name,
+            prompt_type=PromptType.query,
+            **self.encode_kwargs,
+        )
         query_embeddings = unique_query_embeddings[pair_idx_mapping]
 
         if top_ranked is not None:
@@ -496,36 +497,6 @@ class DenseRetrievalExactSearch:
         raise NotImplementedError(
             "You must implement a predict method for your reranker model"
         )
-
-    def encode_conversations(
-        self,
-        model: Encoder,
-        conversations: list[list[str]],
-        task_name: str,
-        **kwargs,
-    ):
-        if callable(getattr(self.model, "encode_conversations", None)):
-            return model.encode_conversations(  # type: ignore
-                conversations, task_name=task_name, **kwargs
-            )
-        logger.warning(
-            "Model doesn't have encode_conversations fallback to default implementation"
-        )
-        queries = self.convert_conv_history_to_query(model, conversations)  # type: ignore
-        return model.encode(
-            create_dataloader_from_texts(queries),
-            task_name=task_name,
-            prompt_type=PromptType.query,
-            **kwargs,
-        )  # type: ignore
-
-    @staticmethod
-    def convert_conv_history_to_query(
-        model: Encoder, conversations: list[list[str]]
-    ) -> list[str]:
-        if callable(getattr(model, "convert_conv_history_to_query", None)):
-            return model.convert_conv_history_to_query(conversations)  # type: ignore
-        return convert_conv_history_to_query(conversations)  # type: ignore
 
 
 def is_cross_encoder_compatible(model) -> bool:

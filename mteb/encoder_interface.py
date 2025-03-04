@@ -17,6 +17,18 @@ class PromptType(str, Enum):
     passage = "passage"
 
 
+class Conversation(TypedDict):
+    """A conversation, consisting of a list of messages.
+
+    Args:
+        role: The role of the message sender.
+        content: The content of the message.
+    """
+
+    role: str
+    content: str
+
+
 class BatchedInput(TypedDict, total=False):
     """The input to the encoder. This is the input to the encoder when using the encode function.
 
@@ -42,7 +54,8 @@ class BatchedInput(TypedDict, total=False):
     title: list[str]
     body: list[str]
     # Retrieval query
-    query: list[str]
+    # list[list[str]] and list[Conversation] is used for conversations datasets
+    query: list[str] | list[list[str]] | list[Conversation]
     instruction: list[str]
 
 
