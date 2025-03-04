@@ -52,7 +52,7 @@ def parse_float(value) -> float:
     try:
         if value == "Infinite":
             return np.inf
-        else: 
+        else:
             return float(value)
     except ValueError:
         return np.nan
@@ -117,7 +117,9 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
     min_score, max_score = df["Mean (Task)"].min(), df["Mean (Task)"].max()
     df["sqrt(dim)"] = np.sqrt(df["Embedding Dimensions"])
     df["Max Tokens"] = df["Max Tokens"].apply(
-        lambda x: "Unknown" if pd.isna(x) else ("Infinite" if np.isinf(x) else str(int(x)))
+        lambda x: "Unknown"
+        if pd.isna(x)
+        else ("Infinite" if np.isinf(x) else str(int(x)))
     )
     fig = px.scatter(
         df,
