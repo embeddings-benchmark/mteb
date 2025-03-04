@@ -106,7 +106,9 @@ def create_dataloader_for_queries(
     return torch.utils.data.DataLoader(dataset, **dataloader_kwargs)
 
 
-def convert_conv_history_to_query(conversations: list[list[str | Conversation]]) -> list[str]:
+def convert_conv_history_to_query(
+    conversations: list[list[str | Conversation]],
+) -> list[str]:
     conversations_converted = []
 
     for conversation in conversations:
