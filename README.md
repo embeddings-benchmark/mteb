@@ -67,7 +67,7 @@ evaluation = mteb.MTEB(tasks=tasks)
 ```
 
 In prompts the key can be:
-1. Prompt types (`passage`, `query`) - they will be used in reranking and retrieval tasks 
+1. Prompt types (`passage`, `query`) - they will be used in reranking and retrieval tasks
 2. Task type - these prompts will be used in all tasks of the given type
    1. `BitextMining`
    2. `Classification`
@@ -103,7 +103,7 @@ mteb run -m sentence-transformers/all-MiniLM-L6-v2 \
 ## Usage Documentation
 Click on each section below to see the details.
 
-<br /> 
+<br />
 
 <details>
   <summary>  Task selection </summary>
@@ -157,7 +157,7 @@ evaluation = mteb.MTEB(tasks=[
 
 ### Running a Benchmark
 
-`mteb` comes with a set of predefined benchmarks. These can be fetched using `get_benchmark` and run in a similar fashion to other sets of tasks. 
+`mteb` comes with a set of predefined benchmarks. These can be fetched using `get_benchmark` and run in a similar fashion to other sets of tasks.
 For instance to select the 56 English datasets that form the "Overall MTEB English leaderboard":
 
 ```python
@@ -247,13 +247,13 @@ class CustomModel:
         **kwargs,
     ) -> np.ndarray:
         """Encodes the given sentences using the encoder.
-        
+
         Args:
             sentences: The sentences to encode.
             task_name: The name of the task.
             prompt_type: The prompt type to use.
             **kwargs: Additional arguments to pass to the encoder.
-            
+
         Returns:
             The encoded sentences.
         """
@@ -297,7 +297,7 @@ evaluation.run(model)
 
 ### Using a cross encoder for reranking
 
-To use a cross encoder for reranking, you can directly use a CrossEncoder from SentenceTransformers. The following code shows a two-stage run with the second stage reading results saved from the first stage. 
+To use a cross encoder for reranking, you can directly use a CrossEncoder from SentenceTransformers. The following code shows a two-stage run with the second stage reading results saved from the first stage.
 
 ```python
 from mteb import MTEB
@@ -453,7 +453,7 @@ model_w_contamination = ModelMeta(
 ### Running the Leaderboard
 
 It is possible to completely deploy the leaderboard locally or self-host it. This can e.g. be relevant for companies that might want to
-integrate build their own benchmarks or integrate custom tasks into existing benchmarks. 
+integrate build their own benchmarks or integrate custom tasks into existing benchmarks.
 
 Running the leaderboard is quite easy. Simply run:
 ```py
@@ -479,12 +479,12 @@ There are times you may want to cache the embeddings so you can re-use them. Thi
 from mteb.models.cache_wrapper import CachedEmbeddingWrapper
 model_with_cached_emb = CachedEmbeddingWrapper(model, cache_path='path_to_cache_dir')
 # run as normal
-evaluation.run(model, ...) 
+evaluation.run(model, ...)
 ```
 
 </details>
 
-<br /> 
+<br />
 
 
 
@@ -525,7 +525,7 @@ MTEB was introduced in "[MTEB: Massive Text Embedding Benchmark](https://arxiv.o
   author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Lo{\"\i}c and Reimers, Nils},
   title = {MTEB: Massive Text Embedding Benchmark},
   publisher = {arXiv},
-  journal={arXiv preprint arXiv:2210.07316},  
+  journal={arXiv preprint arXiv:2210.07316},
   year = {2022}
 }
 ```

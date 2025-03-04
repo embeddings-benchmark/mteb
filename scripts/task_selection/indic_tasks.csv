@@ -15,9 +15,9 @@
                        and challenging non-hate, and 11 languages.
                      "
 12,TweetSentimentClassification,Classification,{'hin'},"['Social', 'Written']",cc-by-3.0,A multilingual Sentiment Analysis dataset consisting of tweets in 8 different languages.
-13,NepaliNewsClassification,Classification,{'nep'},"['News', 'Written']",CC BY-SA 4.0,A Nepali dataset for 7500 news articles 
+13,NepaliNewsClassification,Classification,{'nep'},"['News', 'Written']",CC BY-SA 4.0,A Nepali dataset for 7500 news articles
 14,PunjabiNewsClassification,Classification,{'pan'},"['News', 'Written']",MIT,A Punjabi dataset for 2-class classification of Punjabi news articles
-15,SanskritShlokasClassification,Classification,{'san'},"['Religious', 'Written']",CC BY-SA 4.0,This data set contains ~500 Shlokas  
+15,SanskritShlokasClassification,Classification,{'san'},"['Religious', 'Written']",CC BY-SA 4.0,This data set contains ~500 Shlokas
 16,UrduRomanSentimentClassification,Classification,{'urd'},"['Social', 'Written']",MIT,"The Roman Urdu dataset is a data corpus comprising of more than 20000 records tagged for sentiment (Positive, Negative, Neutral)"
 17,SIB200ClusteringS2S,Clustering,"{'ory', 'kas', 'asm', 'snd', 'hin', 'mar', 'tam', 'san', 'kan', 'urd', 'awa', 'mni', 'npi', 'guj', 'tel', 'pan', 'mal', 'hne', 'ben', 'mai', 'bho'}","['News', 'Written']",cc-by-sa-4.0,"SIB-200 is the largest publicly available topic classification
         dataset based on Flores-200 covering 205 languages and dialects annotated. The dataset is

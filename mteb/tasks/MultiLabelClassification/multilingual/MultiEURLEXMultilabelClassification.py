@@ -57,10 +57,10 @@ class MultiEURLEXMultilabelClassification(
         sample_creation="found",
         bibtex_citation="""
 @InProceedings{chalkidis-etal-2021-multieurlex,
-  author = {Chalkidis, Ilias  
+  author = {Chalkidis, Ilias
                 and Fergadiotis, Manos
                 and Androutsopoulos, Ion},
-  title = {MultiEURLEX -- A multi-lingual and multi-label legal document 
+  title = {MultiEURLEX -- A multi-lingual and multi-label legal document
                classification dataset for zero-shot cross-lingual transfer},
   booktitle = {Proceedings of the 2021 Conference on Empirical Methods
                in Natural Language Processing},
