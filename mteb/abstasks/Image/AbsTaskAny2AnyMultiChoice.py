@@ -450,6 +450,7 @@ def process_language(relevant_docs, queries, corpus, lang=None):
 def calculate_length(queries, corpus):
     queries_lens = []
     doc_lens = []
+    import pdb; pdb.set_trace()
     for query in queries.values():
         queries_lens.append(len(query))
 
