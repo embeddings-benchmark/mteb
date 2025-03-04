@@ -40,7 +40,7 @@ class Encoder(Protocol):
         task_name: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
+    ) -> np.ndarray | torch.Tensor:
         """Encodes the given sentences using the encoder.
 
         Args:
@@ -59,7 +59,7 @@ class Encoder(Protocol):
 
 
         Returns:
-            The encoded sentences.
+            The encoded sentences in a numpy array or torch tensor of the shape (Number of sentences) x (Embedding dimension).
         """
         ...
 

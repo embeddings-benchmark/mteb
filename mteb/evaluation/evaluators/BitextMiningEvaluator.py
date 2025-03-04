@@ -126,20 +126,20 @@ class BitextMiningEvaluator(Evaluator):
         Args:
             query_embeddings: A 2 dimensional tensor with the query embeddings.
             corpus_embeddings: A 2 dimensional tensor with the corpus embeddings.
-            model: The model used to encode the queries and corpus. This is used to check if the embeddings are on the same device and to encode the queries and corpus if they are not already tensors.
+            model: The model used to encode the queries and corpus. This is used to check if the embeddings are on the same device and to encode the
+                queries and corpus if they are not already tensors.
             query_chunk_size: Process 100 queries simultaneously. Increasing that value increases the speed, but requires more memory.
             corpus_chunk_size: Scans the corpus 100k entries at a time. Increasing that value increases the speed, but requires more memory.
             top_k: Retrieve top k matching entries.
 
         Returns:
-            Returns a list with one entry for each query. Each entry is a list of dictionaries with the keys 'corpus_id' and 'score', sorted by decreasing cosine similarity scores.
+            Returns a list with one entry for each query. Each entry is a list of dictionaries with the keys 'corpus_id' and 'score', sorted by
+                decreasing cosine similarity scores.
         """
-        query_embeddings = torch.from_numpy(query_embeddings)
-        corpus_embeddings = torch.from_numpy(corpus_embeddings)
         if len(query_embeddings.shape) == 1:
-            query_embeddings = query_embeddings.unsqueeze(0)
+            query_embeddings = query_embeddings.reshape(1, *query_embeddings.shape)
         if len(corpus_embeddings.shape) == 1:
-            corpus_embeddings = corpus_embeddings.unsqueeze(0)
+            corpus_embeddings = corpus_embeddings.reshape(1, *corpus_embeddings)
 
         # Check that corpus and queries are on the same device
         if corpus_embeddings.device != query_embeddings.device:
@@ -161,7 +161,7 @@ class BitextMiningEvaluator(Evaluator):
                 )
 
                 if hasattr(model, "similarity"):
-                    similarity_scores = model.similarity(
+                    similarity_scores = model.similarity(  # type: ignore
                         query_embeddings[
                             query_start_idx : query_start_idx + query_chunk_size
                         ],
