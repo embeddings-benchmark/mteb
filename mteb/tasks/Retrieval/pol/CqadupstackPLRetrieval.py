@@ -34,6 +34,7 @@ class CQADupstackWordpressRetrievalPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["CQADupstackWordpressRetrieval"],
     )
 
 
@@ -67,6 +68,7 @@ class CQADupstackWebmastersRetrievalPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["CQADupstackWebmastersRetrieval"],
     )
 
 
@@ -100,6 +102,7 @@ class CQADupstackUnixRetrievalPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["CQADupstackUnixRetrieval"],
     )
 
 
@@ -133,6 +136,7 @@ class CQADupstackTexRetrievalPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["CQADupstackTexRetrieval"],
     )
 
 
@@ -166,6 +170,7 @@ class CQADupstackStatsRetrievalPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["CQADupstackStatsRetrieval"],
     )
 
 
@@ -199,6 +204,7 @@ class CQADupstackProgrammersRetrievalPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["CQADupstackProgrammersRetrieval"],
     )
 
 
@@ -232,6 +238,7 @@ class CQADupstackPhysicsRetrievalPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["CQADupstackPhysicsRetrieval"],
     )
 
 
@@ -265,6 +272,7 @@ class CQADupstackMathematicaRetrievalPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["CQADupstackMathematicaRetrieval"],
     )
 
 
@@ -298,6 +306,7 @@ class CQADupstackGisRetrievalPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["CQADupstackGisRetrieval"],
     )
 
 
@@ -331,6 +340,7 @@ class CQADupstackGamingRetrievalPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["CQADupstackGamingRetrieval"],
     )
 
 
@@ -364,6 +374,7 @@ class CQADupstackEnglishRetrievalPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["CQADupstackEnglishRetrieval"],
     )
 
 
@@ -397,4 +408,5 @@ class CQADupstackAndroidRetrievalPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["CQADupstackAndroidRetrieval"],
     )

@@ -38,4 +38,5 @@ class Touche2020PL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["Touche2020"],
     )
