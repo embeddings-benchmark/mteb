@@ -50,7 +50,6 @@ def _load_webfaq_data(
             corpus_identifier,
             cache_dir=cache_dir,
             revision=revision,
-            trust_remote_code=True,
         )
         corpus[lang][split] = {}
         for row in corpus_data["corpus"]:
@@ -66,7 +65,6 @@ def _load_webfaq_data(
             queries_identifier,
             cache_dir=cache_dir,
             revision=revision,
-            trust_remote_code=True,
         )
         queries[lang][split] = {}
         for row in queries_data[split]:
@@ -81,7 +79,6 @@ def _load_webfaq_data(
             qrels_identifier,
             cache_dir=cache_dir,
             revision=revision,
-            trust_remote_code=True,
         )
         relevant_docs[lang][split] = {}
         for row in qrels_data[split]:
