@@ -39,8 +39,8 @@ markdown_extensions:
   - attr_list
   - md_in_html
   - pymdownx.emoji:
-      emoji_index: !!python/name:material.extensions.emoji.twemoji
-      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      emoji_index: "!!python/name:material.extensions.emoji.twemoji"
+      emoji_generator: "!!python/name:material.extensions.emoji.to_svg"
   - tables
   - pymdownx.details
 
@@ -60,12 +60,12 @@ nav:
   #     - Adding a Benchmark: adding_a_leaderboard_tab.md
   #     - Adding a Task: adding_a_dataset.md
   #     - Development Setup: CONTRIBUTING.md
-  - API: 
+  - API:
       - Overview: index.md
       - Benchmark: api/benchmark.md
       - Task: api/task.md
       - Model: api/model.md
-  - Leaderboard: https://huggingface.co/spaces/mteb/leaderboard 
+  - Leaderboard: https://huggingface.co/spaces/mteb/leaderboard
 
 plugins:
   - search
