@@ -227,7 +227,7 @@ def radar_chart(df: pd.DataFrame) -> go.Figure:
             )
         )
     fig.update_layout(
-        font=dict(size=16, color="black"),  # noqa
+        font=dict(size=13, color="black"),  # noqa
         template="plotly_white",
         polar=dict(
             radialaxis=dict(
@@ -245,11 +245,15 @@ def radar_chart(df: pd.DataFrame) -> go.Figure:
         legend=dict(
             orientation="h",
             yanchor="bottom",
-            y=-0.6,
-            xanchor="left",
-            x=-0.05,
+            y=-0.35,
+            xanchor="center",
+            x=0.4,
+            itemwidth=30,
+            font=dict(size=13),
+            entrywidth=0.6,
             entrywidthmode="fraction",
-            entrywidth=1 / 5,
         ),
+        margin=dict(l=0, r=16, t=30, b=30),
+        autosize=True,
     )
     return fig
