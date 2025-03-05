@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from enum import Enum
-from typing import Any, Protocol, Union, runtime_checkable
+from typing import Any, Protocol, TypedDict, Union, runtime_checkable
 
 import numpy as np
 import torch
@@ -15,6 +15,48 @@ Corpus = Union[list[dict[str, str]], dict[str, list[str]]]
 class PromptType(str, Enum):
     query = "query"
     passage = "passage"
+
+
+class Conversation(TypedDict):
+    """A conversation, consisting of a list of messages.
+
+    Args:
+        role: The role of the message sender.
+        content: The content of the message.
+    """
+
+    role: str
+    content: str
+
+
+class BatchedInput(TypedDict, total=False):
+    """The input to the encoder. This is the input to the encoder when using the encode function.
+
+
+    Args:
+        text: The text to encode.
+        image: The image to encode. Can be a list of images or a list of lists of images.
+        audio: The audio to encode. Can be a list of audio files or a list of lists of audio files.
+
+        Retrieval corpus:
+            title: The title of the text to encode.
+            body: The body of the text to encode.
+
+        Retrieval query:
+            query: The query to encode.
+            instruction: The instruction to encode.
+    """
+
+    text: list[str]
+    image: list[list[Image.Image]]
+    audio: list[list[bytes]]
+    # Retrieval corpus
+    title: list[str]
+    body: list[str]
+    # Retrieval query
+    # list[list[str]] and list[Conversation] is used for conversations datasets
+    query: list[str] | list[list[str]] | list[Conversation]
+    instruction: list[str]
 
 
 @runtime_checkable
@@ -35,7 +77,7 @@ class Encoder(Protocol):
 
     def encode(
         self,
-        sentences: Sequence[str],
+        inputs: DataLoader[BatchedInput],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
@@ -44,7 +86,7 @@ class Encoder(Protocol):
         """Encodes the given sentences using the encoder.
 
         Args:
-            sentences: The sentences to encode.
+            inputs: Batch of inputs to encode.
             task_name: The name of the task. Sentence-transformers uses this to
                 determine which prompt to use from a specified dictionary.
                 The order of priorities for prompt selection are:
@@ -59,7 +101,7 @@ class Encoder(Protocol):
 
 
         Returns:
-            The encoded sentences in a numpy array or torch tensor of the shape (Number of sentences) x (Embedding dimension).
+            The encoded input in a numpy array or torch tensor of the shape (Number of sentences) x (Embedding dimension).
         """
         ...
 
@@ -199,7 +241,8 @@ class ImageEncoder:
     ) -> np.ndarray:
         pass
 
-    def get_image_embeddings(  # Seems like sentence transformers use a singular encode for both images and text. Not sure if we want to do the same.
+    def get_image_embeddings(
+        # Seems like sentence transformers use a singular encode for both images and text. Not sure if we want to do the same.
         # If not it might be ideal to redefine Encoder.encode
         self,
         images: list[Image.Image] | DataLoader,
@@ -218,9 +261,8 @@ class ImageEncoder:
     def get_fused_embeddings(  # hmm what if I have a document with images at specific positions?
         self,
         texts: list[str] | None = None,
-        images: list[Image.Image]
-        | DataLoader
-        | None = None,  # the requirement for these two to be the same seems odd (docs without images, images without associated text, docs with multiple images)
+        images: list[Image.Image] | DataLoader | None = None,
+        # the requirement for these two to be the same seems odd (docs without images, images without associated text, docs with multiple images)
         # fusion_mode: str="sum", # will remove this as it should be required in the interface
         **kwargs: Any,
     ) -> np.ndarray:

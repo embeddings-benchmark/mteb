@@ -5,8 +5,9 @@ from typing import Any
 
 import numpy as np
 import tqdm
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import Encoder, PromptType
+from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.wrapper import Wrapper
 
@@ -42,7 +43,7 @@ MODEL_PROMPTS = {
 }
 
 
-class GoogleTextEmbeddingModel(Encoder, Wrapper):
+class GoogleTextEmbeddingModel(Wrapper):
     def __init__(
         self,
         model_name: str,
@@ -111,7 +112,7 @@ class GoogleTextEmbeddingModel(Encoder, Wrapper):
 
     def encode(
         self,
-        sentences: list[str],
+        inputs: DataLoader[BatchedInput],
         task_name: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
@@ -124,9 +125,10 @@ class GoogleTextEmbeddingModel(Encoder, Wrapper):
             if "show_progress_bar" not in kwargs
             else kwargs.pop("show_progress_bar")
         )
+        inputs = [text for batch in inputs for text in batch["text"]]
 
         return self._embed(
-            sentences,
+            inputs,
             google_task_type=google_task_type,
             show_progress_bar=show_progress_bar,
         )

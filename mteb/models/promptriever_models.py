@@ -5,8 +5,9 @@ from typing import Any, Callable
 
 import numpy as np
 import torch
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import Encoder, PromptType
+from mteb.encoder_interface import BatchedInput, Encoder, PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.repllama_models import RepLLaMAWrapper, model_prompts
 from mteb.models.wrapper import Wrapper
@@ -20,7 +21,7 @@ class PromptrieverWrapper(RepLLaMAWrapper, Wrapper):
 
     def encode(
         self,
-        sentences: list[str],
+        inputs: DataLoader[BatchedInput],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
@@ -28,7 +29,7 @@ class PromptrieverWrapper(RepLLaMAWrapper, Wrapper):
     ) -> np.ndarray:
         kwargs["is_promptriever"] = True
         return super().encode(
-            sentences, task_name=task_name, prompt_type=prompt_type, **kwargs
+            inputs, task_name=task_name, prompt_type=prompt_type, **kwargs
         )
 
 

@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Sequence
 from functools import partial
 from typing import Any
 
 import numpy as np
+from torch.utils.data import DataLoader
 
+from mteb.encoder_interface import BatchedInput
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.bge_models import bge_training_data
 from mteb.models.wrapper import Wrapper
@@ -38,18 +39,19 @@ class Model2VecWrapper(Wrapper):
 
     def encode(
         self,
-        sentences: Sequence[str],
+        inputs: DataLoader[BatchedInput],
         **kwargs: Any,
     ) -> np.ndarray:
         """Encodes the given sentences using the encoder.
 
         Args:
-            sentences: The sentences to encode.
+            inputs: The sentences to encode.
             **kwargs: Additional arguments to pass to the encoder.
 
         Returns:
             The encoded sentences.
         """
+        sentences = [text for batch in inputs for text in batch["text"]]
         return self.model.encode(sentences).astype(np.float32)
 
 

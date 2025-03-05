@@ -1,14 +1,14 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Sequence
 from typing import Any, Callable
 
 import numpy as np
 import torch
 from sentence_transformers import SentenceTransformer
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import PromptType
+from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.models.wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
@@ -57,7 +57,7 @@ def instruct_wrapper(
 
         def encode(
             self,
-            sentences: Sequence[str],
+            inputs: DataLoader[BatchedInput],
             *args,
             task_name: str,
             prompt_type: PromptType | None = None,
@@ -67,10 +67,11 @@ def instruct_wrapper(
 
             if self.instruction_template:
                 instruction = self.format_instruction(instruction, prompt_type)
+            inputs = [text for batch in inputs for text in batch["text"]]
 
             logger.info(f"Using instruction: '{instruction}' for task: '{task_name}'")
             embeddings = super().encode(
-                sentences, instruction=instruction, *args, **kwargs
+                inputs, instruction=instruction, *args, **kwargs
             )
             if isinstance(embeddings, torch.Tensor):
                 # sometimes in kwargs can be return_tensors=True
@@ -129,12 +130,14 @@ class InstructSentenceTransformerWrapper(Wrapper):
 
     def encode(
         self,
-        sentences: Sequence[str],
+        inputs: DataLoader[BatchedInput],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
+        sentences = [text for batch in inputs for text in batch["text"]]
+
         if self.add_eos_token:
             sentences = [
                 example + self.model.tokenizer.eos_token for example in sentences
