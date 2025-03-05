@@ -125,6 +125,7 @@ TASK_TYPE = Literal[
     "VisualSTS",
     "ZeroShotClassification",
     "AudioMultilabelClassification",
+    "AudioZeroshotClassification",
 ]
 
 

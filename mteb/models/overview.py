@@ -20,6 +20,7 @@ from mteb.models import (
     blip_models,
     bm25,
     cde_models,
+    clap_models,
     clip_models,
     cohere_models,
     cohere_v,
@@ -138,6 +139,7 @@ model_modules = [
     voyage_models,
     fa_models,
     wav2vec2_models,
+    clap_models,
 ]
 MODEL_REGISTRY = {}
 

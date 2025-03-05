@@ -24,6 +24,9 @@ from mteb.abstasks.Audio.AbsTaskAudioClustering import AbsTaskAudioClustering
 from mteb.abstasks.Audio.AbsTaskAudioMultilabelClassification import (
     AbsTaskAudioMultilabelClassification,
 )
+from mteb.abstasks.Audio.AbsTaskAudioZeroshotClassification import (
+    AbsTaskAudioZeroshotClassification,
+)
 from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.Image.AbsTaskAny2TextMultipleChoice import (
@@ -580,6 +583,58 @@ class MockAudioMultilabelClassificationTask(AbsTaskAudioMultilabelClassification
             }
         )
         self.data_loaded = True
+
+
+class MockAudioZeroshotClassificationTask(AbsTaskAudioZeroshotClassification):
+    audio_column_name: str = "audio"
+    label_column_name: str = "label"
+
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "total_duration": 2.0,  # 2 samples * 1s each
+            "min_duration": 1.0,
+            "avg_duration": 1.0,
+            "max_duration": 1.0,
+            "sample_rate": 16000,
+            "unique_labels": 2,
+            "labels": {"0": {"count": 1}, "1": {"count": 1}},
+        }
+    }
+
+    metadata = TaskMetadata(
+        type="AudioZeroshotClassification",
+        name="MockAudioZeroshotClassification",
+        main_score="accuracy",
+        **general_args,
+    )
+
+    def load_data(self, **kwargs):
+        # Create mock audio data as numpy arrays
+        mock_audio = [
+            {
+                "array": np.random.rand(16000).astype(np.float32),  # 1s audio
+                "sampling_rate": 16000,
+            }
+            for _ in range(2)
+        ]
+        labels = np.array([0, 1])  # Convert labels to numpy array
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "audio": mock_audio,
+                        "label": labels,
+                    }
+                ),
+            }
+        )
+        self.data_loaded = True
+
+    def get_candidate_labels(self) -> list[str]:
+        """Return the text candidates for zeroshot classification"""
+        return ["This is sound type 0", "This is sound type 1"]
 
 
 class MockMultilingualClusteringTask(AbsTaskClustering, MultilingualTask):
