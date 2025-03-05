@@ -282,6 +282,15 @@ class AbsTask(ABC):
         self._eval_splits = eval_splits
         return self
 
+    def filter_modalities(self, modalities: list[str] | None) -> AbsTask:
+        """Filter the modalities of the task."""
+        if modalities is None:
+            return self
+        _modalities = set(modalities)
+        if not _modalities.intersection(self.modalities):
+            self.metadata.modalities = []
+        return self
+
     def filter_languages(
         self,
         languages: list[str] | None,
@@ -329,6 +338,11 @@ class AbsTask(ABC):
         if self._eval_splits:
             return self._eval_splits
         return self.metadata.eval_splits
+
+    @property
+    def modalities(self) -> list[str]:
+        """Returns the modalities of the task"""
+        return getattr(self.metadata, "modalities", ["text"])
 
     def __repr__(self) -> str:
         """Format the representation of the task such that it appears as:
