@@ -474,3 +474,10 @@ class BenchmarkResults(BaseModel):
         for model_res in self.model_results:
             names.extend(model_res.task_names)
         return list(set(names))
+
+    @property
+    def modalities(self) -> list[str]:
+        mod = []
+        for model_res in self.model_results:
+                mod.extend(model_res.modalities)
+        return list(set(mod))

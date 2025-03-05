@@ -143,7 +143,7 @@ class MTEBTasks(tuple):
         return Counter(langs)
 
     def to_markdown(
-        self, properties: list[str] = ["type", "license", "languages", "modality"]
+        self, properties: list[str] = ["type", "license", "languages", "modalities"]
     ) -> str:
         """Generate markdown table with tasks summary
 
@@ -172,7 +172,7 @@ class MTEBTasks(tuple):
             "languages",
             "domains",
             "license",
-            "modality",
+            "modalities",
         ],
     ) -> pd.DataFrame:
         """Generate pandas DataFrame with tasks summary
@@ -198,7 +198,7 @@ class MTEBTasks(tuple):
             "languages",
             "domains",
             "license",
-            "modality",
+            "modalities",
         ],
         group_indices: list[str] | None = ["type", "name"],
         include_citation_in_name: bool = True,

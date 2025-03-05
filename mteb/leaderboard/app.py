@@ -137,14 +137,14 @@ def update_task_info(task_names: str) -> gr.DataFrame:
             "domains",
             "reference",
             "main_score",
-            "modality",
+            "modalities",
         ]
     )
     df["languages"] = df["languages"].map(format_list)
     df = df.sort_values("name")
     df["domains"] = df["domains"].map(format_list)
     df["name"] = "[" + df["name"] + "](" + df["reference"] + ")"
-    df["modality"] = df["modality"].map(format_list)
+    df["modalities"] = df["modalities"].map(format_list)
     df = df.rename(
         columns={
             "name": "Task Name",
@@ -152,7 +152,7 @@ def update_task_info(task_names: str) -> gr.DataFrame:
             "languages": "Languages",
             "domains": "Domains",
             "main_score": "Metric",
-            "modality": "Modality",
+            "modalities": "Modality",
         }
     )
     df = df.drop(columns="reference")
