@@ -212,3 +212,25 @@ clap_htsat_fused = ModelMeta(
     use_instructions=False,
     training_datasets={"LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]},
 )
+
+clap_htsat_unfused = ModelMeta(
+    loader=partial(ClapZeroShotWrapper, model_name="laion/clap-htsat-unfused"),
+    name="laion/clap-htsat-unfused",
+    languages=["en"],
+    revision="main",
+    release_date="2023-05-22",
+    modalities=["audio", "text"],
+    n_parameters=153_492_890,  # Calculated using torch.numel(model.parameters())
+    memory_usage_mb=586,  # Calculated using model.calculate_memory_usage_mb()
+    max_tokens=float("inf"),
+    embed_dim=512,  # The project_dim in config.json is 512
+    license="MIT",
+    open_weights=True,
+    public_training_code="https://github.com/LAION-AI/CLAP",
+    public_training_data="LAION-Audio-630K",
+    framework=["PyTorch"],
+    reference="https://huggingface.co/laion/clap_htsat_unfused",
+    similarity_fn_name="cosine",
+    use_instructions=False,
+    training_datasets={"LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]},
+)
