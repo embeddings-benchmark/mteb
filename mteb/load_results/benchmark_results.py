@@ -479,5 +479,5 @@ class BenchmarkResults(BaseModel):
     def modalities(self) -> list[str]:
         mod = []
         for model_res in self.model_results:
-                mod.extend(model_res.modalities)
+            mod.extend(model_res.modalities)
         return list(set(mod))
