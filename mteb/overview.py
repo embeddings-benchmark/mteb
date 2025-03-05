@@ -117,9 +117,6 @@ class MTEBTasks(tuple):
 
     @staticmethod
     def _extract_property_from_task(task, property):
-        # Need to Handle  modality differently because it is not defined in the metadata for some tasks
-        if property == "modality":
-            return task.modalities
         if hasattr(task.metadata, property):
             return getattr(task.metadata, property)
         elif hasattr(task, property):
@@ -257,7 +254,7 @@ def get_tasks(
     exclude_superseded: bool = True,
     eval_splits: list[str] | None = None,
     exclusive_language_filter: bool = False,
-    modalities: list[str] | None = None,
+    modalities: list[MODALITIES] | None = None,
 ) -> MTEBTasks:
     """Get a list of tasks based on the specified filters.
 
@@ -335,7 +332,7 @@ def get_task(
     eval_splits: list[str] | None = None,
     hf_subsets: list[str] | None = None,
     exclusive_language_filter: bool = False,
-    modalities: list[str] | None = None,
+    modalities: list[MODALITIES] | None = None,
 ) -> AbsTask:
     """Get a task by name.
 

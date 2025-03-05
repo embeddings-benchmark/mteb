@@ -63,14 +63,12 @@ MTEB_EN = Benchmark(
             languages=["eng"],
             eval_splits=["test"],
             exclusive_language_filter=True,
-            modalities=["text"],
         )
         + (
             get_task(
                 "AmazonCounterfactualClassification",
                 eval_splits=["test"],
                 hf_subsets=["en"],
-                modalities=["text"],
             ),
             get_task("STS17", eval_splits=["test"], hf_subsets=["en-en"]),
             get_task("STS22.v2", eval_splits=["test"], hf_subsets=["en"]),
@@ -154,7 +152,6 @@ MTEB_ENG_CLASSIC = Benchmark(
                 "AmazonCounterfactualClassification",
                 eval_splits=["test"],
                 hf_subsets=["en"],
-                modalities=["text"],
             ),
             get_task(
                 "STS17",
@@ -162,7 +159,7 @@ MTEB_ENG_CLASSIC = Benchmark(
                 hf_subsets=["en-en"],
             ),
             get_task(
-                "STS22", eval_splits=["test"], hf_subsets=["en"], modalities=["text"]
+                "STS22", eval_splits=["test"], hf_subsets=["en"]
             ),
         )
     ),

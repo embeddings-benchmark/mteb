@@ -494,8 +494,7 @@ see existing implementations [here](https://github.com/embeddings-benchmark/mteb
         types = {task.metadata.type for task in benchmark.tasks if task.metadata.type}
         modalities = set()
         for task in benchmark.tasks:
-            if hasattr(task.metadata, "modalities") and task.metadata.modalities:
-                modalities.update(task.metadata.modalities)
+            modalities.update(task.metadata.modalities)
         languages, domains, types, modalities = (
             sorted(languages),
             sorted(domains),

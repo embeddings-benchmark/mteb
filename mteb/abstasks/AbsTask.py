@@ -342,7 +342,7 @@ class AbsTask(ABC):
     @property
     def modalities(self) -> list[str]:
         """Returns the modalities of the task"""
-        return getattr(self.metadata, "modalities", ["text"])
+        return self.metadata.modalities
 
     def __repr__(self) -> str:
         """Format the representation of the task such that it appears as:
