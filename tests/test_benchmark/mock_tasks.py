@@ -564,9 +564,6 @@ class MockAudioMultilabelClassificationTask(AbsTaskAudioMultilabelClassification
         **general_args,
     )
 
-    def __init__(self, **kwargs):
-        super().__init__(n_experiments=1, samples_per_label=5, **kwargs)
-
     def load_data(self, **kwargs):
         mock_audio = [
             {
@@ -633,6 +630,7 @@ class MockAudioZeroshotClassificationTask(AbsTaskAudioZeroshotClassification):
         self.data_loaded = True
 
 
+<<<<<<< HEAD
     def get_candidate_labels(self) -> list[str]:
         """Return the text candidates for zeroshot classification"""
         return ["This is sound type 0", "This is sound type 1"]
@@ -652,6 +650,8 @@ class MockAudioMultilabelClassificationLogRegTask(
         super().__init__(method="logReg", **kwargs)
 
 
+=======
+>>>>>>> 11ba946fbe80d5b40b46ef840d35b6b494793533
 class MockMultilingualClusteringTask(AbsTaskClustering, MultilingualTask):
     expected_stats = {
         "test": {

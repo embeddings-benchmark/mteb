@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import mteb
 from mteb.abstasks.Audio.AbsTaskAudioClustering import AbsTaskAudioClustering
 from mteb.abstasks.TaskMetadata import TaskMetadata
 

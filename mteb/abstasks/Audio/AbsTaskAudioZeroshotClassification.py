@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 class AbsTaskAudioZeroshotClassification(AbsTask):
     """Abstract class for ZeroshotClassification tasks
-    The similarity between an image and candidate text prompts, such as this is a .
+    The similarity between audio and candidate text prompts, such as as an audio wav of a dog barking and candidate text prompts like "Sound of a dog barking" or "Sound of a airplane".
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
         image: list of Image.Image
@@ -55,7 +55,7 @@ class AbsTaskAudioZeroshotClassification(AbsTask):
         )
         metrics = evaluator(model, encode_kwargs=encode_kwargs)
 
-        scores = {"accuracy": metrics["accuracy"]}
+        scores = {"accuracy": metrics["accuracy"], "f1": metrics["f1"]}
         self._add_main_score(scores)
         return scores
 

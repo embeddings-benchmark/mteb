@@ -118,7 +118,7 @@ class AudioZeroshotClassificationEvaluator(Evaluator):
         # Calculate metrics
         scores = {
             "accuracy": metrics.accuracy_score(self.labels, predictions),
-            "f1_macro": metrics.f1_score(self.labels, predictions, average="macro"),
+            "f1": metrics.f1_score(self.labels, predictions, average="macro"),
             "f1_weighted": metrics.f1_score(
                 self.labels, predictions, average="weighted"
             ),

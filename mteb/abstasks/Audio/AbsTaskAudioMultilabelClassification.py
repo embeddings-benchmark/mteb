@@ -95,27 +95,14 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
     audio_column_name: str = "audio"
     label_column_name: str = "labels"
     samples_per_label: int = 8
+    n_experiments: int = 10
+    batch_size: int = 32
+    train_split: str = "train"
 
     classifier = MultiOutputClassifier(estimator=LogisticRegression())
 
-    def __init__(
-        self,
-        n_experiments=None,
-        batch_size=32,
-        **kwargs,
-    ):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.batch_size = batch_size
-
-        # Bootstrap parameters
-        self.n_experiments = n_experiments or getattr(self, "n_experiments", 10)
-
-        # Run metadata validation by instantiating addressing the attribute
-        # This is quite hacky. Ideally, this would be done in the constructor of
-        # each concrete task, but then we have to duplicate the __init__ method's
-        # interface.
-        if hasattr(self, "metadata"):
-            self.metadata
 
     def _add_main_score(self, scores):
         scores["main_score"] = scores[self.metadata.main_score]
@@ -136,13 +123,11 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
             audio = self.dataset[split][self.audio_column_name]
             labels = self.dataset[split][self.label_column_name]
 
-        # All audio clips should have the same sample rate - ?
-        assert len({a["sample_rate"] for a in audio}) == 1
-
         durations = [
             len(arr) / sr for arr, sr in zip(audio["array"], audio["sample_rate"])
         ]
         label_counts = [len(l) for l in labels]
+
         flat_labels = [label for sublist in labels for label in sublist]
 
         return AudioMultilabelClassificationDescriptiveStatistics(
@@ -163,7 +148,6 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
         self,
         model: AudioEncoder,
         eval_split: str = "test",
-        train_split: str = "train",
         *,
         encode_kwargs: dict[str, Any] = {},
         **kwargs: Any,
@@ -172,7 +156,7 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
             self.load_data()
 
         scores = {}
-        hf_subsets = list(self.dataset) if self.is_multilingual else ["default"]
+        hf_subsets = self.hf_subsets
 
         for hf_subset in hf_subsets:
             logger.info(
@@ -187,7 +171,6 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
                 model,
                 ds,
                 eval_split,
-                train_split,
                 encode_kwargs=encode_kwargs,
                 **kwargs,
             )
@@ -200,13 +183,13 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
         model: AudioEncoder,
         dataset,
         eval_split: str = "test",
-        train_split: str = "train",
         *,
         encode_kwargs: dict[str, Any] = {},
         **kwargs: Any,
     ) -> ScoresDict:
-        train_split = dataset[train_split]
+        train_split = dataset[self.train_split]
         eval_split = dataset[eval_split]
+
         params = {
             "classifier_type": type(self.classifier).__name__,
             "classifier_params": self.classifier.get_params(),
@@ -219,15 +202,13 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
         for _ in range(self.n_experiments):
             sample_indices, _ = self._undersample_data_indices(
                 train_split[self.label_column_name], self.samples_per_label, None
-            )  # TODO samples_per_label: per class label, atleast 8 samples should be in the train split - debug why not?
+            )
             train_samples.append(sample_indices)
 
         # Get unique training embeddings
         unique_indices = list(set(itertools.chain.from_iterable(train_samples)))
         unique_audio = train_split.select(unique_indices)[self.audio_column_name]
-        _unique_embeddings = model.get_audio_embeddings(
-            unique_audio, **kwargs
-        )  # replacing [clip for clip in unique_audio] -> unique_audio
+        _unique_embeddings = model.get_audio_embeddings(unique_audio, **kwargs)
         unique_train_embeddings = dict(zip(unique_indices, _unique_embeddings))
         test_audio = eval_split[self.audio_column_name]
         binarizer = MultiLabelBinarizer()
@@ -243,7 +224,7 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
             logger.warning("Could not stratify test set. Using all samples.")
 
         X_test = model.get_audio_embeddings(
-            test_audio,  # [clip["array"] for clip in test_audio]
+            test_audio,
             **kwargs,
         )
 
@@ -256,14 +237,10 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
             y_train = binarizer.transform(
                 train_split.select(sample_indices)[self.label_column_name]
             )
-            class_counts = np.sum(y_train, axis=0)
-            if np.all(
-                class_counts > 1
-            ):  # TODO mandatory check: but not required if we have >1 samples per class (needed for the classifier)
-                scores_exp = evaluate_classifier(
-                    X_train, y_train, X_test, y_test, self.classifier
-                )
-                all_scores.append(scores_exp)
+            scores_exp = evaluate_classifier(
+                X_train, y_train, X_test, y_test, self.classifier
+            )
+            all_scores.append(scores_exp)
 
         avg_scores: dict[str, Any] = {
             k: np.mean([s[k] for s in all_scores]) for k in all_scores[0].keys()
