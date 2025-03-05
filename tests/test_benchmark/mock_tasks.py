@@ -584,9 +584,10 @@ class MockAudioMultilabelClassificationTask(AbsTaskAudioMultilabelClassification
         )
         self.data_loaded = True
 
+
 class MockAudioZeroshotClassificationTask(AbsTaskAudioZeroshotClassification):
     audio_column_name: str = "audio"
-    label_column_name: str = "label" 
+    label_column_name: str = "label"
 
     expected_stats = {
         "test": {
@@ -621,20 +622,20 @@ class MockAudioZeroshotClassificationTask(AbsTaskAudioZeroshotClassification):
 
         self.dataset = DatasetDict(
             {
-                "test": Dataset.from_dict({
-                    "audio": mock_audio,
-                    "label": labels,
-                }),
+                "test": Dataset.from_dict(
+                    {
+                        "audio": mock_audio,
+                        "label": labels,
+                    }
+                ),
             }
         )
         self.data_loaded = True
 
-
     def get_candidate_labels(self) -> list[str]:
         """Return the text candidates for zeroshot classification"""
         return ["This is sound type 0", "This is sound type 1"]
-    
-    
+
 
 class MockMultilingualClusteringTask(AbsTaskClustering, MultilingualTask):
     expected_stats = {

@@ -139,7 +139,7 @@ model_modules = [
     voyage_models,
     fa_models,
     wav2vec2_models,
-    clap_models
+    clap_models,
 ]
 MODEL_REGISTRY = {}
 

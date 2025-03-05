@@ -29,7 +29,10 @@ class ClapZeroShotWrapper:
         self.sampling_rate = self.processor.feature_extractor.sampling_rate
 
         self.pipeline = pipeline(
-            task="zero-shot-audio-classification", model=model_name, device=device
+            task="zero-shot-audio-classification",
+            model=model_name,
+            device=device,
+            **kwargs,
         )
 
     def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
@@ -107,7 +110,6 @@ class ClapZeroShotWrapper:
         audio: AudioBatch,
         **kwargs: Any,
     ) -> np.ndarray:
-        
         all_features = []
         target_sampling_rate = 48000  # CLAP's expected sampling rate
 

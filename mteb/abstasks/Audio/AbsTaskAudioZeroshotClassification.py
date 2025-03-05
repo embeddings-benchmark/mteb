@@ -55,7 +55,13 @@ class AbsTaskAudioZeroshotClassification(AbsTask):
         )
         metrics = evaluator(model, encode_kwargs=encode_kwargs)
 
-        scores = {"accuracy": metrics["accuracy"], "f1": metrics["f1"]}
+        scores = {
+            "accuracy": metrics["accuracy"],
+            "f1": metrics["f1"],
+            "f1_weighted": metrics["f1_weighted"],
+            "precision": metrics["precision"],
+            "recall": metrics["recall"],
+        }
         self._add_main_score(scores)
         return scores
 

@@ -85,17 +85,6 @@ class AudioZeroshotClassificationEvaluator(Evaluator):
         """Evaluate zero-shot classification performance."""
         logger.info("Getting text embeddings for candidate labels...")
 
-        print("Available methods for model:")
-        for method in dir(model):
-            if not method.startswith('_'):  # Skip private/internal methods
-                print(f"- {method}")
-
-        print(type(model))
-        
-        print(model,type(model))
-
-        # assert False
-
         text_embeddings = model.get_text_embeddings(self.candidate_labels)
 
         logger.info("Processing audio data...")
@@ -107,7 +96,7 @@ class AudioZeroshotClassificationEvaluator(Evaluator):
         )
 
         audio_embeddings = model.get_audio_embeddings(dataloader)
-        
+
         # Calculate similarity scores
         similarity = (
             torch.from_numpy(audio_embeddings) @ torch.from_numpy(text_embeddings).T
@@ -119,9 +108,11 @@ class AudioZeroshotClassificationEvaluator(Evaluator):
         scores = {
             "accuracy": metrics.accuracy_score(self.labels, predictions),
             "f1": metrics.f1_score(self.labels, predictions, average="macro"),
-            "f1_weighted": metrics.f1_score(
-                self.labels, predictions, average="weighted"
+            "f1_weighted": metrics.f1_score(self.labels, predictions, average="macro"),
+            "precision": metrics.precision_score(
+                self.labels, predictions, average="macro"
             ),
+            "recall": metrics.recall_score(self.labels, predictions, average="macro"),
         }
 
         return scores
