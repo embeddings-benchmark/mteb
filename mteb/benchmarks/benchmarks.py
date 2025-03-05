@@ -158,9 +158,7 @@ MTEB_ENG_CLASSIC = Benchmark(
                 eval_splits=["test"],
                 hf_subsets=["en-en"],
             ),
-            get_task(
-                "STS22", eval_splits=["test"], hf_subsets=["en"]
-            ),
+            get_task("STS22", eval_splits=["test"], hf_subsets=["en"]),
         )
     ),
     description="""The original English benchmark by Muennighoff et al., (2023).
