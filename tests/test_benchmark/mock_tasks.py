@@ -584,6 +584,7 @@ class MockAudioMultilabelClassificationTask(AbsTaskAudioMultilabelClassification
         )
         self.data_loaded = True
 
+<<<<<<< HEAD
 class MockAudioZeroshotClassificationTask(AbsTaskAudioZeroshotClassification):
     audio_column_name: str = "audio"
     label_column_name: str = "label" 
@@ -652,6 +653,9 @@ class MockAudioMultilabelClassificationLogRegTask(
 
 =======
 >>>>>>> 11ba946fbe80d5b40b46ef840d35b6b494793533
+=======
+
+>>>>>>> upstream/maeb
 class MockMultilingualClusteringTask(AbsTaskClustering, MultilingualTask):
     expected_stats = {
         "test": {
