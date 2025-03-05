@@ -141,10 +141,7 @@ MOCK_MIEB_TASK_GRID = [
 MOCK_MAEB_TASK_GRID = [
     MockAudioClusteringTask(),
     MockAudioMultilabelClassificationTask(),
-<<<<<<< HEAD
     MockAudioZeroshotClassificationTask(),
-=======
->>>>>>> upstream/maeb
 ]
 
 
