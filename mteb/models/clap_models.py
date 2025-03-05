@@ -30,7 +30,9 @@ class ClapZeroShotWrapper:
 
         self.pipeline = pipeline(
             task="zero-shot-audio-classification",
-            model=model_name,
+            model=self.model,
+            feature_extractor=self.processor.feature_extractor,  # Add the feature extractor
+            tokenizer=self.processor.tokenizer,  # Add the tokenizer
             device=device,
             **kwargs,
         )
