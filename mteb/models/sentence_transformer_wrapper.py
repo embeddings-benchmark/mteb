@@ -69,7 +69,7 @@ class SentenceTransformerWrapper(Wrapper):
         task_name: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
+    ) -> np.ndarray | torch.Tensor:
         """Encodes the given sentences using the encoder.
 
         Args:
@@ -113,8 +113,8 @@ class SentenceTransformerWrapper(Wrapper):
             **kwargs,
         )
         if isinstance(embeddings, torch.Tensor):
-            # sometimes in kwargs can be return_tensors=True
-            embeddings = embeddings.cpu().detach().float().numpy()
+            # ensure everything is on CPU and is float
+            embeddings = embeddings.cpu().detach().float()
         return embeddings
 
     def _predict(

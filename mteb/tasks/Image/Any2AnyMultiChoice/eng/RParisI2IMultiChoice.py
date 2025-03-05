@@ -4,6 +4,8 @@ from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiCho
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
+# NOTE: These tasks are marked as Any2AnyRetrieval types they are the correct implementations of ROxford retrieval and RParis retrieval
+# (as it requires masking out the different docs in corpus for every query). This aligns with the MIEB papeer.
 class RParisEasyI2IMultiChoice(AbsTaskAny2AnyMultiChoice):
     metadata = TaskMetadata(
         name="RParisEasyI2IMultiChoice",
@@ -13,7 +15,7 @@ class RParisEasyI2IMultiChoice(AbsTaskAny2AnyMultiChoice):
             "path": "JamieSJS/r-paris-easy-multi",
             "revision": "db94b5afd0014ab8c978f20a0fbcc52da1612a08",
         },
-        type="Any2AnyMultiChoice",
+        type="Any2AnyRetrieval",
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -47,7 +49,7 @@ class RParisMediumI2IMultiChoice(AbsTaskAny2AnyMultiChoice):
             "path": "JamieSJS/r-paris-medium-multi",
             "revision": "372c79fc823e1cebc1d55f8e0039aa239285e177",
         },
-        type="Any2AnyMultiChoice",
+        type="Any2AnyRetrieval",
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -81,7 +83,7 @@ class RParisHardI2IMultiChoice(AbsTaskAny2AnyMultiChoice):
             "path": "JamieSJS/r-paris-hard-multi",
             "revision": "4e5997e48fb2f2f8bf1c8973851dedeb17e09a83",
         },
-        type="Any2AnyMultiChoice",
+        type="Any2AnyRetrieval",
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

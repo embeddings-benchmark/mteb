@@ -76,6 +76,7 @@ class STS22CrosslingualSTSv2(AbsTaskSTS):
     doi = "10.18653/v1/2022.semeval-1.155",
     pages = "1094--1106",
 }""",
+        adapted_from=["STS22"],
     )
 
     min_score = 1

@@ -41,7 +41,6 @@ nvidia_training_datasets = {
     "FEVERHardNegatives": ["train"],
     "NanoFEVERRetrieval": ["train"],
     "FiQA2018": ["train"],
-    "FiQA2018-PL": ["train"],  # translation not trained on
     "FiQA2018-NL": ["train"],  # translation not trained on
     "STS12": ["train"],
     "STS22": ["train"],
@@ -56,7 +55,6 @@ nvidia_training_datasets = {
     "ArxivClusteringP2P": ["train"],
     "ArxivClusteringP2P.v2": ["train"],
     "ArxivClusteringS2S": ["train"],
-    "ArxivClusteringS2S.v2": ["train"],
     "BiorxivClusteringP2P": ["train"],
     "BiorxivClusteringP2P.v2": ["train"],
     "BiorxivClusteringS2S": ["train"],

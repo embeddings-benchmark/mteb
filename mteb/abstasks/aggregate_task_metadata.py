@@ -60,6 +60,8 @@ class AggregateTaskMetadata(TaskMetadata):
     @property
     def hf_subsets_to_langscripts(self) -> dict[HFSubset, list[ISO_LANGUAGE_SCRIPT]]:
         """Return a dictionary mapping huggingface subsets to languages."""
+        if isinstance(self.eval_langs, dict):
+            return self.eval_langs
         return {"default": self.eval_langs}  # type: ignore
 
     @model_validator(mode="after")  # type: ignore

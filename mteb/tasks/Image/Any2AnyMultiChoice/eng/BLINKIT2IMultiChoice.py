@@ -14,7 +14,7 @@ class BLINKIT2IMultiChoice(AbsTaskAny2AnyMultiChoice):
             "revision": "a9f994925551c14503d00d86f1307bac6e2ead6a",
             "trust_remote_code": True,
         },
-        type="Any2AnyMultiChoice",
+        type="VisionCentric",
         category="it2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

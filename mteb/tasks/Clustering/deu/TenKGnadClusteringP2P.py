@@ -63,6 +63,7 @@ class TenKGnadClusteringP2PFast(AbsTaskClusteringFast):
         sample_creation="found",
         bibtex_citation=None,  # none found
         # due to duplicates
+        adapted_from=["TenKGnadClusteringP2P"],
     )
 
     def dataset_transform(self) -> None:

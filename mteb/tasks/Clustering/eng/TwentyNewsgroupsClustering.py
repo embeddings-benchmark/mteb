@@ -90,6 +90,7 @@ class TwentyNewsgroupsClusteringFast(AbsTaskClusteringFast):
         }
         """,
         prompt="Identify the topic or theme of the given news articles",
+        adapted_from=["TwentyNewsgroupsClustering"],
     )
 
     def dataset_transform(self):

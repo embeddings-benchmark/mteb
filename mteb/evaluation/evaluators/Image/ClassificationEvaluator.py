@@ -14,7 +14,6 @@ from sklearn.metrics import (
     f1_score,
 )
 from sklearn.neighbors import KNeighborsClassifier
-from torch import Tensor
 from torch.utils.data import DataLoader
 from torchvision import transforms
 
@@ -235,7 +234,9 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
         return scores, test_cache
 
     @staticmethod
-    def _cos_sim(a: Tensor, b: Tensor):
+    def _cos_sim(
+        a: torch.Tensor | np.ndarray, b: torch.Tensor | np.ndarray
+    ) -> torch.Tensor | np.ndarray:
         """Computes the cosine similarity cos_sim(a[i], b[j]) for all i and j.
 
         Return:
@@ -248,17 +249,19 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
             b = torch.tensor(b)
 
         if len(a.shape) == 1:
-            a = a.unsqueeze(0)
+            a = a.reshape(1, *a.shape)
 
         if len(b.shape) == 1:
-            b = b.unsqueeze(0)
+            b = b.reshape(1, *b.shape)
 
         a_norm = torch.nn.functional.normalize(a, p=2, dim=1)
         b_norm = torch.nn.functional.normalize(b, p=2, dim=1)
-        return torch.mm(a_norm, b_norm.transpose(0, 1))
+        return a_norm @ b_norm.transpose(0, 1)
 
     @staticmethod
-    def _euclidean_dist(a: Tensor, b: Tensor):
+    def _euclidean_dist(
+        a: torch.Tensor | np.ndarray, b: torch.Tensor | np.ndarray
+    ) -> torch.Tensor:
         """Computes the euclidean distance euclidean_dist(a[i], b[j]) for all i and j.
 
         Returns:
@@ -271,15 +274,17 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
             b = torch.tensor(b)
 
         if len(a.shape) == 1:
-            a = a.unsqueeze(0)
+            a = a.reshape(1, *a.shape)
 
         if len(b.shape) == 1:
-            b = b.unsqueeze(0)
+            b = b.reshape(1, *b.shape)
 
         return torch.cdist(a, b, p=2)
 
     @staticmethod
-    def _dot_score(a: Tensor, b: Tensor):
+    def _dot_score(
+        a: torch.Tensor | np.ndarray, b: torch.Tensor | np.ndarray
+    ) -> torch.Tensor:
         """Computes the dot-product dot_prod(a[i], b[j]) for all i and j.
 
         Returns:
@@ -292,12 +297,12 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
             b = torch.tensor(b)
 
         if len(a.shape) == 1:
-            a = a.unsqueeze(0)
+            a = a.reshape(1, *a.shape)
 
         if len(b.shape) == 1:
-            b = b.unsqueeze(0)
+            b = b.reshape(1, *b.shape)
 
-        return torch.mm(a, b.transpose(0, 1))
+        return a @ b.transpose(0, 1)
 
 
 class ImagelogRegClassificationEvaluator(Evaluator):
@@ -342,12 +347,15 @@ class ImagelogRegClassificationEvaluator(Evaluator):
             max_iter=self.max_iter,
             verbose=1 if logger.isEnabledFor(logging.DEBUG) else 0,
         )
+        cpu_count = os.cpu_count()
+        num_workers = min(math.floor(cpu_count / 2), 16) if cpu_count else 0
+
         dataloader_train = DataLoader(
             self.dataset_train,
             batch_size=self.encode_kwargs["batch_size"],
             shuffle=False,
             collate_fn=custom_collate_fn,
-            num_workers=min(math.floor(os.cpu_count() / 2), 16),
+            num_workers=num_workers,
         )
         X_train = model.get_image_embeddings(
             dataloader_train, batch_size=self.encode_kwargs["batch_size"]
@@ -357,7 +365,7 @@ class ImagelogRegClassificationEvaluator(Evaluator):
             batch_size=self.encode_kwargs["batch_size"],
             shuffle=False,
             collate_fn=custom_collate_fn,
-            num_workers=min(math.floor(os.cpu_count() / 2), 16),
+            num_workers=num_workers,
         )
         if test_cache is None:
             X_test = model.get_image_embeddings(

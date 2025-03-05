@@ -21,6 +21,7 @@ from .HotpotQAPLRetrieval import HotpotQAPL, HotpotQAPLHardNegatives
 from .MSMARCOPLRetrieval import MSMARCOPL, MSMARCOPLHardNegatives
 from .NFCorpusPLRetrieval import NFCorpusPL
 from .NQPLRetrieval import NQPL, NQPLHardNegatives
+from .PUGGRetrieval import PUGGRetrieval
 from .QuoraPLRetrieval import QuoraPLRetrieval, QuoraPLRetrievalHardNegatives
 from .SCIDOCSPLRetrieval import SCIDOCSPL
 from .SciFactPLRetrieval import SciFactPL
@@ -57,4 +58,6 @@ __all__ = [
     "DBPediaPLHardNegatives",
     "HotpotQAPL",
     "HotpotQAPLHardNegatives",
+    "Touche2020PL",
+    "PUGGRetrieval",
 ]

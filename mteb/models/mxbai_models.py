@@ -8,6 +8,15 @@ from mteb.model_meta import (
     sentence_transformers_loader,
 )
 
+mixedbread_training_data = {
+    # from correspondance:
+    # as mentioned in our blog post
+    # (https://www.mixedbread.com/blog/mxbai-embed-large-v1#built-for-rag-and-real-world-use-cases:~:text=During%20the%20whole,related%20use%20cases.)
+    # We do not train on any data (except the MSMarco training split) of MTEB. We have a strong filtering process to ensure the OOD setting. That's true
+    # for all of our models. Keep up the good work and let me know if you have any questions.
+    "MSMARCO": [],
+}
+
 mxbai_embed_large_v1 = ModelMeta(
     loader=partial(  # type: ignore
         sentence_transformers_loader,
@@ -95,7 +104,7 @@ mxbai_embed_xsmall_v1 = ModelMeta(
     superseded_by=None,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=mixedbread_training_data,
 )
 
 mxbai_embed_2d_large_v1 = ModelMeta(
@@ -118,7 +127,7 @@ mxbai_embed_2d_large_v1 = ModelMeta(
     superseded_by=None,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=mixedbread_training_data,
 )
 
 
@@ -142,5 +151,5 @@ mxbai_embed_xsmall_v1 = ModelMeta(
     superseded_by=None,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=mixedbread_training_data,
 )

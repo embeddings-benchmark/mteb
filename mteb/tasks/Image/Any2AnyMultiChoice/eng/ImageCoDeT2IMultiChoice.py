@@ -13,7 +13,7 @@ class ImageCoDeT2IMultiChoice(AbsTaskAny2AnyMultiChoice):
             "path": "JamieSJS/imagecode-multi",
             "revision": "d28adfd8b34fefa546fdf94bdc352622b2575f6c",
         },
-        type="Any2AnyMultiChoice",
+        type="Compositionality",
         category="it2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

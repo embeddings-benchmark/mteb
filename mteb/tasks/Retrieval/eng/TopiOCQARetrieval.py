@@ -134,4 +134,5 @@ class TopiOCQARetrievalHardNegatives(AbsTaskRetrieval):
       primaryClass={cs.CL}
         }
         """,
+        adapted_from=["TopiOCQA"],
     )

@@ -58,6 +58,7 @@ class NanoHotpotQARetrieval(AbsTaskRetrieval):
         prompt={
             "query": "Given a multi-hop question, retrieve documents that can help answer the question"
         },
+        adapted_from=["HotpotQA"],
     )
 
     def load_data(self, **kwargs):

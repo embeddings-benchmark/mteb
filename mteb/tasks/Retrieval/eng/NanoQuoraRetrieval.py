@@ -42,6 +42,7 @@ class NanoQuoraRetrieval(AbsTaskRetrieval):
         prompt={
             "query": "Given a question, retrieve questions that are semantically equivalent to the given question"
         },
+        adapted_from=["QuoraRetrieval"],
     )
 
     def load_data(self, **kwargs):

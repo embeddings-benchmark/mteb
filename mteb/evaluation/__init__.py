@@ -13,7 +13,6 @@ from .evaluators import (
     SummarizationEvaluator,
     dot_distance,
     kNNClassificationEvaluator,
-    kNNClassificationEvaluatorPytorch,
     logRegClassificationEvaluator,
 )
 from .LangMapping import LANG_MAPPING
@@ -30,7 +29,6 @@ __all__ = [
     "BitextMiningEvaluator",
     "PairClassificationEvaluator",
     "kNNClassificationEvaluator",
-    "kNNClassificationEvaluatorPytorch",
     "logRegClassificationEvaluator",
     "dot_distance",
     "LANG_MAPPING",

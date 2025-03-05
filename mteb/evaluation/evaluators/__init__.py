@@ -4,7 +4,6 @@ from .BitextMiningEvaluator import BitextMiningEvaluator
 from .ClassificationEvaluator import (
     dot_distance,
     kNNClassificationEvaluator,
-    kNNClassificationEvaluatorPytorch,
     logRegClassificationEvaluator,
 )
 from .ClusteringEvaluator import ClusteringEvaluator

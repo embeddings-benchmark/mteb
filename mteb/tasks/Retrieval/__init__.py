@@ -245,6 +245,7 @@ from .pol import (
     MSMARCOPLHardNegatives,
     NFCorpusPL,
     NQPLHardNegatives,
+    PUGGRetrieval,
     QuoraPLRetrieval,
     QuoraPLRetrievalHardNegatives,
     SciFactPL,
@@ -531,4 +532,7 @@ __all__ = [
     "BSARDRetrieval",
     "SyntecRetrieval",
     "FQuADRetrieval",
+    "Touche2020PL",
+    "PUGGRetrieval",
+    "LoTTERetrieval",
 ]

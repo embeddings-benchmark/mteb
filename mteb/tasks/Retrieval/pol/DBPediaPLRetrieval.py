@@ -37,6 +37,7 @@ class DBPediaPL(AbsTaskRetrieval):
  doi =       {10.1145/3077136.3080751},
  publisher = {ACM}
 }""",
+        adapted_from=["DBPedia"],
     )
 
 
@@ -73,4 +74,5 @@ class DBPediaPLHardNegatives(AbsTaskRetrieval):
  doi =       {10.1145/3077136.3080751},
  publisher = {ACM}
 }""",
+        adapted_from=["DBPedia"],
     )

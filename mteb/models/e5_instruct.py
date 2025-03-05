@@ -55,6 +55,7 @@ e5_instruct = ModelMeta(
     embed_dim=1024,
     license="mit",
     max_tokens=514,
+    adapted_from="FacebookAI/xlm-roberta-large",
     citation="""@article{wang2024multilingual,
       title={Multilingual E5 Text Embeddings: A Technical Report},
       author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Yang, Linjun and Majumder, Rangan and Wei, Furu},
@@ -111,6 +112,7 @@ e5_mistral = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=E5_MISTRAL_TRAINING_DATA,
+    adapted_from="mistralai/Mistral-7B-v0.1",
 )
 
 zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
