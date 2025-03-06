@@ -18,4 +18,5 @@ arabic_triplet_matryoshka = ModelMeta(
     public_training_code=None,
     adapted_from="aubmindlab/bert-base-arabertv02",
     public_training_data="akhooli/arabic-triplets-1m-curated-sims-len",  # Update dataset link
+    adapted_from="aubmindlab/bert-base-arabertv02",
 )
