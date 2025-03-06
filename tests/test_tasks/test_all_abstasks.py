@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-import os
 from unittest.mock import Mock, patch
 
 import pytest

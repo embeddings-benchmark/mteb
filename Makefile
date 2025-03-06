@@ -47,7 +47,6 @@ model-load-test:
 
 dataset-load-test:
 	@echo "--- 🚀 Running dataset load test ---"
-	pip install ".[dev, speedtask]"
 	pytest -n auto -m test_datasets
 
 
