@@ -282,13 +282,27 @@ class AbsTask(ABC):
         self._eval_splits = eval_splits
         return self
 
-    def filter_modalities(self, modalities: list[str] | None) -> AbsTask:
-        """Filter the modalities of the task."""
+    def filter_modalities(
+        self, modalities: list[str] | None, exclusive_modality_filter: bool = False
+    ) -> AbsTask:
+        """Filter the modalities of the task.
+
+        Args:
+        modalities: A list of modalities to filter by. If None, the task is returned unchanged.
+        exclusive_modality_filter: If True, only keep tasks where ALL filter modalities are included in the
+            task's modalities and ALL task modalities are in filter modalities (exact match).
+            If False (default), keep tasks if ANY of the task's modalities match the filter modalities.
+        """
         if modalities is None:
             return self
-        _modalities = set(modalities)
-        if not _modalities.intersection(self.modalities):
-            self.metadata.modalities = []
+        filter_modalities_set = set(modalities)
+        task_modalities_set = set(self.modalities)
+        if exclusive_modality_filter:
+            if not (filter_modalities_set == task_modalities_set):
+                self.metadata.modalities = []
+        else:
+            if not filter_modalities_set.intersection(task_modalities_set):
+                self.metadata.modalities = []
         return self
 
     def filter_languages(

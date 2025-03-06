@@ -105,10 +105,15 @@ def filter_task_by_categories(
 
 
 def filter_tasks_by_modalities(
-    tasks: list[AbsTask], modalities: list[MODALITIES]
+    tasks: list[AbsTask],
+    modalities: list[MODALITIES],
+    exclude_modality_filter: bool = False,
 ) -> list[AbsTask]:
     _modalities = set(modalities)
-    return [t for t in tasks if _modalities.intersection(t.modalities)]
+    if exclude_modality_filter:
+        return [t for t in tasks if set(t.modalities) == _modalities]
+    else:
+        return [t for t in tasks if _modalities.intersection(t.modalities)]
 
 
 class MTEBTasks(tuple):
@@ -255,6 +260,7 @@ def get_tasks(
     eval_splits: list[str] | None = None,
     exclusive_language_filter: bool = False,
     modalities: list[MODALITIES] | None = None,
+    exclusive_modality_filter: bool = False,
 ) -> MTEBTasks:
     """Get a list of tasks based on the specified filters.
 
@@ -274,6 +280,9 @@ def get_tasks(
             exclusive_language_filter is set to False both of these will be kept, but if set to True only those that contains all the languages
             specified will be kept.
         modalities: A list of modalities to include. If None, all modalities are included.
+        exclusive_modality_filter: If True, only keep tasks where ALL filter modalities are included in the
+            task's modalities and ALL task modalities are in filter modalities (exact match).
+            If False (default), keep tasks if ANY of the task's modalities match the filter modalities.
 
     Returns:
         A list of all initialized tasks objects which pass all of the filters (AND operation).
@@ -294,6 +303,7 @@ def get_tasks(
                 eval_splits=eval_splits,
                 exclusive_language_filter=exclusive_language_filter,
                 modalities=modalities,
+                exclusive_modality_filter=exclusive_modality_filter,
             )
             for task in tasks
         ]
@@ -320,7 +330,9 @@ def get_tasks(
     if exclude_superseded:
         _tasks = filter_superseded_datasets(_tasks)
     if modalities:
-        _tasks = filter_tasks_by_modalities(_tasks, modalities)
+        _tasks = filter_tasks_by_modalities(
+            _tasks, modalities, exclusive_modality_filter
+        )
 
     return MTEBTasks(_tasks)
 
@@ -333,6 +345,7 @@ def get_task(
     hf_subsets: list[str] | None = None,
     exclusive_language_filter: bool = False,
     modalities: list[MODALITIES] | None = None,
+    exclusive_modality_filter: bool = False,
 ) -> AbsTask:
     """Get a task by name.
 
@@ -347,6 +360,9 @@ def get_task(
             exclusive_language_filter is set to False both of these will be kept, but if set to True only those that contains all the languages
             specified will be kept.
         modalities: A list of modalities to include. If None, all modalities are included.
+        exclusive_modality_filter: If True, only keep tasks where ALL filter modalities are included in the
+            task's modalities and ALL task modalities are in filter modalities (exact match).
+            If False (default), keep tasks if ANY of the task's modalities match the filter modalities.
 
     Returns:
         An initialized task object.
@@ -369,7 +385,7 @@ def get_task(
     if eval_splits:
         task.filter_eval_splits(eval_splits=eval_splits)
     if modalities:
-        task.filter_modalities(modalities)
+        task.filter_modalities(modalities, exclusive_modality_filter)
     return task.filter_languages(
         languages,
         script,
