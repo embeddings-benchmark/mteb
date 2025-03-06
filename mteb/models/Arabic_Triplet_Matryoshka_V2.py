@@ -20,7 +20,3 @@ arabic_triplet_matryoshka = ModelMeta(
     public_training_data="akhooli/arabic-triplets-1m-curated-sims-len",  
     training_datasets={"akhooli/arabic-triplets-1m-curated-sims-len": ["train"]},
 )
-
-# ✅ Correct way to calculate memory usage
-memory_usage = arabic_triplet_matryoshka.calculate_memory_usage_mb()
-print("Calculated Memory Usage (MB):", memory_usage)
