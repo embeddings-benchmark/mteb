@@ -2,8 +2,8 @@ name: Dataset Loading
 
 on:
   pull_request:
-    paths:
-      - 'mteb/tasks/**.py'
+  push:
+    branches: [main]
   schedule:
     - cron: '0 0 */2 * *' # every 2 days
 
