@@ -2,21 +2,20 @@ from mteb.model_meta import ModelMeta
 
 arabic_triplet_matryoshka = ModelMeta(
     name="Omartificial-Intelligence-Space/Arabic-Triplet-Matryoshka-V2",
-    languages=["ara-Arab"],  # Arabic in correct format
+    languages=["ara-Arab"],
     open_weights=True,
-    revision="ed357f222f0b6ea6670d2c9b5a1cb93950d34200",  # Your actual revision hash
+    revision="ed357f222f0b6ea6670d2c9b5a1cb93950d34200",  
     release_date="2024-07-28",
-    n_parameters=135_000_000,  # Update if different
+    n_parameters=135_000_000, 
     memory_usage_mb = 0.5,
-    embed_dim=768,  # Update if different
-    license="apache-2.0",  # Update if different
-    max_tokens=768,  # Update if different
-    reference="https://huggingface.co/Omartificial-Intelligence-Space/Arabic-Triplet-Matryoshka-V2",  # Add correct model link
+    embed_dim=768, 
+    license="apache-2.0",  
+    max_tokens=768, 
+    reference="https://huggingface.co/Omartificial-Intelligence-Space/Arabic-Triplet-Matryoshka-V2",  
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
     adapted_from="aubmindlab/bert-base-arabertv02",
-    public_training_data="https://huggingface.co/datasets/akhooli/arabic-triplets-1m-curated-sims-len",
-    adapted_from="aubmindlab/bert-base-arabertv02",
+    public_training_data="akhooli/arabic-triplets-1m-curated-sims-len",  
 )
