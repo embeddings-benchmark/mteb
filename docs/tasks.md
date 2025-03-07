@@ -849,6 +849,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [WITT2IRetrieval](https://proceedings.mlr.press/v162/bugliarello22a/bugliarello22a.pdf) (Bugliarello et al., 2022) | ['ara', 'bul', 'dan', 'ell', 'eng', 'est', 'ind', 'jpn', 'kor', 'tur', 'vie'] | Any2AnyMultilingualRetrieval | t2i | [Encyclopaedic, Written] | None | None |
 | [WRIMEClassification](https://aclanthology.org/2021.naacl-main.169/) | ['jpn'] | Classification | s2s | [Social, Written] | None | None |
 | [Waimai](https://aclanthology.org/2023.nodalida-1.20/) (Xiao et al., 2023) | ['cmn'] | Classification | s2s |  | None | None |
+| [WebFAQRetrieval](https://huggingface.co/PaDaS-Lab) (Michael Dinzinger, 2025) | ['ara', 'aze', 'ben', 'bul', 'cat', 'ces', 'dan', 'deu', 'ell', 'eng', 'est', 'fas', 'fin', 'fra', 'heb', 'hin', 'hrv', 'hun', 'ind', 'isl', 'ita', 'jpn', 'kat', 'kaz', 'kor', 'lav', 'lit', 'mar', 'msa', 'nld', 'nor', 'pol', 'por', 'ron', 'rus', 'slk', 'slv', 'spa', 'sqi', 'srp', 'swe', 'tgl', 'tha', 'tur', 'ukr', 'urd', 'uzb', 'vie', 'zho'] | Retrieval | s2p | [Web, Written] | {'test': 11434472} | {'test': {'number_of_characters': 35239389, 'num_samples': 11434472, 'num_queries': 271168, 'num_documents': 11163304, 'min_document_length': 7, 'average_document_length': 1.16, 'max_document_length': 4317, 'unique_documents': 11163304, 'min_query_length': 2, 'average_query_length': 82.33, 'max_query_length': 2, 'unique_queries': 271168, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 271168, 'hf_subset_descriptive_stats': {'ara': {'number_of_characters': 746242, 'num_samples': 152664, 'num_queries': 10000, 'num_documents': 142664, 'min_document_length': 10, 'average_document_length': 3.23, 'max_document_length': 1503, 'unique_documents': 142664, 'min_query_length': 2, 'average_query_length': 28.53, 'max_query_length': 2, 'unique_queries': 10000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 10000}, 'aze': {'number_of_characters': 33357, 'num_samples': 5356, 'num_queries': 487, 'num_documents': 4869, 'min_document_length': 10, 'average_document_length': 4.85, 'max_document_length': 149, 'unique_documents': 4869, 'min_query_length': 2, 'average_query_length': 20.0, 'max_query_length': 2, 'unique_queries': 487, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 487}, 'ben': {'number_of_characters': 92226, 'num_samples': 15747, 'num_queries': 1432, 'num_documents': 14315, 'min_document_length': 10, 'average_document_length': 4.44, 'max_document_length': 322, 'unique_documents': 14315, 'min_query_length': 2, 'average_query_length': 19.99, 'max_query_length': 2, 'unique_queries': 1432, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 1432}, 'bul': {'number_of_characters': 248572, 'num_samples': 38208, 'num_queries': 3474, 'num_documents': 34734, 'min_document_length': 10, 'average_document_length': 5.16, 'max_document_length': 396, 'unique_documents': 34734, 'min_query_length': 2, 'average_query_length': 20.0, 'max_query_length': 2, 'unique_queries': 3474, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 3474}, 'cat': {'number_of_characters': 93488, 'num_samples': 13964, 'num_queries': 1270, 'num_documents': 12694, 'min_document_length': 10, 'average_document_length': 5.36, 'max_document_length': 184, 'unique_documents': 12694, 'min_query_length': 2, 'average_query_length': 19.99, 'max_query_length': 2, 'unique_queries': 1270, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 1270}, 'ces': {'number_of_characters': 481288, 'num_samples': 79539, 'num_queries': 7231, 'num_documents': 72308, 'min_document_length': 9, 'average_document_length': 4.66, 'max_document_length': 994, 'unique_documents': 72308, 'min_query_length': 2, 'average_query_length': 20.0, 'max_query_length': 2, 'unique_queries': 7231, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 7231}, 'dan': {'number_of_characters': 760053, 'num_samples': 147686, 'num_queries': 10000, 'num_documents': 137686, 'min_document_length': 10, 'average_document_length': 3.52, 'max_document_length': 1420, 'unique_documents': 137686, 'min_query_length': 2, 'average_query_length': 27.54, 'max_query_length': 2, 'unique_queries': 10000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 10000}, 'deu': {'number_of_characters': 2318297, 'num_samples': 901201, 'num_queries': 10000, 'num_documents': 891201, 'min_document_length': 7, 'average_document_length': 0.6, 'max_document_length': 1191, 'unique_documents': 891201, 'min_query_length': 2, 'average_query_length': 178.24, 'max_query_length': 2, 'unique_queries': 10000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 10000}, 'ell': {'number_of_characters': 295282, 'num_samples': 42368, 'num_queries': 3852, 'num_documents': 38516, 'min_document_length': 12, 'average_document_length': 5.67, 'max_document_length': 229, 'unique_documents': 38516, 'min_query_length': 2, 'average_query_length': 20.0, 'max_query_length': 2, 'unique_queries': 3852, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 3852}, 'eng': {'number_of_characters': 11040979, 'num_samples': 5288725, 'num_queries': 10000, 'num_documents': 5278725, 'min_document_length': 9, 'average_document_length': 0.09, 'max_document_length': 1177, 'unique_documents': 5278725, 'min_query_length': 2, 'average_query_length': 1055.74, 'max_query_length': 2, 'unique_queries': 10000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 10000}, 'est': {'number_of_characters': 90781, 'num_samples': 14181, 'num_queries': 1290, 'num_documents': 12891, 'min_document_length': 10, 'average_document_length': 5.04, 'max_document_length': 177, 'unique_documents': 12891, 'min_query_length': 2, 'average_query_length': 19.99, 'max_query_length': 2, 'unique_queries': 1290, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 1290}, 'fas': {'number_of_characters': 914501, 'num_samples': 236940, 'num_queries': 10000, 'num_documents': 226940, 'min_document_length': 10, 'average_document_length': 2.03, 'max_document_length': 3115, 'unique_documents': 226940, 'min_query_length': 2, 'average_query_length': 45.39, 'max_query_length': 2, 'unique_queries': 10000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 10000}, 'fin': {'number_of_characters': 500237, 'num_samples': 80902, 'num_queries': 7355, 'num_documents': 73547, 'min_document_length': 9, 'average_document_length': 4.8, 'max_document_length': 294, 'unique_documents': 73547, 'min_query_length': 2, 'average_query_length': 20.0, 'max_query_length': 2, 'unique_queries': 7355, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 7355}, 'fra': {'number_of_characters': 1727184, 'num_samples': 579505, 'num_queries': 10000, 'num_documents': 569505, 'min_document_length': 8, 'average_document_length': 1.03, 'max_document_length': 489, 'unique_documents': 569505, 'min_query_length': 2, 'average_query_length': 113.9, 'max_query_length': 2, 'unique_queries': 10000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 10000}, 'heb': {'number_of_characters': 232589, 'num_samples': 42847, 'num_queries': 3896, 'num_documents': 38951, 'min_document_length': 10, 'average_document_length': 3.97, 'max_document_length': 278, 'unique_documents': 38951, 'min_query_length': 2, 'average_query_length': 20.0, 'max_query_length': 2, 'unique_queries': 3896, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 3896}, 'hin': {'number_of_characters': 685269, 'num_samples': 110031, 'num_queries': 10000, 'num_documents': 100031, 'min_document_length': 10, 'average_document_length': 4.85, 'max_document_length': 879, 'unique_documents': 100031, 'min_query_length': 2, 'average_query_length': 20.01, 'max_query_length': 2, 'unique_queries': 10000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 10000}, 'hrv': {'number_of_characters': 38324, 'num_samples': 6100, 'num_queries': 555, 'num_documents': 5545, 'min_document_length': 11, 'average_document_length': 4.91, 'max_document_length': 132, 'unique_documents': 5545, 'min_query_length': 2, 'average_query_length': 19.98, 'max_query_length': 2, 'unique_queries': 555, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 555}, 'hun': {'number_of_characters': 319732, 'num_samples': 49824, 'num_queries': 4530, 'num_documents': 45294, 'min_document_length': 10, 'average_document_length': 5.06, 'max_document_length': 575, 'unique_documents': 45294, 'min_query_length': 2, 'average_query_length': 20.0, 'max_query_length': 2, 'unique_queries': 4530, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 4530}, 'ind': {'number_of_characters': 768010, 'num_samples': 121315, 'num_queries': 10000, 'num_documents': 111315, 'min_document_length': 8, 'average_document_length': 4.9, 'max_document_length': 850, 'unique_documents': 111315, 'min_query_length': 2, 'average_query_length': 22.26, 'max_query_length': 2, 'unique_queries': 10000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 10000}, 'isl': {'number_of_characters': 37490, 'num_samples': 5256, 'num_queries': 478, 'num_documents': 4778, 'min_document_length': 12, 'average_document_length': 5.85, 'max_document_length': 149, 'unique_documents': 4778, 'min_query_length': 2, 'average_query_length': 19.99, 'max_query_length': 2, 'unique_queries': 478, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 478}, 'ita': {'number_of_characters': 1094898, 'num_samples': 267803, 'num_queries': 10000, 'num_documents': 257803, 'min_document_length': 10, 'average_document_length': 2.25, 'max_document_length': 905, 'unique_documents': 257803, 'min_query_length': 2, 'average_query_length': 51.56, 'max_query_length': 2, 'unique_queries': 10000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 10000}, 'jpn': {'number_of_characters': 882722, 'num_samples': 319157, 'num_queries': 10000, 'num_documents': 309157, 'min_document_length': 10, 'average_document_length': 0.86, 'max_document_length': 645, 'unique_documents': 309157, 'min_query_length': 2, 'average_query_length': 61.83, 'max_query_length': 2, 'unique_queries': 10000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 10000}, 'kat': {'number_of_characters': 16624, 'num_samples': 2646, 'num_queries': 241, 'num_documents': 2405, 'min_document_length': 13, 'average_document_length': 4.91, 'max_document_length': 125, 'unique_documents': 2405, 'min_query_length': 2, 'average_query_length': 19.96, 'max_query_length': 2, 'unique_queries': 241, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 241}, 'kaz': {'number_of_characters': 21230, 'num_samples': 3295, 'num_queries': 300, 'num_documents': 2995, 'min_document_length': 16, 'average_document_length': 5.09, 'max_document_length': 260, 'unique_documents': 2995, 'min_query_length': 2, 'average_query_length': 19.97, 'max_query_length': 2, 'unique_queries': 300, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 300}, 'kor': {'number_of_characters': 481069, 'num_samples': 112000, 'num_queries': 10000, 'num_documents': 102000, 'min_document_length': 10, 'average_document_length': 2.72, 'max_document_length': 264, 'unique_documents': 102000, 'min_query_length': 2, 'average_query_length': 20.4, 'max_query_length': 2, 'unique_queries': 10000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 10000}, 'lav': {'number_of_characters': 89318, 'num_samples': 14429, 'num_queries': 1312, 'num_documents': 13117, 'min_document_length': 10, 'average_document_length': 4.81, 'max_document_length': 184, 'unique_documents': 13117, 'min_query_length': 2, 'average_query_length': 20.0, 'max_query_length': 2, 'unique_queries': 1312, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 1312}, 'lit': {'number_of_characters': 126055, 'num_samples': 20200, 'num_queries': 1837, 'num_documents': 18363, 'min_document_length': 9, 'average_document_length': 4.86, 'max_document_length': 420, 'unique_documents': 18363, 'min_query_length': 2, 'average_query_length': 19.99, 'max_query_length': 2, 'unique_queries': 1837, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 1837}, 'mar': {'number_of_characters': 46162, 'num_samples': 8145, 'num_queries': 741, 'num_documents': 7404, 'min_document_length': 14, 'average_document_length': 4.23, 'max_document_length': 184, 'unique_documents': 7404, 'min_query_length': 2, 'average_query_length': 19.98, 'max_query_length': 2, 'unique_queries': 741, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 741}, 'msa': {'number_of_characters': 50848, 'num_samples': 7072, 'num_queries': 643, 'num_documents': 6429, 'min_document_length': 11, 'average_document_length': 5.91, 'max_document_length': 189, 'unique_documents': 6429, 'min_query_length': 2, 'average_query_length': 20.0, 'max_query_length': 2, 'unique_queries': 643, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 643}, 'nld': {'number_of_characters': 1238345, 'num_samples': 380662, 'num_queries': 10000, 'num_documents': 370662, 'min_document_length': 9, 'average_document_length': 1.34, 'max_document_length': 1603, 'unique_documents': 370662, 'min_query_length': 2, 'average_query_length': 74.13, 'max_query_length': 2, 'unique_queries': 10000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 10000}, 'nor': {'number_of_characters': 433342, 'num_samples': 69556, 'num_queries': 6324, 'num_documents': 63232, 'min_document_length': 7, 'average_document_length': 4.85, 'max_document_length': 227, 'unique_documents': 63232, 'min_query_length': 2, 'average_query_length': 20.0, 'max_query_length': 2, 'unique_queries': 6324, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 6324}, 'pol': {'number_of_characters': 902187, 'num_samples': 202515, 'num_queries': 10000, 'num_documents': 192515, 'min_document_length': 10, 'average_document_length': 2.69, 'max_document_length': 1038, 'unique_documents': 192515, 'min_query_length': 2, 'average_query_length': 38.5, 'max_query_length': 2, 'unique_queries': 10000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 10000}, 'por': {'number_of_characters': 918403, 'num_samples': 219353, 'num_queries': 10000, 'num_documents': 209353, 'min_document_length': 10, 'average_document_length': 2.39, 'max_document_length': 1154, 'unique_documents': 209353, 'min_query_length': 2, 'average_query_length': 41.87, 'max_query_length': 2, 'unique_queries': 10000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 10000}, 'ron': {'number_of_characters': 440199, 'num_samples': 65882, 'num_queries': 5990, 'num_documents': 59892, 'min_document_length': 10, 'average_document_length': 5.35, 'max_document_length': 1176, 'unique_documents': 59892, 'min_query_length': 2, 'average_query_length': 20.0, 'max_query_length': 2, 'unique_queries': 5990, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 5990}, 'rus': {'number_of_characters': 1328024, 'num_samples': 397504, 'num_queries': 10000, 'num_documents': 387504, 'min_document_length': 10, 'average_document_length': 1.43, 'max_document_length': 1937, 'unique_documents': 387504, 'min_query_length': 2, 'average_query_length': 77.5, 'max_query_length': 2, 'unique_queries': 10000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 10000}, 'slk': {'number_of_characters': 229346, 'num_samples': 34675, 'num_queries': 3153, 'num_documents': 31522, 'min_document_length': 10, 'average_document_length': 5.28, 'max_document_length': 4317, 'unique_documents': 31522, 'min_query_length': 2, 'average_query_length': 19.99, 'max_query_length': 2, 'unique_queries': 3153, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 3153}, 'slv': {'number_of_characters': 114951, 'num_samples': 17785, 'num_queries': 1617, 'num_documents': 16168, 'min_document_length': 11, 'average_document_length': 5.11, 'max_document_length': 426, 'unique_documents': 16168, 'min_query_length': 2, 'average_query_length': 20.0, 'max_query_length': 2, 'unique_queries': 1617, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 1617}, 'spa': {'number_of_characters': 1758740, 'num_samples': 614661, 'num_queries': 10000, 'num_documents': 604661, 'min_document_length': 10, 'average_document_length': 0.91, 'max_document_length': 559, 'unique_documents': 604661, 'min_query_length': 2, 'average_query_length': 120.93, 'max_query_length': 2, 'unique_queries': 10000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 10000}, 'sqi': {'number_of_characters': 15784, 'num_samples': 2285, 'num_queries': 208, 'num_documents': 2077, 'min_document_length': 11, 'average_document_length': 5.6, 'max_document_length': 141, 'unique_documents': 2077, 'min_query_length': 2, 'average_query_length': 19.97, 'max_query_length': 2, 'unique_queries': 208, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 208}, 'srp': {'number_of_characters': 40489, 'num_samples': 6407, 'num_queries': 583, 'num_documents': 5824, 'min_document_length': 8, 'average_document_length': 4.95, 'max_document_length': 128, 'unique_documents': 5824, 'min_query_length': 2, 'average_query_length': 19.98, 'max_query_length': 2, 'unique_queries': 583, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 583}, 'swe': {'number_of_characters': 779495, 'num_samples': 168738, 'num_queries': 10000, 'num_documents': 158738, 'min_document_length': 10, 'average_document_length': 2.91, 'max_document_length': 257, 'unique_documents': 158738, 'min_query_length': 2, 'average_query_length': 31.75, 'max_query_length': 2, 'unique_queries': 10000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 10000}, 'tgl': {'number_of_characters': 27050, 'num_samples': 4067, 'num_queries': 370, 'num_documents': 3697, 'min_document_length': 13, 'average_document_length': 5.32, 'max_document_length': 198, 'unique_documents': 3697, 'min_query_length': 2, 'average_query_length': 19.98, 'max_query_length': 2, 'unique_queries': 370, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 370}, 'tha': {'number_of_characters': 311898, 'num_samples': 52172, 'num_queries': 4743, 'num_documents': 47429, 'min_document_length': 10, 'average_document_length': 4.58, 'max_document_length': 472, 'unique_documents': 47429, 'min_query_length': 2, 'average_query_length': 20.0, 'max_query_length': 2, 'unique_queries': 4743, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 4743}, 'tur': {'number_of_characters': 706899, 'num_samples': 154846, 'num_queries': 10000, 'num_documents': 144846, 'min_document_length': 7, 'average_document_length': 2.88, 'max_document_length': 703, 'unique_documents': 144846, 'min_query_length': 2, 'average_query_length': 28.97, 'max_query_length': 2, 'unique_queries': 10000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 10000}, 'ukr': {'number_of_characters': 478281, 'num_samples': 75352, 'num_queries': 6851, 'num_documents': 68501, 'min_document_length': 10, 'average_document_length': 4.98, 'max_document_length': 1015, 'unique_documents': 68501, 'min_query_length': 2, 'average_query_length': 20.0, 'max_query_length': 2, 'unique_queries': 6851, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 6851}, 'urd': {'number_of_characters': 18987, 'num_samples': 3053, 'num_queries': 278, 'num_documents': 2775, 'min_document_length': 19, 'average_document_length': 4.84, 'max_document_length': 108, 'unique_documents': 2775, 'min_query_length': 2, 'average_query_length': 19.96, 'max_query_length': 2, 'unique_queries': 278, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 278}, 'uzb': {'number_of_characters': 8789, 'num_samples': 1390, 'num_queries': 127, 'num_documents': 1263, 'min_document_length': 16, 'average_document_length': 4.96, 'max_document_length': 110, 'unique_documents': 1263, 'min_query_length': 2, 'average_query_length': 19.89, 'max_query_length': 2, 'unique_queries': 127, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 127}, 'vie': {'number_of_characters': 787166, 'num_samples': 133972, 'num_queries': 10000, 'num_documents': 123972, 'min_document_length': 9, 'average_document_length': 4.35, 'max_document_length': 1061, 'unique_documents': 123972, 'min_query_length': 2, 'average_query_length': 24.79, 'max_query_length': 2, 'unique_queries': 10000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 10000}, 'zho': {'number_of_characters': 468187, 'num_samples': 142491, 'num_queries': 10000, 'num_documents': 132491, 'min_document_length': 7, 'average_document_length': 1.53, 'max_document_length': 671, 'unique_documents': 132491, 'min_query_length': 2, 'average_query_length': 26.5, 'max_query_length': 2, 'unique_queries': 10000, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 10000}}}} |
 | [WebLINXCandidatesReranking](https://mcgill-nlp.github.io/weblinx) (Xing Han Lù, 2024) | ['eng'] | Reranking | p2p | [Academic, Web, Written] | None | None |
 | [WebQAT2ITRetrieval](https://openaccess.thecvf.com/content/CVPR2022/html/Chang_WebQA_Multihop_and_Multimodal_QA_CVPR_2022_paper.html) (Chang et al., 2022) | ['eng'] | Any2AnyRetrieval | t2it | [Encyclopaedic] | {'test': 405707} | {'test': {'number_of_characters': 34758630, 'num_samples': 405707, 'num_queries': 2511, 'num_documents': 403196, 'min_document_length': 2, 'average_document_length': 85.62, 'max_document_length': 1342, 'unique_documents': 391293, 'num_document_images': 403196, 'min_query_length': 24, 'average_query_length': 93.59, 'max_query_length': 292, 'unique_queries': 2511, 'num_query_images': 0, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.44, 'max_relevant_docs_per_query': 2, 'unique_relevant_docs': 3353}} |
 | [WebQAT2TRetrieval](https://openaccess.thecvf.com/content/CVPR2022/html/Chang_WebQA_Multihop_and_Multimodal_QA_CVPR_2022_paper.html) (Chang et al., 2022) | ['eng'] | Any2AnyRetrieval | t2t | [Encyclopaedic] | {'test': 546912} | {'test': {'number_of_characters': 126324224, 'num_samples': 546912, 'num_queries': 2455, 'num_documents': 544457, 'min_document_length': 57, 'average_document_length': 231.52, 'max_document_length': 959, 'unique_documents': 544457, 'num_document_images': 0, 'min_query_length': 26, 'average_query_length': 109.95, 'max_query_length': 432, 'unique_queries': 2455, 'num_query_images': 0, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 2.04, 'max_relevant_docs_per_query': 4, 'unique_relevant_docs': 4862}} |
@@ -966,7 +967,7 @@ The following tables give you an overview of the tasks in MTEB.
 | apu | Apurinã | Arawakan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | apw | Western Apache | Athabaskan-Eyak-Tlingit | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | apz | Safeyoka | Angan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ara | Arabic | Unclassified | 0 | 2 | 0 | 2 | 12 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 2 | 9 | 2 | 0 | 0 | 0 | 0 | 2 | 0 | 33 |
+| ara | Arabic | Unclassified | 0 | 2 | 0 | 2 | 12 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 2 | 10 | 2 | 0 | 0 | 0 | 0 | 2 | 0 | 34 |
 | arb | Standard Arabic | Afro-Asiatic | 0 | 0 | 0 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
 | are | Western Arrarnta | Pama-Nyungan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | arl | Arabela | Zaparoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -994,7 +995,7 @@ The following tables give you an overview of the tasks in MTEB.
 | awx | Awara | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | ayr | Central Aymara | Aymaran | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
 | azb | South Azerbaijani | Turkic | 0 | 0 | 0 | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| aze | Azerbaijani | Unclassified | 0 | 0 | 0 | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| aze | Azerbaijani | Unclassified | 0 | 0 | 0 | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | azg | San Pedro Amuzgos Amuzgo | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | azj | North Azerbaijani | Turkic | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
 | azz | Highland Puebla Nahuatl | Uto-Aztecan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1013,7 +1014,7 @@ The following tables give you an overview of the tasks in MTEB.
 | bef | Benabena | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | bel | Belarusian | Indo-European | 0 | 0 | 0 | 4 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
 | bem | Bemba (Zambia) | Atlantic-Congo | 0 | 0 | 0 | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| ben | Bengali | Indo-European | 0 | 1 | 0 | 7 | 9 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 29 |
+| ben | Bengali | Indo-European | 0 | 1 | 0 | 7 | 9 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 7 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 30 |
 | beo | Beami | Bosavi | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | ber | Berber (Other) | Unclassified | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | beu | Blagar | Timor-Alor-Pantar | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1067,7 +1068,7 @@ The following tables give you an overview of the tasks in MTEB.
 | bss | Akoose | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | bug | Buginese | Austronesian | 0 | 0 | 0 | 2 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
 | buk | Bugawac | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| bul | Bulgarian | Indo-European | 0 | 1 | 0 | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 14 |
+| bul | Bulgarian | Indo-European | 0 | 1 | 0 | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 1 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 15 |
 | bus | Bokobaru | Mande | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | bvd | Baeggu | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | bvr | Burarra | Maningrida | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1085,7 +1086,7 @@ The following tables give you an overview of the tasks in MTEB.
 | cao | Chácobo | Pano-Tacanan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | cap | Chipaya | Uru-Chipaya | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | car | Galibi Carib | Cariban | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| cat | Catalan | Indo-European | 0 | 0 | 0 | 3 | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
+| cat | Catalan | Indo-European | 0 | 0 | 0 | 3 | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 9 |
 | cav | Cavineña | Pano-Tacanan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | cax | Chiquitano | Chiquitano | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | cbc | Carapana | Tucanoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1099,7 +1100,7 @@ The following tables give you an overview of the tasks in MTEB.
 | cco | Comaltepec Chinantec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | ceb | Cebuano | Austronesian | 0 | 0 | 0 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
 | cek | Eastern Khumi Chin | Sino-Tibetan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ces | Czech | Indo-European | 0 | 1 | 0 | 4 | 5 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 18 |
+| ces | Czech | Indo-European | 0 | 1 | 0 | 4 | 5 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 1 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 19 |
 | cgc | Kagayanen | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | cha | Chamorro | Austronesian | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
 | chd | Highland Oaxaca Chontal | Tequistlatecan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1153,9 +1154,9 @@ The following tables give you an overview of the tasks in MTEB.
 | daa | Dangaléat | Afro-Asiatic | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | dad | Marik | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | dah | Gwahatike | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| dan | Danish | Indo-European | 0 | 2 | 0 | 5 | 9 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 25 |
+| dan | Danish | Indo-European | 0 | 2 | 0 | 5 | 9 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 26 |
 | ded | Dedua | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| deu | German | Indo-European | 0 | 2 | 0 | 6 | 14 | 7 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 7 | 2 | 18 | 4 | 0 | 0 | 0 | 0 | 4 | 0 | 65 |
+| deu | German | Indo-European | 0 | 2 | 0 | 6 | 14 | 7 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 7 | 2 | 19 | 4 | 0 | 0 | 0 | 0 | 4 | 0 | 66 |
 | dgc | Casiguran Dumagat Agta | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | dgr | Dogrib | Athabaskan-Eyak-Tlingit | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | dgz | Daga | Dagan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1180,16 +1181,16 @@ The following tables give you an overview of the tasks in MTEB.
 | dzo | Dzongkha | Sino-Tibetan | 0 | 0 | 0 | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
 | ebk | Eastern Bontok | Unclassified | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | eko | Koti | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ell | Modern Greek (1453-) | Indo-European | 0 | 2 | 0 | 3 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 0 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 18 |
+| ell | Modern Greek (1453-) | Indo-European | 0 | 2 | 0 | 3 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 0 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 19 |
 | emi | Mussau-Emira | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | emp | Northern Emberá | Chocoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| eng | English | Indo-European | 0 | 3 | 55 | 17 | 160 | 20 | 7 | 10 | 22 | 5 | 0 | 3 | 1 | 13 | 9 | 110 | 13 | 2 | 1 | 6 | 7 | 3 | 24 | 491 |
+| eng | English | Indo-European | 0 | 3 | 55 | 17 | 160 | 20 | 7 | 10 | 22 | 5 | 0 | 3 | 1 | 13 | 9 | 111 | 13 | 2 | 1 | 6 | 7 | 3 | 24 | 492 |
 | enq | Enga | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | epo | Esperanto | Artificial Language | 0 | 0 | 0 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | eri | Ogea | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | ese | Ese Ejja | Pano-Tacanan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | esk | Northwest Alaska Inupiatun | Eskimo-Aleut | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| est | Estonian | Uralic | 0 | 1 | 0 | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 9 |
+| est | Estonian | Uralic | 0 | 1 | 0 | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 10 |
 | etr | Edolo | Bosavi | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | eus | Basque | Unclassified | 0 | 0 | 0 | 3 | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
 | ewe | Ewe | Atlantic-Congo | 0 | 0 | 0 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
@@ -1197,14 +1198,14 @@ The following tables give you an overview of the tasks in MTEB.
 | fai | Faiwol | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | fao | Faroese | Indo-European | 0 | 0 | 0 | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
 | far | Fataleka | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fas | Persian | Indo-European | 0 | 1 | 0 | 4 | 28 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 | 2 | 40 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 91 |
+| fas | Persian | Indo-European | 0 | 1 | 0 | 4 | 28 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 | 2 | 41 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 92 |
 | ffm | Maasina Fulfulde | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | fij | Fijian | Austronesian | 0 | 0 | 0 | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
 | fil | Filipino | Austronesian | 0 | 1 | 0 | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| fin | Finnish | Uralic | 0 | 1 | 0 | 3 | 5 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 2 | 5 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 20 |
+| fin | Finnish | Uralic | 0 | 1 | 0 | 3 | 5 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 2 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 21 |
 | fon | Fon | Atlantic-Congo | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
 | for | Fore | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fra | French | Indo-European | 0 | 1 | 0 | 7 | 13 | 8 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 6 | 3 | 15 | 4 | 0 | 1 | 0 | 0 | 4 | 0 | 63 |
+| fra | French | Indo-European | 0 | 1 | 0 | 7 | 13 | 8 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 6 | 3 | 16 | 4 | 0 | 1 | 0 | 0 | 4 | 0 | 64 |
 | fry | Western Frisian | Indo-European | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | fuc | Pulaar | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | fue | Borgu Fulfulde | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1259,9 +1260,9 @@ The following tables give you an overview of the tasks in MTEB.
 | haw | Hawaiian | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | hbo | Ancient Hebrew | Afro-Asiatic | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | hch | Huichol | Uto-Aztecan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| heb | Hebrew | Afro-Asiatic | 0 | 1 | 0 | 4 | 5 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 12 |
+| heb | Hebrew | Afro-Asiatic | 0 | 1 | 0 | 4 | 5 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 13 |
 | heg | Helong | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hin | Hindi | Indo-European | 0 | 1 | 0 | 9 | 12 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 2 | 10 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 40 |
+| hin | Hindi | Indo-European | 0 | 1 | 0 | 9 | 12 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 2 | 11 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 41 |
 | hix | Hixkaryána | Cariban | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | hla | Halia | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | hlt | Matu Chin | Sino-Tibetan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1271,12 +1272,12 @@ The following tables give you an overview of the tasks in MTEB.
 | hns | Caribbean Hindustani | Indo-European | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | hop | Hopi | Uto-Aztecan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | hot | Hote | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hrv | Croatian | Indo-European | 0 | 1 | 0 | 4 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 11 |
+| hrv | Croatian | Indo-European | 0 | 1 | 0 | 4 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 12 |
 | hsb | Upper Sorbian | Indo-European | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | hto | Minica Huitoto | Huitotoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | hub | Huambisa | Chicham | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | hui | Huli | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| hun | Hungarian | Uralic | 0 | 1 | 0 | 5 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 13 |
+| hun | Hungarian | Uralic | 0 | 1 | 0 | 5 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 14 |
 | hus | Huastec | Mayan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | huu | Murui Huitoto | Huitotoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | huv | San Mateo Del Mar Huave | Huavean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1293,13 +1294,13 @@ The following tables give you an overview of the tasks in MTEB.
 | imo | Imbongu | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | ina | Interlingua (International Auxiliary Language Association) | Artificial Language | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | inb | Inga | Quechuan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ind | Indonesian | Austronesian | 0 | 3 | 0 | 6 | 7 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 24 |
+| ind | Indonesian | Austronesian | 0 | 3 | 0 | 6 | 7 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 5 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 25 |
 | ino | Inoke-Yate | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | iou | Tuma-Irumu | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | ipi | Ipili | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| isl | Icelandic | Indo-European | 0 | 0 | 0 | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 9 |
+| isl | Icelandic | Indo-European | 0 | 0 | 0 | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 10 |
 | isn | Isanzu | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| ita | Italian | Indo-European | 0 | 1 | 0 | 5 | 9 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 1 | 5 | 3 | 0 | 0 | 0 | 0 | 4 | 0 | 32 |
+| ita | Italian | Indo-European | 0 | 1 | 0 | 5 | 9 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 1 | 6 | 3 | 0 | 0 | 0 | 0 | 4 | 0 | 33 |
 | iws | Sepik Iwam | Sepik | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | ixl | Ixil | Mayan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | jac | Popti' | Mayan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1310,7 +1311,7 @@ The following tables give you an overview of the tasks in MTEB.
 | jid | Bu (Kaduna State) | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | jiv | Shuar | Chicham | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | jni | Janji | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| jpn | Japanese | Japonic | 0 | 3 | 0 | 5 | 8 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 3 | 13 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 39 |
+| jpn | Japanese | Japonic | 0 | 3 | 0 | 5 | 8 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 3 | 14 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 40 |
 | jvn | Caribbean Javanese | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | kab | Kabyle | Afro-Asiatic | 0 | 0 | 0 | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
 | kac | Kachin | Sino-Tibetan | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
@@ -1318,8 +1319,8 @@ The following tables give you an overview of the tasks in MTEB.
 | kan | Kannada | Dravidian | 0 | 0 | 0 | 6 | 7 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 19 |
 | kaq | Capanahua | Pano-Tacanan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | kas | Kashmiri | Indo-European | 0 | 0 | 0 | 3 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
-| kat | Georgian | Kartvelian | 0 | 0 | 0 | 4 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 10 |
-| kaz | Kazakh | Turkic | 0 | 0 | 0 | 3 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
+| kat | Georgian | Kartvelian | 0 | 0 | 0 | 4 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 11 |
+| kaz | Kazakh | Turkic | 0 | 0 | 0 | 3 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 9 |
 | kbc | Kadiwéu | Guaicuruan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | kbh | Camsá | Unclassified | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | kbm | Iwal | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1366,7 +1367,7 @@ The following tables give you an overview of the tasks in MTEB.
 | knj | Western Kanjobal | Mayan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | knv | Tabo | Unclassified | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | kon | Kongo | Unclassified | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| kor | Korean | Koreanic | 0 | 2 | 0 | 4 | 8 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 3 | 1 | 9 | 3 | 0 | 0 | 0 | 0 | 2 | 0 | 34 |
+| kor | Korean | Koreanic | 0 | 2 | 0 | 4 | 8 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 3 | 1 | 10 | 3 | 0 | 0 | 0 | 0 | 2 | 0 | 35 |
 | kos | Kosraean | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | kpf | Komba | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | kpg | Kapingamarangi | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1405,7 +1406,7 @@ The following tables give you an overview of the tasks in MTEB.
 | lac | Lacandon | Mayan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | lao | Lao | Tai-Kadai | 0 | 0 | 0 | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | lat | Latin | Indo-European | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| lav | Latvian | Indo-European | 0 | 0 | 0 | 1 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
+| lav | Latvian | Indo-European | 0 | 0 | 0 | 1 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
 | lbb | Label | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | lbk | Central Bontok | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | lcm | Tungag | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1418,7 +1419,7 @@ The following tables give you an overview of the tasks in MTEB.
 | lij | Ligurian | Indo-European | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
 | lim | Limburgan | Indo-European | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
 | lin | Lingala | Atlantic-Congo | 0 | 0 | 0 | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
-| lit | Lithuanian | Indo-European | 0 | 0 | 0 | 4 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
+| lit | Lithuanian | Indo-European | 0 | 0 | 0 | 4 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 9 |
 | llg | Lole | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | lmo | Lombard | Indo-European | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
 | ltg | Latgalian | Unclassified | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
@@ -1438,7 +1439,7 @@ The following tables give you an overview of the tasks in MTEB.
 | mal | Malayalam | Dravidian | 0 | 0 | 0 | 7 | 7 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 19 |
 | mam | Mam | Mayan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | maq | Chiquihuitlán Mazatec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| mar | Marathi | Indo-European | 0 | 0 | 0 | 7 | 6 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 2 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 20 |
+| mar | Marathi | Indo-European | 0 | 0 | 0 | 7 | 6 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 3 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 21 |
 | mau | Huautla Mazatec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | mav | Sateré-Mawé | Tupian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | max | North Moluccan Malay | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1511,7 +1512,7 @@ The following tables give you an overview of the tasks in MTEB.
 | mqb | Mbuko | Afro-Asiatic | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | mqj | Mamasa | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | mri | Maori | Austronesian | 0 | 1 | 0 | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
-| msa | Malay (macrolanguage) | Unclassified | 0 | 0 | 0 | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| msa | Malay (macrolanguage) | Unclassified | 0 | 0 | 0 | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | msb | Masbatenyo | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | msc | Sankaran Maninka | Mande | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | msk | Mansaka | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1572,7 +1573,7 @@ The following tables give you an overview of the tasks in MTEB.
 | nij | Ngaju | Austronesian | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
 | nin | Ninzo | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | nko | Nkonya | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nld | Dutch | Indo-European | 0 | 1 | 0 | 6 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 1 | 29 | 2 | 0 | 0 | 0 | 0 | 4 | 0 | 52 |
+| nld | Dutch | Indo-European | 0 | 1 | 0 | 6 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 1 | 30 | 2 | 0 | 0 | 0 | 0 | 4 | 0 | 53 |
 | nlg | Gela | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | nna | Nyangumarta | Pama-Nyungan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | nno | Norwegian Nynorsk | Unclassified | 0 | 0 | 0 | 4 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
@@ -1581,7 +1582,7 @@ The following tables give you an overview of the tasks in MTEB.
 | nob | Norwegian Bokmål | Unclassified | 0 | 0 | 0 | 4 | 7 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 19 |
 | noe | Nimadi | Indo-European | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | nop | Numanggang | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| nor | Norwegian | Indo-European | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
+| nor | Norwegian | Indo-European | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | not | Nomatsiguenga | Arawakan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | nou | Ewage-Notu | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | nov | Novial | Artificial Language | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1642,9 +1643,9 @@ The following tables give you an overview of the tasks in MTEB.
 | poe | San Juan Atzingo Popoloca | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | poh | Poqomchi' | Mayan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | poi | Highland Popoluca | Mixe-Zoque | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| pol | Polish | Indo-European | 0 | 1 | 0 | 4 | 11 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 4 | 0 | 18 | 4 | 0 | 0 | 0 | 0 | 2 | 0 | 49 |
+| pol | Polish | Indo-European | 0 | 1 | 0 | 4 | 11 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 4 | 0 | 19 | 4 | 0 | 0 | 0 | 0 | 2 | 0 | 50 |
 | pon | Pohnpeian | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| por | Portuguese | Indo-European | 0 | 1 | 0 | 4 | 9 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 3 | 1 | 5 | 3 | 0 | 0 | 0 | 0 | 2 | 0 | 31 |
+| por | Portuguese | Indo-European | 0 | 1 | 0 | 4 | 9 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 3 | 1 | 6 | 3 | 0 | 0 | 0 | 0 | 2 | 0 | 32 |
 | poy | Pogolo | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | ppo | Folopa | Teberan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | prf | Paranan | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1683,7 +1684,7 @@ The following tables give you an overview of the tasks in MTEB.
 | rmc | Carpathian Romani | Indo-European | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | rmy | Vlax Romani | Indo-European | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | rom | Romany | Unclassified | 0 | 0 | 0 | 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| ron | Romanian | Indo-European | 0 | 1 | 0 | 5 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 19 |
+| ron | Romanian | Indo-European | 0 | 1 | 0 | 5 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 1 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 20 |
 | roo | Rotokas | North Bougainville | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | rop | Kriol | Indo-European | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | row | Dela-Oenale | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1691,7 +1692,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ruf | Luguru | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | rug | Roviana | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | run | Rundi | Atlantic-Congo | 0 | 0 | 0 | 1 | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
-| rus | Russian | Indo-European | 0 | 2 | 0 | 5 | 13 | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 4 | 2 | 16 | 4 | 0 | 0 | 0 | 0 | 2 | 0 | 56 |
+| rus | Russian | Indo-European | 0 | 2 | 0 | 5 | 13 | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 4 | 2 | 17 | 4 | 0 | 0 | 0 | 0 | 2 | 0 | 57 |
 | rwo | Rawa | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | sab | Buglere | Chibchan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | sag | Sango | Atlantic-Congo | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
@@ -1714,9 +1715,9 @@ The following tables give you an overview of the tasks in MTEB.
 | sim | Mende (Papua New Guinea) | Sepik | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | sin | Sinhala | Indo-European | 0 | 0 | 0 | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
 | sja | Epena | Chocoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| slk | Slovak | Indo-European | 0 | 0 | 0 | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 12 |
+| slk | Slovak | Indo-European | 0 | 0 | 0 | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 13 |
 | sll | Salt-Yui | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| slv | Slovenian | Indo-European | 0 | 0 | 0 | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 10 |
+| slv | Slovenian | Indo-European | 0 | 0 | 0 | 3 | 4 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 11 |
 | smk | Bolinao | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | smo | Samoan | Austronesian | 0 | 0 | 0 | 2 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
 | sna | Shona | Atlantic-Congo | 0 | 0 | 0 | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
@@ -1730,18 +1731,18 @@ The following tables give you an overview of the tasks in MTEB.
 | soq | Kanasi | Dagan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | sot | Southern Sotho | Atlantic-Congo | 0 | 0 | 0 | 1 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | soy | Miyobe | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| spa | Spanish | Indo-European | 0 | 2 | 0 | 4 | 13 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 3 | 2 | 13 | 4 | 0 | 0 | 0 | 0 | 4 | 0 | 50 |
+| spa | Spanish | Indo-European | 0 | 2 | 0 | 4 | 13 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 3 | 2 | 14 | 4 | 0 | 0 | 0 | 0 | 4 | 0 | 51 |
 | spl | Selepet | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | spm | Akukem | Ramu | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | spp | Supyire Senoufo | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | sps | Saposa | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | spy | Sabaot | Nilotic | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| sqi | Albanian | Unclassified | 0 | 0 | 0 | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
+| sqi | Albanian | Unclassified | 0 | 0 | 0 | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
 | srd | Sardinian | Unclassified | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
 | sri | Siriano | Tucanoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | srm | Saramaccan | Indo-European | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | srn | Sranan Tongo | Indo-European | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
-| srp | Serbian | Indo-European | 0 | 0 | 0 | 4 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 9 |
+| srp | Serbian | Indo-European | 0 | 0 | 0 | 4 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 10 |
 | srq | Sirionó | Tupian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | ssd | Siroi | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | ssg | Seimat | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1755,7 +1756,7 @@ The following tables give you an overview of the tasks in MTEB.
 | suz | Sunwar | Sino-Tibetan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | svk | Slovakian Sign Language | Sign Language | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | swa | Swahili (macrolanguage) | Atlantic-Congo | 0 | 1 | 0 | 1 | 7 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 16 |
-| swe | Swedish | Indo-European | 0 | 1 | 0 | 4 | 8 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 1 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 23 |
+| swe | Swedish | Indo-European | 0 | 1 | 0 | 4 | 8 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 1 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 24 |
 | swg | Swabian | Indo-European | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | swh | Swahili (individual language) | Atlantic-Congo | 0 | 0 | 0 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
 | swp | Suau | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1785,10 +1786,10 @@ The following tables give you an overview of the tasks in MTEB.
 | tew | Tewa (USA) | Kiowa-Tanoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | tfr | Teribe | Chibchan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | tgk | Tajik | Indo-European | 0 | 0 | 0 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
-| tgl | Tagalog | Austronesian | 0 | 0 | 0 | 3 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
+| tgl | Tagalog | Austronesian | 0 | 0 | 0 | 3 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 9 |
 | tgo | Sudest | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | tgp | Tangoa | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tha | Thai | Tai-Kadai | 0 | 1 | 0 | 4 | 8 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 22 |
+| tha | Thai | Tai-Kadai | 0 | 1 | 0 | 4 | 8 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 7 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 23 |
 | tif | Tifal | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | tim | Timbe | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | tir | Tigrinya | Afro-Asiatic | 0 | 0 | 0 | 2 | 2 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 8 |
@@ -1827,7 +1828,7 @@ The following tables give you an overview of the tasks in MTEB.
 | tuk | Turkmen | Turkic | 0 | 0 | 0 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | tum | Tumbuka | Atlantic-Congo | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
 | tuo | Tucano | Tucanoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| tur | Turkish | Turkic | 0 | 3 | 0 | 4 | 7 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 3 | 2 | 0 | 0 | 0 | 0 | 2 | 0 | 25 |
+| tur | Turkish | Turkic | 0 | 3 | 0 | 4 | 7 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 4 | 2 | 0 | 0 | 0 | 0 | 2 | 0 | 26 |
 | tvk | Southeast Ambrym | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | twi | Twi | Unclassified | 0 | 0 | 0 | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 6 |
 | txq | Tii | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1841,14 +1842,14 @@ The following tables give you an overview of the tasks in MTEB.
 | ubu | Umbu-Ungu | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | udu | Uduk | Koman | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | uig | Uighur | Turkic | 0 | 0 | 0 | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
-| ukr | Ukrainian | Indo-European | 0 | 1 | 0 | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 9 |
+| ukr | Ukrainian | Indo-European | 0 | 1 | 0 | 4 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 10 |
 | uli | Ulithian | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | ulk | Meriam Mir | Eastern Trans-Fly | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | umb | Umbundu | Atlantic-Congo | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
 | upv | Uripiv-Wala-Rano-Atchin | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | ura | Urarina | Unclassified | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | urb | Urubú-Kaapor | Tupian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| urd | Urdu | Indo-European | 0 | 0 | 0 | 7 | 8 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 19 |
+| urd | Urdu | Indo-European | 0 | 0 | 0 | 7 | 8 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 20 |
 | uri | Urim | Nuclear Torricelli | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | urt | Urat | Nuclear Torricelli | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | urw | Sop | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1856,12 +1857,12 @@ The following tables give you an overview of the tasks in MTEB.
 | usp | Uspanteco | Mayan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | uvh | Uri | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | uvl | Lote | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| uzb | Uzbek | Unclassified | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
+| uzb | Uzbek | Unclassified | 0 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
 | uzn | Northern Uzbek | Turkic | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
 | vec | Venetian | Indo-European | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
 | ven | Venda | Atlantic-Congo | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 |
 | vid | Vidunda | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| vie | Vietnamese | Austroasiatic | 0 | 2 | 0 | 5 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 20 |
+| vie | Vietnamese | Austroasiatic | 0 | 2 | 0 | 5 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 21 |
 | viv | Iduna | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | vmy | Ayautla Mazatec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | waj | Waffa | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1937,7 +1938,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zaw | Mitla Zapotec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zca | Coatecas Altas Zapotec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zga | Kinga | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| zho | Chinese | Unclassified | 0 | 2 | 0 | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 1 | 13 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 23 |
+| zho | Chinese | Unclassified | 0 | 2 | 0 | 2 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 2 | 1 | 14 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 24 |
 | zia | Zia | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | ziw | Zigula | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zlm | Malay (individual language) | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1956,7 +1957,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | Yatee Zapotec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zul | Zulu | Atlantic-Congo | 0 | 0 | 0 | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
 | zyp | Zyphe Chin | Sino-Tibetan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| Total | None | None | None | 0 | 55 | 55 | 1398 | 836 | 313 | 7 | 10 | 22 | 5 | 0 | 3 | 28 | 91 | 56 | 536 | 88 | 2 | 2 | 6 | 7 | 37 | 24 |
+| Total | None | None | None | 0 | 55 | 55 | 1398 | 836 | 313 | 7 | 10 | 22 | 5 | 0 | 3 | 28 | 91 | 56 | 585 | 88 | 2 | 2 | 6 | 7 | 37 | 24 |
 <!-- TASK LANG TABLE END -->
 
 </details>
