@@ -291,7 +291,7 @@ class AbsTask(ABC):
         modalities: A list of modalities to filter by. If None, the task is returned unchanged.
         exclusive_modality_filter: If True, only keep tasks where ALL filter modalities are included in the
             task's modalities and ALL task modalities are in filter modalities (exact match).
-            If False (default), keep tasks if ANY of the task's modalities match the filter modalities.
+            If False, keep tasks if _any_ of the task's modalities match the filter modalities.
         """
         if modalities is None:
             return self
