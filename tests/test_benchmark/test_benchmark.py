@@ -8,8 +8,8 @@ from unittest.mock import patch
 
 import numpy as np
 import pytest
-import torch
 from sentence_transformers import SentenceTransformer
+from torch.utils.data import DataLoader
 
 import mteb
 import mteb.overview
@@ -126,12 +126,14 @@ def test_prompt_name_passed_to_all_encodes(task_name: str | AbsTask, tmp_path: P
     )
 
     class MockEncoderWithInstructions(mteb.Encoder):
-        def encode(self, sentences, prompt_name: str | None = None, **kwargs):
+        def encode(
+            self, sentences: DataLoader, prompt_name: str | None = None, **kwargs
+        ):
             assert prompt_name == _task_name
-            return np.zeros((len(sentences), 10))
+            return np.zeros((len(sentences.dataset), 10))
 
     class EncoderWithoutInstructions(SentenceTransformer):
-        def encode(self, sentences, **kwargs):
+        def encode(self, sentences: DataLoader, **kwargs):
             assert kwargs["prompt_name"] is None
             return super().encode(sentences, **kwargs)
 
@@ -165,13 +167,13 @@ def test_encode_kwargs_passed_to_all_encodes(task_name: str | AbsTask, tmp_path:
     my_encode_kwargs = {"no_one_uses_this_args": "but_its_here"}
 
     class MockEncoderWithKwargs(mteb.Encoder):
-        def encode(self, sentences, task_name: str | None = None, **kwargs):
+        def encode(self, sentences: DataLoader, task_name: str | None = None, **kwargs):
             assert "no_one_uses_this_args" in kwargs
             assert (
                 my_encode_kwargs["no_one_uses_this_args"]
                 == kwargs["no_one_uses_this_args"]
             )
-            return np.zeros((len(sentences), 10))
+            return np.zeros((len(sentences.dataset), 10))
 
     if isinstance(task_name, AbsTask):
         tasks = [task_name]
@@ -257,9 +259,11 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
     class MockEncoderWithPrompts(mteb.Encoder):
         prompts = {}
 
-        def encode(self, sentences, prompt_name: str | None = None, **kwargs):
+        def encode(
+            self, sentences: DataLoader, prompt_name: str | None = None, **kwargs
+        ):
             assert prompt_name == to_compare
-            return np.zeros((len(sentences), 10))
+            return np.zeros((len(sentences.dataset), 10))
 
     eval = mteb.MTEB(tasks=tasks)
 
@@ -276,9 +280,11 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
     class MockEncoderWithExistingPrompts(mteb.Encoder):
         prompts = {to_compare: to_compare}
 
-        def encode(self, sentences, prompt_name: str | None = None, **kwargs):
+        def encode(
+            self, sentences: DataLoader, prompt_name: str | None = None, **kwargs
+        ):
             assert prompt_name == to_compare
-            return np.zeros((len(sentences), 10))
+            return np.zeros((len(sentences.dataset), 10))
 
     eval = mteb.MTEB(tasks=tasks)
 
@@ -323,18 +329,22 @@ def test_model_query_passage_prompts_task_type(
     class MockEncoderWithPrompts(mteb.Encoder):
         is_query = True
 
-        def encode(self, sentences, prompt_name: str | None = None, **kwargs):
+        def encode(
+            self, sentences: DataLoader, prompt_name: str | None = None, **kwargs
+        ):
             check_prompt(prompt_name, self.is_query)
             self.is_query = not self.is_query
-            return np.zeros((len(sentences), 10))
+            return np.zeros((len(sentences.dataset), 10))
 
     class MockSentenceEncoderWithPrompts(MockSentenceTransformer):
         is_query = True
 
-        def encode(self, sentences, prompt_name: str | None = None, *args, **kwargs):
+        def encode(
+            self, sentences: DataLoader, prompt_name: str | None = None, **kwargs
+        ):
             check_prompt(prompt_name, self.is_query)
             self.is_query = not self.is_query
-            return torch.randn(len(sentences), 10).numpy()
+            return np.zeros((len(sentences.dataset), 10))
 
     eval = mteb.MTEB(tasks=tasks)
     model = MockSentenceTransformerWrapper(

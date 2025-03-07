@@ -1,16 +1,17 @@
 from __future__ import annotations
 
 import logging
+from abc import ABC
 from typing import Callable, get_args
 
 import mteb
 from mteb.abstasks.TaskMetadata import TASK_TYPE
-from mteb.encoder_interface import PromptType
+from mteb.encoder_interface import Encoder, PromptType
 
 logger = logging.getLogger(__name__)
 
 
-class Wrapper:
+class Wrapper(Encoder, ABC):
     """Base class to indicate that this is a wrapper for a model.
     Also contains some utility functions for wrappers for working with prompts and instructions.
     """

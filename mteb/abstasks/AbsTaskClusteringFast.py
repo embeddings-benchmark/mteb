@@ -11,6 +11,7 @@ import sklearn
 import sklearn.cluster
 from datasets import Dataset, DatasetDict
 from sklearn.metrics.cluster import v_measure_score
+from torch.utils.data import DataLoader
 
 from mteb.encoder_interface import Encoder
 
@@ -144,7 +145,7 @@ class AbsTaskClusteringFast(AbsTask):
     def _evaluate_subset(
         self,
         model: Encoder,
-        dataset: DatasetDict,
+        dataset: Dataset,
         *,
         encode_kwargs: dict[str, Any] = {},
         **kwargs: Any,
@@ -176,8 +177,11 @@ class AbsTaskClusteringFast(AbsTask):
             )
             downsampled_dataset = dataset.select(example_indices)  # type: ignore
 
+        downsampled_dataset = downsampled_dataset.rename_column(
+            original_column_name="sentences", new_column_name="text"
+        )
         embeddings = model.encode(
-            downsampled_dataset["sentences"],  # type: ignore
+            DataLoader(downsampled_dataset),
             task_name=self.metadata.name,
             **encode_kwargs,
         )

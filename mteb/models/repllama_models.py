@@ -7,9 +7,10 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 import tqdm
+from torch.utils.data import DataLoader
 from transformers import AutoModel, AutoTokenizer
 
-from mteb.encoder_interface import Encoder, PromptType
+from mteb.encoder_interface import BatchedInput, Encoder, PromptType
 from mteb.model_meta import (
     ModelMeta,
     ScoringFunction,
@@ -83,7 +84,7 @@ class RepLLaMAWrapper(Wrapper):
 
     def encode(
         self,
-        sentences: list[str],
+        inputs: DataLoader[BatchedInput],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
@@ -93,6 +94,7 @@ class RepLLaMAWrapper(Wrapper):
         all_embeddings = []
         prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
         prompt = self.model_prompts.get(prompt_name)
+        sentences = [text for batch in inputs for text in batch["text"]]
 
         if prompt:
             if prompt_type == "queries":

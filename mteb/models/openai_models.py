@@ -6,7 +6,9 @@ from typing import Any
 
 import numpy as np
 import tqdm
+from torch.utils.data import DataLoader
 
+from mteb.encoder_interface import BatchedInput
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.wrapper import Wrapper
 from mteb.requires_package import requires_package
@@ -43,7 +45,7 @@ class OpenAIWrapper(Wrapper):
         truncated_sentence = self._encoding.encode(text)[: self._max_tokens]
         return self._encoding.decode(truncated_sentence)
 
-    def encode(self, sentences: list[str], **kwargs: Any) -> np.ndarray:
+    def encode(self, inputs: DataLoader[BatchedInput], **kwargs: Any) -> np.ndarray:
         requires_package(self, "openai", "Openai text embedding")
 
         from openai import NotGiven
@@ -52,6 +54,7 @@ class OpenAIWrapper(Wrapper):
             logger.warning(
                 "Reducing embedding size available only for text-embedding-3-* models"
             )
+        sentences = [text for batch in inputs for text in batch["text"]]
 
         trimmed_sentences = []
         for sentence in sentences:

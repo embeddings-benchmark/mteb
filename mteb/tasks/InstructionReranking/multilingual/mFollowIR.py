@@ -125,7 +125,7 @@ def load_data(
         for row in top_ranked_data["top_ranked"]:
             top_ranked[lang][EVAL_SPLIT][row["query-id"]] = row["corpus-ids"]
 
-    return (corpus, queries, instructions, relevant_docs, top_ranked)
+    return corpus, queries, instructions, relevant_docs, top_ranked
 
 
 class mFollowIRCrossLingual(AbsTaskRetrieval):
@@ -137,7 +137,7 @@ class mFollowIRCrossLingual(AbsTaskRetrieval):
             "path": "jhu-clsp/mFollowIR-cross-lingual-parquet-mteb",
             "revision": "6b01566619233a0c35d135123510b6b02c258ff5",
         },
-        type="Retrieval",
+        type="InstructionReranking",
         category="t2t",
         modalities=["text"],
         eval_splits=[EVAL_SPLIT],
@@ -188,7 +188,7 @@ class mFollowIR(AbsTaskRetrieval):
             "path": "jhu-clsp/mFollowIR-parquet-mteb",
             "revision": "09eecbe45c54b4a6dfb8e68e345cae77337768e2",
         },
-        type="Retrieval",
+        type="InstructionReranking",
         category="t2t",
         modalities=["text"],
         eval_splits=[EVAL_SPLIT],
