@@ -152,22 +152,11 @@ def test_all_tasks_fetch():
     mteb.MTEB.mteb_tasks()
 
 
-def test_get_tasks_with_exclusive_modality_filter():
+@pytest.mark.parametrize("modalities", [["text"], ["image"], ["text", "image"])
+def test_get_tasks_with_exclusive_modality_filter(modalities):
     """Test exclusive_modality_filter with actual tasks (if available)"""
     text_tasks_exclusive = get_tasks(
-        modalities=["text"], exclusive_modality_filter=True
+        modalities=modalities, exclusive_modality_filter=True
     )
     for task in text_tasks_exclusive:
-        assert set(task.modalities) == {"text"}
-
-    image_tasks_exclusive = get_tasks(
-        modalities=["image"], exclusive_modality_filter=True
-    )
-    for task in image_tasks_exclusive:
-        assert set(task.modalities) == {"image"}
-
-    text_and_image_tasks_exclusive = get_tasks(
-        modalities=["text", "image"], exclusive_modality_filter=True
-    )
-    for task in text_and_image_tasks_exclusive:
-        assert set(task.modalities) == {"text", "image"}
+        assert set(task.modalities) == set(modalities)
