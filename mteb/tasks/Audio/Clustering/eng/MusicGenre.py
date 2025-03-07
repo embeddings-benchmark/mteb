@@ -19,7 +19,7 @@ class MusicGenreClustering(AbsTaskAudioClustering):
             "revision": "2ed42a866b5155eb138eb3dc1e68515ccf3c8a50",
         },
         type="AudioClustering",
-        category="a2t",
+        category="a2a",
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="cluster_accuracy",
