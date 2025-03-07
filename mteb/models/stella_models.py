@@ -6,6 +6,41 @@ from mteb.model_meta import ModelMeta
 from mteb.models.instruct_wrapper import instruct_wrapper
 from mteb.models.nvidia_models import nvidia_training_datasets
 
+stella_zh_datasets = {
+    "BQ": [],
+    "LCQMC": [],
+    "PAWSX": [],
+    "STS-B": [],
+    "DuRetrieval": [],
+    "AFQMC": [],
+    "Cmnli": [],
+    "Ocnli": [],
+}
+
+# Derived from conversation:
+
+# The model information in Chinese is as follows:
+# infgrad/stella-base-zh：based on piccolo-base-zh, using supervised data to train, the data is wudao_base_200GB[1]、m3e[2] and simclue[3]
+# infgrad/stella-large-zh：based on piccolo-large-zh, using supervised data to train, the data is wudao_base_200GB[1]、m3e[2] and simclue[3]
+# infgrad/stella-base-zh-v2：based on infgrad/stella-base-zh, using supervised data to train, the data is wudao_base_200GB[1]、m3e[2] and simclue[3]
+# infgrad/stella-large-zh-v2：based on infgrad/stella-large-zh, using supervised data to train, the data is wudao_base_200GB[1]、m3e[2] and simclue[3]
+# For infgrad/stella-mrl-large-zh-v3.5-1792d， infgrad/stella-base-zh-v3-1792d, or other models, I forgot their details, what I remember is that they are distilled models, and using skypile[4] and matrix[5].
+# Finally, m3e[2] and simclue[3] has a overlap with C-MTEB, specifically：
+# BQ
+# lcqmc
+# paws-x
+# dureader_robust
+# AFQMC
+# STSB
+# CMNLI
+# OCNLI
+# Totally 8 training datasets are also CMTEB testset.
+# https://www.scidb.cn/en/detail?dataSetId=c6a3fe684227415a9db8e21bac4a15ab
+# https://github.com/wangyuxinwhy/uniem
+# https://github.com/CLUEbenchmark/SimCLUE
+# https://huggingface.co/datasets/Skywork/SkyPile-150B
+# https://huggingface.co/datasets/m-a-p/Matrix
+
 stella_en_400M = ModelMeta(
     # https://huggingface.co/dunzhang/stella_en_400M_v5/discussions/21#671a6205ac1e2416090f2bf4
     loader=partial(  # type: ignore
@@ -83,6 +118,7 @@ stella_large_zh_v3_1792d = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={
+        **stella_zh_datasets
         # Not in MTEB:
         # - infgrad/dialogue_rewrite_llm
         # - infgrad/retrieval_data_llm
@@ -109,6 +145,7 @@ stella_base_zh_v3_1792d = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={
+        **stella_zh_datasets
         # Not in MTEB:
         # - infgrad/dialogue_rewrite_llm
         # - infgrad/retrieval_data_llm
@@ -135,7 +172,7 @@ stella_mrl_large_zh_v3_5_1792d = ModelMeta(
     adapted_from="dunzhang/stella-large-zh-v3-1792d",
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,  # Not specified
+    training_datasets=stella_zh_datasets,  # Not specified
 )
 
 zpoint_large_embedding_zh = ModelMeta(
