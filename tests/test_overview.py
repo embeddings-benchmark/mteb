@@ -5,7 +5,7 @@ import pytest
 import mteb
 from mteb import get_task, get_tasks
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.abstasks.TaskMetadata import TASK_DOMAIN, TASK_TYPE
+from mteb.abstasks.TaskMetadata import MODALITIES, TASK_DOMAIN, TASK_TYPE
 from mteb.overview import MTEBTasks
 
 
@@ -15,15 +15,35 @@ def test_get_tasks_size_differences():
     assert len(get_tasks()) >= len(get_tasks(script=["Latn"]))
     assert len(get_tasks()) >= len(get_tasks(domains=["Legal"]))
     assert len(get_tasks()) >= len(get_tasks(languages=["eng", "deu"]))
+    assert len(get_tasks()) >= len(get_tasks(modalities=["text"]))
+    assert len(get_tasks()) >= len(get_tasks(modalities=["image"]))
     assert len(get_tasks(languages=["eng", "deu"])) >= len(
         get_tasks(languages=["eng", "deu"])
+    )
+    assert len(get_tasks(modalities=["text", "image"])) >= len(
+        get_tasks(modalities=["text"])
+    )
+    assert len(get_tasks(modalities=["text", "image"])) >= len(
+        get_tasks(modalities=["image"])
     )
 
 
 @pytest.mark.parametrize("task_name", ["BornholmBitextMining", "CQADupstackRetrieval"])
 @pytest.mark.parametrize("eval_splits", [["test"], None])
-def test_get_task(task_name: str, eval_splits: list[str] | None):
-    task = get_task(task_name, eval_splits=eval_splits)
+@pytest.mark.parametrize("modalities", [["text"], None])
+@pytest.mark.parametrize("exclusive_modality_filter", [True, False])
+def test_get_task(
+    task_name: str,
+    eval_splits: list[str] | None,
+    modalities: list[MODALITIES] | None,
+    exclusive_modality_filter: bool,
+):
+    task = get_task(
+        task_name,
+        eval_splits=eval_splits,
+        modalities=modalities,
+        exclusive_modality_filter=exclusive_modality_filter,
+    )
     assert isinstance(task, AbsTask)
     assert task.metadata.name == task_name
     if eval_splits:
@@ -32,18 +52,31 @@ def test_get_task(task_name: str, eval_splits: list[str] | None):
     else:
         assert task.eval_splits == task.metadata.eval_splits
 
+    if modalities:
+        if task.modalities:
+            if exclusive_modality_filter:
+                # With exclusive filter, task modalities must exactly match the requested modalities
+                assert set(task.modalities) == set(modalities)
+            else:
+                # With inclusive filter, task modalities must have overlap with requested modalities
+                assert any(mod in task.modalities for mod in modalities)
+
 
 @pytest.mark.parametrize("languages", [["eng", "deu"], ["eng"], None])
 @pytest.mark.parametrize("script", [["Latn"], ["Cyrl"], None])
 @pytest.mark.parametrize("domains", [["Legal"], ["Medical", "Non-fiction"], None])
 @pytest.mark.parametrize("task_types", [["Classification"], ["Clustering"], None])
 @pytest.mark.parametrize("exclude_superseded_datasets", [True, False])
+@pytest.mark.parametrize("modalities", [["text"], ["image"], ["text", "image"], None])
+@pytest.mark.parametrize("exclusive_modality_filter", [True, False])
 def test_get_tasks(
     languages: list[str],
     script: list[str],
     domains: list[TASK_DOMAIN],
     task_types: list[TASK_TYPE] | None,
     exclude_superseded_datasets: bool,
+    modalities: list[MODALITIES] | None,
+    exclusive_modality_filter: bool,
 ):
     tasks = mteb.get_tasks(
         languages=languages,
@@ -51,6 +84,8 @@ def test_get_tasks(
         domains=domains,
         task_types=task_types,
         exclude_superseded=exclude_superseded_datasets,
+        modalities=modalities,
+        exclusive_modality_filter=exclusive_modality_filter,
     )
 
     for task in tasks:
@@ -67,6 +102,11 @@ def test_get_tasks(
             assert task.metadata.type in task_types
         if exclude_superseded_datasets:
             assert task.superseded_by is None
+        if modalities:
+            if exclusive_modality_filter:
+                assert set(task.modalities) == set(modalities)
+            else:
+                assert any(mod in task.modalities for mod in modalities)
 
 
 def test_get_tasks_filtering():
@@ -90,11 +130,13 @@ def test_get_tasks_filtering():
 
 @pytest.mark.parametrize("script", [["Latn"], ["Cyrl"], None])
 @pytest.mark.parametrize("task_types", [["Classification"], ["Clustering"], None])
+@pytest.mark.parametrize("modalities", [["text"], ["image"], None])
 def test_MTEBTasks(
     script: list[str],
     task_types: list[TASK_TYPE] | None,
+    modalities: list[MODALITIES] | None,
 ):
-    tasks = mteb.get_tasks(script=script, task_types=task_types)
+    tasks = mteb.get_tasks(script=script, task_types=task_types, modalities=modalities)
     assert isinstance(tasks, MTEBTasks)
     langs = tasks.languages
     for t in tasks:
@@ -108,3 +150,24 @@ def test_MTEBTasks(
 def test_all_tasks_fetch():
     """Test that all tasks can be fetched"""
     mteb.MTEB.mteb_tasks()
+
+
+def test_get_tasks_with_exclusive_modality_filter():
+    """Test exclusive_modality_filter with actual tasks (if available)"""
+    text_tasks_exclusive = get_tasks(
+        modalities=["text"], exclusive_modality_filter=True
+    )
+    for task in text_tasks_exclusive:
+        assert set(task.modalities) == {"text"}
+
+    image_tasks_exclusive = get_tasks(
+        modalities=["image"], exclusive_modality_filter=True
+    )
+    for task in image_tasks_exclusive:
+        assert set(task.modalities) == {"image"}
+
+    text_and_image_tasks_exclusive = get_tasks(
+        modalities=["text", "image"], exclusive_modality_filter=True
+    )
+    for task in text_and_image_tasks_exclusive:
+        assert set(task.modalities) == {"text", "image"}
