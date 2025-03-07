@@ -280,10 +280,9 @@ def get_tasks(
             exclusive_language_filter is set to False both of these will be kept, but if set to True only those that contains all the languages
             specified will be kept.
         modalities: A list of modalities to include. If None, all modalities are included.
-        exclusive_modality_filter: If True, only keep tasks where ALL filter modalities are included in the
+        exclusive_modality_filter: If True, only keep tasks where _all_ filter modalities are included in the
             task's modalities and ALL task modalities are in filter modalities (exact match).
-            If False (default), keep tasks if ANY of the task's modalities match the filter modalities.
-
+            If False, keep tasks if _any_ of the task's modalities match the filter modalities.
     Returns:
         A list of all initialized tasks objects which pass all of the filters (AND operation).
 
@@ -360,10 +359,9 @@ def get_task(
             exclusive_language_filter is set to False both of these will be kept, but if set to True only those that contains all the languages
             specified will be kept.
         modalities: A list of modalities to include. If None, all modalities are included.
-        exclusive_modality_filter: If True, only keep tasks where ALL filter modalities are included in the
+        exclusive_modality_filter: If True, only keep tasks where _all_ filter modalities are included in the
             task's modalities and ALL task modalities are in filter modalities (exact match).
-            If False (default), keep tasks if ANY of the task's modalities match the filter modalities.
-
+            If False, keep tasks if _any_ of the task's modalities match the filter modalities.
     Returns:
         An initialized task object.
 
