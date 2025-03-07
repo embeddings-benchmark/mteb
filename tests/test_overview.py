@@ -28,7 +28,9 @@ def test_get_tasks_size_differences():
     )
 
 
-@pytest.mark.parametrize("task_name", ["BornholmBitextMining", "CQADupstackRetrieval"])
+@pytest.mark.parametrize(
+    "task_name", ["BornholmBitextMining", "CQADupstackRetrieval", "Birdsnap"]
+)
 @pytest.mark.parametrize("eval_splits", [["test"], None])
 @pytest.mark.parametrize("modalities", [["text"], None])
 @pytest.mark.parametrize("exclusive_modality_filter", [True, False])
@@ -152,7 +154,7 @@ def test_all_tasks_fetch():
     mteb.MTEB.mteb_tasks()
 
 
-@pytest.mark.parametrize("modalities", [["text"], ["image"], ["text", "image"])
+@pytest.mark.parametrize("modalities", [["text"], ["image"], ["text", "image"]])
 def test_get_tasks_with_exclusive_modality_filter(modalities):
     """Test exclusive_modality_filter with actual tasks (if available)"""
     text_tasks_exclusive = get_tasks(
