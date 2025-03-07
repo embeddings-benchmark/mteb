@@ -283,6 +283,7 @@ def get_tasks(
         exclusive_modality_filter: If True, only keep tasks where _all_ filter modalities are included in the
             task's modalities and ALL task modalities are in filter modalities (exact match).
             If False, keep tasks if _any_ of the task's modalities match the filter modalities.
+
     Returns:
         A list of all initialized tasks objects which pass all of the filters (AND operation).
 
@@ -362,6 +363,7 @@ def get_task(
         exclusive_modality_filter: If True, only keep tasks where _all_ filter modalities are included in the
             task's modalities and ALL task modalities are in filter modalities (exact match).
             If False, keep tasks if _any_ of the task's modalities match the filter modalities.
+
     Returns:
         An initialized task object.
 
