@@ -50,9 +50,20 @@ def parse_model_name(name: str) -> str:
 
 def parse_float(value) -> float:
     try:
-        return float(value)
+        if value == "Infinite":
+            return np.inf
+        else:
+            return float(value)
     except ValueError:
         return np.nan
+
+
+def process_max_tokens(x):
+    if pd.isna(x):
+        return "Unknown"
+    if np.isinf(x):
+        return "Infinite"
+    return str(int(x))
 
 
 models_to_annotate = [
@@ -113,6 +124,7 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
         return go.Figure()
     min_score, max_score = df["Mean (Task)"].min(), df["Mean (Task)"].max()
     df["sqrt(dim)"] = np.sqrt(df["Embedding Dimensions"])
+    df["Max Tokens"] = df["Max Tokens"].apply(lambda x: process_max_tokens(x))
     fig = px.scatter(
         df,
         x="Number of Parameters",
