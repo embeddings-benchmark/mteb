@@ -1,27 +1,28 @@
 from __future__ import annotations
 
 from mteb.abstasks.Audio.AbsTaskZeroshotAudioClassification import (
-    AbsTaskZeroshotClassification,
+    AbsTaskZeroshotAudioClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class CREMADZeroshotClassification(AbsTaskZeroshotClassification):
+class CREMADZeroshotClassification(AbsTaskZeroshotAudioClassification):
     metadata = TaskMetadata(
         name="CREMADZeroshot",
         description="Classifying 6 emotions in actor's voice recordings of same text spoken in different emotions",
         reference="https://pmc.ncbi.nlm.nih.gov/articles/PMC4313618/",
         dataset={
-            "path": "AbstractTTS/CREMA-D"
+            "path": "AbstractTTS/CREMA-D",
+            "revision": "5a172780c79bbddb9b326a2c830447c550a216a4"
         },
         type="ZeroShotClassification",
-        category="a2t",
+        category="t2t",
         eval_splits=["train"],
         eval_langs=["eng-latn"],
         main_score="accuracy",
         domains=["Spoken"],
         task_subtypes=["Emotion classification"],
-        license="odbl-1.0",
+        license="not specified",
         modalities=["audio", "text"],
         sample_creation="created",
         bibtex_citation="""@ARTICLE{Cao2014-ih,
@@ -71,6 +72,7 @@ class CREMADZeroshotClassification(AbsTaskZeroshotClassification):
     # Override default column name in the subclass
     audio_column_name: str = "audio"
     label_column_name: str = "major_emotion"
+    target_column_name: str = "major_emotion"
 
     def get_candidate_labels(self) -> list[str]:
         unique_emotions = set(example[self.label_column_name] for example in self.dataset["train"])

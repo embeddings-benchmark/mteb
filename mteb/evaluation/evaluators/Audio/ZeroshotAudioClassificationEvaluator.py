@@ -85,6 +85,8 @@ class ZeroshotAudioClassificationEvaluator(Evaluator):
 
         logger.info("Evaluating...")
 
-        accuracy = metrics.accuracy_score(self.labels, predictions.tolist())
+        preds = predictions.tolist()
+
+        accuracy = metrics.accuracy_score(self.labels, preds)
 
         return {"accuracy": accuracy}

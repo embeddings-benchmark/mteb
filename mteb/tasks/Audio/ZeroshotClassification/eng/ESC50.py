@@ -42,9 +42,15 @@ class ESC50ZeroshotClassification(AbsTaskZeroshotAudioClassification):
     # Override default column name in the subclass
     audio_column_name: str = "audio"
     label_column_name: str = "category"
+    target_column_name: str = "target"
 
     def get_candidate_labels(self) -> list[str]:
+        pairs = set()
+        for row in self.dataset["train"]:
+            pairs.add((row[self.target_column_name], row[self.label_column_name]))
+        
+        print(sorted(list(pairs)))
         return [
             f"a sound of a {name}."
-            for name in sorted(list(set(self.dataset["train"][self.label_column_name])))
+            for _, name in sorted(list(pairs))
         ]

@@ -1,21 +1,22 @@
 from __future__ import annotations
 
 from mteb.abstasks.Audio.AbsTaskZeroshotAudioClassification import (
-    AbsTaskZeroshotClassification,
+    AbsTaskZeroshotAudioClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class UrbanSound8kZeroshotClassification(AbsTaskZeroshotClassification):
+class UrbanSound8kZeroshotClassification(AbsTaskZeroshotAudioClassification):
     metadata = TaskMetadata(
         name="UrbanSound8kZeroshot",
         description="Classifying 4s urban sounds into 10 classes",
         reference="https://dl.acm.org/doi/10.1145/2647868.2655045",
         dataset={
-            "path": "danavery/urbansound8K"
+            "path": "danavery/urbansound8K",
+            "revision": "8aa9177a0c5a6949ee4ee4b7fcabb01dfd4ae466"
         },
         type="ZeroShotClassification",
-        category="a2t",
+        category="t2t",
         eval_splits=["train"],
         eval_langs=["eng-latn"],
         main_score="accuracy",
@@ -50,11 +51,18 @@ class UrbanSound8kZeroshotClassification(AbsTaskZeroshotClassification):
     # Override default column name in the subclass
     audio_column_name: str = "audio"
     label_column_name: str = "class"
+    target_column_name: str = "classID"
 
     def get_candidate_labels(self) -> list[str]:
-        """
-        Returns a list of formatted candidate labels based on unique sound classes in the dataset.
-        """
-        unique_classes = set(example[self.label_column_name] for example in self.dataset["train"])
-
-        return [f"a sound of a {name}." for name in unique_classes]
+        # self.dataset["train"] = self.dataset["train"][:2000]
+        print("starting")
+        pairs = set()
+        for row in self.dataset["train"]:
+            pairs.add((row[self.target_column_name], row[self.label_column_name]))
+        
+        # print(sorted(list(pairs)))
+        print("done")
+        return [
+            f"a sound of a {name}."
+            for _, name in sorted(list(pairs))
+        ]

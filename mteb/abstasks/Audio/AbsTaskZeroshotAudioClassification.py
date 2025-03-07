@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from datasets import Dataset
+from datasets import Dataset, Sequence, ClassLabel
 
 from mteb.abstasks.TaskMetadata import HFSubset
 
@@ -20,7 +20,9 @@ class AbsTaskZeroshotAudioClassification(AbsTask):
     """
 
     audio_column_name: str = "audio"
-    label_column_name: str = "labels"
+    label_column_name: str = "category"
+    target_column_name: str = "target"
+
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -46,7 +48,7 @@ class AbsTaskZeroshotAudioClassification(AbsTask):
             dataset,
             self.audio_column_name,
             # dataset[self.image_column_name],#broken into dataset and self.image_column_name
-            dataset[self.label_column_name],
+            dataset[self.target_column_name],
             candidate_labels,
             task_name=self.metadata.name,
             **kwargs,
