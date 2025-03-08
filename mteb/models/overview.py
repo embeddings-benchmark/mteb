@@ -13,6 +13,7 @@ from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import (
     align_models,
+    ara_models,
     arctic_models,
     bedrock_models,
     bge_models,
@@ -70,11 +71,11 @@ from mteb.models import (
     stella_models,
     text2vec_models,
     uae_models,
+    vdr_models,
     vista_models,
     vlm2vec_models,
     voyage_models,
     voyage_v,
-    ara_models,
 )
 
 logger = logging.getLogger(__name__)
@@ -141,6 +142,7 @@ model_modules = [
     text2vec_models,
     uae_models,
     voyage_models,
+    vdr_models,
     fa_models,
     ara_models,
 ]
