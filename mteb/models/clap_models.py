@@ -194,8 +194,8 @@ class ClapZeroShotWrapper:
 clap_htsat_fused = ModelMeta(
     loader=partial(ClapZeroShotWrapper, model_name="laion/clap-htsat-fused"),
     name="laion/clap-htsat-fused",
-    languages=["en"],
-    revision="main",
+    languages=["eng_Latn"],
+    revision="cca9e288ab447cee67d9ada1f85ddb46500f1401",
     release_date="2023-05-22",
     modalities=["audio", "text"],
     n_parameters=153_507_530,  # Calculated using torch.numel(model.parameters())
@@ -217,8 +217,8 @@ clap_htsat_fused = ModelMeta(
 clap_htsat_unfused = ModelMeta(
     loader=partial(ClapZeroShotWrapper, model_name="laion/clap-htsat-unfused"),
     name="laion/clap-htsat-unfused",
-    languages=["en"],
-    revision="main",
+    languages=["eng_Latn"],
+    revision="8fa0f1c6d0433df6e97c127f64b2a1d6c0dcda8a",
     release_date="2023-05-22",
     modalities=["audio", "text"],
     n_parameters=153_492_890,  # Calculated using torch.numel(model.parameters())
@@ -239,8 +239,8 @@ clap_htsat_unfused = ModelMeta(
 larger_clap_general = ModelMeta(
     loader=partial(ClapZeroShotWrapper, model_name="laion/larger_clap_general"),
     name="laion/larger_clap_general",
-    languages=["en"],
-    revision="main",
+    languages=["eng_Latn"],
+    revision="ada0c23a36c4e8582805bb38fec3905903f18b41",
     release_date="2023-05-22",
     modalities=["audio", "text"],
     n_parameters=193_913_882,  # Calculated using torch.numel(model.parameters())
@@ -263,8 +263,8 @@ larger_clap_general = ModelMeta(
 larger_clap_music = ModelMeta(
     loader=partial(ClapZeroShotWrapper, model_name="laion/larger_clap_music"),
     name="laion/larger_clap_music",
-    languages=["en"],
-    revision="main",
+    languages=["eng_Latn"],
+    revision="a0b4534a14f58e20944452dff00a22a06ce629d1",
     release_date="2023-05-22",
     modalities=["audio", "text"],
     n_parameters=193_913_882,  # Calculated using torch.numel(model.parameters())
@@ -289,8 +289,8 @@ larger_clap_music_and_speech = ModelMeta(
         ClapZeroShotWrapper, model_name="laion/larger_clap_music_and_speech"
     ),
     name="laion/larger_clap_music_and_speech",
-    languages=["en"],
-    revision="main",
+    languages=["eng_Latn"],
+    revision="195c3a3e68faebb3e2088b9a79e79b43ddbda76b",
     release_date="2023-05-22",
     modalities=["audio", "text"],
     n_parameters=193_913_882,  # Calculated using torch.numel(model.parameters())
