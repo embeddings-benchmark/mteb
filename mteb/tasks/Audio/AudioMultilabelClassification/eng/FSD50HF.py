@@ -12,7 +12,7 @@ class FSD50HFMultilingualClassification(AbsTaskAudioMultilabelClassification):
     metadata = TaskMetadata(
         name="FSD50HF",
         description="Multilabel Audio Classification.",
-        reference="https://huggingface.co/datasets/Chand0320/fsd50k_hf",  # "https://huggingface.co/datasets/CLAPv2/FSD50K",
+        reference="https://huggingface.co/datasets/Chand0320/fsd50k_hf",
         dataset={
             "path": "Chand0320/fsd50k_hf",
             "revision": "ca72d33100074e2933437e844028c941d8e8f065",
