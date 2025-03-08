@@ -14,7 +14,7 @@ from huggingface_hub.errors import (
 from pydantic import BaseModel, ConfigDict
 
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.abstasks.TaskMetadata import STR_DATE, STR_URL
+from mteb.abstasks.TaskMetadata import LICENSES, STR_DATE, STR_URL
 from mteb.encoder_interface import Encoder
 
 from .languages import ISO_LANGUAGE_SCRIPT
@@ -104,7 +104,7 @@ class ModelMeta(BaseModel):
     memory_usage_mb: float | None
     max_tokens: float | None
     embed_dim: int | None
-    license: str | None
+    license: LICENSES | STR_URL | None
     open_weights: bool | None
     public_training_code: str | None
     public_training_data: str | bool | None
