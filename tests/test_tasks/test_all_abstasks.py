@@ -88,6 +88,7 @@ def test_load_data(
             mock_dataset_transform.assert_called_once()
 
 
+@pytest.mark.test_datasets
 @pytest.mark.flaky(
     reruns=3,
     reruns_delay=5,

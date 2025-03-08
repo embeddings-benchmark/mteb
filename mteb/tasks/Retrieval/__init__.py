@@ -298,6 +298,7 @@ __all__ = [
     "CQADupstackWebmastersRetrievalPL",
     "CQADupstackWordpressRetrievalPL",
     "ArguAnaPL",
+    "PUGGRetrieval",
     "FiQAPLRetrieval",
     "NFCorpusPL",
     "QuoraPLRetrieval",
@@ -532,7 +533,4 @@ __all__ = [
     "BSARDRetrieval",
     "SyntecRetrieval",
     "FQuADRetrieval",
-    "Touche2020PL",
-    "PUGGRetrieval",
-    "LoTTERetrieval",
 ]

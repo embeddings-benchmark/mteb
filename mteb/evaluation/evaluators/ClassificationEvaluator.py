@@ -4,7 +4,6 @@ import logging
 from typing import Any
 
 import numpy as np
-import torch
 from datasets import Dataset
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
@@ -13,7 +12,6 @@ from sklearn.metrics import (
     f1_score,
 )
 from sklearn.neighbors import KNeighborsClassifier
-from torch import Tensor
 from torch.utils.data import DataLoader
 
 from mteb.encoder_interface import Encoder

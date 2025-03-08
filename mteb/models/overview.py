@@ -13,6 +13,7 @@ from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import (
     align_models,
+    ara_models,
     arctic_models,
     bedrock_models,
     bge_models,
@@ -143,6 +144,7 @@ model_modules = [
     uae_models,
     voyage_models,
     fa_models,
+    ara_models,
 ]
 MODEL_REGISTRY = {}
 

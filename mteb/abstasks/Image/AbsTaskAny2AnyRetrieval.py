@@ -9,7 +9,7 @@ from time import asctime, time
 from typing import Any
 
 import tqdm
-from datasets import Features, Value, load_dataset
+from datasets import Dataset, Features, Value, concatenate_datasets, load_dataset
 from PIL import Image
 
 from ...evaluation.evaluators import Any2AnyRetrievalEvaluator
@@ -437,12 +437,20 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
             corpus = self.corpus[hf_subset][split]
             relevant_docs = self.relevant_docs[hf_subset][split]
         elif compute_overall:
-            queries = {}
-            corpus = {}
+            queries = concatenate_datasets(
+                [
+                    process_docs(self.queries, hf_subset, split)
+                    for hf_subset in self.metadata.eval_langs
+                ]
+            )
+            corpus = concatenate_datasets(
+                [
+                    process_docs(self.corpus, hf_subset, split)
+                    for hf_subset in self.metadata.eval_langs
+                ]
+            )
             relevant_docs = {}
             for hf_subset in self.metadata.eval_langs:
-                queries.update(process_docs(self.queries, hf_subset, split))
-                corpus.update(process_docs(self.corpus, hf_subset, split))
                 relevant_docs.update(
                     process_relevant_docs(self.relevant_docs, hf_subset, split)
                 )
@@ -533,6 +541,14 @@ def process_docs(
     collection: dict[str, dict[str, dict[str, str] | str]], hf_subset: str, split: str
 ) -> dict[str, str]:
     """Collections can contain overlapping ids in different splits. Prepend split to avoid this"""
-    return {
-        f"{split}_{hf_subset}_{k}": v for k, v in collection[hf_subset][split].items()
-    }
+    res = {}
+    for k in collection[hf_subset][split].features.keys():
+        res.update(
+            {
+                k: [
+                    f"{split}_{hf_subset}_{ele}"
+                    for ele in collection[hf_subset][split][k]
+                ]
+            }
+        )
+    return Dataset.from_dict(res)

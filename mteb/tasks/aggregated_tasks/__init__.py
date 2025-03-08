@@ -17,11 +17,11 @@ from .SynPerChatbotConvSAClassification import SynPerChatbotConvSAClassification
 __all__ = [
     "CQADupstackRetrieval",
     "CQADupstackRetrievalFa",
-    "CQADupstackNLRetrieval",
     "STS17MultilingualVisualSTSEng",
     "STS17MultilingualVisualSTSMultilingual",
+    "CQADupstackNLRetrieval",
+    "CQADupstackRetrievalPL",
     "STSBenchmarkMultilingualVisualSTSEng",
     "STSBenchmarkMultilingualVisualSTSMultilingual",
-    "CQADupstackRetrievalPL",
     "SynPerChatbotConvSAClassification",
 ]

@@ -46,6 +46,7 @@ __all__ = [
     "CQADupstackWebmastersRetrievalPL",
     "CQADupstackWordpressRetrievalPL",
     "ArguAnaPL",
+    "PUGGRetrieval",
     "FiQAPLRetrieval",
     "NFCorpusPL",
     "QuoraPLRetrieval",
@@ -58,6 +59,4 @@ __all__ = [
     "DBPediaPLHardNegatives",
     "HotpotQAPL",
     "HotpotQAPLHardNegatives",
-    "Touche2020PL",
-    "PUGGRetrieval",
 ]
