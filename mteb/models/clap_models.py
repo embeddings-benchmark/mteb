@@ -205,12 +205,12 @@ clap_htsat_fused = ModelMeta(
     license="MIT",
     open_weights=True,
     public_training_code="https://github.com/LAION-AI/CLAP",
-    public_training_data="LAION-Audio-630K",
+    public_training_data="https://laion.ai/blog/laion-audio-630k/",
     framework=["PyTorch"],
     reference="https://huggingface.co/laion/clap_htsat_fused",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets={"LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]},
+    # training_datasets={"LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]},
 )
 
 
@@ -228,12 +228,12 @@ clap_htsat_unfused = ModelMeta(
     license="MIT",
     open_weights=True,
     public_training_code="https://github.com/LAION-AI/CLAP",
-    public_training_data="LAION-Audio-630K",
+    public_training_data="https://laion.ai/blog/laion-audio-630k/",
     framework=["PyTorch"],
     reference="https://huggingface.co/laion/clap_htsat_unfused",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets={"LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]},
+    # training_datasets={"LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]},
 )
 
 larger_clap_general = ModelMeta(
@@ -250,14 +250,14 @@ larger_clap_general = ModelMeta(
     license="MIT",
     open_weights=True,
     public_training_code="https://github.com/LAION-AI/CLAP",
-    public_training_data="LAION-Audio-630K",
+    public_training_data="https://laion.ai/blog/laion-audio-630k/",
     framework=["PyTorch"],
     reference="https://huggingface.co/laion/larger_clap_general",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets={
-        "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
-    },  # Additional finetuning over music dataset but not specified what the exact dataset is
+    # training_datasets={
+    #     "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
+    # },  # Additional finetuning over music dataset but not specified what the exact dataset is
 )
 
 larger_clap_music = ModelMeta(
@@ -274,14 +274,14 @@ larger_clap_music = ModelMeta(
     license="MIT",
     open_weights=True,
     public_training_code="https://github.com/LAION-AI/CLAP",
-    public_training_data="LAION-Audio-630K",
+    public_training_data="https://laion.ai/blog/laion-audio-630k/",
     framework=["PyTorch"],
     reference="https://huggingface.co/laion/larger_clap_music",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets={
-        "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
-    },  # Additional finetuning over music dataset but not specified what the exact dataset is
+    # training_datasets={
+    #     "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
+    # },  # Additional finetuning over music dataset but not specified what the exact dataset is
 )
 
 larger_clap_music_and_speech = ModelMeta(
@@ -300,12 +300,12 @@ larger_clap_music_and_speech = ModelMeta(
     license="MIT",
     open_weights=True,
     public_training_code="https://github.com/LAION-AI/CLAP",
-    public_training_data="LAION-Audio-630K",
+    public_training_data="https://laion.ai/blog/laion-audio-630k/",
     framework=["PyTorch"],
     reference="https://huggingface.co/laion/larger_clap_music_and_speech",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets={
-        "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
-    },  # Additional finetuning over music dataset but not specified what the exact dataset is
+    # training_datasets={
+    #     "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
+    # },  # Additional finetuning over music dataset but not specified what the exact dataset is
 )
