@@ -235,3 +235,77 @@ clap_htsat_unfused = ModelMeta(
     use_instructions=False,
     training_datasets={"LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]},
 )
+
+larger_clap_general = ModelMeta(
+    loader=partial(ClapZeroShotWrapper, model_name="laion/larger_clap_general"),
+    name="laion/larger_clap_general",
+    languages=["en"],
+    revision="main",
+    release_date="2023-05-22",
+    modalities=["audio", "text"],
+    n_parameters=193_913_882,  # Calculated using torch.numel(model.parameters())
+    memory_usage_mb=740,  # Calculated using model.calculate_memory_usage_mb()
+    max_tokens=float("inf"),
+    embed_dim=512,  # The project_dim (for even larger clap general) in config.json is 512
+    license="MIT",
+    open_weights=True,
+    public_training_code="https://github.com/LAION-AI/CLAP",
+    public_training_data="LAION-Audio-630K",
+    framework=["PyTorch"],
+    reference="https://huggingface.co/laion/larger_clap_general",
+    similarity_fn_name="cosine",
+    use_instructions=False,
+    training_datasets={
+        "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
+    },  # Additional finetuning over music dataset but not specified what the exact dataset is
+)
+
+larger_clap_music = ModelMeta(
+    loader=partial(ClapZeroShotWrapper, model_name="laion/larger_clap_music"),
+    name="laion/larger_clap_music",
+    languages=["en"],
+    revision="main",
+    release_date="2023-05-22",
+    modalities=["audio", "text"],
+    n_parameters=193_913_882,  # Calculated using torch.numel(model.parameters())
+    memory_usage_mb=740,  # Calculated using model.calculate_memory_usage_mb()
+    max_tokens=float("inf"),
+    embed_dim=512,  # The project_dim (for even larger clap general) in config.json is 512
+    license="MIT",
+    open_weights=True,
+    public_training_code="https://github.com/LAION-AI/CLAP",
+    public_training_data="LAION-Audio-630K",
+    framework=["PyTorch"],
+    reference="https://huggingface.co/laion/larger_clap_music",
+    similarity_fn_name="cosine",
+    use_instructions=False,
+    training_datasets={
+        "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
+    },  # Additional finetuning over music dataset but not specified what the exact dataset is
+)
+
+larger_clap_music_and_speech = ModelMeta(
+    loader=partial(
+        ClapZeroShotWrapper, model_name="laion/larger_clap_music_and_speech"
+    ),
+    name="laion/larger_clap_music_and_speech",
+    languages=["en"],
+    revision="main",
+    release_date="2023-05-22",
+    modalities=["audio", "text"],
+    n_parameters=193_913_882,  # Calculated using torch.numel(model.parameters())
+    memory_usage_mb=740,  # Calculated using model.calculate_memory_usage_mb()
+    max_tokens=float("inf"),
+    embed_dim=512,  # The project_dim (for even larger clap general) in config.json is 512
+    license="MIT",
+    open_weights=True,
+    public_training_code="https://github.com/LAION-AI/CLAP",
+    public_training_data="LAION-Audio-630K",
+    framework=["PyTorch"],
+    reference="https://huggingface.co/laion/larger_clap_music_and_speech",
+    similarity_fn_name="cosine",
+    use_instructions=False,
+    training_datasets={
+        "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
+    },  # Additional finetuning over music dataset but not specified what the exact dataset is
+)
