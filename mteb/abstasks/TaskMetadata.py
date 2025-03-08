@@ -61,6 +61,7 @@ TASK_SUBTYPE = Literal[
     "Duplicate Detection",
     "Environment Sound Classification",
     "Gender Clustering",
+    "Music Clustering",
 ]
 
 TASK_DOMAIN = Literal[
@@ -88,6 +89,7 @@ TASK_DOMAIN = Literal[
     "Financial",
     "Chemistry",
     "Financial",
+    "Music",
 ]
 
 SAMPLE_CREATION_METHOD = Literal[
