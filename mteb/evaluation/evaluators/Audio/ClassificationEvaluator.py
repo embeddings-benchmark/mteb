@@ -7,6 +7,7 @@ from typing import Any
 
 import numpy as np
 import torch
+from datasets import Audio
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
     accuracy_score,
@@ -36,7 +37,7 @@ class AudioDataset(torch.utils.data.Dataset):
         audio_column_name: str = "audio",
         transform: torch.nn.Module | None = None,  # anything from torchaudio.transforms
     ) -> None:
-        self.dataset = hf_dataset
+        self.dataset = hf_dataset.cast_column(audio_column_name, Audio())
         self.transform = transform
         self.audio_column_name = audio_column_name
 
@@ -82,6 +83,7 @@ class AudiologRegClassificationEvaluator(Evaluator):
         self.dataset_train = AudioDataset(
             dataset_train, audio_column_name=audio_column_name, transform=None
         )
+
         self.y_train = dataset_train[label_column_name]
         self.dataset_test = AudioDataset(
             dataset_test, audio_column_name=audio_column_name, transform=None
@@ -116,13 +118,12 @@ class AudiologRegClassificationEvaluator(Evaluator):
             collate_fn=custom_collate_fn,
             num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
-        if test_cache is None:
-            X_test = model.get_audio_embeddings(
-                dataloader, batch_size=self.encode_kwargs["batch_size"]
-            )
-            test_cache = X_test
-        else:
-            X_test = test_cache
+
+        X_test = model.get_audio_embeddings(
+            dataloader, batch_size=self.encode_kwargs["batch_size"]
+        )
+        test_cache = X_test
+
         logger.info("Fitting logistic regression classifier...")
         if X_train.dtype == torch.bfloat16:
             X_train = X_train.to(torch.float32)
