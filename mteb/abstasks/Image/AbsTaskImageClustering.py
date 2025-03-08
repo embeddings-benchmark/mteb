@@ -30,7 +30,7 @@ class ImageClusteringDescriptiveStatistics(DescriptiveStatistics):
         average_image_height: Average height of images
         max_image_height: Maximum height of images
 
-        unique_labels: Number of unique labels
+        unique_num_labels: Number of unique labels
         labels: dict of label frequencies
     """
 
@@ -115,8 +115,9 @@ class AbsTaskImageClustering(AbsTask):
         **kwargs,
     ) -> ScoresDict:
         evaluator = ImageClusteringEvaluator(
-            dataset[self.image_column_name],
-            dataset[self.label_column_name],
+            dataset,
+            image_column_name=self.image_column_name,
+            label_column_name=self.label_column_name,
             task_name=self.metadata.name,
             **kwargs,
         )
