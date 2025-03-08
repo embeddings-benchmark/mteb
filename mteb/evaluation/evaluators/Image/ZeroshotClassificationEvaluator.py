@@ -11,22 +11,13 @@ from sklearn import metrics
 from torch.utils.data import DataLoader
 from torchvision import transforms
 
-from mteb.create_dataloaders import create_dataloader_from_texts
+from mteb.create_dataloaders import create_dataloader_from_texts, prepare_image_dataset
 from mteb.encoder_interface import Encoder
 
 from ..Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
 
-def convert_images_to_rgb(example: dict[str, Any]) -> dict[str, Any]:
-    image = example["image"]
-    # For PIL images
-    if hasattr(image, "mode") and image.mode != "RGB":
-        example["image"] = image.convert("RGB")
-    # For tensor images with 1 channel
-    elif isinstance(image, torch.Tensor) and image.shape[0] == 1:
-        example["image"] = image.repeat(3, 1, 1)
-    return example
 
 
 class ZeroshotClassificationEvaluator(Evaluator):
@@ -40,12 +31,8 @@ class ZeroshotClassificationEvaluator(Evaluator):
         **kwargs,
     ):
         super().__init__(**kwargs)
-        if "image" not in dataset.column_names:
-            dataset = dataset.rename_column(image_column_name, "image")
-        self.dataset = dataset.map(
-            convert_images_to_rgb,
-            desc="Converting images to RGB"
-        ).with_format("torch")
+
+        self.dataset = prepare_image_dataset(dataset, image_column_name)
         self.image_column_name = image_column_name
         self.labels = labels
         self.candidate_labels = candidate_labels

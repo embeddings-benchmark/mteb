@@ -17,6 +17,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from torch.utils.data import DataLoader
 from torchvision import transforms
 
+from mteb.create_dataloaders import prepare_image_dataset
 from mteb.encoder_interface import Encoder
 
 from ..Evaluator import Evaluator
@@ -26,30 +27,6 @@ logger = logging.getLogger(__name__)
 
 def dot_distance(a: np.ndarray, b: np.ndarray) -> float:
     return -np.dot(a, b)
-
-
-transform = transforms.Compose([transforms.PILToTensor()])
-
-
-class ImageDataset(torch.utils.data.Dataset):
-    def __init__(self, hf_dataset, image_column_name: str = "image", transform=None):
-        self.dataset = hf_dataset
-        self.transform = transform
-        self.image_column_name = image_column_name
-
-    def __len__(self):
-        return len(self.dataset)
-
-    def __getitem__(self, idx):
-        image = self.dataset[idx][self.image_column_name]
-        if image.mode != "RGB":
-            image = image.convert("RGB")
-        image = self.transform(image)
-        return image
-
-
-def custom_collate_fn(batch):
-    return batch
 
 
 class ImagekNNClassificationEvaluator(Evaluator):
@@ -70,14 +47,10 @@ class ImagekNNClassificationEvaluator(Evaluator):
         if limit is not None:
             dataset_train = dataset_train.select(list(range(limit)))
 
-        self.dataset_train = ImageDataset(
-            dataset_train, image_column_name=image_column_name, transform=transform
-        )
+        self.dataset_train = prepare_image_dataset(dataset_train, image_column_name)
         self.y_train = dataset_train[label_column_name]
 
-        self.dataset_test = ImageDataset(
-            dataset_test, image_column_name=image_column_name, transform=transform
-        )
+        self.dataset_test = prepare_image_dataset(dataset_test, image_column_name)
         self.y_test = dataset_test[label_column_name]
         self.task_name = task_name
         self.encode_kwargs = encode_kwargs
@@ -96,11 +69,10 @@ class ImagekNNClassificationEvaluator(Evaluator):
             self.dataset_train,
             batch_size=self.encode_kwargs["batch_size"],
             shuffle=False,
-            collate_fn=custom_collate_fn,
             num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
-        X_train = model.get_image_embeddings(
-            dataloader_train, batch_size=self.encode_kwargs["batch_size"]
+        X_train = model.encode(
+            dataloader_train, task_name=self.task_name, batch_size=self.encode_kwargs["batch_size"]
         )
         dataloader = DataLoader(
             self.dataset_test,
@@ -109,8 +81,8 @@ class ImagekNNClassificationEvaluator(Evaluator):
             num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
         if test_cache is None:
-            X_test = model.get_image_embeddings(
-                dataloader, batch_size=self.encode_kwargs["batch_size"]
+            X_test = model.encode(
+                dataloader, task_name=self.task_name, batch_size=self.encode_kwargs["batch_size"]
             )
             test_cache = X_test
         else:
@@ -154,14 +126,10 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
         if limit is not None:
             dataset_train = dataset_train.select(list(range(limit)))
 
-        self.dataset_train = ImageDataset(
-            dataset_train, image_column_name=image_column_name, transform=transform
-        )
+        self.dataset_train = prepare_image_dataset(dataset_train, image_column_name)
         self.y_train = dataset_train[label_column_name]
 
-        self.dataset_test = ImageDataset(
-            dataset_test, image_column_name=image_column_name, transform=transform
-        )
+        self.dataset_test = prepare_image_dataset(dataset_test, image_column_name)
         self.y_test = dataset_test[label_column_name]
         self.task_name = task_name
         self.encode_kwargs = encode_kwargs
@@ -181,11 +149,10 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
             self.dataset_train,
             batch_size=self.encode_kwargs["batch_size"],
             shuffle=False,
-            collate_fn=custom_collate_fn,
             num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
-        X_train = model.get_image_embeddings(
-            dataloader_train, batch_size=self.encode_kwargs["batch_size"]
+        X_train = model.encode(
+            dataloader_train, task_name=self.task_name, batch_size=self.encode_kwargs["batch_size"]
         )
 
         dataloader = DataLoader(
@@ -195,8 +162,8 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
             num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
         if test_cache is None:
-            X_test = model.get_image_embeddings(
-                dataloader, batch_size=self.encode_kwargs["batch_size"]
+            X_test = model.encode(
+                dataloader, task_name=self.task_name, batch_size=self.encode_kwargs["batch_size"]
             )
             test_cache = X_test
         else:
@@ -327,13 +294,10 @@ class ImagelogRegClassificationEvaluator(Evaluator):
         if limit is not None:
             dataset_train = dataset_train.select(list(range(limit)))
 
-        self.dataset_train = ImageDataset(
-            dataset_train, image_column_name=image_column_name, transform=transform
-        )
+        self.dataset_train = prepare_image_dataset(dataset_train, image_column_name)
         self.y_train = dataset_train[label_column_name]
-        self.dataset_test = ImageDataset(
-            dataset_test, image_column_name=image_column_name, transform=transform
-        )
+
+        self.dataset_test = prepare_image_dataset(dataset_test, image_column_name)
         self.y_test = dataset_test[label_column_name]
 
         self.max_iter = max_iter
@@ -354,22 +318,20 @@ class ImagelogRegClassificationEvaluator(Evaluator):
             self.dataset_train,
             batch_size=self.encode_kwargs["batch_size"],
             shuffle=False,
-            collate_fn=custom_collate_fn,
             num_workers=num_workers,
         )
-        X_train = model.get_image_embeddings(
-            dataloader_train, batch_size=self.encode_kwargs["batch_size"]
+        X_train = model.encode(
+            dataloader_train, task_name=self.task_name, batch_size=self.encode_kwargs["batch_size"]
         )
         dataloader = DataLoader(
             self.dataset_test,
             batch_size=self.encode_kwargs["batch_size"],
             shuffle=False,
-            collate_fn=custom_collate_fn,
             num_workers=num_workers,
         )
         if test_cache is None:
-            X_test = model.get_image_embeddings(
-                dataloader, batch_size=self.encode_kwargs["batch_size"]
+            X_test = model.encode(
+                dataloader, task_name=self.task_name, batch_size=self.encode_kwargs["batch_size"]
             )
             test_cache = X_test
         else:

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Callable
+from typing import Any, Callable
 
 import torch
 from datasets import Dataset
@@ -180,3 +180,23 @@ def create_dataloader_for_queries_conversation(
             }
         )
     return torch.utils.data.DataLoader(dataset, **dataloader_kwargs)
+
+def convert_images_to_rgb(example: dict[str, Any]) -> dict[str, Any]:
+    image = example["image"]
+    # For PIL images
+    if hasattr(image, "mode") and image.mode != "RGB":
+        example["image"] = image.convert("RGB")
+    # For tensor images with 1 channel
+    elif isinstance(image, torch.Tensor) and image.shape[0] == 1:
+        example["image"] = image.repeat(3, 1, 1)
+    return example
+
+
+def prepare_image_dataset(dataset: Dataset, image_column_name: str | None = None) -> Dataset:
+    if image_column_name and "image" not in dataset.column_names:
+        dataset = dataset.rename_column(image_column_name, "image")
+    dataset = dataset.map(
+        convert_images_to_rgb,
+        desc="Converting images to RGB"
+    ).with_format("torch")
+    return dataset
