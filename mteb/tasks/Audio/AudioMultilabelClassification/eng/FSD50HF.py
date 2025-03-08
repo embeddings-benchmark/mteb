@@ -5,13 +5,10 @@ import datasets
 from mteb.abstasks.Audio.AbsTaskAudioMultilabelClassification import (
     AbsTaskAudioMultilabelClassification,
 )
-
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class FSD50HFMultilingualClassification(
-     AbsTaskAudioMultilabelClassification
-):
+class FSD50HFMultilingualClassification(AbsTaskAudioMultilabelClassification):
     metadata = TaskMetadata(
         name="FSD50HF",
         description="Multilabel Audio Classification.",
