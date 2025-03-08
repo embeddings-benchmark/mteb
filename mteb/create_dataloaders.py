@@ -195,8 +195,7 @@ def convert_images_to_rgb(example: dict[str, Any]) -> dict[str, Any]:
 def prepare_image_dataset(dataset: Dataset, image_column_name: str | None = None) -> Dataset:
     if image_column_name and "image" not in dataset.column_names:
         dataset = dataset.rename_column(image_column_name, "image")
-    dataset = dataset.map(
+    return dataset.map(
         convert_images_to_rgb,
         desc="Converting images to RGB"
     ).with_format("torch")
-    return dataset
