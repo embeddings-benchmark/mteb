@@ -57,7 +57,7 @@ class FSD50HFMultilingualClassification(
     )
 
     audio_column_name: str = "audio"
-    label_column_name: str = "sound"
+    label_column_name: str = "labels"
     samples_per_label: int = 8
 
     def load_data(self, **kwargs):
