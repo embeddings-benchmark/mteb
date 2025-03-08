@@ -1,19 +1,21 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import Any
+from typing import Any, Literal
 
+import numpy as np
 import torch
 from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoModel, AutoProcessor
 
-from mteb.encoder_interface import PromptType
+from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta
+from mteb.models.wrapper import Wrapper
 
 
-class CLIPModelWrapper:
+class CLIPModelWrapper(Wrapper):
     def __init__(
         self,
         model_name: str,
@@ -36,7 +38,7 @@ class CLIPModelWrapper:
 
     def get_text_embeddings(
         self,
-        texts: list[str],
+        texts: DataLoader[BatchedInput],
         *,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
@@ -46,10 +48,9 @@ class CLIPModelWrapper:
         all_text_embeddings = []
 
         with torch.no_grad():
-            for i in tqdm(range(0, len(texts), batch_size)):
-                batch_texts = texts[i : i + batch_size]
+            for batch in tqdm(texts):
                 inputs = self.processor(
-                    text=batch_texts, return_tensors="pt", padding=True, truncation=True
+                    text=batch["text"], return_tensors="pt", padding=True, truncation=True
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 text_outputs = self.model.get_text_features(**inputs)
@@ -58,9 +59,10 @@ class CLIPModelWrapper:
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
         return all_text_embeddings
 
+    @torch.no_grad()
     def get_image_embeddings(
         self,
-        images: list[Image.Image] | DataLoader,
+        images: DataLoader[BatchedInput],
         *,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
@@ -69,25 +71,13 @@ class CLIPModelWrapper:
     ):
         all_image_embeddings = []
 
-        if isinstance(images, DataLoader):
-            with torch.no_grad():
-                for batch in tqdm(images):
-                    inputs = self.processor(
-                        images=batch, return_tensors="pt", padding=True
-                    )
-                    inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                    image_outputs = self.model.get_image_features(**inputs)
-                    all_image_embeddings.append(image_outputs.cpu())
-        else:
-            with torch.no_grad():
-                for i in tqdm(range(0, len(images), batch_size)):
-                    batch_images = images[i : i + batch_size]
-                    inputs = self.processor(
-                        images=batch_images, return_tensors="pt", padding=True
-                    )
-                    inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                    image_outputs = self.model.get_image_features(**inputs)
-                    all_image_embeddings.append(image_outputs.cpu())
+        for batch in tqdm(images):
+            inputs = self.processor(
+                images=batch["image"], return_tensors="pt", padding=True
+            )
+            inputs = {k: v.to(self.device) for k, v in inputs.items()}
+            image_outputs = self.model.get_image_features(**inputs)
+            all_image_embeddings.append(image_outputs.cpu())
 
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
         return all_image_embeddings
@@ -119,6 +109,42 @@ class CLIPModelWrapper:
 
         if images is not None:
             image_embeddings = self.get_image_embeddings(images, **kwargs)
+
+        if text_embeddings is not None and image_embeddings is not None:
+            if len(text_embeddings) != len(image_embeddings):
+                raise ValueError(
+                    "The number of texts and images must have the same length"
+                )
+            if fusion_mode == "sum":
+                fused_embeddings = text_embeddings + image_embeddings
+            else:
+                # to do: add other fusion mode
+                raise ValueError(f"fusion mode {fusion_mode} hasn't been implemented")
+            return fused_embeddings
+        elif text_embeddings is not None:
+            return text_embeddings
+        elif image_embeddings is not None:
+            return image_embeddings
+
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        fusion_mode: Literal["sum"] = "sum",
+        **kwargs: Any,
+    ) -> np.ndarray | torch.Tensor:
+        text_embeddings = None
+        image_embeddings = None
+        if "text" in inputs.dataset.features:
+            text_embeddings = self.get_text_embeddings(
+                inputs, **kwargs
+            )
+        if "image" in inputs.dataset.features:
+            image_embeddings = self.get_image_embeddings(
+                inputs, **kwargs
+            )
 
         if text_embeddings is not None and image_embeddings is not None:
             if len(text_embeddings) != len(image_embeddings):

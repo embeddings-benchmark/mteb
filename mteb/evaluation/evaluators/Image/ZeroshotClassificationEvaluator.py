@@ -6,44 +6,33 @@ import os
 from typing import Any
 
 import torch
+from datasets import Dataset
 from sklearn import metrics
 from torch.utils.data import DataLoader
 from torchvision import transforms
 
+from mteb.create_dataloaders import create_dataloader_from_texts
 from mteb.encoder_interface import Encoder
 
 from ..Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
 
-transform = transforms.Compose([transforms.PILToTensor()])
-
-
-class ImageDataset(torch.utils.data.Dataset):
-    def __init__(self, hf_dataset, image_column_name: str = "image", transform=None):
-        self.dataset = hf_dataset
-        self.transform = transform
-        self.image_column_name = image_column_name
-
-    def __len__(self):
-        return len(self.dataset)
-
-    def __getitem__(self, idx):
-        image = self.dataset[idx][self.image_column_name]
-        if image.mode != "RGB":
-            image = image.convert("RGB")
-        image = self.transform(image)
-        return image
-
-
-def custom_collate_fn(batch):
-    return batch
+def convert_images_to_rgb(example: dict[str, Any]) -> dict[str, Any]:
+    image = example["image"]
+    # For PIL images
+    if hasattr(image, "mode") and image.mode != "RGB":
+        example["image"] = image.convert("RGB")
+    # For tensor images with 1 channel
+    elif isinstance(image, torch.Tensor) and image.shape[0] == 1:
+        example["image"] = image.repeat(3, 1, 1)
+    return example
 
 
 class ZeroshotClassificationEvaluator(Evaluator):
     def __init__(
         self,
-        dataset,
+        dataset: Dataset,
         image_column_name: str,
         labels: list[int],
         candidate_labels: list[str],
@@ -51,9 +40,12 @@ class ZeroshotClassificationEvaluator(Evaluator):
         **kwargs,
     ):
         super().__init__(**kwargs)
-        self.dataset = ImageDataset(
-            dataset, image_column_name=image_column_name, transform=transform
-        )
+        if "image" not in dataset.column_names:
+            dataset = dataset.rename_column(image_column_name, "image")
+        self.dataset = dataset.map(
+            convert_images_to_rgb,
+            desc="Converting images to RGB"
+        ).with_format("torch")
         self.image_column_name = image_column_name
         self.labels = labels
         self.candidate_labels = candidate_labels
@@ -67,18 +59,22 @@ class ZeroshotClassificationEvaluator(Evaluator):
             self.dataset,
             batch_size=encode_kwargs["batch_size"],
             shuffle=False,
-            collate_fn=custom_collate_fn,
             num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
 
-        text_embeddings = model.get_text_embeddings(
-            self.candidate_labels, batch_size=encode_kwargs["batch_size"]
+        text_embeddings = model.encode(
+            create_dataloader_from_texts(self.candidate_labels),
+            task_name=self.task_name,
+            batch_size=encode_kwargs["batch_size"],
         )
 
-        image_embeddings = model.get_image_embeddings(
-            dataloader, batch_size=encode_kwargs["batch_size"]
+        image_embeddings = model.encode(
+            dataloader,
+            task_name=self.task_name,
+            batch_size=encode_kwargs["batch_size"],
         )
 
+        # todo change to similarity
         probs = model.calculate_probs(text_embeddings, image_embeddings)
         predictions = probs.argmax(dim=1)
 

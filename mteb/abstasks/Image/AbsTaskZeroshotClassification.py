@@ -28,7 +28,7 @@ class ZeroshotClassificationDescriptiveStatistics(DescriptiveStatistics):
         average_image_height: Average height of images
         max_image_height: Maximum height of images
 
-        unique_labels: Number of unique labels
+        unique_num_labels: Number of unique labels
         labels: dict of label frequencies
 
         min_label_text_length: Minimum length of candidate label text
