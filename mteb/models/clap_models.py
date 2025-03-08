@@ -211,7 +211,7 @@ clap_htsat_fused = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets={
-       #"LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
+        # "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
     },
 )
 
@@ -236,7 +236,7 @@ clap_htsat_unfused = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets={
-       #"LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
+        # "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
     },
 )
 
@@ -260,7 +260,7 @@ larger_clap_general = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets={
-       #"LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
+        # "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
     },  # Additional finetuning over music dataset but not specified what the exact dataset is
 )
 
@@ -284,7 +284,7 @@ larger_clap_music = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets={
-       #"LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
+        # "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
     },  # Additional finetuning over music dataset but not specified what the exact dataset is
 )
 
@@ -310,6 +310,6 @@ larger_clap_music_and_speech = ModelMeta(
     similarity_fn_name="cosine",
     use_instructions=False,
     training_datasets={
-       #"LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
+        # "LAION-Audio-630K": ["https://laion.ai/blog/laion-audio-630k/"]
     },  # Additional finetuning over music dataset but not specified what the exact dataset is
 )
