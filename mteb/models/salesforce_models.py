@@ -3,7 +3,7 @@ from __future__ import annotations
 from functools import partial
 
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
 from mteb.models.instruct_wrapper import (
     InstructSentenceTransformerWrapper,
@@ -25,6 +25,7 @@ SFR_TRAINING_DATA = {  # inherits from e5
     "FEVER": ["train"],
     "FEVERHardNegatives": ["train"],
     "FEVER-NL": ["train"],  # translation not trained on
+    "FEVER-PL": ["train"],  # translation not trained on
     "HotpotQA": ["train"],
     "HotpotQAHardNegatives": ["train"],
     "HotpotQA-PL": ["train"],  # translation not trained on
@@ -60,13 +61,51 @@ SFR_Embedding_2_R = ModelMeta(
     license="cc-by-nc-4.0",
     max_tokens=32768,
     reference="https://huggingface.co/Salesforce/SFR-Embedding-2_R",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from="intfloat/e5-mistral-7b-instruct",
     public_training_code=None,
     public_training_data=None,
     training_datasets=SFR_TRAINING_DATA,
+    citation="""@misc{SFR-embedding-2,
+      title={SFR-Embedding-2: Advanced Text Embedding with Multi-stage Training},
+      author={Rui Meng*, Ye Liu*, Shafiq Rayhan Joty, Caiming Xiong, Yingbo Zhou, Semih Yavuz},
+      year={2024},
+      url={https://huggingface.co/Salesforce/SFR-Embedding-2_R}
+    }
+    """,
+)
+
+SFR_Embedding_Code_2B_R = ModelMeta(
+    loader=partial(  # type: ignore
+        InstructSentenceTransformerWrapper,
+        model_name_or_path="Salesforce/SFR-Embedding-Code-2B_R",
+        instruction_template=instruction_template,
+        attn="cccc",
+        pooling_method="lasttoken",
+        mode="embedding",
+        torch_dtype="auto",
+        normalized=True,
+    ),
+    name="Salesforce/SFR-Embedding-Code-2B_R",
+    languages=["eng_Latn"],
+    open_weights=True,
+    revision="c73d8631a005876ed5abde34db514b1fb6566973",
+    release_date="2025-01-17",  # initial commit of hf model.
+    n_parameters=2_610_000_000,
+    memory_usage_mb=4986,
+    embed_dim=2304,
+    license="cc-by-nc-4.0",
+    max_tokens=8192,
+    reference="https://huggingface.co/Salesforce/SFR-Embedding-Code-2B_R",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    adapted_from="google/gemma-2-2b-it",
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
 )
 
 SFR_Embedding_Code_2B_R = ModelMeta(
@@ -122,7 +161,7 @@ SFR_Embedding_Mistral = ModelMeta(
     license="cc-by-nc-4.0",
     max_tokens=32768,
     reference="https://huggingface.co/Salesforce/SFR-Embedding-Mistral",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,

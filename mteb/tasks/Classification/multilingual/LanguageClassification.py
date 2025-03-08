@@ -36,7 +36,7 @@ class LanguageClassification(AbsTaskClassification):
         },
         description="A language identification dataset for 20 languages.",
         reference="https://huggingface.co/datasets/papluca/language-identification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         type="Classification",
         eval_splits=["test"],

@@ -4,7 +4,7 @@ from functools import partial
 
 import torch
 
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.e5_models import (
     E5_PAPER_RELEASE_DATE,
     ME5_TRAINING_DATA,
@@ -47,7 +47,7 @@ e5_instruct = ModelMeta(
     revision="baa7be480a7de1539afce709c8f13f833a510e0a",
     release_date=E5_PAPER_RELEASE_DATE,
     framework=["GritLM", "PyTorch"],
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     reference="https://huggingface.co/intfloat/multilingual-e5-large-instruct",
     n_parameters=560_000_000,
@@ -56,6 +56,12 @@ e5_instruct = ModelMeta(
     license="mit",
     max_tokens=514,
     adapted_from="FacebookAI/xlm-roberta-large",
+    citation="""@article{wang2024multilingual,
+      title={Multilingual E5 Text Embeddings: A Technical Report},
+      author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Yang, Linjun and Majumder, Rangan and Wei, Furu},
+      journal={arXiv preprint arXiv:2402.05672},
+      year={2024}
+    }""",
     public_training_code=None,
     public_training_data=None,
     training_datasets=ME5_TRAINING_DATA,
@@ -80,7 +86,7 @@ e5_mistral = ModelMeta(
     revision="07163b72af1488142a360786df853f237b1a3ca1",
     release_date=E5_PAPER_RELEASE_DATE,
     framework=["GritLM", "PyTorch"],
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     reference="https://huggingface.co/intfloat/e5-mistral-7b-instruct",
     n_parameters=7_111_000_000,
@@ -88,6 +94,21 @@ e5_mistral = ModelMeta(
     embed_dim=4096,
     license="mit",
     max_tokens=32768,
+    citation="""
+    @article{wang2023improving,
+      title={Improving Text Embeddings with Large Language Models},
+      author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Yang, Linjun and Majumder, Rangan and Wei, Furu},
+      journal={arXiv preprint arXiv:2401.00368},
+      year={2023}
+    }
+    
+    @article{wang2022text,
+      title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
+      author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Jiao, Binxing and Yang, Linjun and Jiang, Daxin and Majumder, Rangan and Wei, Furu},
+      journal={arXiv preprint arXiv:2212.03533},
+      year={2022}
+    }
+    """,
     public_training_code=None,
     public_training_data=None,
     training_datasets=E5_MISTRAL_TRAINING_DATA,
@@ -121,7 +142,7 @@ zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
     public_training_code=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/zeta-alpha-ai/Zeta-Alpha-E5-Mistral",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets={
         **E5_MISTRAL_TRAINING_DATA,

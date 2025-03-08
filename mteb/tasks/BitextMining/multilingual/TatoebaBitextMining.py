@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -120,7 +119,7 @@ _LANGUAGES = {
 }
 
 
-class TatoebaBitextMining(AbsTaskBitextMining, MultilingualTask):
+class TatoebaBitextMining(AbsTaskBitextMining):
     fast_loading = True
     metadata = TaskMetadata(
         name="Tatoeba",
@@ -131,7 +130,7 @@ class TatoebaBitextMining(AbsTaskBitextMining, MultilingualTask):
         description="1,000 English-aligned sentence pairs for each language based on the Tatoeba corpus",
         reference="https://github.com/facebookresearch/LASER/tree/main/data/tatoeba/v1",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,

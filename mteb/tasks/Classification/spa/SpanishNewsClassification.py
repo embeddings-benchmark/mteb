@@ -14,7 +14,7 @@ class SpanishNewsClassification(AbsTaskClassification):
             "revision": "0086c197b914690a9dace258a19398890a05299a",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         date=("2023-05-01", "2024-05-01"),
         eval_splits=["train"],

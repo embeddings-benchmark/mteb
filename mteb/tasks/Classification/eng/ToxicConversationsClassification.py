@@ -14,7 +14,7 @@ class ToxicConversationsClassification(AbsTaskClassification):
             "revision": "edfaf9da55d3dd50d43143d90c1ac476895ae6de",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

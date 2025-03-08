@@ -2,7 +2,11 @@ from __future__ import annotations
 
 from functools import partial
 
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import (
+    ModelMeta,
+    ScoringFunction,
+    sentence_transformers_loader,
+)
 
 LANGUAGES_V2_0 = [
     "afr_Latn",
@@ -81,6 +85,69 @@ LANGUAGES_V2_0 = [
     "zho_Hans",
 ]
 
+
+arctic_m_v1_5 = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="Snowflake/snowflake-arctic-embed-m-v1.5",
+        revision="97eab2e17fcb7ccb8bb94d6e547898fa1a6a0f47",
+        model_prompts={
+            "query": "Represent this sentence for searching relevant passages: "
+        },
+    ),
+    name="Snowflake/snowflake-arctic-embed-m-v1.5",
+    revision="97eab2e17fcb7ccb8bb94d6e547898fa1a6a0f47",
+    release_date="2024-07-08",  # initial commit of hf model.
+    languages=["eng_Latn"],
+    open_weights=True,
+    framework=["Sentence Transformers", "PyTorch"],
+    n_parameters=109_000_000,
+    memory_usage_mb=415,
+    max_tokens=512,
+    embed_dim=768,
+    license="apache-2.0",
+    reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-m-v1.5",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=False,
+    adapted_from=None,
+    superseded_by=None,
+    citation="""@misc{merrick2024embeddingclusteringdataimprove,
+      title={Embedding And Clustering Your Data Can Improve Contrastive Pretraining}, 
+      author={Luke Merrick},
+      year={2024},
+      eprint={2407.18887},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2407.18887}, 
+    }""",
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets={
+        # source: https://arxiv.org/pdf/2405.05374
+        # splits not specified to assuming everything
+        # in MTEB
+        "NQ": ["test"],
+        "NQHardNegatives": ["test"],
+        "HotPotQA": ["test"],
+        "HotPotQAHardNegatives": ["test"],
+        "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
+        "FEVER": ["test"],
+        "FEVERHardNegatives": ["test"],
+        # not in MTEB
+        # trained on stack exchange (title-body)
+        # "stackexchange": [],
+        # potentially means that:
+        # "StackExchangeClusteringP2P": ["test"],
+        # "StackExchangeClusteringP2P.v2": ["test"],
+        # "StackExchangeClustering": ["test"],
+        # "StackExchangeClustering.v2": ["test"],
+        # not in MTEB
+        # "paq": [],
+        # "s2orc": [],
+        # "other": [],  # undisclosed including webdata
+    },  # also use synthetic
+)
+
 arctic_v1_training_datasets = {
     # source: https://arxiv.org/pdf/2405.05374
     # splits not specified to assuming everything
@@ -135,7 +202,7 @@ arctic_embed_xs = ModelMeta(
     embed_dim=384,
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-xs",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     adapted_from="sentence-transformers/all-MiniLM-L6-v2",
     superseded_by=None,
@@ -163,7 +230,7 @@ arctic_embed_s = ModelMeta(
     embed_dim=384,
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-s",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     adapted_from="intfloat/e5-small-unsupervised",
     superseded_by=None,
@@ -191,7 +258,7 @@ arctic_embed_m = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-m",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     adapted_from="intfloat/e5-base-unsupervised",
     superseded_by="Snowflake/snowflake-arctic-embed-m-v1.5",
@@ -219,7 +286,7 @@ arctic_embed_m_long = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-m-long",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     adapted_from="nomic-ai/nomic-embed-text-v1-unsupervised",
     superseded_by="Snowflake/snowflake-arctic-embed-m-v2.0",
@@ -246,7 +313,7 @@ arctic_embed_l = ModelMeta(
     embed_dim=1024,
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-l",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     adapted_from="intfloat/e5-base-unsupervised",
     superseded_by="Snowflake/snowflake-arctic-embed-l-v2.0",
@@ -276,7 +343,7 @@ arctic_embed_m_v1_5 = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-m-v1.5",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     adapted_from=None,
     superseded_by="Snowflake/snowflake-arctic-embed-m-v2.0",
@@ -304,7 +371,7 @@ arctic_embed_m_v2_0 = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-m-v2.0",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     adapted_from="Alibaba-NLP/gte-multilingual-base",
     superseded_by=None,
@@ -331,7 +398,7 @@ arctic_embed_l_v2_0 = ModelMeta(
     embed_dim=1024,
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-l-v2.0",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     adapted_from="BAAI/bge-m3-retromae",
     superseded_by=None,

@@ -1,0 +1,186 @@
+{
+    "test": {
+        "num_samples": 8192,
+        "number_of_characters": 839257,
+        "number_texts_intersect_with_train": 0,
+        "min_text_length": 13,
+        "average_text_length": 102.4483642578125,
+        "max_text_length": 613,
+        "unique_text": 8192,
+        "unique_labels": 2,
+        "labels": {
+            "0": {
+                "count": 4096
+            },
+            "1": {
+                "count": 4096
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "Danish": {
+                "num_samples": 2048,
+                "number_of_characters": 224132,
+                "number_texts_intersect_with_train": 0,
+                "min_text_length": 13,
+                "average_text_length": 109.439453125,
+                "max_text_length": 443,
+                "unique_text": 2048,
+                "unique_labels": 2,
+                "labels": {
+                    "0": {
+                        "count": 1024
+                    },
+                    "1": {
+                        "count": 1024
+                    }
+                }
+            },
+            "Norwegian_b": {
+                "num_samples": 2048,
+                "number_of_characters": 201596,
+                "number_texts_intersect_with_train": 0,
+                "min_text_length": 18,
+                "average_text_length": 98.435546875,
+                "max_text_length": 397,
+                "unique_text": 2048,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 1024
+                    },
+                    "0": {
+                        "count": 1024
+                    }
+                }
+            },
+            "Norwegian_n": {
+                "num_samples": 2048,
+                "number_of_characters": 212059,
+                "number_texts_intersect_with_train": 0,
+                "min_text_length": 18,
+                "average_text_length": 103.54443359375,
+                "max_text_length": 349,
+                "unique_text": 2048,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 1024
+                    },
+                    "0": {
+                        "count": 1024
+                    }
+                }
+            },
+            "Swedish": {
+                "num_samples": 2048,
+                "number_of_characters": 201470,
+                "number_texts_intersect_with_train": 0,
+                "min_text_length": 17,
+                "average_text_length": 98.3740234375,
+                "max_text_length": 613,
+                "unique_text": 2048,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 1024
+                    },
+                    "0": {
+                        "count": 1024
+                    }
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 4096,
+        "number_of_characters": 421198,
+        "number_texts_intersect_with_train": null,
+        "min_text_length": 14,
+        "average_text_length": 102.83154296875,
+        "max_text_length": 402,
+        "unique_text": 4096,
+        "unique_labels": 2,
+        "labels": {
+            "1": {
+                "count": 2048
+            },
+            "0": {
+                "count": 2048
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "Danish": {
+                "num_samples": 1024,
+                "number_of_characters": 110271,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 14,
+                "average_text_length": 107.6865234375,
+                "max_text_length": 392,
+                "unique_text": 1024,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 512
+                    },
+                    "0": {
+                        "count": 512
+                    }
+                }
+            },
+            "Norwegian_b": {
+                "num_samples": 1024,
+                "number_of_characters": 97878,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 18,
+                "average_text_length": 95.583984375,
+                "max_text_length": 350,
+                "unique_text": 1024,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 512
+                    },
+                    "0": {
+                        "count": 512
+                    }
+                }
+            },
+            "Norwegian_n": {
+                "num_samples": 1024,
+                "number_of_characters": 107913,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 20,
+                "average_text_length": 105.3837890625,
+                "max_text_length": 402,
+                "unique_text": 1024,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 512
+                    },
+                    "0": {
+                        "count": 512
+                    }
+                }
+            },
+            "Swedish": {
+                "num_samples": 1024,
+                "number_of_characters": 105136,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 19,
+                "average_text_length": 102.671875,
+                "max_text_length": 326,
+                "unique_text": 1024,
+                "unique_labels": 2,
+                "labels": {
+                    "1": {
+                        "count": 512
+                    },
+                    "0": {
+                        "count": 512
+                    }
+                }
+            }
+        }
+    }
+}

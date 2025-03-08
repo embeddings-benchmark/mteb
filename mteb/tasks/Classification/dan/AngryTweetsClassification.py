@@ -14,7 +14,7 @@ class AngryTweetsClassification(AbsTaskClassification):
         description="A sentiment dataset with 3 classes (positiv, negativ, neutral) for Danish tweets",
         reference="https://aclanthology.org/2021.nodalida-main.53/",
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["dan-Latn"],

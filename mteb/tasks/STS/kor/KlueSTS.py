@@ -16,7 +16,7 @@ class KlueSTS(AbsTaskSTS):
         description="Human-annotated STS dataset of Korean reviews, news, and spoken word sets. Part of the Korean Language Understanding Evaluation (KLUE).",
         reference="https://arxiv.org/abs/2105.09680",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation"],
         eval_langs=["kor-Hang"],
@@ -38,12 +38,8 @@ class KlueSTS(AbsTaskSTS):
 }""",
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5
 
     def dataset_transform(self):
         # In the case of KLUE STS, score value is nested within the `labels` field.

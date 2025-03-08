@@ -1,11 +1,11 @@
 install:
 	@echo "--- 🚀 Installing project dependencies ---"
-	pip install -e ".[dev]"
+	pip install -e ".[dev,docs]"
 
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"
 	@echo "This ensures that the project is not installed in editable mode"
-	pip install ".[dev,speedtask]"
+	pip install ".[dev,speedtask,bm25s,pylate]"
 
 lint:
 	@echo "--- 🧹 Running linters ---"
@@ -36,6 +36,10 @@ build-docs:
 	@echo "--- 📚 Building documentation ---"
 	# since we do not have a documentation site, this just build tables for the .md files
 	python docs/create_tasks_table.py
+
+serve-docs:
+	@echo "--- 📚 Serving documentation ---"
+	python -m mkdocs serve
 
 
 model-load-test:

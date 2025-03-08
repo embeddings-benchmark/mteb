@@ -14,7 +14,7 @@ class BengaliHateSpeechClassification(AbsTaskClassification):
             "revision": "99612296bc093f0720cac7d7cbfcb67eecf1ca2f",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ben-Beng"],

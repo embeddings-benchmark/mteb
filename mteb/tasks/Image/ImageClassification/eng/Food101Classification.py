@@ -36,8 +36,4 @@ class Food101Classification(AbsTaskImageClassification):
         year = {2014}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"validation": 25300},
-            "avg_character_length": {"validation": 431.4},
-        },
     )

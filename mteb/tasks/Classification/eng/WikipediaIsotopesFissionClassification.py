@@ -14,7 +14,7 @@ class WikipediaIsotopesFissionClassification(AbsTaskClassification):
             "revision": "897743346c7c794264f7dbfadc3978aa2895e8e2",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

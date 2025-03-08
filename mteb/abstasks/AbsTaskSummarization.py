@@ -4,6 +4,7 @@ import logging
 from typing import Any
 
 import numpy as np
+from datasets import Dataset
 
 from mteb.encoder_interface import Encoder
 from mteb.load_results.task_results import ScoresDict
@@ -68,37 +69,35 @@ class SummarizationDescriptiveStatistics(DescriptiveStatistics):
 class AbsTaskSummarization(AbsTask):
     """Abstract class for summarization experiments.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns:
         text: str
         human_summaries: list[str]
         machine_summaries: list[str]
         relevance: list[float] (the score of the machine generated summaries)
     """
 
-    evalutor = SummarizationEvaluator
+    min_score: int
+    max_score: int
+
     abstask_prompt = (
         "Given a news summary, retrieve other semantically similar summaries."
     )
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    @property
-    def min_score(self):
-        return self.metadata_dict["min_score"]
-
-    @property
-    def max_score(self):
-        return self.metadata_dict["max_score"]
+    # SummEval has DeprecatedSummarizationEvaluator
+    evaluator = SummarizationEvaluator
 
     def _evaluate_subset(
-        self, model: Encoder, data_split, *, encode_kwargs: dict[str, Any], **kwargs
+        self,
+        model: Encoder,
+        data_split: Dataset,
+        *,
+        encode_kwargs: dict[str, Any],
+        **kwargs,
     ) -> ScoresDict:
         normalized_scores = [
             (np.array(x) - self.min_score) / (self.max_score - self.min_score)
             for x in data_split["relevance"]
         ]
-        evaluator = self.evalutor(
+        evaluator = self.evaluator(
             machine_summaries=data_split["machine_summaries"],
             human_summaries=data_split["human_summaries"],
             texts=data_split["text"],
@@ -109,9 +108,6 @@ class AbsTaskSummarization(AbsTask):
         scores = evaluator(model, encode_kwargs=encode_kwargs)
         self._add_main_score(scores)
         return scores
-
-    def _add_main_score(self, scores: ScoresDict) -> None:
-        scores["main_score"] = scores[self.metadata.main_score]
 
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False

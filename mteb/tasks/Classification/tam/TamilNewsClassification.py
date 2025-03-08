@@ -14,7 +14,7 @@ class TamilNewsClassification(AbsTaskClassification):
             "revision": "bb34dd6690cf17aa731d75d45388c5801b8c4e4b",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],

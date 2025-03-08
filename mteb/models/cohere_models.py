@@ -6,9 +6,10 @@ from typing import Any
 import numpy as np
 import torch
 import tqdm
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.encoder_interface import BatchedInput, PromptType
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.wrapper import Wrapper
 
 supported_languages = [
@@ -180,7 +181,7 @@ class CohereTextEmbeddingModel(Wrapper):
 
     def encode(
         self,
-        sentences: list[str],
+        inputs: DataLoader[BatchedInput],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
@@ -198,9 +199,10 @@ class CohereTextEmbeddingModel(Wrapper):
             if "show_progress_bar" not in kwargs
             else kwargs.pop("show_progress_bar")
         )
+        inputs = [text for batch in inputs for text in batch["text"]]
 
         return self._embed(
-            sentences,
+            inputs,
             cohere_task_type=cohere_task_type,
             show_progress_bar=show_progress_bar,
         )
@@ -231,7 +233,7 @@ cohere_mult_3 = ModelMeta(
     embed_dim=512,
     reference="https://cohere.com/blog/introducing-embed-v3",
     license=None,
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     public_training_code=None,
@@ -256,7 +258,7 @@ cohere_eng_3 = ModelMeta(
     max_tokens=512,
     embed_dim=1024,
     license=None,
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     public_training_code=None,
@@ -281,7 +283,7 @@ cohere_mult_light_3 = ModelMeta(
     max_tokens=512,
     embed_dim=384,
     license=None,
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     public_training_code=None,
@@ -306,7 +308,7 @@ cohere_eng_light_3 = ModelMeta(
     max_tokens=512,
     embed_dim=384,
     license=None,
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     public_training_code=None,

@@ -1,0 +1,28 @@
+{
+    "headlines": {
+        "num_samples": 34376,
+        "number_of_characters": 1427388,
+        "min_text_length": 2,
+        "average_text_length": 41.522806609262275,
+        "max_text_length": 496,
+        "unique_texts": 126,
+        "min_labels_per_text": 4529,
+        "average_labels_per_text": 1.0,
+        "max_labels_per_text": 19155,
+        "unique_labels": 4,
+        "labels": {
+            "domestic news": {
+                "count": 19155
+            },
+            "economy": {
+                "count": 4582
+            },
+            "sports": {
+                "count": 6110
+            },
+            "culture": {
+                "count": 4529
+            }
+        }
+    }
+}

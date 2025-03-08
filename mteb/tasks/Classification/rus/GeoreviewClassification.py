@@ -15,7 +15,7 @@ class GeoreviewClassification(AbsTaskClassification):
         description="Review classification (5-point scale) based on Yandex Georeview dataset",
         reference="https://github.com/yandex/geo-reviews-dataset-2023",
         type="Classification",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],

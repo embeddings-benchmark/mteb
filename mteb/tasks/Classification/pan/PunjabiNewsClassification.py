@@ -14,7 +14,7 @@ class PunjabiNewsClassification(AbsTaskClassification):
             "revision": "cec3923e16519efe51d535497e711932b8f1dc44",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],

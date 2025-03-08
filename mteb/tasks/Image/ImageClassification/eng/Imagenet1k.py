@@ -37,10 +37,6 @@ class Imagenet1kClassification(AbsTaskImageClassification):
         year={2009},
         organization={Ieee}
         }""",
-        descriptive_stats={
-            "n_samples": {"test": 37200},
-            "avg_character_length": {"test": 0},
-        },
     )
     image_column_name: str = "jpg"
     label_column_name: str = "cls"

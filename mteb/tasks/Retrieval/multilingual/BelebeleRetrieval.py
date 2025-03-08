@@ -3,7 +3,6 @@ from __future__ import annotations
 from datasets import load_dataset
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _EVAL_SPLIT = "test"
@@ -177,7 +176,7 @@ def get_lang_pairs() -> dict[str, list[str]]:
 _LANGUAGES_MAPPING = get_lang_pairs()
 
 
-class BelebeleRetrieval(MultilingualTask, AbsTaskRetrieval):
+class BelebeleRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BelebeleRetrieval",
         dataset={
@@ -189,7 +188,7 @@ class BelebeleRetrieval(MultilingualTask, AbsTaskRetrieval):
             + "(including 115 distinct languages and their scripts)"
         ),
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_LANGUAGES_MAPPING,

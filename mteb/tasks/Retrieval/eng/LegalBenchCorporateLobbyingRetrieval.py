@@ -15,7 +15,7 @@ class LegalBenchCorporateLobbying(AbsTaskRetrieval):
             "revision": "f69691c650464e62546d7f2a4536f8f87c891e38",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

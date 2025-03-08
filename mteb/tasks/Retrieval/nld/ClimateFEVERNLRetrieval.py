@@ -16,7 +16,7 @@ class ClimateFEVERNL(AbsTaskRetrieval):
             "revision": "8d4f81ded229ee2bfd63b2d30a9df5d678abb1f7",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nld-Latn"],

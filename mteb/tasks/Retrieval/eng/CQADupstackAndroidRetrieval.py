@@ -15,7 +15,7 @@ class CQADupstackAndroidRetrieval(AbsTaskRetrieval):
             "revision": "f46a197baaae43b4f621051089b82a364682dfeb",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
