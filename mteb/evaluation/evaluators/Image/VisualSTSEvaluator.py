@@ -6,7 +6,6 @@ import os
 from typing import Any
 
 import numpy as np
-import torch
 from scipy.stats import pearsonr, spearmanr
 from sklearn.metrics.pairwise import (
     paired_cosine_distances,
@@ -17,12 +16,12 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 
 from mteb.create_dataloaders import prepare_image_dataset
+
 from ..Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
 
 transform = transforms.Compose([transforms.PILToTensor()])
-
 
 
 class VisualSTSEvaluator(Evaluator):
@@ -36,10 +35,12 @@ class VisualSTSEvaluator(Evaluator):
     ):
         super().__init__(**kwargs)
         self.sentence1_dataset = prepare_image_dataset(
-            dataset, image_column_name=sentences_column_names[0],
+            dataset,
+            image_column_name=sentences_column_names[0],
         )
         self.sentence2_dataset = prepare_image_dataset(
-            dataset, image_column_name=sentences_column_names[0],
+            dataset,
+            image_column_name=sentences_column_names[0],
         )
         self.gold_scores = gold_scores
         self.task_name = task_name
@@ -68,10 +69,14 @@ class VisualSTSEvaluator(Evaluator):
         )
 
         embeddings1 = model.encode(
-            sentence1_dataloader, task_name=self.task_name,batch_size=encode_kwargs["batch_size"]
+            sentence1_dataloader,
+            task_name=self.task_name,
+            batch_size=encode_kwargs["batch_size"],
         )
         embeddings2 = model.encode(
-            sentence2_dataloader, task_name=self.task_name, batch_size=encode_kwargs["batch_size"]
+            sentence2_dataloader,
+            task_name=self.task_name,
+            batch_size=encode_kwargs["batch_size"],
         )
 
         logger.info("Evaluating...")

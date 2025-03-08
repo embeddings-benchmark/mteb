@@ -50,7 +50,10 @@ class CLIPModelWrapper(Wrapper):
         with torch.no_grad():
             for batch in tqdm(texts):
                 inputs = self.processor(
-                    text=batch["text"], return_tensors="pt", padding=True, truncation=True
+                    text=batch["text"],
+                    return_tensors="pt",
+                    padding=True,
+                    truncation=True,
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 text_outputs = self.model.get_text_features(**inputs)
@@ -138,13 +141,9 @@ class CLIPModelWrapper(Wrapper):
         text_embeddings = None
         image_embeddings = None
         if "text" in inputs.dataset.features:
-            text_embeddings = self.get_text_embeddings(
-                inputs, **kwargs
-            )
+            text_embeddings = self.get_text_embeddings(inputs, **kwargs)
         if "image" in inputs.dataset.features:
-            image_embeddings = self.get_image_embeddings(
-                inputs, **kwargs
-            )
+            image_embeddings = self.get_image_embeddings(inputs, **kwargs)
 
         if text_embeddings is not None and image_embeddings is not None:
             if len(text_embeddings) != len(image_embeddings):

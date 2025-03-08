@@ -15,7 +15,6 @@ from sklearn.metrics import (
 )
 from sklearn.neighbors import KNeighborsClassifier
 from torch.utils.data import DataLoader
-from torchvision import transforms
 
 from mteb.create_dataloaders import prepare_image_dataset
 from mteb.encoder_interface import Encoder
@@ -72,7 +71,9 @@ class ImagekNNClassificationEvaluator(Evaluator):
             num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
         X_train = model.encode(
-            dataloader_train, task_name=self.task_name, batch_size=self.encode_kwargs["batch_size"]
+            dataloader_train,
+            task_name=self.task_name,
+            batch_size=self.encode_kwargs["batch_size"],
         )
         dataloader = DataLoader(
             self.dataset_test,
@@ -82,7 +83,9 @@ class ImagekNNClassificationEvaluator(Evaluator):
         )
         if test_cache is None:
             X_test = model.encode(
-                dataloader, task_name=self.task_name, batch_size=self.encode_kwargs["batch_size"]
+                dataloader,
+                task_name=self.task_name,
+                batch_size=self.encode_kwargs["batch_size"],
             )
             test_cache = X_test
         else:
@@ -152,7 +155,9 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
             num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
         X_train = model.encode(
-            dataloader_train, task_name=self.task_name, batch_size=self.encode_kwargs["batch_size"]
+            dataloader_train,
+            task_name=self.task_name,
+            batch_size=self.encode_kwargs["batch_size"],
         )
 
         dataloader = DataLoader(
@@ -163,7 +168,9 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
         )
         if test_cache is None:
             X_test = model.encode(
-                dataloader, task_name=self.task_name, batch_size=self.encode_kwargs["batch_size"]
+                dataloader,
+                task_name=self.task_name,
+                batch_size=self.encode_kwargs["batch_size"],
             )
             test_cache = X_test
         else:
@@ -321,7 +328,9 @@ class ImagelogRegClassificationEvaluator(Evaluator):
             num_workers=num_workers,
         )
         X_train = model.encode(
-            dataloader_train, task_name=self.task_name, batch_size=self.encode_kwargs["batch_size"]
+            dataloader_train,
+            task_name=self.task_name,
+            batch_size=self.encode_kwargs["batch_size"],
         )
         dataloader = DataLoader(
             self.dataset_test,
@@ -331,7 +340,9 @@ class ImagelogRegClassificationEvaluator(Evaluator):
         )
         if test_cache is None:
             X_test = model.encode(
-                dataloader, task_name=self.task_name, batch_size=self.encode_kwargs["batch_size"]
+                dataloader,
+                task_name=self.task_name,
+                batch_size=self.encode_kwargs["batch_size"],
             )
             test_cache = X_test
         else:

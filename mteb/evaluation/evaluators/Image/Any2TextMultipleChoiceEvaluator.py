@@ -78,9 +78,7 @@ class Any2TextMultipleChoiceEvaluator(Evaluator):
             label_embedding_dict[label] = embedding
 
         query_embeddings = model.encode(
-            DataLoader(
-                prepare_image_dataset(self.dataset)
-            ),
+            DataLoader(prepare_image_dataset(self.dataset)),
             task_name=self.task_name,
             batch_size=encode_kwargs["batch_size"],
         )

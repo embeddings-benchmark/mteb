@@ -5,7 +5,6 @@ from typing import Any
 
 import sklearn
 import sklearn.cluster
-from PIL import Image
 from datasets import Dataset
 from scipy.optimize import linear_sum_assignment
 from sklearn import metrics
@@ -22,16 +21,14 @@ class ImageClusteringEvaluator(Evaluator):
     def __init__(
         self,
         dataset: Dataset,
-            image_column_name: str,
-            label_column_name: str,
+        image_column_name: str,
+        label_column_name: str,
         task_name: str | None = None,
         clustering_batch_size: int = 500,
         **kwargs,
     ):
         super().__init__(**kwargs)
-        self.dataset = prepare_image_dataset(
-            dataset, image_column_name
-        )
+        self.dataset = prepare_image_dataset(dataset, image_column_name)
         self.labels = dataset[label_column_name]
         self.clustering_batch_size = clustering_batch_size
         self.task_name = task_name

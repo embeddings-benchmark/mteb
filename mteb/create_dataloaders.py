@@ -181,6 +181,7 @@ def create_dataloader_for_queries_conversation(
         )
     return torch.utils.data.DataLoader(dataset, **dataloader_kwargs)
 
+
 def convert_images_to_rgb(example: dict[str, Any]) -> dict[str, Any]:
     image = example["image"]
     # For PIL images
@@ -192,10 +193,11 @@ def convert_images_to_rgb(example: dict[str, Any]) -> dict[str, Any]:
     return example
 
 
-def prepare_image_dataset(dataset: Dataset, image_column_name: str | None = None) -> Dataset:
+def prepare_image_dataset(
+    dataset: Dataset, image_column_name: str | None = None
+) -> Dataset:
     if image_column_name and "image" not in dataset.column_names:
         dataset = dataset.rename_column(image_column_name, "image")
     return dataset.map(
-        convert_images_to_rgb,
-        desc="Converting images to RGB"
+        convert_images_to_rgb, desc="Converting images to RGB"
     ).with_format("torch")

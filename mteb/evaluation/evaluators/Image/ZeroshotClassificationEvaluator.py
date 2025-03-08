@@ -5,11 +5,9 @@ import math
 import os
 from typing import Any
 
-import torch
 from datasets import Dataset
 from sklearn import metrics
 from torch.utils.data import DataLoader
-from torchvision import transforms
 
 from mteb.create_dataloaders import create_dataloader_from_texts, prepare_image_dataset
 from mteb.encoder_interface import Encoder
@@ -17,7 +15,6 @@ from mteb.encoder_interface import Encoder
 from ..Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
-
 
 
 class ZeroshotClassificationEvaluator(Evaluator):
