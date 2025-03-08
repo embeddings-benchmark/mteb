@@ -56,17 +56,3 @@ class FSD50HFMultilingualClassification(AbsTaskAudioMultilabelClassification):
     audio_column_name: str = "audio"
     label_column_name: str = "labels"
     samples_per_label: int = 8
-
-    def load_data(self, **kwargs):
-        """Load dataset from HuggingFace hub and convert it to the standard format."""
-        if self.data_loaded:
-            return
-
-        self.dataset = {}
-        for lang in self.hf_subsets:
-            self.dataset[lang] = datasets.load_dataset(
-                name=lang, **self.metadata_dict["dataset"]
-            )
-
-        self.dataset_transform()
-        self.data_loaded = True
