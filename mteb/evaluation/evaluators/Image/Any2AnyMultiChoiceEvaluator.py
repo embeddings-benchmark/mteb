@@ -14,10 +14,11 @@ import pytrec_eval
 import torch
 from datasets import Dataset
 from PIL import Image
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, default_collate
 from torchvision import transforms
 
-from mteb.encoder_interface import Encoder
+from mteb.create_dataloaders import image_dataloader, prepare_image_dataset
+from mteb.encoder_interface import Encoder, PromptType
 
 from ..Evaluator import Evaluator
 from ..utils import (
@@ -36,33 +37,9 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 logger = logging.getLogger(__name__)
 
-transform = transforms.Compose([transforms.PILToTensor()])
 
-
-class ImageDataset(torch.utils.data.Dataset):
-    def __init__(self, hf_dataset, image_column_name: str = "image", transform=None):
-        self.dataset = hf_dataset
-        self.transform = transform
-        self.image_column_name = image_column_name
-
-    def __len__(self):
-        return len(self.dataset)
-
-    def __getitem__(self, idx):
-        image = self.dataset[idx][self.image_column_name]
-        if isinstance(image, bytes):
-            image = Image.open(io.BytesIO(image))
-        else:
-            # Assume the image is already in a usable format (e.g., PIL Image)
-            image = image
-        if image.mode != "RGB":
-            image = image.convert("RGB")
-        image = self.transform(image)
-        return image
-
-
-def custom_collate_fn(batch):
-    return batch
+from torch.utils.data._utils.collate import default_collate
+from typing import Any, Dict, List
 
 
 # Adapted from https://github.com/beir-cellar/beir/blob/f062f038c4bfd19a8ca942a9910b1e0d218759d4/beir/retrieval/search/dense/exact_search.py#L12
@@ -105,6 +82,7 @@ class Any2AnyMultiChoiceSearch:
         qrels: Dataset,
         top_k: int,
         score_function: str,
+        task_name: str,
         return_sorted: bool = False,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
@@ -117,43 +95,19 @@ class Any2AnyMultiChoiceSearch:
         query_ids = list(queries["id"])
         self.results = {qid: {} for qid in query_ids}
 
-        q_modality = queries[0]["modality"]
-
-        if q_modality == "text":
-            query_texts = queries["text"]
-            query_embeddings = self.model.get_text_embeddings(
-                texts=query_texts, batch_size=self.encode_kwargs["batch_size"]
-            )
-        else:
-            queries_dataset = ImageDataset(
-                queries, image_column_name="image", transform=transform
-            )
-            query_image_dataloader = DataLoader(
-                queries_dataset,
+        query_embeddings = self.model.encode(
+            image_dataloader(
+                queries,
+                image_column_name="image",
                 batch_size=self.encode_kwargs["batch_size"],
-                shuffle=False,
-                collate_fn=custom_collate_fn,
-                num_workers=min(math.floor(os.cpu_count() / 2), 16),
-            )
-            if q_modality == "image":
-                query_embeddings = self.model.get_image_embeddings(
-                    images=query_image_dataloader,
-                    batch_size=self.encode_kwargs["batch_size"],
-                )
-            elif q_modality == "image,text":
-                query_texts = queries["text"]
-                query_embeddings = self.model.get_fused_embeddings(
-                    texts=query_texts,
-                    images=query_image_dataloader,
-                    batch_size=self.encode_kwargs["batch_size"],
-                )
-            else:
-                raise ValueError(f"Unsupported modality: {q_modality}")
+            ),
+            task_name=task_name,
+            prompt_type=PromptType.query,
+            **self.encode_kwargs,
+        )
 
         logger.info("Preparing Corpus...")
         corpus_ids = list(corpus["id"])
-
-        corpus_modality = corpus[0]["modality"]
 
         logger.info("Encoding Corpus in batches... Warning: This might take a while!")
         logger.info(
@@ -169,36 +123,18 @@ class Any2AnyMultiChoiceSearch:
             )
             chunk_ids = corpus_ids[chunk_start : chunk_start + self.corpus_chunk_size]
 
-            if corpus_modality == "text":
-                corpus_texts = chunk["text"]
-                sub_corpus_embeddings = self.model.get_text_embeddings(
-                    texts=corpus_texts, batch_size=self.encode_kwargs["batch_size"]
-                )
-            else:
-                corpus_dataset = ImageDataset(
-                    chunk, image_column_name="image", transform=transform
-                )
-                corpus_image_dataloader = DataLoader(
-                    corpus_dataset,
+            dataloader = image_dataloader(
+                    chunk,
+                    image_column_name="image",
                     batch_size=self.encode_kwargs["batch_size"],
-                    shuffle=False,
-                    collate_fn=custom_collate_fn,
-                    num_workers=min(math.floor(os.cpu_count() / 2), 16),
                 )
-                if corpus_modality == "image":
-                    sub_corpus_embeddings = self.model.get_image_embeddings(
-                        images=corpus_image_dataloader,
-                        batch_size=self.encode_kwargs["batch_size"],
-                    )
-                elif corpus_modality == "image,text":
-                    corpus_texts = chunk["text"]
-                    sub_corpus_embeddings = self.model.get_fused_embeddings(
-                        texts=corpus_texts,
-                        images=corpus_image_dataloader,
-                        batch_size=self.encode_kwargs["batch_size"],
-                    )
-                else:
-                    raise ValueError(f"Unsupported modality: {corpus_modality}")
+
+            sub_corpus_embeddings = self.model.encode(
+                dataloader,
+                task_name=task_name,
+                prompt_type=PromptType.passage,
+                **self.encode_kwargs,
+            )
 
             cos_scores = self.score_functions[score_function](
                 query_embeddings, sub_corpus_embeddings
@@ -301,7 +237,7 @@ class Any2AnyMultiChoiceEvaluator(Evaluator):
             qrels,
             self.top_k,
             self.score_function,
-            prompt_name=self.task_name,  # type: ignore
+            task_name=self.task_name,  # type: ignore
         )
 
     @staticmethod
