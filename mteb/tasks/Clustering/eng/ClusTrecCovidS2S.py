@@ -27,10 +27,10 @@ class ClusTrecCovidS2SFast(AbsTaskClusteringFast):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
-        date=None,
+        date=("2020-04-10", "2020-07-16"),
         domains=["Academic", "Medical", "Written"],
         task_subtypes=["Thematic clustering"],
-        license="https://github.com/katzurik/Knowledge_Navigator/blob/main/Benchmarks/CLUSTREC%20COVID/README.md#license",
+        license="cc-by-sa-4.0", #license",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",
@@ -79,12 +79,11 @@ class ClusTrecCovidS2S(AbsTaskClustering):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
-        date=None,
+        date=("2020-04-10", "2020-07-16"),
         domains=["Academic", "Written", "Medical"],
         task_subtypes=["Thematic clustering"],
-        license="https://github.com/katzurik/Knowledge_Navigator/blob/main/Benchmarks/CLUSTREC%20COVID/README.md#license",
+        license="cc-by-sa-4.0",
         annotations_creators="expert-annotated",
-        dialect=[],
         sample_creation="created",
         bibtex_citation="""@inproceedings{katz-etal-2024-knowledge,
     title = "Knowledge Navigator: {LLM}-guided Browsing Framework for Exploratory Search in Scientific Literature",
@@ -102,3 +101,14 @@ class ClusTrecCovidS2S(AbsTaskClustering):
         """,
         prompt="Identify the main category of the covid-19 papers based on the titles and abstracts",
     )
+
+
+if __name__ == "__main__":
+    from mteb.tasks.Clustering import ClusTrecCovidS2S  # Replace with the actual task path
+
+    # Initialize the task
+    task = ClusTrecCovidS2S()
+
+    # Compute metadata metrics
+    task.calculate_metadata_metrics()
+
