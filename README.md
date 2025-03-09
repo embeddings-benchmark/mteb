@@ -159,7 +159,7 @@ tasks = mteb.get_tasks(modalities=["text", "image"]) # Only select tasks with te
  You can also specify exclusive modality filtering to only get tasks with exactly the requested modalities (default behavior with exclusive_modality_filter=False):
 ```python
 # Get tasks with text modality, this will also include tasks having both text and image modalities
-tasks = mteb.get_tasks(modalities=["text"], exclusive_modality_filter=False) 
+tasks = mteb.get_tasks(modalities=["text"], exclusive_modality_filter=False)
 
 # Get tasks that have ONLY text modality (no image or other modalities)
 tasks = mteb.get_tasks(modalities=["text"], exclusive_modality_filter=True)
