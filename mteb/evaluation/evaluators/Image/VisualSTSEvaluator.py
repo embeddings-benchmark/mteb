@@ -32,12 +32,14 @@ class VisualSTSEvaluator(Evaluator):
     ):
         super().__init__(**kwargs)
         self.sentence1_dataset = create_image_dataloader(
-            dataset,
-            image_column_name=sentences_column_names[0],
+            dataset.rename_column(
+                sentences_column_names[0], "image"
+            ),
         )
         self.sentence2_dataset = create_image_dataloader(
-            dataset,
-            image_column_name=sentences_column_names[0],
+            dataset.rename_column(
+                sentences_column_names[1], "image"
+            ),
         )
         self.gold_scores = gold_scores
         self.task_name = task_name
@@ -52,8 +54,8 @@ class VisualSTSEvaluator(Evaluator):
         if "batch_size" not in encode_kwargs:
             encode_kwargs["batch_size"] = 32
 
-        self.sentence1_dataset.batch_size = encode_kwargs["batch_size"]
-        self.sentence2_dataset.batch_size = encode_kwargs["batch_size"]
+        # self.sentence1_dataset.batch_size = encode_kwargs["batch_size"]
+        # self.sentence2_dataset.batch_size = encode_kwargs["batch_size"]
 
         embeddings1 = model.encode(
             self.sentence1_dataset,
