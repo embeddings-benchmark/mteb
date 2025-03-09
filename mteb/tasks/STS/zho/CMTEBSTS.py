@@ -80,13 +80,13 @@ class BQ(AbsTaskSTS):
         dialect=None,
         sample_creation=None,
         bibtex_citation="""@misc{xiao2024cpackpackagedresourcesadvance,
-      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, 
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding},
       author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
       year={2024},
       eprint={2309.07597},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2309.07597}, 
+      url={https://arxiv.org/abs/2309.07597},
 }""",
     )
 
@@ -121,13 +121,13 @@ class LCQMC(AbsTaskSTS):
         dialect=None,
         sample_creation=None,
         bibtex_citation="""@misc{xiao2024cpackpackagedresourcesadvance,
-      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, 
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding},
       author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
       year={2024},
       eprint={2309.07597},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2309.07597}, 
+      url={https://arxiv.org/abs/2309.07597},
 }""",
     )
 
@@ -162,13 +162,13 @@ class PAWSX(AbsTaskSTS):
         dialect=None,
         sample_creation=None,
         bibtex_citation="""@misc{xiao2024cpackpackagedresourcesadvance,
-      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, 
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding},
       author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
       year={2024},
       eprint={2309.07597},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2309.07597}, 
+      url={https://arxiv.org/abs/2309.07597},
 }""",
     )
 
@@ -203,13 +203,13 @@ class STSB(AbsTaskSTS):
         dialect=None,
         sample_creation=None,
         bibtex_citation="""@misc{xiao2024cpackpackagedresourcesadvance,
-      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, 
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding},
       author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
       year={2024},
       eprint={2309.07597},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2309.07597}, 
+      url={https://arxiv.org/abs/2309.07597},
 }""",
     )
 

@@ -1,6 +1,7 @@
 install:
 	@echo "--- 🚀 Installing project dependencies ---"
 	pip install -e ".[dev]"
+	pre-commit install
 
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"
@@ -10,7 +11,7 @@ install-for-tests:
 lint:
 	@echo "--- 🧹 Running linters ---"
 	ruff format . 			# running ruff formatting
-	ruff check . --fix  	# running ruff linting
+	ruff check . --fix --exit-non-zero-on-fix  	# running ruff linting # --exit-non-zero-on-fix is used for the pre-commit hook to work
 
 lint-check:
 	@echo "--- 🧹 Check is project is linted ---"
@@ -22,9 +23,10 @@ test:
 	@echo "--- 🧪 Running tests ---"
 	pytest -n auto -m "not test_datasets"
 
+
 test-with-coverage:
 	@echo "--- 🧪 Running tests with coverage ---"
-	pytest -n auto --cov-report=term-missing --cov-config=pyproject.toml --cov=mteb 
+	pytest -n auto --cov-report=term-missing --cov-config=pyproject.toml --cov=mteb
 
 pr:
 	@echo "--- 🚀 Running requirements for a PR ---"
@@ -53,3 +55,9 @@ dataset-load-test:
 run-leaderboard:
 	@echo "--- 🚀 Running leaderboard locally ---"
 	python -m mteb.leaderboard.app
+
+
+.PHONY: check
+check: ## Run code quality tools.
+	@echo "--- 🧹 Running code quality tools ---"
+	@pre-commit run -a

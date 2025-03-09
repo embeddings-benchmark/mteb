@@ -2,7 +2,7 @@
 
 The Massive Multilingual Text Embedding Benchmark (MMTEB) is a community-led extension of [MTEB](https://arxiv.org/abs/2210.07316) to cover embedding tasks for a massive number of languages.
 
-## Background 
+## Background
 
 The Massive Text Embedding Benchmark (MTEB) is intended to evaluate the quality of document embeddings. When it was initially introduced, the benchmark consisted of 8 embedding tasks and 58 different datasets. Since then, MTEB has been subject to multiple community contributions as well as benchmark extensions over specific languages such as [SEB](https://openreview.net/pdf/f5f1953a9c798ec61bb050e62bc7a94037fd4fab.pdf), [C-MTEB](https://github.com/FlagOpen/FlagEmbedding/tree/master/C_MTEB) and [MTEB-French](https://github.com/Lyon-NLP/mteb-french). However, we want even wider coverage and thus announce the community-led extension of MTEB, where we seek to expand coverage of MTEB to as many languages as possible.
 
@@ -32,11 +32,11 @@ We welcome reviews of PRs adding new datasets. If you wish to review PRs of a sp
 
 ## Authorship
 
-We follow a similar approach as in the [SeaCrowd Project](https://github.com/SEACrowd#contributing-to-seacrowd) and use a point-based system to determine co-authorships. 
+We follow a similar approach as in the [SeaCrowd Project](https://github.com/SEACrowd#contributing-to-seacrowd) and use a point-based system to determine co-authorships.
 
 To be considered a co-author, at least 10 contribution points are required. The position of contributors in the author list is determined by the score they acquire, higher scores will appear first.
 
-To monitor how many points you have obtained, the contribution point tracking is now live at [this sheet](points.md) and we recommend updating the score along with your PR. Past contributions also count. 
+To monitor how many points you have obtained, the contribution point tracking is now live at [this sheet](points.md) and we recommend updating the score along with your PR. Past contributions also count.
 
 Everyone with sufficient points will also be added to the MTEB GitHub and Huggingface repository as a contributor.
 
