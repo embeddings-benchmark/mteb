@@ -17,11 +17,10 @@ from gradio_rangeslider import RangeSlider
 import mteb
 from mteb.abstasks.TaskMetadata import TASK_DOMAIN, TASK_TYPE
 from mteb.benchmarks.benchmarks import MTEB_multilingual
+from mteb.custom_validators import MODALITIES
 from mteb.languages import ISO_TO_LANGUAGE
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
 from mteb.leaderboard.table import scores_to_tables
-
-from ..modalities import MODALITIES
 
 logger = logging.getLogger(__name__)
 
