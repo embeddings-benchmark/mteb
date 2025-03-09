@@ -36,6 +36,7 @@ class QuoraPLRetrieval(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["QuoraRetrieval"],
     )
 
 
@@ -70,4 +71,5 @@ class QuoraPLRetrievalHardNegatives(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["QuoraRetrieval"],
     )

@@ -48,6 +48,7 @@ class Touche2020(AbsTaskRetrieval):
         prompt={
             "query": "Given a question, retrieve detailed and persuasive arguments that answer the question"
         },
+        adapted_from=["Touche2020"],
     )
 
 
@@ -80,4 +81,5 @@ class Touche2020v3Retrieval(AbsTaskRetrieval):
    year = 2024,
    address_ = "Washington, D.C."
 }""",
+        adapted_from=["Touche2020"],
     )

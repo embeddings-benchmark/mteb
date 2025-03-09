@@ -5,11 +5,11 @@ import logging
 import os
 from collections import defaultdict
 from pathlib import Path
-from time import time
+from time import asctime, time
 from typing import Any
 
 import tqdm
-from datasets import Features, Value, load_dataset
+from datasets import Dataset, Features, Value, concatenate_datasets, load_dataset
 from PIL import Image
 
 from ...evaluation.evaluators import Any2AnyRetrievalEvaluator
@@ -96,11 +96,16 @@ class HFDataLoader:
         self._load_qrels(split)
         # filter queries with no qrels
         qrels_dict = defaultdict(dict)
+        logger.info(f"{asctime()} - Done load qrels, before map qrels_dict")
 
-        def qrels_dict_init(row):
-            qrels_dict[row["query-id"]][row["corpus-id"]] = int(row["score"])
+        df = self.qrels.to_pandas()
+        query_ids = df["query-id"].to_numpy()
+        corpus_ids = df["corpus-id"].to_numpy()
+        scores = df["score"].to_numpy()
 
-        self.qrels.map(qrels_dict_init)
+        for q, c, s in zip(query_ids, corpus_ids, scores):
+            qrels_dict[q][c] = int(s)
+        logger.info(f"{asctime()} - Done qrels_dict")
         self.qrels = qrels_dict
         self.queries = self.queries.filter(lambda x: x["id"] in self.qrels)
         logger.info("Loaded %d %s Queries.", len(self.queries), split.upper())
@@ -432,12 +437,20 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
             corpus = self.corpus[hf_subset][split]
             relevant_docs = self.relevant_docs[hf_subset][split]
         elif compute_overall:
-            queries = {}
-            corpus = {}
+            queries = concatenate_datasets(
+                [
+                    process_docs(self.queries, hf_subset, split)
+                    for hf_subset in self.metadata.eval_langs
+                ]
+            )
+            corpus = concatenate_datasets(
+                [
+                    process_docs(self.corpus, hf_subset, split)
+                    for hf_subset in self.metadata.eval_langs
+                ]
+            )
             relevant_docs = {}
             for hf_subset in self.metadata.eval_langs:
-                queries.update(process_docs(self.queries, hf_subset, split))
-                corpus.update(process_docs(self.corpus, hf_subset, split))
                 relevant_docs.update(
                     process_relevant_docs(self.relevant_docs, hf_subset, split)
                 )
@@ -528,6 +541,14 @@ def process_docs(
     collection: dict[str, dict[str, dict[str, str] | str]], hf_subset: str, split: str
 ) -> dict[str, str]:
     """Collections can contain overlapping ids in different splits. Prepend split to avoid this"""
-    return {
-        f"{split}_{hf_subset}_{k}": v for k, v in collection[hf_subset][split].items()
-    }
+    res = {}
+    for k in collection[hf_subset][split].features.keys():
+        res.update(
+            {
+                k: [
+                    f"{split}_{hf_subset}_{ele}"
+                    for ele in collection[hf_subset][split][k]
+                ]
+            }
+        )
+    return Dataset.from_dict(res)

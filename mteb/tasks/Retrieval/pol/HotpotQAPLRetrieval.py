@@ -36,6 +36,7 @@ class HotpotQAPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["HotpotQA"],
     )
 
 
@@ -70,4 +71,5 @@ class HotpotQAPLHardNegatives(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["HotpotQA"],
     )

@@ -202,6 +202,7 @@ class NeuCLIR2023RetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["NeuCLIR2022Retrieval"],
     )
 
     def load_data(self, **kwargs):

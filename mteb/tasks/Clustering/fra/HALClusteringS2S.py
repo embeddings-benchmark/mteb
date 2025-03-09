@@ -95,6 +95,7 @@ class HALClusteringS2SFast(AbsTaskClusteringFast):
       archivePrefix={arXiv},
       primaryClass={cs.CL}
 }""",
+        adapted_from=["HALClusteringS2S"],
     )
 
     def dataset_transform(self):

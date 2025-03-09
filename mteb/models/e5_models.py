@@ -167,6 +167,7 @@ e5_mult_small = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=ME5_TRAINING_DATA,
+    adapted_from="microsoft/Multilingual-MiniLM-L12-H384",
 )
 
 e5_mult_base = ModelMeta(
@@ -191,6 +192,7 @@ e5_mult_base = ModelMeta(
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
+    adapted_from="FacebookAI/xlm-roberta-base",
     training_datasets=ME5_TRAINING_DATA,
 )
 
@@ -218,6 +220,7 @@ e5_mult_large = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=ME5_TRAINING_DATA,
+    adapted_from="FacebookAI/xlm-roberta-large",
 )
 
 e5_eng_small_v2 = ModelMeta(
@@ -242,6 +245,7 @@ e5_eng_small_v2 = ModelMeta(
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
+    adapted_from="intfloat/e5-small",
     training_datasets=E5_TRAINING_DATA,
 )
 
@@ -269,6 +273,7 @@ e5_eng_small = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=E5_TRAINING_DATA,
+    adapted_from="sentence-transformers/all-MiniLM-L6-v2",
 )
 
 e5_eng_base_v2 = ModelMeta(
@@ -293,7 +298,7 @@ e5_eng_base_v2 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     superseded_by=None,
-    adapted_from=None,
+    adapted_from="intfloat/e5-base",
     public_training_code=None,
     public_training_data=None,
     training_datasets=E5_TRAINING_DATA,
@@ -321,7 +326,7 @@ e5_eng_large_v2 = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     superseded_by=None,
-    adapted_from=None,
+    adapted_from="intfloat/e5-large",
     public_training_code=None,
     public_training_data=None,
     training_datasets=E5_TRAINING_DATA,
@@ -349,7 +354,7 @@ e5_large = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     superseded_by="intfloat/e5-large-v2",
-    adapted_from=None,
+    adapted_from="google-bert/bert-large-uncased-whole-word-masking",
     public_training_code=None,
     public_training_data=None,
     training_datasets=E5_TRAINING_DATA,
@@ -377,7 +382,7 @@ e5_base = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     superseded_by="intfloat/e5-base-v2",
-    adapted_from=None,
+    adapted_from="google-bert/bert-base-uncased",
     public_training_code=None,
     public_training_data=None,
     training_datasets=E5_TRAINING_DATA,

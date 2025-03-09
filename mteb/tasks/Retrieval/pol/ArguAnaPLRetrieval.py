@@ -38,4 +38,5 @@ class ArguAnaPL(AbsTaskRetrieval):
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["ArguAna"],
     )
