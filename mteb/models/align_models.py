@@ -1,19 +1,21 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import Any
+from typing import Any, Literal
 
+import numpy as np
 import torch
 from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoModel, AutoProcessor
 
-from mteb.encoder_interface import PromptType
+from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta
+from mteb.models.wrapper import Wrapper
 
 
-class ALIGNModelWrapper:
+class ALIGNModelWrapper(Wrapper):
     def __init__(
         self,
         model_name: str,
@@ -97,24 +99,22 @@ class ALIGNModelWrapper:
         probs = (logits * 100).softmax(dim=-1)
         return probs
 
-    def get_fused_embeddings(
+    def encode(
         self,
-        texts: list[str] = None,
-        images: list[Image.Image] | DataLoader = None,
-        fusion_mode="sum",
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        fusion_mode: Literal["sum"] = "sum",
         **kwargs: Any,
-    ):
-        if texts is None and images is None:
-            raise ValueError("Either texts or images must be provided")
-
+    ) -> np.ndarray | torch.Tensor:
         text_embeddings = None
         image_embeddings = None
 
-        if texts is not None:
-            text_embeddings = self.get_text_embeddings(texts, **kwargs)
-
-        if images is not None:
-            image_embeddings = self.get_image_embeddings(images, **kwargs)
+        if "text" in inputs.dataset.features:
+            text_embeddings = self.get_text_embeddings(inputs, **kwargs)
+        if "image" in inputs.dataset.features:
+            image_embeddings = self.get_image_embeddings(inputs, **kwargs)
 
         if text_embeddings is not None and image_embeddings is not None:
             if len(text_embeddings) != len(image_embeddings):
