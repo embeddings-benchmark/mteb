@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from functools import partial
 
-import torch
-
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
@@ -30,20 +28,13 @@ vdr_2b_multi_v1 = ModelMeta(
         instruction_template=instruction_template,
         max_seq_length=32768,
         apply_instruction_to_passages=True,
-        model_kwargs={
-            "pooling_method": "lasttoken",
-            "attn": "cccc",
-            "mode": "embedding",
-            "torch_dtype": torch.bfloat16,
-            "normalized": True,
-        },
     ),
     name="llamaindex/vdr-2b-multi-v1",
     languages=languages,
     open_weights=True,
     revision="2c4e54c8db4071cc61fc3c62f4490124e40c37db",
     release_date="2024-01-08",
-    modalities=["image", "text"],  # Do we have to change this to only text for now?
+    modalities=["text"],  # TODO: integrate with image
     n_parameters=2_000_000_000,
     memory_usage_mb=4213,
     max_tokens=32768,
