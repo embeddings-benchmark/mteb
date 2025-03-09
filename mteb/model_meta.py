@@ -14,11 +14,10 @@ from huggingface_hub.errors import (
 from pydantic import BaseModel, ConfigDict
 
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.abstasks.TaskMetadata import LICENSES, STR_DATE, STR_URL
 from mteb.encoder_interface import Encoder
 
+from .custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
 from .languages import ISO_LANGUAGE_SCRIPT
-from .modalities import MODALITIES
 
 if TYPE_CHECKING:
     from .models.sentence_transformer_wrapper import SentenceTransformerWrapper
