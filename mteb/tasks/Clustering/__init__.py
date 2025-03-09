@@ -12,6 +12,8 @@ from .eng.BiorxivClusteringP2P import *
 from .eng.BiorxivClusteringS2S import *
 from .eng.BuiltBenchClusteringP2P import *
 from .eng.BuiltBenchClusteringS2S import *
+from .eng.ClusTrecCovidP2P import *
+from .eng.ClusTrecCovidS2S import *
 from .eng.MedrxivClusteringP2P import *
 from .eng.MedrxivClusteringS2S import *
 from .eng.RedditClustering import *
