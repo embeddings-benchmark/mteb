@@ -16,7 +16,6 @@ from .AbsTaskSummarization import *
 from .Audio.AbsTaskAny2AnyRetrieval import *
 from .Audio.AbsTaskAudioClassification import *
 from .Audio.AbsTaskAudioClustering import *
-from .Audio.AbsTaskAudioCrossFoldClassification import *
 from .Image.AbsTaskAny2AnyMultiChoice import *
 from .Image.AbsTaskAny2AnyRetrieval import *
 from .Image.AbsTaskAny2TextMultipleChoice import *

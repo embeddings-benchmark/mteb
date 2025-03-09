@@ -2,13 +2,13 @@ from __future__ import annotations
 
 from datasets import Audio
 
-from mteb.abstasks.Audio.AbsTaskAudioCrossFoldClassification import (
-    AbsTaskAudioCrossFoldClassification,
+from mteb.abstasks.Audio.AbsTaskAudioClassification import (
+    AbsTaskAudioClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class ESC50Classification(AbsTaskAudioCrossFoldClassification):
+class ESC50Classification(AbsTaskAudioClassification):
     metadata = TaskMetadata(
         name="ESC50",
         description="Environmental Sound Classification Dataset.",
@@ -52,6 +52,7 @@ class ESC50Classification(AbsTaskAudioCrossFoldClassification):
     audio_column_name: str = "audio"
     label_column_name: str = "target"
     samples_per_label: int = 50
+    single_split_dataset: bool = True
 
     def dataset_transform(
         self,

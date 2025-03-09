@@ -5,6 +5,8 @@ from collections import defaultdict
 from typing import Any
 
 import numpy as np
+from datasets import Dataset
+from sklearn.model_selection import KFold
 
 from mteb.abstasks.TaskMetadata import HFSubset
 
@@ -27,6 +29,8 @@ class AbsTaskAudioClassification(AbsTask):
 
     audio_column_name: str = "audio"
     label_column_name: str = "labels"
+    single_split_dataset: bool = False
+    n_splits = 5  # for 5-fold cross-validation
 
     def __init__(
         self,
@@ -107,48 +111,104 @@ class AbsTaskAudioClassification(AbsTask):
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ) -> ScoresDict:
-        train_split = dataset[train_split]
-        eval_split = dataset[eval_split]
-        params = {"k": self.k}
-        params.update(kwargs)
+        if self.single_split_dataset:
+            assert (
+                train_split == eval_split
+            ), f"Performing 5-fold cross validation, but the dataset has a train (`{train_split}`) and test split (`{eval_split}`)! Set `single_split_dataset` to False, and retry."
+            logger.info("Performing 5-fold cross-validation on the entire dataset!")
+            ds = dataset[train_split]
+            df = ds.to_pandas()
 
-        scores = []
-        test_cache, idxs = (
-            None,
-            None,
-        )  # we store idxs to make the shuffling reproducible
-        for i in range(self.n_experiments):
-            logger.info(
-                "=" * 10 + f" Experiment {i + 1}/{self.n_experiments} " + "=" * 10
-            )
-            # Bootstrap `self.samples_per_label` samples per label for each split
-            undersampled_train, idxs = self._undersample_data(
-                train_split,
-                self.label_column_name,
-                self.samples_per_label,
-                idxs=idxs,
-            )
+            kf = KFold(n_splits=self.n_splits, shuffle=True, random_state=42)
+            folds = []
+            for train_index, val_index in kf.split(df):
+                train_df = df.iloc[train_index]
+                val_df = df.iloc[val_index]
+                train_ds = Dataset.from_pandas(train_df)
+                val_ds = Dataset.from_pandas(val_df)
 
-            if self.method == "logReg":
-                evaluator = AudiologRegClassificationEvaluator(
-                    undersampled_train,
-                    eval_split,
-                    self.audio_column_name,
+                folds.append({"train": train_ds, "validation": val_ds})
+
+            params = {"k": self.k}
+            params.update(kwargs)
+            scores = []
+            test_cache, idxs = (
+                None,
+                None,
+            )  # we store idxs to make the shuffling reproducible
+
+            for fold in folds:  # perform 5-fold cross validation
+                train_split = fold["train"]
+                eval_split = fold["validation"]
+
+                # Bootstrap `self.samples_per_label` samples per label for each split
+                undersampled_train, idxs = self._undersample_data(
+                    train_split,
                     self.label_column_name,
-                    task_name=self.metadata.name,
-                    encode_kwargs=encode_kwargs,
-                    **params,
+                    self.samples_per_label,
+                    idxs=idxs,
                 )
-            else:
-                raise ValueError(f"Method {self.method} not supported")
 
-            scores_exp, test_cache = evaluator(model, test_cache=test_cache)
-            scores.append(scores_exp)
+                if self.method == "logReg":
+                    evaluator = AudiologRegClassificationEvaluator(
+                        undersampled_train,
+                        eval_split,
+                        self.audio_column_name,
+                        self.label_column_name,
+                        task_name=self.metadata.name,
+                        encode_kwargs=encode_kwargs,
+                        **params,
+                    )
+                else:
+                    raise ValueError(f"Method {self.method} not supported")
+
+                scores_exp, test_cache = evaluator(model, test_cache=test_cache)
+                scores.append(scores_exp)
+
+        else:
+            train_split = dataset[train_split]
+            eval_split = dataset[eval_split]
+            params = {"k": self.k}
+            params.update(kwargs)
+
+            scores = []
+            test_cache, idxs = (
+                None,
+                None,
+            )  # we store idxs to make the shuffling reproducible
+            for i in range(self.n_experiments):
+                logger.info(
+                    "=" * 10 + f" Experiment {i + 1}/{self.n_experiments} " + "=" * 10
+                )
+                # Bootstrap `self.samples_per_label` samples per label for each split
+                undersampled_train, idxs = self._undersample_data(
+                    train_split,
+                    self.label_column_name,
+                    self.samples_per_label,
+                    idxs=idxs,
+                )
+
+                if self.method == "logReg":
+                    evaluator = AudiologRegClassificationEvaluator(
+                        undersampled_train,
+                        eval_split,
+                        self.audio_column_name,
+                        self.label_column_name,
+                        task_name=self.metadata.name,
+                        encode_kwargs=encode_kwargs,
+                        **params,
+                    )
+                else:
+                    raise ValueError(f"Method {self.method} not supported")
+
+                scores_exp, test_cache = evaluator(model, test_cache=test_cache)
+                scores.append(scores_exp)
 
         avg_scores: dict[str, Any] = {
             k: np.mean([s[k] for s in scores]) for k in scores[0].keys()
         }
         avg_scores["scores_per_experiment"] = scores
+        print("avg scores: ", avg_scores)
         return avg_scores
 
     def _undersample_data(
