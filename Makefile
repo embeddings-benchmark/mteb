@@ -9,8 +9,8 @@ install-for-tests:
 
 lint:
 	@echo "--- 🧹 Running linters ---"
-	ruff format . 	
-	ruff check . --fix 
+	ruff format . 			# running ruff formatting
+	ruff check . --fix  	# running ruff linting
 
 lint-check:
 	@echo "--- 🧹 Check is project is linted ---"
