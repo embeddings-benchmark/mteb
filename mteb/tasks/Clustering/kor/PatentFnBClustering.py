@@ -1,7 +1,9 @@
-from mteb import MTEB
+from __future__ import annotations
+
+import datasets
+
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 from mteb.abstasks.TaskMetadata import TaskMetadata
-import datasets
 
 # from __future__ import annotations
 
@@ -19,6 +21,7 @@ import datasets
 #     it = iter(iterable)
 #     while batch := tuple(islice(it, n)):
 #         yield batch
+
 
 class PatentFnBClustering(AbsTaskClustering):
     metadata = TaskMetadata(
@@ -47,24 +50,22 @@ class PatentFnBClustering(AbsTaskClustering):
     )
 
     def dataset_transform(self):
-
-
         documents: list = []
         labels: list = []
 
         split = self.metadata.eval_splits[0]
         ds = {}
 
-        documents.append(self.dataset[split]['sentences'])
-        labels.append(self.dataset[split]['labels'])
+        documents.append(self.dataset[split]["sentences"])
+        labels.append(self.dataset[split]["labels"])
 
         # # documents_batched = list(batched(documents, 512))
         # # labels_batched = list(batched(labels, 512))
 
         ds[split] = datasets.Dataset.from_dict(
-                {
-                    "sentences": documents,
-                    "labels": labels,
-                }
-            )
+            {
+                "sentences": documents,
+                "labels": labels,
+            }
+        )
         self.dataset = datasets.DatasetDict(ds)
