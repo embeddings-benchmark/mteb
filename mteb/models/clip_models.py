@@ -76,7 +76,9 @@ class CLIPModelWrapper(Wrapper):
 
         for batch in tqdm(images):
             inputs = self.processor(
-                images=batch["image"], return_tensors="pt", padding=True
+                images=batch["image"],
+                return_tensors="pt",
+                padding=True,
             )
             inputs = {k: v.to(self.device) for k, v in inputs.items()}
             image_outputs = self.model.get_image_features(**inputs)
@@ -86,6 +88,7 @@ class CLIPModelWrapper(Wrapper):
         return all_image_embeddings
 
     def calculate_probs(self, text_embeddings, image_embeddings):
+        # todo refactor to similarity
         text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True)
         image_embeddings = image_embeddings / image_embeddings.norm(
             dim=-1, keepdim=True
@@ -93,41 +96,6 @@ class CLIPModelWrapper(Wrapper):
         logits = torch.matmul(image_embeddings, text_embeddings.T)
         probs = (logits * 100).softmax(dim=-1)
         return probs
-
-    def get_fused_embeddings(
-        self,
-        texts: list[str] = None,
-        images: list[Image.Image] | DataLoader = None,
-        fusion_mode="sum",
-        **kwargs: Any,
-    ):
-        if texts is None and images is None:
-            raise ValueError("Either texts or images must be provided")
-
-        text_embeddings = None
-        image_embeddings = None
-
-        if texts is not None:
-            text_embeddings = self.get_text_embeddings(texts, **kwargs)
-
-        if images is not None:
-            image_embeddings = self.get_image_embeddings(images, **kwargs)
-
-        if text_embeddings is not None and image_embeddings is not None:
-            if len(text_embeddings) != len(image_embeddings):
-                raise ValueError(
-                    "The number of texts and images must have the same length"
-                )
-            if fusion_mode == "sum":
-                fused_embeddings = text_embeddings + image_embeddings
-            else:
-                # to do: add other fusion mode
-                raise ValueError(f"fusion mode {fusion_mode} hasn't been implemented")
-            return fused_embeddings
-        elif text_embeddings is not None:
-            return text_embeddings
-        elif image_embeddings is not None:
-            return image_embeddings
 
     def encode(
         self,

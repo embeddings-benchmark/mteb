@@ -12,9 +12,10 @@ from transformers import BlipForImageTextRetrieval, BlipProcessor
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
+from mteb.models.wrapper import Wrapper
 
 
-class BLIPModelWrapper:
+class BLIPModelWrapper(Wrapper):
     def __init__(
         self,
         model_name: str,
