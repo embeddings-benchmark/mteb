@@ -60,6 +60,7 @@ TASK_SUBTYPE = Literal[
     "Tumor detection",
     "Duplicate Detection",
     "Environment Sound Classification",
+    "Gunshot Audio Classification",
     "Gender Clustering",
 ]
 
@@ -126,6 +127,8 @@ TASK_TYPE = Literal[
     "ZeroShotClassification",
     "AudioMultilabelClassification",
     "AudioZeroshotClassification",
+    "AudioClassification",
+    "AudioCrossFoldClassification",
 ]
 
 
