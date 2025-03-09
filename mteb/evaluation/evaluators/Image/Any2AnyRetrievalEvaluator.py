@@ -1,10 +1,8 @@
 from __future__ import annotations
 
 import heapq
-import io
 import json
 import logging
-import math
 import os
 from collections import defaultdict
 from typing import Any
@@ -14,11 +12,8 @@ import pytrec_eval
 import torch
 from datasets import Dataset
 from PIL import Image
-from torch.utils.data import DataLoader
-from torchvision import transforms
-from mteb.create_dataloaders import image_dataloader, prepare_image_dataset
 
-from mteb.create_dataloaders import prepare_image_dataset
+from mteb.create_dataloaders import create_image_dataloader
 from mteb.encoder_interface import Encoder, PromptType
 
 from ..Evaluator import Evaluator
@@ -92,7 +87,7 @@ class Any2AnyDenseRetrievalExactSearch:
         self.results = {qid: {} for qid in query_ids}
 
         query_embeddings = self.model.encode(
-            image_dataloader(
+            create_image_dataloader(
                 queries,
                 image_column_name="image",
                 batch_size=self.encode_kwargs["batch_size"],
@@ -104,8 +99,6 @@ class Any2AnyDenseRetrievalExactSearch:
 
         logger.info("Preparing Corpus...")
         corpus_ids = list(corpus["id"])
-
-        corpus_modality = corpus[0]["modality"]
 
         logger.info("Encoding Corpus in batches... Warning: This might take a while!")
         logger.info(
@@ -121,11 +114,11 @@ class Any2AnyDenseRetrievalExactSearch:
             )
             chunk_ids = corpus_ids[chunk_start : chunk_start + self.corpus_chunk_size]
 
-            dataloader = image_dataloader(
-                    chunk,
-                    image_column_name="image",
-                    batch_size=self.encode_kwargs["batch_size"],
-                )
+            dataloader = create_image_dataloader(
+                chunk,
+                image_column_name="image",
+                batch_size=self.encode_kwargs["batch_size"],
+            )
 
             sub_corpus_embeddings = self.model.encode(
                 dataloader,

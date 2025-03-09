@@ -1,15 +1,15 @@
 from __future__ import annotations
 
 import logging
-import math
-import os
 from typing import Any
 
 from datasets import Dataset
 from sklearn import metrics
-from torch.utils.data import DataLoader
 
-from mteb.create_dataloaders import create_dataloader_from_texts, prepare_image_dataset
+from mteb.create_dataloaders import (
+    create_dataloader_from_texts,
+    create_image_dataloader,
+)
 from mteb.encoder_interface import Encoder
 
 from ..Evaluator import Evaluator
@@ -29,7 +29,7 @@ class ZeroshotClassificationEvaluator(Evaluator):
     ):
         super().__init__(**kwargs)
 
-        self.dataset = prepare_image_dataset(dataset, image_column_name)
+        self.dataset = dataset
         self.image_column_name = image_column_name
         self.labels = labels
         self.candidate_labels = candidate_labels
@@ -39,11 +39,10 @@ class ZeroshotClassificationEvaluator(Evaluator):
         if "batch_size" not in encode_kwargs:
             encode_kwargs["batch_size"] = 32
 
-        dataloader = DataLoader(
+        dataloader = create_image_dataloader(
             self.dataset,
+            image_column_name=self.image_column_name,
             batch_size=encode_kwargs["batch_size"],
-            shuffle=False,
-            num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
 
         text_embeddings = model.encode(

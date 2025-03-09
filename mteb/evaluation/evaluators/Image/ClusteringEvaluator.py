@@ -8,9 +8,8 @@ import sklearn.cluster
 from datasets import Dataset
 from scipy.optimize import linear_sum_assignment
 from sklearn import metrics
-from torch.utils.data import DataLoader
 
-from mteb.create_dataloaders import prepare_image_dataset
+from mteb.create_dataloaders import create_image_dataloader
 from mteb.encoder_interface import Encoder
 from mteb.evaluation.evaluators.Evaluator import Evaluator
 
@@ -28,7 +27,8 @@ class ImageClusteringEvaluator(Evaluator):
         **kwargs,
     ):
         super().__init__(**kwargs)
-        self.dataset = prepare_image_dataset(dataset, image_column_name)
+        self.dataset = dataset
+        self.image_column_name = image_column_name
         self.labels = dataset[label_column_name]
         self.clustering_batch_size = clustering_batch_size
         self.task_name = task_name
@@ -38,10 +38,10 @@ class ImageClusteringEvaluator(Evaluator):
             encode_kwargs["batch_size"] = 32
 
         image_embeddings = model.encode(
-            DataLoader(
+            create_image_dataloader(
                 self.dataset,
+                image_column_name=self.image_column_name,
                 batch_size=encode_kwargs["batch_size"],
-                shuffle=False,
             ),
             task_name=self.task_name,
             batch_size=encode_kwargs["batch_size"],

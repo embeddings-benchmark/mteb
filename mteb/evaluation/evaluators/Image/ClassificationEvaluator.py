@@ -1,8 +1,6 @@
 from __future__ import annotations
 
 import logging
-import math
-import os
 from typing import Any
 
 import numpy as np
@@ -14,9 +12,8 @@ from sklearn.metrics import (
     f1_score,
 )
 from sklearn.neighbors import KNeighborsClassifier
-from torch.utils.data import DataLoader
 
-from mteb.create_dataloaders import prepare_image_dataset
+from mteb.create_dataloaders import create_image_dataloader
 from mteb.encoder_interface import Encoder
 
 from ..Evaluator import Evaluator
@@ -46,10 +43,11 @@ class ImagekNNClassificationEvaluator(Evaluator):
         if limit is not None:
             dataset_train = dataset_train.select(list(range(limit)))
 
-        self.dataset_train = prepare_image_dataset(dataset_train, image_column_name)
+        self.image_column_name = image_column_name
+        self.dataset_train = dataset_train
         self.y_train = dataset_train[label_column_name]
 
-        self.dataset_test = prepare_image_dataset(dataset_test, image_column_name)
+        self.dataset_test = dataset_test
         self.y_test = dataset_test[label_column_name]
         self.task_name = task_name
         self.encode_kwargs = encode_kwargs
@@ -64,22 +62,20 @@ class ImagekNNClassificationEvaluator(Evaluator):
         max_accuracy = 0
         max_f1 = 0
         max_ap = 0
-        dataloader_train = DataLoader(
+        dataloader_train = create_image_dataloader(
             self.dataset_train,
+            image_column_name=self.image_column_name,
             batch_size=self.encode_kwargs["batch_size"],
-            shuffle=False,
-            num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
         X_train = model.encode(
             dataloader_train,
             task_name=self.task_name,
             batch_size=self.encode_kwargs["batch_size"],
         )
-        dataloader = DataLoader(
+        dataloader = create_image_dataloader(
             self.dataset_test,
+            image_column_name=self.image_column_name,
             batch_size=self.encode_kwargs["batch_size"],
-            shuffle=False,
-            num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
         if test_cache is None:
             X_test = model.encode(
@@ -129,10 +125,11 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
         if limit is not None:
             dataset_train = dataset_train.select(list(range(limit)))
 
-        self.dataset_train = prepare_image_dataset(dataset_train, image_column_name)
+        self.image_column_name = image_column_name
+        self.dataset_train = dataset_train
         self.y_train = dataset_train[label_column_name]
 
-        self.dataset_test = prepare_image_dataset(dataset_test, image_column_name)
+        self.dataset_test = dataset_test
         self.y_test = dataset_test[label_column_name]
         self.task_name = task_name
         self.encode_kwargs = encode_kwargs
@@ -148,11 +145,10 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
         max_f1 = 0
         max_ap = 0
 
-        dataloader_train = DataLoader(
+        dataloader_train = create_image_dataloader(
             self.dataset_train,
+            image_column_name=self.image_column_name,
             batch_size=self.encode_kwargs["batch_size"],
-            shuffle=False,
-            num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
         X_train = model.encode(
             dataloader_train,
@@ -160,11 +156,10 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
             batch_size=self.encode_kwargs["batch_size"],
         )
 
-        dataloader = DataLoader(
+        dataloader = create_image_dataloader(
             self.dataset_test,
+            image_column_name=self.image_column_name,
             batch_size=self.encode_kwargs["batch_size"],
-            shuffle=False,
-            num_workers=min(math.floor(os.cpu_count() / 2), 16),
         )
         if test_cache is None:
             X_test = model.encode(
@@ -301,10 +296,11 @@ class ImagelogRegClassificationEvaluator(Evaluator):
         if limit is not None:
             dataset_train = dataset_train.select(list(range(limit)))
 
-        self.dataset_train = prepare_image_dataset(dataset_train, image_column_name)
+        self.image_column_name = image_column_name
+        self.dataset_train = dataset_train
         self.y_train = dataset_train[label_column_name]
 
-        self.dataset_test = prepare_image_dataset(dataset_test, image_column_name)
+        self.dataset_test = dataset_test
         self.y_test = dataset_test[label_column_name]
 
         self.max_iter = max_iter
@@ -318,25 +314,22 @@ class ImagelogRegClassificationEvaluator(Evaluator):
             max_iter=self.max_iter,
             verbose=1 if logger.isEnabledFor(logging.DEBUG) else 0,
         )
-        cpu_count = os.cpu_count()
-        num_workers = min(math.floor(cpu_count / 2), 16) if cpu_count else 0
 
-        dataloader_train = DataLoader(
+        dataloader_train = create_image_dataloader(
             self.dataset_train,
+            image_column_name=self.image_column_name,
             batch_size=self.encode_kwargs["batch_size"],
-            shuffle=False,
-            num_workers=num_workers,
         )
         X_train = model.encode(
             dataloader_train,
             task_name=self.task_name,
             batch_size=self.encode_kwargs["batch_size"],
         )
-        dataloader = DataLoader(
+
+        dataloader = create_image_dataloader(
             self.dataset_test,
+            image_column_name=self.image_column_name,
             batch_size=self.encode_kwargs["batch_size"],
-            shuffle=False,
-            num_workers=num_workers,
         )
         if test_cache is None:
             X_test = model.encode(

@@ -100,7 +100,9 @@ def blip2_loader(**kwargs):
             all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
             return all_image_embeddings
 
-        def get_multimodal_embeddings(self, inputs: DataLoader[BatchedInput], batch_size=32):
+        def get_multimodal_embeddings(
+            self, inputs: DataLoader[BatchedInput], batch_size=32
+        ):
             all_multimodal_embeddings = []
 
             with torch.no_grad():
@@ -141,8 +143,14 @@ def blip2_loader(**kwargs):
             text_embeddings = None
             image_embeddings = None
 
-            if "text" in inputs.dataset.features and "image" in inputs.dataset.features and fusion_mode == "multimodal":
-                return self.get_multimodal_embeddings(inputs, batch_size=kwargs.get("batch_size", batch_size))
+            if (
+                "text" in inputs.dataset.features
+                and "image" in inputs.dataset.features
+                and fusion_mode == "multimodal"
+            ):
+                return self.get_multimodal_embeddings(
+                    inputs, batch_size=kwargs.get("batch_size", batch_size)
+                )
 
             if "text" in inputs.dataset.features:
                 text_embeddings = self.get_text_embeddings(inputs, **kwargs)

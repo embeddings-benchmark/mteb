@@ -1,10 +1,8 @@
 from __future__ import annotations
 
 import heapq
-import io
 import json
 import logging
-import math
 import os
 from collections import defaultdict
 from typing import Any
@@ -14,10 +12,8 @@ import pytrec_eval
 import torch
 from datasets import Dataset
 from PIL import Image
-from torch.utils.data import DataLoader, default_collate
-from torchvision import transforms
 
-from mteb.create_dataloaders import image_dataloader, prepare_image_dataset
+from mteb.create_dataloaders import create_image_dataloader
 from mteb.encoder_interface import Encoder, PromptType
 
 from ..Evaluator import Evaluator
@@ -36,10 +32,6 @@ from ..utils import (
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 logger = logging.getLogger(__name__)
-
-
-from torch.utils.data._utils.collate import default_collate
-from typing import Any, Dict, List
 
 
 # Adapted from https://github.com/beir-cellar/beir/blob/f062f038c4bfd19a8ca942a9910b1e0d218759d4/beir/retrieval/search/dense/exact_search.py#L12
@@ -96,7 +88,7 @@ class Any2AnyMultiChoiceSearch:
         self.results = {qid: {} for qid in query_ids}
 
         query_embeddings = self.model.encode(
-            image_dataloader(
+            create_image_dataloader(
                 queries,
                 image_column_name="image",
                 batch_size=self.encode_kwargs["batch_size"],
@@ -123,11 +115,11 @@ class Any2AnyMultiChoiceSearch:
             )
             chunk_ids = corpus_ids[chunk_start : chunk_start + self.corpus_chunk_size]
 
-            dataloader = image_dataloader(
-                    chunk,
-                    image_column_name="image",
-                    batch_size=self.encode_kwargs["batch_size"],
-                )
+            dataloader = create_image_dataloader(
+                chunk,
+                image_column_name="image",
+                batch_size=self.encode_kwargs["batch_size"],
+            )
 
             sub_corpus_embeddings = self.model.encode(
                 dataloader,

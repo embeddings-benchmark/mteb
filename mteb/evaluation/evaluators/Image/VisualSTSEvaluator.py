@@ -1,8 +1,6 @@
 from __future__ import annotations
 
 import logging
-import math
-import os
 from typing import Any
 
 import numpy as np
@@ -12,10 +10,9 @@ from sklearn.metrics.pairwise import (
     paired_euclidean_distances,
     paired_manhattan_distances,
 )
-from torch.utils.data import DataLoader
 from torchvision import transforms
 
-from mteb.create_dataloaders import prepare_image_dataset
+from mteb.create_dataloaders import create_image_dataloader
 
 from ..Evaluator import Evaluator
 
@@ -34,11 +31,11 @@ class VisualSTSEvaluator(Evaluator):
         **kwargs,
     ):
         super().__init__(**kwargs)
-        self.sentence1_dataset = prepare_image_dataset(
+        self.sentence1_dataset = create_image_dataloader(
             dataset,
             image_column_name=sentences_column_names[0],
         )
-        self.sentence2_dataset = prepare_image_dataset(
+        self.sentence2_dataset = create_image_dataloader(
             dataset,
             image_column_name=sentences_column_names[0],
         )
@@ -55,26 +52,16 @@ class VisualSTSEvaluator(Evaluator):
         if "batch_size" not in encode_kwargs:
             encode_kwargs["batch_size"] = 32
 
-        sentence1_dataloader = DataLoader(
-            self.sentence1_dataset,
-            batch_size=encode_kwargs["batch_size"],
-            shuffle=False,
-            num_workers=min(math.floor(os.cpu_count() / 2), 16),
-        )
-        sentence2_dataloader = DataLoader(
-            self.sentence2_dataset,
-            batch_size=encode_kwargs["batch_size"],
-            shuffle=False,
-            num_workers=min(math.floor(os.cpu_count() / 2), 16),
-        )
+        self.sentence1_dataset.batch_size = encode_kwargs["batch_size"]
+        self.sentence2_dataset.batch_size = encode_kwargs["batch_size"]
 
         embeddings1 = model.encode(
-            sentence1_dataloader,
+            self.sentence1_dataset,
             task_name=self.task_name,
             batch_size=encode_kwargs["batch_size"],
         )
         embeddings2 = model.encode(
-            sentence2_dataloader,
+            self.sentence2_dataset,
             task_name=self.task_name,
             batch_size=encode_kwargs["batch_size"],
         )

@@ -10,7 +10,7 @@ from mteb.encoder_interface import BatchedInput, Conversation
 
 
 def create_dataloader_from_texts(
-        text: list[str], **dataloader_kwargs
+    text: list[str], **dataloader_kwargs
 ) -> DataLoader[BatchedInput]:
     """Create a dataloader from a list of text.
 
@@ -26,7 +26,7 @@ def create_dataloader_from_texts(
 
 
 def corpus_to_dict(
-        corpus: list[dict[str, str]] | dict[str, list[str]] | list[str],
+    corpus: list[dict[str, str]] | dict[str, list[str]] | list[str],
 ) -> dict[str, list[str | None]]:
     if isinstance(corpus, dict):
         sentences = [
@@ -58,7 +58,7 @@ def corpus_to_dict(
 
 
 def create_dataloader_for_retrieval_corpus(
-        inputs: list[dict[str, str]] | dict[str, list[str]] | list[str], **dataloader_kwargs
+    inputs: list[dict[str, str]] | dict[str, list[str]] | list[str], **dataloader_kwargs
 ) -> DataLoader[BatchedInput]:
     """Create a dataloader from a corpus.
 
@@ -74,10 +74,10 @@ def create_dataloader_for_retrieval_corpus(
 
 
 def create_dataloader_for_queries(
-        queries: list[str],
-        instructions: list[str] | None = None,
-        combine_query_and_instruction: Callable[[str, str], str] | None = None,
-        **dataloader_kwargs,
+    queries: list[str],
+    instructions: list[str] | None = None,
+    combine_query_and_instruction: Callable[[str, str], str] | None = None,
+    **dataloader_kwargs,
 ) -> DataLoader[BatchedInput]:
     """Create a dataloader from a list of queries.
 
@@ -107,7 +107,7 @@ def create_dataloader_for_queries(
 
 
 def convert_conv_history_to_query(
-        conversations: list[list[str | Conversation]],
+    conversations: list[list[str | Conversation]],
 ) -> list[str]:
     conversations_converted = []
 
@@ -120,8 +120,8 @@ def convert_conv_history_to_query(
             conv = []
             for i, turn in enumerate(conversation):
                 error_msg = (
-                        "When converting conversations lists of dictionary to string, each turn in the conversation "
-                        + "must be a dictionary with 'role' and 'content' keys"
+                    "When converting conversations lists of dictionary to string, each turn in the conversation "
+                    + "must be a dictionary with 'role' and 'content' keys"
                 )
                 if not isinstance(turn, dict):
                     raise ValueError(f"Turn {i} is not a dictionary. " + error_msg)
@@ -149,10 +149,10 @@ def convert_conv_history_to_query(
 
 
 def create_dataloader_for_queries_conversation(
-        queries: list[list[str | Conversation]],
-        instructions: list[str] | None = None,
-        combine_query_and_instruction: Callable[[str, str], str] | None = None,
-        **dataloader_kwargs,
+    queries: list[list[str | Conversation]],
+    instructions: list[str] | None = None,
+    combine_query_and_instruction: Callable[[str, str], str] | None = None,
+    **dataloader_kwargs,
 ) -> DataLoader[BatchedInput]:
     """Create a dataloader from a list of queries.
 
@@ -196,9 +196,13 @@ def convert_images_to_rgb(example: dict[str, Any]) -> dict[str, Any]:
 
 
 def prepare_image_dataset(
-        dataset: Dataset, image_column_name: str | None = None
+    dataset: Dataset, image_column_name: str | None = None
 ) -> Dataset:
-    if image_column_name and image_column_name in dataset.column_names and "image" not in dataset.column_names:
+    if (
+        image_column_name
+        and image_column_name in dataset.column_names
+        and "image" not in dataset.column_names
+    ):
         dataset = dataset.rename_column(image_column_name, "image")
     return dataset.map(
         convert_images_to_rgb, desc="Converting images to RGB"
@@ -218,16 +222,17 @@ def custom_collate_fn(
     return collated
 
 
-def image_dataloader(
+def create_image_dataloader(
     dataset: Dataset,
     image_column_name: str | None = None,
     batch_size: int = 32,
+    collate_fn: Callable[[list[dict[str, Any]],], dict[str, Any]] = custom_collate_fn,
 ) -> DataLoader[BatchedInput]:
     dataset = prepare_image_dataset(dataset, image_column_name)
     return DataLoader(
         dataset,
         batch_size=batch_size,
-        collate_fn=custom_collate_fn,
+        collate_fn=collate_fn,
         shuffle=False,
         # num_workers=4,
     )
