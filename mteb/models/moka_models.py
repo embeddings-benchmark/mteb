@@ -54,6 +54,7 @@ m3e_dataset = {
     "LCQMC": ["train"],
     "MIRACLReranking": ["train"],
     "PAWSX": ["train"],
+    "DuRetrieval": [],
     # not in MTEB:
     # - cmrc2018
     # - belle_2m
@@ -67,7 +68,7 @@ m3e_dataset = {
     # - wiki_atomic_edit
     # - chatmed_consult
     # - webqa
-    # - dureader_robust
+    # - dureader_robust - DuRetrieval
     # - csl
     # - lawzhidao
     # - CINLID
