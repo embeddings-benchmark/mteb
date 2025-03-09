@@ -104,13 +104,14 @@ class CLIPModelWrapper(Wrapper):
         task_name: str,
         prompt_type: PromptType | None = None,
         fusion_mode: Literal["sum"] = "sum",
+        is_image_encode: bool = False,
         **kwargs: Any,
     ) -> np.ndarray | torch.Tensor:
         text_embeddings = None
         image_embeddings = None
-        if "text" in inputs.dataset.features:
+        if "text" in inputs.dataset.features or not is_image_encode:
             text_embeddings = self.get_text_embeddings(inputs, **kwargs)
-        if "image" in inputs.dataset.features:
+        if "image" in inputs.dataset.features or is_image_encode:
             image_embeddings = self.get_image_embeddings(inputs, **kwargs)
 
         if text_embeddings is not None and image_embeddings is not None:

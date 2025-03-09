@@ -182,16 +182,23 @@ def create_dataloader_for_queries_conversation(
     return torch.utils.data.DataLoader(dataset, **dataloader_kwargs)
 
 
-def convert_images_to_rgb(example: dict[str, Any]) -> dict[str, Any]:
-    if "image" not in example:
-        return example
-    image = example["image"]
+def transform_image_to_rgb(image: Any) -> Any:
+    """Transform image to RGB format."""
     # For PIL images
     if hasattr(image, "mode") and image.mode != "RGB":
-        example["image"] = image.convert("RGB")
+        return image.convert("RGB")
     # For tensor images with 1 channel
     elif isinstance(image, torch.Tensor) and image.shape[0] == 1:
-        example["image"] = image.repeat(3, 1, 1)
+        return image.repeat(3, 1, 1)
+    return image
+
+
+def convert_images_to_rgb(
+    example: dict[str, Any], image_col_name: str = "image"
+) -> dict[str, Any]:
+    if image_col_name not in example:
+        return example
+    example[image_col_name] = transform_image_to_rgb(example[image_col_name])
     return example
 
 
@@ -226,7 +233,12 @@ def create_image_dataloader(
     dataset: Dataset,
     image_column_name: str | None = None,
     batch_size: int = 32,
-    collate_fn: Callable[[list[dict[str, Any]],], dict[str, Any]] = custom_collate_fn,
+    collate_fn: Callable[
+        [
+            list[dict[str, Any]],
+        ],
+        dict[str, Any],
+    ] = custom_collate_fn,
 ) -> DataLoader[BatchedInput]:
     dataset = prepare_image_dataset(dataset, image_column_name)
     return DataLoader(
