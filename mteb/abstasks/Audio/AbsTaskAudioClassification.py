@@ -227,6 +227,7 @@ class AbsTaskAudioClassification(AbsTask):
             k: np.mean([s[k] for s in scores]) for k in scores[0].keys()
         }
         avg_scores["scores_per_experiment"] = scores
+        print("avg scores:", avg_scores)
         return avg_scores
 
     def _undersample_data(

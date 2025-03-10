@@ -24,10 +24,10 @@ class NSynth(AbsTaskAudioClassification):
         domains=[],  # Replace with appropriate domain from allowed list?? No appropriate domain name is available
         task_subtypes=["Instrument Source Classification"],
         license="not specified",  # Replace with appropriate license from allowed list
-        annotations_creators="...",
+        annotations_creators="human-annotated",
         dialect=[],
         modalities=["audio"],
-        sample_creation="...",
+        sample_creation="created",
         bibtex_citation="""@misc{engel2017neuralaudiosynthesismusical,
             title={Neural Audio Synthesis of Musical Notes with WaveNet Autoencoders}, 
             author={Jesse Engel and Cinjon Resnick and Adam Roberts and Sander Dieleman and Douglas Eck and Karen Simonyan and Mohammad Norouzi},
