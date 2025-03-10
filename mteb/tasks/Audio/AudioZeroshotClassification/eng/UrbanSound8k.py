@@ -16,7 +16,7 @@ class UrbanSound8kZeroshotClassification(AbsTaskAudioZeroshotClassification):
             "revision": "8aa9177a0c5a6949ee4ee4b7fcabb01dfd4ae466",
         },
         type="AudioZeroshotClassification",
-        category="a2a",  # Not sure about this??
+        category="a2t",  # Not sure about this??
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -47,14 +47,14 @@ class UrbanSound8kZeroshotClassification(AbsTaskAudioZeroshotClassification):
     def get_candidate_labels(self) -> list[str]:
         """Return the text candidates for zeroshot classification"""
         return [
-            "This is a sound of air_conditioner",
-            "This is a sound of car_horn",
-            "This is a sound of children_playing",
-            "This is a sound of dog_bark",
+            "This is a sound of air conditioner",
+            "This is a sound of car horn",
+            "This is a sound of children playing",
+            "This is a sound of dog bark",
             "This is a sound of drilling",
-            "This is a sound of engine_idling",
-            "This is a sound of gun_shot",
+            "This is a sound of engine idling",
+            "This is a sound of gun shot",
             "This is a sound of jackhammer",
             "This is a sound of siren",
-            "This is a sound of street_music",
+            "This is a sound of street music",
         ]
