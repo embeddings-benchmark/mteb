@@ -61,7 +61,6 @@ TASK_SUBTYPE = Literal[
     "Duplicate Detection",
     "Environment Sound Classification",
     "Gunshot Audio Classification",
-    "Instrument Source Classification",
     "Gender Clustering",
 ]
 
