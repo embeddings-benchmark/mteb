@@ -38,7 +38,7 @@ class NSynth(AbsTaskAudioClassification):
             url={https://arxiv.org/abs/1704.01279}, 
         }""",
         descriptive_stats={
-            "n_samples": {"train": 289000, "validation": 12700, "test": 4100},
+            "n_samples": {"train": 289205, "validation": 12678, "test": 4096},
         },
     )
 
