@@ -6,8 +6,8 @@ from typing import Any
 import torch
 import torch.nn.functional as F
 from datasets import Dataset
-from PIL.Image import Image
 from torch.utils.data import DataLoader
+from torchvision import transforms
 
 from mteb.create_dataloaders import (
     transform_image_to_rgb,
@@ -17,18 +17,20 @@ from mteb.evaluation.evaluators.Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
 
+transform = transforms.Compose([transforms.PILToTensor()])
+
 
 class CustomImageDataset(torch.utils.data.Dataset):
     def __init__(
         self,
-        images: list[Image],
+        images: list[torch.Tensor],
     ):
         self.images = images
 
     def __len__(self) -> int:
         return len(self.images)
 
-    def __getitem__(self, idx: int) -> dict[str, Image]:
+    def __getitem__(self, idx: int) -> dict[str, torch.Tensor]:
         return {
             "image": self.images[idx],
         }
@@ -94,7 +96,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         else:
             images = self.dataset[self.images_column_names]
 
-        images = [transform_image_to_rgb(img) for img in images]
+        images = [transform.transforms(transform_image_to_rgb(img)) for img in images]
 
         texts = []
         if isinstance(self.texts_column_names, list):
