@@ -23,7 +23,7 @@ class NSynth(AbsTaskAudioClassification):
         date=("2025-03-06", "2025-03-06"),
         domains=["Music"],
         task_subtypes=["Instrument Source Classification"],
-        license="not specified",
+        license="cc-by-4.0",
         annotations_creators="human-annotated",
         dialect=[],
         modalities=["audio"],
