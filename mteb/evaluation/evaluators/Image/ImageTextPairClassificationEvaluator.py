@@ -1,16 +1,15 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Callable
+from typing import Any
 
 import torch
 import torch.nn.functional as F
+from datasets import Dataset
 from torch.utils.data import DataLoader
-from tqdm.auto import tqdm
 
 from mteb.create_dataloaders import (
-    convert_images_to_rgb,
-    create_image_dataloader,
+    transform_image_to_rgb,
 )
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
 from mteb.evaluation.evaluators.Evaluator import Evaluator
@@ -18,50 +17,30 @@ from mteb.evaluation.evaluators.Evaluator import Evaluator
 logger = logging.getLogger(__name__)
 
 
-def make_custom_collate_fn(
-    images_column_names: str | list[str],
-    texts_column_names: str | list[str],
-    encode_image: bool = False,
-) -> Callable[[list[dict[str, Any]]], dict[str, Any]]:
-    """Factory function to create a collate_fn that mimics the behavior of
-    ImageTextDataset.__getitem__. For each sample in the batch, it extracts the images
-    and texts according to the provided column names and applies an optional transform
-    to the images.
+class CustomImageDataset(torch.utils.data.Dataset):
+    def __init__(
+        self,
+        images: list[torch.Tensor],
+    ):
+        self.images = images
 
-    Args:
-        images_column_names: A column name (str) or list of column names for images.
-        texts_column_names: A column name (str) or list of column names for texts.
-        encode_image: If encode images or not
+    def __len__(self):
+        return len(self.images)
 
-    Returns:
-        A collate_fn that can be passed to a DataLoader.
-    """
-
-    def collate_fn(batch: list[dict[str, Any]]) -> dict[str, Any]:
-        collated_texts = []
-        collated_images = []
-        for data in batch:
-            # Extract images from the sample.
-            if isinstance(images_column_names, str):
-                images = data[images_column_names]
-            else:
-                images = [data[col] for col in images_column_names]
-
-            # Extract texts from the sample.
-            if isinstance(texts_column_names, str):
-                texts = data[texts_column_names]
-            else:
-                texts = [data[col] for col in texts_column_names]
-
-            collated_images.extend(images)
-            collated_texts.extend(texts)
-        if encode_image:
-            return {"image": collated_images}
+    def __getitem__(self, idx):
         return {
-            "text": collated_texts,
+            "image": self.images[idx],
         }
 
-    return collate_fn
+    @property
+    def features(self):
+        # for correct wrapper handling
+        return {"image": []}
+
+
+def custom_collate_fn(batch):
+    images = [item["image"] for item in batch]
+    return {"image": torch.stack(images)}
 
 
 class ImageTextPairClassificationEvaluator(Evaluator):
@@ -111,38 +90,34 @@ class ImageTextPairClassificationEvaluator(Evaluator):
             else 1
         )
 
+        images = []
         if isinstance(self.images_column_names, list):
-            for img_column in tqdm(
-                self.images_column_names, desc="Transforming images to RGB"
-            ):
-                self.dataset = self.dataset.map(
-                    convert_images_to_rgb,
-                    fn_kwargs={"image_col_name": img_column},
-                    desc="Transforming images to RGB",
-                    num_proc=4,
-                )
+            for row in self.dataset:
+                for col in self.images_column_names:
+                    images.append(row[col])
         else:
-            self.dataset = self.dataset.map(
-                convert_images_to_rgb,
-                fn_kwargs={"image_col_name": self.images_column_names},
-                desc="Transforming images to RGB",
-            )
+            images = self.dataset[self.images_column_names]
+
+        images = [transform_image_to_rgb(img) for img in images]
+
+        texts = []
+        if isinstance(self.texts_column_names, list):
+            for row in self.dataset:
+                for col in self.texts_column_names:
+                    texts.append(row[col])
+        else:
+            texts = self.dataset[self.texts_column_names]
 
         img_ground_truths = torch.arange(num_images_per_sample)
         caption_ground_truths = torch.arange(num_texts_per_sample)
 
         text_embeddings = model.encode(
             DataLoader(
-                self.dataset,
+                Dataset.from_dict({"text": texts}),
                 batch_size=encode_kwargs["batch_size"],
-                collate_fn=make_custom_collate_fn(
-                    self.images_column_names,
-                    self.texts_column_names,
-                    encode_image=False,
-                ),
             ),
             task_name=self.task_name,
-            is_image_encode=False,
+            # is_image_encode=False,
             **encode_kwargs,
         )
 
@@ -152,17 +127,12 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         ).view(len(self.dataset), num_texts_per_sample, -1)
 
         image_embeddings = model.encode(
-            create_image_dataloader(
-                self.dataset,
+            DataLoader(
+                CustomImageDataset(images),
                 batch_size=encode_kwargs["batch_size"],
-                collate_fn=make_custom_collate_fn(
-                    self.images_column_names,
-                    self.texts_column_names,
-                    encode_image=True,
-                ),
+                collate_fn=lambda x: {"image": [item["image"] for item in x]},
             ),
             task_name=self.task_name,
-            is_image_encode=True,
             **encode_kwargs,
         )
 
