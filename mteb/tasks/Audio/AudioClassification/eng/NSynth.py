@@ -21,9 +21,9 @@ class NSynth(AbsTaskAudioClassification):
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2025-03-06", "2025-03-06"),
-        domains=[],  # Replace with appropriate domain from allowed list?? No appropriate domain name is available
+        domains=["Music"],
         task_subtypes=["Instrument Source Classification"],
-        license="not specified",  # Replace with appropriate license from allowed list
+        license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
         modalities=["audio"],
