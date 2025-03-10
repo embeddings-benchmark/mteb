@@ -10,9 +10,9 @@ class UCF101ZeroshotClassification(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
         name="UCF101ZeroShot",
         description="""UCF101 is an action recognition data set of realistic
-action videos collected from YouTube, having 101 action categories. This 
-version of the dataset does not contain images but images saved frame by 
-frame. Train and test splits are generated based on the authors' first 
+action videos collected from YouTube, having 101 action categories. This
+version of the dataset does not contain images but images saved frame by
+frame. Train and test splits are generated based on the authors' first
 version train/test list.""",
         reference="https://huggingface.co/datasets/flwrlabs/ucf101",
         dataset={
@@ -36,13 +36,13 @@ version train/test list.""",
         modalities=["image"],
         sample_creation="created",
         bibtex_citation="""@misc{soomro2012ucf101dataset101human,
-      title={UCF101: A Dataset of 101 Human Actions Classes From Videos in The Wild}, 
+      title={UCF101: A Dataset of 101 Human Actions Classes From Videos in The Wild},
       author={Khurram Soomro and Amir Roshan Zamir and Mubarak Shah},
       year={2012},
       eprint={1212.0402},
       archivePrefix={arXiv},
       primaryClass={cs.CV},
-      url={https://arxiv.org/abs/1212.0402}, 
+      url={https://arxiv.org/abs/1212.0402},
 }""",
         descriptive_stats={
             "n_samples": {"test": 697222},

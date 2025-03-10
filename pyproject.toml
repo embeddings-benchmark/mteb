@@ -59,7 +59,8 @@ dev = [
 "pytest-xdist>=3.6.1",
 "pytest-coverage>=0.0",
 "pytest-rerunfailures>=15.0",
-"iso639>=0.1.4" # used for tests/scripts/test_generate_model_meta.py
+"iso639>=0.1.4", # used for tests/scripts/test_generate_model_meta.py
+"pre-commit>=4.1.0",
 ]
 codecarbon = ["codecarbon"]
 speedtask = ["GPUtil>=1.4.0", "psutil>=5.9.8"]
@@ -113,7 +114,7 @@ target-version = "py39"
 
 [tool.ruff.lint]
 select = [
-    "F",  # pyflakes rules, 
+    "F",  # pyflakes rules,
     "I",  # sorting for imports
     "E",  # formatting for docs
     "D",  # formatting for docs
@@ -123,7 +124,7 @@ select = [
 ]
 
 
-ignore = ["E501",   # line too long 
+ignore = ["E501",   # line too long
         "E741",     # ambiguous variable name
         "F403",     # undefined import
         "D100",     # Missing docstring in public module
@@ -165,9 +166,9 @@ patch_types = ["fix", "perf"]
 
 [tool.pytest.ini_options]
 addopts = """
-            --reruns 3 
-            --only-rerun requests.exceptions.ReadTimeout 
-            --only-rerun huggingface_hub.errors.HfHubHTTPError 
+            --reruns 3
+            --only-rerun requests.exceptions.ReadTimeout
+            --only-rerun huggingface_hub.errors.HfHubHTTPError
             --only-rerun huggingface_hub.errors.LocalEntryNotFoundError
             --only-rerun FileNotFoundError
             --durations=5

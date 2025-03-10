@@ -32,13 +32,13 @@ class FER2013ZeroshotClassification(AbsTaskZeroshotClassification):
         modalities=["image", "text"],
         sample_creation="created",
         bibtex_citation="""@misc{goodfellow2015explainingharnessingadversarialexamples,
-        title={Explaining and Harnessing Adversarial Examples}, 
+        title={Explaining and Harnessing Adversarial Examples},
         author={Ian J. Goodfellow and Jonathon Shlens and Christian Szegedy},
         year={2015},
         eprint={1412.6572},
         archivePrefix={arXiv},
         primaryClass={stat.ML},
-        url={https://arxiv.org/abs/1412.6572}, 
+        url={https://arxiv.org/abs/1412.6572},
         }
         """,
         descriptive_stats={
