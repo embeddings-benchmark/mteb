@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from datasets import Audio
-
 from mteb.abstasks.Audio.AbsTaskAudioClassification import (
     AbsTaskAudioClassification,
 )
@@ -48,9 +46,4 @@ class GunshotTriangulation(AbsTaskAudioClassification):
     audio_column_name: str = "audio"
     label_column_name: str = "label"
     samples_per_label: int = 10
-    single_split_dataset: bool = True
-
-    def dataset_transform(
-        self,
-    ):
-        self.dataset = self.dataset.cast_column("audio", Audio())
+    is_cross_validation: bool = True
