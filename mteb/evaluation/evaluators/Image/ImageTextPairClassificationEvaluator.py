@@ -6,6 +6,7 @@ from typing import Any
 import torch
 import torch.nn.functional as F
 from datasets import Dataset
+from PIL.Image import Image
 from torch.utils.data import DataLoader
 
 from mteb.create_dataloaders import (
@@ -20,27 +21,22 @@ logger = logging.getLogger(__name__)
 class CustomImageDataset(torch.utils.data.Dataset):
     def __init__(
         self,
-        images: list[torch.Tensor],
+        images: list[Image],
     ):
         self.images = images
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.images)
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx: int) -> dict[str, Image]:
         return {
             "image": self.images[idx],
         }
 
     @property
-    def features(self):
+    def features(self) -> dict[str, Any]:
         # for correct wrapper handling
         return {"image": []}
-
-
-def custom_collate_fn(batch):
-    images = [item["image"] for item in batch]
-    return {"image": torch.stack(images)}
 
 
 class ImageTextPairClassificationEvaluator(Evaluator):
@@ -117,7 +113,6 @@ class ImageTextPairClassificationEvaluator(Evaluator):
                 batch_size=encode_kwargs["batch_size"],
             ),
             task_name=self.task_name,
-            # is_image_encode=False,
             **encode_kwargs,
         )
 
