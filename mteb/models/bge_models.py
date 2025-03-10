@@ -33,7 +33,7 @@ bge_m3_training_data = {
     "HotpotQA-NL": ["train"],  # translation not trained on
     "HotpotQAHardNegatives": ["train"],
     "T2Retrieval": ["train"],
-    "DuReader": ["train"],
+    "DuRetrieval": ["train"],
     "MMarcoReranking": ["train"],
     "CodeSearchNet": ["train"],
     # not in mteb
@@ -70,11 +70,11 @@ bge_training_data = {
         "validation",
         "test",
     ],  # assumed from mlqa	(question, context)
+    "DuRetrieval": ["train"],
     # not in mteb
     # Dataset	Pairs
     # wudao	(title, passage)
     # cmrc2018	(query, context)
-    # dureader	(query, context)
     # simclue	(sentence_a, sentence_b)
     # csl	(title, abstract)
     # amazon_reviews_multi	(title, body)
@@ -91,7 +91,7 @@ bge_training_data = {
 bge_chinese_training_data = {
     # source: https://arxiv.org/pdf/2309.07597
     "T2Retrieval": ["train"],
-    "DuReader": ["train"],
+    "DuRetrieval": ["train"],
     "MMarcoReranking": ["train"],
     "CMedQAv2-reranking": ["train"],
     "Cmnli": ["train"],
@@ -121,7 +121,7 @@ bge_chinese_training_data = {
     # Dataset	Pairs
     # wudao	(title, passage)
     # cmrc2018	(query, context)
-    # dureader	(query, context)
+    # dureader	(query, context) - DuRetrieval
     # simclue	(sentence_a, sentence_b)
     # csl	(title, abstract)
     # amazon_reviews_multi	(title, body)

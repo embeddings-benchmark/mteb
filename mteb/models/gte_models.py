@@ -265,7 +265,7 @@ gte_multilingual_langs = [
 # Source: https://arxiv.org/pdf/2407.19669
 gte_multi_training_data = {
     "T2Retrieval": ["train"],
-    "DuReader": ["train"],
+    "DuRetrieval": ["train"],
     "MMarcoReranking": ["train"],
     "CMedQAv2-reranking": ["train"],
     "NQ-NL": ["train"],  # translation not trained on
