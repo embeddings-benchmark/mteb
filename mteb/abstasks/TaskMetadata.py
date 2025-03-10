@@ -58,6 +58,7 @@ TASK_SUBTYPE = Literal[
     "Environment Sound Classification",
     "Gunshot Audio Classification",
     "Instrument Source Classification",
+    "Music Genre Classification",
     "Gender Clustering",
     "Rendered semantic textual similarity",
 ]
@@ -125,37 +126,7 @@ MAEB_TASK_TYPE = (
     "AudioMultilabelClassification",
     "AudioZeroshotClassification",
     "AudioClassification",
-    "AudioCrossFoldClassification",
 )
-
-TASK_TYPE = (
-    (
-        "BitextMining",
-        "Classification",
-        "MultilabelClassification",
-        "Clustering",
-        "PairClassification",
-        "Reranking",
-        "Retrieval",
-        "STS",
-        "Summarization",
-        "InstructionRetrieval",
-        "Speed",
-        "Any2AnyMultiChoice",
-        "Any2AnyRetrieval",
-        "Any2TextMutipleChoice",
-        "ImageClustering",
-        "ImageClassification",
-        "ImageMultilabelClassification",
-        "ImageTextPairClassification",
-        "VisualSTS",
-        "ZeroShotClassification",
-    )
-    + MIEB_TASK_TYPE
-    + MAEB_TASK_TYPE
-)
-
-TASK_TYPE = Literal[TASK_TYPE]
 
 
 TASK_CATEGORY = Literal[
