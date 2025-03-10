@@ -29,8 +29,8 @@ class AbsTaskAudioClassification(AbsTask):
 
     audio_column_name: str = "audio"
     label_column_name: str = "labels"
-    single_split_dataset: bool = False
-    n_splits = 5  # for 5-fold cross-validation
+    is_cross_validation: bool = False
+    n_splits = 5    # by default: 5-fold cross-validation
 
     def __init__(
         self,
@@ -111,10 +111,10 @@ class AbsTaskAudioClassification(AbsTask):
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ) -> ScoresDict:
-        if self.single_split_dataset:
+        if self.is_cross_validation:
             assert (
                 train_split == eval_split
-            ), f"Performing 5-fold cross validation, but the dataset has a train (`{train_split}`) and test split (`{eval_split}`)! Set `single_split_dataset` to False, and retry."
+            ), f"Performing 5-fold cross validation, but the dataset has a train (`{train_split}`) and test split (`{eval_split}`)! Set `is_cross_validation` to False, and retry."
             logger.info("Performing 5-fold cross-validation on the entire dataset!")
             ds = dataset[train_split]
             df = ds.to_pandas()
