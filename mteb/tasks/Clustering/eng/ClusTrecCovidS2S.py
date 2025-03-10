@@ -30,7 +30,7 @@ class ClusTrecCovidS2SFast(AbsTaskClusteringFast):
         date=("2020-04-10", "2020-07-16"),
         domains=["Academic", "Medical", "Written"],
         task_subtypes=["Thematic clustering"],
-        license="cc-by-sa-4.0", #license",
+        license="cc-by-sa-4.0",  # license",
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",
@@ -85,6 +85,7 @@ class ClusTrecCovidS2S(AbsTaskClustering):
         license="cc-by-sa-4.0",
         annotations_creators="expert-annotated",
         sample_creation="created",
+        dialect=[],
         bibtex_citation="""@inproceedings{katz-etal-2024-knowledge,
     title = "Knowledge Navigator: {LLM}-guided Browsing Framework for Exploratory Search in Scientific Literature",
     author = "Katz, Uri  and
@@ -104,11 +105,12 @@ class ClusTrecCovidS2S(AbsTaskClustering):
 
 
 if __name__ == "__main__":
-    from mteb.tasks.Clustering import ClusTrecCovidS2S  # Replace with the actual task path
+    from mteb.tasks.Clustering import (
+        ClusTrecCovidS2S,
+    )  # Replace with the actual task path
 
     # Initialize the task
     task = ClusTrecCovidS2S()
 
     # Compute metadata metrics
     task.calculate_metadata_metrics()
-
