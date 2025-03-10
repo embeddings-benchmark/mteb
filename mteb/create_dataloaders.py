@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from typing import Callable
+from typing import Any, Callable
 
 import torch
 from datasets import Dataset
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, default_collate
 
 from mteb.encoder_interface import BatchedInput, Conversation
 
@@ -180,3 +180,71 @@ def create_dataloader_for_queries_conversation(
             }
         )
     return torch.utils.data.DataLoader(dataset, **dataloader_kwargs)
+
+
+def transform_image_to_rgb(image: Any) -> Any:
+    """Transform image to RGB format."""
+    # For PIL images
+    if hasattr(image, "mode") and image.mode != "RGB":
+        return image.convert("RGB")
+    # For tensor images with 1 channel
+    elif isinstance(image, torch.Tensor) and image.shape[0] == 1:
+        return image.repeat(3, 1, 1)
+    return image
+
+
+def convert_images_to_rgb(
+    example: dict[str, Any], image_col_name: str = "image"
+) -> dict[str, Any]:
+    if image_col_name not in example:
+        return example
+    example[image_col_name] = transform_image_to_rgb(example[image_col_name])
+    return example
+
+
+def prepare_image_dataset(
+    dataset: Dataset, image_column_name: str | None = None
+) -> Dataset:
+    if (
+        image_column_name
+        and image_column_name in dataset.column_names
+        and "image" not in dataset.column_names
+    ):
+        dataset = dataset.rename_column(image_column_name, "image")
+    return dataset.map(
+        convert_images_to_rgb, desc="Converting images to RGB"
+    ).with_format("torch")
+
+
+def custom_collate_fn(
+    batch: list[dict[str, Any]],
+) -> dict[str, Any]:
+    collated: dict[str, Any] = {}
+    for key in batch[0]:
+        if key == "image":
+            # Leave the images as a list to avoid stacking errors.
+            collated["image"] = [item["image"] for item in batch]
+        else:
+            collated[key] = default_collate([item[key] for item in batch])
+    return collated
+
+
+def create_image_dataloader(
+    dataset: Dataset,
+    image_column_name: str | None = None,
+    batch_size: int = 32,
+    collate_fn: Callable[
+        [
+            list[dict[str, Any]],
+        ],
+        dict[str, Any],
+    ] = custom_collate_fn,
+) -> DataLoader[BatchedInput]:
+    dataset = prepare_image_dataset(dataset, image_column_name)
+    return DataLoader(
+        dataset,
+        batch_size=batch_size,
+        collate_fn=collate_fn,
+        shuffle=False,
+        # num_workers=4,
+    )

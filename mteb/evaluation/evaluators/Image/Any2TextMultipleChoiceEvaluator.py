@@ -10,6 +10,10 @@ from sklearn.metrics.pairwise import cosine_similarity
 from torchvision import transforms
 from tqdm import tqdm
 
+from mteb.create_dataloaders import (
+    create_dataloader_from_texts,
+    create_image_dataloader,
+)
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
 from mteb.evaluation.evaluators.Evaluator import Evaluator
 
@@ -64,20 +68,22 @@ class Any2TextMultipleChoiceEvaluator(Evaluator):
         label_list = list(
             {x for n in self.dataset[self.choices_column_name] for x in n}
         )
-        label_embeddings = model.get_text_embeddings(label_list)
+        label_embeddings = model.encode(
+            create_dataloader_from_texts(
+                label_list,
+            ),
+            task_name=self.task_name,
+            batch_size=encode_kwargs["batch_size"],
+        )
         label_embedding_dict = {}
         for label, embedding in zip(label_list, label_embeddings):
             label_embedding_dict[label] = embedding
 
-        if "text" in self.query_modalities:
-            questions = self.dataset[self.query_column_names["text"]]
-        else:
-            questions = None
-        if "image" in self.query_modalities:
-            images = self.dataset[self.query_column_names["image"]]
-        query_embeddings = model.get_fused_embeddings(
-            texts=questions,
-            images=images,
+        query_embeddings = model.encode(
+            create_image_dataloader(
+                self.dataset, batch_size=encode_kwargs["batch_size"]
+            ),
+            task_name=self.task_name,
             batch_size=encode_kwargs["batch_size"],
         )
 
