@@ -29,7 +29,9 @@ DOMAINS = DOMAINS_LONG + [
 DOMAINS_langs = {split: ["eng-Latn"] for split in DOMAINS}
 
 
-EVAL_SPLITS = ["standard", "long"]
+EVAL_SPLITS = [
+    "standard"
+]  # "long" is also an option but it is not available for all domains.
 
 
 class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
@@ -40,7 +42,7 @@ class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
             "revision": "a75a0eb",
         },
         reference="https://huggingface.co/datasets/xlangai/BRIGHT",
-        description=("Bright retrieval dataset."),
+        description="Bright retrieval dataset.",
         type="Retrieval",
         category="s2p",
         eval_splits=EVAL_SPLITS,
