@@ -16,7 +16,7 @@ class UrbanSound8kZeroshotClassification(AbsTaskAudioZeroshotClassification):
             "revision": "8aa9177a0c5a6949ee4ee4b7fcabb01dfd4ae466",
         },
         type="AudioZeroshotClassification",
-        category="a2t",  # Not sure about this??
+        category="a2t",
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -36,7 +36,7 @@ class UrbanSound8kZeroshotClassification(AbsTaskAudioZeroshotClassification):
   url={https://api.semanticscholar.org/CorpusID:207217115}
 }""",
         descriptive_stats={
-            "n_samples": {"train": 8730},  # Need actual number
+            "n_samples": {"train": 8732},  
         },
     )
 
