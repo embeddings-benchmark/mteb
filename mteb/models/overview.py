@@ -71,6 +71,7 @@ from mteb.models import (
     stella_models,
     text2vec_models,
     uae_models,
+    vdr_models,
     vista_models,
     vlm2vec_models,
     voyage_models,
@@ -143,6 +144,7 @@ model_modules = [
     bedrock_models,
     uae_models,
     voyage_models,
+    vdr_models,
     fa_models,
     ara_models,
 ]

@@ -36,7 +36,7 @@ class HunSum2AbstractiveRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation="""
 @misc{barta2024news,
-      title={From News to Summaries: Building a Hungarian Corpus for Extractive and Abstractive Summarization}, 
+      title={From News to Summaries: Building a Hungarian Corpus for Extractive and Abstractive Summarization},
       author={Botond Barta and Dorina Lakatos and Attila Nagy and Milán Konor Nyist and Judit Ács},
       year={2024},
       eprint={2404.03555},

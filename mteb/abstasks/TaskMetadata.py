@@ -3,12 +3,10 @@ from __future__ import annotations
 import json
 import logging
 from collections.abc import Mapping
-from datetime import date
 from pathlib import Path
-from typing import Annotated, Any, Union
+from typing import Any, Union
 
 from pydantic import (
-    AnyUrl,
     BaseModel,
     BeforeValidator,
     ConfigDict,
@@ -17,6 +15,7 @@ from pydantic import (
 )
 from typing_extensions import Literal, TypedDict
 
+from ..custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
 from ..encoder_interface import PromptType
 from ..languages import (
     ISO_LANGUAGE_SCRIPT,
@@ -25,7 +24,6 @@ from ..languages import (
     path_to_lang_codes,
     path_to_lang_scripts,
 )
-from ..modalities import MODALITIES
 
 TASK_SUBTYPE = Literal[
     "Article retrieval",
@@ -155,16 +153,6 @@ ANNOTATOR_TYPE = Literal[
     "LM-generated and reviewed",  # reviewed by humans
 ]
 
-http_url_adapter = TypeAdapter(AnyUrl)
-STR_URL = Annotated[
-    str, BeforeValidator(lambda value: str(http_url_adapter.validate_python(value)))
-]  # Allows the type to be a string, but ensures that the string is a URL
-
-pastdate_adapter = TypeAdapter(date)
-STR_DATE = Annotated[
-    str, BeforeValidator(lambda value: str(pastdate_adapter.validate_python(value)))
-]  # Allows the type to be a string, but ensures that the string is a valid date
-
 SPLIT_NAME = str
 HFSubset = str
 LANGUAGES = Union[
@@ -187,37 +175,6 @@ PROGRAMMING_LANGS = [
     "shell",
     "sql",
 ]
-
-LICENSES = (  # this list can be extended as needed
-    Literal[  # we use lowercase for the licenses similar to the huggingface datasets
-        "not specified",  # or none found
-        "mit",
-        "cc-by-2.0",
-        "cc-by-3.0",
-        "cc-by-4.0",
-        "cc-by-sa-3.0",
-        "cc-by-sa-4.0",
-        "cc-by-nc-4.0",
-        "cc-by-nc-sa-3.0",
-        "cc-by-nc-sa-4.0",
-        "cc-by-nc-nd-4.0",
-        "cc-by-nd-4.0",
-        "openrail",
-        "openrail++",
-        "odc-by",
-        "afl-3.0",
-        "apache-2.0",
-        "cc-by-nd-2.1-jp",
-        "cc0-1.0",
-        "bsd-3-clause",
-        "gpl-3.0",
-        "lgpl-3.0",
-        "cdla-sharing-1.0",
-        "mpl-2.0",
-        "msr-la-nc",
-        "multiple",
-    ]
-)
 
 METRIC_NAME = str
 METRIC_VALUE = Union[int, float, dict[str, Any]]

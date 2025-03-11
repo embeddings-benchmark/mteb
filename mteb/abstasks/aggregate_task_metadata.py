@@ -10,16 +10,15 @@ from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.TaskMetadata import (
     ANNOTATOR_TYPE,
     LANGUAGES,
-    LICENSES,
     MODALITIES,
     SAMPLE_CREATION_METHOD,
-    STR_DATE,
     TASK_DOMAIN,
     TASK_SUBTYPE,
     TASK_TYPE,
     HFSubset,
     TaskMetadata,
 )
+from mteb.custom_validators import LICENSES, STR_DATE
 from mteb.languages import ISO_LANGUAGE_SCRIPT
 
 logger = logging.getLogger(__name__)

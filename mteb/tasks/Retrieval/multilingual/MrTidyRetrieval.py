@@ -107,7 +107,7 @@ class MrTidyRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation="""@article{mrtydi,
-              title={{Mr. TyDi}: A Multi-lingual Benchmark for Dense Retrieval}, 
+              title={{Mr. TyDi}: A Multi-lingual Benchmark for Dense Retrieval},
               author={Xinyu Zhang and Xueguang Ma and Peng Shi and Jimmy Lin},
               year={2021},
               journal={arXiv:2108.08787},
