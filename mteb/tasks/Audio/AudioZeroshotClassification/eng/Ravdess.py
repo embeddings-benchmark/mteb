@@ -21,11 +21,9 @@ class RavdessZeroshotClassification(AbsTaskAudioZeroshotClassification):
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2018-03-01", "2018-03-16"),
-        domains=[
-            "Spoken"
-        ], 
+        domains=["Spoken"],
         task_subtypes=["Emotion classification"],
-        license="cc-by-nc-sa-3.0", 
+        license="cc-by-nc-sa-3.0",
         annotations_creators="human-annotated",
         dialect=[],
         modalities=["audio"],
