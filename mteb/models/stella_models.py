@@ -172,7 +172,7 @@ stella_mrl_large_zh_v3_5_1792d = ModelMeta(
     adapted_from="dunzhang/stella-large-zh-v3-1792d",
     public_training_code=None,
     public_training_data=None,
-    training_datasets=stella_zh_datasets,  
+    training_datasets=stella_zh_datasets,
 )
 
 zpoint_large_embedding_zh = ModelMeta(
