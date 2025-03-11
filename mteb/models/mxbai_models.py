@@ -47,7 +47,7 @@ mxbai_embed_large_v1 = ModelMeta(
       year={2024},
       url={https://www.mixedbread.ai/blog/mxbai-embed-large-v1},
     }
-    
+
     @article{li2023angle,
       title={AnglE-optimized Text Embeddings},
       author={Li, Xianming and Li, Jing},

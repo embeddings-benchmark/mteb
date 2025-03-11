@@ -11,7 +11,7 @@ class KorSarcasmClassification(AbsTaskClassification):
         The Korean Sarcasm Dataset was created to detect sarcasm in text, which can significantly alter the original
         meaning of a sentence. 9319 tweets were collected from Twitter and labeled for sarcasm or not_sarcasm. These
         tweets were gathered by querying for: irony sarcastic, and
-        sarcasm. 
+        sarcasm.
         The dataset was created by gathering HTML data from Twitter. Queries for hashtags that include sarcasm
         and variants of it were used to return tweets. It was preprocessed by removing the keyword
         hashtag, urls and mentions of the user to preserve anonymity.

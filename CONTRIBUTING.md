@@ -1,4 +1,4 @@
-## Contributing to mteb
+## Contributing to MTEB
 
 We welcome contributions to `mteb` such as new tasks, code optimization or benchmarks.
 
@@ -18,7 +18,7 @@ cd mteb
 make install
 ```
 
-This uses [make](https://www.gnu.org/software/make/) to define the install command. You can see what each command does in the [makefile](https://github.com/embeddings-benchmark/mteb/blob/main/Makefile).  
+This uses [make](https://www.gnu.org/software/make/) to define the install command. You can see what each command does in the [makefile](https://github.com/embeddings-benchmark/mteb/blob/main/Makefile).
 
 ### Running Tests
 
@@ -52,4 +52,4 @@ This command is equivalent to the command run during CI. It will check for code 
 
 Any commit with one of these prefixes will trigger a version bump upon merging to the main branch as long as tests pass. A version bump will then trigger a new release on PyPI as well as a new release on GitHub.
 
-Other prefixes will not trigger a version bump. For example, `docs:`, `chore:`, `refactor:`, etc., however they will structure the commit history and the changelog. You can find more information about this in the [python-semantic-release documentation](https://python-semantic-release.readthedocs.io/en/latest/). If you do not intend to trigger a version bump you're not required to follow this convention when contributing to `mteb`.
+Other prefixes will not trigger a version bump. For example, `docs:`, `chore:`, `refactor:`, etc., however they will structure the commit history and the changelog. You can find more information about this in the [python-semantic-release documentation](https://python-semantic-release.readthedocs.io/en/latest/). If you do not intend to trigger a version bump you're not required to follow this convention when contributing to MTEB.

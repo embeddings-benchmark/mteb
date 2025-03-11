@@ -21,6 +21,3 @@ This metadata includes a short description of the benchmark's intention, the ref
 ## The Benchmark Object
 
 <!-- :::mteb.Benchmark -->
-
-
-

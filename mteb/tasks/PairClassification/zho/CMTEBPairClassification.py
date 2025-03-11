@@ -27,7 +27,7 @@ class Ocnli(AbsTaskPairClassification):
         dialect=None,
         sample_creation=None,
         bibtex_citation="""@misc{hu2020ocnli,
-            title={OCNLI: Original Chinese Natural Language Inference}, 
+            title={OCNLI: Original Chinese Natural Language Inference},
             author={Hai Hu and Kyle Richardson and Liang Xu and Lu Li and Sandra Kuebler and Lawrence S. Moss},
             year={2020},
             eprint={2010.05444},

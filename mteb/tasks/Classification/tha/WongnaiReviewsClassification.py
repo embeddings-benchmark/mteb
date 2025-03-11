@@ -23,7 +23,7 @@ class WongnaiReviewsClassification(AbsTaskClassification):
         dialect=[],
         domains=["Reviews", "Written"],
         task_subtypes=[],
-        license="lgpl-3.0",
+        license="lgpl",
         annotations_creators="derived",
         sample_creation="found",
         bibtex_citation="""

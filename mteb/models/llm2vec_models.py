@@ -110,13 +110,13 @@ def _loader(wrapper: type[LLM2VecWrapper], **kwargs) -> Callable[..., Encoder]:
 
 LLM2VEC_CITATION = """
 @misc{behnamghader2024llm2veclargelanguagemodels,
-      title={LLM2Vec: Large Language Models Are Secretly Powerful Text Encoders}, 
+      title={LLM2Vec: Large Language Models Are Secretly Powerful Text Encoders},
       author={Parishad BehnamGhader and Vaibhav Adlakha and Marius Mosbach and Dzmitry Bahdanau and Nicolas Chapados and Siva Reddy},
       year={2024},
       eprint={2404.05961},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2404.05961}, 
+      url={https://arxiv.org/abs/2404.05961},
 }"""
 
 

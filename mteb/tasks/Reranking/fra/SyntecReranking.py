@@ -28,7 +28,7 @@ class SyntecReranking(AbsTaskRetrieval):
         dialect=None,
         sample_creation="found",
         bibtex_citation="""@misc{ciancone2024extending,
-      title={Extending the Massive Text Embedding Benchmark to French}, 
+      title={Extending the Massive Text Embedding Benchmark to French},
       author={Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
       year={2024},
       eprint={2405.20468},

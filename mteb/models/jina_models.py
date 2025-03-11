@@ -247,13 +247,13 @@ jina_embeddings_v3 = ModelMeta(
     adapted_from="XLM-RoBERTa",
     citation="""
     @misc{sturua2024jinaembeddingsv3multilingualembeddingstask,
-      title={jina-embeddings-v3: Multilingual Embeddings With Task LoRA}, 
+      title={jina-embeddings-v3: Multilingual Embeddings With Task LoRA},
       author={Saba Sturua and Isabelle Mohr and Mohammad Kalim Akram and Michael Günther and Bo Wang and Markus Krimmel and Feng Wang and Georgios Mastrapas and Andreas Koukounas and Andreas Koukounas and Nan Wang and Han Xiao},
       year={2024},
       eprint={2409.10173},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2409.10173}, 
+      url={https://arxiv.org/abs/2409.10173},
     }
     """,
 )
