@@ -5,6 +5,7 @@ from typing import Any, Callable
 import torch
 from datasets import Dataset
 from torch.utils.data import DataLoader, default_collate
+from torchvision import transforms
 
 from mteb.encoder_interface import BatchedInput, Conversation
 
@@ -182,43 +183,62 @@ def create_dataloader_for_queries_conversation(
     return torch.utils.data.DataLoader(dataset, **dataloader_kwargs)
 
 
-def transform_image_to_rgb(image: Any) -> Any:
-    """Transform image to RGB format."""
-    # For PIL images
+DEFAULT_TRANSFORM = transforms.Compose([transforms.PILToTensor()])
+
+
+def transform_image_to_rgb(
+    image: Any, transform: Callable[[Any], Any] | None = None
+) -> Any:
+    """Convert image to RGB and apply a transformation (e.g. PILToTensor)."""
+    # For PIL images: ensure RGB format.
     if hasattr(image, "mode") and image.mode != "RGB":
-        return image.convert("RGB")
-    # For tensor images with 1 channel
+        image = image.convert("RGB")
+    # For tensor images with 1 channel: repeat channels.
     elif isinstance(image, torch.Tensor) and image.shape[0] == 1:
-        return image.repeat(3, 1, 1)
+        image = image.repeat(3, 1, 1)
+    # Apply the additional transformation (e.g., conversion to tensor) if provided.
+    if transform is not None:
+        return transform(image)
     return image
 
 
 def convert_images_to_rgb(
-    example: dict[str, Any], image_col_name: str = "image"
+    example: dict[str, Any],
+    image_col_name: str = "image",
+    transform: Callable[[Any], Any] | None = DEFAULT_TRANSFORM,
 ) -> dict[str, Any]:
     if image_col_name not in example:
         return example
-    example[image_col_name] = transform_image_to_rgb(example[image_col_name])
+    example[image_col_name] = transform_image_to_rgb(example[image_col_name], transform)
     return example
 
 
 def prepare_image_dataset(
-    dataset: Dataset, image_column_name: str | None = None
+    dataset: Dataset,
+    image_column_name: str | None = None,
+    transform: Callable[[Any], Any] | None = DEFAULT_TRANSFORM,
 ) -> Dataset:
+    # If the dataset uses a different column name for images, rename it to "image".
     if (
         image_column_name
         and image_column_name in dataset.column_names
         and "image" not in dataset.column_names
     ):
         dataset = dataset.rename_column(image_column_name, "image")
+    # Map the conversion function over the dataset.
     return dataset.map(
-        convert_images_to_rgb, desc="Converting images to RGB"
-    ).with_format("torch")
+        lambda example: convert_images_to_rgb(
+            example, image_col_name="image", transform=transform
+        ),
+        desc="Converting images to RGB",
+    )
 
 
-def custom_collate_fn(
-    batch: list[dict[str, Any]],
-) -> dict[str, Any]:
+def custom_collate_fn(batch: list[dict[str, Any]]) -> dict[str, Any]:
+    """Custom collate function that mimics the old pipeline:
+    - For the "image" key, leave the images as a list (to avoid stacking errors).
+    - For other keys, use the default collate.
+    """
     collated: dict[str, Any] = {}
     for key in batch[0]:
         if key == "image":
@@ -233,18 +253,16 @@ def create_image_dataloader(
     dataset: Dataset,
     image_column_name: str | None = None,
     batch_size: int = 32,
-    collate_fn: Callable[
-        [
-            list[dict[str, Any]],
-        ],
-        dict[str, Any],
-    ] = custom_collate_fn,
-) -> DataLoader[BatchedInput]:
-    dataset = prepare_image_dataset(dataset, image_column_name)
+    transform: Callable[[Any], Any] | None = DEFAULT_TRANSFORM,
+    collate_fn: Callable[[list[dict[str, Any]]], dict[str, Any]] = custom_collate_fn,
+) -> DataLoader[dict[str, Any]]:
+    """Creates a DataLoader with the image dataset prepared using the explicit transformation.
+    This should mirror the behavior of the old code.
+    """
+    dataset = prepare_image_dataset(dataset, image_column_name, transform)
     return DataLoader(
         dataset,
         batch_size=batch_size,
         collate_fn=collate_fn,
         shuffle=False,
-        # num_workers=4,
     )

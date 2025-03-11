@@ -96,7 +96,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         else:
             images = self.dataset[self.images_column_names]
 
-        images = [transform.transforms(transform_image_to_rgb(img)) for img in images]
+        images = [transform(transform_image_to_rgb(img)) for img in images]
 
         texts = []
         if isinstance(self.texts_column_names, list):
