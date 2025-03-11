@@ -36,7 +36,7 @@ class UrbanSound8kZeroshotClassification(AbsTaskAudioZeroshotClassification):
   url={https://api.semanticscholar.org/CorpusID:207217115}
 }""",
         descriptive_stats={
-            "n_samples": {"train": 8732},  
+            "n_samples": {"train": 8732},
         },
     )
 
