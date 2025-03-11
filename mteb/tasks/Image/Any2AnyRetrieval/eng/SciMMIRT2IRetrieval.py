@@ -92,28 +92,16 @@ class SciMMIRT2IRetrieval(AbsTaskAny2AnyRetrieval):
   journal={arXiv preprint arXiv:2401.13478},
   year={2024}
 }""",
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1.0,
-                    "average_query_length": 261.1932607759946,
-                    "num_documents": 16263,
-                    "num_queries": 16263,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata_dict["dataset"]["path"],
-            splits=self.metadata_dict["eval_splits"],
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True

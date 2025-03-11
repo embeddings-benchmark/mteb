@@ -14,7 +14,7 @@ class WikipediaBioMetChemClassification(AbsTaskClassification):
             "revision": "6ac491e5de9070c6dd434b31e76d3d379123dcff",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

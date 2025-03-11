@@ -20,7 +20,7 @@ class GermanDPR(AbsTaskRetrieval):
             "trust_remote_code": True,
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["deu-Latn"],
@@ -63,7 +63,7 @@ class GermanDPR(AbsTaskRetrieval):
 
         data = datasets.load_dataset(
             split=self._EVAL_SPLIT,
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
         corpus = {}
         queries = {}

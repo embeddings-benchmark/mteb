@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
+import numpy as np
 import torch
 import tqdm
 from datasets import Dataset
@@ -10,6 +11,7 @@ from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_sc
 
 from mteb.encoder_interface import Encoder
 
+from ...create_dataloaders import create_dataloader_from_texts
 from .Evaluator import Evaluator
 from .utils import cos_sim
 
@@ -31,6 +33,7 @@ class BitextMiningEvaluator(Evaluator):
         self.pairs = pair_columns
         self.n = len(sentences)
         self.sentences = sentences
+        # NOTE: used only by BUCC
         self.gold = (
             list(zip(range(self.n), range(self.n)))
             if "gold" not in sentences
@@ -55,8 +58,9 @@ class BitextMiningEvaluator(Evaluator):
 
         embeddings = {}
         for sub in tqdm.tqdm(subsets, desc=f"Encoding {n_subsets}x{self.n} sentences"):
+            dataloader = create_dataloader_from_texts(self.sentences[sub])
             embeddings[sub] = model.encode(
-                self.sentences[sub],
+                dataloader,
                 task_name=self.task_name,
                 **encode_kwargs,
             )
@@ -78,10 +82,10 @@ class BitextMiningEvaluator(Evaluator):
 
     def _compute_metrics(
         self,
-        embeddings1,
-        embeddings2,
+        embeddings1: np.ndarray,
+        embeddings2: np.ndarray,
         model: Encoder,
-    ):
+    ) -> dict[str, float]:
         # Find nearest neighbors
         logger.info("Finding nearest neighbors...")
         nearest_neighbors = self._similarity_search(
@@ -111,33 +115,33 @@ class BitextMiningEvaluator(Evaluator):
 
     def _similarity_search(
         self,
-        query_embeddings,
-        corpus_embeddings,
+        query_embeddings: np.ndarray,
+        corpus_embeddings: np.ndarray,
         model: Encoder,
         query_chunk_size: int = 100,
         corpus_chunk_size: int = 500000,
         top_k: int = 10,
-    ):
+    ) -> list[list[dict[str, float]]]:
         """This function performs a cosine similarity search between a list of query embeddings  and a list of corpus embeddings.
         It can be used for Information Retrieval / Semantic Search for corpora up to about 1 Million entries.
 
         Args:
             query_embeddings: A 2 dimensional tensor with the query embeddings.
             corpus_embeddings: A 2 dimensional tensor with the corpus embeddings.
-            model: The model used to encode the queries and corpus. This is used to check if the embeddings are on the same device and to encode the queries and corpus if they are not already tensors.
+            model: The model used to encode the queries and corpus. This is used to check if the embeddings are on the same device and to encode the
+                queries and corpus if they are not already tensors.
             query_chunk_size: Process 100 queries simultaneously. Increasing that value increases the speed, but requires more memory.
             corpus_chunk_size: Scans the corpus 100k entries at a time. Increasing that value increases the speed, but requires more memory.
             top_k: Retrieve top k matching entries.
 
         Returns:
-            Returns a list with one entry for each query. Each entry is a list of dictionaries with the keys 'corpus_id' and 'score', sorted by decreasing cosine similarity scores.
+            Returns a list with one entry for each query. Each entry is a list of dictionaries with the keys 'corpus_id' and 'score', sorted by
+                decreasing cosine similarity scores.
         """
-        query_embeddings = torch.from_numpy(query_embeddings)
-        corpus_embeddings = torch.from_numpy(corpus_embeddings)
         if len(query_embeddings.shape) == 1:
-            query_embeddings = query_embeddings.unsqueeze(0)
+            query_embeddings = query_embeddings.reshape(1, *query_embeddings.shape)
         if len(corpus_embeddings.shape) == 1:
-            corpus_embeddings = corpus_embeddings.unsqueeze(0)
+            corpus_embeddings = corpus_embeddings.reshape(1, *corpus_embeddings)
 
         # Check that corpus and queries are on the same device
         if corpus_embeddings.device != query_embeddings.device:
@@ -159,7 +163,7 @@ class BitextMiningEvaluator(Evaluator):
                 )
 
                 if hasattr(model, "similarity"):
-                    similarity_scores = model.similarity(
+                    similarity_scores = model.similarity(  # type: ignore
                         query_embeddings[
                             query_start_idx : query_start_idx + query_chunk_size
                         ],

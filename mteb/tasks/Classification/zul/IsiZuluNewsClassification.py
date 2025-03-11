@@ -14,7 +14,7 @@ class IsiZuluNewsClassification(AbsTaskClassification):
             "revision": "55caf0e52693a1ea63b15a4980a73fc137fb862b",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["zul-Latn"],

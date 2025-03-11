@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from mteb.abstasks import AbsTaskPairClassification, MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
+
+from ....abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 
 _LANGUAGES = {
     "as": ["asm-Beng"],
@@ -18,7 +19,7 @@ _LANGUAGES = {
 }
 
 
-class IndicXnliPairClassification(AbsTaskPairClassification, MultilingualTask):
+class IndicXnliPairClassification(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="IndicXnliPairClassification",
         dataset={
@@ -36,7 +37,7 @@ class IndicXnliPairClassification(AbsTaskPairClassification, MultilingualTask):
         over eleven Indic languages.
         """,
         reference="https://gem-benchmark.com/data_cards/opusparcus",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         type="PairClassification",
         eval_splits=["test"],

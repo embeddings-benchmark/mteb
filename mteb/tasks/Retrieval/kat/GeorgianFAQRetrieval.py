@@ -20,7 +20,7 @@ class GeorgianFAQRetrieval(AbsTaskRetrieval):
             "Frequently asked questions (FAQs) and answers mined from Georgian websites via Common Crawl."
         ),
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["kat-Geor"],
@@ -45,10 +45,10 @@ class GeorgianFAQRetrieval(AbsTaskRetrieval):
         relevant_docs = {_EVAL_SPLIT: {}}
 
         data = load_dataset(
-            self.metadata_dict["dataset"]["path"],
+            self.metadata.dataset["path"],
             split=_EVAL_SPLIT,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
         question_ids = {
             question: _id for _id, question in enumerate(set(data["question"]))

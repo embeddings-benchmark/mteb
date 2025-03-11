@@ -15,7 +15,7 @@ class CTKFactsNLI(AbsTaskPairClassification):
         description="Czech Natural Language Inference dataset of around 3K evidence-claim pairs labelled with SUPPORTS, REFUTES or NOT ENOUGH INFO veracity labels. Extracted from a round of fact-checking experiments.",
         reference="https://arxiv.org/abs/2201.11115",
         type="PairClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["ces-Latn"],

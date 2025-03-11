@@ -15,7 +15,7 @@ class IndoNLI(AbsTaskPairClassification):
         description="IndoNLI is the first human-elicited Natural Language Inference (NLI) dataset for Indonesian. IndoNLI is annotated by both crowd workers and experts.",
         reference="https://link.springer.com/chapter/10.1007/978-3-030-41505-1_39",
         type="PairClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test_expert"],
         eval_langs=["ind-Latn"],

@@ -14,7 +14,7 @@ class DKHateClassification(AbsTaskClassification):
         description="Danish Tweets annotated for Hate Speech either being Offensive or not",
         reference="https://aclanthology.org/2020.lrec-1.430/",
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["dan-Latn"],

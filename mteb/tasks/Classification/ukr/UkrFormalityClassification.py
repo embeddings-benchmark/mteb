@@ -20,7 +20,7 @@ class UkrFormalityClassification(AbsTaskClassification):
         },
         reference="https://huggingface.co/datasets/ukr-detect/ukr-formality-dataset-translated-gyafc",
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train", "test"],
         eval_langs=["ukr-Cyrl"],

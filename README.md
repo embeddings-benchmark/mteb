@@ -26,7 +26,7 @@
 </h4>
 
 <h3 align="center">
-    <a href="https://huggingface.co/spaces/mteb/leaderboard"><img style="float: middle; padding: 10px 10px 10px 10px;" width="60" height="55" src="./docs/images/hf_logo.png" /></a>
+    <a href="https://huggingface.co/spaces/mteb/leaderboard"><img style="float: middle; padding: 10px 10px 10px 10px;" width="60" height="55" src="./docs/images/logos/hf_logo.png" /></a>
 </h3>
 
 
@@ -79,6 +79,7 @@ In prompts the key can be:
    8. `STS`
    9. `Summarization`
    10. `InstructionRetrieval`
+   11. `InstructionReranking`
 3. Pair of task type and prompt type like `Retrival-query` - these prompts will be used in all classification tasks
 4. Task name - these prompts will be used in the specific task
 5. Pair of task name and prompt type like `NFCorpus-query` - these prompts will be used in the specific task
@@ -531,7 +532,7 @@ evaluation.run(model, ...)
 
 ## Citing
 
-MTEB was introduced in "[MTEB: Massive Text Embedding Benchmark](https://arxiv.org/abs/2210.07316)", feel free to cite:
+MTEB was introduced in "[MTEB: Massive Text Embedding Benchmark](https://aclanthology.org/2023.eacl-main.148/)", feel free to cite:
 
 ```bibtex
 @article{muennighoff2022mteb,

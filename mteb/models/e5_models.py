@@ -3,7 +3,11 @@ from __future__ import annotations
 from functools import partial
 
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import (
+    ModelMeta,
+    ScoringFunction,
+    sentence_transformers_loader,
+)
 
 E5_PAPER_RELEASE_DATE = "2024-02-08"
 XLMR_LANGUAGES = [
@@ -108,6 +112,24 @@ XLMR_LANGUAGES = [
     "zho_Hans",
 ]
 
+MULTILINGUAL_E5_CITATION = """
+@article{wang2024multilingual,
+  title={Multilingual E5 Text Embeddings: A Technical Report},
+  author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Yang, Linjun and Majumder, Rangan and Wei, Furu},
+  journal={arXiv preprint arXiv:2402.05672},
+  year={2024}
+}
+"""
+
+E5_CITATION = """
+@article{wang2022text,
+  title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
+  author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Jiao, Binxing and Yang, Linjun and Jiang, Daxin and Majumder, Rangan and Wei, Furu},
+  journal={arXiv preprint arXiv:2212.03533},
+  year={2022}
+}
+"""
+
 model_prompts = {
     PromptType.query.value: "query: ",
     PromptType.passage.value: "passage: ",
@@ -133,6 +155,7 @@ ME5_TRAINING_DATA = {
     "FEVER": ["train"],
     "FEVERHardNegatives": ["train"],
     "FEVER-NL": ["train"],  # translation not trained on
+    "FEVER-PL": ["train"],  # translation not trained on
     "HotpotQA": ["train"],
     "HotpotQAHardNegatives": ["train"],
     "HotpotQA-PL": ["train"],  # translation not trained on
@@ -161,13 +184,14 @@ e5_mult_small = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/intfloat/multilingual-e5-small",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
-    public_training_code=None,
+    public_training_code=None,  # couldn't find
     public_training_data=None,
     training_datasets=ME5_TRAINING_DATA,
     adapted_from="microsoft/Multilingual-MiniLM-L12-H384",
+    citation=MULTILINGUAL_E5_CITATION,
 )
 
 e5_mult_base = ModelMeta(
@@ -187,13 +211,14 @@ e5_mult_base = ModelMeta(
     license="mit",
     max_tokens=514,
     reference="https://huggingface.co/intfloat/multilingual-e5-base",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
     adapted_from="FacebookAI/xlm-roberta-base",
     training_datasets=ME5_TRAINING_DATA,
+    citation=MULTILINGUAL_E5_CITATION,
 )
 
 e5_mult_large = ModelMeta(
@@ -214,13 +239,14 @@ e5_mult_large = ModelMeta(
     license="mit",
     max_tokens=514,
     reference="https://huggingface.co/intfloat/multilingual-e5-large",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
     training_datasets=ME5_TRAINING_DATA,
     adapted_from="FacebookAI/xlm-roberta-large",
+    citation=MULTILINGUAL_E5_CITATION,
 )
 
 e5_eng_small_v2 = ModelMeta(
@@ -240,13 +266,14 @@ e5_eng_small_v2 = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/intfloat/e5-small-v2",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
     adapted_from="intfloat/e5-small",
     training_datasets=E5_TRAINING_DATA,
+    citation=E5_CITATION,
 )
 
 e5_eng_small = ModelMeta(
@@ -267,13 +294,14 @@ e5_eng_small = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/intfloat/e5-small",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,
     training_datasets=E5_TRAINING_DATA,
     adapted_from="sentence-transformers/all-MiniLM-L6-v2",
+    citation=E5_CITATION,
 )
 
 e5_eng_base_v2 = ModelMeta(
@@ -294,11 +322,12 @@ e5_eng_base_v2 = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/intfloat/e5-base-v2",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     superseded_by=None,
     adapted_from="intfloat/e5-base",
+    citation=E5_CITATION,
     public_training_code=None,
     public_training_data=None,
     training_datasets=E5_TRAINING_DATA,
@@ -322,7 +351,7 @@ e5_eng_large_v2 = ModelMeta(
     license="mit",
     max_tokens=514,
     reference="https://huggingface.co/intfloat/e5-large-v2",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     superseded_by=None,
@@ -330,6 +359,7 @@ e5_eng_large_v2 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=E5_TRAINING_DATA,
+    citation=E5_CITATION,
 )
 
 e5_large = ModelMeta(
@@ -350,7 +380,7 @@ e5_large = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/intfloat/e5-large",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     superseded_by="intfloat/e5-large-v2",
@@ -358,6 +388,7 @@ e5_large = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=E5_TRAINING_DATA,
+    citation=E5_CITATION,
 )
 
 e5_base = ModelMeta(
@@ -378,7 +409,7 @@ e5_base = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/intfloat/e5-base",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     superseded_by="intfloat/e5-base-v2",
@@ -386,4 +417,5 @@ e5_base = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=E5_TRAINING_DATA,
+    citation=E5_CITATION,
 )

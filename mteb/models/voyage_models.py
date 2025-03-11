@@ -5,9 +5,10 @@ from functools import partial, wraps
 from typing import Any, Literal
 
 import numpy as np
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.encoder_interface import BatchedInput, PromptType
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.wrapper import Wrapper
 from mteb.requires_package import requires_package
 
@@ -91,7 +92,7 @@ class VoyageWrapper(Wrapper):
 
     def encode(
         self,
-        sentences: list[str],
+        inputs: DataLoader[BatchedInput],
         *,
         batch_size: int = 32,
         task_name: str,
@@ -100,7 +101,7 @@ class VoyageWrapper(Wrapper):
     ) -> np.ndarray:
         prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
         input_type = self.model_prompts.get(prompt_name, "document")
-
+        sentences = [text for batch in inputs for text in batch["text"]]
         return self._batched_encode(sentences, batch_size, input_type)
 
     def _batched_encode(
@@ -160,7 +161,7 @@ voyage_large_2_instruct = ModelMeta(
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/05/05/voyage-large-2-instruct-instruction-tuned-and-rank-1-on-mteb/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     training_datasets=VOYAGE_TRAINING_DATA,
@@ -185,7 +186,7 @@ voyage_finance_2 = ModelMeta(
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/06/03/domain-specific-embeddings-finance-edition-voyage-finance-2/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     training_datasets=VOYAGE_TRAINING_DATA,
@@ -210,7 +211,7 @@ voyage_law_2 = ModelMeta(
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/04/15/domain-specific-embeddings-and-retrieval-legal-edition-voyage-law-2/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     training_datasets=VOYAGE_TRAINING_DATA,
@@ -235,7 +236,7 @@ voyage_code_2 = ModelMeta(
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/01/23/voyage-code-2-elevate-your-code-retrieval/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     training_datasets=VOYAGE_TRAINING_DATA,
@@ -286,7 +287,7 @@ voyage_large_2 = ModelMeta(
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2023/10/29/voyage-embeddings/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     training_datasets=VOYAGE_TRAINING_DATA,
@@ -311,7 +312,7 @@ voyage_2 = ModelMeta(
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2023/10/29/voyage-embeddings/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     training_datasets=VOYAGE_TRAINING_DATA,
@@ -335,7 +336,7 @@ voyage_multilingual_2 = ModelMeta(
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/06/10/voyage-multilingual-2-multilingual-embedding-model/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     training_datasets=VOYAGE_TRAINING_DATA,
@@ -360,7 +361,7 @@ voyage_3 = ModelMeta(
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/09/18/voyage-3/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     training_datasets=VOYAGE_TRAINING_DATA,
@@ -385,7 +386,7 @@ voyage_3_lite = ModelMeta(
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/09/18/voyage-3/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     training_datasets=VOYAGE_TRAINING_DATA,
@@ -411,7 +412,7 @@ voyage_3_exp = ModelMeta(
     memory_usage_mb=None,
     license=None,
     reference="https://huggingface.co/voyageai/voyage-3-m-exp",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     training_datasets={

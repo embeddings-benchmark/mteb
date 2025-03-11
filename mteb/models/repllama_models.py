@@ -7,10 +7,14 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 import tqdm
+from torch.utils.data import DataLoader
 from transformers import AutoModel, AutoTokenizer
 
-from mteb.encoder_interface import Encoder, PromptType
-from mteb.model_meta import ModelMeta
+from mteb.encoder_interface import BatchedInput, Encoder, PromptType
+from mteb.model_meta import (
+    ModelMeta,
+    ScoringFunction,
+)
 from mteb.models.wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
@@ -74,19 +78,32 @@ class RepLLaMAWrapper(Wrapper):
             return_tensors="pt",
         )
 
+    def combine_query_and_instruction(self, query, instruction):
+        end_punct = "?" if query.strip()[-1] not in ["?", ".", "!"] else ""
+        return f"{query}{end_punct} {instruction}".strip()
+
     def encode(
         self,
-        sentences: list[str],
+        inputs: DataLoader[BatchedInput],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,  # noqa
+        **kwargs,
     ) -> np.ndarray:
         batch_size = 16 if "batch_size" not in kwargs else kwargs.pop("batch_size")
         all_embeddings = []
-        prompt = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+        prompt = self.model_prompts.get(prompt_name)
+        sentences = [text for batch in inputs for text in batch["text"]]
+
         if prompt:
-            sentences = [f"{prompt}{sentence}".strip() for sentence in sentences]
+            if prompt_type == "queries":
+                sentences = [
+                    f"{prompt}{sentence.strip()}".strip() for sentence in sentences
+                ]
+            else:
+                sentences = [f"{prompt}{sentence}".strip() for sentence in sentences]
+
         for i in tqdm.tqdm(range(0, len(sentences), batch_size)):
             batch_texts = sentences[i : i + batch_size]
 
@@ -125,6 +142,15 @@ model_prompts = {
     PromptType.passage.value: "passage:  ",
 }
 
+REPLLAMA_CITATION = """
+@article{rankllama,
+      title={Fine-Tuning LLaMA for Multi-Stage Text Retrieval},
+      author={Xueguang Ma and Liang Wang and Nan Yang and Furu Wei and Jimmy Lin},
+      year={2023},
+      journal={arXiv:2310.08319},
+}
+"""
+
 repllama_llama2_original = ModelMeta(
     loader=_loader(
         RepLLaMAWrapper,
@@ -149,9 +175,10 @@ repllama_llama2_original = ModelMeta(
     embed_dim=4096,
     license="apache-2.0",
     reference="https://huggingface.co/samaya-ai/castorini/repllama-v1-7b-lora-passage",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
+    citation=REPLLAMA_CITATION,
     public_training_code=None,
     public_training_data=None,
 )
@@ -177,9 +204,10 @@ repllama_llama2_reproduced = ModelMeta(
     embed_dim=4096,
     license="apache-2.0",
     reference="https://huggingface.co/samaya-ai/RepLLaMA-reproduced",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
+    citation=REPLLAMA_CITATION,
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,

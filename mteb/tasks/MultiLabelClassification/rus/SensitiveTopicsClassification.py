@@ -16,7 +16,7 @@ class SensitiveTopicsClassification(AbsTaskMultilabelClassification):
         description="Multilabel classification of sentences across 18 sensitive topics.",
         reference="https://aclanthology.org/2021.bsnlp-1.4",
         type="MultilabelClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],

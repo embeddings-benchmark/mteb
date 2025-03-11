@@ -15,7 +15,7 @@ class JavaneseIMDBClassification(AbsTaskClassification):
             "trust_remote_code": True,
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         date=("2021-06-24", "2021-06-24"),
         eval_splits=["test"],

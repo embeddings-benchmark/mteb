@@ -14,7 +14,7 @@ class GujaratiNewsClassification(AbsTaskClassification):
             "revision": "1a5f2fa2914bfeff4fcdc6fff4194fa8ec8fa19e",
         },
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],

@@ -15,7 +15,7 @@ class FrenkSlClassification(AbsTaskClassification):
         },
         reference="https://arxiv.org/pdf/1906.02045",
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["slv-Latn"],

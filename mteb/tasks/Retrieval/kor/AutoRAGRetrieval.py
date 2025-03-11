@@ -16,7 +16,7 @@ class AutoRAGRetrieval(AbsTaskRetrieval):
         },
         type="Retrieval",
         prompt="Retrieve text based on user query.",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["kor-Hang"],

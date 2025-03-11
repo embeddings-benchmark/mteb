@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from collections.abc import Sequence
 from typing import Any, Literal
 
 import numpy as np
@@ -13,9 +12,9 @@ from torch import Tensor
 from torch.utils.data import DataLoader
 
 import mteb
-from mteb import SentenceTransformerWrapper
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
+from mteb.models import SentenceTransformerWrapper
 from tests.test_benchmark.task_grid import MOCK_TASK_TEST_GRID
 
 
@@ -23,23 +22,23 @@ class MockNumpyEncoder(mteb.Encoder):
     def __init__(self):
         pass
 
-    def encode(self, sentences, prompt_name: str | None = None, **kwargs):
-        return np.random.rand(len(sentences), 10)
+    def encode(self, sentences: DataLoader, prompt_name: str | None = None, **kwargs):
+        return np.random.rand(len(sentences.dataset), 10)
 
 
 class MockTorchEncoder(mteb.Encoder):
     def __init__(self):
         pass
 
-    def encode(self, sentences, prompt_name: str | None = None, **kwargs):
-        return torch.randn(len(sentences), 10).numpy()
+    def encode(self, sentences: DataLoader, prompt_name: str | None = None, **kwargs):
+        return torch.randn(len(sentences.dataset), 10).numpy()
 
 
 class MockTorchbf16Encoder(SentenceTransformer):
     def __init__(self):
         pass
 
-    def encode(self, sentences, prompt_name: str | None = None, **kwargs):
+    def encode(self, sentences: list[str], prompt_name: str | None = None, **kwargs):
         return torch.randn(len(sentences), 10, dtype=torch.bfloat16)
 
 
@@ -136,7 +135,7 @@ class MockSentenceTransformer(SentenceTransformer):
 
     def encode(
         self,
-        sentences: str | list[str],
+        sentences: list[str],
         prompt_name: str | None = None,
         prompt: str | None = None,
         batch_size: int = 32,
@@ -148,6 +147,7 @@ class MockSentenceTransformer(SentenceTransformer):
         convert_to_tensor: bool = False,
         device: str | None = None,
         normalize_embeddings: bool = False,
+        **kwargs: Any,
     ) -> list[Tensor] | ndarray | Tensor:
         return torch.randn(len(sentences), 10).numpy()
 
@@ -190,7 +190,7 @@ class MockSentenceTransformerWrapper(SentenceTransformerWrapper):
 
     def encode(
         self,
-        sentences: Sequence[str],
+        sentences: DataLoader,
         *,
         task_name: str,
         prompt_type: PromptType | None = None,

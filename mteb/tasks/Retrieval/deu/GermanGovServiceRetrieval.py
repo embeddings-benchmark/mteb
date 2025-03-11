@@ -21,7 +21,7 @@ class GermanGovServiceRetrieval(AbsTaskRetrieval):
             "revision": "ed40131b56ce86ce3666f2942953595dd9d29608",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["deu-Latn"],
@@ -56,10 +56,10 @@ class GermanGovServiceRetrieval(AbsTaskRetrieval):
             return
 
         dataset = datasets.load_dataset(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             split=_EVAL_SPLIT,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
         corpus = {}
         queries = {}

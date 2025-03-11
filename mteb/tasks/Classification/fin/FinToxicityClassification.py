@@ -18,7 +18,7 @@ class FinToxicityClassification(AbsTaskClassification):
         },
         reference="https://aclanthology.org/2023.nodalida-1.68",
         type="Classification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fin-Latn"],

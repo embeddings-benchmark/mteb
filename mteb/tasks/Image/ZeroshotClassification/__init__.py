@@ -1,24 +1,55 @@
 from __future__ import annotations
 
-from .eng.Birdsnap import *
-from .eng.Caltech101 import *
-from .eng.CIFAR import *
-from .eng.CLEVR import *
-from .eng.Country211 import *
-from .eng.DTD import *
-from .eng.EuroSAT import *
-from .eng.FER2013 import *
-from .eng.FGVCAircraft import *
-from .eng.Food101 import *
-from .eng.GTSRB import *
-from .eng.Imagenet1k import *
-from .eng.MNIST import *
-from .eng.OxfordPets import *
-from .eng.PatchCamelyon import *
-from .eng.RenderedSST2 import *
-from .eng.RESISC45 import *
-from .eng.SciMMIR import *
-from .eng.StanfordCars import *
-from .eng.STL10 import *
-from .eng.SUN397 import *
-from .eng.UCF101 import *
+from .eng import (
+    CLEVR,
+    BirdsnapZeroshotClassification,
+    Caltech101ZeroshotClassification,
+    CIFAR10ZeroShotClassification,
+    CIFAR100ZeroShotClassification,
+    CLEVRCount,
+    Country211ZeroshotClassification,
+    DTDZeroshotClassification,
+    EuroSATZeroshotClassification,
+    FER2013ZeroshotClassification,
+    FGVCAircraftZeroShotClassification,
+    Food101ZeroShotClassification,
+    GTSRBZeroshotClassification,
+    Imagenet1kZeroshotClassification,
+    MNISTZeroshotClassification,
+    OxfordPetsZeroshotClassification,
+    PatchCamelyonZeroshotClassification,
+    RenderedSST2,
+    RESISC45ZeroshotClassification,
+    SciMMIR,
+    StanfordCarsZeroshotClassification,
+    STL10ZeroshotClassification,
+    SUN397ZeroshotClassification,
+    UCF101ZeroshotClassification,
+)
+
+__all__ = [
+    "MNISTZeroshotClassification",
+    "CLEVR",
+    "CLEVRCount",
+    "SciMMIR",
+    "PatchCamelyonZeroshotClassification",
+    "OxfordPetsZeroshotClassification",
+    "EuroSATZeroshotClassification",
+    "StanfordCarsZeroshotClassification",
+    "CIFAR100ZeroShotClassification",
+    "CIFAR10ZeroShotClassification",
+    "Country211ZeroshotClassification",
+    "Food101ZeroShotClassification",
+    "SUN397ZeroshotClassification",
+    "GTSRBZeroshotClassification",
+    "Imagenet1kZeroshotClassification",
+    "DTDZeroshotClassification",
+    "RESISC45ZeroshotClassification",
+    "STL10ZeroshotClassification",
+    "Caltech101ZeroshotClassification",
+    "BirdsnapZeroshotClassification",
+    "RenderedSST2",
+    "UCF101ZeroshotClassification",
+    "FER2013ZeroshotClassification",
+    "FGVCAircraftZeroShotClassification",
+]

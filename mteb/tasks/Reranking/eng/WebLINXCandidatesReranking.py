@@ -1,24 +1,21 @@
 from __future__ import annotations
 
-import datasets
-
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskReranking import AbsTaskReranking
+from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 
-class WebLINXCandidatesReranking(AbsTaskReranking):
+class WebLINXCandidatesReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="WebLINXCandidatesReranking",
         description="WebLINX is a large-scale benchmark of 100K interactions across 2300 expert demonstrations of conversational web navigation. The reranking task focuses on finding relevant elements at every given step in the trajectory.",
         reference="https://mcgill-nlp.github.io/weblinx",
         dataset={
-            "path": "McGill-NLP/WebLINX",
-            "name": "reranking",
-            "revision": "ed1c933c2b3617e5700d8a7ebe07f5975969a453",
+            "path": "mteb/WebLINXCandidatesReranking",
+            "revision": "107fdc2402d2c4bfb2a720dfcfe1f6ff9d21151b",
         },
         type="Reranking",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[
             "validation",
@@ -29,7 +26,7 @@ class WebLINXCandidatesReranking(AbsTaskReranking):
             "test_web",
         ],
         eval_langs=["eng-Latn"],
-        main_score="mrr",
+        main_score="mrr_at_10",
         date=("2023-03-01", "2023-10-30"),
         domains=["Academic", "Web", "Written"],
         task_subtypes=["Code retrieval", "Conversational retrieval"],
@@ -48,22 +45,3 @@ class WebLINXCandidatesReranking(AbsTaskReranking):
 }
         """,
     )
-
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        self._datasets = {}
-
-        for split in self.metadata.eval_splits:
-            self._datasets[split] = datasets.load_dataset(
-                split=split, **self.metadata_dict["dataset"]
-            )
-
-        self.dataset = datasets.DatasetDict(
-            {split: self._datasets[split] for split in self.metadata.eval_splits}
-        )
-
-        self.dataset_transform()
-
-        self.data_loaded = True

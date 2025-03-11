@@ -39,8 +39,4 @@ class OxfordFlowersClassification(AbsTaskImageClassification):
   pages={722-729},
   keywords={Shape;Kernel;Distributed computing;Support vector machines;Support vector machine classification;object classification;segmentation},
   doi={10.1109/ICVGIP.2008.47}}""",
-        descriptive_stats={
-            "n_samples": {"test": 400000},
-            "avg_character_length": {"test": 431.4},
-        },
     )

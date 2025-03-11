@@ -216,7 +216,6 @@ monobert_large = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["Sentence Transformers", "PyTorch"],
-    is_cross_encoder=True,
 )
 
 # languages unclear: https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual/discussions/28
@@ -243,7 +242,6 @@ jina_reranker_multilingual = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["Sentence Transformers", "PyTorch"],
-    is_cross_encoder=True,
 )
 
 bge_reranker_v2_m3 = ModelMeta(
@@ -302,5 +300,22 @@ bge_reranker_v2_m3 = ModelMeta(
     use_instructions=None,
     training_datasets=bge_m3_training_data,
     framework=["Sentence Transformers", "PyTorch"],
-    is_cross_encoder=True,
+    citation="""
+    @misc{li2023making,
+      title={Making Large Language Models A Better Foundation For Dense Retrieval},
+      author={Chaofan Li and Zheng Liu and Shitao Xiao and Yingxia Shao},
+      year={2023},
+      eprint={2312.15503},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+    }
+    @misc{chen2024bge,
+          title={BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation},
+          author={Jianlv Chen and Shitao Xiao and Peitian Zhang and Kun Luo and Defu Lian and Zheng Liu},
+          year={2024},
+          eprint={2402.03216},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL}
+    }
+    """,
 )
