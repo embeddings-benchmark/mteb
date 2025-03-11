@@ -16,11 +16,11 @@ class MusicGenreClustering(AbsTaskAudioClustering):
         reference="https://www-ai.cs.tu-dortmund.de/audio.html",
         dataset={
             "path": "mteb/music-genre",
-            "revision": "2ed42a866b5155eb138eb3dc1e68515ccf3c8a50",
+            "revision": "dd22d098c9ea301ac2c2e122acb12a9a7bdabc4e",
         },
         type="AudioClustering",
         category="a2a",
-        eval_splits=["train"],
+        eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="cluster_accuracy",
         date=("2005-01-01", "2005-12-31"),
