@@ -357,6 +357,32 @@ rubert_tiny_turbo = ModelMeta(
     adapted_from="cointegrated/rubert-tiny2",
 )
 
+rubert_mini_frida = ModelMeta(
+    name="sergeyzh/rubert-mini-frida",
+    languages=["rus_Cyrl"],
+    open_weights=True,
+    revision="19b279b78afd945b5ccae78f63e284909814adc2",
+    release_date="2025-03-02",
+    n_parameters=32_300_000,
+    memory_usage_mb=123,
+    embed_dim=312,
+    license="mit",
+    max_tokens=2048,
+    reference="https://huggingface.co/sergeyzh/rubert-mini-frida",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets={
+        # https://huggingface.co/datasets/IlyaGusev/gazeta
+        # https://huggingface.co/datasets/zloelias/lenta-ru
+        # https://huggingface.co/datasets/HuggingFaceFW/fineweb-2
+        # https://huggingface.co/datasets/HuggingFaceFW/fineweb
+    },
+    adapted_from="sergeyzh/rubert-mini-sts",
+)
+
 labse_ru_turbo = ModelMeta(
     name="sergeyzh/LaBSE-ru-turbo",
     languages=["rus_Cyrl"],
