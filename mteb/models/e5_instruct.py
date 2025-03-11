@@ -101,7 +101,7 @@ e5_mistral = ModelMeta(
       journal={arXiv preprint arXiv:2401.00368},
       year={2023}
     }
-    
+
     @article{wang2022text,
       title={Text Embeddings by Weakly-Supervised Contrastive Pre-training},
       author={Wang, Liang and Yang, Nan and Huang, Xiaolong and Jiao, Binxing and Yang, Linjun and Jiang, Daxin and Majumder, Rangan and Wei, Furu},

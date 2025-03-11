@@ -241,13 +241,13 @@ labse = ModelMeta(
     # scraped and mined webdata including CC, wiki, see section 3.1 https://aclanthology.org/2022.acl-long.62.pdf
     public_training_code="https://www.kaggle.com/models/google/labse/tensorFlow2/labse/2?tfhub-redirect=true",
     citation="""@misc{feng2022languageagnosticbertsentenceembedding,
-      title={Language-agnostic BERT Sentence Embedding}, 
+      title={Language-agnostic BERT Sentence Embedding},
       author={Fangxiaoyu Feng and Yinfei Yang and Daniel Cer and Naveen Arivazhagan and Wei Wang},
       year={2022},
       eprint={2007.01852},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2007.01852}, 
+      url={https://arxiv.org/abs/2007.01852},
     }""",
     public_training_data=None,
 )
@@ -321,7 +321,7 @@ contriever = ModelMeta(
     use_instructions=False,
     citation="""
     @misc{izacard2021contriever,
-      title={Unsupervised Dense Information Retrieval with Contrastive Learning}, 
+      title={Unsupervised Dense Information Retrieval with Contrastive Learning},
       author={Gautier Izacard and Mathilde Caron and Lucas Hosseini and Sebastian Riedel and Piotr Bojanowski and Armand Joulin and Edouard Grave},
       year={2021},
       url = {https://arxiv.org/abs/2112.09118},

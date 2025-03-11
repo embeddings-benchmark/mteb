@@ -67,7 +67,7 @@ evaluation = mteb.MTEB(tasks=tasks)
 ```
 
 In prompts the key can be:
-1. Prompt types (`passage`, `query`) - they will be used in reranking and retrieval tasks 
+1. Prompt types (`passage`, `query`) - they will be used in reranking and retrieval tasks
 2. Task type - these prompts will be used in all tasks of the given type
    1. `BitextMining`
    2. `Classification`
@@ -104,7 +104,7 @@ mteb run -m sentence-transformers/all-MiniLM-L6-v2 \
 ## Usage Documentation
 Click on each section below to see the details.
 
-<br /> 
+<br />
 
 <details>
   <summary>  Task selection </summary>
@@ -151,6 +151,21 @@ evaluation = mteb.MTEB(tasks=[
 # for an example of a HF subset see "Subset" in the dataset viewer at: https://huggingface.co/datasets/mteb/bucc-bitext-mining
 ```
 
+* by their modalities
+
+```python
+tasks = mteb.get_tasks(modalities=["text", "image"]) # Only select tasks with text or image modalities
+```
+
+ You can also specify exclusive modality filtering to only get tasks with exactly the requested modalities (default behavior with exclusive_modality_filter=False):
+```python
+# Get tasks with text modality, this will also include tasks having both text and image modalities
+tasks = mteb.get_tasks(modalities=["text"], exclusive_modality_filter=False)
+
+# Get tasks that have ONLY text modality (no image or other modalities)
+tasks = mteb.get_tasks(modalities=["text"], exclusive_modality_filter=True)
+```
+
 </details>
 
 <details>
@@ -158,7 +173,7 @@ evaluation = mteb.MTEB(tasks=[
 
 ### Running a Benchmark
 
-`mteb` comes with a set of predefined benchmarks. These can be fetched using `get_benchmark` and run in a similar fashion to other sets of tasks. 
+`mteb` comes with a set of predefined benchmarks. These can be fetched using `get_benchmark` and run in a similar fashion to other sets of tasks.
 For instance to select the 56 English datasets that form the "Overall MTEB English leaderboard":
 
 ```python
@@ -248,13 +263,13 @@ class CustomModel:
         **kwargs,
     ) -> np.ndarray:
         """Encodes the given sentences using the encoder.
-        
+
         Args:
             sentences: The sentences to encode.
             task_name: The name of the task.
             prompt_type: The prompt type to use.
             **kwargs: Additional arguments to pass to the encoder.
-            
+
         Returns:
             The encoded sentences.
         """
@@ -298,7 +313,7 @@ evaluation.run(model)
 
 ### Using a cross encoder for reranking
 
-To use a cross encoder for reranking, you can directly use a CrossEncoder from SentenceTransformers. The following code shows a two-stage run with the second stage reading results saved from the first stage. 
+To use a cross encoder for reranking, you can directly use a CrossEncoder from SentenceTransformers. The following code shows a two-stage run with the second stage reading results saved from the first stage.
 
 ```python
 from mteb import MTEB
@@ -454,7 +469,7 @@ model_w_contamination = ModelMeta(
 ### Running the Leaderboard
 
 It is possible to completely deploy the leaderboard locally or self-host it. This can e.g. be relevant for companies that might want to
-integrate build their own benchmarks or integrate custom tasks into existing benchmarks. 
+integrate build their own benchmarks or integrate custom tasks into existing benchmarks.
 
 Running the leaderboard is quite easy. Simply run:
 ```py
@@ -480,12 +495,12 @@ There are times you may want to cache the embeddings so you can re-use them. Thi
 from mteb.models.cache_wrapper import CachedEmbeddingWrapper
 model_with_cached_emb = CachedEmbeddingWrapper(model, cache_path='path_to_cache_dir')
 # run as normal
-evaluation.run(model, ...) 
+evaluation.run(model, ...)
 ```
 
 </details>
 
-<br /> 
+<br />
 
 
 
@@ -520,22 +535,14 @@ evaluation.run(model, ...)
 MTEB was introduced in "[MTEB: Massive Text Embedding Benchmark](https://aclanthology.org/2023.eacl-main.148/)", feel free to cite:
 
 ```bibtex
-@inproceedings{muennighoff-etal-2023-mteb,
-    title = "{MTEB}: Massive Text Embedding Benchmark",
-    author = "Muennighoff, Niklas  and
-      Tazi, Nouamane  and
-      Magne, Loic  and
-      Reimers, Nils",
-    editor = "Vlachos, Andreas  and
-      Augenstein, Isabelle",
-    booktitle = "Proceedings of the 17th Conference of the European Chapter of the Association for Computational Linguistics",
-    month = may,
-    year = "2023",
-    address = "Dubrovnik, Croatia",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/2023.eacl-main.148",
-    doi = "10.18653/v1/2023.eacl-main.148",
-    pages = "2014--2037",
+@article{muennighoff2022mteb,
+  doi = {10.48550/ARXIV.2210.07316},
+  url = {https://arxiv.org/abs/2210.07316},
+  author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Lo{\"\i}c and Reimers, Nils},
+  title = {MTEB: Massive Text Embedding Benchmark},
+  publisher = {arXiv},
+  journal={arXiv preprint arXiv:2210.07316},
+  year = {2022}
 }
 ```
 

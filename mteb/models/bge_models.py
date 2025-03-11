@@ -11,7 +11,7 @@ from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
 
 model_prompts = {"query": "Represent this sentence for searching relevant passages: "}
 BGE_15_CITATION = """@misc{bge_embedding,
-      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, 
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding},
       author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff},
       year={2023},
       eprint={2309.07597},
@@ -751,7 +751,7 @@ bge_multilingual_gemma2 = ModelMeta(
     n_parameters=9.24 * 1e9,
     memory_usage_mb=35254,
     embed_dim=3584,  # from old C-MTEB leaderboard
-    license="gemma",
+    license="https://ai.google.dev/gemma/terms",
     max_tokens=8192,  # from old C-MTEB leaderboard
     reference="https://huggingface.co/BAAI/bge-multilingual-gemma2",
     similarity_fn_name="cosine",
@@ -783,7 +783,7 @@ bge_en_icl = ModelMeta(
     n_parameters=7.11 * 1e9,
     memory_usage_mb=27125,
     embed_dim=4096,
-    license="apache-2",
+    license="apache-2.0",
     max_tokens=32768,
     reference="https://huggingface.co/BAAI/bge-en-icl",
     similarity_fn_name=ScoringFunction.COSINE,

@@ -185,7 +185,7 @@ model_prompts = {
 
 NOMIC_CITATION = """
 @misc{nussbaum2024nomic,
-      title={Nomic Embed: Training a Reproducible Long Context Text Embedder}, 
+      title={Nomic Embed: Training a Reproducible Long Context Text Embedder},
       author={Zach Nussbaum and John X. Morris and Brandon Duderstadt and Andriy Mulyar},
       year={2024},
       eprint={2402.01613},

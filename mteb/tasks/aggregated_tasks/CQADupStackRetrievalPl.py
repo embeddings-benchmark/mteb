@@ -43,7 +43,7 @@ class CQADupstackRetrievalPL(AbsTaskAggregate):
         type="Retrieval",  # since everything is retrieval - otherwise it would be "Aggregated"
         eval_splits=["test"],
         bibtex_citation="""@misc{wojtasik2024beirpl,
-      title={BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language}, 
+      title={BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
       author={Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
       year={2024},
       eprint={2305.19840},
