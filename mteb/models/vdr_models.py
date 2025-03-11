@@ -10,7 +10,7 @@ from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
 def instruction_template(
     instruction: str, prompt_type: PromptType | None = None
 ) -> str:
-    return "<|im_start|>system\nYou are a helpful assistant.<|im_end|>\n<|im_start|>user\n%s<|im_end|>\n<|endoftext|>"
+    return "{instruction}"
 
 
 languages = [
