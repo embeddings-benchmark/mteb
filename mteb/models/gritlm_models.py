@@ -23,7 +23,7 @@ def gritlm_instruction(instruction: str = "", prompt_type=None) -> str:
 
 GRITLM_CITATION = """
 @misc{muennighoff2024generative,
-      title={Generative Representational Instruction Tuning}, 
+      title={Generative Representational Instruction Tuning},
       author={Niklas Muennighoff and Hongjin Su and Liang Wang and Nan Yang and Furu Wei and Tao Yu and Amanpreet Singh and Douwe Kiela},
       year={2024},
       eprint={2402.09906},

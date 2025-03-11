@@ -28,7 +28,7 @@ class InstructIR(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation="""@article{oh2024instructir,
-      title={{INSTRUCTIR: A Benchmark for Instruction Following of Information Retrieval Models}}, 
+      title={{INSTRUCTIR: A Benchmark for Instruction Following of Information Retrieval Models}},
       author={{Hanseok Oh and Hyunji Lee and Seonghyeon Ye and Haebin Shin and Hansol Jang and Changwook Jun and Minjoon Seo}},
       year={{2024}},
       eprint={{2402.14334}},

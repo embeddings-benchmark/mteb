@@ -44,13 +44,13 @@ def _loader(wrapper: type[PromptrieverWrapper], **kwargs) -> Callable[..., Encod
 
 PROMPTRIEVER_CITATION = """
 @article{weller2024promptriever,
-      title={Promptriever: Instruction-Trained Retrievers Can Be Prompted Like Language Models}, 
+      title={Promptriever: Instruction-Trained Retrievers Can Be Prompted Like Language Models},
       author={Orion Weller and Benjamin Van Durme and Dawn Lawrie and Ashwin Paranjape and Yuhao Zhang and Jack Hessel},
       year={2024},
       eprint={2409.11136},
       archivePrefix={arXiv},
       primaryClass={cs.IR},
-      url={https://arxiv.org/abs/2409.11136}, 
+      url={https://arxiv.org/abs/2409.11136},
 }
 """
 

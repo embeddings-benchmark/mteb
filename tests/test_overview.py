@@ -149,6 +149,7 @@ def test_MTEBTasks(
     n_langs = len(tasks)
     assert len(tasks.to_markdown().split("\n")) - 3 == n_langs
 
+
 @pytest.mark.parametrize("modalities", [["text"], ["image"], ["text", "image"]])
 def test_get_tasks_with_exclusive_modality_filter(modalities):
     """Test exclusive_modality_filter with actual tasks (if available)"""

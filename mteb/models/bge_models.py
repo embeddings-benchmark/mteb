@@ -11,7 +11,7 @@ from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
 
 model_prompts = {"query": "Represent this sentence for searching relevant passages: "}
 BGE_15_CITATION = """@misc{bge_embedding,
-      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, 
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding},
       author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff},
       year={2023},
       eprint={2309.07597},

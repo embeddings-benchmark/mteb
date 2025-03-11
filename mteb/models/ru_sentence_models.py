@@ -331,13 +331,13 @@ rubert_base_cased = ModelMeta(
         "WikipediaRerankingMultilingual": [],
     },
     citation="""@misc{kuratov2019adaptationdeepbidirectionalmultilingual,
-      title={Adaptation of Deep Bidirectional Multilingual Transformers for Russian Language}, 
+      title={Adaptation of Deep Bidirectional Multilingual Transformers for Russian Language},
       author={Yuri Kuratov and Mikhail Arkhipov},
       year={2019},
       eprint={1905.07213},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/1905.07213}, 
+      url={https://arxiv.org/abs/1905.07213},
     }""",
 )
 
@@ -530,13 +530,13 @@ rosberta_ru_en = ModelMeta(
     public_training_code=None,
     framework=["Sentence Transformers", "PyTorch"],
     citation="""@misc{snegirev2024russianfocusedembeddersexplorationrumteb,
-      title={The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design}, 
+      title={The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design},
       author={Artem Snegirev and Maria Tikhonova and Anna Maksimova and Alena Fenogenova and Alexander Abramov},
       year={2024},
       eprint={2408.12503},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2408.12503}, 
+      url={https://arxiv.org/abs/2408.12503},
     }
     """,
 )
