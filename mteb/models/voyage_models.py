@@ -269,7 +269,7 @@ voyage_code_3 = ModelMeta(
 
 
 voyage_large_2 = ModelMeta(
-    name="voyage-large-2",  # Date of publication of this post https://blog.voyageai.com/2023/10/29/voyage-embeddings/
+    name="voyageai/voyage-large-2",  # Date of publication of this post https://blog.voyageai.com/2023/10/29/voyage-embeddings/
     revision="1",
     release_date="2023-10-29",
     languages=None,  # supported languages not specified
