@@ -404,6 +404,32 @@ labse_ru_turbo = ModelMeta(
     public_training_data=None,
 )
 
+berta = ModelMeta(
+    name="sergeyzh/BERTA",
+    languages=["rus_Cyrl"],
+    open_weights=True,
+    revision="914c8c8aed14042ed890fc2c662d5e9e66b2faa7",
+    release_date="2025-03-10",
+    n_parameters=128_000_000,
+    memory_usage_mb=489,
+    embed_dim=768,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/sergeyzh/BERTA",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    training_datasets={
+        # https://huggingface.co/datasets/IlyaGusev/gazeta
+        # https://huggingface.co/datasets/zloelias/lenta-ru
+        # https://huggingface.co/datasets/HuggingFaceFW/fineweb-2
+        # https://huggingface.co/datasets/HuggingFaceFW/fineweb
+    },
+    public_training_code=None,
+    adapted_from="sergeyzh/LaBSE-ru-turbo",
+    public_training_data=None,
+)
+
 rosberta_prompts = {
     # Default
     "Classification": "classification: ",
