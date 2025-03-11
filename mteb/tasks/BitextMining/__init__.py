@@ -22,5 +22,6 @@ from .multilingual.NusaXBitextMining import *
 from .multilingual.PhincBitextMining import *
 from .multilingual.RomaTalesBitextMining import *
 from .multilingual.TatoebaBitextMining import *
+from .multilingual.WebFAQBitextMining import *
 from .srn.SRNCorpusBitextMining import *
 from .vie.VieMedEVBitextMining import *
