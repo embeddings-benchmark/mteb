@@ -8,8 +8,8 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class RavdessZeroshotClassification(AbsTaskAudioZeroshotClassification):
     metadata = TaskMetadata(
-        name="Ravdess_Zeroshot",
-        description="Emotion classification Dataset.",
+        name="RavdessZeroshot",
+        description="Emotion classification Dataset. RAVDESS contains 24 professional actors (12 female, 12 male), vocalizing two lexically-matched statements in a neutral North American accent. Speech emotions includes neutral,calm, happy, sad, angry, fearful, surprise, and disgust expressions. These 8 emtoions also serve as labels for the dataset.",
         reference="https://huggingface.co/datasets/narad/ravdess",
         dataset={
             "path": "narad/ravdess",
@@ -41,9 +41,6 @@ class RavdessZeroshotClassification(AbsTaskAudioZeroshotClassification):
             pages = {1-35},
             number = {5},
     }""",
-        descriptive_stats={
-            "n_samples": {"train": 1440},
-        },
     )
 
     audio_column_name: str = "audio"
