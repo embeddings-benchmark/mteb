@@ -1090,18 +1090,7 @@ BRIGHT_LONG = Benchmark(
     tasks=MTEBTasks(
         (
             get_task(
-                "BrightRetrieval",
-                eval_splits=["long"],
-                hf_subsets=[
-                    "biology",
-                    "earth_science",
-                    "economics",
-                    "psychology",
-                    "robotics",
-                    "stackoverflow",
-                    "sustainable_living",
-                    "pony",
-                ],
+                "BrightLongRetrieval",
             ),
         )
     ),

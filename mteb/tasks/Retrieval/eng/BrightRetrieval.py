@@ -29,11 +29,6 @@ DOMAINS = DOMAINS_LONG + [
 DOMAINS_langs = {split: ["eng-Latn"] for split in DOMAINS}
 
 
-EVAL_SPLITS = [
-    "standard"
-]  # "long" is also an option but it is not available for all domains.
-
-
 class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BrightRetrieval",
@@ -45,7 +40,7 @@ class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
         description="Bright retrieval dataset.",
         type="Retrieval",
         category="s2p",
-        eval_splits=EVAL_SPLITS,
+        eval_splits=["standard"],
         eval_langs=DOMAINS_langs,
         main_score="ndcg_at_10",
         date=("2024-03-01", "2024-06-01"),
@@ -139,3 +134,16 @@ class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
             revision=self.metadata_dict["dataset"]["revision"],
         )
         self.data_loaded = True
+
+
+long_metadata = BrightRetrieval.metadata.copy()
+long_metadata.eval_splits = ["long"]
+long_metadata.description = "Bright retrieval dataset with long documents."
+long_metadata.name = "BrightLongRetrieval"
+
+dom_langs_long = {split: ["eng-Latn"] for split in DOMAINS_LONG}
+long_metadata.eval_langs = dom_langs_long
+
+
+class BrightRetrievalLong(BrightRetrieval):
+    metadata = long_metadata
