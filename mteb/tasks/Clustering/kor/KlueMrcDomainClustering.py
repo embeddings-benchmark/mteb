@@ -9,7 +9,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class KlueMrcDomainClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="KlueMrcDomainClustering",
-        description="his dataset is a processed and redistributed version of the KLUE-MRC dataset. Domain: Game / Media / Automotive / Finance / Real Estate / Education ",
+        description="this dataset is a processed and redistributed version of the KLUE-MRC dataset. Domain: Game / Media / Automotive / Finance / Real Estate / Education ",
         reference="https://huggingface.co/datasets/on-and-on/clustering_klue_mrc_context_domain",
         type="Clustering",
         category="p2p",
@@ -29,7 +29,7 @@ class KlueMrcDomainClustering(AbsTaskClustering):
         annotations_creators="human-annotated",
         dialect=[],
         text_creation="found",
-        bibtex_citation= """@misc{park2021klue,
+        bibtex_citation="""@misc{park2021klue,
       title={KLUE: Korean Language Understanding Evaluation},
       author={Sungjoon Park and Jihyung Moon and Sungdong Kim and Won Ik Cho and Jiyoon Han and Jangwon Park and Chisung Song and Junseong Kim and Yongsook Song and Taehwan Oh and Joohong Lee and Juhyun Oh and Sungwon Lyu and Younghoon Jeong and Inkwon Lee and Sangwoo Seo and Dongjun Lee and Hyunwoo Kim and Myeonghwa Lee and Seongbo Jang and Seungwon Do and Sunkyoung Kim and Kyungtae Lim and Jongwon Lee and Kyumin Park and Jamin Shin and Seonghyun Kim and Lucy Park and Alice Oh and Jungwoo Ha and Kyunghyun Cho},
       year={2021},
@@ -46,7 +46,9 @@ class KlueMrcDomainClustering(AbsTaskClustering):
         split = self.metadata.eval_splits[0]
         ds = {}
 
-        self.dataset = self.dataset.rename_columns({"text": "sentences", "label": "labels"})
+        self.dataset = self.dataset.rename_columns(
+            {"text": "sentences", "label": "labels"}
+        )
 
         documents.append(self.dataset[split]["sentences"])
         labels.append(self.dataset[split]["labels"])
