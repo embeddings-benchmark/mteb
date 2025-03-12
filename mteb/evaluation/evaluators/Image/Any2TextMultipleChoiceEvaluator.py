@@ -62,7 +62,6 @@ class Any2TextMultipleChoiceEvaluator(Evaluator):
         model: Encoder | EncoderWithSimilarity,
         encode_kwargs: dict[str, Any] = {},
     ):
-        print("encode_kwargs", encode_kwargs)
         if "batch_size" not in encode_kwargs:
             encode_kwargs["batch_size"] = 64
 
