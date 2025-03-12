@@ -234,6 +234,11 @@ class AudioEncoder:
     ) -> torch.Tensor | np.ndarray:
         pass
 
+    def get_audio_embeddings_per_frame(
+        self, audio: AudioBatch, **kwargs: Any
+    ) -> torch.Tensor | np.ndarray:
+        pass
+
     def get_text_embeddings(
         self, texts: list[str], **kwargs: Any
     ) -> torch.Tensor | np.ndarray:
