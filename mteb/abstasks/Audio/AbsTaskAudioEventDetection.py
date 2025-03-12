@@ -70,13 +70,11 @@ class AbstractTaskAudioEventsDetection(AbsTask):
     batch_size: int = 32
     train_split: str = "train"
 
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
     def _add_main_score(self, scores):
         scores["main_score"] = scores[self.metadata.main_score]
-
 
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
@@ -93,7 +91,6 @@ class AbstractTaskAudioEventsDetection(AbsTask):
         else:
             audio = self.dataset[split][self.audio_column_name]
             events = self.dataset[split][self.event_column_name]
-
 
         durations = [
             len(arr) / sr for arr, sr in zip(audio["array"], audio["sample_rate"])
@@ -202,9 +199,7 @@ class AbstractTaskAudioEventsDetection(AbsTask):
             test_audio = [test_audio[i] for i in test_indices]
             test_events = [test_events[i] for i in test_indices]
 
-        X_test = model.get_audio_embeddings_per_frame(
-            test_audio, **kwargs
-        )
+        X_test = model.get_audio_embeddings_per_frame(test_audio, **kwargs)
 
         all_scores = []
         for exp_idx, sample_indices in enumerate(train_samples):

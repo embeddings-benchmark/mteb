@@ -141,7 +141,7 @@ class EventDetector:
         self.classes_ = []
         self.label_to_idx = {}
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        
+
         torch.manual_seed(seed)
         np.random.seed(seed)
 
@@ -153,7 +153,7 @@ class EventDetector:
         y_tensor = torch.tensor(all_labels, dtype=torch.float32).to(self.device)
         optimizer = torch.optim.Adam(self.model.parameters(), lr=1e-3)
         criterion = nn.BCELoss()
-        
+
         # Training loop
         self.model.train()
         for epoch in range(10):
@@ -169,7 +169,7 @@ class EventDetector:
             nn.ReLU(),
             nn.Dropout(0.2),
             nn.Linear(256, len(self.classes_)),
-            nn.Sigmoid()
+            nn.Sigmoid(),
         ).to(self.device)
 
     def _process_training_data(self, X_train, y_train):
@@ -185,16 +185,16 @@ class EventDetector:
                 end_frame = int(event["end"] * self.frame_rate)
                 lbl_idx = self.label_to_idx[event["label"]]
                 frame_labels[start_frame:end_frame, lbl_idx] = 1
-                
+
             all_embs.append(embeddings)
             all_labels.append(frame_labels)
-            
+
         return np.vstack(all_embs), np.vstack(all_labels)
 
     def predict(self, X_test: list[np.ndarray]) -> list[list[dict]]:
         self.model.eval()
         pred_events = []
-        
+
         with torch.no_grad():
             for embeddings in X_test:
                 inputs = torch.tensor(embeddings, dtype=torch.float32).to(self.device)
@@ -203,7 +203,7 @@ class EventDetector:
                 filtered = medfilt(binary_pred, kernel_size=(25, 1))  # 250ms window
                 events = self._predictions_to_events(filtered)
                 pred_events.append(events)
-                
+
         return pred_events
 
     def _predictions_to_events(self, predictions: np.ndarray) -> list[dict]:
@@ -213,12 +213,14 @@ class EventDetector:
             starts = np.where(changes == 1)[0]
             ends = np.where(changes == -1)[0]
             if len(starts) > len(ends):
-                ends = np.append(ends, len(predictions)-1)
-                
+                ends = np.append(ends, len(predictions) - 1)
+
             for s, e in zip(starts, ends):
-                events.append({
-                    "label": label,
-                    "start": s * self.frame_duration,
-                    "end": e * self.frame_duration
-                })
+                events.append(
+                    {
+                        "label": label,
+                        "start": s * self.frame_duration,
+                        "end": e * self.frame_duration,
+                    }
+                )
         return events
