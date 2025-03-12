@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from functools import partial
-
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
 b1ade_training_data = {
@@ -12,7 +10,7 @@ b1ade_training_data = {
 
 b1ade_embed = ModelMeta(
     name="b1ade-embed",
-    languages=["eng-Latn"], # in format eng-Latn
+    languages=["eng-Latn"],
     revision="3bdac13927fdc888b903db93b2ffdbd90b295a69",
     open_weights=True,
     release_date="2025-03-10",
@@ -26,6 +24,6 @@ b1ade_embed = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
-    public_training_data="https://huggingface.co/datasets/cfli/bge-full-data",
+    public_training_data=None,
     training_datasets=b1ade_training_data,
 )
