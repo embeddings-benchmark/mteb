@@ -205,7 +205,7 @@ def transform_image_to_rgb(
 def convert_images_to_rgb(
     example: dict[str, Any],
     image_col_name: str = "image",
-    transform: Callable[[Any], Any] | None = DEFAULT_TRANSFORM,
+    transform: Callable[[Any], Any] | None = None,
 ) -> dict[str, Any]:
     if image_col_name not in example:
         return example
@@ -216,7 +216,7 @@ def convert_images_to_rgb(
 def prepare_image_dataset(
     dataset: Dataset,
     image_column_name: str | None = None,
-    transform: Callable[[Any], Any] | None = DEFAULT_TRANSFORM,
+    transform: Callable[[Any], Any] | None = None,
 ) -> Dataset:
     # If the dataset uses a different column name for images, rename it to "image".
     if (
@@ -227,10 +227,8 @@ def prepare_image_dataset(
         dataset = dataset.rename_column(image_column_name, "image")
     # Map the conversion function over the dataset.
     return dataset.map(
-        lambda example: convert_images_to_rgb(
-            example, image_col_name="image", transform=transform
-        ),
-        desc="Converting images to RGB",
+        convert_images_to_rgb,
+        fn_kwargs={"image_col_name": "image", "transform": transform},
     )
 
 
@@ -253,7 +251,7 @@ def create_image_dataloader(
     dataset: Dataset,
     image_column_name: str | None = None,
     batch_size: int = 32,
-    transform: Callable[[Any], Any] | None = DEFAULT_TRANSFORM,
+    transform: Callable[[Any], Any] | None = None,
     collate_fn: Callable[[list[dict[str, Any]]], dict[str, Any]] = custom_collate_fn,
 ) -> DataLoader[dict[str, Any]]:
     """Creates a DataLoader with the image dataset prepared using the explicit transformation.

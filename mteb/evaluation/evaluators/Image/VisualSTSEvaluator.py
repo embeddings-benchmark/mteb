@@ -32,10 +32,18 @@ class VisualSTSEvaluator(Evaluator):
     ):
         super().__init__(**kwargs)
         self.sentence1_dataset = create_image_dataloader(
-            dataset.rename_column(sentences_column_names[0], "image"),
+            (
+                dataset.select_columns(sentences_column_names[0]).rename_column(
+                    sentences_column_names[0], "image"
+                )
+            ),
         )
         self.sentence2_dataset = create_image_dataloader(
-            dataset.rename_column(sentences_column_names[1], "image"),
+            (
+                dataset.select_columns(sentences_column_names[1]).rename_column(
+                    sentences_column_names[1], "image"
+                )
+            ),
         )
         self.gold_scores = gold_scores
         self.task_name = task_name

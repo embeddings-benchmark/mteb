@@ -140,6 +140,6 @@ class AbsTaskAny2TextMultipleChoice(AbsTask):
             task_name=self.metadata.name,
             **kwargs,
         )
-        scores = evaluator(model, encode_kwargs=encode_kwargs)
+        scores = evaluator(model, encode_kwargs=kwargs)
         self._add_main_score(scores)
         return scores
