@@ -96,7 +96,7 @@ class PpcPC(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation="""@misc{dadas2022training,
-      title={Training Effective Neural Sentence Encoders from Automatically Mined Paraphrases}, 
+      title={Training Effective Neural Sentence Encoders from Automatically Mined Paraphrases},
       author={Sławomir Dadas},
       year={2022},
       eprint={2207.12759},

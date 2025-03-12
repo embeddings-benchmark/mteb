@@ -80,7 +80,7 @@ class NeuCLIR2023Retrieval(MultilingualTask, AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation="""@misc{lawrie2024overview,
-      title={Overview of the TREC 2023 NeuCLIR Track}, 
+      title={Overview of the TREC 2023 NeuCLIR Track},
       author={Dawn Lawrie and Sean MacAvaney and James Mayfield and Paul McNamee and Douglas W. Oard and Luca Soldaini and Eugene Yang},
       year={2024},
       eprint={2404.08071},
@@ -195,13 +195,14 @@ class NeuCLIR2023RetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation="""@misc{lawrie2024overview,
-      title={Overview of the TREC 2023 NeuCLIR Track}, 
+      title={Overview of the TREC 2023 NeuCLIR Track},
       author={Dawn Lawrie and Sean MacAvaney and James Mayfield and Paul McNamee and Douglas W. Oard and Luca Soldaini and Eugene Yang},
       year={2024},
       eprint={2404.08071},
       archivePrefix={arXiv},
       primaryClass={cs.IR}
 }""",
+        adapted_from=["NeuCLIR2022Retrieval"],
     )
 
     def load_data(self, **kwargs):
