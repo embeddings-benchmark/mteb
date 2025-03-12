@@ -15,7 +15,6 @@ from torch.utils.data import DataLoader
 import mteb
 from mteb import SentenceTransformerWrapper
 from mteb.encoder_interface import AudioBatch, PromptType
-from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from tests.test_benchmark.task_grid import MOCK_TASK_TEST_GRID
 
@@ -128,8 +127,8 @@ class MockAudioEncoder:
         **kwargs: Any,
     ):
         return torch.randn(len(texts), self.embedding_dim)
-    
-    
+
+
 class MockMocoEncoder:
     mteb_model_meta = ModelMeta(
         name="MockMocoModel",

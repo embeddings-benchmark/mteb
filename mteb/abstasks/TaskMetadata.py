@@ -103,7 +103,7 @@ SAMPLE_CREATION_METHOD = Literal[
     "rendered",
     "multiple",
 ]
-   
+
 
 MIEB_TASK_TYPE = (
     "Any2AnyMultiChoice",
@@ -129,27 +129,31 @@ MAEB_TASK_TYPE = (
 )
 
 TASK_TYPE = (
-    "BitextMining",
-    "Classification",
-    "MultilabelClassification",
-    "Clustering",
-    "PairClassification",
-    "Reranking",
-    "Retrieval",
-    "STS",
-    "Summarization",
-    "InstructionRetrieval",
-    "Speed",
-    "Any2AnyMultiChoice",
-    "Any2AnyRetrieval",
-    "Any2TextMutipleChoice",
-    "ImageClustering",
-    "ImageClassification",
-    "ImageMultilabelClassification",
-    "ImageTextPairClassification",
-    "VisualSTS",
-    "ZeroShotClassification",
-) + MIEB_TASK_TYPE + MAEB_TASK_TYPE
+    (
+        "BitextMining",
+        "Classification",
+        "MultilabelClassification",
+        "Clustering",
+        "PairClassification",
+        "Reranking",
+        "Retrieval",
+        "STS",
+        "Summarization",
+        "InstructionRetrieval",
+        "Speed",
+        "Any2AnyMultiChoice",
+        "Any2AnyRetrieval",
+        "Any2TextMutipleChoice",
+        "ImageClustering",
+        "ImageClassification",
+        "ImageMultilabelClassification",
+        "ImageTextPairClassification",
+        "VisualSTS",
+        "ZeroShotClassification",
+    )
+    + MIEB_TASK_TYPE
+    + MAEB_TASK_TYPE
+)
 
 TASK_TYPE = Literal[TASK_TYPE]
 
