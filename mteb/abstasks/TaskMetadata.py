@@ -58,6 +58,7 @@ TASK_SUBTYPE = Literal[
     "Environment Sound Classification",
     "Gunshot Audio Classification",
     "Instrument Source Classification",
+    "Music Genre Classification",
     "Gender Clustering",
     "Rendered semantic textual similarity",
 ]
