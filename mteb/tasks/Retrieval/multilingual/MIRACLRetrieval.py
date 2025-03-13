@@ -105,6 +105,7 @@ class MIRACLRetrieval(MultilingualTask, AbsTaskRetrieval):
         dataset={
             "path": "miracl/mmteb-miracl",
             "revision": "main",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",
@@ -143,11 +144,10 @@ class MIRACLRetrieval(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_miracl_data(
-            path=self.metadata_dict["dataset"]["path"],
+            **self.metadata_dict["dataset"],
             langs=self.hf_subsets,
             splits=self.metadata_dict["eval_splits"],
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
         )
 
         self.data_loaded = True
