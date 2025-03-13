@@ -46,7 +46,7 @@ class STS17Crosslingual(AbsTaskSTS):
     author = "Cer, Daniel  and
       Diab, Mona  and
       Agirre, Eneko  and
-      Lopez-Gazpio, I{\~n}igo  and
+      Lopez-Gazpio, I{\\~n}igo  and
       Specia, Lucia",
     editor = "Bethard, Steven  and
       Carpuat, Marine  and
