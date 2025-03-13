@@ -363,7 +363,8 @@ def test_reranker_same_ndcg1(tmp_path: Path):
     de = SentenceTransformer(de_name, revision=revision)
     ce = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
     ce_revision = "e9ea2688951463fc2791a2ea2ddfce6762900675"
-    ce.mteb_model_meta = ModelMeta(
+    ce.mteb_model_meta = ModelMeta(  # type: ignore
+        loader=None,
         name="cross-encoder/ms-marco-TinyBERT-L-2-v2",
         languages=["eng-Latn"],
         open_weights=True,

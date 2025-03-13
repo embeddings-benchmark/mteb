@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from functools import partial
 from typing import Any
 
 import numpy as np
@@ -80,11 +79,7 @@ class NoInstructWrapper(Wrapper):
 
 
 no_instruct_small_v0 = ModelMeta(
-    loader=partial(
-        NoInstructWrapper,
-        model_name="avsolatorio/NoInstruct-small-Embedding-v0",
-        revision="b38747000553d8268915c95a55fc87e707c9aadd",
-    ),
+    loader=NoInstructWrapper,
     name="avsolatorio/NoInstruct-small-Embedding-v0",
     languages=["eng-Latn"],
     open_weights=True,

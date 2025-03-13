@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
 from typing import Any, Callable
 
 import numpy as np
@@ -60,10 +59,8 @@ class JasperWrapper(Wrapper):
 
 
 jasper_en_v1 = ModelMeta(
-    loader=partial(  # type: ignore
-        JasperWrapper,
-        model_name="infgrad/jasper_en_vision_language_v1",
-        revision="d6330ce98f8a0d741e781df845904c9484f00efa",
+    loader=JasperWrapper,
+    loader_kwargs=dict(
         config_kwargs={"is_text_encoder": True, "vector_dim": 12288},
         model_kwargs={
             "attn_implementation": "sdpa",

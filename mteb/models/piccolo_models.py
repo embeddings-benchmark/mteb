@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 piccolo_base_zh = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sensenova/piccolo-base-zh",
     languages=["zho_Hans"],
     open_weights=True,
@@ -27,6 +29,7 @@ piccolo_base_zh = ModelMeta(
 )
 
 piccolo_large_zh_v2 = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sensenova/piccolo-large-zh-v2",
     languages=["zho_Hans"],
     open_weights=False,  # They "temporarily" removed it in may last year

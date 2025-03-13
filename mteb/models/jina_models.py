@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
 from typing import Any
 
 import numpy as np
@@ -192,10 +191,8 @@ class JinaWrapper(SentenceTransformerWrapper):
 
 
 jina_embeddings_v3 = ModelMeta(
-    loader=partial(  # type: ignore
-        JinaWrapper,
-        model="jinaai/jina-embeddings-v3",
-        revision="215a6e121fa0183376388ac6b1ae230326bfeaed",
+    loader=JinaWrapper,  # type: ignore
+    loader_kwargs=dict(
         trust_remote_code=True,
         model_prompts={
             "Retrieval-query": "retrieval.query",
@@ -259,10 +256,8 @@ jina_embeddings_v3 = ModelMeta(
 )
 
 jina_embeddings_v2_base_en = ModelMeta(
-    loader=partial(
-        SentenceTransformerWrapper,
-        model_name="jinaai/jina-embeddings-v2-base-en",
-        revision="6e85f575bc273f1fd840a658067d0157933c83f0",
+    loader=SentenceTransformerWrapper,
+    loader_kwargs=dict(
         trust_remote_code=True,
     ),
     name="jinaai/jina-embeddings-v2-base-en",
@@ -318,10 +313,8 @@ jina_embeddings_v2_base_en = ModelMeta(
 )
 
 jina_embeddings_v2_small_en = ModelMeta(
-    loader=partial(
-        SentenceTransformerWrapper,
-        model_name="jinaai/jina-embeddings-v2-small-en",
-        revision="44e7d1d6caec8c883c2d4b207588504d519788d0",
+    loader=SentenceTransformerWrapper,
+    loader_kwargs=dict(
         trust_remote_code=True,
     ),
     name="jinaai/jina-embeddings-v2-small-en",
@@ -377,11 +370,7 @@ jina_embeddings_v2_small_en = ModelMeta(
 )
 
 jina_embedding_b_en_v1 = ModelMeta(
-    loader=partial(
-        SentenceTransformerWrapper,
-        model_name="jinaai/jina-embedding-b-en-v1",
-        revision="32aa658e5ceb90793454d22a57d8e3a14e699516",
-    ),
+    loader=SentenceTransformerWrapper,
     name="jinaai/jina-embedding-b-en-v1",
     languages=["eng-Latn"],
     open_weights=True,
@@ -431,11 +420,7 @@ jina_embedding_b_en_v1 = ModelMeta(
 )
 
 jina_embedding_s_en_v1 = ModelMeta(
-    loader=partial(
-        SentenceTransformerWrapper,
-        model_name="jinaai/jina-embedding-s-en-v1",
-        revision="5ac6cd473e2324c6d5f9e558a6a9f65abb57143e",
-    ),
+    loader=SentenceTransformerWrapper,
     name="jinaai/jina-embedding-s-en-v1",
     languages=["eng-Latn"],
     open_weights=True,

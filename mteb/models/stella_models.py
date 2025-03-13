@@ -1,10 +1,44 @@
 from __future__ import annotations
 
-from functools import partial
-
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.instruct_wrapper import instruct_wrapper
 from mteb.models.nvidia_models import nvidia_training_datasets
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+
+stella_zh_datasets = {
+    "BQ": [],
+    "LCQMC": [],
+    "PAWSX": [],
+    "STS-B": [],
+    "DuRetrieval": [],
+    "AFQMC": [],
+    "Cmnli": [],
+    "Ocnli": [],
+}
+
+# Derived from conversation:
+
+# The model information in Chinese is as follows:
+# infgrad/stella-base-zh：based on piccolo-base-zh, using supervised data to train, the data is wudao_base_200GB[1]、m3e[2] and simclue[3]
+# infgrad/stella-large-zh：based on piccolo-large-zh, using supervised data to train, the data is wudao_base_200GB[1]、m3e[2] and simclue[3]
+# infgrad/stella-base-zh-v2：based on infgrad/stella-base-zh, using supervised data to train, the data is wudao_base_200GB[1]、m3e[2] and simclue[3]
+# infgrad/stella-large-zh-v2：based on infgrad/stella-large-zh, using supervised data to train, the data is wudao_base_200GB[1]、m3e[2] and simclue[3]
+# For infgrad/stella-mrl-large-zh-v3.5-1792d， infgrad/stella-base-zh-v3-1792d, or other models, I forgot their details, what I remember is that they are distilled models, and using skypile[4] and matrix[5].
+# Finally, m3e[2] and simclue[3] has a overlap with C-MTEB, specifically：
+# BQ
+# lcqmc
+# paws-x
+# dureader_robust
+# AFQMC
+# STSB
+# CMNLI
+# OCNLI
+# Totally 8 training datasets are also CMTEB testset.
+# https://www.scidb.cn/en/detail?dataSetId=c6a3fe684227415a9db8e21bac4a15ab
+# https://github.com/wangyuxinwhy/uniem
+# https://github.com/CLUEbenchmark/SimCLUE
+# https://huggingface.co/datasets/Skywork/SkyPile-150B
+# https://huggingface.co/datasets/m-a-p/Matrix
 
 stella_zh_datasets = {
     "BQ": [],
@@ -43,9 +77,8 @@ stella_zh_datasets = {
 
 stella_en_400M = ModelMeta(
     # https://huggingface.co/dunzhang/stella_en_400M_v5/discussions/21#671a6205ac1e2416090f2bf4
-    loader=partial(  # type: ignore
-        instruct_wrapper,
-        model_name_or_path="dunzhang/stella_en_400M_v5",
+    loader=instruct_wrapper,
+    loader_kwargs=dict(
         attn="cccc",
         pooling_method="lasttoken",
         mode="embedding",
@@ -71,9 +104,8 @@ stella_en_400M = ModelMeta(
 )
 
 stella_en_1_5b = ModelMeta(
-    loader=partial(  # type: ignore
-        instruct_wrapper,
-        model_name_or_path="dunzhang/stella_en_1.5B_v5",
+    loader=instruct_wrapper,
+    loader_kwargs=dict(
         attn="cccc",
         pooling_method="lasttoken",
         mode="embedding",
@@ -99,6 +131,7 @@ stella_en_1_5b = ModelMeta(
 )
 
 stella_large_zh_v3_1792d = ModelMeta(
+    loader=sentence_transformers_loader,
     name="dunzhang/stella-large-zh-v3-1792d",
     languages=["zho_Hans"],
     open_weights=True,
@@ -126,6 +159,7 @@ stella_large_zh_v3_1792d = ModelMeta(
 )
 
 stella_base_zh_v3_1792d = ModelMeta(
+    loader=sentence_transformers_loader,
     name="infgrad/stella-base-zh-v3-1792d",
     languages=["zho_Hans"],
     open_weights=True,
@@ -154,6 +188,7 @@ stella_base_zh_v3_1792d = ModelMeta(
 
 
 stella_mrl_large_zh_v3_5_1792d = ModelMeta(
+    loader=sentence_transformers_loader,
     name="dunzhang/stella-mrl-large-zh-v3.5-1792d",
     languages=["zho_Hans"],
     open_weights=True,
@@ -176,6 +211,7 @@ stella_mrl_large_zh_v3_5_1792d = ModelMeta(
 )
 
 zpoint_large_embedding_zh = ModelMeta(
+    loader=sentence_transformers_loader,
     name="iampanda/zpoint_large_embedding_zh",
     languages=["zho_Hans"],
     open_weights=True,

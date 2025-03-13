@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
 from typing import Any
 
 import numpy as np
@@ -53,10 +52,8 @@ class UAEWrapper(SentenceTransformerWrapper):
 
 
 uae_large_v1 = ModelMeta(
-    loader=partial(  # type: ignore
-        UAEWrapper,
-        model="WhereIsAI/UAE-Large-V1",
-        revision="369c368f70f16a613f19f5598d4f12d9f44235d4",
+    loader=UAEWrapper,
+    loader_kwargs=dict(
         # https://github.com/SeanLee97/AnglE/blob/b04eae166d8596b47293c75b4664d3ad820d7331/angle_emb/angle.py#L291-L314
         model_prompts={
             "query": "Represent this sentence for searching relevant passages: {text}",
@@ -68,7 +65,7 @@ uae_large_v1 = ModelMeta(
     open_weights=True,
     revision="369c368f70f16a613f19f5598d4f12d9f44235d4",
     release_date="2023-12-04",  # initial commit of hf model.
-    n_parameters=335 * 1e6,
+    n_parameters=int(335 * 1e6),
     memory_usage_mb=1278,
     max_tokens=512,
     embed_dim=1024,

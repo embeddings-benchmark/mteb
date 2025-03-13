@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from functools import partial
-
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
@@ -38,9 +36,8 @@ SFR_TRAINING_DATA = {  # inherits from e5
 }
 
 SFR_Embedding_2_R = ModelMeta(
-    loader=partial(  # type: ignore
-        instruct_wrapper,
-        model_name_or_path="Salesforce/SFR-Embedding-2_R",
+    loader=instruct_wrapper,
+    loader_kwargs=dict(
         instruction_template=instruction_template,
         attn="cccc",
         pooling_method="lasttoken",
@@ -78,9 +75,8 @@ SFR_Embedding_2_R = ModelMeta(
 )
 
 SFR_Embedding_Code_2B_R = ModelMeta(
-    loader=partial(  # type: ignore
-        InstructSentenceTransformerWrapper,
-        model_name_or_path="Salesforce/SFR-Embedding-Code-2B_R",
+    loader=InstructSentenceTransformerWrapper,
+    loader_kwargs=dict(
         instruction_template=instruction_template,
         attn="cccc",
         pooling_method="lasttoken",
@@ -109,9 +105,8 @@ SFR_Embedding_Code_2B_R = ModelMeta(
 )
 
 SFR_Embedding_Code_2B_R = ModelMeta(
-    loader=partial(  # type: ignore
-        InstructSentenceTransformerWrapper,
-        model_name="Salesforce/SFR-Embedding-Code-2B_R",
+    loader=InstructSentenceTransformerWrapper,
+    loader_kwargs=dict(
         instruction_template=instruction_template,
         attn="cccc",
         pooling_method="lasttoken",
@@ -140,9 +135,8 @@ SFR_Embedding_Code_2B_R = ModelMeta(
 )
 
 SFR_Embedding_Mistral = ModelMeta(
-    loader=partial(  # type: ignore
-        instruct_wrapper,
-        model_name_or_path="Salesforce/SFR-Embedding-Mistral",
+    loader=instruct_wrapper,
+    loader_kwargs=dict(
         instruction_template=instruction_template,
         attn="cccc",
         pooling_method="lasttoken",

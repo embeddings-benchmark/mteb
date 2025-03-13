@@ -3,15 +3,17 @@
 from __future__ import annotations
 
 from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 # I couldn't find the large model on HF for some reason
 text2vec_base_chinese = ModelMeta(
+    loader=sentence_transformers_loader,
     name="shibing624/text2vec-base-chinese",
     languages=["zho-Hans"],
     open_weights=True,
     revision="183bb99aa7af74355fb58d16edf8c13ae7c5433e",
     release_date="2022-01-23",
-    n_parameters=102 * 1e6,
+    n_parameters=int(102 * 1e6),
     embed_dim=768,
     license="apache-2.0",
     max_tokens=512,
@@ -33,6 +35,7 @@ text2vec_base_chinese = ModelMeta(
 )
 
 text2vec_base_chinese_paraphrase = ModelMeta(
+    loader=sentence_transformers_loader,
     name="shibing624/text2vec-base-chinese-paraphrase",
     languages=["zho-Hans"],
     open_weights=True,
@@ -80,8 +83,8 @@ text2vec_base_multilingual = ModelMeta(
     release_date="2023-06-22",
     # While it can be loaded with SBERT, it has one suspicious file according to huggingface
     # So probably best not to.
-    loader=None,
-    n_parameters=118 * 1e6,
+    loader=sentence_transformers_loader,
+    n_parameters=int(118 * 1e69),
     memory_usage_mb=449,
     embed_dim=384,
     license="apache-2.0",

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
 from typing import Any
 
 import numpy as np
@@ -35,7 +34,7 @@ class OpenAIWrapper(Wrapper):
         import tiktoken
 
         self._client = OpenAI()
-        self._model_name = model_name
+        self._model_name = model_name.split("/")[-1]
         self._embed_dim = embed_dim
         self._max_tokens = max_tokens
         self._encoding = tiktoken.get_encoding(tokenizer_name)
@@ -122,9 +121,8 @@ text_embedding_3_small = ModelMeta(
     revision="2",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
-    loader=partial(  # type: ignore
-        OpenAIWrapper,
-        model_name="text-embedding-3-small",
+    loader=OpenAIWrapper,
+    loader_kwargs=dict(
         tokenizer_name="cl100k_base",
         max_tokens=8191,
     ),
@@ -147,9 +145,8 @@ text_embedding_3_large = ModelMeta(
     revision="2",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
-    loader=partial(  # type: ignore
-        OpenAIWrapper,
-        model_name="text-embedding-3-large",
+    loader=OpenAIWrapper,
+    loader_kwargs=dict(
         tokenizer_name="cl100k_base",
         max_tokens=8191,
     ),
@@ -172,9 +169,8 @@ text_embedding_ada_002 = ModelMeta(
     revision="2",
     release_date="2022-12-15",
     languages=None,  # supported languages not specified
-    loader=partial(  # type: ignore
-        OpenAIWrapper,
-        model_name="text-embedding-ada-002",
+    loader=OpenAIWrapper,
+    loader_kwargs=dict(
         tokenizer_name="cl100k_base",
         max_tokens=8191,
     ),

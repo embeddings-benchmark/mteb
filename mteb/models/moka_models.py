@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 sent_trf_training_dataset = {
     # derived from datasheets
@@ -83,12 +84,13 @@ m3e_dataset = {
 }
 
 m3e_base = ModelMeta(
+    loader=sentence_transformers_loader,
     name="moka-ai/m3e-base",
     languages=["zho_Hans", "eng-Latn"],
     open_weights=True,
     revision="764b537a0e50e5c7d64db883f2d2e051cbe3c64c",
     release_date="2023-06-06",  # first commit
-    n_parameters=102 * 1e6,
+    n_parameters=int(102 * 1e6),
     memory_usage_mb=390,
     embed_dim=768,
     # They don't give a specific license but commercial use is not allowed
@@ -106,6 +108,7 @@ m3e_base = ModelMeta(
 )
 
 m3e_small = ModelMeta(
+    loader=sentence_transformers_loader,
     name="moka-ai/m3e-small",
     languages=["zho_Hans", "eng-Latn"],
     open_weights=True,
@@ -129,6 +132,7 @@ m3e_small = ModelMeta(
 )
 
 m3e_large = ModelMeta(
+    loader=sentence_transformers_loader,
     name="moka-ai/m3e-large",
     languages=["zho_Hans", "eng-Latn"],
     open_weights=True,

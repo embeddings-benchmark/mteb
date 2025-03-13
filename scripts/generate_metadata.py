@@ -234,6 +234,7 @@ def model_meta_from_hf_hub_embedding(model_name: str) -> ModelMeta:
         else:
             training_datasets = None
         return ModelMeta(
+            loader=None,
             name=model_name,
             revision=revision,
             release_date=release_date,
@@ -256,6 +257,7 @@ def model_meta_from_hf_hub_embedding(model_name: str) -> ModelMeta:
     except Exception as e:
         logging.error(f"Failed to extract metadata from model: {e}.")
         return ModelMeta(
+            loader=None,
             name=model_name,
             revision=None,
             languages=None,

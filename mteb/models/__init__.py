@@ -9,7 +9,10 @@ from mteb.models.overview import (
     model_meta_from_cross_encoder,
     model_meta_from_sentence_transformers,
 )
-from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
+from mteb.models.sentence_transformer_wrapper import (
+    SentenceTransformerWrapper,
+    sentence_transformers_loader,
+)
 
 __all__ = [
     "MODEL_REGISTRY",
@@ -20,4 +23,5 @@ __all__ = [
     "model_meta_from_sentence_transformers",
     "model_meta_from_cross_encoder",
     "SentenceTransformerWrapper",
+    "sentence_transformers_loader",
 ]

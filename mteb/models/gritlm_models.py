@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
 
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
@@ -34,9 +33,8 @@ GRITLM_CITATION = """
 
 
 gritlm7b = ModelMeta(
-    loader=partial(  # type: ignore
-        instruct_wrapper,
-        model_name_or_path="GritLM/GritLM-7B",
+    loader=instruct_wrapper,
+    loader_kwargs=dict(
         instruction_template=gritlm_instruction,
         mode="embedding",
         torch_dtype="auto",
@@ -63,9 +61,8 @@ gritlm7b = ModelMeta(
 )
 
 gritlm8x7b = ModelMeta(
-    loader=partial(  # type: ignore
-        instruct_wrapper,
-        model_name_or_path="GritLM/GritLM-8x7B",
+    loader=instruct_wrapper,
+    loader_kwargs=dict(
         instruction_template=gritlm_instruction,
         mode="embedding",
         torch_dtype="auto",

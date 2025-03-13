@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from functools import partial
 from typing import Any
 
 import torch
@@ -149,10 +148,7 @@ class JinaCLIPModelWrapper:
 
 
 jina_clip_v1 = ModelMeta(
-    loader=partial(
-        JinaCLIPModelWrapper,
-        model_name="jinaai/jina-clip-v1",
-    ),
+    loader=JinaCLIPModelWrapper,  # type: ignore
     name="jinaai/jina-clip-v1",
     languages=["eng_Latn"],
     revision="06150c7c382d7a4faedc7d5a0d8cdb59308968f4",
