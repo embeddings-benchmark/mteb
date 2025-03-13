@@ -59,7 +59,6 @@ TASK_SUBTYPE = Literal[
     "Gunshot Audio Classification",
     "Instrument Source Classification",
     "Music Genre Classification",
-    "Music Genre Classification",
     "Music Instrument Recognition",
     "Spoken Language Identification",
     "Gender Clustering",
