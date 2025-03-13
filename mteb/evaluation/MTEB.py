@@ -545,6 +545,7 @@ class MTEB:
                     + "attribute is available."
                 )
                 meta = ModelMeta(
+                    loader=None,
                     name=None,
                     revision=None,
                     release_date=None,

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 import os
-from functools import partial
 from typing import Any
 
 import torch
@@ -12,7 +11,7 @@ from torchvision import transforms
 from tqdm import tqdm
 
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 
 api_key = os.getenv("VOYAGE_API_KEY")
 tensor_to_image = transforms.Compose([transforms.ToPILImage()])
@@ -67,7 +66,7 @@ def voyage_v_loader(**kwargs):
             model_name: str,
             **kwargs: Any,
         ):
-            self.model_name = model_name
+            self.model_name = model_name.split("/")[-1]
             self.vo = voyageai.Client()
 
         @retry(
@@ -241,7 +240,7 @@ def voyage_v_loader(**kwargs):
 
 
 voyage_v = ModelMeta(
-    loader=partial(voyage_v_loader, model_name="voyage-multimodal-3"),
+    loader=voyage_v_loader,  # type: ignore
     name="voyageai/voyage-multimodal-3",
     languages=[],  # Unknown
     revision="1",
@@ -251,7 +250,7 @@ voyage_v = ModelMeta(
     max_tokens=32768,
     embed_dim=1024,
     license="mit",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     modalities=["image", "text"],
     open_weights=False,

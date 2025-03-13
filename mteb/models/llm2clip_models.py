@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from functools import partial
 from pathlib import Path
 from typing import Any
 
@@ -209,10 +208,7 @@ llm2clip_training_sets = {
 }
 
 llm2clip_openai_l_14_336 = ModelMeta(
-    loader=partial(
-        llm2clip_loader,
-        model_name="microsoft/LLM2CLIP-Openai-L-14-336",
-    ),
+    loader=llm2clip_loader,  # type: ignore
     name="microsoft/LLM2CLIP-Openai-L-14-336",
     languages=["eng_Latn"],
     revision="92512331f393a003c3d98404677f991c188162c9",
@@ -235,10 +231,7 @@ llm2clip_openai_l_14_336 = ModelMeta(
 
 ## NOTE: https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-224/discussions/1
 llm2clip_openai_l_14_224 = ModelMeta(
-    loader=partial(
-        llm2clip_loader,
-        model_name="microsoft/LLM2CLIP-Openai-L-14-224",
-    ),
+    loader=llm2clip_loader,  # type: ignore
     name="microsoft/LLM2CLIP-Openai-L-14-224",
     languages=["eng_Latn"],
     revision="6b8a11a94ff380fa220dfefe73ac9293d2677575",
@@ -260,10 +253,7 @@ llm2clip_openai_l_14_224 = ModelMeta(
 )
 
 llm2clip_openai_b_16 = ModelMeta(
-    loader=partial(
-        llm2clip_loader,
-        model_name="microsoft/LLM2CLIP-Openai-B-16",
-    ),
+    loader=llm2clip_loader,  # type: ignore
     name="microsoft/LLM2CLIP-Openai-B-16",
     languages=["eng_Latn"],
     revision="ecfb347eb3dcfeb2fbc2a2eae7de6ac5a001aaf8",
