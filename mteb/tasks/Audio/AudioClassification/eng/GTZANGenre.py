@@ -20,7 +20,7 @@ class GTZANGenre(AbsTaskAudioClassification):
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=("2025-03-13", "2025-03-13"),
+        date=("2000-01-01", "2001-12-31"),
         domains=["Music"],
         task_subtypes=["Music Genre Classification"],
         license="not specified",
