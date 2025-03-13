@@ -10,17 +10,17 @@ class GTZANGenre(AbsTaskAudioClassification):
     metadata = TaskMetadata(
         name="GTZANGenre",
         description="Music Genre Classification (10 classes)",
-        reference="https://huggingface.co/datasets/sanchit-gandhi/gtzan",
+        reference="https://huggingface.co/datasets/silky1708/GTZAN-Genre",
         dataset={
-            "path": "sanchit-gandhi/gtzan",
-            "revision": "4bd857132cb0e731bef3ec68558e7acc0a85f144",
+            "path": "silky1708/GTZAN-Genre",
+            "revision": "5efdda59d0d185bfe17ada9b54d233349d0e0168",
         },
         type="AudioClassification",
         category="a2t",
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=("2023-06-23", "2023-06-23"),
+        date=("2025-03-13", "2025-03-13"),
         domains=["Music"],
         task_subtypes=["Music Genre Classification"],
         license="not specified",
@@ -44,6 +44,6 @@ class GTZANGenre(AbsTaskAudioClassification):
     )
 
     audio_column_name: str = "audio"
-    label_column_name: str = "genre"
+    label_column_name: str = "label"
     samples_per_label: int = 10
     is_cross_validation: bool = True
