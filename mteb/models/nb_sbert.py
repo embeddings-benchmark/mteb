@@ -17,6 +17,8 @@ nb_sbert = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data="https://huggingface.co/datasets/NbAiLab/mnli-norwegian",
-    training_datasets={"mnli-norwegian": ["train"]},
+    training_datasets={
+        # "mnli-norwegian": ["train"]
+    },
 )
 
