@@ -3,9 +3,9 @@ from __future__ import annotations
 import itertools
 import json
 import logging
-import warnings
 import tempfile
 import time
+import warnings
 from pathlib import Path
 from typing import Literal, get_args
 from urllib.parse import urlencode
@@ -23,8 +23,8 @@ from mteb.languages import ISO_TO_LANGUAGE
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
 from mteb.leaderboard.table import scores_to_tables
 
-logging.getLogger('mteb.load_results.task_results').setLevel(logging.ERROR)
-logging.getLogger('mteb.models.overview').setLevel(logging.WARNING)
+logging.getLogger("mteb.load_results.task_results").setLevel(logging.ERROR)
+logging.getLogger("mteb.models.overview").setLevel(logging.WARNING)
 warnings.filterwarnings("ignore", message="Couldn't get scores for .* due to .*")
 logger = logging.getLogger(__name__)
 
