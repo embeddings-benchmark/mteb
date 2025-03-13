@@ -5,7 +5,6 @@ from typing import Any, Literal
 
 import numpy as np
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoModel, AutoProcessor
@@ -29,20 +28,20 @@ class ALIGNModelWrapper(Wrapper):
 
     def get_text_embeddings(
         self,
-        texts: list[str],
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 32,
-        **kwargs: Any,
+        texts: DataLoader[BatchedInput],
+        show_progress_bar: bool = True,
     ):
         all_text_embeddings = []
 
         with torch.no_grad():
-            for i in tqdm(range(0, len(texts), batch_size)):
-                batch_texts = texts[i : i + batch_size]
+            for batch in tqdm(
+                texts, disable=not show_progress_bar, desc="Text Encoding"
+            ):
                 inputs = self.processor(
-                    text=batch_texts, return_tensors="pt", padding=True, truncation=True
+                    text=batch["text"],
+                    return_tensors="pt",
+                    padding=True,
+                    truncation=True,
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 text_outputs = self.model.get_text_features(**inputs)
@@ -53,40 +52,20 @@ class ALIGNModelWrapper(Wrapper):
 
     def get_image_embeddings(
         self,
-        images: list[Image.Image] | DataLoader,
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 32,
-        **kwargs: Any,
+        images: DataLoader[BatchedInput],
+        show_progress_bar: bool = True,
     ):
         all_image_embeddings = []
-        if isinstance(images, DataLoader):
-            with torch.no_grad():
-                for batch in tqdm(images):
-                    inputs = self.processor(
-                        images=batch, return_tensors="pt", padding=True
-                    )
-                    inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                    image_outputs = self.model.get_image_features(**inputs)
-                    all_image_embeddings.append(image_outputs.cpu())
-        else:
-            with torch.no_grad():
-                for i in tqdm(range(0, len(images), batch_size)):
-                    batch_images = images[i : i + batch_size]
-                    batch_images = [
-                        img.convert("RGB")
-                        if isinstance(img, Image.Image) and img.mode != "RGB"
-                        else img
-                        for img in batch_images
-                    ]
-                    inputs = self.processor(
-                        images=batch_images, return_tensors="pt", padding=True
-                    )
-                    inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                    image_outputs = self.model.get_image_features(**inputs)
-                    all_image_embeddings.append(image_outputs.cpu())
-
+        with torch.no_grad():
+            for batch in tqdm(
+                images, disable=not show_progress_bar, desc="Image Encoding"
+            ):
+                inputs = self.processor(
+                    images=batch["image"], return_tensors="pt", padding=True
+                )
+                inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                image_outputs = self.model.get_image_features(**inputs)
+                all_image_embeddings.append(image_outputs.cpu())
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
         return all_image_embeddings
 

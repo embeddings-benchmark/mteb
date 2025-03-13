@@ -5,7 +5,6 @@ from typing import Any, Literal
 
 import numpy as np
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import Blip2Processor
@@ -38,28 +37,18 @@ def blip2_loader(**kwargs):
             self.model = Blip2ITM.from_pretrained(model_type).to(self.device).float()
             self.processor = Blip2Processor.from_pretrained(model_name)
 
-        def preprocess(
-            self,
-            texts: list[str],
-            images: list[Image.Image],
-        ):
-            return self.processor(
-                text=texts, images=images, return_tensors="pt", padding=True
-            )
-
         def get_text_embeddings(
             self,
             texts: DataLoader[BatchedInput],
-            *,
-            task_name: str | None = None,
-            prompt_type: PromptType | None = None,
-            batch_size: int = 32,
+            show_progress_bar: bool = True,
             **kwargs: Any,
         ):
             all_text_embeddings = []
 
             with torch.no_grad():
-                for batch in tqdm(texts):
+                for batch in tqdm(
+                    texts, disable=not show_progress_bar, desc="Text Encoding"
+                ):
                     text_tokens = self.model.tokenizer(
                         batch["text"],
                         padding="max_length",
@@ -68,25 +57,22 @@ def blip2_loader(**kwargs):
                         return_tensors="pt",
                     ).to(self.device)
                     text_outputs = self.model.forward_text(text_tokens)
-                    # text_outputs = normalize(self.model.text_proj(text_outputs))
                     all_text_embeddings.append(text_outputs.cpu())
-
             all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
             return all_text_embeddings
 
         def get_image_embeddings(
             self,
             images: DataLoader[BatchedInput],
-            *,
-            task_name: str | None = None,
-            prompt_type: PromptType | None = None,
-            batch_size: int = 32,
+            show_progress_bar: bool = True,
             **kwargs: Any,
         ):
             all_image_embeddings = []
 
             with torch.no_grad():
-                for batch in tqdm(images):
+                for batch in tqdm(
+                    images, disable=not show_progress_bar, desc="Image Encoding"
+                ):
                     inputs = self.processor(
                         images=batch["image"], return_tensors="pt", padding=True
                     )
@@ -94,20 +80,24 @@ def blip2_loader(**kwargs):
                         inputs["pixel_values"].to(self.device)
                     )
                     image_outputs = image_outputs[0][:, 0, :]
-                    # image_outputs = normalize(self.model.vision_proj(image_outputs), dim=-1)
                     all_image_embeddings.append(image_outputs.cpu())
 
             all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
             return all_image_embeddings
 
         def get_multimodal_embeddings(
-            self, inputs: DataLoader[BatchedInput], batch_size=32
+            self,
+            inputs: DataLoader[BatchedInput],
+            show_progress_bar: bool = True,
+            **kwargs: Any,
         ):
             all_multimodal_embeddings = []
 
             with torch.no_grad():
                 # check dataloader batch size is the same as batch size
-                for batch in tqdm(inputs):
+                for batch in tqdm(
+                    inputs, disable=not show_progress_bar, desc="Multimodal Encoding"
+                ):
                     image_inputs = self.processor(
                         images=batch["image"], return_tensors="pt", padding=True
                     )["pixel_values"].to(self.device)
@@ -136,7 +126,6 @@ def blip2_loader(**kwargs):
             task_name: str,
             prompt_type: PromptType | None = None,
             fusion_mode: Literal["sum", "multimodal"] = "sum",
-            batch_size: int = 32,
             **kwargs: Any,
         ) -> np.ndarray | torch.Tensor:
             # TODO: find out if BLIP has a prescribed way of fusing text and image embeddings
@@ -148,9 +137,7 @@ def blip2_loader(**kwargs):
                 and "image" in inputs.dataset.features
                 and fusion_mode == "multimodal"
             ):
-                return self.get_multimodal_embeddings(
-                    inputs, batch_size=kwargs.get("batch_size", batch_size)
-                )
+                return self.get_multimodal_embeddings(inputs)
 
             if "text" in inputs.dataset.features:
                 text_embeddings = self.get_text_embeddings(inputs, **kwargs)

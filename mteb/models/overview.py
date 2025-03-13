@@ -229,7 +229,7 @@ def get_model(model_name: str, revision: str | None = None, **kwargs: Any) -> En
     model = meta.load_model(**kwargs)
 
     # If revision not available in the modelmeta, try to extract it from sentence-transformers
-    if isinstance(model.model, SentenceTransformer):
+    if hasattr(model, "model") and isinstance(model.model, SentenceTransformer):
         _meta = model_meta_from_sentence_transformers(model.model)
         if meta.revision is None:
             meta.revision = _meta.revision if _meta.revision else meta.revision

@@ -2,17 +2,17 @@ from __future__ import annotations
 
 import logging
 import math
-import os
 from functools import partial
-from typing import Any
+from typing import Any, Literal
 
+import numpy as np
 import torch
 from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm.autonotebook import tqdm
 from transformers import AutoModelForVision2Seq, AutoProcessor
 
-from mteb.encoder_interface import PromptType
+from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
 
@@ -155,46 +155,6 @@ class GmeQwen2VL(Wrapper):
         self.device = device
         self.sep = " "
 
-    def encode(
-        self,
-        sentences: list[str],
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ):
-        return self.get_fused_embeddings(
-            texts=sentences, task_name=task_name, prompt_type=prompt_type, **kwargs
-        )
-
-    def encode_queries(self, queries: list[str], **kwargs):
-        embeddings = self.encode(queries, prompt_type=PromptType.query, **kwargs)
-        return embeddings
-
-    def encode_corpus(self, corpus: list[dict[str, str]], **kwargs):
-        if type(corpus) is dict:
-            sentences = [
-                (corpus["title"][i] + self.sep + corpus["text"][i]).strip()
-                if "title" in corpus
-                else corpus["text"][i].strip()
-                for i in range(len(corpus["text"]))
-            ]
-        else:
-            sentences = [
-                (doc["title"] + self.sep + doc["text"]).strip()
-                if "title" in doc
-                else doc["text"].strip()
-                for doc in corpus
-            ]
-        embeddings = self.encode(sentences, prompt_type=PromptType.passage**kwargs)
-        return embeddings
-
-    def get_image_embeddings(self, images: list[Image.Image] | DataLoader, **kwargs):
-        return self.get_fused_embeddings(images=images, **kwargs)
-
-    def get_text_embeddings(self, texts: list[str], **kwargs):
-        return self.get_fused_embeddings(texts=texts, **kwargs)
-
     def calculate_probs(self, text_embeddings, image_embeddings):
         text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True)
         image_embeddings = image_embeddings / image_embeddings.norm(
@@ -206,14 +166,15 @@ class GmeQwen2VL(Wrapper):
 
     def get_fused_embeddings(
         self,
-        texts: list[str] | None = None,
-        images: list[Image.Image] | DataLoader | None = None,
-        task_name: str | None = None,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_name: str,
         prompt_type: PromptType | None = None,
-        tqdm_mininterval: int = 15,
-        instruction=None,
+        fusion_mode: Literal["sum"] = "sum",
+        show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
+    ) -> np.ndarray | torch.Tensor:
+        instruction = self.get_instruction(task_name, prompt_type)
         if prompt_type == PromptType.passage:
             instruction = None
         elif instruction is None:
@@ -222,63 +183,31 @@ class GmeQwen2VL(Wrapper):
             if isinstance(instruction, str) and instruction[-1] != ".":
                 instruction += "."
         self.model = self.model.to(self.device)
-
-        if isinstance(images, DataLoader):
-            image_loader = images
-            batch_size = image_loader.batch_size
-            image_loader.dataset.transform = None
-        else:
-            batch_size = kwargs.pop("batch_size", 32)
-            if images is None:
-                image_loader = None
-            else:
-                image_loader = DataLoader(
-                    images,
-                    batch_size=batch_size,
-                    shuffle=False,
-                    collate_fn=custom_collate_fn,
-                    num_workers=min(math.floor(os.cpu_count() / 2), 8),
-                )
-
-        if texts is None:
-            assert image_loader is not None
-            n_batch = len(image_loader)
-        else:
-            n_batch = len(texts) // batch_size + int(len(texts) % batch_size > 0)
-            image_loader = image_loader or [None] * n_batch
-
         all_embeddings = []
-        none_batch = [None] * batch_size
-        show_progress_bar = kwargs.pop("show_progress_bar", True)
-        pbar = tqdm(
-            total=n_batch,
-            disable=not show_progress_bar,
-            mininterval=tqdm_mininterval,
-            miniters=n_batch // 10,
-            desc="encode",
-        )
-        for n, (i, img_batch) in enumerate(
-            zip(range(0, n_batch * batch_size, batch_size), image_loader)
-        ):
-            text_batch = none_batch if texts is None else texts[i : i + batch_size]
-            img_batch = none_batch if img_batch is None else img_batch
+        for batch in tqdm(inputs, disable=not show_progress_bar, desc="Fused Encoding"):
+            batch_size = len(batch["text"]) or len(batch["image"])
+            if "text" in batch:
+                text_batch = batch["text"]
+            else:
+                text_batch = [None] * batch_size
+
+            if "image" in batch:
+                img_batch = batch["image"]
+            else:
+                img_batch = [None] * batch_size
+
             inputs = dict(
                 texts=text_batch, images=img_batch, instruction=instruction, **kwargs
             )
             with torch.inference_mode():
                 embeddings = self.model.embed(**inputs, device=self.device)
             all_embeddings.append(embeddings.cpu())
-            pbar.update(1)
-        pbar.close()
         all_embeddings = torch.cat(all_embeddings, dim=0)
         return all_embeddings
 
 
-def custom_collate_fn(batch):
-    return batch
-
-
 ### Copied from qwen_vl_utils.vision_process.py
+
 IMAGE_FACTOR = 28
 MIN_PIXELS = 4 * 28 * 28
 MAX_PIXELS = 16384 * 28 * 28

@@ -5,7 +5,6 @@ from typing import Any, Literal
 
 import numpy as np
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoModel, AutoProcessor
@@ -27,28 +26,18 @@ class CLIPModelWrapper(Wrapper):
         self.model = AutoModel.from_pretrained(model_name).to(self.device)
         self.processor = AutoProcessor.from_pretrained(model_name)
 
-    def preprocess(
-        self,
-        texts: list[str],
-        images: list[Image.Image],
-    ):
-        return self.processor(
-            text=texts, images=images, return_tensors="pt", padding=True
-        )
-
     def get_text_embeddings(
         self,
         texts: DataLoader[BatchedInput],
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 32,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ):
         all_text_embeddings = []
 
         with torch.no_grad():
-            for batch in tqdm(texts):
+            for batch in tqdm(
+                texts, disable=not show_progress_bar, desc="Text Encoding"
+            ):
                 inputs = self.processor(
                     text=batch["text"],
                     return_tensors="pt",
@@ -66,15 +55,12 @@ class CLIPModelWrapper(Wrapper):
     def get_image_embeddings(
         self,
         images: DataLoader[BatchedInput],
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 32,
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ):
         all_image_embeddings = []
 
-        for batch in tqdm(images):
+        for batch in tqdm(images, disable=not show_progress_bar, desc="Image Encoding"):
             inputs = self.processor(
                 images=batch["image"],
                 return_tensors="pt",
