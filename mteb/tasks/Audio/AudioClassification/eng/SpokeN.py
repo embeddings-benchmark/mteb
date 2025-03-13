@@ -10,9 +10,9 @@ class SpokeNEnglishClassification(AbsTaskAudioClassification):
     metadata = TaskMetadata(
         name="SpokeNEnglish",
         description="Human Sound Classification Dataset.",
-        reference="https://huggingface.co/datasets/lmms-lab/vocalsound",
+        reference="https://zenodo.org/records/10810044",
         dataset={
-            "path": "Mina76/SpokeN-100-English",
+            "path": "mteb/SpokeN-100-English",
             "revision": "afbff14d927de14412d8124502313ea6d9d140e0",
         },
         type="AudioClassification",
@@ -20,33 +20,30 @@ class SpokeNEnglishClassification(AbsTaskAudioClassification):
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=("2022-01-01", "2023-01-01"),
+        date=("2024-01-01", "2024-01-01"),
         domains=["Spoken"],
         task_subtypes=["Vocal Sound Classification"],
         license="cc-by-sa-4.0",
-        annotations_creators="human-annotated",
+        annotations_creators="LM-generated",
         dialect=[],
         modalities=["audio"],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{Gong_2022,
-            title={Vocalsound: A Dataset for Improving Human Vocal Sounds Recognition},
-            url={http://dx.doi.org/10.1109/ICASSP43922.2022.9746828},
-            DOI={10.1109/icassp43922.2022.9746828},
-            booktitle={ICASSP 2022 - 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
-            publisher={IEEE},
-            author={Gong, Yuan and Yu, Jin and Glass, James},
-            year={2022},
-            month=may }
-                }""",
+        bibtex_citation="""@misc{groh2024spoken100crosslingualbenchmarkingdataset,
+            title={SpokeN-100: A Cross-Lingual Benchmarking Dataset for The Classification of Spoken Numbers in Different Languages}, 
+            author={René Groh and Nina Goes and Andreas M. Kist},
+            year={2024},
+            eprint={2403.09753},
+            archivePrefix={arXiv},
+            primaryClass={cs.SD},
+            url={https://arxiv.org/abs/2403.09753}, 
+        }""",
         descriptive_stats={
-            "n_samples": {"validation": 1860, "test": 3590},
+            "n_samples": {"train": 3200},
         },
     )
 
     audio_column_name: str = "audio"
-    label_column_name: str = "answer"
+    label_column_name: str = "label"
     samples_per_label: int = 32
 
 
-    def dataset_transform(self):
-        self.dataset["train"] = self.dataset["test"]
