@@ -185,6 +185,7 @@ from .multilingual import (
     NeuCLIR2023RetrievalHardNegatives,
     PublicHealthQARetrieval,
     StatcanDialogueDatasetRetrieval,
+    WebFAQRetrieval,
     WikipediaRetrievalMultilingual,
     XMarket,
     XPQARetrieval,
@@ -270,6 +271,7 @@ from .zho import (
 )
 
 __all__ = [
+    "WebFAQRetrieval",
     "CmedqaRetrieval",
     "CovidRetrieval",
     "DuRetrieval",
