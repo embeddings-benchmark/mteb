@@ -14,7 +14,7 @@ class DBpediaClassification(AbsTaskClassification):
             "revision": "9abd46cf7fc8b4c64290f26993c540b92aa145ac",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

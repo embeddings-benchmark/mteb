@@ -25,7 +25,7 @@ class KorHateSpeechMLClassification(AbsTaskMultilabelClassification):
         },
         reference="https://paperswithcode.com/dataset/korean-multi-label-hate-speech-dataset",
         type="MultilabelClassification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["kor-Hang"],

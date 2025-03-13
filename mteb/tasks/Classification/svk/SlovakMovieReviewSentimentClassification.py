@@ -14,7 +14,7 @@ class SlovakMovieReviewSentimentClassification(AbsTaskClassification):
             "revision": "0c47583c9d339b3b6f89e4db76088af5f1ec8d39",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["svk-Latn"],

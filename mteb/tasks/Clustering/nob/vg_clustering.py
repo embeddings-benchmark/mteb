@@ -33,7 +33,7 @@ class VGClustering(AbsTaskClustering):
         description="Articles and their classes (e.g. sports) from VG news articles extracted from Norsk Aviskorpus.",
         reference="https://huggingface.co/datasets/navjordj/VG_summarization",
         type="Clustering",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nob-Latn"],

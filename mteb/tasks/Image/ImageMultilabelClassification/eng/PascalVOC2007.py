@@ -20,7 +20,7 @@ class VOC2007Classification(AbsTaskImageMultilabelClassification):
             "trust_remote_code": True,
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="lrap",

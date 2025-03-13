@@ -15,7 +15,7 @@ class MultiEURLEXMultilabelClassification(AbsTaskMultilabelClassification):
         },
         description="EU laws in 23 EU languages containing annotated labels for 21 EUROVOC concepts.",
         reference="https://huggingface.co/datasets/coastalcph/multi_eurlex",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         type="MultilabelClassification",
         eval_splits=["test"],

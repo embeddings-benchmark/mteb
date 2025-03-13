@@ -14,7 +14,7 @@ class ImageNetDog15Clustering(AbsTaskImageClustering):
             "revision": "bfb6ad3b2109d26c9daddf14f98d315daa35ee72",
         },
         type="ImageClustering",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="nmi",

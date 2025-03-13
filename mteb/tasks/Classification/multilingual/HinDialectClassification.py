@@ -37,7 +37,7 @@ class HinDialectClassification(AbsTaskClassification):
         },
         description="HinDialect: 26 Hindi-related languages and dialects of the Indic Continuum in North India",
         reference="https://lindat.mff.cuni.cz/repository/xmlui/handle/11234/1-4839",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         type="Classification",
         eval_splits=["test"],

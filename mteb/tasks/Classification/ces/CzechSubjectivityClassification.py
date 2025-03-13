@@ -14,7 +14,7 @@ class CzechSubjectivityClassification(AbsTaskClassification):
             "revision": "e387ddf167f3eba99936cff89909ed6264f17e1f",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         date=("2022-04-01", "2022-04-01"),
         eval_splits=["validation", "test"],

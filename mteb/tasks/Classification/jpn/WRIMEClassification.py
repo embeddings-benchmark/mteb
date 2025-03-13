@@ -16,7 +16,7 @@ class WRIMEClassification(AbsTaskClassification):
         description="A dataset of Japanese social network rated for sentiment",
         reference="https://aclanthology.org/2021.naacl-main.169/",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["jpn-Jpan"],

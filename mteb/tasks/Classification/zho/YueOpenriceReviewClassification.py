@@ -14,7 +14,7 @@ class YueOpenriceReviewClassification(AbsTaskClassification):
             "revision": "1300d045cf983bac23faadf3aa12a619624769da",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["yue-Hant"],

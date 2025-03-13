@@ -19,7 +19,7 @@ class TurkicClassification(AbsTaskClassification):
         },
         reference="https://huggingface.co/datasets/Electrotubbie/classification_Turkic_languages/",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs={

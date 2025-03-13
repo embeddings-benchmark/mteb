@@ -26,7 +26,7 @@ class NusaParagraphEmotionClassification(AbsTaskClassification):
         },
         description="NusaParagraphEmotionClassification is a multi-class emotion classification on 10 Indonesian languages from the NusaParagraph dataset.",
         reference="https://github.com/IndoNLP/nusa-writes",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         type="Classification",
         eval_splits=["test"],

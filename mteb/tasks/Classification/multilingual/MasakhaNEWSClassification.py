@@ -32,7 +32,7 @@ class MasakhaNEWSClassification(AbsTaskClassification):
         },
         description="MasakhaNEWS is the largest publicly available dataset for news topic classification in 16 languages widely spoken in Africa. The train/validation/test sets are available for all the 16 languages.",
         reference="https://arxiv.org/abs/2304.09972",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         type="Classification",
         eval_splits=["test"],

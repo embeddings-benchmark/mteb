@@ -14,7 +14,7 @@ class WikipediaSaltsSemiconductorsClassification(AbsTaskClassification):
             "revision": "9e5415a096012fa2d1f3a929952cf9859e4550e7",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

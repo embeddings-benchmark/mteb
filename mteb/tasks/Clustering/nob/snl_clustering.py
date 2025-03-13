@@ -33,7 +33,7 @@ class SNLClustering(AbsTaskClustering):
         description="Webscrabed articles from the Norwegian lexicon 'Det Store Norske Leksikon'. Uses articles categories as clusters.",
         reference="https://huggingface.co/datasets/navjordj/SNL_summarization",
         type="Clustering",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nob-Latn"],

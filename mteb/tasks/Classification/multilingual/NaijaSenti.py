@@ -19,7 +19,7 @@ class NaijaSenti(AbsTaskClassification):
             "trust_remote_code": True,
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs={

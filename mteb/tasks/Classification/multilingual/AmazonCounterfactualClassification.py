@@ -15,7 +15,7 @@ class AmazonCounterfactualClassification(AbsTaskClassification):
             "A collection of Amazon customer reviews annotated for counterfactual detection pair classification."
         ),
         reference="https://arxiv.org/abs/2104.06893",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         type="Classification",
         eval_splits=["validation", "test"],

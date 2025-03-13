@@ -133,7 +133,9 @@ TASK_TYPE = Literal[_task_types]
 
 TASK_CATEGORY = Literal[
     "t2t",
+    "t2c",  # text-to-category
     "i2i",  # image-to-image
+    "i2c",  # image-to-category
     "i2t",  # image-to-text
     "t2i",  # text-to-image
     "it2t",  # image+text-to-text

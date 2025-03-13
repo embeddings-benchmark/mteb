@@ -14,7 +14,7 @@ class InappropriatenessClassification(AbsTaskClassification):
         description="Inappropriateness identification in the form of binary classification",
         reference="https://aclanthology.org/2021.bsnlp-1.4",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],

@@ -14,7 +14,7 @@ class WikipediaTheoreticalAppliedClassification(AbsTaskClassification):
             "revision": "7896906653d31d7102a143d7f55d67cd688e3147",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

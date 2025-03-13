@@ -13,7 +13,7 @@ class AmazonReviewsClassification(AbsTaskClassification):
         },
         description="A collection of Amazon reviews specifically designed to aid research in multilingual text classification.",
         reference="https://arxiv.org/abs/2010.02573",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         type="Classification",
         eval_splits=["validation", "test"],

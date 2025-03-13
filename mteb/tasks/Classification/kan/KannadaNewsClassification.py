@@ -14,7 +14,7 @@ class KannadaNewsClassification(AbsTaskClassification):
         },
         reference="https://github.com/goru001/nlp-for-kannada",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["kan-Knda"],

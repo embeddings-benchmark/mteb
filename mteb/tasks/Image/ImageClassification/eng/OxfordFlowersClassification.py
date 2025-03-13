@@ -14,7 +14,7 @@ class OxfordFlowersClassification(AbsTaskImageClassification):
             "revision": "a37b1891609c0376fa81eced756e7863e1bd873b",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

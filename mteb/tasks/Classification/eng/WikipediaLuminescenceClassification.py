@@ -14,7 +14,7 @@ class WikipediaLuminescenceClassification(AbsTaskClassification):
             "revision": "21c4dcebe2c5b36a35292e6441e7a10b59bf4896",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

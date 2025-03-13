@@ -15,7 +15,7 @@ class SpanishNewsClusteringP2P(AbsTaskClustering):
             "revision": "bf8ca8ddc5b7da4f7004720ddf99bbe0483480e6",
         },
         type="Clustering",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["spa-Latn"],

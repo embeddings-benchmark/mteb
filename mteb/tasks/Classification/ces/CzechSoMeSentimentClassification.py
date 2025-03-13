@@ -14,7 +14,7 @@ class CzechSoMeSentimentClassification(AbsTaskClassification):
             "revision": "6ced1d87a030915822b087bf539e6d5c658f1988",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ces-Latn"],

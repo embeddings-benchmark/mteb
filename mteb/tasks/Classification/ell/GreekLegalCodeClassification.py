@@ -17,7 +17,7 @@ class GreekLegalCodeClassification(AbsTaskClassification):
             "name": "chapter",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         date=("2021-01-01", "2021-01-01"),
         eval_splits=["validation", "test"],

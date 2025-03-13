@@ -22,7 +22,7 @@ class KorHateClassification(AbsTaskClassification):
         },
         reference="https://paperswithcode.com/dataset/korean-hatespeech-dataset",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["kor-Hang"],
