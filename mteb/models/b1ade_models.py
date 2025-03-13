@@ -26,4 +26,11 @@ b1ade_embed = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=b1ade_training_data,
+    adapted_from="BAAI/bge-large-en-v1.5" 
+    # Also (based on model merging)
+    # bert-large-uncased
+    # WhereIsAI/UAE-Large-V1
+    # BAAI/bge-large-en-v1.5
+    # mixedbread-ai/mxbai-embed-large-v1
+    # avsolatorio/GIST-large-Embedding-v0
 )
