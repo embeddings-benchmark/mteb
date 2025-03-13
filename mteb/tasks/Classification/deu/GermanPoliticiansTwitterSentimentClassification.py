@@ -14,7 +14,7 @@ class GermanPoliticiansTwitterSentimentClassification(AbsTaskClassification):
             "revision": "65343b17f5a76227ab2e15b9424dfab6466ffcb1",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],

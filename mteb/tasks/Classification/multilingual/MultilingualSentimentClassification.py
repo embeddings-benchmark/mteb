@@ -51,7 +51,7 @@ class MultilingualSentimentClassification(AbsTaskClassification):
                      """,
         reference="https://huggingface.co/datasets/mteb/multilingual-sentiment-classification",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,

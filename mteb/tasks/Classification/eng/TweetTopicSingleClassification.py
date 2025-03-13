@@ -20,7 +20,7 @@ class TweetTopicSingleClassification(AbsTaskClassification):
         },
         reference="https://arxiv.org/abs/2209.09824",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test_2021"],
         eval_langs=["eng-Latn"],

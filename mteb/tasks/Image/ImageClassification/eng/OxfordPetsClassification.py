@@ -14,7 +14,7 @@ class OxfordPetsClassification(AbsTaskImageClassification):
             "revision": "557b480fae8d69247be74d9503b378a09425096f",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",

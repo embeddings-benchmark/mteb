@@ -14,7 +14,7 @@ class OdiaNewsClassification(AbsTaskClassification):
             "revision": "ffb8a34c9637fb20256e8c7be02504d16af4bd6b",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],
