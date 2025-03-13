@@ -18,9 +18,12 @@ from .NusaXBitextMining import NusaXBitextMining
 from .PhincBitextMining import PhincBitextMining
 from .RomaTalesBitextMining import RomaTalesBitextMining
 from .TatoebaBitextMining import TatoebaBitextMining
+from .WebFAQBitextMining import WebFAQBitextMiningQAs, WebFAQBitextMiningQuestions
 
 __all__ = [
     "IN22ConvBitextMining",
+    "WebFAQBitextMiningQuestions",
+    "WebFAQBitextMiningQAs",
     "IN22GenBitextMining",
     "BUCCBitextMining",
     "LinceMTBitextMining",

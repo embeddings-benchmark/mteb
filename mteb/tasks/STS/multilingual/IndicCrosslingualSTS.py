@@ -59,8 +59,8 @@ class IndicCrosslingualSTS(AbsTaskSTS):
     month = {02},
     issn = {2307-387X},
     doi = {10.1162/tacl_a_00452},
-    url = {https://doi.org/10.1162/tacl\_a\_00452},
-    eprint = {https://direct.mit.edu/tacl/article-pdf/doi/10.1162/tacl\_a\_00452/1987010/tacl\_a\_00452.pdf},
+    url = {https://doi.org/10.1162/tacl\\_a\\_00452}, 
+    eprint = {https://direct.mit.edu/tacl/article-pdf/doi/10.1162/tacl\\_a\\_00452/1987010/tacl\\_a\\_00452.pdf},
 }""",
     )
 

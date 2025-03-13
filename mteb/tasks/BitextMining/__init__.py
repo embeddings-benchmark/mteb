@@ -23,11 +23,15 @@ from .multilingual import (
     PhincBitextMining,
     RomaTalesBitextMining,
     TatoebaBitextMining,
+    WebFAQBitextMiningQAs,
+    WebFAQBitextMiningQuestions,
 )
 from .srn import SRNCorpusBitextMining
 from .vie import VieMedEVBitextMining
 
 __all__ = [
+    "WebFAQBitextMiningQAs",
+    "WebFAQBitextMiningQuestions",
     "TbilisiCityHallBitextMining",
     "VieMedEVBitextMining",
     "BornholmBitextMining",
