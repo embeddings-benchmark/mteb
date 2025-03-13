@@ -293,8 +293,8 @@ class BenchmarkResults(BaseModel):
             unique_revisions = group["revision"].unique()
 
             # ensure None/NA/"external" revisions is filtered out
-            group["revision"][group["revision"].isna()] = "no_revision_available"
-            group["revision"][group["revision"] == "external"] = "no_revision_available"
+            group.loc[group["revision"].isna(), "revision"] = "no_revision_available"
+            group.loc[group["revision"] == "external", "revision"] = "no_revision_available"
 
             # Filtering out no_revision_available if other revisions are present
             if (len(unique_revisions) > 1) and (
