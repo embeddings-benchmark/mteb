@@ -536,21 +536,7 @@ class MTEB:
         if hasattr(model, "mteb_model_meta"):
             meta = model.mteb_model_meta  # type: ignore
         else:
-            try:
-                meta = MTEB._get_model_meta(model)
-            except AttributeError:
-                logger.warning(
-                    "Could not find model metadata. Please set the model.mteb_model_meta attribute or if you are using "
-                    + "SentenceTransformers, please upgrade to version 3.0.0 to ensure that the model.mteb_model_meta "
-                    + "attribute is available."
-                )
-                meta = ModelMeta(
-                    loader=None,
-                    name=None,
-                    revision=None,
-                    release_date=None,
-                    languages=None,
-                )
+            meta = MTEB._get_model_meta(model)
 
         # create a copy of the meta to avoid modifying the original object
         meta = deepcopy(meta)
@@ -645,6 +631,26 @@ class MTEB:
     def _get_model_meta(model: Encoder) -> ModelMeta:
         if isinstance(model, CrossEncoder):
             meta = model_meta_from_cross_encoder(model)
-        else:
+        elif isinstance(model, SentenceTransformer):
             meta = model_meta_from_sentence_transformers(model)
+        else:
+            meta = ModelMeta(
+                loader=None,
+                name=None,
+                revision=None,
+                release_date=None,
+                languages=None,
+                framework=[],
+                similarity_fn_name=None,
+                n_parameters=None,
+                memory_usage_mb=None,
+                max_tokens=None,
+                embed_dim=None,
+                license=None,
+                open_weights=None,
+                public_training_code=None,
+                public_training_data=None,
+                use_instructions=None,
+                training_datasets=None,
+            )
         return meta
