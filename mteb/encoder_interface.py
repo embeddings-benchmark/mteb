@@ -105,26 +105,6 @@ class Encoder(Protocol):
         """
         ...
 
-    def similarity(
-        self,
-        embeddings1: torch.Tensor | np.ndarray,
-        embeddings2: torch.Tensor | np.ndarray,
-    ) -> torch.Tensor:
-        """Compute the similarity between two collections of embeddings. The output will be a matrix with the similarity scores between all embeddings
-        from the first parameter and all embeddings from the second parameter. This differs from similarity_pairwise which computes the similarity
-        between each pair of embeddings.
-
-        read more at: https://www.sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html#sentence_transformers.SentenceTransformer.similarity
-
-        Args:
-            embeddings1: [num_embeddings_1, embedding_dim] or [embedding_dim]-shaped numpy array or torch tensor.
-            embeddings2: [num_embeddings_2, embedding_dim] or [embedding_dim]-shaped numpy array or torch tensor.
-
-        Returns:
-            A [num_embeddings_1, num_embeddings_2]-shaped torch tensor with similarity scores.
-        """
-        ...
-
 
 class EncoderWithQueryInstructionFormatting(Protocol):
     """Optional protocol for encoders that support combining queries with instructions in a model-specific way. If not implemented, MTEB will use the default query instruction formatting ({query} {instruction})."""
@@ -152,6 +132,26 @@ class EncoderWithSimilarity(Encoder, Protocol):
     MTEB will by default attempt to use similarity_pairwise function first before falling back to similarity function. If the encoder does not support
     similarity_pairwise function, it should simply not implement it.
     """
+
+    def similarity(
+        self,
+        embeddings1: torch.Tensor | np.ndarray,
+        embeddings2: torch.Tensor | np.ndarray,
+    ) -> torch.Tensor:
+        """Compute the similarity between two collections of embeddings. The output will be a matrix with the similarity scores between all embeddings
+        from the first parameter and all embeddings from the second parameter. This differs from similarity_pairwise which computes the similarity
+        between each pair of embeddings.
+
+        read more at: https://www.sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html#sentence_transformers.SentenceTransformer.similarity
+
+        Args:
+            embeddings1: [num_embeddings_1, embedding_dim] or [embedding_dim]-shaped numpy array or torch tensor.
+            embeddings2: [num_embeddings_2, embedding_dim] or [embedding_dim]-shaped numpy array or torch tensor.
+
+        Returns:
+            A [num_embeddings_1, num_embeddings_2]-shaped torch tensor with similarity scores.
+        """
+        ...
 
     def similarity_pairwise(
         self,
