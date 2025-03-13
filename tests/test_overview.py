@@ -126,9 +126,9 @@ def test_get_tasks_filtering():
             assert isinstance(task.metadata.eval_langs, dict)
 
             for hf_subset in task.hf_subsets:
-                assert "eng-Latn" in task.metadata.eval_langs[hf_subset], (
-                    f"{task.metadata.name}"
-                )
+                assert (
+                    "eng-Latn" in task.metadata.eval_langs[hf_subset]
+                ), f"{task.metadata.name}"
 
 
 @pytest.mark.parametrize("script", [["Latn"], ["Cyrl"], None])
