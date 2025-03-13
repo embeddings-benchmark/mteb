@@ -1,0 +1,31 @@
+fail_fast: true
+
+repos:
+  - repo: https://github.com/abravalheri/validate-pyproject
+    rev: v0.23
+    hooks:
+      - id: validate-pyproject
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+    -   id: check-yaml
+    -   id: check-json
+    -   id: pretty-format-json
+        args:
+          - "--autofix"
+          - "--indent=4"
+          - "--no-sort-keys"
+    -   id: end-of-file-fixer # generated a lot of changes
+    -   id: trailing-whitespace
+    -   id: check-toml
+
+  - repo: local
+    hooks:
+      - id: lint
+        name: lint
+        description: "Run 'make lint'"
+        entry: make lint
+        language: python
+        types_or: [python]
+        minimum_pre_commit_version: "2.9.2"
