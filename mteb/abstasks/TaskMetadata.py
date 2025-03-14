@@ -60,6 +60,7 @@ TASK_SUBTYPE = Literal[
     "Instrument Source Classification",
     "Music Genre Classification",
     "Gender Clustering",
+    "Topic Classification",
     "Rendered semantic textual similarity",
 ]
 
