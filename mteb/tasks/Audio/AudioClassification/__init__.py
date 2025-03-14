@@ -13,3 +13,4 @@ from .eng.NSynth import *
 from .eng.SpokenQAforIC import *
 from .eng.VoxCelebSA import *
 from .eng.VoxLingua107Top10 import *
+from .eng.SIBFLEURS import *
