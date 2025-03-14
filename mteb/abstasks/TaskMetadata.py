@@ -63,6 +63,7 @@ TASK_SUBTYPE = Literal[
     "Gunshot Audio Classification",
     "Instrument Source Classification",
     "Gender Clustering",
+    "Topic Classification",
 ]
 
 TASK_DOMAIN = Literal[
