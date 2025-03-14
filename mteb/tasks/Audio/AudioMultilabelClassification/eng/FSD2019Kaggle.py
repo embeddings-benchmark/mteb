@@ -57,7 +57,7 @@ class FSD2019KaggleMultilingualClassification(
     )
 
     audio_column_name: str = "audio"
-    label_column_name: str = "label"
+    label_column_name: str = "sound"
     samples_per_label: int = 8
 
     def load_data(self, **kwargs):
