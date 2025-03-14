@@ -1674,3 +1674,94 @@ BUILT_MTEB = Benchmark(
 }""",
     contacts=["mehrzadshm"],
 )
+
+MAIR_TASK_CONFIG = {'Competition-Math': 'Academic', 'ProofWiki_Proof': 'Academic', 'ProofWiki_Reference': 'Academic', 'Stacks_Proof': 'Academic', 'Stacks_Reference': 'Academic', 'Stein_Proof': 'Academic', 'Stein_Reference': 'Academic', 'Trench_Proof': 'Academic', 'Trench_Reference': 'Academic', 'TAD': 'Academic', 'TAS2': 'Academic', 'StackMathQA': 'Academic', 'APPS': 'Code', 'CodeEditSearch': 'Code', 'CodeSearchNet': 'Code', 'Conala': 'Code', 'HumanEval-X': 'Code', 'LeetCode': 'Code', 'MBPP': 'Code', 'RepoBench': 'Code', 'TLDR': 'Code', 'SWE-Bench-Lite': 'Code', 'Apple': 'Finance', 'ConvFinQA': 'Finance', 'FinQA': 'Finance', 'FinanceBench': 'Finance', 'HC3Finance': 'Finance', 'TAT-DQA': 'Finance', 'Trade-the-event': 'Finance', 'AY2': 'Web', 'ELI5': 'Web', 'Fever': 'Web', 'TREx': 'Web', 'WnCw': 'Web', 'WnWi': 'Web', 'WoW': 'Web', 'zsRE': 'Web', 'AILA2019-Case': 'Legal', 'AILA2019-Statutes': 'Legal', 'BSARD': 'Legal', 'BillSum': 'Legal', 'CUAD': 'Legal', 'GerDaLIR': 'Legal', 'LeCaRDv2': 'Legal', 'LegalQuAD': 'Legal', 'REGIR-EU2UK': 'Legal', 'REGIR-UK2EU': 'Legal', 'ArguAna': 'Web', 'CQADupStack': 'Web', 'FiQA': 'Finance', 'NFCorpus': 'Medical', 'Quora': 'Web', 'SciDocs': 'Academic', 'SciFact': 'Academic', 'TopiOCQA': 'Web', 'Touche': 'Web', 'Trec-Covid': 'Medical', 'ACORDAR': 'Web', 'CPCD': 'Web', 'ChroniclingAmericaQA': 'Web', 'Monant': 'Medical', 'NTCIR': 'Web', 'PointRec': 'Web', 'ProCIS-Dialog': 'Web', 'ProCIS-Turn': 'Web', 'QuanTemp': 'Web', 'WebTableSearch': 'Web', 'CARE': 'Medical', 'MISeD': 'Web', 'SParC': 'Web', 'SParC-SQL': 'Web', 'Spider': 'Web', 'Spider-SQL': 'Web', 'LitSearch': 'Academic', 'CAsT_2019': 'Web', 'CAsT_2020': 'Web', 'CAsT_2021': 'Web', 'CAsT_2022': 'Web', 'Core_2017': 'Web', 'Microblog_2011': 'Web', 'Microblog_2012': 'Web', 'Microblog_2013': 'Web', 'Microblog_2014': 'Web', 'PrecisionMedicine_2017': 'Medical', 'PrecisionMedicine_2018': 'Medical', 'PrecisionMedicine_2019': 'Medical', 'PrecisionMedicine-Article_2019': 'Medical', 'PrecisionMedicine-Article_2020': 'Medical', 'CliniDS_2014': 'Medical', 'CliniDS_2015': 'Medical', 'CliniDS_2016': 'Medical', 'ClinicalTrials_2021': 'Medical', 'ClinicalTrials_2022': 'Medical', 'ClinicalTrials_2023': 'Medical', 'DD_2015': 'Web', 'DD_2016': 'Web', 'DD_2017': 'Web', 'FairRanking_2020': 'Academic', 'FairRanking_2021': 'Web', 'FairRanking_2022': 'Web', 'Genomics-AdHoc_2004': 'Medical', 'Genomics-AdHoc_2005': 'Medical', 'Genomics-AdHoc_2006': 'Medical', 'Genomics-AdHoc_2007': 'Medical', 'TREC-Legal_2011': 'Legal', 'NeuCLIR-Tech_2023': 'Web', 'NeuCLIR_2022': 'Web', 'NeuCLIR_2023': 'Web', 'ProductSearch_2023': 'Web', 'ToT_2023': 'Web', 'ToT_2024': 'Web', 'FoodAPI': 'Code', 'HuggingfaceAPI': 'Code', 'PytorchAPI': 'Code', 'SpotifyAPI': 'Code', 'TMDB': 'Code', 'TensorAPI': 'Code', 'ToolBench': 'Code', 'WeatherAPI': 'Code', 'ExcluIR': 'Web', 'Core17': 'Web', 'News21': 'Web', 'Robust04': 'Web', 'InstructIR': 'Web', 'NevIR': 'Web', 'IFEval': 'Web'}
+
+def _get_mair_tasks_by_domain(domain):
+    assert domain in ['Academic', 'Code', 'Web', 'Legal', 'Medical', 'Finance']
+    out = []
+    for task in MAIR_TASK_CONFIG:
+        if MAIR_TASK_CONFIG[task] == domain:
+            out.append(task)
+    return out
+
+
+def _get_mair_all_tasks():
+    return list(MAIR_TASK_CONFIG.keys())
+
+_MAIR_CITATION = """@inproceedings{Sun2024MAIR,
+  title={MAIR: A Massive Benchmark for Evaluating Instructed Retrieval},
+  author={Weiwei Sun and Zhengliang Shi and Jiulong Wu and Lingyong Yan and Xinyu Ma and Yiding Liu and Min Cao and Dawei Yin and Zhaochun Ren},
+  booktitle={EMNLP},
+  year={2024},
+}"""
+
+MAIR = Benchmark(
+    name="MAIR",
+    tasks=get_tasks(
+        tasks=['MAIR-' + name for name in _get_mair_all_tasks()]
+    ),
+    description="MAIR: A Massive Benchmark for Evaluating Instructed Retrieval",
+    reference="https://github.com/sunnweiwei/MAIR",
+    citation=_MAIR_CITATION,
+)
+
+MAIR_WEB = Benchmark(
+    name="MAIR(Web)",
+    tasks=get_tasks(
+        tasks=['MAIR-' + name for name in _get_mair_tasks_by_domain('Web')]
+    ),
+    description="MAIR: A Massive Benchmark for Evaluating Instructed Retrieval",
+    reference="https://github.com/sunnweiwei/MAIR",
+    citation=_MAIR_CITATION,
+)
+
+MAIR_CODE = Benchmark(
+    name="MAIR(Code)",
+    tasks=get_tasks(
+        tasks=['MAIR-' + name for name in _get_mair_tasks_by_domain('Code')]
+    ),
+    description="MAIR: A Massive Benchmark for Evaluating Instructed Retrieval",
+    reference="https://github.com/sunnweiwei/MAIR",
+    citation=_MAIR_CITATION,
+)
+
+MAIR_ACADEMIC = Benchmark(
+    name="MAIR(Academic)",
+    tasks=get_tasks(
+        tasks=['MAIR-' + name for name in _get_mair_tasks_by_domain('Academic')]
+    ),
+    description="MAIR: A Massive Benchmark for Evaluating Instructed Retrieval",
+    reference="https://github.com/sunnweiwei/MAIR",
+    citation=_MAIR_CITATION,
+)
+
+MAIR_LEGAL = Benchmark(
+    name="MAIR(Legal)",
+    tasks=get_tasks(
+        tasks=['MAIR-' + name for name in _get_mair_tasks_by_domain('Legal')]
+    ),
+    description="MAIR: A Massive Benchmark for Evaluating Instructed Retrieval",
+    reference="https://github.com/sunnweiwei/MAIR",
+    citation=_MAIR_CITATION,
+)
+
+MAIR_MEDICAL = Benchmark(
+    name="MAIR(Medical)",
+    tasks=get_tasks(
+        tasks=['MAIR-' + name for name in _get_mair_tasks_by_domain('Medical')]
+    ),
+    description="MAIR: A Massive Benchmark for Evaluating Instructed Retrieval",
+    reference="https://github.com/sunnweiwei/MAIR",
+    citation=_MAIR_CITATION,
+)
+
+MAIR_FINANCE = Benchmark(
+    name="MAIR(Finance)",
+    tasks=get_tasks(
+        tasks=['MAIR-' + name for name in _get_mair_tasks_by_domain('Finance')]
+    ),
+    description="MAIR: A Massive Benchmark for Evaluating Instructed Retrieval",
+    reference="https://github.com/sunnweiwei/MAIR",
+    citation=_MAIR_CITATION,
+)
