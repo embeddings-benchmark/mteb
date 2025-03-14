@@ -54,3 +54,12 @@ class FSD50HFMultilingualClassification(AbsTaskAudioMultilabelClassification):
     audio_column_name: str = "audio"
     label_column_name: str = "labels"
     samples_per_label: int = 8
+
+
+    def dataset_transform(self):
+        """Transform dataset to ensure labels are in list format"""
+        def format_labels(example):
+            example[self.label_column_name] = example[self.label_column_name].split(',')
+            return example
+        # Apply transformation to all splits
+        self.dataset = self.dataset.map(format_labels)

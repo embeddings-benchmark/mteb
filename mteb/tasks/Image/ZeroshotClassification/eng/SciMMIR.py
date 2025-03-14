@@ -30,13 +30,13 @@ class SciMMIR(AbsTaskZeroshotClassification):
         sample_creation="created",
         bibtex_citation="""\
 @misc{wu2024scimmirbenchmarkingscientificmultimodal,
-      title={SciMMIR: Benchmarking Scientific Multi-modal Information Retrieval}, 
+      title={SciMMIR: Benchmarking Scientific Multi-modal Information Retrieval},
       author={Siwei Wu and Yizhi Li and Kang Zhu and Ge Zhang and Yiming Liang and Kaijing Ma and Chenghao Xiao and Haoran Zhang and Bohao Yang and Wenhu Chen and Wenhao Huang and Noura Al Moubayed and Jie Fu and Chenghua Lin},
       year={2024},
       eprint={2401.13478},
       archivePrefix={arXiv},
       primaryClass={cs.IR},
-      url={https://arxiv.org/abs/2401.13478}, 
+      url={https://arxiv.org/abs/2401.13478},
 }""",
         descriptive_stats={
             "n_samples": {"test": 16263},

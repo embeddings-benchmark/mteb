@@ -120,6 +120,7 @@ class MLSUMClusteringP2PFast(AbsTaskClusteringFast, MultilingualTask):
         journal={arXiv preprint arXiv:2004.14900},
         year={2020}
         }""",
+        adapted_from=["MLSUMClusteringP2P"],
     )
 
     def load_data(self, **kwargs):

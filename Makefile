@@ -1,6 +1,7 @@
 install:
 	@echo "--- 🚀 Installing project dependencies ---"
 	pip install -e ".[dev]"
+	pre-commit install
 
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"
@@ -10,7 +11,7 @@ install-for-tests:
 lint:
 	@echo "--- 🧹 Running linters ---"
 	ruff format . 			# running ruff formatting
-	ruff check . --fix  	# running ruff linting
+	ruff check . --fix --exit-non-zero-on-fix  	# running ruff linting # --exit-non-zero-on-fix is used for the pre-commit hook to work
 
 lint-check:
 	@echo "--- 🧹 Check is project is linted ---"
@@ -20,11 +21,12 @@ lint-check:
 
 test:
 	@echo "--- 🧪 Running tests ---"
-	pytest -n auto --durations=5
+	pytest -n auto -m "not test_datasets"
+
 
 test-with-coverage:
 	@echo "--- 🧪 Running tests with coverage ---"
-	pytest -n auto --durations=5 --cov-report=term-missing --cov-config=pyproject.toml --cov=mteb
+	pytest -n auto --cov-report=term-missing --cov-config=pyproject.toml --cov=mteb
 
 pr:
 	@echo "--- 🚀 Running requirements for a PR ---"
@@ -43,3 +45,19 @@ model-load-test:
 	pip install ".[dev, speedtask, pylate,gritlm,xformers,model2vec]"
 	python scripts/extract_model_names.py $(BASE_BRANCH) --return_one_model_name_per_file
 	python tests/test_models/model_loading.py --model_name_file scripts/model_names.txt
+
+
+dataset-load-test:
+	@echo "--- 🚀 Running dataset load test ---"
+	pytest -n auto -m test_datasets
+
+
+run-leaderboard:
+	@echo "--- 🚀 Running leaderboard locally ---"
+	python -m mteb.leaderboard.app
+
+
+.PHONY: check
+check: ## Run code quality tools.
+	@echo "--- 🧹 Running code quality tools ---"
+	@pre-commit run -a

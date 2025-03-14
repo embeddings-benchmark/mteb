@@ -16,7 +16,7 @@ class KorHateSpeechMLClassification(AbsTaskMultilabelClassification):
         For more details, please refer to the paper about K-MHaS, published at COLING 2022.
         This dataset is based on the Korean online news comments available on Kaggle and Github.
         The unlabeled raw data was collected between January 2018 and June 2020.
-        The language producers are users who left the comments on the Korean online news platform between 2018 and 2020. 
+        The language producers are users who left the comments on the Korean online news platform between 2018 and 2020.
         """,
         dataset={
             "path": "jeanlee/kmhas_korean_hate_speech",

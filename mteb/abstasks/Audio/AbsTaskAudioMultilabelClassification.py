@@ -220,7 +220,8 @@ class AbsTaskAudioMultilabelClassification(AbsTask):
                 test_audio, _, y_test, _ = train_test_split(
                     test_audio, y_test, train_size=2000, stratify=y_test
                 )
-        except ValueError:
+        except ValueError as e:
+            print(e)
             logger.warning("Could not stratify test set. Using all samples.")
 
         X_test = model.get_audio_embeddings(

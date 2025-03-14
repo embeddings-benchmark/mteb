@@ -4,7 +4,8 @@ import logging
 from typing import Any
 
 from datasets import Dataset
-
+import numpy as np
+from collections import defaultdict
 from ...encoder_interface import Encoder
 from ...evaluation.evaluators import AudioZeroshotClassificationEvaluator
 from ..AbsTask import AbsTask, ScoresDict
@@ -35,6 +36,51 @@ class AbsTaskAudioZeroshotClassification(AbsTask):
     ):
         pass
 
+    # def _undersample_data(self, dataset: Dataset) -> Dataset:
+    #     """Undersample dataset to have samples_per_label samples for each numeric label"""
+    #     labels = dataset[self.label_column_name]
+        
+    #     # Create label to index mapping (using numeric labels directly)
+    #     label_to_indices = defaultdict(list)
+    #     for idx, label in enumerate(labels):
+    #         label_to_indices[label].append(idx)
+            
+    #     # Sample indices
+    #     selected_indices = []
+    #     for label_num in sorted(label_to_indices.keys()):
+    #         indices = label_to_indices[label_num]
+    #         sample_size = min(self.samples_per_label, len(indices))
+    #         sampled = np.random.choice(indices, size=sample_size, replace=False).tolist()
+    #         selected_indices.extend(sampled)
+            
+    #     logger.info(f"Subsampled from {len(dataset)} to {len(selected_indices)} samples")
+
+
+    #     print(len(selected_indices))
+    #     return dataset.select(selected_indices)
+
+    def _undersample_data(self, dataset: Dataset) -> Dataset:
+        """Undersample dataset to have samples_per_label samples for each numeric label (only for labels 0-9)"""
+        labels = dataset[self.label_column_name]
+        
+        # Create label to index mapping (only for labels 0-9)
+        label_to_indices = defaultdict(list)
+        for idx, label in enumerate(labels):
+            if 0 <= label <= 9:  # Only consider labels 0-9
+                label_to_indices[label].append(idx)
+            
+        # Sample indices
+        selected_indices = []
+        for label_num in sorted(label_to_indices.keys()):
+            indices = label_to_indices[label_num]
+            sample_size = min(self.samples_per_label, len(indices))
+            sampled = np.random.choice(indices, size=sample_size, replace=False).tolist()
+            selected_indices.extend(sampled)
+            
+        logger.info(f"Subsampled from {len(dataset)} to {len(selected_indices)} samples")
+        
+        return dataset.select(selected_indices)
+
     def _evaluate_subset(
         self,
         model: Encoder,
@@ -44,6 +90,9 @@ class AbsTaskAudioZeroshotClassification(AbsTask):
         **kwargs,
     ) -> ScoresDict:
         candidate_labels = self.get_candidate_labels()
+
+        if len(dataset) > 2048:
+            dataset = self._undersample_data(dataset)
 
         evaluator = AudioZeroshotClassificationEvaluator(
             dataset,

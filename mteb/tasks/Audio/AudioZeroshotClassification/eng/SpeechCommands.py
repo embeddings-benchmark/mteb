@@ -6,10 +6,10 @@ from mteb.abstasks.Audio.AbsTaskAudioZeroshotClassification import (
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class ESC50ZeroshotClassification(AbsTaskAudioZeroshotClassification):
+class SpeechCommandsZeroshotClassification(AbsTaskAudioZeroshotClassification):
     metadata = TaskMetadata(
         name="SpeechCommandsZeroshot",
-        description="Sound Classification/Keyword Spotting Dataset. This is a set of one-second .wav audio files, each containing a single spoken English word or background noise. These words are from a small set of commands, and are spoken by a variety of different speakers. With total of 30 labels",
+        description="Sound Classification/Keyword Spotting Dataset. This is a set of one-second audio clips containing a single spoken English word or background noise. These words are from a small set of commands such as 'yes', 'no', and 'stop' spoken by various speakers. With a total of 10 labels/commands for keyword spotting and a total of 30 labels for other auxiliary tasks",
         reference="https://huggingface.co/datasets/google/speech_commands",
         dataset={
             "path": "google/speech_commands",
@@ -18,15 +18,15 @@ class ESC50ZeroshotClassification(AbsTaskAudioZeroshotClassification):
         },
         type="AudioZeroshotClassification",
         category="a2a",
-        eval_splits=["train"],
+        eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2018-07-07", "2018-07-13"),
         domains=[
             "Spoken"
-        ],  # Replace with appropriate domain from allowed list?? No appropriate domain name is available
+        ],
         task_subtypes=["Keyword Spotting"],
-        license="cc-by-nc-sa-3.0",  # Replace with appropriate license from allowed list
+        license="cc-by-4.0",  # Replace with appropriate license from allowed list
         annotations_creators="human-annotated",
         dialect=[],
         modalities=["audio"],
@@ -48,8 +48,8 @@ class ESC50ZeroshotClassification(AbsTaskAudioZeroshotClassification):
     )
 
     audio_column_name: str = "audio"
-    label_column_name: str = "labels"
-    samples_per_label: int = 2000
+    label_column_name: str = "label"
+    samples_per_label: int = 8
 
     def get_candidate_labels(self) -> list[str]:
         """Return the text candidates for zeroshot classification"""
@@ -64,24 +64,35 @@ class ESC50ZeroshotClassification(AbsTaskAudioZeroshotClassification):
             "Off",
             "Stop",
             "Go",
-            "Zero",
-            "One",
-            "Two",
-            "Three",
-            "Four",
-            "Five",
-            "Six",
-            "Seven",
-            "Eight",
-            "Nine",
-            "Bed",
-            "Bird",
-            "Cat",
-            "Dog",
-            "Happy",
-            "House",
-            "Marvin",
-            "Sheila",
-            "Tree",
-            "Wow",
+            # "Zero",
+            # "One",
+            # "Two",
+            # "Three",
+            # "Four",
+            # "Five",
+            # "Six",
+            # "Seven",
+            # "Eight",
+            # "Nine",
+            # "Bed",
+            # "Bird",
+            # "Cat",
+            # "Dog",
+            # "Happy",
+            # "House",
+            # "Marvin",
+            # "Sheila",
+            # "Tree",
+            # "Wow",
         ]
+
+    # def dataset_transform(self):
+    #     """Transform dataset to ensure labels are in list format"""
+    #     def transform_example(example):
+        
+    #         # Extract audio array from nested structure
+    #         example[self.audio_column_name] = example[self.audio_column_name]["array"]
+    #         return example
+        
+        
+    #     self.dataset = self.dataset.map(transform_example)

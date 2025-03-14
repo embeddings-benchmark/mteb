@@ -29,6 +29,7 @@ class AudioDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, idx):
         audio = self.dataset[idx][self.audio_column_name]
+        
         if isinstance(audio, bytes):
             waveform, sample_rate = torchaudio.load(io.BytesIO(audio))
         elif isinstance(audio, str):
@@ -37,6 +38,7 @@ class AudioDataset(torch.utils.data.Dataset):
         else:
             # Assume audio is already a tensor or in a usable format
             waveform = audio
+        
         if self.transform is not None:
             waveform = self.transform(waveform)
         return waveform

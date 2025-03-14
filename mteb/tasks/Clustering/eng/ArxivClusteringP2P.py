@@ -76,6 +76,7 @@ class ArxivClusteringP2PFast(AbsTaskClustering):
     year={2024}
 }""",  # None found
         prompt="Identify the main and secondary category of Arxiv papers based on the titles and abstracts",
+        adapted_from=["ArxivClusteringP2P"],
     )
 
     def dataset_transform(self):
