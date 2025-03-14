@@ -3,13 +3,14 @@ from __future__ import annotations
 from functools import partial
 from typing import Any
 
+import numpy as np
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from mteb.encoder_interface import PromptType
+from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta
+from mteb.models.wrapper import Wrapper
 
 
 def mocov3_loader(**kwargs):
@@ -18,7 +19,7 @@ def mocov3_loader(**kwargs):
     except ImportError:
         raise ImportError("Please install `pip install timm` to use MOCOv3 models.")
 
-    class MOCOv3Wrapper:
+    class MOCOv3Wrapper(Wrapper):
         """A wrapper class for MOCOv3 models that supports image encoding.
         Text encoding and text-image fusion are not supported.
         """
@@ -51,53 +52,37 @@ def mocov3_loader(**kwargs):
 
         @staticmethod
         def get_text_embeddings(
-            texts: list[str],
-            *,
-            task_name: str | None = None,
-            prompt_type: PromptType | None = None,
-            batch_size: int = 32,
+            self,
+            texts: DataLoader[BatchedInput],
+            show_progress_bar: bool = True,
             **kwargs: Any,
         ):
             raise ValueError("MOCO models only support image encoding.")
 
         def get_image_embeddings(
             self,
-            images: list[Image.Image] | DataLoader,
-            *,
-            task_name: str | None = None,
-            prompt_type: PromptType | None = None,
-            batch_size: int = 32,
+            images: DataLoader[BatchedInput],
+            show_progress_bar: bool = True,
             **kwargs: Any,
         ):
             all_image_embeddings = []
 
-            if isinstance(images, DataLoader):
-                import torchvision.transforms.functional as F
+            import torchvision.transforms.functional as F
 
-                with torch.no_grad():
-                    for batch in tqdm(images):
-                        inputs = torch.vstack(
-                            [
-                                self.processor(F.to_pil_image(b.to("cpu"))).unsqueeze(0)
-                                for b in batch
-                            ]
-                        )
-                        output = self.model(
-                            inputs
-                        )  # output is (batch_size, num_features) shaped tensor
-                        all_image_embeddings.append(output)
-            else:
-                with torch.no_grad():
-                    for i in tqdm(range(0, len(images), batch_size)):
-                        batch_images = images[i : i + batch_size]
-                        inputs = torch.vstack(
-                            [self.processor(b).unsqueeze(0) for b in batch_images]
-                        )
-                        output = self.model(
-                            inputs
-                        )  # output is (batch_size, num_features) shaped tensor
-                        all_image_embeddings.append(output)
-
+            with torch.no_grad():
+                for batch in tqdm(
+                    images, disable=not show_progress_bar, desc="Image Encoding"
+                ):
+                    inputs = torch.vstack(
+                        [
+                            self.processor(F.to_pil_image(b.to("cpu"))).unsqueeze(0)
+                            for b in batch["image"]
+                        ]
+                    )
+                    output = self.model(
+                        inputs
+                    )  # output is (batch_size, num_features) shaped tensor
+                    all_image_embeddings.append(output)
             all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
             return all_image_embeddings
 
@@ -105,35 +90,20 @@ def mocov3_loader(**kwargs):
         def calculate_probs(text_embeddings, image_embeddings):
             raise ValueError("MOCO models only support image encoding.")
 
-        def get_fused_embeddings(
+        def encode(
             self,
-            texts: list[str] = None,
-            images: list[Image.Image] | DataLoader = None,
+            inputs: DataLoader[BatchedInput],
             *,
-            task_name: str | None = None,
+            task_name: str,
             prompt_type: PromptType | None = None,
-            batch_size: int = 32,
-            fusion_mode="sum",
             **kwargs: Any,
-        ):
-            if texts is None and images is None:
-                raise ValueError("images must be provided for MOCO models")
-
-            text_embeddings = None
-            image_embeddings = None
-
-            if texts is not None:
-                text_embeddings = self.get_text_embeddings(texts, batch_size)
-
-            if images is not None:
-                image_embeddings = self.get_image_embeddings(images, batch_size)
-
-            if text_embeddings is not None and image_embeddings is not None:
-                raise ValueError("MOCO models only support image encoding.")
-            elif text_embeddings is not None:
-                return text_embeddings
-            elif image_embeddings is not None:
-                return image_embeddings
+        ) -> np.ndarray | torch.Tensor:
+            if "text" in inputs.dataset.features:
+                raise ValueError(
+                    "MOCO models only support image encoding. Text encoding is not supported."
+                )
+            if "image" in inputs.dataset.features:
+                return self.get_image_embeddings(inputs, **kwargs)
 
     return MOCOv3Wrapper(**kwargs)
 

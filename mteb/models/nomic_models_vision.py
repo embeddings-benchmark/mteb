@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 from functools import partial
-from typing import Any
+from typing import Any, Literal
 
+import numpy as np
 import torch
 import torch.nn.functional as F
 from PIL import Image
@@ -10,11 +11,12 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoImageProcessor, AutoModel, AutoTokenizer
 
-from mteb.encoder_interface import PromptType
+from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta
+from mteb.models.wrapper import Wrapper
 
 
-class NomicVisionModelWrapper:
+class NomicVisionModelWrapper(Wrapper):
     def __init__(
         self,
         vision_model_name: str,
@@ -48,20 +50,18 @@ class NomicVisionModelWrapper:
 
     def get_text_embeddings(
         self,
-        texts: list[str],
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 32,
+        texts: DataLoader[BatchedInput],
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ):
         all_text_embeddings = []
 
         with torch.no_grad():
-            for i in tqdm(range(0, len(texts), batch_size)):
-                batch_texts = texts[i : i + batch_size]
+            for batch in tqdm(
+                texts, disable=not show_progress_bar, desc="Text Encoding"
+            ):
                 inputs = self.tokenizer(
-                    batch_texts, padding=True, truncation=True, return_tensors="pt"
+                    batch["text"], padding=True, truncation=True, return_tensors="pt"
                 )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 text_outputs = self.text_model(**inputs)
@@ -88,33 +88,21 @@ class NomicVisionModelWrapper:
 
     def get_image_embeddings(
         self,
-        images: list[Image.Image] | DataLoader,
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 32,
+        images: DataLoader[BatchedInput],
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ):
         all_image_embeddings = []
 
-        if isinstance(images, DataLoader):
-            with torch.no_grad():
-                for batch in tqdm(images):
-                    inputs = self.processor(images=batch, return_tensors="pt")
-                    inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                    image_outputs = self.vision_model(**inputs).last_hidden_state
-                    img_embeddings = F.normalize(image_outputs[:, 0], p=2, dim=1)
-                    all_image_embeddings.append(img_embeddings.cpu())
-        else:
-            with torch.no_grad():
-                for i in tqdm(range(0, len(images), batch_size)):
-                    batch_images = images[i : i + batch_size]
-                    inputs = self.processor(images=batch_images, return_tensors="pt")
-                    inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                    image_outputs = self.vision_model(**inputs).last_hidden_state
-                    img_embeddings = F.normalize(image_outputs[:, 0], p=2, dim=1)
-                    all_image_embeddings.append(img_embeddings.cpu())
-
+        with torch.no_grad():
+            for batch in tqdm(
+                images, disable=not show_progress_bar, desc="Image Encoding"
+            ):
+                inputs = self.processor(images=batch["image"], return_tensors="pt")
+                inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                image_outputs = self.vision_model(**inputs).last_hidden_state
+                img_embeddings = F.normalize(image_outputs[:, 0], p=2, dim=1)
+                all_image_embeddings.append(img_embeddings.cpu())
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
         return all_image_embeddings
 
@@ -124,24 +112,21 @@ class NomicVisionModelWrapper:
         probs = (logits * 100).softmax(dim=-1)
         return probs
 
-    def get_fused_embeddings(
+    def encode(
         self,
-        texts: list[str] = None,
-        images: list[Image.Image] | DataLoader = None,
-        fusion_mode="sum",
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        fusion_mode: Literal["sum"] = "sum",
         **kwargs: Any,
-    ):
-        if texts is None and images is None:
-            raise ValueError("Either texts or images must be provided")
-
+    ) -> np.ndarray | torch.Tensor:
         text_embeddings = None
         image_embeddings = None
-
-        if texts is not None:
-            text_embeddings = self.get_text_embeddings(texts, **kwargs)
-
-        if images is not None:
-            image_embeddings = self.get_image_embeddings(images, **kwargs)
+        if "text" in inputs.dataset.features:
+            text_embeddings = self.get_text_embeddings(inputs, **kwargs)
+        if "image" in inputs.dataset.features:
+            image_embeddings = self.get_image_embeddings(inputs, **kwargs)
 
         if text_embeddings is not None and image_embeddings is not None:
             if len(text_embeddings) != len(image_embeddings):

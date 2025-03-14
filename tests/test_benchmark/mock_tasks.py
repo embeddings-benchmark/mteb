@@ -3013,9 +3013,9 @@ class MockImageTextPairClassificationTask(AbsTaskImageTextPairClassification):
     def load_data(self, **kwargs):
         images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
-            [Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images]
+            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
         ]
-        texts = [["This is a test sentence", "This is another test sentence"]]
+        texts = ["This is a test sentence", "This is another test sentence"]
 
         self.dataset = DatasetDict(
             {
@@ -3073,9 +3073,9 @@ class MockMultilingualImageTextPairClassificationTask(
     def load_data(self, **kwargs):
         images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]
         images = [
-            [Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images]
+            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
         ]
-        texts = [["This is a test sentence", "This is another test sentence"]]
+        texts = ["This is a test sentence", "This is another test sentence"]
         data = {
             "test": Dataset.from_dict(
                 {
