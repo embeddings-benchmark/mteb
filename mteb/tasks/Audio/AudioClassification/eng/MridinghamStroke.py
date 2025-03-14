@@ -40,7 +40,7 @@ class MridinghamStroke(AbsTaskAudioClassification):
             doi={10.1109/ICASSP.2013.6637633}}
         """,
         descriptive_stats={
-            "n_samples": {"train": 6977},  # test samples not found!
+            "n_samples": {"train": 6977},
         },
     )
 
