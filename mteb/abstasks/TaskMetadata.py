@@ -61,6 +61,7 @@ TASK_SUBTYPE = Literal[
     "Music Genre Classification",
     "Music Instrument Recognition",
     "Spoken Language Identification",
+    "Speaker Count Identification",
     "Gender Clustering",
     "Rendered semantic textual similarity",
 ]
@@ -194,6 +195,7 @@ ANNOTATOR_TYPE = Literal[
     "LM-generated and reviewed",  # reviewed by humans
     "automatic",  # any postprocessing using (Audio/Image/Video) models
     "automatic-and-reviewed",  # mix of automated postprocessing and human-based verification
+    "algorithmic",
 ]
 
 SPLIT_NAME = str
