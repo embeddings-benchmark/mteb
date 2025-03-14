@@ -18,7 +18,7 @@ class SIBFLEURSMultilingualClassification(AbsTaskAudioClassification):
             "name": "eng_Latn",
             "revision": "f00a6bbc6b3e3866600f838736295dd09b393902",
         },
-        type="AudioMultilabelClassification",
+        type="AudioClassification",
         category="a2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
