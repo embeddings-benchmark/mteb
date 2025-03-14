@@ -167,7 +167,7 @@ def voyage_v_loader(**kwargs):
             image_embeddings = None
 
             interleaved_embeddings = []
-            if "text" in inputs.dataset.features and "text" in inputs.dataset.features:
+            if "text" in inputs.dataset.features and "image" in inputs.dataset.features:
                 for batch in tqdm(
                     inputs, disable=not show_progress_bar, desc="Interleaved Encoding"
                 ):

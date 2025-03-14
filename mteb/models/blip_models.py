@@ -71,7 +71,9 @@ class BLIPModelWrapper(Wrapper):
             for batch in tqdm(
                 images, disable=not show_progress_bar, desc="Image Encoding"
             ):
-                inputs = self.processor(images=batch, return_tensors="pt", padding=True)
+                inputs = self.processor(
+                    images=batch["image"], return_tensors="pt", padding=True
+                )
                 inputs = {k: v.to(self.device) for k, v in inputs.items()}
                 image_outputs = self.model.vision_model(**inputs)
                 image_outputs = image_outputs[0]

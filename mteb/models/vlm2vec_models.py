@@ -211,7 +211,7 @@ class VLM2VecWrapper:
     ) -> np.ndarray | torch.Tensor:
         import torchvision.transforms.functional as F
 
-        if "text" in inputs.dataset.features and "text" in inputs.dataset.features:
+        if "text" in inputs.dataset.features and "image" in inputs.dataset.features:
             all_fused_embeddings = []
 
             with torch.no_grad():

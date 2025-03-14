@@ -30,6 +30,7 @@ class ALIGNModelWrapper(Wrapper):
         self,
         texts: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
+        **kwargs,
     ):
         all_text_embeddings = []
 
@@ -54,6 +55,7 @@ class ALIGNModelWrapper(Wrapper):
         self,
         images: DataLoader[BatchedInput],
         show_progress_bar: bool = True,
+        **kwargs,
     ):
         all_image_embeddings = []
         with torch.no_grad():

@@ -60,17 +60,13 @@ def openclip_loader(**kwargs):
             **kwargs: Any,
         ):
             all_image_embeddings = []
-            import torchvision.transforms.functional as F
 
             with torch.no_grad(), torch.cuda.amp.autocast():
                 for batch in tqdm(
                     images, disable=not show_progress_bar, desc="Image Encoding"
                 ):
                     inputs = torch.vstack(
-                        [
-                            self.img_preprocess(F.to_pil_image(b)).unsqueeze(0)
-                            for b in batch["image"]
-                        ]
+                        [self.img_preprocess(b).unsqueeze(0) for b in batch["image"]]
                     )
                     image_outputs = self.model.encode_image(inputs.to(self.device))
                     all_image_embeddings.append(image_outputs.cpu())

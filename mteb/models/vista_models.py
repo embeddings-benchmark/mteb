@@ -13,6 +13,7 @@ from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta
 
 tensor_to_image = transforms.Compose([transforms.ToPILImage()])
+pil_to_tensor = transforms.Compose([transforms.PILToTensor()])
 
 
 def vista_loader(**kwargs):
@@ -113,7 +114,13 @@ def vista_loader(**kwargs):
                 texts, disable=not show_progress_bar, desc="Text Encoding"
             ):
                 with torch.no_grad():
-                    batch_embeddings = self.encode(texts=batch["text"])
+                    texts = self.tokenizer(
+                        batch["text"],
+                        return_tensors="pt",
+                        padding=True,
+                        truncation=True,
+                    )
+                    batch_embeddings = self.encode_text(texts.to(self.device))
                 all_text_embeddings.append(batch_embeddings.cpu())
             return torch.cat(all_text_embeddings, dim=0)
 
@@ -128,7 +135,10 @@ def vista_loader(**kwargs):
             all_image_embeddings = []
             with torch.no_grad():
                 for batch in tqdm(images):
-                    batch_embeddings = self.encode(images=batch["image"], tensors=True)
+                    imgs = [self.preprocess_val(image) for image in batch["image"]]
+                    imgs = torch.stack(imgs)
+
+                    batch_embeddings = self.encode_image(images=imgs.to(self.device))
                     all_image_embeddings.append(batch_embeddings.cpu())
             return torch.cat(all_image_embeddings, dim=0)
 
@@ -141,7 +151,8 @@ def vista_loader(**kwargs):
             show_progress_bar: bool = True,
             **kwargs: Any,
         ) -> np.ndarray | torch.Tensor:
-            if "text" in inputs.dataset.features and "text" in inputs.dataset.features:
+            if "text" in inputs.dataset.features and "image" in inputs.dataset.features:
+                all_fused_embeddings = []
                 with torch.no_grad():
                     for batch in tqdm(
                         inputs,
@@ -155,9 +166,18 @@ def vista_loader(**kwargs):
                             truncation=True,
                             max_length=self.max_text_len_with_image,
                         )
-                        return self.encode_mm(
-                            batch["image"].to(self.device), texts.to(self.device)
+                        images = [
+                            self.preprocess_val(image) for image in batch["image"]
+                        ]
+                        images = torch.stack(images)
+                        all_fused_embeddings.append(
+                            self.encode_mm(
+                                images.to(self.device), texts.to(self.device)
+                            )
+                            .cpu()
+                            .to(torch.float32)
                         )
+                return torch.cat(all_fused_embeddings, dim=0)
             elif "text" in inputs.dataset.features:
                 return self.get_text_embeddings(
                     inputs, task_name=task_name, prompt_type=prompt_type, **kwargs
@@ -189,7 +209,7 @@ visualized_bge_base = ModelMeta(
     loader=partial(
         vista_loader,
         model_name_bge="BAAI/bge-base-en-v1.5",
-        model_weight="visualized_base_en_V1.5.pth",
+        model_weight="/home/samoed/Desktop/mteb/orig_mteb/Visualized_base_en_v1.5.pth",
         image_tokens_num=196,
     ),
     name="BAAI/bge-visualized-base",

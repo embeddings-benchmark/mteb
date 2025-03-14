@@ -63,13 +63,11 @@ class JinaCLIPModelWrapper(Wrapper):
         all_image_embeddings = []
 
         with torch.no_grad():
-            import torchvision.transforms.functional as F
-
             for batch in tqdm(
                 images, disable=not show_progress_bar, desc="Image Encoding"
             ):
                 image_outputs = self.model.encode_image(
-                    [F.to_pil_image(b.to("cpu")) for b in batch["image"]],
+                    batch["image"],
                     convert_to_numpy=convert_to_numpy,
                     convert_to_tensor=convert_to_tensor,
                 )
