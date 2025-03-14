@@ -209,7 +209,7 @@ visualized_bge_base = ModelMeta(
     loader=partial(
         vista_loader,
         model_name_bge="BAAI/bge-base-en-v1.5",
-        model_weight="/home/samoed/Desktop/mteb/orig_mteb/Visualized_base_en_v1.5.pth",
+        model_weight="visualized_base_en_V1.5.pth",
         image_tokens_num=196,
     ),
     name="BAAI/bge-visualized-base",
