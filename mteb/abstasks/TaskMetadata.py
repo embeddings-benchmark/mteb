@@ -59,6 +59,8 @@ TASK_SUBTYPE = Literal[
     "Gunshot Audio Classification",
     "Instrument Source Classification",
     "Music Genre Classification",
+    "Music Instrument Recognition",
+    "Spoken Language Identification",
     "Gender Clustering",
     "Rendered semantic textual similarity",
 ]
@@ -90,6 +92,7 @@ TASK_DOMAIN = Literal[
     "Chemistry",
     "Financial",
     "Music",
+    "Speech",
 ]
 
 SAMPLE_CREATION_METHOD = Literal[
@@ -189,6 +192,8 @@ ANNOTATOR_TYPE = Literal[
     "derived",
     "LM-generated",
     "LM-generated and reviewed",  # reviewed by humans
+    "automatic",  # any postprocessing using (Audio/Image/Video) models
+    "automatic-and-reviewed",  # mix of automated postprocessing and human-based verification
 ]
 
 SPLIT_NAME = str
