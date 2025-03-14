@@ -6,3 +6,4 @@ from .eng.GTZANGenre import *
 from .eng.GunshotTriangulation import *
 from .eng.NSynth import *
 from .eng.VoxLingua107Top10 import *
+from .eng.LibriCount import *

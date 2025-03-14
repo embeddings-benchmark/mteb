@@ -61,6 +61,7 @@ TASK_SUBTYPE = Literal[
     "Music Genre Classification",
     "Music Instrument Recognition",
     "Spoken Language Identification",
+    "Speaker Count Identification",
     "Gender Clustering",
     "Rendered semantic textual similarity",
 ]
@@ -92,7 +93,11 @@ TASK_DOMAIN = Literal[
     "Chemistry",
     "Financial",
     "Music",
+<<<<<<< HEAD
     "Speech",
+=======
+    "Speech"
+>>>>>>> add libricount
 ]
 
 SAMPLE_CREATION_METHOD = Literal[
@@ -192,8 +197,12 @@ ANNOTATOR_TYPE = Literal[
     "derived",
     "LM-generated",
     "LM-generated and reviewed",  # reviewed by humans
+<<<<<<< HEAD
     "automatic",  # any postprocessing using (Audio/Image/Video) models
     "automatic-and-reviewed",  # mix of automated postprocessing and human-based verification
+=======
+    "algorithmic"
+>>>>>>> add libricount
 ]
 
 SPLIT_NAME = str
