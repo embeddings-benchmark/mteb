@@ -16,7 +16,7 @@ class VaaniLanguageDetection(AbsTaskAudioMultilabelClassification, MultilingualT
         reference="https://huggingface.co/datasets/ARTPARK-IISc/Vaani",
         dataset={
             "path": "ARTPARK-IISc/Vaani",
-            "revision": "ca72d33100074e2933437e844028c941d8e8f065",
+            "revision": "b133cc2e158905798a723f29685e483517e61275",
         },
         type="AudioMultilabelClassification",
         category="a2t",
