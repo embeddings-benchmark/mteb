@@ -14,11 +14,10 @@ from huggingface_hub.errors import (
 from pydantic import BaseModel, ConfigDict
 
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.abstasks.TaskMetadata import STR_DATE, STR_URL
 from mteb.encoder_interface import Encoder
 
+from .custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
 from .languages import ISO_LANGUAGE_SCRIPT
-from .modalities import MODALITIES
 
 if TYPE_CHECKING:
     from .models.sentence_transformer_wrapper import SentenceTransformerWrapper
@@ -89,6 +88,7 @@ class ModelMeta(BaseModel):
             a benchmark as well as mark dataset contaminations.
         adapted_from: Name of the model from which this model is adapted. For quantizations, fine-tunes, long doc extensions, etc.
         superseded_by: Name of the model that supersedes this model, e.g., nvidia/NV-Embed-v2 supersedes v1.
+        is_cross_encoder: Whether the model can act as a cross-encoder or not.
         modalities: A list of strings representing the modalities the model supports. Default is ["text"].
     """
 
@@ -103,7 +103,7 @@ class ModelMeta(BaseModel):
     memory_usage_mb: float | None
     max_tokens: float | None
     embed_dim: int | None
-    license: str | None
+    license: LICENSES | STR_URL | None
     open_weights: bool | None
     public_training_code: str | None
     public_training_data: str | bool | None
@@ -114,6 +114,7 @@ class ModelMeta(BaseModel):
     training_datasets: dict[str, list[str]] | None
     adapted_from: str | None = None
     superseded_by: str | None = None
+    is_cross_encoder: bool | None = None
     modalities: list[MODALITIES] = ["text"]
 
     def to_dict(self):
@@ -150,9 +151,14 @@ class ModelMeta(BaseModel):
         zero-shot or not on the given tasks.
         Returns None if no training data is specified on the model.
         """
-        if self.training_datasets is None:
+        # If no tasks were specified, we're obviously zero-shot
+        if not tasks:
+            return True
+        training_datasets = self.get_training_datasets()
+        # If no tasks were specified, we're obviously zero-shot
+        if training_datasets is None:
             return None
-        model_datasets = {ds_name for ds_name, splits in self.training_datasets.items()}
+        model_datasets = {ds_name for ds_name, splits in training_datasets.items()}
         if isinstance(tasks[0], str):
             benchmark_datasets = set(tasks)
         else:
@@ -162,6 +168,51 @@ class ModelMeta(BaseModel):
                 benchmark_datasets.add(task.metadata.name)
         intersection = model_datasets & benchmark_datasets
         return len(intersection) == 0
+
+    def get_training_datasets(self) -> dict[str, list[str]] | None:
+        """Returns all training datasets of the model including similar tasks."""
+        import mteb
+
+        if self.training_datasets is None:
+            return None
+
+        training_datasets = self.training_datasets.copy()
+        if self.adapted_from is not None:
+            try:
+                adapted_from_model = mteb.get_model_meta(
+                    self.adapted_from, fetch_from_hf=True
+                )
+                adapted_training_datasets = adapted_from_model.get_training_datasets()
+                if adapted_training_datasets is not None:
+                    training_datasets |= adapted_training_datasets
+            except ValueError as e:
+                logger.warning(f"Could not get source model: {e} in MTEB")
+
+        return_dataset = training_datasets.copy()
+        visited = set()
+
+        for dataset in training_datasets:
+            similar_tasks = collect_similar_tasks(dataset, visited)
+            return_dataset |= {task: [] for task in similar_tasks}
+
+        return return_dataset
+
+    def zero_shot_percentage(
+        self, tasks: Sequence[AbsTask] | Sequence[str]
+    ) -> int | None:
+        """Indicates how out-of-domain the selected tasks are for the given model."""
+        training_datasets = self.get_training_datasets()
+        if (training_datasets is None) or (not tasks):
+            return None
+        model_datasets = {ds_name for ds_name, splits in training_datasets.items()}
+        if isinstance(tasks[0], str):
+            benchmark_datasets = set(tasks)
+        else:
+            tasks = cast(Sequence[AbsTask], tasks)
+            benchmark_datasets = {task.metadata.name for task in tasks}
+        overlap = model_datasets & benchmark_datasets
+        perc_overlap = 100 * (len(overlap) / len(benchmark_datasets))
+        return int(100 - perc_overlap)
 
     def calculate_memory_usage_mb(self) -> int | None:
         """Calculates the memory usage (in FP32) of the model in MB."""
@@ -200,3 +251,28 @@ class ModelMeta(BaseModel):
         # Convert to MB
         model_memory_mb = model_memory_bytes / MB
         return round(model_memory_mb)
+
+
+def collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
+    """Recursively collect all similar tasks for a given dataset."""
+    from .overview import SIMILAR_TASKS
+
+    if dataset in visited:
+        return set()
+
+    visited.add(dataset)
+    similar = set()
+
+    # Check if dataset is a key in SIMILAR_TASKS
+    if dataset in SIMILAR_TASKS:
+        for similar_task in SIMILAR_TASKS[dataset]:
+            similar.add(similar_task)
+            similar.update(collect_similar_tasks(similar_task, visited))
+
+    # Check if dataset appears as a value in SIMILAR_TASKS
+    for parent, children in SIMILAR_TASKS.items():
+        if dataset in children:
+            similar.add(parent)
+            similar.update(collect_similar_tasks(parent, visited))
+
+    return similar

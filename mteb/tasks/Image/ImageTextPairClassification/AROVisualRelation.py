@@ -18,7 +18,7 @@ class AROVisualRelation(AbsTaskImageTextPairClassification):
             "path": "gowitheflow/ARO-Visual-Relation",
             "revision": "3867ad4f46a1ac2e63be034d1fc77dd8c2ef7209",
         },
-        type="ImageTextPairClassification",
+        type="Compositionality",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

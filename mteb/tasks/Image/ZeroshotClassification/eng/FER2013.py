@@ -6,7 +6,7 @@ from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class FER2013Classification(AbsTaskZeroshotClassification):
+class FER2013ZeroshotClassification(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
         name="FER2013ZeroShot",
         description="Classifying facial emotions.",
@@ -32,13 +32,13 @@ class FER2013Classification(AbsTaskZeroshotClassification):
         modalities=["image", "text"],
         sample_creation="created",
         bibtex_citation="""@misc{goodfellow2015explainingharnessingadversarialexamples,
-        title={Explaining and Harnessing Adversarial Examples}, 
+        title={Explaining and Harnessing Adversarial Examples},
         author={Ian J. Goodfellow and Jonathon Shlens and Christian Szegedy},
         year={2015},
         eprint={1412.6572},
         archivePrefix={arXiv},
         primaryClass={stat.ML},
-        url={https://arxiv.org/abs/1412.6572}, 
+        url={https://arxiv.org/abs/1412.6572},
         }
         """,
         descriptive_stats={

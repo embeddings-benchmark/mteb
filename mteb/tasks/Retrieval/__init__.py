@@ -30,6 +30,7 @@ from .eng.AlphaNLIRetrieval import *
 from .eng.ARCChallengeRetrieval import *
 from .eng.ArguAnaRetrieval import *
 from .eng.BrightRetrieval import *
+from .eng.BuiltBenchRetrieval import *
 from .eng.ChemHotpotQARetrieval import *
 from .eng.ChemNQRetrieval import *
 from .eng.ClimateFEVERRetrieval import *
@@ -134,6 +135,7 @@ from .multilingual.NeuCLIR2022Retrieval import *
 from .multilingual.NeuCLIR2023Retrieval import *
 from .multilingual.PublicHealthQARetrieval import *
 from .multilingual.StatcanDialogueDatasetRetrieval import *
+from .multilingual.WebFAQRetrieval import *
 from .multilingual.WikipediaRetrievalMultilingual import *
 from .multilingual.XMarketRetrieval import *
 from .multilingual.XPQARetrieval import *

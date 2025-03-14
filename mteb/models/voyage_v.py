@@ -242,22 +242,22 @@ def voyage_v_loader(**kwargs):
 
 voyage_v = ModelMeta(
     loader=partial(voyage_v_loader, model_name="voyage-multimodal-3"),
-    name="voyage-multimodal-3",
+    name="voyageai/voyage-multimodal-3",
     languages=[],  # Unknown
     revision="1",
     release_date="2024-11-10",
     n_parameters=None,
     memory_usage_mb=None,
-    max_tokens=None,
+    max_tokens=32768,
     embed_dim=1024,
-    license=None,
+    license="mit",
     similarity_fn_name="cosine",
-    framework=[],
+    framework=["API"],
     modalities=["image", "text"],
-    open_weights=None,
+    open_weights=False,
     public_training_code=None,
     public_training_data=None,
-    reference=None,
+    reference="https://huggingface.co/voyageai/voyage-multimodal-3",
     use_instructions=None,
-    training_datasets=None,
+    training_datasets={},  # No overlap with MTEB according to Voyage, could overlap with MIEB, didn't ask
 )

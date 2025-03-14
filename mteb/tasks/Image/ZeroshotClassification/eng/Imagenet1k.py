@@ -8,7 +8,7 @@ from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class Imagenet1kClassification(AbsTaskZeroshotClassification):
+class Imagenet1kZeroshotClassification(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
         name="Imagenet1kZeroShot",
         description="ImageNet, a large-scale ontology of images built upon the backbone of the WordNet structure.",

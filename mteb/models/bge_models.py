@@ -33,7 +33,7 @@ bge_m3_training_data = {
     "HotpotQA-NL": ["train"],  # translation not trained on
     "HotpotQAHardNegatives": ["train"],
     "T2Retrieval": ["train"],
-    "DuReader": ["train"],
+    "DuRetrieval": ["train"],
     "MMarcoReranking": ["train"],
     "CodeSearchNet": ["train"],
     # not in mteb
@@ -70,11 +70,11 @@ bge_training_data = {
         "validation",
         "test",
     ],  # assumed from mlqa	(question, context)
+    "DuRetrieval": ["train"],
     # not in mteb
     # Dataset	Pairs
     # wudao	(title, passage)
     # cmrc2018	(query, context)
-    # dureader	(query, context)
     # simclue	(sentence_a, sentence_b)
     # csl	(title, abstract)
     # amazon_reviews_multi	(title, body)
@@ -91,7 +91,7 @@ bge_training_data = {
 bge_chinese_training_data = {
     # source: https://arxiv.org/pdf/2309.07597
     "T2Retrieval": ["train"],
-    "DuReader": ["train"],
+    "DuRetrieval": ["train"],
     "MMarcoReranking": ["train"],
     "CMedQAv2-reranking": ["train"],
     "Cmnli": ["train"],
@@ -121,7 +121,7 @@ bge_chinese_training_data = {
     # Dataset	Pairs
     # wudao	(title, passage)
     # cmrc2018	(query, context)
-    # dureader	(query, context)
+    # dureader	(query, context) - DuRetrieval
     # simclue	(sentence_a, sentence_b)
     # csl	(title, abstract)
     # amazon_reviews_multi	(title, body)
@@ -656,40 +656,6 @@ bge_m3 = ModelMeta(
     training_datasets=bge_m3_training_data,
 )
 
-bge_multilingual_gemma2 = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="BAAI/bge-multilingual-gemma2",
-        revision="992e13d8984fde2c31ef8a3cb2c038aeec513b8a",
-    ),
-    name="BAAI/bge-multilingual-gemma2",
-    languages=[
-        "eng_Latn",
-        "zho_Hans",
-        "kor_Hang",
-        "kor_Latn",
-        "fra_Latn",
-        "jpn_Jpan",
-        "jpn_Latn",
-    ],  # This list is incomlete. Their description says "and more".
-    # I'm also unsure about the scripts.
-    open_weights=True,
-    revision="992e13d8984fde2c31ef8a3cb2c038aeec513b8a",
-    release_date="2024-07-25",  # initial commit of hf model.
-    n_parameters=9.24 * 1e9,
-    memory_usage_mb=35254,
-    embed_dim=3584,  # from old C-MTEB leaderboard
-    license="gemma",
-    max_tokens=8192,  # from old C-MTEB leaderboard
-    reference="https://huggingface.co/BAAI/bge-multilingual-gemma2",
-    similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
-    use_instructions=False,
-    public_training_code=None,
-    public_training_data=None,
-    training_datasets=None,  # not disclosed
-)
-
 # Contents of cfli/bge-full-data
 bge_full_data = {
     # source: https://arxiv.org/pdf/2409.15700
@@ -746,6 +712,46 @@ bge_full_data = {
     "STSBenchmark": ["train"],
 }
 
+
+bge_multilingual_gemma2 = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="BAAI/bge-multilingual-gemma2",
+        revision="992e13d8984fde2c31ef8a3cb2c038aeec513b8a",
+    ),
+    name="BAAI/bge-multilingual-gemma2",
+    languages=[
+        "eng_Latn",
+        "zho_Hans",
+        "kor_Hang",
+        "kor_Latn",
+        "fra_Latn",
+        "jpn_Jpan",
+        "jpn_Latn",
+    ],  # This list is incomlete. Their description says "and more".
+    # I'm also unsure about the scripts.
+    open_weights=True,
+    revision="992e13d8984fde2c31ef8a3cb2c038aeec513b8a",
+    release_date="2024-07-25",  # initial commit of hf model.
+    n_parameters=9.24 * 1e9,
+    memory_usage_mb=35254,
+    embed_dim=3584,  # from old C-MTEB leaderboard
+    license="https://ai.google.dev/gemma/terms",
+    max_tokens=8192,  # from old C-MTEB leaderboard
+    reference="https://huggingface.co/BAAI/bge-multilingual-gemma2",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets={
+        **bge_full_data,
+        **bge_m3_training_data,
+        "MIRACLReranking": ["train"],
+        "MrTidyRetrieval": ["train"],
+    },
+)
+
 bge_en_icl = ModelMeta(
     loader=partial(
         sentence_transformers_loader,
@@ -762,7 +768,7 @@ bge_en_icl = ModelMeta(
     n_parameters=7.11 * 1e9,
     memory_usage_mb=27125,
     embed_dim=4096,
-    license="apache-2",
+    license="apache-2.0",
     max_tokens=32768,
     reference="https://huggingface.co/BAAI/bge-en-icl",
     similarity_fn_name="cosine",
@@ -775,4 +781,27 @@ bge_en_icl = ModelMeta(
         **bge_full_data,
     },
     adapted_from="intfloat/e5-mistral-7b-instruct",
+)
+
+manu__bge_m3_custom_fr = ModelMeta(
+    name="manu/bge-m3-custom-fr",
+    revision="ed3ef88678ba83ddf4c0fab71a93cb90d89a9078",
+    release_date="2024-04-11",
+    languages=None,
+    loader=None,
+    n_parameters=567754752,
+    memory_usage_mb=2166,
+    max_tokens=8194.0,
+    embed_dim=1024,
+    license=None,
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch", "Sentence Transformers"],
+    reference="https://huggingface.co/manu/bge-m3-custom-fr",
+    similarity_fn_name="cosine",
+    use_instructions=None,
+    training_datasets=bge_m3_training_data,
+    adapted_from="BAAI/bge-m3",
+    superseded_by=None,
 )

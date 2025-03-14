@@ -6,7 +6,7 @@ from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class FGVCAircraftClassification(AbsTaskZeroshotClassification):
+class FGVCAircraftZeroShotClassification(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
         name="FGVCAircraftZeroShot",
         description="Classifying aircraft images from 41 manufacturers and 102 variants.",
@@ -33,13 +33,13 @@ class FGVCAircraftClassification(AbsTaskZeroshotClassification):
         modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation="""@misc{maji2013finegrainedvisualclassificationaircraft,
-            title={Fine-Grained Visual Classification of Aircraft}, 
+            title={Fine-Grained Visual Classification of Aircraft},
             author={Subhransu Maji and Esa Rahtu and Juho Kannala and Matthew Blaschko and Andrea Vedaldi},
             year={2013},
             eprint={1306.5151},
             archivePrefix={arXiv},
             primaryClass={cs.CV},
-            url={https://arxiv.org/abs/1306.5151}, 
+            url={https://arxiv.org/abs/1306.5151},
         }
         """,
         descriptive_stats={

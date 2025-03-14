@@ -6,7 +6,7 @@ from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class Caltech101Classification(AbsTaskZeroshotClassification):
+class Caltech101ZeroshotClassification(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
         name="Caltech101ZeroShot",
         description="Classifying images of 101 widely varied objects.",
@@ -35,8 +35,8 @@ class Caltech101Classification(AbsTaskZeroshotClassification):
         sample_creation="created",
         bibtex_citation="""@INPROCEEDINGS{1384978,
         author={Li Fei-Fei and Fergus, R. and Perona, P.},
-        booktitle={2004 Conference on Computer Vision and Pattern Recognition Workshop}, 
-        title={Learning Generative Visual Models from Few Training Examples: An Incremental Bayesian Approach Tested on 101 Object Categories}, 
+        booktitle={2004 Conference on Computer Vision and Pattern Recognition Workshop},
+        title={Learning Generative Visual Models from Few Training Examples: An Incremental Bayesian Approach Tested on 101 Object Categories},
         year={2004},
         volume={},
         number={},

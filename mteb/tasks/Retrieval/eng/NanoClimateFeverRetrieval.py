@@ -31,7 +31,7 @@ class NanoClimateFeverRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation="""@misc{diggelmann2021climatefever,
-      title={CLIMATE-FEVER: A Dataset for Verification of Real-World Climate Claims}, 
+      title={CLIMATE-FEVER: A Dataset for Verification of Real-World Climate Claims},
       author={Thomas Diggelmann and Jordan Boyd-Graber and Jannis Bulian and Massimiliano Ciaramita and Markus Leippold},
       year={2021},
       eprint={2012.00614},
@@ -41,6 +41,7 @@ class NanoClimateFeverRetrieval(AbsTaskRetrieval):
         prompt={
             "query": "Given a claim about climate change, retrieve documents that support or refute the claim"
         },
+        adapted_from=["ClimateFEVER"],
     )
 
     def load_data(self, **kwargs):

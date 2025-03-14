@@ -39,7 +39,7 @@ class NanoTouche2020Retrieval(AbsTaskRetrieval):
                   Bondarenko, Alexander and
                   Ajjour, Yamen and
                   Stein, Benno},
-  title        = {{Touché20-Argument-Retrieval-for-Controversial- 
+  title        = {{Touché20-Argument-Retrieval-for-Controversial-
                    Questions}},
   month        = jul,
   year         = 2022,
@@ -50,6 +50,7 @@ class NanoTouche2020Retrieval(AbsTaskRetrieval):
         prompt={
             "query": "Given a question, retrieve detailed and persuasive arguments that answer the question"
         },
+        adapted_from=["Touche2020"],
     )
 
     def load_data(self, **kwargs):

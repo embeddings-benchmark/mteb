@@ -42,8 +42,8 @@ class EightTagsClustering(AbsTaskClustering):
         bibtex_citation="""@inproceedings{dadas-etal-2020-evaluation,
             title = "Evaluation of Sentence Representations in {P}olish",
             author = "Dadas, Slawomir  and
-            Pere{\l}kiewicz, Micha{\l}  and
-            Po{\'s}wiata, Rafa{\l}",
+            Pere{\\l}kiewicz, Micha{\\l}  and
+            Po{\\'s}wiata, Rafa{\\l}",
             editor = "Calzolari, Nicoletta  and
             B{\'e}chet, Fr{\'e}d{\'e}ric  and
             Blache, Philippe  and
@@ -54,7 +54,7 @@ class EightTagsClustering(AbsTaskClustering):
             Isahara, Hitoshi  and
             Maegaard, Bente  and
             Mariani, Joseph  and
-            Mazo, H{\'e}l{\`e}ne  and
+            Mazo, H{\\'e}l{\\`e}ne  and
             Moreno, Asuncion  and
             Odijk, Jan  and
             Piperidis, Stelios",
@@ -101,10 +101,10 @@ class EightTagsClusteringFast(AbsTaskClusteringFast):
         bibtex_citation="""@inproceedings{dadas-etal-2020-evaluation,
             title = "Evaluation of Sentence Representations in {P}olish",
             author = "Dadas, Slawomir  and
-            Pere{\l}kiewicz, Micha{\l}  and
-            Po{\'s}wiata, Rafa{\l}",
+            Pere{\\l}kiewicz, Micha{\\l}  and
+            Po{\\'s}wiata, Rafa{\\l}",
             editor = "Calzolari, Nicoletta  and
-            B{\'e}chet, Fr{\'e}d{\'e}ric  and
+            B{\\'e}chet, Fr{\\'e}d{\\'e}ric  and
             Blache, Philippe  and
             Choukri, Khalid  and
             Cieri, Christopher  and
@@ -113,7 +113,7 @@ class EightTagsClusteringFast(AbsTaskClusteringFast):
             Isahara, Hitoshi  and
             Maegaard, Bente  and
             Mariani, Joseph  and
-            Mazo, H{\'e}l{\`e}ne  and
+            Mazo, H{\\'e}l{\\`e}ne  and
             Moreno, Asuncion  and
             Odijk, Jan  and
             Piperidis, Stelios",
@@ -128,6 +128,7 @@ class EightTagsClusteringFast(AbsTaskClusteringFast):
             language = "English",
             ISBN = "979-10-95546-34-4",
         }""",
+        adapted_from=["EightTagsClustering"],
     )
 
     def dataset_transform(self):
@@ -200,6 +201,7 @@ class PlscClusteringS2SFast(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
+        adapted_from=["PlscClusteringS2S"],
     )
 
     def dataset_transform(self):
@@ -281,6 +283,7 @@ class PlscClusteringP2PFast(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
+        adapted_from=["PlscClusteringP2P"],
     )
 
     def dataset_transform(self):

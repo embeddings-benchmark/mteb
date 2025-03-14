@@ -69,4 +69,5 @@ class RiaNewsRetrievalHardNegatives(AbsTaskRetrieval):
         booktitle={Proceedings of the 41st European Conference on Information Retrieval},
         year={2019}
         }""",
+        adapted_from=["RiaNewsRetrieval"],
     )

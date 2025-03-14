@@ -6,7 +6,7 @@ from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class SUN397Classification(AbsTaskZeroshotClassification):
+class SUN397ZeroshotClassification(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
         name="SUN397ZeroShot",
         description="Large scale scene recognition in 397 categories.",
@@ -33,8 +33,8 @@ class SUN397Classification(AbsTaskZeroshotClassification):
         sample_creation="created",
         bibtex_citation="""@INPROCEEDINGS{5539970,
         author={Xiao, Jianxiong and Hays, James and Ehinger, Krista A. and Oliva, Aude and Torralba, Antonio},
-        booktitle={2010 IEEE Computer Society Conference on Computer Vision and Pattern Recognition}, 
-        title={SUN database: Large-scale scene recognition from abbey to zoo}, 
+        booktitle={2010 IEEE Computer Society Conference on Computer Vision and Pattern Recognition},
+        title={SUN database: Large-scale scene recognition from abbey to zoo},
         year={2010},
         volume={},
         number={},

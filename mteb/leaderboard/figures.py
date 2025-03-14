@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+from typing import get_args
+
 import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+
+from mteb.abstasks.TaskMetadata import TASK_TYPE
 
 
 def text_plot(text: str):
@@ -46,9 +50,20 @@ def parse_model_name(name: str) -> str:
 
 def parse_float(value) -> float:
     try:
-        return float(value)
+        if value == "Infinite":
+            return np.inf
+        else:
+            return float(value)
     except ValueError:
         return np.nan
+
+
+def process_max_tokens(x):
+    if pd.isna(x):
+        return "Unknown"
+    if np.isinf(x):
+        return "Infinite"
+    return str(int(x))
 
 
 models_to_annotate = [
@@ -56,6 +71,10 @@ models_to_annotate = [
     "GritLM-7B",
     "LaBSE",
     "multilingual-e5-large-instruct",
+    "EVA02-CLIP-bigE-14-plus",
+    "voyage-multimodal-3",
+    "e5-v",
+    "VLM2Vec-Full",
 ]
 
 
@@ -105,6 +124,7 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
         return go.Figure()
     min_score, max_score = df["Mean (Task)"].min(), df["Mean (Task)"].max()
     df["sqrt(dim)"] = np.sqrt(df["Embedding Dimensions"])
+    df["Max Tokens"] = df["Max Tokens"].apply(lambda x: process_max_tokens(x))
     fig = px.scatter(
         df,
         x="Number of Parameters",
@@ -165,21 +185,10 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
 
 
 TOP_N = 5
-task_types = [
-    "BitextMining",
-    "Classification",
-    "MultilabelClassification",
-    "Clustering",
-    "PairClassification",
-    "Reranking",
-    "Retrieval",
-    "STS",
-    "Summarization",
-    # "InstructionRetrieval",
-    # Not displayed, because the scores are negative,
-    # doesn't work well with the radar chart.
-    "Speed",
-]
+task_types = sorted(get_args(TASK_TYPE))
+task_types.remove("InstructionRetrieval")
+# Not displayed, because the scores are negative,
+# doesn't work well with the radar chart.
 
 line_colors = [
     "#EE4266",
@@ -230,7 +239,7 @@ def radar_chart(df: pd.DataFrame) -> go.Figure:
             )
         )
     fig.update_layout(
-        font=dict(size=16, color="black"),  # noqa
+        font=dict(size=13, color="black"),  # noqa
         template="plotly_white",
         polar=dict(
             radialaxis=dict(
@@ -248,11 +257,15 @@ def radar_chart(df: pd.DataFrame) -> go.Figure:
         legend=dict(
             orientation="h",
             yanchor="bottom",
-            y=-0.6,
-            xanchor="left",
-            x=-0.05,
+            y=-0.35,
+            xanchor="center",
+            x=0.4,
+            itemwidth=30,
+            font=dict(size=13),
+            entrywidth=0.6,
             entrywidthmode="fraction",
-            entrywidth=1 / 5,
         ),
+        margin=dict(l=0, r=16, t=30, b=30),
+        autosize=True,
     )
     return fig

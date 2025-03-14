@@ -1,0 +1,25 @@
+{
+    "test": {
+        "num_samples": 600,
+        "min_image_width": 561,
+        "average_image_width": 1090.9616666666666,
+        "max_image_width": 1600,
+        "min_image_height": 427,
+        "average_image_height": 715.985,
+        "max_image_height": 900,
+        "min_num_choices": 2,
+        "average_num_choices": 2.0,
+        "max_num_choices": 2,
+        "min_question_length": 130,
+        "average_question_length": 136.04333333333332,
+        "max_question_length": 147,
+        "answers": {
+            "0": {
+                "count": 300
+            },
+            "1": {
+                "count": 300
+            }
+        }
+    }
+}

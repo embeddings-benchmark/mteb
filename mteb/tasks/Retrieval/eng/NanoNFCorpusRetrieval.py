@@ -43,6 +43,7 @@ class NanoNFCorpusRetrieval(AbsTaskRetrieval):
         prompt={
             "query": "Given a question, retrieve relevant documents that best answer the question"
         },
+        adapted_from=["NFCorpus"],
     )
 
     def load_data(self, **kwargs):

@@ -1,0 +1,37 @@
+{
+    "test": {
+        "num_samples": 788,
+        "min_image_width": 200,
+        "average_image_width": 757.6789340101523,
+        "max_image_width": 2200,
+        "min_image_height": 181,
+        "average_image_height": 631.3147208121827,
+        "max_image_height": 2200,
+        "min_num_choices": 4,
+        "average_num_choices": 4.550761421319797,
+        "max_num_choices": 6,
+        "min_question_length": 30,
+        "average_question_length": 34.35406091370558,
+        "max_question_length": 45,
+        "answers": {
+            "2": {
+                "count": 169
+            },
+            "4": {
+                "count": 63
+            },
+            "3": {
+                "count": 167
+            },
+            "1": {
+                "count": 184
+            },
+            "0": {
+                "count": 182
+            },
+            "5": {
+                "count": 23
+            }
+        }
+    }
+}

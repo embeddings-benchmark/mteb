@@ -54,6 +54,7 @@ m3e_dataset = {
     "LCQMC": ["train"],
     "MIRACLReranking": ["train"],
     "PAWSX": ["train"],
+    "DuRetrieval": [],
     # not in MTEB:
     # - cmrc2018
     # - belle_2m
@@ -67,7 +68,7 @@ m3e_dataset = {
     # - wiki_atomic_edit
     # - chatmed_consult
     # - webqa
-    # - dureader_robust
+    # - dureader_robust - DuRetrieval
     # - csl
     # - lawzhidao
     # - CINLID
@@ -91,7 +92,7 @@ m3e_base = ModelMeta(
     memory_usage_mb=390,
     embed_dim=768,
     # They don't give a specific license but commercial use is not allowed
-    license="unspecified-noncommercial",
+    license="https://huggingface.co/moka-ai/m3e-base#%F0%9F%93%9C-license",
     max_tokens=512,
     reference="https://huggingface.co/moka-ai/m3e-base",
     similarity_fn_name="cosine",
@@ -114,7 +115,7 @@ m3e_small = ModelMeta(
     memory_usage_mb=None,  # Can't be seen on HF page
     embed_dim=512,
     # They don't give a specific license but commercial use is not allowed
-    license="unspecified-noncommercial",
+    license="https://huggingface.co/moka-ai/m3e-base#%F0%9F%93%9C-license",
     max_tokens=512,
     reference="https://huggingface.co/moka-ai/m3e-small",
     similarity_fn_name="cosine",
@@ -137,7 +138,7 @@ m3e_large = ModelMeta(
     memory_usage_mb=None,  # Can't be seen on HF page
     embed_dim=768,
     # They don't give a specific license but commercial use is not allowed
-    license="unspecified-noncommercial",
+    license="https://huggingface.co/moka-ai/m3e-base#%F0%9F%93%9C-license",
     max_tokens=512,
     reference="https://huggingface.co/moka-ai/m3e-large",
     similarity_fn_name="cosine",

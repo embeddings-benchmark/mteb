@@ -6,7 +6,7 @@ from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class RESISC45Classification(AbsTaskZeroshotClassification):
+class RESISC45ZeroshotClassification(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
         name="RESISC45ZeroShot",
         description="Remote Sensing Image Scene Classification by Northwestern Polytechnical University (NWPU).",
@@ -33,8 +33,8 @@ class RESISC45Classification(AbsTaskZeroshotClassification):
         sample_creation="created",
         bibtex_citation="""@ARTICLE{7891544,
         author={Cheng, Gong and Han, Junwei and Lu, Xiaoqiang},
-        journal={Proceedings of the IEEE}, 
-        title={Remote Sensing Image Scene Classification: Benchmark and State of the Art}, 
+        journal={Proceedings of the IEEE},
+        title={Remote Sensing Image Scene Classification: Benchmark and State of the Art},
         year={2017},
         volume={105},
         number={10},

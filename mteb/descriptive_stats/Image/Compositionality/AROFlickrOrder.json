@@ -1,0 +1,11 @@
+{
+    "test": {
+        "num_samples": 5000,
+        "num_images": 5000,
+        "num_texts": 25000,
+        "num_unique_texts": 23892,
+        "min_text_length": 11,
+        "average_text_length": 62.37296,
+        "max_text_length": 185
+    }
+}

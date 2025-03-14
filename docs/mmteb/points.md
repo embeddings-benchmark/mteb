@@ -10,7 +10,7 @@
 
 The file should be named after the PR number. E.g. `438.jsonl`, where 438 is the PR number.
 
-The possible keys to include is: 
+The possible keys to include is:
 
 ```{python}
 {
@@ -21,7 +21,7 @@ The possible keys to include is:
     "Bug fixes": 2-10, # depends on the complexity of the fix
     "Running Models": 1, # pr model run
     "Review PR": 2, # two points pr. reviewer, can be given to multiple reviewers
-    "Paper Writing": NA, 
+    "Paper Writing": NA,
     "Ideation": NA,
     "Coordination": NA
 }
@@ -76,11 +76,11 @@ Please also add your first name and last name are as you want them to appear in 
 | SaitejaUtpala     | Saiteja | Utpala  | saitejautpala@gmail.com         | ~Saiteja_Utpala1 | Microsoft Research|
 | mmhamdy     | Mohammed | Hamdy  | mhamdy.res@gmail.com         | ~Mohammed_Hamdy1 | Cohere For AI Community|
 | jupyterjazz       | Saba         | Sturua     | saba.sturua@jina.ai              |     ~Saba_Sturua1      | Jina AI                                                     |
-| Ruqyai       | Ruqiya         | Bin Safi     | ruqiya.binsafi@libfstudy.ac.uk           |    ~Ruqiya_Bin_Safi1       | The London Institute of Banking and Finance                                     
+| Ruqyai       | Ruqiya         | Bin Safi     | ruqiya.binsafi@libfstudy.ac.uk           |    ~Ruqiya_Bin_Safi1       | The London Institute of Banking and Finance
 | KranthiGV     | Kranthi Kiran | GV  | kranthi.gv@nyu.edu         | ~Kranthi_Kiran_GV1 | New York University|
 | shreeya-dhakal            | Shreeya     | Dhakal     | ssdhakal57@gmail.com      |                      | Individual Contributor                                                   |
 | dipam7 | Dipam | Vasani | dipam44@gmail.com | ~Dipam_Vasani1 | Individual Contributor                                                  |
-| Art3mis07 | Gayatri | K | gayatrikrishnakumar0707@gmail.com | ~Gayatri_K1 | R. V. College of Engineering | 
+| Art3mis07 | Gayatri | K | gayatrikrishnakumar0707@gmail.com | ~Gayatri_K1 | R. V. College of Engineering |
 | jankounchained    | Jan        | Kostkan    | jan.kostkan@cas.au.dk | ~Jan_Kostkan1        | Aarhus University                            |
 | bp-high           | Bhavish       | Pahwa      | t-bpahwa@microsoft.com           | ~Bhavish_Pahwa1 | Microsoft Research                              |
 | rasdani           | Daniel     | Auras      | daniel@ellamind.com          |   ~Daniel_Auras1     | ellamind, Germany                                   |
@@ -91,7 +91,7 @@ Please also add your first name and last name are as you want them to appear in 
 | ManuelFay         | Manuel        | Faysse     | manuel.faysse@centralesupelec.fr |              ~Manuel_Faysse1        | CentraleSupélec && Illuin Technology                  |
 | hgissbkh          | Hippolyte     | Gisserot-Boukhlef    | hippolyte.gisserot-boukhlef@centralesupelec.fr        |   ~Hippolyte_Gisserot-Boukhlef1    | CentraleSupélec && Artefact Research Center   |
 | sted97          | Simone     | Tedeschi    | tedeschi@diag.uniroma1.it        |   ~Simone_Tedeschi1                   | Sapienza University of Rome   |
-| gentaiscool          | Genta Indra     | Winata    | gentaindrawinata@gmail.com        |   ~Genta_Indra_Winata1                   | Individual Contributor   | 
+| gentaiscool          | Genta Indra     | Winata    | gentaindrawinata@gmail.com        |   ~Genta_Indra_Winata1                   | Individual Contributor   |
 | henilp105 | Henil | Panchal | henilp105@gmail.com | ~Henil_Shalin_Panchal1 | Nirma University |
 | ABorghini          | Alessia     | Borghini    | borghini.alessia99@gmail.com        |   ~Alessia_Borghini1            | Sapienza University of Rome   |
 | jordiclive          | Jordan     | Clive    | jordan.clive19@imperial.ac.uk        |   ~Jordan_Clive1            | Imperial College London   |

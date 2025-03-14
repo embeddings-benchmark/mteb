@@ -38,9 +38,9 @@ class VGHierarchicalClusteringP2P(AbsTaskClusteringFast):
         sample_creation="found",
         bibtex_citation="""@mastersthesis{navjord2023beyond,
     title={Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
-    author={Navjord, J{\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
+    author={Navjord, J{\\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
     year={2023},
-    school={Norwegian University of Life Sciences, {\AA}s}
+    school={Norwegian University of Life Sciences, {\\AA}s}
 }""",
         prompt="Identify the categories (e.g. sports) of given articles in Norwegian",
     )
@@ -83,9 +83,9 @@ class VGHierarchicalClusteringS2S(AbsTaskClusteringFast):
         sample_creation="found",
         bibtex_citation="""@mastersthesis{navjord2023beyond,
     title={Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
-    author={Navjord, J{\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
+    author={Navjord, J{\\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
     year={2023},
-    school={Norwegian University of Life Sciences, {\AA}s}
+    school={Norwegian University of Life Sciences, {\\AA}s}
 }""",
         prompt="Identify the categories (e.g. sports) of given articles in Norwegian",
     )

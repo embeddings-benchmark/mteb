@@ -60,13 +60,14 @@ for model_name in [
         task_types=[
             "Any2AnyRetrieval",
             "Any2AnyMultiChoice",
-            "Any2TextMutipleChoice",
+            "VisionCentric",
             "ImageClustering",
             "ImageClassification",
             "ImageMultilabelClassification",
-            "ImageTextPairClassification",
+            "Compositionality",
             "VisualSTS",
             "ZeroShotClassification",
+            "DocumentUnderstanding",
         ]
     )
     # get i-only tasks for i-only models.

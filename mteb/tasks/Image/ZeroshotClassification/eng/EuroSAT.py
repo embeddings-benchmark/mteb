@@ -6,7 +6,7 @@ from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class EuroSATClassification(AbsTaskZeroshotClassification):
+class EuroSATZeroshotClassification(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
         name="EuroSATZeroShot",
         description="Classifying satellite images.",
@@ -33,8 +33,8 @@ class EuroSATClassification(AbsTaskZeroshotClassification):
         sample_creation="created",
         bibtex_citation="""@ARTICLE{8736785,
         author={Helber, Patrick and Bischke, Benjamin and Dengel, Andreas and Borth, Damian},
-        journal={IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing}, 
-        title={EuroSAT: A Novel Dataset and Deep Learning Benchmark for Land Use and Land Cover Classification}, 
+        journal={IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing},
+        title={EuroSAT: A Novel Dataset and Deep Learning Benchmark for Land Use and Land Cover Classification},
         year={2019},
         volume={12},
         number={7},

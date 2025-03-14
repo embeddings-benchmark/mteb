@@ -79,4 +79,5 @@ class QuoraRetrievalHardNegatives(AbsTaskRetrieval):
     year = {2017},
     url = {https://kaggle.com/competitions/quora-question-pairs}
 }""",
+        adapted_from=["QuoraRetrieval"],
     )

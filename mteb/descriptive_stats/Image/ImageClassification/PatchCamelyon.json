@@ -1,0 +1,20 @@
+{
+    "test": {
+        "num_samples": 32768,
+        "unique_num_labels": 2,
+        "min_image_width": 96,
+        "average_image_width": 96.0,
+        "max_image_width": 96,
+        "min_image_height": 96,
+        "average_image_height": 96.0,
+        "max_image_height": 96,
+        "labels": {
+            "0": {
+                "count": 16391
+            },
+            "1": {
+                "count": 16377
+            }
+        }
+    }
+}

@@ -28,7 +28,7 @@ class FrenkHrClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation="""@misc{ljubešić2019frenk,
-        title={The FRENK Datasets of Socially Unacceptable Discourse in Slovene and English}, 
+        title={The FRENK Datasets of Socially Unacceptable Discourse in Slovene and English},
         author={Nikola Ljubešić and Darja Fišer and Tomaž Erjavec},
         year={2019},
         eprint={1906.02045},

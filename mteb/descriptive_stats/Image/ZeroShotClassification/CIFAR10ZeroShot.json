@@ -1,0 +1,47 @@
+{
+    "test": {
+        "num_samples": 10000,
+        "unique_num_labels": 10,
+        "min_image_width": 32,
+        "average_image_width": 32.0,
+        "max_image_width": 32,
+        "min_image_height": 32,
+        "average_image_height": 32.0,
+        "max_image_height": 32,
+        "min_label_text_length": 17,
+        "average_label_text_length": 19.0,
+        "max_label_text_length": 24,
+        "labels": {
+            "3": {
+                "count": 1000
+            },
+            "8": {
+                "count": 1000
+            },
+            "0": {
+                "count": 1000
+            },
+            "6": {
+                "count": 1000
+            },
+            "1": {
+                "count": 1000
+            },
+            "9": {
+                "count": 1000
+            },
+            "5": {
+                "count": 1000
+            },
+            "7": {
+                "count": 1000
+            },
+            "4": {
+                "count": 1000
+            },
+            "2": {
+                "count": 1000
+            }
+        }
+    }
+}

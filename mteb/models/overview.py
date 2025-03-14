@@ -13,6 +13,7 @@ from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import (
     align_models,
+    ara_models,
     arctic_models,
     bedrock_models,
     bge_models,
@@ -22,6 +23,7 @@ from mteb.models import (
     cde_models,
     clap_models,
     clip_models,
+    codesage_models,
     cohere_models,
     cohere_v,
     colbert_models,
@@ -31,7 +33,7 @@ from mteb.models import (
     e5_v,
     evaclip_models,
     fa_models,
-    gme_models,
+    gme_v_models,
     google_models,
     gritlm_models,
     gte_models,
@@ -42,6 +44,7 @@ from mteb.models import (
     jina_models,
     lens_models,
     linq_models,
+    llm2clip_models,
     llm2vec_models,
     misc_models,
     moco_models,
@@ -56,6 +59,7 @@ from mteb.models import (
     openclip_models,
     piccolo_models,
     promptriever_models,
+    qodo_models,
     qtack_models,
     repllama_models,
     rerankers_custom,
@@ -68,6 +72,7 @@ from mteb.models import (
     stella_models,
     text2vec_models,
     uae_models,
+    vdr_models,
     vista_models,
     vlm2vec_models,
     voyage_models,
@@ -86,6 +91,7 @@ model_modules = [
     blip_models,
     bm25,
     clip_models,
+    codesage_models,
     cde_models,
     cohere_models,
     cohere_v,
@@ -95,11 +101,9 @@ model_modules = [
     e5_models,
     e5_v,
     evaclip_models,
-    gme_models,
     google_models,
     gritlm_models,
     gte_models,
-    gme_models,
     ibm_granite_models,
     inf_models,
     jasper_models,
@@ -107,6 +111,7 @@ model_modules = [
     jina_clip,
     lens_models,
     linq_models,
+    llm2clip_models,
     llm2vec_models,
     misc_models,
     model2vec_models,
@@ -120,7 +125,9 @@ model_modules = [
     openai_models,
     openclip_models,
     piccolo_models,
+    gme_v_models,
     promptriever_models,
+    qodo_models,
     qtack_models,
     repllama_models,
     rerankers_custom,
@@ -137,9 +144,11 @@ model_modules = [
     text2vec_models,
     uae_models,
     voyage_models,
+    vdr_models,
     fa_models,
     wav2vec2_models,
     clap_models,
+    ara_models,
 ]
 MODEL_REGISTRY = {}
 
@@ -230,12 +239,15 @@ def get_model(model_name: str, revision: str | None = None, **kwargs: Any) -> En
     return model
 
 
-def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
+def get_model_meta(
+    model_name: str, revision: str | None = None, fetch_from_hf: bool = True
+) -> ModelMeta:
     """A function to fetch a model metadata object by name.
 
     Args:
         model_name: Name of the model to fetch
         revision: Revision of the model to fetch
+        fetch_from_hf: Whether to fetch the model from HuggingFace Hub if not found in the registry
 
     Returns:
         A model metadata object
@@ -247,6 +259,10 @@ def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
             )
         return MODEL_REGISTRY[model_name]
     else:  # assume it is a sentence-transformers model
+        if not fetch_from_hf:
+            raise ValueError(
+                f"Model {model_name} not found in MTEB registry. Please set fetch_from_hf=False to load it from HuggingFace Hub."
+            )
         logger.info(
             "Model not found in model registry, assuming it is on HF Hub model."
         )
