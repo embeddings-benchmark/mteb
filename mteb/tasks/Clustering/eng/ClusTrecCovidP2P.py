@@ -25,7 +25,6 @@ class ClusTrecCovidP2PFast(AbsTaskClusteringFast):
         category="p2p",
         modalities=["text"],
         eval_splits=["test"],
-        HFSubset="title and abstract",
         eval_langs={
             "title and abstract": ["eng-Latn"],
             "title": ["eng-Latn"]
