@@ -20,4 +20,3 @@ from .Retrieval import *
 from .SpeedTask import *
 from .STS import *
 from .Summarization import *
-from .MAIR import *
