@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+from ast import literal_eval
+
+from datasets import Audio
+
 from mteb.abstasks.Audio.AbsTaskAudioMultilabelClassification import (
     AbsTaskAudioMultilabelClassification,
 )
@@ -648,10 +652,16 @@ class VaaniLanguageDetection(AbsTaskAudioMultilabelClassification, MultilingualT
 
     audio_column_name: str = "audio"
     label_column_name: str = "languagesKnown"
-    samples_per_label: int = 8
+    samples_per_label: int = 2000
 
     def dataset_transform(self):
         for subset in self.hf_subsets:
+            self.dataset[subset]= self.dataset[subset].cast_column(self.audio_column_name, Audio(16_000))
+            self.dataset[subset] = self.dataset[subset].map(
+                lambda x: {
+                    self.label_column_name: literal_eval(x[self.label_column_name])
+                }
+            )
             self.dataset[subset] = self.stratified_subsampling(
                 self.dataset[subset],
                 seed=self.seed,

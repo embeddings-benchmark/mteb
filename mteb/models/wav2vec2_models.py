@@ -112,10 +112,12 @@ class Wav2Vec2AudioWrapper(Wrapper):
                 if isinstance(item, dict):
                     if "array" in item:
                         audio = item["array"]
+                        if isinstance(audio, list):
+                            audio = np.array(audio)
                         audio = (
                             torch.from_numpy(audio).float()
                             if isinstance(audio, np.ndarray)
-                            else audio.float()
+                            else torch.tensor(audio).float()
                         )
                         if item["sampling_rate"] != self.sampling_rate:
                             resampler = torchaudio.transforms.Resample(
