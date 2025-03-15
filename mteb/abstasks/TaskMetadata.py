@@ -63,6 +63,7 @@ TASK_SUBTYPE = Literal[
     "Spoken Language Identification",
     "Stroke Classification of Musical Instrument",
     "Tonic Classification of Musical Instrument",
+    "Spoken Digit Classification",
     "Gender Clustering",
     "Rendered semantic textual similarity",
 ]
