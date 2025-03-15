@@ -34,7 +34,7 @@ class ImageCoDeT2IMultiChoice(AbsTaskAny2AnyMultiChoice):
 }
 """,
         descriptive_stats={
-            "n_samples": {"test": 2302},
+            "n_samples": {"test": 25322},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 0.0,
