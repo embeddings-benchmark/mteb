@@ -48,7 +48,7 @@ class CommonLanguageLanguageClassification(AbsTaskAudioClassification):
     )
 
     audio_column_name: str = "audio"
-    label_column_name: str = "langauge"
+    label_column_name: str = "language"
     samples_per_label: int = 10
 
     def dataset_transform(self):
