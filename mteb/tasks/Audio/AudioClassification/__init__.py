@@ -7,4 +7,5 @@ from .eng.GunshotTriangulation import *
 from .eng.MridinghamStroke import *
 from .eng.MridinghamTonic import *
 from .eng.NSynth import *
+from .eng.VaaniGenderClassification import *
 from .eng.VoxLingua107Top10 import *
