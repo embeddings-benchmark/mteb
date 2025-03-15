@@ -655,6 +655,7 @@ class VaaniLanguageDetection(AbsTaskAudioMultilabelClassification, MultilingualT
     samples_per_label: int = 32
 
     def dataset_transform(self):
+        N_SAMPLES = 2048
         for subset in self.hf_subsets:
             self.dataset[subset] = self.dataset[subset].cast_column(
                 self.audio_column_name, Audio(16_000)
@@ -669,5 +670,5 @@ class VaaniLanguageDetection(AbsTaskAudioMultilabelClassification, MultilingualT
                 seed=self.seed,
                 splits=["train"],
                 label=self.label_column_name,
-                n_samples=self.samples_per_label,
+                n_samples=N_SAMPLES,
             )
