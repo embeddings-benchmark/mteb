@@ -5,4 +5,5 @@ from .eng.ESC50 import *
 from .eng.GTZANGenre import *
 from .eng.GunshotTriangulation import *
 from .eng.NSynth import *
+from .eng.VaaniGenderClassification import *
 from .eng.VoxLingua107Top10 import *
