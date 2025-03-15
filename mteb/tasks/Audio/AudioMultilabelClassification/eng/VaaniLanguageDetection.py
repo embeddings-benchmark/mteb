@@ -651,6 +651,7 @@ class VaaniLanguageDetection(AbsTaskAudioMultilabelClassification, MultilingualT
     samples_per_label: int = 8
 
     def dataset_transform(self):
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"]
-        )
+        for subset in self.hf_subsets:
+            self.dataset[subset] = self.stratified_subsampling(
+                self.dataset[subset], seed=self.seed, splits=["train"]
+            )
