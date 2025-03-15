@@ -22,9 +22,7 @@ class SpeechCommandsZeroshotClassification(AbsTaskAudioZeroshotClassification):
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2018-07-07", "2018-07-13"),
-        domains=[
-            "Spoken"
-        ],
+        domains=["Spoken"],
         task_subtypes=["Keyword Spotting"],
         license="cc-by-4.0",  # Replace with appropriate license from allowed list
         annotations_creators="human-annotated",
@@ -64,35 +62,12 @@ class SpeechCommandsZeroshotClassification(AbsTaskAudioZeroshotClassification):
             "Off",
             "Stop",
             "Go",
-            # "Zero",
-            # "One",
-            # "Two",
-            # "Three",
-            # "Four",
-            # "Five",
-            # "Six",
-            # "Seven",
-            # "Eight",
-            # "Nine",
-            # "Bed",
-            # "Bird",
-            # "Cat",
-            # "Dog",
-            # "Happy",
-            # "House",
-            # "Marvin",
-            # "Sheila",
-            # "Tree",
-            # "Wow",
+            # Dataset has 30 labels, but only first 10 are used for zeroshot classification since they are considered as commands, others are considered as auxiliary labels for v1.1
         ]
 
-    # def dataset_transform(self):
-    #     """Transform dataset to ensure labels are in list format"""
-    #     def transform_example(example):
-        
-    #         # Extract audio array from nested structure
-    #         example[self.audio_column_name] = example[self.audio_column_name]["array"]
-    #         return example
-        
-        
-    #     self.dataset = self.dataset.map(transform_example)
+    def dataset_transform(self):
+        """Transform dataset to ensure labels are in list format and filter to keep only the first 10 command labels"""
+        # Filter dataset to keep only examples with labels 0-9
+        self.dataset = self.dataset.filter(
+            lambda x: 0 <= x[self.label_column_name] < len(self.get_candidate_labels())
+        )
