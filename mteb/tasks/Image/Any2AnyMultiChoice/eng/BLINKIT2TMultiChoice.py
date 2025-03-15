@@ -34,7 +34,7 @@ class BLINKIT2TMultiChoice(AbsTaskAny2AnyMultiChoice):
 }
 """,
         descriptive_stats={
-            "n_samples": {"test": 793},
+            "n_samples": {"test": 813},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 0.0,
