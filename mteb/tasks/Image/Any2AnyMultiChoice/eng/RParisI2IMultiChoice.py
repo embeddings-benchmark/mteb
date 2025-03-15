@@ -42,9 +42,9 @@ class RParisEasyI2IMultiChoice(AbsTaskAny2AnyMultiChoice):
                 "test": {
                     "average_document_length": 0.0,
                     "average_query_length": 0.0,
-                    "num_documents": 516,
+                    "num_documents": 6322,
                     "num_queries": 70,
-                    "average_relevant_docs_per_query": 43.3,
+                    "average_relevant_docs_per_query": 98.2,
                 }
             },
         },
@@ -88,9 +88,9 @@ class RParisMediumI2IMultiChoice(AbsTaskAny2AnyMultiChoice):
                 "test": {
                     "average_document_length": 0.0,
                     "average_query_length": 0.0,
-                    "num_documents": 788,
+                    "num_documents": 6322,
                     "num_queries": 70,
-                    "average_relevant_docs_per_query": 78.9,
+                    "average_relevant_docs_per_query": 246.1,
                 }
             },
         },
@@ -136,7 +136,7 @@ class RParisHardI2IMultiChoice(AbsTaskAny2AnyMultiChoice):
                     "average_query_length": 0.0,
                     "num_documents": 685,
                     "num_queries": 70,
-                    "average_relevant_docs_per_query": 35.7,
+                    "average_relevant_docs_per_query": 147.86,
                 }
             },
         },
