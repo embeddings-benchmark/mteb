@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from ast import literal_eval
-
 from datasets import Audio
 
 from mteb.abstasks.Audio.AbsTaskAudioClassification import (
