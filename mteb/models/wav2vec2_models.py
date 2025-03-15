@@ -160,7 +160,7 @@ class Wav2Vec2AudioWrapper(Wrapper):
         prompt_type: PromptType | None = None,
         batch_size: int = 4,
         **kwargs: Any,
-    ) -> torch.Tensor:
+    ) -> list[torch.Tensor]:
         processed_audio = self._process_audio(audio)
         all_embeddings = []
 
@@ -190,6 +190,28 @@ class Wav2Vec2AudioWrapper(Wrapper):
                 all_embeddings.append(embeddings.cpu())
 
         return torch.cat(all_embeddings, dim=0)
+
+    def get_audio_embeddings_per_frame(
+        self, audio: AudioBatch, **kwargs: Any
+    ) -> torch.Tensor:
+        processed_audio = self._process_audio(audio)
+        all_embeddings = []
+
+        for i in range(0, len(processed_audio), self.batch_size):
+            batch = processed_audio[i : i + self.batch_size]
+            inputs = self.feature_extractor(
+                batch, return_tensors="pt", padding=True
+            ).to(self.device)
+
+            outputs = self.model(**inputs, output_hidden_states=True)
+            hidden_states = outputs.hidden_states[-1]
+
+            for i in range(hidden_states.size(0)):
+                seq_len = inputs.attention_mask[i].sum().item()
+                embeddings = hidden_states[i, :seq_len].cpu()
+                all_embeddings.append(embeddings)
+
+        return all_embeddings
 
     def encode(
         self,
