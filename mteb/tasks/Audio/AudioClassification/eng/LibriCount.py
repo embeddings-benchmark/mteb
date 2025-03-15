@@ -27,7 +27,7 @@ class LibriCount(AbsTaskAudioClassification):
         annotations_creators="algorithmic",  # VAD (Voice Activity Detection) algo
         dialect=[],
         modalities=["audio"],
-        sample_creation="created",   # from LibriSpeech dataset
+        sample_creation="created",  # from LibriSpeech dataset
         bibtex_citation="""@inproceedings{Stoter_2018,
             title={Classification vs. Regression in Supervised Learning for Single Channel Speaker Count Estimation},
             url={http://dx.doi.org/10.1109/ICASSP.2018.8462159},

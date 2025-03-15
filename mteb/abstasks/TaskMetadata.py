@@ -195,12 +195,9 @@ ANNOTATOR_TYPE = Literal[
     "derived",
     "LM-generated",
     "LM-generated and reviewed",  # reviewed by humans
-<<<<<<< HEAD
     "automatic",  # any postprocessing using (Audio/Image/Video) models
     "automatic-and-reviewed",  # mix of automated postprocessing and human-based verification
-=======
     "algorithmic"
->>>>>>> add libricount
 ]
 
 SPLIT_NAME = str
