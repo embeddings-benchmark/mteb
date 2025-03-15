@@ -656,7 +656,9 @@ class VaaniLanguageDetection(AbsTaskAudioMultilabelClassification, MultilingualT
 
     def dataset_transform(self):
         for subset in self.hf_subsets:
-            self.dataset[subset]= self.dataset[subset].cast_column(self.audio_column_name, Audio(16_000))
+            self.dataset[subset] = self.dataset[subset].cast_column(
+                self.audio_column_name, Audio(16_000)
+            )
             self.dataset[subset] = self.dataset[subset].map(
                 lambda x: {
                     self.label_column_name: literal_eval(x[self.label_column_name])
