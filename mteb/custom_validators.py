@@ -39,7 +39,6 @@ LICENSES = (  # this list can be extended as needed
         "cc0-1.0",
         "bsd-3-clause",
         "gpl-3.0",
-        "gemma",
         "lgpl",
         "lgpl-3.0",
         "cdla-sharing-1.0",

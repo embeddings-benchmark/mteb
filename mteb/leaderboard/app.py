@@ -23,8 +23,12 @@ from mteb.languages import ISO_TO_LANGUAGE
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
 from mteb.leaderboard.table import scores_to_tables
 
-logging.getLogger("mteb.load_results.task_results").setLevel(logging.ERROR)
-logging.getLogger("mteb.models.overview").setLevel(logging.WARNING)
+logging.getLogger("mteb.load_results.task_results").setLevel(
+    logging.WARNING
+)  # Warnings related to task split
+logging.getLogger("mteb.models.overview").setLevel(
+    logging.WARNING
+)  # Warning related to model metadata (fetch_from_hf=True)
 warnings.filterwarnings("ignore", message="Couldn't get scores for .* due to .*")
 logger = logging.getLogger(__name__)
 
