@@ -42,16 +42,16 @@ stella_zh_datasets = {
 # https://huggingface.co/datasets/m-a-p/Matrix
 
 stella_en_400M = ModelMeta(
-    # https://huggingface.co/dunzhang/stella_en_400M_v5/discussions/21#671a6205ac1e2416090f2bf4
+    # https://huggingface.co/NovaSearch/stella_en_400M_v5/discussions/21#671a6205ac1e2416090f2bf4
     loader=partial(  # type: ignore
         instruct_wrapper,
-        model_name_or_path="dunzhang/stella_en_400M_v5",
+        model_name_or_path="NovaSearch/stella_en_400M_v5",
         attn="cccc",
         pooling_method="lasttoken",
         mode="embedding",
         torch_dtype="auto",
     ),
-    name="dunzhang/stella_en_400M_v5",
+    name="NovaSearch/stella_en_400M_v5",
     languages=["eng_Latn"],
     open_weights=True,
     use_instructions=True,
@@ -64,7 +64,7 @@ stella_en_400M = ModelMeta(
     license="mit",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch", "GritLM"],
-    reference="https://huggingface.co/dunzhang/stella_en_400M_v5",
+    reference="https://huggingface.co/NovaSearch/stella_en_400M_v5",
     training_datasets=nvidia_training_datasets,  # also distilled from gte-qwen (but training data is unknown) #2164
     public_training_code="https://github.com/NovaSearch-Team/RAG-Retrieval/blob/c40f4638b705eb77d88305d2056901ed550f9f4b/rag_retrieval/train/embedding/README.md",
     public_training_data=None,
@@ -73,13 +73,13 @@ stella_en_400M = ModelMeta(
 stella_en_1_5b = ModelMeta(
     loader=partial(  # type: ignore
         instruct_wrapper,
-        model_name_or_path="dunzhang/stella_en_1.5B_v5",
+        model_name_or_path="NovaSearch/stella_en_1.5B_v5",
         attn="cccc",
         pooling_method="lasttoken",
         mode="embedding",
         torch_dtype="auto",
     ),
-    name="dunzhang/stella_en_1.5B_v5",
+    name="NovaSearch/stella_en_1.5B_v5",
     languages=["eng_Latn"],
     open_weights=True,
     use_instructions=True,
@@ -92,7 +92,7 @@ stella_en_1_5b = ModelMeta(
     license="mit",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch", "GritLM"],
-    reference="https://huggingface.co/dunzhang/stella_en_1.5B_v5",
+    reference="https://huggingface.co/NovaSearch/stella_en_1.5B_v5",
     training_datasets=nvidia_training_datasets,  # also distilled from gte-qwen (but training data is unknown) #2164
     public_training_code="https://github.com/NovaSearch-Team/RAG-Retrieval/blob/c40f4638b705eb77d88305d2056901ed550f9f4b/rag_retrieval/train/embedding/README.md",
     public_training_data=None,
