@@ -16,7 +16,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 # bearibashe and khadiboli are classed as Malayalam and Hindi respectively
 class VaaniLanguageDetection(AbsTaskAudioMultilabelClassification, MultilingualTask):
     metadata = TaskMetadata(
-        name="IISc-Vaani",
+        name="IISc-Vaani-Language-Detection",
         description="Multilingual Language Detection - Multilabel Speech Classification.",
         reference="https://huggingface.co/datasets/ARTPARK-IISc/Vaani",
         dataset={
