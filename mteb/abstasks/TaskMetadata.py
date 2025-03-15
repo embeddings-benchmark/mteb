@@ -95,7 +95,7 @@ TASK_DOMAIN = Literal[
     "Chemistry",
     "Financial",
     "Music",
-    "Speech"
+    "Speech",
 ]
 
 SAMPLE_CREATION_METHOD = Literal[
@@ -197,7 +197,7 @@ ANNOTATOR_TYPE = Literal[
     "LM-generated and reviewed",  # reviewed by humans
     "automatic",  # any postprocessing using (Audio/Image/Video) models
     "automatic-and-reviewed",  # mix of automated postprocessing and human-based verification
-    "algorithmic"
+    "algorithmic",
 ]
 
 SPLIT_NAME = str
