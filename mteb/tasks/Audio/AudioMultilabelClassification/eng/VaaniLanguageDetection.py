@@ -657,5 +657,5 @@ class VaaniLanguageDetection(AbsTaskAudioMultilabelClassification, MultilingualT
                 seed=self.seed,
                 splits=["train"],
                 label=self.label_column_name,
-                samples_per_label=self.samples_per_label,
+                n_samples=self.samples_per_label,
             )
