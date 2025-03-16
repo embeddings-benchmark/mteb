@@ -3,7 +3,7 @@ from __future__ import annotations
 from functools import partial
 
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
 
 
@@ -41,7 +41,7 @@ vdr_2b_multi_v1 = ModelMeta(
     embed_dim=1536,
     license="apache-2.0",
     reference="https://huggingface.co/llamaindex/vdr-2b-multi-v1",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch", "Sentence Transformers"],
     use_instructions=True,
     public_training_code=None,

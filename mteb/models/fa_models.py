@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 
 parsbert = ModelMeta(
     name="HooshvareLab/bert-base-parsbert-uncased",
@@ -16,7 +16,7 @@ parsbert = ModelMeta(
     license="not specified",
     max_tokens=512,
     reference="https://huggingface.co/HooshvareLab/bert-base-parsbert-uncased",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -41,7 +41,7 @@ bert_zwnj = ModelMeta(
     license="not specified",
     max_tokens=512,
     reference="https://huggingface.co/m3hrdadfi/bert-zwnj-wnli-mean-tokens",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -65,7 +65,7 @@ roberta_zwnj = ModelMeta(
     license="not specified",
     max_tokens=514,
     reference="https://huggingface.co/m3hrdadfi/roberta-zwnj-wnli-mean-tokens",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -88,7 +88,7 @@ sentence_transformer_parsbert = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/myrkur/sentence-transformer-parsbert-fa",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -111,7 +111,7 @@ tooka_bert_base = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/PartAI/TookaBERT-Base",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -136,7 +136,7 @@ tooka_sbert = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/PartAI/Tooka-SBERT",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -158,7 +158,7 @@ fa_bert = ModelMeta(
     license="not specified",
     max_tokens=512,
     reference="https://huggingface.co/sbunlp/fabert",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,

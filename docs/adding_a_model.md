@@ -18,7 +18,7 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
        license="mit",
        max_tokens=8194,
        reference="https://huggingface.co/BAAI/bge-m3",
-       similarity_fn_name="cosine",
+       similarity_fn_name=ScoringFunction.COSINE,
        framework=["Sentence Transformers", "PyTorch"],
        use_instructions=False,
        public_training_code=None,

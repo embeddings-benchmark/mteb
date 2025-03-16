@@ -15,6 +15,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from torch.utils.data import DataLoader
 
 from mteb.encoder_interface import Encoder
+from mteb.model_meta import ScoringFunction
 
 from .Evaluator import Evaluator
 
@@ -70,7 +71,10 @@ class kNNClassificationEvaluator(Evaluator):
 
         y_train = self.train_dataset["label"]
         y_test = self.eval_dataset["label"]
-        for metric in ["cosine", "euclidean"]:  # TODO: "dot"
+        for metric in [
+            ScoringFunction.COSINE,
+            ScoringFunction.EUCLIDEAN,
+        ]:  # TODO: "dot"
             knn = KNeighborsClassifier(n_neighbors=self.k, n_jobs=-1, metric=metric)
             knn.fit(X_train, y_train)
             y_pred = knn.predict(X_test)

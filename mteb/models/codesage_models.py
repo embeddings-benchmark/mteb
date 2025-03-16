@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from functools import partial
 
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import ModelMeta, ScoringFunction, sentence_transformers_loader
 
 codesage_languages = [
     "python-Code",
@@ -34,7 +34,7 @@ codesage_large = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/codesage/codesage-large-v2",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         "CodeSearchNetRetrieval": ["train"],
@@ -63,7 +63,7 @@ codesage_base = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/codesage/codesage-base-v2",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         "CodeSearchNetRetrieval": ["train"],
@@ -92,7 +92,7 @@ codesage_small = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/codesage/codesage-small-v2",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         "CodeSearchNetRetrieval": ["train"],

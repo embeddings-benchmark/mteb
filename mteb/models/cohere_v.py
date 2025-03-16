@@ -14,7 +14,7 @@ from torchvision import transforms
 from tqdm import tqdm
 
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 
 api_key = os.getenv("COHERE_API_KEY")
 tensor_to_image = transforms.Compose([transforms.ToPILImage()])
@@ -191,7 +191,7 @@ cohere_mult_3 = ModelMeta(
     max_tokens=None,
     embed_dim=1024,
     license=None,
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=[],
     modalities=["image", "text"],
     open_weights=False,
@@ -213,7 +213,7 @@ cohere_eng_3 = ModelMeta(
     max_tokens=None,
     embed_dim=1024,
     license=None,
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=[],
     modalities=["image", "text"],
     open_weights=False,

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from functools import partial
 
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import ModelMeta, ScoringFunction, sentence_transformers_loader
 
 mini_gte_datasets = {
     "MSMARCO": ["train"],
@@ -42,7 +42,7 @@ mini_gte = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/prdev/mini-gte",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,

@@ -12,7 +12,7 @@ from torchvision import transforms
 from tqdm import tqdm
 
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 
 api_key = os.getenv("VOYAGE_API_KEY")
 tensor_to_image = transforms.Compose([transforms.ToPILImage()])
@@ -251,7 +251,7 @@ voyage_v = ModelMeta(
     max_tokens=32768,
     embed_dim=1024,
     license="mit",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     modalities=["image", "text"],
     open_weights=False,

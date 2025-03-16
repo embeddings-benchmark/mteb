@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.no_model_implementation import no_model_implementation_available
 
 sonar_langs = [
@@ -223,7 +223,7 @@ sonar = ModelMeta(
     embed_dim=1024,
     license="mit",
     memory_usage_mb=None,
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch"],
     reference="https://ai.meta.com/research/publications/sonar-sentence-level-multimodal-and-language-agnostic-representations/",
     training_datasets={

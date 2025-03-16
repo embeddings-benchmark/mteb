@@ -13,6 +13,7 @@ from sklearn.metrics.pairwise import (
 )
 
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
+from mteb.model_meta import ScoringFunction
 
 from ...create_dataloaders import create_dataloader_from_texts
 from .Evaluator import Evaluator
@@ -142,11 +143,26 @@ class PairClassificationEvaluator(Evaluator):
         output_scores = {}
         max_scores = defaultdict(list)
         for short_name, name, scores, reverse in [
-            ["similarity", "Model-Specified Similarity", similarity_scores, True],
-            ["cosine", "Cosine-Similarity", cosine_scores, True],
-            ["manhattan", "Manhattan-Distance", manhattan_distances, False],
-            ["euclidean", "Euclidean-Distance", euclidean_distances, False],
-            ["dot", "Dot-Product", dot_scores, True],
+            [
+                ScoringFunction.MODEL_SPECIFIC,
+                "Model-Specified Similarity",
+                similarity_scores,
+                True,
+            ],
+            [ScoringFunction.COSINE, "Cosine-Similarity", cosine_scores, True],
+            [
+                ScoringFunction.MANHATTAN,
+                "Manhattan-Distance",
+                manhattan_distances,
+                False,
+            ],
+            [
+                ScoringFunction.EUCLIDEAN,
+                "Euclidean-Distance",
+                euclidean_distances,
+                False,
+            ],
+            [ScoringFunction.DOT_PRODUCT, "Dot-Product", dot_scores, True],
         ]:
             metrics = self._compute_metrics(scores, labels, reverse)
             for metric_name, metric_value in metrics.items():

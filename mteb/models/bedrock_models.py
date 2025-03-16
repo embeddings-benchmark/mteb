@@ -11,7 +11,7 @@ import tqdm
 from torch.utils.data import DataLoader
 
 from mteb.encoder_interface import BatchedInput, PromptType
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.cohere_models import model_prompts as cohere_model_prompts
 from mteb.models.cohere_models import supported_languages as cohere_supported_languages
 from mteb.models.wrapper import Wrapper
@@ -181,7 +181,7 @@ amazon_titan_embed_text_v1 = ModelMeta(
     training_datasets=None,
     license=None,
     reference="https://aws.amazon.com/about-aws/whats-new/2023/09/amazon-titan-embeddings-generally-available/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=False,
 )
@@ -207,7 +207,7 @@ amazon_titan_embed_text_v2 = ModelMeta(
     training_datasets=None,
     license=None,
     reference="https://aws.amazon.com/about-aws/whats-new/2024/04/amazon-titan-text-embeddings-v2-amazon-bedrock/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=False,
 )
@@ -236,7 +236,7 @@ cohere_embed_english_v3 = ModelMeta(
     max_tokens=512,
     embed_dim=1024,
     license=None,
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
 )
@@ -263,7 +263,7 @@ cohere_embed_multilingual_v3 = ModelMeta(
     max_tokens=512,
     embed_dim=1024,
     license=None,
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
 )

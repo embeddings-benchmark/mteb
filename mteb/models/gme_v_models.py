@@ -13,7 +13,7 @@ from tqdm.autonotebook import tqdm
 from transformers import AutoModelForVision2Seq, AutoProcessor
 
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.wrapper import Wrapper
 
 logging.basicConfig(level=logging.WARNING)
@@ -427,7 +427,7 @@ gme_qwen2vl_2b = ModelMeta(
     license="apache-2.0",
     max_tokens=32768,
     reference="https://huggingface.co/" + HF_GME_QWEN2VL_2B,
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch"],
     use_instructions=True,
     public_training_code=None,
@@ -452,7 +452,7 @@ gme_qwen2vl_7b = ModelMeta(
     license="apache-2.0",
     max_tokens=32768,
     reference="https://huggingface.co/" + HF_GME_QWEN2VL_2B,
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch"],
     use_instructions=True,
     public_training_code=None,
