@@ -15,7 +15,7 @@ class VehicleSoundClustering(AbsTaskAudioClustering):
         },
         type="AudioClustering",
         category="a2a",
-        eval_splits=["train"],
+        eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="cluster_accuracy",
         date=("2024-06-20", "2024-06-20"),
@@ -34,12 +34,9 @@ class VehicleSoundClustering(AbsTaskAudioClustering):
             title = {An auditory dataset of passing vehicles recorded with a smartphone}
         }""",
         descriptive_stats={
-            "n_samples": {"train": 1705},
+            "n_samples": {"test": 1705},
         },
     )
 
     audio_column_name: str = "audio"
     label_column_name: str = "label"
-
-    def dataset_transform(self):
-        self.dataset["train"] = self.dataset.pop("test")
