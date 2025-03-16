@@ -65,6 +65,9 @@ TASK_SUBTYPE = Literal[
     "Tonic Classification of Musical Instrument",
     "Gender Clustering",
     "Rendered semantic textual similarity",
+    "Sentiment Analysis",
+    "Intent Classification",
+    "Vehicle Clustering",
 ]
 
 TASK_DOMAIN = Literal[
