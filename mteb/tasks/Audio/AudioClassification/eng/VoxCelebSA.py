@@ -52,11 +52,4 @@ class VoxCelebSA(AbsTaskAudioClassification):
     def dataset_transform(self):
         ## remove disagreement data
         self.dataset = self.dataset.filter(lambda x: x["label"] != "Disagreement")
-
-        ## map labels to ids
-        labels = ["Positive", "Negative", "Neutral", "<mixed>"]
-        label2id = {i: j for j, i in enumerate(labels)}
-
-        self.dataset = self.dataset.map(lambda x: {"label": label2id[x["label"]]})
-
         self.dataset["train"] = self.dataset.pop("test")

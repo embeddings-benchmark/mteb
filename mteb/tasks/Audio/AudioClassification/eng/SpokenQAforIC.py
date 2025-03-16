@@ -48,21 +48,6 @@ class SpokenQAforIC(AbsTaskAudioClassification):
     is_cross_validation: bool = True
 
     def dataset_transform(self):
-        ## map labels to ids
-        labels = [
-            "reset password",
-            "order checks",
-            "schedule appointment",
-            "check balance",
-            "replace card",
-            "get branch hours",
-            "transfer money",
-            "pay bill",
-        ]
-
-        label2id = {i: j for j, i in enumerate(labels)}
-
-        self.dataset = self.dataset.map(lambda x: {"label": label2id[x["label"]]})
 
         ## required to run the dataloader for cross-validation
         import torch
