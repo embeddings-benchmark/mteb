@@ -48,7 +48,6 @@ class SpokenQAforIC(AbsTaskAudioClassification):
     is_cross_validation: bool = True
 
     def dataset_transform(self):
-
         ## required to run the dataloader for cross-validation
         import torch
 
