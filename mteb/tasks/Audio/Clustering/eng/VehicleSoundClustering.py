@@ -42,4 +42,4 @@ class VehicleSoundClustering(AbsTaskAudioClustering):
     label_column_name: str = "label"
 
     def dataset_transform(self):
-        self.dataset['train'] = self.dataset.pop('test')
+        self.dataset["train"] = self.dataset.pop("test")

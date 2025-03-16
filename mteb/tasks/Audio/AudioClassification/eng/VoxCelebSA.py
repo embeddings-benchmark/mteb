@@ -38,7 +38,9 @@ class VoxCelebSA(AbsTaskAudioClassification):
             url={https://arxiv.org/abs/2111.10367}, 
         }""",
         descriptive_stats={
-            "n_samples": {"train": 3449}, # after removing Disagreement data (before: 3553)
+            "n_samples": {
+                "train": 3449
+            },  # after removing Disagreement data (before: 3553)
         },
     )
 
@@ -48,14 +50,13 @@ class VoxCelebSA(AbsTaskAudioClassification):
     is_cross_validation: bool = True
 
     def dataset_transform(self):
-        ## remove disagreement data 
-        self.dataset = self.dataset.filter(lambda x: x['label']!='Disagreement')
+        ## remove disagreement data
+        self.dataset = self.dataset.filter(lambda x: x["label"] != "Disagreement")
 
         ## map labels to ids
-        labels = ['Positive', 'Negative', 'Neutral', '<mixed>']
-        label2id = {i:j for j,i in enumerate(labels)}
+        labels = ["Positive", "Negative", "Neutral", "<mixed>"]
+        label2id = {i: j for j, i in enumerate(labels)}
 
-        self.dataset = self.dataset.map(
-            lambda x: {"label": label2id[x["label"]]})
-        
-        self.dataset['train'] = self.dataset.pop('test')
+        self.dataset = self.dataset.map(lambda x: {"label": label2id[x["label"]]})
+
+        self.dataset["train"] = self.dataset.pop("test")
