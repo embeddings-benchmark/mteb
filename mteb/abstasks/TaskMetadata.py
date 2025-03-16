@@ -66,6 +66,8 @@ TASK_SUBTYPE = Literal[
     "Speaker Count Identification",
     "Gender Clustering",
     "Rendered semantic textual similarity",
+    "Gender Classification",
+    "Age Classification",
 ]
 
 TASK_DOMAIN = Literal[
