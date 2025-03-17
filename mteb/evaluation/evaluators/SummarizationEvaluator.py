@@ -11,6 +11,7 @@ from scipy.stats import pearsonr, spearmanr
 
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
 
+from ...create_dataloaders import create_dataloader_from_texts
 from .Evaluator import Evaluator
 from .utils import cos_sim, dot_score
 
@@ -26,24 +27,24 @@ logger = logging.getLogger(__name__)
 class SummarizationEvaluator(Evaluator):
     def __init__(
         self,
-        task_name: str | None = None,
-        human_summaries=None,
-        machine_summaries=None,
-        texts=None,
-        gold_scores=None,
-        limit: int | None = None,
+        human_summaries: list[list[str]],
+        machine_summaries: list[list[str]],
+        texts: list[str],
+        gold_scores: list[list[float]],
+        task_name: str,
         **kwargs,
     ):
-        # human_summaries shape: (None, num_human_summaries)
-        # machine_summaries shape: (None, num_machine_summaries)
-        # gold scores shape: (None, num_machine_summaries)
-        # texts: (None,)
+        """Summarization Evaluator
+
+        Args:
+        human_summaries: shape: (-1, num_human_summaries)
+        machine_summaries: shape: (-1, num_machine_summaries)
+        texts: shape: (-1,)
+        gold_scores: shape: (-1, num_machine_summaries)
+        task_name: Name of the task
+        **kwargs: Additional arguments to pass to the Evaluator
+        """
         super().__init__(**kwargs)
-        if limit is not None:
-            human_summaries = human_summaries[:limit]
-            machine_summaries = machine_summaries[:limit]
-            gold_scores = gold_scores[:limit]
-            texts = texts[:limit]
         self.human_summaries = human_summaries
         self.machine_summaries = machine_summaries
         self.texts = texts
@@ -75,22 +76,26 @@ class SummarizationEvaluator(Evaluator):
 
         logger.info("Encoding human summaries...")
         embs_human_summaries_all = model.encode(
-            [
-                summary
-                for human_summaries in self.human_summaries
-                for summary in human_summaries
-            ],
+            create_dataloader_from_texts(
+                [
+                    summary
+                    for human_summaries in self.human_summaries
+                    for summary in human_summaries
+                ]
+            ),
             task_name=self.task_name,
             **encode_kwargs,
         )
 
         logger.info("Encoding machine summaries...")
         embs_machine_summaries_all = model.encode(
-            [
-                summary
-                for machine_summaries in self.machine_summaries
-                for summary in machine_summaries
-            ],
+            create_dataloader_from_texts(
+                [
+                    summary
+                    for machine_summaries in self.machine_summaries
+                    for summary in machine_summaries
+                ]
+            ),
             task_name=self.task_name,
             **encode_kwargs,
         )
@@ -234,22 +239,26 @@ class DeprecatedSummarizationEvaluator(Evaluator):
 
         logger.info("Encoding human summaries...")
         embs_human_summaries_all = model.encode(
-            [
-                summary
-                for human_summaries in self.human_summaries
-                for summary in human_summaries
-            ],
+            create_dataloader_from_texts(
+                [
+                    summary
+                    for human_summaries in self.human_summaries
+                    for summary in human_summaries
+                ]
+            ),
             task_name=self.task_name,
             **encode_kwargs,
         )
 
         logger.info("Encoding machine summaries...")
         embs_machine_summaries_all = model.encode(
-            [
-                summary
-                for machine_summaries in self.machine_summaries
-                for summary in machine_summaries
-            ],
+            create_dataloader_from_texts(
+                [
+                    summary
+                    for machine_summaries in self.machine_summaries
+                    for summary in machine_summaries
+                ]
+            ),
             task_name=self.task_name,
             **encode_kwargs,
         )

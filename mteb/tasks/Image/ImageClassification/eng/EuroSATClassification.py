@@ -14,7 +14,7 @@ class EuroSATClassification(AbsTaskImageClassification):
             "revision": "b4e28552cd5f3932b6abc37eb20d3e84901ad728",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -40,8 +40,4 @@ class EuroSATClassification(AbsTaskImageClassification):
         keywords={Satellites;Earth;Remote sensing;Machine learning;Spatial resolution;Feature extraction;Benchmark testing;Dataset;deep convolutional neural network;deep learning;earth observation;land cover classification;land use classification;machine learning;remote sensing;satellite image classification;satellite images},
         doi={10.1109/JSTARS.2019.2918242}}
         """,
-        descriptive_stats={
-            "n_samples": {"test": 5400},
-            "avg_character_length": {"test": 431.4},
-        },
     )

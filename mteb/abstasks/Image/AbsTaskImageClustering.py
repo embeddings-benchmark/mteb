@@ -52,7 +52,7 @@ class AbsTaskImageClustering(AbsTask):
     """Abstract class for Clustering tasks
     The similarity is computed between pairs and the results are ranked.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns:
         image: Image.Image
         label: int
     """
@@ -115,8 +115,9 @@ class AbsTaskImageClustering(AbsTask):
         **kwargs,
     ) -> ScoresDict:
         evaluator = ImageClusteringEvaluator(
-            dataset[self.image_column_name],
-            dataset[self.label_column_name],
+            dataset,
+            image_column_name=self.image_column_name,
+            label_column_name=self.label_column_name,
             task_name=self.metadata.name,
             **kwargs,
         )

@@ -1,51 +1,129 @@
 from __future__ import annotations
 
-from .eng.BLINKIT2IRetrieval import *
-from .eng.BLINKIT2TRetrieval import *
-from .eng.CIRRIT2IRetrieval import *
-from .eng.CUB200I2IRetrieval import *
-from .eng.EDIST2ITRetrieval import *
-from .eng.EncyclopediaVQAIT2ITRetrieval import *
-from .eng.Fashion200kI2TRetrieval import *
-from .eng.Fashion200kT2IRetrieval import *
-from .eng.FashionIQIT2IRetrieval import *
-from .eng.Flickr30kI2TRetrieval import *
-from .eng.Flickr30kT2IRetrieval import *
-from .eng.FORBI2IRetrieval import *
-from .eng.GLDv2I2IRetrieval import *
-from .eng.GLDv2I2TRetrieval import *
-from .eng.HatefulMemesI2TRetrieval import *
-from .eng.HatefulMemesT2IRetrieval import *
-from .eng.ImageCoDeT2IRetrieval import *
-from .eng.InfoSeekIT2ITRetrieval import *
-from .eng.InfoSeekIT2TRetrieval import *
-from .eng.LLaVAIT2TRetrieval import *
-from .eng.MemotionI2TRetrieval import *
-from .eng.MemotionT2IRetrieval import *
-from .eng.METI2IRetrieval import *
-from .eng.MSCOCOI2TRetrieval import *
-from .eng.MSCOCOT2IRetrieval import *
-from .eng.NIGHTSI2IRetrieval import *
-from .eng.OKVQAIT2TRetrieval import *
-from .eng.OVENIT2ITRetrieval import *
-from .eng.OVENIT2TRetrieval import *
-from .eng.ReMuQIT2TRetrieval import *
-from .eng.ROxfordI2IRetrieval import *
-from .eng.RP2kI2IRetrieval import *
-from .eng.RParisI2IRetrieval import *
-from .eng.SciMMIRI2TRetrieval import *
-from .eng.SciMMIRT2IRetrieval import *
-from .eng.SketchyI2IRetrieval import *
-from .eng.SOPI2IRetrieval import *
-from .eng.StanfordCarsI2IRetrieval import *
-from .eng.TUBerlinT2IRetrieval import *
-from .eng.VidoreBenchRetrieval import *
-from .eng.VisualNewsI2TRetrieval import *
-from .eng.VisualNewsT2IRetrieval import *
-from .eng.VizWizIT2TRetrieval import *
-from .eng.VQA2IT2TRetrieval import *
-from .eng.WebQAT2ITRetrieval import *
-from .eng.WebQAT2TRetrieval import *
-from .multilingual.WITT2IRetrieval import *
-from .multilingual.XFlickr30kCoT2IRetrieval import *
-from .multilingual.XM3600T2IRetrieval import *
+from .eng import (
+    CUB200I2I,
+    FORBI2I,
+    BLINKIT2IRetrieval,
+    BLINKIT2TRetrieval,
+    CIRRIT2IRetrieval,
+    EDIST2ITRetrieval,
+    EncyclopediaVQAIT2ITRetrieval,
+    Fashion200kI2TRetrieval,
+    Fashion200kT2IRetrieval,
+    FashionIQIT2IRetrieval,
+    Flickr30kI2TRetrieval,
+    Flickr30kT2IRetrieval,
+    GLDv2I2IRetrieval,
+    GLDv2I2TRetrieval,
+    HatefulMemesI2TRetrieval,
+    HatefulMemesT2IRetrieval,
+    ImageCoDeT2IRetrieval,
+    InfoSeekIT2ITRetrieval,
+    InfoSeekIT2TRetrieval,
+    LLaVAIT2TRetrieval,
+    MemotionI2TRetrieval,
+    MemotionT2IRetrieval,
+    METI2IRetrieval,
+    MSCOCOI2TRetrieval,
+    MSCOCOT2IRetrieval,
+    NIGHTSI2IRetrieval,
+    OKVQAIT2TRetrieval,
+    OVENIT2ITRetrieval,
+    OVENIT2TRetrieval,
+    ReMuQIT2TRetrieval,
+    ROxfordEasyI2IRetrieval,
+    ROxfordHardI2IRetrieval,
+    ROxfordMediumI2IRetrieval,
+    RP2kI2IRetrieval,
+    RParisEasyI2IRetrieval,
+    RParisHardI2IRetrieval,
+    RParisMediumI2IRetrieval,
+    SciMMIRI2TRetrieval,
+    SciMMIRT2IRetrieval,
+    SketchyI2IRetrieval,
+    SOPI2IRetrieval,
+    StanfordCarsI2I,
+    TUBerlinT2IRetrieval,
+    VidoreArxivQARetrieval,
+    VidoreDocVQARetrieval,
+    VidoreInfoVQARetrieval,
+    VidoreShiftProjectRetrieval,
+    VidoreSyntheticDocQAAIRetrieval,
+    VidoreSyntheticDocQAEnergyRetrieval,
+    VidoreSyntheticDocQAGovernmentReportsRetrieval,
+    VidoreSyntheticDocQAHealthcareIndustryRetrieval,
+    VidoreTabfquadRetrieval,
+    VidoreTatdqaRetrieval,
+    VisualNewsI2TRetrieval,
+    VisualNewsT2IRetrieval,
+    VizWizIT2TRetrieval,
+    VQA2IT2TRetrieval,
+    WebQAT2ITRetrieval,
+    WebQAT2TRetrieval,
+)
+from .multilingual import WITT2IRetrieval, XFlickr30kCoT2IRetrieval, XM3600T2IRetrieval
+
+__all__ = [
+    "MemotionI2TRetrieval",
+    "BLINKIT2TRetrieval",
+    "InfoSeekIT2ITRetrieval",
+    "ReMuQIT2TRetrieval",
+    "VisualNewsT2IRetrieval",
+    "Fashion200kI2TRetrieval",
+    "CUB200I2I",
+    "SciMMIRT2IRetrieval",
+    "RP2kI2IRetrieval",
+    "Flickr30kI2TRetrieval",
+    "OVENIT2TRetrieval",
+    "VizWizIT2TRetrieval",
+    "BLINKIT2IRetrieval",
+    "WebQAT2TRetrieval",
+    "GLDv2I2IRetrieval",
+    "MemotionT2IRetrieval",
+    "SketchyI2IRetrieval",
+    "Fashion200kT2IRetrieval",
+    "ROxfordEasyI2IRetrieval",
+    "ROxfordHardI2IRetrieval",
+    "ROxfordMediumI2IRetrieval",
+    "EncyclopediaVQAIT2ITRetrieval",
+    "VidoreArxivQARetrieval",
+    "VidoreDocVQARetrieval",
+    "VidoreInfoVQARetrieval",
+    "VidoreShiftProjectRetrieval",
+    "VidoreSyntheticDocQAAIRetrieval",
+    "VidoreSyntheticDocQAEnergyRetrieval",
+    "VidoreSyntheticDocQAGovernmentReportsRetrieval",
+    "VidoreSyntheticDocQAHealthcareIndustryRetrieval",
+    "VidoreTabfquadRetrieval",
+    "VidoreTatdqaRetrieval",
+    "CIRRIT2IRetrieval",
+    "METI2IRetrieval",
+    "StanfordCarsI2I",
+    "MSCOCOT2IRetrieval",
+    "VisualNewsI2TRetrieval",
+    "FORBI2I",
+    "Flickr30kT2IRetrieval",
+    "WebQAT2ITRetrieval",
+    "SOPI2IRetrieval",
+    "NIGHTSI2IRetrieval",
+    "EDIST2ITRetrieval",
+    "LLaVAIT2TRetrieval",
+    "OVENIT2ITRetrieval",
+    "InfoSeekIT2TRetrieval",
+    "HatefulMemesT2IRetrieval",
+    "HatefulMemesI2TRetrieval",
+    "TUBerlinT2IRetrieval",
+    "RParisEasyI2IRetrieval",
+    "RParisHardI2IRetrieval",
+    "RParisMediumI2IRetrieval",
+    "GLDv2I2TRetrieval",
+    "MSCOCOI2TRetrieval",
+    "ImageCoDeT2IRetrieval",
+    "FashionIQIT2IRetrieval",
+    "OKVQAIT2TRetrieval",
+    "SciMMIRI2TRetrieval",
+    "VQA2IT2TRetrieval",
+    "XFlickr30kCoT2IRetrieval",
+    "WITT2IRetrieval",
+    "XM3600T2IRetrieval",
+]

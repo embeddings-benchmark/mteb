@@ -1,14 +1,11 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Annotated
+from typing import Annotated
 
 from pydantic import AnyUrl, BeforeValidator, TypeAdapter
 
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.overview import MTEBTasks, get_task, get_tasks
-
-if TYPE_CHECKING:
-    pass
 
 http_url_adapter = TypeAdapter(AnyUrl)
 UrlString = Annotated[
@@ -737,6 +734,7 @@ MTEB_multilingual = Benchmark(
             "SpartQA",
             "TempReasonL1",
             "TRECCOVID",
+            "CUREv1",
             "WinoGrande",
             "BelebeleRetrieval",
             "MLQARetrieval",
@@ -1652,6 +1650,73 @@ MIEB_LITE = Benchmark(
     reference="",
     contacts=["gowitheflow-1998", "isaac-chung"],
     citation="",
+)
+
+BEIR_PL = Benchmark(
+    name="BEIR-PL",
+    tasks=get_tasks(
+        languages=["pol"],
+        tasks=[
+            "MSMARCO-PL",
+            "TRECCOVID-PL",
+            "NFCorpus-PL",
+            "NQ-PL",
+            "HotpotQA-PL",
+            "FiQA-PL",
+            "ArguAna-PL",
+            "Touche2020-PL",
+            "CQADupstackRetrieval-PL",
+            "Quora-PL",
+            "DBPedia-PL",
+            "SCIDOCS-PL",
+            "SciFact-PL",
+        ],
+        eval_splits=["test"],
+    ),
+    description="BEIR-PL is a benchmark for evaluating text embedding models on Polish language data.",
+    reference="https://arxiv.org/abs/2305.19840",
+    citation="""
+    @misc{wojtasik2024beirplzeroshotinformation,
+          title={BEIR-PL: Zero Shot Information Retrieval Benchmark for the Polish Language},
+          author={Konrad Wojtasik and Vadim Shishkin and Kacper Wołowiec and Arkadiusz Janz and Maciej Piasecki},
+          year={2024},
+          eprint={2305.19840},
+          archivePrefix={arXiv},
+          primaryClass={cs.IR},
+          url={https://arxiv.org/abs/2305.19840},
+}""",
+)
+
+MTEB_LOTTE = Benchmark(
+    name="LoTTE",
+    tasks=MTEBTasks(get_tasks(tasks=["LoTTE"], eval_splits=["dev"])),
+    description=(
+        "LoTTE (Long-Tail Topic-stratified Evaluation for IR) is designed to evaluate retrieval models "
+        "on underrepresented, long-tail topics. Unlike MSMARCO or BEIR, LoTTE features domain-specific queries and "
+        "passages from StackExchange (covering writing, recreation, science, technology, and lifestyle), providing "
+        "a challenging out-of-domain generalization benchmark."
+    ),
+    reference="https://github.com/stanford-futuredata/ColBERT/blob/main/LoTTE.md",
+    citation="""@inproceedings{santhanam-etal-2022-colbertv2,
+        title = "{C}ol{BERT}v2: Effective and Efficient Retrieval via Lightweight Late Interaction",
+        author = "Santhanam, Keshav  and
+          Khattab, Omar  and
+          Saad-Falcon, Jon  and
+          Potts, Christopher  and
+          Zaharia, Matei",
+        editor = "Carpuat, Marine  and
+          de Marneffe, Marie-Catherine  and
+          Meza Ruiz, Ivan Vladimir",
+        booktitle = "Proceedings of the 2022 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies",
+        month = jul,
+        year = "2022",
+        address = "Seattle, United States",
+        publisher = "Association for Computational Linguistics",
+        url = "https://aclanthology.org/2022.naacl-main.272/",
+        doi = "10.18653/v1/2022.naacl-main.272",
+        pages = "3715--3734",
+    }""",
+    contacts=["agu18dec"],
 )
 
 BUILT_MTEB = Benchmark(

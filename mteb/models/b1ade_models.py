@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import ModelMeta
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 b1ade_training_data = {
     # We are in teh process of submitting a paper outlining our process of creating b1ade using model merging and knowledge distillation.

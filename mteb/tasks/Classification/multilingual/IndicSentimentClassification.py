@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -21,7 +20,7 @@ _LANGUAGES = {
 }
 
 
-class IndicSentimentClassification(MultilingualTask, AbsTaskClassification):
+class IndicSentimentClassification(AbsTaskClassification):
     fast_loading = True
     metadata = TaskMetadata(
         name="IndicSentimentClassification",
@@ -31,7 +30,7 @@ class IndicSentimentClassification(MultilingualTask, AbsTaskClassification):
         },
         description="A new, multilingual, and n-way parallel dataset for sentiment analysis in 13 Indic languages.",
         reference="https://arxiv.org/abs/2212.05409",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         type="Classification",
         eval_splits=["test"],

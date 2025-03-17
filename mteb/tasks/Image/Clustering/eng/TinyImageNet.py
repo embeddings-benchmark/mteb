@@ -14,7 +14,7 @@ class TinyImageNet(AbsTaskImageClustering):
             "revision": "5a77092c28e51558c5586e9c5eb71a7e17a5e43f",
         },
         type="ImageClustering",
-        category="i2i",
+        category="i2c",
         eval_splits=["valid"],
         eval_langs=["eng-Latn"],
         main_score="nmi",
@@ -30,8 +30,4 @@ class TinyImageNet(AbsTaskImageClustering):
         modalities=["image"],
         sample_creation="found",
         bibtex_citation="""d""",
-        descriptive_stats={
-            "n_samples": {"valid": 10000},
-            "avg_character_length": {"valid": 431.4},
-        },
     )

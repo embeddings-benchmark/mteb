@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
 from typing import Any
 
 import numpy as np
 import tqdm
+from torch.utils.data import DataLoader
 
-from mteb.model_meta import ModelMeta
+from mteb.encoder_interface import BatchedInput
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.wrapper import Wrapper
 from mteb.requires_package import requires_package
 
@@ -33,7 +34,7 @@ class OpenAIWrapper(Wrapper):
         import tiktoken
 
         self._client = OpenAI()
-        self._model_name = model_name
+        self._model_name = model_name.split("/")[-1]
         self._embed_dim = embed_dim
         self._max_tokens = max_tokens
         self._encoding = tiktoken.get_encoding(tokenizer_name)
@@ -43,7 +44,7 @@ class OpenAIWrapper(Wrapper):
         truncated_sentence = self._encoding.encode(text)[: self._max_tokens]
         return self._encoding.decode(truncated_sentence)
 
-    def encode(self, sentences: list[str], **kwargs: Any) -> np.ndarray:
+    def encode(self, inputs: DataLoader[BatchedInput], **kwargs: Any) -> np.ndarray:
         requires_package(self, "openai", "Openai text embedding")
 
         from openai import NotGiven
@@ -52,6 +53,7 @@ class OpenAIWrapper(Wrapper):
             logger.warning(
                 "Reducing embedding size available only for text-embedding-3-* models"
             )
+        sentences = [text for batch in inputs for text in batch["text"]]
 
         trimmed_sentences = []
         for sentence in sentences:
@@ -119,9 +121,8 @@ text_embedding_3_small = ModelMeta(
     revision="2",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
-    loader=partial(  # type: ignore
-        OpenAIWrapper,
-        model_name="text-embedding-3-small",
+    loader=OpenAIWrapper,
+    loader_kwargs=dict(
         tokenizer_name="cl100k_base",
         max_tokens=8191,
     ),
@@ -132,7 +133,7 @@ text_embedding_3_small = ModelMeta(
     memory_usage_mb=None,
     license=None,
     reference="https://openai.com/index/new-embedding-models-and-api-updates/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=False,
     public_training_code=None,
@@ -144,9 +145,8 @@ text_embedding_3_large = ModelMeta(
     revision="2",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
-    loader=partial(  # type: ignore
-        OpenAIWrapper,
-        model_name="text-embedding-3-large",
+    loader=OpenAIWrapper,
+    loader_kwargs=dict(
         tokenizer_name="cl100k_base",
         max_tokens=8191,
     ),
@@ -169,9 +169,8 @@ text_embedding_ada_002 = ModelMeta(
     revision="2",
     release_date="2022-12-15",
     languages=None,  # supported languages not specified
-    loader=partial(  # type: ignore
-        OpenAIWrapper,
-        model_name="text-embedding-ada-002",
+    loader=OpenAIWrapper,
+    loader_kwargs=dict(
         tokenizer_name="cl100k_base",
         max_tokens=8191,
     ),

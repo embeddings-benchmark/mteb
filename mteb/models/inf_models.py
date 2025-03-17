@@ -1,8 +1,41 @@
 from __future__ import annotations
 
-from functools import partial
+from mteb.model_meta import (
+    ModelMeta,
+    ScoringFunction,
+)
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+inf_retreiver_v1_training_data = {
+    # eng_Latn
+    "ArguAna": ["train"],
+    "CQADupstackRetrieval": ["train"],
+    "ClimateFEVER": ["train"],
+    "DBPedia": ["train"],
+    "FEVER": ["train"],
+    "FiQA2018": ["train"],
+    "HotpotQA": ["train"],
+    "MSMARCO": ["train"],
+    "NFCorpus": ["train"],
+    "NQ": ["train"],
+    "QuoraRetrieval": ["train"],
+    "SCIDOCS": ["train"],
+    "SciFact": ["train"],
+    "TRECCOVID": ["train"],
+    "Touche2020": ["train"],
+    ## and other private data of INF TECH (not in MTEB),
+    #
+    # zho_Hans
+    "CmedqaRetrieval": ["train"],
+    "CovidRetrieval": ["train"],
+    "DuRetrieval": ["train"],
+    "EcomRetrieval": ["train"],
+    "MMarcoRetrieval": ["train"],
+    "MedicalRetrieval": ["train"],
+    "T2Retrieval": ["train"],
+    "VideoRetrieval": ["train"],
+    ## and other private data of INF TECH (not in MTEB),
+}
 
 inf_retreiver_v1_training_data = {
     # eng_Latn
@@ -36,10 +69,8 @@ inf_retreiver_v1_training_data = {
 }
 
 inf_retriever_v1 = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="infly/inf-retriever-v1",
-        revision="cb70ca7c31dfa866b2eff2dad229c144d8ddfd91",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         trust_remote_code=True,
     ),
     name="infly/inf-retriever-v1",
@@ -53,7 +84,7 @@ inf_retriever_v1 = ModelMeta(
     license="apache-2.0",
     max_tokens=32768,
     reference="https://huggingface.co/infly/inf-retriever-v1",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from="Alibaba-NLP/gte-Qwen2-7B-instruct",
@@ -63,10 +94,8 @@ inf_retriever_v1 = ModelMeta(
 )
 
 inf_retriever_v1_1_5B = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="infly/inf-retriever-v1-1.5b",
-        revision="c9c05c2dd50707a486966ba81703021ae2094a06",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         trust_remote_code=True,
     ),
     name="infly/inf-retriever-v1-1.5b",
@@ -80,7 +109,7 @@ inf_retriever_v1_1_5B = ModelMeta(
     license="apache-2.0",
     max_tokens=32768,
     reference="https://huggingface.co/infly/inf-retriever-v1-1.5b",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from="Alibaba-NLP/gte-Qwen2-1.5B-instruct",

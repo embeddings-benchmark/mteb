@@ -1,17 +1,15 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Sequence
-from functools import partial
 from typing import Any, Callable
 
 import numpy as np
 import torch
 from sentence_transformers import SentenceTransformer
+from torch.utils.data import DataLoader
 
-import mteb
-from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.encoder_interface import BatchedInput, PromptType
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.nvidia_models import nvidia_training_datasets
 from mteb.models.wrapper import Wrapper
 
@@ -34,21 +32,21 @@ class JasperWrapper(Wrapper):
 
     def encode(
         self,
-        sentences: Sequence[str],
+        inputs: DataLoader[BatchedInput],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        task = mteb.get_task(task_name=task_name)
         instruction = self.get_task_instruction(task_name, prompt_type)
 
         # to passage prompts won't be applied to passages
-        if prompt_type == PromptType.passage and task.metadata.category == "s2p":
+        if prompt_type == PromptType.passage:
             instruction = None
+        inputs = [text for batch in inputs for text in batch["text"]]
 
         embeddings = self.model.encode(
-            sentences,
+            inputs,
             normalize_embeddings=True,
             prompt=instruction,
             **kwargs,
@@ -61,10 +59,8 @@ class JasperWrapper(Wrapper):
 
 
 jasper_en_v1 = ModelMeta(
-    loader=partial(  # type: ignore
-        JasperWrapper,
-        model_name="NovaSearch/jasper_en_vision_language_v1",
-        revision="d6330ce98f8a0d741e781df845904c9484f00efa",
+    loader=JasperWrapper,
+    loader_kwargs=dict(
         config_kwargs={"is_text_encoder": True, "vector_dim": 12288},
         model_kwargs={
             "attn_implementation": "sdpa",
@@ -84,8 +80,8 @@ jasper_en_v1 = ModelMeta(
     max_tokens=131072,
     embed_dim=8960,
     license="apache-2.0",
-    reference="https://huggingface.co/NovaSearch/jasper_en_vision_language_v1",
-    similarity_fn_name="cosine",
+    reference="https://huggingface.co/infgrad/jasper_en_vision_language_v1",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     adapted_from=None,

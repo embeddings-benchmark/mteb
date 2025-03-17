@@ -36,16 +36,4 @@ class EncyclopediaVQAIT2ITRetrieval(AbsTaskAny2AnyRetrieval):
         prompt={
             "query": "Obtain illustrated documents that correspond to the inquiry alongside the provided image."
         },
-        descriptive_stats={
-            "n_samples": {"test": 3743},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1294.368802424136,
-                    "average_query_length": 51.703713598717606,
-                    "num_documents": 68313,
-                    "num_queries": 3743,
-                    "average_relevant_docs_per_query": 1.3056371894202512,
-                }
-            },
-        },
     )

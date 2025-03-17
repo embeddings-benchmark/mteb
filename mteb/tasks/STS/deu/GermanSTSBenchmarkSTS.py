@@ -6,6 +6,9 @@ from ....abstasks.AbsTaskSTS import AbsTaskSTS
 
 
 class GermanSTSBenchmarkSTS(AbsTaskSTS):
+    min_score = 0
+    max_score = 5
+
     metadata = TaskMetadata(
         name="GermanSTSBenchmark",
         dataset={
@@ -16,7 +19,7 @@ class GermanSTSBenchmarkSTS(AbsTaskSTS):
         + "Translations were originally done by T-Systems on site services GmbH.",
         reference="https://github.com/t-systems-on-site-services-gmbh/german-STSbenchmark",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["deu-Latn"],
@@ -35,10 +38,3 @@ year={2021},
 url={https://github.com/PhilipMay/stsb-multi-mt}
 }""",
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict

@@ -19,7 +19,7 @@ class GerDaLIR(AbsTaskRetrieval):
             "trust_remote_code": True,
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["deu-Latn"],
@@ -53,17 +53,17 @@ class GerDaLIR(AbsTaskRetrieval):
         query_rows = datasets.load_dataset(
             name="queries",
             split=self._EVAL_SPLIT,
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
         corpus_rows = datasets.load_dataset(
             name="corpus",
             split=self._EVAL_SPLIT,
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
         qrels_rows = datasets.load_dataset(
             name="qrels",
             split=self._EVAL_SPLIT,
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         self.queries = {

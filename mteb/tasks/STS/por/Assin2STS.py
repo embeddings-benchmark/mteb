@@ -14,7 +14,7 @@ class Assin2STS(AbsTaskSTS):
         description="Semantic Textual Similarity part of the ASSIN 2, an evaluation shared task collocated with STIL 2019.",
         reference="https://link.springer.com/chapter/10.1007/978-3-030-41505-1_39",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["por-Latn"],
@@ -36,12 +36,8 @@ class Assin2STS(AbsTaskSTS):
         }""",
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 1
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 1
+    max_score = 5
 
     def dataset_transform(self) -> None:
         self.dataset = self.dataset.rename_columns(

@@ -3,13 +3,10 @@ from __future__ import annotations
 from mteb.abstasks.AbsTaskMultilabelClassification import (
     AbsTaskMultilabelClassification,
 )
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class MultiEURLEXMultilabelClassification(
-    MultilingualTask, AbsTaskMultilabelClassification
-):
+class MultiEURLEXMultilabelClassification(AbsTaskMultilabelClassification):
     metadata = TaskMetadata(
         name="MultiEURLEXMultilabelClassification",
         dataset={
@@ -18,7 +15,7 @@ class MultiEURLEXMultilabelClassification(
         },
         description="EU laws in 23 EU languages containing annotated labels for 21 EUROVOC concepts.",
         reference="https://huggingface.co/datasets/coastalcph/multi_eurlex",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         type="MultilabelClassification",
         eval_splits=["test"],

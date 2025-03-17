@@ -8,6 +8,7 @@ from typing import Any, Union
 
 from pydantic import (
     BaseModel,
+    ConfigDict,
     field_validator,
 )
 from typing_extensions import Literal, TypedDict
@@ -82,8 +83,6 @@ TASK_DOMAIN = Literal[
     "Programming",
     "Chemistry",
     "Financial",
-    "Chemistry",
-    "Financial",
 ]
 
 SAMPLE_CREATION_METHOD = Literal[
@@ -98,6 +97,7 @@ SAMPLE_CREATION_METHOD = Literal[
     "rendered",
     "multiple",
 ]
+
 
 MIEB_TASK_TYPE = (
     "Any2AnyMultiChoice",
@@ -114,7 +114,7 @@ MIEB_TASK_TYPE = (
     "Compositionality",
 )
 
-TASK_TYPE = (
+_task_types = (
     "BitextMining",
     "Classification",
     "MultilabelClassification",
@@ -125,18 +125,17 @@ TASK_TYPE = (
     "STS",
     "Summarization",
     "InstructionRetrieval",
+    "InstructionReranking",
     "Speed",
 ) + MIEB_TASK_TYPE
 
-TASK_TYPE = Literal[TASK_TYPE]
-
+TASK_TYPE = Literal[_task_types]
 
 TASK_CATEGORY = Literal[
-    "s2s",  # Sentence-to-sentence
-    "s2p",  # Sentence-to-paragraph
-    "p2p",  # Paragraph-to-paragraph
-    "t2t",  # specifically for text-only tasks in mieb
+    "t2t",
+    "t2c",  # text-to-category
     "i2i",  # image-to-image
+    "i2c",  # image-to-category
     "i2t",  # image-to-text
     "t2i",  # text-to-image
     "it2t",  # image+text-to-text
@@ -199,22 +198,37 @@ class DescriptiveStatistics(TypedDict):
     pass
 
 
-METRIC_VALUE = Union[int, float, dict[str, Any]]
-
-
 logger = logging.getLogger(__name__)
+
+
+class MetadataDatasetDict(TypedDict, total=False):
+    """A dictionary containing the dataset path and revision.
+
+    Args:
+        path: The path to the dataset.
+        revision: The revision of the dataset.
+        name: The name the dataset config.
+        split: The split of the dataset.
+        trust_remote_code: Whether to trust the remote code.
+    """
+
+    path: str
+    revision: str
+    name: str
+    split: str
+    trust_remote_code: bool
 
 
 class TaskMetadata(BaseModel):
     """Metadata for a task.
 
     Args:
-        dataset: All arguments to pass to datasets.load_dataset to load the dataset for the task. Refer to https://huggingface.co/docs/datasets/v2.18.0/en/package_reference/loading_methods#datasets.load_dataset
+        dataset: All arguments to pass to [datasets.load_dataset](https://huggingface.co/docs/datasets/v2.18.0/en/package_reference/loading_methods#datasets.load_dataset) to load the dataset for the task.
         name: The name of the task.
         description: A description of the task.
         type: The type of the task. These includes "Classification", "Summarization", "STS", "Retrieval", "Reranking", "Clustering",
             "PairClassification", "BitextMining". The type should match the abstask type.
-        category: The category of the task. E.g. includes "s2s", "s2p", "p2p" (s=sentence, p=paragraph).
+        category: The category of the task. E.g. includes "t2t" (text to text), "t2i" (text to image).
         reference: A URL to the documentation of the task. E.g. a published paper.
         eval_splits: The splits of the dataset used for evaluation.
         eval_langs: The languages of the dataset used for evaluation. Langauges follows a ETF BCP 47 standard consisting of "{language}-{script}"
@@ -237,7 +251,9 @@ class TaskMetadata(BaseModel):
         adapted_from: Datasets adapted (translated, sampled from, etc.) from other datasets.
     """
 
-    dataset: dict[str, Any]
+    model_config = ConfigDict(extra="forbid")
+
+    dataset: MetadataDatasetDict
 
     name: str
     description: str
@@ -444,6 +460,16 @@ class TaskMetadata(BaseModel):
                 continue
             n_samples[subset] = subset_value["num_samples"]  # type: ignore
         return n_samples
+
+    @property
+    def hf_subsets(self) -> list[str]:
+        """Return the huggingface subsets."""
+        return list(self.hf_subsets_to_langscripts.keys())
+
+    @property
+    def is_multilingual(self) -> bool:
+        """Check if the task is multilingual."""
+        return isinstance(self.eval_langs, dict)
 
     def __hash__(self) -> int:
         return hash(self.model_dump_json())

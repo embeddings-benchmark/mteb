@@ -5,8 +5,7 @@ from pathlib import Path
 
 import pytest
 
-import mteb
-from mteb import AbsTask
+from mteb.abstasks import AbsTask, TaskMetadata
 from mteb.load_results.task_results import TaskResult
 
 tests_folder = Path(__file__).parent.parent
@@ -14,12 +13,12 @@ tests_folder = Path(__file__).parent.parent
 
 class DummyTask(AbsTask):
     superseded_by = "newer_task"
-    metadata = mteb.TaskMetadata(
+    metadata = TaskMetadata(
         name="dummy_task",
         description="dummy task for testing",
         dataset={"revision": "1.0", "path": "dummy_dataset"},
         type="Classification",
-        category="p2p",
+        category="t2t",
         eval_langs={
             "en-de": ["eng-Latn", "deu-Latn"],
             "en-fr": ["eng-Latn", "fra-Latn"],

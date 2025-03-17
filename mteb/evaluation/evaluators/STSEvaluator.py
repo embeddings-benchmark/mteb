@@ -13,6 +13,7 @@ from sklearn.metrics.pairwise import (
 
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
 
+from ...create_dataloaders import create_dataloader_from_texts
 from .Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
@@ -25,14 +26,9 @@ class STSEvaluator(Evaluator):
         sentences2,
         gold_scores,
         task_name: str | None = None,
-        limit: int | None = None,
         **kwargs,
     ):
         super().__init__(**kwargs)
-        if limit is not None:
-            sentences1 = sentences1[:limit]
-            sentences2 = sentences2[:limit]
-            gold_scores = gold_scores[:limit]
         self.sentences1 = sentences1
         self.sentences2 = sentences2
         self.gold_scores = gold_scores
@@ -45,12 +41,12 @@ class STSEvaluator(Evaluator):
         encode_kwargs: dict[str, Any] = {},
     ):
         embeddings1 = model.encode(
-            self.sentences1,
+            create_dataloader_from_texts(self.sentences1),
             task_name=self.task_name,
             **encode_kwargs,
         )
         embeddings2 = model.encode(
-            self.sentences2,
+            create_dataloader_from_texts(self.sentences2),
             task_name=self.task_name,
             **encode_kwargs,
         )

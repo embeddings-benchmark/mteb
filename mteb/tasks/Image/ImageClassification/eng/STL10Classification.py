@@ -14,7 +14,7 @@ class STL10Classification(AbsTaskImageClassification):
             "revision": "49ae7f94508f7feae62baf836db284306eab0b0f",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -45,8 +45,4 @@ class STL10Classification(AbsTaskImageClassification):
         url = 	 {https://proceedings.mlr.press/v15/coates11a.html},
         }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 8000},
-            "avg_character_length": {"test": 431.4},
-        },
     )

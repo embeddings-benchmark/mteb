@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-from functools import partial
-
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.instruct_wrapper import instruct_wrapper
 from mteb.models.nvidia_models import nvidia_training_datasets
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 stella_zh_datasets = {
     "BQ": [],
@@ -42,10 +41,9 @@ stella_zh_datasets = {
 # https://huggingface.co/datasets/m-a-p/Matrix
 
 stella_en_400M = ModelMeta(
-    # https://huggingface.co/NovaSearch/stella_en_400M_v5/discussions/21#671a6205ac1e2416090f2bf4
-    loader=partial(  # type: ignore
-        instruct_wrapper,
-        model_name_or_path="NovaSearch/stella_en_400M_v5",
+    # https://huggingface.co/dunzhang/stella_en_400M_v5/discussions/21#671a6205ac1e2416090f2bf4
+    loader=instruct_wrapper,
+    loader_kwargs=dict(
         attn="cccc",
         pooling_method="lasttoken",
         mode="embedding",
@@ -62,7 +60,7 @@ stella_en_400M = ModelMeta(
     max_tokens=8192,
     embed_dim=4096,
     license="mit",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch", "GritLM"],
     reference="https://huggingface.co/NovaSearch/stella_en_400M_v5",
     training_datasets=nvidia_training_datasets,  # also distilled from gte-qwen (but training data is unknown) #2164
@@ -71,9 +69,8 @@ stella_en_400M = ModelMeta(
 )
 
 stella_en_1_5b = ModelMeta(
-    loader=partial(  # type: ignore
-        instruct_wrapper,
-        model_name_or_path="NovaSearch/stella_en_1.5B_v5",
+    loader=instruct_wrapper,
+    loader_kwargs=dict(
         attn="cccc",
         pooling_method="lasttoken",
         mode="embedding",
@@ -90,7 +87,7 @@ stella_en_1_5b = ModelMeta(
     max_tokens=131072,
     embed_dim=8960,
     license="mit",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch", "GritLM"],
     reference="https://huggingface.co/NovaSearch/stella_en_1.5B_v5",
     training_datasets=nvidia_training_datasets,  # also distilled from gte-qwen (but training data is unknown) #2164
@@ -99,6 +96,7 @@ stella_en_1_5b = ModelMeta(
 )
 
 stella_large_zh_v3_1792d = ModelMeta(
+    loader=sentence_transformers_loader,
     name="dunzhang/stella-large-zh-v3-1792d",
     languages=["zho_Hans"],
     open_weights=True,
@@ -110,7 +108,7 @@ stella_large_zh_v3_1792d = ModelMeta(
     license="not specified",
     max_tokens=512,
     reference="https://huggingface.co/dunzhang/stella-large-zh-v3-1792d",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by="dunzhang/stella-mrl-large-zh-v3.5-1792d",
@@ -126,6 +124,7 @@ stella_large_zh_v3_1792d = ModelMeta(
 )
 
 stella_base_zh_v3_1792d = ModelMeta(
+    loader=sentence_transformers_loader,
     name="infgrad/stella-base-zh-v3-1792d",
     languages=["zho_Hans"],
     open_weights=True,
@@ -137,7 +136,7 @@ stella_base_zh_v3_1792d = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/infgrad/stella-base-zh-v3-1792d",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,
@@ -154,6 +153,7 @@ stella_base_zh_v3_1792d = ModelMeta(
 
 
 stella_mrl_large_zh_v3_5_1792d = ModelMeta(
+    loader=sentence_transformers_loader,
     name="dunzhang/stella-mrl-large-zh-v3.5-1792d",
     languages=["zho_Hans"],
     open_weights=True,
@@ -164,8 +164,8 @@ stella_mrl_large_zh_v3_5_1792d = ModelMeta(
     embed_dim=1792,
     license="mit",
     max_tokens=512,
-    reference="https://huggingface.co/dunzhang/stella-mrl-large-zh-v3.5-1792d",
-    similarity_fn_name="cosine",
+    reference="https://huggingface.co/dunzhang/stella-large-zh-v3-1792d",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,
@@ -176,6 +176,7 @@ stella_mrl_large_zh_v3_5_1792d = ModelMeta(
 )
 
 zpoint_large_embedding_zh = ModelMeta(
+    loader=sentence_transformers_loader,
     name="iampanda/zpoint_large_embedding_zh",
     languages=["zho_Hans"],
     open_weights=True,
@@ -187,7 +188,7 @@ zpoint_large_embedding_zh = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/iampanda/zpoint_large_embedding_zh",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,

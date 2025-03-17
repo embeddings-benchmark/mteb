@@ -1,16 +1,15 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
 from typing import Any, Literal
 
+import numpy as np
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoConfig, AutoModelForCausalLM, AutoProcessor
 
-from mteb.encoder_interface import PromptType
+from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta
 
 logging.basicConfig(level=logging.WARNING)
@@ -79,16 +78,6 @@ class VLM2VecWrapper:
             num_crops=4,
         )
 
-    def encode(
-        self,
-        sentences: list[str],
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ):
-        return self.get_text_embeddings(texts=sentences)
-
     def encode_input(self, input):
         hidden_states = self.mdl(**input, return_dict=True, output_hidden_states=True)
         hidden_states = hidden_states.hidden_states[-1]
@@ -112,109 +101,67 @@ class VLM2VecWrapper:
     # reference: https://github.com/TIGER-AI-Lab/VLM2Vec/blob/main/src/collator.py
     def get_image_embeddings(
         self,
-        images: list[Image.Image] | DataLoader,
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 32,
+        images: DataLoader[BatchedInput],
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ):
         text = "<|image_1|> Represent the given image."
         all_image_embeddings = []
-        if isinstance(images, DataLoader):
-            import torchvision.transforms.functional as F
 
-            with torch.no_grad():
-                for batch in tqdm(images):
-                    input_ids, pixel_values, image_sizes = [], [], []
-                    for b in batch:
-                        inputs = self.processor(
-                            text,
-                            [F.to_pil_image(b.to("cpu"))],
-                            return_tensors="pt",
-                            max_length=256,
-                            truncation=True,
-                        )
-                        inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                        input_ids.append(inputs["input_ids"].squeeze(0).unsqueeze(1))
-                        pixel_values.append(inputs["pixel_values"])
-                        image_sizes.append(inputs["image_sizes"])
+        with torch.no_grad():
+            for batch in tqdm(
+                images, disable=not show_progress_bar, desc="Image Encoding"
+            ):
+                input_ids, pixel_values, image_sizes = [], [], []
+                for b in batch["image"]:
+                    inputs = self.processor(
+                        text,
+                        b,
+                        return_tensors="pt",
+                        max_length=256,
+                        truncation=True,
+                    )
+                    inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                    input_ids.append(inputs["input_ids"].squeeze(0).unsqueeze(1))
+                    pixel_values.append(inputs["pixel_values"])
+                    image_sizes.append(inputs["image_sizes"])
 
-                    input_ids = torch._C._nn.pad_sequence(
-                        input_ids,
-                        batch_first=True,
-                        padding_value=self.processor.tokenizer.pad_token_id,
-                    ).squeeze(2)
-                    attention_mask = input_ids.ne(self.processor.tokenizer.pad_token_id)
+                input_ids = torch._C._nn.pad_sequence(
+                    input_ids,
+                    batch_first=True,
+                    padding_value=self.processor.tokenizer.pad_token_id,
+                ).squeeze(2)
+                attention_mask = input_ids.ne(self.processor.tokenizer.pad_token_id)
 
-                    pixel_values = torch.cat(pixel_values, dim=0)
-                    image_sizes = torch.cat(image_sizes, dim=0)
-                    inputs = {
-                        "input_ids": input_ids,
-                        "attention_mask": attention_mask,
-                        "pixel_values": pixel_values,
-                        "image_sizes": image_sizes,
-                    }
+                pixel_values = torch.cat(pixel_values, dim=0)
+                image_sizes = torch.cat(image_sizes, dim=0)
+                inputs = {
+                    "input_ids": input_ids,
+                    "attention_mask": attention_mask,
+                    "pixel_values": pixel_values,
+                    "image_sizes": image_sizes,
+                }
 
-                    image_outputs = self.encode_input(inputs)
-                    all_image_embeddings.append(image_outputs.cpu().to(torch.float32))
-
-        else:
-            with torch.no_grad():
-                for i in tqdm(range(0, len(images), batch_size)):
-                    batch_images = images[i : i + batch_size]
-                    input_ids, pixel_values, image_sizes = [], [], []
-                    for b in batch_images:
-                        inputs = self.processor(
-                            text,
-                            [b],
-                            return_tensors="pt",
-                            max_length=256,
-                            truncation=True,
-                        )
-                        inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                        input_ids.append(inputs["input_ids"].squeeze(0).unsqueeze(1))
-                        pixel_values.append(inputs["pixel_values"])
-                        image_sizes.append(inputs["image_sizes"])
-
-                    input_ids = torch._C._nn.pad_sequence(
-                        input_ids,
-                        batch_first=True,
-                        padding_value=self.processor.tokenizer.pad_token_id,
-                    ).squeeze(2)
-                    attention_mask = input_ids.ne(self.processor.tokenizer.pad_token_id)
-
-                    pixel_values = torch.cat(pixel_values, dim=0)
-                    image_sizes = torch.cat(image_sizes, dim=0)
-                    inputs = {
-                        "input_ids": input_ids,
-                        "attention_mask": attention_mask,
-                        "pixel_values": pixel_values,
-                        "image_sizes": image_sizes,
-                    }
-
-                    image_outputs = self.encode_input(inputs)
-                    all_image_embeddings.append(image_outputs.cpu().to(torch.float32))
+                image_outputs = self.encode_input(inputs)
+                all_image_embeddings.append(image_outputs.cpu().to(torch.float32))
 
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
         return all_image_embeddings
 
     def get_text_embeddings(
         self,
-        texts: list[str],
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 32,
+        texts: DataLoader[BatchedInput],
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ):
         all_text_embeddings = []
 
         with torch.no_grad():
-            for i in tqdm(range(0, len(texts), batch_size)):
+            for batch in tqdm(
+                texts, disable=not show_progress_bar, desc="Text Encoding"
+            ):
                 input_ids = []
-                batch_texts = texts[i : i + batch_size]
-                for text in batch_texts:
+                for text in batch["text"]:
                     inputs = self.processor(
                         text,
                         None,
@@ -251,115 +198,63 @@ class VLM2VecWrapper:
         probs = (logits * 100).softmax(dim=-1)
         return probs
 
-    def get_fused_embeddings(
+    def encode(
         self,
-        texts: list[str] = None,
-        images: list[Image.Image] | DataLoader = None,
+        inputs: DataLoader[BatchedInput],
         *,
-        task_name: str | None = None,
+        task_name: str,
         prompt_type: PromptType | None = None,
-        batch_size: int = 32,
-        fusion_mode="sum",
+        fusion_mode: Literal["sum"] = "sum",
         **kwargs: Any,
-    ):
-        if texts is None and images is None:
-            raise ValueError("Either texts or images must be provided")
+    ) -> np.ndarray | torch.Tensor:
+        if "text" in inputs.dataset.features and "image" in inputs.dataset.features:
+            all_fused_embeddings = []
 
-        text_embeddings = None
-        image_embeddings = None
-        kwargs.update(
-            task_name=task_name, prompt_type=prompt_type, batch_size=batch_size
-        )
+            with torch.no_grad():
+                for batch in inputs:
+                    input_ids, pixel_values, image_sizes = [], [], []
+                    batch_text = batch["text"]
+                    batch_image = batch["image"]
+                    for item_image, item_text in zip(batch_image, batch_text):
+                        inputs = self.processor(
+                            f"<|image_1|> Represent the given image with the following question: {item_text}",
+                            item_image,
+                            return_tensors="pt",
+                            max_length=256,
+                            truncation=True,
+                        )
+                        inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                        input_ids.append(inputs["input_ids"].squeeze(0).unsqueeze(1))
+                        pixel_values.append(inputs["pixel_values"])
+                        image_sizes.append(inputs["image_sizes"])
 
-        if texts is not None and images is None:
-            text_embeddings = self.get_text_embeddings(texts, **kwargs)
-            return text_embeddings
+                    input_ids = torch._C._nn.pad_sequence(
+                        input_ids,
+                        batch_first=True,
+                        padding_value=self.processor.tokenizer.pad_token_id,
+                    ).squeeze(2)
+                    attention_mask = input_ids.ne(self.processor.tokenizer.pad_token_id)
 
-        if images is not None and texts is None:
-            image_embeddings = self.get_image_embeddings(images, **kwargs)
+                    pixel_values = torch.cat(pixel_values, dim=0)
+                    image_sizes = torch.cat(image_sizes, dim=0)
+                    inputs = {
+                        "input_ids": input_ids,
+                        "attention_mask": attention_mask,
+                        "pixel_values": pixel_values,
+                        "image_sizes": image_sizes,
+                    }
+
+                    outputs = self.encode_input(inputs)
+                    all_fused_embeddings.append(outputs.cpu().to(torch.float32))
+
+                fused_embeddings = torch.cat(all_fused_embeddings, dim=0)
+                return fused_embeddings
+        elif "image" in inputs.dataset.features:
+            image_embeddings = self.get_image_embeddings(inputs, **kwargs)
             return image_embeddings
-
-        # text_embeddings is not None and image_embeddings is not None
-        texts = iter(texts)
-        all_fused_embeddings = []
-        if isinstance(images, DataLoader):
-            import torchvision.transforms.functional as F
-
-            with torch.no_grad():
-                for batch in images:
-                    input_ids, pixel_values, image_sizes = [], [], []
-                    for b in batch:
-                        text = next(texts)
-                        inputs = self.processor(
-                            f"<|image_1|> Represent the given image with the following question: {text}",
-                            [F.to_pil_image(b.to("cpu"))],
-                            return_tensors="pt",
-                            max_length=256,
-                            truncation=True,
-                        )
-                        inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                        input_ids.append(inputs["input_ids"].squeeze(0).unsqueeze(1))
-                        pixel_values.append(inputs["pixel_values"])
-                        image_sizes.append(inputs["image_sizes"])
-
-                    input_ids = torch._C._nn.pad_sequence(
-                        input_ids,
-                        batch_first=True,
-                        padding_value=self.processor.tokenizer.pad_token_id,
-                    ).squeeze(2)
-                    attention_mask = input_ids.ne(self.processor.tokenizer.pad_token_id)
-
-                    pixel_values = torch.cat(pixel_values, dim=0)
-                    image_sizes = torch.cat(image_sizes, dim=0)
-                    inputs = {
-                        "input_ids": input_ids,
-                        "attention_mask": attention_mask,
-                        "pixel_values": pixel_values,
-                        "image_sizes": image_sizes,
-                    }
-
-                    outputs = self.encode_input(inputs)
-                    all_fused_embeddings.append(outputs.cpu().to(torch.float32))
-        else:
-            with torch.no_grad():
-                for i in tqdm(range(0, len(images), batch_size)):
-                    batch_images = images[i : i + batch_size]
-                    input_ids, pixel_values, image_sizes = [], [], []
-                    for b in batch_images:
-                        text = next(texts)
-                        inputs = self.processor(
-                            f"<|image_1|> Represent the given image with the following question: {text}",
-                            [b],
-                            return_tensors="pt",
-                            max_length=256,
-                            truncation=True,
-                        )
-                        inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                        input_ids.append(inputs["input_ids"].squeeze(0).unsqueeze(1))
-                        pixel_values.append(inputs["pixel_values"])
-                        image_sizes.append(inputs["image_sizes"])
-
-                    input_ids = torch._C._nn.pad_sequence(
-                        input_ids,
-                        batch_first=True,
-                        padding_value=self.processor.tokenizer.pad_token_id,
-                    ).squeeze(2)
-                    attention_mask = input_ids.ne(self.processor.tokenizer.pad_token_id)
-
-                    pixel_values = torch.cat(pixel_values, dim=0)
-                    image_sizes = torch.cat(image_sizes, dim=0)
-                    inputs = {
-                        "input_ids": input_ids,
-                        "attention_mask": attention_mask,
-                        "pixel_values": pixel_values,
-                        "image_sizes": image_sizes,
-                    }
-
-                    outputs = self.encode_input(inputs)
-                    all_fused_embeddings.append(outputs.cpu().to(torch.float32))
-
-        fused_embeddings = torch.cat(all_fused_embeddings, dim=0)
-        return fused_embeddings
+        elif "text" in inputs.dataset.features:
+            text_embeddings = self.get_text_embeddings(inputs, **kwargs)
+            return text_embeddings
 
 
 vlm2vec_training_datasets = {
@@ -367,10 +262,7 @@ vlm2vec_training_datasets = {
 }
 
 vlm2vec_lora = ModelMeta(
-    loader=partial(
-        VLM2VecWrapper,
-        model_name="TIGER-Lab/VLM2Vec-LoRA",
-    ),
+    loader=VLM2VecWrapper,
     name="TIGER-Lab/VLM2Vec-LoRA",
     languages=["eng_Latn"],
     revision="7403b6327958071c1e33c822c7453adadccc7298",
@@ -392,10 +284,7 @@ vlm2vec_lora = ModelMeta(
 )
 
 vlm2vec_full = ModelMeta(
-    loader=partial(
-        VLM2VecWrapper,
-        model_name="TIGER-Lab/VLM2Vec-Full",
-    ),
+    loader=VLM2VecWrapper,
     name="TIGER-Lab/VLM2Vec-Full",
     languages=["eng_Latn"],
     revision="e9afa98002097ac2471827ba23ea1f2ddd229480",

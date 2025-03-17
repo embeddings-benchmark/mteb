@@ -14,7 +14,7 @@ class OxfordPetsClassification(AbsTaskImageClassification):
             "revision": "557b480fae8d69247be74d9503b378a09425096f",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -40,8 +40,4 @@ class OxfordPetsClassification(AbsTaskImageClassification):
   keywords={Positron emission tomography;Image segmentation;Cats;Dogs;Layout;Deformable models;Head},
   doi={10.1109/CVPR.2012.6248092}}
         """,
-        descriptive_stats={
-            "n_samples": {"test": 3669},
-            "avg_character_length": {"test": 431.4},
-        },
     )

@@ -15,7 +15,7 @@ class RUParaPhraserSTS(AbsTaskSTS):
         description="ParaPhraser is a news headlines corpus with precise, near and non-paraphrases.",
         reference="https://aclanthology.org/2020.ngt-1.6",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],
@@ -53,12 +53,8 @@ class RUParaPhraserSTS(AbsTaskSTS):
         """,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = -1
-        metadata_dict["max_score"] = 1
-        return metadata_dict
+    min_score = -1
+    max_score = 1
 
     def dataset_transform(self):
         self.dataset = self.dataset.rename_columns(

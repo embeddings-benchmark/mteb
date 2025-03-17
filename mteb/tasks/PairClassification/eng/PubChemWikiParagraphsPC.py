@@ -14,7 +14,7 @@ class PubChemWikiParagraphsPC(AbsTaskPairClassification):
             "revision": "7fb14716e4106b72f51a16e682e5cd2d67e9bd70",
         },
         type="PairClassification",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

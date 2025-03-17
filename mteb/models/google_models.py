@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from functools import partial
 from typing import Any
 
 import numpy as np
 import tqdm
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import Encoder, PromptType
-from mteb.model_meta import ModelMeta
+from mteb.encoder_interface import BatchedInput, PromptType
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.wrapper import Wrapper
 
 MULTILINGUAL_EVALUATED_LANGUAGES = [
@@ -50,7 +50,7 @@ GECKO_TRAINING_DATA = {
 }
 
 
-class GoogleTextEmbeddingModel(Encoder, Wrapper):
+class GoogleTextEmbeddingModel(Wrapper):
     def __init__(
         self,
         model_name: str,
@@ -119,7 +119,7 @@ class GoogleTextEmbeddingModel(Encoder, Wrapper):
 
     def encode(
         self,
-        sentences: list[str],
+        inputs: DataLoader[BatchedInput],
         task_name: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
@@ -132,17 +132,18 @@ class GoogleTextEmbeddingModel(Encoder, Wrapper):
             if "show_progress_bar" not in kwargs
             else kwargs.pop("show_progress_bar")
         )
+        inputs = [text for batch in inputs for text in batch["text"]]
 
         return self._embed(
-            sentences,
+            inputs,
             google_task_type=google_task_type,
             show_progress_bar=show_progress_bar,
         )
 
 
 google_text_emb_004 = ModelMeta(
-    loader=partial(
-        GoogleTextEmbeddingModel,
+    loader=GoogleTextEmbeddingModel,
+    loader_kwargs=dict(
         model_name="text-embedding-004",
         model_prompts=MODEL_PROMPTS,
     ),
@@ -157,7 +158,7 @@ google_text_emb_004 = ModelMeta(
     embed_dim=768,
     license=None,
     reference="https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,  # assumed
     framework=["API"],
     use_instructions=True,
     public_training_code=None,
@@ -166,8 +167,8 @@ google_text_emb_004 = ModelMeta(
 )
 
 google_text_emb_005 = ModelMeta(
-    loader=partial(
-        GoogleTextEmbeddingModel,
+    loader=GoogleTextEmbeddingModel,
+    loader_kwargs=dict(
         model_name="text-embedding-005",
         model_prompts=MODEL_PROMPTS,
     ),
@@ -182,7 +183,7 @@ google_text_emb_005 = ModelMeta(
     embed_dim=768,
     license=None,
     reference="https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,  # assumed
     framework=["API"],
     use_instructions=True,
     public_training_code=None,
@@ -191,9 +192,9 @@ google_text_emb_005 = ModelMeta(
 )
 
 google_text_multilingual_emb_002 = ModelMeta(
-    loader=partial(
-        GoogleTextEmbeddingModel,
-        model_name="text-multilingual-embedding-002",
+    loader=GoogleTextEmbeddingModel,
+    loader_kwargs=dict(
+        model_name="text-embedding-002",
         model_prompts=MODEL_PROMPTS,
     ),
     name="google/text-multilingual-embedding-002",
@@ -207,7 +208,7 @@ google_text_multilingual_emb_002 = ModelMeta(
     embed_dim=768,
     license=None,
     reference="https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,  # assumed
     framework=["API"],
     use_instructions=True,
     public_training_code=None,
@@ -216,8 +217,8 @@ google_text_multilingual_emb_002 = ModelMeta(
 )
 
 google_gemini_embedding_exp_03_07 = ModelMeta(
-    loader=partial(
-        GoogleTextEmbeddingModel,
+    loader=GoogleTextEmbeddingModel,
+    loader_kwargs=dict(
         model_name="gemini-embedding-exp-03-07",
         model_prompts=MODEL_PROMPTS,
     ),
@@ -232,7 +233,7 @@ google_gemini_embedding_exp_03_07 = ModelMeta(
     embed_dim=3072,
     license=None,
     reference="https://developers.googleblog.com/en/gemini-embedding-text-model-now-available-gemini-api/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     public_training_code=None,

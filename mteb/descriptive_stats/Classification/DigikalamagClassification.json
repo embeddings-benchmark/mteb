@@ -1,0 +1,140 @@
+{
+    "test": {
+        "num_samples": 852,
+        "number_of_characters": 2935825,
+        "number_texts_intersect_with_train": 0,
+        "min_text_length": 40,
+        "average_text_length": 3445.8039906103286,
+        "max_text_length": 36911,
+        "unique_texts": 852,
+        "min_labels_per_text": 5,
+        "average_label_per_text": 12.762910798122066,
+        "max_labels_per_text": 14,
+        "unique_labels": 18,
+        "labels": {
+            "\u0633": {
+                "count": 328
+            },
+            "\u0644": {
+                "count": 715
+            },
+            "\u0627": {
+                "count": 787
+            },
+            "\u0645": {
+                "count": 642
+            },
+            "\u062a": {
+                "count": 488
+            },
+            " ": {
+                "count": 1470
+            },
+            "\u0648": {
+                "count": 1590
+            },
+            "\u0632": {
+                "count": 358
+            },
+            "\u06cc": {
+                "count": 1975
+            },
+            "\u0628": {
+                "count": 408
+            },
+            "\u0639": {
+                "count": 289
+            },
+            "\u06a9": {
+                "count": 302
+            },
+            "\u0646": {
+                "count": 624
+            },
+            "\u0698": {
+                "count": 277
+            },
+            "\u0647": {
+                "count": 180
+            },
+            "\u0631": {
+                "count": 193
+            },
+            "\u062f": {
+                "count": 235
+            },
+            "\u062e": {
+                "count": 13
+            }
+        }
+    },
+    "train": {
+        "num_samples": 6896,
+        "number_of_characters": 23218475,
+        "number_texts_intersect_with_train": null,
+        "min_text_length": 114,
+        "average_text_length": 3366.948230858469,
+        "max_text_length": 53321,
+        "unique_texts": 6896,
+        "min_labels_per_text": 5,
+        "average_label_per_text": 12.764936194895592,
+        "max_labels_per_text": 14,
+        "unique_labels": 18,
+        "labels": {
+            "\u0639": {
+                "count": 2342
+            },
+            "\u0644": {
+                "count": 5794
+            },
+            "\u0645": {
+                "count": 5194
+            },
+            " ": {
+                "count": 11904
+            },
+            "\u0648": {
+                "count": 12878
+            },
+            "\u062a": {
+                "count": 3961
+            },
+            "\u06a9": {
+                "count": 2451
+            },
+            "\u0646": {
+                "count": 5046
+            },
+            "\u0698": {
+                "count": 2245
+            },
+            "\u06cc": {
+                "count": 15977
+            },
+            "\u0647": {
+                "count": 1451
+            },
+            "\u0631": {
+                "count": 1552
+            },
+            "\u0633": {
+                "count": 2654
+            },
+            "\u0627": {
+                "count": 6371
+            },
+            "\u0628": {
+                "count": 3309
+            },
+            "\u0632": {
+                "count": 2897
+            },
+            "\u062f": {
+                "count": 1900
+            },
+            "\u062e": {
+                "count": 101
+            }
+        }
+    }
+}

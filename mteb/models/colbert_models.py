@@ -1,15 +1,14 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Sequence
-from functools import partial
 from typing import Any
 
 import numpy as np
 import torch
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.encoder_interface import BatchedInput, PromptType
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
@@ -59,7 +58,7 @@ class ColBERTWrapper(Wrapper):
 
     def encode(
         self,
-        sentences: Sequence[str],
+        inputs: DataLoader[BatchedInput],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
@@ -68,7 +67,7 @@ class ColBERTWrapper(Wrapper):
         """Encodes the given sentences using the encoder.
 
         Args:
-            sentences: The sentences to encode.
+            inputs: The inputs to encode.
             task_name: The name of the task. Pylate uses this to
                 determine which prompt to use from a specified dictionary.
             prompt_type: The name type of prompt. (query or passage)
@@ -97,12 +96,18 @@ class ColBERTWrapper(Wrapper):
             logger.info(
                 f"No model prompts found for task={task_name} prompt_type={prompt_type}"
             )
-        logger.info(f"Encoding {len(sentences)} sentences.")
+        logger.info(f"Encoding {len(inputs)} sentences.")
+
+        if "request_qid" in kwargs:
+            kwargs.pop("request_qid")
+
+        inputs = [text for batch in inputs for text in batch["text"]]
 
         pred = self.model.encode(
-            sentences,
+            inputs,
             prompt_name=prompt_name,
             is_query=True if prompt_type == PromptType.query else False,
+            convert_to_tensor=True,
             **kwargs,
         )
 
@@ -143,10 +148,7 @@ class ColBERTWrapper(Wrapper):
 
 
 colbert_v2 = ModelMeta(
-    loader=partial(
-        ColBERTWrapper,
-        model_name="colbert-ir/colbertv2.0",
-    ),
+    loader=ColBERTWrapper,
     name="colbert-ir/colbertv2.0",
     languages=["eng_Latn"],
     open_weights=True,
@@ -154,12 +156,12 @@ colbert_v2 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     release_date="2024-09-21",
-    n_parameters=110 * 1e6,
+    n_parameters=int(110 * 1e6),
     memory_usage_mb=418,
     max_tokens=180,  # Reduced for Benchmarking - see ColBERT paper
     embed_dim=None,  # Bag of Embeddings (128) for each token
     license="mit",
-    similarity_fn_name="max_sim",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
     framework=["PyLate", "ColBERT"],
     reference="https://huggingface.co/colbert-ir/colbertv2.0",
     use_instructions=False,
@@ -172,9 +174,8 @@ colbert_v2 = ModelMeta(
 )
 
 jina_colbert_v2 = ModelMeta(
-    loader=partial(
-        ColBERTWrapper,
-        model_name="jinaai/jina-colbert-v2",
+    loader=ColBERTWrapper,
+    loader_kwargs=dict(
         query_prefix="[QueryMarker]",
         document_prefix="[DocumentMarker]",
         attend_to_expansion_tokens=True,
@@ -210,12 +211,12 @@ jina_colbert_v2 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     release_date="2024-08-16",
-    n_parameters=559 * 1e6,
+    n_parameters=int(559 * 1e6),
     memory_usage_mb=1067,
     max_tokens=8192,
     embed_dim=None,  # Bag of Embeddings (128) for each token
     license="cc-by-nc-4.0",
-    similarity_fn_name="max_sim",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
     framework=["PyLate", "ColBERT"],
     reference="https://huggingface.co/jinaai/jina-colbert-v2",
     use_instructions=False,

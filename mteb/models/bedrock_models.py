@@ -3,14 +3,14 @@ from __future__ import annotations
 import json
 import logging
 import re
-from functools import partial
 from typing import Any
 
 import numpy as np
 import tqdm
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.encoder_interface import BatchedInput, PromptType
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.cohere_models import model_prompts as cohere_model_prompts
 from mteb.models.cohere_models import supported_languages as cohere_supported_languages
 from mteb.models.wrapper import Wrapper
@@ -51,12 +51,13 @@ class BedrockWrapper(Wrapper):
 
     def encode(
         self,
-        sentences: list[str],
+        inputs: DataLoader[BatchedInput],
         *,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
+        inputs = [text for batch in inputs for text in batch["text"]]
         requires_package(self, "boto3", "Amazon Bedrock")
         show_progress_bar = (
             False
@@ -64,13 +65,13 @@ class BedrockWrapper(Wrapper):
             else kwargs.pop("show_progress_bar")
         )
         if self._provider == "amazon":
-            return self._encode_amazon(sentences, show_progress_bar)
+            return self._encode_amazon(inputs, show_progress_bar)
         elif self._provider == "cohere":
             prompt_name = self.get_prompt_name(
                 self.model_prompts, task_name, prompt_type
             )
             cohere_task_type = self.model_prompts.get(prompt_name, "search_document")
-            return self._encode_cohere(sentences, cohere_task_type, show_progress_bar)
+            return self._encode_cohere(inputs, cohere_task_type, show_progress_bar)
         else:
             raise ValueError(
                 f"Unknown provider '{self._provider}'. Must be 'amazon' or 'cohere'."
@@ -163,8 +164,8 @@ amazon_titan_embed_text_v1 = ModelMeta(
     revision="1",
     release_date="2023-09-27",
     languages=None,  # not specified
-    loader=partial(
-        BedrockWrapper,
+    loader=BedrockWrapper,
+    loader_kwargs=dict(
         model_id="amazon.titan-embed-text-v1",
         provider="amazon",
         max_tokens=8192,
@@ -179,7 +180,7 @@ amazon_titan_embed_text_v1 = ModelMeta(
     training_datasets=None,
     license=None,
     reference="https://aws.amazon.com/about-aws/whats-new/2023/09/amazon-titan-embeddings-generally-available/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=False,
 )
@@ -189,8 +190,8 @@ amazon_titan_embed_text_v2 = ModelMeta(
     revision="1",
     release_date="2024-04-30",
     languages=None,  # not specified
-    loader=partial(
-        BedrockWrapper,
+    loader=BedrockWrapper,
+    loader_kwargs=dict(
         model_id="amazon.titan-embed-text-v2:0",
         provider="amazon",
         max_tokens=8192,
@@ -205,7 +206,7 @@ amazon_titan_embed_text_v2 = ModelMeta(
     training_datasets=None,
     license=None,
     reference="https://aws.amazon.com/about-aws/whats-new/2024/04/amazon-titan-text-embeddings-v2-amazon-bedrock/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=False,
 )
@@ -213,8 +214,8 @@ amazon_titan_embed_text_v2 = ModelMeta(
 # https://github.com/embeddings-benchmark/mteb/blob/main/mteb/models/cohere_models.py
 # This implementation uses the Amazon Bedrock endpoint for Cohere models.
 cohere_embed_english_v3 = ModelMeta(
-    loader=partial(
-        BedrockWrapper,
+    loader=BedrockWrapper,
+    loader_kwargs=dict(
         model_id="cohere.embed-english-v3",
         provider="cohere",
         max_tokens=512,
@@ -234,14 +235,14 @@ cohere_embed_english_v3 = ModelMeta(
     max_tokens=512,
     embed_dim=1024,
     license=None,
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
 )
 
 cohere_embed_multilingual_v3 = ModelMeta(
-    loader=partial(
-        BedrockWrapper,
+    loader=BedrockWrapper,
+    loader_kwargs=dict(
         model_id="cohere.embed-multilingual-v3",
         provider="cohere",
         max_tokens=512,
@@ -261,7 +262,7 @@ cohere_embed_multilingual_v3 = ModelMeta(
     max_tokens=512,
     embed_dim=1024,
     license=None,
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
 )

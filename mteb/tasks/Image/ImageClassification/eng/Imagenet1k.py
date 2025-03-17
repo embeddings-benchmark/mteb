@@ -14,7 +14,7 @@ class Imagenet1kClassification(AbsTaskImageClassification):
             "revision": "b24c7a5a3ef12df09089055d1795e2ce7c7e7397",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -37,10 +37,6 @@ class Imagenet1kClassification(AbsTaskImageClassification):
         year={2009},
         organization={Ieee}
         }""",
-        descriptive_stats={
-            "n_samples": {"test": 37200},
-            "avg_character_length": {"test": 0},
-        },
     )
     image_column_name: str = "jpg"
     label_column_name: str = "cls"
