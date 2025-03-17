@@ -116,14 +116,13 @@ def llm2clip_loader(**kwargs):
             **kwargs: Any,
         ):
             all_image_embeddings = []
-            import torchvision.transforms.functional as F
 
             with torch.no_grad(), torch.amp.autocast("cuda"):
                 for batch in tqdm(
                     images, disable=not show_progress_bar, desc="Image Encoding"
                 ):
                     input_pixels = self.processor(
-                        images=[F.to_pil_image(b) for b in batch["image"]],
+                        images=batch["image"],
                         return_tensors="pt",
                     ).pixel_values.to(self.device)
                     image_features = self.model.get_image_features(input_pixels)

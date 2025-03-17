@@ -108,7 +108,6 @@ class VLM2VecWrapper:
     ):
         text = "<|image_1|> Represent the given image."
         all_image_embeddings = []
-        import torchvision.transforms.functional as F
 
         with torch.no_grad():
             for batch in tqdm(
@@ -118,7 +117,7 @@ class VLM2VecWrapper:
                 for b in batch["image"]:
                     inputs = self.processor(
                         text,
-                        [F.to_pil_image(b.to("cpu"))],
+                        b,
                         return_tensors="pt",
                         max_length=256,
                         truncation=True,
@@ -209,8 +208,6 @@ class VLM2VecWrapper:
         fusion_mode: Literal["sum"] = "sum",
         **kwargs: Any,
     ) -> np.ndarray | torch.Tensor:
-        import torchvision.transforms.functional as F
-
         if "text" in inputs.dataset.features and "image" in inputs.dataset.features:
             all_fused_embeddings = []
 
@@ -221,8 +218,8 @@ class VLM2VecWrapper:
                     batch_image = batch["image"]
                     for item_image, item_text in zip(batch_image, batch_text):
                         inputs = self.processor(
-                            f"<|image_1|> Represent the given image with the following question: {item_text['text']}",
-                            [F.to_pil_image(item_image.to("cpu"))],
+                            f"<|image_1|> Represent the given image with the following question: {item_text}",
+                            item_image,
                             return_tensors="pt",
                             max_length=256,
                             truncation=True,

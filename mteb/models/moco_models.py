@@ -98,6 +98,7 @@ def mocov3_loader(**kwargs):
             prompt_type: PromptType | None = None,
             **kwargs: Any,
         ) -> np.ndarray | torch.Tensor:
+            0 / 0
             if "text" in inputs.dataset.features:
                 raise ValueError(
                     "MOCO models only support image encoding. Text encoding is not supported."

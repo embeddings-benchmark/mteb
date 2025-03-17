@@ -5,7 +5,6 @@ from typing import Any, Literal
 
 import numpy as np
 import torch
-import torchvision.transforms.functional as F
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
@@ -78,10 +77,7 @@ def evaclip_loader(**kwargs):
                     images, disable=not show_progress_bar, desc="Image Encoding"
                 ):
                     inputs = torch.vstack(
-                        [
-                            self.img_preprocess(F.to_pil_image(b)).unsqueeze(0)
-                            for b in batch["image"]
-                        ]
+                        [self.img_preprocess(b).unsqueeze(0) for b in batch["image"]]
                     )
                     image_outputs = self.model.encode_image(inputs.to(self.device))
                     all_image_embeddings.append(image_outputs.cpu())
