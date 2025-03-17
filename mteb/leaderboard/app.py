@@ -28,7 +28,7 @@ logging.getLogger("mteb.load_results.task_results").setLevel(
 )  # Warnings related to task split
 logging.getLogger("mteb.models.overview").setLevel(
     logging.WARNING
-)  # Warning related to model metadata (fetch_from_hf=True)
+)  # Warning related to model metadata (fetch_from_hf=False)
 warnings.filterwarnings("ignore", message="Couldn't get scores for .* due to .*")
 logger = logging.getLogger(__name__)
 
