@@ -52,31 +52,11 @@ class IEMOCAP(AbsTaskAudioClassification):
     )
 
     audio_column_name: str = "audio"
-    label_column_name: str = "label"
+    label_column_name: str = "major_emotion"
     samples_per_label: int = 10
     is_cross_validation: bool = True
 
     def dataset_transform(self):
-        ## map labels to ids
-        labels = [
-            "sad",
-            "happy",
-            "surprise",
-            "frustrated",
-            "disgust",
-            "angry",
-            "neutral",
-            "excited",
-            "other",
-            "fear",
-        ]
-
-        label2id = {i: j for j, i in enumerate(labels)}
-
-        self.dataset = self.dataset.map(
-            lambda x: {"label": label2id[x["major_emotion"]]}
-        )
-
         ## required to run the dataloader for cross-validation
         import torch
 
