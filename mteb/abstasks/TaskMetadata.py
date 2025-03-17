@@ -67,6 +67,9 @@ TASK_SUBTYPE = Literal[
     "Spoken Digit Classification",
     "Gender Clustering",
     "Rendered semantic textual similarity",
+    "Sentiment Analysis",
+    "Intent Classification",
+    "Vehicle Clustering",
 ]
 
 TASK_DOMAIN = Literal[
