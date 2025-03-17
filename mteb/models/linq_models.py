@@ -1,13 +1,11 @@
 from __future__ import annotations
 
-from functools import partial
-
 import torch
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
-from mteb.models.instruct_wrapper import instruct_wrapper
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 
 
 def instruction_template(
@@ -17,9 +15,8 @@ def instruction_template(
 
 
 Linq_Embed_Mistral = ModelMeta(
-    loader=partial(  # type: ignore
-        instruct_wrapper,
-        model_name_or_path="Linq-AI-Research/Linq-Embed-Mistral",
+    loader=SentenceTransformerWrapper,
+    loader_kwargs=dict(
         instruction_template=instruction_template,
         attn="cccc",
         pooling_method="lasttoken",

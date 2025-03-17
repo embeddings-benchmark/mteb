@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from functools import partial
-
 import torch
 
 from mteb.model_meta import ModelMeta, ScoringFunction
@@ -31,9 +29,8 @@ E5_MISTRAL_TRAINING_DATA = {
 }
 
 e5_instruct = ModelMeta(
-    loader=partial(  # type: ignore
-        instruct_wrapper,
-        model_name_or_path="intfloat/multilingual-e5-large-instruct",
+    loader=instruct_wrapper,
+    loader_kwargs=dict(
         instruction_template=E5_INSTRUCTION,
         attn="cccc",
         pooling_method="mean",
@@ -68,9 +65,8 @@ e5_instruct = ModelMeta(
 )
 
 e5_mistral = ModelMeta(
-    loader=partial(  # type: ignore
-        instruct_wrapper,
-        model_name_or_path="intfloat/e5-mistral-7b-instruct",
+    loader=instruct_wrapper,
+    loader_kwargs=dict(
         instruction_template=E5_INSTRUCTION,
         attn="cccc",
         pooling_method="lasttoken",
@@ -116,9 +112,8 @@ e5_mistral = ModelMeta(
 )
 
 zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
-    loader=partial(  # type: ignore
-        instruct_wrapper,
-        model_name_or_path="zeta-alpha-ai/Zeta-Alpha-E5-Mistral",
+    loader=instruct_wrapper,
+    loader_kwargs=dict(
         instruction_template=E5_INSTRUCTION,
         attn="cccc",
         pooling_method="lasttoken",

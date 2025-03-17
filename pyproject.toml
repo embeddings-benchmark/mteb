@@ -194,6 +194,10 @@ addopts = """
 # --durations=5 -> Show the 5 slowest tests
 # --reruns-delay 10 -> Delay between reruns in seconds to avoid running into the same issue again
 
+markers = [
+    "test_datasets: marks tests that tests dataset availability",
+]
+
 [tool.uv]
 override-dependencies = [
     "salesforce-lavis", # salesforce-lavis is not valid with sentence transformers >=3.0.0

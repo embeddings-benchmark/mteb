@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 parsbert = ModelMeta(
+    loader=sentence_transformers_loader,
     name="HooshvareLab/bert-base-parsbert-uncased",
     languages=["fas-Arab"],
     open_weights=True,
@@ -16,7 +18,7 @@ parsbert = ModelMeta(
     license="not specified",
     max_tokens=512,
     reference="https://huggingface.co/HooshvareLab/bert-base-parsbert-uncased",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -30,6 +32,7 @@ parsbert = ModelMeta(
 )
 
 bert_zwnj = ModelMeta(
+    loader=sentence_transformers_loader,
     name="m3hrdadfi/bert-zwnj-wnli-mean-tokens",
     languages=["fas-Arab"],
     open_weights=True,
@@ -41,7 +44,7 @@ bert_zwnj = ModelMeta(
     license="not specified",
     max_tokens=512,
     reference="https://huggingface.co/m3hrdadfi/bert-zwnj-wnli-mean-tokens",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -54,6 +57,7 @@ bert_zwnj = ModelMeta(
 )
 
 roberta_zwnj = ModelMeta(
+    loader=sentence_transformers_loader,
     name="m3hrdadfi/roberta-zwnj-wnli-mean-tokens",
     languages=["fas-Arab"],
     open_weights=True,
@@ -65,7 +69,7 @@ roberta_zwnj = ModelMeta(
     license="not specified",
     max_tokens=514,
     reference="https://huggingface.co/m3hrdadfi/roberta-zwnj-wnli-mean-tokens",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -77,6 +81,7 @@ roberta_zwnj = ModelMeta(
 )
 
 sentence_transformer_parsbert = ModelMeta(
+    loader=sentence_transformers_loader,
     name="myrkur/sentence-transformer-parsbert-fa",
     languages=["fas-Arab"],
     open_weights=True,
@@ -88,7 +93,7 @@ sentence_transformer_parsbert = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/myrkur/sentence-transformer-parsbert-fa",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -100,6 +105,7 @@ sentence_transformer_parsbert = ModelMeta(
 )
 
 tooka_bert_base = ModelMeta(
+    loader=sentence_transformers_loader,
     name="PartAI/TookaBERT-Base",
     languages=["fas-Arab"],
     open_weights=True,
@@ -111,7 +117,7 @@ tooka_bert_base = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/PartAI/TookaBERT-Base",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -125,6 +131,7 @@ tooka_bert_base = ModelMeta(
 )
 
 tooka_sbert = ModelMeta(
+    loader=sentence_transformers_loader,
     name="PartAI/Tooka-SBERT",
     languages=["fas-Arab"],
     open_weights=True,
@@ -136,7 +143,7 @@ tooka_sbert = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/PartAI/Tooka-SBERT",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -147,6 +154,7 @@ tooka_sbert = ModelMeta(
 )
 
 fa_bert = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sbunlp/fabert",
     languages=["fas-Arab"],
     open_weights=True,
@@ -158,7 +166,7 @@ fa_bert = ModelMeta(
     license="not specified",
     max_tokens=512,
     reference="https://huggingface.co/sbunlp/fabert",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,

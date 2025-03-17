@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 arabic_triplet_matryoshka = ModelMeta(
+    loader=sentence_transformers_loader,
     name="Omartificial-Intelligence-Space/Arabic-Triplet-Matryoshka-V2",
     languages=["ara-Arab"],
     open_weights=True,
@@ -14,7 +16,7 @@ arabic_triplet_matryoshka = ModelMeta(
     license="apache-2.0",
     max_tokens=768,
     reference="https://huggingface.co/Omartificial-Intelligence-Space/Arabic-Triplet-Matryoshka-V2",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,

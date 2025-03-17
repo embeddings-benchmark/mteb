@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 from collections import defaultdict
+from typing import TYPE_CHECKING
 
 import numpy as np
 import pandas as pd
@@ -12,6 +13,9 @@ import tqdm
 from datasets import load_dataset
 from packaging.version import Version
 from sklearn.metrics import auc
+
+if TYPE_CHECKING:
+    from mteb.types import Array
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +38,7 @@ def use_torch_compile():
     return gpu_ok
 
 
-def cos_sim(a: torch.Tensor | np.ndarray, b: torch.Tensor | np.ndarray) -> torch.Tensor:
+def cos_sim(a: Array, b: Array) -> torch.Tensor:
     """Calculate pairwise cosine similarities between two sets of vectors.
 
     Computes the cosine similarity cos_sim(a[i], b[j]) for all i and j.
@@ -73,7 +77,7 @@ def cos_sim(a: torch.Tensor | np.ndarray, b: torch.Tensor | np.ndarray) -> torch
         return _cos_sim_core(a, b)
 
 
-def max_sim(a: np.ndarray | torch.Tensor, b: np.ndarray | torch.Tensor) -> torch.Tensor:
+def max_sim(a: Array, b: Array) -> torch.Tensor:
     """Computes the max-similarity max_sim(a[i], b[j]) for all i and j.
     Works with a Tensor of the shape (batch_size, num_tokens, token_dim)
 
@@ -101,9 +105,7 @@ def max_sim(a: np.ndarray | torch.Tensor, b: np.ndarray | torch.Tensor) -> torch
     return scores.max(axis=-1).values.sum(axis=-1)
 
 
-def dot_score(
-    a: torch.Tensor | np.ndarray, b: torch.Tensor | np.ndarray
-) -> torch.Tensor:
+def dot_score(a: Array, b: Array) -> torch.Tensor:
     """Computes the dot-product dot_prod(a[i], b[j]) for all i and j.
     :return: Matrix with res[i][j]  = dot_prod(a[i], b[j])
     """

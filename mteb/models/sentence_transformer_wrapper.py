@@ -15,6 +15,12 @@ from mteb.models.wrapper import Wrapper
 logger = logging.getLogger(__name__)
 
 
+def sentence_transformers_loader(
+    model_name: str, revision: str | None = None, **kwargs
+) -> SentenceTransformerWrapper:
+    return SentenceTransformerWrapper(model=model_name, revision=revision, **kwargs)
+
+
 class SentenceTransformerWrapper(Wrapper):
     def __init__(
         self,

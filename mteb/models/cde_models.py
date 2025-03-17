@@ -4,13 +4,12 @@ import logging
 
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.bge_models import bge_full_data
-from mteb.models.no_model_implementation import no_model_implementation_available
 
 logger = logging.getLogger(__name__)
 
 
 cde_small_v1 = ModelMeta(
-    loader=no_model_implementation_available,
+    loader=None,
     name="jxm/cde-small-v1",
     languages=["eng_Latn"],
     open_weights=True,
@@ -33,7 +32,7 @@ cde_small_v1 = ModelMeta(
 )
 
 cde_small_v2 = ModelMeta(
-    loader=no_model_implementation_available,
+    loader=None,
     name="jxm/cde-small-v2",
     languages=["eng_Latn"],
     open_weights=True,

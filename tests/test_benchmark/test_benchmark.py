@@ -22,9 +22,10 @@ from .mock_models import (
     MockMocoEncoder,
     MockNumpyEncoder,
     MockSentenceTransformer,
+    MockSentenceTransformersbf16Encoder,
     MockSentenceTransformerWrapper,
-    MockTorchbf16Encoder,
     MockTorchEncoder,
+    MockTorchfp16Encoder,
 )
 from .mock_tasks import (
     MockImageClusteringTask,
@@ -58,7 +59,8 @@ def test_mulitple_mteb_tasks(tasks: list[AbsTask], model: mteb.Encoder, tmp_path
     [
         MockNumpyEncoder(),
         MockTorchEncoder(),
-        MockTorchbf16Encoder(),
+        MockTorchfp16Encoder(),
+        MockSentenceTransformersbf16Encoder(),
     ],
 )
 def test_benchmark_encoders_on_task(
