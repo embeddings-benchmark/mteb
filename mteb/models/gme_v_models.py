@@ -166,28 +166,6 @@ class GmeQwen2VL(Wrapper):
             texts=sentences, task_name=task_name, prompt_type=prompt_type, **kwargs
         )
 
-    def encode_queries(self, queries: list[str], **kwargs):
-        embeddings = self.encode(queries, prompt_type=PromptType.query, **kwargs)
-        return embeddings
-
-    def encode_corpus(self, corpus: list[dict[str, str]], **kwargs):
-        if type(corpus) is dict:
-            sentences = [
-                (corpus["title"][i] + self.sep + corpus["text"][i]).strip()
-                if "title" in corpus
-                else corpus["text"][i].strip()
-                for i in range(len(corpus["text"]))
-            ]
-        else:
-            sentences = [
-                (doc["title"] + self.sep + doc["text"]).strip()
-                if "title" in doc
-                else doc["text"].strip()
-                for doc in corpus
-            ]
-        embeddings = self.encode(sentences, prompt_type=PromptType.passage**kwargs)
-        return embeddings
-
     def get_image_embeddings(self, images: list[Image.Image] | DataLoader, **kwargs):
         return self.get_fused_embeddings(images=images, **kwargs)
 
