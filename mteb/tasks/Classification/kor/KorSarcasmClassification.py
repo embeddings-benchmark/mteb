@@ -22,7 +22,7 @@ class KorSarcasmClassification(AbsTaskClassification):
         },
         reference="https://github.com/SpellOnYou/korean-sarcasm",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["kor-Hang"],

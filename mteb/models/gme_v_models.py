@@ -163,7 +163,7 @@ class GmeQwen2VL(Wrapper):
         probs = (logits * 100).softmax(dim=-1)
         return probs
 
-    def get_fused_embeddings(
+    def encode(
         self,
         inputs: DataLoader[BatchedInput],
         *,

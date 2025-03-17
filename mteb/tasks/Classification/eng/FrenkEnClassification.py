@@ -15,7 +15,7 @@ class FrenkEnClassification(AbsTaskClassification):
         },
         reference="https://arxiv.org/abs/1906.02045",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

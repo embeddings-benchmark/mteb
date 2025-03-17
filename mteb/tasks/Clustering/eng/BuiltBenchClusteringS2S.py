@@ -14,7 +14,7 @@ class BuiltBenchClusteringS2S(AbsTaskClustering):
             "revision": "1aaeb2ece89ea0a8c64e215c95c4cfaf7e891149",
         },
         type="Clustering",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
