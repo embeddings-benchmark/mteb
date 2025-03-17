@@ -4,7 +4,6 @@ import base64
 import io
 import os
 import time
-from functools import partial
 from typing import Any, Literal
 
 import numpy as np
@@ -14,7 +13,7 @@ from torchvision import transforms
 from tqdm import tqdm
 
 from mteb.encoder_interface import BatchedInput, PromptType
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 
 api_key = os.getenv("COHERE_API_KEY")
 tensor_to_image = transforms.Compose([transforms.ToPILImage()])
@@ -22,7 +21,7 @@ tensor_to_image = transforms.Compose([transforms.ToPILImage()])
 
 def cohere_v_loader(**kwargs):
     try:
-        import cohere
+        import cohere  # type: ignore
     except ImportError:
         raise ImportError("To use cohere models, please run `pip install cohere`.")
 
@@ -143,8 +142,9 @@ def cohere_v_loader(**kwargs):
 
 
 cohere_mult_3 = ModelMeta(
-    loader=partial(cohere_v_loader, model_name="embed-multilingual-v3.0"),
-    name="embed-multilingual-v3.0-v",
+    loader=cohere_v_loader,  # type: ignore
+    loader_kwargs={"model_name": "embed-multilingual-v3.0"},
+    name="cohere/embed-multilingual-v3.0",
     languages=[],  # Unknown, but support >100 languages
     revision="1",
     release_date="2024-10-24",
@@ -153,7 +153,7 @@ cohere_mult_3 = ModelMeta(
     max_tokens=None,
     embed_dim=1024,
     license=None,
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=[],
     modalities=["image", "text"],
     open_weights=False,
@@ -165,8 +165,9 @@ cohere_mult_3 = ModelMeta(
 )
 
 cohere_eng_3 = ModelMeta(
-    loader=partial(cohere_v_loader, model_name="embed-english-v3.0"),
-    name="embed-english-v3.0-v",
+    loader=cohere_v_loader,  # type: ignore
+    loader_kwargs={"model_name": "embed-english-v3.0"},
+    name="cohere/embed-english-v3.0",
     languages=["eng-Latn"],
     revision="1",
     release_date="2024-10-24",
@@ -175,7 +176,7 @@ cohere_eng_3 = ModelMeta(
     max_tokens=None,
     embed_dim=1024,
     license=None,
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=[],
     modalities=["image", "text"],
     open_weights=False,

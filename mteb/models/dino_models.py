@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from functools import partial
 from typing import Any, Literal
 
 import numpy as np
@@ -103,10 +102,7 @@ dinov2_training_datasets = {
 
 
 dinov2_small = ModelMeta(
-    loader=partial(
-        DINOModelWrapper,
-        model_name="facebook/dinov2-small",
-    ),
+    loader=DINOModelWrapper,  # type: ignore
     name="facebook/dinov2-small",
     languages=["eng_Latn"],
     revision="ed25f3a31f01632728cabb09d1542f84ab7b0056",
@@ -128,10 +124,7 @@ dinov2_small = ModelMeta(
 )
 
 dinov2_base = ModelMeta(
-    loader=partial(
-        DINOModelWrapper,
-        model_name="facebook/dinov2-base",
-    ),
+    loader=DINOModelWrapper,  # type: ignore
     name="facebook/dinov2-base",
     languages=["eng_Latn"],
     revision="f9e44c814b77203eaa57a6bdbbd535f21ede1415",
@@ -153,10 +146,7 @@ dinov2_base = ModelMeta(
 )
 
 dinov2_large = ModelMeta(
-    loader=partial(
-        DINOModelWrapper,
-        model_name="facebook/dinov2-large",
-    ),
+    loader=DINOModelWrapper,  # type: ignore
     name="facebook/dinov2-large",
     languages=["eng_Latn"],
     revision="47b73eefe95e8d44ec3623f8890bd894b6ea2d6c",
@@ -178,10 +168,7 @@ dinov2_large = ModelMeta(
 )
 
 dinov2_giant = ModelMeta(
-    loader=partial(
-        DINOModelWrapper,
-        model_name="facebook/dinov2-giant",
-    ),
+    loader=DINOModelWrapper,  # type: ignore
     name="facebook/dinov2-giant",
     languages=["eng_Latn"],
     revision="611a9d42f2335e0f921f1e313ad3c1b7178d206d",

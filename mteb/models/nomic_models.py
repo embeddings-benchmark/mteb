@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
 from typing import Any
 
 import numpy as np
@@ -195,11 +194,9 @@ NOMIC_CITATION = """
 """
 
 nomic_embed_v1_5 = ModelMeta(
-    loader=partial(
-        NomicWrapper,
+    loader=NomicWrapper,
+    loader_kwargs=dict(
         trust_remote_code=True,
-        model_name="nomic-ai/nomic-embed-text-v1.5",
-        revision="b0753ae76394dd36bcfb912a46018088bca48be0",
         model_prompts=model_prompts,
     ),
     name="nomic-ai/nomic-embed-text-v1.5",
@@ -225,11 +222,9 @@ nomic_embed_v1_5 = ModelMeta(
 )
 
 nomic_embed_v1 = ModelMeta(
-    loader=partial(
-        NomicWrapper,
+    loader=NomicWrapper,
+    loader_kwargs=dict(
         trust_remote_code=True,
-        model_name="nomic-ai/nomic-embed-text-v1",
-        revision="0759316f275aa0cb93a5b830973843ca66babcf5",
         model_prompts=model_prompts,
     ),
     name="nomic-ai/nomic-embed-text-v1",
@@ -255,11 +250,9 @@ nomic_embed_v1 = ModelMeta(
 )
 
 nomic_embed_v1_ablated = ModelMeta(
-    loader=partial(
-        NomicWrapper,
+    loader=NomicWrapper,
+    loader_kwargs=dict(
         trust_remote_code=True,
-        model_name="nomic-ai/nomic-embed-text-v1-ablated",
-        revision="7d948905c5d5d3874fa55a925d68e49dbf411e5f",
         model_prompts=model_prompts,
     ),
     name="nomic-ai/nomic-embed-text-v1-ablated",
@@ -284,11 +277,9 @@ nomic_embed_v1_ablated = ModelMeta(
 )
 
 nomic_embed_v1_unsupervised = ModelMeta(
-    loader=partial(
-        NomicWrapper,
+    loader=NomicWrapper,
+    loader_kwargs=dict(
         trust_remote_code=True,
-        model_name="nomic-ai/nomic-embed-text-v1-unsupervised",
-        revision="b53d557b15ae63852847c222d336c1609eced93c",
         model_prompts=model_prompts,
     ),
     name="nomic-ai/nomic-embed-text-v1-unsupervised",
@@ -313,14 +304,10 @@ nomic_embed_v1_unsupervised = ModelMeta(
 )
 
 nomic_modern_bert_embed = ModelMeta(
-    loader=partial(
-        NomicWrapper,
-        model_name="nomic-ai/modernbert-embed-base",
-        revision="5960f1566fb7cb1adf1eb6e816639cf4646d9b12",
+    loader=NomicWrapper,
+    loader_kwargs=dict(
+        trust_remote_code=True,
         model_prompts=model_prompts,
-        model_kwargs={
-            "torch_dtype": torch.float16,
-        },
     ),
     name="nomic-ai/modernbert-embed-base",
     languages=["eng-Latn"],

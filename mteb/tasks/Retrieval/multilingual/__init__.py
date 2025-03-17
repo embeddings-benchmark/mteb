@@ -24,12 +24,14 @@ from .NeuCLIR2023Retrieval import (
 )
 from .PublicHealthQARetrieval import PublicHealthQARetrieval
 from .StatcanDialogueDatasetRetrieval import StatcanDialogueDatasetRetrieval
+from .WebFAQRetrieval import WebFAQRetrieval
 from .WikipediaRetrievalMultilingual import WikipediaRetrievalMultilingual
 from .XMarketRetrieval import XMarket
 from .XPQARetrieval import XPQARetrieval
 from .XQuADRetrieval import XQuADRetrieval
 
 __all__ = [
+    "WebFAQRetrieval",
     "WikipediaRetrievalMultilingual",
     "MintakaRetrieval",
     "PublicHealthQARetrieval",

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from functools import partial
 from typing import Any
 
 import numpy as np
@@ -134,7 +133,7 @@ class CohereTextEmbeddingModel(Wrapper):
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
-        self.model_name = model_name
+        self.model_name = model_name.lstrip("Cohere/Cohere-")
         self.sep = sep
         self.model_prompts = (
             self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
@@ -217,9 +216,8 @@ model_prompts = {
 }
 
 cohere_mult_3 = ModelMeta(
-    loader=partial(  # type: ignore
-        CohereTextEmbeddingModel,
-        model_name="embed-multilingual-v3.0",
+    loader=CohereTextEmbeddingModel,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     name="Cohere/Cohere-embed-multilingual-v3.0",
@@ -242,9 +240,8 @@ cohere_mult_3 = ModelMeta(
 )
 
 cohere_eng_3 = ModelMeta(
-    loader=partial(  # type: ignore
-        CohereTextEmbeddingModel,
-        model_name="embed-english-v3.0",
+    loader=CohereTextEmbeddingModel,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     name="Cohere/Cohere-embed-english-v3.0",
@@ -267,9 +264,8 @@ cohere_eng_3 = ModelMeta(
 )
 
 cohere_mult_light_3 = ModelMeta(
-    loader=partial(
-        CohereTextEmbeddingModel,
-        model_name="embed-multilingual-light-v3.0",
+    loader=CohereTextEmbeddingModel,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     name="Cohere/Cohere-embed-multilingual-light-v3.0",
@@ -292,9 +288,8 @@ cohere_mult_light_3 = ModelMeta(
 )
 
 cohere_eng_light_3 = ModelMeta(
-    loader=partial(
-        CohereTextEmbeddingModel,
-        model_name="embed-english-light-v3.0",
+    loader=CohereTextEmbeddingModel,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     name="Cohere/Cohere-embed-english-light-v3.0",

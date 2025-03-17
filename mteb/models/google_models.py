@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from functools import partial
 from typing import Any
 
 import numpy as np
@@ -143,8 +142,8 @@ class GoogleTextEmbeddingModel(Wrapper):
 
 
 google_text_emb_004 = ModelMeta(
-    loader=partial(
-        GoogleTextEmbeddingModel,
+    loader=GoogleTextEmbeddingModel,
+    loader_kwargs=dict(
         model_name="text-embedding-004",
         model_prompts=MODEL_PROMPTS,
     ),
@@ -168,8 +167,8 @@ google_text_emb_004 = ModelMeta(
 )
 
 google_text_emb_005 = ModelMeta(
-    loader=partial(
-        GoogleTextEmbeddingModel,
+    loader=GoogleTextEmbeddingModel,
+    loader_kwargs=dict(
         model_name="text-embedding-005",
         model_prompts=MODEL_PROMPTS,
     ),
@@ -193,9 +192,9 @@ google_text_emb_005 = ModelMeta(
 )
 
 google_text_multilingual_emb_002 = ModelMeta(
-    loader=partial(
-        GoogleTextEmbeddingModel,
-        model_name="text-multilingual-embedding-002",
+    loader=GoogleTextEmbeddingModel,
+    loader_kwargs=dict(
+        model_name="text-embedding-002",
         model_prompts=MODEL_PROMPTS,
     ),
     name="google/text-multilingual-embedding-002",
@@ -218,8 +217,8 @@ google_text_multilingual_emb_002 = ModelMeta(
 )
 
 google_gemini_embedding_exp_03_07 = ModelMeta(
-    loader=partial(
-        GoogleTextEmbeddingModel,
+    loader=GoogleTextEmbeddingModel,
+    loader_kwargs=dict(
         model_name="gemini-embedding-exp-03-07",
         model_prompts=MODEL_PROMPTS,
     ),
@@ -234,7 +233,7 @@ google_gemini_embedding_exp_03_07 = ModelMeta(
     embed_dim=3072,
     license=None,
     reference="https://developers.googleblog.com/en/gemini-embedding-text-model-now-available-gemini-api/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     public_training_code=None,

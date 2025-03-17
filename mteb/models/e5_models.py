@@ -1,13 +1,11 @@
 from __future__ import annotations
 
-from functools import partial
-
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import (
     ModelMeta,
     ScoringFunction,
-    sentence_transformers_loader,
 )
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 E5_PAPER_RELEASE_DATE = "2024-02-08"
 XLMR_LANGUAGES = [
@@ -167,10 +165,8 @@ ME5_TRAINING_DATA = {
 }
 
 e5_mult_small = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="intfloat/multilingual-e5-small",
-        revision="fd1525a9fd15316a2d503bf26ab031a61d056e98",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     name="intfloat/multilingual-e5-small",
@@ -195,9 +191,8 @@ e5_mult_small = ModelMeta(
 )
 
 e5_mult_base = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="intfloat/multilingual-e5-base",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     name="intfloat/multilingual-e5-base",
@@ -222,10 +217,8 @@ e5_mult_base = ModelMeta(
 )
 
 e5_mult_large = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="intfloat/multilingual-e5-large",
-        revision="ab10c1a7f42e74530fe7ae5be82e6d4f11a719eb",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     name="intfloat/multilingual-e5-large",
@@ -250,9 +243,8 @@ e5_mult_large = ModelMeta(
 )
 
 e5_eng_small_v2 = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="intfloat/e5-small-v2",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     name="intfloat/e5-small-v2",
@@ -277,10 +269,8 @@ e5_eng_small_v2 = ModelMeta(
 )
 
 e5_eng_small = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="intfloat/e5-small",
-        revision="e272f3049e853b47cb5ca3952268c6662abda68f",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     name="intfloat/e5-small",
@@ -305,10 +295,8 @@ e5_eng_small = ModelMeta(
 )
 
 e5_eng_base_v2 = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="intfloat/e5-base-v2",
-        revision="1c644c92ad3ba1efdad3f1451a637716616a20e8",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     name="intfloat/e5-base-v2",
@@ -334,10 +322,8 @@ e5_eng_base_v2 = ModelMeta(
 )
 
 e5_eng_large_v2 = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="intfloat/e5-large-v2",
-        revision="b322e09026e4ea05f42beadf4d661fb4e101d311",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     name="intfloat/e5-large-v2",
@@ -363,10 +349,8 @@ e5_eng_large_v2 = ModelMeta(
 )
 
 e5_large = ModelMeta(
-    loader=partial(
-        sentence_transformers_loader,
-        model_name="intfloat/e5-large",
-        revision="4dc6d853a804b9c8886ede6dda8a073b7dc08a81",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     name="intfloat/e5-large",
@@ -392,10 +376,8 @@ e5_large = ModelMeta(
 )
 
 e5_base = ModelMeta(
-    loader=partial(
-        sentence_transformers_loader,
-        model_name="intfloat/e5-base",
-        revision="b533fe4636f4a2507c08ddab40644d20b0006d6a",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     name="intfloat/e5-base",

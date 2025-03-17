@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
 from typing import Any
 
 import numpy as np
@@ -149,10 +148,7 @@ class ColBERTWrapper(Wrapper):
 
 
 colbert_v2 = ModelMeta(
-    loader=partial(
-        ColBERTWrapper,
-        model_name="colbert-ir/colbertv2.0",
-    ),
+    loader=ColBERTWrapper,
     name="colbert-ir/colbertv2.0",
     languages=["eng_Latn"],
     open_weights=True,
@@ -160,7 +156,7 @@ colbert_v2 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     release_date="2024-09-21",
-    n_parameters=110 * 1e6,
+    n_parameters=int(110 * 1e6),
     memory_usage_mb=418,
     max_tokens=180,  # Reduced for Benchmarking - see ColBERT paper
     embed_dim=None,  # Bag of Embeddings (128) for each token
@@ -178,9 +174,8 @@ colbert_v2 = ModelMeta(
 )
 
 jina_colbert_v2 = ModelMeta(
-    loader=partial(
-        ColBERTWrapper,
-        model_name="jinaai/jina-colbert-v2",
+    loader=ColBERTWrapper,
+    loader_kwargs=dict(
         query_prefix="[QueryMarker]",
         document_prefix="[DocumentMarker]",
         attend_to_expansion_tokens=True,
@@ -216,7 +211,7 @@ jina_colbert_v2 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     release_date="2024-08-16",
-    n_parameters=559 * 1e6,
+    n_parameters=int(559 * 1e6),
     memory_usage_mb=1067,
     max_tokens=8192,
     embed_dim=None,  # Bag of Embeddings (128) for each token

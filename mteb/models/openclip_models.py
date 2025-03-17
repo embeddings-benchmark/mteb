@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from functools import partial
 from typing import Any, Literal
 
 import numpy as np
@@ -123,10 +122,7 @@ def openclip_loader(**kwargs):
 
 
 CLIP_ViT_L_14_DataComp_XL_s13B_b90K = ModelMeta(
-    loader=partial(
-        openclip_loader,
-        model_name="laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K",
-    ),
+    loader=openclip_loader,  # type: ignore
     name="laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K",
     languages=["eng_Latn"],
     revision="84c9828e63dc9a9351d1fe637c346d4c1c4db341",
@@ -150,10 +146,7 @@ CLIP_ViT_L_14_DataComp_XL_s13B_b90K = ModelMeta(
 )
 
 CLIP_ViT_B_32_DataComp_XL_s13B_b90K = ModelMeta(
-    loader=partial(
-        openclip_loader,
-        model_name="laion/CLIP-ViT-B-32-DataComp.XL-s13B-b90K",
-    ),
+    loader=openclip_loader,  # type: ignore
     name="laion/CLIP-ViT-B-32-DataComp.XL-s13B-b90K",
     languages=["eng_Latn"],
     revision="f0e2ffa09cbadab3db6a261ec1ec56407ce42912",
@@ -177,10 +170,7 @@ CLIP_ViT_B_32_DataComp_XL_s13B_b90K = ModelMeta(
 )
 
 CLIP_ViT_B_16_DataComp_XL_s13B_b90K = ModelMeta(
-    loader=partial(
-        openclip_loader,
-        model_name="laion/CLIP-ViT-B-16-DataComp.XL-s13B-b90K",
-    ),
+    loader=openclip_loader,  # type: ignore
     name="laion/CLIP-ViT-B-16-DataComp.XL-s13B-b90K",
     languages=["eng_Latn"],
     revision="d110532e8d4ff91c574ee60a342323f28468b287",
@@ -204,10 +194,7 @@ CLIP_ViT_B_16_DataComp_XL_s13B_b90K = ModelMeta(
 )
 
 CLIP_ViT_bigG_14_laion2B_39B_b160k = ModelMeta(
-    loader=partial(
-        openclip_loader,
-        model_name="laion/CLIP-ViT-bigG-14-laion2B-39B-b160k",
-    ),
+    loader=openclip_loader,  # type: ignore
     name="laion/CLIP-ViT-bigG-14-laion2B-39B-b160k",
     languages=["eng_Latn"],
     revision="bc7788f151930d91b58474715fdce5524ad9a189",
@@ -231,10 +218,7 @@ CLIP_ViT_bigG_14_laion2B_39B_b160k = ModelMeta(
 )
 
 CLIP_ViT_g_14_laion2B_s34B_b88K = ModelMeta(
-    loader=partial(
-        openclip_loader,
-        model_name="laion/CLIP-ViT-g-14-laion2B-s34B-b88K",
-    ),
+    loader=openclip_loader,  # type: ignore
     name="laion/CLIP-ViT-g-14-laion2B-s34B-b88K",
     languages=["eng_Latn"],
     revision="15efd0f6ac0c40c0f9da7becca03c974d7012604",
@@ -258,10 +242,7 @@ CLIP_ViT_g_14_laion2B_s34B_b88K = ModelMeta(
 )
 
 CLIP_ViT_H_14_laion2B_s32B_b79K = ModelMeta(
-    loader=partial(
-        openclip_loader,
-        model_name="laion/CLIP-ViT-H-14-laion2B-s32B-b79K",
-    ),
+    loader=openclip_loader,  # type: ignore
     name="laion/CLIP-ViT-H-14-laion2B-s32B-b79K",
     languages=["eng_Latn"],
     revision="de081ac0a0ca8dc9d1533eed1ae884bb8ae1404b",
@@ -285,10 +266,7 @@ CLIP_ViT_H_14_laion2B_s32B_b79K = ModelMeta(
 )
 
 CLIP_ViT_L_14_laion2B_s32B_b82K = ModelMeta(
-    loader=partial(
-        openclip_loader,
-        model_name="laion/CLIP-ViT-L-14-laion2B-s32B-b82K",
-    ),
+    loader=openclip_loader,  # type: ignore
     name="laion/CLIP-ViT-L-14-laion2B-s32B-b82K",
     languages=["eng_Latn"],
     revision="1627032197142fbe2a7cfec626f4ced3ae60d07a",
@@ -312,10 +290,7 @@ CLIP_ViT_L_14_laion2B_s32B_b82K = ModelMeta(
 )
 
 CLIP_ViT_B_32_laion2B_s34B_b79K = ModelMeta(
-    loader=partial(
-        openclip_loader,
-        model_name="laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
-    ),
+    loader=openclip_loader,
     name="laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
     languages=["eng_Latn"],
     revision="08f73555f1b2fb7c82058aebbd492887a94968ef",

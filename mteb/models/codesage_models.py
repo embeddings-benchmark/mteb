@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from functools import partial
-
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 codesage_languages = [
     "python-Code",
@@ -14,11 +13,7 @@ codesage_languages = [
 ]
 
 codesage_large = ModelMeta(
-    loader=partial(
-        sentence_transformers_loader,
-        model_name="codesage/codesage-large-v2",
-        revision="6e5d6dc15db3e310c37c6dbac072409f95ffa5c5",
-    ),
+    loader=sentence_transformers_loader,
     name="codesage/codesage-large-v2",
     languages=codesage_languages,
     revision="6e5d6dc15db3e310c37c6dbac072409f95ffa5c5",
@@ -34,7 +29,7 @@ codesage_large = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/codesage/codesage-large-v2",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         "CodeSearchNetRetrieval": ["train"],
@@ -43,11 +38,7 @@ codesage_large = ModelMeta(
 )
 
 codesage_base = ModelMeta(
-    loader=partial(
-        sentence_transformers_loader,
-        model_name="codesage/codesage-base-v2",
-        revision="92eac4f44c8674638f039f1b0d8280f2539cb4c7",
-    ),
+    loader=sentence_transformers_loader,
     name="codesage/codesage-base-v2",
     languages=codesage_languages,
     revision="92eac4f44c8674638f039f1b0d8280f2539cb4c7",
@@ -63,7 +54,7 @@ codesage_base = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/codesage/codesage-base-v2",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         "CodeSearchNetRetrieval": ["train"],
@@ -72,11 +63,7 @@ codesage_base = ModelMeta(
 )
 
 codesage_small = ModelMeta(
-    loader=partial(
-        sentence_transformers_loader,
-        model_name="codesage/codesage-small-v2",
-        revision="4844c2f24b25e181aa43ca058cc73dd2622565c1",
-    ),
+    loader=sentence_transformers_loader,
     name="codesage/codesage-small-v2",
     languages=codesage_languages,
     revision="4844c2f24b25e181aa43ca058cc73dd2622565c1",
@@ -92,7 +79,7 @@ codesage_small = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/codesage/codesage-small-v2",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         "CodeSearchNetRetrieval": ["train"],

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from functools import partial
 from typing import Any, Literal
 
 import numpy as np
@@ -150,10 +149,8 @@ class E5VWrapper:
 
 
 e5_v = ModelMeta(
-    loader=partial(
-        E5VWrapper,
-        model_name="royokong/e5-v",
-        torch_dtype=torch.float16,
+    loader=E5VWrapper,
+    loader_kwargs=dict(
         device_map="auto",
     ),
     name="royokong/e5-v",

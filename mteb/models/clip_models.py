@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from functools import partial
 from typing import Any, Literal
 
 import numpy as np
@@ -117,10 +116,7 @@ class CLIPModelWrapper(Wrapper):
 
 
 clip_vit_large_patch14 = ModelMeta(
-    loader=partial(
-        CLIPModelWrapper,
-        model_name="openai/clip-vit-large-patch14",
-    ),
+    loader=CLIPModelWrapper,  # type: ignore
     name="openai/clip-vit-large-patch14",
     languages=["eng_Latn"],
     revision="32bd64288804d66eefd0ccbe215aa642df71cc41",
@@ -142,10 +138,7 @@ clip_vit_large_patch14 = ModelMeta(
 )
 
 clip_vit_base_patch32 = ModelMeta(
-    loader=partial(
-        CLIPModelWrapper,
-        model_name="openai/clip-vit-base-patch32",
-    ),
+    loader=CLIPModelWrapper,  # type: ignore
     name="openai/clip-vit-base-patch32",
     languages=["eng_Latn"],
     revision="3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
@@ -167,10 +160,7 @@ clip_vit_base_patch32 = ModelMeta(
 )
 
 clip_vit_base_patch16 = ModelMeta(
-    loader=partial(
-        CLIPModelWrapper,
-        model_name="openai/clip-vit-base-patch16",
-    ),
+    loader=CLIPModelWrapper,  # type: ignore
     name="openai/clip-vit-base-patch16",
     languages=["eng_Latn"],
     revision="57c216476eefef5ab752ec549e440a49ae4ae5f3",

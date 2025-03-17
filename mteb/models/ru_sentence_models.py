@@ -2,19 +2,17 @@
 
 from __future__ import annotations
 
-from functools import partial
-
 import torch
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import (
     ModelMeta,
     ScoringFunction,
-    sentence_transformers_loader,
 )
-from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 rubert_tiny = ModelMeta(
+    loader=sentence_transformers_loader,
     name="cointegrated/rubert-tiny",
     languages=["rus_Cyrl"],
     open_weights=True,
@@ -39,6 +37,7 @@ rubert_tiny = ModelMeta(
 )
 
 rubert_tiny2 = ModelMeta(
+    loader=sentence_transformers_loader,
     name="cointegrated/rubert-tiny2",
     languages=["rus_Cyrl"],
     open_weights=True,
@@ -64,6 +63,7 @@ rubert_tiny2 = ModelMeta(
 )
 
 sbert_large_nlu_ru = ModelMeta(
+    loader=sentence_transformers_loader,
     name="ai-forever/sbert_large_nlu_ru",
     languages=["rus_Cyrl"],
     open_weights=True,
@@ -88,6 +88,7 @@ sbert_large_nlu_ru = ModelMeta(
 )
 
 sbert_large_mt_nlu_ru = ModelMeta(
+    loader=sentence_transformers_loader,
     name="ai-forever/sbert_large_mt_nlu_ru",
     languages=["rus_Cyrl"],
     open_weights=True,
@@ -111,10 +112,8 @@ sbert_large_mt_nlu_ru = ModelMeta(
 )
 
 user_base_ru = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="deepvk/USER-base",
-        revision="436a489a2087d61aa670b3496a9915f84e46c861",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts={"query": "query: ", "passage": "passage: "},
     ),
     name="deepvk/USER-base",
@@ -176,11 +175,7 @@ user_base_ru = ModelMeta(
 )
 
 user_bge_m3 = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="deepvk/USER-bge-m3",
-        revision="0cc6cfe48e260fb0474c753087a69369e88709ae",
-    ),
+    loader=sentence_transformers_loader,
     name="deepvk/USER-bge-m3",
     languages=["rus_Cyrl"],
     open_weights=True,
@@ -232,11 +227,7 @@ user_bge_m3 = ModelMeta(
 )
 
 user_bge_m3 = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="deepvk/USER-bge-m3",
-        revision="0cc6cfe48e260fb0474c753087a69369e88709ae",
-    ),
+    loader=sentence_transformers_loader,
     name="deepvk/USER-bge-m3",
     languages=["rus_Cyrl"],
     open_weights=True,
@@ -279,6 +270,7 @@ user_bge_m3 = ModelMeta(
 )
 
 deberta_v1_ru = ModelMeta(
+    loader=sentence_transformers_loader,
     name="deepvk/deberta-v1-base",
     languages=["rus_Cyrl"],
     open_weights=True,
@@ -308,6 +300,7 @@ deberta_v1_ru = ModelMeta(
 )
 
 rubert_base_cased = ModelMeta(
+    loader=sentence_transformers_loader,
     name="DeepPavlov/rubert-base-cased",
     languages=["rus_Cyrl"],
     open_weights=True,
@@ -342,6 +335,7 @@ rubert_base_cased = ModelMeta(
 )
 
 distilrubert_small_cased_conversational = ModelMeta(
+    loader=sentence_transformers_loader,
     name="DeepPavlov/distilrubert-small-cased-conversational",
     languages=["rus_Cyrl"],
     open_weights=True,
@@ -375,6 +369,7 @@ distilrubert_small_cased_conversational = ModelMeta(
 )
 
 rubert_base_cased_sentence = ModelMeta(
+    loader=sentence_transformers_loader,
     name="DeepPavlov/rubert-base-cased-sentence",
     languages=["rus_Cyrl"],
     open_weights=True,
@@ -398,6 +393,7 @@ rubert_base_cased_sentence = ModelMeta(
 )
 
 labse_en_ru = ModelMeta(
+    loader=sentence_transformers_loader,
     name="cointegrated/LaBSE-en-ru",
     languages=["rus_Cyrl"],
     open_weights=True,
@@ -424,6 +420,7 @@ turbo_models_datasets = {
     # Not MTEB: {"IlyaGusev/gazeta": ["train"], "zloelias/lenta-ru": ["train"]},
 }
 rubert_tiny_turbo = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sergeyzh/rubert-tiny-turbo",
     languages=["rus_Cyrl"],
     open_weights=True,
@@ -444,7 +441,35 @@ rubert_tiny_turbo = ModelMeta(
     adapted_from="cointegrated/rubert-tiny2",
 )
 
+rubert_mini_frida = ModelMeta(
+    loader=sentence_transformers_loader,
+    name="sergeyzh/rubert-mini-frida",
+    languages=["rus_Cyrl"],
+    open_weights=True,
+    revision="19b279b78afd945b5ccae78f63e284909814adc2",
+    release_date="2025-03-02",
+    n_parameters=32_300_000,
+    memory_usage_mb=123,
+    embed_dim=312,
+    license="mit",
+    max_tokens=2048,
+    reference="https://huggingface.co/sergeyzh/rubert-mini-frida",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets={
+        # https://huggingface.co/datasets/IlyaGusev/gazeta
+        # https://huggingface.co/datasets/zloelias/lenta-ru
+        # https://huggingface.co/datasets/HuggingFaceFW/fineweb-2
+        # https://huggingface.co/datasets/HuggingFaceFW/fineweb
+    },
+    adapted_from="sergeyzh/rubert-mini-sts",
+)
+
 labse_ru_turbo = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sergeyzh/LaBSE-ru-turbo",
     languages=["rus_Cyrl"],
     open_weights=True,
@@ -462,6 +487,33 @@ labse_ru_turbo = ModelMeta(
     training_datasets=turbo_models_datasets,
     public_training_code=None,
     adapted_from="cointegrated/LaBSE-en-ru",
+    public_training_data=None,
+)
+
+berta = ModelMeta(
+    loader=sentence_transformers_loader,
+    name="sergeyzh/BERTA",
+    languages=["rus_Cyrl"],
+    open_weights=True,
+    revision="914c8c8aed14042ed890fc2c662d5e9e66b2faa7",
+    release_date="2025-03-10",
+    n_parameters=128_000_000,
+    memory_usage_mb=489,
+    embed_dim=768,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/sergeyzh/BERTA",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    training_datasets={
+        # https://huggingface.co/datasets/IlyaGusev/gazeta
+        # https://huggingface.co/datasets/zloelias/lenta-ru
+        # https://huggingface.co/datasets/HuggingFaceFW/fineweb-2
+        # https://huggingface.co/datasets/HuggingFaceFW/fineweb
+    },
+    public_training_code=None,
+    adapted_from="sergeyzh/LaBSE-ru-turbo",
     public_training_data=None,
 )
 
@@ -489,10 +541,8 @@ rosberta_prompts = {
 }
 
 rosberta_ru_en = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="ai-forever/ru-en-RoSBERTa",
-        revision="89fb1651989adbb1cfcfdedafd7d102951ad0555",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts=rosberta_prompts,
     ),
     name="ai-forever/ru-en-RoSBERTa",
@@ -655,10 +705,8 @@ frida_training_datasets = {
 }
 
 frida = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="ai-forever/FRIDA",
-        revision="7292217af9a9e6dbf07048f76b434ad1e2aa8b76",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts=frida_prompts,
     ),
     name="ai-forever/FRIDA",
@@ -673,7 +721,7 @@ frida = ModelMeta(
     max_tokens=512,
     embed_dim=1536,
     license="mit",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     adapted_from="ai-forever/FRED-T5-1.7B",
     training_datasets=frida_training_datasets,
     public_training_data=None,
@@ -682,10 +730,8 @@ frida = ModelMeta(
 )
 
 giga_embeddings = ModelMeta(
-    loader=partial(
-        InstructSentenceTransformerWrapper,
-        model_name="ai-sage/Giga-Embeddings-instruct",
-        revision="646f5ff3587e74a18141c8d6b60d1cffd5897b92",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         trust_remote_code=True,
         instruction_template="Instruct: {instruction}\nQuery: ",
         apply_instruction_to_passages=False,
@@ -704,7 +750,7 @@ giga_embeddings = ModelMeta(
     license="mit",
     max_tokens=32768,
     reference="https://huggingface.co/ai-sage/Giga-Embeddings-instruct",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,

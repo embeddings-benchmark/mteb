@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from functools import partial
 from typing import Any, Literal
 
 import numpy as np
@@ -115,10 +114,7 @@ class ALIGNModelWrapper(Wrapper):
 
 
 align_base = ModelMeta(
-    loader=partial(
-        ALIGNModelWrapper,
-        model_name="kakaobrain/align-base",
-    ),
+    loader=ALIGNModelWrapper,
     name="kakaobrain/align-base",
     languages=["eng_Latn"],
     revision="e96a37facc7b1f59090ece82293226b817afd6ba",

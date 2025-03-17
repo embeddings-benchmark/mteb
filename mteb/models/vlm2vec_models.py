@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
 from typing import Any, Literal
 
 import numpy as np
@@ -263,10 +262,7 @@ vlm2vec_training_datasets = {
 }
 
 vlm2vec_lora = ModelMeta(
-    loader=partial(
-        VLM2VecWrapper,
-        model_name="TIGER-Lab/VLM2Vec-LoRA",
-    ),
+    loader=VLM2VecWrapper,
     name="TIGER-Lab/VLM2Vec-LoRA",
     languages=["eng_Latn"],
     revision="7403b6327958071c1e33c822c7453adadccc7298",
@@ -288,10 +284,7 @@ vlm2vec_lora = ModelMeta(
 )
 
 vlm2vec_full = ModelMeta(
-    loader=partial(
-        VLM2VecWrapper,
-        model_name="TIGER-Lab/VLM2Vec-Full",
-    ),
+    loader=VLM2VecWrapper,
     name="TIGER-Lab/VLM2Vec-Full",
     languages=["eng_Latn"],
     revision="e9afa98002097ac2471827ba23ea1f2ddd229480",

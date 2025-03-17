@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from functools import partial
 from typing import Any, Literal
 
 import numpy as np
@@ -172,10 +171,7 @@ blip2_training_datasets = {
 }
 
 blip2_opt_2_7b = ModelMeta(
-    loader=partial(
-        blip2_loader,
-        model_name="Salesforce/blip2-opt-2.7b",
-    ),
+    loader=blip2_loader,
     name="Salesforce/blip2-opt-2.7b",
     languages=["eng_Latn"],
     revision="51572668da0eb669e01a189dc22abe6088589a24",
@@ -197,10 +193,7 @@ blip2_opt_2_7b = ModelMeta(
 )
 
 blip2_opt_6_7b_coco = ModelMeta(
-    loader=partial(
-        blip2_loader,
-        model_name="Salesforce/blip2-opt-6.7b-coco",
-    ),
+    loader=blip2_loader,
     name="Salesforce/blip2-opt-6.7b-coco",
     languages=["eng_Latn"],
     revision="0d580de59320a25a4d2c386387bcef310d5f286e",

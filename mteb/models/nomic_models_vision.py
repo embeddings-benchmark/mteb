@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from functools import partial
 from typing import Any, Literal
 
 import numpy as np
@@ -146,11 +145,11 @@ class NomicVisionModelWrapper(Wrapper):
 
 
 nomic_embed_vision_v1_5 = ModelMeta(
-    loader=partial(
-        NomicVisionModelWrapper,
-        vision_model_name="nomic-ai/nomic-embed-vision-v1.5",
-        text_model_name="nomic-ai/nomic-embed-text-v1.5",
-    ),
+    loader=NomicVisionModelWrapper,
+    loader_kwargs={
+        "vision_model_name": "nomic-ai/nomic-embed-vision-v1.5",
+        "text_model_name": "nomic-ai/nomic-embed-text-v1.5",
+    },
     name="nomic-ai/nomic-embed-vision-v1.5",
     languages=["eng_Latn"],
     revision="af2246fffdab78d8458418480e4886a8e48b70a7",

@@ -2,11 +2,10 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Sequence
+from dataclasses import field
 from enum import Enum
-from functools import partial
 from typing import TYPE_CHECKING, Any, Callable, Literal, cast
 
-import numpy as np
 from huggingface_hub import get_safetensors_metadata
 from huggingface_hub.errors import (
     GatedRepoError,
@@ -23,10 +22,10 @@ from .custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
 from .languages import ISO_LANGUAGE_SCRIPT
 
 if TYPE_CHECKING:
-    from .models.sentence_transformer_wrapper import SentenceTransformerWrapper
+    from mteb.types import Array
+
 
 logger = logging.getLogger(__name__)
-
 
 FRAMEWORKS = Literal[
     "Sentence Transformers",
@@ -48,14 +47,6 @@ class ScoringFunction(str, Enum):
     MAX_SIM = "MaxSim"
 
 
-def sentence_transformers_loader(
-    model_name: str, revision: str | None = None, **kwargs
-) -> SentenceTransformerWrapper:
-    from .models.sentence_transformer_wrapper import SentenceTransformerWrapper
-
-    return SentenceTransformerWrapper(model=model_name, revision=revision, **kwargs)
-
-
 def get_loader_name(
     loader: Callable[..., Encoder] | None,
 ) -> str | None:
@@ -70,7 +61,8 @@ class ModelMeta(BaseModel):
     """The model metadata object.
 
     Attributes:
-            loader: the function that loads the model. If None it will just default to loading the model using the sentence transformer library.
+            loader: the function that loads the model. If None it will assume that the model is not implemented.
+            loader_kwargs: The keyword arguments to pass to the loader function.
             name: The name of the model, ideally the name on huggingface.
             n_parameters: The number of parameters in the model, e.g. 7_000_000 for a 7M parameter model. Can be None if the number of parameters is not known (e.g. for proprietary models) or
                 if the loader returns a SentenceTransformer model from which it can be derived.
@@ -107,7 +99,8 @@ class ModelMeta(BaseModel):
     revision: str | None
     release_date: STR_DATE | None
     languages: list[ISO_LANGUAGE_SCRIPT] | None
-    loader: Callable[..., Encoder] | None = None
+    loader: Callable[..., Encoder] | None
+    loader_kwargs: dict[str, Any] = field(default_factory=dict)
     n_parameters: int | None
     memory_usage_mb: float | None
     max_tokens: float | None
@@ -130,8 +123,8 @@ class ModelMeta(BaseModel):
     @classmethod
     def validate_similarity_fn_name(cls, value):
         """Converts the similarity function name to the corresponding enum value.
-        sentence_transformers uses Literal['cosine', 'dot', 'euclidean', 'manhattan'] for similarity_fn_name
-        pylate uses Literal['MaxSim'] for similarity_fn_name
+        sentence_transformers uses Literal['cosine', 'dot', 'euclidean', 'manhattan'] for
+        pylate uses Literal['MaxSim']
         """
         if type(value) is ScoringFunction or value is None:
             return value
@@ -144,15 +137,14 @@ class ModelMeta(BaseModel):
             return mapping[value]
         raise ValueError(f"Invalid similarity function name: {value}")
 
-    def get_similarity_function(self) -> Callable[[np.ndarray, np.ndarray], np.ndarray]:
+    def get_similarity_function(self) -> Callable[[Array, Array], Array]:
         if self.similarity_fn_name is ScoringFunction.COSINE:
             return cos_sim
         elif self.similarity_fn_name is ScoringFunction.DOT_PRODUCT:
             return dot_score
         elif self.similarity_fn_name is ScoringFunction.MAX_SIM:
             return max_sim
-        elif self.similarity_fn_name is None:
-            raise ValueError("Similarity function not specified.")
+        raise ValueError("Similarity function not specified or invalid.")
 
     def to_dict(self):
         dict_repr = self.model_dump()
@@ -162,20 +154,17 @@ class ModelMeta(BaseModel):
 
     def load_model(self, **kwargs: Any) -> Encoder:
         if self.loader is None:
-            logger.warning(
-                f"Loader not specified for model {self.name}, loading using sentence transformers."
+            raise NotImplementedError(
+                "No model implementation is available for this model."
             )
-            loader = partial(
-                sentence_transformers_loader,
-                model_name=self.name,
-                revision=self.revision,
-                **kwargs,
-            )
-        else:
-            loader = self.loader
 
-        model: Encoder = loader(**kwargs)  # type: ignore
-        model.mteb_model_meta = self
+        # Allow overwrites
+        _kwargs = self.loader_kwargs.copy()
+        _kwargs.update({"revision": self.revision})
+        _kwargs.update(kwargs)
+
+        model: Encoder = self.loader(self.name, **_kwargs)
+        model.mteb_model_meta = self  # type: ignore
         return model
 
     def model_name_as_path(self) -> str:
@@ -258,7 +247,7 @@ class ModelMeta(BaseModel):
 
         MB = 1024**2
         try:
-            safetensors_metadata = get_safetensors_metadata(self.name)
+            safetensors_metadata = get_safetensors_metadata(self.name)  # type: ignore
             if len(safetensors_metadata.parameter_count) >= 0:
                 dtype_size_map = {
                     "F64": 8,  # 64-bit float

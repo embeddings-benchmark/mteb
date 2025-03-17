@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from functools import partial
 from typing import Any, Literal
 
 import numpy as np
@@ -206,9 +205,8 @@ vista_training_datasets = {
 }
 
 visualized_bge_base = ModelMeta(
-    loader=partial(
-        vista_loader,
-        model_name_bge="BAAI/bge-base-en-v1.5",
+    loader=vista_loader,
+    loader_kwargs=dict(
         model_weight="visualized_base_en_V1.5.pth",
         image_tokens_num=196,
     ),
@@ -233,9 +231,8 @@ visualized_bge_base = ModelMeta(
 )
 
 visualized_bge_m3 = ModelMeta(
-    loader=partial(
-        vista_loader,
-        model_name_bge="BAAI/bge-m3",
+    loader=vista_loader,
+    loader_kwargs=dict(
         model_weight="visualized_m3.pth",
         image_tokens_num=256,
     ),

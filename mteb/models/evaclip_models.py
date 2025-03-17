@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from functools import partial
 from typing import Any, Literal
 
 import numpy as np
@@ -143,10 +142,7 @@ laion_2b = {
 }
 
 EVA02_CLIP_B_16 = ModelMeta(
-    loader=partial(
-        evaclip_loader,
-        model_name="EVA02-CLIP-B-16",
-    ),
+    loader=evaclip_loader,
     name="QuanSun/EVA02-CLIP-B-16",
     languages=["eng_Latn"],
     revision="11afd202f2ae80869d6cef18b1ec775e79bd8d12",
@@ -168,10 +164,7 @@ EVA02_CLIP_B_16 = ModelMeta(
 )
 
 EVA02_CLIP_L_14 = ModelMeta(
-    loader=partial(
-        evaclip_loader,
-        model_name="EVA02-CLIP-L-14",
-    ),
+    loader=evaclip_loader,
     name="QuanSun/EVA02-CLIP-L-14",
     languages=["eng_Latn"],
     revision="11afd202f2ae80869d6cef18b1ec775e79bd8d12",
@@ -193,10 +186,7 @@ EVA02_CLIP_L_14 = ModelMeta(
 )
 
 EVA02_CLIP_bigE_14 = ModelMeta(
-    loader=partial(
-        evaclip_loader,
-        model_name="EVA02-CLIP-bigE-14",
-    ),
+    loader=evaclip_loader,
     name="QuanSun/EVA02-CLIP-bigE-14",
     languages=["eng_Latn"],
     revision="11afd202f2ae80869d6cef18b1ec775e79bd8d12",
@@ -219,10 +209,7 @@ EVA02_CLIP_bigE_14 = ModelMeta(
 
 
 EVA02_CLIP_bigE_14_plus = ModelMeta(
-    loader=partial(
-        evaclip_loader,
-        model_name="EVA02-CLIP-bigE-14-plus",
-    ),
+    loader=evaclip_loader,
     name="QuanSun/EVA02-CLIP-bigE-14-plus",
     languages=["eng_Latn"],
     revision="11afd202f2ae80869d6cef18b1ec775e79bd8d12",

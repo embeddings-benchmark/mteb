@@ -43,7 +43,7 @@ class PubChemWikiPairClassification(AbsTaskPairClassification):
         sample_creation="created",
         bibtex_citation="""
         @article{kasmaee2024chemteb,
-        title={ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
+        title={ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \\& Efficiency on a Specific Domain},
         author={Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
         journal={arXiv preprint arXiv:2412.00532},
         year={2024}

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from functools import partial
 from typing import Any
 
 import numpy as np
@@ -114,10 +113,7 @@ mocov3_training_datasets = {
 }
 
 mocov3_vit_base = ModelMeta(
-    loader=partial(
-        mocov3_loader,
-        model_name="nyu-visionx/moco-v3-vit-b",
-    ),
+    loader=mocov3_loader,  # type: ignore
     name="nyu-visionx/moco-v3-vit-b",
     languages=["eng_Latn"],
     revision="7d091cd70772c5c0ecf7f00b5f12ca609a99d69d",
@@ -139,10 +135,7 @@ mocov3_vit_base = ModelMeta(
 )
 
 mocov3_vit_large = ModelMeta(
-    loader=partial(
-        mocov3_loader,
-        model_name="nyu-visionx/moco-v3-vit-l",
-    ),
+    loader=mocov3_loader,  # type: ignore
     name="nyu-visionx/moco-v3-vit-l",
     languages=["eng_Latn"],
     revision="7bf75358d616f39b9716148bf4e3425f3bd35b47",

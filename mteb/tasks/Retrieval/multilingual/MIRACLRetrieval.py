@@ -31,7 +31,12 @@ _LANGUAGES = {
 
 
 def _load_miracl_data(
-    path: str, langs: list, splits: str, cache_dir: str = None, revision: str = None
+    path: str,
+    langs: list,
+    splits: str,
+    cache_dir: str | None = None,
+    revision: str | None = None,
+    trust_remote_code: bool = False,
 ):
     corpus = {lang: {split: None for split in splits} for lang in langs}
     queries = {lang: {split: None for split in splits} for lang in langs}
@@ -47,7 +52,7 @@ def _load_miracl_data(
             corpus_identifier,
             cache_dir=cache_dir,
             revision=revision,
-            trust_remote_code=True,
+            trust_remote_code=trust_remote_code,
         )
         corpus[lang][split] = {}
         for row in corpus_data["corpus"]:
@@ -63,7 +68,7 @@ def _load_miracl_data(
             queries_identifier,
             cache_dir=cache_dir,
             revision=revision,
-            trust_remote_code=True,
+            trust_remote_code=trust_remote_code,
         )
         queries[lang][split] = {}
         for row in queries_data["queries"]:
@@ -78,7 +83,7 @@ def _load_miracl_data(
             qrels_identifier,
             cache_dir=cache_dir,
             revision=revision,
-            trust_remote_code=True,
+            trust_remote_code=trust_remote_code,
         )
         relevant_docs[lang][split] = {}
         for row in qrels_data[split]:
@@ -104,6 +109,7 @@ class MIRACLRetrieval(AbsTaskRetrieval):
         dataset={
             "path": "miracl/mmteb-miracl",
             "revision": "main",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="t2t",
@@ -143,18 +149,24 @@ class MIRACLRetrieval(AbsTaskRetrieval):
 
         self.corpus, self.queries, self.relevant_docs = _load_miracl_data(
             path=self.metadata.dataset["path"],
+            revision=self.metadata.dataset["revision"],
             langs=self.hf_subsets,
             splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata.dataset["revision"],
+            trust_remote_code=self.metadata.dataset["trust_remote_code"],
         )
 
         self.data_loaded = True
 
 
 def _load_miracl_data_hard_negatives(
-    path: str, langs: list, splits: str, cache_dir: str = None, revision: str = None
-):
+    path: str,
+    langs: list,
+    splits: str,
+    cache_dir: str | None = None,
+    revision: str | None = None,
+    trust_remote_code: bool = False,
+) -> tuple:
     corpus = {lang: {split: None for split in splits} for lang in langs}
     queries = {lang: {split: None for split in splits} for lang in langs}
     relevant_docs = {lang: {split: None for split in splits} for lang in langs}
@@ -189,7 +201,7 @@ def _load_miracl_data_hard_negatives(
                 corpus_identifier,
                 cache_dir=cache_dir,
                 revision=revision,
-                trust_remote_code=True,
+                trust_remote_code=trust_remote_code,
             )
             corpus[lang][split] = {}
             for row in corpus_data["corpus"]:
@@ -205,7 +217,7 @@ def _load_miracl_data_hard_negatives(
                 queries_identifier,
                 cache_dir=cache_dir,
                 revision=revision,
-                trust_remote_code=True,
+                trust_remote_code=trust_remote_code,
             )
             queries[lang][split] = {}
             for row in queries_data["queries"]:
@@ -220,7 +232,7 @@ def _load_miracl_data_hard_negatives(
                 qrels_identifier,
                 cache_dir=cache_dir,
                 revision=revision,
-                trust_remote_code=True,
+                trust_remote_code=trust_remote_code,
             )
             relevant_docs[lang][split] = {}
             for row in qrels_data[split]:
@@ -237,7 +249,7 @@ def _load_miracl_data_hard_negatives(
                 "miracl/mmteb-miracl",
                 corpus_identifier,
                 cache_dir=cache_dir,
-                trust_remote_code=True,
+                trust_remote_code=trust_remote_code,
             )
             corpus[lang][split] = {}
             for row in corpus_data["corpus"]:
@@ -252,7 +264,7 @@ def _load_miracl_data_hard_negatives(
                 "miracl/mmteb-miracl",
                 queries_identifier,
                 cache_dir=cache_dir,
-                trust_remote_code=True,
+                trust_remote_code=trust_remote_code,
             )
             queries[lang][split] = {}
             for row in queries_data["queries"]:
@@ -266,7 +278,7 @@ def _load_miracl_data_hard_negatives(
                 "miracl/mmteb-miracl",
                 qrels_identifier,
                 cache_dir=cache_dir,
-                trust_remote_code=True,
+                trust_remote_code=trust_remote_code,
             )
             relevant_docs[lang][split] = {}
             for row in qrels_data[split]:
@@ -334,6 +346,7 @@ class MIRACLRetrievalHardNegatives(AbsTaskRetrieval):
                 splits=self.metadata.eval_splits,
                 cache_dir=kwargs.get("cache_dir", None),
                 revision=self.metadata.dataset["revision"],
+                trust_remote_code=self.metadata.dataset["trust_remote_code"],
             )
         )
 

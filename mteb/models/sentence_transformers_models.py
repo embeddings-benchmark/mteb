@@ -2,11 +2,10 @@
 
 from __future__ import annotations
 
-from functools import partial
-
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerWrapper,
+    sentence_transformers_loader,
 )
 
 paraphrase_langs = [
@@ -114,6 +113,7 @@ sent_trf_training_dataset = {
 }
 
 all_MiniLM_L6_v2 = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/all-MiniLM-L6-v2",
     languages=["eng-Latn"],
     open_weights=True,
@@ -137,6 +137,7 @@ all_MiniLM_L6_v2 = ModelMeta(
 )
 
 all_MiniLM_L12_v2 = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/all-MiniLM-L12-v2",
     languages=["eng-Latn"],
     open_weights=True,
@@ -160,6 +161,7 @@ all_MiniLM_L12_v2 = ModelMeta(
 )
 
 paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
     languages=paraphrase_langs,
     open_weights=True,
@@ -183,6 +185,7 @@ paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
 )
 
 paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     languages=paraphrase_langs,
     open_weights=True,
@@ -217,6 +220,7 @@ paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
 )
 
 labse = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/LaBSE",
     languages=paraphrase_langs,
     open_weights=True,
@@ -253,6 +257,7 @@ labse = ModelMeta(
 )
 
 multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformer/multi-qa-MiniLM-L6-cos-v1",
     languages=["eng-Latn"],
     open_weights=True,
@@ -276,6 +281,7 @@ multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
 )
 
 all_mpnet_base_v2 = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/all-mpnet-base-v2",
     languages=["eng-Latn"],
     open_weights=True,
@@ -299,12 +305,7 @@ all_mpnet_base_v2 = ModelMeta(
 )
 
 contriever = ModelMeta(
-    loader=partial(
-        SentenceTransformerWrapper,
-        model="facebook/contriever-msmarco",
-        revision="abe8c1493371369031bcb1e02acb754cf4e162fa",
-        similarity_fn_name=ScoringFunction.DOT_PRODUCT,
-    ),
+    loader=SentenceTransformerWrapper,
     name="facebook/contriever-msmarco",
     languages=["eng-Latn"],
     open_weights=True,
@@ -333,6 +334,7 @@ contriever = ModelMeta(
 )
 
 microllama_text_embedding = ModelMeta(
+    loader=sentence_transformers_loader,
     name="keeeeenw/MicroLlama-text-embedding",
     languages=["eng-Latn"],
     open_weights=True,
@@ -366,6 +368,7 @@ microllama_text_embedding = ModelMeta(
 )
 
 sentence_t5_base = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/sentence-t5-base",
     languages=["eng-Latn"],
     open_weights=True,
@@ -377,7 +380,7 @@ sentence_t5_base = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/sentence-transformers/sentence-t5-base",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -386,6 +389,7 @@ sentence_t5_base = ModelMeta(
 )
 
 sentence_t5_large = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/sentence-t5-large",
     languages=["eng-Latn"],
     open_weights=True,
@@ -397,7 +401,7 @@ sentence_t5_large = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/sentence-transformers/sentence-t5-large",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -406,6 +410,7 @@ sentence_t5_large = ModelMeta(
 )
 
 sentence_t5_xl = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/sentence-t5-xl",
     languages=["eng-Latn"],
     open_weights=True,
@@ -417,7 +422,7 @@ sentence_t5_xl = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/sentence-transformers/sentence-t5-xl",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -426,6 +431,7 @@ sentence_t5_xl = ModelMeta(
 )
 
 sentence_t5_xxl = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/sentence-t5-xxl",
     languages=["eng-Latn"],
     open_weights=True,
@@ -437,7 +443,7 @@ sentence_t5_xxl = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/sentence-transformers/sentence-t5-xxl",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -445,6 +451,7 @@ sentence_t5_xxl = ModelMeta(
     training_datasets={"SNLI": ["train"], "Community QA": ["train"]},
 )
 gtr_t5_large = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/gtr-t5-large",
     languages=["eng-Latn"],  # in format eng-Latn
     open_weights=True,
@@ -456,7 +463,7 @@ gtr_t5_large = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/sentence-transformers/gtr-t5-large",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -477,6 +484,7 @@ gtr_t5_large = ModelMeta(
 )
 
 gtr_t5_xl = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/gtr-t5-xl",
     languages=["eng-Latn"],  # in format eng-Latn
     open_weights=True,
@@ -488,7 +496,7 @@ gtr_t5_xl = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/sentence-transformers/gtr-t5-xl",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -508,6 +516,7 @@ gtr_t5_xl = ModelMeta(
     },
 )
 gtr_t5_xxl = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/gtr-t5-xxl",
     languages=["eng-Latn"],  # in format eng-Latn
     open_weights=True,
@@ -519,7 +528,7 @@ gtr_t5_xxl = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/sentence-transformers/gtr-t5-xxl",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -540,6 +549,7 @@ gtr_t5_xxl = ModelMeta(
 )
 
 gtr_t5_base = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/gtr-t5-base",
     languages=["eng-Latn"],  # in format eng-Latn
     open_weights=True,
@@ -551,7 +561,7 @@ gtr_t5_base = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/sentence-transformers/gtr-t5-base",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
