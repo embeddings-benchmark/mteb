@@ -14,7 +14,7 @@ class WikipediaChemFieldsClassification(AbsTaskClassification):
             "revision": "a75fae77759acc115f015f2b856baa47776d733d",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

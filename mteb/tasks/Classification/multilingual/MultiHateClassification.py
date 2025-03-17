@@ -32,7 +32,7 @@ class MultiHateClassification(AbsTaskClassification):
                      """,
         reference="https://aclanthology.org/2022.woah-1.15/",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,

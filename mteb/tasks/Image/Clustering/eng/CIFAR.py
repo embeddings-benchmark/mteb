@@ -14,7 +14,7 @@ class CIFAR10Clustering(AbsTaskImageClustering):
             "revision": "0b2714987fa478483af9968de7c934580d0bb9a2",
         },
         type="ImageClustering",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="nmi",

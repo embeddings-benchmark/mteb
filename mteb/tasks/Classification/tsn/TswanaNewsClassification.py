@@ -15,7 +15,7 @@ class TswanaNewsClassification(AbsTaskClassification):
         },
         type="Classification",
         task_subtypes=["Topic classification"],
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["tsn-Latn"],

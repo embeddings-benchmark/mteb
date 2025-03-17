@@ -39,7 +39,7 @@ class MasakhaNEWSClusteringS2S(AbsTaskClustering):
         ),
         reference="https://huggingface.co/datasets/masakhane/masakhanews",
         type="Clustering",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
