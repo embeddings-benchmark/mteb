@@ -9,6 +9,7 @@ b1ade_training_data = {
 }
 
 b1ade_embed = ModelMeta(
+    loader=sentence_transformers_loader,
     name="b1ade-embed",
     languages=["eng-Latn"],
     revision="3bdac13927fdc888b903db93b2ffdbd90b295a69",
@@ -26,7 +27,7 @@ b1ade_embed = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=b1ade_training_data,
-    adapted_from="BAAI/bge-large-en-v1.5" 
+    adapted_from="BAAI/bge-large-en-v1.5",
     # Also (based on model merging)
     # bert-large-uncased
     # WhereIsAI/UAE-Large-V1
