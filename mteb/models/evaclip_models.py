@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Literal
 
+import numpy as np
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from mteb.encoder_interface import PromptType
+from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta
 
 
@@ -44,32 +44,19 @@ def evaclip_loader(**kwargs):
             self.model.eval()
             self.tokenizer = get_tokenizer(model_name)
 
-        def encode(  # type: ignore
-            self,
-            sentences: list[str],
-            *,
-            task_name: str | None = None,
-            prompt_type: PromptType | None = None,
-            batch_size: int = 32,
-            **kwargs: Any,
-        ):
-            return self.get_text_embeddings(texts=sentences, batch_size=batch_size)
-
         def get_text_embeddings(
             self,
-            texts: list[str],
-            *,
-            task_name: str | None = None,
-            prompt_type: PromptType | None = None,
-            batch_size: int = 32,
+            texts: DataLoader[BatchedInput],
+            show_progress_bar: bool = True,
             **kwargs: Any,
         ):
             all_text_embeddings = []
 
             with torch.no_grad(), torch.cuda.amp.autocast():
-                for i in tqdm(range(0, len(texts), batch_size)):
-                    batch_texts = texts[i : i + batch_size]
-                    inputs = self.tokenizer(batch_texts)
+                for batch in tqdm(
+                    texts, disable=not show_progress_bar, desc="Text Encoding"
+                ):
+                    inputs = self.tokenizer(batch["text"])
                     text_outputs = self.model.encode_text(inputs.to(self.device))
                     all_text_embeddings.append(text_outputs.cpu())
 
@@ -78,37 +65,21 @@ def evaclip_loader(**kwargs):
 
         def get_image_embeddings(
             self,
-            images: list[Image.Image] | DataLoader,
-            *,
-            task_name: str | None = None,
-            prompt_type: PromptType | None = None,
-            batch_size: int = 32,
+            images: DataLoader[BatchedInput],
+            show_progress_bar: bool = True,
             **kwargs: Any,
         ):
             all_image_embeddings = []
-            if isinstance(images, DataLoader):
-                import torchvision.transforms.functional as F
 
-                with torch.no_grad(), torch.cuda.amp.autocast():
-                    for batch in tqdm(images):
-                        # import pdb; pdb.set_trace()
-                        inputs = torch.vstack(
-                            [
-                                self.img_preprocess(F.to_pil_image(b)).unsqueeze(0)
-                                for b in batch
-                            ]
-                        )
-                        image_outputs = self.model.encode_image(inputs.to(self.device))
-                        all_image_embeddings.append(image_outputs.cpu())
-            else:
-                with torch.no_grad(), torch.cuda.amp.autocast():
-                    for i in tqdm(range(0, len(images), batch_size)):
-                        batch_images = images[i : i + batch_size]
-                        inputs = torch.vstack(
-                            [self.img_preprocess(b).unsqueeze(0) for b in batch_images]
-                        )
-                        image_outputs = self.model.encode_image(inputs.to(self.device))
-                        all_image_embeddings.append(image_outputs.cpu())
+            with torch.no_grad(), torch.cuda.amp.autocast():
+                for batch in tqdm(
+                    images, disable=not show_progress_bar, desc="Image Encoding"
+                ):
+                    inputs = torch.vstack(
+                        [self.img_preprocess(b).unsqueeze(0) for b in batch["image"]]
+                    )
+                    image_outputs = self.model.encode_image(inputs.to(self.device))
+                    all_image_embeddings.append(image_outputs.cpu())
 
             all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
             return all_image_embeddings
@@ -124,24 +95,21 @@ def evaclip_loader(**kwargs):
             probs = (logits * 100).softmax(dim=-1)
             return probs
 
-        def get_fused_embeddings(
+        def encode(
             self,
-            texts: list[str] = None,
-            images: list[Image.Image] | DataLoader = None,
-            fusion_mode="sum",
+            inputs: DataLoader[BatchedInput],
+            *,
+            task_name: str,
+            prompt_type: PromptType | None = None,
+            fusion_mode: Literal["sum"] = "sum",
             **kwargs: Any,
-        ):
-            if texts is None and images is None:
-                raise ValueError("Either texts or images must be provided")
-
+        ) -> np.ndarray | torch.Tensor:
             text_embeddings = None
             image_embeddings = None
-
-            if texts is not None:
-                text_embeddings = self.get_text_embeddings(texts, **kwargs)
-
-            if images is not None:
-                image_embeddings = self.get_image_embeddings(images, **kwargs)
+            if "text" in inputs.dataset.features:
+                text_embeddings = self.get_text_embeddings(inputs, **kwargs)
+            if "image" in inputs.dataset.features:
+                image_embeddings = self.get_image_embeddings(inputs, **kwargs)
 
             if text_embeddings is not None and image_embeddings is not None:
                 if len(text_embeddings) != len(image_embeddings):

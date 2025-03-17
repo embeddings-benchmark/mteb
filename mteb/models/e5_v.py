@@ -1,16 +1,16 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Literal
 
+import numpy as np
 import torch
 import transformers
 from packaging import version
-from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import LlavaNextForConditionalGeneration, LlavaNextProcessor
 
-from mteb.encoder_interface import PromptType
+from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta
 
 E5_V_TRANSFORMERS_VERSION = (
@@ -57,20 +57,21 @@ class E5VWrapper:
 
     def get_text_embeddings(
         self,
-        texts: list[str],
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 8,
+        texts: DataLoader[BatchedInput],
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ):
         all_text_embeddings = []
 
         with torch.no_grad():
-            for i in tqdm(range(0, len(texts), batch_size)):
-                batch_texts = texts[i : i + batch_size]
+            for batch in tqdm(
+                texts, disable=not show_progress_bar, desc="Text Encoding"
+            ):
                 text_inputs = self.processor(
-                    [self.text_prompt.replace("<sent>", text) for text in batch_texts],
+                    [
+                        self.text_prompt.replace("<sent>", text)
+                        for text in batch["text"]
+                    ],
                     return_tensors="pt",
                     padding=True,
                 ).to("cuda")
@@ -82,42 +83,27 @@ class E5VWrapper:
 
     def get_image_embeddings(
         self,
-        images: list[Image.Image] | DataLoader,
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 8,
+        images: DataLoader[BatchedInput],
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ):
         all_image_embeddings = []
 
         with torch.no_grad():
-            if isinstance(images, DataLoader):
-                for batch_images in tqdm(images):
-                    img_inputs = self.processor(
-                        [self.img_prompt] * len(batch_images),
-                        batch_images,
-                        return_tensors="pt",
-                        padding=True,
-                    ).to("cuda")
-                    image_outputs = self.model(
-                        **img_inputs, output_hidden_states=True, return_dict=True
-                    ).hidden_states[-1][:, -1, :]
-                    all_image_embeddings.append(image_outputs.cpu())
-            else:
-                for i in tqdm(range(0, len(images), batch_size)):
-                    batch_images = images[i : i + batch_size]
-                    img_inputs = self.processor(
-                        [self.img_prompt] * len(batch_images),
-                        batch_images,
-                        return_tensors="pt",
-                        padding=True,
-                    ).to("cuda")
-                    image_outputs = self.model(
-                        **img_inputs, output_hidden_states=True, return_dict=True
-                    ).hidden_states[-1][:, -1, :]
-                    all_image_embeddings.append(image_outputs.cpu())
-            return torch.cat(all_image_embeddings, dim=0)
+            for batch in tqdm(
+                images, disable=not show_progress_bar, desc="Image Encoding"
+            ):
+                img_inputs = self.processor(
+                    [self.img_prompt] * len(batch["image"]),
+                    batch["image"],
+                    return_tensors="pt",
+                    padding=True,
+                ).to("cuda")
+                image_outputs = self.model(
+                    **img_inputs, output_hidden_states=True, return_dict=True
+                ).hidden_states[-1][:, -1, :]
+                all_image_embeddings.append(image_outputs.cpu())
+        return torch.cat(all_image_embeddings, dim=0)
 
     def calculate_probs(self, text_embeddings, image_embeddings):
         text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True)
@@ -128,61 +114,38 @@ class E5VWrapper:
         probs = (logits * 100).softmax(dim=-1)
         return probs
 
-    def get_fused_embeddings(
+    def encode(
         self,
-        texts: list[str] = None,
-        images: list[Image.Image] = None,
-        batch_size: int = 8,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        fusion_mode: Literal["sum"] = "sum",
+        show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
-        if texts is None and images is None:
-            raise ValueError("Either texts or images must be provided")
+    ) -> np.ndarray | torch.Tensor:
+        if "image" in inputs.dataset.features and "text" in inputs.dataset.features:
+            all_fused_embeddings = []
 
-        all_fused_embeddings = []
-        kwargs.update(batch_size=batch_size)
-
-        if texts is not None and images is not None:
             with torch.no_grad():
-                if isinstance(images, DataLoader):
-                    for index, batch_images in enumerate(tqdm(images)):
-                        batch_texts = texts[
-                            index * batch_size : (index + 1) * batch_size
-                        ]
-                        prompts = [
-                            self.composed_prompt.format(text) for text in batch_texts
-                        ]
-                        inputs = self.processor(
-                            prompts, batch_images, return_tensors="pt", padding=True
-                        ).to("cuda")
-                        outputs = self.model(
-                            **inputs, output_hidden_states=True, return_dict=True
-                        ).hidden_states[-1][:, -1, :]
-                        all_fused_embeddings.append(outputs.cpu())
-                else:
-                    if len(texts) != len(images):
-                        raise ValueError(
-                            "The number of texts and images must have the same length"
-                        )
-                    for i in tqdm(range(0, len(images), batch_size)):
-                        batch_texts = texts[i : i + batch_size]
-                        batch_images = images[i : i + batch_size]
-                        prompts = [
-                            self.composed_prompt.format(text) for text in batch_texts
-                        ]
-                        inputs = self.processor(
-                            prompts, batch_images, return_tensors="pt", padding=True
-                        ).to("cuda")
-                        outputs = self.model(
-                            **inputs, output_hidden_states=True, return_dict=True
-                        ).hidden_states[-1][:, -1, :]
-                        all_fused_embeddings.append(outputs.cpu())
+                for batch in tqdm(
+                    inputs, disable=not show_progress_bar, desc="Fused Encoding"
+                ):
+                    prompts = [
+                        self.composed_prompt.format(text) for text in batch["text"]
+                    ]
+                    inputs = self.processor(
+                        prompts, batch["image"], return_tensors="pt", padding=True
+                    ).to("cuda")
+                    outputs = self.model(
+                        **inputs, output_hidden_states=True, return_dict=True
+                    ).hidden_states[-1][:, -1, :]
+                    all_fused_embeddings.append(outputs.cpu())
             return torch.cat(all_fused_embeddings, dim=0)
-        elif texts is not None:
-            text_embeddings = self.get_text_embeddings(texts, **kwargs)
-            return text_embeddings
-        elif images is not None:
-            image_embeddings = self.get_image_embeddings(images, **kwargs)
-            return image_embeddings
+        elif "text" in inputs.dataset.features:
+            return self.get_text_embeddings(inputs, **kwargs)
+        elif "image" in inputs.dataset.features:
+            return self.get_image_embeddings(inputs, **kwargs)
 
 
 e5_v = ModelMeta(

@@ -115,8 +115,9 @@ class AbsTaskImageClustering(AbsTask):
         **kwargs,
     ) -> ScoresDict:
         evaluator = ImageClusteringEvaluator(
-            dataset[self.image_column_name],
-            dataset[self.label_column_name],
+            dataset,
+            image_column_name=self.image_column_name,
+            label_column_name=self.label_column_name,
             task_name=self.metadata.name,
             **kwargs,
         )
