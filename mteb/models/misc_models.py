@@ -6,7 +6,7 @@ from mteb.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
-from mteb.models.bge_models import bge_m3_training_data, bge_training_data
+from mteb.models.bge_models import bge_training_data
 from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
 from mteb.models.e5_models import E5_TRAINING_DATA
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
@@ -1614,39 +1614,7 @@ deepfile__embedder_100p = ModelMeta(
     adapted_from="sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     superseded_by=None,
 )
-deepvk__USER_bge_m3 = ModelMeta(
-    name="deepvk/USER-bge-m3",
-    revision="0cc6cfe48e260fb0474c753087a69369e88709ae",
-    release_date="2024-07-05",
-    languages=["rus_Cyrl"],
-    loader=sentence_transformers_loader,
-    n_parameters=359026688,
-    memory_usage_mb=1370,
-    max_tokens=8194.0,
-    embed_dim=1024,
-    license="apache-2.0",
-    open_weights=True,
-    public_training_code=None,
-    public_training_data=None,
-    framework=["PyTorch", "Sentence Transformers"],
-    reference="https://huggingface.co/deepvk/USER-bge-m3",
-    similarity_fn_name=ScoringFunction.COSINE,
-    use_instructions=None,
-    training_datasets=bge_m3_training_data,  # derived from.
-    # not in MTEB:
-    # "deepvk/ru-HNP": ["train"],
-    # "deepvk/ru-WANLI": ["train"],
-    # "Shitao/bge-m3-data": ["train"],
-    # "RussianNLP/russian_super_glue": ["train"],
-    # "reciTAL/mlsum": ["train"],
-    # "Milana/russian_keywords": ["train"],
-    # "IlyaGusev/gazeta": ["train"],
-    # "d0rj/gsm8k-ru": ["train"],
-    # "bragovo/dsum_ru": ["train"],
-    # "CarlBrendt/Summ_Dialog_News": ["train"],
-    adapted_from="USER-bge-m3",
-    superseded_by=None,
-)
+
 infgrad__stella_base_en_v2 = ModelMeta(
     name="infgrad/stella-base-en-v2",
     revision="c9e80ff9892d80b39dc54e30a7873f91ea161034",
