@@ -206,7 +206,7 @@ class ModelMeta(BaseModel):
         if self.adapted_from is not None:
             try:
                 adapted_from_model = mteb.get_model_meta(
-                    self.adapted_from, fetch_from_hf=True
+                    self.adapted_from, fetch_from_hf=False
                 )
                 adapted_training_datasets = adapted_from_model.get_training_datasets()
                 if adapted_training_datasets is not None:

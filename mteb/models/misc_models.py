@@ -1545,7 +1545,7 @@ abhinand__MedEmbed_small_v0_1 = ModelMeta(
         "TRECCOVID-NL": ["train"],  # translation not trained on
         "ArguAna-NL": ["train"],  # translation not trained on
     },
-    adapted_from="./medical-bge-small-v1-mix1",
+    adapted_from="BAAI/bge-base-en-v1.5",
     superseded_by=None,
 )
 avsolatorio__NoInstruct_small_Embedding_v0 = ModelMeta(

@@ -189,58 +189,6 @@ user_bge_m3 = ModelMeta(
     reference="https://huggingface.co/deepvk/USER-base",
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
-    adapted_from="https://huggingface.co/BAAI/bge-m3",
-    use_instructions=False,
-    training_datasets={
-        "BibleNLPBitextMining": ["train"],
-        # https://github.com/unicamp-dl/mMARCO
-        # deepvk/ru-HNP
-        # deepvk/ru-WANLI
-        # MedNLI
-        # RCB
-        "TERRa": ["train"],
-        # Tapaco
-        # Opus100
-        # BiblePar
-        # RudetoxifierDataDetox
-        # RuParadetox
-        "MIRACL": ["train"],
-        # MLDR
-        # Lenta
-        "MLSUMClusteringP2P": ["train"],
-        "MLSUMClusteringP2P.v2": ["train"],
-        "MLSUMClusteringS2S": ["train"],
-        "MLSUMClusteringS2S.v2": ["train"],
-        "MrTidyRetrieval": ["train"],
-        # "Panorama"
-        # PravoIsrael
-        # xlsum
-        # Fialka-v1
-        # RussianKeywords
-        # Gazeta
-        # Gsm8k-ru
-        # DSumRu
-        # SummDialogNews
-    },
-    public_training_code=None,
-    public_training_data=None,
-)
-
-user_bge_m3 = ModelMeta(
-    loader=sentence_transformers_loader,
-    name="deepvk/USER-bge-m3",
-    languages=["rus_Cyrl"],
-    open_weights=True,
-    revision="0cc6cfe48e260fb0474c753087a69369e88709ae",
-    release_date="2024-07-05",
-    n_parameters=359_026_688,
-    memory_usage_mb=1370,
-    embed_dim=1024,
-    license="apache-2.0",
-    max_tokens=8194,
-    reference="https://huggingface.co/deepvk/USER-base",
-    similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
     adapted_from="BAAI/bge-m3",
     use_instructions=False,
     training_datasets={
@@ -503,7 +451,7 @@ berta = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/sergeyzh/BERTA",
-    similarity_fn_name=ScoringFunction.COSINE,
+    similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     training_datasets={
