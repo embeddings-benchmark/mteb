@@ -17,7 +17,6 @@ make install
 This uses [make](https://www.gnu.org/software/make/) to define the install command. You can see what each command does in the [makefile](https://github.com/embeddings-benchmark/mteb/blob/main/Makefile).
 
 ### Running Tests
-
 To run the tests, you can use the following command:
 
 ```bash

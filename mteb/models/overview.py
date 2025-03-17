@@ -15,6 +15,7 @@ from mteb.models import (
     align_models,
     ara_models,
     arctic_models,
+    b1ade_models,
     bedrock_models,
     bge_models,
     blip2_models,
@@ -148,6 +149,7 @@ model_modules = [
     vdr_models,
     fa_models,
     ara_models,
+    b1ade_models,
 ]
 MODEL_REGISTRY = {}
 
