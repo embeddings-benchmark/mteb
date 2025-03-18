@@ -57,7 +57,8 @@ class ImageDataset(torch.utils.data.Dataset):
             image = image
         if image.mode != "RGB":
             image = image.convert("RGB")
-        image = self.transform(image)
+        if self.transform is not None:
+            image = self.transform(image)
         return image
 
 
