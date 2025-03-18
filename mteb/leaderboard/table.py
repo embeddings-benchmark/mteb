@@ -196,32 +196,61 @@ def scores_to_tables(
     # setting model name column to markdown
     column_types[1] = "markdown"
     score_columns = ["Mean (Task)", "Mean (TaskType)", *mean_per_type.columns]
-    numeric_zero_shot = joint_table["Zero-shot"].copy().replace(-1, np.nan)
+    excluded_columns = [
+        "Rank (Borda)",
+        "Model",
+        "Number of Parameters",
+        "Embedding Dimensions",
+        "Max Tokens",
+    ]
+    gradient_columns = {
+        col: "Greens" for col in joint_table.columns if col not in excluded_columns
+    }
+    numeric_data = joint_table.copy()
+    for col in score_columns + ["Zero-shot"]:
+        if col in numeric_data.columns:
+            numeric_data[col] = numeric_data[col].replace(-1, np.nan)
     joint_table["Zero-shot"] = joint_table["Zero-shot"].apply(format_zero_shot)
     joint_table[score_columns] = joint_table[score_columns].map(format_scores)
-    joint_table_style = (
-        joint_table.style.format(
-            {
-                **{column: "{:.2f}" for column in score_columns},
-                "Rank (Borda)": "{:.0f}",
-            },
-            na_rep="",
-        )
-        .highlight_min("Rank (Borda)", props="font-weight: bold")
-        .highlight_max(subset=score_columns, props="font-weight: bold")
-        .background_gradient(
-            cmap="RdYlGn",
-            subset=["Zero-shot"],
-            vmin=50,
-            vmax=100,
-            gmap=numeric_zero_shot,
-        )
+    joint_table_style = joint_table.style.format(
+        {
+            **{column: "{:.2f}" for column in score_columns},
+            "Rank (Borda)": "{:.0f}",
+        },
+        na_rep="⚠️ NA",
     )
+    joint_table_style = joint_table_style.highlight_min(
+        "Rank (Borda)", props="font-weight: bold"
+    ).highlight_max(subset=score_columns, props="font-weight: bold")
+
+    # Apply background gradients for each selected column
+    for col, cmap in gradient_columns.items():
+        if col in joint_table.columns and numeric_data[col].notna().sum() > 0:
+            mask = numeric_data[col].notna()
+            if col != "Zero-shot":
+                gmap_values = numeric_data[col] * 100
+            else:
+                gmap_values = numeric_data[col]
+
+            joint_table_style = joint_table_style.background_gradient(
+                cmap=cmap,
+                subset=pd.IndexSlice[mask, col],
+                gmap=gmap_values.loc[mask],
+            )
     task_score_columns = per_task.select_dtypes("number").columns
     per_task[task_score_columns] *= 100
+    per_task_numeric = per_task.copy()
     per_task_style = per_task.style.format(
-        "{:.2f}", subset=task_score_columns, na_rep=""
+        "{:.2f}", subset=task_score_columns, na_rep="⚠️ NA"
     ).highlight_max(subset=task_score_columns, props="font-weight: bold")
+    for col in task_score_columns:
+        if col != "Model" and per_task_numeric[col].notna().sum() > 0:
+            mask = per_task_numeric[col].notna()
+            per_task_style = per_task_style.background_gradient(
+                cmap="Greens",
+                subset=pd.IndexSlice[mask, col],
+                gmap=per_task_numeric[col].loc[mask],
+            )
     return (
         gr.DataFrame(
             joint_table_style,
