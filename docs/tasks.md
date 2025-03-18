@@ -67,6 +67,7 @@ The following tables give you an overview of the tasks in MTEB.
 | [BlurbsClusteringS2S.v2](https://www.inf.uni-hamburg.de/en/inst/ab/lt/resources/data/germeval-2019-hmc.html) (Steffen Remus, 2019) | ['deu'] | Clustering | s2s | [Fiction, Written] | None | None |
 | [BornholmBitextMining](https://aclanthology.org/W19-6138/) | ['dan'] | BitextMining | s2s | [Fiction, Social, Web, Written] | {'test': 500} | {'test': {'num_samples': 500, 'number_of_characters': 44361, 'unique_pairs': 500, 'min_sentence1_length': 1, 'average_sentence1_length': 49.83, 'max_sentence1_length': 555, 'unique_sentence1': 497, 'min_sentence2_length': 5, 'average_sentence2_length': 38.89, 'max_sentence2_length': 453, 'unique_sentence2': 491}} |
 | [BrazilianToxicTweetsClassification](https://paperswithcode.com/dataset/told-br) (Joao Augusto Leite and                         Diego F. Silva and                         Kalina Bontcheva and                         Carolina Scarton, 2020) | ['por'] | MultilabelClassification | s2s | [Constructed, Written] | None | None |
+| [BrightLongRetrieval](https://huggingface.co/datasets/xlangai/BRIGHT) (Hongjin Su, 2024) | ['eng'] | Retrieval | s2p | [Non-fiction, Written] | None | None |
 | [BrightRetrieval](https://huggingface.co/datasets/xlangai/BRIGHT) (Hongjin Su, 2024) | ['eng'] | Retrieval | s2p | [Non-fiction, Written] | None | None |
 | [BuiltBenchClusteringP2P](https://arxiv.org/abs/2411.12056) (Shahinmoghadam et al., 2024) | ['eng'] | Clustering | p2p | [Engineering, Written] | None | None |
 | [BuiltBenchClusteringS2S](https://arxiv.org/abs/2411.12056) (Shahinmoghadam et al., 2024) | ['eng'] | Clustering | s2s | [Engineering, Written] | None | None |
@@ -1186,7 +1187,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | Modern Greek (1453-) | Indo-European | 0 | 2 | 0 | 5 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 0 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 21 |
 | emi | Mussau-Emira | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | emp | Northern Emberá | Chocoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| eng | English | Indo-European | 0 | 3 | 55 | 19 | 160 | 20 | 7 | 10 | 22 | 5 | 0 | 3 | 1 | 13 | 9 | 111 | 13 | 2 | 1 | 6 | 7 | 3 | 24 | 494 |
+| eng | English | Indo-European | 0 | 3 | 55 | 19 | 160 | 20 | 7 | 10 | 22 | 5 | 0 | 3 | 1 | 13 | 9 | 112 | 13 | 2 | 1 | 6 | 7 | 3 | 24 | 495 |
 | enq | Enga | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | epo | Esperanto | Artificial Language | 0 | 0 | 0 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | eri | Ogea | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1959,7 +1960,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | Yatee Zapotec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zul | Zulu | Atlantic-Congo | 0 | 0 | 0 | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
 | zyp | Zyphe Chin | Sino-Tibetan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| Total | None | None | None | 0 | 55 | 55 | 1492 | 836 | 313 | 7 | 10 | 22 | 5 | 0 | 3 | 28 | 91 | 56 | 585 | 88 | 2 | 2 | 6 | 7 | 37 | 24 |
+| Total | None | None | None | 0 | 55 | 55 | 1492 | 836 | 313 | 7 | 10 | 22 | 5 | 0 | 3 | 28 | 91 | 56 | 586 | 88 | 2 | 2 | 6 | 7 | 37 | 24 |
 <!-- TASK LANG TABLE END -->
 
 </details>
