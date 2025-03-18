@@ -57,7 +57,8 @@ class ImageDataset(torch.utils.data.Dataset):
             image = image
         if image.mode != "RGB":
             image = image.convert("RGB")
-        image = self.transform(image)
+        if self.transform is not None:
+            image = self.transform(image)
         return image
 
 
@@ -105,6 +106,7 @@ class Any2AnyMultiChoiceSearch:
         qrels: Dataset,
         top_k: int,
         score_function: str,
+        task_name: str | None = None,
         return_sorted: bool = False,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
@@ -122,7 +124,9 @@ class Any2AnyMultiChoiceSearch:
         if q_modality == "text":
             query_texts = queries["text"]
             query_embeddings = self.model.get_text_embeddings(
-                texts=query_texts, batch_size=self.encode_kwargs["batch_size"]
+                texts=query_texts,
+                task_name=task_name,
+                batch_size=self.encode_kwargs["batch_size"],
             )
         else:
             queries_dataset = ImageDataset(
@@ -139,6 +143,7 @@ class Any2AnyMultiChoiceSearch:
                 query_embeddings = self.model.get_image_embeddings(
                     images=query_image_dataloader,
                     batch_size=self.encode_kwargs["batch_size"],
+                    task_name=task_name,
                 )
             elif q_modality == "image,text":
                 query_texts = queries["text"]
@@ -146,6 +151,7 @@ class Any2AnyMultiChoiceSearch:
                     texts=query_texts,
                     images=query_image_dataloader,
                     batch_size=self.encode_kwargs["batch_size"],
+                    task_name=task_name,
                 )
             else:
                 raise ValueError(f"Unsupported modality: {q_modality}")
@@ -189,6 +195,7 @@ class Any2AnyMultiChoiceSearch:
                     sub_corpus_embeddings = self.model.get_image_embeddings(
                         images=corpus_image_dataloader,
                         batch_size=self.encode_kwargs["batch_size"],
+                        task_name=task_name,
                     )
                 elif corpus_modality == "image,text":
                     corpus_texts = chunk["text"]
@@ -196,6 +203,7 @@ class Any2AnyMultiChoiceSearch:
                         texts=corpus_texts,
                         images=corpus_image_dataloader,
                         batch_size=self.encode_kwargs["batch_size"],
+                        task_name=task_name,
                     )
                 else:
                     raise ValueError(f"Unsupported modality: {corpus_modality}")
@@ -301,7 +309,7 @@ class Any2AnyMultiChoiceEvaluator(Evaluator):
             qrels,
             self.top_k,
             self.score_function,
-            prompt_name=self.task_name,  # type: ignore
+            task_name=self.task_name,  # type: ignore
         )
 
     @staticmethod
