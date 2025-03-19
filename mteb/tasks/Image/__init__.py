@@ -8,4 +8,4 @@ from .ImageClassification import *
 from .ImageMultilabelClassification import *
 from .ImageTextPairClassification import *
 from .VisualSTS import *
-from .ZeroShotClassification_ import *
+from .ZeroShotClassification import *

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskZeroShotClassification_ import (
+from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
     AbsTaskZeroShotClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
