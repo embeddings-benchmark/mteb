@@ -21,5 +21,5 @@ from .Image.AbsTaskImageClustering import *
 from .Image.AbsTaskImageMultilabelClassification import *
 from .Image.AbsTaskImageTextPairClassification import *
 from .Image.AbsTaskVisualSTS import *
-from .Image.AbsTaskZeroShotClassification import *
+from .Image.AbsTaskZeroShotClassification_ import *
 from .MultilingualTask import *
