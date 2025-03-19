@@ -34,9 +34,9 @@ class OpenCLIPWrapper:
 See also [adding a model](adding_a_model.md) for reference.
 
 ### X Evaluator
-With the model, [ZeroshotClassificationEvaluator](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/evaluation/evaluators/Image/ZeroshotClassificationEvaluator.py) is implemented here. This defines how the model are used to do zero-shot classification and get back results on desired metrics.
+With the model, [ZeroShotClassificationEvaluator](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/evaluation/evaluators/Image/ZeroShotClassificationEvaluator.py) is implemented here. This defines how the model are used to do zero-shot classification and get back results on desired metrics.
 ```python
-class ZeroshotClassificationEvaluator(Evaluator):
+class ZeroShotClassificationEvaluator(Evaluator):
     def __init__(self, ...):
         ...
     def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}):
@@ -45,17 +45,17 @@ class ZeroshotClassificationEvaluator(Evaluator):
 ```
 
 ### AbsTask X
-With the evaluator, [AbsTaskZeroshotClassification](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/abstasks/Image/AbsTaskZeroshotClassification.py) is defined, operating on the dataset, calling the defined Evaluator, and gives out results.
+With the evaluator, [AbsTaskZeroShotClassification](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/abstasks/Image/AbsTaskZeroShotClassification.py) is defined, operating on the dataset, calling the defined Evaluator, and gives out results.
 ```python
-class AbsTaskZeroshotClassification(AbsTask):
+class AbsTaskZeroShotClassification(AbsTask):
     ...
 ```
 
 
 ### Dataset class
-With all these, we can then define the dataset. [CIFAR10](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/tasks/Image/ZeroshotClassification/eng/CIFAR.py) is implemented like this, subclassing `AbsTaskZeroshotClassification`, and overwrite the `get_candidate_labels` function, which gives `["a photo of {label_name}"]` to be used in the evaluator.
+With all these, we can then define the dataset. [CIFAR10](https://github.com/embeddings-benchmark/mteb/blob/mieb/mteb/tasks/Image/ZeroShotClassification/eng/CIFAR.py) is implemented like this, subclassing `AbsTaskZeroShotClassification`, and overwrite the `get_candidate_labels` function, which gives `["a photo of {label_name}"]` to be used in the evaluator.
 ```python
-class CIFAR10ZeroShotClassification(AbsTaskZeroshotClassification):
+class CIFAR10ZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(...)
 
     def get_candidate_labels(self) -> list[str]:

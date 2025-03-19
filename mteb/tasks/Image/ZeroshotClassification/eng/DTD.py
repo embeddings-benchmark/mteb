@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
-    AbsTaskZeroshotClassification,
+from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
+    AbsTaskZeroShotClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class DTDZeroshotClassification(AbsTaskZeroshotClassification):
+class DTDZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="DTDZeroShot",
         description="Describable Textures Dataset in 47 categories.",

@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
-    AbsTaskZeroshotClassification,
+from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
+    AbsTaskZeroShotClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class FER2013ZeroshotClassification(AbsTaskZeroshotClassification):
+class FER2013ZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="FER2013ZeroShot",
         description="Classifying facial emotions.",

@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
-    AbsTaskZeroshotClassification,
+from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
+    AbsTaskZeroShotClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class MNISTZeroshotClassification(AbsTaskZeroshotClassification):
+class MNISTZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="MNISTZeroShot",
         description="Classifying handwritten digits.",
