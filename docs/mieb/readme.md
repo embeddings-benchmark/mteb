@@ -1,3 +1,6 @@
+**NOTE**: This collaboration have been finalized and the paper is soon to be released. This document remains for documentation.
+
+
 # Welcome to MIEB! 👋
 
 The Massive Image Embedding Benchmark (MIEB) is an image extension of [MTEB](https://arxiv.org/abs/2210.07316) to cover embedding tasks for image-text tasks.
