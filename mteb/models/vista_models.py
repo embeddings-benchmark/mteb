@@ -6,13 +6,11 @@ from typing import Any
 import torch
 from PIL import Image
 from torch.utils.data import DataLoader
-from torchvision import transforms
 from tqdm import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
-
-tensor_to_image = transforms.Compose([transforms.ToPILImage()])
+from mteb.requires_package import requires_image_dependencies
 
 
 def vista_loader(**kwargs):
@@ -53,16 +51,19 @@ def vista_loader(**kwargs):
 
         def __init__(
             self,
-            model_name_bge: str = None,
+            model_name_bge: str | None = None,
             model_weight=None,
             normlized: bool = True,
             sentence_pooling_method: str = "cls",
             negatives_cross_device: bool = False,
             temperature: float = 0.02,
             from_pretrained=None,
-            image_tokens_num: int = None,
+            image_tokens_num: int | None = None,
             **kwargs: Any,
         ):
+            requires_image_dependencies()
+            from torchvision import transforms
+
             super().__init__(
                 model_name_bge=model_name_bge,
                 model_weight=model_weight,
@@ -76,6 +77,7 @@ def vista_loader(**kwargs):
             self.max_text_len_with_image = (
                 self.tokenizer.model_max_length - image_tokens_num
             )
+            self.transform = transforms.Compose([transforms.ToPILImage()])
             self.eval()
 
         def encode_text(self, texts):
@@ -147,7 +149,7 @@ def vista_loader(**kwargs):
                         ]
                     else:
                         images = [
-                            self.preprocess_val(tensor_to_image(image))
+                            self.preprocess_val(self.tensor_to_image(image))
                             for image in images
                         ]
                     images = torch.stack(images)

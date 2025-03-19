@@ -15,9 +15,9 @@ import torch
 from datasets import Dataset
 from PIL import Image
 from torch.utils.data import DataLoader
-from torchvision import transforms
 
 from mteb.encoder_interface import Encoder
+from mteb.requires_package import requires_image_dependencies
 
 from ..Evaluator import Evaluator
 from ..utils import (
@@ -36,7 +36,13 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 logger = logging.getLogger(__name__)
 
-transform = transforms.Compose([transforms.PILToTensor()])
+
+def get_default_transform():
+    requires_image_dependencies()
+    from torchvision import transforms
+
+    return transforms.Compose([transforms.Resize((224, 224)), transforms.ToTensor()])
+
 
 
 class ImageDataset(torch.utils.data.Dataset):
@@ -121,6 +127,8 @@ class Any2AnyMultiChoiceSearch:
 
         q_modality = queries[0]["modality"]
 
+        default_transform = get_default_transform()
+
         if q_modality == "text":
             query_texts = queries["text"]
             query_embeddings = self.model.get_text_embeddings(
@@ -130,7 +138,7 @@ class Any2AnyMultiChoiceSearch:
             )
         else:
             queries_dataset = ImageDataset(
-                queries, image_column_name="image", transform=transform
+                queries, image_column_name="image", transform=default_transform
             )
             query_image_dataloader = DataLoader(
                 queries_dataset,
@@ -182,7 +190,7 @@ class Any2AnyMultiChoiceSearch:
                 )
             else:
                 corpus_dataset = ImageDataset(
-                    chunk, image_column_name="image", transform=transform
+                    chunk, image_column_name="image", transform=default_transform
                 )
                 corpus_image_dataloader = DataLoader(
                     corpus_dataset,

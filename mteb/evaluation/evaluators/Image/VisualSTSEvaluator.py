@@ -14,14 +14,19 @@ from sklearn.metrics.pairwise import (
     paired_manhattan_distances,
 )
 from torch.utils.data import DataLoader
-from torchvision import transforms
+
+from mteb.requires_package import requires_image_dependencies
 
 from ..Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
 
-transform = transforms.Compose([transforms.PILToTensor()])
 
+def get_default_transform():
+    requires_image_dependencies()
+    from torchvision import transforms
+
+    return transforms.Compose([transforms.PILToTensor()])
 
 class ImageDataset(torch.utils.data.Dataset):
     def __init__(self, hf_dataset, image_column_name: str = "image", transform=None):
@@ -54,11 +59,13 @@ class VisualSTSEvaluator(Evaluator):
         **kwargs,
     ):
         super().__init__(**kwargs)
+
+        default_transform = get_default_transform()
         self.sentence1_dataset = ImageDataset(
-            dataset, image_column_name=sentences_column_names[0], transform=transform
+            dataset, image_column_name=sentences_column_names[0], transform=default_transform
         )
         self.sentence2_dataset = ImageDataset(
-            dataset, image_column_name=sentences_column_names[1], transform=transform
+            dataset, image_column_name=sentences_column_names[1], transform=default_transform
         )
         self.gold_scores = gold_scores
         self.task_name = task_name

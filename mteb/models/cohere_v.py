@@ -10,14 +10,11 @@ from typing import Any
 import torch
 from PIL import Image
 from torch.utils.data import DataLoader
-from torchvision import transforms
 from tqdm import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
-
-api_key = os.getenv("COHERE_API_KEY")
-tensor_to_image = transforms.Compose([transforms.ToPILImage()])
+from mteb.requires_package import requires_image_dependencies
 
 
 def cohere_v_loader(**kwargs):
@@ -32,15 +29,20 @@ def cohere_v_loader(**kwargs):
             model_name: str,
             **kwargs: Any,
         ):
-            self.model_name = model_name
-            self.client = cohere.ClientV2(api_key)
-            self.image_format = "JPEG"
-            """ Wrapper for Cohere multimodal embedding model,
+            """Wrapper for Cohere multimodal embedding model,
 
             do `export COHERE_API_KEY=<Your_Cohere_API_KEY>` before running eval scripts.
             Cohere currently supports 40 images/min, thus time.sleep(1.5) is applied after each image.
             Remove or adjust this after Cohere API changes capacity.
             """
+            requires_image_dependencies()
+            from torchvision import transforms
+
+            self.model_name = model_name
+            api_key = os.getenv("COHERE_API_KEY")
+            self.client = cohere.ClientV2(api_key)
+            self.image_format = "JPEG"
+            self.transform = transforms.Compose([transforms.PILToTensor()])
 
         def get_text_embeddings(
             self,

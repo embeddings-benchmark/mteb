@@ -22,3 +22,11 @@ def requires_package(
             f"{name} requires the `{package_name}` library but it was not found in your environment. "
             + f"If you want to load {model_name} models, please `{install_instruction}` to install the package."
         )
+
+
+def requires_image_dependencies() -> None:
+    if not _is_package_available("torchvision"):
+        raise ImportError(
+            "You are trying to running the image subset of mteb without having installed the required dependencies (`torchvision`). "
+            + "You can install the required dependencies using `pip install 'mteb[image]'` to install the required dependencies."
+        )
