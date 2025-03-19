@@ -159,8 +159,7 @@ class AbsTaskBitextMining(AbsTask):
                 sentence1 = self.dataset[hf_subset][split][sent_1]
                 sentence2 = self.dataset[hf_subset][split][sent_2]
         elif compute_overall:
-            sentence1, sentence2 = []
-            sentence2 = []
+            sentence1, sentence2 = [], []
             if self.parallel_subsets:
                 for hf_subset in self.metadata.eval_langs:
                     sent_1, sent_2 = hf_subset.split("-")
