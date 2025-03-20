@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import os
 
-from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
-    AbsTaskZeroshotClassification,
+from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
+    AbsTaskZeroShotClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class PatchCamelyonZeroshotClassification(AbsTaskZeroshotClassification):
+class PatchCamelyonZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="PatchCamelyonZeroShot",
         description="""Histopathology diagnosis classification dataset.""",

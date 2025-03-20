@@ -40,7 +40,7 @@ def custom_collate_fn(batch):
     return batch
 
 
-class ZeroshotClassificationEvaluator(Evaluator):
+class ZeroShotClassificationEvaluator(Evaluator):
     def __init__(
         self,
         dataset,

@@ -50,7 +50,7 @@ from .mock_tasks import (
     MockSummarizationTask,
     MockTextMultipleChoiceTask,
     MockVisualSTSTask,
-    MockZeroshotClassificationTask,
+    MockZeroShotClassificationTask,
 )
 
 twenty_news = TwentyNewsgroupsClusteringFast()
@@ -127,7 +127,7 @@ MOCK_MIEB_TASK_GRID = [
     MockImageClusteringTask(),
     MockImageTextPairClassificationTask(),
     MockVisualSTSTask(),
-    MockZeroshotClassificationTask(),
+    MockZeroShotClassificationTask(),
     MockImageMultilabelClassificationTask(),
     MockMultilingualImageClassificationTask(),
     MockMultilingualImageTextPairClassificationTask(),

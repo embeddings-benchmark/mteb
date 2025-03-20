@@ -1,20 +1,19 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
-    AbsTaskZeroshotClassification,
+from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
+    AbsTaskZeroShotClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class FGVCAircraftZeroShotClassification(AbsTaskZeroshotClassification):
+class OxfordPetsZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
-        name="FGVCAircraftZeroShot",
-        description="Classifying aircraft images from 41 manufacturers and 102 variants.",
+        name="OxfordPetsZeroShot",
+        description="Classifying animal images.",
         reference="https://arxiv.org/abs/1306.5151",
         dataset={
-            "path": "HuggingFaceM4/FGVC-Aircraft",
-            "revision": "91860adfc9a09aabca5cddb5247442109b38e213",
-            "trust_remote_code": True,
+            "path": "isaacchung/OxfordPets",
+            "revision": "557b480fae8d69247be74d9503b378a09425096f",
         },
         type="ZeroShotClassification",
         category="i2t",
@@ -43,14 +42,13 @@ class FGVCAircraftZeroShotClassification(AbsTaskZeroshotClassification):
         }
         """,
         descriptive_stats={
-            "n_samples": {"test": 3333},
+            "n_samples": {"test": 3669},
             "avg_character_length": {"test": 431.4},
         },
     )
-    label_column_name: str = "variant"  ## could be family, manufacturer, or variant. Variant has the higher number of classes.
 
     def get_candidate_labels(self) -> list[str]:
         return [
-            f"a photo of a {name}, a type of aircraft."
+            f"a photo of a {name}, a type of pet."
             for name in self.dataset["test"].features[self.label_column_name].names
         ]

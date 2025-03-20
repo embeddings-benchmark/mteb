@@ -7,15 +7,15 @@ from typing import Any
 from datasets import Dataset
 
 from ...encoder_interface import Encoder
-from ...evaluation.evaluators import ZeroshotClassificationEvaluator
+from ...evaluation.evaluators import ZeroShotClassificationEvaluator
 from ..AbsTask import AbsTask, ScoresDict
 from ..TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
 
-class ZeroshotClassificationDescriptiveStatistics(DescriptiveStatistics):
-    """Descriptive statistics for ZeroshotClassification
+class ZeroShotClassificationDescriptiveStatistics(DescriptiveStatistics):
+    """Descriptive statistics for ZeroShotClassification
 
     Attributes:
         num_samples: number of samples in the dataset.
@@ -54,8 +54,8 @@ class ZeroshotClassificationDescriptiveStatistics(DescriptiveStatistics):
     max_label_text_length: int
 
 
-class AbsTaskZeroshotClassification(AbsTask):
-    """Abstract class for ZeroshotClassification tasks
+class AbsTaskZeroShotClassification(AbsTask):
+    """Abstract class for ZeroShotClassification tasks
     The similarity between an images and candidate text prompts, such as this is a dog/this is a cat.
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
@@ -74,7 +74,7 @@ class AbsTaskZeroshotClassification(AbsTask):
 
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
-    ) -> ZeroshotClassificationDescriptiveStatistics:
+    ) -> ZeroShotClassificationDescriptiveStatistics:
         if hf_subset:
             imgs = self.dataset[hf_subset][split][self.image_column_name]
             labels = self.dataset[hf_subset][split][self.label_column_name]
@@ -101,7 +101,7 @@ class AbsTaskZeroshotClassification(AbsTask):
         candidate_labels = self.get_candidate_labels()
         candidate_labels_len = [len(c) for c in candidate_labels]
 
-        return ZeroshotClassificationDescriptiveStatistics(
+        return ZeroShotClassificationDescriptiveStatistics(
             num_samples=num_samples,
             unique_num_labels=unique_num_labels,
             min_image_width=min(img_widths),
@@ -128,7 +128,7 @@ class AbsTaskZeroshotClassification(AbsTask):
         **kwargs,
     ) -> ScoresDict:
         candidate_labels = self.get_candidate_labels()
-        evaluator = ZeroshotClassificationEvaluator(
+        evaluator = ZeroShotClassificationEvaluator(
             dataset,
             self.image_column_name,
             # dataset[self.image_column_name],#broken into dataset and self.image_column_name
