@@ -48,6 +48,7 @@ class Any2TextMultipleChoiceEvaluator(Evaluator):
         self.label_column_name = label_column_name
         self.choices_column_name = choices_column_name
         self.task_name = task_name
+        self.transform = transform
 
     def __call__(
         self,
