@@ -10,7 +10,7 @@ from mteb import ModelMeta
     ("model_name", "expected_memory"),
     [
         ("intfloat/e5-mistral-7b-instruct", 13563),  # multiple safetensors
-        ("infgrad/jasper_en_vision_language_v1", 3802),  # bf16
+        ("NovaSearch/jasper_en_vision_language_v1", 3802),  # bf16
         ("intfloat/multilingual-e5-small", 449),  # safetensors
         ("BAAI/bge-m3", 2167),  # pytorch_model.bin
     ],

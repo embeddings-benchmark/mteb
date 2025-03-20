@@ -134,11 +134,15 @@ class ImageTextPairClassificationEvaluator(Evaluator):
             images = [img for images in images_list for img in images]
             texts = [txt for texts in texts_list for txt in texts]
             images_emb = F.normalize(
-                model.get_image_embeddings(images, batch_size=len(images)),
+                model.get_image_embeddings(
+                    images, batch_size=len(images), task_name=self.task_name
+                ),
                 dim=-1,
             ).view(len(batch), num_images_per_sample, -1)
             texts_emb = F.normalize(
-                model.get_text_embeddings(texts, batch_size=len(texts)),
+                model.get_text_embeddings(
+                    texts, batch_size=len(texts), task_name=self.task_name
+                ),
                 dim=-1,
             ).view(len(batch), num_texts_per_sample, -1)
             for i in range(len(batch)):

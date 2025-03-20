@@ -50,9 +50,20 @@ def parse_model_name(name: str) -> str:
 
 def parse_float(value) -> float:
     try:
-        return float(value)
+        if value == "Infinite":
+            return np.inf
+        else:
+            return float(value)
     except ValueError:
         return np.nan
+
+
+def process_max_tokens(x):
+    if pd.isna(x):
+        return "Unknown"
+    if np.isinf(x):
+        return "Infinite"
+    return str(int(x))
 
 
 models_to_annotate = [
@@ -113,6 +124,7 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
         return go.Figure()
     min_score, max_score = df["Mean (Task)"].min(), df["Mean (Task)"].max()
     df["sqrt(dim)"] = np.sqrt(df["Embedding Dimensions"])
+    df["Max Tokens"] = df["Max Tokens"].apply(lambda x: process_max_tokens(x))
     fig = px.scatter(
         df,
         x="Number of Parameters",
@@ -207,7 +219,7 @@ def radar_chart(df: pd.DataFrame) -> go.Figure:
             "Couldn't produce radar chart, the benchmark only contains one task category."
         )
     df = df[["Model", *task_type_columns]].set_index("Model")
-    df = df.replace("", np.nan)
+    df = df.mask(df == "", np.nan)
     df = df.dropna()
     df = df.head(TOP_N)
     df = df.iloc[::-1]
@@ -227,7 +239,7 @@ def radar_chart(df: pd.DataFrame) -> go.Figure:
             )
         )
     fig.update_layout(
-        font=dict(size=16, color="black"),  # noqa
+        font=dict(size=13, color="black"),  # noqa
         template="plotly_white",
         polar=dict(
             radialaxis=dict(
@@ -245,11 +257,15 @@ def radar_chart(df: pd.DataFrame) -> go.Figure:
         legend=dict(
             orientation="h",
             yanchor="bottom",
-            y=-0.6,
-            xanchor="left",
-            x=-0.05,
+            y=-0.35,
+            xanchor="center",
+            x=0.4,
+            itemwidth=30,
+            font=dict(size=13),
+            entrywidth=0.6,
             entrywidthmode="fraction",
-            entrywidth=1 / 5,
         ),
+        margin=dict(l=0, r=16, t=30, b=30),
+        autosize=True,
     )
     return fig

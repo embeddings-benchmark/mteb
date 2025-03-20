@@ -1,2 +1,2 @@
 # from .ClassificationEvaluator import *
-# from .ZeroshotClassificationEvaluator import *
+# from .ZeroShotClassificationEvaluator import *

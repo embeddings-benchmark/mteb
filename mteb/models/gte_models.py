@@ -265,7 +265,7 @@ gte_multilingual_langs = [
 # Source: https://arxiv.org/pdf/2407.19669
 gte_multi_training_data = {
     "T2Retrieval": ["train"],
-    "DuReader": ["train"],
+    "DuRetrieval": ["train"],
     "MMarcoReranking": ["train"],
     "CMedQAv2-reranking": ["train"],
     "NQ-NL": ["train"],  # translation not trained on
@@ -304,7 +304,7 @@ gte_multilingual_base = ModelMeta(
     n_parameters=int(305 * 1e6),
     memory_usage_mb=582,
     embed_dim=1024,
-    license="apache-2",
+    license="apache-2.0",
     max_tokens=8192,
     reference="https://huggingface.co/Alibaba-NLP/gte-multilingual-base",
     similarity_fn_name="cosine",
@@ -329,7 +329,7 @@ gte_modernbert_base = ModelMeta(
     n_parameters=int(149 * 1e6),
     memory_usage_mb=284,
     embed_dim=768,
-    license="apache-2",
+    license="apache-2.0",
     max_tokens=8192,
     reference="https://huggingface.co/Alibaba-NLP/gte-modernbert-base",
     similarity_fn_name="cosine",

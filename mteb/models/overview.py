@@ -13,7 +13,9 @@ from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import (
     align_models,
+    ara_models,
     arctic_models,
+    b1ade_models,
     bedrock_models,
     bge_models,
     blip2_models,
@@ -70,6 +72,7 @@ from mteb.models import (
     stella_models,
     text2vec_models,
     uae_models,
+    vdr_models,
     vista_models,
     vlm2vec_models,
     voyage_models,
@@ -140,7 +143,10 @@ model_modules = [
     text2vec_models,
     uae_models,
     voyage_models,
+    vdr_models,
     fa_models,
+    ara_models,
+    b1ade_models,
 ]
 MODEL_REGISTRY = {}
 

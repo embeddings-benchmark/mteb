@@ -34,8 +34,8 @@ from mteb.abstasks.Image.AbsTaskImageTextPairClassification import (
     AbsTaskImageTextPairClassification,
 )
 from mteb.abstasks.Image.AbsTaskVisualSTS import AbsTaskVisualSTS
-from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
-    AbsTaskZeroshotClassification,
+from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
+    AbsTaskZeroShotClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -2868,10 +2868,10 @@ class MockVisualSTSTask(AbsTaskVisualSTS):
         return metadata_dict
 
 
-class MockZeroshotClassificationTask(AbsTaskZeroshotClassification):
+class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         type="ZeroShotClassification",
-        name="MockZeroshotClassification",
+        name="MockZeroShotClassification",
         main_score="accuracy",
         descriptive_stats={
             "test": {

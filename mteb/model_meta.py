@@ -14,11 +14,10 @@ from huggingface_hub.errors import (
 from pydantic import BaseModel, ConfigDict
 
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.abstasks.TaskMetadata import STR_DATE, STR_URL
 from mteb.encoder_interface import Encoder
 
+from .custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
 from .languages import ISO_LANGUAGE_SCRIPT
-from .modalities import MODALITIES
 
 if TYPE_CHECKING:
     from .models.sentence_transformer_wrapper import SentenceTransformerWrapper
@@ -104,7 +103,7 @@ class ModelMeta(BaseModel):
     memory_usage_mb: float | None
     max_tokens: float | None
     embed_dim: int | None
-    license: str | None
+    license: LICENSES | STR_URL | None
     open_weights: bool | None
     public_training_code: str | None
     public_training_data: str | bool | None
@@ -181,7 +180,7 @@ class ModelMeta(BaseModel):
         if self.adapted_from is not None:
             try:
                 adapted_from_model = mteb.get_model_meta(
-                    self.adapted_from, fetch_from_hf=True
+                    self.adapted_from, fetch_from_hf=False
                 )
                 adapted_training_datasets = adapted_from_model.get_training_datasets()
                 if adapted_training_datasets is not None:
