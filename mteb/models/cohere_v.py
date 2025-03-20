@@ -182,7 +182,7 @@ def cohere_v_loader(**kwargs):
 
 cohere_mult_3 = ModelMeta(
     loader=partial(cohere_v_loader, model_name="embed-multilingual-v3.0"),
-    name="cohere/embed-multilingual-v3.0",
+    name="Cohere/Cohere-embed-multilingual-v3.0",
     languages=[],  # Unknown, but support >100 languages
     revision="1",
     release_date="2024-10-24",
@@ -204,7 +204,7 @@ cohere_mult_3 = ModelMeta(
 
 cohere_eng_3 = ModelMeta(
     loader=partial(cohere_v_loader, model_name="embed-english-v3.0"),
-    name="cohere/embed-english-v3.0",
+    name="Cohere/Cohere-embed-english-v3.0",
     languages=["eng-Latn"],
     revision="1",
     release_date="2024-10-24",
