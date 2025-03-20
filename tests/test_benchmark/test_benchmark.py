@@ -364,7 +364,7 @@ def test_task_modality_filtering(mock_logger, task):
         f"'{modality}'" for modality in sorted(task.metadata.modalities)
     )
     mock_logger.assert_called_with(
-        f"MockMocoModel only supports ['image'], but the task modalities are [{task_modalities}]."
+        f"mock/MockMocoModel only supports ['image'], but the task modalities are [{task_modalities}]."
     )
 
 
