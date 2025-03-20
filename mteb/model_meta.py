@@ -11,7 +11,7 @@ from huggingface_hub.errors import (
     NotASafetensorsRepoError,
     SafetensorsParsingError,
 )
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_validator
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.encoder_interface import Encoder
@@ -122,6 +122,17 @@ class ModelMeta(BaseModel):
         loader = dict_repr.pop("loader", None)
         dict_repr["loader"] = get_loader_name(loader)
         return dict_repr
+
+    @field_validator("name")
+    @classmethod
+    def check_name(cls, v: str | None) -> str | None:
+        if v is None or v == "bm25s":
+            return v
+        if "/" not in v:
+            raise ValueError(
+                "Model name must be in the format 'organization/model_name'"
+            )
+        return v
 
     def load_model(self, **kwargs: Any) -> Encoder:
         if self.loader is None:
