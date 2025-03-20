@@ -7,9 +7,9 @@ from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class ClusTrecCovidP2PFast(AbsTaskClusteringFast, MultilingualTask):
+class ClusTrecCovid(AbsTaskClusteringFast, MultilingualTask):
     metadata = TaskMetadata(
-        name="ClusTREC-CovidP2P",
+        name="ClusTREC-Covid",
         description="A Topical Clustering Benchmark for COVID-19 Scientific Research across 50 covid-19 related topics.",
         reference="https://github.com/katzurik/Knowledge_Navigator/tree/main/Benchmarks/CLUSTREC%20COVID",
         dataset={
