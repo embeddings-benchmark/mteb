@@ -16,7 +16,6 @@ from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
 
-# logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
 HF_GME_QWEN2VL_2B = "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"

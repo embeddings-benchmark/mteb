@@ -13,7 +13,6 @@ from transformers import AutoConfig, AutoModelForCausalLM, AutoProcessor
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 
-# logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
 EncodeTypes = Literal["query", "passage"]
