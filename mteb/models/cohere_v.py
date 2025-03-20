@@ -83,7 +83,7 @@ def cohere_v_loader(**kwargs):
                     for image in batch:
                         # cohere only supports 1 image per call
                         buffered = io.BytesIO()
-                        image = tensor_to_image(image)
+                        image = self.transform(image)
                         image.save(buffered, format=self.image_format)
                         image_bytes = buffered.getvalue()
                         stringified_buffer = base64.b64encode(image_bytes).decode(
@@ -144,8 +144,8 @@ def cohere_v_loader(**kwargs):
 
         def get_fused_embeddings(
             self,
-            texts: list[str] = None,
-            images: list[Image.Image] | DataLoader = None,
+            texts: list[str] | None = None,
+            images: list[Image.Image] | DataLoader | None = None,
             fusion_mode="sum",
             **kwargs: Any,
         ):

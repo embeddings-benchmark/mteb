@@ -15,7 +15,6 @@ from mteb.evaluation.evaluators.Evaluator import Evaluator
 logger = logging.getLogger(__name__)
 
 
-
 class Any2TextMultipleChoiceEvaluator(Evaluator):
     """Evaluate a model based on the similarity of queries (can be interleaved) and candidate answers.
     The goal is to find the correct text in multiple candidates that

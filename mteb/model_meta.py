@@ -15,7 +15,6 @@ from pydantic import BaseModel, ConfigDict
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.encoder_interface import Encoder
-from mteb.requires_package import requires_image_dependencies
 
 from .custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
 from .languages import ISO_LANGUAGE_SCRIPT

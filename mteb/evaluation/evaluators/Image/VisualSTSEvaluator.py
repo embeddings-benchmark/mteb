@@ -28,6 +28,7 @@ def get_default_transform():
 
     return transforms.Compose([transforms.PILToTensor()])
 
+
 class ImageDataset(torch.utils.data.Dataset):
     def __init__(self, hf_dataset, image_column_name: str = "image", transform=None):
         self.dataset = hf_dataset
@@ -62,10 +63,14 @@ class VisualSTSEvaluator(Evaluator):
 
         default_transform = get_default_transform()
         self.sentence1_dataset = ImageDataset(
-            dataset, image_column_name=sentences_column_names[0], transform=default_transform
+            dataset,
+            image_column_name=sentences_column_names[0],
+            transform=default_transform,
         )
         self.sentence2_dataset = ImageDataset(
-            dataset, image_column_name=sentences_column_names[1], transform=default_transform
+            dataset,
+            image_column_name=sentences_column_names[1],
+            transform=default_transform,
         )
         self.gold_scores = gold_scores
         self.task_name = task_name

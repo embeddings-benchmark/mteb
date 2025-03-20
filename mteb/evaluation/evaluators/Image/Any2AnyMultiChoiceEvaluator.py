@@ -44,7 +44,6 @@ def get_default_transform():
     return transforms.Compose([transforms.Resize((224, 224)), transforms.ToTensor()])
 
 
-
 class ImageDataset(torch.utils.data.Dataset):
     def __init__(self, hf_dataset, image_column_name: str = "image", transform=None):
         self.dataset = hf_dataset

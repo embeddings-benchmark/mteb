@@ -72,7 +72,6 @@ class JinaCLIPModelWrapper:
 
         if isinstance(images, DataLoader):
             with torch.no_grad():
-
                 for batch in tqdm(images):
                     image_outputs = self.model.encode_image(
                         [F.to_pil_image(b.to("cpu")) for b in batch],

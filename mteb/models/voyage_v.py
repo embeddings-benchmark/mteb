@@ -14,8 +14,6 @@ from mteb.model_meta import ModelMeta
 from mteb.requires_package import requires_image_dependencies
 
 
-
-
 def downsample_image(
     image: Image.Image, max_pixels: int = 16000000, target_longest_side: int = 4000
 ) -> Image.Image:
