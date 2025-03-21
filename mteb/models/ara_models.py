@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 arabic_triplet_matryoshka = ModelMeta(
+    loader=sentence_transformers_loader,
     name="Omartificial-Intelligence-Space/Arabic-Triplet-Matryoshka-V2",
     languages=["ara-Arab"],
     open_weights=True,

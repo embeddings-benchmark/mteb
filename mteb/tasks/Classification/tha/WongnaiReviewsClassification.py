@@ -14,7 +14,7 @@ class WongnaiReviewsClassification(AbsTaskClassification):
             "revision": "cd351eb26093aa4b232a2390a0da35e7fab21655",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["tha-Thai"],
@@ -23,7 +23,7 @@ class WongnaiReviewsClassification(AbsTaskClassification):
         dialect=[],
         domains=["Reviews", "Written"],
         task_subtypes=[],
-        license="lgpl",
+        license="lgpl-3.0",
         annotations_creators="derived",
         sample_creation="found",
         bibtex_citation="""

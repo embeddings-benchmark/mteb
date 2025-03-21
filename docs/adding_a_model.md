@@ -5,8 +5,10 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
 1. **Add meta information about your model to [model dir](../mteb/models/)**. See the docstring of ModelMeta for meta data details.
    ```python
    from mteb.model_meta import ModelMeta
+    from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
    bge_m3 = ModelMeta(
+       loader=sentence_transformers_loader,
        name="model_name",
        languages=["model_languages"], # in format eng-Latn
        open_weights=True,
@@ -33,8 +35,8 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
    import numpy as np
 
    class CustomWrapper(Wrapper):
-       def __init__(self, model_name, model_revision):
-           super().__init__(model_name, model_revision)
+       def __init__(self, model_name, revision):
+           super().__init__(model_name, revision)
            # your custom implementation here
 
        def encode(
@@ -51,11 +53,10 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
    Then you can specify the `loader` parameter in the `ModelMeta` class:
    ```python
    your_model = ModelMeta(
-       loader=partial(
-            CustomWrapper,
-            model_name="model_name",
-            model_revision="5617a9f61b028005a4858fdac845db406aefb181"
-       ),
+       loader=CustomWrapper,
+       name = "{model name}",
+       revision = "{revision on huggingface}"
+       loader_kwargs={} # additional argument passed to the loader besides name and revision
        ...
    )
    ```
@@ -106,10 +107,8 @@ You can directly add the prompts when saving and uploading your model to the Hub
 
 ```python
 model = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="intfloat/multilingual-e5-small",
-        revision="fd1525a9fd15316a2d503bf26ab031a61d056e98",
+    loader=sentence_transformers_loader
+    loader_kwargs=dict(
         model_prompts={
            "query": "query: ",
            "passage": "passage: ",
@@ -124,12 +123,12 @@ If you are unable to directly add the prompts in the model configuration, you ca
 Models that use instructions can use the [`InstructSentenceTransformerWrapper`](../mteb/models/instruct_wrapper.py). For example:
 ```python
 model = ModelMeta(
-    loader=partial(
-        InstructSentenceTransformerWrapper,
-        model="nvidia/NV-Embed-v1",
-        revision="7604d305b621f14095a1aa23d351674c2859553a",
+    loader=InstructSentenceTransformerWrapper,
+    loader_kwargs=dict(
         instruction_template="Instruct: {instruction}\nQuery: ",
     ),
+    name="nvidia/NV-Embed-v1",
+    revision="7604d305b621f14095a1aa23d351674c2859553a",
    ...
 )
 ```

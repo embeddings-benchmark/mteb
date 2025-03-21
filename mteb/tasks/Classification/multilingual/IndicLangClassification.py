@@ -71,7 +71,7 @@ class IndicLangClassification(AbsTaskClassification):
         },
         description="A language identification test set for native-script as well as Romanized text which spans 22 Indic languages.",
         reference="https://arxiv.org/abs/2305.15814",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         type="Classification",
         eval_splits=["test"],

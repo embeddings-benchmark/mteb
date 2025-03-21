@@ -14,7 +14,7 @@ class SDSEyeProtectionClassification(AbsTaskClassification):
             "revision": "35cbe5ee544dd26e343238a333de4568e6f77819",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

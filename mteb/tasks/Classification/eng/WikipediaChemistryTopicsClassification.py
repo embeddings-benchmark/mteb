@@ -14,7 +14,7 @@ class WikipediaChemistryTopicsClassification(AbsTaskClassification):
             "revision": "d8fb355db2248f95df8ea410a43aa1db1ee96ba4",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

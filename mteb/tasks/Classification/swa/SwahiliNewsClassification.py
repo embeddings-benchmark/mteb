@@ -14,7 +14,7 @@ class SwahiliNewsClassification(AbsTaskClassification):
             "revision": "24fcf066e6b96f9e0d743e8b79184e0c599f73c3",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["swa-Latn"],

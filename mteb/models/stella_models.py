@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-from functools import partial
-
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.instruct_wrapper import instruct_wrapper
 from mteb.models.nvidia_models import nvidia_training_datasets
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 stella_zh_datasets = {
     "BQ": [],
@@ -43,15 +42,14 @@ stella_zh_datasets = {
 
 stella_en_400M = ModelMeta(
     # https://huggingface.co/dunzhang/stella_en_400M_v5/discussions/21#671a6205ac1e2416090f2bf4
-    loader=partial(  # type: ignore
-        instruct_wrapper,
-        model_name_or_path="dunzhang/stella_en_400M_v5",
+    loader=instruct_wrapper,
+    loader_kwargs=dict(
         attn="cccc",
         pooling_method="lasttoken",
         mode="embedding",
         torch_dtype="auto",
     ),
-    name="dunzhang/stella_en_400M_v5",
+    name="NovaSearch/stella_en_400M_v5",
     languages=["eng_Latn"],
     open_weights=True,
     use_instructions=True,
@@ -64,22 +62,21 @@ stella_en_400M = ModelMeta(
     license="mit",
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch", "GritLM"],
-    reference="https://huggingface.co/dunzhang/stella_en_400M_v5",
+    reference="https://huggingface.co/NovaSearch/stella_en_400M_v5",
     training_datasets=nvidia_training_datasets,  # also distilled from gte-qwen (but training data is unknown) #2164
     public_training_code="https://github.com/NovaSearch-Team/RAG-Retrieval/blob/c40f4638b705eb77d88305d2056901ed550f9f4b/rag_retrieval/train/embedding/README.md",
     public_training_data=None,
 )
 
 stella_en_1_5b = ModelMeta(
-    loader=partial(  # type: ignore
-        instruct_wrapper,
-        model_name_or_path="dunzhang/stella_en_1.5B_v5",
+    loader=instruct_wrapper,
+    loader_kwargs=dict(
         attn="cccc",
         pooling_method="lasttoken",
         mode="embedding",
         torch_dtype="auto",
     ),
-    name="dunzhang/stella_en_1.5B_v5",
+    name="NovaSearch/stella_en_1.5B_v5",
     languages=["eng_Latn"],
     open_weights=True,
     use_instructions=True,
@@ -92,13 +89,14 @@ stella_en_1_5b = ModelMeta(
     license="mit",
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch", "GritLM"],
-    reference="https://huggingface.co/dunzhang/stella_en_1.5B_v5",
+    reference="https://huggingface.co/NovaSearch/stella_en_1.5B_v5",
     training_datasets=nvidia_training_datasets,  # also distilled from gte-qwen (but training data is unknown) #2164
     public_training_code="https://github.com/NovaSearch-Team/RAG-Retrieval/blob/c40f4638b705eb77d88305d2056901ed550f9f4b/rag_retrieval/train/embedding/README.md",
     public_training_data=None,
 )
 
 stella_large_zh_v3_1792d = ModelMeta(
+    loader=sentence_transformers_loader,
     name="dunzhang/stella-large-zh-v3-1792d",
     languages=["zho_Hans"],
     open_weights=True,
@@ -126,6 +124,7 @@ stella_large_zh_v3_1792d = ModelMeta(
 )
 
 stella_base_zh_v3_1792d = ModelMeta(
+    loader=sentence_transformers_loader,
     name="infgrad/stella-base-zh-v3-1792d",
     languages=["zho_Hans"],
     open_weights=True,
@@ -154,6 +153,7 @@ stella_base_zh_v3_1792d = ModelMeta(
 
 
 stella_mrl_large_zh_v3_5_1792d = ModelMeta(
+    loader=sentence_transformers_loader,
     name="dunzhang/stella-mrl-large-zh-v3.5-1792d",
     languages=["zho_Hans"],
     open_weights=True,
@@ -176,6 +176,7 @@ stella_mrl_large_zh_v3_5_1792d = ModelMeta(
 )
 
 zpoint_large_embedding_zh = ModelMeta(
+    loader=sentence_transformers_loader,
     name="iampanda/zpoint_large_embedding_zh",
     languages=["zho_Hans"],
     open_weights=True,

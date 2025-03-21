@@ -23,7 +23,7 @@ class MTOPIntentClassification(AbsTaskClassification):
         },
         description="MTOP: Multilingual Task-Oriented Semantic Parsing",
         reference="https://arxiv.org/pdf/2008.09335.pdf",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         type="Classification",
         eval_splits=["validation", "test"],

@@ -15,7 +15,7 @@ class ItalianLinguisticAcceptabilityClassification(AbsTaskClassification):
         description="An Italian Corpus of Linguistic Acceptability taken from linguistic literature with a binary annotation made by the original authors themselves.",
         reference="https://aclanthology.org/2021.findings-emnlp.250/",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ita-Latn"],

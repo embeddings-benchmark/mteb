@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.model_meta import ModelMeta, ScoringFunction
-from mteb.models.no_model_implementation import no_model_implementation_available
 
 sonar_langs = [
     "ace-Arab",
@@ -211,7 +210,7 @@ sonar_langs = [
 ]
 
 sonar = ModelMeta(
-    loader=no_model_implementation_available,
+    loader=None,
     name="facebook/SONAR",
     languages=sonar_langs,
     open_weights=True,

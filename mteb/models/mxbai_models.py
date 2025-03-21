@@ -1,12 +1,10 @@
 from __future__ import annotations
 
-from functools import partial
-
 from mteb.model_meta import (
     ModelMeta,
     ScoringFunction,
-    sentence_transformers_loader,
 )
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 mixedbread_training_data = {
     # from correspondance:
@@ -18,10 +16,8 @@ mixedbread_training_data = {
 }
 
 mxbai_embed_large_v1 = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="mixedbread-ai/mxbai-embed-large-v1",
-        revision="990580e27d329c7408b3741ecff85876e128e203",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts={
             "query": "Represent this sentence for searching relevant passages: "
         },
@@ -61,7 +57,7 @@ mxbai_embed_large_v1 = ModelMeta(
 )
 
 mxbai_embed_2d_large_v1 = ModelMeta(
-    loader=None,
+    loader=sentence_transformers_loader,
     name="mixedbread-ai/mxbai-embed-2d-large-v1",
     languages=["eng_Latn"],
     open_weights=True,
@@ -85,7 +81,7 @@ mxbai_embed_2d_large_v1 = ModelMeta(
 
 
 mxbai_embed_xsmall_v1 = ModelMeta(
-    loader=None,
+    loader=sentence_transformers_loader,
     name="mixedbread-ai/mxbai-embed-xsmall-v1",
     languages=["eng_Latn"],
     open_weights=True,
@@ -108,7 +104,7 @@ mxbai_embed_xsmall_v1 = ModelMeta(
 )
 
 mxbai_embed_2d_large_v1 = ModelMeta(
-    loader=None,
+    loader=sentence_transformers_loader,
     name="mixedbread-ai/mxbai-embed-2d-large-v1",
     languages=["eng_Latn"],
     open_weights=True,
@@ -132,7 +128,7 @@ mxbai_embed_2d_large_v1 = ModelMeta(
 
 
 mxbai_embed_xsmall_v1 = ModelMeta(
-    loader=None,
+    loader=sentence_transformers_loader,
     name="mixedbread-ai/mxbai-embed-xsmall-v1",
     languages=["eng_Latn"],
     open_weights=True,

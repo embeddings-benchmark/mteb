@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 Qodo_Embed_1_1_5B = ModelMeta(
+    loader=sentence_transformers_loader,
     name="Qodo/Qodo-Embed-1-1.5B",
     languages=[
         "python-Code",
@@ -34,6 +36,7 @@ Qodo_Embed_1_1_5B = ModelMeta(
 )
 
 Qodo_Embed_1_7B = ModelMeta(
+    loader=sentence_transformers_loader,
     name="Qodo/Qodo-Embed-1-7B",
     languages=[
         "python-Code",

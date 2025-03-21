@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.36.21"
+version = "1.36.25"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -72,11 +72,13 @@ docs = [
 
 speedtask = ["GPUtil>=1.4.0", "psutil>=5.9.8"]
 peft = ["peft>=0.11.0"]
+
 leaderboard = [
-    "gradio>=5.16.0,<6.0.0; python_version > '3.9'",  # 3.10 is required for gradio
-    "gradio_rangeslider>=0.0.8", 
-    "plotly>=5.24.0,<6.0.0", 
-    "cachetools>=5.2.0"
+    "gradio==5.16.0; python_version > '3.9'", # 3.10 is required for gradio
+    "gradio_rangeslider>=0.0.8",
+    "plotly>=5.24.0,<6.0.0",
+    "cachetools>=5.2.0",
+    "matplotlib>=3.9.4",
 ]
 flagembedding = ["FlagEmbedding"]
 jina = ["einops>=0.8.0"]
@@ -193,6 +195,10 @@ addopts = """
 # FileNotFoundError -> HF Cache is broken:  https://github.com/embeddings-benchmark/mteb/actions/runs/13302915091/job/37147507251?pr=2029
 # --durations=5 -> Show the 5 slowest tests
 # --reruns-delay 10 -> Delay between reruns in seconds to avoid running into the same issue again
+
+markers = [
+    "test_datasets: marks tests that tests dataset availability",
+]
 
 [tool.uv]
 override-dependencies = [

@@ -1,12 +1,10 @@
 from __future__ import annotations
 
-from functools import partial
-
 from mteb.model_meta import (
     ModelMeta,
     ScoringFunction,
-    sentence_transformers_loader,
 )
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 inf_retreiver_v1_training_data = {
     # eng_Latn
@@ -71,10 +69,8 @@ inf_retreiver_v1_training_data = {
 }
 
 inf_retriever_v1 = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="infly/inf-retriever-v1",
-        revision="cb70ca7c31dfa866b2eff2dad229c144d8ddfd91",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         trust_remote_code=True,
     ),
     name="infly/inf-retriever-v1",
@@ -98,10 +94,8 @@ inf_retriever_v1 = ModelMeta(
 )
 
 inf_retriever_v1_1_5B = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="infly/inf-retriever-v1-1.5b",
-        revision="c9c05c2dd50707a486966ba81703021ae2094a06",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         trust_remote_code=True,
     ),
     name="infly/inf-retriever-v1-1.5b",

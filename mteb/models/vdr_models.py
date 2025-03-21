@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from functools import partial
-
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
@@ -22,9 +20,8 @@ languages = [
 ]
 
 vdr_2b_multi_v1 = ModelMeta(
-    loader=partial(
-        InstructSentenceTransformerWrapper,
-        model_name="llamaindex/vdr-2b-multi-v1",
+    loader=InstructSentenceTransformerWrapper,
+    loader_kwargs=dict(
         instruction_template=instruction_template,
         max_seq_length=32768,
         apply_instruction_to_passages=True,

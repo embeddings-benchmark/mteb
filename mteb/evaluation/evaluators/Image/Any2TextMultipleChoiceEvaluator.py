@@ -10,6 +10,10 @@ from sklearn.metrics.pairwise import cosine_similarity
 from torchvision import transforms
 from tqdm import tqdm
 
+from mteb.create_dataloaders import (
+    create_dataloader_from_texts,
+    create_image_dataloader,
+)
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
 from mteb.evaluation.evaluators.Evaluator import Evaluator
 
@@ -61,28 +65,32 @@ class Any2TextMultipleChoiceEvaluator(Evaluator):
         if "batch_size" not in encode_kwargs:
             encode_kwargs["batch_size"] = 64
 
-        label_list = list(
-            {x for n in self.dataset[self.choices_column_name] for x in n}
+        choices = self.dataset[self.choices_column_name]
+        answers = self.dataset[self.label_column_name]
+        label_list = list({x for n in choices for x in n})
+        label_embeddings = model.encode(
+            create_dataloader_from_texts(
+                label_list,
+            ),
+            task_name=self.task_name,
+            batch_size=encode_kwargs["batch_size"],
         )
-        label_embeddings = model.get_text_embeddings(label_list)
         label_embedding_dict = {}
         for label, embedding in zip(label_list, label_embeddings):
             label_embedding_dict[label] = embedding
 
-        if "text" in self.query_modalities:
-            questions = self.dataset[self.query_column_names["text"]]
-        else:
-            questions = None
-        if "image" in self.query_modalities:
-            images = self.dataset[self.query_column_names["image"]]
-        query_embeddings = model.get_fused_embeddings(
-            texts=questions,
-            images=images,
+        dataset = create_image_dataloader(
+            self.dataset.remove_columns(
+                [self.choices_column_name, self.label_column_name]
+            ),
             batch_size=encode_kwargs["batch_size"],
         )
 
-        answers = self.dataset[self.label_column_name]
-        choices = self.dataset[self.choices_column_name]
+        query_embeddings = model.encode(
+            dataset,
+            task_name=self.task_name,
+            batch_size=encode_kwargs["batch_size"],
+        )
 
         # note that answers are the indeces
         predictions = []

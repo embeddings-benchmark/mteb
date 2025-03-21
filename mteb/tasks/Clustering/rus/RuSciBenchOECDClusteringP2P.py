@@ -19,7 +19,7 @@ class RuSciBenchOECDClusteringP2P(AbsTaskClusteringFast):
         description="Clustering of scientific papers (title+abstract) by rubric",
         reference="https://github.com/mlsa-iai-msu-lab/ru_sci_bench/",
         type="Clustering",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],

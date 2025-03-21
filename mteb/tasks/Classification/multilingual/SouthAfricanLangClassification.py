@@ -27,7 +27,7 @@ class SouthAfricanLangClassification(AbsTaskClassification):
         },
         description="A language identification test set for 11 South African Languages.",
         reference="https://www.kaggle.com/competitions/south-african-language-identification/",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         type="Classification",
         eval_splits=["test"],

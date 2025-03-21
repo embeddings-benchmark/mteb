@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any, Literal
 
 import numpy as np
+import numpy.typing as npt
 import torch
 from numpy import ndarray
 from sentence_transformers import CrossEncoder, SentenceTransformer
@@ -13,6 +14,7 @@ from torch.utils.data import DataLoader
 
 import mteb
 from mteb.encoder_interface import PromptType
+from mteb.load_results.task_results import Namespace
 from mteb.model_meta import ModelMeta
 from mteb.models import SentenceTransformerWrapper
 from tests.test_benchmark.task_grid import MOCK_TASK_TEST_GRID
@@ -22,8 +24,10 @@ class MockNumpyEncoder(mteb.Encoder):
     def __init__(self):
         pass
 
-    def encode(self, sentences: DataLoader, prompt_name: str | None = None, **kwargs):
-        return np.random.rand(len(sentences.dataset), 10)
+    def encode(
+        self, sentences: DataLoader, prompt_name: str | None = None, **kwargs
+    ) -> npt.NDArray[np.float32]:
+        return np.random.rand(len(sentences.dataset), 10)  # type: ignore
 
 
 class MockTorchEncoder(mteb.Encoder):
@@ -31,19 +35,42 @@ class MockTorchEncoder(mteb.Encoder):
         pass
 
     def encode(self, sentences: DataLoader, prompt_name: str | None = None, **kwargs):
-        return torch.randn(len(sentences.dataset), 10).numpy()
+        return torch.randn(len(sentences.dataset), 10)
 
 
-class MockTorchbf16Encoder(SentenceTransformer):
+class MockTorchfp16Encoder(mteb.Encoder):
     def __init__(self):
         pass
 
-    def encode(self, sentences: list[str], prompt_name: str | None = None, **kwargs):
-        return torch.randn(len(sentences), 10, dtype=torch.bfloat16)
+    def encode(
+        self, sentences: DataLoader, prompt_name: str | None = None, **kwargs
+    ) -> Tensor:
+        return torch.randn(len(sentences.dataset), 10, dtype=torch.float16)  # type: ignore
+
+
+class MockSentenceTransformersbf16Encoder(SentenceTransformer):
+    """Ensure that data types not supported by the encoder are converted to the supported data type."""
+
+    model_card_data = Namespace(
+        model_name="MockSentenceTransformersbf16Encoder", base_model_revision="1.0.0"
+    )
+
+    def __init__(self):
+        pass
+
+    def encode(
+        self, sentences: list[str], prompt_name: str | None = None, **kwargs
+    ) -> Tensor:
+        return torch.randn(len(sentences), 10, dtype=torch.bfloat16)  # type: ignore
+
+    @staticmethod
+    def get_sentence_embedding_dimension() -> int:
+        return 10
 
 
 class MockCLIPEncoder:
     mteb_model_meta = ModelMeta(
+        loader=None,
         name="MockCLIPModel",
         languages=["eng_Latn"],
         revision="3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
@@ -81,8 +108,8 @@ class MockCLIPEncoder:
         else:
             return torch.randn(len(images), 10)
 
-    def get_fused_embeddings(self, texts, images, **kwargs):
-        return torch.randn(len(texts), 10)
+    def encode(self, inputs, **kwargs):
+        return torch.randn(len(inputs.dataset), 10)
 
     def calculate_probs(self, text_embeddings, image_embeddings):
         return torch.randn(image_embeddings.shape[0], text_embeddings.shape[0])
@@ -90,6 +117,7 @@ class MockCLIPEncoder:
 
 class MockMocoEncoder:
     mteb_model_meta = ModelMeta(
+        loader=None,
         name="MockMocoModel",
         languages=["eng_Latn"],
         revision="7d091cd70772c5c0ecf7f00b5f12ca609a99d69d",

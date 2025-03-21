@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 parsbert = ModelMeta(
+    loader=sentence_transformers_loader,
     name="HooshvareLab/bert-base-parsbert-uncased",
     languages=["fas-Arab"],
     open_weights=True,
@@ -30,6 +32,7 @@ parsbert = ModelMeta(
 )
 
 bert_zwnj = ModelMeta(
+    loader=sentence_transformers_loader,
     name="m3hrdadfi/bert-zwnj-wnli-mean-tokens",
     languages=["fas-Arab"],
     open_weights=True,
@@ -54,6 +57,7 @@ bert_zwnj = ModelMeta(
 )
 
 roberta_zwnj = ModelMeta(
+    loader=sentence_transformers_loader,
     name="m3hrdadfi/roberta-zwnj-wnli-mean-tokens",
     languages=["fas-Arab"],
     open_weights=True,
@@ -77,6 +81,7 @@ roberta_zwnj = ModelMeta(
 )
 
 sentence_transformer_parsbert = ModelMeta(
+    loader=sentence_transformers_loader,
     name="myrkur/sentence-transformer-parsbert-fa",
     languages=["fas-Arab"],
     open_weights=True,
@@ -100,6 +105,7 @@ sentence_transformer_parsbert = ModelMeta(
 )
 
 tooka_bert_base = ModelMeta(
+    loader=sentence_transformers_loader,
     name="PartAI/TookaBERT-Base",
     languages=["fas-Arab"],
     open_weights=True,
@@ -125,6 +131,7 @@ tooka_bert_base = ModelMeta(
 )
 
 tooka_sbert = ModelMeta(
+    loader=sentence_transformers_loader,
     name="PartAI/Tooka-SBERT",
     languages=["fas-Arab"],
     open_weights=True,
@@ -147,6 +154,7 @@ tooka_sbert = ModelMeta(
 )
 
 fa_bert = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sbunlp/fabert",
     languages=["fas-Arab"],
     open_weights=True,

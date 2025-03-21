@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 import logging
 import re
-from functools import partial
 from typing import Any
 
 import numpy as np
@@ -165,8 +164,8 @@ amazon_titan_embed_text_v1 = ModelMeta(
     revision="1",
     release_date="2023-09-27",
     languages=None,  # not specified
-    loader=partial(
-        BedrockWrapper,
+    loader=BedrockWrapper,
+    loader_kwargs=dict(
         model_id="amazon.titan-embed-text-v1",
         provider="amazon",
         max_tokens=8192,
@@ -191,8 +190,8 @@ amazon_titan_embed_text_v2 = ModelMeta(
     revision="1",
     release_date="2024-04-30",
     languages=None,  # not specified
-    loader=partial(
-        BedrockWrapper,
+    loader=BedrockWrapper,
+    loader_kwargs=dict(
         model_id="amazon.titan-embed-text-v2:0",
         provider="amazon",
         max_tokens=8192,
@@ -215,8 +214,8 @@ amazon_titan_embed_text_v2 = ModelMeta(
 # https://github.com/embeddings-benchmark/mteb/blob/main/mteb/models/cohere_models.py
 # This implementation uses the Amazon Bedrock endpoint for Cohere models.
 cohere_embed_english_v3 = ModelMeta(
-    loader=partial(
-        BedrockWrapper,
+    loader=BedrockWrapper,
+    loader_kwargs=dict(
         model_id="cohere.embed-english-v3",
         provider="cohere",
         max_tokens=512,
@@ -242,8 +241,8 @@ cohere_embed_english_v3 = ModelMeta(
 )
 
 cohere_embed_multilingual_v3 = ModelMeta(
-    loader=partial(
-        BedrockWrapper,
+    loader=BedrockWrapper,
+    loader_kwargs=dict(
         model_id="cohere.embed-multilingual-v3",
         provider="cohere",
         max_tokens=512,

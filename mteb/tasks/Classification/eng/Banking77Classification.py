@@ -14,7 +14,7 @@ class Banking77Classification(AbsTaskClassification):
             "revision": "0fd18e25b25c072e09e0d92ab615fda904d66300",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

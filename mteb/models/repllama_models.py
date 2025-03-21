@@ -23,8 +23,9 @@ logger = logging.getLogger(__name__)
 class RepLLaMAWrapper(Wrapper):
     def __init__(
         self,
-        base_model_name_or_path: str,
         peft_model_name_or_path: str,
+        *,
+        base_model_name_or_path: str,
         torch_dtype: torch.dtype,
         device_map: str,
         model_prompts: dict[str, str] | None = None,
@@ -152,10 +153,9 @@ REPLLAMA_CITATION = """
 """
 
 repllama_llama2_original = ModelMeta(
-    loader=_loader(
-        RepLLaMAWrapper,
+    loader=RepLLaMAWrapper,  # type: ignore
+    loader_kwargs=dict(
         base_model_name_or_path="meta-llama/Llama-2-7b-hf",
-        peft_model_name_or_path="castorini/repllama-v1-7b-lora-passage",
         device_map="auto",
         torch_dtype=torch.bfloat16,
         model_prompts=model_prompts,
@@ -185,10 +185,9 @@ repllama_llama2_original = ModelMeta(
 
 
 repllama_llama2_reproduced = ModelMeta(
-    loader=_loader(
-        RepLLaMAWrapper,
+    loader=RepLLaMAWrapper,  # type: ignore
+    loader_kwargs=dict(
         base_model_name_or_path="meta-llama/Llama-2-7b-hf",
-        peft_model_name_or_path="samaya-ai/RepLLaMA-reproduced",
         device_map="auto",
         torch_dtype=torch.bfloat16,
         model_prompts=model_prompts,
