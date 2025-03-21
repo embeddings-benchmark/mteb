@@ -785,6 +785,7 @@ MTEB_multilingual = Benchmark(
             "STSES",
             "STSB",
             "MIRACLRetrievalHardNegatives",
+            "VDRMultilingualRetrieval",
         ],
     ),
     description="A large-scale multilingual expansion of MTEB, driven mainly by highly-curated community contributions covering 250+ languages.",
