@@ -188,6 +188,8 @@ from .spa.SpanishPassageRetrievalS2S import *
 from .swe.SwednRetrieval import *
 from .swe.SweFaqRetrieval import *
 from .tur.TurHistQuad import *
+from .vie.GreenNodeTableMarkdownRetrieval import *
 from .vie.VieQuADRetrieval import *
+from .vie.ZacLegalTextRetrieval import *
 from .zho.CMTEBRetrieval import *
 from .zho.LeCaRDv2Retrieval import *
