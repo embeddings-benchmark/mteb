@@ -166,7 +166,7 @@ class PairClassificationEvaluator(Evaluator):
         ]:
             metrics = self._compute_metrics(scores, labels, reverse)
             for metric_name, metric_value in metrics.items():
-                output_scores[f"{short_name}_{metric_name}"] = metric_value
+                output_scores[f"{short_name.value}_{metric_name}"] = metric_value
                 max_scores[metric_name].append(metric_value)
 
         for metric in max_scores:
