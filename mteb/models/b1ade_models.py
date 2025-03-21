@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 b1ade_training_data = {
@@ -22,7 +22,7 @@ b1ade_embed = ModelMeta(
     license="mit",
     max_tokens=4096,
     reference="https://huggingface.co/w601sxs/b1ade-embed",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,

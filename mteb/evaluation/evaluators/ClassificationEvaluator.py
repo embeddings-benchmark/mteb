@@ -15,6 +15,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from torch.utils.data import DataLoader
 
 from mteb.encoder_interface import Encoder
+from mteb.model_meta import ScoringFunction
 
 from .Evaluator import Evaluator
 
@@ -70,20 +71,25 @@ class kNNClassificationEvaluator(Evaluator):
 
         y_train = self.train_dataset["label"]
         y_test = self.eval_dataset["label"]
-        for metric in ["cosine", "euclidean"]:  # TODO: "dot"
-            knn = KNeighborsClassifier(n_neighbors=self.k, n_jobs=-1, metric=metric)
+        for metric in [
+            ScoringFunction.COSINE,
+            ScoringFunction.EUCLIDEAN,
+        ]:  # TODO: "dot"
+            knn = KNeighborsClassifier(
+                n_neighbors=self.k, n_jobs=-1, metric=metric.value
+            )
             knn.fit(X_train, y_train)
             y_pred = knn.predict(X_test)
             accuracy = accuracy_score(y_test, y_pred)
             f1 = f1_score(y_test, y_pred, average="macro")
-            scores["accuracy_" + metric] = accuracy
-            scores["f1_" + metric] = f1
+            scores["accuracy_" + metric.value] = accuracy
+            scores["f1_" + metric.value] = f1
             max_accuracy = max(max_accuracy, accuracy)
             max_f1 = max(max_f1, f1)  # type: ignore
             # if binary classification
             if len(np.unique(y_train)) == 2:
                 ap = average_precision_score(y_test, y_pred)
-                scores["ap_" + metric] = ap
+                scores["ap_" + metric.value] = ap
                 max_ap = max(max_ap, ap)
         scores["accuracy"] = max_accuracy
         scores["f1"] = max_f1
