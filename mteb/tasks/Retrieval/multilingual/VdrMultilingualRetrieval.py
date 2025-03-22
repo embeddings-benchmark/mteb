@@ -150,11 +150,3 @@ class VDRMultilingualRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
 
         self.data_loaded = True
 
-    def evaluate(
-        self,
-        model,
-        split="train",
-        **kwargs,
-    ):
-        """Override evaluate to use the correct split name."""
-        return super().evaluate(model, split=split, **kwargs)
