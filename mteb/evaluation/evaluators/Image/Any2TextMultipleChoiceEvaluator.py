@@ -35,7 +35,6 @@ class Any2TextMultipleChoiceEvaluator(Evaluator):
         label_column_name: str,
         choices_column_name: str,
         task_name: str | None = None,
-        transform=None,
         limit: int | None = None,
         **kwargs,
     ):
@@ -48,7 +47,6 @@ class Any2TextMultipleChoiceEvaluator(Evaluator):
         self.label_column_name = label_column_name
         self.choices_column_name = choices_column_name
         self.task_name = task_name
-        self.transform = transform
 
     def __call__(
         self,
