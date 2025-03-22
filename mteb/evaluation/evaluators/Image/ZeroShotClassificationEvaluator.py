@@ -8,15 +8,20 @@ from typing import Any
 import torch
 from sklearn import metrics
 from torch.utils.data import DataLoader
-from torchvision import transforms
 
 from mteb.encoder_interface import Encoder
+from mteb.requires_package import requires_image_dependencies
 
 from ..Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
 
-transform = transforms.Compose([transforms.PILToTensor()])
+
+def get_default_transform():
+    requires_image_dependencies()
+    from torchvision import transforms
+
+    return transforms.Compose([transforms.PILToTensor()])
 
 
 class ImageDataset(torch.utils.data.Dataset):
@@ -52,7 +57,9 @@ class ZeroShotClassificationEvaluator(Evaluator):
     ):
         super().__init__(**kwargs)
         self.dataset = ImageDataset(
-            dataset, image_column_name=image_column_name, transform=transform
+            dataset,
+            image_column_name=image_column_name,
+            transform=get_default_transform(),
         )
         self.image_column_name = image_column_name
         self.labels = labels

@@ -7,15 +7,12 @@ import numpy as np
 import torch
 from sklearn.metrics import accuracy_score
 from sklearn.metrics.pairwise import cosine_similarity
-from torchvision import transforms
 from tqdm import tqdm
 
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
 from mteb.evaluation.evaluators.Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
-
-transform = transforms.Compose([transforms.PILToTensor()])
 
 
 class Any2TextMultipleChoiceEvaluator(Evaluator):
@@ -38,7 +35,6 @@ class Any2TextMultipleChoiceEvaluator(Evaluator):
         label_column_name: str,
         choices_column_name: str,
         task_name: str | None = None,
-        transform=None,
         limit: int | None = None,
         **kwargs,
     ):
@@ -51,7 +47,6 @@ class Any2TextMultipleChoiceEvaluator(Evaluator):
         self.label_column_name = label_column_name
         self.choices_column_name = choices_column_name
         self.task_name = task_name
-        self.transform = transform
 
     def __call__(
         self,
