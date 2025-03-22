@@ -1,15 +1,14 @@
 from __future__ import annotations
 
-from functools import partial
-from typing import Any
+from typing import Any, Literal
 
+import numpy as np
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoImageProcessor, AutoModel
 
-from mteb.encoder_interface import PromptType
+from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta
 
 
@@ -31,60 +30,39 @@ class DINOModelWrapper:
 
     @staticmethod
     def get_text_embeddings(
-        texts: list[str],
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 32,
+        self,
+        texts: DataLoader[BatchedInput],
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ):
         raise ValueError("DINO models only support image encoding.")
 
     def get_image_embeddings(
         self,
-        images: list[Image.Image] | DataLoader,
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 32,
-        pooling="cls",
+        images: DataLoader[BatchedInput],
+        show_progress_bar: bool = True,
+        pooling: Literal["cls", "mean"] = "cls",
         **kwargs: Any,
     ):
         all_image_embeddings = []
 
-        if isinstance(images, DataLoader):
-            with torch.no_grad():
-                for batch in tqdm(images):
-                    inputs = self.processor(images=batch, return_tensors="pt")
-                    inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                    image_outputs = self.model(**inputs)
-                    features = image_outputs.last_hidden_state
-                    if pooling == "cls":
-                        features = features[:, 0, :]  # TODO: confirm best practice
-                    elif pooling == "mean":
-                        features = features.mean(dim=1)
-                    else:
-                        raise ValueError(
-                            "Pooling methods not implemented. Use cls or mean."
-                        )
-                    all_image_embeddings.append(features.cpu())
-        else:
-            with torch.no_grad():
-                for i in tqdm(range(0, len(images), batch_size)):
-                    batch_images = images[i : i + batch_size]
-                    inputs = self.processor(images=batch_images, return_tensors="pt")
-                    inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                    image_outputs = self.model(**inputs)
-                    features = image_outputs.last_hidden_state
-                    if pooling == "cls":
-                        features = features[:, 0, :]
-                    elif pooling == "mean":
-                        features = features.mean(dim=1)
-                    else:
-                        raise ValueError(
-                            "Pooling methods not implemented. Use cls or mean."
-                        )
-                    all_image_embeddings.append(features.cpu())
+        with torch.no_grad():
+            for batch in tqdm(
+                images, disable=not show_progress_bar, desc="Image Encoding"
+            ):
+                inputs = self.processor(images=batch["image"], return_tensors="pt")
+                inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                image_outputs = self.model(**inputs)
+                features = image_outputs.last_hidden_state
+                if pooling == "cls":
+                    features = features[:, 0, :]  # TODO: confirm best practice
+                elif pooling == "mean":
+                    features = features.mean(dim=1)
+                else:
+                    raise ValueError(
+                        "Pooling methods not implemented. Use cls or mean."
+                    )
+                all_image_embeddings.append(features.cpu())
 
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
         return all_image_embeddings
@@ -93,24 +71,21 @@ class DINOModelWrapper:
     def calculate_probs(text_embeddings, image_embeddings):
         raise ValueError("DINO models only support image encoding.")
 
-    def get_fused_embeddings(
+    def encode(
         self,
-        texts: list[str] = None,
-        images: list[Image.Image] | DataLoader = None,
-        fusion_mode="sum",
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        fusion_mode: Literal["sum"] = "sum",
         **kwargs: Any,
-    ):
-        if texts is None and images is None:
-            raise ValueError("images must be provided for DINO models")
-
+    ) -> np.ndarray | torch.Tensor:
         text_embeddings = None
         image_embeddings = None
-
-        if texts is not None:
-            text_embeddings = self.get_text_embeddings(texts, **kwargs)
-
-        if images is not None:
-            image_embeddings = self.get_image_embeddings(images, **kwargs)
+        if "text" in inputs.dataset.features:
+            text_embeddings = self.get_text_embeddings(inputs, **kwargs)
+        if "image" in inputs.dataset.features:
+            image_embeddings = self.get_image_embeddings(inputs, **kwargs)
 
         if text_embeddings is not None and image_embeddings is not None:
             raise ValueError("DINO models only support image encoding.")
@@ -127,10 +102,7 @@ dinov2_training_datasets = {
 
 
 dinov2_small = ModelMeta(
-    loader=partial(
-        DINOModelWrapper,
-        model_name="facebook/dinov2-small",
-    ),
+    loader=DINOModelWrapper,  # type: ignore
     name="facebook/dinov2-small",
     languages=["eng_Latn"],
     revision="ed25f3a31f01632728cabb09d1542f84ab7b0056",
@@ -152,10 +124,7 @@ dinov2_small = ModelMeta(
 )
 
 dinov2_base = ModelMeta(
-    loader=partial(
-        DINOModelWrapper,
-        model_name="facebook/dinov2-base",
-    ),
+    loader=DINOModelWrapper,  # type: ignore
     name="facebook/dinov2-base",
     languages=["eng_Latn"],
     revision="f9e44c814b77203eaa57a6bdbbd535f21ede1415",
@@ -177,10 +146,7 @@ dinov2_base = ModelMeta(
 )
 
 dinov2_large = ModelMeta(
-    loader=partial(
-        DINOModelWrapper,
-        model_name="facebook/dinov2-large",
-    ),
+    loader=DINOModelWrapper,  # type: ignore
     name="facebook/dinov2-large",
     languages=["eng_Latn"],
     revision="47b73eefe95e8d44ec3623f8890bd894b6ea2d6c",
@@ -202,10 +168,7 @@ dinov2_large = ModelMeta(
 )
 
 dinov2_giant = ModelMeta(
-    loader=partial(
-        DINOModelWrapper,
-        model_name="facebook/dinov2-giant",
-    ),
+    loader=DINOModelWrapper,  # type: ignore
     name="facebook/dinov2-giant",
     languages=["eng_Latn"],
     revision="611a9d42f2335e0f921f1e313ad3c1b7178d206d",

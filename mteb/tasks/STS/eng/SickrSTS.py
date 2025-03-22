@@ -15,7 +15,7 @@ class SickrSTS(AbsTaskSTS):
         description="Semantic Textual Similarity SICK-R dataset",
         reference="https://aclanthology.org/L14-1314/",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -55,9 +55,5 @@ class SickrSTS(AbsTaskSTS):
 }""",
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5

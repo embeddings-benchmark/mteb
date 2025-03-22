@@ -1,16 +1,15 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Sequence
-from functools import partial
 from typing import Any
 
 import numpy as np
 import torch
 from sentence_transformers import __version__ as st_version
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.encoder_interface import BatchedInput, PromptType
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 
 logger = logging.getLogger(__name__)
@@ -157,7 +156,7 @@ class JinaWrapper(SentenceTransformerWrapper):
 
     def encode(
         self,
-        sentences: Sequence[str],
+        inputs: DataLoader[BatchedInput],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
@@ -172,6 +171,8 @@ class JinaWrapper(SentenceTransformerWrapper):
             logger.info(
                 f"No model prompts found for task={task_name} prompt_type={prompt_type}"
             )
+        sentences = [text for batch in inputs for text in batch["text"]]
+
         logger.info(f"Encoding {len(sentences)} sentences.")
 
         jina_task_name = self.model_prompts.get(prompt_name, None)
@@ -190,10 +191,8 @@ class JinaWrapper(SentenceTransformerWrapper):
 
 
 jina_embeddings_v3 = ModelMeta(
-    loader=partial(  # type: ignore
-        JinaWrapper,
-        model="jinaai/jina-embeddings-v3",
-        revision="215a6e121fa0183376388ac6b1ae230326bfeaed",
+    loader=JinaWrapper,  # type: ignore
+    loader_kwargs=dict(
         trust_remote_code=True,
         model_prompts={
             "Retrieval-query": "retrieval.query",
@@ -218,7 +217,7 @@ jina_embeddings_v3 = ModelMeta(
     max_tokens=8194,
     embed_dim=1024,
     license="cc-by-nc-4.0",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     reference="https://huggingface.co/jinaai/jina-embeddings-v3",
@@ -243,13 +242,22 @@ jina_embeddings_v3 = ModelMeta(
         # oasst1, oasst2
     },
     adapted_from="XLM-RoBERTa",
+    citation="""
+    @misc{sturua2024jinaembeddingsv3multilingualembeddingstask,
+      title={jina-embeddings-v3: Multilingual Embeddings With Task LoRA},
+      author={Saba Sturua and Isabelle Mohr and Mohammad Kalim Akram and Michael Günther and Bo Wang and Markus Krimmel and Feng Wang and Georgios Mastrapas and Andreas Koukounas and Andreas Koukounas and Nan Wang and Han Xiao},
+      year={2024},
+      eprint={2409.10173},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2409.10173},
+    }
+    """,
 )
 
 jina_embeddings_v2_base_en = ModelMeta(
-    loader=partial(
-        SentenceTransformerWrapper,
-        model_name="jinaai/jina-embeddings-v2-base-en",
-        revision="6e85f575bc273f1fd840a658067d0157933c83f0",
+    loader=SentenceTransformerWrapper,
+    loader_kwargs=dict(
         trust_remote_code=True,
     ),
     name="jinaai/jina-embeddings-v2-base-en",
@@ -263,7 +271,7 @@ jina_embeddings_v2_base_en = ModelMeta(
     license="apache-2.0",
     max_tokens=8192,
     reference="https://huggingface.co/jinaai/jina-embeddings-v2-base-en",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,
@@ -305,10 +313,8 @@ jina_embeddings_v2_base_en = ModelMeta(
 )
 
 jina_embeddings_v2_small_en = ModelMeta(
-    loader=partial(
-        SentenceTransformerWrapper,
-        model_name="jinaai/jina-embeddings-v2-small-en",
-        revision="44e7d1d6caec8c883c2d4b207588504d519788d0",
+    loader=SentenceTransformerWrapper,
+    loader_kwargs=dict(
         trust_remote_code=True,
     ),
     name="jinaai/jina-embeddings-v2-small-en",
@@ -322,7 +328,7 @@ jina_embeddings_v2_small_en = ModelMeta(
     license="apache-2.0",
     max_tokens=8192,
     reference="https://huggingface.co/jinaai/jina-embeddings-v2-small-en",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,
@@ -364,11 +370,7 @@ jina_embeddings_v2_small_en = ModelMeta(
 )
 
 jina_embedding_b_en_v1 = ModelMeta(
-    loader=partial(
-        SentenceTransformerWrapper,
-        model_name="jinaai/jina-embedding-b-en-v1",
-        revision="32aa658e5ceb90793454d22a57d8e3a14e699516",
-    ),
+    loader=SentenceTransformerWrapper,
     name="jinaai/jina-embedding-b-en-v1",
     languages=["eng-Latn"],
     open_weights=True,
@@ -380,7 +382,7 @@ jina_embedding_b_en_v1 = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/jinaai/jina-embedding-b-en-v1",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by="jinaai/jina-embeddings-v2-base-en",
@@ -418,11 +420,7 @@ jina_embedding_b_en_v1 = ModelMeta(
 )
 
 jina_embedding_s_en_v1 = ModelMeta(
-    loader=partial(
-        SentenceTransformerWrapper,
-        model_name="jinaai/jina-embedding-s-en-v1",
-        revision="5ac6cd473e2324c6d5f9e558a6a9f65abb57143e",
-    ),
+    loader=SentenceTransformerWrapper,
     name="jinaai/jina-embedding-s-en-v1",
     languages=["eng-Latn"],
     open_weights=True,
@@ -434,7 +432,7 @@ jina_embedding_s_en_v1 = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/jinaai/jina-embedding-s-en-v1",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by="jinaai/jina-embeddings-v2-small-en",

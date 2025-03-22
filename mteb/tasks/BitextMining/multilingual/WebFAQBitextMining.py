@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 # Consider only those language pairs with at least 250 samples
@@ -198,7 +197,7 @@ _LANGUAGES = {
 _SPLITS = ["default"]
 
 
-class WebFAQBitextMiningQuestions(AbsTaskBitextMining, MultilingualTask):
+class WebFAQBitextMiningQuestions(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="WebFAQBitextMiningQuestions",
         description="""The WebFAQ Bitext Dataset consists of natural FAQ-style Question-Answer pairs that align across languages.
@@ -210,7 +209,7 @@ The dataset is sourced from FAQ pages on the web.""",
             "revision": "a1bc0e8fd36c3d5015bd64c14ca098596774784a",
         },
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=_SPLITS,
         eval_langs=_LANGUAGES,
@@ -252,7 +251,7 @@ The dataset is sourced from FAQ pages on the web.""",
         self.dataset = dataset
 
 
-class WebFAQBitextMiningQAs(AbsTaskBitextMining, MultilingualTask):
+class WebFAQBitextMiningQAs(AbsTaskBitextMining):
     metadata = TaskMetadata(
         name="WebFAQBitextMiningQAs",
         description="""The WebFAQ Bitext Dataset consists of natural FAQ-style Question-Answer pairs that align across languages.
@@ -264,7 +263,7 @@ The dataset is sourced from FAQ pages on the web.""",
             "revision": "a1bc0e8fd36c3d5015bd64c14ca098596774784a",
         },
         type="BitextMining",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=_SPLITS,
         eval_langs=_LANGUAGES,

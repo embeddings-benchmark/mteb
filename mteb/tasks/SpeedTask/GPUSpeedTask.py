@@ -12,7 +12,7 @@ class GPUSpeedTask(AbsTaskSpeedTask):
         reference="https://github.com/KennethEnevoldsen/scandinavian-embedding-benchmark/blob/c8376f967d1294419be1d3eb41217d04cd3a65d3/src/seb/registered_tasks/speed.py#L83-L96",
         dataset={"path": " ", "revision": "1.0"},
         type="Speed",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

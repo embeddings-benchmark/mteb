@@ -14,7 +14,7 @@ class OxfordFlowersClassification(AbsTaskImageClassification):
             "revision": "a37b1891609c0376fa81eced756e7863e1bd873b",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -39,8 +39,4 @@ class OxfordFlowersClassification(AbsTaskImageClassification):
   pages={722-729},
   keywords={Shape;Kernel;Distributed computing;Support vector machines;Support vector machine classification;object classification;segmentation},
   doi={10.1109/ICVGIP.2008.47}}""",
-        descriptive_stats={
-            "n_samples": {"test": 400000},
-            "avg_character_length": {"test": 431.4},
-        },
     )

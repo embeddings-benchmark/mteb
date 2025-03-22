@@ -18,7 +18,7 @@ class NanoMSMARCORetrieval(AbsTaskRetrieval):
             "revision": "7b8ff22f2771dc65ac5b439f222eb19a1f56abda",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["eng-Latn"],

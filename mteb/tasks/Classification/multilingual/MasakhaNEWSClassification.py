@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -24,7 +23,7 @@ _LANGUAGES = {
 }
 
 
-class MasakhaNEWSClassification(AbsTaskClassification, MultilingualTask):
+class MasakhaNEWSClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="MasakhaNEWSClassification",
         dataset={
@@ -33,7 +32,7 @@ class MasakhaNEWSClassification(AbsTaskClassification, MultilingualTask):
         },
         description="MasakhaNEWS is the largest publicly available dataset for news topic classification in 16 languages widely spoken in Africa. The train/validation/test sets are available for all the 16 languages.",
         reference="https://arxiv.org/abs/2304.09972",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         type="Classification",
         eval_splits=["test"],

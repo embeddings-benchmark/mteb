@@ -7,11 +7,18 @@ from typing import Any
 import numpy as np
 import torch
 from sentence_transformers import CrossEncoder, SentenceTransformer
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import PromptType
+from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.models.wrapper import Wrapper
 
 logger = logging.getLogger(__name__)
+
+
+def sentence_transformers_loader(
+    model_name: str, revision: str | None = None, **kwargs
+) -> SentenceTransformerWrapper:
+    return SentenceTransformerWrapper(model=model_name, revision=revision, **kwargs)
 
 
 class SentenceTransformerWrapper(Wrapper):
@@ -56,23 +63,23 @@ class SentenceTransformerWrapper(Wrapper):
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
 
         if isinstance(self.model, CrossEncoder):
-            self.predict = self._predict
+            self.predict = self.handle_instructions_predict
 
         if hasattr(self.model, "similarity") and callable(self.model.similarity):
             self.similarity = self.model.similarity
 
     def encode(
         self,
-        sentences: Sequence[str],
+        inputs: DataLoader[BatchedInput],
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
+    ) -> np.ndarray | torch.Tensor:
         """Encodes the given sentences using the encoder.
 
         Args:
-            sentences: The sentences to encode.
+            inputs: The sentences to encode.
             task_name: The name of the task. Sentence-transformers uses this to
                 determine which prompt to use from a specified dictionary.
             prompt_type: The name type of prompt. (query or passage)
@@ -102,16 +109,18 @@ class SentenceTransformerWrapper(Wrapper):
             logger.info(
                 f"No model prompts found for task={task_name} prompt_type={prompt_type}"
             )
-        logger.info(f"Encoding {len(sentences)} sentences.")
+        logger.info(f"Encoding {len(inputs)} inputs.")
+
+        inputs = [text for batch in inputs for text in batch["text"]]
 
         embeddings = self.model.encode(
-            sentences,
+            inputs,
             prompt_name=prompt_name,
             **kwargs,
         )
         if isinstance(embeddings, torch.Tensor):
-            # sometimes in kwargs can be return_tensors=True
-            embeddings = embeddings.cpu().detach().float().numpy()
+            # ensure everything is on CPU and is float
+            embeddings = embeddings.cpu().detach().float()
         return embeddings
 
     def _predict(
@@ -124,3 +133,14 @@ class SentenceTransformerWrapper(Wrapper):
             convert_to_numpy=True,
             **kwargs,
         )
+
+    def handle_instructions_predict(self, sentences, **kwargs):
+        # unzip the queries, corpus, and instruction so we can add the instructions to the queries
+        # as ST models can't take an arg for instructions
+        queries, corpus, instructions = list(zip(*sentences))
+        # combine the queries and instructions
+        queries_with_instructions = [
+            f"{query.strip()} {instruction}".strip() if instruction else query
+            for query, instruction in zip(queries, instructions)
+        ]
+        return self._predict(list(zip(queries_with_instructions, corpus)), **kwargs)

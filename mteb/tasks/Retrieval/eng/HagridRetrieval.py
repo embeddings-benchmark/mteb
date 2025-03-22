@@ -24,7 +24,7 @@ class HagridRetrieval(AbsTaskRetrieval):
             + "along with a set of manually labelled relevant passages"
         ),
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["dev"],
         eval_langs=["eng-Latn"],
@@ -52,10 +52,8 @@ class HagridRetrieval(AbsTaskRetrieval):
         data = datasets.load_dataset(
             "miracl/hagrid",
             split=self.metadata.eval_splits[0],
-            revision=self.metadata_dict["dataset"].get("revision", None),
-            trust_remote_code=self.metadata_dict["dataset"].get(
-                "trust_remote_code", False
-            ),
+            revision=self.metadata.dataset.get("revision", None),
+            trust_remote_code=self.metadata.dataset["trust_remote_code"],
         )
         proc_data = self.preprocess_data(data)
 

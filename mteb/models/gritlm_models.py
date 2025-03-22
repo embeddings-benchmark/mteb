@@ -1,9 +1,8 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
 
-from mteb.model_meta import ModelMeta
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
 from mteb.models.instruct_wrapper import instruct_wrapper
 
@@ -21,10 +20,21 @@ def gritlm_instruction(instruction: str = "", prompt_type=None) -> str:
     )
 
 
+GRITLM_CITATION = """
+@misc{muennighoff2024generative,
+      title={Generative Representational Instruction Tuning},
+      author={Niklas Muennighoff and Hongjin Su and Liang Wang and Nan Yang and Furu Wei and Tao Yu and Amanpreet Singh and Douwe Kiela},
+      year={2024},
+      eprint={2402.09906},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+"""
+
+
 gritlm7b = ModelMeta(
-    loader=partial(  # type: ignore
-        instruct_wrapper,
-        model_name_or_path="GritLM/GritLM-7B",
+    loader=instruct_wrapper,
+    loader_kwargs=dict(
         instruction_template=gritlm_instruction,
         mode="embedding",
         torch_dtype="auto",
@@ -40,19 +50,19 @@ gritlm7b = ModelMeta(
     license="apache-2.0",
     max_tokens=4096,
     reference="https://huggingface.co/GritLM/GritLM-7B",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["GritLM", "PyTorch"],
     use_instructions=True,
     training_datasets=GRIT_LM_TRAINING_DATA,
     # section 3.1 "We finetune our final models from Mistral 7B [68] and Mixtral 8x7B [69] using adaptations of E5 [160] and the Tülu 2 data
     public_training_code="https://github.com/ContextualAI/gritlm",
     public_training_data=None,
+    citation=GRITLM_CITATION,
 )
 
 gritlm8x7b = ModelMeta(
-    loader=partial(  # type: ignore
-        instruct_wrapper,
-        model_name_or_path="GritLM/GritLM-8x7B",
+    loader=instruct_wrapper,
+    loader_kwargs=dict(
         instruction_template=gritlm_instruction,
         mode="embedding",
         torch_dtype="auto",
@@ -68,10 +78,11 @@ gritlm8x7b = ModelMeta(
     license="apache-2.0",
     max_tokens=4096,
     reference="https://huggingface.co/GritLM/GritLM-8x7B",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["GritLM", "PyTorch"],
     use_instructions=True,
     training_datasets=GRIT_LM_TRAINING_DATA,
+    citation=GRITLM_CITATION,
     # section 3.1 "We finetune our final models from Mistral 7B [68] and Mixtral 8x7B [69] using adaptations of E5 [160] and the Tülu 2 data
     public_training_code="https://github.com/ContextualAI/gritlm",
     public_training_data=None,

@@ -14,7 +14,7 @@ class SUN397Classification(AbsTaskImageClassification):
             "revision": "7e6af6a2499ad708618be868e1471eac0aca1168",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -39,8 +39,4 @@ class SUN397Classification(AbsTaskImageClassification):
         pages={3485-3492},
         doi={10.1109/CVPR.2010.5539970}}
         """,
-        descriptive_stats={
-            "n_samples": {"test": 21750},
-            "avg_character_length": {"test": 256},
-        },
     )

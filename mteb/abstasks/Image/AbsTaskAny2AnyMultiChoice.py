@@ -308,9 +308,9 @@ class AbsTaskAny2AnyMultiChoice(AbsTask):
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
-        dataset_path = self.metadata_dict["dataset"]["path"]
+        dataset_path = self.metadata.dataset["path"]
 
-        for split in kwargs.get("eval_splits", self.metadata_dict["eval_splits"]):
+        for split in kwargs.get("eval_splits", self.metadata.eval_splits):
             corpus, queries, qrels = HFDataLoader(
                 hf_repo=dataset_path,
                 streaming=False,
@@ -343,7 +343,7 @@ class AbsTaskAny2AnyMultiChoice(AbsTask):
         )
 
         scores = {}
-        hf_subsets = list(self.hf_subsets) if self.is_multilingual else ["default"]
+        hf_subsets = self.hf_subsets
 
         for hf_subset in hf_subsets:
             logger.info(f"Subset: {hf_subset}")

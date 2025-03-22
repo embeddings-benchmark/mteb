@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
 from typing import Any, Callable
 
 import torch
@@ -21,7 +20,7 @@ class RerankerWrapper(DenseRetrievalExactSearch):
         self,
         model_name_or_path: str,
         batch_size: int = 4,
-        fp_options: bool = None,
+        fp_options: bool | None = None,
         silent: bool = False,
         **kwargs,
     ):
@@ -41,7 +40,7 @@ class RerankerWrapper(DenseRetrievalExactSearch):
         self.silent = silent
         self.first_print = True  # for debugging
 
-    def predict(self, input_to_rerank, **kwargs) -> list:
+    def predict(self, input_to_rerank, **kwargs):
         pass
 
 
@@ -184,8 +183,11 @@ class JinaReranker(RerankerWrapper):
         return scores
 
 
-def _loader(wrapper: type[RerankerWrapper], **kwargs) -> Callable[..., Encoder]:
+def rerank_wrapper_loader(
+    model_name_or_path: str, wrapper: type[RerankerWrapper], **kwargs
+) -> Callable[..., Encoder]:
     _kwargs = kwargs
+    _kwargs["model_name_or_path"] = model_name_or_path
 
     def loader_inner(**kwargs: Any) -> Encoder:
         return wrapper(**_kwargs, **kwargs)
@@ -194,10 +196,9 @@ def _loader(wrapper: type[RerankerWrapper], **kwargs) -> Callable[..., Encoder]:
 
 
 monobert_large = ModelMeta(
-    loader=partial(  # type: ignore
-        _loader,
+    loader=rerank_wrapper_loader,  # type: ignore
+    loader_kwargs=dict(
         wrapper=MonoBERTReranker,
-        model_name_or_path="castorini/monobert-large-msmarco",
         fp_options="float16",
     ),
     name="castorini/monobert-large-msmarco",
@@ -216,15 +217,13 @@ monobert_large = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["Sentence Transformers", "PyTorch"],
-    is_cross_encoder=True,
 )
 
 # languages unclear: https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual/discussions/28
 jina_reranker_multilingual = ModelMeta(
-    loader=partial(  # type: ignore
-        _loader,
+    loader=rerank_wrapper_loader,  # type: ignore
+    loader_kwargs=dict(
         wrapper=JinaReranker,
-        model_name_or_path="jinaai/jina-reranker-v2-base-multilingual",
         fp_options="float16",
     ),
     name="jinaai/jina-reranker-v2-base-multilingual",
@@ -243,14 +242,12 @@ jina_reranker_multilingual = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["Sentence Transformers", "PyTorch"],
-    is_cross_encoder=True,
 )
 
 bge_reranker_v2_m3 = ModelMeta(
-    loader=partial(  # type: ignore
-        _loader,
+    loader=rerank_wrapper_loader,  # type: ignore
+    loader_kwargs=dict(
         wrapper=BGEReranker,
-        model_name_or_path="BAAI/bge-reranker-v2-m3",
         fp_options="float16",
     ),
     name="BAAI/bge-reranker-v2-m3",
@@ -302,5 +299,22 @@ bge_reranker_v2_m3 = ModelMeta(
     use_instructions=None,
     training_datasets=bge_m3_training_data,
     framework=["Sentence Transformers", "PyTorch"],
-    is_cross_encoder=True,
+    citation="""
+    @misc{li2023making,
+      title={Making Large Language Models A Better Foundation For Dense Retrieval},
+      author={Chaofan Li and Zheng Liu and Shitao Xiao and Yingxia Shao},
+      year={2023},
+      eprint={2312.15503},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+    }
+    @misc{chen2024bge,
+          title={BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation},
+          author={Jianlv Chen and Shitao Xiao and Peitian Zhang and Kun Luo and Defu Lian and Zheng Liu},
+          year={2024},
+          eprint={2402.03216},
+          archivePrefix={arXiv},
+          primaryClass={cs.CL}
+    }
+    """,
 )

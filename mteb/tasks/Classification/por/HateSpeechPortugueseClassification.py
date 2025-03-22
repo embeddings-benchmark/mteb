@@ -15,7 +15,7 @@ class HateSpeechPortugueseClassification(AbsTaskClassification):
             "trust_remote_code": True,
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["por-Latn"],

@@ -1,15 +1,14 @@
 from __future__ import annotations
 
-from functools import partial
-from typing import Any
+from typing import Any, Literal
 
+import numpy as np
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoModel, AutoProcessor
 
-from mteb.encoder_interface import PromptType
+from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta
 
 
@@ -20,36 +19,31 @@ class SiglipModelWrapper:
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
+        try:
+            import sentencepiece  # noqa: F401
+        except ImportError:
+            raise ImportError(
+                "The `sentencepiece` package is required to run `pip install sentencepiece`"
+            )
         self.model_name = model_name
         self.device = device
         self.model = AutoModel.from_pretrained(model_name).to(self.device)
         self.processor = AutoProcessor.from_pretrained(model_name)
 
-    def preprocess(
-        self,
-        texts: list[str],
-        images: list[Image.Image],
-    ):
-        return self.processor(
-            text=texts, images=images, return_tensors="pt", padding=True
-        )
-
     def get_text_embeddings(
         self,
-        texts: list[str],
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 32,
+        texts: DataLoader[BatchedInput],
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ):
         all_text_embeddings = []
 
         with torch.no_grad():
-            for i in tqdm(range(0, len(texts), batch_size)):
-                batch_texts = texts[i : i + batch_size]
+            for batch in tqdm(
+                texts, disable=not show_progress_bar, desc="Text Encoding"
+            ):
                 inputs = self.processor(
-                    text=batch_texts,
+                    text=batch["text"],
                     return_tensors="pt",
                     padding="max_length",
                     truncation=True,
@@ -63,41 +57,20 @@ class SiglipModelWrapper:
 
     def get_image_embeddings(
         self,
-        images: list[Image.Image] | DataLoader,
-        *,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        batch_size: int = 32,
+        images: DataLoader[BatchedInput],
+        show_progress_bar: bool = True,
         **kwargs: Any,
     ):
         all_image_embeddings = []
 
-        if isinstance(images, DataLoader):
-            with torch.no_grad():
-                for batch in tqdm(images):
-                    inputs = self.processor(
-                        images=batch, return_tensors="pt", padding=True
-                    )
-                    inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                    image_outputs = self.model.get_image_features(**inputs)
-                    all_image_embeddings.append(image_outputs.cpu())
-        else:
-            with torch.no_grad():
-                for i in tqdm(range(0, len(images), batch_size)):
-                    batch_images = images[i : i + batch_size]
-                    batch_images = [
-                        img.convert("RGB")
-                        if isinstance(img, Image.Image) and img.mode != "RGB"
-                        else img
-                        for img in batch_images
-                    ]
-                    inputs = self.processor(
-                        images=batch_images, return_tensors="pt", padding=True
-                    )
-                    inputs = {k: v.to(self.device) for k, v in inputs.items()}
-                    image_outputs = self.model.get_image_features(**inputs)
-                    all_image_embeddings.append(image_outputs.cpu())
-
+        with torch.no_grad():
+            for batch in tqdm(images):
+                inputs = self.processor(
+                    images=batch["image"], return_tensors="pt", padding=True
+                )
+                inputs = {k: v.to(self.device) for k, v in inputs.items()}
+                image_outputs = self.model.get_image_features(**inputs)
+                all_image_embeddings.append(image_outputs.cpu())
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
         return all_image_embeddings
 
@@ -119,24 +92,21 @@ class SiglipModelWrapper:
         logits_per_image = logits_per_text.t()
         return logits_per_image
 
-    def get_fused_embeddings(
+    def encode(
         self,
-        texts: list[str] = None,
-        images: list[Image.Image] | DataLoader = None,
-        fusion_mode="sum",
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_name: str,
+        prompt_type: PromptType | None = None,
+        fusion_mode: Literal["sum"] = "sum",
         **kwargs: Any,
-    ):
-        if texts is None and images is None:
-            raise ValueError("Either texts or images must be provided")
-
+    ) -> np.ndarray | torch.Tensor:
         text_embeddings = None
         image_embeddings = None
-
-        if texts is not None:
-            text_embeddings = self.get_text_embeddings(texts, **kwargs)
-
-        if images is not None:
-            image_embeddings = self.get_image_embeddings(images, **kwargs)
+        if "text" in inputs.dataset.features:
+            text_embeddings = self.get_text_embeddings(inputs, **kwargs)
+        if "image" in inputs.dataset.features:
+            image_embeddings = self.get_image_embeddings(inputs, **kwargs)
 
         if text_embeddings is not None and image_embeddings is not None:
             if len(text_embeddings) != len(image_embeddings):
@@ -160,10 +130,7 @@ siglip_training_datasets = {
 }
 
 siglip_so400m_patch14_224 = ModelMeta(
-    loader=partial(
-        SiglipModelWrapper,
-        model_name="google/siglip-so400m-patch14-224",
-    ),
+    loader=SiglipModelWrapper,  # type: ignore
     name="google/siglip-so400m-patch14-224",
     languages=["eng_Latn"],
     revision="d04cf29fca7b6374f74d8bea1969314492266b5e",
@@ -185,10 +152,7 @@ siglip_so400m_patch14_224 = ModelMeta(
 )
 
 siglip_so400m_patch14_384 = ModelMeta(
-    loader=partial(
-        SiglipModelWrapper,
-        model_name="google/siglip-so400m-patch14-384",
-    ),
+    loader=SiglipModelWrapper,  # type: ignore
     name="google/siglip-so400m-patch14-384",
     languages=["eng_Latn"],
     revision="9fdffc58afc957d1a03a25b10dba0329ab15c2a3",
@@ -210,10 +174,7 @@ siglip_so400m_patch14_384 = ModelMeta(
 )
 
 siglip_so400m_patch16_256_i18n = ModelMeta(
-    loader=partial(
-        SiglipModelWrapper,
-        model_name="google/siglip-so400m-patch16-256-i18n",
-    ),
+    loader=SiglipModelWrapper,  # type: ignore
     name="google/siglip-so400m-patch16-256-i18n",
     languages=["eng_Latn"],
     revision="365d321c0cfdea96bc28e3a29787a11a062681a1",
@@ -235,10 +196,7 @@ siglip_so400m_patch16_256_i18n = ModelMeta(
 )
 
 siglip_base_patch16_256_multilingual = ModelMeta(
-    loader=partial(
-        SiglipModelWrapper,
-        model_name="google/siglip-base-patch16-256-multilingual",
-    ),
+    loader=SiglipModelWrapper,  # type: ignore
     name="google/siglip-base-patch16-256-multilingual",
     languages=["eng_Latn"],
     revision="8952a4eafcde3cb7ab46b1dd629b33f8784ca9c6",
@@ -260,10 +218,7 @@ siglip_base_patch16_256_multilingual = ModelMeta(
 )
 
 siglip_base_patch16_256 = ModelMeta(
-    loader=partial(
-        SiglipModelWrapper,
-        model_name="google/siglip-base-patch16-256",
-    ),
+    loader=SiglipModelWrapper,  # type: ignore
     name="google/siglip-base-patch16-256",
     languages=["eng_Latn"],
     revision="b078df89e446d623010d890864d4207fe6399f61",
@@ -285,10 +240,7 @@ siglip_base_patch16_256 = ModelMeta(
 )
 
 siglip_base_patch16_512 = ModelMeta(
-    loader=partial(
-        SiglipModelWrapper,
-        model_name="google/siglip-base-patch16-512",
-    ),
+    loader=SiglipModelWrapper,  # type: ignore
     name="google/siglip-base-patch16-512",
     languages=["eng_Latn"],
     revision="753a949581523b60257d93e18391e8c27f72eb22",
@@ -310,10 +262,7 @@ siglip_base_patch16_512 = ModelMeta(
 )
 
 siglip_base_patch16_384 = ModelMeta(
-    loader=partial(
-        SiglipModelWrapper,
-        model_name="google/siglip-base-patch16-384",
-    ),
+    loader=SiglipModelWrapper,  # type: ignore
     name="google/siglip-base-patch16-384",
     languages=["eng_Latn"],
     revision="41aec1c83b32e0a6fca20ad88ba058aa5b5ea394",
@@ -335,10 +284,7 @@ siglip_base_patch16_384 = ModelMeta(
 )
 
 siglip_base_patch16_224 = ModelMeta(
-    loader=partial(
-        SiglipModelWrapper,
-        model_name="google/siglip-base-patch16-224",
-    ),
+    loader=SiglipModelWrapper,  # type: ignore
     name="google/siglip-base-patch16-224",
     languages=["eng_Latn"],
     revision="7fd15f0689c79d79e38b1c2e2e2370a7bf2761ed",
@@ -360,10 +306,7 @@ siglip_base_patch16_224 = ModelMeta(
 )
 
 siglip_large_patch16_256 = ModelMeta(
-    loader=partial(
-        SiglipModelWrapper,
-        model_name="google/siglip-large-patch16-256",
-    ),
+    loader=SiglipModelWrapper,  # type: ignore
     name="google/siglip-large-patch16-256",
     languages=["eng_Latn"],
     revision="d0da9f876e7d66b4e250cd2450c3ba2ce735e447",
@@ -385,10 +328,7 @@ siglip_large_patch16_256 = ModelMeta(
 )
 
 siglip_large_patch16_384 = ModelMeta(
-    loader=partial(
-        SiglipModelWrapper,
-        model_name="google/siglip-large-patch16-384",
-    ),
+    loader=SiglipModelWrapper,  # type: ignore
     name="google/siglip-large-patch16-384",
     languages=["eng_Latn"],
     revision="ce005573a40965dfd21fd937fbdeeebf2439fc35",

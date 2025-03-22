@@ -42,18 +42,10 @@ class CVBenchCount(AbsTaskAny2TextMultipleChoice):
   journal={arXiv preprint arXiv:2406.16860},
   year={2024}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 788},
-            "avg_character_length": {
-                "test": {
-                    # to do
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
-        self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)
         self.dataset_transform()
         self.dataset = self.dataset.filter(lambda example: example["task"] == "Count")
         self.dataset = self.dataset.map(
@@ -102,18 +94,10 @@ class CVBenchRelation(AbsTaskAny2TextMultipleChoice):
   journal={arXiv preprint arXiv:2406.16860},
   year={2024}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 650},
-            "avg_character_length": {
-                "test": {
-                    # to do
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
-        self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)
         self.dataset_transform()
         self.dataset = self.dataset.filter(
             lambda example: example["task"] == "Relation"
@@ -164,18 +148,10 @@ class CVBenchDepth(AbsTaskAny2TextMultipleChoice):
   journal={arXiv preprint arXiv:2406.16860},
   year={2024}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 600},
-            "avg_character_length": {
-                "test": {
-                    # to do
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
-        self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)
         self.dataset_transform()
         self.dataset = self.dataset.filter(lambda example: example["task"] == "Depth")
         self.dataset = self.dataset.map(
@@ -224,18 +200,10 @@ class CVBenchDistance(AbsTaskAny2TextMultipleChoice):
   journal={arXiv preprint arXiv:2406.16860},
   year={2024}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 600},
-            "avg_character_length": {
-                "test": {
-                    # to do
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
-        self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)
         self.dataset_transform()
         self.dataset = self.dataset.filter(
             lambda example: example["task"] == "Distance"
