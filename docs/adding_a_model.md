@@ -5,7 +5,7 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
 1. **Add meta information about your model to [model dir](../mteb/models/)**. See the docstring of ModelMeta for meta data details.
    ```python
    from mteb.model_meta import ModelMeta
-    from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+   from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
    bge_m3 = ModelMeta(
        loader=sentence_transformers_loader,
