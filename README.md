@@ -55,37 +55,6 @@ evaluation = mteb.MTEB(tasks=tasks)
 results = evaluation.run(model, output_folder=f"results/{model_name}")
 ```
 
-<details>
-  <summary> Running SentenceTransformer model with prompts </summary>
-
-Prompts can be passed to the SentenceTransformer model using the `prompts` parameter. The following code shows how to use prompts with SentenceTransformer:
-
-```python
-from sentence_transformers import SentenceTransformer
-
-
-model = SentenceTransformer("average_word_embeddings_komninos", prompts={"query": "Query:", "passage": "Passage:"})
-evaluation = mteb.MTEB(tasks=tasks)
-```
-
-In prompts the key can be:
-1. Prompt types (`passage`, `query`) - they will be used in reranking and retrieval tasks
-2. Task type - these prompts will be used in all tasks of the given type
-   1. `BitextMining`
-   2. `Classification`
-   3. `MultilabelClassification`
-   4. `Clustering`
-   5. `PairClassification`
-   6. `Reranking`
-   7. `Retrieval`
-   8. `STS`
-   9. `Summarization`
-   10. `InstructionRetrieval`
-3. Pair of task type and prompt type like `Retrival-query` - these prompts will be used in all classification tasks
-4. Task name - these prompts will be used in the specific task
-5. Pair of task name and prompt type like `NFCorpus-query` - these prompts will be used in the specific task
-</details>
-
 ### Using the CLI
 
 ```bash
@@ -113,7 +82,7 @@ The following links to the main sections in the usage documentation.
 | **Selecting Tasks** | |
 | [Selecting a benchmark](docs/usage/usage.md#selecting-a-benchmark) | How to select and filter tasks |
 | [Task selection](docs/usage/usage.md#task-selection) | How to select and filter tasks |
-| [Selecting Split and Subsets](docs/usage/usage.md#selecting-evaluation-split-or-subsets) | How to select evaluation splits or subsets | 
+| [Selecting Split and Subsets](docs/usage/usage.md#selecting-evaluation-split-or-subsets) | How to select evaluation splits or subsets |
 | [Using a Custom Task](docs/usage/usage.md#using-a-custom-task) | How to evaluate on a custom task |
 | **Selecting a Model** | |
 | [Using a Pre-defined Model](docs/usage/usage.md#using-a-pre-defined-model) | How to run a pre-defined model |
@@ -164,12 +133,12 @@ MTEB was introduced in "[MTEB: Massive Text Embedding Benchmark](https://arxiv.o
 
 ```bibtex
 @article{enevoldsen2025mmtebmassivemultilingualtext,
-      title={MMTEB: Massive Multilingual Text Embedding Benchmark}, 
+      title={MMTEB: Massive Multilingual Text Embedding Benchmark},
       author={Kenneth Enevoldsen and Isaac Chung and Imene Kerboua and Márton Kardos and Ashwin Mathur and David Stap and Jay Gala and Wissam Siblini and Dominik Krzemiński and Genta Indra Winata and Saba Sturua and Saiteja Utpala and Mathieu Ciancone and Marion Schaeffer and Gabriel Sequeira and Diganta Misra and Shreeya Dhakal and Jonathan Rystrøm and Roman Solomatin and Ömer Çağatan and Akash Kundu and Martin Bernstorff and Shitao Xiao and Akshita Sukhlecha and Bhavish Pahwa and Rafał Poświata and Kranthi Kiran GV and Shawon Ashraf and Daniel Auras and Björn Plüster and Jan Philipp Harries and Loïc Magne and Isabelle Mohr and Mariya Hendriksen and Dawei Zhu and Hippolyte Gisserot-Boukhlef and Tom Aarsen and Jan Kostkan and Konrad Wojtasik and Taemin Lee and Marek Šuppa and Crystina Zhang and Roberta Rocca and Mohammed Hamdy and Andrianos Michail and John Yang and Manuel Faysse and Aleksei Vatolin and Nandan Thakur and Manan Dey and Dipam Vasani and Pranjal Chitale and Simone Tedeschi and Nguyen Tai and Artem Snegirev and Michael Günther and Mengzhou Xia and Weijia Shi and Xing Han Lù and Jordan Clive and Gayatri Krishnakumar and Anna Maksimova and Silvan Wehrli and Maria Tikhonova and Henil Panchal and Aleksandr Abramov and Malte Ostendorff and Zheng Liu and Simon Clematide and Lester James Miranda and Alena Fenogenova and Guangyu Song and Ruqiya Bin Safi and Wen-Ding Li and Alessia Borghini and Federico Cassano and Hongjin Su and Jimmy Lin and Howard Yen and Lasse Hansen and Sara Hooker and Chenghao Xiao and Vaibhav Adlakha and Orion Weller and Siva Reddy and Niklas Muennighoff},
       publisher = {arXiv},
       journal={arXiv preprint arXiv:2502.13595},
       year={2025},
-      url={https://arxiv.org/abs/2502.13595}, 
+      url={https://arxiv.org/abs/2502.13595},
       doi = {10.48550/arXiv.2502.13595},
 }
 

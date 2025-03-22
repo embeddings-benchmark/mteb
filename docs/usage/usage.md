@@ -1,6 +1,6 @@
 # Usage
 
-This usage documentation follows a structure similar first it introduces a simple example of how to evaluate a model in MTEB. 
+This usage documentation follows a structure similar first it introduces a simple example of how to evaluate a model in MTEB.
 Then introduces model detailed section of defining model, selecting tasks and running the evaluation. Each section contain subsection pertaining to
 these.
 
@@ -41,11 +41,11 @@ results = evaluation.run(model)
 ```
 
 
-### Evaluating on Different Modalities 
+### Evaluating on Different Modalities
 MTEB is not only text evaluating, but also allow you to evaluate image and image-text embeddings.
 
 > [!NOTE]
-> Running MTEB on images requires you to install the optional dependencies using `pip install mteb[image]` 
+> Running MTEB on images requires you to install the optional dependencies using `pip install mteb[image]`
 
 To evaluate image embeddings you can follows the same approach for any other task in `mteb`. Simply ensuring that the task contains the modality "image":
 
@@ -96,7 +96,7 @@ model = meta.load_model()
 model = mteb.get_model(model_name)
 ```
 
-You can get an overview of on the models available in `mteb` as follows: 
+You can get an overview of on the models available in `mteb` as follows:
 
 ```py
 model_metas = mteb.get_model_metas()
@@ -131,7 +131,7 @@ However, we do recommend check in mteb include an implementation of the model be
 
 It is also possible to implement your own custom model in MTEB as long as it adheres to the [encoder interface](https://github.com/embeddings-benchmark/mteb/blob/main/mteb/encoder_interface.py#L21).
 
-This entails implementing an `encode` function taking as inputs a list of sentences, and returning a list of embeddings (embeddings can be `np.array`, `torch.tensor`, etc.). 
+This entails implementing an `encode` function taking as inputs a list of sentences, and returning a list of embeddings (embeddings can be `np.array`, `torch.tensor`, etc.).
 
 ```python
 import mteb
@@ -185,7 +185,7 @@ benchmark = mteb.get_benchmark("MTEB(eng, v2)")
 evaluation = mteb.MTEB(tasks=benchmark)
 ```
 
-The benchmark specified not only a list of tasks, but also what splits and language to run on. 
+The benchmark specified not only a list of tasks, but also what splits and language to run on.
 
 To get an overview of all available benchmarks simply run:
 
@@ -194,11 +194,11 @@ import mteb
 benchmarks = mteb.get_benchmarks()
 ```
 
-> [!NOTE]  
-> Generally we use the naming scheme for benchmarks `MTEB(*)`, where the "*" denotes the target of the benchmark. 
-> In the case of a language, we use the three-letter language code. 
-> For large groups of languages, we use the group notation, e.g., `MTEB(Scandinavian, v1)` for Scandinavian languages. 
-> External benchmarks implemented in MTEB like `CoIR` use their original name. 
+> [!NOTE]
+> Generally we use the naming scheme for benchmarks `MTEB(*)`, where the "*" denotes the target of the benchmark.
+> In the case of a language, we use the three-letter language code.
+> For large groups of languages, we use the group notation, e.g., `MTEB(Scandinavian, v1)` for Scandinavian languages.
+> External benchmarks implemented in MTEB like `CoIR` use their original name.
 
 When using a benchmark from MTEB please cite `mteb` along with the citations of the benchmark which you can access using:
 
@@ -218,7 +218,7 @@ This can be done in multiple ways, e.g.:
 * by their domains
 * by their modalities
 * and many more
-  
+
 ```python
 # by name
 tasks = mteb.get_tasks(tasks=["Banking77Classification"])
@@ -259,7 +259,7 @@ task = mteb.get_task("AmazonReviewsClassification", hf_subsets=["en", "fr"])
 
 > [!NOTE]
 >  **What is a subset?** A subset on a Huggingface dataset is what you specify after the dataset name, e.g. `datasets.load_dataset("nyu-mll/glue", "cola")`.
-> Often the subset does not need to be defined and is left as "default". The subset is however useful, especially for multilingual datasets to specify the 
+> Often the subset does not need to be defined and is left as "default". The subset is however useful, especially for multilingual datasets to specify the
 > desired language or language pair e.g. in [`mteb/bucc-bitext-mining`](https://huggingface.co/datasets/mteb/bucc-bitext-mining) we might want to evaluate only on the French-English subset `"fr-en"`.
 
 
@@ -267,7 +267,7 @@ task = mteb.get_task("AmazonReviewsClassification", hf_subsets=["en", "fr"])
 
 ### Using a Custom Task
 
-To evaluate on a custom task, you can run the following code on your custom task. 
+To evaluate on a custom task, you can run the following code on your custom task.
 See [how to add a new task](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_dataset.md), for how to create a new task in MTEB.
 
 
@@ -290,7 +290,7 @@ evaluation.run(model)
 This section contain documentation related to the runtime of the evalution. How to pass arguments to the encoder, saving outputs and similar.
 
 
-### Introduction the the runner
+### Introduction to the runner
 
 By default `mteb` with save the results in the `results/{model_name}` folder, however if you want to saving the results in a specific folder you
 can specify it as follows:
@@ -317,6 +317,35 @@ To pass in arguments to the model's `encode` function, you can use the encode ke
 ```python
 evaluation.run(model, encode_kwargs={"batch_size": 32})
 ```
+
+### Running SentenceTransformer model with prompts
+
+Prompts can be passed to the SentenceTransformer model using the `prompts` parameter. The following code shows how to use prompts with SentenceTransformer:
+
+```python
+from sentence_transformers import SentenceTransformer
+
+
+model = SentenceTransformer("average_word_embeddings_komninos", prompts={"query": "Query:", "passage": "Passage:"})
+evaluation = mteb.MTEB(tasks=tasks)
+```
+
+In prompts the key can be:
+1. Prompt types (`passage`, `query`) - they will be used in reranking and retrieval tasks
+2. Task type - these prompts will be used in all tasks of the given type
+   1. `BitextMining`
+   2. `Classification`
+   3. `MultilabelClassification`
+   4. `Clustering`
+   5. `PairClassification`
+   6. `Reranking`
+   7. `Retrieval`
+   8. `STS`
+   9. `Summarization`
+   10. `InstructionRetrieval`
+3. Pair of task type and prompt type like `Retrival-query` - these prompts will be used in all classification tasks
+4. Task name - these prompts will be used in the specific task
+5. Pair of task name and prompt type like `NFCorpus-query` - these prompts will be used in the specific task
 
 
 ### Running Cross Encoders on Reranking
