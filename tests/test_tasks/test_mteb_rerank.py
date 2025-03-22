@@ -361,7 +361,7 @@ def test_mteb_rerank(tmp_path: Path):
 
 
 def test_reranker_same_ndcg1():
-    de_name = "average_word_embeddings_komninos"
+    de_name = "sentence-transformers/average_word_embeddings_komninos"
     revision = "21eec43590414cb8e3a6f654857abed0483ae36e"
     de = SentenceTransformer(de_name, revision=revision)
     ce = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
