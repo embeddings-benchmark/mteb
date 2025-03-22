@@ -148,4 +148,3 @@ class VDRMultilingualRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         )
 
         self.data_loaded = True
-
