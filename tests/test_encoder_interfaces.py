@@ -6,5 +6,7 @@ from mteb.encoder_interface import Encoder
 
 
 def test_sentence_is_encoder():
-    model = SentenceTransformer("average_word_embeddings_komninos")
+    model = SentenceTransformer(
+        "sentence-transformers/average_word_embeddings_komninos"
+    )
     assert isinstance(model, Encoder)

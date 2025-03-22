@@ -358,7 +358,7 @@ def test_mteb_rerank(tmp_path: Path):
 
 
 def test_reranker_same_ndcg1(tmp_path: Path):
-    de_name = "average_word_embeddings_komninos"
+    de_name = "sentence-transformers/average_word_embeddings_komninos"
     revision = "21eec43590414cb8e3a6f654857abed0483ae36e"
     de = SentenceTransformer(de_name, revision=revision)
     ce = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
@@ -404,9 +404,9 @@ def test_reranker_same_ndcg1(tmp_path: Path):
     )
 
     # read in stage 1 and stage two and check ndcg@1 is the same
-    with (
-        stage1_path / f"sentence-transformers__{de_name}/{revision}/SciFact.json"
-    ).open() as f:
+    with open(
+        f"tests/results/stage1/{de_name.replace('/', '__')}/{revision}/SciFact.json"
+    ) as f:
         stage1 = json.load(f)
 
     with (
