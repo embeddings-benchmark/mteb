@@ -405,7 +405,9 @@ def test_reranker_same_ndcg1():
     )
 
     # read in stage 1 and stage two and check ndcg@1 is the same
-    with open(f"tests/results/stage1/{de_name}/{revision}/SciFact.json") as f:
+    with open(
+        f"tests/results/stage1/{de_name.replace('/', '__')}/{revision}/SciFact.json"
+    ) as f:
         stage1 = json.load(f)
 
     with open(
