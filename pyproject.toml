@@ -52,7 +52,7 @@ homepage = "https://github.com/embeddings-benchmark/mteb"
 mteb = "mteb.cli:main"
 
 [project.optional-dependencies]
-image = ["torchvision>0.0.0"]
+image = ["torchvision>0.2.1"]
 dev = [
 "ruff==0.9.7", # locked so we don't get PRs which fail only due to a lint update
 "pytest>=8.3.4",
