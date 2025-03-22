@@ -23,7 +23,6 @@ from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from sentence_transformers import SentenceTransformer
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-
 class SciDocsReranking(AbsTaskReranking):
     metadata = TaskMetadata(
         name="SciDocsRR",
