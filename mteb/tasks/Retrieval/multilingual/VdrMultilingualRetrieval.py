@@ -40,7 +40,6 @@ def _load_vdr_multilingual_data(
             trust_remote_code=trust_remote_code,
         )
 
-        print(f"Loaded {lang_code} dataset with {len(dataset)} samples")
         corpus_records = []
         queries_records = []
         relevant_dict = {}
