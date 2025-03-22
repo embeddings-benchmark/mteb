@@ -11,14 +11,16 @@ import numpy as np
 import torch
 import tqdm
 
-from mteb.encoder_interface import Encoder, PromptType
+from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.encoder_interface import Encoder
 
 from ...create_dataloaders import (
     create_dataloader_for_queries,
     create_dataloader_for_queries_conversation,
     create_dataloader_for_retrieval_corpus,
 )
-from .utils import cos_sim, download
+from ...types import PromptType
+from .utils import download
 
 logger = logging.getLogger(__name__)
 
@@ -70,7 +72,9 @@ class DenseRetrievalExactSearch:
         corpus: dict[str, dict[str, str]],
         queries: dict[str, str],
         top_k: int,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         instructions: dict[str, str] | None = None,
         request_qid: str | None = None,
         return_sorted: bool = False,
@@ -83,7 +87,9 @@ class DenseRetrievalExactSearch:
             corpus: Dictionary mapping corpus IDs to document dictionaries
             queries: Dictionary mapping query IDs to query strings
             top_k: Number of top results to return
-            task_name: Name of the task
+            task_metadata: Name of the task
+            hf_split: Name of split
+            hf_subset: Name of subset
             instructions: Optional instructions to append to queries
             request_qid: Optional request query ID
             return_sorted: Whether to return results sorted
@@ -149,7 +155,9 @@ class DenseRetrievalExactSearch:
         # Encode queries using the model with the dataloader
         unique_query_embeddings = self.model.encode(
             unique_query_dataloader,
-            task_name=task_name,
+            task_metadata=task_metadata,
+            hf_subset=hf_subset,
+            hf_split=hf_split,
             prompt_type=PromptType.query,
             **self.encode_kwargs,
         )
@@ -163,7 +171,9 @@ class DenseRetrievalExactSearch:
                 corpus=corpus,
                 top_ranked=top_ranked,
                 top_k=top_k,
-                task_name=task_name,
+                task_metadata=task_metadata,
+                hf_subset=hf_subset,
+                hf_split=hf_split,
                 request_qid=request_qid,
                 return_sorted=return_sorted,
             )
@@ -174,7 +184,9 @@ class DenseRetrievalExactSearch:
                 query_embeddings=query_embeddings,
                 corpus=corpus,
                 top_k=top_k,
-                task_name=task_name,
+                task_metadata=task_metadata,
+                hf_subset=hf_subset,
+                hf_split=hf_split,
                 request_qid=request_qid,
                 return_sorted=return_sorted,
             )
@@ -192,7 +204,9 @@ class DenseRetrievalExactSearch:
         corpus: dict[str, dict[str, str]],
         top_ranked: dict[str, list[str]],
         top_k: int,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         request_qid: str | None = None,
         return_sorted: bool = False,
     ) -> dict[str, list[tuple[float, str]]]:
@@ -223,7 +237,9 @@ class DenseRetrievalExactSearch:
         unique_docs = [corpus[doc_id] for doc_id in unique_doc_ids]
         all_doc_embeddings = self.model.encode(
             create_dataloader_for_retrieval_corpus(unique_docs),
-            task_name=task_name,
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
             prompt_type=PromptType.passage,
             request_qid=request_qid,
             **self.encode_kwargs,
@@ -248,12 +264,8 @@ class DenseRetrievalExactSearch:
             # Ensure query embedding is on the correct device and has correct shape
             query_embedding = query_embeddings[query_idx].unsqueeze(0)
 
-            score_function = (
-                self.model.similarity if hasattr(self.model, "similarity") else cos_sim
-            )
-
             with torch.inference_mode():
-                scores = score_function(
+                scores = self.model.similarity(
                     query_embedding,
                     query_doc_embeddings,
                 )
@@ -299,7 +311,9 @@ class DenseRetrievalExactSearch:
         query_embeddings: np.ndarray,
         corpus: dict[str, dict[str, str]],
         top_k: int,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         request_qid: str | None = None,
         return_sorted: bool = False,
     ) -> dict[str, list[tuple[float, str]]]:
@@ -323,7 +337,9 @@ class DenseRetrievalExactSearch:
                 create_dataloader_for_retrieval_corpus(
                     corpus[corpus_start_idx:corpus_end_idx]
                 ),  # type: ignore
-                task_name=task_name,
+                task_metadata=task_metadata,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
                 prompt_type=PromptType.passage,
                 request_qid=request_qid,
                 **self.encode_kwargs,
@@ -334,22 +350,8 @@ class DenseRetrievalExactSearch:
             query_embeddings = torch.as_tensor(query_embeddings).to(device)
             sub_corpus_embeddings = torch.as_tensor(sub_corpus_embeddings).to(device)
 
-            if hasattr(self.model, "mteb_model_meta") or hasattr(
-                self.model, "similarity"
-            ):
-                score_function = (
-                    self.model.similarity
-                    if hasattr(self.model, "similarity")
-                    else self.model.mteb_model_meta.get_similarity_function()
-                )
-            else:
-                logger.warning(
-                    "The model does not provide `mteb_model_meta`; defaulting to the cosine similarity function."
-                )
-                score_function = cos_sim
-
             with torch.inference_mode():
-                scores = score_function(query_embeddings, sub_corpus_embeddings)
+                scores = self.model.similarity(query_embeddings, sub_corpus_embeddings)
 
             # get top-k values
             cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(

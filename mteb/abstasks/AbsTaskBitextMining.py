@@ -5,12 +5,12 @@ from typing import Any
 
 from datasets import Dataset, DatasetDict
 
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics
 from mteb.encoder_interface import Encoder
 
 from ..evaluation.evaluators import BitextMiningEvaluator
 from ..load_results.task_results import HFSubset, ScoresDict
 from .AbsTask import AbsTask
-from .TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -85,6 +85,8 @@ class AbsTaskBitextMining(AbsTask):
                 model,
                 self.dataset[split],  # type: ignore
                 parallel=True,
+                hf_split=split,
+                hf_subset="parallel",
                 encode_kwargs=encode_kwargs,
                 **kwargs,
             )
@@ -101,6 +103,8 @@ class AbsTaskBitextMining(AbsTask):
                 scores[hf_subet] = self._evaluate_subset(
                     model,
                     data_split,
+                    hf_split=split,
+                    hf_subset=hf_subet,
                     encode_kwargs=encode_kwargs,
                     **kwargs,
                 )
@@ -118,6 +122,8 @@ class AbsTaskBitextMining(AbsTask):
         model: Encoder,
         data_split: Dataset,
         *,
+        hf_split: str,
+        hf_subset: str,
         parallel: bool = False,
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
@@ -126,8 +132,10 @@ class AbsTaskBitextMining(AbsTask):
 
         evaluator = BitextMiningEvaluator(
             data_split,
-            task_name=self.metadata.name,
+            task_metadata=self.metadata,
             pair_columns=pairs,  # type: ignore
+            hf_split=hf_split,
+            hf_subset=hf_subset,
             **kwargs,
         )
         metrics = evaluator(model, encode_kwargs=encode_kwargs)

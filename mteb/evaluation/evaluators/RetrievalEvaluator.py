@@ -3,6 +3,8 @@ from __future__ import annotations
 import logging
 from typing import Any
 
+from mteb.abstasks.TaskMetadata import TaskMetadata
+
 from .Evaluator import Evaluator
 from .model_classes import (
     DenseRetrievalExactSearch,
@@ -55,6 +57,9 @@ class RetrievalEvaluator(Evaluator):
         self,
         corpus: dict[str, dict[str, str]],
         queries: dict[str, str],
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         instructions: dict[str, str] | None = None,
         qid: str | None = None,
         top_ranked: dict[str, list[str]] | None = None,
@@ -80,7 +85,9 @@ class RetrievalEvaluator(Evaluator):
                 corpus,
                 queries,
                 self.top_k,
-                task_name=self.task_name,  # type: ignore
+                task_metadata=task_metadata,  # type: ignore
+                hf_split=hf_split,
+                hf_subset=hf_subset,
                 instructions=instructions,
                 score_function="bm25",
                 **kwargs,
@@ -93,7 +100,9 @@ class RetrievalEvaluator(Evaluator):
                 instructions=instructions,
                 top_ranked=top_ranked,
                 request_qid=qid,
-                task_name=self.task_name,
+                task_metadata=task_metadata,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
                 **kwargs,
             )
 
@@ -102,8 +111,8 @@ class RetrievalEvaluator(Evaluator):
         qrels: dict[str, dict[str, int]],
         results: dict[str, dict[str, float]],
         k_values: list[int],
+        task_metadata: TaskMetadata,
         ignore_identical_ids: bool = False,
-        task_name: str = None,
     ) -> tuple[
         dict[str, float],
         dict[str, float],
@@ -130,7 +139,7 @@ class RetrievalEvaluator(Evaluator):
             results, qrels, k_values
         )
         task_scores = add_task_specific_scores(
-            all_scores, qrels, results, task_name, k_values
+            all_scores, qrels, results, task_metadata.name, k_values
         )
 
         return ndcg, _map, recall, precision, naucs, task_scores

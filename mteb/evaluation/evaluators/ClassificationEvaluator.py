@@ -14,6 +14,7 @@ from sklearn.metrics import (
 from sklearn.neighbors import KNeighborsClassifier
 from torch.utils.data import DataLoader
 
+from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder
 
 from .Evaluator import Evaluator
@@ -30,7 +31,9 @@ class kNNClassificationEvaluator(Evaluator):
         self,
         train_dataset: Dataset,
         eval_dataset: Dataset,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         k: int = 1,
         **kwargs,
     ):
@@ -38,7 +41,9 @@ class kNNClassificationEvaluator(Evaluator):
         self.train_dataset = train_dataset
         self.eval_dataset = eval_dataset
 
-        self.task_name = task_name
+        self.task_metadata = task_metadata
+        self.hf_split = hf_split
+        self.hf_subset = hf_subset
 
         self.k = k
 
@@ -55,13 +60,17 @@ class kNNClassificationEvaluator(Evaluator):
         max_ap = 0
         X_train = model.encode(
             DataLoader(self.train_dataset),
-            task_name=self.task_name,
+            task_metadata=self.task_metadata,
+            hf_split="train",
+            hf_subset=self.hf_subset,
             **encode_kwargs,
         )
         if test_cache is None:
             X_test = model.encode(
                 DataLoader(self.eval_dataset),
-                task_name=self.task_name,
+                task_metadata=self.task_metadata,
+                hf_split=self.hf_split,
+                hf_subset=self.hf_subset,
                 **encode_kwargs,
             )
             test_cache = X_test
@@ -97,7 +106,9 @@ class logRegClassificationEvaluator(Evaluator):
         self,
         train_dataset: Dataset,
         eval_dataset: Dataset,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         max_iter: int = 100,
         **kwargs,
     ):
@@ -106,7 +117,9 @@ class logRegClassificationEvaluator(Evaluator):
         self.eval_dataset = eval_dataset
 
         self.max_iter = max_iter
-        self.task_name = task_name
+        self.task_metadata = task_metadata
+        self.hf_split = hf_split
+        self.hf_subset = hf_subset
 
     def __call__(
         self,
@@ -124,13 +137,17 @@ class logRegClassificationEvaluator(Evaluator):
         )
         X_train = model.encode(
             DataLoader(self.train_dataset),
-            task_name=self.task_name,
+            task_metadata=self.task_metadata,
+            hf_split="train",
+            hf_subset=self.hf_subset,
             **encode_kwargs,
         )
         if test_cache is None:
             test_cache = model.encode(
                 DataLoader(self.eval_dataset),
-                task_name=self.task_name,
+                task_metadata=self.task_metadata,
+                hf_split=self.hf_split,
+                hf_subset=self.hf_subset,
                 **encode_kwargs,
             )
         logger.info("Fitting logistic regression classifier...")

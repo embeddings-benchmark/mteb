@@ -444,8 +444,9 @@ There are times you may want to cache the embeddings so you can re-use them. Thi
 # define your task and model above as normal
 ...
 # wrap the model with the cache wrapper
-from mteb.models.cache_wrapper import CachedEmbeddingWrapper
-model_with_cached_emb = CachedEmbeddingWrapper(model, cache_path='path_to_cache_dir')
+from mteb.models.cache_wrapper import CachedEmbeddingBaseEncoder
+
+model_with_cached_emb = CachedEmbeddingBaseEncoder(model, cache_path='path_to_cache_dir')
 # run as normal
 evaluation.run(model, ...)
 ```

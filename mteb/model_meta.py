@@ -16,13 +16,12 @@ from pydantic import BaseModel, ConfigDict, field_validator
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.encoder_interface import Encoder
-from mteb.evaluation.evaluators.utils import cos_sim, dot_score, max_sim
 
 from .custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
 from .languages import ISO_LANGUAGE_SCRIPT
 
 if TYPE_CHECKING:
-    from mteb.types import Array
+    pass
 
 
 logger = logging.getLogger(__name__)
@@ -138,15 +137,6 @@ class ModelMeta(BaseModel):
             return mapping[value]
         raise ValueError(f"Invalid similarity function name: {value}")
 
-    def get_similarity_function(self) -> Callable[[Array, Array], Array]:
-        if self.similarity_fn_name is ScoringFunction.COSINE:
-            return cos_sim
-        elif self.similarity_fn_name is ScoringFunction.DOT_PRODUCT:
-            return dot_score
-        elif self.similarity_fn_name is ScoringFunction.MAX_SIM:
-            return max_sim
-        raise ValueError("Similarity function not specified or invalid.")
-
     def to_dict(self):
         dict_repr = self.model_dump()
         loader = dict_repr.pop("loader", None)
@@ -172,10 +162,9 @@ class ModelMeta(BaseModel):
 
         # Allow overwrites
         _kwargs = self.loader_kwargs.copy()
-        _kwargs.update({"revision": self.revision})
         _kwargs.update(kwargs)
 
-        model: Encoder = self.loader(self.name, **_kwargs)
+        model: Encoder = self.loader(self.name, revision=self.revision, **_kwargs)
         model.mteb_model_meta = self  # type: ignore
         return model
 

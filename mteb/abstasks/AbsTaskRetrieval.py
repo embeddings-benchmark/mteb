@@ -10,14 +10,13 @@ from typing import Any, Callable
 
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.TaskMetadata import HFSubset
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset
 
 from ..evaluation.evaluators import RetrievalEvaluator
 from ..evaluation.evaluators.utils import make_score_dict
 from ..load_results.task_results import ScoresDict
 from .AbsTask import AbsTask
 from .dataloaders import RetrievalDataLoader
-from .TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -235,6 +234,7 @@ class AbsTaskRetrieval(AbsTask):
                 corpus,
                 queries,
                 relevant_docs,
+                split,
                 hf_subset,
                 top_ranked,
                 instructions,
@@ -248,6 +248,7 @@ class AbsTaskRetrieval(AbsTask):
         corpus: dict[str, dict[str, str]],
         queries: dict[str, str],
         relevant_docs: dict[str, dict[str, int]],
+        hf_split: str,
         hf_subset: str,
         top_ranked: dict[str, list[str]] | None = None,
         instructions: dict[str, str] | None = None,
@@ -267,6 +268,7 @@ class AbsTaskRetrieval(AbsTask):
             queries: Queries to evaluate on
             relevant_docs: Relevant documents for the queries
             hf_subset: Subset of the dataset
+            hf_split: Split of the dataset
             top_ranked: Top ranked documents (used for reranking)
             instructions: Instructions for the queries (used for InstructRetrieval/Reranking)
             save_predictions: Whether to save the predictions
@@ -288,6 +290,9 @@ class AbsTaskRetrieval(AbsTask):
                 queries,
                 instructions=instructions,
                 top_ranked=top_ranked,
+                task_metadata=self.metadata,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
                 **kwargs,
             )
             end_time = time()
@@ -327,7 +332,7 @@ class AbsTaskRetrieval(AbsTask):
             results,
             retriever.k_values,
             ignore_identical_ids=self.ignore_identical_ids,
-            task_name=self.metadata.name,
+            task_metadata=self.metadata,
         )
 
         mrr, naucs_mrr = retriever.evaluate_custom(

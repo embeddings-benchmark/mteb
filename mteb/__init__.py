@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from importlib.metadata import version
 
-from mteb.abstasks import AbsTask, TaskMetadata
+from mteb.abstasks import AbsTask
+from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder
 from mteb.evaluation import MTEB
 from mteb.load_results import BenchmarkResults, load_results

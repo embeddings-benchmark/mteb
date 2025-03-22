@@ -6,7 +6,7 @@ import torch
 from datasets import Dataset
 from torch.utils.data import DataLoader, default_collate
 
-from mteb.encoder_interface import BatchedInput, Conversation
+from mteb.types import BatchedInput, Conversation
 
 
 def create_dataloader_from_texts(
