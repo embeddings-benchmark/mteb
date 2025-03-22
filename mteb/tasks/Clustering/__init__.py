@@ -58,6 +58,7 @@ from .fra import (
     HALClusteringS2SFast,
 )
 from .jpn import LivedoorNewsClustering, LivedoorNewsClusteringv2, MewsC16JaClustering
+from .kor import KlueMrcDomainClustering, KlueYnatMrcCategoryClustering
 from .multilingual import (
     IndicReviewsClusteringP2P,
     MasakhaNEWSClusteringP2P,
@@ -177,6 +178,8 @@ __all__ = [
     "LivedoorNewsClustering",
     "LivedoorNewsClusteringv2",
     "MewsC16JaClustering",
+    "KlueYnatMrcCategoryClustering",
+    "KlueMrcDomainClustering",
     "WikiClusteringFastP2P",
     "WikiClusteringP2P",
     "MLSUMClusteringS2S",

@@ -10,6 +10,7 @@ from tqdm import tqdm
 from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
+from mteb.requires_package import requires_image_dependencies
 
 
 def mocov3_loader(**kwargs):
@@ -29,6 +30,8 @@ def mocov3_loader(**kwargs):
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
             **kwargs: Any,
         ):
+            requires_image_dependencies()
+
             self.model_name = model_name
             self.device = device
             name = "vit_base_patch16_224"
@@ -97,7 +100,6 @@ def mocov3_loader(**kwargs):
             prompt_type: PromptType | None = None,
             **kwargs: Any,
         ) -> np.ndarray | torch.Tensor:
-            0 / 0
             if "text" in inputs.dataset.features:
                 raise ValueError(
                     "MOCO models only support image encoding. Text encoding is not supported."
