@@ -26,27 +26,27 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class SciDocsReranking(AbsTaskReranking):
     metadata = TaskMetadata(
-      name="SciDocsRR",
-      description="Ranking of related scientific papers based on their title.",
-      reference="https://allenai.org/data/scidocs",
-      type="Reranking",
-      category="t2t",
-      modalities=["text"],
-      eval_splits=["test"],
-      eval_langs=["eng-Latn"],
-      main_score="map",
-      dataset={
-        "path": "mteb/scidocs-reranking",
-        "revision": "d3c5e1fc0b855ab6097bf1cda04dd73947d7caab",
-      },
-      date=("2000-01-01", "2020-12-31"),  # best guess
-      domains=["Academic", "Non-fiction", "Domains"],
-      task_subtypes=["Scientific Reranking"],
-      license="cc-by-4.0",
-      annotations_creators="derived",
-      dialect=[],
-      sample_creation="found",
-      bibtex_citation="""
+        name="SciDocsRR",
+        description="Ranking of related scientific papers based on their title.",
+        reference="https://allenai.org/data/scidocs",
+        type="Reranking",
+        category="t2t",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="map",
+        dataset={
+            "path": "mteb/scidocs-reranking",
+            "revision": "d3c5e1fc0b855ab6097bf1cda04dd73947d7caab",
+        },
+        date=("2000-01-01", "2020-12-31"), # best guess
+        domains=["Academic", "Non-fiction", "Domains"],
+        task_subtypes=["Scientific Reranking"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation="""
 @inproceedings{cohan-etal-2020-specter,
     title = "{SPECTER}: Document-level Representation Learning using Citation-informed Transformers",
     author = "Cohan, Arman  and
