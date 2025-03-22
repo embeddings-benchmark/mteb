@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import datasets
+from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -13,7 +14,7 @@ _LANGS = {
     "de": ["deu-Latn"],
     "it": ["ita-Latn"],
 }
-_EVAL_SPLIT = "train"  # It is test split only, but given name as train.
+_EVAL_SPLIT = "train"  # It is test split only, but given name as train on HF
 
 
 def _load_vdr_multilingual_data(
@@ -24,49 +25,82 @@ def _load_vdr_multilingual_data(
     revision: str = None,
     trust_remote_code: bool = False,
 ):
-    corpus = {lang_code: {split: {}} for lang_code in langs}
-    queries = {lang_code: {split: {}} for lang_code in langs}
-    relevant_docs = {lang_code: {split: {}} for lang_code in langs}
+    """Load data from the VDR Multilingual dataset."""
+    corpus_dict = {}
+    queries_dict = {}
+    relevant_docs_dict = {}
 
     for lang_code in langs:
         dataset = datasets.load_dataset(
             path=path,
             name=lang_code,
+            split=split,
             cache_dir=cache_dir,
             revision=revision,
             trust_remote_code=trust_remote_code,
         )
 
-        if split not in dataset:
-            continue
+        print(f"Loaded {lang_code} dataset with {len(dataset)} samples")
+        corpus_records = []
+        queries_records = []
+        relevant_dict = {}
 
-        for idx, record in enumerate(dataset[split]):
+        for idx, record in enumerate(dataset):
             doc_id = f"doc-{record['id']}"
-            corpus[lang_code][split][doc_id] = {
-                "text": record.get("query", ""),
-                "image": record.get("image", None),
-                "modality": "text,image" if record.get("image") is not None else "text",
-            }
-
             query_id = f"query-{record['id']}"
-            queries[lang_code][split][query_id] = {
-                "text": record.get("query", ""),
-                "image": record.get("image", None),
-                "modality": "text,image" if record.get("image") is not None else "text",
-            }
+            has_image = record.get("image") is not None
 
-            if query_id not in relevant_docs[lang_code][split]:
-                relevant_docs[lang_code][split][query_id] = {}
-            relevant_docs[lang_code][split][query_id][doc_id] = 1
+            corpus_records.append(
+                {
+                    "id": doc_id,
+                    "text": record.get("query", ""),
+                    "image": record.get("image", None),
+                    "modality": "image" if has_image else "text",
+                }
+            )
 
-    corpus = datasets.DatasetDict(corpus)
-    queries = datasets.DatasetDict(queries)
-    relevant_docs = datasets.DatasetDict(relevant_docs)
+            queries_records.append(
+                {
+                    "id": query_id,
+                    "text": record.get("query", ""),
+                    "image": record.get("image", None),
+                    "modality": "image" if has_image else "text",
+                }
+            )
 
-    return corpus, queries, relevant_docs
+            if query_id not in relevant_dict:
+                relevant_dict[query_id] = {}
+            relevant_dict[query_id][doc_id] = 1
+
+        if lang_code not in corpus_dict:
+            corpus_dict[lang_code] = {}
+        if lang_code not in queries_dict:
+            queries_dict[lang_code] = {}
+        if lang_code not in relevant_docs_dict:
+            relevant_docs_dict[lang_code] = {}
+
+        corpus_dict[lang_code][split] = Dataset.from_list(corpus_records)
+        queries_dict[lang_code][split] = Dataset.from_list(queries_records)
+        relevant_docs_dict[lang_code][split] = relevant_dict
+
+    corpus_dataset_dict = {}
+    queries_dataset_dict = {}
+    relevant_docs_dataset_dict = {}
+
+    for lang_code in langs:
+        if (
+            lang_code in corpus_dict
+            and lang_code in queries_dict
+            and lang_code in relevant_docs_dict
+        ):
+            corpus_dataset_dict[lang_code] = DatasetDict(corpus_dict[lang_code])
+            queries_dataset_dict[lang_code] = DatasetDict(queries_dict[lang_code])
+            relevant_docs_dataset_dict[lang_code] = relevant_docs_dict[lang_code]
+
+    return corpus_dataset_dict, queries_dataset_dict, relevant_docs_dataset_dict
 
 
-class VDRMultilingualRetrieval(MultilingualTask, AbsTaskRetrieval):
+class VDRMultilingualRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="VDRMultilingualRetrieval",
         description="Multilingual Visual Document retrieval Dataset covering 5 languages: Italian, Spanish, English, French and German",
@@ -115,3 +149,12 @@ class VDRMultilingualRetrieval(MultilingualTask, AbsTaskRetrieval):
         )
 
         self.data_loaded = True
+
+    def evaluate(
+        self,
+        model,
+        split="train",
+        **kwargs,
+    ):
+        """Override evaluate to use the correct split name."""
+        return super().evaluate(model, split=split, **kwargs)
