@@ -1,37 +1,34 @@
 {
     "test": {
-        "num_samples": 788,
-        "min_image_width": 200,
-        "average_image_width": 757.6789340101523,
-        "max_image_width": 2200,
-        "min_image_height": 181,
-        "average_image_height": 631.3147208121827,
-        "max_image_height": 2200,
-        "min_num_choices": 4,
-        "average_num_choices": 4.550761421319797,
-        "max_num_choices": 6,
-        "min_question_length": 30,
-        "average_question_length": 34.35406091370558,
-        "max_question_length": 45,
-        "answers": {
-            "2": {
-                "count": 169
-            },
-            "4": {
-                "count": 63
-            },
-            "3": {
-                "count": 167
-            },
-            "1": {
-                "count": 184
-            },
-            "0": {
-                "count": 182
-            },
-            "5": {
-                "count": 23
-            }
-        }
+        "number_of_characters": 27095,
+        "num_samples": 805,
+        "num_queries": 788,
+        "num_documents": 17,
+        "min_document_length": 1,
+        "average_document_length": 1.411764705882353,
+        "max_document_length": 2,
+        "unique_documents": 17,
+        "min_document_image_width": 0,
+        "average_document_image_width": 0,
+        "max_document_image_width": 0,
+        "min_document_image_height": 0,
+        "average_document_image_height": 0,
+        "max_document_image_height": 0,
+        "num_document_images": 0,
+        "min_query_length": 30,
+        "average_query_length": 34.35406091370558,
+        "max_query_length": 45,
+        "unique_queries": 197,
+        "num_query_images": 788,
+        "min_query_image_width": 181,
+        "average_query_image_width": 631.3147208121827,
+        "max_query_image_width": 2200,
+        "min_query_image_height": 200,
+        "average_query_image_height": 757.6789340101523,
+        "max_query_image_height": 2200,
+        "min_relevant_docs_per_query": 1,
+        "average_relevant_docs_per_query": 1.0,
+        "max_relevant_docs_per_query": 1,
+        "unique_relevant_docs": 17
     }
 }

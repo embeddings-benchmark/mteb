@@ -41,7 +41,7 @@ def get_default_transform():
     requires_image_dependencies()
     from torchvision import transforms
 
-    return transforms.Compose([transforms.Resize((224, 224)), transforms.ToTensor()])
+    return transforms.Compose([transforms.PILToTensor()])
 
 
 class ImageDataset(torch.utils.data.Dataset):
