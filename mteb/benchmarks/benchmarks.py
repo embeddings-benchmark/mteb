@@ -454,6 +454,55 @@ RAR_b = Benchmark(
     contacts=["gowitheflow-1998"],
 )
 
+MTEB_ARA = Benchmark(
+    name="MTEB(ara, v1)",
+    tasks=MTEBTasks(
+        get_tasks(
+            languages=["ara"],
+            tasks=[
+                # Classification
+                "AJGT",
+                "HotelReviewSentimentClassification",
+                "LanguageClassification",
+                "MassiveIntentClassification",
+                "MultiHateClassification",
+                "MultilingualSentimentClassification",
+                "OnlineStoreReviewSentimentClassification",
+                "RestaurantReviewSentimentClassification",
+                "TweetEmotionClassification",
+                "TweetSarcasmClassification",
+                "TweetSentimentClassification",
+                "MassiveScenarioClassification",
+                # Pair Classification
+                "ArEntail",
+                "XNLI",
+                # BitextMining
+                "IWSLT2017BitextMining",
+                # Reranking
+                "MIRACLReranking",
+                "NamaaMrTydiReranking",
+                # Retrieval
+                "MIRACLRetrieval",
+                "MLQARetrieval",
+                "MintakaRetrieval",
+                "MrTidyRetrieval",
+                "MultiLongDocRetrieval",
+                "PublicHealthQA",
+                "SadeemQuestionRetrieval",
+                "XPQARetrieval",
+                "MIRACLRetrievalHardNegatives",
+                # STS
+                "STS17",
+                "STS22.v2",
+            ],
+        )
+    ),
+    description="A benchmark for text embedding performance evaluation in the Arabic language.",
+    reference=None,
+    citation=None,
+    contacts=["haytamdon"],
+)
+
 MTEB_FRA = Benchmark(
     name="MTEB(fra, v1)",
     tasks=MTEBTasks(
