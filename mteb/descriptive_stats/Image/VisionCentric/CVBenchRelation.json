@@ -1,25 +1,34 @@
 {
     "test": {
-        "num_samples": 650,
-        "min_image_width": 189,
-        "average_image_width": 546.3169230769231,
-        "max_image_width": 2200,
-        "min_image_height": 190,
-        "average_image_height": 448.4492307692308,
-        "max_image_height": 2200,
-        "min_num_choices": 2,
-        "average_num_choices": 2.0,
-        "max_num_choices": 2,
-        "min_question_length": 132,
-        "average_question_length": 181.45846153846153,
-        "max_question_length": 224,
-        "answers": {
-            "0": {
-                "count": 327
-            },
-            "1": {
-                "count": 323
-            }
-        }
+        "number_of_characters": 117967,
+        "num_samples": 654,
+        "num_queries": 650,
+        "num_documents": 4,
+        "min_document_length": 4,
+        "average_document_length": 4.75,
+        "max_document_length": 5,
+        "unique_documents": 4,
+        "min_document_image_width": 0,
+        "average_document_image_width": 0,
+        "max_document_image_width": 0,
+        "min_document_image_height": 0,
+        "average_document_image_height": 0,
+        "max_document_image_height": 0,
+        "num_document_images": 0,
+        "min_query_length": 132,
+        "average_query_length": 181.45846153846153,
+        "max_query_length": 224,
+        "unique_queries": 580,
+        "num_query_images": 650,
+        "min_query_image_width": 190,
+        "average_query_image_width": 448.4492307692308,
+        "max_query_image_width": 2200,
+        "min_query_image_height": 189,
+        "average_query_image_height": 546.3169230769231,
+        "max_query_image_height": 2200,
+        "min_relevant_docs_per_query": 1,
+        "average_relevant_docs_per_query": 1.0,
+        "max_relevant_docs_per_query": 1,
+        "unique_relevant_docs": 4
     }
 }
