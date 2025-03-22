@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
-    AbsTaskZeroshotClassification,
+from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
+    AbsTaskZeroShotClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class UCF101ZeroshotClassification(AbsTaskZeroshotClassification):
+class UCF101ZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="UCF101ZeroShot",
         description="""UCF101 is an action recognition data set of realistic

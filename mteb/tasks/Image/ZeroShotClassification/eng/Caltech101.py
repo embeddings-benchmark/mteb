@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
-    AbsTaskZeroshotClassification,
+from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
+    AbsTaskZeroShotClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class Caltech101ZeroshotClassification(AbsTaskZeroshotClassification):
+class Caltech101ZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="Caltech101ZeroShot",
         description="Classifying images of 101 widely varied objects.",

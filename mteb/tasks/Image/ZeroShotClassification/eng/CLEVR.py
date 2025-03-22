@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
-    AbsTaskZeroshotClassification,
+from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
+    AbsTaskZeroShotClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class CLEVR(AbsTaskZeroshotClassification):
+class CLEVR(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="CLEVRZeroShot",
         description="CLEVR closest object distance identification task.",
@@ -54,7 +54,7 @@ year = {2017}
         return [f"{c} shapes." for c in labels]
 
 
-class CLEVRCount(AbsTaskZeroshotClassification):
+class CLEVRCount(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="CLEVRCountZeroShot",
         description="CLEVR count objects task.",

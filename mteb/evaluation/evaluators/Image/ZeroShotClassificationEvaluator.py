@@ -17,7 +17,7 @@ from ..Evaluator import Evaluator
 logger = logging.getLogger(__name__)
 
 
-class ZeroshotClassificationEvaluator(Evaluator):
+class ZeroShotClassificationEvaluator(Evaluator):
     def __init__(
         self,
         dataset: Dataset,

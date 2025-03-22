@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import os
 
-from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
-    AbsTaskZeroshotClassification,
+from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
+    AbsTaskZeroShotClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class Imagenet1kZeroshotClassification(AbsTaskZeroshotClassification):
+class Imagenet1kZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="Imagenet1kZeroShot",
         description="ImageNet, a large-scale ontology of images built upon the backbone of the WordNet structure.",

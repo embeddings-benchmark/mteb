@@ -11,6 +11,7 @@ from transformers import AutoConfig, AutoModelForCausalLM, AutoProcessor
 
 from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta
+from mteb.requires_package import requires_image_dependencies
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
@@ -27,6 +28,7 @@ class VLM2VecWrapper:
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs,
     ):
+        requires_image_dependencies()
         try:
             import flash_attn  # noqa
             from peft import LoraConfig, PeftModel  # noqa

@@ -31,8 +31,8 @@ from mteb.abstasks.Image.AbsTaskImageTextPairClassification import (
     AbsTaskImageTextPairClassification,
 )
 from mteb.abstasks.Image.AbsTaskVisualSTS import AbsTaskVisualSTS
-from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
-    AbsTaskZeroshotClassification,
+from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
+    AbsTaskZeroShotClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -3134,7 +3134,7 @@ class MockVisualSTSTask(AbsTaskVisualSTS):
         self.data_loaded = True
 
 
-class MockZeroshotClassificationTask(AbsTaskZeroshotClassification):
+class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
     expected_stats = {
         "test": {
             "average_text_length": 26.0,
@@ -3146,7 +3146,7 @@ class MockZeroshotClassificationTask(AbsTaskZeroshotClassification):
 
     metadata = TaskMetadata(
         type="ZeroShotClassification",
-        name="MockZeroshotClassification",
+        name="MockZeroShotClassification",
         main_score="accuracy",
         **general_args,  # type: ignore
     )

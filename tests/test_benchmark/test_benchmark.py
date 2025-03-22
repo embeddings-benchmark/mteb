@@ -37,7 +37,7 @@ from .mock_tasks import (
     MockRerankingTask,
     MockRetrievalTask,
 )
-from .task_grid import MOCK_TASK_TEST_GRID
+from .task_grid import MOCK_MIEB_TASK_GRID, MOCK_TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
 
@@ -191,6 +191,32 @@ def test_encode_kwargs_passed_to_all_encodes(task_name: str | AbsTask, tmp_path:
         output_folder=tmp_path.as_posix(),
         overwrite_results=True,
         encode_kwargs=my_encode_kwargs,
+    )
+
+
+@pytest.mark.parametrize("task_name", MOCK_TASK_TEST_GRID + MOCK_MIEB_TASK_GRID)
+def test_task_name_passed_encoder(task_name: mteb.AbsTask, tmp_path: Path):
+    """Test that all tasks correctly pass down the task_name to the encoder."""
+    _task_name = (
+        task_name.metadata.name if isinstance(task_name, mteb.AbsTask) else task_name
+    )
+
+    class MockEncoderWithInstructions(mteb.Encoder):
+        def encode(self, sentences, task_name: str | None = None, **kwargs):
+            assert task_name == _task_name
+            return np.zeros((len(sentences), 10))
+
+    if isinstance(task_name, mteb.AbsTask):
+        tasks = [task_name]
+    else:
+        tasks = mteb.get_tasks(tasks=[task_name])
+
+    eval = mteb.MTEB(tasks=tasks)
+
+    eval.run(
+        MockEncoderWithInstructions(),
+        output_folder=tmp_path.as_posix(),
+        overwrite_results=True,
     )
 
 

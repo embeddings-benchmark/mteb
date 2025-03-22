@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
-    AbsTaskZeroshotClassification,
+from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
+    AbsTaskZeroShotClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class RESISC45ZeroshotClassification(AbsTaskZeroshotClassification):
+class RESISC45ZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="RESISC45ZeroShot",
         description="Remote Sensing Image Scene Classification by Northwestern Polytechnical University (NWPU).",

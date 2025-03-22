@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import os
 
-from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
-    AbsTaskZeroshotClassification,
+from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
+    AbsTaskZeroShotClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class Country211ZeroshotClassification(AbsTaskZeroshotClassification):
+class Country211ZeroShotClassification(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         name="Country211ZeroShot",
         description="Classifying images of 211 countries.",
