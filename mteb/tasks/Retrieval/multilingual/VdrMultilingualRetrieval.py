@@ -73,7 +73,7 @@ class VDRMultilingualRetrieval(MultilingualTask, AbsTaskRetrieval):
         reference="https://huggingface.co/datasets/llamaindex/vdr-multilingual-test",
         dataset={
             "path": "llamaindex/vdr-multilingual-test",
-            "revision": "9e26ae152f5950ab1a5ff1c58edade3acc894793"
+            "revision": "9e26ae152f5950ab1a5ff1c58edade3acc894793",
         },
         type="Retrieval",
         category="it2it",
