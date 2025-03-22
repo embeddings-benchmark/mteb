@@ -8,14 +8,11 @@ from typing import Any
 import torch
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
-from torchvision import transforms
 
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
 from mteb.evaluation.evaluators.Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
-
-transform = transforms.Compose([transforms.PILToTensor()])
 
 
 class ImageTextDataset(torch.utils.data.Dataset):
