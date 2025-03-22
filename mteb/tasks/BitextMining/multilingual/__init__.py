@@ -22,8 +22,6 @@ from .WebFAQBitextMining import WebFAQBitextMiningQAs, WebFAQBitextMiningQuestio
 
 __all__ = [
     "IN22ConvBitextMining",
-    "WebFAQBitextMiningQuestions",
-    "WebFAQBitextMiningQAs",
     "IN22GenBitextMining",
     "BUCCBitextMining",
     "LinceMTBitextMining",
@@ -32,6 +30,8 @@ __all__ = [
     "NTREXBitextMining",
     "IndicGenBenchFloresBitextMining",
     "NollySentiBitextMining",
+    "WebFAQBitextMiningQAs",
+    "WebFAQBitextMiningQuestions",
     "BUCCBitextMiningFast",
     "PhincBitextMining",
     "TatoebaBitextMining",

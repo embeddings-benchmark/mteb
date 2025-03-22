@@ -5,7 +5,7 @@ from .AILAStatutesRetrieval import AILAStatutes
 from .AlphaNLIRetrieval import AlphaNLI
 from .ARCChallengeRetrieval import ARCChallenge
 from .ArguAnaRetrieval import ArguAna
-from .BrightRetrieval import BrightRetrieval
+from .BrightRetrieval import BrightLongRetrieval, BrightRetrieval
 from .BuiltBenchRetrieval import BuiltBenchRetrieval
 from .ChemHotpotQARetrieval import ChemHotpotQARetrieval
 from .ChemNQRetrieval import ChemNQRetrieval
@@ -156,6 +156,7 @@ __all__ = [
     "HellaSwag",
     "PIQA",
     "SpartQA",
+    "BrightLongRetrieval",
     "BrightRetrieval",
     "TempReasonL1",
     "HotpotQA",
