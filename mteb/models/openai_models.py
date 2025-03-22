@@ -27,10 +27,20 @@ class OpenAIWrapper(Wrapper):
         """Wrapper for OpenAIs embedding API.
         To handle documents larger than 8191 tokens, we truncate the document to the specified sequence length.
         """
-        requires_package(self, "openai", "Openai text embedding")
+        requires_package(
+            self,
+            "openai",
+            "Openai text embedding",
+            install_instruction="pip install mteb[openai]",
+        )
         from openai import OpenAI
 
-        requires_package(self, "tiktoken", "Tiktoken package")
+        requires_package(
+            self,
+            "tiktoken",
+            "Tiktoken package",
+            install_instruction="pip install mteb[openai]",
+        )
         import tiktoken
 
         self._client = OpenAI()

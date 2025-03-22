@@ -5,14 +5,11 @@ from typing import Any, Literal
 import numpy as np
 import torch
 from torch.utils.data import DataLoader
-from torchvision import transforms
 from tqdm import tqdm
 
 from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta
-
-tensor_to_image = transforms.Compose([transforms.ToPILImage()])
-pil_to_tensor = transforms.Compose([transforms.PILToTensor()])
+from mteb.requires_package import requires_image_dependencies
 
 
 def vista_loader(**kwargs):
@@ -24,18 +21,47 @@ def vista_loader(**kwargs):
         )
 
     class VisualizedBGEWrapper(Visualized_BGE):
+        """Setting up VISTA
+
+        ```
+        git clone https://github.com/FlagOpen/FlagEmbedding.git
+        cd FlagEmbedding/research/visual_bge
+        pip install -e .
+        pip install torchvision timm einops ftfy
+        ```
+        back to the root folder of mteb; download the vision tower for bge-base
+        ```
+        cd ..
+        wget https://huggingface.co/BAAI/bge-visualized/resolve/main/Visualized_base_en_v1.5.pth?download=true
+        ```
+        rename it to `visualized_base_en_V1.5.pth`
+        ```
+        mv Visualized_base_en_v1.5.pth?download=true visualized_base_en_V1.5.pth
+        ```
+        download the vision tower for bge-m3
+        ```
+        wget https://huggingface.co/BAAI/bge-visualized/resolve/main/Visualized_m3.pth?download=true
+        ```
+        rename it to `visualized_m3.pth`
+        ```
+        mv Visualized_m3.pth?download=true visualized_m3.pth
+        ```
+        """
+
         def __init__(
             self,
-            model_name_bge: str = None,
+            model_name_bge: str | None = None,
             model_weight=None,
             normlized: bool = True,
             sentence_pooling_method: str = "cls",
             negatives_cross_device: bool = False,
             temperature: float = 0.02,
             from_pretrained=None,
-            image_tokens_num: int = None,
+            image_tokens_num: int | None = None,
             **kwargs: Any,
         ):
+            requires_image_dependencies()
+
             super().__init__(
                 model_name_bge=model_name_bge,
                 model_weight=model_weight,

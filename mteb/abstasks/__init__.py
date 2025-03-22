@@ -20,7 +20,7 @@ from .Image import (
     AbsTaskImageMultilabelClassification,
     AbsTaskImageTextPairClassification,
     AbsTaskVisualSTS,
-    AbsTaskZeroshotClassification,
+    AbsTaskZeroShotClassification,
 )
 from .TaskMetadata import TaskMetadata
 
@@ -45,5 +45,5 @@ __all__ = [
     "AbsTaskImageMultilabelClassification",
     "AbsTaskImageTextPairClassification",
     "AbsTaskVisualSTS",
-    "AbsTaskZeroshotClassification",
+    "AbsTaskZeroShotClassification",
 ]

@@ -1,3 +1,6 @@
+
+**NOTE**: This open collaboration have been finalized and the [paper](https://arxiv.org/abs/2502.13595) released. This document remains for documentation.
+
 # Welcome to MMTEB! 👋
 
 The Massive Multilingual Text Embedding Benchmark (MMTEB) is a community-led extension of [MTEB](https://arxiv.org/abs/2210.07316) to cover embedding tasks for a massive number of languages.

@@ -18,7 +18,7 @@ from .Image import (
     ImagelogRegClassificationEvaluator,
     ImageTextPairClassificationEvaluator,
     VisualSTSEvaluator,
-    ZeroshotClassificationEvaluator,
+    ZeroShotClassificationEvaluator,
 )
 from .model_classes import DenseRetrievalExactSearch
 from .PairClassificationEvaluator import PairClassificationEvaluator
@@ -52,5 +52,5 @@ __all__ = [
     "ImageClusteringEvaluator",
     "ImageTextPairClassificationEvaluator",
     "VisualSTSEvaluator",
-    "ZeroshotClassificationEvaluator",
+    "ZeroShotClassificationEvaluator",
 ]

@@ -10,15 +10,12 @@ from sklearn.metrics.pairwise import (
     paired_euclidean_distances,
     paired_manhattan_distances,
 )
-from torchvision import transforms
 
 from mteb.create_dataloaders import create_image_dataloader
 
 from ..Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
-
-transform = transforms.Compose([transforms.PILToTensor()])
 
 
 class VisualSTSEvaluator(Evaluator):

@@ -3,6 +3,8 @@ from __future__ import annotations
 from mteb.benchmarks.benchmark import Benchmark
 from mteb.benchmarks.benchmarks import (
     BRIGHT,
+    C_MTEB,
+    FA_MTEB,
     LONG_EMBED,
     MTEB_DEU,
     MTEB_EN,
@@ -51,6 +53,8 @@ __all__ = [
     "MTEB_EU",
     "LONG_EMBED",
     "BRIGHT",
+    "FA_MTEB",
+    "C_MTEB",
     "BENCHMARK_REGISTRY",
     "get_benchmarks",
     "get_benchmark",

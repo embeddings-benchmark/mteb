@@ -11,6 +11,7 @@ from transformers import AutoModel
 from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
+from mteb.requires_package import requires_image_dependencies
 
 
 class JinaCLIPModelWrapper(Wrapper):
@@ -20,6 +21,8 @@ class JinaCLIPModelWrapper(Wrapper):
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
+        requires_image_dependencies()
+
         self.model_name = model_name
         self.device = device
         self.model = AutoModel.from_pretrained(model_name, trust_remote_code=True).to(

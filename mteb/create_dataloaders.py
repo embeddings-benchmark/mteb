@@ -5,7 +5,6 @@ from typing import Any, Callable
 import torch
 from datasets import Dataset
 from torch.utils.data import DataLoader, default_collate
-from torchvision import transforms
 
 from mteb.encoder_interface import BatchedInput, Conversation
 
@@ -181,9 +180,6 @@ def create_dataloader_for_queries_conversation(
             }
         )
     return torch.utils.data.DataLoader(dataset, **dataloader_kwargs)
-
-
-DEFAULT_TRANSFORM = transforms.Compose([transforms.PILToTensor()])
 
 
 def transform_image_to_rgb(

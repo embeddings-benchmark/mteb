@@ -45,7 +45,7 @@ from .mock_tasks import (
     MockSummarizationTask,
     MockTextMultipleChoiceTask,
     MockVisualSTSTask,
-    MockZeroshotClassificationTask,
+    MockZeroShotClassificationTask,
 )
 
 TASK_TEST_GRID = (
@@ -119,7 +119,7 @@ MOCK_MIEB_TASK_GRID = [
     MockImageClusteringTask(),
     MockImageTextPairClassificationTask(),
     MockVisualSTSTask(),
-    MockZeroshotClassificationTask(),
+    MockZeroShotClassificationTask(),
     MockImageMultilabelClassificationTask(),
     MockMultilingualImageClassificationTask(),
     MockMultilingualImageTextPairClassificationTask(),

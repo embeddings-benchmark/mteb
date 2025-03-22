@@ -9,14 +9,11 @@ from typing import Any, Literal
 import numpy as np
 import torch
 from torch.utils.data import DataLoader
-from torchvision import transforms
 from tqdm import tqdm
 
 from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
-
-api_key = os.getenv("COHERE_API_KEY")
-tensor_to_image = transforms.Compose([transforms.ToPILImage()])
+from mteb.requires_package import requires_image_dependencies
 
 
 def cohere_v_loader(**kwargs):
@@ -37,9 +34,14 @@ def cohere_v_loader(**kwargs):
             Cohere currently supports 40 images/min, thus time.sleep(1.5) is applied after each image.
             Remove or adjust this after Cohere API changes capacity.
             """
+            requires_image_dependencies()
+            from torchvision import transforms
+
             self.model_name = model_name
+            api_key = os.getenv("COHERE_API_KEY")
             self.client = cohere.ClientV2(api_key)
             self.image_format = "JPEG"
+            self.transform = transforms.Compose([transforms.PILToTensor()])
 
         def get_text_embeddings(
             self,
@@ -76,7 +78,7 @@ def cohere_v_loader(**kwargs):
                 for image in batch:
                     # cohere only supports 1 image per call
                     buffered = io.BytesIO()
-                    image = tensor_to_image(image)
+                    image = self.transform(image)
                     image.save(buffered, format=self.image_format)
                     image_bytes = buffered.getvalue()
                     stringified_buffer = base64.b64encode(image_bytes).decode("utf-8")

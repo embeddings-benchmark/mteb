@@ -11,7 +11,7 @@ b1ade_training_data = {
 
 b1ade_embed = ModelMeta(
     loader=sentence_transformers_loader,
-    name="b1ade-embed",
+    name="w601sxs/b1ade-embed",
     languages=["eng-Latn"],
     revision="3bdac13927fdc888b903db93b2ffdbd90b295a69",
     open_weights=True,

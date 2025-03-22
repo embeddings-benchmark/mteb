@@ -7,17 +7,15 @@ import torch
 import torch.nn.functional as F
 from datasets import Dataset
 from torch.utils.data import DataLoader
-from torchvision import transforms
 
 from mteb.create_dataloaders import (
     transform_image_to_rgb,
 )
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
 from mteb.evaluation.evaluators.Evaluator import Evaluator
+from mteb.requires_package import requires_image_dependencies
 
 logger = logging.getLogger(__name__)
-
-transform = transforms.Compose([transforms.PILToTensor()])
 
 
 class CustomImageDataset(torch.utils.data.Dataset):
@@ -64,10 +62,14 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         **kwargs,
     ):
         super().__init__(**kwargs)
+        requires_image_dependencies()
+        from torchvision import transforms
+
         self.dataset = dataset
         self.images_column_names = images_column_names
         self.texts_column_names = texts_column_names
         self.task_name = task_name
+        self.transform = transforms.Compose([transforms.PILToTensor()])
 
     def __call__(
         self,
@@ -96,7 +98,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         else:
             images = self.dataset[self.images_column_names]
 
-        images = [transform(transform_image_to_rgb(img)) for img in images]
+        images = [self.transform(transform_image_to_rgb(img)) for img in images]
 
         texts = []
         if isinstance(self.texts_column_names, list):

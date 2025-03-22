@@ -8,10 +8,10 @@ from .AbsTaskImageClustering import AbsTaskImageClustering
 from .AbsTaskImageMultilabelClassification import AbsTaskImageMultilabelClassification
 from .AbsTaskImageTextPairClassification import AbsTaskImageTextPairClassification
 from .AbsTaskVisualSTS import AbsTaskVisualSTS
-from .AbsTaskZeroshotClassification import AbsTaskZeroshotClassification
+from .AbsTaskZeroShotClassification import AbsTaskZeroShotClassification
 
 __all__ = [
-    "AbsTaskZeroshotClassification",
+    "AbsTaskZeroShotClassification",
     "AbsTaskVisualSTS",
     "AbsTaskImageTextPairClassification",
     "AbsTaskImageMultilabelClassification",

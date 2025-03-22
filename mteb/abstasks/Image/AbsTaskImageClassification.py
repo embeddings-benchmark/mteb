@@ -98,8 +98,7 @@ class AbsTaskImageClassification(AbsTask):
             imgs = self.dataset[hf_subset][split][self.image_column_name]
             labels = self.dataset[hf_subset][split][self.label_column_name]
         elif compute_overall:
-            imgs = []
-            labels = []
+            imgs, labels = [], []
             for hf_subset in self.metadata.eval_langs:
                 imgs.extend(self.dataset[hf_subset][split][self.image_column_name])
                 labels.extend(self.dataset[hf_subset][split][self.label_column_name])
@@ -113,7 +112,7 @@ class AbsTaskImageClassification(AbsTask):
 
         img_widths, img_heights = [], []
         for img in imgs:
-            width, height = img.size
+            width, height = img.size  # type: ignore
             img_heights.append(height)
             img_widths.append(width)
 

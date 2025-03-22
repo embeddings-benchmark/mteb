@@ -74,7 +74,7 @@ class Any2AnyMultiChoiceSearch:
         qrels: Dataset,
         top_k: int,
         score_function: str,
-        task_name: str,
+        task_name: str | None = None,
         return_sorted: bool = False,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
