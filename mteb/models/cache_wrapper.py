@@ -12,9 +12,6 @@ import torch
 from mteb.encoder_interface import Encoder
 from mteb.models.wrapper import Wrapper
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
 logger = logging.getLogger(__name__)
 
 

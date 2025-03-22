@@ -14,7 +14,6 @@ from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.requires_package import requires_image_dependencies
 
-logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
 EncodeTypes = Literal["query", "passage"]
