@@ -9,11 +9,12 @@ from sklearn.metrics import accuracy_score
 from sklearn.metrics.pairwise import cosine_similarity
 from tqdm import tqdm
 
+from mteb.abstasks import TaskMetadata
 from mteb.create_dataloaders import (
     create_dataloader_from_texts,
     create_image_dataloader,
 )
-from mteb.encoder_interface import Encoder, EncoderWithSimilarity
+from mteb.encoder_interface import Encoder
 from mteb.evaluation.evaluators.Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
@@ -38,7 +39,9 @@ class Any2TextMultipleChoiceEvaluator(Evaluator):
         query_column_names: dict,
         label_column_name: str,
         choices_column_name: str,
-        task_name: str | None = None,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         limit: int | None = None,
         **kwargs,
     ):
@@ -50,11 +53,13 @@ class Any2TextMultipleChoiceEvaluator(Evaluator):
         self.query_column_names = query_column_names
         self.label_column_name = label_column_name
         self.choices_column_name = choices_column_name
-        self.task_name = task_name
+        self.task_metadata = task_metadata
+        self.hf_split = hf_split
+        self.hf_subset = hf_subset
 
     def __call__(
         self,
-        model: Encoder | EncoderWithSimilarity,
+        model: Encoder,
         encode_kwargs: dict[str, Any] = {},
     ):
         if "batch_size" not in encode_kwargs:
@@ -67,9 +72,14 @@ class Any2TextMultipleChoiceEvaluator(Evaluator):
             create_dataloader_from_texts(
                 label_list,
             ),
-            task_name=self.task_name,
+            task_metadata=self.task_metadata,
+            hf_split=self.hf_split,
+            hf_subset=self.hf_subset,
             batch_size=encode_kwargs["batch_size"],
         )
+        if not isinstance(label_embeddings, torch.Tensor):
+            label_embeddings = torch.tensor(label_embeddings)
+
         label_embedding_dict = {}
         for label, embedding in zip(label_list, label_embeddings):
             label_embedding_dict[label] = embedding
@@ -83,11 +93,15 @@ class Any2TextMultipleChoiceEvaluator(Evaluator):
 
         query_embeddings = model.encode(
             dataset,
-            task_name=self.task_name,
+            task_metadata=self.task_metadata,
+            hf_split=self.hf_split,
+            hf_subset=self.hf_subset,
             batch_size=encode_kwargs["batch_size"],
         )
+        if not isinstance(query_embeddings, torch.Tensor):
+            query_embeddings = torch.tensor(query_embeddings)
 
-        # note that answers are the indeces
+        # note that answers are the indexes
         predictions = []
         for q_embedding, choice in tqdm(zip(query_embeddings, choices)):
             choice_embeddings = torch.vstack(

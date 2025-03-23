@@ -44,6 +44,7 @@ class ScoringFunction(str, Enum):
     COSINE = "cosine"
     DOT_PRODUCT = "dot"
     MAX_SIM = "MaxSim"
+    VISION = "vision"
 
 
 def get_loader_name(
@@ -99,7 +100,7 @@ class ModelMeta(BaseModel):
     revision: str | None
     release_date: STR_DATE | None
     languages: list[ISO_LANGUAGE_SCRIPT] | None
-    loader: Callable[..., Encoder] | None
+    loader: Callable[..., Encoder] | type[Encoder] | None
     loader_kwargs: dict[str, Any] = field(default_factory=dict)
     n_parameters: int | None
     memory_usage_mb: float | None

@@ -182,3 +182,44 @@ def pairwise_dot_score(a: Array, b: Array) -> Array:
         Tensor: Vector with res[i] = dot_prod(a[i], b[i])
     """
     return (a * b).sum(dim=-1)
+
+
+# https://github.com/UKPLab/sentence-transformers/blob/3fd59c3d122f2148e22b6338447b45d850fb6ea4/sentence_transformers/util.py#L196C1-L227C56
+def euclidean_sim(a: Array, b: Array) -> Array:
+    """Computes the euclidean similarity (i.e., negative distance) between two tensors.
+
+    Args:
+        a (Union[list, np.ndarray, Tensor]): The first tensor.
+        b (Union[list, np.ndarray, Tensor]): The second tensor.
+
+    Returns:
+        Tensor: Matrix with res[i][j] = -euclidean_distance(a[i], b[j])
+    """
+    a = convert_to_tensor(a)
+    b = convert_to_tensor(b)
+
+    return -torch.cdist(a, b, p=2.0)
+
+
+def pairwise_euclidean_sim(a: Array, b: Array) -> Array:
+    """Computes the euclidean distance (i.e., negative distance) between pairs of tensors.
+
+    Args:
+        a (Union[list, np.ndarray, Tensor]): The first tensor.
+        b (Union[list, np.ndarray, Tensor]): The second tensor.
+
+    Returns:
+        Tensor: Vector with res[i] = -euclidean_distance(a[i], b[i])
+    """
+    a = convert_to_tensor(a)
+    b = convert_to_tensor(b)
+
+    return -torch.sqrt(torch.sum((a - b) ** 2, dim=-1))
+
+
+def vision_similarity(text_embeddings: Array, image_embeddings: Array) -> Array:
+    text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True)
+    image_embeddings = image_embeddings / image_embeddings.norm(dim=-1, keepdim=True)
+    logits = torch.matmul(image_embeddings, text_embeddings.T)
+    probs = (logits * 100).softmax(dim=-1)
+    return probs

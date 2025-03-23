@@ -10,7 +10,7 @@ from mteb import MTEB
 from mteb.abstasks import AbsTask
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
-from mteb.models.base_encoder import BaseEncoder
+from mteb.models.abs_encoder import AbsEncoder
 from tests.test_benchmark.task_grid import TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
@@ -67,13 +67,13 @@ def test_validate_task_to_prompt_name(task_name: str | AbsTask):
         "query": "prompt_name",
         "passage": "prompt_name",
     }
-    base_encoder = BaseEncoder("", "")
+    base_encoder = AbsEncoder("", "")
     base_encoder.model_prompts = model_prompts
     base_encoder.validate_task_to_prompt_name()
 
 
 def test_validate_task_to_prompt_name_fail():
-    base_encoder = BaseEncoder("", "")
+    base_encoder = AbsEncoder("", "")
     with pytest.raises(KeyError):
         base_encoder.model_prompts = {
             "task_name": "prompt_name",

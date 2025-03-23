@@ -14,16 +14,16 @@ from torch.utils.data import DataLoader
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.load_results.task_results import Namespace
 from mteb.model_meta import ModelMeta
-from mteb.models import BaseEncoder, SentenceTransformerWrapper
+from mteb.models import AbsEncoder, SentenceTransformerWrapper
 from mteb.types import Array, BatchedInput, PromptType
 
 
-class BaseMockEncoder(BaseEncoder):
+class AbsMockEncoder(AbsEncoder):
     def __init__(self):
         pass
 
 
-class MockNumpyEncoder(BaseMockEncoder):
+class MockNumpyEncoder(AbsMockEncoder):
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -37,7 +37,7 @@ class MockNumpyEncoder(BaseMockEncoder):
         return np.random.rand(len(inputs.dataset), 10)  # type: ignore
 
 
-class MockTorchEncoder(BaseMockEncoder):
+class MockTorchEncoder(AbsMockEncoder):
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -51,7 +51,7 @@ class MockTorchEncoder(BaseMockEncoder):
         return torch.randn(len(inputs.dataset), 10)
 
 
-class MockTorchfp16Encoder(BaseMockEncoder):
+class MockTorchfp16Encoder(AbsMockEncoder):
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -92,7 +92,7 @@ class MockSentenceTransformersbf16Encoder(SentenceTransformer):
         return 10
 
 
-class MockCLIPEncoder(BaseMockEncoder):
+class MockCLIPEncoder(AbsMockEncoder):
     mteb_model_meta = ModelMeta(
         loader=None,
         name="mock/MockCLIPModel",
@@ -129,7 +129,7 @@ class MockCLIPEncoder(BaseMockEncoder):
         return torch.randn(len(inputs.dataset), 10)
 
 
-class MockMocoEncoder(BaseMockEncoder):
+class MockMocoEncoder(AbsMockEncoder):
     mteb_model_meta = ModelMeta(
         loader=None,
         name="mock/MockMocoModel",

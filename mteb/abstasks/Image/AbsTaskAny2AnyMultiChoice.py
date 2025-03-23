@@ -13,9 +13,9 @@ from datasets import Features, Value, load_dataset
 from PIL import Image
 
 from mteb.abstasks.AbsTask import AbsTask, ScoresDict
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics
 
 from ...evaluation.evaluators import Any2AnyMultiChoiceEvaluator
-from ..TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -337,7 +337,6 @@ class AbsTaskAny2AnyMultiChoice(AbsTask):
     ):
         retriever = Any2AnyMultiChoiceEvaluator(
             retriever=model,
-            task_name=self.metadata.name,
             encode_kwargs=encode_kwargs,
             **kwargs,
         )
@@ -361,15 +360,29 @@ class AbsTaskAny2AnyMultiChoice(AbsTask):
                     self.relevant_docs[hf_subset][split],
                 )
             scores[hf_subset] = self._evaluate_subset(
-                retriever, corpus, queries, relevant_docs, hf_subset, **kwargs
+                retriever, corpus, queries, relevant_docs, hf_subset, split, **kwargs
             )
         return scores
 
     def _evaluate_subset(
-        self, retriever, corpus, queries, relevant_docs, hf_subset: str, **kwargs
+        self,
+        retriever,
+        corpus,
+        queries,
+        relevant_docs,
+        hf_subset: str,
+        hf_split: str,
+        **kwargs,
     ):
         start_time = time()
-        results = retriever(corpus, queries, relevant_docs)
+        results = retriever(
+            corpus,
+            queries,
+            relevant_docs,
+            task_metadata=self.metadata,
+            hf_subset=hf_subset,
+            hf_split=hf_split,
+        )
         end_time = time()
         logger.info(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
 

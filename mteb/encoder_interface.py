@@ -8,7 +8,6 @@ from mteb.types import Array, BatchedInput, PromptType
 
 if TYPE_CHECKING:
     from mteb import TaskMetadata
-    from mteb.model_meta import ModelMeta
 
 Corpus = Union[list[dict[str, str]], dict[str, list[str]]]
 
@@ -20,9 +19,6 @@ class Encoder(Protocol):
     Besides the required functions specified below, the encoder can additionally specify the the following signatures seen below.
     In general the interface is kept aligned with sentence-transformers interface. In cases where exceptions occurs these are handled within MTEB.
     """
-
-    mteb_model_meta: ModelMeta | None = None
-    model_prompts: dict[str, str] | None = None
 
     def __init__(self, model: str, revision: str, **kwargs) -> None:
         """The initialization function for the encoder. Used when calling it from the mteb run CLI.

@@ -20,7 +20,7 @@ from mteb.evaluation.MTEB import logger
 from mteb.types import Array, BatchedInput, PromptType
 
 from .mock_models import (
-    BaseMockEncoder,
+    AbsMockEncoder,
     MockCLIPEncoder,
     MockMocoEncoder,
     MockNumpyEncoder,
@@ -171,7 +171,7 @@ def test_encode_kwargs_passed_to_all_encodes(task_name: str | AbsTask, tmp_path:
     """Test that all tasks correctly pass down the encode_kwargs to the encoder."""
     my_encode_kwargs = {"no_one_uses_this_args": "but_its_here"}
 
-    class MockEncoderWithKwargs(BaseMockEncoder):
+    class MockEncoderWithKwargs(AbsMockEncoder):
         def encode(self, sentences: DataLoader, task_name: str | None = None, **kwargs):
             assert "no_one_uses_this_args" in kwargs
             assert (
@@ -218,7 +218,7 @@ def test_task_metadata_passed_encoder(task_name: mteb.AbsTask, tmp_path: Path):
             assert task_metadata.name == _task_name
             assert isinstance(hf_split, str)
             assert isinstance(hf_subset, str)
-            return np.zeros((len(inputs), 10))
+            return np.zeros((len(inputs.dataset), 10))
 
     if isinstance(task_name, mteb.AbsTask):
         tasks = [task_name]

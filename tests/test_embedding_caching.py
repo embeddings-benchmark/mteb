@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 
 from mteb.encoder_interface import Encoder
-from mteb.models.cache_wrapper import CachedEmbeddingBaseEncoder
+from mteb.models.cache_wrapper import CachedEmbeddingWrapper
 
 
 class DummyModel(Encoder):
@@ -36,7 +36,7 @@ class TestCachedEmbeddingWrapper:
         dummy_model = DummyModel()
 
         # Create the wrapper
-        wrapped_model = CachedEmbeddingBaseEncoder(dummy_model, cache_dir)
+        wrapped_model = CachedEmbeddingWrapper(dummy_model, cache_dir)
 
         # Simulate data
         queries = [
@@ -87,7 +87,7 @@ class TestCachedEmbeddingWrapper:
         dummy_model = DummyModel()
 
         # Create the wrapper
-        wrapped_model = CachedEmbeddingBaseEncoder(dummy_model, cache_dir)
+        wrapped_model = CachedEmbeddingWrapper(dummy_model, cache_dir)
 
         # Call a function that is not wrapped
         result = wrapped_model.random_other_function_returns_false()

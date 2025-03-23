@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import TypedDict
+from typing import TypedDict, Union
 
 import numpy as np
 import torch
 from PIL import Image
 
-Array = np.ndarray | torch.Tensor
+Array = Union[np.ndarray, torch.Tensor]
 
 
 class PromptType(str, Enum):
