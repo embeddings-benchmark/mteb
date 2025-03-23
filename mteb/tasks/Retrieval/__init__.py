@@ -42,6 +42,7 @@ from .eng import (
     AlphaNLI,
     ARCChallenge,
     ArguAna,
+    BrightLongRetrieval,
     BrightRetrieval,
     BuiltBenchRetrieval,
     ChemHotpotQARetrieval,
@@ -271,7 +272,6 @@ from .zho import (
 )
 
 __all__ = [
-    "WebFAQRetrieval",
     "CmedqaRetrieval",
     "CovidRetrieval",
     "DuRetrieval",
@@ -429,6 +429,7 @@ __all__ = [
     "HellaSwag",
     "PIQA",
     "SpartQA",
+    "BrightLongRetrieval",
     "BrightRetrieval",
     "TempReasonL1",
     "HotpotQA",
@@ -490,6 +491,7 @@ __all__ = [
     "HunSum2AbstractiveRetrieval",
     "AutoRAGRetrieval",
     "KoStrategyQA",
+    "WebFAQRetrieval",
     "WikipediaRetrievalMultilingual",
     "MintakaRetrieval",
     "PublicHealthQARetrieval",

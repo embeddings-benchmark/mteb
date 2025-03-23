@@ -1,12 +1,12 @@
 install:
 	@echo "--- 🚀 Installing project dependencies ---"
-	pip install -e ".[dev,docs]"
+	pip install -e ".[dev,docs,image]"
 	pre-commit install
 
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"
 	@echo "This ensures that the project is not installed in editable mode"
-	pip install ".[dev,speedtask,bm25s,pylate]"
+	pip install ".[dev,speedtask,bm25s,pylate,image]"
 
 lint:
 	@echo "--- 🧹 Running linters ---"

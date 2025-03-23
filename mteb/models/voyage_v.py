@@ -1,21 +1,17 @@
 from __future__ import annotations
 
 import logging
-import os
 from typing import Any, Literal
 
 import numpy as np
 import torch
 from PIL import Image
 from torch.utils.data import DataLoader
-from torchvision import transforms
 from tqdm import tqdm
 
 from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
-
-api_key = os.getenv("VOYAGE_API_KEY")
-tensor_to_image = transforms.Compose([transforms.ToPILImage()])
+from mteb.requires_package import requires_image_dependencies
 
 
 def downsample_image(
@@ -37,15 +33,15 @@ def downsample_image(
         logging.info(
             f"Downsampling image from {width}x{height} to {new_width}x{new_height}"
         )
-        return image.resize(new_size, Image.LANCZOS)
+        return image.resize(new_size, Image.LANCZOS)  # type: ignore
     if width > height:
         if width > 10000:
             logging.error("Processing extremely wide images.")
-            return image.resize((10000, height), Image.LANCZOS)
+            return image.resize((10000, height), Image.LANCZOS)  # type: ignore
     else:
         if height > 10000:
             logging.error("Processing extremely high images.")
-            return image.resize((width, 10000), Image.LANCZOS)
+            return image.resize((width, 10000), Image.LANCZOS)  # type: ignore
     return image
 
 
@@ -67,8 +63,12 @@ def voyage_v_loader(**kwargs):
             model_name: str,
             **kwargs: Any,
         ):
+            requires_image_dependencies()
+            from torchvision import transforms
+
             self.model_name = model_name.split("/")[-1]
             self.vo = voyageai.Client()
+            self.tensor_to_image = transforms.Compose([transforms.PILToTensor()])
 
         @retry(
             stop=stop_after_attempt(6),  # Stop after 6 attempts
@@ -126,7 +126,7 @@ def voyage_v_loader(**kwargs):
                 images, disable=not show_progress_bar, desc="Image Encoding"
             ):
                 batch_images = [
-                    [downsample_image(tensor_to_image(image))]
+                    [downsample_image(self.tensor_to_image(image))]
                     for image in batch["image"]
                 ]
                 embeddings = self._multimodal_embed(
@@ -171,7 +171,7 @@ def voyage_v_loader(**kwargs):
                     inputs, disable=not show_progress_bar, desc="Interleaved Encoding"
                 ):
                     batch_images = [
-                        downsample_image(tensor_to_image(image))
+                        downsample_image(self.tensor_to_image(image))
                         for image in batch["image"]
                     ]
                     batch_texts = batch["text"]

@@ -10,6 +10,7 @@ from tqdm import tqdm
 from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
+from mteb.requires_package import requires_image_dependencies
 
 
 def openclip_loader(**kwargs):
@@ -25,6 +26,8 @@ def openclip_loader(**kwargs):
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
             **kwargs: Any,
         ):
+            requires_image_dependencies()
+
             self.model_name = model_name
             self.device = device
             self.model, _, self.img_preprocess = open_clip.create_model_and_transforms(

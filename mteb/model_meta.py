@@ -67,7 +67,7 @@ class ModelMeta(BaseModel):
     Attributes:
             loader: the function that loads the model. If None it will assume that the model is not implemented.
             loader_kwargs: The keyword arguments to pass to the loader function.
-            name: The name of the model, ideally the name on huggingface.
+            name: The name of the model, ideally the name on huggingface. It should be in the format "organization/model_name".
             n_parameters: The number of parameters in the model, e.g. 7_000_000 for a 7M parameter model. Can be None if the number of parameters is not known (e.g. for proprietary models) or
                 if the loader returns a SentenceTransformer model from which it can be derived.
             memory_usage_mb: The memory usage of the model in MB. Can be None if the memory usage is not known (e.g. for proprietary models). To calculate it use the `calculate_memory_usage_mb` method.
@@ -94,6 +94,7 @@ class ModelMeta(BaseModel):
                 a benchmark as well as mark dataset contaminations.
             adapted_from: Name of the model from which this model is adapted. For quantizations, fine-tunes, long doc extensions, etc.
             superseded_by: Name of the model that supersedes this model, e.g., nvidia/NV-Embed-v2 supersedes v1.
+            is_cross_encoder: Whether the model can act as a cross-encoder or not.
             modalities: A list of strings representing the modalities the model supports. Default is ["text"].
     """
 
@@ -155,6 +156,17 @@ class ModelMeta(BaseModel):
         loader = dict_repr.pop("loader", None)
         dict_repr["loader"] = get_loader_name(loader)
         return dict_repr
+
+    @field_validator("name")
+    @classmethod
+    def check_name(cls, v: str | None) -> str | None:
+        if v is None or v == "bm25s":
+            return v
+        if "/" not in v:
+            raise ValueError(
+                "Model name must be in the format 'organization/model_name'"
+            )
+        return v
 
     def load_model(self, **kwargs: Any) -> Encoder:
         if self.loader is None:
