@@ -79,6 +79,7 @@ class RetrievalEvaluator(Evaluator):
             )
         elif (
             hasattr(self.retriever.model, "mteb_model_meta")
+            and self.retriever.model.mteb_model_meta is not None
             and self.retriever.model.mteb_model_meta.name == "bm25s"
         ):
             return self.retriever.model.search(
