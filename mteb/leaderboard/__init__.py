@@ -1,5 +1,5 @@
 from __future__ import annotations
 
-from mteb.leaderboard.app import run_leaderboard
+from mteb.leaderboard.app import get_leaderboard_app
 
-__all__ = ["run_leaderboard"]
+__all__ = ["get_leaderboard_app"]
