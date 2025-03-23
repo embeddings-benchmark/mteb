@@ -48,7 +48,6 @@ class ScoringFunction(str, Enum):
     EUCLIDEAN = "euclidean"
     MANHATTAN = "manhattan"
     MODEL_SPECIFIC = "similarity"
-    MAX = "max"
 
 
 def get_loader_name(

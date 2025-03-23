@@ -382,7 +382,7 @@ class TaskResult(BaseModel):
                     (ScoringFunction.MANHATTAN, "manhattan"),
                     (ScoringFunction.EUCLIDEAN, "euclidean"),
                     (ScoringFunction.DOT_PRODUCT, "dot"),
-                    (ScoringFunction.MAX, "max"),
+                    ("max", "max"),
                     (ScoringFunction.MODEL_SPECIFIC, "similarity"),
                 ]:
                     prev_name_scores = hf_subset_scores.pop(prev_name, None)
