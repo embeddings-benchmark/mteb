@@ -13,8 +13,7 @@ from torch.utils.data import DataLoader
 
 import mteb
 import mteb.overview
-from mteb import TaskMetadata
-from mteb.abstasks import AbsTask
+from mteb.abstasks import AbsTask, TaskMetadata
 from mteb.create_meta import generate_readme
 from mteb.evaluation.MTEB import logger
 from mteb.types import Array, BatchedInput, PromptType

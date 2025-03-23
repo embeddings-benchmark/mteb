@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader
 from mteb.types import Array, BatchedInput, PromptType
 
 if TYPE_CHECKING:
-    from mteb import TaskMetadata
+    from mteb.abstasks import TaskMetadata
 
 Corpus = Union[list[dict[str, str]], dict[str, list[str]]]
 
