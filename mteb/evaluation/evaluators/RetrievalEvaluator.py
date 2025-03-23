@@ -28,7 +28,6 @@ class RetrievalEvaluator(Evaluator):
     def __init__(
         self,
         retriever,
-        task_name: str | None = None,
         k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000],
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
@@ -51,7 +50,6 @@ class RetrievalEvaluator(Evaluator):
         self.top_k = (
             max(k_values) if "top_k" not in kwargs else kwargs["top_k"]
         )  # can lower it if reranking
-        self.task_name = task_name
 
     def __call__(
         self,

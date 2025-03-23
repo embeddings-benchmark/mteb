@@ -137,6 +137,8 @@ def test_prompt_name_passed_to_all_encodes(task_name: str | AbsTask, tmp_path: P
             return np.zeros((len(sentences.dataset), 10))
 
     class EncoderWithoutInstructions(MockSentenceTransformer):
+        prompts = {}
+
         def encode(self, sentences: DataLoader, **kwargs):
             assert kwargs["prompt_name"] is None
             return super().encode(sentences, **kwargs)
@@ -330,7 +332,7 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
     eval = mteb.MTEB(tasks=tasks)
 
     # Test that the task_name is passed down to the encoder
-    model = MockSentenceTransformerWrapper(MockEncoderWithExistingPrompts("", ""))
+    model = MockSentenceTransformerWrapper(MockEncoderWithExistingPrompts())
     eval.run(
         model,
         output_folder=tmp_path.as_posix(),

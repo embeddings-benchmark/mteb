@@ -22,6 +22,18 @@ class AbsMockEncoder(AbsEncoder):
     def __init__(self):
         pass
 
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        return np.random.rand(len(inputs.dataset), 10)
+
 
 class MockNumpyEncoder(AbsMockEncoder):
     def encode(

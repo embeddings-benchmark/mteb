@@ -199,7 +199,6 @@ class AbsTaskRetrieval(AbsTask):
     ) -> dict[HFSubset, ScoresDict]:
         retriever = RetrievalEvaluator(
             retriever=model,
-            task_name=self.metadata.name,
             encode_kwargs=encode_kwargs,
             **kwargs,
         )
