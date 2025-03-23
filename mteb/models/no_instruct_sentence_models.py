@@ -7,13 +7,14 @@ import torch
 from torch.utils.data import DataLoader
 from transformers import AutoModel, AutoTokenizer
 
-from mteb.encoder_interface import BatchedInput, PromptType
+from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.utils import batched
-from mteb.models.wrapper import Wrapper
+from mteb.types import Array, BatchedInput, PromptType
 
 
-class NoInstructWrapper(Wrapper):
+class NoInstructAbsEncoder(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -32,15 +33,17 @@ class NoInstructWrapper(Wrapper):
             model_name, revision=revision, **kwargs
         )
 
-    def encode(  # type: ignore
+    def encode(
         self,
         inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
         batch_size: int = 32,
         **kwargs: Any,
-    ):
+    ) -> Array:
         sentences = [text for batch in inputs for text in batch["text"]]
         embeddings = []
         for batch in batched(sentences, batch_size):
@@ -79,7 +82,7 @@ class NoInstructWrapper(Wrapper):
 
 
 no_instruct_small_v0 = ModelMeta(
-    loader=NoInstructWrapper,
+    loader=NoInstructAbsEncoder,
     name="avsolatorio/NoInstruct-small-Embedding-v0",
     languages=["eng-Latn"],
     open_weights=True,

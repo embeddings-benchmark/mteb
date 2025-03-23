@@ -1,20 +1,20 @@
 from __future__ import annotations
 
-from typing import Any, Literal
+from typing import Any
 
-import numpy as np
 import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoModel
 
-from mteb.encoder_interface import BatchedInput, PromptType
-from mteb.model_meta import ModelMeta
-from mteb.models.wrapper import Wrapper
+from mteb.abstasks import TaskMetadata
+from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.requires_package import requires_image_dependencies
+from mteb.types import Array, BatchedInput, PromptType
 
 
-class JinaCLIPModelWrapper(Wrapper):
+class JinaCLIPModelAbsEncoder(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -78,24 +78,16 @@ class JinaCLIPModelWrapper(Wrapper):
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
         return all_image_embeddings
 
-    def calculate_probs(self, text_embeddings, image_embeddings):
-        text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True)
-        image_embeddings = image_embeddings / image_embeddings.norm(
-            dim=-1, keepdim=True
-        )
-        logits = torch.matmul(image_embeddings, text_embeddings.T)
-        probs = (logits * 100).softmax(dim=-1)
-        return probs
-
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
-        fusion_mode: Literal["sum"] = "sum",
         **kwargs: Any,
-    ) -> np.ndarray | torch.Tensor:
+    ) -> Array:
         text_embeddings = None
         image_embeddings = None
         if "text" in inputs.dataset.features:
@@ -112,20 +104,17 @@ class JinaCLIPModelWrapper(Wrapper):
                 raise ValueError(
                     "The number of texts and images must have the same length"
                 )
-            if fusion_mode == "sum":
-                fused_embeddings = text_embeddings + image_embeddings
-            else:
-                # to do: add other fusion mode
-                raise ValueError(f"fusion mode {fusion_mode} hasn't been implemented")
+            fused_embeddings = text_embeddings + image_embeddings
             return fused_embeddings
         elif text_embeddings is not None:
             return text_embeddings
         elif image_embeddings is not None:
             return image_embeddings
+        raise ValueError
 
 
 jina_clip_v1 = ModelMeta(
-    loader=JinaCLIPModelWrapper,  # type: ignore
+    loader=JinaCLIPModelAbsEncoder,  # type: ignore
     name="jinaai/jina-clip-v1",
     languages=["eng_Latn"],
     revision="06150c7c382d7a4faedc7d5a0d8cdb59308968f4",
@@ -141,7 +130,7 @@ jina_clip_v1 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/jinaai/jina-clip-v1",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.VISION,
     use_instructions=True,
     training_datasets={
         # LAION400M

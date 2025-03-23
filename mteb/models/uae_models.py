@@ -3,13 +3,13 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-import numpy as np
 import torch
 from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import BatchedInput, PromptType
+from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
+from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -21,20 +21,22 @@ class UAEWrapper(SentenceTransformerWrapper):
         self,
         inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
-        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+    ) -> Array:
+        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         sentences = [text for batch in inputs for text in batch["text"]]
 
         if prompt_name:
             logger.info(
-                f"Using prompt_name={prompt_name} for task={task_name} prompt_type={prompt_type}"
+                f"Using prompt_name={prompt_name} for task={task_metadata.name} prompt_type={prompt_type}"
             )
         else:
             logger.info(
-                f"No model prompts found for task={task_name} prompt_type={prompt_type}"
+                f"No model prompts found for task={task_metadata.name} prompt_type={prompt_type}"
             )
         logger.info(f"Encoding {len(sentences)} sentences.")
         if prompt_name and prompt_name in self.model.prompts:

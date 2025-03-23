@@ -10,7 +10,7 @@ import numpy as np
 import torch
 
 from mteb.encoder_interface import Encoder
-from mteb.models.wrapper import Wrapper
+from mteb.models.abs_encoder import AbsEncoder
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -202,7 +202,7 @@ class TextVectorMap:
         logger.info(f"Closed TextVectorMap in directory: {self.directory}")
 
 
-class CachedEmbeddingWrapper(Wrapper, Encoder):
+class CachedEmbeddingWrapper(AbsEncoder, Encoder):
     def __init__(self, model: Encoder, cache_path: str | Path):
         self._model = model
         self.cache_path = Path(cache_path)

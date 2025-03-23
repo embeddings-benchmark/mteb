@@ -6,15 +6,16 @@ from typing import Any
 import numpy as np
 from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import BatchedInput
+from mteb import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.bge_models import bge_training_data
-from mteb.models.wrapper import Wrapper
+from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
 
-class Model2VecWrapper(Wrapper):
+class Model2VecAbsEncoder(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -39,23 +40,19 @@ class Model2VecWrapper(Wrapper):
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
-        """Encodes the given sentences using the encoder.
-
-        Args:
-            inputs: The sentences to encode.
-            **kwargs: Additional arguments to pass to the encoder.
-
-        Returns:
-            The encoded sentences.
-        """
+    ) -> Array:
         sentences = [text for batch in inputs for text in batch["text"]]
         return self.model.encode(sentences).astype(np.float32)
 
 
 m2v_base_glove_subword = ModelMeta(
-    loader=Model2VecWrapper,
+    loader=Model2VecAbsEncoder,
     name="minishlab/M2V_base_glove_subword",
     languages=["eng_Latn"],
     open_weights=True,
@@ -79,7 +76,7 @@ m2v_base_glove_subword = ModelMeta(
 
 
 m2v_base_glove = ModelMeta(
-    loader=Model2VecWrapper,
+    loader=Model2VecAbsEncoder,
     name="minishlab/M2V_base_glove",
     languages=["eng_Latn"],
     open_weights=True,
@@ -102,7 +99,7 @@ m2v_base_glove = ModelMeta(
 )
 
 m2v_base_output = ModelMeta(
-    loader=Model2VecWrapper,
+    loader=Model2VecAbsEncoder,
     name="minishlab/M2V_base_output",
     languages=["eng_Latn"],
     open_weights=True,
@@ -125,7 +122,7 @@ m2v_base_output = ModelMeta(
 )
 
 m2v_multilingual_output = ModelMeta(
-    loader=Model2VecWrapper,
+    loader=Model2VecAbsEncoder,
     name="minishlab/M2V_multilingual_output",
     languages=["eng_Latn"],
     open_weights=True,
@@ -148,7 +145,7 @@ m2v_multilingual_output = ModelMeta(
 )
 
 potion_base_2m = ModelMeta(
-    loader=Model2VecWrapper,
+    loader=Model2VecAbsEncoder,
     name="minishlab/potion-base-2M",
     languages=["eng_Latn"],
     open_weights=True,
@@ -171,7 +168,7 @@ potion_base_2m = ModelMeta(
 )
 
 potion_base_4m = ModelMeta(
-    loader=Model2VecWrapper,
+    loader=Model2VecAbsEncoder,
     name="minishlab/potion-base-4M",
     languages=["eng_Latn"],
     open_weights=True,
@@ -194,7 +191,7 @@ potion_base_4m = ModelMeta(
 )
 
 potion_base_8m = ModelMeta(
-    loader=Model2VecWrapper,
+    loader=Model2VecAbsEncoder,
     name="minishlab/potion-base-8M",
     languages=["eng_Latn"],
     open_weights=True,

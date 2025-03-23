@@ -4,7 +4,7 @@ import logging
 from typing import Literal
 
 from mteb.model_meta import ModelMeta
-from mteb.models.wrapper import Wrapper
+from mteb.models.abs_encoder import AbsEncoder
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +18,7 @@ def bm25_loader(name: str, **kwargs):
             "bm25s or PyStemmer is not installed. Please install it with `pip install mteb[bm25s]`."
         )
 
-    class BM25Search(Wrapper):
+    class BM25Search(AbsEncoder):
         """BM25 search"""
 
         def __init__(

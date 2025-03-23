@@ -3,15 +3,15 @@ from __future__ import annotations
 import logging
 from typing import Any, Literal
 
-import numpy as np
 import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoConfig, AutoModelForCausalLM, AutoProcessor
 
-from mteb.encoder_interface import BatchedInput, PromptType
-from mteb.model_meta import ModelMeta
+from mteb.abstasks import TaskMetadata
+from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.requires_package import requires_image_dependencies
+from mteb.types import Array, BatchedInput, PromptType
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
@@ -191,24 +191,16 @@ class VLM2VecWrapper:
         all_text_embeddings = torch.cat(all_text_embeddings, dim=0)
         return all_text_embeddings
 
-    def calculate_probs(self, text_embeddings, image_embeddings):
-        text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True)
-        image_embeddings = image_embeddings / image_embeddings.norm(
-            dim=-1, keepdim=True
-        )
-        logits = torch.matmul(image_embeddings, text_embeddings.T)
-        probs = (logits * 100).softmax(dim=-1)
-        return probs
-
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
-        fusion_mode: Literal["sum"] = "sum",
         **kwargs: Any,
-    ) -> np.ndarray | torch.Tensor:
+    ) -> Array:
         if "text" in inputs.dataset.features and "image" in inputs.dataset.features:
             all_fused_embeddings = []
 
@@ -257,6 +249,7 @@ class VLM2VecWrapper:
         elif "text" in inputs.dataset.features:
             text_embeddings = self.get_text_embeddings(inputs, **kwargs)
             return text_embeddings
+        raise ValueError
 
 
 vlm2vec_training_datasets = {
@@ -280,7 +273,7 @@ vlm2vec_lora = ModelMeta(
     public_training_data="https://huggingface.co/datasets/TIGER-Lab/MMEB-train",
     framework=["PyTorch"],
     reference="https://huggingface.co/TIGER-Lab/VLM2Vec-LoRA",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.VISION,
     use_instructions=True,
     training_datasets=vlm2vec_training_datasets,
 )
@@ -302,7 +295,7 @@ vlm2vec_full = ModelMeta(
     public_training_data="https://huggingface.co/TIGER-Lab/VLM2Vec-Full",
     framework=["PyTorch"],
     reference="https://huggingface.co/TIGER-Lab/VLM2Vec-Full",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.VISION,
     use_instructions=True,
     training_datasets=vlm2vec_training_datasets,
 )

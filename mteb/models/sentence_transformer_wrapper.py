@@ -9,22 +9,22 @@ import torch
 from sentence_transformers import CrossEncoder, SentenceTransformer
 from torch.utils.data import DataLoader
 
-from mteb.models.base_encoder import BaseEncoder
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
 
 if TYPE_CHECKING:
-    from mteb import TaskMetadata
+    from mteb import Encoder, TaskMetadata
 
 logger = logging.getLogger(__name__)
 
 
 def sentence_transformers_loader(
     model_name: str, revision: str | None = None, **kwargs
-) -> SentenceTransformerWrapper:
+) -> Encoder:
     return SentenceTransformerWrapper(model=model_name, revision=revision, **kwargs)
 
 
-class SentenceTransformerWrapper(BaseEncoder):
+class SentenceTransformerWrapper(AbsEncoder):
     def __init__(
         self,
         model: str | SentenceTransformer | CrossEncoder,

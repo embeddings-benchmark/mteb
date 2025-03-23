@@ -1,16 +1,16 @@
 from __future__ import annotations
 
-from typing import Any, Literal
+from typing import Any
 
-import numpy as np
 import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from mteb.encoder_interface import BatchedInput, PromptType
-from mteb.model_meta import ModelMeta
-from mteb.models.wrapper import Wrapper
+from mteb.abstasks import TaskMetadata
+from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.requires_package import requires_image_dependencies
+from mteb.types import Array, BatchedInput, PromptType
 
 
 def openclip_loader(**kwargs):
@@ -19,7 +19,7 @@ def openclip_loader(**kwargs):
     except ImportError:
         raise ImportError("Please run `pip install open_clip_torch`.")
 
-    class OpenCLIPWrapper(Wrapper):
+    class OpenCLIPAbsEncoder(AbsEncoder):
         def __init__(
             self,
             model_name: str = "laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K",
@@ -91,11 +91,12 @@ def openclip_loader(**kwargs):
             self,
             inputs: DataLoader[BatchedInput],
             *,
-            task_name: str,
+            task_metadata: TaskMetadata,
+            hf_split: str,
+            hf_subset: str,
             prompt_type: PromptType | None = None,
-            fusion_mode: Literal["sum"] = "sum",
             **kwargs: Any,
-        ) -> np.ndarray | torch.Tensor:
+        ) -> Array:
             text_embeddings = None
             image_embeddings = None
             if "text" in inputs.dataset.features:
@@ -108,20 +109,15 @@ def openclip_loader(**kwargs):
                     raise ValueError(
                         "The number of texts and images must have the same length"
                     )
-                if fusion_mode == "sum":
-                    fused_embeddings = text_embeddings + image_embeddings
-                else:
-                    # to do: add other fusion mode
-                    raise ValueError(
-                        f"fusion mode {fusion_mode} hasn't been implemented"
-                    )
+                fused_embeddings = text_embeddings + image_embeddings
                 return fused_embeddings
             elif text_embeddings is not None:
                 return text_embeddings
             elif image_embeddings is not None:
                 return image_embeddings
+            raise ValueError
 
-    return OpenCLIPWrapper(**kwargs)
+    return OpenCLIPAbsEncoder(**kwargs)
 
 
 CLIP_ViT_L_14_DataComp_XL_s13B_b90K = ModelMeta(
@@ -141,7 +137,7 @@ CLIP_ViT_L_14_DataComp_XL_s13B_b90K = ModelMeta(
     public_training_data="https://huggingface.co/datasets/mlfoundations/datacomp_1b",
     framework=["PyTorch"],
     reference="https://huggingface.co/laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.VISION,
     use_instructions=False,
     training_datasets={
         # DataComp-1B
@@ -165,7 +161,7 @@ CLIP_ViT_B_32_DataComp_XL_s13B_b90K = ModelMeta(
     public_training_data="https://huggingface.co/datasets/mlfoundations/datacomp_1b",
     framework=["PyTorch"],
     reference="https://huggingface.co/laion/CLIP-ViT-B-32-DataComp.XL-s13B-b90K",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.VISION,
     use_instructions=False,
     training_datasets={
         # DataComp-1B
@@ -189,7 +185,7 @@ CLIP_ViT_B_16_DataComp_XL_s13B_b90K = ModelMeta(
     public_training_data="https://huggingface.co/datasets/mlfoundations/datacomp_1b",
     framework=["PyTorch"],
     reference="https://huggingface.co/laion/CLIP-ViT-B-16-DataComp.XL-s13B-b90K",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.VISION,
     use_instructions=False,
     training_datasets={
         # DataComp-1B
@@ -213,7 +209,7 @@ CLIP_ViT_bigG_14_laion2B_39B_b160k = ModelMeta(
     public_training_data="https://laion.ai/blog/laion-5b/",
     framework=["PyTorch"],
     reference="https://huggingface.co/laion/CLIP-ViT-bigG-14-laion2B-39B-b160k",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.VISION,
     use_instructions=False,
     training_datasets={
         # 2 Billion sample English subset of LAION-5B
@@ -237,7 +233,7 @@ CLIP_ViT_g_14_laion2B_s34B_b88K = ModelMeta(
     public_training_data="https://laion.ai/blog/laion-5b/",
     framework=["PyTorch"],
     reference="https://huggingface.co/laion/CLIP-ViT-g-14-laion2B-s34B-b88K",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.VISION,
     use_instructions=False,
     training_datasets={
         # 2 Billion sample English subset of LAION-5B
@@ -261,7 +257,7 @@ CLIP_ViT_H_14_laion2B_s32B_b79K = ModelMeta(
     public_training_data="https://laion.ai/blog/laion-5b/",
     framework=["PyTorch"],
     reference="https://huggingface.co/laion/CLIP-ViT-H-14-laion2B-s32B-b79K",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.VISION,
     use_instructions=False,
     training_datasets={
         # 2 Billion sample English subset of LAION-5B
@@ -285,7 +281,7 @@ CLIP_ViT_L_14_laion2B_s32B_b82K = ModelMeta(
     public_training_data="https://laion.ai/blog/laion-5b/",
     framework=["PyTorch"],
     reference="https://huggingface.co/laion/CLIP-ViT-L-14-laion2B-s32B-b82K",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.VISION,
     use_instructions=False,
     training_datasets={
         # 2 Billion sample English subset of LAION-5B
@@ -309,7 +305,7 @@ CLIP_ViT_B_32_laion2B_s34B_b79K = ModelMeta(
     public_training_data="https://laion.ai/blog/laion-5b/",
     framework=["PyTorch"],
     reference="https://huggingface.co/laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.VISION,
     use_instructions=False,
     training_datasets={
         # 2 Billion sample English subset of LAION-5B

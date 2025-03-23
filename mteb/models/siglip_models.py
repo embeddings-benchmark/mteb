@@ -1,15 +1,15 @@
 from __future__ import annotations
 
-from typing import Any, Literal
+from typing import Any
 
-import numpy as np
 import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoModel, AutoProcessor
 
-from mteb.encoder_interface import BatchedInput, PromptType
-from mteb.model_meta import ModelMeta
+from mteb.abstasks import TaskMetadata
+from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.types import Array, BatchedInput, PromptType
 
 
 class SiglipModelWrapper:
@@ -74,33 +74,16 @@ class SiglipModelWrapper:
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
         return all_image_embeddings
 
-    def calculate_probs(self, text_embeddings, image_embeddings):
-        # normalized features
-        image_embeddings = image_embeddings / image_embeddings.norm(
-            p=2, dim=-1, keepdim=True
-        )
-        text_embeddings = text_embeddings / text_embeddings.norm(
-            p=2, dim=-1, keepdim=True
-        )
-
-        # cosine similarity as logits
-        logits_per_text = torch.matmul(
-            text_embeddings, image_embeddings.t().to(text_embeddings.device)
-        ) * self.model.logit_scale.exp().to(
-            text_embeddings.device
-        ) + self.model.logit_bias.to(text_embeddings.device)
-        logits_per_image = logits_per_text.t()
-        return logits_per_image
-
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
-        fusion_mode: Literal["sum"] = "sum",
         **kwargs: Any,
-    ) -> np.ndarray | torch.Tensor:
+    ) -> Array:
         text_embeddings = None
         image_embeddings = None
         if "text" in inputs.dataset.features:
@@ -113,16 +96,13 @@ class SiglipModelWrapper:
                 raise ValueError(
                     "The number of texts and images must have the same length"
                 )
-            if fusion_mode == "sum":
-                fused_embeddings = text_embeddings + image_embeddings
-            else:
-                # to do: add other fusion mode
-                raise ValueError(f"fusion mode {fusion_mode} hasn't been implemented")
+            fused_embeddings = text_embeddings + image_embeddings
             return fused_embeddings
         elif text_embeddings is not None:
             return text_embeddings
         elif image_embeddings is not None:
             return image_embeddings
+        raise ValueError
 
 
 siglip_training_datasets = {
@@ -146,7 +126,7 @@ siglip_so400m_patch14_224 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/google/siglip-so400m-patch14-224",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.VISION,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
 )
@@ -168,7 +148,7 @@ siglip_so400m_patch14_384 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/google/siglip-so400m-patch14-384",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.VISION,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
 )
@@ -190,7 +170,7 @@ siglip_so400m_patch16_256_i18n = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/google/siglip-so400m-patch16-256-i18n",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.VISION,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
 )
@@ -212,7 +192,7 @@ siglip_base_patch16_256_multilingual = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/google/siglip-base-patch16-256-multilingual",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.VISION,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
 )
@@ -234,7 +214,7 @@ siglip_base_patch16_256 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/google/siglip-base-patch16-256",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.VISION,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
 )
@@ -256,7 +236,7 @@ siglip_base_patch16_512 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/google/siglip-base-patch16-512",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.VISION,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
 )
@@ -278,7 +258,7 @@ siglip_base_patch16_384 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/google/siglip-base-patch16-384",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.VISION,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
 )
@@ -300,7 +280,7 @@ siglip_base_patch16_224 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/google/siglip-base-patch16-224",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.VISION,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
 )
@@ -322,7 +302,7 @@ siglip_large_patch16_256 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/google/siglip-large-patch16-256",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.VISION,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
 )
@@ -344,7 +324,7 @@ siglip_large_patch16_384 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/google/siglip-large-patch16-384",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.VISION,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
 )

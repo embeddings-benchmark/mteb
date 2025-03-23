@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import logging
-from abc import ABC
-from typing import Callable, get_args
+from abc import ABC, abstractmethod
+from typing import Any, Callable, get_args
+
+from torch.utils.data import DataLoader
 
 import mteb
 from mteb.abstasks.TaskMetadata import TASK_TYPE, TaskMetadata
-from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.similarity_functions import (
     cos_sim,
@@ -15,13 +16,14 @@ from mteb.similarity_functions import (
     pairwise_cos_sim,
     pairwise_dot_score,
     pairwise_max_sim,
+    vision_similarity,
 )
-from mteb.types import Array, PromptType
+from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
 
-class BaseEncoder(Encoder, ABC):
+class AbsEncoder(ABC):
     """Base class to indicate that this is a wrapper for a model.
     Also contains some utility functions for wrappers for working with prompts and instructions.
     """
@@ -71,8 +73,45 @@ class BaseEncoder(Encoder, ABC):
         elif self.mteb_model_meta.similarity_fn_name is ScoringFunction.DOT_PRODUCT:
             return pairwise_dot_score(embeddings1, embeddings2)
         elif self.mteb_model_meta.similarity_fn_name is ScoringFunction.MAX_SIM:
-            raise pairwise_max_sim(embeddings1, embeddings2)
+            return pairwise_max_sim(embeddings1, embeddings2)
+        elif self.mteb_model_meta.similarity_fn_name is ScoringFunction.VISION:
+            return vision_similarity(embeddings1, embeddings2)
         raise ValueError("Similarity function not specified.")
+
+    @abstractmethod
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        """Encodes the given sentences using the encoder.
+
+        Args:
+            inputs: Batch of inputs to encode.
+            task_metadata: The metadata of the task. Sentence-transformers uses this to
+                determine which prompt to use from a specified dictionary.
+                The order of priorities for prompt selection are:
+                    1. Composed prompt of task name + prompt type (query or passage)
+                    2. Specific task prompt
+                    3. Composed prompt of task type + prompt type (query or passage)
+                    4. Specific task type prompt
+                    5. Specific prompt type (query or passage)
+            hf_split: Split of current task
+            hf_subset: Subset of current task
+            prompt_type: The name type of prompt. (query or passage)
+            **kwargs: Additional arguments to pass to the encoder.
+
+        Returns:
+            The encoded input in a numpy array or torch tensor of the shape (Number of sentences) x (Embedding dimension).
+        """
+        raise NotImplementedError(
+            "The encode method must be implemented in the subclass."
+        )
 
     def get_prompt_name(
         self,
@@ -150,9 +189,8 @@ class BaseEncoder(Encoder, ABC):
                     logger.warning(msg)
                     raise KeyError(msg)
 
-    @staticmethod
     def get_instruction(
-        task_metadata: TaskMetadata, prompt_type: PromptType | None
+        self, task_metadata: TaskMetadata, prompt_type: PromptType | None
     ) -> str:
         """Get the instruction/prompt to be used for encoding sentences."""
         if isinstance(task_metadata.prompt, dict) and prompt_type:
@@ -185,3 +223,19 @@ class BaseEncoder(Encoder, ABC):
         if self.instruction_template:
             return self.format_instruction(instruction)
         return instruction
+
+    def combine_query_and_instruction(
+        self,
+        query: str,
+        instruction: str,
+    ) -> str:
+        """Combines a query with an instruction.
+
+        Args:
+            query: The query text to combine.
+            instruction: The instruction text to combine with the query.
+
+        Returns:
+            The combined query and instruction text.
+        """
+        return f"{query} {instruction}"
