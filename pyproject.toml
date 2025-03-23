@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.36.28"
+version = "1.36.31"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -40,7 +40,6 @@ dependencies = [
     "typing_extensions>=0.0.0",
     "eval_type_backport>=0.0.0",
     "polars>=0.20.22",
-    "torchvision>0.0.0",
 ]
 
 
@@ -53,6 +52,7 @@ homepage = "https://github.com/embeddings-benchmark/mteb"
 mteb = "mteb.cli:main"
 
 [project.optional-dependencies]
+image = ["torchvision>0.2.1"]
 dev = [
 "ruff==0.9.7", # locked so we don't get PRs which fail only due to a lint update
 "pytest>=8.3.4",

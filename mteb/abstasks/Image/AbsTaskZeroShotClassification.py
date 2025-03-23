@@ -79,8 +79,7 @@ class AbsTaskZeroShotClassification(AbsTask):
             imgs = self.dataset[hf_subset][split][self.image_column_name]
             labels = self.dataset[hf_subset][split][self.label_column_name]
         elif compute_overall:
-            imgs = []
-            labels = []
+            imgs, labels = [], []
             for hf_subset in self.metadata.eval_langs:
                 imgs.extend(self.dataset[hf_subset][split][self.image_column_name])
                 labels.extend(self.dataset[hf_subset][split][self.label_column_name])
@@ -94,12 +93,11 @@ class AbsTaskZeroShotClassification(AbsTask):
 
         img_widths, img_heights = [], []
         for img in imgs:
-            width, height = img.size
+            width, height = img.size  # type: ignore
             img_heights.append(height)
             img_widths.append(width)
 
-        candidate_labels = self.get_candidate_labels()
-        candidate_labels_len = [len(c) for c in candidate_labels]
+        candidate_labels_len = [len(c) for c in self.get_candidate_labels()]
 
         return ZeroShotClassificationDescriptiveStatistics(
             num_samples=num_samples,
@@ -131,7 +129,6 @@ class AbsTaskZeroShotClassification(AbsTask):
         evaluator = ZeroShotClassificationEvaluator(
             dataset,
             self.image_column_name,
-            # dataset[self.image_column_name],#broken into dataset and self.image_column_name
             dataset[self.label_column_name],
             candidate_labels,
             task_name=self.metadata.name,

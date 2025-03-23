@@ -207,7 +207,9 @@ def run_leaderboard():
     logger.info("Loading all benchmark results")
     all_results = load_results()
 
-    benchmarks = sorted(mteb.get_benchmarks(), key=lambda x: x.name)
+    benchmarks = sorted(
+        mteb.get_benchmarks(display_on_leaderboard=True), key=lambda x: x.name
+    )
     all_benchmark_results = {
         benchmark.name: benchmark.load_results(
             base_results=all_results
@@ -286,9 +288,9 @@ def run_leaderboard():
         gr.Markdown(
             """
         ## Embedding Leaderboard
-    
+
         This leaderboard compares 100+ text and image (soon) embedding models across 1000+ languages. We refer to the publication of each selectable benchmark for details on metrics, languages, tasks, and task types. Anyone is welcome [to add a model](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_model.md), [add benchmarks](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_benchmark.md), [help us improve zero-shot annotations](https://github.com/embeddings-benchmark/mteb/blob/06489abca007261c7e6b11f36d4844c5ed5efdcb/mteb/models/bge_models.py#L91) or [propose other changes to the leaderboard](https://github.com/embeddings-benchmark/mteb/tree/main/mteb/leaderboard) 🤗 Also, check out [MTEB Arena](https://huggingface.co/spaces/mteb/arena) ⚔️
-    
+
         > Looking for the previous MTEB leaderboard? We have made it available [here](https://huggingface.co/spaces/mteb/leaderboard_legacy) but it will no longer be updated.
         """
         )
@@ -418,9 +420,9 @@ def run_leaderboard():
                 gr.Markdown(
                     """
         **Rank(borda)** is computed based on the [borda count](https://en.wikipedia.org/wiki/Borda_count), where each task is treated as a preference voter, which gives votes on the models per their relative performance on the task. The best model obtains the highest number of votes. The model with the highest number of votes across tasks obtains the highest rank. The Borda rank tends to prefer models that perform well broadly across tasks. However, given that it is a rank it can be unclear if the two models perform similarly.
-    
+
         **Mean(Task)**: This is a naïve average computed across all the tasks within the benchmark. This score is simple to understand and is continuous as opposed to the Borda rank. However, the mean can overvalue tasks with higher variance in its scores.
-    
+
         **Mean(TaskType)**: This is a weighted average across different task categories, such as classification or retrieval. It is computed by first computing the average by task category and then computing the average on each category. Similar to the Mean(Task) this measure is continuous and tends to overvalue tasks with higher variance. This score also prefers models that perform well across all task categories.
                 """
                 )
@@ -458,7 +460,7 @@ def run_leaderboard():
                 gr.Markdown(
                     """
     Possible reasons why a model may not show up in the leaderboard:
-    
+
     - **Filter Setting**: It is being filtered out with your current filter. By default, we do not show models that are not zero-shot on the benchmark.
     You can change this setting in the model selection panel.
     - **Missing Results**: The model may not have been run on the tasks in the benchmark. We only display models that have been run on at least one task
