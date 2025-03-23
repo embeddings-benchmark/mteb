@@ -25,7 +25,7 @@ def searchmap_loader(gpu_id=0):
         trust_remote_code=True,
         device=f"cuda:{gpu_id}"
     )
-    # Only enable memory optimizations that don't affect outputs
+
     if hasattr(model, "encoder"):
         # Configure for inference only
         model.encoder.eval()  # Ensure eval mode
