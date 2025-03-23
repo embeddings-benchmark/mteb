@@ -48,7 +48,7 @@ class AbsEncoder(ABC):
             return cos_sim(embeddings1, embeddings2)
         elif self.mteb_model_meta.similarity_fn_name is ScoringFunction.DOT_PRODUCT:
             return dot_score(embeddings1, embeddings2)
-        elif self.mteb_model_meta.similarity_fn_namze is ScoringFunction.MAX_SIM:
+        elif self.mteb_model_meta.similarity_fn_name is ScoringFunction.MAX_SIM:
             return max_sim(embeddings1, embeddings2)
         raise ValueError("Similarity function not specified.")
 
