@@ -16,6 +16,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from mteb.abstasks import TaskMetadata
 from mteb.create_dataloaders import create_image_dataloader
 from mteb.encoder_interface import Encoder
+from mteb.model_meta import ScoringFunction
 from mteb.similarity_functions import cos_sim, dot_score, euclidean_sim
 
 from ..Evaluator import Evaluator
@@ -92,7 +93,10 @@ class ImagekNNClassificationEvaluator(Evaluator):
             test_cache = X_test
         else:
             X_test = test_cache
-        for metric in ["cosine", "euclidean"]:  # TODO: "dot"
+        for metric in [
+            ScoringFunction.COSINE,
+            ScoringFunction.EUCLIDEAN,
+        ]:  # TODO: "dot"
             knn = KNeighborsClassifier(n_neighbors=self.k, n_jobs=-1, metric=metric)
             knn.fit(X_train, self.y_train)
             y_pred = knn.predict(X_test)
@@ -184,12 +188,16 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
             test_cache = X_test
         else:
             X_test = test_cache
-        for metric in ["cosine", "euclidean", "dot"]:
-            if metric == "cosine":
+        for metric in [
+            ScoringFunction.COSINE,
+            ScoringFunction.EUCLIDEAN,
+            ScoringFunction.DOT_PRODUCT,
+        ]:
+            if metric == ScoringFunction.COSINE:
                 distances = 1 - cos_sim(X_test, X_train)
-            elif metric == "euclidean":
+            elif metric == ScoringFunction.EUCLIDEAN:
                 distances = euclidean_sim(X_test, X_train)
-            elif metric == "dot":
+            elif metric == ScoringFunction.DOT_PRODUCT:
                 distances = -dot_score(X_test, X_train)
             neigh_indices = torch.topk(
                 distances, k=self.k, dim=1, largest=False
@@ -201,14 +209,14 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
             y_pred = y_pred.tolist()
             accuracy = accuracy_score(self.y_test, y_pred)
             f1 = f1_score(self.y_test, y_pred, average="macro")
-            scores["accuracy_" + metric] = accuracy
-            scores["f1_" + metric] = f1
+            scores["accuracy_" + metric.value] = accuracy
+            scores["f1_" + metric.value] = f1
             max_accuracy = max(max_accuracy, accuracy)
             max_f1 = max(max_f1, f1)  # type: ignore
             # if binary classification
             if len(np.unique(self.y_train)) == 2:
                 ap = average_precision_score(self.y_test, y_pred)
-                scores["ap_" + metric] = ap
+                scores["ap_" + metric.value] = ap
                 max_ap = max(max_ap, ap)
         scores["accuracy"] = max_accuracy
         scores["f1"] = max_f1

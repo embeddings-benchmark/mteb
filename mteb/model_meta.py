@@ -4,7 +4,7 @@ import logging
 from collections.abc import Sequence
 from dataclasses import field
 from enum import Enum
-from typing import TYPE_CHECKING, Any, Callable, Literal, cast
+from typing import Any, Callable, Literal, cast
 
 from huggingface_hub import get_safetensors_metadata
 from huggingface_hub.errors import (
@@ -19,10 +19,6 @@ from mteb.encoder_interface import Encoder
 
 from .custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
 from .languages import ISO_LANGUAGE_SCRIPT
-
-if TYPE_CHECKING:
-    pass
-
 
 logger = logging.getLogger(__name__)
 
@@ -44,6 +40,9 @@ class ScoringFunction(str, Enum):
     COSINE = "cosine"
     DOT_PRODUCT = "dot"
     MAX_SIM = "MaxSim"
+    EUCLIDEAN = "euclidean"
+    MANHATTAN = "manhattan"
+    MODEL_SPECIFIC = "similarity"
     VISION = "vision"
 
 
