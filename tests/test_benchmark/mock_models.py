@@ -160,12 +160,7 @@ class MockMocoEncoder(AbsMockEncoder):
     )
 
 
-class MockSentenceTransformer(SentenceTransformer):
-    """A mock implementation of the SentenceTransformer intended to implement just the encode, method using the same arguments."""
-
-    def __init__(self, *args, **kwargs):
-        pass
-
+class MockSentenceTransformer(MockSentenceTransformersbf16Encoder):
     def encode(
         self,
         sentences: list[str],
