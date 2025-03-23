@@ -45,6 +45,9 @@ class ScoringFunction(str, Enum):
     COSINE = "cosine"
     DOT_PRODUCT = "dot"
     MAX_SIM = "MaxSim"
+    EUCLIDEAN = "euclidean"
+    MANHATTAN = "manhattan"
+    MODEL_SPECIFIC = "similarity"
 
 
 def get_loader_name(
