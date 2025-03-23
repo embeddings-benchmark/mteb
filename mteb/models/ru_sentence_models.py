@@ -92,7 +92,7 @@ sbert_large_mt_nlu_ru = ModelMeta(
     n_parameters=427_000_000,
     memory_usage_mb=1629,
     embed_dim=1024,
-    license="Not specified",
+    license="not specified",
     max_tokens=512,  # best guess
     reference="https://huggingface.co/ai-forever/sbert_large_mt_nlu_ru",
     similarity_fn_name="cosine",
@@ -248,7 +248,7 @@ rubert_base_cased = ModelMeta(
     n_parameters=1280_000_000,
     memory_usage_mb=4883,
     embed_dim=768,
-    license="Not specified",
+    license="not specified",
     max_tokens=512,
     reference="https://huggingface.co/DeepPavlov/rubert-base-cased",
     similarity_fn_name="cosine",
@@ -273,7 +273,7 @@ distilrubert_small_cased_conversational = ModelMeta(
     n_parameters=107_000_000,
     memory_usage_mb=408,
     embed_dim=768,
-    license="Not specified",
+    license="not specified",
     max_tokens=512,
     reference="https://huggingface.co/DeepPavlov/distilrubert-small-cased-conversational",
     similarity_fn_name="cosine",
@@ -296,7 +296,7 @@ rubert_base_cased_sentence = ModelMeta(
     n_parameters=107_000_000,
     memory_usage_mb=408,
     embed_dim=768,
-    license="Not specified",
+    license="not specified",
     max_tokens=512,
     reference="https://huggingface.co/DeepPavlov/rubert-base-cased-sentence",
     similarity_fn_name="cosine",
@@ -319,7 +319,7 @@ labse_en_ru = ModelMeta(
     n_parameters=129_000_000,
     memory_usage_mb=492,
     embed_dim=768,
-    license="Not specified",
+    license="not specified",
     max_tokens=512,
     reference="https://huggingface.co/cointegrated/LaBSE-en-ru",
     similarity_fn_name="cosine",
@@ -357,6 +357,32 @@ rubert_tiny_turbo = ModelMeta(
     adapted_from="cointegrated/rubert-tiny2",
 )
 
+rubert_mini_frida = ModelMeta(
+    name="sergeyzh/rubert-mini-frida",
+    languages=["rus_Cyrl"],
+    open_weights=True,
+    revision="19b279b78afd945b5ccae78f63e284909814adc2",
+    release_date="2025-03-02",
+    n_parameters=32_300_000,
+    memory_usage_mb=123,
+    embed_dim=312,
+    license="mit",
+    max_tokens=2048,
+    reference="https://huggingface.co/sergeyzh/rubert-mini-frida",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets={
+        # https://huggingface.co/datasets/IlyaGusev/gazeta
+        # https://huggingface.co/datasets/zloelias/lenta-ru
+        # https://huggingface.co/datasets/HuggingFaceFW/fineweb-2
+        # https://huggingface.co/datasets/HuggingFaceFW/fineweb
+    },
+    adapted_from="sergeyzh/rubert-mini-sts",
+)
+
 labse_ru_turbo = ModelMeta(
     name="sergeyzh/LaBSE-ru-turbo",
     languages=["rus_Cyrl"],
@@ -375,6 +401,32 @@ labse_ru_turbo = ModelMeta(
     training_datasets=turbo_models_datasets,
     public_training_code=None,
     adapted_from="cointegrated/LaBSE-en-ru",
+    public_training_data=None,
+)
+
+berta = ModelMeta(
+    name="sergeyzh/BERTA",
+    languages=["rus_Cyrl"],
+    open_weights=True,
+    revision="914c8c8aed14042ed890fc2c662d5e9e66b2faa7",
+    release_date="2025-03-10",
+    n_parameters=128_000_000,
+    memory_usage_mb=489,
+    embed_dim=768,
+    license="mit",
+    max_tokens=512,
+    reference="https://huggingface.co/sergeyzh/BERTA",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=True,
+    training_datasets={
+        # https://huggingface.co/datasets/IlyaGusev/gazeta
+        # https://huggingface.co/datasets/zloelias/lenta-ru
+        # https://huggingface.co/datasets/HuggingFaceFW/fineweb-2
+        # https://huggingface.co/datasets/HuggingFaceFW/fineweb
+    },
+    public_training_code=None,
+    adapted_from="sergeyzh/LaBSE-ru-turbo",
     public_training_data=None,
 )
 

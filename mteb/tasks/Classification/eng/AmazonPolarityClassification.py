@@ -25,8 +25,8 @@ class AmazonPolarityClassification(AbsTaskClassification):
         ),  # Estimated range for the collection of reviews
         domains=["Reviews", "Written"],
         task_subtypes=["Sentiment/Hate speech"],
-        license="not specified",
         annotations_creators="derived",
+        license="apache-2.0",
         dialect=[],
         sample_creation="found",
         bibtex_citation="""@article{McAuley2013HiddenFA,

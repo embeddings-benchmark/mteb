@@ -16,6 +16,18 @@ UrlString = Annotated[
 ]  # Allows the type to be a string, but ensures that the string is a URL
 
 
+MMTEB_CITATION = """
+@article{enevoldsen2025mmtebmassivemultilingualtext,
+      title={MMTEB: Massive Multilingual Text Embedding Benchmark}, 
+      author={Kenneth Enevoldsen and Isaac Chung and Imene Kerboua and Márton Kardos and Ashwin Mathur and David Stap and Jay Gala and Wissam Siblini and Dominik Krzemiński and Genta Indra Winata and Saba Sturua and Saiteja Utpala and Mathieu Ciancone and Marion Schaeffer and Gabriel Sequeira and Diganta Misra and Shreeya Dhakal and Jonathan Rystrøm and Roman Solomatin and Ömer Çağatan and Akash Kundu and Martin Bernstorff and Shitao Xiao and Akshita Sukhlecha and Bhavish Pahwa and Rafał Poświata and Kranthi Kiran GV and Shawon Ashraf and Daniel Auras and Björn Plüster and Jan Philipp Harries and Loïc Magne and Isabelle Mohr and Mariya Hendriksen and Dawei Zhu and Hippolyte Gisserot-Boukhlef and Tom Aarsen and Jan Kostkan and Konrad Wojtasik and Taemin Lee and Marek Šuppa and Crystina Zhang and Roberta Rocca and Mohammed Hamdy and Andrianos Michail and John Yang and Manuel Faysse and Aleksei Vatolin and Nandan Thakur and Manan Dey and Dipam Vasani and Pranjal Chitale and Simone Tedeschi and Nguyen Tai and Artem Snegirev and Michael Günther and Mengzhou Xia and Weijia Shi and Xing Han Lù and Jordan Clive and Gayatri Krishnakumar and Anna Maksimova and Silvan Wehrli and Maria Tikhonova and Henil Panchal and Aleksandr Abramov and Malte Ostendorff and Zheng Liu and Simon Clematide and Lester James Miranda and Alena Fenogenova and Guangyu Song and Ruqiya Bin Safi and Wen-Ding Li and Alessia Borghini and Federico Cassano and Hongjin Su and Jimmy Lin and Howard Yen and Lasse Hansen and Sara Hooker and Chenghao Xiao and Vaibhav Adlakha and Orion Weller and Siva Reddy and Niklas Muennighoff},
+      publisher = {arXiv},
+      journal={arXiv preprint arXiv:2502.13595},
+      year={2025},
+      url={https://arxiv.org/abs/2502.13595}, 
+      doi = {10.48550/arXiv.2502.13595},
+}
+"""
+
 MTEB_EN = Benchmark(
     name="MTEB(eng, v2)",
     tasks=MTEBTasks(
@@ -81,7 +93,7 @@ This way the new benchmark and leaderboard can give our users a more realistic e
 
 The original MTEB leaderboard is available under the [MTEB(eng, v1)](http://mteb-leaderboard.hf.space/?benchmark_name=MTEB%28eng%2C+v1%29) tab.
     """,
-    citation="",
+    citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "Muennighoff"],
 )
 
@@ -226,13 +238,13 @@ MTEB_MAIN_RU = Benchmark(
     description="A Russian version of the Massive Text Embedding Benchmark with a number of novel Russian tasks in all task categories of the original MTEB.",
     reference="https://aclanthology.org/2023.eacl-main.148/",
     citation="""@misc{snegirev2024russianfocusedembeddersexplorationrumteb,
-      title={The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design}, 
+      title={The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design},
       author={Artem Snegirev and Maria Tikhonova and Anna Maksimova and Alena Fenogenova and Alexander Abramov},
       year={2024},
       eprint={2408.12503},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2408.12503}, 
+      url={https://arxiv.org/abs/2408.12503},
 }
 """,
 )
@@ -249,7 +261,7 @@ MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
     description="Retrieval w/Instructions is the task of finding relevant documents for a query that has detailed instructions.",
     reference="https://arxiv.org/abs/2403.15246",
     citation="""@misc{weller2024followir,
-      title={FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions}, 
+      title={FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions},
       author={Orion Weller and Benjamin Chang and Sean MacAvaney and Kyle Lo and Arman Cohan and Benjamin Van Durme and Dawn Lawrie and Luca Soldaini},
       year={2024},
       eprint={2403.15246},
@@ -398,13 +410,13 @@ CoIR = Benchmark(
     description="CoIR: A Comprehensive Benchmark for Code Information Retrieval Models",
     reference="https://github.com/CoIR-team/coir",
     citation="""@misc{li2024coircomprehensivebenchmarkcode,
-      title={CoIR: A Comprehensive Benchmark for Code Information Retrieval Models}, 
+      title={CoIR: A Comprehensive Benchmark for Code Information Retrieval Models},
       author={Xiangyang Li and Kuicai Dong and Yi Quan Lee and Wei Xia and Yichun Yin and Hao Zhang and Yong Liu and Yasheng Wang and Ruiming Tang},
       year={2024},
       eprint={2407.02883},
       archivePrefix={arXiv},
       primaryClass={cs.IR},
-      url={https://arxiv.org/abs/2407.02883}, 
+      url={https://arxiv.org/abs/2407.02883},
     }""",
 )
 
@@ -485,13 +497,13 @@ MTEB_FRA = Benchmark(
     description="MTEB-French, a French expansion of the original benchmark with high-quality native French datasets.",
     reference="https://arxiv.org/abs/2405.20468",
     citation="""@misc{ciancone2024mtebfrenchresourcesfrenchsentence,
-      title={MTEB-French: Resources for French Sentence Embedding Evaluation and Analysis}, 
+      title={MTEB-French: Resources for French Sentence Embedding Evaluation and Analysis},
       author={Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
       year={2024},
       eprint={2405.20468},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2405.20468}, 
+      url={https://arxiv.org/abs/2405.20468},
 }""",
     contacts=["imenelydiaker"],
 )
@@ -532,13 +544,13 @@ MTEB_DEU = Benchmark(
     description="A benchmark for text-embedding performance in German.",
     reference="https://arxiv.org/html/2401.02709v1",
     citation="""@misc{wehrli2024germantextembeddingclustering,
-      title={German Text Embedding Clustering Benchmark}, 
+      title={German Text Embedding Clustering Benchmark},
       author={Silvan Wehrli and Bert Arnrich and Christopher Irrgang},
       year={2024},
       eprint={2401.02709},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2401.02709}, 
+      url={https://arxiv.org/abs/2401.02709},
 }""",
     contacts=["slvnwhrl"],
 )
@@ -646,7 +658,7 @@ MTEB_code = Benchmark(
     ),
     description="A massive code embedding benchmark covering retrieval tasks in a miriad of popular programming languages.",
     reference=None,
-    citation=None,
+    citation=MMTEB_CITATION,
 )
 
 MTEB_multilingual = Benchmark(
@@ -789,7 +801,7 @@ MTEB_multilingual = Benchmark(
     ),
     description="A large-scale multilingual expansion of MTEB, driven mainly by highly-curated community contributions covering 250+ languages.",
     reference=None,
-    citation=None,
+    citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
 )
 
@@ -904,7 +916,7 @@ MTEB_INDIC = Benchmark(
     ),
     description="A regional geopolitical text embedding benchmark targetting embedding performance on Indic languages.",
     reference=None,
-    citation=None,
+    citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
 )
 
@@ -1036,7 +1048,7 @@ MTEB_EU = Benchmark(
     ),
     description="A regional geopolitical text embedding benchmark targetting embedding performance on European languages.",
     reference=None,
-    citation=None,
+    citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
 )
 
@@ -1084,10 +1096,15 @@ BRIGHT = Benchmark(
 }""",
 )
 
-
 BRIGHT_LONG = Benchmark(
     name="BRIGHT (long)",
-    tasks=get_tasks(tasks=["BrightRetrieval"], eval_splits=["long"]),
+    tasks=MTEBTasks(
+        (
+            get_task(
+                "BrightLongRetrieval",
+            ),
+        )
+    ),
     description="""BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
 BRIGHT is the first text retrieval
 benchmark that requires intensive reasoning to retrieve relevant documents with
@@ -1119,14 +1136,15 @@ CODE_RAG = Benchmark(
     description="A benchmark for evaluating code retrieval augmented generation, testing models' ability to retrieve relevant programming solutions, tutorials and documentation.",
     reference="https://arxiv.org/abs/2406.14497",
     citation="""@misc{wang2024coderagbenchretrievalaugmentcode,
-      title={CodeRAG-Bench: Can Retrieval Augment Code Generation?}, 
+      title={CodeRAG-Bench: Can Retrieval Augment Code Generation?},
       author={Zora Zhiruo Wang and Akari Asai and Xinyan Velocity Yu and Frank F. Xu and Yiqing Xie and Graham Neubig and Daniel Fried},
       year={2024},
       eprint={2406.14497},
       archivePrefix={arXiv},
       primaryClass={cs.SE},
-      url={https://arxiv.org/abs/2406.14497}, 
+      url={https://arxiv.org/abs/2406.14497},
     }""",
+    display_on_leaderboard=False,
 )
 
 BEIR = Benchmark(
@@ -1238,7 +1256,7 @@ C_MTEB = Benchmark(
     description="The Chinese Massive Text Embedding Benchmark (C-MTEB) is a comprehensive benchmark for Chinese text embeddings covering 6 tasks and 35 datasets.",
     reference="https://github.com/FlagOpen/FlagEmbedding/tree/master/research/C_MTEB",
     citation="""@misc{c-pack,
-      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, 
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding},
       author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff},
       year={2023},
       eprint={2309.07597},
@@ -1363,7 +1381,7 @@ CHEMTEB = Benchmark(
     description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
     reference="https://arxiv.org/abs/2412.00532",
     citation="""@article{kasmaee2024chemteb,
-    title={ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
+    title={ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \\& Efficiency on a Specific Domain},
     author={Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
     journal={arXiv preprint arXiv:2412.00532},
     year={2024}
@@ -1396,13 +1414,13 @@ BEIR_NL = Benchmark(
     reference="https://arxiv.org/abs/2412.08329",
     contacts=["nikolay-banar"],
     citation="""@misc{banar2024beirnlzeroshotinformationretrieval,
-    title={BEIR-NL: Zero-shot Information Retrieval Benchmark for the Dutch Language}, 
+    title={BEIR-NL: Zero-shot Information Retrieval Benchmark for the Dutch Language},
      author={Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
      year={2024},
      eprint={2412.08329},
      archivePrefix={arXiv},
      primaryClass={cs.CL},
-     url={https://arxiv.org/abs/2412.08329}, 
+     url={https://arxiv.org/abs/2412.08329},
 }""",
 )
 
@@ -1550,8 +1568,8 @@ MIEB_ENG = Benchmark(
             "VisualSTS-b-Eng",
         ],
     ),
-    description="""MIEB(eng) is a comprehensive image embeddings benchmark, spanning 8 task types, covering 125 tasks. 
-    In addition to image classification (zero shot and linear probing), clustering, retrieval, MIEB includes tasks in compositionality evaluation, 
+    description="""MIEB(eng) is a comprehensive image embeddings benchmark, spanning 8 task types, covering 125 tasks.
+    In addition to image classification (zero shot and linear probing), clustering, retrieval, MIEB includes tasks in compositionality evaluation,
     document undestanding, visual STS, and CV-centric tasks.""",
     reference="",
     contacts=["gowitheflow-1998", "isaac-chung"],
@@ -1572,9 +1590,9 @@ MIEB_MULTILINGUAL = Benchmark(
             "VisualSTS-b-Multilingual",
         ],
     ),
-    description="""MIEB(Multilingual) is a comprehensive image embeddings benchmark, spanning 10 task types, covering 130 tasks and a total of 39 languages. 
-    In addition to image classification (zero shot and linear probing), clustering, retrieval, MIEB includes tasks in compositionality evaluation, 
-    document undestanding, visual STS, and CV-centric tasks. This benchmark consists of MIEB(eng) + 3 multilingual retrieval 
+    description="""MIEB(Multilingual) is a comprehensive image embeddings benchmark, spanning 10 task types, covering 130 tasks and a total of 39 languages.
+    In addition to image classification (zero shot and linear probing), clustering, retrieval, MIEB includes tasks in compositionality evaluation,
+    document undestanding, visual STS, and CV-centric tasks. This benchmark consists of MIEB(eng) + 3 multilingual retrieval
     datasets + the multilingual parts of VisualSTS-b and VisualSTS-16.""",
     reference="",
     contacts=["gowitheflow-1998", "isaac-chung"],
@@ -1646,7 +1664,7 @@ MIEB_LITE = Benchmark(
             "XM3600T2IRetrieval",
         ],
     ),
-    description="""MIEB(lite) is a comprehensive image embeddings benchmark, spanning 10 task types, covering 51 tasks. 
+    description="""MIEB(lite) is a comprehensive image embeddings benchmark, spanning 10 task types, covering 51 tasks.
     This is a lite version of MIEB(Multilingual), designed to be run at a fraction of the cost while maintaining
     relative rank of models.""",
     reference="",

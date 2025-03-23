@@ -15,10 +15,10 @@ from pydantic import BaseModel, ConfigDict, Field
 from mteb.abstasks.AbsTask import AbsTask, ScoresDict
 from mteb.abstasks.TaskMetadata import (
     ISO_LANGUAGE_SCRIPT,
-    MODALITIES,
     TASK_DOMAIN,
     TASK_TYPE,
 )
+from mteb.custom_validators import MODALITIES
 from mteb.languages import ISO_LANGUAGE
 from mteb.load_results.task_results import TaskResult
 from mteb.models.overview import get_model_metas
@@ -293,8 +293,10 @@ class BenchmarkResults(BaseModel):
             unique_revisions = group["revision"].unique()
 
             # ensure None/NA/"external" revisions is filtered out
-            group["revision"][group["revision"].isna()] = "no_revision_available"
-            group["revision"][group["revision"] == "external"] = "no_revision_available"
+            group.loc[group["revision"].isna(), "revision"] = "no_revision_available"
+            group.loc[group["revision"] == "external", "revision"] = (
+                "no_revision_available"
+            )
 
             # Filtering out no_revision_available if other revisions are present
             if (len(unique_revisions) > 1) and (

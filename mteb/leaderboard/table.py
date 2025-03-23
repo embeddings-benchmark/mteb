@@ -196,13 +196,14 @@ def scores_to_tables(
     # setting model name column to markdown
     column_types[1] = "markdown"
     score_columns = ["Mean (Task)", "Mean (TaskType)", *mean_per_type.columns]
+    numeric_zero_shot = joint_table["Zero-shot"].copy().replace(-1, np.nan)
+    joint_table["Zero-shot"] = joint_table["Zero-shot"].apply(format_zero_shot)
     joint_table[score_columns] = joint_table[score_columns].map(format_scores)
     joint_table_style = (
         joint_table.style.format(
             {
                 **{column: "{:.2f}" for column in score_columns},
                 "Rank (Borda)": "{:.0f}",
-                "Zero-shot": format_zero_shot,
             },
             na_rep="",
         )
@@ -213,6 +214,7 @@ def scores_to_tables(
             subset=["Zero-shot"],
             vmin=50,
             vmax=100,
+            gmap=numeric_zero_shot,
         )
     )
     task_score_columns = per_task.select_dtypes("number").columns

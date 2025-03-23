@@ -9,7 +9,8 @@ from collections import Counter, defaultdict
 import pandas as pd
 
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.abstasks.TaskMetadata import MODALITIES, TASK_CATEGORY, TASK_DOMAIN, TASK_TYPE
+from mteb.abstasks.TaskMetadata import TASK_CATEGORY, TASK_DOMAIN, TASK_TYPE
+from mteb.custom_validators import MODALITIES
 from mteb.languages import (
     ISO_TO_LANGUAGE,
     ISO_TO_SCRIPT,
