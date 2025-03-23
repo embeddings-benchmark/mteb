@@ -47,29 +47,28 @@ def _load_vdr_multilingual_data(
         for idx, record in enumerate(dataset):
             doc_id = f"doc-{record['id']}"
             query_id = f"query-{record['id']}"
-            has_image = record.get("image") is not None
+            has_query = record.get("query") is not None
 
             corpus_records.append(
                 {
                     "id": doc_id,
-                    "text": record.get("query", ""),
-                    "image": record.get("image", None),
-                    "modality": "image" if has_image else "text",
+                    "image": record.get("image"),
+                    "modality": "image",
                 }
             )
 
-            queries_records.append(
-                {
-                    "id": query_id,
-                    "text": record.get("query", ""),
-                    "image": record.get("image", None),
-                    "modality": "image" if has_image else "text",
-                }
-            )
+            if has_query:
+                queries_records.append(
+                    {
+                        "id": query_id,
+                        "text": record.get("query", ""),
+                        "modality": "text",
+                    }
+                )
 
-            if query_id not in relevant_dict:
-                relevant_dict[query_id] = {}
-            relevant_dict[query_id][doc_id] = 1
+                if query_id not in relevant_dict:
+                    relevant_dict[query_id] = {}
+                relevant_dict[query_id][doc_id] = 1
 
         if lang_code not in corpus_dict:
             corpus_dict[lang_code] = {}
