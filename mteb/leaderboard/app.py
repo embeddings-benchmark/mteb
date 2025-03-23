@@ -888,4 +888,4 @@ if __name__ == "__main__":
     )  # Warning related to model metadata (fetch_from_hf=False)
     warnings.filterwarnings("ignore", message="Couldn't get scores for .* due to .*")
     app = get_leaderboard_app()
-    app.launch(share=True)
+    app.launch(server_name="0.0.0.0", server_port=7860)
