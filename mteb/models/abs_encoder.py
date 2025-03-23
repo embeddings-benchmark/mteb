@@ -43,13 +43,13 @@ class AbsEncoder(ABC):
                 and callable(self.model.similarity)
             ):
                 return self.model.similarity(embeddings1, embeddings2)
-            return cos_sim(embeddings2, embeddings2)
+            return cos_sim(embeddings1, embeddings2)
         if self.mteb_model_meta.similarity_fn_name is ScoringFunction.COSINE:
-            return cos_sim(embeddings2, embeddings2)
+            return cos_sim(embeddings1, embeddings2)
         elif self.mteb_model_meta.similarity_fn_name is ScoringFunction.DOT_PRODUCT:
-            return dot_score(embeddings2, embeddings2)
+            return dot_score(embeddings1, embeddings2)
         elif self.mteb_model_meta.similarity_fn_namze is ScoringFunction.MAX_SIM:
-            return max_sim(embeddings2, embeddings2)
+            return max_sim(embeddings1, embeddings2)
         raise ValueError("Similarity function not specified.")
 
     def similarity_pairwise(
