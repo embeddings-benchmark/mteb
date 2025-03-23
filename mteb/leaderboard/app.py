@@ -203,7 +203,7 @@ def filter_models(
     return list(models_to_keep)
 
 
-def run_leaderboard():
+def run_leaderboard() -> gr.Blocks:
     logger.info("Loading all benchmark results")
     all_results = load_results()
 
@@ -873,7 +873,7 @@ def run_leaderboard():
             bench_modalities,
         )
         update_tables(bench_scores, "", filtered_tasks, filtered_models, benchmark.name)
-    demo.launch(share=True)
+    return demo
 
 
 if __name__ == "__main__":
@@ -887,4 +887,5 @@ if __name__ == "__main__":
         logging.ERROR
     )  # Warning related to model metadata (fetch_from_hf=False)
     warnings.filterwarnings("ignore", message="Couldn't get scores for .* due to .*")
-    run_leaderboard()
+    app = run_leaderboard()
+    app.launch(share=True)
