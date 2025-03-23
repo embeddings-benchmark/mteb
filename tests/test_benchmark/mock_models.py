@@ -69,7 +69,8 @@ class MockSentenceTransformersbf16Encoder(SentenceTransformer):
     """Ensure that data types not supported by the encoder are converted to the supported data type."""
 
     model_card_data = Namespace(
-        model_name="MockSentenceTransformersbf16Encoder", base_model_revision="1.0.0"
+        model_name="mock/MockSentenceTransformersbf16Encoder",
+        base_model_revision="1.0.0",
     )
 
     def __init__(self):
@@ -77,15 +78,21 @@ class MockSentenceTransformersbf16Encoder(SentenceTransformer):
 
     def encode(
         self,
-        inputs: DataLoader[BatchedInput],
-        *,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        prompt_type: PromptType | None = None,
-        **kwargs: Any,
-    ) -> Array:
-        return torch.randn(len(inputs), 10, dtype=torch.bfloat16)  # type: ignore
+        sentences: str | list[str],
+        prompt_name: str | None = None,
+        prompt: str | None = None,
+        batch_size: int = 32,
+        show_progress_bar: bool | None = None,
+        output_value: Literal["sentence_embedding", "token_embeddings"]
+        | None = "sentence_embedding",
+        precision: Literal["float32", "int8", "uint8", "binary", "ubinary"] = "float32",
+        convert_to_numpy: bool = True,
+        convert_to_tensor: bool = False,
+        device: str = None,
+        normalize_embeddings: bool = False,
+        **kwargs,
+    ) -> list[Tensor] | np.ndarray | Tensor:
+        return torch.randn(len(sentences), 10, dtype=torch.bfloat16)  # type: ignore
 
     @staticmethod
     def get_sentence_embedding_dimension() -> int:
