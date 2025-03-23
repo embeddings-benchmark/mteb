@@ -213,7 +213,9 @@ def filter_models(
 logger.info("Loading all benchmark results")
 all_results = load_results()
 
-benchmarks = sorted(mteb.get_benchmarks(), key=lambda x: x.name)
+benchmarks = sorted(
+    mteb.get_benchmarks(display_on_leaderboard=True), key=lambda x: x.name
+)
 all_benchmark_results = {
     benchmark.name: benchmark.load_results(base_results=all_results).join_revisions()
     for benchmark in benchmarks
