@@ -115,8 +115,8 @@ class VDRMultilingualRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         eval_langs=_LANGS,
         main_score="ndcg_at_5",
         date=(
-            "2025-10-01",
-            "2025-08-01",
+            "2025-01-10",
+            "2025-01-08",
         ),  # Not Specified excatly in the dataset and blog
         domains=["Web"],
         task_subtypes=["Image Text Retrieval"],
