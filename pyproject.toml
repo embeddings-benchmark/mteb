@@ -25,6 +25,7 @@ classifiers = [
 ]
 requires-python = ">=3.9,<3.13"
 dependencies = [
+    "setuptools<78",  # https://github.com/pypa/setuptools/issues/4910
     "datasets>=2.19.0,<3.0.0",
     "numpy>=1.0.0,<3.0.0",
     "requests>=2.26.0",
