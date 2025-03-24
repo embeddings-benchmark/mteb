@@ -36,6 +36,7 @@ class KlueMrcDomainClustering(AbsTaskClustering):
       archivePrefix={arXiv},
       primaryClass={cs.CL},
 }""",
+        prompt="Identify the topic or theme of the given texts",
     )
 
     def dataset_transform(self):

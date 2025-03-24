@@ -12,7 +12,7 @@ class KlueYnatMrcCategoryClustering(AbsTaskClustering):
         description="this dataset is a processed and redistributed version of the KLUE-Ynat & KLUE-MRC  dataset. News_category: IT/Science, Sports, Media/Culture, Ecomomy/Finance, Real Estate",
         reference="https://huggingface.co/datasets/on-and-on/clustering_klue_mrc_ynat_title",
         type="Clustering",
-        category="p2p",
+        category="s2s",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["kor-Hang"],
@@ -23,7 +23,7 @@ class KlueYnatMrcCategoryClustering(AbsTaskClustering):
         },
         date=("2016-01-01", "2020-12-31"),
         domains=["News", "Written"],
-        task_subtypes=None,
+        task_subtypes=[],
         license="cc-by-sa-4.0",
         annotations_creators="human-annotated",
         dialect=[],
@@ -36,6 +36,7 @@ class KlueYnatMrcCategoryClustering(AbsTaskClustering):
       archivePrefix={arXiv},
       primaryClass={cs.CL},
 }""",
+        prompt="Identify the topic or theme of the given texts",
     )
 
     def dataset_transform(self):
