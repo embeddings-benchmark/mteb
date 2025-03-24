@@ -9,7 +9,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class KlueMrcDomainClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="KlueMrcDomainClustering",
-        description="this dataset is a processed and redistributed version of the KLUE-MRC dataset. Domain: Game / Media / Automotive / Finance / Real Estate / Education ",
+        description="this dataset is a processed and redistributed version of the KLUE-MRC dataset. Domain: Game / Media / Automotive / Finance / Real Estate / Education",
         reference="https://huggingface.co/datasets/on-and-on/clustering_klue_mrc_context_domain",
         type="Clustering",
         category="p2p",
