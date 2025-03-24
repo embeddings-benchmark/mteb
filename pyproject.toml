@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.36.10"
+version = "1.36.32"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -23,7 +23,7 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.9,<3.13"
 dependencies = [
     "datasets>=2.19.0,<3.0.0",
     "numpy>=1.0.0,<3.0.0",
@@ -40,7 +40,6 @@ dependencies = [
     "typing_extensions>=0.0.0",
     "eval_type_backport>=0.0.0",
     "polars>=0.20.22",
-    "torchvision>0.0.0",
 ]
 
 
@@ -53,18 +52,26 @@ homepage = "https://github.com/embeddings-benchmark/mteb"
 mteb = "mteb.cli:main"
 
 [project.optional-dependencies]
+image = ["torchvision>0.2.1"]
 dev = [
 "ruff==0.9.7", # locked so we don't get PRs which fail only due to a lint update
 "pytest>=8.3.4",
 "pytest-xdist>=3.6.1",
 "pytest-coverage>=0.0",
 "pytest-rerunfailures>=15.0",
-"iso639>=0.1.4" # used for tests/scripts/test_generate_model_meta.py
+"iso639>=0.1.4", # used for tests/scripts/test_generate_model_meta.py
+"pre-commit>=4.1.0",
 ]
 codecarbon = ["codecarbon"]
 speedtask = ["GPUtil>=1.4.0", "psutil>=5.9.8"]
 peft = ["peft>=0.11.0"]
-leaderboard = ["gradio>=5.16.0,<6.0.0", "gradio_rangeslider>=0.0.8", "plotly>=5.24.0,<6.0.0", "cachetools>=5.2.0"]
+leaderboard = [
+    "gradio==5.16.0; python_version > '3.9'", # 3.10 is required for gradio
+    "gradio_rangeslider>=0.0.8",
+    "plotly>=5.24.0,<6.0.0",
+    "cachetools>=5.2.0",
+    "matplotlib>=3.9.4",
+]
 flagembedding = ["FlagEmbedding"]
 jina = ["einops>=0.8.0"]
 flash_attention = ["flash-attn>=2.6.3"]
@@ -113,7 +120,7 @@ target-version = "py39"
 
 [tool.ruff.lint]
 select = [
-    "F",  # pyflakes rules, 
+    "F",  # pyflakes rules,
     "I",  # sorting for imports
     "E",  # formatting for docs
     "D",  # formatting for docs
@@ -123,7 +130,7 @@ select = [
 ]
 
 
-ignore = ["E501",   # line too long 
+ignore = ["E501",   # line too long
         "E741",     # ambiguous variable name
         "F403",     # undefined import
         "D100",     # Missing docstring in public module
@@ -165,9 +172,9 @@ patch_types = ["fix", "perf"]
 
 [tool.pytest.ini_options]
 addopts = """
-            --reruns 3 
-            --only-rerun requests.exceptions.ReadTimeout 
-            --only-rerun huggingface_hub.errors.HfHubHTTPError 
+            --reruns 3
+            --only-rerun requests.exceptions.ReadTimeout
+            --only-rerun huggingface_hub.errors.HfHubHTTPError
             --only-rerun huggingface_hub.errors.LocalEntryNotFoundError
             --only-rerun FileNotFoundError
             --durations=5
@@ -180,3 +187,8 @@ addopts = """
 # FileNotFoundError -> HF Cache is broken:  https://github.com/embeddings-benchmark/mteb/actions/runs/13302915091/job/37147507251?pr=2029
 # --durations=5 -> Show the 5 slowest tests
 # --reruns-delay 10 -> Delay between reruns in seconds to avoid running into the same issue again
+
+[tool.uv]
+override-dependencies = [
+    "salesforce-lavis", # salesforce-lavis is not valid with sentence transformers >=3.0.0
+]

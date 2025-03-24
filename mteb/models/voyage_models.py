@@ -99,7 +99,8 @@ class VoyageWrapper(Wrapper):
         **kwargs: Any,
     ) -> np.ndarray:
         prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
-        input_type = prompt_name if prompt_name is not None else "document"
+        input_type = self.model_prompts.get(prompt_name, "document")
+
         return self._batched_encode(sentences, batch_size, input_type)
 
     def _batched_encode(
@@ -269,7 +270,7 @@ voyage_code_3 = ModelMeta(
 
 
 voyage_large_2 = ModelMeta(
-    name="voyage-large-2",  # Date of publication of this post https://blog.voyageai.com/2023/10/29/voyage-embeddings/
+    name="voyageai/voyage-large-2",  # Date of publication of this post https://blog.voyageai.com/2023/10/29/voyage-embeddings/
     revision="1",
     release_date="2023-10-29",
     languages=None,  # supported languages not specified

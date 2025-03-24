@@ -10,10 +10,15 @@ from typing import Any, Callable, Literal
 import numpy as np
 import pandas as pd
 from packaging.version import InvalidVersion, Version
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 from mteb.abstasks.AbsTask import AbsTask, ScoresDict
-from mteb.abstasks.TaskMetadata import ISO_LANGUAGE_SCRIPT, TASK_DOMAIN, TASK_TYPE
+from mteb.abstasks.TaskMetadata import (
+    ISO_LANGUAGE_SCRIPT,
+    TASK_DOMAIN,
+    TASK_TYPE,
+)
+from mteb.custom_validators import MODALITIES
 from mteb.languages import ISO_LANGUAGE
 from mteb.load_results.task_results import TaskResult
 from mteb.models.overview import get_model_metas
@@ -26,6 +31,9 @@ class ModelResult(BaseModel):
     model_name: str
     model_revision: str | None
     task_results: list[TaskResult]
+    default_modalities: list[MODALITIES] = Field(
+        default_factory=lambda: ["text"], alias="modalities"
+    )
     model_config = ConfigDict(
         protected_namespaces=(),
     )
@@ -47,6 +55,7 @@ class ModelResult(BaseModel):
         languages: list[str] | None = None,
         domains: list[TASK_DOMAIN] | None = None,
         task_types: list[TASK_TYPE] | None = None,
+        modalities: list[MODALITIES] | None = None,
     ) -> ModelResult:
         new_task_results = []
         for task_result in self.task_results:
@@ -62,6 +71,10 @@ class ModelResult(BaseModel):
                     continue
             if (task_types is not None) and (task_result.task_type not in task_types):
                 continue
+            if modalities is not None:
+                task_modalities = getattr(task_result, "modalities", [])
+                if not any(modality in task_modalities for modality in modalities):
+                    continue
             new_task_results.append(task_result)
         return type(self).model_construct(
             model_name=self.model_name,
@@ -182,6 +195,16 @@ class ModelResult(BaseModel):
     def task_names(self) -> list[str]:
         return [task_res.task_name for task_res in self.task_results]
 
+    @property
+    def modalities(self) -> list[str]:
+        mods = []
+        for task_res in self.task_results:
+            task_modalities = getattr(task_res, "modalities", [])
+            mods.extend(task_modalities)
+        if not mods:
+            mods = self.default_modalities
+        return list(set(mods))
+
 
 class BenchmarkResults(BaseModel):
     model_results: list[ModelResult]
@@ -202,6 +225,7 @@ class BenchmarkResults(BaseModel):
         languages: list[str] | None = None,
         domains: list[TASK_DOMAIN] | None = None,
         task_types: list[TASK_TYPE] | None = None,
+        modalities: list[MODALITIES] | None = None,
     ) -> BenchmarkResults:
         model_results = [
             res.filter_tasks(
@@ -209,6 +233,7 @@ class BenchmarkResults(BaseModel):
                 languages=languages,
                 domains=domains,
                 task_types=task_types,
+                modalities=modalities,
             )
             for res in self.model_results
         ]
@@ -268,8 +293,10 @@ class BenchmarkResults(BaseModel):
             unique_revisions = group["revision"].unique()
 
             # ensure None/NA/"external" revisions is filtered out
-            group["revision"][group["revision"].isna()] = "no_revision_available"
-            group["revision"][group["revision"] == "external"] = "no_revision_available"
+            group.loc[group["revision"].isna(), "revision"] = "no_revision_available"
+            group.loc[group["revision"] == "external", "revision"] = (
+                "no_revision_available"
+            )
 
             # Filtering out no_revision_available if other revisions are present
             if (len(unique_revisions) > 1) and (
@@ -449,3 +476,10 @@ class BenchmarkResults(BaseModel):
         for model_res in self.model_results:
             names.extend(model_res.task_names)
         return list(set(names))
+
+    @property
+    def modalities(self) -> list[str]:
+        mod = []
+        for model_res in self.model_results:
+            mod.extend(model_res.modalities)
+        return list(set(mod))

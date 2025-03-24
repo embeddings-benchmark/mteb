@@ -12,6 +12,7 @@ from transformers import AutoConfig, AutoModelForCausalLM, AutoProcessor
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
+from mteb.requires_package import requires_image_dependencies
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
@@ -28,6 +29,7 @@ class VLM2VecWrapper:
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs,
     ):
+        requires_image_dependencies()
         try:
             import flash_attn  # noqa
             from peft import LoraConfig, PeftModel  # noqa
@@ -119,11 +121,11 @@ class VLM2VecWrapper:
         batch_size: int = 32,
         **kwargs: Any,
     ):
+        import torchvision.transforms.functional as F
+
         text = "<|image_1|> Represent the given image."
         all_image_embeddings = []
         if isinstance(images, DataLoader):
-            import torchvision.transforms.functional as F
-
             with torch.no_grad():
                 for batch in tqdm(images):
                     input_ids, pixel_values, image_sizes = [], [], []
@@ -253,8 +255,8 @@ class VLM2VecWrapper:
 
     def get_fused_embeddings(
         self,
-        texts: list[str] = None,
-        images: list[Image.Image] | DataLoader = None,
+        texts: list[str] | None = None,
+        images: list[Image.Image] | DataLoader | None = None,
         *,
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
@@ -262,6 +264,8 @@ class VLM2VecWrapper:
         fusion_mode="sum",
         **kwargs: Any,
     ):
+        import torchvision.transforms.functional as F
+
         if texts is None and images is None:
             raise ValueError("Either texts or images must be provided")
 
@@ -283,8 +287,6 @@ class VLM2VecWrapper:
         texts = iter(texts)
         all_fused_embeddings = []
         if isinstance(images, DataLoader):
-            import torchvision.transforms.functional as F
-
             with torch.no_grad():
                 for batch in images:
                     input_ids, pixel_values, image_sizes = [], [], []

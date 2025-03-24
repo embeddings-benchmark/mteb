@@ -2,7 +2,6 @@
 # 1) install Python dependencies
 # 2) run make test
 
-
 name: Test
 on:
   push:
@@ -30,7 +29,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: "pip"
-        
+
       - name: Install dependencies
         shell: bash
         run: |
@@ -53,4 +52,3 @@ jobs:
           # if it fails again, the workflow will fail.
           # If it passes the first time the test will not run again
           make test || make test
-

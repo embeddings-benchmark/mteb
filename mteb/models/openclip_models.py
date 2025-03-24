@@ -10,6 +10,7 @@ from tqdm import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
+from mteb.requires_package import requires_image_dependencies
 
 
 def openclip_loader(**kwargs):
@@ -25,6 +26,8 @@ def openclip_loader(**kwargs):
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
             **kwargs: Any,
         ):
+            requires_image_dependencies()
+
             self.model_name = model_name
             self.device = device
             self.model, _, self.img_preprocess = open_clip.create_model_and_transforms(
@@ -71,10 +74,10 @@ def openclip_loader(**kwargs):
             batch_size: int = 32,
             **kwargs: Any,
         ):
+            import torchvision.transforms.functional as F
+
             all_image_embeddings = []
             if isinstance(images, DataLoader):
-                import torchvision.transforms.functional as F
-
                 with torch.no_grad(), torch.cuda.amp.autocast():
                     for batch in tqdm(images):
                         # import pdb; pdb.set_trace()
@@ -112,8 +115,8 @@ def openclip_loader(**kwargs):
 
         def get_fused_embeddings(
             self,
-            texts: list[str] = None,
-            images: list[Image.Image] | DataLoader = None,
+            texts: list[str] | None = None,
+            images: list[Image.Image] | DataLoader | None = None,
             fusion_mode="sum",
             **kwargs: Any,
         ):

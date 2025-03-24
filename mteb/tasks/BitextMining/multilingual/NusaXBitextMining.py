@@ -50,7 +50,7 @@ class NusaXBitextMining(AbsTaskBitextMining, MultilingualTask):
         year={2023}
         }
         @misc{winata2024miners,
-            title={MINERS: Multilingual Language Models as Semantic Retrievers}, 
+            title={MINERS: Multilingual Language Models as Semantic Retrievers},
             author={Genta Indra Winata and Ruochen Zhang and David Ifeoluwa Adelani},
             year={2024},
             eprint={2406.07424},

@@ -534,7 +534,7 @@ class AbsTaskAny2AnyMultiChoice(AbsTask):
         # create a list of number of relevant docs per query
         queries_set = set(queries["id"])
         qrels_lengths = [
-            len(relevant_docs[qid])
+            len([v for k, v in relevant_docs[qid].items() if v != 0])
             for qid in tqdm.tqdm(relevant_docs.keys(), desc="qrels:")
             if qid in queries_set
         ]

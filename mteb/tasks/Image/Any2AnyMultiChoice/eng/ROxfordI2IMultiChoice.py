@@ -37,14 +37,14 @@ class ROxfordEasyI2IMultiChoice(AbsTaskAny2AnyMultiChoice):
 }
         """,
         descriptive_stats={
-            "n_samples": {"test": 70},
+            "n_samples": {"test": 5063},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 0.0,
                     "average_query_length": 0.0,
-                    "num_documents": 516,
+                    "num_documents": 4993,
                     "num_queries": 70,
-                    "average_relevant_docs_per_query": 43.3,
+                    "average_relevant_docs_per_query": 44.5,
                 }
             },
         },
@@ -83,12 +83,12 @@ class ROxfordMediumI2IMultiChoice(AbsTaskAny2AnyMultiChoice):
 }
         """,
         descriptive_stats={
-            "n_samples": {"test": 70},
+            "n_samples": {"test": 5063},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 0.0,
                     "average_query_length": 0.0,
-                    "num_documents": 788,
+                    "num_documents": 4993,
                     "num_queries": 70,
                     "average_relevant_docs_per_query": 78.9,
                 }
@@ -129,12 +129,12 @@ class ROxfordHardI2IMultiChoice(AbsTaskAny2AnyMultiChoice):
 }
         """,
         descriptive_stats={
-            "n_samples": {"test": 70},
+            "n_samples": {"test": 5063},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 0.0,
                     "average_query_length": 0.0,
-                    "num_documents": 685,
+                    "num_documents": 4993,
                     "num_queries": 70,
                     "average_relevant_docs_per_query": 35.7,
                 }

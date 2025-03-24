@@ -10,6 +10,7 @@ from tqdm import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
+from mteb.requires_package import requires_image_dependencies
 
 
 def mocov3_loader(**kwargs):
@@ -29,6 +30,8 @@ def mocov3_loader(**kwargs):
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
             **kwargs: Any,
         ):
+            requires_image_dependencies()
+
             self.model_name = model_name
             self.device = device
             name = "vit_base_patch16_224"
@@ -69,11 +72,11 @@ def mocov3_loader(**kwargs):
             batch_size: int = 32,
             **kwargs: Any,
         ):
+            import torchvision.transforms.functional as F
+
             all_image_embeddings = []
 
             if isinstance(images, DataLoader):
-                import torchvision.transforms.functional as F
-
                 with torch.no_grad():
                     for batch in tqdm(images):
                         inputs = torch.vstack(
@@ -107,8 +110,8 @@ def mocov3_loader(**kwargs):
 
         def get_fused_embeddings(
             self,
-            texts: list[str] = None,
-            images: list[Image.Image] | DataLoader = None,
+            texts: list[str] | None = None,
+            images: list[Image.Image] | DataLoader | None = None,
             *,
             task_name: str | None = None,
             prompt_type: PromptType | None = None,
