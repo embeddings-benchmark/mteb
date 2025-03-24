@@ -12,6 +12,7 @@ from sentence_transformers import __version__ as st_version
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
+from mteb.requires_package import requires_package
 
 logger = logging.getLogger(__name__)
 
@@ -140,19 +141,14 @@ class JinaWrapper(SentenceTransformerWrapper):
             raise RuntimeError(
                 f"sentence_transformers version {st_version} is lower than the required version 3.1.0"
             )
-        try:
-            import einops  # noqa: F401
-        except ImportError:
-            raise ImportError(
-                "To use the jina-embeddings-v3 models `einops` is required. Please install it with `pip install mteb[jina]`."
-            )
-        try:
-            import flash_attn  # noqa: F401
-        except ImportError:
-            logger.warning(
-                "Using flash_attn for jina-embeddings-v3 models is recommended. Please install it with `pip install mteb[flash_attention]`."
-                "Fallback to native implementation."
-            )
+        requires_package(self, "jina", model, "pip install 'mteb[jina]'")
+        import einops  # noqa: F401
+
+        requires_package(
+            self, "flash_attention", model, "pip install 'mteb[flash_attention]'"
+        )
+        import flash_attn  # noqa: F401
+
         super().__init__(model, revision, model_prompts, **kwargs)
 
     def encode(

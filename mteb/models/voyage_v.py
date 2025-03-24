@@ -11,7 +11,7 @@ from tqdm import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
-from mteb.requires_package import requires_image_dependencies
+from mteb.requires_package import requires_image_dependencies, requires_package
 
 
 def downsample_image(
@@ -46,16 +46,15 @@ def downsample_image(
 
 
 def voyage_v_loader(**kwargs):
-    try:
-        import voyageai
-    except ImportError:
-        raise ImportError("To use voyage models, please run `pip install -U voyageai`.")
-    try:
-        from tenacity import retry, stop_after_attempt, wait_exponential
-    except ImportError:
-        raise ImportError(
-            "please run `pip install tenacity` to use exponential backoff."
-        )
+    model_name = kwargs.get("model_name", "Voyage vision")
+    requires_package(
+        voyage_v_loader,
+        "voyageai and tenacity",
+        model_name,
+        "pip install 'mteb[voyage_v]'",
+    )
+    import voyageai
+    from tenacity import retry, stop_after_attempt, wait_exponential
 
     class VoyageMultiModalModelWrapper:
         def __init__(
