@@ -6,6 +6,7 @@ install:
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"
 	@echo "This ensures that the project is not installed in editable mode"
+	pip install "setuptools==77.0.3"
 	pip install ".[dev,speedtask,image]"
 
 lint:
