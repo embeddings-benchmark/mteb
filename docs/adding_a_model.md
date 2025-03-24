@@ -31,7 +31,7 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
    To calculate `memory_usage_mb` you can run `model_meta.calculate_memory_usage_mb()`. By default, the model will run using the [`sentence_transformers_loader`](../mteb/models/sentence_transformer_wrapper.py) loader function. If you need to use a custom implementation, you can specify the `loader` parameter in the `ModelMeta` class. For example:
    ```python
    from mteb.models.base_encoder import BaseEncoder
-from mteb.types import PromptType
+   from mteb.types import PromptType
    import numpy as np
 
    class CustomWrapper(BaseEncoder):
