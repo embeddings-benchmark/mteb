@@ -21,7 +21,4 @@ jobs:
 
       - name: Install dependencies and run tests
         run: |
-          echo "setuptools<78.0.0" > /tmp/constraints.txt
-          pip install --upgrade pip
-          PIP_CONSTRAINT=/tmp/constraints.txt make install-for-tests
           make model-load-test BASE_BRANCH=${{ github.event.pull_request.base.ref }}

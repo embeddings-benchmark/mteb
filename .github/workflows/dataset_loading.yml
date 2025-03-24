@@ -21,9 +21,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-          echo "setuptools<78.0.0" > /tmp/constraints.txt
-          pip install --upgrade pip
-          PIP_CONSTRAINT=/tmp/constraints.txt make install-for-tests
+          make install-for-tests
 
     - name: Run dataset loading tests
       run: |
