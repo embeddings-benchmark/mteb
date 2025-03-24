@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
+from ....abstasks.AbsTaskClustering import AbsTaskClustering
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 

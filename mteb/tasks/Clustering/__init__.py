@@ -49,3 +49,5 @@ from .spa.SpanishNewsClusteringP2P import *
 from .swe.swedn_clustering import *
 from .swe.SwednClustering import *
 from .zho.CMTEBClustering import *
+from .kor.KlueMrcDomainClustering import *
+from .kor.KlueYnatMrcCategoryClustering import *
