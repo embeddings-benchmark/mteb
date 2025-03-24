@@ -209,6 +209,16 @@ def scores_to_tables(
     # setting model name column to markdown
     column_types[1] = "markdown"
     score_columns = ["Mean (Task)", "Mean (TaskType)", *mean_per_type.columns]
+
+    return apply_styling(joint_table, per_task, score_columns, column_types)
+
+
+def apply_styling(
+    joint_table: pd.DataFrame,
+    per_task: pd.DataFrame,
+    score_columns: list[str],
+    column_types: list[str],
+) -> tuple[gr.DataFrame, gr.DataFrame]:
     excluded_columns = [
         "Rank (Borda)",
         "Model",
