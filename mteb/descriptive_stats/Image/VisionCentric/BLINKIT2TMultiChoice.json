@@ -26,9 +26,9 @@
         "min_query_image_height": 232,
         "average_query_image_height": 722.6418663303909,
         "max_query_image_height": 3226,
-        "min_relevant_docs_per_query": 2,
-        "average_relevant_docs_per_query": 2.849936948297604,
-        "max_relevant_docs_per_query": 4,
+        "min_relevant_docs_per_query": 1,
+        "average_relevant_docs_per_query": 1.0,
+        "max_relevant_docs_per_query": 1,
         "unique_relevant_docs": 20
     }
 }

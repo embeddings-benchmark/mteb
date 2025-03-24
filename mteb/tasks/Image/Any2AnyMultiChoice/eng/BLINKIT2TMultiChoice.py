@@ -34,13 +34,13 @@ class BLINKIT2TMultiChoice(AbsTaskAny2AnyMultiChoice):
 }
 """,
         descriptive_stats={
-            "n_samples": {"test": 923},
+            "n_samples": {"test": 813},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 0.0,
                     "average_query_length": 0.0,
-                    "num_documents": 24,
-                    "num_queries": 923,
+                    "num_documents": 20,
+                    "num_queries": 793,
                     "average_relevant_docs_per_query": 1,
                 }
             },
