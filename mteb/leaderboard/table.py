@@ -221,9 +221,7 @@ def scores_to_tables(
     ]
     light_green_cmap = create_light_green_cmap()
     numeric_data = joint_table.copy()
-    for col in score_columns + ["Zero-shot"]:
-        if col in numeric_data.columns:
-            numeric_data[col] = numeric_data[col].replace(-1, np.nan)
+    numeric_data["Zero-shot"] = numeric_data["Zero-shot"].replace(-1, np.nan)
     joint_table["Zero-shot"] = joint_table["Zero-shot"].apply(format_zero_shot)
     joint_table[score_columns] = joint_table[score_columns].map(format_scores)
     joint_table_style = joint_table.style.format(
@@ -239,7 +237,7 @@ def scores_to_tables(
 
     # Apply background gradients for each selected column
     for col in gradient_columns:
-        if col in joint_table.columns and numeric_data[col].notna().sum() > 0:
+        if col in joint_table.columns:
             mask = numeric_data[col].notna()
             if col != "Zero-shot":
                 gmap_values = numeric_data[col] * 100
@@ -254,17 +252,16 @@ def scores_to_tables(
             )
     task_score_columns = per_task.select_dtypes("number").columns
     per_task[task_score_columns] *= 100
-    per_task_numeric = per_task.copy()
     per_task_style = per_task.style.format(
         "{:.2f}", subset=task_score_columns, na_rep=""
     ).highlight_max(subset=task_score_columns, props="font-weight: bold")
     for col in task_score_columns:
-        if col != "Model" and per_task_numeric[col].notna().sum() > 0:
-            mask = per_task_numeric[col].notna()
+        if col != "Model":
+            mask = per_task[col].notna()
             per_task_style = per_task_style.background_gradient(
                 cmap=light_green_cmap,
                 subset=pd.IndexSlice[mask, col],
-                gmap=per_task_numeric[col].loc[mask],
+                gmap=per_task[col].loc[mask],
             )
     return (
         gr.DataFrame(
