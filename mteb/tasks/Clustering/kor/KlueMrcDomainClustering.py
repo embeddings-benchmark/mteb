@@ -23,7 +23,7 @@ class KlueMrcDomainClustering(AbsTaskClustering):
         },
         date=("2016-01-01", "2020-12-31"),
         domains=["News", "Written"],
-        task_subtypes=None,
+        task_subtypes=[],
         license="cc-by-sa-4.0",
         annotations_creators="human-annotated",
         dialect=[],
