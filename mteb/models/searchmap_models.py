@@ -18,12 +18,10 @@ task_instructions = {
     "Summarization": "Generate a representation for this text that can be used for summarization:"
 }
 
-def searchmap_loader(gpu_id=0):
-    torch.cuda.empty_cache()
+def searchmap_loader():
     model = SentenceTransformer(
         "VPLabs/SearchMap_Preview", 
-        trust_remote_code=True,
-        device=f"cuda:{gpu_id}"
+        trust_remote_code=True
     )
 
     if hasattr(model, "encoder"):
