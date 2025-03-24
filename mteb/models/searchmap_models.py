@@ -5,19 +5,6 @@ from sentence_transformers import SentenceTransformer
 import torch
 
 # Define task instructions with specific task names
-task_instructions = {
-    "SIB200Classification": "Generate a representation for this text that can be used for classification:",
-    "SIB200ClusteringS2S": "Generate a representation for this text that can be used for clustering:",
-    "BelebeleRetrieval": "Generate a representation for this text that can be used for retrieval:",
-    "Classification": "Generate a representation for this text that can be used for classification:",
-    "Clustering": "Generate a representation for this text that can be used for clustering:",
-    "Retrieval": "Generate a representation for this text that can be used for retrieval:",
-    "STS": "Generate a representation for this text that can be used for semantic similarity:",
-    "PairClassification": "Generate a representation for this text pair that can be used for classification:",
-    "Reranking": "Generate a representation for this text that can be used for reranking:",
-    "Summarization": "Generate a representation for this text that can be used for summarization:"
-}
-
 def searchmap_loader():
     model = SentenceTransformer(
         "VPLabs/SearchMap_Preview", 
