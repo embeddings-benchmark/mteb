@@ -157,6 +157,13 @@ def scores_to_tables(
         "Number of Parameters",
         model_metas.map(lambda m: format_n_parameters(m.n_parameters)),
     )
+    joint_table.insert(
+        1,
+        "Memory Usage (MB)",
+        model_metas.map(
+            lambda m: str(int(m.memory_usage_mb)) if m.memory_usage_mb else "Unknown"
+        ),
+    )
     tasks = get_tasks(tasks=list(data["task_name"].unique()))
     joint_table.insert(
         1, "Zero-shot", model_metas.map(lambda m: m.zero_shot_percentage(tasks))
