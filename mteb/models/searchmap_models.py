@@ -35,5 +35,6 @@ searchmap_preview = ModelMeta(
     framework=["Sentence Transformers", "PyTorch"],
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None
+    training_datasets=None,
+    adapted_from="NovaSearch/stella_en_400M_v5"
 ) 
