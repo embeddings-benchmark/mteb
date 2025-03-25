@@ -21,6 +21,7 @@ searchmap_preview = ModelMeta(
         model_prompts=task_instructions,  
     ),
     name="VPLabs/SearchMap_Preview",
+    revision="69de17ef48278ed08ba1a4e65ead8179912b696e",
     languages=["eng_Latn"],
     open_weights=True,
     use_instructions=True,
