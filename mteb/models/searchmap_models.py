@@ -10,7 +10,7 @@ task_instructions = {
     "STS": "Generate a representation for this text that can be used for semantic similarity:",
     "PairClassification": "Generate a representation for this text pair that can be used for classification:",
     "Reranking": "Generate a representation for this text that can be used for reranking:",
-    "Summarization": "Generate a representation for this text that can be used for summarization:"
+    "Summarization": "Generate a representation for this text that can be used for summarization:",
 }
 
 searchmap_preview = ModelMeta(
@@ -37,5 +37,5 @@ searchmap_preview = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
-    adapted_from="NovaSearch/stella_en_400M_v5"
+    adapted_from="NovaSearch/stella_en_400M_v5",
 ) 
