@@ -23,9 +23,5 @@ ritrieve_zh_v1 = ModelMeta(
     adapted_from=None,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={
-        **stella_zh_datasets,
-        **bge_full_data,
-        **bge_m3_training_data
-    }
+    training_datasets={**stella_zh_datasets, **bge_full_data, **bge_m3_training_data},
 )
