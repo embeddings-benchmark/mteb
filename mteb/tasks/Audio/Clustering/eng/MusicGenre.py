@@ -16,7 +16,7 @@ class MusicGenreClustering(AbsTaskAudioClustering):
         reference="https://www-ai.cs.tu-dortmund.de/audio.html",
         dataset={
             "path": "mteb/music-genre",
-            "revision": "dd22d098c9ea301ac2c2e122acb12a9a7bdabc4e",
+            "revision": "eb78950d473b87812357c207bae9c36779383e09",
         },
         type="AudioClustering",
         category="a2a",
@@ -40,16 +40,3 @@ class MusicGenreClustering(AbsTaskAudioClustering):
                         year={2005}
                         }""",
     )
-
-    def dataset_transform(self):
-        self.dataset["train"] = self.dataset["train"].map(
-            lambda example: {
-                "audio": {
-                    "array": np.array(librosa.load(example["audio"]["path"], sr=16000)[0]),
-                    "sampling_rate": 16000,
-                }
-            }
-        )
-        self.dataset["train"] = self.dataset["train"].cast_column(
-            "audio", Audio(sampling_rate=16000)
-        )
