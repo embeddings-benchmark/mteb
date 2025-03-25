@@ -64,7 +64,7 @@ dev = [
 ]
 codecarbon = ["codecarbon"]
 speedtask = [
-    "setuptools<78",  # https://github.com/pypa/setuptools/issues/4910
+    "setuptools!=78.0.1",  # https://github.com/pypa/setuptools/issues/4910
     "GPUtil>=1.4.0",
     "psutil>=5.9.8"
 ]
