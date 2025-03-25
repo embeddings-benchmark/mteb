@@ -63,7 +63,11 @@ dev = [
 "pre-commit>=4.1.0",
 ]
 codecarbon = ["codecarbon"]
-speedtask = ["GPUtil>=1.4.0", "psutil>=5.9.8"]
+speedtask = [
+    "setuptools!=78.0.1",  # https://github.com/pypa/setuptools/issues/4910
+    "GPUtil>=1.4.0",
+    "psutil>=5.9.8"
+]
 peft = ["peft>=0.11.0"]
 leaderboard = [
     "gradio==5.16.0; python_version > '3.9'", # 3.10 is required for gradio

@@ -383,6 +383,8 @@ The following tables give you an overview of the tasks in MTEB.
 | [KLUE-TC](https://arxiv.org/abs/2105.09680) (Sungjoon Park, 2021) | ['kor'] | Classification | s2s | [News, Written] | None | None |
 | [KannadaNewsClassification](https://github.com/goru001/nlp-for-kannada) (Anoop Kunchukuttan, 2020) | ['kan'] | Classification | s2s | [News, Written] | None | None |
 | [KinopoiskClassification](https://www.dialog-21.ru/media/1226/blinovpd.pdf) (Blinov et al., 2013) | ['rus'] | Classification | p2p | [Reviews, Written] | None | None |
+| [KlueMrcDomainClustering](https://huggingface.co/datasets/on-and-on/clustering_klue_mrc_context_domain) (Sungjoon Park, 2021) | ['kor'] | Clustering | p2p | [News, Written] | None | None |
+| [KlueYnatMrcCategoryClustering](https://huggingface.co/datasets/on-and-on/clustering_klue_mrc_ynat_title) (Sungjoon Park, 2021) | ['kor'] | Clustering | s2s | [News, Written] | None | None |
 | Ko-StrategyQA (Geva et al., 2021) | ['kor'] | Retrieval | s2p |  | None | None |
 | [KorFin](https://huggingface.co/datasets/amphora/korfin-asc) (Son et al., 2023) | ['kor'] | Classification | s2s | [Financial, News, Written] | None | None |
 | [KorHateClassification](https://paperswithcode.com/dataset/korean-hatespeech-dataset) (Jihyung Moon, 2020) | ['kor'] | Classification | s2s | [Social, Written] | None | None |
@@ -1372,7 +1374,7 @@ The following tables give you an overview of the tasks in MTEB.
 | knj | Western Kanjobal | Mayan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | knv | Tabo | Unclassified | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | kon | Kongo | Unclassified | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
-| kor | Korean | Koreanic | 0 | 2 | 0 | 6 | 8 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 3 | 1 | 10 | 3 | 0 | 0 | 0 | 0 | 2 | 0 | 37 |
+| kor | Korean | Koreanic | 0 | 2 | 0 | 6 | 8 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 3 | 1 | 10 | 3 | 0 | 0 | 0 | 0 | 2 | 0 | 39 |
 | kos | Kosraean | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | kpf | Komba | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | kpg | Kapingamarangi | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1962,7 +1964,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | Yatee Zapotec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zul | Zulu | Atlantic-Congo | 0 | 0 | 0 | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
 | zyp | Zyphe Chin | Sino-Tibetan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| Total | None | None | None | 0 | 55 | 55 | 1492 | 836 | 314 | 7 | 10 | 22 | 5 | 0 | 3 | 28 | 91 | 56 | 591 | 88 | 2 | 2 | 6 | 7 | 37 | 24 |
+| Total | None | None | None | 0 | 55 | 55 | 1492 | 836 | 316 | 7 | 10 | 22 | 5 | 0 | 3 | 28 | 91 | 56 | 591 | 88 | 2 | 2 | 6 | 7 | 37 | 24 |
 <!-- TASK LANG TABLE END -->
 
 </details>
