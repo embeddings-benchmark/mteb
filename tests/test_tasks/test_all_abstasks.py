@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-import asyncio
 import logging
 from unittest.mock import Mock, patch
 
-import aiohttp
+import huggingface_hub
 import pytest
 
 import mteb
@@ -36,6 +35,17 @@ ALL_MOCK_TASKS = (
 tasks = [t for t in MTEB().tasks_cls if t.metadata.name not in ALL_MOCK_TASKS]
 
 
+dataset_revisions = list(
+    {  # deduplicate as multiple tasks rely on the same dataset (save us at least 100 test cases)
+        (t.metadata.dataset["path"], t.metadata.dataset["revision"])
+        for t in mteb.get_tasks(exclude_superseded=False)
+        if not isinstance(t, (AbsTaskAggregate, AbsTaskSpeedTask))
+        and t.metadata.name != "AfriSentiLangClassification"
+        and t.metadata.name not in ALL_MOCK_TASKS
+    }
+)
+
+
 @pytest.mark.parametrize("task", tasks)
 @patch("datasets.load_dataset")
 @patch("datasets.concatenate_datasets")
@@ -61,62 +71,31 @@ def test_load_data(
             mock_dataset_transform.assert_called_once()
 
 
-async def check_dataset_on_hf(
-    session: aiohttp.ClientSession, dataset: str, revision: str
-) -> bool:
-    url = f"https://huggingface.co/datasets/{dataset}/tree/{revision}"
-    async with session.head(url) as response:
-        return response.status == 200
-
-
-async def check_datasets_are_available_on_hf(tasks):
-    does_not_exist = []
-    async with aiohttp.ClientSession() as session:
-        tasks_checks = [
-            check_dataset_on_hf(
-                session,
-                task.metadata.dataset["path"],
-                task.metadata.dataset["revision"],
-            )
-            for task in tasks
-            if not isinstance(task, AbsTaskSpeedTask)
-        ]
-        datasets_exists = await asyncio.gather(*tasks_checks)
-
-    for task, ds_exists in zip(tasks, datasets_exists):
-        if not ds_exists:
-            does_not_exist.append(
-                (task.metadata.dataset["path"], task.metadata.dataset["revision"])
-            )
-
-    if does_not_exist:
-        pretty_print = "\n".join(
-            [f"{ds[0]} - revision {ds[1]}" for ds in does_not_exist]
-        )
-        assert False, f"Datasets not available on Hugging Face:\n{pretty_print}"
-
-
-def test_dataset_availability():
-    """Checks if the datasets are available on Hugging Face using both their name and revision."""
-    tasks = MTEB().tasks_cls
-    # do not check aggregated tasks as they don't have a dataset
-    tasks = [t for t in tasks if not isinstance(t, AbsTaskAggregate)]
-    tasks = [
-        t
-        for t in tasks
-        if t.metadata.name not in MOCK_TASK_TEST_GRID_AS_STRING
-        if t.metadata.name not in MOCK_MIEB_TASK_GRID_AS_STRING
-        if t.metadata.name not in MOCK_MAEB_TASK_GRID_AS_STRING
-        and t.metadata.name
-        != "AfriSentiLangClassification"  # HOTFIX: Issue#1777. Remove this line when issue is resolved.
-    ]
-    asyncio.run(check_datasets_are_available_on_hf(tasks))
+@pytest.mark.test_datasets
+@pytest.mark.flaky(
+    reruns=3,
+    reruns_delay=5,
+    only_rerun=["AssertionError"],
+    reason="May fail due to network issues",
+)
+@pytest.mark.parametrize("dataset_revision", dataset_revisions)
+def test_dataset_on_hf(dataset_revision: tuple[str, str]):
+    repo_id, revision = dataset_revision
+    try:
+        huggingface_hub.dataset_info(repo_id, revision=revision)
+    except (
+        huggingface_hub.errors.RepositoryNotFoundError,
+        huggingface_hub.errors.RevisionNotFoundError,
+    ):
+        assert False, f"Dataset {repo_id} - {revision} not available"
+    except Exception as e:
+        assert False, f"Dataset {repo_id} - {revision} failed with {e}"
 
 
 def test_superseded_dataset_exists():
     tasks = mteb.get_tasks(exclude_superseded=False)
     for task in tasks:
         if task.superseded_by:
-            assert (
-                task.superseded_by in TASKS_REGISTRY
-            ), f"{task} is superseded by {task.superseded_by} but {task.superseded_by} is not in the TASKS_REGISTRY"
+            assert task.superseded_by in TASKS_REGISTRY, (
+                f"{task} is superseded by {task.superseded_by} but {task.superseded_by} is not in the TASKS_REGISTRY"
+            )

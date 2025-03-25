@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 from .aggregated_tasks import *
+from .Audio.AudioClassification import *
+from .Audio.AudioMultilabelClassification import *
+from .Audio.AudioZeroshotClassification import *
 from .Audio.Clustering import *
 from .BitextMining import *
 from .Classification import *
@@ -21,4 +24,3 @@ from .Retrieval import *
 from .SpeedTask import *
 from .STS import *
 from .Summarization import *
-from .SummaryRetrieval import *

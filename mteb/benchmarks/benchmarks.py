@@ -79,7 +79,7 @@ This benchmark was created to account for the fact that many models have now bee
 to tasks in the original MTEB, and contains tasks that are not as frequently used for model training.
 This way the new benchmark and leaderboard can give our users a more realistic expectation of models' generalization performance.
 
-The original MTEB leaderboard is available under the [MTEB(eng, classic)](https://huggingface.co/spaces/mteb/leaderboard?benchmark_name=MTEB%28eng%2C+classic%29) tab.
+The original MTEB leaderboard is available under the [MTEB(eng, v1)](http://mteb-leaderboard.hf.space/?benchmark_name=MTEB%28eng%2C+v1%29) tab.
     """,
     citation="",
     contacts=["KennethEnevoldsen", "Muennighoff"],
@@ -153,13 +153,17 @@ MTEB_ENG_CLASSIC = Benchmark(
                 eval_splits=["test"],
                 hf_subsets=["en"],
             ),
-            get_task("STS17", eval_splits=["test"], hf_subsets=["en-en"]),
+            get_task(
+                "STS17",
+                eval_splits=["test"],
+                hf_subsets=["en-en"],
+            ),
             get_task("STS22", eval_splits=["test"], hf_subsets=["en"]),
         )
     ),
     description="""The original English benchmark by Muennighoff et al., (2023).
 This page is an adaptation of the [old MTEB leaderboard](https://huggingface.co/spaces/mteb/leaderboard_legacy).
-We recommend that you use [MTEB(eng)](https://huggingface.co/spaces/mteb/leaderboard?benchmark_name=MTEB%28eng%29) instead as it uses updated versions of the task making it notably faster to run and resolves [a known bug](https://github.com/embeddings-benchmark/mteb/issues/1156) in existing tasks. This benchmark also removes datasets common for fine-tuning such as MSMARCO, which makes model performance scores more comparable. However, generally, both benchmarks provide similar estimates.
+We recommend that you use [MTEB(eng, v2)](http://mteb-leaderboard.hf.space/?benchmark_name=MTEB%28eng%2C+v2%29) instead as it uses updated versions of the task making it notably faster to run and resolves [a known bug](https://github.com/embeddings-benchmark/mteb/issues/1156) in existing tasks. This benchmark also removes datasets common for fine-tuning such as MSMARCO, which makes model performance scores more comparable. However, generally, both benchmarks provide similar estimates.
     """,
     citation="""@inproceedings{muennighoff-etal-2023-mteb,
     title = "{MTEB}: Massive Text Embedding Benchmark",
@@ -222,13 +226,13 @@ MTEB_MAIN_RU = Benchmark(
     description="A Russian version of the Massive Text Embedding Benchmark with a number of novel Russian tasks in all task categories of the original MTEB.",
     reference="https://aclanthology.org/2023.eacl-main.148/",
     citation="""@misc{snegirev2024russianfocusedembeddersexplorationrumteb,
-      title={The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design}, 
+      title={The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design},
       author={Artem Snegirev and Maria Tikhonova and Anna Maksimova and Alena Fenogenova and Alexander Abramov},
       year={2024},
       eprint={2408.12503},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2408.12503}, 
+      url={https://arxiv.org/abs/2408.12503},
 }
 """,
 )
@@ -245,7 +249,7 @@ MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
     description="Retrieval w/Instructions is the task of finding relevant documents for a query that has detailed instructions.",
     reference="https://arxiv.org/abs/2403.15246",
     citation="""@misc{weller2024followir,
-      title={FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions}, 
+      title={FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions},
       author={Orion Weller and Benjamin Chang and Sean MacAvaney and Kyle Lo and Arman Cohan and Benjamin Van Durme and Dawn Lawrie and Luca Soldaini},
       year={2024},
       eprint={2403.15246},
@@ -346,7 +350,7 @@ SEB = Benchmark(
             "SwedishSentimentClassification",
             "SweRecClassification",
             # Retrieval
-            "DanFEVER",
+            "DanFeverRetrieval",
             "NorQuadRetrieval",
             "SNLRetrieval",
             "SwednRetrieval",
@@ -394,13 +398,13 @@ CoIR = Benchmark(
     description="CoIR: A Comprehensive Benchmark for Code Information Retrieval Models",
     reference="https://github.com/CoIR-team/coir",
     citation="""@misc{li2024coircomprehensivebenchmarkcode,
-      title={CoIR: A Comprehensive Benchmark for Code Information Retrieval Models}, 
+      title={CoIR: A Comprehensive Benchmark for Code Information Retrieval Models},
       author={Xiangyang Li and Kuicai Dong and Yi Quan Lee and Wei Xia and Yichun Yin and Hao Zhang and Yong Liu and Yasheng Wang and Ruiming Tang},
       year={2024},
       eprint={2407.02883},
       archivePrefix={arXiv},
       primaryClass={cs.IR},
-      url={https://arxiv.org/abs/2407.02883}, 
+      url={https://arxiv.org/abs/2407.02883},
     }""",
 )
 
@@ -481,13 +485,13 @@ MTEB_FRA = Benchmark(
     description="MTEB-French, a French expansion of the original benchmark with high-quality native French datasets.",
     reference="https://arxiv.org/abs/2405.20468",
     citation="""@misc{ciancone2024mtebfrenchresourcesfrenchsentence,
-      title={MTEB-French: Resources for French Sentence Embedding Evaluation and Analysis}, 
+      title={MTEB-French: Resources for French Sentence Embedding Evaluation and Analysis},
       author={Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
       year={2024},
       eprint={2405.20468},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2405.20468}, 
+      url={https://arxiv.org/abs/2405.20468},
 }""",
     contacts=["imenelydiaker"],
 )
@@ -528,13 +532,13 @@ MTEB_DEU = Benchmark(
     description="A benchmark for text-embedding performance in German.",
     reference="https://arxiv.org/html/2401.02709v1",
     citation="""@misc{wehrli2024germantextembeddingclustering,
-      title={German Text Embedding Clustering Benchmark}, 
+      title={German Text Embedding Clustering Benchmark},
       author={Silvan Wehrli and Bert Arnrich and Christopher Irrgang},
       year={2024},
       eprint={2401.02709},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2401.02709}, 
+      url={https://arxiv.org/abs/2401.02709},
 }""",
     contacts=["slvnwhrl"],
 )
@@ -859,41 +863,44 @@ indic_languages = [
 
 MTEB_INDIC = Benchmark(
     name="MTEB(Indic, v1)",
-    tasks=get_tasks(
-        tasks=[
-            # Bitext
-            "IN22ConvBitextMining",
-            "IN22GenBitextMining",
-            "IndicGenBenchFloresBitextMining",
-            "LinceMTBitextMining",
-            # clustering
-            "SIB200ClusteringS2S",
-            # classification
-            "BengaliSentimentAnalysis",
-            "GujaratiNewsClassification",
-            "HindiDiscourseClassification",
-            "SentimentAnalysisHindi",
-            "MalayalamNewsClassification",
-            "IndicLangClassification",
-            "MTOPIntentClassification",
-            "MultiHateClassification",
-            "TweetSentimentClassification",
-            "NepaliNewsClassification",
-            "PunjabiNewsClassification",
-            "SanskritShlokasClassification",
-            "UrduRomanSentimentClassification",
-            # STS
-            "IndicCrosslingualSTS",
-            # pair classification
-            "XNLI",
-            # retrieval
-            "BelebeleRetrieval",
-            "XQuADRetrieval",
-            # reranking
-            "WikipediaRerankingMultilingual",
-        ],
-        languages=indic_languages,
-        exclusive_language_filter=True,
+    tasks=MTEBTasks(
+        get_tasks(
+            tasks=[
+                # Bitext
+                "IN22ConvBitextMining",
+                "IN22GenBitextMining",
+                "IndicGenBenchFloresBitextMining",
+                "LinceMTBitextMining",
+                # clustering
+                "SIB200ClusteringS2S",
+                # classification
+                "BengaliSentimentAnalysis",
+                "GujaratiNewsClassification",
+                "HindiDiscourseClassification",
+                "SentimentAnalysisHindi",
+                "MalayalamNewsClassification",
+                "IndicLangClassification",
+                "MTOPIntentClassification",
+                "MultiHateClassification",
+                "TweetSentimentClassification",
+                "NepaliNewsClassification",
+                "PunjabiNewsClassification",
+                "SanskritShlokasClassification",
+                "UrduRomanSentimentClassification",
+                # pair classification
+                "XNLI",
+                # retrieval
+                "BelebeleRetrieval",
+                "XQuADRetrieval",
+                # reranking
+                "WikipediaRerankingMultilingual",
+            ],
+            languages=indic_languages,
+            exclusive_language_filter=True,
+        )
+        +
+        # STS
+        (get_task("IndicCrosslingualSTS"),)
     ),
     description="A regional geopolitical text embedding benchmark targetting embedding performance on Indic languages.",
     reference=None,
@@ -1060,15 +1067,35 @@ LONG_EMBED = Benchmark(
 
 BRIGHT = Benchmark(
     name="BRIGHT",
-    tasks=get_tasks(
-        tasks=["BrightRetrieval"],
-    ),
+    tasks=get_tasks(tasks=["BrightRetrieval"], eval_splits=["standard"]),
     description="""BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
     BRIGHT is the first text retrieval
     benchmark that requires intensive reasoning to retrieve relevant documents with
     a dataset consisting of 1,384 real-world queries spanning diverse domains, such as
     economics, psychology, mathematics, and coding. These queries are drawn from
     naturally occurring and carefully curated human data.
+    """,
+    reference="https://brightbenchmark.github.io/",
+    citation="""@article{su2024bright,
+  title={Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
+  author={Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
+  journal={arXiv preprint arXiv:2407.12883},
+  year={2024}
+}""",
+)
+
+
+BRIGHT_LONG = Benchmark(
+    name="BRIGHT (long)",
+    tasks=get_tasks(tasks=["BrightRetrieval"], eval_splits=["long"]),
+    description="""BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval.
+BRIGHT is the first text retrieval
+benchmark that requires intensive reasoning to retrieve relevant documents with
+a dataset consisting of 1,384 real-world queries spanning diverse domains, such as
+economics, psychology, mathematics, and coding. These queries are drawn from
+naturally occurring and carefully curated human data.
+
+This is the long version of the benchmark, which only filter longer documents.
     """,
     reference="https://brightbenchmark.github.io/",
     citation="""@article{su2024bright,
@@ -1092,13 +1119,13 @@ CODE_RAG = Benchmark(
     description="A benchmark for evaluating code retrieval augmented generation, testing models' ability to retrieve relevant programming solutions, tutorials and documentation.",
     reference="https://arxiv.org/abs/2406.14497",
     citation="""@misc{wang2024coderagbenchretrievalaugmentcode,
-      title={CodeRAG-Bench: Can Retrieval Augment Code Generation?}, 
+      title={CodeRAG-Bench: Can Retrieval Augment Code Generation?},
       author={Zora Zhiruo Wang and Akari Asai and Xinyan Velocity Yu and Frank F. Xu and Yiqing Xie and Graham Neubig and Daniel Fried},
       year={2024},
       eprint={2406.14497},
       archivePrefix={arXiv},
       primaryClass={cs.SE},
-      url={https://arxiv.org/abs/2406.14497}, 
+      url={https://arxiv.org/abs/2406.14497},
     }""",
 )
 
@@ -1192,12 +1219,18 @@ C_MTEB = Benchmark(
                 "JDReview",
             ],
         )
-        + get_tasks(tasks=["MultilingualSentiment"], eval_splits=["test"])
         + get_tasks(
             tasks=[
+                "MultilingualSentiment",
                 "ATEC",
                 "BQ",
                 "STSB",
+            ],
+            eval_splits=["test"],
+        )
+        + get_tasks(
+            tasks=[
+                "MultilingualSentiment",
             ],
             eval_splits=["validation"],
         )
@@ -1205,7 +1238,7 @@ C_MTEB = Benchmark(
     description="The Chinese Massive Text Embedding Benchmark (C-MTEB) is a comprehensive benchmark for Chinese text embeddings covering 6 tasks and 35 datasets.",
     reference="https://github.com/FlagOpen/FlagEmbedding/tree/master/research/C_MTEB",
     citation="""@misc{c-pack,
-      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, 
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding},
       author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff},
       year={2023},
       eprint={2309.07597},
@@ -1330,7 +1363,7 @@ CHEMTEB = Benchmark(
     description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
     reference="https://arxiv.org/abs/2412.00532",
     citation="""@article{kasmaee2024chemteb,
-    title={ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
+    title={ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \\& Efficiency on a Specific Domain},
     author={Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
     journal={arXiv preprint arXiv:2412.00532},
     year={2024}
@@ -1363,12 +1396,281 @@ BEIR_NL = Benchmark(
     reference="https://arxiv.org/abs/2412.08329",
     contacts=["nikolay-banar"],
     citation="""@misc{banar2024beirnlzeroshotinformationretrieval,
-    title={BEIR-NL: Zero-shot Information Retrieval Benchmark for the Dutch Language}, 
+    title={BEIR-NL: Zero-shot Information Retrieval Benchmark for the Dutch Language},
      author={Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
      year={2024},
      eprint={2412.08329},
      archivePrefix={arXiv},
      primaryClass={cs.CL},
-     url={https://arxiv.org/abs/2412.08329}, 
+     url={https://arxiv.org/abs/2412.08329},
 }""",
+)
+
+MIEB_common_tasks = [
+    # Image Classification
+    "Birdsnap",  # fine
+    "Caltech101",  # fine
+    "CIFAR10",  # coarse
+    "CIFAR100",  # fine
+    "Country211",  # fine
+    "DTD",  # coarse
+    "EuroSAT",  # coarse
+    "FER2013",  # coarse
+    "FGVCAircraft",  # fine
+    "Food101Classification",  # fine
+    "GTSRB",  # coarse
+    "Imagenet1k",  # fine
+    "MNIST",  # coarse
+    "OxfordFlowersClassification",  # fine
+    "OxfordPets",  # fine
+    "PatchCamelyon",  # coarse
+    "RESISC45",  # fine
+    "StanfordCars",  # fine
+    "STL10",  # coarse
+    "SUN397",  # fine
+    "UCF101",  # fine
+    # ImageMultiLabelClassification
+    "VOC2007",  # coarse
+    # Clustering
+    "CIFAR10Clustering",
+    "CIFAR100Clustering",
+    "ImageNetDog15Clustering",
+    "ImageNet10Clustering",
+    "TinyImageNetClustering",
+    # ZeroShotClassification
+    "BirdsnapZeroShot",
+    "Caltech101ZeroShot",
+    "CIFAR10ZeroShot",
+    "CIFAR100ZeroShot",
+    "CLEVRZeroShot",
+    "CLEVRCountZeroShot",
+    "Country211ZeroShot",
+    "DTDZeroShot",
+    "EuroSATZeroShot",
+    "FER2013ZeroShot",
+    "FGVCAircraftZeroShot",
+    "Food101ZeroShot",
+    "GTSRBZeroShot",
+    "Imagenet1kZeroShot",
+    "MNISTZeroShot",
+    "OxfordPetsZeroShot",
+    "PatchCamelyonZeroShot",
+    "RenderedSST2",
+    "RESISC45ZeroShot",
+    "StanfordCarsZeroShot",
+    "STL10ZeroShot",
+    "SUN397ZeroShot",
+    "UCF101ZeroShot",
+    # Any2TextMutipleChoice
+    "CVBenchCount",
+    "CVBenchRelation",
+    "CVBenchDepth",
+    "CVBenchDistance",
+    # Any2AnyMultipleChoice
+    "BLINKIT2IMultiChoice",
+    "BLINKIT2TMultiChoice",
+    # Compositionality
+    "ImageCoDeT2IMultiChoice",
+    "AROCocoOrder",
+    "AROFlickrOrder",
+    "AROVisualAttribution",
+    "AROVisualRelation",
+    "SugarCrepe",
+    "Winoground",
+    # VisualSTS
+    "STS12VisualSTS",
+    "STS13VisualSTS",
+    "STS14VisualSTS",
+    "STS15VisualSTS",
+    "STS16VisualSTS",
+    # Any2AnyRetrieval
+    "BLINKIT2IRetrieval",
+    "BLINKIT2TRetrieval",
+    "CIRRIT2IRetrieval",
+    "CUB200I2IRetrieval",
+    "EDIST2ITRetrieval",
+    "Fashion200kI2TRetrieval",
+    "Fashion200kT2IRetrieval",
+    "FashionIQIT2IRetrieval",
+    "Flickr30kI2TRetrieval",
+    "Flickr30kT2IRetrieval",
+    "FORBI2IRetrieval",
+    "GLDv2I2IRetrieval",
+    "GLDv2I2TRetrieval",
+    "HatefulMemesI2TRetrieval",
+    "HatefulMemesT2IRetrieval",
+    "ImageCoDeT2IRetrieval",
+    "InfoSeekIT2ITRetrieval",
+    "InfoSeekIT2TRetrieval",
+    "MemotionI2TRetrieval",
+    "MemotionT2IRetrieval",
+    "METI2IRetrieval",
+    "MSCOCOI2TRetrieval",
+    "MSCOCOT2IRetrieval",
+    "NIGHTSI2IRetrieval",
+    "OVENIT2ITRetrieval",
+    "OVENIT2TRetrieval",
+    "ROxfordEasyI2IMultiChoice",
+    "ROxfordMediumI2IMultiChoice",
+    "ROxfordHardI2IMultiChoice",
+    "RP2kI2IRetrieval",
+    "RParisEasyI2IMultiChoice",
+    "RParisMediumI2IMultiChoice",
+    "RParisHardI2IMultiChoice",
+    "SciMMIRI2TRetrieval",
+    "SciMMIRT2IRetrieval",
+    "SketchyI2IRetrieval",
+    "SOPI2IRetrieval",
+    "StanfordCarsI2IRetrieval",
+    "TUBerlinT2IRetrieval",
+    "VidoreArxivQARetrieval",
+    "VidoreDocVQARetrieval",
+    "VidoreInfoVQARetrieval",
+    "VidoreTabfquadRetrieval",
+    "VidoreTatdqaRetrieval",
+    "VidoreShiftProjectRetrieval",
+    "VidoreSyntheticDocQAAIRetrieval",
+    "VidoreSyntheticDocQAEnergyRetrieval",
+    "VidoreSyntheticDocQAGovernmentReportsRetrieval",
+    "VidoreSyntheticDocQAHealthcareIndustryRetrieval",
+    "VisualNewsI2TRetrieval",
+    "VisualNewsT2IRetrieval",
+    "VizWizIT2TRetrieval",
+    "VQA2IT2TRetrieval",
+    "WebQAT2ITRetrieval",
+    "WebQAT2TRetrieval",
+]
+
+MIEB_ENG = Benchmark(
+    name="MIEB(eng)",
+    tasks=get_tasks(
+        tasks=MIEB_common_tasks
+        + [
+            "VisualSTS17Eng",
+            "VisualSTS-b-Eng",
+        ],
+    ),
+    description="""MIEB(eng) is a comprehensive image embeddings benchmark, spanning 8 task types, covering 125 tasks.
+    In addition to image classification (zero shot and linear probing), clustering, retrieval, MIEB includes tasks in compositionality evaluation,
+    document undestanding, visual STS, and CV-centric tasks.""",
+    reference="",
+    contacts=["gowitheflow-1998", "isaac-chung"],
+    citation="",
+)
+
+MIEB_MULTILINGUAL = Benchmark(
+    name="MIEB(Multilingual)",
+    tasks=get_tasks(
+        tasks=MIEB_common_tasks
+        + [
+            "WITT2IRetrieval",
+            "XFlickr30kCoT2IRetrieval",
+            "XM3600T2IRetrieval",
+            "VisualSTS17Eng",
+            "VisualSTS-b-Eng",
+            "VisualSTS17Multilingual",
+            "VisualSTS-b-Multilingual",
+        ],
+    ),
+    description="""MIEB(Multilingual) is a comprehensive image embeddings benchmark, spanning 10 task types, covering 130 tasks and a total of 39 languages.
+    In addition to image classification (zero shot and linear probing), clustering, retrieval, MIEB includes tasks in compositionality evaluation,
+    document undestanding, visual STS, and CV-centric tasks. This benchmark consists of MIEB(eng) + 3 multilingual retrieval
+    datasets + the multilingual parts of VisualSTS-b and VisualSTS-16.""",
+    reference="",
+    contacts=["gowitheflow-1998", "isaac-chung"],
+    citation="",
+)
+
+MIEB_LITE = Benchmark(
+    name="MIEB(lite)",
+    tasks=get_tasks(
+        tasks=[
+            # Image Classification
+            "Country211",
+            "DTD",
+            "EuroSAT",
+            "GTSRB",
+            "OxfordPets",
+            "PatchCamelyon",
+            "RESISC45",
+            "SUN397",
+            # Clustering
+            "ImageNetDog15Clustering",
+            "TinyImageNetClustering",
+            # ZeroShotClassification
+            "CIFAR100ZeroShot",
+            "Country211ZeroShot",
+            "FER2013ZeroShot",
+            "FGVCAircraftZeroShot",
+            "Food101ZeroShot",
+            "OxfordPetsZeroShot",
+            "StanfordCarsZeroShot",
+            # Any2TextMutipleChoice
+            "CVBenchCount",
+            "CVBenchRelation",
+            "CVBenchDepth",
+            "CVBenchDistance",
+            # Any2AnyMultipleChoice
+            "BLINKIT2IMultiChoice",
+            "ImageCoDeT2IMultiChoice",
+            # ImageTextPairClassification
+            "AROCocoOrder",
+            "AROFlickrOrder",
+            "AROVisualAttribution",
+            "AROVisualRelation",
+            "Winoground",
+            # VisualSTS
+            "STS13VisualSTS",
+            "STS15VisualSTS",
+            "STS17MultilingualVisualSTS",
+            "STSBenchmarkMultilingualVisualSTS",
+            # Any2AnyRetrieval
+            "CIRRIT2IRetrieval",
+            "CUB200I2IRetrieval",
+            "Fashion200kI2TRetrieval",
+            "HatefulMemesI2TRetrieval",
+            "InfoSeekIT2TRetrieval",
+            "NIGHTSI2IRetrieval",
+            "OVENIT2TRetrieval",
+            "RP2kI2IRetrieval",
+            "VidoreDocVQARetrieval",
+            "VidoreInfoVQARetrieval",
+            "VidoreTabfquadRetrieval",
+            "VidoreTatdqaRetrieval",
+            "VidoreShiftProjectRetrieval",
+            "VidoreSyntheticDocQAAIRetrieval",
+            "VisualNewsI2TRetrieval",
+            "VQA2IT2TRetrieval",
+            "WebQAT2ITRetrieval",
+            "WITT2IRetrieval",
+            "XM3600T2IRetrieval",
+        ],
+    ),
+    description="""MIEB(lite) is a comprehensive image embeddings benchmark, spanning 10 task types, covering 51 tasks.
+    This is a lite version of MIEB(Multilingual), designed to be run at a fraction of the cost while maintaining
+    relative rank of models.""",
+    reference="",
+    contacts=["gowitheflow-1998", "isaac-chung"],
+    citation="",
+)
+
+BUILT_MTEB = Benchmark(
+    name="BuiltBench(eng)",
+    tasks=get_tasks(
+        tasks=[
+            "BuiltBenchClusteringP2P",
+            "BuiltBenchClusteringS2S",
+            "BuiltBenchRetrieval",
+            "BuiltBenchReranking",
+        ],
+    ),
+    description='"Built-Bench" is an ongoing effort aimed at evaluating text embedding models in the context of built asset management, spanning over various dicsiplines such as architeture, engineering, constrcution, and operations management of the built environment.',
+    reference="https://arxiv.org/abs/2411.12056",
+    citation="""@article{shahinmoghadam2024benchmarking,
+    title={Benchmarking pre-trained text embedding models in aligning built asset information},
+    author={Shahinmoghadam, Mehrzad and Motamedi, Ali},
+    journal={arXiv preprint arXiv:2411.12056},
+    year={2024}
+}""",
+    contacts=["mehrzadshm"],
 )

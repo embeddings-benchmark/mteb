@@ -15,6 +15,8 @@ from .mock_tasks import (
     MockAny2AnyRetrievalI2TTask,
     MockAny2AnyRetrievalT2ITask,
     MockAudioClusteringTask,
+    MockAudioMultilabelClassificationTask,
+    MockAudioZeroshotClassificationTask,
     MockBitextMiningTask,
     MockClassificationTask,
     MockClusteringFastTask,
@@ -136,6 +138,13 @@ MOCK_MIEB_TASK_GRID = [
     MockMultilingualImageMultilabelClassificationTask(),
 ]
 
+MOCK_MAEB_TASK_GRID = [
+    MockAudioClusteringTask(),
+    MockAudioMultilabelClassificationTask(),
+    MockAudioZeroshotClassificationTask(),
+]
+
+
 MOCK_MIEB_TASK_GRID_AS_STRING = [
     t.metadata.name if isinstance(t, AbsTask) else t for t in MOCK_MIEB_TASK_GRID
 ]
@@ -144,7 +153,6 @@ MOCK_MIEB_TASK_REGISTRY = {
     task.metadata.name: type(task) for task in MOCK_MIEB_TASK_GRID
 }
 
-MOCK_MAEB_TASK_GRID = [MockAudioClusteringTask()]
 
 MOCK_MAEB_TASK_GRID_AS_STRING = [
     t.metadata.name if isinstance(t, AbsTask) else t for t in MOCK_MAEB_TASK_GRID

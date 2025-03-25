@@ -115,6 +115,7 @@ class MLSUMClusteringS2SFast(AbsTaskClusteringFast, MultilingualTask):
         journal={arXiv preprint arXiv:2004.14900},
         year={2020}
         }""",
+        adapted_from=["MLSUMClusteringS2S"],
     )
 
     def load_data(self, **kwargs):

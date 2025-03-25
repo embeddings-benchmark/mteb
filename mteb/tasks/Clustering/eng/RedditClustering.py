@@ -35,8 +35,8 @@ class RedditFastClusteringS2S(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation="""@article{geigle:2021:arxiv,
-        author    = {Gregor Geigle and 
-                        Nils Reimers and 
+        author    = {Gregor Geigle and
+                        Nils Reimers and
                         Andreas R{\"u}ckl{\'e} and
                         Iryna Gurevych},
         title     = {TWEAC: Transformer with Extendable QA Agent Classifiers},
@@ -48,6 +48,7 @@ class RedditFastClusteringS2S(AbsTaskClusteringFast):
         eprint    = {2104.07081}
         }""",
         prompt="Identify the topic or theme of Reddit posts based on the titles",
+        adapted_from=["RedditClustering"],
     )
 
     def dataset_transform(self):
@@ -93,8 +94,8 @@ class RedditClustering(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         bibtex_citation="""@article{geigle:2021:arxiv,
-        author    = {Gregor Geigle and 
-                        Nils Reimers and 
+        author    = {Gregor Geigle and
+                        Nils Reimers and
                         Andreas R{\"u}ckl{\'e} and
                         Iryna Gurevych},
         title     = {TWEAC: Transformer with Extendable QA Agent Classifiers},

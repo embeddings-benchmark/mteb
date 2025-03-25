@@ -6,7 +6,7 @@ from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class DTDClassification(AbsTaskZeroshotClassification):
+class DTDZeroshotClassification(AbsTaskZeroshotClassification):
     metadata = TaskMetadata(
         name="DTDZeroShot",
         description="Describable Textures Dataset in 47 categories.",
