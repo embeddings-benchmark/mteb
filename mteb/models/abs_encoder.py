@@ -50,6 +50,8 @@ class AbsEncoder(ABC):
             return dot_score(embeddings1, embeddings2)
         elif self.mteb_model_meta.similarity_fn_name is ScoringFunction.MAX_SIM:
             return max_sim(embeddings1, embeddings2)
+        elif self.mteb_model_meta.similarity_fn_name is ScoringFunction.VISION:
+            return vision_similarity(embeddings1, embeddings2)
         raise ValueError("Similarity function not specified.")
 
     def similarity_pairwise(
