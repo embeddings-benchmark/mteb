@@ -31,6 +31,7 @@ class NanoDBPediaRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation="""@article{lehmann2015dbpedia, title={DBpedia: A large-scale, multilingual knowledge base extracted from Wikipedia}, author={Lehmann, Jens and et al.}, journal={Semantic Web}, year={2015}}""",
+        adapted_from=["DBPedia"],
     )
 
     def load_data(self, **kwargs):

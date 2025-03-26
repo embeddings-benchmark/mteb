@@ -44,7 +44,7 @@ class JasperWrapper(Wrapper):
         instruction = self.get_task_instruction(task_name, prompt_type)
 
         # to passage prompts won't be applied to passages
-        if prompt_type == PromptType.passage and task.metadata.type == "s2p":
+        if prompt_type == PromptType.passage and task.metadata.category == "s2p":
             instruction = None
 
         embeddings = self.model.encode(
