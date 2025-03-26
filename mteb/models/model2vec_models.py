@@ -10,6 +10,7 @@ import numpy as np
 from mteb.model_meta import ModelMeta
 from mteb.models.bge_models import bge_training_data
 from mteb.models.wrapper import Wrapper
+from mteb.requires_package import requires_package
 
 logger = logging.getLogger(__name__)
 
@@ -26,12 +27,8 @@ class Model2VecWrapper(Wrapper):
             model_name: The Model2Vec model to load from HuggingFace Hub.
             **kwargs: Additional arguments to pass to the wrapper.
         """
-        try:
-            from model2vec import StaticModel  # type: ignore
-        except ModuleNotFoundError as e:
-            raise ModuleNotFoundError(
-                "To use the Model2Vec models `model2vec` is required. Please install it with `pip install mteb[model2vec]`."
-            ) from e
+        requires_package(self, "model2vec", model_name, "pip install 'mteb[model2vec]'")
+        from model2vec import StaticModel  # type: ignore
 
         self.model_name = model_name
         self.static_model = StaticModel.from_pretrained(self.model_name)
