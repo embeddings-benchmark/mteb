@@ -146,7 +146,7 @@ class PairClassificationEvaluator(Evaluator):
         max_scores = defaultdict(list)
         for short_name, name, scores, reverse in [
             [
-                ScoringFunction.MODEL_SPECIFIC,
+                "similarity",
                 "Model-Specified Similarity",
                 similarity_scores,
                 True,

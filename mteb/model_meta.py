@@ -42,7 +42,7 @@ class ScoringFunction(str, Enum):
     MAX_SIM = "MaxSim"
     EUCLIDEAN = "euclidean"
     MANHATTAN = "manhattan"
-    MODEL_SPECIFIC = "similarity"
+    CUSTOM = "custom"
     VISION = "vision"
 
 

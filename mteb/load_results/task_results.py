@@ -383,7 +383,7 @@ class TaskResult(BaseModel):
                     (ScoringFunction.EUCLIDEAN.value, "euclidean"),
                     (ScoringFunction.DOT_PRODUCT.value, "dot"),
                     ("max", "max"),
-                    (ScoringFunction.MODEL_SPECIFIC.value, "similarity"),
+                    ("similarity", "similarity"),
                 ]:
                     prev_name_scores = hf_subset_scores.pop(prev_name, None)
                     if prev_name_scores is not None:
