@@ -28,6 +28,7 @@ class AbsEncoder(ABC):
     Also contains some utility functions for wrappers for working with prompts and instructions.
     """
 
+    model: Any
     mteb_model_meta: ModelMeta | None = None
     model_prompts: dict[str, str] | None = None
     instruction_template: str | Callable[[str, str], str] | None = None
@@ -114,6 +115,50 @@ class AbsEncoder(ABC):
         raise NotImplementedError(
             "The encode method must be implemented in the subclass."
         )
+
+    def predict(
+        self,
+        inputs1: DataLoader[BatchedInput],
+        inputs2: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        """Predicts relevance scores for pairs of inputs.
+
+        Args:
+            inputs1: First Dataloader of inputs to encode.
+            inputs2: Second Dataloader of inputs to encode.
+            task_metadata: Metadata of the current task.
+            hf_split: Split of current task, allows to know some additional information about current split.
+                E.g. Current language
+            hf_subset: Subset of current task. Similar to `hf_split` to get more information
+            prompt_type: The name type of prompt. (query or passage)
+            **kwargs: Additional arguments to pass to the cross-encoder.
+
+        Returns:
+            The predicted relevance scores for each inputs pair.
+        """
+        embeddings1 = self.model.encode(
+            inputs1,
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            prompt_type=prompt_type,
+            **kwargs,
+        )
+        embeddings2 = self.model.encode(
+            inputs2,
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            prompt_type=prompt_type,
+            **kwargs,
+        )
+        return self.similarity_pairwise(embeddings1, embeddings2)
 
     def get_prompt_name(
         self,

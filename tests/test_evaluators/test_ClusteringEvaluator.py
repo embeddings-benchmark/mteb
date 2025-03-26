@@ -28,7 +28,7 @@ class TestClusteringEvaluator:
         dataset = Dataset.from_dict({"text": sentences, "labels": labels})
         clusterer = ClusteringEvaluator(
             dataset,
-            tasl_metadata="",  # typing: ignore
+            task_metadata="",  # typing: ignore
             hf_subset="",
             hf_split="",
         )
