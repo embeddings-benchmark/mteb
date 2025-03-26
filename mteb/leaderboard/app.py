@@ -21,7 +21,7 @@ from mteb.benchmarks.benchmarks import MTEB_multilingual
 from mteb.custom_validators import MODALITIES
 from mteb.languages import ISO_TO_LANGUAGE
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
-from mteb.leaderboard.table import scores_to_tables
+from mteb.leaderboard.table import create_tables
 
 logging.getLogger("mteb.load_results.task_results").setLevel(
     logging.WARNING
@@ -234,7 +234,7 @@ filtered_models = filter_models(
     zero_shot_setting="allow_all",
 )
 
-summary_table, per_task_table = scores_to_tables(
+summary_table, per_task_table = create_tables(
     [entry for entry in default_scores if entry["model_name"] in filtered_models]
 )
 
@@ -809,7 +809,7 @@ see existing implementations [here](https://github.com/embeddings-benchmark/mteb
                 filtered_scores.append(entry)
         else:
             filtered_scores = scores
-        summary, per_task = scores_to_tables(filtered_scores, search_query)
+        summary, per_task = create_tables(filtered_scores, search_query)
         elapsed = time.time() - start_time
         logger.info(f"update_tables callback: {elapsed}s")
         return summary, per_task

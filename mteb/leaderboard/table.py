@@ -111,9 +111,7 @@ def create_light_green_cmap():
     return light_green_cmap
 
 
-def scores_to_tables(
-    scores_long: list[dict], search_query: str | None = None
-) -> tuple[gr.DataFrame, gr.DataFrame]:
+def scores_to_tables(scores_long: list[dict], search_query: str | None = None):
     if not scores_long:
         no_results_frame = pd.DataFrame(
             {"No results": ["You can try relaxing your criteria"]}
@@ -210,7 +208,7 @@ def scores_to_tables(
     column_types[1] = "markdown"
     score_columns = ["Mean (Task)", "Mean (TaskType)", *mean_per_type.columns]
 
-    return apply_styling(joint_table, per_task, score_columns, column_types)
+    return joint_table, per_task, score_columns, column_types
 
 
 def apply_styling(
@@ -252,14 +250,21 @@ def apply_styling(
             if col != "Zero-shot":
                 gmap_values = numeric_data[col] * 100
                 cmap = light_green_cmap
+                joint_table_style = joint_table_style.background_gradient(
+                    cmap=cmap,
+                    subset=pd.IndexSlice[mask, col],
+                    gmap=gmap_values.loc[mask],
+                )
             else:
                 gmap_values = numeric_data[col]
-                cmap = "Greens"
-            joint_table_style = joint_table_style.background_gradient(
-                cmap=cmap,
-                subset=pd.IndexSlice[mask, col],
-                gmap=gmap_values.loc[mask],
-            )
+                cmap = "RdYlGn"
+                joint_table_style = joint_table_style.background_gradient(
+                    cmap=cmap,
+                    subset=pd.IndexSlice[mask, col],
+                    vmin=50,
+                    vmax=100,
+                    gmap=gmap_values.loc[mask],
+                )
     task_score_columns = per_task.select_dtypes("number").columns
     per_task[task_score_columns] *= 100
     per_task_style = per_task.style.format(
@@ -282,3 +287,17 @@ def apply_styling(
         ),
         gr.DataFrame(per_task_style, interactive=False, pinned_columns=1),
     )
+
+
+def create_tables(
+    scores_long: list[dict], search_query: str | None = None
+) -> tuple[gr.DataFrame, gr.DataFrame]:
+    result = scores_to_tables(scores_long, search_query)
+    if len(result) == 2:
+        joint_table, per_task = result
+        return joint_table, per_task
+    joint_table, per_task, score_columns, column_types = result
+    summary_table, per_task_table = apply_styling(
+        joint_table, per_task, score_columns, column_types
+    )
+    return summary_table, per_task_table
