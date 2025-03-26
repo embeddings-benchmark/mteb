@@ -87,9 +87,7 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
                         answer_id = str(text2id[a])
                     answer_ids.append(answer_id)
 
-                self.relevant_docs[split][query_id] = {
-                    answer_id: 1 for answer_id in answer_ids
-                }
+                self.relevant_docs[split][query_id] = dict.fromkeys(answer_ids, 1)
 
 
 def answers_to_list(example: dict) -> dict:

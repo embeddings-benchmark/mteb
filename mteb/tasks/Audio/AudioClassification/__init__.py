@@ -10,6 +10,7 @@ from .eng.LibriCount import *
 from .eng.MridinghamStroke import *
 from .eng.MridinghamTonic import *
 from .eng.NSynth import *
+from .eng.SpokeN import *
 from .eng.SpokenQAforIC import *
 from .eng.VoxCelebSA import *
 from .eng.VoxLingua107Top10 import *
