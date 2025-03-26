@@ -503,4 +503,8 @@ class DenseRetrievalExactSearch:
 
 def is_cross_encoder_compatible(model) -> bool:
     op = getattr(model, "predict", None)
-    return callable(op)
+    return (
+        callable(op)
+        if not hasattr(model, "mteb_model_meta")
+        else model.mteb_model_meta.is_cross_encoder
+    )
