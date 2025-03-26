@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import logging
 from collections import defaultdict
-from typing import TYPE_CHECKING
 
 import numpy as np
 import pandas as pd
@@ -13,9 +12,6 @@ import tqdm
 from datasets import load_dataset
 from packaging.version import Version
 from sklearn.metrics import auc
-
-if TYPE_CHECKING:
-    pass
 
 logger = logging.getLogger(__name__)
 

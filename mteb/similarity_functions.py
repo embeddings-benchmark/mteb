@@ -21,7 +21,7 @@ def convert_to_tensor(a: Array, dtype=torch.float32) -> torch.Tensor:
     return a
 
 
-def normalize_embeddings(embeddings: Array) -> Array:
+def normalize_embeddings(embeddings: Array) -> torch.Tensor:
     """Normalizes the embeddings matrix, so that each sentence embedding has unit length.
 
     Args:
@@ -30,6 +30,7 @@ def normalize_embeddings(embeddings: Array) -> Array:
     Returns:
         Tensor: The normalized embeddings matrix.
     """
+    embeddings = convert_to_tensor(embeddings)
     return torch.nn.functional.normalize(embeddings, p=2, dim=1)
 
 

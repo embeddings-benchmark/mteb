@@ -20,11 +20,11 @@ class Encoder(Protocol):
     In general the interface is kept aligned with sentence-transformers interface. In cases where exceptions occurs these are handled within MTEB.
     """
 
-    def __init__(self, model: str, revision: str, **kwargs) -> None:
+    def __init__(self, model_name: str, revision: str, **kwargs) -> None:
         """The initialization function for the encoder. Used when calling it from the mteb run CLI.
 
         Args:
-            model: name of the model
+            model_name: Name of the model
             revision: revision of the model
             kwargs: Any additional kwargs
         """
@@ -52,8 +52,9 @@ class Encoder(Protocol):
                     3. Composed prompt of task type + prompt type (query or passage)
                     4. Specific task type prompt
                     5. Specific prompt type (query or passage)
-            hf_split: Split of current task
-            hf_subset: Subset of current task
+            hf_split: Split of current task, allows to know some additional information about current split.
+                E.g. Current language
+            hf_subset: Subset of current task. Similar to `hf_split` to get more information
             prompt_type: The name type of prompt. (query or passage)
             **kwargs: Additional arguments to pass to the encoder.
 
@@ -119,8 +120,8 @@ class Encoder(Protocol):
 
     # def predict(
     #     self,
-    #     queries: Sequence[str],
-    #     passages: Sequence[str],
+    #     queries: Sequence[BatchedInput],
+    #     passages: Sequence[BatchedInput],
     #     *,
     #     task_name: str | None = None,
     #     instruction: str | None = None,
