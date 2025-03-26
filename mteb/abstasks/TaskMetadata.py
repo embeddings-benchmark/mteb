@@ -66,6 +66,7 @@ TASK_SUBTYPE = Literal[
     "Speaker Count Identification",
     "Spoken Digit Classification",
     "Gender Clustering",
+    "Music Clustering",
     "Rendered semantic textual similarity",
     "Sentiment Analysis",
     "Intent Classification",
