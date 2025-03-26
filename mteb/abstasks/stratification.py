@@ -242,7 +242,7 @@ class IterativeStratification(_BaseKFold):
             [self.percentage_per_fold[i] * self.n_samples for i in range(self.n_splits)]
         )
         rows = sp.lil_matrix(y).rows
-        rows_used = {i: False for i in range(self.n_samples)}
+        rows_used = dict.fromkeys(range(self.n_samples), False)
         all_combinations = []
         per_row_combinations = [[] for i in range(self.n_samples)]
         samples_with_combination = {}
