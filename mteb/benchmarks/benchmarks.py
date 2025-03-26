@@ -1465,14 +1465,13 @@ MIEB_common_tasks = [
     "STL10ZeroShot",
     "SUN397ZeroShot",
     "UCF101ZeroShot",
-    # Any2TextMutipleChoice
+    # Any2AnyMultipleChoice
+    "BLINKIT2IMultiChoice",
+    "BLINKIT2TMultiChoice",
     "CVBenchCount",
     "CVBenchRelation",
     "CVBenchDepth",
     "CVBenchDistance",
-    # Any2AnyMultipleChoice
-    "BLINKIT2IMultiChoice",
-    "BLINKIT2TMultiChoice",
     # Compositionality
     "ImageCoDeT2IMultiChoice",
     "AROCocoOrder",
@@ -1514,13 +1513,13 @@ MIEB_common_tasks = [
     "NIGHTSI2IRetrieval",
     "OVENIT2ITRetrieval",
     "OVENIT2TRetrieval",
-    "ROxfordEasyI2IMultiChoice",
-    "ROxfordMediumI2IMultiChoice",
-    "ROxfordHardI2IMultiChoice",
+    "ROxfordEasyI2IRetrieval",
+    "ROxfordMediumI2IRetrieval",
+    "ROxfordHardI2IRetrieval",
     "RP2kI2IRetrieval",
-    "RParisEasyI2IMultiChoice",
-    "RParisMediumI2IMultiChoice",
-    "RParisHardI2IMultiChoice",
+    "RParisEasyI2IRetrieval",
+    "RParisMediumI2IRetrieval",
+    "RParisHardI2IRetrieval",
     "SciMMIRI2TRetrieval",
     "SciMMIRT2IRetrieval",
     "SketchyI2IRetrieval",
@@ -1609,14 +1608,13 @@ MIEB_LITE = Benchmark(
             "Food101ZeroShot",
             "OxfordPetsZeroShot",
             "StanfordCarsZeroShot",
-            # Any2TextMutipleChoice
+            # Any2AnyMultipleChoice
+            "BLINKIT2IMultiChoice",
+            "ImageCoDeT2IMultiChoice",
             "CVBenchCount",
             "CVBenchRelation",
             "CVBenchDepth",
             "CVBenchDistance",
-            # Any2AnyMultipleChoice
-            "BLINKIT2IMultiChoice",
-            "ImageCoDeT2IMultiChoice",
             # ImageTextPairClassification
             "AROCocoOrder",
             "AROFlickrOrder",
