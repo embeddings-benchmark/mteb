@@ -151,24 +151,24 @@ class PairClassificationEvaluator(Evaluator):
                 similarity_scores,
                 True,
             ],
-            [ScoringFunction.COSINE, "Cosine-Similarity", cosine_scores, True],
+            [ScoringFunction.COSINE.value, "Cosine-Similarity", cosine_scores, True],
             [
-                ScoringFunction.MANHATTAN,
+                ScoringFunction.MANHATTAN.value,
                 "Manhattan-Distance",
                 manhattan_distances,
                 False,
             ],
             [
-                ScoringFunction.EUCLIDEAN,
+                ScoringFunction.EUCLIDEAN.value,
                 "Euclidean-Distance",
                 euclidean_distances,
                 False,
             ],
-            [ScoringFunction.DOT_PRODUCT, "Dot-Product", dot_scores, True],
+            [ScoringFunction.DOT_PRODUCT.value, "Dot-Product", dot_scores, True],
         ]:
             metrics = self._compute_metrics(scores, labels, reverse)
             for metric_name, metric_value in metrics.items():
-                output_scores[f"{short_name.value}_{metric_name}"] = metric_value
+                output_scores[f"{short_name}_{metric_name}"] = metric_value
                 max_scores[metric_name].append(metric_value)
 
         for metric in max_scores:
