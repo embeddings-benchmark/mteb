@@ -238,8 +238,7 @@ potion_base_8m = ModelMeta(
 
 pubmed_bert_100k = ModelMeta(
     loader=partial(
-        Model2VecWrapper,
-        name="NeuML/pubmedbert-base-embeddings-100K"
+        Model2VecWrapper, model_name="NeuML/pubmedbert-base-embeddings-100K"
     ),
     name="NeuML/pubmedbert-base-embeddings-100K",
     languages=["eng_Latn"],
@@ -264,8 +263,7 @@ pubmed_bert_100k = ModelMeta(
 
 pubmed_bert_500k = ModelMeta(
     loader=partial(
-        Model2VecWrapper,
-        name="NeuML/pubmedbert-base-embeddings-500K"
+        Model2VecWrapper, model_name="NeuML/pubmedbert-base-embeddings-500K"
     ),
     name="NeuML/pubmedbert-base-embeddings-500K",
     languages=["eng_Latn"],
@@ -289,10 +287,7 @@ pubmed_bert_500k = ModelMeta(
 )
 
 pubmed_bert_1m = ModelMeta(
-    loader=partial(
-        Model2VecWrapper,
-        name="NeuML/pubmedbert-base-embeddings-1M"
-    ),
+    loader=partial(Model2VecWrapper, model_name="NeuML/pubmedbert-base-embeddings-1M"),
     name="NeuML/pubmedbert-base-embeddings-1M",
     languages=["eng_Latn"],
     open_weights=True,
@@ -315,10 +310,7 @@ pubmed_bert_1m = ModelMeta(
 )
 
 pubmed_bert_2m = ModelMeta(
-    loader=partial(
-        Model2VecWrapper,
-        name="NeuML/pubmedbert-base-embeddings-2M"
-    ),
+    loader=partial(Model2VecWrapper, model_name="NeuML/pubmedbert-base-embeddings-2M"),
     name="NeuML/pubmedbert-base-embeddings-2M",
     languages=["eng_Latn"],
     open_weights=True,
@@ -341,10 +333,7 @@ pubmed_bert_2m = ModelMeta(
 )
 
 pubmed_bert_8m = ModelMeta(
-    loader=partial(
-        Model2VecWrapper,
-        name="NeuML/pubmedbert-base-embeddings-8M"
-    ),
+    loader=partial(Model2VecWrapper, model_name="NeuML/pubmedbert-base-embeddings-8M"),
     name="NeuML/pubmedbert-base-embeddings-8M",
     languages=["eng_Latn"],
     open_weights=True,
@@ -365,4 +354,3 @@ pubmed_bert_8m = ModelMeta(
     public_training_code="https://huggingface.co/NeuML/pubmedbert-base-embeddings-8M#training",
     public_training_data="https://pubmed.ncbi.nlm.nih.gov/download/",
 )
-
