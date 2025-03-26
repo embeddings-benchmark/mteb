@@ -17,7 +17,7 @@ class VocalSoundClassification(AbsTaskAudioClassification):
         },
         type="AudioClassification",
         category="a2t",
-        eval_splits=["val"],
+        eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2022-01-01", "2023-01-01"),
