@@ -65,9 +65,9 @@ _LANGUAGES = {
 def _load_webfaq_data(
     path: str, langs: list, splits: str, cache_dir: str = None, revision: str = None
 ):
-    corpus = {lang: {split: None for split in splits} for lang in langs}
-    queries = {lang: {split: None for split in splits} for lang in langs}
-    relevant_docs = {lang: {split: None for split in splits} for lang in langs}
+    corpus = {lang: dict.fromkeys(splits) for lang in langs}
+    queries = {lang: dict.fromkeys(splits) for lang in langs}
+    relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}
 
     split = _EVAL_SPLIT
 

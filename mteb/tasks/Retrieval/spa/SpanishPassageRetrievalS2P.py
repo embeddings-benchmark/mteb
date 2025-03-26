@@ -82,7 +82,8 @@ isbn="978-3-030-15719-7"
         self.corpus = {"test": {row["_id"]: row for row in corpus_rows}}
         self.relevant_docs = {
             "test": {
-                row["_id"]: {v: 1 for v in row["text"].split(" ")} for row in qrels_rows
+                row["_id"]: dict.fromkeys(row["text"].split(" "), 1)
+                for row in qrels_rows
             }
         }
 

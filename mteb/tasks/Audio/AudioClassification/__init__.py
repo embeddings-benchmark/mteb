@@ -11,5 +11,6 @@ from .eng.MridinghamStroke import *
 from .eng.MridinghamTonic import *
 from .eng.NSynth import *
 from .eng.SpokenQAforIC import *
+from .eng.VocalSound import *
 from .eng.VoxCelebSA import *
 from .eng.VoxLingua107Top10 import *
