@@ -26,7 +26,12 @@ class TestClusteringEvaluator:
         sentences = ["dog walked home", "cat walked home", "robot walked to the park"]
         labels = [1, 2, 3]
         dataset = Dataset.from_dict({"text": sentences, "labels": labels})
-        clusterer = ClusteringEvaluator(dataset, "", "", "")
+        clusterer = ClusteringEvaluator(
+            dataset,
+            tasl_metadata="",  # typing: ignore
+            hf_subset="",
+            hf_split="",
+        )
         result = clusterer(model)
 
         assert result == {"v_measure": 1.0}
