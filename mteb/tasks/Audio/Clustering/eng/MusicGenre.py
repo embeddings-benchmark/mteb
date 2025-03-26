@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import librosa
 import numpy as np
 from datasets import Audio
 
