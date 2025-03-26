@@ -35,7 +35,7 @@ class GermanGovServiceRetrieval(AbsTaskRetrieval):
         bibtex_citation="""@software{lhm-dienstleistungen-qa,
   author       = {Schröder, Leon Marius and
                   Gutknecht, Clemens and
-                  Alkiddeh, Oubada and 
+                  Alkiddeh, Oubada and
                   Susanne Weiß,
                   Lukas, Leon},
   title        = {LHM-Dienstleistungen-QA - german public domain question-answering dataset},

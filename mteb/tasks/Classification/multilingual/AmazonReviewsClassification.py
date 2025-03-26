@@ -36,7 +36,7 @@ class AmazonReviewsClassification(MultilingualTask, AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         bibtex_citation="""@misc{keung2020multilingual,
-      title={The Multilingual Amazon Reviews Corpus}, 
+      title={The Multilingual Amazon Reviews Corpus},
       author={Phillip Keung and Yichao Lu and György Szarvas and Noah A. Smith},
       year={2020},
       eprint={2010.02573},

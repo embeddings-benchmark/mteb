@@ -77,6 +77,7 @@ class MIRACLReranking(MultilingualTask, AbsTaskReranking):
         prompt={
             "query": "Given a question, retrieve Wikipedia passages that answer the question"
         },
+        adapted_from=["MIRACLRetrieval"],
     )
 
     def _evaluate_subset(

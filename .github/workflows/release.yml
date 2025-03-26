@@ -20,8 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     concurrency: release
     permissions:
-      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing using PyPI 
-
+      id-token: write # IMPORTANT: this permission is mandatory for trusted publishing using PyPI
 
     if: ${{ github.ref == 'refs/heads/main' && github.event.workflow_run.conclusion == 'success'}}
     steps:
@@ -40,8 +39,8 @@ jobs:
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         if: steps.release.outputs.released == 'true'
-        # This action supports PyPI's trusted publishing implementation, which allows authentication to PyPI without a manually 
-        # configured API token or username/password combination. To perform trusted publishing with this action, your project's 
+        # This action supports PyPI's trusted publishing implementation, which allows authentication to PyPI without a manually
+        # configured API token or username/password combination. To perform trusted publishing with this action, your project's
         # publisher must already be configured on PyPI.
 
       - name: Publish package distributions to GitHub Releases
