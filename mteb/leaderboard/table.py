@@ -293,6 +293,7 @@ def create_tables(
     scores_long: list[dict], search_query: str | None = None
 ) -> tuple[gr.DataFrame, gr.DataFrame]:
     result = scores_to_tables(scores_long, search_query)
+    # dataframe with No Results is returned, so no need to apply styling
     if len(result) == 2:
         joint_table, per_task = result
         return joint_table, per_task
