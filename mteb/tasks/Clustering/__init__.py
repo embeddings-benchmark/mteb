@@ -29,6 +29,8 @@ from .fra.AlloProfClusteringS2S import *
 from .fra.HALClusteringS2S import *
 from .jpn.LivedoorNewsClustering import *
 from .jpn.MewsC16JaClustering import *
+from .kor.KlueMrcDomainClustering import *
+from .kor.KlueYnatMrcCategoryClustering import *
 from .multilingual.IndicReviewsClusteringP2P import *
 from .multilingual.MasakhaNEWSClusteringP2P import *
 from .multilingual.MasakhaNEWSClusteringS2S import *

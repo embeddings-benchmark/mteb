@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.36.32"
+version = "1.36.33"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -63,7 +63,11 @@ dev = [
 "pre-commit>=4.1.0",
 ]
 codecarbon = ["codecarbon"]
-speedtask = ["GPUtil>=1.4.0", "psutil>=5.9.8"]
+speedtask = [
+    "setuptools!=78.0.1",  # https://github.com/pypa/setuptools/issues/4910
+    "GPUtil>=1.4.0",
+    "psutil>=5.9.8"
+]
 peft = ["peft>=0.11.0"]
 leaderboard = [
     "gradio==5.16.0; python_version > '3.9'", # 3.10 is required for gradio
@@ -72,7 +76,7 @@ leaderboard = [
     "cachetools>=5.2.0",
     "matplotlib>=3.9.4",
 ]
-flagembedding = ["FlagEmbedding"]
+flagembedding = ["FlagEmbedding==1.3.4"]
 jina = ["einops>=0.8.0"]
 flash_attention = ["flash-attn>=2.6.3"]
 openai = ["openai>=1.41.0", "tiktoken>=0.8.0"]
@@ -82,7 +86,13 @@ bm25s = ["bm25s>=0.2.6", "PyStemmer>=2.2.0.3"]
 gritlm = ["gritlm>=1.0.2"]
 xformers = ["xformers>=0.0.29"]
 blip2 = ["salesforce-lavis>=1.0.2"]
-
+voyageai = ["voyageai>=1.0.0,<2.0.0"]
+voyage_v = ["voyageai>1.0.0,<2.0.0", "tenacity>1.0.0,<2.0.0"]
+cohere = ["cohere==5.14.0"]
+vertexai = ["vertexai==1.71.1"]
+ll2vec = ["ll2vec==0.2.3"]
+timm = ["timm==1.0.15"]
+open_clip_torch = ["open_clip_torch==2.31.0"]
 
 [tool.coverage.report]
 
