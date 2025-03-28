@@ -1,5 +1,7 @@
 from __future__ import annotations
+
 from functools import partial
+
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
 # Define task instructions with specific task names
@@ -14,11 +16,11 @@ task_instructions = {
 }
 
 searchmap_preview = ModelMeta(
-    loader=partial(  
+    loader=partial(
         sentence_transformers_loader,
         model_name="VPLabs/SearchMap_Preview",
         revision="69de17ef48278ed08ba1a4e65ead8179912b696e",
-        model_prompts=task_instructions,  
+        model_prompts=task_instructions,
     ),
     name="VPLabs/SearchMap_Preview",
     revision="69de17ef48278ed08ba1a4e65ead8179912b696e",
@@ -38,4 +40,4 @@ searchmap_preview = ModelMeta(
     public_training_data=None,
     training_datasets=None,
     adapted_from="NovaSearch/stella_en_400M_v5",
-) 
+)
