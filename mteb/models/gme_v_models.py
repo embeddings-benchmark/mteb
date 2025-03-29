@@ -16,11 +16,7 @@ from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
 
-logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
-
-HF_GME_QWEN2VL_2B = "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
-HF_GME_QWEN2VL_7B = "Alibaba-NLP/gme-Qwen2-VL-7B-Instruct"
 
 
 class Encoder(torch.nn.Module):
@@ -133,7 +129,7 @@ class Encoder(torch.nn.Module):
 class GmeQwen2VL(Wrapper):
     def __init__(
         self,
-        model_name: str = HF_GME_QWEN2VL_2B,
+        model_name: str,
         model_path: str | None = None,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         min_image_tokens=4,
@@ -413,9 +409,9 @@ training_data = {
 gme_qwen2vl_2b = ModelMeta(
     loader=partial(
         GmeQwen2VL,
-        model_name=HF_GME_QWEN2VL_2B,
+        model_name="Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
     ),
-    name=HF_GME_QWEN2VL_2B,
+    name="Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
     languages=["eng_Latn", "cmn-Hans"],
     open_weights=True,
     revision="ce765ae71b8cdb208203cd8fb64a170b1b84293a",
@@ -426,7 +422,7 @@ gme_qwen2vl_2b = ModelMeta(
     embed_dim=1536,
     license="apache-2.0",
     max_tokens=32768,
-    reference="https://huggingface.co/" + HF_GME_QWEN2VL_2B,
+    reference="https://huggingface.co/Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
     similarity_fn_name="cosine",
     framework=["PyTorch"],
     use_instructions=True,
@@ -438,9 +434,9 @@ gme_qwen2vl_2b = ModelMeta(
 gme_qwen2vl_7b = ModelMeta(
     loader=partial(
         GmeQwen2VL,
-        model_name=HF_GME_QWEN2VL_7B,
+        model_name="Alibaba-NLP/gme-Qwen2-VL-7B-Instruct",
     ),
-    name=HF_GME_QWEN2VL_7B,
+    name="Alibaba-NLP/gme-Qwen2-VL-7B-Instruct",
     languages=["eng_Latn", "cmn-Hans"],
     open_weights=True,
     revision="477027a6480f8630363be77751f169cc3434b673",
@@ -451,7 +447,7 @@ gme_qwen2vl_7b = ModelMeta(
     embed_dim=3584,
     license="apache-2.0",
     max_tokens=32768,
-    reference="https://huggingface.co/" + HF_GME_QWEN2VL_2B,
+    reference="https://huggingface.co/Alibaba-NLP/gme-Qwen2-VL-7B-Instruct",
     similarity_fn_name="cosine",
     framework=["PyTorch"],
     use_instructions=True,

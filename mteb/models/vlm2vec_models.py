@@ -18,7 +18,6 @@ from mteb.requires_package import (
     suggest_package,
 )
 
-logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
 EncodeTypes = Literal["query", "passage"]
