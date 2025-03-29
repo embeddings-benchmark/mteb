@@ -44,7 +44,16 @@ ops_moa_conan_embedding = ModelMeta(
     reference="https://huggingface.co/OpenSearch-AI/Ops-MoA-Conan-embedding-v1",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets={"cmteb_retrieval": ["train"]},
+    training_datasets={
+                "T2Retrieval": ["train"],
+                "MMarcoRetrieval": ["train"],
+                "DuRetrieval": ["train"],
+                "CovidRetrieval": ["train"],
+                "CmedqaRetrieval": ["train"],
+                "EcomRetrieval": ["train"],
+                "MedicalRetrieval": ["train"],
+                "VideoRetrieval": ["train"],
+    },
     superseded_by=None,
 )
 
