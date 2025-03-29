@@ -230,6 +230,7 @@ def apply_styling(
         "Number of Parameters",
         "Embedding Dimensions",
         "Max Tokens",
+        "Memory Usage (MB)",
     ]
     gradient_columns = [
         col for col in joint_table.columns if col not in excluded_columns
