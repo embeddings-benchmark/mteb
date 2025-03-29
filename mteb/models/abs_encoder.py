@@ -142,20 +142,20 @@ class AbsEncoder(ABC):
         Returns:
             The predicted relevance scores for each inputs pair.
         """
-        embeddings1 = self.model.encode(
+        embeddings1 = self.encode(
             inputs1,
             task_metadata=task_metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
-            prompt_type=prompt_type,
+            prompt_type=PromptType.query,
             **kwargs,
         )
-        embeddings2 = self.model.encode(
+        embeddings2 = self.encode(
             inputs2,
             task_metadata=task_metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
-            prompt_type=prompt_type,
+            prompt_type=PromptType.passage,
             **kwargs,
         )
         return self.similarity_pairwise(embeddings1, embeddings2)

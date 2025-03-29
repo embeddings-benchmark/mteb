@@ -533,7 +533,11 @@ class DenseRetrievalExactSearch:
 
 
 def is_cross_encoder_compatible(model) -> bool:
-    op = getattr(model, "predict", None)
+    model_attr = getattr(model, "model", None)
+    op = None
+    # if we don't have `model_meta` then check if base model has `predict`
+    if model_attr is not None:
+        op = getattr(model_attr, "predict", None)
     return (
         model.mteb_model_meta.is_cross_encoder
         if hasattr(model, "mteb_model_meta") and model.mteb_model_meta is not None

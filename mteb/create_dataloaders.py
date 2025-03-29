@@ -93,11 +93,8 @@ def create_dataloader_for_queries(
     Returns:
         A dataloader with the queries.
     """
-    any_none_instruction = any(i is None for i in instructions)
-    if any_none_instruction:
-        logger.warning(
-            "Some instructions are None. This will result in queries being None."
-        )
+    # cross encoder can produce list of None
+    any_none_instruction = instructions is None or any(i is None for i in instructions)
     if instructions is None or any_none_instruction:
         dataset = Dataset.from_dict({"text": queries, "query": queries})
     else:

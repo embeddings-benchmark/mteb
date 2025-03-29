@@ -369,7 +369,7 @@ def test_model_query_passage_prompts_task_type(
         f"{task_name}-passage": "passage",
     }
 
-    class MockEncoderWithPrompts(MockSentenceTransformer):
+    class MockEncoderWithPrompts:
         is_query = True
 
         def encode(
@@ -379,7 +379,7 @@ def test_model_query_passage_prompts_task_type(
             self.is_query = not self.is_query
             return np.zeros((len(sentences.dataset), 10))
 
-    class MockSentenceEncoderWithPrompts(MockSentenceTransformer):
+    class MockSentenceEncoderWithPrompts:
         is_query = True
 
         def encode(
