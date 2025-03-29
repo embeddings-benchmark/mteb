@@ -383,7 +383,7 @@ def add_create_table_parser(subparsers) -> None:
     parser.add_argument(
         "--models",
         type=str,
-        nargs='*',
+        nargs="*",
         default=None,
         help="Models to include in the table (default: all models from results dir)",
     )

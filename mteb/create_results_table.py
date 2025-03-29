@@ -14,6 +14,7 @@ from mteb.load_results import load_results
 
 logger = logging.getLogger(__name__)
 
+
 def get_available_benchmarks():
     """Get all available benchmark names."""
     return [b.name for b in mteb.get_benchmarks()]
@@ -247,9 +248,7 @@ def format_table_for_display(df: pd.DataFrame) -> str:
 
 def create_table_cli(args: argparse.Namespace) -> pd.DataFrame:
     """Entry point for CLI integration."""
-    models = (
-        [model.strip() for model in args.models] if args.models else None
-    )
+    models = [model.strip() for model in args.models] if args.models else None
 
     result_df = create_comparison_table(
         results_folder=args.results,
