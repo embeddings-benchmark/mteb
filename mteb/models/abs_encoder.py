@@ -218,6 +218,10 @@ class AbsEncoder(ABC):
         return self.model_prompts.get(prompt_name, None)
 
     def validate_task_to_prompt_name(self) -> None:
+        """Validate the task name and prompt type against the model prompts.
+
+        All keys in model_prompts should be valid task names, prompt types or the combination of both.
+        """
         if self.model_prompts is None:
             return
         task_types = get_args(TASK_TYPE)
