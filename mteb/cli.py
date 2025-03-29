@@ -82,7 +82,7 @@ To create comparison tables between models based on various aggregation levels (
 
 ```bash
 mteb create-table --results results/ \
-                 --models "intfloat/multilingual-e5-small,intfloat/multilingual-e5-base" \
+                 --models "intfloat/multilingual-e5-small" "intfloat/multilingual-e5-base" \
                  --benchmark "MTEB(eng, v1)" \
                  --aggregation-level task \
                  --output comparison_table.csv
@@ -100,7 +100,7 @@ import torch
 
 import mteb
 from mteb.create_meta import generate_readme
-from mteb.create_table import create_table_cli
+from mteb.create_results_table import create_table_cli
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
@@ -383,8 +383,9 @@ def add_create_table_parser(subparsers) -> None:
     parser.add_argument(
         "--models",
         type=str,
+        nargs='*',
         default=None,
-        help="Comma-separated list of models to include in the table (default: all models)",
+        help="Models to include in the table (default: all models from results dir)",
     )
 
     parser.add_argument(

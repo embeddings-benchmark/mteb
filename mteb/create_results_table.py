@@ -12,9 +12,7 @@ import pandas as pd
 import mteb
 from mteb.load_results import load_results
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
 
 def get_available_benchmarks():
     """Get all available benchmark names."""
@@ -70,9 +68,9 @@ def save_dataframe(
 
 def create_comparison_table(
     results_folder: str,
+    output_path: str,
     model_names: list[str] | None = None,
     benchmark_name: str | None = None,
-    output_path: str | None = None,
     aggregation_level: Literal["subset", "split", "task"] = "task",
 ) -> pd.DataFrame:
     """Create comparison tables for MTEB models.
@@ -250,14 +248,14 @@ def format_table_for_display(df: pd.DataFrame) -> str:
 def create_table_cli(args: argparse.Namespace) -> pd.DataFrame:
     """Entry point for CLI integration."""
     models = (
-        [model.strip() for model in args.models.split(",")] if args.models else None
+        [model.strip() for model in args.models] if args.models else None
     )
 
     result_df = create_comparison_table(
         results_folder=args.results,
+        output_path=args.output,
         model_names=models,
         benchmark_name=args.benchmark,
-        output_path=args.output,
         aggregation_level=args.aggregation_level,
     )
 
