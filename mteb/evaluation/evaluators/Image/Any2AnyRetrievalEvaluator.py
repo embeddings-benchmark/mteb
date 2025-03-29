@@ -13,14 +13,14 @@ import torch
 from datasets import Dataset
 from PIL import Image
 
+from mteb.abstasks import TaskMetadata
 from mteb.create_dataloaders import create_image_dataloader
-from mteb.encoder_interface import Encoder, PromptType
+from mteb.encoder_interface import Encoder
+from mteb.types import PromptType
 
 from ..Evaluator import Evaluator
 from ..utils import (
     confidence_scores,
-    cos_sim,
-    dot_score,
     download,
     hole,
     mrr,
@@ -51,11 +51,6 @@ class Any2AnyDenseRetrievalExactSearch:
         if "batch_size" not in encode_kwargs:
             encode_kwargs["batch_size"] = 128
 
-        self.score_functions = {"cos_sim": cos_sim, "dot": dot_score}
-        self.score_function_desc = {
-            "cos_sim": "Cosine Similarity",
-            "dot": "Dot Product",
-        }
         self.corpus_chunk_size = corpus_chunk_size
         self.previous_results = previous_results
         self.batch_size = encode_kwargs.get("batch_size")
@@ -73,15 +68,12 @@ class Any2AnyDenseRetrievalExactSearch:
         queries: Dataset,  # solve memoery issues
         top_k: int,
         score_function: str,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         return_sorted: bool = False,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
-        if score_function not in self.score_functions:
-            raise ValueError(
-                f"score function: {score_function} must be either (cos_sim) for cosine similarity or (dot) for dot product"
-            )
-
         logger.info("Encoding Queries.")
         query_ids = list(queries["id"])
         self.results = {qid: {} for qid in query_ids}
@@ -92,7 +84,9 @@ class Any2AnyDenseRetrievalExactSearch:
                 image_column_name="image",
                 batch_size=self.encode_kwargs["batch_size"],
             ),
-            task_name=task_name,
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
             prompt_type=PromptType.query,
             **self.encode_kwargs,
         )
@@ -101,9 +95,6 @@ class Any2AnyDenseRetrievalExactSearch:
         corpus_ids = list(corpus["id"])
 
         logger.info("Encoding Corpus in batches... Warning: This might take a while!")
-        logger.info(
-            f"Scoring Function: {self.score_function_desc[score_function]} ({score_function})"
-        )
 
         result_heaps = {qid: [] for qid in query_ids}
         for chunk_start in range(0, len(corpus), self.corpus_chunk_size):
@@ -122,14 +113,14 @@ class Any2AnyDenseRetrievalExactSearch:
 
             sub_corpus_embeddings = self.model.encode(
                 dataloader,
-                task_name=task_name,
+                task_metadata=task_metadata,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
                 prompt_type=PromptType.passage,
                 **self.encode_kwargs,
             )
 
-            cos_scores = self.score_functions[score_function](
-                query_embeddings, sub_corpus_embeddings
-            )
+            cos_scores = self.model.similarity(query_embeddings, sub_corpus_embeddings)
             cos_scores[torch.isnan(cos_scores)] = -1
 
             cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
@@ -189,7 +180,6 @@ class Any2AnyRetrievalEvaluator(Evaluator):
     def __init__(
         self,
         retriever=None,
-        task_name: str | None = None,
         k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000],
         score_function: str = "cos_sim",
         encode_kwargs: dict[str, Any] = {},
@@ -205,12 +195,14 @@ class Any2AnyRetrievalEvaluator(Evaluator):
             max(k_values) if "top_k" not in kwargs else kwargs["top_k"]
         )  # can lower it if reranking
         self.score_function = score_function
-        self.task_name = task_name
 
     def __call__(
         self,
         corpus: dict[str, dict[str, str | Image.Image]],
         queries: dict[str, dict[str, str | Image.Image]],
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
     ) -> dict[str, dict[str, float]]:
         if not self.retriever:
             raise ValueError("Model/Technique has not been provided!")
@@ -220,7 +212,9 @@ class Any2AnyRetrievalEvaluator(Evaluator):
             queries,
             self.top_k,
             self.score_function,
-            task_name=self.task_name,
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
         )
 
     @staticmethod

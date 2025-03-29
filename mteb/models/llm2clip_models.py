@@ -1,18 +1,18 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any
 
-import numpy as np
 import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoConfig, AutoModel, AutoTokenizer, CLIPImageProcessor
 
-from mteb.encoder_interface import BatchedInput, PromptType
-from mteb.model_meta import ModelMeta
-from mteb.models.wrapper import Wrapper
+from mteb.abstasks import TaskMetadata
+from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.requires_package import requires_image_dependencies
+from mteb.types import Array, BatchedInput, PromptType
 
 MODEL2PROCESSOR = {
     "microsoft/LLM2CLIP-Openai-L-14-336": "openai/clip-vit-large-patch14-336",
@@ -30,7 +30,7 @@ def llm2clip_loader(**kwargs):
             "To use the LLM2CLIP models `llm2vec` is required. Please install it with `pip install llm2vec`."
         )
 
-    class LLM2CLIPWrapper(Wrapper):
+    class LLM2CLIPAbsEncoder(AbsEncoder):
         def __init__(
             self,
             model_name: str = "microsoft/LLM2CLIP-Openai-L-14-336",
@@ -134,26 +134,16 @@ def llm2clip_loader(**kwargs):
             all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
             return all_image_embeddings
 
-        def calculate_probs(self, text_embeddings, image_embeddings):
-            text_embeddings = text_embeddings / text_embeddings.norm(
-                dim=-1, keepdim=True
-            )
-            image_embeddings = image_embeddings / image_embeddings.norm(
-                dim=-1, keepdim=True
-            )
-            logits = torch.matmul(image_embeddings, text_embeddings.T)
-            probs = (logits * 100).softmax(dim=-1)
-            return probs
-
         def encode(
             self,
             inputs: DataLoader[BatchedInput],
             *,
-            task_name: str,
+            task_metadata: TaskMetadata,
+            hf_split: str,
+            hf_subset: str,
             prompt_type: PromptType | None = None,
-            fusion_mode: Literal["sum"] = "sum",
             **kwargs: Any,
-        ) -> np.ndarray | torch.Tensor:
+        ) -> Array:
             text_embeddings = None
             image_embeddings = None
             if "text" in inputs.dataset.features:
@@ -166,20 +156,15 @@ def llm2clip_loader(**kwargs):
                     raise ValueError(
                         "The number of texts and images must have the same length"
                     )
-                if fusion_mode == "sum":
-                    fused_embeddings = text_embeddings + image_embeddings
-                else:
-                    # to do: add other fusion mode
-                    raise ValueError(
-                        f"fusion mode {fusion_mode} hasn't been implemented"
-                    )
+                fused_embeddings = text_embeddings + image_embeddings
                 return fused_embeddings
             elif text_embeddings is not None:
                 return text_embeddings
             elif image_embeddings is not None:
                 return image_embeddings
+            raise ValueError
 
-    return LLM2CLIPWrapper(**kwargs)
+    return LLM2CLIPAbsEncoder(**kwargs)
 
 
 llm2clip_training_sets = {
@@ -206,7 +191,7 @@ llm2clip_openai_l_14_336 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-336",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.VISION,
     use_instructions=True,
     training_datasets=llm2clip_training_sets,
 )
@@ -229,7 +214,7 @@ llm2clip_openai_l_14_224 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-224",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.VISION,
     use_instructions=True,
     training_datasets=llm2clip_training_sets,
 )
@@ -251,7 +236,7 @@ llm2clip_openai_b_16 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/microsoft/LLM2CLIP-Openai-B-16",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.VISION,
     use_instructions=True,
     training_datasets=llm2clip_training_sets,
 )

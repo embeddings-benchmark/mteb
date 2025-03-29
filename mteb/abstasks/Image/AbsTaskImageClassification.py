@@ -7,7 +7,7 @@ from typing import Any
 import numpy as np
 from PIL import ImageFile
 
-from mteb.abstasks.TaskMetadata import HFSubset
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset
 
 from ...encoder_interface import Encoder
 from ...evaluation.evaluators import (
@@ -15,7 +15,6 @@ from ...evaluation.evaluators import (
     ImagelogRegClassificationEvaluator,
 )
 from ..AbsTask import AbsTask, ScoresDict
-from ..TaskMetadata import DescriptiveStatistics
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
@@ -157,8 +156,9 @@ class AbsTaskImageClassification(AbsTask):
             scores[hf_subset] = self._evaluate_subset(
                 model,
                 ds,
-                eval_split,
-                train_split,
+                hf_subset=hf_subset,
+                hf_split=eval_split,
+                train_split=train_split,
                 encode_kwargs=encode_kwargs,
                 **kwargs,
             )
@@ -170,13 +170,14 @@ class AbsTaskImageClassification(AbsTask):
         self,
         model: Encoder,
         dataset,
-        eval_split: str = "test",
+        hf_subset: str,
+        hf_split: str = "test",
         train_split: str = "train",
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ) -> ScoresDict:
         train_split = dataset[train_split]
-        eval_split = dataset[eval_split]
+        eval_split = dataset[hf_split]
         params = {"k": self.k}
         params.update(kwargs)
 
@@ -203,7 +204,9 @@ class AbsTaskImageClassification(AbsTask):
                     eval_split,
                     self.image_column_name,
                     self.label_column_name,
-                    task_name=self.metadata.name,
+                    task_metadata=self.metadata,
+                    hf_split=hf_split,
+                    hf_subset=hf_subset,
                     encode_kwargs=encode_kwargs,
                     **params,
                 )
@@ -213,7 +216,9 @@ class AbsTaskImageClassification(AbsTask):
                     eval_split,
                     self.image_column_name,
                     self.label_column_name,
-                    task_name=self.metadata.name,
+                    task_metadata=self.metadata,
+                    hf_split=hf_split,
+                    hf_subset=hf_subset,
                     encode_kwargs=encode_kwargs,
                     **params,
                 )

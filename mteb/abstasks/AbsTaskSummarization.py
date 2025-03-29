@@ -6,12 +6,12 @@ from typing import Any
 import numpy as np
 from datasets import Dataset
 
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics
 from mteb.encoder_interface import Encoder
 from mteb.load_results.task_results import ScoresDict
 
 from ..evaluation.evaluators import SummarizationEvaluator
 from .AbsTask import AbsTask
-from .TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -90,6 +90,8 @@ class AbsTaskSummarization(AbsTask):
         model: Encoder,
         data_split: Dataset,
         *,
+        hf_split: str,
+        hf_subset: str,
         encode_kwargs: dict[str, Any],
         **kwargs,
     ) -> ScoresDict:
@@ -102,7 +104,9 @@ class AbsTaskSummarization(AbsTask):
             human_summaries=data_split["human_summaries"],
             texts=data_split["text"],
             gold_scores=normalized_scores,
-            task_name=self.metadata.name,
+            task_metadata=self.metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
             **kwargs,
         )
         scores = evaluator(model, encode_kwargs=encode_kwargs)

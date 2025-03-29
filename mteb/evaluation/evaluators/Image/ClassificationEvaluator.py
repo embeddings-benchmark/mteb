@@ -13,17 +13,15 @@ from sklearn.metrics import (
 )
 from sklearn.neighbors import KNeighborsClassifier
 
+from mteb.abstasks import TaskMetadata
 from mteb.create_dataloaders import create_image_dataloader
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ScoringFunction
+from mteb.similarity_functions import cos_sim, dot_score, euclidean_sim
 
 from ..Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
-
-
-def dot_distance(a: np.ndarray, b: np.ndarray) -> float:
-    return -np.dot(a, b)
 
 
 class ImagekNNClassificationEvaluator(Evaluator):
@@ -33,7 +31,9 @@ class ImagekNNClassificationEvaluator(Evaluator):
         dataset_test,
         image_column_name,
         label_column_name,
-        task_name: str | None = None,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         k: int = 1,
         encode_kwargs: dict[str, Any] = {},
         limit: int | None = None,
@@ -50,7 +50,9 @@ class ImagekNNClassificationEvaluator(Evaluator):
 
         self.dataset_test = dataset_test
         self.y_test = dataset_test[label_column_name]
-        self.task_name = task_name
+        self.task_metadata = task_metadata
+        self.hf_split = hf_split
+        self.hf_subset = hf_subset
         self.encode_kwargs = encode_kwargs
 
         if "batch_size" not in self.encode_kwargs:
@@ -70,7 +72,9 @@ class ImagekNNClassificationEvaluator(Evaluator):
         )
         X_train = model.encode(
             dataloader_train,
-            task_name=self.task_name,
+            task_metadata=self.task_metadata,
+            hf_split="train",
+            hf_subset=self.hf_subset,
             batch_size=self.encode_kwargs["batch_size"],
         )
         dataloader = create_image_dataloader(
@@ -81,7 +85,9 @@ class ImagekNNClassificationEvaluator(Evaluator):
         if test_cache is None:
             X_test = model.encode(
                 dataloader,
-                task_name=self.task_name,
+                task_metadata=self.task_metadata,
+                hf_split=self.hf_split,
+                hf_subset=self.hf_subset,
                 batch_size=self.encode_kwargs["batch_size"],
             )
             test_cache = X_test
@@ -119,7 +125,9 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
         dataset_test,
         image_column_name,
         label_column_name,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         k: int = 1,
         encode_kwargs: dict[str, Any] = {},
         limit: int | None = None,
@@ -135,7 +143,9 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
 
         self.dataset_test = dataset_test
         self.y_test = dataset_test[label_column_name]
-        self.task_name = task_name
+        self.task_metadata = task_metadata
+        self.hf_split = hf_split
+        self.hf_subset = hf_subset
         self.encode_kwargs = encode_kwargs
 
         if "batch_size" not in self.encode_kwargs:
@@ -156,7 +166,9 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
         )
         X_train = model.encode(
             dataloader_train,
-            task_name=self.task_name,
+            task_metadata=self.task_metadata,
+            hf_split="train",
+            hf_subset=self.hf_subset,
             batch_size=self.encode_kwargs["batch_size"],
         )
 
@@ -168,7 +180,9 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
         if test_cache is None:
             X_test = model.encode(
                 dataloader,
-                task_name=self.task_name,
+                task_metadata=self.task_metadata,
+                hf_split=self.hf_split,
+                hf_subset=self.hf_subset,
                 batch_size=self.encode_kwargs["batch_size"],
             )
             test_cache = X_test
@@ -178,13 +192,16 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
             ScoringFunction.COSINE,
             ScoringFunction.EUCLIDEAN,
             ScoringFunction.DOT_PRODUCT,
+            ScoringFunction.CUSTOM,
         ]:
             if metric == ScoringFunction.COSINE:
-                distances = 1 - self._cos_sim(X_test, X_train)
+                distances = 1 - cos_sim(X_test, X_train)
             elif metric == ScoringFunction.EUCLIDEAN:
-                distances = self._euclidean_dist(X_test, X_train)
+                distances = euclidean_sim(X_test, X_train)
             elif metric == ScoringFunction.DOT_PRODUCT:
-                distances = -self._dot_score(X_test, X_train)
+                distances = -dot_score(X_test, X_train)
+            elif metric == ScoringFunction.CUSTOM:
+                distances = model.similarity(X_test, X_train)
             neigh_indices = torch.topk(
                 distances, k=self.k, dim=1, largest=False
             ).indices
@@ -210,77 +227,6 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
             scores["ap"] = max_ap
         return scores, test_cache
 
-    @staticmethod
-    def _cos_sim(
-        a: torch.Tensor | np.ndarray, b: torch.Tensor | np.ndarray
-    ) -> torch.Tensor | np.ndarray:
-        """Computes the cosine similarity cos_sim(a[i], b[j]) for all i and j.
-
-        Return:
-            Matrix with res[i][j]  = cos_sim(a[i], b[j])
-        """
-        if not isinstance(a, torch.Tensor):
-            a = torch.tensor(a)
-
-        if not isinstance(b, torch.Tensor):
-            b = torch.tensor(b)
-
-        if len(a.shape) == 1:
-            a = a.reshape(1, *a.shape)
-
-        if len(b.shape) == 1:
-            b = b.reshape(1, *b.shape)
-
-        a_norm = torch.nn.functional.normalize(a, p=2, dim=1)
-        b_norm = torch.nn.functional.normalize(b, p=2, dim=1)
-        return a_norm @ b_norm.transpose(0, 1)
-
-    @staticmethod
-    def _euclidean_dist(
-        a: torch.Tensor | np.ndarray, b: torch.Tensor | np.ndarray
-    ) -> torch.Tensor:
-        """Computes the euclidean distance euclidean_dist(a[i], b[j]) for all i and j.
-
-        Returns:
-            Matrix with res[i][j]  = euclidean_dist(a[i], b[j])
-        """
-        if not isinstance(a, torch.Tensor):
-            a = torch.tensor(a)
-
-        if not isinstance(b, torch.Tensor):
-            b = torch.tensor(b)
-
-        if len(a.shape) == 1:
-            a = a.reshape(1, *a.shape)
-
-        if len(b.shape) == 1:
-            b = b.reshape(1, *b.shape)
-
-        return torch.cdist(a, b, p=2)
-
-    @staticmethod
-    def _dot_score(
-        a: torch.Tensor | np.ndarray, b: torch.Tensor | np.ndarray
-    ) -> torch.Tensor:
-        """Computes the dot-product dot_prod(a[i], b[j]) for all i and j.
-
-        Returns:
-            Matrix with res[i][j]  = dot_prod(a[i], b[j])
-        """
-        if not isinstance(a, torch.Tensor):
-            a = torch.tensor(a)
-
-        if not isinstance(b, torch.Tensor):
-            b = torch.tensor(b)
-
-        if len(a.shape) == 1:
-            a = a.reshape(1, *a.shape)
-
-        if len(b.shape) == 1:
-            b = b.reshape(1, *b.shape)
-
-        return a @ b.transpose(0, 1)
-
 
 class ImagelogRegClassificationEvaluator(Evaluator):
     def __init__(
@@ -289,7 +235,9 @@ class ImagelogRegClassificationEvaluator(Evaluator):
         dataset_test,
         image_column_name,
         label_column_name,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         max_iter: int = 100,
         encode_kwargs: dict[str, Any] = {},
         limit: int | None = None,
@@ -312,7 +260,9 @@ class ImagelogRegClassificationEvaluator(Evaluator):
         self.y_test = dataset_test[label_column_name]
 
         self.max_iter = max_iter
-        self.task_name = task_name
+        self.task_metadata = task_metadata
+        self.hf_split = hf_split
+        self.hf_subset = hf_subset
 
     def __call__(self, model, test_cache=None):
         scores = {}
@@ -330,7 +280,9 @@ class ImagelogRegClassificationEvaluator(Evaluator):
         )
         X_train = model.encode(
             dataloader_train,
-            task_name=self.task_name,
+            task_metadata=self.task_metadata,
+            hf_split="train",
+            hf_subset=self.hf_subset,
             batch_size=self.encode_kwargs["batch_size"],
         )
 
@@ -342,7 +294,9 @@ class ImagelogRegClassificationEvaluator(Evaluator):
         if test_cache is None:
             X_test = model.encode(
                 dataloader,
-                task_name=self.task_name,
+                task_metadata=self.task_metadata,
+                hf_split=self.hf_split,
+                hf_subset=self.hf_subset,
                 batch_size=self.encode_kwargs["batch_size"],
             )
             test_cache = X_test

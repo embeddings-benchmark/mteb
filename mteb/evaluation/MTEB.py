@@ -533,7 +533,7 @@ class MTEB:
 
     @staticmethod
     def create_model_meta(model: Encoder) -> ModelMeta:
-        if hasattr(model, "mteb_model_meta"):
+        if hasattr(model, "mteb_model_meta") and model.mteb_model_meta is not None:
             meta = model.mteb_model_meta  # type: ignore
         else:
             meta = MTEB._get_model_meta(model)

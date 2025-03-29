@@ -7,9 +7,10 @@ import torch
 import tqdm
 from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import BatchedInput, PromptType
+from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
-from mteb.models.wrapper import Wrapper
+from mteb.models.abs_encoder import AbsEncoder
+from mteb.types import Array, BatchedInput, PromptType
 
 supported_languages = [
     "afr-Latn",
@@ -125,7 +126,7 @@ supported_languages = [
 
 
 # Implementation follows https://github.com/KennethEnevoldsen/scandinavian-embedding-benchmark/blob/main/src/seb/registered_models/cohere_models.py
-class CohereTextEmbeddingModel(Wrapper):
+class CohereTextEmbeddingModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -135,9 +136,8 @@ class CohereTextEmbeddingModel(Wrapper):
     ) -> None:
         self.model_name = model_name.lstrip("Cohere/Cohere-")
         self.sep = sep
-        self.model_prompts = (
-            self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
-        )
+        self.model_prompts = model_prompts
+        self.validate_task_to_prompt_name()
 
     def _embed(
         self,
@@ -182,11 +182,13 @@ class CohereTextEmbeddingModel(Wrapper):
         self,
         inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
-        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+    ) -> Array:
+        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         cohere_task_type = self.model_prompts.get(prompt_name)
 
         if cohere_task_type is None:

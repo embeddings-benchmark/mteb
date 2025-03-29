@@ -4,16 +4,16 @@ import base64
 import io
 import os
 import time
-from typing import Any, Literal
+from typing import Any
 
-import numpy as np
 import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from mteb.encoder_interface import BatchedInput, PromptType
+from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.requires_package import requires_image_dependencies
+from mteb.types import Array, BatchedInput, PromptType
 
 
 def cohere_v_loader(**kwargs):
@@ -95,26 +95,16 @@ def cohere_v_loader(**kwargs):
             all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
             return all_image_embeddings
 
-        def calculate_probs(self, text_embeddings, image_embeddings):
-            text_embeddings = text_embeddings / text_embeddings.norm(
-                dim=-1, keepdim=True
-            )
-            image_embeddings = image_embeddings / image_embeddings.norm(
-                dim=-1, keepdim=True
-            )
-            logits = torch.matmul(image_embeddings, text_embeddings.T)
-            probs = (logits * 100).softmax(dim=-1)
-            return probs
-
         def encode(
             self,
             inputs: DataLoader[BatchedInput],
             *,
-            task_name: str,
+            task_metadata: TaskMetadata,
+            hf_split: str,
+            hf_subset: str,
             prompt_type: PromptType | None = None,
-            fusion_mode: Literal["sum"] = "sum",
             **kwargs: Any,
-        ) -> np.ndarray | torch.Tensor:
+        ) -> Array:
             text_embeddings = None
             image_embeddings = None
             if "text" in inputs.dataset.features:
@@ -127,18 +117,13 @@ def cohere_v_loader(**kwargs):
                     raise ValueError(
                         "The number of texts and images must have the same length"
                     )
-                if fusion_mode == "sum":
-                    fused_embeddings = text_embeddings + image_embeddings
-                else:
-                    # to do: add other fusion mode
-                    raise ValueError(
-                        f"fusion mode {fusion_mode} hasn't been implemented"
-                    )
+                fused_embeddings = text_embeddings + image_embeddings
                 return fused_embeddings
             elif text_embeddings is not None:
                 return text_embeddings
             elif image_embeddings is not None:
                 return image_embeddings
+            raise ValueError
 
     return CohereMultiModalModelWrapper(**kwargs)
 

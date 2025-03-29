@@ -10,17 +10,19 @@ import tqdm
 from torch.utils.data import DataLoader
 from transformers import AutoModel, AutoTokenizer
 
-from mteb.encoder_interface import BatchedInput, Encoder, PromptType
+from mteb.abstasks import TaskMetadata
+from mteb.encoder_interface import Encoder
 from mteb.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
-from mteb.models.wrapper import Wrapper
+from mteb.models.abs_encoder import AbsEncoder
+from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
 
-class RepLLaMAWrapper(Wrapper):
+class RepLLaMAAbsEncoder(AbsEncoder):
     def __init__(
         self,
         peft_model_name_or_path: str,
@@ -87,13 +89,15 @@ class RepLLaMAWrapper(Wrapper):
         self,
         inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs,
-    ) -> np.ndarray:
+        **kwargs: Any,
+    ) -> Array:
         batch_size = 16 if "batch_size" not in kwargs else kwargs.pop("batch_size")
         all_embeddings = []
-        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         prompt = self.model_prompts.get(prompt_name)
         sentences = [text for batch in inputs for text in batch["text"]]
 
@@ -129,7 +133,7 @@ class RepLLaMAWrapper(Wrapper):
         return np.concatenate(all_embeddings, axis=0)
 
 
-def _loader(wrapper: type[RepLLaMAWrapper], **kwargs) -> Callable[..., Encoder]:
+def _loader(wrapper: type[RepLLaMAAbsEncoder], **kwargs) -> Callable[..., Encoder]:
     _kwargs = kwargs
 
     def loader_inner(**kwargs: Any) -> Encoder:
@@ -153,7 +157,7 @@ REPLLAMA_CITATION = """
 """
 
 repllama_llama2_original = ModelMeta(
-    loader=RepLLaMAWrapper,  # type: ignore
+    loader=RepLLaMAAbsEncoder,  # type: ignore
     loader_kwargs=dict(
         base_model_name_or_path="meta-llama/Llama-2-7b-hf",
         device_map="auto",
@@ -185,7 +189,7 @@ repllama_llama2_original = ModelMeta(
 
 
 repllama_llama2_reproduced = ModelMeta(
-    loader=RepLLaMAWrapper,  # type: ignore
+    loader=RepLLaMAAbsEncoder,  # type: ignore
     loader_kwargs=dict(
         base_model_name_or_path="meta-llama/Llama-2-7b-hf",
         device_map="auto",

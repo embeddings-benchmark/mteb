@@ -8,12 +8,12 @@ import numpy as np
 import tqdm
 from datasets import Dataset
 
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics
 from mteb.encoder_interface import Encoder
 from mteb.load_results.task_results import ScoresDict
 
 from ..evaluation.evaluators import ClusteringEvaluator
 from .AbsTask import AbsTask
-from .TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -69,6 +69,8 @@ class AbsTaskClustering(AbsTask):
         model: Encoder,
         dataset: Dataset,
         *,
+        hf_split: str,
+        hf_subset: str,
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ) -> ScoresDict:
@@ -79,7 +81,9 @@ class AbsTaskClustering(AbsTask):
             )
             evaluator = ClusteringEvaluator(
                 clustering_dataset,
-                task_name=self.metadata.name,
+                task_metadata=self.metadata,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
                 **kwargs,
             )
             metrics = evaluator(model, encode_kwargs=encode_kwargs)

@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
 from mteb.models.instruct_wrapper import (
-    InstructSentenceTransformerWrapper,
+    InstructSentenceTransformerAbsEncoder,
     instruct_wrapper,
 )
+from mteb.types import PromptType
 
 
 def instruction_template(
@@ -75,7 +75,7 @@ SFR_Embedding_2_R = ModelMeta(
 )
 
 SFR_Embedding_Code_2B_R = ModelMeta(
-    loader=InstructSentenceTransformerWrapper,
+    loader=InstructSentenceTransformerAbsEncoder,
     loader_kwargs=dict(
         instruction_template=instruction_template,
         attn="cccc",
@@ -105,7 +105,7 @@ SFR_Embedding_Code_2B_R = ModelMeta(
 )
 
 SFR_Embedding_Code_2B_R = ModelMeta(
-    loader=InstructSentenceTransformerWrapper,
+    loader=InstructSentenceTransformerAbsEncoder,
     loader_kwargs=dict(
         instruction_template=instruction_template,
         attn="cccc",

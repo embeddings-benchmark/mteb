@@ -73,7 +73,14 @@ class AbsTaskVisualSTS(AbsTask):
     max_score: int = 5
 
     def _evaluate_subset(
-        self, model, data_split, *, encode_kwargs: dict[str, Any] = {}, **kwargs
+        self,
+        model,
+        data_split,
+        *,
+        hf_split: str,
+        hf_subset: str,
+        encode_kwargs: dict[str, Any] = {},
+        **kwargs,
     ) -> ScoresDict:
         def normalize(x):
             return (x - self.min_score) / (self.max_score - self.min_score)
@@ -83,7 +90,9 @@ class AbsTaskVisualSTS(AbsTask):
             data_split,
             self.sentences_column_names,
             normalized_scores,
-            task_name=self.metadata.name,
+            task_metadata=self.metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
             **kwargs,
         )
         scores = evaluator(model, encode_kwargs=encode_kwargs)

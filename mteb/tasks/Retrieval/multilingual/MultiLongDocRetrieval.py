@@ -5,8 +5,6 @@ import datasets
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskRetrieval import *
-
 _LANGUAGES = {
     "ar": ["ara-Arab"],
     "de": ["deu-Latn"],

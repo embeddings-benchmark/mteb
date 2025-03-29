@@ -6,9 +6,10 @@ import numpy as np
 import tqdm
 from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import BatchedInput, PromptType
+from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
-from mteb.models.wrapper import Wrapper
+from mteb.models.abs_encoder import AbsEncoder
+from mteb.types import Array, BatchedInput, PromptType
 
 MULTILINGUAL_EVALUATED_LANGUAGES = [
     "arb_Arab",
@@ -50,7 +51,7 @@ GECKO_TRAINING_DATA = {
 }
 
 
-class GoogleTextEmbeddingModel(Wrapper):
+class GoogleTextEmbeddingModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -59,9 +60,8 @@ class GoogleTextEmbeddingModel(Wrapper):
         **kwargs,
     ) -> None:
         self.model_name = model_name
-        self.model_prompts = (
-            self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
-        )
+        self.model_prompts = model_prompts
+        self.validate_task_to_prompt_name()
 
     def _embed(
         self,
@@ -120,11 +120,14 @@ class GoogleTextEmbeddingModel(Wrapper):
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
-        task_name: str,
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
-        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+    ) -> Array:
+        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         google_task_type = self.model_prompts.get(prompt_name)
 
         show_progress_bar = (

@@ -9,6 +9,7 @@ from datasets import Dataset
 from sklearn import metrics
 from torch.utils.data import DataLoader
 
+from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder
 
 from .Evaluator import Evaluator
@@ -20,14 +21,18 @@ class ClusteringEvaluator(Evaluator):
     def __init__(
         self,
         dataset: Dataset,
-        task_name: str | None = None,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         clustering_batch_size: int = 500,
         **kwargs,
     ):
         super().__init__(**kwargs)
         self.dataset = dataset
         self.clustering_batch_size = clustering_batch_size
-        self.task_name = task_name
+        self.task_metadata = task_metadata
+        self.hf_split = hf_split
+        self.hf_subset = hf_subset
 
     def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}):
         if "batch_size" not in encode_kwargs:
@@ -35,7 +40,9 @@ class ClusteringEvaluator(Evaluator):
 
         corpus_embeddings = model.encode(
             DataLoader(self.dataset),
-            task_name=self.task_name,
+            task_metadata=self.task_metadata,
+            hf_subset=self.hf_subset,
+            hf_split=self.hf_split,
             **encode_kwargs,
         )
 

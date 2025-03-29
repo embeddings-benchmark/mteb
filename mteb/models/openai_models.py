@@ -7,15 +7,16 @@ import numpy as np
 import tqdm
 from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import BatchedInput
+from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
-from mteb.models.wrapper import Wrapper
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.requires_package import requires_package
+from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
 
-class OpenAIWrapper(Wrapper):
+class OpenAIAbsEncoder(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -54,7 +55,16 @@ class OpenAIWrapper(Wrapper):
         truncated_sentence = self._encoding.encode(text)[: self._max_tokens]
         return self._encoding.decode(truncated_sentence)
 
-    def encode(self, inputs: DataLoader[BatchedInput], **kwargs: Any) -> np.ndarray:
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
         requires_package(self, "openai", "Openai text embedding")
 
         from openai import NotGiven
@@ -131,7 +141,7 @@ text_embedding_3_small = ModelMeta(
     revision="2",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
-    loader=OpenAIWrapper,
+    loader=OpenAIAbsEncoder,
     loader_kwargs=dict(
         tokenizer_name="cl100k_base",
         max_tokens=8191,
@@ -155,7 +165,7 @@ text_embedding_3_large = ModelMeta(
     revision="2",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
-    loader=OpenAIWrapper,
+    loader=OpenAIAbsEncoder,
     loader_kwargs=dict(
         tokenizer_name="cl100k_base",
         max_tokens=8191,
@@ -179,7 +189,7 @@ text_embedding_ada_002 = ModelMeta(
     revision="2",
     release_date="2022-12-15",
     languages=None,  # supported languages not specified
-    loader=OpenAIWrapper,
+    loader=OpenAIAbsEncoder,
     loader_kwargs=dict(
         tokenizer_name="cl100k_base",
         max_tokens=8191,

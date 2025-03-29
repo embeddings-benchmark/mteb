@@ -2,14 +2,23 @@ from __future__ import annotations
 
 import pytest
 
+from mteb import TaskMetadata
 from mteb.evaluation.evaluators import RetrievalEvaluator
 from mteb.models import SentenceTransformerWrapper
 from tests.test_benchmark.mock_models import MockNumpyEncoder
+from tests.test_benchmark.mock_tasks import general_args
 
 TOL = 0.0001
 
 
 class TestRetrievalEvaluator:
+    metadata = TaskMetadata(
+        type="Retrieval",
+        name="MockRetrievalTask",
+        main_score="ndcg_at_10",
+        **general_args,
+    )
+
     def setup_method(self):
         """Setup any state tied to the execution of the given method in a class.
 
@@ -70,6 +79,7 @@ class TestRetrievalEvaluator:
             relevant_docs,
             results,
             [1, 2, 3],
+            self.metadata,
             ignore_identical_ids=ignore_identical_ids,
         )
 
@@ -122,15 +132,9 @@ class TestRetrievalEvaluator:
             relevant_docs,
             results,
             [1, 2, 3],
+            self.metadata,
             ignore_identical_ids=ignore_identical_ids,
         )
-
-        print(
-            naucs["nAUC_NDCG@3_max"],
-            naucs["nAUC_NDCG@3_std"],
-            naucs["nAUC_NDCG@3_diff1"],
-        )
-
         aucs = ["nAUC_NDCG@3_max", "nAUC_NDCG@3_std", "nAUC_NDCG@3_diff1"]
         for auc in aucs:
             assert naucs[auc] == pytest.approx(expected_naucs[auc], TOL)

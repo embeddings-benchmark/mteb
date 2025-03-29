@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import torch
 
-from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
+from mteb.types import PromptType
 
 
 def instruction_template(

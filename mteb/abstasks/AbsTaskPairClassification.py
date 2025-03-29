@@ -5,11 +5,12 @@ from collections import Counter, defaultdict
 
 from datasets import Dataset
 
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics
+
 from ..encoder_interface import Encoder
 from ..evaluation.evaluators import PairClassificationEvaluator
 from ..load_results.task_results import ScoresDict
 from .AbsTask import AbsTask
-from .TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -72,6 +73,8 @@ class AbsTaskPairClassification(AbsTask):
         model: Encoder,
         dataset: Dataset,
         *,
+        hf_split: str,
+        hf_subset: str,
         encode_kwargs: dict[str, str] = {},
         **kwargs,
     ) -> ScoresDict:
@@ -83,7 +86,9 @@ class AbsTaskPairClassification(AbsTask):
             data_split["sentence1"],
             data_split["sentence2"],
             data_split["labels"],
-            task_name=self.metadata.name,
+            task_metadata=self.metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
             **kwargs,
         )
         scores = evaluator.compute_metrics(model, encode_kwargs=encode_kwargs)

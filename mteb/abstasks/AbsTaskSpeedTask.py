@@ -6,6 +6,8 @@ import time
 from pathlib import Path
 
 import numpy as np
+from datasets import Dataset
+from torch.utils.data import DataLoader
 
 from mteb.encoder_interface import Encoder
 from mteb.load_results.task_results import ScoresDict
@@ -31,13 +33,17 @@ class AbsTaskSpeedTask(AbsTask):
         file_path = Path(__file__).parent / "the_ugly_duckling.txt"
         with file_path.open("r") as f:
             text = f.read()
-        self.dataset = {"test": {"text": text.split("\n\n")}}
+        self.dataset = {"test": Dataset.from_dict({"text": text.split("\n\n")})}
         self.data_loaded = True
 
     def _get_time_taken(self, model: Encoder, data_split) -> float:
         start = time.time()
         model.encode(
-            data_split["text"], device=self.device, task_name=self.metadata.name
+            DataLoader(data_split),
+            device=self.device,
+            task_metadata=self.metadata,
+            hf_split="speed",
+            hf_subset="speed",
         )
         time_taken = time.time() - start
         return time_taken
@@ -83,7 +89,11 @@ class AbsTaskSpeedTask(AbsTask):
 
     def _evaluate_subset(self, model: Encoder, data_split, **kwargs) -> ScoresDict:
         model.encode(
-            ["encode this"], device=self.device, task_name=self.metadata.name
+            DataLoader(Dataset.from_list([{"text": "encode this"}])),
+            device=self.device,
+            task_metadata=self.metadata,
+            hf_split="speed",
+            hf_subset="speed",
         )  # ensure model is loaded
 
         timings = []

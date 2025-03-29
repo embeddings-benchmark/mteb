@@ -1,12 +1,16 @@
 from __future__ import annotations
 
 import logging
+from typing import Any
 
 import torch
+from torch.utils.data import DataLoader
 from transformers import AutoModelForCausalLM, AutoModelForSeq2SeqLM, AutoTokenizer
 
+from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta
-from mteb.models.rerankers_custom import RerankerWrapper, rerank_wrapper_loader
+from mteb.models.rerankers_custom import RerankerWrapper
+from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -99,13 +103,22 @@ class MonoT5Reranker(RerankerWrapper):
             return token_false_id, token_true_id
 
     @torch.inference_mode()
-    def predict(self, input_to_rerank, **kwargs):
-        inputs = list(zip(*input_to_rerank))
-        if len(input_to_rerank[0]) == 2:
-            queries, passages = inputs
-            instructions = None
-        else:
-            queries, passages, instructions = inputs
+    def predict(
+        self,
+        inputs1: DataLoader[BatchedInput],
+        inputs2: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        queries = [text for batch in inputs1 for text in batch["query"]]
+        instructions = None
+        if "instruction" in inputs2.dataset.features:
+            instructions = [text for batch in inputs1 for text in batch["instruction"]]
+        passages = [text for batch in inputs2 for text in batch["text"]]
 
         if instructions is not None and instructions[0] is not None:
             queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
@@ -193,13 +206,22 @@ Relevant: """
         self.model.eval()
 
     @torch.inference_mode()
-    def predict(self, input_to_rerank, **kwargs):
-        inputs = list(zip(*input_to_rerank))
-        if len(input_to_rerank[0]) == 2:
-            queries, passages = inputs
-            instructions = None
-        else:
-            queries, passages, instructions = inputs
+    def predict(
+        self,
+        inputs1: DataLoader[BatchedInput],
+        inputs2: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        queries = [text for batch in inputs1 for text in batch["query"]]
+        instructions = None
+        if "instruction" in inputs2.dataset.features:
+            instructions = [text for batch in inputs1 for text in batch["instruction"]]
+        passages = [text for batch in inputs2 for text in batch["text"]]
 
         if instructions is not None and instructions[0] is not None:
             # logger.info(f"Adding instructions to LLAMA queries")
@@ -284,9 +306,8 @@ Passage: {text}"""
 
 
 monot5_small = ModelMeta(
-    loader=rerank_wrapper_loader,
+    loader=MonoT5Reranker,
     loader_kwargs=dict(
-        wrapper=MonoT5Reranker,
         fp_options="float16",
     ),
     name="castorini/monot5-small-msmarco-10k",
@@ -305,6 +326,7 @@ monot5_small = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
+    is_cross_encoder=True,
     citation="""@misc{rosa2022parameterleftbehinddistillation,
       title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
       author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
@@ -317,9 +339,8 @@ monot5_small = ModelMeta(
 )
 
 monot5_base = ModelMeta(
-    loader=rerank_wrapper_loader,  # type: ignore
+    loader=MonoT5Reranker,  # type: ignore
     loader_kwargs=dict(
-        wrapper=MonoT5Reranker,
         fp_options="float16",
     ),
     name="castorini/monot5-base-msmarco-10k",
@@ -347,12 +368,12 @@ monot5_base = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
+    is_cross_encoder=True,
 )
 
 monot5_large = ModelMeta(
-    loader=rerank_wrapper_loader,  # type: ignore
+    loader=MonoT5Reranker,
     loader_kwargs=dict(
-        wrapper=MonoT5Reranker,
         fp_options="float16",
     ),
     name="castorini/monot5-large-msmarco-10k",
@@ -371,6 +392,7 @@ monot5_large = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
+    is_cross_encoder=True,
     citation="""@misc{rosa2022parameterleftbehinddistillation,
       title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
       author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
@@ -383,9 +405,8 @@ monot5_large = ModelMeta(
 )
 
 monot5_3b = ModelMeta(
-    loader=rerank_wrapper_loader,  # type: ignore
+    loader=MonoT5Reranker,
     loader_kwargs=dict(
-        wrapper=MonoT5Reranker,
         fp_options="float16",
     ),
     name="castorini/monot5-3b-msmarco-10k",
@@ -404,6 +425,7 @@ monot5_3b = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
+    is_cross_encoder=True,
     citation="""@misc{rosa2022parameterleftbehinddistillation,
       title={No Parameter Left Behind: How Distillation and Model Size Affect Zero-Shot Retrieval},
       author={Guilherme Moraes Rosa and Luiz Bonifacio and Vitor Jeronymo and Hugo Abonizio and Marzieh Fadaee and Roberto Lotufo and Rodrigo Nogueira},
@@ -416,9 +438,8 @@ monot5_3b = ModelMeta(
 )
 
 flant5_base = ModelMeta(
-    loader=rerank_wrapper_loader,  # type: ignore
+    loader=FLANT5Reranker,  # type: ignore
     loader_kwargs=dict(
-        wrapper=FLANT5Reranker,
         fp_options="float16",
     ),
     name="google/flan-t5-base",
@@ -459,12 +480,12 @@ flant5_base = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch"],
+    is_cross_encoder=True,
 )
 
 flant5_large = ModelMeta(
-    loader=rerank_wrapper_loader,  # type: ignore
+    loader=FLANT5Reranker,
     loader_kwargs=dict(
-        wrapper=FLANT5Reranker,
         fp_options="float16",
     ),
     name="google/flan-t5-large",
@@ -505,12 +526,12 @@ flant5_large = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch"],
+    is_cross_encoder=True,
 )
 
 flant5_xl = ModelMeta(
-    loader=rerank_wrapper_loader,  # type: ignore
+    loader=FLANT5Reranker,
     loader_kwargs=dict(
-        wrapper=FLANT5Reranker,
         fp_options="float16",
     ),
     name="google/flan-t5-xl",
@@ -551,12 +572,12 @@ flant5_xl = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch"],
+    is_cross_encoder=True,
 )
 
 flant5_xxl = ModelMeta(
-    loader=rerank_wrapper_loader,  # type: ignore
+    loader=FLANT5Reranker,
     loader_kwargs=dict(
-        wrapper=FLANT5Reranker,
         fp_options="float16",
     ),
     name="google/flan-t5-xxl",
@@ -597,13 +618,13 @@ flant5_xxl = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch"],
+    is_cross_encoder=True,
 )
 
 
 llama2_7b = ModelMeta(
-    loader=rerank_wrapper_loader,  # type: ignore
+    loader=LlamaReranker,
     loader_kwargs=dict(
-        wrapper=LlamaReranker,
         fp_options="float16",
     ),
     name="meta-llama/Llama-2-7b-hf",
@@ -631,12 +652,12 @@ llama2_7b = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2307.09288},
     }""",
+    is_cross_encoder=True,
 )
 
 llama2_7b_chat = ModelMeta(
-    loader=rerank_wrapper_loader,  # type: ignore
+    loader=LlamaReranker,
     loader_kwargs=dict(
-        wrapper=LlamaReranker,
         fp_options="float16",
     ),
     name="meta-llama/Llama-2-7b-chat-hf",
@@ -664,12 +685,12 @@ llama2_7b_chat = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
+    is_cross_encoder=True,
 )
 
 mistral_7b = ModelMeta(
-    loader=rerank_wrapper_loader,  # type: ignore
+    loader=MistralReranker,
     loader_kwargs=dict(
-        wrapper=MistralReranker,
         fp_options="float16",
     ),
     name="mistralai/Mistral-7B-Instruct-v0.2",
@@ -697,12 +718,12 @@ mistral_7b = ModelMeta(
       primaryClass={cs.CL},
       url={https://arxiv.org/abs/2310.06825},
     }""",
+    is_cross_encoder=True,
 )
 
 followir_7b = ModelMeta(
-    loader=rerank_wrapper_loader,  # type: ignore
+    loader=FollowIRReranker,
     loader_kwargs=dict(
-        wrapper=FollowIRReranker,
         fp_options="float16",
     ),
     name="jhu-clsp/FollowIR-7B",
@@ -731,6 +752,7 @@ followir_7b = ModelMeta(
       primaryClass={cs.IR}
     }
     """,
+    is_cross_encoder=True,
 )
 
 
@@ -839,9 +861,8 @@ mt5_languages = [
 ]
 
 mt5_base_mmarco_v2 = ModelMeta(
-    loader=rerank_wrapper_loader,  # type: ignore
+    loader=MonoT5Reranker,
     loader_kwargs=dict(
-        wrapper=MonoT5Reranker,
         fp_options="float16",
     ),
     name="unicamp-dl/mt5-base-mmarco-v2",
@@ -869,12 +890,12 @@ mt5_base_mmarco_v2 = ModelMeta(
     similarity_fn_name=None,
     use_instructions=None,
     framework=["PyTorch"],
+    is_cross_encoder=True,
 )
 
 mt5_13b_mmarco_100k = ModelMeta(
-    loader=rerank_wrapper_loader,  # type: ignore
+    loader=MonoT5Reranker,  # type: ignore
     loader_kwargs=dict(
-        wrapper=MonoT5Reranker,
         fp_options="float16",
     ),
     name="unicamp-dl/mt5-13b-mmarco-100k",
@@ -893,4 +914,5 @@ mt5_13b_mmarco_100k = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["PyTorch"],
+    is_cross_encoder=True,
 )

@@ -9,11 +9,11 @@ import tqdm
 from datasets import Dataset
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
+from mteb.abstasks import TaskMetadata
 from mteb.encoder_interface import Encoder
 
 from ...create_dataloaders import create_dataloader_from_texts
 from .Evaluator import Evaluator
-from .utils import cos_sim
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +25,9 @@ class BitextMiningEvaluator(Evaluator):
     def __init__(
         self,
         sentences: Dataset,
-        task_name: str | None = None,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         pair_columns: list[tuple[str, str]] = DEFAULT_PAIR,
         **kwargs,
     ):
@@ -39,7 +41,9 @@ class BitextMiningEvaluator(Evaluator):
             if "gold" not in sentences
             else sentences["gold"]
         )
-        self.task_name = task_name
+        self.hf_split = hf_split
+        self.hf_subset = hf_subset
+        self.task_metadata = task_metadata
 
     def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}):
         scores = self.compute_metrics(model, encode_kwargs=encode_kwargs)
@@ -54,14 +58,16 @@ class BitextMiningEvaluator(Evaluator):
         else:
             # BUCC outputs a dict instead of a Dataset
             subsets = list(pair_elements)
-        n_subsets = len(subsets)
 
         embeddings = {}
-        for sub in tqdm.tqdm(subsets, desc=f"Encoding {n_subsets}x{self.n} sentences"):
+        for sub in tqdm.tqdm(subsets):
             dataloader = create_dataloader_from_texts(self.sentences[sub])
             embeddings[sub] = model.encode(
                 dataloader,
-                task_name=self.task_name,
+                task_metadata=self.task_metadata,
+                # parallel datasets have lang pairs for subset
+                hf_subset=self.hf_subset if self.hf_subset != "parallel" else sub,
+                hf_split=self.hf_split,
                 **encode_kwargs,
             )
 
@@ -144,7 +150,11 @@ class BitextMiningEvaluator(Evaluator):
             corpus_embeddings = corpus_embeddings.reshape(1, *corpus_embeddings)
 
         # Check that corpus and queries are on the same device
-        if corpus_embeddings.device != query_embeddings.device:
+        if (
+            isinstance(corpus_embeddings, torch.Tensor)
+            and isinstance(query_embeddings, torch.Tensor)
+            and corpus_embeddings.device != query_embeddings.device
+        ):
             query_embeddings = query_embeddings.to(corpus_embeddings.device)
 
         queries_result_list = [[] for _ in range(len(query_embeddings))]
@@ -153,7 +163,7 @@ class BitextMiningEvaluator(Evaluator):
             # Iterate over chunks of the corpus
             for corpus_start_idx in range(0, len(corpus_embeddings), corpus_chunk_size):
                 # Compute cosine similarities
-                similarity_scores = cos_sim(
+                similarity_scores = model.similarity(  # type: ignore
                     query_embeddings[
                         query_start_idx : query_start_idx + query_chunk_size
                     ],
@@ -161,16 +171,6 @@ class BitextMiningEvaluator(Evaluator):
                         corpus_start_idx : corpus_start_idx + corpus_chunk_size
                     ],
                 )
-
-                if hasattr(model, "similarity"):
-                    similarity_scores = model.similarity(  # type: ignore
-                        query_embeddings[
-                            query_start_idx : query_start_idx + query_chunk_size
-                        ],
-                        corpus_embeddings[
-                            corpus_start_idx : corpus_start_idx + corpus_chunk_size
-                        ],
-                    )
 
                 # Get top-k scores
                 cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(

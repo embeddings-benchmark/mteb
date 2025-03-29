@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from mteb.encoder_interface import PromptType
 from mteb.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.types import PromptType
 
 E5_PAPER_RELEASE_DATE = "2024-02-08"
 XLMR_LANGUAGES = [

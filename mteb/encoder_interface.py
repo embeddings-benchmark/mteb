@@ -1,62 +1,15 @@
 from __future__ import annotations
 
-from collections.abc import Sequence
-from enum import Enum
-from typing import Any, Protocol, TypedDict, Union, runtime_checkable
+from typing import TYPE_CHECKING, Any, Protocol, Union, runtime_checkable
 
-import numpy as np
-import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 
+from mteb.types import Array, BatchedInput, PromptType
+
+if TYPE_CHECKING:
+    from mteb.abstasks import TaskMetadata
+
 Corpus = Union[list[dict[str, str]], dict[str, list[str]]]
-
-
-class PromptType(str, Enum):
-    query = "query"
-    passage = "passage"
-
-
-class Conversation(TypedDict):
-    """A conversation, consisting of a list of messages.
-
-    Args:
-        role: The role of the message sender.
-        content: The content of the message.
-    """
-
-    role: str
-    content: str
-
-
-class BatchedInput(TypedDict, total=False):
-    """The input to the encoder. This is the input to the encoder when using the encode function.
-
-
-    Args:
-        text: The text to encode.
-        image: The image to encode. Can be a list of images or a list of lists of images.
-        audio: The audio to encode. Can be a list of audio files or a list of lists of audio files.
-
-        Retrieval corpus:
-            title: The title of the text to encode.
-            body: The body of the text to encode.
-
-        Retrieval query:
-            query: The query to encode.
-            instruction: The instruction to encode.
-    """
-
-    text: list[str]
-    image: list[list[Image.Image]]
-    audio: list[list[bytes]]
-    # Retrieval corpus
-    title: list[str]
-    body: list[str]
-    # Retrieval query
-    # list[list[str]] and list[Conversation] is used for conversations datasets
-    query: list[str] | list[list[str]] | list[Conversation]
-    instruction: list[str]
 
 
 @runtime_checkable
@@ -67,27 +20,31 @@ class Encoder(Protocol):
     In general the interface is kept aligned with sentence-transformers interface. In cases where exceptions occurs these are handled within MTEB.
     """
 
-    def __init__(self, device: str | None = None) -> None:
+    def __init__(self, model_name: str, revision: str, **kwargs) -> None:
         """The initialization function for the encoder. Used when calling it from the mteb run CLI.
 
         Args:
-            device: The device to use for encoding. Can be ignored if the encoder is not using a device (e.g. for API)
+            model_name: Name of the model
+            revision: revision of the model
+            kwargs: Any additional kwargs
         """
-        self.device = device
+        ...
 
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray | torch.Tensor:
+    ) -> Array:
         """Encodes the given sentences using the encoder.
 
         Args:
             inputs: Batch of inputs to encode.
-            task_name: The name of the task. Sentence-transformers uses this to
+            task_metadata: The metadata of the task. Sentence-transformers uses this to
                 determine which prompt to use from a specified dictionary.
                 The order of priorities for prompt selection are:
                     1. Composed prompt of task name + prompt type (query or passage)
@@ -95,19 +52,16 @@ class Encoder(Protocol):
                     3. Composed prompt of task type + prompt type (query or passage)
                     4. Specific task type prompt
                     5. Specific prompt type (query or passage)
+            hf_split: Split of current task, allows to know some additional information about current split.
+                E.g. Current language
+            hf_subset: Subset of current task. Similar to `hf_split` to get more information
             prompt_type: The name type of prompt. (query or passage)
             **kwargs: Additional arguments to pass to the encoder.
-
-
 
         Returns:
             The encoded input in a numpy array or torch tensor of the shape (Number of sentences) x (Embedding dimension).
         """
         ...
-
-
-class EncoderWithQueryInstructionFormatting(Protocol):
-    """Optional protocol for encoders that support combining queries with instructions in a model-specific way. If not implemented, MTEB will use the default query instruction formatting ({query} {instruction})."""
 
     def combine_query_and_instruction(
         self,
@@ -125,19 +79,11 @@ class EncoderWithQueryInstructionFormatting(Protocol):
         """
         ...
 
-
-class EncoderWithSimilarity(Encoder, Protocol):
-    """Besides the required functions in the Encoder interface, the encoder can additionally specify its own similiarity functions.
-
-    MTEB will by default attempt to use similarity_pairwise function first before falling back to similarity function. If the encoder does not support
-    similarity_pairwise function, it should simply not implement it.
-    """
-
     def similarity(
         self,
-        embeddings1: torch.Tensor | np.ndarray,
-        embeddings2: torch.Tensor | np.ndarray,
-    ) -> torch.Tensor:
+        embeddings1: Array,
+        embeddings2: Array,
+    ) -> Array:
         """Compute the similarity between two collections of embeddings. The output will be a matrix with the similarity scores between all embeddings
         from the first parameter and all embeddings from the second parameter. This differs from similarity_pairwise which computes the similarity
         between each pair of embeddings.
@@ -155,9 +101,9 @@ class EncoderWithSimilarity(Encoder, Protocol):
 
     def similarity_pairwise(
         self,
-        embeddings1: torch.Tensor | np.ndarray,
-        embeddings2: torch.Tensor | np.ndarray,
-    ) -> torch.Tensor:
+        embeddings1: Array,
+        embeddings2: Array,
+    ) -> Array:
         """Compute the similarity between two collections of embeddings. The output will be a vector with the similarity scores between each pair of
         embeddings.
 
@@ -172,98 +118,30 @@ class EncoderWithSimilarity(Encoder, Protocol):
         """
         ...
 
-
-@runtime_checkable
-class EncoderWithConversationEncode(Encoder, Protocol):
-    """The optional interface for an encoder that supports encoding conversations."""
-
-    def encode_conversations(
+    def predict(
         self,
-        conversations: Sequence[Sequence[str]],
+        inputs1: DataLoader[BatchedInput],
+        inputs2: DataLoader[BatchedInput],
         *,
-        task_name: str | None = None,
-        **kwargs: Any,
-    ) -> torch.Tensor | np.ndarray:
-        """Encodes the given conversations using the encoder.
-
-        Args:
-            conversations: The conversations to encode.
-            task_name: The name of the task. Sentence-transformers uses this to
-                determine which prompt to use from a specified dictionary.
-            **kwargs: Additional arguments to pass to the encoder.
-
-            The order of priorities for prompt selection are:
-                1. Composed prompt of task name + prompt type (query or passage)
-                2. Specific task prompt
-                3. Composed prompt of task type + prompt type (query or passage)
-                4. Specific task type prompt
-                5. Specific prompt type (query or passage)
-
-        Returns:
-            The encoded conversations.
-        """
-        ...
-
-    @staticmethod
-    def convert_conv_history_to_query(conversations: Sequence[Sequence[str]]) -> str:
-        """Converts a conversation history to a single query.
-
-        Args:
-            conversations: The conversations to convert.
-
-        Returns:
-            The query.
-        """
-        ...
-
-
-class ImageEncoder:
-    """Interface for image encoder designed based on VLM2VecWrapper.
-    There is not a perfect 1-1 match, e.g. device can be None here.
-    The intention here is to define the current interface and adapt to as close to MTEB as possible
-    and align as much as possible with sentencetransformers.
-    """
-
-    def __init__(
-        self,
-        device: str | None,
-        **kwargs: Any,
-    ):
-        pass
-
-    def encode(  # current a 1-1 match with Encoder.encode
-        self,
-        sentences: Sequence[str],
-        *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
-        pass
+    ) -> Array:
+        """Predicts relevance scores for pairs of inputs. Note that, unlike the encoder, the cross-encoder can compare across inputs.
 
-    def get_image_embeddings(
-        # Seems like sentence transformers use a singular encode for both images and text. Not sure if we want to do the same.
-        # If not it might be ideal to redefine Encoder.encode
-        self,
-        images: list[Image.Image] | DataLoader,
-        **kwargs,
-        # removed batch_size, it is not required that it will accept kwargs
-    ) -> np.ndarray:  # added standard output (I believe we actually expect tensors in the code, but would like to be consistent)
-        pass
+        Args:
+            inputs1: First Dataloader of inputs to encode.
+            inputs2: Second Dataloader of inputs to encode.
+            task_metadata: Metadata of the current task.
+            hf_split: Split of current task, allows to know some additional information about current split.
+                E.g. Current language
+            hf_subset: Subset of current task. Similar to `hf_split` to get more information
+            prompt_type: The name type of prompt. (query or passage)
+            **kwargs: Additional arguments to pass to the cross-encoder.
 
-    def get_text_embeddings(  # any reason for this?
-        self,
-        texts: list[str],
-        **kwargs,
-    ) -> np.ndarray:
-        pass
-
-    def get_fused_embeddings(  # hmm what if I have a document with images at specific positions?
-        self,
-        texts: list[str] | None = None,
-        images: list[Image.Image] | DataLoader | None = None,
-        # the requirement for these two to be the same seems odd (docs without images, images without associated text, docs with multiple images)
-        # fusion_mode: str="sum", # will remove this as it should be required in the interface
-        **kwargs: Any,
-    ) -> np.ndarray:
-        pass
+        Returns:
+            The predicted relevance scores for each inputs pair.
+        """
+        ...

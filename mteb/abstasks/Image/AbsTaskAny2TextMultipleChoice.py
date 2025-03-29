@@ -6,10 +6,11 @@ from typing import Any
 
 from datasets import Dataset
 
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics
+
 from ...encoder_interface import Encoder
 from ...evaluation.evaluators import Any2TextMultipleChoiceEvaluator
 from ..AbsTask import AbsTask, ScoresDict
-from ..TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -123,6 +124,8 @@ class AbsTaskAny2TextMultipleChoice(AbsTask):
         model: Encoder,
         dataset: Dataset,
         *,
+        hf_split: str,
+        hf_subset: str,
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ) -> ScoresDict:
@@ -137,7 +140,9 @@ class AbsTaskAny2TextMultipleChoice(AbsTask):
             query_column_names=self.query_column_names,
             label_column_name=self.label_column_name,
             choices_column_name=self.choices_column_name,
-            task_name=self.metadata.name,
+            task_metadata=self.metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
             **kwargs,
         )
         scores = evaluator(model, encode_kwargs=encode_kwargs)

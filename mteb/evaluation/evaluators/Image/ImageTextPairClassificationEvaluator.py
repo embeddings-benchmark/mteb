@@ -8,10 +8,11 @@ import torch.nn.functional as F
 from datasets import Dataset
 from torch.utils.data import DataLoader
 
+from mteb.abstasks import TaskMetadata
 from mteb.create_dataloaders import (
     transform_image_to_rgb,
 )
-from mteb.encoder_interface import Encoder, EncoderWithSimilarity
+from mteb.encoder_interface import Encoder
 from mteb.evaluation.evaluators.Evaluator import Evaluator
 from mteb.requires_package import requires_image_dependencies
 
@@ -58,7 +59,9 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         dataset,
         images_column_names: str | list[str],
         texts_column_names: str | list[str],
-        task_name: str | None = None,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         **kwargs,
     ):
         super().__init__(**kwargs)
@@ -68,12 +71,14 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         self.dataset = dataset
         self.images_column_names = images_column_names
         self.texts_column_names = texts_column_names
-        self.task_name = task_name
+        self.task_metadata = task_metadata
+        self.hf_split = hf_split
+        self.hf_subset = hf_subset
         self.transform = transforms.Compose([transforms.PILToTensor()])
 
     def __call__(
         self,
-        model: Encoder | EncoderWithSimilarity,
+        model: Encoder,
         encode_kwargs: dict[str, Any] = {},
     ):
         if "batch_size" not in encode_kwargs:
@@ -116,9 +121,14 @@ class ImageTextPairClassificationEvaluator(Evaluator):
                 Dataset.from_dict({"text": texts}),
                 batch_size=encode_kwargs["batch_size"],
             ),
-            task_name=self.task_name,
+            task_metadata=self.task_metadata,
+            hf_subset=self.hf_subset,
+            hf_split=self.hf_split,
             **encode_kwargs,
         )
+
+        if not isinstance(text_embeddings, torch.Tensor):
+            text_embeddings = torch.tensor(text_embeddings)
 
         norm_text_embeddings = F.normalize(
             text_embeddings,
@@ -131,9 +141,13 @@ class ImageTextPairClassificationEvaluator(Evaluator):
                 batch_size=encode_kwargs["batch_size"],
                 collate_fn=lambda x: {"image": [item["image"] for item in x]},
             ),
-            task_name=self.task_name,
+            task_metadata=self.task_metadata,
+            hf_subset=self.hf_subset,
+            hf_split=self.hf_split,
             **encode_kwargs,
         )
+        if not isinstance(image_embeddings, torch.Tensor):
+            image_embeddings = torch.tensor(image_embeddings)
 
         norm_image_embeddings = F.normalize(
             image_embeddings,
