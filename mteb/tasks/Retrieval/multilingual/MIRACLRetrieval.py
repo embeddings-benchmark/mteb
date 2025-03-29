@@ -305,6 +305,7 @@ class MIRACLRetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
         dataset={
             "path": "mteb/miracl-hard-negatives",
             "revision": "95c8db7d4a6e9c1d8a60601afd63d553ae20a2eb",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="s2p",
@@ -342,12 +343,12 @@ class MIRACLRetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
 
         self.corpus, self.queries, self.relevant_docs = (
             _load_miracl_data_hard_negatives(
-                path=self.metadata_dict["dataset"]["path"],
+                path=self.metadata.dataset["path"],
                 langs=self.hf_subsets,
                 splits=self.metadata_dict["eval_splits"],
                 cache_dir=kwargs.get("cache_dir", None),
-                revision=self.metadata_dict["dataset"]["revision"],
-                trust_remote_code=self.metadata.dataset["trust_remote_code"],
+                revision=self.metadata.dataset["revision"],
+                trust_remote_code=self.metadata.dataset.get("trust_remote_code", False),
             )
         )
 

@@ -70,7 +70,6 @@ mteb run -m sentence-transformers/all-MiniLM-L6-v2 \
 Note that using multiple GPUs in parallel can be done by just having a custom encode function that distributes the inputs to multiple GPUs like e.g. [here](https://github.com/microsoft/unilm/blob/b60c741f746877293bb85eed6806736fc8fa0ffd/e5/mteb_eval.py#L60) or [here](https://github.com/ContextualAI/gritlm/blob/09d8630f0c95ac6a456354bcb6f964d7b9b6a609/gritlm/gritlm.py#L75). See [custom models](docs/usage/usage.md#using-a-custom-model) for more information.
 
 
-
 ## Usage Documentation
 The following links to the main sections in the usage documentation.
 
@@ -102,16 +101,16 @@ The following links to the main sections in the usage documentation.
 
 ## Overview
 
-| Overview                  |                                                                                     |
+| Overview                       |                                                                                     |
 |--------------------------------|-------------------------------------------------------------------------------------|
 | 📈 [Leaderboard]               | The interactive leaderboard of the benchmark                                        |
 | 📋 [Tasks]                     | Overview of available tasks                                                         |
 | 📐 [Benchmarks]                | Overview of available benchmarks                                                    |
-| **Contributing**           |   |
-| 🤖 [Adding a model]            | Information related to how to submit a model to MTEB and to the leaderboard |
-| 👩‍🔬 [Reproducible workflows] | Information related to how to create reproducible workflows with MTEB |
-| 👩‍💻 [Adding a dataset]       | How to add a new task/dataset to MTEB                                               |
-| 👩‍💻 [Adding a benchmark]     | How to add a new benchmark to MTEB and to the leaderboard                           |
+| **Contributing**               |                                                                                     |
+| 🤖 [Adding a model]            | Information related to how to submit a model to MTEB and to the leaderboard         |
+| 👩‍🔬 [Reproducible workflows]    | Information related to how to create reproducible workflows with MTEB               |
+| 👩‍💻 [Adding a dataset]          | How to add a new task/dataset to MTEB                                               |
+| 👩‍💻 [Adding a benchmark]        | How to add a new benchmark to MTEB and to the leaderboard                           |
 | 🤝 [Contributing]              | How to contribute to MTEB and set it up for development                             |
 
 [Tasks]: docs/tasks.md
@@ -125,23 +124,13 @@ The following links to the main sections in the usage documentation.
 
 ## Citing
 
-MTEB was introduced in "[MTEB: Massive Text Embedding Benchmark](https://arxiv.org/abs/2210.07316)", and heavily expanded in "[MMTEB: Massive Multilingual Text Embedding Benchmark](https://arxiv.org/abs/2502.13595)". When using `mteb` we recommend that you cite both articles.
+MTEB was introduced in "[MTEB: Massive Text Embedding Benchmark](https://arxiv.org/abs/2210.07316)", and heavily expanded in "[MMTEB: Massive Multilingual Text Embedding Benchmark](https://arxiv.org/abs/2502.13595)". When using `mteb`, we recommend that you cite both articles.
 
 <details>
   <summary> Bibtex Citation (click to unfold) </summary>
 
 
 ```bibtex
-@article{enevoldsen2025mmtebmassivemultilingualtext,
-      title={MMTEB: Massive Multilingual Text Embedding Benchmark},
-      author={Kenneth Enevoldsen and Isaac Chung and Imene Kerboua and Márton Kardos and Ashwin Mathur and David Stap and Jay Gala and Wissam Siblini and Dominik Krzemiński and Genta Indra Winata and Saba Sturua and Saiteja Utpala and Mathieu Ciancone and Marion Schaeffer and Gabriel Sequeira and Diganta Misra and Shreeya Dhakal and Jonathan Rystrøm and Roman Solomatin and Ömer Çağatan and Akash Kundu and Martin Bernstorff and Shitao Xiao and Akshita Sukhlecha and Bhavish Pahwa and Rafał Poświata and Kranthi Kiran GV and Shawon Ashraf and Daniel Auras and Björn Plüster and Jan Philipp Harries and Loïc Magne and Isabelle Mohr and Mariya Hendriksen and Dawei Zhu and Hippolyte Gisserot-Boukhlef and Tom Aarsen and Jan Kostkan and Konrad Wojtasik and Taemin Lee and Marek Šuppa and Crystina Zhang and Roberta Rocca and Mohammed Hamdy and Andrianos Michail and John Yang and Manuel Faysse and Aleksei Vatolin and Nandan Thakur and Manan Dey and Dipam Vasani and Pranjal Chitale and Simone Tedeschi and Nguyen Tai and Artem Snegirev and Michael Günther and Mengzhou Xia and Weijia Shi and Xing Han Lù and Jordan Clive and Gayatri Krishnakumar and Anna Maksimova and Silvan Wehrli and Maria Tikhonova and Henil Panchal and Aleksandr Abramov and Malte Ostendorff and Zheng Liu and Simon Clematide and Lester James Miranda and Alena Fenogenova and Guangyu Song and Ruqiya Bin Safi and Wen-Ding Li and Alessia Borghini and Federico Cassano and Hongjin Su and Jimmy Lin and Howard Yen and Lasse Hansen and Sara Hooker and Chenghao Xiao and Vaibhav Adlakha and Orion Weller and Siva Reddy and Niklas Muennighoff},
-      publisher = {arXiv},
-      journal={arXiv preprint arXiv:2502.13595},
-      year={2025},
-      url={https://arxiv.org/abs/2502.13595},
-      doi = {10.48550/arXiv.2502.13595},
-}
-
 @article{muennighoff2022mteb,
   author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Lo{\"\i}c and Reimers, Nils},
   title = {MTEB: Massive Text Embedding Benchmark},
@@ -151,21 +140,31 @@ MTEB was introduced in "[MTEB: Massive Text Embedding Benchmark](https://arxiv.o
   url = {https://arxiv.org/abs/2210.07316},
   doi = {10.48550/ARXIV.2210.07316},
 }
+
+@article{enevoldsen2025mmtebmassivemultilingualtext,
+  title={MMTEB: Massive Multilingual Text Embedding Benchmark},
+  author={Kenneth Enevoldsen and Isaac Chung and Imene Kerboua and Márton Kardos and Ashwin Mathur and David Stap and Jay Gala and Wissam Siblini and Dominik Krzemiński and Genta Indra Winata and Saba Sturua and Saiteja Utpala and Mathieu Ciancone and Marion Schaeffer and Gabriel Sequeira and Diganta Misra and Shreeya Dhakal and Jonathan Rystrøm and Roman Solomatin and Ömer Çağatan and Akash Kundu and Martin Bernstorff and Shitao Xiao and Akshita Sukhlecha and Bhavish Pahwa and Rafał Poświata and Kranthi Kiran GV and Shawon Ashraf and Daniel Auras and Björn Plüster and Jan Philipp Harries and Loïc Magne and Isabelle Mohr and Mariya Hendriksen and Dawei Zhu and Hippolyte Gisserot-Boukhlef and Tom Aarsen and Jan Kostkan and Konrad Wojtasik and Taemin Lee and Marek Šuppa and Crystina Zhang and Roberta Rocca and Mohammed Hamdy and Andrianos Michail and John Yang and Manuel Faysse and Aleksei Vatolin and Nandan Thakur and Manan Dey and Dipam Vasani and Pranjal Chitale and Simone Tedeschi and Nguyen Tai and Artem Snegirev and Michael Günther and Mengzhou Xia and Weijia Shi and Xing Han Lù and Jordan Clive and Gayatri Krishnakumar and Anna Maksimova and Silvan Wehrli and Maria Tikhonova and Henil Panchal and Aleksandr Abramov and Malte Ostendorff and Zheng Liu and Simon Clematide and Lester James Miranda and Alena Fenogenova and Guangyu Song and Ruqiya Bin Safi and Wen-Ding Li and Alessia Borghini and Federico Cassano and Hongjin Su and Jimmy Lin and Howard Yen and Lasse Hansen and Sara Hooker and Chenghao Xiao and Vaibhav Adlakha and Orion Weller and Siva Reddy and Niklas Muennighoff},
+  publisher = {arXiv},
+  journal={arXiv preprint arXiv:2502.13595},
+  year={2025},
+  url={https://arxiv.org/abs/2502.13595},
+  doi = {10.48550/arXiv.2502.13595},
+}
 ```
 </details>
 
 
-If you use any of the specific benchmark we also recommend that you cite the authors.
+If you use any of the specific benchmarks, we also recommend that you cite the authors.
 
 ```py
 benchmark = mteb.get_benchmark("MTEB(eng, v2)")
-benchmark.citation # get citation for a specific benchmarks
+benchmark.citation # get citation for a specific benchmark
 
 # you can also create a table of the task for the appendix using:
 benchmark.tasks.to_latex()
 ```
 
-Some of these amazing publications include:
+Some of these amazing publications include (ordered chronologically):
 - Shitao Xiao, Zheng Liu, Peitian Zhang, Niklas Muennighoff. "[C-Pack: Packaged Resources To Advance General Chinese Embedding](https://arxiv.org/abs/2309.07597)" arXiv 2023
 - Michael Günther, Jackmin Ong, Isabelle Mohr, Alaeddine Abdessalem, Tanguy Abel, Mohammad Kalim Akram, Susana Guzman, Georgios Mastrapas, Saba Sturua, Bo Wang, Maximilian Werk, Nan Wang, Han Xiao. "[Jina Embeddings 2: 8192-Token General-Purpose Text Embeddings for Long Documents](https://arxiv.org/abs/2310.19923)" arXiv 2023
 - Silvan Wehrli, Bert Arnrich, Christopher Irrgang. "[German Text Embedding Clustering Benchmark](https://arxiv.org/abs/2401.02709)" arXiv 2024
