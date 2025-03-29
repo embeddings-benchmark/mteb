@@ -40,11 +40,11 @@ ops_moa_conan_embedding = ModelMeta(
     open_weights=True,
     public_training_code=None,
     public_training_data=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Sentence Transformers"],
     reference="https://huggingface.co/OpenSearch-AI/Ops-MoA-Conan-embedding-v1",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets=None,
+    training_datasets={"cmteb_retrieval": ["train"]},
     superseded_by=None,
 )
 
@@ -66,10 +66,10 @@ ops_moa_yuan_embedding = ModelMeta(
     open_weights=True,
     public_training_code=None,
     public_training_data=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Sentence Transformers"],
     reference="https://huggingface.co/OpenSearch-AI/Ops-MoA-Yuan-embedding-1.0",
     similarity_fn_name="cosine",
     use_instructions=False,
-    training_datasets=None,
+    training_datasets={"cmteb_retrieval": ["train"]},
     superseded_by=None,
 )
