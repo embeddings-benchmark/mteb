@@ -70,7 +70,7 @@ def save_dataframe(
 
 def create_comparison_table(
     results_folder: str,
-    model_names: list[str],
+    model_names: list[str] | None = None,
     benchmark_name: str | None = None,
     output_path: str | None = None,
     aggregation_level: Literal["subset", "split", "task"] = "task",
@@ -79,7 +79,7 @@ def create_comparison_table(
 
     Args:
         results_folder: Path to the results folder
-        model_names: List of model names to include
+        model_names: List of model names to include (default: None, which means all available models)
         benchmark_name: Name of the benchmark (optional)
         output_path: Path to save the output tables
         aggregation_level: Level of aggregation for results ('subset', 'split', or 'task')
@@ -90,7 +90,11 @@ def create_comparison_table(
     Returns:
         result_df: DataFrame with aggregated results
     """
-    logger.info(f"Creating comparison table for models: {', '.join(model_names)}")
+    if model_names:
+        logger.info(f"Creating comparison table for models: {', '.join(model_names)}")
+    else:
+        logger.info("Creating comparison table for all available models")
+
     logger.info(f"Using aggregation level: {aggregation_level}")
 
     # Load results
@@ -243,50 +247,11 @@ def format_table_for_display(df: pd.DataFrame) -> str:
     return df.to_string()
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Create comparison tables for MTEB models."
+def create_table_cli(args: argparse.Namespace) -> pd.DataFrame:
+    """Entry point for CLI integration."""
+    models = (
+        [model.strip() for model in args.models.split(",")] if args.models else None
     )
-
-    parser.add_argument(
-        "--results",
-        type=str,
-        default="results/",
-        help="Path to fetch results from (local folder or GitHub repo URL)",
-    )
-
-    parser.add_argument(
-        "--models",
-        type=str,
-        required=True,
-        help="Comma-separated list of models to include in the table",
-    )
-
-    parser.add_argument(
-        "--benchmark",
-        type=str,
-        default=None,
-        help=f"Benchmark to use (optional). Available: {get_available_benchmarks()}",
-    )
-
-    parser.add_argument(
-        "--aggregation-level",
-        type=str,
-        choices=["subset", "split", "task"],
-        default="task",
-        help="Level of aggregation for results (subset, split, or task)",
-    )
-
-    parser.add_argument(
-        "--output",
-        type=str,
-        default="comparison_table.csv",
-        help="Output path for the generated table (include extension: .csv, .xlsx, or .md)",
-    )
-
-    args = parser.parse_args()
-
-    models = [model.strip() for model in args.models.split(",")]
 
     result_df = create_comparison_table(
         results_folder=args.results,
@@ -304,3 +269,5 @@ if __name__ == "__main__":
         print(format_table_for_display(result_df))
     else:
         print("\nNo data available for the specified models and benchmark")
+
+    return result_df

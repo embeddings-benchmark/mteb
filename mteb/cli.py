@@ -5,6 +5,7 @@ MTEB is a benchmark for evaluating the quality of embeddings in various tasks. I
 - mteb run: Runs a model on a set of tasks
 - mteb available_tasks: Lists the available tasks within MTEB
 - mteb create_meta: Creates the metadata for a model card from a folder of results
+- mteb create-table: Creates comparison tables for MTEB models 
 
 ## Running Models on Tasks
 
@@ -73,6 +74,18 @@ model-index:
       value: 84.49350649350649
 ---
 ```
+
+
+## Creating Comparison Tables
+
+To create comparison tables between models based on various aggregation levels (task, split, or subset), use the `mteb create-table` command. For example:
+
+```bash
+mteb create-table --results results/ \
+                 --models "intfloat/multilingual-e5-small,intfloat/multilingual-e5-base" \
+                 --benchmark "MTEB(eng, v1)" \
+                 --aggregation-level task \
+                 --output comparison_table.csv
 """
 
 from __future__ import annotations
@@ -87,6 +100,7 @@ import torch
 
 import mteb
 from mteb.create_meta import generate_readme
+from mteb.create_table import create_table_cli
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
@@ -354,6 +368,50 @@ def add_create_meta_parser(subparsers) -> None:
     parser.set_defaults(func=create_meta)
 
 
+def add_create_table_parser(subparsers) -> None:
+    parser = subparsers.add_parser(
+        "create-table", help="Create comparison tables for MTEB models"
+    )
+
+    parser.add_argument(
+        "--results",
+        type=str,
+        default="results/",
+        help="Path to fetch results from (local folder or GitHub repo URL)",
+    )
+
+    parser.add_argument(
+        "--models",
+        type=str,
+        default=None,
+        help="Comma-separated list of models to include in the table (default: all models)",
+    )
+
+    parser.add_argument(
+        "--benchmark",
+        type=str,
+        default=None,
+        help="Benchmark to use (optional). Available benchmarks can be listed with 'mteb available_benchmarks'",
+    )
+
+    parser.add_argument(
+        "--aggregation-level",
+        type=str,
+        choices=["subset", "split", "task"],
+        default="task",
+        help="Level of aggregation for results (subset, split, or task)",
+    )
+
+    parser.add_argument(
+        "--output",
+        type=str,
+        default="comparison_table.csv",
+        help="Output path for the generated table (include extension: .csv, .xlsx, or .md)",
+    )
+
+    parser.set_defaults(func=create_table_cli)
+
+
 def main():
     parser = argparse.ArgumentParser(description="The MTEB Command line interface.")
 
@@ -364,6 +422,7 @@ def main():
     add_available_tasks_parser(subparsers)
     add_available_benchmarks_parser(subparsers)
     add_create_meta_parser(subparsers)
+    add_create_table_parser(subparsers)
 
     args = parser.parse_args()
 
