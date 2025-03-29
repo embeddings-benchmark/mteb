@@ -192,6 +192,7 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
             ScoringFunction.COSINE,
             ScoringFunction.EUCLIDEAN,
             ScoringFunction.DOT_PRODUCT,
+            ScoringFunction.CUSTOM,
         ]:
             if metric == ScoringFunction.COSINE:
                 distances = 1 - cos_sim(X_test, X_train)
@@ -199,6 +200,8 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
                 distances = euclidean_sim(X_test, X_train)
             elif metric == ScoringFunction.DOT_PRODUCT:
                 distances = -dot_score(X_test, X_train)
+            elif metric == ScoringFunction.CUSTOM:
+                distances = model.similarity(X_test, X_train)
             neigh_indices = torch.topk(
                 distances, k=self.k, dim=1, largest=False
             ).indices

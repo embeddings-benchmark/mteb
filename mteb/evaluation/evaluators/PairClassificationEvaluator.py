@@ -17,6 +17,7 @@ from mteb.encoder_interface import Encoder
 from mteb.model_meta import ScoringFunction
 
 from ...create_dataloaders import create_dataloader_from_texts
+from ...similarity_functions import compute_pairwise_similarity
 from .Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
@@ -131,7 +132,7 @@ class PairClassificationEvaluator(Evaluator):
         manhattan_distances = paired_manhattan_distances(embeddings1, embeddings2)
         euclidean_distances = paired_euclidean_distances(embeddings1, embeddings2)
 
-        similarity_scores = model.similarity_pairwise(embeddings1, embeddings2)  # type: ignore
+        similarity_scores = compute_pairwise_similarity(model, embeddings1, embeddings2)
 
         embeddings1_np = np.asarray(embeddings1)
         embeddings2_np = np.asarray(embeddings2)

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import torch
 
+import mteb
 from mteb.types import Array
 
 
@@ -19,6 +20,17 @@ def convert_to_tensor(a: Array, dtype=torch.float32) -> torch.Tensor:
     if not isinstance(a, torch.Tensor):
         a = torch.tensor(a, dtype=dtype)
     return a
+
+
+def compute_pairwise_similarity(
+    model: mteb.Encoder, embedding1: Array, embedding2: Array
+) -> Array:
+    """Computes pairwise similarity. It first attempts to use the model.simarity_pairwise method if it exists
+    otherwise it uses the model.similarity method
+    """
+    if hasattr(model, "similarity_pairwise"):
+        return model.similarity_pairwise(embedding1, embedding2)
+    return pairwise_cos_sim(embedding1, embedding2)
 
 
 def normalize_embeddings(embeddings: Array) -> torch.Tensor:
@@ -182,6 +194,8 @@ def pairwise_dot_score(a: Array, b: Array) -> Array:
     Returns:
         Tensor: Vector with res[i] = dot_prod(a[i], b[i])
     """
+    a = convert_to_tensor(a)
+    b = convert_to_tensor(b)
     return (a * b).sum(dim=-1)
 
 
@@ -219,6 +233,9 @@ def pairwise_euclidean_sim(a: Array, b: Array) -> Array:
 
 
 def vision_similarity(text_embeddings: Array, image_embeddings: Array) -> Array:
+    text_embeddings = convert_to_tensor(text_embeddings)
+    image_embeddings = convert_to_tensor(image_embeddings)
+
     text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True)
     image_embeddings = image_embeddings / image_embeddings.norm(dim=-1, keepdim=True)
     logits = torch.matmul(image_embeddings, text_embeddings.T)

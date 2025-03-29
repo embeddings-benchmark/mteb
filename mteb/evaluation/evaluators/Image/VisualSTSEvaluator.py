@@ -12,6 +12,7 @@ from sklearn.metrics.pairwise import (
 
 from mteb.abstasks import TaskMetadata
 from mteb.create_dataloaders import create_image_dataloader
+from mteb.similarity_functions import compute_pairwise_similarity
 
 from ..Evaluator import Evaluator
 
@@ -78,7 +79,7 @@ class VisualSTSEvaluator(Evaluator):
         )
 
         logger.info("Evaluating...")
-        cosine_scores = 1 - (paired_cosine_distances(embeddings1, embeddings2))
+        cosine_scores = 1 - paired_cosine_distances(embeddings1, embeddings2)
         manhattan_distances = -paired_manhattan_distances(embeddings1, embeddings2)
         euclidean_distances = -paired_euclidean_distances(embeddings1, embeddings2)
 
@@ -91,7 +92,7 @@ class VisualSTSEvaluator(Evaluator):
         euclidean_pearson, _ = pearsonr(self.gold_scores, euclidean_distances)
         euclidean_spearman, _ = spearmanr(self.gold_scores, euclidean_distances)
 
-        similarity_scores = model.similarity_pairwise(embeddings1, embeddings2)  # type: ignore
+        similarity_scores = compute_pairwise_similarity(model, embeddings1, embeddings2)
 
         if similarity_scores is not None:
             pearson = pearsonr(self.gold_scores, similarity_scores)

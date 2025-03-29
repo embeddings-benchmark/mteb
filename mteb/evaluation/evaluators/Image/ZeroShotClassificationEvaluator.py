@@ -66,7 +66,6 @@ class ZeroShotClassificationEvaluator(Evaluator):
             batch_size=encode_kwargs["batch_size"],
         )
 
-        # todo change to similarity
         probs = model.similarity(text_embeddings, image_embeddings)
         predictions = probs.argmax(dim=1)
 

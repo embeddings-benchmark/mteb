@@ -14,6 +14,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder
 
 from ...create_dataloaders import create_dataloader_from_texts
+from ...similarity_functions import compute_pairwise_similarity
 from .Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
@@ -73,7 +74,7 @@ class STSEvaluator(Evaluator):
         euclidean_pearson, _ = pearsonr(self.gold_scores, euclidean_distances)
         euclidean_spearman, _ = spearmanr(self.gold_scores, euclidean_distances)
 
-        similarity_scores = model.similarity_pairwise(embeddings1, embeddings2)  # type: ignore
+        similarity_scores = compute_pairwise_similarity(model, embeddings1, embeddings2)
 
         if similarity_scores is not None:
             pearson, _ = pearsonr(self.gold_scores, similarity_scores)
