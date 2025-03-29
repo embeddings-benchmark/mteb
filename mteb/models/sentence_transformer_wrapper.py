@@ -125,7 +125,7 @@ class SentenceTransformerWrapper(AbsEncoder):
 
     def _predict(
         self,
-        sentences: Sequence[str],
+        sentences: Sequence[tuple[str, str]],
         **kwargs: Any,
     ) -> np.ndarray:
         return self.model.predict(
@@ -134,13 +134,25 @@ class SentenceTransformerWrapper(AbsEncoder):
             **kwargs,
         )
 
-    def handle_instructions_predict(self, sentences, **kwargs):
-        # unzip the queries, corpus, and instruction so we can add the instructions to the queries
-        # as ST models can't take an arg for instructions
-        queries, corpus, instructions = list(zip(*sentences))
-        # combine the queries and instructions
-        queries_with_instructions = [
-            f"{query.strip()} {instruction}".strip() if instruction else query
-            for query, instruction in zip(queries, instructions)
+    def handle_instructions_predict(
+        self,
+        inputs1: DataLoader[BatchedInput],
+        inputs2: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ):
+        all_queries_with_instructions = [
+            text for batch in inputs1 for text in batch["text"]
         ]
-        return self._predict(list(zip(queries_with_instructions, corpus)), **kwargs)
+        all_corpus_with_instructions = [
+            text for batch in inputs2 for text in batch["text"]
+        ]
+
+        return self._predict(
+            list(zip(all_queries_with_instructions, all_corpus_with_instructions)),
+            **kwargs,
+        )
