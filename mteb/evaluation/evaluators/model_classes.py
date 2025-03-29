@@ -10,6 +10,7 @@ from typing import Any
 import numpy as np
 import torch
 import tqdm
+from torch.utils.data import DataLoader
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder
@@ -19,7 +20,7 @@ from ...create_dataloaders import (
     create_dataloader_for_queries_conversation,
     create_dataloader_for_retrieval_corpus,
 )
-from ...types import PromptType
+from ...types import Array, BatchedInput, PromptType
 from .utils import download
 
 logger = logging.getLogger(__name__)
@@ -417,6 +418,9 @@ class DenseRetrievalExactSearch:
         corpus: dict[str, dict[str, str]],
         queries: dict[str, str | list[str]],
         top_k: int,
+        hf_split: str,
+        hf_subset: str,
+        task_metadata: TaskMetadata,
         instructions: dict[str, str] | None = None,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
@@ -425,7 +429,7 @@ class DenseRetrievalExactSearch:
         Note: you must provide the path to the results to rerank to the __init__ function as `previous_results` or else rerank all documents in the corpus
         """
         pairs = []  # create the pairs for reranking
-        for qid in queries.keys():
+        for qid in tqdm.tqdm(queries.keys()):
             if self.previous_results is None:
                 # try to use all of them
                 logging.info(
@@ -463,7 +467,7 @@ class DenseRetrievalExactSearch:
             tqdm.tqdm(
                 range(0, len(pairs), self.batch_size),
                 leave=False,
-                disable=not self.show_progress_bar,
+                # disable=not self.show_progress_bar,
             )
         ):
             corpus_end_idx = min(corpus_start_idx + self.batch_size, len(pairs))
@@ -477,6 +481,18 @@ class DenseRetrievalExactSearch:
                 corpus_ids,
             ) = zip(*cur_batch)
 
+            queries_dataset = create_dataloader_for_queries(
+                queries=queries_in_pair,
+                instructions=instructions_in_pair,
+                combine_query_and_instruction=self.combine_query_and_instruction
+                if hasattr(self, "combine_query_and_instruction")
+                else None,
+            )
+
+            corpus_dataset = create_dataloader_for_retrieval_corpus(
+                corpus_in_pair,
+            )
+
             if not (
                 len(queries_in_pair) == len(corpus_in_pair) == len(instructions_in_pair)
             ):
@@ -486,8 +502,13 @@ class DenseRetrievalExactSearch:
 
             # cross-encoders may use the instructions in a unique way
             # due to the many ways of combining query+instruct+doc, so let them decide
-            scores = self.model.predict(  # type: ignore
-                list(zip(queries_in_pair, corpus_in_pair, instructions_in_pair))
+            scores = self.model.predict(
+                queries_dataset,
+                corpus_dataset,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
+                task_metadata=task_metadata,
+                **self.encode_kwargs,
             )
 
             for i, score in enumerate(scores):
@@ -495,7 +516,17 @@ class DenseRetrievalExactSearch:
 
         return results
 
-    def predict(self, queries, passages, **kwargs):
+    def predict(
+        self,
+        inputs1: DataLoader[BatchedInput],
+        inputs2: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
         raise NotImplementedError(
             "You must implement a predict method for your reranker model"
         )
@@ -504,7 +535,7 @@ class DenseRetrievalExactSearch:
 def is_cross_encoder_compatible(model) -> bool:
     op = getattr(model, "predict", None)
     return (
-        callable(op)
-        if not hasattr(model, "mteb_model_meta")
-        else model.mteb_model_meta.is_cross_encoder
+        model.mteb_model_meta.is_cross_encoder
+        if hasattr(model, "mteb_model_meta") and model.mteb_model_meta is not None
+        else callable(op)
     )

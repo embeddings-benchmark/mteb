@@ -117,6 +117,7 @@ class ModelMeta(BaseModel):
     adapted_from: str | None = None
     superseded_by: str | None = None
     modalities: list[MODALITIES] = ["text"]
+    is_cross_encoder: bool | None = None
     citation: str | None = None
 
     @field_validator("similarity_fn_name", mode="before")

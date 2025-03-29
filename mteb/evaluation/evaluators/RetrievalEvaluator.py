@@ -73,7 +73,14 @@ class RetrievalEvaluator(Evaluator):
 
         if self.is_cross_encoder:
             return self.retriever.search_cross_encoder(
-                corpus, queries, self.top_k, instructions=instructions, **kwargs
+                corpus,
+                queries,
+                self.top_k,
+                instructions=instructions,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
+                task_metadata=task_metadata,
+                **kwargs,
             )
         elif (
             hasattr(self.retriever.model, "mteb_model_meta")
