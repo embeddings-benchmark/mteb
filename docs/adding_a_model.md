@@ -139,6 +139,7 @@ If your are adding a model that requires additional dependencies, you can add th
 
 In the [voyage_models.py](../mteb/models/voyage_models.py) file, we have added the following code:
 ```python
+from mteb.requires_package import requires_package
 requires_package(self, "voyageai", model_name, "pip install 'mteb[voyageai]'")
 ```
 and also updated [pyproject.toml]((../pyproject.toml)) file with the following code:
