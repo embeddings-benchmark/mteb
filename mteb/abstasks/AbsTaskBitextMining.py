@@ -91,20 +91,20 @@ class AbsTaskBitextMining(AbsTask):
                 **kwargs,
             )
         else:
-            for hf_subet in hf_subsets:
+            for hf_subset in hf_subsets:
                 logger.info(
-                    f"Task: {self.metadata.name}, split: {split}, subset: {hf_subet}. Running..."
+                    f"Task: {self.metadata.name}, split: {split}, subset: {hf_subset}. Running..."
                 )
 
-                if hf_subet not in self.dataset and hf_subet == "default":
+                if hf_subset not in self.dataset and hf_subset == "default":
                     data_split = self.dataset[split]
                 else:
-                    data_split = self.dataset[hf_subet][split]
-                scores[hf_subet] = self._evaluate_subset(
+                    data_split = self.dataset[hf_subset][split]
+                scores[hf_subset] = self._evaluate_subset(
                     model,
                     data_split,
                     hf_split=split,
-                    hf_subset=hf_subet,
+                    hf_subset=hf_subset,
                     encode_kwargs=encode_kwargs,
                     **kwargs,
                 )

@@ -84,8 +84,8 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         _unique_train_embeddings = model.encode(
             DataLoader(unique_train_dataset),
             task_metadata=self.metadata,
-            hf_split=hf_split,
-            hf_subset=self.train_split,
+            hf_split=self.train_split,
+            hf_subset=hf_subset,
             **encode_kwargs,
         )
         unique_train_embeddings = dict(
