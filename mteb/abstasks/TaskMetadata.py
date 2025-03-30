@@ -138,6 +138,7 @@ MAEB_TASK_TYPE = (
     "AudioZeroshotClassification",
     "AudioClassification",
     "AudioCrossFoldClassification",
+    "AudioPairClassification",
 )
 
 TASK_TYPE = (
