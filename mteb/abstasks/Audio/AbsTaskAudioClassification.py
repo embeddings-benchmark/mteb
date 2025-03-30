@@ -121,9 +121,9 @@ class AbsTaskAudioClassification(AbsTask):
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ) -> ScoresDict:
-        assert train_split == eval_split, (
-            f"Performing {self.n_splits}-fold cross validation, but the dataset has a train (`{train_split}`) and test split (`{eval_split}`)! Set `is_cross_validation` to False, and retry."
-        )
+        assert (
+            train_split == eval_split
+        ), f"Performing {self.n_splits}-fold cross validation, but the dataset has a train (`{train_split}`) and test split (`{eval_split}`)! Set `is_cross_validation` to False, and retry."
         logger.info(
             f"Performing {self.n_splits}-fold cross-validation on the entire dataset!"
         )

@@ -58,7 +58,7 @@ class AudioPairClassificationEvaluator(Evaluator):
         assert len(self.audio1) == len(self.audio2)
         assert len(self.audio1) == len(self.labels)
 
-        if type(labels[0]).__name__ == 'list':
+        if type(labels[0]).__name__ == "list":
             labels = [label[0] for label in labels]
 
         # print(labels[0])
@@ -105,7 +105,10 @@ class AudioPairClassificationEvaluator(Evaluator):
             **encode_kwargs,
         )
 
-        emb_dict = {tuple(audio.tolist()): embedding for audio, embedding in zip(audios, embeddings)}
+        emb_dict = {
+            tuple(audio.tolist()): embedding
+            for audio, embedding in zip(audios, embeddings)
+        }
         embeddings1 = [emb_dict[tuple(audio)] for audio in self.audio1]
         embeddings2 = [emb_dict[tuple(audio)] for audio in self.audio2]
 
@@ -168,8 +171,10 @@ class AudioPairClassificationEvaluator(Evaluator):
         Returns:
             The metrics for the given scores and labels.
         """
-        acc, acc_threshold = AudioPairClassificationEvaluator.find_best_acc_and_threshold(
-            scores, labels, high_score_more_similar
+        acc, acc_threshold = (
+            AudioPairClassificationEvaluator.find_best_acc_and_threshold(
+                scores, labels, high_score_more_similar
+            )
         )
         (
             f1,

@@ -85,9 +85,9 @@ class BGEReranker(RerankerWrapper):
         assert len(queries) == len(passages)
         query_passage_tuples = list(zip(queries, passages))
         scores = self.model.compute_score(query_passage_tuples, normalize=True)
-        assert len(scores) == len(queries), (
-            f"Expected {len(queries)} scores, got {len(scores)}"
-        )
+        assert len(scores) == len(
+            queries
+        ), f"Expected {len(queries)} scores, got {len(scores)}"
         return scores
 
 
