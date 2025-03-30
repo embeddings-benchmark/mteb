@@ -144,7 +144,9 @@ def create_comparison_table(
                             "task_name": task_name,
                             "split": split,
                             "subset": score_item.get("hf_subset", "default"),
-                            "score": score_item.get("main_score", 0.0) * 100,
+                            "score": score_item.get("main_score", 0.0) * 100
+                            if score_item.get("main_score", 0.0) is not None
+                            else 0.0,
                         }
                     )
 

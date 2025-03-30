@@ -188,6 +188,80 @@ def test_create_meta_from_existing(existing_readme_name: str, gold_readme_name: 
     assert result.returncode == 0, "Command failed"
 
 
+@pytest.mark.parametrize(
+    "results_folder",
+    [
+        # "tests/results",  # Local results folder
+        "https://github.com/embeddings-benchmark/results",  # Remote results repository
+    ],
+)
+@pytest.mark.parametrize("aggregation_level", ["subset", "split", "task"])
+@pytest.mark.parametrize("output_format", ["csv", "md", "xlsx"])
+def test_create_table(
+    results_folder: str,
+    aggregation_level: str,
+    output_format: str,
+):
+    """Test create-table CLI tool with local and remote results repositories."""
+    test_folder = Path(__file__).parent
+    output_file = f"comparison_table_test.{output_format}"
+    output_path = test_folder / output_file
+    models = ["intfloat/multilingual-e5-small", "intfloat/multilingual-e5-base"]
+    benchmark = "MTEB(Multilingual, v1)"
+
+    models_arg = " ".join(f'"{model}"' for model in models)
+    command = (
+        f"{sys.executable} -m mteb create-table "
+        f"--results {results_folder} "
+        f"--models {models_arg} "
+        f'--benchmark "{benchmark}" '
+        f"--aggregation-level {aggregation_level} "
+        f"--output {output_path}"
+    )
+
+    # Run the command
+    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+
+    # Assert the command executed successfully
+    assert result.returncode == 0, f"Command failed: {result.stderr}"
+
+    # Assert the output file was created
+    assert output_path.exists(), "Output file not created"
+
+    if aggregation_level == "task":
+        expected_headers = ["task_name"] + models
+    elif aggregation_level == "split":
+        expected_headers = ["task_name", "split"] + models
+    elif aggregation_level == "subset":
+        expected_headers = ["task_name", "split", "subset"] + models
+
+    if output_file.endswith(".csv"):
+        with output_path.open("r") as f:
+            content = f.readline().strip().split(",")
+            assert sorted(content) == sorted(expected_headers), (
+                f"CSV headers do not match: {content}"
+            )
+    elif output_file.endswith(".xlsx"):
+        try:
+            import pandas as pd
+
+            df = pd.read_excel(output_path)
+            assert sorted(df.columns) == sorted(expected_headers), (
+                f"Excel headers do not match: {list(df.columns)}"
+            )
+        except ImportError:
+            pytest.fail("pandas or openpyxl is not installed for reading Excel files")
+    elif output_file.endswith(".md"):
+        with output_path.open("r") as f:
+            content = f.readline()
+            assert all(header in content for header in expected_headers), (
+                "Markdown headers do not match"
+            )
+
+    if output_path.exists():
+        output_path.unlink()
+
+
 def test_save_predictions():
     command = f"{sys.executable} -m mteb run -m sentence-transformers/average_word_embeddings_komninos -t NFCorpus --output_folder tests/results --save_predictions"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)

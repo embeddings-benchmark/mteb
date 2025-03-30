@@ -30,6 +30,11 @@ def download_of_results(
     Returns:
         The path to the local cache directory.
     """
+    results_path = Path(results_repo)
+    if results_path.exists() and results_path.is_dir():
+        logger.info(f"Using local results repository at {results_path}")
+        return results_path
+
     default_cache_directory = Path.home() / ".cache" / "mteb"
 
     if cache_directory is None:
