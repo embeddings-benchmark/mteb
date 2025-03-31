@@ -392,6 +392,7 @@ def add_create_table_parser(subparsers) -> None:
         "--benchmark",
         type=str,
         default=None,
+        choices=[benchmark.name for benchmark in mteb.get_benchmarks()],
         help="Benchmark to use (optional). Available benchmarks can be listed with 'mteb available_benchmarks'",
     )
 
