@@ -195,10 +195,12 @@ def test_create_meta_from_existing(existing_readme_name: str, gold_readme_name: 
         "https://github.com/embeddings-benchmark/results",  # Remote results repository
     ],
 )
+@pytest.mark.parametrize("benchmark", ["MTEB(eng, v1)", "MTEB(Multilingual, v1)"])
 @pytest.mark.parametrize("aggregation_level", ["subset", "split", "task"])
 @pytest.mark.parametrize("output_format", ["csv", "md", "xlsx"])
 def test_create_table(
     results_folder: str,
+    benchmark: str,
     aggregation_level: str,
     output_format: str,
 ):
@@ -207,9 +209,11 @@ def test_create_table(
     output_file = f"comparison_table_test.{output_format}"
     output_path = test_folder / output_file
     models = ["intfloat/multilingual-e5-small", "intfloat/multilingual-e5-base"]
-    benchmark = "MTEB(Multilingual, v1)"
-
     models_arg = " ".join(f'"{model}"' for model in models)
+
+    if output_format == "xlsx":
+        pytest.importorskip("openpyxl", reason="openpyxl is required for .xlsx output")
+
     command = (
         f"{sys.executable} -m mteb create-table "
         f"--results {results_folder} "
