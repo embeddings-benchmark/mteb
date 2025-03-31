@@ -130,7 +130,7 @@ jina_clip_v1 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/jinaai/jina-clip-v1",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets={
         # LAION400M

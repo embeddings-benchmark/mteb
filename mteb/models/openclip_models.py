@@ -76,17 +76,6 @@ def openclip_loader(**kwargs):
             all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
             return all_image_embeddings
 
-        def calculate_probs(self, text_embeddings, image_embeddings):
-            text_embeddings = text_embeddings / text_embeddings.norm(
-                dim=-1, keepdim=True
-            )
-            image_embeddings = image_embeddings / image_embeddings.norm(
-                dim=-1, keepdim=True
-            )
-            logits = torch.matmul(image_embeddings, text_embeddings.T)
-            probs = (logits * 100).softmax(dim=-1)
-            return probs
-
         def encode(
             self,
             inputs: DataLoader[BatchedInput],
@@ -137,7 +126,7 @@ CLIP_ViT_L_14_DataComp_XL_s13B_b90K = ModelMeta(
     public_training_data="https://huggingface.co/datasets/mlfoundations/datacomp_1b",
     framework=["PyTorch"],
     reference="https://huggingface.co/laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         # DataComp-1B
@@ -161,7 +150,7 @@ CLIP_ViT_B_32_DataComp_XL_s13B_b90K = ModelMeta(
     public_training_data="https://huggingface.co/datasets/mlfoundations/datacomp_1b",
     framework=["PyTorch"],
     reference="https://huggingface.co/laion/CLIP-ViT-B-32-DataComp.XL-s13B-b90K",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         # DataComp-1B
@@ -185,7 +174,7 @@ CLIP_ViT_B_16_DataComp_XL_s13B_b90K = ModelMeta(
     public_training_data="https://huggingface.co/datasets/mlfoundations/datacomp_1b",
     framework=["PyTorch"],
     reference="https://huggingface.co/laion/CLIP-ViT-B-16-DataComp.XL-s13B-b90K",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         # DataComp-1B
@@ -209,7 +198,7 @@ CLIP_ViT_bigG_14_laion2B_39B_b160k = ModelMeta(
     public_training_data="https://laion.ai/blog/laion-5b/",
     framework=["PyTorch"],
     reference="https://huggingface.co/laion/CLIP-ViT-bigG-14-laion2B-39B-b160k",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         # 2 Billion sample English subset of LAION-5B
@@ -233,7 +222,7 @@ CLIP_ViT_g_14_laion2B_s34B_b88K = ModelMeta(
     public_training_data="https://laion.ai/blog/laion-5b/",
     framework=["PyTorch"],
     reference="https://huggingface.co/laion/CLIP-ViT-g-14-laion2B-s34B-b88K",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         # 2 Billion sample English subset of LAION-5B
@@ -257,7 +246,7 @@ CLIP_ViT_H_14_laion2B_s32B_b79K = ModelMeta(
     public_training_data="https://laion.ai/blog/laion-5b/",
     framework=["PyTorch"],
     reference="https://huggingface.co/laion/CLIP-ViT-H-14-laion2B-s32B-b79K",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         # 2 Billion sample English subset of LAION-5B
@@ -281,7 +270,7 @@ CLIP_ViT_L_14_laion2B_s32B_b82K = ModelMeta(
     public_training_data="https://laion.ai/blog/laion-5b/",
     framework=["PyTorch"],
     reference="https://huggingface.co/laion/CLIP-ViT-L-14-laion2B-s32B-b82K",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         # 2 Billion sample English subset of LAION-5B
@@ -305,7 +294,7 @@ CLIP_ViT_B_32_laion2B_s34B_b79K = ModelMeta(
     public_training_data="https://laion.ai/blog/laion-5b/",
     framework=["PyTorch"],
     reference="https://huggingface.co/laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         # 2 Billion sample English subset of LAION-5B

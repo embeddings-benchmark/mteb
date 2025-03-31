@@ -249,7 +249,7 @@ visualized_bge_base = ModelMeta(
     public_training_data="https://huggingface.co/datasets/JUNJIE99/VISTA_S2",
     framework=["PyTorch"],
     reference="https://huggingface.co/BAAI/bge-visualized",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=vista_training_datasets,
 )
@@ -275,7 +275,7 @@ visualized_bge_m3 = ModelMeta(
     public_training_data="https://huggingface.co/datasets/JUNJIE99/VISTA_S2",
     framework=["PyTorch"],
     reference="https://huggingface.co/BAAI/bge-visualized",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=vista_training_datasets,
 )

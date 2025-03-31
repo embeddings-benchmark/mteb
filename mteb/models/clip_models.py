@@ -120,7 +120,7 @@ clip_vit_large_patch14 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/openai/clip-vit-large-patch14",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=None,
 )
@@ -142,7 +142,7 @@ clip_vit_base_patch32 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/openai/clip-vit-base-patch32",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=None,
 )
@@ -164,7 +164,7 @@ clip_vit_base_patch16 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/openai/clip-vit-base-patch16",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=None,
 )

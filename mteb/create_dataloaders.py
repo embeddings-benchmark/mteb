@@ -254,7 +254,7 @@ def create_image_dataloader(
     batch_size: int = 32,
     transform: Callable[[Any], Any] | None = None,
     collate_fn: Callable[[list[dict[str, Any]]], dict[str, Any]] = custom_collate_fn,
-) -> DataLoader[dict[str, Any]]:
+) -> DataLoader[BatchedInput]:
     """Creates a DataLoader with the image dataset prepared using the explicit transformation.
     This should mirror the behavior of the old code.
     """

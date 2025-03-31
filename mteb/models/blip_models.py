@@ -133,7 +133,7 @@ blip_image_captioning_large = ModelMeta(
     public_training_data="https://github.com/salesforce/BLIP",
     framework=["PyTorch"],
     reference="https://huggingface.co/Salesforce/blip-image-captioning-large",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         # COCO
@@ -159,7 +159,7 @@ blip_image_captioning_base = ModelMeta(
     public_training_data="https://github.com/salesforce/BLIP",
     framework=["PyTorch"],
     reference="https://huggingface.co/Salesforce/blip-image-captioning-base",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         # COCO
@@ -186,7 +186,7 @@ blip_vqa_base = ModelMeta(
     public_training_data="https://github.com/salesforce/BLIP",
     framework=["PyTorch"],
     reference="https://huggingface.co/Salesforce/blip-vqa-base",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         # CC3M+CC12M+SBU
@@ -211,7 +211,7 @@ blip_vqa_capfilt_large = ModelMeta(
     public_training_data="https://github.com/salesforce/BLIP",
     framework=["PyTorch"],
     reference="https://huggingface.co/Salesforce/blip-vqa-capfilt-large",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         # CC3M+CC12M+SBU
@@ -236,7 +236,7 @@ blip_itm_base_coco = ModelMeta(
     public_training_data="https://github.com/salesforce/BLIP",
     framework=["PyTorch"],
     reference="https://huggingface.co/Salesforce/blip-itm-base-coco",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         # CC3M+CC12M+SBU
@@ -261,7 +261,7 @@ blip_itm_large_coco = ModelMeta(
     public_training_data="https://github.com/salesforce/BLIP",
     framework=["PyTorch"],
     reference="https://huggingface.co/Salesforce/blip-itm-large-coco",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         # COCO
@@ -287,7 +287,7 @@ blip_itm_base_flickr = ModelMeta(
     public_training_data="https://github.com/salesforce/BLIP",
     framework=["PyTorch"],
     reference="https://huggingface.co/Salesforce/blip-itm-base-flickr",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         # CC3M+CC12M+SBU
@@ -313,7 +313,7 @@ blip_itm_large_flickr = ModelMeta(
     public_training_data="https://github.com/salesforce/BLIP",
     framework=["PyTorch"],
     reference="https://huggingface.co/Salesforce/blip-itm-large-flickr",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         # CC3M+CC12M+SBU

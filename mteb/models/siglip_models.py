@@ -126,7 +126,7 @@ siglip_so400m_patch14_224 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/google/siglip-so400m-patch14-224",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
 )
@@ -148,7 +148,7 @@ siglip_so400m_patch14_384 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/google/siglip-so400m-patch14-384",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
 )
@@ -170,7 +170,7 @@ siglip_so400m_patch16_256_i18n = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/google/siglip-so400m-patch16-256-i18n",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
 )
@@ -192,7 +192,7 @@ siglip_base_patch16_256_multilingual = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/google/siglip-base-patch16-256-multilingual",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
 )
@@ -214,7 +214,7 @@ siglip_base_patch16_256 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/google/siglip-base-patch16-256",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
 )
@@ -236,7 +236,7 @@ siglip_base_patch16_512 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/google/siglip-base-patch16-512",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
 )
@@ -258,7 +258,7 @@ siglip_base_patch16_384 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/google/siglip-base-patch16-384",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
 )
@@ -280,7 +280,7 @@ siglip_base_patch16_224 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/google/siglip-base-patch16-224",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
 )
@@ -302,7 +302,7 @@ siglip_large_patch16_256 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/google/siglip-large-patch16-256",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
 )
@@ -324,7 +324,7 @@ siglip_large_patch16_384 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/google/siglip-large-patch16-384",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=siglip_training_datasets,
 )

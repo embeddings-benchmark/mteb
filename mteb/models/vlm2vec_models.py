@@ -273,7 +273,7 @@ vlm2vec_lora = ModelMeta(
     public_training_data="https://huggingface.co/datasets/TIGER-Lab/MMEB-train",
     framework=["PyTorch"],
     reference="https://huggingface.co/TIGER-Lab/VLM2Vec-LoRA",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets=vlm2vec_training_datasets,
 )
@@ -295,7 +295,7 @@ vlm2vec_full = ModelMeta(
     public_training_data="https://huggingface.co/TIGER-Lab/VLM2Vec-Full",
     framework=["PyTorch"],
     reference="https://huggingface.co/TIGER-Lab/VLM2Vec-Full",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets=vlm2vec_training_datasets,
 )

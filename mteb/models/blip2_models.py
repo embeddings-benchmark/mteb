@@ -168,7 +168,7 @@ blip2_opt_2_7b = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/Salesforce/blip2-opt-2.7b",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=blip2_training_datasets,
 )
@@ -190,7 +190,7 @@ blip2_opt_6_7b_coco = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/Salesforce/blip2-opt-6.7b-coco",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=blip2_training_datasets,
 )

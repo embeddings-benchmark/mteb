@@ -146,7 +146,7 @@ EVA02_CLIP_B_16 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/QuanSun/EVA-CLIP",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=training_datasets,
 )
@@ -168,7 +168,7 @@ EVA02_CLIP_L_14 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/QuanSun/EVA-CLIP",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=training_datasets,
 )
@@ -190,7 +190,7 @@ EVA02_CLIP_bigE_14 = ModelMeta(
     public_training_data="https://laion.ai/blog/laion-5b/",
     framework=["PyTorch"],
     reference="https://huggingface.co/QuanSun/EVA-CLIP",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=laion_2b,
 )
@@ -213,7 +213,7 @@ EVA02_CLIP_bigE_14_plus = ModelMeta(
     public_training_data="https://laion.ai/blog/laion-5b/",
     framework=["PyTorch"],
     reference="https://huggingface.co/QuanSun/EVA-CLIP",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=laion_2b,
 )

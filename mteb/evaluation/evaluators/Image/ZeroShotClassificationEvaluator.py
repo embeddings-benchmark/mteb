@@ -12,6 +12,7 @@ from mteb.create_dataloaders import (
     create_image_dataloader,
 )
 from mteb.encoder_interface import Encoder
+from mteb.similarity_functions import vision_similarity
 
 from ..Evaluator import Evaluator
 
@@ -66,7 +67,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
             batch_size=encode_kwargs["batch_size"],
         )
 
-        probs = model.similarity(text_embeddings, image_embeddings)
+        probs = vision_similarity(text_embeddings, image_embeddings)
         predictions = probs.argmax(dim=1)
 
         logger.info("Evaluating...")

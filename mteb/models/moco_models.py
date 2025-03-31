@@ -130,7 +130,7 @@ mocov3_vit_base = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://github.com/facebookresearch/moco-v3",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=mocov3_training_datasets,
 )
@@ -152,7 +152,7 @@ mocov3_vit_large = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://github.com/facebookresearch/moco-v3",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=mocov3_training_datasets,
 )

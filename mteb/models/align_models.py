@@ -122,7 +122,7 @@ align_base = ModelMeta(
     public_training_data=True,
     framework=["PyTorch"],
     reference="https://huggingface.co/kakaobrain/align-base",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         # COYO-700M

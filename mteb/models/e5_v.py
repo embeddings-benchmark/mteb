@@ -161,7 +161,7 @@ e5_v = ModelMeta(
     public_training_data="https://huggingface.co/datasets/princeton-nlp/datasets-for-simcse",
     framework=["PyTorch"],
     reference="https://huggingface.co/royokong/e5-v",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets={
         # princeton-nlp/datasets-for-simcse

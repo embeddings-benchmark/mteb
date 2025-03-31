@@ -191,7 +191,7 @@ llm2clip_openai_l_14_336 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-336",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets=llm2clip_training_sets,
 )
@@ -214,7 +214,7 @@ llm2clip_openai_l_14_224 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-224",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets=llm2clip_training_sets,
 )
@@ -236,7 +236,7 @@ llm2clip_openai_b_16 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/microsoft/LLM2CLIP-Openai-B-16",
-    similarity_fn_name=ScoringFunction.VISION,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets=llm2clip_training_sets,
 )
