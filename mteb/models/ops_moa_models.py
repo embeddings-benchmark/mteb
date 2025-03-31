@@ -1,12 +1,11 @@
 from __future__ import annotations
 
+from functools import partial
+
+from sentence_transformers import SentenceTransformer
+
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
-from functools import partial
-from sentence_transformers import SentenceTransformer
-import torch
-import torch.nn as nn
-from huggingface_hub import snapshot_download
 
 
 class CustomWrapper(Wrapper):

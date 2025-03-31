@@ -1473,13 +1473,13 @@ MIEB_common_tasks = [
     "CVBenchDepth",
     "CVBenchDistance",
     # Compositionality
-    "ImageCoDeT2IMultiChoice",
     "AROCocoOrder",
     "AROFlickrOrder",
     "AROVisualAttribution",
     "AROVisualRelation",
     "SugarCrepe",
     "Winoground",
+    "ImageCoDe",
     # VisualSTS
     "STS12VisualSTS",
     "STS13VisualSTS",
@@ -1610,7 +1610,6 @@ MIEB_LITE = Benchmark(
             "StanfordCarsZeroShot",
             # Any2AnyMultipleChoice
             "BLINKIT2IMultiChoice",
-            "ImageCoDeT2IMultiChoice",
             "CVBenchCount",
             "CVBenchRelation",
             "CVBenchDepth",
@@ -1621,6 +1620,7 @@ MIEB_LITE = Benchmark(
             "AROVisualAttribution",
             "AROVisualRelation",
             "Winoground",
+            "ImageCoDe",
             # VisualSTS
             "STS13VisualSTS",
             "STS15VisualSTS",
