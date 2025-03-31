@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+import json
 import logging
+from datetime import datetime
+from pathlib import Path
 from unittest.mock import Mock, patch
 
 import huggingface_hub
@@ -75,9 +78,26 @@ def test_load_data(
 )
 @pytest.mark.parametrize("dataset_revision", dataset_revisions)
 def test_dataset_on_hf(dataset_revision: tuple[str, str]):
+    CACHE_FILE = Path("./.cache/dataset_check_cache.json")
     repo_id, revision = dataset_revision
+    today = datetime.now().strftime("%Y-%m-%d")
+    repo_key = repo_id + "-" + revision
+
+    if CACHE_FILE.exists():
+        with CACHE_FILE.open("r") as f:
+            cache = json.load(f)
+    else:
+        cache = {}
+
+    if cache.get(repo_key) == {"repo_id": repo_id, "revision": revision, "date": today}:
+        pytest.skip(f"Dataset {repo_id} - {revision} already checked today")
+
     try:
         huggingface_hub.dataset_info(repo_id, revision=revision)
+
+        cache[repo_key] = {"repo_id": repo_id, "revision": revision, "date": today}
+        with CACHE_FILE.open("w") as f:
+            json.dump(cache, f)
     except (
         huggingface_hub.errors.RepositoryNotFoundError,
         huggingface_hub.errors.RevisionNotFoundError,
