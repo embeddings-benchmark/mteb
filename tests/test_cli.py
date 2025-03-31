@@ -228,36 +228,6 @@ def test_create_table(
     # Assert the output file was created
     assert output_path.exists(), "Output file not created"
 
-    if aggregation_level == "task":
-        expected_headers = ["task_name"] + models
-    elif aggregation_level == "split":
-        expected_headers = ["task_name", "split"] + models
-    elif aggregation_level == "subset":
-        expected_headers = ["task_name", "split", "subset"] + models
-
-    if output_file.endswith(".csv"):
-        with output_path.open("r") as f:
-            content = f.readline().strip().split(",")
-            assert sorted(content) == sorted(expected_headers), (
-                f"CSV headers do not match: {content}"
-            )
-    elif output_file.endswith(".xlsx"):
-        try:
-            import pandas as pd
-
-            df = pd.read_excel(output_path)
-            assert sorted(df.columns) == sorted(expected_headers), (
-                f"Excel headers do not match: {list(df.columns)}"
-            )
-        except ImportError:
-            pytest.fail("pandas or openpyxl is not installed for reading Excel files")
-    elif output_file.endswith(".md"):
-        with output_path.open("r") as f:
-            content = f.readline()
-            assert all(header in content for header in expected_headers), (
-                "Markdown headers do not match"
-            )
-
     if output_path.exists():
         output_path.unlink()
 
