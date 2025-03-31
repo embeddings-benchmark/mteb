@@ -203,21 +203,26 @@ class TextVectorMap:
 
 
 class CachedEmbeddingWrapper(Wrapper, Encoder):
-    def __init__(self, model: Encoder, cache_path: str | Path):
+    def __init__(self, model: Encoder, tasks: list[str], cache_path: str | Path):
         self._model = model
         self.cache_path = Path(cache_path)
         self.cache_path.mkdir(parents=True, exist_ok=True)
+        self.cache_dict = {}
+        self.tasks = tasks
 
         if hasattr(model, "encode"):
-            self.cache = TextVectorMap(self.cache_path / "cache")
-            self.cache.load(name="cache")
+            for task in tasks:
+                self.cache_dict[task] = TextVectorMap(self.cache_path / task)
+                self.cache_dict[task].load(name=task)
         else:
             logger.error("Model must have an 'encode' method.")
             raise ValueError("Invalid model encoding method")
 
         logger.info("Initialized CachedEmbeddingWrapper")
 
-    def encode(self, texts: list[str], batch_size: int = 32, **kwargs) -> np.ndarray:
+    def encode(
+        self, texts: list[str], batch_size: int = 32, task_name: str = None, **kwargs
+    ) -> np.ndarray:
         """Encode texts using the wrapped model, with caching"""
         try:
             results = []
@@ -226,7 +231,7 @@ class CachedEmbeddingWrapper(Wrapper, Encoder):
 
             # Check cache for each text
             for i, text in enumerate(texts):
-                vector = self.cache.get_vector(text)
+                vector = self.cache_dict[task_name].get_vector(text)
                 if vector is not None:
                     results.append(vector)
                 else:
@@ -244,9 +249,9 @@ class CachedEmbeddingWrapper(Wrapper, Encoder):
 
                 # Add new vectors to cache
                 for text, vector in zip(uncached_texts, new_vectors):
-                    self.cache.add(text, vector)
+                    self.cache_dict[task_name].add(text, vector)
                 results.extend(new_vectors)
-                self.cache.save()
+                self.cache_dict[task_name].save()
             else:
                 logger.info("All texts found in cache")
 
@@ -290,5 +295,6 @@ class CachedEmbeddingWrapper(Wrapper, Encoder):
         self.close()
 
     def close(self):
-        self.cache.close()
+        for task in self.tasks:
+            self.cache_dict[task].close()
         logger.info("Closed CachedEmbeddingWrapper")
