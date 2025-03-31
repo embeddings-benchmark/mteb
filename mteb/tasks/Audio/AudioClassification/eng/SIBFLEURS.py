@@ -18,7 +18,7 @@ class SIBFLEURSMultilingualClassification(AbsTaskAudioClassification):
             "name": "eng_Latn",
             "revision": "f00a6bbc6b3e3866600f838736295dd09b393902",
         },
-        type="AudioClassification",
+        type="AudioMultilabelClassification",
         category="a2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -30,7 +30,7 @@ class SIBFLEURSMultilingualClassification(AbsTaskAudioClassification):
         domains=[
             "Encyclopaedic"
         ],  # original FLORES-101 dataset is read-out wikipedia corpus
-        task_subtypes=["Topic Classification"],
+        task_subtypes=["Topic classification"],
         license="cc-by-4.0",
         annotations_creators="derived",
         dialect=[],
@@ -56,7 +56,7 @@ class SIBFLEURSMultilingualClassification(AbsTaskAudioClassification):
     samples_per_label: int = 10
 
     def dataset_transform(self):
-        ## flatten multi element entries in the dataset
+        ## flatten multi element entries in the dataset for samples with multiple speakers.
         dataset = {}
         for split in self.dataset.keys():
             data = self.dataset[split]
