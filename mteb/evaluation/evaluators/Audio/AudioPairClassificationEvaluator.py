@@ -45,10 +45,6 @@ class AudioPairClassificationEvaluator(Evaluator):
         **kwargs,
     ):
         super().__init__(**kwargs)
-        if limit:
-            audio1 = audio1[:limit]
-            audio2 = audio2[:limit]
-            labels = labels[:limit]
         self.audio1 = audio1
         self.audio2 = audio2
         self.labels = labels
