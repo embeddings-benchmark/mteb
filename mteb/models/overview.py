@@ -51,6 +51,7 @@ from mteb.models import (
     model2vec_models,
     moka_models,
     mxbai_models,
+    nb_sbert,
     no_instruct_sentence_models,
     nomic_models,
     nomic_models_vision,
@@ -153,6 +154,7 @@ model_modules = [
     fa_models,
     ara_models,
     b1ade_models,
+    nb_sbert,
 ]
 MODEL_REGISTRY = {}
 
