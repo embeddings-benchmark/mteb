@@ -57,9 +57,10 @@ class AudioPairClassificationEvaluator(Evaluator):
             labels = [label[0] for label in labels]
 
         for label in labels:
-            raise ValueError(
-                f"Invalid label value: {label}. Please assign each label to a value in [0, 1]."
-            )
+            if label not in [0, 1]:
+                raise ValueError(
+                    f"Invalid label value: {label}. Please assign each label to a value in [0, 1]."
+                )
 
     def __call__(
         self,
