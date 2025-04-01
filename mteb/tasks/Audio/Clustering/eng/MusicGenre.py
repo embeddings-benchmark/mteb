@@ -1,8 +1,5 @@
 from __future__ import annotations
 
-import numpy as np
-from datasets import Audio
-
 from mteb.abstasks.Audio.AbsTaskAudioClustering import AbsTaskAudioClustering
 from mteb.abstasks.TaskMetadata import TaskMetadata
 

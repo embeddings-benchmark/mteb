@@ -71,6 +71,7 @@ TASK_SUBTYPE = Literal[
     "Sentiment Analysis",
     "Intent Classification",
     "Vehicle Clustering",
+    "Rendered semantic textual similarity",
 ]
 
 TASK_DOMAIN = Literal[
@@ -116,7 +117,6 @@ SAMPLE_CREATION_METHOD = Literal[
     "multiple",
 ]
 
-
 MIEB_TASK_TYPE = (
     "Any2AnyMultiChoice",
     "Any2AnyRetrieval",
@@ -153,15 +153,6 @@ TASK_TYPE = (
         "Summarization",
         "InstructionRetrieval",
         "Speed",
-        "Any2AnyMultiChoice",
-        "Any2AnyRetrieval",
-        "Any2TextMutipleChoice",
-        "ImageClustering",
-        "ImageClassification",
-        "ImageMultilabelClassification",
-        "ImageTextPairClassification",
-        "VisualSTS",
-        "ZeroShotClassification",
     )
     + MIEB_TASK_TYPE
     + MAEB_TASK_TYPE

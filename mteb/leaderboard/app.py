@@ -5,6 +5,7 @@ import json
 import logging
 import tempfile
 import time
+import warnings
 from pathlib import Path
 from typing import Literal, get_args
 from urllib.parse import urlencode
@@ -20,8 +21,15 @@ from mteb.benchmarks.benchmarks import MTEB_multilingual
 from mteb.custom_validators import MODALITIES
 from mteb.languages import ISO_TO_LANGUAGE
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
-from mteb.leaderboard.table import scores_to_tables
+from mteb.leaderboard.table import create_tables
 
+logging.getLogger("mteb.load_results.task_results").setLevel(
+    logging.WARNING
+)  # Warnings related to task split
+logging.getLogger("mteb.models.overview").setLevel(
+    logging.WARNING
+)  # Warning related to model metadata (fetch_from_hf=False)
+warnings.filterwarnings("ignore", message="Couldn't get scores for .* due to .*")
 logger = logging.getLogger(__name__)
 
 acknowledgment_md = """
@@ -205,7 +213,9 @@ def filter_models(
 logger.info("Loading all benchmark results")
 all_results = load_results()
 
-benchmarks = sorted(mteb.get_benchmarks(), key=lambda x: x.name)
+benchmarks = sorted(
+    mteb.get_benchmarks(display_on_leaderboard=True), key=lambda x: x.name
+)
 all_benchmark_results = {
     benchmark.name: benchmark.load_results(base_results=all_results).join_revisions()
     for benchmark in benchmarks
@@ -226,7 +236,7 @@ filtered_models = filter_models(
     zero_shot_setting="allow_all",
 )
 
-summary_table, per_task_table = scores_to_tables(
+summary_table, per_task_table = create_tables(
     [entry for entry in default_scores if entry["model_name"] in filtered_models]
 )
 
@@ -801,7 +811,7 @@ see existing implementations [here](https://github.com/embeddings-benchmark/mteb
                 filtered_scores.append(entry)
         else:
             filtered_scores = scores
-        summary, per_task = scores_to_tables(filtered_scores, search_query)
+        summary, per_task = create_tables(filtered_scores, search_query)
         elapsed = time.time() - start_time
         logger.info(f"update_tables callback: {elapsed}s")
         return summary, per_task
@@ -859,4 +869,4 @@ for benchmark in benchmarks:
 
 
 if __name__ == "__main__":
-    demo.launch()
+    demo.launch(share=True)
