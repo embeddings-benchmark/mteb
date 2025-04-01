@@ -1676,3 +1676,86 @@ BUILT_MTEB = Benchmark(
 }""",
     contacts=["mehrzadshm"],
 )
+
+MAIR_TASK_CONFIG = {'Academic': ['Competition-Math', 'ProofWiki_Proof', 'ProofWiki_Reference', 'Stacks_Proof', 'Stacks_Reference', 'Stein_Proof', 'Stein_Reference', 'Trench_Proof', 'Trench_Reference', 'TAD', 'TAS2', 'StackMathQA', 'SciDocs', 'SciFact', 'LitSearch', 'FairRanking_2020'], 'Code': ['APPS', 'CodeEditSearch', 'CodeSearchNet', 'Conala', 'HumanEval-X', 'LeetCode', 'MBPP', 'RepoBench', 'TLDR', 'SWE-Bench-Lite', 'FoodAPI', 'HuggingfaceAPI', 'PytorchAPI', 'SpotifyAPI', 'TMDB', 'TensorAPI', 'ToolBench', 'WeatherAPI'], 'Finance': ['Apple', 'ConvFinQA', 'FinQA', 'FinanceBench', 'HC3Finance', 'TAT-DQA', 'Trade-the-event', 'FiQA'], 'Web': ['AY2', 'ELI5', 'Fever', 'TREx', 'WnCw', 'WnWi', 'WoW', 'zsRE', 'ArguAna', 'CQADupStack', 'Quora', 'TopiOCQA', 'Touche', 'ACORDAR', 'CPCD', 'ChroniclingAmericaQA', 'NTCIR', 'PointRec', 'ProCIS-Dialog', 'ProCIS-Turn', 'QuanTemp', 'WebTableSearch', 'MISeD', 'SParC', 'SParC-SQL', 'Spider', 'Spider-SQL', 'CAsT_2019', 'CAsT_2020', 'CAsT_2021', 'CAsT_2022', 'Core_2017', 'Microblog_2011', 'Microblog_2012', 'Microblog_2013', 'Microblog_2014', 'DD_2015', 'DD_2016', 'DD_2017', 'FairRanking_2021', 'FairRanking_2022', 'NeuCLIR-Tech_2023', 'NeuCLIR_2022', 'NeuCLIR_2023', 'ProductSearch_2023', 'ToT_2023', 'ToT_2024', 'ExcluIR', 'Core17', 'News21', 'Robust04', 'InstructIR', 'NevIR', 'IFEval'], 'Legal': ['AILA2019-Case', 'AILA2019-Statutes', 'BSARD', 'BillSum', 'CUAD', 'GerDaLIR', 'LeCaRDv2', 'LegalQuAD', 'REGIR-EU2UK', 'REGIR-UK2EU', 'TREC-Legal_2011'], 'Medical': ['NFCorpus', 'Trec-Covid', 'Monant', 'CARE', 'PrecisionMedicine_2017', 'PrecisionMedicine_2018', 'PrecisionMedicine_2019', 'PrecisionMedicine-Article_2019', 'PrecisionMedicine-Article_2020', 'CliniDS_2014', 'CliniDS_2015', 'CliniDS_2016', 'ClinicalTrials_2021', 'ClinicalTrials_2022', 'ClinicalTrials_2023', 'Genomics-AdHoc_2004', 'Genomics-AdHoc_2005', 'Genomics-AdHoc_2006', 'Genomics-AdHoc_2007']}
+
+
+def _get_mair_all_tasks():
+    return list(MAIR_TASK_CONFIG.keys())
+
+_MAIR_CITATION = """@inproceedings{Sun2024MAIR,
+  title={MAIR: A Massive Benchmark for Evaluating Instructed Retrieval},
+  author={Weiwei Sun and Zhengliang Shi and Jiulong Wu and Lingyong Yan and Xinyu Ma and Yiding Liu and Min Cao and Dawei Yin and Zhaochun Ren},
+  booktitle={EMNLP},
+  year={2024},
+}"""
+
+MAIR = Benchmark(
+    name="MAIR",
+    tasks=get_tasks(
+        tasks=['MAIR-' + name for _domain in MAIR_TASK_CONFIG.values() for name in _domain]
+    ),
+    description="MAIR: A Massive Benchmark for Evaluating Instructed Retrieval",
+    reference="https://github.com/sunnweiwei/MAIR",
+    citation=_MAIR_CITATION,
+)
+
+MAIR_WEB = Benchmark(
+    name="MAIR(Web)",
+    tasks=get_tasks(
+        tasks=['MAIR-' + name for name in MAIR_TASK_CONFIG['Web']]
+    ),
+    description="MAIR: A Massive Benchmark for Evaluating Instructed Retrieval",
+    reference="https://github.com/sunnweiwei/MAIR",
+    citation=_MAIR_CITATION,
+)
+
+MAIR_CODE = Benchmark(
+    name="MAIR(Code)",
+    tasks=get_tasks(
+        tasks=['MAIR-' + name for name in MAIR_TASK_CONFIG['Code']]
+    ),
+    description="MAIR: A Massive Benchmark for Evaluating Instructed Retrieval",
+    reference="https://github.com/sunnweiwei/MAIR",
+    citation=_MAIR_CITATION,
+)
+
+MAIR_ACADEMIC = Benchmark(
+    name="MAIR(Academic)",
+    tasks=get_tasks(
+        tasks=['MAIR-' + name for name in MAIR_TASK_CONFIG['Academic']]
+    ),
+    description="MAIR: A Massive Benchmark for Evaluating Instructed Retrieval",
+    reference="https://github.com/sunnweiwei/MAIR",
+    citation=_MAIR_CITATION,
+)
+
+MAIR_LEGAL = Benchmark(
+    name="MAIR(Legal)",
+    tasks=get_tasks(
+        tasks=['MAIR-' + name for name in MAIR_TASK_CONFIG['Legal']]
+    ),
+    description="MAIR: A Massive Benchmark for Evaluating Instructed Retrieval",
+    reference="https://github.com/sunnweiwei/MAIR",
+    citation=_MAIR_CITATION,
+)
+
+MAIR_MEDICAL = Benchmark(
+    name="MAIR(Medical)",
+    tasks=get_tasks(
+        tasks=['MAIR-' + name for name in MAIR_TASK_CONFIG['Medical']]
+    ),
+    description="MAIR: A Massive Benchmark for Evaluating Instructed Retrieval",
+    reference="https://github.com/sunnweiwei/MAIR",
+    citation=_MAIR_CITATION,
+)
+
+MAIR_FINANCE = Benchmark(
+    name="MAIR(Finance)",
+    tasks=get_tasks(
+        tasks=['MAIR-' + name for name in MAIR_TASK_CONFIG['Finance']]
+    ),
+    description="MAIR: A Massive Benchmark for Evaluating Instructed Retrieval",
+    reference="https://github.com/sunnweiwei/MAIR",
+    citation=_MAIR_CITATION,
+)
