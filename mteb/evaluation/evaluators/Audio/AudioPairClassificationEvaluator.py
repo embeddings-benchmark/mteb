@@ -42,14 +42,9 @@ class AudioPairClassificationEvaluator(Evaluator):
         audio2,
         labels,
         task_name: str | None = None,
-        limit: int | None = None,
         **kwargs,
     ):
         super().__init__(**kwargs)
-        if limit:
-            audio1 = audio1[:limit]
-            audio2 = audio2[:limit]
-            labels = labels[:limit]
         self.audio1 = audio1
         self.audio2 = audio2
         self.labels = labels
@@ -58,7 +53,7 @@ class AudioPairClassificationEvaluator(Evaluator):
         assert len(self.audio1) == len(self.audio2)
         assert len(self.audio1) == len(self.labels)
 
-        if type(labels[0]).__name__ == "list":
+        if isinstance(labels[0], list):
             labels = [label[0] for label in labels]
 
         for label in labels:
