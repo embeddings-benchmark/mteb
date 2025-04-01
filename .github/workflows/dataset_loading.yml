@@ -13,6 +13,13 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    - name: Cache Hugging Face
+      id: cache-hf
+      uses: actions/cache@v4
+      with:
+        key: cache-dataset-loading
+        path: ${{ github.workspace }}/.cache/dataset_check_cache.json
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
