@@ -42,7 +42,6 @@ class AudioPairClassificationEvaluator(Evaluator):
         audio2,
         labels,
         task_name: str | None = None,
-        limit: int | None = None,
         **kwargs,
     ):
         super().__init__(**kwargs)
