@@ -37,6 +37,7 @@ LICENSES = (  # this list can be extended as needed
         "bsd-3-clause",
         "gpl-3.0",
         "lgpl",
+        "lgpl-3.0",
         "cdla-sharing-1.0",
         "mpl-2.0",
         "msr-la-nc",

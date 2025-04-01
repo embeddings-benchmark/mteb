@@ -79,8 +79,13 @@ def get_benchmark(
 
 
 def get_benchmarks(
-    names: list[str] | None = None,
+    names: list[str] | None = None, display_on_leaderboard: bool | None = None
 ) -> list[Benchmark]:
     if names is None:
         names = list(BENCHMARK_REGISTRY.keys())
-    return [get_benchmark(name) for name in names]
+    benchmarks = [get_benchmark(name) for name in names]
+    if display_on_leaderboard is not None:
+        benchmarks = [
+            b for b in benchmarks if b.display_on_leaderboard is display_on_leaderboard
+        ]
+    return benchmarks

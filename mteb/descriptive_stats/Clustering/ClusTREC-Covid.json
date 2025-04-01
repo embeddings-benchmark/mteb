@@ -1,0 +1,493 @@
+{
+  "test": {
+    "num_samples": 4568,
+    "number_of_characters": 2977845,
+    "min_text_length": 14,
+    "average_text_length": 651.8925131348511,
+    "max_text_length": 8364,
+    "min_labels_per_text": 6,
+    "average_labels_per_text": 1.0,
+    "max_labels_per_text": 100,
+    "unique_labels": 50,
+    "labels": {
+      "coronavirus origin": {
+        "count": 100
+      },
+      "coronavirus response to weather changes": {
+        "count": 100
+      },
+      "coronavirus immunity": {
+        "count": 78
+      },
+      "how do people die from the coronavirus": {
+        "count": 100
+      },
+      "animal models of COVID-19": {
+        "count": 100
+      },
+      "coronavirus test rapid testing": {
+        "count": 100
+      },
+      "serological tests for coronavirus": {
+        "count": 100
+      },
+      "coronavirus under reporting": {
+        "count": 100
+      },
+      "coronavirus in Canada": {
+        "count": 92
+      },
+      "coronavirus social distancing impact": {
+        "count": 100
+      },
+      "coronavirus hospital rationing": {
+        "count": 100
+      },
+      "coronavirus quarantine": {
+        "count": 100
+      },
+      "how does coronavirus spread": {
+        "count": 100
+      },
+      "coronavirus super spreaders": {
+        "count": 98
+      },
+      "coronavirus outside body": {
+        "count": 34
+      },
+      "how long does coronavirus survive on surfaces": {
+        "count": 74
+      },
+      "coronavirus clinical trials": {
+        "count": 100
+      },
+      "masks prevent coronavirus": {
+        "count": 100
+      },
+      "what alcohol sanitizer kills coronavirus": {
+        "count": 64
+      },
+      "coronavirus and ACE inhibitors": {
+        "count": 100
+      },
+      "coronavirus mortality": {
+        "count": 100
+      },
+      "coronavirus heart impacts": {
+        "count": 100
+      },
+      "coronavirus hypertension": {
+        "count": 74
+      },
+      "coronavirus diabetes": {
+        "count": 100
+      },
+      "coronavirus biomarkers": {
+        "count": 100
+      },
+      "coronavirus early symptoms": {
+        "count": 100
+      },
+      "coronavirus asymptomatic": {
+        "count": 100
+      },
+      "coronavirus hydroxychloroquine": {
+        "count": 100
+      },
+      "coronavirus drug repurposing": {
+        "count": 100
+      },
+      "coronavirus remdesivir": {
+        "count": 100
+      },
+      "difference between coronavirus and flu": {
+        "count": 100
+      },
+      "coronavirus subtypes": {
+        "count": 6
+      },
+      "coronavirus vaccine candidates": {
+        "count": 36
+      },
+      "coronavirus recovery": {
+        "count": 100
+      },
+      "coronavirus public datasets": {
+        "count": 100
+      },
+      "SARS-CoV-2 spike structure": {
+        "count": 100
+      },
+      "SARS-CoV-2 phylogenetic analysis": {
+        "count": 100
+      },
+      "COVID inflammatory response": {
+        "count": 100
+      },
+      "COVID-19 cytokine storm": {
+        "count": 100
+      },
+      "coronavirus mutations": {
+        "count": 100
+      },
+      "COVID-19 in African-Americans": {
+        "count": 100
+      },
+      "Vitamin D and COVID-19": {
+        "count": 100
+      },
+      "violence during pandemic": {
+        "count": 100
+      },
+      "impact of masks on coronavirus transmission": {
+        "count": 100
+      },
+      "coronavirus mental health impact": {
+        "count": 100
+      },
+      "dexamethasone coronavirus": {
+        "count": 92
+      },
+      "COVID-19 outcomes in children": {
+        "count": 100
+      },
+      "school reopening coronavirus": {
+        "count": 100
+      },
+      "post-infection COVID-19 immunity": {
+        "count": 88
+      },
+      "mRNA vaccine coronavirus": {
+        "count": 32
+      }
+    },
+    "hf_subset_descriptive_stats": {
+      "title and abstract": {
+        "num_samples": 2284,
+        "number_of_characters": 2755462,
+        "min_text_length": 14,
+        "average_text_length": 1206.4194395796849,
+        "max_text_length": 8364,
+        "min_labels_per_text": 3,
+        "average_labels_per_text": 1.0,
+        "max_labels_per_text": 50,
+        "unique_labels": 50,
+        "labels": {
+          "coronavirus origin": {
+            "count": 50
+          },
+          "coronavirus response to weather changes": {
+            "count": 50
+          },
+          "coronavirus immunity": {
+            "count": 39
+          },
+          "how do people die from the coronavirus": {
+            "count": 50
+          },
+          "animal models of COVID-19": {
+            "count": 50
+          },
+          "coronavirus test rapid testing": {
+            "count": 50
+          },
+          "serological tests for coronavirus": {
+            "count": 50
+          },
+          "coronavirus under reporting": {
+            "count": 50
+          },
+          "coronavirus in Canada": {
+            "count": 46
+          },
+          "coronavirus social distancing impact": {
+            "count": 50
+          },
+          "coronavirus hospital rationing": {
+            "count": 50
+          },
+          "coronavirus quarantine": {
+            "count": 50
+          },
+          "how does coronavirus spread": {
+            "count": 50
+          },
+          "coronavirus super spreaders": {
+            "count": 49
+          },
+          "coronavirus outside body": {
+            "count": 17
+          },
+          "how long does coronavirus survive on surfaces": {
+            "count": 37
+          },
+          "coronavirus clinical trials": {
+            "count": 50
+          },
+          "masks prevent coronavirus": {
+            "count": 50
+          },
+          "what alcohol sanitizer kills coronavirus": {
+            "count": 32
+          },
+          "coronavirus and ACE inhibitors": {
+            "count": 50
+          },
+          "coronavirus mortality": {
+            "count": 50
+          },
+          "coronavirus heart impacts": {
+            "count": 50
+          },
+          "coronavirus hypertension": {
+            "count": 37
+          },
+          "coronavirus diabetes": {
+            "count": 50
+          },
+          "coronavirus biomarkers": {
+            "count": 50
+          },
+          "coronavirus early symptoms": {
+            "count": 50
+          },
+          "coronavirus asymptomatic": {
+            "count": 50
+          },
+          "coronavirus hydroxychloroquine": {
+            "count": 50
+          },
+          "coronavirus drug repurposing": {
+            "count": 50
+          },
+          "coronavirus remdesivir": {
+            "count": 50
+          },
+          "difference between coronavirus and flu": {
+            "count": 50
+          },
+          "coronavirus subtypes": {
+            "count": 3
+          },
+          "coronavirus vaccine candidates": {
+            "count": 18
+          },
+          "coronavirus recovery": {
+            "count": 50
+          },
+          "coronavirus public datasets": {
+            "count": 50
+          },
+          "SARS-CoV-2 spike structure": {
+            "count": 50
+          },
+          "SARS-CoV-2 phylogenetic analysis": {
+            "count": 50
+          },
+          "COVID inflammatory response": {
+            "count": 50
+          },
+          "COVID-19 cytokine storm": {
+            "count": 50
+          },
+          "coronavirus mutations": {
+            "count": 50
+          },
+          "COVID-19 in African-Americans": {
+            "count": 50
+          },
+          "Vitamin D and COVID-19": {
+            "count": 50
+          },
+          "violence during pandemic": {
+            "count": 50
+          },
+          "impact of masks on coronavirus transmission": {
+            "count": 50
+          },
+          "coronavirus mental health impact": {
+            "count": 50
+          },
+          "dexamethasone coronavirus": {
+            "count": 46
+          },
+          "COVID-19 outcomes in children": {
+            "count": 50
+          },
+          "school reopening coronavirus": {
+            "count": 50
+          },
+          "post-infection COVID-19 immunity": {
+            "count": 44
+          },
+          "mRNA vaccine coronavirus": {
+            "count": 16
+          }
+        }
+      },
+      "title": {
+        "num_samples": 2284,
+        "number_of_characters": 222383,
+        "min_text_length": 14,
+        "average_text_length": 97.36558669001751,
+        "max_text_length": 348,
+        "min_labels_per_text": 3,
+        "average_labels_per_text": 1.0,
+        "max_labels_per_text": 50,
+        "unique_labels": 50,
+        "labels": {
+          "coronavirus origin": {
+            "count": 50
+          },
+          "coronavirus response to weather changes": {
+            "count": 50
+          },
+          "coronavirus immunity": {
+            "count": 39
+          },
+          "how do people die from the coronavirus": {
+            "count": 50
+          },
+          "animal models of COVID-19": {
+            "count": 50
+          },
+          "coronavirus test rapid testing": {
+            "count": 50
+          },
+          "serological tests for coronavirus": {
+            "count": 50
+          },
+          "coronavirus under reporting": {
+            "count": 50
+          },
+          "coronavirus in Canada": {
+            "count": 46
+          },
+          "coronavirus social distancing impact": {
+            "count": 50
+          },
+          "coronavirus hospital rationing": {
+            "count": 50
+          },
+          "coronavirus quarantine": {
+            "count": 50
+          },
+          "how does coronavirus spread": {
+            "count": 50
+          },
+          "coronavirus super spreaders": {
+            "count": 49
+          },
+          "coronavirus outside body": {
+            "count": 17
+          },
+          "how long does coronavirus survive on surfaces": {
+            "count": 37
+          },
+          "coronavirus clinical trials": {
+            "count": 50
+          },
+          "masks prevent coronavirus": {
+            "count": 50
+          },
+          "what alcohol sanitizer kills coronavirus": {
+            "count": 32
+          },
+          "coronavirus and ACE inhibitors": {
+            "count": 50
+          },
+          "coronavirus mortality": {
+            "count": 50
+          },
+          "coronavirus heart impacts": {
+            "count": 50
+          },
+          "coronavirus hypertension": {
+            "count": 37
+          },
+          "coronavirus diabetes": {
+            "count": 50
+          },
+          "coronavirus biomarkers": {
+            "count": 50
+          },
+          "coronavirus early symptoms": {
+            "count": 50
+          },
+          "coronavirus asymptomatic": {
+            "count": 50
+          },
+          "coronavirus hydroxychloroquine": {
+            "count": 50
+          },
+          "coronavirus drug repurposing": {
+            "count": 50
+          },
+          "coronavirus remdesivir": {
+            "count": 50
+          },
+          "difference between coronavirus and flu": {
+            "count": 50
+          },
+          "coronavirus subtypes": {
+            "count": 3
+          },
+          "coronavirus vaccine candidates": {
+            "count": 18
+          },
+          "coronavirus recovery": {
+            "count": 50
+          },
+          "coronavirus public datasets": {
+            "count": 50
+          },
+          "SARS-CoV-2 spike structure": {
+            "count": 50
+          },
+          "SARS-CoV-2 phylogenetic analysis": {
+            "count": 50
+          },
+          "COVID inflammatory response": {
+            "count": 50
+          },
+          "COVID-19 cytokine storm": {
+            "count": 50
+          },
+          "coronavirus mutations": {
+            "count": 50
+          },
+          "COVID-19 in African-Americans": {
+            "count": 50
+          },
+          "Vitamin D and COVID-19": {
+            "count": 50
+          },
+          "violence during pandemic": {
+            "count": 50
+          },
+          "impact of masks on coronavirus transmission": {
+            "count": 50
+          },
+          "coronavirus mental health impact": {
+            "count": 50
+          },
+          "dexamethasone coronavirus": {
+            "count": 46
+          },
+          "COVID-19 outcomes in children": {
+            "count": 50
+          },
+          "school reopening coronavirus": {
+            "count": 50
+          },
+          "post-infection COVID-19 immunity": {
+            "count": 44
+          },
+          "mRNA vaccine coronavirus": {
+            "count": 16
+          }
+        }
+      }
+    }
+  }
+}

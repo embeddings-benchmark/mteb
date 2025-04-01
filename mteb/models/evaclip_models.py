@@ -10,6 +10,7 @@ from tqdm import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
+from mteb.requires_package import requires_image_dependencies
 
 
 def evaclip_loader(**kwargs):
@@ -36,6 +37,8 @@ def evaclip_loader(**kwargs):
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
             **kwargs: Any,
         ):
+            requires_image_dependencies()
+
             self.model_name = model_name
             self.device = device
             pretrained = "eva_clip"  # or "/path/to/EVA02_CLIP_B_psz16_s8B.pt"
@@ -86,10 +89,10 @@ def evaclip_loader(**kwargs):
             batch_size: int = 32,
             **kwargs: Any,
         ):
+            import torchvision.transforms.functional as F
+
             all_image_embeddings = []
             if isinstance(images, DataLoader):
-                import torchvision.transforms.functional as F
-
                 with torch.no_grad(), torch.cuda.amp.autocast():
                     for batch in tqdm(images):
                         inputs = torch.vstack(

@@ -11,7 +11,7 @@ MTEB is a benchmark for evaluating the quality of embeddings in various tasks. I
 To run a model on a set of tasks, use the `mteb run` command. For example:
 
 ```bash
-mteb run -m average_word_embeddings_komninos \
+mteb run -m sentence-transformers/average_word_embeddings_komninos \
          -t Banking77Classification EmotionClassification \
          --output_folder mteb_output \
           --verbosity 3
@@ -44,7 +44,7 @@ mteb available_benchmarks # list all available benchmarks
 Once a model is run you can create the metadata for a model card from a folder of results, use the `mteb create_meta` command. For example:
 
 ```bash
-mteb create_meta --results_folder mteb_output/average_word_embeddings_komninos/{revision} \
+mteb create_meta --results_folder mteb_output/sentence-transformers__average_word_embeddings_komninos/{revision} \
                  --output_path model_card.md
 ```
 
