@@ -1,7 +1,6 @@
 name: Datasets available on HuggingFace
 
 on:
-  pull_request:
   push:
     branches: [main]
 
