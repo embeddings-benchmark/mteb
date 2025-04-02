@@ -14,7 +14,7 @@ from mteb.requires_package import requires_image_dependencies
 from mteb.types import Array, BatchedInput, PromptType
 
 
-class JinaCLIPModelAbsEncoder(AbsEncoder):
+class JinaCLIPModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -114,7 +114,7 @@ class JinaCLIPModelAbsEncoder(AbsEncoder):
 
 
 jina_clip_v1 = ModelMeta(
-    loader=JinaCLIPModelAbsEncoder,  # type: ignore
+    loader=JinaCLIPModel,  # type: ignore
     name="jinaai/jina-clip-v1",
     languages=["eng_Latn"],
     revision="06150c7c382d7a4faedc7d5a0d8cdb59308968f4",

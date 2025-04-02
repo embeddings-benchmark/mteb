@@ -14,7 +14,7 @@ from mteb.models.utils import batched
 from mteb.types import Array, BatchedInput, PromptType
 
 
-class NoInstructAbsEncoder(AbsEncoder):
+class NoInstructModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -82,7 +82,7 @@ class NoInstructAbsEncoder(AbsEncoder):
 
 
 no_instruct_small_v0 = ModelMeta(
-    loader=NoInstructAbsEncoder,
+    loader=NoInstructModel,
     name="avsolatorio/NoInstruct-small-Embedding-v0",
     languages=["eng-Latn"],
     open_weights=True,

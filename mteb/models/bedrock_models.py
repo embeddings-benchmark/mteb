@@ -20,7 +20,7 @@ from mteb.types import Array, BatchedInput, PromptType
 logger = logging.getLogger(__name__)
 
 
-class BedrockAbsEncoder(AbsEncoder):
+class BedrockModel(AbsEncoder):
     def __init__(
         self,
         model_id: str,
@@ -162,7 +162,7 @@ amazon_titan_embed_text_v1 = ModelMeta(
     revision="1",
     release_date="2023-09-27",
     languages=None,  # not specified
-    loader=BedrockAbsEncoder,
+    loader=BedrockModel,
     loader_kwargs=dict(
         model_id="amazon.titan-embed-text-v1",
         provider="amazon",
@@ -188,7 +188,7 @@ amazon_titan_embed_text_v2 = ModelMeta(
     revision="1",
     release_date="2024-04-30",
     languages=None,  # not specified
-    loader=BedrockAbsEncoder,
+    loader=BedrockModel,
     loader_kwargs=dict(
         model_id="amazon.titan-embed-text-v2:0",
         provider="amazon",
@@ -212,7 +212,7 @@ amazon_titan_embed_text_v2 = ModelMeta(
 # https://github.com/embeddings-benchmark/mteb/blob/main/mteb/models/cohere_models.py
 # This implementation uses the Amazon Bedrock endpoint for Cohere models.
 cohere_embed_english_v3 = ModelMeta(
-    loader=BedrockAbsEncoder,
+    loader=BedrockModel,
     loader_kwargs=dict(
         model_id="cohere.embed-english-v3",
         provider="cohere",
@@ -239,7 +239,7 @@ cohere_embed_english_v3 = ModelMeta(
 )
 
 cohere_embed_multilingual_v3 = ModelMeta(
-    loader=BedrockAbsEncoder,
+    loader=BedrockModel,
     loader_kwargs=dict(
         model_id="cohere.embed-multilingual-v3",
         provider="cohere",

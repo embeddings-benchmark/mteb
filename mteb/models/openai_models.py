@@ -16,7 +16,7 @@ from mteb.types import Array, BatchedInput, PromptType
 logger = logging.getLogger(__name__)
 
 
-class OpenAIAbsEncoder(AbsEncoder):
+class OpenAIModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -141,7 +141,7 @@ text_embedding_3_small = ModelMeta(
     revision="2",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
-    loader=OpenAIAbsEncoder,
+    loader=OpenAIModel,
     loader_kwargs=dict(
         tokenizer_name="cl100k_base",
         max_tokens=8191,
@@ -165,7 +165,7 @@ text_embedding_3_large = ModelMeta(
     revision="2",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
-    loader=OpenAIAbsEncoder,
+    loader=OpenAIModel,
     loader_kwargs=dict(
         tokenizer_name="cl100k_base",
         max_tokens=8191,
@@ -189,7 +189,7 @@ text_embedding_ada_002 = ModelMeta(
     revision="2",
     release_date="2022-12-15",
     languages=None,  # supported languages not specified
-    loader=OpenAIAbsEncoder,
+    loader=OpenAIModel,
     loader_kwargs=dict(
         tokenizer_name="cl100k_base",
         max_tokens=8191,

@@ -19,7 +19,7 @@ def mocov3_loader(**kwargs):
     except ImportError:
         raise ImportError("Please install `pip install timm` to use MOCOv3 models.")
 
-    class MOCOv3AbsEncoder(AbsEncoder):
+    class MOCOv3Model(AbsEncoder):
         """A wrapper class for MOCOv3 models that supports image encoding.
         Text encoding and text-image fusion are not supported.
         """
@@ -106,7 +106,7 @@ def mocov3_loader(**kwargs):
                 return self.get_image_embeddings(inputs, **kwargs)
             raise ValueError
 
-    return MOCOv3AbsEncoder(**kwargs)
+    return MOCOv3Model(**kwargs)
 
 
 mocov3_training_datasets = {

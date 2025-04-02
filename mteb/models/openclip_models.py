@@ -19,7 +19,7 @@ def openclip_loader(**kwargs):
     except ImportError:
         raise ImportError("Please run `pip install open_clip_torch`.")
 
-    class OpenCLIPAbsEncoder(AbsEncoder):
+    class OpenCLIPModel(AbsEncoder):
         def __init__(
             self,
             model_name: str = "laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K",
@@ -106,7 +106,7 @@ def openclip_loader(**kwargs):
                 return image_embeddings
             raise ValueError
 
-    return OpenCLIPAbsEncoder(**kwargs)
+    return OpenCLIPModel(**kwargs)
 
 
 CLIP_ViT_L_14_DataComp_XL_s13B_b90K = ModelMeta(

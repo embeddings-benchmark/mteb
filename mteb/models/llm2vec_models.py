@@ -50,7 +50,7 @@ llm2vec_supervised_training_data = {
 }
 
 
-class LLM2VecAbsEncoder(AbsEncoder):
+class LLM2VecModel(AbsEncoder):
     def __init__(
         self,
         model_prompts: dict[str, str] | None = None,
@@ -103,7 +103,7 @@ class LLM2VecAbsEncoder(AbsEncoder):
         return self.model.encode(sentences, **kwargs)
 
 
-def _loader(wrapper: type[LLM2VecAbsEncoder], **kwargs) -> Callable[..., Encoder]:
+def _loader(wrapper: type[LLM2VecModel], **kwargs) -> Callable[..., Encoder]:
     _kwargs = kwargs
 
     def loader_inner(**kwargs: Any) -> Encoder:
@@ -126,7 +126,7 @@ LLM2VEC_CITATION = """
 
 llm2vec_llama3_8b_supervised = ModelMeta(
     loader=_loader(
-        LLM2VecAbsEncoder,
+        LLM2VecModel,
         base_model_name_or_path="McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp",
         peft_model_name_or_path="McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-supervised",
         device_map="auto",
@@ -155,7 +155,7 @@ llm2vec_llama3_8b_supervised = ModelMeta(
 
 llm2vec_llama3_8b_unsupervised = ModelMeta(
     loader=_loader(
-        LLM2VecAbsEncoder,
+        LLM2VecModel,
         base_model_name_or_path="McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp",
         peft_model_name_or_path="McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-unsup-simcse",
         device_map="auto",
@@ -183,7 +183,7 @@ llm2vec_llama3_8b_unsupervised = ModelMeta(
 
 llm2vec_mistral7b_supervised = ModelMeta(
     loader=_loader(
-        LLM2VecAbsEncoder,
+        LLM2VecModel,
         base_model_name_or_path="McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp",
         peft_model_name_or_path="McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp-supervised",
         device_map="auto",
@@ -211,7 +211,7 @@ llm2vec_mistral7b_supervised = ModelMeta(
 
 llm2vec_mistral7b_unsupervised = ModelMeta(
     loader=_loader(
-        LLM2VecAbsEncoder,
+        LLM2VecModel,
         base_model_name_or_path="McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp",
         peft_model_name_or_path="McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp-unsup-simcse",
         device_map="auto",
@@ -239,7 +239,7 @@ llm2vec_mistral7b_unsupervised = ModelMeta(
 
 llm2vec_llama2_7b_supervised = ModelMeta(
     loader=_loader(
-        LLM2VecAbsEncoder,
+        LLM2VecModel,
         base_model_name_or_path="McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp",
         peft_model_name_or_path="McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp-supervised",
         device_map="auto",
@@ -267,7 +267,7 @@ llm2vec_llama2_7b_supervised = ModelMeta(
 
 llm2vec_llama2_7b_unsupervised = ModelMeta(
     loader=_loader(
-        LLM2VecAbsEncoder,
+        LLM2VecModel,
         base_model_name_or_path="McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp",
         peft_model_name_or_path="McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp-unsup-simcse",
         device_map="auto",
@@ -295,7 +295,7 @@ llm2vec_llama2_7b_unsupervised = ModelMeta(
 
 llm2vec_sheared_llama_supervised = ModelMeta(
     loader=_loader(
-        LLM2VecAbsEncoder,
+        LLM2VecModel,
         base_model_name_or_path="McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp",
         peft_model_name_or_path="McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp-supervised",
         device_map="auto",
@@ -323,7 +323,7 @@ llm2vec_sheared_llama_supervised = ModelMeta(
 
 llm2vec_sheared_llama_unsupervised = ModelMeta(
     loader=_loader(
-        LLM2VecAbsEncoder,
+        LLM2VecModel,
         base_model_name_or_path="McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp",
         peft_model_name_or_path="McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp-unsup-simcse",
         device_map="auto",

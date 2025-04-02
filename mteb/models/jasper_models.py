@@ -16,7 +16,7 @@ from mteb.types import Array, BatchedInput, PromptType
 logger = logging.getLogger(__name__)
 
 
-class JasperWrapper(AbsEncoder):
+class JasperModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -61,7 +61,7 @@ class JasperWrapper(AbsEncoder):
 
 
 jasper_en_v1 = ModelMeta(
-    loader=JasperWrapper,
+    loader=JasperModel,
     loader_kwargs=dict(
         config_kwargs={"is_text_encoder": True, "vector_dim": 12288},
         model_kwargs={

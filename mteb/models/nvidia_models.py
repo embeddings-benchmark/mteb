@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 
 from mteb.model_meta import ModelMeta, ScoringFunction
-from mteb.models.instruct_wrapper import InstructSentenceTransformerAbsEncoder
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.types import PromptType
 
 logger = logging.getLogger(__name__)
@@ -81,7 +81,7 @@ nvidia_training_datasets = {
 }
 
 NV_embed_v2 = ModelMeta(
-    loader=InstructSentenceTransformerAbsEncoder,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=instruction_template,
         trust_remote_code=True,
@@ -110,7 +110,7 @@ NV_embed_v2 = ModelMeta(
 )
 
 NV_embed_v1 = ModelMeta(
-    loader=InstructSentenceTransformerAbsEncoder,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=instruction_template,
         trust_remote_code=True,

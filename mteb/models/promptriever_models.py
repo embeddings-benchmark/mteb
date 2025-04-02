@@ -10,13 +10,13 @@ from mteb.abstasks import TaskMetadata
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.repllama_models import RepLLaMAAbsEncoder, model_prompts
+from mteb.models.repllama_models import RepLLaMAModel, model_prompts
 from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
 
-class PromptrieverAbsEncoder(RepLLaMAAbsEncoder, AbsEncoder):
+class PromptrieverModel(RepLLaMAModel, AbsEncoder):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -41,7 +41,7 @@ class PromptrieverAbsEncoder(RepLLaMAAbsEncoder, AbsEncoder):
         )
 
 
-def _loader(wrapper: type[PromptrieverAbsEncoder], **kwargs) -> Callable[..., Encoder]:
+def _loader(wrapper: type[PromptrieverModel], **kwargs) -> Callable[..., Encoder]:
     _kwargs = kwargs
 
     def loader_inner(**kwargs: Any) -> Encoder:
@@ -65,7 +65,7 @@ PROMPTRIEVER_CITATION = """
 
 promptriever_llama2 = ModelMeta(
     loader=_loader(
-        PromptrieverAbsEncoder,
+        PromptrieverModel,
         base_model_name_or_path="meta-llama/Llama-2-7b-hf",
         peft_model_name_or_path="samaya-ai/promptriever-llama2-7b-v1",
         device_map="auto",
@@ -94,7 +94,7 @@ promptriever_llama2 = ModelMeta(
 
 promptriever_llama3 = ModelMeta(
     loader=_loader(
-        PromptrieverAbsEncoder,
+        PromptrieverModel,
         base_model_name_or_path="meta-llama/Meta-Llama-3.1-8B",
         peft_model_name_or_path="samaya-ai/promptriever-llama3.1-8b-v1",
         device_map="auto",
@@ -126,7 +126,7 @@ promptriever_llama3 = ModelMeta(
 
 promptriever_llama3_instruct = ModelMeta(
     loader=_loader(
-        PromptrieverAbsEncoder,
+        PromptrieverModel,
         base_model_name_or_path="meta-llama/Meta-Llama-3.1-8B-Instruct",
         peft_model_name_or_path="samaya-ai/promptriever-llama3.1-8b-instruct-v1",
         device_map="auto",
@@ -158,7 +158,7 @@ promptriever_llama3_instruct = ModelMeta(
 
 promptriever_mistral_v1 = ModelMeta(
     loader=_loader(
-        PromptrieverAbsEncoder,
+        PromptrieverModel,
         base_model_name_or_path="mistralai/Mistral-7B-v0.1",
         peft_model_name_or_path="samaya-ai/promptriever-mistral-v0.1-7b-v1",
         device_map="auto",

@@ -11,6 +11,7 @@ from transformers import LlavaNextForConditionalGeneration, LlavaNextProcessor
 
 from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
 
 E5_V_TRANSFORMERS_VERSION = (
@@ -18,7 +19,7 @@ E5_V_TRANSFORMERS_VERSION = (
 )
 
 
-class E5VWrapper:
+class E5VModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -142,7 +143,7 @@ class E5VWrapper:
 
 
 e5_v = ModelMeta(
-    loader=E5VWrapper,
+    loader=E5VModel,
     loader_kwargs=dict(
         device_map="auto",
     ),

@@ -15,7 +15,7 @@ from mteb.types import Array, BatchedInput, PromptType
 logger = logging.getLogger(__name__)
 
 
-class Model2VecAbsEncoder(AbsEncoder):
+class Model2VecModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -52,7 +52,7 @@ class Model2VecAbsEncoder(AbsEncoder):
 
 
 m2v_base_glove_subword = ModelMeta(
-    loader=Model2VecAbsEncoder,
+    loader=Model2VecModel,
     name="minishlab/M2V_base_glove_subword",
     languages=["eng_Latn"],
     open_weights=True,
@@ -76,7 +76,7 @@ m2v_base_glove_subword = ModelMeta(
 
 
 m2v_base_glove = ModelMeta(
-    loader=Model2VecAbsEncoder,
+    loader=Model2VecModel,
     name="minishlab/M2V_base_glove",
     languages=["eng_Latn"],
     open_weights=True,
@@ -99,7 +99,7 @@ m2v_base_glove = ModelMeta(
 )
 
 m2v_base_output = ModelMeta(
-    loader=Model2VecAbsEncoder,
+    loader=Model2VecModel,
     name="minishlab/M2V_base_output",
     languages=["eng_Latn"],
     open_weights=True,
@@ -122,7 +122,7 @@ m2v_base_output = ModelMeta(
 )
 
 m2v_multilingual_output = ModelMeta(
-    loader=Model2VecAbsEncoder,
+    loader=Model2VecModel,
     name="minishlab/M2V_multilingual_output",
     languages=["eng_Latn"],
     open_weights=True,
@@ -145,7 +145,7 @@ m2v_multilingual_output = ModelMeta(
 )
 
 potion_base_2m = ModelMeta(
-    loader=Model2VecAbsEncoder,
+    loader=Model2VecModel,
     name="minishlab/potion-base-2M",
     languages=["eng_Latn"],
     open_weights=True,
@@ -168,7 +168,7 @@ potion_base_2m = ModelMeta(
 )
 
 potion_base_4m = ModelMeta(
-    loader=Model2VecAbsEncoder,
+    loader=Model2VecModel,
     name="minishlab/potion-base-4M",
     languages=["eng_Latn"],
     open_weights=True,
@@ -191,7 +191,7 @@ potion_base_4m = ModelMeta(
 )
 
 potion_base_8m = ModelMeta(
-    loader=Model2VecAbsEncoder,
+    loader=Model2VecModel,
     name="minishlab/potion-base-8M",
     languages=["eng_Latn"],
     open_weights=True,

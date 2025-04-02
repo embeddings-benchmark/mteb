@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from mteb.model_meta import ModelMeta, ScoringFunction
-from mteb.models.instruct_wrapper import InstructSentenceTransformerAbsEncoder
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.types import PromptType
 
 
@@ -20,7 +20,7 @@ languages = [
 ]
 
 vdr_2b_multi_v1 = ModelMeta(
-    loader=InstructSentenceTransformerAbsEncoder,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=instruction_template,
         max_seq_length=32768,

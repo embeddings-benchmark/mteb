@@ -23,7 +23,7 @@ def blip2_loader(**kwargs):
             "Please install `pip install mteb[blip2]` to use BLIP-2 models."
         )
 
-    class BLIP2ModelAbsEncoder(AbsEncoder):
+    class BLIP2Model(AbsEncoder):
         def __init__(
             self,
             model_name: str,
@@ -142,7 +142,7 @@ def blip2_loader(**kwargs):
                 return image_embeddings
             raise ValueError
 
-    return BLIP2ModelAbsEncoder(**kwargs)
+    return BLIP2Model(**kwargs)
 
 
 blip2_training_datasets = {

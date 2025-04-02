@@ -9,10 +9,11 @@ from transformers import AutoImageProcessor, AutoModel
 
 from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
 
 
-class DINOModelWrapper:
+class DINOModel(AbsEncoder):
     """A wrapper class for DINO models that supports image encoding.
     Text encoding and text-image fusion are not supported.
     """
@@ -100,7 +101,7 @@ dinov2_training_datasets = {
 
 
 dinov2_small = ModelMeta(
-    loader=DINOModelWrapper,  # type: ignore
+    loader=DINOModel,  # type: ignore
     name="facebook/dinov2-small",
     languages=["eng_Latn"],
     revision="ed25f3a31f01632728cabb09d1542f84ab7b0056",
@@ -122,7 +123,7 @@ dinov2_small = ModelMeta(
 )
 
 dinov2_base = ModelMeta(
-    loader=DINOModelWrapper,  # type: ignore
+    loader=DINOModel,  # type: ignore
     name="facebook/dinov2-base",
     languages=["eng_Latn"],
     revision="f9e44c814b77203eaa57a6bdbbd535f21ede1415",
@@ -144,7 +145,7 @@ dinov2_base = ModelMeta(
 )
 
 dinov2_large = ModelMeta(
-    loader=DINOModelWrapper,  # type: ignore
+    loader=DINOModel,  # type: ignore
     name="facebook/dinov2-large",
     languages=["eng_Latn"],
     revision="47b73eefe95e8d44ec3623f8890bd894b6ea2d6c",
@@ -166,7 +167,7 @@ dinov2_large = ModelMeta(
 )
 
 dinov2_giant = ModelMeta(
-    loader=DINOModelWrapper,  # type: ignore
+    loader=DINOModel,  # type: ignore
     name="facebook/dinov2-giant",
     languages=["eng_Latn"],
     revision="611a9d42f2335e0f921f1e313ad3c1b7178d206d",

@@ -22,7 +22,7 @@ from mteb.types import Array, BatchedInput, PromptType
 logger = logging.getLogger(__name__)
 
 
-class RepLLaMAAbsEncoder(AbsEncoder):
+class RepLLaMAModel(AbsEncoder):
     def __init__(
         self,
         peft_model_name_or_path: str,
@@ -133,7 +133,7 @@ class RepLLaMAAbsEncoder(AbsEncoder):
         return np.concatenate(all_embeddings, axis=0)
 
 
-def _loader(wrapper: type[RepLLaMAAbsEncoder], **kwargs) -> Callable[..., Encoder]:
+def _loader(wrapper: type[RepLLaMAModel], **kwargs) -> Callable[..., Encoder]:
     _kwargs = kwargs
 
     def loader_inner(**kwargs: Any) -> Encoder:
@@ -157,7 +157,7 @@ REPLLAMA_CITATION = """
 """
 
 repllama_llama2_original = ModelMeta(
-    loader=RepLLaMAAbsEncoder,  # type: ignore
+    loader=RepLLaMAModel,  # type: ignore
     loader_kwargs=dict(
         base_model_name_or_path="meta-llama/Llama-2-7b-hf",
         device_map="auto",
@@ -189,7 +189,7 @@ repllama_llama2_original = ModelMeta(
 
 
 repllama_llama2_reproduced = ModelMeta(
-    loader=RepLLaMAAbsEncoder,  # type: ignore
+    loader=RepLLaMAModel,  # type: ignore
     loader_kwargs=dict(
         base_model_name_or_path="meta-llama/Llama-2-7b-hf",
         device_map="auto",

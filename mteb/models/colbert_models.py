@@ -14,7 +14,7 @@ from mteb.types import Array, BatchedInput, PromptType
 logger = logging.getLogger(__name__)
 
 
-class ColBERTAbsEncoder(AbsEncoder):
+class ColBERTModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -101,7 +101,7 @@ class ColBERTAbsEncoder(AbsEncoder):
 
 
 colbert_v2 = ModelMeta(
-    loader=ColBERTAbsEncoder,
+    loader=ColBERTModel,
     name="colbert-ir/colbertv2.0",
     languages=["eng_Latn"],
     open_weights=True,
@@ -127,7 +127,7 @@ colbert_v2 = ModelMeta(
 )
 
 jina_colbert_v2 = ModelMeta(
-    loader=ColBERTAbsEncoder,
+    loader=ColBERTModel,
     loader_kwargs=dict(
         query_prefix="[QueryMarker]",
         document_prefix="[DocumentMarker]",

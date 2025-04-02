@@ -15,7 +15,7 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
 
 
-class NomicVisionModelAbsEncoder(AbsEncoder):
+class NomicVisionModel(AbsEncoder):
     def __init__(
         self,
         vision_model_name: str,
@@ -137,7 +137,7 @@ class NomicVisionModelAbsEncoder(AbsEncoder):
 
 
 nomic_embed_vision_v1_5 = ModelMeta(
-    loader=NomicVisionModelAbsEncoder,
+    loader=NomicVisionModel,
     loader_kwargs={
         "vision_model_name": "nomic-ai/nomic-embed-vision-v1.5",
         "text_model_name": "nomic-ai/nomic-embed-text-v1.5",

@@ -13,19 +13,17 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
 
 
-class ALIGNModelAbsEncoder(AbsEncoder):
+class ALIGNModel(AbsEncoder):
     def __init__(
         self,
         model: str,
         revision: str,
-        # device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
         self.model_name = model
-        # self.device = device
-        self.model = AutoModel.from_pretrained(
-            model, revision=revision
-        )  # .to(self.device)
+        self.device = device
+        self.model = AutoModel.from_pretrained(model, revision=revision).to(self.device)
         self.processor = AutoProcessor.from_pretrained(model, revision=revision)
 
     def get_text_embeddings(
@@ -106,7 +104,7 @@ class ALIGNModelAbsEncoder(AbsEncoder):
 
 
 align_base = ModelMeta(
-    loader=ALIGNModelAbsEncoder,
+    loader=ALIGNModel,
     name="kakaobrain/align-base",
     languages=["eng_Latn"],
     revision="e96a37facc7b1f59090ece82293226b817afd6ba",

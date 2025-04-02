@@ -144,7 +144,21 @@ class SentenceTransformerWrapper(AbsEncoder):
         hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ):
+    ) -> Array:
+        """Handles the prediction for cross-encoders with instructions.
+
+        Args:
+            inputs1: Queries with optional instructions to encode.
+            inputs2: Passages to encode.
+            task_metadata: Task metadata.
+            hf_split: Split of the task
+            hf_subset: Split of the subset
+            prompt_type: The type of prompt to use (query or passage).
+            **kwargs: Kwargs to pass to the model.
+
+        Returns:
+            Similarity scores for the query-passage pairs.
+        """
         all_queries_with_instructions = [
             text for batch in inputs1 for text in batch["text"]
         ]

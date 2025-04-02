@@ -70,7 +70,7 @@ def rate_limit(max_rpm: int, interval: int = 60):
     return decorator
 
 
-class VoyageAbsEncoder(AbsEncoder):
+class VoyageModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -152,7 +152,7 @@ voyage_large_2_instruct = ModelMeta(
     revision="1",
     release_date="2024-05-05",
     languages=None,  # supported languages not specified
-    loader=VoyageAbsEncoder,
+    loader=VoyageModel,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -176,7 +176,7 @@ voyage_finance_2 = ModelMeta(
     revision="1",
     release_date="2024-05-30",
     languages=None,  # supported languages not specified
-    loader=VoyageAbsEncoder,
+    loader=VoyageModel,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -200,7 +200,7 @@ voyage_law_2 = ModelMeta(
     revision="1",
     release_date="2024-04-15",
     languages=None,  # supported languages not specified
-    loader=VoyageAbsEncoder,
+    loader=VoyageModel,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -224,7 +224,7 @@ voyage_code_2 = ModelMeta(
     revision="1",
     release_date="2024-01-23",
     languages=None,  # supported languages not specified
-    loader=VoyageAbsEncoder,
+    loader=VoyageModel,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -248,7 +248,7 @@ voyage_code_3 = ModelMeta(
     revision="1",
     release_date="2024-12-04",
     languages=None,  # supported languages not specified
-    loader=VoyageAbsEncoder,
+    loader=VoyageModel,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -273,7 +273,7 @@ voyage_large_2 = ModelMeta(
     revision="1",
     release_date="2023-10-29",
     languages=None,  # supported languages not specified
-    loader=VoyageAbsEncoder,
+    loader=VoyageModel,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -297,7 +297,7 @@ voyage_2 = ModelMeta(
     revision="1",
     release_date="2023-10-29",
     languages=None,  # supported languages not specified
-    loader=VoyageAbsEncoder,
+    loader=VoyageModel,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -320,7 +320,7 @@ voyage_multilingual_2 = ModelMeta(
     revision="1",
     release_date="2024-06-10",
     languages=None,  # supported languages not specified
-    loader=VoyageAbsEncoder,
+    loader=VoyageModel,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -344,7 +344,7 @@ voyage_3 = ModelMeta(
     revision="1",
     release_date="2024-09-18",
     languages=None,  # supported languages not specified
-    loader=VoyageAbsEncoder,
+    loader=VoyageModel,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -368,7 +368,7 @@ voyage_3_lite = ModelMeta(
     revision="1",
     release_date="2024-09-18",
     languages=None,  # supported languages not specified
-    loader=VoyageAbsEncoder,
+    loader=VoyageModel,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
@@ -392,7 +392,7 @@ voyage_3_exp = ModelMeta(
     revision="1",
     release_date="2025-01-08",
     languages=["eng-Latn"],
-    loader=VoyageAbsEncoder,
+    loader=VoyageModel,
     loader_kwargs=dict(
         model_prompts=model_prompts,
     ),

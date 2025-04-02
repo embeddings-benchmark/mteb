@@ -27,7 +27,7 @@ def instruct_wrapper(
             f"Please install `pip install mteb[gritlm]` to use {model_name_or_path}."
         )
 
-    class InstructAbsEncoder(GritLM, AbsEncoder):
+    class InstructGritLMModel(GritLM, AbsEncoder):
         def __init__(
             self,
             model_name_or_path: str,
@@ -82,10 +82,10 @@ def instruct_wrapper(
                 embeddings = embeddings.cpu().detach().float().numpy()
             return embeddings
 
-    return InstructAbsEncoder(model_name_or_path, mode, instruction_template, **kwargs)
+    return InstructGritLMModel(model_name_or_path, mode, instruction_template, **kwargs)
 
 
-class InstructSentenceTransformerAbsEncoder(AbsEncoder):
+class InstructSentenceTransformerModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,

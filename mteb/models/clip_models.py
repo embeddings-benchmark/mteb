@@ -13,7 +13,7 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
 
 
-class CLIPModelAbsEncoder(AbsEncoder):
+class CLIPModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -104,7 +104,7 @@ class CLIPModelAbsEncoder(AbsEncoder):
 
 
 clip_vit_large_patch14 = ModelMeta(
-    loader=CLIPModelAbsEncoder,  # type: ignore
+    loader=CLIPModel,  # type: ignore
     name="openai/clip-vit-large-patch14",
     languages=["eng_Latn"],
     revision="32bd64288804d66eefd0ccbe215aa642df71cc41",
@@ -126,7 +126,7 @@ clip_vit_large_patch14 = ModelMeta(
 )
 
 clip_vit_base_patch32 = ModelMeta(
-    loader=CLIPModelAbsEncoder,  # type: ignore
+    loader=CLIPModel,  # type: ignore
     name="openai/clip-vit-base-patch32",
     languages=["eng_Latn"],
     revision="3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
@@ -148,7 +148,7 @@ clip_vit_base_patch32 = ModelMeta(
 )
 
 clip_vit_base_patch16 = ModelMeta(
-    loader=CLIPModelAbsEncoder,  # type: ignore
+    loader=CLIPModel,  # type: ignore
     name="openai/clip-vit-base-patch16",
     languages=["eng_Latn"],
     revision="57c216476eefef5ab752ec549e440a49ae4ae5f3",
