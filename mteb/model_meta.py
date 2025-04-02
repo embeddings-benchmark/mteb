@@ -43,7 +43,6 @@ class ScoringFunction(str, Enum):
     EUCLIDEAN = "euclidean"
     MANHATTAN = "manhattan"
     CUSTOM = "custom"
-    VISION = "vision"
 
 
 def get_loader_name(
