@@ -16,7 +16,7 @@ class DummyModel(Encoder):
 
     def encode(self, texts, **kwargs):
         self.call_count += 1
-        return np.random.rand(len(texts), self.embedding_dim).astype(np.float32)
+        return np.random.rand(len(texts), self.embedding_dim).astype(np.float32)  # noqa: NPY002
 
     def random_other_function_returns_false(self):
         return False

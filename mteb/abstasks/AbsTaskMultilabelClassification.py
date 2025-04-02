@@ -138,7 +138,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         sample_indices = []
         if idxs is None:
             idxs = np.arange(len(y))
-        np.random.shuffle(idxs)
+        self.np_rng.shuffle(idxs)
         label_counter = defaultdict(int)
         for i in idxs:
             if any((label_counter[label] < samples_per_label) for label in y[i]):

@@ -29,7 +29,7 @@ ScoresDict = dict[str, Any]
 
 def set_seed(seed: int) -> tuple[random.Random, np.random.Generator]:
     torch.manual_seed(seed)
-    np.random.seed(seed)
+    np.random.seed(seed)  # noqa: NPY002
     transformers.set_seed(seed)
     return random.Random(seed), np.random.default_rng(seed)
 

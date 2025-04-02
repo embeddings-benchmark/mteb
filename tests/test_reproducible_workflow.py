@@ -60,7 +60,7 @@ def test_validate_task_to_prompt_name(task_name: str | AbsTask):
     else:
         task_names = [task_name]
 
-    model_prompts = {task_name: "prompt_name" for task_name in task_names}
+    model_prompts = dict.fromkeys(task_names, "prompt_name")
     model_prompts |= {task_name + "-query": "prompt_name" for task_name in task_names}
     model_prompts |= {task_name + "-passage": "prompt_name" for task_name in task_names}
     model_prompts |= {

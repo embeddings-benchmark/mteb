@@ -32,7 +32,7 @@ class AbsMockEncoder(AbsEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        return np.random.rand(len(inputs.dataset), 10)
+        return np.random.rand(len(inputs.dataset), 10)  # noqa: NPY002
 
 
 class MockNumpyEncoder(AbsMockEncoder):
@@ -46,7 +46,7 @@ class MockNumpyEncoder(AbsMockEncoder):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        return np.random.rand(len(inputs.dataset), 10)  # type: ignore
+        return np.random.rand(len(inputs.dataset), 10)  # type: ignore # noqa: NPY002
 
 
 class MockTorchEncoder(AbsMockEncoder):
