@@ -298,30 +298,9 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
     > Looking for the previous MTEB leaderboard? We have made it available [here](https://huggingface.co/spaces/mteb/leaderboard_legacy) but it will no longer be updated.
     """
     )
-
     with gr.Row():
-        with gr.Column(scale=5):
-            gr.Markdown(
-                """
-            ### Benchmarks
-            Select one of the hand-curated benchmarks from our publications and modify them using one of the following filters to fit your needs.
-            """
-            )
-            with gr.Group():
-                with gr.Row(elem_classes="overflow-y-scroll max-h-80"):
-                    with gr.Column():
-                        benchmark_select.render()
-                        with gr.Accordion("Select Languages", open=False):
-                            lang_select.render()
-                        with gr.Accordion("Select Task Types", open=False):
-                            type_select.render()
-                        with gr.Accordion("Select Domains", open=False):
-                            domain_select.render()
-                        with gr.Accordion("Select Modalities", open=False):
-                            modality_select.render()
-                        with gr.Accordion("Add and remove tasks:", open=False):
-                            task_select.render()
-        with gr.Column(scale=8):
+        with gr.Column():
+            benchmark_select.render()
             gr.Markdown(
                 """
             ### Model Selection
@@ -388,17 +367,6 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                             value=(MIN_MODEL_SIZE, MAX_MODEL_SIZE),
                             label="Model Size (#M Parameters)",
                         )
-    scores = gr.State(default_scores)
-    models = gr.State(filtered_models)
-    with gr.Row():
-        with gr.Column():
-            description = gr.Markdown(
-                update_description,
-                inputs=[benchmark_select, lang_select, type_select, domain_select],
-            )
-            citation = gr.Markdown(update_citation, inputs=[benchmark_select])
-            with gr.Accordion("Share this benchmark:", open=False):
-                gr.Markdown(produce_benchmark_link, inputs=[benchmark_select])
         with gr.Column():
             with gr.Tab("Performance per Model Size"):
                 plot = gr.Plot(performance_size_plot, inputs=[summary_table])
@@ -410,6 +378,46 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                 gr.Markdown(
                     "*We only display models that have been run on all task types in the benchmark*"
                 )
+    with gr.Row():
+        with gr.Column():
+            with gr.Accordion("Benchmark Description", open=False):
+                description = gr.Markdown(
+                    update_description,
+                    inputs=[benchmark_select, lang_select, type_select, domain_select],
+                )
+        with gr.Column():
+            with gr.Accordion("Acknowledgment", open=False):
+                citation = gr.Markdown(update_citation, inputs=[benchmark_select])
+        with gr.Column():
+            with gr.Accordion("Share this benchmark:", open=False):
+                gr.Markdown(produce_benchmark_link, inputs=[benchmark_select])
+    with gr.Sidebar():
+        gr.Markdown("Customize Benchmark and advanced model selection")
+        with gr.Row():
+            with gr.Column():
+                gr.Markdown(
+                    """
+            ### Benchmarks
+            Select one of the hand-curated benchmarks from our publications and modify them using one of the following filters to fit your needs.
+            """
+                )
+            with gr.Group():
+                with gr.Row(elem_classes="overflow-y-scroll max-h-80"):
+                    with gr.Column():
+                        # benchmark_select.render()
+                        with gr.Accordion("Select Languages", open=False):
+                            lang_select.render()
+                        with gr.Accordion("Select Task Types", open=False):
+                            type_select.render()
+                        with gr.Accordion("Select Domains", open=False):
+                            domain_select.render()
+                        with gr.Accordion("Select Modalities", open=False):
+                            modality_select.render()
+                        with gr.Accordion("Add and remove tasks:", open=False):
+                            task_select.render()
+    scores = gr.State(default_scores)
+    models = gr.State(filtered_models)
+
     with gr.Tab("Summary"):
         summary_table.render()
         download_summary = gr.DownloadButton("Download Table")
