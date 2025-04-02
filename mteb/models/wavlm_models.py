@@ -108,7 +108,7 @@ wavlm_base = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=["Librispeech (pre-training)"],
     modalities=["audio"],
 )
 
@@ -134,7 +134,7 @@ wavlm_base_sd = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=["Librispeech (pre-training)", "LibriMix (finetuning)"],
     modalities=["audio"],
 )
 
@@ -160,7 +160,7 @@ wavlm_base_plus = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=["Libri-Light (pre-training)", "GigaSpeech (pre-training)", "VoxPopuli (pre-training)"],
     modalities=["audio"],
 )
 
@@ -186,7 +186,7 @@ wavlm_base_plus_sv = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=["Libri-Light (pre-training)", "GigaSpeech (pre-training)", "VoxPopuli (pre-training)", "VoxCeleb1 (finetuning)"],
     modalities=["audio"],
 )
 
@@ -212,7 +212,7 @@ wavlm_base_plus_sd = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=["Libri-Light (pre-training)", "GigaSpeech (pre-training)", "VoxPopuli (pre-training)", "LibriMix (finetuning)"],
     modalities=["audio"],
 )
 
@@ -239,7 +239,7 @@ wavlm_base_sv = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=["Librispeech (pre-training)", "VoxCeleb1 (finetuning)"],
     modalities=["audio"],
 )
 
@@ -266,6 +266,6 @@ wavlm_large = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=None,
+    training_datasets=["Libri-Light (pre-training)", "GigaSpeech (pre-training)", "VoxPopuli (pre-training)"],
     modalities=["audio"],
 )
