@@ -76,18 +76,17 @@ def _iterative_train_test_split(X, y, test_size, random_state=None):
     return train_indexes, test_indexes
 
 
-def _fold_tie_break(desired_samples_per_fold, M, random_state=check_random_state(None)):
+def _fold_tie_break(
+    desired_samples_per_fold: np.ndarray,
+    M: np.ndarray,
+    random_state: np.random.RandomState,
+):
     """Helper function to split a tie between folds with same desirability of a given sample
 
-    Parameters
-    ----------
-    desired_samples_per_fold: np.array[Float], :code:`(n_splits)`
-        number of samples desired per fold
-    M : np.array(int)
-        List of folds between which to break the tie
-
-    random_state : None | int | np.random.RandomState
-        the random state seed (optional)
+    Args:
+        desired_samples_per_fold: np.array[Float], number of samples desired per fold
+        M: np.array(int), List of folds between which to break the tie
+        random_state: A numpy random state
 
     Returns:
     -------
@@ -100,26 +99,18 @@ def _fold_tie_break(desired_samples_per_fold, M, random_state=check_random_state
         max_val = max(desired_samples_per_fold[M])
         M_prim = np.where(np.array(desired_samples_per_fold) == max_val)[0]
         M_prim = np.array([x for x in M_prim if x in M])
-        if random_state:
-            if isinstance(random_state, np.random.RandomState):
-                return random_state.choice(M_prim, 1)[0]
-            else:
-                np.random.seed(random_state)
-        return np.random.choice(M_prim, 1)[0]
+        return random_state.choice(M_prim, 1)[0]
 
 
-def _get_most_desired_combination(samples_with_combination):
+def _get_most_desired_combination(samples_with_combination: dict):
     """Select the next most desired combination whose evidence should be split among folds
 
-    Parameters
-    ----------
-    samples_with_combination : dict[Combination, list[int]], :code:`(n_combinations)`
+    Args:
+        samples_with_combination : dict[Combination, list[int]], :code:`(n_combinations)`
             map from each label combination present in y to list of sample indexes that have this combination assigned
 
     Returns:
-    -------
-    combination: Combination
-        the combination to split next
+        Combination, the combination to split next
     """
     currently_chosen = None
     best_number_of_combinations, best_support_size = None, None
@@ -129,8 +120,8 @@ def _get_most_desired_combination(samples_with_combination):
         if support_size == 0:
             continue
         if currently_chosen is None or (
-            best_number_of_combinations < number_of_combinations
-            and best_support_size > support_size
+            best_number_of_combinations < number_of_combinations  # type: ignore
+            and best_support_size > support_size  # type: ignore
         ):
             currently_chosen = combination
             best_number_of_combinations, best_support_size = (
@@ -179,7 +170,7 @@ class IterativeStratification(_BaseKFold):
         self._rng_state = check_random_state(random_state)
         need_shuffle = shuffle or random_state is not None
         self.order = order
-        super().__init__(
+        super().__init__(  # type: ignore
             n_splits,
             shuffle=need_shuffle,
             random_state=self._rng_state if need_shuffle else None,
@@ -189,7 +180,8 @@ class IterativeStratification(_BaseKFold):
             self.percentage_per_fold = sample_distribution_per_fold
         else:
             self.percentage_per_fold = [
-                1 / float(self.n_splits) for _ in range(self.n_splits)
+                1 / float(self.n_splits)
+                for _ in range(self.n_splits)  # type: ignore
             ]
 
     def _prepare_stratification(self, y: np.ndarray) -> tuple:
@@ -213,14 +205,14 @@ class IterativeStratification(_BaseKFold):
         """
         self.n_samples, self.n_labels = y.shape
         self.desired_samples_per_fold = np.array(
-            [self.percentage_per_fold[i] * self.n_samples for i in range(self.n_splits)]
+            [self.percentage_per_fold[i] * self.n_samples for i in range(self.n_splits)]  # type: ignore
         )
         rows = sp.lil_matrix(y).rows
-        rows_used = {i: False for i in range(self.n_samples)}
+        rows_used = dict.fromkeys(range(self.n_samples), False)
         all_combinations = []
         per_row_combinations = [[] for i in range(self.n_samples)]
         samples_with_combination = {}
-        folds = [[] for _ in range(self.n_splits)]
+        folds = [[] for _ in range(self.n_splits)]  # type: ignore
 
         # for every row
         for sample_index, label_assignment in enumerate(rows):
@@ -242,7 +234,7 @@ class IterativeStratification(_BaseKFold):
             combination: np.array(
                 [
                     len(evidence_for_combination) * self.percentage_per_fold[j]
-                    for j in range(self.n_splits)
+                    for j in range(self.n_splits)  # type: ignore
                 ]
             )
             for combination, evidence_for_combination in samples_with_combination.items()
@@ -311,24 +303,22 @@ class IterativeStratification(_BaseKFold):
     def _iter_test_indices(self, X, y=None, groups=None):
         """Internal method for providing scikit-learn's split with folds
 
-        Parameters
-        ----------
-        X : array-like, shape (n_samples, n_features)
-            Training data, where n_samples is the number of samples
-            and n_features is the number of features.
-            Note that providing ``y`` is sufficient to generate the splits and
-            hence ``np.zeros(n_samples)`` may be used as a placeholder for
-            ``X`` instead of actual training data.
-        y : array-like, shape (n_samples,)
-            The target variable for supervised learning problems.
-            Stratification is done based on the y labels.
-        groups : object
-            Always ignored, exists for compatibility.
+        Args:
+            X : array-like, shape (n_samples, n_features)
+                Training data, where n_samples is the number of samples
+                and n_features is the number of features.
+                Note that providing ``y`` is sufficient to generate the splits and
+                hence ``np.zeros(n_samples)`` may be used as a placeholder for
+                ``X`` instead of actual training data.
+            y : array-like, shape (n_samples,)
+                The target variable for supervised learning problems.
+                Stratification is done based on the y labels.
+            groups : object
+                Always ignored, exists for compatibility.
 
         Yields:
-        ------
-        fold : list[int]
-            indexes of test samples for a given fold, yielded for each of the folds
+            fold : list[int]
+                indexes of test samples for a given fold, yielded for each of the folds
         """
         (
             rows,
@@ -337,7 +327,7 @@ class IterativeStratification(_BaseKFold):
             per_row_combinations,
             samples_with_combination,
             folds,
-        ) = self._prepare_stratification(y)
+        ) = self._prepare_stratification(y)  # type: ignore
 
         self._distribute_positive_evidence(
             rows_used, folds, samples_with_combination, per_row_combinations

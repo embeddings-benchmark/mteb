@@ -237,7 +237,7 @@ class AbsTaskImageClassification(AbsTask):
         """
         if idxs is None:
             idxs = np.arange(len(dataset_split))
-        np.random.shuffle(idxs)
+        self.np_rng.shuffle(idxs)
         if not isinstance(idxs, list):
             idxs = idxs.tolist()
         label_counter = defaultdict(int)

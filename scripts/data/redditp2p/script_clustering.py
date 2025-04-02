@@ -15,7 +15,7 @@ MAX_LABELS = 100
 MIN_SAMPLES = 1_000
 MAX_SAMPLES = 100_000
 
-np.random.seed(SEED)
+np.random.seed(SEED)  # noqa: NPY002
 random.seed(SEED)
 
 ds = datasets.load_dataset(

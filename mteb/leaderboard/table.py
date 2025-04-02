@@ -202,7 +202,7 @@ def scores_to_tables(
     joint_table_style = (
         joint_table.style.format(
             {
-                **{column: "{:.2f}" for column in score_columns},
+                **dict.fromkeys(score_columns, "{:.2f}"),
                 "Rank (Borda)": "{:.0f}",
             },
             na_rep="",

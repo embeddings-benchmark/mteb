@@ -36,11 +36,9 @@ def load_bright_data(
     cache_dir: str | None = None,
     revision: str | None = None,
 ):
-    corpus = {domain: {split: None for split in eval_splits} for domain in DOMAINS}
-    queries = {domain: {split: None for split in eval_splits} for domain in DOMAINS}
-    relevant_docs = {
-        domain: {split: None for split in eval_splits} for domain in DOMAINS
-    }
+    corpus = {domain: dict.fromkeys(eval_splits) for domain in DOMAINS}
+    queries = {domain: dict.fromkeys(eval_splits) for domain in DOMAINS}
+    relevant_docs = {domain: dict.fromkeys(eval_splits) for domain in DOMAINS}
 
     for domain in domains:
         domain_corpus = datasets.load_dataset(

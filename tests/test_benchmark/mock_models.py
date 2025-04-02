@@ -27,7 +27,7 @@ class MockNumpyEncoder(mteb.Encoder):
     def encode(
         self, sentences: DataLoader, prompt_name: str | None = None, **kwargs
     ) -> npt.NDArray[np.float32]:
-        return np.random.rand(len(sentences.dataset), 10)  # type: ignore
+        return np.random.rand(len(sentences.dataset), 10)  # type: ignore  # noqa: NPY002
 
 
 class MockTorchEncoder(mteb.Encoder):

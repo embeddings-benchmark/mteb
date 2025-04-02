@@ -38,9 +38,9 @@ def _load_miracl_data(
     revision: str | None = None,
     trust_remote_code: bool = False,
 ):
-    corpus = {lang: {split: None for split in splits} for lang in langs}
-    queries = {lang: {split: None for split in splits} for lang in langs}
-    relevant_docs = {lang: {split: None for split in splits} for lang in langs}
+    corpus = {lang: dict.fromkeys(splits) for lang in langs}
+    queries = {lang: dict.fromkeys(splits) for lang in langs}
+    relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}
 
     split = _EVAL_SPLIT
 
@@ -167,9 +167,9 @@ def _load_miracl_data_hard_negatives(
     revision: str | None = None,
     trust_remote_code: bool = False,
 ) -> tuple:
-    corpus = {lang: {split: None for split in splits} for lang in langs}
-    queries = {lang: {split: None for split in splits} for lang in langs}
-    relevant_docs = {lang: {split: None for split in splits} for lang in langs}
+    corpus = {lang: dict.fromkeys(splits) for lang in langs}
+    queries = {lang: dict.fromkeys(splits) for lang in langs}
+    relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}
 
     split = _EVAL_SPLIT
 
