@@ -14,7 +14,7 @@ class BLINKIT2IMultiChoice(AbsTaskAny2AnyMultiChoice):
             "revision": "a9f994925551c14503d00d86f1307bac6e2ead6a",
             "trust_remote_code": True,
         },
-        type="Any2AnyMultiChoice",
+        type="VisionCentric",
         category="it2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -35,13 +35,13 @@ class BLINKIT2IMultiChoice(AbsTaskAny2AnyMultiChoice):
 }
 """,
         descriptive_stats={
-            "n_samples": {"test": 534},
+            "n_samples": {"test": 1206},
             "avg_character_length": {
                 "test": {
                     "average_document_length": 0.0,
                     "average_query_length": 0.0,
-                    "num_documents": 1200,
-                    "num_queries": 534,
+                    "num_documents": 804,
+                    "num_queries": 402,
                     "average_relevant_docs_per_query": 1,
                 }
             },

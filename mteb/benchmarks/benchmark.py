@@ -47,6 +47,7 @@ class Benchmark:
     reference: UrlString | None = None
     citation: str | None = None
     contacts: list[str] | None = None
+    display_on_leaderboard: bool = True
 
     def __iter__(self):
         return iter(self.tasks)

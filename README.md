@@ -36,9 +36,11 @@
 pip install mteb
 ```
 
+
 ## Example Usage
 
-* Using a Python script:
+
+### Using a script
 
 ```python
 import mteb
@@ -53,41 +55,10 @@ evaluation = mteb.MTEB(tasks=tasks)
 results = evaluation.run(model, output_folder=f"results/{model_name}")
 ```
 
-<details>
-  <summary> Running SentenceTransformer model with prompts </summary>
-
-Prompts can be passed to the SentenceTransformer model using the `prompts` parameter. The following code shows how to use prompts with SentenceTransformer:
-
-```python
-from sentence_transformers import SentenceTransformer
-
-
-model = SentenceTransformer("average_word_embeddings_komninos", prompts={"query": "Query:", "passage": "Passage:"})
-evaluation = mteb.MTEB(tasks=tasks)
-```
-
-In prompts the key can be:
-1. Prompt types (`passage`, `query`) - they will be used in reranking and retrieval tasks 
-2. Task type - these prompts will be used in all tasks of the given type
-   1. `BitextMining`
-   2. `Classification`
-   3. `MultilabelClassification`
-   4. `Clustering`
-   5. `PairClassification`
-   6. `Reranking`
-   7. `Retrieval`
-   8. `STS`
-   9. `Summarization`
-   10. `InstructionRetrieval`
-3. Pair of task type and prompt type like `Retrival-query` - these prompts will be used in all classification tasks
-4. Task name - these prompts will be used in the specific task
-5. Pair of task name and prompt type like `NFCorpus-query` - these prompts will be used in the specific task
-</details>
-
-* Using CLI
+### Using the CLI
 
 ```bash
-mteb available_tasks
+mteb available_tasks # list _all_ available tasks
 
 mteb run -m sentence-transformers/all-MiniLM-L6-v2 \
     -t Banking77Classification  \
@@ -96,412 +67,51 @@ mteb run -m sentence-transformers/all-MiniLM-L6-v2 \
 # if nothing is specified default to saving the results in the results/{model_name} folder
 ```
 
-* Using multiple GPUs in parallel can be done by just having a custom encode function that distributes the inputs to multiple GPUs like e.g. [here](https://github.com/microsoft/unilm/blob/b60c741f746877293bb85eed6806736fc8fa0ffd/e5/mteb_eval.py#L60) or [here](https://github.com/ContextualAI/gritlm/blob/09d8630f0c95ac6a456354bcb6f964d7b9b6a609/gritlm/gritlm.py#L75).
-
+Note that using multiple GPUs in parallel can be done by just having a custom encode function that distributes the inputs to multiple GPUs like e.g. [here](https://github.com/microsoft/unilm/blob/b60c741f746877293bb85eed6806736fc8fa0ffd/e5/mteb_eval.py#L60) or [here](https://github.com/ContextualAI/gritlm/blob/09d8630f0c95ac6a456354bcb6f964d7b9b6a609/gritlm/gritlm.py#L75). See [custom models](docs/usage/usage.md#using-a-custom-model) for more information.
 
 
 ## Usage Documentation
-Click on each section below to see the details.
-
-<br /> 
-
-<details>
-  <summary>  Task selection </summary>
-
-### Task selection
-
-Tasks can be selected by providing the list of datasets, but also
-
-* by their task (e.g. "Clustering" or "Classification")
-
-```python
-tasks = mteb.get_tasks(task_types=["Clustering", "Retrieval"]) # Only select clustering and retrieval tasks
-```
-
-* by their categories e.g. "s2s" (sentence to sentence) or "p2p" (paragraph to paragraph)
-
-```python
-tasks = mteb.get_tasks(categories=["s2s", "p2p"]) # Only select sentence2sentence and paragraph2paragraph datasets
-```
-
-* by their languages
-
-```python
-tasks = mteb.get_tasks(languages=["eng", "deu"]) # Only select datasets which contain "eng" or "deu" (iso 639-3 codes)
-```
-
-You can also specify which languages to load for multilingual/cross-lingual tasks like below:
-
-```python
-import mteb
-
-tasks = [
-    mteb.get_task("AmazonReviewsClassification", languages = ["eng", "fra"]),
-    mteb.get_task("BUCCBitextMining", languages = ["deu"]), # all subsets containing "deu"
-]
-
-# or you can select specific huggingface subsets like this:
-from mteb.tasks import AmazonReviewsClassification, BUCCBitextMining
-
-evaluation = mteb.MTEB(tasks=[
-        AmazonReviewsClassification(hf_subsets=["en", "fr"]) # Only load "en" and "fr" subsets of Amazon Reviews
-        BUCCBitextMining(hf_subsets=["de-en"]), # Only load "de-en" subset of BUCC
-])
-# for an example of a HF subset see "Subset" in the dataset viewer at: https://huggingface.co/datasets/mteb/bucc-bitext-mining
-```
-
-</details>
-
-<details>
-  <summary>  Running a benchmark </summary>
-
-### Running a Benchmark
-
-`mteb` comes with a set of predefined benchmarks. These can be fetched using `get_benchmark` and run in a similar fashion to other sets of tasks. 
-For instance to select the 56 English datasets that form the "Overall MTEB English leaderboard":
-
-```python
-import mteb
-benchmark = mteb.get_benchmark("MTEB(eng, v1)")
-evaluation = mteb.MTEB(tasks=benchmark)
-```
-
-The benchmark specified not only a list of tasks, but also what splits and language to run on. To get an overview of all available benchmarks simply run:
-
-```python
-import mteb
-benchmarks = mteb.get_benchmarks()
-```
-
-Generally we use the naming scheme for benchmarks `MTEB(*)`, where the "*" denotes the target of the benchmark. In the case of a language, we use the three-letter language code. For large groups of languages, we use the group notation, e.g., `MTEB(Scandinavian, v1)` for Scandinavian languages. External benchmarks implemented in MTEB like `CoIR` use their original name. When using a benchmark from MTEB please cite `mteb` along with the citations of the benchmark which you can access using:
-
-```python
-benchmark.citation
-```
-
-</details>
-
-<details>
-  <summary>  Passing in `encode` arguments </summary>
-
-
-### Passing in `encode` arguments
-
-To pass in arguments to the model's `encode` function, you can use the encode keyword arguments (`encode_kwargs`):
-
-```python
-evaluation.run(model, encode_kwargs={"batch_size": 32})
-```
-</details>
-
-
-<details>
-  <summary>  Selecting evaluation split </summary>
-
-### Selecting evaluation split
-You can evaluate only on `test` splits of all tasks by doing the following:
-
-```python
-evaluation.run(model, eval_splits=["test"])
-```
-
-Note that the public leaderboard uses the test splits for all datasets except MSMARCO, where the "dev" split is used.
-
-</details>
-
-
-<details>
-  <summary> Selecting evaluation subset </summary>
-
-### Selecting evaluation subset
-You can evaluate only on selected subsets. For example, if you want to evaluate only the `subset_name_to_run` subset of all tasks, do the following:
-
-```python
-evaluation.run(model, eval_subsets=["subset_name_to_run"])
-```
-
-Monolingual tasks have `default` subset, other tasks have subsets that are specific to the dataset.
-
-</details>
-
-<details>
-  <summary>  Using a custom model </summary>
-
-
-### Using a custom model
-
-Models should implement the following interface, implementing an `encode` function taking as inputs a list of sentences, and returning a list of embeddings (embeddings can be `np.array`, `torch.tensor`, etc.). For inspiration, you can look at the [mteb/mtebscripts repo](https://github.com/embeddings-benchmark/mtebscripts) used for running diverse models via SLURM scripts for the paper.
-
-```python
-import mteb
-from mteb.encoder_interface import PromptType
-import numpy as np
-
-
-class CustomModel:
-    def encode(
-        self,
-        sentences: list[str],
-        task_name: str,
-        prompt_type: PromptType | None = None,
-        **kwargs,
-    ) -> np.ndarray:
-        """Encodes the given sentences using the encoder.
-        
-        Args:
-            sentences: The sentences to encode.
-            task_name: The name of the task.
-            prompt_type: The prompt type to use.
-            **kwargs: Additional arguments to pass to the encoder.
-            
-        Returns:
-            The encoded sentences.
-        """
-        pass
-
-model = CustomModel()
-tasks = mteb.get_tasks(tasks=["Banking77Classification"])
-evaluation = MTEB(tasks=tasks)
-evaluation.run(model)
-```
-
-</details>
-
-<details>
-  <summary>  Evaluating on a custom dataset </summary>
-
-
-### Evaluating on a custom dataset
-
-To evaluate on a custom task, you can run the following code on your custom task. See [how to add a new task](docs/adding_a_dataset.md), for how to create a new task in MTEB.
-
-```python
-from mteb import MTEB
-from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
-from sentence_transformers import SentenceTransformer
-
-
-class MyCustomTask(AbsTaskReranking):
-    ...
-
-model = SentenceTransformer("average_word_embeddings_komninos")
-evaluation = MTEB(tasks=[MyCustomTask()])
-evaluation.run(model)
-```
-
-</details>
-
-<details>
-  <summary>  Using a cross encoder for reranking</summary>
-
-
-### Using a cross encoder for reranking
-
-To use a cross encoder for reranking, you can directly use a CrossEncoder from SentenceTransformers. The following code shows a two-stage run with the second stage reading results saved from the first stage. 
-
-```python
-from mteb import MTEB
-import mteb
-from sentence_transformers import CrossEncoder, SentenceTransformer
-
-cross_encoder = CrossEncoder("cross-encoder/ms-marco-TinyBERT-L-2-v2")
-dual_encoder = SentenceTransformer("all-MiniLM-L6-v2")
-
-tasks = mteb.get_tasks(tasks=["NFCorpus"], languages=["eng"])
-
-subset = "default" # subset name used in the NFCorpus dataset
-eval_splits = ["test"]
-
-evaluation = MTEB(tasks=tasks)
-evaluation.run(
-    dual_encoder,
-    eval_splits=eval_splits,
-    save_predictions=True,
-    output_folder="results/stage1",
-)
-evaluation.run(
-    cross_encoder,
-    eval_splits=eval_splits,
-    top_k=5,
-    save_predictions=True,
-    output_folder="results/stage2",
-    previous_results=f"results/stage1/NFCorpus_{subset}_predictions.json",
-)
-```
-
-</details>
-
-<details>
-  <summary> Late Interaction (ColBERT) </summary>
-
-### Using Late Interaction models for retrieval
-
-```python
-from mteb import MTEB
-import mteb
-
-
-colbert = mteb.get_model("colbert-ir/colbertv2.0")
-tasks = mteb.get_tasks(tasks=["NFCorpus"], languages=["eng"])
-
-eval_splits = ["test"]
-
-evaluation = MTEB(tasks=tasks)
-
-evaluation.run(
-    colbert,
-    eval_splits=eval_splits,
-    corpus_chunk_size=500,
-)
-```
-This implementation employs the MaxSim operation to compute the similarity between sentences. While MaxSim provides high-quality results, it processes a larger number of embeddings, potentially leading to increased resource usage. To manage resource consumption, consider lowering the `corpus_chunk_size` parameter.
-
-
-</details>
-
-<details>
-  <summary>  Saving retrieval task predictions </summary>
-
-### Saving retrieval task predictions
-
-To save the predictions from a retrieval task, add the `--save_predictions` flag in the CLI or set `save_predictions=True` in the run method. The filename will be in the "{task_name}_{subset}_predictions.json" format.
-
-Python:
-```python
-from mteb import MTEB
-import mteb
-from sentence_transformers import SentenceTransformer
-
-model = SentenceTransformer("all-MiniLM-L6-v2")
-
-tasks = mteb.get_tasks(tasks=["NFCorpus"], languages=["eng"])
-
-evaluation = MTEB(tasks=tasks)
-evaluation.run(
-    model,
-    eval_splits=["test"],
-    save_predictions=True,
-    output_folder="results",
-)
-```
-
-CLI:
-```bash
-mteb run -t NFCorpus -m all-MiniLM-L6-v2 --output_folder results --save_predictions
-```
-
-</details>
-
-<details>
-  <summary> Fetching result from the results repository </summary>
-
-### Fetching results from the results repository
-
-Multiple models have already been run on tasks available within MTEB. These results are available results [repository](https://github.com/embeddings-benchmark/results).
-
-To make the results more easily accessible, we have designed custom functionality for retrieving from the repository. For instance, if you are selecting the best model for your French and English retrieval task on legal documents you could fetch the relevant tasks and create a dataframe of the results using the following code:
-
-```python
-import mteb
-from mteb.task_selection import results_to_dataframe
-
-tasks = mteb.get_tasks(
-    task_types=["Retrieval"], languages=["eng", "fra"], domains=["Legal"]
-)
-
-model_names = [
-    "GritLM/GritLM-7B",
-    "intfloat/multilingual-e5-small",
-    "intfloat/multilingual-e5-base",
-    "intfloat/multilingual-e5-large",
-]
-models = [mteb.get_model_meta(name) for name in model_names]
-
-results = mteb.load_results(models=models, tasks=tasks)
-
-df = results_to_dataframe(results)
-```
-
-</details>
-
-
-<details>
-  <summary>  Annotate Contamination in the training data of a model  </summary>
-
-### Annotate Contamination
-
-have your found contamination in the training data of a model? Please let us know, either by opening an issue or ideally by submitting a PR
-annotatig the training datasets of the model:
-
-```py
-model_w_contamination = ModelMeta(
-    name = "model-with-contamination"
-    ...
-    training_datasets: {"ArguAna": # name of dataset within MTEB
-                        ["test"]} # the splits that have been trained on
-    ...
-)
-```
-
-
-</details>
-
-<details>
-  <summary>  Running the leaderboard locally </summary>
-
-
-### Running the Leaderboard
-
-It is possible to completely deploy the leaderboard locally or self-host it. This can e.g. be relevant for companies that might want to
-integrate build their own benchmarks or integrate custom tasks into existing benchmarks. 
-
-Running the leaderboard is quite easy. Simply run:
-```py
-python -m mteb.leaderboard.app
-```
-
-The leaderboard requires gradio install, which can be installed using `pip install mteb[gradio]` and requires python >3.10.
-
-</details>
-
-<details>
-  <summary>  Caching Embeddings To Re-Use Them </summary>
-
-
-### Caching Embeddings To Re-Use Them
-
-There are times you may want to cache the embeddings so you can re-use them. This may be true if you have multiple query sets for the same corpus (e.g. Wikipedia) or are doing some optimization over the queries (e.g. prompting, other experiments). You can setup a cache by using a simple wrapper, which will save the cache per task in the `cache_embeddings/{task_name}` folder:
-
-```python
-# define your task and model above as normal
-...
-# wrap the model with the cache wrapper
-from mteb.models.cache_wrapper import CachedEmbeddingWrapper
-model_with_cached_emb = CachedEmbeddingWrapper(model, cache_path='path_to_cache_dir')
-# run as normal
-evaluation.run(model, ...) 
-```
-
-</details>
-
-<br /> 
-
-
-
-## Documentation
-
-| Documentation                  |                                                                                     |
+The following links to the main sections in the usage documentation.
+
+| Section | |
+| ------- |- |
+| **General** | |
+| [Evaluating a Model](docs/usage/usage.md#evaluating-a-model) | How to evaluate a model |
+| [Evaluating on different Modalities](docs/usage/usage.md#evaluating-on-different-modalities) | How to evaluate image and image-text tasks |
+| **Selecting Tasks** | |
+| [Selecting a benchmark](docs/usage/usage.md#selecting-a-benchmark) | How to select and filter tasks |
+| [Task selection](docs/usage/usage.md#task-selection) | How to select and filter tasks |
+| [Selecting Split and Subsets](docs/usage/usage.md#selecting-evaluation-split-or-subsets) | How to select evaluation splits or subsets |
+| [Using a Custom Task](docs/usage/usage.md#using-a-custom-task) | How to evaluate on a custom task |
+| **Selecting a Model** | |
+| [Using a Pre-defined Model](docs/usage/usage.md#using-a-pre-defined-model) | How to run a pre-defined model |
+| [Using a SentenceTransformer Model](docs/usage/usage.md#using-a-sentence-transformer-model) | How to run a model loaded using sentence-transformers |
+| [Using a Custom Model](docs/usage/usage.md#using-a-custom-model) | How to run and implement a custom model |
+| **Running Evaluation** | |
+| [Passing Arguments to the model](docs/usage/usage.md#passing-in-encode-arguments) | How to pass `encode` arguments to the model |
+| [Running Cross Encoders](docs/usage/usage.md#running-cross-encoders-on-reranking) | How to run cross encoders for reranking |
+| [Running Late Interaction (ColBERT)](docs/usage/usage.md#using-late-interaction-models) | How to run late interaction models |
+| [Saving Retrieval Predictions](docs/usage/usage.md#saving-retrieval-task-predictions) | How to save prediction for later analysis |
+| [Caching Embeddings](docs/usage/usage.md#caching-embeddings-to-re-use-them) | How to cache and re-use embeddings |
+| **Leaderboard** | |
+| [Running the Leaderboard Locally](docs/usage/usage.md#running-the-leaderboard-locally) | How to run the leaderboard locally |
+| [Report Data Contamination](docs/usage/usage.md#annotate-contamination) | How to report data contamination for a model |
+| [Fetching Result from the Leaderboard](docs/usage/usage.md#fetching-results-from-the-leaderboard) | How to fetch the raw results from the leaderboard |
+
+
+## Overview
+
+| Overview                       |                                                                                     |
 |--------------------------------|-------------------------------------------------------------------------------------|
+| 📈 [Leaderboard]               | The interactive leaderboard of the benchmark                                        |
 | 📋 [Tasks]                     | Overview of available tasks                                                         |
 | 📐 [Benchmarks]                | Overview of available benchmarks                                                    |
-| 📈 [Leaderboard]               | The interactive leaderboard of the benchmark                                        |
-| 🤖 [Adding a model]            | Information related to how to submit a model to MTEB and to the leaderboard |
-| 👩‍🔬 [Reproducible workflows] | Information related to how to reproduce and create reproducible workflows with MTEB |
-| 👩‍💻 [Adding a dataset]       | How to add a new task/dataset to MTEB                                               |
-| 👩‍💻 [Adding a benchmark]     | How to add a new benchmark to MTEB and to the leaderboard                           |
+| **Contributing**               |                                                                                     |
+| 🤖 [Adding a model]            | Information related to how to submit a model to MTEB and to the leaderboard         |
+| 👩‍🔬 [Reproducible workflows]    | Information related to how to create reproducible workflows with MTEB               |
+| 👩‍💻 [Adding a dataset]          | How to add a new task/dataset to MTEB                                               |
+| 👩‍💻 [Adding a benchmark]        | How to add a new benchmark to MTEB and to the leaderboard                           |
 | 🤝 [Contributing]              | How to contribute to MTEB and set it up for development                             |
-| 🌐 [MMTEB]                     | An open-source effort to extend MTEB to cover a broad set of languages              |
-| 🖼️ [MIEB]                      | Extension of MTEB to image embeddings |
 
 [Tasks]: docs/tasks.md
 [Benchmarks]: docs/benchmarks.md
@@ -510,27 +120,51 @@ evaluation.run(model, ...)
 [Adding a dataset]: docs/adding_a_dataset.md
 [Adding a benchmark]: docs/adding_a_benchmark.md
 [Leaderboard]: https://huggingface.co/spaces/mteb/leaderboard
-[MMTEB]: docs/mmteb/readme.md
-[MIEB]: docs/mieb.md
 [Reproducible workflows]: docs/reproducible_workflow.md
 
 ## Citing
 
-MTEB was introduced in "[MTEB: Massive Text Embedding Benchmark](https://arxiv.org/abs/2210.07316)", feel free to cite:
+MTEB was introduced in "[MTEB: Massive Text Embedding Benchmark](https://arxiv.org/abs/2210.07316)", and heavily expanded in "[MMTEB: Massive Multilingual Text Embedding Benchmark](https://arxiv.org/abs/2502.13595)". When using `mteb`, we recommend that you cite both articles.
+
+<details>
+  <summary> Bibtex Citation (click to unfold) </summary>
+
 
 ```bibtex
 @article{muennighoff2022mteb,
-  doi = {10.48550/ARXIV.2210.07316},
-  url = {https://arxiv.org/abs/2210.07316},
   author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Lo{\"\i}c and Reimers, Nils},
   title = {MTEB: Massive Text Embedding Benchmark},
   publisher = {arXiv},
-  journal={arXiv preprint arXiv:2210.07316},  
+  journal={arXiv preprint arXiv:2210.07316},
   year = {2022}
+  url = {https://arxiv.org/abs/2210.07316},
+  doi = {10.48550/ARXIV.2210.07316},
+}
+
+@article{enevoldsen2025mmtebmassivemultilingualtext,
+  title={MMTEB: Massive Multilingual Text Embedding Benchmark},
+  author={Kenneth Enevoldsen and Isaac Chung and Imene Kerboua and Márton Kardos and Ashwin Mathur and David Stap and Jay Gala and Wissam Siblini and Dominik Krzemiński and Genta Indra Winata and Saba Sturua and Saiteja Utpala and Mathieu Ciancone and Marion Schaeffer and Gabriel Sequeira and Diganta Misra and Shreeya Dhakal and Jonathan Rystrøm and Roman Solomatin and Ömer Çağatan and Akash Kundu and Martin Bernstorff and Shitao Xiao and Akshita Sukhlecha and Bhavish Pahwa and Rafał Poświata and Kranthi Kiran GV and Shawon Ashraf and Daniel Auras and Björn Plüster and Jan Philipp Harries and Loïc Magne and Isabelle Mohr and Mariya Hendriksen and Dawei Zhu and Hippolyte Gisserot-Boukhlef and Tom Aarsen and Jan Kostkan and Konrad Wojtasik and Taemin Lee and Marek Šuppa and Crystina Zhang and Roberta Rocca and Mohammed Hamdy and Andrianos Michail and John Yang and Manuel Faysse and Aleksei Vatolin and Nandan Thakur and Manan Dey and Dipam Vasani and Pranjal Chitale and Simone Tedeschi and Nguyen Tai and Artem Snegirev and Michael Günther and Mengzhou Xia and Weijia Shi and Xing Han Lù and Jordan Clive and Gayatri Krishnakumar and Anna Maksimova and Silvan Wehrli and Maria Tikhonova and Henil Panchal and Aleksandr Abramov and Malte Ostendorff and Zheng Liu and Simon Clematide and Lester James Miranda and Alena Fenogenova and Guangyu Song and Ruqiya Bin Safi and Wen-Ding Li and Alessia Borghini and Federico Cassano and Hongjin Su and Jimmy Lin and Howard Yen and Lasse Hansen and Sara Hooker and Chenghao Xiao and Vaibhav Adlakha and Orion Weller and Siva Reddy and Niklas Muennighoff},
+  publisher = {arXiv},
+  journal={arXiv preprint arXiv:2502.13595},
+  year={2025},
+  url={https://arxiv.org/abs/2502.13595},
+  doi = {10.48550/arXiv.2502.13595},
 }
 ```
+</details>
 
-You may also want to read and cite the amazing work that has extended MTEB & integrated new datasets:
+
+If you use any of the specific benchmarks, we also recommend that you cite the authors.
+
+```py
+benchmark = mteb.get_benchmark("MTEB(eng, v2)")
+benchmark.citation # get citation for a specific benchmark
+
+# you can also create a table of the task for the appendix using:
+benchmark.tasks.to_latex()
+```
+
+Some of these amazing publications include (ordered chronologically):
 - Shitao Xiao, Zheng Liu, Peitian Zhang, Niklas Muennighoff. "[C-Pack: Packaged Resources To Advance General Chinese Embedding](https://arxiv.org/abs/2309.07597)" arXiv 2023
 - Michael Günther, Jackmin Ong, Isabelle Mohr, Alaeddine Abdessalem, Tanguy Abel, Mohammad Kalim Akram, Susana Guzman, Georgios Mastrapas, Saba Sturua, Bo Wang, Maximilian Werk, Nan Wang, Han Xiao. "[Jina Embeddings 2: 8192-Token General-Purpose Text Embeddings for Long Documents](https://arxiv.org/abs/2310.19923)" arXiv 2023
 - Silvan Wehrli, Bert Arnrich, Christopher Irrgang. "[German Text Embedding Clustering Benchmark](https://arxiv.org/abs/2401.02709)" arXiv 2024
@@ -538,5 +172,3 @@ You may also want to read and cite the amazing work that has extended MTEB & int
 - Dawei Zhu, Liang Wang, Nan Yang, Yifan Song, Wenhao Wu, Furu Wei, Sujian Li. "[LongEmbed: Extending Embedding Models for Long Context Retrieval](https://arxiv.org/abs/2404.12096)" arXiv 2024
 - Kenneth Enevoldsen, Márton Kardos, Niklas Muennighoff, Kristoffer Laigaard Nielbo. "[The Scandinavian Embedding Benchmarks: Comprehensive Assessment of Multilingual and Monolingual Text Embedding](https://arxiv.org/abs/2406.02396)" arXiv 2024
 - Ali Shiraee Kasmaee, Mohammad Khodadad, Mohammad Arshi Saloot, Nick Sherck, Stephen Dokas, Hamidreza Mahyar, Soheila Samiee. "[ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance & Efficiency on a Specific Domain](https://arxiv.org/abs/2412.00532)" arXiv 2024
-
-For works that have used MTEB for benchmarking, you can find them on the [leaderboard](https://huggingface.co/spaces/mteb/leaderboard).

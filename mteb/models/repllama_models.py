@@ -12,6 +12,7 @@ from transformers import AutoModel, AutoTokenizer
 from mteb.encoder_interface import Encoder, PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
+from mteb.requires_package import requires_package
 
 logger = logging.getLogger(__name__)
 
@@ -26,12 +27,10 @@ class RepLLaMAWrapper(Wrapper):
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ):
-        try:
-            from peft import PeftModel
-        except ImportError:
-            raise ImportError(
-                "To use the RepLLaMA based models `peft` is required. Please install it with `pip install 'mteb[peft]'`."
-            )
+        requires_package(
+            self, "peft", peft_model_name_or_path, "pip install 'mteb[peft]'"
+        )
+        from peft import PeftModel
 
         self.base_model = AutoModel.from_pretrained(
             base_model_name_or_path,

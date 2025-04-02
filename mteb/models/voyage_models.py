@@ -78,7 +78,7 @@ class VoyageWrapper(Wrapper):
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
-        requires_package(self, "voyageai", "Voyage")
+        requires_package(self, "voyageai", model_name, "pip install 'mteb[voyageai]'")
         import voyageai
 
         self._client = voyageai.Client(max_retries=max_retries)
@@ -98,7 +98,9 @@ class VoyageWrapper(Wrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        input_type = self.model_prompts.get(prompt_type.value, "document")
+        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+        input_type = self.model_prompts.get(prompt_name, "document")
+
         return self._batched_encode(sentences, batch_size, input_type)
 
     def _batched_encode(
@@ -241,7 +243,7 @@ voyage_code_2 = ModelMeta(
     public_training_data=None,
 )
 
-voyage_code_2 = ModelMeta(
+voyage_code_3 = ModelMeta(
     name="voyageai/voyage-code-3",
     revision="1",
     release_date="2024-12-04",
@@ -261,14 +263,14 @@ voyage_code_2 = ModelMeta(
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
-    training_datasets=None,  # Not known
+    training_datasets=VOYAGE_TRAINING_DATA,  # src: private communication with Voyage
     public_training_code=None,
     public_training_data=None,
 )
 
 
 voyage_large_2 = ModelMeta(
-    name="voyage-large-2",  # Date of publication of this post https://blog.voyageai.com/2023/10/29/voyage-embeddings/
+    name="voyageai/voyage-large-2",  # Date of publication of this post https://blog.voyageai.com/2023/10/29/voyage-embeddings/
     revision="1",
     release_date="2023-10-29",
     languages=None,  # supported languages not specified
@@ -404,6 +406,7 @@ voyage_3_exp = ModelMeta(
     max_tokens=32000,
     embed_dim=2048,
     open_weights=False,
+    # from their card https://huggingface.co/voyageai/voyage-3-m-exp#model-information
     n_parameters=int(6918 * 1e6),
     memory_usage_mb=None,
     license=None,
@@ -412,57 +415,65 @@ voyage_3_exp = ModelMeta(
     framework=["API"],
     use_instructions=True,
     training_datasets={
-        # MTEB(eng, classic) training data:
+        # MTEB(eng, v1) training data:
+        "AmazonPolarityClassification": ["train"],
+        "AmazonReviewsClassification": ["train"],
+        "EmotionClassification": ["train"],
+        "HotpotQA": ["train"],
+        "ImdbClassification": ["train"],
+        "MTOPDomainClassification": ["train"],
+        "MTOPIntentClassification": ["train"],
+        "MindSmallReranking": ["train"],
+        "MassiveIntentClassification": ["train"],
+        "MassiveScenarioClassification": ["train"],
+        "MedrxivClusteringP2P": ["train"],
+        "MedrxivClusteringS2S": ["train"],
+        "STS12": ["train"],
+        "STSBenchmark": ["train"],
+        "StackOverflowDupQuestions": ["train"],
+        "ToxicConversationsClassification": ["train"],
+        "TweetSentimentExtractionClassification": ["train"],
+        "BiorxivClusteringP2P": ["train"],
+        "BiorxivClusteringS2S": ["train"],
+        "Banking77Classification": ["train"],
         "ArguAna": ["train"],
         "ArguAna-PL": ["train"],
         "ArguAna-NL": ["train"],  # translation not trained on
         "NanoArguAnaRetrieval": ["train"],
-        "HotpotQA": ["train"],
-        "HotpotQA-PL": ["train"],  # translation not trained on
-        "HotpotQA-NL": ["train"],  # translation not trained on
-        "HotpotQAHardNegatives": ["train"],
+        "STS22": ["train"],
+        "AmazonCounterfactualClassification": ["train"],
+        "ArxivClusteringP2P": ["train"],
+        "ArxivClusteringS2S": ["train"],
+        "NQ": ["train"],
+        "SciFact": ["train"],
+        "QuoraRetrieval": ["train"],
+        "NanoQuoraRetrieval": ["train"],
+        "NQHardNegatives": ["train"],
+        "NanoNQRetrieval": ["train"],
+        "NQ-PL": ["train"],  # translation not trained on
+        "NQ-NL": ["train"],  # translation not trained on
+        "NFCorpus": ["train"],
+        "FEVERHardNegatives": ["train"],
+        "NanoFEVERRetrieval": ["train"],
+        "FEVER-NL": ["train"],  # translation not trained on
+        "FiQA2018-NL": ["train"],  # translation not trained on
+        "BiorxivClusteringP2P.v2": ["train"],
+        "BiorxivClusteringS2S.v2": ["train"],
+        "MedrxivClusteringP2P.v2": ["train"],
+        "MedrxivClusteringS2S.v2": ["train"],
         "MSMARCO": ["train"],
         "MSMARCOHardNegatives": ["train"],
         "NanoMSMARCORetrieval": ["train"],
         "MSMARCO-PL": ["train"],  # translation not trained on
         "mMARCO-NL": ["train"],  # translation not trained on
-        "NQ": ["train"],
-        "NQHardNegatives": ["train"],
-        "NanoNQRetrieval": ["train"],
-        "NQ-PL": ["train"],  # translation not trained on
-        "NQ-NL": ["train"],  # translation not trained on
+        "HotpotQA-PL": ["train"],  # translation not trained on
+        "HotpotQA-NL": ["train"],  # translation not trained on
+        "HotpotQAHardNegatives": ["train"],
         "FEVER": ["train"],
-        "FEVERHardNegatives": ["train"],
-        "NanoFEVERRetrieval": ["train"],
-        "FEVER-NL": ["train"],  # translation not trained on
         "FiQA2018": ["train"],
-        "FiQA2018-PL": ["train"],  # translation not trained on
-        "FiQA2018-NL": ["train"],  # translation not trained on
-        "STS12": ["train"],
-        "STS22": ["train"],
-        "AmazonReviewsClassification": ["train"],
-        "AmazonCounterfactualClassification": ["train"],
-        "Banking77Classification": ["train"],
-        "EmotionClassification": ["train"],
-        "ImdbClassification": ["train"],
-        "MTOPIntentClassification": ["train"],
-        "ToxicConversationsClassification": ["train"],
-        "TweetSentimentExtractionClassification": ["train"],
-        "ArxivClusteringP2P": ["train"],
+        "DBPedia": ["train"],
+        "TRECCOVID": ["train"],
         "ArxivClusteringP2P.v2": ["train"],
-        "ArxivClusteringS2S": ["train"],
-        "ArxivClusteringS2S.v2": ["train"],
-        "BiorxivClusteringP2P": ["train"],
-        "BiorxivClusteringP2P.v2": ["train"],
-        "BiorxivClusteringS2S": ["train"],
-        "BiorxivClusteringS2S.v2": ["train"],
-        "MedrxivClusteringP2P": ["train"],
-        "MedrxivClusteringP2P.v2": ["train"],
-        "MedrxivClusteringS2S": ["train"],
-        "MedrxivClusteringS2S.v2": ["train"],
-        "TwentyNewsgroupsClustering": ["train"],
-        "TwentyNewsgroupsClustering.v2": ["train"],
-        "STSBenchmark": ["train"],
         "STSBenchmarkMultilingualSTS": ["train"],  # translated, not trained on
     },
     public_training_code=None,

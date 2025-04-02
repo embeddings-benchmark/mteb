@@ -15,9 +15,9 @@ import torch
 from datasets import Dataset
 from PIL import Image
 from torch.utils.data import DataLoader
-from torchvision import transforms
 
 from mteb.encoder_interface import Encoder, PromptType
+from mteb.requires_package import requires_image_dependencies
 
 from ..Evaluator import Evaluator
 from ..utils import (
@@ -36,7 +36,12 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_TRANSFORM = transforms.Compose([transforms.PILToTensor()])
+
+def get_default_transform():
+    requires_image_dependencies()
+    from torchvision import transforms
+
+    return transforms.Compose([transforms.PILToTensor()])
 
 
 class ImageDataset(torch.utils.data.Dataset):
@@ -74,13 +79,14 @@ class Any2AnyDenseRetrievalExactSearch:
         encode_kwargs: dict[str, Any] = {},
         corpus_chunk_size: int = 20000,
         previous_results: str | None = None,
-        transform=DEFAULT_TRANSFORM,
+        transform=None,
         **kwargs: Any,
     ):
         # Model is class that provides get_text_embeddings() and get_image_embeddings()
         self.model = model
         self.encode_kwargs = encode_kwargs
-        self.transform = transform
+        if transform is None:
+            self.transform = get_default_transform()
 
         if "batch_size" not in encode_kwargs:
             encode_kwargs["batch_size"] = 128

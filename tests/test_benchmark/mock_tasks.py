@@ -21,11 +21,14 @@ from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
 from mteb.abstasks.AbsTaskSummarization import AbsTaskSummarization
 from mteb.abstasks.Audio.AbsTaskAudioClustering import AbsTaskAudioClustering
+from mteb.abstasks.Audio.AbsTaskAudioMultilabelClassification import (
+    AbsTaskAudioMultilabelClassification,
+)
+from mteb.abstasks.Audio.AbsTaskAudioZeroshotClassification import (
+    AbsTaskAudioZeroshotClassification,
+)
 from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.Image.AbsTaskAny2TextMultipleChoice import (
-    AbsTaskAny2TextMultipleChoice,
-)
 from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
 from mteb.abstasks.Image.AbsTaskImageClustering import AbsTaskImageClustering
 from mteb.abstasks.Image.AbsTaskImageMultilabelClassification import (  # noqa
@@ -35,8 +38,8 @@ from mteb.abstasks.Image.AbsTaskImageTextPairClassification import (
     AbsTaskImageTextPairClassification,
 )
 from mteb.abstasks.Image.AbsTaskVisualSTS import AbsTaskVisualSTS
-from mteb.abstasks.Image.AbsTaskZeroshotClassification import (
-    AbsTaskZeroshotClassification,
+from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
+    AbsTaskZeroShotClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -525,6 +528,110 @@ class MockAudioClusteringTask(AbsTaskAudioClustering):
             }
         )
         self.data_loaded = True
+
+
+class MockAudioMultilabelClassificationTask(AbsTaskAudioMultilabelClassification):
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "total_duration": 2.0,  # 2 samples * 1s each
+            "min_duration": 1.0,
+            "avg_duration": 1.0,
+            "max_duration": 1.0,
+            "sample_rate": 16000,
+            "unique_labels": 2,
+            "labels": {"0": {"count": 1}, "1": {"count": 1}},
+        },
+        "train": {
+            "num_samples": 10,
+            "total_duration": 10.0,
+            "min_duration": 1.0,
+            "avg_duration": 1.0,
+            "max_duration": 1.0,
+            "sample_rate": 16000,
+            "unique_labels": 2,
+            "labels": {"0": {"count": 5}, "1": {"count": 5}},
+        },
+    }
+
+    metadata = TaskMetadata(
+        type="AudioMultilabelClassification",
+        name="MockAudioMultilabelClassification",
+        main_score="accuracy",
+        **general_args,
+    )
+
+    def load_data(self, **kwargs):
+        mock_audio = [
+            {
+                "array": np.random.rand(16000),  # 1s audio
+                "sampling_rate": 16000,
+            }
+            for _ in range(2)
+        ]
+        labels = [[0], [1]]
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict({"audio": mock_audio, "labels": labels}),
+                "train": Dataset.from_dict(
+                    {"audio": mock_audio * 5, "labels": labels * 5}
+                ),
+            }
+        )
+        self.data_loaded = True
+
+
+class MockAudioZeroshotClassificationTask(AbsTaskAudioZeroshotClassification):
+    audio_column_name: str = "audio"
+    label_column_name: str = "label"
+
+    expected_stats = {
+        "test": {
+            "num_samples": 2,
+            "total_duration": 2.0,  # 2 samples * 1s each
+            "min_duration": 1.0,
+            "avg_duration": 1.0,
+            "max_duration": 1.0,
+            "sample_rate": 16000,
+            "unique_labels": 2,
+            "labels": {"0": {"count": 1}, "1": {"count": 1}},
+        }
+    }
+
+    metadata = TaskMetadata(
+        type="AudioZeroshotClassification",
+        name="MockAudioZeroshotClassification",
+        main_score="accuracy",
+        **general_args,
+    )
+
+    def load_data(self, **kwargs):
+        # Create mock audio data as numpy arrays
+        mock_audio = [
+            {
+                "array": np.random.rand(16000).astype(np.float32),  # 1s audio
+                "sampling_rate": 16000,
+            }
+            for _ in range(2)
+        ]
+        labels = np.array([0, 1])  # Convert labels to numpy array
+
+        self.dataset = DatasetDict(
+            {
+                "test": Dataset.from_dict(
+                    {
+                        "audio": mock_audio,
+                        "label": labels,
+                    }
+                ),
+            }
+        )
+        self.data_loaded = True
+
+    def get_candidate_labels(self) -> list[str]:
+        """Return the text candidates for zeroshot classification"""
+        return ["This is sound type 0", "This is sound type 1"]
 
 
 class MockMultilingualClusteringTask(AbsTaskClustering, MultilingualTask):
@@ -2330,45 +2437,6 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskAny2AnyRetrieval):
         self.data_loaded = True
 
 
-class MockTextMultipleChoiceTask(AbsTaskAny2TextMultipleChoice):
-    metadata = TaskMetadata(
-        type="Any2TextMutipleChoice",
-        name="MockTextMultipleChoice",
-        main_score="accuracy",
-        descriptive_stats={
-            "test": {
-                # TODO: Add descriptive stats
-            }
-        },
-        **general_args,  # type: ignore
-    )
-    metadata.modalities = ["text", "image"]
-    metadata.category = "it2i"
-
-    def load_data(self, **kwargs):
-        images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
-
-        self.dataset = DatasetDict(
-            {
-                "test": Dataset.from_dict(
-                    {
-                        "id": [f"q{i}" for i in range(2)],
-                        "image": [images[i] for i in range(2)],
-                        "question": [
-                            "This is a positive sentence",
-                            "This is another positive sentence",
-                        ],
-                        "choices": [["3", "2", "1", "0"], ["3", "2", "1", "0"]],
-                        "answer": ["1", "0"],
-                    }
-                )
-            }
-        )
-
-
 class MockImageClassificationTask(AbsTaskImageClassification):
     metadata = TaskMetadata(
         type="ImageClassification",
@@ -2771,7 +2839,7 @@ class MockMultilingualImageMultilabelClassificationTask(
 
 class MockImageTextPairClassificationTask(AbsTaskImageTextPairClassification):
     metadata = TaskMetadata(
-        type="ImageTextPairClassification",
+        type="Compositionality",
         name="MockImageTextPairClassification",
         main_score="text_acc",
         descriptive_stats={
@@ -2812,7 +2880,7 @@ class MockMultilingualImageTextPairClassificationTask(
     AbsTaskImageTextPairClassification, MultilingualTask
 ):
     metadata = TaskMetadata(
-        type="ImageTextPairClassification",
+        type="Compositionality",
         name="MockMultilingualImageTextPairClassification",
         main_score="accuracy",
         descriptive_stats={
@@ -2873,7 +2941,7 @@ class MockMultilingualImageTextPairClassificationTask(
 
 class MockVisualSTSTask(AbsTaskVisualSTS):
     metadata = TaskMetadata(
-        type="VisualSTS",
+        type="VisualSTS(eng)",
         name="MockVisualSTS",
         main_score="cosine_spearman",
         descriptive_stats={
@@ -2917,10 +2985,10 @@ class MockVisualSTSTask(AbsTaskVisualSTS):
         return metadata_dict
 
 
-class MockZeroshotClassificationTask(AbsTaskZeroshotClassification):
+class MockZeroShotClassificationTask(AbsTaskZeroShotClassification):
     metadata = TaskMetadata(
         type="ZeroShotClassification",
-        name="MockZeroshotClassification",
+        name="MockZeroShotClassification",
         main_score="accuracy",
         descriptive_stats={
             "test": {

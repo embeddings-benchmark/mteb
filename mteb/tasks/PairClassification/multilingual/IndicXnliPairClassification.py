@@ -33,7 +33,7 @@ class IndicXnliPairClassification(AbsTaskPairClassification, MultilingualTask):
         XNLI were translated from English into each of the eleven Indic languages. IndicTrans
         is a large Transformer-based sequence to sequence model. It is trained on Samanantar
         dataset (Ramesh et al., 2021), which is the largest parallel multi- lingual corpus
-        over eleven Indic languages. 
+        over eleven Indic languages.
         """,
         reference="https://gem-benchmark.com/data_cards/opusparcus",
         category="s2s",
@@ -54,9 +54,9 @@ class IndicXnliPairClassification(AbsTaskPairClassification, MultilingualTask):
             doi = {10.48550/ARXIV.2204.08776},
             url = {https://arxiv.org/abs/2204.08776},
             author = {Aggarwal, Divyanshu and Gupta, Vivek and Kunchukuttan, Anoop},
-            title = {IndicXNLI: Evaluating Multilingual Inference for Indian Languages}, 
+            title = {IndicXNLI: Evaluating Multilingual Inference for Indian Languages},
             publisher = {arXiv},
-            year = {2022},        
+            year = {2022},
             copyright = {Creative Commons Attribution 4.0 International}
         }
         """,

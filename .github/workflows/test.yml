@@ -2,7 +2,6 @@
 # 1) install Python dependencies
 # 2) run make test
 
-
 name: Test
 on:
   push:
@@ -25,12 +24,19 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Cache Hugging Face
+        id: cache-hf
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: ${{ runner.os }}-hf
+
       - name: Setup Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
           cache: "pip"
-        
+
       - name: Install dependencies
         shell: bash
         run: |
@@ -53,4 +59,3 @@ jobs:
           # if it fails again, the workflow will fail.
           # If it passes the first time the test will not run again
           make test || make test
-

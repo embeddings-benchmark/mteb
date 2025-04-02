@@ -42,7 +42,7 @@ class TopiOCQARetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation="""
         @misc{adlakha2022topiocqa,
-      title={TopiOCQA: Open-domain Conversational Question Answering with Topic Switching}, 
+      title={TopiOCQA: Open-domain Conversational Question Answering with Topic Switching},
       author={Vaibhav Adlakha and Shehzaad Dhuliawala and Kaheer Suleman and Harm de Vries and Siva Reddy},
       year={2022},
       eprint={2110.00768},
@@ -125,7 +125,7 @@ class TopiOCQARetrievalHardNegatives(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation="""
         @misc{adlakha2022topiocqa,
-      title={TopiOCQA: Open-domain Conversational Question Answering with Topic Switching}, 
+      title={TopiOCQA: Open-domain Conversational Question Answering with Topic Switching},
       author={Vaibhav Adlakha and Shehzaad Dhuliawala and Kaheer Suleman and Harm de Vries and Siva Reddy},
       year={2022},
       eprint={2110.00768},
@@ -133,4 +133,5 @@ class TopiOCQARetrievalHardNegatives(AbsTaskRetrieval):
       primaryClass={cs.CL}
         }
         """,
+        adapted_from=["TopiOCQA"],
     )

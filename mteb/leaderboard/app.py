@@ -5,27 +5,41 @@ import json
 import logging
 import tempfile
 import time
+import warnings
 from pathlib import Path
-from typing import Literal
+from typing import Literal, get_args
 from urllib.parse import urlencode
 
+import cachetools
 import gradio as gr
 import pandas as pd
 from gradio_rangeslider import RangeSlider
 
 import mteb
+from mteb.abstasks.TaskMetadata import TASK_DOMAIN, TASK_TYPE
 from mteb.benchmarks.benchmarks import MTEB_multilingual
-from mteb.caching import json_cache
+from mteb.custom_validators import MODALITIES
+from mteb.languages import ISO_TO_LANGUAGE
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
-from mteb.leaderboard.table import scores_to_tables
+from mteb.leaderboard.table import create_tables
 
+logging.getLogger("mteb.load_results.task_results").setLevel(
+    logging.WARNING
+)  # Warnings related to task split
+logging.getLogger("mteb.models.overview").setLevel(
+    logging.WARNING
+)  # Warning related to model metadata (fetch_from_hf=False)
+warnings.filterwarnings("ignore", message="Couldn't get scores for .* due to .*")
 logger = logging.getLogger(__name__)
 
 acknowledgment_md = """
 ### Acknowledgment
-We thank [ServiceNow](https://www.servicenow.com/), [Contextual AI](https://contextual.ai/) and [Hugging Face](https://huggingface.co/) for their generous sponsorship. If you'd like to sponsor us, please get in [touch](mailto:n.muennighoff@gmail.com).
+We thank [Google](https://cloud.google.com/), [ServiceNow](https://www.servicenow.com/), [Contextual AI](https://contextual.ai/) and [Hugging Face](https://huggingface.co/) for their generous sponsorship. If you'd like to sponsor us, please get in [touch](mailto:n.muennighoff@gmail.com).
 
 <div class="sponsor-image-about" style="display: flex; align-items: center; gap: 10px;">
+    <a href="https://cloud.google.com/">
+        <img src="https://img.icons8.com/?size=512&id=17949&format=png" width="60" height="55" style="padding: 10px;">
+    </a>
     <a href="https://www.servicenow.com/">
         <img src="https://play-lh.googleusercontent.com/HdfHZ5jnfMM1Ep7XpPaVdFIVSRx82wKlRC_qmnHx9H1E4aWNp4WKoOcH0x95NAnuYg" width="60" height="55" style="padding: 10px;">
     </a>
@@ -39,20 +53,6 @@ We thank [ServiceNow](https://www.servicenow.com/), [Contextual AI](https://cont
 
 We also thank the following companies which provide API credits to evaluate their models: [OpenAI](https://openai.com/), [Voyage AI](https://www.voyageai.com/)
 """
-
-MMTEB_TASK_TYPES = [  # TEMPORARY FIX: when adding MIEB to the leaderboard, this can probably be replaced with TASK_TYPE
-    "BitextMining",
-    "Classification",
-    "MultilabelClassification",
-    "Clustering",
-    "PairClassification",
-    "Reranking",
-    "Retrieval",
-    "STS",
-    "Summarization",
-    "InstructionRetrieval",
-    "Speed",
-]
 
 
 ALL_MODELS = {meta.name for meta in mteb.get_model_metas()}
@@ -137,12 +137,21 @@ def format_list(props: list[str]):
 def update_task_info(task_names: str) -> gr.DataFrame:
     tasks = mteb.get_tasks(tasks=task_names)
     df = tasks.to_dataframe(
-        properties=["name", "type", "languages", "domains", "reference", "main_score"]
+        properties=[
+            "name",
+            "type",
+            "languages",
+            "domains",
+            "reference",
+            "main_score",
+            "modalities",
+        ]
     )
     df["languages"] = df["languages"].map(format_list)
     df = df.sort_values("name")
     df["domains"] = df["domains"].map(format_list)
     df["name"] = "[" + df["name"] + "](" + df["reference"] + ")"
+    df["modalities"] = df["modalities"].map(format_list)
     df = df.rename(
         columns={
             "name": "Task Name",
@@ -150,6 +159,7 @@ def update_task_info(task_names: str) -> gr.DataFrame:
             "languages": "Languages",
             "domains": "Domains",
             "main_score": "Metric",
+            "modalities": "Modality",
         }
     )
     df = df.drop(columns="reference")
@@ -167,7 +177,7 @@ def filter_models(
     compatibility: list[str],
     instructions: bool | None,
     model_size: tuple[int | None, int | None],
-    zero_shot_setting: Literal["hard", "soft", "off"],
+    zero_shot_setting: Literal["only_zero_shot", "allow_all", "remove_unknown"],
 ):
     lower, upper = model_size
     # Setting to None, when the user doesn't specify anything
@@ -191,10 +201,10 @@ def filter_models(
     for model_meta in model_metas:
         is_model_zero_shot = model_meta.is_zero_shot_on(task_select)
         if is_model_zero_shot is None:
-            if zero_shot_setting == "hard":
+            if zero_shot_setting in ["remove_unknown", "only_zero_shot"]:
                 continue
         elif not is_model_zero_shot:
-            if zero_shot_setting != "off":
+            if zero_shot_setting == "only_zero_shot":
                 continue
         models_to_keep.add(model_meta.name)
     return list(models_to_keep)
@@ -203,7 +213,9 @@ def filter_models(
 logger.info("Loading all benchmark results")
 all_results = load_results()
 
-benchmarks = sorted(mteb.get_benchmarks(), key=lambda x: x.name)
+benchmarks = sorted(
+    mteb.get_benchmarks(display_on_leaderboard=True), key=lambda x: x.name
+)
 all_benchmark_results = {
     benchmark.name: benchmark.load_results(base_results=all_results).join_revisions()
     for benchmark in benchmarks
@@ -221,10 +233,10 @@ filtered_models = filter_models(
     compatibility=[],
     instructions=None,
     model_size=(MIN_MODEL_SIZE, MAX_MODEL_SIZE),
-    zero_shot_setting="soft",
+    zero_shot_setting="allow_all",
 )
 
-summary_table, per_task_table = scores_to_tables(
+summary_table, per_task_table = create_tables(
     [entry for entry in default_scores if entry["model_name"] in filtered_models]
 )
 
@@ -235,33 +247,41 @@ benchmark_select = gr.Dropdown(
     info="Select one of our expert-selected benchmarks from MTEB publications.",
 )
 lang_select = gr.Dropdown(
-    all_results.languages,
+    ISO_TO_LANGUAGE,
     value=sorted(default_results.languages),
+    allow_custom_value=True,
     multiselect=True,
     label="Language",
     info="Select languages to include.",
 )
 type_select = gr.Dropdown(
-    all_results.task_types,
-    value=sorted(MMTEB_TASK_TYPES),
+    sorted(get_args(TASK_TYPE)),
+    value=sorted(default_results.task_types),
     multiselect=True,
     label="Task Type",
     info="Select task types to include.",
 )
 domain_select = gr.Dropdown(
-    all_results.domains,
+    sorted(get_args(TASK_DOMAIN)),
     value=sorted(default_results.domains),
     multiselect=True,
     label="Domain",
     info="Select domains to include.",
 )
 task_select = gr.Dropdown(
-    all_results.task_names,
+    sorted(all_results.task_names),
     value=sorted(default_results.task_names),
     allow_custom_value=True,
     multiselect=True,
     label="Task",
     info="Select specific tasks to include",
+)
+modality_select = gr.Dropdown(
+    sorted(get_args(MODALITIES)),
+    value=sorted(default_results.modalities),
+    multiselect=True,
+    label="Modality",
+    info="Select modalities to include.",
 )
 
 head = """
@@ -271,11 +291,11 @@ head = """
 with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
     gr.Markdown(
         """
-    ## MMTEB: Massive Multilingual Text Embedding Benchmark
+    ## Embedding Leaderboard
 
-    The MMTEB leaderboard compares text embedding models on 1000+ languages. Check out the [paper](https://openreview.net/pdf?id=zl3pfz4VCV) for details on datasets, languages and tasks. And you can contribute! 🤗 To add a model, please refer to the documentation in the [GitHub repository](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_model.md). Also check out [MTEB Arena](https://huggingface.co/spaces/mteb/arena) ⚔️
-    
-    > Looking for the previous MTEB leaderboard? We have made it available [here](https://huggingface.co/spaces/mteb/leaderboard_legacy). Though it will no longer be updated.
+    This leaderboard compares 100+ text and image (soon) embedding models across 1000+ languages. We refer to the publication of each selectable benchmark for details on metrics, languages, tasks, and task types. Anyone is welcome [to add a model](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_model.md), [add benchmarks](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_benchmark.md), [help us improve zero-shot annotations](https://github.com/embeddings-benchmark/mteb/blob/06489abca007261c7e6b11f36d4844c5ed5efdcb/mteb/models/bge_models.py#L91) or [propose other changes to the leaderboard](https://github.com/embeddings-benchmark/mteb/tree/main/mteb/leaderboard) 🤗 Also, check out [MTEB Arena](https://huggingface.co/spaces/mteb/arena) ⚔️
+
+    > Looking for the previous MTEB leaderboard? We have made it available [here](https://huggingface.co/spaces/mteb/leaderboard_legacy) but it will no longer be updated.
     """
     )
 
@@ -297,13 +317,15 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                             type_select.render()
                         with gr.Accordion("Select Domains", open=False):
                             domain_select.render()
+                        with gr.Accordion("Select Modalities", open=False):
+                            modality_select.render()
                         with gr.Accordion("Add and remove tasks:", open=False):
                             task_select.render()
         with gr.Column(scale=8):
             gr.Markdown(
                 """
             ### Model Selection
-            Select models to rank based on an assortment of criteria. 
+            Select models to rank based on an assortment of criteria.
             """,
             )
             with gr.Group():
@@ -351,12 +373,12 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                             [
                                 (
                                     "Only Zero-shot",
-                                    "hard",
+                                    "only_zero_shot",
                                 ),
-                                ("Allow Unknown", "soft"),
-                                ("Allow all", "off"),
+                                ("Remove Unknown", "remove_unknown"),
+                                ("Allow All", "allow_all"),
                             ],
-                            value="soft",
+                            value="allow_all",
                             label="Zero-shot",
                             interactive=True,
                         )
@@ -389,13 +411,6 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
                     "*We only display models that have been run on all task types in the benchmark*"
                 )
     with gr.Tab("Summary"):
-        gr.Markdown(
-            """
-            ✅ - Model is zero-shot on the benchmark <br>
-            ⚠️  - Training data unknown <br>
-            ❌ - Model is **NOT** zero-shot on the benchmark
-        """
-        )
         summary_table.render()
         download_summary = gr.DownloadButton("Download Table")
         download_summary.click(
@@ -408,9 +423,9 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
         ):
             gr.Markdown(
                 """
-    **Rank(borda)** is computed based on the [borda count](https://en.wikipedia.org/wiki/Borda_count), where each task is treated as a preference voter, which gives votes on the models in accordance with their relative performance on the task. The best model obtains the highest number of votes. The model with the highest number of votes across tasks obtains the highest rank. The Borda rank tends to prefer models that perform well broadly across tasks. However, given that it is a rank it can be unclear if the two models perform similarly.
+    **Rank(borda)** is computed based on the [borda count](https://en.wikipedia.org/wiki/Borda_count), where each task is treated as a preference voter, which gives votes on the models per their relative performance on the task. The best model obtains the highest number of votes. The model with the highest number of votes across tasks obtains the highest rank. The Borda rank tends to prefer models that perform well broadly across tasks. However, given that it is a rank it can be unclear if the two models perform similarly.
 
-    **Mean(Task)**: This is a naïve average computed across all the tasks within the benchmark. This score is simple to understand and is continuous as opposed to the Borda rank. However, the mean can overvalue tasks with higher variance in its scores. 
+    **Mean(Task)**: This is a naïve average computed across all the tasks within the benchmark. This score is simple to understand and is continuous as opposed to the Borda rank. However, the mean can overvalue tasks with higher variance in its scores.
 
     **Mean(TaskType)**: This is a weighted average across different task categories, such as classification or retrieval. It is computed by first computing the average by task category and then computing the average on each category. Similar to the Mean(Task) this measure is continuous and tends to overvalue tasks with higher variance. This score also prefers models that perform well across all task categories.
             """
@@ -422,10 +437,24 @@ with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
             gr.Markdown(
                 """
 A model is considered zero-shot if it is not trained on any splits of the datasets used to derive the tasks.
-E.g., if a model is trained on Natural Questions, it cannot be considered zero-shot on benchmarks containing the task “NQ” which is derived from Natural Questions.
+The percentages in the table indicate what portion of the benchmark can be considered out-of-distribution for a given model.
+100% means the model has not been trained on any of the datasets in a given benchmark, and therefore the benchmark score can be interpreted as the model's overall generalization performance,
+while 50% means the model has been finetuned on half of the tasks in the benchmark, thereby indicating that the benchmark results should be interpreted with a pinch of salt.
 This definition creates a few edge cases. For instance, multiple models are typically trained on Wikipedia title and body pairs, but we do not define this as leakage on, e.g., “WikipediaRetrievalMultilingual” and “WikiClusteringP2P” as these datasets are not based on title-body pairs.
 Distilled, further fine-tunes, or in other ways, derivative models inherit the datasets of their parent models.
-Based on community feedback and research findings, This definition could change in the future.
+Based on community feedback and research findings, this definition may change in the future. Please open a PR if you notice any mistakes or want to help us refine annotations, see [GitHub](https://github.com/embeddings-benchmark/mteb/blob/06489abca007261c7e6b11f36d4844c5ed5efdcb/mteb/models/bge_models.py#L91).
+            """
+            )
+        with gr.Accordion(
+            "What do the other columns mean?",
+            open=False,
+        ):
+            gr.Markdown(
+                """
+- **Number of Parameters**: This is the total number of parameters in the model including embedding parameters. A higher value means the model requires more CPU/GPU memory to run; thus, less is generally desirable.
+- **Embedding Dimension**: This is the vector dimension of the embeddings that the model produces. When saving embeddings to disk, a higher dimension will require more space, thus less is usually desirable.
+- **Max tokens**: This refers to how many tokens (=word pieces) the model can process. Generally, a larger value is desirable.
+- **Zero-shot**: This indicates if the model is zero-shot on the benchmark. For more information on zero-shot see the info box above.
             """
             )
         with gr.Accordion(
@@ -436,13 +465,13 @@ Based on community feedback and research findings, This definition could change 
                 """
 Possible reasons why a model may not show up in the leaderboard:
 
-- **Filter Setting**: It is being filtered out with your current filter. By default, we do not show models that are not zero-shot on the benchmark. 
+- **Filter Setting**: It is being filtered out with your current filter. By default, we do not show models that are not zero-shot on the benchmark.
 You can change this setting in the model selection panel.
-- **Missing Results**: The model may not have been run on the tasks in the benchmark. We only display models that have been run on at least one task 
-in the benchmark. For visualizations that require the mean across all tasks, we only display models that have been run on all tasks in the benchmark. 
+- **Missing Results**: The model may not have been run on the tasks in the benchmark. We only display models that have been run on at least one task
+in the benchmark. For visualizations that require the mean across all tasks, we only display models that have been run on all tasks in the benchmark.
 You can see existing results in the [results repository](https://github.com/embeddings-benchmark/results). This is also where new results are added via PR.
 - **Missing Metadata**: Currently, we only show models for which we have metadata in [mteb](https://github.com/embeddings-benchmark/mteb).
-You can follow this guide on how to add a [model](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_model.md) and 
+You can follow this guide on how to add a [model](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_model.md) and
 see existing implementations [here](https://github.com/embeddings-benchmark/mteb/tree/main/mteb/models).
             """
             )
@@ -458,7 +487,10 @@ see existing implementations [here](https://github.com/embeddings-benchmark/mteb
     # This sets the benchmark from the URL query parameters
     demo.load(set_benchmark_on_load, inputs=[], outputs=[benchmark_select])
 
-    @json_cache
+    @cachetools.cached(
+        cache={},
+        key=lambda benchmark_name: hash(benchmark_name),
+    )
     def on_benchmark_select(benchmark_name):
         start_time = time.time()
         benchmark = mteb.get_benchmark(benchmark_name)
@@ -470,10 +502,14 @@ see existing implementations [here](https://github.com/embeddings-benchmark/mteb
         ]
         domains = set(itertools.chain.from_iterable(domains))
         types = {task.metadata.type for task in benchmark.tasks if task.metadata.type}
-        languages, domains, types = (
+        modalities = set()
+        for task in benchmark.tasks:
+            modalities.update(task.metadata.modalities)
+        languages, domains, types, modalities = (
             sorted(languages),
             sorted(domains),
             sorted(types),
+            sorted(modalities),
         )
         elapsed = time.time() - start_time
         benchmark_results = all_benchmark_results[benchmark_name]
@@ -483,17 +519,30 @@ see existing implementations [here](https://github.com/embeddings-benchmark/mteb
             languages,
             domains,
             types,
-            [task.metadata.name for task in benchmark.tasks],
+            modalities,
+            sorted([task.metadata.name for task in benchmark.tasks]),
             scores,
         )
 
     benchmark_select.change(
         on_benchmark_select,
         inputs=[benchmark_select],
-        outputs=[lang_select, domain_select, type_select, task_select, scores],
+        outputs=[
+            lang_select,
+            domain_select,
+            type_select,
+            modality_select,
+            task_select,
+            scores,
+        ],
     )
 
-    @json_cache
+    @cachetools.cached(
+        cache={},
+        key=lambda benchmark_name, languages: hash(
+            (hash(benchmark_name), hash(tuple(languages)))
+        ),
+    )
     def update_scores_on_lang_change(benchmark_name, languages):
         start_time = time.time()
         benchmark_results = all_benchmark_results[benchmark_name]
@@ -508,7 +557,25 @@ see existing implementations [here](https://github.com/embeddings-benchmark/mteb
         outputs=[scores],
     )
 
-    def update_task_list(benchmark_name, type_select, domain_select, lang_select):
+    @cachetools.cached(
+        cache={},
+        key=lambda benchmark_name,
+        type_select,
+        domain_select,
+        lang_select,
+        modality_select: hash(
+            (
+                hash(benchmark_name),
+                hash(tuple(type_select)),
+                hash(tuple(domain_select)),
+                hash(tuple(lang_select)),
+                hash(tuple(modality_select)),
+            )
+        ),
+    )
+    def update_task_list(
+        benchmark_name, type_select, domain_select, lang_select, modality_select
+    ):
         start_time = time.time()
         tasks_to_keep = []
         for task in mteb.get_benchmark(benchmark_name).tasks:
@@ -518,27 +585,78 @@ see existing implementations [here](https://github.com/embeddings-benchmark/mteb
                 continue
             if not (set(task.languages or []) & set(lang_select)):
                 continue
+            if not (set(task.metadata.modalities or []) & set(modality_select)):
+                continue
             tasks_to_keep.append(task.metadata.name)
         elapsed = time.time() - start_time
         logger.info(f"update_task_list callback: {elapsed}s")
-        return tasks_to_keep
+        return sorted(tasks_to_keep)
 
     type_select.input(
         update_task_list,
-        inputs=[benchmark_select, type_select, domain_select, lang_select],
+        inputs=[
+            benchmark_select,
+            type_select,
+            domain_select,
+            lang_select,
+            modality_select,
+        ],
         outputs=[task_select],
     )
     domain_select.input(
         update_task_list,
-        inputs=[benchmark_select, type_select, domain_select, lang_select],
+        inputs=[
+            benchmark_select,
+            type_select,
+            domain_select,
+            lang_select,
+            modality_select,
+        ],
         outputs=[task_select],
     )
     lang_select.input(
         update_task_list,
-        inputs=[benchmark_select, type_select, domain_select, lang_select],
+        inputs=[
+            benchmark_select,
+            type_select,
+            domain_select,
+            lang_select,
+            modality_select,
+        ],
+        outputs=[task_select],
+    )
+    modality_select.input(
+        update_task_list,
+        inputs=[
+            benchmark_select,
+            type_select,
+            domain_select,
+            lang_select,
+            modality_select,
+        ],
         outputs=[task_select],
     )
 
+    @cachetools.cached(
+        cache={},
+        key=lambda scores,
+        tasks,
+        availability,
+        compatibility,
+        instructions,
+        model_size,
+        zero_shot: hash(
+            (
+                id(scores),
+                hash(tuple(tasks)),
+                hash(availability),
+                hash(tuple(compatibility)),
+                hash(instructions),
+                hash(model_size),
+                hash(zero_shot),
+            )
+        ),
+    )
     def update_models(
         scores: list[dict],
         tasks: list[str],
@@ -546,7 +664,7 @@ see existing implementations [here](https://github.com/embeddings-benchmark/mteb
         compatibility: list[str],
         instructions: bool | None,
         model_size: tuple[int, int],
-        zero_shot: Literal["hard", "soft", "off"],
+        zero_shot: Literal["allow_all", "remove_unknown", "only_zero_shot"],
     ):
         start_time = time.time()
         model_names = list({entry["model_name"] for entry in scores})
@@ -560,8 +678,11 @@ see existing implementations [here](https://github.com/embeddings-benchmark/mteb
             zero_shot_setting=zero_shot,
         )
         elapsed = time.time() - start_time
+        if model_names == filtered_models:
+            # This indicates that the models should not be filtered
+            return None
         logger.info(f"update_models callback: {elapsed}s")
-        return filtered_models
+        return sorted(filtered_models)
 
     scores.change(
         update_models,
@@ -655,49 +776,97 @@ see existing implementations [here](https://github.com/embeddings-benchmark/mteb
         outputs=[models],
     )
 
+    @cachetools.cached(
+        cache={},
+        key=lambda scores, search_query, tasks, models_to_keep, benchmark_name: hash(
+            (
+                id(scores),
+                hash(search_query),
+                hash(tuple(tasks)),
+                id(models_to_keep),
+                hash(benchmark_name),
+            )
+        ),
+    )
     def update_tables(
         scores,
         search_query: str,
         tasks,
         models_to_keep,
+        benchmark_name: str,
     ):
         start_time = time.time()
         tasks = set(tasks)
-        models_to_keep = set(models_to_keep)
-        filtered_scores = []
-        for entry in scores:
-            if entry["task_name"] not in tasks:
-                continue
-            if entry["model_name"] not in models_to_keep:
-                continue
-            filtered_scores.append(entry)
-        summary, per_task = scores_to_tables(filtered_scores, search_query)
+        benchmark = mteb.get_benchmark(benchmark_name)
+        benchmark_tasks = {task.metadata.name for task in benchmark.tasks}
+        if (benchmark_tasks != tasks) or (models_to_keep is not None):
+            filtered_scores = []
+            for entry in scores:
+                if entry["task_name"] not in tasks:
+                    continue
+                if (models_to_keep is not None) and (
+                    entry["model_name"] not in models_to_keep
+                ):
+                    continue
+                filtered_scores.append(entry)
+        else:
+            filtered_scores = scores
+        summary, per_task = create_tables(filtered_scores, search_query)
         elapsed = time.time() - start_time
         logger.info(f"update_tables callback: {elapsed}s")
         return summary, per_task
 
     task_select.change(
         update_tables,
-        inputs=[scores, searchbar, task_select, models],
+        inputs=[scores, searchbar, task_select, models, benchmark_select],
         outputs=[summary_table, per_task_table],
     )
     scores.change(
         update_tables,
-        inputs=[scores, searchbar, task_select, models],
+        inputs=[scores, searchbar, task_select, models, benchmark_select],
         outputs=[summary_table, per_task_table],
     )
     models.change(
         update_tables,
-        inputs=[scores, searchbar, task_select, models],
+        inputs=[scores, searchbar, task_select, models, benchmark_select],
         outputs=[summary_table, per_task_table],
     )
     searchbar.submit(
         update_tables,
-        inputs=[scores, searchbar, task_select, models],
+        inputs=[scores, searchbar, task_select, models, benchmark_select],
         outputs=[summary_table, per_task_table],
     )
 
     gr.Markdown(acknowledgment_md, elem_id="ack_markdown")
 
+
+# Prerun on all benchmarks, so that results of callbacks get cached
+for benchmark in benchmarks:
+    (
+        bench_languages,
+        bench_domains,
+        bench_types,
+        bench_modalities,
+        bench_tasks,
+        bench_scores,
+    ) = on_benchmark_select(benchmark.name)
+    filtered_models = update_models(
+        bench_scores,
+        bench_tasks,
+        availability=None,
+        compatibility=[],
+        instructions=None,
+        model_size=(MIN_MODEL_SIZE, MAX_MODEL_SIZE),
+        zero_shot="allow_all",
+    )
+    # We have to call this both on the filtered and unfiltered task because the callbacks
+    # also gets called twice for some reason
+    update_tables(bench_scores, "", bench_tasks, filtered_models, benchmark.name)
+    filtered_tasks = update_task_list(
+        benchmark.name, bench_types, bench_domains, bench_languages, bench_modalities
+    )
+    update_tables(bench_scores, "", filtered_tasks, filtered_models, benchmark.name)
+
+
 if __name__ == "__main__":
-    demo.launch()
+    demo.launch(share=True)
