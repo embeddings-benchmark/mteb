@@ -386,21 +386,21 @@ def get_leaderboard_app() -> gr.Blocks:
         models = gr.State(filtered_models)
         with gr.Row():
             with gr.Column():
-                _ = gr.Markdown(
+                description = gr.Markdown(  # noqa: F841
                     update_description,
                     inputs=[benchmark_select, lang_select, type_select, domain_select],
                 )
-                _ = gr.Markdown(update_citation, inputs=[benchmark_select])
+                citation = gr.Markdown(update_citation, inputs=[benchmark_select])  # noqa: F841
                 with gr.Accordion("Share this benchmark:", open=False):
                     gr.Markdown(produce_benchmark_link, inputs=[benchmark_select])
             with gr.Column():
                 with gr.Tab("Performance per Model Size"):
-                    _ = gr.Plot(performance_size_plot, inputs=[summary_table])
+                    plot = gr.Plot(performance_size_plot, inputs=[summary_table])  # noqa: F841
                     gr.Markdown(
                         "*We only display models that have been run on all tasks in the benchmark*"
                     )
                 with gr.Tab("Performance per Task Type (Radar Chart)"):
-                    _ = gr.Plot(radar_chart, inputs=[summary_table])
+                    radar_plot = gr.Plot(radar_chart, inputs=[summary_table])  # noqa: F841
                     gr.Markdown(
                         "*We only display models that have been run on all task types in the benchmark*"
                     )
@@ -476,7 +476,7 @@ def get_leaderboard_app() -> gr.Blocks:
                 download_table, inputs=[per_task_table], outputs=[download_per_task]
             )
         with gr.Tab("Task information"):
-            _ = gr.DataFrame(update_task_info, inputs=[task_select])
+            task_info_table = gr.DataFrame(update_task_info, inputs=[task_select])  # noqa: F841
 
         # This sets the benchmark from the URL query parameters
         demo.load(set_benchmark_on_load, inputs=[], outputs=[benchmark_select])
@@ -885,5 +885,6 @@ if __name__ == "__main__":
         logging.ERROR
     )  # Warning related to model metadata (fetch_from_hf=False)
     warnings.filterwarnings("ignore", message="Couldn't get scores for .* due to .*")
+
     app = get_leaderboard_app()
     app.launch(server_name="0.0.0.0", server_port=7860)
