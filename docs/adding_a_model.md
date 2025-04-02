@@ -34,7 +34,7 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
    from mteb.types import PromptType
    import numpy as np
 
-   class CustomWrapper(Encoder):
+   class CustomWrapper:
        def __init__(self, model_name, revision):
            super().__init__(model_name, revision)
            # your custom implementation here
