@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from functools import partial
 
+import numpy as np
 from sentence_transformers import SentenceTransformer
 
 from mteb.model_meta import ModelMeta
