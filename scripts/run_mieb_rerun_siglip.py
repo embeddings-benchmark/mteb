@@ -17,7 +17,7 @@ for model_name in [
         task_types=[
             "Any2AnyRetrieval",
             "Any2AnyMultiChoice",
-            "VisionCentric",
+            "VisionCentricQA",
             "ImageClustering",
             "ImageClassification",
             "ImageMultilabelClassification",
