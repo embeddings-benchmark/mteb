@@ -903,9 +903,8 @@ The following tables give you an overview of the tasks in MTEB.
 
 <details>
 
-<!-- TASK LANG TABLE START -->
-| ISO Code | Language | Family | Any2AnyMultiChoice | Any2AnyMultilingualRetrieval | Any2AnyRetrieval | BitextMining | Classification | Clustering | Compositionality | DocumentUnderstanding | ImageClassification | ImageClustering | ImageMultilabelClassification | InstructionRetrieval | MultilabelClassification | PairClassification | Reranking | Retrieval | STS | Speed | Summarization | VisionCentricQA | VisualSTS(eng) | VisualSTS(multi) | ZeroShotClassification | Sum |
-|---|------|------|------|------|------|------|------|------|------|------|------|------|------|------|------|------|------|------|------|------|------|------|------|---|
+<!-- TASK LANG TABLE START -->| ISO Code | Language | Family | Any2AnyMultiChoice | Any2AnyMultilingualRetrieval | Any2AnyRetrieval | BitextMining | Classification | Clustering | Compositionality | DocumentUnderstanding | ImageClassification | ImageClustering | ImageMultilabelClassification | InstructionRetrieval | MultilabelClassification | PairClassification | Reranking | Retrieval | STS | Speed | Summarization | VisionCentricQA | VisualSTS(eng) | VisualSTS(multi) | ZeroShotClassification | Sum |
+|----------|----------|--------|--------------------|------------------------------|------------------|--------------|----------------|------------|------------------|-----------------------|---------------------|-----------------|-------------------------------|----------------------|--------------------------|--------------------|-----------|-----------|-----|-------|---------------|-----------------|----------------|------------------|------------------------|-----|
 | aai | Arifama-Miniafia | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | aak | Ankave | Angan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | aau | Abau | Sepik | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
