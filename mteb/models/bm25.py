@@ -5,18 +5,15 @@ from typing import Literal
 
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
+from mteb.requires_package import requires_package
 
 logger = logging.getLogger(__name__)
 
 
-def bm25_loader(name: str, **kwargs):
-    try:
-        import bm25s
-        import Stemmer
-    except ImportError:
-        raise ImportError(
-            "bm25s or PyStemmer is not installed. Please install it with `pip install mteb[bm25s]`."
-        )
+def bm25_loader(model_name, **kwargs):
+    requires_package(bm25_loader, "bm25s", model_name, "pip install mteb[bm25s]")
+    import bm25s
+    import Stemmer
 
     class BM25Search(Wrapper):
         """BM25 search"""

@@ -14,7 +14,6 @@ from .AbsTaskSummarization import AbsTaskSummarization
 from .Image import (
     AbsTaskAny2AnyMultiChoice,
     AbsTaskAny2AnyRetrieval,
-    AbsTaskAny2TextMultipleChoice,
     AbsTaskImageClassification,
     AbsTaskImageClustering,
     AbsTaskImageMultilabelClassification,
@@ -39,7 +38,6 @@ __all__ = [
     "TaskMetadata",
     "AbsTaskAny2AnyMultiChoice",
     "AbsTaskAny2AnyRetrieval",
-    "AbsTaskAny2TextMultipleChoice",
     "AbsTaskImageClassification",
     "AbsTaskImageClustering",
     "AbsTaskImageMultilabelClassification",

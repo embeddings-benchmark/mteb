@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from .AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
 from .AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from .AbsTaskAny2TextMultipleChoice import AbsTaskAny2TextMultipleChoice
 from .AbsTaskImageClassification import AbsTaskImageClassification
 from .AbsTaskImageClustering import AbsTaskImageClustering
 from .AbsTaskImageMultilabelClassification import AbsTaskImageMultilabelClassification
@@ -17,7 +16,6 @@ __all__ = [
     "AbsTaskImageMultilabelClassification",
     "AbsTaskImageClustering",
     "AbsTaskImageClassification",
-    "AbsTaskAny2TextMultipleChoice",
     "AbsTaskAny2AnyRetrieval",
     "AbsTaskAny2AnyMultiChoice",
 ]

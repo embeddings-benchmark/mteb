@@ -1,7 +1,6 @@
 name: Datasets available on HuggingFace
 
 on:
-  pull_request:
   push:
     branches: [main]
 
@@ -21,7 +20,8 @@ jobs:
 
     - name: Install dependencies
       run: |
-        make install-for-tests
+          make install-for-tests
+
     - name: Run dataset loading tests
       run: |
         make dataset-load-test

@@ -11,9 +11,12 @@ from transformers import AutoConfig, AutoModelForCausalLM, AutoProcessor
 
 from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta
-from mteb.requires_package import requires_image_dependencies
+from mteb.requires_package import (
+    requires_image_dependencies,
+    requires_package,
+    suggest_package,
+)
 
-logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
 EncodeTypes = Literal["query", "passage"]
@@ -29,13 +32,16 @@ class VLM2VecWrapper:
         **kwargs,
     ):
         requires_image_dependencies()
-        try:
+        if suggest_package(
+            self,
+            "flash_attn",
+            model_name,
+            "pip install flash-attn --no-build-isolation",
+        ):
             import flash_attn  # noqa
-            from peft import LoraConfig, PeftModel  # noqa
-        except ImportError:
-            logger.warning(
-                "VLM2Vec models were trained with flash attention enabled. For optimal performance, please install the `flash_attn` package with `pip install flash-attn --no-build-isolation`."
-            )
+
+        requires_package(self, "peft", model_name, "pip install 'mteb[peft]'")
+        from peft import LoraConfig, PeftModel  # noqa
 
         self.pooling = "last"
         self.normalize = True

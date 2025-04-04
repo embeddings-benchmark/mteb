@@ -103,7 +103,7 @@ MIEB_TASK_TYPE = (
     "Any2AnyMultiChoice",
     "Any2AnyRetrieval",
     "Any2AnyMultilingualRetrieval",
-    "VisionCentric",
+    "VisionCentricQA",
     "ImageClustering",
     "ImageClassification",
     "ImageMultilabelClassification",

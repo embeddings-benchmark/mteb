@@ -378,17 +378,17 @@ class TaskResult(BaseModel):
         for split, split_score in scores.items():
             for hf_subset, hf_subset_scores in split_score.items():
                 for name, prev_name in [
-                    (ScoringFunction.COSINE, "cos_sim"),
-                    (ScoringFunction.MANHATTAN, "manhattan"),
-                    (ScoringFunction.EUCLIDEAN, "euclidean"),
-                    (ScoringFunction.DOT_PRODUCT, "dot"),
+                    (ScoringFunction.COSINE.value, "cos_sim"),
+                    (ScoringFunction.MANHATTAN.value, "manhattan"),
+                    (ScoringFunction.EUCLIDEAN.value, "euclidean"),
+                    (ScoringFunction.DOT_PRODUCT.value, "dot"),
                     ("max", "max"),
-                    (ScoringFunction.MODEL_SPECIFIC, "similarity"),
+                    (ScoringFunction.MODEL_SPECIFIC.value, "similarity"),
                 ]:
                     prev_name_scores = hf_subset_scores.pop(prev_name, None)
                     if prev_name_scores is not None:
                         for k, v in prev_name_scores.items():
-                            hf_subset_scores[f"{name.value}_{k}"] = v
+                            hf_subset_scores[f"{name}_{k}"] = v
 
                 if "main_score" not in hf_subset_scores:
                     if main_score in hf_subset_scores:

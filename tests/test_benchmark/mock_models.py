@@ -52,7 +52,8 @@ class MockSentenceTransformersbf16Encoder(SentenceTransformer):
     """Ensure that data types not supported by the encoder are converted to the supported data type."""
 
     model_card_data = Namespace(
-        model_name="MockSentenceTransformersbf16Encoder", base_model_revision="1.0.0"
+        model_name="mock/MockSentenceTransformersbf16Encoder",
+        base_model_revision="1.0.0",
     )
 
     def __init__(self):
@@ -71,7 +72,7 @@ class MockSentenceTransformersbf16Encoder(SentenceTransformer):
 class MockCLIPEncoder:
     mteb_model_meta = ModelMeta(
         loader=None,
-        name="MockCLIPModel",
+        name="mock/MockCLIPModel",
         languages=["eng_Latn"],
         revision="3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
         release_date="2021-02-06",
@@ -118,7 +119,7 @@ class MockCLIPEncoder:
 class MockMocoEncoder:
     mteb_model_meta = ModelMeta(
         loader=None,
-        name="MockMocoModel",
+        name="mock/MockMocoModel",
         languages=["eng_Latn"],
         revision="7d091cd70772c5c0ecf7f00b5f12ca609a99d69d",
         release_date="2024-01-01",
