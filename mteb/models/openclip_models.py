@@ -22,7 +22,8 @@ def openclip_loader(**kwargs):
     class OpenCLIPModel(AbsEncoder):
         def __init__(
             self,
-            model_name: str = "laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K",
+            model_name: str,
+            revision: str,
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
             **kwargs: Any,
         ):
