@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from functools import partial
-
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
@@ -58,11 +56,7 @@ ops_moa_yuan_embedding = ModelMeta(
     revision="23712d0766417b0eb88a2513c6e212a58b543268",
     release_date="2025-03-26",
     languages=["zho_Hans"],
-    loader=partial(
-        OPSWrapper,
-        "OpenSearch-AI/Ops-MoA-Yuan-embedding-1.0",
-        "23712d0766417b0eb88a2513c6e212a58b543268",
-    ),
+    loader=OPSWrapper,
     n_parameters=343 * 1e6,
     memory_usage_mb=2e3,
     max_tokens=512,
