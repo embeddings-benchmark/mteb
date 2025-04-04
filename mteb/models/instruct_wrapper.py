@@ -3,14 +3,14 @@ from __future__ import annotations
 import logging
 from typing import Any, Callable
 
-import numpy as np
 import torch
 from sentence_transformers import SentenceTransformer
 from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import BatchedInput, PromptType
-from mteb.models.wrapper import Wrapper
+from mteb.abstasks import TaskMetadata
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.requires_package import requires_package
+from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +26,7 @@ def instruct_wrapper(
     )
     from gritlm import GritLM
 
-    class InstructWrapper(GritLM, Wrapper):
+    class InstructGritLMModel(GritLM, AbsEncoder):
         def __init__(
             self,
             model_name_or_path: str,
@@ -58,17 +58,21 @@ def instruct_wrapper(
             self,
             inputs: DataLoader[BatchedInput],
             *args,
-            task_name: str,
+            task_metadata: TaskMetadata,
+            hf_split: str,
+            hf_subset: str,
             prompt_type: PromptType | None = None,
             **kwargs: Any,
-        ) -> np.ndarray:
-            instruction = self.get_instruction(task_name, prompt_type)
+        ) -> Array:
+            instruction = self.get_instruction(task_metadata, prompt_type)
 
             if self.instruction_template:
                 instruction = self.format_instruction(instruction, prompt_type)
             inputs = [text for batch in inputs for text in batch["text"]]
 
-            logger.info(f"Using instruction: '{instruction}' for task: '{task_name}'")
+            logger.info(
+                f"Using instruction: '{instruction}' for task: '{task_metadata.name}'"
+            )
             embeddings = super().encode(
                 inputs, instruction=instruction, *args, **kwargs
             )
@@ -77,10 +81,10 @@ def instruct_wrapper(
                 embeddings = embeddings.cpu().detach().float().numpy()
             return embeddings
 
-    return InstructWrapper(model_name_or_path, mode, instruction_template, **kwargs)
+    return InstructGritLMModel(model_name_or_path, mode, instruction_template, **kwargs)
 
 
-class InstructSentenceTransformerWrapper(Wrapper):
+class InstructSentenceTransformerModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -131,10 +135,12 @@ class InstructSentenceTransformerWrapper(Wrapper):
         self,
         inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
+    ) -> Array:
         sentences = [text for batch in inputs for text in batch["text"]]
 
         if self.add_eos_token:
@@ -142,7 +148,7 @@ class InstructSentenceTransformerWrapper(Wrapper):
                 example + self.model.tokenizer.eos_token for example in sentences
             ]
 
-        instruction = self.get_task_instruction(task_name, prompt_type)
+        instruction = self.get_task_instruction(task_metadata, prompt_type)
 
         # to passage prompts won't be applied to passages
         if not self.apply_instruction_to_passages and prompt_type == PromptType.passage:
@@ -152,7 +158,9 @@ class InstructSentenceTransformerWrapper(Wrapper):
             )
 
         if instruction:
-            logger.info(f"Using instruction: '{instruction}' for task: '{task_name}'")
+            logger.info(
+                f"Using instruction: '{instruction}' for task: '{task_metadata.name}'"
+            )
 
         embeddings = self.model.encode(
             sentences,

@@ -3,20 +3,20 @@ from __future__ import annotations
 import logging
 from typing import Any, Callable
 
-import numpy as np
 import torch
 from sentence_transformers import SentenceTransformer
 from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import BatchedInput, PromptType
+from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.nvidia_models import nvidia_training_datasets
-from mteb.models.wrapper import Wrapper
+from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
 
-class JasperWrapper(Wrapper):
+class JasperModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -34,11 +34,13 @@ class JasperWrapper(Wrapper):
         self,
         inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
-        instruction = self.get_task_instruction(task_name, prompt_type)
+    ) -> Array:
+        instruction = self.get_task_instruction(task_metadata, prompt_type)
 
         # to passage prompts won't be applied to passages
         if prompt_type == PromptType.passage:
@@ -59,7 +61,7 @@ class JasperWrapper(Wrapper):
 
 
 jasper_en_v1 = ModelMeta(
-    loader=JasperWrapper,
+    loader=JasperModel,
     loader_kwargs=dict(
         config_kwargs={"is_text_encoder": True, "vector_dim": 12288},
         model_kwargs={

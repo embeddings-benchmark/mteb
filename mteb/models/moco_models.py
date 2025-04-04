@@ -2,23 +2,22 @@ from __future__ import annotations
 
 from typing import Any
 
-import numpy as np
 import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from mteb.encoder_interface import BatchedInput, PromptType
-from mteb.model_meta import ModelMeta
-from mteb.models.wrapper import Wrapper
+from mteb.abstasks import TaskMetadata
+from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.requires_package import requires_image_dependencies, requires_package
+from mteb.types import Array, BatchedInput, PromptType
 
 
-def mocov3_loader(**kwargs):
-    model_name = kwargs.get("model_name", "MOCOv3")
+def mocov3_loader(model_name, **kwargs):
     requires_package(mocov3_loader, "timm", model_name, "pip install 'mteb[timm]'")
     import timm
 
-    class MOCOv3Wrapper(Wrapper):
+    class MOCOv3Model(AbsEncoder):
         """A wrapper class for MOCOv3 models that supports image encoding.
         Text encoding and text-image fusion are not supported.
         """
@@ -87,26 +86,25 @@ def mocov3_loader(**kwargs):
             all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
             return all_image_embeddings
 
-        @staticmethod
-        def calculate_probs(text_embeddings, image_embeddings):
-            raise ValueError("MOCO models only support image encoding.")
-
         def encode(
             self,
             inputs: DataLoader[BatchedInput],
             *,
-            task_name: str,
+            task_metadata: TaskMetadata,
+            hf_split: str,
+            hf_subset: str,
             prompt_type: PromptType | None = None,
             **kwargs: Any,
-        ) -> np.ndarray | torch.Tensor:
+        ) -> Array:
             if "text" in inputs.dataset.features:
                 raise ValueError(
                     "MOCO models only support image encoding. Text encoding is not supported."
                 )
             if "image" in inputs.dataset.features:
                 return self.get_image_embeddings(inputs, **kwargs)
+            raise ValueError
 
-    return MOCOv3Wrapper(**kwargs)
+    return MOCOv3Model(model_name, **kwargs)
 
 
 mocov3_training_datasets = {
@@ -130,7 +128,7 @@ mocov3_vit_base = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://github.com/facebookresearch/moco-v3",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=mocov3_training_datasets,
 )
@@ -152,7 +150,7 @@ mocov3_vit_large = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://github.com/facebookresearch/moco-v3",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=mocov3_training_datasets,
 )

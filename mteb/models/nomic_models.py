@@ -3,17 +3,16 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-import numpy as np
 import torch
 import torch.nn.functional as F
 import transformers
 from packaging.version import Version
 from torch.utils.data import DataLoader
 
-import mteb
-from mteb.encoder_interface import BatchedInput, PromptType
+from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
+from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -44,26 +43,26 @@ class NomicWrapper(SentenceTransformerWrapper):
     def to(self, device: torch.device) -> None:
         self.model.to(device)
 
-    def encode(  # type: ignore
+    def encode(
         self,
         inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
         batch_size: int = 32,
         **kwargs: Any,
-    ) -> np.ndarray:
+    ) -> Array:
         # default to search_document if input_type and prompt_name are not provided
         prompt_name = (
-            self.get_prompt_name(self.model_prompts, task_name, prompt_type)
-            or PromptType.passage.value
+            self.get_prompt_name(task_metadata, prompt_type) or PromptType.passage.value
         )
-        task = mteb.get_task(task_name)
         sentences = [text for batch in inputs for text in batch["text"]]
 
         # normalization not applied to classification
         # https://github.com/nomic-ai/contrastors/blob/5f7b461e5a13b5636692d1c9f1141b27232fe966/src/contrastors/eval/mteb_eval/eval_mteb.py#L172
-        normalize = task.metadata.type not in (
+        normalize = task_metadata not in (
             "Classification",
             "MultilabelClassification",
             "PairClassification",

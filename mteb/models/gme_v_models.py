@@ -2,18 +2,18 @@ from __future__ import annotations
 
 import logging
 import math
-from typing import Any, Literal
+from typing import Any
 
-import numpy as np
 import torch
 from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm.autonotebook import tqdm
 from transformers import AutoModelForVision2Seq, AutoProcessor
 
-from mteb.encoder_interface import BatchedInput, PromptType
+from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
-from mteb.models.wrapper import Wrapper
+from mteb.models.abs_encoder import AbsEncoder
+from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -125,10 +125,11 @@ class Encoder(torch.nn.Module):
         return embeddings
 
 
-class GmeQwen2VL(Wrapper):
+class GmeQwen2VL(AbsEncoder):
     def __init__(
         self,
         model_name: str,
+        revision: str,
         model_path: str | None = None,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         min_image_tokens=4,
@@ -138,42 +139,38 @@ class GmeQwen2VL(Wrapper):
     ) -> None:
         model_name = model_path or model_name
         base = AutoModelForVision2Seq.from_pretrained(
-            model_name, torch_dtype=torch.float16, **kwargs
+            model_name, revision=revision, torch_dtype=torch.float16, **kwargs
         )
         min_pixels = min_image_tokens * 28 * 28
         max_pixels = max_image_tokens * 28 * 28
         processor = AutoProcessor.from_pretrained(
-            model_name, min_pixels=min_pixels, max_pixels=max_pixels, **kwargs
+            model_name,
+            revision=revision,
+            min_pixels=min_pixels,
+            max_pixels=max_pixels,
+            **kwargs,
         )
         self.model = Encoder(base, processor, max_length=max_length)
         self.model.eval()
         self.device = device
         self.sep = " "
 
-    def calculate_probs(self, text_embeddings, image_embeddings):
-        text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True)
-        image_embeddings = image_embeddings / image_embeddings.norm(
-            dim=-1, keepdim=True
-        )
-        logits = torch.matmul(image_embeddings, text_embeddings.T)
-        probs = (logits * 100).softmax(dim=-1)
-        return probs
-
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
-        fusion_mode: Literal["sum"] = "sum",
         show_progress_bar: bool = True,
         **kwargs: Any,
-    ) -> np.ndarray | torch.Tensor:
-        instruction = self.get_instruction(task_name, prompt_type)
+    ) -> Array:
+        instruction = self.get_instruction(task_metadata, prompt_type)
         if prompt_type == PromptType.passage:
             instruction = None
         elif instruction is None:
-            instruction = self.get_instruction(task_name, prompt_type)
+            instruction = self.get_instruction(task_metadata, prompt_type)
             # NOTE: copied from the old get_gme_instruction function.
             if isinstance(instruction, str) and instruction[-1] != ".":
                 instruction += "."

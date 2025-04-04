@@ -4,12 +4,12 @@ from __future__ import annotations
 
 import torch
 
-from mteb.encoder_interface import PromptType
 from mteb.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.types import PromptType
 
 rubert_tiny = ModelMeta(
     loader=sentence_transformers_loader,

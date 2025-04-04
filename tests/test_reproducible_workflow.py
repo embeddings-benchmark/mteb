@@ -10,7 +10,7 @@ from mteb import MTEB
 from mteb.abstasks import AbsTask
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
-from mteb.models.wrapper import Wrapper
+from tests.test_benchmark.mock_models import AbsMockEncoder
 from tests.test_benchmark.task_grid import TASK_TEST_GRID
 
 logging.basicConfig(level=logging.INFO)
@@ -67,14 +67,20 @@ def test_validate_task_to_prompt_name(task_name: str | AbsTask):
         "query": "prompt_name",
         "passage": "prompt_name",
     }
-    Wrapper.validate_task_to_prompt_name(model_prompts)
+    base_encoder = AbsMockEncoder()
+    base_encoder.model_prompts = model_prompts
+    base_encoder.validate_task_to_prompt_name()
 
 
 def test_validate_task_to_prompt_name_fail():
+    base_encoder = AbsMockEncoder()
     with pytest.raises(KeyError):
-        Wrapper.validate_task_to_prompt_name(
-            {"task_name": "prompt_name", "task_name-query": "prompt_name"}
-        )
+        base_encoder.model_prompts = {
+            "task_name": "prompt_name",
+            "task_name-query": "prompt_name",
+        }
+        base_encoder.validate_task_to_prompt_name()
 
     with pytest.raises(KeyError):
-        Wrapper.validate_task_to_prompt_name({"task_name-task_name": "prompt_name"})
+        base_encoder.model_prompts = {"task_name-task_name": "prompt_name"}
+        base_encoder.validate_task_to_prompt_name()

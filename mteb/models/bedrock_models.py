@@ -9,17 +9,18 @@ import numpy as np
 import tqdm
 from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import BatchedInput, PromptType
+from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.cohere_models import model_prompts as cohere_model_prompts
 from mteb.models.cohere_models import supported_languages as cohere_supported_languages
-from mteb.models.wrapper import Wrapper
 from mteb.requires_package import requires_package
+from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
 
-class BedrockWrapper(Wrapper):
+class BedrockModel(AbsEncoder):
     def __init__(
         self,
         model_id: str,
@@ -39,11 +40,8 @@ class BedrockWrapper(Wrapper):
         self._provider = provider.lower()
 
         if self._provider == "cohere":
-            self.model_prompts = (
-                self.validate_task_to_prompt_name(model_prompts)
-                if model_prompts
-                else None
-            )
+            self.model_prompts = model_prompts
+            self.validate_task_to_prompt_name()
             self._max_batch_size = 96
             self._max_sequence_length = max_tokens * 4
         else:
@@ -53,10 +51,12 @@ class BedrockWrapper(Wrapper):
         self,
         inputs: DataLoader[BatchedInput],
         *,
-        task_name: str | None = None,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
+    ) -> Array:
         inputs = [text for batch in inputs for text in batch["text"]]
         requires_package(self, "boto3", "Amazon Bedrock")
         show_progress_bar = (
@@ -67,9 +67,7 @@ class BedrockWrapper(Wrapper):
         if self._provider == "amazon":
             return self._encode_amazon(inputs, show_progress_bar)
         elif self._provider == "cohere":
-            prompt_name = self.get_prompt_name(
-                self.model_prompts, task_name, prompt_type
-            )
+            prompt_name = self.get_prompt_name(task_metadata, prompt_type)
             cohere_task_type = self.model_prompts.get(prompt_name, "search_document")
             return self._encode_cohere(inputs, cohere_task_type, show_progress_bar)
         else:
@@ -164,7 +162,7 @@ amazon_titan_embed_text_v1 = ModelMeta(
     revision="1",
     release_date="2023-09-27",
     languages=None,  # not specified
-    loader=BedrockWrapper,
+    loader=BedrockModel,
     loader_kwargs=dict(
         model_id="amazon.titan-embed-text-v1",
         provider="amazon",
@@ -190,7 +188,7 @@ amazon_titan_embed_text_v2 = ModelMeta(
     revision="1",
     release_date="2024-04-30",
     languages=None,  # not specified
-    loader=BedrockWrapper,
+    loader=BedrockModel,
     loader_kwargs=dict(
         model_id="amazon.titan-embed-text-v2:0",
         provider="amazon",
@@ -214,7 +212,7 @@ amazon_titan_embed_text_v2 = ModelMeta(
 # https://github.com/embeddings-benchmark/mteb/blob/main/mteb/models/cohere_models.py
 # This implementation uses the Amazon Bedrock endpoint for Cohere models.
 cohere_embed_english_v3 = ModelMeta(
-    loader=BedrockWrapper,
+    loader=BedrockModel,
     loader_kwargs=dict(
         model_id="cohere.embed-english-v3",
         provider="cohere",
@@ -241,7 +239,7 @@ cohere_embed_english_v3 = ModelMeta(
 )
 
 cohere_embed_multilingual_v3 = ModelMeta(
-    loader=BedrockWrapper,
+    loader=BedrockModel,
     loader_kwargs=dict(
         model_id="cohere.embed-multilingual-v3",
         provider="cohere",

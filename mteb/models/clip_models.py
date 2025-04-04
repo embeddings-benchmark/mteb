@@ -1,29 +1,32 @@
 from __future__ import annotations
 
-from typing import Any, Literal
+from typing import Any
 
-import numpy as np
 import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoModel, AutoProcessor
 
-from mteb.encoder_interface import BatchedInput, PromptType
-from mteb.model_meta import ModelMeta
-from mteb.models.wrapper import Wrapper
+from mteb.abstasks import TaskMetadata
+from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.abs_encoder import AbsEncoder
+from mteb.types import Array, BatchedInput, PromptType
 
 
-class CLIPModelWrapper(Wrapper):
+class CLIPModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
+        revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.device = device
-        self.model = AutoModel.from_pretrained(model_name).to(self.device)
-        self.processor = AutoProcessor.from_pretrained(model_name)
+        self.model = AutoModel.from_pretrained(model_name, revision=revision).to(
+            self.device
+        )
+        self.processor = AutoProcessor.from_pretrained(model_name, revision=revision)
 
     def get_text_embeddings(
         self,
@@ -72,25 +75,16 @@ class CLIPModelWrapper(Wrapper):
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
         return all_image_embeddings
 
-    def calculate_probs(self, text_embeddings, image_embeddings):
-        # todo refactor to similarity
-        text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True)
-        image_embeddings = image_embeddings / image_embeddings.norm(
-            dim=-1, keepdim=True
-        )
-        logits = torch.matmul(image_embeddings, text_embeddings.T)
-        probs = (logits * 100).softmax(dim=-1)
-        return probs
-
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
-        fusion_mode: Literal["sum"] = "sum",
         **kwargs: Any,
-    ) -> np.ndarray | torch.Tensor:
+    ) -> Array:
         text_embeddings = None
         image_embeddings = None
         if "text" in inputs.dataset.features:
@@ -103,20 +97,17 @@ class CLIPModelWrapper(Wrapper):
                 raise ValueError(
                     "The number of texts and images must have the same length"
                 )
-            if fusion_mode == "sum":
-                fused_embeddings = text_embeddings + image_embeddings
-            else:
-                # to do: add other fusion mode
-                raise ValueError(f"fusion mode {fusion_mode} hasn't been implemented")
+            fused_embeddings = text_embeddings + image_embeddings
             return fused_embeddings
         elif text_embeddings is not None:
             return text_embeddings
         elif image_embeddings is not None:
             return image_embeddings
+        raise ValueError
 
 
 clip_vit_large_patch14 = ModelMeta(
-    loader=CLIPModelWrapper,  # type: ignore
+    loader=CLIPModel,  # type: ignore
     name="openai/clip-vit-large-patch14",
     languages=["eng_Latn"],
     revision="32bd64288804d66eefd0ccbe215aa642df71cc41",
@@ -132,13 +123,13 @@ clip_vit_large_patch14 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/openai/clip-vit-large-patch14",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=None,
 )
 
 clip_vit_base_patch32 = ModelMeta(
-    loader=CLIPModelWrapper,  # type: ignore
+    loader=CLIPModel,  # type: ignore
     name="openai/clip-vit-base-patch32",
     languages=["eng_Latn"],
     revision="3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
@@ -154,13 +145,13 @@ clip_vit_base_patch32 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/openai/clip-vit-base-patch32",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=None,
 )
 
 clip_vit_base_patch16 = ModelMeta(
-    loader=CLIPModelWrapper,  # type: ignore
+    loader=CLIPModel,  # type: ignore
     name="openai/clip-vit-base-patch16",
     languages=["eng_Latn"],
     revision="57c216476eefef5ab752ec549e440a49ae4ae5f3",
@@ -176,7 +167,7 @@ clip_vit_base_patch16 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/openai/clip-vit-base-patch16",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=None,
 )

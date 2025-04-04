@@ -3,10 +3,11 @@ from __future__ import annotations
 import logging
 from typing import Any
 
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics
+
 from ..evaluation.evaluators import STSEvaluator
 from ..load_results.task_results import ScoresDict
 from .AbsTask import AbsTask
-from .TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -65,7 +66,14 @@ class AbsTaskSTS(AbsTask):
     max_score: int
 
     def _evaluate_subset(
-        self, model, data_split, *, encode_kwargs: dict[str, Any] = {}, **kwargs
+        self,
+        model,
+        data_split,
+        *,
+        hf_split: str,
+        hf_subset: str,
+        encode_kwargs: dict[str, Any] = {},
+        **kwargs,
     ) -> ScoresDict:
         def normalize(x):
             return (x - self.min_score) / (self.max_score - self.min_score)
@@ -75,7 +83,9 @@ class AbsTaskSTS(AbsTask):
             data_split["sentence1"],
             data_split["sentence2"],
             normalized_scores,
-            task_name=self.metadata.name,
+            task_metadata=self.metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
             **kwargs,
         )
         scores = evaluator(model, encode_kwargs=encode_kwargs)

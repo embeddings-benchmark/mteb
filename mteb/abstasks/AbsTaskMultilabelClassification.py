@@ -60,13 +60,14 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         self,
         model: Encoder,
         dataset: DatasetDict | Dataset,
-        eval_split_name: str,
         *,
+        hf_split: str,
+        hf_subset: str,
         encode_kwargs: dict[str, Any] = {},
         **kwargs: Any,
     ) -> ScoresDict:
         train_split = dataset[self.train_split]
-        eval_split = dataset[eval_split_name]
+        eval_split = dataset[hf_split]
 
         scores = []
         # Bootstrap sample indices from training set for each experiment
@@ -82,7 +83,9 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
 
         _unique_train_embeddings = model.encode(
             DataLoader(unique_train_dataset),
-            task_name=self.metadata.name,
+            task_metadata=self.metadata,
+            hf_split=self.train_split,
+            hf_subset=hf_subset,
             **encode_kwargs,
         )
         unique_train_embeddings = dict(
@@ -101,7 +104,9 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
 
         X_test = model.encode(
             DataLoader(test_dataset),
-            task_name=self.metadata.name,
+            task_metadata=self.metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
             **encode_kwargs,
         )
         binarizer = MultiLabelBinarizer()

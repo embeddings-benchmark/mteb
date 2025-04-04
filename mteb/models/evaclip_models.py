@@ -1,18 +1,19 @@
 from __future__ import annotations
 
-from typing import Any, Literal
+from typing import Any
 
-import numpy as np
 import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from mteb.encoder_interface import BatchedInput, PromptType
-from mteb.model_meta import ModelMeta
+from mteb.abstasks import TaskMetadata
+from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models import AbsEncoder
 from mteb.requires_package import requires_image_dependencies
+from mteb.types import Array, BatchedInput, PromptType
 
 
-def evaclip_loader(**kwargs):
+def evaclip_loader(model_name, **kwargs):
     try:
         import os
         import sys
@@ -29,10 +30,10 @@ def evaclip_loader(**kwargs):
             "`git clone https://github.com/NVIDIA/apex && cd apex && pip install -v --disable-pip-version-check --no-build-isolation --no-cache-dir ./`"
         )
 
-    class EvaCLIPWrapper:
+    class EvaCLIPWrapper(AbsEncoder):
         def __init__(
             self,
-            model_name: str = "EVA02-CLIP-B-16",
+            model_name: str,
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
             **kwargs: Any,
         ):
@@ -87,26 +88,16 @@ def evaclip_loader(**kwargs):
             all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
             return all_image_embeddings
 
-        def calculate_probs(self, text_embeddings, image_embeddings):
-            text_embeddings = text_embeddings / text_embeddings.norm(
-                dim=-1, keepdim=True
-            )
-            image_embeddings = image_embeddings / image_embeddings.norm(
-                dim=-1, keepdim=True
-            )
-            logits = torch.matmul(image_embeddings, text_embeddings.T)
-            probs = (logits * 100).softmax(dim=-1)
-            return probs
-
         def encode(
             self,
             inputs: DataLoader[BatchedInput],
             *,
-            task_name: str,
+            task_metadata: TaskMetadata,
+            hf_split: str,
+            hf_subset: str,
             prompt_type: PromptType | None = None,
-            fusion_mode: Literal["sum"] = "sum",
             **kwargs: Any,
-        ) -> np.ndarray | torch.Tensor:
+        ) -> Array:
             text_embeddings = None
             image_embeddings = None
             if "text" in inputs.dataset.features:
@@ -119,20 +110,15 @@ def evaclip_loader(**kwargs):
                     raise ValueError(
                         "The number of texts and images must have the same length"
                     )
-                if fusion_mode == "sum":
-                    fused_embeddings = text_embeddings + image_embeddings
-                else:
-                    # to do: add other fusion mode
-                    raise ValueError(
-                        f"fusion mode {fusion_mode} hasn't been implemented"
-                    )
+                fused_embeddings = text_embeddings + image_embeddings
                 return fused_embeddings
             elif text_embeddings is not None:
                 return text_embeddings
             elif image_embeddings is not None:
                 return image_embeddings
+            raise ValueError
 
-    return EvaCLIPWrapper(**kwargs)
+    return EvaCLIPWrapper(model_name, **kwargs)
 
 
 training_code = "https://github.com/baaivision/EVA/tree/master/EVA-CLIP"
@@ -161,7 +147,7 @@ EVA02_CLIP_B_16 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/QuanSun/EVA-CLIP",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=training_datasets,
 )
@@ -183,7 +169,7 @@ EVA02_CLIP_L_14 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/QuanSun/EVA-CLIP",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=training_datasets,
 )
@@ -205,7 +191,7 @@ EVA02_CLIP_bigE_14 = ModelMeta(
     public_training_data="https://laion.ai/blog/laion-5b/",
     framework=["PyTorch"],
     reference="https://huggingface.co/QuanSun/EVA-CLIP",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=laion_2b,
 )
@@ -228,7 +214,7 @@ EVA02_CLIP_bigE_14_plus = ModelMeta(
     public_training_data="https://laion.ai/blog/laion-5b/",
     framework=["PyTorch"],
     reference="https://huggingface.co/QuanSun/EVA-CLIP",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=laion_2b,
 )

@@ -2,17 +2,18 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
-import numpy as np
 import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoImageProcessor, AutoModel
 
-from mteb.encoder_interface import BatchedInput, PromptType
-from mteb.model_meta import ModelMeta
+from mteb.abstasks import TaskMetadata
+from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models import AbsEncoder
+from mteb.types import Array, BatchedInput, PromptType
 
 
-class DINOModelWrapper:
+class DINOModel(AbsEncoder):
     """A wrapper class for DINO models that supports image encoding.
     Text encoding and text-image fusion are not supported.
     """
@@ -20,13 +21,18 @@ class DINOModelWrapper:
     def __init__(
         self,
         model_name: str,
+        revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.device = device
-        self.model = AutoModel.from_pretrained(model_name).to(self.device)
-        self.processor = AutoImageProcessor.from_pretrained(model_name)
+        self.model = AutoModel.from_pretrained(model_name, revision=revision).to(
+            self.device
+        )
+        self.processor = AutoImageProcessor.from_pretrained(
+            model_name, revision=revision
+        )
 
     @staticmethod
     def get_text_embeddings(
@@ -67,19 +73,16 @@ class DINOModelWrapper:
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
         return all_image_embeddings
 
-    @staticmethod
-    def calculate_probs(text_embeddings, image_embeddings):
-        raise ValueError("DINO models only support image encoding.")
-
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
-        fusion_mode: Literal["sum"] = "sum",
         **kwargs: Any,
-    ) -> np.ndarray | torch.Tensor:
+    ) -> Array:
         text_embeddings = None
         image_embeddings = None
         if "text" in inputs.dataset.features:
@@ -93,6 +96,7 @@ class DINOModelWrapper:
             return text_embeddings
         elif image_embeddings is not None:
             return image_embeddings
+        raise ValueError("No text or image data found.")
 
 
 dinov2_training_datasets = {
@@ -102,7 +106,7 @@ dinov2_training_datasets = {
 
 
 dinov2_small = ModelMeta(
-    loader=DINOModelWrapper,  # type: ignore
+    loader=DINOModel,  # type: ignore
     name="facebook/dinov2-small",
     languages=["eng_Latn"],
     revision="ed25f3a31f01632728cabb09d1542f84ab7b0056",
@@ -118,13 +122,13 @@ dinov2_small = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/facebook/dinov2-small",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=dinov2_training_datasets,
 )
 
 dinov2_base = ModelMeta(
-    loader=DINOModelWrapper,  # type: ignore
+    loader=DINOModel,  # type: ignore
     name="facebook/dinov2-base",
     languages=["eng_Latn"],
     revision="f9e44c814b77203eaa57a6bdbbd535f21ede1415",
@@ -140,13 +144,13 @@ dinov2_base = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/facebook/dinov2-base",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=dinov2_training_datasets,
 )
 
 dinov2_large = ModelMeta(
-    loader=DINOModelWrapper,  # type: ignore
+    loader=DINOModel,  # type: ignore
     name="facebook/dinov2-large",
     languages=["eng_Latn"],
     revision="47b73eefe95e8d44ec3623f8890bd894b6ea2d6c",
@@ -162,13 +166,13 @@ dinov2_large = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/facebook/dinov2-large",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=dinov2_training_datasets,
 )
 
 dinov2_giant = ModelMeta(
-    loader=DINOModelWrapper,  # type: ignore
+    loader=DINOModel,  # type: ignore
     name="facebook/dinov2-giant",
     languages=["eng_Latn"],
     revision="611a9d42f2335e0f921f1e313ad3c1b7178d206d",
@@ -184,7 +188,7 @@ dinov2_giant = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/facebook/dinov2-giant",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=dinov2_training_datasets,
 )

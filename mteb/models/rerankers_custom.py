@@ -1,17 +1,19 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Callable
+from typing import Any
 
 import torch
 from sentence_transformers import CrossEncoder
+from torch.utils.data import DataLoader
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
-from mteb.encoder_interface import Encoder
+from mteb.abstasks import TaskMetadata
 from mteb.evaluation.evaluators.RetrievalEvaluator import DenseRetrievalExactSearch
 from mteb.model_meta import ModelMeta
 from mteb.models.bge_models import bge_m3_training_data
 from mteb.requires_package import requires_package
+from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -41,9 +43,6 @@ class RerankerWrapper(DenseRetrievalExactSearch):
         self.silent = silent
         self.first_print = True  # for debugging
 
-    def predict(self, input_to_rerank, **kwargs):
-        pass
-
 
 class BGEReranker(RerankerWrapper):
     name: str = "BGE"
@@ -72,13 +71,23 @@ class BGEReranker(RerankerWrapper):
         self.model = FlagReranker(model_name_or_path, use_fp16=True)
 
     @torch.inference_mode()
-    def predict(self, input_to_rerank, **kwargs):
-        inputs = list(zip(*input_to_rerank))
-        if len(input_to_rerank[0]) == 2:
-            queries, passages = inputs
-            instructions = None
-        else:
-            queries, passages, instructions = inputs
+    def predict(
+        self,
+        inputs1: DataLoader[BatchedInput],
+        inputs2: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        queries = [text for batch in inputs1 for text in batch["query"]]
+        instructions = None
+        if "instruction" in inputs2.dataset.features:
+            instructions = [text for batch in inputs1 for text in batch["instruction"]]
+        passages = [text for batch in inputs2 for text in batch["text"]]
+
         if instructions is not None and instructions[0] is not None:
             assert len(instructions) == len(queries)
             queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
@@ -119,13 +128,22 @@ class MonoBERTReranker(RerankerWrapper):
         self.model.eval()
 
     @torch.inference_mode()
-    def predict(self, input_to_rerank, **kwargs):
-        inputs = list(zip(*input_to_rerank))
-        if len(input_to_rerank[0]) == 2:
-            queries, passages = inputs
-            instructions = None
-        else:
-            queries, passages, instructions = inputs
+    def predict(
+        self,
+        inputs1: DataLoader[BatchedInput],
+        inputs2: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        queries = [text for batch in inputs1 for text in batch["query"]]
+        instructions = None
+        if "instruction" in inputs2.dataset.features:
+            instructions = [text for batch in inputs1 for text in batch["instruction"]]
+        passages = [text for batch in inputs2 for text in batch["text"]]
 
         if instructions is not None and instructions[0] is not None:
             queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
@@ -140,7 +158,7 @@ class MonoBERTReranker(RerankerWrapper):
         ).to(self.device)
         output = self.model(**tokens)[0]
         batch_scores = torch.nn.functional.log_softmax(output, dim=1)
-        return batch_scores[:, 1].exp().tolist()
+        return batch_scores[:, 1].exp()
 
 
 class JinaReranker(RerankerWrapper):
@@ -165,13 +183,23 @@ class JinaReranker(RerankerWrapper):
             trust_remote_code=True,
         )
 
-    def predict(self, input_to_rerank, **kwargs):
-        inputs = list(zip(*input_to_rerank))
-        if len(input_to_rerank[0]) == 2:
-            queries, passages = inputs
-            instructions = None
-        else:
-            queries, passages, instructions = inputs
+    @torch.inference_mode()
+    def predict(
+        self,
+        inputs1: DataLoader[BatchedInput],
+        inputs2: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        queries = [text for batch in inputs1 for text in batch["query"]]
+        instructions = None
+        if "instruction" in inputs2.dataset.features:
+            instructions = [text for batch in inputs1 for text in batch["instruction"]]
+        passages = [text for batch in inputs2 for text in batch["text"]]
 
         if instructions is not None and instructions[0] is not None:
             queries = [f"{q} {i}".strip() for i, q in zip(instructions, queries)]
@@ -181,26 +209,13 @@ class JinaReranker(RerankerWrapper):
             self.first_print = False
 
         sentence_pairs = list(zip(queries, passages))
-        scores = self.model.predict(sentence_pairs, convert_to_tensor=True).tolist()
+        scores = self.model.predict(sentence_pairs, convert_to_tensor=True)
         return scores
 
 
-def rerank_wrapper_loader(
-    model_name_or_path: str, wrapper: type[RerankerWrapper], **kwargs
-) -> Callable[..., Encoder]:
-    _kwargs = kwargs
-    _kwargs["model_name_or_path"] = model_name_or_path
-
-    def loader_inner(**kwargs: Any) -> Encoder:
-        return wrapper(**_kwargs, **kwargs)
-
-    return loader_inner()
-
-
 monobert_large = ModelMeta(
-    loader=rerank_wrapper_loader,  # type: ignore
+    loader=MonoBERTReranker,  # type: ignore
     loader_kwargs=dict(
-        wrapper=MonoBERTReranker,
         fp_options="float16",
     ),
     name="castorini/monobert-large-msmarco",
@@ -219,13 +234,13 @@ monobert_large = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["Sentence Transformers", "PyTorch"],
+    is_cross_encoder=True,
 )
 
 # languages unclear: https://huggingface.co/jinaai/jina-reranker-v2-base-multilingual/discussions/28
 jina_reranker_multilingual = ModelMeta(
-    loader=rerank_wrapper_loader,  # type: ignore
+    loader=JinaReranker,  # type: ignore
     loader_kwargs=dict(
-        wrapper=JinaReranker,
         fp_options="float16",
     ),
     name="jinaai/jina-reranker-v2-base-multilingual",
@@ -244,12 +259,12 @@ jina_reranker_multilingual = ModelMeta(
     use_instructions=None,
     training_datasets=None,
     framework=["Sentence Transformers", "PyTorch"],
+    is_cross_encoder=True,
 )
 
 bge_reranker_v2_m3 = ModelMeta(
-    loader=rerank_wrapper_loader,  # type: ignore
+    loader=BGEReranker,  # type: ignore
     loader_kwargs=dict(
-        wrapper=BGEReranker,
         fp_options="float16",
     ),
     name="BAAI/bge-reranker-v2-m3",
@@ -301,6 +316,7 @@ bge_reranker_v2_m3 = ModelMeta(
     use_instructions=None,
     training_datasets=bge_m3_training_data,
     framework=["Sentence Transformers", "PyTorch"],
+    is_cross_encoder=True,
     citation="""
     @misc{li2023making,
       title={Making Large Language Models A Better Foundation For Dense Retrieval},

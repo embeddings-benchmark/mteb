@@ -156,7 +156,12 @@ class AbsTask(ABC):
             else:
                 data_split = self.dataset[hf_subset][split]
             scores[hf_subset] = self._evaluate_subset(
-                model, data_split, encode_kwargs=encode_kwargs, **kwargs
+                model,
+                data_split,
+                hf_split=split,
+                hf_subset=hf_subset,
+                encode_kwargs=encode_kwargs,
+                **kwargs,
             )
             self._add_main_score(scores[hf_subset])
         return scores
@@ -167,6 +172,8 @@ class AbsTask(ABC):
         model: Encoder,
         data_split: DatasetDict | Dataset,
         encode_kwargs: dict[str, Any],
+        hf_split: str,
+        hf_subset: str,
         **kwargs: Any,
     ) -> ScoresDict:
         raise NotImplementedError(

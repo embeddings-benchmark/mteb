@@ -3,15 +3,16 @@ from __future__ import annotations
 import logging
 from typing import Any, Literal
 
-import numpy as np
 import torch
 from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from mteb.encoder_interface import BatchedInput, PromptType
+from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models import AbsEncoder
 from mteb.requires_package import requires_image_dependencies, requires_package
+from mteb.types import Array, BatchedInput, PromptType
 
 
 def downsample_image(
@@ -45,8 +46,7 @@ def downsample_image(
     return image
 
 
-def voyage_v_loader(**kwargs):
-    model_name = kwargs.get("model_name", "Voyage vision")
+def voyage_v_loader(model_name, **kwargs):
     requires_package(
         voyage_v_loader,
         "voyageai and tenacity",
@@ -56,7 +56,7 @@ def voyage_v_loader(**kwargs):
     import voyageai
     from tenacity import retry, stop_after_attempt, wait_exponential
 
-    class VoyageMultiModalModelWrapper:
+    class VoyageMultiModalModelWrapper(AbsEncoder):
         def __init__(
             self,
             model_name: str,
@@ -135,26 +135,17 @@ def voyage_v_loader(**kwargs):
             all_image_embeddings = torch.vstack(all_image_embeddings)
             return all_image_embeddings
 
-        def calculate_probs(self, text_embeddings, image_embeddings):
-            text_embeddings = text_embeddings / text_embeddings.norm(
-                dim=-1, keepdim=True
-            )
-            image_embeddings = image_embeddings / image_embeddings.norm(
-                dim=-1, keepdim=True
-            )
-            logits = torch.matmul(image_embeddings, text_embeddings.T)
-            probs = (logits * 100).softmax(dim=-1)
-            return probs
-
         def encode(
             self,
             inputs: DataLoader[BatchedInput],
             *,
-            task_name: str,
+            task_metadata: TaskMetadata,
+            hf_split: str,
+            hf_subset: str,
             prompt_type: PromptType | None = None,
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ) -> np.ndarray | torch.Tensor:
+        ) -> Array:
             if prompt_type is not None:
                 if prompt_type == PromptType.passage:
                     input_type = "document"
@@ -198,8 +189,9 @@ def voyage_v_loader(**kwargs):
                 return text_embeddings
             elif image_embeddings is not None:
                 return image_embeddings
+            raise ValueError
 
-    return VoyageMultiModalModelWrapper(**kwargs)
+    return VoyageMultiModalModelWrapper(model_name, **kwargs)
 
 
 voyage_v = ModelMeta(

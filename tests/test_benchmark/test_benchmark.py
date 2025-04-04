@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 from pathlib import Path
+from typing import Any
 from unittest.mock import patch
 
 import numpy as np
@@ -12,11 +13,13 @@ from torch.utils.data import DataLoader
 
 import mteb
 import mteb.overview
-from mteb.abstasks import AbsTask
+from mteb.abstasks import AbsTask, TaskMetadata
 from mteb.create_meta import generate_readme
 from mteb.evaluation.MTEB import logger
+from mteb.types import Array, BatchedInput, PromptType
 
 from .mock_models import (
+    AbsMockEncoder,
     MockCLIPEncoder,
     MockMocoEncoder,
     MockNumpyEncoder,
@@ -126,7 +129,7 @@ def test_prompt_name_passed_to_all_encodes(task_name: str | AbsTask, tmp_path: P
         task_name.metadata.name if isinstance(task_name, AbsTask) else task_name
     )
 
-    class MockEncoderWithInstructions(mteb.Encoder):
+    class MockEncoderWithInstructions(MockSentenceTransformer):
         def encode(
             self, sentences: DataLoader, prompt_name: str | None = None, **kwargs
         ):
@@ -134,6 +137,8 @@ def test_prompt_name_passed_to_all_encodes(task_name: str | AbsTask, tmp_path: P
             return np.zeros((len(sentences.dataset), 10))
 
     class EncoderWithoutInstructions(MockSentenceTransformer):
+        prompts = {}
+
         def encode(self, sentences: DataLoader, **kwargs):
             assert kwargs["prompt_name"] is None
             return super().encode(sentences, **kwargs)
@@ -167,7 +172,7 @@ def test_encode_kwargs_passed_to_all_encodes(task_name: str | AbsTask, tmp_path:
     """Test that all tasks correctly pass down the encode_kwargs to the encoder."""
     my_encode_kwargs = {"no_one_uses_this_args": "but_its_here"}
 
-    class MockEncoderWithKwargs(mteb.Encoder):
+    class MockEncoderWithKwargs(AbsMockEncoder):
         def encode(self, sentences: DataLoader, task_name: str | None = None, **kwargs):
             assert "no_one_uses_this_args" in kwargs
             assert (
@@ -194,16 +199,27 @@ def test_encode_kwargs_passed_to_all_encodes(task_name: str | AbsTask, tmp_path:
 
 
 @pytest.mark.parametrize("task_name", MOCK_TASK_TEST_GRID + MOCK_MIEB_TASK_GRID)
-def test_task_name_passed_encoder(task_name: mteb.AbsTask, tmp_path: Path):
+def test_task_metadata_passed_encoder(task_name: mteb.AbsTask, tmp_path: Path):
     """Test that all tasks correctly pass down the task_name to the encoder."""
     _task_name = (
         task_name.metadata.name if isinstance(task_name, mteb.AbsTask) else task_name
     )
 
-    class MockEncoderWithInstructions(mteb.Encoder):
-        def encode(self, sentences, task_name: str | None = None, **kwargs):
-            assert task_name == _task_name
-            return np.zeros((len(sentences), 10))
+    class MockEncoder(MockCLIPEncoder):
+        def encode(
+            self,
+            inputs: DataLoader[BatchedInput],
+            *,
+            task_metadata: TaskMetadata,
+            hf_split: str,
+            hf_subset: str,
+            prompt_type: PromptType | None = None,
+            **kwargs: Any,
+        ) -> Array:
+            assert task_metadata.name == _task_name
+            assert isinstance(hf_split, str)
+            assert isinstance(hf_subset, str)
+            return np.zeros((len(inputs.dataset), 10))
 
     if isinstance(task_name, mteb.AbsTask):
         tasks = [task_name]
@@ -213,7 +229,7 @@ def test_task_name_passed_encoder(task_name: mteb.AbsTask, tmp_path: Path):
     eval = mteb.MTEB(tasks=tasks)
 
     eval.run(
-        MockEncoderWithInstructions(),
+        MockEncoder(),
         output_folder=tmp_path.as_posix(),
         overwrite_results=True,
     )
@@ -283,7 +299,7 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
 
     to_compare = _task_name if is_task_name else _task_type
 
-    class MockEncoderWithPrompts(mteb.Encoder):
+    class MockEncoderWithPrompts(MockSentenceTransformer):
         prompts = {}
 
         def encode(
@@ -304,7 +320,7 @@ def test_prompt_name_passed_to_all_encodes_with_prompts(
         overwrite_results=True,
     )
 
-    class MockEncoderWithExistingPrompts(mteb.Encoder):
+    class MockEncoderWithExistingPrompts(MockSentenceTransformer):
         prompts = {to_compare: to_compare}
 
         def encode(
@@ -353,7 +369,7 @@ def test_model_query_passage_prompts_task_type(
         f"{task_name}-passage": "passage",
     }
 
-    class MockEncoderWithPrompts(mteb.Encoder):
+    class MockEncoderWithPrompts:
         is_query = True
 
         def encode(
@@ -363,7 +379,7 @@ def test_model_query_passage_prompts_task_type(
             self.is_query = not self.is_query
             return np.zeros((len(sentences.dataset), 10))
 
-    class MockSentenceEncoderWithPrompts(MockSentenceTransformer):
+    class MockSentenceEncoderWithPrompts:
         is_query = True
 
         def encode(

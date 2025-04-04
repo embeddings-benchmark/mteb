@@ -13,11 +13,11 @@ from sklearn.model_selection import train_test_split
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 
-from mteb.abstasks.TaskMetadata import HFSubset
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset
 
+from ...create_dataloaders import create_image_dataloader
 from ...encoder_interface import Encoder
 from ..AbsTask import AbsTask, ScoresDict
-from ..TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -199,8 +199,9 @@ class AbsTaskImageMultilabelClassification(AbsTask):
             scores[hf_subset] = self._evaluate_subset(
                 model,
                 ds,
-                eval_split,
-                train_split,
+                hf_split=eval_split,
+                hf_subset=hf_subset,
+                train_split=train_split,
                 encode_kwargs=encode_kwargs,
                 **kwargs,
             )
@@ -212,14 +213,15 @@ class AbsTaskImageMultilabelClassification(AbsTask):
         self,
         model: Encoder,
         dataset,
-        eval_split: str = "test",
-        train_split: str = "train",
+        hf_split: str,
+        hf_subset: str,
+        train_split: str,
         *,
         encode_kwargs: dict[str, Any] = {},
         **kwargs: Any,
     ) -> ScoresDict:
         train_split = dataset[train_split]
-        eval_split = dataset[eval_split]
+        eval_split = dataset[hf_split]
         params = {
             "classifier_type": type(self.classifier).__name__,
             "classifier_params": self.classifier.get_params(),
@@ -237,18 +239,23 @@ class AbsTaskImageMultilabelClassification(AbsTask):
             train_samples.append(sample_indices)
         # Encode all unique images at the indices
         unique_train_indices = list(set(itertools.chain.from_iterable(train_samples)))
-        unique_train_images = train_split.select(unique_train_indices)[
-            self.image_column_name
-        ]
 
-        _unique_train_embeddings = model.get_image_embeddings(
-            unique_train_images,
+        dataloader_train = create_image_dataloader(
+            train_split.select(unique_train_indices),
+            image_column_name=self.image_column_name,
+            batch_size=encode_kwargs["batch_size"],
+        )
+        _unique_train_embeddings = model.encode(
+            dataloader_train,
+            hf_split="train",
+            hf_subset=hf_subset,
+            task_metadata=self.metadata,
             **encode_kwargs,
         )
         unique_train_embeddings = dict(
             zip(unique_train_indices, _unique_train_embeddings)
         )
-        test_images = eval_split[self.image_column_name]
+        test_images = eval_split
         binarizer = MultiLabelBinarizer()
         y_test = binarizer.fit_transform(eval_split[self.label_column_name])
         # Stratified subsampling of test set to 2000 examples.
@@ -259,8 +266,19 @@ class AbsTaskImageMultilabelClassification(AbsTask):
                 )
         except ValueError:
             logger.warning("Couldn't subsample, continuing with the entire test set.")
+        dataloader_test = create_image_dataloader(
+            test_images,
+            image_column_name=self.image_column_name,
+            batch_size=encode_kwargs["batch_size"],
+        )
 
-        X_test = model.get_image_embeddings(test_images, **encode_kwargs)
+        X_test = model.encode(
+            dataloader_test,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            task_metadata=self.metadata,
+            **encode_kwargs,
+        )
         for i_experiment, sample_indices in enumerate(train_samples):
             logger.info(
                 "=" * 10

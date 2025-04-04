@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-import numpy as np
 from scipy.stats import pearsonr, spearmanr
 from sklearn.metrics.pairwise import (
     paired_cosine_distances,
@@ -11,7 +10,9 @@ from sklearn.metrics.pairwise import (
     paired_manhattan_distances,
 )
 
+from mteb.abstasks import TaskMetadata
 from mteb.create_dataloaders import create_image_dataloader
+from mteb.similarity_functions import compute_pairwise_similarity
 
 from ..Evaluator import Evaluator
 
@@ -24,6 +25,9 @@ class VisualSTSEvaluator(Evaluator):
         dataset,
         sentences_column_names: list[str],
         gold_scores: list[float],
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         task_name: str | None = None,
         **kwargs,
     ):
@@ -43,8 +47,9 @@ class VisualSTSEvaluator(Evaluator):
             ),
         )
         self.gold_scores = gold_scores
-        self.task_name = task_name
-        # TODO use task_name for prompts with interleaved encoding.
+        self.task_metadata = task_metadata
+        self.hf_split = hf_split
+        self.hf_subset = hf_subset
 
     def __call__(
         self,
@@ -60,17 +65,21 @@ class VisualSTSEvaluator(Evaluator):
 
         embeddings1 = model.encode(
             self.sentence1_dataset,
-            task_name=self.task_name,
+            task_metadata=self.task_metadata,
+            hf_subset=self.hf_subset,
+            hf_split=self.hf_split,
             batch_size=encode_kwargs["batch_size"],
         )
         embeddings2 = model.encode(
             self.sentence2_dataset,
-            task_name=self.task_name,
+            task_metadata=self.task_metadata,
+            hf_subset=self.hf_subset,
+            hf_split=self.hf_split,
             batch_size=encode_kwargs["batch_size"],
         )
 
         logger.info("Evaluating...")
-        cosine_scores = 1 - (paired_cosine_distances(embeddings1, embeddings2))
+        cosine_scores = 1 - paired_cosine_distances(embeddings1, embeddings2)
         manhattan_distances = -paired_manhattan_distances(embeddings1, embeddings2)
         euclidean_distances = -paired_euclidean_distances(embeddings1, embeddings2)
 
@@ -83,15 +92,7 @@ class VisualSTSEvaluator(Evaluator):
         euclidean_pearson, _ = pearsonr(self.gold_scores, euclidean_distances)
         euclidean_spearman, _ = spearmanr(self.gold_scores, euclidean_distances)
 
-        similarity_scores = None
-        if hasattr(model, "similarity_pairwise"):
-            similarity_scores = model.similarity_pairwise(embeddings1, embeddings2)  # type: ignore
-        elif hasattr(model, "similarity"):
-            _similarity_scores = [
-                float(model.similarity(e1, e2))  # type: ignore
-                for e1, e2 in zip(embeddings1, embeddings2)
-            ]
-            similarity_scores = np.array(_similarity_scores)
+        similarity_scores = compute_pairwise_similarity(model, embeddings1, embeddings2)
 
         if similarity_scores is not None:
             pearson = pearsonr(self.gold_scores, similarity_scores)

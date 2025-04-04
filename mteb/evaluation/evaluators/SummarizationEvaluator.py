@@ -9,11 +9,12 @@ import torch
 import tqdm
 from scipy.stats import pearsonr, spearmanr
 
-from mteb.encoder_interface import Encoder, EncoderWithSimilarity
+from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.encoder_interface import Encoder
+from mteb.similarity_functions import cos_sim, dot_score
 
 from ...create_dataloaders import create_dataloader_from_texts
 from .Evaluator import Evaluator
-from .utils import cos_sim, dot_score
 
 # if later than python 3.13 use typing module
 if sys.version_info >= (3, 13):
@@ -31,7 +32,9 @@ class SummarizationEvaluator(Evaluator):
         machine_summaries: list[list[str]],
         texts: list[str],
         gold_scores: list[list[float]],
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         **kwargs,
     ):
         """Summarization Evaluator
@@ -41,7 +44,9 @@ class SummarizationEvaluator(Evaluator):
         machine_summaries: shape: (-1, num_machine_summaries)
         texts: shape: (-1,)
         gold_scores: shape: (-1, num_machine_summaries)
-        task_name: Name of the task
+        task_metadata: Name of the task
+        hf_split: Split of task
+        hf_subset: Subset of task
         **kwargs: Additional arguments to pass to the Evaluator
         """
         super().__init__(**kwargs)
@@ -49,11 +54,13 @@ class SummarizationEvaluator(Evaluator):
         self.machine_summaries = machine_summaries
         self.texts = texts
         self.gold_scores = gold_scores
-        self.task_name = task_name
+        self.task_metadata = task_metadata
+        self.hf_split = hf_split
+        self.hf_subset = hf_subset
 
     def __call__(
         self,
-        model: Encoder | EncoderWithSimilarity,
+        model: Encoder,
         *,
         encode_kwargs: dict[str, Any] = {},
     ):
@@ -83,7 +90,9 @@ class SummarizationEvaluator(Evaluator):
                     for summary in human_summaries
                 ]
             ),
-            task_name=self.task_name,
+            task_metadata=self.task_metadata,
+            hf_subset=self.hf_subset,
+            hf_split=self.hf_split,
             **encode_kwargs,
         )
 
@@ -96,7 +105,9 @@ class SummarizationEvaluator(Evaluator):
                     for summary in machine_summaries
                 ]
             ),
-            task_name=self.task_name,
+            task_metadata=self.task_metadata,
+            hf_subset=self.hf_subset,
+            hf_split=self.hf_split,
             **encode_kwargs,
         )
 
@@ -124,21 +135,11 @@ class SummarizationEvaluator(Evaluator):
                 cosine_scores = cos_sim(emb_machine_summary, embs_human_summaries)
                 dot_scores = dot_score(emb_machine_summary, embs_human_summaries)
 
-                if hasattr(model, "similarity_pairwise"):
-                    # Pairwise similarity
-                    _sim_score = [
-                        float(model.similarity(emb_machine_summary, emb_human_summary))  # type: ignore
-                        for emb_human_summary in embs_human_summaries
-                    ]
-                    sim_score = torch.tensor(_sim_score)
-                elif hasattr(model, "similarity"):
-                    _sim_score = [
-                        float(model.similarity(emb_machine_summary, emb_human_summary))  # type: ignore
-                        for emb_human_summary in embs_human_summaries
-                    ]
-                    sim_score = torch.tensor(_sim_score)
-                else:
-                    sim_score = cosine_scores  # Default to cosine similarity
+                _sim_score = [
+                    float(model.similarity(emb_machine_summary, emb_human_summary))  # type: ignore
+                    for emb_human_summary in embs_human_summaries
+                ]
+                sim_score = torch.tensor(_sim_score)
 
                 cosine_max_score = torch.max(cosine_scores).item()
                 dot_max_score = torch.max(dot_scores).item()
@@ -190,12 +191,14 @@ class DeprecatedSummarizationEvaluator(Evaluator):
 
     def __init__(
         self,
-        task_name: str | None = None,
         human_summaries=None,
         machine_summaries=None,
         texts=None,
         gold_scores=None,
         limit: int | None = None,
+        task_metadata: TaskMetadata | None = None,
+        hf_split: str | None = None,
+        hf_subset: str | None = None,
         **kwargs,
     ):
         # human_summaries shape: (None, num_human_summaries)
@@ -212,11 +215,13 @@ class DeprecatedSummarizationEvaluator(Evaluator):
         self.machine_summaries = machine_summaries
         self.texts = texts
         self.gold_scores = gold_scores
-        self.task_name = task_name
+        self.task_metadata = task_metadata
+        self.hf_split = hf_split
+        self.hf_subset = hf_subset
 
     def __call__(
         self,
-        model: Encoder | EncoderWithSimilarity,
+        model: Encoder,
         *,
         encode_kwargs: dict[str, Any] = {},
     ):
@@ -246,7 +251,9 @@ class DeprecatedSummarizationEvaluator(Evaluator):
                     for summary in human_summaries
                 ]
             ),
-            task_name=self.task_name,
+            task_metadata=self.task_metadata,
+            hf_subset=self.hf_subset,
+            hf_split=self.hf_split,
             **encode_kwargs,
         )
 
@@ -259,7 +266,9 @@ class DeprecatedSummarizationEvaluator(Evaluator):
                     for summary in machine_summaries
                 ]
             ),
-            task_name=self.task_name,
+            task_metadata=self.task_metadata,
+            hf_subset=self.hf_subset,
+            hf_split=self.hf_split,
             **encode_kwargs,
         )
 
@@ -287,21 +296,12 @@ class DeprecatedSummarizationEvaluator(Evaluator):
                 cosine_scores = cos_sim(emb_machine_summary, embs_human_summaries)
                 dot_scores = dot_score(emb_machine_summary, embs_human_summaries)
 
-                if hasattr(model, "similarity_pairwise"):
-                    # Pairwise similarity
-                    _sim_score = [
-                        float(model.similarity(emb_machine_summary, emb_human_summary))  # type: ignore
-                        for emb_human_summary in embs_human_summaries
-                    ]
-                    sim_score = torch.tensor(_sim_score)
-                elif hasattr(model, "similarity"):
-                    _sim_score = [
-                        float(model.similarity(emb_machine_summary, emb_human_summary))  # type: ignore
-                        for emb_human_summary in embs_human_summaries
-                    ]
-                    sim_score = torch.tensor(_sim_score)
-                else:
-                    sim_score = cosine_scores  # Default to cosine similarity
+                # Pairwise similarity
+                _sim_score = [
+                    float(model.similarity(emb_machine_summary, emb_human_summary))  # type: ignore
+                    for emb_human_summary in embs_human_summaries
+                ]
+                sim_score = torch.tensor(_sim_score)
 
                 cosine_max_score = torch.max(cosine_scores).item()
                 dot_max_score = torch.max(dot_scores).item()

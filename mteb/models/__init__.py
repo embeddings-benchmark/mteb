@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.overview import (
     MODEL_REGISTRY,
     ModelMeta,
@@ -24,4 +25,5 @@ __all__ = [
     "model_meta_from_cross_encoder",
     "SentenceTransformerWrapper",
     "sentence_transformers_loader",
+    "AbsEncoder",
 ]

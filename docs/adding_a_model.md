@@ -5,7 +5,7 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
 1. **Add meta information about your model to [model dir](../mteb/models/)**. See the docstring of ModelMeta for meta data details.
    ```python
    from mteb.model_meta import ModelMeta
-    from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+   from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
    bge_m3 = ModelMeta(
        loader=sentence_transformers_loader,
@@ -30,11 +30,11 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
    ```
    To calculate `memory_usage_mb` you can run `model_meta.calculate_memory_usage_mb()`. By default, the model will run using the [`sentence_transformers_loader`](../mteb/models/sentence_transformer_wrapper.py) loader function. If you need to use a custom implementation, you can specify the `loader` parameter in the `ModelMeta` class. For example:
    ```python
-   from mteb.models.wrapper import Wrapper
-   from mteb.encoder_interface import PromptType
+   from mteb.encoder_interface import Encoder
+   from mteb.types import PromptType
    import numpy as np
 
-   class CustomWrapper(Wrapper):
+   class CustomWrapper:
        def __init__(self, model_name, revision):
            super().__init__(model_name, revision)
            # your custom implementation here

@@ -1,12 +1,15 @@
 from __future__ import annotations
 
+import logging
 from typing import Any, Callable
 
 import torch
 from datasets import Dataset
 from torch.utils.data import DataLoader, default_collate
 
-from mteb.encoder_interface import BatchedInput, Conversation
+from mteb.types import BatchedInput, Conversation
+
+logger = logging.getLogger(__name__)
 
 
 def create_dataloader_from_texts(
@@ -90,7 +93,9 @@ def create_dataloader_for_queries(
     Returns:
         A dataloader with the queries.
     """
-    if instructions is None:
+    # cross encoder can produce list of None
+    any_none_instruction = instructions is None or any(i is None for i in instructions)
+    if instructions is None or any_none_instruction:
         dataset = Dataset.from_dict({"text": queries, "query": queries})
     else:
         dataset = Dataset.from_dict(
@@ -249,7 +254,7 @@ def create_image_dataloader(
     batch_size: int = 32,
     transform: Callable[[Any], Any] | None = None,
     collate_fn: Callable[[list[dict[str, Any]]], dict[str, Any]] = custom_collate_fn,
-) -> DataLoader[dict[str, Any]]:
+) -> DataLoader[BatchedInput]:
     """Creates a DataLoader with the image dataset prepared using the explicit transformation.
     This should mirror the behavior of the old code.
     """

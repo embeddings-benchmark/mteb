@@ -2,17 +2,18 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
-import numpy as np
 import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from mteb.encoder_interface import BatchedInput, PromptType
-from mteb.model_meta import ModelMeta
+from mteb.abstasks import TaskMetadata
+from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models import AbsEncoder
 from mteb.requires_package import requires_image_dependencies
+from mteb.types import Array, BatchedInput, PromptType
 
 
-def vista_loader(**kwargs):
+def vista_loader(model_name, **kwargs):
     try:  # a temporal fix for the dependency issues of vista models.
         from visual_bge.modeling import Visualized_BGE
     except ImportError:
@@ -20,7 +21,7 @@ def vista_loader(**kwargs):
             "Please install `visual_bge`, refer to https://github.com/FlagOpen/FlagEmbedding/tree/master/research/visual_bge#install-flagembedding."
         )
 
-    class VisualizedBGEWrapper(Visualized_BGE):
+    class VisualizedBGEWrapper(Visualized_BGE, AbsEncoder):
         """Setting up VISTA
 
         ```
@@ -171,11 +172,13 @@ def vista_loader(**kwargs):
             self,
             inputs: DataLoader[BatchedInput],
             *,
-            task_name: str,
+            task_metadata: TaskMetadata,
+            hf_split: str,
+            hf_subset: str,
             prompt_type: PromptType | None = None,
             show_progress_bar: bool = True,
             **kwargs: Any,
-        ) -> np.ndarray | torch.Tensor:
+        ) -> Array:
             if "text" in inputs.dataset.features and "image" in inputs.dataset.features:
                 all_fused_embeddings = []
                 with torch.no_grad():
@@ -205,25 +208,21 @@ def vista_loader(**kwargs):
                 return torch.cat(all_fused_embeddings, dim=0)
             elif "text" in inputs.dataset.features:
                 return self.get_text_embeddings(
-                    inputs, task_name=task_name, prompt_type=prompt_type, **kwargs
+                    inputs,
+                    task_metadata=task_metadata,
+                    prompt_type=prompt_type,
+                    **kwargs,
                 )
             elif "image" in inputs.dataset.features:
                 return self.get_image_embeddings(
-                    inputs, task_name=task_name, prompt_type=prompt_type, **kwargs
+                    inputs,
+                    task_metadata=task_metadata,
+                    prompt_type=prompt_type,
+                    **kwargs,
                 )
+            raise ValueError
 
-        def calculate_probs(self, text_embeddings, image_embeddings):
-            text_embeddings = text_embeddings / text_embeddings.norm(
-                dim=-1, keepdim=True
-            )
-            image_embeddings = image_embeddings / image_embeddings.norm(
-                dim=-1, keepdim=True
-            )
-            logits = torch.matmul(image_embeddings, text_embeddings.T)
-            probs = (logits * 100).softmax(dim=-1)
-            return probs
-
-    return VisualizedBGEWrapper(**kwargs)
+    return VisualizedBGEWrapper(model_name, **kwargs)
 
 
 vista_training_datasets = {
@@ -251,7 +250,7 @@ visualized_bge_base = ModelMeta(
     public_training_data="https://huggingface.co/datasets/JUNJIE99/VISTA_S2",
     framework=["PyTorch"],
     reference="https://huggingface.co/BAAI/bge-visualized",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=vista_training_datasets,
 )
@@ -277,7 +276,7 @@ visualized_bge_m3 = ModelMeta(
     public_training_data="https://huggingface.co/datasets/JUNJIE99/VISTA_S2",
     framework=["PyTorch"],
     reference="https://huggingface.co/BAAI/bge-visualized",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=vista_training_datasets,
 )

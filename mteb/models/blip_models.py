@@ -1,32 +1,33 @@
 from __future__ import annotations
 
-from typing import Any, Literal
+from typing import Any
 
-import numpy as np
 import torch
 from torch.nn.functional import normalize
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import BlipForImageTextRetrieval, BlipProcessor
 
-from mteb.encoder_interface import BatchedInput, PromptType
-from mteb.model_meta import ModelMeta
-from mteb.models.wrapper import Wrapper
+from mteb.abstasks import TaskMetadata
+from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.abs_encoder import AbsEncoder
+from mteb.types import Array, BatchedInput, PromptType
 
 
-class BLIPModelWrapper(Wrapper):
+class BLIPModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
+        revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.device = device
-        self.model = BlipForImageTextRetrieval.from_pretrained(model_name).to(
-            self.device
-        )
-        self.processor = BlipProcessor.from_pretrained(model_name)
+        self.model = BlipForImageTextRetrieval.from_pretrained(
+            model_name, revision=revision
+        ).to(self.device)
+        self.processor = BlipProcessor.from_pretrained(model_name, revision=revision)
 
     def get_text_embeddings(
         self,
@@ -84,24 +85,16 @@ class BLIPModelWrapper(Wrapper):
         all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
         return all_image_embeddings
 
-    def calculate_probs(self, text_embeddings, image_embeddings):
-        text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True)
-        image_embeddings = image_embeddings / image_embeddings.norm(
-            dim=-1, keepdim=True
-        )
-        logits = torch.matmul(image_embeddings, text_embeddings.T)
-        probs = (logits * 100).softmax(dim=-1)
-        return probs
-
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
-        fusion_mode: Literal["sum"] = "sum",
         **kwargs: Any,
-    ) -> np.ndarray | torch.Tensor:
+    ) -> Array:
         text_embeddings = None
         image_embeddings = None
         if "text" in inputs.dataset.features:
@@ -114,21 +107,18 @@ class BLIPModelWrapper(Wrapper):
                 raise ValueError(
                     "The number of texts and images must have the same length"
                 )
-            if fusion_mode == "sum":
-                fused_embeddings = text_embeddings + image_embeddings
-            else:
-                # to do: add other fusion mode
-                raise ValueError(f"fusion mode {fusion_mode} hasn't been implemented")
+            fused_embeddings = text_embeddings + image_embeddings
             return fused_embeddings
         elif text_embeddings is not None:
             return text_embeddings
         elif image_embeddings is not None:
             return image_embeddings
+        raise ValueError
 
 
 # in descending order of usage (downloads from huggingface)
 blip_image_captioning_large = ModelMeta(
-    loader=BLIPModelWrapper,  # type: ignore
+    loader=BLIPModel,  # type: ignore
     name="Salesforce/blip-image-captioning-large",
     languages=["eng_Latn"],
     revision="2227ac38c9f16105cb0412e7cab4759978a8fd90",
@@ -144,7 +134,7 @@ blip_image_captioning_large = ModelMeta(
     public_training_data="https://github.com/salesforce/BLIP",
     framework=["PyTorch"],
     reference="https://huggingface.co/Salesforce/blip-image-captioning-large",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         # COCO
@@ -154,7 +144,7 @@ blip_image_captioning_large = ModelMeta(
 )
 
 blip_image_captioning_base = ModelMeta(
-    loader=BLIPModelWrapper,  # type: ignore
+    loader=BLIPModel,  # type: ignore
     name="Salesforce/blip-image-captioning-base",
     languages=["eng_Latn"],
     revision="89b09ea1789f7addf2f6d6f0dfc4ce10ab58ef84",
@@ -170,7 +160,7 @@ blip_image_captioning_base = ModelMeta(
     public_training_data="https://github.com/salesforce/BLIP",
     framework=["PyTorch"],
     reference="https://huggingface.co/Salesforce/blip-image-captioning-base",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         # COCO
@@ -181,7 +171,7 @@ blip_image_captioning_base = ModelMeta(
 
 
 blip_vqa_base = ModelMeta(
-    loader=BLIPModelWrapper,  # type: ignore
+    loader=BLIPModel,  # type: ignore
     name="Salesforce/blip-vqa-base",
     languages=["eng_Latn"],
     revision="c7df8e7cd7aa2ee9af18f56e2b29e59a92651b64",
@@ -197,7 +187,7 @@ blip_vqa_base = ModelMeta(
     public_training_data="https://github.com/salesforce/BLIP",
     framework=["PyTorch"],
     reference="https://huggingface.co/Salesforce/blip-vqa-base",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         # CC3M+CC12M+SBU
@@ -206,7 +196,7 @@ blip_vqa_base = ModelMeta(
 )
 
 blip_vqa_capfilt_large = ModelMeta(
-    loader=BLIPModelWrapper,  # type: ignore
+    loader=BLIPModel,  # type: ignore
     name="Salesforce/blip-vqa-capfilt-large",
     languages=["eng_Latn"],
     revision="e53f95265aeab69013fabb5380500ab984adbbb4",
@@ -222,7 +212,7 @@ blip_vqa_capfilt_large = ModelMeta(
     public_training_data="https://github.com/salesforce/BLIP",
     framework=["PyTorch"],
     reference="https://huggingface.co/Salesforce/blip-vqa-capfilt-large",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         # CC3M+CC12M+SBU
@@ -231,7 +221,7 @@ blip_vqa_capfilt_large = ModelMeta(
 )
 
 blip_itm_base_coco = ModelMeta(
-    loader=BLIPModelWrapper,  # type: ignore
+    loader=BLIPModel,  # type: ignore
     name="Salesforce/blip-itm-base-coco",
     languages=["eng_Latn"],
     revision="7eaa90c11850c0b17fc38c6a11e7d88bd6ac231f",
@@ -247,7 +237,7 @@ blip_itm_base_coco = ModelMeta(
     public_training_data="https://github.com/salesforce/BLIP",
     framework=["PyTorch"],
     reference="https://huggingface.co/Salesforce/blip-itm-base-coco",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         # CC3M+CC12M+SBU
@@ -256,7 +246,7 @@ blip_itm_base_coco = ModelMeta(
 )
 
 blip_itm_large_coco = ModelMeta(
-    loader=BLIPModelWrapper,  # type: ignore
+    loader=BLIPModel,  # type: ignore
     name="Salesforce/blip-itm-large-coco",
     languages=["eng_Latn"],
     revision="fef05cafc05298067cbbca00b125749394a77a6f",
@@ -272,7 +262,7 @@ blip_itm_large_coco = ModelMeta(
     public_training_data="https://github.com/salesforce/BLIP",
     framework=["PyTorch"],
     reference="https://huggingface.co/Salesforce/blip-itm-large-coco",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         # COCO
@@ -282,7 +272,7 @@ blip_itm_large_coco = ModelMeta(
 )
 
 blip_itm_base_flickr = ModelMeta(
-    loader=BLIPModelWrapper,  # type: ignore
+    loader=BLIPModel,  # type: ignore
     name="Salesforce/blip-itm-base-flickr",
     languages=["eng_Latn"],
     revision="1de29e660d91ae1786c1876212ea805a22eab251",
@@ -298,7 +288,7 @@ blip_itm_base_flickr = ModelMeta(
     public_training_data="https://github.com/salesforce/BLIP",
     framework=["PyTorch"],
     reference="https://huggingface.co/Salesforce/blip-itm-base-flickr",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         # CC3M+CC12M+SBU
@@ -308,7 +298,7 @@ blip_itm_base_flickr = ModelMeta(
 )
 
 blip_itm_large_flickr = ModelMeta(
-    loader=BLIPModelWrapper,  # type: ignore
+    loader=BLIPModel,  # type: ignore
     name="Salesforce/blip-itm-large-flickr",
     languages=["eng_Latn"],
     revision="bda12e6506758f54261b5ab174b2c55a3ba143fb",
@@ -324,7 +314,7 @@ blip_itm_large_flickr = ModelMeta(
     public_training_data="https://github.com/salesforce/BLIP",
     framework=["PyTorch"],
     reference="https://huggingface.co/Salesforce/blip-itm-large-flickr",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets={
         # CC3M+CC12M+SBU

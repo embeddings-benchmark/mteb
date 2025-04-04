@@ -4,11 +4,11 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 
 from mteb.model_meta import ModelMeta
-from mteb.models.wrapper import Wrapper
+from mteb.models import AbsEncoder
 
 
-class OPSWrapper(Wrapper):
-    def __init__(self, model_name, revision):
+class OPSWrapper(AbsEncoder):
+    def __init__(self, model_name: str, revision: str):
         super().__init__()
         self.model = SentenceTransformer(
             model_name, revision=revision, trust_remote_code=True

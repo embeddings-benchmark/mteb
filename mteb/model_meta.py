@@ -4,7 +4,7 @@ import logging
 from collections.abc import Sequence
 from dataclasses import field
 from enum import Enum
-from typing import TYPE_CHECKING, Any, Callable, Literal, cast
+from typing import Any, Callable, Literal, cast
 
 from huggingface_hub import get_safetensors_metadata
 from huggingface_hub.errors import (
@@ -16,14 +16,9 @@ from pydantic import BaseModel, ConfigDict, field_validator
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.encoder_interface import Encoder
-from mteb.evaluation.evaluators.utils import cos_sim, dot_score, max_sim
 
 from .custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
 from .languages import ISO_LANGUAGE_SCRIPT
-
-if TYPE_CHECKING:
-    from mteb.types import Array
-
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +42,7 @@ class ScoringFunction(str, Enum):
     MAX_SIM = "MaxSim"
     EUCLIDEAN = "euclidean"
     MANHATTAN = "manhattan"
-    MODEL_SPECIFIC = "similarity"
+    CUSTOM = "custom"
 
 
 def get_loader_name(
@@ -103,7 +98,7 @@ class ModelMeta(BaseModel):
     revision: str | None
     release_date: STR_DATE | None
     languages: list[ISO_LANGUAGE_SCRIPT] | None
-    loader: Callable[..., Encoder] | None
+    loader: Callable[..., Encoder] | type[Encoder] | None
     loader_kwargs: dict[str, Any] = field(default_factory=dict)
     n_parameters: int | None
     memory_usage_mb: float | None
@@ -121,6 +116,7 @@ class ModelMeta(BaseModel):
     adapted_from: str | None = None
     superseded_by: str | None = None
     modalities: list[MODALITIES] = ["text"]
+    is_cross_encoder: bool | None = None
     citation: str | None = None
 
     @field_validator("similarity_fn_name", mode="before")
@@ -140,15 +136,6 @@ class ModelMeta(BaseModel):
         if value in mapping:
             return mapping[value]
         raise ValueError(f"Invalid similarity function name: {value}")
-
-    def get_similarity_function(self) -> Callable[[Array, Array], Array]:
-        if self.similarity_fn_name is ScoringFunction.COSINE:
-            return cos_sim
-        elif self.similarity_fn_name is ScoringFunction.DOT_PRODUCT:
-            return dot_score
-        elif self.similarity_fn_name is ScoringFunction.MAX_SIM:
-            return max_sim
-        raise ValueError("Similarity function not specified or invalid.")
 
     def to_dict(self):
         dict_repr = self.model_dump()
@@ -175,10 +162,9 @@ class ModelMeta(BaseModel):
 
         # Allow overwrites
         _kwargs = self.loader_kwargs.copy()
-        _kwargs.update({"revision": self.revision})
         _kwargs.update(kwargs)
 
-        model: Encoder = self.loader(self.name, **_kwargs)
+        model: Encoder = self.loader(self.name, revision=self.revision, **_kwargs)
         model.mteb_model_meta = self  # type: ignore
         return model
 
