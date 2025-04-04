@@ -1,11 +1,84 @@
 from __future__ import annotations
 
-import datasets
+from datasets import Dataset, load_dataset
 
-from mteb.abstasks.Image.AbsTaskAny2TextMultipleChoice import (
-    AbsTaskAny2TextMultipleChoice,
-)
+from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
 from mteb.abstasks.TaskMetadata import TaskMetadata
+
+
+def _load_data(
+    path: str,
+    splits: list[str],
+    cache_dir: str = None,
+    revision: str = None,
+    subtask: str = "Count",
+):
+    corpus = {}
+    queries = {}
+    relevant_docs = {}
+
+    dataset = load_dataset(
+        path,
+        cache_dir=cache_dir,
+        revision=revision,
+    )
+    dataset = dataset.filter(lambda example: example["task"] == subtask)
+    for split in splits:
+        split_dataset = dataset[split]
+
+        split_dataset = split_dataset.map(
+            transform_choices,
+            remove_columns=[
+                "idx",
+                "type",
+                "filename",
+                "source",
+                "source_dataset",
+                "source_filename",
+                "target_class",
+                "target_size",
+                "bbox",
+                "prompt",
+            ],
+        )
+
+        queries[split] = split_dataset.map(
+            lambda x, idx: {
+                "id": f"query-{split}-{idx}",
+                "text": x["question"],
+                "modality": "image,text",
+            },
+            with_indices=True,
+            remove_columns=["answer", "choices", "task"],
+        )
+
+        corpus_element = []
+        corpus_to_id = {}
+        relevant_docs[split] = {}
+
+        for idx, entry in enumerate(split_dataset):
+            choices = entry["choices"]
+            answer = choices[entry["answer"]]
+
+            query_id = f"query-{split}-{idx}"
+
+            for choice in choices:
+                if choice not in corpus_to_id:
+                    corpus_id = len(corpus_element)
+                    corpus_element.append(choice)
+                    corpus_to_id[choice] = f"corpus-{split}-{corpus_id}"
+
+                is_relevant = 1 if choice == answer else 0
+                if query_id not in relevant_docs[split]:
+                    relevant_docs[split][query_id] = {}
+                relevant_docs[split][query_id][corpus_to_id[choice]] = is_relevant
+            corpus_ids = [corpus_id for _, corpus_id in corpus_to_id.items()]
+            docs = [doc for doc, _ in corpus_to_id.items()]
+        corpus_records = []
+        for corpus_id, doc in zip(corpus_ids, docs):
+            corpus_records.append({"id": corpus_id, "text": doc, "modality": "text"})
+        corpus[split] = Dataset.from_list(corpus_records)
+    return corpus, queries, relevant_docs
 
 
 def transform_choices(example):
@@ -14,7 +87,7 @@ def transform_choices(example):
     return example
 
 
-class CVBenchCount(AbsTaskAny2TextMultipleChoice):
+class CVBenchCount(AbsTaskAny2AnyMultiChoice):
     metadata = TaskMetadata(
         name="CVBenchCount",
         description="count the number of objects in the image.",
@@ -23,7 +96,7 @@ class CVBenchCount(AbsTaskAny2TextMultipleChoice):
             "path": "nyu-visionx/CV-Bench",
             "revision": "22409a927ab5cf68e3655023d51694587455fc99",
         },
-        type="VisionCentric",
+        type="VisionCentricQA",
         category="it2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -34,7 +107,7 @@ class CVBenchCount(AbsTaskAny2TextMultipleChoice):
         license="mit",
         annotations_creators="derived",
         dialect=[],
-        modalities=["text", "image"],
+        modalities=["image", "text"],
         sample_creation="found",
         bibtex_citation="""@article{tong2024cambrian,
   title={Cambrian-1: A fully open, vision-centric exploration of multimodal llms},
@@ -45,28 +118,17 @@ class CVBenchCount(AbsTaskAny2TextMultipleChoice):
     )
 
     def load_data(self, **kwargs):
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)
-        self.dataset_transform()
-        self.dataset = self.dataset.filter(lambda example: example["task"] == "Count")
-        self.dataset = self.dataset.map(
-            transform_choices,
-            remove_columns=[
-                "idx",
-                "type",
-                "filename",
-                "source",
-                "source_dataset",
-                "source_filename",
-                "target_class",
-                "target_size",
-                "bbox",
-                "prompt",
-            ],
+        self.corpus, self.queries, self.relevant_docs = _load_data(
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
+            cache_dir=kwargs.get("cache_dir", None),
+            revision=self.metadata.dataset["revision"],
+            subtask="Count",
         )
         self.data_loaded = True
 
 
-class CVBenchRelation(AbsTaskAny2TextMultipleChoice):
+class CVBenchRelation(AbsTaskAny2AnyMultiChoice):
     metadata = TaskMetadata(
         name="CVBenchRelation",
         description="decide the relation of the objects in the image.",
@@ -75,7 +137,7 @@ class CVBenchRelation(AbsTaskAny2TextMultipleChoice):
             "path": "nyu-visionx/CV-Bench",
             "revision": "22409a927ab5cf68e3655023d51694587455fc99",
         },
-        type="VisionCentric",
+        type="VisionCentricQA",
         category="it2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -97,30 +159,17 @@ class CVBenchRelation(AbsTaskAny2TextMultipleChoice):
     )
 
     def load_data(self, **kwargs):
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)
-        self.dataset_transform()
-        self.dataset = self.dataset.filter(
-            lambda example: example["task"] == "Relation"
-        )
-        self.dataset = self.dataset.map(
-            transform_choices,
-            remove_columns=[
-                "idx",
-                "type",
-                "filename",
-                "source",
-                "source_dataset",
-                "source_filename",
-                "target_class",
-                "target_size",
-                "bbox",
-                "prompt",
-            ],
+        self.corpus, self.queries, self.relevant_docs = _load_data(
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
+            cache_dir=kwargs.get("cache_dir", None),
+            revision=self.metadata.dataset["revision"],
+            subtask="Relation",
         )
         self.data_loaded = True
 
 
-class CVBenchDepth(AbsTaskAny2TextMultipleChoice):
+class CVBenchDepth(AbsTaskAny2AnyMultiChoice):
     metadata = TaskMetadata(
         name="CVBenchDepth",
         description="judge the depth of the objects in the image with similarity matching.",
@@ -129,7 +178,7 @@ class CVBenchDepth(AbsTaskAny2TextMultipleChoice):
             "path": "nyu-visionx/CV-Bench",
             "revision": "22409a927ab5cf68e3655023d51694587455fc99",
         },
-        type="VisionCentric",
+        type="VisionCentricQA",
         category="it2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -151,28 +200,17 @@ class CVBenchDepth(AbsTaskAny2TextMultipleChoice):
     )
 
     def load_data(self, **kwargs):
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)
-        self.dataset_transform()
-        self.dataset = self.dataset.filter(lambda example: example["task"] == "Depth")
-        self.dataset = self.dataset.map(
-            transform_choices,
-            remove_columns=[
-                "idx",
-                "type",
-                "filename",
-                "source",
-                "source_dataset",
-                "source_filename",
-                "target_class",
-                "target_size",
-                "bbox",
-                "prompt",
-            ],
+        self.corpus, self.queries, self.relevant_docs = _load_data(
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
+            cache_dir=kwargs.get("cache_dir", None),
+            revision=self.metadata.dataset["revision"],
+            subtask="Depth",
         )
         self.data_loaded = True
 
 
-class CVBenchDistance(AbsTaskAny2TextMultipleChoice):
+class CVBenchDistance(AbsTaskAny2AnyMultiChoice):
     metadata = TaskMetadata(
         name="CVBenchDistance",
         description="judge the distance of the objects in the image with similarity matching.",
@@ -181,7 +219,7 @@ class CVBenchDistance(AbsTaskAny2TextMultipleChoice):
             "path": "nyu-visionx/CV-Bench",
             "revision": "22409a927ab5cf68e3655023d51694587455fc99",
         },
-        type="VisionCentric",
+        type="VisionCentricQA",
         category="it2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -203,24 +241,11 @@ class CVBenchDistance(AbsTaskAny2TextMultipleChoice):
     )
 
     def load_data(self, **kwargs):
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)
-        self.dataset_transform()
-        self.dataset = self.dataset.filter(
-            lambda example: example["task"] == "Distance"
-        )
-        self.dataset = self.dataset.map(
-            transform_choices,
-            remove_columns=[
-                "idx",
-                "type",
-                "filename",
-                "source",
-                "source_dataset",
-                "source_filename",
-                "target_class",
-                "target_size",
-                "bbox",
-                "prompt",
-            ],
+        self.corpus, self.queries, self.relevant_docs = _load_data(
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
+            cache_dir=kwargs.get("cache_dir", None),
+            revision=self.metadata.dataset["revision"],
+            subtask="Distance",
         )
         self.data_loaded = True

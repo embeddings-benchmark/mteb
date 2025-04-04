@@ -9,6 +9,7 @@ from torch.utils.data import DataLoader
 from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.requires_package import requires_package
 from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
@@ -33,12 +34,8 @@ class ColBERTModel(AbsEncoder):
                 and finally to the specific prompt type.
             **kwargs: Additional arguments to pass to the model.
         """
-        try:
-            from pylate import models as colbert_model
-        except ModuleNotFoundError as e:
-            raise ModuleNotFoundError(
-                "To use the ColBERT models `pylate` is required. Please install it with `pip install mteb[pylate]`."
-            ) from e
+        requires_package(self, "pylate", model_name, "pip install mteb[pylate]")
+        from pylate import models as colbert_model
 
         self.model_name = model_name
         self.model = colbert_model.ColBERT(self.model_name, revision=revision, **kwargs)

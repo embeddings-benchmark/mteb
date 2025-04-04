@@ -11,7 +11,7 @@ from transformers import AutoConfig, AutoModel, AutoTokenizer, CLIPImageProcesso
 from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.requires_package import requires_image_dependencies
+from mteb.requires_package import requires_image_dependencies, requires_package
 from mteb.types import Array, BatchedInput, PromptType
 
 MODEL2PROCESSOR = {
@@ -22,13 +22,10 @@ MODEL2PROCESSOR = {
 
 
 def llm2clip_loader(model_name, **kwargs):
-    try:
-        from llm2vec import LLM2Vec
-    except ImportError:
-        # https://github.com/baaivision/EVA/tree/master/EVA-CLIP#setup
-        raise ImportError(
-            "To use the LLM2CLIP models `llm2vec` is required. Please install it with `pip install llm2vec`."
-        )
+    requires_package(
+        llm2clip_loader, "llm2vec", model_name, "pip install 'mteb[llm2vec]'"
+    )
+    from llm2vec import LLM2Vec
 
     class LLM2CLIPAbsEncoder(AbsEncoder):
         def __init__(

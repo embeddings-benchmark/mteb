@@ -10,18 +10,17 @@ from transformers import Blip2Processor
 from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.requires_package import requires_package
 from mteb.types import Array, BatchedInput, PromptType
 
 
 def blip2_loader(model_name, **kwargs):
-    try:  # a temporal fix for the dependency issues.
-        from lavis.models.blip2_models.blip2_image_text_matching import (
-            Blip2ITM,
-        )
-    except ImportError:
-        raise ImportError(
-            "Please install `pip install mteb[blip2]` to use BLIP-2 models."
-        )
+    requires_package(
+        blip2_loader, "salesforce-lavis", model_name, "pip install 'mteb[blip2]'"
+    )
+    from lavis.models.blip2_models.blip2_image_text_matching import (
+        Blip2ITM,
+    )
 
     class BLIP2Model(AbsEncoder):
         def __init__(

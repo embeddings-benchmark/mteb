@@ -9,15 +9,18 @@ from tqdm import tqdm
 from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.requires_package import requires_image_dependencies
+from mteb.requires_package import requires_image_dependencies, requires_package
 from mteb.types import Array, BatchedInput, PromptType
 
 
 def openclip_loader(model_name, **kwargs):
-    try:
-        import open_clip
-    except ImportError:
-        raise ImportError("Please run `pip install open_clip_torch`.")
+    requires_package(
+        openclip_loader,
+        "open_clip_torch",
+        model_name,
+        "pip install 'mteb[open_clip_torch]'",
+    )
+    import open_clip
 
     class OpenCLIPModel(AbsEncoder):
         def __init__(

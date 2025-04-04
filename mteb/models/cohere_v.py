@@ -13,15 +13,15 @@ from tqdm import tqdm
 from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models import AbsEncoder
-from mteb.requires_package import requires_image_dependencies
+from mteb.requires_package import requires_image_dependencies, requires_package
 from mteb.types import Array, BatchedInput, PromptType
 
 
 def cohere_v_loader(model_name, **kwargs):
-    try:
-        import cohere  # type: ignore
-    except ImportError:
-        raise ImportError("To use cohere models, please run `pip install cohere`.")
+    requires_package(
+        cohere_v_loader, "cohere", model_name, "pip install 'mteb[cohere]'"
+    )
+    import cohere
 
     class CohereMultiModalModelWrapper(AbsEncoder):
         def __init__(

@@ -15,11 +15,7 @@ from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
 
-logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
-
-HF_GME_QWEN2VL_2B = "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
-HF_GME_QWEN2VL_7B = "Alibaba-NLP/gme-Qwen2-VL-7B-Instruct"
 
 
 class Encoder(torch.nn.Module):
@@ -337,7 +333,7 @@ training_data = {
 
 gme_qwen2vl_2b = ModelMeta(
     loader=GmeQwen2VL,
-    name=HF_GME_QWEN2VL_2B,
+    name="Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
     languages=["eng_Latn", "cmn-Hans"],
     open_weights=True,
     revision="ce765ae71b8cdb208203cd8fb64a170b1b84293a",
@@ -348,7 +344,7 @@ gme_qwen2vl_2b = ModelMeta(
     embed_dim=1536,
     license="apache-2.0",
     max_tokens=32768,
-    reference="https://huggingface.co/" + HF_GME_QWEN2VL_2B,
+    reference="https://huggingface.co/Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch"],
     use_instructions=True,
@@ -359,7 +355,7 @@ gme_qwen2vl_2b = ModelMeta(
 
 gme_qwen2vl_7b = ModelMeta(
     loader=GmeQwen2VL,
-    name=HF_GME_QWEN2VL_7B,
+    name="Alibaba-NLP/gme-Qwen2-VL-7B-Instruct",
     languages=["eng_Latn", "cmn-Hans"],
     open_weights=True,
     revision="477027a6480f8630363be77751f169cc3434b673",
@@ -370,7 +366,7 @@ gme_qwen2vl_7b = ModelMeta(
     embed_dim=3584,
     license="apache-2.0",
     max_tokens=32768,
-    reference="https://huggingface.co/" + HF_GME_QWEN2VL_2B,
+    reference="https://huggingface.co/Alibaba-NLP/gme-Qwen2-VL-7B-Instruct",
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch"],
     use_instructions=True,

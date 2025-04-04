@@ -43,7 +43,6 @@ from .mock_tasks import (
     MockRetrievalTask,
     MockSTSTask,
     MockSummarizationTask,
-    MockTextMultipleChoiceTask,
     MockVisualSTSTask,
     MockZeroShotClassificationTask,
 )
@@ -112,7 +111,6 @@ MOCK_TASK_REGISTRY = {task.metadata.name: type(task) for task in MOCK_TASK_TEST_
 MOCK_MIEB_TASK_GRID = [
     MockAny2AnyRetrievalI2TTask(),
     MockAny2AnyRetrievalT2ITask(),
-    MockTextMultipleChoiceTask(),
     MockMultiChoiceTask(),
     MockImageClassificationTask(),
     MockImageClassificationKNNTask(),

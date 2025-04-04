@@ -80,7 +80,7 @@ class VoyageModel(AbsEncoder):
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
-        requires_package(self, "voyageai", "Voyage")
+        requires_package(self, "voyageai", model_name, "pip install 'mteb[voyageai]'")
         import voyageai
 
         self._client = voyageai.Client(max_retries=max_retries)

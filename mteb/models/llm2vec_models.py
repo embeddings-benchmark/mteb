@@ -10,6 +10,7 @@ from mteb.abstasks import TaskMetadata
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.requires_package import requires_package, suggest_package
 from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
@@ -58,21 +59,20 @@ class LLM2VecModel(AbsEncoder):
         *args,
         **kwargs,
     ):
-        try:
-            from llm2vec import LLM2Vec
-        except ImportError:
-            raise ImportError(
-                "To use the LLM2Vec models `llm2vec` is required. Please install it with `pip install llm2vec`."
-            )
+        model_name = kwargs.get("model_name", "LLM2Vec")
+        requires_package(self, "llm2vec", model_name, "pip install 'mteb[llm2vec]'")
+        from llm2vec import LLM2Vec
+
         extra_kwargs = {}
-        try:
-            import flash_attn  # noqa
+        if suggest_package(
+            self,
+            "flash_attn",
+            model_name,
+            "pip install flash-attn --no-build-isolation",
+        ):
+            import flash_attn  # noqa: F401
 
             extra_kwargs["attn_implementation"] = "flash_attention_2"
-        except ImportError:
-            logger.warning(
-                "LLM2Vec models were trained with flash attention enabled. For optimal performance, please install the `flash_attn` package with `pip install flash-attn --no-build-isolation`."
-            )
         self.model_prompts = model_prompts
         self.validate_task_to_prompt_name()
 

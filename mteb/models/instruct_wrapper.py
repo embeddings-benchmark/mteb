@@ -9,6 +9,7 @@ from torch.utils.data import DataLoader
 
 from mteb.abstasks import TaskMetadata
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.requires_package import requires_package
 from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
@@ -20,12 +21,10 @@ def instruct_wrapper(
     instruction_template: str | Callable[[str], str] | None = None,
     **kwargs,
 ):
-    try:
-        from gritlm import GritLM
-    except ImportError:
-        raise ImportError(
-            f"Please install `pip install mteb[gritlm]` to use {model_name_or_path}."
-        )
+    requires_package(
+        instruct_wrapper, "gritlm", model_name_or_path, "pip install 'mteb[gritlm]'"
+    )
+    from gritlm import GritLM
 
     class InstructGritLMModel(GritLM, AbsEncoder):
         def __init__(

@@ -9,15 +9,13 @@ from tqdm import tqdm
 from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.requires_package import requires_image_dependencies
+from mteb.requires_package import requires_image_dependencies, requires_package
 from mteb.types import Array, BatchedInput, PromptType
 
 
 def mocov3_loader(model_name, **kwargs):
-    try:
-        import timm
-    except ImportError:
-        raise ImportError("Please install `pip install timm` to use MOCOv3 models.")
+    requires_package(mocov3_loader, "timm", model_name, "pip install 'mteb[timm]'")
+    import timm
 
     class MOCOv3Model(AbsEncoder):
         """A wrapper class for MOCOv3 models that supports image encoding.

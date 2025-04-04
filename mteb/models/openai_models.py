@@ -31,16 +31,16 @@ class OpenAIModel(AbsEncoder):
         requires_package(
             self,
             "openai",
-            "Openai text embedding",
-            install_instruction="pip install mteb[openai]",
+            model_name,
+            install_instruction="pip install 'mteb[openai]'",
         )
         from openai import OpenAI
 
         requires_package(
             self,
             "tiktoken",
-            "Tiktoken package",
-            install_instruction="pip install mteb[openai]",
+            model_name,
+            install_instruction="pip install 'mteb[openai]'",
         )
         import tiktoken
 
