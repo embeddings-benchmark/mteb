@@ -72,6 +72,8 @@ TASK_SUBTYPE = Literal[
     "Intent Classification",
     "Vehicle Clustering",
     "Rendered semantic textual similarity",
+    "Gender Classification",
+    "Age Classification",
 ]
 
 TASK_DOMAIN = Literal[
