@@ -90,6 +90,28 @@ class MockCLIPEncoder:
 
 
 class MockAudioEncoder:
+    mteb_model_meta = ModelMeta(
+        name="mock/MockAudioEncoder",
+        languages=["eng_Latn"],
+        revision="7d091cd70772c5c0ecf7f00b5f12ca609a99d69d",
+        release_date="2024-01-01",
+        modalities=["audio"],
+        n_parameters=86_600_000,
+        memory_usage_mb=330,
+        max_tokens=None,
+        embed_dim=768,
+        license=None,
+        open_weights=True,
+        public_training_code=None,
+        public_training_data=None,
+        framework=["PyTorch"],
+        reference="https://huggingface.co/facebook/wav2vec2-large-xlsr-53-english",
+        similarity_fn_name=None,
+        use_instructions=False,
+        training_datasets=None,
+    )
+    model_card_data = mteb_model_meta
+
     def __init__(self):
         self.embedding_dim = 768
 
