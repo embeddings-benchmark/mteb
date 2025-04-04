@@ -130,6 +130,7 @@ class CohereTextEmbeddingModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
+        revision: str,
         sep: str = " ",
         model_prompts: dict[str, str] | None = None,
         **kwargs,

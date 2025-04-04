@@ -46,7 +46,7 @@ def downsample_image(
     return image
 
 
-def voyage_v_loader(**kwargs):
+def voyage_v_loader(model_name, **kwargs):
     try:
         import voyageai
     except ImportError:
@@ -193,7 +193,7 @@ def voyage_v_loader(**kwargs):
                 return image_embeddings
             raise ValueError
 
-    return VoyageMultiModalModelWrapper(**kwargs)
+    return VoyageMultiModalModelWrapper(model_name, **kwargs)
 
 
 voyage_v = ModelMeta(

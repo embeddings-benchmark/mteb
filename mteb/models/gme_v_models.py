@@ -132,7 +132,8 @@ class Encoder(torch.nn.Module):
 class GmeQwen2VL(AbsEncoder):
     def __init__(
         self,
-        model_name: str = HF_GME_QWEN2VL_2B,
+        model_name: str,
+        revision: str,
         model_path: str | None = None,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         min_image_tokens=4,
@@ -142,12 +143,16 @@ class GmeQwen2VL(AbsEncoder):
     ) -> None:
         model_name = model_path or model_name
         base = AutoModelForVision2Seq.from_pretrained(
-            model_name, torch_dtype=torch.float16, **kwargs
+            model_name, revision=revision, torch_dtype=torch.float16, **kwargs
         )
         min_pixels = min_image_tokens * 28 * 28
         max_pixels = max_image_tokens * 28 * 28
         processor = AutoProcessor.from_pretrained(
-            model_name, min_pixels=min_pixels, max_pixels=max_pixels, **kwargs
+            model_name,
+            revision=revision,
+            min_pixels=min_pixels,
+            max_pixels=max_pixels,
+            **kwargs,
         )
         self.model = Encoder(base, processor, max_length=max_length)
         self.model.eval()

@@ -13,7 +13,7 @@ from mteb.requires_package import requires_image_dependencies
 from mteb.types import Array, BatchedInput, PromptType
 
 
-def mocov3_loader(**kwargs):
+def mocov3_loader(model_name, **kwargs):
     try:
         import timm
     except ImportError:
@@ -106,7 +106,7 @@ def mocov3_loader(**kwargs):
                 return self.get_image_embeddings(inputs, **kwargs)
             raise ValueError
 
-    return MOCOv3Model(**kwargs)
+    return MOCOv3Model(model_name, **kwargs)
 
 
 mocov3_training_datasets = {

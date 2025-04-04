@@ -131,7 +131,7 @@ class JinaWrapper(SentenceTransformerWrapper):
     def __init__(
         self,
         model: str,
-        revision: str | None = None,
+        revision: str,
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:

@@ -17,6 +17,7 @@ class SiglipModelWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str,
+        revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
@@ -28,8 +29,10 @@ class SiglipModelWrapper(AbsEncoder):
             )
         self.model_name = model_name
         self.device = device
-        self.model = AutoModel.from_pretrained(model_name).to(self.device)
-        self.processor = AutoProcessor.from_pretrained(model_name)
+        self.model = AutoModel.from_pretrained(model_name, revision=revision).to(
+            self.device
+        )
+        self.processor = AutoProcessor.from_pretrained(model_name, revision=revision)
 
     def get_text_embeddings(
         self,

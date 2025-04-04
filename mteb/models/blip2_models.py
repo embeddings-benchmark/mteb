@@ -13,7 +13,7 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
 
 
-def blip2_loader(**kwargs):
+def blip2_loader(model_name, **kwargs):
     try:  # a temporal fix for the dependency issues.
         from lavis.models.blip2_models.blip2_image_text_matching import (
             Blip2ITM,
@@ -27,14 +27,21 @@ def blip2_loader(**kwargs):
         def __init__(
             self,
             model_name: str,
+            revision: str,
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
             **kwargs: Any,
         ):
             self.model_name = model_name
             self.device = device
             model_type = "coco" if "coco" in model_name else "pretrain"
-            self.model = Blip2ITM.from_pretrained(model_type).to(self.device).float()
-            self.processor = Blip2Processor.from_pretrained(model_name)
+            self.model = (
+                Blip2ITM.from_pretrained(model_type, revision=revision)
+                .to(self.device)
+                .float()
+            )
+            self.processor = Blip2Processor.from_pretrained(
+                model_name, revision=revision
+            )
 
         def get_text_embeddings(
             self,
@@ -142,7 +149,7 @@ def blip2_loader(**kwargs):
                 return image_embeddings
             raise ValueError
 
-    return BLIP2Model(**kwargs)
+    return BLIP2Model(model_name, **kwargs)
 
 
 blip2_training_datasets = {

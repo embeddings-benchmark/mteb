@@ -13,7 +13,7 @@ from mteb.requires_package import requires_image_dependencies
 from mteb.types import Array, BatchedInput, PromptType
 
 
-def openclip_loader(**kwargs):
+def openclip_loader(model_name, **kwargs):
     try:
         import open_clip
     except ImportError:
@@ -107,7 +107,7 @@ def openclip_loader(**kwargs):
                 return image_embeddings
             raise ValueError
 
-    return OpenCLIPModel(**kwargs)
+    return OpenCLIPModel(model_name, **kwargs)
 
 
 CLIP_ViT_L_14_DataComp_XL_s13B_b90K = ModelMeta(

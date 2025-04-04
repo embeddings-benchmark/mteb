@@ -18,6 +18,7 @@ class JinaCLIPModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
+        revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
@@ -25,9 +26,9 @@ class JinaCLIPModel(AbsEncoder):
 
         self.model_name = model_name
         self.device = device
-        self.model = AutoModel.from_pretrained(model_name, trust_remote_code=True).to(
-            self.device
-        )
+        self.model = AutoModel.from_pretrained(
+            model_name, revision=revision, trust_remote_code=True
+        ).to(self.device)
 
     def get_text_embeddings(
         self,

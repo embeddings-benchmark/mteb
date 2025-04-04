@@ -23,6 +23,7 @@ class E5VModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
+        revision: str,
         composed_prompt=None,
         **kwargs: Any,
     ):
@@ -34,11 +35,13 @@ class E5VModel(AbsEncoder):
             )
 
         self.model_name = model_name
-        self.processor = LlavaNextProcessor.from_pretrained(model_name)
+        self.processor = LlavaNextProcessor.from_pretrained(
+            model_name, revision=revision
+        )
         if "device" in kwargs:
             self.device = kwargs.pop("device")
         self.model = LlavaNextForConditionalGeneration.from_pretrained(
-            model_name, **kwargs
+            model_name, revision=revision, **kwargs
         )
         self.model.eval()
         self.template = "<|start_header_id|>user<|end_header_id|>\n\n{}<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n \n"

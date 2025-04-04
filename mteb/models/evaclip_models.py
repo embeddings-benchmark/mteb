@@ -13,7 +13,7 @@ from mteb.requires_package import requires_image_dependencies
 from mteb.types import Array, BatchedInput, PromptType
 
 
-def evaclip_loader(**kwargs):
+def evaclip_loader(model_name, **kwargs):
     try:
         import os
         import sys
@@ -33,7 +33,7 @@ def evaclip_loader(**kwargs):
     class EvaCLIPWrapper(AbsEncoder):
         def __init__(
             self,
-            model_name: str = "EVA02-CLIP-B-16",
+            model_name: str,
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
             **kwargs: Any,
         ):
@@ -118,7 +118,7 @@ def evaclip_loader(**kwargs):
                 return image_embeddings
             raise ValueError
 
-    return EvaCLIPWrapper(**kwargs)
+    return EvaCLIPWrapper(model_name, **kwargs)
 
 
 training_code = "https://github.com/baaivision/EVA/tree/master/EVA-CLIP"

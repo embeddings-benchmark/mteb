@@ -17,7 +17,7 @@ from mteb.requires_package import requires_image_dependencies
 from mteb.types import Array, BatchedInput, PromptType
 
 
-def cohere_v_loader(**kwargs):
+def cohere_v_loader(model_name, **kwargs):
     try:
         import cohere  # type: ignore
     except ImportError:
@@ -126,7 +126,7 @@ def cohere_v_loader(**kwargs):
                 return image_embeddings
             raise ValueError
 
-    return CohereMultiModalModelWrapper(**kwargs)
+    return CohereMultiModalModelWrapper(model_name, **kwargs)
 
 
 cohere_mult_3 = ModelMeta(

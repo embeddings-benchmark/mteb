@@ -21,7 +21,7 @@ MODEL2PROCESSOR = {
 }
 
 
-def llm2clip_loader(**kwargs):
+def llm2clip_loader(model_name, **kwargs):
     try:
         from llm2vec import LLM2Vec
     except ImportError:
@@ -33,7 +33,7 @@ def llm2clip_loader(**kwargs):
     class LLM2CLIPAbsEncoder(AbsEncoder):
         def __init__(
             self,
-            model_name: str = "microsoft/LLM2CLIP-Openai-L-14-336",
+            model_name: str,
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
             **kwargs: Any,
         ):
@@ -164,7 +164,7 @@ def llm2clip_loader(**kwargs):
                 return image_embeddings
             raise ValueError
 
-    return LLM2CLIPAbsEncoder(**kwargs)
+    return LLM2CLIPAbsEncoder(model_name, **kwargs)
 
 
 llm2clip_training_sets = {

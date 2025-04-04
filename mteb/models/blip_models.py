@@ -18,15 +18,16 @@ class BLIPModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
+        revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.device = device
-        self.model = BlipForImageTextRetrieval.from_pretrained(model_name).to(
-            self.device
-        )
-        self.processor = BlipProcessor.from_pretrained(model_name)
+        self.model = BlipForImageTextRetrieval.from_pretrained(
+            model_name, revision=revision
+        ).to(self.device)
+        self.processor = BlipProcessor.from_pretrained(model_name, revision=revision)
 
     def get_text_embeddings(
         self,
