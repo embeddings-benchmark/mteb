@@ -35,18 +35,6 @@ class RParisEasyI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrieval
   year={2018}
 }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 6392},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 0.0,
-                    "num_documents": 6322,
-                    "num_queries": 70,
-                    "average_relevant_docs_per_query": 98.2,
-                }
-            },
-        },
     )
     skip_first_result = False
 
@@ -81,18 +69,6 @@ class RParisMediumI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetriev
   year={2018}
 }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 6392},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 0.0,
-                    "num_documents": 6322,
-                    "num_queries": 70,
-                    "average_relevant_docs_per_query": 246.1,
-                }
-            },
-        },
     )
     skip_first_result = False
 
@@ -127,17 +103,5 @@ class RParisHardI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrieval
   year={2018}
 }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 6392},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 0.0,
-                    "num_documents": 6322,
-                    "num_queries": 70,
-                    "average_relevant_docs_per_query": 147.86,
-                }
-            },
-        },
     )
     skip_first_result = False

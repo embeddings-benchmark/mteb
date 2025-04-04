@@ -9,7 +9,7 @@ from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
 
 
-class CustomWrapper(Wrapper):
+class OPSWrapper(Wrapper):
     def __init__(self, model_name, revision):
         super().__init__()
         self.model = SentenceTransformer(
@@ -27,11 +27,7 @@ ops_moa_conan_embedding = ModelMeta(
     revision="46dcd58753f3daa920c66f89e47086a534089350",
     release_date="2025-03-26",
     languages=["zho_Hans"],
-    loader=partial(
-        CustomWrapper,
-        "OpenSearch-AI/Ops-MoA-Conan-embedding-v1",
-        "46dcd58753f3daa920c66f89e47086a534089350",
-    ),
+    loader=OPSWrapper,
     n_parameters=343 * 1e6,
     memory_usage_mb=2e3,
     max_tokens=512,
@@ -63,7 +59,7 @@ ops_moa_yuan_embedding = ModelMeta(
     release_date="2025-03-26",
     languages=["zho_Hans"],
     loader=partial(
-        CustomWrapper,
+        OPSWrapper,
         "OpenSearch-AI/Ops-MoA-Yuan-embedding-1.0",
         "23712d0766417b0eb88a2513c6e212a58b543268",
     ),

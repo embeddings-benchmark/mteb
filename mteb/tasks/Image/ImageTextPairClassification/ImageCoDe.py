@@ -52,18 +52,6 @@ class ImageCoDe(AbsTaskImageTextPairClassification):
   year={2022}
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 25322},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 0.0,
-                    "num_documents": 23020,
-                    "num_queries": 2302,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
@@ -71,22 +59,22 @@ class ImageCoDe(AbsTaskImageTextPairClassification):
             return
 
         corpus = load_dataset(
-            self.metadata_dict["dataset"]["path"],
+            self.metadata.dataset["path"],
             "corpus",
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )["corpus"]
         query = load_dataset(
-            self.metadata_dict["dataset"]["path"],
+            self.metadata.dataset["path"],
             "query",
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )["test"]
         qrels = load_dataset(
-            self.metadata_dict["dataset"]["path"],
+            self.metadata.dataset["path"],
             "qrels",
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )["test"]
 
         corpus_ids = corpus["id"]
