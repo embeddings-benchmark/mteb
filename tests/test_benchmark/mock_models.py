@@ -118,7 +118,7 @@ class MockCLIPEncoder:
 class MockMocoEncoder:
     mteb_model_meta = ModelMeta(
         loader=None,
-        name="MockMocoModel",
+        name="mock/MockMocoModel",
         languages=["eng_Latn"],
         revision="7d091cd70772c5c0ecf7f00b5f12ca609a99d69d",
         release_date="2024-01-01",
