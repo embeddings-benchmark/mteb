@@ -25,7 +25,7 @@ class VoxPopuliAccentPairClassification(AbsTaskAudioPairClassification):
         type="AudioPairClassification",
         category="t2t",
         eval_splits=["test"],
-        eval_langs=["eng-latn"],
+        eval_langs=["eng-Latn"],
         main_score="max-ap",
         domains=["Spoken"],
         task_subtypes=["Emotion classification"],

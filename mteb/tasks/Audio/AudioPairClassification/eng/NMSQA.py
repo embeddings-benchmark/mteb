@@ -25,7 +25,7 @@ class NMSQAPairClassification(AbsTaskAudioPairClassification):
         type="AudioPairClassification",
         category="t2t",  # no audio category yet
         eval_splits=["test"],
-        eval_langs=["eng-latn"],
+        eval_langs=["eng-Latn"],
         main_score="max_ap",
         domains=["Spoken"],
         task_subtypes=["Question answering"],
