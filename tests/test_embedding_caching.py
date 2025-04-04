@@ -36,7 +36,7 @@ class TestCachedEmbeddingWrapper:
         dummy_model = DummyModel()
 
         # Create the wrapper
-        wrapped_model = CachedEmbeddingWrapper(dummy_model, ["DummyTask"], cache_dir)
+        wrapped_model = CachedEmbeddingWrapper(dummy_model, cache_dir)
 
         # Simulate data
         queries = [
@@ -50,14 +50,14 @@ class TestCachedEmbeddingWrapper:
         ]
 
         # First call - should use the model to compute embeddings
-        query_embeddings1 = wrapped_model.encode(queries, task_name="DummyTask")
-        corpus_embeddings1 = wrapped_model.encode(corpus, task_name="DummyTask")
+        query_embeddings1 = wrapped_model.encode(queries, task_name="DummyTaskQuery")
+        corpus_embeddings1 = wrapped_model.encode(corpus, task_name="DummyTaskCorpus")
 
         assert dummy_model.call_count == 2  # One call for queries, one for corpus
 
         # Second call - should use cached embeddings
-        query_embeddings2 = wrapped_model.encode(queries, task_name="DummyTask")
-        corpus_embeddings2 = wrapped_model.encode(corpus, task_name="DummyTask")
+        query_embeddings2 = wrapped_model.encode(queries, task_name="DummyTaskQuery")
+        corpus_embeddings2 = wrapped_model.encode(corpus, task_name="DummyTaskCorpus")
 
         assert dummy_model.call_count == 2  # No additional calls to the model
 
@@ -66,18 +66,22 @@ class TestCachedEmbeddingWrapper:
         np.testing.assert_allclose(corpus_embeddings1, corpus_embeddings2)
 
         # Verify that cache files were created
-        assert (cache_dir / "DummyTask" / "vectors.npy").exists()
-        assert (cache_dir / "DummyTask" / "index.json").exists()
+        assert (cache_dir / "DummyTaskQuery" / "vectors.npy").exists()
+        assert (cache_dir / "DummyTaskQuery" / "index.json").exists()
+        assert (cache_dir / "DummyTaskCorpus" / "vectors.npy").exists()
+        assert (cache_dir / "DummyTaskCorpus" / "index.json").exists()
 
         # Test with a new query - should use cache for existing queries and compute for new one
         new_queries = ["What is the role of insulin in diabetes?"]
-        query_embeddings3 = wrapped_model.encode(new_queries, task_name="DummyTask")
+        query_embeddings3 = wrapped_model.encode(
+            new_queries, task_name="DummyTaskQuery"
+        )
 
         assert dummy_model.call_count == 3  # One additional call for the new query
         assert query_embeddings3.shape == (1, dummy_model.embedding_dim)
 
         # try with a cached query only
-        _ = wrapped_model.encode(queries, task_name="DummyTask")
+        _ = wrapped_model.encode(queries, task_name="DummyTaskQuery")
         assert dummy_model.call_count == 3
 
         wrapped_model.close()  # delete to allow cleanup on Windows
@@ -87,7 +91,7 @@ class TestCachedEmbeddingWrapper:
         dummy_model = DummyModel()
 
         # Create the wrapper
-        wrapped_model = CachedEmbeddingWrapper(dummy_model, ["DummyTask"], cache_dir)
+        wrapped_model = CachedEmbeddingWrapper(dummy_model, cache_dir)
 
         # Call a function that is not wrapped
         result = wrapped_model.random_other_function_returns_false()

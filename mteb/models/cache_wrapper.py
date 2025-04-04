@@ -203,17 +203,13 @@ class TextVectorMap:
 
 
 class CachedEmbeddingWrapper(Wrapper, Encoder):
-    def __init__(self, model: Encoder, tasks: list[str], cache_path: str | Path):
+    def __init__(self, model: Encoder, cache_path: str | Path):
         self._model = model
         self.cache_path = Path(cache_path)
         self.cache_path.mkdir(parents=True, exist_ok=True)
-        self.cache_dict = {}
-        self.tasks = tasks
 
         if hasattr(model, "encode"):
-            for task in tasks:
-                self.cache_dict[task] = TextVectorMap(self.cache_path / task)
-                self.cache_dict[task].load(name=task)
+            self.cache_dict = {}
         else:
             logger.error("Model must have an 'encode' method.")
             raise ValueError("Invalid model encoding method")
@@ -228,6 +224,11 @@ class CachedEmbeddingWrapper(Wrapper, Encoder):
             results = []
             uncached_texts = []
             uncached_indices = []
+
+            # Initialize cache
+            if task_name not in self.cache_dict:
+                self.cache_dict[task_name] = TextVectorMap(self.cache_path / task_name)
+                self.cache_dict[task_name].load(name=task_name)
 
             # Check cache for each text
             for i, text in enumerate(texts):
@@ -295,6 +296,6 @@ class CachedEmbeddingWrapper(Wrapper, Encoder):
         self.close()
 
     def close(self):
-        for task in self.tasks:
+        for task in list(self.cache_dict.keys()):
             self.cache_dict[task].close()
         logger.info("Closed CachedEmbeddingWrapper")
