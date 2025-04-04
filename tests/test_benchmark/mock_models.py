@@ -52,7 +52,8 @@ class MockSentenceTransformersbf16Encoder(SentenceTransformer):
     """Ensure that data types not supported by the encoder are converted to the supported data type."""
 
     model_card_data = Namespace(
-        model_name="MockSentenceTransformersbf16Encoder", base_model_revision="1.0.0"
+        model_name="mock/MockSentenceTransformersbf16Encoder",
+        base_model_revision="1.0.0",
     )
 
     def __init__(self):
