@@ -139,7 +139,11 @@ def insert_tables(
     for table, tag in zip(tables, tags):
         start = f"<!-- {tag} START -->"
         end = f"<!-- {tag} END -->"
-        md = md.replace(md[md.index(start) + len(start) : md.index(end)], table)
+        # Ensure a newline after the start tag
+        md = md.replace(
+            md[md.index(start) + len(start) : md.index(end)],
+            f"\n{table}\n",
+        )
 
     Path(file_path).write_text(md, encoding="utf-8")
 
