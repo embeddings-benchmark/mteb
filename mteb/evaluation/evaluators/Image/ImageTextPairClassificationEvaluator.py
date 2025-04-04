@@ -6,6 +6,7 @@ from typing import Any
 import torch
 import torch.nn.functional as F
 from datasets import Dataset
+from PIL.Image import Image
 from torch.utils.data import DataLoader
 
 from mteb.abstasks import TaskMetadata
@@ -22,14 +23,14 @@ logger = logging.getLogger(__name__)
 class CustomImageDataset(torch.utils.data.Dataset):
     def __init__(
         self,
-        images: list[torch.Tensor],
+        images: list[Image],
     ):
         self.images = images
 
     def __len__(self) -> int:
         return len(self.images)
 
-    def __getitem__(self, idx: int) -> dict[str, torch.Tensor]:
+    def __getitem__(self, idx: int) -> dict[str, Image]:
         return {
             "image": self.images[idx],
         }
@@ -66,7 +67,6 @@ class ImageTextPairClassificationEvaluator(Evaluator):
     ):
         super().__init__(**kwargs)
         requires_image_dependencies()
-        from torchvision import transforms
 
         self.dataset = dataset
         self.images_column_names = images_column_names
@@ -74,7 +74,6 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         self.task_metadata = task_metadata
         self.hf_split = hf_split
         self.hf_subset = hf_subset
-        self.transform = transforms.Compose([transforms.PILToTensor()])
 
     def __call__(
         self,
@@ -103,7 +102,7 @@ class ImageTextPairClassificationEvaluator(Evaluator):
         else:
             images = self.dataset[self.images_column_names]
 
-        images = [self.transform(transform_image_to_rgb(img)) for img in images]
+        images = [transform_image_to_rgb(img) for img in images]
 
         texts = []
         if isinstance(self.texts_column_names, list):
