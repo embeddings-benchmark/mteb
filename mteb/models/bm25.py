@@ -10,8 +10,7 @@ from mteb.requires_package import requires_package
 logger = logging.getLogger(__name__)
 
 
-def bm25_loader(**kwargs):
-    model_name = kwargs.get("model_name", "BM25")
+def bm25_loader(model_name, **kwargs):
     requires_package(bm25_loader, "bm25s", model_name, "pip install mteb[bm25s]")
     import bm25s
     import Stemmer
