@@ -106,13 +106,14 @@ def create_task_lang_table(tasks: list[mteb.AbsTask], sort_by_sum=False) -> str:
         df = df.sort(by="sum", descending=True)
 
     total = df.sum()
-
-    task_names_md = " | ".join(sorted(get_args(TASK_TYPE)))
-    horizontal_line_md = "---|---" * (len(sorted(get_args(TASK_TYPE))) + 1)
-    table = f"""
-| ISO Code | Language | Family | {task_names_md} | Sum |
-|{horizontal_line_md}|
-"""
+    task_names = sorted(get_args(TASK_TYPE))
+    headers = ["ISO Code", "Language", "Family"] + task_names + ["Sum"]
+    table_header = "| " + " | ".join(headers) + " |"
+    separator_line = "|"
+    for header in headers:
+        width = len(header) + 2
+        separator_line += "-" * width + "|"
+    table = table_header + "\n" + separator_line + "\n"
 
     for row in df.iter_rows():
         table += f"| {row[0]} "
