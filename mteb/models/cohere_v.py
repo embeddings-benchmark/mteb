@@ -12,6 +12,7 @@ from tqdm import tqdm
 
 from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models import AbsEncoder
 from mteb.requires_package import requires_image_dependencies
 from mteb.types import Array, BatchedInput, PromptType
 
@@ -22,7 +23,7 @@ def cohere_v_loader(**kwargs):
     except ImportError:
         raise ImportError("To use cohere models, please run `pip install cohere`.")
 
-    class CohereMultiModalModelWrapper:
+    class CohereMultiModalModelWrapper(AbsEncoder):
         def __init__(
             self,
             model_name: str,

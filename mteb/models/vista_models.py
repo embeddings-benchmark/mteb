@@ -8,6 +8,7 @@ from tqdm import tqdm
 
 from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models import AbsEncoder
 from mteb.requires_package import requires_image_dependencies
 from mteb.types import Array, BatchedInput, PromptType
 
@@ -20,7 +21,7 @@ def vista_loader(**kwargs):
             "Please install `visual_bge`, refer to https://github.com/FlagOpen/FlagEmbedding/tree/master/research/visual_bge#install-flagembedding."
         )
 
-    class VisualizedBGEWrapper(Visualized_BGE):
+    class VisualizedBGEWrapper(Visualized_BGE, AbsEncoder):
         """Setting up VISTA
 
         ```

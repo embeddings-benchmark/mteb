@@ -8,6 +8,7 @@ from tqdm import tqdm
 
 from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models import AbsEncoder
 from mteb.requires_package import requires_image_dependencies
 from mteb.types import Array, BatchedInput, PromptType
 
@@ -29,7 +30,7 @@ def evaclip_loader(**kwargs):
             "`git clone https://github.com/NVIDIA/apex && cd apex && pip install -v --disable-pip-version-check --no-build-isolation --no-cache-dir ./`"
         )
 
-    class EvaCLIPWrapper:
+    class EvaCLIPWrapper(AbsEncoder):
         def __init__(
             self,
             model_name: str = "EVA02-CLIP-B-16",

@@ -9,10 +9,11 @@ from transformers import AutoModel, AutoProcessor
 
 from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models import AbsEncoder
 from mteb.types import Array, BatchedInput, PromptType
 
 
-class SiglipModelWrapper:
+class SiglipModelWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str,

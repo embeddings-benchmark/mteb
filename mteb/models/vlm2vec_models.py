@@ -10,6 +10,7 @@ from transformers import AutoConfig, AutoModelForCausalLM, AutoProcessor
 
 from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models import AbsEncoder
 from mteb.requires_package import requires_image_dependencies
 from mteb.types import Array, BatchedInput, PromptType
 
@@ -19,7 +20,7 @@ logger = logging.getLogger(__name__)
 EncodeTypes = Literal["query", "passage"]
 
 
-class VLM2VecWrapper:
+class VLM2VecWrapper(AbsEncoder):
     """Adapted from https://github.com/TIGER-AI-Lab/VLM2Vec/blob/main/src/model.py"""
 
     def __init__(

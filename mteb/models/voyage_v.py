@@ -10,6 +10,7 @@ from tqdm import tqdm
 
 from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models import AbsEncoder
 from mteb.requires_package import requires_image_dependencies
 from mteb.types import Array, BatchedInput, PromptType
 
@@ -57,7 +58,7 @@ def voyage_v_loader(**kwargs):
             "please run `pip install tenacity` to use exponential backoff."
         )
 
-    class VoyageMultiModalModelWrapper:
+    class VoyageMultiModalModelWrapper(AbsEncoder):
         def __init__(
             self,
             model_name: str,
