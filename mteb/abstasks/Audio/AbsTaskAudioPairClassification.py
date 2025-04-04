@@ -1,16 +1,15 @@
 from __future__ import annotations
 
 import logging
-from collections import Counter, defaultdict
 
-from typing import Any
 from datasets import Dataset
 
-from ...encoder_interface import AudioEncoder, Encoder
-from ...evaluation.evaluators.Audio.AudioPairClassificationEvaluator import AudioPairClassificationEvaluator
+from ...encoder_interface import AudioEncoder
+from ...evaluation.evaluators.Audio.AudioPairClassificationEvaluator import (
+    AudioPairClassificationEvaluator,
+)
 from ...load_results.task_results import ScoresDict
 from ..AbsTask import AbsTask
-from ..TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -26,9 +25,9 @@ class AbsTaskAudioPairClassification(AbsTask):
         label: int
     """
 
-    audio1_column_name : str = 'audio1'
-    audio2_column_name : str = 'audio2'
-    label_column_name : str = 'label'
+    audio1_column_name: str = "audio1"
+    audio2_column_name: str = "audio2"
+    label_column_name: str = "label"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

@@ -12,6 +12,7 @@ from mteb.encoder_interface import Encoder
 from mteb.evaluation.evaluators.RetrievalEvaluator import DenseRetrievalExactSearch
 from mteb.model_meta import ModelMeta
 from mteb.models.bge_models import bge_m3_training_data
+from mteb.requires_package import requires_package
 
 logger = logging.getLogger(__name__)
 
@@ -61,12 +62,13 @@ class BGEReranker(RerankerWrapper):
         if self.fp_options:
             model_args["torch_dtype"] = self.fp_options
 
-        try:
-            from FlagEmbedding import FlagReranker
-        except ImportError:
-            raise ImportError(
-                "FlagEmbedding is not installed. Please install it via `pip install mteb[flagembedding]`"
-            )
+        requires_package(
+            self,
+            "flagembedding",
+            model_name_or_path,
+            "pip install 'mteb[flagembedding]'",
+        )
+        from FlagEmbedding import FlagReranker
 
         self.model = FlagReranker(model_name_or_path, use_fp16=True)
 

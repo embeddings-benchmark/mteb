@@ -42,14 +42,9 @@ class AudioPairClassificationEvaluator(Evaluator):
         audio2,
         labels,
         task_name: str | None = None,
-        limit: int | None = None,
         **kwargs,
     ):
         super().__init__(**kwargs)
-        if limit:
-            audio1 = audio1[:limit]
-            audio2 = audio2[:limit]
-            labels = labels[:limit]
         self.audio1 = audio1
         self.audio2 = audio2
         self.labels = labels
@@ -58,13 +53,14 @@ class AudioPairClassificationEvaluator(Evaluator):
         assert len(self.audio1) == len(self.audio2)
         assert len(self.audio1) == len(self.labels)
 
-        if type(labels[0]).__name__ == 'list':
+        if isinstance(labels[0], list):
             labels = [label[0] for label in labels]
 
-        # print(labels[0])
-
         for label in labels:
-            assert label == 0 or label == 1
+            if label not in [0, 1]:
+                raise ValueError(
+                    f"Invalid label value: {label}. Please assign each label to a value in [0, 1]."
+                )
 
     def __call__(
         self,
@@ -105,7 +101,10 @@ class AudioPairClassificationEvaluator(Evaluator):
             **encode_kwargs,
         )
 
-        emb_dict = {tuple(audio.tolist()): embedding for audio, embedding in zip(audios, embeddings)}
+        emb_dict = {
+            tuple(audio.tolist()): embedding
+            for audio, embedding in zip(audios, embeddings)
+        }
         embeddings1 = [emb_dict[tuple(audio)] for audio in self.audio1]
         embeddings2 = [emb_dict[tuple(audio)] for audio in self.audio2]
 
@@ -168,8 +167,10 @@ class AudioPairClassificationEvaluator(Evaluator):
         Returns:
             The metrics for the given scores and labels.
         """
-        acc, acc_threshold = AudioPairClassificationEvaluator.find_best_acc_and_threshold(
-            scores, labels, high_score_more_similar
+        acc, acc_threshold = (
+            AudioPairClassificationEvaluator.find_best_acc_and_threshold(
+                scores, labels, high_score_more_similar
+            )
         )
         (
             f1,

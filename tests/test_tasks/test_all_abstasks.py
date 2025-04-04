@@ -15,6 +15,9 @@ from mteb.abstasks.AbsTaskSpeedTask import AbsTaskSpeedTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.Image.AbsTaskImageTextPairClassification import (
+    AbsTaskImageTextPairClassification,
+)
 from mteb.abstasks.MultiSubsetLoader import MultiSubsetLoader
 from mteb.overview import TASKS_REGISTRY
 
@@ -33,6 +36,25 @@ ALL_MOCK_TASKS = (
 )
 
 tasks = [t for t in MTEB().tasks_cls if t.metadata.name not in ALL_MOCK_TASKS]
+
+datasets_not_available = [
+    "AfriSentiLangClassification",
+    "SNLHierarchicalClusteringP2P",
+    "SNLClustering",
+    "SNLHierarchicalClusteringS2S",
+    "SNLRetrieval",
+]
+
+
+dataset_revisions = list(
+    {  # deduplicate as multiple tasks rely on the same dataset (save us at least 100 test cases)
+        (t.metadata.dataset["path"], t.metadata.dataset["revision"])
+        for t in mteb.get_tasks(exclude_superseded=False)
+        if not isinstance(t, (AbsTaskAggregate, AbsTaskSpeedTask))
+        and t.metadata.name not in datasets_not_available
+        and t.metadata.name not in ALL_MOCK_TASKS
+    }
+)
 
 
 dataset_revisions = list(
@@ -60,6 +82,7 @@ def test_load_data(
         or isinstance(task, MultiSubsetLoader)
         or isinstance(task, AbsTaskSpeedTask)
         or isinstance(task, AbsTaskAny2AnyMultiChoice)
+        or isinstance(task, AbsTaskImageTextPairClassification)
     ):
         pytest.skip()
     with patch.object(task, "dataset_transform") as mock_dataset_transform:

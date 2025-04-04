@@ -71,6 +71,9 @@ TASK_SUBTYPE = Literal[
     "Sentiment Analysis",
     "Intent Classification",
     "Vehicle Clustering",
+    "Rendered semantic textual similarity",
+    "Gender Classification",
+    "Age Classification",
 ]
 
 TASK_DOMAIN = Literal[
@@ -116,12 +119,11 @@ SAMPLE_CREATION_METHOD = Literal[
     "multiple",
 ]
 
-
 MIEB_TASK_TYPE = (
     "Any2AnyMultiChoice",
     "Any2AnyRetrieval",
     "Any2AnyMultilingualRetrieval",
-    "VisionCentric",
+    "VisionCentricQA",
     "ImageClustering",
     "ImageClassification",
     "ImageMultilabelClassification",
@@ -138,7 +140,7 @@ MAEB_TASK_TYPE = (
     "AudioZeroshotClassification",
     "AudioClassification",
     "AudioCrossFoldClassification",
-    "AudioPairClassification"
+    "AudioPairClassification",
 )
 
 TASK_TYPE = (
@@ -154,15 +156,6 @@ TASK_TYPE = (
         "Summarization",
         "InstructionRetrieval",
         "Speed",
-        "Any2AnyMultiChoice",
-        "Any2AnyRetrieval",
-        "Any2TextMutipleChoice",
-        "ImageClustering",
-        "ImageClassification",
-        "ImageMultilabelClassification",
-        "ImageTextPairClassification",
-        "VisualSTS",
-        "ZeroShotClassification",
     )
     + MIEB_TASK_TYPE
     + MAEB_TASK_TYPE
