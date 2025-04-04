@@ -17,7 +17,7 @@ class ImageCoDeT2IRetrieval(AbsTaskAny2AnyRetrieval):
         category="t2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="ndcg_at_10",
+        main_score="cv_recall_at_3",
         date=("2022-05-22", "2022-05-27"),  # conference dates
         domains=["Web", "Written"],
         task_subtypes=["Image Text Retrieval"],
