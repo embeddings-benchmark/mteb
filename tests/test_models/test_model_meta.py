@@ -10,7 +10,7 @@ from mteb import ModelMeta
     ("model_name", "expected_memory"),
     [
         ("intfloat/e5-mistral-7b-instruct", 13563),  # multiple safetensors
-        ("infgrad/jasper_en_vision_language_v1", 3802),  # bf16
+        ("NovaSearch/jasper_en_vision_language_v1", 3802),  # bf16
         ("intfloat/multilingual-e5-small", 449),  # safetensors
         ("BAAI/bge-m3", 2167),  # pytorch_model.bin
     ],
@@ -36,7 +36,7 @@ def test_model_memory_usage_api_model():
 )
 def test_model_similar_tasks(training_datasets):
     dummy_model_meta = ModelMeta(
-        name="test_model",
+        name="test/test_model",
         revision="test",
         release_date=None,
         languages=None,
@@ -65,6 +65,32 @@ def test_model_similar_tasks(training_datasets):
         "Touche2020Retrieval.v3",
     ]
     assert sorted(dummy_model_meta.get_training_datasets().keys()) == expected
+
+
+def test_model_name_without_prefix():
+    with pytest.raises(ValueError):
+        ModelMeta(
+            name="test_model",
+            revision="test",
+            release_date=None,
+            languages=None,
+            loader=None,
+            n_parameters=None,
+            memory_usage_mb=None,
+            max_tokens=None,
+            embed_dim=None,
+            license=None,
+            open_weights=None,
+            public_training_code=None,
+            public_training_data=None,
+            framework=[],
+            reference=None,
+            similarity_fn_name=None,
+            use_instructions=None,
+            training_datasets=None,
+            adapted_from=None,
+            superseded_by=None,
+        )
 
 
 def test_model_training_dataset_adapted():

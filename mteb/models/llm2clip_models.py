@@ -12,6 +12,7 @@ from transformers import AutoConfig, AutoModel, AutoTokenizer, CLIPImageProcesso
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
+from mteb.requires_package import requires_image_dependencies, requires_package
 
 MODEL2PROCESSOR = {
     "microsoft/LLM2CLIP-Openai-L-14-336": "openai/clip-vit-large-patch14-336",
@@ -21,13 +22,11 @@ MODEL2PROCESSOR = {
 
 
 def llm2clip_loader(**kwargs):
-    try:
-        from llm2vec import LLM2Vec
-    except ImportError:
-        # https://github.com/baaivision/EVA/tree/master/EVA-CLIP#setup
-        raise ImportError(
-            "To use the LLM2CLIP models `llm2vec` is required. Please install it with `pip install llm2vec`."
-        )
+    model_name = kwargs.get("model_name", "LLM2CLIP")
+    requires_package(
+        llm2clip_loader, "llm2vec", model_name, "pip install 'mteb[llm2vec]'"
+    )
+    from llm2vec import LLM2Vec
 
     class LLM2CLIPWrapper:
         def __init__(
@@ -36,6 +35,8 @@ def llm2clip_loader(**kwargs):
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
             **kwargs: Any,
         ):
+            requires_image_dependencies()
+
             if model_name not in MODEL2PROCESSOR:
                 raise Exception(
                     f"This model {model_name} is not in the supported mode list: {list(MODEL2PROCESSOR.keys())}."
@@ -119,10 +120,10 @@ def llm2clip_loader(**kwargs):
             batch_size: int = 32,
             **kwargs: Any,
         ):
+            import torchvision.transforms.functional as F
+
             all_image_embeddings = []
             if isinstance(images, DataLoader):
-                import torchvision.transforms.functional as F
-
                 with torch.no_grad(), torch.amp.autocast("cuda"):
                     for batch in tqdm(images):
                         input_pixels = self.processor(

@@ -10,13 +10,18 @@ from tqdm import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
+from mteb.requires_package import requires_image_dependencies, requires_package
 
 
 def openclip_loader(**kwargs):
-    try:
-        import open_clip
-    except ImportError:
-        raise ImportError("Please run `pip install open_clip_torch`.")
+    model_name = kwargs.get("model_name", "CLIP-ViT")
+    requires_package(
+        openclip_loader,
+        "open_clip_torch",
+        model_name,
+        "pip install 'mteb[open_clip_torch]'",
+    )
+    import open_clip
 
     class OpenCLIPWrapper:
         def __init__(
@@ -25,6 +30,8 @@ def openclip_loader(**kwargs):
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
             **kwargs: Any,
         ):
+            requires_image_dependencies()
+
             self.model_name = model_name
             self.device = device
             self.model, _, self.img_preprocess = open_clip.create_model_and_transforms(
@@ -71,10 +78,10 @@ def openclip_loader(**kwargs):
             batch_size: int = 32,
             **kwargs: Any,
         ):
+            import torchvision.transforms.functional as F
+
             all_image_embeddings = []
             if isinstance(images, DataLoader):
-                import torchvision.transforms.functional as F
-
                 with torch.no_grad(), torch.cuda.amp.autocast():
                     for batch in tqdm(images):
                         inputs = torch.vstack(
@@ -111,8 +118,8 @@ def openclip_loader(**kwargs):
 
         def get_fused_embeddings(
             self,
-            texts: list[str] = None,
-            images: list[Image.Image] | DataLoader = None,
+            texts: list[str] | None = None,
+            images: list[Image.Image] | DataLoader | None = None,
             fusion_mode="sum",
             **kwargs: Any,
         ):

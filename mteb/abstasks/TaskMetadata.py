@@ -63,7 +63,14 @@ TASK_SUBTYPE = Literal[
     "Spoken Language Identification",
     "Stroke Classification of Musical Instrument",
     "Tonic Classification of Musical Instrument",
+    "Speaker Count Identification",
+    "Spoken Digit Classification",
     "Gender Clustering",
+    "Music Clustering",
+    "Rendered semantic textual similarity",
+    "Sentiment Analysis",
+    "Intent Classification",
+    "Vehicle Clustering",
     "Rendered semantic textual similarity",
     "Gender Classification",
     "Age Classification",
@@ -112,7 +119,6 @@ SAMPLE_CREATION_METHOD = Literal[
     "multiple",
 ]
 
-
 MIEB_TASK_TYPE = (
     "Any2AnyMultiChoice",
     "Any2AnyRetrieval",
@@ -134,6 +140,7 @@ MAEB_TASK_TYPE = (
     "AudioZeroshotClassification",
     "AudioClassification",
     "AudioCrossFoldClassification",
+    "AudioPairClassification",
 )
 
 TASK_TYPE = (
@@ -149,15 +156,6 @@ TASK_TYPE = (
         "Summarization",
         "InstructionRetrieval",
         "Speed",
-        "Any2AnyMultiChoice",
-        "Any2AnyRetrieval",
-        "Any2TextMutipleChoice",
-        "ImageClustering",
-        "ImageClassification",
-        "ImageMultilabelClassification",
-        "ImageTextPairClassification",
-        "VisualSTS",
-        "ZeroShotClassification",
     )
     + MIEB_TASK_TYPE
     + MAEB_TASK_TYPE
@@ -198,6 +196,7 @@ ANNOTATOR_TYPE = Literal[
     "LM-generated and reviewed",  # reviewed by humans
     "automatic",  # any postprocessing using (Audio/Image/Video) models
     "automatic-and-reviewed",  # mix of automated postprocessing and human-based verification
+    "algorithmic",
 ]
 
 SPLIT_NAME = str

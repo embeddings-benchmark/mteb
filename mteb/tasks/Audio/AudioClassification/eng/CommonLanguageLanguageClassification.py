@@ -8,7 +8,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class CommonLanguageLanguageClassification(AbsTaskAudioClassification):
     metadata = TaskMetadata(
-        name="Common-Language-Language-Detection",
+        name="CommonLanguageLanguageDetection",
         description="Language Classification",
         reference="https://huggingface.co/datasets/speechbrain/common_language",
         dataset={

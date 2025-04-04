@@ -133,3 +133,17 @@ model = ModelMeta(
    ...
 )
 ```
+
+##### Adding model dependencies in pyproject.toml
+If your are adding a model that requires additional dependencies, you can add them to the `pyproject.toml` file and instead of checking whether dependencies are installed or not make use of `requires_package` from [requires_package.py](../mteb/requires_packages.py). For example:
+
+In the [voyage_models.py](../mteb/models/voyage_models.py) file, we have added the following code:
+```python
+requires_package(self, "voyageai", model_name, "pip install 'mteb[voyageai]'")
+```
+and also updated [pyproject.toml]((../pyproject.toml)) file with the following code:
+```python
+voyageai = ["voyageai>=1.0.0,<2.0.0"]
+```
+so that it will check whether voyageai is installed or not. If not, then it will give an error message to install voyageai. This has done so as to give clear installation warnings. 
+If you want to give suggestion instead of warning, you can use `suggest_package` from [requires_package.py](../mteb/requires_packages.py).

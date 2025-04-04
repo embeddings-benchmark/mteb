@@ -8,7 +8,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class CommonLanguageGenderDetection(AbsTaskAudioClassification):
     metadata = TaskMetadata(
-        name="Common-Language-Gender-Detection",
+        name="CommonLanguageGenderDetection",
         description="Gender Classification",
         reference="https://huggingface.co/datasets/speechbrain/common_language",
         dataset={

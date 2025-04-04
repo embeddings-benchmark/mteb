@@ -5,8 +5,10 @@ import re
 from collections import defaultdict
 
 import gradio as gr
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from matplotlib.colors import LinearSegmentedColormap
 from pandas.api.types import is_numeric_dtype
 
 from mteb.models.overview import get_model_meta
@@ -98,9 +100,18 @@ def format_zero_shot(zero_shot_percentage: int):
     return f"{zero_shot_percentage:.0f}%"
 
 
-def scores_to_tables(
-    scores_long: list[dict], search_query: str | None = None
-) -> tuple[gr.DataFrame, gr.DataFrame]:
+def create_light_green_cmap():
+    cmap = plt.cm.get_cmap("Greens")
+    num_colors = 256
+    half_colors = np.linspace(0, 0.5, num_colors)
+    half_cmap = [cmap(val) for val in half_colors]
+    light_green_cmap = LinearSegmentedColormap.from_list(
+        "LightGreens", half_cmap, N=256
+    )
+    return light_green_cmap
+
+
+def scores_to_tables(scores_long: list[dict], search_query: str | None = None):
     if not scores_long:
         no_results_frame = pd.DataFrame(
             {"No results": ["You can try relaxing your criteria"]}
@@ -157,6 +168,13 @@ def scores_to_tables(
         "Number of Parameters",
         model_metas.map(lambda m: format_n_parameters(m.n_parameters)),
     )
+    joint_table.insert(
+        1,
+        "Memory Usage (MB)",
+        model_metas.map(
+            lambda m: str(int(m.memory_usage_mb)) if m.memory_usage_mb else "Unknown"
+        ),
+    )
     tasks = get_tasks(tasks=list(data["task_name"].unique()))
     joint_table.insert(
         1, "Zero-shot", model_metas.map(lambda m: m.zero_shot_percentage(tasks))
@@ -196,30 +214,78 @@ def scores_to_tables(
     # setting model name column to markdown
     column_types[1] = "markdown"
     score_columns = ["Mean (Task)", "Mean (TaskType)", *mean_per_type.columns]
+
+    return joint_table, per_task, score_columns, column_types
+
+
+def apply_styling(
+    joint_table: pd.DataFrame,
+    per_task: pd.DataFrame,
+    score_columns: list[str],
+    column_types: list[str],
+) -> tuple[gr.DataFrame, gr.DataFrame]:
+    excluded_columns = [
+        "Rank (Borda)",
+        "Model",
+        "Number of Parameters",
+        "Embedding Dimensions",
+        "Max Tokens",
+        "Memory Usage (MB)",
+    ]
+    gradient_columns = [
+        col for col in joint_table.columns if col not in excluded_columns
+    ]
+    light_green_cmap = create_light_green_cmap()
+    numeric_data = joint_table.copy()
+    numeric_data["Zero-shot"] = numeric_data["Zero-shot"].replace(-1, np.nan)
+    joint_table["Zero-shot"] = joint_table["Zero-shot"].apply(format_zero_shot)
     joint_table[score_columns] = joint_table[score_columns].map(format_scores)
-    joint_table_style = (
-        joint_table.style.format(
-            {
-                **{column: "{:.2f}" for column in score_columns},
-                "Rank (Borda)": "{:.0f}",
-                "Zero-shot": format_zero_shot,
-            },
-            na_rep="",
-        )
-        .highlight_min("Rank (Borda)", props="font-weight: bold")
-        .highlight_max(subset=score_columns, props="font-weight: bold")
-        .background_gradient(
-            cmap="RdYlGn",
-            subset=["Zero-shot"],
-            vmin=50,
-            vmax=100,
-        )
+    joint_table_style = joint_table.style.format(
+        {
+            **{column: "{:.2f}" for column in score_columns},
+            "Rank (Borda)": "{:.0f}",
+        },
+        na_rep="",
     )
+    joint_table_style = joint_table_style.highlight_min(
+        "Rank (Borda)", props="font-weight: bold"
+    ).highlight_max(subset=score_columns, props="font-weight: bold")
+
+    # Apply background gradients for each selected column
+    for col in gradient_columns:
+        if col in joint_table.columns:
+            mask = numeric_data[col].notna()
+            if col != "Zero-shot":
+                gmap_values = numeric_data[col] * 100
+                cmap = light_green_cmap
+                joint_table_style = joint_table_style.background_gradient(
+                    cmap=cmap,
+                    subset=pd.IndexSlice[mask, col],
+                    gmap=gmap_values.loc[mask],
+                )
+            else:
+                gmap_values = numeric_data[col]
+                cmap = "RdYlGn"
+                joint_table_style = joint_table_style.background_gradient(
+                    cmap=cmap,
+                    subset=pd.IndexSlice[mask, col],
+                    vmin=50,
+                    vmax=100,
+                    gmap=gmap_values.loc[mask],
+                )
     task_score_columns = per_task.select_dtypes("number").columns
     per_task[task_score_columns] *= 100
     per_task_style = per_task.style.format(
         "{:.2f}", subset=task_score_columns, na_rep=""
     ).highlight_max(subset=task_score_columns, props="font-weight: bold")
+    for col in task_score_columns:
+        if col != "Model":
+            mask = per_task[col].notna()
+            per_task_style = per_task_style.background_gradient(
+                cmap=light_green_cmap,
+                subset=pd.IndexSlice[mask, col],
+                gmap=per_task[col].loc[mask],
+            )
     return (
         gr.DataFrame(
             joint_table_style,
@@ -229,3 +295,18 @@ def scores_to_tables(
         ),
         gr.DataFrame(per_task_style, interactive=False, pinned_columns=1),
     )
+
+
+def create_tables(
+    scores_long: list[dict], search_query: str | None = None
+) -> tuple[gr.DataFrame, gr.DataFrame]:
+    result = scores_to_tables(scores_long, search_query)
+    # dataframe with No Results is returned, so no need to apply styling
+    if len(result) == 2:
+        joint_table, per_task = result
+        return joint_table, per_task
+    joint_table, per_task, score_columns, column_types = result
+    summary_table, per_task_table = apply_styling(
+        joint_table, per_task, score_columns, column_types
+    )
+    return summary_table, per_task_table
