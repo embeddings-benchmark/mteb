@@ -10,14 +10,18 @@ from tqdm import tqdm
 from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
-from mteb.requires_package import requires_image_dependencies
+from mteb.requires_package import requires_image_dependencies, requires_package
 
 
 def openclip_loader(**kwargs):
-    try:
-        import open_clip
-    except ImportError:
-        raise ImportError("Please run `pip install open_clip_torch`.")
+    model_name = kwargs.get("model_name", "CLIP-ViT")
+    requires_package(
+        openclip_loader,
+        "open_clip_torch",
+        model_name,
+        "pip install 'mteb[open_clip_torch]'",
+    )
+    import open_clip
 
     class OpenCLIPWrapper(Wrapper):
         def __init__(

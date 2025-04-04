@@ -12,7 +12,7 @@ from transformers import AutoConfig, AutoModel, AutoTokenizer, CLIPImageProcesso
 from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
-from mteb.requires_package import requires_image_dependencies
+from mteb.requires_package import requires_image_dependencies, requires_package
 
 MODEL2PROCESSOR = {
     "microsoft/LLM2CLIP-Openai-L-14-336": "openai/clip-vit-large-patch14-336",
@@ -22,13 +22,11 @@ MODEL2PROCESSOR = {
 
 
 def llm2clip_loader(**kwargs):
-    try:
-        from llm2vec import LLM2Vec
-    except ImportError:
-        # https://github.com/baaivision/EVA/tree/master/EVA-CLIP#setup
-        raise ImportError(
-            "To use the LLM2CLIP models `llm2vec` is required. Please install it with `pip install llm2vec`."
-        )
+    model_name = kwargs.get("model_name", "LLM2CLIP")
+    requires_package(
+        llm2clip_loader, "llm2vec", model_name, "pip install 'mteb[llm2vec]'"
+    )
+    from llm2vec import LLM2Vec
 
     class LLM2CLIPWrapper(Wrapper):
         def __init__(

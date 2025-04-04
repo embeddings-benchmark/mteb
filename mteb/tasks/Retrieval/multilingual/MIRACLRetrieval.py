@@ -304,6 +304,7 @@ class MIRACLRetrievalHardNegatives(AbsTaskRetrieval):
         dataset={
             "path": "mteb/miracl-hard-negatives",
             "revision": "95c8db7d4a6e9c1d8a60601afd63d553ae20a2eb",
+            "trust_remote_code": True,
         },
         type="Retrieval",
         category="t2t",
@@ -346,7 +347,7 @@ class MIRACLRetrievalHardNegatives(AbsTaskRetrieval):
                 splits=self.metadata.eval_splits,
                 cache_dir=kwargs.get("cache_dir", None),
                 revision=self.metadata.dataset["revision"],
-                trust_remote_code=self.metadata.dataset["trust_remote_code"],
+                trust_remote_code=self.metadata.dataset.get("trust_remote_code", False),
             )
         )
 

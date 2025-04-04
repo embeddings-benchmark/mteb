@@ -13,14 +13,15 @@ from tqdm import tqdm
 
 from mteb.encoder_interface import BatchedInput, PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
-from mteb.requires_package import requires_image_dependencies
+from mteb.requires_package import requires_image_dependencies, requires_package
 
 
 def cohere_v_loader(**kwargs):
-    try:
-        import cohere  # type: ignore
-    except ImportError:
-        raise ImportError("To use cohere models, please run `pip install cohere`.")
+    model_name = kwargs.get("model_name", "Cohere")
+    requires_package(
+        cohere_v_loader, "cohere", model_name, "pip install 'mteb[cohere]'"
+    )
+    import cohere
 
     class CohereMultiModalModelWrapper:
         def __init__(

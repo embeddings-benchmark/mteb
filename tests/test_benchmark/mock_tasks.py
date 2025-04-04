@@ -19,9 +19,6 @@ from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
 from mteb.abstasks.AbsTaskSummarization import AbsTaskSummarization
 from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.Image.AbsTaskAny2TextMultipleChoice import (
-    AbsTaskAny2TextMultipleChoice,
-)
 from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
 from mteb.abstasks.Image.AbsTaskImageClustering import AbsTaskImageClustering
 from mteb.abstasks.Image.AbsTaskImageMultilabelClassification import (  # noqa
@@ -2599,46 +2596,6 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskAny2AnyRetrieval):
             },
         }
         self.data_loaded = True
-
-
-class MockTextMultipleChoiceTask(AbsTaskAny2TextMultipleChoice):
-    expected_stats = {
-        "test": {
-            # TODO: Add descriptive stats
-        }
-    }
-
-    metadata = TaskMetadata(
-        type="VisionCentric",
-        name="MockTextMultipleChoice",
-        main_score="accuracy",
-        **general_args,  # type: ignore
-    )
-    metadata.modalities = ["text", "image"]
-    metadata.category = "it2i"
-
-    def load_data(self, **kwargs):
-        images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]  # noqa: NPY002
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
-
-        self.dataset = DatasetDict(
-            {
-                "test": Dataset.from_dict(
-                    {
-                        "id": [f"q{i}" for i in range(2)],
-                        "image": [images[i] for i in range(2)],
-                        "question": [
-                            "This is a positive sentence",
-                            "This is another positive sentence",
-                        ],
-                        "choices": [["3", "2", "1", "0"], ["3", "2", "1", "0"]],
-                        "answer": ["1", "0"],
-                    }
-                )
-            }
-        )
 
 
 class MockImageClassificationTask(AbsTaskImageClassification):
