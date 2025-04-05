@@ -85,11 +85,6 @@ def get_task_results(results_folder: Path) -> list[TaskResult]:
         if r.is_file() and r.name != "model_meta.json" and "predictions" not in r.name
     ]
     task_results = [TaskResult.from_disk(path) for path in json_files]
-    task_results = [
-        results
-        for results in task_results
-        if results.task_name not in ["GPUSpeedTask", "CPUSpeedTask"]
-    ]
     # We should ideally find better way in the future to aggregate scores for tasks like CQADupstack
     task_results = potentially_add_cqadupstack_to_results(task_results)
     return sorted(task_results, key=lambda x: x.task_name)
