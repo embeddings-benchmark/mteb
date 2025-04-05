@@ -8,7 +8,6 @@ from .AbsTaskClusteringFast import AbsTaskClusteringFast
 from .AbsTaskMultilabelClassification import AbsTaskMultilabelClassification
 from .AbsTaskPairClassification import AbsTaskPairClassification
 from .AbsTaskRetrieval import AbsTaskRetrieval
-from .AbsTaskSpeedTask import AbsTaskSpeedTask
 from .AbsTaskSTS import AbsTaskSTS
 from .AbsTaskSummarization import AbsTaskSummarization
 from .Image import (
@@ -32,7 +31,6 @@ __all__ = [
     "AbsTaskMultilabelClassification",
     "AbsTaskPairClassification",
     "AbsTaskRetrieval",
-    "AbsTaskSpeedTask",
     "AbsTaskSTS",
     "AbsTaskSummarization",
     "TaskMetadata",
