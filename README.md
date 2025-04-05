@@ -79,7 +79,7 @@ The following links to the main sections in the usage documentation.
 | [Evaluating a Model](docs/usage/usage.md#evaluating-a-model) | How to evaluate a model |
 | [Evaluating on different Modalities](docs/usage/usage.md#evaluating-on-different-modalities) | How to evaluate image and image-text tasks |
 | **Selecting Tasks** | |
-| [Selecting a benchmark](docs/usage/usage.md#selecting-a-benchmark) | How to select and filter tasks |
+| [Selecting a benchmark](docs/usage/usage.md#selecting-a-benchmark) | How to select benchmarks |
 | [Task selection](docs/usage/usage.md#task-selection) | How to select and filter tasks |
 | [Selecting Split and Subsets](docs/usage/usage.md#selecting-evaluation-split-or-subsets) | How to select evaluation splits or subsets |
 | [Using a Custom Task](docs/usage/usage.md#using-a-custom-task) | How to evaluate on a custom task |
@@ -107,8 +107,8 @@ The following links to the main sections in the usage documentation.
 | 📋 [Tasks]                     | Overview of available tasks                                                         |
 | 📐 [Benchmarks]                | Overview of available benchmarks                                                    |
 | **Contributing**               |                                                                                     |
-| 🤖 [Adding a model]            | Information related to how to submit a model to MTEB and to the leaderboard         |
-| 👩‍🔬 [Reproducible workflows]    | Information related to how to create reproducible workflows with MTEB               |
+| 🤖 [Adding a model]            | How to submit a model to MTEB and to the leaderboard                                |
+| 👩‍🔬 [Reproducible workflows]    | How to create reproducible workflows with MTEB                                      |
 | 👩‍💻 [Adding a dataset]          | How to add a new task/dataset to MTEB                                               |
 | 👩‍💻 [Adding a benchmark]        | How to add a new benchmark to MTEB and to the leaderboard                           |
 | 🤝 [Contributing]              | How to contribute to MTEB and set it up for development                             |
