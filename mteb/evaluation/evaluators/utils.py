@@ -60,7 +60,6 @@ def recall_cap(
     capped_recall = defaultdict(list)
 
     k_max = max(k_values)
-    logging.info("\n")
 
     for query_id, doc_scores in results.items():
         top_hits = sorted(doc_scores.items(), key=lambda item: item[1], reverse=True)[
@@ -74,7 +73,9 @@ def recall_cap(
                 row[0] for row in top_hits[0:k] if qrels[query_id].get(row[0], 0) > 0
             ]
             denominator = min(len(query_relevant_docs), k)
-            capped_recall[f"R_cap@{k}"].append(len(retrieved_docs) / denominator)
+            if denominator == 0:
+                capped_recall[f"R_cap_at_{k}"].append(None)
+            capped_recall[f"R_cap_at_{k}"].append(len(retrieved_docs) / denominator)
     return capped_recall
 
 
@@ -91,7 +92,6 @@ def hole(
             annotated_corpus.add(doc_id)
 
     k_max = max(k_values)
-    logging.info("\n")
 
     for _, scores in results.items():
         top_hits = sorted(scores.items(), key=lambda item: item[1], reverse=True)[
@@ -101,7 +101,7 @@ def hole(
             hole_docs = [
                 row[0] for row in top_hits[0:k] if row[0] not in annotated_corpus
             ]
-            Hole[f"Hole@{k}"].append(len(hole_docs) / k)
+            Hole[f"Hole_at_{k}"].append(len(hole_docs) / k)
     return Hole
 
 

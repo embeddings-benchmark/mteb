@@ -10,9 +10,10 @@ from typing import Any, Callable, TypedDict
 from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset
+from mteb.encoder_interface import Encoder
 
-from .. import Encoder
 from ..evaluation.evaluators import RetrievalEvaluator
+from ..evaluation.evaluators.utils import make_score_dict
 from ..load_results.task_results import ScoresDict
 from .AbsTask import AbsTask
 from .dataloaders import RetrievalDataLoader
@@ -113,10 +114,10 @@ class AbsTaskRetrieval(AbsTask):
             hf_subset: {
                 split: {
                     'corpus': dict[str, dict[str, str]],  # doc_id -> doc
-                    'queries': dict[str, Union[str, List[str]]],  # query_id -> query
+                    'queries': dict[str, str | list[str]]],  # query_id -> query
                     'relevant_docs': dict[str, dict[str, int]],  # query_id -> doc_id -> score
                     'instructions': Optional[dict[str, str]],  # query_id -> instruction
-                    'top_ranked': Optional[dict[str, List[str]]]  # query_id -> doc_ids
+                    'top_ranked': Optional[dict[str, list[str]]]  # query_id -> doc_ids
                 }
             }
         }
@@ -141,6 +142,53 @@ class AbsTaskRetrieval(AbsTask):
             )
         )
 
+    def transform_old_dataset_format_retrieval(self):
+        if not hasattr(self, "queries"):
+            return
+        if self.metadata.is_multilingual:
+            for subset in self.queries:
+                for split in self.queries[subset]:
+                    self.dataset[subset][split]["queries"] = self.queries[subset][split]
+                    self.dataset[subset][split]["corpus"] = self.corpus[subset][split]
+                    self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[
+                        subset
+                    ][split]
+                    if hasattr(self, "instructions"):
+                        self.dataset[subset][split]["instructions"] = self.instructions[
+                            subset
+                        ][split]
+                    if hasattr(self, "top_ranked"):
+                        self.dataset[subset][split]["top_ranked"] = self.top_ranked[
+                            subset
+                        ][split]
+        else:
+            subset = "default"
+            for split in self.queries:
+                self.dataset[subset][split]["queries"] = self.queries[subset][
+                    split
+                ].copy()
+                self.dataset[subset][split]["corpus"] = self.corpus[subset][
+                    split
+                ].copy()
+                self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[
+                    subset
+                ][split].copy()
+                if hasattr(self, "instructions"):
+                    self.dataset[subset][split]["instructions"] = self.instructions[
+                        subset
+                    ][split].copy()
+                if hasattr(self, "top_ranked"):
+                    self.dataset[subset][split]["top_ranked"] = self.top_ranked[subset][
+                        split
+                    ].copy()
+        del self.queries
+        del self.corpus
+        del self.relevant_docs
+        if hasattr(self, "instructions"):
+            del self.instructions
+        if hasattr(self, "top_ranked"):
+            del self.top_ranked
+
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
@@ -152,6 +200,9 @@ class AbsTaskRetrieval(AbsTask):
 
         def process_data(split: str, hf_subset: str = "default"):
             """Helper function to load and process data for a given split and language"""
+            logger.info(
+                f"Loading {split} split for {hf_subset} subset of {self.metadata.name}"
+            )
             corpus, queries, relevant_docs, instructions, top_ranked = (
                 RetrievalDataLoader(
                     hf_repo=dataset_path,
@@ -181,7 +232,7 @@ class AbsTaskRetrieval(AbsTask):
 
     def evaluate(
         self,
-        model,
+        model: Encoder,
         split: str = "test",
         subsets_to_run: list[HFSubset] | None = None,
         *,
@@ -200,23 +251,14 @@ class AbsTaskRetrieval(AbsTask):
         Returns:
             Dictionary mapping subsets to their evaluation scores
         """
-        scores = {}
-        hf_subsets = self.hf_subsets
-        if subsets_to_run is not None:
-            hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
-
-        for hf_subset in hf_subsets:
-            logger.info(f"Evaluating subset: {hf_subset}")
-
-            scores[hf_subset] = self._evaluate_subset(
-                model,
-                self.dataset[hf_subset][split],
-                encode_kwargs,
-                hf_split=split,
-                hf_subset=hf_subset,
-                **kwargs,
-            )
-        return scores
+        self.transform_old_dataset_format_retrieval()
+        return super().evaluate(
+            model,
+            split,
+            subsets_to_run,
+            encode_kwargs=encode_kwargs,
+            **kwargs,
+        )
 
     def _evaluate_subset(
         self,
@@ -252,20 +294,21 @@ class AbsTaskRetrieval(AbsTask):
             Dictionary of evaluation scores
         """
         retriever = RetrievalEvaluator(
-            retriever=model,
-            encode_kwargs=encode_kwargs,
+            corpus=data_split["corpus"],
+            queries=data_split["queries"],
+            task_metadata=self.metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            instructions=data_split["instructions"],
+            top_ranked=data_split["top_ranked"],
             **kwargs,
         )
 
         if results is None:
             results = retriever(
-                corpus=data_split["corpus"],
-                queries=data_split["queries"],
-                task_metadata=self.metadata,
-                hf_split=hf_split,
-                hf_subset=hf_subset,
-                instructions=data_split["instructions"],
-                top_ranked=data_split["top_ranked"],
+                model,
+                encode_kwargs=encode_kwargs,
+                previous_results=results,
                 **kwargs,
             )
 
@@ -293,11 +336,16 @@ class AbsTaskRetrieval(AbsTask):
                 json.dump(data_split["relevant_docs"], f)
 
         ndcg, _map, recall, precision, naucs, task_scores = retriever.evaluate(
-            qrels=data_split["relevant_docs"],
-            results=results,
-            k_values=retriever.k_values,
-            task_metadata=self.metadata,
+            data_split["relevant_docs"],
+            results,
+            retriever.k_values,
             ignore_identical_ids=self.ignore_identical_ids,
+        )
+        mrr, naucs_mrr = retriever.evaluate_custom(
+            data_split["relevant_docs"], results, retriever.k_values
+        )
+        scores = make_score_dict(
+            ndcg, _map, recall, precision, mrr, naucs, naucs_mrr, task_scores
         )
 
         if export_errors:
@@ -325,7 +373,7 @@ class AbsTaskRetrieval(AbsTask):
                         "false_negatives": false_negatives,
                     }
 
-        return task_scores
+        return scores
 
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False

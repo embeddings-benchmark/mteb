@@ -4,8 +4,8 @@ import logging
 from pathlib import Path
 from typing import Any
 
-from mteb import Encoder
 from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.encoder_interface import Encoder
 
 from .Evaluator import Evaluator
 from .model_classes import (
@@ -16,10 +16,7 @@ from .utils import (
     add_task_specific_scores,
     calculate_retrieval_scores,
     evaluate_abstention,
-    hole,
     mrr,
-    recall_cap,
-    top_k_accuracy,
 )
 
 logger = logging.getLogger(__name__)
@@ -98,7 +95,6 @@ class RetrievalEvaluator(Evaluator):
         qrels: dict[str, dict[str, int]],
         results: dict[str, dict[str, float]],
         k_values: list[int],
-        task_metadata: TaskMetadata,
         ignore_identical_ids: bool = False,
     ) -> tuple[
         dict[str, float],
@@ -126,7 +122,7 @@ class RetrievalEvaluator(Evaluator):
             results, qrels, k_values
         )
         task_scores = add_task_specific_scores(
-            all_scores, qrels, results, task_metadata.name, k_values
+            all_scores, qrels, results, self.task_metadata.name, k_values
         )
 
         return ndcg, _map, recall, precision, naucs, task_scores
@@ -137,12 +133,13 @@ class RetrievalEvaluator(Evaluator):
         results: dict[str, dict[str, float]],
         k_values: list[int],
     ) -> tuple[dict[str, float], dict[str, float]]:
-        metric_scores = {
-            **mrr(qrels, results, k_values),
-            **recall_cap(qrels, results, k_values),
-            **hole(qrels, results, k_values),
-            **top_k_accuracy(qrels, results, k_values),
-        }
+        # metric_scores = {
+        #     **mrr(qrels, results, k_values),
+        #     **recall_cap(qrels, results, k_values),
+        #     **hole(qrels, results, k_values),
+        #     **top_k_accuracy(qrels, results, k_values),
+        # }
+        metric_scores = mrr(qrels, results, k_values)
         naucs = evaluate_abstention(results, metric_scores)
 
         metric_scores_avg = {k: sum(v) / len(v) for k, v in metric_scores.items()}

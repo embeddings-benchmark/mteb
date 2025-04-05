@@ -144,7 +144,7 @@ class AbsTaskReranking(AbsTaskRetrieval):
                         top_ranked[hf_subset][split][query_id].append(doc_id)
                         relevant_docs[hf_subset][split][query_id][doc_id] = relevance
 
-            self.datset[hf_subset][split] = {
+            self.dataset[hf_subset][split] = {
                 "corpus": corpus[hf_subset][split],
                 "queries": queries[hf_subset][split],
                 "relevant_docs": relevant_docs[hf_subset][split],
