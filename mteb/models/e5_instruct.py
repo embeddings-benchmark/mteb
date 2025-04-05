@@ -175,3 +175,37 @@ zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
     adapted_from="intfloat/e5-mistral-7b-instruct",
     superseded_by=None,
 )
+
+E5_R_MISTRAL_7B_INSTRUCTION = "{instruction}\n"
+BeastyZ__e5_R_mistral_7b = ModelMeta(
+    loader=partial(  # type: ignore
+        instruct_wrapper,
+        model_name_or_path="BeastyZ/e5-R-mistral-7b",
+        instruction_template=E5_R_MISTRAL_7B_INSTRUCTION,
+        attn="cccc",
+        pooling_method="mean",
+        mode="embedding",
+        torch_dtype=torch.float32,
+        normalized=True,
+    ),
+    name="BeastyZ/e5-R-mistral-7b",
+    revision="3f810a6a7fd220369ad248e3705cf13d71803602",
+    release_date="2024-06-28",
+    languages=["eng_Latn"],
+    n_parameters=7241732096,
+    memory_usage_mb=27625,
+    max_tokens=32768.0,
+    embed_dim=None,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference="https://huggingface.co/BeastyZ/e5-R-mistral-7b",
+    similarity_fn_name="cosine",
+    use_instructions=None,
+    training_datasets=E5_MISTRAL_TRAINING_DATA,
+    # not MTEB: {"BeastyZ/E5-R": ["train"]},
+    adapted_from="intfloat/e5-mistral-7b-instruct",
+    superseded_by=None,
+)
