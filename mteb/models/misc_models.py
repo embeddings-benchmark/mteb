@@ -6,7 +6,6 @@ import torch
 
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 from mteb.models.bge_models import bge_m3_training_data, bge_training_data
-from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
 from mteb.models.e5_models import E5_TRAINING_DATA
 from mteb.models.sentence_transformers_models import sent_trf_training_dataset
 
@@ -355,29 +354,6 @@ Jaume__gemma_2b_embeddings = ModelMeta(
     use_instructions=None,
     training_datasets={},
     adapted_from="google/gemma-2b",
-    superseded_by=None,
-)
-BeastyZ__e5_R_mistral_7b = ModelMeta(
-    name="BeastyZ/e5-R-mistral-7b",
-    revision="3f810a6a7fd220369ad248e3705cf13d71803602",
-    release_date="2024-06-28",
-    languages=["eng_Latn"],
-    loader=None,
-    n_parameters=7241732096,
-    memory_usage_mb=27625,
-    max_tokens=32768.0,
-    embed_dim=None,
-    license="apache-2.0",
-    open_weights=True,
-    public_training_code=None,
-    public_training_data=None,
-    framework=["PyTorch"],
-    reference="https://huggingface.co/BeastyZ/e5-R-mistral-7b",
-    similarity_fn_name="cosine",
-    use_instructions=None,
-    training_datasets=E5_MISTRAL_TRAINING_DATA,
-    # not MTEB: {"BeastyZ/E5-R": ["train"]},
-    adapted_from="intfloat/e5-mistral-7b-instruct",
     superseded_by=None,
 )
 
