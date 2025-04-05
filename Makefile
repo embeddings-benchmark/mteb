@@ -6,7 +6,7 @@ install:
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"
 	@echo "This ensures that the project is not installed in editable mode"
-	pip install ".[dev,speedtask,bm25s,pylate,image]"
+	pip install ".[dev,bm25s,pylate,image]"
 
 lint:
 	@echo "--- 🧹 Running linters ---"
