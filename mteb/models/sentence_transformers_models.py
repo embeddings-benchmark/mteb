@@ -226,7 +226,7 @@ labse = ModelMeta(
 )
 
 multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
-    name="sentence-transformer/multi-qa-MiniLM-L6-cos-v1",
+    name="sentence-transformers/multi-qa-MiniLM-L6-cos-v1",
     languages=["eng-Latn"],
     open_weights=True,
     revision="b207367332321f8e44f96e224ef15bc607f4dbf0",
