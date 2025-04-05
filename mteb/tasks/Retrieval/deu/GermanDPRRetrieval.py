@@ -20,7 +20,7 @@ class GermanDPR(AbsTaskRetrieval):
             "trust_remote_code": True,
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["deu-Latn"],
@@ -63,7 +63,7 @@ class GermanDPR(AbsTaskRetrieval):
 
         data = datasets.load_dataset(
             split=self._EVAL_SPLIT,
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
         corpus = {}
         queries = {}
@@ -82,7 +82,7 @@ class GermanDPR(AbsTaskRetrieval):
                 existing_docs=all_docs,
             )
             corpus.update(neg_docs)
-            relevant_docs[q_id] = {k: 1 for k in pos_docs}
+            relevant_docs[q_id] = dict.fromkeys(pos_docs, 1)
         corpus = {
             key: doc.get("title", "") + " " + doc["text"] for key, doc in corpus.items()
         }

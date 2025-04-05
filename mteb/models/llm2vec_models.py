@@ -3,13 +3,15 @@ from __future__ import annotations
 import logging
 from typing import Any, Callable
 
-import numpy as np
 import torch
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import Encoder, PromptType
-from mteb.model_meta import ModelMeta
-from mteb.models.wrapper import Wrapper
+from mteb.abstasks import TaskMetadata
+from mteb.encoder_interface import Encoder
+from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.requires_package import requires_package, suggest_package
+from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +51,7 @@ llm2vec_supervised_training_data = {
 }
 
 
-class LLM2VecWrapper(Wrapper):
+class LLM2VecModel(AbsEncoder):
     def __init__(
         self,
         model_prompts: dict[str, str] | None = None,
@@ -71,10 +73,8 @@ class LLM2VecWrapper(Wrapper):
             import flash_attn  # noqa: F401
 
             extra_kwargs["attn_implementation"] = "flash_attention_2"
-
-        self.model_prompts = (
-            self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
-        )
+        self.model_prompts = model_prompts
+        self.validate_task_to_prompt_name()
 
         if device:
             kwargs["device_map"] = device
@@ -86,19 +86,24 @@ class LLM2VecWrapper(Wrapper):
 
     def encode(
         self,
-        sentences: list[str],
+        inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,  # noqa
-    ) -> np.ndarray:
-        instruction = llm2vec_instruction(self.get_instruction(task_name, prompt_type))
+        **kwargs: Any,
+    ) -> Array:
+        instruction = llm2vec_instruction(
+            self.get_instruction(task_metadata, prompt_type)
+        )
+        sentences = [text for batch in inputs for text in batch["text"]]
 
         sentences = [[instruction, sentence] for sentence in sentences]
         return self.model.encode(sentences, **kwargs)
 
 
-def _loader(wrapper: type[LLM2VecWrapper], **kwargs) -> Callable[..., Encoder]:
+def _loader(wrapper: type[LLM2VecModel], **kwargs) -> Callable[..., Encoder]:
     _kwargs = kwargs
 
     def loader_inner(**kwargs: Any) -> Encoder:
@@ -107,9 +112,21 @@ def _loader(wrapper: type[LLM2VecWrapper], **kwargs) -> Callable[..., Encoder]:
     return loader_inner
 
 
+LLM2VEC_CITATION = """
+@misc{behnamghader2024llm2veclargelanguagemodels,
+      title={LLM2Vec: Large Language Models Are Secretly Powerful Text Encoders},
+      author={Parishad BehnamGhader and Vaibhav Adlakha and Marius Mosbach and Dzmitry Bahdanau and Nicolas Chapados and Siva Reddy},
+      year={2024},
+      eprint={2404.05961},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2404.05961},
+}"""
+
+
 llm2vec_llama3_8b_supervised = ModelMeta(
     loader=_loader(
-        LLM2VecWrapper,
+        LLM2VecModel,
         base_model_name_or_path="McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp",
         peft_model_name_or_path="McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-supervised",
         device_map="auto",
@@ -127,17 +144,18 @@ llm2vec_llama3_8b_supervised = ModelMeta(
     embed_dim=4096,
     license="mit",
     reference="https://huggingface.co/McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-supervised",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     training_datasets=llm2vec_supervised_training_data,
     public_training_data=None,
+    citation=LLM2VEC_CITATION,
 )
 
 llm2vec_llama3_8b_unsupervised = ModelMeta(
     loader=_loader(
-        LLM2VecWrapper,
+        LLM2VecModel,
         base_model_name_or_path="McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp",
         peft_model_name_or_path="McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-unsup-simcse",
         device_map="auto",
@@ -154,9 +172,10 @@ llm2vec_llama3_8b_unsupervised = ModelMeta(
     embed_dim=4096,
     license="mit",
     reference="https://huggingface.co/McGill-NLP/LLM2Vec-Meta-Llama-3-8B-Instruct-mntp-unsup-simcse",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    citation=LLM2VEC_CITATION,
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     training_datasets={},
     public_training_data=None,
@@ -164,7 +183,7 @@ llm2vec_llama3_8b_unsupervised = ModelMeta(
 
 llm2vec_mistral7b_supervised = ModelMeta(
     loader=_loader(
-        LLM2VecWrapper,
+        LLM2VecModel,
         base_model_name_or_path="McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp",
         peft_model_name_or_path="McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp-supervised",
         device_map="auto",
@@ -181,9 +200,10 @@ llm2vec_mistral7b_supervised = ModelMeta(
     embed_dim=4096,
     license="mit",
     reference="https://huggingface.co/McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp-supervised",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    citation=LLM2VEC_CITATION,
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     training_datasets=llm2vec_supervised_training_data,
     public_training_data=None,
@@ -191,7 +211,7 @@ llm2vec_mistral7b_supervised = ModelMeta(
 
 llm2vec_mistral7b_unsupervised = ModelMeta(
     loader=_loader(
-        LLM2VecWrapper,
+        LLM2VecModel,
         base_model_name_or_path="McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp",
         peft_model_name_or_path="McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp-unsup-simcse",
         device_map="auto",
@@ -208,9 +228,10 @@ llm2vec_mistral7b_unsupervised = ModelMeta(
     embed_dim=4096,
     license="mit",
     reference="https://huggingface.co/McGill-NLP/LLM2Vec-Mistral-7B-Instruct-v2-mntp-unsup-simcse",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    citation=LLM2VEC_CITATION,
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     training_datasets={},
     public_training_data=None,
@@ -218,7 +239,7 @@ llm2vec_mistral7b_unsupervised = ModelMeta(
 
 llm2vec_llama2_7b_supervised = ModelMeta(
     loader=_loader(
-        LLM2VecWrapper,
+        LLM2VecModel,
         base_model_name_or_path="McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp",
         peft_model_name_or_path="McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp-supervised",
         device_map="auto",
@@ -235,9 +256,10 @@ llm2vec_llama2_7b_supervised = ModelMeta(
     embed_dim=4096,
     license="mit",
     reference="https://huggingface.co/McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp-supervised",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    citation=LLM2VEC_CITATION,
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     training_datasets=llm2vec_supervised_training_data,
     public_training_data=None,
@@ -245,7 +267,7 @@ llm2vec_llama2_7b_supervised = ModelMeta(
 
 llm2vec_llama2_7b_unsupervised = ModelMeta(
     loader=_loader(
-        LLM2VecWrapper,
+        LLM2VecModel,
         base_model_name_or_path="McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp",
         peft_model_name_or_path="McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp-unsup-simcse",
         device_map="auto",
@@ -262,17 +284,18 @@ llm2vec_llama2_7b_unsupervised = ModelMeta(
     embed_dim=4096,
     license="mit",
     reference="https://huggingface.co/McGill-NLP/LLM2Vec-Llama-2-7b-chat-hf-mntp-unsup-simcse",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     training_datasets={},
     public_training_data=None,
+    citation=LLM2VEC_CITATION,
 )
 
 llm2vec_sheared_llama_supervised = ModelMeta(
     loader=_loader(
-        LLM2VecWrapper,
+        LLM2VecModel,
         base_model_name_or_path="McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp",
         peft_model_name_or_path="McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp-supervised",
         device_map="auto",
@@ -289,9 +312,10 @@ llm2vec_sheared_llama_supervised = ModelMeta(
     embed_dim=4096,
     license="mit",
     reference="https://huggingface.co/McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp-supervised",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    citation=LLM2VEC_CITATION,
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     training_datasets=llm2vec_supervised_training_data,
     public_training_data=None,
@@ -299,7 +323,7 @@ llm2vec_sheared_llama_supervised = ModelMeta(
 
 llm2vec_sheared_llama_unsupervised = ModelMeta(
     loader=_loader(
-        LLM2VecWrapper,
+        LLM2VecModel,
         base_model_name_or_path="McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp",
         peft_model_name_or_path="McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp-unsup-simcse",
         device_map="auto",
@@ -316,9 +340,10 @@ llm2vec_sheared_llama_unsupervised = ModelMeta(
     embed_dim=4096,
     license="mit",
     reference="https://huggingface.co/McGill-NLP/LLM2Vec-Sheared-LLaMA-mntp-unsup-simcse",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["LLM2Vec", "PyTorch"],
     use_instructions=True,
+    citation=LLM2VEC_CITATION,
     public_training_code="https://github.com/McGill-NLP/llm2vec/tree/250292a307428240d801fadd85825464e71c3277/train_configs",
     training_datasets={},
     public_training_data=None,

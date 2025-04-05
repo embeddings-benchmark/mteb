@@ -1,18 +1,18 @@
 from __future__ import annotations
 
-from functools import partial
 from pathlib import Path
 from typing import Any
 
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from transformers import AutoConfig, AutoModel, AutoTokenizer, CLIPImageProcessor
 
-from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.abstasks import TaskMetadata
+from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.requires_package import requires_image_dependencies, requires_package
+from mteb.types import Array, BatchedInput, PromptType
 
 MODEL2PROCESSOR = {
     "microsoft/LLM2CLIP-Openai-L-14-336": "openai/clip-vit-large-patch14-336",
@@ -21,17 +21,16 @@ MODEL2PROCESSOR = {
 }
 
 
-def llm2clip_loader(**kwargs):
-    model_name = kwargs.get("model_name", "LLM2CLIP")
+def llm2clip_loader(model_name, **kwargs):
     requires_package(
         llm2clip_loader, "llm2vec", model_name, "pip install 'mteb[llm2vec]'"
     )
     from llm2vec import LLM2Vec
 
-    class LLM2CLIPWrapper:
+    class LLM2CLIPAbsEncoder(AbsEncoder):
         def __init__(
             self,
-            model_name: str = "microsoft/LLM2CLIP-Openai-L-14-336",
+            model_name: str,
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
             **kwargs: Any,
         ):
@@ -88,20 +87,18 @@ def llm2clip_loader(**kwargs):
 
         def get_text_embeddings(
             self,
-            texts: list[str],
-            *,
-            task_name: str | None = None,
-            prompt_type: PromptType | None = None,
-            batch_size: int = 32,
+            texts: DataLoader[BatchedInput],
+            show_progress_bar: bool = True,
             **kwargs: Any,
         ):
             all_text_embeddings = []
 
             with torch.no_grad(), torch.amp.autocast("cuda"):
-                for i in tqdm(range(0, len(texts), batch_size)):
-                    batch_texts = texts[i : i + batch_size]
+                for batch in tqdm(
+                    texts, disable=not show_progress_bar, desc="Text Encoding"
+                ):
                     text_features = self.l2v.encode(
-                        batch_texts, convert_to_tensor=True
+                        batch["text"], convert_to_tensor=True
                     ).to(self.device)
                     text_features = self.model.get_text_features(text_features)
                     text_features /= text_features.norm(dim=-1, keepdim=True)
@@ -113,93 +110,58 @@ def llm2clip_loader(**kwargs):
 
         def get_image_embeddings(
             self,
-            images: list[Image.Image] | DataLoader,
-            *,
-            task_name: str | None = None,
-            prompt_type: PromptType | None = None,
-            batch_size: int = 32,
+            images: DataLoader[BatchedInput],
+            show_progress_bar: bool = True,
             **kwargs: Any,
         ):
-            import torchvision.transforms.functional as F
-
             all_image_embeddings = []
-            if isinstance(images, DataLoader):
-                with torch.no_grad(), torch.amp.autocast("cuda"):
-                    for batch in tqdm(images):
-                        input_pixels = self.processor(
-                            images=[F.to_pil_image(b) for b in batch],
-                            return_tensors="pt",
-                        ).pixel_values.to(self.device)
-                        image_features = self.model.get_image_features(input_pixels)
-                        image_features /= image_features.norm(dim=-1, keepdim=True)
-                        all_image_embeddings.append(
-                            image_features.cpu().to(torch.float32)
-                        )
-            else:
-                with torch.no_grad(), torch.cuda.amp.autocast():
-                    for i in tqdm(range(0, len(images), batch_size)):
-                        batch_images = images[i : i + batch_size]
-                        input_pixels = self.processor(
-                            images=batch_images, return_tensors="pt"
-                        ).pixel_values.to(self.device)
-                        image_features = self.model.get_image_features(input_pixels)
-                        image_features /= image_features.norm(dim=-1, keepdim=True)
-                        all_image_embeddings.append(
-                            image_features.cpu().to(torch.float32)
-                        )
+
+            with torch.no_grad(), torch.amp.autocast("cuda"):
+                for batch in tqdm(
+                    images, disable=not show_progress_bar, desc="Image Encoding"
+                ):
+                    input_pixels = self.processor(
+                        images=batch["image"],
+                        return_tensors="pt",
+                    ).pixel_values.to(self.device)
+                    image_features = self.model.get_image_features(input_pixels)
+                    image_features /= image_features.norm(dim=-1, keepdim=True)
+                    all_image_embeddings.append(image_features.cpu().to(torch.float32))
 
             all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
             return all_image_embeddings
 
-        def calculate_probs(self, text_embeddings, image_embeddings):
-            text_embeddings = text_embeddings / text_embeddings.norm(
-                dim=-1, keepdim=True
-            )
-            image_embeddings = image_embeddings / image_embeddings.norm(
-                dim=-1, keepdim=True
-            )
-            logits = torch.matmul(image_embeddings, text_embeddings.T)
-            probs = (logits * 100).softmax(dim=-1)
-            return probs
-
-        def get_fused_embeddings(
+        def encode(
             self,
-            texts: list[str] = None,
-            images: list[Image.Image] | DataLoader = None,
-            fusion_mode="sum",
+            inputs: DataLoader[BatchedInput],
+            *,
+            task_metadata: TaskMetadata,
+            hf_split: str,
+            hf_subset: str,
+            prompt_type: PromptType | None = None,
             **kwargs: Any,
-        ):
-            if texts is None and images is None:
-                raise ValueError("Either texts or images must be provided")
-
+        ) -> Array:
             text_embeddings = None
             image_embeddings = None
-
-            if texts is not None:
-                text_embeddings = self.get_text_embeddings(texts, **kwargs)
-
-            if images is not None:
-                image_embeddings = self.get_image_embeddings(images, **kwargs)
+            if "text" in inputs.dataset.features:
+                text_embeddings = self.get_text_embeddings(inputs, **kwargs)
+            if "image" in inputs.dataset.features:
+                image_embeddings = self.get_image_embeddings(inputs, **kwargs)
 
             if text_embeddings is not None and image_embeddings is not None:
                 if len(text_embeddings) != len(image_embeddings):
                     raise ValueError(
                         "The number of texts and images must have the same length"
                     )
-                if fusion_mode == "sum":
-                    fused_embeddings = text_embeddings + image_embeddings
-                else:
-                    # to do: add other fusion mode
-                    raise ValueError(
-                        f"fusion mode {fusion_mode} hasn't been implemented"
-                    )
+                fused_embeddings = text_embeddings + image_embeddings
                 return fused_embeddings
             elif text_embeddings is not None:
                 return text_embeddings
             elif image_embeddings is not None:
                 return image_embeddings
+            raise ValueError
 
-    return LLM2CLIPWrapper(**kwargs)
+    return LLM2CLIPAbsEncoder(model_name, **kwargs)
 
 
 llm2clip_training_sets = {
@@ -210,10 +172,7 @@ llm2clip_training_sets = {
 }
 
 llm2clip_openai_l_14_336 = ModelMeta(
-    loader=partial(
-        llm2clip_loader,
-        model_name="microsoft/LLM2CLIP-Openai-L-14-336",
-    ),
+    loader=llm2clip_loader,  # type: ignore
     name="microsoft/LLM2CLIP-Openai-L-14-336",
     languages=["eng_Latn"],
     revision="92512331f393a003c3d98404677f991c188162c9",
@@ -229,17 +188,14 @@ llm2clip_openai_l_14_336 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-336",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets=llm2clip_training_sets,
 )
 
 ## NOTE: https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-224/discussions/1
 llm2clip_openai_l_14_224 = ModelMeta(
-    loader=partial(
-        llm2clip_loader,
-        model_name="microsoft/LLM2CLIP-Openai-L-14-224",
-    ),
+    loader=llm2clip_loader,  # type: ignore
     name="microsoft/LLM2CLIP-Openai-L-14-224",
     languages=["eng_Latn"],
     revision="6b8a11a94ff380fa220dfefe73ac9293d2677575",
@@ -255,16 +211,13 @@ llm2clip_openai_l_14_224 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-224",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets=llm2clip_training_sets,
 )
 
 llm2clip_openai_b_16 = ModelMeta(
-    loader=partial(
-        llm2clip_loader,
-        model_name="microsoft/LLM2CLIP-Openai-B-16",
-    ),
+    loader=llm2clip_loader,  # type: ignore
     name="microsoft/LLM2CLIP-Openai-B-16",
     languages=["eng_Latn"],
     revision="ecfb347eb3dcfeb2fbc2a2eae7de6ac5a001aaf8",
@@ -280,14 +233,7 @@ llm2clip_openai_b_16 = ModelMeta(
     public_training_data=None,
     framework=["PyTorch"],
     reference="https://huggingface.co/microsoft/LLM2CLIP-Openai-B-16",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     training_datasets=llm2clip_training_sets,
 )
-
-
-if __name__ == "__main__":
-    m = llm2clip_loader()
-    emb = m.get_text_embeddings(
-        texts=["what is going on blah?", "this is a test for this model."]
-    )

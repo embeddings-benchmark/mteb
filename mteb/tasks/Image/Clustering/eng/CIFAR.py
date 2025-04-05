@@ -14,7 +14,7 @@ class CIFAR10Clustering(AbsTaskImageClustering):
             "revision": "0b2714987fa478483af9968de7c934580d0bb9a2",
         },
         type="ImageClustering",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="nmi",
@@ -36,10 +36,6 @@ class CIFAR10Clustering(AbsTaskImageClustering):
             year = {2009}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 10000},
-            "avg_character_length": {"test": 431.4},
-        },
     )
 
     image_column_name: str = "img"
@@ -77,10 +73,6 @@ class CIFAR100Clustering(AbsTaskImageClustering):
             year = {2009}
         }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 10000},
-            "avg_character_length": {"test": 431.4},
-        },
     )
     image_column_name: str = "img"
     label_column_name: str = "fine_label"

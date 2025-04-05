@@ -1,12 +1,14 @@
 from __future__ import annotations
 
-from functools import partial
-
 import torch
 
-from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import (
+    ModelMeta,
+    ScoringFunction,
+)
 from mteb.models.instruct_wrapper import instruct_wrapper
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+from mteb.types import PromptType
 
 
 def instruction_template(
@@ -19,10 +21,18 @@ def instruction_template(
     )
 
 
+GTE_CITATION = """
+@article{li2023towards,
+  title={Towards general text embeddings with multi-stage contrastive learning},
+  author={Li, Zehan and Zhang, Xin and Zhang, Yanzhao and Long, Dingkun and Xie, Pengjun and Zhang, Meishan},
+  journal={arXiv preprint arXiv:2308.03281},
+  year={2023}
+}
+"""
+
 gte_Qwen2_7B_instruct = ModelMeta(
-    loader=partial(  # type: ignore
-        instruct_wrapper,
-        model_name_or_path="Alibaba-NLP/gte-Qwen2-7B-instruct",
+    loader=instruct_wrapper,
+    loader_kwargs=dict(
         instruction_template=instruction_template,
         attn="bbcc",
         pooling_method="lasttoken",
@@ -43,9 +53,10 @@ gte_Qwen2_7B_instruct = ModelMeta(
     embed_dim=3584,
     license="apache-2.0",
     reference="https://huggingface.co/Alibaba-NLP/gte-Qwen2-7B-instruct",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    citation=GTE_CITATION,
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
@@ -53,9 +64,8 @@ gte_Qwen2_7B_instruct = ModelMeta(
 )
 
 gte_Qwen1_5_7B_instruct = ModelMeta(
-    loader=partial(  # type: ignore
-        instruct_wrapper,
-        model_name_or_path="Alibaba-NLP/gte-Qwen1.5-7B-instruct",
+    loader=instruct_wrapper,
+    loader_kwargs=dict(
         instruction_template=instruction_template,
         attn="bbcc",
         pooling_method="lasttoken",
@@ -75,7 +85,7 @@ gte_Qwen1_5_7B_instruct = ModelMeta(
     license="apache-2.0",
     max_tokens=32_768,
     reference="https://huggingface.co/Alibaba-NLP/gte-Qwen1.5-7B-instruct",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
@@ -84,9 +94,8 @@ gte_Qwen1_5_7B_instruct = ModelMeta(
 )
 
 gte_Qwen2_1_5B_instruct = ModelMeta(
-    loader=partial(  # type: ignore
-        instruct_wrapper,
-        model_name_or_path="Alibaba-NLP/gte-Qwen2-1.5B-instruct",
+    loader=instruct_wrapper,
+    loader_kwargs=dict(
         instruction_template=instruction_template,
         attn="bbcc",
         pooling_method="lasttoken",
@@ -106,7 +115,7 @@ gte_Qwen2_1_5B_instruct = ModelMeta(
     license="apache-2.0",
     max_tokens=32_768,
     reference="https://huggingface.co/Alibaba-NLP/gte-Qwen2-1.5B-instruct",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
@@ -115,11 +124,7 @@ gte_Qwen2_1_5B_instruct = ModelMeta(
 )
 
 gte_small_zh = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="thenlper/gte-small-zh",
-        revision="af7bd46fbb00b3a6963c8dd7f1786ddfbfbe973a",
-    ),
+    loader=sentence_transformers_loader,
     name="thenlper/gte-small-zh",
     languages=["zho_Hans"],
     open_weights=True,
@@ -131,7 +136,7 @@ gte_small_zh = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/thenlper/gte-small-zh",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -140,11 +145,7 @@ gte_small_zh = ModelMeta(
 )
 
 gte_base_zh = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="thenlper/gte-base-zh",
-        revision="71ab7947d6fac5b64aa299e6e40e6c2b2e85976c",
-    ),
+    loader=sentence_transformers_loader,
     name="thenlper/gte-base-zh",
     languages=["zho_Hans"],
     open_weights=True,
@@ -156,7 +157,7 @@ gte_base_zh = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/thenlper/gte-base-zh",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -165,11 +166,7 @@ gte_base_zh = ModelMeta(
 )
 
 gte_large_zh = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="thenlper/gte-large-zh",
-        revision="64c364e579de308104a9b2c170ca009502f4f545",
-    ),
+    loader=sentence_transformers_loader,
     name="thenlper/gte-large-zh",
     languages=["zho_Hans"],
     open_weights=True,
@@ -181,7 +178,7 @@ gte_large_zh = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/thenlper/gte-large-zh",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -291,11 +288,7 @@ gte_multi_training_data = {
 }
 
 gte_multilingual_base = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="Alibaba-NLP/gte-multilingual-base",
-        revision="ca1791e0bcc104f6db161f27de1340241b13c5a4",
-    ),
+    loader=sentence_transformers_loader,
     name="Alibaba-NLP/gte-multilingual-base",
     languages=gte_multilingual_langs,
     open_weights=True,
@@ -307,7 +300,7 @@ gte_multilingual_base = ModelMeta(
     license="apache-2.0",
     max_tokens=8192,
     reference="https://huggingface.co/Alibaba-NLP/gte-multilingual-base",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -316,11 +309,7 @@ gte_multilingual_base = ModelMeta(
 )
 
 gte_modernbert_base = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="Alibaba-NLP/gte-modernbert-base",
-        revision="7ca8b4ca700621b67618669f5378fe5f5820b8e4",
-    ),
+    loader=sentence_transformers_loader,
     name="Alibaba-NLP/gte-modernbert-base",
     languages=["eng_Latn"],
     open_weights=True,
@@ -332,7 +321,7 @@ gte_modernbert_base = ModelMeta(
     license="apache-2.0",
     max_tokens=8192,
     reference="https://huggingface.co/Alibaba-NLP/gte-modernbert-base",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,  # couldn't find
@@ -342,6 +331,7 @@ gte_modernbert_base = ModelMeta(
 
 
 gte_base_en_v15 = ModelMeta(
+    loader=sentence_transformers_loader,
     name="Alibaba-NLP/gte-base-en-v1.5",
     languages=["eng-Latn"],
     open_weights=True,
@@ -353,7 +343,7 @@ gte_base_en_v15 = ModelMeta(
     license="apache-2.0",
     max_tokens=8192,
     reference="https://huggingface.co/Alibaba-NLP/gte-base-en-v1.5",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     superseded_by=None,

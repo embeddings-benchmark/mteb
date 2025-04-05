@@ -16,7 +16,7 @@ class TERRa(AbsTaskPairClassification):
         + "whether the meaning of one text is entailed (can be inferred) from the other text.",
         reference="https://arxiv.org/pdf/2010.15925",
         type="PairClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["dev"],
         eval_langs=["rus-Cyrl"],

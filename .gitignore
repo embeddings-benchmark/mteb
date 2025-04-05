@@ -152,3 +152,7 @@ mteb/leaderboard/__cached_results.json
 
 # gradio
 .gradio/
+
+
+# codecarbon
+powermetrics_log.txt

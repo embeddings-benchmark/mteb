@@ -16,7 +16,7 @@ def split_by_first_newline(s):
 common_args = {
     "reference": "https://arxiv.org/pdf/2406.14497",
     "type": "Reranking",
-    "category": "s2s",
+    "category": "t2t",
     "modalities": ["text"],
     "eval_splits": ["train"],
     "eval_langs": ["python-Code"],

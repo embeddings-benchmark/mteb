@@ -8,7 +8,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 def _load_data(
     path: str,
-    splits: str,
+    splits: list[str],
     cache_dir: str = None,
     revision: str = None,
     subtask: str = "Count",
@@ -115,26 +115,14 @@ class CVBenchCount(AbsTaskAny2AnyMultiChoice):
   journal={arXiv preprint arXiv:2406.16860},
   year={2024}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 419},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 0.0,
-                    "num_documents": 17,
-                    "num_queries": 402,
-                    "average_relevant_docs_per_query": 1,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
         self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata_dict["dataset"]["path"],
-            splits=self.metadata_dict["eval_splits"],
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
             subtask="Count",
         )
         self.data_loaded = True
@@ -168,26 +156,14 @@ class CVBenchRelation(AbsTaskAny2AnyMultiChoice):
   journal={arXiv preprint arXiv:2406.16860},
   year={2024}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 654},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 0.0,
-                    "num_documents": 4,
-                    "num_queries": 650,
-                    "average_relevant_docs_per_query": 1,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
         self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata_dict["dataset"]["path"],
-            splits=self.metadata_dict["eval_splits"],
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
             subtask="Relation",
         )
         self.data_loaded = True
@@ -221,26 +197,14 @@ class CVBenchDepth(AbsTaskAny2AnyMultiChoice):
   journal={arXiv preprint arXiv:2406.16860},
   year={2024}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 669},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 0.0,
-                    "num_documents": 69,
-                    "num_queries": 600,
-                    "average_relevant_docs_per_query": 1,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
         self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata_dict["dataset"]["path"],
-            splits=self.metadata_dict["eval_splits"],
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
             subtask="Depth",
         )
         self.data_loaded = True
@@ -274,26 +238,14 @@ class CVBenchDistance(AbsTaskAny2AnyMultiChoice):
   journal={arXiv preprint arXiv:2406.16860},
   year={2024}
 }""",
-        descriptive_stats={
-            "n_samples": {"test": 656},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 0.0,
-                    "num_documents": 54,
-                    "num_queries": 600,
-                    "average_relevant_docs_per_query": 1,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
         self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata_dict["dataset"]["path"],
-            splits=self.metadata_dict["eval_splits"],
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
             subtask="Distance",
         )
         self.data_loaded = True

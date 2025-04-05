@@ -7,6 +7,8 @@ import warnings
 from pathlib import Path
 
 import numpy as np
+from datasets import Dataset
+from torch.utils.data import DataLoader
 
 from mteb.encoder_interface import Encoder
 from mteb.load_results.task_results import ScoresDict
@@ -25,9 +27,6 @@ class AbsTaskSpeedTask(AbsTask):
     num_loops = 7
     device = "cpu"
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
     def load_data(self, **kwargs):
         """Reads the text 'The Ugly Duckling' as the `test` split with a `text` column."""
         if self.data_loaded:
@@ -35,13 +34,17 @@ class AbsTaskSpeedTask(AbsTask):
         file_path = Path(__file__).parent / "the_ugly_duckling.txt"
         with file_path.open("r") as f:
             text = f.read()
-        self.dataset = {"test": {"text": text.split("\n\n")}}
+        self.dataset = {"test": Dataset.from_dict({"text": text.split("\n\n")})}
         self.data_loaded = True
 
     def _get_time_taken(self, model: Encoder, data_split) -> float:
         start = time.time()
         model.encode(
-            data_split["text"], device=self.device, task_name=self.metadata.name
+            DataLoader(data_split),
+            device=self.device,
+            task_metadata=self.metadata,
+            hf_split="speed",
+            hf_subset="speed",
         )
         time_taken = time.time() - start
         return time_taken
@@ -91,7 +94,11 @@ class AbsTaskSpeedTask(AbsTask):
             DeprecationWarning,
         )
         model.encode(
-            ["encode this"], device=self.device, task_name=self.metadata.name
+            DataLoader(Dataset.from_list([{"text": "encode this"}])),
+            device=self.device,
+            task_metadata=self.metadata,
+            hf_split="speed",
+            hf_subset="speed",
         )  # ensure model is loaded
 
         timings = []
@@ -111,10 +118,7 @@ class AbsTaskSpeedTask(AbsTask):
         self._add_main_score(scores)
         return scores
 
-    def _add_main_score(self, scores) -> None:
-        scores["main_score"] = scores[self.metadata.main_score]
-
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> dict[str, float]:
-        pass
+        return {"num_samples": 1}

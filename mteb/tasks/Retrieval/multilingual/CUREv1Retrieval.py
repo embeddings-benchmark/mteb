@@ -7,7 +7,6 @@ from datasets import DatasetDict, load_dataset
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ....abstasks.MultilingualTask import MultilingualTask
 
 _LANGUAGES = {
     "en": ["eng-Latn", "eng-Latn"],
@@ -34,7 +33,7 @@ class CUREv1Splits(str, Enum):
         return sorted(cls._member_names_)
 
 
-class CUREv1Retrieval(MultilingualTask, AbsTaskRetrieval):
+class CUREv1Retrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         dataset={
             "path": "clinia/CUREv1",
@@ -44,7 +43,7 @@ class CUREv1Retrieval(MultilingualTask, AbsTaskRetrieval):
         description="Collection of query-passage pairs curated by medical professionals, across 10 disciplines and 3 cross-lingual settings.",
         type="Retrieval",
         modalities=["text"],
-        category="s2p",
+        category="t2t",
         reference="https://huggingface.co/datasets/clinia/CUREv1",
         eval_splits=CUREv1Splits.names(),
         eval_langs=_LANGUAGES,
@@ -64,8 +63,8 @@ class CUREv1Retrieval(MultilingualTask, AbsTaskRetrieval):
 
     def _load_corpus(self, split: str, cache_dir: str | None = None):
         ds = load_dataset(
-            path=self.metadata_dict["dataset"]["path"],
-            revision=self.metadata_dict["dataset"]["revision"],
+            path=self.metadata.dataset["path"],
+            revision=self.metadata.dataset["revision"],
             name="corpus",
             split=split,
             cache_dir=cache_dir,
@@ -79,8 +78,8 @@ class CUREv1Retrieval(MultilingualTask, AbsTaskRetrieval):
 
     def _load_qrels(self, split: str, cache_dir: str | None = None):
         ds = load_dataset(
-            path=self.metadata_dict["dataset"]["path"],
-            revision=self.metadata_dict["dataset"]["revision"],
+            path=self.metadata.dataset["path"],
+            revision=self.metadata.dataset["revision"],
             name="qrels",
             split=split,
             cache_dir=cache_dir,
@@ -100,8 +99,8 @@ class CUREv1Retrieval(MultilingualTask, AbsTaskRetrieval):
 
     def _load_queries(self, split: str, language: str, cache_dir: str | None = None):
         ds = load_dataset(
-            path=self.metadata_dict["dataset"]["path"],
-            revision=self.metadata_dict["dataset"]["revision"],
+            path=self.metadata.dataset["path"],
+            revision=self.metadata.dataset["revision"],
             name=f"queries-{language}",
             split=split,
             cache_dir=cache_dir,
@@ -120,15 +119,9 @@ class CUREv1Retrieval(MultilingualTask, AbsTaskRetrieval):
         cache_dir = kwargs.get("cache_dir", None)
 
         # Iterate over splits and languages
-        corpus = {
-            language: {split: None for split in eval_splits} for language in languages
-        }
-        queries = {
-            language: {split: None for split in eval_splits} for language in languages
-        }
-        relevant_docs = {
-            language: {split: None for split in eval_splits} for language in languages
-        }
+        corpus = {language: dict.fromkeys(eval_splits) for language in languages}
+        queries = {language: dict.fromkeys(eval_splits) for language in languages}
+        relevant_docs = {language: dict.fromkeys(eval_splits) for language in languages}
         for split in eval_splits:
             # Since this is a cross-lingual dataset, the corpus and the relevant documents do not depend on the language
             split_corpus = self._load_corpus(split=split, cache_dir=cache_dir)

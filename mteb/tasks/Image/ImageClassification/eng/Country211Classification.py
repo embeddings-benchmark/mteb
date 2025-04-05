@@ -14,7 +14,7 @@ class Country211Classification(AbsTaskImageClassification):
             "revision": "1699f138f0558342a1cbf99f7cf36b4361bb5ebc",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -35,10 +35,6 @@ class Country211Classification(AbsTaskImageClassification):
         journal={arXiv preprint arXiv:2103.00020},
         year={2021}
         }""",
-        descriptive_stats={
-            "n_samples": {"test": 21100},
-            "avg_character_length": {"test": 0},
-        },
     )
 
     image_column_name: str = "jpg"

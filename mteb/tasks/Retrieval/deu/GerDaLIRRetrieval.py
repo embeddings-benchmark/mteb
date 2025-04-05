@@ -19,7 +19,7 @@ class GerDaLIR(AbsTaskRetrieval):
             "trust_remote_code": True,
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=["deu-Latn"],
@@ -53,17 +53,17 @@ class GerDaLIR(AbsTaskRetrieval):
         query_rows = datasets.load_dataset(
             name="queries",
             split=self._EVAL_SPLIT,
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
         corpus_rows = datasets.load_dataset(
             name="corpus",
             split=self._EVAL_SPLIT,
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
         qrels_rows = datasets.load_dataset(
             name="qrels",
             split=self._EVAL_SPLIT,
-            **self.metadata_dict["dataset"],
+            **self.metadata.dataset,
         )
 
         self.queries = {
@@ -72,7 +72,8 @@ class GerDaLIR(AbsTaskRetrieval):
         self.corpus = {self._EVAL_SPLIT: {row["_id"]: row for row in corpus_rows}}
         self.relevant_docs = {
             self._EVAL_SPLIT: {
-                row["_id"]: {v: 1 for v in row["text"].split(" ")} for row in qrels_rows
+                row["_id"]: dict.fromkeys(row["text"].split(" "), 1)
+                for row in qrels_rows
             }
         }
 

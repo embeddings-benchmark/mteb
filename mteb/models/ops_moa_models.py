@@ -1,16 +1,14 @@
 from __future__ import annotations
 
-from functools import partial
-
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
 from mteb.model_meta import ModelMeta
-from mteb.models.wrapper import Wrapper
+from mteb.models import AbsEncoder
 
 
-class CustomWrapper(Wrapper):
-    def __init__(self, model_name, revision):
+class OPSWrapper(AbsEncoder):
+    def __init__(self, model_name: str, revision: str):
         super().__init__()
         self.model = SentenceTransformer(
             model_name, revision=revision, trust_remote_code=True
@@ -27,11 +25,7 @@ ops_moa_conan_embedding = ModelMeta(
     revision="46dcd58753f3daa920c66f89e47086a534089350",
     release_date="2025-03-26",
     languages=["zho_Hans"],
-    loader=partial(
-        CustomWrapper,
-        "OpenSearch-AI/Ops-MoA-Conan-embedding-v1",
-        "46dcd58753f3daa920c66f89e47086a534089350",
-    ),
+    loader=OPSWrapper,
     n_parameters=343 * 1e6,
     memory_usage_mb=2e3,
     max_tokens=512,
@@ -62,11 +56,7 @@ ops_moa_yuan_embedding = ModelMeta(
     revision="23712d0766417b0eb88a2513c6e212a58b543268",
     release_date="2025-03-26",
     languages=["zho_Hans"],
-    loader=partial(
-        CustomWrapper,
-        "OpenSearch-AI/Ops-MoA-Yuan-embedding-1.0",
-        "23712d0766417b0eb88a2513c6e212a58b543268",
-    ),
+    loader=OPSWrapper,
     n_parameters=343 * 1e6,
     memory_usage_mb=2e3,
     max_tokens=512,

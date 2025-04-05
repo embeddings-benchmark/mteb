@@ -79,7 +79,7 @@ def create_task_lang_table(tasks: list[mteb.AbsTask], sort_by_sum=False) -> str:
             if lang in PROGRAMMING_LANGS:
                 lang = "code"
             if table_dict.get(lang) is None:
-                table_dict[lang] = {k: 0 for k in sorted(get_args(TASK_TYPE))}
+                table_dict[lang] = dict.fromkeys(sorted(get_args(TASK_TYPE)), 0)
             table_dict[lang][task.metadata.type] += 1
 
     ## Wrangle for polars

@@ -1,17 +1,18 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
-from typing import Any
+from typing import Any, Literal
 
 import torch
 from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.abstasks import TaskMetadata
+from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models import AbsEncoder
 from mteb.requires_package import requires_image_dependencies, requires_package
+from mteb.types import Array, BatchedInput, PromptType
 
 
 def downsample_image(
@@ -45,8 +46,7 @@ def downsample_image(
     return image
 
 
-def voyage_v_loader(**kwargs):
-    model_name = kwargs.get("model_name", "Voyage vision")
+def voyage_v_loader(model_name, **kwargs):
     requires_package(
         voyage_v_loader,
         "voyageai and tenacity",
@@ -56,7 +56,7 @@ def voyage_v_loader(**kwargs):
     import voyageai
     from tenacity import retry, stop_after_attempt, wait_exponential
 
-    class VoyageMultiModalModelWrapper:
+    class VoyageMultiModalModelWrapper(AbsEncoder):
         def __init__(
             self,
             model_name: str,
@@ -65,7 +65,7 @@ def voyage_v_loader(**kwargs):
             requires_image_dependencies()
             from torchvision import transforms
 
-            self.model_name = model_name
+            self.model_name = model_name.split("/")[-1]
             self.vo = voyageai.Client()
             self.tensor_to_image = transforms.Compose([transforms.PILToTensor()])
 
@@ -78,12 +78,10 @@ def voyage_v_loader(**kwargs):
 
         def get_text_embeddings(
             self,
-            texts: list[str],
-            *,
-            task_name: str | None = None,
+            texts: DataLoader[BatchedInput],
+            show_progress_bar: bool = True,
             prompt_type: PromptType | None = None,
-            batch_size: int = 32,
-            input_type=None,
+            input_type: Literal["document", "query"] | None = None,
             **kwargs: Any,
         ):
             if input_type is None and prompt_type is not None:
@@ -94,11 +92,10 @@ def voyage_v_loader(**kwargs):
 
             all_text_embeddings = []
 
-            batch_size = 128  # for run tasks purpose
-
-            for i in tqdm(range(0, len(texts), batch_size)):
-                batch_texts = texts[i : i + batch_size]
-                batch_texts = [[text] for text in batch_texts]
+            for batch in tqdm(
+                texts, disable=not show_progress_bar, desc="Text Encoding"
+            ):
+                batch_texts = [[text] for text in batch["text"]]
 
                 # with retry mechanism
                 embeddings = self._multimodal_embed(
@@ -110,12 +107,10 @@ def voyage_v_loader(**kwargs):
 
         def get_image_embeddings(
             self,
-            images: list[Image.Image] | DataLoader,
-            *,
-            task_name: str | None = None,
+            images: DataLoader[BatchedInput],
+            show_progress_bar: bool = True,
             prompt_type: PromptType | None = None,
-            batch_size: int = 32,
-            input_type=None,
+            input_type: Literal["document", "query"] | None = None,
             **kwargs: Any,
         ):
             if input_type is None and prompt_type is not None:
@@ -126,55 +121,32 @@ def voyage_v_loader(**kwargs):
 
             all_image_embeddings = []
 
-            if isinstance(images, DataLoader):
-                for index, batch in enumerate(tqdm(images)):
-                    if index == 0:
-                        assert len(batch) == batch_size
-                    batch_images = [
-                        [downsample_image(self.tensor_to_image(image))]
-                        for image in batch
-                    ]
-                    embeddings = self._multimodal_embed(
-                        batch_images, model=self.model_name, input_type=input_type
-                    ).embeddings
-                    all_image_embeddings.append(torch.tensor(embeddings))
-            else:
-                for i in tqdm(range(0, len(images), batch_size)):
-                    batch_images = images[i : i + batch_size]
-                    batch_images = [[downsample_image(image)] for image in batch_images]
-                    embeddings = self._multimodal_embed(
-                        batch_images, model=self.model_name, input_type=input_type
-                    ).embeddings
-                    all_image_embeddings.append(torch.tensor(embeddings))
+            for batch in tqdm(
+                images, disable=not show_progress_bar, desc="Image Encoding"
+            ):
+                batch_images = [
+                    [downsample_image(self.tensor_to_image(image))]
+                    for image in batch["image"]
+                ]
+                embeddings = self._multimodal_embed(
+                    batch_images, model=self.model_name, input_type=input_type
+                ).embeddings
+                all_image_embeddings.append(torch.tensor(embeddings))
             all_image_embeddings = torch.vstack(all_image_embeddings)
             return all_image_embeddings
 
-        def calculate_probs(self, text_embeddings, image_embeddings):
-            text_embeddings = text_embeddings / text_embeddings.norm(
-                dim=-1, keepdim=True
-            )
-            image_embeddings = image_embeddings / image_embeddings.norm(
-                dim=-1, keepdim=True
-            )
-            logits = torch.matmul(image_embeddings, text_embeddings.T)
-            probs = (logits * 100).softmax(dim=-1)
-            return probs
-
-        def get_fused_embeddings(
+        def encode(
             self,
-            texts: list[str] = None,
-            images: list[Image.Image] | DataLoader = None,
+            inputs: DataLoader[BatchedInput],
             *,
-            task_name: str | None = None,
+            task_metadata: TaskMetadata,
+            hf_split: str,
+            hf_subset: str,
             prompt_type: PromptType | None = None,
-            batch_size: int = 32,
-            input_type=None,
+            show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
-            if texts is None and images is None:
-                raise ValueError("Either texts or images must be provided")
-
-            if input_type is None and prompt_type is not None:
+        ) -> Array:
+            if prompt_type is not None:
                 if prompt_type == PromptType.passage:
                     input_type = "document"
                 elif prompt_type == PromptType.query:
@@ -184,65 +156,46 @@ def voyage_v_loader(**kwargs):
             image_embeddings = None
 
             interleaved_embeddings = []
-            if texts is not None and images is not None:
-                if isinstance(images, DataLoader):
-                    for index, batch in tqdm(enumerate(images)):
-                        if index == 0:
-                            assert len(batch) == batch_size
-                        batch_images = [
-                            downsample_image(self.tensor_to_image(image))
-                            for image in batch
-                        ]
-                        batch_texts = texts[
-                            index * batch_size : (index + 1) * batch_size
-                        ]
-                        interleaved_inputs = [
-                            [text, image]
-                            for image, text in zip(batch_images, batch_texts)
-                        ]
-                        embeddings = self._multimodal_embed(
-                            interleaved_inputs,
-                            model=self.model_name,
-                            input_type=input_type,
-                        ).embeddings
-                        interleaved_embeddings.append(torch.tensor(embeddings))
-                else:
-                    for i in tqdm(range(0, len(images), batch_size)):
-                        batch_images = images[i : i + batch_size]
-                        batch_texts = texts[i : i + batch_size]
-                        interleaved_inputs = [
-                            [text, image]
-                            for image, text in zip(batch_images, batch_texts)
-                        ]
-                        embeddings = self._multimodal_embed(
-                            interleaved_inputs,
-                            model=self.model_name,
-                            input_type=input_type,
-                        ).embeddings
-                        interleaved_embeddings.append(torch.tensor(embeddings))
+            if "text" in inputs.dataset.features and "image" in inputs.dataset.features:
+                for batch in tqdm(
+                    inputs, disable=not show_progress_bar, desc="Interleaved Encoding"
+                ):
+                    batch_images = [
+                        downsample_image(self.tensor_to_image(image))
+                        for image in batch["image"]
+                    ]
+                    batch_texts = batch["text"]
+                    interleaved_inputs = [
+                        [text, image] for image, text in zip(batch_images, batch_texts)
+                    ]
+                    embeddings = self._multimodal_embed(
+                        interleaved_inputs,
+                        model=self.model_name,
+                        input_type=input_type,
+                    ).embeddings
+                    interleaved_embeddings.append(torch.tensor(embeddings))
                 interleaved_embeddings = torch.vstack(interleaved_embeddings)
                 return interleaved_embeddings
-
-            elif texts is not None:
+            elif "text" in inputs.dataset.features:
                 text_embeddings = self.get_text_embeddings(
-                    texts, batch_size, input_type=input_type
+                    inputs, input_type=input_type
                 )
-
-            elif images is not None:
+            elif "image" in inputs.dataset.features:
                 image_embeddings = self.get_image_embeddings(
-                    images, batch_size, input_type=input_type
+                    inputs, input_type=input_type
                 )
 
             if text_embeddings is not None:
                 return text_embeddings
             elif image_embeddings is not None:
                 return image_embeddings
+            raise ValueError
 
-    return VoyageMultiModalModelWrapper(**kwargs)
+    return VoyageMultiModalModelWrapper(model_name, **kwargs)
 
 
 voyage_v = ModelMeta(
-    loader=partial(voyage_v_loader, model_name="voyage-multimodal-3"),
+    loader=voyage_v_loader,  # type: ignore
     name="voyageai/voyage-multimodal-3",
     languages=[],  # Unknown
     revision="1",
@@ -252,7 +205,7 @@ voyage_v = ModelMeta(
     max_tokens=32768,
     embed_dim=1024,
     license="mit",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     modalities=["image", "text"],
     open_weights=False,

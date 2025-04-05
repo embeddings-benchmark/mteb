@@ -1,15 +1,17 @@
 from __future__ import annotations
 
 import time
-from functools import partial, wraps
+from functools import wraps
 from typing import Any, Literal
 
 import numpy as np
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
-from mteb.models.wrapper import Wrapper
+from mteb.abstasks import TaskMetadata
+from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.requires_package import requires_package
+from mteb.types import Array, BatchedInput, PromptType
 
 VOYAGE_TRAINING_DATA = {
     # Self-reported (message from VoyageAI member)
@@ -68,7 +70,7 @@ def rate_limit(max_rpm: int, interval: int = 60):
     return decorator
 
 
-class VoyageWrapper(Wrapper):
+class VoyageModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -83,24 +85,26 @@ class VoyageWrapper(Wrapper):
 
         self._client = voyageai.Client(max_retries=max_retries)
         self._embed_func = rate_limit(max_rpm)(token_limit(max_tpm)(self._client.embed))
-        self._model_name = model_name
+
+        self._model_name = model_name.split("/")[-1]
         self._max_tpm = max_tpm
-        self.model_prompts = (
-            self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
-        )
+        self.model_prompts = model_prompts
+        self.validate_task_to_prompt_name()
 
     def encode(
         self,
-        sentences: list[str],
+        inputs: DataLoader[BatchedInput],
         *,
-        batch_size: int = 32,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
+        batch_size: int = 32,
         **kwargs: Any,
-    ) -> np.ndarray:
-        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+    ) -> Array:
+        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         input_type = self.model_prompts.get(prompt_name, "document")
-
+        sentences = [text for batch in inputs for text in batch["text"]]
         return self._batched_encode(sentences, batch_size, input_type)
 
     def _batched_encode(
@@ -148,9 +152,8 @@ voyage_large_2_instruct = ModelMeta(
     revision="1",
     release_date="2024-05-05",
     languages=None,  # supported languages not specified
-    loader=partial(  # type: ignore
-        VoyageWrapper,
-        model_name="voyage-large-2-instruct",
+    loader=VoyageModel,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     max_tokens=16000,
@@ -160,7 +163,7 @@ voyage_large_2_instruct = ModelMeta(
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/05/05/voyage-large-2-instruct-instruction-tuned-and-rank-1-on-mteb/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     training_datasets=VOYAGE_TRAINING_DATA,
@@ -173,9 +176,8 @@ voyage_finance_2 = ModelMeta(
     revision="1",
     release_date="2024-05-30",
     languages=None,  # supported languages not specified
-    loader=partial(  # type: ignore
-        VoyageWrapper,
-        model_name="voyage-finance-2",
+    loader=VoyageModel,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     max_tokens=32000,
@@ -185,7 +187,7 @@ voyage_finance_2 = ModelMeta(
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/06/03/domain-specific-embeddings-finance-edition-voyage-finance-2/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     training_datasets=VOYAGE_TRAINING_DATA,
@@ -198,9 +200,8 @@ voyage_law_2 = ModelMeta(
     revision="1",
     release_date="2024-04-15",
     languages=None,  # supported languages not specified
-    loader=partial(  # type: ignore
-        VoyageWrapper,
-        model_name="voyage-law-2",
+    loader=VoyageModel,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     max_tokens=16000,
@@ -210,7 +211,7 @@ voyage_law_2 = ModelMeta(
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/04/15/domain-specific-embeddings-and-retrieval-legal-edition-voyage-law-2/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     training_datasets=VOYAGE_TRAINING_DATA,
@@ -223,9 +224,8 @@ voyage_code_2 = ModelMeta(
     revision="1",
     release_date="2024-01-23",
     languages=None,  # supported languages not specified
-    loader=partial(  # type: ignore
-        VoyageWrapper,
-        model_name="voyage-code-2",
+    loader=VoyageModel,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     max_tokens=16000,
@@ -235,7 +235,7 @@ voyage_code_2 = ModelMeta(
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/01/23/voyage-code-2-elevate-your-code-retrieval/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     training_datasets=VOYAGE_TRAINING_DATA,
@@ -248,9 +248,8 @@ voyage_code_3 = ModelMeta(
     revision="1",
     release_date="2024-12-04",
     languages=None,  # supported languages not specified
-    loader=partial(  # type: ignore
-        VoyageWrapper,
-        model_name="voyage-code-3",
+    loader=VoyageModel,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     max_tokens=32000,
@@ -260,7 +259,7 @@ voyage_code_3 = ModelMeta(
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/12/04/voyage-code-3/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     training_datasets=VOYAGE_TRAINING_DATA,  # src: private communication with Voyage
@@ -274,9 +273,8 @@ voyage_large_2 = ModelMeta(
     revision="1",
     release_date="2023-10-29",
     languages=None,  # supported languages not specified
-    loader=partial(  # type: ignore
-        VoyageWrapper,
-        model_name="voyage-large-2",
+    loader=VoyageModel,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     max_tokens=16000,
@@ -286,7 +284,7 @@ voyage_large_2 = ModelMeta(
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2023/10/29/voyage-embeddings/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     training_datasets=VOYAGE_TRAINING_DATA,
@@ -299,9 +297,8 @@ voyage_2 = ModelMeta(
     revision="1",
     release_date="2023-10-29",
     languages=None,  # supported languages not specified
-    loader=partial(  # type: ignore
-        VoyageWrapper,
-        model_name="voyage-2",
+    loader=VoyageModel,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     max_tokens=4000,
@@ -311,7 +308,7 @@ voyage_2 = ModelMeta(
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2023/10/29/voyage-embeddings/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     training_datasets=VOYAGE_TRAINING_DATA,
@@ -323,9 +320,8 @@ voyage_multilingual_2 = ModelMeta(
     revision="1",
     release_date="2024-06-10",
     languages=None,  # supported languages not specified
-    loader=partial(  # type: ignore
-        VoyageWrapper,
-        model_name="voyage-multilingual-2",
+    loader=VoyageModel,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     max_tokens=32000,
@@ -335,7 +331,7 @@ voyage_multilingual_2 = ModelMeta(
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/06/10/voyage-multilingual-2-multilingual-embedding-model/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     training_datasets=VOYAGE_TRAINING_DATA,
@@ -348,9 +344,8 @@ voyage_3 = ModelMeta(
     revision="1",
     release_date="2024-09-18",
     languages=None,  # supported languages not specified
-    loader=partial(
-        VoyageWrapper,
-        model_name="voyage-3",
+    loader=VoyageModel,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     max_tokens=32000,
@@ -360,7 +355,7 @@ voyage_3 = ModelMeta(
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/09/18/voyage-3/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     training_datasets=VOYAGE_TRAINING_DATA,
@@ -373,9 +368,8 @@ voyage_3_lite = ModelMeta(
     revision="1",
     release_date="2024-09-18",
     languages=None,  # supported languages not specified
-    loader=partial(
-        VoyageWrapper,
-        model_name="voyage-3-lite",
+    loader=VoyageModel,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     max_tokens=32000,
@@ -385,7 +379,7 @@ voyage_3_lite = ModelMeta(
     memory_usage_mb=None,
     license=None,
     reference="https://blog.voyageai.com/2024/09/18/voyage-3/",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     training_datasets=VOYAGE_TRAINING_DATA,
@@ -398,9 +392,8 @@ voyage_3_exp = ModelMeta(
     revision="1",
     release_date="2025-01-08",
     languages=["eng-Latn"],
-    loader=partial(
-        VoyageWrapper,
-        model_name="voyage-3-m-exp",
+    loader=VoyageModel,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     max_tokens=32000,
@@ -411,7 +404,7 @@ voyage_3_exp = ModelMeta(
     memory_usage_mb=None,
     license=None,
     reference="https://huggingface.co/voyageai/voyage-3-m-exp",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["API"],
     use_instructions=True,
     training_datasets={

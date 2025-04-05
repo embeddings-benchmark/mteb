@@ -12,7 +12,7 @@ class KlueMrcDomainClustering(AbsTaskClustering):
         description="this dataset is a processed and redistributed version of the KLUE-MRC dataset. Domain: Game / Media / Automotive / Finance / Real Estate / Education",
         reference="https://huggingface.co/datasets/on-and-on/clustering_klue_mrc_context_domain",
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["kor-Hang"],

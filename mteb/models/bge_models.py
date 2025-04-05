@@ -1,11 +1,21 @@
 from __future__ import annotations
 
-from functools import partial
-
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import (
+    ModelMeta,
+    ScoringFunction,
+)
 from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 model_prompts = {"query": "Represent this sentence for searching relevant passages: "}
+BGE_15_CITATION = """@misc{bge_embedding,
+      title={C-Pack: Packaged Resources To Advance General Chinese Embedding},
+      author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff},
+      year={2023},
+      eprint={2309.07597},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}"""
 model_prompts_zh = {"query": "为这个句子生成表示以用于检索相关文章："}
 
 bge_m3_training_data = {
@@ -313,10 +323,8 @@ bgem3_languages = [
 ]
 
 bge_small_en_v1_5 = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="BAAI/bge-small-en-v1.5",
-        revision="5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     name="BAAI/bge-small-en-v1.5",
@@ -330,19 +338,18 @@ bge_small_en_v1_5 = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/BAAI/bge-small-en-v1.5",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
     public_training_data="https://data.baai.ac.cn/details/BAAI-MTP",
     training_datasets=bge_training_data,
+    citation=BGE_15_CITATION,
 )
 
 bge_base_en_v1_5 = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="BAAI/bge-base-en-v1.5",
-        revision="a5beb1e3e68b9ab74eb54cfd186867f64f240e1a",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     name="BAAI/bge-base-en-v1.5",
@@ -356,19 +363,18 @@ bge_base_en_v1_5 = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/BAAI/bge-base-en-v1.5",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,  # seemingly released (at least for some models, but the link is broken
     public_training_data="https://data.baai.ac.cn/details/BAAI-MTP",
     training_datasets=bge_training_data,
+    citation=BGE_15_CITATION,
 )
 
 bge_large_en_v1_5 = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="BAAI/bge-large-en-v1.5",
-        revision="d4aa6901d3a41ba39fb536a557fa166f842b0e09",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     name="BAAI/bge-large-en-v1.5",
@@ -382,19 +388,18 @@ bge_large_en_v1_5 = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/BAAI/bge-large-en-v1.5",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
+    citation=BGE_15_CITATION,
     public_training_code=None,  # seemingly released (at least for some models, but the link is broken
     public_training_data="https://data.baai.ac.cn/details/BAAI-MTP",
     training_datasets=bge_training_data,
 )
 
 bge_small_zh = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="BAAI/bge-small-zh",
-        revision="1d2363c5de6ce9ba9c890c8e23a4c72dce540ca8",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts=model_prompts_zh,
     ),
     name="BAAI/bge-small-zh",
@@ -408,7 +413,7 @@ bge_small_zh = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/BAAI/bge-small-zh",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
@@ -418,10 +423,8 @@ bge_small_zh = ModelMeta(
 )
 
 bge_base_zh = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="BAAI/bge-base-zh",
-        revision="0e5f83d4895db7955e4cb9ed37ab73f7ded339b6",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts=model_prompts_zh,
     ),
     name="BAAI/bge-base-zh",
@@ -435,7 +438,7 @@ bge_base_zh = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/BAAI/bge-base-zh",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
@@ -445,10 +448,8 @@ bge_base_zh = ModelMeta(
 )
 
 bge_large_zh = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="BAAI/bge-large-zh",
-        revision="b5d9f5c027e87b6f0b6fa4b614f8f9cdc45ce0e8",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts=model_prompts_zh,
     ),
     name="BAAI/bge-large-zh",
@@ -462,7 +463,7 @@ bge_large_zh = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/BAAI/bge-large-zh",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
@@ -472,10 +473,8 @@ bge_large_zh = ModelMeta(
 )
 
 bge_small_en = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="BAAI/bge-small-en",
-        revision="4778d71a06863076696b03fd2777eb118712cad8",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     name="BAAI/bge-small-en",
@@ -489,7 +488,7 @@ bge_small_en = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/BAAI/bge-small-en",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
@@ -499,10 +498,8 @@ bge_small_en = ModelMeta(
 )
 
 bge_base_en = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="BAAI/bge-base-en",
-        revision="b737bf5dcc6ee8bdc530531266b4804a5d77b5d8",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     name="BAAI/bge-base-en",
@@ -516,7 +513,7 @@ bge_base_en = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/BAAI/bge-base-en",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,  # seemingly released (at least for some models, but the link is broken
@@ -526,10 +523,8 @@ bge_base_en = ModelMeta(
 )
 
 bge_large_en = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="BAAI/bge-large-en",
-        revision="abe7d9d814b775ca171121fb03f394dc42974275",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     name="BAAI/bge-large-en",
@@ -543,7 +538,7 @@ bge_large_en = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/BAAI/bge-large-en",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,  # seemingly released (at least for some models, but the link is broken
@@ -554,10 +549,8 @@ bge_large_en = ModelMeta(
 
 
 bge_small_zh_v1_5 = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="BAAI/bge-small-zh-v1.5",
-        revision="7999e1d3359715c523056ef9478215996d62a620",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts=model_prompts_zh,
     ),
     name="BAAI/bge-small-zh-v1.5",
@@ -571,7 +564,7 @@ bge_small_zh_v1_5 = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/BAAI/bge-small-zh-v1.5",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
@@ -580,10 +573,8 @@ bge_small_zh_v1_5 = ModelMeta(
 )
 
 bge_base_zh_v1_5 = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="BAAI/bge-base-zh-v1.5",
-        revision="f03589ceff5aac7111bd60cfc7d497ca17ecac65",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts=model_prompts_zh,
     ),
     name="BAAI/bge-base-zh-v1.5",
@@ -597,7 +588,7 @@ bge_base_zh_v1_5 = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/BAAI/bge-base-zh-v1.5",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
@@ -606,10 +597,8 @@ bge_base_zh_v1_5 = ModelMeta(
 )
 
 bge_large_zh_v1_5 = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="BAAI/bge-large-zh-v1.5",
-        revision="79e7739b6ab944e86d6171e44d24c997fc1e0116",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts=model_prompts_zh,
     ),
     name="BAAI/bge-large-zh-v1.5",
@@ -623,7 +612,7 @@ bge_large_zh_v1_5 = ModelMeta(
     license="mit",
     max_tokens=512,
     reference="https://huggingface.co/BAAI/bge-large-zh-v1.5",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
     public_training_code=None,
@@ -632,11 +621,7 @@ bge_large_zh_v1_5 = ModelMeta(
 )
 
 bge_m3 = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="BAAI/bge-m3",
-        revision="5617a9f61b028005a4858fdac845db406aefb181",
-    ),
+    loader=sentence_transformers_loader,
     name="BAAI/bge-m3",
     languages=bgem3_languages,
     open_weights=True,
@@ -648,7 +633,7 @@ bge_m3 = ModelMeta(
     license="mit",
     max_tokens=8194,
     reference="https://huggingface.co/BAAI/bge-m3",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -714,11 +699,7 @@ bge_full_data = {
 
 
 bge_multilingual_gemma2 = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="BAAI/bge-multilingual-gemma2",
-        revision="992e13d8984fde2c31ef8a3cb2c038aeec513b8a",
-    ),
+    loader=sentence_transformers_loader,
     name="BAAI/bge-multilingual-gemma2",
     languages=[
         "eng_Latn",
@@ -733,13 +714,13 @@ bge_multilingual_gemma2 = ModelMeta(
     open_weights=True,
     revision="992e13d8984fde2c31ef8a3cb2c038aeec513b8a",
     release_date="2024-07-25",  # initial commit of hf model.
-    n_parameters=9.24 * 1e9,
+    n_parameters=int(9.24 * 1e9),
     memory_usage_mb=35254,
     embed_dim=3584,  # from old C-MTEB leaderboard
     license="https://ai.google.dev/gemma/terms",
     max_tokens=8192,  # from old C-MTEB leaderboard
     reference="https://huggingface.co/BAAI/bge-multilingual-gemma2",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -753,11 +734,7 @@ bge_multilingual_gemma2 = ModelMeta(
 )
 
 bge_en_icl = ModelMeta(
-    loader=partial(
-        sentence_transformers_loader,
-        model_name="BAAI/bge-en-icl",
-        revision="971c7e1445cc86656ca0bd85ed770b8675a40bb5",
-    ),
+    loader=sentence_transformers_loader,
     name="BAAI/bge-en-icl",
     languages=[
         "eng_Latn",
@@ -765,13 +742,13 @@ bge_en_icl = ModelMeta(
     open_weights=True,
     revision="971c7e1445cc86656ca0bd85ed770b8675a40bb5",
     release_date="2024-07-25",  # initial commit of hf model.
-    n_parameters=7.11 * 1e9,
+    n_parameters=int(7.11 * 1e9),
     memory_usage_mb=27125,
     embed_dim=4096,
     license="apache-2.0",
     max_tokens=32768,
     reference="https://huggingface.co/BAAI/bge-en-icl",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code="https://github.com/FlagOpen/FlagEmbedding",
@@ -788,7 +765,7 @@ manu__bge_m3_custom_fr = ModelMeta(
     revision="ed3ef88678ba83ddf4c0fab71a93cb90d89a9078",
     release_date="2024-04-11",
     languages=None,
-    loader=None,
+    loader=sentence_transformers_loader,
     n_parameters=567754752,
     memory_usage_mb=2166,
     max_tokens=8194.0,
@@ -799,7 +776,7 @@ manu__bge_m3_custom_fr = ModelMeta(
     public_training_data=None,
     framework=["PyTorch", "Sentence Transformers"],
     reference="https://huggingface.co/manu/bge-m3-custom-fr",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=None,
     training_datasets=bge_m3_training_data,
     adapted_from="BAAI/bge-m3",

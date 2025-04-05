@@ -1,39 +1,31 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
+from typing import Literal
 
-from mteb.evaluation.evaluators.RetrievalEvaluator import DRESModel
 from mteb.model_meta import ModelMeta
-from mteb.models.wrapper import Wrapper
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.requires_package import requires_package
 
 logger = logging.getLogger(__name__)
 
 
-def bm25_loader(**kwargs):
-    model_name = kwargs.get("model_name", "BM25")
+def bm25_loader(model_name, **kwargs):
     requires_package(bm25_loader, "bm25s", model_name, "pip install mteb[bm25s]")
     import bm25s
     import Stemmer
 
-    class BM25Search(DRESModel, Wrapper):
+    class BM25Search(AbsEncoder):
         """BM25 search"""
 
         def __init__(
             self,
-            previous_results: str = None,
+            previous_results: str | None = None,
             stopwords: str = "en",
             stemmer_language: str | None = "english",
             **kwargs,
         ):
-            super().__init__(
-                model=None,
-                batch_size=1,
-                corpus_chunk_size=1,
-                previous_results=previous_results,
-                **kwargs,
-            )
+            self.model = None
 
             self.stopwords = stopwords
             self.stemmer = (
@@ -41,7 +33,7 @@ def bm25_loader(**kwargs):
             )
 
         @classmethod
-        def name(self):
+        def name(cls) -> Literal["bm25s"]:
             return "bm25s"
 
         def search(
@@ -49,8 +41,6 @@ def bm25_loader(**kwargs):
             corpus: dict[str, dict[str, str]],
             queries: dict[str, str | list[str]],
             top_k: int,
-            score_function: str,
-            return_sorted: bool = False,
             **kwargs,
         ) -> dict[str, dict[str, float]]:
             logger.info("Encoding Corpus...")
@@ -115,13 +105,13 @@ def bm25_loader(**kwargs):
 
         def encode(self, texts: list[str], **kwargs):
             """Encode input text as term vectors"""
-            return bm25s.tokenize(texts, stopwords=self.stopwords, stemmer=self.stemmer)
+            return bm25s.tokenize(texts, stopwords=self.stopwords, stemmer=self.stemmer)  # type: ignore
 
     return BM25Search(**kwargs)
 
 
 bm25_s = ModelMeta(
-    loader=partial(bm25_loader, model_name="bm25s"),  # type: ignore
+    loader=bm25_loader,
     name="bm25s",
     languages=["eng_Latn"],
     open_weights=True,

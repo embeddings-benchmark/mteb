@@ -7,16 +7,14 @@ from typing import Any
 import numpy as np
 from PIL import ImageFile
 
-from mteb.abstasks.TaskMetadata import HFSubset
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset
 
 from ...encoder_interface import Encoder
 from ...evaluation.evaluators import (
     ImagekNNClassificationEvaluator,
-    ImagekNNClassificationEvaluatorPytorch,
     ImagelogRegClassificationEvaluator,
 )
 from ..AbsTask import AbsTask, ScoresDict
-from ..TaskMetadata import DescriptiveStatistics
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
@@ -59,7 +57,7 @@ class AbsTaskImageClassification(AbsTask):
     """Abstract class for kNN classification tasks
     The similarity is computed between pairs and the results are ranked.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It
     must contain the following columns:
         image: Image.Image
         label: int
@@ -67,29 +65,17 @@ class AbsTaskImageClassification(AbsTask):
 
     image_column_name: str = "image"
     label_column_name: str = "label"
+    samples_per_label: int = 16
+    n_experiments: int = 5
 
     def __init__(
         self,
         method: str = "logReg",
-        n_experiments: int | None = None,
-        samples_per_label: int | None = None,
         k: int = 3,
         **kwargs,
     ):
         super().__init__(**kwargs)
         self.method = method
-
-        # Bootstrap parameters
-        self.n_experiments: int = (  # type: ignore
-            n_experiments
-            if n_experiments is not None
-            else self.metadata_dict.get("n_experiments", 5)
-        )
-        self.samples_per_label: int = (  # type: ignore
-            samples_per_label
-            if samples_per_label is not None
-            else self.metadata_dict.get("samples_per_label", 16)
-        )
 
         # kNN parameters
         self.k = k
@@ -156,7 +142,7 @@ class AbsTaskImageClassification(AbsTask):
             self.load_data()
 
         scores = {}
-        hf_subsets = list(self.dataset) if self.is_multilingual else ["default"]
+        hf_subsets = self.hf_subsets
 
         for hf_subset in hf_subsets:
             logger.info(
@@ -170,8 +156,9 @@ class AbsTaskImageClassification(AbsTask):
             scores[hf_subset] = self._evaluate_subset(
                 model,
                 ds,
-                eval_split,
-                train_split,
+                hf_subset=hf_subset,
+                hf_split=eval_split,
+                train_split=train_split,
                 encode_kwargs=encode_kwargs,
                 **kwargs,
             )
@@ -183,13 +170,14 @@ class AbsTaskImageClassification(AbsTask):
         self,
         model: Encoder,
         dataset,
-        eval_split: str = "test",
+        hf_subset: str,
+        hf_split: str = "test",
         train_split: str = "train",
         encode_kwargs: dict[str, Any] = {},
         **kwargs,
     ) -> ScoresDict:
         train_split = dataset[train_split]
-        eval_split = dataset[eval_split]
+        eval_split = dataset[hf_split]
         params = {"k": self.k}
         params.update(kwargs)
 
@@ -216,17 +204,9 @@ class AbsTaskImageClassification(AbsTask):
                     eval_split,
                     self.image_column_name,
                     self.label_column_name,
-                    task_name=self.metadata.name,
-                    encode_kwargs=encode_kwargs,
-                    **params,
-                )
-            elif self.method == "kNN-pytorch":
-                evaluator = ImagekNNClassificationEvaluatorPytorch(
-                    undersampled_train,
-                    eval_split,
-                    self.image_column_name,
-                    self.label_column_name,
-                    task_name=self.metadata.name,
+                    task_metadata=self.metadata,
+                    hf_split=hf_split,
+                    hf_subset=hf_subset,
                     encode_kwargs=encode_kwargs,
                     **params,
                 )
@@ -236,7 +216,9 @@ class AbsTaskImageClassification(AbsTask):
                     eval_split,
                     self.image_column_name,
                     self.label_column_name,
-                    task_name=self.metadata.name,
+                    task_metadata=self.metadata,
+                    hf_split=hf_split,
+                    hf_subset=hf_subset,
                     encode_kwargs=encode_kwargs,
                     **params,
                 )
@@ -260,7 +242,7 @@ class AbsTaskImageClassification(AbsTask):
         """
         if idxs is None:
             idxs = np.arange(len(dataset_split))
-        np.random.shuffle(idxs)
+        self.np_rng.shuffle(idxs)
         if not isinstance(idxs, list):
             idxs = idxs.tolist()
         label_counter = defaultdict(int)

@@ -39,18 +39,6 @@ class ROxfordEasyI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrieva
   year={2018}
 }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 5063},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 0.0,
-                    "num_documents": 4993,
-                    "num_queries": 70,
-                    "average_relevant_docs_per_query": 44.5,
-                }
-            },
-        },
     )
     skip_first_result = False
 
@@ -85,18 +73,6 @@ class ROxfordMediumI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrie
   year={2018}
 }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 5063},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 0.0,
-                    "num_documents": 4993,
-                    "num_queries": 70,
-                    "average_relevant_docs_per_query": 78.9,
-                }
-            },
-        },
     )
     skip_first_result = False
 
@@ -131,17 +107,5 @@ class ROxfordHardI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrieva
   year={2018}
 }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 5063},
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 0.0,
-                    "average_query_length": 0.0,
-                    "num_documents": 4993,
-                    "num_queries": 70,
-                    "average_relevant_docs_per_query": 35.7,
-                }
-            },
-        },
     )
     skip_first_result = False

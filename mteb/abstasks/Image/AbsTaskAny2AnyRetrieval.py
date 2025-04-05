@@ -12,9 +12,10 @@ import tqdm
 from datasets import Dataset, Features, Value, concatenate_datasets, load_dataset
 from PIL import Image
 
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics
+
 from ...evaluation.evaluators import Any2AnyRetrievalEvaluator
 from ..AbsTask import AbsTask, ScoresDict
-from ..TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -274,9 +275,9 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
         if self.data_loaded:
             return
         self.corpus, self.queries, self.relevant_docs = {}, {}, {}
-        dataset_path = self.metadata_dict["dataset"]["path"]
+        dataset_path = self.metadata.dataset["path"]
 
-        for split in kwargs.get("eval_splits", self.metadata_dict["eval_splits"]):
+        for split in kwargs.get("eval_splits", self.metadata.eval_splits):
             corpus, queries, qrels = HFDataLoader(
                 hf_repo=dataset_path,
                 streaming=False,
@@ -303,13 +304,12 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
     ):
         retriever = Any2AnyRetrievalEvaluator(
             retriever=model,
-            task_name=self.metadata.name,
             encode_kwargs=encode_kwargs,
             **kwargs,
         )
 
         scores = {}
-        hf_subsets = list(self.hf_subsets) if self.is_multilingual else ["default"]
+        hf_subsets = self.hf_subsets
 
         for hf_subset in hf_subsets:
             logger.info(f"Subset: {hf_subset}")
@@ -327,15 +327,28 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
                     self.relevant_docs[hf_subset][split],
                 )
             scores[hf_subset] = self._evaluate_subset(
-                retriever, corpus, queries, relevant_docs, hf_subset, **kwargs
+                retriever, corpus, queries, relevant_docs, hf_subset, split, **kwargs
             )
         return scores
 
     def _evaluate_subset(
-        self, retriever, corpus, queries, relevant_docs, hf_subset: str, **kwargs
+        self,
+        retriever,
+        corpus,
+        queries,
+        relevant_docs,
+        hf_subset: str,
+        hf_split: str,
+        **kwargs,
     ):
         start_time = time()
-        results = retriever(corpus, queries)
+        results = retriever(
+            corpus,
+            queries,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            task_metadata=self.metadata,
+        )
         end_time = time()
         logger.info(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
 

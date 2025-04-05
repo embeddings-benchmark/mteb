@@ -21,7 +21,7 @@ class SKQuadRetrieval(AbsTaskRetrieval):
             "revision": "09f81f51dd5b8497da16d02c69c98d5cb5993ef2",
         },
         type="Retrieval",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["slk-Latn"],

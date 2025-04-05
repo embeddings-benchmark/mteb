@@ -14,7 +14,7 @@ class DTDClassification(AbsTaskImageClassification):
             "revision": "d2afa97d9f335b1a6b3b09c637aef667f98f966e",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -35,8 +35,4 @@ class DTDClassification(AbsTaskImageClassification):
             Booktitle = {Proceedings of the {IEEE} Conf. on Computer Vision and Pattern Recognition ({CVPR})},
             Year      = {2014}}
         """,
-        descriptive_stats={
-            "n_samples": {"test": 1880},
-            "avg_character_length": {"test": 456},
-        },
     )

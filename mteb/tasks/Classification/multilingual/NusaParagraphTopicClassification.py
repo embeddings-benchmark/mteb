@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -18,7 +17,7 @@ _LANGUAGES = {
 }
 
 
-class NusaParagraphTopicClassification(MultilingualTask, AbsTaskClassification):
+class NusaParagraphTopicClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="NusaParagraphTopicClassification",
         dataset={
@@ -27,7 +26,7 @@ class NusaParagraphTopicClassification(MultilingualTask, AbsTaskClassification):
         },
         description="NusaParagraphTopicClassification is a multi-class topic classification on 10 Indonesian languages.",
         reference="https://github.com/IndoNLP/nusa-writes",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         type="Classification",
         eval_splits=["test"],

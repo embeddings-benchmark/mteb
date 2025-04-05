@@ -120,7 +120,7 @@ def test_get_tasks_filtering():
 
     for task in tasks:
         if (
-            task.is_multilingual
+            task.metadata.is_multilingual
             and task.metadata.name != "STS17MultilingualVisualSTSEng"
         ):
             assert isinstance(task.metadata.eval_langs, dict)
@@ -148,11 +148,6 @@ def test_MTEBTasks(
     # check for header of a table
     n_langs = len(tasks)
     assert len(tasks.to_markdown().split("\n")) - 3 == n_langs
-
-
-def test_all_tasks_fetch():
-    """Test that all tasks can be fetched"""
-    mteb.MTEB.mteb_tasks()
 
 
 @pytest.mark.parametrize("modalities", [["text"], ["image"], ["text", "image"]])

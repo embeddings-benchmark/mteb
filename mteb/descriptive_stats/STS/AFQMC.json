@@ -1,0 +1,18 @@
+{
+    "validation": {
+        "num_samples": 4316,
+        "number_of_characters": 115065,
+        "unique_pairs": 4316,
+        "min_sentence1_length": 5,
+        "average_sentence1_len": 13.385773864689527,
+        "max_sentence1_length": 76,
+        "unique_sentence1": 4313,
+        "min_sentence2_length": 5,
+        "average_sentence2_len": 13.274328081556996,
+        "max_sentence2_length": 82,
+        "unique_sentence2": 4313,
+        "min_score": 0,
+        "avg_score": 0.31000926784059313,
+        "max_score": 1
+    }
+}

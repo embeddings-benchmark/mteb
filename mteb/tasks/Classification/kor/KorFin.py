@@ -16,9 +16,9 @@ class KorFin(AbsTaskClassification):
         description="The KorFin-ASC is an extension of KorFin-ABSA, which is a financial sentiment analysis dataset including 8818 samples with (aspect, polarity) pairs annotated. The samples were collected from KLUE-TC and analyst reports from Naver Finance.",
         reference="https://huggingface.co/datasets/amphora/korfin-asc",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
-        eval_splits=["test"],
+        eval_splits=["train"],
         eval_langs=["kor-Hang"],
         main_score="accuracy",
         date=(
@@ -46,5 +46,5 @@ class KorFin(AbsTaskClassification):
             {"SRC": "text", "SENTIMENT": "label"}
         ).remove_columns(["SID", "TYPE", "ASPECT"])
         self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["test"]
+            self.dataset, seed=self.seed, splits=self.metadata.eval_splits
         )

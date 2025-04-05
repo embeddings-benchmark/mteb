@@ -62,27 +62,25 @@ class VisualSTSDescriptiveStatistics(DescriptiveStatistics):
 class AbsTaskVisualSTS(AbsTask):
     """Abstract class for visual STS experiments.
 
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata_dict["eval_splits"], and assign it to self.dataset. It must contain the following columns:
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns:
         sentence1: PIL.Image
         sentence2: PIL.Image
         score: float
     """
 
     sentences_column_names = ["sentence1", "sentence2"]
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    @property
-    def min_score(self) -> int:
-        return self.metadata_dict["min_score"]
-
-    @property
-    def max_score(self) -> int:
-        return self.metadata_dict["max_score"]
+    min_score: int = 0
+    max_score: int = 5
 
     def _evaluate_subset(
-        self, model, data_split, *, encode_kwargs: dict[str, Any] = {}, **kwargs
+        self,
+        model,
+        data_split,
+        *,
+        hf_split: str,
+        hf_subset: str,
+        encode_kwargs: dict[str, Any] = {},
+        **kwargs,
     ) -> ScoresDict:
         def normalize(x):
             return (x - self.min_score) / (self.max_score - self.min_score)
@@ -92,7 +90,9 @@ class AbsTaskVisualSTS(AbsTask):
             data_split,
             self.sentences_column_names,
             normalized_scores,
-            task_name=self.metadata.name,
+            task_metadata=self.metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
             **kwargs,
         )
         scores = evaluator(model, encode_kwargs=encode_kwargs)

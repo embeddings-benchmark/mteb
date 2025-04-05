@@ -14,7 +14,7 @@ class FER2013Classification(AbsTaskImageClassification):
             "revision": "9399b94167523fe5c40b3a857e24ef931ee4395b",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -39,10 +39,6 @@ class FER2013Classification(AbsTaskImageClassification):
         url={https://arxiv.org/abs/1412.6572},
         }
         """,
-        descriptive_stats={
-            "n_samples": {"test": 7178},
-            "avg_character_length": {"test": 431.4},
-        },
     )
     image_column_name: str = "jpg"
     label_column_name: str = "cls"

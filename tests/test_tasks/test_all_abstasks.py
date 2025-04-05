@@ -7,9 +7,7 @@ import huggingface_hub
 import pytest
 
 import mteb
-from mteb import MTEB
 from mteb.abstasks import AbsTask
-from mteb.abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.AbsTaskSpeedTask import AbsTaskSpeedTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
@@ -18,8 +16,7 @@ from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.Image.AbsTaskImageTextPairClassification import (
     AbsTaskImageTextPairClassification,
 )
-from mteb.abstasks.MultiSubsetLoader import MultiSubsetLoader
-from mteb.overview import TASKS_REGISTRY
+from mteb.overview import TASKS_REGISTRY, get_tasks
 
 from ..test_benchmark.task_grid import (
     MOCK_MIEB_TASK_GRID_AS_STRING,
@@ -30,7 +27,12 @@ logging.basicConfig(level=logging.INFO)
 
 ALL_MOCK_TASKS = MOCK_TASK_TEST_GRID_AS_STRING + MOCK_MIEB_TASK_GRID_AS_STRING
 
-tasks = [t for t in MTEB().tasks_cls if t.metadata.name not in ALL_MOCK_TASKS]
+tasks = [
+    t
+    for t in get_tasks(exclude_superseded=False)
+    if t.metadata.name not in ALL_MOCK_TASKS
+]
+
 
 datasets_not_available = [
     "AfriSentiLangClassification",
@@ -62,11 +64,10 @@ def test_load_data(
     if (
         isinstance(task, AbsTaskRetrieval)
         or isinstance(task, AbsTaskAny2AnyRetrieval)
-        or isinstance(task, AbsTaskInstructionRetrieval)
-        or isinstance(task, MultiSubsetLoader)
         or isinstance(task, AbsTaskSpeedTask)
         or isinstance(task, AbsTaskAny2AnyMultiChoice)
         or isinstance(task, AbsTaskImageTextPairClassification)
+        or task.metadata.is_multilingual
     ):
         pytest.skip()
     with patch.object(task, "dataset_transform") as mock_dataset_transform:
@@ -74,7 +75,7 @@ def test_load_data(
         mock_load_dataset.assert_called()
 
         # They don't yet but should they so they can be expanded more easily?
-        if not task.is_multilingual:
+        if not task.metadata.is_multilingual:
             mock_dataset_transform.assert_called_once()
 
 
