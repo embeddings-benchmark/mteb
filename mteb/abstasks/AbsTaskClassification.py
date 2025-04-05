@@ -82,7 +82,7 @@ class AbsTaskClassification(AbsTask):
         split: str = "test",
         subsets_to_run: list[HFSubset] | None = None,
         *,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         if not self.data_loaded:
@@ -120,7 +120,7 @@ class AbsTaskClassification(AbsTask):
         dataset: DatasetDict | Dataset,
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
         **kwargs,
     ) -> ScoresDict:
         train_split = dataset[self.train_split]

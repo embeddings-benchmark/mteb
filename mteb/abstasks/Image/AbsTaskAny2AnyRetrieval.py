@@ -299,7 +299,7 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
         model,
         split: str = "test",
         *,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
         **kwargs,
     ):
         retriever = Any2AnyRetrievalEvaluator(

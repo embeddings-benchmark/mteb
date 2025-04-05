@@ -250,7 +250,7 @@ class MTEB:
         overwrite_results: bool = False,
         raise_error: bool = True,
         co2_tracker: bool = True,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any] | None = None,
         **kwargs,
     ) -> list[TaskResult]:
         """Run the evaluation pipeline on the selected tasks.
@@ -276,6 +276,11 @@ class MTEB:
             A list of TaskResult objects, one for each task evaluated.
         """
         # update logging to account for different levels of Verbosity (similar to the command line)
+
+        if encode_kwargs is None:
+            encode_kwargs = {}
+
+        encode_kwargs["batch_size"] = encode_kwargs.get("batch_size", 32)
 
         if verbosity == 0:
             datasets.logging.set_verbosity(logging.CRITICAL)  # 40

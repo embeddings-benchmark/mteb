@@ -35,7 +35,8 @@ class ImagekNNClassificationEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         k: int = 1,
-        encode_kwargs: dict[str, Any] = {},
+        *,
+        encode_kwargs: dict[str, Any],
         limit: int | None = None,
         **kwargs,
     ):
@@ -54,9 +55,6 @@ class ImagekNNClassificationEvaluator(Evaluator):
         self.hf_split = hf_split
         self.hf_subset = hf_subset
         self.encode_kwargs = encode_kwargs
-
-        if "batch_size" not in self.encode_kwargs:
-            self.encode_kwargs["batch_size"] = 32
 
         self.k = k
 
@@ -129,7 +127,8 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
         hf_split: str,
         hf_subset: str,
         k: int = 1,
-        encode_kwargs: dict[str, Any] = {},
+        *,
+        encode_kwargs: dict[str, Any],
         limit: int | None = None,
         **kwargs: Any,
     ):
@@ -147,9 +146,6 @@ class ImagekNNClassificationEvaluatorPytorch(Evaluator):
         self.hf_split = hf_split
         self.hf_subset = hf_subset
         self.encode_kwargs = encode_kwargs
-
-        if "batch_size" not in self.encode_kwargs:
-            self.encode_kwargs["batch_size"] = 32
 
         self.k = k
 
@@ -239,15 +235,13 @@ class ImagelogRegClassificationEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         max_iter: int = 100,
-        encode_kwargs: dict[str, Any] = {},
+        *,
+        encode_kwargs: dict[str, Any],
         limit: int | None = None,
         **kwargs,
     ):
         super().__init__(**kwargs)
         self.encode_kwargs = encode_kwargs
-
-        if "batch_size" not in self.encode_kwargs:
-            self.encode_kwargs["batch_size"] = 32
 
         if limit is not None:
             dataset_train = dataset_train.select(list(range(limit)))

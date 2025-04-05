@@ -178,7 +178,7 @@ class AbsTaskImageMultilabelClassification(AbsTask):
         eval_split: str = "test",
         train_split: str = "train",
         *,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         if not self.data_loaded:
@@ -217,7 +217,7 @@ class AbsTaskImageMultilabelClassification(AbsTask):
         hf_subset: str,
         train_split: str,
         *,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
         **kwargs: Any,
     ) -> ScoresDict:
         train_split = dataset[train_split]

@@ -39,7 +39,7 @@ class Any2AnyDenseRetrievalExactSearch:
     def __init__(
         self,
         model: Encoder,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
         corpus_chunk_size: int = 20000,
         previous_results: str | None = None,
         **kwargs: Any,
@@ -47,9 +47,6 @@ class Any2AnyDenseRetrievalExactSearch:
         # Model is class that provides get_text_embeddings() and get_image_embeddings()
         self.model = model
         self.encode_kwargs = encode_kwargs
-
-        if "batch_size" not in encode_kwargs:
-            encode_kwargs["batch_size"] = 128
 
         self.corpus_chunk_size = corpus_chunk_size
         self.previous_results = previous_results
@@ -182,7 +179,8 @@ class Any2AnyRetrievalEvaluator(Evaluator):
         retriever=None,
         k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000],
         score_function: str = "cos_sim",
-        encode_kwargs: dict[str, Any] = {},
+        *,
+        encode_kwargs: dict[str, Any],
         **kwargs,
     ):
         super().__init__(**kwargs)

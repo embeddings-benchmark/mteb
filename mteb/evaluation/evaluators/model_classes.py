@@ -31,7 +31,7 @@ class DenseRetrievalExactSearch:
     def __init__(
         self,
         model: Encoder,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
         corpus_chunk_size: int = 50000,
         previous_results: str | Path | None = None,
         **kwargs: Any,
