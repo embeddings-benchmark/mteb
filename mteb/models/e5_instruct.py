@@ -10,7 +10,10 @@ from mteb.models.e5_models import (
     ME5_TRAINING_DATA,
     XLMR_LANGUAGES,
 )
-from mteb.models.instruct_wrapper import instruct_wrapper
+from mteb.models.instruct_wrapper import (
+    InstructSentenceTransformerWrapper,
+    instruct_wrapper,
+)
 
 MISTRAL_LANGUAGES = ["eng_Latn", "fra_Latn", "deu_Latn", "ita_Latn", "spa_Latn"]
 
@@ -179,7 +182,7 @@ zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
 E5_R_MISTRAL_7B_INSTRUCTION = "{instruction}\n"
 BeastyZ__e5_R_mistral_7b = ModelMeta(
     loader=partial(  # type: ignore
-        instruct_wrapper,
+        InstructSentenceTransformerWrapper,
         model_name_or_path="BeastyZ/e5-R-mistral-7b",
         instruction_template=E5_R_MISTRAL_7B_INSTRUCTION,
         attn="cccc",
@@ -195,15 +198,15 @@ BeastyZ__e5_R_mistral_7b = ModelMeta(
     n_parameters=7241732096,
     memory_usage_mb=27625,
     max_tokens=32768.0,
-    embed_dim=None,
+    embed_dim=4096,
     license="apache-2.0",
     open_weights=True,
-    public_training_code=None,
-    public_training_data=None,
+    public_training_code="https://github.com/LeeSureman/E5-Retrieval-Reproduction",
+    public_training_data="https://huggingface.co/datasets/BeastyZ/E5-R",
     framework=["PyTorch"],
     reference="https://huggingface.co/BeastyZ/e5-R-mistral-7b",
     similarity_fn_name="cosine",
-    use_instructions=None,
+    use_instructions=True,
     training_datasets=E5_MISTRAL_TRAINING_DATA,
     # not MTEB: {"BeastyZ/E5-R": ["train"]},
     adapted_from="intfloat/e5-mistral-7b-instruct",
