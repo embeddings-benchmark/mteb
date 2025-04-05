@@ -28,11 +28,12 @@ logger = logging.getLogger(__name__)
 
 # Adapted from https://github.com/beir-cellar/beir/blob/f062f038c4bfd19a8ca942a9910b1e0d218759d4/beir/retrieval/search/dense/exact_search.py#L12
 class DenseRetrievalExactSearch:
+    corpus_chunk_size: int = 50000
+
     def __init__(
         self,
         model: Encoder,
         encode_kwargs: dict[str, Any] = {},
-        corpus_chunk_size: int = 50000,
         previous_results: str | Path | None = None,
         **kwargs: Any,
     ):
@@ -42,7 +43,6 @@ class DenseRetrievalExactSearch:
         if "show_progress_bar" not in encode_kwargs:
             self.encode_kwargs["show_progress_bar"] = True
 
-        self.corpus_chunk_size = corpus_chunk_size
         if isinstance(previous_results, Path):
             self.previous_results = str(previous_results)
         else:

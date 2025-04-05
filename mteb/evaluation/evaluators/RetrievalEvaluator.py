@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import logging
+from pathlib import Path
 from typing import Any
 
+from mteb import Encoder
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from .Evaluator import Evaluator
@@ -23,35 +25,12 @@ from .utils import (
 logger = logging.getLogger(__name__)
 
 
-# Adapted from https://github.com/beir-cellar/beir/blob/f062f038c4bfd19a8ca942a9910b1e0d218759d4/beir/retrieval/evaluation.py#L9
 class RetrievalEvaluator(Evaluator):
-    def __init__(
-        self,
-        retriever,
-        k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000],
-        encode_kwargs: dict[str, Any] = {},
-        **kwargs,
-    ):
-        super().__init__(**kwargs)
-        self.is_cross_encoder = False
-        if is_cross_encoder_compatible(retriever):
-            logger.info(
-                "The custom predict function of the model will be used if not a SentenceTransformer CrossEncoder"
-            )
-            self.retriever = DenseRetrievalExactSearch(
-                retriever, encode_kwargs=encode_kwargs, **kwargs
-            )
-            self.is_cross_encoder = True
-        else:
-            self.retriever = DenseRetrievalExactSearch(
-                retriever, encode_kwargs=encode_kwargs, **kwargs
-            )
-        self.k_values = k_values
-        self.top_k = (
-            max(k_values) if "top_k" not in kwargs else kwargs["top_k"]
-        )  # can lower it if reranking
+    k_values = [1, 3, 5, 10, 20, 100, 1000]
+    top_k = 1000
+    cross_encoder_top_k = 100
 
-    def __call__(
+    def __init__(
         self,
         corpus: dict[str, dict[str, str]],
         queries: dict[str, str],
@@ -59,61 +38,63 @@ class RetrievalEvaluator(Evaluator):
         hf_split: str,
         hf_subset: str,
         instructions: dict[str, str] | None = None,
-        qid: str | None = None,
         top_ranked: dict[str, list[str]] | None = None,
+        qid: str | None = None,
         **kwargs,
-    ) -> dict[str, dict[str, float]]:
-        if not self.retriever:
-            raise ValueError("Model/Technique has not been provided!")
+    ):
+        super().__init__(**kwargs)
+        self.corpus = corpus
+        self.queries = queries
+        self.instructions = instructions
+        self.top_ranked = top_ranked
 
-        # allow kwargs top-k to override the class top-k
-        if "top_k" in kwargs:
-            self.top_k = kwargs["top_k"]
-            del kwargs["top_k"]
+        self.task_metadata = task_metadata
+        self.hf_split = hf_split
+        self.hf_subset = hf_subset
+        self.qid = qid
+
+    def __call__(
+        self,
+        model: Encoder,
+        previous_results: str | Path | None = None,
+        encode_kwargs: dict[str, Any] = {},
+        **kwargs: Any,
+    ) -> dict[str, dict[str, float]]:
+        self.is_cross_encoder = is_cross_encoder_compatible(model)
+        if self.is_cross_encoder:
+            logger.info(
+                "The custom predict function of the model will be used if not a SentenceTransformer CrossEncoder"
+            )
+        self.retriever = DenseRetrievalExactSearch(
+            model, encode_kwargs=encode_kwargs, previous_results=previous_results
+        )
 
         if self.is_cross_encoder:
-            return self.retriever.search_cross_encoder(
-                corpus,
-                queries,
-                self.top_k,
-                instructions=instructions,
-                hf_split=hf_split,
-                hf_subset=hf_subset,
-                task_metadata=task_metadata,
-                **kwargs,
-            )
+            score_function = self.retriever.search_cross_encoder
         elif (
-            hasattr(self.retriever.model, "mteb_model_meta")
-            and self.retriever.model.mteb_model_meta is not None
-            and self.retriever.model.mteb_model_meta.name == "bm25s"
+            hasattr(model, "mteb_model_meta")
+            and model.mteb_model_meta is not None
+            and model.mteb_model_meta.name == "bm25s"
         ):
-            return self.retriever.model.search(
-                corpus,
-                queries,
-                self.top_k,
-                task_metadata=task_metadata,  # type: ignore
-                hf_split=hf_split,
-                hf_subset=hf_subset,
-                instructions=instructions,
-                score_function="bm25",
-                **kwargs,
-            )
+            score_function = self.retriever.model.search
         else:
-            return self.retriever.search(
-                corpus,
-                queries,
-                self.top_k,
-                instructions=instructions,
-                top_ranked=top_ranked,
-                request_qid=qid,
-                task_metadata=task_metadata,
-                hf_split=hf_split,
-                hf_subset=hf_subset,
-                **kwargs,
-            )
+            score_function = self.retriever.search
 
-    @staticmethod
+        return score_function(
+            self.corpus,
+            self.queries,
+            self.top_k,
+            instructions=self.instructions,
+            top_ranked=self.top_ranked,
+            request_qid=self.qid,
+            task_metadata=self.task_metadata,
+            hf_split=self.hf_split,
+            hf_subset=self.hf_subset,
+            **kwargs,
+        )
+
     def evaluate(
+        self,
         qrels: dict[str, dict[str, int]],
         results: dict[str, dict[str, float]],
         k_values: list[int],
@@ -150,33 +131,20 @@ class RetrievalEvaluator(Evaluator):
 
         return ndcg, _map, recall, precision, naucs, task_scores
 
-    @staticmethod
     def evaluate_custom(
+        self,
         qrels: dict[str, dict[str, int]],
         results: dict[str, dict[str, float]],
         k_values: list[int],
-        metric: str,
-        output_type: str = "all",
     ) -> tuple[dict[str, float], dict[str, float]]:
-        if metric.lower() in ["mrr", "mrr@k", "mrr_cut"]:
-            metric_scores = mrr(qrels, results, k_values, output_type)
-
-        elif metric.lower() in ["recall_cap", "r_cap", "r_cap@k"]:
-            metric_scores = recall_cap(qrels, results, k_values, output_type)
-
-        elif metric.lower() in ["hole", "hole@k"]:
-            metric_scores = hole(qrels, results, k_values, output_type)
-
-        elif metric.lower() in [
-            "acc",
-            "top_k_acc",
-            "accuracy",
-            "accuracy@k",
-            "top_k_accuracy",
-        ]:
-            metric_scores = top_k_accuracy(qrels, results, k_values, output_type)
-
+        metric_scores = {
+            **mrr(qrels, results, k_values),
+            **recall_cap(qrels, results, k_values),
+            **hole(qrels, results, k_values),
+            **top_k_accuracy(qrels, results, k_values),
+        }
         naucs = evaluate_abstention(results, metric_scores)
+
         metric_scores_avg = {k: sum(v) / len(v) for k, v in metric_scores.items()}
 
         return metric_scores_avg, naucs

@@ -76,12 +76,16 @@ class AbsTaskReranking(AbsTaskRetrieval):
             f"Transforming old format to standard format for {self.metadata.name}"
         )
 
-        self.corpus = defaultdict(lambda: defaultdict(dict))
-        self.queries = defaultdict(lambda: defaultdict(dict))
-        self.relevant_docs = defaultdict(lambda: defaultdict(lambda: defaultdict(dict)))
-        self.top_ranked = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
+        corpus = defaultdict(lambda: defaultdict(dict))
+        queries = defaultdict(lambda: defaultdict(dict))
+        relevant_docs = defaultdict(lambda: defaultdict(lambda: defaultdict(dict)))
+        top_ranked = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
 
         hf_subsets = self.hf_subsets
+
+        self.dataset = defaultdict(
+            lambda: defaultdict(lambda: defaultdict(lambda: defaultdict()))
+        )
 
         for hf_subset in hf_subsets:
             if given_dataset:
@@ -127,20 +131,24 @@ class AbsTaskReranking(AbsTaskRetrieval):
                 # Populate the data structures
                 for item in processed_dataset:
                     query_id = item["query_id"]
-                    self.queries[hf_subset][split][query_id] = item["query"]
+                    queries[hf_subset][split][query_id] = item["query"]
 
                     # Add documents and relevance information
                     for doc_id, doc_text, relevance in zip(
                         item["doc_ids"], item["doc_texts"], item["relevance_scores"]
                     ):
-                        self.corpus[hf_subset][split][doc_id] = {
+                        corpus[hf_subset][split][doc_id] = {
                             "text": doc_text,
                             "_id": doc_id,
                         }
-                        self.top_ranked[hf_subset][split][query_id].append(doc_id)
-                        self.relevant_docs[hf_subset][split][query_id][doc_id] = (
-                            relevance
-                        )
+                        top_ranked[hf_subset][split][query_id].append(doc_id)
+                        relevant_docs[hf_subset][split][query_id][doc_id] = relevance
 
-        self.instructions = None
+            self.datset[hf_subset][split] = {
+                "corpus": corpus[hf_subset][split],
+                "queries": queries[hf_subset][split],
+                "relevant_docs": relevant_docs[hf_subset][split],
+                "instructions": None,
+                "top_ranked": top_ranked[hf_subset][split],
+            }
         self.data_loaded = True
