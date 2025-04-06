@@ -4,8 +4,6 @@ import pytest
 
 from mteb import TaskMetadata
 from mteb.evaluation.evaluators import RetrievalEvaluator
-from mteb.models import SentenceTransformerWrapper
-from tests.test_benchmark.mock_models import MockNumpyEncoder
 from tests.test_benchmark.mock_tasks import general_args
 
 TOL = 0.0001
@@ -25,7 +23,7 @@ class TestRetrievalEvaluator:
         setup_method is invoked for every test method of a class.
         """
         self.evaluator = RetrievalEvaluator(
-            SentenceTransformerWrapper(MockNumpyEncoder()),
+            None, None, self.metadata, None, None, None, None, None
         )
 
     @pytest.mark.parametrize(
@@ -79,7 +77,6 @@ class TestRetrievalEvaluator:
             relevant_docs,
             results,
             [1, 2, 3],
-            self.metadata,
             ignore_identical_ids=ignore_identical_ids,
         )
 
@@ -132,7 +129,6 @@ class TestRetrievalEvaluator:
             relevant_docs,
             results,
             [1, 2, 3],
-            self.metadata,
             ignore_identical_ids=ignore_identical_ids,
         )
         aucs = ["nAUC_NDCG@3_max", "nAUC_NDCG@3_std", "nAUC_NDCG@3_diff1"]

@@ -304,11 +304,10 @@ class AbsTaskRetrieval(AbsTask):
             **kwargs,
         )
 
-        if results is None:
+        if not results:
             results = retriever(
                 model,
                 encode_kwargs=encode_kwargs,
-                previous_results=results,
                 **kwargs,
             )
 
@@ -318,16 +317,22 @@ class AbsTaskRetrieval(AbsTask):
                 output_folder.mkdir(parents=True)
 
         if save_predictions:
-            # Filter results to only include documents in the corpus
-            doc_ids = set(data_split["corpus"].keys())
-            filtered_results = {
-                qid: {k: v for k, v in results[qid].items() if k in doc_ids}
-                for qid in results
-            }
-            predictions_path = (
+            if self.top_k is not None:
+                for qid in list(results.keys()):
+                    doc_ids = set(
+                        sorted(
+                            results[qid], key=lambda x: results[qid][x], reverse=True
+                        )[: self.top_k]
+                    )
+                    results[qid] = {
+                        k: v for k, v in results[qid].items() if k in doc_ids
+                    }
+            qrels_save_path = (
                 output_folder / f"{self.metadata.name}_{hf_subset}_predictions.json"
             )
-            predictions_path.write_text(json.dumps(filtered_results))
+
+            with open(qrels_save_path, "w") as f:
+                json.dump(results, f)
 
         if save_qrels:
             with open(
@@ -378,6 +383,7 @@ class AbsTaskRetrieval(AbsTask):
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> RetrievalDescriptiveStatistics:
+        self.transform_old_dataset_format_retrieval()
         if hf_subset and hf_subset in self.dataset:
             split_data = self.dataset[hf_subset][split]
             queries = split_data["queries"]
@@ -440,7 +446,7 @@ class AbsTaskRetrieval(AbsTask):
         )
         qrels_per_doc = num_qrels_non_zero / len(relevant_docs) if num_queries else 0
 
-        if instructions is not None:
+        if instructions is not None and len(instructions) > 0:
             instructions_len = [
                 len(instruction) for instruction in instructions.values()
             ]
@@ -456,7 +462,7 @@ class AbsTaskRetrieval(AbsTask):
             max_instruction_length = None
             unique_instructions = None
 
-        if top_ranked is not None and num_queries:
+        if top_ranked is not None and num_queries and len(top_ranked) > 0:
             top_ranked_per_query = [len(docs) for docs in top_ranked.values()]
             num_top_ranked = len(top_ranked_per_query)
             min_top_ranked_per_query = min(top_ranked_per_query)
@@ -652,22 +658,20 @@ def calculate_corpus_length(
 
 
 def process_docs(
-    collection: dict[str, dict[str, dict[str, str] | str]], hf_subset: str, split: str
+    collection: dict[str, dict[str, str] | str], hf_subset: str, split: str
 ) -> dict[str, str]:
     """Collections can contain overlapping ids in different splits. Prepend split to avoid this"""
-    return {
-        f"{split}_{hf_subset}_{k}": v for k, v in collection[hf_subset][split].items()
-    }
+    return {f"{split}_{hf_subset}_{k}": v for k, v in collection.items()}
 
 
 def process_relevant_docs(
-    collection: dict[str, dict[str, dict[str, dict[str, int]]]],
+    collection: dict[str, dict[str, int]],
     hf_subset: str,
     split: str,
 ) -> dict[str, dict[str, int]]:
     """Collections can contain overlapping ids in different splits. Prepend split to avoid this"""
     return_collection = {}
-    for query_id, relevant in collection[hf_subset][split].items():
+    for query_id, relevant in collection.items():
         return_collection[f"{split}_{hf_subset}_{query_id}"] = {
             f"{split}_{hf_subset}_{doc_id}": value for doc_id, value in relevant.items()
         }

@@ -1148,11 +1148,11 @@ class MockRerankingTask(AbsTaskRetrieval):
     expected_stats = {
         "test": {
             "num_samples": 4,
-            "number_of_characters": 106,
+            "number_of_characters": 112,
             "num_documents": 2,
             "min_document_length": 27,
-            "average_document_length": 27.0,
-            "max_document_length": 27,
+            "average_document_length": 30.0,
+            "max_document_length": 33,
             "unique_documents": 2,
             "num_queries": 2,
             "min_query_length": 23,
@@ -1192,7 +1192,7 @@ class MockRerankingTask(AbsTaskRetrieval):
             },
             "corpus": {
                 "d1": "This is a positive sentence",
-                "d2": "This is a negative sentence",
+                "d2": "This is another positive sentence",
             },
             "relevant_docs": {
                 "q1": {"d1": 1, "d2": 0},
@@ -1316,7 +1316,7 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
             },
             "corpus": {
                 "d1": "This is a positive sentence",
-                "d2": "This is a negative sentence",
+                "d2": "This is another positive sentence",
             },
             "relevant_docs": {
                 "q1": {"d1": 1, "d2": 0},
@@ -1411,7 +1411,7 @@ class MockRetrievalTask(AbsTaskRetrieval):
             },
             "corpus": {
                 "d1": "This is a positive sentence",
-                "d2": "This is a negative sentence",
+                "d2": "This is another positive sentence",
             },
             "relevant_docs": {
                 "q1": {"d1": 1, "d2": 0},
@@ -1623,7 +1623,7 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
             },
             "corpus": {
                 "d1": "This is a positive sentence",
-                "d2": "This is a negative sentence",
+                "d2": "This is another positive sentence",
             },
             "relevant_docs": {
                 "q1": {"d1": 1, "d2": 0},
@@ -1878,7 +1878,7 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
             },
             "corpus": {
                 "d1": "This is a positive sentence",
-                "d2": "This is a negative sentence",
+                "d2": "This is another positive sentence",
             },
             "relevant_docs": {
                 "q1": {"d1": 1, "d2": 0},
@@ -1942,7 +1942,7 @@ class MockInstructionReranking(AbsTaskRetrieval):
             },
             "corpus": {
                 "d1": "This is a positive sentence",
-                "d2": "This is a negative sentence",
+                "d2": "This is another positive sentence",
             },
             "relevant_docs": {
                 "q1": {"d1": 1, "d2": 0},
@@ -2070,7 +2070,7 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
             },
             "corpus": {
                 "d1": "This is a positive sentence",
-                "d2": "This is a negative sentence",
+                "d2": "This is another positive sentence",
             },
             "relevant_docs": {
                 "q1": {"d1": 1, "d2": 0},
@@ -2196,7 +2196,7 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
             },
             "corpus": {
                 "d1": "This is a positive sentence",
-                "d2": "This is a negative sentence",
+                "d2": "This is another positive sentence",
             },
             "relevant_docs": {
                 "q1": {"d1": 1, "d2": 0},

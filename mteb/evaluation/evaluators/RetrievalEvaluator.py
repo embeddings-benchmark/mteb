@@ -55,8 +55,11 @@ class RetrievalEvaluator(Evaluator):
         model: Encoder,
         previous_results: str | Path | None = None,
         encode_kwargs: dict[str, Any] = {},
+        top_k: int | None = None,
         **kwargs: Any,
     ) -> dict[str, dict[str, float]]:
+        if top_k is not None:
+            self.top_k = top_k
         self.is_cross_encoder = is_cross_encoder_compatible(model)
         if self.is_cross_encoder:
             logger.info(

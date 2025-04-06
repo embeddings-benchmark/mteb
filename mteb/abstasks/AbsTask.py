@@ -163,7 +163,6 @@ class AbsTask(ABC):
                 encode_kwargs=encode_kwargs,
                 **kwargs,
             )
-            print(scores)
             self._add_main_score(scores[hf_subset])
         return scores
 
