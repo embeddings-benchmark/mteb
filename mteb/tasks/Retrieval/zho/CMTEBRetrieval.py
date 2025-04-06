@@ -205,7 +205,7 @@ class CovidRetrieval(AbsTaskRetrieval):
         date=("2022-03-03", "2022-03-18"),
         domains=["Medical", "Entertainment", "E-commerce"],
         task_subtypes=["Passage retrieval"],
-        license=None,
+        license='not specified,
         annotations_creators="human-annotated",
         dialect=None,
         sample_creation=None,
