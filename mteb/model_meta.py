@@ -14,10 +14,13 @@ from huggingface_hub.errors import (
 from pydantic import BaseModel, ConfigDict, field_validator
 
 from mteb.abstasks.AbsTask import AbsTask
+from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder
 
 from .custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
-from .languages import ISO_LANGUAGE_SCRIPT
+from .languages import (
+    ISO_LANGUAGE_SCRIPT,
+)
 
 if TYPE_CHECKING:
     from .models.sentence_transformer_wrapper import SentenceTransformerWrapper
@@ -122,6 +125,19 @@ class ModelMeta(BaseModel):
         loader = dict_repr.pop("loader", None)
         dict_repr["loader"] = get_loader_name(loader)
         return dict_repr
+
+    def validate(self) -> None:
+        """Validates the model metadata."""
+        if self.languages is not None:
+            self.languages_are_valid(self.languages)
+
+    def languages_are_valid(self, languages: list[ISO_LANGUAGE_SCRIPT] | None) -> None:
+        """This method checks that each language is valid."""
+        if languages is None:
+            return
+
+        for code in languages:
+            TaskMetadata._check_language_code(code)
 
     @field_validator("name")
     @classmethod
