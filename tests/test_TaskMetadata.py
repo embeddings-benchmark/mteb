@@ -357,23 +357,55 @@ def test_filled_metadata_is_filled():
     )
 
 
+def test_invalid_metadata_eval_lang_is_invalid():
+    with pytest.raises(ValueError):
+        TaskMetadata(
+            name="MyTask",
+            dataset={
+                "path": "test/dataset",
+                "revision": "1.0",
+            },
+            description="testing",
+            reference="https://aclanthology.org/W19-6138/",
+            type="Classification",
+            category="s2s",
+            modalities=["text"],
+            eval_splits=["test"],
+            eval_langs=["eng_Latn"],  # uses underscore instead of dash
+            main_score="map",
+            date=("2021-01-01", "2021-12-31"),
+            domains=["Non-fiction", "Written"],
+            license="mit",
+            task_subtypes=["Thematic clustering"],
+            annotations_creators="expert-annotated",
+            dialect=[],
+            sample_creation="found",
+            bibtex_citation="Someone et al",
+        ).validate_metadata()
+
+
 def test_all_metadata_is_filled_and_valid():
     all_tasks = get_tasks()
 
     unfilled_metadata = []
+    invalid_metadata = []
     for task in all_tasks:
         if (
-            task.metadata.name not in _HISTORIC_DATASETS
-            and task.metadata.name.replace("HardNegatives", "")
-            not in _HISTORIC_DATASETS
+            task.metadata.name in _HISTORIC_DATASETS
+            or task.metadata.name.replace("HardNegatives", "") in _HISTORIC_DATASETS
         ):
-            if not task.metadata.is_filled() and (
-                not task.metadata.validate_metadata()
-            ):
-                unfilled_metadata.append(task.metadata.name)
-    if unfilled_metadata:
+            continue
+
+        if not task.metadata.is_filled():
+            unfilled_metadata.append(task.metadata.name)
+        else:
+            if not task.metadata.validate_metadata():
+                invalid_metadata.append(task.metadata.name)
+
+    if unfilled_metadata or invalid_metadata:
         raise ValueError(
-            f"The metadata of the following datasets is not filled: {unfilled_metadata}"
+            f"The metadata of the following datasets is not filled: {unfilled_metadata}."
+            + f"The metadata of the following datasets is invalid: {invalid_metadata}."
         )
 
 
