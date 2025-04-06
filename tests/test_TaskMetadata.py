@@ -5,6 +5,7 @@ import logging
 import pytest
 
 from mteb import AbsTask
+from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.overview import get_tasks
 
@@ -179,10 +180,6 @@ _HISTORIC_DATASETS = [
     "TamilNewsClassification",
     "TenKGnadClusteringP2P.v2",
     "TenKGnadClusteringS2S.v2",
-    "SynPerChatbotConvSAClassification",
-    "CQADupstackRetrieval-Fa",
-    "VisualSTS17Eng",
-    "VisualSTS17Multilingual",
 ]
 
 
@@ -393,13 +390,14 @@ def test_all_metadata_is_filled_and_valid():
         if (
             task.metadata.name in _HISTORIC_DATASETS
             or task.metadata.name.replace("HardNegatives", "") in _HISTORIC_DATASETS
+            or isinstance(task, AbsTaskAggregate)
         ):
             continue
 
         if not task.metadata.is_filled():
             unfilled_metadata.append(task.metadata.name)
         else:
-            if not task.metadata.validate_metadata():
+            if task.metadata.validate_metadata() is not None:
                 invalid_metadata.append(task.metadata.name)
 
     if unfilled_metadata or invalid_metadata:
