@@ -60,6 +60,31 @@ multilingual_eval_langs = {
 }
 
 
+def base_retrieval_datasplit():
+    return {
+        "queries": {
+            "q1": "This is a test sentence",
+            "q2": "This is another test sentence",
+        },
+        "corpus": {
+            "d1": "This is a positive sentence",
+            "d2": "This is another positive sentence",
+        },
+        "relevant_docs": {
+            "q1": {"d1": 1, "d2": 0},
+            "q2": {"d1": 0, "d2": 1},
+        },
+        "top_ranked": {
+            "q1": ["d1", "d2"],
+            "q2": ["d2", "d1"],
+        },
+        "instructions": {
+            "q1": "This is a test instruction",
+            "q2": "This is another test instruction",
+        },
+    }
+
+
 class MockClassificationTask(AbsTaskClassification):
     expected_stats = {
         "test": {
@@ -1185,25 +1210,10 @@ class MockRerankingTask(AbsTaskRetrieval):
     )
 
     def load_data(self, **kwargs):
-        self.dataset["default"]["test"] = {
-            "queries": {
-                "q1": "This is a test sentence",
-                "q2": "This is another test sentence",
-            },
-            "corpus": {
-                "d1": "This is a positive sentence",
-                "d2": "This is another positive sentence",
-            },
-            "relevant_docs": {
-                "q1": {"d1": 1, "d2": 0},
-                "q2": {"d1": 0, "d2": 1},
-            },
-            "top_ranked": {
-                "q1": ["d1", "d2"],
-                "q2": ["d2", "d1"],
-            },
-            "instructions": None,
-        }
+        base_datasplit = base_retrieval_datasplit()
+        base_datasplit["instructions"] = None
+
+        self.dataset["default"]["test"] = base_datasplit
         self.data_loaded = True
 
 
@@ -1309,25 +1319,8 @@ class MockMultilingualRerankingTask(AbsTaskRetrieval):
     metadata.eval_langs = multilingual_eval_langs
 
     def load_data(self, **kwargs):
-        base_datasplit = {
-            "queries": {
-                "q1": "This is a test sentence",
-                "q2": "This is another test sentence",
-            },
-            "corpus": {
-                "d1": "This is a positive sentence",
-                "d2": "This is another positive sentence",
-            },
-            "relevant_docs": {
-                "q1": {"d1": 1, "d2": 0},
-                "q2": {"d1": 0, "d2": 1},
-            },
-            "top_ranked": {
-                "q1": ["d1", "d2"],
-                "q2": ["d2", "d1"],
-            },
-            "instructions": None,
-        }
+        base_datasplit = base_retrieval_datasplit()
+        base_datasplit["instructions"] = None
         self.dataset["eng"]["test"] = base_datasplit
         self.dataset["fra"]["test"] = base_datasplit
 
@@ -1404,22 +1397,10 @@ class MockRetrievalTask(AbsTaskRetrieval):
     )
 
     def load_data(self, **kwargs):
-        base_datasplit = {
-            "queries": {
-                "q1": "This is a test sentence",
-                "q2": "This is another test sentence",
-            },
-            "corpus": {
-                "d1": "This is a positive sentence",
-                "d2": "This is another positive sentence",
-            },
-            "relevant_docs": {
-                "q1": {"d1": 1, "d2": 0},
-                "q2": {"d1": 0, "d2": 1},
-            },
-            "top_ranked": None,
-            "instructions": None,
-        }
+        base_datasplit = base_retrieval_datasplit()
+        base_datasplit["instructions"] = None
+        base_datasplit["top_ranked"] = None
+
         self.dataset["default"]["test"] = base_datasplit
         self.dataset["default"]["val"] = base_datasplit
         self.data_loaded = True
@@ -1616,22 +1597,10 @@ class MockMultilingualRetrievalTask(AbsTaskRetrieval):
     metadata.eval_langs = multilingual_eval_langs
 
     def load_data(self, **kwargs):
-        base_datasplit = {
-            "queries": {
-                "q1": "This is a test sentence",
-                "q2": "This is another test sentence",
-            },
-            "corpus": {
-                "d1": "This is a positive sentence",
-                "d2": "This is another positive sentence",
-            },
-            "relevant_docs": {
-                "q1": {"d1": 1, "d2": 0},
-                "q2": {"d1": 0, "d2": 1},
-            },
-            "top_ranked": None,
-            "instructions": None,
-        }
+        base_datasplit = base_retrieval_datasplit()
+        base_datasplit["instructions"] = None
+        base_datasplit["top_ranked"] = None
+
         for subset in ["eng", "fra"]:
             for split in ["test", "val"]:
                 self.dataset[subset][split] = base_datasplit
@@ -1871,25 +1840,9 @@ class MockInstructionRetrieval(AbsTaskRetrieval):
     )
 
     def load_data(self, **kwargs):
-        base_datasplit = {
-            "queries": {
-                "q1": "This is a test sentence",
-                "q2": "This is another test sentence",
-            },
-            "corpus": {
-                "d1": "This is a positive sentence",
-                "d2": "This is another positive sentence",
-            },
-            "relevant_docs": {
-                "q1": {"d1": 1, "d2": 0},
-                "q2": {"d1": 0, "d2": 1},
-            },
-            "top_ranked": None,
-            "instructions": {
-                "q1": "This is a test instruction",
-                "q2": "This is another test instruction",
-            },
-        }
+        base_datasplit = base_retrieval_datasplit()
+        base_datasplit["top_ranked"] = None
+
         self.dataset["default"]["test"] = base_datasplit
         self.data_loaded = True
 
@@ -1935,28 +1888,8 @@ class MockInstructionReranking(AbsTaskRetrieval):
     )
 
     def load_data(self, **kwargs):
-        base_datasplit = {
-            "queries": {
-                "q1": "This is a test sentence",
-                "q2": "This is another test sentence",
-            },
-            "corpus": {
-                "d1": "This is a positive sentence",
-                "d2": "This is another positive sentence",
-            },
-            "relevant_docs": {
-                "q1": {"d1": 1, "d2": 0},
-                "q2": {"d1": 0, "d2": 1},
-            },
-            "top_ranked": {
-                "q1": ["d1", "d2"],
-                "q2": ["d2", "d1"],
-            },
-            "instructions": {
-                "q1": "This is a test instruction",
-                "q2": "This is another test instruction",
-            },
-        }
+        base_datasplit = base_retrieval_datasplit()
+
         self.dataset["default"]["test"] = base_datasplit
         self.data_loaded = True
 
@@ -2063,25 +1996,9 @@ class MockMultilingualInstructionRetrieval(AbsTaskRetrieval):
     metadata.eval_langs = multilingual_eval_langs
 
     def load_data(self, **kwargs):
-        base_datasplit = {
-            "queries": {
-                "q1": "This is a test sentence",
-                "q2": "This is another test sentence",
-            },
-            "corpus": {
-                "d1": "This is a positive sentence",
-                "d2": "This is another positive sentence",
-            },
-            "relevant_docs": {
-                "q1": {"d1": 1, "d2": 0},
-                "q2": {"d1": 0, "d2": 1},
-            },
-            "top_ranked": None,
-            "instructions": {
-                "q1": "This is a test instruction",
-                "q2": "This is another test instruction",
-            },
-        }
+        base_datasplit = base_retrieval_datasplit()
+        base_datasplit["top_ranked"] = None
+
         for subset in ["eng", "fra"]:
             self.dataset[subset]["test"] = base_datasplit
         self.data_loaded = True
@@ -2189,28 +2106,8 @@ class MockMultilingualInstructionReranking(AbsTaskRetrieval):
     metadata.eval_langs = multilingual_eval_langs
 
     def load_data(self, **kwargs):
-        base_datasplit = {
-            "queries": {
-                "q1": "This is a test sentence",
-                "q2": "This is another test sentence",
-            },
-            "corpus": {
-                "d1": "This is a positive sentence",
-                "d2": "This is another positive sentence",
-            },
-            "relevant_docs": {
-                "q1": {"d1": 1, "d2": 0},
-                "q2": {"d1": 0, "d2": 1},
-            },
-            "top_ranked": {
-                "q1": ["d1", "d2"],
-                "q2": ["d2", "d1"],
-            },
-            "instructions": {
-                "q1": "This is a test instruction",
-                "q2": "This is another test instruction",
-            },
-        }
+        base_datasplit = base_retrieval_datasplit()
+
         for subset in ["eng", "fra"]:
             for split in ["test", "val"]:
                 self.dataset[subset][split] = base_datasplit
