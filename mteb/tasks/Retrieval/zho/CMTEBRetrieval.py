@@ -207,7 +207,7 @@ class CovidRetrieval(AbsTaskRetrieval):
         task_subtypes=["Passage retrieval"],
         license='not specified,
         annotations_creators="human-annotated",
-        dialect=None,
+        dialect=[],
         sample_creation=None,
         bibtex_citation=None,
         prompt={
