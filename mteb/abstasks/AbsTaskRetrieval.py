@@ -145,6 +145,18 @@ class AbsTaskRetrieval(AbsTask):
     def transform_old_dataset_format_retrieval(self):
         if not hasattr(self, "queries"):
             return
+        self.dataset = defaultdict(
+            lambda: defaultdict(
+                lambda: {
+                    "corpus": {},
+                    "queries": {},
+                    "relevant_docs": {},
+                    "instructions": None,
+                    "top_ranked": None,
+                }
+            )
+        )
+
         if self.metadata.is_multilingual:
             for subset in self.queries:
                 for split in self.queries[subset]:
@@ -164,21 +176,17 @@ class AbsTaskRetrieval(AbsTask):
         else:
             subset = "default"
             for split in self.queries:
-                self.dataset[subset][split]["queries"] = self.queries[subset][
-                    split
-                ].copy()
-                self.dataset[subset][split]["corpus"] = self.corpus[subset][
-                    split
-                ].copy()
+                self.dataset[subset][split]["queries"] = self.queries[split].copy()
+                self.dataset[subset][split]["corpus"] = self.corpus[split].copy()
                 self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[
-                    subset
-                ][split].copy()
+                    split
+                ].copy()
                 if hasattr(self, "instructions"):
                     self.dataset[subset][split]["instructions"] = self.instructions[
-                        subset
-                    ][split].copy()
+                        split
+                    ].copy()
                 if hasattr(self, "top_ranked"):
-                    self.dataset[subset][split]["top_ranked"] = self.top_ranked[subset][
+                    self.dataset[subset][split]["top_ranked"] = self.top_ranked[
                         split
                     ].copy()
         del self.queries
@@ -228,6 +236,7 @@ class AbsTaskRetrieval(AbsTask):
         else:
             for split in eval_splits:
                 process_data(split)
+        self.dataset_transform()
         self.data_loaded = True
 
     def evaluate(
@@ -251,7 +260,10 @@ class AbsTaskRetrieval(AbsTask):
         Returns:
             Dictionary mapping subsets to their evaluation scores
         """
+        if not self.data_loaded:
+            self.load_data()
         self.transform_old_dataset_format_retrieval()
+
         return super().evaluate(
             model,
             split,

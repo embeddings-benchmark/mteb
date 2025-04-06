@@ -83,10 +83,6 @@ class AbsTaskReranking(AbsTaskRetrieval):
 
         hf_subsets = self.hf_subsets
 
-        self.dataset = defaultdict(
-            lambda: defaultdict(lambda: defaultdict(lambda: defaultdict()))
-        )
-
         for hf_subset in hf_subsets:
             if given_dataset:
                 cur_dataset = given_dataset
