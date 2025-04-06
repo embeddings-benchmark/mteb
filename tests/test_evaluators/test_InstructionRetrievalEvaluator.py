@@ -13,7 +13,9 @@ class TestInstructionMetricsEvaluation:
         """
         # checks that it loads
         self.evaluator = RetrievalEvaluator(
-            SentenceTransformerWrapper(MockNumpyEncoder()), task_name="test"
+            SentenceTransformerWrapper(MockNumpyEncoder()),
+            task_name="test",
+            encode_kwargs={},
         )
 
     def test_p_mrr(self):

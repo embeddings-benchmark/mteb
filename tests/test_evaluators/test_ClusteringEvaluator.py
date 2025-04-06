@@ -32,6 +32,6 @@ class TestClusteringEvaluator:
             hf_subset="",
             hf_split="",
         )
-        result = clusterer(model)
+        result = clusterer(model, encode_kwargs={})
 
         assert result == {"v_measure": 1.0}
