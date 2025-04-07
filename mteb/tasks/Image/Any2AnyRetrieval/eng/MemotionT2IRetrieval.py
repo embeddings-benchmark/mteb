@@ -31,7 +31,6 @@ def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = No
             lambda example: example["text_corrected"] != None
         )
 
-    # Apply the map function to each split and concatenate
     shared_corpus = concatenate_datasets(
         [
             split_datasets[split].map(

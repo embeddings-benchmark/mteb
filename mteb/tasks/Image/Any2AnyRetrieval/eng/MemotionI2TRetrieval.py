@@ -21,7 +21,7 @@ def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = No
     def map_function(split_name):
         return lambda x, idx: {
             "id": f"corpus-{split_name}-{idx}",
-            "text": x["text_corrected"],  # if x["text_corrected"] else "",
+            "text": x["text_corrected"],
             "modality": "text",
             "image": None,
         }
