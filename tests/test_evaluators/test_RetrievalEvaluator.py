@@ -25,7 +25,7 @@ class TestRetrievalEvaluator:
         setup_method is invoked for every test method of a class.
         """
         self.evaluator = RetrievalEvaluator(
-            SentenceTransformerWrapper(MockNumpyEncoder()),
+            SentenceTransformerWrapper(MockNumpyEncoder()), encode_kwargs={}
         )
 
     @pytest.mark.parametrize(

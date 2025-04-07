@@ -34,10 +34,7 @@ class ClusteringEvaluator(Evaluator):
         self.hf_split = hf_split
         self.hf_subset = hf_subset
 
-    def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}):
-        if "batch_size" not in encode_kwargs:
-            encode_kwargs["batch_size"] = 32
-
+    def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any]):
         corpus_embeddings = model.encode(
             DataLoader(self.dataset),
             task_metadata=self.task_metadata,

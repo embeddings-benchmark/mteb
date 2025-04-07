@@ -332,7 +332,7 @@ class AbsTaskAny2AnyMultiChoice(AbsTask):
         model,
         split: str = "test",
         *,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
         **kwargs,
     ):
         retriever = Any2AnyMultiChoiceEvaluator(
@@ -688,7 +688,7 @@ class MultiChoiceEvaluationMixin:
         model,
         split: str = "test",
         *,
-        encode_kwargs: dict[str, Any] = None,
+        encode_kwargs: dict[str, Any],
         **kwargs,
     ):
         # Use Any2AnyMultiChoiceEvaluator instead of Any2AnyRetrievalEvaluator

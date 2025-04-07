@@ -45,11 +45,11 @@ class BitextMiningEvaluator(Evaluator):
         self.hf_subset = hf_subset
         self.task_metadata = task_metadata
 
-    def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}):
+    def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any]):
         scores = self.compute_metrics(model, encode_kwargs=encode_kwargs)
         return scores
 
-    def compute_metrics(self, model: Encoder, encode_kwargs: dict[str, Any] = {}):
+    def compute_metrics(self, model: Encoder, encode_kwargs: dict[str, Any]):
         pair_elements = {p for pair in self.pairs for p in pair}
         if isinstance(self.sentences, Dataset):
             subsets = [

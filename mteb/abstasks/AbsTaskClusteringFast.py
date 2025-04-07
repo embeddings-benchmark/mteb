@@ -149,7 +149,7 @@ class AbsTaskClusteringFast(AbsTask):
         *,
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
         **kwargs: Any,
     ) -> dict[str, float | dict[str, list[float]]]:
         if (

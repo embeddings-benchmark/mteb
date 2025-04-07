@@ -194,7 +194,7 @@ class AbsTaskRetrieval(AbsTask):
         split: str = "test",
         subsets_to_run: list[HFSubset] | None = None,
         *,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
         **kwargs,
     ) -> dict[HFSubset, ScoresDict]:
         retriever = RetrievalEvaluator(

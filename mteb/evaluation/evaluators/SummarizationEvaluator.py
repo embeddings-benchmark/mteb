@@ -62,12 +62,8 @@ class SummarizationEvaluator(Evaluator):
         self,
         model: Encoder,
         *,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
     ):
-        # set default for encode_kwargs
-        if "batch_size" not in encode_kwargs:
-            encode_kwargs["batch_size"] = 32
-
         cosine_spearman_scores = []
         cosine_pearson_scores = []
         dot_spearman_scores = []
@@ -223,12 +219,8 @@ class DeprecatedSummarizationEvaluator(Evaluator):
         self,
         model: Encoder,
         *,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
     ):
-        # set default for encode_kwargs
-        if "batch_size" not in encode_kwargs:
-            encode_kwargs["batch_size"] = 32
-
         cosine_spearman_scores = []
         cosine_pearson_scores = []
         dot_spearman_scores = []

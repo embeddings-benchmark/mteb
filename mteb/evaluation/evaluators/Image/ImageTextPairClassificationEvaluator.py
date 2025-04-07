@@ -78,11 +78,8 @@ class ImageTextPairClassificationEvaluator(Evaluator):
     def __call__(
         self,
         model: Encoder,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
     ):
-        if "batch_size" not in encode_kwargs:
-            encode_kwargs["batch_size"] = 64
-
         num_images_per_sample = (
             len(self.images_column_names)
             if isinstance(self.images_column_names, list)

@@ -29,7 +29,8 @@ class RetrievalEvaluator(Evaluator):
         self,
         retriever,
         k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000],
-        encode_kwargs: dict[str, Any] = {},
+        *,
+        encode_kwargs: dict[str, Any],
         **kwargs,
     ):
         super().__init__(**kwargs)
