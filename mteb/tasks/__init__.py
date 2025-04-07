@@ -925,7 +925,6 @@ from .Retrieval import (
     XPQARetrieval,
     XQuADRetrieval,
 )
-from .SpeedTask import CPUSpeedTask, GPUSpeedTask
 from .STS import (
     AFQMC,
     ATEC,
@@ -1205,8 +1204,6 @@ __all__ = [
     "SummEvalSummarizationv2",
     "SummEvalFrSummarization",
     "SummEvalFrSummarizationv2",
-    "GPUSpeedTask",
-    "CPUSpeedTask",
     "News21InstructionRetrieval",
     "Core17InstructionRetrieval",
     "Robust04InstructionRetrieval",

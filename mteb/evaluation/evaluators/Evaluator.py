@@ -17,7 +17,7 @@ class Evaluator(ABC):
         self.rng_state, self.np_rng = set_seed(seed)
 
     @abstractmethod
-    def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}):
+    def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any]):
         """This is called during training to evaluate the model.
         It returns scores.
 

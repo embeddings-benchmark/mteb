@@ -66,7 +66,7 @@ class PairClassificationEvaluator(Evaluator):
     def __call__(
         self,
         model: Encoder,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
     ):
         scores = self.compute_metrics(model, encode_kwargs=encode_kwargs)
 
@@ -109,11 +109,8 @@ class PairClassificationEvaluator(Evaluator):
         self,
         model: Encoder,
         *,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
     ):
-        if "batch_size" not in encode_kwargs:
-            encode_kwargs["batch_size"] = 32
-
         all_sentences = self.sentences1 + self.sentences2
         len_sentences1 = len(self.sentences1)
         embeddings = self._encode_unique_texts(

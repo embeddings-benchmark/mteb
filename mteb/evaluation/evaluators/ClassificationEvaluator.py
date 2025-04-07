@@ -52,7 +52,7 @@ class kNNClassificationEvaluator(Evaluator):
         self,
         model: Encoder,
         *,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
         test_cache: np.ndarray | None = None,
     ) -> tuple[dict[str, float], Any]:
         scores = {}
@@ -131,7 +131,7 @@ class logRegClassificationEvaluator(Evaluator):
         self,
         model: Encoder,
         *,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
         test_cache: np.ndarray | None = None,
     ) -> tuple[dict[str, float], Any]:
         scores = {}

@@ -79,7 +79,7 @@ class AbsTaskVisualSTS(AbsTask):
         *,
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
         **kwargs,
     ) -> ScoresDict:
         def normalize(x):

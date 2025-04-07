@@ -63,7 +63,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         *,
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
         **kwargs: Any,
     ) -> ScoresDict:
         train_split = dataset[self.train_split]

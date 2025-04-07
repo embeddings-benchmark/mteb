@@ -43,7 +43,7 @@ class STSEvaluator(Evaluator):
         self,
         model: Encoder,
         *,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
     ):
         embeddings1 = model.encode(
             create_dataloader_from_texts(self.sentences1),

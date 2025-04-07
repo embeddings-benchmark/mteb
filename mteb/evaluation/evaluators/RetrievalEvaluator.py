@@ -53,8 +53,8 @@ class RetrievalEvaluator(Evaluator):
     def __call__(
         self,
         model: Encoder,
+        encode_kwargs: dict[str, Any],
         previous_results: str | Path | None = None,
-        encode_kwargs: dict[str, Any] = {},
         top_k: int | None = None,
         **kwargs: Any,
     ) -> dict[str, dict[str, float]]:

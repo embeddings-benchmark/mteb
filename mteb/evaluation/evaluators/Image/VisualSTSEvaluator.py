@@ -55,14 +55,8 @@ class VisualSTSEvaluator(Evaluator):
         self,
         model,  # TODO: model type
         *,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
     ):
-        if "batch_size" not in encode_kwargs:
-            encode_kwargs["batch_size"] = 32
-
-        # self.sentence1_dataset.batch_size = encode_kwargs["batch_size"]
-        # self.sentence2_dataset.batch_size = encode_kwargs["batch_size"]
-
         embeddings1 = model.encode(
             self.sentence1_dataset,
             task_metadata=self.task_metadata,
