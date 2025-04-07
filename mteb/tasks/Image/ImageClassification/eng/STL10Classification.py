@@ -43,8 +43,7 @@ class STL10Classification(AbsTaskImageClassification):
         publisher =    {PMLR},
         pdf = 	 {http://proceedings.mlr.press/v15/coates11a/coates11a.pdf},
         url = 	 {https://proceedings.mlr.press/v15/coates11a.html},
-        }
-        """,
+        }""",
         descriptive_stats={
             "n_samples": {"test": 8000},
             "avg_character_length": {"test": 431.4},

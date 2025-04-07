@@ -50,8 +50,7 @@ class ImageCoDe(AbsTaskImageTextPairClassification):
   author={Krojer, Benno and Adlakha, Vaibhav and Vineet, Vibhav and Goyal, Yash and Ponti, Edoardo and Reddy, Siva},
   journal={arXiv preprint arXiv:2203.15867},
   year={2022}
-}
-""",
+}""",
         descriptive_stats={
             "n_samples": {"test": 25322},
             "avg_character_length": {

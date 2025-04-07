@@ -32,9 +32,7 @@ title = {Google Landmarks Dataset v2 - A Large-Scale Benchmark for Instance-Leve
 booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
 month = {June},
 year = {2020}
-}
-
-""",
+}""",
         descriptive_stats={
             "n_samples": {"test": 1972},
             "avg_character_length": {

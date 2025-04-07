@@ -32,8 +32,7 @@ class CUB200I2I(AbsTaskAny2AnyRetrieval):
         month = {09},
         pages = {},
         title = {Caltech-UCSD Birds 200}
-        }
-        """,
+        }""",
         descriptive_stats={
             "n_samples": {"default": 5794},
             "avg_character_length": {

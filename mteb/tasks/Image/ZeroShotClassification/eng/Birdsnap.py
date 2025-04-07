@@ -37,8 +37,7 @@ class BirdsnapZeroShotClassification(AbsTaskZeroShotClassification):
         booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
         month = {June},
         year = {2014}
-        }
-        """,
+        }""",
         descriptive_stats={
             "n_samples": {"test": 1851},
             "avg_character_length": {"test": 431.4},
