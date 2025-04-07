@@ -21,14 +21,16 @@ def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = No
     def map_function(split_name):
         return lambda x, idx: {
             "id": f"corpus-{split_name}-{idx}",
-            "text": x["text_corrected"],# if x["text_corrected"] else "",
+            "text": x["text_corrected"],  # if x["text_corrected"] else "",
             "modality": "text",
             "image": None,
         }
 
     split_datasets = {}
     for split in dataset_splits:
-        split_datasets[split] = dataset[split].filter(lambda example: example['text_corrected'] != None)
+        split_datasets[split] = dataset[split].filter(
+            lambda example: example["text_corrected"] != None
+        )
 
     shared_corpus = concatenate_datasets(
         [
@@ -49,11 +51,11 @@ def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = No
             for split in dataset_splits
         ]
     )
-    
+
     for split in splits:
         corpus[split] = shared_corpus
         split_dataset = split_datasets[split]
-        
+
         queries[split] = split_dataset.map(
             lambda x, idx: {
                 "id": f"query-{split}-{idx}",
