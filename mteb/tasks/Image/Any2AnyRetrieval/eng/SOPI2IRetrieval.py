@@ -32,8 +32,7 @@ class SOPI2IRetrieval(AbsTaskAny2AnyRetrieval):
   booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
   pages={4004--4012},
   year={2016}
-}
-        """,
+}""",
         descriptive_stats={
             "n_samples": {"test": 120053},
             "avg_character_length": {

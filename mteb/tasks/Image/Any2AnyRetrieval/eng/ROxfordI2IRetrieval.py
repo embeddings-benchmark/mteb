@@ -37,8 +37,7 @@ class ROxfordEasyI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrieva
   booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
   pages={5706--5715},
   year={2018}
-}
-        """,
+}""",
         descriptive_stats={
             "n_samples": {"test": 5063},
             "avg_character_length": {

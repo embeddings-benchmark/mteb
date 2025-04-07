@@ -36,8 +36,7 @@ class CIFAR10ZeroShotClassification(AbsTaskZeroShotClassification):
             title = {Learning multiple layers of features from tiny images},
             institution = {},
             year = {2009}
-        }
-        """,
+        }""",
         descriptive_stats={
             "n_samples": {"test": 10000},
             "avg_character_length": {"test": 431.4},

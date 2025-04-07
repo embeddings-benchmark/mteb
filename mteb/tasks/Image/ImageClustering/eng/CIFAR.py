@@ -34,8 +34,7 @@ class CIFAR10Clustering(AbsTaskImageClustering):
             title = {Learning multiple layers of features from tiny images},
             institution = {},
             year = {2009}
-        }
-        """,
+        }""",
         descriptive_stats={
             "n_samples": {"test": 10000},
             "avg_character_length": {"test": 431.4},
@@ -75,8 +74,7 @@ class CIFAR100Clustering(AbsTaskImageClustering):
             title = {Learning multiple layers of features from tiny images},
             institution = {},
             year = {2009}
-        }
-        """,
+        }""",
         descriptive_stats={
             "n_samples": {"test": 10000},
             "avg_character_length": {"test": 431.4},

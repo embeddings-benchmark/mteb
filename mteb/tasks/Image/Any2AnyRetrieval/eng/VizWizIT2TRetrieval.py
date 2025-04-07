@@ -33,9 +33,7 @@ class VizWizIT2TRetrieval(AbsTaskAny2AnyRetrieval):
   booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
   pages={3608--3617},
   year={2018}
-}
-
-""",
+}""",
         descriptive_stats={
             "n_samples": {"test": 214354},
             "avg_character_length": {
