@@ -180,6 +180,23 @@ _HISTORIC_DATASETS = [
     "TamilNewsClassification",
     "TenKGnadClusteringP2P.v2",
     "TenKGnadClusteringS2S.v2",
+    "ClimateFEVERHardNegatives",
+    "DBPediaHardNegatives",
+    "FEVERHardNegatives",
+    "HotpotQAHardNegatives",
+    "MSMARCOHardNegatives",
+    "NQHardNegatives",
+    "QuoraRetrievalHardNegatives",
+    "TopiOCQAHardNegatives",
+    "MIRACLRetrievalHardNegatives",
+    "NeuCLIR2022RetrievalHardNegatives",
+    "NeuCLIR2023RetrievalHardNegatives",
+    "DBPedia-PLHardNegatives",
+    "HotpotQA-PLHardNegatives",
+    "MSMARCO-PLHardNegatives",
+    "NQ-PLHardNegatives",
+    "Quora-PLHardNegatives",
+    "RiaNewsRetrievalHardNegatives",
 ]
 
 
@@ -387,10 +404,8 @@ def test_all_metadata_is_filled_and_valid():
     unfilled_metadata = []
     invalid_metadata = []
     for task in all_tasks:
-        if (
-            task.metadata.name in _HISTORIC_DATASETS
-            or task.metadata.name.replace("HardNegatives", "") in _HISTORIC_DATASETS
-            or isinstance(task, AbsTaskAggregate)
+        if task.metadata.name in _HISTORIC_DATASETS or isinstance(
+            task, AbsTaskAggregate
         ):
             continue
 
