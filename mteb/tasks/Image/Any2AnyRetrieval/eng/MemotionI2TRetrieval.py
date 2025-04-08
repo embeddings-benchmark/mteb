@@ -29,7 +29,7 @@ def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = No
     split_datasets = {}
     for split in dataset_splits:
         split_datasets[split] = dataset[split].filter(
-            lambda example: example["text_corrected"] != None
+            lambda example: example["text_corrected"] is not None
         )
 
     shared_corpus = concatenate_datasets(
