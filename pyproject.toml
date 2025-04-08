@@ -71,6 +71,7 @@ speedtask = [
 peft = ["peft>=0.11.0"]
 leaderboard = [
     "gradio==5.16.0; python_version > '3.9'", # 3.10 is required for gradio
+    "pydantic<2.11", # remove with gradio bump https://github.com/embeddings-benchmark/mteb/issues/2523
     "gradio_rangeslider>=0.0.8",
     "plotly>=5.24.0,<6.0.0",
     "cachetools>=5.2.0",
