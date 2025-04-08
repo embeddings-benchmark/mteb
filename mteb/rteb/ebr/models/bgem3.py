@@ -1,6 +1,6 @@
 from ebr.core.base import EmbeddingModel
 from ebr.utils.lazy_import import LazyImport
-from ebr.core.meta import ModelMeta
+from mteb.model_meta import ModelMeta
 
 BGEM3FlagModel = LazyImport("FlagEmbedding", attribute="BGEM3FlagModel")
 

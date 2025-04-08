@@ -9,7 +9,7 @@ from typing import Any, TYPE_CHECKING
 import torch.nn as nn
 
 if TYPE_CHECKING:
-    from ebr.core.meta import ModelMeta
+    from mteb.model_meta import ModelMeta
 
 
 class EmbeddingModel(nn.Module, ABC):

@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Any, TYPE_CHECKING
 
-from ebr.core.meta import ModelMeta
+from mteb.model_meta import ModelMeta
 from ebr.core.base import APIEmbeddingModel
 from ebr.utils.lazy_import import LazyImport
 

@@ -6,7 +6,7 @@ import time
 import logging
 
 from ebr.core.base import APIEmbeddingModel
-from ebr.core.meta import ModelMeta
+from mteb.model_meta import ModelMeta
 
 from google import genai
 from google.genai.types import EmbedContentConfig
