@@ -31,8 +31,7 @@ class METI2IRetrieval(AbsTaskAny2AnyRetrieval):
   author={Ypsilantis, Nikolaos-Antonios and Garcia, Noa and Han, Guangxing and Ibrahimi, Sarah and Van Noord, Nanne and Tolias, Giorgos},
   booktitle={Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
   year={2021}
-}
-        """,
+}""",
         descriptive_stats={
             # "n_samples": {"default": 397121},
         },

@@ -38,8 +38,7 @@ class FGVCAircraftClassification(AbsTaskImageClassification):
             archivePrefix={arXiv},
             primaryClass={cs.CV},
             url={https://arxiv.org/abs/1306.5151},
-        }
-        """,
+        }""",
         descriptive_stats={
             "n_samples": {"test": 3333},
             "avg_character_length": {"test": 431.4},

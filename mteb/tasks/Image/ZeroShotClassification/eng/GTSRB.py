@@ -42,8 +42,7 @@ class GTSRBZeroShotClassification(AbsTaskZeroShotClassification):
     number={},
     pages={1453-1460},
     keywords={Humans;Training;Image color analysis;Benchmark testing;Lead;Histograms;Image resolution},
-    doi={10.1109/IJCNN.2011.6033395}}
-    """,
+    doi={10.1109/IJCNN.2011.6033395}}""",
         descriptive_stats={
             "n_samples": {"test": 12630},
             "avg_character_length": {"test": 0},
