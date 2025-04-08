@@ -1,34 +1,38 @@
+from __future__ import annotations
+
+import os
+
 from ebr.core.base import EmbeddingModel
 from ebr.utils.lazy_import import LazyImport
-from mteb.model_meta import ModelMeta
+
+if os.environ["USE_RTEB"]:
+    from ebr.core.meta import ModelMeta
+else:
+    from mteb.model_meta import ModelMeta
 
 BGEM3FlagModel = LazyImport("FlagEmbedding", attribute="BGEM3FlagModel")
 
 
 class BGEM3EmbeddingModel(EmbeddingModel):
-    def __init__(
-        self,
-        model_meta: ModelMeta,
-        **kwargs
-    ):
+    def __init__(self, model_meta: ModelMeta, **kwargs):
         super().__init__(model_meta, **kwargs)
         self._model = BGEM3FlagModel(
             model_name_or_path=model_meta.model_name,
         )
 
     def embed(self, data: list[str], input_type: str) -> list[list[float]]:
-        result = self._model.encode(sentences=data, batch_size=12)['dense_vecs']
+        result = self._model.encode(sentences=data, batch_size=12)["dense_vecs"]
         return [[float(str(x)) for x in result[i]] for i in range(len(result))]
 
 
 bge_m3 = ModelMeta(
     loader=BGEM3EmbeddingModel,
-    model_name='BAAI/bge-m3',
+    model_name="BAAI/bge-m3",
     embd_dtype="float32",
     embd_dim=1024,
     max_tokens=8192,
     similarity="cosine",
-    reference="https://huggingface.co/BAAI/bge-m3"
+    reference="https://huggingface.co/BAAI/bge-m3",
 )
 #
 # bge_m3_unsupervised = ModelMeta(

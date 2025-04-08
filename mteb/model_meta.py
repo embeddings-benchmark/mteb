@@ -61,15 +61,16 @@ def get_loader_name(
 
 def model_id(
     model_name: str,
-    embd_dtype: str | None, # Keep None here as input can still be None before default assignment
+    embd_dtype: str
+    | None,  # Keep None here as input can still be None before default assignment
     embd_dim: int | None,
 ) -> str:
     # Handle potential None values passed to the function, even if the class attribute has a default
     if model_name is None:
-         # Or handle appropriately, maybe raise error if name is critical for ID
+        # Or handle appropriately, maybe raise error if name is critical for ID
         model_name_part = "unknown_model"
     else:
-        model_name_part = model_name.replace('/', '__')
+        model_name_part = model_name.replace("/", "__")
 
     dtype_str = embd_dtype if embd_dtype else "unknown_dtype"
     dim_str = f"{embd_dim}d" if embd_dim else "unknown_dim"
@@ -81,10 +82,9 @@ def model_id(
         # Let's assume the function should reflect the actual value passed or derived.
         # If the intention is to always use the default if None is passed, adjust logic here.
         # For now, stick to representing the input or lack thereof.
-        pass # dtype_str is already "unknown_dtype"
+        pass  # dtype_str is already "unknown_dtype"
 
     return f"{model_name_part}_{dtype_str}_{dim_str}"
-
 
 
 class ModelMeta(BaseModel):
@@ -147,7 +147,9 @@ class ModelMeta(BaseModel):
     is_cross_encoder: bool | None = None
     modalities: list[MODALITIES] = ["text"]
     # Attribute merged from rteb/ebr/core/meta.py
-    embd_dtype: EMBEDDING_DTYPES = "float32" # Defaulting to float32 as requested, type hint updated
+    embd_dtype: EMBEDDING_DTYPES = (
+        "float32"  # Defaulting to float32 as requested, type hint updated
+    )
 
     def to_dict(self):
         dict_repr = self.model_dump()
@@ -302,11 +304,7 @@ class ModelMeta(BaseModel):
             raise ValueError("Model name is required to generate an ID.")
         # Note: Using target's embed_dim and the newly added embd_dtype
         # self.embd_dtype will be 'float32' by default if not specified otherwise
-        return model_id(
-            self.name,
-            self.embd_dtype,
-            self.embed_dim
-        )
+        return model_id(self.name, self.embd_dtype, self.embed_dim)
 
 
 def collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
@@ -332,4 +330,3 @@ def collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
             similar.update(collect_similar_tasks(parent, visited))
 
     return similar
-

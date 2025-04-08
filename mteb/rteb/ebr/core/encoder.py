@@ -1,19 +1,18 @@
-import os
+from __future__ import annotations
+
 import json
 import logging
-from typing import List
-
-from pytorch_lightning import LightningModule
+import os
 
 from ebr.core.base import EmbeddingModel
 from ebr.utils.data import JSONLDataset
 from ebr.utils.distributed import gather_list
+from pytorch_lightning import LightningModule
 
 logger = logging.getLogger(__name__)
 
 
 class Encoder(LightningModule):
-
     def __init__(
         self,
         model: EmbeddingModel,
@@ -49,18 +48,18 @@ class Encoder(LightningModule):
         num_shards = self.trainer.num_devices
         return f"{self.save_file}-{self.local_rank}-of-{num_shards}"
 
-    def get_local_embd_files(self, num_shards=None) -> List[str]:
+    def get_local_embd_files(self, num_shards=None) -> list[str]:
         # Return local (intermediate) file names, which are jsonl files
         assert self.save_file is not None
         if num_shards is None:
             num_shards = self.trainer.num_devices
         return [f"{self.save_file}-{i}-of-{num_shards}" for i in range(num_shards)]
-    
-    def get_embd_files(self, num_shards=None) -> List[str]:
+
+    def get_embd_files(self, num_shards=None) -> list[str]:
         # Return the final file names, which are arrow files
         local_files = self.get_local_embd_files(num_shards=num_shards)
         return local_files
-    
+
     def embd_files_exist(self, num_shards=None) -> bool:
         files = self.get_embd_files(num_shards=num_shards)
         return all(os.path.exists(file) for file in files)
@@ -82,7 +81,8 @@ class Encoder(LightningModule):
                         self.local_embds.append(example)
             else:
                 logger.warning(
-                    f"load_embds is True but {self.local_embd_file_name} doesn't exist. Skipping the loading.")
+                    f"load_embds is True but {self.local_embd_file_name} doesn't exist. Skipping the loading."
+                )
 
         if self.save_embds:
             if self.load_embds:
@@ -94,14 +94,16 @@ class Encoder(LightningModule):
 
     def predict_step(self, batch, batch_idx):
         indices = batch["id"]
-        
+
         if self.load_embds and self.local_existing_ids:
             masks = [id in self.local_existing_ids for id in indices]
             num_existed = sum(masks)
             if num_existed == len(indices):
                 return
             elif num_existed > 0:
-                raise NotImplementedError("Partial loading within batch is not supported yet.")
+                raise NotImplementedError(
+                    "Partial loading within batch is not supported yet."
+                )
 
         embds = self._model(batch)
 

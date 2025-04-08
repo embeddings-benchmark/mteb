@@ -1,7 +1,13 @@
 from __future__ import annotations
-from typing import Any, TYPE_CHECKING
 
-from mteb.model_meta import ModelMeta
+import os
+from typing import TYPE_CHECKING
+
+if os.environ["USE_RTEB"]:
+    from ebr.core.meta import ModelMeta
+else:
+    from mteb.model_meta import ModelMeta
+
 from ebr.core.base import APIEmbeddingModel
 from ebr.utils.lazy_import import LazyImport
 
@@ -14,20 +20,14 @@ else:
 
 
 class OpenAIEmbeddingModel(APIEmbeddingModel):
-
     def __init__(
         self,
         model_meta: ModelMeta,
         api_key: str | None = None,
         num_retries: int | None = None,
-        **kwargs
+        **kwargs,
     ):
-        super().__init__(
-            model_meta,
-            api_key=api_key,
-            num_retries=num_retries,
-            **kwargs
-        )
+        super().__init__(model_meta, api_key=api_key, num_retries=num_retries, **kwargs)
         self._client = None
         self._tokenizer = None
 
@@ -48,11 +48,9 @@ class OpenAIEmbeddingModel(APIEmbeddingModel):
         if self.max_tokens:
             for n, tok in enumerate(tokens):
                 if len(tok) > self.max_tokens:
-                    tokens[n] = tok[:self.max_tokens]
+                    tokens[n] = tok[: self.max_tokens]
         result = self.client.embeddings.create(
-            input=tokens,
-            model=self.model_name,
-            dimensions=self.embd_dim
+            input=tokens, model=self.model_name, dimensions=self.embd_dim
         )
         embeddings = [d.embedding for d in result.data]
         return embeddings
@@ -66,7 +64,6 @@ class OpenAIEmbeddingModel(APIEmbeddingModel):
         return openai.InternalServerError
 
 
-
 text_embedding_3_large = ModelMeta(
     loader=OpenAIEmbeddingModel,
     model_name="text-embedding-3-large",
@@ -74,7 +71,7 @@ text_embedding_3_large = ModelMeta(
     embd_dim=3072,
     max_tokens=8191,
     similarity="cosine",
-    reference="https://platform.openai.com/docs/guides/embeddings"
+    reference="https://platform.openai.com/docs/guides/embeddings",
 )
 
 
@@ -85,7 +82,7 @@ text_embedding_3_large_512d = ModelMeta(
     embd_dim=512,
     max_tokens=8191,
     similarity="cosine",
-    reference="https://platform.openai.com/docs/guides/embeddings"
+    reference="https://platform.openai.com/docs/guides/embeddings",
 )
 
 
@@ -96,7 +93,7 @@ text_embedding_3_small = ModelMeta(
     embd_dim=1536,
     max_tokens=8191,
     similarity="cosine",
-    reference="https://platform.openai.com/docs/guides/embeddings"
+    reference="https://platform.openai.com/docs/guides/embeddings",
 )
 
 
@@ -107,5 +104,5 @@ text_embedding_3_small_512d = ModelMeta(
     embd_dim=512,
     max_tokens=8191,
     similarity="cosine",
-    reference="https://platform.openai.com/docs/guides/embeddings"
+    reference="https://platform.openai.com/docs/guides/embeddings",
 )

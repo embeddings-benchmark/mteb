@@ -1,7 +1,13 @@
 from __future__ import annotations
-from typing import Any, TYPE_CHECKING
 
-from mteb.model_meta import ModelMeta
+import os
+from typing import TYPE_CHECKING
+
+if os.environ["USE_RTEB"]:
+    from ebr.core.meta import ModelMeta
+else:
+    from mteb.model_meta import ModelMeta
+
 from ebr.core.base import APIEmbeddingModel
 from ebr.utils.lazy_import import LazyImport
 
@@ -12,20 +18,14 @@ else:
 
 
 class CohereEmbeddingModel(APIEmbeddingModel):
-
     def __init__(
         self,
         model_meta: ModelMeta,
         api_key: str | None = None,
         num_retries: int | None = None,
-        **kwargs
+        **kwargs,
     ):
-        super().__init__(
-            model_meta,
-            api_key=api_key,
-            num_retries=num_retries,
-            **kwargs
-        )
+        super().__init__(model_meta, api_key=api_key, num_retries=num_retries, **kwargs)
         self._client = None
 
     @property
@@ -42,13 +42,17 @@ class CohereEmbeddingModel(APIEmbeddingModel):
             raise NotImplementedError
 
     def embed(self, data: str, input_type: str) -> list[list[float]]:
-        
-        return getattr(self.client.embed(
-            model=self.model_name,
-            texts=data,
-            input_type="search_query" if input_type == "query" else "search_document",
-            embedding_types=[self.embedding_type]
-        ).embeddings, self.embedding_type)
+        return getattr(
+            self.client.embed(
+                model=self.model_name,
+                texts=data,
+                input_type="search_query"
+                if input_type == "query"
+                else "search_document",
+                embedding_types=[self.embedding_type],
+            ).embeddings,
+            self.embedding_type,
+        )
 
     @staticmethod
     def rate_limit_error_type() -> type:
@@ -66,4 +70,3 @@ embed_multilingual_v3_0 = ModelMeta(
     reference="https://docs.cohere.com/v2/docs/cohere-embed"
 )
 """
-

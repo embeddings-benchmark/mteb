@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-from typing import Any, Callable, Literal, Optional
+from typing import Any, Callable, Literal
 
+from ebr.core.base import EmbeddingModel, RetrievalDataset
 from pydantic import BaseModel, ConfigDict
-
-from ebr.core.base import RetrievalDataset, EmbeddingModel
 
 # Tier 0: fully open (documents, queries, relevance)
 # Tier 1: documents and queries released
@@ -16,9 +15,7 @@ EMBEDDING_DTYPES = Literal["float32", "int8", "binary"]
 SIMILARITY_METRICS = Literal["cosine", "dot"]
 
 
-def dataset_id(
-    dataset_name: str
-) -> str:
+def dataset_id(dataset_name: str) -> str:
     return f"{dataset_name}"
 
 
@@ -54,7 +51,7 @@ class DatasetMeta(BaseModel):
         return super().model_dump_json(exclude=exclude, **kwargs)
 
     def load_dataset(self, data_path: str, **kwargs):
-        return self.loader(data_path, self, **kwargs)        
+        return self.loader(data_path, self, **kwargs)
 
     @property
     def _id(self) -> str:
@@ -70,7 +67,7 @@ class ModelMeta(BaseModel):
         embd_dtype: The data type of the embeddings produced by the model, e.g. `float32`.
         embd_dim: The dimension of the embeddings produced by the model, e.g. `1024`.
         num_params: The number of parameters in the model, e.g. `7_000_000` for a 7M parameter model.
-        max_tokens: The maximum number of tokens the model can handle. 
+        max_tokens: The maximum number of tokens the model can handle.
         similarity: Similarity function, e.g. cosine, dot-product, etc.
         query_instruct: Prompt to prepend to the input for queries.
         corpus_instruct: Prompt to prepend to the input for documents.
@@ -103,8 +100,4 @@ class ModelMeta(BaseModel):
 
     @property
     def _id(self) -> str:
-        return model_id(
-            self.model_name,
-            self.embd_dtype,
-            self.embd_dim
-        )
+        return model_id(self.model_name, self.embd_dtype, self.embd_dim)

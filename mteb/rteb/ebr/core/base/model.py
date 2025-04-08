@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-import time
 import logging
+import time
+from abc import ABC, abstractmethod
 from types import NoneType
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import torch.nn as nn
 
@@ -13,13 +13,9 @@ if TYPE_CHECKING:
 
 
 class EmbeddingModel(nn.Module, ABC):
-    """Base class for embedding models.
-    """
+    """Base class for embedding models."""
 
-    def __init__(self,
-        model_meta: ModelMeta,
-        **kwargs
-    ):
+    def __init__(self, model_meta: ModelMeta, **kwargs):
         super().__init__()
         self._model_meta = model_meta
 
@@ -38,18 +34,20 @@ class EmbeddingModel(nn.Module, ABC):
 
 
 class APIEmbeddingModel(EmbeddingModel):
-    """Base class for API-based embedding models.
-    """
+    """Base class for API-based embedding models."""
 
-    def __init__(self,
+    def __init__(
+        self,
         model_meta: ModelMeta,
         api_key: str | None = None,
         num_retries: int | None = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(model_meta, **kwargs)
         self._api_key = api_key
-        assert num_retries is None or num_retries > 0, "num_retries must be a positive integer"
+        assert num_retries is None or num_retries > 0, (
+            "num_retries must be a positive integer"
+        )
         self._num_retries = num_retries
 
     @property

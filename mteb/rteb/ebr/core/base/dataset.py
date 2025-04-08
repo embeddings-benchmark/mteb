@@ -3,7 +3,7 @@ from __future__ import annotations
 from abc import ABC
 from functools import cache
 from pathlib import Path
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from torch.utils.data import Dataset
 
@@ -11,12 +11,7 @@ if TYPE_CHECKING:
     from ebr.core.meta import DatasetMeta
 
 
-def add_instruct(
-    dataset: Dataset,
-    instruct: str,
-    input_type: str
-):
-
+def add_instruct(dataset: Dataset, instruct: str, input_type: str):
     for item in dataset.data:
         if instruct:
             item["text"] = instruct + item["text"]
@@ -26,7 +21,6 @@ def add_instruct(
 
 
 class RetrievalDataset(ABC):
-
     LEADERBOARD: str = None
 
     def __init__(
@@ -35,16 +29,16 @@ class RetrievalDataset(ABC):
         dataset_meta: DatasetMeta,
         query_instruct: str | None = None,
         corpus_instruct: str | None = None,
-        **kwargs
+        **kwargs,
     ):
-        assert type(self).LEADERBOARD, f"leaderboard must be defined"
+        assert type(self).LEADERBOARD, "leaderboard must be defined"
         super().__init__()
         self._dataset_meta = dataset_meta
         self._query_instruct = query_instruct
         self._corpus_instruct = corpus_instruct
         self._task_path = (Path(data_path) / dataset_meta.dataset_name).resolve()
 
-    #def __getattr__(self, name: str) -> Any:
+    # def __getattr__(self, name: str) -> Any:
     #    try:
     #        return super().__getattr__(name)
     #    except AttributeError:

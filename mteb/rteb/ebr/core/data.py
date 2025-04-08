@@ -1,25 +1,22 @@
-import torch
-from typing import Optional, Any
-from pytorch_lightning import LightningDataModule
+from __future__ import annotations
 
+import torch
 from ebr.datasets import get_retrieval_dataset
 from ebr.utils.data import EmptyDataset, JSONLDataset
+from pytorch_lightning import LightningDataModule
 
 
 class EmbeddingDataCollator:
-
     def __call__(self, examples):
         assert len(examples) > 0
         batch = {
-            key: [example[key] for example in examples]
-            for key in examples[0].keys()
+            key: [example[key] for example in examples] for key in examples[0].keys()
         }
         batch["embd"] = torch.tensor(batch["embd"])
         return batch
 
 
 class RetrieveDataCollator:
-
     def __init__(self, tokenizer=None):
         self.tokenizer = tokenizer
         self._early_truncate = True
@@ -36,11 +33,11 @@ class RetrieveDataCollator:
             if self._early_truncate:
                 max_str_len = self.tokenizer.model_max_length * 6
                 texts = [s[:max_str_len] for s in texts]
- 
+
             batch["input"] = self.tokenizer(
                 texts,
-                padding=True, 
-                truncation=True, 
+                padding=True,
+                truncation=True,
                 return_tensors="pt",
             )
 
@@ -48,16 +45,15 @@ class RetrieveDataCollator:
 
 
 class RetrieveDataModule(LightningDataModule):
-
     def __init__(
-        self, 
+        self,
         data_path: str,
         dataset_name: str,
-        batch_size: int = 32, 
-        embd_batch_size: int = 1024, 
+        batch_size: int = 32,
+        embd_batch_size: int = 1024,
         num_workers: int = 4,
-        dataset_kwargs: Optional[dict] = None,
-        collator_kwargs: Optional[dict] = None,
+        dataset_kwargs: dict | None = None,
+        collator_kwargs: dict | None = None,
     ):
         super().__init__()
         self.batch_size = batch_size
@@ -84,8 +80,8 @@ class RetrieveDataModule(LightningDataModule):
 
     def corpus_dataloader(self):
         return torch.utils.data.DataLoader(
-            self.dataset.corpus, 
-            batch_size=self.batch_size, 
+            self.dataset.corpus,
+            batch_size=self.batch_size,
             num_workers=self.num_workers,
             collate_fn=self.corpus_collator,
         )

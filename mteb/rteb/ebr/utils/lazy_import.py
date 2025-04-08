@@ -1,16 +1,16 @@
+from __future__ import annotations
+
 import importlib
 import importlib.util
 from types import ModuleType
-from typing import Any, Optional
+from typing import Any
 
 
-def prompt_install(
-    package: str,
-    version: Optional[str] = None
-) -> bool:
-    """Checks whether the user wants to install a module before proceeding.
-    """
-    raise ModuleNotFoundError(f"{package}{'==' + version if version else ''} not found.")
+def prompt_install(package: str, version: str | None = None) -> bool:
+    """Checks whether the user wants to install a module before proceeding."""
+    raise ModuleNotFoundError(
+        f"{package}{'==' + version if version else ''} not found."
+    )
 
 
 class LazyImport(ModuleType):
@@ -23,9 +23,9 @@ class LazyImport(ModuleType):
     def __init__(
         self,
         name: str,
-        attribute: Optional[str] = None,
-        package_name: Optional[str] = None,
-        min_version: Optional[str] = None
+        attribute: str | None = None,
+        package_name: str | None = None,
+        min_version: str | None = None,
     ):
         super().__init__(name)
         self._attribute = attribute
