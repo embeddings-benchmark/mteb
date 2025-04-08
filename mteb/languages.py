@@ -30,6 +30,7 @@ PROGRAMMING_LANGS = [
     "php",
     "c",
     "c++",
+    "c#",
     "rust",
     "swift",
     "scala",

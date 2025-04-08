@@ -12,7 +12,7 @@ from mteb.models.e5_models import (
 )
 from mteb.models.instruct_wrapper import instruct_wrapper
 
-MISTRAL_LANGUAGES = ["eng_Latn", "fra_Latn", "deu_Latn", "ita_Latn", "spa_Latn"]
+MISTRAL_LANGUAGES = ["eng-Latn", "fra-Latn", "deu-Latn", "ita-Latn", "spa-Latn"]
 
 E5_INSTRUCTION = "Instruct: {instruction}\nQuery: "
 
@@ -110,7 +110,7 @@ zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
     name="zeta-alpha-ai/Zeta-Alpha-E5-Mistral",
     revision="c791d37474fa6a5c72eb3a2522be346bc21fbfc3",
     release_date="2024-08-30",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     n_parameters=7110660096,
     memory_usage_mb=13563,
     max_tokens=32768.0,
