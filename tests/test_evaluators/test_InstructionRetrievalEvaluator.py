@@ -11,14 +11,14 @@ class TestInstructionMetricsEvaluation:
         """
         # checks that it loads
         self.evaluator = RetrievalEvaluator(
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
+            corpus=None,
+            queries=None,
+            task_metadata=None,
+            hf_split=None,
+            hf_subset=None,
+            instructions=None,
+            top_ranked=None,
+            qid=None,
         )
 
     def test_p_mrr(self):

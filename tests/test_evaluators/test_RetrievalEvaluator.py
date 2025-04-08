@@ -23,7 +23,14 @@ class TestRetrievalEvaluator:
         setup_method is invoked for every test method of a class.
         """
         self.evaluator = RetrievalEvaluator(
-            None, None, self.metadata, None, None, None, None, None
+            corpus=None,
+            queries=None,
+            task_metadata=self.metadata,
+            hf_split=None,
+            hf_subset=None,
+            instructions=None,
+            top_ranked=None,
+            qid=None,
         )
 
     @pytest.mark.parametrize(

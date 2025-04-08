@@ -114,10 +114,21 @@ class AbsTaskRetrieval(AbsTask):
             hf_subset: {
                 split: {
                     'corpus': dict[str, dict[str, str]],  # doc_id -> doc
+                        Semantically, it should contain dict[split_name, dict[sample_id, dict[str, str]]]
+                        E.g. {"test": {"document_one": {"_id": "d1", "title": "title", "text": "text"}}}
                     'queries': dict[str, str | list[str]]],  # query_id -> query
+                        Semantically, it should contain dict[split_name, dict[sample_id, str]] or dict[split_name, dict[sample_id, list[str]]] for conversations
+                        E.g. {"test": {"q1": "query"}}
+                        or {"test": {"q1": ["turn1", "turn2", "turn3"]}}
                     'relevant_docs': dict[str, dict[str, int]],  # query_id -> doc_id -> score
+                        Semantically, it should contain dict[split_name, dict[sample_id, dict[doc_id, score]]]
+                        E.g.: {"test": {"q1": {"document_one": 1}}}
                     'instructions': Optional[dict[str, str]],  # query_id -> instruction
+                        Semantically, it should contain dict[split_name, dict[sample_id, list[doc_id]]] or dict[split_name, dict[sample_id, dict[doc_id, score]]]
+                        E.g.: {"test": {"q1": ["document_one", "document_two"]}} or {"test": {"q1": {"document_one": 1, "document_two": 0.5}}}
                     'top_ranked': Optional[dict[str, list[str]]]  # query_id -> doc_ids
+                        Semantically, it should contain dict[split_name, dict[sample_id, str]]. If there are multiple instructions per query, please duplicate the queries and give them unique ids for consolidation.
+                        E.g. {"test": {"query-id1": "instruction text"}}
                 }
             }
         }
@@ -142,7 +153,7 @@ class AbsTaskRetrieval(AbsTask):
             )
         )
 
-    def transform_old_dataset_format_retrieval(self):
+    def convert_v1_dataset_format_to_v2(self):
         if not hasattr(self, "queries"):
             return
         self.dataset = defaultdict(
@@ -262,7 +273,7 @@ class AbsTaskRetrieval(AbsTask):
         """
         if not self.data_loaded:
             self.load_data()
-        self.transform_old_dataset_format_retrieval()
+        self.convert_v1_dataset_format_to_v2()
 
         return super().evaluate(
             model,
@@ -368,13 +379,12 @@ class AbsTaskRetrieval(AbsTask):
         if export_errors:
             errors = {}
 
-            top_k = self.top_k
             if not save_predictions:
                 for qid in results.keys():
                     doc_scores = results[qid]
                     sorted_docs = sorted(
                         doc_scores.items(), key=lambda x: x[1], reverse=True
-                    )[:top_k]
+                    )[:1]
                     results[qid] = dict(sorted_docs)
             for qid, retrieved_docs in results.items():
                 expected_docs = data_split["relevant_docs"][qid]
@@ -389,13 +399,18 @@ class AbsTaskRetrieval(AbsTask):
                         "false_positives": false_positives,
                         "false_negatives": false_negatives,
                     }
+            errors_save_path = (
+                output_folder / f"{self.metadata.name}_{hf_subset}_errors.json"
+            )
+            with errors_save_path.open("w") as f:
+                json.dump(errors, f)
 
         return scores
 
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> RetrievalDescriptiveStatistics:
-        self.transform_old_dataset_format_retrieval()
+        self.convert_v1_dataset_format_to_v2()
         if hf_subset and hf_subset in self.dataset:
             split_data = self.dataset[hf_subset][split]
             queries = split_data["queries"]
