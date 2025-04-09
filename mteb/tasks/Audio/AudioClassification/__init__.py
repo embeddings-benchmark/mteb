@@ -11,6 +11,8 @@ from .eng.ESC50 import *
 from .eng.FSDD import *
 from .eng.GTZANGenre import *
 from .eng.GunshotTriangulation import *
+from .eng.IEMOCAPEmotion import *
+from .eng.IEMOCAPGender import *
 from .eng.LibriCount import *
 from .eng.MInDS14 import *
 from .eng.MridinghamStroke import *
@@ -24,6 +26,4 @@ from .eng.VoxCelebSA import *
 from .eng.VoxLingua107Top10 import *
 from .eng.VoxPopuliAccentID import *
 from .eng.VoxPopuliGenderID import *
-from .eng.VoxPopuliLanguageID import * 
-from .eng.IEMOCAPGender import *
-from .eng.IEMOCAPEmotion import *
+from .eng.VoxPopuliLanguageID import *

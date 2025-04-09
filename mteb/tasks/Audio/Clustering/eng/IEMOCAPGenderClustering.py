@@ -6,14 +6,14 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class IEMOCAPGenderClustering(AbsTaskAudioClustering):
     label_column_name: str = "gender"
-    
+
     metadata = TaskMetadata(
         name="IEMOCAPGenderClustering",
         description="Clustering speech samples by speaker gender (male/female) from the IEMOCAP database of interactive emotional dyadic conversations.",
         reference="https://doi.org/10.1007/s10579-008-9076-6",
         dataset={
             "path": "AbstractTTS/IEMOCAP",
-            "revision": "9f1696a135a65ce997d898d4121c952269a822ca", # Latest commit as of writing
+            "revision": "9f1696a135a65ce997d898d4121c952269a822ca",  # Latest commit as of writing
         },
         type="AudioClustering",
         category="a2a",
@@ -39,9 +39,8 @@ class IEMOCAPGenderClustering(AbsTaskAudioClustering):
             publisher={Springer}
         }""",
         descriptive_stats={
-            "n_samples": {"train": 10000},  # Approximate 
+            "n_samples": {"train": 10000},  # Approximate
         },
     )
-    
+
     audio_column_name: str = "audio"
-    

@@ -6,7 +6,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class VoxPopuliAccentClustering(AbsTaskAudioClustering):
     label_column_name: str = "accent"
-    
+
     metadata = TaskMetadata(
         name="VoxPopuliAccentClustering",
         description="Clustering English speech samples by non-native accent from European Parliament recordings.",
@@ -25,7 +25,7 @@ class VoxPopuliAccentClustering(AbsTaskAudioClustering):
         domains=["Spoken", "Speech"],
         task_subtypes=["Accent Clustering"],
         license="cc0-1.0",
-        annotations_creators="found",
+        annotations_creators="human-annotated",
         dialect=[],
         modalities=["audio"],
         sample_creation="found",
@@ -53,24 +53,29 @@ class VoxPopuliAccentClustering(AbsTaskAudioClustering):
             "n_samples": {"test": 1500},  # Approx after filtering
         },
     )
-    
+
     audio_column_name: str = "audio"
-    
+
     def dataset_transform(self):
         # Simple filtering for valid accent labels
         for split in self.dataset:
             # Filter out samples with "None" accent
             self.dataset[split] = self.dataset[split].filter(
-                lambda example: example["accent"] != "None" and example["accent"] is not None
+                lambda example: example["accent"] != "None"
+                and example["accent"] is not None
             )
-            
+
             # Clean up accent labels (removing "en_" prefix for readability)
             self.dataset[split] = self.dataset[split].map(
                 lambda example: {"accent_clean": example["accent"].replace("en_", "")}
             )
             # Use cleaned accent as label
-            self.dataset[split] = self.dataset[split].rename_column("accent_clean", self.label_column_name)
-            
+            self.dataset[split] = self.dataset[split].rename_column(
+                "accent_clean", self.label_column_name
+            )
+
             # Basic limit on dataset size if needed
             if len(self.dataset[split]) > 1000:
-                self.dataset[split] = self.dataset[split].shuffle(seed=42).select(range(1000)) 
+                self.dataset[split] = (
+                    self.dataset[split].shuffle(seed=42).select(range(1000))
+                )

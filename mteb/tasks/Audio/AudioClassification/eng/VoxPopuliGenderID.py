@@ -25,7 +25,7 @@ class VoxPopuliGenderID(AbsTaskAudioClassification):
         domains=["Spoken", "Speech"],
         task_subtypes=["Gender Classification"],
         license="cc0-1.0",
-        annotations_creators="found",
+        annotations_creators="human-annotated",
         dialect=[],
         modalities=["audio"],
         sample_creation="found",
@@ -50,25 +50,31 @@ class VoxPopuliGenderID(AbsTaskAudioClassification):
             pages = "993--1003",
         }""",
         descriptive_stats={
-            "n_samples": {"train": 5000, "validation": 500, "test": 500},  # Approx after filtering to English
+            "n_samples": {
+                "train": 5000,
+                "validation": 500,
+                "test": 500,
+            },  # Approx after filtering to English
         },
     )
 
     audio_column_name: str = "audio"
     label_column_name: str = "gender"
-    samples_per_label: int = 50 # Approximate placeholder because value varies
+    samples_per_label: int = 50  # Approximate placeholder because value varies
     is_cross_validation: bool = False
-    
+
     def dataset_transform(self):
         # Filter out samples with missing gender information and focus on English language
         for split in self.dataset:
             # Filter to get only English (language 0) with valid gender labels
             self.dataset[split] = self.dataset[split].filter(
-                lambda example: (example["gender"] is not None and 
-                                example["gender"] in ["male", "female"] and
-                                example["language"] == 0)  # 0 is English
+                lambda example: (
+                    example["gender"] is not None
+                    and example["gender"] in ["male", "female"]
+                    and example["language"] == 0
+                )  # 0 is English
             )
-            
+
             # Simple subsample if dataset is very large (optional)
             if len(self.dataset[split]) > 1000:
-                self.dataset[split] = self.dataset[split].select(range(1000)) 
+                self.dataset[split] = self.dataset[split].select(range(1000))

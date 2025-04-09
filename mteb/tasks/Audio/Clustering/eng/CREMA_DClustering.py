@@ -37,4 +37,4 @@ class CREMA_DClustering(AbsTaskAudioClustering):
             year={2014},
             publisher={IEEE}
             }""",
-    ) 
+    )

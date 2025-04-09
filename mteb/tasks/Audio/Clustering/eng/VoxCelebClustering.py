@@ -5,6 +5,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 # ASSUMED VOXCELEB IN CLASSIFICATION TASK WAS ACCURATE.
 
+
 class VoxCelebClustering(AbsTaskAudioClustering):
     label_column_name: str = "label"
     metadata = TaskMetadata(
@@ -38,8 +39,8 @@ class VoxCelebClustering(AbsTaskAudioClustering):
             url={https://arxiv.org/abs/2111.10367}, 
         }""",
     )
-    
+
     def dataset_transform(self):
         ## remove disagreement data
         self.dataset = self.dataset.filter(lambda x: x["label"] != "Disagreement")
-        self.dataset["train"] = self.dataset.pop("test") 
+        self.dataset["train"] = self.dataset.pop("test")

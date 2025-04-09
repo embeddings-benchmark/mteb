@@ -25,7 +25,7 @@ class VoxPopuliAccentID(AbsTaskAudioClassification):
         domains=["Spoken", "Speech"],
         task_subtypes=["Accent identification"],
         license="cc0-1.0",
-        annotations_creators="found",
+        annotations_creators="human-annotated",
         dialect=[],
         modalities=["audio"],
         sample_creation="found",
@@ -50,26 +50,29 @@ class VoxPopuliAccentID(AbsTaskAudioClassification):
             pages = "993--1003",
         }""",
         descriptive_stats={
-            "n_samples": {"test": 6900}, 
+            "n_samples": {"test": 6900},
         },
     )
 
     audio_column_name: str = "audio"
     label_column_name: str = "accent"
-    samples_per_label: int = 30 # Approximate placeholder because value varies
+    samples_per_label: int = 30  # Approximate placeholder because value varies
     is_cross_validation: bool = False
-    
+
     def dataset_transform(self):
         # Simple filtering for valid accent labels
         for split in self.dataset:
             # Filter out samples with "None" accent
             self.dataset[split] = self.dataset[split].filter(
-                lambda example: example["accent"] != "None" and example["accent"] is not None
+                lambda example: example["accent"] != "None"
+                and example["accent"] is not None
             )
-            
+
             # Clean up accent labels (removing "en_" prefix for readability)
             self.dataset[split] = self.dataset[split].map(
                 lambda example: {"accent_clean": example["accent"].replace("en_", "")}
             )
             # Use cleaned accent as label
-            self.dataset[split] = self.dataset[split].rename_column("accent_clean", self.label_column_name) 
+            self.dataset[split] = self.dataset[split].rename_column(
+                "accent_clean", self.label_column_name
+            )

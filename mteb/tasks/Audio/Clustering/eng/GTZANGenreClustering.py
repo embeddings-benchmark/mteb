@@ -37,4 +37,4 @@ class GTZANGenreClustering(AbsTaskAudioClustering):
             pages={293-302},
             keywords={Humans;Music information retrieval;Instruments;Computer science;Multiple signal classification;Signal analysis;Pattern recognition;Feature extraction;Wavelet analysis;Cultural differences},
             doi={10.1109/TSA.2002.800560}}""",
-    ) 
+    )

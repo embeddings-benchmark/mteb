@@ -23,8 +23,8 @@ class AmbientAcousticContextClassification(AbsTaskAudioClassification):
         date=("2020-01-01", "2020-12-31"),  # Paper publication date
         domains=["Spoken", "Speech"],
         task_subtypes=["Environment Sound Classification"],
-        license="unknown",  # As specified in dataset card
-        annotations_creators="crowdsourced",
+        license="not specified",  # As specified in dataset card
+        annotations_creators="human-annotated",
         dialect=[],
         modalities=["audio"],
         sample_creation="found",

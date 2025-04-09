@@ -13,7 +13,7 @@ class IEMOCAPGenderClassification(AbsTaskAudioClassification):
         reference="https://doi.org/10.1007/s10579-008-9076-6",
         dataset={
             "path": "AbstractTTS/IEMOCAP",
-            "revision": "9f1696a135a65ce997d898d4121c952269a822ca", 
+            "revision": "9f1696a135a65ce997d898d4121c952269a822ca",
         },
         type="AudioClassification",
         category="a2t",
