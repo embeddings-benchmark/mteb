@@ -22,3 +22,6 @@ from .eng.SpokenQAforIC import *
 from .eng.TUTAcousticScenes import *
 from .eng.VoxCelebSA import *
 from .eng.VoxLingua107Top10 import *
+from .VoxPopuliAccentID import *
+from .VoxPopuliGenderID import *
+from .VoxPopuliLanguageID import * 
