@@ -15,8 +15,6 @@ from .model_classes import (
 from .utils import (
     add_task_specific_scores,
     calculate_retrieval_scores,
-    evaluate_abstention,
-    mrr,
 )
 
 logger = logging.getLogger(__name__)
@@ -100,11 +98,13 @@ class RetrievalEvaluator(Evaluator):
         k_values: list[int],
         ignore_identical_ids: bool = False,
     ) -> tuple[
+        dict[str, list[float]],
+        dict[str, list[float]],
+        dict[str, list[float]],
+        dict[str, list[float]],
         dict[str, float],
         dict[str, float],
-        dict[str, float],
-        dict[str, float],
-        dict[str, float],
+        dict[str, list[float]],
         dict[str, float],
     ]:
         if ignore_identical_ids:
@@ -121,30 +121,12 @@ class RetrievalEvaluator(Evaluator):
                 "For evaluation, we DO NOT ignore identical query and document ids (default), please explicitly set ``ignore_identical_ids=True`` to ignore this."
             )
 
-        all_scores, ndcg, _map, recall, precision, naucs = calculate_retrieval_scores(
-            results, qrels, k_values
+        all_scores, ndcg, _map, recall, precision, naucs, mrr, naucs_mrr = (
+            calculate_retrieval_scores(results, qrels, k_values)
         )
+        print("all_scores", all_scores)
         task_scores = add_task_specific_scores(
             all_scores, qrels, results, self.task_metadata.name, k_values
         )
 
-        return ndcg, _map, recall, precision, naucs, task_scores
-
-    def evaluate_custom(
-        self,
-        qrels: dict[str, dict[str, int]],
-        results: dict[str, dict[str, float]],
-        k_values: list[int],
-    ) -> tuple[dict[str, float], dict[str, float]]:
-        # metric_scores = {
-        #     **mrr(qrels, results, k_values),
-        #     **recall_cap(qrels, results, k_values),
-        #     **hole(qrels, results, k_values),
-        #     **top_k_accuracy(qrels, results, k_values),
-        # }
-        metric_scores = mrr(qrels, results, k_values)
-        naucs = evaluate_abstention(results, metric_scores)
-
-        metric_scores_avg = {k: sum(v) / len(v) for k, v in metric_scores.items()}
-
-        return metric_scores_avg, naucs
+        return ndcg, _map, recall, precision, naucs, task_scores, mrr, naucs_mrr

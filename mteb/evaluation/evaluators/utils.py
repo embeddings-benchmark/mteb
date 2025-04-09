@@ -564,7 +564,20 @@ def max_over_subqueries(qrels, results, k_values):
     return {"max_over_subqueries_" + k: v for k, v in score_dict.items()}
 
 
-def calculate_retrieval_scores(results, qrels, k_values):
+def calculate_retrieval_scores(
+    results: dict[str, dict[str, float]],
+    qrels: dict[str, dict[str, int]],
+    k_values: list[int],
+) -> tuple[
+    dict[str, list[float]],
+    dict[str, list[float]],
+    dict[str, list[float]],
+    dict[str, list[float]],
+    dict[str, list[float]],
+    dict[str, float],
+    dict[str, list[float]],
+    dict[str, float],
+]:
     map_string = "map_cut." + ",".join([str(k) for k in k_values])
     ndcg_string = "ndcg_cut." + ",".join([str(k) for k in k_values])
     recall_string = "recall." + ",".join([str(k) for k in k_values])
@@ -573,7 +586,7 @@ def calculate_retrieval_scores(results, qrels, k_values):
     evaluator = pytrec_eval.RelevanceEvaluator(
         qrels, {map_string, ndcg_string, recall_string, precision_string}
     )
-    scores = evaluator.evaluate(results)
+    scores: dict[str, list[float]] = evaluator.evaluate(results)
 
     (
         ndcg,
@@ -585,12 +598,14 @@ def calculate_retrieval_scores(results, qrels, k_values):
         all_recalls,
         all_precisions,
     ) = parse_metrics_from_scores(scores, k_values)
+    mrr_scores = mrr(qrels, results, k_values)
 
     naucs = evaluate_abstention(
         results, {**all_ndcgs, **all_aps, **all_recalls, **all_precisions}
     )
+    naucs_mrr = evaluate_abstention(results, mrr_scores)
 
-    return scores, ndcg, _map, recall, precision, naucs
+    return scores, ndcg, _map, recall, precision, naucs, mrr_scores, naucs_mrr
 
 
 def evaluate_abstention(

@@ -367,14 +367,13 @@ class AbsTaskRetrieval(AbsTask):
             ) as f:
                 json.dump(data_split["relevant_docs"], f)
 
-        ndcg, _map, recall, precision, naucs, task_scores = retriever.evaluate(
-            data_split["relevant_docs"],
-            results,
-            retriever.k_values,
-            ignore_identical_ids=self.ignore_identical_ids,
-        )
-        mrr, naucs_mrr = retriever.evaluate_custom(
-            data_split["relevant_docs"], results, retriever.k_values
+        ndcg, _map, recall, precision, naucs, task_scores, mrr, naucs_mrr = (
+            retriever.evaluate(
+                data_split["relevant_docs"],
+                results,
+                retriever.k_values,
+                ignore_identical_ids=self.ignore_identical_ids,
+            )
         )
         scores = make_score_dict(
             ndcg, _map, recall, precision, mrr, naucs, naucs_mrr, task_scores
