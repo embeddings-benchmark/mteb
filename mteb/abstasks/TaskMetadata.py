@@ -24,6 +24,7 @@ from ..languages import (
 
 TASK_SUBTYPE = Literal[
     "Article retrieval",
+    "Accent identification",
     "Conversational retrieval",
     "Dialect pairing",
     "Dialog Systems",
@@ -67,10 +68,14 @@ TASK_SUBTYPE = Literal[
     "Spoken Digit Classification",
     "Gender Clustering",
     "Music Clustering",
+    "Sentiment Clustering",
+    "Emotion Clustering",
+    "Accent Clustering",
     "Rendered semantic textual similarity",
     "Sentiment Analysis",
     "Intent Classification",
     "Vehicle Clustering",
+    "Environment Sound Clustering",
     "Rendered semantic textual similarity",
     "Gender Classification",
     "Age Classification",
