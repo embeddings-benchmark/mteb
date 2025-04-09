@@ -551,112 +551,69 @@ class AbsTaskRetrieval(AbsTask):
 
         def push_section(
             data: dict[str, dict[Any, Any]],
+            column: str,
             suffix: str,
             converter: Callable[[Any, Any], dict[str, Any]],
         ) -> None:
             sections = {}
-            for split, items in data.items():
+            for split in data.keys():
+                # skip empty instructions and top ranked
+                if column not in data[split] or data[split][column] is None:
+                    continue
                 sections[split] = Dataset.from_list(
-                    [converter(idx, item) for idx, item in items.items()]
+                    [converter(idx, item) for idx, item in data[split][column].items()]
                 )
             DatasetDict(sections).push_to_hub(repo_name, suffix)
 
-        if self.metadata.is_multilingual:
-            for lang in self.dataset["queries"]:
-                logger.info(f"Converting {lang} of {self.metadata.name}")
-                push_section(
-                    self.dataset["queries"][lang],
-                    f"{lang}-queries",
-                    lambda idx, text: {"_id": idx, "text": text},
-                )
-                push_section(
-                    self.dataset["corpus"][lang],
-                    f"{lang}-corpus",
-                    lambda idx, text: {
-                        "_id": idx,
-                        "text": format_text_field(text),
-                        "title": "",
-                    },
-                )
-                # Handle relevant_docs separately since one entry expands to multiple records.
-                relevant_sections = {}
-                for split, queries in self.dataset["relevant_docs"][lang].items():
-                    entries = []
-                    for query_id, docs in queries.items():
-                        for doc_id, score in docs.items():
-                            entries.append(
-                                {
-                                    "query-id": query_id,
-                                    "corpus-id": doc_id,
-                                    "score": score,
-                                }
-                            )
-                    relevant_sections[split] = Dataset.from_list(entries)
-                DatasetDict(relevant_sections).push_to_hub(repo_name, f"{lang}-qrels")
-
-                if self.dataset["instructions"]:
-                    push_section(
-                        self.dataset["instructions"][lang],
-                        f"{lang}-instruction",
-                        lambda idx, text: {"query-id": idx, "instruction": text},
-                    )
-                if self.dataset["top_ranked"]:
-                    push_section(
-                        self.dataset["top_ranked"][lang],
-                        f"{lang}-top_ranked",
-                        lambda idx, docs: {"query-id": idx, "corpus-ids": docs},
-                    )
-        else:
-            # For non-multilingual cases, flatten the structure if a "default" key exists.
-            if "default" in self.dataset["queries"]:
-                self.dataset["queries"] = self.dataset["queries"]["default"]
-                self.dataset["corpus"] = self.dataset["corpus"]["default"]
-                self.dataset["relevant_docs"] = self.dataset["relevant_docs"]["default"]
-                if self.dataset["instructions"]:
-                    self.dataset["instructions"] = self.dataset["instructions"][
-                        "default"
-                    ]
-                if self.dataset["top_ranked"]:
-                    self.dataset["top_ranked"] = self.dataset["top_ranked"]["default"]
-
+        for subset in self.dataset:
+            logger.info(f"Converting {subset} of {self.metadata.name}")
             push_section(
-                self.dataset["queries"],
+                self.dataset[subset],
                 "queries",
+                f"{subset}-queries" if subset != "default" else "queries",
                 lambda idx, text: {"_id": idx, "text": text},
             )
             push_section(
-                self.dataset["corpus"],
+                self.dataset[subset],
                 "corpus",
+                f"{subset}-corpus" if subset != "default" else "corpus",
                 lambda idx, text: {
                     "_id": idx,
                     "text": format_text_field(text),
-                    "title": text.get("title", "") if isinstance(text, dict) else "",
+                    "title": "",
                 },
             )
-            # Process relevant_docs with flattening.
+            # Handle relevant_docs separately since one entry expands to multiple records.
             relevant_sections = {}
-            for split, queries in self.dataset["relevant_docs"].items():
+            for split, values in self.dataset[subset].items():
+                relecant_docs = values["relevant_docs"]
                 entries = []
-                for query_id, docs in queries.items():
+                for query_id, docs in relecant_docs.items():
                     for doc_id, score in docs.items():
                         entries.append(
-                            {"query-id": query_id, "corpus-id": doc_id, "score": score}
+                            {
+                                "query-id": query_id,
+                                "corpus-id": doc_id,
+                                "score": score,
+                            }
                         )
                 relevant_sections[split] = Dataset.from_list(entries)
-            DatasetDict(relevant_sections).push_to_hub(repo_name, "default")
+            DatasetDict(relevant_sections).push_to_hub(
+                repo_name, f"{subset}-qrels" if subset != "default" else "qrels"
+            )
 
-            if self.dataset["instructions"]:
-                push_section(
-                    self.dataset["instructions"],
-                    "instruction",
-                    lambda idx, text: {"query-id": idx, "instruction": text},
-                )
-            if self.dataset["top_ranked"]:
-                push_section(
-                    self.dataset["top_ranked"],
-                    "top_ranked",
-                    lambda idx, docs: {"query-id": idx, "corpus-ids": docs},
-                )
+            push_section(
+                self.dataset[subset],
+                "instructions",
+                f"{subset}-instruction" if subset != "default" else "instruction",
+                lambda idx, text: {"query-id": idx, "instruction": text},
+            )
+            push_section(
+                self.dataset[subset],
+                "top_ranked",
+                f"{subset}-top_ranked" if subset != "default" else "top_ranked",
+                lambda idx, docs: {"query-id": idx, "corpus-ids": docs},
+            )
 
 
 def calculate_queries_length(queries: dict[str, str]) -> list[int] | None:
