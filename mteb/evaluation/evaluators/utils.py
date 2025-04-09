@@ -185,7 +185,7 @@ def evaluate_p_mrr_change(
     qrels: dict[str, dict[str, float]],
     task_name: str,
     k_values: list[int],
-) -> dict[str, float]:
+) -> dict[str, float | dict[str, float]]:
     """Computes the scores needed for FollowIR datasets, including p-MRR (measuring change in instruction) and
     details about the original instruction run and changed instruction run.
     """
@@ -247,11 +247,20 @@ def evaluate_p_mrr_change(
     followir_scores["og"] = {}
     followir_scores["changed"] = {}
     for name, group in [("og", original_run), ("changed", new_run)]:
-        _, ndcg, _map, recall, precision, naucs = calculate_retrieval_scores(
-            group, qrels_sep[name], k_values
-        )
+        (
+            scores,
+            ndcg,
+            _map,
+            recall,
+            precision,
+            naucs,
+            avg_mrr,
+            naucs_mrr,
+        ) = calculate_retrieval_scores(group, qrels_sep[name], k_values)
         # add these to the followir_scores with name prefix
-        scores_dict = make_score_dict(ndcg, _map, recall, precision, {}, naucs, {}, {})
+        scores_dict = make_score_dict(
+            ndcg, _map, recall, precision, naucs, avg_mrr, naucs_mrr, {}
+        )
         for key, value in scores_dict.items():
             followir_scores[name][key] = value
 

@@ -580,7 +580,7 @@ class AbsTaskRetrieval(AbsTask):
                 lambda idx, text: {
                     "_id": idx,
                     "text": format_text_field(text),
-                    "title": "",
+                    "title": text.get("title", "") if isinstance(text, dict) else "",
                 },
             )
             # Handle relevant_docs separately since one entry expands to multiple records.

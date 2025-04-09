@@ -87,7 +87,7 @@ class TestRetrievalEvaluator:
             ignore_identical_ids=ignore_identical_ids,
         )
 
-        ndcg, _map, recall, precision, nauc, task_specific = output
+        ndcg, _map, recall, precision, nauc, task_specific, mrr, nauc_mrr = output
 
         assert ndcg == expected_metrics["ndcg"]
         assert _map == expected_metrics["map"]
@@ -132,7 +132,16 @@ class TestRetrievalEvaluator:
             "4": {"0": 0.5, "1": 0.4, "2": 0.5},
         }
 
-        _, _, _, _, naucs, _ = self.evaluator.evaluate(
+        (
+            _,
+            _,
+            _,
+            _,
+            naucs,
+            _,
+            _,
+            _,
+        ) = self.evaluator.evaluate(
             relevant_docs,
             results,
             [1, 2, 3],
