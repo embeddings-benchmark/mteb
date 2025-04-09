@@ -104,7 +104,7 @@ class RetrievalEvaluator(Evaluator):
         dict[str, list[float]],
         dict[str, float],
         dict[str, float],
-        dict[str, list[float]],
+        dict[str, float],
         dict[str, float],
     ]:
         if ignore_identical_ids:
@@ -124,7 +124,7 @@ class RetrievalEvaluator(Evaluator):
         all_scores, ndcg, _map, recall, precision, naucs, mrr, naucs_mrr = (
             calculate_retrieval_scores(results, qrels, k_values)
         )
-        print("all_scores", all_scores)
+
         task_scores = add_task_specific_scores(
             all_scores, qrels, results, self.task_metadata.name, k_values
         )

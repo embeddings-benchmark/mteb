@@ -575,7 +575,7 @@ def calculate_retrieval_scores(
     dict[str, list[float]],
     dict[str, list[float]],
     dict[str, float],
-    dict[str, list[float]],
+    dict[str, float],
     dict[str, float],
 ]:
     map_string = "map_cut." + ",".join([str(k) for k in k_values])
@@ -605,7 +605,9 @@ def calculate_retrieval_scores(
     )
     naucs_mrr = evaluate_abstention(results, mrr_scores)
 
-    return scores, ndcg, _map, recall, precision, naucs, mrr_scores, naucs_mrr
+    avg_mrr = {k: sum(mrr_scores[k]) / len(mrr_scores[k]) for k in mrr_scores.keys()}
+
+    return scores, ndcg, _map, recall, precision, naucs, avg_mrr, naucs_mrr
 
 
 def evaluate_abstention(
