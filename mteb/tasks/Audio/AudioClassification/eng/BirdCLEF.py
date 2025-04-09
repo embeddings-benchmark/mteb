@@ -26,7 +26,7 @@ class BirdCLEFClassification(AbsTaskAudioClassification):
         date=("2025-01-01", "2025-12-31"),  # Competition year
         domains=["Spoken", "Speech"],
         task_subtypes=["Environment Sound Classification"],
-        license="cc-by-nc-4.0", 
+        license="cc-by-nc-4.0",
         annotations_creators="expert-annotated",
         dialect=[],
         modalities=["audio"],
@@ -48,7 +48,7 @@ class BirdCLEFClassification(AbsTaskAudioClassification):
         },
     )
 
-    audio_column_name: str = "recording"  
+    audio_column_name: str = "recording"
     label_column_name: str = "primary_label"
     samples_per_label: int = (
         50  # This might need adjustment based on actual dataset statistics

@@ -16,7 +16,9 @@ class MInDS14Classification(AbsTaskAudioClassification):
         type="AudioClassification",
         category="a2t",
         eval_splits=["train"],  # Dataset only has a train split
-        eval_langs=["all"],     # Evaluation supported for all language configurations (the 14 languages)
+        eval_langs=[
+            "all"
+        ],  # Evaluation supported for all language configurations (the 14 languages)
         main_score="accuracy",
         date=("2021-04-01", "2021-04-30"),  # Paper publication date
         domains=["Speech", "Spoken"],
@@ -40,7 +42,9 @@ class MInDS14Classification(AbsTaskAudioClassification):
             bibsource = {dblp computer science bibliography, https://dblp.org}
             }""",
         descriptive_stats={
-            "n_samples": {"train": 600},  # Approximate total number of samples per language configuration
+            "n_samples": {
+                "train": 600
+            },  # Approximate total number of samples per language configuration
             "n_classes": 14,
             "classes": [
                 "aboard",

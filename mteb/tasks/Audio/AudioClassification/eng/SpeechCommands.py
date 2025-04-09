@@ -79,5 +79,5 @@ class SpeechCommandsClassification(AbsTaskAudioClassification):
 
     audio_column_name: str = "audio"
     label_column_name: str = "label"
-    samples_per_label: int = 50 # Rough guess/placeholder
+    samples_per_label: int = 50  # Rough guess/placeholder
     is_cross_validation: bool = False

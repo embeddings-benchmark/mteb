@@ -20,8 +20,10 @@ class TUTAcousticScenesClassification(AbsTaskAudioClassification):
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
-        date=("2018-01-01", "2018-12-31"), 
-        domains=["Spoken"],  # A more appropriate domain for this task could be put when the domain list is updated
+        date=("2018-01-01", "2018-12-31"),
+        domains=[
+            "Spoken"
+        ],  # A more appropriate domain for this task could be put when the domain list is updated
         task_subtypes=["Environment Sound Classification"],
         license="cc-by-4.0",
         annotations_creators="expert-annotated",
@@ -57,5 +59,5 @@ class TUTAcousticScenesClassification(AbsTaskAudioClassification):
 
     audio_column_name: str = "audio"
     label_column_name: str = "scene_label"
-    samples_per_label: int = 864 # Roughly 864 samples per label
+    samples_per_label: int = 864  # Roughly 864 samples per label
     is_cross_validation: bool = False
