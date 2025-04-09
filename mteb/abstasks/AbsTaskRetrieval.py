@@ -5,6 +5,7 @@ import logging
 from collections import defaultdict
 from collections.abc import Mapping
 from pathlib import Path
+from time import time
 from typing import Any, Callable, TypedDict
 
 from datasets import Dataset, DatasetDict
@@ -328,11 +329,14 @@ class AbsTaskRetrieval(AbsTask):
         )
 
         if not results:
+            start_time = time()
             results = retriever(
                 model,
                 encode_kwargs=encode_kwargs,
                 **kwargs,
             )
+            end_time = time()
+            logger.debug(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
 
         if save_predictions or export_errors or save_qrels:
             output_folder = Path(output_folder)
