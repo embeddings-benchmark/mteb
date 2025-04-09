@@ -12,7 +12,7 @@ from mteb.models.e5_models import (
 )
 from mteb.models.instruct_wrapper import instruct_wrapper
 
-MISTRAL_LANGUAGES = ["eng_Latn", "fra_Latn", "deu_Latn", "ita_Latn", "spa_Latn"]
+MISTRAL_LANGUAGES = ["eng-Latn", "fra-Latn", "deu-Latn", "ita-Latn", "spa-Latn"]
 
 E5_INSTRUCTION = "Instruct: {instruction}\nQuery: "
 
@@ -46,7 +46,7 @@ e5_instruct = ModelMeta(
     open_weights=True,
     revision="baa7be480a7de1539afce709c8f13f833a510e0a",
     release_date=E5_PAPER_RELEASE_DATE,
-    framework=["GritLM", "PyTorch"],
+    framework=["GritLM", "PyTorch", "Sentence Transformers"],
     similarity_fn_name="cosine",
     use_instructions=True,
     reference="https://huggingface.co/intfloat/multilingual-e5-large-instruct",
@@ -79,7 +79,7 @@ e5_mistral = ModelMeta(
     open_weights=True,
     revision="07163b72af1488142a360786df853f237b1a3ca1",
     release_date=E5_PAPER_RELEASE_DATE,
-    framework=["GritLM", "PyTorch"],
+    framework=["GritLM", "PyTorch", "Sentence Transformers"],
     similarity_fn_name="cosine",
     use_instructions=True,
     reference="https://huggingface.co/intfloat/e5-mistral-7b-instruct",
@@ -110,7 +110,7 @@ zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
     name="zeta-alpha-ai/Zeta-Alpha-E5-Mistral",
     revision="c791d37474fa6a5c72eb3a2522be346bc21fbfc3",
     release_date="2024-08-30",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     n_parameters=7110660096,
     memory_usage_mb=13563,
     max_tokens=32768.0,
@@ -119,7 +119,7 @@ zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
     open_weights=True,
     public_training_data=None,
     public_training_code=None,
-    framework=["PyTorch"],
+    framework=["PyTorch", "Sentence Transformers", "GritLM"],
     reference="https://huggingface.co/zeta-alpha-ai/Zeta-Alpha-E5-Mistral",
     similarity_fn_name="cosine",
     use_instructions=True,

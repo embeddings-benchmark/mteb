@@ -10,13 +10,18 @@ from tqdm import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
+from mteb.requires_package import requires_image_dependencies, requires_package
 
 
 def openclip_loader(**kwargs):
-    try:
-        import open_clip
-    except ImportError:
-        raise ImportError("Please run `pip install open_clip_torch`.")
+    model_name = kwargs.get("model_name", "CLIP-ViT")
+    requires_package(
+        openclip_loader,
+        "open_clip_torch",
+        model_name,
+        "pip install 'mteb[open_clip_torch]'",
+    )
+    import open_clip
 
     class OpenCLIPWrapper:
         def __init__(
@@ -25,6 +30,8 @@ def openclip_loader(**kwargs):
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
             **kwargs: Any,
         ):
+            requires_image_dependencies()
+
             self.model_name = model_name
             self.device = device
             self.model, _, self.img_preprocess = open_clip.create_model_and_transforms(
@@ -71,10 +78,10 @@ def openclip_loader(**kwargs):
             batch_size: int = 32,
             **kwargs: Any,
         ):
+            import torchvision.transforms.functional as F
+
             all_image_embeddings = []
             if isinstance(images, DataLoader):
-                import torchvision.transforms.functional as F
-
                 with torch.no_grad(), torch.cuda.amp.autocast():
                     for batch in tqdm(images):
                         # import pdb; pdb.set_trace()
@@ -112,8 +119,8 @@ def openclip_loader(**kwargs):
 
         def get_fused_embeddings(
             self,
-            texts: list[str] = None,
-            images: list[Image.Image] | DataLoader = None,
+            texts: list[str] | None = None,
+            images: list[Image.Image] | DataLoader | None = None,
             fusion_mode="sum",
             **kwargs: Any,
         ):
@@ -156,7 +163,7 @@ CLIP_ViT_L_14_DataComp_XL_s13B_b90K = ModelMeta(
         model_name="laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K",
     ),
     name="laion/CLIP-ViT-L-14-DataComp.XL-s13B-b90K",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     revision="84c9828e63dc9a9351d1fe637c346d4c1c4db341",
     release_date="2023-04-26",
     modalities=["image", "text"],
@@ -183,7 +190,7 @@ CLIP_ViT_B_32_DataComp_XL_s13B_b90K = ModelMeta(
         model_name="laion/CLIP-ViT-B-32-DataComp.XL-s13B-b90K",
     ),
     name="laion/CLIP-ViT-B-32-DataComp.XL-s13B-b90K",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     revision="f0e2ffa09cbadab3db6a261ec1ec56407ce42912",
     release_date="2023-04-26",
     modalities=["image", "text"],
@@ -210,7 +217,7 @@ CLIP_ViT_B_16_DataComp_XL_s13B_b90K = ModelMeta(
         model_name="laion/CLIP-ViT-B-16-DataComp.XL-s13B-b90K",
     ),
     name="laion/CLIP-ViT-B-16-DataComp.XL-s13B-b90K",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     revision="d110532e8d4ff91c574ee60a342323f28468b287",
     release_date="2023-04-26",
     modalities=["image", "text"],
@@ -237,7 +244,7 @@ CLIP_ViT_bigG_14_laion2B_39B_b160k = ModelMeta(
         model_name="laion/CLIP-ViT-bigG-14-laion2B-39B-b160k",
     ),
     name="laion/CLIP-ViT-bigG-14-laion2B-39B-b160k",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     revision="bc7788f151930d91b58474715fdce5524ad9a189",
     release_date="2023-01-23",
     modalities=["image", "text"],
@@ -264,7 +271,7 @@ CLIP_ViT_g_14_laion2B_s34B_b88K = ModelMeta(
         model_name="laion/CLIP-ViT-g-14-laion2B-s34B-b88K",
     ),
     name="laion/CLIP-ViT-g-14-laion2B-s34B-b88K",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     revision="15efd0f6ac0c40c0f9da7becca03c974d7012604",
     release_date="2023-03-06",
     modalities=["image", "text"],
@@ -291,7 +298,7 @@ CLIP_ViT_H_14_laion2B_s32B_b79K = ModelMeta(
         model_name="laion/CLIP-ViT-H-14-laion2B-s32B-b79K",
     ),
     name="laion/CLIP-ViT-H-14-laion2B-s32B-b79K",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     revision="de081ac0a0ca8dc9d1533eed1ae884bb8ae1404b",
     release_date="2022-09-15",
     modalities=["image", "text"],
@@ -318,7 +325,7 @@ CLIP_ViT_L_14_laion2B_s32B_b82K = ModelMeta(
         model_name="laion/CLIP-ViT-L-14-laion2B-s32B-b82K",
     ),
     name="laion/CLIP-ViT-L-14-laion2B-s32B-b82K",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     revision="1627032197142fbe2a7cfec626f4ced3ae60d07a",
     release_date="2022-09-15",
     modalities=["image", "text"],
@@ -345,7 +352,7 @@ CLIP_ViT_B_32_laion2B_s34B_b79K = ModelMeta(
         model_name="laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
     ),
     name="laion/CLIP-ViT-B-32-laion2B-s34B-b79K",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     revision="08f73555f1b2fb7c82058aebbd492887a94968ef",
     release_date="2022-09-15",
     modalities=["image", "text"],

@@ -45,8 +45,8 @@ class MockTorchbf16Encoder(SentenceTransformer):
 
 class MockCLIPEncoder:
     mteb_model_meta = ModelMeta(
-        name="MockCLIPModel",
-        languages=["eng_Latn"],
+        name="mock/MockCLIPModel",
+        languages=["eng-Latn"],
         revision="3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
         release_date="2021-02-06",
         modalities=["image", "text"],
@@ -91,8 +91,8 @@ class MockCLIPEncoder:
 
 class MockMocoEncoder:
     mteb_model_meta = ModelMeta(
-        name="MockMocoModel",
-        languages=["eng_Latn"],
+        name="mock/MockMocoModel",
+        languages=["eng-Latn"],
         revision="7d091cd70772c5c0ecf7f00b5f12ca609a99d69d",
         release_date="2024-01-01",
         modalities=["image"],

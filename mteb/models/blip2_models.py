@@ -11,17 +11,17 @@ from transformers import Blip2Processor
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
+from mteb.requires_package import requires_package
 
 
 def blip2_loader(**kwargs):
-    try:  # a temporal fix for the dependency issues.
-        from lavis.models.blip2_models.blip2_image_text_matching import (
-            Blip2ITM,
-        )
-    except ImportError:
-        raise ImportError(
-            "Please install `pip install mteb[blip2]` to use BLIP-2 models."
-        )
+    model_name = kwargs.get("model_name", "BLIP-2")
+    requires_package(
+        blip2_loader, "salesforce-lavis", model_name, "pip install 'mteb[blip2]'"
+    )
+    from lavis.models.blip2_models.blip2_image_text_matching import (
+        Blip2ITM,
+    )
 
     class BLIP2ModelWrapper:
         def __init__(
@@ -227,7 +227,7 @@ blip2_opt_2_7b = ModelMeta(
         model_name="Salesforce/blip2-opt-2.7b",
     ),
     name="Salesforce/blip2-opt-2.7b",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     revision="51572668da0eb669e01a189dc22abe6088589a24",
     release_date="2024-03-22",
     modalities=["image", "text"],
@@ -252,7 +252,7 @@ blip2_opt_6_7b_coco = ModelMeta(
         model_name="Salesforce/blip2-opt-6.7b-coco",
     ),
     name="Salesforce/blip2-opt-6.7b-coco",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     revision="0d580de59320a25a4d2c386387bcef310d5f286e",
     release_date="2024-03-31",
     modalities=["image", "text"],

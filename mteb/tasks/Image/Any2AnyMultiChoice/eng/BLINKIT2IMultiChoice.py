@@ -14,7 +14,7 @@ class BLINKIT2IMultiChoice(AbsTaskAny2AnyMultiChoice):
             "revision": "a9f994925551c14503d00d86f1307bac6e2ead6a",
             "trust_remote_code": True,
         },
-        type="VisionCentric",
+        type="VisionCentricQA",
         category="it2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -28,12 +28,11 @@ class BLINKIT2IMultiChoice(AbsTaskAny2AnyMultiChoice):
         modalities=["text", "image"],
         sample_creation="found",
         bibtex_citation="""@article{fu2024blink,
-  title={Blink: Multimodal large language models can see but not perceive},
-  author={Fu, Xingyu and Hu, Yushi and Li, Bangzheng and Feng, Yu and Wang, Haoyu and Lin, Xudong and Roth, Dan and Smith, Noah A and Ma, Wei-Chiu and Krishna, Ranjay},
-  journal={arXiv preprint arXiv:2404.12390},
-  year={2024}
-}
-""",
+        title={Blink: Multimodal large language models can see but not perceive},
+        author={Fu, Xingyu and Hu, Yushi and Li, Bangzheng and Feng, Yu and Wang, Haoyu and Lin, Xudong and Roth, Dan and Smith, Noah A and Ma, Wei-Chiu and Krishna, Ranjay},
+        journal={arXiv preprint arXiv:2404.12390},
+        year={2024}
+        }""",
         descriptive_stats={
             "n_samples": {"test": 1206},
             "avg_character_length": {

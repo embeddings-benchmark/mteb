@@ -34,8 +34,7 @@ class Food101Classification(AbsTaskImageClassification):
         author = {Bossard, Lukas and Guillaumin, Matthieu and Van Gool, Luc},
         booktitle = {European Conference on Computer Vision},
         year = {2014}
-        }
-        """,
+        }""",
         descriptive_stats={
             "n_samples": {"validation": 25300},
             "avg_character_length": {"validation": 431.4},
