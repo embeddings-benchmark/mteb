@@ -156,7 +156,13 @@ def update_task_info(task_names: str) -> gr.DataFrame:
         }
     )
     df = df.drop(columns="reference")
-    return gr.DataFrame(df, datatype=["markdown"] + ["str"] * (len(df.columns) - 1))
+    return gr.DataFrame(
+        df,
+        datatype=["markdown"] + ["str"] * (len(df.columns) - 1),
+        show_copy_button=True,
+        show_fullscreen_button=True,
+        show_search="filter",
+    )
 
 
 # Model sizes in million parameters
@@ -390,17 +396,23 @@ def get_leaderboard_app() -> gr.Blocks:
                     update_description,
                     inputs=[benchmark_select, lang_select, type_select, domain_select],
                 )
-                citation = gr.Markdown(update_citation, inputs=[benchmark_select])  # noqa: F841
+                citation = gr.Markdown(
+                    update_citation, inputs=[benchmark_select]
+                )  # noqa: F841
                 with gr.Accordion("Share this benchmark:", open=False):
                     gr.Markdown(produce_benchmark_link, inputs=[benchmark_select])
             with gr.Column():
                 with gr.Tab("Performance per Model Size"):
-                    plot = gr.Plot(performance_size_plot, inputs=[summary_table])  # noqa: F841
+                    plot = gr.Plot(
+                        performance_size_plot, inputs=[summary_table]
+                    )  # noqa: F841
                     gr.Markdown(
                         "*We only display models that have been run on all tasks in the benchmark*"
                     )
                 with gr.Tab("Performance per Task Type (Radar Chart)"):
-                    radar_plot = gr.Plot(radar_chart, inputs=[summary_table])  # noqa: F841
+                    radar_plot = gr.Plot(
+                        radar_chart, inputs=[summary_table]
+                    )  # noqa: F841
                     gr.Markdown(
                         "*We only display models that have been run on all task types in the benchmark*"
                     )
@@ -476,7 +488,9 @@ def get_leaderboard_app() -> gr.Blocks:
                 download_table, inputs=[per_task_table], outputs=[download_per_task]
             )
         with gr.Tab("Task information"):
-            task_info_table = gr.DataFrame(update_task_info, inputs=[task_select])  # noqa: F841
+            task_info_table = gr.DataFrame(
+                update_task_info, inputs=[task_select]
+            )  # noqa: F841
 
         # This sets the benchmark from the URL query parameters
         demo.load(set_benchmark_on_load, inputs=[], outputs=[benchmark_select])
@@ -557,11 +571,7 @@ def get_leaderboard_app() -> gr.Blocks:
 
         @cachetools.cached(
             cache={},
-            key=lambda benchmark_name,
-            type_select,
-            domain_select,
-            lang_select,
-            modality_select: hash(
+            key=lambda benchmark_name, type_select, domain_select, lang_select, modality_select: hash(
                 (
                     hash(benchmark_name),
                     hash(tuple(type_select)),
@@ -637,13 +647,7 @@ def get_leaderboard_app() -> gr.Blocks:
 
         @cachetools.cached(
             cache={},
-            key=lambda scores,
-            tasks,
-            availability,
-            compatibility,
-            instructions,
-            model_size,
-            zero_shot: hash(
+            key=lambda scores, tasks, availability, compatibility, instructions, model_size, zero_shot: hash(
                 (
                     id(scores),
                     hash(tuple(tasks)),
@@ -776,11 +780,7 @@ def get_leaderboard_app() -> gr.Blocks:
 
         @cachetools.cached(
             cache={},
-            key=lambda scores,
-            search_query,
-            tasks,
-            models_to_keep,
-            benchmark_name: hash(
+            key=lambda scores, search_query, tasks, models_to_keep, benchmark_name: hash(
                 (
                     id(scores),
                     hash(search_query),

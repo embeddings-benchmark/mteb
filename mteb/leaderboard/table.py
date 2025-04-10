@@ -292,8 +292,18 @@ def apply_styling(
             datatype=column_types,
             interactive=False,
             pinned_columns=3,
+            show_fullscreen_button=True,
+            show_copy_button=True,
+            show_search="filter",
         ),
-        gr.DataFrame(per_task_style, interactive=False, pinned_columns=1),
+        gr.DataFrame(
+            per_task_style,
+            interactive=False,
+            pinned_columns=1,
+            show_fullscreen_button=True,
+            show_copy_button=True,
+            show_search="filter",
+        ),
     )
 
 
