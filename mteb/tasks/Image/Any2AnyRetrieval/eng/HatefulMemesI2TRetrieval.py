@@ -4,6 +4,7 @@ from datasets import concatenate_datasets, load_dataset
 
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
+import pandas as pd
 
 
 def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = None):
@@ -16,8 +17,12 @@ def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = No
         cache_dir=cache_dir,
         revision=revision,
     )
-    dataset_splits = list(dataset)
+    dataset_splits = ["test", "validation", "train"]
     shared_corpus = concatenate_datasets([dataset[split] for split in dataset_splits])
+
+    text_df = pd.DataFrame(shared_corpus["text"], columns=["text"])
+    unique_indices = text_df.drop_duplicates(subset="text", keep="first").index
+    shared_corpus = shared_corpus.select(unique_indices)
 
     shared_corpus = shared_corpus.map(
         lambda x: {
