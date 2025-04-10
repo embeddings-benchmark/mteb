@@ -14,7 +14,7 @@ class InstructIR(AbsTaskRetrieval):
             "path": "mteb/InstructIR-mteb",
             "revision": "42c3afabe480643b755a7099dbf0f9ebeedaf6ca",
         },
-        type="Reranking",
+        type="InstructionRetrieval",
         category="t2t",
         modalities=["text"],
         eval_splits=["test"],

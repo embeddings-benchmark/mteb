@@ -434,7 +434,7 @@ class AbsTaskAny2AnyRetrieval(AbsTask):
             errors_save_path = (
                 output_folder / f"{self.metadata.name}_{hf_subset}_errors.json"
             )
-            with open(errors_save_path, "w") as f:
+            with errors_save_path.open("w") as f:
                 json.dump(errors, f)
 
         return scores

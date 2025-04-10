@@ -41,7 +41,7 @@ class RetrievalDataLoader:
         self.hf_repo = hf_repo
         self.trust_remote_code = trust_remote_code
         self.split = split
-        self.config = config
+        self.config = config if config != "default" else None
 
     def load(
         self,
@@ -57,7 +57,6 @@ class RetrievalDataLoader:
         configs = get_dataset_config_names(
             self.hf_repo, self.revision, trust_remote_code=self.trust_remote_code
         )
-
         logger.info("Loading Corpus...")
         self._load_corpus(self.config)
         logger.info("Loaded %d %s Documents.", len(self.corpus), self.split.upper())
