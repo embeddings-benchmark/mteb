@@ -329,25 +329,19 @@ def get_leaderboard_app() -> gr.Blocks:
                 """,
                 )
                 with gr.Group():
-                    with gr.Row():
-                        searchbar = gr.Textbox(
-                            label="Search Models",
-                            info="Press Enter to search.\nSearch models by name (RegEx sensitive. Separate queries with `|`)",
-                            interactive=True,
-                        )
-                        compatibility = gr.CheckboxGroup(
-                            [
-                                (
-                                    "Should be sentence-transformers compatible",
-                                    "Sentence Transformers",
-                                )
-                            ],
-                            value=[],
-                            label="Compatibility",
-                            interactive=True,
-                        )
                     with gr.Row(elem_classes=""):
                         with gr.Column():
+                            compatibility = gr.CheckboxGroup(
+                                [
+                                    (
+                                        "Should be sentence-transformers compatible",
+                                        "Sentence Transformers",
+                                    )
+                                ],
+                                value=[],
+                                label="Compatibility",
+                                interactive=True,
+                            )
                             availability = gr.Radio(
                                 [
                                     ("Only Open", True),
@@ -780,10 +774,9 @@ def get_leaderboard_app() -> gr.Blocks:
 
         @cachetools.cached(
             cache={},
-            key=lambda scores, search_query, tasks, models_to_keep, benchmark_name: hash(
+            key=lambda scores, tasks, models_to_keep, benchmark_name: hash(
                 (
                     id(scores),
-                    hash(search_query),
                     hash(tuple(tasks)),
                     id(models_to_keep),
                     hash(benchmark_name),
@@ -792,7 +785,6 @@ def get_leaderboard_app() -> gr.Blocks:
         )
         def update_tables(
             scores,
-            search_query: str,
             tasks,
             models_to_keep,
             benchmark_name: str,
@@ -813,29 +805,24 @@ def get_leaderboard_app() -> gr.Blocks:
                     filtered_scores.append(entry)
             else:
                 filtered_scores = scores
-            summary, per_task = create_tables(filtered_scores, search_query)
+            summary, per_task = create_tables(filtered_scores)
             elapsed = time.time() - start_time
             logger.info(f"update_tables callback: {elapsed}s")
             return summary, per_task
 
         task_select.change(
             update_tables,
-            inputs=[scores, searchbar, task_select, models, benchmark_select],
+            inputs=[scores, task_select, models, benchmark_select],
             outputs=[summary_table, per_task_table],
         )
         scores.change(
             update_tables,
-            inputs=[scores, searchbar, task_select, models, benchmark_select],
+            inputs=[scores, task_select, models, benchmark_select],
             outputs=[summary_table, per_task_table],
         )
         models.change(
             update_tables,
-            inputs=[scores, searchbar, task_select, models, benchmark_select],
-            outputs=[summary_table, per_task_table],
-        )
-        searchbar.submit(
-            update_tables,
-            inputs=[scores, searchbar, task_select, models, benchmark_select],
+            inputs=[scores, task_select, models, benchmark_select],
             outputs=[summary_table, per_task_table],
         )
 
@@ -862,7 +849,7 @@ def get_leaderboard_app() -> gr.Blocks:
         )
         # We have to call this both on the filtered and unfiltered task because the callbacks
         # also gets called twice for some reason
-        update_tables(bench_scores, "", bench_tasks, filtered_models, benchmark.name)
+        update_tables(bench_scores, bench_tasks, filtered_models, benchmark.name)
         filtered_tasks = update_task_list(
             benchmark.name,
             bench_types,
@@ -870,7 +857,7 @@ def get_leaderboard_app() -> gr.Blocks:
             bench_languages,
             bench_modalities,
         )
-        update_tables(bench_scores, "", filtered_tasks, filtered_models, benchmark.name)
+        update_tables(bench_scores, filtered_tasks, filtered_models, benchmark.name)
     return demo
 
 
