@@ -274,6 +274,7 @@ class AbsTaskRetrieval(AbsTask):
         """
         if not self.data_loaded:
             self.load_data()
+        # TODO: convert all tasks directly https://github.com/embeddings-benchmark/mteb/issues/2030
         self.convert_v1_dataset_format_to_v2()
 
         return super().evaluate(
