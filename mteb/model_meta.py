@@ -38,6 +38,7 @@ FRAMEWORKS = Literal[
     "ColBERT",
 ]
 DISTANCE_METRICS = Literal["cosine", "max_sim", "dot"]
+EMBEDDING_DTYPES = Literal["float32", "int8", "binary"]
 
 
 def sentence_transformers_loader(
@@ -58,6 +59,34 @@ def get_loader_name(
     return loader.__name__
 
 
+def model_id(
+    model_name: str,
+    embd_dtype: str
+    | None,  # Keep None here as input can still be None before default assignment
+    embd_dim: int | None,
+) -> str:
+    # Handle potential None values passed to the function, even if the class attribute has a default
+    if model_name is None:
+        # Or handle appropriately, maybe raise error if name is critical for ID
+        model_name_part = "unknown_model"
+    else:
+        model_name_part = model_name.replace("/", "__")
+
+    dtype_str = embd_dtype if embd_dtype else "unknown_dtype"
+    dim_str = f"{embd_dim}d" if embd_dim else "unknown_dim"
+
+    # Check if default was used implicitly for dtype
+    if embd_dtype is None:
+        # If the class attribute defaults to 'float32', reflect that possibility if None is passed
+        # However, the class instance will have 'float32' if not specified.
+        # Let's assume the function should reflect the actual value passed or derived.
+        # If the intention is to always use the default if None is passed, adjust logic here.
+        # For now, stick to representing the input or lack thereof.
+        pass  # dtype_str is already "unknown_dtype"
+
+    return f"{model_name_part}_{dtype_str}_{dim_str}"
+
+
 class ModelMeta(BaseModel):
     """The model metadata object.
 
@@ -70,6 +99,7 @@ class ModelMeta(BaseModel):
         max_tokens: The maximum number of tokens the model can handle. Can be None if the maximum number of tokens is not known (e.g. for proprietary
             models).
         embed_dim: The dimension of the embeddings produced by the model. Currently all models are assumed to produce fixed-size embeddings.
+        embd_dtype: The data type of the embeddings produced by the model (e.g., "float32", "int8", "binary"). Defaults to "float32".
         revision: The revision number of the model. If None, it is assumed that the metadata (including the loader) is valid for all revisions of the model.
         release_date: The date the model's revision was released.
         license: The license under which the model is released. Required if open_weights is True.
@@ -116,6 +146,10 @@ class ModelMeta(BaseModel):
     superseded_by: str | None = None
     is_cross_encoder: bool | None = None
     modalities: list[MODALITIES] = ["text"]
+    # Attribute merged from rteb/ebr/core/meta.py
+    embd_dtype: EMBEDDING_DTYPES = (
+        "float32"  # Defaulting to float32 as requested, type hint updated
+    )
 
     def to_dict(self):
         dict_repr = self.model_dump()
@@ -262,6 +296,15 @@ class ModelMeta(BaseModel):
         # Convert to MB
         model_memory_mb = model_memory_bytes / MB
         return round(model_memory_mb)
+
+    @property
+    def _id(self) -> str:
+        """Generates a unique ID for the model based on name, dtype, and dimension."""
+        if self.name is None:
+            raise ValueError("Model name is required to generate an ID.")
+        # Note: Using target's embed_dim and the newly added embd_dtype
+        # self.embd_dtype will be 'float32' by default if not specified otherwise
+        return model_id(self.name, self.embd_dtype, self.embed_dim)
 
 
 def collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:

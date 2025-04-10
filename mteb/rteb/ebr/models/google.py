@@ -1,16 +1,20 @@
-
-
 from __future__ import annotations
-from typing import Any, TYPE_CHECKING
-import time
+
 import logging
+import os
+import time
+from typing import Any
 
 from ebr.core.base import APIEmbeddingModel
-from ebr.core.meta import ModelMeta
+
+if os.environ["USE_RTEB"]:
+    from ebr.core.meta import ModelMeta
+else:
+    from mteb.model_meta import ModelMeta
 
 from google import genai
-from google.genai.types import EmbedContentConfig
 from google.genai.errors import APIError
+from google.genai.types import EmbedContentConfig
 
 
 class GoogleEmbeddingModel(APIEmbeddingModel):
@@ -19,14 +23,9 @@ class GoogleEmbeddingModel(APIEmbeddingModel):
         model_meta: ModelMeta,
         api_key: str | None = None,
         num_retries: int | None = None,
-        **kwargs
+        **kwargs,
     ):
-        super().__init__(
-            model_meta,
-            api_key=api_key,
-            num_retries=num_retries,
-            **kwargs
-        )
+        super().__init__(model_meta, api_key=api_key, num_retries=num_retries, **kwargs)
         self._client = None
 
     @property
@@ -41,7 +40,9 @@ class GoogleEmbeddingModel(APIEmbeddingModel):
             model=self._model_meta.model_name,
             contents=data,
             config=EmbedContentConfig(
-                task_type="RETRIEVAL_QUERY" if input_type == "query" else "RETRIEVAL_DOCUMENT",
+                task_type="RETRIEVAL_QUERY"
+                if input_type == "query"
+                else "RETRIEVAL_DOCUMENT",
                 output_dimensionality=self.embd_dim,
             ),
         )
@@ -77,5 +78,5 @@ text_embedding_004 = ModelMeta(
     embd_dim=768,
     max_tokens=2048,
     similarity="cosine",
-    reference="https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings"
+    reference="https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings",
 )

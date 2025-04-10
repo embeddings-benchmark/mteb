@@ -1,2 +1,1 @@
-from ebr.core.encoder import Encoder
-from ebr.core.retriever import Retriever
+from __future__ import annotations

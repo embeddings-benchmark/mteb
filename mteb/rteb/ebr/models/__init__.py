@@ -1,13 +1,16 @@
+from __future__ import annotations
+
 from ebr.core.base import EmbeddingModel
-from ebr.core.meta import ModelMeta, model_id
+from ebr.models.bgem3 import *
 from ebr.models.cohere import *
+from ebr.models.google import *
+from ebr.models.gritlm import *
 from ebr.models.openai import *
 from ebr.models.sentence_transformers import *
 from ebr.models.voyageai import *
-from ebr.models.bgem3 import *
-from ebr.models.gritlm import *
-from ebr.models.google import *
+from ebr.utils.lazy_import import LazyImport
 
+from mteb.model_meta import ModelMeta, model_id
 
 MODEL_REGISTRY: dict[str, ModelMeta] = {}
 for name in dir():
@@ -18,11 +21,8 @@ for name in dir():
 
 
 def get_embedding_model(
-    model_name: str, 
-    embd_dim: int,
-    embd_dtype: str,
-    **kwargs
+    model_name: str, embd_dim: int, embd_dtype: str, **kwargs
 ) -> EmbeddingModel:
     key = model_id(model_name, embd_dim, embd_dtype)
-    #TODO: add logic to dynamically load missing model
+    # TODO: add logic to dynamically load missing model
     return MODEL_REGISTRY[key].load_model(**kwargs)

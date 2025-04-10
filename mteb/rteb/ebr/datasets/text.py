@@ -1,16 +1,16 @@
-from functools import cache
+from __future__ import annotations
+
 import json
 import os
-
-from torch.utils.data import Dataset
+from functools import cache
 
 from ebr.core.base import RetrievalDataset
 from ebr.core.meta import DatasetMeta
 from ebr.utils.data import JSONLDataset
+from torch.utils.data import Dataset
 
 
 class TextRetrievalDataset(RetrievalDataset):
-
     LEADERBOARD: str = "Text"
 
     def __init__(
@@ -19,14 +19,14 @@ class TextRetrievalDataset(RetrievalDataset):
         dataset_meta: DatasetMeta,
         query_instruct: str | None = None,
         corpus_instruct: str | None = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(
             data_path,
             dataset_meta,
             query_instruct=query_instruct,
             corpus_instruct=corpus_instruct,
-            **kwargs
+            **kwargs,
         )
         assert os.path.isdir(self._task_path), f"{self._task_path} is not a directory."
 
@@ -94,7 +94,7 @@ AILACasedocs = DatasetMeta(
     dataset_name="AILACasedocs",
     tier=3,
     groups={"text": 1, "legal": 1, "english": 1},
-    reference=None
+    reference=None,
 )
 
 AILAStatutes = DatasetMeta(
@@ -102,7 +102,7 @@ AILAStatutes = DatasetMeta(
     dataset_name="AILAStatutes",
     tier=3,
     groups={"text": 1, "legal": 1, "english": 1},
-    reference=None
+    reference=None,
 )
 
 LegalSummarization = DatasetMeta(
@@ -110,7 +110,7 @@ LegalSummarization = DatasetMeta(
     dataset_name="LegalSummarization",
     tier=3,
     groups={"text": 1, "legal": 1, "english": 1},
-    reference=None
+    reference=None,
 )
 
 LegalQuAD = DatasetMeta(
@@ -118,7 +118,7 @@ LegalQuAD = DatasetMeta(
     dataset_name="LegalQuAD",
     tier=3,
     groups={"text": 1, "legal": 1, "german": 1},
-    reference=None
+    reference=None,
 )
 
 
@@ -129,7 +129,7 @@ FinanceBench = DatasetMeta(
     dataset_name="FinanceBench",
     tier=3,
     groups={"text": 1, "finance": 1, "english": 1},
-    reference=None
+    reference=None,
 )
 
 HC3Finance = DatasetMeta(
@@ -137,7 +137,7 @@ HC3Finance = DatasetMeta(
     dataset_name="HC3Finance",
     tier=3,
     groups={"text": 1, "finance": 1, "english": 1},
-    reference=None
+    reference=None,
 )
 
 FinQA = DatasetMeta(
@@ -145,7 +145,7 @@ FinQA = DatasetMeta(
     dataset_name="FinQA",
     tier=3,
     groups={"text": 1, "finance": 1, "english": 1},
-    reference=None
+    reference=None,
 )
 
 
@@ -156,7 +156,7 @@ APPS = DatasetMeta(
     dataset_name="APPS",
     tier=3,
     groups={"text": 1, "code": 1, "english": 1},
-    reference=None
+    reference=None,
 )
 
 DS1000 = DatasetMeta(
@@ -164,7 +164,7 @@ DS1000 = DatasetMeta(
     dataset_name="DS1000",
     tier=3,
     groups={"text": 1, "code": 1, "english": 1},
-    reference=None
+    reference=None,
 )
 
 HumanEval = DatasetMeta(
@@ -172,7 +172,7 @@ HumanEval = DatasetMeta(
     dataset_name="HumanEval",
     tier=3,
     groups={"text": 1, "code": 1},
-    reference=None
+    reference=None,
 )
 
 MBPP = DatasetMeta(
@@ -180,7 +180,7 @@ MBPP = DatasetMeta(
     dataset_name="MBPP",
     tier=3,
     groups={"text": 1, "code": 1},
-    reference=None
+    reference=None,
 )
 
 WikiSQL = DatasetMeta(
@@ -188,7 +188,7 @@ WikiSQL = DatasetMeta(
     dataset_name="WikiSQL",
     tier=3,
     groups={"text": 1, "code": 1, "english": 1},
-    reference=None
+    reference=None,
 )
 
 
@@ -199,7 +199,7 @@ ChatDoctor_HealthCareMagic = DatasetMeta(
     dataset_name="ChatDoctor_HealthCareMagic",
     tier=3,
     groups={"text": 1, "healthcare": 1, "english": 1},
-    reference=None
+    reference=None,
 )
 
 
@@ -210,7 +210,5 @@ FrenchBoolQ = DatasetMeta(
     dataset_name="FrenchBoolQ",
     tier=3,
     groups={"text": 1, "french": 1},
-    reference=None
+    reference=None,
 )
-
-

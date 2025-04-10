@@ -1,14 +1,15 @@
+from __future__ import annotations
+
 import json
 from collections import OrderedDict
 
-from beir.retrieval.search.dense.util import cos_sim, dot_score
-from pytorch_lightning import LightningModule
 import torch
 import torch.distributed as dist
+from beir.retrieval.search.dense.util import cos_sim, dot_score
+from pytorch_lightning import LightningModule
 
 
 class Retriever(LightningModule):
-
     def __init__(
         self,
         topk: int = 100,
@@ -79,7 +80,9 @@ class Retriever(LightningModule):
             if self.in_memory:
                 gathered_prediction = [None] * self.trainer.num_devices
                 dist.all_gather_object(gathered_prediction, self.local_prediction)
-                self.prediction = {k: v for preds in gathered_prediction for k, v in preds.items()}
+                self.prediction = {
+                    k: v for preds in gathered_prediction for k, v in preds.items()
+                }
             else:
                 with open(self.local_prediction_file_name, "w") as f:
                     json.dump(self.local_prediction, f)
