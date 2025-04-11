@@ -185,6 +185,7 @@ BeastyZ__e5_R_mistral_7b = ModelMeta(
         InstructSentenceTransformerWrapper,
         model_name_or_path="BeastyZ/e5-R-mistral-7b",
         instruction_template=E5_R_MISTRAL_7B_INSTRUCTION,
+        tokenizer_kwargs={"padding_token": "</s>"},
     ),
     name="BeastyZ/e5-R-mistral-7b",
     revision="3f810a6a7fd220369ad248e3705cf13d71803602",
