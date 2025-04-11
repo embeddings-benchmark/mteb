@@ -38,8 +38,8 @@ class OxfordPetsClassification(AbsTaskImageClassification):
   number={},
   pages={3498-3505},
   keywords={Positron emission tomography;Image segmentation;Cats;Dogs;Layout;Deformable models;Head},
-  doi={10.1109/CVPR.2012.6248092}}
-        """,
+  doi={10.1109/CVPR.2012.6248092}
+  }""",
         descriptive_stats={
             "n_samples": {"test": 3669},
             "avg_character_length": {"test": 431.4},

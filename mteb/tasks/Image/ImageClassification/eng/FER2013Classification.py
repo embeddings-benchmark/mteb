@@ -37,8 +37,7 @@ class FER2013Classification(AbsTaskImageClassification):
         archivePrefix={arXiv},
         primaryClass={stat.ML},
         url={https://arxiv.org/abs/1412.6572},
-        }
-        """,
+        }""",
         descriptive_stats={
             "n_samples": {"test": 7178},
             "avg_character_length": {"test": 431.4},

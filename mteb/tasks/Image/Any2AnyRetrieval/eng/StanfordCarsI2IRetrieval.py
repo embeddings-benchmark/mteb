@@ -31,8 +31,7 @@ class StanfordCarsI2I(AbsTaskAny2AnyRetrieval):
         author={Jonathan Krause and Jia Deng and Michael Stark and Li Fei-Fei},
         year={2013},
         url={https://api.semanticscholar.org/CorpusID:16632981}
-        }
-        """,
+        }""",
         descriptive_stats={
             "n_samples": {"default": 8041},
             "avg_character_length": {

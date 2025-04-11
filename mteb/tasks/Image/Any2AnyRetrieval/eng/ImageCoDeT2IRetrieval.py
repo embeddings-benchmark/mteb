@@ -17,7 +17,7 @@ class ImageCoDeT2IRetrieval(AbsTaskAny2AnyRetrieval):
         category="t2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="ndcg_at_10",
+        main_score="cv_recall_at_3",
         date=("2022-05-22", "2022-05-27"),  # conference dates
         domains=["Web", "Written"],
         task_subtypes=["Image Text Retrieval"],
@@ -31,8 +31,7 @@ class ImageCoDeT2IRetrieval(AbsTaskAny2AnyRetrieval):
   author={Krojer, Benno and Adlakha, Vaibhav and Vineet, Vibhav and Goyal, Yash and Ponti, Edoardo and Reddy, Siva},
   journal={arXiv preprint arXiv:2203.15867},
   year={2022}
-}
-""",
+}""",
         descriptive_stats={
             "n_samples": {"test": 2302},
             "avg_character_length": {

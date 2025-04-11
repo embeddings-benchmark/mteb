@@ -503,8 +503,8 @@ It is possible to completely deploy the leaderboard locally or self-host it. Thi
 integrate build their own benchmarks or integrate custom tasks into existing benchmarks.
 
 Running the leaderboard is quite easy. Simply run:
-```py
-python -m mteb.leaderboard.app
+```bash
+make run-leaderboard
 ```
 
-The leaderboard requires gradio install, which can be installed using `pip install mteb[gradio]` and requires python >3.10.
+The leaderboard requires gradio install, which can be installed using `pip install mteb[leaderboard]` and requires python >3.10.

@@ -32,13 +32,21 @@ ALL_MOCK_TASKS = MOCK_TASK_TEST_GRID_AS_STRING + MOCK_MIEB_TASK_GRID_AS_STRING
 
 tasks = [t for t in MTEB().tasks_cls if t.metadata.name not in ALL_MOCK_TASKS]
 
+datasets_not_available = [
+    "AfriSentiLangClassification",
+    "SNLHierarchicalClusteringP2P",
+    "SNLClustering",
+    "SNLHierarchicalClusteringS2S",
+    "SNLRetrieval",
+]
+
 
 dataset_revisions = list(
     {  # deduplicate as multiple tasks rely on the same dataset (save us at least 100 test cases)
         (t.metadata.dataset["path"], t.metadata.dataset["revision"])
         for t in mteb.get_tasks(exclude_superseded=False)
         if not isinstance(t, (AbsTaskAggregate, AbsTaskSpeedTask))
-        and t.metadata.name != "AfriSentiLangClassification"
+        and t.metadata.name not in datasets_not_available
         and t.metadata.name not in ALL_MOCK_TASKS
     }
 )

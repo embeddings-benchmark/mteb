@@ -34,8 +34,7 @@ class FORBI2I(AbsTaskAny2AnyRetrieval):
             archivePrefix={arXiv},
             primaryClass={cs.CV},
             url={https://arxiv.org/abs/2309.16249},
-        }
-        """,
+        }""",
         descriptive_stats={
             "n_samples": {"default": 13250},
             "avg_character_length": {

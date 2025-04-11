@@ -31,8 +31,7 @@ class RP2kI2IRetrieval(AbsTaskAny2AnyRetrieval):
   author={Peng, Jingtian and Xiao, Chang and Li, Yifan},
   journal={arXiv preprint arXiv:2006.12634},
   year={2020}
-}
-        """,
+}""",
         descriptive_stats={
             "n_samples": {"test": 39457},
             "avg_character_length": {
