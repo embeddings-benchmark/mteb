@@ -88,36 +88,25 @@ class Wrapper:
         return task_to_prompt_name
 
     @staticmethod
-    def get_instruction(task_name: str, prompt_type: PromptType | None) -> str:
+    def get_instruction(
+        task_name: str,
+        prompt_type: PromptType | None,
+        prompts_dict: dict[str, str] | None = None,
+    ) -> str:
         """Get the instruction/prompt to be used for encoding sentences."""
+        if prompts_dict and task_name in prompts_dict:
+            return prompts_dict[task_name]
         task = mteb.get_task(task_name=task_name)
         task_metadata = task.metadata
-        prompt_data = task_metadata.prompt
-        prompt_type_value = prompt_type.value if prompt_type else None
-        task_type = task_metadata.type
+
         if isinstance(task_metadata.prompt, dict) and prompt_type:
-            if (
-                task_name
-                and prompt_type
-                and f"{task_name}-{prompt_type_value}" in prompt_data
-            ):
-                return prompt_data[f"{task_name}-{prompt_type_value}"]
-            if task_name and task_name in prompt_data:
-                return prompt_data[task_name]
-            if (
-                task_type
-                and prompt_type
-                and f"{task_type}-{prompt_type_value}" in prompt_data
-            ):
-                return prompt_data[f"{task_type}-{prompt_type_value}"]
-            if task_type and task_type in prompt_data:
-                return prompt_data[task_type]
-            if prompt_type and prompt_type_value in prompt_data:
-                return prompt_data[prompt_type_value]
+            if task_metadata.prompt.get(prompt_type.value):
+                return task_metadata.prompt[prompt_type.value]
             logger.warning(
                 f"Prompt type '{prompt_type}' not found in task metadata for task '{task_name}'."
             )
             return ""
+
         if task_metadata.prompt:
             return task_metadata.prompt
         return task.abstask_prompt
