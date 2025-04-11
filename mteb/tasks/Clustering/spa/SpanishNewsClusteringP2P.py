@@ -21,7 +21,7 @@ class SpanishNewsClusteringP2P(AbsTaskClustering):
         eval_langs=["spa-Latn"],
         main_score="v_measure",
         date=None,
-        domains=None,
+        domains=[],
         task_subtypes=None,
         license=None,
         annotations_creators=None,

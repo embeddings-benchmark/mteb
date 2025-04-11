@@ -228,11 +228,11 @@ class TaskMetadata(BaseModel):
     reference: STR_URL | None = None
 
     eval_splits: list[str] = ["test"]
-    eval_langs: LANGUAGES
+    eval_langs: LANGUAGES = []
     main_score: str
 
     date: tuple[STR_DATE, STR_DATE] | None = None
-    domains: list[TASK_DOMAIN] | None = None
+    domains: list[TASK_DOMAIN] = []
     task_subtypes: list[TASK_SUBTYPE] | None = None
     license: LICENSES | STR_URL | None = None
 
