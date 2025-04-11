@@ -155,6 +155,10 @@ class AbsTaskAggregate(AbsTask):
         )
 
     @property
+    def is_aggregate(self):  # Overrides the is_aggregate method on AbsTask
+        return True
+
+    @property
     def eval_splits(self) -> list[str]:
         if self._eval_splits:
             return self._eval_splits

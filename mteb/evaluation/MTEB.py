@@ -17,7 +17,6 @@ import datasets
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 from mteb.abstasks.AbsTask import ScoresDict
-from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import model_meta_from_sentence_transformers
@@ -467,7 +466,7 @@ class MTEB:
                 f"\n\n********************** Evaluating {task.metadata.name} **********************"
             )
 
-            if isinstance(task, AbsTaskAggregate):
+            if task.is_aggregate:
                 self_ = MTEB(tasks=task.metadata.tasks)
                 task_results = self_.run(
                     model,

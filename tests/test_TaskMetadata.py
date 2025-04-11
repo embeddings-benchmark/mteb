@@ -1161,3 +1161,10 @@ def test_eval_langs_correctly_specified(task: AbsTask):
         assert isinstance(task.metadata.eval_langs, list), (
             f"{task.metadata.name} should have eval_langs as a list"
         )
+
+
+def test_is_aggregate_property_correct():
+    tasks = get_tasks()
+
+    for task in tasks:
+        assert task.is_aggregate == isinstance(task, AbsTaskAggregate)
