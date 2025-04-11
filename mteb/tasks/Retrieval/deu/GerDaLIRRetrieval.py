@@ -26,7 +26,7 @@ class GerDaLIR(AbsTaskRetrieval):
         main_score="ndcg_at_10",
         date=None,
         domains=["Legal"],
-        task_subtypes=["Legal information retrieval"],
+        task_subtypes=[],
         license=None,
         annotations_creators=None,
         dialect=None,

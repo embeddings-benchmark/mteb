@@ -46,7 +46,7 @@ class MasakhaNEWSClusteringS2S(AbsTaskClustering, MultilingualTask):
         eval_langs=_LANGUAGES,
         main_score="v_measure",
         date=("2023-04-21", "2023-05-26"),
-        domains=["News"],
+        domains=["News", "Written"],
         task_subtypes=["Topic classification"],
         license="afl-3.0",
         annotations_creators="human-annotated",

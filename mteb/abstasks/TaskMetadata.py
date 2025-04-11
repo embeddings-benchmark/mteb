@@ -89,7 +89,7 @@ TASK_DOMAIN = Literal[
     "Entertainment",
     "E-commerce",
     "Vehicle",
-    "IT",
+    "Information Technology",
     "Emotion",
     "Books",
     "Not Specified",
