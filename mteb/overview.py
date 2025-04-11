@@ -134,12 +134,15 @@ def filter_tasks_by_modalities(
 
 
 def filter_aggregate_tasks(
-    tasks: list[AbsTask], include_aggregate: bool = True
+    tasks: list[AbsTask], exclude_aggregate: bool = True
 ) -> list[AbsTask]:
-    """Filters tasks by whether they are aggregate or not."""
-    if include_aggregate:
-        return tasks
-    return [t for t in tasks if not t.is_aggregate]
+    """Args:
+    tasks: A list of tasks to filter.
+    exclude_aggregate: Is True, filter out aggregate tasks. If False, return all the original tasks.
+    """
+    if exclude_aggregate:
+        return [t for t in tasks if not t.is_aggregate]
+    return tasks
 
 
 class MTEBTasks(tuple):
@@ -287,7 +290,7 @@ def get_tasks(
     exclusive_language_filter: bool = False,
     modalities: list[MODALITIES] | None = None,
     exclusive_modality_filter: bool = False,
-    include_aggregate: bool = True,
+    exclude_aggregate: bool = False,
 ) -> MTEBTasks:
     """Get a list of tasks based on the specified filters.
 
@@ -310,7 +313,7 @@ def get_tasks(
         exclusive_modality_filter: If True, only keep tasks where _all_ filter modalities are included in the
             task's modalities and ALL task modalities are in filter modalities (exact match).
             If False, keep tasks if _any_ of the task's modalities match the filter modalities.
-        include_aggregate: If True, include aggregate tasks. If False, aggregate tasks are filtered out.
+        exclude_aggregate: If True, exclude aggregate tasks. If False, both aggregate and non-aggregate tasks are returned.
 
     Returns:
         A list of all initialized tasks objects which pass all of the filters (AND operation).
@@ -361,8 +364,8 @@ def get_tasks(
         _tasks = filter_tasks_by_modalities(
             _tasks, modalities, exclusive_modality_filter
         )
-    if include_aggregate:
-        _tasks = filter_aggregate_tasks(_tasks, include_aggregate)
+    if exclude_aggregate:
+        _tasks = filter_aggregate_tasks(_tasks, exclude_aggregate)
 
     return MTEBTasks(_tasks)
 
