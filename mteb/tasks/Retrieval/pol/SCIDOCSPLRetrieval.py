@@ -22,7 +22,7 @@ class SCIDOCSPL(AbsTaskRetrieval):
         eval_langs=["pol-Latn"],
         main_score="ndcg_at_10",
         date=None,
-        domains=None,
+        domains=[],
         task_subtypes=None,
         license=None,
         annotations_creators=None,
