@@ -27,6 +27,7 @@ from mteb.models import (
     cohere_models,
     cohere_v,
     colbert_models,
+    conan_models,
     dino_models,
     e5_instruct,
     e5_models,
@@ -99,7 +100,7 @@ model_modules = [
     cohere_models,
     cohere_v,
     colbert_models,
-    conan_mo
+    conan_models,
     dino_models,
     e5_instruct,
     e5_models,
