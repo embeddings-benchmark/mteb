@@ -467,7 +467,7 @@ class MTEB:
                 f"\n\n********************** Evaluating {task.metadata.name} **********************"
             )
 
-            if isinstance(task, AbsTaskAggregate):
+            if task.is_aggregate:
                 self_ = MTEB(tasks=task.metadata.tasks)
                 task_results = self_.run(
                     model,
