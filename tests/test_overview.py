@@ -72,6 +72,7 @@ def test_get_task(
 @pytest.mark.parametrize("exclude_superseded_datasets", [True, False])
 @pytest.mark.parametrize("modalities", [["text"], ["image"], ["text", "image"], None])
 @pytest.mark.parametrize("exclusive_modality_filter", [True, False])
+@pytest.mark.parametrize("include_aggregate", [True, False])
 def test_get_tasks(
     languages: list[str],
     script: list[str],
@@ -80,6 +81,7 @@ def test_get_tasks(
     exclude_superseded_datasets: bool,
     modalities: list[MODALITIES] | None,
     exclusive_modality_filter: bool,
+    include_aggregate: bool,
 ):
     tasks = mteb.get_tasks(
         languages=languages,
@@ -89,6 +91,7 @@ def test_get_tasks(
         exclude_superseded=exclude_superseded_datasets,
         modalities=modalities,
         exclusive_modality_filter=exclusive_modality_filter,
+        include_aggregate=include_aggregate,
     )
 
     for task in tasks:
@@ -110,6 +113,9 @@ def test_get_tasks(
                 assert set(task.modalities) == set(modalities)
             else:
                 assert any(mod in task.modalities for mod in modalities)
+        if not include_aggregate:
+            # Aggregate tasks should be excluded
+            assert not task.is_aggregate
 
 
 def test_get_tasks_filtering():
