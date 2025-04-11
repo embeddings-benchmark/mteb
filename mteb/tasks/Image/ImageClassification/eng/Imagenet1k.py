@@ -38,5 +38,5 @@ class Imagenet1kClassification(AbsTaskImageClassification):
         organization={Ieee}
         }""",
     )
-    image_column_name: str = "jpg"
+    values_column_name: str = "jpg"
     label_column_name: str = "cls"

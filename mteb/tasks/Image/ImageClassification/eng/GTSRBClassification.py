@@ -41,5 +41,5 @@ class GTSRBClassification(AbsTaskImageClassification):
   doi={10.1109/IJCNN.2011.6033395}}
 """,
     )
-    image_column_name = "webp"
+    values_column_name = "webp"
     label_column_name = "cls"

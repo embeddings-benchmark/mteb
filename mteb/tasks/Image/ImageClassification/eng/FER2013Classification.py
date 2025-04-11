@@ -40,5 +40,5 @@ class FER2013Classification(AbsTaskImageClassification):
         }
         """,
     )
-    image_column_name: str = "jpg"
+    values_column_name: str = "jpg"
     label_column_name: str = "cls"

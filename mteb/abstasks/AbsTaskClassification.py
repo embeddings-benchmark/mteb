@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from abc import ABC, abstractmethod
 from collections import Counter, defaultdict
 from typing import Any
 
@@ -13,6 +14,7 @@ from mteb.encoder_interface import Encoder
 from ..evaluation.evaluators import (
     logRegClassificationEvaluator,
 )
+from ..evaluation.evaluators.ClassificationEvaluator import AbsClassificationEvaluator
 from ..load_results.task_results import HFSubset, ScoresDict
 from .AbsTask import AbsTask
 
@@ -55,26 +57,15 @@ class ClassificationDescriptiveStatistics(DescriptiveStatistics):
     labels: dict[str, dict[str, int]]
 
 
-class AbsTaskClassification(AbsTask):
-    """Abstract class for classification tasks
-    The similarity is computed between pairs and the results are ranked.
-
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It
-    must contain the following columns:
-        text: str
-        label: int
-
-    Attributes:
-       samples_per_label: Number of samples to use pr. label. These samples are embedded and a classifier is fit using the labels and samples.
-
-    """
-
-    evaluator = logRegClassificationEvaluator
-    abstask_prompt = "Classify user passages."
+class AbsClassification(AbsTask, ABC):
+    evaluator: AbsClassificationEvaluator
     samples_per_label: int = 8
     n_experiments: int = 10
     k: int = 3
-    train_split = "train"
+    train_split: str = "train"
+    label_column_name: str = "label"
+    values_column_name: str
+    is_image: bool = False
 
     def evaluate(
         self,
@@ -117,7 +108,7 @@ class AbsTaskClassification(AbsTask):
     def _evaluate_subset(
         self,
         model: Encoder,
-        dataset: DatasetDict | Dataset,
+        dataset: DatasetDict,
         hf_split: str,
         hf_subset: str,
         encode_kwargs: dict[str, Any],
@@ -140,13 +131,15 @@ class AbsTaskClassification(AbsTask):
             # Bootstrap `self.samples_per_label` samples per label for each split
             train_dataset, idxs = self._undersample_data(
                 train_split,
-                self.samples_per_label,
                 idxs,
             )
 
             evaluator = self.evaluator(
                 train_dataset,
                 eval_split,
+                self.values_column_name,
+                self.label_column_name,
+                self.is_image,
                 task_metadata=self.metadata,
                 hf_split=hf_split,
                 hf_subset=hf_subset,
@@ -163,8 +156,35 @@ class AbsTaskClassification(AbsTask):
         avg_scores["scores_per_experiment"] = scores
         return avg_scores
 
+    @abstractmethod
     def _undersample_data(
-        self, dataset: Dataset, samples_per_label: int, idxs=None
+        self, dataset: Dataset, idxs=None
+    ) -> tuple[Dataset, list[int]]:
+        """Undersample data to have `samples_per_label` samples of each label."""
+        pass
+
+
+class AbsTaskClassification(AbsClassification):
+    """Abstract class for classification tasks
+    The similarity is computed between pairs and the results are ranked.
+
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It
+    must contain the following columns:
+        text: str
+        label: int
+
+    Attributes:
+       samples_per_label: Number of samples to use pr. label. These samples are embedded and a classifier is fit using the labels and samples.
+
+    """
+
+    evaluator = logRegClassificationEvaluator
+    abstask_prompt = "Classify user passages."
+    values_column_name: str = "text"
+    is_image: bool = False
+
+    def _undersample_data(
+        self, dataset: Dataset, idxs=None
     ) -> tuple[Dataset, list[int]]:
         """Undersample data to have `samples_per_label` samples of each label.
 
@@ -187,8 +207,8 @@ class AbsTaskClassification(AbsTask):
         sampled_idxs = []
 
         for i in idxs:
-            label = dataset[i]["label"]
-            if label_counter[label] < samples_per_label:
+            label = dataset[i][self.label_column_name]
+            if label_counter[label] < self.samples_per_label:
                 sampled_idxs.append(i)
                 label_counter[label] += 1
 
@@ -199,23 +219,29 @@ class AbsTaskClassification(AbsTask):
     ) -> ClassificationDescriptiveStatistics:
         train_text = []
         if hf_subset:
-            text = self.dataset[hf_subset][split]["text"]
-            label = self.dataset[hf_subset][split]["label"]
-            if split != "train":
-                train_text = self.dataset[hf_subset]["train"]["text"]
+            text = self.dataset[hf_subset][split][self.values_column_name]
+            label = self.dataset[hf_subset][split][self.label_column_name]
+            if split != self.train_split:
+                train_text = self.dataset[hf_subset][self.train_split][
+                    self.values_column_name
+                ]
         elif compute_overall:
             text = []
             label = []
             for hf_subset in self.metadata.eval_langs:
-                text.extend(self.dataset[hf_subset][split]["text"])
-                label.extend(self.dataset[hf_subset][split]["label"])
-                if split != "train":
-                    train_text.extend(self.dataset[hf_subset]["train"]["text"])
+                text.extend(self.dataset[hf_subset][split][self.values_column_name])
+                label.extend(self.dataset[hf_subset][split][self.label_column_name])
+                if split != self.train_split:
+                    train_text.extend(
+                        self.dataset[hf_subset][self.train_split][
+                            self.values_column_name
+                        ]
+                    )
         else:
-            text = self.dataset[split]["text"]
-            label = self.dataset[split]["label"]
-            if split != "train":
-                train_text = self.dataset["train"]["text"]
+            text = self.dataset[split][self.values_column_name]
+            label = self.dataset[split][self.label_column_name]
+            if split != self.train_split:
+                train_text = self.dataset[self.train_split][self.values_column_name]
 
         text_len = [len(t) for t in text]
         total_text_len = sum(text_len)
@@ -232,7 +258,7 @@ class AbsTaskClassification(AbsTask):
                 total_labels.extend(l if len(l) > 0 else [None])
         label_count = Counter(total_labels)
         num_texts_in_train = (
-            len(set(text) & set(train_text)) if split != "train" else None
+            len(set(text) & set(train_text)) if split != self.train_split else None
         )
         return ClassificationDescriptiveStatistics(
             num_samples=len(text),

@@ -8,7 +8,12 @@ from collections import Counter, defaultdict
 
 import pandas as pd
 
-from mteb.abstasks import AbsTask, AbsTaskMultilabelClassification
+from mteb.abstasks import (
+    AbsTask,
+    AbsTaskImageClassification,
+    AbsTaskMultilabelClassification,
+)
+from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.TaskMetadata import TASK_CATEGORY, TASK_DOMAIN, TASK_TYPE
 from mteb.custom_validators import MODALITIES
@@ -31,6 +36,8 @@ def create_task_list() -> list[type[AbsTask]]:
     tasks_categories_cls = list(AbsTask.__subclasses__()) + [
         AbsTaskMultilabelClassification,
         AbsTaskReranking,
+        AbsTaskClassification,
+        AbsTaskImageClassification,
     ]
     tasks = []
     for cat_cls in tasks_categories_cls:

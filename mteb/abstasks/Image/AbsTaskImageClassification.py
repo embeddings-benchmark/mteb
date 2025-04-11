@@ -2,19 +2,15 @@ from __future__ import annotations
 
 import logging
 from collections import Counter, defaultdict
-from typing import Any
 
 import numpy as np
+from datasets import Dataset
 from PIL import ImageFile
 
-from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics
 
-from ...encoder_interface import Encoder
-from ...evaluation.evaluators import (
-    ImagekNNClassificationEvaluator,
-    ImagelogRegClassificationEvaluator,
-)
-from ..AbsTask import AbsTask, ScoresDict
+from ...evaluation import logRegClassificationEvaluator
+from ..AbsTaskClassification import AbsClassification
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
@@ -53,7 +49,7 @@ class ImageClassificationDescriptiveStatistics(DescriptiveStatistics):
     labels: dict[str, dict[str, int]]
 
 
-class AbsTaskImageClassification(AbsTask):
+class AbsTaskImageClassification(AbsClassification):
     """Abstract class for kNN classification tasks
     The similarity is computed between pairs and the results are ranked.
 
@@ -63,46 +59,26 @@ class AbsTaskImageClassification(AbsTask):
         label: int
     """
 
-    image_column_name: str = "image"
-    label_column_name: str = "label"
+    evaluator = logRegClassificationEvaluator
+    values_column_name: str = "image"
     samples_per_label: int = 16
     n_experiments: int = 5
-
-    def __init__(
-        self,
-        method: str = "logReg",
-        k: int = 3,
-        **kwargs,
-    ):
-        super().__init__(**kwargs)
-        self.method = method
-
-        # kNN parameters
-        self.k = k
-
-        # Run metadata validation by instantiating addressing the attribute
-        # This is quite hacky. Ideally, this would be done in the constructor of
-        # each concrete task, but then we have to duplicate the __init__ method's
-        # interface.
-        if hasattr(self, "metadata"):
-            self.metadata
-
-    def _add_main_score(self, scores: dict[HFSubset, ScoresDict]) -> None:
-        scores["main_score"] = scores[self.metadata.main_score]
+    abstask_prompt = "Classify user passages."
+    is_image = True
 
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ImageClassificationDescriptiveStatistics:
         if hf_subset:
-            imgs = self.dataset[hf_subset][split][self.image_column_name]
+            imgs = self.dataset[hf_subset][split][self.values_column_name]
             labels = self.dataset[hf_subset][split][self.label_column_name]
         elif compute_overall:
             imgs, labels = [], []
             for hf_subset in self.metadata.eval_langs:
-                imgs.extend(self.dataset[hf_subset][split][self.image_column_name])
+                imgs.extend(self.dataset[hf_subset][split][self.values_column_name])
                 labels.extend(self.dataset[hf_subset][split][self.label_column_name])
         else:
-            imgs = self.dataset[split][self.image_column_name]
+            imgs = self.dataset[split][self.values_column_name]
             labels = self.dataset[split][self.label_column_name]
 
         num_samples = len(labels)
@@ -129,115 +105,7 @@ class AbsTaskImageClassification(AbsTask):
             },
         )
 
-    def evaluate(
-        self,
-        model,
-        eval_split: str = "test",
-        train_split: str = "train",
-        *,
-        encode_kwargs: dict[str, Any],
-        **kwargs,
-    ) -> dict[HFSubset, ScoresDict]:
-        if not self.data_loaded:
-            self.load_data()
-
-        scores = {}
-        hf_subsets = self.hf_subsets
-
-        for hf_subset in hf_subsets:
-            logger.info(
-                f"\nTask: {self.metadata.name}, split: {eval_split}, subset: {hf_subset}. Running..."
-            )
-
-            if hf_subset not in self.dataset and hf_subset == "default":
-                ds = self.dataset
-            else:
-                ds = self.dataset[hf_subset]
-            scores[hf_subset] = self._evaluate_subset(
-                model,
-                ds,
-                hf_subset=hf_subset,
-                hf_split=eval_split,
-                train_split=train_split,
-                encode_kwargs=encode_kwargs,
-                **kwargs,
-            )
-            self._add_main_score(scores[hf_subset])
-
-        return scores
-
-    def _evaluate_subset(
-        self,
-        model: Encoder,
-        dataset,
-        hf_subset: str,
-        hf_split: str = "test",
-        train_split: str = "train",
-        *,
-        encode_kwargs: dict[str, Any],
-        **kwargs,
-    ) -> ScoresDict:
-        train_split = dataset[train_split]
-        eval_split = dataset[hf_split]
-        params = {"k": self.k}
-        params.update(kwargs)
-
-        scores = []
-        test_cache, idxs = (
-            None,
-            None,
-        )  # we store idxs to make the shuffling reproducible
-        for i in range(self.n_experiments):
-            logger.info(
-                "=" * 10 + f" Experiment {i + 1}/{self.n_experiments} " + "=" * 10
-            )
-            # Bootstrap `self.samples_per_label` samples per label for each split
-            undersampled_train, idxs = self._undersample_data(
-                train_split,
-                self.label_column_name,
-                self.samples_per_label,
-                idxs=idxs,
-            )
-
-            if self.method == "kNN":
-                evaluator = ImagekNNClassificationEvaluator(
-                    undersampled_train,
-                    eval_split,
-                    self.image_column_name,
-                    self.label_column_name,
-                    task_metadata=self.metadata,
-                    hf_split=hf_split,
-                    hf_subset=hf_subset,
-                    encode_kwargs=encode_kwargs,
-                    **params,
-                )
-            elif self.method == "logReg":
-                evaluator = ImagelogRegClassificationEvaluator(
-                    undersampled_train,
-                    eval_split,
-                    self.image_column_name,
-                    self.label_column_name,
-                    task_metadata=self.metadata,
-                    hf_split=hf_split,
-                    hf_subset=hf_subset,
-                    encode_kwargs=encode_kwargs,
-                    **params,
-                )
-            else:
-                raise ValueError(f"Method {self.method} not supported")
-
-            scores_exp, test_cache = evaluator(model, test_cache=test_cache)
-            scores.append(scores_exp)
-
-        avg_scores: dict[str, Any] = {
-            k: np.mean([s[k] for s in scores]) for k in scores[0].keys()
-        }
-        avg_scores["scores_per_experiment"] = scores
-        return avg_scores
-
-    def _undersample_data(
-        self, dataset_split, label_column_name, samples_per_label, idxs=None
-    ):
+    def _undersample_data(self, dataset_split: Dataset, idxs=None):
         """Undersample data to have samples_per_label samples of each label
         without loading all images into memory.
         """
@@ -249,10 +117,10 @@ class AbsTaskImageClassification(AbsTask):
         label_counter = defaultdict(int)
         selected_indices = []
 
-        labels = dataset_split[label_column_name]
+        labels = dataset_split[self.label_column_name]
         for i in idxs:
             label = labels[i]
-            if label_counter[label] < samples_per_label:
+            if label_counter[label] < self.samples_per_label:
                 selected_indices.append(i)
                 label_counter[label] += 1
 

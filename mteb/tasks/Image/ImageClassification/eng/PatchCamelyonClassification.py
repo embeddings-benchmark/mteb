@@ -51,5 +51,5 @@ isbn="978-3-030-00934-2"
 }
 """,
     )
-    image_column_name = "webp"
+    values_column_name = "webp"
     label_column_name = "cls"

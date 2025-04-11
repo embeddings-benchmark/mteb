@@ -37,7 +37,7 @@ class CIFAR10Classification(AbsTaskImageClassification):
         }
         """,
     )
-    image_column_name: str = "img"
+    values_column_name: str = "img"
 
 
 class CIFAR100Classification(AbsTaskImageClassification):
@@ -73,5 +73,5 @@ class CIFAR100Classification(AbsTaskImageClassification):
         }
         """,
     )
-    image_column_name: str = "img"
+    values_column_name: str = "img"
     label_column_name: str = "fine_label"

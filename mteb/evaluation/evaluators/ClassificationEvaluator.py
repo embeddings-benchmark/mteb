@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from abc import ABC, abstractmethod
 from typing import Any
 
 import numpy as np
@@ -18,6 +19,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder
 from mteb.model_meta import ScoringFunction
 
+from ...create_dataloaders import create_image_dataloader
 from .Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
@@ -27,27 +29,45 @@ def dot_distance(a: np.ndarray, b: np.ndarray) -> float:
     return -np.dot(a, b)
 
 
-class kNNClassificationEvaluator(Evaluator):
+class AbsClassificationEvaluator(Evaluator, ABC):
     def __init__(
         self,
         train_dataset: Dataset,
         eval_dataset: Dataset,
+        values_column_name: str,
+        label_column_name: str,
+        is_image: bool,
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        k: int = 1,
+        max_iter: int = 100,
         **kwargs,
     ):
         super().__init__(**kwargs)
         self.train_dataset = train_dataset
         self.eval_dataset = eval_dataset
 
+        self.values_column_name = values_column_name
+        self.label_column_name = label_column_name
+
+        self.max_iter = max_iter
         self.task_metadata = task_metadata
         self.hf_split = hf_split
         self.hf_subset = hf_subset
+        self.is_image = is_image
 
-        self.k = k
+    @abstractmethod
+    def __call__(
+        self,
+        model: Encoder,
+        *,
+        encode_kwargs: dict[str, Any],
+        test_cache: np.ndarray | None = None,
+    ) -> tuple[dict[str, float], Any]:
+        raise NotImplementedError()
 
+
+class kNNClassificationEvaluator(AbsClassificationEvaluator):
     def __call__(
         self,
         model: Encoder,
@@ -107,26 +127,7 @@ class kNNClassificationEvaluator(Evaluator):
         return scores, test_cache
 
 
-class logRegClassificationEvaluator(Evaluator):
-    def __init__(
-        self,
-        train_dataset: Dataset,
-        eval_dataset: Dataset,
-        task_metadata: TaskMetadata,
-        hf_split: str,
-        hf_subset: str,
-        max_iter: int = 100,
-        **kwargs,
-    ):
-        super().__init__(**kwargs)
-        self.train_dataset = train_dataset
-        self.eval_dataset = eval_dataset
-
-        self.max_iter = max_iter
-        self.task_metadata = task_metadata
-        self.hf_split = hf_split
-        self.hf_subset = hf_subset
-
+class logRegClassificationEvaluator(AbsClassificationEvaluator):
     def __call__(
         self,
         model: Encoder,
@@ -141,8 +142,30 @@ class logRegClassificationEvaluator(Evaluator):
             max_iter=self.max_iter,
             verbose=1 if logger.isEnabledFor(logging.DEBUG) else 0,
         )
+        if self.is_image:
+            dataloader_train = create_image_dataloader(
+                self.train_dataset,
+                image_column_name=self.values_column_name,
+                batch_size=encode_kwargs["batch_size"],
+            )
+            dataloader_test = create_image_dataloader(
+                self.eval_dataset,
+                image_column_name=self.values_column_name,
+                batch_size=encode_kwargs["batch_size"],
+            )
+        else:
+            if self.values_column_name != "text":
+                self.train_dataset = self.train_dataset.rename_column(
+                    self.values_column_name, "text"
+                )
+                self.eval_dataset = self.eval_dataset.rename_column(
+                    self.values_column_name, "text"
+                )
+            dataloader_train = DataLoader(self.train_dataset)
+            dataloader_test = DataLoader(self.eval_dataset)
+
         X_train = model.encode(
-            DataLoader(self.train_dataset),
+            dataloader_train,
             task_metadata=self.task_metadata,
             hf_split="train",
             hf_subset=self.hf_subset,
@@ -150,15 +173,15 @@ class logRegClassificationEvaluator(Evaluator):
         )
         if test_cache is None:
             test_cache = model.encode(
-                DataLoader(self.eval_dataset),
+                dataloader_test,
                 task_metadata=self.task_metadata,
                 hf_split=self.hf_split,
                 hf_subset=self.hf_subset,
                 **encode_kwargs,
             )
         logger.info("Fitting logistic regression classifier...")
-        y_train = self.train_dataset["label"]
-        y_test = self.eval_dataset["label"]
+        y_train = self.train_dataset[self.label_column_name]
+        y_test = self.eval_dataset[self.label_column_name]
         clf.fit(X_train, y_train)
         logger.info("Evaluating...")
         y_pred = clf.predict(test_cache)
