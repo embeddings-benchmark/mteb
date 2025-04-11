@@ -347,9 +347,10 @@ class AbsTask(ABC):
         self.hf_subsets = subsets_to_keep
         return self
 
-    
     @property
-    def is_aggregate(self) -> bool: # Overrided by subclasses (AbsTaskAggregate) that are aggregate
+    def is_aggregate(
+        self,
+    ) -> bool:  # Overrided by subclasses (AbsTaskAggregate) that are aggregate
         """Whether the task is aggregate. Subclasses that are aggregate should override this with `True`."""
         return False
 
