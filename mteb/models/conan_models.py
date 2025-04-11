@@ -177,7 +177,7 @@ class ConanWrapper(Wrapper):
 
 Conan_embedding_v2 = ModelMeta(
     name="TencentBAC/Conan-embedding-v2",
-    revision="a9975bd04f07e0fa8e9ec52b4385e19fa2c76b25",
+    revision="e5c87c63889630bca87486f6a2645ed97c5ddb17",
     release_date="2025-04-10",
     languages=[
         "eng-Latn",
