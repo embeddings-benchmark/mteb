@@ -99,6 +99,7 @@ model_modules = [
     cohere_models,
     cohere_v,
     colbert_models,
+    conan_mo
     dino_models,
     e5_instruct,
     e5_models,
