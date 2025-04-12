@@ -19,7 +19,6 @@ from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
 from mteb.abstasks.AbsTaskSummarization import AbsTaskSummarization
 from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
 from mteb.abstasks.Image.AbsTaskImageClustering import AbsTaskImageClustering
 from mteb.abstasks.Image.AbsTaskImageMultilabelClassification import (  # noqa
     AbsTaskImageMultilabelClassification,
@@ -2598,7 +2597,7 @@ class MockAny2AnyRetrievalT2ITask(AbsTaskAny2AnyRetrieval):
         self.data_loaded = True
 
 
-class MockImageClassificationTask(AbsTaskImageClassification):
+class MockImageClassificationTask(AbsTaskAnyClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
@@ -2652,7 +2651,7 @@ class MockImageClassificationTask(AbsTaskImageClassification):
         self.data_loaded = True
 
 
-class MockImageClassificationKNNTask(AbsTaskImageClassification):
+class MockImageClassificationKNNTask(AbsTaskAnyClassification):
     expected_stats = (
         {
             "test": {
@@ -2708,7 +2707,7 @@ class MockImageClassificationKNNTask(AbsTaskImageClassification):
         self.data_loaded = True
 
 
-class MockMultilingualImageClassificationTask(AbsTaskImageClassification):
+class MockMultilingualImageClassificationTask(AbsTaskAnyClassification):
     n_experiments = 1
     samples_per_label = 5
     expected_stats = {
