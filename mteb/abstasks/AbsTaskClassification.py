@@ -58,7 +58,7 @@ class ClassificationDescriptiveStatistics(DescriptiveStatistics):
 
 
 class AbsClassification(AbsTask, ABC):
-    evaluator: AbsClassificationEvaluator
+    evaluator: type[AbsClassificationEvaluator]
     samples_per_label: int = 8
     n_experiments: int = 10
     k: int = 3

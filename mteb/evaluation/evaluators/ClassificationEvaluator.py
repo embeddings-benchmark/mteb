@@ -42,7 +42,7 @@ class AbsClassificationEvaluator(Evaluator, ABC):
         hf_subset: str,
         max_iter: int = 100,
         **kwargs,
-    ):
+    ) -> None:
         super().__init__(**kwargs)
         self.train_dataset = train_dataset
         self.eval_dataset = eval_dataset
