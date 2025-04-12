@@ -1,10 +1,8 @@
 from __future__ import annotations
 
 import logging
-from collections import Counter, defaultdict
+from collections import Counter
 
-import numpy as np
-from datasets import Dataset
 from PIL import ImageFile
 
 from mteb.abstasks.TaskMetadata import DescriptiveStatistics
@@ -103,29 +101,4 @@ class AbsTaskImageClassification(AbsClassification):
             labels={
                 str(label): {"count": count} for label, count in label_count.items()
             },
-        )
-
-    def _undersample_data(self, dataset_split: Dataset, idxs: list[int] | None = None):
-        """Undersample data to have samples_per_label samples of each label
-        without loading all images into memory.
-        """
-        if idxs is None:
-            idxs = np.arange(len(dataset_split))
-        self.np_rng.shuffle(idxs)
-        if not isinstance(idxs, list):
-            idxs = idxs.tolist()
-        label_counter = defaultdict(int)
-        selected_indices = []
-
-        labels = dataset_split[self.label_column_name]
-        for i in idxs:
-            label = labels[i]
-            if label_counter[label] < self.samples_per_label:
-                selected_indices.append(i)
-                label_counter[label] += 1
-
-        undersampled_dataset = dataset_split.select(selected_indices)
-        return (
-            undersampled_dataset,
-            idxs,
         )

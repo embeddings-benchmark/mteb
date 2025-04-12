@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from abc import ABC, abstractmethod
+from abc import ABC
 from collections import Counter, defaultdict
 from typing import Any
 
@@ -156,33 +156,6 @@ class AbsClassification(AbsTask, ABC):
         avg_scores["scores_per_experiment"] = scores
         return avg_scores
 
-    @abstractmethod
-    def _undersample_data(
-        self, dataset: Dataset, idxs: list[int] | None = None
-    ) -> tuple[Dataset, list[int]]:
-        """Undersample data to have `samples_per_label` samples of each label."""
-        pass
-
-
-class AbsTaskClassification(AbsClassification):
-    """Abstract class for classification tasks
-    The similarity is computed between pairs and the results are ranked.
-
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It
-    must contain the following columns:
-        text: str
-        label: int
-
-    Attributes:
-       samples_per_label: Number of samples to use pr. label. These samples are embedded and a classifier is fit using the labels and samples.
-
-    """
-
-    evaluator = logRegClassificationEvaluator
-    abstask_prompt = "Classify user passages."
-    values_column_name: str = "text"
-    is_image: bool = False
-
     def _undersample_data(
         self, dataset: Dataset, idxs: list[int] | None = None
     ) -> tuple[Dataset, list[int]]:
@@ -212,6 +185,26 @@ class AbsTaskClassification(AbsClassification):
                 label_counter[label] += 1
 
         return dataset.select(sampled_idxs), idxs
+
+
+class AbsTaskClassification(AbsClassification):
+    """Abstract class for classification tasks
+    The similarity is computed between pairs and the results are ranked.
+
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It
+    must contain the following columns:
+        text: str
+        label: int
+
+    Attributes:
+       samples_per_label: Number of samples to use pr. label. These samples are embedded and a classifier is fit using the labels and samples.
+
+    """
+
+    evaluator = logRegClassificationEvaluator
+    abstask_prompt = "Classify user passages."
+    values_column_name: str = "text"
+    is_image: bool = False
 
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
