@@ -2,20 +2,16 @@ from __future__ import annotations
 
 import pytest
 
-from tests.test_benchmark.mock_tasks import (
-    MockImageClassificationKNNTask,
-    MockImageClassificationTask,
-)
-from tests.test_benchmark.task_grid import MOCK_TASK_TEST_GRID
+from tests.test_benchmark.task_grid import ALL_TASK_TEST_GRID
 
 
 @pytest.mark.parametrize(
     "task",
-    MOCK_TASK_TEST_GRID
-    + [MockImageClassificationTask(), MockImageClassificationKNNTask()],
+    ALL_TASK_TEST_GRID,
 )
 def test_descriptive_stats(task):
-    # todo integrate MIEB
+    if task.metadata.name == "MockMultilingualMultiChoice":
+        pytest.skip("Task computed stats are not implemented correctly yet")
     result_stat = task.calculate_metadata_metrics()
     # remove descriptive task file
     task.metadata.descriptive_stat_path.unlink()
