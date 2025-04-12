@@ -55,6 +55,31 @@ class AbsClassificationEvaluator(Evaluator, ABC):
         self.hf_split = hf_split
         self.hf_subset = hf_subset
         self.is_image = is_image
+        self.k = kwargs.get("k", 3)
+
+    def create_dataloaders(self, batch_size: int) -> tuple[DataLoader, DataLoader]:
+        if self.is_image:
+            dataloader_train = create_image_dataloader(
+                self.train_dataset,
+                image_column_name=self.values_column_name,
+                batch_size=batch_size,
+            )
+            dataloader_test = create_image_dataloader(
+                self.eval_dataset,
+                image_column_name=self.values_column_name,
+                batch_size=batch_size,
+            )
+        else:
+            if self.values_column_name != "text":
+                self.train_dataset = self.train_dataset.rename_column(
+                    self.values_column_name, "text"
+                )
+                self.eval_dataset = self.eval_dataset.rename_column(
+                    self.values_column_name, "text"
+                )
+            dataloader_train = DataLoader(self.train_dataset)
+            dataloader_test = DataLoader(self.eval_dataset)
+        return dataloader_train, dataloader_test
 
     @abstractmethod
     def __call__(
@@ -79,8 +104,11 @@ class kNNClassificationEvaluator(AbsClassificationEvaluator):
         max_accuracy = 0
         max_f1 = 0
         max_ap = 0
+        dataloader_train, dataloader_test = self.create_dataloaders(
+            batch_size=encode_kwargs["batch_size"]
+        )
         X_train = model.encode(
-            DataLoader(self.train_dataset),
+            dataloader_train,
             task_metadata=self.task_metadata,
             hf_split="train",
             hf_subset=self.hf_subset,
@@ -88,7 +116,7 @@ class kNNClassificationEvaluator(AbsClassificationEvaluator):
         )
         if test_cache is None:
             X_test = model.encode(
-                DataLoader(self.eval_dataset),
+                dataloader_test,
                 task_metadata=self.task_metadata,
                 hf_split=self.hf_split,
                 hf_subset=self.hf_subset,
@@ -142,27 +170,10 @@ class logRegClassificationEvaluator(AbsClassificationEvaluator):
             max_iter=self.max_iter,
             verbose=1 if logger.isEnabledFor(logging.DEBUG) else 0,
         )
-        if self.is_image:
-            dataloader_train = create_image_dataloader(
-                self.train_dataset,
-                image_column_name=self.values_column_name,
-                batch_size=encode_kwargs["batch_size"],
-            )
-            dataloader_test = create_image_dataloader(
-                self.eval_dataset,
-                image_column_name=self.values_column_name,
-                batch_size=encode_kwargs["batch_size"],
-            )
-        else:
-            if self.values_column_name != "text":
-                self.train_dataset = self.train_dataset.rename_column(
-                    self.values_column_name, "text"
-                )
-                self.eval_dataset = self.eval_dataset.rename_column(
-                    self.values_column_name, "text"
-                )
-            dataloader_train = DataLoader(self.train_dataset)
-            dataloader_test = DataLoader(self.eval_dataset)
+
+        dataloader_train, dataloader_test = self.create_dataloaders(
+            batch_size=encode_kwargs["batch_size"]
+        )
 
         X_train = model.encode(
             dataloader_train,
