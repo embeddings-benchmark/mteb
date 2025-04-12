@@ -160,7 +160,7 @@ class kNNClassificationEvaluator(ClassificationEvaluator):
                 )
 
         for metric_name, metric_score in max_scores.items():
-            scores[f"{metric_name}_max"] = metric_score
+            scores[metric_name] = metric_score
 
         return scores, test_cache
 
