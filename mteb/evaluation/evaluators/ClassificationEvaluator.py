@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from abc import ABC, abstractmethod
+from abc import ABC
 from typing import Any
 
 import numpy as np
@@ -106,16 +106,6 @@ class AbsClassificationEvaluator(Evaluator, ABC):
                 y_test, y_pred, average="weighted"
             )
         return scores
-
-    @abstractmethod
-    def __call__(
-        self,
-        model: Encoder,
-        *,
-        encode_kwargs: dict[str, Any],
-        test_cache: np.ndarray | None = None,
-    ) -> tuple[dict[str, float], Any]:
-        raise NotImplementedError()
 
 
 class kNNClassificationEvaluator(AbsClassificationEvaluator):
