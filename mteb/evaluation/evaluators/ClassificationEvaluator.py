@@ -11,6 +11,8 @@ from sklearn.metrics import (
     accuracy_score,
     average_precision_score,
     f1_score,
+    precision_score,
+    recall_score,
 )
 from sklearn.neighbors import KNeighborsClassifier
 from torch.utils.data import DataLoader
@@ -81,6 +83,29 @@ class AbsClassificationEvaluator(Evaluator, ABC):
             dataloader_test = DataLoader(self.eval_dataset)
         return dataloader_train, dataloader_test
 
+    def calculate_scores(
+        self,
+        y_test: np.ndarray | list[int],
+        y_pred: np.ndarray,
+    ) -> dict[str, float]:
+        scores = {
+            "accuracy": accuracy_score(y_test, y_pred),
+            "f1": f1_score(y_test, y_pred, average="macro"),
+            "f1_weighted": f1_score(y_test, y_pred, average="weighted"),
+            "precision": precision_score(y_test, y_pred, average="macro"),
+            "precision_weighted": precision_score(y_test, y_pred, average="weighted"),
+            "recall": recall_score(y_test, y_pred, average="macro"),
+            "recall_weighted": recall_score(y_test, y_pred, average="weighted"),
+        }
+
+        # if binary classification
+        if len(np.unique(y_test)) == 2:
+            scores["ap"] = average_precision_score(y_test, y_pred, average="macro")
+            scores["ap_weighted"] = average_precision_score(
+                y_test, y_pred, average="weighted"
+            )
+        return scores
+
     @abstractmethod
     def __call__(
         self,
@@ -101,9 +126,7 @@ class kNNClassificationEvaluator(AbsClassificationEvaluator):
         test_cache: np.ndarray | None = None,
     ) -> tuple[dict[str, float], Any]:
         scores = {}
-        max_accuracy = 0
-        max_f1 = 0
-        max_ap = 0
+        max_scores = {}
         dataloader_train, dataloader_test = self.create_dataloaders(
             batch_size=encode_kwargs["batch_size"]
         )
@@ -129,29 +152,23 @@ class kNNClassificationEvaluator(AbsClassificationEvaluator):
         y_train = self.train_dataset["label"]
         y_test = self.eval_dataset["label"]
         for metric in [
-            ScoringFunction.COSINE,
-            ScoringFunction.EUCLIDEAN,
-        ]:  # TODO: "dot"
-            knn = KNeighborsClassifier(
-                n_neighbors=self.k, n_jobs=-1, metric=metric.value
-            )
+            ScoringFunction.COSINE.value,
+            ScoringFunction.EUCLIDEAN.value,
+            "l1",
+        ]:
+            knn = KNeighborsClassifier(n_neighbors=self.k, n_jobs=-1, metric=metric)
             knn.fit(X_train, y_train)
             y_pred = knn.predict(X_test)
-            accuracy = accuracy_score(y_test, y_pred)
-            f1 = f1_score(y_test, y_pred, average="macro")
-            scores["accuracy_" + metric.value] = accuracy
-            scores["f1_" + metric.value] = f1
-            max_accuracy = max(max_accuracy, accuracy)
-            max_f1 = max(max_f1, f1)  # type: ignore
-            # if binary classification
-            if len(np.unique(y_train)) == 2:
-                ap = average_precision_score(y_test, y_pred)
-                scores["ap_" + metric.value] = ap
-                max_ap = max(max_ap, ap)
-        scores["accuracy"] = max_accuracy
-        scores["f1"] = max_f1
-        if len(np.unique(y_train)) == 2:
-            scores["ap"] = max_ap
+            metric_scores = self.calculate_scores(y_test, y_pred)
+            for metric_name, metric_score in metric_scores.items():
+                scores[f"{metric_name}_{metric}"] = metric_score
+                max_scores[metric_name] = max(
+                    max_scores.get(metric_name, 0), metric_score
+                )
+
+        for metric_name, metric_score in max_scores.items():
+            scores[f"{metric_name}_max"] = metric_score
+
         return scores, test_cache
 
 
@@ -163,7 +180,6 @@ class logRegClassificationEvaluator(AbsClassificationEvaluator):
         encode_kwargs: dict[str, Any],
         test_cache: np.ndarray | None = None,
     ) -> tuple[dict[str, float], Any]:
-        scores = {}
         clf = LogisticRegression(
             random_state=self.seed,
             n_jobs=-1,
@@ -196,15 +212,5 @@ class logRegClassificationEvaluator(AbsClassificationEvaluator):
         clf.fit(X_train, y_train)
         logger.info("Evaluating...")
         y_pred = clf.predict(test_cache)
-        scores["accuracy"] = accuracy_score(y_test, y_pred)
-        scores["f1"] = f1_score(y_test, y_pred, average="macro")
-        scores["f1_weighted"] = f1_score(y_test, y_pred, average="weighted")
-
-        # if binary classification
-        if len(np.unique(y_test)) == 2:
-            scores["ap"] = average_precision_score(y_test, y_pred, average="macro")
-            scores["ap_weighted"] = average_precision_score(
-                y_test, y_pred, average="weighted"
-            )
-
+        scores = self.calculate_scores(y_test, y_pred)
         return scores, test_cache
