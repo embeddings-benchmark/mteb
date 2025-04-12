@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 TEST_SAMPLES = 2048
 
 
-class PersianFoodSentimentClassification(AbsTaskClassification):
+class PersianFoodSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="PersianFoodSentimentClassification",
         description="Persian Food Review Dataset",

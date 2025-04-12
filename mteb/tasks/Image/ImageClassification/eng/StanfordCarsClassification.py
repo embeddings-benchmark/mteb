@@ -1,10 +1,14 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class StanfordCarsClassification(AbsTaskImageClassification):
+class StanfordCarsClassification(AbsTaskAnyClassification):
+    values_column_name: str = "image"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="StanfordCars",
         description="Classifying car images from 196 makes.",

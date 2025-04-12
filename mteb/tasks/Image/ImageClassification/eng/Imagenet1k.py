@@ -1,10 +1,15 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class Imagenet1kClassification(AbsTaskImageClassification):
+class Imagenet1kClassification(AbsTaskAnyClassification):
+    values_column_name: str = "jpg"
+    label_column_name: str = "cls"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="Imagenet1k",
         description="ImageNet, a large-scale ontology of images built upon the backbone of the WordNet structure.",
@@ -38,5 +43,3 @@ class Imagenet1kClassification(AbsTaskImageClassification):
         organization={Ieee}
         }""",
     )
-    values_column_name: str = "jpg"
-    label_column_name: str = "cls"

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class UkrFormalityClassification(AbsTaskClassification):
+class UkrFormalityClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="UkrFormalityClassification",
         description="""

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class CyrillicTurkicLangClassification(AbsTaskClassification):
+class CyrillicTurkicLangClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="CyrillicTurkicLangClassification",
         description="Cyrillic dataset of 8 Turkic languages spoken in Russia and former USSR",

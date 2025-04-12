@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 TEST_SAMPLES = 2048
 
 
-class VieStudentFeedbackClassification(AbsTaskClassification):
+class VieStudentFeedbackClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="VieStudentFeedbackClassification",
         description="A Vietnamese dataset for classification of student feedback",

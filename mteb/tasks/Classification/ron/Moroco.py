@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 
 # type: ignore
 from mteb.abstasks.TaskMetadata import TaskMetadata  # type: ignore
 
 
-class Moroco(AbsTaskClassification):
+class Moroco(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="Moroco",
         dataset={

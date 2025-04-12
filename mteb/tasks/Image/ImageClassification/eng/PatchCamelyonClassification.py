@@ -1,10 +1,15 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class PatchCamelyonClassification(AbsTaskImageClassification):
+class PatchCamelyonClassification(AbsTaskAnyClassification):
+    values_column_name = "webp"
+    label_column_name = "cls"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="PatchCamelyon",
         description="""Histopathology diagnosis classification dataset.""",
@@ -51,5 +56,3 @@ isbn="978-3-030-00934-2"
 }
 """,
     )
-    values_column_name = "webp"
-    label_column_name = "cls"

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class ToxicConversationsClassification(AbsTaskClassification):
+class ToxicConversationsClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="ToxicConversationsClassification",
         description="Collection of comments from the Civil Comments platform together with annotations if the comment is toxic or not.",

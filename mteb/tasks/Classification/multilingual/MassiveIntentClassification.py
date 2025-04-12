@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -58,7 +58,7 @@ _LANGUAGES = {
 }
 
 
-class MassiveIntentClassification(AbsTaskClassification):
+class MassiveIntentClassification(AbsTaskAnyClassification):
     fast_loading = True
     metadata = TaskMetadata(
         name="MassiveIntentClassification",

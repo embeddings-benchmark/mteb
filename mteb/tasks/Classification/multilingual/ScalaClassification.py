@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGS = {
@@ -11,7 +11,7 @@ _LANGS = {
 }
 
 
-class ScalaClassification(AbsTaskClassification):
+class ScalaClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="ScalaClassification",
         description="""ScaLa a linguistic acceptability dataset for the mainland Scandinavian languages automatically constructed from dependency annotations in Universal Dependencies Treebanks.

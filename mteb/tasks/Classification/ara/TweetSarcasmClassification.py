@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class TweetSarcasmClassification(AbsTaskClassification):
+class TweetSarcasmClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="TweetSarcasmClassification",
         dataset={

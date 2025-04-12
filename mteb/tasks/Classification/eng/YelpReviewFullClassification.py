@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class YelpReviewFullClassification(AbsTaskClassification):
+class YelpReviewFullClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="YelpReviewFullClassification",
         description="Yelp Review Full is a dataset for sentiment analysis, containing 5 classes corresponding to ratings 1-5.",

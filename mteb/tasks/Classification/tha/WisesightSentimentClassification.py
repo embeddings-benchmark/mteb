@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class WisesightSentimentClassification(AbsTaskClassification):
+class WisesightSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="WisesightSentimentClassification",
         description="Wisesight Sentiment Corpus: Social media messages in Thai language with sentiment label (positive, neutral, negative, question)",

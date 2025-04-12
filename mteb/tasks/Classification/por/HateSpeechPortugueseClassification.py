@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class HateSpeechPortugueseClassification(AbsTaskClassification):
+class HateSpeechPortugueseClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="HateSpeechPortugueseClassification",
         description="HateSpeechPortugueseClassification is a dataset of Portuguese tweets categorized with their sentiment (2 classes).",

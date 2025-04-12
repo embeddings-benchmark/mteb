@@ -1,10 +1,14 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class CIFAR10Classification(AbsTaskImageClassification):
+class CIFAR10Classification(AbsTaskAnyClassification):
+    values_column_name: str = "img"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="CIFAR10",
         description="Classifying images from 10 classes.",
@@ -37,10 +41,14 @@ class CIFAR10Classification(AbsTaskImageClassification):
         }
         """,
     )
+
+
+class CIFAR100Classification(AbsTaskAnyClassification):
     values_column_name: str = "img"
+    label_column_name: str = "fine_label"
+    samples_per_label: int = 16
+    n_experiments: int = 5
 
-
-class CIFAR100Classification(AbsTaskImageClassification):
     metadata = TaskMetadata(
         name="CIFAR100",
         description="Classifying images from 100 classes.",
@@ -73,5 +81,3 @@ class CIFAR100Classification(AbsTaskImageClassification):
         }
         """,
     )
-    values_column_name: str = "img"
-    label_column_name: str = "fine_label"

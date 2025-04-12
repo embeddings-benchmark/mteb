@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class TweetTopicSingleClassification(AbsTaskClassification):
+class TweetTopicSingleClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="TweetTopicSingleClassification",
         description="""Topic classification dataset on Twitter with 6 labels. Each instance of

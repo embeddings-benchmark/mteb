@@ -4,7 +4,7 @@ from typing import Any
 
 import datasets
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -62,7 +62,7 @@ LANG_MAP = {
 }
 
 
-class IndicLangClassification(AbsTaskClassification):
+class IndicLangClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="IndicLangClassification",
         dataset={

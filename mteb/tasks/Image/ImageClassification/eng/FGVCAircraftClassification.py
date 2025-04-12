@@ -1,10 +1,16 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class FGVCAircraftClassification(AbsTaskImageClassification):
+class FGVCAircraftClassification(AbsTaskAnyClassification):
+    values_column_name: str = "image"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+    # could be family, manufacturer, or variant. Variant has the higher number of classes.
+    label_column_name: str = "variant"
+
     metadata = TaskMetadata(
         name="FGVCAircraft",
         description="Classifying aircraft images from 41 manufacturers and 102 variants.",
@@ -41,4 +47,3 @@ class FGVCAircraftClassification(AbsTaskImageClassification):
         }
         """,
     )
-    label_column_name: str = "variant"  ## could be family, manufacturer, or variant. Variant has the higher number of classes.

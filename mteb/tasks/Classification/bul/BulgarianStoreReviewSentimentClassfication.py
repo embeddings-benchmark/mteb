@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class BulgarianStoreReviewSentimentClassfication(AbsTaskClassification):
+class BulgarianStoreReviewSentimentClassfication(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="BulgarianStoreReviewSentimentClassfication",
         description="Bulgarian online store review dataset for sentiment classification.",

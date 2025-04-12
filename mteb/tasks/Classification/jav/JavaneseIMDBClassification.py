@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class JavaneseIMDBClassification(AbsTaskClassification):
+class JavaneseIMDBClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="JavaneseIMDBClassification",
         description="Large Movie Review Dataset translated to Javanese. This is a dataset for binary sentiment classification containing substantially more data than previous benchmark datasets.",

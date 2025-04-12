@@ -6,8 +6,8 @@ import numpy as np
 from datasets import Dataset, DatasetDict
 from PIL import Image
 
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
 from mteb.abstasks.AbsTaskClusteringFast import AbsTaskClusteringFast
 from mteb.abstasks.AbsTaskMultilabelClassification import (
@@ -60,7 +60,7 @@ multilingual_eval_langs = {
 }
 
 
-class MockClassificationTask(AbsTaskClassification):
+class MockClassificationTaskAny(AbsTaskAnyClassification):
     expected_stats = {
         "test": {
             "num_samples": 2,
@@ -124,7 +124,7 @@ class MockClassificationTask(AbsTaskClassification):
         self.data_loaded = True
 
 
-class MockMultilingualClassificationTask(AbsTaskClassification):
+class MockMultilingualClassificationTaskAny(AbsTaskAnyClassification):
     expected_stats = {
         "test": {
             "num_samples": 4,

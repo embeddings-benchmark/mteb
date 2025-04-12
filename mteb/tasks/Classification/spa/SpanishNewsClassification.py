@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class SpanishNewsClassification(AbsTaskClassification):
+class SpanishNewsClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SpanishNewsClassification",
         description="A Spanish dataset for news classification. The dataset includes articles from reputable Spanish news sources spanning 12 different categories.",

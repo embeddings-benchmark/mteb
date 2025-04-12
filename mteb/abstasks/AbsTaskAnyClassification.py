@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from abc import ABC
 from collections import Counter, defaultdict
 from typing import Any
 
@@ -37,6 +36,16 @@ class ClassificationDescriptiveStatistics(DescriptiveStatistics):
         min_labels_per_text: Minimum number of labels per text
         average_label_per_text: Average number of labels per text
         max_labels_per_text: Maximum number of labels per text
+
+        min_image_width: Minimum width of images
+        average_image_width: Average width of images
+        max_image_width: Maximum width of images
+
+        min_image_height: Minimum height of images
+        average_image_height: Average height of images
+        max_image_height: Maximum height of images
+
+
         unique_labels: Number of unique labels
         labels: dict of label frequencies
     """
@@ -53,19 +62,41 @@ class ClassificationDescriptiveStatistics(DescriptiveStatistics):
     min_labels_per_text: int
     average_label_per_text: float
     max_labels_per_text: int
+
+    min_image_width: float
+    average_image_width: float
+    max_image_width: float
+
+    min_image_height: float
+    average_image_height: float
+    max_image_height: float
+
     unique_labels: int
     labels: dict[str, dict[str, int]]
 
 
-class AbsClassification(AbsTask, ABC):
-    evaluator: type[AbsClassificationEvaluator]
+class AbsTaskAnyClassification(AbsTask):
+    """Abstract class for classification tasks
+    The similarity is computed between pairs and the results are ranked.
+
+    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It
+    must contain the following columns:
+        text: str
+        label: int
+
+    Attributes:
+       samples_per_label: Number of samples to use pr. label. These samples are embedded and a classifier is fit using the labels and samples.
+
+    """
+
+    evaluator: type[AbsClassificationEvaluator] = logRegClassificationEvaluator
     samples_per_label: int = 8
     n_experiments: int = 10
     k: int = 3
     train_split: str = "train"
     label_column_name: str = "label"
-    values_column_name: str
-    is_image: bool = False
+    values_column_name: str = "text"
+    abstask_prompt = "Classify user passages."
 
     def evaluate(
         self,
@@ -119,6 +150,10 @@ class AbsClassification(AbsTask, ABC):
         params = {"k": self.k}
         params.update(kwargs)
 
+        is_image = False
+        if "image" in self.metadata.modalities:
+            is_image = True
+
         scores = []
         test_cache, idxs = (
             None,
@@ -139,7 +174,7 @@ class AbsClassification(AbsTask, ABC):
                 eval_split,
                 self.values_column_name,
                 self.label_column_name,
-                self.is_image,
+                is_image,
                 task_metadata=self.metadata,
                 hf_split=hf_split,
                 hf_subset=hf_subset,
@@ -186,42 +221,22 @@ class AbsClassification(AbsTask, ABC):
 
         return dataset.select(sampled_idxs), idxs
 
-
-class AbsTaskClassification(AbsClassification):
-    """Abstract class for classification tasks
-    The similarity is computed between pairs and the results are ranked.
-
-    self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It
-    must contain the following columns:
-        text: str
-        label: int
-
-    Attributes:
-       samples_per_label: Number of samples to use pr. label. These samples are embedded and a classifier is fit using the labels and samples.
-
-    """
-
-    evaluator = logRegClassificationEvaluator
-    abstask_prompt = "Classify user passages."
-    values_column_name: str = "text"
-    is_image: bool = False
-
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ClassificationDescriptiveStatistics:
         train_text = []
         if hf_subset:
-            text = self.dataset[hf_subset][split][self.values_column_name]
+            values = self.dataset[hf_subset][split][self.values_column_name]
             label = self.dataset[hf_subset][split][self.label_column_name]
             if split != self.train_split:
                 train_text = self.dataset[hf_subset][self.train_split][
                     self.values_column_name
                 ]
         elif compute_overall:
-            text = []
+            values = []
             label = []
             for hf_subset in self.metadata.eval_langs:
-                text.extend(self.dataset[hf_subset][split][self.values_column_name])
+                values.extend(self.dataset[hf_subset][split][self.values_column_name])
                 label.extend(self.dataset[hf_subset][split][self.label_column_name])
                 if split != self.train_split:
                     train_text.extend(
@@ -230,13 +245,25 @@ class AbsTaskClassification(AbsClassification):
                         ]
                     )
         else:
-            text = self.dataset[split][self.values_column_name]
+            values = self.dataset[split][self.values_column_name]
             label = self.dataset[split][self.label_column_name]
             if split != self.train_split:
                 train_text = self.dataset[self.train_split][self.values_column_name]
 
-        text_len = [len(t) for t in text]
-        total_text_len = sum(text_len)
+        total_text_len = 0
+        text_len = []
+        img_widths, img_heights = [], []
+
+        if "image" in self.metadata.modalities:
+            text_len = [len(t) for t in values]
+            total_text_len = sum(text_len)
+        else:
+            img_widths, img_heights = [], []
+            for img in values:
+                width, height = img.size  # type: ignore
+                img_heights.append(height)
+                img_widths.append(width)
+
         if isinstance(label[0], int):
             label_len = [1] * len(label)
             total_label_len = len(label)
@@ -248,21 +275,31 @@ class AbsTaskClassification(AbsClassification):
             total_labels = []
             for l in label:
                 total_labels.extend(l if len(l) > 0 else [None])
+
         label_count = Counter(total_labels)
         num_texts_in_train = (
-            len(set(text) & set(train_text)) if split != self.train_split else None
+            len(set(values) & set(train_text)) if split != self.train_split else None
         )
         return ClassificationDescriptiveStatistics(
-            num_samples=len(text),
+            num_samples=len(values),
+            # text
             number_of_characters=total_text_len,
             number_texts_intersect_with_train=num_texts_in_train,
             min_text_length=min(text_len),
-            average_text_length=total_text_len / len(text),
+            average_text_length=total_text_len / len(values),
             max_text_length=max(text_len),
-            unique_texts=len(set(text)),
+            unique_texts=len(set(values)),
             min_labels_per_text=min(label_len),
             average_label_per_text=total_label_len / len(label),
             max_labels_per_text=max(label_len),
+            # image
+            min_image_width=min(img_widths),
+            average_image_width=sum(img_widths) / len(img_widths),
+            max_image_width=max(img_widths),
+            min_image_height=min(img_heights),
+            average_image_height=sum(img_heights) / len(img_heights),
+            max_image_height=max(img_heights),
+            # labels
             unique_labels=len(label_count),
             labels={
                 str(label): {
@@ -275,8 +312,8 @@ class AbsTaskClassification(AbsClassification):
     def _push_dataset_to_hub(self, repo_name: str) -> None:
         self._upload_dataset_to_hub(
             repo_name,
-            {
-                self.values_column_name: "text",
-                self.label_column_name: "label",
-            },
+            [
+                self.values_column_name,
+                self.label_column_name,
+            ],
         )

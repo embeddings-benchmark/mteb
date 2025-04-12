@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class NordicLangClassification(AbsTaskClassification):
+class NordicLangClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="NordicLangClassification",
         description="A dataset for Nordic language identification.",

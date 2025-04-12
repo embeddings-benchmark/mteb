@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class CzechSubjectivityClassification(AbsTaskClassification):
+class CzechSubjectivityClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="CzechSubjectivityClassification",
         description="An Czech dataset for subjectivity classification.",

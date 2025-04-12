@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class AJGT(AbsTaskClassification):
+class AJGT(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="AJGT",
         dataset={

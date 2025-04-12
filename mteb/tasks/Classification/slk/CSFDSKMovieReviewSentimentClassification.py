@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class CSFDSKMovieReviewSentimentClassification(AbsTaskClassification):
+class CSFDSKMovieReviewSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="CSFDSKMovieReviewSentimentClassification",
         description="The dataset contains 30k user reviews from csfd.cz in Slovak.",
