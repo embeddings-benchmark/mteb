@@ -63,13 +63,13 @@ class ClassificationDescriptiveStatistics(DescriptiveStatistics):
     average_label_per_text: float
     max_labels_per_text: int
 
-    min_image_width: float
-    average_image_width: float
-    max_image_width: float
+    min_image_width: float | None
+    average_image_width: float | None
+    max_image_width: float | None
 
-    min_image_height: float
-    average_image_height: float
-    max_image_height: float
+    min_image_height: float | None
+    average_image_height: float | None
+    max_image_height: float | None
 
     unique_labels: int
     labels: dict[str, dict[str, int]]
@@ -251,18 +251,24 @@ class AbsTaskAnyClassification(AbsTask):
                 train_text = self.dataset[self.train_split][self.values_column_name]
 
         total_text_len = 0
-        text_len = []
-        img_widths, img_heights = [], []
+        text_len = None
+        img_widths, img_heights = None, None
+        num_texts_in_train = None
 
         if "image" in self.metadata.modalities:
-            text_len = [len(t) for t in values]
-            total_text_len = sum(text_len)
-        else:
             img_widths, img_heights = [], []
             for img in values:
                 width, height = img.size  # type: ignore
                 img_heights.append(height)
                 img_widths.append(width)
+        else:
+            text_len = [len(t) for t in values]
+            total_text_len = sum(text_len)
+            num_texts_in_train = (
+                len(set(values) & set(train_text))
+                if split != self.train_split
+                else None
+            )
 
         if isinstance(label[0], int):
             label_len = [1] * len(label)
@@ -277,29 +283,33 @@ class AbsTaskAnyClassification(AbsTask):
                 total_labels.extend(l if len(l) > 0 else [None])
 
         label_count = Counter(total_labels)
-        num_texts_in_train = (
-            len(set(values) & set(train_text)) if split != self.train_split else None
-        )
+
         return ClassificationDescriptiveStatistics(
             num_samples=len(values),
             # text
             number_of_characters=total_text_len,
-            number_texts_intersect_with_train=num_texts_in_train,
-            min_text_length=min(text_len),
-            average_text_length=total_text_len / len(values),
-            max_text_length=max(text_len),
-            unique_texts=len(set(values)),
+            number_texts_intersect_with_train=num_texts_in_train
+            if num_texts_in_train
+            else None,
+            min_text_length=min(text_len) if text_len else None,
+            average_text_length=total_text_len / len(values) if text_len else None,
+            max_text_length=max(text_len) if text_len else None,
+            unique_texts=len(set(values)) if text_len else None,
+            # image
+            min_image_width=min(img_widths) if img_widths else None,
+            average_image_width=sum(img_widths) / len(img_widths)
+            if img_widths
+            else None,
+            max_image_width=max(img_widths) if img_widths else None,
+            min_image_height=min(img_heights) if img_heights else None,
+            average_image_height=sum(img_heights) / len(img_heights)
+            if img_heights
+            else None,
+            max_image_height=max(img_heights) if img_heights else None,
+            # labels
             min_labels_per_text=min(label_len),
             average_label_per_text=total_label_len / len(label),
             max_labels_per_text=max(label_len),
-            # image
-            min_image_width=min(img_widths),
-            average_image_width=sum(img_widths) / len(img_widths),
-            max_image_width=max(img_widths),
-            min_image_height=min(img_heights),
-            average_image_height=sum(img_heights) / len(img_heights),
-            max_image_height=max(img_heights),
-            # labels
             unique_labels=len(label_count),
             labels={
                 str(label): {
