@@ -31,7 +31,7 @@ class ImageClassificationDescriptiveStatistics(DescriptiveStatistics):
         average_image_height: Average height of images
         max_image_height: Maximum height of images
 
-        unique_labels: Number of unique labels
+        unique_num_labels: Number of unique labels
         labels: dict of label frequencies
     """
 
@@ -105,7 +105,7 @@ class AbsTaskImageClassification(AbsClassification):
             },
         )
 
-    def _undersample_data(self, dataset_split: Dataset, idxs=None):
+    def _undersample_data(self, dataset_split: Dataset, idxs: list[int] | None = None):
         """Undersample data to have samples_per_label samples of each label
         without loading all images into memory.
         """

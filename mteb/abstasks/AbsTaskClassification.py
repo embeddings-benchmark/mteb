@@ -158,7 +158,7 @@ class AbsClassification(AbsTask, ABC):
 
     @abstractmethod
     def _undersample_data(
-        self, dataset: Dataset, idxs=None
+        self, dataset: Dataset, idxs: list[int] | None = None
     ) -> tuple[Dataset, list[int]]:
         """Undersample data to have `samples_per_label` samples of each label."""
         pass
@@ -184,13 +184,12 @@ class AbsTaskClassification(AbsClassification):
     is_image: bool = False
 
     def _undersample_data(
-        self, dataset: Dataset, idxs=None
+        self, dataset: Dataset, idxs: list[int] | None = None
     ) -> tuple[Dataset, list[int]]:
         """Undersample data to have `samples_per_label` samples of each label.
 
         Args:
             dataset: Hugging Face `datasets.Dataset` containing "text" and "label".
-            samples_per_label: Number of samples per label to retain.
             idxs: Optional indices to shuffle and sample from.
 
         Returns:
@@ -281,4 +280,10 @@ class AbsTaskClassification(AbsClassification):
         )
 
     def _push_dataset_to_hub(self, repo_name: str) -> None:
-        self._upload_dataset_to_hub(repo_name, ["text", "label"])
+        self._upload_dataset_to_hub(
+            repo_name,
+            {
+                self.values_column_name: "text",
+                self.label_column_name: "label",
+            },
+        )

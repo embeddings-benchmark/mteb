@@ -408,15 +408,28 @@ class AbsTask(ABC):
     def _add_main_score(self, scores: dict[HFSubset, ScoresDict]) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
 
-    def _upload_dataset_to_hub(self, repo_name: str, fields: list[str]) -> None:
+    def _upload_dataset_to_hub(
+        self, repo_name: str, fields: list[str] | dict[str, str]
+    ) -> None:
         if self.metadata.is_multilingual:
             for config in self.metadata.eval_langs:
                 logger.info(f"Converting {config} of {self.metadata.name}")
                 sentences = {}
                 for split in self.dataset[config]:
-                    sentences[split] = Dataset.from_dict(
-                        {field: self.dataset[config][split][field] for field in fields}
-                    )
+                    if isinstance(fields, dict):
+                        sentences[split] = Dataset.from_dict(
+                            {
+                                mapped_name: self.dataset[config][split][original_name]
+                                for original_name, mapped_name in fields.items()
+                            }
+                        )
+                    else:
+                        sentences[split] = Dataset.from_dict(
+                            {
+                                field: self.dataset[config][split][field]
+                                for field in fields
+                            }
+                        )
                 sentences = DatasetDict(sentences)
                 sentences.push_to_hub(
                     repo_name, config, commit_message=f"Add {config} dataset"
@@ -424,9 +437,17 @@ class AbsTask(ABC):
         else:
             sentences = {}
             for split in self.dataset:
-                sentences[split] = Dataset.from_dict(
-                    {field: self.dataset[split][field] for field in fields}
-                )
+                if isinstance(fields, dict):
+                    sentences[split] = Dataset.from_dict(
+                        {
+                            mapped_name: self.dataset[split][original_name]
+                            for original_name, mapped_name in fields.items()
+                        }
+                    )
+                else:
+                    sentences[split] = Dataset.from_dict(
+                        {field: self.dataset[split][field] for field in fields}
+                    )
             sentences = DatasetDict(sentences)
             sentences.push_to_hub(repo_name, commit_message="Add dataset")
 
