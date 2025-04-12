@@ -43,6 +43,7 @@ class AbsClassificationEvaluator(Evaluator, ABC):
         hf_split: str,
         hf_subset: str,
         max_iter: int = 100,
+        k: int = 3,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
@@ -57,7 +58,7 @@ class AbsClassificationEvaluator(Evaluator, ABC):
         self.hf_split = hf_split
         self.hf_subset = hf_subset
         self.is_image = is_image
-        self.k = kwargs.get("k", 3)
+        self.k = k
 
     def create_dataloaders(self, batch_size: int) -> tuple[DataLoader, DataLoader]:
         if self.is_image:
