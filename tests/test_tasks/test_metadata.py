@@ -2,10 +2,18 @@ from __future__ import annotations
 
 import pytest
 
+from tests.test_benchmark.mock_tasks import (
+    MockImageClassificationKNNTask,
+    MockImageClassificationTask,
+)
 from tests.test_benchmark.task_grid import MOCK_TASK_TEST_GRID
 
 
-@pytest.mark.parametrize("task", MOCK_TASK_TEST_GRID)
+@pytest.mark.parametrize(
+    "task",
+    MOCK_TASK_TEST_GRID
+    + [MockImageClassificationTask(), MockImageClassificationKNNTask()],
+)
 def test_descriptive_stats(task):
     # todo integrate MIEB
     result_stat = task.calculate_metadata_metrics()

@@ -2715,7 +2715,27 @@ class MockImageClassificationTask(AbsTaskAnyClassification):
             "max_labels_per_text": 1,
             "unique_labels": 2,
             "labels": {"1": {"count": 1}, "0": {"count": 1}},
-        }
+        },
+        "train": {
+            "num_samples": 10,
+            "number_of_characters": 0,
+            "number_texts_intersect_with_train": None,
+            "min_text_length": None,
+            "average_text_length": None,
+            "max_text_length": None,
+            "unique_texts": None,
+            "min_image_width": 100,
+            "average_image_width": 100.0,
+            "max_image_width": 100,
+            "min_image_height": 100,
+            "average_image_height": 100.0,
+            "max_image_height": 100,
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 2,
+            "labels": {"1": {"count": 5}, "0": {"count": 5}},
+        },
     }
 
     metadata = TaskMetadata(
@@ -2777,7 +2797,27 @@ class MockImageClassificationKNNTask(AbsTaskAnyClassification):
             "max_labels_per_text": 1,
             "unique_labels": 2,
             "labels": {"1": {"count": 1}, "0": {"count": 1}},
-        }
+        },
+        "train": {
+            "num_samples": 10,
+            "number_of_characters": 0,
+            "number_texts_intersect_with_train": None,
+            "min_text_length": None,
+            "average_text_length": None,
+            "max_text_length": None,
+            "unique_texts": None,
+            "min_image_width": 100,
+            "average_image_width": 100.0,
+            "max_image_width": 100,
+            "min_image_height": 100,
+            "average_image_height": 100.0,
+            "max_image_height": 100,
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 2,
+            "labels": {"1": {"count": 5}, "0": {"count": 5}},
+        },
     }
 
     metadata = TaskMetadata(
