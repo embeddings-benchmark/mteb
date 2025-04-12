@@ -31,14 +31,13 @@ def dot_distance(a: np.ndarray, b: np.ndarray) -> float:
     return -np.dot(a, b)
 
 
-class AbsClassificationEvaluator(Evaluator, ABC):
+class ClassificationEvaluator(Evaluator, ABC):
     def __init__(
         self,
         train_dataset: Dataset,
         eval_dataset: Dataset,
         values_column_name: str,
         label_column_name: str,
-        is_image: bool,
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
@@ -57,11 +56,10 @@ class AbsClassificationEvaluator(Evaluator, ABC):
         self.task_metadata = task_metadata
         self.hf_split = hf_split
         self.hf_subset = hf_subset
-        self.is_image = is_image
         self.k = k
 
     def create_dataloaders(self, batch_size: int) -> tuple[DataLoader, DataLoader]:
-        if self.is_image:
+        if self.task_metadata.modalities == ["image"]:
             dataloader_train = create_image_dataloader(
                 self.train_dataset,
                 image_column_name=self.values_column_name,
@@ -72,7 +70,7 @@ class AbsClassificationEvaluator(Evaluator, ABC):
                 image_column_name=self.values_column_name,
                 batch_size=batch_size,
             )
-        else:
+        elif self.task_metadata.modalities == ["text"]:
             if self.values_column_name != "text":
                 self.train_dataset = self.train_dataset.rename_column(
                     self.values_column_name, "text"
@@ -82,6 +80,10 @@ class AbsClassificationEvaluator(Evaluator, ABC):
                 )
             dataloader_train = DataLoader(self.train_dataset)
             dataloader_test = DataLoader(self.eval_dataset)
+        else:
+            raise ValueError(
+                "ClassificationEvaluator only supports image and text modalities."
+            )
         return dataloader_train, dataloader_test
 
     def calculate_scores(
@@ -108,7 +110,7 @@ class AbsClassificationEvaluator(Evaluator, ABC):
         return scores
 
 
-class kNNClassificationEvaluator(AbsClassificationEvaluator):
+class kNNClassificationEvaluator(ClassificationEvaluator):
     def __call__(
         self,
         model: Encoder,
@@ -163,7 +165,7 @@ class kNNClassificationEvaluator(AbsClassificationEvaluator):
         return scores, test_cache
 
 
-class logRegClassificationEvaluator(AbsClassificationEvaluator):
+class logRegClassificationEvaluator(ClassificationEvaluator):
     def __call__(
         self,
         model: Encoder,

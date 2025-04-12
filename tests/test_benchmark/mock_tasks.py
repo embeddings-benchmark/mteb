@@ -2748,7 +2748,7 @@ class MockImageClassificationTask(AbsTaskAnyClassification):
     metadata.category = "i2c"
     n_experiments = 1
     samples_per_label = 5
-    values_column_name = "image"
+    input_column_name = "image"
 
     def load_data(self, **kwargs):
         images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]  # noqa: NPY002
@@ -2830,7 +2830,7 @@ class MockImageClassificationKNNTask(AbsTaskAnyClassification):
     metadata.category = "i2c"
     n_experiments = 1
     samples_per_label = 5
-    values_column_name = "image"
+    input_column_name = "image"
     evaluator = kNNClassificationEvaluator
 
     def load_data(self, **kwargs):

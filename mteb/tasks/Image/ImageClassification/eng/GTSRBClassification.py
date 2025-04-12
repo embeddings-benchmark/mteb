@@ -5,7 +5,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class GTSRBClassification(AbsTaskAnyClassification):
-    values_column_name = "webp"
+    input_column_name = "webp"
     label_column_name = "cls"
     samples_per_label: int = 16
     n_experiments: int = 5

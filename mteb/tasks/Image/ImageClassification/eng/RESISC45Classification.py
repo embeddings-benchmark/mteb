@@ -5,7 +5,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class RESISC45Classification(AbsTaskAnyClassification):
-    values_column_name: str = "image"
+    input_column_name: str = "image"
     samples_per_label: int = 16
     n_experiments: int = 5
 

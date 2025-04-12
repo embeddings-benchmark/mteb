@@ -6,6 +6,7 @@ from typing import Any
 
 import numpy as np
 from datasets import Dataset, DatasetDict
+from PIL import ImageFile
 
 from mteb.abstasks.TaskMetadata import DescriptiveStatistics
 from mteb.encoder_interface import Encoder
@@ -13,10 +14,11 @@ from mteb.encoder_interface import Encoder
 from ..evaluation.evaluators import (
     logRegClassificationEvaluator,
 )
-from ..evaluation.evaluators.ClassificationEvaluator import AbsClassificationEvaluator
+from ..evaluation.evaluators.ClassificationEvaluator import ClassificationEvaluator
 from ..load_results.task_results import HFSubset, ScoresDict
 from .AbsTask import AbsTask
 
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 logger = logging.getLogger(__name__)
 
 
@@ -51,18 +53,16 @@ class ClassificationDescriptiveStatistics(DescriptiveStatistics):
     """
 
     num_samples: int
-    number_of_characters: int
+    number_of_characters: int | None
     number_texts_intersect_with_train: int | None
 
-    min_text_length: int
-    average_text_length: float
-    max_text_length: int
-    unique_texts: int
+    # will be None for image tasks
+    min_text_length: int | None
+    average_text_length: float | None
+    max_text_length: int | None
+    unique_texts: int | None
 
-    min_labels_per_text: int
-    average_label_per_text: float
-    max_labels_per_text: int
-
+    # will be None for text tasks
     min_image_width: float | None
     average_image_width: float | None
     max_image_width: float | None
@@ -70,6 +70,10 @@ class ClassificationDescriptiveStatistics(DescriptiveStatistics):
     min_image_height: float | None
     average_image_height: float | None
     max_image_height: float | None
+
+    min_labels_per_text: int
+    average_label_per_text: float
+    max_labels_per_text: int
 
     unique_labels: int
     labels: dict[str, dict[str, int]]
@@ -89,13 +93,13 @@ class AbsTaskAnyClassification(AbsTask):
 
     """
 
-    evaluator: type[AbsClassificationEvaluator] = logRegClassificationEvaluator
+    evaluator: type[ClassificationEvaluator] = logRegClassificationEvaluator
     samples_per_label: int = 8
     n_experiments: int = 10
     k: int = 3
     train_split: str = "train"
     label_column_name: str = "label"
-    values_column_name: str = "text"
+    input_column_name: str = "text"
     abstask_prompt = "Classify user passages."
 
     def evaluate(
@@ -150,10 +154,6 @@ class AbsTaskAnyClassification(AbsTask):
         params = {"k": self.k}
         params.update(kwargs)
 
-        is_image = False
-        if "image" in self.metadata.modalities:
-            is_image = True
-
         scores = []
         test_cache, idxs = (
             None,
@@ -172,9 +172,8 @@ class AbsTaskAnyClassification(AbsTask):
             evaluator = self.evaluator(
                 train_dataset,
                 eval_split,
-                self.values_column_name,
+                self.input_column_name,
                 self.label_column_name,
-                is_image,
                 task_metadata=self.metadata,
                 hf_split=hf_split,
                 hf_subset=hf_subset,
@@ -226,29 +225,29 @@ class AbsTaskAnyClassification(AbsTask):
     ) -> ClassificationDescriptiveStatistics:
         train_text = []
         if hf_subset:
-            values = self.dataset[hf_subset][split][self.values_column_name]
+            inputs = self.dataset[hf_subset][split][self.input_column_name]
             label = self.dataset[hf_subset][split][self.label_column_name]
             if split != self.train_split:
                 train_text = self.dataset[hf_subset][self.train_split][
-                    self.values_column_name
+                    self.input_column_name
                 ]
         elif compute_overall:
-            values = []
+            inputs = []
             label = []
             for hf_subset in self.metadata.eval_langs:
-                values.extend(self.dataset[hf_subset][split][self.values_column_name])
+                inputs.extend(self.dataset[hf_subset][split][self.input_column_name])
                 label.extend(self.dataset[hf_subset][split][self.label_column_name])
                 if split != self.train_split:
                     train_text.extend(
                         self.dataset[hf_subset][self.train_split][
-                            self.values_column_name
+                            self.input_column_name
                         ]
                     )
         else:
-            values = self.dataset[split][self.values_column_name]
+            inputs = self.dataset[split][self.input_column_name]
             label = self.dataset[split][self.label_column_name]
             if split != self.train_split:
-                train_text = self.dataset[self.train_split][self.values_column_name]
+                train_text = self.dataset[self.train_split][self.input_column_name]
 
         total_text_len = 0
         text_len = None
@@ -257,15 +256,15 @@ class AbsTaskAnyClassification(AbsTask):
 
         if "image" in self.metadata.modalities:
             img_widths, img_heights = [], []
-            for img in values:
+            for img in inputs:
                 width, height = img.size  # type: ignore
                 img_heights.append(height)
                 img_widths.append(width)
-        else:
-            text_len = [len(t) for t in values]
+        if "text" in self.metadata.modalities:
+            text_len = [len(t) for t in inputs]
             total_text_len = sum(text_len)
             num_texts_in_train = (
-                len(set(values) & set(train_text))
+                len(set(inputs) & set(train_text))
                 if split != self.train_split
                 else None
             )
@@ -285,16 +284,16 @@ class AbsTaskAnyClassification(AbsTask):
         label_count = Counter(total_labels)
 
         return ClassificationDescriptiveStatistics(
-            num_samples=len(values),
+            num_samples=len(inputs),
             # text
             number_of_characters=total_text_len,
             number_texts_intersect_with_train=num_texts_in_train
             if num_texts_in_train
             else None,
             min_text_length=min(text_len) if text_len else None,
-            average_text_length=total_text_len / len(values) if text_len else None,
+            average_text_length=total_text_len / len(inputs) if text_len else None,
             max_text_length=max(text_len) if text_len else None,
-            unique_texts=len(set(values)) if text_len else None,
+            unique_texts=len(set(inputs)) if text_len else None,
             # image
             min_image_width=min(img_widths) if img_widths else None,
             average_image_width=sum(img_widths) / len(img_widths)
@@ -323,7 +322,7 @@ class AbsTaskAnyClassification(AbsTask):
         self._upload_dataset_to_hub(
             repo_name,
             [
-                self.values_column_name,
+                self.input_column_name,
                 self.label_column_name,
             ],
         )

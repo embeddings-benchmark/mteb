@@ -5,7 +5,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class Country211Classification(AbsTaskAnyClassification):
-    values_column_name: str = "jpg"
+    input_column_name: str = "jpg"
     label_column_name: str = "cls"
     samples_per_label: int = 16
     n_experiments: int = 5
