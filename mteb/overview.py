@@ -287,7 +287,7 @@ def get_tasks(
     exclusive_language_filter: bool = False,
     modalities: list[MODALITIES] | None = None,
     exclusive_modality_filter: bool = False,
-    exclude_aggregate: bool = True,
+    exclude_aggregate: bool = False,
 ) -> MTEBTasks:
     """Get a list of tasks based on the specified filters.
 
