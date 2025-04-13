@@ -133,16 +133,13 @@ def filter_tasks_by_modalities(
         return [t for t in tasks if _modalities.intersection(t.modalities)]
 
 
-def filter_aggregate_tasks(
-    tasks: list[AbsTask], exclude_aggregate: bool = True
-) -> list[AbsTask]:
-    """Args:
-    tasks: A list of tasks to filter.
-    exclude_aggregate: Is True, filter out aggregate tasks. If False, return all the original tasks.
+def filter_aggregate_tasks(tasks: list[AbsTask]) -> list[AbsTask]:
+    """Returns input tasks that are *not* aggregate.
+
+    Args:
+        tasks: A list of tasks to filter.
     """
-    if exclude_aggregate:
-        return [t for t in tasks if not t.is_aggregate]
-    return tasks
+    return [t for t in tasks if not t.is_aggregate]
 
 
 class MTEBTasks(tuple):
@@ -290,7 +287,7 @@ def get_tasks(
     exclusive_language_filter: bool = False,
     modalities: list[MODALITIES] | None = None,
     exclusive_modality_filter: bool = False,
-    exclude_aggregate: bool = False,
+    exclude_aggregate: bool = True,
 ) -> MTEBTasks:
     """Get a list of tasks based on the specified filters.
 
@@ -365,7 +362,7 @@ def get_tasks(
             _tasks, modalities, exclusive_modality_filter
         )
     if exclude_aggregate:
-        _tasks = filter_aggregate_tasks(_tasks, exclude_aggregate)
+        _tasks = filter_aggregate_tasks(_tasks)
 
     return MTEBTasks(_tasks)
 
