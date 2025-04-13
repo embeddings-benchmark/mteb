@@ -1,20 +1,22 @@
-# -*- coding: utf-8 -*-
-import os
+from __future__ import annotations
+
 import hashlib
+import json
+import logging
+import os
 import random
 import string
 import time
-import json
-import logging
-import requests
 from functools import partial
 from typing import Any
 
 import numpy as np
+import requests
+
 from mteb.model_meta import ModelMeta
-from mteb.models.wrapper import Wrapper
-from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
 from mteb.models.bge_models import bge_full_data
+from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
+from mteb.models.wrapper import Wrapper
 
 conan_zh_datasets = {
     "BQ": ["train"],
@@ -51,12 +53,12 @@ class RateLimiter:
         self.last_request_time = time.time()
 
     def execute_with_retry(self, func, *args, **kwargs):
-        """
-        Execute a function with retry logic
+        """Execute a function with retry logic
 
         Args:
             func: The function to execute
-            *args, **kwargs: Arguments to pass to the function
+            *args: Arguments to pass to the function
+            **kwargs: Arguments to pass to the function
 
         Returns:
             The result of the function execution
@@ -64,11 +66,9 @@ class RateLimiter:
         Raises:
             Exception: When max retries are reached and still failing
         """
-        # First, wait for rate limiting
-        self.wait()
-
         retries = 0
         while retries < self.max_retries:
+            self.wait()
             try:
                 return func(*args, **kwargs)
             except Exception as e:
@@ -100,7 +100,7 @@ class Client:
         return "".join(random_chars(chars) for _ in range(size))
 
     def __signature(self, random_str, time_stamp):
-        params_str = "%s:%d:%s:%s" % (self.ak, time_stamp, random_str, self.sk)
+        params_str = f"{self.ak}:{time_stamp}:{random_str}:{self.sk}"
         encoded_params_str = params_str.encode("utf-8")
         return hashlib.md5(encoded_params_str).hexdigest()
 
@@ -123,17 +123,20 @@ class Client:
         params["content_id"] = f"test_{int(time.time())}"
         headers = {"Content-Type": "application/json"}
 
-        rsp = requests.post(self.url, data=json.dumps(params), timeout=self.timeout, headers=headers)
+        rsp = requests.post(
+            self.url, data=json.dumps(params), timeout=self.timeout, headers=headers
+        )
         result = rsp.json()
 
         if rsp.status_code != 200:
-            raise Exception(f"API request failed with status {rsp.status_code}: {result}")
+            raise Exception(
+                f"API request failed with status {rsp.status_code}: {result}"
+            )
 
         return result
 
     def embed(self, text):
-        """
-        Embed text using the server with rate limiting and retry logic
+        """Embed text using the server with rate limiting and retry logic
 
         Args:
             text: The input text to embed
