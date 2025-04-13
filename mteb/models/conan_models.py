@@ -4,16 +4,14 @@ import hashlib
 import random
 import string
 import time
-import requests
 import json
 import logging
+import requests
+from functools import partial
+from typing import Any
 
 import numpy as np
-
-from functools import partial, wraps
-from typing import Any, Literal
 from mteb.model_meta import ModelMeta
-from mteb.encoder_interface import PromptType
 from mteb.models.wrapper import Wrapper
 from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
 from mteb.models.bge_models import bge_full_data
@@ -35,35 +33,57 @@ conan_zh_datasets = {
 
 logger = logging.getLogger(__name__)
 
-import time
-import logging
-import numpy as np
-from typing import Any
-import string
-import random
-import hashlib
-import json
-import requests
-import os
-from threading import Lock
-
-logger = logging.getLogger(__name__)
 
 class RateLimiter:
-    def __init__(self, qps):
+    def __init__(self, qps, max_retries=3):
         self.qps = qps
         self.min_interval = 1.0 / qps
         self.last_request_time = 0
-        self.lock = Lock() 
+        self.max_retries = max_retries
 
     def wait(self):
-        with self.lock:
-            current_time = time.time()
-            time_since_last = current_time - self.last_request_time
-            if time_since_last < self.min_interval:
-                sleep_time = self.min_interval - time_since_last
-                time.sleep(sleep_time)
-            self.last_request_time = time.time()
+        """Simple rate limiting logic"""
+        current_time = time.time()
+        time_since_last = current_time - self.last_request_time
+        if time_since_last < self.min_interval:
+            sleep_time = self.min_interval - time_since_last
+            time.sleep(sleep_time)
+        self.last_request_time = time.time()
+
+    def execute_with_retry(self, func, *args, **kwargs):
+        """
+        Execute a function with retry logic
+
+        Args:
+            func: The function to execute
+            *args, **kwargs: Arguments to pass to the function
+
+        Returns:
+            The result of the function execution
+
+        Raises:
+            Exception: When max retries are reached and still failing
+        """
+        # First, wait for rate limiting
+        self.wait()
+
+        retries = 0
+        while retries < self.max_retries:
+            try:
+                return func(*args, **kwargs)
+            except Exception as e:
+                retries += 1
+                if retries < self.max_retries:
+                    sleep_time = 10 * retries
+                    logger.warning(
+                        f"Request failed (attempt {retries}/{self.max_retries}), "
+                        f"sleeping for {sleep_time}s. Error: {str(e)}"
+                    )
+                    time.sleep(sleep_time)
+                else:
+                    logger.error(f"Max retries reached. Last error: {str(e)}")
+                    raise
+
 
 class Client:
     def __init__(self, ak, sk, url, timeout=30):
@@ -71,8 +91,7 @@ class Client:
         self.sk = sk
         self.url = url
         self.timeout = timeout
-        self.rate_limiter = RateLimiter(qps=5) 
-        self.max_retries = 3
+        self.rate_limiter = RateLimiter(qps=5, max_retries=3)
 
     def _random_password(self, size=40, chars=None):
         if chars is None:
@@ -87,7 +106,7 @@ class Client:
 
     def get_signature(self):
         timestamp = int(time.time())
-        random_str = self.__random_password(20)
+        random_str = self._random_password(20)
         sig = self.__signature(random_str, timestamp)
         params = {
             "timestamp": timestamp,
@@ -96,6 +115,21 @@ class Client:
             "sign": sig,
         }
         return params
+
+    def _do_request(self, text):
+        """Execute the actual request without retry logic"""
+        params = self.get_signature()
+        params["body"] = text
+        params["content_id"] = f"test_{int(time.time())}"
+        headers = {"Content-Type": "application/json"}
+
+        rsp = requests.post(self.url, data=json.dumps(params), timeout=self.timeout, headers=headers)
+        result = rsp.json()
+
+        if rsp.status_code != 200:
+            raise Exception(f"API request failed with status {rsp.status_code}: {result}")
+
+        return result
 
     def embed(self, text):
         """
@@ -107,39 +141,9 @@ class Client:
         Returns:
             dict: Response containing embedding
         """
-        self.rate_limiter.wait()
+        # Use rate_limiter to execute the request, handling rate limiting and retries
+        return self.rate_limiter.execute_with_retry(self._do_request, text)
 
-        retries = 0
-        while retries < self.max_retries:
-            try:
-                params = self.get_signature()
-                params["body"] = text
-                params["content_id"] = f"test_{int(time.time())}"
-                headers = {"Content-Type": "application/json"}
-
-                rsp = requests.post(
-                    self.url, 
-                    data=json.dumps(params), 
-                    timeout=self.timeout, 
-                    headers=headers
-                )
-                result = json.loads(rsp.text)
-                
-                if rsp.status_code != 200:
-                    raise Exception(f"API request failed with status {rsp.status_code}: {result}")
-                
-                return result
-
-            except Exception as e:
-                retries += 1
-                if retries < self.max_retries:
-                    sleep_time = 10 * retries 
-                    logger.warning(f"Request failed (attempt {retries}/{self.max_retries}), "
-                                 f"sleeping for {sleep_time}s. Error: {str(e)}")
-                    time.sleep(sleep_time)
-                else:
-                    logger.error(f"Max retries reached. Last error: {str(e)}")
-                    raise
 
 class ConanWrapper(Wrapper):
     def __init__(
@@ -151,7 +155,7 @@ class ConanWrapper(Wrapper):
         SK = os.getenv("CONAN_SK")
         if not AK or not SK:
             raise ValueError("CONAN_AK and CONAN_SK environment variables must be set")
-            
+
         self.client = Client(ak=AK, sk=SK, url="https://ai.om.qq.com/api/conan/v2")
         self.model_name = model_name
 
@@ -161,19 +165,19 @@ class ConanWrapper(Wrapper):
         **kwargs: Any,
     ) -> np.ndarray:
         embeddings = []
-        
+
         for sentence in sentences:
             try:
                 result = self.client.embed(sentence)
-                if 'embedding' not in result:
+                if "embedding" not in result:
                     raise ValueError(f"No embedding in response: {result}")
-                embeddings.append(result['embedding'])
+                embeddings.append(result["embedding"])
             except Exception as e:
                 logger.error(f"Failed to embed sentence: {str(e)}")
                 raise
 
         return np.array(embeddings)
-        
+
 
 Conan_embedding_v2 = ModelMeta(
     name="TencentBAC/Conan-embedding-v2",
