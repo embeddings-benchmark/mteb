@@ -96,7 +96,7 @@ The following links to the main sections in the usage documentation.
 | **Leaderboard** | |
 | [Running the Leaderboard Locally](docs/usage/usage.md#running-the-leaderboard-locally) | How to run the leaderboard locally |
 | [Report Data Contamination](docs/usage/usage.md#annotate-contamination) | How to report data contamination for a model |
-| [Fetching Result from the Leaderboard](docs/usage/usage.md#fetching-results-from-the-leaderboard) | How to fetch the raw results from the leaderboard |
+| [Loading and working with Results](docs/usage/results.md) | How to load and working with the raw results from the leaderboard, including making result dataframes |
 
 
 ## Overview
