@@ -141,11 +141,11 @@ class JinaWrapper(SentenceTransformerWrapper):
             raise RuntimeError(
                 f"sentence_transformers version {st_version} is lower than the required version 3.1.0"
             )
-        requires_package(self, "jina", model, "pip install 'mteb[jina]'")
+        requires_package(self, "einops", model, "pip install 'mteb[jina]'")
         import einops  # noqa: F401
 
         requires_package(
-            self, "flash_attention", model, "pip install 'mteb[flash_attention]'"
+            self, "flash_attn", model, "pip install 'mteb[flash_attention]'"
         )
         import flash_attn  # noqa: F401
 
