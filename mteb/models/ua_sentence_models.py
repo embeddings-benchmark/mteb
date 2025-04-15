@@ -27,5 +27,5 @@ xlm_roberta_ua_distilled = ModelMeta(
     adapted_from="FacebookAI/xlm-roberta-base",
     modalities=["text"],
     public_training_data=None,
-    use_instructions=False
+    use_instructions=False,
 )
