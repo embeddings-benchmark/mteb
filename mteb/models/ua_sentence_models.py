@@ -20,9 +20,9 @@ xlm_roberta_ua_distilled = ModelMeta(
     reference="https://github.com/panalexeu/xlm-roberta-ua-distilled/tree/main",
     languages=["eng-Latn", "ukr-Cyrl"],
     training_datasets={
-        "sentence-transformers/parallel-sentences-talks": ["train"],
-        "sentence-transformers/parallel-sentences-wikimatrix": ["train"],
-        "sentence-transformers/parallel-sentences-tatoeba": ["train"],
+       #  "sentence-transformers/parallel-sentences-talks": ["train"],
+       #  "sentence-transformers/parallel-sentences-wikimatrix": ["train"],
+       #  "sentence-transformers/parallel-sentences-tatoeba": ["train"],
     },
     adapted_from="FacebookAI/xlm-roberta-base",
     modalities=["text"],
