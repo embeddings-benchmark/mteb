@@ -87,12 +87,12 @@ def test_get_results_table(
         "subset",
         "split",
     ]
-    t1 = mr.get_results_table(aggregation_level="subset", format="long")
+    t1 = mr.to_dataframe(aggregation_level="subset", format="long")
     assert isinstance(t1, pd.DataFrame)
     assert all(col in t1.columns for col in required_columns), "Columns are missing"
     assert t1.shape[0] > 0, "Results table is empty"
 
-    t2 = mr.get_results_table(aggregation_level="split", format="long")
+    t2 = mr.to_dataframe(aggregation_level="split", format="long")
     assert all(
         col in t2.columns for col in required_columns if col not in ["subset"]
     ), "Columns are missing"
@@ -101,7 +101,7 @@ def test_get_results_table(
         "Aggregation level 'split' should have more rows than 'subset'"
     )
 
-    t3 = mr.get_results_table(aggregation_level="task", format="long")
+    t3 = mr.to_dataframe(aggregation_level="task", format="long")
     assert all(
         col in t3.columns for col in required_columns if col not in ["subset", "split"]
     ), "Columns are missing"
@@ -111,8 +111,8 @@ def test_get_results_table(
         "Aggregation level 'task' should have more rows than 'split'"
     )
 
-    t4_wide = mr.get_results_table(aggregation_level="task", format="wide")
-    t4_long = mr.get_results_table(aggregation_level="task", format="long")
+    t4_wide = mr.to_dataframe(aggregation_level="task", format="wide")
+    t4_long = mr.to_dataframe(aggregation_level="task", format="long")
     assert isinstance(t4_wide, pd.DataFrame)
 
     # we know it is only one task

@@ -94,12 +94,12 @@ def test_get_results_table(
         "subset",
         "split",
     ]
-    t1 = benchmark_results.get_results_table(aggregation_level="subset", format="long")
+    t1 = benchmark_results.to_dataframe(aggregation_level="subset", format="long")
     assert isinstance(t1, pd.DataFrame)
     assert all(col in t1.columns for col in required_columns), "Columns are missing"
     assert t1.shape[0] > 0, "Results table is empty"
 
-    t2 = benchmark_results.get_results_table(aggregation_level="split", format="long")
+    t2 = benchmark_results.to_dataframe(aggregation_level="split", format="long")
     assert all(
         col in t2.columns for col in required_columns if col not in ["subset"]
     ), "Columns are missing"
@@ -108,7 +108,7 @@ def test_get_results_table(
         "Aggregation level 'split' should have more rows than 'subset'"
     )
 
-    t3 = benchmark_results.get_results_table(aggregation_level="task", format="long")
+    t3 = benchmark_results.to_dataframe(aggregation_level="task", format="long")
     assert all(
         col in t3.columns for col in required_columns if col not in ["subset", "split"]
     ), "Columns are missing"
@@ -120,7 +120,7 @@ def test_get_results_table(
 
     # test no model revisions
     benchmark_res = benchmark_results.join_revisions()
-    t1 = benchmark_res.get_results_table(aggregation_level="subset", format="long")
+    t1 = benchmark_res.to_dataframe(aggregation_level="subset", format="long")
     assert "model_revision" not in t1.columns, (
         "Model revision column should not be present"
     )
@@ -131,8 +131,8 @@ def test_get_results_table(
     # simplify down to one model and one task
     br = benchmark_res.select_models([model_name]).select_tasks([task])
 
-    t4_wide = br.get_results_table(aggregation_level="task", format="wide")
-    t4_long = br.get_results_table(aggregation_level="task", format="long")
+    t4_wide = br.to_dataframe(aggregation_level="task", format="wide")
+    t4_long = br.to_dataframe(aggregation_level="task", format="long")
     assert isinstance(t4_wide, pd.DataFrame)
 
     # check that the scores are the same for a given model

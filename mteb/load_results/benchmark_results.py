@@ -31,6 +31,41 @@ Score = Any
 logger = logging.getLogger(__name__)
 
 
+def _aggregate_and_pivot(
+    df: pd.DataFrame,
+    columns: list[str],
+    aggregation_level: Literal["subset", "split", "task"],
+    format: Literal["wide", "long"],
+    aggregation_fn: Callable[[list[Score]], Any] | None,
+) -> pd.DataFrame:
+    if aggregation_level == "subset":
+        index_columns = ["task_name", "split", "subset"]
+
+    elif aggregation_level == "split":
+        index_columns = ["task_name", "split"]
+
+    elif aggregation_level == "task":
+        index_columns = ["task_name"]
+
+    # perform aggregation
+    if aggregation_fn is None:
+        aggregation_fn = np.mean
+
+    if format == "wide":
+        return df.pivot_table(
+            index=index_columns,
+            columns=columns,
+            values="score",
+            aggfunc=aggregation_fn,
+        ).reset_index()
+    elif format == "long":
+        return (
+            df.groupby(columns + index_columns)
+            .agg(score=("score", aggregation_fn))
+            .reset_index()
+        )
+
+
 class ModelResult(BaseModel):
     """Data class to hold the results of a model on a set of tasks.
 
@@ -206,7 +241,7 @@ class ModelResult(BaseModel):
 
         return scores_data
 
-    def get_results_table(
+    def to_dataframe(
         self,
         aggregation_level: Literal["subset", "split", "task"] = "task",
         aggregation_fn: Callable[[list[Score]], Any] | None = None,
@@ -257,33 +292,13 @@ class ModelResult(BaseModel):
         else:
             _columns.append("model_revision")
 
-        # Aggregation
-        if aggregation_level == "subset":
-            index_columns = ["task_name", "split", "subset"]
-
-        elif aggregation_level == "split":
-            index_columns = ["task_name", "split"]
-
-        elif aggregation_level == "task":
-            index_columns = ["task_name"]
-
-        # perform aggregation
-        if aggregation_fn is None:
-            aggregation_fn = np.mean
-
-        if format == "wide":
-            return df.pivot_table(
-                index=index_columns,
-                columns=_columns,
-                values="score",
-                aggfunc=aggregation_fn,
-            ).reset_index()
-        elif format == "long":
-            return (
-                df.groupby(_columns + index_columns)
-                .agg(score=("score", aggregation_fn))
-                .reset_index()
-            )
+        return _aggregate_and_pivot(
+            df,
+            columns=_columns,
+            aggregation_level=aggregation_level,
+            format=format,
+            aggregation_fn=aggregation_fn,
+        )
 
     def __hash__(self) -> int:
         return id(self)
@@ -604,7 +619,7 @@ class BenchmarkResults(BaseModel):
                     )
         return entries
 
-    def get_results_table(
+    def to_dataframe(
         self,
         aggregation_level: Literal["subset", "split", "task"] = "task",
         aggregation_fn: Callable[[list[Score]], Any] | None = None,
@@ -662,32 +677,13 @@ class BenchmarkResults(BaseModel):
             _columns.append("model_revision")
 
         # Aggregation
-        if aggregation_level == "subset":
-            index_columns = ["task_name", "split", "subset"]
-
-        elif aggregation_level == "split":
-            index_columns = ["task_name", "split"]
-
-        elif aggregation_level == "task":
-            index_columns = ["task_name"]
-
-        # perform aggregation
-        if aggregation_fn is None:
-            aggregation_fn = np.mean
-
-        if format == "wide":
-            return df.pivot_table(
-                index=index_columns,
-                columns=_columns,
-                values="score",
-                aggfunc=aggregation_fn,
-            ).reset_index()
-        elif format == "long":
-            return (
-                df.groupby(_columns + index_columns)
-                .agg(score=("score", aggregation_fn))
-                .reset_index()
-            )
+        return _aggregate_and_pivot(
+            df,
+            columns=_columns,
+            aggregation_level=aggregation_level,
+            aggregation_fn=aggregation_fn,
+            format=format,
+        )
 
     def __iter__(self):
         return iter(self.model_results)
