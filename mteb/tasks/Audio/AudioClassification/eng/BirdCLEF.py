@@ -9,22 +9,22 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class BirdCLEFClassification(AbsTaskAudioClassification):
     metadata = TaskMetadata(
         name="BirdCLEF",
-        description="BirdCLEF+ 2025 dataset for species identification from audio, focused on birds, amphibians, mammals and insects from the Middle Magdalena Valley of Colombia.",
+        description="BirdCLEF+ 2025 dataset for species identification from audio, focused on birds, amphibians, mammals and insects from the Middle Magdalena Valley of Colombia. Downsampled to 50 classes with 20 samples each.",
         reference="https://huggingface.co/datasets/christopher/birdclef-2025",
         dataset={
-            "path": "christopher/birdclef-2025",
-            "revision": "dad4270214702fb42482c302d0710cbc820d95ef",
+            "path": "AdnanElAssadi/birdclef25_small",
+            "revision": "55dbd1a0f77dd71980337a6e64620369c1e3585a",
         },
         type="AudioClassification",
         category="a2t",
-        eval_splits=["train"],  # Using train split as it contains the labeled data
+        eval_splits=["train"],  
         eval_langs=[
             "eng-Latn",
         ],
         main_score="accuracy",
         date=("2025-01-01", "2025-12-31"),  # Competition year
-        domains=["Spoken", "Speech"],
-        task_subtypes=["Environment Sound Classification"],
+        domains=["Spoken", "Speech", "Bioacoustics"],
+        task_subtypes=["Species Classification"],
         license="cc-by-nc-4.0",
         annotations_creators="expert-annotated",
         dialect=[],
@@ -38,18 +38,14 @@ class BirdCLEFClassification(AbsTaskAudioClassification):
             url={https://huggingface.co/datasets/christopher/birdclef-2025}
         }""",
         descriptive_stats={
-            "n_samples": {"train": 28000},  # Approximate number of rows
-            "metadata": {
-                "sampling_rate": 32000,
-                "includes": ["birds", "amphibians", "mammals", "insects"],
-                "region": "Middle Magdalena Valley of Colombia",
-            },
+            "n_samples": {"train": 1000},  # 50 classes × 20 samples each
+            "n_classes": 50,
         },
     )
 
     audio_column_name: str = "recording"
     label_column_name: str = "primary_label"
-    samples_per_label: int = (
-        50  # This might need adjustment based on actual dataset statistics
-    )
+    samples_per_label: int = 20  
     is_cross_validation: bool = True
+    
+

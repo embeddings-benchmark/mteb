@@ -65,6 +65,7 @@ TASK_SUBTYPE = Literal[
     "Stroke Classification of Musical Instrument",
     "Tonic Classification of Musical Instrument",
     "Speaker Count Identification",
+    "Species Classification",
     "Spoken Digit Classification",
     "Gender Clustering",
     "Music Clustering",
@@ -83,6 +84,7 @@ TASK_SUBTYPE = Literal[
 
 TASK_DOMAIN = Literal[
     "Academic",
+    "Bioacoustics",
     "Blog",
     "Constructed",
     "Encyclopaedic",
