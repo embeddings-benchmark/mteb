@@ -543,6 +543,8 @@ def get_leaderboard_app() -> gr.Blocks:
         )
         def update_scores_on_lang_change(benchmark_name, languages):
             start_time = time.time()
+            if not len(languages):
+                return []
             benchmark_results = all_benchmark_results[benchmark_name]
             scores = benchmark_results.get_scores(languages=languages, format="long")
             elapsed = time.time() - start_time
@@ -570,6 +572,8 @@ def get_leaderboard_app() -> gr.Blocks:
         def update_task_list(
             benchmark_name, type_select, domain_select, lang_select, modality_select
         ):
+            if not len(lang_select):
+                return []
             start_time = time.time()
             tasks_to_keep = []
             for task in mteb.get_benchmark(benchmark_name).tasks:
