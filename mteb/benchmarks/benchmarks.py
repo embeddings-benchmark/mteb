@@ -1558,7 +1558,15 @@ MIEB_ENG = Benchmark(
     document undestanding, visual STS, and CV-centric tasks.""",
     reference="",
     contacts=["gowitheflow-1998", "isaac-chung"],
-    citation="",
+    citation="""@misc{xiao2025miebmassiveimageembedding,
+      title={MIEB: Massive Image Embedding Benchmark}, 
+      author={Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
+      year={2025},
+      eprint={2504.10471},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2504.10471}, 
+    }""",
 )
 
 MIEB_MULTILINGUAL = Benchmark(
@@ -1581,7 +1589,15 @@ MIEB_MULTILINGUAL = Benchmark(
     datasets + the multilingual parts of VisualSTS-b and VisualSTS-16.""",
     reference="",
     contacts=["gowitheflow-1998", "isaac-chung"],
-    citation="",
+    citation="""@misc{xiao2025miebmassiveimageembedding,
+      title={MIEB: Massive Image Embedding Benchmark}, 
+      author={Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
+      year={2025},
+      eprint={2504.10471},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2504.10471}, 
+    }""",
 )
 
 MIEB_LITE = Benchmark(
@@ -1653,7 +1669,15 @@ MIEB_LITE = Benchmark(
     relative rank of models.""",
     reference="",
     contacts=["gowitheflow-1998", "isaac-chung"],
-    citation="",
+    citation="""@misc{xiao2025miebmassiveimageembedding,
+      title={MIEB: Massive Image Embedding Benchmark}, 
+      author={Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
+      year={2025},
+      eprint={2504.10471},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2504.10471}, 
+    }""",
 )
 
 BUILT_MTEB = Benchmark(
