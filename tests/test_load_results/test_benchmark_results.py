@@ -83,7 +83,7 @@ def test_join_revisions(benchmark_results: BenchmarkResults) -> None:
     assert revision == mteb.get_model_meta(model_name).revision
 
 
-def test_get_results_table(
+def test_to_dataframe(
     benchmark_results: BenchmarkResults,
 ) -> None:
     required_columns = [

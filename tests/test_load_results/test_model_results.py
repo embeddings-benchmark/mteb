@@ -75,7 +75,7 @@ def test_select_tasks(
     assert task_names[0] == "BornholmBitextMining"
 
 
-def test_get_results_table(
+def test_to_dataframe(
     model_result: ModelResult,  # noqa: F811
 ) -> None:
     mr = model_result

@@ -61,7 +61,7 @@ results = results.select_tasks(retrieval_tasks)
 ### Creating a Dataframe
 
 ```py
-df = results.get_results_table()
+df = results.to_dataframe()
 
 print(df)
 # model_name                        task_name  GritLM/GritLM-7B
@@ -88,7 +88,7 @@ print(df)
 By default this will give you the results in a `"wide"` format. However, you can just as well get them in a long format:
 
 ```py
-long_format_df = results.get_results_table(format="long")
+long_format_df = results.to_dataframe(format="long")
 
 print(long_format_df.head(5))
 #          model_name          task_name     score
