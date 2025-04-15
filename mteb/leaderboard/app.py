@@ -106,7 +106,8 @@ def update_description(
     benchmark_name: str, languages: list[str], task_types: list[str], domains: list[str]
 ) -> str:
     benchmark = mteb.get_benchmark(benchmark_name)
-    description = f"## {benchmark.name}\n{benchmark.description}\n"
+    # description = f"## {benchmark.name}\n{benchmark.description}\n"
+    description = f"{benchmark.description}\n"
     n_languages = len(languages)
     n_task_types = len(task_types)
     n_tasks = len(benchmark.tasks)
@@ -285,7 +286,21 @@ def get_leaderboard_app() -> gr.Blocks:
       <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     """
 
-    with gr.Blocks(fill_width=True, theme=gr.themes.Base(), head=head) as demo:
+    with gr.Blocks(
+        fill_width=True,
+        theme=gr.themes.Soft(
+            font=[gr.themes.GoogleFont("Roboto Mono"), "Arial", "sans-serif"],
+        ),
+        head=head,
+    ) as demo:
+        with gr.Sidebar(
+            position="left",
+            label="Benchmark Selection and Customization",
+            visible=True,
+            width="25%",
+        ):
+            gr.Markdown("## Select Benchmark")
+            benchmark_select, column = make_selector(BENCHMARK_ENTRIES)
         gr.Markdown(
             """
         ## Embedding Leaderboard
@@ -295,29 +310,26 @@ def get_leaderboard_app() -> gr.Blocks:
         > Looking for the previous MTEB leaderboard? We have made it available [here](https://huggingface.co/spaces/mteb/leaderboard_legacy) but it will no longer be updated.
         """
         )
-        with gr.Sidebar(
-            position="left",
-            label="Benchmark Selection and Customization",
-            visible=True,
-            width="25%",
-        ):
-            gr.Markdown("## Select Benchmark")
-            benchmark_select, column = make_selector(BENCHMARK_ENTRIES)
+        gr.Markdown(
+            lambda name: f"<center> <h2> <b> {name} </b> </h2> </center><br>",
+            inputs=benchmark_select,
+        )
 
         scores = gr.State(default_scores)
         models = gr.State(filtered_models)
         with gr.Row():
-            with gr.Column():
+            with gr.Column(scale=1):
                 description = gr.Markdown(  # noqa: F841
                     update_description,
                     inputs=[benchmark_select, lang_select, type_select, domain_select],
                 )
-                citation = gr.Markdown(
-                    update_citation, inputs=[benchmark_select]
-                )  # noqa: F841
-                with gr.Accordion("Share this benchmark:", open=False):
+                with gr.Accordion("Cite this benchmark:", open=False):
+                    citation = gr.Markdown(
+                        update_citation, inputs=[benchmark_select]
+                    )  # noqa: F841
+                with gr.Accordion("Share this benchmark:", open=True):
                     gr.Markdown(produce_benchmark_link, inputs=[benchmark_select])
-            with gr.Column():
+            with gr.Column(scale=2):
                 with gr.Tab("Performance per Model Size"):
                     plot = gr.Plot(
                         performance_size_plot, inputs=[summary_table]
@@ -333,7 +345,7 @@ def get_leaderboard_app() -> gr.Blocks:
                         "*We only display models that have been run on all task types in the benchmark*"
                     )
 
-        with gr.Accordion("Customize Current Benchmark", open=False):
+        with gr.Accordion("Customize this Benchmark", open=False):
             with gr.Column():
                 with gr.Row():
                     type_select.render()
