@@ -61,6 +61,20 @@ def get_column_types(df: pd.DataFrame) -> list[str]:
     return types
 
 
+def get_column_widths(df: pd.DataFrame) -> list[str]:
+    widths = []
+    for column_name in df.columns:
+        column_word_lengths = [len(word) for word in column_name.split()]
+        if is_numeric_dtype(df[column_name]):
+            value_lengths = [len(f"{value:.2f}") for value in df[column_name]]
+        else:
+            value_lengths = [len(str(value)) for value in df[column_name]]
+        max_length = max(max(column_word_lengths), max(value_lengths))
+        n_pixels = 25 + (max_length * 10)
+        widths.append(f"{n_pixels}px")
+    return widths
+
+
 def get_means_per_types(per_task: pd.DataFrame):
     task_names_per_type = defaultdict(list)
     for task_name in per_task.columns:
@@ -237,7 +251,7 @@ def apply_styling(
     ]
     light_green_cmap = create_light_green_cmap()
     numeric_data = joint_table.copy()
-    numeric_data["Zero-shot"] = numeric_data["Zero-shot"].replace(-1, np.nan)
+    # numeric_data["Zero-shot"] = numeric_data["Zero-shot"].replace(-1, np.nan)
     joint_table["Zero-shot"] = joint_table["Zero-shot"].apply(format_zero_shot)
     joint_table[score_columns] = joint_table[score_columns].map(format_scores)
     joint_table_style = joint_table.style.format(
@@ -286,12 +300,17 @@ def apply_styling(
                 subset=pd.IndexSlice[mask, col],
                 gmap=per_task[col].loc[mask],
             )
+    column_widths = get_column_widths(joint_table_style.data)
+    column_widths[0] = "100px"
+    column_widths[1] = "250px"
     return (
         gr.DataFrame(
             joint_table_style,
             datatype=column_types,
             interactive=False,
             pinned_columns=3,
+            column_widths=column_widths,
+            wrap=True,
             show_fullscreen_button=True,
             show_copy_button=True,
             show_search="filter",
