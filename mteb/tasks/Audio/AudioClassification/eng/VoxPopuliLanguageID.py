@@ -9,28 +9,23 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class VoxPopuliLanguageID(AbsTaskAudioClassification):
     metadata = TaskMetadata(
         name="VoxPopuliLanguageID",
-        description="Classification of speech samples into one of 18 European languages from European Parliament recordings.",
+        description="Classification of speech samples into one of 5 European languages (English, German, French, Spanish, Polish) from European Parliament recordings.",
         reference="https://huggingface.co/datasets/facebook/voxpopuli",
         dataset={
             "path": "facebook/voxpopuli",
-            "name": "multilang",  # This explicitly selects the multilingual config
+            "name": "multilang",  # This selects the multilingual config/subset
             "revision": "719aaef8225945c0d80b277de6c79aa42ab053d5",
         },
         type="AudioClassification",
         category="a2t",
         eval_splits=["test"],
         eval_langs=[
-            "eng-Latn",
-            "deu-Latn",
-            "fra-Latn",
-            "spa-Latn",
-            "pol-Latn",
-            "ita-Latn",
-            "ron-Latn",
-            "hun-Latn",
-            "ces-Latn",
-            "nld-Latn",
-        ],  # Using BCP-47 format
+            "eng-Latn",  # English
+            "deu-Latn",  # German
+            "fra-Latn",  # French
+            "spa-Latn",  # Spanish
+            "pol-Latn",  # Polish
+        ],  # Using BCP-47 format for the 5 main languages
         main_score="accuracy",
         date=("2009-01-01", "2020-12-31"),
         domains=["Spoken", "Speech"],
@@ -61,47 +56,16 @@ class VoxPopuliLanguageID(AbsTaskAudioClassification):
             pages = "993--1003",
         }""",
         descriptive_stats={
-            "n_samples": {"train": 50000, "validation": 5000, "test": 5000},  # Approx
+            "n_samples": {
+                "test": 7800,  # Approximate count for the 5 main languages in test split (train and validation will not be included)
+            },
         },
     )
 
     audio_column_name: str = "audio"
     label_column_name: str = "language"
-    samples_per_label: int = 30  # Approximate placeholder because value varies
-    is_cross_validation: bool = False
-
-    def dataset_transform(self):
-        # Convert numerical language IDs to string language codes for better interpretability
-        language_map = {
-            0: "en",
-            1: "de",
-            2: "fr",
-            3: "es",
-            4: "pl",
-            5: "it",
-            6: "ro",
-            7: "hu",
-            8: "cs",
-            9: "nl",
-            10: "fi",
-            11: "hr",
-            12: "sk",
-            13: "sl",
-            14: "et",
-            15: "lt",
-            16: "lv",
-            17: "da",
-        }
-
-        for split in self.dataset:
-            self.dataset[split] = self.dataset[split].map(
-                lambda example: {"language_code": language_map[example["language"]]}
-            )
-            # Use language code as label
-            self.dataset[split] = self.dataset[split].rename_column(
-                "language_code", self.label_column_name
-            )
-
-            # Simple subsample if dataset is very large (optional)
-            if len(self.dataset[split]) > 5000:
-                self.dataset[split] = self.dataset[split].select(range(5000))
+    samples_per_label: int = 50  # For balanced training
+    is_cross_validation: bool = (
+        True  # Use cross-validation since we only have test split
+    )
+    n_splits: int = 5  # Standard 5-fold cross-validation

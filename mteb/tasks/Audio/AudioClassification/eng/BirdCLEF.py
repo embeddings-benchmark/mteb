@@ -20,8 +20,7 @@ class BirdCLEFClassification(AbsTaskAudioClassification):
         eval_splits=["train"],  # Using train split as it contains the labeled data
         eval_langs=[
             "eng-Latn",
-            "spa-Latn",
-        ],  # Both English and Spanish names are provided
+        ],
         main_score="accuracy",
         date=("2025-01-01", "2025-12-31"),  # Competition year
         domains=["Spoken", "Speech"],

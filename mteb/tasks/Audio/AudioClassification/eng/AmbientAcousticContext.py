@@ -9,21 +9,21 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class AmbientAcousticContextClassification(AbsTaskAudioClassification):
     metadata = TaskMetadata(
         name="AmbientAcousticContext",
-        description="The Ambient Acoustic Context dataset contains 1-second segments for activities that occur in a workplace setting.",
+        description="The Ambient Acoustic Context dataset contains 1-second segments for activities that occur in a workplace setting. This is a downsampled version with ~100 train and ~50 test samples per class.",
         reference="https://dl.acm.org/doi/10.1145/3379503.3403535",
         dataset={
-            "path": "flwrlabs/ambient-acoustic-context",
-            "revision": "8c77edafc0cad477055ec099c253c87b2b08e77a",
+            "path": "AdnanElAssadi/ambient-acoustic-context-small",
+            "revision": "360c858462b79492c6b09d5855ec4d59c87497c6",
         },
         type="AudioClassification",
         category="a2t",
-        eval_splits=["train"],  # Dataset only has train split
+        eval_splits=["test"],  # Using the pre-created test split
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2020-01-01", "2020-12-31"),  # Paper publication date
         domains=["Spoken", "Speech"],
         task_subtypes=["Environment Sound Classification"],
-        license="not specified",  # As specified in dataset card
+        license="not specified",  # Not specified in dataset card
         annotations_creators="human-annotated",
         dialect=[],
         modalities=["audio"],
@@ -45,13 +45,18 @@ class AmbientAcousticContextClassification(AbsTaskAudioClassification):
             series = {MobileHCI '20}
         }""",
         descriptive_stats={
-            "n_samples": {"train": 70254},  # As mentioned in dataset card
-            "n_classes": 24,  # From dataset viewer
-            "sampling_rate": 16000,  # From data instances example
+            "n_samples": {
+                "train": 2387,  # ~100 samples × 24 classes
+                "test": 1036,  # ~50 samples × 24 classes
+            },
+            "n_classes": 24,
+            "sampling_rate": 16000,
         },
     )
 
     audio_column_name: str = "audio"
     label_column_name: str = "label"
-    samples_per_label: int = 300  # Placeholder because value varies
+    samples_per_label: int = None  # Not needed as dataset is already balanced
     is_cross_validation: bool = False
+
+    # No dataset_transform method needed as dataset is already filtered and split

@@ -39,7 +39,7 @@ class IEMOCAPGenderClustering(AbsTaskAudioClustering):
             publisher={Springer}
         }""",
         descriptive_stats={
-            "n_samples": {"train": 10000},  # Approximate
+            "n_samples": {"train": 10039},  # Approximate
         },
     )
 

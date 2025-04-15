@@ -39,11 +39,11 @@ class IEMOCAPGenderClassification(AbsTaskAudioClassification):
             publisher={Springer}
         }""",
         descriptive_stats={
-            "n_samples": {"train": 10000},  # Approximate
+            "n_samples": {"train": 10039},
         },
     )
 
     audio_column_name: str = "audio"
     label_column_name: str = "gender"
-    samples_per_label: int = 50  # Approximate placeholder
-    is_cross_validation: bool = False
+    samples_per_label: int = 100
+    is_cross_validation: bool = True

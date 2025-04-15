@@ -11,14 +11,13 @@ class MInDS14Classification(AbsTaskAudioClassification):
         reference="https://arxiv.org/abs/2104.08524",
         dataset={
             "path": "PolyAI/minds14",
+            "name": "en-US",  # English language configuration
             "revision": "75900a7c6f93f014f25b50d16596a6da89add3a5",
         },
         type="AudioClassification",
         category="a2t",
-        eval_splits=["train"],  # Dataset only has a train split
-        eval_langs=[
-            "all"
-        ],  # Evaluation supported for all language configurations (the 14 languages)
+        eval_splits=["train"],
+        eval_langs=["eng-Latn"],  # English (en-US) in BCP-47 format
         main_score="accuracy",
         date=("2021-04-01", "2021-04-30"),  # Paper publication date
         domains=["Speech", "Spoken"],
@@ -43,8 +42,8 @@ class MInDS14Classification(AbsTaskAudioClassification):
             }""",
         descriptive_stats={
             "n_samples": {
-                "train": 600
-            },  # Approximate total number of samples per language configuration
+                "train": 563,  # Count for en-US configuration
+            },
             "n_classes": 14,
             "classes": [
                 "aboard",
@@ -66,6 +65,7 @@ class MInDS14Classification(AbsTaskAudioClassification):
     )
 
     audio_column_name: str = "audio"
-    label_column_name: str = "intent_class"
-    samples_per_label: int = 50  # Rounded average: 600 samples / 14 classes ≈ 43 samples per label (if even distribution)
-    is_cross_validation: bool = False
+    label_column_name: str = "intent_class"  # Contains numeric labels 0-13
+    samples_per_label: int = 40
+    is_cross_validation: bool = True
+    n_splits: int = 5

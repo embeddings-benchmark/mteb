@@ -13,12 +13,12 @@ class VoxPopuliGenderClustering(AbsTaskAudioClustering):
         reference="https://huggingface.co/datasets/facebook/voxpopuli",
         dataset={
             "path": "facebook/voxpopuli",
-            "name": "multilang",  # This explicitly selects the multilingual config
+            "name": "multilang",  # This selects the multilingual config
             "revision": "719aaef8225945c0d80b277de6c79aa42ab053d5",
         },
         type="AudioClustering",
         category="a2a",
-        eval_splits=["test"],
+        eval_splits=["validation", "test"],
         eval_langs=["eng-Latn"],  # Focus on one language for clustering
         main_score="cluster_accuracy",
         date=("2009-01-01", "2020-12-31"),
@@ -50,26 +50,34 @@ class VoxPopuliGenderClustering(AbsTaskAudioClustering):
             pages = "993--1003",
         }""",
         descriptive_stats={
-            "n_samples": {"test": 1000},  # Approx after filtering and balancing
+            "n_samples": {
+                "train": 7600,
+                "validation": 1755,  # 22.5% of of 7800 (english samples)
+                "test": 1840,  # 23.5% of of 7800 (english samples)
+            },
         },
     )
 
     audio_column_name: str = "audio"
 
-    def dataset_transform(self):
-        # Simple filtering for English samples with valid gender
-        for split in self.dataset:
-            # Filter to English language (0) with valid gender labels
-            self.dataset[split] = self.dataset[split].filter(
-                lambda example: (
-                    example["gender"] is not None
-                    and example["gender"] in ["male", "female"]
-                    and example["language"] == 0
-                )  # 0 is English
-            )
+    def dataset_transform(self, dataset):
+        """Filter to keep only English samples in all splits."""
+        # VoxPopuli language codes: 0 = English (en)
+        ENGLISH_CODE = 0
 
-            # Basic limit on dataset size if needed
-            if len(self.dataset[split]) > 1000:
-                self.dataset[split] = (
-                    self.dataset[split].shuffle(seed=42).select(range(1000))
-                )
+        transformed_dataset = {}
+        for split in dataset:
+            # Get indices of English samples using numeric code
+            english_indices = [
+                i
+                for i, lang_code in enumerate(dataset[split]["language"])
+                if lang_code == ENGLISH_CODE
+            ]
+
+            # Select only English samples
+            if english_indices:
+                transformed_dataset[split] = dataset[split].select(english_indices)
+            else:
+                transformed_dataset[split] = dataset[split]
+
+        return transformed_dataset

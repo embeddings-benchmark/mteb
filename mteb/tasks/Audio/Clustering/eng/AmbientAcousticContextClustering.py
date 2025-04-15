@@ -6,13 +6,14 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 class AmbientAcousticContextClustering(AbsTaskAudioClustering):
     label_column_name: str = "label"
+
     metadata = TaskMetadata(
         name="AmbientAcousticContextClustering",
-        description="Clustering task based on the Ambient Acoustic Context dataset containing 1-second segments for workplace activities.",
+        description="Clustering task based on a subset of the Ambient Acoustic Context dataset containing 1-second segments for workplace activities.",
         reference="https://dl.acm.org/doi/10.1145/3379503.3403535",
         dataset={
-            "path": "flwrlabs/ambient-acoustic-context",
-            "revision": "8c77edafc0cad477055ec099c253c87b2b08e77a",
+            "path": "AdnanElAssadi/ambient-acoustic-context-small",
+            "revision": "360c858462b79492c6b09d5855ec4d59c87497c6",
         },
         type="AudioClustering",
         category="a2a",
@@ -43,4 +44,12 @@ class AmbientAcousticContextClustering(AbsTaskAudioClustering):
             location = {Oldenburg, Germany},
             series = {MobileHCI '20}
         }""",
+        descriptive_stats={
+            "n_samples": {
+                "train": 2387,  # ~100 samples × 24 classes
+                "test": 1036,  # ~50 samples × 24 classes
+            },
+            "n_classes": 24,
+            "sampling_rate": 16000,
+        },
     )

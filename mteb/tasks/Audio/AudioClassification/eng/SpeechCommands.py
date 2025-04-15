@@ -17,12 +17,12 @@ class SpeechCommandsClassification(AbsTaskAudioClassification):
         },
         type="AudioClassification",
         category="a2t",
-        eval_splits=["test"],
+        eval_splits=["validation", "test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2018-04-11", "2018-04-11"),  # v0.02 release date
         domains=["Speech"],
-        task_subtypes=["Spoken Digit Classification"],
+        task_subtypes=["Spoken Language Identification"],
         license="cc-by-4.0",
         annotations_creators="human-annotated",
         dialect=[],
@@ -35,8 +35,8 @@ class SpeechCommandsClassification(AbsTaskAudioClassification):
             year={2018}
         }""",
         descriptive_stats={
-            "n_samples": {"test": 4890},  # From v0.02
-            "n_classes": 35,  # 35 classes in v0.02
+            "n_samples": {"train": 84848, "validation": 9982, "test": 4890},
+            "n_classes": 35,
             "classes": [
                 "yes",
                 "no",
@@ -79,5 +79,5 @@ class SpeechCommandsClassification(AbsTaskAudioClassification):
 
     audio_column_name: str = "audio"
     label_column_name: str = "label"
-    samples_per_label: int = 50  # Rough guess/placeholder
+    samples_per_label: int = 50
     is_cross_validation: bool = False

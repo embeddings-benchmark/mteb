@@ -39,37 +39,52 @@ class IEMOCAPEmotionClassification(AbsTaskAudioClassification):
             publisher={Springer}
         }""",
         descriptive_stats={
-            "n_samples": {"train": 5000},  # Approximate after subsampling
+            "n_samples": {"train": 10039},  # Approximate after subsampling
         },
     )
 
     audio_column_name: str = "audio"
-    label_column_name: str = "major_emotion"
-    samples_per_label: int = 50  # Approximate placeholder because value varies
-    is_cross_validation: bool = False
+    label_column_name: str = "emotion"
+    samples_per_label: int = 10
+    is_cross_validation: bool = True
 
     def dataset_transform(self):
+        # Define emotion labels and their mapping to indices
+        labels = [
+            "angry",  # 0
+            "sad",  # 1
+            "happy",  # 2
+            "neutral",  # 3
+            "frustrated",  # 4
+            "excited",  # 5
+            "fear",  # 6
+            "surprise",  # 7
+            "disgust",  # 8
+            "other",  # 9
+        ]
+        label2id = {emotion: idx for idx, emotion in enumerate(labels)}
+
         # Basic filtering to ensure we have valid emotion labels
         for split in self.dataset:
-            # Ensure we have valid emotion labels and that they're normalized
+            # First ensure we have valid emotion labels and normalize case
             self.dataset[split] = self.dataset[split].filter(
                 lambda example: example["major_emotion"] is not None
                 and example["major_emotion"] != ""
             )
 
-            # Map emotion labels to lowercase for consistency
+            # Map to indices with case normalization for reliability
             self.dataset[split] = self.dataset[split].map(
                 lambda example: {
-                    "major_emotion_clean": example["major_emotion"].lower()
+                    "emotion_id": label2id.get(example["major_emotion"].lower(), -1)
                 }
             )
-            # Use cleaned emotion as label
-            self.dataset[split] = self.dataset[split].rename_column(
-                "major_emotion_clean", self.label_column_name
+
+            # Filter out any examples with unknown emotions
+            self.dataset[split] = self.dataset[split].filter(
+                lambda example: example["emotion_id"] != -1
             )
 
-            # Simple subsample if dataset is very large
-            if len(self.dataset[split]) > 5000:
-                self.dataset[split] = (
-                    self.dataset[split].shuffle(seed=42).select(range(5000))
-                )
+            # Use numeric ID as the label
+            self.dataset[split] = self.dataset[split].rename_column(
+                "emotion_id", self.label_column_name
+            )

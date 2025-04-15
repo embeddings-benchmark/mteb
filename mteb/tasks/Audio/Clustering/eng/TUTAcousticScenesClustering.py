@@ -36,4 +36,20 @@ class TUTAcousticScenesClustering(AbsTaskAudioClustering):
             publisher = {Tampere University of Technology},
             address = {Tampere, Finland}
         }""",
+        descriptive_stats={
+            "n_samples": {"train": 8640},  # Based on provided stats
+            "n_classes": 10,
+            "classes": [
+                "airport",
+                "bus",
+                "metro",
+                "metro_station",
+                "park",
+                "public_square",
+                "shopping_mall",
+                "street_pedestrian",
+                "street_traffic",
+                "tram",
+            ],
+        },
     )

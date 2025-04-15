@@ -39,7 +39,7 @@ class IEMOCAPEmotionClustering(AbsTaskAudioClustering):
             publisher={Springer}
         }""",
         descriptive_stats={
-            "n_samples": {"train": 5000},  # Approximate after subsampling
+            "n_samples": {"train": 10039},  # Approximate after subsampling
         },
     )
 

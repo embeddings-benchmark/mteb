@@ -59,5 +59,6 @@ class TUTAcousticScenesClassification(AbsTaskAudioClassification):
 
     audio_column_name: str = "audio"
     label_column_name: str = "scene_label"
-    samples_per_label: int = 864  # Roughly 864 samples per label
-    is_cross_validation: bool = False
+    samples_per_label: int = 50
+    is_cross_validation: bool = True
+    n_splits: int = 5

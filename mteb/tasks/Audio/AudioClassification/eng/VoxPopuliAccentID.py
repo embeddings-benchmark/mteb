@@ -56,23 +56,25 @@ class VoxPopuliAccentID(AbsTaskAudioClassification):
 
     audio_column_name: str = "audio"
     label_column_name: str = "accent"
-    samples_per_label: int = 30  # Approximate placeholder because value varies
+    samples_per_label: int = 50
     is_cross_validation: bool = False
 
-    def dataset_transform(self):
-        # Simple filtering for valid accent labels
-        for split in self.dataset:
-            # Filter out samples with "None" accent
-            self.dataset[split] = self.dataset[split].filter(
-                lambda example: example["accent"] != "None"
-                and example["accent"] is not None
-            )
+    def dataset_transform(self, dataset):
+        # Split test into train (80%) and new test (20%)
+        import random
 
-            # Clean up accent labels (removing "en_" prefix for readability)
-            self.dataset[split] = self.dataset[split].map(
-                lambda example: {"accent_clean": example["accent"].replace("en_", "")}
-            )
-            # Use cleaned accent as label
-            self.dataset[split] = self.dataset[split].rename_column(
-                "accent_clean", self.label_column_name
-            )
+        random.seed(42)
+
+        test_data = dataset["test"]
+        indices = list(range(len(test_data)))
+        random.shuffle(indices)
+
+        split_point = int(len(indices) * 0.8)
+        train_indices = indices[:split_point]
+        test_indices = indices[split_point:]
+
+        transformed_dataset = {
+            "train": test_data.select(train_indices),
+            "test": test_data.select(test_indices),
+        }
+        return transformed_dataset
