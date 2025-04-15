@@ -206,7 +206,7 @@ def _create_button(i, label, entry, state, label_to_value, **kwargs):
     label_to_value[label] = val
     button = gr.Button(
         label,
-        variant="huggingface" if i != 0 else "primary",
+        variant="secondary" if i != 0 else "primary",
         icon=entry["icon"],
         key=f"{i}_button_{val}",
         elem_classes="text-white",
@@ -217,7 +217,7 @@ def _create_button(i, label, entry, state, label_to_value, **kwargs):
         if state == label_to_value[label]:
             return gr.Button(variant="primary")
         else:
-            return gr.Button(variant="huggingface")
+            return gr.Button(variant="secondary")
 
     def _update_value(label) -> str:
         return label_to_value[label]
