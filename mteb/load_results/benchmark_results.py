@@ -438,7 +438,12 @@ class BenchmarkResults(BaseModel):
 
         name_rev = {}
 
-        for name, revision in zip(names, _revisions, strict=True):
+        if len(names) != len(_revisions):
+            raise ValueError(
+                "The length of names and revisions must be the same or revisions must be None."
+            )
+
+        for name, revision in zip(names, _revisions):
             if isinstance(name, ModelMeta):
                 name_rev[name.name] = name.revision
             else:
@@ -530,7 +535,7 @@ class BenchmarkResults(BaseModel):
 
         records = []
         for model_result in self:
-            for task_result in model_result:
+            for task_result in model_result.task_results:
                 records.append(
                     dict(
                         model=model_result.model_name,
