@@ -292,14 +292,15 @@ def apply_styling(
     per_task_style = per_task.style.format(
         "{:.2f}", subset=task_score_columns, na_rep=""
     ).highlight_max(subset=task_score_columns, props="font-weight: bold")
-    for col in task_score_columns:
-        if col != "Model":
-            mask = per_task[col].notna()
-            per_task_style = per_task_style.background_gradient(
-                cmap=light_green_cmap,
-                subset=pd.IndexSlice[mask, col],
-                gmap=per_task[col].loc[mask],
-            )
+    # TODO: uncomment this when Gradio fixes it
+    # for col in task_score_columns:
+    #     if col != "Model":
+    #         mask = per_task[col].notna()
+    #         per_task_style = per_task_style.background_gradient(
+    #             cmap=light_green_cmap,
+    #             subset=pd.IndexSlice[mask, col],
+    #             gmap=per_task[col].loc[mask],
+    #         )
     column_widths = get_column_widths(joint_table_style.data)
     column_widths[0] = "100px"
     column_widths[1] = "250px"
