@@ -327,7 +327,7 @@ class Any2AnyRetrievalEvaluator(Evaluator):
         output_type: str = "all",
     ) -> tuple[dict[str, float]]:
         if metric.lower() in ["mrr", "mrr@k", "mrr_cut"]:
-            metric_scores = mrr(qrels, results, k_values, output_type)
+            metric_scores = mrr(qrels, results, k_values)
 
         elif metric.lower() in ["recall_cap", "r_cap", "r_cap@k"]:
             metric_scores = recall_cap(qrels, results, k_values, output_type)
