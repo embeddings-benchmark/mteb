@@ -12,8 +12,8 @@ class SpeechCommandsClassification(AbsTaskAudioClassification):
         description="A set of one-second .wav audio files, each containing a single spoken English word or background noise.",
         reference="https://arxiv.org/abs/1804.03209",
         dataset={
-            "path": "google/speech_commands",
-            "revision": "57ba463ab37e1e7845e0626539a6f6d0fcfbe64a",  # Using v0.02 as it's the latest version
+            "path": "AdnanElAssadi/speech_commands_small",
+            "revision": "a59564b91bf0cfcf587e11c2603fe42bae21e5f0",  # Using downsampled version of v0.02
         },
         type="AudioClassification",
         category="a2t",
@@ -35,8 +35,8 @@ class SpeechCommandsClassification(AbsTaskAudioClassification):
             year={2018}
         }""",
         descriptive_stats={
-            "n_samples": {"train": 84848, "validation": 9982, "test": 4890},
-            "n_classes": 35,
+            "n_samples": {"train": 1755, "validation": 9982, "test": 4890},
+            "n_classes": 36,
             "classes": [
                 "yes",
                 "no",
@@ -73,6 +73,7 @@ class SpeechCommandsClassification(AbsTaskAudioClassification):
                 "follow",
                 "learn",
                 "visual",
+                "_unknown_",  # (likely background noise or silent segments)
             ],
         },
     )
