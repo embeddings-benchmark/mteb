@@ -269,7 +269,6 @@ class ModelResult(BaseModel):
                 - "task": Aggregates the scores by task. The DataFrame will have one row per model and task.
             aggregation_fn: The function to use for aggregation. If None, the mean will be used.
             include_model_revision: If True, the model revision will be included in the DataFrame. If False, it will be excluded.
-                If None, the model revision will be included if there are multiple revisions for the same model.
             format: The format of the DataFrame. Can be one of:
                 - "wide": The DataFrame will be of shape (number of tasks, number of models). Scores will be in the cells.
                 - "long": The DataFrame will of length (number of tasks * number of model). Scores will be in columns.
@@ -495,8 +494,6 @@ class BenchmarkResults(BaseModel):
         - If there is no main revision, we prefer the one run using the latest mteb version.
         """
         # TODO: In v2 we should probably have this be the default when loading. We could probably even reduce loading times by only loading what we need
-        # TODO: Currently join revision doesn't actually garuantee that you only have one revision of the model. It only garuantees that you have
-        # one result per task for each model (you will then have to merge to two columns afterwards)
 
         def parse_version(version_str: str) -> Version | None:
             try:
@@ -623,7 +620,7 @@ class BenchmarkResults(BaseModel):
         self,
         aggregation_level: Literal["subset", "split", "task"] = "task",
         aggregation_fn: Callable[[list[Score]], Any] | None = None,
-        include_model_revision: bool | None = None,
+        include_model_revision: bool = False,
         format: Literal["wide", "long"] = "wide",
     ) -> pd.DataFrame:
         """Get a DataFrame with the scores for all models and tasks.
@@ -647,7 +644,7 @@ class BenchmarkResults(BaseModel):
                 - "task": Aggregates the scores by task. The DataFrame will have one row per model and task.
             aggregation_fn: The function to use for aggregation. If None, the mean will be used.
             include_model_revision: If True, the model revision will be included in the DataFrame. If False, it will be excluded.
-                If None, the model revision will be included if there are multiple revisions for the same model.
+                If there are multiple revisions for the same model, they will be joined using the `join_revisions` method.
             format: The format of the DataFrame. Can be one of:
                 - "wide": The DataFrame will be of shape (number of tasks, number of models). Scores will be in the cells.
                 - "long": The DataFrame will of length (number of tasks * number of model). Scores will be in columns.
@@ -655,8 +652,12 @@ class BenchmarkResults(BaseModel):
         Returns:
             A DataFrame with the scores for all models and tasks.
         """
+        bench_results = self
+        if include_model_revision is False:
+            bench_results = bench_results.join_revisions()
+
         scores_data = []
-        for model_result in self.model_results:
+        for model_result in bench_results:
             scores_data.extend(model_result._get_score_for_table())
 
         if not scores_data:
@@ -667,10 +668,6 @@ class BenchmarkResults(BaseModel):
         df = pd.DataFrame(scores_data)
 
         _columns = ["model_name"]
-        if include_model_revision is None:
-            include_model_revision = len(
-                {model_res.model_name for model_res in self.model_results}
-            ) < len(self.model_results)
         if include_model_revision is False:
             df = df.drop(columns=["model_revision"])
         else:
