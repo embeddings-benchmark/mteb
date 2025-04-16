@@ -56,11 +56,12 @@ class VoxPopuliAccentClustering(AbsTaskAudioClustering):
 
     audio_column_name: str = "audio"
 
-    def dataset_transform(self, dataset):
+    def dataset_transform(self):
         # Split test into train (80%) and new test (20%)
         import random
 
         random.seed(42)
+        dataset = self.dataset
 
         test_data = dataset["test"]
         indices = list(range(len(test_data)))
