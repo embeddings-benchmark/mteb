@@ -200,7 +200,7 @@ class CovidRetrieval(AbsTaskRetrieval):
         eval_langs=["cmn-Hans"],
         main_score="ndcg_at_10",
         date=("2022-03-03", "2022-03-18"),
-        domains=["Medical", "Entertainment", "E-commerce"],
+        domains=["Medical", "Entertainment"],
         task_subtypes=[],
         license="not specified",
         annotations_creators="human-annotated",
