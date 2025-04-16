@@ -17,7 +17,7 @@ class BirdCLEFClassification(AbsTaskAudioClassification):
         },
         type="AudioClassification",
         category="a2t",
-        eval_splits=["train"],  
+        eval_splits=["train"],
         eval_langs=[
             "eng-Latn",
         ],
@@ -45,7 +45,5 @@ class BirdCLEFClassification(AbsTaskAudioClassification):
 
     audio_column_name: str = "recording"
     label_column_name: str = "primary_label"
-    samples_per_label: int = 20  
+    samples_per_label: int = 20
     is_cross_validation: bool = True
-    
-

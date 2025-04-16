@@ -66,7 +66,7 @@ class VoxPopuliGenderID(AbsTaskAudioClassification):
     def dataset_transform(self):
         """Filter to keep only English samples in all splits."""
         dataset = self.dataset
-        
+
         # VoxPopuli language codes: 0 = English (en)
         ENGLISH_CODE = 0
 

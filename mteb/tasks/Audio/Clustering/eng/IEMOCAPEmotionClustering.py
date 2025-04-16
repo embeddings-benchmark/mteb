@@ -44,4 +44,3 @@ class IEMOCAPEmotionClustering(AbsTaskAudioClustering):
     )
 
     audio_column_name: str = "audio"
-
