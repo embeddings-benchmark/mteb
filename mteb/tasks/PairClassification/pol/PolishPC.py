@@ -21,7 +21,7 @@ class SickePLPC(AbsTaskPairClassification):
         eval_langs=["pol-Latn"],
         main_score="max_ap",
         date=None,
-        domains=[],
+        domains=None,
         task_subtypes=None,
         license=None,
         annotations_creators=None,

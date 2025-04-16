@@ -22,7 +22,7 @@ class GermanSTSBenchmarkSTS(AbsTaskSTS):
         eval_langs=["deu-Latn"],
         main_score="cosine_spearman",
         date=None,
-        domains=[],
+        domains=None,
         task_subtypes=None,
         license=None,
         annotations_creators=None,

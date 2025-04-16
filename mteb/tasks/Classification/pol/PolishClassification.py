@@ -123,7 +123,7 @@ class AllegroReviewsClassification(AbsTaskClassification):
         eval_langs=["pol-Latn"],
         main_score="accuracy",
         date=None,
-        domains=[],
+        domains=None,
         task_subtypes=None,
         license=None,
         annotations_creators=None,

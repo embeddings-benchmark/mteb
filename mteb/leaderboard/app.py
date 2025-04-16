@@ -579,11 +579,13 @@ def get_leaderboard_app() -> gr.Blocks:
             for task in mteb.get_benchmark(benchmark_name).tasks:
                 if task.metadata.type not in type_select:
                     continue
-                if task.metadata.domains and not (
+                if task.metadata.domains is not None and not (
                     set(task.metadata.domains) & set(domain_select)
                 ):
                     continue
-                if task.languages and not (set(task.languages) & set(lang_select)):
+                if task.languages is not None and not (
+                    set(task.languages) & set(lang_select)
+                ):
                     continue
                 if task.metadata.modalities and not (
                     set(task.metadata.modalities) & set(modality_select)

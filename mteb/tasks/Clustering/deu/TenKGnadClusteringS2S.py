@@ -24,7 +24,7 @@ class TenKGnadClusteringS2S(AbsTaskClustering):
         main_score="v_measure",
         date=None,
         form=None,
-        domains=[],
+        domains=None,
         task_subtypes=None,
         license=None,
         annotations_creators=None,
