@@ -452,7 +452,7 @@ class PersianTextTone(AbsTaskClassification):
         eval_langs=["fas-Arab"],
         main_score="accuracy",
         date=("2024-09-01", "2024-12-31"),
-        domains=["Not Specified"],
+        domains=[],
         task_subtypes=["Sentiment/Hate speech"],
         license="not specified",
         annotations_creators="LM-generated",

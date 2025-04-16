@@ -21,7 +21,7 @@ class T2Reranking(AbsTaskReranking):
         main_score="map",
         date=None,
         form=None,
-        domains=["Not Specified"],
+        domains=[],
         task_subtypes=None,
         license="not specified",
         annotations_creators=None,

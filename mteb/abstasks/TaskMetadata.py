@@ -56,9 +56,6 @@ TASK_SUBTYPE = Literal[
     "Tumor detection",
     "Duplicate Detection",
     "Rendered semantic textual similarity",
-    "Passage retrieval",
-    "Passage ranking",
-    "Legal information retrieval",
 ]
 
 TASK_DOMAIN = Literal[
@@ -69,7 +66,6 @@ TASK_DOMAIN = Literal[
     "Engineering",
     "Fiction",
     "Government",
-    "General",
     "Legal",
     "Medical",
     "News",
@@ -87,11 +83,6 @@ TASK_DOMAIN = Literal[
     "Chemistry",
     "Financial",
     "Entertainment",
-    "E-commerce",
-    "Vehicle",
-    "Information Technology",
-    "Emotion",
-    "Books",
     "Not Specified",
 ]
 

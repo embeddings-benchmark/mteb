@@ -27,7 +27,7 @@ class GermanDPR(AbsTaskRetrieval):
         main_score="ndcg_at_10",
         date=None,
         domains=["Encyclopaedic"],
-        task_subtypes=["Passage retrieval"],
+        task_subtypes=[],
         license="cc-by-4.0",
         annotations_creators=None,
         dialect=None,
