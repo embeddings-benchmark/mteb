@@ -105,7 +105,6 @@ def update_description(
     benchmark_name: str, languages: list[str], task_types: list[str], domains: list[str]
 ) -> str:
     benchmark = mteb.get_benchmark(benchmark_name)
-    # description = f"## {benchmark.name}\n{benchmark.description}\n"
     description = f"{benchmark.description}\n"
     n_languages = len(languages)
     n_task_types = len(task_types)
