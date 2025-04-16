@@ -524,7 +524,7 @@ def get_leaderboard_app() -> gr.Blocks:
             elapsed = time.time() - start_time
             benchmark_results = all_benchmark_results[benchmark_name]
             scores = benchmark_results.get_scores(format="long")
-            print(f"on_benchmark_select callback: {elapsed}s")
+            logger.debug(f"on_benchmark_select callback: {elapsed}s")
             return (
                 languages,
                 domains,
@@ -560,7 +560,7 @@ def get_leaderboard_app() -> gr.Blocks:
             benchmark_results = all_benchmark_results[benchmark_name]
             scores = benchmark_results.get_scores(languages=languages, format="long")
             elapsed = time.time() - start_time
-            print(f"update_scores callback: {elapsed}s")
+            logger.debug(f"update_scores callback: {elapsed}s")
             return scores
 
         lang_select.input(
@@ -599,7 +599,7 @@ def get_leaderboard_app() -> gr.Blocks:
                     continue
                 tasks_to_keep.append(task.metadata.name)
             elapsed = time.time() - start_time
-            print(f"update_task_list callback: {elapsed}s")
+            logger.debug(f"update_task_list callback: {elapsed}s")
             return sorted(tasks_to_keep)
 
         type_select.input(
@@ -685,7 +685,7 @@ def get_leaderboard_app() -> gr.Blocks:
             if model_names == filtered_models:
                 # This indicates that the models should not be filtered
                 return None
-            print(f"update_models callback: {elapsed}s")
+            logger.debug(f"update_models callback: {elapsed}s")
             return sorted(filtered_models)
 
         scores.change(
@@ -815,7 +815,7 @@ def get_leaderboard_app() -> gr.Blocks:
                 filtered_scores = scores
             summary, per_task = create_tables(filtered_scores)
             elapsed = time.time() - start_time
-            print(f"update_tables callback: {elapsed}s")
+            logger.debug(f"update_tables callback: {elapsed}s")
             return summary, per_task
 
         task_select.change(
