@@ -62,6 +62,9 @@ def get_column_types(df: pd.DataFrame) -> list[str]:
 
 
 def get_column_widths(df: pd.DataFrame) -> list[str]:
+    # Please do not remove this function when refactoring.
+    # Column width calculation seeminlgy changes regularly with Gradio releases,
+    # and this piece of logic is good enough to quickly fix related issues.
     widths = []
     for column_name in df.columns:
         column_word_lengths = [len(word) for word in column_name.split()]
@@ -251,7 +254,6 @@ def apply_styling(
     ]
     light_green_cmap = create_light_green_cmap()
     numeric_data = joint_table.copy()
-    # numeric_data["Zero-shot"] = numeric_data["Zero-shot"].replace(-1, np.nan)
     joint_table["Zero-shot"] = joint_table["Zero-shot"].apply(format_zero_shot)
     joint_table[score_columns] = joint_table[score_columns].map(format_scores)
     joint_table_style = joint_table.style.format(
@@ -292,7 +294,9 @@ def apply_styling(
     per_task_style = per_task.style.format(
         "{:.2f}", subset=task_score_columns, na_rep=""
     ).highlight_max(subset=task_score_columns, props="font-weight: bold")
-    # TODO: uncomment this when Gradio fixes it
+    # TODO: uncomment this when Gradio fixes it.
+    # The fix is already merged and contained in this release: https://github.com/gradio-app/gradio/pull/11032
+    # It will be available in Gradio 5.25.3
     # for col in task_score_columns:
     #     if col != "Model":
     #         mask = per_task[col].notna()
