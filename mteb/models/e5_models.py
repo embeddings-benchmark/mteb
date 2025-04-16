@@ -130,6 +130,7 @@ E5_TRAINING_DATA = {
 
 ME5_TRAINING_DATA = {
     **E5_TRAINING_DATA,
+    "XQuAD": ["train"], # trained on SQuAD train dataset
     "FEVER": ["train"],
     "FEVERHardNegatives": ["train"],
     "FEVER-NL": ["train"],  # translation not trained on
