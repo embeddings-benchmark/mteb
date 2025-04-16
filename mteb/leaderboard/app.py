@@ -20,8 +20,7 @@ from mteb.abstasks.TaskMetadata import TASK_DOMAIN, TASK_TYPE
 from mteb.benchmarks.benchmarks import MTEB_multilingual
 from mteb.custom_validators import MODALITIES
 from mteb.languages import ISO_TO_LANGUAGE
-from mteb.leaderboard.benchmark_selector import (BENCHMARK_ENTRIES,
-                                                 make_selector)
+from mteb.leaderboard.benchmark_selector import BENCHMARK_ENTRIES, make_selector
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
 from mteb.leaderboard.table import create_tables
 
@@ -324,23 +323,17 @@ def get_leaderboard_app() -> gr.Blocks:
                     inputs=[benchmark_select, lang_select, type_select, domain_select],
                 )
                 with gr.Accordion("Cite this benchmark:", open=False):
-                    citation = gr.Markdown(
-                        update_citation, inputs=[benchmark_select]
-                    )  # noqa: F841
+                    citation = gr.Markdown(update_citation, inputs=[benchmark_select])  # noqa: F841
                 with gr.Accordion("Share this benchmark:", open=True):
                     gr.Markdown(produce_benchmark_link, inputs=[benchmark_select])
             with gr.Column(scale=2):
                 with gr.Tab("Performance per Model Size"):
-                    plot = gr.Plot(
-                        performance_size_plot, inputs=[summary_table]
-                    )  # noqa: F841
+                    plot = gr.Plot(performance_size_plot, inputs=[summary_table])  # noqa: F841
                     gr.Markdown(
                         "*We only display models that have been run on all tasks in the benchmark*"
                     )
                 with gr.Tab("Performance per Task Type (Radar Chart)"):
-                    radar_plot = gr.Plot(
-                        radar_chart, inputs=[summary_table]
-                    )  # noqa: F841
+                    radar_plot = gr.Plot(radar_chart, inputs=[summary_table])  # noqa: F841
                     gr.Markdown(
                         "*We only display models that have been run on all task types in the benchmark*"
                     )
@@ -486,9 +479,7 @@ def get_leaderboard_app() -> gr.Blocks:
                 download_table, inputs=[per_task_table], outputs=[download_per_task]
             )
         with gr.Tab("Task information"):
-            task_info_table = gr.DataFrame(
-                update_task_info, inputs=[task_select]
-            )  # noqa: F841
+            task_info_table = gr.DataFrame(update_task_info, inputs=[task_select])  # noqa: F841
 
         # This sets the benchmark from the URL query parameters
         demo.load(set_benchmark_on_load, inputs=[], outputs=[benchmark_select])
@@ -571,7 +562,11 @@ def get_leaderboard_app() -> gr.Blocks:
 
         @cachetools.cached(
             cache={},
-            key=lambda benchmark_name, type_select, domain_select, lang_select, modality_select: hash(
+            key=lambda benchmark_name,
+            type_select,
+            domain_select,
+            lang_select,
+            modality_select: hash(
                 (
                     hash(benchmark_name),
                     hash(tuple(type_select)),
@@ -649,7 +644,13 @@ def get_leaderboard_app() -> gr.Blocks:
 
         @cachetools.cached(
             cache={},
-            key=lambda scores, tasks, availability, compatibility, instructions, model_size, zero_shot: hash(
+            key=lambda scores,
+            tasks,
+            availability,
+            compatibility,
+            instructions,
+            model_size,
+            zero_shot: hash(
                 (
                     id(scores),
                     hash(tuple(tasks)),
