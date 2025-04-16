@@ -470,33 +470,6 @@ vectors = vectors[~zero_mask]
 
 This section contains information on how to interact with the leaderboard including running it locally, analysing the results, annotating contamination and more.
 
-### Fetching results from the Leaderboard
-
-Multiple models have already been run on tasks available within MTEB. These results are available results [repository](https://github.com/embeddings-benchmark/results).
-
-To make the results more easily accessible, we have designed custom functionality for retrieving from the repository. For instance, if you are selecting the best model for your French and English retrieval task on legal documents you could fetch the relevant tasks and create a dataframe of the results using the following code:
-
-```python
-import mteb
-from mteb.task_selection import results_to_dataframe
-
-tasks = mteb.get_tasks(
-    task_types=["Retrieval"], languages=["eng", "fra"], domains=["Legal"]
-)
-
-model_names = [
-    "GritLM/GritLM-7B",
-    "intfloat/multilingual-e5-small",
-    "intfloat/multilingual-e5-base",
-    "intfloat/multilingual-e5-large",
-]
-models = [mteb.get_model_meta(name) for name in model_names]
-
-results = mteb.load_results(models=models, tasks=tasks)
-
-df = results_to_dataframe(results)
-```
-
 ### Annotate Contamination
 
 have your found contamination in the training data of a model? Please let us know, either by opening an issue or ideally by submitting a PR
