@@ -304,9 +304,7 @@ def get_leaderboard_app() -> gr.Blocks:
             """
         ## Embedding Leaderboard
 
-        This leaderboard compares 100+ text and image (soon) embedding models across 1000+ languages. We refer to the publication of each selectable benchmark for details on metrics, languages, tasks, and task types. Anyone is welcome [to add a model](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_model.md), [add benchmarks](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_benchmark.md), [help us improve zero-shot annotations](https://github.com/embeddings-benchmark/mteb/blob/06489abca007261c7e6b11f36d4844c5ed5efdcb/mteb/models/bge_models.py#L91) or [propose other changes to the leaderboard](https://github.com/embeddings-benchmark/mteb/tree/main/mteb/leaderboard) 🤗 Also, check out [MTEB Arena](https://huggingface.co/spaces/mteb/arena) ⚔️
-
-        > Looking for the previous MTEB leaderboard? We have made it available [here](https://huggingface.co/spaces/mteb/leaderboard_legacy) but it will no longer be updated.
+        This leaderboard compares 100+ text and image embedding models across 1000+ languages. We refer to the publication of each selectable benchmark for details on metrics, languages, tasks, and task types. Anyone is welcome [to add a model](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_model.md), [add benchmarks](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_benchmark.md), [help us improve zero-shot annotations](https://github.com/embeddings-benchmark/mteb/blob/06489abca007261c7e6b11f36d4844c5ed5efdcb/mteb/models/bge_models.py#L91) or [propose other changes to the leaderboard](https://github.com/embeddings-benchmark/mteb/tree/main/mteb/leaderboard) 🤗 Also, check out [MTEB Arena](https://huggingface.co/spaces/mteb/arena) ⚔️
         """
         )
         gr.Markdown(
@@ -834,6 +832,11 @@ def get_leaderboard_app() -> gr.Blocks:
         )
 
         gr.Markdown(acknowledgment_md, elem_id="ack_markdown")
+        gr.Markdown(
+            """
+        > Looking for the previous MTEB leaderboard? We have made it available [here](https://huggingface.co/spaces/mteb/leaderboard_legacy) but it will no longer be updated.
+        """
+        )
 
     # Prerun on all benchmarks, so that results of callbacks get cached
     for benchmark in benchmarks:
