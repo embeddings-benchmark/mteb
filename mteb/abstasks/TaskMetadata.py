@@ -6,6 +6,7 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any, Union
 
+from huggingface_hub import DatasetCardData
 from pydantic import (
     BaseModel,
     ConfigDict,
@@ -13,6 +14,7 @@ from pydantic import (
 )
 from typing_extensions import Literal, TypedDict
 
+import mteb
 from mteb.custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
 from mteb.languages import (
     ISO_LANGUAGE_SCRIPT,
@@ -98,7 +100,6 @@ SAMPLE_CREATION_METHOD = Literal[
     "multiple",
 ]
 
-
 MIEB_TASK_TYPE = (
     "Any2AnyMultiChoice",
     "Any2AnyRetrieval",
@@ -126,7 +127,6 @@ _task_types = (
     "Summarization",
     "InstructionRetrieval",
     "InstructionReranking",
-    "Speed",
 ) + MIEB_TASK_TYPE
 
 TASK_TYPE = Literal[_task_types]
@@ -477,3 +477,85 @@ class TaskMetadata(BaseModel):
     @property
     def revision(self) -> str:
         return self.dataset["revision"]
+
+    def create_dataset_card_data(self) -> DatasetCardData:
+        """Create a DatasetCardData object from the task metadata.
+
+        Returns:
+            DatasetCardData: The DatasetCardData object.
+        """
+        # todo figure out datasets with multiple types. E. g. one dataset as classification and ZeroShotClassification
+        mteb_task_type_to_datasets = {
+            # Text
+            "BitextMining": "translation",
+            "Classification": "text-classification",
+            "MultilabelClassification": "text-classification",
+            "Clustering": "zero-shot-classification",  # not sure
+            "PairClassification": "text-classification",
+            "Reranking": "text-ranking",
+            "Retrieval": "text-retrieval",
+            "STS": "sentence-similarity",
+            "Summarization": "summarization",
+            "InstructionRetrieval": "text-retrieval",
+            "InstructionReranking": "text-ranking",
+            # Image
+            "Any2AnyMultiChoice": "image-multiple-choice",  # currently not real HF type
+            "Any2AnyRetrieval": "image-retrieval",  # currently not real HF type
+            "Any2AnyMultilingualRetrieval": "image-retrieval",  # currently not real HF type
+            "VisionCentricQA": "visual-question-answering",
+            "ImageClustering": "zero-shot-image-classification",
+            "ImageClassification": "image-classification",
+            "ImageMultilabelClassification": "image-classification",
+            "DocumentUnderstanding": "image-retrieval",  # currently not real HF type
+            "VisualSTS(eng)": "image-similarity",  # currently not real HF type
+            "VisualSTS(multi)": "image-similarity",  # currently not real HF type
+            "ZeroShotClassification": "zero-shot-image-classification",
+            "Compositionality": "image-text-classification",  # currently not real HF type
+        }
+
+        dataset_type = [mteb_task_type_to_datasets[self.type]]
+
+        if self.category in ["i2i", "it2i", "i2it", "it2it"]:
+            dataset_type.append("image-to-image")
+        if self.category in ["i2t", "t2i", "it2t", "it2i", "t2it", "i2it", "it2it"]:
+            dataset_type.extend(["image-to-text", "text-to-image"])
+
+        if self.is_multilingual:
+            languages: list[str] = []
+            for val in list(self.eval_langs.values()):
+                languages.extend(val)
+        else:
+            languages: list[str] = self.eval_langs
+
+        languages = [lang.split("-")[0] for lang in languages]
+
+        multilinguality = "multilingual" if self.is_multilingual else "monolingual"
+        if "translated" in self.sample_creation:
+            multilinguality = "translated"
+
+        if self.adapted_from is not None:
+            source_datasets = [
+                task.metadata.dataset["path"]
+                for task in mteb.get_tasks(self.adapted_from)
+            ]
+        else:
+            source_datasets = None
+
+        tags = ["mteb"]
+        tags.extend(self.modalities)
+
+        return DatasetCardData(
+            language=languages,
+            license=self.license if self.license != "not specified" else "unknown",
+            annotations_creators=[self.annotations_creators],
+            multilinguality=multilinguality,
+            source_datasets=source_datasets,
+            task_category=dataset_type,
+            task_ids=self.task_subtypes,
+            tags=tags,
+            domains=self.domains,
+            # params for dataset template
+            citation_bibtex=self.bibtex_citation,
+            dataset_summary=self.description,
+            dataset_reference=self.reference,
+        )

@@ -123,6 +123,7 @@ exclude = ["tests", "results"]
 
 [tool.setuptools.package-data]
 "*" = ["*.json"]
+"mteb.abstasks" = ["dataset_card_template.md"]
 
 [tool.ruff]
 

@@ -6,6 +6,7 @@ import random
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from copy import copy
+from pathlib import Path
 from typing import Any
 
 import datasets
@@ -14,6 +15,7 @@ import torch
 import tqdm
 import transformers
 from datasets import Dataset, DatasetDict
+from huggingface_hub import DatasetCard
 from sklearn.preprocessing import MultiLabelBinarizer
 
 from mteb.abstasks.stratification import _iterative_train_test_split
@@ -442,6 +444,8 @@ class AbsTask(ABC):
         if not self.data_loaded:
             self.load_data()
 
+        dataset_card = self.generate_dataset_card()
+        dataset_card.push_to_hub(repo_name, commit_message="Add dataset card")
         self._push_dataset_to_hub(repo_name)
 
     @property
@@ -470,3 +474,17 @@ class AbsTask(ABC):
 
     def __hash__(self) -> int:
         return hash(self.metadata)
+
+    def generate_dataset_card(self) -> DatasetCard:
+        """Generates a dataset card for the task.
+
+        Returns:
+            DatasetCard: The dataset card for the task.
+        """
+        path = Path(__file__).parent / "dataset_card_template.md"
+        dataset_card_data = self.metadata.create_dataset_card_data()
+        dataset_card = DatasetCard.from_template(
+            card_data=dataset_card_data,
+            template_path=str(path),
+        )
+        return dataset_card
