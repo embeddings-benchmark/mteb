@@ -7,13 +7,12 @@ from typing import Any
 import numpy as np
 from datasets import Dataset, DatasetDict
 from PIL import ImageFile
+from sklearn.base import BaseEstimator
+from sklearn.linear_model import LogisticRegression
 
 from mteb.abstasks.TaskMetadata import DescriptiveStatistics
 from mteb.encoder_interface import Encoder
 
-from ..evaluation.evaluators import (
-    logRegClassificationEvaluator,
-)
 from ..evaluation.evaluators.ClassificationEvaluator import ClassificationEvaluator
 from ..load_results.task_results import HFSubset, ScoresDict
 from .AbsTask import AbsTask
@@ -93,7 +92,12 @@ class AbsTaskAnyClassification(AbsTask):
 
     """
 
-    evaluator: type[ClassificationEvaluator] = logRegClassificationEvaluator
+    evaluator: type[ClassificationEvaluator] = ClassificationEvaluator
+    classifier: BaseEstimator = LogisticRegression(
+        n_jobs=-1,
+        max_iter=100,
+    )
+
     samples_per_label: int = 8
     n_experiments: int = 10
     k: int = 3
@@ -114,6 +118,8 @@ class AbsTaskAnyClassification(AbsTask):
         if not self.data_loaded:
             self.load_data()
 
+        if "random_state" in self.classifier.get_params():
+            self.classifier = self.classifier.set_params(random_state=self.seed)
         scores = {}
         hf_subsets = self.hf_subsets
         if subsets_to_run is not None:
@@ -177,6 +183,7 @@ class AbsTaskAnyClassification(AbsTask):
                 task_metadata=self.metadata,
                 hf_split=hf_split,
                 hf_subset=hf_subset,
+                classifier=self.classifier,
                 **params,
             )
             scores_exp, test_cache = evaluator(

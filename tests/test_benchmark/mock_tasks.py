@@ -31,7 +31,6 @@ from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
     AbsTaskZeroShotClassification,
 )
 from mteb.abstasks.TaskMetadata import TaskMetadata
-from mteb.evaluation import kNNClassificationEvaluator
 
 general_args = {
     "description": "a mock task for testing",
@@ -2577,89 +2576,6 @@ class MockImageClassificationTask(AbsTaskAnyClassification):
     n_experiments = 1
     samples_per_label = 5
     input_column_name = "image"
-
-    def load_data(self, **kwargs):
-        images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]  # noqa: NPY002
-        images = [
-            Image.fromarray(image.astype("uint8")).convert("RGBA") for image in images
-        ]
-        labels = [1, 0]
-
-        self.dataset = DatasetDict(
-            {
-                "test": Dataset.from_dict(
-                    {
-                        "image": images,
-                        "label": labels,
-                    }
-                ),
-                "train": Dataset.from_dict(
-                    {
-                        "image": images * 5,
-                        "label": labels * 5,
-                    }
-                ),
-            }
-        )
-        self.data_loaded = True
-
-
-class MockImageClassificationKNNTask(AbsTaskAnyClassification):
-    expected_stats = {
-        "test": {
-            "num_samples": 2,
-            "number_of_characters": 0,
-            "number_texts_intersect_with_train": None,
-            "min_text_length": None,
-            "average_text_length": None,
-            "max_text_length": None,
-            "unique_texts": None,
-            "min_image_width": 100,
-            "average_image_width": 100.0,
-            "max_image_width": 100,
-            "min_image_height": 100,
-            "average_image_height": 100.0,
-            "max_image_height": 100,
-            "min_labels_per_text": 1,
-            "average_label_per_text": 1.0,
-            "max_labels_per_text": 1,
-            "unique_labels": 2,
-            "labels": {"1": {"count": 1}, "0": {"count": 1}},
-        },
-        "train": {
-            "num_samples": 10,
-            "number_of_characters": 0,
-            "number_texts_intersect_with_train": None,
-            "min_text_length": None,
-            "average_text_length": None,
-            "max_text_length": None,
-            "unique_texts": None,
-            "min_image_width": 100,
-            "average_image_width": 100.0,
-            "max_image_width": 100,
-            "min_image_height": 100,
-            "average_image_height": 100.0,
-            "max_image_height": 100,
-            "min_labels_per_text": 1,
-            "average_label_per_text": 1.0,
-            "max_labels_per_text": 1,
-            "unique_labels": 2,
-            "labels": {"1": {"count": 5}, "0": {"count": 5}},
-        },
-    }
-
-    metadata = TaskMetadata(
-        type="ImageClassification",
-        name="MockImageClassificationKNN",
-        main_score="accuracy",
-        **general_args,  # type: ignore
-    )
-    metadata.modalities = ["image"]
-    metadata.category = "i2c"
-    n_experiments = 1
-    samples_per_label = 5
-    input_column_name = "image"
-    evaluator = kNNClassificationEvaluator
 
     def load_data(self, **kwargs):
         images = [np.random.randint(0, 255, (100, 100, 3)) for _ in range(2)]  # noqa: NPY002

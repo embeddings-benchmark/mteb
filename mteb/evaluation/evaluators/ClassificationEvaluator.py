@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 import logging
-from abc import ABC
 from typing import Any
 
 import numpy as np
 from datasets import Dataset
-from sklearn.linear_model import LogisticRegression
+from sklearn.base import BaseEstimator
 from sklearn.metrics import (
     accuracy_score,
     average_precision_score,
@@ -14,12 +13,10 @@ from sklearn.metrics import (
     precision_score,
     recall_score,
 )
-from sklearn.neighbors import KNeighborsClassifier
 from torch.utils.data import DataLoader
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder
-from mteb.model_meta import ScoringFunction
 
 from ...create_dataloaders import create_image_dataloader
 from .Evaluator import Evaluator
@@ -27,11 +24,7 @@ from .Evaluator import Evaluator
 logger = logging.getLogger(__name__)
 
 
-def dot_distance(a: np.ndarray, b: np.ndarray) -> float:
-    return -np.dot(a, b)
-
-
-class ClassificationEvaluator(Evaluator, ABC):
+class ClassificationEvaluator(Evaluator):
     def __init__(
         self,
         train_dataset: Dataset,
@@ -41,8 +34,7 @@ class ClassificationEvaluator(Evaluator, ABC):
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
-        max_iter: int = 100,
-        k: int = 3,
+        classifier: BaseEstimator,
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
@@ -52,11 +44,10 @@ class ClassificationEvaluator(Evaluator, ABC):
         self.values_column_name = values_column_name
         self.label_column_name = label_column_name
 
-        self.max_iter = max_iter
         self.task_metadata = task_metadata
         self.hf_split = hf_split
         self.hf_subset = hf_subset
-        self.k = k
+        self.classifier = classifier
 
     def create_dataloaders(self, batch_size: int) -> tuple[DataLoader, DataLoader]:
         if self.task_metadata.modalities == ["image"]:
@@ -109,8 +100,6 @@ class ClassificationEvaluator(Evaluator, ABC):
             )
         return scores
 
-
-class kNNClassificationEvaluator(ClassificationEvaluator):
     def __call__(
         self,
         model: Encoder,
@@ -118,68 +107,6 @@ class kNNClassificationEvaluator(ClassificationEvaluator):
         encode_kwargs: dict[str, Any],
         test_cache: np.ndarray | None = None,
     ) -> tuple[dict[str, float], Any]:
-        scores = {}
-        max_scores = {}
-        dataloader_train, dataloader_test = self.create_dataloaders(
-            batch_size=encode_kwargs["batch_size"]
-        )
-        X_train = model.encode(
-            dataloader_train,
-            task_metadata=self.task_metadata,
-            hf_split="train",
-            hf_subset=self.hf_subset,
-            **encode_kwargs,
-        )
-        if test_cache is None:
-            X_test = model.encode(
-                dataloader_test,
-                task_metadata=self.task_metadata,
-                hf_split=self.hf_split,
-                hf_subset=self.hf_subset,
-                **encode_kwargs,
-            )
-            test_cache = X_test
-        else:
-            X_test = test_cache
-
-        y_train = self.train_dataset["label"]
-        y_test = self.eval_dataset["label"]
-        for metric in [
-            ScoringFunction.COSINE.value,
-            ScoringFunction.EUCLIDEAN.value,
-            "l1",
-        ]:
-            knn = KNeighborsClassifier(n_neighbors=self.k, n_jobs=-1, metric=metric)
-            knn.fit(X_train, y_train)
-            y_pred = knn.predict(X_test)
-            metric_scores = self.calculate_scores(y_test, y_pred)
-            for metric_name, metric_score in metric_scores.items():
-                scores[f"{metric_name}_{metric}"] = metric_score
-                max_scores[metric_name] = max(
-                    max_scores.get(metric_name, 0), metric_score
-                )
-
-        for metric_name, metric_score in max_scores.items():
-            scores[metric_name] = metric_score
-
-        return scores, test_cache
-
-
-class logRegClassificationEvaluator(ClassificationEvaluator):
-    def __call__(
-        self,
-        model: Encoder,
-        *,
-        encode_kwargs: dict[str, Any],
-        test_cache: np.ndarray | None = None,
-    ) -> tuple[dict[str, float], Any]:
-        clf = LogisticRegression(
-            random_state=self.seed,
-            n_jobs=-1,
-            max_iter=self.max_iter,
-            verbose=1 if logger.isEnabledFor(logging.DEBUG) else 0,
-        )
-
         dataloader_train, dataloader_test = self.create_dataloaders(
             batch_size=encode_kwargs["batch_size"]
         )
@@ -202,8 +129,8 @@ class logRegClassificationEvaluator(ClassificationEvaluator):
         logger.info("Fitting logistic regression classifier...")
         y_train = self.train_dataset[self.label_column_name]
         y_test = self.eval_dataset[self.label_column_name]
-        clf.fit(X_train, y_train)
+        self.classifier.fit(X_train, y_train)
         logger.info("Evaluating...")
-        y_pred = clf.predict(test_cache)
+        y_pred = self.classifier.predict(test_cache)
         scores = self.calculate_scores(y_test, y_pred)
         return scores, test_cache
