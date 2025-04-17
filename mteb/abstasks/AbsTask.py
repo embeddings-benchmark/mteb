@@ -482,9 +482,10 @@ class AbsTask(ABC):
             DatasetCard: The dataset card for the task.
         """
         path = Path(__file__).parent / "dataset_card_template.md"
-        dataset_card_data = self.metadata.create_dataset_card_data()
+        dataset_card_data, template_kwargs = self.metadata.create_dataset_card_data()
         dataset_card = DatasetCard.from_template(
             card_data=dataset_card_data,
             template_path=str(path),
+            **template_kwargs,
         )
         return dataset_card

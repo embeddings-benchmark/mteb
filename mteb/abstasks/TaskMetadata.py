@@ -478,11 +478,11 @@ class TaskMetadata(BaseModel):
     def revision(self) -> str:
         return self.dataset["revision"]
 
-    def create_dataset_card_data(self) -> DatasetCardData:
+    def create_dataset_card_data(self) -> tuple[DatasetCardData, dict[str, str]]:
         """Create a DatasetCardData object from the task metadata.
 
         Returns:
-            DatasetCardData: The DatasetCardData object.
+            A DatasetCardData object with the metadata for the task with kwargs to card
         """
         # todo figure out datasets with multiple types. E. g. one dataset as classification and ZeroShotClassification
         mteb_task_type_to_datasets = {
@@ -544,18 +544,28 @@ class TaskMetadata(BaseModel):
         tags = ["mteb"]
         tags.extend(self.modalities)
 
-        return DatasetCardData(
-            language=languages,
-            license=self.license if self.license != "not specified" else "unknown",
-            annotations_creators=[self.annotations_creators],
-            multilinguality=multilinguality,
-            source_datasets=source_datasets,
-            task_category=dataset_type,
-            task_ids=self.task_subtypes,
-            tags=tags,
-            domains=self.domains,
-            # params for dataset template
-            citation_bibtex=self.bibtex_citation,
-            dataset_summary=self.description,
-            dataset_reference=self.reference,
+        descriptive_stats = self.descriptive_stats
+        if descriptive_stats is not None:
+            descriptive_stats = json.dumps(descriptive_stats, indent=4)
+
+        return (
+            DatasetCardData(
+                language=languages,
+                license=self.license if self.license != "not specified" else "unknown",
+                annotations_creators=[self.annotations_creators],
+                multilinguality=multilinguality,
+                source_datasets=source_datasets,
+                task_category=dataset_type,
+                task_ids=self.task_subtypes,
+                tags=tags,
+                domains=self.domains,
+            ),
+            dict(
+                citation=self.bibtex_citation,
+                dataset_description=self.description,
+                dataset_reference=self.reference,
+                descritptive_stats=descriptive_stats,
+                dataset_task_name=self.name,
+                category=self.category,
+            ),
         )
