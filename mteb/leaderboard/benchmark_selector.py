@@ -132,13 +132,6 @@ BENCHMARK_ENTRIES = [
                 ),
             ),
             (
-                "English Legacy",
-                dict(
-                    value="MTEB(eng, v1)",
-                    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/gb.svg",
-                ),
-            ),
-            (
                 "French",
                 dict(
                     value="MTEB(fra, v1)",
@@ -196,6 +189,18 @@ BENCHMARK_ENTRIES = [
             ("MINERSBitextMining", dict(value="MINERSBitextMining", icon=None)),
             ("NanoBEIR", dict(value="NanoBEIR", icon=None)),
             ("Reasoning retrieval", dict(value="RAR-b", icon=None)),
+        ],
+    ),
+    (
+        "Legacy",
+        [
+            (
+                "English Legacy",
+                dict(
+                    value="MTEB(eng, v1)",
+                    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/gb.svg",
+                ),
+            ),
         ],
     ),
 ]
