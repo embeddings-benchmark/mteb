@@ -555,7 +555,7 @@ class TaskMetadata(BaseModel):
                 annotations_creators=[self.annotations_creators],
                 multilinguality=multilinguality,
                 source_datasets=source_datasets,
-                task_category=dataset_type,
+                task_categories=dataset_type,
                 task_ids=self.task_subtypes,
                 tags=tags,
                 domains=self.domains,
