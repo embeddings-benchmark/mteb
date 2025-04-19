@@ -184,7 +184,7 @@ BENCHMARK_ENTRIES = [
             ("BEIR-NL", dict(value="BEIR-NL", icon=None)),
             ("BRIGHT", dict(value="BRIGHT", icon=None)),
             ("BRIGHT (long)", dict(value="BRIGHT (long)", icon=None)),
-            ("BuiltBench (eng)", dict(value="BRIGHT (long)", icon=None)),
+            ("BuiltBench (eng)", dict(value="BuiltBench(eng)", icon=None)),
             ("Code Information Retrieval", dict(value="CoIR", icon=None)),
             ("Instruction Following", dict(value="FollowIR", icon=None)),
             ("Long-context Retrieval", dict(value="LongEmbed", icon=None)),
