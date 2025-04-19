@@ -8,7 +8,11 @@ import torch
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.models.bge_models import bge_m3_training_data
 from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
+from mteb.models.nomic_models import (
+    nomic_training_data,
+)
 
 rubert_tiny = ModelMeta(
     name="cointegrated/rubert-tiny",
@@ -665,4 +669,102 @@ giga_embeddings = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
+)
+
+user2_training_data = {
+    **nomic_training_data,
+    **bge_m3_training_data,
+    # deepvk/cultura_ru_edu
+    # AllNLI
+    # nyuuzyou/fishkinet-posts
+    # IlyaGusev/gazeta
+    # its5Q/habr_qna
+    # zloelias/lenta-ru
+    # unicamp-dl/mmarco
+    # deepvk/ru-HNP
+    # deepvk/ru-WANLI
+    # wikimedia/wikipedia
+    # CarlBrendt/Summ_Dialog_News
+    # RussianNLP/wikiomnia
+    # its5Q/yandex-q
+    # "mC4" ru
+    # "CC-News" ru
+    # MultiLongDocRetrieval
+}
+
+user2_prompts = {
+    # Override some prompts for ruMTEB tasks
+    "HeadlineClassification": "search_query: ",
+    "RuSciBenchGRNTIClassification": "clustering: ",
+    "RuSciBenchOECDClassification": "clustering: ",
+    "GeoreviewClusteringP2P": "search_query: ",
+    "SensitiveTopicsClassification": "search_query: ",
+    "STS22": "search_document: ",
+    "InappropriatenessClassification": "classification: ",
+    "CEDRClassification": "classification: ",
+    # Default
+    "Classification": "classification: ",
+    "MultilabelClassification": "classification: ",
+    "Clustering": "clustering: ",
+    "PairClassification": "classification: ",
+    "Reranking": "classification: ",
+    f"Reranking-{PromptType.query.value}": "search_query: ",
+    f"Reranking-{PromptType.passage.value}": "search_document: ",
+    "STS": "classification: ",
+    "Summarization": "clustering: ",
+    PromptType.query.value: "search_query: ",
+    PromptType.passage.value: "search_document: ",
+}
+user2_small = ModelMeta(
+    loader=partial(
+        sentence_transformers_loader,
+        model_name="deepvk/USER2-small",
+        revision="23f65b34cf7632032061f5cc66c14714e6d4cee4",
+        model_prompts=user2_prompts,
+    ),
+    name="deepvk/USER2-small",
+    languages=["rus-Cyrl"],
+    open_weights=True,
+    revision="23f65b34cf7632032061f5cc66c14714e6d4cee4",
+    release_date="2025-04-19",
+    use_instructions=True,
+    reference="https://huggingface.co/collections/deepvk/user2-6802650d7210f222ec60e05f",
+    n_parameters=34_400_000,
+    memory_usage_mb=131,
+    max_tokens=8192,
+    embed_dim=384,
+    license="apache-2.0",
+    similarity_fn_name="cosine",
+    adapted_from="deepvk/RuModernBERT-small",
+    training_datasets=user2_training_data,
+    public_training_data=None,
+    public_training_code="https://github.com/BlessedTatonka/some_code/tree/2899f27d51efdf4217fc6453799ff197e9792f1e",
+    framework=["Sentence Transformers", "PyTorch"],
+)
+
+user2_base = ModelMeta(
+    loader=partial(
+        sentence_transformers_loader,
+        model_name="deepvk/USER2-base",
+        revision="0942cf96909b6d52e61f79a01e2d30c7be640b27",
+        model_prompts=user2_prompts,
+    ),
+    name="deepvk/USER2-base",
+    languages=["rus-Cyrl"],
+    open_weights=True,
+    revision="0942cf96909b6d52e61f79a01e2d30c7be640b27",
+    release_date="2025-04-19",
+    use_instructions=True,
+    reference="https://huggingface.co/collections/deepvk/user2-6802650d7210f222ec60e05f",
+    n_parameters=149_000_000,
+    memory_usage_mb=568,
+    max_tokens=8192,
+    embed_dim=768,
+    license="apache-2.0",
+    similarity_fn_name="cosine",
+    adapted_from="deepvk/RuModernBERT-base",
+    training_datasets=user2_training_data,
+    public_training_data=None,
+    public_training_code="https://github.com/BlessedTatonka/some_code/tree/2899f27d51efdf4217fc6453799ff197e9792f1e",
+    framework=["Sentence Transformers", "PyTorch"],
 )
