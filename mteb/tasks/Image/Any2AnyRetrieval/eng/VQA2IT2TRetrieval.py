@@ -33,8 +33,7 @@ title = {Making the v in VQA Matter: Elevating the Role of Image Understanding i
 booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
 month = {July},
 year = {2017}
-}
-""",
+}""",
         descriptive_stats={
             "n_samples": {"test": 4319},
             "avg_character_length": {

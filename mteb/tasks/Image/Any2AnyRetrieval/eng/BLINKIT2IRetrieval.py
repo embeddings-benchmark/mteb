@@ -32,8 +32,7 @@ class BLINKIT2IRetrieval(AbsTaskAny2AnyRetrieval):
   author={Fu, Xingyu and Hu, Yushi and Li, Bangzheng and Feng, Yu and Wang, Haoyu and Lin, Xudong and Roth, Dan and Smith, Noah A and Ma, Wei-Chiu and Krishna, Ranjay},
   journal={arXiv preprint arXiv:2404.12390},
   year={2024}
-}
-""",
+}""",
         descriptive_stats={
             "n_samples": {"test": 402},
             "avg_character_length": {

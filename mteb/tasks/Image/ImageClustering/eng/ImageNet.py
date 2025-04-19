@@ -35,8 +35,8 @@ class ImageNetDog15Clustering(AbsTaskImageClustering):
   number={},
   pages={248-255},
   keywords={Large-scale systems;Image databases;Explosions;Internet;Robustness;Information retrieval;Image retrieval;Multimedia databases;Ontologies;Spine},
-  doi={10.1109/CVPR.2009.5206848}}
-        """,
+  doi={10.1109/CVPR.2009.5206848}
+  }""",
         descriptive_stats={
             "n_samples": {"test": 1076, "train": 1500},
             # "avg_character_length": {"test": 431.4},

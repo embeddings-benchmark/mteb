@@ -1,0 +1,57 @@
+{
+    "dataset_revision": "NA",
+    "evaluation_time": 0.007855892181396484,
+    "kg_co2_emissions": null,
+    "mteb_version": "1.12.75",
+    "scores": {
+        "test": [
+            {
+                "cosine_accuracy": 1.0,
+                "cosine_accuracy_threshold": 0.48992985486984253,
+                "cosine_ap": 1.0,
+                "cosine_f1": 1.0,
+                "cosine_f1_threshold": 0.48992985486984253,
+                "cosine_precision": 1.0,
+                "cosine_recall": 1.0,
+                "dot_accuracy": 1.0,
+                "dot_accuracy_threshold": 0.30161741375923157,
+                "dot_ap": 1.0,
+                "dot_f1": 1.0,
+                "dot_f1_threshold": 0.30161741375923157,
+                "dot_precision": 1.0,
+                "dot_recall": 1.0,
+                "euclidean_accuracy": 1.0,
+                "euclidean_accuracy_threshold": 0.8020626306533813,
+                "euclidean_ap": 1.0,
+                "euclidean_f1": 1.0,
+                "euclidean_f1_threshold": 0.8020626306533813,
+                "euclidean_precision": 1.0,
+                "euclidean_recall": 1.0,
+                "hf_subset": "default",
+                "languages": [
+                    "eng-Latn"
+                ],
+                "main_score": 1.0,
+                "manhattan_accuracy": 1.0,
+                "manhattan_accuracy_threshold": 10.830148696899414,
+                "manhattan_ap": 1.0,
+                "manhattan_f1": 1.0,
+                "manhattan_f1_threshold": 10.830148696899414,
+                "manhattan_precision": 1.0,
+                "manhattan_recall": 1.0,
+                "max_ap": 1.0,
+                "max_f1": 1.0,
+                "max_precision": 1.0,
+                "max_recall": 1.0,
+                "similarity_accuracy": 1.0,
+                "similarity_accuracy_threshold": 0.48992985486984253,
+                "similarity_ap": 1.0,
+                "similarity_f1": 1.0,
+                "similarity_f1_threshold": 0.48992985486984253,
+                "similarity_precision": 1.0,
+                "similarity_recall": 1.0
+            }
+        ]
+    },
+    "task_name": "MockPairClassificationTask"
+}

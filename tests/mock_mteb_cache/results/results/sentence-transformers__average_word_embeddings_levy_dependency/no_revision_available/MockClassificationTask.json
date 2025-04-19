@@ -1,0 +1,95 @@
+{
+    "dataset_revision": "NA",
+    "evaluation_time": 0.18496918678283691,
+    "kg_co2_emissions": null,
+    "mteb_version": "1.12.75",
+    "scores": {
+        "test": [
+            {
+                "accuracy": 0.5,
+                "ap": 0.5,
+                "ap_weighted": 0.5,
+                "f1": 0.33333333333333337,
+                "f1_weighted": 0.33333333333333337,
+                "hf_subset": "default",
+                "languages": [
+                    "eng-Latn"
+                ],
+                "main_score": 0.5,
+                "scores_per_experiment": [
+                    {
+                        "accuracy": 0.5,
+                        "ap": 0.5,
+                        "ap_weighted": 0.5,
+                        "f1": 0.3333333333333333,
+                        "f1_weighted": 0.3333333333333333
+                    },
+                    {
+                        "accuracy": 0.5,
+                        "ap": 0.5,
+                        "ap_weighted": 0.5,
+                        "f1": 0.3333333333333333,
+                        "f1_weighted": 0.3333333333333333
+                    },
+                    {
+                        "accuracy": 0.5,
+                        "ap": 0.5,
+                        "ap_weighted": 0.5,
+                        "f1": 0.3333333333333333,
+                        "f1_weighted": 0.3333333333333333
+                    },
+                    {
+                        "accuracy": 0.5,
+                        "ap": 0.5,
+                        "ap_weighted": 0.5,
+                        "f1": 0.3333333333333333,
+                        "f1_weighted": 0.3333333333333333
+                    },
+                    {
+                        "accuracy": 0.5,
+                        "ap": 0.5,
+                        "ap_weighted": 0.5,
+                        "f1": 0.3333333333333333,
+                        "f1_weighted": 0.3333333333333333
+                    },
+                    {
+                        "accuracy": 0.5,
+                        "ap": 0.5,
+                        "ap_weighted": 0.5,
+                        "f1": 0.3333333333333333,
+                        "f1_weighted": 0.3333333333333333
+                    },
+                    {
+                        "accuracy": 0.5,
+                        "ap": 0.5,
+                        "ap_weighted": 0.5,
+                        "f1": 0.3333333333333333,
+                        "f1_weighted": 0.3333333333333333
+                    },
+                    {
+                        "accuracy": 0.5,
+                        "ap": 0.5,
+                        "ap_weighted": 0.5,
+                        "f1": 0.3333333333333333,
+                        "f1_weighted": 0.3333333333333333
+                    },
+                    {
+                        "accuracy": 0.5,
+                        "ap": 0.5,
+                        "ap_weighted": 0.5,
+                        "f1": 0.3333333333333333,
+                        "f1_weighted": 0.3333333333333333
+                    },
+                    {
+                        "accuracy": 0.5,
+                        "ap": 0.5,
+                        "ap_weighted": 0.5,
+                        "f1": 0.3333333333333333,
+                        "f1_weighted": 0.3333333333333333
+                    }
+                ]
+            }
+        ]
+    },
+    "task_name": "MockClassificationTask"
+}

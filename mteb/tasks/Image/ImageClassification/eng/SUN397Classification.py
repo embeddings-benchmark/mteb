@@ -37,8 +37,8 @@ class SUN397Classification(AbsTaskImageClassification):
         volume={},
         number={},
         pages={3485-3492},
-        doi={10.1109/CVPR.2010.5539970}}
-        """,
+        doi={10.1109/CVPR.2010.5539970}
+        }""",
         descriptive_stats={
             "n_samples": {"test": 21750},
             "avg_character_length": {"test": 256},

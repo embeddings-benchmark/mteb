@@ -464,6 +464,7 @@ class TaskResult(BaseModel):
         subsets: Iterable[str] | None = None,
     ) -> float:
         """Sped up version of get_score that will be used if no aggregation, script or getter needs to be specified."""
+        # TODO: v2: We should make this private
         if splits is None:
             splits = self.scores.keys()
         val_sum = 0

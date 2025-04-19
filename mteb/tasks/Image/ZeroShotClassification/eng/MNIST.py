@@ -37,8 +37,7 @@ class MNISTZeroShotClassification(AbsTaskZeroShotClassification):
         journal={ATT Labs [Online]. Available: http://yann.lecun.com/exdb/mnist},
         volume={2},
         year={2010}
-        }
-        """,
+        }""",
         descriptive_stats={
             "n_samples": {"test": 10000},
             "avg_character_length": {"test": 431.4},
