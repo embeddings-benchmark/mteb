@@ -715,7 +715,7 @@ user2_small = ModelMeta(
     adapted_from="deepvk/RuModernBERT-small",
     training_datasets=user2_training_data,
     public_training_data=None,
-    public_training_code=None,
+    public_training_code="https://github.com/BlessedTatonka/some_code/tree/2899f27d51efdf4217fc6453799ff197e9792f1e",
     framework=["Sentence Transformers", "PyTorch"],
 )
 
@@ -742,6 +742,6 @@ user2_base = ModelMeta(
     adapted_from="deepvk/RuModernBERT-base",
     training_datasets=user2_training_data,
     public_training_data=None,
-    public_training_code=None,
+    public_training_code="https://github.com/BlessedTatonka/some_code/tree/2899f27d51efdf4217fc6453799ff197e9792f1e",
     framework=["Sentence Transformers", "PyTorch"],
 )
