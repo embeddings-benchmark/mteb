@@ -17,12 +17,12 @@ UrlString = Annotated[
 
 
 MMTEB_CITATION = """@article{enevoldsen2025mmtebmassivemultilingualtext,
-    title={MMTEB: Massive Multilingual Text Embedding Benchmark}, 
+    title={MMTEB: Massive Multilingual Text Embedding Benchmark},
     author={Kenneth Enevoldsen and Isaac Chung and Imene Kerboua and Márton Kardos and Ashwin Mathur and David Stap and Jay Gala and Wissam Siblini and Dominik Krzemiński and Genta Indra Winata and Saba Sturua and Saiteja Utpala and Mathieu Ciancone and Marion Schaeffer and Gabriel Sequeira and Diganta Misra and Shreeya Dhakal and Jonathan Rystrøm and Roman Solomatin and Ömer Çağatan and Akash Kundu and Martin Bernstorff and Shitao Xiao and Akshita Sukhlecha and Bhavish Pahwa and Rafał Poświata and Kranthi Kiran GV and Shawon Ashraf and Daniel Auras and Björn Plüster and Jan Philipp Harries and Loïc Magne and Isabelle Mohr and Mariya Hendriksen and Dawei Zhu and Hippolyte Gisserot-Boukhlef and Tom Aarsen and Jan Kostkan and Konrad Wojtasik and Taemin Lee and Marek Šuppa and Crystina Zhang and Roberta Rocca and Mohammed Hamdy and Andrianos Michail and John Yang and Manuel Faysse and Aleksei Vatolin and Nandan Thakur and Manan Dey and Dipam Vasani and Pranjal Chitale and Simone Tedeschi and Nguyen Tai and Artem Snegirev and Michael Günther and Mengzhou Xia and Weijia Shi and Xing Han Lù and Jordan Clive and Gayatri Krishnakumar and Anna Maksimova and Silvan Wehrli and Maria Tikhonova and Henil Panchal and Aleksandr Abramov and Malte Ostendorff and Zheng Liu and Simon Clematide and Lester James Miranda and Alena Fenogenova and Guangyu Song and Ruqiya Bin Safi and Wen-Ding Li and Alessia Borghini and Federico Cassano and Hongjin Su and Jimmy Lin and Howard Yen and Lasse Hansen and Sara Hooker and Chenghao Xiao and Vaibhav Adlakha and Orion Weller and Siva Reddy and Niklas Muennighoff},
     publisher = {arXiv},
     journal={arXiv preprint arXiv:2502.13595},
     year={2025},
-    url={https://arxiv.org/abs/2502.13595}, 
+    url={https://arxiv.org/abs/2502.13595},
     doi = {10.48550/arXiv.2502.13595},
 }"""
 
@@ -1559,13 +1559,13 @@ MIEB_ENG = Benchmark(
     reference="",
     contacts=["gowitheflow-1998", "isaac-chung"],
     citation="""@misc{xiao2025miebmassiveimageembedding,
-      title={MIEB: Massive Image Embedding Benchmark}, 
+      title={MIEB: Massive Image Embedding Benchmark},
       author={Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
       year={2025},
       eprint={2504.10471},
       archivePrefix={arXiv},
       primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2504.10471}, 
+      url={https://arxiv.org/abs/2504.10471},
     }""",
 )
 
@@ -1590,13 +1590,13 @@ MIEB_MULTILINGUAL = Benchmark(
     reference="",
     contacts=["gowitheflow-1998", "isaac-chung"],
     citation="""@misc{xiao2025miebmassiveimageembedding,
-      title={MIEB: Massive Image Embedding Benchmark}, 
+      title={MIEB: Massive Image Embedding Benchmark},
       author={Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
       year={2025},
       eprint={2504.10471},
       archivePrefix={arXiv},
       primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2504.10471}, 
+      url={https://arxiv.org/abs/2504.10471},
     }""",
 )
 
@@ -1670,13 +1670,13 @@ MIEB_LITE = Benchmark(
     reference="",
     contacts=["gowitheflow-1998", "isaac-chung"],
     citation="""@misc{xiao2025miebmassiveimageembedding,
-      title={MIEB: Massive Image Embedding Benchmark}, 
+      title={MIEB: Massive Image Embedding Benchmark},
       author={Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
       year={2025},
       eprint={2504.10471},
       archivePrefix={arXiv},
       primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2504.10471}, 
+      url={https://arxiv.org/abs/2504.10471},
     }""",
 )
 
@@ -1699,4 +1699,40 @@ BUILT_MTEB = Benchmark(
     year={2024}
 }""",
     contacts=["mehrzadshm"],
+)
+
+ENCODECHKA = Benchmark(
+    name="Encodechka",
+    tasks=MTEBTasks(
+        get_tasks(
+            tasks=[
+                # STS
+                "RuSTSBenchmarkSTS",
+                # PI
+                "RUParaPhraserSTS",
+                # SA
+                "SentiRuEval2016",
+                # TI
+                "RuToxicOKMLCUPClassification",
+                # IA
+                "InappropriatenessClassificationv2",
+                # IC, ICX
+                "RuNLUIntentClassification",
+            ]
+        )
+        +
+        # NLI
+        get_tasks(tasks=["XNLI"], eval_splits=["test"], languages=["rus-Cyrl"]),
+    ),
+    description="A benchmark for evaluating text embedding models on Russian data.",
+    reference="https://github.com/avidale/encodechka",
+    citation="""@misc{dale_encodechka,
+   author = "Dale, David",
+   title  = "Russian rating of sentence encoders",
+   editor = "habr.com",
+   url    = "https://habr.com/ru/articles/669674/",
+   month  = {June},
+   year   = {2022},
+   note = {[Online; posted 12-June-2022]},
+}""",
 )
