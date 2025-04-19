@@ -11,9 +11,6 @@ from mteb.model_meta import ModelMeta, sentence_transformers_loader
 from mteb.models.bge_models import bge_m3_training_data
 from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
 from mteb.models.nomic_models import (
-    model_prompts as nomic_model_prompts,
-)
-from mteb.models.nomic_models import (
     nomic_training_data,
 )
 
@@ -690,14 +687,40 @@ user2_training_data = {
     # CarlBrendt/Summ_Dialog_News
     # RussianNLP/wikiomnia
     # its5Q/yandex-q
+    # "mC4" ru
+    # "CC-News" ru
+    # MultiLongDocRetrieval
 }
 
+user2_prompts = {
+    # Override some prompts for ruMTEB tasks
+    "HeadlineClassification": "search_query: ",
+    "RuSciBenchGRNTIClassification": "clustering: ",
+    "RuSciBenchOECDClassification": "clustering: ",
+    "GeoreviewClusteringP2P": "search_query: ",
+    "SensitiveTopicsClassification": "search_query: ",
+    "STS22": "search_document: ",
+    "InappropriatenessClassification": "classification: ",
+    "CEDRClassification": "classification: ",
+    # Default
+    "Classification": "classification: ",
+    "MultilabelClassification": "classification: ",
+    "Clustering": "clustering: ",
+    "PairClassification": "classification: ",
+    "Reranking": "classification: ",
+    f"Reranking-{PromptType.query.value}": "search_query: ",
+    f"Reranking-{PromptType.passage.value}": "search_document: ",
+    "STS": "classification: ",
+    "Summarization": "clustering: ",
+    PromptType.query.value: "search_query: ",
+    PromptType.passage.value: "search_document: ",
+}
 user2_small = ModelMeta(
     loader=partial(
         sentence_transformers_loader,
         model_name="deepvk/USER2-small",
         revision="23f65b34cf7632032061f5cc66c14714e6d4cee4",
-        model_prompts=nomic_model_prompts,
+        model_prompts=user2_prompts,
     ),
     name="deepvk/USER2-small",
     languages=["rus-Cyrl"],
@@ -724,7 +747,7 @@ user2_base = ModelMeta(
         sentence_transformers_loader,
         model_name="deepvk/USER2-base",
         revision="0942cf96909b6d52e61f79a01e2d30c7be640b27",
-        model_prompts=nomic_model_prompts,
+        model_prompts=user2_prompts,
     ),
     name="deepvk/USER2-base",
     languages=["rus-Cyrl"],
