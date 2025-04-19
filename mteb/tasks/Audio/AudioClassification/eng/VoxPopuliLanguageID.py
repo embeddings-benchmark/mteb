@@ -57,7 +57,8 @@ class VoxPopuliLanguageID(AbsTaskAudioClassification):
         }""",
         descriptive_stats={
             "n_samples": {
-                "test": 7800,  # Approximate count for the 5 main languages in test split (train and validation will not be included)
+                "train": 6200,  # ~80% of test examples
+                "test": 1600,  # ~20% of test examples
             },
         },
     )
@@ -65,7 +66,45 @@ class VoxPopuliLanguageID(AbsTaskAudioClassification):
     audio_column_name: str = "audio"
     label_column_name: str = "language"
     samples_per_label: int = 50  # For balanced training
-    is_cross_validation: bool = (
-        True  # Use cross-validation since we only have test split
-    )
-    n_splits: int = 5  # Standard 5-fold cross-validation
+    is_cross_validation: bool = False
+
+    def dataset_transform(self):
+        """Create train and test splits from the original test split."""
+        import random
+
+        random.seed(42)
+
+        if "test" in self.dataset:
+            test_data = self.dataset["test"]
+            print(
+                f"Creating train/test splits from original test split with {len(test_data)} examples"
+            )
+
+            # Get all indices (all audio assumed valid)
+            all_indices = list(range(len(test_data)))
+
+            # Create stratified split (balanced by language)
+            lang_indices = {}
+            for i in all_indices:
+                lang = test_data[i][self.label_column_name]
+                if lang not in lang_indices:
+                    lang_indices[lang] = []
+                lang_indices[lang].append(i)
+
+            # Take 80% for training, 20% for testing from each language
+            train_indices = []
+            test_indices = []
+
+            for lang, indices in lang_indices.items():
+                # Shuffle indices for this language
+                shuffled = indices.copy()
+                random.shuffle(shuffled)
+
+                # Split 80/20
+                split_point = int(len(shuffled) * 0.8)
+                train_indices.extend(shuffled[:split_point])
+                test_indices.extend(shuffled[split_point:])
+
+            # Create the splits
+            self.dataset["train"] = test_data.select(train_indices)
+            self.dataset["test"] = test_data.select(test_indices)

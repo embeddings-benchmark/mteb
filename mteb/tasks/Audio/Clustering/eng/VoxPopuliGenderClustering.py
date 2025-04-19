@@ -5,7 +5,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class VoxPopuliGenderClustering(AbsTaskAudioClustering):
-    label_column_name: str = "gender"
+    label_column_name: str = "gender_id"
 
     metadata = TaskMetadata(
         name="VoxPopuliGenderClustering",
@@ -13,7 +13,7 @@ class VoxPopuliGenderClustering(AbsTaskAudioClustering):
         reference="https://huggingface.co/datasets/facebook/voxpopuli",
         dataset={
             "path": "facebook/voxpopuli",
-            "name": "multilang",  # This selects the multilingual config
+            "name": "en",  # This selects the english config
             "revision": "719aaef8225945c0d80b277de6c79aa42ab053d5",
         },
         type="AudioClustering",
@@ -52,8 +52,8 @@ class VoxPopuliGenderClustering(AbsTaskAudioClustering):
         descriptive_stats={
             "n_samples": {
                 "train": 7600,
-                "validation": 1755,  # 22.5% of of 7800 (english samples)
-                "test": 1840,  # 23.5% of of 7800 (english samples)
+                "validation": 1750,
+                "test": 1840,
             },
         },
     )
@@ -61,25 +61,15 @@ class VoxPopuliGenderClustering(AbsTaskAudioClustering):
     audio_column_name: str = "audio"
 
     def dataset_transform(self):
-        """Filter to keep only English samples in all splits."""
-        dataset = self.dataset
+        # Define label mapping
+        label2id = {"female": 0, "male": 1}
 
-        # VoxPopuli language codes: 0 = English (en)
-        ENGLISH_CODE = 0
+        # Apply transformation to all dataset splits
+        for split in self.dataset:
+            # Define transform function to add numeric labels
+            def add_gender_id(example):
+                example["gender_id"] = label2id[example["gender"]]
+                return example
 
-        transformed_dataset = {}
-        for split in dataset:
-            # Get indices of English samples using numeric code
-            english_indices = [
-                i
-                for i, lang_code in enumerate(dataset[split]["language"])
-                if lang_code == ENGLISH_CODE
-            ]
-
-            # Select only English samples
-            if english_indices:
-                transformed_dataset[split] = dataset[split].select(english_indices)
-            else:
-                transformed_dataset[split] = dataset[split]
-
-        return transformed_dataset
+            print(f"Converting gender labels to numeric IDs for split '{split}'...")
+            self.dataset[split] = self.dataset[split].map(add_gender_id)

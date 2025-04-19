@@ -13,7 +13,7 @@ class VoxPopuliGenderID(AbsTaskAudioClassification):
         reference="https://huggingface.co/datasets/facebook/voxpopuli",
         dataset={
             "path": "facebook/voxpopuli",
-            "name": "multilang",  # This selects the multilingual config/subset
+            "name": "en",  # This selects the english config/subset
             "revision": "719aaef8225945c0d80b277de6c79aa42ab053d5",
         },
         type="AudioClassification",
@@ -52,37 +52,13 @@ class VoxPopuliGenderID(AbsTaskAudioClassification):
         descriptive_stats={
             "n_samples": {
                 "train": 7600,
-                "validation": 1755,  # 22.5% of of 7800 (english samples)
-                "test": 1840,  # 23.5% of of 7800 (english samples)
+                "validation": 1750,
+                "test": 1840,
             },
         },
     )
 
     audio_column_name: str = "audio"
     label_column_name: str = "gender"
-    samples_per_label: int = 50
+    samples_per_label: int = 100
     is_cross_validation: bool = False
-
-    def dataset_transform(self):
-        """Filter to keep only English samples in all splits."""
-        dataset = self.dataset
-
-        # VoxPopuli language codes: 0 = English (en)
-        ENGLISH_CODE = 0
-
-        transformed_dataset = {}
-        for split in dataset:
-            # Get indices of English samples using numeric code
-            english_indices = [
-                i
-                for i, lang_code in enumerate(dataset[split]["language"])
-                if lang_code == ENGLISH_CODE
-            ]
-
-            # Select only English samples
-            if english_indices:
-                transformed_dataset[split] = dataset[split].select(english_indices)
-            else:
-                transformed_dataset[split] = dataset[split]
-
-        return transformed_dataset

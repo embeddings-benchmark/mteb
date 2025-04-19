@@ -5,7 +5,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class IEMOCAPEmotionClustering(AbsTaskAudioClustering):
-    label_column_name: str = "major_emotion"
+    label_column_name: str = "emotion"
 
     metadata = TaskMetadata(
         name="IEMOCAPEmotionClustering",
@@ -44,3 +44,44 @@ class IEMOCAPEmotionClustering(AbsTaskAudioClustering):
     )
 
     audio_column_name: str = "audio"
+
+    def dataset_transform(self):
+        # Define emotion labels and their mapping to indices
+        labels = [
+            "angry",  # 0
+            "sad",  # 1
+            "happy",  # 2
+            "neutral",  # 3
+            "frustrated",  # 4
+            "excited",  # 5
+            "fear",  # 6
+            "surprise",  # 7
+            "disgust",  # 8
+            "other",  # 9
+        ]
+        label2id = {emotion: idx for idx, emotion in enumerate(labels)}
+
+        # Basic filtering to ensure we have valid emotion labels
+        for split in self.dataset:
+            # First ensure we have valid emotion labels and normalize case
+            self.dataset[split] = self.dataset[split].filter(
+                lambda example: example["major_emotion"] is not None
+                and example["major_emotion"] != ""
+            )
+
+            # Map to indices with case normalization for reliability
+            self.dataset[split] = self.dataset[split].map(
+                lambda example: {
+                    "emotion_id": label2id.get(example["major_emotion"].lower(), -1)
+                }
+            )
+
+            # Filter out any examples with unknown emotions
+            self.dataset[split] = self.dataset[split].filter(
+                lambda example: example["emotion_id"] != -1
+            )
+
+            # Use numeric ID as the label
+            self.dataset[split] = self.dataset[split].rename_column(
+                "emotion_id", self.label_column_name
+            )

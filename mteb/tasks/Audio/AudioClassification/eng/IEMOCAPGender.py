@@ -44,6 +44,20 @@ class IEMOCAPGenderClassification(AbsTaskAudioClassification):
     )
 
     audio_column_name: str = "audio"
-    label_column_name: str = "gender"
+    label_column_name: str = "gender_id"
     samples_per_label: int = 100
     is_cross_validation: bool = True
+
+    def dataset_transform(self):
+        # Define label mapping
+        label2id = {"Female": 0, "Male": 1}
+
+        # Apply transformation to all dataset splits
+        for split in self.dataset:
+            # Define transform function to add numeric labels
+            def add_gender_id(example):
+                example["gender_id"] = label2id[example["gender"]]
+                return example
+
+            print(f"Converting gender labels to numeric IDs for split '{split}'...")
+            self.dataset[split] = self.dataset[split].map(add_gender_id)
