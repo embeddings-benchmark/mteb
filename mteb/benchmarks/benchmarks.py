@@ -220,9 +220,12 @@ MTEB_MAIN_RU = Benchmark(
             "RuBQRetrieval",
             # STS
             "RUParaPhraserSTS",
-            "RuSTSBenchmarkSTS",
             "STS22",
         ],
+    )
+    + get_tasks(
+        tasks=["RuSTSBenchmarkSTS"],
+        eval_splits=["test"],
     ),
     description="A Russian version of the Massive Text Embedding Benchmark with a number of novel Russian tasks in all task categories of the original MTEB.",
     reference="https://aclanthology.org/2023.eacl-main.148/",
@@ -1706,8 +1709,6 @@ ENCODECHKA = Benchmark(
     tasks=MTEBTasks(
         get_tasks(
             tasks=[
-                # STS
-                "RuSTSBenchmarkSTS",
                 # PI
                 "RUParaPhraserSTS",
                 # SA
@@ -1722,7 +1723,13 @@ ENCODECHKA = Benchmark(
         )
         +
         # NLI
-        get_tasks(tasks=["XNLI"], eval_splits=["test"], languages=["rus-Cyrl"]),
+        get_tasks(tasks=["XNLI"], eval_splits=["test"], languages=["rus-Cyrl"])
+        # STS
+        + get_tasks(
+            tasks=["RuSTSBenchmarkSTS"],
+            eval_splits=["validation"],
+            languages=["rus-Cyrl"],
+        ),
     ),
     description="A benchmark for evaluating text embedding models on Russian data.",
     reference="https://github.com/avidale/encodechka",
