@@ -64,7 +64,6 @@ from mteb.models import (
     promptriever_models,
     qodo_models,
     qtack_models,
-    relle_models,
     repllama_models,
     rerankers_custom,
     rerankers_monot5_based,

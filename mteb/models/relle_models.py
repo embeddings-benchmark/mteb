@@ -4,8 +4,6 @@ from functools import partial
 
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
-
-
 relle_en = ModelMeta(
     loader=partial(
         sentence_transformers_loader,
@@ -13,7 +11,9 @@ relle_en = ModelMeta(
         revision="093417798a062ed8ddd8424df3be62145d4ace91",
     ),
     name="bchoiced/RELLE",
-    languages=["eng-Latn",],
+    languages=[
+        "eng-Latn",
+    ],
     open_weights=True,
     revision="093417798a062ed8ddd8424df3be62145d4ace91",
     release_date="2025-04-17",
