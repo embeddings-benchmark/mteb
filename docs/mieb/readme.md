@@ -3,7 +3,7 @@
 
 # Welcome to MIEB! 👋
 
-The Massive Image Embedding Benchmark (MIEB) is an image extension of [MTEB](https://arxiv.org/abs/2210.07316) to cover embedding tasks for image-text tasks.
+The [Massive Image Embedding Benchmark (MIEB)](https://arxiv.org/abs/2504.10471) is an image extension of [MTEB](https://arxiv.org/abs/2210.07316) to cover embedding tasks for image-text tasks.
 
 ## 🌱 Background
 
@@ -80,3 +80,19 @@ results = evaluation.run(model)
 ```
 
 By default, results will be under `results/laion__CLIP-ViT-L-14-laion2B-s32B-b82K/REVISION/CIFAR10ZeroShot.json`. Sometimes metrics can be a bit different than what the original paper claimed. This might be due to the resolution/layout difference of images in the remake of the dataset.
+
+## Citing
+
+When using `mieb`, we recommend you use the following citation:
+
+```bibtex
+@article{xiao2025mieb,
+  author = {Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
+  title = {MIEB: Massive Image Embedding Benchmark},
+  publisher = {arXiv},
+  journal={arXiv preprint arXiv:2504.10471},
+  year = {2025}
+  url = {https://arxiv.org/abs/2504.10471},
+  doi = {10.48550/ARXIV.2504.10471},
+}
+```
