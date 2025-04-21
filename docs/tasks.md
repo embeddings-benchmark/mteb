@@ -316,10 +316,10 @@ The following tables give you an overview of the tasks in MTEB.
 | [GeorgianFAQRetrieval](https://huggingface.co/datasets/jupyterjazz/georgian-faq) | ['kat'] | Retrieval | s2p | [Web, Written] | None | None |
 | [GerDaLIR](https://github.com/lavis-nlp/GerDaLIR) | ['deu'] | Retrieval | s2p |  | None | None |
 | [GerDaLIRSmall](https://github.com/lavis-nlp/GerDaLIR) | ['deu'] | Retrieval | p2p | [Legal, Written] | None | None |
-| [GermanDPR](https://huggingface.co/datasets/deepset/germandpr) (Timo Möller, 2021) | ['deu'] | Retrieval | s2p |  | None | None |
+| [GermanDPR](https://huggingface.co/datasets/deepset/germandpr) (Timo Möller, 2021) | ['deu'] | Retrieval | s2p | [Non-fiction, Web, Written] | None | None |
 | [GermanGovServiceRetrieval](https://huggingface.co/datasets/it-at-m/LHM-Dienstleistungen-QA) | ['deu'] | Retrieval | s2p | [Government, Written] | None | None |
 | [GermanPoliticiansTwitterSentimentClassification](https://aclanthology.org/2022.konvens-1.9) | ['deu'] | Classification | s2s | [Government, Social, Written] | None | None |
-| [GermanQuAD-Retrieval](https://www.kaggle.com/datasets/GermanQuAD) (Timo Möller, 2021) | ['deu'] | Retrieval | s2p |  | None | None |
+| [GermanQuAD-Retrieval](https://huggingface.co/datasets/deepset/germanquad) (Timo Möller, 2021) | ['deu'] | Retrieval | s2p | [Non-fiction, Web, Written] | None | None |
 | [GermanSTSBenchmark](https://github.com/t-systems-on-site-services-gmbh/german-STSbenchmark) (Philip May, 2021) | ['deu'] | STS | s2s |  | None | None |
 | [GreekCivicsQA](https://huggingface.co/datasets/antoinelb7/alloprof) | ['ell'] | Retrieval | s2p | [Academic, Written] | None | None |
 | [GreekLegalCodeClassification](https://arxiv.org/abs/2109.15298) | ['ell'] | Classification | s2s | [Legal, Written] | None | None |
