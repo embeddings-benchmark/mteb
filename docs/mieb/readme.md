@@ -4,11 +4,14 @@ The [Massive Image Embedding Benchmark (MIEB)](https://arxiv.org/abs/2504.10471)
 
 ## 🌱 Background
 
-MIEB intends to extend MTEB and MMTEB to cover image representation learning and image-text alignment tasks.
+MIEB intends to extend MTEB and MMTEB to cover image representation learning and image-text alignment tasks. At the time of publishing, MIEB offers 130 tasks over 8 task categories. 3 benchmarks are offered:
+1. `MIEB(Multilingual)`
+2. `MIEB(eng)`
+3. `MIEB(lite)`
 
 ## Running MIEB
 
-If you’re already familiar with how MTEB works, then run any task and model the same way! 
+If you’re already familiar with how MTEB works, then run any benchmark, task, and model the same way! 
 
 
 ### 🛠️Run MIEB in 2 lines via CLI
