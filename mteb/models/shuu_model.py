@@ -1,6 +1,6 @@
 from functools import partial
 from mteb.model_meta import ModelMeta
-from mteb.models.sentence_transformers_wrapper import SentenceTransformerWrapper
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 
 codemodernbert_crow_meta = ModelMeta(
     name="Shuu12121/CodeSearch-ModernBERT-Crow-Plus",
