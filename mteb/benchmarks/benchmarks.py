@@ -1563,7 +1563,7 @@ MIEB_ENG = Benchmark(
     title = {MIEB: Massive Image Embedding Benchmark},
     publisher = {arXiv},
     journal={arXiv preprint arXiv:2504.10471},
-    year = {2025}
+    year = {2025},
     url = {https://arxiv.org/abs/2504.10471},
     doi = {10.48550/ARXIV.2504.10471},
     }""",
@@ -1594,7 +1594,7 @@ MIEB_MULTILINGUAL = Benchmark(
     title = {MIEB: Massive Image Embedding Benchmark},
     publisher = {arXiv},
     journal={arXiv preprint arXiv:2504.10471},
-    year = {2025}
+    year = {2025},
     url = {https://arxiv.org/abs/2504.10471},
     doi = {10.48550/ARXIV.2504.10471},
     }""",
@@ -1674,7 +1674,7 @@ MIEB_LITE = Benchmark(
     title = {MIEB: Massive Image Embedding Benchmark},
     publisher = {arXiv},
     journal={arXiv preprint arXiv:2504.10471},
-    year = {2025}
+    year = {2025},
     url = {https://arxiv.org/abs/2504.10471},
     doi = {10.48550/ARXIV.2504.10471},
     }""",
