@@ -1,4 +1,8 @@
-from mteb.model_meta import ModelMeta
+from __future__ import annotations
+
+from functools import partial
+
+from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
 frony_training_datasets = {
     "AI허브_금융법률": ["train"],
@@ -30,10 +34,19 @@ frony_training_datasets = {
 }
 
 FronyEmbed_tiny_ko_v1 = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="FronyAI/frony-embed-tiny-ko-v1",
+        revision="frony-embed-tiny-ko-v1-20250421",
+        model_prompts={
+           "query": "<Q>",
+           "passage": "<P>",
+        },
+    ),
     name="FronyAI/frony-embed-tiny-ko-v1",
+    revision="frony-embed-tiny-ko-v1-20250421",
     languages=["kor-Hang", "eng-Latn"],
     open_weights=True,
-    revision="frony-embed-tiny-ko-v1-20250421",
     release_date="2025-04-21",
     n_parameters=111_000_000,
     memory_usage_mb=2048,
@@ -50,10 +63,18 @@ FronyEmbed_tiny_ko_v1 = ModelMeta(
 )
 
 FronyEmbed_small_ko_v1 = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="FronyAI/frony-embed-small-ko-v1",
+        revision="frony-embed-small-ko-v1-20250421",
+        model_prompts={
+           "query": "<Q>",
+           "passage": "<P>",
+        },
+    ),
     name="FronyAI/frony-embed-small-ko-v1",
     languages=["kor-Hang", "eng-Latn"],
     open_weights=True,
-    revision="frony-embed-small-ko-v1-20250421",
     release_date="2025-04-21",
     n_parameters=111_000_000,
     memory_usage_mb=2048,
@@ -70,10 +91,18 @@ FronyEmbed_small_ko_v1 = ModelMeta(
 )
 
 FronyEmbed_medium_ko_v1 = ModelMeta(
+    loader=partial(  # type: ignore
+        sentence_transformers_loader,
+        model_name="FronyAI/frony-embed-medium-ko-v1",
+        revision="frony-embed-medium-ko-v1-20250421",
+        model_prompts={
+           "query": "<Q>",
+           "passage": "<P>",
+        },
+    ),
     name="FronyAI/frony-embed-medium-ko-v1",
     languages=["kor-Hang", "eng-Latn"],
     open_weights=True,
-    revision="frony-embed-medium-ko-v1-20250421",
     release_date="2025-04-21",
     n_parameters=337_000_000,
     memory_usage_mb=2048,
