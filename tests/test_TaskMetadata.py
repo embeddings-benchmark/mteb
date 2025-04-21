@@ -53,8 +53,6 @@ _HISTORIC_DATASETS = [
     "TwitterHjerneRetrieval",
     "GerDaLIR",
     "GerDaLIRSmall",
-    "GermanDPR",
-    "GermanQuAD-Retrieval",
     "LegalQuAD",
     "AILACasedocs",
     "AILAStatutes",
