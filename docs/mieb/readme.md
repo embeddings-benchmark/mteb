@@ -9,12 +9,12 @@ MIEB intends to extend MTEB and MMTEB to cover image representation learning and
 2. `MIEB(eng)`
 3. `MIEB(lite)`
 
-## Running MIEB
+## 🚀 Running MIEB
 
 If you’re already familiar with how MTEB works, then run any benchmark, task, and model the same way! 
 
 
-### 🛠️Run MIEB in 2 lines via CLI
+### Run MIEB in 2 lines via CLI
 First, install the `mieb` dependencies:
 ```sh
 pip install mteb[image]
@@ -25,7 +25,7 @@ Then, run the multilingual benchmark with a selected model, e.g. CLIP:
 mteb run -b ‘MIEB(Multilingual)’ -m openai/clip-vit-base-patch16
 ```
 
-### 🧪 Run MIEB in Python
+### Run MIEB in Python
 
 Similarly, running the benchmark can be done in Python in 3 main steps: 1) Select the tasks, load the model, and run the evaluation.
 
