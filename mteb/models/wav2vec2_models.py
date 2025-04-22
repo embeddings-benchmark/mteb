@@ -181,7 +181,7 @@ class Wav2Vec2AudioWrapper(Wrapper):
 
                 outputs = self.model(
                     inputs.input_values.squeeze(0),
-                    attention_mask=inputs.attention_mask,
+                    attention_mask=inputs.attention_mask.squeeze(0).unsqueeze(-1),
                     output_hidden_states=True,
                 )
 
