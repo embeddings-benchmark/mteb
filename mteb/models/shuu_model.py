@@ -1,6 +1,5 @@
 from __future__ import annotations
 from functools import partial
-from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
 codemodernbert_crow_meta = ModelMeta(
