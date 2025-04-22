@@ -6,7 +6,7 @@ codemodernbert_crow_meta = ModelMeta(
     loader=partial(
         sentence_transformers_loader,
         model="Shuu12121/CodeSearch-ModernBERT-Crow-Plus",
-        revision="fd3d662ca9ba8d0e6be981cb3be21aee7a80096e",
+        revision="044a7a4b552f86e284817234c336bccf16f895cee",
     ),
     name="Shuu12121/CodeSearch-ModernBERT-Crow-Plus",
     languages=["eng-Latn"],
