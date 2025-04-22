@@ -5,7 +5,7 @@ from mteb.model_meta import ModelMeta, sentence_transformers_loader
 codemodernbert_crow_meta = ModelMeta(
     loader=partial(
         sentence_transformers_loader,
-        model="Shuu12121/CodeSearch-ModernBERT-Crow-Plus",
+        model_name="Shuu12121/CodeSearch-ModernBERT-Crow-Plus",
         revision="044a7a4b552f86e284817234c336bccf16f895cee",
     ),
     name="Shuu12121/CodeSearch-ModernBERT-Crow-Plus",
