@@ -1,12 +1,14 @@
+from __future__ import annotations
+
 from functools import partial
-from mteb.model_meta import ModelMeta
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
+from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
 codemodernbert_crow_meta = ModelMeta(
     name="Shuu12121/CodeSearch-ModernBERT-Crow-Plus",
     languages=["eng-Latn"],
     loader=partial(
-        SentenceTransformerWrapper,
+        sentence_transformers_loader,
         model="Shuu12121/CodeSearch-ModernBERT-Crow-Plus",
         revision="fd3d662ca9ba8d0e6be981cb3be21aee7a80096e",
     ),
@@ -24,11 +26,11 @@ codemodernbert_crow_meta = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={
-        "code-search-net/code_search_net": ["train"],
-        "Shuu12121/python-codesearch-filtered": ["train"],
-        "Shuu12121/ruby-codesearch-filtered": ["train"],
-        "Shuu12121/java-codesearch-filtered": ["train"],
-        "Shuu12121/javascript-codesearch-filtered": ["train"],
-        "Shuu12121/rust-codesearch-filtered": ["train"],
+        "code-search-net/code_search_net": "main",
+        "Shuu12121/python-codesearch-filtered": "latest",
+        "Shuu12121/java-codesearch-filtered": "latest",
+        "Shuu12121/javascript-codesearch-filtered": "latest",
+        "Shuu12121/ruby-codesearch-filtered": "latest",
+        "Shuu12121/rust-codesearch-filtered": "latest"
     },
 )
