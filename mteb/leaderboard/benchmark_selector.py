@@ -1,12 +1,14 @@
+from __future__ import annotations
+
 import gradio as gr
 
 """
 Each entry is a tuple, where the first element is a label, and the second is either a single benchmark or a group of benchmarks.
 
-Example: 
+Example:
 [
     ("First Benchmark", dict(value="MTEB(something)", icon="icon_url")),
-    ("Group of Benchmarks", 
+    ("Group of Benchmarks",
         [
             ("Second Benchmark", dict(value="MTEB(something)", icon="icon_url")),
             ("Third Benchmark", dict(value="MTEB(something)", icon="icon_url")),
@@ -182,7 +184,7 @@ BENCHMARK_ENTRIES = [
             ("BEIR-NL", dict(value="BEIR-NL", icon=None)),
             ("BRIGHT", dict(value="BRIGHT", icon=None)),
             ("BRIGHT (long)", dict(value="BRIGHT (long)", icon=None)),
-            ("BuiltBench (eng)", dict(value="BRIGHT (long)", icon=None)),
+            ("BuiltBench (eng)", dict(value="BuiltBench(eng)", icon=None)),
             ("Code Information Retrieval", dict(value="CoIR", icon=None)),
             ("Instruction Following", dict(value="FollowIR", icon=None)),
             ("Long-context Retrieval", dict(value="LongEmbed", icon=None)),
@@ -252,7 +254,7 @@ def make_selector(entries: list[tuple[str, dict | list]]) -> tuple[gr.State, gr.
             else:
                 gr.Markdown(f"### **{label}**")
                 for sub_label, sub_entry in entry:
-                    button = _create_button(
+                    button = _create_button(  # noqa: F841
                         i, sub_label, sub_entry, state, label_to_value, size="md"
                     )
 
