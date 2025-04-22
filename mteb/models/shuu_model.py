@@ -1,6 +1,6 @@
 from __future__ import annotations
-
 from functools import partial
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
 codemodernbert_crow_meta = ModelMeta(
@@ -26,11 +26,11 @@ codemodernbert_crow_meta = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={
-        "code-search-net/code_search_net": "main",
-        "Shuu12121/python-codesearch-filtered": "latest",
-        "Shuu12121/java-codesearch-filtered": "latest",
-        "Shuu12121/javascript-codesearch-filtered": "latest",
-        "Shuu12121/ruby-codesearch-filtered": "latest",
-        "Shuu12121/rust-codesearch-filtered": "latest"
+        "code-search-net/code_search_net": ["main"],
+        "Shuu12121/python-codesearch-filtered": ["latest"],
+        "Shuu12121/java-codesearch-filtered": ["latest"],
+        "Shuu12121/javascript-codesearch-filtered": ["latest"],
+        "Shuu12121/ruby-codesearch-filtered": ["latest"],
+        "Shuu12121/rust-codesearch-filtered": ["latest"],
     },
 )
