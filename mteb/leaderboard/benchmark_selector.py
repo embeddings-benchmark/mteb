@@ -2,6 +2,9 @@ from __future__ import annotations
 
 import gradio as gr
 
+import mteb
+from mteb import Benchmark
+
 """
 Each entry is a tuple, where the first element is a label, and the second is either a single benchmark or a group of benchmarks.
 
@@ -17,245 +20,156 @@ Example:
 ]
 """
 BENCHMARK_ENTRIES = [
-    (
-        "Multilingual",
-        dict(
-            value="MTEB(Multilingual, v1)",
-            icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-globe.svg",
-        ),
-    ),
-    (
-        "English",
-        dict(
-            value="MTEB(eng, v2)",
-            icon="https://github.com/lipis/flag-icons/raw/refs/heads/main/flags/4x3/us.svg",
-        ),
-    ),
+    mteb.get_benchmarks(["MTEB(Multilingual, v1)", "MTEB(eng, v2)"]),
     (
         "Image Benchmarks",
-        [
-            (
-                "Images, Multilingual",
-                dict(
-                    value="MIEB(Multilingual)",
-                    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-pictures.svg",
-                ),
-            ),
-            (
-                "Images, English",
-                dict(
-                    value="MIEB(eng)",
-                    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-picture.svg",
-                ),
-            ),
-            (
-                "Images, Lite",
-                dict(
-                    value="MIEB(lite)",
-                    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-map-landscape.svg",
-                ),
-            ),
-        ],
+        mteb.get_benchmarks(
+            [
+                "MIEB(Multilingual)",
+                "MIEB(eng)",
+                "MIEB(lite)",
+            ]
+        ),
     ),
     (
         "Domain-Specific Benchmarks",
-        [
-            (
-                "Code",
-                dict(
-                    value="MTEB(Code, v1)",
-                    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-tech-electronics.svg",
-                ),
-            ),
-            (
-                "Legal",
-                dict(
-                    value="MTEB(Law, v1)",
-                    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-map-library.svg",
-                ),
-            ),
-            (
-                "Medical",
-                dict(
-                    value="MTEB(Medical, v1)",
-                    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-map-hospital.svg",
-                ),
-            ),
-            (
-                "Chemical",
-                dict(
-                    value="ChemTEB",
-                    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-purge.svg",
-                ),
-            ),
-        ],
+        mteb.get_benchmarks(
+            [
+                "MTEB(Code, v1)",
+                "MTEB(Law, v1)",
+                "MTEB(Medical, v1)",
+                "ChemTEB",
+            ]
+        ),
     ),
     (
         "Regional Benchmarks",
-        [
-            (
-                "European",
-                dict(
-                    value="MTEB(Europe, v1)",
-                    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/eu.svg",
-                ),
-            ),
-            (
-                "Indic",
-                dict(
-                    value="MTEB(Indic, v1)",
-                    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/in.svg",
-                ),
-            ),
-            (
-                "Scandinavian",
-                dict(
-                    value="MTEB(Scandinavian, v1)",
-                    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/dk.svg",
-                ),
-            ),
-        ],
+        mteb.get_benchmarks(
+            [
+                "MTEB(Europe, v1)",
+                "MTEB(Indic, v1)",
+                "MTEB(Scandinavian, v1)",
+            ]
+        ),
     ),
     (
         "Language-specific Benchmarks",
-        [
-            (
-                "Chinese",
-                dict(
-                    value="MTEB(cmn, v1)",
-                    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/cn.svg",
-                ),
-            ),
-            (
-                "German",
-                dict(
-                    value="MTEB(deu, v1)",
-                    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/de.svg",
-                ),
-            ),
-            (
-                "French",
-                dict(
-                    value="MTEB(fra, v1)",
-                    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/fr.svg",
-                ),
-            ),
-            (
-                "Japanese",
-                dict(
-                    value="MTEB(jpn, v1)",
-                    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/jp.svg",
-                ),
-            ),
-            (
-                "Korean",
-                dict(
-                    value="MTEB(kor, v1)",
-                    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/kr.svg",
-                ),
-            ),
-            (
-                "Polish",
-                dict(
-                    value="MTEB(pol, v1)",
-                    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/pl.svg",
-                ),
-            ),
-            (
-                "Russian",
-                dict(
-                    value="MTEB(rus, v1)",
-                    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ru.svg",
-                ),
-            ),
-            (
-                "Farsi (BETA)",
-                dict(
-                    value="MTEB(fas, beta)",
-                    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ir.svg",
-                ),
-            ),
-        ],
+        mteb.get_benchmarks(
+            [
+                "MTEB(cmn, v1)",
+                "MTEB(deu, v1)",
+                "MTEB(fra, v1)",
+                "MTEB(jpn, v1)",
+                "MTEB(kor, v1)",
+                "MTEB(pol, v1)",
+                "MTEB(rus, v1)",
+                "MTEB(fas, beta)",
+            ]
+        ),
     ),
     (
         "Miscellaneous",
-        [
-            ("BEIR", dict(value="BEIR", icon=None)),
-            ("BEIR-NL", dict(value="BEIR-NL", icon=None)),
-            ("BRIGHT", dict(value="BRIGHT", icon=None)),
-            ("BRIGHT (long)", dict(value="BRIGHT (long)", icon=None)),
-            ("BuiltBench (eng)", dict(value="BuiltBench(eng)", icon=None)),
-            ("Code Information Retrieval", dict(value="CoIR", icon=None)),
-            ("Instruction Following", dict(value="FollowIR", icon=None)),
-            ("Long-context Retrieval", dict(value="LongEmbed", icon=None)),
-            ("MINERSBitextMining", dict(value="MINERSBitextMining", icon=None)),
-            ("NanoBEIR", dict(value="NanoBEIR", icon=None)),
-            ("Reasoning retrieval", dict(value="RAR-b", icon=None)),
-        ],
+        mteb.get_benchmarks(
+            [
+                "BEIR",
+                "BEIR-NL",
+                "NanoBEIR",
+                "BRIGHT",
+                "BRIGHT (long)",
+                "BuiltBench(eng)",
+                "CoIR",
+                "FollowIR",
+                "LongEmbed",
+                "MINERSBitextMining",
+                "RAR-b",
+            ]
+        ),
     ),
     (
         "Legacy",
-        [
-            (
-                "English Legacy",
-                dict(
-                    value="MTEB(eng, v1)",
-                    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/gb.svg",
-                ),
-            ),
-        ],
+        mteb.get_benchmarks(
+            [
+                "MTEB(eng, v1)",
+            ]
+        ),
     ),
 ]
 
 
-def _create_button(i, label, entry, state, label_to_value, **kwargs):
-    val = entry["value"]
-    label_to_value[label] = val
+def _create_button(
+    i: int,
+    benchmark: Benchmark,
+    state: gr.State,
+    label_to_value: dict[str, str],
+    **kwargs,
+):
+    val = benchmark.name
+    label = (
+        benchmark.display_name if benchmark.display_name is not None else benchmark.name
+    )
+    label_to_value[label] = benchmark.name
     button = gr.Button(
         label,
         variant="secondary" if i != 0 else "primary",
-        icon=entry["icon"],
+        icon=benchmark.icon,
         key=f"{i}_button_{val}",
         elem_classes="text-white",
         **kwargs,
     )
 
-    def _update_variant(state, label) -> gr.Button:
+    def _update_variant(state: str, label: str) -> gr.Button:
         if state == label_to_value[label]:
             return gr.Button(variant="primary")
         else:
             return gr.Button(variant="secondary")
 
-    def _update_value(label) -> str:
+    def _update_value(label: str) -> str:
         return label_to_value[label]
 
     state.change(_update_variant, inputs=[state, button], outputs=[button])
-    button.click(_update_value, outputs=[state], inputs=[button])
+    button.click(_update_value, inputs=[button], outputs=[state])
     return button
 
 
-def make_selector(entries: list[tuple[str, dict | list]]) -> tuple[gr.State, gr.Column]:
+def make_selector(
+    entries: list[list[Benchmark] | tuple[str, list[Benchmark]]],
+) -> tuple[gr.State, gr.Column]:
     if not entries:
         raise ValueError("No entries were specified, can't build selector.")
     label_to_value = {}
     state = None
     with gr.Column() as column:
-        for i, (label, entry) in enumerate(entries):
+        i = 0
+        for entry in entries:
             if i == 0:
-                if isinstance(entry, dict):
-                    state = gr.State(entry["value"])
+                if isinstance(entry, list):
+                    fist_entry = entry[0]
+                    state = gr.State(fist_entry.name)
+                elif isinstance(entry, tuple):
+                    _label, _entry = entry
+                    state = gr.State(_entry[0].name)
                 else:
-                    _label, _entry = entry[0]
-                    state = gr.State(_entry["value"])
-            if isinstance(entry, dict):
-                button = _create_button(
-                    i, label, entry, state, label_to_value, size="lg"
-                )
-            else:
-                gr.Markdown(f"### **{label}**")
-                for sub_label, sub_entry in entry:
-                    button = _create_button(  # noqa: F841
-                        i, sub_label, sub_entry, state, label_to_value, size="md"
+                    raise ValueError("Benchmark selector specified incorrectly")
+            if isinstance(entry, list):
+                for benchmark in entry:
+                    button = _create_button(
+                        i, benchmark, state, label_to_value, size="lg"
                     )
+                    i += 1
+            elif isinstance(entry, tuple):
+                label, _entry = entry
+                gr.Markdown(f"### **{label}**")
+                for benchmark in _entry:
+                    button = _create_button(  # noqa: F841
+                        i, benchmark, state, label_to_value, size="md"
+                    )
+                    i += 1
 
     return state, column
+
+
+if __name__ == "__main__":
+    with gr.Blocks() as b:
+        selector = make_selector(BENCHMARK_ENTRIES)
+
+    b.launch()
