@@ -3,6 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from ....evaluation.evaluators.utils import paired_accuracy
 
 
 class NevIR(AbsTaskRetrieval):
@@ -35,3 +36,13 @@ class NevIR(AbsTaskRetrieval):
   url={{https://api.semanticscholar.org/CorpusID:258676146}}
 }""",
     )
+
+    def task_specific_scores(
+        self,
+        scores: dict[str, float],
+        qrels: dict[str, dict[str, int]],
+        results: dict[str, dict[str, float]],
+    ) -> dict[str, float]:
+        return {
+            "paired_accuracy": paired_accuracy(qrels, results, scores),
+        }

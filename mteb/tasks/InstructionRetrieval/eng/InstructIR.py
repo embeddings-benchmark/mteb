@@ -3,6 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from ....evaluation.evaluators.utils import robustness_at_10
 
 
 class InstructIR(AbsTaskRetrieval):
@@ -36,3 +37,13 @@ class InstructIR(AbsTaskRetrieval):
       primaryClass={{cs.CL}}
 }""",
     )
+
+    def task_specific_scores(
+        self,
+        scores: dict[str, float],
+        qrels: dict[str, dict[str, int]],
+        results: dict[str, dict[str, float]],
+    ) -> dict[str, float]:
+        return {
+            "robustness_at_10": robustness_at_10(qrels, results, scores)
+        }

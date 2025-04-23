@@ -137,8 +137,10 @@ class AbsTaskRetrieval(AbsTask):
 
     ignore_identical_ids: bool = False
     abstask_prompt = "Retrieve text based on user query."
-    top_k = 100
+    k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000]
+    top_k:int = max(k_values)
     dataset: dict[str, dict[str, SplitData]]
+    cross_encoder_top_k:int = 100
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -326,6 +328,7 @@ class AbsTaskRetrieval(AbsTask):
             hf_subset=hf_subset,
             instructions=data_split["instructions"],
             top_ranked=data_split["top_ranked"],
+            top_k=self.top_k,
             **kwargs,
         )
 
@@ -368,16 +371,19 @@ class AbsTaskRetrieval(AbsTask):
             ) as f:
                 json.dump(data_split["relevant_docs"], f)
 
-        ndcg, _map, recall, precision, naucs, task_scores, mrr, naucs_mrr = (
+        all_scores, ndcg, _map, recall, precision, naucs, task_scores, mrr, naucs_mrr = (
             retriever.evaluate(
                 data_split["relevant_docs"],
                 results,
-                retriever.k_values,
+                self.k_values,
                 ignore_identical_ids=self.ignore_identical_ids,
             )
         )
+        task_specific_scores = self.task_specific_scores(
+            all_scores, data_split["relevant_docs"], results
+        )
         scores = make_score_dict(
-            ndcg, _map, recall, precision, mrr, naucs, naucs_mrr, task_scores
+            ndcg, _map, recall, precision, mrr, naucs, naucs_mrr, task_specific_scores
         )
 
         if export_errors:
@@ -410,6 +416,14 @@ class AbsTaskRetrieval(AbsTask):
                 json.dump(errors, f)
 
         return scores
+
+    def task_specific_scores(
+        self,
+        scores: dict[str, float],
+        qrels: dict[str, dict[str, int]],
+        results: dict[str, dict[str, float]],
+    ) -> dict[str, float]:
+        return {}
 
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False

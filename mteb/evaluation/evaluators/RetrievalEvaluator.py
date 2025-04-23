@@ -13,7 +13,6 @@ from .model_classes import (
     is_cross_encoder_compatible,
 )
 from .utils import (
-    add_task_specific_scores,
     calculate_retrieval_scores,
 )
 
@@ -21,10 +20,6 @@ logger = logging.getLogger(__name__)
 
 
 class RetrievalEvaluator(Evaluator):
-    k_values = [1, 3, 5, 10, 20, 100, 1000]
-    top_k = 1000
-    cross_encoder_top_k = 100
-
     def __init__(
         self,
         corpus: dict[str, dict[str, str]],
@@ -47,17 +42,15 @@ class RetrievalEvaluator(Evaluator):
         self.hf_split = hf_split
         self.hf_subset = hf_subset
         self.qid = qid
+        self.top_k = top_k
 
     def __call__(
         self,
         model: Encoder,
         encode_kwargs: dict[str, Any],
         previous_results: str | Path | None = None,
-        top_k: int | None = None,
         **kwargs: Any,
     ) -> dict[str, dict[str, float]]:
-        if top_k is not None:
-            self.top_k = top_k
         self.is_cross_encoder = is_cross_encoder_compatible(model)
         if self.is_cross_encoder:
             logger.info(
@@ -102,7 +95,7 @@ class RetrievalEvaluator(Evaluator):
         dict[str, list[float]],
         dict[str, list[float]],
         dict[str, list[float]],
-        dict[str, float],
+        dict[str, list[float]],
         dict[str, float],
         dict[str, float],
         dict[str, float],
@@ -125,8 +118,4 @@ class RetrievalEvaluator(Evaluator):
             calculate_retrieval_scores(results, qrels, k_values)
         )
 
-        task_scores = add_task_specific_scores(
-            all_scores, qrels, results, self.task_metadata.name, k_values
-        )
-
-        return ndcg, _map, recall, precision, naucs, task_scores, mrr, naucs_mrr
+        return all_scores, ndcg, _map, recall, precision, naucs, mrr, naucs_mrr

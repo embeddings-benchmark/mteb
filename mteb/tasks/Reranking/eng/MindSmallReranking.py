@@ -8,6 +8,7 @@ import tqdm
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from ....evaluation.evaluators.utils import max_over_subqueries
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -221,3 +222,11 @@ class MindSmallReranking(AbsTaskRetrieval):
 
         self.instructions = None
         self.data_loaded = True
+
+    def task_specific_scores(
+        self,
+        scores: dict[str, float],
+        qrels: dict[str, dict[str, int]],
+        results: dict[str, dict[str, float]],
+    ) -> dict[str, float]:
+        return max_over_subqueries(qrels, results, self.k_values)

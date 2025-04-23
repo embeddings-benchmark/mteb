@@ -7,6 +7,7 @@ import datasets
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from ....evaluation.evaluators.utils import evaluate_p_mrr_change
 
 logger = getLogger(__name__)
 
@@ -178,6 +179,16 @@ class mFollowIRCrossLingual(AbsTaskRetrieval):
 
         self.data_loaded = True
 
+    def task_specific_scores(
+        self,
+        scores: dict[str, float],
+        qrels: dict[str, dict[str, int]],
+        results: dict[str, dict[str, float]],
+    ) -> dict[str, float]:
+        return evaluate_p_mrr_change(
+            results, qrels, self.k_values
+        )
+
 
 class mFollowIR(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -228,3 +239,14 @@ class mFollowIR(AbsTaskRetrieval):
         )
 
         self.data_loaded = True
+
+    def task_specific_scores(
+        self,
+        scores: dict[str, float],
+        qrels: dict[str, dict[str, int]],
+        results: dict[str, dict[str, float]],
+    ) -> dict[str, float]:
+        return evaluate_p_mrr_change(
+            results, qrels, self.k_values
+        )
+

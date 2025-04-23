@@ -392,13 +392,6 @@ def add_task_specific_scores(
 ) -> dict[str, float]:
     """Add task-specific scores to the scores dictionary, that are not needed for all results but require additional computation."""
     task_scores = {}
-    if task_name in ["NevIR"]:
-        paired_score = paired_accuracy(qrels, results, scores)
-        task_scores["paired_accuracy"] = paired_score
-
-    if task_name in ["InstructIR"]:
-        robustness_at_10_score = robustness_at_10(qrels, results, scores)
-        task_scores["robustness_at_10"] = robustness_at_10_score
 
     if task_name in [
         "mFollowIR",
@@ -411,11 +404,6 @@ def add_task_specific_scores(
             results, qrels, task_name, k_values
         )
         task_scores.update(p_mrr_and_consolidated_scores)
-
-    if task_name in ["MindSmallReranking"]:
-        take_max_over_subqueries = max_over_subqueries(qrels, results, k_values)
-        task_scores.update(take_max_over_subqueries)
-
     return task_scores
 
 
