@@ -78,6 +78,7 @@ The following links to the main sections in the usage documentation.
 | **General** | |
 | [Evaluating a Model](docs/usage/usage.md#evaluating-a-model) | How to evaluate a model |
 | [Evaluating on different Modalities](docs/usage/usage.md#evaluating-on-different-modalities) | How to evaluate image and image-text tasks |
+| [MIEB](docs/mieb/readme.md) | How to run the Massive Image Embedding Benchmark |
 | **Selecting Tasks** | |
 | [Selecting a benchmark](docs/usage/usage.md#selecting-a-benchmark) | How to select benchmarks |
 | [Task selection](docs/usage/usage.md#task-selection) | How to select and filter tasks |
@@ -97,6 +98,7 @@ The following links to the main sections in the usage documentation.
 | [Running the Leaderboard Locally](docs/usage/usage.md#running-the-leaderboard-locally) | How to run the leaderboard locally |
 | [Report Data Contamination](docs/usage/usage.md#annotate-contamination) | How to report data contamination for a model |
 | [Loading and working with Results](docs/usage/results.md) | How to load and working with the raw results from the leaderboard, including making result dataframes |
+
 
 
 ## Overview
