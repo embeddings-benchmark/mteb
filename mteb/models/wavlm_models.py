@@ -95,9 +95,8 @@ class WavlmWrapper(Wrapper):
         return waveform.squeeze()
 
     def _pad_audio_batch(self, batch):
-        # Ensure all tensors are properly shaped before padding
         batch = [x.reshape(-1) if x.ndim == 0 else x for x in batch]
-        max_length = max(audio.shape[0] for audio in batch)  # Find longest audio
+        max_length = max(audio.shape[0] for audio in batch) 
         padded_batch = [
             torch.nn.functional.pad(audio, (0, max_length - audio.shape[0]))
             for audio in batch
@@ -120,43 +119,34 @@ class WavlmWrapper(Wrapper):
             for i in range(0, len(processed_audio), batch_size):
                 batch = processed_audio[i : i + batch_size]
                 
-                # Ensure proper shape for input values
                 batch_tensor = self._pad_audio_batch(batch)
                 
-                # The model expects [batch_size, sequence_length]
-                # Ensure we have the right shape
                 if batch_tensor.ndim == 1:
-                    batch_tensor = batch_tensor.unsqueeze(0)  # Add batch dimension
+                    batch_tensor = batch_tensor.unsqueeze(0) 
                 elif batch_tensor.ndim > 2:
-                    # Reshape to [batch_size, sequence_length]
                     batch_tensor = batch_tensor.view(batch_tensor.size(0), -1)
                 
                 inputs = self.feature_extractor(
-                    batch_tensor.cpu().numpy(),  # Convert to numpy for feature extractor
+                    batch_tensor.cpu().numpy(), 
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
-                    padding="longest",  # Use dynamic padding
+                    padding="longest",
                     return_attention_mask=True,
                 ).to(self.device)
 
-                # Process through the model
                 outputs = self.model(
                     inputs.input_values,
                     attention_mask=inputs.attention_mask,
                     output_hidden_states=True,
                 )
 
-                # Get embeddings from the last hidden state
                 last_hidden_state = outputs.hidden_states[-1]
-                # Mean pooling to get a fixed-size representation
                 embeddings = torch.mean(last_hidden_state, dim=1)
                 all_embeddings.append(embeddings.cpu())
 
-        # Concatenate all batch embeddings
         if all_embeddings:
             return torch.cat(all_embeddings, dim=0)
         else:
-            # Return empty tensor if no embeddings were produced
             return torch.zeros((0, self.model.config.hidden_size))
 
     def encode(
