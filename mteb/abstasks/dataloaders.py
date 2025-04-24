@@ -38,6 +38,8 @@ class RetrievalDataLoader:
         self.qrels = {}
         self.instructions = None
         self.top_ranked = None
+        self.qrels_diff = None
+
         self.hf_repo = hf_repo
         self.trust_remote_code = trust_remote_code
         self.split = split
@@ -53,6 +55,7 @@ class RetrievalDataLoader:
         dict[str, list[str]]
         | dict[str, dict[str, float]]
         | None,  # top_ranked (optional)
+        dict[str, list[str]] | None,  # qrels diff
     ]:
         configs = get_dataset_config_names(
             self.hf_repo, self.revision, trust_remote_code=self.trust_remote_code
@@ -79,6 +82,13 @@ class RetrievalDataLoader:
                 f"Instructions loaded: {len(self.instructions) if self.instructions else 0}"
             )
 
+        if any(c.startswith("qrel_diff") for c in configs):
+            logger.info("Loading qrels diffs")
+            self._load_qrels_diffs(self.config)
+            logger.info(
+                f"Qrels diffs loaded: {len(self.qrels_diff) if self.qrels_diff else 0}"
+            )
+
         self._load_qrels(self.config)
         # filter queries with no qrels
         qrels_dict = defaultdict(dict)
@@ -102,7 +112,14 @@ class RetrievalDataLoader:
             for doc in self.corpus
         }
 
-        return self.corpus, self.queries, self.qrels, self.instructions, self.top_ranked
+        return (
+            self.corpus,
+            self.queries,
+            self.qrels,
+            self.instructions,
+            self.top_ranked,
+            self.qrels_diff,
+        )
 
     def load_corpus(self, config: str | None = None) -> dict[str, dict[str, str]]:
         logger.info("Loading Corpus...")
@@ -240,3 +257,15 @@ class RetrievalDataLoader:
         self.instructions = {
             row["query-id"]: row["instruction"] for row in self.instructions
         }
+
+    def _load_qrels_diffs(self, config: str | None = None):
+        config = f"qrel_diff-{config}" if config is not None else "qrel_diff"
+        qrel_diff_ds = load_dataset(
+            self.hf_repo,
+            config,
+            split=self.get_split(config),
+            trust_remote_code=self.trust_remote_code,
+            revision=self.revision,
+        )
+        changed_qrels = {item["query-id"]: item["corpus-ids"] for item in qrel_diff_ds}
+        self.qrels_diff = changed_qrels

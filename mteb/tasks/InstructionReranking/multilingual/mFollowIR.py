@@ -56,6 +56,7 @@ def load_data(
     relevant_docs = {lang: {EVAL_SPLIT: {}} for lang in langs}
     instructions = {lang: {EVAL_SPLIT: {}} for lang in langs}
     top_ranked = {lang: {EVAL_SPLIT: {}} for lang in langs}
+    qrel_diffs = {lang: {EVAL_SPLIT: {}} for lang in langs}
 
     for lang in langs:
         if "-" in lang:
@@ -126,7 +127,19 @@ def load_data(
         for row in top_ranked_data["top_ranked"]:
             top_ranked[lang][EVAL_SPLIT][row["query-id"]] = row["corpus-ids"]
 
-    return corpus, queries, instructions, relevant_docs, top_ranked
+        qrel_diff = datasets.load_dataset(
+            path,
+            f"qrel_diff-{loading_lang}",
+            split="qrel_diff",
+            cache_dir=cache_dir,
+            revision=revision,
+        )
+
+        qrel_diffs[lang][EVAL_SPLIT] = {
+            item["query-id"]: item["corpus-ids"] for item in qrel_diff
+        }
+
+    return corpus, queries, instructions, relevant_docs, top_ranked, qrel_diffs
 
 
 class mFollowIRCrossLingual(AbsTaskRetrieval):
@@ -169,6 +182,7 @@ class mFollowIRCrossLingual(AbsTaskRetrieval):
             self.instructions,
             self.relevant_docs,
             self.top_ranked,
+            self.qrels_diff,
         ) = load_data(
             path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
@@ -181,12 +195,17 @@ class mFollowIRCrossLingual(AbsTaskRetrieval):
 
     def task_specific_scores(
         self,
-        scores: dict[str, float],
+        scores: dict[str, dict[str, float]],
         qrels: dict[str, dict[str, int]],
         results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
     ) -> dict[str, float]:
         return evaluate_p_mrr_change(
-            results, qrels, self.k_values
+            results,
+            qrels,
+            self.dataset[hf_subset][hf_split]["qrels_diff"],
+            self.k_values,
         )
 
 
@@ -230,6 +249,7 @@ class mFollowIR(AbsTaskRetrieval):
             self.instructions,
             self.relevant_docs,
             self.top_ranked,
+            self.qrels_diff,
         ) = load_data(
             path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
@@ -242,11 +262,15 @@ class mFollowIR(AbsTaskRetrieval):
 
     def task_specific_scores(
         self,
-        scores: dict[str, float],
+        scores: dict[str, dict[str, float]],
         qrels: dict[str, dict[str, int]],
         results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
     ) -> dict[str, float]:
         return evaluate_p_mrr_change(
-            results, qrels, self.k_values
+            results,
+            qrels,
+            self.dataset[hf_subset][hf_split]["qrels_diff"],
+            self.k_values,
         )
-

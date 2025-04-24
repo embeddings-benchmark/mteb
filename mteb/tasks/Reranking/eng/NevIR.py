@@ -39,10 +39,16 @@ class NevIR(AbsTaskRetrieval):
 
     def task_specific_scores(
         self,
-        scores: dict[str, float],
+        scores: dict[str, dict[str, float]],
         qrels: dict[str, dict[str, int]],
         results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
     ) -> dict[str, float]:
+        import json
+
+        with open("scores.json", "w") as f:
+            json.dump(scores, f, indent=4)
         return {
             "paired_accuracy": paired_accuracy(qrels, results, scores),
         }

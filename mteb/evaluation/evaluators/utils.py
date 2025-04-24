@@ -9,7 +9,6 @@ import pytrec_eval
 import requests
 import torch
 import tqdm
-from datasets import load_dataset
 from packaging.version import Version
 from sklearn.metrics import auc
 
@@ -183,48 +182,13 @@ def calculate_pmrr(original_run, new_run, changed_qrels):
 def evaluate_p_mrr_change(
     results: dict[str, dict[str, float]],
     qrels: dict[str, dict[str, float]],
-    task_name: str,
+    changed_qrels: dict[str, list[str]],
     k_values: list[int],
 ) -> dict[str, float | dict[str, float]]:
     """Computes the scores needed for FollowIR datasets, including p-MRR (measuring change in instruction) and
     details about the original instruction run and changed instruction run.
     """
     followir_scores = defaultdict(dict)
-    # load the qrel_diff from the dataset
-    TASK_TO_HF_DATASET = {
-        "Core17InstructionRetrieval": ("jhu-clsp/core17-instructions-mteb", False),
-        "Robust04InstructionRetrieval": ("jhu-clsp/robust04-instructions-mteb", False),
-        "News21InstructionRetrieval": ("jhu-clsp/news21-instructions-mteb", False),
-        "mFollowIR": ("jhu-clsp/mfollowir-parquet-mteb", True),
-        "mFollowIRCrossLingual": (
-            "jhu-clsp/mfollowir-cross-lingual-parquet-mteb",
-            True,
-        ),
-    }
-    hf_path, is_multilingual = TASK_TO_HF_DATASET[task_name]
-    if is_multilingual:
-        # figure out which of the languages this is: ["zho", "rus", "fas"]
-        # gather the changed_qrels for each, and store the keys as a check
-        for lang in ["zho", "rus", "fas"]:
-            config_name = f"qrel_diff-{lang}"
-            changed_qrels = {
-                item["query-id"]: item["corpus-ids"]
-                for item in load_dataset(hf_path, config_name)["qrel_diff"]
-            }
-            potential_keys = {item + "-og" for item in changed_qrels.keys()} | {
-                item + "-changed" for item in changed_qrels.keys()
-            }
-            if (
-                potential_keys == set(qrels.keys())
-                or len(potential_keys - set(qrels.keys())) <= 2
-            ):  # there are about two skipped
-                break  # this is the right qrels
-
-    else:
-        changed_qrels = {
-            item["query-id"]: item["corpus-ids"]
-            for item in load_dataset(hf_path, "qrel_diff")["qrel_diff"]
-        }
 
     qrels_sep = {
         "og": {k: v for k, v in qrels.items() if k.endswith("-og")},
@@ -383,34 +347,10 @@ def nAUC(
     return abst_nauc
 
 
-def add_task_specific_scores(
-    scores: dict[str, float],
-    qrels: dict[str, dict[str, int]],
-    results: dict[str, dict[str, float]],
-    task_name: str,
-    k_values: list[int],
-) -> dict[str, float]:
-    """Add task-specific scores to the scores dictionary, that are not needed for all results but require additional computation."""
-    task_scores = {}
-
-    if task_name in [
-        "mFollowIR",
-        "mFollowIRCrossLingual",
-        "Robust04InstructionRetrieval",
-        "Core17InstructionRetrieval",
-        "News21InstructionRetrieval",
-    ]:
-        p_mrr_and_consolidated_scores = evaluate_p_mrr_change(
-            results, qrels, task_name, k_values
-        )
-        task_scores.update(p_mrr_and_consolidated_scores)
-    return task_scores
-
-
 def paired_accuracy(
     qrels: dict[str, dict[str, float]],
     results: dict[str, dict[str, float]],
-    scores: dict[str, float],
+    scores: dict[str, list[float]],
 ) -> float:
     """Computes the paired accuracy. This means both queries for an instance have to be correct for it to count.
         This is because models will prefer one passage all the time, giving it 50% automatically unless we correct for this.
@@ -441,7 +381,7 @@ def paired_accuracy(
 def robustness_at_10(
     qrels: dict[str, dict[str, float]],
     results: dict[str, dict[str, float]],
-    scores: dict[str, float],
+    scores: dict[str, dict[str, float]],
 ) -> float:
     """Computes the robustness at 10. This computes the lowest ndcg@10 over all instructions. Taken from https://arxiv.org/abs/2402.14334
 
@@ -487,13 +427,13 @@ def make_score_dict(ndcg, _map, recall, precision, mrr, naucs, naucs_mrr, task_s
     return scores
 
 
-def parse_metrics_from_scores(scores, k_values):
-    all_ndcgs, all_aps, all_recalls, all_precisions = {}, {}, {}, {}
-    for k in k_values:
-        all_ndcgs[f"NDCG@{k}"] = []
-        all_aps[f"MAP@{k}"] = []
-        all_recalls[f"Recall@{k}"] = []
-        all_precisions[f"P@{k}"] = []
+def parse_metrics_from_scores(scores: dict[str, dict[str, float]], k_values: list[int]):
+    all_ndcgs, all_aps, all_recalls, all_precisions = (
+        defaultdict(list),
+        defaultdict(list),
+        defaultdict(list),
+        defaultdict(list),
+    )
 
     for query_id in scores.keys():
         for k in k_values:
@@ -566,7 +506,7 @@ def calculate_retrieval_scores(
     qrels: dict[str, dict[str, int]],
     k_values: list[int],
 ) -> tuple[
-    dict[str, list[float]],
+    dict[str, dict[str, float]],
     dict[str, list[float]],
     dict[str, list[float]],
     dict[str, list[float]],
@@ -583,7 +523,7 @@ def calculate_retrieval_scores(
     evaluator = pytrec_eval.RelevanceEvaluator(
         qrels, {map_string, ndcg_string, recall_string, precision_string}
     )
-    scores: dict[str, list[float]] = evaluator.evaluate(results)
+    scores = evaluator.evaluate(results)
 
     (
         ndcg,

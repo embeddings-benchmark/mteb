@@ -27,6 +27,7 @@ class RetrievalEvaluator(Evaluator):
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
+        top_k: int,
         instructions: dict[str, str] | None = None,
         top_ranked: dict[str, list[str]] | None = None,
         qid: str | None = None,
@@ -91,7 +92,7 @@ class RetrievalEvaluator(Evaluator):
         k_values: list[int],
         ignore_identical_ids: bool = False,
     ) -> tuple[
-        dict[str, list[float]],
+        dict[str, dict[str, float]],
         dict[str, list[float]],
         dict[str, list[float]],
         dict[str, list[float]],

@@ -3,6 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from ....evaluation.evaluators.utils import evaluate_p_mrr_change
 
 
 class Robust04InstructionRetrieval(AbsTaskRetrieval):
@@ -39,10 +40,15 @@ class Robust04InstructionRetrieval(AbsTaskRetrieval):
 
     def task_specific_scores(
         self,
-        scores: dict[str, float],
+        scores: dict[str, dict[str, float]],
         qrels: dict[str, dict[str, int]],
         results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
     ) -> dict[str, float]:
         return evaluate_p_mrr_change(
-            results, qrels, self.k_values
+            results,
+            qrels,
+            self.dataset[hf_subset][hf_split]["qrels_diff"],
+            self.k_values,
         )

@@ -225,8 +225,10 @@ class MindSmallReranking(AbsTaskRetrieval):
 
     def task_specific_scores(
         self,
-        scores: dict[str, float],
+        scores: dict[str, dict[str, float]],
         qrels: dict[str, dict[str, int]],
         results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
     ) -> dict[str, float]:
         return max_over_subqueries(qrels, results, self.k_values)
