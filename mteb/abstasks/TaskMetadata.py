@@ -558,8 +558,8 @@ class TaskMetadata(BaseModel):
                 task_categories=dataset_type,
                 task_ids=self.task_subtypes,
                 tags=tags,
-                domains=self.domains,
             ),
+            # parameters for readme generation
             dict(
                 citation=self.bibtex_citation,
                 dataset_description=self.description,
@@ -567,6 +567,7 @@ class TaskMetadata(BaseModel):
                 descritptive_stats=descriptive_stats,
                 dataset_task_name=self.name,
                 category=self.category,
+                domains=", ".join(self.domains),
             ),
         )
 
