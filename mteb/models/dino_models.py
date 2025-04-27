@@ -7,7 +7,7 @@ import torch
 from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import AutoImageProcessor, AutoModel
+from transformers import AutoImageProcessor, AutoModel, Dinov2Model
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
@@ -26,7 +26,10 @@ class DINOModelWrapper:
     ):
         self.model_name = model_name
         self.device = device
-        self.model = AutoModel.from_pretrained(model_name).to(self.device)
+        if "webssl" in model_name:
+            self.model = Dinov2Model.from_pretrained(model_name).to(self.device)
+        else:
+            self.model = AutoModel.from_pretrained(model_name).to(self.device)
         self.processor = AutoImageProcessor.from_pretrained(model_name)
 
     @staticmethod
@@ -225,3 +228,59 @@ dinov2_giant = ModelMeta(
     use_instructions=False,
     training_datasets=dinov2_training_datasets,
 )
+
+webssl_dino_training_datasets = {
+    # MetaCLIP 2B samples
+}
+
+webssl_dino300m_full2b = ModelMeta(
+    loader=partial(
+        DINOModelWrapper,
+        model_name="facebook/webssl-dino300m-full2b-224",
+    ),
+    name="facebook/webssl-dino300m-full2b-224",
+    languages=["eng-Latn"],
+    revision="8529cdb3fb75014932af3b896455fc21c386168e",
+    release_date="2025-04-24",
+    modalities=["image"],
+    n_parameters=304_000_000,
+    memory_usage_mb=1158,
+    max_tokens=None,
+    embed_dim=1024,
+    license="cc-by-nc-4.0",
+    open_weights=True,
+    public_training_code="",
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference="https://huggingface.co/facebook/webssl-dino300m-full2b-224",
+    similarity_fn_name=None,
+    use_instructions=False,
+    training_datasets=webssl_dino_training_datasets,
+)
+
+webssl_dino1b_full2b = ModelMeta(
+    loader=partial(
+        DINOModelWrapper,
+        model_name="facebook/webssl-dino1b-full2b-224",
+    ),
+    name="facebook/webssl-dino1b-full2b-224",
+    languages=["eng-Latn"],
+    revision="d3bf033d9c8cc62ea9e73c40956642cad2ec568a",
+    release_date="2025-04-24",
+    modalities=["image"],
+    n_parameters=1_130_000_000,
+    memory_usage_mb=4329,
+    max_tokens=None,
+    embed_dim=1536,
+    license="cc-by-nc-4.0",
+    open_weights=True,
+    public_training_code="",
+    public_training_data=None,
+    framework=["PyTorch"],
+    reference="https://huggingface.co/facebook/webssl-dino1b-full2b-224",
+    similarity_fn_name=None,
+    use_instructions=False,
+    training_datasets=webssl_dino_training_datasets,
+)
+
+
