@@ -13,11 +13,11 @@
 
 {{ dataset_description }}
 
-|                |                                             |
-|----------------|---------------------------------------------|
-| Task category: | {{ category }}                              |
-| Domains        | {{ domains }}                               |
-| Reference      | {{ dataset_reference | default("", true) }} |
+|               |                                             |
+|---------------|---------------------------------------------|
+| Task category | {{ category }}                              |
+| Domains       | {{ domains }}                               |
+| Reference     | {{ dataset_reference | default("", true) }} |
 
 
 ## How to evaluate on this task
