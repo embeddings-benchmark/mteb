@@ -4,16 +4,25 @@
 {{ card_data }}
 ---
 <!-- adapted from https://github.com/huggingface/huggingface_hub/blob/v0.30.2/src/huggingface_hub/templates/datasetcard_template.md -->
-# {{ dataset_task_name }}
+
+<div align="center" style="padding: 40px 20px; background-color: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); max-width: 600px; margin: 0 auto;">
+  <h1 style="font-size: 3.5rem; color: #1a1a1a; margin: 0 0 20px 0; letter-spacing: 2px; font-weight: 700;">{{ dataset_task_name }}</h1>
+  <div style="font-size: 1.5rem; color: #4a4a4a; margin-bottom: 5px; font-weight: 300;">An <a href="https://github.com/embeddings-benchmark/mteb" style="color: #2c5282; font-weight: 600; text-decoration: none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">MTEB</a> dataset</div>
+  <div style="font-size: 0.9rem; color: #2c5282; margin-top: 10px;">Massive Text Embedding Benchmark</div>
+</div>
 
 {{ dataset_description }}
 
-> This dataset is included as a task in [`mteb`](https://github.com/embeddings-benchmark/mteb).
+|                |                                             |
+|----------------|---------------------------------------------|
+| Task category: | {{ category }}                              |
+| Domains        | {{ domains }}                               |
+| Reference      | {{ dataset_reference | default("", true) }} |
 
-- Task category: {{ category }}
-- Domains: {{ domains }}
 
 ## How to evaluate on this task
+
+You can evaluate an embedding model on this dataset using the following code:
 
 ```python
 import mteb
@@ -26,7 +35,7 @@ evaluator.run(model)
 ```
 
 <!-- Datasets want link to arxiv in readme to autolink dataset with paper -->
-Reference: {{ dataset_reference | default("", true) }}
+To learn more about how to run models on `mteb` task check out the [GitHub repitory](https://github.com/embeddings-benchmark/mteb). 
 
 ## Citation
 
@@ -57,6 +66,24 @@ If you use this dataset, please cite the dataset as well as [mteb](https://githu
 ```
 
 # Dataset Statistics
+<details>
+  <summary> Dataset Statistics</summary>
+
+The following code contains the descriptive statistics from the task. These can also be obtained using:
+
+```python
+import mteb
+
+task = mteb.get_task("{{ dataset_task_name }}")
+
+desc_stats = task.metadata.descriptive_stats
+```
+
 ```json
 {{ descritptive_stats | default("{}", true) }}
 ```
+
+</details>
+
+---
+*This dataset card was automatically generated using [MTEB](https://github.com/embeddings-benchmark/mteb)*
