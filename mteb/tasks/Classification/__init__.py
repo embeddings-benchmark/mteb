@@ -129,9 +129,12 @@ from .rus.GeoreviewClassification import *
 from .rus.HeadlineClassification import *
 from .rus.InappropriatenessClassification import *
 from .rus.KinopoiskClassification import *
+from .rus.ru_nlu_intent_classification import *
+from .rus.ru_toixic_classification_okmlcup import *
 from .rus.RuReviewsClassification import *
 from .rus.RuSciBenchGRNTIClassification import *
 from .rus.RuSciBenchOECDClassification import *
+from .rus.senti_ru_eval import *
 from .san.SanskritShlokasClassification import *
 from .sin.SinhalaNewsClassification import *
 from .sin.SinhalaNewsSourceClassification import *
