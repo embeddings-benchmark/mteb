@@ -196,7 +196,7 @@ class STSB(AbsTaskSTS):
         eval_langs=["cmn-Hans"],
         main_score="cosine_spearman",
         date=None,
-        domains=None,
+        domains=[],
         task_subtypes=None,
         license=None,
         annotations_creators=None,
