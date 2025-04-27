@@ -6,7 +6,7 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any, Union
 
-from huggingface_hub import DatasetCardData
+from huggingface_hub import DatasetCard, DatasetCardData
 from pydantic import (
     BaseModel,
     ConfigDict,
@@ -490,7 +490,7 @@ class TaskMetadata(BaseModel):
             "BitextMining": "translation",
             "Classification": "text-classification",
             "MultilabelClassification": "text-classification",
-            "Clustering": "zero-shot-classification",  # not sure
+            "Clustering": "text-clustering",
             "PairClassification": "text-classification",
             "Reranking": "text-ranking",
             "Retrieval": "text-retrieval",
@@ -503,7 +503,7 @@ class TaskMetadata(BaseModel):
             "Any2AnyRetrieval": "image-retrieval",  # currently not real HF type
             "Any2AnyMultilingualRetrieval": "image-retrieval",  # currently not real HF type
             "VisionCentricQA": "visual-question-answering",
-            "ImageClustering": "zero-shot-image-classification",
+            "ImageClustering": "image-clustering",
             "ImageClassification": "image-classification",
             "ImageMultilabelClassification": "image-classification",
             "DocumentUnderstanding": "image-retrieval",  # currently not real HF type
@@ -569,3 +569,18 @@ class TaskMetadata(BaseModel):
                 category=self.category,
             ),
         )
+
+    def generate_dataset_card(self) -> DatasetCard:
+        """Generates a dataset card for the task.
+
+        Returns:
+            DatasetCard: The dataset card for the task.
+        """
+        path = Path(__file__).parent / "dataset_card_template.md"
+        dataset_card_data, template_kwargs = self.create_dataset_card_data()
+        dataset_card = DatasetCard.from_template(
+            card_data=dataset_card_data,
+            template_path=str(path),
+            **template_kwargs,
+        )
+        return dataset_card

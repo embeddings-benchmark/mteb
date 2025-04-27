@@ -444,7 +444,7 @@ class AbsTask(ABC):
         if not self.data_loaded:
             self.load_data()
 
-        dataset_card = self.generate_dataset_card()
+        dataset_card = self.metadata.generate_dataset_card()
         dataset_card.push_to_hub(repo_name, commit_message="Add dataset card")
         self._push_dataset_to_hub(repo_name)
 
@@ -474,18 +474,3 @@ class AbsTask(ABC):
 
     def __hash__(self) -> int:
         return hash(self.metadata)
-
-    def generate_dataset_card(self) -> DatasetCard:
-        """Generates a dataset card for the task.
-
-        Returns:
-            DatasetCard: The dataset card for the task.
-        """
-        path = Path(__file__).parent / "dataset_card_template.md"
-        dataset_card_data, template_kwargs = self.metadata.create_dataset_card_data()
-        dataset_card = DatasetCard.from_template(
-            card_data=dataset_card_data,
-            template_path=str(path),
-            **template_kwargs,
-        )
-        return dataset_card
