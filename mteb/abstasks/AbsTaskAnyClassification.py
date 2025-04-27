@@ -10,7 +10,12 @@ from PIL import ImageFile
 from sklearn.base import BaseEstimator
 from sklearn.linear_model import LogisticRegression
 
-from mteb.abstasks.TaskMetadata import DescriptiveStatistics
+from mteb.abstasks.TaskMetadata import (
+    DescriptiveStatistics,
+    ImageStatistics,
+    LabelStatistics,
+    TextStatistics,
+)
 from mteb.encoder_interface import Encoder
 
 from ..evaluation.evaluators.ClassificationEvaluator import ClassificationEvaluator
@@ -29,53 +34,18 @@ class ClassificationDescriptiveStatistics(DescriptiveStatistics):
         number_of_characters: Total number of symbols in the dataset.
         number_texts_intersect_with_train: Number of texts in the train split
 
-        min_text_length: Minimum length of text
-        average_text_length: Average length of text
-        max_text_length: Maximum length of text
-        unique_texts: Number of unique texts
-
-        min_labels_per_text: Minimum number of labels per text
-        average_label_per_text: Average number of labels per text
-        max_labels_per_text: Maximum number of labels per text
-
-        min_image_width: Minimum width of images
-        average_image_width: Average width of images
-        max_image_width: Maximum width of images
-
-        min_image_height: Minimum height of images
-        average_image_height: Average height of images
-        max_image_height: Maximum height of images
-
-
-        unique_labels: Number of unique labels
-        labels: dict of label frequencies
+        text_statistics: Statistics for text
+        image_statistics: Statistics for images
+        label_statistics: Statistics for labels
     """
 
     num_samples: int
     number_of_characters: int | None
     number_texts_intersect_with_train: int | None
 
-    # will be None for image tasks
-    min_text_length: int | None
-    average_text_length: float | None
-    max_text_length: int | None
-    unique_texts: int | None
-
-    # will be None for text tasks
-    min_image_width: float | None
-    average_image_width: float | None
-    max_image_width: float | None
-
-    min_image_height: float | None
-    average_image_height: float | None
-    max_image_height: float | None
-
-    min_labels_per_text: int
-    average_label_per_text: float
-    max_labels_per_text: int
-
-    unique_labels: int
-    labels: dict[str, dict[str, int]]
+    text_statistics: TextStatistics | None
+    image_statistics: ImageStatistics | None
+    label_statistics: LabelStatistics
 
 
 class AbsTaskAnyClassification(AbsTask):
@@ -290,29 +260,29 @@ class AbsTaskAnyClassification(AbsTask):
 
         label_count = Counter(total_labels)
 
-        return ClassificationDescriptiveStatistics(
-            num_samples=len(inputs),
-            # text
-            number_of_characters=total_text_len,
-            number_texts_intersect_with_train=num_texts_in_train
-            if num_texts_in_train
-            else None,
-            min_text_length=min(text_len) if text_len else None,
-            average_text_length=total_text_len / len(inputs) if text_len else None,
-            max_text_length=max(text_len) if text_len else None,
-            unique_texts=len(set(inputs)) if text_len else None,
-            # image
-            min_image_width=min(img_widths) if img_widths else None,
-            average_image_width=sum(img_widths) / len(img_widths)
-            if img_widths
-            else None,
-            max_image_width=max(img_widths) if img_widths else None,
-            min_image_height=min(img_heights) if img_heights else None,
-            average_image_height=sum(img_heights) / len(img_heights)
-            if img_heights
-            else None,
-            max_image_height=max(img_heights) if img_heights else None,
-            # labels
+        if text_len:
+            text_statistics = TextStatistics(
+                min_text_length=min(text_len),
+                average_text_length=total_text_len / len(inputs),
+                max_text_length=max(text_len),
+                unique_texts=len(set(inputs)),
+            )
+        else:
+            text_statistics = None
+
+        if img_widths:
+            image_statistics = ImageStatistics(
+                min_image_width=min(img_widths),
+                average_image_width=sum(img_widths) / len(img_widths),
+                max_image_width=max(img_widths),
+                min_image_height=min(img_heights),
+                average_image_height=sum(img_heights) / len(img_heights),
+                max_image_height=max(img_heights),
+            )
+        else:
+            image_statistics = None
+
+        label_statistics = LabelStatistics(
             min_labels_per_text=min(label_len),
             average_label_per_text=total_label_len / len(label),
             max_labels_per_text=max(label_len),
@@ -323,6 +293,18 @@ class AbsTaskAnyClassification(AbsTask):
                 }
                 for label, value in label_count.items()
             },
+        )
+
+        return ClassificationDescriptiveStatistics(
+            num_samples=len(inputs),
+            # text
+            number_of_characters=total_text_len,
+            number_texts_intersect_with_train=num_texts_in_train
+            if num_texts_in_train
+            else None,
+            text_statistics=text_statistics,
+            image_statistics=image_statistics,
+            label_statistics=label_statistics,
         )
 
     def _push_dataset_to_hub(self, repo_name: str) -> None:
