@@ -62,7 +62,7 @@ dev = [
 "iso639>=0.1.4", # used for tests/scripts/test_generate_model_meta.py
 "pre-commit>=4.1.0",
 ]
-codecarbon = ["codecarbon"]
+codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
 speedtask = [
     "setuptools!=78.0.1",  # https://github.com/pypa/setuptools/issues/4910
     "GPUtil>=1.4.0",
