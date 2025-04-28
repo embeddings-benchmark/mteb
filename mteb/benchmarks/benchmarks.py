@@ -1731,7 +1731,7 @@ MIEB_LITE = Benchmark(
 MIEB_IMG = Benchmark(
     name="MIEB(Img)",
     tasks=get_tasks(
-        [
+        tasks=[
             "CUB200I2IRetrieval",
             "FORBI2IRetrieval",
             "GLDv2I2IRetrieval",
