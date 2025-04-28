@@ -1788,7 +1788,7 @@ MIEB_IMG = Benchmark(
             "UCF101ZeroShot",
         ],
     ),
-    description="",
+    description="A image-only version of MIEB(Multilingual) that consists of 54 tasks.",
     reference="https://arxiv.org/abs/2504.10471",
     citation="""@misc{xiao2025miebmassiveimageembedding,
       title={MIEB: Massive Image Embedding Benchmark},
