@@ -85,6 +85,7 @@ from mteb.models import (
     vlm2vec_models,
     voyage_models,
     voyage_v,
+    seed_models,
 )
 
 logger = logging.getLogger(__name__)
@@ -163,6 +164,7 @@ model_modules = [
     ara_models,
     b1ade_models,
     nb_sbert,
+    seed_models
 ]
 MODEL_REGISTRY = {}
 
