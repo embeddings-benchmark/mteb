@@ -1588,7 +1588,7 @@ MIEB_common_tasks = [
 
 MIEB_ENG = Benchmark(
     name="MIEB(eng)",
-    display_name="Images, English",
+    display_name="Image-Text, English",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-picture.svg",
     tasks=get_tasks(
         tasks=MIEB_common_tasks
@@ -1615,7 +1615,7 @@ MIEB_ENG = Benchmark(
 
 MIEB_MULTILINGUAL = Benchmark(
     name="MIEB(Multilingual)",
-    display_name="Images, Multilingual",
+    display_name="Image-Text, Multilingual",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-pictures.svg",
     tasks=get_tasks(
         tasks=MIEB_common_tasks
@@ -1648,7 +1648,7 @@ MIEB_MULTILINGUAL = Benchmark(
 
 MIEB_LITE = Benchmark(
     name="MIEB(lite)",
-    display_name="Images, Lite",
+    display_name="Image-Text, Lite",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-map-landscape.svg",
     tasks=get_tasks(
         tasks=[
@@ -1730,6 +1730,8 @@ MIEB_LITE = Benchmark(
 
 MIEB_IMG = Benchmark(
     name="MIEB(Img)",
+    display_name="Image only",
+      icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-pictures.svg",
     tasks=get_tasks(
         tasks=[
             "CUB200I2IRetrieval",
