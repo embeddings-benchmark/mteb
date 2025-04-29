@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsAnyTaskSTS import AbsAnyTaskSTS
+from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 
-class STS12STS(AbsAnyTaskSTS):
+class STS12STS(AbsTaskAnySTS):
     min_score = 0
     max_score = 5
 

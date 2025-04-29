@@ -6,7 +6,7 @@ import numpy as np
 from datasets import Dataset, DatasetDict
 from PIL import Image
 
-from mteb.abstasks.AbsAnyTaskSTS import AbsAnyTaskSTS
+from mteb.abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
@@ -863,7 +863,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
         self.data_loaded = True
 
 
-class MockSTSTask(AbsAnyTaskSTS):
+class MockSTSTask(AbsTaskAnySTS):
     expected_stats = {
         "test": {
             "num_samples": 2,
@@ -915,7 +915,7 @@ class MockSTSTask(AbsAnyTaskSTS):
     max_score = 1
 
 
-class MockMultilingualSTSTask(AbsAnyTaskSTS):
+class MockMultilingualSTSTask(AbsTaskAnySTS):
     expected_stats = {
         "test": {
             "num_samples": 4,
@@ -2825,7 +2825,7 @@ class MockMultilingualImageTextPairClassificationTask(
         self.data_loaded = True
 
 
-class MockVisualSTSTask(AbsAnyTaskSTS):
+class MockVisualSTSTask(AbsTaskAnySTS):
     expected_stats = {
         "test": {
             "average_image_size": 26.0,

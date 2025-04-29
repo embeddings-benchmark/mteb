@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsAnyTaskSTS import AbsAnyTaskSTS
+from mteb.abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -19,7 +19,7 @@ _LANGUAGES = {
 _SPLITS = ["dev", "test"]
 
 
-class STSBenchmarkMultilingualSTS(AbsAnyTaskSTS):
+class STSBenchmarkMultilingualSTS(AbsTaskAnySTS):
     fast_loading = True
     metadata = TaskMetadata(
         name="STSBenchmarkMultilingualSTS",

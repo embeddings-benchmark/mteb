@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsAnyTaskSTS import AbsAnyTaskSTS
+from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 N_SAMPLES = 1000
 
 
-class SickBrSTS(AbsAnyTaskSTS):
+class SickBrSTS(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="SICK-BR-STS",
         dataset={

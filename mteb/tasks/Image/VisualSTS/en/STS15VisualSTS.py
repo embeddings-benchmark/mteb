@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsAnyTaskSTS import AbsAnyTaskSTS
+from mteb.abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class STS15VisualSTS(AbsAnyTaskSTS):
+class STS15VisualSTS(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="STS15VisualSTS",
         dataset={

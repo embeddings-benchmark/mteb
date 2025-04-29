@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from .AbsAnyTaskSTS import AbsAnyTaskSTS
 from .AbsTask import AbsTask
+from .AbsTaskAnySTS import AbsTaskAnySTS
 from .AbsTaskBitextMining import AbsTaskBitextMining
 from .AbsTaskClassification import AbsTaskClassification
 from .AbsTaskClustering import AbsTaskClustering
@@ -30,7 +30,7 @@ __all__ = [
     "AbsTaskMultilabelClassification",
     "AbsTaskPairClassification",
     "AbsTaskRetrieval",
-    "AbsAnyTaskSTS",
+    "AbsTaskAnySTS",
     "AbsTaskSummarization",
     "TaskMetadata",
     "AbsTaskAny2AnyMultiChoice",

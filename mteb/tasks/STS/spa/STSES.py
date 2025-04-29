@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsAnyTaskSTS import AbsAnyTaskSTS
+from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 _EVAL_SPLIT = "test"
 
 
-class STSES(AbsAnyTaskSTS):
+class STSES(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="STSES",
         dataset={

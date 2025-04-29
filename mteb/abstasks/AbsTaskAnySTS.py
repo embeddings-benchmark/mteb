@@ -6,8 +6,8 @@ from typing import Any
 from datasets import Dataset
 
 from mteb.abstasks.TaskMetadata import DescriptiveStatistics
+from mteb.encoder_interface import Encoder
 
-from .. import Encoder
 from ..evaluation.evaluators import AnySTSEvaluator
 from ..load_results.task_results import ScoresDict
 from .AbsTask import AbsTask
@@ -55,7 +55,7 @@ class STSDescriptiveStatistics(DescriptiveStatistics):
     max_score: float
 
 
-class AbsAnyTaskSTS(AbsTask):
+class AbsTaskAnySTS(AbsTask):
     """Abstract class for STS experiments.
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns::
