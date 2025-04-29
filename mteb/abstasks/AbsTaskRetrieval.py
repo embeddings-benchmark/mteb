@@ -3,10 +3,9 @@ from __future__ import annotations
 import json
 import logging
 from collections import defaultdict
-from collections.abc import Mapping
 from pathlib import Path
 from time import time
-from typing import Any, Callable, TypedDict
+from typing import Any, Callable
 
 from datasets import Dataset, DatasetDict
 
@@ -17,7 +16,7 @@ from ..evaluation.evaluators import RetrievalEvaluator
 from ..evaluation.evaluators.utils import make_score_dict
 from ..load_results.task_results import ScoresDict
 from .AbsTask import AbsTask
-from .dataloaders import RetrievalDataLoader
+from .dataloaders import RetrievalDataLoader, RetrievalSplitData
 
 logger = logging.getLogger(__name__)
 
@@ -96,14 +95,6 @@ class RetrievalDescriptiveStatistics(DescriptiveStatistics):
     max_top_ranked_per_query: int | None
 
 
-class SplitData(TypedDict, total=False):
-    corpus: Mapping[str, str | dict[str, str]]
-    queries: Mapping[str, str]
-    relevant_docs: Mapping[str, Mapping[str, float]]
-    instructions: Mapping[str, str] | None
-    top_ranked: Mapping[str, list[str]] | None
-
-
 class AbsTaskRetrieval(AbsTask):
     """Abstract class for retrieval experiments.
 
@@ -138,7 +129,7 @@ class AbsTaskRetrieval(AbsTask):
     ignore_identical_ids: bool = False
     abstask_prompt = "Retrieve text based on user query."
     top_k = 100
-    dataset: dict[str, dict[str, SplitData]]
+    dataset: dict[str, dict[str, RetrievalSplitData]]
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -223,23 +214,14 @@ class AbsTaskRetrieval(AbsTask):
             logger.info(
                 f"Loading {split} split for {hf_subset} subset of {self.metadata.name}"
             )
-            corpus, queries, relevant_docs, instructions, top_ranked = (
-                RetrievalDataLoader(
-                    hf_repo=dataset_path,
-                    revision=revision,
-                    trust_remote_code=trust_remote_code,
-                    split=split,
-                    config=hf_subset,
-                ).load()
-            )
 
-            self.dataset[hf_subset][split] = {
-                "corpus": corpus,
-                "queries": queries,
-                "relevant_docs": relevant_docs,
-                "instructions": instructions,
-                "top_ranked": top_ranked,
-            }
+            self.dataset[hf_subset][split] = RetrievalDataLoader(
+                hf_repo=dataset_path,
+                revision=revision,
+                trust_remote_code=trust_remote_code,
+                split=split,
+                config=hf_subset,
+            ).load()
 
         if self.metadata.is_multilingual:
             for lang in self.metadata.eval_langs:
