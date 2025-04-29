@@ -1,22 +1,20 @@
 from __future__ import annotations
 
-from functools import partial
-from typing import Any, Callable
-import time
+import logging
 import os
+import time
+from functools import partial
+from typing import Any
 
 import numpy as np
+import tiktoken
 import torch
 import tqdm
-import tiktoken
-import logging
-
-from openai import OpenAI
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
-
+from mteb.requires_package import requires_package
 
 logger = logging.getLogger(__name__)
 
@@ -25,24 +23,24 @@ class SeedTextEmbeddingModel(Wrapper):
     def __init__(
         self,
         model_name: str,
-        model_prompts: dict[str, str] | None = None,
         rate_limit_per_minute: int = 300,
-        instruction_template: str | Callable[[str], str] | None = None,
         **kwargs,
     ) -> None:
-        if (
-            isinstance(instruction_template, str)
-            and "{instruction}" not in instruction_template
-        ):
-            raise ValueError(
-                "Instruction template must contain the string '{instruction}'."
-            )
-        if instruction_template is None:
-            logger.warning(
-                "No instruction template provided. Instructions will be used as-is."
-            )
-            
-        self.instruction_template = instruction_template
+        requires_package(
+            self,
+            "openai",
+            model_name,
+            install_instruction="pip install 'mteb[openai]'",
+        )
+        from openai import OpenAI
+
+        requires_package(
+            self,
+            "tiktoken",
+            model_name,
+            install_instruction="pip install 'mteb[openai]'",
+        )
+
         self.model_name = model_name
         self.rate_limit_per_minute = rate_limit_per_minute
         self.last_request_time = 0
@@ -57,10 +55,10 @@ class SeedTextEmbeddingModel(Wrapper):
         current_time = time.time()
         time_since_last_request = current_time - self.last_request_time
         min_interval = 60.0 / self.rate_limit_per_minute
-        
+
         if time_since_last_request < min_interval:
             time.sleep(min_interval - time_since_last_request)
-        
+
         self.last_request_time = time.time()
 
     def _truncate_text(self, text: str, max_tokens: int = 32000) -> str:
@@ -97,7 +95,7 @@ class SeedTextEmbeddingModel(Wrapper):
         for batch in tqdm.tqdm(batches, leave=False, disable=not show_progress_bar):
             # Truncate texts
             batch = [self._truncate_text(text) for text in batch]
-            
+
             # Add instruction to each text
             batch = [self._format_instruction(instruction, text) for text in batch]
 
@@ -105,9 +103,7 @@ class SeedTextEmbeddingModel(Wrapper):
                 try:
                     self._enforce_rate_limit()
                     response = self.client.embeddings.create(
-                        model=self.model_name,
-                        input=batch,
-                        encoding_format="float"
+                        model=self.model_name, input=batch, encoding_format="float"
                     )
                     embeddings = [x.embedding for x in response.data]
                     break
@@ -129,7 +125,7 @@ class SeedTextEmbeddingModel(Wrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        logger.warning(f"The API will be publicly available soon. Stay tuned!")
+        logger.warning("The API will be publicly available soon. Stay tuned!")
 
         instruction = self.get_instruction(task_name, prompt_type)
         show_progress_bar = kwargs.pop("show_progress_bar", False)
@@ -140,10 +136,6 @@ class SeedTextEmbeddingModel(Wrapper):
             show_progress_bar=show_progress_bar,
         )
 
-def instruction_template(
-    instruction: str, prompt_type: PromptType | None = None
-) -> str:
-    return f"Instruct: {instruction}\nQuery: " if instruction else ""
 
 seed_embedding = ModelMeta(
     name="ByteDance-Seed/Doubao-1.5-Embedding",
@@ -156,9 +148,7 @@ seed_embedding = ModelMeta(
     loader=partial(
         SeedTextEmbeddingModel,
         model_name="ByteDance-Seed/Doubao-1.5-Embedding",
-        model_prompts=None,
         rate_limit_per_minute=300,
-        instruction_template=instruction_template,
     ),
     max_tokens=32768,
     embed_dim=2048,

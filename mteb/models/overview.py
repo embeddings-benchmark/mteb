@@ -72,6 +72,7 @@ from mteb.models import (
     ru_sentence_models,
     salesforce_models,
     searchmap_models,
+    seed_models,
     sentence_transformers_models,
     shuu_model,
     siglip_models,
@@ -85,7 +86,6 @@ from mteb.models import (
     vlm2vec_models,
     voyage_models,
     voyage_v,
-    seed_models,
 )
 
 logger = logging.getLogger(__name__)
@@ -164,7 +164,7 @@ model_modules = [
     ara_models,
     b1ade_models,
     nb_sbert,
-    seed_models
+    seed_models,
 ]
 MODEL_REGISTRY = {}
 
