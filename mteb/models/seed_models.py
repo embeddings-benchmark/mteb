@@ -7,7 +7,6 @@ from functools import partial
 from typing import Any
 
 import numpy as np
-import torch
 import tqdm
 
 from mteb.encoder_interface import PromptType
