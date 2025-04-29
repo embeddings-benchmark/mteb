@@ -178,8 +178,8 @@ def calculate_pmrr(original_run, new_run, changed_qrels):
 
 
 def evaluate_p_mrr_change(
-    results: dict[str, dict[str, float]],
     qrels: dict[str, dict[str, float]],
+    results: dict[str, dict[str, float]],
     changed_qrels: dict[str, list[str]],
     k_values: list[int],
 ) -> dict[str, float | dict[str, float]]:
@@ -307,7 +307,7 @@ def nAUC(
 
         for i, rate in enumerate(abstention_rates):
             num_instances_abst = min(
-                round(rate * len(conf_scores_argsort)), len(conf_scores) - 1
+                round(rate * conf_scores_argsort.shape[0]), len(conf_scores) - 1
             )
             abst_curve[i] = metrics[conf_scores_argsort[num_instances_abst:]].mean()
 
@@ -387,8 +387,17 @@ def robustness_at_10(
     return sum(robustness_scores) / len(robustness_scores)
 
 
-def make_score_dict(ndcg, _map, recall, precision, mrr, naucs, naucs_mrr, task_scores):
-    scores = {
+def make_score_dict(
+    ndcg: dict[str, float],
+    _map: dict[str, float],
+    recall: dict[str, float],
+    precision: dict[str, float],
+    mrr: dict[str, float],
+    naucs: dict[str, float],
+    naucs_mrr: dict[str, float],
+    task_scores: dict[str, float],
+) -> dict[str, float]:
+    return {
         **{f"ndcg_at_{k.split('@')[1]}": v for (k, v) in ndcg.items()},
         **{f"map_at_{k.split('@')[1]}": v for (k, v) in _map.items()},
         **{f"recall_at_{k.split('@')[1]}": v for (k, v) in recall.items()},
@@ -404,10 +413,20 @@ def make_score_dict(ndcg, _map, recall, precision, mrr, naucs, naucs_mrr, task_s
         },
         **task_scores,
     }
-    return scores
 
 
-def parse_metrics_from_scores(scores: dict[str, dict[str, float]], k_values: list[int]):
+def parse_metrics_from_scores(
+    scores: dict[str, dict[str, float]], k_values: list[int]
+) -> tuple[
+    dict[str, float],
+    dict[str, float],
+    dict[str, float],
+    dict[str, float],
+    dict[str, list[float]],
+    dict[str, list[float]],
+    dict[str, list[float]],
+    dict[str, list[float]],
+]:
     all_ndcgs, all_aps, all_recalls, all_precisions = (
         defaultdict(list),
         defaultdict(list),
@@ -422,18 +441,13 @@ def parse_metrics_from_scores(scores: dict[str, dict[str, float]], k_values: lis
             all_recalls[f"Recall@{k}"].append(scores[query_id]["recall_" + str(k)])
             all_precisions[f"P@{k}"].append(scores[query_id]["P_" + str(k)])
 
-    ndcg, _map, recall, precision = (
-        all_ndcgs.copy(),
-        all_aps.copy(),
-        all_recalls.copy(),
-        all_precisions.copy(),
-    )
+    ndcg, _map, recall, precision = {}, {}, {}, {}
 
     for k in k_values:
-        ndcg[f"NDCG@{k}"] = round(sum(ndcg[f"NDCG@{k}"]) / len(scores), 5)
-        _map[f"MAP@{k}"] = round(sum(_map[f"MAP@{k}"]) / len(scores), 5)
-        recall[f"Recall@{k}"] = round(sum(recall[f"Recall@{k}"]) / len(scores), 5)
-        precision[f"P@{k}"] = round(sum(precision[f"P@{k}"]) / len(scores), 5)
+        ndcg[f"NDCG@{k}"] = round(sum(all_ndcgs[f"NDCG@{k}"]) / len(scores), 5)
+        _map[f"MAP@{k}"] = round(sum(all_aps[f"MAP@{k}"]) / len(scores), 5)
+        recall[f"Recall@{k}"] = round(sum(all_recalls[f"Recall@{k}"]) / len(scores), 5)
+        precision[f"P@{k}"] = round(sum(all_precisions[f"P@{k}"]) / len(scores), 5)
 
     return (
         ndcg,
@@ -447,7 +461,11 @@ def parse_metrics_from_scores(scores: dict[str, dict[str, float]], k_values: lis
     )
 
 
-def max_over_subqueries(qrels, results, k_values):
+def max_over_subqueries(
+    qrels: dict[str, dict[str, float]],
+    results: dict[str, dict[str, float]],
+    k_values: list[int],
+) -> dict[str, float]:
     """Computes the max over subqueries scores when merging.
 
     Args:
@@ -485,14 +503,14 @@ def max_over_subqueries(qrels, results, k_values):
 
 def calculate_retrieval_scores(
     results: dict[str, dict[str, float]],
-    qrels: dict[str, dict[str, int]],
+    qrels: dict[str, dict[str, float]],
     k_values: list[int],
 ) -> tuple[
     dict[str, dict[str, float]],
-    dict[str, list[float]],
-    dict[str, list[float]],
-    dict[str, list[float]],
-    dict[str, list[float]],
+    dict[str, float],
+    dict[str, float],
+    dict[str, float],
+    dict[str, float],
     dict[str, float],
     dict[str, float],
     dict[str, float],
@@ -505,7 +523,7 @@ def calculate_retrieval_scores(
     evaluator = pytrec_eval.RelevanceEvaluator(
         qrels, {map_string, ndcg_string, recall_string, precision_string}
     )
-    scores = evaluator.evaluate(results)
+    scores: dict[str, dict[str, float]] = evaluator.evaluate(results)
 
     (
         ndcg,

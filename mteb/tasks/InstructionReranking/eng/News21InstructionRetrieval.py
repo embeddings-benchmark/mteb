@@ -47,8 +47,8 @@ class News21InstructionRetrieval(AbsTaskRetrieval):
         hf_subset: str,
     ) -> dict[str, float]:
         return evaluate_p_mrr_change(
-            results,
             qrels,
+            results,
             self.dataset[hf_subset][hf_split]["qrels_diff"],
             self.k_values,
         )
