@@ -7,7 +7,6 @@ from functools import partial
 from typing import Any
 
 import numpy as np
-import tiktoken
 import torch
 import tqdm
 
@@ -40,6 +39,7 @@ class SeedTextEmbeddingModel(Wrapper):
             model_name,
             install_instruction="pip install 'mteb[openai]'",
         )
+        import tiktoken
 
         self.model_name = model_name
         self.rate_limit_per_minute = rate_limit_per_minute
@@ -113,7 +113,7 @@ class SeedTextEmbeddingModel(Wrapper):
                     if retries == 0:
                         raise e
 
-            all_embeddings.extend(torch.tensor(embeddings).numpy())
+            all_embeddings.extend(embeddings)
 
         return np.array(all_embeddings)
 
