@@ -12,12 +12,14 @@ task_list_sts17: list[AbsTask] = [
 
 
 class STS17MultilingualVisualSTSEng(AbsTaskAggregate):
+    is_multilingual=True
     metadata = AggregateTaskMetadata(
         name="VisualSTS17Eng",
         description="STS17MultilingualVisualSTS English only.",
         reference="https://arxiv.org/abs/2402.08183/",
         tasks=task_list_sts17,
         category="i2i",
+        modalities=["image"]
         license="not specified",
         annotations_creators="human-annotated",
         dialect=[""],
