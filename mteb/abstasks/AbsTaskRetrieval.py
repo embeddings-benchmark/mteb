@@ -16,7 +16,7 @@ from ..evaluation.evaluators import RetrievalEvaluator
 from ..evaluation.evaluators.utils import make_score_dict
 from ..load_results.task_results import ScoresDict
 from .AbsTask import AbsTask
-from .dataloaders import RetrievalDataLoader, RetrievalSplitData
+from .task_data_loaders import RetrievalDataLoader, RetrievalSplitData
 
 logger = logging.getLogger(__name__)
 
