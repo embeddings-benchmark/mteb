@@ -146,7 +146,7 @@ seed_embedding = ModelMeta(
     ],
     loader=partial(
         SeedTextEmbeddingModel,
-        model_name="ByteDance-Seed/Doubao-1.5-Embedding",
+        model_name="doubao-1-5-embedding",
         rate_limit_per_minute=300,
     ),
     max_tokens=32768,
