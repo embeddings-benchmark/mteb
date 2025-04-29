@@ -3,7 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ....evaluation.evaluators.utils import paired_accuracy
+from ....evaluation.evaluators.retrieval_metrics import paired_accuracy
 
 
 class NevIR(AbsTaskRetrieval):

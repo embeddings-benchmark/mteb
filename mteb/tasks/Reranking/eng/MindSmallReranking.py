@@ -8,7 +8,7 @@ import tqdm
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ....evaluation.evaluators.utils import max_over_subqueries
+from ....evaluation.evaluators.retrieval_metrics import max_over_subqueries
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

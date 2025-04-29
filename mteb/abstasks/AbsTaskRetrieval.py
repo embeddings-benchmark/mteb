@@ -14,7 +14,7 @@ from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset
 from mteb.encoder_interface import Encoder
 
 from ..evaluation.evaluators import RetrievalEvaluator
-from ..evaluation.evaluators.utils import make_score_dict
+from ..evaluation.evaluators.retrieval_metrics import make_score_dict
 from ..load_results.task_results import ScoresDict
 from .AbsTask import AbsTask
 from .dataloaders import RetrievalDataLoader

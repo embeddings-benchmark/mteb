@@ -7,7 +7,7 @@ import datasets
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ....evaluation.evaluators.utils import evaluate_p_mrr_change
+from ....evaluation.evaluators.retrieval_metrics import evaluate_p_mrr_change
 
 logger = getLogger(__name__)
 

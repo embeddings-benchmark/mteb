@@ -3,7 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ....evaluation.evaluators.utils import evaluate_p_mrr_change
+from ....evaluation.evaluators.retrieval_metrics import evaluate_p_mrr_change
 
 
 class News21InstructionRetrieval(AbsTaskRetrieval):

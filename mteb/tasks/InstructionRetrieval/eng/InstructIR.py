@@ -3,7 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from ....evaluation.evaluators.utils import robustness_at_10
+from ....evaluation.evaluators.retrieval_metrics import robustness_at_10
 
 
 class InstructIR(AbsTaskRetrieval):

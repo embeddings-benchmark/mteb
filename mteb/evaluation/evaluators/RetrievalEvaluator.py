@@ -12,7 +12,7 @@ from .model_classes import (
     DenseRetrievalExactSearch,
     is_cross_encoder_compatible,
 )
-from .utils import (
+from .retrieval_metrics import (
     calculate_retrieval_scores,
 )
 
