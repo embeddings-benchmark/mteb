@@ -1731,7 +1731,7 @@ MIEB_LITE = Benchmark(
 MIEB_IMG = Benchmark(
     name="MIEB(Img)",
     display_name="Image only",
-      icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-pictures.svg",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-pictures.svg",
     tasks=get_tasks(
         tasks=[
             "CUB200I2IRetrieval",
