@@ -252,6 +252,7 @@ def confidence_scores(sim_scores: list[float]) -> dict[str, float]:
 
     cs_max = sim_scores_sorted[0]
     cs_std = np.std(sim_scores)
+    cs_diff1 = None
     if len(sim_scores) > 1:
         cs_diff1 = sim_scores_sorted[0] - sim_scores_sorted[1]
     elif len(sim_scores) == 1:
@@ -329,7 +330,7 @@ def nAUC(
 def paired_accuracy(
     qrels: dict[str, dict[str, float]],
     results: dict[str, dict[str, float]],
-    scores: dict[str, list[float]],
+    scores: dict[str, dict[str, float]],
 ) -> float:
     """Computes the paired accuracy. This means both queries for an instance have to be correct for it to count.
         This is because models will prefer one passage all the time, giving it 50% automatically unless we correct for this.
@@ -473,10 +474,12 @@ def max_over_subqueries(qrels, results, k_values):
         new_qrels[query_id_base] = qrels[query_id_full]  # all the same
 
     # now we have the new results, we can compute the scores
-    _, ndcg, _map, recall, precision, naucs = calculate_retrieval_scores(
-        new_results, new_qrels, k_values
+    _, ndcg, _map, recall, precision, naucs, mrr, naucs_mrr = (
+        calculate_retrieval_scores(new_results, new_qrels, k_values)
     )
-    score_dict = make_score_dict(ndcg, _map, recall, precision, {}, naucs, {}, {})
+    score_dict = make_score_dict(
+        ndcg, _map, recall, precision, naucs, mrr, naucs_mrr, {}
+    )
     return {"max_over_subqueries_" + k: v for k, v in score_dict.items()}
 
 
