@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
+from mteb.abstasks.AbsAnyTaskSTS import AbsAnyTaskSTS
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class JSICK(AbsTaskSTS):
+class JSICK(AbsAnyTaskSTS):
     metadata = TaskMetadata(
         name="JSICK",
         dataset={

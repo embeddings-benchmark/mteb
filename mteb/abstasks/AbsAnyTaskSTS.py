@@ -3,9 +3,12 @@ from __future__ import annotations
 import logging
 from typing import Any
 
+from datasets import Dataset
+
 from mteb.abstasks.TaskMetadata import DescriptiveStatistics
 
-from ..evaluation.evaluators import STSEvaluator
+from .. import Encoder
+from ..evaluation.evaluators import AnySTSEvaluator
 from ..load_results.task_results import ScoresDict
 from .AbsTask import AbsTask
 
@@ -52,7 +55,7 @@ class STSDescriptiveStatistics(DescriptiveStatistics):
     max_score: float
 
 
-class AbsTaskSTS(AbsTask):
+class AbsAnyTaskSTS(AbsTask):
     """Abstract class for STS experiments.
 
     self.load_data() must generate a huggingface dataset with a split matching self.metadata.eval_splits, and assign it to self.dataset. It must contain the following columns::
@@ -62,26 +65,23 @@ class AbsTaskSTS(AbsTask):
     """
 
     abstask_prompt = "Retrieve semantically similar text."
-    min_score: int
-    max_score: int
+    column_names: tuple[str, str] = ("sentence1", "sentence2")
+    min_score: int = 0
+    max_score: int = 5
 
     def _evaluate_subset(
         self,
-        model,
-        data_split,
-        *,
+        model: Encoder,
+        data_split: Dataset,
+        encode_kwargs: dict[str, Any],
         hf_split: str,
         hf_subset: str,
-        encode_kwargs: dict[str, Any],
-        **kwargs,
+        **kwargs: Any,
     ) -> ScoresDict:
-        def normalize(x):
-            return (x - self.min_score) / (self.max_score - self.min_score)
-
-        normalized_scores = list(map(normalize, data_split["score"]))
-        evaluator = STSEvaluator(
-            data_split["sentence1"],
-            data_split["sentence2"],
+        normalized_scores = list(map(self.normalize, data_split["score"]))
+        evaluator = AnySTSEvaluator(
+            data_split,
+            self.column_names,
             normalized_scores,
             task_metadata=self.metadata,
             hf_split=hf_split,
@@ -89,13 +89,12 @@ class AbsTaskSTS(AbsTask):
             **kwargs,
         )
         scores = evaluator(model, encode_kwargs=encode_kwargs)
-
-        self._add_main_score(scores)
         return scores
 
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> STSDescriptiveStatistics:
+        # TODO integrate image
         if hf_subset:
             sentence1 = self.dataset[hf_subset][split]["sentence1"]
             sentence2 = self.dataset[hf_subset][split]["sentence2"]
@@ -136,4 +135,9 @@ class AbsTaskSTS(AbsTask):
         )
 
     def _push_dataset_to_hub(self, repo_name: str) -> None:
-        self._upload_dataset_to_hub(repo_name, ["sentence1", "sentence2", "score"])
+        self._upload_dataset_to_hub(
+            repo_name, [self.column_names[0], self.column_names[1], "score"]
+        )
+
+    def normalize(self, x: float) -> float:
+        return (x - self.min_score) / (self.max_score - self.min_score)

@@ -170,7 +170,7 @@ class AbsTask(ABC):
     def _evaluate_subset(
         self,
         model: Encoder,
-        data_split: DatasetDict | Dataset,
+        data_split: Dataset,
         encode_kwargs: dict[str, Any],
         hf_split: str,
         hf_subset: str,

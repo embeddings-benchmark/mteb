@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from .evaluators import (
+    AnySTSEvaluator,
     BitextMiningEvaluator,
     ClassificationEvaluator,
     ClusteringEvaluator,
@@ -9,7 +10,6 @@ from .evaluators import (
     Evaluator,
     PairClassificationEvaluator,
     RetrievalEvaluator,
-    STSEvaluator,
     SummarizationEvaluator,
     dot_distance,
     kNNClassificationEvaluator,
@@ -20,7 +20,7 @@ from .MTEB import MTEB
 
 __all__ = [
     "Evaluator",
-    "STSEvaluator",
+    "AnySTSEvaluator",
     "SummarizationEvaluator",
     "DeprecatedSummarizationEvaluator",
     "RetrievalEvaluator",

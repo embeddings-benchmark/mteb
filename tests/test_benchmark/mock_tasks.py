@@ -6,6 +6,7 @@ import numpy as np
 from datasets import Dataset, DatasetDict
 from PIL import Image
 
+from mteb.abstasks.AbsAnyTaskSTS import AbsAnyTaskSTS
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
 from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
 from mteb.abstasks.AbsTaskClustering import AbsTaskClustering
@@ -15,7 +16,6 @@ from mteb.abstasks.AbsTaskMultilabelClassification import (
 )
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
 from mteb.abstasks.AbsTaskSummarization import AbsTaskSummarization
 from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
@@ -27,7 +27,6 @@ from mteb.abstasks.Image.AbsTaskImageMultilabelClassification import (  # noqa
 from mteb.abstasks.Image.AbsTaskImageTextPairClassification import (
     AbsTaskImageTextPairClassification,
 )
-from mteb.abstasks.Image.AbsTaskVisualSTS import AbsTaskVisualSTS
 from mteb.abstasks.Image.AbsTaskZeroShotClassification import (
     AbsTaskZeroShotClassification,
 )
@@ -864,7 +863,7 @@ class MockMultilingualPairClassificationTask(AbsTaskPairClassification):
         self.data_loaded = True
 
 
-class MockSTSTask(AbsTaskSTS):
+class MockSTSTask(AbsAnyTaskSTS):
     expected_stats = {
         "test": {
             "num_samples": 2,
@@ -916,7 +915,7 @@ class MockSTSTask(AbsTaskSTS):
     max_score = 1
 
 
-class MockMultilingualSTSTask(AbsTaskSTS):
+class MockMultilingualSTSTask(AbsAnyTaskSTS):
     expected_stats = {
         "test": {
             "num_samples": 4,
@@ -2826,7 +2825,7 @@ class MockMultilingualImageTextPairClassificationTask(
         self.data_loaded = True
 
 
-class MockVisualSTSTask(AbsTaskVisualSTS):
+class MockVisualSTSTask(AbsAnyTaskSTS):
     expected_stats = {
         "test": {
             "average_image_size": 26.0,

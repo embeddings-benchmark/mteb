@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
+from datasets import Dataset
 from scipy.stats import pearsonr, spearmanr
 from sklearn.metrics.pairwise import (
     paired_cosine_distances,
@@ -13,27 +14,37 @@ from sklearn.metrics.pairwise import (
 from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder
 
-from ...create_dataloaders import create_dataloader_from_texts
+from ...create_dataloaders import (
+    create_dataloader,
+)
 from ...similarity_functions import compute_pairwise_similarity
 from .Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
 
 
-class STSEvaluator(Evaluator):
+class AnySTSEvaluator(Evaluator):
     def __init__(
         self,
-        sentences1,
-        sentences2,
-        gold_scores,
+        dataset: Dataset,
+        sentences_column_names: tuple[str, str],
+        gold_scores: list[float],
         task_metadata: TaskMetadata,
         hf_split: str,
         hf_subset: str,
         **kwargs,
     ):
         super().__init__(**kwargs)
-        self.sentences1 = sentences1
-        self.sentences2 = sentences2
+        self.first_column = create_dataloader(
+            dataset,
+            task_metadata,
+            sentences_column_names[0],
+        )
+        self.second_column = create_dataloader(
+            dataset,
+            task_metadata,
+            sentences_column_names[1],
+        )
         self.gold_scores = gold_scores
         self.task_metadata = task_metadata
         self.hf_split = hf_split
@@ -46,14 +57,14 @@ class STSEvaluator(Evaluator):
         encode_kwargs: dict[str, Any],
     ):
         embeddings1 = model.encode(
-            create_dataloader_from_texts(self.sentences1),
+            self.first_column,
             task_metadata=self.task_metadata,
             hf_split=self.hf_split,
             hf_subset=self.hf_subset,
             **encode_kwargs,
         )
         embeddings2 = model.encode(
-            create_dataloader_from_texts(self.sentences2),
+            self.second_column,
             task_metadata=self.task_metadata,
             hf_split=self.hf_split,
             hf_subset=self.hf_subset,

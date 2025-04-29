@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskSTS import AbsTaskSTS
+from ....abstasks.AbsAnyTaskSTS import AbsAnyTaskSTS
 
 
-class Farsick(AbsTaskSTS):
+class Farsick(AbsAnyTaskSTS):
     metadata = TaskMetadata(
         name="Farsick",
         description="A Persian Semantic Textual Similarity And Natural Language Inference Dataset",
@@ -32,7 +32,7 @@ class Farsick(AbsTaskSTS):
     min_score = 1
 
 
-class SynPerSTS(AbsTaskSTS):
+class SynPerSTS(AbsAnyTaskSTS):
     metadata = TaskMetadata(
         name="SynPerSTS",
         description="Synthetic Persian Semantic Textual Similarity Dataset",
@@ -59,7 +59,7 @@ class SynPerSTS(AbsTaskSTS):
     min_score = 1
 
 
-class Query2Query(AbsTaskSTS):
+class Query2Query(AbsAnyTaskSTS):
     metadata = TaskMetadata(
         name="Query2Query",
         description="Query to Query Datasets.",

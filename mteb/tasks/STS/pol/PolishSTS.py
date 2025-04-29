@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
+from mteb.abstasks.AbsAnyTaskSTS import AbsAnyTaskSTS
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class SickrPLSTS(AbsTaskSTS):
+class SickrPLSTS(AbsAnyTaskSTS):
     metadata = TaskMetadata(
         name="SICK-R-PL",
         dataset={
@@ -63,7 +63,7 @@ class SickrPLSTS(AbsTaskSTS):
     max_score = 5
 
 
-class CdscrSTS(AbsTaskSTS):
+class CdscrSTS(AbsAnyTaskSTS):
     metadata = TaskMetadata(
         name="CDSC-R",
         dataset={

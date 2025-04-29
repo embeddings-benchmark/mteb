@@ -9,7 +9,6 @@ from .ClassificationEvaluator import (
 )
 from .ClusteringEvaluator import ImageClusteringEvaluator
 from .ImageTextPairClassificationEvaluator import ImageTextPairClassificationEvaluator
-from .VisualSTSEvaluator import VisualSTSEvaluator
 from .ZeroShotClassificationEvaluator import ZeroShotClassificationEvaluator
 
 __all__ = [
@@ -20,6 +19,5 @@ __all__ = [
     "ImagekNNClassificationEvaluatorPytorch",
     "ImageClusteringEvaluator",
     "ImageTextPairClassificationEvaluator",
-    "VisualSTSEvaluator",
     "ZeroShotClassificationEvaluator",
 ]
