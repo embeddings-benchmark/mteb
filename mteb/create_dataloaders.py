@@ -172,7 +172,13 @@ def create_dataloader_for_queries_conversation(
     """
     converted_queries = convert_conv_history_to_query(queries)
     if instructions is None:
-        dataset = Dataset.from_dict({"text": converted_queries, "query": queries})
+        dataset = Dataset.from_dict(
+            {
+                "text": converted_queries,
+                "query": converted_queries,
+                "conversation": queries,
+            }
+        )
     else:
         dataset = Dataset.from_dict(
             {
@@ -181,7 +187,8 @@ def create_dataloader_for_queries_conversation(
                     for q, i in zip(converted_queries, instructions)
                 ],
                 "instruction": instructions,
-                "query": queries,
+                "query": converted_queries,
+                "conversation": queries,
             }
         )
     return torch.utils.data.DataLoader(dataset, **dataloader_kwargs)

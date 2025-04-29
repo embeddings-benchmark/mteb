@@ -52,6 +52,6 @@ class BatchedInput(TypedDict, total=False):
     title: list[str]
     body: list[str]
     # Retrieval query
-    # list[list[str]] and list[Conversation] is used for conversations datasets
-    query: list[str] | list[list[str]] | list[Conversation]
+    query: list[str]
+    conversation: list[list[str | Conversation]]
     instruction: list[str]
