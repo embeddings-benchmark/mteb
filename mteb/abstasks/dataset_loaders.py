@@ -20,6 +20,14 @@ logger = logging.getLogger(__name__)
 
 
 class RetrievalSplitData(TypedDict):
+    """A dictionary containing the corpus, queries, relevant documents, instructions, and top-ranked documents for a retrieval task.
+    - `corpus`: A mapping of document IDs to their text or title and text.
+    - `queries`: A mapping of query IDs to their text.
+    - `relevant_docs`: A mapping of query IDs to a mapping of document IDs and their relevance scores.
+    - `instructions`: A mapping of query IDs to their instructions (if applicable).
+    - `top_ranked`: A mapping of query IDs to a list of top-ranked document IDs (if applicable).
+    """
+
     corpus: Mapping[str, str | dict[str, str]]
     queries: Mapping[str, str]
     relevant_docs: Mapping[str, Mapping[str, float]]
@@ -62,7 +70,6 @@ class RetrievalDataLoader:
         corpus = self._load_corpus()
         queries = self._load_queries()
 
-        # TODO figure out if it possible to change key of dataset index
         queries = {
             query["id"]: query["text"]
             for query in queries.filter(lambda x: x["id"] in qrels)
@@ -100,6 +107,9 @@ class RetrievalDataLoader:
             return self.split
         if len(splits) == 1:
             return splits[0]
+        raise ValueError(
+            f"Split {self.split} not found in {splits}. Please specify a valid split."
+        )
 
     def load_dataset_split(self, config: str) -> Dataset:
         return load_dataset(
@@ -164,7 +174,6 @@ class RetrievalDataLoader:
 
         qrels_ds.map(qrels_dict_init)
         logger.info("Loaded %d %s qrels.", len(qrels_dict), self.split.upper())
-        logger.info("Qrels Example: %s", qrels_dict[0])
         return qrels_dict
 
     def _load_top_ranked(self) -> dict[str, str]:
