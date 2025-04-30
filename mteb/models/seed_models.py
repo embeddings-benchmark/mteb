@@ -107,7 +107,7 @@ class SeedTextEmbeddingModel(Wrapper):
                     embeddings = [x.embedding for x in response.data]
                     break
                 except Exception as e:
-                    logger. warning(f"Retrying... {retries} retries left. Error: {str(e)}")
+                    logger.warning(f"Retrying... {retries} retries left. Error: {str(e)}")
                     retries -= 1
                     if retries == 0:
                         raise e
