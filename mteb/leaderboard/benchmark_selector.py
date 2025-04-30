@@ -28,6 +28,7 @@ BENCHMARK_ENTRIES = [
                 "MIEB(Multilingual)",
                 "MIEB(eng)",
                 "MIEB(lite)",
+                "MIEB(Img)",
             ]
         ),
     ),
