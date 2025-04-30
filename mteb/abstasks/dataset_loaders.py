@@ -183,26 +183,6 @@ class RetrievalDataLoader:
             f"{self.config}-top_ranked" if self.config is not None else "top_ranked"
         )
         top_ranked_ds = self.load_dataset_split(config)
-
-        # TODO check format
-        if (
-            "query-id" in top_ranked_ds.column_names
-            and "corpus-ids" in top_ranked_ds.column_names
-        ):
-            # is a {query-id: str, corpus-ids: list[str]} format
-            top_ranked_ds = top_ranked_ds.cast_column("query-id", Value("string"))
-            top_ranked_ds = top_ranked_ds.cast_column(
-                "corpus-ids", Sequence(Value("string"))
-            )
-        else:
-            # is a {"query-id": {"corpus-id": score}} format, let's change it
-            top_ranked_ds = top_ranked_ds.map(
-                lambda x: {"query-id": x["query-id"], "corpus-ids": list(x.keys())},
-                remove_columns=[
-                    col for col in top_ranked_ds.column_names if col != "query-id"
-                ],
-            )
-
         top_ranked_ds = top_ranked_ds.cast(
             Features(
                 {
