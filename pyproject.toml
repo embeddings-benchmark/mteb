@@ -93,6 +93,7 @@ vertexai = ["vertexai==1.71.1"]
 ll2vec = ["ll2vec==0.2.3"]
 timm = ["timm==1.0.15"]
 open_clip_torch = ["open_clip_torch==2.31.0"]
+xet = ["huggingface_hub[hf_xet]>=0.30.0"]
 
 [tool.coverage.report]
 
