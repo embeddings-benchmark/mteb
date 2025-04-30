@@ -7,7 +7,7 @@ import torch
 from PIL import Image
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import AutoImageProcessor, AutoModel, Dinov2Model
+from transformers import AutoImageProcessor, AutoModel
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
@@ -26,10 +26,7 @@ class DINOModelWrapper:
     ):
         self.model_name = model_name
         self.device = device
-        if "webssl" in model_name:
-            self.model = Dinov2Model.from_pretrained(model_name).to(self.device)
-        else:
-            self.model = AutoModel.from_pretrained(model_name).to(self.device)
+        self.model = AutoModel.from_pretrained(model_name).to(self.device)
         self.processor = AutoImageProcessor.from_pretrained(model_name)
 
     @staticmethod
