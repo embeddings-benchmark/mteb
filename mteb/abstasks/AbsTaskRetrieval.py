@@ -16,7 +16,7 @@ from ..evaluation.evaluators import RetrievalEvaluator
 from ..evaluation.evaluators.retrieval_metrics import make_score_dict
 from ..load_results.task_results import ScoresDict
 from .AbsTask import AbsTask
-from .dataset_loaders import RetrievalDataLoader, RetrievalSplitData
+from .dataset_loaders import RetrievalDatasetLoader, RetrievalSplitData
 
 logger = logging.getLogger(__name__)
 
@@ -231,7 +231,7 @@ class AbsTaskRetrieval(AbsTask):
                 f"Loading {split} split for {hf_subset} subset of {self.metadata.name}"
             )
 
-            self.dataset[hf_subset][split] = RetrievalDataLoader(
+            self.dataset[hf_subset][split] = RetrievalDatasetLoader(
                 hf_repo=dataset_path,
                 revision=revision,
                 trust_remote_code=trust_remote_code,
