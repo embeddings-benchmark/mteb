@@ -74,14 +74,6 @@ class RetrievalDataLoader:
             query["id"]: query["text"]
             for query in queries.filter(lambda x: x["id"] in qrels)
         }
-        corpus = {
-            doc["id"]: (
-                doc["title"] + " " + doc["text"]
-                if len(doc.get("title", "")) > 0
-                else doc["text"]
-            )
-            for doc in corpus
-        }
 
         if any(c.endswith("top_ranked") for c in configs):
             top_ranked = self._load_top_ranked()
@@ -120,7 +112,7 @@ class RetrievalDataLoader:
             revision=self.revision,
         )
 
-    def _load_corpus(self) -> Dataset | DatasetDict:
+    def _load_corpus(self) -> dict[str, dict[str, str]]:
         logger.info("Loading Corpus...")
 
         config = f"{self.config}-corpus" if self.config is not None else "corpus"
@@ -132,7 +124,13 @@ class RetrievalDataLoader:
         )
         logger.info("Loaded %d %s Documents.", len(corpus_ds), self.split.upper())
         logger.info("Doc Example: %s", corpus_ds[0])
-        return corpus_ds
+        return {
+            doc["id"]: {
+                "title": doc.get("title", ""),
+                "text": doc["text"],
+            }
+            for doc in corpus_ds
+        }
 
     def _load_queries(self) -> Dataset | DatasetDict:
         logger.info("Loading Queries...")
