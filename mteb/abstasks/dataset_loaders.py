@@ -122,10 +122,8 @@ class RetrievalDatasetLoader:
 
         config = f"{self.config}-corpus" if self.config is not None else "corpus"
         corpus_ds = self.load_dataset_split(config)
-        corpus_ds = (
-            corpus_ds.cast_column("_id", Value("string"))
-            .rename_column("_id", "id")
-            .select_columns(["id", "text", "title"])
+        corpus_ds = corpus_ds.cast_column("_id", Value("string")).rename_column(
+            "_id", "id"
         )
         logger.info("Loaded %d %s Documents.", len(corpus_ds), self.split.upper())
         logger.info("Doc Example: %s", corpus_ds[0])
