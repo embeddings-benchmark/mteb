@@ -9,6 +9,7 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 import mteb
 from mteb import MTEB
 from mteb.model_meta import ModelMeta
+from tests.test_benchmark.mock_tasks import MockRetrievalTask
 
 logging.basicConfig(level=logging.INFO)
 
@@ -383,7 +384,8 @@ def test_reranker_same_ndcg1(tmp_path: Path):
         training_datasets=None,
         framework=["Sentence Transformers", "PyTorch"],
     )
-    eval = MTEB(tasks=mteb.get_tasks(["SciFact"]))
+    task = MockRetrievalTask()
+    eval = MTEB(tasks=[task])
     stage1_path = tmp_path / "stage1"
     eval.run(
         de,
@@ -397,20 +399,22 @@ def test_reranker_same_ndcg1(tmp_path: Path):
         ce,  # type: ignore
         output_folder=stage2_path.as_posix(),
         overwrite_results=True,
-        previous_results=(stage1_path / "SciFact_default_predictions.json"),
+        previous_results=(
+            stage1_path / f"{task.metadata.name}_default_predictions.json"
+        ),
         save_predictions=False,
         eval_splits=["test"],
     )
 
     # read in stage 1 and stage two and check ndcg@1 is the same
     with open(
-        f"{stage1_path}/{de_name.replace('/', '__')}/{revision}/SciFact.json"
+        f"{stage1_path}/{de_name.replace('/', '__')}/{revision}/{task.metadata.name}.json"
     ) as f:
         stage1 = json.load(f)
 
     with (
         stage2_path
-        / f"cross-encoder__ms-marco-TinyBERT-L-2-v2/{ce_revision}/SciFact.json"
+        / f"cross-encoder__ms-marco-TinyBERT-L-2-v2/{ce_revision}/{task.metadata.name}.json"
     ).open() as f:
         stage2 = json.load(f)
 
