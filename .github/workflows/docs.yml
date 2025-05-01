@@ -57,6 +57,7 @@ jobs:
             echo "No changes detected"
           else
             git add docs/tasks.md
-            git commit -m "Update tasks table"
+            git add docs/benchmarks.md
+            git commit -m "Update tasks & benchmarks tables"
             git push
           fi

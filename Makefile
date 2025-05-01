@@ -38,6 +38,7 @@ build-docs:
 	@echo "--- 📚 Building documentation ---"
 	# since we do not have a documentation site, this just build tables for the .md files
 	python docs/create_tasks_table.py
+	python docs/create_benchmarks_table.py
 
 
 model-load-test:
