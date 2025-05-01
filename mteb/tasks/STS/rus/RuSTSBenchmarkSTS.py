@@ -18,7 +18,7 @@ class RuSTSBenchmarkSTS(AbsTaskSTS):
         type="STS",
         category="s2s",
         modalities=["text"],
-        eval_splits=["test"],
+        eval_splits=["test", "validation"],
         eval_langs=["rus-Cyrl"],
         main_score="cosine_spearman",
         date=("2012-01-01", "2018-01-01"),

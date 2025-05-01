@@ -31,7 +31,7 @@ class GTSRBZeroShotClassification(AbsTaskZeroShotClassification):
         license="not specified",
         annotations_creators="derived",
         dialect=[],
-        modalities=["image"],
+        modalities=["image", "text"],
         sample_creation="created",
         bibtex_citation="""@INPROCEEDINGS{6033395,
     author={Stallkamp, Johannes and Schlipsing, Marc and Salmen, Jan and Igel, Christian},
