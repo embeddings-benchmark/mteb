@@ -157,7 +157,7 @@ seed_embedding = ModelMeta(
     n_parameters=None,
     memory_usage_mb=None,
     license=None,
-    reference="https://console.volcengine.com/ark/region:ark+cn-beijing/model/detail?Id=doubao-1-5-embedding",
+    reference="https://huggingface.co/ByteDance-Seed/Doubao-1.5-Embedding",
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
