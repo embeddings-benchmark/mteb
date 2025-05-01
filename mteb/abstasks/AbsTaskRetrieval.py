@@ -138,14 +138,14 @@ class AbsTaskRetrieval(AbsTask):
         super().__init__(**kwargs)
         self.dataset = defaultdict(
             lambda: defaultdict(
-                lambda: {
-                    "corpus": {},
-                    "queries": {},
-                    "relevant_docs": {},
-                    "instructions": None,
-                    "top_ranked": None,
-                    "qrels_diff": None,
-                }
+                lambda: RetrievalSplitData(
+                    corpus={},
+                    queries={},
+                    relevant_docs={},
+                    instructions=None,
+                    top_ranked=None,
+                    qrels_diff=None,
+                )
             )
         )
 
@@ -154,14 +154,14 @@ class AbsTaskRetrieval(AbsTask):
             return
         self.dataset = defaultdict(
             lambda: defaultdict(
-                lambda: {
-                    "corpus": {},
-                    "queries": {},
-                    "relevant_docs": {},
-                    "instructions": None,
-                    "top_ranked": None,
-                    "qrels_diff": None,
-                }
+                lambda: RetrievalSplitData(
+                    corpus={},
+                    queries={},
+                    relevant_docs={},
+                    instructions=None,
+                    top_ranked=None,
+                    qrels_diff=None,
+                )
             )
         )
 
