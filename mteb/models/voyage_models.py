@@ -368,6 +368,31 @@ voyage_3 = ModelMeta(
     public_training_data=None,
 )
 
+voyage_3_large = ModelMeta(
+    name="voyageai/voyage-3-large",  # Use the identifier the user provided
+    revision="1",  # Assuming revision 1
+    release_date="2024-09-18",  # Assuming same release as voyage-3
+    languages=None,
+    loader=partial(  # type: ignore
+        VoyageWrapper,
+        model_name="voyage-3-large",  # Match the API model name
+        model_prompts=model_prompts,
+    ),
+    max_tokens=32000,  # Assuming same as voyage-3
+    embed_dim=1024,  # Assuming same as voyage-3
+    open_weights=False,
+    n_parameters=None,
+    memory_usage_mb=None,
+    license=None,
+    reference="https://blog.voyageai.com/2024/09/18/voyage-3/",  # Assuming same reference
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=True,
+    training_datasets=VOYAGE_TRAINING_DATA,
+    public_training_code=None,
+    public_training_data=None,
+)
+
 voyage_3_lite = ModelMeta(
     name="voyageai/voyage-3-lite",
     revision="1",

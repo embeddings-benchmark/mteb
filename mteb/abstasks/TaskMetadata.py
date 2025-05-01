@@ -126,6 +126,7 @@ TASK_TYPE = (
     "Summarization",
     "InstructionRetrieval",
     "Speed",
+    "RTEB",
 ) + MIEB_TASK_TYPE
 
 TASK_TYPE = Literal[TASK_TYPE]
