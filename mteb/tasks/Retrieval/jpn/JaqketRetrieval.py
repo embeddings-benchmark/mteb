@@ -31,7 +31,7 @@ author =  "鈴木正敏 and 鈴木潤 and 松田耕史 and ⻄田京介 and 井�
 title =   "JAQKET: クイズを題材にした日本語 QA データセットの構築",
 booktitle =   "言語処理学会第26回年次大会",
 year =    "2020",
-url = "https://www.anlp.jp/proceedings/annual_meeting/2020/pdf_dir/P2-24.pdf"
+url = "https://www.anlp.jp/proceedings/annual_meeting/2020/pdf_dir/P2-24.pdf",
 note= "in Japanese"
 }""",
     )

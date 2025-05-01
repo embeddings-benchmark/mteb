@@ -46,5 +46,5 @@ class MindSmallReranking(AbsTaskReranking):
         news recommendation highly relies on the quality of news content understanding and user interest modeling.
         Many natural language processing techniques such as effective text representation methods and pre-trained
         language models can effectively improve the performance of news recommendation. The MIND dataset will be
-        available at https://msnews.github.io}.", }""",
+        available at https://msnews.github.io.", }""",
     )

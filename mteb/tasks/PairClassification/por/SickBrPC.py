@@ -28,7 +28,7 @@ class SickBrPC(AbsTaskPairClassification):
         sample_creation="human-translated and localized",
         bibtex_citation="""
         @inproceedings{real18,
-        author="Real, Livy
+        author={Real, Livy
             and Rodrigues, Ana
             and Vieira e Silva, Andressa
             and Albiero, Beatriz
@@ -36,13 +36,13 @@ class SickBrPC(AbsTaskPairClassification):
             and Guide, Bruno
             and Silva, Cindy
             and de Oliveira Lima, Guilherme
-            and C{\\^a}mara, Igor C. S.
-            and Stanojevi{\\'{c}}, Milo{\\v{s}}
+            and C{\^a}mara, Igor C. S.
+            and Stanojevi{\'{c}}, Milo{\v{s}}
             and Souza, Rodrigo
-            and de Paiva, Valeria"
+            and de Paiva, Valeria},
         year ="2018",
-        title="SICK-BR: A Portuguese Corpus for Inference",
-        booktitle="Computational Processing of the Portuguese Language. PROPOR 2018.",
+        title="{SICK-BR: A Portuguese Corpus for Inference}",
+        booktitle="{Computational Processing of the Portuguese Language. PROPOR 2018.}",
         doi ="10.1007/978-3-319-99722-3_31",
         isbn="978-3-319-99722-3"
         }

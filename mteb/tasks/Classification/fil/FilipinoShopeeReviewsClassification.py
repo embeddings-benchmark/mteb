@@ -29,7 +29,7 @@ class FilipinoShopeeReviewsClassification(AbsTaskClassification):
         bibtex_citation="""
         @article{riegoenhancement,
             title={Enhancement to Low-Resource Text Classification via Sequential Transfer Learning},
-            author={Riego, Neil Christian R. and Villarba, Danny Bell and Sison, Ariel Antwaun Rolando C. and Pineda, Fernandez C. and Lagunzad, Herminiño C.}
+            author={Riego, Neil Christian R. and Villarba, Danny Bell and Sison, Ariel Antwaun Rolando C. and Pineda, Fernandez C. and Lagunzad, Herminiño C.},
             journal={United International Journal for Research & Technology},
             volume={04},
             issue={08},

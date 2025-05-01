@@ -49,7 +49,7 @@ class GermanQuADRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""misc{möller2021germanquad,
+        bibtex_citation="""@misc{möller2021germanquad,
       title={GermanQuAD and GermanDPR: Improving Non-English Question Answering and Passage Retrieval},
       author={Timo Möller and Julian Risch and Malte Pietsch},
       year={2021},
