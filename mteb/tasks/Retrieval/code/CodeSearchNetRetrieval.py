@@ -32,7 +32,14 @@ class CodeSearchNetRetrieval(MultilingualTask, AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="@article{husain2019codesearchnet, title={{CodeSearchNet} challenge: Evaluating the state of semantic code search}, author={Husain, Hamel and Wu, Ho-Hsiang and Gazit, Tiferet and Allamanis, Miltiadis and Brockschmidt, Marc}, journal={arXiv preprint arXiv:1909.09436}, year={2019} }",
+        bibtex_citation=r"""
+@article{husain2019codesearchnet,
+  author = {Husain, Hamel and Wu, Ho-Hsiang and Gazit, Tiferet and Allamanis, Miltiadis and Brockschmidt, Marc},
+  journal = {arXiv preprint arXiv:1909.09436},
+  title = {{CodeSearchNet} challenge: Evaluating the state of semantic code search},
+  year = {2019},
+}
+""",
     )
 
     def load_data(self, **kwargs):

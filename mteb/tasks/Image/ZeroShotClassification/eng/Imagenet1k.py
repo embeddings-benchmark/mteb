@@ -33,14 +33,16 @@ class Imagenet1kZeroShotClassification(AbsTaskZeroShotClassification):
         dialect=[],
         modalities=["image", "text"],
         sample_creation="created",
-        bibtex_citation="""@article{deng2009imagenet,
-        title={ImageNet: A large-scale hierarchical image database},
-        author={Deng, Jia and Dong, Wei and Socher, Richard and Li, Li-Jia and Li, Kai and Fei-Fei, Li},
-        journal={2009 IEEE Conference on Computer Vision and Pattern Recognition},
-        pages={248--255},
-        year={2009},
-        organization={Ieee}
-        }""",
+        bibtex_citation=r"""
+@article{deng2009imagenet,
+  author = {Deng, Jia and Dong, Wei and Socher, Richard and Li, Li-Jia and Li, Kai and Fei-Fei, Li},
+  journal = {2009 IEEE Conference on Computer Vision and Pattern Recognition},
+  organization = {Ieee},
+  pages = {248--255},
+  title = {ImageNet: A large-scale hierarchical image database},
+  year = {2009},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 37200},
             "avg_character_length": {"test": 0},

@@ -28,17 +28,17 @@ class JSICK(AbsTaskSTS):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @article{yanaka2022compositional,
-            title={Compositional Evaluation on Japanese Textual Entailment and Similarity},
-            author={Yanaka, Hitomi and Mineshima, Koji},
-            journal={Transactions of the Association for Computational Linguistics},
-            volume={10},
-            pages={1266--1284},
-            year={2022},
-            publisher={MIT Press One Broadway, 12th Floor, Cambridge, Massachusetts 02142, USA~…}
-        }
-        """,
+        bibtex_citation=r"""
+@article{yanaka2022compositional,
+  author = {Yanaka, Hitomi and Mineshima, Koji},
+  journal = {Transactions of the Association for Computational Linguistics},
+  pages = {1266--1284},
+  publisher = {MIT Press One Broadway, 12th Floor, Cambridge, Massachusetts 02142, USA~…},
+  title = {Compositional Evaluation on Japanese Textual Entailment and Similarity},
+  volume = {10},
+  year = {2022},
+}
+""",
     )
 
     @property

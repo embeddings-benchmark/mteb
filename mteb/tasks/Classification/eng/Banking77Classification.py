@@ -29,29 +29,31 @@ class Banking77Classification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{casanueva-etal-2020-efficient,
-    title = "Efficient Intent Detection with Dual Sentence Encoders",
-    author = "Casanueva, I{\~n}igo  and
-      Tem{\v{c}}inas, Tadas  and
-      Gerz, Daniela  and
-      Henderson, Matthew  and
-      Vuli{\'c}, Ivan",
-    editor = "Wen, Tsung-Hsien  and
-      Celikyilmaz, Asli  and
-      Yu, Zhou  and
-      Papangelis, Alexandros  and
-      Eric, Mihail  and
-      Kumar, Anuj  and
-      Casanueva, I{\~n}igo  and
-      Shah, Rushin",
-    booktitle = "Proceedings of the 2nd Workshop on Natural Language Processing for Conversational AI",
-    month = jul,
-    year = "2020",
-    address = "Online",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/2020.nlp4convai-1.5",
-    doi = "10.18653/v1/2020.nlp4convai-1.5",
-    pages = "38--45",
-}""",
+        bibtex_citation=r"""
+@inproceedings{casanueva-etal-2020-efficient,
+  address = {Online},
+  author = {Casanueva, I{\~n}igo  and
+Tem{\v{c}}inas, Tadas  and
+Gerz, Daniela  and
+Henderson, Matthew  and
+Vuli{\'c}, Ivan},
+  booktitle = {Proceedings of the 2nd Workshop on Natural Language Processing for Conversational AI},
+  doi = {10.18653/v1/2020.nlp4convai-1.5},
+  editor = {Wen, Tsung-Hsien  and
+Celikyilmaz, Asli  and
+Yu, Zhou  and
+Papangelis, Alexandros  and
+Eric, Mihail  and
+Kumar, Anuj  and
+Casanueva, I{\~n}igo  and
+Shah, Rushin},
+  month = jul,
+  pages = {38--45},
+  publisher = {Association for Computational Linguistics},
+  title = {Efficient Intent Detection with Dual Sentence Encoders},
+  url = {https://aclanthology.org/2020.nlp4convai-1.5},
+  year = {2020},
+}
+""",
         prompt="Given a online banking query, find the corresponding intents",
     )

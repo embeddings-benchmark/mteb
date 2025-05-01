@@ -26,37 +26,37 @@ class SickrPLSTS(AbsTaskSTS):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="human-translated and localized",
-        bibtex_citation="""
+        bibtex_citation=r"""
 @inproceedings{dadas-etal-2020-evaluation,
-    title = "Evaluation of Sentence Representations in {P}olish",
-    author = "Dadas, Slawomir  and
-      Perelkiewicz, Michal  and
-      Poswiata, Rafal",
-    editor = "Calzolari, Nicoletta  and
-      B{\'e}chet, Fr{\'e}d{\'e}ric  and
-      Blache, Philippe  and
-      Choukri, Khalid  and
-      Cieri, Christopher  and
-      Declerck, Thierry  and
-      Goggi, Sara  and
-      Isahara, Hitoshi  and
-      Maegaard, Bente  and
-      Mariani, Joseph  and
-      Mazo, Helene  and
-      Moreno, Asuncion  and
-      Odijk, Jan  and
-      Piperidis, Stelios",
-    booktitle = "Proceedings of the Twelfth Language Resources and Evaluation Conference",
-    month = may,
-    year = "2020",
-    address = "Marseille, France",
-    publisher = "European Language Resources Association",
-    url = "https://aclanthology.org/2020.lrec-1.207",
-    pages = "1674--1680",
-    language = "English",
-    ISBN = "979-10-95546-34-4",
+  address = {Marseille, France},
+  author = {Dadas, Slawomir  and
+Perelkiewicz, Michal  and
+Poswiata, Rafal},
+  booktitle = {Proceedings of the Twelfth Language Resources and Evaluation Conference},
+  editor = {Calzolari, Nicoletta  and
+B{\'e}chet, Fr{\'e}d{\'e}ric  and
+Blache, Philippe  and
+Choukri, Khalid  and
+Cieri, Christopher  and
+Declerck, Thierry  and
+Goggi, Sara  and
+Isahara, Hitoshi  and
+Maegaard, Bente  and
+Mariani, Joseph  and
+Mazo, Helene  and
+Moreno, Asuncion  and
+Odijk, Jan  and
+Piperidis, Stelios},
+  isbn = {979-10-95546-34-4},
+  language = {English},
+  month = may,
+  pages = {1674--1680},
+  publisher = {European Language Resources Association},
+  title = {Evaluation of Sentence Representations in {P}olish},
+  url = {https://aclanthology.org/2020.lrec-1.207},
+  year = {2020},
 }
-        """,
+""",
     )
 
     @property
@@ -89,24 +89,23 @@ class CdscrSTS(AbsTaskSTS):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="human-translated and localized",
-        bibtex_citation="""
+        bibtex_citation=r"""
 @inproceedings{wroblewska-krasnowska-kieras-2017-polish,
-    title = "{P}olish evaluation dataset for compositional distributional semantics models",
-    author = "Wr{\'o}blewska, Alina  and
-      Krasnowska-Kiera{\'s}, Katarzyna",
-    editor = "Barzilay, Regina  and
-      Kan, Min-Yen",
-    booktitle = "Proceedings of the 55th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
-    month = jul,
-    year = "2017",
-    address = "Vancouver, Canada",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/P17-1073",
-    doi = "10.18653/v1/P17-1073",
-    pages = "784--792",
+  address = {Vancouver, Canada},
+  author = {Wr{\'o}blewska, Alina  and
+Krasnowska-Kiera{\'s}, Katarzyna},
+  booktitle = {Proceedings of the 55th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/P17-1073},
+  editor = {Barzilay, Regina  and
+Kan, Min-Yen},
+  month = jul,
+  pages = {784--792},
+  publisher = {Association for Computational Linguistics},
+  title = {{P}olish evaluation dataset for compositional distributional semantics models},
+  url = {https://aclanthology.org/P17-1073},
+  year = {2017},
 }
-
-        """,
+""",
     )
 
     @property

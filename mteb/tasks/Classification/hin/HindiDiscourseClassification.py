@@ -27,29 +27,30 @@ class HindiDiscourseClassification(AbsTaskClassification):
         license="mit",
         annotations_creators="expert-annotated",
         sample_creation="found",
-        bibtex_citation="""
-        @inproceedings{dhanwal-etal-2020-annotated,
-    title = "An Annotated Dataset of Discourse Modes in {H}indi Stories",
-    author = "Dhanwal, Swapnil  and
-      Dutta, Hritwik  and
-      Nankani, Hitesh  and
-      Shrivastava, Nilay  and
-      Kumar, Yaman  and
-      Li, Junyi Jessy  and
-      Mahata, Debanjan  and
-      Gosangi, Rakesh  and
-      Zhang, Haimin  and
-      Shah, Rajiv Ratn  and
-      Stent, Amanda",
-    booktitle = "Proceedings of the 12th Language Resources and Evaluation Conference",
-    month = may,
-    year = "2020",
-    address = "Marseille, France",
-    publisher = "European Language Resources Association",
-    url = "https://www.aclweb.org/anthology/2020.lrec-1.149",
-    language = "English",
-    ISBN = "979-10-95546-34-4",
-}""",
+        bibtex_citation=r"""
+@inproceedings{dhanwal-etal-2020-annotated,
+  address = {Marseille, France},
+  author = {Dhanwal, Swapnil  and
+Dutta, Hritwik  and
+Nankani, Hitesh  and
+Shrivastava, Nilay  and
+Kumar, Yaman  and
+Li, Junyi Jessy  and
+Mahata, Debanjan  and
+Gosangi, Rakesh  and
+Zhang, Haimin  and
+Shah, Rajiv Ratn  and
+Stent, Amanda},
+  booktitle = {Proceedings of the 12th Language Resources and Evaluation Conference},
+  isbn = {979-10-95546-34-4},
+  language = {English},
+  month = may,
+  publisher = {European Language Resources Association},
+  title = {An Annotated Dataset of Discourse Modes in {H}indi Stories},
+  url = {https://www.aclweb.org/anthology/2020.lrec-1.149},
+  year = {2020},
+}
+""",
     )
 
     def dataset_transform(self):

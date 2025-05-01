@@ -26,13 +26,15 @@ class EncyclopediaVQAIT2ITRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["image", "text"],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{mensink2023encyclopedic,
-  title={Encyclopedic VQA: Visual questions about detailed properties of fine-grained categories},
-  author={Mensink, Thomas and Uijlings, Jasper and Castrejon, Lluis and Goel, Arushi and Cadar, Felipe and Zhou, Howard and Sha, Fei and Araujo, Andr{\'e} and Ferrari, Vittorio},
-  booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision},
-  pages={3113--3124},
-  year={2023}
-}""",
+        bibtex_citation=r"""
+@inproceedings{mensink2023encyclopedic,
+  author = {Mensink, Thomas and Uijlings, Jasper and Castrejon, Lluis and Goel, Arushi and Cadar, Felipe and Zhou, Howard and Sha, Fei and Araujo, Andr{\'e} and Ferrari, Vittorio},
+  booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision},
+  pages = {3113--3124},
+  title = {Encyclopedic VQA: Visual questions about detailed properties of fine-grained categories},
+  year = {2023},
+}
+""",
         prompt={
             "query": "Obtain illustrated documents that correspond to the inquiry alongside the provided image."
         },

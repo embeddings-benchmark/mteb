@@ -44,22 +44,23 @@ class XNLI(MultilingualTask, AbsTaskPairClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@InProceedings{conneau2018xnli,
-        author = {Conneau, Alexis
-                        and Rinott, Ruty
-                        and Lample, Guillaume
-                        and Williams, Adina
-                        and Bowman, Samuel R.
-                        and Schwenk, Holger
-                        and Stoyanov, Veselin},
-        title = {XNLI: Evaluating Cross-lingual Sentence Representations},
-        booktitle = {Proceedings of the 2018 Conference on Empirical Methods
-                    in Natural Language Processing},
-        year = {2018},
-        publisher = {Association for Computational Linguistics},
-        location = {Brussels, Belgium},
-        }
-        """,
+        bibtex_citation=r"""
+@inproceedings{conneau2018xnli,
+  author = {Conneau, Alexis
+and Rinott, Ruty
+and Lample, Guillaume
+and Williams, Adina
+and Bowman, Samuel R.
+and Schwenk, Holger
+and Stoyanov, Veselin},
+  booktitle = {Proceedings of the 2018 Conference on Empirical Methods
+in Natural Language Processing},
+  location = {Brussels, Belgium},
+  publisher = {Association for Computational Linguistics},
+  title = {XNLI: Evaluating Cross-lingual Sentence Representations},
+  year = {2018},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -131,15 +132,16 @@ class XNLIV2(MultilingualTask, AbsTaskPairClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="machine-translated and verified",
-        bibtex_citation="""@inproceedings{upadhyay2023xnli,
-            title={XNLI 2.0: Improving XNLI dataset and performance on Cross Lingual Understanding (XLU)},
-            author={Upadhyay, Ankit Kumar and Upadhya, Harsit Kumar},
-            booktitle={2023 IEEE 8th International Conference for Convergence in Technology (I2CT)},
-            pages={1--6},
-            year={2023},
-            organization={IEEE}
-            }
-        """,
+        bibtex_citation=r"""
+@inproceedings{upadhyay2023xnli,
+  author = {Upadhyay, Ankit Kumar and Upadhya, Harsit Kumar},
+  booktitle = {2023 IEEE 8th International Conference for Convergence in Technology (I2CT)},
+  organization = {IEEE},
+  pages = {1--6},
+  title = {XNLI 2.0: Improving XNLI dataset and performance on Cross Lingual Understanding (XLU)},
+  year = {2023},
+}
+""",
         # average of premise and hypothesis
     )
 

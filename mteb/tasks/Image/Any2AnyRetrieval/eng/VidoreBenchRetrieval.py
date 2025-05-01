@@ -92,12 +92,14 @@ class VidoreArxivQARetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{faysse2024colpali,
-  title={ColPali: Efficient Document Retrieval with Vision Language Models},
-  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
-  journal={arXiv preprint arXiv:2407.01449},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+@article{faysse2024colpali,
+  author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal = {arXiv preprint arXiv:2407.01449},
+  title = {ColPali: Efficient Document Retrieval with Vision Language Models},
+  year = {2024},
+}
+""",
         prompt={"query": "Find a screenshot that relevant to the user's question."},
         descriptive_stats={
             "n_samples": None,
@@ -146,12 +148,14 @@ class VidoreDocVQARetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{faysse2024colpali,
-  title={ColPali: Efficient Document Retrieval with Vision Language Models},
-  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
-  journal={arXiv preprint arXiv:2407.01449},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+@article{faysse2024colpali,
+  author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal = {arXiv preprint arXiv:2407.01449},
+  title = {ColPali: Efficient Document Retrieval with Vision Language Models},
+  year = {2024},
+}
+""",
         prompt={"query": "Find a screenshot that relevant to the user's question."},
         descriptive_stats={
             "n_samples": None,
@@ -200,12 +204,14 @@ class VidoreInfoVQARetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{faysse2024colpali,
-  title={ColPali: Efficient Document Retrieval with Vision Language Models},
-  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
-  journal={arXiv preprint arXiv:2407.01449},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+@article{faysse2024colpali,
+  author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal = {arXiv preprint arXiv:2407.01449},
+  title = {ColPali: Efficient Document Retrieval with Vision Language Models},
+  year = {2024},
+}
+""",
         prompt={"query": "Find a screenshot that relevant to the user's question."},
         descriptive_stats={
             "n_samples": None,
@@ -254,12 +260,14 @@ class VidoreTabfquadRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{faysse2024colpali,
-  title={ColPali: Efficient Document Retrieval with Vision Language Models},
-  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
-  journal={arXiv preprint arXiv:2407.01449},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+@article{faysse2024colpali,
+  author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal = {arXiv preprint arXiv:2407.01449},
+  title = {ColPali: Efficient Document Retrieval with Vision Language Models},
+  year = {2024},
+}
+""",
         prompt={"query": "Find a screenshot that relevant to the user's question."},
         descriptive_stats={
             "n_samples": None,
@@ -308,12 +316,14 @@ class VidoreTatdqaRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{faysse2024colpali,
-  title={ColPali: Efficient Document Retrieval with Vision Language Models},
-  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
-  journal={arXiv preprint arXiv:2407.01449},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+@article{faysse2024colpali,
+  author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal = {arXiv preprint arXiv:2407.01449},
+  title = {ColPali: Efficient Document Retrieval with Vision Language Models},
+  year = {2024},
+}
+""",
         prompt={"query": "Find a screenshot that relevant to the user's question."},
         descriptive_stats={
             "n_samples": None,
@@ -362,12 +372,14 @@ class VidoreShiftProjectRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{faysse2024colpali,
-  title={ColPali: Efficient Document Retrieval with Vision Language Models},
-  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
-  journal={arXiv preprint arXiv:2407.01449},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+@article{faysse2024colpali,
+  author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal = {arXiv preprint arXiv:2407.01449},
+  title = {ColPali: Efficient Document Retrieval with Vision Language Models},
+  year = {2024},
+}
+""",
         prompt={"query": "Find a screenshot that relevant to the user's question."},
         descriptive_stats={
             "n_samples": None,
@@ -416,12 +428,14 @@ class VidoreSyntheticDocQAAIRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{faysse2024colpali,
-  title={ColPali: Efficient Document Retrieval with Vision Language Models},
-  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
-  journal={arXiv preprint arXiv:2407.01449},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+@article{faysse2024colpali,
+  author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal = {arXiv preprint arXiv:2407.01449},
+  title = {ColPali: Efficient Document Retrieval with Vision Language Models},
+  year = {2024},
+}
+""",
         prompt={"query": "Find a screenshot that relevant to the user's question."},
         descriptive_stats={
             "n_samples": None,
@@ -470,12 +484,14 @@ class VidoreSyntheticDocQAEnergyRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{faysse2024colpali,
-  title={ColPali: Efficient Document Retrieval with Vision Language Models},
-  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
-  journal={arXiv preprint arXiv:2407.01449},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+@article{faysse2024colpali,
+  author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal = {arXiv preprint arXiv:2407.01449},
+  title = {ColPali: Efficient Document Retrieval with Vision Language Models},
+  year = {2024},
+}
+""",
         prompt={"query": "Find a screenshot that relevant to the user's question."},
         descriptive_stats={
             "n_samples": None,
@@ -524,12 +540,14 @@ class VidoreSyntheticDocQAGovernmentReportsRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{faysse2024colpali,
-  title={ColPali: Efficient Document Retrieval with Vision Language Models},
-  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
-  journal={arXiv preprint arXiv:2407.01449},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+@article{faysse2024colpali,
+  author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal = {arXiv preprint arXiv:2407.01449},
+  title = {ColPali: Efficient Document Retrieval with Vision Language Models},
+  year = {2024},
+}
+""",
         prompt={"query": "Find a screenshot that relevant to the user's question."},
         descriptive_stats={
             "n_samples": None,
@@ -578,12 +596,14 @@ class VidoreSyntheticDocQAHealthcareIndustryRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{faysse2024colpali,
-  title={ColPali: Efficient Document Retrieval with Vision Language Models},
-  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
-  journal={arXiv preprint arXiv:2407.01449},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+@article{faysse2024colpali,
+  author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal = {arXiv preprint arXiv:2407.01449},
+  title = {ColPali: Efficient Document Retrieval with Vision Language Models},
+  year = {2024},
+}
+""",
         prompt={"query": "Find a screenshot that relevant to the user's question."},
         descriptive_stats={
             "n_samples": None,

@@ -27,20 +27,21 @@ class DutchBookReviewSentimentClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{DBLP:journals/corr/abs-1910-00896,
-  author    = {Benjamin, van der Burgh and
-               Suzan, Verberne},
-  title     = {The merits of Universal Language Model Fine-tuning for Small Datasets
-               - a case with Dutch book reviews},
-  journal   = {CoRR},
-  volume    = {abs/1910.00896},
-  year      = {2019},
-  url       = {http://arxiv.org/abs/1910.00896},
-  archivePrefix = {arXiv},
-  eprint    = {1910.00896},
+        bibtex_citation=r"""
+@article{DBLP:journals/corr/abs-1910-00896,
+  archiveprefix = {arXiv},
+  author = {Benjamin, van der Burgh and
+Suzan, Verberne},
+  bibsource = {dblp computer science bibliography, https://dblp.org},
+  biburl = {https://dblp.org/rec/journals/corr/abs-1910-00896.bib},
+  eprint = {1910.00896},
+  journal = {CoRR},
   timestamp = {Fri, 04 Oct 2019 12:28:06 +0200},
-  biburl    = {https://dblp.org/rec/journals/corr/abs-1910-00896.bib},
-  bibsource = {dblp computer science bibliography, https://dblp.org}
+  title = {The merits of Universal Language Model Fine-tuning for Small Datasets
+- a case with Dutch book reviews},
+  url = {http://arxiv.org/abs/1910.00896},
+  volume = {abs/1910.00896},
+  year = {2019},
 }
 """,
     )

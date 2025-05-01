@@ -27,13 +27,15 @@ class RParisEasyI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrieval
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{radenovic2018revisiting,
-  title={Revisiting oxford and paris: Large-scale image retrieval benchmarking},
-  author={Radenovi{\'c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej},
-  booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
-  pages={5706--5715},
-  year={2018}
-}""",
+        bibtex_citation=r"""
+@inproceedings{radenovic2018revisiting,
+  author = {Radenovi{\'c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej},
+  booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
+  pages = {5706--5715},
+  title = {Revisiting oxford and paris: Large-scale image retrieval benchmarking},
+  year = {2018},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 6392},
             "avg_character_length": {
@@ -72,14 +74,15 @@ class RParisMediumI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetriev
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{radenovic2018revisiting,
-  title={Revisiting oxford and paris: Large-scale image retrieval benchmarking},
-  author={Radenovi{\'c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej},
-  booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
-  pages={5706--5715},
-  year={2018}
+        bibtex_citation=r"""
+@inproceedings{radenovic2018revisiting,
+  author = {Radenovi{\'c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej},
+  booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
+  pages = {5706--5715},
+  title = {Revisiting oxford and paris: Large-scale image retrieval benchmarking},
+  year = {2018},
 }
-        """,
+""",
         descriptive_stats={
             "n_samples": {"test": 6392},
             "avg_character_length": {
@@ -118,14 +121,15 @@ class RParisHardI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrieval
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{radenovic2018revisiting,
-  title={Revisiting oxford and paris: Large-scale image retrieval benchmarking},
-  author={Radenovi{\'c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej},
-  booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
-  pages={5706--5715},
-  year={2018}
+        bibtex_citation=r"""
+@inproceedings{radenovic2018revisiting,
+  author = {Radenovi{\'c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej},
+  booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
+  pages = {5706--5715},
+  title = {Revisiting oxford and paris: Large-scale image retrieval benchmarking},
+  year = {2018},
 }
-        """,
+""",
         descriptive_stats={
             "n_samples": {"test": 6392},
             "avg_character_length": {
