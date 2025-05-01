@@ -342,7 +342,6 @@ def test_mteb_rerank(tmp_path: Path):
         output_folder=tmp_path.as_posix(),
         overwrite_results=True,
         eval_splits=["test"],
-        top_k=2,
         previous_results=tmp_file,
         save_predictions=True,
     )
@@ -351,10 +350,11 @@ def test_mteb_rerank(tmp_path: Path):
     with (tmp_path / "SciFact_default_predictions.json").open() as f:
         results = json.load(f)
 
+    results = sorted(results["1"].keys(), key=lambda x: (results["1"][x], x))[:2]
     # check that only the top two results are re-orderd
-    assert "19238" not in results["1"]
-    assert "4983" in results["1"]
-    assert "18670" in results["1"]
+    assert "19238" not in results
+    assert "4983" in results
+    assert "18670" in results
 
 
 def test_reranker_same_ndcg1(tmp_path: Path):
@@ -400,7 +400,6 @@ def test_reranker_same_ndcg1(tmp_path: Path):
         previous_results=(stage1_path / "SciFact_default_predictions.json"),
         save_predictions=False,
         eval_splits=["test"],
-        top_k=1,  # don't allow it to rerank more than 1 so we can check for top_1 being the same
     )
 
     # read in stage 1 and stage two and check ndcg@1 is the same
