@@ -36,8 +36,8 @@ def benchmark_to_markdown_row(b: mteb.Benchmark) -> str:
 
 def create_benchmarks_table(benchmarks: list[mteb.Benchmark]) -> str:
     table = """
-| Name | Leaderboard name | # Tasks | Task Types | Citation | Domains | Languages |
-|------|------------------|---------|------------|----------|---------|-----------|
+| Name | Leaderboard name | # Tasks | Task Types | Domains | Languages |
+|------|------------------|---------|------------|---------|-----------|
 """
     for benchmark in benchmarks:
         table += benchmark_to_markdown_row(benchmark) + "\n"
