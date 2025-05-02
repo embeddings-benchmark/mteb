@@ -21,6 +21,9 @@ def benchmark_to_markdown_row(b: mteb.Benchmark) -> str:
         if t.metadata.languages:
             agg_langs.update(t.languages)
 
+    # to not infinitely trigger ci
+    agg_domains = sorted(agg_domains)
+    agg_langs = sorted(agg_langs)
     langs = ",".join(list(agg_langs))
     domains = "[" + ", ".join(agg_domains) + "]" if agg_domains else ""
 
