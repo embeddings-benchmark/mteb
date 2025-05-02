@@ -117,7 +117,8 @@ exclude_also = [
     ]
 
 [tool.setuptools.packages.find]
-exclude = ["tests", "results"]
+where = ["."]
+include = ["mteb*"]
 
 [tool.setuptools.package-data]
 "*" = ["*.json"]
