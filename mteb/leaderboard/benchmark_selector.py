@@ -20,7 +20,7 @@ Example:
 ]
 """
 BENCHMARK_ENTRIES = [
-    mteb.get_benchmarks(["MTEB(Multilingual, v1)", "MTEB(eng, v2)"]),
+    mteb.get_benchmarks(["MTEB(Multilingual, v2)", "MTEB(eng, v2)"]),
     (
         "Image Benchmarks",
         mteb.get_benchmarks(
