@@ -1,90 +1,163 @@
 from __future__ import annotations
 
+from collections.abc import Iterable
 from functools import partial
+from typing import Any
 
 import numpy as np
 import torch
-from datasets import Audio
+import torchaudio
+from torch.utils.data import DataLoader
+from tqdm import tqdm
 from transformers import Wav2Vec2FeatureExtractor, WavLMModel
 
-from mteb.encoder_interface import AudioEncoder, PromptType
+from mteb.encoder_interface import AudioBatch, AudioData, PromptType
 from mteb.model_meta import ModelMeta
+from mteb.models.wrapper import Wrapper
 
 
-class WavlmWrapper(AudioEncoder):
+class WavlmWrapper(Wrapper):
     def __init__(
         self,
         model_name: str,
-        model_revision: str,
-        device: str | None = None,
-        **kwargs,
+        model_revision: str = None,
+        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        **kwargs: Any,
     ):
-        super().__init__(device=device, **kwargs)
         self.model_name = model_name
         self.model_revision = model_revision
-
+        self.device = device
+        
         self.model = WavLMModel.from_pretrained(
-            self.model_name, revision=self.model_revision
-        )
+            self.model_name, 
+            revision=self.model_revision
+        ).to(self.device)
+        
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(
-            self.model_name,
-            # revision=self.model_revision
+            self.model_name
         )
-        self.embed_dim = self.model.config.hidden_size
+        self.sampling_rate = self.feature_extractor.sampling_rate
 
-        if device:
-            self.model = self.model.to(device)
+    def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
+        processed_audio = []
+
+        if isinstance(audio, DataLoader):
+            for batch in audio:
+                processed_audio.extend(self._handle_batch(batch))
+        else:
+            processed_audio = self._handle_batch(audio)
+
+        return processed_audio
+
+    def _handle_batch(
+        self, batch: AudioData | Iterable[tuple[AudioData, str]]
+    ) -> list[torch.Tensor]:
+        waveforms = []
+
+        if isinstance(batch, tuple):  # Handle (audio, metadata) tuples
+            for audio, _ in batch:
+                waveforms.append(self._convert_audio_from_numpy(audio))
+        else:
+            for item in batch:
+                if isinstance(item, dict):
+                    if "array" in item:
+                        audio = item["array"]
+                        audio = (
+                            torch.from_numpy(audio).float()
+                            if isinstance(audio, np.ndarray)
+                            else audio.float()
+                        )
+                        if item["sampling_rate"] != self.sampling_rate:
+                            resampler = torchaudio.transforms.Resample(
+                                item["sampling_rate"], self.sampling_rate
+                            )
+                            audio = resampler(audio)
+                        waveforms.append(self._convert_audio_from_numpy(audio))
+                    elif "path" in item:
+                        waveforms.append(self._load_audio_file(item["path"]))
+                elif isinstance(item, (np.ndarray, torch.Tensor)):
+                    waveforms.append(self._convert_audio_from_numpy(item))
+                elif isinstance(item, str):
+                    waveforms.append(self._load_audio_file(item))
+
+        return waveforms
+
+    def _convert_audio_from_numpy(self, audio: AudioData) -> torch.Tensor:
+        if isinstance(audio, np.ndarray):
+            audio = torch.from_numpy(audio)
+        return audio.squeeze()
+
+    def _load_audio_file(self, path: str) -> torch.Tensor:
+        waveform, sample_rate = torchaudio.load(path)
+        if sample_rate != self.sampling_rate:
+            resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
+            waveform = resampler(waveform)
+        return waveform.squeeze()
+
+    def _pad_audio_batch(self, batch):
+        batch = [x.reshape(-1) if x.ndim == 0 else x for x in batch]
+        max_length = max(audio.shape[0] for audio in batch) 
+        padded_batch = [
+            torch.nn.functional.pad(audio, (0, max_length - audio.shape[0]))
+            for audio in batch
+        ]
+        return torch.stack(padded_batch)
 
     def get_audio_embeddings(
-        self, audio_files: list[Audio] | Audio, batch_size: int = 32, **kwargs
-    ) -> np.ndarray:
-        if not isinstance(audio_files, list):
-            audio_files = [audio_files]
-
+        self,
+        audio: AudioBatch,
+        *,
+        task_name: str | None = None,
+        prompt_type: PromptType | None = None,
+        batch_size: int = 4,
+        **kwargs: Any,
+    ) -> torch.Tensor:
+        processed_audio = self._process_audio(audio)
         all_embeddings = []
 
-        for i in range(0, len(audio_files), batch_size):
-            batch = audio_files[i : i + batch_size]
+        with torch.no_grad():
+            for i in range(0, len(processed_audio), batch_size):
+                batch = processed_audio[i : i + batch_size]
+                
+                batch_tensor = self._pad_audio_batch(batch)
+                
+                if batch_tensor.ndim == 1:
+                    batch_tensor = batch_tensor.unsqueeze(0) 
+                elif batch_tensor.ndim > 2:
+                    batch_tensor = batch_tensor.view(batch_tensor.size(0), -1)
+                
+                inputs = self.feature_extractor(
+                    batch_tensor.cpu().numpy(), 
+                    sampling_rate=self.sampling_rate,
+                    return_tensors="pt",
+                    padding="longest",
+                    return_attention_mask=True,
+                ).to(self.device)
 
-            audio_data = [file["array"] for file in batch]
-            sampling_rates = [file["sampling_rate"] for file in batch]
-
-            # Preprocess batch
-            inputs = self.feature_extractor(
-                audio_data,
-                sampling_rate=sampling_rates[0],
-                padding=True,
-                return_tensors="pt",
-            )
-
-            if hasattr(self, "device") and self.device:
-                inputs = {k: v.to(self.device) for k, v in inputs.items()}
-
-            # Get embeddings
-            with torch.no_grad():
                 outputs = self.model(
-                    input_values=inputs["input_values"],
+                    inputs.input_values,
+                    attention_mask=inputs.attention_mask,
                     output_hidden_states=True,
-                    return_dict=True,
                 )
 
-            hidden_states = outputs.hidden_states[-1]
-            batch_embeddings = hidden_states.mean(dim=1).cpu().numpy()
-            all_embeddings.append(batch_embeddings)
+                last_hidden_state = outputs.hidden_states[-1]
+                embeddings = torch.mean(last_hidden_state, dim=1)
+                all_embeddings.append(embeddings.cpu())
 
-        return np.vstack(all_embeddings)
+        if all_embeddings:
+            return torch.cat(all_embeddings, dim=0)
+        else:
+            return torch.zeros((0, self.model.config.hidden_size))
 
     def encode(
         self,
-        audio_files: list[Audio],
+        inputs: AudioBatch,
         *,
         task_name: str,
         prompt_type: PromptType | None = None,
-        batch_size: int = 32,
-        **kwargs,
+        **kwargs: Any,
     ) -> np.ndarray:
-        return self.get_audio_embeddings(audio_files, batch_size=batch_size, **kwargs)
-
+        return self.get_audio_embeddings(inputs, task_name=task_name, **kwargs).numpy()
 
 wavlm_base = ModelMeta(
     loader=partial(
