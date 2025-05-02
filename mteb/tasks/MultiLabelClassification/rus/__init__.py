@@ -7,7 +7,7 @@ from .ru_toixic_multilabelclassification_okmlcup import (
 from .SensitiveTopicsClassification import SensitiveTopicsClassification
 
 __all__ = [
+    "CEDRClassification",
     "RuToxicOKMLCUPMultilabelClassification",
     "SensitiveTopicsClassification",
-    "CEDRClassification",
 ]

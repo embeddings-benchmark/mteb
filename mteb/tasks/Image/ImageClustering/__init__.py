@@ -9,9 +9,9 @@ from .eng import (
 )
 
 __all__ = [
-    "TinyImageNet",
     "CIFAR100Clustering",
     "CIFAR10Clustering",
     "ImageNet10Clustering",
     "ImageNetDog15Clustering",
+    "TinyImageNet",
 ]

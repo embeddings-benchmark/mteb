@@ -12,10 +12,10 @@ from .rus import (
 
 __all__ = [
     "BrazilianToxicTweetsClassification",
-    "MalteseNewsClassification",
+    "CEDRClassification",
     "KorHateSpeechMLClassification",
+    "MalteseNewsClassification",
     "MultiEURLEXMultilabelClassification",
     "RuToxicOKMLCUPMultilabelClassification",
     "SensitiveTopicsClassification",
-    "CEDRClassification",
 ]

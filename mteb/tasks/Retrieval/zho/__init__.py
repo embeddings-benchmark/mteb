@@ -17,9 +17,9 @@ __all__ = [
     "CovidRetrieval",
     "DuRetrieval",
     "EcomRetrieval",
+    "LeCaRDv2",
     "MMarcoRetrieval",
     "MedicalRetrieval",
     "T2Retrieval",
     "VideoRetrieval",
-    "LeCaRDv2",
 ]

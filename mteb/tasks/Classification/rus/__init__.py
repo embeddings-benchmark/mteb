@@ -15,15 +15,15 @@ from .RuSciBenchOECDClassification import RuSciBenchOECDClassification
 from .senti_ru_eval import SentiRuEval2016Classification
 
 __all__ = [
-    "RuNLUIntentClassification",
-    "RuToxicOKMLCUPClassification",
-    "KinopoiskClassification",
+    "GeoreviewClassification",
     "HeadlineClassification",
     "InappropriatenessClassification",
     "InappropriatenessClassificationv2",
-    "SentiRuEval2016Classification",
+    "KinopoiskClassification",
+    "RuNLUIntentClassification",
+    "RuReviewsClassification",
     "RuSciBenchGRNTIClassification",
     "RuSciBenchOECDClassification",
-    "RuReviewsClassification",
-    "GeoreviewClassification",
+    "RuToxicOKMLCUPClassification",
+    "SentiRuEval2016Classification",
 ]

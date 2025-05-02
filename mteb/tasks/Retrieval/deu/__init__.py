@@ -8,10 +8,10 @@ from .GermanQuADRetrieval import GermanQuADRetrieval
 from .LegalQuADRetrieval import LegalQuAD
 
 __all__ = [
-    "GermanQuADRetrieval",
+    "GerDaLIR",
     "GerDaLIRSmall",
     "GermanDPR",
     "GermanGovServiceRetrieval",
+    "GermanQuADRetrieval",
     "LegalQuAD",
-    "GerDaLIR",
 ]

@@ -11,7 +11,7 @@ from .CzechSubjectivityClassification import CzechSubjectivityClassification
 
 __all__ = [
     "CSFDCZMovieReviewSentimentClassification",
-    "CzechSubjectivityClassification",
     "CzechProductReviewSentimentClassification",
     "CzechSoMeSentimentClassification",
+    "CzechSubjectivityClassification",
 ]

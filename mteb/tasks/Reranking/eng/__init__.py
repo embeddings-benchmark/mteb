@@ -10,10 +10,10 @@ from .WebLINXCandidatesReranking import WebLINXCandidatesReranking
 
 __all__ = [
     "AskUbuntuDupQuestions",
-    "WebLINXCandidatesReranking",
-    "StackOverflowDupQuestions",
-    "NevIR",
-    "MindSmallReranking",
     "BuiltBenchReranking",
+    "MindSmallReranking",
+    "NevIR",
     "SciDocsReranking",
+    "StackOverflowDupQuestions",
+    "WebLINXCandidatesReranking",
 ]

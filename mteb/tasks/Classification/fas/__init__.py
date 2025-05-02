@@ -31,6 +31,7 @@ __all__ = [
     "DeepSentiPers",
     "DigikalamagClassification",
     "NLPTwitterAnalysisClassification",
+    "PersianFoodSentimentClassification",
     "PersianTextEmotion",
     "PersianTextTone",
     "SIDClassification",
@@ -51,5 +52,4 @@ __all__ = [
     "SynPerChatbotSatisfactionLevelClassification",
     "SynPerChatbotToneChatbotClassification",
     "SynPerChatbotToneUserClassification",
-    "PersianFoodSentimentClassification",
 ]

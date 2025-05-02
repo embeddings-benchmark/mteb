@@ -6,12 +6,12 @@ from .TenKGnadClusteringP2P import TenKGnadClusteringP2P, TenKGnadClusteringP2PF
 from .TenKGnadClusteringS2S import TenKGnadClusteringS2S, TenKGnadClusteringS2SFast
 
 __all__ = [
+    "BlurbsClusteringP2P",
+    "BlurbsClusteringP2PFast",
     "BlurbsClusteringS2S",
     "BlurbsClusteringS2SFast",
     "TenKGnadClusteringP2P",
     "TenKGnadClusteringP2PFast",
     "TenKGnadClusteringS2S",
     "TenKGnadClusteringS2SFast",
-    "BlurbsClusteringP2P",
-    "BlurbsClusteringP2PFast",
 ]

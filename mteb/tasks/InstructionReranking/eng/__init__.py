@@ -5,7 +5,7 @@ from .News21InstructionRetrieval import News21InstructionRetrieval
 from .Robust04InstructionRetrieval import Robust04InstructionRetrieval
 
 __all__ = [
-    "News21InstructionRetrieval",
     "Core17InstructionRetrieval",
+    "News21InstructionRetrieval",
     "Robust04InstructionRetrieval",
 ]

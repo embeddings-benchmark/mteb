@@ -12,10 +12,10 @@ from .VGHierarchicalClustering import (
 )
 
 __all__ = [
-    "VGClustering",
+    "SNLClustering",
     "SNLHierarchicalClusteringP2P",
     "SNLHierarchicalClusteringS2S",
-    "SNLClustering",
+    "VGClustering",
     "VGHierarchicalClusteringP2P",
     "VGHierarchicalClusteringS2S",
 ]
