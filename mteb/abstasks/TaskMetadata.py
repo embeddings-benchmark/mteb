@@ -556,8 +556,10 @@ class TaskMetadata(BaseModel):
         if existing_dataset_card_data is None:
             existing_dataset_card_data = DatasetCardData()
 
-        return (
-            DatasetCardData(
+        dataset_card_data_params = existing_dataset_card_data.to_dict()
+        # override the existing values
+        dataset_card_data_params.update(
+            dict(
                 language=languages,
                 license=self.license if self.license != "not specified" else "unknown",
                 annotations_creators=[self.annotations_creators]
@@ -568,8 +570,11 @@ class TaskMetadata(BaseModel):
                 task_categories=dataset_type,
                 task_ids=self.task_subtypes,
                 tags=tags,
-                **existing_dataset_card_data.to_dict(),
-            ),
+            )
+        )
+
+        return (
+            DatasetCardData(**dataset_card_data_params),
             # parameters for readme generation
             dict(
                 citation=self.bibtex_citation,
