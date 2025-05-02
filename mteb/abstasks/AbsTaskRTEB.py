@@ -727,8 +727,6 @@ class AbsTaskRTEB(AbsTask):
             load_embds=load_embds_flag,  # Use the flag from kwargs
             save_embds=save_embds_flag,  # Use the flag from kwargs
         )
-        task_save_path = Path(args.save_path) / model_name
-        task_save_path.mkdir(parents=True, exist_ok=True)
         rteb_cache_path = Path(
             f"{os.path.expanduser('~')}/.cache/rteb/{self.rteb_dataset_name}/{model_name}"
         )
@@ -797,17 +795,17 @@ class AbsTaskRTEB(AbsTask):
 
         # 2. Encode Queries and Corpus using pl.Trainer
         queries_embds_file = (
-            task_save_path / QUERIES_EMBD_FILENAME
+            rteb_cache_path / QUERIES_EMBD_FILENAME
         )  # Use consistent filename
         corpus_embds_file = (
-            task_save_path / CORPUS_EMBD_FILENAME
+            rteb_cache_path / CORPUS_EMBD_FILENAME
         )  # Use consistent filename
 
         # Encode Queries
         logger.info("Encoding queries")
         rteb_encoder.is_query = True
         rteb_encoder.in_memory = len(self.queries) < args.embd_in_memory_threshold
-        rteb_encoder.save_file = os.path.join(task_save_path, QUERIES_EMBD_FILENAME)
+        rteb_encoder.save_file = str(queries_embds_file)
         if args.load_embds and rteb_encoder.embd_files_exist(trainer.num_devices):
             queries_embds_files = rteb_encoder.get_embd_files(trainer.num_devices)
             logger.info(f"Embedding files exist: {queries_embds_files}")
@@ -947,7 +945,7 @@ class AbsTaskRTEB(AbsTask):
                 logger.info("-" * 40)
                 logger.info(f"Dataset: {self.rteb_dataset_name}")
                 logger.info(f"Model: {model_name}")
-                logger.info(f"Save path: {task_save_path}")
+                logger.info(f"Save path: {rteb_cache_path}")
                 logger.info("Retrieval evaluation:")
                 logger.info(rteb_scores)  # Log the scores dictionary
 
