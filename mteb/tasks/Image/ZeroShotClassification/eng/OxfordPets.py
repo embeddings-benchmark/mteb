@@ -31,16 +31,17 @@ class OxfordPetsZeroShotClassification(AbsTaskZeroShotClassification):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="created",
-        bibtex_citation="""@misc{maji2013finegrainedvisualclassificationaircraft,
-            title={Fine-Grained Visual Classification of Aircraft},
-            author={Subhransu Maji and Esa Rahtu and Juho Kannala and Matthew Blaschko and Andrea Vedaldi},
-            year={2013},
-            eprint={1306.5151},
-            archivePrefix={arXiv},
-            primaryClass={cs.CV},
-            url={https://arxiv.org/abs/1306.5151},
-        }
-        """,
+        bibtex_citation=r"""
+@misc{maji2013finegrainedvisualclassificationaircraft,
+  archiveprefix = {arXiv},
+  author = {Subhransu Maji and Esa Rahtu and Juho Kannala and Matthew Blaschko and Andrea Vedaldi},
+  eprint = {1306.5151},
+  primaryclass = {cs.CV},
+  title = {Fine-Grained Visual Classification of Aircraft},
+  url = {https://arxiv.org/abs/1306.5151},
+  year = {2013},
+}
+""",
     )
 
     def get_candidate_labels(self) -> list[str]:

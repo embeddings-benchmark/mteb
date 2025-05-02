@@ -35,15 +35,17 @@ version train/test list.""",
         dialect=[],
         modalities=["image", "text"],
         sample_creation="created",
-        bibtex_citation="""@misc{soomro2012ucf101dataset101human,
-      title={UCF101: A Dataset of 101 Human Actions Classes From Videos in The Wild},
-      author={Khurram Soomro and Amir Roshan Zamir and Mubarak Shah},
-      year={2012},
-      eprint={1212.0402},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/1212.0402},
-}""",
+        bibtex_citation=r"""
+@misc{soomro2012ucf101dataset101human,
+  archiveprefix = {arXiv},
+  author = {Khurram Soomro and Amir Roshan Zamir and Mubarak Shah},
+  eprint = {1212.0402},
+  primaryclass = {cs.CV},
+  title = {UCF101: A Dataset of 101 Human Actions Classes From Videos in The Wild},
+  url = {https://arxiv.org/abs/1212.0402},
+  year = {2012},
+}
+""",
     )
 
     def get_candidate_labels(self) -> list[str]:

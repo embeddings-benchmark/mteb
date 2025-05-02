@@ -29,13 +29,14 @@ class CIFAR10Clustering(AbsTaskImageClustering):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation=""" @TECHREPORT{Krizhevsky09learningmultiple,
-            author = {Alex Krizhevsky},
-            title = {Learning multiple layers of features from tiny images},
-            institution = {},
-            year = {2009}
-        }
-        """,
+        bibtex_citation=r"""
+@techreport{Krizhevsky09learningmultiple,
+  author = {Alex Krizhevsky},
+  institution = {},
+  title = {Learning multiple layers of features from tiny images},
+  year = {2009},
+}
+""",
     )
 
     image_column_name: str = "img"
@@ -66,13 +67,14 @@ class CIFAR100Clustering(AbsTaskImageClustering):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation=""" @TECHREPORT{Krizhevsky09learningmultiple,
-            author = {Alex Krizhevsky},
-            title = {Learning multiple layers of features from tiny images},
-            institution = {},
-            year = {2009}
-        }
-        """,
+        bibtex_citation=r"""
+@techreport{Krizhevsky09learningmultiple,
+  author = {Alex Krizhevsky},
+  institution = {},
+  title = {Learning multiple layers of features from tiny images},
+  year = {2009},
+}
+""",
     )
     image_column_name: str = "img"
     label_column_name: str = "fine_label"

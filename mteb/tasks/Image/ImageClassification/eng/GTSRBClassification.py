@@ -29,16 +29,18 @@ class GTSRBClassification(AbsTaskImageClassification):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@INPROCEEDINGS{6033395,
-  author={Stallkamp, Johannes and Schlipsing, Marc and Salmen, Jan and Igel, Christian},
-  booktitle={The 2011 International Joint Conference on Neural Networks},
-  title={The German Traffic Sign Recognition Benchmark: A multi-class classification competition},
-  year={2011},
-  volume={},
-  number={},
-  pages={1453-1460},
-  keywords={Humans;Training;Image color analysis;Benchmark testing;Lead;Histograms;Image resolution},
-  doi={10.1109/IJCNN.2011.6033395}}
+        bibtex_citation=r"""
+@inproceedings{6033395,
+  author = {Stallkamp, Johannes and Schlipsing, Marc and Salmen, Jan and Igel, Christian},
+  booktitle = {The 2011 International Joint Conference on Neural Networks},
+  doi = {10.1109/IJCNN.2011.6033395},
+  keywords = {Humans;Training;Image color analysis;Benchmark testing;Lead;Histograms;Image resolution},
+  number = {},
+  pages = {1453-1460},
+  title = {The German Traffic Sign Recognition Benchmark: A multi-class classification competition},
+  volume = {},
+  year = {2011},
+}
 """,
     )
     image_column_name = "webp"

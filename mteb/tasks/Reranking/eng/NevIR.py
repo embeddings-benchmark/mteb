@@ -27,11 +27,13 @@ class NevIR(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{Weller2023NevIRNI,
-  title={{NevIR: Negation in Neural Information Retrieval}},
-  author={{Orion Weller and Dawn J Lawrie and Benjamin Van Durme}},
-  booktitle={{Conference of the European Chapter of the Association for Computational Linguistics}},
-  year={{2023}},
-  url={{https://api.semanticscholar.org/CorpusID:258676146}}
-}""",
+        bibtex_citation=r"""
+@inproceedings{Weller2023NevIRNI,
+  author = {{Orion Weller and Dawn J Lawrie and Benjamin Van Durme}},
+  booktitle = {{Conference of the European Chapter of the Association for Computational Linguistics}},
+  title = {{NevIR: Negation in Neural Information Retrieval}},
+  url = {{https://api.semanticscholar.org/CorpusID:258676146}},
+  year = {{2023}},
+}
+""",
     )
