@@ -40,14 +40,16 @@ class HALClusteringS2S(AbsTaskClustering):
         annotations_creators="human-annotated",
         dialect=None,
         sample_creation="found",
-        bibtex_citation="""@misc{ciancone2024extending,
-      title={Extending the Massive Text Embedding Benchmark to French},
-      author={Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
-      year={2024},
-      eprint={2405.20468},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-}""",
+        bibtex_citation=r"""
+@misc{ciancone2024extending,
+  archiveprefix = {arXiv},
+  author = {Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
+  eprint = {2405.20468},
+  primaryclass = {cs.CL},
+  title = {Extending the Massive Text Embedding Benchmark to French},
+  year = {2024},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -87,14 +89,16 @@ class HALClusteringS2SFast(AbsTaskClusteringFast):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{ciancone2024extending,
-      title={Extending the Massive Text Embedding Benchmark to French},
-      author={Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
-      year={2024},
-      eprint={2405.20468},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-}""",
+        bibtex_citation=r"""
+@misc{ciancone2024extending,
+  archiveprefix = {arXiv},
+  author = {Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
+  eprint = {2405.20468},
+  primaryclass = {cs.CL},
+  title = {Extending the Massive Text Embedding Benchmark to French},
+  year = {2024},
+}
+""",
         adapted_from=["HALClusteringS2S"],
     )
 

@@ -29,12 +29,14 @@ class RiaNewsRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{gavrilov2018self,
-        title={Self-Attentive Model for Headline Generation},
-        author={Gavrilov, Daniil and  Kalaidin, Pavel and  Malykh, Valentin},
-        booktitle={Proceedings of the 41st European Conference on Information Retrieval},
-        year={2019}
-        }""",
+        bibtex_citation=r"""
+@inproceedings{gavrilov2018self,
+  author = {Gavrilov, Daniil and  Kalaidin, Pavel and  Malykh, Valentin},
+  booktitle = {Proceedings of the 41st European Conference on Information Retrieval},
+  title = {Self-Attentive Model for Headline Generation},
+  year = {2019},
+}
+""",
         prompt={"query": "Given a news title, retrieve relevant news article"},
     )
 
@@ -63,11 +65,13 @@ class RiaNewsRetrievalHardNegatives(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{gavrilov2018self,
-        title={Self-Attentive Model for Headline Generation},
-        author={Gavrilov, Daniil and  Kalaidin, Pavel and  Malykh, Valentin},
-        booktitle={Proceedings of the 41st European Conference on Information Retrieval},
-        year={2019}
-        }""",
+        bibtex_citation=r"""
+@inproceedings{gavrilov2018self,
+  author = {Gavrilov, Daniil and  Kalaidin, Pavel and  Malykh, Valentin},
+  booktitle = {Proceedings of the 41st European Conference on Information Retrieval},
+  title = {Self-Attentive Model for Headline Generation},
+  year = {2019},
+}
+""",
         adapted_from=["RiaNewsRetrieval"],
     )

@@ -28,14 +28,15 @@ class CLEVR(AbsTaskZeroShotClassification):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="created",
-        bibtex_citation="""\
-@InProceedings{Johnson_2017_CVPR,
-author = {Johnson, Justin and Hariharan, Bharath and van der Maaten, Laurens and Fei-Fei, Li and Lawrence Zitnick, C. and Girshick, Ross},
-title = {CLEVR: A Diagnostic Dataset for Compositional Language and Elementary Visual Reasoning},
-booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
-month = {July},
-year = {2017}
-}""",
+        bibtex_citation=r"""
+@inproceedings{Johnson_2017_CVPR,
+  author = {Johnson, Justin and Hariharan, Bharath and van der Maaten, Laurens and Fei-Fei, Li and Lawrence Zitnick, C. and Girshick, Ross},
+  booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+  month = {July},
+  title = {CLEVR: A Diagnostic Dataset for Compositional Language and Elementary Visual Reasoning},
+  year = {2017},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 15000},
             "avg_character_length": {"test": 0},
@@ -80,14 +81,15 @@ class CLEVRCount(AbsTaskZeroShotClassification):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="created",
-        bibtex_citation="""\
-@InProceedings{Johnson_2017_CVPR,
-author = {Johnson, Justin and Hariharan, Bharath and van der Maaten, Laurens and Fei-Fei, Li and Lawrence Zitnick, C. and Girshick, Ross},
-title = {CLEVR: A Diagnostic Dataset for Compositional Language and Elementary Visual Reasoning},
-booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
-month = {July},
-year = {2017}
-}""",
+        bibtex_citation=r"""
+@inproceedings{Johnson_2017_CVPR,
+  author = {Johnson, Justin and Hariharan, Bharath and van der Maaten, Laurens and Fei-Fei, Li and Lawrence Zitnick, C. and Girshick, Ross},
+  booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+  month = {July},
+  title = {CLEVR: A Diagnostic Dataset for Compositional Language and Elementary Visual Reasoning},
+  year = {2017},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 15000},
             "avg_character_length": {"test": 0},

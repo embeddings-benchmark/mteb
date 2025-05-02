@@ -64,31 +64,31 @@ class MultilingualSentimentClassification(AbsTaskClassification, MultilingualTas
         annotations_creators="derived",
         dialect=["ar-dz"],
         sample_creation="found",
-        bibtex_citation="""
-        @inproceedings{mollanorozy-etal-2023-cross,
-            title = "Cross-lingual Transfer Learning with \{P\}ersian",
-            author = "Mollanorozy, Sepideh  and
-            Tanti, Marc  and
-            Nissim, Malvina",
-            editor = "Beinborn, Lisa  and
-            Goswami, Koustava  and
-            Murado{\\u{g}}lu, Saliha  and
-            Sorokin, Alexey  and
-            Kumar, Ritesh  and
-            Shcherbakov, Andreas  and
-            Ponti, Edoardo M.  and
-            Cotterell, Ryan  and
-            Vylomova, Ekaterina",
-            booktitle = "Proceedings of the 5th Workshop on Research in Computational Linguistic Typology and Multilingual NLP",
-            month = may,
-            year = "2023",
-            address = "Dubrovnik, Croatia",
-            publisher = "Association for Computational Linguistics",
-            url = "https://aclanthology.org/2023.sigtyp-1.9",
-            doi = "10.18653/v1/2023.sigtyp-1.9",
-            pages = "89--95",
-        }
-        """,
+        bibtex_citation=r"""
+@inproceedings{mollanorozy-etal-2023-cross,
+  address = {Dubrovnik, Croatia},
+  author = {Mollanorozy, Sepideh  and
+Tanti, Marc  and
+Nissim, Malvina},
+  booktitle = {Proceedings of the 5th Workshop on Research in Computational Linguistic Typology and Multilingual NLP},
+  doi = {10.18653/v1/2023.sigtyp-1.9},
+  editor = {Beinborn, Lisa  and
+Goswami, Koustava  and
+Murado{\\u{g}}lu, Saliha  and
+Sorokin, Alexey  and
+Kumar, Ritesh  and
+Shcherbakov, Andreas  and
+Ponti, Edoardo M.  and
+Cotterell, Ryan  and
+Vylomova, Ekaterina},
+  month = may,
+  pages = {89--95},
+  publisher = {Association for Computational Linguistics},
+  title = {Cross-lingual Transfer Learning with \{P\}ersian},
+  url = {https://aclanthology.org/2023.sigtyp-1.9},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):

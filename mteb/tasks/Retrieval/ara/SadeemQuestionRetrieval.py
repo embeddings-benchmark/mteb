@@ -32,12 +32,12 @@ class SadeemQuestionRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-            @inproceedings{sadeem-2024-ar-retrieval-questions,
-            title = "SadeemQuestionRetrieval: A New Benchmark for Arabic questions-based Articles Searching.",
-            author = "abubakr.soliman@sadeem.app"
-            }
-        """,
+        bibtex_citation=r"""
+@inproceedings{sadeem-2024-ar-retrieval-questions,
+  author = {abubakr.soliman@sadeem.app},
+  title = {SadeemQuestionRetrieval: A New Benchmark for Arabic questions-based Articles Searching.},
+}
+""",
     )
 
     def load_data(self, **kwargs):

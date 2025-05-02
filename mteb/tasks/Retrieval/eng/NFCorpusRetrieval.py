@@ -27,16 +27,18 @@ class NFCorpus(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@inproceedings{boteva2016,
+        bibtex_citation=r"""
+@inproceedings{boteva2016,
   author = {Boteva, Vera and Gholipour, Demian and Sokolov, Artem and Riezler, Stefan},
-  title = {A Full-Text Learning to Rank Dataset for Medical Information Retrieval},
-  journal = {Proceedings of the 38th European Conference on Information Retrieval},
-  journal-abbrev = {ECIR},
-  year = {2016},
   city = {Padova},
   country = {Italy},
-  url = {http://www.cl.uni-heidelberg.de/~riezler/publications/papers/ECIR2016.pdf}
-}""",
+  journal = {Proceedings of the 38th European Conference on Information Retrieval},
+  journal-abbrev = {ECIR},
+  title = {A Full-Text Learning to Rank Dataset for Medical Information Retrieval},
+  url = {http://www.cl.uni-heidelberg.de/~riezler/publications/papers/ECIR2016.pdf},
+  year = {2016},
+}
+""",
         prompt={
             "query": "Given a question, retrieve relevant documents that best answer the question"
         },

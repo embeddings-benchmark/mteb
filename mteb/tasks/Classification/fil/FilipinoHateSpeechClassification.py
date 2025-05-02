@@ -29,17 +29,17 @@ class FilipinoHateSpeechClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @article{Cabasag-2019-hate-speech,
-            title={Hate speech in Philippine election-related tweets: Automatic detection and classification using natural language processing.},
-            author={Neil Vicente Cabasag, Vicente Raphael Chan, Sean Christian Lim, Mark Edward Gonzales, and Charibeth Cheng},
-            journal={Philippine Computing Journal},
-            volume={XIV},
-            number={1},
-            month={August},
-            year={2019}
-        }
-        """,
+        bibtex_citation=r"""
+@article{Cabasag-2019-hate-speech,
+  author = {Neil Vicente Cabasag, Vicente Raphael Chan, Sean Christian Lim, Mark Edward Gonzales, and Charibeth Cheng},
+  journal = {Philippine Computing Journal},
+  month = {August},
+  number = {1},
+  title = {Hate speech in Philippine election-related tweets: Automatic detection and classification using natural language processing.},
+  volume = {XIV},
+  year = {2019},
+}
+""",
     )
 
     def dataset_transform(self):

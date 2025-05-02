@@ -27,12 +27,14 @@ class LeCaRDv2(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=None,
         sample_creation="found",
-        bibtex_citation="""@misc{li2023lecardv2,
-      title={LeCaRDv2: A Large-Scale Chinese Legal Case Retrieval Dataset},
-      author={Haitao Li and Yunqiu Shao and Yueyue Wu and Qingyao Ai and Yixiao Ma and Yiqun Liu},
-      year={2023},
-      eprint={2310.17609},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-}""",
+        bibtex_citation=r"""
+@misc{li2023lecardv2,
+  archiveprefix = {arXiv},
+  author = {Haitao Li and Yunqiu Shao and Yueyue Wu and Qingyao Ai and Yixiao Ma and Yiqun Liu},
+  eprint = {2310.17609},
+  primaryclass = {cs.CL},
+  title = {LeCaRDv2: A Large-Scale Chinese Legal Case Retrieval Dataset},
+  year = {2023},
+}
+""",
     )
