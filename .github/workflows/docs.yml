@@ -50,6 +50,8 @@ jobs:
           make build-docs
 
       - name: Push table
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
