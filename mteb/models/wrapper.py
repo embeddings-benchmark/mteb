@@ -124,9 +124,12 @@ class Wrapper:
         return self.instruction_template(instruction, prompt_type)
 
     def get_task_instruction(
-        self, task_name: str, prompt_type: PromptType | None
+        self,
+        task_name: str,
+        prompt_type: PromptType | None,
+        prompts_dict: dict[str, str] | None = None,
     ) -> str:
-        instruction = self.get_instruction(task_name, prompt_type)
+        instruction = self.get_instruction(task_name, prompt_type, prompts_dict)
         if self.instruction_template:
             return self.format_instruction(instruction)
         return instruction
