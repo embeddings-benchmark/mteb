@@ -466,6 +466,7 @@ class AbsTask(ABC):
         if not self.data_loaded:
             self.load_data()
 
+        self.metadata.push_dataset_card_to_hub(repo_name)
         self._push_dataset_to_hub(repo_name)
 
     @property

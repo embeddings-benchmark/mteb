@@ -51,7 +51,6 @@ def test_reproducibility_workflow(
         "Summarization",
         "InstructionRetrieval",
         "InstructionReranking",
-        "Speed",
     ),
 )
 def test_validate_task_to_prompt_name(task_name: str | AbsTask):

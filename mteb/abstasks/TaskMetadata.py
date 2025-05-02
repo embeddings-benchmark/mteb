@@ -6,6 +6,7 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any, Union
 
+from huggingface_hub import DatasetCard, DatasetCardData, repo_exists
 from pydantic import (
     BaseModel,
     ConfigDict,
@@ -13,6 +14,7 @@ from pydantic import (
 )
 from typing_extensions import Literal, TypedDict
 
+import mteb
 from mteb.custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
 from mteb.languages import (
     ISO_LANGUAGE_SCRIPT,
@@ -98,7 +100,6 @@ SAMPLE_CREATION_METHOD = Literal[
     "multiple",
 ]
 
-
 MIEB_TASK_TYPE = (
     "Any2AnyMultiChoice",
     "Any2AnyRetrieval",
@@ -126,7 +127,6 @@ _task_types = (
     "Summarization",
     "InstructionRetrieval",
     "InstructionReranking",
-    "Speed",
 ) + MIEB_TASK_TYPE
 
 TASK_TYPE = Literal[_task_types]
@@ -535,3 +535,147 @@ class TaskMetadata(BaseModel):
     @property
     def revision(self) -> str:
         return self.dataset["revision"]
+
+    def create_dataset_card_data(
+        self, existing_dataset_card_data: DatasetCardData | None = None
+    ) -> tuple[DatasetCardData, dict[str, str]]:
+        """Create a DatasetCardData object from the task metadata.
+
+        Args:
+            existing_dataset_card_data: The existing DatasetCardData object to update. If None, a new object will be created.
+
+        Returns:
+            A DatasetCardData object with the metadata for the task with kwargs to card
+        """
+        # todo figure out datasets with multiple types. E. g. one dataset as classification and ZeroShotClassification
+        mteb_task_type_to_datasets = {
+            # Text
+            "BitextMining": "translation",
+            "Classification": "text-classification",
+            "MultilabelClassification": "text-classification",
+            "Clustering": "text-clustering",
+            "PairClassification": "text-classification",
+            "Reranking": "text-ranking",
+            "Retrieval": "text-retrieval",
+            "STS": "sentence-similarity",
+            "Summarization": "summarization",
+            "InstructionRetrieval": "text-retrieval",
+            "InstructionReranking": "text-ranking",
+            # Image
+            "Any2AnyMultiChoice": "image-multiple-choice",  # currently not real HF type
+            "Any2AnyRetrieval": "image-retrieval",  # currently not real HF type
+            "Any2AnyMultilingualRetrieval": "image-retrieval",  # currently not real HF type
+            "VisionCentricQA": "visual-question-answering",
+            "ImageClustering": "image-clustering",
+            "ImageClassification": "image-classification",
+            "ImageMultilabelClassification": "image-classification",
+            "DocumentUnderstanding": "image-retrieval",  # currently not real HF type
+            "VisualSTS(eng)": "image-similarity",  # currently not real HF type
+            "VisualSTS(multi)": "image-similarity",  # currently not real HF type
+            "ZeroShotClassification": "zero-shot-image-classification",
+            "Compositionality": "image-text-classification",  # currently not real HF type
+        }
+
+        dataset_type = [mteb_task_type_to_datasets[self.type]]
+
+        if self.category in ["i2i", "it2i", "i2it", "it2it"]:
+            dataset_type.append("image-to-image")
+        if self.category in ["i2t", "t2i", "it2t", "it2i", "t2it", "i2it", "it2it"]:
+            dataset_type.extend(["image-to-text", "text-to-image"])
+
+        if self.is_multilingual:
+            languages: list[str] = []
+            for val in list(self.eval_langs.values()):
+                languages.extend(val)
+        else:
+            languages: list[str] = self.eval_langs
+
+        languages = [lang.split("-")[0] for lang in languages]
+
+        multilinguality = "multilingual" if self.is_multilingual else "monolingual"
+        if "translated" in self.sample_creation:
+            multilinguality = "translated"
+
+        if self.adapted_from is not None:
+            source_datasets = [
+                task.metadata.dataset["path"]
+                for task in mteb.get_tasks(self.adapted_from)
+            ]
+        else:
+            source_datasets = None
+
+        tags = ["mteb"]
+        tags.extend(self.modalities)
+
+        descriptive_stats = self.descriptive_stats
+        if descriptive_stats is not None:
+            descriptive_stats = json.dumps(descriptive_stats, indent=4)
+
+        if existing_dataset_card_data is None:
+            existing_dataset_card_data = DatasetCardData()
+
+        dataset_card_data_params = existing_dataset_card_data.to_dict()
+        # override the existing values
+        dataset_card_data_params.update(
+            dict(
+                language=languages,
+                license=self.license if self.license != "not specified" else "unknown",
+                annotations_creators=[self.annotations_creators]
+                if self.annotations_creators
+                else None,
+                multilinguality=multilinguality,
+                source_datasets=source_datasets,
+                task_categories=dataset_type,
+                task_ids=self.task_subtypes,
+                tags=tags,
+            )
+        )
+
+        return (
+            DatasetCardData(**dataset_card_data_params),
+            # parameters for readme generation
+            dict(
+                citation=self.bibtex_citation,
+                dataset_description=self.description,
+                dataset_reference=self.reference,
+                descritptive_stats=descriptive_stats,
+                dataset_task_name=self.name,
+                category=self.category,
+                domains=", ".join(self.domains),
+            ),
+        )
+
+    def generate_dataset_card(
+        self, existing_dataset_card: DatasetCard | None = None
+    ) -> DatasetCard:
+        """Generates a dataset card for the task.
+
+        Args:
+            existing_dataset_card: The existing dataset card to update. If None, a new dataset card will be created.
+
+        Returns:
+            DatasetCard: The dataset card for the task.
+        """
+        path = Path(__file__).parent / "dataset_card_template.md"
+        existing_dataset_card_data = (
+            existing_dataset_card.data if existing_dataset_card else None
+        )
+        dataset_card_data, template_kwargs = self.create_dataset_card_data(
+            existing_dataset_card_data
+        )
+        dataset_card = DatasetCard.from_template(
+            card_data=dataset_card_data,
+            template_path=str(path),
+            **template_kwargs,
+        )
+        return dataset_card
+
+    def push_dataset_card_to_hub(self, repo_name: str) -> None:
+        """Pushes the dataset card to the huggingface hub.
+
+        Args:
+            repo_name: The name of the repository to push the dataset card to.
+        """
+        dataset_card = DatasetCard.load(repo_name) if repo_exists(repo_name) else None
+        dataset_card = self.generate_dataset_card(dataset_card)
+        dataset_card.push_to_hub(repo_name, commit_message="Add dataset card")
