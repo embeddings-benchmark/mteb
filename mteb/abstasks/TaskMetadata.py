@@ -16,10 +16,7 @@ from typing_extensions import Literal, TypedDict
 from mteb.custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
 from mteb.languages import (
     ISO_LANGUAGE_SCRIPT,
-    ISO_TO_LANGUAGE,
-    ISO_TO_SCRIPT,
-    path_to_lang_codes,
-    path_to_lang_scripts,
+    check_language_code,
 )
 from mteb.types import PromptType
 
@@ -57,6 +54,7 @@ TASK_SUBTYPE = Literal[
     "Tumor detection",
     "Duplicate Detection",
     "Rendered semantic textual similarity",
+    "Intent classification",
 ]
 
 TASK_DOMAIN = Literal[
@@ -83,6 +81,7 @@ TASK_DOMAIN = Literal[
     "Programming",
     "Chemistry",
     "Financial",
+    "Entertainment",
 ]
 
 SAMPLE_CREATION_METHOD = Literal[
@@ -97,7 +96,6 @@ SAMPLE_CREATION_METHOD = Literal[
     "rendered",
     "multiple",
 ]
-
 
 MIEB_TASK_TYPE = (
     "Any2AnyMultiChoice",
@@ -114,7 +112,7 @@ MIEB_TASK_TYPE = (
     "Compositionality",
 )
 
-_task_types = (
+_TASK_TYPE = (
     "BitextMining",
     "Classification",
     "MultilabelClassification",
@@ -129,7 +127,8 @@ _task_types = (
     "Speed",
 ) + MIEB_TASK_TYPE
 
-TASK_TYPE = Literal[_task_types]
+TASK_TYPE = Literal[_TASK_TYPE]
+
 
 TASK_CATEGORY = Literal[
     "t2t",
@@ -157,23 +156,6 @@ SPLIT_NAME = str
 HFSubset = str
 LANGUAGES = Union[
     list[ISO_LANGUAGE_SCRIPT], Mapping[HFSubset, list[ISO_LANGUAGE_SCRIPT]]
-]
-
-PROGRAMMING_LANGS = [
-    "python",
-    "javascript",
-    "typescript",
-    "go",
-    "ruby",
-    "java",
-    "php",
-    "c",
-    "c++",
-    "rust",
-    "swift",
-    "scala",
-    "shell",
-    "sql",
 ]
 
 METRIC_NAME = str
@@ -336,30 +318,10 @@ class TaskMetadata(BaseModel):
         if isinstance(eval_langs, dict):
             for langs in eval_langs.values():
                 for code in langs:
-                    self._check_language_code(code)
+                    check_language_code(code)
         else:
             for code in eval_langs:
-                self._check_language_code(code)
-
-    @staticmethod
-    def _check_language_code(code):
-        """This method checks that the language code (e.g. "eng-Latn") is valid."""
-        lang, script = code.split("-")
-        if script == "Code":
-            if lang in PROGRAMMING_LANGS:
-                return  # override for code
-            else:
-                raise ValueError(
-                    f"Programming language {lang} is not a valid programming language."
-                )
-        if lang not in ISO_TO_LANGUAGE:
-            raise ValueError(
-                f"Invalid language code: {lang}, you can find valid ISO 639-3 codes in {path_to_lang_codes}"
-            )
-        if script not in ISO_TO_SCRIPT:
-            raise ValueError(
-                f"Invalid script code: {script}, you can find valid ISO 15924 codes in {path_to_lang_scripts}"
-            )
+                check_language_code(code)
 
     @property
     def bcp47_codes(self) -> list[ISO_LANGUAGE_SCRIPT]:

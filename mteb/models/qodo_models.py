@@ -3,20 +3,23 @@ from __future__ import annotations
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
+qodo_languages = [
+    "python-Code",
+    "c++-Code",
+    "c#-Code",
+    "go-Code",
+    "java-Code",
+    "javascript-Code",
+    "php-Code",
+    "ruby-Code",
+    "typescript-Code",
+]
+
+
 Qodo_Embed_1_1_5B = ModelMeta(
     loader=sentence_transformers_loader,
     name="Qodo/Qodo-Embed-1-1.5B",
-    languages=[
-        "python-Code",
-        "c++-Code",
-        "c#-Code",
-        "go-Code",
-        "java-Code",
-        "Javascript-Code",
-        "php-Code",
-        "ruby-Code",
-        "typescript-Code",
-    ],
+    languages=qodo_languages,
     open_weights=True,
     revision="84bbef079b32e8823ec226d4e9e92902706b0eb6",
     release_date="2025-02-19",
@@ -38,17 +41,7 @@ Qodo_Embed_1_1_5B = ModelMeta(
 Qodo_Embed_1_7B = ModelMeta(
     loader=sentence_transformers_loader,
     name="Qodo/Qodo-Embed-1-7B",
-    languages=[
-        "python-Code",
-        "c++-Code",
-        "c#-Code",
-        "go-Code",
-        "java-Code",
-        "Javascript-Code",
-        "php-Code",
-        "ruby-Code",
-        "typescript-Code",
-    ],
+    languages=qodo_languages,
     open_weights=True,
     revision="f9edd9bf7f687c0e832424058e265120f603cd81",
     release_date="2025-02-24",

@@ -48,6 +48,8 @@ class Benchmark:
     citation: str | None = None
     contacts: list[str] | None = None
     display_on_leaderboard: bool = True
+    icon: str | None = None
+    display_name: str | None = None
 
     def __iter__(self):
         return iter(self.tasks)

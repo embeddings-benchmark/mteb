@@ -164,7 +164,7 @@ repllama_llama2_original = ModelMeta(
         model_prompts=model_prompts,
     ),
     name="castorini/repllama-v1-7b-lora-passage",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="01c7f73d771dfac7d292323805ebc428287df4f9-6097554dfe6e7d93e92f55010b678bcca1e233a8",  # base-peft revision
     release_date="2023-10-11",
@@ -196,7 +196,7 @@ repllama_llama2_reproduced = ModelMeta(
         model_prompts=model_prompts,
     ),
     name="samaya-ai/RepLLaMA-reproduced",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="01c7f73d771dfac7d292323805ebc428287df4f9-ad5c1d0938a1e02954bcafb4d811ba2f34052e71",  # base-peft revision
     release_date="2024-09-15",

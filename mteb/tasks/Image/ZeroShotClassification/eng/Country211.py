@@ -31,7 +31,7 @@ class Country211ZeroShotClassification(AbsTaskZeroShotClassification):
         license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
-        modalities=["image"],
+        modalities=["image", "text"],
         sample_creation="created",
         bibtex_citation="""@article{radford2021learning,
         title={Learning Transferable Visual Models From Natural Language Supervision},

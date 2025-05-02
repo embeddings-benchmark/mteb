@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import polars as pl
 from datasets import concatenate_datasets, load_dataset
 
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
@@ -16,8 +17,12 @@ def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = No
         cache_dir=cache_dir,
         revision=revision,
     )
-    dataset_splits = list(dataset)
+    dataset_splits = ["test", "validation", "train"]
     shared_corpus = concatenate_datasets([dataset[split] for split in dataset_splits])
+
+    text_df = pl.DataFrame({"text": shared_corpus["text"]})
+    unique_indices = text_df["text"].arg_unique()
+    shared_corpus = shared_corpus.select(unique_indices)
 
     shared_corpus = shared_corpus.map(
         lambda x: {
@@ -61,12 +66,11 @@ def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = No
 class HatefulMemesT2IRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="HatefulMemesT2IRetrieval",
-        description="Retrieve captions based on memes.",
+        description="Retrieve captions based on memes to assess OCR abilities.",
         reference="https://arxiv.org/pdf/2005.04790",
         dataset={
             "path": "Ahren09/MMSoc_HatefulMemes",
             "revision": "c9a9a6c3ef0765622a6de0af6ebb68f323ad73ba",
-            # "trust_remote_code": True,
         },
         type="Any2AnyRetrieval",
         category="t2i",

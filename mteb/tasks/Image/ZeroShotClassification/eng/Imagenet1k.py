@@ -31,7 +31,7 @@ class Imagenet1kZeroShotClassification(AbsTaskZeroShotClassification):
         license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
-        modalities=["image"],
+        modalities=["image", "text"],
         sample_creation="created",
         bibtex_citation="""@article{deng2009imagenet,
         title={ImageNet: A large-scale hierarchical image database},

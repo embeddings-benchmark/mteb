@@ -33,7 +33,7 @@ class BlurbsClusteringS2S(AbsTaskClustering):
         eval_langs=["deu-Latn"],
         main_score="v_measure",
         date=None,
-        domains=None,
+        domains=["Written"],
         task_subtypes=None,
         license=None,
         annotations_creators=None,

@@ -66,7 +66,7 @@ jasper_en_v1 = ModelMeta(
         config_kwargs={"is_text_encoder": True, "vector_dim": 12288},
         model_kwargs={
             "attn_implementation": "sdpa",
-            "torch_dtype": torch.float16,
+            "torch_dtype": torch.bfloat16,
         },
         trust_remote_code=True,
         max_seq_length=2048,

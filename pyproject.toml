@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.36.37"
+version = "1.38.3"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -41,7 +41,6 @@ dependencies = [
     "eval_type_backport>=0.0.0",
     "polars>=0.20.22",
     "codecarbon>=2.0.0",
-    "torchvision>0.0.0",
 ]
 
 
@@ -72,7 +71,7 @@ docs = [
 ]
 peft = ["peft>=0.11.0"]
 leaderboard = [
-    "gradio==5.16.0; python_version > '3.9'", # 3.10 is required for gradio
+    "gradio==5.17.1; python_version > '3.9'", # 3.10 is required for gradio
     "gradio_rangeslider>=0.0.8",
     "plotly>=5.24.0,<6.0.0",
     "cachetools>=5.2.0",
