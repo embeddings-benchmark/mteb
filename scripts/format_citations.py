@@ -106,6 +106,7 @@ def format_bibtex(bibtex_str: str) -> str | None:
     try:
         bib_database = bibtexparser.loads(bibtex_str, parser=parser)
         if not bib_database.entries:
+            logger.warning(f"No entries found in BibTeX string. {bibtex_str}")
             return None
         bib_database.comments = []
 
@@ -115,7 +116,8 @@ def format_bibtex(bibtex_str: str) -> str | None:
         writer.add_trailing_comma = True
 
         return writer.write(bib_database).strip()
-    except Exception:
+    except Exception as e:
+        logger.warning(f"Failed to parse BibTeX: {e}")
         return None
 
 
