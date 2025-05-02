@@ -36,12 +36,14 @@ class VGHierarchicalClusteringP2P(AbsTaskClusteringFast):
         dialect=[],
         task_subtypes=["Thematic clustering"],
         sample_creation="found",
-        bibtex_citation="""@mastersthesis{navjord2023beyond,
-    title={Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
-    author={Navjord, J{\\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
-    year={2023},
-    school={Norwegian University of Life Sciences, {\\AA}s}
-}""",
+        bibtex_citation=r"""
+@mastersthesis{navjord2023beyond,
+  author = {Navjord, J{\\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
+  school = {Norwegian University of Life Sciences, {\\AA}s},
+  title = {Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
+  year = {2023},
+}
+""",
         prompt="Identify the categories (e.g. sports) of given articles in Norwegian",
     )
 
@@ -81,12 +83,14 @@ class VGHierarchicalClusteringS2S(AbsTaskClusteringFast):
         dialect=[],
         task_subtypes=["Thematic clustering"],
         sample_creation="found",
-        bibtex_citation="""@mastersthesis{navjord2023beyond,
-    title={Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
-    author={Navjord, J{\\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
-    year={2023},
-    school={Norwegian University of Life Sciences, {\\AA}s}
-}""",
+        bibtex_citation=r"""
+@mastersthesis{navjord2023beyond,
+  author = {Navjord, J{\\o}rgen Johnsen and Korsvik, Jon-Mikkel Ryen},
+  school = {Norwegian University of Life Sciences, {\\AA}s},
+  title = {Beyond extractive: advancing abstractive automatic text summarization in Norwegian with transformers},
+  year = {2023},
+}
+""",
         prompt="Identify the categories (e.g. sports) of given articles in Norwegian",
     )
 

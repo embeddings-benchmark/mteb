@@ -26,24 +26,24 @@ class CzechProductReviewSentimentClassification(AbsTaskClassification):
         license="cc-by-nc-sa-4.0",
         annotations_creators="derived",
         sample_creation="found",
-        bibtex_citation="""
-        @inproceedings{habernal-etal-2013-sentiment,
-            title = "Sentiment Analysis in {C}zech Social Media Using Supervised Machine Learning",
-            author = "Habernal, Ivan  and
-            Pt{\'a}{\v{c}}ek, Tom{\'a}{\v{s}}  and
-            Steinberger, Josef",
-            editor = "Balahur, Alexandra  and
-            van der Goot, Erik  and
-            Montoyo, Andres",
-            booktitle = "Proceedings of the 4th Workshop on Computational Approaches to Subjectivity, Sentiment and Social Media Analysis",
-            month = jun,
-            year = "2013",
-            address = "Atlanta, Georgia",
-            publisher = "Association for Computational Linguistics",
-            url = "https://aclanthology.org/W13-1609",
-            pages = "65--74",
-        }
-        """,
+        bibtex_citation=r"""
+@inproceedings{habernal-etal-2013-sentiment,
+  address = {Atlanta, Georgia},
+  author = {Habernal, Ivan  and
+Pt{\'a}{\v{c}}ek, Tom{\'a}{\v{s}}  and
+Steinberger, Josef},
+  booktitle = {Proceedings of the 4th Workshop on Computational Approaches to Subjectivity, Sentiment and Social Media Analysis},
+  editor = {Balahur, Alexandra  and
+van der Goot, Erik  and
+Montoyo, Andres},
+  month = jun,
+  pages = {65--74},
+  publisher = {Association for Computational Linguistics},
+  title = {Sentiment Analysis in {C}zech Social Media Using Supervised Machine Learning},
+  url = {https://aclanthology.org/W13-1609},
+  year = {2013},
+}
+""",
     )
     samples_per_label = 16
 

@@ -26,14 +26,15 @@ class BulgarianStoreReviewSentimentClassfication(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@data{DVN/TXIK9P_2018,
-author = {Georgieva-Trifonova, Tsvetanka and Stefanova, Milena and Kalchev, Stefan},
-publisher = {Harvard Dataverse},
-title = {{Dataset for ``Customer Feedback Text Analysis for Online Stores Reviews in Bulgarian''}},
-year = {2018},
-version = {V1},
-doi = {10.7910/DVN/TXIK9P},
-url = {https://doi.org/10.7910/DVN/TXIK9P}
+        bibtex_citation=r"""
+@data{DVN/TXIK9P_2018,
+  author = {Georgieva-Trifonova, Tsvetanka and Stefanova, Milena and Kalchev, Stefan},
+  doi = {10.7910/DVN/TXIK9P},
+  publisher = {Harvard Dataverse},
+  title = {{Dataset for ``Customer Feedback Text Analysis for Online Stores Reviews in Bulgarian''}},
+  url = {https://doi.org/10.7910/DVN/TXIK9P},
+  version = {V1},
+  year = {2018},
 }
 """,
     )

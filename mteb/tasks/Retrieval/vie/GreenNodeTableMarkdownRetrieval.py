@@ -29,7 +29,5 @@ class GreenNodeTableMarkdownRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        TODO: Add bibtex citation when the paper is published
-        """,
+        bibtex_citation="",  # TODO: Add bibtex citation when the paper is published
     )

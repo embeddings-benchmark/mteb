@@ -31,29 +31,29 @@ class IndonesianMongabayConservationClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @inproceedings{fransiska-etal-2023-utilizing,
-            title = "Utilizing Weak Supervision to Generate {I}ndonesian Conservation Datasets",
-            author = "Fransiska, Mega  and
-            Pitaloka, Diah  and
-            Saripudin, Saripudin  and
-            Putra, Satrio  and
-            Sutawika*, Lintang",
-            editor = "Wijaya, Derry  and
-            Aji, Alham Fikri  and
-            Vania, Clara  and
-            Winata, Genta Indra  and
-            Purwarianti, Ayu",
-            booktitle = "Proceedings of the First Workshop in South East Asian Language Processing",
-            month = nov,
-            year = "2023",
-            address = "Nusa Dua, Bali, Indonesia",
-            publisher = "Association for Computational Linguistics",
-            url = "https://aclanthology.org/2023.sealp-1.4",
-            doi = "10.18653/v1/2023.sealp-1.4",
-            pages = "30--54",
-        }
-        """,
+        bibtex_citation=r"""
+@inproceedings{fransiska-etal-2023-utilizing,
+  address = {Nusa Dua, Bali, Indonesia},
+  author = {Fransiska, Mega  and
+Pitaloka, Diah  and
+Saripudin, Saripudin  and
+Putra, Satrio  and
+Sutawika*, Lintang},
+  booktitle = {Proceedings of the First Workshop in South East Asian Language Processing},
+  doi = {10.18653/v1/2023.sealp-1.4},
+  editor = {Wijaya, Derry  and
+Aji, Alham Fikri  and
+Vania, Clara  and
+Winata, Genta Indra  and
+Purwarianti, Ayu},
+  month = nov,
+  pages = {30--54},
+  publisher = {Association for Computational Linguistics},
+  title = {Utilizing Weak Supervision to Generate {I}ndonesian Conservation Datasets},
+  url = {https://aclanthology.org/2023.sealp-1.4},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):

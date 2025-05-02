@@ -49,21 +49,23 @@ class LanguageClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@InProceedings{conneau2018xnli,
+        bibtex_citation=r"""
+@inproceedings{conneau2018xnli,
   author = {Conneau, Alexis
-                 and Rinott, Ruty
-                 and Lample, Guillaume
-                 and Williams, Adina
-                 and Bowman, Samuel R.
-                 and Schwenk, Holger
-                 and Stoyanov, Veselin},
-  title = {XNLI: Evaluating Cross-lingual Sentence Representations},
+and Rinott, Ruty
+and Lample, Guillaume
+and Williams, Adina
+and Bowman, Samuel R.
+and Schwenk, Holger
+and Stoyanov, Veselin},
   booktitle = {Proceedings of the 2018 Conference on Empirical Methods
-               in Natural Language Processing},
-  year = {2018},
-  publisher = {Association for Computational Linguistics},
+in Natural Language Processing},
   location = {Brussels, Belgium},
-}""",
+  publisher = {Association for Computational Linguistics},
+  title = {XNLI: Evaluating Cross-lingual Sentence Representations},
+  year = {2018},
+}
+""",
     )
 
     def dataset_transform(self) -> None:

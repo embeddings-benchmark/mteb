@@ -27,9 +27,11 @@ class WikiCitiesClustering(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@ONLINE{wikidump,
-    author = "Wikimedia Foundation",
-    title  = "Wikimedia Downloads",
-    url    = "https://dumps.wikimedia.org"
-}""",
+        bibtex_citation=r"""
+@online{wikidump,
+  author = {Wikimedia Foundation},
+  title = {Wikimedia Downloads},
+  url = {https://dumps.wikimedia.org},
+}
+""",
     )

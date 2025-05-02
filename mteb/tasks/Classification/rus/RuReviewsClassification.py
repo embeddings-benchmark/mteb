@@ -26,18 +26,20 @@ class RuReviewsClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@INPROCEEDINGS{Smetanin-SA-2019,
-        author={Sergey Smetanin and Michail Komarov},
-        booktitle={2019 IEEE 21st Conference on Business Informatics (CBI)},
-        title={Sentiment Analysis of Product Reviews in Russian using Convolutional Neural Networks},
-        year={2019},
-        volume={01},
-        number={},
-        pages={482-486},
-        doi={10.1109/CBI.2019.00062},
-        ISSN={2378-1963},
-        month={July}
-        }""",
+        bibtex_citation=r"""
+@inproceedings{Smetanin-SA-2019,
+  author = {Sergey Smetanin and Michail Komarov},
+  booktitle = {2019 IEEE 21st Conference on Business Informatics (CBI)},
+  doi = {10.1109/CBI.2019.00062},
+  issn = {2378-1963},
+  month = {July},
+  number = {},
+  pages = {482-486},
+  title = {Sentiment Analysis of Product Reviews in Russian using Convolutional Neural Networks},
+  volume = {01},
+  year = {2019},
+}
+""",
         prompt="Classify product reviews into positive, negative or neutral sentiment",
     )
 

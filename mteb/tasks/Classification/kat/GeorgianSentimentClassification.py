@@ -26,33 +26,33 @@ class GeorgianSentimentClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @inproceedings{stefanovitch-etal-2022-resources,
-    title = "Resources and Experiments on Sentiment Classification for {G}eorgian",
-    author = "Stefanovitch, Nicolas  and
-      Piskorski, Jakub  and
-      Kharazi, Sopho",
-    editor = "Calzolari, Nicoletta  and
-      B{\'e}chet, Fr{\'e}d{\'e}ric  and
-      Blache, Philippe  and
-      Choukri, Khalid  and
-      Cieri, Christopher  and
-      Declerck, Thierry  and
-      Goggi, Sara  and
-      Isahara, Hitoshi  and
-      Maegaard, Bente  and
-      Mariani, Joseph  and
-      Mazo, H{\'e}l{\`e}ne  and
-      Odijk, Jan  and
-      Piperidis, Stelios",
-    booktitle = "Proceedings of the Thirteenth Language Resources and Evaluation Conference",
-    month = jun,
-    year = "2022",
-    address = "Marseille, France",
-    publisher = "European Language Resources Association",
-    url = "https://aclanthology.org/2022.lrec-1.173",
-    pages = "1613--1621",
-    abstract = "This paper presents, to the best of our knowledge, the first ever publicly available annotated dataset for sentiment classification and semantic polarity dictionary for Georgian. The characteristics of these resources and the process of their creation are described in detail. The results of various experiments on the performance of both lexicon- and machine learning-based models for Georgian sentiment classification are also reported. Both 3-label (positive, neutral, negative) and 4-label settings (same labels + mixed) are considered. The machine learning models explored include, i.a., logistic regression, SVMs, and transformed-based models. We also explore transfer learning- and translation-based (to a well-supported language) approaches. The obtained results for Georgian are on par with the state-of-the-art results in sentiment classification for well studied languages when using training data of comparable size.",
+        bibtex_citation=r"""
+@inproceedings{stefanovitch-etal-2022-resources,
+  abstract = {This paper presents, to the best of our knowledge, the first ever publicly available annotated dataset for sentiment classification and semantic polarity dictionary for Georgian. The characteristics of these resources and the process of their creation are described in detail. The results of various experiments on the performance of both lexicon- and machine learning-based models for Georgian sentiment classification are also reported. Both 3-label (positive, neutral, negative) and 4-label settings (same labels + mixed) are considered. The machine learning models explored include, i.a., logistic regression, SVMs, and transformed-based models. We also explore transfer learning- and translation-based (to a well-supported language) approaches. The obtained results for Georgian are on par with the state-of-the-art results in sentiment classification for well studied languages when using training data of comparable size.},
+  address = {Marseille, France},
+  author = {Stefanovitch, Nicolas  and
+Piskorski, Jakub  and
+Kharazi, Sopho},
+  booktitle = {Proceedings of the Thirteenth Language Resources and Evaluation Conference},
+  editor = {Calzolari, Nicoletta  and
+B{\'e}chet, Fr{\'e}d{\'e}ric  and
+Blache, Philippe  and
+Choukri, Khalid  and
+Cieri, Christopher  and
+Declerck, Thierry  and
+Goggi, Sara  and
+Isahara, Hitoshi  and
+Maegaard, Bente  and
+Mariani, Joseph  and
+Mazo, H{\'e}l{\`e}ne  and
+Odijk, Jan  and
+Piperidis, Stelios},
+  month = jun,
+  pages = {1613--1621},
+  publisher = {European Language Resources Association},
+  title = {Resources and Experiments on Sentiment Classification for {G}eorgian},
+  url = {https://aclanthology.org/2022.lrec-1.173},
+  year = {2022},
 }
-        """,
+""",
     )

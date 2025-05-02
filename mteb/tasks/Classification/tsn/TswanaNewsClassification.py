@@ -26,16 +26,16 @@ class TswanaNewsClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @inproceedings{marivate2023puoberta,
-            title   = {PuoBERTa: Training and evaluation of a curated language model for Setswana},
-            author  = {Vukosi Marivate and Moseli Mots'Oehli and Valencia Wagner and Richard Lastrucci and Isheanesu Dzingirai},
-            year    = {2023},
-            booktitle= {SACAIR 2023 (To Appear)},
-            keywords = {NLP},
-            preprint_url = {https://arxiv.org/abs/2310.09141},
-            dataset_url = {https://github.com/dsfsi/PuoBERTa},
-            software_url = {https://huggingface.co/dsfsi/PuoBERTa}
-        }
-        """,
+        bibtex_citation=r"""
+@inproceedings{marivate2023puoberta,
+  author = {Vukosi Marivate and Moseli Mots'Oehli and Valencia Wagner and Richard Lastrucci and Isheanesu Dzingirai},
+  booktitle = {SACAIR 2023 (To Appear)},
+  dataset_url = {https://github.com/dsfsi/PuoBERTa},
+  keywords = {NLP},
+  preprint_url = {https://arxiv.org/abs/2310.09141},
+  software_url = {https://huggingface.co/dsfsi/PuoBERTa},
+  title = {PuoBERTa: Training and evaluation of a curated language model for Setswana},
+  year = {2023},
+}
+""",
     )

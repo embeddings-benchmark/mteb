@@ -26,14 +26,14 @@ class CSFDCZMovieReviewSentimentClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
+        bibtex_citation=r"""
 @misc{štefánik2023resources,
-      title={Resources and Few-shot Learners for In-context Learning in Slavic Languages},
-      author={Michal Štefánik and Marek Kadlčík and Piotr Gramacki and Petr Sojka},
-      year={2023},
-      eprint={2304.01922},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+  archiveprefix = {arXiv},
+  author = {Michal Štefánik and Marek Kadlčík and Piotr Gramacki and Petr Sojka},
+  eprint = {2304.01922},
+  primaryclass = {cs.CL},
+  title = {Resources and Few-shot Learners for In-context Learning in Slavic Languages},
+  year = {2023},
 }
 """,
     )

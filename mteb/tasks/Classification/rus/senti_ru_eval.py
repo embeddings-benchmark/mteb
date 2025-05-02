@@ -28,12 +28,13 @@ class SentiRuEval2016Classification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{loukachevitch2016sentirueval,
-  title={SentiRuEval-2016: overcoming time gap and data sparsity in tweet sentiment analysis},
-  author={Loukachevitch, NV and Rubtsova, Yu V},
-  booktitle={Computational Linguistics and Intellectual Technologies},
-  pages={416--426},
-  year={2016}
+        bibtex_citation=r"""
+@inproceedings{loukachevitch2016sentirueval,
+  author = {Loukachevitch, NV and Rubtsova, Yu V},
+  booktitle = {Computational Linguistics and Intellectual Technologies},
+  pages = {416--426},
+  title = {SentiRuEval-2016: overcoming time gap and data sparsity in tweet sentiment analysis},
+  year = {2016},
 }
 """,
     )

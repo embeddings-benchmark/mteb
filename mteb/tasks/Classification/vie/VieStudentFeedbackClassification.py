@@ -29,16 +29,18 @@ class VieStudentFeedbackClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@InProceedings{8573337,
-  author={Nguyen, Kiet Van and Nguyen, Vu Duc and Nguyen, Phu X. V. and Truong, Tham T. H. and Nguyen, Ngan Luu-Thuy},
-  booktitle={2018 10th International Conference on Knowledge and Systems Engineering (KSE)},
-  title={UIT-VSFC: Vietnamese Students’ Feedback Corpus for Sentiment Analysis},
-  year={2018},
-  volume={},
-  number={},
-  pages={19-24},
-  doi={10.1109/KSE.2018.8573337}
-}""",
+        bibtex_citation=r"""
+@inproceedings{8573337,
+  author = {Nguyen, Kiet Van and Nguyen, Vu Duc and Nguyen, Phu X. V. and Truong, Tham T. H. and Nguyen, Ngan Luu-Thuy},
+  booktitle = {2018 10th International Conference on Knowledge and Systems Engineering (KSE)},
+  doi = {10.1109/KSE.2018.8573337},
+  number = {},
+  pages = {19-24},
+  title = {UIT-VSFC: Vietnamese Students’ Feedback Corpus for Sentiment Analysis},
+  volume = {},
+  year = {2018},
+}
+""",
     )
 
     def dataset_transform(self):

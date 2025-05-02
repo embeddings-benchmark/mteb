@@ -29,16 +29,17 @@ class GreekLegalCodeClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{papaloukas-etal-2021-glc,
-    title = "Multi-granular Legal Topic Classification on Greek Legislation",
-    author = "Papaloukas, Christos and Chalkidis, Ilias and Athinaios, Konstantinos and Pantazi, Despina-Athanasia and Koubarakis, Manolis",
-    booktitle = "Proceedings of the Natural Legal Language Processing Workshop 2021",
-    year = "2021",
-    address = "Punta Cana, Dominican Republic",
-    publisher = "Association for Computational Linguistics",
-    url = "https://arxiv.org/abs/2109.15298",
-    doi = "10.48550/arXiv.2109.15298",
-    pages = "63--75"
+        bibtex_citation=r"""
+@inproceedings{papaloukas-etal-2021-glc,
+  address = {Punta Cana, Dominican Republic},
+  author = {Papaloukas, Christos and Chalkidis, Ilias and Athinaios, Konstantinos and Pantazi, Despina-Athanasia and Koubarakis, Manolis},
+  booktitle = {Proceedings of the Natural Legal Language Processing Workshop 2021},
+  doi = {10.48550/arXiv.2109.15298},
+  pages = {63--75},
+  publisher = {Association for Computational Linguistics},
+  title = {Multi-granular Legal Topic Classification on Greek Legislation},
+  url = {https://arxiv.org/abs/2109.15298},
+  year = {2021},
 }
 """,
     )

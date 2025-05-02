@@ -26,13 +26,15 @@ class BengaliSentimentAnalysis(AbsTaskClassification):
         license="cc-by-4.0",
         annotations_creators="human-annotated",
         sample_creation="found",
-        bibtex_citation="""@inproceedings{sazzed2020cross,
-        title={Cross-lingual sentiment classification in low-resource Bengali language},
-        author={Sazzed, Salim},
-        booktitle={Proceedings of the Sixth Workshop on Noisy User-generated Text (W-NUT 2020)},
-        pages={50--60},
-        year={2020}
-        }""",
+        bibtex_citation=r"""
+@inproceedings{sazzed2020cross,
+  author = {Sazzed, Salim},
+  booktitle = {Proceedings of the Sixth Workshop on Noisy User-generated Text (W-NUT 2020)},
+  pages = {50--60},
+  title = {Cross-lingual sentiment classification in low-resource Bengali language},
+  year = {2020},
+}
+""",
     )
 
     def dataset_transform(self):

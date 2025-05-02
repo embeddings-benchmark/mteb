@@ -28,13 +28,15 @@ class ArxivClusteringS2S(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{arxiv_org_submitters_2024,
-    title={arXiv Dataset},
-    url={https://www.kaggle.com/dsv/7548853},
-    DOI={10.34740/KAGGLE/DSV/7548853},
-    publisher={Kaggle},
-    author={arXiv.org submitters},
-    year={2024}
-}""",
+        bibtex_citation=r"""
+@misc{arxiv_org_submitters_2024,
+  author = {arXiv.org submitters},
+  doi = {10.34740/KAGGLE/DSV/7548853},
+  publisher = {Kaggle},
+  title = {arXiv Dataset},
+  url = {https://www.kaggle.com/dsv/7548853},
+  year = {2024},
+}
+""",
         prompt="Identify the main and secondary category of Arxiv papers based on the titles",
     )

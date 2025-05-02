@@ -29,13 +29,15 @@ class ToxicConversationsClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{jigsaw-unintended-bias-in-toxicity-classification,
-    author = {cjadams and Daniel Borkan and inversion and Jeffrey Sorensen and Lucas Dixon and Lucy Vasserman and nithum},
-    title = {Jigsaw Unintended Bias in Toxicity Classification},
-    publisher = {Kaggle},
-    year = {2019},
-    url = {https://kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification}
-}""",
+        bibtex_citation=r"""
+@misc{jigsaw-unintended-bias-in-toxicity-classification,
+  author = {cjadams and Daniel Borkan and inversion and Jeffrey Sorensen and Lucas Dixon and Lucy Vasserman and nithum},
+  publisher = {Kaggle},
+  title = {Jigsaw Unintended Bias in Toxicity Classification},
+  url = {https://kaggle.com/competitions/jigsaw-unintended-bias-in-toxicity-classification},
+  year = {2019},
+}
+""",
         prompt="Classify the given comments as either toxic or not toxic",
     )
 

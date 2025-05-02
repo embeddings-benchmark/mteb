@@ -28,21 +28,23 @@ class TERRa(AbsTaskPairClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{shavrina2020russiansuperglue,
-        title={RussianSuperGLUE: A Russian Language Understanding Evaluation Benchmark},
-        author={Shavrina, Tatiana
-                    and Fenogenova, Alena
-                    and Emelyanov, Anton
-                    and Shevelev, Denis
-                    and Artemova, Ekaterina
-                    and Malykh, Valentin
-                    and Mikhailov, Vladislav
-                    and Tikhonova, Maria
-                    and Chertok, Andrey
-                    and Evlampiev, Andrey},
-        journal={arXiv preprint arXiv:2010.15925},
-        year={2020}
-        }""",
+        bibtex_citation=r"""
+@article{shavrina2020russiansuperglue,
+  author = {Shavrina, Tatiana
+and Fenogenova, Alena
+and Emelyanov, Anton
+and Shevelev, Denis
+and Artemova, Ekaterina
+and Malykh, Valentin
+and Mikhailov, Vladislav
+and Tikhonova, Maria
+and Chertok, Andrey
+and Evlampiev, Andrey},
+  journal = {arXiv preprint arXiv:2010.15925},
+  title = {RussianSuperGLUE: A Russian Language Understanding Evaluation Benchmark},
+  year = {2020},
+}
+""",
         prompt="Given a premise, retrieve a hypothesis that is entailed by the premise",
     )
 

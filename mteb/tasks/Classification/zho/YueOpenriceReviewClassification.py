@@ -26,14 +26,16 @@ class YueOpenriceReviewClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{xiang2019sentiment,
-  title={Sentiment Augmented Attention Network for Cantonese Restaurant Review Analysis},
-  author={Xiang, Rong and Jiao, Ying and Lu, Qin},
-  booktitle={Proceedings of the 8th KDD Workshop on Issues of Sentiment Discovery and Opinion Mining (WISDOM)},
-  pages={1--9},
-  year={2019},
-  organization={KDD WISDOM}
-}""",
+        bibtex_citation=r"""
+@inproceedings{xiang2019sentiment,
+  author = {Xiang, Rong and Jiao, Ying and Lu, Qin},
+  booktitle = {Proceedings of the 8th KDD Workshop on Issues of Sentiment Discovery and Opinion Mining (WISDOM)},
+  organization = {KDD WISDOM},
+  pages = {1--9},
+  title = {Sentiment Augmented Attention Network for Cantonese Restaurant Review Analysis},
+  year = {2019},
+}
+""",
     )
 
     samples_per_label = 32

@@ -79,12 +79,14 @@ class NeuCLIR2022Retrieval(AbsTaskRetrieval):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{lawrie2023overview,
-  title={Overview of the TREC 2022 NeuCLIR track},
-  author={Lawrie, Dawn and MacAvaney, Sean and Mayfield, James and McNamee, Paul and Oard, Douglas W and Soldaini, Luca and Yang, Eugene},
-  journal={arXiv preprint arXiv:2304.12367},
-  year={2023}
-}""",
+        bibtex_citation=r"""
+@article{lawrie2023overview,
+  author = {Lawrie, Dawn and MacAvaney, Sean and Mayfield, James and McNamee, Paul and Oard, Douglas W and Soldaini, Luca and Yang, Eugene},
+  journal = {arXiv preprint arXiv:2304.12367},
+  title = {Overview of the TREC 2022 NeuCLIR track},
+  year = {2023},
+}
+""",
     )
 
     def load_data(self, **kwargs):
@@ -192,12 +194,14 @@ class NeuCLIR2022RetrievalHardNegatives(AbsTaskRetrieval):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{lawrie2023overview,
-  title={Overview of the TREC 2022 NeuCLIR track},
-  author={Lawrie, Dawn and MacAvaney, Sean and Mayfield, James and McNamee, Paul and Oard, Douglas W and Soldaini, Luca and Yang, Eugene},
-  journal={arXiv preprint arXiv:2304.12367},
-  year={2023}
-}""",
+        bibtex_citation=r"""
+@article{lawrie2023overview,
+  author = {Lawrie, Dawn and MacAvaney, Sean and Mayfield, James and McNamee, Paul and Oard, Douglas W and Soldaini, Luca and Yang, Eugene},
+  journal = {arXiv preprint arXiv:2304.12367},
+  title = {Overview of the TREC 2022 NeuCLIR track},
+  year = {2023},
+}
+""",
         adapted_from=["NeuCLIR2022Retrieval"],
     )
 
