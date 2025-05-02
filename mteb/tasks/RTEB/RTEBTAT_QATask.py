@@ -12,7 +12,7 @@ class RTEBTAT_QA(AbsTaskRTEB):
         "task_name": "RTEBTAT_QA",
         "description": "RTEB evaluation for TAT_QA dataset.",
         "reference": "https://huggingface.co/datasets/next-tat/TAT-QA",
-        "dataset_path": "next-tat/TAT-QA",
+        "dataset_path": "embedding-benchmark/TAT_QA",
         "dataset_revision": "main",
         "main_score": "ndcg_at_10",
         "revision": "1.0.1",

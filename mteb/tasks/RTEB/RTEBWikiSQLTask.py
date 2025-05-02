@@ -12,7 +12,7 @@ class RTEBWikiSQL(AbsTaskRTEB):
         "task_name": "RTEBWikiSQL",
         "description": "RTEB evaluation for WikiSQL dataset.",
         "reference": "https://huggingface.co/datasets/Salesforce/wikisql",
-        "dataset_path": "Salesforce/wikisql",
+        "dataset_path": "embedding-benchmark/WikiSQL",
         "dataset_revision": "main",
         "main_score": "ndcg_at_10",
         "revision": "1.0.1",

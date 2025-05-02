@@ -12,8 +12,8 @@ class RTEBLegalQuAD(AbsTaskRTEB):
         "task_name": "RTEBLegalQuAD",
         "description": "RTEB evaluation for LegalQuAD dataset.",
         "reference": "https://github.com/elenanereiss/LegalQuAD",
-        "dataset_path": "elenanereiss/LegalQuAD",  # Updated from local path to HF path
-        "dataset_revision": "dd73c838031a4914a7a1a16d785b8cec617aaaa4",
+        "dataset_path": "embedding-benchmark/LegalQuAD",
+        "dataset_revision": "main",
         "main_score": "ndcg_at_10",
         "revision": "1.0.0",
         "date": None,  # LegalQuAD doesn't have a specific date range

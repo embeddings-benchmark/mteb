@@ -12,8 +12,8 @@ class RTEBJapaneseCoNaLa(AbsTaskRTEB):
         "task_name": "RTEBJapaneseCoNaLa",
         "description": "RTEB evaluation for JapaneseCoNaLa dataset.",
         "reference": "https://huggingface.co/datasets/haih2/japanese-conala",
-        "dataset_path": "haih2/japanese-conala",
-        "dataset_revision": "main",  # Assuming main based on HF page
+        "dataset_path": "embedding-benchmark/JapaneseCoNaLa",
+        "dataset_revision": "main",
         "main_score": "ndcg_at_10",
         "revision": "1.0.1",
         "date": None,

@@ -12,7 +12,7 @@ class RTEBFrenchTriviaQAWikicontext(AbsTaskRTEB):
         "task_name": "RTEBFrenchTriviaQAWikicontext",
         "description": "RTEB evaluation for FrenchTriviaQAWikicontext dataset.",
         "reference": "https://www.cs.utexas.edu/~eunsol/files/papers/acl17jcwz.pdf",
-        "dataset_path": "manu/french-trivia",
+        "dataset_path": "embedding-benchmark/FrenchTriviaQAWikicontext",
         "dataset_revision": "main",
         "main_score": "ndcg_at_10",
         "revision": "1.0.1",

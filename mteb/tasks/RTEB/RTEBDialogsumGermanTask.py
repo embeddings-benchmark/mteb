@@ -12,7 +12,7 @@ class RTEBDialogsumGerman(AbsTaskRTEB):
         "task_name": "RTEBDialogsumGerman",
         "description": "RTEB evaluation for DialogsumGerman dataset.",
         "reference": "https://aclanthology.org/2021.findings-acl.449/",
-        "dataset_path": "fathyshalab/Dialogsum-german",
+        "dataset_path": "embedding-benchmark/DialogsumGerman",
         "dataset_revision": "main",
         "main_score": "ndcg_at_10",
         "revision": "1.0.1",

@@ -13,7 +13,7 @@ class RTEBGermanLegalSentences(AbsTaskRTEB):
         "task_name": "RTEBGermanLegalSentences",
         "description": "RTEB evaluation for GermanLegalSentences dataset.",
         "reference": "http://openlegaldata.io/",  # Open Legal Data source
-        "dataset_path": "lavis-nlp/german_legal_sentences",
+        "dataset_path": "embedding-benchmark/GermanLegalSentences",
         "dataset_revision": "main",
         "eval_langs": ["deu-Latn"],
         "main_score": "ndcg_at_10",

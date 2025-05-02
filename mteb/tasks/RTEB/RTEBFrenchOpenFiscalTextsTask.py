@@ -12,7 +12,7 @@ class RTEBFrenchOpenFiscalTexts(AbsTaskRTEB):
         "task_name": "RTEBFrenchOpenFiscalTexts",
         "description": "RTEB evaluation for FrenchOpenFiscalTexts dataset.",
         "reference": "https://echanges.dila.gouv.fr/OPENDATA/JADE/",  # OPENDATA/JADE source
-        "dataset_path": "StanBienaives/french-open-fiscal-texts",
+        "dataset_path": "embedding-benchmark/FrenchOpenFiscalTexts",
         "dataset_revision": "main",
         "main_score": "ndcg_at_10",
         "revision": "1.0.1",

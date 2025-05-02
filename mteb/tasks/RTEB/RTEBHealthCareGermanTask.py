@@ -12,7 +12,7 @@ class RTEBHealthCareGerman(AbsTaskRTEB):
         "task_name": "RTEBHealthCareGerman",
         "description": "RTEB evaluation for HealthCareGerman dataset.",
         "reference": "https://huggingface.co/datasets/thisserand/health_care_german",
-        "dataset_path": "thisserand/health_care_german",
+        "dataset_path": "embedding-benchmark/HealthCareGerman",
         "dataset_revision": "main",
         "main_score": "ndcg_at_10",
         "revision": "1.0.1",

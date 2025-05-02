@@ -12,7 +12,7 @@ class RTEBConvFinQA(AbsTaskRTEB):
         "task_name": "RTEBConvFinQA",
         "description": "RTEB evaluation for ConvFinQA dataset.",
         "reference": "https://github.com/czyssrs/ConvFinQA",
-        "dataset_path": "FinGPT/fingpt-convfinqa",
+        "dataset_path": "embedding-benchmark/ConvFinQA",
         "dataset_revision": "main",
         "main_score": "ndcg_at_10",
         "revision": "1.0.1",

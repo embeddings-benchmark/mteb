@@ -12,13 +12,14 @@ class RTEBAILAStatutes(AbsTaskRTEB):
         "task_name": "RTEBAILAStatutes",
         "description": "RTEB evaluation for AILAStatutes dataset.",
         "reference": "https://zenodo.org/records/4063986",
-        "dataset_path": "zenodo/4063986",  # Using Zenodo DOI as path
-        "dataset_revision": "ebfcd844eadd3d667efa3c57fc5c8c87f5c2867e",
+        "dataset_path": "embedding-benchmark/AILAStatutes",
+        "dataset_revision": "main",
         "main_score": "ndcg_at_10",
         "revision": "1.0.1",
         "date": None,  # Date not specified in dataset metadata
         "domains": ["Legal"],
         "task_subtypes": ["Article retrieval"],
+        "annotations_creators": "derived",
         "license": "cc-by-4.0",  # Standardized license format
         "bibtex_citation": """@dataset{paheli_bhattacharya_2020_4063986,
   author       = {Paheli Bhattacharya and

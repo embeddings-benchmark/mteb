@@ -12,7 +12,7 @@ class RTEBChatDoctor_HealthCareMagic(AbsTaskRTEB):
         "task_name": "RTEBChatDoctor_HealthCareMagic",
         "description": "RTEB evaluation for ChatDoctor_HealthCareMagic dataset.",
         "reference": "https://github.com/Kent0n-Li/ChatDoctor",
-        "dataset_path": "lavita/ChatDoctor-HealthCareMagic-100k",
+        "dataset_path": "embedding-benchmark/ChatDoctor_HealthCareMagic",
         "dataset_revision": "main",
         "main_score": "ndcg_at_10",
         "revision": "1.0.1",

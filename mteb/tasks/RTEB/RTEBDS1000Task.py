@@ -12,7 +12,7 @@ class RTEBDS1000(AbsTaskRTEB):
         "task_name": "RTEBDS1000",
         "description": "RTEB evaluation for DS1000 dataset.",
         "reference": "https://ds1000-code-gen.github.io/",
-        "dataset_path": "xlangai/DS-1000",
+        "dataset_path": "embedding-benchmark/DS1000",
         "dataset_revision": "main",
         "main_score": "ndcg_at_10",
         "revision": "1.0.1",

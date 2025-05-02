@@ -12,7 +12,7 @@ class RTEBCOVID_QA(AbsTaskRTEB):
         "task_name": "RTEBCOVID_QA",
         "description": "RTEB evaluation for COVID_QA dataset.",
         "reference": "https://aclanthology.org/2020.nlpcovid19-acl.18/",
-        "dataset_path": "castorini/covid_qa_castorini",
+        "dataset_path": "embedding-benchmark/COVID_QA",
         "dataset_revision": "main",
         "main_score": "ndcg_at_10",
         "revision": "1.0.1",

@@ -12,7 +12,7 @@ class RTEBHumanEval(AbsTaskRTEB):
         "task_name": "RTEBHumanEval",
         "description": "RTEB evaluation for HumanEval dataset.",
         "reference": "https://github.com/openai/human-eval",
-        "dataset_path": "openai/openai_humaneval",
+        "dataset_path": "embedding-benchmark/HumanEval",
         "dataset_revision": "main",
         "main_score": "ndcg_at_10",
         "revision": "1.0.1",

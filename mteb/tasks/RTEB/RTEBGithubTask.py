@@ -12,7 +12,7 @@ class RTEBGithub(AbsTaskRTEB):
         "task_name": "RTEBGithub",
         "description": "RTEB evaluation for Github dataset.",
         "reference": "https://github.com/CoIR-team/coir",
-        "dataset_path": "CoIR-team/Github",  # Updated from TODO placeholder
+        "dataset_path": "embedding-benchmark/Github",
         "dataset_revision": "main",
         "main_score": "ndcg_at_10",
         "revision": "1.0.1",

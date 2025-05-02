@@ -12,7 +12,7 @@ class RTEBFrenchBoolQ(AbsTaskRTEB):
         "task_name": "RTEBFrenchBoolQ",
         "description": "RTEB evaluation for FrenchBoolQ dataset.",
         "reference": "https://github.com/google-research-datasets/boolean-questions",
-        "dataset_path": "manu/french_boolq",
+        "dataset_path": "embedding-benchmark/FrenchBoolQ",
         "dataset_revision": "main",
         "main_score": "ndcg_at_10",
         "revision": "1.0.1",

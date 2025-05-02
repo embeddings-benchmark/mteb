@@ -12,7 +12,7 @@ class RTEBLegalSummarization(AbsTaskRTEB):
         "task_name": "RTEBLegalSummarization",
         "description": "RTEB evaluation for LegalSummarization dataset.",
         "reference": "https://huggingface.co/datasets/mteb/legal_summarization",
-        "dataset_path": "mteb/legal_summarization",
+        "dataset_path": "embedding-benchmark/LegalSummarization",
         "dataset_revision": "main",
         "main_score": "ndcg_at_10",
         "revision": "1.0.1",

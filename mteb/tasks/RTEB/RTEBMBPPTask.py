@@ -12,7 +12,7 @@ class RTEBMBPP(AbsTaskRTEB):
         "task_name": "RTEBMBPP",
         "description": "RTEB evaluation for MBPP dataset.",
         "reference": "https://huggingface.co/datasets/Muennighoff/mbpp",
-        "dataset_path": "Muennighoff/mbpp",
+        "dataset_path": "embedding-benchmark/MBPP",
         "dataset_revision": "main",
         "main_score": "ndcg_at_10",
         "revision": "1.0.1",

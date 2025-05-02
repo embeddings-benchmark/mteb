@@ -8,7 +8,7 @@ import pytest
 
 import mteb
 from mteb import MTEB
-from mteb.abstasks import AbsTask
+from mteb.abstasks import AbsTask, AbsTaskRTEB
 from mteb.abstasks.AbsTaskInstructionRetrieval import AbsTaskInstructionRetrieval
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.AbsTaskSpeedTask import AbsTaskSpeedTask
@@ -67,6 +67,7 @@ def test_load_data(
         or isinstance(task, AbsTaskSpeedTask)
         or isinstance(task, AbsTaskAny2AnyMultiChoice)
         or isinstance(task, AbsTaskImageTextPairClassification)
+        or isinstance(task, AbsTaskRTEB)
     ):
         pytest.skip()
     with patch.object(task, "dataset_transform") as mock_dataset_transform:

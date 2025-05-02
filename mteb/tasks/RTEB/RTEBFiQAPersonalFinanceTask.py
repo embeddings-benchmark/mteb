@@ -12,7 +12,7 @@ class RTEBFiQAPersonalFinance(AbsTaskRTEB):
         "task_name": "RTEBFiQAPersonalFinance",
         "description": "RTEB evaluation for FiQAPersonalFinance dataset.",
         "reference": "https://sites.google.com/view/fiqa/home",
-        "dataset_path": "bilalRahib/fiqa-personal-finance-dataset",
+        "dataset_path": "embedding-benchmark/FiQAPersonalFinance",
         "dataset_revision": "main",
         "main_score": "ndcg_at_10",
         "revision": "1.0.1",

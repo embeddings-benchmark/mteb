@@ -12,7 +12,7 @@ class RTEBHC3Finance(AbsTaskRTEB):
         "task_name": "RTEBHC3Finance",
         "description": "RTEB evaluation for HC3Finance dataset.",
         "reference": "https://huggingface.co/datasets/Hello-SimpleAI/HC3",
-        "dataset_path": "Atharva07/hc3_finance",
+        "dataset_path": "embedding-benchmark/HC3Finance",
         "dataset_revision": "main",
         "main_score": "ndcg_at_10",
         "revision": "1.0.1",

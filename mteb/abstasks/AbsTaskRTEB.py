@@ -639,6 +639,7 @@ class AbsTaskRTEB(AbsTask):
             type="Retrieval",
             category="s2p",
             eval_splits=["test"],
+            sample_creation="found",
             eval_langs=eval_langs,
             main_score=main_score,
             revision=revision,

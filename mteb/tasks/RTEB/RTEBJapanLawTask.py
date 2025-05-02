@@ -12,7 +12,7 @@ class RTEBJapanLaw(AbsTaskRTEB):
         "task_name": "RTEBJapanLaw",
         "description": "RTEB evaluation for JapanLaw dataset.",
         "reference": "https://huggingface.co/datasets/y2lan/japan-law",
-        "dataset_path": "TODO/JapanLaw",
+        "dataset_path": "embedding-benchmark/JapanLaw",
         "dataset_revision": "main",
         "main_score": "ndcg_at_10",
         "revision": "1.0.1",

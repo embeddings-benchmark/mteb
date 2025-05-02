@@ -13,8 +13,8 @@ class RTEBFinanceBench(AbsTaskRTEB):
         "task_name": "RTEBFinanceBench",
         "description": "RTEB evaluation for FinanceBench dataset.",
         "reference": "https://github.com/patronus-ai/financebench",
-        "dataset_path": "PatronusAI/financebench",
-        "dataset_revision": "main",  # Assuming main based on HF page
+        "dataset_path": "embedding-benchmark/FinanceBench",
+        "dataset_revision": "main",
         "main_score": "ndcg_at_10",
         "revision": "1.0.1",
         "date": ("2023-11-20", "2023-11-20"),  # Using the date of the arXiv paper

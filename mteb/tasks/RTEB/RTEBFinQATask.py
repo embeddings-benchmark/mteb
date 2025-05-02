@@ -12,7 +12,7 @@ class RTEBFinQA(AbsTaskRTEB):
         "task_name": "RTEBFinQA",
         "description": "RTEB evaluation for FinQA dataset.",
         "reference": "https://finqasite.github.io/",
-        "dataset_path": "ibm-research/finqa",
+        "dataset_path": "embedding-benchmark/FinQA",
         "dataset_revision": "main",
         "main_score": "ndcg_at_10",
         "revision": "1.0.1",
