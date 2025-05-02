@@ -6,7 +6,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
     "da": ["dan-Latn"],
-    "en": ["keng-Latn"],
+    "en": ["eng-Latn"],
     "fi": ["fin-Latn"],
     "no": ["nob-Latn"],
     "sv": ["swe-Latn"],
