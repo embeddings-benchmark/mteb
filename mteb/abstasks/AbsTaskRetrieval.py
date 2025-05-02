@@ -546,7 +546,8 @@ class AbsTaskRetrieval(AbsTask):
                 sections[split] = Dataset.from_list(
                     [converter(idx, item) for idx, item in data[split][column].items()]
                 )
-            DatasetDict(sections).push_to_hub(repo_name, suffix)
+            if len(sections) > 0:
+                DatasetDict(sections).push_to_hub(repo_name, suffix)
 
         for subset in self.dataset:
             logger.info(f"Converting {subset} of {self.metadata.name}")

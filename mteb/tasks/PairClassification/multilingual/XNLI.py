@@ -112,10 +112,10 @@ class XNLIV2(AbsTaskPairClassification):
             "path": "mteb/XNLIV2",
             "revision": "06108371a8bceee5024a527c4330baa29eb5a013",
         },
-        description="""
-        This is subset of 'XNLI 2.0: Improving XNLI dataset and performance on Cross Lingual Understanding'
-        with languages that were not part of the original XNLI plus three (verified) languages that are not strongly covered in MTEB
-        """,
+        description=(
+            "This is subset of 'XNLI 2.0: Improving XNLI dataset and performance on Cross Lingual Understanding' "
+            "with languages that were not part of the original XNLI plus three (verified) languages that are not strongly covered in MTEB"
+        ),
         reference="https://arxiv.org/pdf/2301.06527",
         category="t2t",
         modalities=["text"],
