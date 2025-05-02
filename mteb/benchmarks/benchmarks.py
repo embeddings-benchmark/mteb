@@ -815,7 +815,9 @@ MTEB_multilingual = Benchmark(
     name="MTEB(Multilingual, v1)",
     display_name="Multilingual",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-globe.svg",
-    tasks=MTEBTasks(mteb_multilingual_tasks + get_tasks(tasks=["SNLHierarchicalClusteringP2P"])),
+    tasks=MTEBTasks(
+        mteb_multilingual_tasks + get_tasks(tasks=["SNLHierarchicalClusteringP2P"])
+    ),
     description="A large-scale multilingual expansion of MTEB, driven mainly by highly-curated community contributions covering 250+ languages. This benhcmark has been replaced by MTEB(Multilingual, v2) as one of the datasets (SNLHierarchicalClustering) included in v1 was removed from the Hugging Face Hub.",
     reference="https://arxiv.org/abs/2502.13595",
     citation=MMTEB_CITATION,
