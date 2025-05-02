@@ -72,13 +72,6 @@ from .Any2AnyRetrieval import (
     XFlickr30kCoT2IRetrieval,
     XM3600T2IRetrieval,
 )
-from .Clustering import (
-    CIFAR10Clustering,
-    CIFAR100Clustering,
-    ImageNet10Clustering,
-    ImageNetDog15Clustering,
-    TinyImageNet,
-)
 from .ImageClassification import (
     BirdsnapClassification,
     Caltech101Classification,
@@ -101,6 +94,13 @@ from .ImageClassification import (
     STL10Classification,
     SUN397Classification,
     UCF101Classification,
+)
+from .ImageClustering import (
+    CIFAR10Clustering,
+    CIFAR100Clustering,
+    ImageNet10Clustering,
+    ImageNetDog15Clustering,
+    TinyImageNet,
 )
 from .ImageMultilabelClassification import VOC2007Classification
 from .ImageTextPairClassification import (
@@ -149,19 +149,19 @@ from .ZeroShotClassification import (
 )
 
 __all__ = [
-    "VOC2007Classification",
-    "STS17MultilingualVisualSTS",
-    "STSBenchmarkMultilingualVisualSTS",
-    "STS13VisualSTS",
-    "STS15VisualSTS",
-    "STS12VisualSTS",
-    "STS16VisualSTS",
-    "STS14VisualSTS",
     "TinyImageNet",
     "CIFAR100Clustering",
     "CIFAR10Clustering",
     "ImageNet10Clustering",
     "ImageNetDog15Clustering",
+    "VOC2007Classification",
+    "STS13VisualSTS",
+    "STS15VisualSTS",
+    "STS12VisualSTS",
+    "STS16VisualSTS",
+    "STS14VisualSTS",
+    "STS17MultilingualVisualSTS",
+    "STSBenchmarkMultilingualVisualSTS",
     "OxfordPetsClassification",
     "StanfordCarsClassification",
     "SUN397Classification",

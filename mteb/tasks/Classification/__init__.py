@@ -275,10 +275,14 @@ from .rus import (
     GeoreviewClassification,
     HeadlineClassification,
     InappropriatenessClassification,
+    InappropriatenessClassificationv2,
     KinopoiskClassification,
+    RuNLUIntentClassification,
     RuReviewsClassification,
     RuSciBenchGRNTIClassification,
     RuSciBenchOECDClassification,
+    RuToxicOKMLCUPClassification,
+    SentiRuEval2016Classification,
 )
 from .san import SanskritShlokasClassification
 from .sin import SinhalaNewsClassification, SinhalaNewsSourceClassification
@@ -607,9 +611,13 @@ __all__ = [
     "MasakhaNEWSClassification",
     "GujaratiNewsClassification",
     "IsiZuluNewsClassification",
+    "RuNLUIntentClassification",
+    "RuToxicOKMLCUPClassification",
     "KinopoiskClassification",
     "HeadlineClassification",
     "InappropriatenessClassification",
+    "InappropriatenessClassificationv2",
+    "SentiRuEval2016Classification",
     "RuSciBenchGRNTIClassification",
     "RuSciBenchOECDClassification",
     "RuReviewsClassification",

@@ -5,6 +5,11 @@ from .AILAStatutesRetrieval import AILAStatutes
 from .AlphaNLIRetrieval import AlphaNLI
 from .ARCChallengeRetrieval import ARCChallenge
 from .ArguAnaRetrieval import ArguAna
+from .BIRCOArguAnaReranking import BIRCOArguAnaReranking
+from .BIRCOClinicalTrialReranking import BIRCOClinicalTrialReranking
+from .BIRCODorisMaeReranking import BIRCODorisMaeReranking
+from .BIRCORelicReranking import BIRCORelicReranking
+from .BIRCOWhatsThatBookReranking import BIRCOWhatsThatBookReranking
 from .BrightRetrieval import BrightLongRetrieval, BrightRetrieval
 from .BuiltBenchRetrieval import BuiltBenchRetrieval
 from .ChemHotpotQARetrieval import ChemHotpotQARetrieval
@@ -110,6 +115,7 @@ __all__ = [
     "LEMBNeedleRetrieval",
     "LEMBPasskeyRetrieval",
     "CQADupstackAndroidRetrieval",
+    "BIRCODorisMaeReranking",
     "TempReasonL2Context",
     "NanoDBPediaRetrieval",
     "ARCChallenge",
@@ -145,12 +151,14 @@ __all__ = [
     "LitSearchRetrieval",
     "NanoFEVERRetrieval",
     "NanoMSMARCORetrieval",
+    "BIRCORelicReranking",
     "FeedbackQARetrieval",
     "HagridRetrieval",
     "NanoNFCorpusRetrieval",
     "FaithDialRetrieval",
     "SciFact",
     "CQADupstackMathematicaRetrieval",
+    "BIRCOArguAnaReranking",
     "RARbMath",
     "NanoNQRetrieval",
     "HellaSwag",
@@ -161,12 +169,14 @@ __all__ = [
     "TempReasonL1",
     "HotpotQA",
     "HotpotQAHardNegatives",
+    "BIRCOWhatsThatBookReranking",
     "NanoClimateFeverRetrieval",
     "NanoQuoraRetrieval",
     "NanoArguAnaRetrieval",
     "LegalBenchConsumerContractsQA",
     "NanoHotpotQARetrieval",
     "ArguAna",
+    "BIRCOClinicalTrialReranking",
     "LEMBWikimQARetrieval",
     "TempReasonL3Fact",
     "FEVER",

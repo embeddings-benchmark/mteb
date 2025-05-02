@@ -396,7 +396,7 @@ rubert_tiny_turbo = ModelMeta(
 rubert_mini_frida = ModelMeta(
     loader=sentence_transformers_loader,
     name="sergeyzh/rubert-mini-frida",
-    languages=["rus_Cyrl"],
+    languages=["rus-Cyrl"],
     open_weights=True,
     revision="19b279b78afd945b5ccae78f63e284909814adc2",
     release_date="2025-03-02",
@@ -445,7 +445,7 @@ labse_ru_turbo = ModelMeta(
 berta = ModelMeta(
     loader=sentence_transformers_loader,
     name="sergeyzh/BERTA",
-    languages=["rus_Cyrl"],
+    languages=["rus-Cyrl"],
     open_weights=True,
     revision="914c8c8aed14042ed890fc2c662d5e9e66b2faa7",
     release_date="2025-03-10",
@@ -717,48 +717,6 @@ berta_training_datasets = {
     # https://huggingface.co/datasets/HuggingFaceFW/fineweb-2
     # https://huggingface.co/datasets/HuggingFaceFW/fineweb
 }
-
-berta = ModelMeta(
-    name="sergeyzh/BERTA",
-    languages=["rus-Cyrl"],
-    open_weights=True,
-    revision="914c8c8aed14042ed890fc2c662d5e9e66b2faa7",
-    release_date="2025-03-10",
-    n_parameters=128_000_000,
-    memory_usage_mb=489,
-    embed_dim=768,
-    license="mit",
-    max_tokens=512,
-    reference="https://huggingface.co/sergeyzh/BERTA",
-    similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
-    use_instructions=True,
-    training_datasets=berta_training_datasets,
-    public_training_code=None,
-    adapted_from="sergeyzh/LaBSE-ru-turbo",
-    public_training_data=None,
-)
-
-rubert_mini_frida = ModelMeta(
-    name="sergeyzh/rubert-mini-frida",
-    languages=["rus-Cyrl"],
-    open_weights=True,
-    revision="19b279b78afd945b5ccae78f63e284909814adc2",
-    release_date="2025-03-02",
-    n_parameters=32_300_000,
-    memory_usage_mb=123,
-    embed_dim=312,
-    license="mit",
-    max_tokens=2048,
-    reference="https://huggingface.co/sergeyzh/rubert-mini-frida",
-    similarity_fn_name="cosine",
-    framework=["Sentence Transformers", "PyTorch"],
-    use_instructions=True,
-    public_training_code=None,
-    public_training_data=None,
-    training_datasets=berta_training_datasets,
-    adapted_from="sergeyzh/rubert-mini-sts",
-)
 
 
 user2_training_data = {

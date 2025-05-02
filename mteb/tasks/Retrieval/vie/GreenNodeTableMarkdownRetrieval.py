@@ -17,7 +17,7 @@ class GreenNodeTableMarkdownRetrieval(AbsTaskRetrieval):
             "revision": "d86a4dad9fd7c70359f617d86984395ea89be1c5",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["vie-Latn"],

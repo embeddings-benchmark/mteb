@@ -9,7 +9,7 @@ from mteb.models.e5_models import (
     XLMR_LANGUAGES,
 )
 from mteb.models.instruct_wrapper import (
-    InstructSentenceTransformerWrapper,
+    InstructSentenceTransformerModel,
     instruct_wrapper,
 )
 
@@ -197,7 +197,7 @@ zeta_alpha_ai__Zeta_Alpha_E5_Mistral = ModelMeta(
 
 E5_R_MISTRAL_7B_INSTRUCTION = "{instruction}\n"
 BeastyZ__e5_R_mistral_7b = ModelMeta(
-    loader=InstructSentenceTransformerWrapper,
+    loader=InstructSentenceTransformerModel,
     loader_kwargs=dict(
         instruction_template=E5_R_MISTRAL_7B_INSTRUCTION,
         tokenizer_kwargs={"pad_token": "</s>"},

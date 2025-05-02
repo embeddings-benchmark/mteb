@@ -84,66 +84,6 @@ LANGUAGES_V2_0 = [
 ]
 
 
-arctic_m_v1_5 = ModelMeta(
-    loader=sentence_transformers_loader,
-    loader_kwargs=dict(
-        model_prompts={
-            "query": "Represent this sentence for searching relevant passages: "
-        },
-    ),
-    name="Snowflake/snowflake-arctic-embed-m-v1.5",
-    revision="97eab2e17fcb7ccb8bb94d6e547898fa1a6a0f47",
-    release_date="2024-07-08",  # initial commit of hf model.
-    languages=["eng_Latn"],
-    open_weights=True,
-    framework=["Sentence Transformers", "PyTorch"],
-    n_parameters=109_000_000,
-    memory_usage_mb=415,
-    max_tokens=512,
-    embed_dim=768,
-    license="apache-2.0",
-    reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-m-v1.5",
-    similarity_fn_name=ScoringFunction.COSINE,
-    use_instructions=False,
-    adapted_from=None,
-    superseded_by=None,
-    citation="""@misc{merrick2024embeddingclusteringdataimprove,
-      title={Embedding And Clustering Your Data Can Improve Contrastive Pretraining},
-      author={Luke Merrick},
-      year={2024},
-      eprint={2407.18887},
-      archivePrefix={arXiv},
-      primaryClass={cs.LG},
-      url={https://arxiv.org/abs/2407.18887},
-    }""",
-    public_training_code=None,
-    public_training_data=None,
-    training_datasets={
-        # source: https://arxiv.org/pdf/2405.05374
-        # splits not specified to assuming everything
-        # in MTEB
-        "NQ": ["test"],
-        "NQHardNegatives": ["test"],
-        "HotPotQA": ["test"],
-        "HotPotQAHardNegatives": ["test"],
-        "HotPotQA-PL": ["test"],  # translated from hotpotQA (not trained on)
-        "FEVER": ["test"],
-        "FEVERHardNegatives": ["test"],
-        # not in MTEB
-        # trained on stack exchange (title-body)
-        # "stackexchange": [],
-        # potentially means that:
-        # "StackExchangeClusteringP2P": ["test"],
-        # "StackExchangeClusteringP2P.v2": ["test"],
-        # "StackExchangeClustering": ["test"],
-        # "StackExchangeClustering.v2": ["test"],
-        # not in MTEB
-        # "paq": [],
-        # "s2orc": [],
-        # "other": [],  # undisclosed including webdata
-    },  # also use synthetic
-)
-
 arctic_v1_training_datasets = {
     # source: https://arxiv.org/pdf/2405.05374
     # splits not specified to assuming everything

@@ -15,7 +15,7 @@ class ZacLegalTextRetrieval(AbsTaskRetrieval):
             "revision": "910766554633e8da014e88f54988705dde7ecaac",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["vie-Latn"],
