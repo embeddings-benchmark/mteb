@@ -6,7 +6,7 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any, Union
 
-from huggingface_hub import DatasetCard, DatasetCardData
+from huggingface_hub import DatasetCard, DatasetCardData, repo_exists
 from pydantic import (
     BaseModel,
     ConfigDict,
@@ -478,8 +478,13 @@ class TaskMetadata(BaseModel):
     def revision(self) -> str:
         return self.dataset["revision"]
 
-    def create_dataset_card_data(self) -> tuple[DatasetCardData, dict[str, str]]:
+    def create_dataset_card_data(
+        self, existing_dataset_card_data: DatasetCardData | None = None
+    ) -> tuple[DatasetCardData, dict[str, str]]:
         """Create a DatasetCardData object from the task metadata.
+
+        Args:
+            existing_dataset_card_data: The existing DatasetCardData object to update. If None, a new object will be created.
 
         Returns:
             A DatasetCardData object with the metadata for the task with kwargs to card
@@ -548,16 +553,22 @@ class TaskMetadata(BaseModel):
         if descriptive_stats is not None:
             descriptive_stats = json.dumps(descriptive_stats, indent=4)
 
+        if existing_dataset_card_data is None:
+            existing_dataset_card_data = DatasetCardData()
+
         return (
             DatasetCardData(
                 language=languages,
                 license=self.license if self.license != "not specified" else "unknown",
-                annotations_creators=[self.annotations_creators],
+                annotations_creators=[self.annotations_creators]
+                if self.annotations_creators
+                else None,
                 multilinguality=multilinguality,
                 source_datasets=source_datasets,
                 task_categories=dataset_type,
                 task_ids=self.task_subtypes,
                 tags=tags,
+                **existing_dataset_card_data.to_dict(),
             ),
             # parameters for readme generation
             dict(
@@ -571,17 +582,37 @@ class TaskMetadata(BaseModel):
             ),
         )
 
-    def generate_dataset_card(self) -> DatasetCard:
+    def generate_dataset_card(
+        self, existing_dataset_card: DatasetCard | None = None
+    ) -> DatasetCard:
         """Generates a dataset card for the task.
+
+        Args:
+            existing_dataset_card: The existing dataset card to update. If None, a new dataset card will be created.
 
         Returns:
             DatasetCard: The dataset card for the task.
         """
         path = Path(__file__).parent / "dataset_card_template.md"
-        dataset_card_data, template_kwargs = self.create_dataset_card_data()
+        existing_dataset_card_data = (
+            existing_dataset_card.data if existing_dataset_card else None
+        )
+        dataset_card_data, template_kwargs = self.create_dataset_card_data(
+            existing_dataset_card_data
+        )
         dataset_card = DatasetCard.from_template(
             card_data=dataset_card_data,
             template_path=str(path),
             **template_kwargs,
         )
         return dataset_card
+
+    def push_dataset_card_to_hub(self, repo_name: str) -> None:
+        """Pushes the dataset card to the huggingface hub.
+
+        Args:
+            repo_name: The name of the repository to push the dataset card to.
+        """
+        dataset_card = DatasetCard.load(repo_name) if repo_exists(repo_name) else None
+        dataset_card = self.generate_dataset_card(dataset_card)
+        dataset_card.push_to_hub(repo_name, commit_message="Add dataset card")
