@@ -94,21 +94,22 @@ class Wrapper:
         prompts_dict: dict[str, str] | None = None,
     ) -> str:
         """Get the instruction/prompt to be used for encoding sentences."""
-        if prompts_dict and task_name in prompts_dict:
-            return prompts_dict[task_name]
         task = mteb.get_task(task_name=task_name)
         task_metadata = task.metadata
+        prompt = task_metadata.prompt
+        if prompts_dict and task_name in prompts_dict:
+            prompt = prompts_dict[task_name]
 
-        if isinstance(task_metadata.prompt, dict) and prompt_type:
-            if task_metadata.prompt.get(prompt_type.value):
-                return task_metadata.prompt[prompt_type.value]
+        if isinstance(prompt, dict) and prompt_type:
+            if prompt.get(prompt_type.value):
+                return prompt[prompt_type.value]
             logger.warning(
                 f"Prompt type '{prompt_type}' not found in task metadata for task '{task_name}'."
             )
             return ""
 
-        if task_metadata.prompt:
-            return task_metadata.prompt
+        if prompt:
+            return prompt
         return task.abstask_prompt
 
     def format_instruction(
