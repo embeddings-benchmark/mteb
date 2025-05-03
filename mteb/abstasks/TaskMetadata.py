@@ -656,6 +656,10 @@ class TaskMetadata(BaseModel):
         Args:
             repo_name: The name of the repository to push the dataset card to.
         """
-        dataset_card = DatasetCard.load(repo_name) if repo_exists(repo_name) else None
+        dataset_card = (
+            DatasetCard.load(repo_name)
+            if repo_exists(repo_name, repo_type="dataset")
+            else None
+        )
         dataset_card = self.generate_dataset_card(dataset_card)
         dataset_card.push_to_hub(repo_name, commit_message="Add dataset card")
