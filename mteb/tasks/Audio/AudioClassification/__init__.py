@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from .eng.BeijingOpera import *
+from .eng.BirdCLEF import *
 from .eng.CommonLanguageAgeDetection import *
 from .eng.CommonLanguageGenderDetection import *
 from .eng.CommonLanguageLanguageClassification import *
