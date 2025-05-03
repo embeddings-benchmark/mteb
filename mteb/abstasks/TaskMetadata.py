@@ -239,6 +239,23 @@ class LabelStatistics(TypedDict):
     labels: dict[str, dict[str, int]]
 
 
+class ScoreStatistics(TypedDict):
+    """Class for descriptive statistics for texts.
+
+    Attributes:
+        min_labels_per_text: Minimum number of labels per text
+        average_label_per_text: Average number of labels per text
+        max_labels_per_text: Maximum number of labels per text
+
+        unique_labels: Number of unique labels
+        labels: dict of label frequencies
+    """
+
+    min_score: int
+    avg_score: float
+    max_score: int
+
+
 logger = logging.getLogger(__name__)
 
 

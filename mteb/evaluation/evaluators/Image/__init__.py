@@ -4,7 +4,6 @@ from .Any2AnyMultiChoiceEvaluator import Any2AnyMultiChoiceEvaluator
 from .Any2AnyRetrievalEvaluator import Any2AnyRetrievalEvaluator
 from .ClusteringEvaluator import ImageClusteringEvaluator
 from .ImageTextPairClassificationEvaluator import ImageTextPairClassificationEvaluator
-from .VisualSTSEvaluator import VisualSTSEvaluator
 from .ZeroShotClassificationEvaluator import ZeroShotClassificationEvaluator
 
 __all__ = [
@@ -12,6 +11,5 @@ __all__ = [
     "Any2AnyRetrievalEvaluator",
     "ImageClusteringEvaluator",
     "ImageTextPairClassificationEvaluator",
-    "VisualSTSEvaluator",
     "ZeroShotClassificationEvaluator",
 ]

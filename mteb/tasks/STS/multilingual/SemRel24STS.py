@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
+from mteb.abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -21,7 +21,7 @@ _LANGUAGES = {
 _SPLITS = ["test"]
 
 
-class SemRel24STS(AbsTaskSTS):
+class SemRel24STS(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="SemRel24STS",
         dataset={

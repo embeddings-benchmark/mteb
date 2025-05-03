@@ -5,12 +5,10 @@ from .AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from .AbsTaskImageClustering import AbsTaskImageClustering
 from .AbsTaskImageMultilabelClassification import AbsTaskImageMultilabelClassification
 from .AbsTaskImageTextPairClassification import AbsTaskImageTextPairClassification
-from .AbsTaskVisualSTS import AbsTaskVisualSTS
 from .AbsTaskZeroShotClassification import AbsTaskZeroShotClassification
 
 __all__ = [
     "AbsTaskZeroShotClassification",
-    "AbsTaskVisualSTS",
     "AbsTaskImageTextPairClassification",
     "AbsTaskImageMultilabelClassification",
     "AbsTaskImageClustering",

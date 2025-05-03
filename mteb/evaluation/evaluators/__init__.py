@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .AnySTSEvaluator import AnySTSEvaluator
 from .BitextMiningEvaluator import BitextMiningEvaluator
 from .ClassificationEvaluator import ClassificationEvaluator
 from .ClusteringEvaluator import ClusteringEvaluator
@@ -9,13 +10,11 @@ from .Image import (
     Any2AnyRetrievalEvaluator,
     ImageClusteringEvaluator,
     ImageTextPairClassificationEvaluator,
-    VisualSTSEvaluator,
     ZeroShotClassificationEvaluator,
 )
 from .model_classes import DenseRetrievalExactSearch
 from .PairClassificationEvaluator import PairClassificationEvaluator
 from .RetrievalEvaluator import RetrievalEvaluator
-from .STSEvaluator import STSEvaluator
 from .SummarizationEvaluator import (
     DeprecatedSummarizationEvaluator,
     SummarizationEvaluator,
@@ -23,7 +22,7 @@ from .SummarizationEvaluator import (
 
 __all__ = [
     "Evaluator",
-    "STSEvaluator",
+    "AnySTSEvaluator",
     "SummarizationEvaluator",
     "DeprecatedSummarizationEvaluator",
     "RetrievalEvaluator",
@@ -35,7 +34,6 @@ __all__ = [
     "Any2AnyRetrievalEvaluator",
     "ImageClusteringEvaluator",
     "ImageTextPairClassificationEvaluator",
-    "VisualSTSEvaluator",
     "ZeroShotClassificationEvaluator",
     "ClassificationEvaluator",
 ]

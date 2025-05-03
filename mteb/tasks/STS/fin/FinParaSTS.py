@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskSTS import AbsTaskSTS
+from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 N_SAMPLES = 1000
 
 
-class FinParaSTS(AbsTaskSTS):
+class FinParaSTS(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="FinParaSTS",
         dataset={

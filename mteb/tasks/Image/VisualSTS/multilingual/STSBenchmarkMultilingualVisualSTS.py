@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskVisualSTS import AbsTaskVisualSTS
+from mteb.abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -19,7 +19,7 @@ _LANGUAGES = {
 _SPLITS = ["dev", "test"]
 
 
-class STSBenchmarkMultilingualVisualSTS(AbsTaskVisualSTS):
+class STSBenchmarkMultilingualVisualSTS(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="STSBenchmarkMultilingualVisualSTS",
         dataset={
