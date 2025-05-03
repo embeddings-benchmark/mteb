@@ -126,15 +126,6 @@ class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
         modalities=["text"],
         bibtex_citation=r"""
 @misc{su2024brightrealisticchallengingbenchmark,
-<<<<<<< HEAD
-    title={BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval},
-    author={Hongjin Su and Howard Yen and Mengzhou Xia and Weijia Shi and Niklas Muennighoff and Han-yu Wang and Haisu Liu and Quan Shi and Zachary S. Siegel and Michael Tang and Ruoxi Sun and Jinsung Yoon and Sercan O. Arik and Danqi Chen and Tao Yu},
-    year={2024},
-    eprint={2407.12883},
-    archivePrefix={arXiv},
-    primaryClass={cs.CL},
-    url={https://arxiv.org/abs/2407.12883},
-=======
   archiveprefix = {arXiv},
   author = {Hongjin Su and Howard Yen and Mengzhou Xia and Weijia Shi and Niklas Muennighoff and Han-yu Wang and Haisu Liu and Quan Shi and Zachary S. Siegel and Michael Tang and Ruoxi Sun and Jinsung Yoon and Sercan O. Arik and Danqi Chen and Tao Yu},
   eprint = {2407.12883},
@@ -142,7 +133,6 @@ class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
   title = {BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval},
   url = {https://arxiv.org/abs/2407.12883},
   year = {2024},
->>>>>>> origin/main
 }
 """,
     )

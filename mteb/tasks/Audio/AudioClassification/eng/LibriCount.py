@@ -28,16 +28,19 @@ class LibriCount(AbsTaskAudioClassification):
         dialect=[],
         modalities=["audio"],
         sample_creation="created",  # from LibriSpeech dataset
-        bibtex_citation="""@inproceedings{Stoter_2018,
-            title={Classification vs. Regression in Supervised Learning for Single Channel Speaker Count Estimation},
-            url={http://dx.doi.org/10.1109/ICASSP.2018.8462159},
-            DOI={10.1109/icassp.2018.8462159},
-            booktitle={2018 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
-            publisher={IEEE},
-            author={Stoter, Fabian-Robert and Chakrabarty, Soumitro and Edler, Bernd and Habets, Emanuel A. P.},
-            year={2018},
-            month=apr, pages={436-440}}
-        """,
+        bibtex_citation=r"""
+@inproceedings{Stoter_2018,
+  author = {Stoter, Fabian-Robert and Chakrabarty, Soumitro and Edler, Bernd and Habets, Emanuel A. P.},
+  booktitle = {2018 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  doi = {10.1109/icassp.2018.8462159},
+  month = apr,
+  pages = {436-440},
+  publisher = {IEEE},
+  title = {Classification vs. Regression in Supervised Learning for Single Channel Speaker Count Estimation},
+  url = {http://dx.doi.org/10.1109/ICASSP.2018.8462159},
+  year = {2018},
+}
+""",
         descriptive_stats={
             "n_samples": {"train": 5720},
         },

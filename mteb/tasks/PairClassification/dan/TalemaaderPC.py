@@ -9,7 +9,7 @@ class TalemaaderPC(AbsTaskPairClassification):
         name="TalemaaderPC",
         description="""\
 The Danish Language and Literature Society has developed a dataset for evaluating language models in Danish.
-The dataset contains a total of 1000 Danish idioms and fixed expressions with transferred meanings based on the Danish Dictionary's collection of fixed expressions with associated definitions. 
+The dataset contains a total of 1000 Danish idioms and fixed expressions with transferred meanings based on the Danish Dictionary's collection of fixed expressions with associated definitions.
 For each of the 1000 idioms and fixed expressions, three false definitions have also been prepared.
 The dataset can be used to test the performance of language models in identifying correct definitions for Danish idioms and fixed expressions.
 """,
@@ -31,16 +31,16 @@ The dataset can be used to test the performance of language models in identifyin
         annotations_creators="derived",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""
+        bibtex_citation=r"""
 @misc{DSLDK1000Talemader,
-  title = {1000 danske talemåder - evalueringsdatasæt},
   author = {{Det Danske Sprog- og Litteraturselskab}},
-  year = {2024},
   howpublished = {Sprogteknologi.dk},
-  url = {https://sprogteknologi.dk/dataset/1000-talemader-evalueringsdatasaet},
+  language = {Danish},
   note = {CC-BY licensed dataset of 1000 Danish sayings and expressions},
   publisher = {Digitaliseringsstyrelsen \& Det Danske Sprog- og Litteraturselskab},
-  language = {Danish}
+  title = {1000 danske talemåder - evalueringsdatasæt},
+  url = {https://sprogteknologi.dk/dataset/1000-talemader-evalueringsdatasaet},
+  year = {2024},
 }
 """,
     )

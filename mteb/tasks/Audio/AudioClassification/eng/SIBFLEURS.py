@@ -36,16 +36,17 @@ class SIBFLEURSMultilingualClassification(AbsTaskAudioClassification):
         dialect=[],
         modalities=["audio"],
         sample_creation="found",
-        bibtex_citation="""@misc{schmidt2025fleursslumassivelymultilingualbenchmark,
-                title={Fleurs-SLU: A Massively Multilingual Benchmark for Spoken Language Understanding}, 
-                author={Fabian David Schmidt and Ivan Vulić and Goran Glavaš and David Ifeoluwa Adelani},
-                year={2025},
-                eprint={2501.06117},
-                archivePrefix={arXiv},
-                primaryClass={cs.CL},
-                url={https://arxiv.org/abs/2501.06117}, 
-            }
-        """,
+        bibtex_citation=r"""
+@misc{schmidt2025fleursslumassivelymultilingualbenchmark,
+  archiveprefix = {arXiv},
+  author = {Fabian David Schmidt and Ivan Vulić and Goran Glavaš and David Ifeoluwa Adelani},
+  eprint = {2501.06117},
+  primaryclass = {cs.CL},
+  title = {Fleurs-SLU: A Massively Multilingual Benchmark for Spoken Language Understanding},
+  url = {https://arxiv.org/abs/2501.06117},
+  year = {2025},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 177},
         },

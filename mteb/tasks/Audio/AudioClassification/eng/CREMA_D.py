@@ -28,16 +28,18 @@ class CREMA_D(AbsTaskAudioClassification):
         dialect=[],
         modalities=["audio"],
         sample_creation="created",
-        bibtex_citation="""@article{cao2014crema,
-            title={Crema-d: Crowd-sourced emotional multimodal actors dataset},
-            author={Cao, Houwei and Cooper, David G and Keutmann, Michael K and Gur, Ruben C and Nenkova, Ani and Verma, Ragini},
-            journal={IEEE transactions on affective computing},
-            volume={5},
-            number={4},
-            pages={377--390},
-            year={2014},
-            publisher={IEEE}
-            }""",
+        bibtex_citation=r"""
+@article{cao2014crema,
+  author = {Cao, Houwei and Cooper, David G and Keutmann, Michael K and Gur, Ruben C and Nenkova, Ani and Verma, Ragini},
+  journal = {IEEE transactions on affective computing},
+  number = {4},
+  pages = {377--390},
+  publisher = {IEEE},
+  title = {Crema-d: Crowd-sourced emotional multimodal actors dataset},
+  volume = {5},
+  year = {2014},
+}
+""",
         descriptive_stats={
             "n_samples": {"train": 7442},
         },
