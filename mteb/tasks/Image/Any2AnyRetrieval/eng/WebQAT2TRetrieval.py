@@ -26,13 +26,15 @@ class WebQAT2TRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text"],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{chang2022webqa,
-      title={Webqa: Multihop and multimodal qa},
-      author={Chang, Yingshan and Narang, Mridu and Suzuki, Hisami and Cao, Guihong and Gao, Jianfeng and Bisk, Yonatan},
-      booktitle={Proceedings of the IEEE/CVF conference on computer vision and pattern recognition},
-      pages={16495--16504},
-       year={2022}
-      }""",
+        bibtex_citation=r"""
+@inproceedings{chang2022webqa,
+  author = {Chang, Yingshan and Narang, Mridu and Suzuki, Hisami and Cao, Guihong and Gao, Jianfeng and Bisk, Yonatan},
+  booktitle = {Proceedings of the IEEE/CVF conference on computer vision and pattern recognition},
+  pages = {16495--16504},
+  title = {Webqa: Multihop and multimodal qa},
+  year = {2022},
+}
+""",
         prompt={
             "query": "Retrieve passages from Wikipedia that provide answers to the following question."
         },

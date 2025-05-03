@@ -47,23 +47,25 @@ class XQuADRetrieval(MultilingualTask, AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@article{Artetxe:etal:2019,
-      author    = {Mikel Artetxe and Sebastian Ruder and Dani Yogatama},
-      title     = {On the cross-lingual transferability of monolingual representations},
-      journal   = {CoRR},
-      volume    = {abs/1910.11856},
-      year      = {2019},
-      archivePrefix = {arXiv},
-      eprint    = {1910.11856}
+        bibtex_citation=r"""
+@article{Artetxe:etal:2019,
+  archiveprefix = {arXiv},
+  author = {Mikel Artetxe and Sebastian Ruder and Dani Yogatama},
+  eprint = {1910.11856},
+  journal = {CoRR},
+  title = {On the cross-lingual transferability of monolingual representations},
+  volume = {abs/1910.11856},
+  year = {2019},
 }
-@inproceedings{
-      dumitrescu2021liro,
-      title={LiRo: Benchmark and leaderboard for Romanian language tasks},
-      author={Stefan Daniel Dumitrescu and Petru Rebeja and Beata Lorincz and Mihaela Gaman and Andrei Avram and Mihai Ilie and Andrei Pruteanu and Adriana Stan and Lorena Rosia and Cristina Iacobescu and Luciana Morogan and George Dima and Gabriel Marchidan and Traian Rebedea and Madalina Chitez and Dani Yogatama and Sebastian Ruder and Radu Tudor Ionescu and Razvan Pascanu and Viorica Patraucean},
-      booktitle={Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
-      year={2021},
-      url={https://openreview.net/forum?id=JH61CD7afTv}
-}""",
+
+@inproceedings{dumitrescu2021liro,
+  author = {Stefan Daniel Dumitrescu and Petru Rebeja and Beata Lorincz and Mihaela Gaman and Andrei Avram and Mihai Ilie and Andrei Pruteanu and Adriana Stan and Lorena Rosia and Cristina Iacobescu and Luciana Morogan and George Dima and Gabriel Marchidan and Traian Rebedea and Madalina Chitez and Dani Yogatama and Sebastian Ruder and Radu Tudor Ionescu and Razvan Pascanu and Viorica Patraucean},
+  booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
+  title = {LiRo: Benchmark and leaderboard for Romanian language tasks},
+  url = {https://openreview.net/forum?id=JH61CD7afTv},
+  year = {2021},
+}
+""",
     )
 
     def load_data(self, **kwargs):

@@ -27,16 +27,18 @@ class TUBerlinT2IRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{eitz2012humans,
-  title={How do humans sketch objects?},
-  author={Eitz, Mathias and Hays, James and Alexa, Marc},
-  journal={ACM Transactions on graphics (TOG)},
-  volume={31},
-  number={4},
-  pages={1--10},
-  year={2012},
-  publisher={Acm New York, NY, USA}
-}""",
+        bibtex_citation=r"""
+@article{eitz2012humans,
+  author = {Eitz, Mathias and Hays, James and Alexa, Marc},
+  journal = {ACM Transactions on graphics (TOG)},
+  number = {4},
+  pages = {1--10},
+  publisher = {Acm New York, NY, USA},
+  title = {How do humans sketch objects?},
+  volume = {31},
+  year = {2012},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 250},
             "avg_character_length": {

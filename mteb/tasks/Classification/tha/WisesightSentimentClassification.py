@@ -27,20 +27,20 @@ class WisesightSentimentClassification(AbsTaskClassification):
         license="cc0-1.0",
         annotations_creators="expert-annotated",
         sample_creation="found",
-        bibtex_citation="""@software{bact_2019_3457447,
-  author       = {Suriyawongkul, Arthit and
-                  Chuangsuwanich, Ekapol and
-                  Chormai, Pattarawat and
-                  Polpanumas, Charin},
-  title        = {PyThaiNLP/wisesight-sentiment: First release},
-  month        = sep,
-  year         = 2019,
-  publisher    = {Zenodo},
-  version      = {v1.0},
-  doi          = {10.5281/zenodo.3457447},
-  url          = {https://doi.org/10.5281/zenodo.3457447}
+        bibtex_citation=r"""
+@software{bact_2019_3457447,
+  author = {Suriyawongkul, Arthit and
+Chuangsuwanich, Ekapol and
+Chormai, Pattarawat and
+Polpanumas, Charin},
+  doi = {10.5281/zenodo.3457447},
+  month = sep,
+  publisher = {Zenodo},
+  title = {PyThaiNLP/wisesight-sentiment: First release},
+  url = {https://doi.org/10.5281/zenodo.3457447},
+  version = {v1.0},
+  year = {2019},
 }
-
 """,
     )
 

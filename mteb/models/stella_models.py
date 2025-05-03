@@ -52,7 +52,7 @@ stella_en_400M = ModelMeta(
         torch_dtype="auto",
     ),
     name="NovaSearch/stella_en_400M_v5",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     use_instructions=True,
     revision="1bb50bc7bb726810eac2140e62155b88b0df198f",
@@ -80,7 +80,7 @@ stella_en_1_5b = ModelMeta(
         torch_dtype="auto",
     ),
     name="NovaSearch/stella_en_1.5B_v5",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     use_instructions=True,
     revision="d03be74b361d4eb24f42a2fe5bd2e29917df4604",
@@ -100,7 +100,7 @@ stella_en_1_5b = ModelMeta(
 
 stella_large_zh_v3_1792d = ModelMeta(
     name="dunzhang/stella-large-zh-v3-1792d",
-    languages=["zho_Hans"],
+    languages=["zho-Hans"],
     open_weights=True,
     revision="d5d39eb8cd11c80a63df53314e59997074469f09",
     release_date="2024-02-17",
@@ -127,7 +127,7 @@ stella_large_zh_v3_1792d = ModelMeta(
 
 stella_base_zh_v3_1792d = ModelMeta(
     name="infgrad/stella-base-zh-v3-1792d",
-    languages=["zho_Hans"],
+    languages=["zho-Hans"],
     open_weights=True,
     revision="82254892a0fba125aa2abf3a4800d2dd12821343",
     release_date="2024-02-17",
@@ -155,7 +155,7 @@ stella_base_zh_v3_1792d = ModelMeta(
 
 stella_mrl_large_zh_v3_5_1792d = ModelMeta(
     name="dunzhang/stella-mrl-large-zh-v3.5-1792d",
-    languages=["zho_Hans"],
+    languages=["zho-Hans"],
     open_weights=True,
     revision="17bb1c32a93a8fc5f6fc9e91d5ea86da99983cfe",
     release_date="2024-02-27",
@@ -177,7 +177,7 @@ stella_mrl_large_zh_v3_5_1792d = ModelMeta(
 
 zpoint_large_embedding_zh = ModelMeta(
     name="iampanda/zpoint_large_embedding_zh",
-    languages=["zho_Hans"],
+    languages=["zho-Hans"],
     open_weights=True,
     revision="b1075144f440ab4409c05622c1179130ebd57d03",
     release_date="2024-06-04",

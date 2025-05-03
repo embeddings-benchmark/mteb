@@ -57,17 +57,6 @@ dataset_revisions = list(
 )
 
 
-dataset_revisions = list(
-    {  # deduplicate as multiple tasks rely on the same dataset (save us at least 100 test cases)
-        (t.metadata.dataset["path"], t.metadata.dataset["revision"])
-        for t in mteb.get_tasks(exclude_superseded=False)
-        if not isinstance(t, (AbsTaskAggregate, AbsTaskSpeedTask))
-        and t.metadata.name != "AfriSentiLangClassification"
-        and t.metadata.name not in ALL_MOCK_TASKS
-    }
-)
-
-
 @pytest.mark.parametrize("task", tasks)
 @patch("datasets.load_dataset")
 @patch("datasets.concatenate_datasets")
@@ -122,3 +111,10 @@ def test_superseded_dataset_exists():
             assert task.superseded_by in TASKS_REGISTRY, (
                 f"{task} is superseded by {task.superseded_by} but {task.superseded_by} is not in the TASKS_REGISTRY"
             )
+
+
+def test_is_aggregate_property_correct():
+    tasks = mteb.get_tasks()
+
+    for task in tasks:
+        assert task.is_aggregate == isinstance(task, AbsTaskAggregate)

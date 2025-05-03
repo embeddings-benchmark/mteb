@@ -40,16 +40,16 @@ class TopiOCQARetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{adlakha2022topiocqa,
-      title={TopiOCQA: Open-domain Conversational Question Answering with Topic Switching},
-      author={Vaibhav Adlakha and Shehzaad Dhuliawala and Kaheer Suleman and Harm de Vries and Siva Reddy},
-      year={2022},
-      eprint={2110.00768},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{adlakha2022topiocqa,
+  archiveprefix = {arXiv},
+  author = {Vaibhav Adlakha and Shehzaad Dhuliawala and Kaheer Suleman and Harm de Vries and Siva Reddy},
+  eprint = {2110.00768},
+  primaryclass = {cs.CL},
+  title = {TopiOCQA: Open-domain Conversational Question Answering with Topic Switching},
+  year = {2022},
+}
+""",
     )
 
     # TODO: Will be removed if curated and added to mteb HF
@@ -123,15 +123,15 @@ class TopiOCQARetrievalHardNegatives(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{adlakha2022topiocqa,
-      title={TopiOCQA: Open-domain Conversational Question Answering with Topic Switching},
-      author={Vaibhav Adlakha and Shehzaad Dhuliawala and Kaheer Suleman and Harm de Vries and Siva Reddy},
-      year={2022},
-      eprint={2110.00768},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{adlakha2022topiocqa,
+  archiveprefix = {arXiv},
+  author = {Vaibhav Adlakha and Shehzaad Dhuliawala and Kaheer Suleman and Harm de Vries and Siva Reddy},
+  eprint = {2110.00768},
+  primaryclass = {cs.CL},
+  title = {TopiOCQA: Open-domain Conversational Question Answering with Topic Switching},
+  year = {2022},
+}
+""",
         adapted_from=["TopiOCQA"],
     )

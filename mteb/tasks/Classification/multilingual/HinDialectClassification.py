@@ -50,15 +50,16 @@ class HinDialectClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{11234/1-4839,
-        title = {{HinDialect} 1.1: 26 Hindi-related languages and dialects of the Indic Continuum in North India},
-        author = {Bafna, Niyati and {\v Z}abokrtsk{\'y}, Zden{\v e}k and Espa{\~n}a-Bonet, Cristina and van Genabith, Josef and Kumar, Lalit "Samyak Lalit" and Suman, Sharda and Shivay, Rahul},
-        url = {http://hdl.handle.net/11234/1-4839},
-        note = {{LINDAT}/{CLARIAH}-{CZ} digital library at the Institute of Formal and Applied Linguistics ({{\'U}FAL}), Faculty of Mathematics and Physics, Charles University},
-        copyright = {Creative Commons - Attribution-{NonCommercial}-{ShareAlike} 4.0 International ({CC} {BY}-{NC}-{SA} 4.0)},
-        year = {2022} }
-        """,
+        bibtex_citation=r"""
+@misc{11234/1-4839,
+  author = {Bafna, Niyati and {\v Z}abokrtsk{\'y}, Zden{\v e}k and Espa{\~n}a-Bonet, Cristina and van Genabith, Josef and Kumar, Lalit "Samyak Lalit" and Suman, Sharda and Shivay, Rahul},
+  copyright = {Creative Commons - Attribution-{NonCommercial}-{ShareAlike} 4.0 International ({CC} {BY}-{NC}-{SA} 4.0)},
+  note = {{LINDAT}/{CLARIAH}-{CZ} digital library at the Institute of Formal and Applied Linguistics ({{\'U}FAL}), Faculty of Mathematics and Physics, Charles University},
+  title = {{HinDialect} 1.1: 26 Hindi-related languages and dialects of the Indic Continuum in North India},
+  url = {http://hdl.handle.net/11234/1-4839},
+  year = {2022},
+}
+""",
     )
 
     def dataset_transform(self) -> None:

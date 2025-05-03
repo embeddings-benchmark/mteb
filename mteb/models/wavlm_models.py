@@ -8,7 +8,6 @@ import numpy as np
 import torch
 import torchaudio
 from torch.utils.data import DataLoader
-from tqdm import tqdm
 from transformers import Wav2Vec2FeatureExtractor, WavLMModel
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
@@ -27,12 +26,11 @@ class WavlmWrapper(Wrapper):
         self.model_name = model_name
         self.model_revision = model_revision
         self.device = device
-        
+
         self.model = WavLMModel.from_pretrained(
-            self.model_name, 
-            revision=self.model_revision
+            self.model_name, revision=self.model_revision
         ).to(self.device)
-        
+
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(
             self.model_name
         )
@@ -96,7 +94,7 @@ class WavlmWrapper(Wrapper):
 
     def _pad_audio_batch(self, batch):
         batch = [x.reshape(-1) if x.ndim == 0 else x for x in batch]
-        max_length = max(audio.shape[0] for audio in batch) 
+        max_length = max(audio.shape[0] for audio in batch)
         padded_batch = [
             torch.nn.functional.pad(audio, (0, max_length - audio.shape[0]))
             for audio in batch
@@ -118,16 +116,16 @@ class WavlmWrapper(Wrapper):
         with torch.no_grad():
             for i in range(0, len(processed_audio), batch_size):
                 batch = processed_audio[i : i + batch_size]
-                
+
                 batch_tensor = self._pad_audio_batch(batch)
-                
+
                 if batch_tensor.ndim == 1:
-                    batch_tensor = batch_tensor.unsqueeze(0) 
+                    batch_tensor = batch_tensor.unsqueeze(0)
                 elif batch_tensor.ndim > 2:
                     batch_tensor = batch_tensor.view(batch_tensor.size(0), -1)
-                
+
                 inputs = self.feature_extractor(
-                    batch_tensor.cpu().numpy(), 
+                    batch_tensor.cpu().numpy(),
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                     padding="longest",
@@ -159,6 +157,7 @@ class WavlmWrapper(Wrapper):
     ) -> np.ndarray:
         return self.get_audio_embeddings(inputs, task_name=task_name, **kwargs).numpy()
 
+
 wavlm_base = ModelMeta(
     loader=partial(
         WavlmWrapper,
@@ -166,7 +165,7 @@ wavlm_base = ModelMeta(
         model_revision="efa81aae7ff777e464159e0f877d54eac5b84f81",
     ),
     name="microsoft/wavlm-base",
-    languages=["eng"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="efa81aae7ff777e464159e0f877d54eac5b84f81",
     release_date="2022-07-19",
@@ -192,7 +191,7 @@ wavlm_base_sd = ModelMeta(
         model_revision="fe13cca7e592cf0e11287cfede24e6999ac7dc4e",
     ),
     name="microsoft/wavlm-base-sd",
-    languages=["eng"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="fe13cca7e592cf0e11287cfede24e6999ac7dc4e",
     release_date="2022-07-19",
@@ -218,7 +217,7 @@ wavlm_base_plus = ModelMeta(
         model_revision="4c66d4806a428f2e922ccfa1a962776e232d487b",
     ),
     name="microsoft/wavlm-base-plus",
-    languages=["eng"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="4c66d4806a428f2e922ccfa1a962776e232d487b",
     release_date="2022-07-19",
@@ -248,7 +247,7 @@ wavlm_base_plus_sv = ModelMeta(
         model_revision="feb593a6c23c1cc3d9510425c29b0a14d2b07b1e",
     ),
     name="microsoft/wavlm-base-plus-sv",
-    languages=["eng"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="feb593a6c23c1cc3d9510425c29b0a14d2b07b1e",
     release_date="2022-07-19",
@@ -279,7 +278,7 @@ wavlm_base_plus_sd = ModelMeta(
         model_revision="5bd86f0662bd55704109a794c6a1b1790ea0f91a",
     ),
     name="microsoft/wavlm-base-plus-sd",
-    languages=["eng"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="5bd86f0662bd55704109a794c6a1b1790ea0f91a",
     release_date="2022-07-19",
@@ -310,7 +309,7 @@ wavlm_base_sv = ModelMeta(
         model_revision="0a23162ffc49adcf42bdf836a00cb2eb45af3601",
     ),
     name="microsoft/wavlm-base-sv",
-    languages=["eng"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="0a23162ffc49adcf42bdf836a00cb2eb45af3601",
     release_date="2022-07-19",
@@ -336,7 +335,7 @@ wavlm_large = ModelMeta(
         model_revision="c1423ed94bb01d80a3f5ce5bc39f6026a0f4828c",
     ),
     name="microsoft/wavlm-large",
-    languages=["eng"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="c1423ed94bb01d80a3f5ce5bc39f6026a0f4828c",
     release_date="2022-07-19",

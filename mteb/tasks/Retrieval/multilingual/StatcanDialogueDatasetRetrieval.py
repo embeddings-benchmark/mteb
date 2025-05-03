@@ -85,19 +85,19 @@ class StatcanDialogueDatasetRetrieval(MultilingualTask, AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
+        bibtex_citation=r"""
 @inproceedings{lu-etal-2023-statcan,
-    title = "The {S}tat{C}an Dialogue Dataset: Retrieving Data Tables through Conversations with Genuine Intents",
-    author = "Lu, Xing Han  and
-      Reddy, Siva  and
-      de Vries, Harm",
-    booktitle = "Proceedings of the 17th Conference of the European Chapter of the Association for Computational Linguistics",
-    month = may,
-    year = "2023",
-    address = "Dubrovnik, Croatia",
-    publisher = "Association for Computational Linguistics",
-    url = "https://arxiv.org/abs/2304.01412",
-    pages = "2799--2829",
+  address = {Dubrovnik, Croatia},
+  author = {Lu, Xing Han  and
+Reddy, Siva  and
+de Vries, Harm},
+  booktitle = {Proceedings of the 17th Conference of the European Chapter of the Association for Computational Linguistics},
+  month = may,
+  pages = {2799--2829},
+  publisher = {Association for Computational Linguistics},
+  title = {The {S}tat{C}an Dialogue Dataset: Retrieving Data Tables through Conversations with Genuine Intents},
+  url = {https://arxiv.org/abs/2304.01412},
+  year = {2023},
 }
 """,
     )

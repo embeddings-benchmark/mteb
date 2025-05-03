@@ -27,14 +27,16 @@ class ArxivClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@ARTICLE{8675939,
-        author={He, Jun and Wang, Liqun and Liu, Liu and Feng, Jiao and Wu, Hao},
-        journal={IEEE Access},
-        title={Long Document Classification From Local Word Glimpses via Recurrent Attention Learning},
-        year={2019},
-        volume={7},
-        number={},
-        pages={40707-40718},
-        doi={10.1109/ACCESS.2019.2907992}
-        }""",
+        bibtex_citation=r"""
+@article{8675939,
+  author = {He, Jun and Wang, Liqun and Liu, Liu and Feng, Jiao and Wu, Hao},
+  doi = {10.1109/ACCESS.2019.2907992},
+  journal = {IEEE Access},
+  number = {},
+  pages = {40707-40718},
+  title = {Long Document Classification From Local Word Glimpses via Recurrent Attention Learning},
+  volume = {7},
+  year = {2019},
+}
+""",
     )

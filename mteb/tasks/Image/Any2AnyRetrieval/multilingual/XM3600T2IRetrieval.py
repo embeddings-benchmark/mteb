@@ -142,13 +142,15 @@ class XM3600T2IRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{thapliyal2022crossmodal,
-  title={Crossmodal-3600: A Massively Multilingual Multimodal Evaluation Dataset},
-  author={Thapliyal, Ashish V and Tuset, Jordi Pont and Chen, Xi and Soricut, Radu},
-  booktitle={Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing},
-  pages={715--729},
-  year={2022}
-}""",
+        bibtex_citation=r"""
+@inproceedings{thapliyal2022crossmodal,
+  author = {Thapliyal, Ashish V and Tuset, Jordi Pont and Chen, Xi and Soricut, Radu},
+  booktitle = {Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing},
+  pages = {715--729},
+  title = {Crossmodal-3600: A Massively Multilingual Multimodal Evaluation Dataset},
+  year = {2022},
+}
+""",
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {
