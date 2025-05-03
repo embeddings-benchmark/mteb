@@ -65,7 +65,7 @@ Robnik-{\v{S}}ikonja, Marko},
         )
 
 
-class InappropriatenessClassificationv2(AbsTaskClassification):
+class InappropriatenessClassificationv2(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="InappropriatenessClassificationv2",
         dataset={

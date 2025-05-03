@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class RuNLUIntentClassification(AbsTaskClassification):
+class RuNLUIntentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="RuNLUIntentClassification",
         dataset={
