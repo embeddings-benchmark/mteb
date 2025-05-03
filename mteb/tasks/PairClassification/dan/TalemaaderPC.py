@@ -44,3 +44,6 @@ The dataset can be used to test the performance of language models in identifyin
 }
 """,
     )
+
+    def dataset_transform(self):
+        self.dataset = self.dataset.rename_column("label", "labels")
