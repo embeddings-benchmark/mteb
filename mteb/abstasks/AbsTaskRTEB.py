@@ -819,12 +819,12 @@ class AbsTaskRTEB(AbsTask):
                 model=rteb_encoder, dataloaders=query_dataloader
             )  # Use the new dataloader
             # Set the query embeddings
-            queries_embds_files = rteb_encoder.get_embd_files()
             if rteb_encoder.in_memory:
                 queries_embd_ds = EmptyDataset(
                     rteb_encoder.embds
                 )  # Create dataset directly
             else:
+                queries_embds_files = rteb_encoder.get_embd_files()
                 queries_embd_ds = JSONLDataset(
                     queries_embds_files
                 )  # Create dataset directly
@@ -862,8 +862,9 @@ class AbsTaskRTEB(AbsTask):
                     rteb_encoder.embds
                 )  # Create dataset directly
             else:
+                corpus_embds_files = rteb_encoder.get_embd_files()
                 corpus_embd_ds = JSONLDataset(
-                    [str(corpus_embds_file)]
+                    corpus_embds_files
                 )  # Create dataset directly
 
         trainer.strategy.barrier()  # Ensure embeddings are ready on all ranks
