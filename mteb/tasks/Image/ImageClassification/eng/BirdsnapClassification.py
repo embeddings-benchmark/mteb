@@ -1,10 +1,15 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class BirdsnapClassification(AbsTaskImageClassification):
+class BirdsnapClassification(AbsTaskAnyClassification):
+    input_column_name: str = "image"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+    label_column_name: str = "common"
+
     metadata = TaskMetadata(
         name="Birdsnap",
         description="Classifying bird images from 500 species.",
@@ -39,6 +44,3 @@ class BirdsnapClassification(AbsTaskImageClassification):
 }
 """,
     )
-
-    # Override default column name in the subclass
-    label_column_name: str = "common"

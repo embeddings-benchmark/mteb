@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class Banking77Classification(AbsTaskClassification):
+class Banking77Classification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="Banking77Classification",
         description="Dataset composed of online banking queries annotated with their corresponding intents.",

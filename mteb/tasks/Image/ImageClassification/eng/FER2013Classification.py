@@ -1,10 +1,15 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class FER2013Classification(AbsTaskImageClassification):
+class FER2013Classification(AbsTaskAnyClassification):
+    input_column_name: str = "jpg"
+    label_column_name: str = "cls"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="FER2013",
         description="Classifying facial emotions.",
@@ -41,5 +46,3 @@ class FER2013Classification(AbsTaskImageClassification):
 }
 """,
     )
-    image_column_name: str = "jpg"
-    label_column_name: str = "cls"

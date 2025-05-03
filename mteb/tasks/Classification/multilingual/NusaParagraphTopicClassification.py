@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -17,7 +17,7 @@ _LANGUAGES = {
 }
 
 
-class NusaParagraphTopicClassification(AbsTaskClassification):
+class NusaParagraphTopicClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="NusaParagraphTopicClassification",
         dataset={

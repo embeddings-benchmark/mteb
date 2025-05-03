@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class SweRecClassification(AbsTaskClassification):
+class SweRecClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SweRecClassification",
         description="A Swedish dataset for sentiment classification on review",

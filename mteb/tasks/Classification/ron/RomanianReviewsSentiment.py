@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class RomanianReviewsSentiment(AbsTaskClassification):
+class RomanianReviewsSentiment(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="RomanianReviewsSentiment",
         description="LaRoSeDa (A Large Romanian Sentiment Data Set) contains 15,000 reviews written in Romanian",

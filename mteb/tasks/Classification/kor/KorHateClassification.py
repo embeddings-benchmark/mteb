@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class KorHateClassification(AbsTaskClassification):
+class KorHateClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="KorHateClassification",
         description="""The dataset was created to provide the first human-labeled Korean corpus for

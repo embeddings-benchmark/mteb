@@ -1,10 +1,15 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class Country211Classification(AbsTaskImageClassification):
+class Country211Classification(AbsTaskAnyClassification):
+    input_column_name: str = "jpg"
+    label_column_name: str = "cls"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="Country211",
         description="Classifying images of 211 countries.",
@@ -38,6 +43,3 @@ class Country211Classification(AbsTaskImageClassification):
 }
 """,
     )
-
-    image_column_name: str = "jpg"
-    label_column_name: str = "cls"

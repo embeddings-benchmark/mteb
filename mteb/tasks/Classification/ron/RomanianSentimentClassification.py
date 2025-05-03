@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 TEST_SAMPLES = 2048
 
 
-class RomanianSentimentClassification(AbsTaskClassification):
+class RomanianSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="RomanianSentimentClassification",
         description="An Romanian dataset for sentiment classification.",

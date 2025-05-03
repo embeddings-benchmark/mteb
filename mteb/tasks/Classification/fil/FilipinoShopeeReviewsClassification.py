@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class FilipinoShopeeReviewsClassification(AbsTaskClassification):
+class FilipinoShopeeReviewsClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="FilipinoShopeeReviewsClassification",
         description="The Shopee reviews tl 15 dataset is constructed by randomly taking 2100 training samples and 450 samples for testing and validation for each review star from 1 to 5. In total, there are 10500 training samples and 2250 each in validation and testing samples.",

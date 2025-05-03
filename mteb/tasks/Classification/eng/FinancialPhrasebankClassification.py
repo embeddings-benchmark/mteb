@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class FinancialPhrasebankClassification(AbsTaskClassification):
+class FinancialPhrasebankClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="FinancialPhrasebankClassification",
         description="Polar sentiment dataset of sentences from financial news, categorized by sentiment into positive, negative, or neutral.",

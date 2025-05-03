@@ -6,16 +6,23 @@ from typing import Any
 
 import numpy as np
 from datasets import Dataset, DatasetDict
+from PIL import ImageFile
+from sklearn.base import BaseEstimator
+from sklearn.linear_model import LogisticRegression
 
-from mteb.abstasks.TaskMetadata import DescriptiveStatistics
+from mteb.abstasks.TaskMetadata import (
+    DescriptiveStatistics,
+    ImageStatistics,
+    LabelStatistics,
+    TextStatistics,
+)
 from mteb.encoder_interface import Encoder
 
-from ..evaluation.evaluators import (
-    logRegClassificationEvaluator,
-)
+from ..evaluation.evaluators.ClassificationEvaluator import ClassificationEvaluator
 from ..load_results.task_results import HFSubset, ScoresDict
 from .AbsTask import AbsTask
 
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 logger = logging.getLogger(__name__)
 
 
@@ -27,35 +34,21 @@ class ClassificationDescriptiveStatistics(DescriptiveStatistics):
         number_of_characters: Total number of symbols in the dataset.
         number_texts_intersect_with_train: Number of texts in the train split
 
-        min_text_length: Minimum length of text
-        average_text_length: Average length of text
-        max_text_length: Maximum length of text
-        unique_texts: Number of unique texts
-
-        min_labels_per_text: Minimum number of labels per text
-        average_label_per_text: Average number of labels per text
-        max_labels_per_text: Maximum number of labels per text
-        unique_labels: Number of unique labels
-        labels: dict of label frequencies
+        text_statistics: Statistics for text
+        image_statistics: Statistics for images
+        label_statistics: Statistics for labels
     """
 
     num_samples: int
-    number_of_characters: int
+    number_of_characters: int | None
     number_texts_intersect_with_train: int | None
 
-    min_text_length: int
-    average_text_length: float
-    max_text_length: int
-    unique_texts: int
-
-    min_labels_per_text: int
-    average_label_per_text: float
-    max_labels_per_text: int
-    unique_labels: int
-    labels: dict[str, dict[str, int]]
+    text_statistics: TextStatistics | None
+    image_statistics: ImageStatistics | None
+    label_statistics: LabelStatistics
 
 
-class AbsTaskClassification(AbsTask):
+class AbsTaskAnyClassification(AbsTask):
     """Abstract class for classification tasks
     The similarity is computed between pairs and the results are ranked.
 
@@ -69,12 +62,19 @@ class AbsTaskClassification(AbsTask):
 
     """
 
-    evaluator = logRegClassificationEvaluator
-    abstask_prompt = "Classify user passages."
+    evaluator: type[ClassificationEvaluator] = ClassificationEvaluator
+    classifier: BaseEstimator = LogisticRegression(
+        n_jobs=-1,
+        max_iter=100,
+    )
+
     samples_per_label: int = 8
     n_experiments: int = 10
     k: int = 3
-    train_split = "train"
+    train_split: str = "train"
+    label_column_name: str = "label"
+    input_column_name: str = "text"
+    abstask_prompt = "Classify user passages."
 
     def evaluate(
         self,
@@ -88,6 +88,8 @@ class AbsTaskClassification(AbsTask):
         if not self.data_loaded:
             self.load_data()
 
+        if "random_state" in self.classifier.get_params():
+            self.classifier = self.classifier.set_params(random_state=self.seed)
         scores = {}
         hf_subsets = self.hf_subsets
         if subsets_to_run is not None:
@@ -117,7 +119,7 @@ class AbsTaskClassification(AbsTask):
     def _evaluate_subset(
         self,
         model: Encoder,
-        dataset: DatasetDict | Dataset,
+        dataset: DatasetDict,
         hf_split: str,
         hf_subset: str,
         encode_kwargs: dict[str, Any],
@@ -140,16 +142,18 @@ class AbsTaskClassification(AbsTask):
             # Bootstrap `self.samples_per_label` samples per label for each split
             train_dataset, idxs = self._undersample_data(
                 train_split,
-                self.samples_per_label,
                 idxs,
             )
 
             evaluator = self.evaluator(
                 train_dataset,
                 eval_split,
+                self.input_column_name,
+                self.label_column_name,
                 task_metadata=self.metadata,
                 hf_split=hf_split,
                 hf_subset=hf_subset,
+                classifier=self.classifier,
                 **params,
             )
             scores_exp, test_cache = evaluator(
@@ -164,13 +168,12 @@ class AbsTaskClassification(AbsTask):
         return avg_scores
 
     def _undersample_data(
-        self, dataset: Dataset, samples_per_label: int, idxs=None
+        self, dataset: Dataset, idxs: list[int] | None = None
     ) -> tuple[Dataset, list[int]]:
         """Undersample data to have `samples_per_label` samples of each label.
 
         Args:
             dataset: Hugging Face `datasets.Dataset` containing "text" and "label".
-            samples_per_label: Number of samples per label to retain.
             idxs: Optional indices to shuffle and sample from.
 
         Returns:
@@ -187,8 +190,8 @@ class AbsTaskClassification(AbsTask):
         sampled_idxs = []
 
         for i in idxs:
-            label = dataset[i]["label"]
-            if label_counter[label] < samples_per_label:
+            label = dataset[i][self.label_column_name]
+            if label_counter[label] < self.samples_per_label:
                 sampled_idxs.append(i)
                 label_counter[label] += 1
 
@@ -199,26 +202,50 @@ class AbsTaskClassification(AbsTask):
     ) -> ClassificationDescriptiveStatistics:
         train_text = []
         if hf_subset:
-            text = self.dataset[hf_subset][split]["text"]
-            label = self.dataset[hf_subset][split]["label"]
-            if split != "train":
-                train_text = self.dataset[hf_subset]["train"]["text"]
+            inputs = self.dataset[hf_subset][split][self.input_column_name]
+            label = self.dataset[hf_subset][split][self.label_column_name]
+            if split != self.train_split:
+                train_text = self.dataset[hf_subset][self.train_split][
+                    self.input_column_name
+                ]
         elif compute_overall:
-            text = []
+            inputs = []
             label = []
             for hf_subset in self.metadata.eval_langs:
-                text.extend(self.dataset[hf_subset][split]["text"])
-                label.extend(self.dataset[hf_subset][split]["label"])
-                if split != "train":
-                    train_text.extend(self.dataset[hf_subset]["train"]["text"])
+                inputs.extend(self.dataset[hf_subset][split][self.input_column_name])
+                label.extend(self.dataset[hf_subset][split][self.label_column_name])
+                if split != self.train_split:
+                    train_text.extend(
+                        self.dataset[hf_subset][self.train_split][
+                            self.input_column_name
+                        ]
+                    )
         else:
-            text = self.dataset[split]["text"]
-            label = self.dataset[split]["label"]
-            if split != "train":
-                train_text = self.dataset["train"]["text"]
+            inputs = self.dataset[split][self.input_column_name]
+            label = self.dataset[split][self.label_column_name]
+            if split != self.train_split:
+                train_text = self.dataset[self.train_split][self.input_column_name]
 
-        text_len = [len(t) for t in text]
-        total_text_len = sum(text_len)
+        total_text_len = 0
+        text_len = None
+        img_widths, img_heights = None, None
+        num_texts_in_train = None
+
+        if "image" in self.metadata.modalities:
+            img_widths, img_heights = [], []
+            for img in inputs:
+                width, height = img.size  # type: ignore
+                img_heights.append(height)
+                img_widths.append(width)
+        if "text" in self.metadata.modalities:
+            text_len = [len(t) for t in inputs]
+            total_text_len = sum(text_len)
+            num_texts_in_train = (
+                len(set(inputs) & set(train_text))
+                if split != self.train_split
+                else None
+            )
+
         if isinstance(label[0], int):
             label_len = [1] * len(label)
             total_label_len = len(label)
@@ -230,18 +257,32 @@ class AbsTaskClassification(AbsTask):
             total_labels = []
             for l in label:
                 total_labels.extend(l if len(l) > 0 else [None])
+
         label_count = Counter(total_labels)
-        num_texts_in_train = (
-            len(set(text) & set(train_text)) if split != "train" else None
-        )
-        return ClassificationDescriptiveStatistics(
-            num_samples=len(text),
-            number_of_characters=total_text_len,
-            number_texts_intersect_with_train=num_texts_in_train,
-            min_text_length=min(text_len),
-            average_text_length=total_text_len / len(text),
-            max_text_length=max(text_len),
-            unique_texts=len(set(text)),
+
+        if text_len:
+            text_statistics = TextStatistics(
+                min_text_length=min(text_len),
+                average_text_length=total_text_len / len(inputs),
+                max_text_length=max(text_len),
+                unique_texts=len(set(inputs)),
+            )
+        else:
+            text_statistics = None
+
+        if img_widths:
+            image_statistics = ImageStatistics(
+                min_image_width=min(img_widths),
+                average_image_width=sum(img_widths) / len(img_widths),
+                max_image_width=max(img_widths),
+                min_image_height=min(img_heights),
+                average_image_height=sum(img_heights) / len(img_heights),
+                max_image_height=max(img_heights),
+            )
+        else:
+            image_statistics = None
+
+        label_statistics = LabelStatistics(
             min_labels_per_text=min(label_len),
             average_label_per_text=total_label_len / len(label),
             max_labels_per_text=max(label_len),
@@ -254,5 +295,23 @@ class AbsTaskClassification(AbsTask):
             },
         )
 
+        return ClassificationDescriptiveStatistics(
+            num_samples=len(inputs),
+            # text
+            number_of_characters=total_text_len,
+            number_texts_intersect_with_train=num_texts_in_train
+            if num_texts_in_train
+            else None,
+            text_statistics=text_statistics,
+            image_statistics=image_statistics,
+            label_statistics=label_statistics,
+        )
+
     def _push_dataset_to_hub(self, repo_name: str) -> None:
-        self._upload_dataset_to_hub(repo_name, ["text", "label"])
+        self._upload_dataset_to_hub(
+            repo_name,
+            [
+                self.input_column_name,
+                self.label_column_name,
+            ],
+        )

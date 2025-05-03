@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class PoemSentimentClassification(AbsTaskClassification):
+class PoemSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="PoemSentimentClassification",
         description="Poem Sentiment is a sentiment dataset of poem verses from Project Gutenberg.",

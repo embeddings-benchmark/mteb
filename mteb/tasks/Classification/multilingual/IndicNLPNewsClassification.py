@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -15,7 +15,7 @@ _LANGUAGES = {
 }
 
 
-class IndicNLPNewsClassification(AbsTaskClassification):
+class IndicNLPNewsClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="IndicNLPNewsClassification",
         dataset={

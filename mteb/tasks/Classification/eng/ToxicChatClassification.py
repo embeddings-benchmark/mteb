@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _EVAL_SPLITS = ["test"]
 
 
-class ToxicChatClassification(AbsTaskClassification):
+class ToxicChatClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="ToxicChatClassification",
         description="""This dataset contains toxicity annotations on 10K user

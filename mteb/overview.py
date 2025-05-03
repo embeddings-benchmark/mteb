@@ -8,7 +8,10 @@ from collections import Counter, defaultdict
 
 import pandas as pd
 
-from mteb.abstasks import AbsTask, AbsTaskMultilabelClassification
+from mteb.abstasks import (
+    AbsTask,
+    AbsTaskMultilabelClassification,
+)
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.TaskMetadata import TASK_CATEGORY, TASK_DOMAIN, TASK_TYPE
 from mteb.custom_validators import MODALITIES

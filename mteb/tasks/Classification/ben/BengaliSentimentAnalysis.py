@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class BengaliSentimentAnalysis(AbsTaskClassification):
+class BengaliSentimentAnalysis(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="BengaliSentimentAnalysis",
         description="dataset contains 3307 Negative reviews and 8500 Positive reviews collected and manually annotated from Youtube Bengali drama.",

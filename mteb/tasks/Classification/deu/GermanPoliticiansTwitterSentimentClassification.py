@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class GermanPoliticiansTwitterSentimentClassification(AbsTaskClassification):
+class GermanPoliticiansTwitterSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="GermanPoliticiansTwitterSentimentClassification",
         description="GermanPoliticiansTwitterSentiment is a dataset of German tweets categorized with their sentiment (3 classes).",

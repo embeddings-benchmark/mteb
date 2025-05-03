@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class TNews(AbsTaskClassification):
+class TNews(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="TNews",
         description="Short Text Classification for News",
@@ -77,7 +77,7 @@ Lan, Zhenzhong },
     samples_per_label = 32
 
 
-class IFlyTek(AbsTaskClassification):
+class IFlyTek(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="IFlyTek",
         description="Long Text classification for the description of Apps",
@@ -152,7 +152,7 @@ Lan, Zhenzhong },
     n_experiments = 5
 
 
-class MultilingualSentiment(AbsTaskClassification):
+class MultilingualSentiment(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="MultilingualSentiment",
         description="A collection of multilingual sentiments datasets grouped into 3 classes -- positive, neutral, negative",
@@ -181,7 +181,7 @@ class MultilingualSentiment(AbsTaskClassification):
     samples_per_label = 32
 
 
-class JDReview(AbsTaskClassification):
+class JDReview(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="JDReview",
         description="review for iphone",
@@ -217,7 +217,7 @@ class JDReview(AbsTaskClassification):
     samples_per_label = 32
 
 
-class OnlineShopping(AbsTaskClassification):
+class OnlineShopping(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="OnlineShopping",
         description="Sentiment Analysis of User Reviews on Online Shopping Websites",
@@ -253,7 +253,7 @@ class OnlineShopping(AbsTaskClassification):
     samples_per_label = 32
 
 
-class Waimai(AbsTaskClassification):
+class Waimai(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="Waimai",
         description="Sentiment Analysis of user reviews on takeaway platforms",

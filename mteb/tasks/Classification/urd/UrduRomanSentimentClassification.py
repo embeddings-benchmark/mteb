@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class UrduRomanSentimentClassification(AbsTaskClassification):
+class UrduRomanSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="UrduRomanSentimentClassification",
         description="The Roman Urdu dataset is a data corpus comprising of more than 20000 records tagged for sentiment (Positive, Negative, Neutral)",

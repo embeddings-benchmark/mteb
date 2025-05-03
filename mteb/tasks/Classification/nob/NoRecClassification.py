@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class NoRecClassification(AbsTaskClassification):
+class NoRecClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="NoRecClassification",
         description="A Norwegian dataset for sentiment classification on review",

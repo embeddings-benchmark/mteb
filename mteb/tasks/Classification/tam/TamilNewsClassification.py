@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class TamilNewsClassification(AbsTaskClassification):
+class TamilNewsClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="TamilNewsClassification",
         description="A Tamil dataset for 6-class classification of Tamil news articles",

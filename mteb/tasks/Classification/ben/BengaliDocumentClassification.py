@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class BengaliDocumentClassification(AbsTaskClassification):
+class BengaliDocumentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="BengaliDocumentClassification",
         description="Dataset for News Classification, categorized with 13 domains.",

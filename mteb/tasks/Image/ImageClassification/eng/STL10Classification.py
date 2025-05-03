@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class STL10Classification(AbsTaskImageClassification):
+class STL10Classification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="STL10",
         description="Classifying 96x96 images from 10 classes.",

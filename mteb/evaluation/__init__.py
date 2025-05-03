@@ -11,9 +11,6 @@ from .evaluators import (
     RetrievalEvaluator,
     STSEvaluator,
     SummarizationEvaluator,
-    dot_distance,
-    kNNClassificationEvaluator,
-    logRegClassificationEvaluator,
 )
 from .LangMapping import LANG_MAPPING
 from .MTEB import MTEB
@@ -28,9 +25,6 @@ __all__ = [
     "ClusteringEvaluator",
     "BitextMiningEvaluator",
     "PairClassificationEvaluator",
-    "kNNClassificationEvaluator",
-    "logRegClassificationEvaluator",
-    "dot_distance",
     "LANG_MAPPING",
     "MTEB",
     "ClassificationEvaluator",

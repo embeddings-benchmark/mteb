@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class CbdClassification(AbsTaskClassification):
+class CbdClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="CBD",
         description="Polish Tweets annotated for cyberbullying detection.",
@@ -40,7 +40,7 @@ class CbdClassification(AbsTaskClassification):
     )
 
 
-class PolEmo2InClassification(AbsTaskClassification):
+class PolEmo2InClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="PolEmo2.0-IN",
         description="A collection of Polish online reviews from four domains: medicine, hotels, products and "
@@ -83,7 +83,7 @@ Za{\'s}ko-Zieli{\'n}ska, Monika},
     )
 
 
-class PolEmo2OutClassification(AbsTaskClassification):
+class PolEmo2OutClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="PolEmo2.0-OUT",
         description="A collection of Polish online reviews from four domains: medicine, hotels, products and "
@@ -111,7 +111,7 @@ class PolEmo2OutClassification(AbsTaskClassification):
     )
 
 
-class AllegroReviewsClassification(AbsTaskClassification):
+class AllegroReviewsClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="AllegroReviews",
         description="A Polish dataset for sentiment classification on reviews from e-commerce marketplace Allegro.",
@@ -137,7 +137,7 @@ class AllegroReviewsClassification(AbsTaskClassification):
     )
 
 
-class PacClassification(AbsTaskClassification):
+class PacClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="PAC",
         description="Polish Paraphrase Corpus",
