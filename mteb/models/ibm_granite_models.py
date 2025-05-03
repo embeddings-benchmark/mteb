@@ -7,19 +7,19 @@ from mteb.model_meta import (
 from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 GRANITE_LANGUAGES = [
-    "ara_Latn",
-    "ces_Latn",
-    "deu_Latn",
-    "eng_Latn",
-    "spa_Latn",
-    "fra_Latn",
-    "ita_Latn",
-    "jpn_Latn",
-    "kor_Latn",
-    "nld_Latn",
-    "por_Latn",
-    "zho_Hant",
-    "zho_Hans",
+    "ara-Latn",
+    "ces-Latn",
+    "deu-Latn",
+    "eng-Latn",
+    "spa-Latn",
+    "fra-Latn",
+    "ita-Latn",
+    "jpn-Latn",
+    "kor-Latn",
+    "nld-Latn",
+    "por-Latn",
+    "zho-Hant",
+    "zho-Hans",
 ]
 
 granite_training_data = {
@@ -135,7 +135,7 @@ granite_278m_multilingual = ModelMeta(
 granite_30m_english = ModelMeta(
     loader=sentence_transformers_loader,
     name="ibm-granite/granite-embedding-30m-english",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="eddbb57470f896b5f8e2bfcb823d8f0e2d2024a5",
     release_date="2024-12-18",
@@ -158,7 +158,7 @@ granite_30m_english = ModelMeta(
 granite_125m_english = ModelMeta(
     loader=sentence_transformers_loader,
     name="ibm-granite/granite-embedding-125m-english",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="e48d3a5b47eaa18e3fe07d4676e187fd80f32730",
     release_date="2024-12-18",

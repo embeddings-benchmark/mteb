@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from .en import (
+from .eng import (
     STS12VisualSTS,
     STS13VisualSTS,
     STS14VisualSTS,

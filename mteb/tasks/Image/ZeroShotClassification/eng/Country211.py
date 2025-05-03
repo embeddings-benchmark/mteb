@@ -31,14 +31,16 @@ class Country211ZeroShotClassification(AbsTaskZeroShotClassification):
         license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
-        modalities=["image"],
+        modalities=["image", "text"],
         sample_creation="created",
-        bibtex_citation="""@article{radford2021learning,
-        title={Learning Transferable Visual Models From Natural Language Supervision},
-        author={Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and others},
-        journal={arXiv preprint arXiv:2103.00020},
-        year={2021}
-        }""",
+        bibtex_citation=r"""
+@article{radford2021learning,
+  author = {Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and others},
+  journal = {arXiv preprint arXiv:2103.00020},
+  title = {Learning Transferable Visual Models From Natural Language Supervision},
+  year = {2021},
+}
+""",
     )
 
     image_column_name: str = "jpg"

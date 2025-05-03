@@ -26,12 +26,14 @@ class JaqketRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@InProceedings{Kurihara_nlp2020,
-author =  "鈴木正敏 and 鈴木潤 and 松田耕史 and ⻄田京介 and 井之上直也",
-title =   "JAQKET: クイズを題材にした日本語 QA データセットの構築",
-booktitle =   "言語処理学会第26回年次大会",
-year =    "2020",
-url = "https://www.anlp.jp/proceedings/annual_meeting/2020/pdf_dir/P2-24.pdf"
-note= "in Japanese"
-}""",
+        bibtex_citation=r"""
+@inproceedings{Kurihara_nlp2020,
+  author = {鈴木正敏 and 鈴木潤 and 松田耕史 and ⻄田京介 and 井之上直也},
+  booktitle = {言語処理学会第26回年次大会},
+  note = {in Japanese},
+  title = {JAQKET: クイズを題材にした日本語 QA データセットの構築},
+  url = {https://www.anlp.jp/proceedings/annual_meeting/2020/pdf_dir/P2-24.pdf},
+  year = {2020},
+}
+""",
     )

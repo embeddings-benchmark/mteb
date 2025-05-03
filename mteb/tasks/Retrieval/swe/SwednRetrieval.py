@@ -30,12 +30,14 @@ class SwednRetrieval(AbsTaskRetrieval):
         dialect=[],
         task_subtypes=["Article retrieval"],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{monsen2021method,
-    title={A method for building non-english corpora for abstractive text summarization},
-    author={Monsen, Julius and J{\"o}nsson, Arne},
-    booktitle={Proceedings of CLARIN Annual Conference},
-    year={2021}
-}""",
+        bibtex_citation=r"""
+@inproceedings{monsen2021method,
+  author = {Monsen, Julius and J{\"o}nsson, Arne},
+  booktitle = {Proceedings of CLARIN Annual Conference},
+  title = {A method for building non-english corpora for abstractive text summarization},
+  year = {2021},
+}
+""",
         prompt={
             "query": "Given a Swedish news headline retrieve summaries or news articles"
         },

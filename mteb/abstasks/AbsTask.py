@@ -273,17 +273,20 @@ class AbsTask(ABC):
         self, overwrite_results: bool = False
     ) -> dict[str, DescriptiveStatistics | dict[str, DescriptiveStatistics]]:
         """Calculates descriptive statistics from the dataset by calling `_calculate_metrics_from_split`."""
+        from mteb.abstasks import AbsTaskAnyClassification
+
         if self.metadata.descriptive_stat_path.exists() and not overwrite_results:
             logger.info("Loading metadata descriptive statistics from cache.")
             return self.metadata.descriptive_stats
 
-        self.load_data()
+        if not self.data_loaded:
+            self.load_data()
 
         descriptive_stats = {}
         hf_subset_stat = "hf_subset_descriptive_stats"
         eval_splits = self.metadata.eval_splits
-        if self.metadata.type in ["Classification", "MultilabelClassification"]:
-            eval_splits += ["train"]
+        if isinstance(self, AbsTaskAnyClassification):
+            eval_splits.append(self.train_split)
 
         pbar_split = tqdm.tqdm(eval_splits, desc="Processing Splits...")
         for split in pbar_split:
@@ -408,15 +411,28 @@ class AbsTask(ABC):
     def _add_main_score(self, scores: dict[HFSubset, ScoresDict]) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
 
-    def _upload_dataset_to_hub(self, repo_name: str, fields: list[str]) -> None:
+    def _upload_dataset_to_hub(
+        self, repo_name: str, fields: list[str] | dict[str, str]
+    ) -> None:
         if self.metadata.is_multilingual:
             for config in self.metadata.eval_langs:
                 logger.info(f"Converting {config} of {self.metadata.name}")
                 sentences = {}
                 for split in self.dataset[config]:
-                    sentences[split] = Dataset.from_dict(
-                        {field: self.dataset[config][split][field] for field in fields}
-                    )
+                    if isinstance(fields, dict):
+                        sentences[split] = Dataset.from_dict(
+                            {
+                                mapped_name: self.dataset[config][split][original_name]
+                                for original_name, mapped_name in fields.items()
+                            }
+                        )
+                    else:
+                        sentences[split] = Dataset.from_dict(
+                            {
+                                field: self.dataset[config][split][field]
+                                for field in fields
+                            }
+                        )
                 sentences = DatasetDict(sentences)
                 sentences.push_to_hub(
                     repo_name, config, commit_message=f"Add {config} dataset"
@@ -424,9 +440,17 @@ class AbsTask(ABC):
         else:
             sentences = {}
             for split in self.dataset:
-                sentences[split] = Dataset.from_dict(
-                    {field: self.dataset[split][field] for field in fields}
-                )
+                if isinstance(fields, dict):
+                    sentences[split] = Dataset.from_dict(
+                        {
+                            mapped_name: self.dataset[split][original_name]
+                            for original_name, mapped_name in fields.items()
+                        }
+                    )
+                else:
+                    sentences[split] = Dataset.from_dict(
+                        {field: self.dataset[split][field] for field in fields}
+                    )
             sentences = DatasetDict(sentences)
             sentences.push_to_hub(repo_name, commit_message="Add dataset")
 
@@ -442,7 +466,15 @@ class AbsTask(ABC):
         if not self.data_loaded:
             self.load_data()
 
+        self.metadata.push_dataset_card_to_hub(repo_name)
         self._push_dataset_to_hub(repo_name)
+
+    @property
+    def is_aggregate(
+        self,
+    ) -> bool:  # Overrided by subclasses (AbsTaskAggregate) that are aggregate
+        """Whether the task is aggregate. Subclasses that are aggregate should override this with `True`."""
+        return False
 
     @property
     def eval_splits(self) -> list[str]:

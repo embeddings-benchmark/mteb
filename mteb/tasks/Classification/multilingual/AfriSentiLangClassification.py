@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class AfriSentiLangClassification(AbsTaskClassification):
+class AfriSentiLangClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="AfriSentiLangClassification",
         description="AfriSentiLID is the largest LID classification dataset for African Languages.",

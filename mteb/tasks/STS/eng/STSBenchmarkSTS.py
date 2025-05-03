@@ -30,12 +30,14 @@ class STSBenchmarkSTS(AbsTaskAnySTS):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="machine-translated and verified",
-        bibtex_citation="""@InProceedings{huggingface:dataset:stsb_multi_mt,
-title = {Machine translated multilingual STS benchmark dataset.},
-author={Philip May},
-year={2021},
-url={https://github.com/PhilipMay/stsb-multi-mt}
-}""",
+        bibtex_citation=r"""
+@inproceedings{huggingface:dataset:stsb_multi_mt,
+  author = {Philip May},
+  title = {Machine translated multilingual STS benchmark dataset.},
+  url = {https://github.com/PhilipMay/stsb-multi-mt},
+  year = {2021},
+}
+""",
     )
 
     min_score = 0

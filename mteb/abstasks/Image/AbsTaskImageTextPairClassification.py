@@ -62,13 +62,19 @@ class AbsTaskImageTextPairClassification(AbsTask):
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> ImageTextPairClassificationDescriptiveStatistics:
-        dataset = (
-            self.dataset[split] if hf_subset is None else self.dataset[hf_subset][split]
-        )
+        if compute_overall:
+            # TODO: implement overall statistics
+            return {}
+        else:
+            dataset = (
+                self.dataset[split]
+                if hf_subset is None
+                else self.dataset[hf_subset][split]
+            )
         num_samples = len(dataset)
 
         if isinstance(self.images_column_names, str):
-            num_images = list(dataset[self.images_column_names])
+            num_images = len(list(dataset[self.images_column_names]))
         elif isinstance(self.images_column_names, list):
             num_images = sum(
                 [len(dataset[img_column]) for img_column in self.images_column_names]

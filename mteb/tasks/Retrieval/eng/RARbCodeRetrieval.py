@@ -28,28 +28,26 @@ class RARbCode(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{xiao2024rar,
-  title={RAR-b: Reasoning as Retrieval Benchmark},
-  author={Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
-  journal={arXiv preprint arXiv:2404.06347},
-  year={2024}
-}
-@article{muennighoff2023octopack,
-  title={Octopack: Instruction tuning code large language models},
-  author={Muennighoff, Niklas and Liu, Qian and Zebaze, Armel and Zheng, Qinkai and Hui, Binyuan and Zhuo, Terry Yue and Singh, Swayam and Tang, Xiangru and Von Werra, Leandro and Longpre, Shayne},
-  journal={arXiv preprint arXiv:2308.07124},
-  year={2023}
-}
-@article{austin2021program,
-  title={Program Synthesis with Large Language Models},
-  author={Austin, Jacob and Odena, Augustus and Nye, Maxwell and Bosma, Maarten and Michalewski, Henryk and Dohan, David and Jiang, Ellen and Cai, Carrie and Terry, Michael and Le, Quoc and others},
-  journal={arXiv preprint arXiv:2108.07732},
-  year={2021}
+        bibtex_citation=r"""
 @article{husain2019codesearchnet,
-  title={Codesearchnet challenge: Evaluating the state of semantic code search},
-  author={Husain, Hamel and Wu, Ho-Hsiang and Gazit, Tiferet and Allamanis, Miltiadis and Brockschmidt, Marc},
-  journal={arXiv preprint arXiv:1909.09436},
-  year={2019}
+  author = {Husain, Hamel and Wu, Ho-Hsiang and Gazit, Tiferet and Allamanis, Miltiadis and Brockschmidt, Marc},
+  journal = {arXiv preprint arXiv:1909.09436},
+  title = {Codesearchnet challenge: Evaluating the state of semantic code search},
+  year = {2019},
+}
+
+@article{muennighoff2023octopack,
+  author = {Muennighoff, Niklas and Liu, Qian and Zebaze, Armel and Zheng, Qinkai and Hui, Binyuan and Zhuo, Terry Yue and Singh, Swayam and Tang, Xiangru and Von Werra, Leandro and Longpre, Shayne},
+  journal = {arXiv preprint arXiv:2308.07124},
+  title = {Octopack: Instruction tuning code large language models},
+  year = {2023},
+}
+
+@article{xiao2024rar,
+  author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
+  journal = {arXiv preprint arXiv:2404.06347},
+  title = {RAR-b: Reasoning as Retrieval Benchmark},
+  year = {2024},
 }
 """,
         prompt={"query": "Retrieve the answer for the following coding problem."},

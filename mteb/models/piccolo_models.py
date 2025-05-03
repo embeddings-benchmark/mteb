@@ -8,7 +8,7 @@ from mteb.models.sentence_transformer_wrapper import sentence_transformers_loade
 piccolo_base_zh = ModelMeta(
     loader=sentence_transformers_loader,
     name="sensenova/piccolo-base-zh",
-    languages=["zho_Hans"],
+    languages=["zho-Hans"],
     open_weights=True,
     revision="47c0a63b8f667c3482e05b2fd45577bb19252196",
     release_date="2023-09-04",  # first commit
@@ -31,7 +31,7 @@ piccolo_base_zh = ModelMeta(
 piccolo_large_zh_v2 = ModelMeta(
     loader=sentence_transformers_loader,
     name="sensenova/piccolo-large-zh-v2",
-    languages=["zho_Hans"],
+    languages=["zho-Hans"],
     open_weights=False,  # They "temporarily" removed it in may last year
     # "Due to certain internal company considerations"
     revision="05948c1d889355936bdf9db7d30df57dd78d25a3",

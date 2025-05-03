@@ -105,3 +105,10 @@ def test_superseded_dataset_exists():
             assert task.superseded_by in TASKS_REGISTRY, (
                 f"{task} is superseded by {task.superseded_by} but {task.superseded_by} is not in the TASKS_REGISTRY"
             )
+
+
+def test_is_aggregate_property_correct():
+    tasks = mteb.get_tasks()
+
+    for task in tasks:
+        assert task.is_aggregate == isinstance(task, AbsTaskAggregate)

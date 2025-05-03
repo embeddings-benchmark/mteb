@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class STL10Classification(AbsTaskImageClassification):
+class STL10Classification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="STL10",
         description="Classifying 96x96 images from 10 classes.",
@@ -29,20 +29,21 @@ class STL10Classification(AbsTaskImageClassification):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@InProceedings{pmlr-v15-coates11a,
-        title = 	 {An Analysis of Single-Layer Networks in Unsupervised Feature Learning},
-        author = 	 {Coates, Adam and Ng, Andrew and Lee, Honglak},
-        booktitle = 	 {Proceedings of the Fourteenth International Conference on Artificial Intelligence and Statistics},
-        pages = 	 {215--223},
-        year = 	 {2011},
-        editor = 	 {Gordon, Geoffrey and Dunson, David and Dudík, Miroslav},
-        volume = 	 {15},
-        series = 	 {Proceedings of Machine Learning Research},
-        address = 	 {Fort Lauderdale, FL, USA},
-        month = 	 {11--13 Apr},
-        publisher =    {PMLR},
-        pdf = 	 {http://proceedings.mlr.press/v15/coates11a/coates11a.pdf},
-        url = 	 {https://proceedings.mlr.press/v15/coates11a.html},
-        }
-        """,
+        bibtex_citation=r"""
+@inproceedings{pmlr-v15-coates11a,
+  address = {Fort Lauderdale, FL, USA},
+  author = {Coates, Adam and Ng, Andrew and Lee, Honglak},
+  booktitle = {Proceedings of the Fourteenth International Conference on Artificial Intelligence and Statistics},
+  editor = {Gordon, Geoffrey and Dunson, David and Dudík, Miroslav},
+  month = {11--13 Apr},
+  pages = {215--223},
+  pdf = {http://proceedings.mlr.press/v15/coates11a/coates11a.pdf},
+  publisher = {PMLR},
+  series = {Proceedings of Machine Learning Research},
+  title = {An Analysis of Single-Layer Networks in Unsupervised Feature Learning},
+  url = {https://proceedings.mlr.press/v15/coates11a.html},
+  volume = {15},
+  year = {2011},
+}
+""",
     )

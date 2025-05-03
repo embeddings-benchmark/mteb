@@ -1,10 +1,14 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class UCF101Classification(AbsTaskImageClassification):
+class UCF101Classification(AbsTaskAnyClassification):
+    input_column_name: str = "image"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="UCF101",
         description="""UCF101 is an action recognition data set of realistic
@@ -33,13 +37,15 @@ version train/test list.""",
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@misc{soomro2012ucf101dataset101human,
-      title={UCF101: A Dataset of 101 Human Actions Classes From Videos in The Wild},
-      author={Khurram Soomro and Amir Roshan Zamir and Mubarak Shah},
-      year={2012},
-      eprint={1212.0402},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/1212.0402},
-}""",
+        bibtex_citation=r"""
+@misc{soomro2012ucf101dataset101human,
+  archiveprefix = {arXiv},
+  author = {Khurram Soomro and Amir Roshan Zamir and Mubarak Shah},
+  eprint = {1212.0402},
+  primaryclass = {cs.CV},
+  title = {UCF101: A Dataset of 101 Human Actions Classes From Videos in The Wild},
+  url = {https://arxiv.org/abs/1212.0402},
+  year = {2012},
+}
+""",
     )

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class SlovakHateSpeechClassification(AbsTaskClassification):
+class SlovakHateSpeechClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SlovakHateSpeechClassification",
         description="The dataset contains posts from a social network with human annotations for hateful or offensive language in Slovak.",

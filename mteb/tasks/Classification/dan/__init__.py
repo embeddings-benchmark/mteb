@@ -8,8 +8,8 @@ from .LccSentimentClassification import LccSentimentClassification
 
 __all__ = [
     "AngryTweetsClassification",
-    "DdiscoCohesionClassification",
-    "DanishPoliticalCommentsClassification",
     "DKHateClassification",
+    "DanishPoliticalCommentsClassification",
+    "DdiscoCohesionClassification",
     "LccSentimentClassification",
 ]

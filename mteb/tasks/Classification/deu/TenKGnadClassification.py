@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class TenKGnadClassification(AbsTaskClassification):
+class TenKGnadClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="TenKGnadClassification",
         description="10k German News Articles Dataset (10kGNAD) contains news articles from the online Austrian newspaper website DER Standard with their topic classification (9 classes).",
@@ -26,16 +26,16 @@ class TenKGnadClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-            @InProceedings{Schabus2017,
-                Author    = {Dietmar Schabus and Marcin Skowron and Martin Trapp},
-                Title     = {One Million Posts: A Data Set of German Online Discussions},
-                Booktitle = {Proceedings of the 40th International ACM SIGIR Conference on Research and Development in Information Retrieval (SIGIR)},
-                Pages     = {1241--1244},
-                Year      = {2017},
-                Address   = {Tokyo, Japan},
-                Doi       = {10.1145/3077136.3080711},
-                Month     = aug
-                }
-        """,
+        bibtex_citation=r"""
+@inproceedings{Schabus2017,
+  address = {Tokyo, Japan},
+  author = {Dietmar Schabus and Marcin Skowron and Martin Trapp},
+  booktitle = {Proceedings of the 40th International ACM SIGIR Conference on Research and Development in Information Retrieval (SIGIR)},
+  doi = {10.1145/3077136.3080711},
+  month = aug,
+  pages = {1241--1244},
+  title = {One Million Posts: A Data Set of German Online Discussions},
+  year = {2017},
+}
+""",
     )

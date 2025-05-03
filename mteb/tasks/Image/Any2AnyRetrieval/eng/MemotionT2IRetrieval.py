@@ -25,10 +25,15 @@ def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = No
             "modality": "image",
         }
 
-    # Apply the map function to each split and concatenate
+    split_datasets = {}
+    for split in dataset_splits:
+        split_datasets[split] = dataset[split].filter(
+            lambda example: example["text_corrected"] is not None
+        )
+
     shared_corpus = concatenate_datasets(
         [
-            dataset[split].map(
+            split_datasets[split].map(
                 map_function(split),
                 with_indices=True,
                 remove_columns=[
@@ -45,13 +50,10 @@ def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = No
             for split in dataset_splits
         ]
     )
-    # image corrupted
-    shared_corpus = shared_corpus.select(
-        [i for i in range(len(shared_corpus)) if i not in [4578, 6781, 6784, 6786]]
-    )
+
     for split in splits:
         corpus[split] = shared_corpus
-        split_dataset = dataset[split]
+        split_dataset = split_datasets[split]
         queries[split] = split_dataset.map(
             lambda x, idx: {
                 "id": f"query-{split}-{idx}",
@@ -71,18 +73,14 @@ def _load_data(path: str, splits: str, cache_dir: str = None, revision: str = No
                 "text_corrected",
             ],
         )
-        if split == "test":
-            queries[split] = queries[split].select(
-                [i for i in range(len(queries[split])) if i not in [489, 492, 494]]
-            )
+
         relevant_docs[split] = {}
         for index in range(len(split_dataset)):
-            if index not in [489, 492, 494]:
-                query_id = f"query-{split}-{index}"
-                doc_id = f"corpus-{split}-{index}"
-                if query_id not in relevant_docs[split]:
-                    relevant_docs[split][query_id] = {}
-                relevant_docs[split][query_id][doc_id] = 1
+            query_id = f"query-{split}-{index}"
+            doc_id = f"corpus-{split}-{index}"
+            if query_id not in relevant_docs[split]:
+                relevant_docs[split][query_id] = {}
+            relevant_docs[split][query_id][doc_id] = 1
     return corpus, queries, relevant_docs
 
 
@@ -109,13 +107,15 @@ class MemotionT2IRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{sharma2020semeval,
-  title={SemEval-2020 Task 8: Memotion Analysis-the Visuo-Lingual Metaphor!},
-  author={Sharma, Chhavi and Bhageria, Deepesh and Scott, William and Pykl, Srinivas and Das, Amitava and Chakraborty, Tanmoy and Pulabaigari, Viswanath and Gamb{\"a}ck, Bj{\"o}rn},
-  booktitle={Proceedings of the Fourteenth Workshop on Semantic Evaluation},
-  pages={759--773},
-  year={2020}
-}""",
+        bibtex_citation=r"""
+@inproceedings{sharma2020semeval,
+  author = {Sharma, Chhavi and Bhageria, Deepesh and Scott, William and Pykl, Srinivas and Das, Amitava and Chakraborty, Tanmoy and Pulabaigari, Viswanath and Gamb{\"a}ck, Bj{\"o}rn},
+  booktitle = {Proceedings of the Fourteenth Workshop on Semantic Evaluation},
+  pages = {759--773},
+  title = {SemEval-2020 Task 8: Memotion Analysis-the Visuo-Lingual Metaphor!},
+  year = {2020},
+}
+""",
     )
 
     def load_data(self, **kwargs):

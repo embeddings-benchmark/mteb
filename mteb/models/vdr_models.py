@@ -11,12 +11,12 @@ def instruction_template(
     return "{instruction}"
 
 
-languages = [
-    "eng_Latn",
-    "ita_Latn",
-    "fra_Latn",
-    "deu_Latn",
-    "spa_Latn",
+vdr_languages = [
+    "eng-Latn",
+    "ita-Latn",
+    "fra-Latn",
+    "deu-Latn",
+    "spa-Latn",
 ]
 
 vdr_2b_multi_v1 = ModelMeta(
@@ -27,7 +27,7 @@ vdr_2b_multi_v1 = ModelMeta(
         apply_instruction_to_passages=True,
     ),
     name="llamaindex/vdr-2b-multi-v1",
-    languages=languages,
+    languages=vdr_languages,
     open_weights=True,
     revision="2c4e54c8db4071cc61fc3c62f4490124e40c37db",
     release_date="2024-01-08",

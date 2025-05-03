@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class MyanmarNews(AbsTaskClassification):
+class MyanmarNews(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="MyanmarNews",
         dataset={
@@ -26,13 +26,14 @@ class MyanmarNews(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""""
-        @inproceedings{Khine2017,
-        author    = {A. H. Khine and K. T. Nwet and K. M. Soe},
-        title     = {Automatic Myanmar News Classification},
-        booktitle = {15th Proceedings of International Conference on Computer Applications},
-        year      = {2017},
-        month     = {February},
-        pages     = {401--408}
-        }""",
+        bibtex_citation=r"""
+@inproceedings{Khine2017,
+  author = {A. H. Khine and K. T. Nwet and K. M. Soe},
+  booktitle = {15th Proceedings of International Conference on Computer Applications},
+  month = {February},
+  pages = {401--408},
+  title = {Automatic Myanmar News Classification},
+  year = {2017},
+}
+""",
     )

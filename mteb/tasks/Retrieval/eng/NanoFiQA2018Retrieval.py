@@ -30,14 +30,15 @@ class NanoFiQA2018Retrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{
-thakur2021beir,
-title={{BEIR}: A Heterogeneous Benchmark for Zero-shot Evaluation of Information Retrieval Models},
-author={Nandan Thakur and Nils Reimers and Andreas R{\"u}ckl{\'e} and Abhishek Srivastava and Iryna Gurevych},
-booktitle={Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
-year={2021},
-url={https://openreview.net/forum?id=wCu6T5xFjeJ}
-}""",
+        bibtex_citation=r"""
+@inproceedings{thakur2021beir,
+  author = {Nandan Thakur and Nils Reimers and Andreas R{\"u}ckl{\'e} and Abhishek Srivastava and Iryna Gurevych},
+  booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
+  title = {{BEIR}: A Heterogeneous Benchmark for Zero-shot Evaluation of Information Retrieval Models},
+  url = {https://openreview.net/forum?id=wCu6T5xFjeJ},
+  year = {2021},
+}
+""",
         prompt={
             "query": "Given a financial question, retrieve user replies that best answer the question"
         },
