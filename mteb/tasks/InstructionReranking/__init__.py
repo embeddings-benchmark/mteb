@@ -8,8 +8,8 @@ from .eng import (
 from .multilingual import mFollowIR, mFollowIRCrossLingual
 
 __all__ = [
-    "News21InstructionRetrieval",
     "Core17InstructionRetrieval",
+    "News21InstructionRetrieval",
     "Robust04InstructionRetrieval",
     "mFollowIR",
     "mFollowIRCrossLingual",

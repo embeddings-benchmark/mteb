@@ -18,10 +18,7 @@ import mteb
 from mteb.custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
 from mteb.languages import (
     ISO_LANGUAGE_SCRIPT,
-    ISO_TO_LANGUAGE,
-    ISO_TO_SCRIPT,
-    path_to_lang_codes,
-    path_to_lang_scripts,
+    check_language_code,
 )
 from mteb.types import PromptType
 
@@ -59,6 +56,7 @@ TASK_SUBTYPE = Literal[
     "Tumor detection",
     "Duplicate Detection",
     "Rendered semantic textual similarity",
+    "Intent classification",
 ]
 
 TASK_DOMAIN = Literal[
@@ -85,6 +83,7 @@ TASK_DOMAIN = Literal[
     "Programming",
     "Chemistry",
     "Financial",
+    "Entertainment",
 ]
 
 SAMPLE_CREATION_METHOD = Literal[
@@ -115,7 +114,7 @@ MIEB_TASK_TYPE = (
     "Compositionality",
 )
 
-_task_types = (
+_TASK_TYPE = (
     "BitextMining",
     "Classification",
     "MultilabelClassification",
@@ -129,7 +128,8 @@ _task_types = (
     "InstructionReranking",
 ) + MIEB_TASK_TYPE
 
-TASK_TYPE = Literal[_task_types]
+TASK_TYPE = Literal[_TASK_TYPE]
+
 
 TASK_CATEGORY = Literal[
     "t2t",
@@ -159,23 +159,6 @@ LANGUAGES = Union[
     list[ISO_LANGUAGE_SCRIPT], Mapping[HFSubset, list[ISO_LANGUAGE_SCRIPT]]
 ]
 
-PROGRAMMING_LANGS = [
-    "python",
-    "javascript",
-    "typescript",
-    "go",
-    "ruby",
-    "java",
-    "php",
-    "c",
-    "c++",
-    "rust",
-    "swift",
-    "scala",
-    "shell",
-    "sql",
-]
-
 METRIC_NAME = str
 METRIC_VALUE = Union[int, float, dict[str, Any]]
 
@@ -196,6 +179,81 @@ class DescriptiveStatistics(TypedDict):
     """Class for descriptive statistics."""
 
     pass
+
+
+class TextStatistics(TypedDict):
+    """Class for descriptive statistics for texts.
+
+    Attributes:
+        min_text_length: Minimum length of text
+        average_text_length: Average length of text
+        max_text_length: Maximum length of text
+        unique_texts: Number of unique texts
+    """
+
+    min_text_length: int
+    average_text_length: float
+    max_text_length: int
+    unique_texts: int
+
+
+class ImageStatistics(TypedDict):
+    """Class for descriptive statistics for images.
+
+    Attributes:
+        min_image_width: Minimum width of images
+        average_image_width: Average width of images
+        max_image_width: Maximum width of images
+
+        min_image_height: Minimum height of images
+        average_image_height: Average height of images
+        max_image_height: Maximum height of images
+    """
+
+    min_image_width: float
+    average_image_width: float
+    max_image_width: float
+
+    min_image_height: float
+    average_image_height: float
+    max_image_height: float
+
+
+class LabelStatistics(TypedDict):
+    """Class for descriptive statistics for texts.
+
+    Attributes:
+        min_labels_per_text: Minimum number of labels per text
+        average_label_per_text: Average number of labels per text
+        max_labels_per_text: Maximum number of labels per text
+
+        unique_labels: Number of unique labels
+        labels: dict of label frequencies
+    """
+
+    min_labels_per_text: int
+    average_label_per_text: float
+    max_labels_per_text: int
+
+    unique_labels: int
+    labels: dict[str, dict[str, int]]
+
+
+class ScoreStatistics(TypedDict):
+    """Class for descriptive statistics for texts.
+
+    Attributes:
+        min_labels_per_text: Minimum number of labels per text
+        average_label_per_text: Average number of labels per text
+        max_labels_per_text: Maximum number of labels per text
+
+        unique_labels: Number of unique labels
+        labels: dict of label frequencies
+    """
+
+    min_score: int
+    avg_score: float
+    max_score: int
 
 
 logger = logging.getLogger(__name__)
@@ -336,30 +394,10 @@ class TaskMetadata(BaseModel):
         if isinstance(eval_langs, dict):
             for langs in eval_langs.values():
                 for code in langs:
-                    self._check_language_code(code)
+                    check_language_code(code)
         else:
             for code in eval_langs:
-                self._check_language_code(code)
-
-    @staticmethod
-    def _check_language_code(code):
-        """This method checks that the language code (e.g. "eng-Latn") is valid."""
-        lang, script = code.split("-")
-        if script == "Code":
-            if lang in PROGRAMMING_LANGS:
-                return  # override for code
-            else:
-                raise ValueError(
-                    f"Programming language {lang} is not a valid programming language."
-                )
-        if lang not in ISO_TO_LANGUAGE:
-            raise ValueError(
-                f"Invalid language code: {lang}, you can find valid ISO 639-3 codes in {path_to_lang_codes}"
-            )
-        if script not in ISO_TO_SCRIPT:
-            raise ValueError(
-                f"Invalid script code: {script}, you can find valid ISO 15924 codes in {path_to_lang_scripts}"
-            )
+                check_language_code(code)
 
     @property
     def bcp47_codes(self) -> list[ISO_LANGUAGE_SCRIPT]:

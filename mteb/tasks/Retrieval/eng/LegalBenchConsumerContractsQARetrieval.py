@@ -27,17 +27,19 @@ class LegalBenchConsumerContractsQA(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=None,
         sample_creation="found",
-        bibtex_citation="""@article{koreeda2021contractnli,
-  title={ContractNLI: A dataset for document-level natural language inference for contracts},
-  author={Koreeda, Yuta and Manning, Christopher D},
-  journal={arXiv preprint arXiv:2110.01799},
-  year={2021}
-  }
+        bibtex_citation=r"""
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
 
-  @article{hendrycks2021cuad,
-  title={Cuad: An expert-annotated nlp dataset for legal contract review},
-  author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-  journal={arXiv preprint arXiv:2103.06268},
-  year={2021}
-}""",
+@article{koreeda2021contractnli,
+  author = {Koreeda, Yuta and Manning, Christopher D},
+  journal = {arXiv preprint arXiv:2110.01799},
+  title = {ContractNLI: A dataset for document-level natural language inference for contracts},
+  year = {2021},
+}
+""",
     )

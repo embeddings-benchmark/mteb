@@ -4,4 +4,4 @@ from .ESCIReranking import ESCIReranking
 from .MIRACLReranking import MIRACLReranking
 from .WikipediaRerankingMultilingual import WikipediaRerankingMultilingual
 
-__all__ = ["MIRACLReranking", "ESCIReranking", "WikipediaRerankingMultilingual"]
+__all__ = ["ESCIReranking", "MIRACLReranking", "WikipediaRerankingMultilingual"]

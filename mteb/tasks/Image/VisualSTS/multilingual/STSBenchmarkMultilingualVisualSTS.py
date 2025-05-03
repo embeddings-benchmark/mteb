@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskVisualSTS import AbsTaskVisualSTS
+from mteb.abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -19,7 +19,7 @@ _LANGUAGES = {
 _SPLITS = ["dev", "test"]
 
 
-class STSBenchmarkMultilingualVisualSTS(AbsTaskVisualSTS):
+class STSBenchmarkMultilingualVisualSTS(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="STSBenchmarkMultilingualVisualSTS",
         dataset={
@@ -46,10 +46,12 @@ class STSBenchmarkMultilingualVisualSTS(AbsTaskVisualSTS):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="rendered",
-        bibtex_citation="""@article{xiao2024pixel,
-  title={Pixel Sentence Representation Learning},
-  author={Xiao, Chenghao and Huang, Zhuoxu and Chen, Danlu and Hudson, G Thomas and Li, Yizhi and Duan, Haoran and Lin, Chenghua and Fu, Jie and Han, Jungong and Moubayed, Noura Al},
-  journal={arXiv preprint arXiv:2402.08183},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+@article{xiao2024pixel,
+  author = {Xiao, Chenghao and Huang, Zhuoxu and Chen, Danlu and Hudson, G Thomas and Li, Yizhi and Duan, Haoran and Lin, Chenghua and Fu, Jie and Han, Jungong and Moubayed, Noura Al},
+  journal = {arXiv preprint arXiv:2402.08183},
+  title = {Pixel Sentence Representation Learning},
+  year = {2024},
+}
+""",
     )

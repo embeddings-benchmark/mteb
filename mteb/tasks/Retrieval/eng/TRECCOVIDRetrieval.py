@@ -27,14 +27,16 @@ class TRECCOVID(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@misc{roberts2021searching,
-      title={Searching for Scientific Evidence in a Pandemic: An Overview of TREC-COVID},
-      author={Kirk Roberts and Tasmeer Alam and Steven Bedrick and Dina Demner-Fushman and Kyle Lo and Ian Soboroff and Ellen Voorhees and Lucy Lu Wang and William R Hersh},
-      year={2021},
-      eprint={2104.09632},
-      archivePrefix={arXiv},
-      primaryClass={cs.IR}
-}""",
+        bibtex_citation=r"""
+@misc{roberts2021searching,
+  archiveprefix = {arXiv},
+  author = {Kirk Roberts and Tasmeer Alam and Steven Bedrick and Dina Demner-Fushman and Kyle Lo and Ian Soboroff and Ellen Voorhees and Lucy Lu Wang and William R Hersh},
+  eprint = {2104.09632},
+  primaryclass = {cs.IR},
+  title = {Searching for Scientific Evidence in a Pandemic: An Overview of TREC-COVID},
+  year = {2021},
+}
+""",
         prompt={
             "query": "Given a query on COVID-19, retrieve documents that answer the query"
         },

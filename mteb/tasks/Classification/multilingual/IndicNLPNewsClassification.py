@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -15,7 +15,7 @@ _LANGUAGES = {
 }
 
 
-class IndicNLPNewsClassification(AbsTaskClassification):
+class IndicNLPNewsClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="IndicNLPNewsClassification",
         dataset={
@@ -37,13 +37,14 @@ class IndicNLPNewsClassification(AbsTaskClassification):
         license="cc-by-nc-4.0",
         annotations_creators="expert-annotated",
         sample_creation="found",
-        bibtex_citation="""
-      @article{kunchukuttan2020indicnlpcorpus,
-    title={AI4Bharat-IndicNLP Corpus: Monolingual Corpora and Word Embeddings for Indic Languages},
-    author={Anoop Kunchukuttan and Divyanshu Kakwani and Satish Golla and Gokul N.C. and Avik Bhattacharyya and Mitesh M. Khapra and Pratyush Kumar},
-    year={2020},
-    journal={arXiv preprint arXiv:2005.00085}
-}""",
+        bibtex_citation=r"""
+@article{kunchukuttan2020indicnlpcorpus,
+  author = {Anoop Kunchukuttan and Divyanshu Kakwani and Satish Golla and Gokul N.C. and Avik Bhattacharyya and Mitesh M. Khapra and Pratyush Kumar},
+  journal = {arXiv preprint arXiv:2005.00085},
+  title = {AI4Bharat-IndicNLP Corpus: Monolingual Corpora and Word Embeddings for Indic Languages},
+  year = {2020},
+}
+""",
     )
 
     def dataset_transform(self):

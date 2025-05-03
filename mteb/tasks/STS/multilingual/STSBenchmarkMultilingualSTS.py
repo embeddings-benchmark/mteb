@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
+from mteb.abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -19,7 +19,7 @@ _LANGUAGES = {
 _SPLITS = ["dev", "test"]
 
 
-class STSBenchmarkMultilingualSTS(AbsTaskSTS):
+class STSBenchmarkMultilingualSTS(AbsTaskAnySTS):
     fast_loading = True
     metadata = TaskMetadata(
         name="STSBenchmarkMultilingualSTS",
@@ -45,12 +45,14 @@ class STSBenchmarkMultilingualSTS(AbsTaskSTS):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="machine-translated",
-        bibtex_citation="""@InProceedings{huggingface:dataset:stsb_multi_mt,
-        title = {Machine translated multilingual STS benchmark dataset.},
-        author={Philip May},
-        year={2021},
-        url={https://github.com/PhilipMay/stsb-multi-mt}
-        }""",
+        bibtex_citation=r"""
+@inproceedings{huggingface:dataset:stsb_multi_mt,
+  author = {Philip May},
+  title = {Machine translated multilingual STS benchmark dataset.},
+  url = {https://github.com/PhilipMay/stsb-multi-mt},
+  year = {2021},
+}
+""",
     )
 
     min_score = 0

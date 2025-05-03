@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskSTS import AbsTaskSTS
+from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 
-class SickFrSTS(AbsTaskSTS):
+class SickFrSTS(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="SICKFr",
         dataset={
@@ -21,7 +21,7 @@ class SickFrSTS(AbsTaskSTS):
         eval_langs=["fra-Latn"],
         main_score="cosine_spearman",
         date=None,
-        domains=None,
+        domains=[],
         task_subtypes=None,
         license=None,
         annotations_creators=None,

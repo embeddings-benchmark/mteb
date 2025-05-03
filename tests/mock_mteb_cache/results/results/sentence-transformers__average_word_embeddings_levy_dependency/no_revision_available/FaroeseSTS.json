@@ -1,0 +1,32 @@
+{
+    "dataset_revision": "8cb36efa69428b3dc290e1125995a999963163c5",
+    "evaluation_time": 0.6911499500274658,
+    "kg_co2_emissions": null,
+    "mteb_version": "1.12.75",
+    "scores": {
+        "train": [
+            {
+                "cosine_pearson": 0.1106871505768587,
+                "cosine_spearman": 0.20133273626294929,
+                "euclidean_pearson": 0.14969537470030972,
+                "euclidean_spearman": 0.19061456589163325,
+                "hf_subset": "default",
+                "languages": [
+                    "fao-Latn"
+                ],
+                "main_score": 0.20133273626294929,
+                "manhattan_pearson": 0.14973612252759752,
+                "manhattan_spearman": 0.19080662705097662,
+                "pearson": [
+                    0.04620749634924611,
+                    0.21271772666081656
+                ],
+                "spearman": [
+                    0.17833030945908993,
+                    1.2626269918000071e-06
+                ]
+            }
+        ]
+    },
+    "task_name": "FaroeseSTS"
+}

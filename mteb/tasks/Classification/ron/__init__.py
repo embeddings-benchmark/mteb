@@ -4,4 +4,4 @@ from .Moroco import Moroco
 from .RomanianReviewsSentiment import RomanianReviewsSentiment
 from .RomanianSentimentClassification import RomanianSentimentClassification
 
-__all__ = ["RomanianReviewsSentiment", "Moroco", "RomanianSentimentClassification"]
+__all__ = ["Moroco", "RomanianReviewsSentiment", "RomanianSentimentClassification"]

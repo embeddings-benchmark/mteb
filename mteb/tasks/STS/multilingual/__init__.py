@@ -8,9 +8,9 @@ from .STSBenchmarkMultilingualSTS import STSBenchmarkMultilingualSTS
 
 __all__ = [
     "IndicCrosslingualSTS",
-    "SemRel24STS",
     "STS17Crosslingual",
     "STS22CrosslingualSTS",
     "STS22CrosslingualSTSv2",
     "STSBenchmarkMultilingualSTS",
+    "SemRel24STS",
 ]

@@ -2,7 +2,9 @@ from __future__ import annotations
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate, AggregateTaskMetadata
-from mteb.tasks.Image.VisualSTS import STS17MultilingualVisualSTS
+from mteb.tasks.Image.VisualSTS.multilingual.STS17MultilingualVisualSTS import (
+    STS17MultilingualVisualSTS,
+)
 
 task_list_sts17: list[AbsTask] = [
     STS17MultilingualVisualSTS().filter_languages(
@@ -28,12 +30,14 @@ class STS17MultilingualVisualSTSEng(AbsTaskAggregate):
         main_score="cosine_spearman",
         type="VisualSTS(eng)",
         eval_splits=["test"],
-        bibtex_citation="""@article{xiao2024pixel,
-  title={Pixel Sentence Representation Learning},
-  author={Xiao, Chenghao and Huang, Zhuoxu and Chen, Danlu and Hudson, G Thomas and Li, Yizhi and Duan, Haoran and Lin, Chenghua and Fu, Jie and Han, Jungong and Moubayed, Noura Al},
-  journal={arXiv preprint arXiv:2402.08183},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+@article{xiao2024pixel,
+  author = {Xiao, Chenghao and Huang, Zhuoxu and Chen, Danlu and Hudson, G Thomas and Li, Yizhi and Duan, Haoran and Lin, Chenghua and Fu, Jie and Han, Jungong and Moubayed, Noura Al},
+  journal = {arXiv preprint arXiv:2402.08183},
+  title = {Pixel Sentence Representation Learning},
+  year = {2024},
+}
+""",
     )
 
 
@@ -82,10 +86,12 @@ class STS17MultilingualVisualSTSMultilingual(AbsTaskAggregate):
             "it-en": ["ita-Latn", "eng-Latn"],
             "nl-en": ["nld-Latn", "eng-Latn"],
         },
-        bibtex_citation="""@article{xiao2024pixel,
-  title={Pixel Sentence Representation Learning},
-  author={Xiao, Chenghao and Huang, Zhuoxu and Chen, Danlu and Hudson, G Thomas and Li, Yizhi and Duan, Haoran and Lin, Chenghua and Fu, Jie and Han, Jungong and Moubayed, Noura Al},
-  journal={arXiv preprint arXiv:2402.08183},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+@article{xiao2024pixel,
+  author = {Xiao, Chenghao and Huang, Zhuoxu and Chen, Danlu and Hudson, G Thomas and Li, Yizhi and Duan, Haoran and Lin, Chenghua and Fu, Jie and Han, Jungong and Moubayed, Noura Al},
+  journal = {arXiv preprint arXiv:2402.08183},
+  title = {Pixel Sentence Representation Learning},
+  year = {2024},
+}
+""",
     )

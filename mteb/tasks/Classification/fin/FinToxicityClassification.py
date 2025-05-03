@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class FinToxicityClassification(AbsTaskClassification):
+class FinToxicityClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="FinToxicityClassification",
         description="""
@@ -30,18 +30,19 @@ class FinToxicityClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="machine-translated",
-        bibtex_citation="""
-        @inproceedings{eskelinen-etal-2023-toxicity,
-            title = "Toxicity Detection in {F}innish Using Machine Translation",
-            author = "Eskelinen, Anni  and
-            Silvala, Laura  and
-            Ginter, Filip  and
-            Pyysalo, Sampo  and
-            Laippala, Veronika",
-            booktitle = "Proceedings of the 24th Nordic Conference on Computational Linguistics (NoDaLiDa)",
-            month = may,
-            year = "2023",
-        }""",
+        bibtex_citation=r"""
+@inproceedings{eskelinen-etal-2023-toxicity,
+  author = {Eskelinen, Anni  and
+Silvala, Laura  and
+Ginter, Filip  and
+Pyysalo, Sampo  and
+Laippala, Veronika},
+  booktitle = {Proceedings of the 24th Nordic Conference on Computational Linguistics (NoDaLiDa)},
+  month = may,
+  title = {Toxicity Detection in {F}innish Using Machine Translation},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):

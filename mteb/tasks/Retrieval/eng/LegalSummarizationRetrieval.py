@@ -27,16 +27,18 @@ class LegalSummarization(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=None,
         sample_creation="found",
-        bibtex_citation="""@inproceedings{manor-li-2019-plain,
-    title = "Plain {E}nglish Summarization of Contracts",
-    author = "Manor, Laura  and
-      Li, Junyi Jessy",
-    booktitle = "Proceedings of the Natural Legal Language Processing Workshop 2019",
-    month = jun,
-    year = "2019",
-    address = "Minneapolis, Minnesota",
-    publisher = "Association for Computational Linguistics",
-    url = "https://www.aclweb.org/anthology/W19-2201",
-    pages = "1--11",
-}""",
+        bibtex_citation=r"""
+@inproceedings{manor-li-2019-plain,
+  address = {Minneapolis, Minnesota},
+  author = {Manor, Laura  and
+Li, Junyi Jessy},
+  booktitle = {Proceedings of the Natural Legal Language Processing Workshop 2019},
+  month = jun,
+  pages = {1--11},
+  publisher = {Association for Computational Linguistics},
+  title = {Plain {E}nglish Summarization of Contracts},
+  url = {https://www.aclweb.org/anthology/W19-2201},
+  year = {2019},
+}
+""",
     )

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class PoemSentimentClassification(AbsTaskClassification):
+class PoemSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="PoemSentimentClassification",
         description="Poem Sentiment is a sentiment dataset of poem verses from Project Gutenberg.",
@@ -27,14 +27,14 @@ class PoemSentimentClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=["eng-Latn-US", "en-Latn-GB"],
         sample_creation="found",
-        bibtex_citation="""
+        bibtex_citation=r"""
 @misc{sheng2020investigating,
-      title={Investigating Societal Biases in a Poetry Composition System},
-      author={Emily Sheng and David Uthus},
-      year={2020},
-      eprint={2011.02686},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+  archiveprefix = {arXiv},
+  author = {Emily Sheng and David Uthus},
+  eprint = {2011.02686},
+  primaryclass = {cs.CL},
+  title = {Investigating Societal Biases in a Poetry Composition System},
+  year = {2020},
 }
 """,
     )

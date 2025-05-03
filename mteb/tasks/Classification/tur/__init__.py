@@ -4,6 +4,6 @@ from .TurkishMovieSentimentClassification import TurkishMovieSentimentClassifica
 from .TurkishProductSentimentClassification import TurkishProductSentimentClassification
 
 __all__ = [
-    "TurkishProductSentimentClassification",
     "TurkishMovieSentimentClassification",
+    "TurkishProductSentimentClassification",
 ]

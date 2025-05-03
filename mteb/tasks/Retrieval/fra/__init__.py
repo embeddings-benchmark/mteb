@@ -5,4 +5,4 @@ from .BSARDRetrieval import BSARDRetrieval
 from .FQuADRetrieval import FQuADRetrieval
 from .SyntecRetrieval import SyntecRetrieval
 
-__all__ = ["AlloprofRetrieval", "BSARDRetrieval", "SyntecRetrieval", "FQuADRetrieval"]
+__all__ = ["AlloprofRetrieval", "BSARDRetrieval", "FQuADRetrieval", "SyntecRetrieval"]

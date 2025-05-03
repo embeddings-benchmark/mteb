@@ -9,11 +9,11 @@ from .SugarCrepe import SugarCrepe
 from .Winoground import Winoground
 
 __all__ = [
-    "Winoground",
-    "ImageCoDe",
-    "AROFlickrOrder",
-    "AROVisualRelation",
-    "SugarCrepe",
-    "AROVisualAttribution",
     "AROCocoOrder",
+    "AROFlickrOrder",
+    "AROVisualAttribution",
+    "AROVisualRelation",
+    "ImageCoDe",
+    "SugarCrepe",
+    "Winoground",
 ]

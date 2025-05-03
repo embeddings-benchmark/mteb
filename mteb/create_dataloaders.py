@@ -7,6 +7,7 @@ import torch
 from datasets import Dataset
 from torch.utils.data import DataLoader, default_collate
 
+from mteb.abstasks import TaskMetadata
 from mteb.types import BatchedInput, Conversation
 
 logger = logging.getLogger(__name__)
@@ -265,3 +266,21 @@ def create_image_dataloader(
         collate_fn=collate_fn,
         shuffle=False,
     )
+
+
+def create_dataloader(
+    dataset: Dataset,
+    task_metadata: TaskMetadata,
+    input_column: str | None = None,
+    batch_size: int = 32,
+) -> DataLoader:
+    if "image" in task_metadata.modalities:
+        return create_image_dataloader(
+            (dataset.select_columns(input_column).rename_column(input_column, "image")),
+            batch_size=batch_size,
+        )
+    if "text" in task_metadata.modalities and input_column is not None:
+        return create_dataloader_from_texts(
+            dataset[input_column], batch_size=batch_size
+        )
+    return DataLoader(dataset, batch_size=batch_size)

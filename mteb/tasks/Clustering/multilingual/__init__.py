@@ -9,14 +9,14 @@ from .SIB200ClusteringS2S import SIB200ClusteringFast
 from .WikiClusteringP2P import WikiClusteringFastP2P, WikiClusteringP2P
 
 __all__ = [
-    "WikiClusteringFastP2P",
-    "WikiClusteringP2P",
-    "MLSUMClusteringS2S",
-    "MLSUMClusteringS2SFast",
-    "MasakhaNEWSClusteringS2S",
+    "IndicReviewsClusteringP2P",
     "MLSUMClusteringP2P",
     "MLSUMClusteringP2PFast",
-    "IndicReviewsClusteringP2P",
-    "SIB200ClusteringFast",
+    "MLSUMClusteringS2S",
+    "MLSUMClusteringS2SFast",
     "MasakhaNEWSClusteringP2P",
+    "MasakhaNEWSClusteringS2S",
+    "SIB200ClusteringFast",
+    "WikiClusteringFastP2P",
+    "WikiClusteringP2P",
 ]

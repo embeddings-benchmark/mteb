@@ -23,7 +23,7 @@ searchmap_preview = ModelMeta(
     },
     name="VPLabs/SearchMap_Preview",
     revision="69de17ef48278ed08ba1a4e65ead8179912b696e",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     use_instructions=True,
     release_date="2025-03-05",

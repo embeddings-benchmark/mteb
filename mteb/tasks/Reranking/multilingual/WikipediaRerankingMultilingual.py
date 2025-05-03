@@ -46,9 +46,11 @@ class WikipediaRerankingMultilingual(AbsTaskRetrieval):
         annotations_creators="LM-generated and reviewed",
         dialect=[],
         sample_creation="LM-generated and verified",
-        bibtex_citation="""@ONLINE{wikidump,
-    author = "Wikimedia Foundation",
-    title  = "Wikimedia Downloads",
-    url    = "https://dumps.wikimedia.org"
-}""",
+        bibtex_citation=r"""
+@online{wikidump,
+  author = {Wikimedia Foundation},
+  title = {Wikimedia Downloads},
+  url = {https://dumps.wikimedia.org},
+}
+""",
     )

@@ -27,24 +27,26 @@ class TwitterSemEval2015PC(AbsTaskPairClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{xu-etal-2015-semeval,
-        title = "{S}em{E}val-2015 Task 1: Paraphrase and Semantic Similarity in {T}witter ({PIT})",
-        author = "Xu, Wei  and
-        Callison-Burch, Chris  and
-        Dolan, Bill",
-        editor = "Nakov, Preslav  and
-        Zesch, Torsten  and
-        Cer, Daniel  and
-        Jurgens, David",
-        booktitle = "Proceedings of the 9th International Workshop on Semantic Evaluation ({S}em{E}val 2015)",
-        month = jun,
-        year = "2015",
-        address = "Denver, Colorado",
-        publisher = "Association for Computational Linguistics",
-        url = "https://aclanthology.org/S15-2001",
-        doi = "10.18653/v1/S15-2001",
-        pages = "1--11",
-    }""",
+        bibtex_citation=r"""
+@inproceedings{xu-etal-2015-semeval,
+  address = {Denver, Colorado},
+  author = {Xu, Wei  and
+Callison-Burch, Chris  and
+Dolan, Bill},
+  booktitle = {Proceedings of the 9th International Workshop on Semantic Evaluation ({S}em{E}val 2015)},
+  doi = {10.18653/v1/S15-2001},
+  editor = {Nakov, Preslav  and
+Zesch, Torsten  and
+Cer, Daniel  and
+Jurgens, David},
+  month = jun,
+  pages = {1--11},
+  publisher = {Association for Computational Linguistics},
+  title = {{S}em{E}val-2015 Task 1: Paraphrase and Semantic Similarity in {T}witter ({PIT})},
+  url = {https://aclanthology.org/S15-2001},
+  year = {2015},
+}
+""",
         prompt="Retrieve tweets that are semantically similar to the given tweet",
     )
 

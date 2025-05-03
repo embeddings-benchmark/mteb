@@ -12,10 +12,10 @@ from .TweetEmotionClassification import TweetEmotionClassification
 from .TweetSarcasmClassification import TweetSarcasmClassification
 
 __all__ = [
-    "TweetSarcasmClassification",
-    "TweetEmotionClassification",
-    "RestaurantReviewSentimentClassification",
+    "AJGT",
     "HotelReviewSentimentClassification",
     "OnlineStoreReviewSentimentClassification",
-    "AJGT",
+    "RestaurantReviewSentimentClassification",
+    "TweetEmotionClassification",
+    "TweetSarcasmClassification",
 ]

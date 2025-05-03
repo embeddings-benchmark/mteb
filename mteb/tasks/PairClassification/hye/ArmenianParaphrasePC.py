@@ -26,16 +26,16 @@ class ArmenianParaphrasePC(AbsTaskPairClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{malajyan2020arpa,
-            title={ARPA: Armenian Paraphrase Detection Corpus and Models},
-            author={Arthur Malajyan and Karen Avetisyan and Tsolak Ghukasyan},
-            year={2020},
-            eprint={2009.12615},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{malajyan2020arpa,
+  archiveprefix = {arXiv},
+  author = {Arthur Malajyan and Karen Avetisyan and Tsolak Ghukasyan},
+  eprint = {2009.12615},
+  primaryclass = {cs.CL},
+  title = {ARPA: Armenian Paraphrase Detection Corpus and Models},
+  year = {2020},
+}
+""",
     )
 
     def dataset_transform(self):

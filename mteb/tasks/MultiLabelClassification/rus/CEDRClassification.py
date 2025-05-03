@@ -28,15 +28,16 @@ class CEDRClassification(AbsTaskMultilabelClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{sboev2021data,
-        title={Data-Driven Model for Emotion Detection in Russian Texts},
-        author={Sboev, Alexander and Naumov, Aleksandr and Rybka, Roman},
-        journal={Procedia Computer Science},
-        volume={190},
-        pages={637--642},
-        year={2021},
-        publisher={Elsevier}
-        }
-        """,
+        bibtex_citation=r"""
+@article{sboev2021data,
+  author = {Sboev, Alexander and Naumov, Aleksandr and Rybka, Roman},
+  journal = {Procedia Computer Science},
+  pages = {637--642},
+  publisher = {Elsevier},
+  title = {Data-Driven Model for Emotion Detection in Russian Texts},
+  volume = {190},
+  year = {2021},
+}
+""",
         prompt="Given a comment as query, find expressed emotions (joy, sadness, surprise, fear, and anger)",
     )

@@ -4,7 +4,7 @@ from typing import Any
 
 import datasets
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -62,7 +62,7 @@ LANG_MAP = {
 }
 
 
-class IndicLangClassification(AbsTaskClassification):
+class IndicLangClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="IndicLangClassification",
         dataset={
@@ -84,23 +84,25 @@ class IndicLangClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{madhani-etal-2023-bhasa,
-    title = "Bhasa-Abhijnaanam: Native-script and romanized Language Identification for 22 {I}ndic languages",
-    author = "Madhani, Yash  and
-      Khapra, Mitesh M.  and
-      Kunchukuttan, Anoop",
-    editor = "Rogers, Anna  and
-      Boyd-Graber, Jordan  and
-      Okazaki, Naoaki",
-    booktitle = "Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 2: Short Papers)",
-    month = jul,
-    year = "2023",
-    address = "Toronto, Canada",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/2023.acl-short.71",
-    doi = "10.18653/v1/2023.acl-short.71",
-    pages = "816--826"
-}""",
+        bibtex_citation=r"""
+@inproceedings{madhani-etal-2023-bhasa,
+  address = {Toronto, Canada},
+  author = {Madhani, Yash  and
+Khapra, Mitesh M.  and
+Kunchukuttan, Anoop},
+  booktitle = {Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 2: Short Papers)},
+  doi = {10.18653/v1/2023.acl-short.71},
+  editor = {Rogers, Anna  and
+Boyd-Graber, Jordan  and
+Okazaki, Naoaki},
+  month = jul,
+  pages = {816--826},
+  publisher = {Association for Computational Linguistics},
+  title = {Bhasa-Abhijnaanam: Native-script and romanized Language Identification for 22 {I}ndic languages},
+  url = {https://aclanthology.org/2023.acl-short.71},
+  year = {2023},
+}
+""",
     )
 
     def load_data(self, **kwargs: Any) -> None:

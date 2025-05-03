@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
+from mteb.abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class Assin2STS(AbsTaskSTS):
+class Assin2STS(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="Assin2STS",
         dataset={
@@ -26,14 +26,16 @@ class Assin2STS(AbsTaskSTS):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{real2020assin,
-            title={The assin 2 shared task: a quick overview},
-            author={Real, Livy and Fonseca, Erick and Oliveira, Hugo Goncalo},
-            booktitle={International Conference on Computational Processing of the Portuguese Language},
-            pages={406--412},
-            year={2020},
-            organization={Springer}
-        }""",
+        bibtex_citation=r"""
+@inproceedings{real2020assin,
+  author = {Real, Livy and Fonseca, Erick and Oliveira, Hugo Goncalo},
+  booktitle = {International Conference on Computational Processing of the Portuguese Language},
+  organization = {Springer},
+  pages = {406--412},
+  title = {The assin 2 shared task: a quick overview},
+  year = {2020},
+}
+""",
     )
 
     min_score = 1
