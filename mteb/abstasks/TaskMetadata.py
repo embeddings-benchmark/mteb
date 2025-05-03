@@ -594,12 +594,18 @@ class TaskMetadata(BaseModel):
         if existing_dataset_card_data is None:
             existing_dataset_card_data = DatasetCardData()
 
+        dataset_license = self.license
+        if dataset_license == "not specified":
+            dataset_license = "unknown"
+        elif dataset_license.startswith("https://"):
+            dataset_license = "other"
+
         dataset_card_data_params = existing_dataset_card_data.to_dict()
         # override the existing values
         dataset_card_data_params.update(
             dict(
                 language=languages,
-                license=self.license if self.license != "not specified" else "unknown",
+                license=dataset_license,
                 annotations_creators=[self.annotations_creators]
                 if self.annotations_creators
                 else None,
