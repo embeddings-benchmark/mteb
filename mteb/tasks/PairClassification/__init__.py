@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from .ara import ArEntail
 from .ces import CTKFactsNLI
+from .dan import TalemaaderPC
 from .deu import FalseFriendsDeEnPC
 from .eng import (
     LegalBenchPC,
@@ -76,6 +77,7 @@ __all__ = [
     "SynPerQAPC",
     "SynPerTextKeywordsPC",
     "TERRa",
+    "TalemaaderPC",
     "TwitterSemEval2015PC",
     "TwitterURLCorpusPC",
     "XNLI",

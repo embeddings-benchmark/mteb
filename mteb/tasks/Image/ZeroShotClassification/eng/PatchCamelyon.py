@@ -31,7 +31,7 @@ class PatchCamelyonZeroShotClassification(AbsTaskZeroShotClassification):
         license="not specified",
         annotations_creators="derived",
         dialect=[],
-        modalities=["image"],
+        modalities=["image", "text"],
         sample_creation="created",
         bibtex_citation=r"""
 @inproceedings{10.1007/978-3-030-00934-2_24,

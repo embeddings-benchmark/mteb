@@ -16,6 +16,19 @@ qodo_languages = [
 ]
 
 
+qodo_languages = [
+    "python-Code",
+    "c++-Code",
+    "c#-Code",
+    "go-Code",
+    "java-Code",
+    "javascript-Code",
+    "php-Code",
+    "ruby-Code",
+    "typescript-Code",
+]
+
+
 Qodo_Embed_1_1_5B = ModelMeta(
     loader=sentence_transformers_loader,
     name="Qodo/Qodo-Embed-1-1.5B",
