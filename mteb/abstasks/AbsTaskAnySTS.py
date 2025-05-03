@@ -8,7 +8,7 @@ from datasets import Dataset
 from mteb.abstasks.TaskMetadata import (
     DescriptiveStatistics,
     ImageStatistics,
-    LabelStatistics,
+    ScoreStatistics,
     TextStatistics,
 )
 from mteb.encoder_interface import Encoder
@@ -39,7 +39,7 @@ class AnySTSDescriptiveStatistics(DescriptiveStatistics):
 
     num_samples: int
     number_of_characters: int | None
-    unique_pairs: int
+    unique_pairs: int | None
 
     text1_statistics: TextStatistics | None
     text2_statistics: TextStatistics | None
@@ -47,7 +47,7 @@ class AnySTSDescriptiveStatistics(DescriptiveStatistics):
     image1_statistics: ImageStatistics | None
     image2_statistics: ImageStatistics | None
 
-    label_statistics: LabelStatistics | None
+    label_statistics: ScoreStatistics
 
 
 class AbsTaskAnySTS(AbsTask):
@@ -123,10 +123,12 @@ class AbsTaskAnySTS(AbsTask):
             sentence1_len = [len(s) for s in sentence1]
             sentence2_len = [len(s) for s in sentence2]
             number_of_characters = sum(sentence1_len) + sum(sentence2_len)
+            unique_pairs = len(set(zip(sentence1, sentence2)))
         else:
             text1_statistics = None
             text2_statistics = None
             number_of_characters = None
+            unique_pairs = None
 
         if "image" in self.metadata.modalities:
             img_widths1, img_heights1 = [], []
@@ -162,7 +164,7 @@ class AbsTaskAnySTS(AbsTask):
             image1_statistics = None
             image2_statistics = None
 
-        labels_statistics = LabelStatistics(
+        labels_statistics = ScoreStatistics(
             min_score=min(score),
             avg_score=sum(score) / len(score),
             max_score=max(score),
@@ -171,7 +173,7 @@ class AbsTaskAnySTS(AbsTask):
         return AnySTSDescriptiveStatistics(
             num_samples=len(sentence1),
             number_of_characters=number_of_characters,
-            unique_pairs=len(set(zip(sentence1, sentence2))),
+            unique_pairs=unique_pairs,
             text1_statistics=text1_statistics,
             text2_statistics=text2_statistics,
             image1_statistics=image1_statistics,
