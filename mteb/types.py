@@ -56,5 +56,5 @@ class BatchedInput(TypedDict, total=False):
     body: list[str]
     # Retrieval query
     query: list[str]
-    conversation: list[list[str] | Conversation]
+    conversation: list[Conversation]
     instruction: list[str]
