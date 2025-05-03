@@ -32,15 +32,15 @@ class Moroco(AbsTaskClassification):
             "ron-Latn-mol",
         ],  # Moldavian, or the Romanian dialect used in Moldova, does not have an ISO 639-1 code assigned to it. However, it has been given the three-letter code "mol" under ISO 639-3
         sample_creation="found",
-        bibtex_citation=""""
-        @inproceedings{ Butnaru-ACL-2019,
-        author = {Andrei M. Butnaru and Radu Tudor Ionescu},
-        title = "{MOROCO: The Moldavian and Romanian Dialectal Corpus}",
-        booktitle = {Proceedings of ACL},
-        year = {2019},
-        pages={688--698},
-        }
-        """,
+        bibtex_citation=r"""
+@inproceedings{Butnaru-ACL-2019,
+  author = {Andrei M. Butnaru and Radu Tudor Ionescu},
+  booktitle = {Proceedings of ACL},
+  pages = {688--698},
+  title = {{MOROCO: The Moldavian and Romanian Dialectal Corpus}},
+  year = {2019},
+}
+""",
     )
 
     def dataset_transform(self):

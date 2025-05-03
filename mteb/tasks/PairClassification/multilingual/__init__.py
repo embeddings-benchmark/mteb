@@ -12,9 +12,9 @@ __all__ = [
     "IndicXnliPairClassification",
     "OpusparcusPC",
     "PawsXPairClassification",
-    "RTE3",
     "PubChemWikiPairClassification",
-    "XStance",
+    "RTE3",
     "XNLI",
     "XNLIV2",
+    "XStance",
 ]

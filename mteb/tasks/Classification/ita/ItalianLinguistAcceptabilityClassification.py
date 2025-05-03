@@ -27,23 +27,23 @@ class ItalianLinguisticAcceptabilityClassification(AbsTaskClassification):
         license="not specified",
         annotations_creators="expert-annotated",
         sample_creation="found",
-        bibtex_citation="""
-        @inproceedings{trotta-etal-2021-monolingual-cross,
-    title = "Monolingual and Cross-Lingual Acceptability Judgments with the {I}talian {C}o{LA} corpus",
-    author = "Trotta, Daniela  and
-      Guarasci, Raffaele  and
-      Leonardelli, Elisa  and
-      Tonelli, Sara",
-    booktitle = "Findings of the Association for Computational Linguistics: EMNLP 2021",
-    month = nov,
-    year = "2021",
-    address = "Punta Cana, Dominican Republic",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/2021.findings-emnlp.250",
-    doi = "10.18653/v1/2021.findings-emnlp.250",
-    pages = "2929--2940"
+        bibtex_citation=r"""
+@inproceedings{trotta-etal-2021-monolingual-cross,
+  address = {Punta Cana, Dominican Republic},
+  author = {Trotta, Daniela  and
+Guarasci, Raffaele  and
+Leonardelli, Elisa  and
+Tonelli, Sara},
+  booktitle = {Findings of the Association for Computational Linguistics: EMNLP 2021},
+  doi = {10.18653/v1/2021.findings-emnlp.250},
+  month = nov,
+  pages = {2929--2940},
+  publisher = {Association for Computational Linguistics},
+  title = {Monolingual and Cross-Lingual Acceptability Judgments with the {I}talian {C}o{LA} corpus},
+  url = {https://aclanthology.org/2021.findings-emnlp.250},
+  year = {2021},
 }
-        """,
+""",
     )
 
     def dataset_transform(self):

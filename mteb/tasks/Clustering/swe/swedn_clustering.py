@@ -48,12 +48,14 @@ class SwednClustering(AbsTaskClustering):
         dialect=[],
         task_subtypes=["Thematic clustering"],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{monsen2021method,
-  title={A method for building non-english corpora for abstractive text summarization},
-  author={Monsen, Julius and J{\"o}nsson, Arne},
-  booktitle={Proceedings of CLARIN Annual Conference},
-  year={2021}
-}""",
+        bibtex_citation=r"""
+@inproceedings{monsen2021method,
+  author = {Monsen, Julius and J{\"o}nsson, Arne},
+  booktitle = {Proceedings of CLARIN Annual Conference},
+  title = {A method for building non-english corpora for abstractive text summarization},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):

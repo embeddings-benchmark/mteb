@@ -30,21 +30,21 @@ class STSES(AbsTaskSTS):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@inproceedings{agirre2015semeval,
-  title={Semeval-2015 task 2: Semantic textual similarity, english, spanish and pilot on interpretability},
-  author={Agirre, Eneko and Banea, Carmen and Cardie, Claire and Cer, Daniel and Diab, Mona and Gonzalez-Agirre, Aitor and Guo, Weiwei and Lopez-Gazpio, Inigo and Maritxalar, Montse and Mihalcea, Rada and others},
-  booktitle={Proceedings of the 9th international workshop on semantic evaluation (SemEval 2015)},
-  pages={252--263},
-  year={2015}
+        bibtex_citation=r"""
+@inproceedings{agirre2014semeval,
+  author = {Agirre, Eneko and Banea, Carmen and Cardie, Claire and Cer, Daniel M and Diab, Mona T and Gonzalez-Agirre, Aitor and Guo, Weiwei and Mihalcea, Rada and Rigau, German and Wiebe, Janyce},
+  booktitle = {SemEval@ COLING},
+  pages = {81--91},
+  title = {SemEval-2014 Task 10: Multilingual Semantic Textual Similarity.},
+  year = {2014},
 }
 
-
-@inproceedings{agirre2014semeval,
-  title={SemEval-2014 Task 10: Multilingual Semantic Textual Similarity.},
-  author={Agirre, Eneko and Banea, Carmen and Cardie, Claire and Cer, Daniel M and Diab, Mona T and Gonzalez-Agirre, Aitor and Guo, Weiwei and Mihalcea, Rada and Rigau, German and Wiebe, Janyce},
-  booktitle={SemEval@ COLING},
-  pages={81--91},
-  year={2014}
+@inproceedings{agirre2015semeval,
+  author = {Agirre, Eneko and Banea, Carmen and Cardie, Claire and Cer, Daniel and Diab, Mona and Gonzalez-Agirre, Aitor and Guo, Weiwei and Lopez-Gazpio, Inigo and Maritxalar, Montse and Mihalcea, Rada and others},
+  booktitle = {Proceedings of the 9th international workshop on semantic evaluation (SemEval 2015)},
+  pages = {252--263},
+  title = {Semeval-2015 task 2: Semantic textual similarity, english, spanish and pilot on interpretability},
+  year = {2015},
 }
 """,
     )

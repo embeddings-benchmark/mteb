@@ -27,13 +27,15 @@ class CIRRIT2IRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{liu2021image,
-        title={Image retrieval on real-life images with pre-trained vision-and-language models},
-        author={Liu, Zheyuan and Rodriguez-Opazo, Cristian and Teney, Damien and Gould, Stephen},
-        booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision},
-        pages={2125--2134},
-        year={2021}
-        }""",
+        bibtex_citation=r"""
+@inproceedings{liu2021image,
+  author = {Liu, Zheyuan and Rodriguez-Opazo, Cristian and Teney, Damien and Gould, Stephen},
+  booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision},
+  pages = {2125--2134},
+  title = {Image retrieval on real-life images with pre-trained vision-and-language models},
+  year = {2021},
+}
+""",
         prompt={
             "query": "Retrieve a day-to-day image that aligns with the modification instructions of the provided image."
         },

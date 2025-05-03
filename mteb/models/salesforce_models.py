@@ -48,7 +48,7 @@ SFR_Embedding_2_R = ModelMeta(
         normalized=True,
     ),
     name="Salesforce/SFR-Embedding-2_R",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="91762139d94ed4371a9fa31db5551272e0b83818",
     release_date="2024-06-14",  # initial commit of hf model.
@@ -85,37 +85,7 @@ SFR_Embedding_Code_2B_R = ModelMeta(
         normalized=True,
     ),
     name="Salesforce/SFR-Embedding-Code-2B_R",
-    languages=["eng_Latn"],
-    open_weights=True,
-    revision="c73d8631a005876ed5abde34db514b1fb6566973",
-    release_date="2025-01-17",  # initial commit of hf model.
-    n_parameters=2_610_000_000,
-    memory_usage_mb=4986,
-    embed_dim=2304,
-    license="cc-by-nc-4.0",
-    max_tokens=8192,
-    reference="https://huggingface.co/Salesforce/SFR-Embedding-Code-2B_R",
-    similarity_fn_name=ScoringFunction.COSINE,
-    framework=["Sentence Transformers", "PyTorch"],
-    use_instructions=True,
-    adapted_from="google/gemma-2-2b-it",
-    public_training_code=None,
-    public_training_data=None,
-    training_datasets=None,
-)
-
-SFR_Embedding_Code_2B_R = ModelMeta(
-    loader=InstructSentenceTransformerModel,
-    loader_kwargs=dict(
-        instruction_template=instruction_template,
-        attn="cccc",
-        pooling_method="lasttoken",
-        mode="embedding",
-        torch_dtype="auto",
-        normalized=True,
-    ),
-    name="Salesforce/SFR-Embedding-Code-2B_R",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="c73d8631a005876ed5abde34db514b1fb6566973",
     release_date="2025-01-17",  # initial commit of hf model.
@@ -145,7 +115,7 @@ SFR_Embedding_Mistral = ModelMeta(
         normalized=True,
     ),
     name="Salesforce/SFR-Embedding-Mistral",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="938c560d1c236aa563b2dbdf084f28ab28bccb11",
     release_date="2024-01-24",  # initial commit of hf model.

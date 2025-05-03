@@ -26,14 +26,16 @@ class Assin2RTE(AbsTaskPairClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{real2020assin,
-            title={The assin 2 shared task: a quick overview},
-            author={Real, Livy and Fonseca, Erick and Oliveira, Hugo Goncalo},
-            booktitle={International Conference on Computational Processing of the Portuguese Language},
-            pages={406--412},
-            year={2020},
-            organization={Springer}
-        }""",
+        bibtex_citation=r"""
+@inproceedings{real2020assin,
+  author = {Real, Livy and Fonseca, Erick and Oliveira, Hugo Goncalo},
+  booktitle = {International Conference on Computational Processing of the Portuguese Language},
+  organization = {Springer},
+  pages = {406--412},
+  title = {The assin 2 shared task: a quick overview},
+  year = {2020},
+}
+""",
     )
 
     def dataset_transform(self):

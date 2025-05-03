@@ -10,10 +10,10 @@ from .eng import (
 )
 
 __all__ = [
+    "BLINKIT2IMultiChoice",
+    "BLINKIT2TMultiChoice",
     "CVBenchCount",
     "CVBenchDepth",
     "CVBenchDistance",
     "CVBenchRelation",
-    "BLINKIT2IMultiChoice",
-    "BLINKIT2TMultiChoice",
 ]

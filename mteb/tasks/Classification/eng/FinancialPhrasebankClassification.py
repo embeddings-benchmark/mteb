@@ -28,15 +28,15 @@ class FinancialPhrasebankClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-            @article{Malo2014GoodDO,
-            title={Good debt or bad debt: Detecting semantic orientations in economic texts},
-            author={P. Malo and A. Sinha and P. Korhonen and J. Wallenius and P. Takala},
-            journal={Journal of the Association for Information Science and Technology},
-            year={2014},
-            volume={65}
-            }
-        """,
+        bibtex_citation=r"""
+@article{Malo2014GoodDO,
+  author = {P. Malo and A. Sinha and P. Korhonen and J. Wallenius and P. Takala},
+  journal = {Journal of the Association for Information Science and Technology},
+  title = {Good debt or bad debt: Detecting semantic orientations in economic texts},
+  volume = {65},
+  year = {2014},
+}
+""",
     )
 
     def dataset_transform(self):

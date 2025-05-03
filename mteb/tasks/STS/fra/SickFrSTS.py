@@ -21,7 +21,7 @@ class SickFrSTS(AbsTaskSTS):
         eval_langs=["fra-Latn"],
         main_score="cosine_spearman",
         date=None,
-        domains=None,
+        domains=[],
         task_subtypes=None,
         license=None,
         annotations_creators=None,

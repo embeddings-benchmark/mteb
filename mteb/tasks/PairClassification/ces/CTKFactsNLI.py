@@ -27,16 +27,18 @@ class CTKFactsNLI(AbsTaskPairClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{ullrich2023csfever,
-        title={CsFEVER and CTKFacts: acquiring Czech data for fact verification},
-        author={Ullrich, Herbert and Drchal, Jan and R{\\`y}par, Martin and Vincourov{\\'a}, Hana and Moravec, V{\\'a}clav},
-        journal={Language Resources and Evaluation},
-        volume={57},
-        number={4},
-        pages={1571--1605},
-        year={2023},
-        publisher={Springer}
-        }""",  # after removing label 1=NOT ENOUGH INFO
+        bibtex_citation=r"""
+@article{ullrich2023csfever,
+  author = {Ullrich, Herbert and Drchal, Jan and R{\\`y}par, Martin and Vincourov{\\'a}, Hana and Moravec, V{\\'a}clav},
+  journal = {Language Resources and Evaluation},
+  number = {4},
+  pages = {1571--1605},
+  publisher = {Springer},
+  title = {CsFEVER and CTKFacts: acquiring Czech data for fact verification},
+  volume = {57},
+  year = {2023},
+}
+""",  # after removing label 1=NOT ENOUGH INFO
     )
 
     def dataset_transform(self):

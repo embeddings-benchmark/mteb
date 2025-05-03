@@ -36,14 +36,14 @@ class CyrillicTurkicLangClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @inproceedings{goldhahn2012building,
-        title={Building Large Monolingual Dictionaries at the Leipzig Corpora Collection: From 100 to 200 Languages},
-        author={Goldhahn, Dirk and Eckart, Thomas and Quasthoff, Uwe},
-        booktitle={Proceedings of the Eighth International Conference on Language Resources and Evaluation (LREC'12)},
-        year={2012}
-        }
-        """,
+        bibtex_citation=r"""
+@inproceedings{goldhahn2012building,
+  author = {Goldhahn, Dirk and Eckart, Thomas and Quasthoff, Uwe},
+  booktitle = {Proceedings of the Eighth International Conference on Language Resources and Evaluation (LREC'12)},
+  title = {Building Large Monolingual Dictionaries at the Leipzig Corpora Collection: From 100 to 200 Languages},
+  year = {2012},
+}
+""",
     )
 
     def dataset_transform(self):

@@ -26,20 +26,22 @@ class MacedonianTweetSentimentClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{jovanoski-etal-2015-sentiment,
-    title = "Sentiment Analysis in {T}witter for {M}acedonian",
-    author = "Jovanoski, Dame  and
-      Pachovski, Veno  and
-      Nakov, Preslav",
-    editor = "Mitkov, Ruslan  and
-      Angelova, Galia  and
-      Bontcheva, Kalina",
-    booktitle = "Proceedings of the International Conference Recent Advances in Natural Language Processing",
-    month = sep,
-    year = "2015",
-    address = "Hissar, Bulgaria",
-    publisher = "INCOMA Ltd. Shoumen, BULGARIA",
-    url = "https://aclanthology.org/R15-1034",
-    pages = "249--257",
-}""",
+        bibtex_citation=r"""
+@inproceedings{jovanoski-etal-2015-sentiment,
+  address = {Hissar, Bulgaria},
+  author = {Jovanoski, Dame  and
+Pachovski, Veno  and
+Nakov, Preslav},
+  booktitle = {Proceedings of the International Conference Recent Advances in Natural Language Processing},
+  editor = {Mitkov, Ruslan  and
+Angelova, Galia  and
+Bontcheva, Kalina},
+  month = sep,
+  pages = {249--257},
+  publisher = {INCOMA Ltd. Shoumen, BULGARIA},
+  title = {Sentiment Analysis in {T}witter for {M}acedonian},
+  url = {https://aclanthology.org/R15-1034},
+  year = {2015},
+}
+""",
     )

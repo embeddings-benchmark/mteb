@@ -26,15 +26,15 @@ class KurdishSentimentClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=["Sorani"],
         sample_creation="found",
-        bibtex_citation="""
-        @article{article,
-            author = {Badawi, Soran and Kazemi, Arefeh and Rezaie, Vali},
-            year = {2024},
-            month = {01},
-            pages = {1-20},
-            title = {KurdiSent: a corpus for kurdish sentiment analysis},
-            journal = {Language Resources and Evaluation},
-            doi = {10.1007/s10579-023-09716-6}
-            }
-        """,
+        bibtex_citation=r"""
+@article{article,
+  author = {Badawi, Soran and Kazemi, Arefeh and Rezaie, Vali},
+  doi = {10.1007/s10579-023-09716-6},
+  journal = {Language Resources and Evaluation},
+  month = {01},
+  pages = {1-20},
+  title = {KurdiSent: a corpus for kurdish sentiment analysis},
+  year = {2024},
+}
+""",
     )

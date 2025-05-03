@@ -24,17 +24,19 @@ class GermanSTSBenchmarkSTS(AbsTaskSTS):
         eval_splits=["validation", "test"],
         eval_langs=["deu-Latn"],
         main_score="cosine_spearman",
-        date=None,
-        domains=None,
+        date=("2023-11-09", "2024-01-24"),
+        domains=[],
         task_subtypes=None,
-        license=None,
+        license="cc-by-sa-3.0",
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@InProceedings{huggingface:dataset:stsb_multi_mt,
-title = {Machine translated multilingual STS benchmark dataset.},
-author={Philip May},
-year={2021},
-url={https://github.com/PhilipMay/stsb-multi-mt}
-}""",
+        bibtex_citation=r"""
+@inproceedings{huggingface:dataset:stsb_multi_mt,
+  author = {Philip May},
+  title = {Machine translated multilingual STS benchmark dataset.},
+  url = {https://github.com/PhilipMay/stsb-multi-mt},
+  year = {2021},
+}
+""",
     )

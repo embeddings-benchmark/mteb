@@ -26,14 +26,14 @@ class AJGT(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=["ara-arab-MSA", "ara-arab-JO"],
         sample_creation="found",
-        bibtex_citation="""
+        bibtex_citation=r"""
 @inproceedings{alomari2017arabic,
-  title={Arabic tweets sentimental analysis using machine learning},
-  author={Alomari, Khaled Mohammad and ElSherif, Hatem M and Shaalan, Khaled},
-  booktitle={International Conference on Industrial, Engineering and Other Applications of Applied Intelligent Systems},
-  pages={602--610},
-  year={2017},
-  organization={Springer}
+  author = {Alomari, Khaled Mohammad and ElSherif, Hatem M and Shaalan, Khaled},
+  booktitle = {International Conference on Industrial, Engineering and Other Applications of Applied Intelligent Systems},
+  organization = {Springer},
+  pages = {602--610},
+  title = {Arabic tweets sentimental analysis using machine learning},
+  year = {2017},
 }
 """,
     )

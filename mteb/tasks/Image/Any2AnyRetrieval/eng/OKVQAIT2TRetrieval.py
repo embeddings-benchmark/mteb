@@ -26,13 +26,15 @@ class OKVQAIT2TRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["image", "text"],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{marino2019ok,
-  title={Ok-vqa: A visual question answering benchmark requiring external knowledge},
-  author={Marino, Kenneth and Rastegari, Mohammad and Farhadi, Ali and Mottaghi, Roozbeh},
-  booktitle={Proceedings of the IEEE/cvf conference on computer vision and pattern recognition},
-  pages={3195--3204},
-  year={2019}
-}""",
+        bibtex_citation=r"""
+@inproceedings{marino2019ok,
+  author = {Marino, Kenneth and Rastegari, Mohammad and Farhadi, Ali and Mottaghi, Roozbeh},
+  booktitle = {Proceedings of the IEEE/cvf conference on computer vision and pattern recognition},
+  pages = {3195--3204},
+  title = {Ok-vqa: A visual question answering benchmark requiring external knowledge},
+  year = {2019},
+}
+""",
         prompt={
             "query": "Retrieve documents that provide an answer to the question alongside the image."
         },

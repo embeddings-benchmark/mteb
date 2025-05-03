@@ -29,10 +29,12 @@ class DTDClassification(AbsTaskImageClassification):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@InProceedings{cimpoi14describing,
-            Author    = {M. Cimpoi and S. Maji and I. Kokkinos and S. Mohamed and and A. Vedaldi},
-            Title     = {Describing Textures in the Wild},
-            Booktitle = {Proceedings of the {IEEE} Conf. on Computer Vision and Pattern Recognition ({CVPR})},
-            Year      = {2014}}
-        """,
+        bibtex_citation=r"""
+@inproceedings{cimpoi14describing,
+  author = {M. Cimpoi and S. Maji and I. Kokkinos and S. Mohamed and and A. Vedaldi},
+  booktitle = {Proceedings of the {IEEE} Conf. on Computer Vision and Pattern Recognition ({CVPR})},
+  title = {Describing Textures in the Wild},
+  year = {2014},
+}
+""",
     )

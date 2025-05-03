@@ -33,12 +33,14 @@ class VieMedEVBitextMining(AbsTaskBitextMining):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="human-translated and localized",
-        bibtex_citation="""@inproceedings{medev,
-    title     = {{Improving Vietnamese-English Medical Machine Translation}},
-    author    = {Nhu Vo and Dat Quoc Nguyen and Dung D. Le and Massimo Piccardi and Wray Buntine},
-    booktitle = {Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation (LREC-COLING)},
-    year      = {2024}
-}""",
+        bibtex_citation=r"""
+@inproceedings{medev,
+  author = {Nhu Vo and Dat Quoc Nguyen and Dung D. Le and Massimo Piccardi and Wray Buntine},
+  booktitle = {Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation (LREC-COLING)},
+  title = {{Improving Vietnamese-English Medical Machine Translation}},
+  year = {2024},
+}
+""",
     )
 
     def dataset_transform(self):

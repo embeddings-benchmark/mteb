@@ -100,7 +100,7 @@ class ColBERTModel(AbsEncoder):
 colbert_v2 = ModelMeta(
     loader=ColBERTModel,
     name="colbert-ir/colbertv2.0",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="c1e84128e85ef755c096a95bdb06b47793b13acf",
     public_training_code=None,

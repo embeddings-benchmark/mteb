@@ -27,12 +27,18 @@ class NQ(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{47761,title	= {Natural Questions: a Benchmark for Question Answering Research},
-        author	= {Tom Kwiatkowski and Jennimaria Palomaki and Olivia Redfield and Michael Collins and Ankur Parikh
-        and Chris Alberti and Danielle Epstein and Illia Polosukhin and Matthew Kelcey and Jacob Devlin and Kenton Lee
-        and Kristina N. Toutanova and Llion Jones and Ming-Wei Chang and Andrew Dai and Jakob Uszkoreit and Quoc Le
-        and Slav Petrov},year	= {2019},journal	= {Transactions of the Association of Computational
-        Linguistics}}""",
+        bibtex_citation=r"""
+@article{47761,
+  author = {Tom Kwiatkowski and Jennimaria Palomaki and Olivia Redfield and Michael Collins and Ankur Parikh
+and Chris Alberti and Danielle Epstein and Illia Polosukhin and Matthew Kelcey and Jacob Devlin and Kenton Lee
+and Kristina N. Toutanova and Llion Jones and Ming-Wei Chang and Andrew Dai and Jakob Uszkoreit and Quoc Le
+and Slav Petrov},
+  journal = {Transactions of the Association of Computational
+Linguistics},
+  title = {Natural Questions: a Benchmark for Question Answering Research},
+  year = {2019},
+}
+""",
         prompt={
             "query": "Given a question, retrieve Wikipedia passages that answer the question"
         },
@@ -61,12 +67,18 @@ class NQHardNegatives(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@article{47761,title	= {Natural Questions: a Benchmark for Question Answering Research},
-        author	= {Tom Kwiatkowski and Jennimaria Palomaki and Olivia Redfield and Michael Collins and Ankur Parikh
-        and Chris Alberti and Danielle Epstein and Illia Polosukhin and Matthew Kelcey and Jacob Devlin and Kenton Lee
-        and Kristina N. Toutanova and Llion Jones and Ming-Wei Chang and Andrew Dai and Jakob Uszkoreit and Quoc Le
-        and Slav Petrov},year	= {2019},journal	= {Transactions of the Association of Computational
-        Linguistics}}""",
+        bibtex_citation=r"""
+@article{47761,
+  author = {Tom Kwiatkowski and Jennimaria Palomaki and Olivia Redfield and Michael Collins and Ankur Parikh
+and Chris Alberti and Danielle Epstein and Illia Polosukhin and Matthew Kelcey and Jacob Devlin and Kenton Lee
+and Kristina N. Toutanova and Llion Jones and Ming-Wei Chang and Andrew Dai and Jakob Uszkoreit and Quoc Le
+and Slav Petrov},
+  journal = {Transactions of the Association of Computational
+Linguistics},
+  title = {Natural Questions: a Benchmark for Question Answering Research},
+  year = {2019},
+}
+""",
         prompt={
             "query": "Given a question, retrieve Wikipedia passages that answer the question"
         },

@@ -36,11 +36,6 @@ from .FaMTEBRetrieval import (
 )
 
 __all__ = [
-    "PersianWebDocumentRetrieval",
-    "SynPerChatbotRAGFAQRetrieval",
-    "SynPerChatbotRAGTopicsRetrieval",
-    "SynPerChatbotTopicsRetrieval",
-    "SynPerQARetrieval",
     "ArguAnaFa",
     "CQADupstackAndroidRetrievalFa",
     "CQADupstackEnglishRetrievalFa",
@@ -61,9 +56,14 @@ __all__ = [
     "MSMARCOFa",
     "NFCorpusFa",
     "NQFa",
+    "PersianWebDocumentRetrieval",
     "QuoraRetrievalFa",
     "SCIDOCSFa",
     "SciFactFa",
+    "SynPerChatbotRAGFAQRetrieval",
+    "SynPerChatbotRAGTopicsRetrieval",
+    "SynPerChatbotTopicsRetrieval",
+    "SynPerQARetrieval",
     "TRECCOVIDFa",
     "Touche2020Fa",
 ]

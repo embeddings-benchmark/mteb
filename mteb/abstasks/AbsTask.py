@@ -446,6 +446,13 @@ class AbsTask(ABC):
         self._push_dataset_to_hub(repo_name)
 
     @property
+    def is_aggregate(
+        self,
+    ) -> bool:  # Overrided by subclasses (AbsTaskAggregate) that are aggregate
+        """Whether the task is aggregate. Subclasses that are aggregate should override this with `True`."""
+        return False
+
+    @property
     def eval_splits(self) -> list[str]:
         if self._eval_splits:
             return self._eval_splits

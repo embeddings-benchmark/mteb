@@ -26,14 +26,14 @@ class RestaurantReviewSentimentClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=["ara-arab-EG", "ara-arab-JO", "ara-arab-SA"],
         sample_creation="found",
-        bibtex_citation="""
+        bibtex_citation=r"""
 @inproceedings{elsahar2015building,
-  title={Building large arabic multi-domain resources for sentiment analysis},
-  author={ElSahar, Hady and El-Beltagy, Samhaa R},
-  booktitle={International conference on intelligent text processing and computational linguistics},
-  pages={23--34},
-  year={2015},
-  organization={Springer}
+  author = {ElSahar, Hady and El-Beltagy, Samhaa R},
+  booktitle = {International conference on intelligent text processing and computational linguistics},
+  organization = {Springer},
+  pages = {23--34},
+  title = {Building large arabic multi-domain resources for sentiment analysis},
+  year = {2015},
 }
 """,
     )

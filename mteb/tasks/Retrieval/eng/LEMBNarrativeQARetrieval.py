@@ -32,31 +32,31 @@ class LEMBNarrativeQARetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-            @article{kocisky-etal-2018-narrativeqa,
-            title = "The {N}arrative{QA} Reading Comprehension Challenge",
-            author = "Ko{\v{c}}isk{\'y}, Tom{\'a}{\v{s}}  and
-            Schwarz, Jonathan  and
-            Blunsom, Phil  and
-            Dyer, Chris  and
-            Hermann, Karl Moritz  and
-            Melis, G{\'a}bor  and
-            Grefenstette, Edward",
-            editor = "Lee, Lillian  and
-            Johnson, Mark  and
-            Toutanova, Kristina  and
-            Roark, Brian",
-            journal = "Transactions of the Association for Computational Linguistics",
-            volume = "6",
-            year = "2018",
-            address = "Cambridge, MA",
-            publisher = "MIT Press",
-            url = "https://aclanthology.org/Q18-1023",
-            doi = "10.1162/tacl_a_00023",
-            pages = "317--328",
-            abstract = "",
-        }
-        """,
+        bibtex_citation=r"""
+@article{kocisky-etal-2018-narrativeqa,
+  abstract = {},
+  address = {Cambridge, MA},
+  author = {Ko{\v{c}}isk{\'y}, Tom{\'a}{\v{s}}  and
+Schwarz, Jonathan  and
+Blunsom, Phil  and
+Dyer, Chris  and
+Hermann, Karl Moritz  and
+Melis, G{\'a}bor  and
+Grefenstette, Edward},
+  doi = {10.1162/tacl_a_00023},
+  editor = {Lee, Lillian  and
+Johnson, Mark  and
+Toutanova, Kristina  and
+Roark, Brian},
+  journal = {Transactions of the Association for Computational Linguistics},
+  pages = {317--328},
+  publisher = {MIT Press},
+  title = {The {N}arrative{QA} Reading Comprehension Challenge},
+  url = {https://aclanthology.org/Q18-1023},
+  volume = {6},
+  year = {2018},
+}
+""",
     )
 
     def load_data(self, **kwargs):

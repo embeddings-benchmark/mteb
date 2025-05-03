@@ -26,13 +26,15 @@ class AngryTweetsClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{pauli2021danlp,
-  title={DaNLP: An open-source toolkit for Danish Natural Language Processing},
-  author={Pauli, Amalie Brogaard and Barrett, Maria and Lacroix, Oph{\'e}lie and Hvingelby, Rasmus},
-  booktitle={Proceedings of the 23rd Nordic Conference on Computational Linguistics (NoDaLiDa)},
-  pages={460--466},
-  year={2021}
-}""",
+        bibtex_citation=r"""
+@inproceedings{pauli2021danlp,
+  author = {Pauli, Amalie Brogaard and Barrett, Maria and Lacroix, Oph{\'e}lie and Hvingelby, Rasmus},
+  booktitle = {Proceedings of the 23rd Nordic Conference on Computational Linguistics (NoDaLiDa)},
+  pages = {460--466},
+  title = {DaNLP: An open-source toolkit for Danish Natural Language Processing},
+  year = {2021},
+}
+""",
         prompt="Classify Danish tweets by sentiment. (positive, negative, neutral).",
     )
 

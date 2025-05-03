@@ -26,14 +26,16 @@ class KinopoiskClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{blinov2013research,
-        title={Research of lexical approach and machine learning methods for sentiment analysis},
-        author={Blinov, PD and Klekovkina, Maria and Kotelnikov, Eugeny and Pestov, Oleg},
-        journal={Computational Linguistics and Intellectual Technologies},
-        volume={2},
-        number={12},
-        pages={48--58},
-        year={2013}
-        }""",
+        bibtex_citation=r"""
+@article{blinov2013research,
+  author = {Blinov, PD and Klekovkina, Maria and Kotelnikov, Eugeny and Pestov, Oleg},
+  journal = {Computational Linguistics and Intellectual Technologies},
+  number = {12},
+  pages = {48--58},
+  title = {Research of lexical approach and machine learning methods for sentiment analysis},
+  volume = {2},
+  year = {2013},
+}
+""",
         prompt="Classify the sentiment expressed in the given movie review text",
     )
