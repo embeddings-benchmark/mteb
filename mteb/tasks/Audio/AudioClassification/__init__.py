@@ -9,6 +9,8 @@ from .eng.ESC50 import *
 from .eng.FSDD import *
 from .eng.GTZANGenre import *
 from .eng.GunshotTriangulation import *
+from .eng.IEMOCAPEmotion import *
+from .eng.IEMOCAPGender import *
 from .eng.LibriCount import *
 from .eng.MridinghamStroke import *
 from .eng.MridinghamTonic import *
