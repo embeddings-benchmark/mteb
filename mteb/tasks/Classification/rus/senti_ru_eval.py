@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class SentiRuEval2016Classification(AbsTaskClassification):
+class SentiRuEval2016Classification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SentiRuEval2016",
         dataset={
