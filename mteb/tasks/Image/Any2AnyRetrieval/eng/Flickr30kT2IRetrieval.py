@@ -26,15 +26,17 @@ class Flickr30kT2IRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{Young2014FromID,
-  title={From image descriptions to visual denotations: New similarity metrics for semantic inference over event descriptions},
-  author={Peter Young and Alice Lai and Micah Hodosh and J. Hockenmaier},
-  journal={Transactions of the Association for Computational Linguistics},
-  year={2014},
-  volume={2},
-  pages={67-78},
-  url={https://api.semanticscholar.org/CorpusID:3104920}
-}""",
+        bibtex_citation=r"""
+@article{Young2014FromID,
+  author = {Peter Young and Alice Lai and Micah Hodosh and J. Hockenmaier},
+  journal = {Transactions of the Association for Computational Linguistics},
+  pages = {67-78},
+  title = {From image descriptions to visual denotations: New similarity metrics for semantic inference over event descriptions},
+  url = {https://api.semanticscholar.org/CorpusID:3104920},
+  volume = {2},
+  year = {2014},
+}
+""",
         prompt={"query": "Find an image that matches the given caption."},
         descriptive_stats={
             "n_samples": {"test": 5000},

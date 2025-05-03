@@ -86,12 +86,14 @@ class SciMMIRI2TRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{wu2024scimmir,
-  title={SciMMIR: Benchmarking Scientific Multi-modal Information Retrieval},
-  author={Wu, Siwei and Li, Yizhi and Zhu, Kang and Zhang, Ge and Liang, Yiming and Ma, Kaijing and Xiao, Chenghao and Zhang, Haoran and Yang, Bohao and Chen, Wenhu and others},
-  journal={arXiv preprint arXiv:2401.13478},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+@article{wu2024scimmir,
+  author = {Wu, Siwei and Li, Yizhi and Zhu, Kang and Zhang, Ge and Liang, Yiming and Ma, Kaijing and Xiao, Chenghao and Zhang, Haoran and Yang, Bohao and Chen, Wenhu and others},
+  journal = {arXiv preprint arXiv:2401.13478},
+  title = {SciMMIR: Benchmarking Scientific Multi-modal Information Retrieval},
+  year = {2024},
+}
+""",
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {

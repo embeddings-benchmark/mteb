@@ -34,14 +34,16 @@ class NarrativeQARetrieval(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@misc{kočiský2017narrativeqa,
-      title={The NarrativeQA Reading Comprehension Challenge},
-      author={Tomáš Kočiský and Jonathan Schwarz and Phil Blunsom and Chris Dyer and Karl Moritz Hermann and Gábor Melis and Edward Grefenstette},
-      year={2017},
-      eprint={1712.07040},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-}""",
+        bibtex_citation=r"""
+@misc{kočiský2017narrativeqa,
+  archiveprefix = {arXiv},
+  author = {Tomáš Kočiský and Jonathan Schwarz and Phil Blunsom and Chris Dyer and Karl Moritz Hermann and Gábor Melis and Edward Grefenstette},
+  eprint = {1712.07040},
+  primaryclass = {cs.CL},
+  title = {The NarrativeQA Reading Comprehension Challenge},
+  year = {2017},
+}
+""",
     )
 
     def load_data(self, **kwargs):

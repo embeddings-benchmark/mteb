@@ -55,19 +55,19 @@ class MultiEURLEXMultilabelClassification(
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-@InProceedings{chalkidis-etal-2021-multieurlex,
+        bibtex_citation=r"""
+@inproceedings{chalkidis-etal-2021-multieurlex,
   author = {Chalkidis, Ilias
-                and Fergadiotis, Manos
-                and Androutsopoulos, Ion},
-  title = {MultiEURLEX -- A multi-lingual and multi-label legal document
-               classification dataset for zero-shot cross-lingual transfer},
+and Fergadiotis, Manos
+and Androutsopoulos, Ion},
   booktitle = {Proceedings of the 2021 Conference on Empirical Methods
-               in Natural Language Processing},
-  year = {2021},
-  publisher = {Association for Computational Linguistics},
+in Natural Language Processing},
   location = {Punta Cana, Dominican Republic},
-  url = {https://arxiv.org/abs/2109.00904}
+  publisher = {Association for Computational Linguistics},
+  title = {MultiEURLEX -- A multi-lingual and multi-label legal document
+classification dataset for zero-shot cross-lingual transfer},
+  url = {https://arxiv.org/abs/2109.00904},
+  year = {2021},
 }
-        """,
+""",
     )

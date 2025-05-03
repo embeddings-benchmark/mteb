@@ -109,13 +109,15 @@ class MemotionI2TRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{sharma2020semeval,
-  title={SemEval-2020 Task 8: Memotion Analysis-the Visuo-Lingual Metaphor!},
-  author={Sharma, Chhavi and Bhageria, Deepesh and Scott, William and Pykl, Srinivas and Das, Amitava and Chakraborty, Tanmoy and Pulabaigari, Viswanath and Gamb{\"a}ck, Bj{\"o}rn},
-  booktitle={Proceedings of the Fourteenth Workshop on Semantic Evaluation},
-  pages={759--773},
-  year={2020}
-}""",
+        bibtex_citation=r"""
+@inproceedings{sharma2020semeval,
+  author = {Sharma, Chhavi and Bhageria, Deepesh and Scott, William and Pykl, Srinivas and Das, Amitava and Chakraborty, Tanmoy and Pulabaigari, Viswanath and Gamb{\"a}ck, Bj{\"o}rn},
+  booktitle = {Proceedings of the Fourteenth Workshop on Semantic Evaluation},
+  pages = {759--773},
+  title = {SemEval-2020 Task 8: Memotion Analysis-the Visuo-Lingual Metaphor!},
+  year = {2020},
+}
+""",
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {

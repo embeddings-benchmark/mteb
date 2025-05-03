@@ -26,10 +26,10 @@ class MovieReviewSentimentClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
+        bibtex_citation=r"""
 @software{blard2020,
-  title = {French sentiment analysis with BERT},
   author = {Théophile Blard},
+  title = {French sentiment analysis with BERT},
   url = {https://github.com/TheophileBlard/french-sentiment-analysis-with-bert},
   year = {2020},
 }
