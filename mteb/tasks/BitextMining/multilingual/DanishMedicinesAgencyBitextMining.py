@@ -10,7 +10,7 @@ class DanishMedicinesAgencyBitextMining(AbsTaskBitextMining, MultilingualTask):
         name="DanishMedicinesAgencyBitextMining",
         dataset={
             "path": "mteb/english-danish-parallel-corpus",
-            "revision": "3d99956200bc217dc0a57db9b94d071954c125c7",
+            "revision": "0e45e58e9c360134cdb2bf023ad2606a27a2a086",
         },
         description="A Bilingual English-Danish parallel corpus from The Danish Medicines Agency.",
         reference="https://sprogteknologi.dk/dataset/bilingual-english-danish-parallel-corpus-from-the-danish-medicines-agency",
