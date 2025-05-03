@@ -25,3 +25,4 @@ jobs:
         id: lint
         run: |
           make lint-check
+          make format-citations
