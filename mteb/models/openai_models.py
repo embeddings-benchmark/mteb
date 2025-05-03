@@ -63,6 +63,10 @@ class OpenAIWrapper(Wrapper):
                 "Reducing embedding size available only for text-embedding-3-* models"
             )
 
+        if self._embed_dim and all(not s.strip() for s in sentences):
+            logger.warning("Empty input detected - returning zero embeddings.")
+            return np.zeros((len(sentences), self._embed_dim), dtype=np.float32)
+
         trimmed_sentences = []
         for sentence in sentences:
             encoded_sentence = self._encoding.encode(sentence)
