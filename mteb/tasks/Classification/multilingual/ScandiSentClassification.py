@@ -35,19 +35,21 @@ class ScandiSentClassification(MultilingualTask, AbsTaskClassification):
         license="openrail",
         annotations_creators="expert-annotated",
         sample_creation="found",
-        bibtex_citation="""@inproceedings{isbister-etal-2021-stop,
-            title = "Should we Stop Training More Monolingual Models, and Simply Use Machine Translation Instead?",
-            author = "Isbister, Tim  and
-            Carlsson, Fredrik  and
-            Sahlgren, Magnus",
-            editor = "Dobnik, Simon  and
-            {\O}vrelid, Lilja",
-            booktitle = "Proceedings of the 23rd Nordic Conference on Computational Linguistics (NoDaLiDa)",
-            month = may # " 31--2 " # jun,
-            year = "2021",
-            address = "Reykjavik, Iceland (Online)",
-            publisher = {Link{\"o}ping University Electronic Press, Sweden},
-            url = "https://aclanthology.org/2021.nodalida-main.42/",
-            pages = "385--390",
-        }""",
+        bibtex_citation=r"""
+@inproceedings{isbister-etal-2021-stop,
+  address = {Reykjavik, Iceland (Online)},
+  author = {Isbister, Tim  and
+Carlsson, Fredrik  and
+Sahlgren, Magnus},
+  booktitle = {Proceedings of the 23rd Nordic Conference on Computational Linguistics (NoDaLiDa)},
+  editor = {Dobnik, Simon  and
+{\O}vrelid, Lilja},
+  month = may # { 31--2 } # jun,
+  pages = {385--390},
+  publisher = {Link{\"o}ping University Electronic Press, Sweden},
+  title = {Should we Stop Training More Monolingual Models, and Simply Use Machine Translation Instead?},
+  url = {https://aclanthology.org/2021.nodalida-main.42/},
+  year = {2021},
+}
+""",
     )
