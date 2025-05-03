@@ -112,7 +112,7 @@ def create_dataloader_for_queries(
 
 
 def convert_conv_history_to_query(
-    conversations: list[list[str | Conversation]],
+    conversations: list[list[str] | Conversation],
 ) -> list[str]:
     conversations_converted = []
 
@@ -154,7 +154,7 @@ def convert_conv_history_to_query(
 
 
 def create_dataloader_for_queries_conversation(
-    queries: list[list[str | Conversation]],
+    queries: list[list[str] | Conversation],
     instructions: list[str] | None = None,
     combine_query_and_instruction: Callable[[str, str], str] | None = None,
     **dataloader_kwargs,
