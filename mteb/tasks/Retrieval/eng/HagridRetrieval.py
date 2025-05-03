@@ -36,12 +36,14 @@ class HagridRetrieval(AbsTaskRetrieval):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{hagrid,
-      title={{HAGRID}: A Human-LLM Collaborative Dataset for Generative Information-Seeking with Attribution},
-      author={Ehsan Kamalloo and Aref Jafari and Xinyu Zhang and Nandan Thakur and Jimmy Lin},
-      year={2023},
-      journal={arXiv:2307.16883},
-}""",
+        bibtex_citation=r"""
+@article{hagrid,
+  author = {Ehsan Kamalloo and Aref Jafari and Xinyu Zhang and Nandan Thakur and Jimmy Lin},
+  journal = {arXiv:2307.16883},
+  title = {{HAGRID}: A Human-LLM Collaborative Dataset for Generative Information-Seeking with Attribution},
+  year = {2023},
+}
+""",
     )
 
     def load_data(self, **kwargs):

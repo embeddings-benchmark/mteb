@@ -1,10 +1,15 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class GTSRBClassification(AbsTaskImageClassification):
+class GTSRBClassification(AbsTaskAnyClassification):
+    input_column_name = "webp"
+    label_column_name = "cls"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="GTSRB",
         description="""The German Traffic Sign Recognition Benchmark (GTSRB) is a multi-class classification dataset for traffic signs. It consists of dataset of more than 50,000 traffic sign images. The dataset comprises 43 classes with unbalanced class frequencies.""",
@@ -29,17 +34,17 @@ class GTSRBClassification(AbsTaskImageClassification):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@INPROCEEDINGS{6033395,
-  author={Stallkamp, Johannes and Schlipsing, Marc and Salmen, Jan and Igel, Christian},
-  booktitle={The 2011 International Joint Conference on Neural Networks},
-  title={The German Traffic Sign Recognition Benchmark: A multi-class classification competition},
-  year={2011},
-  volume={},
-  number={},
-  pages={1453-1460},
-  keywords={Humans;Training;Image color analysis;Benchmark testing;Lead;Histograms;Image resolution},
-  doi={10.1109/IJCNN.2011.6033395}}
+        bibtex_citation=r"""
+@inproceedings{6033395,
+  author = {Stallkamp, Johannes and Schlipsing, Marc and Salmen, Jan and Igel, Christian},
+  booktitle = {The 2011 International Joint Conference on Neural Networks},
+  doi = {10.1109/IJCNN.2011.6033395},
+  keywords = {Humans;Training;Image color analysis;Benchmark testing;Lead;Histograms;Image resolution},
+  number = {},
+  pages = {1453-1460},
+  title = {The German Traffic Sign Recognition Benchmark: A multi-class classification competition},
+  volume = {},
+  year = {2011},
+}
 """,
     )
-    image_column_name = "webp"
-    label_column_name = "cls"

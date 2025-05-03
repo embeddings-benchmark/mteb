@@ -27,12 +27,14 @@ class BuiltBenchRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@article{shahinmoghadam2024benchmarking,
-    title={Benchmarking pre-trained text embedding models in aligning built asset information},
-    author={Shahinmoghadam, Mehrzad and Motamedi, Ali},
-    journal={arXiv preprint arXiv:2411.12056},
-    year={2024}
-}""",
+        bibtex_citation=r"""
+@article{shahinmoghadam2024benchmarking,
+  author = {Shahinmoghadam, Mehrzad and Motamedi, Ali},
+  journal = {arXiv preprint arXiv:2411.12056},
+  title = {Benchmarking pre-trained text embedding models in aligning built asset information},
+  year = {2024},
+}
+""",
         prompt={
             "query": "Given a query, retrieve relevant entity descriptions from buit asset classification systems such as IFC and Uniclass"
         },

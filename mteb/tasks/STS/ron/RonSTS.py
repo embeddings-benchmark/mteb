@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskSTS import AbsTaskSTS
+from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 
-class RonSTS(AbsTaskSTS):
+class RonSTS(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="RonSTS",
         dataset={
@@ -28,14 +28,14 @@ class RonSTS(AbsTaskSTS):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="machine-translated and verified",
-        bibtex_citation="""
-        @inproceedings{dumitrescu2021liro,
-            title={LiRo: Benchmark and leaderboard for Romanian language tasks},
-            author={Dumitrescu, Stefan Daniel and Rebeja, Petru and Lorincz, Beata and Gaman, Mihaela and Avram, Andrei and Ilie, Mihai and Pruteanu, Andrei and Stan, Adriana and Rosia, Lorena and Iacobescu, Cristina and others},
-            booktitle={Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
-            year={2021}
-            }
-            """,
+        bibtex_citation=r"""
+@inproceedings{dumitrescu2021liro,
+  author = {Dumitrescu, Stefan Daniel and Rebeja, Petru and Lorincz, Beata and Gaman, Mihaela and Avram, Andrei and Ilie, Mihai and Pruteanu, Andrei and Stan, Adriana and Rosia, Lorena and Iacobescu, Cristina and others},
+  booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 1)},
+  title = {LiRo: Benchmark and leaderboard for Romanian language tasks},
+  year = {2021},
+}
+""",
     )
 
     min_score = 0

@@ -1,10 +1,14 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class OxfordPetsClassification(AbsTaskImageClassification):
+class OxfordPetsClassification(AbsTaskAnyClassification):
+    input_column_name: str = "image"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="OxfordPets",
         description="Classifying animal images.",
@@ -29,15 +33,17 @@ class OxfordPetsClassification(AbsTaskImageClassification):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@INPROCEEDINGS{6248092,
-  author={Parkhi, Omkar M and Vedaldi, Andrea and Zisserman, Andrew and Jawahar, C. V.},
-  booktitle={2012 IEEE Conference on Computer Vision and Pattern Recognition},
-  title={Cats and dogs},
-  year={2012},
-  volume={},
-  number={},
-  pages={3498-3505},
-  keywords={Positron emission tomography;Image segmentation;Cats;Dogs;Layout;Deformable models;Head},
-  doi={10.1109/CVPR.2012.6248092}}
-        """,
+        bibtex_citation=r"""
+@inproceedings{6248092,
+  author = {Parkhi, Omkar M and Vedaldi, Andrea and Zisserman, Andrew and Jawahar, C. V.},
+  booktitle = {2012 IEEE Conference on Computer Vision and Pattern Recognition},
+  doi = {10.1109/CVPR.2012.6248092},
+  keywords = {Positron emission tomography;Image segmentation;Cats;Dogs;Layout;Deformable models;Head},
+  number = {},
+  pages = {3498-3505},
+  title = {Cats and dogs},
+  volume = {},
+  year = {2012},
+}
+""",
     )

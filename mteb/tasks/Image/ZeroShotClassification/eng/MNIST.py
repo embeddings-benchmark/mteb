@@ -31,14 +31,15 @@ class MNISTZeroShotClassification(AbsTaskZeroShotClassification):
         dialect=[],
         modalities=["image", "text"],
         sample_creation="created",
-        bibtex_citation="""@article{lecun2010mnist,
-        title={MNIST handwritten digit database},
-        author={LeCun, Yann and Cortes, Corinna and Burges, CJ},
-        journal={ATT Labs [Online]. Available: http://yann.lecun.com/exdb/mnist},
-        volume={2},
-        year={2010}
-        }
-        """,
+        bibtex_citation=r"""
+@article{lecun2010mnist,
+  author = {LeCun, Yann and Cortes, Corinna and Burges, CJ},
+  journal = {ATT Labs [Online]. Available: http://yann.lecun.com/exdb/mnist},
+  title = {MNIST handwritten digit database},
+  volume = {2},
+  year = {2010},
+}
+""",
     )
 
     def get_candidate_labels(self) -> list[str]:

@@ -15,12 +15,12 @@ from .STSBenchmarkMultilingualVisualSTS import (
 from .SynPerChatbotConvSAClassification import SynPerChatbotConvSAClassification
 
 __all__ = [
+    "CQADupstackNLRetrieval",
     "CQADupstackRetrieval",
     "CQADupstackRetrievalFa",
+    "CQADupstackRetrievalPL",
     "STS17MultilingualVisualSTSEng",
     "STS17MultilingualVisualSTSMultilingual",
-    "CQADupstackNLRetrieval",
-    "CQADupstackRetrievalPL",
     "STSBenchmarkMultilingualVisualSTSEng",
     "STSBenchmarkMultilingualVisualSTSMultilingual",
     "SynPerChatbotConvSAClassification",

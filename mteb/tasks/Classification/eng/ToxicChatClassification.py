@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _EVAL_SPLITS = ["test"]
 
 
-class ToxicChatClassification(AbsTaskClassification):
+class ToxicChatClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="ToxicChatClassification",
         description="""This dataset contains toxicity annotations on 10K user
@@ -37,14 +37,16 @@ class ToxicChatClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{lin2023toxicchat,
-            title={ToxicChat: Unveiling Hidden Challenges of Toxicity Detection in Real-World User-AI Conversation},
-            author={Zi Lin and Zihan Wang and Yongqi Tong and Yangkun Wang and Yuxin Guo and Yujia Wang and Jingbo Shang},
-            year={2023},
-            eprint={2310.17389},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        }""",
+        bibtex_citation=r"""
+@misc{lin2023toxicchat,
+  archiveprefix = {arXiv},
+  author = {Zi Lin and Zihan Wang and Yongqi Tong and Yangkun Wang and Yuxin Guo and Yujia Wang and Jingbo Shang},
+  eprint = {2310.17389},
+  primaryclass = {cs.CL},
+  title = {ToxicChat: Unveiling Hidden Challenges of Toxicity Detection in Real-World User-AI Conversation},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):

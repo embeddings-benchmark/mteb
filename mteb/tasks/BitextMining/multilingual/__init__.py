@@ -3,6 +3,7 @@ from __future__ import annotations
 from .BibleNLPBitextMining import BibleNLPBitextMining
 from .BUCCBitextMining import BUCCBitextMining
 from .BUCCBitextMiningFast import BUCCBitextMiningFast
+from .DanishMedicinesAgencyBitextMining import DanishMedicinesAgencyBitextMining
 from .DiaBLaBitextMining import DiaBLaBitextMining
 from .FloresBitextMining import FloresBitextMining
 from .IN22ConvBitextMining import IN22ConvBitextMining
@@ -21,24 +22,25 @@ from .TatoebaBitextMining import TatoebaBitextMining
 from .WebFAQBitextMining import WebFAQBitextMiningQAs, WebFAQBitextMiningQuestions
 
 __all__ = [
+    "BUCCBitextMining",
+    "BUCCBitextMiningFast",
+    "BibleNLPBitextMining",
+    "DanishMedicinesAgencyBitextMining",
+    "DiaBLaBitextMining",
+    "FloresBitextMining",
     "IN22ConvBitextMining",
     "IN22GenBitextMining",
-    "BUCCBitextMining",
-    "LinceMTBitextMining",
-    "NusaTranslationBitextMining",
-    "DiaBLaBitextMining",
-    "NTREXBitextMining",
+    "IWSLT2017BitextMining",
     "IndicGenBenchFloresBitextMining",
+    "LinceMTBitextMining",
+    "NTREXBitextMining",
     "NollySentiBitextMining",
+    "NorwegianCourtsBitextMining",
+    "NusaTranslationBitextMining",
+    "NusaXBitextMining",
+    "PhincBitextMining",
+    "RomaTalesBitextMining",
+    "TatoebaBitextMining",
     "WebFAQBitextMiningQAs",
     "WebFAQBitextMiningQuestions",
-    "BUCCBitextMiningFast",
-    "PhincBitextMining",
-    "TatoebaBitextMining",
-    "NusaXBitextMining",
-    "IWSLT2017BitextMining",
-    "BibleNLPBitextMining",
-    "FloresBitextMining",
-    "RomaTalesBitextMining",
-    "NorwegianCourtsBitextMining",
 ]

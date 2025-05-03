@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskSTS import AbsTaskSTS
+from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 
-class STS13STS(AbsTaskSTS):
+class STS13STS(AbsTaskAnySTS):
     min_score = 0
     max_score = 5
 
@@ -30,11 +30,13 @@ class STS13STS(AbsTaskSTS):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{Agirre2013SEM2S,
-  title={*SEM 2013 shared task: Semantic Textual Similarity},
-  author={Eneko Agirre and Daniel Matthew Cer and Mona T. Diab and Aitor Gonzalez-Agirre and Weiwei Guo},
-  booktitle={International Workshop on Semantic Evaluation},
-  year={2013},
-  url={https://api.semanticscholar.org/CorpusID:10241043}
-}""",
+        bibtex_citation=r"""
+@inproceedings{Agirre2013SEM2S,
+  author = {Eneko Agirre and Daniel Matthew Cer and Mona T. Diab and Aitor Gonzalez-Agirre and Weiwei Guo},
+  booktitle = {International Workshop on Semantic Evaluation},
+  title = {*SEM 2013 shared task: Semantic Textual Similarity},
+  url = {https://api.semanticscholar.org/CorpusID:10241043},
+  year = {2013},
+}
+""",
     )

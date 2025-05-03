@@ -26,24 +26,26 @@ class LLaVAIT2TRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{lin-etal-2024-preflmr,
-    title = "{P}re{FLMR}: Scaling Up Fine-Grained Late-Interaction Multi-modal Retrievers",
-    author = "Lin, Weizhe  and
-      Mei, Jingbiao  and
-      Chen, Jinghong  and
-      Byrne, Bill",
-    editor = "Ku, Lun-Wei  and
-      Martins, Andre  and
-      Srikumar, Vivek",
-    booktitle = "Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
-    month = aug,
-    year = "2024",
-    address = "Bangkok, Thailand",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/2024.acl-long.289",
-    doi = "10.18653/v1/2024.acl-long.289",
-    pages = "5294--5316",
-}""",
+        bibtex_citation=r"""
+@inproceedings{lin-etal-2024-preflmr,
+  address = {Bangkok, Thailand},
+  author = {Lin, Weizhe  and
+Mei, Jingbiao  and
+Chen, Jinghong  and
+Byrne, Bill},
+  booktitle = {Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2024.acl-long.289},
+  editor = {Ku, Lun-Wei  and
+Martins, Andre  and
+Srikumar, Vivek},
+  month = aug,
+  pages = {5294--5316},
+  publisher = {Association for Computational Linguistics},
+  title = {{P}re{FLMR}: Scaling Up Fine-Grained Late-Interaction Multi-modal Retrievers},
+  url = {https://aclanthology.org/2024.acl-long.289},
+  year = {2024},
+}
+""",
         prompt={
             "query": "Provide a specific decription of the image along with the following question."
         },

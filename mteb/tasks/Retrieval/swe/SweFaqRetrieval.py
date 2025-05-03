@@ -30,13 +30,15 @@ class SweFaqRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{berdivcevskis2023superlim,
-  title={Superlim: A Swedish language understanding evaluation benchmark},
-  author={Berdi{\v{c}}evskis, Aleksandrs and Bouma, Gerlof and Kurtz, Robin and Morger, Felix and {\"O}hman, Joey and Adesam, Yvonne and Borin, Lars and Dann{\'e}lls, Dana and Forsberg, Markus and Isbister, Tim and others},
-  booktitle={Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing},
-  pages={8137--8153},
-  year={2023}
-}""",  # for the benchmark in which this dataset is used
+        bibtex_citation=r"""
+@inproceedings{berdivcevskis2023superlim,
+  author = {Berdi{\v{c}}evskis, Aleksandrs and Bouma, Gerlof and Kurtz, Robin and Morger, Felix and {\"O}hman, Joey and Adesam, Yvonne and Borin, Lars and Dann{\'e}lls, Dana and Forsberg, Markus and Isbister, Tim and others},
+  booktitle = {Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing},
+  pages = {8137--8153},
+  title = {Superlim: A Swedish language understanding evaluation benchmark},
+  year = {2023},
+}
+""",  # for the benchmark in which this dataset is used
         prompt={"query": "Retrieve answers given questions in Swedish"},
     )
 

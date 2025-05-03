@@ -10,12 +10,12 @@ from .TwitterSemEval2015PC import TwitterSemEval2015PC
 from .TwitterURLCorpusPC import TwitterURLCorpusPC
 
 __all__ = [
+    "LegalBenchPC",
+    "PubChemAISentenceParaphrasePC",
     "PubChemSMILESPC",
     "PubChemSynonymPC",
-    "LegalBenchPC",
-    "TwitterSemEval2015PC",
     "PubChemWikiParagraphsPC",
-    "TwitterURLCorpusPC",
     "SprintDuplicateQuestionsPC",
-    "PubChemAISentenceParaphrasePC",
+    "TwitterSemEval2015PC",
+    "TwitterURLCorpusPC",
 ]

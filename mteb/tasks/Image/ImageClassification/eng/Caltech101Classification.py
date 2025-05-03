@@ -1,10 +1,14 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class Caltech101Classification(AbsTaskImageClassification):
+class Caltech101Classification(AbsTaskAnyClassification):
+    input_column_name: str = "image"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="Caltech101",
         description="Classifying images of 101 widely varied objects.",
@@ -31,15 +35,17 @@ class Caltech101Classification(AbsTaskImageClassification):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@INPROCEEDINGS{1384978,
-        author={Li Fei-Fei and Fergus, R. and Perona, P.},
-        booktitle={2004 Conference on Computer Vision and Pattern Recognition Workshop},
-        title={Learning Generative Visual Models from Few Training Examples: An Incremental Bayesian Approach Tested on 101 Object Categories},
-        year={2004},
-        volume={},
-        number={},
-        pages={178-178},
-        keywords={Bayesian methods;Testing;Humans;Maximum likelihood estimation;Assembly;Shape;Machine vision;Image recognition;Parameter estimation;Image databases},
-        doi={10.1109/CVPR.2004.383}}
-        """,
+        bibtex_citation=r"""
+@inproceedings{1384978,
+  author = {Li Fei-Fei and Fergus, R. and Perona, P.},
+  booktitle = {2004 Conference on Computer Vision and Pattern Recognition Workshop},
+  doi = {10.1109/CVPR.2004.383},
+  keywords = {Bayesian methods;Testing;Humans;Maximum likelihood estimation;Assembly;Shape;Machine vision;Image recognition;Parameter estimation;Image databases},
+  number = {},
+  pages = {178-178},
+  title = {Learning Generative Visual Models from Few Training Examples: An Incremental Bayesian Approach Tested on 101 Object Categories},
+  volume = {},
+  year = {2004},
+}
+""",
     )

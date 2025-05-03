@@ -1,10 +1,15 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class Country211Classification(AbsTaskImageClassification):
+class Country211Classification(AbsTaskAnyClassification):
+    input_column_name: str = "jpg"
+    label_column_name: str = "cls"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="Country211",
         description="Classifying images of 211 countries.",
@@ -29,13 +34,12 @@ class Country211Classification(AbsTaskImageClassification):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@article{radford2021learning,
-        title={Learning Transferable Visual Models From Natural Language Supervision},
-        author={Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and others},
-        journal={arXiv preprint arXiv:2103.00020},
-        year={2021}
-        }""",
+        bibtex_citation=r"""
+@article{radford2021learning,
+  author = {Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and others},
+  journal = {arXiv preprint arXiv:2103.00020},
+  title = {Learning Transferable Visual Models From Natural Language Supervision},
+  year = {2021},
+}
+""",
     )
-
-    image_column_name: str = "jpg"
-    label_column_name: str = "cls"

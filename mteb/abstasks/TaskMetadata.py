@@ -6,6 +6,7 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any, Union
 
+from huggingface_hub import DatasetCard, DatasetCardData, repo_exists
 from pydantic import (
     BaseModel,
     ConfigDict,
@@ -13,13 +14,11 @@ from pydantic import (
 )
 from typing_extensions import Literal, TypedDict
 
+import mteb
 from mteb.custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
 from mteb.languages import (
     ISO_LANGUAGE_SCRIPT,
-    ISO_TO_LANGUAGE,
-    ISO_TO_SCRIPT,
-    path_to_lang_codes,
-    path_to_lang_scripts,
+    check_language_code,
 )
 from mteb.types import PromptType
 
@@ -57,6 +56,7 @@ TASK_SUBTYPE = Literal[
     "Tumor detection",
     "Duplicate Detection",
     "Rendered semantic textual similarity",
+    "Intent classification",
 ]
 
 TASK_DOMAIN = Literal[
@@ -83,6 +83,7 @@ TASK_DOMAIN = Literal[
     "Programming",
     "Chemistry",
     "Financial",
+    "Entertainment",
 ]
 
 SAMPLE_CREATION_METHOD = Literal[
@@ -97,7 +98,6 @@ SAMPLE_CREATION_METHOD = Literal[
     "rendered",
     "multiple",
 ]
-
 
 MIEB_TASK_TYPE = (
     "Any2AnyMultiChoice",
@@ -114,7 +114,7 @@ MIEB_TASK_TYPE = (
     "Compositionality",
 )
 
-_task_types = (
+_TASK_TYPE = (
     "BitextMining",
     "Classification",
     "MultilabelClassification",
@@ -126,10 +126,10 @@ _task_types = (
     "Summarization",
     "InstructionRetrieval",
     "InstructionReranking",
-    "Speed",
 ) + MIEB_TASK_TYPE
 
-TASK_TYPE = Literal[_task_types]
+TASK_TYPE = Literal[_TASK_TYPE]
+
 
 TASK_CATEGORY = Literal[
     "t2t",
@@ -159,23 +159,6 @@ LANGUAGES = Union[
     list[ISO_LANGUAGE_SCRIPT], Mapping[HFSubset, list[ISO_LANGUAGE_SCRIPT]]
 ]
 
-PROGRAMMING_LANGS = [
-    "python",
-    "javascript",
-    "typescript",
-    "go",
-    "ruby",
-    "java",
-    "php",
-    "c",
-    "c++",
-    "rust",
-    "swift",
-    "scala",
-    "shell",
-    "sql",
-]
-
 METRIC_NAME = str
 METRIC_VALUE = Union[int, float, dict[str, Any]]
 
@@ -196,6 +179,81 @@ class DescriptiveStatistics(TypedDict):
     """Class for descriptive statistics."""
 
     pass
+
+
+class TextStatistics(TypedDict):
+    """Class for descriptive statistics for texts.
+
+    Attributes:
+        min_text_length: Minimum length of text
+        average_text_length: Average length of text
+        max_text_length: Maximum length of text
+        unique_texts: Number of unique texts
+    """
+
+    min_text_length: int
+    average_text_length: float
+    max_text_length: int
+    unique_texts: int
+
+
+class ImageStatistics(TypedDict):
+    """Class for descriptive statistics for images.
+
+    Attributes:
+        min_image_width: Minimum width of images
+        average_image_width: Average width of images
+        max_image_width: Maximum width of images
+
+        min_image_height: Minimum height of images
+        average_image_height: Average height of images
+        max_image_height: Maximum height of images
+    """
+
+    min_image_width: float
+    average_image_width: float
+    max_image_width: float
+
+    min_image_height: float
+    average_image_height: float
+    max_image_height: float
+
+
+class LabelStatistics(TypedDict):
+    """Class for descriptive statistics for texts.
+
+    Attributes:
+        min_labels_per_text: Minimum number of labels per text
+        average_label_per_text: Average number of labels per text
+        max_labels_per_text: Maximum number of labels per text
+
+        unique_labels: Number of unique labels
+        labels: dict of label frequencies
+    """
+
+    min_labels_per_text: int
+    average_label_per_text: float
+    max_labels_per_text: int
+
+    unique_labels: int
+    labels: dict[str, dict[str, int]]
+
+
+class ScoreStatistics(TypedDict):
+    """Class for descriptive statistics for texts.
+
+    Attributes:
+        min_labels_per_text: Minimum number of labels per text
+        average_label_per_text: Average number of labels per text
+        max_labels_per_text: Maximum number of labels per text
+
+        unique_labels: Number of unique labels
+        labels: dict of label frequencies
+    """
+
+    min_score: int
+    avg_score: float
+    max_score: int
 
 
 logger = logging.getLogger(__name__)
@@ -336,30 +394,10 @@ class TaskMetadata(BaseModel):
         if isinstance(eval_langs, dict):
             for langs in eval_langs.values():
                 for code in langs:
-                    self._check_language_code(code)
+                    check_language_code(code)
         else:
             for code in eval_langs:
-                self._check_language_code(code)
-
-    @staticmethod
-    def _check_language_code(code):
-        """This method checks that the language code (e.g. "eng-Latn") is valid."""
-        lang, script = code.split("-")
-        if script == "Code":
-            if lang in PROGRAMMING_LANGS:
-                return  # override for code
-            else:
-                raise ValueError(
-                    f"Programming language {lang} is not a valid programming language."
-                )
-        if lang not in ISO_TO_LANGUAGE:
-            raise ValueError(
-                f"Invalid language code: {lang}, you can find valid ISO 639-3 codes in {path_to_lang_codes}"
-            )
-        if script not in ISO_TO_SCRIPT:
-            raise ValueError(
-                f"Invalid script code: {script}, you can find valid ISO 15924 codes in {path_to_lang_scripts}"
-            )
+                check_language_code(code)
 
     @property
     def bcp47_codes(self) -> list[ISO_LANGUAGE_SCRIPT]:
@@ -477,3 +515,147 @@ class TaskMetadata(BaseModel):
     @property
     def revision(self) -> str:
         return self.dataset["revision"]
+
+    def create_dataset_card_data(
+        self, existing_dataset_card_data: DatasetCardData | None = None
+    ) -> tuple[DatasetCardData, dict[str, str]]:
+        """Create a DatasetCardData object from the task metadata.
+
+        Args:
+            existing_dataset_card_data: The existing DatasetCardData object to update. If None, a new object will be created.
+
+        Returns:
+            A DatasetCardData object with the metadata for the task with kwargs to card
+        """
+        # todo figure out datasets with multiple types. E. g. one dataset as classification and ZeroShotClassification
+        mteb_task_type_to_datasets = {
+            # Text
+            "BitextMining": "translation",
+            "Classification": "text-classification",
+            "MultilabelClassification": "text-classification",
+            "Clustering": "text-clustering",
+            "PairClassification": "text-classification",
+            "Reranking": "text-ranking",
+            "Retrieval": "text-retrieval",
+            "STS": "sentence-similarity",
+            "Summarization": "summarization",
+            "InstructionRetrieval": "text-retrieval",
+            "InstructionReranking": "text-ranking",
+            # Image
+            "Any2AnyMultiChoice": "image-multiple-choice",  # currently not real HF type
+            "Any2AnyRetrieval": "image-retrieval",  # currently not real HF type
+            "Any2AnyMultilingualRetrieval": "image-retrieval",  # currently not real HF type
+            "VisionCentricQA": "visual-question-answering",
+            "ImageClustering": "image-clustering",
+            "ImageClassification": "image-classification",
+            "ImageMultilabelClassification": "image-classification",
+            "DocumentUnderstanding": "image-retrieval",  # currently not real HF type
+            "VisualSTS(eng)": "image-similarity",  # currently not real HF type
+            "VisualSTS(multi)": "image-similarity",  # currently not real HF type
+            "ZeroShotClassification": "zero-shot-image-classification",
+            "Compositionality": "image-text-classification",  # currently not real HF type
+        }
+
+        dataset_type = [mteb_task_type_to_datasets[self.type]]
+
+        if self.category in ["i2i", "it2i", "i2it", "it2it"]:
+            dataset_type.append("image-to-image")
+        if self.category in ["i2t", "t2i", "it2t", "it2i", "t2it", "i2it", "it2it"]:
+            dataset_type.extend(["image-to-text", "text-to-image"])
+
+        if self.is_multilingual:
+            languages: list[str] = []
+            for val in list(self.eval_langs.values()):
+                languages.extend(val)
+        else:
+            languages: list[str] = self.eval_langs
+
+        languages = [lang.split("-")[0] for lang in languages]
+
+        multilinguality = "multilingual" if self.is_multilingual else "monolingual"
+        if "translated" in self.sample_creation:
+            multilinguality = "translated"
+
+        if self.adapted_from is not None:
+            source_datasets = [
+                task.metadata.dataset["path"]
+                for task in mteb.get_tasks(self.adapted_from)
+            ]
+        else:
+            source_datasets = None
+
+        tags = ["mteb"]
+        tags.extend(self.modalities)
+
+        descriptive_stats = self.descriptive_stats
+        if descriptive_stats is not None:
+            descriptive_stats = json.dumps(descriptive_stats, indent=4)
+
+        if existing_dataset_card_data is None:
+            existing_dataset_card_data = DatasetCardData()
+
+        dataset_card_data_params = existing_dataset_card_data.to_dict()
+        # override the existing values
+        dataset_card_data_params.update(
+            dict(
+                language=languages,
+                license=self.license if self.license != "not specified" else "unknown",
+                annotations_creators=[self.annotations_creators]
+                if self.annotations_creators
+                else None,
+                multilinguality=multilinguality,
+                source_datasets=source_datasets,
+                task_categories=dataset_type,
+                task_ids=self.task_subtypes,
+                tags=tags,
+            )
+        )
+
+        return (
+            DatasetCardData(**dataset_card_data_params),
+            # parameters for readme generation
+            dict(
+                citation=self.bibtex_citation,
+                dataset_description=self.description,
+                dataset_reference=self.reference,
+                descritptive_stats=descriptive_stats,
+                dataset_task_name=self.name,
+                category=self.category,
+                domains=", ".join(self.domains),
+            ),
+        )
+
+    def generate_dataset_card(
+        self, existing_dataset_card: DatasetCard | None = None
+    ) -> DatasetCard:
+        """Generates a dataset card for the task.
+
+        Args:
+            existing_dataset_card: The existing dataset card to update. If None, a new dataset card will be created.
+
+        Returns:
+            DatasetCard: The dataset card for the task.
+        """
+        path = Path(__file__).parent / "dataset_card_template.md"
+        existing_dataset_card_data = (
+            existing_dataset_card.data if existing_dataset_card else None
+        )
+        dataset_card_data, template_kwargs = self.create_dataset_card_data(
+            existing_dataset_card_data
+        )
+        dataset_card = DatasetCard.from_template(
+            card_data=dataset_card_data,
+            template_path=str(path),
+            **template_kwargs,
+        )
+        return dataset_card
+
+    def push_dataset_card_to_hub(self, repo_name: str) -> None:
+        """Pushes the dataset card to the huggingface hub.
+
+        Args:
+            repo_name: The name of the repository to push the dataset card to.
+        """
+        dataset_card = DatasetCard.load(repo_name) if repo_exists(repo_name) else None
+        dataset_card = self.generate_dataset_card(dataset_card)
+        dataset_card.push_to_hub(repo_name, commit_message="Add dataset card")

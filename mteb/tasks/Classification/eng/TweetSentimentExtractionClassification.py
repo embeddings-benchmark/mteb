@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class TweetSentimentExtractionClassification(AbsTaskClassification):
+class TweetSentimentExtractionClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="TweetSentimentExtractionClassification",
         description="",
@@ -29,13 +29,15 @@ class TweetSentimentExtractionClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{tweet-sentiment-extraction,
-    author = {Maggie, Phil Culliton, Wei Chen},
-    title = {Tweet Sentiment Extraction},
-    publisher = {Kaggle},
-    year = {2020},
-    url = {https://kaggle.com/competitions/tweet-sentiment-extraction}
-}""",
+        bibtex_citation=r"""
+@misc{tweet-sentiment-extraction,
+  author = {Maggie, Phil Culliton, Wei Chen},
+  publisher = {Kaggle},
+  title = {Tweet Sentiment Extraction},
+  url = {https://kaggle.com/competitions/tweet-sentiment-extraction},
+  year = {2020},
+}
+""",
         prompt="Classify the sentiment of a given tweet as either positive, negative, or neutral",
     )
 

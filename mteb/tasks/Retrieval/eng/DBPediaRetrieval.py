@@ -27,16 +27,18 @@ class DBPedia(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{Hasibi:2017:DVT,
- author =    {Hasibi, Faegheh and Nikolaev, Fedor and Xiong, Chenyan and Balog, Krisztian and Bratsberg, Svein Erik and Kotov, Alexander and Callan, Jamie},
- title =     {DBpedia-Entity V2: A Test Collection for Entity Search},
- booktitle = {Proceedings of the 40th International ACM SIGIR Conference on Research and Development in Information Retrieval},
- series =    {SIGIR '17},
- year =      {2017},
- pages =     {1265--1268},
- doi =       {10.1145/3077136.3080751},
- publisher = {ACM}
-}""",
+        bibtex_citation=r"""
+@inproceedings{Hasibi:2017:DVT,
+  author = {Hasibi, Faegheh and Nikolaev, Fedor and Xiong, Chenyan and Balog, Krisztian and Bratsberg, Svein Erik and Kotov, Alexander and Callan, Jamie},
+  booktitle = {Proceedings of the 40th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  doi = {10.1145/3077136.3080751},
+  pages = {1265--1268},
+  publisher = {ACM},
+  series = {SIGIR '17},
+  title = {DBpedia-Entity V2: A Test Collection for Entity Search},
+  year = {2017},
+}
+""",
         prompt={
             "query": "Given a query, retrieve relevant entity descriptions from DBPedia"
         },
@@ -65,15 +67,17 @@ class DBPediaHardNegatives(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{Hasibi:2017:DVT,
- author =    {Hasibi, Faegheh and Nikolaev, Fedor and Xiong, Chenyan and Balog, Krisztian and Bratsberg, Svein Erik and Kotov, Alexander and Callan, Jamie},
- title =     {DBpedia-Entity V2: A Test Collection for Entity Search},
- booktitle = {Proceedings of the 40th International ACM SIGIR Conference on Research and Development in Information Retrieval},
- series =    {SIGIR '17},
- year =      {2017},
- pages =     {1265--1268},
- doi =       {10.1145/3077136.3080751},
- publisher = {ACM}
-}""",
+        bibtex_citation=r"""
+@inproceedings{Hasibi:2017:DVT,
+  author = {Hasibi, Faegheh and Nikolaev, Fedor and Xiong, Chenyan and Balog, Krisztian and Bratsberg, Svein Erik and Kotov, Alexander and Callan, Jamie},
+  booktitle = {Proceedings of the 40th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  doi = {10.1145/3077136.3080751},
+  pages = {1265--1268},
+  publisher = {ACM},
+  series = {SIGIR '17},
+  title = {DBpedia-Entity V2: A Test Collection for Entity Search},
+  year = {2017},
+}
+""",
         adapted_from=["DBPedia"],
     )

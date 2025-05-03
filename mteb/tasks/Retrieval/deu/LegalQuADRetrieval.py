@@ -27,15 +27,17 @@ class LegalQuAD(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=None,
         sample_creation="found",
-        bibtex_citation="""@INPROCEEDINGS{9723721,
-  author={Hoppe, Christoph and Pelkmann, David and Migenda, Nico and Hötte, Daniel and Schenck, Wolfram},
-  booktitle={2021 IEEE Fourth International Conference on Artificial Intelligence and Knowledge Engineering (AIKE)},
-  title={Towards Intelligent Legal Advisors for Document Retrieval and Question-Answering in German Legal Documents},
-  year={2021},
-  volume={},
-  number={},
-  pages={29-32},
-  keywords={Knowledge engineering;Law;Semantic search;Conferences;Bit error rate;NLP;knowledge extraction;question-answering;semantic search;document retrieval;German language},
-  doi={10.1109/AIKE52691.2021.00011}
-  }""",
+        bibtex_citation=r"""
+@inproceedings{9723721,
+  author = {Hoppe, Christoph and Pelkmann, David and Migenda, Nico and Hötte, Daniel and Schenck, Wolfram},
+  booktitle = {2021 IEEE Fourth International Conference on Artificial Intelligence and Knowledge Engineering (AIKE)},
+  doi = {10.1109/AIKE52691.2021.00011},
+  keywords = {Knowledge engineering;Law;Semantic search;Conferences;Bit error rate;NLP;knowledge extraction;question-answering;semantic search;document retrieval;German language},
+  number = {},
+  pages = {29-32},
+  title = {Towards Intelligent Legal Advisors for Document Retrieval and Question-Answering in German Legal Documents},
+  volume = {},
+  year = {2021},
+}
+""",
     )

@@ -9,9 +9,9 @@ from .NLPJournalTitleIntroRetrieval import NLPJournalTitleIntroRetrieval
 
 __all__ = [
     "JaGovFaqsRetrieval",
-    "NLPJournalAbsIntroRetrieval",
-    "JaqketRetrieval",
-    "NLPJournalTitleAbsRetrieval",
     "JaQuADRetrieval",
+    "JaqketRetrieval",
+    "NLPJournalAbsIntroRetrieval",
+    "NLPJournalTitleAbsRetrieval",
     "NLPJournalTitleIntroRetrieval",
 ]

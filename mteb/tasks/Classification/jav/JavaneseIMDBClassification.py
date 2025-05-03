@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class JavaneseIMDBClassification(AbsTaskClassification):
+class JavaneseIMDBClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="JavaneseIMDBClassification",
         description="Large Movie Review Dataset translated to Javanese. This is a dataset for binary sentiment classification containing substantially more data than previous benchmark datasets.",
@@ -27,16 +27,16 @@ class JavaneseIMDBClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @inproceedings{wongso2021causal,
-            title={Causal and Masked Language Modeling of Javanese Language using Transformer-based Architectures},
-            author={Wongso, Wilson and Setiawan, David Samuel and Suhartono, Derwin},
-            booktitle={2021 International Conference on Advanced Computer Science and Information Systems (ICACSIS)},
-            pages={1--7},
-            year={2021},
-            organization={IEEE}
-        }
-        """,
+        bibtex_citation=r"""
+@inproceedings{wongso2021causal,
+  author = {Wongso, Wilson and Setiawan, David Samuel and Suhartono, Derwin},
+  booktitle = {2021 International Conference on Advanced Computer Science and Information Systems (ICACSIS)},
+  organization = {IEEE},
+  pages = {1--7},
+  title = {Causal and Masked Language Modeling of Javanese Language using Transformer-based Architectures},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):

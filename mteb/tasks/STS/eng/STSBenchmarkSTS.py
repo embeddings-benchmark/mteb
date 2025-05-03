@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskSTS import AbsTaskSTS
+from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 
-class STSBenchmarkSTS(AbsTaskSTS):
+class STSBenchmarkSTS(AbsTaskAnySTS):
     min_score = 0
     max_score = 5
 
@@ -30,12 +30,14 @@ class STSBenchmarkSTS(AbsTaskSTS):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="machine-translated and verified",
-        bibtex_citation="""@InProceedings{huggingface:dataset:stsb_multi_mt,
-title = {Machine translated multilingual STS benchmark dataset.},
-author={Philip May},
-year={2021},
-url={https://github.com/PhilipMay/stsb-multi-mt}
-}""",
+        bibtex_citation=r"""
+@inproceedings{huggingface:dataset:stsb_multi_mt,
+  author = {Philip May},
+  title = {Machine translated multilingual STS benchmark dataset.},
+  url = {https://github.com/PhilipMay/stsb-multi-mt},
+  year = {2021},
+}
+""",
     )
 
     min_score = 0

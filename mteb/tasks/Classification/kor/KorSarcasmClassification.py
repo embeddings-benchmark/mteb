@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class KorSarcasmClassification(AbsTaskClassification):
+class KorSarcasmClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="KorSarcasmClassification",
         description="""
@@ -34,16 +34,16 @@ class KorSarcasmClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{kim2019kocasm,
-            author = {Kim, Jiwon and Cho, Won Ik},
-            title = {Kocasm: Korean Automatic Sarcasm Detection},
-            year = {2019},
-            publisher = {GitHub},
-            journal = {GitHub repository},
-            howpublished = {https://github.com/SpellOnYou/korean-sarcasm}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{kim2019kocasm,
+  author = {Kim, Jiwon and Cho, Won Ik},
+  howpublished = {https://github.com/SpellOnYou/korean-sarcasm},
+  journal = {GitHub repository},
+  publisher = {GitHub},
+  title = {Kocasm: Korean Automatic Sarcasm Detection},
+  year = {2019},
+}
+""",
     )
 
     def dataset_transform(self):

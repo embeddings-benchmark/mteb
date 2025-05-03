@@ -16,7 +16,7 @@ from torch.utils.data import DataLoader
 from mteb.encoder_interface import Encoder
 
 from ..load_results.task_results import ScoresDict
-from .AbsTaskClassification import AbsTaskClassification
+from .AbsTaskAnyClassification import AbsTaskAnyClassification
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +41,7 @@ def evaluate_classifier(
     }
 
 
-class AbsTaskMultilabelClassification(AbsTaskClassification):
+class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
     """Abstract class for multioutput classification tasks
     The similarity is computed between pairs and the results are ranked.
 

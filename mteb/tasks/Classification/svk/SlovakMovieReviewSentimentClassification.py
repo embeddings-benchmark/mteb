@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class SlovakMovieReviewSentimentClassification(AbsTaskClassification):
+class SlovakMovieReviewSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SlovakMovieReviewSentimentClassification",
         description="User reviews of movies on the CSFD movie database, with 2 sentiment classes (positive, negative)",
@@ -26,14 +26,14 @@ class SlovakMovieReviewSentimentClassification(AbsTaskClassification):
         license="cc-by-nc-sa-4.0",
         annotations_creators="derived",
         sample_creation="found",
-        bibtex_citation="""
-        @article{vstefanik2023resources,
-            title={Resources and Few-shot Learners for In-context Learning in Slavic Languages},
-            author={{\v{S}}tef{\'a}nik, Michal and Kadl{\v{c}}{\'\i}k, Marek and Gramacki, Piotr and Sojka, Petr},
-            journal={arXiv preprint arXiv:2304.01922},
-            year={2023}
-            }
-        """,
+        bibtex_citation=r"""
+@article{vstefanik2023resources,
+  author = {{\v{S}}tef{\'a}nik, Michal and Kadl{\v{c}}{\'\i}k, Marek and Gramacki, Piotr and Sojka, Petr},
+  journal = {arXiv preprint arXiv:2304.01922},
+  title = {Resources and Few-shot Learners for In-context Learning in Slavic Languages},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self) -> None:

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class TurkishMovieSentimentClassification(AbsTaskClassification):
+class TurkishMovieSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="TurkishMovieSentimentClassification",
         description="Turkish Movie Review Dataset",
@@ -26,15 +26,15 @@ class TurkishMovieSentimentClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @inproceedings{Demirtas2013CrosslingualPD,
-            title={Cross-lingual polarity detection with machine translation},
-            author={Erkin Demirtas and Mykola Pechenizkiy},
-            booktitle={wisdom},
-            year={2013},
-            url={https://api.semanticscholar.org/CorpusID:3912960}
-        }
-        """,
+        bibtex_citation=r"""
+@inproceedings{Demirtas2013CrosslingualPD,
+  author = {Erkin Demirtas and Mykola Pechenizkiy},
+  booktitle = {wisdom},
+  title = {Cross-lingual polarity detection with machine translation},
+  url = {https://api.semanticscholar.org/CorpusID:3912960},
+  year = {2013},
+}
+""",
     )
 
     def dataset_transform(self):

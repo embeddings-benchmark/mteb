@@ -43,22 +43,23 @@ class XNLI(AbsTaskPairClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@InProceedings{conneau2018xnli,
-        author = {Conneau, Alexis
-                        and Rinott, Ruty
-                        and Lample, Guillaume
-                        and Williams, Adina
-                        and Bowman, Samuel R.
-                        and Schwenk, Holger
-                        and Stoyanov, Veselin},
-        title = {XNLI: Evaluating Cross-lingual Sentence Representations},
-        booktitle = {Proceedings of the 2018 Conference on Empirical Methods
-                    in Natural Language Processing},
-        year = {2018},
-        publisher = {Association for Computational Linguistics},
-        location = {Brussels, Belgium},
-        }
-        """,
+        bibtex_citation=r"""
+@inproceedings{conneau2018xnli,
+  author = {Conneau, Alexis
+and Rinott, Ruty
+and Lample, Guillaume
+and Williams, Adina
+and Bowman, Samuel R.
+and Schwenk, Holger
+and Stoyanov, Veselin},
+  booktitle = {Proceedings of the 2018 Conference on Empirical Methods
+in Natural Language Processing},
+  location = {Brussels, Belgium},
+  publisher = {Association for Computational Linguistics},
+  title = {XNLI: Evaluating Cross-lingual Sentence Representations},
+  year = {2018},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -112,10 +113,10 @@ class XNLIV2(AbsTaskPairClassification):
             "path": "mteb/XNLIV2",
             "revision": "06108371a8bceee5024a527c4330baa29eb5a013",
         },
-        description="""
-        This is subset of 'XNLI 2.0: Improving XNLI dataset and performance on Cross Lingual Understanding'
-        with languages that were not part of the original XNLI plus three (verified) languages that are not strongly covered in MTEB
-        """,
+        description=(
+            "This is subset of 'XNLI 2.0: Improving XNLI dataset and performance on Cross Lingual Understanding' "
+            "with languages that were not part of the original XNLI plus three (verified) languages that are not strongly covered in MTEB"
+        ),
         reference="https://arxiv.org/pdf/2301.06527",
         category="t2t",
         modalities=["text"],
@@ -130,13 +131,14 @@ class XNLIV2(AbsTaskPairClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="machine-translated and verified",
-        bibtex_citation="""@inproceedings{upadhyay2023xnli,
-            title={XNLI 2.0: Improving XNLI dataset and performance on Cross Lingual Understanding (XLU)},
-            author={Upadhyay, Ankit Kumar and Upadhya, Harsit Kumar},
-            booktitle={2023 IEEE 8th International Conference for Convergence in Technology (I2CT)},
-            pages={1--6},
-            year={2023},
-            organization={IEEE}
-            }
-        """,
+        bibtex_citation=r"""
+@inproceedings{upadhyay2023xnli,
+  author = {Upadhyay, Ankit Kumar and Upadhya, Harsit Kumar},
+  booktitle = {2023 IEEE 8th International Conference for Convergence in Technology (I2CT)},
+  organization = {IEEE},
+  pages = {1--6},
+  title = {XNLI 2.0: Improving XNLI dataset and performance on Cross Lingual Understanding (XLU)},
+  year = {2023},
+}
+""",
     )

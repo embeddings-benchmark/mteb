@@ -28,18 +28,19 @@ class AlphaNLI(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{xiao2024rar,
-  title={RAR-b: Reasoning as Retrieval Benchmark},
-  author={Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
-  journal={arXiv preprint arXiv:2404.06347},
-  year={2024}
+        bibtex_citation=r"""
+@article{bhagavatula2019abductive,
+  author = {Bhagavatula, Chandra and Bras, Ronan Le and Malaviya, Chaitanya and Sakaguchi, Keisuke and Holtzman, Ari and Rashkin, Hannah and Downey, Doug and Yih, Scott Wen-tau and Choi, Yejin},
+  journal = {arXiv preprint arXiv:1908.05739},
+  title = {Abductive commonsense reasoning},
+  year = {2019},
 }
 
-@article{bhagavatula2019abductive,
-  title={Abductive commonsense reasoning},
-  author={Bhagavatula, Chandra and Bras, Ronan Le and Malaviya, Chaitanya and Sakaguchi, Keisuke and Holtzman, Ari and Rashkin, Hannah and Downey, Doug and Yih, Scott Wen-tau and Choi, Yejin},
-  journal={arXiv preprint arXiv:1908.05739},
-  year={2019}
+@article{xiao2024rar,
+  author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
+  journal = {arXiv preprint arXiv:2404.06347},
+  title = {RAR-b: Reasoning as Retrieval Benchmark},
+  year = {2024},
 }
 """,
         prompt={
