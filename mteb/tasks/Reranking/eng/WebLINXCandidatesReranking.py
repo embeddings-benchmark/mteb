@@ -37,16 +37,16 @@ class WebLINXCandidatesReranking(AbsTaskReranking):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""
+        bibtex_citation=r"""
 @misc{lù2024weblinx,
-      title={WebLINX: Real-World Website Navigation with Multi-Turn Dialogue},
-      author={Xing Han Lù and Zdeněk Kasner and Siva Reddy},
-      year={2024},
-      eprint={2402.05930},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+  archiveprefix = {arXiv},
+  author = {Xing Han Lù and Zdeněk Kasner and Siva Reddy},
+  eprint = {2402.05930},
+  primaryclass = {cs.CL},
+  title = {WebLINX: Real-World Website Navigation with Multi-Turn Dialogue},
+  year = {2024},
 }
-        """,
+""",
     )
 
     def load_data(self, **kwargs):

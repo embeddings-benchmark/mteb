@@ -84,7 +84,7 @@ m3e_dataset = {
 
 m3e_base = ModelMeta(
     name="moka-ai/m3e-base",
-    languages=["zho_Hans", "eng-Latn"],
+    languages=["zho-Hans", "eng-Latn"],
     open_weights=True,
     revision="764b537a0e50e5c7d64db883f2d2e051cbe3c64c",
     release_date="2023-06-06",  # first commit
@@ -107,7 +107,7 @@ m3e_base = ModelMeta(
 
 m3e_small = ModelMeta(
     name="moka-ai/m3e-small",
-    languages=["zho_Hans", "eng-Latn"],
+    languages=["zho-Hans", "eng-Latn"],
     open_weights=True,
     revision="44c696631b2a8c200220aaaad5f987f096e986df",
     release_date="2023-06-02",  # first commit
@@ -130,7 +130,7 @@ m3e_small = ModelMeta(
 
 m3e_large = ModelMeta(
     name="moka-ai/m3e-large",
-    languages=["zho_Hans", "eng-Latn"],
+    languages=["zho-Hans", "eng-Latn"],
     open_weights=True,
     revision="12900375086c37ba5d83d1e417b21dc7d1d1f388",
     release_date="2023-06-21",  # first commit

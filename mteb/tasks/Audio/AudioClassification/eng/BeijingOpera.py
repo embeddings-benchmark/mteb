@@ -28,17 +28,19 @@ class BeijingOpera(AbsTaskAudioClassification):
         dialect=[],
         modalities=["audio"],
         sample_creation="created",
-        bibtex_citation="""@INPROCEEDINGS{6853981,
-            author={Tian, Mi and Srinivasamurthy, Ajay and Sandler, Mark and Serra, Xavier},
-            booktitle={2014 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)}, 
-            title={A study of instrument-wise onset detection in Beijing Opera percussion ensembles}, 
-            year={2014},
-            volume={},
-            number={},
-            pages={2159-2163},
-            keywords={Decision support systems;Conferences;Acoustics;Speech;Speech processing;Time-frequency analysis;Beijing Opera;Onset Detection;Drum Transcription;Non-negative matrix factorization},
-            doi={10.1109/ICASSP.2014.6853981}}
-        """,
+        bibtex_citation=r"""
+@inproceedings{6853981,
+  author = {Tian, Mi and Srinivasamurthy, Ajay and Sandler, Mark and Serra, Xavier},
+  booktitle = {2014 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  doi = {10.1109/ICASSP.2014.6853981},
+  keywords = {Decision support systems;Conferences;Acoustics;Speech;Speech processing;Time-frequency analysis;Beijing Opera;Onset Detection;Drum Transcription;Non-negative matrix factorization},
+  number = {},
+  pages = {2159-2163},
+  title = {A study of instrument-wise onset detection in Beijing Opera percussion ensembles},
+  volume = {},
+  year = {2014},
+}
+""",
         descriptive_stats={
             "n_samples": {"train": 236, "test": 3021},  # test samples not found!
         },

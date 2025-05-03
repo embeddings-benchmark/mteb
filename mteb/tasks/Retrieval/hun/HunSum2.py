@@ -34,14 +34,14 @@ class HunSum2AbstractiveRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
+        bibtex_citation=r"""
 @misc{barta2024news,
-      title={From News to Summaries: Building a Hungarian Corpus for Extractive and Abstractive Summarization},
-      author={Botond Barta and Dorina Lakatos and Attila Nagy and Milán Konor Nyist and Judit Ács},
-      year={2024},
-      eprint={2404.03555},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+  archiveprefix = {arXiv},
+  author = {Botond Barta and Dorina Lakatos and Attila Nagy and Milán Konor Nyist and Judit Ács},
+  eprint = {2404.03555},
+  primaryclass = {cs.CL},
+  title = {From News to Summaries: Building a Hungarian Corpus for Extractive and Abstractive Summarization},
+  year = {2024},
 }
 """,
     )

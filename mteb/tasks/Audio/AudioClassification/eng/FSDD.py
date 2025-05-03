@@ -28,14 +28,15 @@ class FSDD(AbsTaskAudioClassification):
         dialect=[],
         modalities=["audio"],
         sample_creation="created",
-        bibtex_citation="""@misc{zohar2018free,
-            author={J. Zohar and S. Cãar and F. Jason and P. Yuxin and N. Hereman and T. Adhish},
-            title={Jakobovski/Free-Spoken-Digit-Dataset: V1.0.8},
-            year={2018},
-            month={aug},
-            url={https://doi.org/10.5281/zenodo.1342401}
-            }
-        """,
+        bibtex_citation=r"""
+@misc{zohar2018free,
+  author = {J. Zohar and S. Cãar and F. Jason and P. Yuxin and N. Hereman and T. Adhish},
+  month = {aug},
+  title = {Jakobovski/Free-Spoken-Digit-Dataset: V1.0.8},
+  url = {https://doi.org/10.5281/zenodo.1342401},
+  year = {2018},
+}
+""",
         descriptive_stats={
             "n_samples": {"train": 2700, "test": 300},
         },

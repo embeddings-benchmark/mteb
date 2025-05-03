@@ -6,7 +6,7 @@ from mteb.models.stella_models import stella_zh_datasets
 
 ritrieve_zh_v1 = ModelMeta(
     name="richinfoai/ritrieve_zh_v1",
-    languages=["zho_Hans"],
+    languages=["zho-Hans"],
     open_weights=True,
     revision="f8d5a707656c55705027678e311f9202c8ced12c",
     release_date="2025-03-25",

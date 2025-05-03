@@ -28,18 +28,19 @@ class CommonLanguageAgeDetection(AbsTaskAudioClassification):
         dialect=[],
         modalities=["audio"],
         sample_creation="found",
-        bibtex_citation="""@dataset{ganesh_sinisetty_2021_5036977,
-  author       = {Ganesh Sinisetty and
-                  Pavlo Ruban and
-                  Oleksandr Dymov and
-                  Mirco Ravanelli},
-  title        = {CommonLanguage},
-  month        = jun,
-  year         = 2021,
-  publisher    = {Zenodo},
-  version      = {0.1},
-  doi          = {10.5281/zenodo.5036977},
-  url          = {https://doi.org/10.5281/zenodo.5036977}
+        bibtex_citation=r"""
+@dataset{ganesh_sinisetty_2021_5036977,
+  author = {Ganesh Sinisetty and
+Pavlo Ruban and
+Oleksandr Dymov and
+Mirco Ravanelli},
+  doi = {10.5281/zenodo.5036977},
+  month = jun,
+  publisher = {Zenodo},
+  title = {CommonLanguage},
+  url = {https://doi.org/10.5281/zenodo.5036977},
+  version = {0.1},
+  year = {2021},
 }
 """,
         descriptive_stats={

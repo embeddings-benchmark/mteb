@@ -42,6 +42,7 @@ LICENSES = (  # this list can be extended as needed
         "mpl-2.0",
         "msr-la-nc",
         "multiple",
+        "openrail",
     ]
 )
 

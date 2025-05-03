@@ -26,17 +26,18 @@ class WongnaiReviewsClassification(AbsTaskClassification):
         license="lgpl-3.0",
         annotations_creators="derived",
         sample_creation="found",
-        bibtex_citation="""
-        @software{cstorm125_2020_3852912,
-            author  = {cstorm125 and lukkiddd},
-            title   = {PyThaiNLP/classification-benchmarks: v0.1-alpha},
-            month   = may,
-            year    = 2020,
-            publisher = {Zenodo},
-            version = {v0.1-alpha},
-            doi     = {10.5281/zenodo.3852912},
-            url     = {https://doi.org/10.5281/zenodo.3852912}
-        }""",
+        bibtex_citation=r"""
+@software{cstorm125_2020_3852912,
+  author = {cstorm125 and lukkiddd},
+  doi = {10.5281/zenodo.3852912},
+  month = may,
+  publisher = {Zenodo},
+  title = {PyThaiNLP/classification-benchmarks: v0.1-alpha},
+  url = {https://doi.org/10.5281/zenodo.3852912},
+  version = {v0.1-alpha},
+  year = {2020},
+}
+""",
     )
 
     def dataset_transform(self):

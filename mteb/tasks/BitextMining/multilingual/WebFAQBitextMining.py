@@ -222,15 +222,17 @@ The dataset is sourced from FAQ pages on the web.""",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="human-translated",
-        bibtex_citation="""@misc{dinzinger2025webfaq,
-    title={WebFAQ: A Multilingual Collection of Natural Q&amp;A Datasets for Dense Retrieval},
-    author={Michael Dinzinger and Laura Caspari and Kanishka Ghosh Dastidar and Jelena Mitrović and Michael Granitzer},
-    year={2025},
-    eprint={2502.20936},
-    archivePrefix={arXiv},
-    primaryClass={cs.CL},
-    url={https://arxiv.org/abs/2502.20936},
-}""",
+        bibtex_citation=r"""
+@misc{dinzinger2025webfaq,
+  archiveprefix = {arXiv},
+  author = {Michael Dinzinger and Laura Caspari and Kanishka Ghosh Dastidar and Jelena Mitrović and Michael Granitzer},
+  eprint = {2502.20936},
+  primaryclass = {cs.CL},
+  title = {WebFAQ: A Multilingual Collection of Natural Q&amp;A Datasets for Dense Retrieval},
+  url = {https://arxiv.org/abs/2502.20936},
+  year = {2025},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -276,15 +278,17 @@ The dataset is sourced from FAQ pages on the web.""",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="human-translated",
-        bibtex_citation="""@misc{dinzinger2025webfaq,
-    title={WebFAQ: A Multilingual Collection of Natural Q&amp;A Datasets for Dense Retrieval},
-    author={Michael Dinzinger and Laura Caspari and Kanishka Ghosh Dastidar and Jelena Mitrović and Michael Granitzer},
-    year={2025},
-    eprint={2502.20936},
-    archivePrefix={arXiv},
-    primaryClass={cs.CL},
-    url={https://arxiv.org/abs/2502.20936},
-}""",
+        bibtex_citation=r"""
+@misc{dinzinger2025webfaq,
+  archiveprefix = {arXiv},
+  author = {Michael Dinzinger and Laura Caspari and Kanishka Ghosh Dastidar and Jelena Mitrović and Michael Granitzer},
+  eprint = {2502.20936},
+  primaryclass = {cs.CL},
+  title = {WebFAQ: A Multilingual Collection of Natural Q&amp;A Datasets for Dense Retrieval},
+  url = {https://arxiv.org/abs/2502.20936},
+  year = {2025},
+}
+""",
     )
 
     def dataset_transform(self):

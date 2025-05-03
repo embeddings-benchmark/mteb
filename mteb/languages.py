@@ -20,6 +20,24 @@ path_to_lang_codes = Path(__file__).parent / "iso_639_3_to_language.json"
 path_to_lang_scripts = Path(__file__).parent / "iso_15924_to_script.json"
 path_to_lang_fam = Path(__file__).parent / "language_family.json"
 
+PROGRAMMING_LANGS = [
+    "python",
+    "javascript",
+    "typescript",
+    "go",
+    "ruby",
+    "java",
+    "php",
+    "c",
+    "c++",
+    "c#",
+    "rust",
+    "swift",
+    "scala",
+    "shell",
+    "sql",
+]
+
 with path_to_lang_codes.open("r") as f:
     ISO_TO_LANGUAGE = json.load(f)
 
@@ -98,3 +116,23 @@ class LanguageScripts:
             if not self.contains_script(s):
                 return False
         return True
+
+
+def check_language_code(code: str) -> None:
+    """This method checks that the language code (e.g. "eng-Latn") is valid."""
+    lang, script = code.split("-")
+    if script == "Code":
+        if lang in PROGRAMMING_LANGS:
+            return  # override for code
+        else:
+            raise ValueError(
+                f"Programming language {lang} is not a valid programming language."
+            )
+    if lang not in ISO_TO_LANGUAGE:
+        raise ValueError(
+            f"Invalid language code: {lang}, you can find valid ISO 639-3 codes in {path_to_lang_codes}"
+        )
+    if script not in ISO_TO_SCRIPT:
+        raise ValueError(
+            f"Invalid script code: {script}, you can find valid ISO 15924 codes in {path_to_lang_scripts}"
+        )
