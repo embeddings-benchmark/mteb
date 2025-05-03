@@ -52,6 +52,9 @@ dataset-load-test:
 	@echo "--- 🚀 Running dataset load test ---"
 	pytest -n auto -m test_datasets
 
+leaderboard-build-test:
+	@echo "--- 🚀 Running leaderboard build test ---"
+	pytest -q tests/test_leaderboard.py
 
 run-leaderboard:
 	@echo "--- 🚀 Running leaderboard locally ---"
