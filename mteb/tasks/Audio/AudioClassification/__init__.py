@@ -17,3 +17,6 @@ from .eng.SIBFLEURS import *
 from .eng.SpokenQAforIC import *
 from .eng.VoxCelebSA import *
 from .eng.VoxLingua107Top10 import *
+from .eng.VoxPopuliAccentID import *
+from .eng.VoxPopuliGenderID import *
+from .eng.VoxPopuliLanguageID import *
