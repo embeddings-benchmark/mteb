@@ -5,6 +5,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class BengaliSentimentAnalysis(AbsTaskClassification):
+    superseded_by = "BengaliSentimentAnalysis.v2"
     metadata = TaskMetadata(
         name="BengaliSentimentAnalysis",
         description="dataset contains 3307 Negative reviews and 8500 Positive reviews collected and manually annotated from Youtube Bengali drama.",
@@ -41,3 +42,37 @@ class BengaliSentimentAnalysis(AbsTaskClassification):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["train"]
         )
+
+
+class BengaliSentimentAnalysisV2(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="BengaliSentimentAnalysis.v2",
+        description="dataset contains 3307 Negative reviews and 8500 Positive reviews collected and manually annotated from Youtube Bengali drama.",
+        reference="https://data.mendeley.com/datasets/p6zc7krs37/4",
+        dataset={
+            "path": "mteb/bengali_sentiment_analysis",
+            "revision": "236e341b9d7481172939eb7440e1d4dcb554c3ac",
+        },
+        type="Classification",
+        category="s2s",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["ben-Beng"],
+        main_score="f1",
+        date=("2020-06-24", "2020-11-26"),
+        dialect=[],
+        domains=["Reviews", "Written"],
+        task_subtypes=["Sentiment/Hate speech"],
+        license="cc-by-4.0",
+        annotations_creators="human-annotated",
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{sazzed2020cross,
+  author = {Sazzed, Salim},
+  booktitle = {Proceedings of the Sixth Workshop on Noisy User-generated Text (W-NUT 2020)},
+  pages = {50--60},
+  title = {Cross-lingual sentiment classification in low-resource Bengali language},
+  year = {2020},
+}
+""",
+    )

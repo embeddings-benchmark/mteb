@@ -5,6 +5,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class RestaurantReviewSentimentClassification(AbsTaskClassification):
+    superseded_by = "RestaurantReviewSentimentClassification.v2"
     metadata = TaskMetadata(
         name="RestaurantReviewSentimentClassification",
         dataset={
@@ -44,3 +45,38 @@ class RestaurantReviewSentimentClassification(AbsTaskClassification):
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["train"]
         )
+
+
+class RestaurantReviewSentimentClassificationV2(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="RestaurantReviewSentimentClassification.v2",
+        dataset={
+            "path": "mteb/restaurant_review_sentiment",
+            "revision": "04df217aa4274e0806e879ce8b76754d57544343",
+        },
+        description="Dataset of 8364 restaurant reviews from qaym.com in Arabic for sentiment analysis",
+        reference="https://link.springer.com/chapter/10.1007/978-3-319-18117-2_2",
+        type="Classification",
+        category="s2s",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["ara-Arab"],
+        main_score="accuracy",
+        date=("2014-01-01", "2015-01-01"),
+        domains=["Reviews", "Written"],
+        task_subtypes=["Sentiment/Hate speech"],
+        license="not specified",
+        annotations_creators="derived",
+        dialect=["ara-arab-EG", "ara-arab-JO", "ara-arab-SA"],
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{elsahar2015building,
+  author = {ElSahar, Hady and El-Beltagy, Samhaa R},
+  booktitle = {International conference on intelligent text processing and computational linguistics},
+  organization = {Springer},
+  pages = {23--34},
+  title = {Building large arabic multi-domain resources for sentiment analysis},
+  year = {2015},
+}
+""",
+    )
