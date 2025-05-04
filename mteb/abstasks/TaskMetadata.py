@@ -687,7 +687,7 @@ class TaskMetadata(BaseModel):
         dataset_card = self.generate_dataset_card(dataset_card)
         dataset_card.push_to_hub(repo_name, commit_message="Add dataset card")
 
-    def _map_subtypes_to_hf(self) -> list[str] | None:
+    def _map_subtypes_to_hf(self) -> list[str]:
         # to get full list of available task_ids execute
         # requests.post("https://huggingface.co/api/validate-yaml", json={
         #   "content": "---\ntask_ids: 'test'\n---",
