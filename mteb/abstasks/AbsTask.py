@@ -502,3 +502,14 @@ class AbsTask(ABC):
 
     def __hash__(self) -> int:
         return hash(self.metadata)
+
+    def unload_data(self) -> None:
+        """Unloads the dataset from memory"""
+        if self.data_loaded:
+            self.dataset = None
+            self.data_loaded = False
+            logger.info(f"Unloaded dataset {self.metadata.name} from memory.")
+        else:
+            logger.warning(
+                f"Dataset {self.metadata.name} is not loaded, cannot unload it."
+            )
