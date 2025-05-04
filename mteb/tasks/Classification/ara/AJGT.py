@@ -5,6 +5,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class AJGT(AbsTaskClassification):
+    superseded_by = "AJGT.v2"
     metadata = TaskMetadata(
         name="AJGT",
         dataset={
@@ -17,6 +18,40 @@ class AJGT(AbsTaskClassification):
         category="s2s",
         modalities=["text"],
         eval_splits=["train"],
+        eval_langs=["ara-Arab"],
+        main_score="accuracy",
+        date=("2021-01-01", "2022-01-25"),
+        domains=["Social", "Written"],
+        task_subtypes=["Sentiment/Hate speech"],
+        license="afl-3.0",
+        annotations_creators="human-annotated",
+        dialect=["ara-arab-MSA", "ara-arab-JO"],
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{alomari2017arabic,
+  author = {Alomari, Khaled Mohammad and ElSherif, Hatem M and Shaalan, Khaled},
+  booktitle = {International Conference on Industrial, Engineering and Other Applications of Applied Intelligent Systems},
+  organization = {Springer},
+  pages = {602--610},
+  title = {Arabic tweets sentimental analysis using machine learning},
+  year = {2017},
+}
+""",
+    )
+
+class AJGTV2(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="AJGT.v2",
+        dataset={
+            "path": "mteb/ajgt",
+            "revision": "6c3a9c1aaf2d9fd5e41508c33eb250cd6804ce98",
+        },
+        description="Arabic Jordanian General Tweets (AJGT) Corpus consisted of 1,800 tweets annotated as positive and negative. Modern Standard Arabic (MSA) or Jordanian dialect.",
+        reference="https://link.springer.com/chapter/10.1007/978-3-319-60042-0_66/",
+        type="Classification",
+        category="s2s",
+        modalities=["text"],
+        eval_splits=["test"],
         eval_langs=["ara-Arab"],
         main_score="accuracy",
         date=("2021-01-01", "2022-01-25"),
