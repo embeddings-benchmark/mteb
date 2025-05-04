@@ -39,6 +39,7 @@ class AJGT(AbsTaskClassification):
 """,
     )
 
+
 class AJGTV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="AJGT.v2",
