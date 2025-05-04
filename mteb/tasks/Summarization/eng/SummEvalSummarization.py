@@ -76,7 +76,7 @@ class SummEvalSummarizationv2(AbsTaskSummarization):
   year = {2020},
 }
 """,
-        adapted_from=["SummEvalSummarization"],
+        adapted_from=["SummEval"],
     )
 
     min_score = 0

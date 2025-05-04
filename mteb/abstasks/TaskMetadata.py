@@ -6,7 +6,13 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any, Union
 
-from huggingface_hub import DatasetCard, DatasetCardData, repo_exists
+from huggingface_hub import (
+    DatasetCard,
+    DatasetCardData,
+    constants,
+    file_exists,
+    repo_exists,
+)
 from pydantic import (
     BaseModel,
     ConfigDict,
@@ -570,10 +576,10 @@ class TaskMetadata(BaseModel):
         else:
             languages: list[str] = self.eval_langs
 
-        languages = [lang.split("-")[0] for lang in languages]
+        languages = sorted({lang.split("-")[0] for lang in languages})
 
         multilinguality = "multilingual" if self.is_multilingual else "monolingual"
-        if "translated" in self.sample_creation:
+        if self.sample_creation and "translated" in self.sample_creation:
             multilinguality = "translated"
 
         if self.adapted_from is not None:
@@ -594,12 +600,20 @@ class TaskMetadata(BaseModel):
         if existing_dataset_card_data is None:
             existing_dataset_card_data = DatasetCardData()
 
+        dataset_license = self.license
+        if dataset_license:
+            license_mapping = {"not specified": "unknown", "msr-la-nc": "other"}
+            dataset_license = license_mapping.get(
+                dataset_license,
+                "other" if dataset_license.startswith("http") else dataset_license,
+            )
+
         dataset_card_data_params = existing_dataset_card_data.to_dict()
         # override the existing values
         dataset_card_data_params.update(
             dict(
                 language=languages,
-                license=self.license if self.license != "not specified" else "unknown",
+                license=dataset_license,
                 annotations_creators=[self.annotations_creators]
                 if self.annotations_creators
                 else None,
@@ -621,7 +635,7 @@ class TaskMetadata(BaseModel):
                 descritptive_stats=descriptive_stats,
                 dataset_task_name=self.name,
                 category=self.category,
-                domains=", ".join(self.domains),
+                domains=", ".join(self.domains) if self.domains else None,
             ),
         )
 
@@ -656,10 +670,12 @@ class TaskMetadata(BaseModel):
         Args:
             repo_name: The name of the repository to push the dataset card to.
         """
-        dataset_card = (
-            DatasetCard.load(repo_name)
-            if repo_exists(repo_name, repo_type="dataset")
-            else None
-        )
+        dataset_card = None
+        if repo_exists(
+            repo_name, repo_type=constants.REPO_TYPE_DATASET
+        ) and file_exists(
+            repo_name, constants.REPOCARD_NAME, repo_type=constants.REPO_TYPE_DATASET
+        ):
+            dataset_card = DatasetCard.load(repo_name)
         dataset_card = self.generate_dataset_card(dataset_card)
         dataset_card.push_to_hub(repo_name, commit_message="Add dataset card")
