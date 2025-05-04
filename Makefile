@@ -21,7 +21,7 @@ lint-check:
 
 test:
 	@echo "--- 🧪 Running tests ---"
-	pytest -n auto -m "not test_datasets and not leaderboard_stability"
+	pytest -n auto -m "not (test_datasets or leaderboard_stability)"
 
 
 test-with-coverage:
