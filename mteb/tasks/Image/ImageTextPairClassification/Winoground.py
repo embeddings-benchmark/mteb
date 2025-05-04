@@ -45,8 +45,4 @@ class Winoground(AbsTaskImageTextPairClassification):
   year = {2022},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 400},
-            "avg_character_length": {"test": 431.4},
-        },
     )

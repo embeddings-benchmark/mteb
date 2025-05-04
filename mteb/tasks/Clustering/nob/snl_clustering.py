@@ -33,7 +33,7 @@ class SNLClustering(AbsTaskClustering):
         description="Webscrabed articles from the Norwegian lexicon 'Det Store Norske Leksikon'. Uses articles categories as clusters.",
         reference="https://huggingface.co/datasets/navjordj/SNL_summarization",
         type="Clustering",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nob-Latn"],
@@ -56,7 +56,7 @@ class SNLClustering(AbsTaskClustering):
     )
 
     def dataset_transform(self):
-        splits = self.metadata_dict["eval_splits"]
+        splits = self.metadata.eval_splits
 
         documents: list = []
         labels: list = []

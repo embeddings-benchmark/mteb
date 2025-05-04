@@ -1,9 +1,20 @@
 from __future__ import annotations
 
-from .eng.STS12VisualSTS import *
-from .eng.STS13VisualSTS import *
-from .eng.STS14VisualSTS import *
-from .eng.STS15VisualSTS import *
-from .eng.STS16VisualSTS import *
-from .multilingual.STS17MultilingualVisualSTS import *
-from .multilingual.STSBenchmarkMultilingualVisualSTS import *
+from .eng import (
+    STS12VisualSTS,
+    STS13VisualSTS,
+    STS14VisualSTS,
+    STS15VisualSTS,
+    STS16VisualSTS,
+)
+from .multilingual import STS17MultilingualVisualSTS, STSBenchmarkMultilingualVisualSTS
+
+__all__ = [
+    "STS12VisualSTS",
+    "STS13VisualSTS",
+    "STS14VisualSTS",
+    "STS15VisualSTS",
+    "STS16VisualSTS",
+    "STS17MultilingualVisualSTS",
+    "STSBenchmarkMultilingualVisualSTS",
+]

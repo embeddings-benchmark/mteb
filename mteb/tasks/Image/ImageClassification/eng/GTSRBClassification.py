@@ -1,10 +1,15 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class GTSRBClassification(AbsTaskImageClassification):
+class GTSRBClassification(AbsTaskAnyClassification):
+    input_column_name = "webp"
+    label_column_name = "cls"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="GTSRB",
         description="""The German Traffic Sign Recognition Benchmark (GTSRB) is a multi-class classification dataset for traffic signs. It consists of dataset of more than 50,000 traffic sign images. The dataset comprises 43 classes with unbalanced class frequencies.""",
@@ -14,7 +19,7 @@ class GTSRBClassification(AbsTaskImageClassification):
             "revision": "1c13eff0803d2b02c9dc8dfe85e67770b3f0f3c5",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -42,10 +47,4 @@ class GTSRBClassification(AbsTaskImageClassification):
   year = {2011},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 12630},
-            "avg_character_length": {"test": 0},
-        },
     )
-    image_column_name = "webp"
-    label_column_name = "cls"

@@ -39,10 +39,6 @@ class SciMMIR(AbsTaskZeroShotClassification):
   year = {2024},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 16263},
-            "avg_character_length": {"test": 0},
-        },
     )
 
     label_column_name: str = "class"

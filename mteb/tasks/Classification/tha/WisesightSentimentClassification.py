@@ -1,21 +1,20 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class WisesightSentimentClassification(AbsTaskClassification):
+class WisesightSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="WisesightSentimentClassification",
         description="Wisesight Sentiment Corpus: Social media messages in Thai language with sentiment label (positive, neutral, negative, question)",
         reference="https://github.com/PyThaiNLP/wisesight-sentiment",
         dataset={
-            "path": "pythainlp/wisesight_sentiment",
-            "revision": "14aa5773afa135ba835cc5179bbc4a63657a42ae",
-            "trust_remote_code": True,
+            "path": "mteb/WisesightSentimentClassification",
+            "revision": "727ea9bd253f9eedf16aebec6ac3f07791fb3db2",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["tha-Thai"],
@@ -43,14 +42,3 @@ Polpanumas, Charin},
 }
 """,
     )
-
-    def dataset_transform(self):
-        for split in self.dataset.keys():
-            self.dataset[split] = self.dataset[split].rename_column("texts", "text")
-            self.dataset[split] = self.dataset[split].rename_column("category", "label")
-
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            seed=self.seed,
-            splits=["test"],
-        )

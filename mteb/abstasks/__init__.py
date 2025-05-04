@@ -1,24 +1,41 @@
 from __future__ import annotations
 
-from ..evaluation.LangMapping import *
-from .AbsTask import *
-from .AbsTaskBitextMining import *
-from .AbsTaskClassification import *
-from .AbsTaskClustering import *
-from .AbsTaskInstructionRetrieval import *
-from .AbsTaskMultilabelClassification import *
-from .AbsTaskPairClassification import *
-from .AbsTaskReranking import *
-from .AbsTaskRetrieval import *
-from .AbsTaskSpeedTask import *
-from .AbsTaskSTS import *
-from .AbsTaskSummarization import *
-from .Image.AbsTaskAny2AnyMultiChoice import *
-from .Image.AbsTaskAny2AnyRetrieval import *
-from .Image.AbsTaskImageClassification import *
-from .Image.AbsTaskImageClustering import *
-from .Image.AbsTaskImageMultilabelClassification import *
-from .Image.AbsTaskImageTextPairClassification import *
-from .Image.AbsTaskVisualSTS import *
-from .Image.AbsTaskZeroShotClassification import *
-from .MultilingualTask import *
+from .AbsTask import AbsTask
+from .AbsTaskAnyClassification import AbsTaskAnyClassification
+from .AbsTaskAnySTS import AbsTaskAnySTS
+from .AbsTaskBitextMining import AbsTaskBitextMining
+from .AbsTaskClustering import AbsTaskClustering
+from .AbsTaskClusteringFast import AbsTaskClusteringFast
+from .AbsTaskMultilabelClassification import AbsTaskMultilabelClassification
+from .AbsTaskPairClassification import AbsTaskPairClassification
+from .AbsTaskRetrieval import AbsTaskRetrieval
+from .AbsTaskSummarization import AbsTaskSummarization
+from .Image import (
+    AbsTaskAny2AnyMultiChoice,
+    AbsTaskAny2AnyRetrieval,
+    AbsTaskImageClustering,
+    AbsTaskImageMultilabelClassification,
+    AbsTaskImageTextPairClassification,
+    AbsTaskZeroShotClassification,
+)
+from .TaskMetadata import TaskMetadata
+
+__all__ = [
+    "AbsTask",
+    "AbsTaskBitextMining",
+    "AbsTaskAnyClassification",
+    "AbsTaskClustering",
+    "AbsTaskClusteringFast",
+    "AbsTaskMultilabelClassification",
+    "AbsTaskPairClassification",
+    "AbsTaskRetrieval",
+    "AbsTaskAnySTS",
+    "AbsTaskSummarization",
+    "TaskMetadata",
+    "AbsTaskAny2AnyMultiChoice",
+    "AbsTaskAny2AnyRetrieval",
+    "AbsTaskImageClustering",
+    "AbsTaskImageMultilabelClassification",
+    "AbsTaskImageTextPairClassification",
+    "AbsTaskZeroShotClassification",
+]

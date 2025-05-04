@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-from functools import partial
-
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import (
+    ModelMeta,
+    ScoringFunction,
+)
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 LANGUAGES_V2_0 = [
     "afr-Latn",
@@ -81,6 +83,7 @@ LANGUAGES_V2_0 = [
     "zho-Hans",
 ]
 
+
 arctic_v1_training_datasets = {
     # source: https://arxiv.org/pdf/2405.05374
     # splits not specified to assuming everything
@@ -118,11 +121,7 @@ arctic_v2_training_datasets = {
 }
 
 arctic_embed_xs = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="Snowflake/snowflake-arctic-embed-xs",
-        revision="742da4f66e1823b5b4dbe6c320a1375a1fd85f9e",
-    ),
+    loader=sentence_transformers_loader,
     name="Snowflake/snowflake-arctic-embed-xs",
     revision="742da4f66e1823b5b4dbe6c320a1375a1fd85f9e",
     release_date="2024-07-08",  # initial commit of hf model.
@@ -135,7 +134,7 @@ arctic_embed_xs = ModelMeta(
     embed_dim=384,
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-xs",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     adapted_from="sentence-transformers/all-MiniLM-L6-v2",
     superseded_by=None,
@@ -146,11 +145,7 @@ arctic_embed_xs = ModelMeta(
 
 
 arctic_embed_s = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="Snowflake/snowflake-arctic-embed-s",
-        revision="d3c1d2d433dd0fdc8e9ca01331a5f225639e798f",
-    ),
+    loader=sentence_transformers_loader,
     name="Snowflake/snowflake-arctic-embed-s",
     revision="d3c1d2d433dd0fdc8e9ca01331a5f225639e798f",
     release_date="2024-04-12",  # initial commit of hf model.
@@ -163,7 +158,7 @@ arctic_embed_s = ModelMeta(
     embed_dim=384,
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-s",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     adapted_from="intfloat/e5-small-unsupervised",
     superseded_by=None,
@@ -174,11 +169,7 @@ arctic_embed_s = ModelMeta(
 
 
 arctic_embed_m = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="Snowflake/snowflake-arctic-embed-m",
-        revision="cc17beacbac32366782584c8752220405a0f3f40",
-    ),
+    loader=sentence_transformers_loader,
     name="Snowflake/snowflake-arctic-embed-m",
     revision="cc17beacbac32366782584c8752220405a0f3f40",
     release_date="2024-04-12",  # initial commit of hf model.
@@ -191,7 +182,7 @@ arctic_embed_m = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-m",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     adapted_from="intfloat/e5-base-unsupervised",
     superseded_by="Snowflake/snowflake-arctic-embed-m-v1.5",
@@ -201,12 +192,8 @@ arctic_embed_m = ModelMeta(
 )
 
 arctic_embed_m_long = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="Snowflake/snowflake-arctic-embed-m-long",
-        revision="89d0f6ab196eead40b90cb6f9fefec01a908d2d1",
-        trust_remote_code=True,
-    ),
+    loader=sentence_transformers_loader,
+    loader_kwargs={"trust_remote_code": True},
     name="Snowflake/snowflake-arctic-embed-m-long",
     revision="89d0f6ab196eead40b90cb6f9fefec01a908d2d1",
     release_date="2024-04-12",  # initial commit of hf model.
@@ -219,7 +206,7 @@ arctic_embed_m_long = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-m-long",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     adapted_from="nomic-ai/nomic-embed-text-v1-unsupervised",
     superseded_by="Snowflake/snowflake-arctic-embed-m-v2.0",
@@ -229,11 +216,7 @@ arctic_embed_m_long = ModelMeta(
 )
 
 arctic_embed_l = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="Snowflake/snowflake-arctic-embed-l",
-        revision="9a9e5834d2e89cdd8bb72b64111dde496e4fe78c",
-    ),
+    loader=sentence_transformers_loader,
     name="Snowflake/snowflake-arctic-embed-l",
     revision="9a9e5834d2e89cdd8bb72b64111dde496e4fe78c",
     release_date="2024-04-12",  # initial commit of hf model.
@@ -246,7 +229,7 @@ arctic_embed_l = ModelMeta(
     embed_dim=1024,
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-l",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     adapted_from="intfloat/e5-base-unsupervised",
     superseded_by="Snowflake/snowflake-arctic-embed-l-v2.0",
@@ -256,10 +239,8 @@ arctic_embed_l = ModelMeta(
 )
 
 arctic_embed_m_v1_5 = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="Snowflake/snowflake-arctic-embed-m-v1.5",
-        revision="97eab2e17fcb7ccb8bb94d6e547898fa1a6a0f47",
+    loader=sentence_transformers_loader,
+    loader_kwargs=dict(
         model_prompts={
             "query": "Represent this sentence for searching relevant passages: "
         },
@@ -276,7 +257,7 @@ arctic_embed_m_v1_5 = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-m-v1.5",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     adapted_from=None,
     superseded_by="Snowflake/snowflake-arctic-embed-m-v2.0",
@@ -286,12 +267,8 @@ arctic_embed_m_v1_5 = ModelMeta(
 )
 
 arctic_embed_m_v2_0 = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="Snowflake/snowflake-arctic-embed-m-v2.0",
-        revision="f2a7d59d80dfda5b1d14f096f3ce88bb6bf9ebdc",
-        trust_remote_code=True,
-    ),
+    loader=sentence_transformers_loader,
+    loader_kwargs={"trust_remote_code": True},
     name="Snowflake/snowflake-arctic-embed-m-v2.0",
     revision="f2a7d59d80dfda5b1d14f096f3ce88bb6bf9ebdc",
     release_date="2024-12-04",  # initial commit of hf model.
@@ -304,7 +281,7 @@ arctic_embed_m_v2_0 = ModelMeta(
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-m-v2.0",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     adapted_from="Alibaba-NLP/gte-multilingual-base",
     superseded_by=None,
@@ -314,11 +291,7 @@ arctic_embed_m_v2_0 = ModelMeta(
 )
 
 arctic_embed_l_v2_0 = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="Snowflake/snowflake-arctic-embed-l-v2.0",
-        revision="edc2df7b6c25794b340229ca082e7c78782e6374",
-    ),
+    loader=sentence_transformers_loader,
     name="Snowflake/snowflake-arctic-embed-l-v2.0",
     revision="edc2df7b6c25794b340229ca082e7c78782e6374",
     release_date="2024-12-04",  # initial commit of hf model.
@@ -331,7 +304,7 @@ arctic_embed_l_v2_0 = ModelMeta(
     embed_dim=1024,
     license="apache-2.0",
     reference="https://huggingface.co/Snowflake/snowflake-arctic-embed-l-v2.0",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=True,
     adapted_from="BAAI/bge-m3-retromae",
     superseded_by=None,

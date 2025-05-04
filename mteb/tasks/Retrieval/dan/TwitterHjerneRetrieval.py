@@ -16,7 +16,7 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
         description="Danish question asked on Twitter with the Hashtag #Twitterhjerne ('Twitter brain') and their corresponding answer.",
         reference="https://huggingface.co/datasets/sorenmulli/da-hashtag-twitterhjerne",
         type="Retrieval",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["dan-Latn"],
@@ -87,9 +87,7 @@ class TwitterHjerneRetrieval(AbsTaskRetrieval):
                         answer_id = str(text2id[a])
                     answer_ids.append(answer_id)
 
-                self.relevant_docs[split][query_id] = {
-                    answer_id: 1 for answer_id in answer_ids
-                }
+                self.relevant_docs[split][query_id] = dict.fromkeys(answer_ids, 1)
 
 
 def answers_to_list(example: dict) -> dict:

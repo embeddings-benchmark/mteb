@@ -44,10 +44,6 @@ class EuroSATZeroShotClassification(AbsTaskZeroShotClassification):
   year = {2019},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 5400},
-            "avg_character_length": {"test": 431.4},
-        },
     )
 
     def get_candidate_labels(self) -> list[str]:

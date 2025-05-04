@@ -1,195 +1,556 @@
 from __future__ import annotations
 
-from .ara.SadeemQuestionRetrieval import *
-from .code.AppsRetrieval import *
-from .code.CodeEditSearchRetrieval import *
-from .code.CodeFeedbackMTRetrieval import *
-from .code.CodeFeedbackSTRetrieval import *
-from .code.CodeRAG import *
-from .code.CodeSearchNetCCRetrieval import *
-from .code.CodeSearchNetRetrieval import *
-from .code.CodeTransOceanContestRetrieval import *
-from .code.CodeTransOceanDLRetrieval import *
-from .code.COIRCodeSearchNetRetrieval import *
-from .code.CosQARetrieval import *
-from .code.StackOverflowQARetrieval import *
-from .code.SyntheticText2SqlRetrieval import *
-from .dan.DanFeverRetrieval import *
-from .dan.TV2Nordretrieval import *
-from .dan.TwitterHjerneRetrieval import *
-from .deu.GerDaLIRRetrieval import *
-from .deu.GerDaLIRSmallRetrieval import *
-from .deu.GermanDPRRetrieval import *
-from .deu.GermanGovServiceRetrieval import *
-from .deu.GermanQuADRetrieval import *
-from .deu.LegalQuADRetrieval import *
-from .ell.GreekCivicsQA import *
-from .eng.AILACasedocsRetrieval import *
-from .eng.AILAStatutesRetrieval import *
-from .eng.AlphaNLIRetrieval import *
-from .eng.ARCChallengeRetrieval import *
-from .eng.ArguAnaRetrieval import *
-from .eng.BrightRetrieval import *
-from .eng.BuiltBenchRetrieval import *
-from .eng.ChemHotpotQARetrieval import *
-from .eng.ChemNQRetrieval import *
-from .eng.ClimateFEVERRetrieval import *
-from .eng.CQADupstackAndroidRetrieval import *
-from .eng.CQADupstackEnglishRetrieval import *
-from .eng.CQADupstackGamingRetrieval import *
-from .eng.CQADupstackGisRetrieval import *
-from .eng.CQADupstackMathematicaRetrieval import *
-from .eng.CQADupstackPhysicsRetrieval import *
-from .eng.CQADupstackProgrammersRetrieval import *
-from .eng.CQADupstackStatsRetrieval import *
-from .eng.CQADupstackTexRetrieval import *
-from .eng.CQADupstackUnixRetrieval import *
-from .eng.CQADupstackWebmastersRetrieval import *
-from .eng.CQADupstackWordpressRetrieval import *
-from .eng.DBPediaRetrieval import *
-from .eng.FaithDialRetrieval import *
-from .eng.FeedbackQARetrieval import *
-from .eng.FEVERRetrieval import *
-from .eng.FiQA2018Retrieval import *
-from .eng.HagridRetrieval import *
-from .eng.HellaSwagRetrieval import *
-from .eng.HotpotQARetrieval import *
-from .eng.LegalBenchConsumerContractsQARetrieval import *
-from .eng.LegalBenchCorporateLobbyingRetrieval import *
-from .eng.LegalSummarizationRetrieval import *
-from .eng.LEMBNarrativeQARetrieval import *
-from .eng.LEMBNeedleRetrieval import *
-from .eng.LEMBPasskeyRetrieval import *
-from .eng.LEMBQMSumRetrieval import *
-from .eng.LEMBSummScreenFDRetrieval import *
-from .eng.LEMBWikimQARetrieval import *
-from .eng.LitSearchRetrieval import *
-from .eng.MedicalQARetrieval import *
-from .eng.MLQuestions import *
-from .eng.MSMARCORetrieval import *
-from .eng.MSMARCOv2Retrieval import *
-from .eng.NanoArguAnaRetrieval import *
-from .eng.NanoClimateFeverRetrieval import *
-from .eng.NanoDBPediaRetrieval import *
-from .eng.NanoFEVERRetrieval import *
-from .eng.NanoFiQA2018Retrieval import *
-from .eng.NanoHotpotQARetrieval import *
-from .eng.NanoMSMARCORetrieval import *
-from .eng.NanoNFCorpusRetrieval import *
-from .eng.NanoNQRetrieval import *
-from .eng.NanoQuoraRetrieval import *
-from .eng.NanoSCIDOCSRetrieval import *
-from .eng.NanoSciFactRetrieval import *
-from .eng.NanoTouche2020Retrieval import *
-from .eng.NarrativeQARetrieval import *
-from .eng.NFCorpusRetrieval import *
-from .eng.NQRetrieval import *
-from .eng.PiqaRetrieval import *
-from .eng.QuailRetrieval import *
-from .eng.QuoraRetrieval import *
-from .eng.RARbCodeRetrieval import *
-from .eng.RARbMathRetrieval import *
-from .eng.SCIDOCSRetrieval import *
-from .eng.SciFactRetrieval import *
-from .eng.SiqaRetrieval import *
-from .eng.SpartQARetrieval import *
-from .eng.TempReasonL1Retrieval import *
-from .eng.TempReasonL2ContextRetrieval import *
-from .eng.TempReasonL2FactRetrieval import *
-from .eng.TempReasonL2PureRetrieval import *
-from .eng.TempReasonL3ContextRetrieval import *
-from .eng.TempReasonL3FactRetrieval import *
-from .eng.TempReasonL3PureRetrieval import *
-from .eng.TopiOCQARetrieval import *
-from .eng.Touche2020Retrieval import *
-from .eng.TRECCOVIDRetrieval import *
-from .eng.WinoGrandeRetrieval import *
-from .est.estqa import *
-from .fas.BEIRFa import *
-from .fas.FaMTEBRetrieval import *
-from .fra.AlloprofRetrieval import *
-from .fra.BSARDRetrieval import *
-from .fra.FQuADRetrieval import *
-from .fra.SyntecRetrieval import *
-from .hun.HunSum2 import *
-from .jpn.JaGovFaqsRetrieval import *
-from .jpn.JaqketRetrieval import *
-from .jpn.JaQuADRetrieval import *
-from .jpn.NLPJournalAbsIntroRetrieval import *
-from .jpn.NLPJournalTitleAbsRetrieval import *
-from .jpn.NLPJournalTitleIntroRetrieval import *
-from .kat.GeorgianFAQRetrieval import *
-from .kor.AutoRAGRetrieval import *
-from .kor.KoStrategyQA import *
-from .multilingual.BelebeleRetrieval import *
-from .multilingual.CrossLingualSemanticDiscriminationWMT19 import *
-from .multilingual.CrossLingualSemanticDiscriminationWMT21 import *
-from .multilingual.CUREv1Retrieval import *
-from .multilingual.IndicQARetrieval import *
-from .multilingual.MintakaRetrieval import *
-from .multilingual.MIRACLRetrieval import *
-from .multilingual.MLQARetrieval import *
-from .multilingual.MrTidyRetrieval import *
-from .multilingual.MultiLongDocRetrieval import *
-from .multilingual.NeuCLIR2022Retrieval import *
-from .multilingual.NeuCLIR2023Retrieval import *
-from .multilingual.PublicHealthQARetrieval import *
-from .multilingual.StatcanDialogueDatasetRetrieval import *
-from .multilingual.WebFAQRetrieval import *
-from .multilingual.WikipediaRetrievalMultilingual import *
-from .multilingual.XMarketRetrieval import *
-from .multilingual.XPQARetrieval import *
-from .multilingual.XQuADRetrieval import *
-from .nld.ArguAnaNLRetrieval import *
-from .nld.ClimateFEVERNLRetrieval import *
-from .nld.CQADupstackAndroidNLRetrieval import *
-from .nld.CQADupstackEnglishNLRetrieval import *
-from .nld.CQADupstackGamingNLRetrieval import *
-from .nld.CQADupstackGisNLRetrieval import *
-from .nld.CQADupstackMathematicaNLRetrieval import *
-from .nld.CQADupstackPhysicsNLRetrieval import *
-from .nld.CQADupstackProgrammersNLRetrieval import *
-from .nld.CQADupstackStatsNLRetrieval import *
-from .nld.CQADupstackTexNLRetrieval import *
-from .nld.CQADupstackUnixNLRetrieval import *
-from .nld.CQADupstackWebmastersNLRetrieval import *
-from .nld.CQADupstackWordpressNLRetrieval import *
-from .nld.DBPediaNLRetrieval import *
-from .nld.FEVERNLRetrieval import *
-from .nld.FiQA2018NLRetrieval import *
-from .nld.HotpotQANLRetrieval import *
-from .nld.MMARCONLRetrieval import *
-from .nld.NFCorpusNLRetrieval import *
-from .nld.NQNLRetrieval import *
-from .nld.QuoraNLRetrieval import *
-from .nld.SCIDOCSNLRetrieval import *
-from .nld.SciFactNLRetrieval import *
-from .nld.Touche2020NLRetrieval import *
-from .nld.TRECCOVIDNLRetrieval import *
-from .nob.norquad import *
-from .nob.snl_retrieval import *
-from .pol.ArguAnaPLRetrieval import *
-from .pol.DBPediaPLRetrieval import *
-from .pol.FiQAPLRetrieval import *
-from .pol.HotpotQAPLRetrieval import *
-from .pol.MSMARCOPLRetrieval import *
-from .pol.NFCorpusPLRetrieval import *
-from .pol.NQPLRetrieval import *
-from .pol.QuoraPLRetrieval import *
-from .pol.SCIDOCSPLRetrieval import *
-from .pol.SciFactPLRetrieval import *
-from .pol.TRECCOVIDPLRetrieval import *
-from .rus.RiaNewsRetrieval import *
-from .rus.RuBQRetrieval import *
-from .slk.SKQuadRetrieval import *
-from .slk.SlovakSumRetrieval import *
-from .spa.SpanishPassageRetrievalS2P import *
-from .spa.SpanishPassageRetrievalS2S import *
-from .swe.SwednRetrieval import *
-from .swe.SweFaqRetrieval import *
-from .tur.TurHistQuad import *
-from .vie.GreenNodeTableMarkdownRetrieval import *
-from .vie.VieQuADRetrieval import *
-from .vie.ZacLegalTextRetrieval import *
-from .zho.CMTEBRetrieval import *
-from .zho.LeCaRDv2Retrieval import *
+from .ara import SadeemQuestionRetrieval
+from .code import (
+    AppsRetrieval,
+    CodeEditSearchRetrieval,
+    CodeFeedbackMT,
+    CodeFeedbackST,
+    CodeRAGLibraryDocumentationSolutionsRetrieval,
+    CodeRAGOnlineTutorialsRetrieval,
+    CodeRAGProgrammingSolutionsRetrieval,
+    CodeRAGStackoverflowPostsRetrieval,
+    CodeSearchNetCCRetrieval,
+    CodeSearchNetRetrieval,
+    CodeTransOceanContestRetrieval,
+    CodeTransOceanDLRetrieval,
+    COIRCodeSearchNetRetrieval,
+    CosQARetrieval,
+    StackOverflowQARetrieval,
+    SyntheticText2SQLRetrieval,
+)
+from .dan import DanFever, DanFeverRetrieval, TV2Nordretrieval, TwitterHjerneRetrieval
+from .deu import (
+    GerDaLIR,
+    GerDaLIRSmall,
+    GermanDPR,
+    GermanGovServiceRetrieval,
+    GermanQuADRetrieval,
+    LegalQuAD,
+)
+from .ell import GreekCivicsQA
+from .eng import (
+    FEVER,
+    MSMARCO,
+    NQ,
+    PIQA,
+    SCIDOCS,
+    SIQA,
+    TRECCOVID,
+    AILACasedocs,
+    AILAStatutes,
+    AlphaNLI,
+    ARCChallenge,
+    ArguAna,
+    BIRCOArguAnaReranking,
+    BIRCOClinicalTrialReranking,
+    BIRCODorisMaeReranking,
+    BIRCORelicReranking,
+    BIRCOWhatsThatBookReranking,
+    BrightLongRetrieval,
+    BrightRetrieval,
+    BuiltBenchRetrieval,
+    ChemHotpotQARetrieval,
+    ChemNQRetrieval,
+    ClimateFEVER,
+    ClimateFEVERHardNegatives,
+    ClimateFEVERRetrievalv2,
+    CQADupstackAndroidRetrieval,
+    CQADupstackEnglishRetrieval,
+    CQADupstackGamingRetrieval,
+    CQADupstackGisRetrieval,
+    CQADupstackMathematicaRetrieval,
+    CQADupstackPhysicsRetrieval,
+    CQADupstackProgrammersRetrieval,
+    CQADupstackStatsRetrieval,
+    CQADupstackTexRetrieval,
+    CQADupstackUnixRetrieval,
+    CQADupstackWebmastersRetrieval,
+    CQADupstackWordpressRetrieval,
+    DBPedia,
+    DBPediaHardNegatives,
+    FaithDialRetrieval,
+    FeedbackQARetrieval,
+    FEVERHardNegatives,
+    FiQA2018,
+    HagridRetrieval,
+    HellaSwag,
+    HotpotQA,
+    HotpotQAHardNegatives,
+    LegalBenchConsumerContractsQA,
+    LegalBenchCorporateLobbying,
+    LegalSummarization,
+    LEMBNarrativeQARetrieval,
+    LEMBNeedleRetrieval,
+    LEMBPasskeyRetrieval,
+    LEMBQMSumRetrieval,
+    LEMBSummScreenFDRetrieval,
+    LEMBWikimQARetrieval,
+    LitSearchRetrieval,
+    LoTTERetrieval,
+    MedicalQARetrieval,
+    MLQuestionsRetrieval,
+    MSMARCOHardNegatives,
+    MSMARCOv2,
+    NanoArguAnaRetrieval,
+    NanoClimateFeverRetrieval,
+    NanoDBPediaRetrieval,
+    NanoFEVERRetrieval,
+    NanoFiQA2018Retrieval,
+    NanoHotpotQARetrieval,
+    NanoMSMARCORetrieval,
+    NanoNFCorpusRetrieval,
+    NanoNQRetrieval,
+    NanoQuoraRetrieval,
+    NanoSCIDOCSRetrieval,
+    NanoSciFactRetrieval,
+    NanoTouche2020Retrieval,
+    NarrativeQARetrieval,
+    NFCorpus,
+    NQHardNegatives,
+    Quail,
+    QuoraRetrieval,
+    QuoraRetrievalHardNegatives,
+    RARbCode,
+    RARbMath,
+    SciFact,
+    SpartQA,
+    TempReasonL1,
+    TempReasonL2Context,
+    TempReasonL2Fact,
+    TempReasonL2Pure,
+    TempReasonL3Context,
+    TempReasonL3Fact,
+    TempReasonL3Pure,
+    TopiOCQARetrieval,
+    TopiOCQARetrievalHardNegatives,
+    Touche2020,
+    Touche2020v3Retrieval,
+    WinoGrande,
+)
+from .est import EstQA
+from .fas import (
+    ArguAnaFa,
+    ClimateFEVERFa,
+    CQADupstackAndroidRetrievalFa,
+    CQADupstackEnglishRetrievalFa,
+    CQADupstackGamingRetrievalFa,
+    CQADupstackGisRetrievalFa,
+    CQADupstackMathematicaRetrievalFa,
+    CQADupstackPhysicsRetrievalFa,
+    CQADupstackProgrammersRetrievalFa,
+    CQADupstackStatsRetrievalFa,
+    CQADupstackTexRetrievalFa,
+    CQADupstackUnixRetrievalFa,
+    CQADupstackWebmastersRetrievalFa,
+    CQADupstackWordpressRetrievalFa,
+    DBPediaFa,
+    FiQA2018Fa,
+    HotpotQAFa,
+    MSMARCOFa,
+    NFCorpusFa,
+    NQFa,
+    PersianWebDocumentRetrieval,
+    QuoraRetrievalFa,
+    SCIDOCSFa,
+    SciFactFa,
+    SynPerChatbotRAGFAQRetrieval,
+    SynPerChatbotRAGTopicsRetrieval,
+    SynPerChatbotTopicsRetrieval,
+    SynPerQARetrieval,
+    Touche2020Fa,
+    TRECCOVIDFa,
+)
+from .fra import AlloprofRetrieval, BSARDRetrieval, FQuADRetrieval, SyntecRetrieval
+from .hun import HunSum2AbstractiveRetrieval
+from .jpn import (
+    JaGovFaqsRetrieval,
+    JaqketRetrieval,
+    JaQuADRetrieval,
+    NLPJournalAbsIntroRetrieval,
+    NLPJournalTitleAbsRetrieval,
+    NLPJournalTitleIntroRetrieval,
+)
+from .kat import GeorgianFAQRetrieval
+from .kor import AutoRAGRetrieval, KoStrategyQA
+from .multilingual import (
+    BelebeleRetrieval,
+    CrossLingualSemanticDiscriminationWMT19,
+    CrossLingualSemanticDiscriminationWMT21,
+    CUREv1Retrieval,
+    IndicQARetrieval,
+    MintakaRetrieval,
+    MIRACLRetrieval,
+    MIRACLRetrievalHardNegatives,
+    MLQARetrieval,
+    MrTidyRetrieval,
+    MultiLongDocRetrieval,
+    NeuCLIR2022Retrieval,
+    NeuCLIR2022RetrievalHardNegatives,
+    NeuCLIR2023Retrieval,
+    NeuCLIR2023RetrievalHardNegatives,
+    PublicHealthQARetrieval,
+    StatcanDialogueDatasetRetrieval,
+    WebFAQRetrieval,
+    WikipediaRetrievalMultilingual,
+    XMarket,
+    XPQARetrieval,
+    XQuADRetrieval,
+)
+from .nld import (
+    FEVERNL,
+    MMMARCONL,
+    NQNL,
+    SCIDOCSNL,
+    TRECCOVIDNL,
+    ArguAnaNL,
+    ClimateFEVERNL,
+    CQADupstackAndroidNLRetrieval,
+    CQADupstackEnglishNLRetrieval,
+    CQADupstackGamingNLRetrieval,
+    CQADupstackGisNLRetrieval,
+    CQADupstackMathematicaNLRetrieval,
+    CQADupstackPhysicsNLRetrieval,
+    CQADupstackProgrammersNLRetrieval,
+    CQADupstackStatsNLRetrieval,
+    CQADupstackTexNLRetrieval,
+    CQADupstackUnixNLRetrieval,
+    CQADupstackWebmastersNLRetrieval,
+    CQADupstackWordpressNLRetrieval,
+    DBPediaNL,
+    FiQA2018NL,
+    HotpotQANL,
+    NFCorpusNL,
+    QuoraNLRetrieval,
+    SciFactNL,
+    Touche2020NL,
+)
+from .nob import NorQuadRetrieval, SNLRetrieval
+from .pol import (
+    MSMARCOPL,
+    NQPL,
+    SCIDOCSPL,
+    TRECCOVIDPL,
+    ArguAnaPL,
+    CQADupstackAndroidRetrievalPL,
+    CQADupstackEnglishRetrievalPL,
+    CQADupstackGamingRetrievalPL,
+    CQADupstackGisRetrievalPL,
+    CQADupstackMathematicaRetrievalPL,
+    CQADupstackPhysicsRetrievalPL,
+    CQADupstackProgrammersRetrievalPL,
+    CQADupstackStatsRetrievalPL,
+    CQADupstackTexRetrievalPL,
+    CQADupstackUnixRetrievalPL,
+    CQADupstackWebmastersRetrievalPL,
+    CQADupstackWordpressRetrievalPL,
+    DBPediaPL,
+    DBPediaPLHardNegatives,
+    FiQAPLRetrieval,
+    HotpotQAPL,
+    HotpotQAPLHardNegatives,
+    MSMARCOPLHardNegatives,
+    NFCorpusPL,
+    NQPLHardNegatives,
+    PUGGRetrieval,
+    QuoraPLRetrieval,
+    QuoraPLRetrievalHardNegatives,
+    SciFactPL,
+    Touche2020PL,
+)
+from .rus import RiaNewsRetrieval, RiaNewsRetrievalHardNegatives, RuBQRetrieval
+from .slk import SKQuadRetrieval, SlovakSumRetrieval
+from .spa import SpanishPassageRetrievalS2P, SpanishPassageRetrievalS2S
+from .swe import SwednRetrieval, SweFaqRetrieval
+from .tur import TurHistQuadRetrieval
+from .vie import (
+    GreenNodeTableMarkdownRetrieval,
+    VieQuADRetrieval,
+    ZacLegalTextRetrieval,
+)
+from .zho import (
+    CmedqaRetrieval,
+    CovidRetrieval,
+    DuRetrieval,
+    EcomRetrieval,
+    LeCaRDv2,
+    MedicalRetrieval,
+    MMarcoRetrieval,
+    T2Retrieval,
+    VideoRetrieval,
+)
+
+__all__ = [
+    "AILACasedocs",
+    "AILAStatutes",
+    "ARCChallenge",
+    "AlloprofRetrieval",
+    "AlphaNLI",
+    "AppsRetrieval",
+    "ArguAna",
+    "ArguAnaFa",
+    "ArguAnaNL",
+    "ArguAnaPL",
+    "AutoRAGRetrieval",
+    "BIRCOArguAnaReranking",
+    "BIRCOClinicalTrialReranking",
+    "BIRCODorisMaeReranking",
+    "BIRCORelicReranking",
+    "BIRCOWhatsThatBookReranking",
+    "BSARDRetrieval",
+    "BelebeleRetrieval",
+    "BrightLongRetrieval",
+    "BrightRetrieval",
+    "BuiltBenchRetrieval",
+    "COIRCodeSearchNetRetrieval",
+    "CQADupstackAndroidNLRetrieval",
+    "CQADupstackAndroidRetrieval",
+    "CQADupstackAndroidRetrievalFa",
+    "CQADupstackAndroidRetrievalPL",
+    "CQADupstackEnglishNLRetrieval",
+    "CQADupstackEnglishRetrieval",
+    "CQADupstackEnglishRetrievalFa",
+    "CQADupstackEnglishRetrievalPL",
+    "CQADupstackGamingNLRetrieval",
+    "CQADupstackGamingRetrieval",
+    "CQADupstackGamingRetrievalFa",
+    "CQADupstackGamingRetrievalPL",
+    "CQADupstackGisNLRetrieval",
+    "CQADupstackGisRetrieval",
+    "CQADupstackGisRetrievalFa",
+    "CQADupstackGisRetrievalPL",
+    "CQADupstackMathematicaNLRetrieval",
+    "CQADupstackMathematicaRetrieval",
+    "CQADupstackMathematicaRetrievalFa",
+    "CQADupstackMathematicaRetrievalPL",
+    "CQADupstackPhysicsNLRetrieval",
+    "CQADupstackPhysicsRetrieval",
+    "CQADupstackPhysicsRetrievalFa",
+    "CQADupstackPhysicsRetrievalPL",
+    "CQADupstackProgrammersNLRetrieval",
+    "CQADupstackProgrammersRetrieval",
+    "CQADupstackProgrammersRetrievalFa",
+    "CQADupstackProgrammersRetrievalPL",
+    "CQADupstackStatsNLRetrieval",
+    "CQADupstackStatsRetrieval",
+    "CQADupstackStatsRetrievalFa",
+    "CQADupstackStatsRetrievalPL",
+    "CQADupstackTexNLRetrieval",
+    "CQADupstackTexRetrieval",
+    "CQADupstackTexRetrievalFa",
+    "CQADupstackTexRetrievalPL",
+    "CQADupstackUnixNLRetrieval",
+    "CQADupstackUnixRetrieval",
+    "CQADupstackUnixRetrievalFa",
+    "CQADupstackUnixRetrievalPL",
+    "CQADupstackWebmastersNLRetrieval",
+    "CQADupstackWebmastersRetrieval",
+    "CQADupstackWebmastersRetrievalFa",
+    "CQADupstackWebmastersRetrievalPL",
+    "CQADupstackWordpressNLRetrieval",
+    "CQADupstackWordpressRetrieval",
+    "CQADupstackWordpressRetrievalFa",
+    "CQADupstackWordpressRetrievalPL",
+    "CUREv1Retrieval",
+    "ChemHotpotQARetrieval",
+    "ChemNQRetrieval",
+    "ClimateFEVER",
+    "ClimateFEVERFa",
+    "ClimateFEVERHardNegatives",
+    "ClimateFEVERNL",
+    "ClimateFEVERRetrievalv2",
+    "CmedqaRetrieval",
+    "CodeEditSearchRetrieval",
+    "CodeFeedbackMT",
+    "CodeFeedbackST",
+    "CodeRAGLibraryDocumentationSolutionsRetrieval",
+    "CodeRAGOnlineTutorialsRetrieval",
+    "CodeRAGProgrammingSolutionsRetrieval",
+    "CodeRAGStackoverflowPostsRetrieval",
+    "CodeSearchNetCCRetrieval",
+    "CodeSearchNetRetrieval",
+    "CodeTransOceanContestRetrieval",
+    "CodeTransOceanDLRetrieval",
+    "CosQARetrieval",
+    "CovidRetrieval",
+    "CrossLingualSemanticDiscriminationWMT19",
+    "CrossLingualSemanticDiscriminationWMT21",
+    "DBPedia",
+    "DBPediaFa",
+    "DBPediaHardNegatives",
+    "DBPediaNL",
+    "DBPediaPL",
+    "DBPediaPLHardNegatives",
+    "DanFever",
+    "DanFeverRetrieval",
+    "DuRetrieval",
+    "EcomRetrieval",
+    "EstQA",
+    "FEVER",
+    "FEVERHardNegatives",
+    "FEVERNL",
+    "FQuADRetrieval",
+    "FaithDialRetrieval",
+    "FeedbackQARetrieval",
+    "FiQA2018",
+    "FiQA2018Fa",
+    "FiQA2018NL",
+    "FiQAPLRetrieval",
+    "GeorgianFAQRetrieval",
+    "GerDaLIR",
+    "GerDaLIRSmall",
+    "GermanDPR",
+    "GermanGovServiceRetrieval",
+    "GermanQuADRetrieval",
+    "GreekCivicsQA",
+    "GreenNodeTableMarkdownRetrieval",
+    "HagridRetrieval",
+    "HellaSwag",
+    "HotpotQA",
+    "HotpotQAFa",
+    "HotpotQAHardNegatives",
+    "HotpotQANL",
+    "HotpotQAPL",
+    "HotpotQAPLHardNegatives",
+    "HunSum2AbstractiveRetrieval",
+    "IndicQARetrieval",
+    "JaGovFaqsRetrieval",
+    "JaQuADRetrieval",
+    "JaqketRetrieval",
+    "KoStrategyQA",
+    "LEMBNarrativeQARetrieval",
+    "LEMBNeedleRetrieval",
+    "LEMBPasskeyRetrieval",
+    "LEMBQMSumRetrieval",
+    "LEMBSummScreenFDRetrieval",
+    "LEMBWikimQARetrieval",
+    "LeCaRDv2",
+    "LegalBenchConsumerContractsQA",
+    "LegalBenchCorporateLobbying",
+    "LegalQuAD",
+    "LegalSummarization",
+    "LitSearchRetrieval",
+    "LoTTERetrieval",
+    "MIRACLRetrieval",
+    "MIRACLRetrievalHardNegatives",
+    "MLQARetrieval",
+    "MLQuestionsRetrieval",
+    "MMMARCONL",
+    "MMarcoRetrieval",
+    "MSMARCO",
+    "MSMARCOFa",
+    "MSMARCOHardNegatives",
+    "MSMARCOPL",
+    "MSMARCOPLHardNegatives",
+    "MSMARCOv2",
+    "MedicalQARetrieval",
+    "MedicalRetrieval",
+    "MintakaRetrieval",
+    "MrTidyRetrieval",
+    "MultiLongDocRetrieval",
+    "NFCorpus",
+    "NFCorpusFa",
+    "NFCorpusNL",
+    "NFCorpusPL",
+    "NLPJournalAbsIntroRetrieval",
+    "NLPJournalTitleAbsRetrieval",
+    "NLPJournalTitleIntroRetrieval",
+    "NQ",
+    "NQFa",
+    "NQHardNegatives",
+    "NQNL",
+    "NQPL",
+    "NQPLHardNegatives",
+    "NanoArguAnaRetrieval",
+    "NanoClimateFeverRetrieval",
+    "NanoDBPediaRetrieval",
+    "NanoFEVERRetrieval",
+    "NanoFiQA2018Retrieval",
+    "NanoHotpotQARetrieval",
+    "NanoMSMARCORetrieval",
+    "NanoNFCorpusRetrieval",
+    "NanoNQRetrieval",
+    "NanoQuoraRetrieval",
+    "NanoSCIDOCSRetrieval",
+    "NanoSciFactRetrieval",
+    "NanoTouche2020Retrieval",
+    "NarrativeQARetrieval",
+    "NeuCLIR2022Retrieval",
+    "NeuCLIR2022RetrievalHardNegatives",
+    "NeuCLIR2023Retrieval",
+    "NeuCLIR2023RetrievalHardNegatives",
+    "NorQuadRetrieval",
+    "PIQA",
+    "PUGGRetrieval",
+    "PersianWebDocumentRetrieval",
+    "PublicHealthQARetrieval",
+    "Quail",
+    "QuoraNLRetrieval",
+    "QuoraPLRetrieval",
+    "QuoraPLRetrievalHardNegatives",
+    "QuoraRetrieval",
+    "QuoraRetrievalFa",
+    "QuoraRetrievalHardNegatives",
+    "RARbCode",
+    "RARbMath",
+    "RiaNewsRetrieval",
+    "RiaNewsRetrievalHardNegatives",
+    "RuBQRetrieval",
+    "SCIDOCS",
+    "SCIDOCSFa",
+    "SCIDOCSNL",
+    "SCIDOCSPL",
+    "SIQA",
+    "SKQuadRetrieval",
+    "SNLRetrieval",
+    "SadeemQuestionRetrieval",
+    "SciFact",
+    "SciFactFa",
+    "SciFactNL",
+    "SciFactPL",
+    "SlovakSumRetrieval",
+    "SpanishPassageRetrievalS2P",
+    "SpanishPassageRetrievalS2S",
+    "SpartQA",
+    "StackOverflowQARetrieval",
+    "StatcanDialogueDatasetRetrieval",
+    "SweFaqRetrieval",
+    "SwednRetrieval",
+    "SynPerChatbotRAGFAQRetrieval",
+    "SynPerChatbotRAGTopicsRetrieval",
+    "SynPerChatbotTopicsRetrieval",
+    "SynPerQARetrieval",
+    "SyntecRetrieval",
+    "SyntheticText2SQLRetrieval",
+    "T2Retrieval",
+    "TRECCOVID",
+    "TRECCOVIDFa",
+    "TRECCOVIDNL",
+    "TRECCOVIDPL",
+    "TV2Nordretrieval",
+    "TempReasonL1",
+    "TempReasonL2Context",
+    "TempReasonL2Fact",
+    "TempReasonL2Pure",
+    "TempReasonL3Context",
+    "TempReasonL3Fact",
+    "TempReasonL3Pure",
+    "TopiOCQARetrieval",
+    "TopiOCQARetrievalHardNegatives",
+    "Touche2020",
+    "Touche2020Fa",
+    "Touche2020NL",
+    "Touche2020PL",
+    "Touche2020v3Retrieval",
+    "TurHistQuadRetrieval",
+    "TwitterHjerneRetrieval",
+    "VideoRetrieval",
+    "VieQuADRetrieval",
+    "WebFAQRetrieval",
+    "WikipediaRetrievalMultilingual",
+    "WinoGrande",
+    "XMarket",
+    "XPQARetrieval",
+    "XQuADRetrieval",
+    "ZacLegalTextRetrieval",
+]

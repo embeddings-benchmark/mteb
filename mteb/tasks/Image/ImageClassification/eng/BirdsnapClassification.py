@@ -1,10 +1,15 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class BirdsnapClassification(AbsTaskImageClassification):
+class BirdsnapClassification(AbsTaskAnyClassification):
+    input_column_name: str = "image"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+    label_column_name: str = "common"
+
     metadata = TaskMetadata(
         name="Birdsnap",
         description="Classifying bird images from 500 species.",
@@ -14,7 +19,7 @@ class BirdsnapClassification(AbsTaskImageClassification):
             "revision": "fd23015508be94f0b5b59d61630e4ea2536509e4",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -38,11 +43,4 @@ class BirdsnapClassification(AbsTaskImageClassification):
   year = {2014},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 1851},
-            "avg_character_length": {"test": 431.4},
-        },
     )
-
-    # Override default column name in the subclass
-    label_column_name: str = "common"

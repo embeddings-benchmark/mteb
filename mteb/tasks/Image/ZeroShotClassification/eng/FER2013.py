@@ -42,10 +42,6 @@ class FER2013ZeroShotClassification(AbsTaskZeroShotClassification):
   year = {2015},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 7178},
-            "avg_character_length": {"test": 431.4},
-        },
     )
     image_column_name: str = "jpg"
     label_column_name: str = "cls"

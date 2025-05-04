@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class BengaliHateSpeechClassification(AbsTaskClassification):
+class BengaliHateSpeechClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="BengaliHateSpeechClassification",
         description="The Bengali Hate Speech Dataset is a Bengali-language dataset of news articles collected from various Bengali media sources and categorized based on the type of hate in the text.",
@@ -14,7 +14,7 @@ class BengaliHateSpeechClassification(AbsTaskClassification):
             "revision": "99612296bc093f0720cac7d7cbfcb67eecf1ca2f",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ben-Beng"],

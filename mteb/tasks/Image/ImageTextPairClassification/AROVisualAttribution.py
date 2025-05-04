@@ -42,8 +42,4 @@ class AROVisualAttribution(AbsTaskImageTextPairClassification):
   year = {2023},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 28748},
-            "avg_character_length": {"test": 1},
-        },
     )

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class SDSEyeProtectionClassification(AbsTaskClassification):
+class SDSEyeProtectionClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SDSEyeProtectionClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
@@ -14,7 +14,7 @@ class SDSEyeProtectionClassification(AbsTaskClassification):
             "revision": "35cbe5ee544dd26e343238a333de4568e6f77819",
         },
         type="Classification",
-        category="s2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

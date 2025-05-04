@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class AngryTweetsClassification(AbsTaskClassification):
+class AngryTweetsClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="AngryTweetsClassification",
         dataset={
@@ -14,7 +14,7 @@ class AngryTweetsClassification(AbsTaskClassification):
         description="A sentiment dataset with 3 classes (positiv, negativ, neutral) for Danish tweets",
         reference="https://aclanthology.org/2021.nodalida-main.53/",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["dan-Latn"],

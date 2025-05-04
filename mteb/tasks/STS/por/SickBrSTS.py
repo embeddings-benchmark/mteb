@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskSTS import AbsTaskSTS
+from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 N_SAMPLES = 1000
 
 
-class SickBrSTS(AbsTaskSTS):
+class SickBrSTS(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="SICK-BR-STS",
         dataset={
@@ -17,7 +17,7 @@ class SickBrSTS(AbsTaskSTS):
         description="SICK-BR is a Portuguese inference corpus, human translated from SICK",
         reference="https://linux.ime.usp.br/~thalen/SICK_PT.pdf",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["por-Latn"],
@@ -52,12 +52,8 @@ and de Paiva, Valeria},
 """,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 1
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 1
+    max_score = 5
 
     def dataset_transform(self):
         self.dataset = self.stratified_subsampling(

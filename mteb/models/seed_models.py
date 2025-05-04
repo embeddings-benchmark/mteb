@@ -11,13 +11,13 @@ import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
-from mteb.models.wrapper import Wrapper
+from mteb.models import AbsEncoder
 from mteb.requires_package import requires_package
 
 logger = logging.getLogger(__name__)
 
 
-class SeedTextEmbeddingModel(Wrapper):
+class SeedTextEmbeddingModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,

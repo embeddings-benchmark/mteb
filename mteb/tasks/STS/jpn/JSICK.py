@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
+from mteb.abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class JSICK(AbsTaskSTS):
+class JSICK(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="JSICK",
         dataset={
@@ -16,7 +16,7 @@ class JSICK(AbsTaskSTS):
         description="JSICK is the Japanese NLI and STS dataset by manually translating the English dataset SICK (Marelli et al., 2014) into Japanese.",
         reference="https://github.com/sbintuitions/JMTEB",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["jpn-Jpan"],
@@ -41,12 +41,8 @@ class JSICK(AbsTaskSTS):
 """,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 1
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 1
+    max_score = 5
 
     def dataset_transform(self) -> None:
         self.dataset = self.dataset.rename_column("label", "score")

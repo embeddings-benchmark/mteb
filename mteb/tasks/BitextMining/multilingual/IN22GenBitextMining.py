@@ -5,7 +5,6 @@ from typing import Any
 import datasets
 
 from mteb.abstasks.AbsTaskBitextMining import AbsTaskBitextMining
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = [
@@ -53,7 +52,7 @@ def extend_lang_pairs() -> dict[str, list[str]]:
 _LANGUAGES_MAPPING = extend_lang_pairs()
 
 
-class IN22GenBitextMining(AbsTaskBitextMining, MultilingualTask):
+class IN22GenBitextMining(AbsTaskBitextMining):
     parallel_subsets = True
     metadata = TaskMetadata(
         name="IN22GenBitextMining",
@@ -65,7 +64,7 @@ class IN22GenBitextMining(AbsTaskBitextMining, MultilingualTask):
         description="IN22-Gen is a n-way parallel general-purpose multi-domain benchmark dataset for machine translation spanning English and 22 Indic languages.",
         reference="https://huggingface.co/datasets/ai4bharat/IN22-Gen",
         type="BitextMining",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=_SPLIT,
         eval_langs=_LANGUAGES_MAPPING,
@@ -102,5 +101,5 @@ class IN22GenBitextMining(AbsTaskBitextMining, MultilingualTask):
         """Load dataset from HuggingFace hub"""
         if self.data_loaded:
             return
-        self.dataset = datasets.load_dataset(**self.metadata_dict["dataset"])
+        self.dataset = datasets.load_dataset(**self.metadata.dataset)
         self.data_loaded = True

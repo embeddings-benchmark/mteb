@@ -1,21 +1,20 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class DutchBookReviewSentimentClassification(AbsTaskClassification):
+class DutchBookReviewSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="DutchBookReviewSentimentClassification",
         description="A Dutch book review for sentiment classification.",
         reference="https://github.com/benjaminvdb/DBRD",
         dataset={
-            "path": "benjaminvdb/dbrd",
-            "revision": "3f756ab4572e071eb53e887ab629f19fa747d39e",
-            "trust_remote_code": True,
+            "path": "mteb/DutchBookReviewSentimentClassification",
+            "revision": "1c2815ad38cf4794eb8d678fb08f569ea79392f6",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2019-10-04", "2019-10-04"),
         eval_splits=["test"],

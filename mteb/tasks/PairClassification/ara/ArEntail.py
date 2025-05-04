@@ -14,7 +14,7 @@ class ArEntail(AbsTaskPairClassification):
         description="A manually-curated Arabic natural language inference dataset from news headlines.",
         reference="https://link.springer.com/article/10.1007/s10579-024-09731-1",
         type="PairClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ara-Arab"],

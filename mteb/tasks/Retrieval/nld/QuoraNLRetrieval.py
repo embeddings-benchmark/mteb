@@ -20,7 +20,7 @@ class QuoraNLRetrieval(AbsTaskRetrieval):
         ),
         reference="https://huggingface.co/datasets/clips/beir-nl-quora",
         type="Retrieval",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["nld-Latn"],

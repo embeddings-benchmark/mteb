@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import datasets
 
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
@@ -54,7 +53,7 @@ def _load_xmarket_data(
         corpus[lang][split] = {row["_id"]: row for row in corpus_rows}
         queries[lang][split] = {row["_id"]: row["text"] for row in query_rows}
         relevant_docs[lang][split] = {
-            row["_id"]: {v: 1 for v in row["text"].split(" ")} for row in qrels_rows
+            row["_id"]: dict.fromkeys(row["text"].split(" "), 1) for row in qrels_rows
         }
 
     corpus = datasets.DatasetDict(corpus)
@@ -64,7 +63,7 @@ def _load_xmarket_data(
     return corpus, queries, relevant_docs
 
 
-class XMarket(MultilingualTask, AbsTaskRetrieval):
+class XMarket(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="XMarket",
         description="XMarket",
@@ -74,7 +73,7 @@ class XMarket(MultilingualTask, AbsTaskRetrieval):
             "revision": "dfe57acff5b62c23732a7b7d3e3fb84ff501708b",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs=_EVAL_LANGS,
@@ -107,11 +106,11 @@ class XMarket(MultilingualTask, AbsTaskRetrieval):
             return
 
         self.corpus, self.queries, self.relevant_docs = _load_xmarket_data(
-            path=self.metadata_dict["dataset"]["path"],
+            path=self.metadata.dataset["path"],
             langs=self.metadata.eval_langs,
-            split=self.metadata_dict["eval_splits"][0],
+            split=self.metadata.eval_splits[0],
             cache_dir=kwargs.get("cache_dir", None),
-            revision=self.metadata_dict["dataset"]["revision"],
+            revision=self.metadata.dataset["revision"],
         )
 
         self.data_loaded = True

@@ -37,14 +37,4 @@ class FORBI2I(AbsTaskAny2AnyRetrieval):
   year = {2023},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"default": 13250},
-            "avg_character_length": {
-                "test": {
-                    "num_documents": 53984,
-                    "num_queries": 13250,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )

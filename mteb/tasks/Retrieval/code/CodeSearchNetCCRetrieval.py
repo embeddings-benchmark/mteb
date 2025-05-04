@@ -5,7 +5,6 @@ import logging
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGS = ["python", "javascript", "go", "ruby", "java", "php"]
@@ -73,7 +72,7 @@ def _load_code_search_code_retrieval(
     return corpus, queries, relevant_docs
 
 
-class CodeSearchNetCCRetrieval(MultilingualTask, AbsTaskRetrieval):
+class CodeSearchNetCCRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CodeSearchNetCCRetrieval",
         description="The dataset is a collection of code snippets. The task is to retrieve the most relevant code snippet for a given code snippet.",
@@ -83,7 +82,7 @@ class CodeSearchNetCCRetrieval(MultilingualTask, AbsTaskRetrieval):
             "revision": "6e1effa2c03723c5fde48ee912b5ee08d4f211e8",
         },
         type="Retrieval",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=[_EVAL_SPLIT],
         eval_langs={lang: [lang + "-Code"] for lang in _LANGS},
@@ -114,11 +113,11 @@ class CodeSearchNetCCRetrieval(MultilingualTask, AbsTaskRetrieval):
 
         self.corpus, self.queries, self.relevant_docs = (
             _load_code_search_code_retrieval(
-                path=self.metadata_dict["dataset"]["path"],
+                path=self.metadata.dataset["path"],
                 langs=self.hf_subsets,
-                splits=self.metadata_dict["eval_splits"],
+                splits=self.metadata.eval_splits,
                 cache_dir=kwargs.get("cache_dir", None),
-                revision=self.metadata_dict["dataset"]["revision"],
+                revision=self.metadata.dataset["revision"],
             )
         )
 

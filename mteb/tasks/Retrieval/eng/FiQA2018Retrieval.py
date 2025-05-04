@@ -17,7 +17,7 @@ class FiQA2018(AbsTaskRetrieval):
             "revision": "27a168819829fe9bcd655c2df245fb19452e8e06",
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

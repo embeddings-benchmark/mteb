@@ -14,7 +14,7 @@ class ImageNetDog15Clustering(AbsTaskImageClustering):
             "revision": "bfb6ad3b2109d26c9daddf14f98d315daa35ee72",
         },
         type="ImageClustering",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="nmi",
@@ -39,10 +39,6 @@ class ImageNetDog15Clustering(AbsTaskImageClustering):
   year = {2009},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 1076, "train": 1500},
-            # "avg_character_length": {"test": 431.4},
-        },
     )
 
 
@@ -81,8 +77,4 @@ class ImageNet10Clustering(AbsTaskImageClustering):
   year = {2009},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 13000},
-            # "avg_character_length": {"test": 431.4},
-        },
     )

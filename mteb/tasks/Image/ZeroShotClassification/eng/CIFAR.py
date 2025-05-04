@@ -39,10 +39,6 @@ class CIFAR10ZeroShotClassification(AbsTaskZeroShotClassification):
   year = {2009},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 10000},
-            "avg_character_length": {"test": 431.4},
-        },
     )
     image_column_name: str = "img"
 
@@ -86,10 +82,6 @@ class CIFAR100ZeroShotClassification(AbsTaskZeroShotClassification):
   year = {2009},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 10000},
-            "avg_character_length": {"test": 431.4},
-        },
     )
     image_column_name: str = "img"
     label_column_name: str = "fine_label"

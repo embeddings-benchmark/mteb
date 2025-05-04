@@ -1,0 +1,28 @@
+{
+    "test": {
+        "num_samples": 1,
+        "number_of_characters": 617,
+        "min_text_length": 617,
+        "average_text_length": 617.0,
+        "max_text_length": 617,
+        "unique_texts": 617,
+        "min_labels_per_text": 113,
+        "average_labels_per_text": 617.0,
+        "max_labels_per_text": 229,
+        "unique_labels": 4,
+        "labels": {
+            "Biochemists": {
+                "count": 153
+            },
+            "Geochemists": {
+                "count": 113
+            },
+            "Electrochemists": {
+                "count": 122
+            },
+            "Atmospheric Chemists": {
+                "count": 229
+            }
+        }
+    }
+}

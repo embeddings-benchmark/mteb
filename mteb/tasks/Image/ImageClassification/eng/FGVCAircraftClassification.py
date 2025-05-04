@@ -1,10 +1,16 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class FGVCAircraftClassification(AbsTaskImageClassification):
+class FGVCAircraftClassification(AbsTaskAnyClassification):
+    input_column_name: str = "image"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+    # could be family, manufacturer, or variant. Variant has the higher number of classes.
+    label_column_name: str = "variant"
+
     metadata = TaskMetadata(
         name="FGVCAircraft",
         description="Classifying aircraft images from 41 manufacturers and 102 variants.",
@@ -15,7 +21,7 @@ class FGVCAircraftClassification(AbsTaskImageClassification):
             "trust_remote_code": True,
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -41,9 +47,4 @@ class FGVCAircraftClassification(AbsTaskImageClassification):
   year = {2013},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 3333},
-            "avg_character_length": {"test": 431.4},
-        },
     )
-    label_column_name: str = "variant"  ## could be family, manufacturer, or variant. Variant has the higher number of classes.

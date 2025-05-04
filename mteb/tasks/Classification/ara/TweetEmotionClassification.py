@@ -1,21 +1,20 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class TweetEmotionClassification(AbsTaskClassification):
+class TweetEmotionClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="TweetEmotionClassification",
         dataset={
-            "path": "emotone-ar-cicling2017/emotone_ar",
-            "revision": "0ded8ff72cc68cbb7bb5c01b0a9157982b73ddaf",
-            "trust_remote_code": True,
+            "path": "mteb/TweetEmotionClassification",
+            "revision": "0d803980e91953cc67c21429f74b301b7b1b3f08",
         },
         description="A dataset of 10,000 tweets that was created with the aim of covering the most frequently used emotion categories in Arabic tweets.",
         reference="https://link.springer.com/chapter/10.1007/978-3-319-77116-8_8",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ara-Arab"],
@@ -38,9 +37,3 @@ class TweetEmotionClassification(AbsTaskClassification):
 }
 """,
     )
-
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_column("tweet", "text")
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"]
-        )

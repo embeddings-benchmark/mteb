@@ -1,10 +1,14 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class EuroSATClassification(AbsTaskImageClassification):
+class EuroSATClassification(AbsTaskAnyClassification):
+    input_column_name: str = "image"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="EuroSAT",
         description="Classifying satellite images.",
@@ -14,7 +18,7 @@ class EuroSATClassification(AbsTaskImageClassification):
             "revision": "b4e28552cd5f3932b6abc37eb20d3e84901ad728",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -42,8 +46,4 @@ class EuroSATClassification(AbsTaskImageClassification):
   year = {2019},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 5400},
-            "avg_character_length": {"test": 431.4},
-        },
     )

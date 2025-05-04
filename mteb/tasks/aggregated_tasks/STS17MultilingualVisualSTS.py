@@ -2,7 +2,9 @@ from __future__ import annotations
 
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate, AggregateTaskMetadata
-from mteb.tasks.Image.VisualSTS import STS17MultilingualVisualSTS
+from mteb.tasks.Image.VisualSTS.multilingual.STS17MultilingualVisualSTS import (
+    STS17MultilingualVisualSTS,
+)
 
 task_list_sts17: list[AbsTask] = [
     STS17MultilingualVisualSTS().filter_languages(

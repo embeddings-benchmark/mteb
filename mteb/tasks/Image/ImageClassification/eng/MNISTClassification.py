@@ -1,10 +1,14 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class MNISTClassification(AbsTaskImageClassification):
+class MNISTClassification(AbsTaskAnyClassification):
+    input_column_name: str = "image"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="MNIST",
         description="Classifying handwritten digits.",
@@ -14,7 +18,7 @@ class MNISTClassification(AbsTaskImageClassification):
             "revision": "77f3279092a1c1579b2250db8eafed0ad422088c",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -38,8 +42,4 @@ class MNISTClassification(AbsTaskImageClassification):
   year = {2010},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 10000},
-            "avg_character_length": {"test": 431.4},
-        },
     )

@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskSTS import AbsTaskSTS
+from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 
-class ATEC(AbsTaskSTS):
+class ATEC(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="ATEC",
         dataset={
@@ -15,7 +15,7 @@ class ATEC(AbsTaskSTS):
         description="A Chinese dataset for textual relatedness",
         reference="https://aclanthology.org/2021.emnlp-main.357",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["cmn-Hans"],
@@ -51,15 +51,11 @@ Yih, Scott Wen-tau},
 """,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 1
-        return metadata_dict
+    min_score = 0
+    max_score = 1
 
 
-class BQ(AbsTaskSTS):
+class BQ(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="BQ",
         dataset={
@@ -69,7 +65,7 @@ class BQ(AbsTaskSTS):
         description="A Chinese dataset for textual relatedness",
         reference="https://aclanthology.org/2021.emnlp-main.357",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["cmn-Hans"],
@@ -94,15 +90,11 @@ class BQ(AbsTaskSTS):
 """,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 1
-        return metadata_dict
+    min_score = 0
+    max_score = 1
 
 
-class LCQMC(AbsTaskSTS):
+class LCQMC(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="LCQMC",
         dataset={
@@ -112,7 +104,7 @@ class LCQMC(AbsTaskSTS):
         description="A Chinese dataset for textual relatedness",
         reference="https://aclanthology.org/2021.emnlp-main.357",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
@@ -137,15 +129,11 @@ class LCQMC(AbsTaskSTS):
 """,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 1
-        return metadata_dict
+    min_score = 0
+    max_score = 1
 
 
-class PAWSX(AbsTaskSTS):
+class PAWSX(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="PAWSX",
         dataset={
@@ -155,7 +143,7 @@ class PAWSX(AbsTaskSTS):
         description="A Chinese dataset for textual relatedness",
         reference="https://aclanthology.org/2021.emnlp-main.357",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
@@ -180,15 +168,11 @@ class PAWSX(AbsTaskSTS):
 """,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 1
-        return metadata_dict
+    min_score = 0
+    max_score = 1
 
 
-class STSB(AbsTaskSTS):
+class STSB(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="STSB",
         dataset={
@@ -198,7 +182,7 @@ class STSB(AbsTaskSTS):
         description="A Chinese dataset for textual relatedness",
         reference="https://aclanthology.org/2021.emnlp-main.357",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["cmn-Hans"],
@@ -223,15 +207,11 @@ class STSB(AbsTaskSTS):
 """,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 0
+    max_score = 5
 
 
-class AFQMC(AbsTaskSTS):
+class AFQMC(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="AFQMC",
         dataset={
@@ -241,7 +221,7 @@ class AFQMC(AbsTaskSTS):
         description="A Chinese dataset for textual relatedness",
         reference="https://aclanthology.org/2021.emnlp-main.357",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation"],
         eval_langs=["cmn-Hans"],
@@ -277,15 +257,11 @@ Yih, Scott Wen-tau},
 """,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 1
-        return metadata_dict
+    min_score = 0
+    max_score = 1
 
 
-class QBQTC(AbsTaskSTS):
+class QBQTC(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="QBQTC",
         dataset={
@@ -295,7 +271,7 @@ class QBQTC(AbsTaskSTS):
         description="",
         reference="https://github.com/CLUEbenchmark/QBQTC/tree/main/dataset",
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["cmn-Hans"],
@@ -310,9 +286,5 @@ class QBQTC(AbsTaskSTS):
         bibtex_citation=None,
     )
 
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 2
-        return metadata_dict
+    min_score = 0
+    max_score = 2

@@ -3,7 +3,6 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -77,7 +76,7 @@ def extend_lang_pairs() -> dict[str, list[str]]:
 _EVAL_LANGS = extend_lang_pairs()
 
 
-class MLQARetrieval(AbsTaskRetrieval, MultilingualTask):
+class MLQARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MLQARetrieval",
         description="""MLQA (MultiLingual Question Answering) is a benchmark dataset for evaluating cross-lingual question answering performance.
@@ -91,7 +90,7 @@ class MLQARetrieval(AbsTaskRetrieval, MultilingualTask):
             "trust_remote_code": True,
         },
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=_EVAL_LANGS,
@@ -129,7 +128,7 @@ class MLQARetrieval(AbsTaskRetrieval, MultilingualTask):
 
             _dataset_raw[lang_pair] = datasets.load_dataset(
                 name=hf_subset,
-                **self.metadata_dict["dataset"],
+                **self.metadata.dataset,
             )
 
             self.queries[lang_pair] = {}

@@ -44,10 +44,6 @@ class RESISC45ZeroShotClassification(AbsTaskZeroShotClassification):
   year = {2017},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 6300},
-            "avg_character_length": {"test": 256},
-        },
     )
 
     def get_candidate_labels(self) -> list[str]:

@@ -3,7 +3,6 @@ from __future__ import annotations
 import datasets
 
 from mteb.abstasks.AbsTaskPairClassification import AbsTaskPairClassification
-from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGS = {
@@ -14,7 +13,7 @@ _LANGS = {
 }
 
 
-class RTE3(MultilingualTask, AbsTaskPairClassification):
+class RTE3(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="RTE3",
         dataset={
@@ -23,7 +22,7 @@ class RTE3(MultilingualTask, AbsTaskPairClassification):
         },
         description="Recognising Textual Entailment Challenge (RTE-3) aim to provide the NLP community with a benchmark to test progress in recognizing textual entailment",
         reference="https://aclanthology.org/W07-1401/",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         type="PairClassification",
         eval_splits=["test"],

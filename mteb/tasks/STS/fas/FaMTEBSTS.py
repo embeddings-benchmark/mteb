@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-from ....abstasks.AbsTaskSTS import AbsTaskSTS
+from ....abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 
 
-class Farsick(AbsTaskSTS):
+class Farsick(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="Farsick",
         description="A Persian Semantic Textual Similarity And Natural Language Inference Dataset",
@@ -15,7 +15,7 @@ class Farsick(AbsTaskSTS):
             "revision": "f8b8d630f631c6c16b7bc3cb924bdf62a51bed06",
         },
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -29,16 +29,10 @@ class Farsick(AbsTaskSTS):
         sample_creation="found",
         bibtex_citation=""" """,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 1
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 1
 
 
-class SynPerSTS(AbsTaskSTS):
+class SynPerSTS(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="SynPerSTS",
         description="Synthetic Persian Semantic Textual Similarity Dataset",
@@ -48,7 +42,7 @@ class SynPerSTS(AbsTaskSTS):
             "revision": "914047db08928b5326d8b106583dc563b73d1ecf",
         },
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -62,16 +56,10 @@ class SynPerSTS(AbsTaskSTS):
         sample_creation="LM-generated and verified",
         bibtex_citation=""" """,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 1
-        metadata_dict["max_score"] = 5
-        return metadata_dict
+    min_score = 1
 
 
-class Query2Query(AbsTaskSTS):
+class Query2Query(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="Query2Query",
         description="Query to Query Datasets.",
@@ -81,7 +69,7 @@ class Query2Query(AbsTaskSTS):
             "revision": "52602079f9032fcf181775a310d79d2f197534e4",
         },
         type="STS",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -95,10 +83,5 @@ class Query2Query(AbsTaskSTS):
         sample_creation="found",
         bibtex_citation=""" """,
     )
-
-    @property
-    def metadata_dict(self) -> dict[str, str]:
-        metadata_dict = super().metadata_dict
-        metadata_dict["min_score"] = 0
-        metadata_dict["max_score"] = 2
-        return metadata_dict
+    min_score = 0
+    max_score = 2

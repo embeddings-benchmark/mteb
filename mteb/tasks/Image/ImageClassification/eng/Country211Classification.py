@@ -1,10 +1,15 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class Country211Classification(AbsTaskImageClassification):
+class Country211Classification(AbsTaskAnyClassification):
+    input_column_name: str = "jpg"
+    label_column_name: str = "cls"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="Country211",
         description="Classifying images of 211 countries.",
@@ -14,7 +19,7 @@ class Country211Classification(AbsTaskImageClassification):
             "revision": "1699f138f0558342a1cbf99f7cf36b4361bb5ebc",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -37,11 +42,4 @@ class Country211Classification(AbsTaskImageClassification):
   year = {2021},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 21100},
-            "avg_character_length": {"test": 0},
-        },
     )
-
-    image_column_name: str = "jpg"
-    label_column_name: str = "cls"

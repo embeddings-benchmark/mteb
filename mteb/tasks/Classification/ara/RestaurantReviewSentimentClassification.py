@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class RestaurantReviewSentimentClassification(AbsTaskClassification):
+class RestaurantReviewSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="RestaurantReviewSentimentClassification",
         dataset={
@@ -14,7 +14,7 @@ class RestaurantReviewSentimentClassification(AbsTaskClassification):
         description="Dataset of 8364 restaurant reviews from qaym.com in Arabic for sentiment analysis",
         reference="https://link.springer.com/chapter/10.1007/978-3-319-18117-2_2",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ara-Arab"],

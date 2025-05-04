@@ -7,21 +7,28 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 import tqdm
+from torch.utils.data import DataLoader
 from transformers import AutoModel, AutoTokenizer
 
-from mteb.encoder_interface import Encoder, PromptType
-from mteb.model_meta import ModelMeta
-from mteb.models.wrapper import Wrapper
+from mteb.abstasks import TaskMetadata
+from mteb.encoder_interface import Encoder
+from mteb.model_meta import (
+    ModelMeta,
+    ScoringFunction,
+)
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.requires_package import requires_package
+from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
 
-class RepLLaMAWrapper(Wrapper):
+class RepLLaMAModel(AbsEncoder):
     def __init__(
         self,
-        base_model_name_or_path: str,
         peft_model_name_or_path: str,
+        *,
+        base_model_name_or_path: str,
         torch_dtype: torch.dtype,
         device_map: str,
         model_prompts: dict[str, str] | None = None,
@@ -73,19 +80,34 @@ class RepLLaMAWrapper(Wrapper):
             return_tensors="pt",
         )
 
+    def combine_query_and_instruction(self, query, instruction):
+        end_punct = "?" if query.strip()[-1] not in ["?", ".", "!"] else ""
+        return f"{query}{end_punct} {instruction}".strip()
+
     def encode(
         self,
-        sentences: list[str],
+        inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs: Any,  # noqa
-    ) -> np.ndarray:
+        **kwargs: Any,
+    ) -> Array:
         batch_size = 16 if "batch_size" not in kwargs else kwargs.pop("batch_size")
         all_embeddings = []
-        prompt = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
+        prompt = self.model_prompts.get(prompt_name)
+        sentences = [text for batch in inputs for text in batch["text"]]
+
         if prompt:
-            sentences = [f"{prompt}{sentence}".strip() for sentence in sentences]
+            if prompt_type == "queries":
+                sentences = [
+                    f"{prompt}{sentence.strip()}".strip() for sentence in sentences
+                ]
+            else:
+                sentences = [f"{prompt}{sentence}".strip() for sentence in sentences]
+
         for i in tqdm.tqdm(range(0, len(sentences), batch_size)):
             batch_texts = sentences[i : i + batch_size]
 
@@ -110,7 +132,7 @@ class RepLLaMAWrapper(Wrapper):
         return np.concatenate(all_embeddings, axis=0)
 
 
-def _loader(wrapper: type[RepLLaMAWrapper], **kwargs) -> Callable[..., Encoder]:
+def _loader(wrapper: type[RepLLaMAModel], **kwargs) -> Callable[..., Encoder]:
     _kwargs = kwargs
 
     def loader_inner(**kwargs: Any) -> Encoder:
@@ -124,11 +146,19 @@ model_prompts = {
     PromptType.passage.value: "passage:  ",
 }
 
+REPLLAMA_CITATION = """
+@article{rankllama,
+      title={Fine-Tuning LLaMA for Multi-Stage Text Retrieval},
+      author={Xueguang Ma and Liang Wang and Nan Yang and Furu Wei and Jimmy Lin},
+      year={2023},
+      journal={arXiv:2310.08319},
+}
+"""
+
 repllama_llama2_original = ModelMeta(
-    loader=_loader(
-        RepLLaMAWrapper,
+    loader=RepLLaMAModel,  # type: ignore
+    loader_kwargs=dict(
         base_model_name_or_path="meta-llama/Llama-2-7b-hf",
-        peft_model_name_or_path="castorini/repllama-v1-7b-lora-passage",
         device_map="auto",
         torch_dtype=torch.bfloat16,
         model_prompts=model_prompts,
@@ -148,19 +178,19 @@ repllama_llama2_original = ModelMeta(
     embed_dim=4096,
     license="apache-2.0",
     reference="https://huggingface.co/samaya-ai/castorini/repllama-v1-7b-lora-passage",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
+    citation=REPLLAMA_CITATION,
     public_training_code=None,
     public_training_data=None,
 )
 
 
 repllama_llama2_reproduced = ModelMeta(
-    loader=_loader(
-        RepLLaMAWrapper,
+    loader=RepLLaMAModel,  # type: ignore
+    loader_kwargs=dict(
         base_model_name_or_path="meta-llama/Llama-2-7b-hf",
-        peft_model_name_or_path="samaya-ai/RepLLaMA-reproduced",
         device_map="auto",
         torch_dtype=torch.bfloat16,
         model_prompts=model_prompts,
@@ -176,9 +206,10 @@ repllama_llama2_reproduced = ModelMeta(
     embed_dim=4096,
     license="apache-2.0",
     reference="https://huggingface.co/samaya-ai/RepLLaMA-reproduced",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch", "Tevatron"],
     use_instructions=True,
+    citation=REPLLAMA_CITATION,
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,

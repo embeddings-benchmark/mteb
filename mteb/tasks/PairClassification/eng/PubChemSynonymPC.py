@@ -14,7 +14,7 @@ class PubChemSynonymPC(AbsTaskPairClassification):
             "revision": "5037d69d177c9628fb79cb57eea1299178b28c1b",
         },
         type="PairClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

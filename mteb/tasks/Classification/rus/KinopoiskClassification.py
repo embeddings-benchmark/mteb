@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class KinopoiskClassification(AbsTaskClassification):
+class KinopoiskClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="KinopoiskClassification",
         dataset={
@@ -14,7 +14,7 @@ class KinopoiskClassification(AbsTaskClassification):
         description="Kinopoisk review sentiment classification",
         reference="https://www.dialog-21.ru/media/1226/blinovpd.pdf",
         type="Classification",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],

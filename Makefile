@@ -1,12 +1,12 @@
 install:
 	@echo "--- 🚀 Installing project dependencies ---"
-	pip install -e ".[dev,image]"
+	pip install -e ".[dev,docs,image]"
 	pre-commit install
 
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"
 	@echo "This ensures that the project is not installed in editable mode"
-	pip install ".[dev,image]"
+	pip install ".[dev,bm25s,pylate,image]"
 
 lint:
 	@echo "--- 🧹 Running linters ---"
@@ -39,6 +39,10 @@ build-docs:
 	# since we do not have a documentation site, this just build tables for the .md files
 	python docs/create_tasks_table.py
 	python docs/create_benchmarks_table.py
+
+serve-docs:
+	@echo "--- 📚 Serving documentation ---"
+	python -m mkdocs serve
 
 
 model-load-test:

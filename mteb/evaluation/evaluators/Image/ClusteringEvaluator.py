@@ -5,10 +5,12 @@ from typing import Any
 
 import sklearn
 import sklearn.cluster
-from PIL import Image
+from datasets import Dataset
 from scipy.optimize import linear_sum_assignment
 from sklearn import metrics
 
+from mteb.abstasks import TaskMetadata
+from mteb.create_dataloaders import create_image_dataloader
 from mteb.encoder_interface import Encoder
 from mteb.evaluation.evaluators.Evaluator import Evaluator
 
@@ -18,28 +20,34 @@ logger = logging.getLogger(__name__)
 class ImageClusteringEvaluator(Evaluator):
     def __init__(
         self,
-        images: list[Image.Image],
-        labels: list[int],
-        task_name: str | None = None,
+        dataset: Dataset,
+        image_column_name: str,
+        label_column_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         clustering_batch_size: int = 500,
-        limit: int | None = None,
         **kwargs,
     ):
         super().__init__(**kwargs)
-        if limit is not None:
-            images = images[:limit]
-            labels = labels[:limit]
-        self.images = images
-        self.labels = labels
+        self.dataset = dataset
+        self.image_column_name = image_column_name
+        self.labels = dataset[label_column_name]
         self.clustering_batch_size = clustering_batch_size
-        self.task_name = task_name
+        self.task_metadata = task_metadata
+        self.hf_split = hf_split
+        self.hf_subset = hf_subset
 
-    def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}):
-        if "batch_size" not in encode_kwargs:
-            encode_kwargs["batch_size"] = 32
-
-        image_embeddings = model.get_image_embeddings(
-            self.images,
+    def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any]):
+        image_embeddings = model.encode(
+            create_image_dataloader(
+                self.dataset,
+                image_column_name=self.image_column_name,
+                batch_size=encode_kwargs["batch_size"],
+            ),
+            task_metadata=self.task_metadata,
+            hf_split=self.hf_split,
+            hf_subset=self.hf_subset,
             batch_size=encode_kwargs["batch_size"],
         )
 

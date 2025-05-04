@@ -2,21 +2,35 @@ from __future__ import annotations
 
 import pytest
 
-from mteb import SentenceTransformerWrapper
+from mteb import TaskMetadata
 from mteb.evaluation.evaluators import RetrievalEvaluator
-from tests.test_benchmark.mock_models import MockNumpyEncoder
+from tests.test_benchmark.mock_tasks import general_args
 
 TOL = 0.0001
 
 
 class TestRetrievalEvaluator:
+    metadata = TaskMetadata(
+        type="Retrieval",
+        name="MockRetrievalTask",
+        main_score="ndcg_at_10",
+        **general_args,
+    )
+
     def setup_method(self):
         """Setup any state tied to the execution of the given method in a class.
 
         setup_method is invoked for every test method of a class.
         """
         self.evaluator = RetrievalEvaluator(
-            SentenceTransformerWrapper(MockNumpyEncoder()),
+            corpus=None,
+            queries=None,
+            task_metadata=self.metadata,
+            hf_split=None,
+            hf_subset=None,
+            instructions=None,
+            top_ranked=None,
+            qid=None,
         )
 
     @pytest.mark.parametrize(
@@ -38,6 +52,7 @@ class TestRetrievalEvaluator:
                     "map": {"MAP@1": 0.75, "MAP@2": 1.0, "MAP@3": 1.0},
                     "recall": {"Recall@1": 0.75, "Recall@2": 1.0, "Recall@3": 1.0},
                     "precision": {"P@1": 1.0, "P@2": 0.75, "P@3": 0.5},
+                    "task_specific": {},
                 },
             ),
             # Test no self retrieval
@@ -57,6 +72,7 @@ class TestRetrievalEvaluator:
                     "map": {"MAP@1": 0.25, "MAP@2": 0.25, "MAP@3": 0.25},
                     "recall": {"Recall@1": 0.25, "Recall@2": 0.25, "Recall@3": 0.25},
                     "precision": {"P@1": 0.5, "P@2": 0.25, "P@3": 0.16667},
+                    "task_specific": {},
                 },
             ),
         ],
@@ -71,12 +87,13 @@ class TestRetrievalEvaluator:
             ignore_identical_ids=ignore_identical_ids,
         )
 
-        ndcg, _map, recall, precision, nauc = output
+        ndcg, _map, recall, precision, nauc, task_specific, mrr, nauc_mrr = output
 
         assert ndcg == expected_metrics["ndcg"]
         assert _map == expected_metrics["map"]
         assert recall == expected_metrics["recall"]
         assert precision == expected_metrics["precision"]
+        assert task_specific == expected_metrics["task_specific"]
 
     @pytest.mark.parametrize(
         "ignore_identical_ids, expected_naucs",
@@ -115,19 +132,21 @@ class TestRetrievalEvaluator:
             "4": {"0": 0.5, "1": 0.4, "2": 0.5},
         }
 
-        _, _, _, _, naucs = self.evaluator.evaluate(
+        (
+            _,
+            _,
+            _,
+            _,
+            naucs,
+            _,
+            _,
+            _,
+        ) = self.evaluator.evaluate(
             relevant_docs,
             results,
             [1, 2, 3],
             ignore_identical_ids=ignore_identical_ids,
         )
-
-        print(
-            naucs["nAUC_NDCG@3_max"],
-            naucs["nAUC_NDCG@3_std"],
-            naucs["nAUC_NDCG@3_diff1"],
-        )
-
         aucs = ["nAUC_NDCG@3_max", "nAUC_NDCG@3_std", "nAUC_NDCG@3_diff1"]
         for auc in aucs:
             assert naucs[auc] == pytest.approx(expected_naucs[auc], TOL)

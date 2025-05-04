@@ -1,4 +1,11 @@
 from __future__ import annotations
 
-from .eng.SummEvalSummarization import *
-from .fra.SummEvalFrSummarization import *
+from .eng import SummEvalSummarization, SummEvalSummarizationv2
+from .fra import SummEvalFrSummarization, SummEvalFrSummarizationv2
+
+__all__ = [
+    "SummEvalFrSummarization",
+    "SummEvalFrSummarizationv2",
+    "SummEvalSummarization",
+    "SummEvalSummarizationv2",
+]

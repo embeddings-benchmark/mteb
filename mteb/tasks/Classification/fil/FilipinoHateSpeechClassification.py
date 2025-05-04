@@ -1,23 +1,22 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 TEST_SAMPLES = 2048
 
 
-class FilipinoHateSpeechClassification(AbsTaskClassification):
+class FilipinoHateSpeechClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="FilipinoHateSpeechClassification",
         description="Filipino Twitter dataset for sentiment classification.",
         reference="https://pcj.csp.org.ph/index.php/pcj/issue/download/29/PCJ%20V14%20N1%20pp1-14%202019",
         dataset={
-            "path": "legacy-datasets/hate_speech_filipino",
-            "revision": "1994e9bb7f3ec07518e3f0d9e870cb293e234686",
-            "trust_remote_code": True,
+            "path": "mteb/FilipinoHateSpeechClassification",
+            "revision": "087a17c0b7f9a78901c88aea00ad2892a319fdac",
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         date=("2019-08-01", "2019-08-01"),
         eval_splits=["validation", "test"],
@@ -41,8 +40,3 @@ class FilipinoHateSpeechClassification(AbsTaskClassification):
 }
 """,
     )
-
-    def dataset_transform(self):
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["validation", "test"]
-        )

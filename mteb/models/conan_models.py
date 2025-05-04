@@ -14,9 +14,9 @@ import numpy as np
 import requests
 
 from mteb.model_meta import ModelMeta
+from mteb.models import AbsEncoder
 from mteb.models.bge_models import bge_full_data
 from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
-from mteb.models.wrapper import Wrapper
 
 conan_zh_datasets = {
     "BQ": ["train"],
@@ -148,7 +148,7 @@ class Client:
         return self.rate_limiter.execute_with_retry(self._do_request, text)
 
 
-class ConanWrapper(Wrapper):
+class ConanWrapper(AbsEncoder):
     def __init__(
         self,
         model_name: str,

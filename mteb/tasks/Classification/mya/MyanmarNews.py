@@ -1,21 +1,20 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class MyanmarNews(AbsTaskClassification):
+class MyanmarNews(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="MyanmarNews",
         dataset={
-            "path": "ayehninnkhine/myanmar_news",
-            "revision": "b899ec06227db3679b0fe3c4188a6b48cc0b65eb",
-            "trust_remote_code": True,
+            "path": "mteb/MyanmarNews",
+            "revision": "644419f24bc820bbf8af24e0b4714a069812e0a3",
         },
         description="The Myanmar News dataset on Hugging Face contains news articles in Burmese. It is designed for tasks such as text classification, sentiment analysis, and language modeling. The dataset includes a variety of news topics in 4 categorie, providing a rich resource for natural language processing applications involving Burmese which is a low resource language.",
         reference="https://huggingface.co/datasets/myanmar_news",
         type="Classification",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["mya-Mymr"],
@@ -38,9 +37,3 @@ class MyanmarNews(AbsTaskClassification):
 }
 """,
     )
-
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_columns({"category": "label"})
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"]
-        )

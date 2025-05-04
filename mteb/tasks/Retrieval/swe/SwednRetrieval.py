@@ -18,7 +18,7 @@ class SwednRetrieval(AbsTaskRetrieval):
         description="The SWE-DN corpus is based on 1,963,576 news articles from the Swedish newspaper Dagens Nyheter (DN) during the years 2000--2020. The articles are filtered to resemble the CNN/DailyMail dataset both regarding textual structure",
         reference="https://spraakbanken.gu.se/en/resources/swedn",
         type="Retrieval",
-        category="p2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["swe-Latn"],

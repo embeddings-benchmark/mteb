@@ -19,7 +19,7 @@ The dataset can be used to test the performance of language models in identifyin
             "revision": "e714d53c059ca83d56c41d22f800da8245bb87fc",
         },
         type="PairClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["dan-Latn"],
@@ -46,14 +46,4 @@ The dataset can be used to test the performance of language models in identifyin
     )
 
     def dataset_transform(self):
-        _dataset = {}
-        for split in self.metadata.eval_splits:
-            hf_dataset = self.dataset[split]
-            _dataset[split] = [
-                {
-                    "sentence1": hf_dataset["sentence1"],
-                    "sentence2": hf_dataset["sentence2"],
-                    "labels": hf_dataset["label"],
-                }
-            ]
-        self.dataset = _dataset
+        self.dataset = self.dataset.rename_column("label", "labels")

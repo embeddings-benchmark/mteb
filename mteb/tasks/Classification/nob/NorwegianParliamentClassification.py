@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class NorwegianParliamentClassification(AbsTaskClassification):
+class NorwegianParliamentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="NorwegianParliamentClassification",
         description="Norwegian parliament speeches annotated for sentiment",
@@ -15,7 +15,7 @@ class NorwegianParliamentClassification(AbsTaskClassification):
             "trust_remote_code": True,
         },
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test", "validation"],
         eval_langs=["nob-Latn"],

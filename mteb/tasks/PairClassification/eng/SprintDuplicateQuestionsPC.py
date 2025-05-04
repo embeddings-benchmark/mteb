@@ -15,7 +15,7 @@ class SprintDuplicateQuestionsPC(AbsTaskPairClassification):
             "revision": "d66bd1f72af766a5cc4b0ca5e00c162f89e8cc46",
         },
         type="PairClassification",
-        category="s2s",
+        category="t2t",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

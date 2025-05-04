@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class TweetSarcasmClassification(AbsTaskClassification):
+class TweetSarcasmClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="TweetSarcasmClassification",
         dataset={
@@ -14,7 +14,7 @@ class TweetSarcasmClassification(AbsTaskClassification):
         description="Arabic sarcasm detection dataset, which was created through the reannotation of available Arabic sentiment analysis datasets.",
         reference="https://aclanthology.org/2020.osact-1.5/",
         type="Classification",
-        category="s2s",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ara-Arab"],

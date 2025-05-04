@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class AmazonPolarityClassification(AbsTaskClassification):
+class AmazonPolarityClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="AmazonPolarityClassification",
         description="Amazon Polarity Classification Dataset.",
@@ -14,7 +14,7 @@ class AmazonPolarityClassification(AbsTaskClassification):
             "revision": "e2d317d38cd51312af73b3d32a06d1a08b442046",
         },
         type="Classification",
-        category="p2p",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

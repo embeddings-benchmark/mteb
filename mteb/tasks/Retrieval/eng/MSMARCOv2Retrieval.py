@@ -15,7 +15,7 @@ class MSMARCOv2(AbsTaskRetrieval):
         description="MS MARCO is a collection of datasets focused on deep learning in search",
         reference="https://microsoft.github.io/msmarco/TREC-Deep-Learning.html",
         type="Retrieval",
-        category="s2p",
+        category="t2t",
         modalities=["text"],
         eval_splits=["train", "dev", "dev2"],
         eval_langs=["eng-Latn"],

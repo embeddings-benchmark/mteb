@@ -48,10 +48,6 @@ class STL10ZeroShotClassification(AbsTaskZeroShotClassification):
   year = {2011},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 8000},
-            "avg_character_length": {"test": 431.4},
-        },
     )
 
     def get_candidate_labels(self) -> list[str]:

@@ -1,10 +1,14 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class UCF101Classification(AbsTaskImageClassification):
+class UCF101Classification(AbsTaskAnyClassification):
+    input_column_name: str = "image"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="UCF101",
         description="""UCF101 is an action recognition data set of realistic
@@ -18,7 +22,7 @@ version train/test list.""",
             "revision": "1098eed48f2929443f47c39f3b5c814e16369c11",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -44,8 +48,4 @@ version train/test list.""",
   year = {2012},
 }
 """,
-        descriptive_stats={
-            "n_samples": {"test": 697222},
-            "avg_character_length": {"test": 0},
-        },
     )
