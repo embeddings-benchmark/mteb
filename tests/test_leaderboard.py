@@ -14,6 +14,7 @@ def run_leaderboard_app():
     app.launch(server_name="0.0.0.0", server_port=7860, prevent_thread_lock=True)
 
 
+@pytest.mark.leaderboard_stability
 @pytest.mark.timeout(300)
 def test_leaderboard_app_does_not_crash():
     """Test to ensure the leaderboard app does not crash within the first 5 minutes."""
