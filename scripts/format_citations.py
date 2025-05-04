@@ -237,6 +237,7 @@ def process_file(
 def tasks(args):
     tasks_dir = Path(args.tasks_dir)
     dry_run = args.dry_run
+    error_on_change = args.error_on_change
 
     modified_files = error_files = skipped_files = processed_files = bibtex_modified = 0
     task_files = sorted(tasks_dir.rglob("*.py"))
@@ -274,6 +275,9 @@ def tasks(args):
     if dry_run:
         logger.info("\nNOTE: Dry run mode was enabled. No files were actually changed.")
 
+    if file_modified and error_on_change:
+        raise Exception("Files are modified")
+
     if error_files > 0:
         logger.warning("Errors occurred during processing. Check logs above.")
         raise RuntimeError
@@ -282,6 +286,7 @@ def tasks(args):
 def benchmarks(args):
     benchmarks_file = Path(args.benchmarks_file)
     dry_run = args.dry_run
+    error_on_change = args.error_on_change
 
     logger.info(f"Processing {benchmarks_file}...")
 
@@ -306,6 +311,9 @@ def benchmarks(args):
 
     if dry_run and file_modified:
         logger.info("\nNOTE: Dry run mode was enabled. File was not actually changed.")
+
+    if file_modified and error_on_change:
+        raise Exception("Files are modified")
 
     if file_error:
         logger.warning("Errors occurred during processing. Check logs above.")
@@ -332,6 +340,11 @@ def main():
         action="store_true",
         help="Perform parsing and formatting but do not modify files.",
     )
+    tasks_parser.add_argument(
+        "--error-on-change",
+        action="store_true",
+        help="Raise error when files are modified. Need for pre-commit",
+    )
     tasks_parser.set_defaults(func=tasks)
 
     benchmarks_parser = subparsers.add_parser(
@@ -345,8 +358,13 @@ def main():
     )
     benchmarks_parser.add_argument(
         "--dry-run",
-        action="store_false",
+        action="store_true",
         help="Perform parsing and formatting but do not modify the file.",
+    )
+    benchmarks_parser.add_argument(
+        "--error-on-change",
+        action="store_true",
+        help="Raise error when files are modified. Need for pre-commit",
     )
     benchmarks_parser.set_defaults(func=benchmarks)
 

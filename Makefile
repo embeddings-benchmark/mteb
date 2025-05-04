@@ -57,6 +57,11 @@ run-leaderboard:
 	@echo "--- 🚀 Running leaderboard locally ---"
 	python -m mteb.leaderboard.app
 
+format-citations:
+	@echo "--- 🧹 Formatting citations ---"
+	python scripts/format_citations.py benchmarks
+	python scripts/format_citations.py tasks
+
 
 .PHONY: check
 check: ## Run code quality tools.
