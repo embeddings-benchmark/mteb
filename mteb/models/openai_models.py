@@ -19,8 +19,8 @@ class OpenAIWrapper(Wrapper):
         self,
         model_name: str,
         max_tokens: int,
+        embed_dim: int,
         tokenizer_name: str = "cl100k_base",  # since all models use this tokenizer now
-        embed_dim: int | None = None,
         **kwargs,
     ) -> None:
         """Wrapper for OpenAIs embedding API.
@@ -54,8 +54,12 @@ class OpenAIWrapper(Wrapper):
         return self._encoding.decode(truncated_sentence)
 
     def encode(self, sentences: list[str], **kwargs: Any) -> np.ndarray:
-        requires_package(self, "openai", "Openai text embedding")
+        empty_mask = [not s.strip() for s in sentences]
+        if all(empty_mask):
+            logger.warning("Empty input detected - returning zero embeddings.")
+            return np.zeros((len(sentences), self._embed_dim), dtype=np.float32)
 
+        requires_package(self, "openai", "Openai text embedding")
         from openai import NotGiven
 
         if self._model_name == "text-embedding-ada-002" and self._embed_dim is not None:
@@ -63,18 +67,22 @@ class OpenAIWrapper(Wrapper):
                 "Reducing embedding size available only for text-embedding-3-* models"
             )
 
-        if self._embed_dim and all(not s.strip() for s in sentences):
-            logger.warning("Empty input detected - returning zero embeddings.")
-            return np.zeros((len(sentences), self._embed_dim), dtype=np.float32)
+        if any(empty_mask):
+            logger.warning(
+                "Empty strings detected - encoding non-empty only, returing zero vectors for empty strings."
+            )
 
+        non_empty_sentences = [s for s, e in zip(sentences, empty_mask) if not e]
         trimmed_sentences = []
-        for sentence in sentences:
+        for sentence in non_empty_sentences:
             encoded_sentence = self._encoding.encode(sentence)
             if len(encoded_sentence) > self._max_tokens:
                 truncated_sentence = self.truncate_text_tokens(sentence)
                 trimmed_sentences.append(truncated_sentence)
             else:
                 trimmed_sentences.append(sentence)
+        if not trimmed_sentences:
+            return np.zeros((len(sentences), self._embed_dim), dtype=np.float32)
 
         max_batch_size = kwargs.get("batch_size", 2048)
         sublists = [
@@ -122,7 +130,11 @@ class OpenAIWrapper(Wrapper):
                     )
             all_embeddings.extend(self._to_numpy(response))
 
-        return np.array(all_embeddings)
+        all_embeddings = np.array(all_embeddings)
+        final_embeddings = np.zeros((len(sentences), self._embed_dim), dtype=np.float32)
+        non_empty_idxs = [i for i, e in enumerate(empty_mask) if not e]
+        final_embeddings[non_empty_idxs] = all_embeddings
+        return final_embeddings
 
     def _to_numpy(self, embedding_response) -> np.ndarray:
         return np.array([e.embedding for e in embedding_response.data])
@@ -138,6 +150,7 @@ text_embedding_3_small = ModelMeta(
         model_name="text-embedding-3-small",
         tokenizer_name="cl100k_base",
         max_tokens=8191,
+        embed_dim=1536,
     ),
     max_tokens=8191,
     embed_dim=1536,
@@ -163,6 +176,7 @@ text_embedding_3_large = ModelMeta(
         model_name="text-embedding-3-large",
         tokenizer_name="cl100k_base",
         max_tokens=8191,
+        embed_dim=3072,
     ),
     max_tokens=8191,
     embed_dim=3072,
@@ -188,6 +202,7 @@ text_embedding_ada_002 = ModelMeta(
         model_name="text-embedding-ada-002",
         tokenizer_name="cl100k_base",
         max_tokens=8191,
+        embed_dim=1536,
     ),
     reference="https://openai.com/index/new-and-improved-embedding-model/",
     max_tokens=8191,
