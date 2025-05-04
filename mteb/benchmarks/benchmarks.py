@@ -239,7 +239,7 @@ MTEB_MAIN_RU = Benchmark(
     reference="https://aclanthology.org/2023.eacl-main.148/",
     citation=r"""
 @misc{snegirev2024russianfocusedembeddersexplorationrumteb,
-  archiveprefix={arXiv},
+  archiveprefix = {arXiv},
   author = {Artem Snegirev and Maria Tikhonova and Anna Maksimova and Alena Fenogenova and Alexander Abramov},
   eprint = {2408.12503},
   primaryclass = {cs.CL},

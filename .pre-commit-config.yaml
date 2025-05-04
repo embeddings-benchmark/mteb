@@ -31,9 +31,19 @@ repos:
         minimum_pre_commit_version: "2.9.2"
       - id: format-citations
         name: format-citations
-        description: "Run 'make format-citations'"
-        entry: make format-citations
+        description: "Format citations"
+        entry: python scripts/format_citations.py benchmarks --error-on-change
         language: system
-        files: '(mteb/tasks/|mteb/benchmarks/)'
+        files: 'mteb/benchmarks/'
+        pass_filenames: false
+        types_or: [ python ]
+        minimum_pre_commit_version: "2.9.2"
+      - id: format-tasks-citations
+        name: format-tasks-citations
+        description: "Format citations"
+        entry: python scripts/format_citations.py tasks --error-on-change
+        language: system
+        files: 'mteb/tasks/'
+        pass_filenames: false
         types_or: [ python ]
         minimum_pre_commit_version: "2.9.2"
