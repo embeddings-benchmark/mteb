@@ -30,13 +30,15 @@ class BirdCLEFClassification(AbsTaskAudioClassification):
         dialect=[],
         modalities=["audio"],
         sample_creation="found",
-        bibtex_citation="""@dataset{birdclef2025,
-            author={Christopher},
-            title={BirdCLEF+ 2025},
-            year={2025},
-            publisher={Hugging Face},
-            url={https://huggingface.co/datasets/christopher/birdclef-2025}
-        }""",
+        bibtex_citation=r"""
+@dataset{birdclef2025,
+  author = {Christopher},
+  publisher = {Hugging Face},
+  title = {BirdCLEF+ 2025},
+  url = {https://huggingface.co/datasets/christopher/birdclef-2025},
+  year = {2025},
+}
+""",
         descriptive_stats={
             "n_samples": {"train": 1000},  # 50 classes × 20 samples each
             "n_classes": 50,
