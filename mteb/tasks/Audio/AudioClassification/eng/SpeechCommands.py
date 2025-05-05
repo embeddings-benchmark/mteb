@@ -9,7 +9,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class SpeechCommandsClassification(AbsTaskAudioClassification):
     metadata = TaskMetadata(
         name="SpeechCommands",
-        description="A set of one-second .wav audio files, each containing a single spoken English word or background noise. To keep evaluation fast, we use a downsampled version of the original dataset by keeping 50 samples per class for training.",
+        description="A set of one-second .wav audio files, each containing a single spoken English word or background noise. To keep evaluation fast, we use a downsampled version of the original dataset by keeping ~50 samples per class for training.",
         reference="https://arxiv.org/abs/1804.03209",
         dataset={
             "path": "AdnanElAssadi/speech_commands_small",
