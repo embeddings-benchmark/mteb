@@ -29,15 +29,17 @@ class VoxCelebClustering(AbsTaskAudioClustering):
         dialect=[],
         modalities=["audio"],
         sample_creation="found",
-        bibtex_citation="""@misc{shon2022sluenewbenchmarktasks,
-            title={SLUE: New Benchmark Tasks for Spoken Language Understanding Evaluation on Natural Speech},
-            author={Suwon Shon and Ankita Pasad and Felix Wu and Pablo Brusco and Yoav Artzi and Karen Livescu and Kyu J. Han},
-            year={2022},
-            eprint={2111.10367},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL},
-            url={https://arxiv.org/abs/2111.10367},
-        }""",
+        bibtex_citation=r"""
+@misc{shon2022sluenewbenchmarktasks,
+  archiveprefix = {arXiv},
+  author = {Suwon Shon and Ankita Pasad and Felix Wu and Pablo Brusco and Yoav Artzi and Karen Livescu and Kyu J. Han},
+  eprint = {2111.10367},
+  primaryclass = {cs.CL},
+  title = {SLUE: New Benchmark Tasks for Spoken Language Understanding Evaluation on Natural Speech},
+  url = {https://arxiv.org/abs/2111.10367},
+  year = {2022},
+}
+""",
     )
 
     def dataset_transform(self):
