@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from datasets import load_dataset
+
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
@@ -46,9 +48,17 @@ class Core17InstructionRetrieval(AbsTaskRetrieval):
         hf_split: str,
         hf_subset: str,
     ) -> dict[str, float]:
+        qrel_diff_ds = load_dataset(
+            self.metadata.dataset["path"],
+            "qrel_diff",
+            split="qrel_diff",
+            revision=self.metadata.dataset["revision"],
+        )
+        changed_qrels = {item["query-id"]: item["corpus-ids"] for item in qrel_diff_ds}
+
         return evaluate_p_mrr_change(
             qrels,
             results,
-            self.dataset[hf_subset][hf_split]["qrels_diff"],
+            changed_qrels,
             self.k_values,
         )

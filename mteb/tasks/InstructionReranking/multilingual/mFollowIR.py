@@ -142,6 +142,17 @@ def load_data(
     return corpus, queries, instructions, relevant_docs, top_ranked, qrel_diffs
 
 
+def load_qrel_diff(metadata: TaskMetadata, hf_subset: str) -> dict[str, list[str]]:
+    hf_subset = hf_subset.replace("eng-", "")
+    qrel_diff_ds = datasets.load_dataset(
+        metadata.dataset["path"],
+        f"qrel_diff-{hf_subset}",
+        split="qrel_diff",
+        revision=metadata.dataset["revision"],
+    )
+    return {item["query-id"]: item["corpus-ids"] for item in qrel_diff_ds}
+
+
 class mFollowIRCrossLingual(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="mFollowIRCrossLingual",
@@ -204,7 +215,7 @@ class mFollowIRCrossLingual(AbsTaskRetrieval):
         return evaluate_p_mrr_change(
             qrels,
             results,
-            self.dataset[hf_subset][hf_split]["qrels_diff"],
+            load_qrel_diff(self.metadata, hf_subset),
             self.k_values,
         )
 
@@ -271,6 +282,6 @@ class mFollowIR(AbsTaskRetrieval):
         return evaluate_p_mrr_change(
             qrels,
             results,
-            self.dataset[hf_subset][hf_split]["qrels_diff"],
+            load_qrel_diff(self.metadata, hf_subset),
             self.k_values,
         )

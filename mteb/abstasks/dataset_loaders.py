@@ -26,7 +26,6 @@ class RetrievalSplitData(TypedDict):
     - `relevant_docs`: A mapping of query IDs to a mapping of document IDs and their relevance scores.
     - `instructions`: A mapping of query IDs to their instructions (if applicable).
     - `top_ranked`: A mapping of query IDs to a list of top-ranked document IDs (if applicable).
-    - `qrels_diff`: A mapping of query IDs to a list of document IDs that have changed relevance scores (if applicable).
     """
 
     corpus: Mapping[str, str | dict[str, str]]
@@ -34,7 +33,6 @@ class RetrievalSplitData(TypedDict):
     relevant_docs: Mapping[str, Mapping[str, float]]
     instructions: Mapping[str, str] | None
     top_ranked: Mapping[str, list[str]] | None
-    qrels_diff: Mapping[str, list[str]] | None
 
 
 class RetrievalDatasetLoader:
@@ -62,7 +60,6 @@ class RetrievalDatasetLoader:
     def load(self) -> RetrievalSplitData:
         top_ranked = None
         instructions = None
-        qrels_diff = None
 
         configs = get_dataset_config_names(
             self.hf_repo, self.revision, trust_remote_code=self.trust_remote_code
@@ -82,16 +79,12 @@ class RetrievalDatasetLoader:
         if any(c.endswith("instruction") for c in configs):
             instructions = self._load_instructions()
 
-        if any(c.startswith("qrel_diff") for c in configs):
-            qrels_diff = self._load_qrels_diffs()
-
         return RetrievalSplitData(
             corpus=corpus,
             queries=queries,
             relevant_docs=qrels,
             instructions=instructions,
             top_ranked=top_ranked,
-            qrels_diff=qrels_diff,
         )
 
     def get_split(self, config: str) -> str:
@@ -220,27 +213,3 @@ class RetrievalDatasetLoader:
             f"Instructions loaded: {len(instructions_ds) if instructions_ds else 0}"
         )
         return instructions_ds
-
-    def _load_qrels_diffs(self) -> dict[str, list[str]]:
-        logger.info("Loading qrels diffs")
-        config = f"qrel_diff-{self.config}" if self.config is not None else "qrel_diff"
-
-        qrel_diff_ds = load_dataset(
-            self.hf_repo,
-            config,
-            split=self.get_split(config),
-            trust_remote_code=self.trust_remote_code,
-            revision=self.revision,
-        )
-        qrel_diff_ds = qrel_diff_ds.cast(
-            Features(
-                {
-                    "query-id": Value("string"),
-                    "corpus-ids": Sequence(Value("string")),
-                }
-            )
-        ).select_columns(["query-id", "corpus-ids"])
-
-        changed_qrels = {item["query-id"]: item["corpus-ids"] for item in qrel_diff_ds}
-        logger.info(f"Qrels diffs loaded: {len(changed_qrels) if changed_qrels else 0}")
-        return changed_qrels
