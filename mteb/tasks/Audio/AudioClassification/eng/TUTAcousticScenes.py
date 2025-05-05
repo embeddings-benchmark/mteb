@@ -30,15 +30,17 @@ class TUTAcousticScenesClassification(AbsTaskAudioClassification):
         dialect=[],
         modalities=["audio"],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{Mesaros2018_DCASE,
-            author    = {Annamaria Mesaros and Toni Heittola and Tuomas Virtanen},
-            title     = {A Multi-Device Dataset for Urban Acoustic Scene Classification},
-            booktitle = {Proceedings of the Detection and Classification of Acoustic Scenes and Events 2018 Workshop (DCASE2018)},
-            year      = {2018},
-            publisher = {Tampere University of Technology},
-            address   = {Tampere, Finland},
-            url       = {https://arxiv.org/abs/1807.09840}
-            }""",
+        bibtex_citation=r"""
+@inproceedings{Mesaros2018_DCASE,
+  address = {Tampere, Finland},
+  author = {Annamaria Mesaros and Toni Heittola and Tuomas Virtanen},
+  booktitle = {Proceedings of the Detection and Classification of Acoustic Scenes and Events 2018 Workshop (DCASE2018)},
+  publisher = {Tampere University of Technology},
+  title = {A Multi-Device Dataset for Urban Acoustic Scene Classification},
+  url = {https://arxiv.org/abs/1807.09840},
+  year = {2018},
+}
+""",
         descriptive_stats={
             "n_samples": {"train": 8640},  # Based on provided stats
             "n_classes": 10,
