@@ -10,7 +10,6 @@ from .eng.FSDD import *
 from .eng.GTZANGenre import *
 from .eng.GunshotTriangulation import *
 from .eng.LibriCount import *
-from .eng.MInDS14 import *
 from .eng.MridinghamStroke import *
 from .eng.MridinghamTonic import *
 from .eng.NSynth import *
@@ -18,3 +17,4 @@ from .eng.SIBFLEURS import *
 from .eng.SpokenQAforIC import *
 from .eng.VoxCelebSA import *
 from .eng.VoxLingua107Top10 import *
+from .multilingual.MInDS14 import *
