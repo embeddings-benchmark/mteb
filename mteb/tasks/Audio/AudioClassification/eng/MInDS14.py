@@ -3,6 +3,21 @@ from __future__ import annotations
 from mteb.abstasks.Audio.AbsTaskAudioClassification import AbsTaskAudioClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+EVAL_LANGS_MAP = {
+    "en-GB": ["eng-Latn"],  # English
+    "fr-FR": ["fra-Latn"],  # French
+    "it-IT": ["ita-Latn"],  # Italian
+    "es-ES": ["spa-Latn"],  # Spanish
+    "pt-PT": ["por-Latn"],  # Portuguese
+    "de-DE": ["deu-Latn"],  # German
+    "nl-NL": ["nld-Latn"],  # Dutch
+    "ru-RU": ["rus-Cyrl"],  # Russian
+    "pl-PL": ["pol-Latn"],  # Polish
+    "cs-CZ": ["ces-Latn"],  # Czech
+    "ko-KR": ["kor-Hang"],  # Korean
+    "zh-CN": ["zho-Hans"],  # Chinese (Simplified)
+}
+
 
 class MInDS14Classification(AbsTaskAudioClassification):
     metadata = TaskMetadata(
@@ -11,13 +26,13 @@ class MInDS14Classification(AbsTaskAudioClassification):
         reference="https://arxiv.org/abs/2104.08524",
         dataset={
             "path": "PolyAI/minds14",
-            "name": "en-US",  # English language configuration
             "revision": "75900a7c6f93f014f25b50d16596a6da89add3a5",
+            "trust_remote_code": True,
         },
         type="AudioClassification",
         category="a2t",
         eval_splits=["train"],
-        eval_langs=["eng-Latn"],  # English (en-US) in BCP-47 format
+        eval_langs=EVAL_LANGS_MAP,
         main_score="accuracy",
         date=("2021-04-01", "2021-04-30"),  # Paper publication date
         domains=["Speech", "Spoken"],
