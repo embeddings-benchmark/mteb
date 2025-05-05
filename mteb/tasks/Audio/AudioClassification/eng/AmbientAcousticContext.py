@@ -60,4 +60,3 @@ class AmbientAcousticContextClassification(AbsTaskAudioClassification):
     label_column_name: str = "label"
     samples_per_label: int = None  # Not needed as dataset is already balanced
     is_cross_validation: bool = False
-
