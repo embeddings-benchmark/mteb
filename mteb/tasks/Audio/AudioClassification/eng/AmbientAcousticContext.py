@@ -17,7 +17,7 @@ class AmbientAcousticContextClassification(AbsTaskAudioClassification):
         },
         type="AudioClassification",
         category="a2t",
-        eval_splits=["test"],  # Using the pre-created test split
+        eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2020-01-01", "2020-12-31"),  # Paper publication date
@@ -61,4 +61,3 @@ class AmbientAcousticContextClassification(AbsTaskAudioClassification):
     samples_per_label: int = None  # Not needed as dataset is already balanced
     is_cross_validation: bool = False
 
-    # No dataset_transform method needed as dataset is already filtered and split
