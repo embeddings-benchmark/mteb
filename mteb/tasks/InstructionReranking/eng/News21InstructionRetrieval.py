@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+from datasets import load_dataset
+
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
+from ....evaluation.evaluators.retrieval_metrics import evaluate_p_mrr_change
 
 
 class News21InstructionRetrieval(AbsTaskRetrieval):
@@ -38,3 +41,26 @@ class News21InstructionRetrieval(AbsTaskRetrieval):
 }
 """,
     )
+
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: dict[str, dict[str, int]],
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        qrel_diff_ds = load_dataset(
+            self.metadata.dataset["path"],
+            "qrel_diff",
+            split="qrel_diff",
+            revision=self.metadata.dataset["revision"],
+        )
+        changed_qrels = {item["query-id"]: item["corpus-ids"] for item in qrel_diff_ds}
+
+        return evaluate_p_mrr_change(
+            qrels,
+            results,
+            changed_qrels,
+            self.k_values,
+        )

@@ -19,15 +19,15 @@ from mteb.encoder_interface import Encoder
 from mteb.types import PromptType
 
 from ..Evaluator import Evaluator
-from ..utils import (
+from ..retrieval_metrics import (
     confidence_scores,
-    download,
     hole,
     mrr,
     nAUC,
     recall_cap,
     top_k_accuracy,
 )
+from ..utils import download
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 

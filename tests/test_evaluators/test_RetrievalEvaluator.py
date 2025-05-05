@@ -31,6 +31,7 @@ class TestRetrievalEvaluator:
             instructions=None,
             top_ranked=None,
             qid=None,
+            top_k=5,
         )
 
     @pytest.mark.parametrize(
@@ -80,20 +81,19 @@ class TestRetrievalEvaluator:
     def test_metrics_at_k(
         self, relevant_docs, results, ignore_identical_ids, expected_metrics
     ):
-        output = self.evaluator.evaluate(
-            relevant_docs,
-            results,
-            [1, 2, 3],
-            ignore_identical_ids=ignore_identical_ids,
+        all_scores, ndcg, _map, recall, precision, naucs, mrr, naucs_mrr = (
+            self.evaluator.evaluate(
+                relevant_docs,
+                results,
+                [1, 2, 3],
+                ignore_identical_ids=ignore_identical_ids,
+            )
         )
-
-        ndcg, _map, recall, precision, nauc, task_specific, mrr, nauc_mrr = output
 
         assert ndcg == expected_metrics["ndcg"]
         assert _map == expected_metrics["map"]
         assert recall == expected_metrics["recall"]
         assert precision == expected_metrics["precision"]
-        assert task_specific == expected_metrics["task_specific"]
 
     @pytest.mark.parametrize(
         "ignore_identical_ids, expected_naucs",
@@ -132,20 +132,13 @@ class TestRetrievalEvaluator:
             "4": {"0": 0.5, "1": 0.4, "2": 0.5},
         }
 
-        (
-            _,
-            _,
-            _,
-            _,
-            naucs,
-            _,
-            _,
-            _,
-        ) = self.evaluator.evaluate(
-            relevant_docs,
-            results,
-            [1, 2, 3],
-            ignore_identical_ids=ignore_identical_ids,
+        all_scores, ndcg, _map, recall, precision, naucs, mrr, naucs_mrr = (
+            self.evaluator.evaluate(
+                relevant_docs,
+                results,
+                [1, 2, 3],
+                ignore_identical_ids=ignore_identical_ids,
+            )
         )
         aucs = ["nAUC_NDCG@3_max", "nAUC_NDCG@3_std", "nAUC_NDCG@3_diff1"]
         for auc in aucs:

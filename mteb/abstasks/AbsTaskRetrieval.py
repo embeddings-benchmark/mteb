@@ -13,10 +13,10 @@ from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset
 from mteb.encoder_interface import Encoder
 
 from ..evaluation.evaluators import RetrievalEvaluator
-from ..evaluation.evaluators.utils import make_score_dict
+from ..evaluation.evaluators.retrieval_metrics import make_score_dict
 from ..load_results.task_results import ScoresDict
 from .AbsTask import AbsTask
-from .dataset_loaders import RetrievalDataLoader, RetrievalSplitData
+from .dataset_loaders import RetrievalDatasetLoader, RetrievalSplitData
 
 logger = logging.getLogger(__name__)
 
@@ -121,6 +121,7 @@ class AbsTaskRetrieval(AbsTask):
                     'top_ranked': Optional[dict[str, list[str]]]  # query_id -> doc_ids
                         Semantically, it should contain dict[split_name, dict[sample_id, str]]. If there are multiple instructions per query, please duplicate the queries and give them unique ids for consolidation.
                         E.g. {"test": {"query-id1": "instruction text"}}
+                    'qrels_diff': Optional[dict[str, list[str]]]
                 }
             }
         }
@@ -128,20 +129,23 @@ class AbsTaskRetrieval(AbsTask):
 
     ignore_identical_ids: bool = False
     abstask_prompt = "Retrieve text based on user query."
-    top_k = 100
+    k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000]
+    top_k: int = max(k_values)
     dataset: dict[str, dict[str, RetrievalSplitData]]
+    cross_encoder_top_k: int = 100
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.dataset = defaultdict(
             lambda: defaultdict(
-                lambda: {
-                    "corpus": {},
-                    "queries": {},
-                    "relevant_docs": {},
-                    "instructions": None,
-                    "top_ranked": None,
-                }
+                lambda: RetrievalSplitData(
+                    corpus={},
+                    queries={},
+                    relevant_docs={},
+                    instructions=None,
+                    top_ranked=None,
+                    qrels_diff=None,
+                )
             )
         )
 
@@ -150,13 +154,14 @@ class AbsTaskRetrieval(AbsTask):
             return
         self.dataset = defaultdict(
             lambda: defaultdict(
-                lambda: {
-                    "corpus": {},
-                    "queries": {},
-                    "relevant_docs": {},
-                    "instructions": None,
-                    "top_ranked": None,
-                }
+                lambda: RetrievalSplitData(
+                    corpus={},
+                    queries={},
+                    relevant_docs={},
+                    instructions=None,
+                    top_ranked=None,
+                    qrels_diff=None,
+                )
             )
         )
 
@@ -176,6 +181,10 @@ class AbsTaskRetrieval(AbsTask):
                         self.dataset[subset][split]["top_ranked"] = self.top_ranked[
                             subset
                         ][split]
+                    if hasattr(self, "qrels_diff"):
+                        self.dataset[subset][split]["qrels_diff"] = self.qrels_diff[
+                            subset
+                        ][split]
         else:
             subset = "default"
             for split in self.queries:
@@ -192,6 +201,11 @@ class AbsTaskRetrieval(AbsTask):
                     self.dataset[subset][split]["top_ranked"] = self.top_ranked[
                         split
                     ].copy()
+                if hasattr(self, "qrels_diff"):
+                    self.dataset[subset][split]["top_ranked"] = self.qrels_diff[
+                        split
+                    ].copy()
+
         del self.queries
         del self.corpus
         del self.relevant_docs
@@ -199,6 +213,8 @@ class AbsTaskRetrieval(AbsTask):
             del self.instructions
         if hasattr(self, "top_ranked"):
             del self.top_ranked
+        if hasattr(self, "qrels_diff"):
+            del self.qrels_diff
 
     def load_data(self, **kwargs):
         if self.data_loaded:
@@ -215,7 +231,7 @@ class AbsTaskRetrieval(AbsTask):
                 f"Loading {split} split for {hf_subset} subset of {self.metadata.name}"
             )
 
-            self.dataset[hf_subset][split] = RetrievalDataLoader(
+            self.dataset[hf_subset][split] = RetrievalDatasetLoader(
                 hf_repo=dataset_path,
                 revision=revision,
                 trust_remote_code=trust_remote_code,
@@ -308,6 +324,7 @@ class AbsTaskRetrieval(AbsTask):
             hf_subset=hf_subset,
             instructions=data_split["instructions"],
             top_ranked=data_split["top_ranked"],
+            top_k=self.top_k,
             **kwargs,
         )
 
@@ -350,16 +367,30 @@ class AbsTaskRetrieval(AbsTask):
             ) as f:
                 json.dump(data_split["relevant_docs"], f)
 
-        ndcg, _map, recall, precision, naucs, task_scores, mrr, naucs_mrr = (
-            retriever.evaluate(
-                data_split["relevant_docs"],
-                results,
-                retriever.k_values,
-                ignore_identical_ids=self.ignore_identical_ids,
-            )
+        (
+            all_scores,
+            ndcg,
+            _map,
+            recall,
+            precision,
+            naucs,
+            mrr,
+            naucs_mrr,
+        ) = retriever.evaluate(
+            data_split["relevant_docs"],
+            results,
+            self.k_values,
+            ignore_identical_ids=self.ignore_identical_ids,
+        )
+        task_specific_scores = self.task_specific_scores(
+            all_scores,
+            data_split["relevant_docs"],
+            results,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
         )
         scores = make_score_dict(
-            ndcg, _map, recall, precision, mrr, naucs, naucs_mrr, task_scores
+            ndcg, _map, recall, precision, mrr, naucs, naucs_mrr, task_specific_scores
         )
 
         if export_errors:
@@ -392,6 +423,16 @@ class AbsTaskRetrieval(AbsTask):
                 json.dump(errors, f)
 
         return scores
+
+    def task_specific_scores(
+        self,
+        scores: dict[str, dict[str, float]],
+        qrels: dict[str, dict[str, int]],
+        results: dict[str, dict[str, float]],
+        hf_split: str,
+        hf_subset: str,
+    ) -> dict[str, float]:
+        return {}
 
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
