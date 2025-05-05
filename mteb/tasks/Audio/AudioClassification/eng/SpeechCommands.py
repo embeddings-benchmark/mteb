@@ -9,15 +9,15 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 class SpeechCommandsClassification(AbsTaskAudioClassification):
     metadata = TaskMetadata(
         name="SpeechCommands",
-        description="A set of one-second .wav audio files, each containing a single spoken English word or background noise.",
+        description="A set of one-second .wav audio files, each containing a single spoken English word or background noise. To keep evaluation fast, we use a downsampled version of the original dataset by keeping 50 samples per class for training.",
         reference="https://arxiv.org/abs/1804.03209",
         dataset={
             "path": "AdnanElAssadi/speech_commands_small",
-            "revision": "a59564b91bf0cfcf587e11c2603fe42bae21e5f0",  # Using downsampled version of v0.02
+            "revision": "a59564b91bf0cfcf587e11c2603fe42bae21e5f0",
         },
         type="AudioClassification",
         category="a2t",
-        eval_splits=["validation", "test"],
+        eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2018-04-11", "2018-04-11"),  # v0.02 release date
@@ -28,12 +28,14 @@ class SpeechCommandsClassification(AbsTaskAudioClassification):
         dialect=[],
         modalities=["audio"],
         sample_creation="found",
-        bibtex_citation="""@article{speechcommands2018,
-            title={Speech Commands: A Dataset for Limited-Vocabulary Speech Recognition},
-            author={Pete Warden},
-            journal={arXiv preprint arXiv:1804.03209},
-            year={2018}
-        }""",
+        bibtex_citation=r"""
+@article{speechcommands2018,
+  author = {Pete Warden},
+  journal = {arXiv preprint arXiv:1804.03209},
+  title = {Speech Commands: A Dataset for Limited-Vocabulary Speech Recognition},
+  year = {2018},
+}
+""",
         descriptive_stats={
             "n_samples": {"train": 1755, "validation": 9982, "test": 4890},
             "n_classes": 36,
