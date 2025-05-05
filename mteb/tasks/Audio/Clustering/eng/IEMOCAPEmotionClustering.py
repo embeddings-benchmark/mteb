@@ -28,16 +28,18 @@ class IEMOCAPEmotionClustering(AbsTaskAudioClustering):
         dialect=[],
         modalities=["audio"],
         sample_creation="created",
-        bibtex_citation="""@article{busso2008iemocap,
-title={IEMOCAP: Interactive emotional dyadic motion capture database},
-author={Busso, Carlos and Bulut, Murtaza and Lee, Chi-Chun and Kazemzadeh, Abe and Mower, Emily and Kim, Samuel and Chang, Jeannette N and Lee, Sungbok and Narayanan, Shrikanth S},
-journal={Language resources and evaluation},
-volume={42},
-number={4},
-pages={335--359},
-year={2008},
-publisher={Springer}
-}""",
+        bibtex_citation=r"""
+@article{busso2008iemocap,
+  author = {Busso, Carlos and Bulut, Murtaza and Lee, Chi-Chun and Kazemzadeh, Abe and Mower, Emily and Kim, Samuel and Chang, Jeannette N and Lee, Sungbok and Narayanan, Shrikanth S},
+  journal = {Language resources and evaluation},
+  number = {4},
+  pages = {335--359},
+  publisher = {Springer},
+  title = {IEMOCAP: Interactive emotional dyadic motion capture database},
+  volume = {42},
+  year = {2008},
+}
+""",
         descriptive_stats={
             "n_samples": {"train": 10039},  # Approximate after subsampling
         },
