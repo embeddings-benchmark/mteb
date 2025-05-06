@@ -140,7 +140,7 @@ class SeedTextEmbeddingModel(Wrapper):
 
 seed_embedding = ModelMeta(
     name="ByteDance-Seed/Doubao-1.5-Embedding",
-    revision="2",
+    revision="3",
     release_date="2025-04-25",
     languages=[
         "eng-Latn",
