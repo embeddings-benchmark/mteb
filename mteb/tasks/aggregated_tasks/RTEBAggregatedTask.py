@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb import AILACasedocs, AILAStatutes, LegalQuAD, ChatDoctor_HealthCareMagic
+from mteb.tasks.Retrieval import AILACasedocs, AILAStatutes, LegalQuAD, ChatDoctor_HealthCareMagic
 from mteb.abstasks import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate, AggregateTaskMetadata
 
@@ -9,14 +9,13 @@ task_list_rteb: list[AbsTask] = [
     AILAStatutes(),
     LegalQuAD(),
     ChatDoctor_HealthCareMagic(),
-    # APPS(),
-    # ChatDoctor_HealthCareMagic(),
-    # ConvFinQA(),
-    # COVID_QA(),
-    # DialogsumGerman(),
-    # DS1000(),
-    # FinanceBench(),
-    # FinQA(),
+    # APPS(),  # new
+    # ConvFinQA(),  # new
+    # COVID_QA(),  # new
+    # DialogsumGerman(),  # new
+    # DS1000(),  # new
+    # FinanceBench(),  # new
+    # FinQA(),  # new
     # FiQAPersonalFinance(),
     # FrenchBoolQ(),
     # FrenchOpenFiscalTexts(),
@@ -42,7 +41,7 @@ class RTEBAggregatedTask(AbsTaskAggregate):
         reference=None,
         tasks=task_list_rteb,
         main_score="average_score",
-        type="RTEB",
+        type="Retrieval",
         eval_splits=["test"],
         bibtex_citation=None,
     )

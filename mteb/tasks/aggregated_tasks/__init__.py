@@ -12,6 +12,7 @@ from .STSBenchmarkMultilingualVisualSTS import (
     STSBenchmarkMultilingualVisualSTSMultilingual,
 )
 from .SynPerChatbotConvSAClassification import SynPerChatbotConvSAClassification
+from .RTEBAggregatedTask import RTEBAggregatedTask
 
 __all__ = [
     "CQADupstackRetrieval",
@@ -22,4 +23,5 @@ __all__ = [
     "STS17MultilingualVisualSTSMultilingual",
     "STSBenchmarkMultilingualVisualSTSEng",
     "STSBenchmarkMultilingualVisualSTSMultilingual",
+    "RTEBAggregatedTask",
 ]
