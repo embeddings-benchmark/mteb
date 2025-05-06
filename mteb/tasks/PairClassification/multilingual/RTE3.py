@@ -36,21 +36,22 @@ class RTE3(MultilingualTask, AbsTaskPairClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{giampiccolo-etal-2007-third,
-            title = "The Third {PASCAL} Recognizing Textual Entailment Challenge",
-            author = "Giampiccolo, Danilo  and
-            Magnini, Bernardo  and
-            Dagan, Ido  and
-            Dolan, Bill",
-            booktitle = "Proceedings of the {ACL}-{PASCAL} Workshop on Textual Entailment and Paraphrasing",
-            month = jun,
-            year = "2007",
-            address = "Prague",
-            publisher = "Association for Computational Linguistics",
-            url = "https://aclanthology.org/W07-1401",
-            pages = "1--9",
-        }
-        """,
+        bibtex_citation=r"""
+@inproceedings{giampiccolo-etal-2007-third,
+  address = {Prague},
+  author = {Giampiccolo, Danilo  and
+Magnini, Bernardo  and
+Dagan, Ido  and
+Dolan, Bill},
+  booktitle = {Proceedings of the {ACL}-{PASCAL} Workshop on Textual Entailment and Paraphrasing},
+  month = jun,
+  pages = {1--9},
+  publisher = {Association for Computational Linguistics},
+  title = {The Third {PASCAL} Recognizing Textual Entailment Challenge},
+  url = {https://aclanthology.org/W07-1401},
+  year = {2007},
+}
+""",
         # sum of 4 languages after neutral filtering
     )
 

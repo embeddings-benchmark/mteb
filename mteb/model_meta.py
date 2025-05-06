@@ -17,7 +17,10 @@ from mteb.abstasks.AbsTask import AbsTask
 from mteb.encoder_interface import Encoder
 
 from .custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
-from .languages import ISO_LANGUAGE_SCRIPT
+from .languages import (
+    ISO_LANGUAGE_SCRIPT,
+    check_language_code,
+)
 
 if TYPE_CHECKING:
     from .models.sentence_transformer_wrapper import SentenceTransformerWrapper
@@ -156,6 +159,16 @@ class ModelMeta(BaseModel):
         loader = dict_repr.pop("loader", None)
         dict_repr["loader"] = get_loader_name(loader)
         return dict_repr
+
+    @field_validator("languages")
+    @classmethod
+    def languages_are_valid(cls, languages: list[ISO_LANGUAGE_SCRIPT] | None) -> None:
+        if languages is None:
+            return None
+
+        for code in languages:
+            check_language_code(code)
+        return languages
 
     @field_validator("name")
     @classmethod

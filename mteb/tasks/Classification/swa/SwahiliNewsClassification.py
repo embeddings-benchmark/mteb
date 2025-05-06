@@ -26,16 +26,16 @@ class SwahiliNewsClassification(AbsTaskClassification):
         license="cc-by-nc-sa-4.0",
         annotations_creators="derived",
         sample_creation="found",
-        bibtex_citation="""
-        @inproceedings{davis2020swahili,
-        title = "Swahili: News Classification Dataset (0.2)",
-        author = "Davis, David",
-        year = "2020",
-        publisher = "Zenodo",
-        doi = "10.5281/zenodo.5514203",
-        url = "https://doi.org/10.5281/zenodo.5514203"
-        }
-        """,
+        bibtex_citation=r"""
+@inproceedings{davis2020swahili,
+  author = {Davis, David},
+  doi = {10.5281/zenodo.5514203},
+  publisher = {Zenodo},
+  title = {Swahili: News Classification Dataset (0.2)},
+  url = {https://doi.org/10.5281/zenodo.5514203},
+  year = {2020},
+}
+""",
     )
 
     def dataset_transform(self) -> None:

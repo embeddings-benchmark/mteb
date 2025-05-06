@@ -26,13 +26,15 @@ class CUB200I2I(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@article{article,
-        author = {Welinder, Peter and Branson, Steve and Mita, Takeshi and Wah, Catherine and Schroff, Florian and Belongie, Serge and Perona, Pietro},
-        year = {2010},
-        month = {09},
-        pages = {},
-        title = {Caltech-UCSD Birds 200}
-        }""",
+        bibtex_citation=r"""
+@article{article,
+  author = {Welinder, Peter and Branson, Steve and Mita, Takeshi and Wah, Catherine and Schroff, Florian and Belongie, Serge and Perona, Pietro},
+  month = {09},
+  pages = {},
+  title = {Caltech-UCSD Birds 200},
+  year = {2010},
+}
+""",
         descriptive_stats={
             "n_samples": {"default": 5794},
             "avg_character_length": {

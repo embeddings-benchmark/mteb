@@ -78,6 +78,7 @@ The following links to the main sections in the usage documentation.
 | **General** | |
 | [Evaluating a Model](docs/usage/usage.md#evaluating-a-model) | How to evaluate a model |
 | [Evaluating on different Modalities](docs/usage/usage.md#evaluating-on-different-modalities) | How to evaluate image and image-text tasks |
+| [MIEB](docs/mieb/readme.md) | How to run the Massive Image Embedding Benchmark |
 | **Selecting Tasks** | |
 | [Selecting a benchmark](docs/usage/usage.md#selecting-a-benchmark) | How to select benchmarks |
 | [Task selection](docs/usage/usage.md#task-selection) | How to select and filter tasks |
@@ -96,7 +97,8 @@ The following links to the main sections in the usage documentation.
 | **Leaderboard** | |
 | [Running the Leaderboard Locally](docs/usage/usage.md#running-the-leaderboard-locally) | How to run the leaderboard locally |
 | [Report Data Contamination](docs/usage/usage.md#annotate-contamination) | How to report data contamination for a model |
-| [Fetching Result from the Leaderboard](docs/usage/usage.md#fetching-results-from-the-leaderboard) | How to fetch the raw results from the leaderboard |
+| [Loading and working with Results](docs/usage/results.md) | How to load and working with the raw results from the leaderboard, including making result dataframes |
+
 
 
 ## Overview
@@ -172,3 +174,5 @@ Some of these amazing publications include (ordered chronologically):
 - Dawei Zhu, Liang Wang, Nan Yang, Yifan Song, Wenhao Wu, Furu Wei, Sujian Li. "[LongEmbed: Extending Embedding Models for Long Context Retrieval](https://arxiv.org/abs/2404.12096)" arXiv 2024
 - Kenneth Enevoldsen, Márton Kardos, Niklas Muennighoff, Kristoffer Laigaard Nielbo. "[The Scandinavian Embedding Benchmarks: Comprehensive Assessment of Multilingual and Monolingual Text Embedding](https://arxiv.org/abs/2406.02396)" arXiv 2024
 - Ali Shiraee Kasmaee, Mohammad Khodadad, Mohammad Arshi Saloot, Nick Sherck, Stephen Dokas, Hamidreza Mahyar, Soheila Samiee. "[ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance & Efficiency on a Specific Domain](https://arxiv.org/abs/2412.00532)" arXiv 2024
+- Chenghao Xiao, Isaac Chung, Imene Kerboua, Jamie Stirling, Xin Zhang, Márton Kardos, Roman Solomatin, Noura Al Moubayed, Kenneth Enevoldsen, Niklas Muennighoff. "[MIEB: Massive Image Embedding Benchmark](https://arxiv.org/abs/2504.10471)" arXiv 2025
+

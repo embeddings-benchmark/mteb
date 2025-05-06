@@ -124,17 +124,17 @@ class BrightRetrieval(MultilingualTask, AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         modalities=["text"],
-        bibtex_citation="""
+        bibtex_citation=r"""
 @misc{su2024brightrealisticchallengingbenchmark,
-    title={BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval},
-    author={Hongjin Su and Howard Yen and Mengzhou Xia and Weijia Shi and Niklas Muennighoff and Han-yu Wang and Haisu Liu and Quan Shi and Zachary S. Siegel and Michael Tang and Ruoxi Sun and Jinsung Yoon and Sercan O. Arik and Danqi Chen and Tao Yu},
-    year={2024},
-    eprint={2407.12883},
-    archivePrefix={arXiv},
-    primaryClass={cs.CL},
-    url={https://arxiv.org/abs/2407.12883},
+  archiveprefix = {arXiv},
+  author = {Hongjin Su and Howard Yen and Mengzhou Xia and Weijia Shi and Niklas Muennighoff and Han-yu Wang and Haisu Liu and Quan Shi and Zachary S. Siegel and Michael Tang and Ruoxi Sun and Jinsung Yoon and Sercan O. Arik and Danqi Chen and Tao Yu},
+  eprint = {2407.12883},
+  primaryclass = {cs.CL},
+  title = {BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval},
+  url = {https://arxiv.org/abs/2407.12883},
+  year = {2024},
 }
-        """,
+""",
     )
     load_bright_data = load_bright_data
     load_data = load_data

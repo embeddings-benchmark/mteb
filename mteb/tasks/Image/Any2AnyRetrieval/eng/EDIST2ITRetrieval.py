@@ -26,13 +26,15 @@ class EDIST2ITRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{liu2023edis,
-  title={EDIS: Entity-Driven Image Search over Multimodal Web Content},
-  author={Liu, Siqi and Feng, Weixi and Fu, Tsu-Jui and Chen, Wenhu and Wang, William},
-  booktitle={Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing},
-  pages={4877--4894},
-  year={2023}
-}""",
+        bibtex_citation=r"""
+@inproceedings{liu2023edis,
+  author = {Liu, Siqi and Feng, Weixi and Fu, Tsu-Jui and Chen, Wenhu and Wang, William},
+  booktitle = {Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing},
+  pages = {4877--4894},
+  title = {EDIS: Entity-Driven Image Search over Multimodal Web Content},
+  year = {2023},
+}
+""",
         prompt={"query": "Identify the news photo for the given caption."},
         descriptive_stats={
             "n_samples": {"test": 3241},

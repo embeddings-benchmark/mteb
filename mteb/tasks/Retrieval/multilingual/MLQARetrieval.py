@@ -103,13 +103,15 @@ class MLQARetrieval(AbsTaskRetrieval, MultilingualTask):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{lewis2019mlqa,
-        title = {MLQA: Evaluating Cross-lingual Extractive Question Answering},
-        author = {Lewis, Patrick and Oguz, Barlas and Rinott, Ruty and Riedel, Sebastian and Schwenk, Holger},
-        journal = {arXiv preprint arXiv:1910.07475},
-        year = 2019,
-        eid = {arXiv: 1910.07475}
-        }""",
+        bibtex_citation=r"""
+@article{lewis2019mlqa,
+  author = {Lewis, Patrick and Oguz, Barlas and Rinott, Ruty and Riedel, Sebastian and Schwenk, Holger},
+  eid = {arXiv: 1910.07475},
+  journal = {arXiv preprint arXiv:1910.07475},
+  title = {MLQA: Evaluating Cross-lingual Extractive Question Answering},
+  year = {2019},
+}
+""",
     )
 
     def load_data(self, **kwargs):

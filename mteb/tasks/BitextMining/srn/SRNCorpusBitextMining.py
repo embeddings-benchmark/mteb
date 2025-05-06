@@ -46,12 +46,12 @@ class SRNCorpusBitextMining(AbsTaskBitextMining, MultilingualTask):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
+        bibtex_citation=r"""
 @article{zwennicker2022towards,
-  title={Towards a general purpose machine translation system for Sranantongo},
-  author={Zwennicker, Just and Stap, David},
-  journal={arXiv preprint arXiv:2212.06383},
-  year={2022}
+  author = {Zwennicker, Just and Stap, David},
+  journal = {arXiv preprint arXiv:2212.06383},
+  title = {Towards a general purpose machine translation system for Sranantongo},
+  year = {2022},
 }
 """,
     )

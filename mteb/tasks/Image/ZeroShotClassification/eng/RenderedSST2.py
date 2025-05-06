@@ -28,7 +28,7 @@ class RenderedSST2(AbsTaskZeroShotClassification):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="created",
-        bibtex_citation="""d""",
+        bibtex_citation="",
         descriptive_stats={
             "n_samples": {"test": 1820},
             "avg_character_length": {"test": 10.0},

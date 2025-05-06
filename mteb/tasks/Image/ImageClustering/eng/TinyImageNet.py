@@ -29,7 +29,7 @@ class TinyImageNet(AbsTaskImageClustering):
         dialect=[],
         modalities=["image"],
         sample_creation="found",
-        bibtex_citation="""d""",
+        bibtex_citation="",
         descriptive_stats={
             "n_samples": {"valid": 10000},
             "avg_character_length": {"valid": 431.4},
