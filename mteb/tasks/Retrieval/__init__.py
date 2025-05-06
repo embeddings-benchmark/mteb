@@ -34,6 +34,7 @@ from .eng.BuiltBenchRetrieval import *
 from .eng.ChemHotpotQARetrieval import *
 from .eng.ChemNQRetrieval import *
 from .eng.ClimateFEVERRetrieval import *
+from .eng.ChatDoctor_HealthCareMagic import *
 from .eng.CQADupstackAndroidRetrieval import *
 from .eng.CQADupstackEnglishRetrieval import *
 from .eng.CQADupstackGamingRetrieval import *
