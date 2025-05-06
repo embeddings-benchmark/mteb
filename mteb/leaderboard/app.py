@@ -8,7 +8,6 @@ import time
 import warnings
 from pathlib import Path
 from typing import Literal, get_args
-from urllib.parse import urlencode
 
 import cachetools
 import gradio as gr
@@ -23,6 +22,11 @@ from mteb.languages import ISO_TO_LANGUAGE
 from mteb.leaderboard.benchmark_selector import BENCHMARK_ENTRIES, make_selector
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
 from mteb.leaderboard.table import create_tables
+from mteb.leaderboard.url_utils import (
+    decode_filter_state,
+    encode_filter_state,
+    generate_short_url,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -65,16 +69,43 @@ def load_results():
             return mteb.BenchmarkResults.from_validated(**json.load(cache_file))
 
 
-def produce_benchmark_link(benchmark_name: str, request: gr.Request) -> str:
-    """Produces a URL for the selected benchmark."""
-    params = urlencode(
-        {
-            "benchmark_name": benchmark_name,
-        }
-    )
+def produce_benchmark_link(
+    benchmark_name: str,
+    languages: list[str],
+    domains: list[str],
+    task_types: list[str],
+    modalities: list[str],
+    tasks: list[str],
+    request: gr.Request,
+) -> str:
+    """Produces a URL for the selected benchmark with all applied filters in compact form."""
+    # Create filter state dictionary with non-empty/non-default values
+    filter_state = {
+        "b": benchmark_name,
+    }
+
+    if languages:
+        filter_state["l"] = languages
+
+    if domains:
+        filter_state["d"] = domains
+
+    if task_types:
+        filter_state["tt"] = task_types
+
+    if modalities:
+        filter_state["m"] = modalities
+
+    if tasks:
+        filter_state["t"] = tasks
+
+    encoded = encode_filter_state(filter_state)
+
     base_url = request.request.base_url
-    url = f"{base_url}?{params}"
-    md = f"```\n{url}\n```"
+    long_url = f"{base_url}?s={encoded}"
+    short_id = generate_short_url(long_url)
+    short_url = f"{base_url}?id={short_id}"
+    md = f"```\n{short_url}\n```"
     return md
 
 
@@ -82,8 +113,54 @@ DEFAULT_BENCHMARK_NAME = MTEB_multilingual.name
 
 
 def set_benchmark_on_load(request: gr.Request):
+    """Load benchmark configuration from encoded URL parameter"""
     query_params = request.query_params
-    return query_params.get("benchmark_name", DEFAULT_BENCHMARK_NAME)
+
+    if "s" in query_params:
+        encoded_state = query_params.get("s")
+        filter_state = decode_filter_state(encoded_state)
+
+        benchmark_name = filter_state.get("b", DEFAULT_BENCHMARK_NAME)
+        languages = filter_state.get("l", [])
+        domains = filter_state.get("d", [])
+        task_types = filter_state.get("tt", [])
+        modalities = filter_state.get("m", [])
+        tasks = filter_state.get("t", [])
+
+        return (
+            benchmark_name,
+            languages,
+            domains,
+            task_types,
+            modalities,
+            tasks,
+        )
+
+    benchmark_name = query_params.get("benchmark_name", DEFAULT_BENCHMARK_NAME)
+    benchmark = mteb.get_benchmark(benchmark_name)
+    languages = [task.languages for task in benchmark.tasks if task.languages]
+    languages = sorted(set(itertools.chain.from_iterable(languages)))
+    domains = [
+        task.metadata.domains for task in benchmark.tasks if task.metadata.domains
+    ]
+    domains = sorted(set(itertools.chain.from_iterable(domains)))
+    task_types = sorted(
+        {task.metadata.type for task in benchmark.tasks if task.metadata.type}
+    )
+    modalities = set()
+    for task in benchmark.tasks:
+        modalities.update(task.metadata.modalities)
+    modalities = sorted(modalities)
+    tasks = sorted([task.metadata.name for task in benchmark.tasks])
+
+    return (
+        benchmark_name,
+        languages,
+        domains,
+        task_types,
+        modalities,
+        tasks,
+    )
 
 
 def download_table(table: pd.DataFrame) -> str:
@@ -322,7 +399,17 @@ def get_leaderboard_app() -> gr.Blocks:
                 with gr.Accordion("Cite this benchmark:", open=False):
                     citation = gr.Markdown(update_citation, inputs=[benchmark_select])  # noqa: F841
                 with gr.Accordion("Share this benchmark:", open=False):
-                    gr.Markdown(produce_benchmark_link, inputs=[benchmark_select])
+                    gr.Markdown(
+                        produce_benchmark_link,
+                        inputs=[
+                            benchmark_select,
+                            lang_select,
+                            domain_select,
+                            type_select,
+                            modality_select,
+                            task_select,
+                        ],
+                    )
             with gr.Column(scale=2):
                 with gr.Tab("Performance per Model Size"):
                     plot = gr.Plot(performance_size_plot, inputs=[summary_table])  # noqa: F841
@@ -479,7 +566,18 @@ def get_leaderboard_app() -> gr.Blocks:
             task_info_table = gr.DataFrame(update_task_info, inputs=[task_select])  # noqa: F841
 
         # This sets the benchmark from the URL query parameters
-        demo.load(set_benchmark_on_load, inputs=[], outputs=[benchmark_select])
+        demo.load(
+            set_benchmark_on_load,
+            inputs=[],
+            outputs=[
+                benchmark_select,
+                lang_select,
+                domain_select,
+                type_select,
+                modality_select,
+                task_select,
+            ],
+        )
 
         @cachetools.cached(
             cache={},
