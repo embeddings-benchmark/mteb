@@ -28,17 +28,19 @@ class SIQA(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{xiao2024rar,
-  title={RAR-b: Reasoning as Retrieval Benchmark},
-  author={Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
-  journal={arXiv preprint arXiv:2404.06347},
-  year={2024}
-}
+        bibtex_citation=r"""
 @article{sap2019socialiqa,
-  title={Socialiqa: Commonsense reasoning about social interactions},
-  author={Sap, Maarten and Rashkin, Hannah and Chen, Derek and LeBras, Ronan and Choi, Yejin},
-  journal={arXiv preprint arXiv:1904.09728},
-  year={2019}
+  author = {Sap, Maarten and Rashkin, Hannah and Chen, Derek and LeBras, Ronan and Choi, Yejin},
+  journal = {arXiv preprint arXiv:1904.09728},
+  title = {Socialiqa: Commonsense reasoning about social interactions},
+  year = {2019},
+}
+
+@article{xiao2024rar,
+  author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
+  journal = {arXiv preprint arXiv:2404.06347},
+  title = {RAR-b: Reasoning as Retrieval Benchmark},
+  year = {2024},
 }
 """,
         prompt={

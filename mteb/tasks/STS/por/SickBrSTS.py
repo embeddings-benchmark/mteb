@@ -29,27 +29,27 @@ class SickBrSTS(AbsTaskSTS):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="human-translated and localized",
-        bibtex_citation="""
+        bibtex_citation=r"""
 @inproceedings{real18,
-  author="Real, Livy
-    and Rodrigues, Ana
-    and Vieira e Silva, Andressa
-    and Albiero, Beatriz
-    and Thalenberg, Bruna
-    and Guide, Bruno
-    and Silva, Cindy
-    and de Oliveira Lima, Guilherme
-    and Camara, Igor C. S.
-    and Stanojevi{\'{c}}, Milo{\v{s}}
-    and Souza, Rodrigo
-    and de Paiva, Valeria"
-  year ="2018",
-  title="SICK-BR: A Portuguese Corpus for Inference",
-  booktitle="Computational Processing of the Portuguese Language. PROPOR 2018.",
-  doi ="10.1007/978-3-319-99722-3_31",
-  isbn="978-3-319-99722-3"
+  author = {Real, Livy
+and Rodrigues, Ana
+and Vieira e Silva, Andressa
+and Albiero, Beatriz
+and Thalenberg, Bruna
+and Guide, Bruno
+and Silva, Cindy
+and de Oliveira Lima, Guilherme
+and Camara, Igor C. S.
+and Stanojevi{\'{c}}, Milo{\v{s}}
+and Souza, Rodrigo
+and de Paiva, Valeria},
+  booktitle = {{Computational Processing of the Portuguese Language. PROPOR 2018.}},
+  doi = {10.1007/978-3-319-99722-3_31},
+  isbn = {978-3-319-99722-3},
+  title = {{SICK-BR: A Portuguese Corpus for Inference}},
+  year = {2018},
 }
-        """,
+""",
     )
 
     @property

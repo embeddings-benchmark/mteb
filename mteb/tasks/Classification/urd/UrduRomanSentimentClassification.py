@@ -27,15 +27,15 @@ class UrduRomanSentimentClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{misc_roman_urdu_data_set_458,
-  author       = {Sharf,Zareen},
-  title        = {{Roman Urdu Data Set}},
-  year         = {2018},
+        bibtex_citation=r"""
+@misc{misc_roman_urdu_data_set_458,
+  author = {Sharf,Zareen},
   howpublished = {UCI Machine Learning Repository},
-  note         = {{DOI}: https://doi.org/10.24432/C58325}
+  note = {{DOI}: https://doi.org/10.24432/C58325},
+  title = {{Roman Urdu Data Set}},
+  year = {2018},
 }
-    """,
+""",
     )
 
     def dataset_transform(self):

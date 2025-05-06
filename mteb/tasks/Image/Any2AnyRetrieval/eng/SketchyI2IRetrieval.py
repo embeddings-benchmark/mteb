@@ -26,12 +26,14 @@ class SketchyI2IRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{ypsilantis2021met,
-  title={The met dataset: Instance-level recognition for artworks},
-  author={Ypsilantis, Nikolaos-Antonios and Garcia, Noa and Han, Guangxing and Ibrahimi, Sarah and Van Noord, Nanne and Tolias, Giorgos},
-  booktitle={Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
-  year={2021}
-}""",
+        bibtex_citation=r"""
+@inproceedings{ypsilantis2021met,
+  author = {Ypsilantis, Nikolaos-Antonios and Garcia, Noa and Han, Guangxing and Ibrahimi, Sarah and Van Noord, Nanne and Tolias, Giorgos},
+  booktitle = {Thirty-fifth Conference on Neural Information Processing Systems Datasets and Benchmarks Track (Round 2)},
+  title = {The met dataset: Instance-level recognition for artworks},
+  year = {2021},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 452886},
             "avg_character_length": {

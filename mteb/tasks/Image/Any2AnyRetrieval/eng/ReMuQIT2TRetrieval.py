@@ -26,25 +26,27 @@ class ReMuQIT2TRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["image", "text"],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{luo-etal-2023-end,
-    title = "End-to-end Knowledge Retrieval with Multi-modal Queries",
-    author = "Luo, Man  and
-      Fang, Zhiyuan  and
-      Gokhale, Tejas  and
-      Yang, Yezhou  and
-      Baral, Chitta",
-    editor = "Rogers, Anna  and
-      Boyd-Graber, Jordan  and
-      Okazaki, Naoaki",
-    booktitle = "Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
-    month = jul,
-    year = "2023",
-    address = "Toronto, Canada",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/2023.acl-long.478",
-    doi = "10.18653/v1/2023.acl-long.478",
-    pages = "8573--8589",
-}""",
+        bibtex_citation=r"""
+@inproceedings{luo-etal-2023-end,
+  address = {Toronto, Canada},
+  author = {Luo, Man  and
+Fang, Zhiyuan  and
+Gokhale, Tejas  and
+Yang, Yezhou  and
+Baral, Chitta},
+  booktitle = {Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2023.acl-long.478},
+  editor = {Rogers, Anna  and
+Boyd-Graber, Jordan  and
+Okazaki, Naoaki},
+  month = jul,
+  pages = {8573--8589},
+  publisher = {Association for Computational Linguistics},
+  title = {End-to-end Knowledge Retrieval with Multi-modal Queries},
+  url = {https://aclanthology.org/2023.acl-long.478},
+  year = {2023},
+}
+""",
         prompt={
             "query": "Retrieve a fact-based paragraph that provides an answer to the given query about the image."
         },

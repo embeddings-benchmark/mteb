@@ -27,13 +27,15 @@ class VQA2IT2TRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@InProceedings{Goyal_2017_CVPR,
-author = {Goyal, Yash and Khot, Tejas and Summers-Stay, Douglas and Batra, Dhruv and Parikh, Devi},
-title = {Making the v in VQA Matter: Elevating the Role of Image Understanding in Visual Question Answering},
-booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
-month = {July},
-year = {2017}
-}""",
+        bibtex_citation=r"""
+@inproceedings{Goyal_2017_CVPR,
+  author = {Goyal, Yash and Khot, Tejas and Summers-Stay, Douglas and Batra, Dhruv and Parikh, Devi},
+  booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+  month = {July},
+  title = {Making the v in VQA Matter: Elevating the Role of Image Understanding in Visual Question Answering},
+  year = {2017},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 4319},
             "avg_character_length": {

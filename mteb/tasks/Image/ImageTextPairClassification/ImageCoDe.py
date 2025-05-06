@@ -45,12 +45,14 @@ class ImageCoDe(AbsTaskImageTextPairClassification):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{krojer2022image,
-  title={Image retrieval from contextual descriptions},
-  author={Krojer, Benno and Adlakha, Vaibhav and Vineet, Vibhav and Goyal, Yash and Ponti, Edoardo and Reddy, Siva},
-  journal={arXiv preprint arXiv:2203.15867},
-  year={2022}
-}""",
+        bibtex_citation=r"""
+@article{krojer2022image,
+  author = {Krojer, Benno and Adlakha, Vaibhav and Vineet, Vibhav and Goyal, Yash and Ponti, Edoardo and Reddy, Siva},
+  journal = {arXiv preprint arXiv:2203.15867},
+  title = {Image retrieval from contextual descriptions},
+  year = {2022},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 25322},
             "avg_character_length": {

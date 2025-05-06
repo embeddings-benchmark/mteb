@@ -27,14 +27,16 @@ class ClimateFEVER(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{diggelmann2021climatefever,
-      title={CLIMATE-FEVER: A Dataset for Verification of Real-World Climate Claims},
-      author={Thomas Diggelmann and Jordan Boyd-Graber and Jannis Bulian and Massimiliano Ciaramita and Markus Leippold},
-      year={2021},
-      eprint={2012.00614},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-}""",
+        bibtex_citation=r"""
+@misc{diggelmann2021climatefever,
+  archiveprefix = {arXiv},
+  author = {Thomas Diggelmann and Jordan Boyd-Graber and Jannis Bulian and Massimiliano Ciaramita and Markus Leippold},
+  eprint = {2012.00614},
+  primaryclass = {cs.CL},
+  title = {CLIMATE-FEVER: A Dataset for Verification of Real-World Climate Claims},
+  year = {2021},
+}
+""",
         prompt={
             "query": "Given a claim about climate change, retrieve documents that support or refute the claim"
         },
@@ -63,14 +65,16 @@ class ClimateFEVERHardNegatives(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{diggelmann2021climatefever,
-      title={CLIMATE-FEVER: A Dataset for Verification of Real-World Climate Claims},
-      author={Thomas Diggelmann and Jordan Boyd-Graber and Jannis Bulian and Massimiliano Ciaramita and Markus Leippold},
-      year={2021},
-      eprint={2012.00614},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-}""",
+        bibtex_citation=r"""
+@misc{diggelmann2021climatefever,
+  archiveprefix = {arXiv},
+  author = {Thomas Diggelmann and Jordan Boyd-Graber and Jannis Bulian and Massimiliano Ciaramita and Markus Leippold},
+  eprint = {2012.00614},
+  primaryclass = {cs.CL},
+  title = {CLIMATE-FEVER: A Dataset for Verification of Real-World Climate Claims},
+  year = {2021},
+}
+""",
         adapted_from=["ClimateFEVER"],
     )
 
@@ -97,14 +101,16 @@ class ClimateFEVERRetrievalv2(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{diggelmann2021climatefever,
-      title={CLIMATE-FEVER: A Dataset for Verification of Real-World Climate Claims},
-      author={Thomas Diggelmann and Jordan Boyd-Graber and Jannis Bulian and Massimiliano Ciaramita and Markus Leippold},
-      year={2021},
-      eprint={2012.00614},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-}""",
+        bibtex_citation=r"""
+@misc{diggelmann2021climatefever,
+  archiveprefix = {arXiv},
+  author = {Thomas Diggelmann and Jordan Boyd-Graber and Jannis Bulian and Massimiliano Ciaramita and Markus Leippold},
+  eprint = {2012.00614},
+  primaryclass = {cs.CL},
+  title = {CLIMATE-FEVER: A Dataset for Verification of Real-World Climate Claims},
+  year = {2021},
+}
+""",
         prompt={
             "query": "Given a claim about climate change, retrieve documents that support or refute the claim"
         },
