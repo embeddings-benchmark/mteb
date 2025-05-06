@@ -3,18 +3,16 @@ from __future__ import annotations
 from collections.abc import Iterable
 from functools import partial
 from typing import Any
-import os
 
 import numpy as np
 import torch
 import torchaudio
 from torch.utils.data import DataLoader
-from tqdm import tqdm
 from transformers import AutoProcessor, Qwen2AudioForConditionalGeneration
 
-from mteb.models.wrapper import Wrapper
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
 from mteb.model_meta import ModelMeta
+from mteb.models.wrapper import Wrapper
 
 
 class Qwen2AudioWrapper(Wrapper):
@@ -65,7 +63,9 @@ class Qwen2AudioWrapper(Wrapper):
                             else arr.float()
                         )
                         if sr and sr != self.sampling_rate:
-                            resampler = torchaudio.transforms.Resample(sr, self.sampling_rate)
+                            resampler = torchaudio.transforms.Resample(
+                                sr, self.sampling_rate
+                            )
                             tensor = resampler(tensor)
                         waveforms.append(self._convert_audio_from_numpy(tensor))
                     elif "path" in item:
@@ -79,25 +79,22 @@ class Qwen2AudioWrapper(Wrapper):
     def _convert_audio_from_numpy(self, audio: AudioData) -> torch.Tensor:
         if isinstance(audio, np.ndarray):
             audio = torch.from_numpy(audio)
-        if audio.ndim == 2: 
+        if audio.ndim == 2:
             audio = audio.mean(dim=0)
         return audio.squeeze()
 
     def _load_audio_file(self, path: str) -> torch.Tensor:
         waveform, sr = torchaudio.load(path)
-        if waveform.ndim == 2: 
+        if waveform.ndim == 2:
             waveform = waveform.mean(dim=0)
         if sr != self.sampling_rate:
             resampler = torchaudio.transforms.Resample(sr, self.sampling_rate)
             waveform = resampler(waveform)
         return waveform.squeeze()
 
-
     def _pad_audio_batch(self, batch: list[torch.Tensor]) -> torch.Tensor:
         max_len = max(w.shape[0] for w in batch)
-        padded = [
-            torch.nn.functional.pad(w, (0, max_len - w.shape[0])) for w in batch
-        ]
+        padded = [torch.nn.functional.pad(w, (0, max_len - w.shape[0])) for w in batch]
         return torch.stack(padded)
 
     def get_audio_embeddings(
@@ -109,17 +106,16 @@ class Qwen2AudioWrapper(Wrapper):
         batch_size: int = 4,
         **kwargs: Any,
     ) -> torch.Tensor:
-        processed = self._process_audio(audio)  
+        processed = self._process_audio(audio)
         embeddings_list: list[torch.Tensor] = []
 
         with torch.no_grad():
             for i in range(0, len(processed), batch_size):
-                batch = processed[i : i + batch_size]  
+                batch = processed[i : i + batch_size]
 
                 audio_list = [w.numpy() for w in batch]
                 prompt = " ".join(["<|AUDIO|>"] * len(audio_list))
 
-                
                 inputs = self.processor(
                     text=prompt,
                     audios=audio_list,
@@ -135,13 +131,11 @@ class Qwen2AudioWrapper(Wrapper):
                     output_hidden_states=True,
                 )
 
-                last_hidden = outputs.hidden_states[-1]      
-                emb = last_hidden.mean(dim=1).cpu()         
+                last_hidden = outputs.hidden_states[-1]
+                emb = last_hidden.mean(dim=1).cpu()
                 embeddings_list.append(emb)
 
         return torch.cat(embeddings_list, dim=0)
-
-
 
     def encode(
         self,
@@ -152,7 +146,6 @@ class Qwen2AudioWrapper(Wrapper):
         **kwargs: Any,
     ) -> np.ndarray:
         return self.get_audio_embeddings(inputs, **kwargs).numpy()
-
 
 
 qwen2_audio_meta = ModelMeta(
@@ -174,5 +167,5 @@ qwen2_audio_meta = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
-    modalities=["audio"]
+    modalities=["audio"],
 )
