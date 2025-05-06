@@ -15,7 +15,7 @@ class PromptType(str, Enum):
     passage = "passage"
 
 
-class Conversation(TypedDict):
+class ConversationTurn(TypedDict):
     """A conversation, consisting of a list of messages.
 
     Args:
@@ -25,6 +25,9 @@ class Conversation(TypedDict):
 
     role: str
     content: str
+
+
+Conversation = list[ConversationTurn]
 
 
 class BatchedInput(TypedDict, total=False):
@@ -52,6 +55,6 @@ class BatchedInput(TypedDict, total=False):
     title: list[str]
     body: list[str]
     # Retrieval query
-    # list[list[str]] and list[Conversation] is used for conversations datasets
-    query: list[str] | list[list[str]] | list[Conversation]
+    query: list[str]
+    conversation: list[Conversation]
     instruction: list[str]
