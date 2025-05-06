@@ -149,7 +149,11 @@ class Qwen2AudioWrapper(Wrapper):
 
 
 qwen2_audio_meta = ModelMeta(
-    loader=partial(Qwen2AudioWrapper, model_name="Qwen/Qwen2-Audio-7B", model_revision="dd84470756e6277a71d4d7188773a43cde92696e"),
+    loader=partial(
+        Qwen2AudioWrapper,
+        model_name="Qwen/Qwen2-Audio-7B",
+        model_revision="dd84470756e6277a71d4d7188773a43cde92696e",
+    ),
     name="Qwen/Qwen2-Audio-7B",
     languages=["eng-Latn"],
     open_weights=True,
