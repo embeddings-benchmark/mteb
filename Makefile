@@ -21,7 +21,7 @@ lint-check:
 
 test:
 	@echo "--- 🧪 Running tests ---"
-	pytest -n auto -m "not test_datasets"
+	pytest -n auto -m "not (test_datasets or leaderboard_stability)"
 
 
 test-with-coverage:
@@ -52,6 +52,9 @@ dataset-load-test:
 	@echo "--- 🚀 Running dataset load test ---"
 	pytest -n auto -m test_datasets
 
+leaderboard-build-test:
+	@echo "--- 🚀 Running leaderboard build test ---"
+	pytest -n auto -m leaderboard_stability
 
 run-leaderboard:
 	@echo "--- 🚀 Running leaderboard locally ---"
