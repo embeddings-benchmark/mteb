@@ -19,36 +19,15 @@ import mteb
 from mteb.abstasks.TaskMetadata import TASK_DOMAIN, TASK_TYPE
 from mteb.benchmarks.benchmarks import MTEB_multilingual
 from mteb.custom_validators import MODALITIES
-from mteb.languages import ISO_TO_LANGUAGE
 from mteb.leaderboard.benchmark_selector import BENCHMARK_ENTRIES, make_selector
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
 from mteb.leaderboard.table import create_tables
+from mteb.leaderboard.text_segments import ACKNOWLEDGEMENT, FAQ
 
 logger = logging.getLogger(__name__)
 
-acknowledgment_md = """
-### Acknowledgment
-We thank [Google](https://cloud.google.com/), [ServiceNow](https://www.servicenow.com/), [Contextual AI](https://contextual.ai/) and [Hugging Face](https://huggingface.co/) for their generous sponsorship. If you'd like to sponsor us, please get in [touch](mailto:n.muennighoff@gmail.com).
 
-<div class="sponsor-image-about" style="display: flex; align-items: center; gap: 10px;">
-    <a href="https://cloud.google.com/">
-        <img src="https://img.icons8.com/?size=512&id=17949&format=png" width="60" height="55" style="padding: 10px;">
-    </a>
-    <a href="https://www.servicenow.com/">
-        <img src="https://play-lh.googleusercontent.com/HdfHZ5jnfMM1Ep7XpPaVdFIVSRx82wKlRC_qmnHx9H1E4aWNp4WKoOcH0x95NAnuYg" width="60" height="55" style="padding: 10px;">
-    </a>
-    <a href="https://contextual.ai/">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQd4EDMoZLFRrIjVBrSXOQYGcmvUJ3kL4U2usvjuKPla-LoRTZtLzFnb_Cu5tXzRI7DNBo&usqp=CAU" width="60" height="55" style="padding: 10px;">
-    </a>
-    <a href="https://huggingface.co">
-        <img src="https://raw.githubusercontent.com/embeddings-benchmark/mteb/main/docs/images/hf_logo.png" width="60" height="55" style="padding: 10px;">
-    </a>
-</div>
-
-We also thank the following companies which provide API credits to evaluate their models: [OpenAI](https://openai.com/), [Voyage AI](https://www.voyageai.com/)
-"""
-
-
+LANGUAGE: list[str] = list({l for t in mteb.get_tasks() for l in t.metadata.languages})
 ALL_MODELS = {meta.name for meta in mteb.get_model_metas()}
 
 
@@ -243,7 +222,7 @@ def get_leaderboard_app() -> gr.Blocks:
         [entry for entry in default_scores if entry["model_name"] in filtered_models]
     )
     lang_select = gr.Dropdown(
-        ISO_TO_LANGUAGE,
+        LANGUAGE,
         value=sorted(default_results.languages),
         allow_custom_value=True,
         multiselect=True,
@@ -295,7 +274,7 @@ def get_leaderboard_app() -> gr.Blocks:
             position="left",
             label="Benchmark Selection and Customization",
             visible=True,
-            width="25%",
+            width="18%",
         ):
             gr.Markdown("## Select Benchmark")
             benchmark_select, column = make_selector(BENCHMARK_ENTRIES)
@@ -303,7 +282,7 @@ def get_leaderboard_app() -> gr.Blocks:
             """
         ## Embedding Leaderboard
 
-        This leaderboard compares 100+ text and image embedding models across 1000+ languages. We refer to the publication of each selectable benchmark for details on metrics, languages, tasks, and task types. Anyone is welcome [to add a model](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_model.md), [add benchmarks](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_benchmark.md), [help us improve zero-shot annotations](https://github.com/embeddings-benchmark/mteb/blob/06489abca007261c7e6b11f36d4844c5ed5efdcb/mteb/models/bge_models.py#L91) or [propose other changes to the leaderboard](https://github.com/embeddings-benchmark/mteb/tree/main/mteb/leaderboard) 🤗 Also, check out [MTEB Arena](https://huggingface.co/spaces/mteb/arena) ⚔️
+        This leaderboard compares 100+ text and image embedding models across 1000+ languages. We refer to the publication of each selectable benchmark for details on metrics, languages, tasks, and task types. Anyone is welcome [to add a model](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_model.md), [add benchmarks](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_benchmark.md), [help us improve zero-shot annotations](https://github.com/embeddings-benchmark/mteb/blob/06489abca007261c7e6b11f36d4844c5ed5efdcb/mteb/models/bge_models.py#L91) or [propose other changes to the leaderboard](https://github.com/embeddings-benchmark/mteb/tree/main/mteb/leaderboard).
         """
         )
         gr.Markdown(
@@ -412,63 +391,10 @@ def get_leaderboard_app() -> gr.Blocks:
             )
 
             with gr.Accordion(
-                "What do aggregate measures (Rank(Borda), Mean(Task), etc.) mean?",
+                "Frequently Asked Questions",
                 open=False,
             ):
-                gr.Markdown(
-                    """
-        **Rank(borda)** is computed based on the [borda count](https://en.wikipedia.org/wiki/Borda_count), where each task is treated as a preference voter, which gives votes on the models per their relative performance on the task. The best model obtains the highest number of votes. The model with the highest number of votes across tasks obtains the highest rank. The Borda rank tends to prefer models that perform well broadly across tasks. However, given that it is a rank it can be unclear if the two models perform similarly.
-
-        **Mean(Task)**: This is a naïve average computed across all the tasks within the benchmark. This score is simple to understand and is continuous as opposed to the Borda rank. However, the mean can overvalue tasks with higher variance in its scores.
-
-        **Mean(TaskType)**: This is a weighted average across different task categories, such as classification or retrieval. It is computed by first computing the average by task category and then computing the average on each category. Similar to the Mean(Task) this measure is continuous and tends to overvalue tasks with higher variance. This score also prefers models that perform well across all task categories.
-                """
-                )
-            with gr.Accordion(
-                "What does zero-shot mean?",
-                open=False,
-            ):
-                gr.Markdown(
-                    """
-    A model is considered zero-shot if it is not trained on any splits of the datasets used to derive the tasks.
-    The percentages in the table indicate what portion of the benchmark can be considered out-of-distribution for a given model.
-    100% means the model has not been trained on any of the datasets in a given benchmark, and therefore the benchmark score can be interpreted as the model's overall generalization performance,
-    while 50% means the model has been finetuned on half of the tasks in the benchmark, thereby indicating that the benchmark results should be interpreted with a pinch of salt.
-    This definition creates a few edge cases. For instance, multiple models are typically trained on Wikipedia title and body pairs, but we do not define this as leakage on, e.g., “WikipediaRetrievalMultilingual” and “WikiClusteringP2P” as these datasets are not based on title-body pairs.
-    Distilled, further fine-tunes, or in other ways, derivative models inherit the datasets of their parent models.
-    Based on community feedback and research findings, this definition may change in the future. Please open a PR if you notice any mistakes or want to help us refine annotations, see [GitHub](https://github.com/embeddings-benchmark/mteb/blob/06489abca007261c7e6b11f36d4844c5ed5efdcb/mteb/models/bge_models.py#L91).
-                """
-                )
-            with gr.Accordion(
-                "What do the other columns mean?",
-                open=False,
-            ):
-                gr.Markdown(
-                    """
-    - **Number of Parameters**: This is the total number of parameters in the model including embedding parameters. A higher value means the model requires more CPU/GPU memory to run; thus, less is generally desirable.
-    - **Embedding Dimension**: This is the vector dimension of the embeddings that the model produces. When saving embeddings to disk, a higher dimension will require more space, thus less is usually desirable.
-    - **Max tokens**: This refers to how many tokens (=word pieces) the model can process. Generally, a larger value is desirable.
-    - **Zero-shot**: This indicates if the model is zero-shot on the benchmark. For more information on zero-shot see the info box above.
-                """
-                )
-            with gr.Accordion(
-                "Why is a model missing or not showing up?",
-                open=False,
-            ):
-                gr.Markdown(
-                    """
-    Possible reasons why a model may not show up in the leaderboard:
-
-    - **Filter Setting**: It is being filtered out with your current filter. By default, we do not show models that are not zero-shot on the benchmark.
-    You can change this setting in the model selection panel.
-    - **Missing Results**: The model may not have been run on the tasks in the benchmark. We only display models that have been run on at least one task
-    in the benchmark. For visualizations that require the mean across all tasks, we only display models that have been run on all tasks in the benchmark.
-    You can see existing results in the [results repository](https://github.com/embeddings-benchmark/results). This is also where new results are added via PR.
-    - **Missing Metadata**: Currently, we only show models for which we have metadata in [mteb](https://github.com/embeddings-benchmark/mteb).
-    You can follow this guide on how to add a [model](https://github.com/embeddings-benchmark/mteb/blob/main/docs/adding_a_model.md) and
-    see existing implementations [here](https://github.com/embeddings-benchmark/mteb/tree/main/mteb/models).
-                """
-                )
+                gr.Markdown(FAQ)
         with gr.Tab("Performance per task"):
             per_task_table.render()
             download_per_task = gr.DownloadButton("Download Table")
@@ -838,12 +764,7 @@ def get_leaderboard_app() -> gr.Blocks:
             outputs=[summary_table, per_task_table],
         )
 
-        gr.Markdown(acknowledgment_md, elem_id="ack_markdown")
-        gr.Markdown(
-            """
-        > Looking for the previous MTEB leaderboard? We have made it available [here](https://huggingface.co/spaces/mteb/leaderboard_legacy) but it will no longer be updated.
-        """
-        )
+        gr.Markdown(ACKNOWLEDGEMENT, elem_id="ack_markdown")
 
     # Prerun on all benchmarks, so that results of callbacks get cached
     for benchmark in benchmarks:
