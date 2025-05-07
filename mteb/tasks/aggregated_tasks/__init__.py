@@ -3,6 +3,7 @@ from __future__ import annotations
 from .CQADupStackNLRetrieval import CQADupstackNLRetrieval
 from .CQADupStackRetrieval import CQADupstackRetrieval
 from .CQADupStackRetrievalFa import CQADupstackRetrievalFa
+from .RTEBAggregatedTask import RTEBAggregatedTask
 from .STS17MultilingualVisualSTS import (
     STS17MultilingualVisualSTSEng,
     STS17MultilingualVisualSTSMultilingual,
@@ -12,7 +13,6 @@ from .STSBenchmarkMultilingualVisualSTS import (
     STSBenchmarkMultilingualVisualSTSMultilingual,
 )
 from .SynPerChatbotConvSAClassification import SynPerChatbotConvSAClassification
-from .RTEBAggregatedTask import RTEBAggregatedTask
 
 __all__ = [
     "CQADupstackRetrieval",

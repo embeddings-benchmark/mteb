@@ -1,8 +1,13 @@
 from __future__ import annotations
 
-from mteb.tasks.Retrieval import AILACasedocs, AILAStatutes, LegalQuAD, ChatDoctor_HealthCareMagic
 from mteb.abstasks import AbsTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate, AggregateTaskMetadata
+from mteb.tasks.Retrieval import (
+    AILACasedocs,
+    AILAStatutes,
+    ChatDoctor_HealthCareMagic,
+    LegalQuAD,
+)
 
 task_list_rteb: list[AbsTask] = [
     AILACasedocs(),
