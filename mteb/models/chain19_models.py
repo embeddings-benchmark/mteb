@@ -4,25 +4,25 @@ from functools import partial
 
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
-relle_en = ModelMeta(
+chain19_en = ModelMeta(
     loader=partial(
         sentence_transformers_loader,
-        model_name="bchoiced/19C4H2",
-        revision="7cd0d6c584210e0b91912d15d2eab077bac1d05b",
+        model_name="bchoiced/CHAIN19",
+        revision="5ba01fcb4e90ede5e2772b8a9ca68c12515dc6af",
     ),
-    name="bchoiced/19C4H2",
+    name="bchoiced/CHAIN19",
     languages=[
         "eng-Latn",
     ],
     open_weights=True,
-    revision="7cd0d6c584210e0b91912d15d2eab077bac1d05b",
+    revision="5ba01fcb4e90ede5e2772b8a9ca68c12515dc6af",
     release_date="2025-05-07",
     n_parameters=7_110_000_000,
     memory_usage_mb=27125,
     embed_dim=4096,
     license="cc-by-sa-4.0",
     max_tokens=32768,
-    reference="https://huggingface.co/bchoiced/19C4H2",
+    reference="https://huggingface.co/bchoiced/CHAIN19",
     similarity_fn_name="cosine",
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
