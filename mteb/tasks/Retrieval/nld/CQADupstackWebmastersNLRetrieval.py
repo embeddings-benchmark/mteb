@@ -42,7 +42,7 @@ class CQADupstackWebmastersNLRetrieval(AbsTaskRetrieval):
   year = {2024},
 }
 """,
-        adapted_from=["CQADupstackWebmasters"],
+        adapted_from=["CQADupstackWebmastersRetrieval"],
     )
 
     def load_data(self, **kwargs):
