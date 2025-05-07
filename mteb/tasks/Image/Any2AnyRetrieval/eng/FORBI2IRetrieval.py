@@ -26,15 +26,17 @@ class FORBI2I(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@misc{wu2023forbflatobjectretrieval,
-            title={FORB: A Flat Object Retrieval Benchmark for Universal Image Embedding},
-            author={Pengxiang Wu and Siman Wang and Kevin Dela Rosa and Derek Hao Hu},
-            year={2023},
-            eprint={2309.16249},
-            archivePrefix={arXiv},
-            primaryClass={cs.CV},
-            url={https://arxiv.org/abs/2309.16249},
-        }""",
+        bibtex_citation=r"""
+@misc{wu2023forbflatobjectretrieval,
+  archiveprefix = {arXiv},
+  author = {Pengxiang Wu and Siman Wang and Kevin Dela Rosa and Derek Hao Hu},
+  eprint = {2309.16249},
+  primaryclass = {cs.CV},
+  title = {FORB: A Flat Object Retrieval Benchmark for Universal Image Embedding},
+  url = {https://arxiv.org/abs/2309.16249},
+  year = {2023},
+}
+""",
         descriptive_stats={
             "n_samples": {"default": 13250},
             "avg_character_length": {

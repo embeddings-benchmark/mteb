@@ -29,12 +29,14 @@ class StanfordCarsClassification(AbsTaskImageClassification):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{Krause2013CollectingAL,
-        title={Collecting a Large-scale Dataset of Fine-grained Cars},
-        author={Jonathan Krause and Jia Deng and Michael Stark and Li Fei-Fei},
-        year={2013},
-        url={https://api.semanticscholar.org/CorpusID:16632981}
-        }""",
+        bibtex_citation=r"""
+@inproceedings{Krause2013CollectingAL,
+  author = {Jonathan Krause and Jia Deng and Michael Stark and Li Fei-Fei},
+  title = {Collecting a Large-scale Dataset of Fine-grained Cars},
+  url = {https://api.semanticscholar.org/CorpusID:16632981},
+  year = {2013},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 8041},
             "avg_character_length": {"test": 431.4},

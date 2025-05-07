@@ -27,14 +27,14 @@ class HotelReviewSentimentClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=["ara-arab-EG", "ara-arab-JO", "ara-arab-LB", "ara-arab-SA"],
         sample_creation="found",
-        bibtex_citation="""
+        bibtex_citation=r"""
 @article{elnagar2018hotel,
-  title={Hotel Arabic-reviews dataset construction for sentiment analysis applications},
-  author={Elnagar, Ashraf and Khalifa, Yasmin S and Einea, Anas},
-  journal={Intelligent natural language processing: Trends and applications},
-  pages={35--52},
-  year={2018},
-  publisher={Springer}
+  author = {Elnagar, Ashraf and Khalifa, Yasmin S and Einea, Anas},
+  journal = {Intelligent natural language processing: Trends and applications},
+  pages = {35--52},
+  publisher = {Springer},
+  title = {Hotel Arabic-reviews dataset construction for sentiment analysis applications},
+  year = {2018},
 }
 """,
     )

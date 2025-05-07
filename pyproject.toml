@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.38.0"
+version = "1.38.6"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -61,8 +61,9 @@ dev = [
 "pytest-rerunfailures>=15.0",
 "iso639>=0.1.4", # used for tests/scripts/test_generate_model_meta.py
 "pre-commit>=4.1.0",
+"bibtexparser>=1.4.3" # used for tests/test_citation_formatting.py
 ]
-codecarbon = ["codecarbon"]
+codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
 speedtask = [
     "setuptools!=78.0.1",  # https://github.com/pypa/setuptools/issues/4910
     "GPUtil>=1.4.0",
@@ -70,7 +71,7 @@ speedtask = [
 ]
 peft = ["peft>=0.11.0"]
 leaderboard = [
-    "gradio==5.17.1; python_version > '3.9'", # 3.10 is required for gradio
+    "gradio==5.27.1; python_version > '3.9'", # 3.10 is required for gradio
     "gradio_rangeslider>=0.0.8",
     "plotly>=5.24.0,<6.0.0",
     "cachetools>=5.2.0",

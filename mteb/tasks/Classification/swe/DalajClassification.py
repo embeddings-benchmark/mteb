@@ -29,12 +29,14 @@ class DalajClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@misc{2105.06681,
-Author = {Elena Volodina and Yousuf Ali Mohammed and Julia Klezl},
-Title = {DaLAJ - a dataset for linguistic acceptability judgments for Swedish: Format, baseline, sharing},
-Year = {2021},
-Eprint = {arXiv:2105.06681},
-}""",
+        bibtex_citation=r"""
+@misc{2105.06681,
+  author = {Elena Volodina and Yousuf Ali Mohammed and Julia Klezl},
+  eprint = {arXiv:2105.06681},
+  title = {DaLAJ - a dataset for linguistic acceptability judgments for Swedish: Format, baseline, sharing},
+  year = {2021},
+}
+""",
         prompt="Classify texts based on linguistic acceptability in Swedish",
     )
 

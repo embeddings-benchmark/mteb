@@ -39,14 +39,16 @@ class OpusparcusPC(AbsTaskPairClassification, MultilingualTask):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@misc{creutz2018open,
-      title={Open Subtitles Paraphrase Corpus for Six Languages},
-      author={Mathias Creutz},
-      year={2018},
-      eprint={1809.06142},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-}""",
+        bibtex_citation=r"""
+@misc{creutz2018open,
+  archiveprefix = {arXiv},
+  author = {Mathias Creutz},
+  eprint = {1809.06142},
+  primaryclass = {cs.CL},
+  title = {Open Subtitles Paraphrase Corpus for Six Languages},
+  year = {2018},
+}
+""",
     )
 
     def load_data(self, **kwargs):

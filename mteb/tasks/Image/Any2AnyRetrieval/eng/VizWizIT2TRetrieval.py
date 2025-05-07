@@ -27,13 +27,15 @@ class VizWizIT2TRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{gurari2018vizwiz,
-  title={Vizwiz grand challenge: Answering visual questions from blind people},
-  author={Gurari, Danna and Li, Qing and Stangl, Abigale J and Guo, Anhong and Lin, Chi and Grauman, Kristen and Luo, Jiebo and Bigham, Jeffrey P},
-  booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
-  pages={3608--3617},
-  year={2018}
-}""",
+        bibtex_citation=r"""
+@inproceedings{gurari2018vizwiz,
+  author = {Gurari, Danna and Li, Qing and Stangl, Abigale J and Guo, Anhong and Lin, Chi and Grauman, Kristen and Luo, Jiebo and Bigham, Jeffrey P},
+  booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
+  pages = {3608--3617},
+  title = {Vizwiz grand challenge: Answering visual questions from blind people},
+  year = {2018},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 214354},
             "avg_character_length": {

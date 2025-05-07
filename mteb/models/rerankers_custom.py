@@ -64,7 +64,7 @@ class BGEReranker(RerankerWrapper):
 
         requires_package(
             self,
-            "flagembedding",
+            "FlagEmbedding",
             model_name_or_path,
             "pip install 'mteb[flagembedding]'",
         )

@@ -194,12 +194,14 @@ class mFollowIRCrossLingual(MultilingualTask, AbsTaskInstructionRetrieval):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{weller2024mfollowir,
-  title={{mFollowIR: a Multilingual Benchmark for Instruction Following in Retrieval}},
-  author={Weller, Orion and Chang, Benjamin and Yang, Eugene and Yarmohammadi, Mahsa and Barham, Sam and MacAvaney, Sean and Cohan, Arman and Soldaini, Luca and Van Durme, Benjamin and Lawrie, Dawn},
-  journal={arXiv preprint TODO},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+@article{weller2024mfollowir,
+  author = {Weller, Orion and Chang, Benjamin and Yang, Eugene and Yarmohammadi, Mahsa and Barham, Sam and MacAvaney, Sean and Cohan, Arman and Soldaini, Luca and Van Durme, Benjamin and Lawrie, Dawn},
+  journal = {arXiv preprint TODO},
+  title = {{mFollowIR: a Multilingual Benchmark for Instruction Following in Retrieval}},
+  year = {2024},
+}
+""",
     )
 
     def load_data(self, **kwargs):
@@ -247,12 +249,14 @@ class mFollowIR(MultilingualTask, AbsTaskInstructionRetrieval):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{weller2024mfollowir,
-  title={{mFollowIR: a Multilingual Benchmark for Instruction Following in Retrieval}},
-  author={Weller, Orion and Chang, Benjamin and Yang, Eugene and Yarmohammadi, Mahsa and Barham, Sam and MacAvaney, Sean and Cohan, Arman and Soldaini, Luca and Van Durme, Benjamin and Lawrie, Dawn},
-  journal={arXiv preprint TODO},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+@article{weller2024mfollowir,
+  author = {Weller, Orion and Chang, Benjamin and Yang, Eugene and Yarmohammadi, Mahsa and Barham, Sam and MacAvaney, Sean and Cohan, Arman and Soldaini, Luca and Van Durme, Benjamin and Lawrie, Dawn},
+  journal = {arXiv preprint TODO},
+  title = {{mFollowIR: a Multilingual Benchmark for Instruction Following in Retrieval}},
+  year = {2024},
+}
+""",
     )
 
     def load_data(self, **kwargs):

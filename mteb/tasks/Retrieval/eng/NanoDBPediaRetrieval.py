@@ -30,7 +30,14 @@ class NanoDBPediaRetrieval(AbsTaskRetrieval):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{lehmann2015dbpedia, title={DBpedia: A large-scale, multilingual knowledge base extracted from Wikipedia}, author={Lehmann, Jens and et al.}, journal={Semantic Web}, year={2015}}""",
+        bibtex_citation=r"""
+@article{lehmann2015dbpedia,
+  author = {Lehmann, Jens and et al.},
+  journal = {Semantic Web},
+  title = {DBpedia: A large-scale, multilingual knowledge base extracted from Wikipedia},
+  year = {2015},
+}
+""",
         prompt={
             "query": "Given a query, retrieve relevant entity descriptions from DBPedia"
         },

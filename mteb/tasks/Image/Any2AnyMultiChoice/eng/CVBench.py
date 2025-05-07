@@ -109,12 +109,14 @@ class CVBenchCount(AbsTaskAny2AnyMultiChoice):
         dialect=[],
         modalities=["image", "text"],
         sample_creation="found",
-        bibtex_citation="""@article{tong2024cambrian,
-  title={Cambrian-1: A fully open, vision-centric exploration of multimodal llms},
-  author={Tong, Shengbang and Brown, Ellis and Wu, Penghao and Woo, Sanghyun and Middepogu, Manoj and Akula, Sai Charitha and Yang, Jihan and Yang, Shusheng and Iyer, Adithya and Pan, Xichen and others},
-  journal={arXiv preprint arXiv:2406.16860},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+@article{tong2024cambrian,
+  author = {Tong, Shengbang and Brown, Ellis and Wu, Penghao and Woo, Sanghyun and Middepogu, Manoj and Akula, Sai Charitha and Yang, Jihan and Yang, Shusheng and Iyer, Adithya and Pan, Xichen and others},
+  journal = {arXiv preprint arXiv:2406.16860},
+  title = {Cambrian-1: A fully open, vision-centric exploration of multimodal llms},
+  year = {2024},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 419},
             "avg_character_length": {
@@ -162,12 +164,14 @@ class CVBenchRelation(AbsTaskAny2AnyMultiChoice):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{tong2024cambrian,
-  title={Cambrian-1: A fully open, vision-centric exploration of multimodal llms},
-  author={Tong, Shengbang and Brown, Ellis and Wu, Penghao and Woo, Sanghyun and Middepogu, Manoj and Akula, Sai Charitha and Yang, Jihan and Yang, Shusheng and Iyer, Adithya and Pan, Xichen and others},
-  journal={arXiv preprint arXiv:2406.16860},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+@article{tong2024cambrian,
+  author = {Tong, Shengbang and Brown, Ellis and Wu, Penghao and Woo, Sanghyun and Middepogu, Manoj and Akula, Sai Charitha and Yang, Jihan and Yang, Shusheng and Iyer, Adithya and Pan, Xichen and others},
+  journal = {arXiv preprint arXiv:2406.16860},
+  title = {Cambrian-1: A fully open, vision-centric exploration of multimodal llms},
+  year = {2024},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 654},
             "avg_character_length": {
@@ -215,12 +219,14 @@ class CVBenchDepth(AbsTaskAny2AnyMultiChoice):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{tong2024cambrian,
-  title={Cambrian-1: A fully open, vision-centric exploration of multimodal llms},
-  author={Tong, Shengbang and Brown, Ellis and Wu, Penghao and Woo, Sanghyun and Middepogu, Manoj and Akula, Sai Charitha and Yang, Jihan and Yang, Shusheng and Iyer, Adithya and Pan, Xichen and others},
-  journal={arXiv preprint arXiv:2406.16860},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+@article{tong2024cambrian,
+  author = {Tong, Shengbang and Brown, Ellis and Wu, Penghao and Woo, Sanghyun and Middepogu, Manoj and Akula, Sai Charitha and Yang, Jihan and Yang, Shusheng and Iyer, Adithya and Pan, Xichen and others},
+  journal = {arXiv preprint arXiv:2406.16860},
+  title = {Cambrian-1: A fully open, vision-centric exploration of multimodal llms},
+  year = {2024},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 669},
             "avg_character_length": {
@@ -268,12 +274,14 @@ class CVBenchDistance(AbsTaskAny2AnyMultiChoice):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{tong2024cambrian,
-  title={Cambrian-1: A fully open, vision-centric exploration of multimodal llms},
-  author={Tong, Shengbang and Brown, Ellis and Wu, Penghao and Woo, Sanghyun and Middepogu, Manoj and Akula, Sai Charitha and Yang, Jihan and Yang, Shusheng and Iyer, Adithya and Pan, Xichen and others},
-  journal={arXiv preprint arXiv:2406.16860},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+@article{tong2024cambrian,
+  author = {Tong, Shengbang and Brown, Ellis and Wu, Penghao and Woo, Sanghyun and Middepogu, Manoj and Akula, Sai Charitha and Yang, Jihan and Yang, Shusheng and Iyer, Adithya and Pan, Xichen and others},
+  journal = {arXiv preprint arXiv:2406.16860},
+  title = {Cambrian-1: A fully open, vision-centric exploration of multimodal llms},
+  year = {2024},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 656},
             "avg_character_length": {

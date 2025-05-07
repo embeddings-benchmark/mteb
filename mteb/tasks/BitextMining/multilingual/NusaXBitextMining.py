@@ -41,21 +41,22 @@ class NusaXBitextMining(AbsTaskBitextMining, MultilingualTask):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""
-        @inproceedings{winata2023nusax,
-        title={NusaX: Multilingual Parallel Sentiment Dataset for 10 Indonesian Local Languages},
-        author={Winata, Genta Indra and Aji, Alham Fikri and Cahyawijaya, Samuel and Mahendra, Rahmad and Koto, Fajri and Romadhony, Ade and Kurniawan, Kemal and Moeljadi, David and Prasojo, Radityo Eko and Fung, Pascale and others},
-        booktitle={Proceedings of the 17th Conference of the European Chapter of the Association for Computational Linguistics},
-        pages={815--834},
-        year={2023}
-        }
-        @misc{winata2024miners,
-            title={MINERS: Multilingual Language Models as Semantic Retrievers},
-            author={Genta Indra Winata and Ruochen Zhang and David Ifeoluwa Adelani},
-            year={2024},
-            eprint={2406.07424},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        }
-        """,
+        bibtex_citation=r"""
+@inproceedings{winata2023nusax,
+  author = {Winata, Genta Indra and Aji, Alham Fikri and Cahyawijaya, Samuel and Mahendra, Rahmad and Koto, Fajri and Romadhony, Ade and Kurniawan, Kemal and Moeljadi, David and Prasojo, Radityo Eko and Fung, Pascale and others},
+  booktitle = {Proceedings of the 17th Conference of the European Chapter of the Association for Computational Linguistics},
+  pages = {815--834},
+  title = {NusaX: Multilingual Parallel Sentiment Dataset for 10 Indonesian Local Languages},
+  year = {2023},
+}
+
+@misc{winata2024miners,
+  archiveprefix = {arXiv},
+  author = {Genta Indra Winata and Ruochen Zhang and David Ifeoluwa Adelani},
+  eprint = {2406.07424},
+  primaryclass = {cs.CL},
+  title = {MINERS: Multilingual Language Models as Semantic Retrievers},
+  year = {2024},
+}
+""",
     )
