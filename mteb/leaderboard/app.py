@@ -112,7 +112,9 @@ def produce_benchmark_link(
 DEFAULT_BENCHMARK_NAME = MTEB_multilingual.name
 
 
-def set_benchmark_on_load(request: gr.Request):
+def set_benchmark_on_load(
+    request: gr.Request,
+) -> tuple[str, list[str], list[str], list[str], list[str], list[str]]:
     """Load benchmark configuration from encoded URL parameter"""
     query_params = request.query_params
 
