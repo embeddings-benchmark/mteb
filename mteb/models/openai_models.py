@@ -55,14 +55,10 @@ class OpenAIWrapper(Wrapper):
         return self._encoding.decode(truncated_sentence)
 
     def encode(self, sentences: list[str], **kwargs: Any) -> np.ndarray:
-        requires_package(self, "openai", "Openai text embedding")
+        print("Starting OpenAIWrapper encode method")
         from openai import NotGiven
 
         empty_mask = [not s.strip() for s in sentences]
-        if all(empty_mask):
-            logger.warning("Empty input detected - returning zero embeddings.")
-            return np.zeros((len(sentences), self._embed_dim), dtype=np.float32)
-
         if self._model_name == "text-embedding-ada-002" and self._embed_dim is not None:
             logger.warning(
                 "Reducing embedding size available only for text-embedding-3-* models"
