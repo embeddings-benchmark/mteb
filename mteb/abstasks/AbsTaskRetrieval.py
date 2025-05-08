@@ -563,9 +563,9 @@ class AbsTaskRetrieval(AbsTask):
             # Handle relevant_docs separately since one entry expands to multiple records.
             relevant_sections = {}
             for split, values in self.dataset[subset].items():
-                relecant_docs = values["relevant_docs"]
+                relevant_docs = values["relevant_docs"]
                 entries = []
-                for query_id, docs in relecant_docs.items():
+                for query_id, docs in relevant_docs.items():
                     for doc_id, score in docs.items():
                         entries.append(
                             {

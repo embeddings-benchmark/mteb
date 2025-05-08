@@ -47,7 +47,8 @@ def load_bright_data(
         examples = datasets.load_dataset(
             path, "examples", split=domain, cache_dir=cache_dir, revision=revision
         )
-        if domain in DOMAINS_LONG:
+        queries[domain]["standard"] = {e["id"]: e["query"] for e in examples}
+        if domain in DOMAINS_LONG and self.is_long:
             domain_corpus_long = datasets.load_dataset(
                 path,
                 "long_documents",
@@ -55,29 +56,29 @@ def load_bright_data(
                 cache_dir=cache_dir,
                 revision=revision,
             )
-        corpus[domain]["standard"] = {
-            e["id"]: {"text": e["content"]} for e in domain_corpus
-        }
-        if domain in DOMAINS_LONG:
             corpus[domain]["long"] = {
                 e["id"]: {"text": e["content"]} for e in domain_corpus_long
             }
-        queries[domain]["standard"] = queries[domain]["long"] = {
-            e["id"]: e["query"] for e in examples
+            queries[domain]["long"] = queries[domain]["standard"]
+            relevant_docs[domain]["long"] = {}
+
+        corpus[domain]["standard"] = {
+            e["id"]: {"text": e["content"]} for e in domain_corpus
         }
+
         relevant_docs[domain]["standard"] = {}
-        relevant_docs[domain]["long"] = {}
 
         for e in examples:
             qid = e["id"]
             gold_ids = e["gold_ids"]
-            gold_ids_long = e["gold_ids_long"]
             relevant_docs[domain]["standard"][qid] = defaultdict(dict)
-            relevant_docs[domain]["long"][qid] = defaultdict(dict)
             for gid in gold_ids:
                 relevant_docs[domain]["standard"][qid].update({gid: 1})
-            for gid in gold_ids_long:
-                relevant_docs[domain]["long"][qid].update({gid: 1})
+            if domain in DOMAINS_LONG and self.is_long:
+                relevant_docs[domain]["long"][qid] = defaultdict(dict)
+                gold_ids_long = e["gold_ids_long"]
+                for gid in gold_ids_long:
+                    relevant_docs[domain]["long"][qid].update({gid: 1})
 
     corpus = datasets.DatasetDict(corpus)
     queries = datasets.DatasetDict(queries)
@@ -91,7 +92,7 @@ def load_data(self, **kwargs):
 
     self.corpus, self.queries, self.relevant_docs = self.load_bright_data(
         path=self.metadata.dataset["path"],
-        domains=DOMAINS,
+        domains=list(self.metadata.eval_langs.keys()),
         eval_splits=self.metadata.eval_splits,
         cache_dir=kwargs.get("cache_dir", None),
         revision=self.metadata.dataset["revision"],
@@ -100,6 +101,7 @@ def load_data(self, **kwargs):
 
 
 class BrightRetrieval(AbsTaskRetrieval):
+    is_long = False
     metadata = TaskMetadata(
         name="BrightRetrieval",
         dataset={
@@ -147,7 +149,14 @@ long_metadata.eval_langs = dom_langs_long
 
 
 class BrightLongRetrieval(AbsTaskRetrieval):
+    is_long = True
     metadata = long_metadata
 
     load_bright_data = load_bright_data
     load_data = load_data
+
+
+if __name__ == "__main__":
+    print("long")
+    task = BrightLongRetrieval()
+    task.push_dataset_to_hub(f"mteb/{task.metadata.name}", reupload=True)
