@@ -126,8 +126,6 @@ class SeedTextEmbeddingModel(Wrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> np.ndarray:
-        logger.warning("The API will be publicly available soon. Stay tuned!")
-
         instruction = self.get_instruction(task_name, prompt_type)
         show_progress_bar = kwargs.pop("show_progress_bar", False)
 
@@ -139,8 +137,8 @@ class SeedTextEmbeddingModel(Wrapper):
 
 
 seed_embedding = ModelMeta(
-    name="ByteDance-Seed/Doubao-1.5-Embedding",
-    revision="2",
+    name="ByteDance-Seed/Seed1.5-Embedding",
+    revision="3",
     release_date="2025-04-25",
     languages=[
         "eng-Latn",
@@ -157,7 +155,7 @@ seed_embedding = ModelMeta(
     n_parameters=None,
     memory_usage_mb=None,
     license=None,
-    reference="https://huggingface.co/ByteDance-Seed/Doubao-1.5-Embedding",
+    reference="https://huggingface.co/ByteDance-Seed/Seed1.5-Embedding",
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,
