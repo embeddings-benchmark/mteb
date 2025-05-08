@@ -523,12 +523,15 @@ class TaskMetadata(BaseModel):
         return self.dataset["revision"]
 
     def create_dataset_card_data(
-        self, existing_dataset_card_data: DatasetCardData | None = None
+        self,
+        existing_dataset_card_data: DatasetCardData | None = None,
+        reupload: bool = False,
     ) -> tuple[DatasetCardData, dict[str, str]]:
         """Create a DatasetCardData object from the task metadata.
 
         Args:
             existing_dataset_card_data: The existing DatasetCardData object to update. If None, a new object will be created.
+            reupload: If true, then `source_datasets` will be added to model card with source dataset.
 
         Returns:
             A DatasetCardData object with the metadata for the task with kwargs to card
@@ -580,8 +583,16 @@ class TaskMetadata(BaseModel):
                 languages.extend(val)
         else:
             languages: list[str] = self.eval_langs
-
-        languages = sorted({lang.split("-")[0] for lang in languages})
+        # value "python" is not valid. It must be an ISO 639-1, 639-2 or 639-3 code (two/three letters),
+        # or a special value like "code", "multilingual".
+        readme_langs = []
+        for lang in languages:
+            lang_name, family = lang.split("-")
+            if family == "Code":
+                readme_langs.append("code")
+            else:
+                readme_langs.append(lang_name)
+        languages = sorted(set(readme_langs))
 
         multilinguality = "multilingual" if self.is_multilingual else "monolingual"
         if self.sample_creation and "translated" in self.sample_creation:
@@ -592,8 +603,14 @@ class TaskMetadata(BaseModel):
                 task.metadata.dataset["path"]
                 for task in mteb.get_tasks(self.adapted_from)
             ]
+            if reupload:
+                source_datasets.append(self.dataset["path"])
         else:
-            source_datasets = None
+            source_datasets = (
+                None
+                if not TaskMetadata.push_dataset_card_to_hub
+                else [self.dataset["path"]]
+            )
 
         tags = ["mteb"] + self.modalities
 
@@ -647,12 +664,15 @@ class TaskMetadata(BaseModel):
         )
 
     def generate_dataset_card(
-        self, existing_dataset_card: DatasetCard | None = None
+        self,
+        existing_dataset_card: DatasetCard | None = None,
+        reupload: bool = False,
     ) -> DatasetCard:
         """Generates a dataset card for the task.
 
         Args:
             existing_dataset_card: The existing dataset card to update. If None, a new dataset card will be created.
+            reupload: If true, then `source_datasets` will be added to model card with source dataset.
 
         Returns:
             DatasetCard: The dataset card for the task.
@@ -662,7 +682,7 @@ class TaskMetadata(BaseModel):
             existing_dataset_card.data if existing_dataset_card else None
         )
         dataset_card_data, template_kwargs = self.create_dataset_card_data(
-            existing_dataset_card_data
+            existing_dataset_card_data, reupload
         )
         dataset_card = DatasetCard.from_template(
             card_data=dataset_card_data,
@@ -671,11 +691,12 @@ class TaskMetadata(BaseModel):
         )
         return dataset_card
 
-    def push_dataset_card_to_hub(self, repo_name: str) -> None:
+    def push_dataset_card_to_hub(self, repo_name: str, reupload: bool = False) -> None:
         """Pushes the dataset card to the huggingface hub.
 
         Args:
             repo_name: The name of the repository to push the dataset card to.
+            reupload: If true, then `source_datasets` will be added to model card with source dataset.
         """
         dataset_card = None
         if repo_exists(
@@ -684,7 +705,7 @@ class TaskMetadata(BaseModel):
             repo_name, constants.REPOCARD_NAME, repo_type=constants.REPO_TYPE_DATASET
         ):
             dataset_card = DatasetCard.load(repo_name)
-        dataset_card = self.generate_dataset_card(dataset_card)
+        dataset_card = self.generate_dataset_card(dataset_card, reupload)
         dataset_card.push_to_hub(repo_name, commit_message="Add dataset card")
 
     def _map_subtypes_to_hf(self) -> list[str]:
