@@ -9,10 +9,8 @@ class JSTS(AbsTaskSTS):
     metadata = TaskMetadata(
         name="JSTS",
         dataset={
-            "path": "shunk031/JGLUE",
-            "revision": "50e79c314a7603ebc92236b66a0973d51a00ed8c",
-            "name": "JSTS",
-            "trust_remote_code": True,
+            "path": "mteb/JSTS",
+            "revision": "5bac629e25799df4c9c80a6a5db983d6cba9e77d",
         },
         description="Japanese Semantic Textual Similarity Benchmark dataset construct from YJ Image Captions Dataset "
         + "(Miyazaki and Shimizu, 2016) and annotated by crowdsource annotators.",
@@ -67,6 +65,3 @@ Piperidis, Stelios},
         metadata_dict["min_score"] = 0
         metadata_dict["max_score"] = 5
         return metadata_dict
-
-    def dataset_transform(self) -> None:
-        self.dataset = self.dataset.rename_column("label", "score")

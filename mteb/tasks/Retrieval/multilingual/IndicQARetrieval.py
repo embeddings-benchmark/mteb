@@ -1,9 +1,5 @@
 from __future__ import annotations
 
-from hashlib import sha256
-
-import datasets
-
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
@@ -24,13 +20,12 @@ _LANGUAGES = {
 }
 
 
-class IndicQARetrieval(MultilingualTask, AbsTaskRetrieval):
+class IndicQARetrieval(AbsTaskRetrieval, MultilingualTask):
     metadata = TaskMetadata(
         name="IndicQARetrieval",
         dataset={
-            "path": "ai4bharat/IndicQA",
-            "revision": "570d90ae4f7b64fe4fdd5f42fc9f9279b8c9fd9d",
-            "trust_remote_code": True,
+            "path": "mteb/IndicQARetrieval",
+            "revision": "51e8b328988795d658f6f34acd34044e9346e2ee",
         },
         description="IndicQA is a manually curated cloze-style reading comprehension dataset that can be used for evaluating question-answering models in 11 Indic languages. It is repurposed retrieving relevant context for each question.",
         reference="https://arxiv.org/abs/2212.05409",
@@ -57,45 +52,3 @@ class IndicQARetrieval(MultilingualTask, AbsTaskRetrieval):
 }
 """,
     )
-
-    def load_data(self, **kwargs):
-        if self.data_loaded:
-            return
-
-        split = "test"
-        queries = {lang: {split: {}} for lang in self.hf_subsets}
-        corpus = {lang: {split: {}} for lang in self.hf_subsets}
-        relevant_docs = {lang: {split: {}} for lang in self.hf_subsets}
-
-        for lang in self.hf_subsets:
-            data = datasets.load_dataset(
-                name=f"indicqa.{lang}", **self.metadata_dict["dataset"]
-            )[split]
-            data = data.filter(lambda x: x["answers"]["text"] != "")
-
-            question_ids = {
-                question: sha256(question.encode("utf-8")).hexdigest()
-                for question in set(data["question"])
-            }
-            context_ids = {
-                context: sha256(context.encode("utf-8")).hexdigest()
-                for context in set(data["context"])
-            }
-
-            for row in data:
-                question = row["question"]
-                context = row["context"]
-                query_id = question_ids[question]
-                queries[lang][split][query_id] = question
-
-                doc_id = context_ids[context]
-                corpus[lang][split][doc_id] = {"text": context}
-                if query_id not in relevant_docs[lang][split]:
-                    relevant_docs[lang][split][query_id] = {}
-                relevant_docs[lang][split][query_id][doc_id] = 1
-
-        self.corpus = datasets.DatasetDict(corpus)
-        self.queries = datasets.DatasetDict(queries)
-        self.relevant_docs = datasets.DatasetDict(relevant_docs)
-
-        self.data_loaded = True
