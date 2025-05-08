@@ -169,7 +169,7 @@ HIT_TMG_task_prompts = {
     "RuSciBenchOECDClusteringP2P": "Identify the topic or theme of the Russian articles.",
 }
 
-HIT_TMG_INSTRUCTION = "Instruct: {instruction}\nQuery: "
+HIT_TMG_INSTRUCTION = "Instruct: {instruction} \n Query: "
 
 HIT_TMG__KaLM_embedding_multilingual_mini_instruct_v1 = ModelMeta(
     loader=partial(  # type: ignore
