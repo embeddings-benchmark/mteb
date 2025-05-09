@@ -55,7 +55,7 @@ class CSFDCZMovieReviewSentimentClassification(AbsTaskClassification):
 class CSFDCZMovieReviewSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CSFDCZMovieReviewSentimentClassification.v2",
-        description="""The dataset contains 30k user reviews from csfd.cz in Czech.
+        description="""The dataset contains about 30k user reviews from csfd.cz in Czech.
         This version corrects errors found in the original data. For details, see https://github.com/embeddings-benchmark/mteb/pull/2680""",
         reference="https://arxiv.org/abs/2304.01922",
         dataset={
