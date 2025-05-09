@@ -118,7 +118,7 @@ class CDEWrapper(SentenceTransformerWrapper):
                 f"Embeddings for {task_metadata.name} subset: {hf_subset} already loaded"
             )
             return
-        prompt = self.get_prompt(task_metadata, prompt_type)
+        prompt = "search_document: "
         logger.info(
             f"Loading dataset embeddings for task {task_metadata.name}, subset: {hf_subset} "
             f"Prompt: `{prompt}`"
@@ -129,7 +129,6 @@ class CDEWrapper(SentenceTransformerWrapper):
             task.convert_v1_dataset_format_to_v2()
             cur_ds = task.dataset[hf_subset][hf_split]["corpus"]
             sentences = corpus_to_dict(list(cur_ds.values()))["text"]
-            prompt = self.get_prompt(task_metadata, PromptType.passage)
         elif task_metadata.type in self.classification_task_types:
             task: AbsTaskAnyClassification = mteb.get_task(task_metadata.name)
             task.load_data()
