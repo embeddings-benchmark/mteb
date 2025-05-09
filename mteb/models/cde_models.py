@@ -2,29 +2,32 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Sequence
-from functools import partial
 from typing import Any
 
 import numpy as np
 import torch
+from torch.utils.data import DataLoader
 from transformers import AutoConfig
 
+import mteb
+from mteb import TaskMetadata
+from mteb.abstasks import AbsTaskAnyClassification, AbsTaskRetrieval
+from mteb.create_dataloaders import corpus_to_dict
 from mteb.encoder_interface import PromptType
-from mteb.evaluation import corpus_to_str
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.bge_models import bge_full_data
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
+from mteb.types import Array, BatchedInput
 
 logger = logging.getLogger(__name__)
 
 
 class CDEWrapper(SentenceTransformerWrapper):
     dataset_embeddings: torch.Tensor | None = None
-    prev_task_name: str | None = None
-    task_types_with_sample_data = (
+    prev_embeddings_key: tuple[str, str, str] | None = None
+    classification_task_types = (
         "Classification",
         "MultilabelClassification",
-        "Summarization",
     )
     retrieval_task_types = (
         "Retrieval",
@@ -38,25 +41,40 @@ class CDEWrapper(SentenceTransformerWrapper):
         model_config = AutoConfig.from_pretrained(model, trust_remote_code=True)
         self.max_sentences = model_config.transductive_corpus_size
 
+    def create_embeddings_key(
+        self,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+    ) -> tuple[str, str, str]:
+        return (
+            task_metadata.name,
+            hf_split,
+            hf_subset,
+        )
+
     def encode(
         self,
-        sentences: Sequence[str],
+        inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
-        self.load_task_sample(sentences, task_name, prompt_type, **kwargs)
-
-        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+    ) -> Array:
+        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         if prompt_name:
             logger.info(
-                f"Using prompt_name={prompt_name} for task={task_name} prompt_type={prompt_type}"
+                f"Using prompt_name={prompt_name} for task={task_metadata.name} prompt_type={prompt_type}"
             )
         else:
             logger.info(
-                f"No model prompts found for task={task_name} prompt_type={prompt_type}"
+                f"No model prompts found for task={task_metadata.name} prompt_type={prompt_type}"
             )
+        sentences = [batch["text"] for batch in inputs for batch in batch["text"]]
+        self.load_task_sample(sentences, task_metadata, prompt_type, **kwargs)
+
         logger.info(f"Encoding {len(sentences)} sentences.")
         if self.dataset_embeddings is None:
             raise ValueError("Dataset embeddings are not loaded")
@@ -71,34 +89,45 @@ class CDEWrapper(SentenceTransformerWrapper):
             # sometimes in kwargs can be return_tensors=True
             embeddings = embeddings.cpu().detach().float().numpy()
 
-        self.prev_task_name = task_name
+        self.prev_embeddings_key = self.create_embeddings_key(
+            task_metadata, hf_split, hf_subset
+        )
         return embeddings
 
     def load_task_sample(
         self,
         sentences: Sequence[str],
-        task_name: str,
+        task_metadata: TaskMetadata,
         prompt_type: PromptType | None,
+        hf_split: str,
+        hf_subset: str,
         **kwargs: Any,
     ) -> None:
-        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         logger.info(
-            f"Loading dataset embeddings for task {task_name}. "
-            f"Prompt name: {prompt_name}. Prompt value {self.model_prompts.get(task_name, None)}"
+            f"Loading dataset embeddings for task {task_metadata.name}. "
+            f"Prompt name: {prompt_name}. Prompt value {self.model_prompts.get(task_metadata.name, None)}"
         )
-        if isinstance(sentences[0], list):
-            sentences = [s for sentences_list in sentences for s in sentences_list]
+        if task_metadata.type in self.retrieval_task_types:
+            task: AbsTaskRetrieval = mteb.get_task(task_metadata.name)
+            task.load_data()
+            cur_ds = task.dataset[hf_subset][hf_split]["corpus"]
+            sentences = corpus_to_dict(list(cur_ds.values()))
+        elif task_metadata.type in self.classification_task_types:
+            task: AbsTaskAnyClassification = mteb.get_task(task_metadata.name)
+            task.load_data()
+            cur_ds = task.dataset[hf_subset][task.train_split]
+            sentences = cur_ds[task.input_column_name]
+        elif task_metadata.type == "Summarization":
+            pass
         # We need to sample with replacement if the minicorpus needs to be bigger than the number of sentences
         is_replace = len(sentences) < self.max_sentences
         rng_state = np.random.default_rng(42)
         minicorpus = rng_state.choice(
             sentences, size=self.max_sentences, replace=is_replace
         )
-        minicorpus = corpus_to_str(minicorpus)
-        if isinstance(minicorpus[0], dict):
-            minicorpus = [d["text"] for d in minicorpus]
         self.dataset_embeddings = self.model.encode(
-            corpus_to_str(minicorpus),
+            minicorpus,
             prompt_name=prompt_name,
             convert_to_tensor=True,
             **kwargs,
@@ -119,18 +148,15 @@ cde_model_prompts = {
 }
 
 cde_small_v1 = ModelMeta(
-    loader=partial(
-        CDEWrapper,
-        model="jxm/cde-small-v1",
-        # https://huggingface.co/jxm/cde-small-v2/discussions/9
-        # revision="7017cdcb2abeccc8e9abd1c2379eb0e05121eec8",
+    loader=CDEWrapper,
+    loader_kwargs=dict(
         model_prompts=cde_model_prompts,
         trust_remote_code=True,
     ),
     name="jxm/cde-small-v1",
     languages=["eng-Latn"],
     open_weights=True,
-    revision="7017cdcb2abeccc8e9abd1c2379eb0e05121eec8",
+    revision="main",  # TODO https://huggingface.co/jxm/cde-small-v2/discussions/9
     release_date="2024-09-24",
     n_parameters=int(281 * 1e6),
     memory_usage_mb=1072,  # Though the second-stage model is only 140M
@@ -149,18 +175,15 @@ cde_small_v1 = ModelMeta(
 )
 
 cde_small_v2 = ModelMeta(
-    loader=partial(
-        CDEWrapper,
-        model="jxm/cde-small-v2",
-        # https://huggingface.co/jxm/cde-small-v2/discussions/9
-        # revision="a7e5882ad52c27ea2831fc8258f24379c25cb459",
+    loader=CDEWrapper,
+    loader_kwargs=dict(
         model_prompts=cde_model_prompts,
         trust_remote_code=True,
     ),
     name="jxm/cde-small-v2",
     languages=["eng-Latn"],
     open_weights=True,
-    revision="a7e5882ad52c27ea2831fc8258f24379c25cb459",
+    revision="main",  # TODO https://huggingface.co/jxm/cde-small-v2/discussions/9
     release_date="2025-01-13",
     n_parameters=int(306 * 1e6),
     memory_usage_mb=1166,  # Though the second-stage model is only 140M
