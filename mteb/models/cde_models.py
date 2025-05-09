@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Sequence
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
@@ -10,8 +10,7 @@ from torch.utils.data import DataLoader
 from transformers import AutoConfig
 
 import mteb
-from mteb import TaskMetadata
-from mteb.abstasks import AbsTaskAnyClassification, AbsTaskRetrieval
+from mteb.abstasks import TaskMetadata
 from mteb.create_dataloaders import corpus_to_dict
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta, ScoringFunction
@@ -19,12 +18,18 @@ from mteb.models.bge_models import bge_full_data
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 from mteb.types import Array, BatchedInput
 
+if TYPE_CHECKING:
+    from mteb.abstasks import (
+        AbsTaskAnyClassification,
+        AbsTaskRetrieval,
+        AbsTaskSummarization,
+    )
 logger = logging.getLogger(__name__)
 
 
 class CDEWrapper(SentenceTransformerWrapper):
     dataset_embeddings: torch.Tensor | None = None
-    prev_embeddings_key: tuple[str, str, str] | None = None
+    prev_embeddings_key: tuple[str, str] | None = None
     classification_task_types = (
         "Classification",
         "MultilabelClassification",
@@ -44,12 +49,10 @@ class CDEWrapper(SentenceTransformerWrapper):
     def create_embeddings_key(
         self,
         task_metadata: TaskMetadata,
-        hf_split: str,
         hf_subset: str,
-    ) -> tuple[str, str, str]:
+    ) -> tuple[str, str]:
         return (
             task_metadata.name,
-            hf_split,
             hf_subset,
         )
 
@@ -63,17 +66,24 @@ class CDEWrapper(SentenceTransformerWrapper):
         prompt_type: PromptType | None = None,
         **kwargs: Any,
     ) -> Array:
-        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
-        if prompt_name:
+        prompt = self.get_prompt(task_metadata, prompt_type)
+        if prompt:
             logger.info(
-                f"Using prompt_name={prompt_name} for task={task_metadata.name} prompt_type={prompt_type}"
+                f"Using prompt=`{prompt}` for task={task_metadata.name} prompt_type={prompt_type}"
             )
         else:
             logger.info(
                 f"No model prompts found for task={task_metadata.name} prompt_type={prompt_type}"
             )
-        sentences = [batch["text"] for batch in inputs for batch in batch["text"]]
-        self.load_task_sample(sentences, task_metadata, prompt_type, **kwargs)
+        sentences = [text for batch in inputs for text in batch["text"]]
+        self.load_task_sample(
+            sentences,
+            task_metadata,
+            prompt_type,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            **kwargs,
+        )
 
         logger.info(f"Encoding {len(sentences)} sentences.")
         if self.dataset_embeddings is None:
@@ -81,7 +91,7 @@ class CDEWrapper(SentenceTransformerWrapper):
 
         embeddings = self.model.encode(
             sentences,
-            prompt_name=prompt_name,
+            prompt=prompt,
             dataset_embeddings=self.dataset_embeddings,
             **kwargs,
         )
@@ -89,9 +99,7 @@ class CDEWrapper(SentenceTransformerWrapper):
             # sometimes in kwargs can be return_tensors=True
             embeddings = embeddings.cpu().detach().float().numpy()
 
-        self.prev_embeddings_key = self.create_embeddings_key(
-            task_metadata, hf_split, hf_subset
-        )
+        self.prev_embeddings_key = self.create_embeddings_key(task_metadata, hf_subset)
         return embeddings
 
     def load_task_sample(
@@ -103,23 +111,35 @@ class CDEWrapper(SentenceTransformerWrapper):
         hf_subset: str,
         **kwargs: Any,
     ) -> None:
-        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
+        if self.prev_embeddings_key == self.create_embeddings_key(
+            task_metadata, hf_subset
+        ):
+            logger.info(
+                f"Embeddings for {task_metadata.name} subset: {hf_subset} already loaded"
+            )
+            return
+        prompt = self.get_prompt(task_metadata, prompt_type)
         logger.info(
-            f"Loading dataset embeddings for task {task_metadata.name}. "
-            f"Prompt name: {prompt_name}. Prompt value {self.model_prompts.get(task_metadata.name, None)}"
+            f"Loading dataset embeddings for task {task_metadata.name}, subset: {hf_subset} "
+            f"Prompt: `{prompt}`"
         )
         if task_metadata.type in self.retrieval_task_types:
             task: AbsTaskRetrieval = mteb.get_task(task_metadata.name)
             task.load_data()
+            task.convert_v1_dataset_format_to_v2()
             cur_ds = task.dataset[hf_subset][hf_split]["corpus"]
-            sentences = corpus_to_dict(list(cur_ds.values()))
+            sentences = corpus_to_dict(list(cur_ds.values()))["text"]
         elif task_metadata.type in self.classification_task_types:
             task: AbsTaskAnyClassification = mteb.get_task(task_metadata.name)
             task.load_data()
             cur_ds = task.dataset[hf_subset][task.train_split]
             sentences = cur_ds[task.input_column_name]
         elif task_metadata.type == "Summarization":
-            pass
+            task: AbsTaskSummarization = mteb.get_task(task_metadata.name)
+            task.load_data()
+            cur_ds = task.dataset[hf_subset][hf_split]
+            sentences = cur_ds["text"]
+
         # We need to sample with replacement if the minicorpus needs to be bigger than the number of sentences
         is_replace = len(sentences) < self.max_sentences
         rng_state = np.random.default_rng(42)
@@ -128,7 +148,7 @@ class CDEWrapper(SentenceTransformerWrapper):
         )
         self.dataset_embeddings = self.model.encode(
             minicorpus,
-            prompt_name=prompt_name,
+            prompt=prompt,
             convert_to_tensor=True,
             **kwargs,
         )
