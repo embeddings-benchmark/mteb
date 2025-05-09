@@ -48,7 +48,6 @@ class AudioCapsRetrieval(AbsTaskAudio2TextRetrieval):
     text_column_name: str = 'caption'
     id_column_name: str = 'audiocap_id'
 
-    # def dataset_transform(self):
-    #     for split in self.dataset.keys():
-    #         self.dataset[split].rename_column('caption', 'text')
-    #         self.dataset[split].rename_column('audiocap_id', '_id')
+    def dataset_transform(self):
+        for split in self.dataset.keys():
+            self.dataset[split] = self.dataset[split][:10]
