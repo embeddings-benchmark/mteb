@@ -9,12 +9,12 @@ from pathlib import Path
 from time import time
 from typing import Any
 
-from datasets import Features, Value, load_dataset
+from datasets import Features, Value, load_dataset, Dataset
 import datasets
 
 from mteb.abstasks.TaskMetadata import HFSubset
 
-from ...evaluation.evaluators.Audio import Audio2TextRetrievalEvaluator
+from ...evaluation.evaluators.Audio.Audio2TextRetrievalEvaluator import Audio2TextRetrievalEvaluator
 from ...load_results.task_results import ScoresDict
 from ..AbsTask import AbsTask
 from ..TaskMetadata import DescriptiveStatistics
@@ -33,8 +33,8 @@ class HFDataLoader:
         prefix: str | None = None,
         corpus_file: str = "corpus.jsonl",
         query_file: str = "queries.jsonl",
-        qrels_folder: str = "qrels",
-        qrels_file: str = "",
+        qrels_folder: str = None,
+        qrels_file: str = None,
         streaming: bool = False,
         keep_in_memory: bool = False,
         trust_remote_code: bool = False,
@@ -45,6 +45,7 @@ class HFDataLoader:
         self.corpus = {}
         self.queries = {}
         self.qrels = {}
+        self.qrels_file = None
         self.hf_repo = hf_repo
         self.audio_column_name = audio_column_name
         self.id_column_name = id_column_name
@@ -72,7 +73,7 @@ class HFDataLoader:
                 os.path.join(data_folder, query_file) if data_folder else query_file
             )
             self.qrels_folder = (
-                os.path.join(data_folder, qrels_folder) if data_folder else None
+                os.path.join(data_folder, qrels_folder) if data_folder and qrels_folder else None
             )
             self.qrels_file = qrels_file
         self.streaming = streaming
@@ -106,7 +107,10 @@ class HFDataLoader:
             logger.info("Loading Queries...")
             self._load_queries()
 
-        self._load_qrels(split)
+        if self.qrels_file != None:
+            self._load_qrels(split)
+        else:
+            self._generate_qrels(split)
         # filter queries with no qrels
         qrels_dict = defaultdict(dict)
 
@@ -133,10 +137,31 @@ class HFDataLoader:
 
         return self.corpus
 
+    def _generate_qrels(self, split: str):
+        ds = load_dataset(
+                self.hf_repo,
+                "default",
+                keep_in_memory=self.keep_in_memory,
+                streaming=self.streaming,
+                trust_remote_code=self.trust_remote_code,
+            )[split]
+
+        qrels_dict = {
+            'query-id': ds[self.id_column_name],
+            'corpus-id': ds[self.id_column_name],
+            'score': [1] * len(ds)
+        }
+        features = Features({
+            'query-id':  Value('string'),
+            'corpus-id': Value('string'),
+            'score':     Value('int32'),
+        })
+        self.qrels = Dataset.from_dict(qrels_dict, features=features)
+
     def _load_corpus(self):
         if self.hf_repo:
             datasets.logging.set_verbosity_debug()
-            print(self.hf_repo)
+            # print(self.hf_repo)
             corpus_ds = load_dataset(
                 self.hf_repo,
                 "default",
@@ -151,8 +176,9 @@ class HFDataLoader:
                 streaming=self.streaming,
                 keep_in_memory=self.keep_in_memory,
             )
-        corpus_ds = next(iter(corpus_ds.values()))  # get first split
-        corpus_ds = corpus_ds.cast_column(self.id_column_name, Value("string"))
+        corpus_ds = (next(iter(corpus_ds.values()))) # get first split
+        # print(corpus_ds)
+        corpus_ds = corpus_ds.cast_column(self.id_column_name, Value(dtype="string"))
         corpus_ds = corpus_ds.rename_column(self.id_column_name, "id")
         corpus_ds = corpus_ds.remove_columns(
             [
@@ -209,6 +235,7 @@ class HFDataLoader:
                 "score": Value("float"),
             }
         )
+        print(qrels_ds)
         qrels_ds = qrels_ds.cast(features)
         self.qrels = qrels_ds
 
@@ -280,6 +307,10 @@ class AbsTaskAudio2TextRetrieval(AbsTask):
     ignore_identical_ids: bool = False
     abstask_prompt = "Retrieve text based on user query."
 
+    audio_column_name: str = 'audio'
+    text_column_name: str = 'caption'
+    id_column_name: str = 'audiocap_id'
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -308,7 +339,7 @@ class AbsTaskAudio2TextRetrieval(AbsTask):
             # Conversion from DataSet
             queries = {query["id"]: query["audio"] for query in queries}
             corpus = {
-                doc["id"]: doc.get("title", "") + " " + doc["audio"] for doc in corpus
+                doc["id"]: doc.get("title", "") + " " + doc[self.text_column_name] for doc in corpus
             }
             self.corpus[split], self.queries[split], self.relevant_docs[split] = (
                 corpus,

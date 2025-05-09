@@ -18,7 +18,7 @@ class AudioCapsRetrieval(AbsTaskAudio2TextRetrieval):
         type="Retrieval",
         category="s2s",
         modalities=["text"],
-        eval_splits=["test"],
+        eval_splits=["test[:%10]"],
         eval_langs=["eng-Latn"],
         main_score="ndcg_at_10",
         date=("2018-01-01", "2018-12-31"),
@@ -48,7 +48,6 @@ class AudioCapsRetrieval(AbsTaskAudio2TextRetrieval):
     text_column_name: str = 'caption'
     id_column_name: str = 'audiocap_id'
 
-    # def dataset_transform(self):
-    #     for split in self.dataset.keys():
-    #         self.dataset[split].rename_column('caption', 'text')
-    #         self.dataset[split].rename_column('audiocap_id', '_id')
+    def dataset_transform(self):
+        for split in self.dataset.keys():
+            self.dataset[split] = self.dataset[split][:10]
