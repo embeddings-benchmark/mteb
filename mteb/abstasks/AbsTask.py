@@ -77,6 +77,9 @@ class AbsTask(ABC):
         fast_loading: (Not recommended to use) Denotes if the task should be loaded using the fast loading method.
             This is only possible if the dataset have a "default" config. We don't recommend to use this method, and suggest to use different subsets for loading datasets.
             This was used only for historical reasons and will be removed in the future.
+        data_loaded: Denotes if the dataset is loaded or not. This is used to avoid loading the dataset multiple times.
+        seed: The random seed used for reproducibility.
+        hf_subsets: The list of Huggingface subsets to use.
     """
 
     metadata: TaskMetadata
@@ -85,7 +88,7 @@ class AbsTask(ABC):
     superseded_by: str | None = None
     dataset: dict[HFSubset, DatasetDict] | None = None  # type: ignore
     data_loaded: bool = False
-    hf_subsets: list[HFSubset] | None = None
+    hf_subsets: list[HFSubset]
     fast_loading: bool = False
 
     def __init__(self, seed: int = 42, **kwargs: Any):

@@ -2,11 +2,10 @@ from __future__ import annotations
 
 import json
 import logging
-import os
-import subprocess
 from collections.abc import Sequence
 from pathlib import Path
 
+import mteb.cache as cache
 from mteb.abstasks.AbsTask import AbsTask
 from mteb.load_results.benchmark_results import BenchmarkResults, ModelResult
 from mteb.load_results.task_results import TaskResult
@@ -15,51 +14,6 @@ from mteb.model_meta import ModelMeta
 logger = logging.getLogger(__name__)
 MODEL_NAME = str
 REVISION = str
-
-
-def download_of_results(
-    results_repo: str, cache_directory: Path | None = None, download_latest: bool = True
-) -> Path:
-    """Downloads the latest version of the results repository from GitHub to a local cache directory. Required git to be installed.
-
-    Args:
-        results_repo: The URL of the results repository on GitHub.
-        cache_directory: The directory where the repository should be cached. If None it will use the MTEB_CACHE environment variable or "~/.cache/mteb" by default.
-        download_latest: If True it will download the latest version of the repository, otherwise it will only update the existing repository.
-
-    Returns:
-        The path to the local cache directory.
-    """
-    default_cache_directory = Path.home() / ".cache" / "mteb"
-
-    if cache_directory is None:
-        _cache_directory = os.environ.get("MTEB_CACHE", None)
-        cache_directory = (
-            Path(_cache_directory) if _cache_directory else default_cache_directory
-        )
-
-    if not cache_directory.exists():
-        cache_directory.mkdir(parents=True)
-
-    # if "results" folder already exists update it
-    results_directory = cache_directory / os.path.basename(results_repo)
-    if results_directory.exists():
-        if download_latest:
-            logger.info(
-                f"Results repository already exists in {results_directory}, updating it using git pull"
-            )
-            subprocess.run(["git", "pull"], cwd=results_directory)
-        else:
-            logger.info(
-                f"Results repository already exists in {results_directory}, skipping update, set download_latest=True to update it"
-            )
-    else:
-        logger.info(
-            f"No results repository found in {results_directory}, cloning it from {results_repo}"
-        )
-        subprocess.run(["git", "clone", results_repo], cwd=cache_directory)
-
-    return results_directory
 
 
 def _model_name_and_revision(
@@ -108,7 +62,9 @@ def load_results(
     """
     # TODO: we want to allow results_repo (the first argument) to be a local path
     # TODO: in v2 we can rename it to "path" to align with load_dataset
-    repo_directory = download_of_results(results_repo, download_latest=download_latest)
+    repo_directory = cache.download_results_cache(
+        results_repo=results_repo, download_latest=download_latest
+    )
     model_paths = [p for p in (repo_directory / "results").glob("*") if p.is_dir()]
 
     if models is not None:

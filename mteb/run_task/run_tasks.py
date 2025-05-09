@@ -1,20 +1,20 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Iterable
 from pathlib import Path
 from time import time
-from typing import Any, Literal
+from typing import Any, Literal, cast
 
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
+import mteb.cache as cache
 from mteb import SentenceTransformerWrapper
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.benchmarks import Benchmark
+from mteb.abstasks.TaskMetadata import HFSubset, Splitname
 from mteb.encoder_interface import Encoder
 from mteb.load_results import TaskResult
 
-from .get_model_meta import get_model_meta, get_output_path
+from .get_model_meta import get_model_meta, get_output_folder
 
 logger = logging.getLogger(__name__)
 
@@ -23,8 +23,7 @@ def _run_task(
     model: Encoder,
     task: AbsTask,
     *,
-    splits: list[str],
-    subsets_to_run: list[str] | None,  # TODO: Can this actualy be None?
+    splits: dict[Splitname, list[HFSubset]],
     co2_tracker: bool | None,
     encode_kwargs: dict[str, Any],
     **kwargs: Any,
@@ -57,7 +56,6 @@ def _run_task(
                     model,
                     task,
                     splits=splits,
-                    subsets_to_run=subsets_to_run,
                     encode_kwargs=encode_kwargs,
                     co2_tracker=False,
                     **kwargs,
@@ -75,12 +73,12 @@ def _run_task(
 
     evaluation_time = 0
 
-    for split in splits:
+    for split, hf_subsets in splits.items():
         tick = time()
         task_results[split] = task.evaluate(
             model,
             split,
-            subsets_to_run=subsets_to_run,
+            subsets_to_run=hf_subsets,
             encode_kwargs=encode_kwargs,
             **kwargs,
         )
@@ -104,29 +102,38 @@ def _run_task(
     return result
 
 
-def run_task(
+def run_tasks(
     model: Encoder | SentenceTransformer | CrossEncoder,
-    task: AbsTask,
+    task: AbsTask,  # TODO: allow multiple tasks + benchmarks
     *,
-    splits: list[str] | None = None,
-    subsets_to_run: list[str] | None = None,
     co2_tracker: bool | None = None,
     raise_error: bool = True,
     encode_kwargs: dict[str, Any] | None = None,
-    output_folder: Path | str | None = None,
+    output_folder: Path | str | None = "results",
+    cache_strategy: Literal[
+        "no_cache", "output_folder", "online_cache", "only_cache"
+    ] = "output_folder",
+    overwrite_strategy: Literal["always", "never", "only-missing"] = "only-missing",
     **kwargs: Any,
 ) -> TaskResult | None:
     """This function runs a model on a a given task and returns the results.
 
     Args:
         model: The model to use for encoding.
-        tasks: A task to run.
-        splits: The splits to evaluate on. If None, the default evaluation splits for the task will be used.
-        subsets_to_run: The subsets to evaluate on. If None, all subsets will be evaluated.
+        task: A task to run.
         co2_tracker: If True, track the CO₂ emissions of the evaluation. If none is passed co2 tracking will be run if codecarbon is installed.
         encode_kwargs: Additional keyword arguments passed to the models `encode` method.
         raise_error: If True, raise an error if the task fails. If False, return an empty list.
         output_folder: The folder to save the results to. If None, the results will not be saved.
+        cache_strategy: The strategy to use for loading existing the results. Can be:
+            - "no_cache": will not load the results from the cache.
+            - "output_folder": Will check if the results exist in the output folder and load them from there.
+            - "online_cache": Will check if the results exist in the online cache and load them from there. This will download the results from the online cache.
+            - "only_cache": Will only load the results from the cache folder and do not run the task. Useful for debugging and testing.
+        overwrite_strategy: The strategy to use for overwriting the results. Can be:
+            - "always": Always overwrite the results
+            - "never": Never overwrite the results
+            - "only-missing": Only rerun the missing splits of a run. It will not rerun the splits if the dataset revision or mteb version has changed.
         kwargs: Additional keyword arguments for the task.
 
     Returns:
@@ -141,21 +148,49 @@ def run_task(
             "No batch size defined in encode_kwargs. Setting `encode_kwargs['batch_size'] = 32`."
         )
 
-    splits_to_run = splits if splits is not None else task.eval_splits
-    subsets_to_run = subsets_to_run if subsets_to_run is not None else task.hf_subsets
-
     meta = get_model_meta(model)
     if isinstance(model, (SentenceTransformer, CrossEncoder)):
-        model: Encoder = SentenceTransformerWrapper(model)  # type: ignore[assignment] # TODO: SentenceTransformerWrapper should be a subclass of Encoder
+        model = SentenceTransformerWrapper(model)  # type: ignore[assignment] # TODO: SentenceTransformerWrapper should be a subclass of Encoder
+    model = cast(Encoder, model)
 
-    output_path = get_output_path(meta, output_folder)
+    output_folder = get_output_folder(meta, output_folder)
+
+    # figure out cache path
+    cache_result_path = None
+    if cache_strategy == "no_cache":
+        pass
+    elif cache_strategy == "output_folder":
+        if output_folder is None:
+            raise ValueError(
+                "output_folder must be specified when cache_strategy is 'output_folder'"
+            )
+        cache_result_path = output_folder / f"{task.metadata.name}.json"
+    elif cache_strategy == "online_cache":
+        cache_path = cache.download_results_cache(download_latest=True)
+
+    if cache_result_path:
+        existing_results = TaskResult.from_disk(cache_path)
+    else:
+        existing_results = None
+
+    if cache_strategy == "only_cache":
+        if existing_results is None:
+            logger.warning(
+                f"Cache strategy is set to 'only_cache' but no results were found in {cache_path}. Rerun the task with alternative cache_strategy to generate the results."
+            )
+        return existing_results
+
+    if existing_results and existing_results.is_mergeable(task):
+        missing_eval = existing_results.get_missing_evaluations(task)
+    else:
+        missing_eval = {split: task.hf_subsets for split in task.eval_splits}
 
     if raise_error is False:
         try:
             result = _run_task(
-                model,
-                task,
-                splits=splits_to_run,
+                model=model,
+                splits=missing_eval,
+                task=task,
                 subsets_to_run=task.hf_subsets,
                 co2_tracker=co2_tracker,
                 encode_kwargs=encode_kwargs,
@@ -163,102 +198,38 @@ def run_task(
             )
         except Exception as e:
             logger.error(
-                f"Error while running task {task.metadata.name} on splits {splits_to_run}: {e}"
+                f"Error while running task {task.metadata.name} on splits {list(missing_eval.keys())}: {e}"
             )
             return None
 
     result = _run_task(
-        model,
-        task,
-        splits=splits_to_run,
+        model=model,
+        splits=missing_eval,
+        task=task,
         subsets_to_run=task.hf_subsets,
         co2_tracker=co2_tracker,
         encode_kwargs=encode_kwargs,
         **kwargs,
     )
 
-    if output_path:
-        save_path = output_path / f"{task.metadata.name}.json"
+    if existing_results:
+        result = result.merge(existing_results)
+
+    if output_folder and overwrite_strategy != "never":
+        save_path = output_folder / f"{task.metadata.name}.json"
         result.to_disk(save_path)
 
     return result
 
 
-def run_tasks(
-    model: Encoder | SentenceTransformer | CrossEncoder,
-    tasks: Iterable[AbsTask] | Benchmark,
-    *,
-    co2_tracker: bool | None = None,
-    raise_error: bool = True,
-    encode_kwargs: dict[str, Any] | None = None,
-    output_folder: str | None = None,
-    cache_strategy: Literal[
-        "no_cache", "output_folder", "online_cache"
-    ] = "output_folder",
-    overwrite_strategy: Literal[
-        "always", "never", "only-missing", "if-version-changed"
-    ] = "only-missing",
-    **kwargs: Any,
-) -> list[TaskResult]:
-    """This function runs a model on a a given task and returns the results.
-
-    Args:
-        model: The model to use for encoding.
-        tasks: A benhmark or a list of tasks to run.
-        co2_tracker: If True, track the CO₂ emissions of the evaluation. If none is passed co2 tracking will be run if codecarbon is installed.
-        encode_kwargs: Additional keyword arguments passed to the models `encode` method.
-        raise_error: If True, raise an error if the task fails. If False, return an empty list.
-        output_folder: The folder to save the results to. If None, the results will not be saved.
-        cache_strategy: The strategy to use for loading existing the results. Can be:
-            - "no_cache": will not load the results from the cache.
-            - "output_folder": Will check if the results exist in the output folder and load them from there.
-            - "online_cache": Will check if the results exist in the online cache and load them from there. This will download the results from the online cache.
-            - "only_cache": Will only load the results from the cache folder and do not run the task. Useful for debugging and testing.
-        overwrite_strategy: The strategy to use for overwriting the results. Can be "always", "never", "only-missing" or "on-version-mismatch".
-        kwargs: Additional keyword arguments for the task.
-
-    Returns:
-        The results of the evaluation.
-    """
-    if isinstance(tasks, AbsTask):
-        tasks = [tasks]
-
-    if isinstance(tasks, Benchmark):
-        tasks = tasks.tasks
-
-    results = []
-
-    for task in tasks:
-        result = run_task(
-            model,
-            task,
-            co2_tracker=co2_tracker,
-            raise_error=raise_error,
-            encode_kwargs=encode_kwargs,
-            output_folder=output_folder,
-            **kwargs,
-        )
-        if result is not None:
-            results.append(result)
-
-    return results
-
-
 # TODO:
-# - Add merging strategy for results
-# - Add cache_strategy
-#   - cache_strategy = "output_folder" (default) will load the results only if they exist in the output folder
-#   - cache_stategy = "online_cache" will load the results from the online results folder. This will download the results from the online results folder and save them to the cache folder
-#   - cache_strategy = "no_cache" will not load the results from the cache folder
-# - Add overwrite_strategy
-#   - "always" Always overwrite the results
-#   - "never" Never overwrite the results
-#   - "only-missing" (default) Overwrite the results only if it contains missing splits or results and in that case only rerun the missing splits
-#   - "if-version-changed" Overwrite the results only if it hasn't been run using the latest mteb version
-#   - "only-load": Only load the results from the cache folder and do not run the task. Useful for debugging and testing.
 
 # Other:
 # - Model handling for bm25
 #   - Currently the MTEB runner checks for bm25 and retrieval task. We should move this check to bm25's encode.
 # - Add Benchmark.run(model) method, which simply a wrapper around run_tasks
 # - Redo AggregatedTask to use the new run_tasks method
+
+# Figure out a good UI for running tasks (how should the TQDM progress bar look like) - how does it interact with the sentence TRF progress bar
+
+# Add tests
