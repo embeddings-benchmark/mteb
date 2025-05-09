@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class BengaliHateSpeechClassification(AbsTaskClassification):
+class BengaliHateSpeechClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="BengaliHateSpeechClassification",
         description="The Bengali Hate Speech Dataset is a Bengali-language dataset of news articles collected from various Bengali media sources and categorized based on the type of hate in the text.",
@@ -14,7 +14,7 @@ class BengaliHateSpeechClassification(AbsTaskClassification):
             "revision": "99612296bc093f0720cac7d7cbfcb67eecf1ca2f",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ben-Beng"],
@@ -26,12 +26,13 @@ class BengaliHateSpeechClassification(AbsTaskClassification):
         license="mit",
         annotations_creators="expert-annotated",
         sample_creation="found",
-        bibtex_citation="""@inproceedings{karim2020BengaliNLP,
-    title={Classification Benchmarks for Under-resourced Bengali Language based on Multichannel Convolutional-LSTM Network},
-    author={Karim, Md. Rezaul and Chakravarti, Bharathi Raja and P. McCrae, John and Cochez, Michael},
-    booktitle={7th IEEE International Conference on Data Science and Advanced Analytics (IEEE DSAA,2020)},
-    publisher={IEEE},
-    year={2020}
+        bibtex_citation=r"""
+@inproceedings{karim2020BengaliNLP,
+  author = {Karim, Md. Rezaul and Chakravarti, Bharathi Raja and P. McCrae, John and Cochez, Michael},
+  booktitle = {7th IEEE International Conference on Data Science and Advanced Analytics (IEEE DSAA,2020)},
+  publisher = {IEEE},
+  title = {Classification Benchmarks for Under-resourced Bengali Language based on Multichannel Convolutional-LSTM Network},
+  year = {2020},
 }
 """,
     )

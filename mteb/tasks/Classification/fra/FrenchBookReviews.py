@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class FrenchBookReviews(AbsTaskClassification):
+class FrenchBookReviews(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="FrenchBookReviews",
         dataset={
@@ -14,7 +14,7 @@ class FrenchBookReviews(AbsTaskClassification):
         description="It is a French book reviews dataset containing a huge number of reader reviews on French books. Each review is pared with a rating that ranges from 0.5 to 5 (with 0.5 increment).",
         reference="https://huggingface.co/datasets/Abirate/french_book_reviews",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["fra-Latn"],

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class MovieReviewSentimentClassification(AbsTaskClassification):
+class MovieReviewSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="MovieReviewSentimentClassification",
         dataset={
@@ -14,7 +14,7 @@ class MovieReviewSentimentClassification(AbsTaskClassification):
         description="The Allociné dataset is a French-language dataset for sentiment analysis that contains movie reviews produced by the online community of the Allociné.fr website.",
         reference="https://github.com/TheophileBlard/french-sentiment-analysis-with-bert",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["fra-Latn"],
@@ -26,10 +26,10 @@ class MovieReviewSentimentClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
+        bibtex_citation=r"""
 @software{blard2020,
-  title = {French sentiment analysis with BERT},
   author = {Théophile Blard},
+  title = {French sentiment analysis with BERT},
   url = {https://github.com/TheophileBlard/french-sentiment-analysis-with-bert},
   year = {2020},
 }

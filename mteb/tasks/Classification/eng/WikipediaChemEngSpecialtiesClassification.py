@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class WikipediaChemEngSpecialtiesClassification(AbsTaskClassification):
+class WikipediaChemEngSpecialtiesClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="WikipediaChemEngSpecialtiesClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
@@ -14,7 +14,7 @@ class WikipediaChemEngSpecialtiesClassification(AbsTaskClassification):
             "revision": "f81a76a2fb690e5d5bd7a26dd07e85cdf8405dfb",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -26,12 +26,12 @@ class WikipediaChemEngSpecialtiesClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""
-        @article{kasmaee2024chemteb,
-        title={ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
-        author={Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
-        journal={arXiv preprint arXiv:2412.00532},
-        year={2024}
-        }
-        """,
+        bibtex_citation=r"""
+@article{kasmaee2024chemteb,
+  author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
+  journal = {arXiv preprint arXiv:2412.00532},
+  title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
+  year = {2024},
+}
+""",
     )

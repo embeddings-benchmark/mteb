@@ -4,13 +4,17 @@ from __future__ import annotations
 
 import difflib
 import logging
-from collections import Counter
+from collections import Counter, defaultdict
 
 import pandas as pd
 
-from mteb.abstasks import AbsTask, AbsTaskMultilabelClassification
+from mteb.abstasks import (
+    AbsTask,
+    AbsTaskMultilabelClassification,
+)
 from mteb.abstasks.AbsTaskReranking import AbsTaskReranking
 from mteb.abstasks.TaskMetadata import TASK_CATEGORY, TASK_DOMAIN, TASK_TYPE
+from mteb.custom_validators import MODALITIES
 from mteb.languages import (
     ISO_TO_LANGUAGE,
     ISO_TO_SCRIPT,
@@ -56,7 +60,23 @@ def create_name_to_task_mapping() -> dict[str, type[AbsTask]]:
     return metadata_names
 
 
+def create_similar_tasks() -> dict[str, list[str]]:
+    """Create a dictionary of similar tasks.
+
+    Returns:
+        Dict with key is parent task and value is list of similar tasks.
+    """
+    tasks = create_task_list()
+    similar_tasks = defaultdict(list)
+    for task in tasks:
+        if task.metadata.adapted_from:
+            for similar_task in task.metadata.adapted_from:
+                similar_tasks[similar_task].append(task.metadata.name)
+    return similar_tasks
+
+
 TASKS_REGISTRY = create_name_to_task_mapping()
+SIMILAR_TASKS = create_similar_tasks()
 
 
 def check_is_valid_script(script: str) -> None:
@@ -120,6 +140,27 @@ def filter_task_by_categories(
     return [t for t in tasks if t.metadata.category in _categories]
 
 
+def filter_tasks_by_modalities(
+    tasks: list[AbsTask],
+    modalities: list[MODALITIES],
+    exclude_modality_filter: bool = False,
+) -> list[AbsTask]:
+    _modalities = set(modalities)
+    if exclude_modality_filter:
+        return [t for t in tasks if set(t.modalities) == _modalities]
+    else:
+        return [t for t in tasks if _modalities.intersection(t.modalities)]
+
+
+def filter_aggregate_tasks(tasks: list[AbsTask]) -> list[AbsTask]:
+    """Returns input tasks that are *not* aggregate.
+
+    Args:
+        tasks: A list of tasks to filter.
+    """
+    return [t for t in tasks if not t.is_aggregate]
+
+
 class MTEBTasks(tuple):
     def __repr__(self) -> str:
         return "MTEBTasks" + super().__repr__()
@@ -150,7 +191,7 @@ class MTEBTasks(tuple):
         return Counter(langs)
 
     def to_markdown(
-        self, properties: list[str] = ["type", "license", "languages"]
+        self, properties: list[str] = ["type", "license", "languages", "modalities"]
     ) -> str:
         """Generate markdown table with tasks summary
 
@@ -173,7 +214,14 @@ class MTEBTasks(tuple):
 
     def to_dataframe(
         self,
-        properties: list[str] = ["name", "type", "languages", "domains", "license"],
+        properties: list[str] = [
+            "name",
+            "type",
+            "languages",
+            "domains",
+            "license",
+            "modalities",
+        ],
     ) -> pd.DataFrame:
         """Generate pandas DataFrame with tasks summary
 
@@ -192,7 +240,14 @@ class MTEBTasks(tuple):
 
     def to_latex(
         self,
-        properties: list[str] = ["name", "type", "languages", "domains", "license"],
+        properties: list[str] = [
+            "name",
+            "type",
+            "languages",
+            "domains",
+            "license",
+            "modalities",
+        ],
         group_indices: list[str] | None = ["type", "name"],
         include_citation_in_name: bool = True,
         limit_n_entries: int | None = 3,
@@ -248,6 +303,9 @@ def get_tasks(
     exclude_superseded: bool = True,
     eval_splits: list[str] | None = None,
     exclusive_language_filter: bool = False,
+    modalities: list[MODALITIES] | None = None,
+    exclusive_modality_filter: bool = False,
+    exclude_aggregate: bool = False,
 ) -> MTEBTasks:
     """Get a list of tasks based on the specified filters.
 
@@ -265,6 +323,11 @@ def get_tasks(
         exclusive_language_filter: Some datasets contains more than one language e.g. for STS22 the subset "de-en" contain eng and deu. If
             exclusive_language_filter is set to False both of these will be kept, but if set to True only those that contains all the languages
             specified will be kept.
+        modalities: A list of modalities to include. If None, all modalities are included.
+        exclusive_modality_filter: If True, only keep tasks where _all_ filter modalities are included in the
+            task's modalities and ALL task modalities are in filter modalities (exact match).
+            If False, keep tasks if _any_ of the task's modalities match the filter modalities.
+        exclude_aggregate: If True, exclude aggregate tasks. If False, both aggregate and non-aggregate tasks are returned.
 
     Returns:
         A list of all initialized tasks objects which pass all of the filters (AND operation).
@@ -284,6 +347,8 @@ def get_tasks(
                 script,
                 eval_splits=eval_splits,
                 exclusive_language_filter=exclusive_language_filter,
+                modalities=modalities,
+                exclusive_modality_filter=exclusive_modality_filter,
             )
             for task in tasks
         ]
@@ -309,6 +374,12 @@ def get_tasks(
         _tasks = filter_task_by_categories(_tasks, categories)
     if exclude_superseded:
         _tasks = filter_superseded_datasets(_tasks)
+    if modalities:
+        _tasks = filter_tasks_by_modalities(
+            _tasks, modalities, exclusive_modality_filter
+        )
+    if exclude_aggregate:
+        _tasks = filter_aggregate_tasks(_tasks)
 
     return MTEBTasks(_tasks)
 
@@ -320,6 +391,8 @@ def get_task(
     eval_splits: list[str] | None = None,
     hf_subsets: list[str] | None = None,
     exclusive_language_filter: bool = False,
+    modalities: list[MODALITIES] | None = None,
+    exclusive_modality_filter: bool = False,
 ) -> AbsTask:
     """Get a task by name.
 
@@ -333,6 +406,10 @@ def get_task(
         exclusive_language_filter: Some datasets contains more than one language e.g. for STS22 the subset "de-en" contain eng and deu. If
             exclusive_language_filter is set to False both of these will be kept, but if set to True only those that contains all the languages
             specified will be kept.
+        modalities: A list of modalities to include. If None, all modalities are included.
+        exclusive_modality_filter: If True, only keep tasks where _all_ filter modalities are included in the
+            task's modalities and ALL task modalities are in filter modalities (exact match).
+            If False, keep tasks if _any_ of the task's modalities match the filter modalities.
 
     Returns:
         An initialized task object.
@@ -352,6 +429,8 @@ def get_task(
     task = TASKS_REGISTRY[task_name]()
     if eval_splits:
         task.filter_eval_splits(eval_splits=eval_splits)
+    if modalities:
+        task.filter_modalities(modalities, exclusive_modality_filter)
     return task.filter_languages(
         languages,
         script,

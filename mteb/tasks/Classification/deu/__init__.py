@@ -5,4 +5,4 @@ from .GermanPoliticiansTwitterSentimentClassification import (
 )
 from .TenKGnadClassification import TenKGnadClassification
 
-__all__ = ["TenKGnadClassification", "GermanPoliticiansTwitterSentimentClassification"]
+__all__ = ["GermanPoliticiansTwitterSentimentClassification", "TenKGnadClassification"]

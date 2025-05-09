@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 sent_trf_training_dataset = {
     # derived from datasheets
@@ -54,6 +55,7 @@ m3e_dataset = {
     "LCQMC": ["train"],
     "MIRACLReranking": ["train"],
     "PAWSX": ["train"],
+    "DuRetrieval": [],
     # not in MTEB:
     # - cmrc2018
     # - belle_2m
@@ -67,7 +69,7 @@ m3e_dataset = {
     # - wiki_atomic_edit
     # - chatmed_consult
     # - webqa
-    # - dureader_robust
+    # - dureader_robust - DuRetrieval
     # - csl
     # - lawzhidao
     # - CINLID
@@ -82,16 +84,17 @@ m3e_dataset = {
 }
 
 m3e_base = ModelMeta(
+    loader=sentence_transformers_loader,
     name="moka-ai/m3e-base",
-    languages=["zho_Hans", "eng-Latn"],
+    languages=["zho-Hans", "eng-Latn"],
     open_weights=True,
     revision="764b537a0e50e5c7d64db883f2d2e051cbe3c64c",
     release_date="2023-06-06",  # first commit
-    n_parameters=102 * 1e6,
+    n_parameters=int(102 * 1e6),
     memory_usage_mb=390,
     embed_dim=768,
     # They don't give a specific license but commercial use is not allowed
-    license="unspecified-noncommercial",
+    license="https://huggingface.co/moka-ai/m3e-base#%F0%9F%93%9C-license",
     max_tokens=512,
     reference="https://huggingface.co/moka-ai/m3e-base",
     similarity_fn_name=ScoringFunction.COSINE,
@@ -105,8 +108,9 @@ m3e_base = ModelMeta(
 )
 
 m3e_small = ModelMeta(
+    loader=sentence_transformers_loader,
     name="moka-ai/m3e-small",
-    languages=["zho_Hans", "eng-Latn"],
+    languages=["zho-Hans", "eng-Latn"],
     open_weights=True,
     revision="44c696631b2a8c200220aaaad5f987f096e986df",
     release_date="2023-06-02",  # first commit
@@ -114,7 +118,7 @@ m3e_small = ModelMeta(
     memory_usage_mb=None,  # Can't be seen on HF page
     embed_dim=512,
     # They don't give a specific license but commercial use is not allowed
-    license="unspecified-noncommercial",
+    license="https://huggingface.co/moka-ai/m3e-base#%F0%9F%93%9C-license",
     max_tokens=512,
     reference="https://huggingface.co/moka-ai/m3e-small",
     similarity_fn_name=ScoringFunction.COSINE,
@@ -128,8 +132,9 @@ m3e_small = ModelMeta(
 )
 
 m3e_large = ModelMeta(
+    loader=sentence_transformers_loader,
     name="moka-ai/m3e-large",
-    languages=["zho_Hans", "eng-Latn"],
+    languages=["zho-Hans", "eng-Latn"],
     open_weights=True,
     revision="12900375086c37ba5d83d1e417b21dc7d1d1f388",
     release_date="2023-06-21",  # first commit
@@ -137,7 +142,7 @@ m3e_large = ModelMeta(
     memory_usage_mb=None,  # Can't be seen on HF page
     embed_dim=768,
     # They don't give a specific license but commercial use is not allowed
-    license="unspecified-noncommercial",
+    license="https://huggingface.co/moka-ai/m3e-base#%F0%9F%93%9C-license",
     max_tokens=512,
     reference="https://huggingface.co/moka-ai/m3e-large",
     similarity_fn_name=ScoringFunction.COSINE,

@@ -1,21 +1,21 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Sequence
-from functools import partial
 from typing import Any
 
-import numpy as np
 import torch
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import PromptType
+from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
-from mteb.models.wrapper import Wrapper
+from mteb.models.abs_encoder import AbsEncoder
+from mteb.requires_package import requires_package
+from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
 
-class ColBERTWrapper(Wrapper):
+class ColBERTModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -34,12 +34,8 @@ class ColBERTWrapper(Wrapper):
                 and finally to the specific prompt type.
             **kwargs: Additional arguments to pass to the model.
         """
-        try:
-            from pylate import models as colbert_model
-        except ModuleNotFoundError as e:
-            raise ModuleNotFoundError(
-                "To use the ColBERT models `pylate` is required. Please install it with `pip install mteb[pylate]`."
-            ) from e
+        requires_package(self, "pylate", model_name, "pip install mteb[pylate]")
+        from pylate import models as colbert_model
 
         self.model_name = model_name
         self.model = colbert_model.ColBERT(self.model_name, revision=revision, **kwargs)
@@ -49,60 +45,43 @@ class ColBERTWrapper(Wrapper):
             and len(self.model.prompts) > 0
         ):
             try:
-                model_prompts = self.validate_task_to_prompt_name(self.model.prompts)
+                self.model_prompts = model_prompts
+                self.validate_task_to_prompt_name()
             except ValueError:
                 model_prompts = None
         elif model_prompts is not None and hasattr(self.model, "prompts"):
             logger.info(f"Model prompts will be overwritten with {model_prompts}")
             self.model.prompts = model_prompts
-        self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
+            self.validate_task_to_prompt_name()
 
     def encode(
         self,
-        sentences: Sequence[str],
+        inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
-        """Encodes the given sentences using the encoder.
-
-        Args:
-            sentences: The sentences to encode.
-            task_name: The name of the task. Pylate uses this to
-                determine which prompt to use from a specified dictionary.
-            prompt_type: The name type of prompt. (query or passage)
-            **kwargs: Additional arguments to pass to the encoder.
-
-            The order of priorities for prompt selection are:
-                1. Composed prompt of task name + prompt type (query or passage)
-                2. Specific task prompt
-                3. Composed prompt of task type + prompt type (query or passage)
-                4. Specific task type prompt
-                5. Specific prompt type (query or passage)
-
-        Returns:
-            The encoded sentences as a numpy array.
-        """
-        prompt_name = None
-        if self.model_prompts is not None:
-            prompt_name = self.get_prompt_name(
-                self.model_prompts, task_name, prompt_type
-            )
+    ) -> Array:
+        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         if prompt_name:
             logger.info(
-                f"Using prompt_name={prompt_name} for task={task_name} prompt_type={prompt_type}"
+                f"Using prompt_name={prompt_name} for task={task_metadata.name} prompt_type={prompt_type}"
             )
         else:
             logger.info(
-                f"No model prompts found for task={task_name} prompt_type={prompt_type}"
+                f"No model prompts found for task={task_metadata.name} prompt_type={prompt_type}"
             )
-        logger.info(f"Encoding {len(sentences)} sentences.")
+        logger.info(f"Encoding {len(inputs)} sentences.")
 
         if "request_qid" in kwargs:
             kwargs.pop("request_qid")
+
+        inputs = [text for batch in inputs for text in batch["text"]]
+
         pred = self.model.encode(
-            sentences,
+            inputs,
             prompt_name=prompt_name,
             is_query=True if prompt_type == PromptType.query else False,
             convert_to_tensor=True,
@@ -117,47 +96,17 @@ class ColBERTWrapper(Wrapper):
 
         return pred.cpu().numpy()
 
-    def similarity(self, a: np.ndarray, b: np.ndarray) -> np.ndarray:
-        """Computes the max-similarity max_sim(a[i], b[j]) for all i and j.
-            Works with a Tensor of the shape (batch_size, num_tokens, token_dim)
-
-        Return:
-            Matrix with res[i][j]  = max_sim(a[i], b[j])
-        """  # noqa: D402
-        if not isinstance(a, torch.Tensor):
-            a = torch.tensor(a, dtype=torch.float32)
-
-        if not isinstance(b, torch.Tensor):
-            b = torch.tensor(b, dtype=torch.float32)
-
-        if len(a.shape) == 2:
-            a = a.unsqueeze(0)
-
-        if len(b.shape) == 2:
-            b = b.unsqueeze(0)
-
-        scores = torch.einsum(
-            "ash,bth->abst",
-            a,
-            b,
-        )
-
-        return scores.max(axis=-1).values.sum(axis=-1)
-
 
 colbert_v2 = ModelMeta(
-    loader=partial(
-        ColBERTWrapper,
-        model_name="colbert-ir/colbertv2.0",
-    ),
+    loader=ColBERTModel,
     name="colbert-ir/colbertv2.0",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="c1e84128e85ef755c096a95bdb06b47793b13acf",
     public_training_code=None,
     public_training_data=None,
     release_date="2024-09-21",
-    n_parameters=110 * 1e6,
+    n_parameters=int(110 * 1e6),
     memory_usage_mb=418,
     max_tokens=180,  # Reduced for Benchmarking - see ColBERT paper
     embed_dim=None,  # Bag of Embeddings (128) for each token
@@ -175,9 +124,8 @@ colbert_v2 = ModelMeta(
 )
 
 jina_colbert_v2 = ModelMeta(
-    loader=partial(
-        ColBERTWrapper,
-        model_name="jinaai/jina-colbert-v2",
+    loader=ColBERTModel,
+    loader_kwargs=dict(
         query_prefix="[QueryMarker]",
         document_prefix="[DocumentMarker]",
         attend_to_expansion_tokens=True,
@@ -213,7 +161,7 @@ jina_colbert_v2 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     release_date="2024-08-16",
-    n_parameters=559 * 1e6,
+    n_parameters=int(559 * 1e6),
     memory_usage_mb=1067,
     max_tokens=8192,
     embed_dim=None,  # Bag of Embeddings (128) for each token

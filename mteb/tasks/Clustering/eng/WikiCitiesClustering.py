@@ -15,7 +15,7 @@ class WikiCitiesClustering(AbsTaskClustering):
             "revision": "ddc9ee9242fa65332597f70e967ecc38b9d734fa",
         },
         type="Clustering",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -27,9 +27,11 @@ class WikiCitiesClustering(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@ONLINE{wikidump,
-    author = "Wikimedia Foundation",
-    title  = "Wikimedia Downloads",
-    url    = "https://dumps.wikimedia.org"
-}""",
+        bibtex_citation=r"""
+@online{wikidump,
+  author = {Wikimedia Foundation},
+  title = {Wikimedia Downloads},
+  url = {https://dumps.wikimedia.org},
+}
+""",
     )

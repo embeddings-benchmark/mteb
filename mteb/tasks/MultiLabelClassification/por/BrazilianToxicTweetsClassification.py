@@ -21,7 +21,7 @@ class BrazilianToxicTweetsClassification(AbsTaskMultilabelClassification):
             "revision": "f333c1fcfa3ab43f008a327c8bd0140441354d34",
         },
         type="MultilabelClassification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["por-Latn"],
@@ -33,21 +33,23 @@ class BrazilianToxicTweetsClassification(AbsTaskMultilabelClassification):
         annotations_creators="expert-annotated",
         dialect=["brazilian"],
         sample_creation="found",
-        bibtex_citation="""@article{DBLP:journals/corr/abs-2010-04543,
-            author    = {Joao Augusto Leite and
-                        Diego F. Silva and
-                        Kalina Bontcheva and
-                        Carolina Scarton},
-            title     = {Toxic Language Detection in Social Media for Brazilian Portuguese:
-                        New Dataset and Multilingual Analysis},
-            journal   = {CoRR},
-            volume    = {abs/2010.04543},
-            year      = {2020},
-            url       = {https://arxiv.org/abs/2010.04543},
-            eprinttype = {arXiv},
-            eprint    = {2010.04543},
-            timestamp = {Tue, 15 Dec 2020 16:10:16 +0100},
-            }""",
+        bibtex_citation=r"""
+@article{DBLP:journals/corr/abs-2010-04543,
+  author = {Joao Augusto Leite and
+Diego F. Silva and
+Kalina Bontcheva and
+Carolina Scarton},
+  eprint = {2010.04543},
+  eprinttype = {arXiv},
+  journal = {CoRR},
+  timestamp = {Tue, 15 Dec 2020 16:10:16 +0100},
+  title = {Toxic Language Detection in Social Media for Brazilian Portuguese:
+New Dataset and Multilingual Analysis},
+  url = {https://arxiv.org/abs/2010.04543},
+  volume = {abs/2010.04543},
+  year = {2020},
+}
+""",
     )
 
     def dataset_transform(self):

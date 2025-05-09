@@ -5,11 +5,11 @@ from collections import Counter
 import datasets
 from datasets import DatasetDict
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class TurkicClassification(AbsTaskClassification):
+class TurkicClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="TurkicClassification",
         description="A dataset of news classification in three Turkic languages.",
@@ -19,7 +19,7 @@ class TurkicClassification(AbsTaskClassification):
         },
         reference="https://huggingface.co/datasets/Electrotubbie/classification_Turkic_languages/",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs={

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class KurdishSentimentClassification(AbsTaskClassification):
+class KurdishSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="KurdishSentimentClassification",
         description="Kurdish Sentiment Dataset",
@@ -14,7 +14,7 @@ class KurdishSentimentClassification(AbsTaskClassification):
             "revision": "f334d90a9f68cc3af78cc2a2ece6a3b69408124c",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["kur-Arab"],
@@ -26,15 +26,15 @@ class KurdishSentimentClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=["Sorani"],
         sample_creation="found",
-        bibtex_citation="""
-        @article{article,
-            author = {Badawi, Soran and Kazemi, Arefeh and Rezaie, Vali},
-            year = {2024},
-            month = {01},
-            pages = {1-20},
-            title = {KurdiSent: a corpus for kurdish sentiment analysis},
-            journal = {Language Resources and Evaluation},
-            doi = {10.1007/s10579-023-09716-6}
-            }
-        """,
+        bibtex_citation=r"""
+@article{article,
+  author = {Badawi, Soran and Kazemi, Arefeh and Rezaie, Vali},
+  doi = {10.1007/s10579-023-09716-6},
+  journal = {Language Resources and Evaluation},
+  month = {01},
+  pages = {1-20},
+  title = {KurdiSent: a corpus for kurdish sentiment analysis},
+  year = {2024},
+}
+""",
     )

@@ -5,7 +5,7 @@ from .BengaliHateSpeechClassification import BengaliHateSpeechClassification
 from .BengaliSentimentAnalysis import BengaliSentimentAnalysis
 
 __all__ = [
-    "BengaliSentimentAnalysis",
     "BengaliDocumentClassification",
     "BengaliHateSpeechClassification",
+    "BengaliSentimentAnalysis",
 ]

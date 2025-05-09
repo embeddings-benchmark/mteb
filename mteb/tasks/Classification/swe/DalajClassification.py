@@ -1,11 +1,11 @@
 # SuperLIM tasks
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class DalajClassification(AbsTaskClassification):
+class DalajClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="DalajClassification",
         dataset={
@@ -17,7 +17,7 @@ class DalajClassification(AbsTaskClassification):
         description="A Swedish dataset for linguistic acceptability. Available as a part of Superlim.",
         reference="https://spraakbanken.gu.se/en/resources/superlim",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["swe-Latn"],
@@ -29,12 +29,14 @@ class DalajClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@misc{2105.06681,
-Author = {Elena Volodina and Yousuf Ali Mohammed and Julia Klezl},
-Title = {DaLAJ - a dataset for linguistic acceptability judgments for Swedish: Format, baseline, sharing},
-Year = {2021},
-Eprint = {arXiv:2105.06681},
-}""",
+        bibtex_citation=r"""
+@misc{2105.06681,
+  author = {Elena Volodina and Yousuf Ali Mohammed and Julia Klezl},
+  eprint = {arXiv:2105.06681},
+  title = {DaLAJ - a dataset for linguistic acceptability judgments for Swedish: Format, baseline, sharing},
+  year = {2021},
+}
+""",
         prompt="Classify texts based on linguistic acceptability in Swedish",
     )
 

@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 TEST_SAMPLES = 2048
 
 
-class PersianFoodSentimentClassification(AbsTaskClassification):
+class PersianFoodSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="PersianFoodSentimentClassification",
         description="Persian Food Review Dataset",
@@ -16,7 +16,7 @@ class PersianFoodSentimentClassification(AbsTaskClassification):
             "revision": "92ba517dfd22f6334111ad84154d16a2890f5b1d",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["fas-Arab"],
@@ -28,15 +28,15 @@ class PersianFoodSentimentClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @article{ParsBERT,
-            title={ParsBERT: Transformer-based Model for Persian Language Understanding},
-            author={Mehrdad Farahani, Mohammad Gharachorloo, Marzieh Farahani, Mohammad Manthouri},
-            journal={ArXiv},
-            year={2020},
-            volume={abs/2005.12515}
-        }
-        """,
+        bibtex_citation=r"""
+@article{ParsBERT,
+  author = {Mehrdad Farahani, Mohammad Gharachorloo, Marzieh Farahani, Mohammad Manthouri},
+  journal = {ArXiv},
+  title = {ParsBERT: Transformer-based Model for Persian Language Understanding},
+  volume = {abs/2005.12515},
+  year = {2020},
+}
+""",
     )
 
     def dataset_transform(self):

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGS = {
@@ -11,10 +11,10 @@ _LANGS = {
 }
 
 
-class ScalaClassification(AbsTaskClassification):
+class ScalaClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="ScalaClassification",
-        description="""ScaLa a linguistic acceptability dataset for the mainland Scandinavian languages automatically constructed from dependency annotations in Universal Dependencies Treebanks. 
+        description="""ScaLa a linguistic acceptability dataset for the mainland Scandinavian languages automatically constructed from dependency annotations in Universal Dependencies Treebanks.
         Published as part of 'ScandEval: A Benchmark for Scandinavian Natural Language Processing'""",
         reference="https://aclanthology.org/2023.nodalida-1.20/",
         dataset={
@@ -22,7 +22,7 @@ class ScalaClassification(AbsTaskClassification):
             "revision": "ec85bb6c69679ed15ac66c0bf6e180bf563eb137",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGS,
@@ -37,19 +37,21 @@ class ScalaClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{nielsen-2023-scandeval,
-            title = "{S}cand{E}val: A Benchmark for {S}candinavian Natural Language Processing",
-            author = "Nielsen, Dan",
-            editor = {Alum{\"a}e, Tanel  and
-            Fishel, Mark},
-            booktitle = "Proceedings of the 24th Nordic Conference on Computational Linguistics (NoDaLiDa)",
-            month = may,
-            year = "2023",
-            address = "T{\'o}rshavn, Faroe Islands",
-            publisher = "University of Tartu Library",
-            url = "https://aclanthology.org/2023.nodalida-1.20",
-            pages = "185--201",
-        }""",
+        bibtex_citation=r"""
+@inproceedings{nielsen-2023-scandeval,
+  address = {T{\'o}rshavn, Faroe Islands},
+  author = {Nielsen, Dan},
+  booktitle = {Proceedings of the 24th Nordic Conference on Computational Linguistics (NoDaLiDa)},
+  editor = {Alum{\"a}e, Tanel  and
+Fishel, Mark},
+  month = may,
+  pages = {185--201},
+  publisher = {University of Tartu Library},
+  title = {{S}cand{E}val: A Benchmark for {S}candinavian Natural Language Processing},
+  url = {https://aclanthology.org/2023.nodalida-1.20},
+  year = {2023},
+}
+""",
         prompt="Classify passages in Scandinavian Languages based on linguistic acceptability",
     )
 

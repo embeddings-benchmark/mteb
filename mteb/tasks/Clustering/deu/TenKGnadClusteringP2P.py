@@ -17,7 +17,7 @@ class TenKGnadClusteringP2P(AbsTaskClustering):
             "revision": "5c59e41555244b7e45c9a6be2d720ab4bafae558",
         },
         type="Clustering",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],
@@ -46,7 +46,7 @@ class TenKGnadClusteringP2PFast(AbsTaskClusteringFast):
             "revision": "5c59e41555244b7e45c9a6be2d720ab4bafae558",
         },
         type="Clustering",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],
@@ -63,6 +63,7 @@ class TenKGnadClusteringP2PFast(AbsTaskClusteringFast):
         sample_creation="found",
         bibtex_citation=None,  # none found
         # due to duplicates
+        adapted_from=["TenKGnadClusteringP2P"],
     )
 
     def dataset_transform(self) -> None:

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class KorHateClassification(AbsTaskClassification):
+class KorHateClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="KorHateClassification",
         description="""The dataset was created to provide the first human-labeled Korean corpus for
@@ -13,7 +13,7 @@ class KorHateClassification(AbsTaskClassification):
         major Korean web portals to close the comments section on their platform. However, this only
         serves as a temporary solution, and the fundamental issue has not been solved yet. This dataset
         hopes to improve Korean hate speech detection. Annotation was performed by 32 annotators,
-        consisting of 29 annotators from the crowdsourcing platform DeepNatural AI and three NLP researchers. 
+        consisting of 29 annotators from the crowdsourcing platform DeepNatural AI and three NLP researchers.
         """,
         dataset={
             "path": "inmoonlight/kor_hate",
@@ -22,7 +22,7 @@ class KorHateClassification(AbsTaskClassification):
         },
         reference="https://paperswithcode.com/dataset/korean-hatespeech-dataset",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["kor-Hang"],
@@ -34,15 +34,16 @@ class KorHateClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{moon2020beep,
-            title={BEEP! Korean Corpus of Online News Comments for Toxic Speech Detection}, 
-            author={Jihyung Moon and Won Ik Cho and Junbum Lee},
-            year={2020},
-            eprint={2005.12503},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        }""",
+        bibtex_citation=r"""
+@misc{moon2020beep,
+  archiveprefix = {arXiv},
+  author = {Jihyung Moon and Won Ik Cho and Junbum Lee},
+  eprint = {2005.12503},
+  primaryclass = {cs.CL},
+  title = {BEEP! Korean Corpus of Online News Comments for Toxic Speech Detection},
+  year = {2020},
+}
+""",
     )
 
     def dataset_transform(self):

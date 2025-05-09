@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class SynPerChatbotConvSAAnger(AbsTaskClassification):
+class SynPerChatbotConvSAAnger(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotConvSAAnger",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Anger",
@@ -14,7 +14,7 @@ class SynPerChatbotConvSAAnger(AbsTaskClassification):
             "revision": "5cae68b7fc094cb2fa6890a464e4d836e8107f5e",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -31,7 +31,7 @@ class SynPerChatbotConvSAAnger(AbsTaskClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotConvSASatisfaction(AbsTaskClassification):
+class SynPerChatbotConvSASatisfaction(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotConvSASatisfaction",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Satisfaction",
@@ -41,7 +41,7 @@ class SynPerChatbotConvSASatisfaction(AbsTaskClassification):
             "revision": "50fd9d5d09edd53af89af765636be5db6f983f0e",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -58,7 +58,7 @@ class SynPerChatbotConvSASatisfaction(AbsTaskClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotConvSAFriendship(AbsTaskClassification):
+class SynPerChatbotConvSAFriendship(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotConvSAFriendship",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Friendship",
@@ -68,7 +68,7 @@ class SynPerChatbotConvSAFriendship(AbsTaskClassification):
             "revision": "9dae119101e9b4e9bb40d5b9d29ffd7a621f9942",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -85,7 +85,7 @@ class SynPerChatbotConvSAFriendship(AbsTaskClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotConvSAFear(AbsTaskClassification):
+class SynPerChatbotConvSAFear(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotConvSAFear",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Fear",
@@ -95,7 +95,7 @@ class SynPerChatbotConvSAFear(AbsTaskClassification):
             "revision": "3c22f7e6bf4e366c86d69293c9164bf9e9d80aac",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -112,7 +112,7 @@ class SynPerChatbotConvSAFear(AbsTaskClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotConvSAJealousy(AbsTaskClassification):
+class SynPerChatbotConvSAJealousy(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotConvSAJealousy",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Jealousy",
@@ -122,7 +122,7 @@ class SynPerChatbotConvSAJealousy(AbsTaskClassification):
             "revision": "0d5104ecaa109d2448afe1f40dbf860f5e4458a8",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -139,7 +139,7 @@ class SynPerChatbotConvSAJealousy(AbsTaskClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotConvSASurprise(AbsTaskClassification):
+class SynPerChatbotConvSASurprise(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotConvSASurprise",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Surprise",
@@ -149,7 +149,7 @@ class SynPerChatbotConvSASurprise(AbsTaskClassification):
             "revision": "62dad66fc2837b0ac5e5175fe7c265d2d502a386",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -166,7 +166,7 @@ class SynPerChatbotConvSASurprise(AbsTaskClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotConvSALove(AbsTaskClassification):
+class SynPerChatbotConvSALove(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotConvSALove",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Love",
@@ -176,7 +176,7 @@ class SynPerChatbotConvSALove(AbsTaskClassification):
             "revision": "0e000b2f73e9bb74ec8fc6da10011c52725b8469",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -193,7 +193,7 @@ class SynPerChatbotConvSALove(AbsTaskClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotConvSASadness(AbsTaskClassification):
+class SynPerChatbotConvSASadness(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotConvSASadness",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Sadness",
@@ -203,7 +203,7 @@ class SynPerChatbotConvSASadness(AbsTaskClassification):
             "revision": "e9c678325565a5e4dadc43fd6693a8ccff1dd6b2",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -220,7 +220,7 @@ class SynPerChatbotConvSASadness(AbsTaskClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotConvSAHappiness(AbsTaskClassification):
+class SynPerChatbotConvSAHappiness(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotConvSAHappiness",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Happiness",
@@ -230,7 +230,7 @@ class SynPerChatbotConvSAHappiness(AbsTaskClassification):
             "revision": "e60893b7a8d01c9b8c12fadfe8f0a06e9d548a63",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -247,7 +247,7 @@ class SynPerChatbotConvSAHappiness(AbsTaskClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotConvSAToneChatbotClassification(AbsTaskClassification):
+class SynPerChatbotConvSAToneChatbotClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotConvSAToneChatbotClassification",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Tone Chatbot Classification",
@@ -257,7 +257,7 @@ class SynPerChatbotConvSAToneChatbotClassification(AbsTaskClassification):
             "revision": "1f403cfadb85004fbf7e2480334fffc4c999b4ab",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -274,7 +274,7 @@ class SynPerChatbotConvSAToneChatbotClassification(AbsTaskClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotConvSAToneUserClassification(AbsTaskClassification):
+class SynPerChatbotConvSAToneUserClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotConvSAToneUserClassification",
         description="Synthetic Persian Chatbot Conversational Sentiment Analysis Tone User",
@@ -284,7 +284,7 @@ class SynPerChatbotConvSAToneUserClassification(AbsTaskClassification):
             "revision": "dd0f76661bef69819cc38c8a455b10af86ac3571",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -301,7 +301,7 @@ class SynPerChatbotConvSAToneUserClassification(AbsTaskClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotSatisfactionLevelClassification(AbsTaskClassification):
+class SynPerChatbotSatisfactionLevelClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotSatisfactionLevelClassification",
         description="Synthetic Persian Chatbot Satisfaction Level Classification",
@@ -311,7 +311,7 @@ class SynPerChatbotSatisfactionLevelClassification(AbsTaskClassification):
             "revision": "e72db473602d750f1bcdc9f0436e1e3b967e088f",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -328,7 +328,7 @@ class SynPerChatbotSatisfactionLevelClassification(AbsTaskClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotRAGToneChatbotClassification(AbsTaskClassification):
+class SynPerChatbotRAGToneChatbotClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotRAGToneChatbotClassification",
         description="Synthetic Persian Chatbot RAG Tone Chatbot Classification",
@@ -338,7 +338,7 @@ class SynPerChatbotRAGToneChatbotClassification(AbsTaskClassification):
             "revision": "76f15a203fc13bd98a8f0fdddab1b68c28d7d674",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -355,7 +355,7 @@ class SynPerChatbotRAGToneChatbotClassification(AbsTaskClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotRAGToneUserClassification(AbsTaskClassification):
+class SynPerChatbotRAGToneUserClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotRAGToneUserClassification",
         description="Synthetic Persian Chatbot RAG Tone User Classification",
@@ -365,7 +365,7 @@ class SynPerChatbotRAGToneUserClassification(AbsTaskClassification):
             "revision": "f1f6ad83bb135dc94fbf1ca05c3ba164f5619369",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -382,7 +382,7 @@ class SynPerChatbotRAGToneUserClassification(AbsTaskClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotToneChatbotClassification(AbsTaskClassification):
+class SynPerChatbotToneChatbotClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotToneChatbotClassification",
         description="Synthetic Persian Chatbot Tone Chatbot Classification",
@@ -392,7 +392,7 @@ class SynPerChatbotToneChatbotClassification(AbsTaskClassification):
             "revision": "a5a739a036fa7bb8ae0be91bc081fdd260d4bdab",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -409,7 +409,7 @@ class SynPerChatbotToneChatbotClassification(AbsTaskClassification):
     samples_per_label = 32
 
 
-class SynPerChatbotToneUserClassification(AbsTaskClassification):
+class SynPerChatbotToneUserClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SynPerChatbotToneUserClassification",
         description="Synthetic Persian Chatbot Tone User Classification",
@@ -419,7 +419,7 @@ class SynPerChatbotToneUserClassification(AbsTaskClassification):
             "revision": "780d629437f7be127c6b287a61776372f9f333b9",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -436,7 +436,7 @@ class SynPerChatbotToneUserClassification(AbsTaskClassification):
     samples_per_label = 32
 
 
-class PersianTextTone(AbsTaskClassification):
+class PersianTextTone(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="PersianTextTone",
         description="Persian Text Tone",
@@ -446,7 +446,7 @@ class PersianTextTone(AbsTaskClassification):
             "revision": "7144f4c6bdd77911df0dfc5a8bd44dba17e27e3a",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -463,7 +463,7 @@ class PersianTextTone(AbsTaskClassification):
     samples_per_label = 32
 
 
-class SIDClassification(AbsTaskClassification):
+class SIDClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SIDClassification",
         description="SID Classification",
@@ -473,7 +473,7 @@ class SIDClassification(AbsTaskClassification):
             "revision": "29bed651bb980395f5aa473607154d93226945e1",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -490,7 +490,7 @@ class SIDClassification(AbsTaskClassification):
     samples_per_label = 32
 
 
-class DeepSentiPers(AbsTaskClassification):
+class DeepSentiPers(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="DeepSentiPers",
         description="Persian Sentiment Analysis Dataset",
@@ -500,7 +500,7 @@ class DeepSentiPers(AbsTaskClassification):
             "revision": "ee4f09f404051761cfe14d68127532c82de41cb3",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -520,7 +520,7 @@ class DeepSentiPers(AbsTaskClassification):
         self.dataset = self.dataset.rename_column("review", "text")
 
 
-class PersianTextEmotion(AbsTaskClassification):
+class PersianTextEmotion(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="PersianTextEmotion",
         description="Emotion is a Persian dataset with six basic emotions: anger, fear, joy, love, sadness, and surprise.",
@@ -530,7 +530,7 @@ class PersianTextEmotion(AbsTaskClassification):
             "revision": "518fcd2c8b89917c7696770672688217a2eabf88",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -547,7 +547,7 @@ class PersianTextEmotion(AbsTaskClassification):
     samples_per_label = 32
 
 
-class SentimentDKSF(AbsTaskClassification):
+class SentimentDKSF(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SentimentDKSF",
         description="The Sentiment DKSF (Digikala/Snappfood comments) is a dataset for sentiment analysis.",
@@ -557,7 +557,7 @@ class SentimentDKSF(AbsTaskClassification):
             "revision": "b4d5a8dd501db610b5ad89e9aa13f863b842b395",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -574,7 +574,7 @@ class SentimentDKSF(AbsTaskClassification):
     samples_per_label = 32
 
 
-class NLPTwitterAnalysisClassification(AbsTaskClassification):
+class NLPTwitterAnalysisClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="NLPTwitterAnalysisClassification",
         description="Twitter Analysis Classification",
@@ -584,7 +584,7 @@ class NLPTwitterAnalysisClassification(AbsTaskClassification):
             "revision": "4ceb1312583fd2c7c73ad2d550b726124dcd39a0",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],
@@ -604,7 +604,7 @@ class NLPTwitterAnalysisClassification(AbsTaskClassification):
         self.dataset = self.dataset.rename_column("tweet", "text")
 
 
-class DigikalamagClassification(AbsTaskClassification):
+class DigikalamagClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="DigikalamagClassification",
         description="A total of 8,515 articles scraped from Digikala Online Magazine. This dataset includes seven different classes.",
@@ -615,7 +615,7 @@ class DigikalamagClassification(AbsTaskClassification):
             "trust_remote_code": True,
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["fas-Arab"],

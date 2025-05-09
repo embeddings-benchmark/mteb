@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class UkrFormalityClassification(AbsTaskClassification):
+class UkrFormalityClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="UkrFormalityClassification",
         description="""
@@ -20,7 +20,7 @@ class UkrFormalityClassification(AbsTaskClassification):
         },
         reference="https://huggingface.co/datasets/ukr-detect/ukr-formality-dataset-translated-gyafc",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train", "test"],
         eval_langs=["ukr-Cyrl"],
@@ -32,16 +32,18 @@ class UkrFormalityClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="machine-translated",
-        bibtex_citation="""@inproceedings{rao-tetreault-2018-dear,
-        title = "Dear Sir or Madam, May {I} Introduce the {GYAFC} Dataset: Corpus, Benchmarks and Metrics for Formality Style Transfer",
-        author = "Rao, Sudha  and
-        Tetreault, Joel",
-        booktitle = "Proceedings of the 2018 Conference of the North {A}merican Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long Papers)",
-        month = jun,
-        year = "2018",
-        publisher = "Association for Computational Linguistics",
-        url = "https://aclanthology.org/N18-1012",
-        }""",
+        bibtex_citation=r"""
+@inproceedings{rao-tetreault-2018-dear,
+  author = {Rao, Sudha  and
+Tetreault, Joel},
+  booktitle = {Proceedings of the 2018 Conference of the North {A}merican Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long Papers)},
+  month = jun,
+  publisher = {Association for Computational Linguistics},
+  title = {Dear Sir or Madam, May {I} Introduce the {GYAFC} Dataset: Corpus, Benchmarks and Metrics for Formality Style Transfer},
+  url = {https://aclanthology.org/N18-1012},
+  year = {2018},
+}
+""",
     )
 
     def dataset_transform(self):

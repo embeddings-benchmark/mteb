@@ -1,21 +1,19 @@
 from __future__ import annotations
 
-from functools import partial
-from typing import Any
+from typing import Any, Literal
 
 import torch
-from PIL import Image
 from torch.utils.data import DataLoader
-from torchvision import transforms
 from tqdm import tqdm
 
-from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
+from mteb.abstasks import TaskMetadata
+from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models import AbsEncoder
+from mteb.requires_package import requires_image_dependencies
+from mteb.types import Array, BatchedInput, PromptType
 
-tensor_to_image = transforms.Compose([transforms.ToPILImage()])
 
-
-def vista_loader(**kwargs):
+def vista_loader(model_name, **kwargs):
     try:  # a temporal fix for the dependency issues of vista models.
         from visual_bge.modeling import Visualized_BGE
     except ImportError:
@@ -23,19 +21,48 @@ def vista_loader(**kwargs):
             "Please install `visual_bge`, refer to https://github.com/FlagOpen/FlagEmbedding/tree/master/research/visual_bge#install-flagembedding."
         )
 
-    class VisualizedBGEWrapper(Visualized_BGE):
+    class VisualizedBGEWrapper(Visualized_BGE, AbsEncoder):
+        """Setting up VISTA
+
+        ```
+        git clone https://github.com/FlagOpen/FlagEmbedding.git
+        cd FlagEmbedding/research/visual_bge
+        pip install -e .
+        pip install torchvision timm einops ftfy
+        ```
+        back to the root folder of mteb; download the vision tower for bge-base
+        ```
+        cd ..
+        wget https://huggingface.co/BAAI/bge-visualized/resolve/main/Visualized_base_en_v1.5.pth?download=true
+        ```
+        rename it to `visualized_base_en_V1.5.pth`
+        ```
+        mv Visualized_base_en_v1.5.pth?download=true visualized_base_en_V1.5.pth
+        ```
+        download the vision tower for bge-m3
+        ```
+        wget https://huggingface.co/BAAI/bge-visualized/resolve/main/Visualized_m3.pth?download=true
+        ```
+        rename it to `visualized_m3.pth`
+        ```
+        mv Visualized_m3.pth?download=true visualized_m3.pth
+        ```
+        """
+
         def __init__(
             self,
-            model_name_bge: str = None,
+            model_name_bge: str | None = None,
             model_weight=None,
             normlized: bool = True,
             sentence_pooling_method: str = "cls",
             negatives_cross_device: bool = False,
             temperature: float = 0.02,
             from_pretrained=None,
-            image_tokens_num: int = None,
+            image_tokens_num: int | None = None,
             **kwargs: Any,
         ):
+            requires_image_dependencies()
+
             super().__init__(
                 model_name_bge=model_name_bge,
                 model_weight=model_weight,
@@ -100,136 +127,102 @@ def vista_loader(**kwargs):
                 t_reps = torch.nn.functional.normalize(t_reps, dim=-1)
             return t_reps.contiguous()
 
-        def encode(
-            self,
-            images=None,
-            texts=None,
-            tensors=False,
-            task_name: str | None = None,
-            prompt_type: PromptType | None = None,
-            **kwargs: Any,
-        ):
-            if images is not None:
-                if isinstance(images, list):
-                    if not tensors:
-                        images = [
-                            self.preprocess_val(
-                                img if isinstance(img, Image.Image) else Image.open(img)
-                            )
-                            for img in images
-                        ]
-                    else:
-                        images = [
-                            self.preprocess_val(tensor_to_image(image))
-                            for image in images
-                        ]
-                    images = torch.stack(images)
-                if texts is not None:
-                    texts = self.tokenizer(
-                        texts,
-                        return_tensors="pt",
-                        padding=True,
-                        truncation=True,
-                        max_length=self.max_text_len_with_image,
-                    )
-                    return self.encode_mm(images.to(self.device), texts.to(self.device))
-                else:
-                    return self.encode_image(images.to(self.device))
-            else:
-                if texts is not None:
-                    texts = self.tokenizer(
-                        texts, return_tensors="pt", padding=True, truncation=True
-                    )
-                    return self.encode_text(texts.to(self.device))
-                else:
-                    return None
-
         def get_text_embeddings(
             self,
-            texts: list[str],
-            *,
-            task_name: str | None = None,
+            texts: DataLoader[BatchedInput],
+            show_progress_bar: bool = True,
             prompt_type: PromptType | None = None,
-            batch_size: int = 32,
+            input_type: Literal["document", "query"] | None = None,
             **kwargs: Any,
         ):
             all_text_embeddings = []
-            for i in tqdm(range(0, len(texts), batch_size)):
-                batch_texts = texts[i : i + batch_size]
+            for batch in tqdm(
+                texts, disable=not show_progress_bar, desc="Text Encoding"
+            ):
                 with torch.no_grad():
-                    batch_embeddings = self.encode(texts=batch_texts)
+                    texts = self.tokenizer(
+                        batch["text"],
+                        return_tensors="pt",
+                        padding=True,
+                        truncation=True,
+                    )
+                    batch_embeddings = self.encode_text(texts.to(self.device))
                 all_text_embeddings.append(batch_embeddings.cpu())
             return torch.cat(all_text_embeddings, dim=0)
 
         def get_image_embeddings(
             self,
-            images: list[Image.Image] | DataLoader,
-            *,
-            task_name: str | None = None,
+            images: DataLoader[BatchedInput],
+            show_progress_bar: bool = True,
             prompt_type: PromptType | None = None,
-            batch_size: int = 32,
+            input_type: Literal["document", "query"] | None = None,
             **kwargs: Any,
         ):
             all_image_embeddings = []
+            with torch.no_grad():
+                for batch in tqdm(images):
+                    imgs = [self.preprocess_val(image) for image in batch["image"]]
+                    imgs = torch.stack(imgs)
 
-            if isinstance(images, DataLoader):
-                with torch.no_grad():
-                    for batch in tqdm(images):
-                        batch_embeddings = self.encode(images=batch, tensors=True)
-                        all_image_embeddings.append(batch_embeddings.cpu())
-            else:
-                with torch.no_grad():
-                    for i in tqdm(range(0, len(images), batch_size)):
-                        batch_images = images[i : i + batch_size]
-                        batch_embeddings = self.encode(images=batch_images)
-                        all_image_embeddings.append(batch_embeddings.cpu())
+                    batch_embeddings = self.encode_image(images=imgs.to(self.device))
+                    all_image_embeddings.append(batch_embeddings.cpu())
             return torch.cat(all_image_embeddings, dim=0)
 
-        def get_fused_embeddings(
+        def encode(
             self,
-            texts: list[str] = None,
-            images: list[Image.Image] | DataLoader = None,
-            task_name: str | None = None,
+            inputs: DataLoader[BatchedInput],
+            *,
+            task_metadata: TaskMetadata,
+            hf_split: str,
+            hf_subset: str,
             prompt_type: PromptType | None = None,
-            batch_size: int = 32,
+            show_progress_bar: bool = True,
             **kwargs: Any,
-        ):
-            all_embeddings = []
-
-            if isinstance(images, DataLoader):
+        ) -> Array:
+            if "text" in inputs.dataset.features and "image" in inputs.dataset.features:
+                all_fused_embeddings = []
                 with torch.no_grad():
-                    for index, batch_images in enumerate(tqdm(images)):
-                        batch_texts = texts[
-                            index * batch_size : (index + 1) * batch_size
+                    for batch in tqdm(
+                        inputs,
+                        disable=not show_progress_bar,
+                        desc="Interleaved Encoding",
+                    ):
+                        texts = self.tokenizer(
+                            batch["text"],
+                            return_tensors="pt",
+                            padding=True,
+                            truncation=True,
+                            max_length=self.max_text_len_with_image,
+                        )
+                        images = [
+                            self.preprocess_val(image) for image in batch["image"]
                         ]
-                        batch_embeddings = self.encode(
-                            images=batch_images, texts=batch_texts, tensors=True
+                        images = torch.stack(images)
+                        all_fused_embeddings.append(
+                            self.encode_mm(
+                                images.to(self.device), texts.to(self.device)
+                            )
+                            .cpu()
+                            .to(torch.float32)
                         )
-                        all_embeddings.append(batch_embeddings.cpu())
-            else:
-                assert len(texts) == len(images)
-                with torch.no_grad():
-                    for i in tqdm(range(0, len(texts), batch_size)):
-                        batch_texts = texts[i : i + batch_size]
-                        batch_images = images[i : i + batch_size]
-                        batch_embeddings = self.encode(
-                            images=batch_images, texts=batch_texts
-                        )
-                        all_embeddings.append(batch_embeddings.cpu())
-            return torch.cat(all_embeddings, dim=0)
+                return torch.cat(all_fused_embeddings, dim=0)
+            elif "text" in inputs.dataset.features:
+                return self.get_text_embeddings(
+                    inputs,
+                    task_metadata=task_metadata,
+                    prompt_type=prompt_type,
+                    **kwargs,
+                )
+            elif "image" in inputs.dataset.features:
+                return self.get_image_embeddings(
+                    inputs,
+                    task_metadata=task_metadata,
+                    prompt_type=prompt_type,
+                    **kwargs,
+                )
+            raise ValueError
 
-        def calculate_probs(self, text_embeddings, image_embeddings):
-            text_embeddings = text_embeddings / text_embeddings.norm(
-                dim=-1, keepdim=True
-            )
-            image_embeddings = image_embeddings / image_embeddings.norm(
-                dim=-1, keepdim=True
-            )
-            logits = torch.matmul(image_embeddings, text_embeddings.T)
-            probs = (logits * 100).softmax(dim=-1)
-            return probs
-
-    return VisualizedBGEWrapper(**kwargs)
+    return VisualizedBGEWrapper(model_name, **kwargs)
 
 
 vista_training_datasets = {
@@ -237,20 +230,19 @@ vista_training_datasets = {
 }
 
 visualized_bge_base = ModelMeta(
-    loader=partial(
-        vista_loader,
-        model_name_bge="BAAI/bge-base-en-v1.5",
+    loader=vista_loader,
+    loader_kwargs=dict(
         model_weight="visualized_base_en_V1.5.pth",
         image_tokens_num=196,
     ),
     name="BAAI/bge-visualized-base",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     revision="98db10b10d22620010d06f11733346e1c98c34aa",
     release_date="2024-06-06",
     modalities=["image", "text"],
     n_parameters=196_000_000,
-    memory_usage_mb=748,
-    max_tokens=77,
+    memory_usage_mb=1631,
+    max_tokens=512,
     embed_dim=768,
     license=None,
     open_weights=True,
@@ -258,26 +250,25 @@ visualized_bge_base = ModelMeta(
     public_training_data="https://huggingface.co/datasets/JUNJIE99/VISTA_S2",
     framework=["PyTorch"],
     reference="https://huggingface.co/BAAI/bge-visualized",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=vista_training_datasets,
 )
 
 visualized_bge_m3 = ModelMeta(
-    loader=partial(
-        vista_loader,
-        model_name_bge="BAAI/bge-m3",
+    loader=vista_loader,
+    loader_kwargs=dict(
         model_weight="visualized_m3.pth",
         image_tokens_num=256,
     ),
     name="BAAI/bge-visualized-m3",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     revision="98db10b10d22620010d06f11733346e1c98c34aa",
     release_date="2024-06-06",
     modalities=["image", "text"],
-    n_parameters=None,
-    memory_usage_mb=None,
-    max_tokens=77,
+    n_parameters=872_909_505,
+    memory_usage_mb=4263,
+    max_tokens=8192,
     embed_dim=1024,
     license=None,
     open_weights=True,
@@ -285,7 +276,7 @@ visualized_bge_m3 = ModelMeta(
     public_training_data="https://huggingface.co/datasets/JUNJIE99/VISTA_S2",
     framework=["PyTorch"],
     reference="https://huggingface.co/BAAI/bge-visualized",
-    similarity_fn_name=None,
+    similarity_fn_name=ScoringFunction.COSINE,
     use_instructions=False,
     training_datasets=vista_training_datasets,
 )

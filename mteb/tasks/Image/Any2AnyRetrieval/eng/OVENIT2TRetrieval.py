@@ -26,13 +26,15 @@ class OVENIT2TRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text"],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{hu2023open,
-  title={Open-domain visual entity recognition: Towards recognizing millions of wikipedia entities},
-  author={Hu, Hexiang and Luan, Yi and Chen, Yang and Khandelwal, Urvashi and Joshi, Mandar and Lee, Kenton and Toutanova, Kristina and Chang, Ming-Wei},
-  booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision},
-  pages={12065--12075},
-  year={2023}
-}""",
+        bibtex_citation=r"""
+@inproceedings{hu2023open,
+  author = {Hu, Hexiang and Luan, Yi and Chen, Yang and Khandelwal, Urvashi and Joshi, Mandar and Lee, Kenton and Toutanova, Kristina and Chang, Ming-Wei},
+  booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision},
+  pages = {12065--12075},
+  title = {Open-domain visual entity recognition: Towards recognizing millions of wikipedia entities},
+  year = {2023},
+}
+""",
         prompt={
             "query": "Retrieve a Wikipedia paragraph that provides an answer to the given query about the image."
         },

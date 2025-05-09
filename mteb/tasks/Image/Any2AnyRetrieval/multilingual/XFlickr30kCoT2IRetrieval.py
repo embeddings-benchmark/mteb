@@ -20,9 +20,9 @@ _LANGUAGES = {
 def _load_xflickrco_data(
     path: str, langs: list, splits: str, cache_dir: str = None, revision: str = None
 ):
-    corpus = {lang: {split: None for split in splits} for lang in langs}
-    queries = {lang: {split: None for split in splits} for lang in langs}
-    relevant_docs = {lang: {split: None for split in splits} for lang in langs}
+    corpus = {lang: dict.fromkeys(splits) for lang in langs}
+    queries = {lang: dict.fromkeys(splits) for lang in langs}
+    relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}
 
     split = "test"
 
@@ -83,7 +83,7 @@ class XFlickr30kCoT2IRetrieval(AbsTaskAny2AnyRetrieval):
             "revision": "0af2c2eba58b27a71898787e286be04befdd7a20",
             # "trust_remote_code": True,
         },
-        type="Any2AnyRetrieval",
+        type="Any2AnyMultilingualRetrieval",
         category="t2i",
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
@@ -96,14 +96,16 @@ class XFlickr30kCoT2IRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{bugliarello2022iglue,
-  title={IGLUE: A benchmark for transfer learning across modalities, tasks, and languages},
-  author={Bugliarello, Emanuele and Liu, Fangyu and Pfeiffer, Jonas and Reddy, Siva and Elliott, Desmond and Ponti, Edoardo Maria and Vuli{\'c}, Ivan},
-  booktitle={International Conference on Machine Learning},
-  pages={2370--2392},
-  year={2022},
-  organization={PMLR}
-}""",
+        bibtex_citation=r"""
+@inproceedings{bugliarello2022iglue,
+  author = {Bugliarello, Emanuele and Liu, Fangyu and Pfeiffer, Jonas and Reddy, Siva and Elliott, Desmond and Ponti, Edoardo Maria and Vuli{\'c}, Ivan},
+  booktitle = {International Conference on Machine Learning},
+  organization = {PMLR},
+  pages = {2370--2392},
+  title = {IGLUE: A benchmark for transfer learning across modalities, tasks, and languages},
+  year = {2022},
+}
+""",
     )
 
     def load_data(self, **kwargs):

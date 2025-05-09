@@ -17,6 +17,7 @@ from pydantic import BaseModel, field_validator
 from mteb.abstasks.AbsTask import AbsTask, ScoresDict
 from mteb.abstasks.TaskMetadata import ISO_LANGUAGE_SCRIPT, HFSubset
 from mteb.languages import ISO_LANGUAGE, LanguageScripts
+from mteb.model_meta import ScoringFunction
 
 Split = str
 Score = Any
@@ -377,10 +378,10 @@ class TaskResult(BaseModel):
         for split, split_score in scores.items():
             for hf_subset, hf_subset_scores in split_score.items():
                 for name, prev_name in [
-                    ("cosine", "cos_sim"),
-                    ("manhattan", "manhattan"),
-                    ("euclidean", "euclidean"),
-                    ("dot", "dot"),
+                    (ScoringFunction.COSINE.value, "cos_sim"),
+                    (ScoringFunction.MANHATTAN.value, "manhattan"),
+                    (ScoringFunction.EUCLIDEAN.value, "euclidean"),
+                    (ScoringFunction.DOT_PRODUCT.value, "dot"),
                     ("max", "max"),
                     ("similarity", "similarity"),
                 ]:
@@ -461,9 +462,13 @@ class TaskResult(BaseModel):
         return aggregation(values)
 
     def get_score_fast(
-        self, splits: Iterable[str] | None = None, languages: str | None = None
+        self,
+        splits: Iterable[str] | None = None,
+        languages: str | None = None,
+        subsets: Iterable[str] | None = None,
     ) -> float:
         """Sped up version of get_score that will be used if no aggregation, script or getter needs to be specified."""
+        # TODO: v2: We should make this private
         if splits is None:
             splits = self.scores.keys()
         val_sum = 0
@@ -478,6 +483,13 @@ class TaskResult(BaseModel):
                 main_score = scores.get("main_score", None)
                 if main_score is None:
                     raise ValueError(f"Missing main score for subset: {hf_subset}")
+                if subsets and hf_subset not in subsets:
+                    continue
+                elif subsets:
+                    val_sum += main_score
+                    n_val += 1
+                    continue
+
                 if languages is None:
                     val_sum += main_score
                     n_val += 1
@@ -486,6 +498,7 @@ class TaskResult(BaseModel):
                     if lang.split("-")[0] in languages:
                         val_sum += main_score
                         n_val += 1
+                        logger.info(f"{val_sum=}, {n_val=}")
                         break
         if n_val == 0:
             raise ValueError("No splits had scores for the specified languages.")

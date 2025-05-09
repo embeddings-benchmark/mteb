@@ -5,8 +5,11 @@ from typing import Any
 
 import sklearn
 import sklearn.cluster
+from datasets import Dataset
 from sklearn import metrics
+from torch.utils.data import DataLoader
 
+from mteb.abstasks.TaskMetadata import TaskMetadata
 from mteb.encoder_interface import Encoder
 
 from .Evaluator import Evaluator
@@ -17,31 +20,33 @@ logger = logging.getLogger(__name__)
 class ClusteringEvaluator(Evaluator):
     def __init__(
         self,
-        sentences,
-        labels,
-        task_name: str | None = None,
+        dataset: Dataset,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         clustering_batch_size: int = 500,
         **kwargs,
     ):
         super().__init__(**kwargs)
-        self.sentences = sentences
-        self.labels = labels
+        self.dataset = dataset
         self.clustering_batch_size = clustering_batch_size
-        self.task_name = task_name
+        self.task_metadata = task_metadata
+        self.hf_split = hf_split
+        self.hf_subset = hf_subset
 
-    def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any] = {}):
-        if "batch_size" not in encode_kwargs:
-            encode_kwargs["batch_size"] = 32
-
+    def __call__(self, model: Encoder, *, encode_kwargs: dict[str, Any]):
         corpus_embeddings = model.encode(
-            self.sentences,
-            task_name=self.task_name,
+            DataLoader(self.dataset),
+            task_metadata=self.task_metadata,
+            hf_subset=self.hf_subset,
+            hf_split=self.hf_split,
             **encode_kwargs,
         )
 
+        labels = self.dataset["labels"]
         logger.info("Fitting Mini-Batch K-Means model...")
         clustering_model = sklearn.cluster.MiniBatchKMeans(
-            n_clusters=len(set(self.labels)),
+            n_clusters=len(set(labels)),
             batch_size=self.clustering_batch_size,
             n_init="auto",
         )
@@ -49,6 +54,6 @@ class ClusteringEvaluator(Evaluator):
         cluster_assignment = clustering_model.labels_
 
         logger.info("Evaluating...")
-        v_measure = metrics.cluster.v_measure_score(self.labels, cluster_assignment)
+        v_measure = metrics.cluster.v_measure_score(labels, cluster_assignment)
 
         return {"v_measure": v_measure}

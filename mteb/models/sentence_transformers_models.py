@@ -2,67 +2,66 @@
 
 from __future__ import annotations
 
-from functools import partial
-
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerWrapper,
+    sentence_transformers_loader,
 )
 
 paraphrase_langs = [
-    "ara_Arab",
-    "bul_Cyrl",
-    "cat_Latn",
-    "ces_Latn",
-    "dan_Latn",
-    "deu_Latn",
-    "ell_Grek",
-    "eng_Latn",
-    "spa_Latn",
-    "est_Latn",
-    "fas_Arab",
-    "fin_Latn",
-    "fra_Latn",
-    "fra_Latn",
-    "glg_Latn",
-    "guj_Gujr",
-    "heb_Hebr",
-    "hin_Deva",
-    "hrv_Latn",
-    "hun_Latn",
-    "hye_Armn",
-    "ind_Latn",
-    "ita_Latn",
-    "jpn_Jpan",
-    "kat_Geor",
-    "kor_Hang",
-    "kur_Arab",
-    "lit_Latn",
-    "lav_Latn",
-    "mkd_Cyrl",
-    "mon_Cyrl",
-    "mar_Deva",
-    "msa_Latn",
-    "mya_Mymr",
-    "nob_Latn",
-    "nld_Latn",
-    "pol_Latn",
-    "por_Latn",
-    "por_Latn",
-    "ron_Latn",
-    "rus_Cyrl",
-    "slk_Latn",
-    "slv_Latn",
-    "sqi_Latn",
-    "srp_Cyrl",
-    "swe_Latn",
-    "tha_Thai",
-    "tur_Latn",
-    "ukr_Cyrl",
-    "urd_Arab",
-    "vie_Latn",
-    "zho_Hans",
-    "zho_Hant",
+    "ara-Arab",
+    "bul-Cyrl",
+    "cat-Latn",
+    "ces-Latn",
+    "dan-Latn",
+    "deu-Latn",
+    "ell-Grek",
+    "eng-Latn",
+    "spa-Latn",
+    "est-Latn",
+    "fas-Arab",
+    "fin-Latn",
+    "fra-Latn",
+    "fra-Latn",
+    "glg-Latn",
+    "guj-Gujr",
+    "heb-Hebr",
+    "hin-Deva",
+    "hrv-Latn",
+    "hun-Latn",
+    "hye-Armn",
+    "ind-Latn",
+    "ita-Latn",
+    "jpn-Jpan",
+    "kat-Geor",
+    "kor-Hang",
+    "kur-Arab",
+    "lit-Latn",
+    "lav-Latn",
+    "mkd-Cyrl",
+    "mon-Cyrl",
+    "mar-Deva",
+    "msa-Latn",
+    "mya-Mymr",
+    "nob-Latn",
+    "nld-Latn",
+    "pol-Latn",
+    "por-Latn",
+    "por-Latn",
+    "ron-Latn",
+    "rus-Cyrl",
+    "slk-Latn",
+    "slv-Latn",
+    "sqi-Latn",
+    "srp-Cyrl",
+    "swe-Latn",
+    "tha-Thai",
+    "tur-Latn",
+    "ukr-Cyrl",
+    "urd-Arab",
+    "vie-Latn",
+    "zho-Hans",
+    "zho-Hant",
 ]
 
 SBERT_CITATION = """@inproceedings{reimers-2019-sentence-bert,
@@ -114,6 +113,7 @@ sent_trf_training_dataset = {
 }
 
 all_MiniLM_L6_v2 = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/all-MiniLM-L6-v2",
     languages=["eng-Latn"],
     open_weights=True,
@@ -137,6 +137,7 @@ all_MiniLM_L6_v2 = ModelMeta(
 )
 
 all_MiniLM_L12_v2 = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/all-MiniLM-L12-v2",
     languages=["eng-Latn"],
     open_weights=True,
@@ -160,6 +161,7 @@ all_MiniLM_L12_v2 = ModelMeta(
 )
 
 paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
     languages=paraphrase_langs,
     open_weights=True,
@@ -183,6 +185,7 @@ paraphrase_multilingual_MiniLM_L12_v2 = ModelMeta(
 )
 
 paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     languages=paraphrase_langs,
     open_weights=True,
@@ -217,6 +220,7 @@ paraphrase_multilingual_mpnet_base_v2 = ModelMeta(
 )
 
 labse = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/LaBSE",
     languages=paraphrase_langs,
     open_weights=True,
@@ -233,23 +237,28 @@ labse = ModelMeta(
     use_instructions=False,
     superseded_by=None,
     adapted_from=None,
-    training_datasets=None,
+    training_datasets={
+        # CommonCrawl
+        # wiki  05-21-2020 dump
+        # The translation corpus is constructed from web pages using a bitext mining system
+    },
     # scraped and mined webdata including CC, wiki, see section 3.1 https://aclanthology.org/2022.acl-long.62.pdf
     public_training_code="https://www.kaggle.com/models/google/labse/tensorFlow2/labse/2?tfhub-redirect=true",
     citation="""@misc{feng2022languageagnosticbertsentenceembedding,
-      title={Language-agnostic BERT Sentence Embedding}, 
+      title={Language-agnostic BERT Sentence Embedding},
       author={Fangxiaoyu Feng and Yinfei Yang and Daniel Cer and Naveen Arivazhagan and Wei Wang},
       year={2022},
       eprint={2007.01852},
       archivePrefix={arXiv},
       primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2007.01852}, 
+      url={https://arxiv.org/abs/2007.01852},
     }""",
     public_training_data=None,
 )
 
 multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
-    name="sentence-transformer/multi-qa-MiniLM-L6-cos-v1",
+    loader=sentence_transformers_loader,
+    name="sentence-transformers/multi-qa-MiniLM-L6-cos-v1",
     languages=["eng-Latn"],
     open_weights=True,
     revision="b207367332321f8e44f96e224ef15bc607f4dbf0",
@@ -272,6 +281,7 @@ multi_qa_MiniLM_L6_cos_v1 = ModelMeta(
 )
 
 all_mpnet_base_v2 = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/all-mpnet-base-v2",
     languages=["eng-Latn"],
     open_weights=True,
@@ -294,13 +304,110 @@ all_mpnet_base_v2 = ModelMeta(
     citation=SBERT_CITATION,
 )
 
-contriever = ModelMeta(
-    loader=partial(
-        SentenceTransformerWrapper,
-        model="facebook/contriever-msmarco",
-        revision="abe8c1493371369031bcb1e02acb754cf4e162fa",
-        similarity_fn_name=ScoringFunction.DOT_PRODUCT,
+static_multi_datasets = {
+    # wikititles
+    "TatoebaBitextMining": [],
+    # talks
+    # europarl
+    # global_voices
+    # muse
+    # wikimatrix
+    # opensubtitles
+    "StackExchangeClustering.v2": [],
+    "StackExchangeClusteringP2P.v2": [],
+    # quora
+    "QuoraRetrieval": [],
+    "NanoQuoraRetrieval": [],
+    "Quora-NL": [],  # translation not trained on
+    # wikianswers_duplicates
+    # all_nli - the "triplet" subset
+    # simple_wiki
+    # altlex
+    # flickr30k_captions
+    # coco_captions
+    # nli_for_simcse
+    # negation
+}
+static_multi_languages = [
+    "eng-Latn",
+    "ara-Arab",
+    "bul-Cyrl",
+    "cat-Latn",
+    "ces-Latn",
+    "dan-Latn",
+    "deu-Latn",
+    "ell-Grek",
+    "spa-Latn",
+    "est-Latn",
+    "fas-Arab",
+    "fin-Latn",
+    "fra-Latn",
+    "glg-Latn",
+    "guj-Gujr",
+    "heb-Hebr",
+    "hin-Deva",
+    "hun-Latn",
+    "hye-Armn",
+    "ind-Latn",
+    "ita-Latn",
+    "jpn-Jpan",
+    "kat-Geor",
+    "kor-Hang",
+    "kur-Latn",
+    "lit-Latn",
+    "lav-Latn",
+    "mkd-Cyrl",
+    "mon-Cyrl",
+    "mar-Deva",
+    "mal-Mlym",
+    "mya-Mymr",
+    "nob-Latn",
+    "nld-Latn",
+    "pol-Latn",
+    "por-Latn",
+    "ron-Latn",
+    "rus-Cyrl",
+    "slk-Latn",
+    "slv-Latn",
+    "sqi-Latn",
+    "srp-Cyrl",
+    "swe-Latn",
+    "tha-Thai",
+    "tur-Latn",
+    "ukr-Cyrl",
+    "urd-Arab",
+    "vie-Latn",
+    "zho-Hans",
+]
+
+static_similarity_mrl_multilingual_v1 = ModelMeta(
+    name="sentence-transformers/static-similarity-mrl-multilingual-v1",
+    loader=SentenceTransformerWrapper,
+    loader_kwargs=dict(
+        device="cpu",  # CPU is just as quick, if not quicker
     ),
+    languages=static_multi_languages,
+    open_weights=True,
+    revision="7264ea07c5365a11d7e6d87dbb6195889a13054f",
+    release_date="2025-01-15",
+    n_parameters=108_420_096,
+    memory_usage_mb=413,
+    embed_dim=1024,
+    license="apache-2.0",
+    max_tokens=None,
+    reference="https://huggingface.co/sentence-transformers/static-similarity-mrl-multilingual-v1",
+    similarity_fn_name="cosine",
+    framework=["Sentence Transformers", "PyTorch"],
+    use_instructions=False,
+    superseded_by=None,
+    adapted_from=None,
+    training_datasets=static_multi_datasets,
+    public_training_code="https://huggingface.co/blog/static-embeddings",
+    public_training_data="https://huggingface.co/collections/sentence-transformers/embedding-model-datasets-6644d7a3673a511914aa7552",
+)
+
+contriever = ModelMeta(
+    loader=SentenceTransformerWrapper,
     name="facebook/contriever-msmarco",
     languages=["eng-Latn"],
     open_weights=True,
@@ -317,7 +424,7 @@ contriever = ModelMeta(
     use_instructions=False,
     citation="""
     @misc{izacard2021contriever,
-      title={Unsupervised Dense Information Retrieval with Contrastive Learning}, 
+      title={Unsupervised Dense Information Retrieval with Contrastive Learning},
       author={Gautier Izacard and Mathilde Caron and Lucas Hosseini and Sebastian Riedel and Piotr Bojanowski and Armand Joulin and Edouard Grave},
       year={2021},
       url = {https://arxiv.org/abs/2112.09118},
@@ -329,6 +436,7 @@ contriever = ModelMeta(
 )
 
 microllama_text_embedding = ModelMeta(
+    loader=sentence_transformers_loader,
     name="keeeeenw/MicroLlama-text-embedding",
     languages=["eng-Latn"],
     open_weights=True,
@@ -362,6 +470,7 @@ microllama_text_embedding = ModelMeta(
 )
 
 sentence_t5_base = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/sentence-t5-base",
     languages=["eng-Latn"],
     open_weights=True,
@@ -373,7 +482,7 @@ sentence_t5_base = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/sentence-transformers/sentence-t5-base",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -382,6 +491,7 @@ sentence_t5_base = ModelMeta(
 )
 
 sentence_t5_large = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/sentence-t5-large",
     languages=["eng-Latn"],
     open_weights=True,
@@ -393,7 +503,7 @@ sentence_t5_large = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/sentence-transformers/sentence-t5-large",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -402,6 +512,7 @@ sentence_t5_large = ModelMeta(
 )
 
 sentence_t5_xl = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/sentence-t5-xl",
     languages=["eng-Latn"],
     open_weights=True,
@@ -413,7 +524,7 @@ sentence_t5_xl = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/sentence-transformers/sentence-t5-xl",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -422,6 +533,7 @@ sentence_t5_xl = ModelMeta(
 )
 
 sentence_t5_xxl = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/sentence-t5-xxl",
     languages=["eng-Latn"],
     open_weights=True,
@@ -433,7 +545,7 @@ sentence_t5_xxl = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/sentence-transformers/sentence-t5-xxl",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -441,6 +553,7 @@ sentence_t5_xxl = ModelMeta(
     training_datasets={"SNLI": ["train"], "Community QA": ["train"]},
 )
 gtr_t5_large = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/gtr-t5-large",
     languages=["eng-Latn"],  # in format eng-Latn
     open_weights=True,
@@ -452,7 +565,7 @@ gtr_t5_large = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/sentence-transformers/gtr-t5-large",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -473,6 +586,7 @@ gtr_t5_large = ModelMeta(
 )
 
 gtr_t5_xl = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/gtr-t5-xl",
     languages=["eng-Latn"],  # in format eng-Latn
     open_weights=True,
@@ -484,7 +598,7 @@ gtr_t5_xl = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/sentence-transformers/gtr-t5-xl",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -504,6 +618,7 @@ gtr_t5_xl = ModelMeta(
     },
 )
 gtr_t5_xxl = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/gtr-t5-xxl",
     languages=["eng-Latn"],  # in format eng-Latn
     open_weights=True,
@@ -515,7 +630,7 @@ gtr_t5_xxl = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/sentence-transformers/gtr-t5-xxl",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,
@@ -536,6 +651,7 @@ gtr_t5_xxl = ModelMeta(
 )
 
 gtr_t5_base = ModelMeta(
+    loader=sentence_transformers_loader,
     name="sentence-transformers/gtr-t5-base",
     languages=["eng-Latn"],  # in format eng-Latn
     open_weights=True,
@@ -547,7 +663,7 @@ gtr_t5_base = ModelMeta(
     license="apache-2.0",
     max_tokens=512,
     reference="https://huggingface.co/sentence-transformers/gtr-t5-base",
-    similarity_fn_name="cosine",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=False,
     public_training_code=None,

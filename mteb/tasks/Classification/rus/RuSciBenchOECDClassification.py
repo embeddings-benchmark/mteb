@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class RuSciBenchOECDClassification(AbsTaskClassification):
+class RuSciBenchOECDClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="RuSciBenchOECDClassification",
         dataset={
@@ -14,7 +14,7 @@ class RuSciBenchOECDClassification(AbsTaskClassification):
         description="Classification of scientific papers (title+abstract) by rubric",
         reference="https://github.com/mlsa-iai-msu-lab/ru_sci_bench/",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],

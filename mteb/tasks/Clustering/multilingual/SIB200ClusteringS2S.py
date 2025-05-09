@@ -224,7 +224,7 @@ class SIB200ClusteringFast(AbsTaskClusteringFast):
             "revision": "a74d7350ea12af010cfb1c21e34f1f81fd2e615b",
         },
         type="Clustering",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGS,
@@ -236,12 +236,14 @@ class SIB200ClusteringFast(AbsTaskClusteringFast):
         annotations_creators="expert-annotated",  # expert annotated for English --> human translations
         dialect=[],
         sample_creation="human-translated and localized",
-        bibtex_citation="""@article{adelani2023sib,
-            title={SIB-200: A simple, inclusive, and big evaluation dataset for topic classification in 200+ languages and dialects},
-            author={Adelani, David Ifeoluwa and Liu, Hannah and Shen, Xiaoyu and Vassilyev, Nikita and Alabi, Jesujoba O and Mao, Yanke and Gao, Haonan and Lee, Annie En-Shiun},
-            journal={arXiv preprint arXiv:2309.07445},
-            year={2023}
-        }""",  # combined train, validation, and test into test.
+        bibtex_citation=r"""
+@article{adelani2023sib,
+  author = {Adelani, David Ifeoluwa and Liu, Hannah and Shen, Xiaoyu and Vassilyev, Nikita and Alabi, Jesujoba O and Mao, Yanke and Gao, Haonan and Lee, Annie En-Shiun},
+  journal = {arXiv preprint arXiv:2309.07445},
+  title = {SIB-200: A simple, inclusive, and big evaluation dataset for topic classification in 200+ languages and dialects},
+  year = {2023},
+}
+""",  # combined train, validation, and test into test.
     )
 
     def dataset_transform(self):

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
 
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.e5_instruct import E5_MISTRAL_TRAINING_DATA
@@ -23,7 +22,7 @@ def gritlm_instruction(instruction: str = "", prompt_type=None) -> str:
 
 GRITLM_CITATION = """
 @misc{muennighoff2024generative,
-      title={Generative Representational Instruction Tuning}, 
+      title={Generative Representational Instruction Tuning},
       author={Niklas Muennighoff and Hongjin Su and Liang Wang and Nan Yang and Furu Wei and Tao Yu and Amanpreet Singh and Douwe Kiela},
       year={2024},
       eprint={2402.09906},
@@ -34,15 +33,14 @@ GRITLM_CITATION = """
 
 
 gritlm7b = ModelMeta(
-    loader=partial(  # type: ignore
-        instruct_wrapper,
-        model_name_or_path="GritLM/GritLM-7B",
+    loader=instruct_wrapper,
+    loader_kwargs=dict(
         instruction_template=gritlm_instruction,
         mode="embedding",
         torch_dtype="auto",
     ),
     name="GritLM/GritLM-7B",
-    languages=["eng_Latn", "fra_Latn", "deu_Latn", "ita_Latn", "spa_Latn"],
+    languages=["eng-Latn", "fra-Latn", "deu-Latn", "ita-Latn", "spa-Latn"],
     open_weights=True,
     revision="13f00a0e36500c80ce12870ea513846a066004af",
     release_date="2024-02-15",
@@ -63,15 +61,14 @@ gritlm7b = ModelMeta(
 )
 
 gritlm8x7b = ModelMeta(
-    loader=partial(  # type: ignore
-        instruct_wrapper,
-        model_name_or_path="GritLM/GritLM-8x7B",
+    loader=instruct_wrapper,
+    loader_kwargs=dict(
         instruction_template=gritlm_instruction,
         mode="embedding",
         torch_dtype="auto",
     ),
     name="GritLM/GritLM-8x7B",
-    languages=["eng_Latn", "fra_Latn", "deu_Latn", "ita_Latn", "spa_Latn"],
+    languages=["eng-Latn", "fra-Latn", "deu-Latn", "ita-Latn", "spa-Latn"],
     open_weights=True,
     revision="7f089b13e3345510281733ca1e6ff871b5b4bc76",
     release_date="2024-02-15",

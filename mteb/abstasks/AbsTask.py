@@ -29,7 +29,7 @@ ScoresDict = dict[str, Any]
 
 def set_seed(seed: int) -> tuple[random.Random, np.random.Generator]:
     torch.manual_seed(seed)
-    np.random.seed(seed)
+    np.random.seed(seed)  # noqa: NPY002
     transformers.set_seed(seed)
     return random.Random(seed), np.random.default_rng(seed)
 
@@ -120,7 +120,7 @@ class AbsTask(ABC):
         split: str = "test",
         subsets_to_run: list[HFSubset] | None = None,
         *,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         """Evaluates a Sentence Embedding Model on the task.
@@ -149,14 +149,19 @@ class AbsTask(ABC):
 
         for hf_subset in hf_subsets:
             logger.info(
-                f"\nTask: {self.metadata.name}, split: {split}, subset: {hf_subset}. Running..."
+                f"Task: {self.metadata.name}, split: {split}, subset: {hf_subset}. Running..."
             )
             if hf_subset not in self.dataset and hf_subset == "default":
                 data_split = self.dataset[split]
             else:
                 data_split = self.dataset[hf_subset][split]
             scores[hf_subset] = self._evaluate_subset(
-                model, data_split, encode_kwargs=encode_kwargs, **kwargs
+                model,
+                data_split,
+                hf_split=split,
+                hf_subset=hf_subset,
+                encode_kwargs=encode_kwargs,
+                **kwargs,
             )
             self._add_main_score(scores[hf_subset])
         return scores
@@ -165,8 +170,10 @@ class AbsTask(ABC):
     def _evaluate_subset(
         self,
         model: Encoder,
-        data_split: DatasetDict | Dataset,
+        data_split: Dataset,
         encode_kwargs: dict[str, Any],
+        hf_split: str,
+        hf_subset: str,
         **kwargs: Any,
     ) -> ScoresDict:
         raise NotImplementedError(
@@ -266,17 +273,20 @@ class AbsTask(ABC):
         self, overwrite_results: bool = False
     ) -> dict[str, DescriptiveStatistics | dict[str, DescriptiveStatistics]]:
         """Calculates descriptive statistics from the dataset by calling `_calculate_metrics_from_split`."""
+        from mteb.abstasks import AbsTaskAnyClassification
+
         if self.metadata.descriptive_stat_path.exists() and not overwrite_results:
             logger.info("Loading metadata descriptive statistics from cache.")
             return self.metadata.descriptive_stats
 
-        self.load_data()
+        if not self.data_loaded:
+            self.load_data()
 
         descriptive_stats = {}
         hf_subset_stat = "hf_subset_descriptive_stats"
         eval_splits = self.metadata.eval_splits
-        if self.metadata.type in ["Classification", "MultilabelClassification"]:
-            eval_splits += ["train"]
+        if isinstance(self, AbsTaskAnyClassification):
+            eval_splits.append(self.train_split)
 
         pbar_split = tqdm.tqdm(eval_splits, desc="Processing Splits...")
         for split in pbar_split:
@@ -333,6 +343,29 @@ class AbsTask(ABC):
         self._eval_splits = eval_splits
         return self
 
+    def filter_modalities(
+        self, modalities: list[str] | None, exclusive_modality_filter: bool = False
+    ) -> AbsTask:
+        """Filter the modalities of the task.
+
+        Args:
+        modalities: A list of modalities to filter by. If None, the task is returned unchanged.
+        exclusive_modality_filter: If True, only keep tasks where _all_ filter modalities are included in the
+            task's modalities and ALL task modalities are in filter modalities (exact match).
+            If False, keep tasks if _any_ of the task's modalities match the filter modalities.
+        """
+        if modalities is None:
+            return self
+        filter_modalities_set = set(modalities)
+        task_modalities_set = set(self.modalities)
+        if exclusive_modality_filter:
+            if not (filter_modalities_set == task_modalities_set):
+                self.metadata.modalities = []
+        else:
+            if not filter_modalities_set.intersection(task_modalities_set):
+                self.metadata.modalities = []
+        return self
+
     def filter_languages(
         self,
         languages: list[str] | None,
@@ -378,15 +411,28 @@ class AbsTask(ABC):
     def _add_main_score(self, scores: dict[HFSubset, ScoresDict]) -> None:
         scores["main_score"] = scores[self.metadata.main_score]
 
-    def _upload_dataset_to_hub(self, repo_name: str, fields: list[str]) -> None:
+    def _upload_dataset_to_hub(
+        self, repo_name: str, fields: list[str] | dict[str, str]
+    ) -> None:
         if self.metadata.is_multilingual:
             for config in self.metadata.eval_langs:
                 logger.info(f"Converting {config} of {self.metadata.name}")
                 sentences = {}
                 for split in self.dataset[config]:
-                    sentences[split] = Dataset.from_dict(
-                        {field: self.dataset[config][split][field] for field in fields}
-                    )
+                    if isinstance(fields, dict):
+                        sentences[split] = Dataset.from_dict(
+                            {
+                                mapped_name: self.dataset[config][split][original_name]
+                                for original_name, mapped_name in fields.items()
+                            }
+                        )
+                    else:
+                        sentences[split] = Dataset.from_dict(
+                            {
+                                field: self.dataset[config][split][field]
+                                for field in fields
+                            }
+                        )
                 sentences = DatasetDict(sentences)
                 sentences.push_to_hub(
                     repo_name, config, commit_message=f"Add {config} dataset"
@@ -394,9 +440,17 @@ class AbsTask(ABC):
         else:
             sentences = {}
             for split in self.dataset:
-                sentences[split] = Dataset.from_dict(
-                    {field: self.dataset[split][field] for field in fields}
-                )
+                if isinstance(fields, dict):
+                    sentences[split] = Dataset.from_dict(
+                        {
+                            mapped_name: self.dataset[split][original_name]
+                            for original_name, mapped_name in fields.items()
+                        }
+                    )
+                else:
+                    sentences[split] = Dataset.from_dict(
+                        {field: self.dataset[split][field] for field in fields}
+                    )
             sentences = DatasetDict(sentences)
             sentences.push_to_hub(repo_name, commit_message="Add dataset")
 
@@ -412,13 +466,26 @@ class AbsTask(ABC):
         if not self.data_loaded:
             self.load_data()
 
+        self.metadata.push_dataset_card_to_hub(repo_name)
         self._push_dataset_to_hub(repo_name)
+
+    @property
+    def is_aggregate(
+        self,
+    ) -> bool:  # Overrided by subclasses (AbsTaskAggregate) that are aggregate
+        """Whether the task is aggregate. Subclasses that are aggregate should override this with `True`."""
+        return False
 
     @property
     def eval_splits(self) -> list[str]:
         if self._eval_splits:
             return self._eval_splits
         return self.metadata.eval_splits
+
+    @property
+    def modalities(self) -> list[str]:
+        """Returns the modalities of the task"""
+        return self.metadata.modalities
 
     def __repr__(self) -> str:
         """Format the representation of the task such that it appears as:

@@ -1,20 +1,24 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class OxfordPetsClassification(AbsTaskImageClassification):
+class OxfordPetsClassification(AbsTaskAnyClassification):
+    input_column_name: str = "image"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="OxfordPets",
         description="Classifying animal images.",
-        reference="https://arxiv.org/abs/1306.5151",
+        reference="https://ieeexplore.ieee.org/abstract/document/6248092",
         dataset={
             "path": "isaacchung/OxfordPets",
             "revision": "557b480fae8d69247be74d9503b378a09425096f",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -29,14 +33,17 @@ class OxfordPetsClassification(AbsTaskImageClassification):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@misc{maji2013finegrainedvisualclassificationaircraft,
-            title={Fine-Grained Visual Classification of Aircraft}, 
-            author={Subhransu Maji and Esa Rahtu and Juho Kannala and Matthew Blaschko and Andrea Vedaldi},
-            year={2013},
-            eprint={1306.5151},
-            archivePrefix={arXiv},
-            primaryClass={cs.CV},
-            url={https://arxiv.org/abs/1306.5151}, 
-        }
-        """,
+        bibtex_citation=r"""
+@inproceedings{6248092,
+  author = {Parkhi, Omkar M and Vedaldi, Andrea and Zisserman, Andrew and Jawahar, C. V.},
+  booktitle = {2012 IEEE Conference on Computer Vision and Pattern Recognition},
+  doi = {10.1109/CVPR.2012.6248092},
+  keywords = {Positron emission tomography;Image segmentation;Cats;Dogs;Layout;Deformable models;Head},
+  number = {},
+  pages = {3498-3505},
+  title = {Cats and dogs},
+  volume = {},
+  year = {2012},
+}
+""",
     )

@@ -18,7 +18,7 @@ class BiorxivClusteringP2PFast(AbsTaskClusteringFast):
             "revision": "f5dbc242e11dd8e24def4c4268607a49e02946dc",
         },
         type="Clustering",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -32,6 +32,7 @@ class BiorxivClusteringP2PFast(AbsTaskClusteringFast):
         sample_creation="created",
         bibtex_citation="",
         prompt="Identify the main category of Biorxiv papers based on the titles and abstracts",
+        adapted_from=["BiorxivClusteringP2P"],
     )
 
     def dataset_transform(self):
@@ -50,7 +51,7 @@ class BiorxivClusteringP2P(AbsTaskClustering):
             "revision": "65b79d1d13f80053f67aca9498d9402c2d9f1f40",
         },
         type="Clustering",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class FinancialPhrasebankClassification(AbsTaskClassification):
+class FinancialPhrasebankClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="FinancialPhrasebankClassification",
         description="Polar sentiment dataset of sentences from financial news, categorized by sentiment into positive, negative, or neutral.",
@@ -16,7 +16,7 @@ class FinancialPhrasebankClassification(AbsTaskClassification):
             "trust_remote_code": True,
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["eng-Latn"],
@@ -28,15 +28,15 @@ class FinancialPhrasebankClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-            @article{Malo2014GoodDO,
-            title={Good debt or bad debt: Detecting semantic orientations in economic texts},
-            author={P. Malo and A. Sinha and P. Korhonen and J. Wallenius and P. Takala},
-            journal={Journal of the Association for Information Science and Technology},
-            year={2014},
-            volume={65}
-            }
-        """,
+        bibtex_citation=r"""
+@article{Malo2014GoodDO,
+  author = {P. Malo and A. Sinha and P. Korhonen and J. Wallenius and P. Takala},
+  journal = {Journal of the Association for Information Science and Technology},
+  title = {Good debt or bad debt: Detecting semantic orientations in economic texts},
+  volume = {65},
+  year = {2014},
+}
+""",
     )
 
     def dataset_transform(self):

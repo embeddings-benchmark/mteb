@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class HateSpeechPortugueseClassification(AbsTaskClassification):
+class HateSpeechPortugueseClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="HateSpeechPortugueseClassification",
         description="HateSpeechPortugueseClassification is a dataset of Portuguese tweets categorized with their sentiment (2 classes).",
@@ -15,7 +15,7 @@ class HateSpeechPortugueseClassification(AbsTaskClassification):
             "trust_remote_code": True,
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["por-Latn"],
@@ -27,28 +27,28 @@ class HateSpeechPortugueseClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-            @inproceedings{fortuna-etal-2019-hierarchically,
-                title = "A Hierarchically-Labeled {P}ortuguese Hate Speech Dataset",
-                author = "Fortuna, Paula  and
-                Rocha da Silva, Jo{\~a}o  and
-                Soler-Company, Juan  and
-                Wanner, Leo  and
-                Nunes, S{\'e}rgio",
-                editor = "Roberts, Sarah T.  and
-                Tetreault, Joel  and
-                Prabhakaran, Vinodkumar  and
-                Waseem, Zeerak",
-                booktitle = "Proceedings of the Third Workshop on Abusive Language Online",
-                month = aug,
-                year = "2019",
-                address = "Florence, Italy",
-                publisher = "Association for Computational Linguistics",
-                url = "https://aclanthology.org/W19-3510",
-                doi = "10.18653/v1/W19-3510",
-                pages = "94--104",
-            }
-        """,
+        bibtex_citation=r"""
+@inproceedings{fortuna-etal-2019-hierarchically,
+  address = {Florence, Italy},
+  author = {Fortuna, Paula  and
+Rocha da Silva, Jo{\~a}o  and
+Soler-Company, Juan  and
+Wanner, Leo  and
+Nunes, S{\'e}rgio},
+  booktitle = {Proceedings of the Third Workshop on Abusive Language Online},
+  doi = {10.18653/v1/W19-3510},
+  editor = {Roberts, Sarah T.  and
+Tetreault, Joel  and
+Prabhakaran, Vinodkumar  and
+Waseem, Zeerak},
+  month = aug,
+  pages = {94--104},
+  publisher = {Association for Computational Linguistics},
+  title = {A Hierarchically-Labeled {P}ortuguese Hate Speech Dataset},
+  url = {https://aclanthology.org/W19-3510},
+  year = {2019},
+}
+""",
     )
 
     def dataset_transform(self):

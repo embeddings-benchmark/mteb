@@ -1,10 +1,15 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class PatchCamelyonClassification(AbsTaskImageClassification):
+class PatchCamelyonClassification(AbsTaskAnyClassification):
+    input_column_name = "webp"
+    label_column_name = "cls"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="PatchCamelyon",
         description="""Histopathology diagnosis classification dataset.""",
@@ -14,7 +19,7 @@ class PatchCamelyonClassification(AbsTaskImageClassification):
             "revision": "502695fe1a141108650e3c5b91c8b5e0ff84ed49",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -29,27 +34,26 @@ class PatchCamelyonClassification(AbsTaskImageClassification):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@InProceedings{10.1007/978-3-030-00934-2_24,
-author="Veeling, Bastiaan S.
+        bibtex_citation=r"""
+@inproceedings{10.1007/978-3-030-00934-2_24,
+  abstract = {We propose a new model for digital pathology segmentation, based on the observation that histopathology images are inherently symmetric under rotation and reflection. Utilizing recent findings on rotation equivariant CNNs, the proposed model leverages these symmetries in a principled manner. We present a visual analysis showing improved stability on predictions, and demonstrate that exploiting rotation equivariance significantly improves tumor detection performance on a challenging lymph node metastases dataset. We further present a novel derived dataset to enable principled comparison of machine learning models, in combination with an initial benchmark. Through this dataset, the task of histopathology diagnosis becomes accessible as a challenging benchmark for fundamental machine learning research.},
+  address = {Cham},
+  author = {Veeling, Bastiaan S.
 and Linmans, Jasper
 and Winkens, Jim
 and Cohen, Taco
-and Welling, Max",
-editor="Frangi, Alejandro F.
+and Welling, Max},
+  booktitle = {Medical Image Computing and Computer Assisted Intervention -- MICCAI 2018},
+  editor = {Frangi, Alejandro F.
 and Schnabel, Julia A.
 and Davatzikos, Christos
 and Alberola-L{\'o}pez, Carlos
-and Fichtinger, Gabor",
-title="Rotation Equivariant CNNs for Digital Pathology",
-booktitle="Medical Image Computing and Computer Assisted Intervention -- MICCAI 2018",
-year="2018",
-publisher="Springer International Publishing",
-address="Cham",
-pages="210--218",
-abstract="We propose a new model for digital pathology segmentation, based on the observation that histopathology images are inherently symmetric under rotation and reflection. Utilizing recent findings on rotation equivariant CNNs, the proposed model leverages these symmetries in a principled manner. We present a visual analysis showing improved stability on predictions, and demonstrate that exploiting rotation equivariance significantly improves tumor detection performance on a challenging lymph node metastases dataset. We further present a novel derived dataset to enable principled comparison of machine learning models, in combination with an initial benchmark. Through this dataset, the task of histopathology diagnosis becomes accessible as a challenging benchmark for fundamental machine learning research.",
-isbn="978-3-030-00934-2"
+and Fichtinger, Gabor},
+  isbn = {978-3-030-00934-2},
+  pages = {210--218},
+  publisher = {Springer International Publishing},
+  title = {Rotation Equivariant CNNs for Digital Pathology},
+  year = {2018},
 }
 """,
     )
-    image_column_name = "webp"
-    label_column_name = "cls"

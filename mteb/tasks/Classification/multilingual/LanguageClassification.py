@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = [
@@ -27,7 +27,7 @@ _LANGUAGES = [
 ]
 
 
-class LanguageClassification(AbsTaskClassification):
+class LanguageClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="LanguageClassification",
         dataset={
@@ -36,7 +36,7 @@ class LanguageClassification(AbsTaskClassification):
         },
         description="A language identification dataset for 20 languages.",
         reference="https://huggingface.co/datasets/papluca/language-identification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         type="Classification",
         eval_splits=["test"],
@@ -49,21 +49,23 @@ class LanguageClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@InProceedings{conneau2018xnli,
+        bibtex_citation=r"""
+@inproceedings{conneau2018xnli,
   author = {Conneau, Alexis
-                 and Rinott, Ruty
-                 and Lample, Guillaume
-                 and Williams, Adina
-                 and Bowman, Samuel R.
-                 and Schwenk, Holger
-                 and Stoyanov, Veselin},
-  title = {XNLI: Evaluating Cross-lingual Sentence Representations},
+and Rinott, Ruty
+and Lample, Guillaume
+and Williams, Adina
+and Bowman, Samuel R.
+and Schwenk, Holger
+and Stoyanov, Veselin},
   booktitle = {Proceedings of the 2018 Conference on Empirical Methods
-               in Natural Language Processing},
-  year = {2018},
-  publisher = {Association for Computational Linguistics},
+in Natural Language Processing},
   location = {Brussels, Belgium},
-}""",
+  publisher = {Association for Computational Linguistics},
+  title = {XNLI: Evaluating Cross-lingual Sentence Representations},
+  year = {2018},
+}
+""",
     )
 
     def dataset_transform(self) -> None:

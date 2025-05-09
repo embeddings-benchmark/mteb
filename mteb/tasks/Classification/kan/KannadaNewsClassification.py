@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class KannadaNewsClassification(AbsTaskClassification):
+class KannadaNewsClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="KannadaNewsClassification",
         description="The Kannada news dataset contains only the headlines of news article in three categories: Entertainment, Tech, and Sports. The data set contains around 6300 news article headlines which are collected from Kannada news websites. The data set has been cleaned and contains train and test set using which can be used to benchmark topic classification models in Kannada.",
@@ -14,7 +14,7 @@ class KannadaNewsClassification(AbsTaskClassification):
         },
         reference="https://github.com/goru001/nlp-for-kannada",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["kan-Knda"],
@@ -26,13 +26,14 @@ class KannadaNewsClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @article{kunchukuttan2020indicnlpcorpus,
-    title={AI4Bharat-IndicNLP Corpus: Monolingual Corpora and Word Embeddings for Indic Languages},
-    author={Anoop Kunchukuttan and Divyanshu Kakwani and Satish Golla and Gokul N.C. and Avik Bhattacharyya and Mitesh M. Khapra and Pratyush Kumar},
-    year={2020},
-    journal={arXiv preprint arXiv:2005.00085},
-}""",
+        bibtex_citation=r"""
+@article{kunchukuttan2020indicnlpcorpus,
+  author = {Anoop Kunchukuttan and Divyanshu Kakwani and Satish Golla and Gokul N.C. and Avik Bhattacharyya and Mitesh M. Khapra and Pratyush Kumar},
+  journal = {arXiv preprint arXiv:2005.00085},
+  title = {AI4Bharat-IndicNLP Corpus: Monolingual Corpora and Word Embeddings for Indic Languages},
+  year = {2020},
+}
+""",
     )
 
     def dataset_transform(self):

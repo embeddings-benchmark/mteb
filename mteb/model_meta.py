@@ -2,11 +2,10 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Sequence
+from dataclasses import field
 from enum import Enum
-from functools import partial
-from typing import TYPE_CHECKING, Any, Callable, Literal, cast
+from typing import Any, Callable, Literal, cast
 
-import numpy as np
 from huggingface_hub import get_safetensors_metadata
 from huggingface_hub.errors import (
     GatedRepoError,
@@ -16,18 +15,15 @@ from huggingface_hub.errors import (
 from pydantic import BaseModel, ConfigDict, field_validator
 
 from mteb.abstasks.AbsTask import AbsTask
-from mteb.abstasks.TaskMetadata import STR_DATE, STR_URL
 from mteb.encoder_interface import Encoder
-from mteb.evaluation.evaluators.utils import cos_sim, dot_score, max_sim
 
-from .languages import ISO_LANGUAGE_SCRIPT
-from .modalities import MODALITIES
-
-if TYPE_CHECKING:
-    from .models.sentence_transformer_wrapper import SentenceTransformerWrapper
+from .custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
+from .languages import (
+    ISO_LANGUAGE_SCRIPT,
+    check_language_code,
+)
 
 logger = logging.getLogger(__name__)
-
 
 FRAMEWORKS = Literal[
     "Sentence Transformers",
@@ -47,14 +43,9 @@ class ScoringFunction(str, Enum):
     COSINE = "cosine"
     DOT_PRODUCT = "dot"
     MAX_SIM = "MaxSim"
-
-
-def sentence_transformers_loader(
-    model_name: str, revision: str | None = None, **kwargs
-) -> SentenceTransformerWrapper:
-    from .models.sentence_transformer_wrapper import SentenceTransformerWrapper
-
-    return SentenceTransformerWrapper(model=model_name, revision=revision, **kwargs)
+    EUCLIDEAN = "euclidean"
+    MANHATTAN = "manhattan"
+    CUSTOM = "custom"
 
 
 def get_loader_name(
@@ -71,8 +62,9 @@ class ModelMeta(BaseModel):
     """The model metadata object.
 
     Attributes:
-            loader: the function that loads the model. If None it will just default to loading the model using the sentence transformer library.
-            name: The name of the model, ideally the name on huggingface.
+            loader: the function that loads the model. If None it will assume that the model is not implemented.
+            loader_kwargs: The keyword arguments to pass to the loader function.
+            name: The name of the model, ideally the name on huggingface. It should be in the format "organization/model_name".
             n_parameters: The number of parameters in the model, e.g. 7_000_000 for a 7M parameter model. Can be None if the number of parameters is not known (e.g. for proprietary models) or
                 if the loader returns a SentenceTransformer model from which it can be derived.
             memory_usage_mb: The memory usage of the model in MB. Can be None if the memory usage is not known (e.g. for proprietary models). To calculate it use the `calculate_memory_usage_mb` method.
@@ -99,6 +91,7 @@ class ModelMeta(BaseModel):
                 a benchmark as well as mark dataset contaminations.
             adapted_from: Name of the model from which this model is adapted. For quantizations, fine-tunes, long doc extensions, etc.
             superseded_by: Name of the model that supersedes this model, e.g., nvidia/NV-Embed-v2 supersedes v1.
+            is_cross_encoder: Whether the model can act as a cross-encoder or not.
             modalities: A list of strings representing the modalities the model supports. Default is ["text"].
     """
 
@@ -108,12 +101,13 @@ class ModelMeta(BaseModel):
     revision: str | None
     release_date: STR_DATE | None
     languages: list[ISO_LANGUAGE_SCRIPT] | None
-    loader: Callable[..., Encoder] | None = None
+    loader: Callable[..., Encoder] | type[Encoder] | None
+    loader_kwargs: dict[str, Any] = field(default_factory=dict)
     n_parameters: int | None
     memory_usage_mb: float | None
     max_tokens: float | None
     embed_dim: int | None
-    license: str | None
+    license: LICENSES | STR_URL | None
     open_weights: bool | None
     public_training_code: str | None
     public_training_data: str | bool | None
@@ -125,14 +119,15 @@ class ModelMeta(BaseModel):
     adapted_from: str | None = None
     superseded_by: str | None = None
     modalities: list[MODALITIES] = ["text"]
+    is_cross_encoder: bool | None = None
     citation: str | None = None
 
     @field_validator("similarity_fn_name", mode="before")
     @classmethod
     def validate_similarity_fn_name(cls, value):
         """Converts the similarity function name to the corresponding enum value.
-        sentence_transformers uses Literal['cosine', 'dot', 'euclidean', 'manhattan'] for similarity_fn_name
-        pylate uses Literal['MaxSim'] for similarity_fn_name
+        sentence_transformers uses Literal['cosine', 'dot', 'euclidean', 'manhattan'] for
+        pylate uses Literal['MaxSim']
         """
         if type(value) is ScoringFunction or value is None:
             return value
@@ -145,38 +140,45 @@ class ModelMeta(BaseModel):
             return mapping[value]
         raise ValueError(f"Invalid similarity function name: {value}")
 
-    def get_similarity_function(self) -> Callable[[np.ndarray, np.ndarray], np.ndarray]:
-        if self.similarity_fn_name is ScoringFunction.COSINE:
-            return cos_sim
-        elif self.similarity_fn_name is ScoringFunction.DOT_PRODUCT:
-            return dot_score
-        elif self.similarity_fn_name is ScoringFunction.MAX_SIM:
-            return max_sim
-        elif self.similarity_fn_name is None:
-            raise ValueError("Similarity function not specified.")
-
     def to_dict(self):
         dict_repr = self.model_dump()
         loader = dict_repr.pop("loader", None)
         dict_repr["loader"] = get_loader_name(loader)
         return dict_repr
 
+    @field_validator("languages")
+    @classmethod
+    def languages_are_valid(cls, languages: list[ISO_LANGUAGE_SCRIPT] | None) -> None:
+        if languages is None:
+            return None
+
+        for code in languages:
+            check_language_code(code)
+        return languages
+
+    @field_validator("name")
+    @classmethod
+    def check_name(cls, v: str | None) -> str | None:
+        if v is None or v == "bm25s":
+            return v
+        if "/" not in v:
+            raise ValueError(
+                "Model name must be in the format 'organization/model_name'"
+            )
+        return v
+
     def load_model(self, **kwargs: Any) -> Encoder:
         if self.loader is None:
-            logger.warning(
-                f"Loader not specified for model {self.name}, loading using sentence transformers."
+            raise NotImplementedError(
+                "No model implementation is available for this model."
             )
-            loader = partial(
-                sentence_transformers_loader,
-                model_name=self.name,
-                revision=self.revision,
-                **kwargs,
-            )
-        else:
-            loader = self.loader
 
-        model: Encoder = loader(**kwargs)  # type: ignore
-        model.mteb_model_meta = self
+        # Allow overwrites
+        _kwargs = self.loader_kwargs.copy()
+        _kwargs.update(kwargs)
+
+        model: Encoder = self.loader(self.name, revision=self.revision, **_kwargs)
+        model.mteb_model_meta = self  # type: ignore
         return model
 
     def model_name_as_path(self) -> str:
@@ -189,9 +191,14 @@ class ModelMeta(BaseModel):
         zero-shot or not on the given tasks.
         Returns None if no training data is specified on the model.
         """
-        if self.training_datasets is None:
+        # If no tasks were specified, we're obviously zero-shot
+        if not tasks:
+            return True
+        training_datasets = self.get_training_datasets()
+        # If no tasks were specified, we're obviously zero-shot
+        if training_datasets is None:
             return None
-        model_datasets = {ds_name for ds_name, splits in self.training_datasets.items()}
+        model_datasets = {ds_name for ds_name, splits in training_datasets.items()}
         if isinstance(tasks[0], str):
             benchmark_datasets = set(tasks)
         else:
@@ -202,6 +209,51 @@ class ModelMeta(BaseModel):
         intersection = model_datasets & benchmark_datasets
         return len(intersection) == 0
 
+    def get_training_datasets(self) -> dict[str, list[str]] | None:
+        """Returns all training datasets of the model including similar tasks."""
+        import mteb
+
+        if self.training_datasets is None:
+            return None
+
+        training_datasets = self.training_datasets.copy()
+        if self.adapted_from is not None:
+            try:
+                adapted_from_model = mteb.get_model_meta(
+                    self.adapted_from, fetch_from_hf=False
+                )
+                adapted_training_datasets = adapted_from_model.get_training_datasets()
+                if adapted_training_datasets is not None:
+                    training_datasets |= adapted_training_datasets
+            except ValueError as e:
+                logger.warning(f"Could not get source model: {e} in MTEB")
+
+        return_dataset = training_datasets.copy()
+        visited = set()
+
+        for dataset in training_datasets:
+            similar_tasks = collect_similar_tasks(dataset, visited)
+            return_dataset |= {task: [] for task in similar_tasks}
+
+        return return_dataset
+
+    def zero_shot_percentage(
+        self, tasks: Sequence[AbsTask] | Sequence[str]
+    ) -> int | None:
+        """Indicates how out-of-domain the selected tasks are for the given model."""
+        training_datasets = self.get_training_datasets()
+        if (training_datasets is None) or (not tasks):
+            return None
+        model_datasets = {ds_name for ds_name, splits in training_datasets.items()}
+        if isinstance(tasks[0], str):
+            benchmark_datasets = set(tasks)
+        else:
+            tasks = cast(Sequence[AbsTask], tasks)
+            benchmark_datasets = {task.metadata.name for task in tasks}
+        overlap = model_datasets & benchmark_datasets
+        perc_overlap = 100 * (len(overlap) / len(benchmark_datasets))
+        return int(100 - perc_overlap)
+
     def calculate_memory_usage_mb(self) -> int | None:
         """Calculates the memory usage (in FP32) of the model in MB."""
         if "API" in self.framework:
@@ -209,7 +261,7 @@ class ModelMeta(BaseModel):
 
         MB = 1024**2
         try:
-            safetensors_metadata = get_safetensors_metadata(self.name)
+            safetensors_metadata = get_safetensors_metadata(self.name)  # type: ignore
             if len(safetensors_metadata.parameter_count) >= 0:
                 dtype_size_map = {
                     "F64": 8,  # 64-bit float
@@ -239,3 +291,28 @@ class ModelMeta(BaseModel):
         # Convert to MB
         model_memory_mb = model_memory_bytes / MB
         return round(model_memory_mb)
+
+
+def collect_similar_tasks(dataset: str, visited: set[str]) -> set[str]:
+    """Recursively collect all similar tasks for a given dataset."""
+    from .overview import SIMILAR_TASKS
+
+    if dataset in visited:
+        return set()
+
+    visited.add(dataset)
+    similar = set()
+
+    # Check if dataset is a key in SIMILAR_TASKS
+    if dataset in SIMILAR_TASKS:
+        for similar_task in SIMILAR_TASKS[dataset]:
+            similar.add(similar_task)
+            similar.update(collect_similar_tasks(similar_task, visited))
+
+    # Check if dataset appears as a value in SIMILAR_TASKS
+    for parent, children in SIMILAR_TASKS.items():
+        if dataset in children:
+            similar.add(parent)
+            similar.update(collect_similar_tasks(parent, visited))
+
+    return similar

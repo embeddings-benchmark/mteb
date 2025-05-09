@@ -19,7 +19,7 @@ class LivedoorNewsClusteringv2(AbsTaskClusteringFast):
             "trust_remote_code": True,
         },
         type="Clustering",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["jpn-Jpan"],
@@ -32,6 +32,7 @@ class LivedoorNewsClusteringv2(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
+        adapted_from=["LivedoorNewsClustering"],
     )
 
     def dataset_transform(self):
@@ -62,7 +63,7 @@ class LivedoorNewsClustering(AbsTaskClusteringFast):
             "trust_remote_code": True,
         },
         type="Clustering",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["jpn-Jpan"],

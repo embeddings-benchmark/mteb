@@ -1,10 +1,14 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class MNISTClassification(AbsTaskImageClassification):
+class MNISTClassification(AbsTaskAnyClassification):
+    input_column_name: str = "image"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="MNIST",
         description="Classifying handwritten digits.",
@@ -14,7 +18,7 @@ class MNISTClassification(AbsTaskImageClassification):
             "revision": "77f3279092a1c1579b2250db8eafed0ad422088c",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -29,12 +33,13 @@ class MNISTClassification(AbsTaskImageClassification):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@article{lecun2010mnist,
-        title={MNIST handwritten digit database},
-        author={LeCun, Yann and Cortes, Corinna and Burges, CJ},
-        journal={ATT Labs [Online]. Available: http://yann.lecun.com/exdb/mnist},
-        volume={2},
-        year={2010}
-        }
-        """,
+        bibtex_citation=r"""
+@article{lecun2010mnist,
+  author = {LeCun, Yann and Cortes, Corinna and Burges, CJ},
+  journal = {ATT Labs [Online]. Available: http://yann.lecun.com/exdb/mnist},
+  title = {MNIST handwritten digit database},
+  volume = {2},
+  year = {2010},
+}
+""",
     )

@@ -18,7 +18,7 @@ class AROVisualRelation(AbsTaskImageTextPairClassification):
             "path": "gowitheflow/ARO-Visual-Relation",
             "revision": "3867ad4f46a1ac2e63be034d1fc77dd8c2ef7209",
         },
-        type="ImageTextPairClassification",
+        type="Compositionality",
         category="i2t",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -34,10 +34,12 @@ class AROVisualRelation(AbsTaskImageTextPairClassification):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{yuksekgonul2023and,
-  title={When and why vision-language models behave like bags-of-words, and what to do about it?},
-  author={Yuksekgonul, Mert and Bianchi, Federico and Kalluri, Pratyusha and Jurafsky, Dan and Zou, James},
-  booktitle={The Eleventh International Conference on Learning Representations},
-  year={2023}
-}""",
+        bibtex_citation=r"""
+@inproceedings{yuksekgonul2023and,
+  author = {Yuksekgonul, Mert and Bianchi, Federico and Kalluri, Pratyusha and Jurafsky, Dan and Zou, James},
+  booktitle = {The Eleventh International Conference on Learning Representations},
+  title = {When and why vision-language models behave like bags-of-words, and what to do about it?},
+  year = {2023},
+}
+""",
     )

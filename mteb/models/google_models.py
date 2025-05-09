@@ -1,35 +1,37 @@
 from __future__ import annotations
 
-from functools import partial
 from typing import Any
 
 import numpy as np
 import tqdm
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import Encoder, PromptType
+from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
-from mteb.models.wrapper import Wrapper
+from mteb.models.abs_encoder import AbsEncoder
+from mteb.requires_package import requires_package
+from mteb.types import Array, BatchedInput, PromptType
 
 MULTILINGUAL_EVALUATED_LANGUAGES = [
-    "arb_Arab",
-    "ben_Beng",
-    "eng_Latn",
-    "spa_Latn",
-    "deu_Latn",
-    "pes_Arab",
-    "fin_Latn",
-    "fra_Latn",
-    "hin_Deva",
-    "ind_Latn",
-    "jpn_Jpan",
-    "kor_Hang",
-    "rus_Cyrl",
-    "swh_Latn",
-    "tel_Telu",
-    "tha_Thai",
-    "yor_Latn",
-    "zho_Hant",
-    "zho_Hans",
+    "arb-Arab",
+    "ben-Beng",
+    "eng-Latn",
+    "spa-Latn",
+    "deu-Latn",
+    "pes-Arab",
+    "fin-Latn",
+    "fra-Latn",
+    "hin-Deva",
+    "ind-Latn",
+    "jpn-Jpan",
+    "kor-Hang",
+    "rus-Cyrl",
+    "swh-Latn",
+    "tel-Telu",
+    "tha-Thai",
+    "yor-Latn",
+    "zho-Hant",
+    "zho-Hans",
 ]
 
 MODEL_PROMPTS = {
@@ -41,8 +43,16 @@ MODEL_PROMPTS = {
     PromptType.passage.value: "RETRIEVAL_DOCUMENT",
 }
 
+GECKO_TRAINING_DATA = {
+    # Ones that are available from HF.
+    "NQHardNegatives": ["train"],
+    "FEVERHardNegatives": ["train"],
+    "HotpotQAHardNegatives": ["train"],
+    "MIRACLRetrievalHardNegatives": ["train"],
+}
 
-class GoogleTextEmbeddingModel(Encoder, Wrapper):
+
+class GoogleTextEmbeddingModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -51,9 +61,8 @@ class GoogleTextEmbeddingModel(Encoder, Wrapper):
         **kwargs,
     ) -> None:
         self.model_name = model_name
-        self.model_prompts = (
-            self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
-        )
+        self.model_prompts = model_prompts
+        self.validate_task_to_prompt_name()
 
     def _embed(
         self,
@@ -66,12 +75,11 @@ class GoogleTextEmbeddingModel(Encoder, Wrapper):
         """Embeds texts with a pre-trained, foundational model.
         From https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings#generative-ai-get-text-embedding-python_vertex_ai_sdk
         """
-        try:
-            from vertexai.language_models import TextEmbeddingInput, TextEmbeddingModel
-        except ImportError:
-            raise ImportError(
-                "The `vertexai` package is required to run the google API, please install it using `pip install vertexai`"
-            )
+        requires_package(
+            self, "vertexai", self.model_name, "pip install 'mteb[vertexai]'"
+        )
+        from vertexai.language_models import TextEmbeddingInput, TextEmbeddingModel
+
         model = TextEmbeddingModel.from_pretrained(self.model_name)
         if titles:
             # Allow title-only embeddings by replacing text with a space
@@ -111,12 +119,15 @@ class GoogleTextEmbeddingModel(Encoder, Wrapper):
 
     def encode(
         self,
-        sentences: list[str],
-        task_name: str,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
-        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+    ) -> Array:
+        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         google_task_type = self.model_prompts.get(prompt_name)
 
         show_progress_bar = (
@@ -124,17 +135,18 @@ class GoogleTextEmbeddingModel(Encoder, Wrapper):
             if "show_progress_bar" not in kwargs
             else kwargs.pop("show_progress_bar")
         )
+        inputs = [text for batch in inputs for text in batch["text"]]
 
         return self._embed(
-            sentences,
+            inputs,
             google_task_type=google_task_type,
             show_progress_bar=show_progress_bar,
         )
 
 
 google_text_emb_004 = ModelMeta(
-    loader=partial(
-        GoogleTextEmbeddingModel,
+    loader=GoogleTextEmbeddingModel,
+    loader_kwargs=dict(
         model_name="text-embedding-004",
         model_prompts=MODEL_PROMPTS,
     ),
@@ -153,13 +165,13 @@ google_text_emb_004 = ModelMeta(
     framework=["API"],
     use_instructions=True,
     public_training_code=None,
-    public_training_data=None,  # assumed
-    training_datasets=None,
+    public_training_data=None,
+    training_datasets=GECKO_TRAINING_DATA,
 )
 
 google_text_emb_005 = ModelMeta(
-    loader=partial(
-        GoogleTextEmbeddingModel,
+    loader=GoogleTextEmbeddingModel,
+    loader_kwargs=dict(
         model_name="text-embedding-005",
         model_prompts=MODEL_PROMPTS,
     ),
@@ -178,20 +190,20 @@ google_text_emb_005 = ModelMeta(
     framework=["API"],
     use_instructions=True,
     public_training_code=None,
-    public_training_data=None,  # assumed
-    training_datasets=None,
+    public_training_data=None,
+    training_datasets=GECKO_TRAINING_DATA,
 )
 
 google_text_multilingual_emb_002 = ModelMeta(
-    loader=partial(
-        GoogleTextEmbeddingModel,
-        model_name="text-multilingual-embedding-002",
+    loader=GoogleTextEmbeddingModel,
+    loader_kwargs=dict(
+        model_name="text-embedding-002",
         model_prompts=MODEL_PROMPTS,
     ),
     name="google/text-multilingual-embedding-002",
     languages=MULTILINGUAL_EVALUATED_LANGUAGES,  # From the list of evaluated languages in https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/text-embeddings-api#supported_text_languages
     open_weights=False,
-    revision="1",  # revision is intended for implementation
+    revision="1",
     release_date="2024-05-14",
     n_parameters=None,
     memory_usage_mb=None,
@@ -203,6 +215,31 @@ google_text_multilingual_emb_002 = ModelMeta(
     framework=["API"],
     use_instructions=True,
     public_training_code=None,
-    public_training_data=None,  # assumed
-    training_datasets=None,
+    public_training_data=None,
+    training_datasets=GECKO_TRAINING_DATA,
+)
+
+google_gemini_embedding_exp_03_07 = ModelMeta(
+    loader=GoogleTextEmbeddingModel,
+    loader_kwargs=dict(
+        model_name="gemini-embedding-exp-03-07",
+        model_prompts=MODEL_PROMPTS,
+    ),
+    name="google/gemini-embedding-exp-03-07",
+    languages=MULTILINGUAL_EVALUATED_LANGUAGES,
+    open_weights=False,
+    revision="1",
+    release_date="2025-03-07",
+    n_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=8192,
+    embed_dim=3072,
+    license=None,
+    reference="https://developers.googleblog.com/en/gemini-embedding-text-model-now-available-gemini-api/",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["API"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=GECKO_TRAINING_DATA,
 )

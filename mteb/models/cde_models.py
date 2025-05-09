@@ -90,7 +90,8 @@ class CDEWrapper(SentenceTransformerWrapper):
             sentences = [s for sentences_list in sentences for s in sentences_list]
         # We need to sample with replacement if the minicorpus needs to be bigger than the number of sentences
         is_replace = len(sentences) < self.max_sentences
-        minicorpus = np.random.choice(
+        rng_state = np.random.default_rng(42)
+        minicorpus = rng_state.choice(
             sentences, size=self.max_sentences, replace=is_replace
         )
         minicorpus = corpus_to_str(minicorpus)
@@ -127,7 +128,7 @@ cde_small_v1 = ModelMeta(
         trust_remote_code=True,
     ),
     name="jxm/cde-small-v1",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="7017cdcb2abeccc8e9abd1c2379eb0e05121eec8",
     release_date="2024-09-24",
@@ -157,7 +158,7 @@ cde_small_v2 = ModelMeta(
         trust_remote_code=True,
     ),
     name="jxm/cde-small-v2",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="a7e5882ad52c27ea2831fc8258f24379c25cb459",
     release_date="2025-01-13",

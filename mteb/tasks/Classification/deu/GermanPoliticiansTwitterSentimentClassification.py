@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class GermanPoliticiansTwitterSentimentClassification(AbsTaskClassification):
+class GermanPoliticiansTwitterSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="GermanPoliticiansTwitterSentimentClassification",
         description="GermanPoliticiansTwitterSentiment is a dataset of German tweets categorized with their sentiment (3 classes).",
@@ -14,7 +14,7 @@ class GermanPoliticiansTwitterSentimentClassification(AbsTaskClassification):
             "revision": "65343b17f5a76227ab2e15b9424dfab6466ffcb1",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["deu-Latn"],
@@ -26,28 +26,28 @@ class GermanPoliticiansTwitterSentimentClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-            @inproceedings{schmidt-etal-2022-sentiment,
-                title = "Sentiment Analysis on {T}witter for the Major {G}erman Parties during the 2021 {G}erman Federal Election",
-                author = "Schmidt, Thomas  and
-                Fehle, Jakob  and
-                Weissenbacher, Maximilian  and
-                Richter, Jonathan  and
-                Gottschalk, Philipp  and
-                Wolff, Christian",
-                editor = "Schaefer, Robin  and
-                Bai, Xiaoyu  and
-                Stede, Manfred  and
-                Zesch, Torsten",
-                booktitle = "Proceedings of the 18th Conference on Natural Language Processing (KONVENS 2022)",
-                month = "12--15 " # sep,
-                year = "2022",
-                address = "Potsdam, Germany",
-                publisher = "KONVENS 2022 Organizers",
-                url = "https://aclanthology.org/2022.konvens-1.9",
-                pages = "74--87",
-            }
-        """,
+        bibtex_citation=r"""
+@inproceedings{schmidt-etal-2022-sentiment,
+  address = {Potsdam, Germany},
+  author = {Schmidt, Thomas  and
+Fehle, Jakob  and
+Weissenbacher, Maximilian  and
+Richter, Jonathan  and
+Gottschalk, Philipp  and
+Wolff, Christian},
+  booktitle = {Proceedings of the 18th Conference on Natural Language Processing (KONVENS 2022)},
+  editor = {Schaefer, Robin  and
+Bai, Xiaoyu  and
+Stede, Manfred  and
+Zesch, Torsten},
+  month = {12--15 } # sep,
+  pages = {74--87},
+  publisher = {KONVENS 2022 Organizers},
+  title = {Sentiment Analysis on {T}witter for the Major {G}erman Parties during the 2021 {G}erman Federal Election},
+  url = {https://aclanthology.org/2022.konvens-1.9},
+  year = {2022},
+}
+""",
     )
 
     def dataset_transform(self):

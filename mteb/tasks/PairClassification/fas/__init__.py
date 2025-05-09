@@ -12,8 +12,8 @@ from .FaMTEBPairClassification import (
 from .FarsTail import FarsTail
 
 __all__ = [
-    "FarsTail",
     "CExaPPC",
+    "FarsTail",
     "FarsiParaphraseDetection",
     "ParsinluEntail",
     "ParsinluQueryParaphPC",

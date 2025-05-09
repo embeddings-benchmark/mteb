@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class NusaXSentiClassification(AbsTaskClassification):
+class NusaXSentiClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="NusaX-senti",
         description="NusaX is a high-quality multilingual parallel corpus that covers 12 languages, Indonesian, English, and 10 Indonesian local languages, namely Acehnese, Balinese, Banjarese, Buginese, Madurese, Minangkabau, Javanese, Ngaju, Sundanese, and Toba Batak. NusaX-Senti is a 3-labels (positive, neutral, negative) sentiment analysis dataset for 10 Indonesian local languages + Indonesian and English.",
@@ -15,7 +15,7 @@ class NusaXSentiClassification(AbsTaskClassification):
             "trust_remote_code": True,
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs={
@@ -40,18 +40,18 @@ class NusaXSentiClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{winata2022nusax,
-      title={NusaX: Multilingual Parallel Sentiment Dataset for 10 Indonesian Local Languages},
-      author={Winata, Genta Indra and Aji, Alham Fikri and Cahyawijaya,
-      Samuel and Mahendra, Rahmad and Koto, Fajri and Romadhony,
-      Ade and Kurniawan, Kemal and Moeljadi, David and Prasojo,
-      Radityo Eko and Fung, Pascale and Baldwin, Timothy and Lau,
-      Jey Han and Sennrich, Rico and Ruder, Sebastian},
-      year={2022},
-      eprint={2205.15960},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+        bibtex_citation=r"""
+@misc{winata2022nusax,
+  archiveprefix = {arXiv},
+  author = {Winata, Genta Indra and Aji, Alham Fikri and Cahyawijaya,
+Samuel and Mahendra, Rahmad and Koto, Fajri and Romadhony,
+Ade and Kurniawan, Kemal and Moeljadi, David and Prasojo,
+Radityo Eko and Fung, Pascale and Baldwin, Timothy and Lau,
+Jey Han and Sennrich, Rico and Ruder, Sebastian},
+  eprint = {2205.15960},
+  primaryclass = {cs.CL},
+  title = {NusaX: Multilingual Parallel Sentiment Dataset for 10 Indonesian Local Languages},
+  year = {2022},
 }
 """,
     )

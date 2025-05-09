@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class RomanianReviewsSentiment(AbsTaskClassification):
+class RomanianReviewsSentiment(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="RomanianReviewsSentiment",
         description="LaRoSeDa (A Large Romanian Sentiment Data Set) contains 15,000 reviews written in Romanian",
@@ -15,7 +15,7 @@ class RomanianReviewsSentiment(AbsTaskClassification):
             "trust_remote_code": True,
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         date=("2020-01-01", "2021-01-11"),
         eval_splits=["test"],
@@ -27,13 +27,12 @@ class RomanianReviewsSentiment(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-@article{
-    tache2101clustering,
-    title={Clustering Word Embeddings with Self-Organizing Maps. Application on LaRoSeDa -- A Large Romanian Sentiment Data Set},
-    author={Anca Maria Tache and Mihaela Gaman and Radu Tudor Ionescu},
-    journal={ArXiv},
-    year = {2021}
+        bibtex_citation=r"""
+@article{tache2101clustering,
+  author = {Anca Maria Tache and Mihaela Gaman and Radu Tudor Ionescu},
+  journal = {ArXiv},
+  title = {Clustering Word Embeddings with Self-Organizing Maps. Application on LaRoSeDa -- A Large Romanian Sentiment Data Set},
+  year = {2021},
 }
 """,
     )

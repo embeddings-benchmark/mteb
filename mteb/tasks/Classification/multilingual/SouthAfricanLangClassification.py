@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = [
@@ -18,7 +18,7 @@ _LANGUAGES = [
 ]
 
 
-class SouthAfricanLangClassification(AbsTaskClassification):
+class SouthAfricanLangClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SouthAfricanLangClassification",
         dataset={
@@ -27,7 +27,7 @@ class SouthAfricanLangClassification(AbsTaskClassification):
         },
         description="A language identification test set for 11 South African Languages.",
         reference="https://www.kaggle.com/competitions/south-african-language-identification/",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         type="Classification",
         eval_splits=["test"],
@@ -40,13 +40,15 @@ class SouthAfricanLangClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{south-african-language-identification,
-    author = {ExploreAI Academy, Joanne M},
-    title = {South African Language Identification},
-    publisher = {Kaggle},
-    year = {2022},
-    url = {https://kaggle.com/competitions/south-african-language-identification}
-}""",
+        bibtex_citation=r"""
+@misc{south-african-language-identification,
+  author = {ExploreAI Academy, Joanne M},
+  publisher = {Kaggle},
+  title = {South African Language Identification},
+  url = {https://kaggle.com/competitions/south-african-language-identification},
+  year = {2022},
+}
+""",
     )
 
     def dataset_transform(self) -> None:

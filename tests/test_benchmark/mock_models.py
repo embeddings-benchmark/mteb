@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from collections.abc import Sequence
 from typing import Any, Literal
 
 import numpy as np
@@ -12,41 +11,77 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 from torch import Tensor
 from torch.utils.data import DataLoader
 
-import mteb
-from mteb.encoder_interface import PromptType
+from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.load_results.task_results import Namespace
 from mteb.model_meta import ModelMeta
-from mteb.models import SentenceTransformerWrapper
-from tests.test_benchmark.task_grid import MOCK_TASK_TEST_GRID
+from mteb.models import AbsEncoder, SentenceTransformerWrapper
+from mteb.types import Array, BatchedInput, PromptType
 
 
-class MockNumpyEncoder(mteb.Encoder):
+class AbsMockEncoder(AbsEncoder):
     def __init__(self):
         pass
 
-    def encode(self, sentences, prompt_name: str | None = None, **kwargs):
-        return np.random.rand(len(sentences), 10)
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        return np.random.rand(len(inputs.dataset), 10)  # noqa: NPY002
 
 
-class MockTorchEncoder(mteb.Encoder):
-    def __init__(self):
-        pass
-
-    def encode(self, sentences, prompt_name: str | None = None, **kwargs):
-        return torch.randn(len(sentences), 10).numpy()
-
-
-class MockTorchbf16Encoder(SentenceTransformer):
-    def __init__(self):
-        pass
-
-    def encode(self, sentences, prompt_name: str | None = None, **kwargs):
-        return torch.randn(len(sentences), 10, dtype=torch.bfloat16)
+class MockNumpyEncoder(AbsMockEncoder):
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        return np.random.rand(len(inputs.dataset), 10)  # type: ignore # noqa: NPY002
 
 
-class MockCLIPEncoder:
+class MockTorchEncoder(AbsMockEncoder):
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        return torch.randn(len(inputs.dataset), 10)
+
+
+class MockTorchfp16Encoder(AbsMockEncoder):
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        return torch.randn(len(inputs.dataset), 10, dtype=torch.float16)  # type: ignore
+
+
+class MockCLIPEncoder(AbsMockEncoder):
     mteb_model_meta = ModelMeta(
-        name="MockCLIPModel",
-        languages=["eng_Latn"],
+        loader=None,
+        name="mock/MockCLIPModel",
+        languages=["eng-Latn"],
         revision="3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
         release_date="2021-02-06",
         modalities=["image", "text"],
@@ -66,33 +101,24 @@ class MockCLIPEncoder:
     )
     model_card_data = mteb_model_meta
 
-    def __init__(self):
-        pass
-
-    def get_text_embeddings(self, texts, **kwargs):
-        return torch.randn(len(texts), 10)
-
-    def get_image_embeddings(self, images, **kwargs):
-        if isinstance(images, DataLoader):
-            all_embeddings = []
-            for batch in images:
-                batch_embeddings = torch.randn(len(batch), 10)
-                all_embeddings.append(batch_embeddings)
-            return torch.cat(all_embeddings, dim=0)
-        else:
-            return torch.randn(len(images), 10)
-
-    def get_fused_embeddings(self, texts, images, **kwargs):
-        return torch.randn(len(texts), 10)
-
-    def calculate_probs(self, text_embeddings, image_embeddings):
-        return torch.randn(image_embeddings.shape[0], text_embeddings.shape[0])
+    def encode(
+        self,
+        inputs: DataLoader[BatchedInput],
+        *,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
+        prompt_type: PromptType | None = None,
+        **kwargs: Any,
+    ) -> Array:
+        return torch.randn(len(inputs.dataset), 10)
 
 
-class MockMocoEncoder:
+class MockMocoEncoder(AbsMockEncoder):
     mteb_model_meta = ModelMeta(
-        name="MockMocoModel",
-        languages=["eng_Latn"],
+        loader=None,
+        name="mock/MockMocoModel",
+        languages=["eng-Latn"],
         revision="7d091cd70772c5c0ecf7f00b5f12ca609a99d69d",
         release_date="2024-01-01",
         modalities=["image"],
@@ -110,33 +136,22 @@ class MockMocoEncoder:
         use_instructions=False,
         training_datasets=None,
     )
-    model_card_data = mteb_model_meta
+
+
+class MockSentenceTransformer(SentenceTransformer):
+    """Ensure that data types not supported by the encoder are converted to the supported data type."""
+
+    model_card_data = Namespace(
+        model_name="mock/MockSentenceTransformer",
+        base_model_revision="1.0.0",
+    )
 
     def __init__(self):
         pass
 
-    def get_text_embeddings(self, texts, **kwargs):
-        pass
-
-    def get_image_embeddings(self, images, **kwargs):
-        pass
-
-    def get_fused_embeddings(self, texts, images, **kwargs):
-        pass
-
-    def calculate_probs(self, text_embeddings, image_embeddings):
-        pass
-
-
-class MockSentenceTransformer(SentenceTransformer):
-    """A mock implementation of the SentenceTransformer intended to implement just the encode, method using the same arguments."""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
     def encode(
         self,
-        sentences: str | list[str],
+        sentences: list[str],
         prompt_name: str | None = None,
         prompt: str | None = None,
         batch_size: int = 32,
@@ -151,6 +166,30 @@ class MockSentenceTransformer(SentenceTransformer):
         **kwargs: Any,
     ) -> list[Tensor] | ndarray | Tensor:
         return torch.randn(len(sentences), 10).numpy()
+
+    @staticmethod
+    def get_sentence_embedding_dimension() -> int:
+        return 10
+
+
+class MockSentenceTransformersbf16Encoder(MockSentenceTransformer):
+    def encode(
+        self,
+        sentences: str | list[str],
+        prompt_name: str | None = None,
+        prompt: str | None = None,
+        batch_size: int = 32,
+        show_progress_bar: bool | None = None,
+        output_value: Literal["sentence_embedding", "token_embeddings"]
+        | None = "sentence_embedding",
+        precision: Literal["float32", "int8", "uint8", "binary", "ubinary"] = "float32",
+        convert_to_numpy: bool = True,
+        convert_to_tensor: bool = False,
+        device: str = None,
+        normalize_embeddings: bool = False,
+        **kwargs,
+    ) -> list[Tensor] | np.ndarray | Tensor:
+        return torch.randn(len(sentences), 10, dtype=torch.bfloat16)  # type: ignore
 
 
 class MockSentenceTransformerWrapper(SentenceTransformerWrapper):
@@ -191,55 +230,21 @@ class MockSentenceTransformerWrapper(SentenceTransformerWrapper):
 
     def encode(
         self,
-        sentences: Sequence[str],
+        inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
-        prompt_name = None
-        if self.model_prompts is not None:
-            prompt_name = get_mock_prompt_name(
-                self.model_prompts, task_name, prompt_type
-            )
+    ) -> Array:
+        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
 
         embeddings = self.model.encode(
-            sentences,
+            inputs,
             prompt_name=prompt_name,
             **kwargs,  # sometimes in kwargs can be return_tensors=True
         )
         if isinstance(embeddings, torch.Tensor):
             embeddings = embeddings.cpu().detach().float().numpy()
         return embeddings
-
-
-def get_mock_prompt_name(
-    task_to_prompt: dict[str, str], task_name: str, prompt_type: PromptType | None
-) -> str | None:
-    task = [
-        mock_task
-        for mock_task in MOCK_TASK_TEST_GRID
-        if mock_task.metadata.name == task_name
-    ][0]
-    task_type = task.metadata.type
-    prompt_type_value = prompt_type.value if prompt_type else None
-
-    if (
-        task_name
-        and prompt_type
-        and f"{task_name}-{prompt_type_value}" in task_to_prompt
-    ):
-        return f"{task_name}-{prompt_type_value}"
-    if task_name and task_name in task_to_prompt:
-        return task_name
-    if (
-        task_type
-        and prompt_type
-        and f"{task_type}-{prompt_type_value}" in task_to_prompt
-    ):
-        return f"{task_type}-{prompt_type_value}"
-    if task_type and task_type in task_to_prompt:
-        return task_type
-    if prompt_type and prompt_type in task_to_prompt:
-        return prompt_type_value
-    return None

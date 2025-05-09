@@ -27,7 +27,7 @@ class EightTagsClustering(AbsTaskClustering):
             "revision": "78b962b130c6690659c65abf67bf1c2f030606b6",
         },
         type="Clustering",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
@@ -39,36 +39,38 @@ class EightTagsClustering(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{dadas-etal-2020-evaluation,
-            title = "Evaluation of Sentence Representations in {P}olish",
-            author = "Dadas, Slawomir  and
-            Pere{\l}kiewicz, Micha{\l}  and
-            Po{\'s}wiata, Rafa{\l}",
-            editor = "Calzolari, Nicoletta  and
-            B{\'e}chet, Fr{\'e}d{\'e}ric  and
-            Blache, Philippe  and
-            Choukri, Khalid  and
-            Cieri, Christopher  and
-            Declerck, Thierry  and
-            Goggi, Sara  and
-            Isahara, Hitoshi  and
-            Maegaard, Bente  and
-            Mariani, Joseph  and
-            Mazo, H{\'e}l{\`e}ne  and
-            Moreno, Asuncion  and
-            Odijk, Jan  and
-            Piperidis, Stelios",
-            booktitle = "Proceedings of the Twelfth Language Resources and Evaluation Conference",
-            month = may,
-            year = "2020",
-            address = "Marseille, France",
-            publisher = "European Language Resources Association",
-            url = "https://aclanthology.org/2020.lrec-1.207",
-            pages = "1674--1680",
-            abstract = "Methods for learning sentence representations have been actively developed in recent years. However, the lack of pre-trained models and datasets annotated at the sentence level has been a problem for low-resource languages such as Polish which led to less interest in applying these methods to language-specific tasks. In this study, we introduce two new Polish datasets for evaluating sentence embeddings and provide a comprehensive evaluation of eight sentence representation methods including Polish and multilingual models. We consider classic word embedding models, recently developed contextual embeddings and multilingual sentence encoders, showing strengths and weaknesses of specific approaches. We also examine different methods of aggregating word vectors into a single sentence vector.",
-            language = "English",
-            ISBN = "979-10-95546-34-4",
-        }""",
+        bibtex_citation=r"""
+@inproceedings{dadas-etal-2020-evaluation,
+  abstract = {Methods for learning sentence representations have been actively developed in recent years. However, the lack of pre-trained models and datasets annotated at the sentence level has been a problem for low-resource languages such as Polish which led to less interest in applying these methods to language-specific tasks. In this study, we introduce two new Polish datasets for evaluating sentence embeddings and provide a comprehensive evaluation of eight sentence representation methods including Polish and multilingual models. We consider classic word embedding models, recently developed contextual embeddings and multilingual sentence encoders, showing strengths and weaknesses of specific approaches. We also examine different methods of aggregating word vectors into a single sentence vector.},
+  address = {Marseille, France},
+  author = {Dadas, Slawomir  and
+Pere{\\l}kiewicz, Micha{\\l}  and
+Po{\\'s}wiata, Rafa{\\l}},
+  booktitle = {Proceedings of the Twelfth Language Resources and Evaluation Conference},
+  editor = {Calzolari, Nicoletta  and
+B{\'e}chet, Fr{\'e}d{\'e}ric  and
+Blache, Philippe  and
+Choukri, Khalid  and
+Cieri, Christopher  and
+Declerck, Thierry  and
+Goggi, Sara  and
+Isahara, Hitoshi  and
+Maegaard, Bente  and
+Mariani, Joseph  and
+Mazo, H{\\'e}l{\\`e}ne  and
+Moreno, Asuncion  and
+Odijk, Jan  and
+Piperidis, Stelios},
+  isbn = {979-10-95546-34-4},
+  language = {English},
+  month = may,
+  pages = {1674--1680},
+  publisher = {European Language Resources Association},
+  title = {Evaluation of Sentence Representations in {P}olish},
+  url = {https://aclanthology.org/2020.lrec-1.207},
+  year = {2020},
+}
+""",
     )
 
 
@@ -86,7 +88,7 @@ class EightTagsClusteringFast(AbsTaskClusteringFast):
             "revision": "78b962b130c6690659c65abf67bf1c2f030606b6",
         },
         type="Clustering",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
@@ -98,36 +100,39 @@ class EightTagsClusteringFast(AbsTaskClusteringFast):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{dadas-etal-2020-evaluation,
-            title = "Evaluation of Sentence Representations in {P}olish",
-            author = "Dadas, Slawomir  and
-            Pere{\l}kiewicz, Micha{\l}  and
-            Po{\'s}wiata, Rafa{\l}",
-            editor = "Calzolari, Nicoletta  and
-            B{\'e}chet, Fr{\'e}d{\'e}ric  and
-            Blache, Philippe  and
-            Choukri, Khalid  and
-            Cieri, Christopher  and
-            Declerck, Thierry  and
-            Goggi, Sara  and
-            Isahara, Hitoshi  and
-            Maegaard, Bente  and
-            Mariani, Joseph  and
-            Mazo, H{\'e}l{\`e}ne  and
-            Moreno, Asuncion  and
-            Odijk, Jan  and
-            Piperidis, Stelios",
-            booktitle = "Proceedings of the Twelfth Language Resources and Evaluation Conference",
-            month = may,
-            year = "2020",
-            address = "Marseille, France",
-            publisher = "European Language Resources Association",
-            url = "https://aclanthology.org/2020.lrec-1.207",
-            pages = "1674--1680",
-            abstract = "Methods for learning sentence representations have been actively developed in recent years. However, the lack of pre-trained models and datasets annotated at the sentence level has been a problem for low-resource languages such as Polish which led to less interest in applying these methods to language-specific tasks. In this study, we introduce two new Polish datasets for evaluating sentence embeddings and provide a comprehensive evaluation of eight sentence representation methods including Polish and multilingual models. We consider classic word embedding models, recently developed contextual embeddings and multilingual sentence encoders, showing strengths and weaknesses of specific approaches. We also examine different methods of aggregating word vectors into a single sentence vector.",
-            language = "English",
-            ISBN = "979-10-95546-34-4",
-        }""",
+        bibtex_citation=r"""
+@inproceedings{dadas-etal-2020-evaluation,
+  abstract = {Methods for learning sentence representations have been actively developed in recent years. However, the lack of pre-trained models and datasets annotated at the sentence level has been a problem for low-resource languages such as Polish which led to less interest in applying these methods to language-specific tasks. In this study, we introduce two new Polish datasets for evaluating sentence embeddings and provide a comprehensive evaluation of eight sentence representation methods including Polish and multilingual models. We consider classic word embedding models, recently developed contextual embeddings and multilingual sentence encoders, showing strengths and weaknesses of specific approaches. We also examine different methods of aggregating word vectors into a single sentence vector.},
+  address = {Marseille, France},
+  author = {Dadas, Slawomir  and
+Pere{\\l}kiewicz, Micha{\\l}  and
+Po{\\'s}wiata, Rafa{\\l}},
+  booktitle = {Proceedings of the Twelfth Language Resources and Evaluation Conference},
+  editor = {Calzolari, Nicoletta  and
+B{\\'e}chet, Fr{\\'e}d{\\'e}ric  and
+Blache, Philippe  and
+Choukri, Khalid  and
+Cieri, Christopher  and
+Declerck, Thierry  and
+Goggi, Sara  and
+Isahara, Hitoshi  and
+Maegaard, Bente  and
+Mariani, Joseph  and
+Mazo, H{\\'e}l{\\`e}ne  and
+Moreno, Asuncion  and
+Odijk, Jan  and
+Piperidis, Stelios},
+  isbn = {979-10-95546-34-4},
+  language = {English},
+  month = may,
+  pages = {1674--1680},
+  publisher = {European Language Resources Association},
+  title = {Evaluation of Sentence Representations in {P}olish},
+  url = {https://aclanthology.org/2020.lrec-1.207},
+  year = {2020},
+}
+""",
+        adapted_from=["EightTagsClustering"],
     )
 
     def dataset_transform(self):
@@ -160,7 +165,7 @@ class PlscClusteringS2S(AbsTaskClusteringFast):
             "revision": "39bcadbac6b1eddad7c1a0a176119ce58060289a",
         },
         type="Clustering",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
@@ -187,7 +192,7 @@ class PlscClusteringS2SFast(AbsTaskClusteringFast):
             "revision": "39bcadbac6b1eddad7c1a0a176119ce58060289a",
         },
         type="Clustering",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
@@ -200,6 +205,7 @@ class PlscClusteringS2SFast(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
+        adapted_from=["PlscClusteringS2S"],
     )
 
     def dataset_transform(self):
@@ -241,7 +247,7 @@ class PlscClusteringP2P(AbsTaskClusteringFast):
             "revision": "8436dd4c05222778013d6642ee2f3fa1722bca9b",
         },
         type="Clustering",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
@@ -268,7 +274,7 @@ class PlscClusteringP2PFast(AbsTaskClusteringFast):
             "revision": "8436dd4c05222778013d6642ee2f3fa1722bca9b",
         },
         type="Clustering",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
@@ -281,6 +287,7 @@ class PlscClusteringP2PFast(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="found",
         bibtex_citation="",
+        adapted_from=["PlscClusteringP2P"],
     )
 
     def dataset_transform(self):

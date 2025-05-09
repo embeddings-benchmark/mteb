@@ -12,8 +12,12 @@ from sklearn.metrics.pairwise import (
     paired_manhattan_distances,
 )
 
-from mteb.encoder_interface import Encoder, EncoderWithSimilarity
+from mteb.abstasks.TaskMetadata import TaskMetadata
+from mteb.encoder_interface import Encoder
+from mteb.model_meta import ScoringFunction
 
+from ...create_dataloaders import create_dataloader_from_texts
+from ...similarity_functions import compute_pairwise_similarity
 from .Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
@@ -41,19 +45,18 @@ class PairClassificationEvaluator(Evaluator):
         sentences1,
         sentences2,
         labels,
-        task_name: str | None = None,
-        limit: int | None = None,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         **kwargs,
     ):
         super().__init__(**kwargs)
-        if limit:
-            sentences1 = sentences1[:limit]
-            sentences2 = sentences2[:limit]
-            labels = labels[:limit]
         self.sentences1 = sentences1
         self.sentences2 = sentences2
         self.labels = labels
-        self.task_name = task_name
+        self.task_metadata = task_metadata
+        self.hf_split = hf_split
+        self.hf_subset = hf_subset
 
         assert len(self.sentences1) == len(self.sentences2)
         assert len(self.sentences1) == len(self.labels)
@@ -62,8 +65,8 @@ class PairClassificationEvaluator(Evaluator):
 
     def __call__(
         self,
-        model: Encoder | EncoderWithSimilarity,
-        encode_kwargs: dict[str, Any] = {},
+        model: Encoder,
+        encode_kwargs: dict[str, Any],
     ):
         scores = self.compute_metrics(model, encode_kwargs=encode_kwargs)
 
@@ -76,7 +79,9 @@ class PairClassificationEvaluator(Evaluator):
     def _encode_unique_texts(
         all_texts: list[str],
         model: Encoder,
-        task_name: str | None,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         **encode_kwargs: Any,
     ):
         index_map, all_unique_texts, all_texts_indexes = {}, [], []
@@ -91,8 +96,10 @@ class PairClassificationEvaluator(Evaluator):
         )
         all_unique_texts_embs = np.asarray(
             model.encode(
-                all_unique_texts,
-                task_name=task_name,
+                create_dataloader_from_texts(all_unique_texts),
+                task_metadata=task_metadata,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
                 **encode_kwargs,
             )
         )
@@ -100,19 +107,18 @@ class PairClassificationEvaluator(Evaluator):
 
     def compute_metrics(
         self,
-        model: Encoder | EncoderWithSimilarity,
+        model: Encoder,
         *,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
     ):
-        if "batch_size" not in encode_kwargs:
-            encode_kwargs["batch_size"] = 32
-
         all_sentences = self.sentences1 + self.sentences2
         len_sentences1 = len(self.sentences1)
         embeddings = self._encode_unique_texts(
             all_sentences,
             model,
-            task_name=self.task_name,
+            task_metadata=self.task_metadata,
+            hf_split=self.hf_split,
+            hf_subset=self.hf_subset,
             **encode_kwargs,
         )
         embeddings1 = embeddings[:len_sentences1]
@@ -123,16 +129,7 @@ class PairClassificationEvaluator(Evaluator):
         manhattan_distances = paired_manhattan_distances(embeddings1, embeddings2)
         euclidean_distances = paired_euclidean_distances(embeddings1, embeddings2)
 
-        if hasattr(model, "similarity_pairwise"):
-            similarity_scores = model.similarity_pairwise(embeddings1, embeddings2)  # type: ignore
-        elif hasattr(model, "similarity"):
-            _similarity_scores = [
-                float(model.similarity(e1, e2))  # type: ignore
-                for e1, e2 in zip(embeddings1, embeddings2)
-            ]
-            similarity_scores = np.array(_similarity_scores)
-        else:
-            similarity_scores = cosine_scores  # Default to cosine similarity
+        similarity_scores = compute_pairwise_similarity(model, embeddings1, embeddings2)
 
         embeddings1_np = np.asarray(embeddings1)
         embeddings2_np = np.asarray(embeddings2)
@@ -146,11 +143,26 @@ class PairClassificationEvaluator(Evaluator):
         output_scores = {}
         max_scores = defaultdict(list)
         for short_name, name, scores, reverse in [
-            ["similarity", "Model-Specified Similarity", similarity_scores, True],
-            ["cosine", "Cosine-Similarity", cosine_scores, True],
-            ["manhattan", "Manhattan-Distance", manhattan_distances, False],
-            ["euclidean", "Euclidean-Distance", euclidean_distances, False],
-            ["dot", "Dot-Product", dot_scores, True],
+            [
+                "similarity",
+                "Model-Specified Similarity",
+                similarity_scores,
+                True,
+            ],
+            [ScoringFunction.COSINE.value, "Cosine-Similarity", cosine_scores, True],
+            [
+                ScoringFunction.MANHATTAN.value,
+                "Manhattan-Distance",
+                manhattan_distances,
+                False,
+            ],
+            [
+                ScoringFunction.EUCLIDEAN.value,
+                "Euclidean-Distance",
+                euclidean_distances,
+                False,
+            ],
+            [ScoringFunction.DOT_PRODUCT.value, "Dot-Product", dot_scores, True],
         ]:
             metrics = self._compute_metrics(scores, labels, reverse)
             for metric_name, metric_value in metrics.items():

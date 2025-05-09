@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class ImdbClassification(AbsTaskClassification):
+class ImdbClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="ImdbClassification",
         description="Large Movie Review Dataset",
@@ -14,7 +14,7 @@ class ImdbClassification(AbsTaskClassification):
         },
         reference="http://www.aclweb.org/anthology/P11-1015",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -29,24 +29,26 @@ class ImdbClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{maas-etal-2011-learning,
-    title = "Learning Word Vectors for Sentiment Analysis",
-    author = "Maas, Andrew L.  and
-      Daly, Raymond E.  and
-      Pham, Peter T.  and
-      Huang, Dan  and
-      Ng, Andrew Y.  and
-      Potts, Christopher",
-    editor = "Lin, Dekang  and
-      Matsumoto, Yuji  and
-      Mihalcea, Rada",
-    booktitle = "Proceedings of the 49th Annual Meeting of the Association for Computational Linguistics: Human Language Technologies",
-    month = jun,
-    year = "2011",
-    address = "Portland, Oregon, USA",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/P11-1015",
-    pages = "142--150",
-}""",
+        bibtex_citation=r"""
+@inproceedings{maas-etal-2011-learning,
+  address = {Portland, Oregon, USA},
+  author = {Maas, Andrew L.  and
+Daly, Raymond E.  and
+Pham, Peter T.  and
+Huang, Dan  and
+Ng, Andrew Y.  and
+Potts, Christopher},
+  booktitle = {Proceedings of the 49th Annual Meeting of the Association for Computational Linguistics: Human Language Technologies},
+  editor = {Lin, Dekang  and
+Matsumoto, Yuji  and
+Mihalcea, Rada},
+  month = jun,
+  pages = {142--150},
+  publisher = {Association for Computational Linguistics},
+  title = {Learning Word Vectors for Sentiment Analysis},
+  url = {https://aclanthology.org/P11-1015},
+  year = {2011},
+}
+""",
         prompt="Classify the sentiment expressed in the given movie review text from the IMDB dataset",
     )

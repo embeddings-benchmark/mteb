@@ -14,7 +14,7 @@ class BuiltBenchClusteringS2S(AbsTaskClustering):
             "revision": "1aaeb2ece89ea0a8c64e215c95c4cfaf7e891149",
         },
         type="Clustering",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -26,11 +26,13 @@ class BuiltBenchClusteringS2S(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@article{shahinmoghadam2024benchmarking,
-    title={Benchmarking pre-trained text embedding models in aligning built asset information},
-    author={Shahinmoghadam, Mehrzad and Motamedi, Ali},
-    journal={arXiv preprint arXiv:2411.12056},
-    year={2024}
-}""",
+        bibtex_citation=r"""
+@article{shahinmoghadam2024benchmarking,
+  author = {Shahinmoghadam, Mehrzad and Motamedi, Ali},
+  journal = {arXiv preprint arXiv:2411.12056},
+  title = {Benchmarking pre-trained text embedding models in aligning built asset information},
+  year = {2024},
+}
+""",
         prompt="Identify the category of the built asset entities based on the names or titles",
     )

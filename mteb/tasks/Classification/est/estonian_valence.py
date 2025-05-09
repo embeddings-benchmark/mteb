@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class EstonianValenceClassification(AbsTaskClassification):
+class EstonianValenceClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="EstonianValenceClassification",
         dataset={
@@ -14,7 +14,7 @@ class EstonianValenceClassification(AbsTaskClassification):
         description="Dataset containing annotated Estonian news data from the Postimees and Õhtuleht newspapers.",
         reference="https://figshare.com/articles/dataset/Estonian_Valence_Corpus_Eesti_valentsikorpus/24517054",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["est-Latn"],
@@ -29,15 +29,16 @@ class EstonianValenceClassification(AbsTaskClassification):
         license="cc-by-4.0",
         annotations_creators="human-annotated",
         sample_creation="found",
-        bibtex_citation="""
+        bibtex_citation=r"""
 @article{Pajupuu2023,
-    author = "Hille Pajupuu and Jaan Pajupuu and Rene Altrov and Kairi Tamuri",
-    title = "{Estonian Valence Corpus  / Eesti valentsikorpus}",
-    year = "2023",
-    month = "11",
-    url = "https://figshare.com/articles/dataset/Estonian_Valence_Corpus_Eesti_valentsikorpus/24517054",
-    doi = "10.6084/m9.figshare.24517054.v1"
-}""",
+  author = {Hille Pajupuu and Jaan Pajupuu and Rene Altrov and Kairi Tamuri},
+  doi = {10.6084/m9.figshare.24517054.v1},
+  month = {11},
+  title = {{Estonian Valence Corpus  / Eesti valentsikorpus}},
+  url = {https://figshare.com/articles/dataset/Estonian_Valence_Corpus_Eesti_valentsikorpus/24517054},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):

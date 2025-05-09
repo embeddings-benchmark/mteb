@@ -5,12 +5,12 @@ from typing import Any
 
 from datasets import Dataset, DatasetDict
 
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics
 from mteb.encoder_interface import Encoder
 
 from ..evaluation.evaluators import BitextMiningEvaluator
 from ..load_results.task_results import HFSubset, ScoresDict
 from .AbsTask import AbsTask
-from .TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -67,7 +67,7 @@ class AbsTaskBitextMining(AbsTask):
         split: str = "test",
         subsets_to_run: list[HFSubset] | None = None,
         *,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
         **kwargs: Any,
     ) -> dict[HFSubset, ScoresDict]:
         if not self.data_loaded:
@@ -85,22 +85,26 @@ class AbsTaskBitextMining(AbsTask):
                 model,
                 self.dataset[split],  # type: ignore
                 parallel=True,
+                hf_split=split,
+                hf_subset="parallel",
                 encode_kwargs=encode_kwargs,
                 **kwargs,
             )
         else:
-            for hf_subet in hf_subsets:
+            for hf_subset in hf_subsets:
                 logger.info(
-                    f"Task: {self.metadata.name}, split: {split}, subset: {hf_subet}. Running..."
+                    f"Task: {self.metadata.name}, split: {split}, subset: {hf_subset}. Running..."
                 )
 
-                if hf_subet not in self.dataset and hf_subet == "default":
+                if hf_subset not in self.dataset and hf_subset == "default":
                     data_split = self.dataset[split]
                 else:
-                    data_split = self.dataset[hf_subet][split]
-                scores[hf_subet] = self._evaluate_subset(
+                    data_split = self.dataset[hf_subset][split]
+                scores[hf_subset] = self._evaluate_subset(
                     model,
                     data_split,
+                    hf_split=split,
+                    hf_subset=hf_subset,
                     encode_kwargs=encode_kwargs,
                     **kwargs,
                 )
@@ -118,16 +122,20 @@ class AbsTaskBitextMining(AbsTask):
         model: Encoder,
         data_split: Dataset,
         *,
+        hf_split: str,
+        hf_subset: str,
         parallel: bool = False,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
         **kwargs,
     ) -> ScoresDict:
         pairs = self.get_pairs(parallel)
 
         evaluator = BitextMiningEvaluator(
             data_split,
-            task_name=self.metadata.name,
+            task_metadata=self.metadata,
             pair_columns=pairs,  # type: ignore
+            hf_split=hf_split,
+            hf_subset=hf_subset,
             **kwargs,
         )
         metrics = evaluator(model, encode_kwargs=encode_kwargs)
@@ -152,8 +160,7 @@ class AbsTaskBitextMining(AbsTask):
                 sentence1 = self.dataset[hf_subset][split][sent_1]
                 sentence2 = self.dataset[hf_subset][split][sent_2]
         elif compute_overall:
-            sentence1 = []
-            sentence2 = []
+            sentence1, sentence2 = [], []
             if self.parallel_subsets:
                 for hf_subset in self.metadata.eval_langs:
                     sent_1, sent_2 = hf_subset.split("-")

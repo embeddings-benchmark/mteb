@@ -1,23 +1,22 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Sequence
-from functools import partial
 from typing import Any, Callable
 
-import numpy as np
 import torch
 from sentence_transformers import SentenceTransformer
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import PromptType
+from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.nvidia_models import nvidia_training_datasets
-from mteb.models.wrapper import Wrapper
+from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
 
-class JasperWrapper(Wrapper):
+class JasperModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
@@ -33,20 +32,23 @@ class JasperWrapper(Wrapper):
 
     def encode(
         self,
-        sentences: Sequence[str],
+        inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
-        instruction = self.get_task_instruction(task_name, prompt_type)
+    ) -> Array:
+        instruction = self.get_task_instruction(task_metadata, prompt_type)
 
         # to passage prompts won't be applied to passages
         if prompt_type == PromptType.passage:
             instruction = None
+        inputs = [text for batch in inputs for text in batch["text"]]
 
         embeddings = self.model.encode(
-            sentences,
+            inputs,
             normalize_embeddings=True,
             prompt=instruction,
             **kwargs,
@@ -59,20 +61,18 @@ class JasperWrapper(Wrapper):
 
 
 jasper_en_v1 = ModelMeta(
-    loader=partial(  # type: ignore
-        JasperWrapper,
-        model_name="infgrad/jasper_en_vision_language_v1",
-        revision="d6330ce98f8a0d741e781df845904c9484f00efa",
+    loader=JasperModel,
+    loader_kwargs=dict(
         config_kwargs={"is_text_encoder": True, "vector_dim": 12288},
         model_kwargs={
             "attn_implementation": "sdpa",
-            "torch_dtype": torch.float16,
+            "torch_dtype": torch.bfloat16,
         },
         trust_remote_code=True,
         max_seq_length=2048,
         instruction_template="Instruct: {instruction}\nQuery: ",
     ),
-    name="infgrad/jasper_en_vision_language_v1",
+    name="NovaSearch/jasper_en_vision_language_v1",
     languages=["eng-Latn"],
     open_weights=True,
     revision="d6330ce98f8a0d741e781df845904c9484f00efa",
@@ -82,7 +82,7 @@ jasper_en_v1 = ModelMeta(
     max_tokens=131072,
     embed_dim=8960,
     license="apache-2.0",
-    reference="https://huggingface.co/infgrad/jasper_en_vision_language_v1/tree/main",
+    reference="https://huggingface.co/infgrad/jasper_en_vision_language_v1",
     similarity_fn_name=ScoringFunction.COSINE,
     framework=["Sentence Transformers", "PyTorch"],
     use_instructions=True,
@@ -90,7 +90,7 @@ jasper_en_v1 = ModelMeta(
     superseded_by=None,
     training_datasets={
         # stage 1, 2, 3
-        #  "In jasper model the teacher model is nvidia/NV-Embed-v2", source https://huggingface.co/infgrad/jasper_en_vision_language_v1
+        #  "In jasper model the teacher model is nvidia/NV-Embed-v2", source https://huggingface.co/NovaSearch/jasper_en_vision_language_v1
         **nvidia_training_datasets,
         # fineweb-edu
         # https://huggingface.co/datasets/sentence-transformers/embedding-training-data

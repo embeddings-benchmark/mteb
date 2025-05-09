@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class YueOpenriceReviewClassification(AbsTaskClassification):
+class YueOpenriceReviewClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="YueOpenriceReviewClassification",
         description="A Cantonese dataset for review classification",
@@ -14,7 +14,7 @@ class YueOpenriceReviewClassification(AbsTaskClassification):
             "revision": "1300d045cf983bac23faadf3aa12a619624769da",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["yue-Hant"],
@@ -26,14 +26,16 @@ class YueOpenriceReviewClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{xiang2019sentiment,
-  title={Sentiment Augmented Attention Network for Cantonese Restaurant Review Analysis},
-  author={Xiang, Rong and Jiao, Ying and Lu, Qin},
-  booktitle={Proceedings of the 8th KDD Workshop on Issues of Sentiment Discovery and Opinion Mining (WISDOM)},
-  pages={1--9},
-  year={2019},
-  organization={KDD WISDOM}
-}""",
+        bibtex_citation=r"""
+@inproceedings{xiang2019sentiment,
+  author = {Xiang, Rong and Jiao, Ying and Lu, Qin},
+  booktitle = {Proceedings of the 8th KDD Workshop on Issues of Sentiment Discovery and Opinion Mining (WISDOM)},
+  organization = {KDD WISDOM},
+  pages = {1--9},
+  title = {Sentiment Augmented Attention Network for Cantonese Restaurant Review Analysis},
+  year = {2019},
+}
+""",
     )
 
     samples_per_label = 32

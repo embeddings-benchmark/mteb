@@ -48,9 +48,9 @@ _LANGUAGES = {
 def _load_xm3600_data(
     path: str, langs: list, splits: str, cache_dir: str = None, revision: str = None
 ):
-    corpus = {lang: {split: None for split in splits} for lang in langs}
-    queries = {lang: {split: None for split in splits} for lang in langs}
-    relevant_docs = {lang: {split: None for split in splits} for lang in langs}
+    corpus = {lang: dict.fromkeys(splits) for lang in langs}
+    queries = {lang: dict.fromkeys(splits) for lang in langs}
+    relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}
 
     split = "test"
 
@@ -128,7 +128,7 @@ class XM3600T2IRetrieval(AbsTaskAny2AnyRetrieval):
             "revision": "8d3e5665526c55a5855cd6ddfbaba2032bc7cee4",
             # "trust_remote_code": True,
         },
-        type="Any2AnyRetrieval",
+        type="Any2AnyMultilingualRetrieval",
         category="t2i",
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
@@ -141,13 +141,15 @@ class XM3600T2IRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{thapliyal2022crossmodal,
-  title={Crossmodal-3600: A Massively Multilingual Multimodal Evaluation Dataset},
-  author={Thapliyal, Ashish V and Tuset, Jordi Pont and Chen, Xi and Soricut, Radu},
-  booktitle={Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing},
-  pages={715--729},
-  year={2022}
-}""",
+        bibtex_citation=r"""
+@inproceedings{thapliyal2022crossmodal,
+  author = {Thapliyal, Ashish V and Tuset, Jordi Pont and Chen, Xi and Soricut, Radu},
+  booktitle = {Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing},
+  pages = {715--729},
+  title = {Crossmodal-3600: A Massively Multilingual Multimodal Evaluation Dataset},
+  year = {2022},
+}
+""",
     )
 
     def load_data(self, **kwargs):

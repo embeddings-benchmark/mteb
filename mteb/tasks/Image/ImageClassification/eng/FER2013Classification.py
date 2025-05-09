@@ -1,10 +1,15 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class FER2013Classification(AbsTaskImageClassification):
+class FER2013Classification(AbsTaskAnyClassification):
+    input_column_name: str = "jpg"
+    label_column_name: str = "cls"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+
     metadata = TaskMetadata(
         name="FER2013",
         description="Classifying facial emotions.",
@@ -14,7 +19,7 @@ class FER2013Classification(AbsTaskImageClassification):
             "revision": "9399b94167523fe5c40b3a857e24ef931ee4395b",
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -29,16 +34,15 @@ class FER2013Classification(AbsTaskImageClassification):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@misc{goodfellow2015explainingharnessingadversarialexamples,
-        title={Explaining and Harnessing Adversarial Examples}, 
-        author={Ian J. Goodfellow and Jonathon Shlens and Christian Szegedy},
-        year={2015},
-        eprint={1412.6572},
-        archivePrefix={arXiv},
-        primaryClass={stat.ML},
-        url={https://arxiv.org/abs/1412.6572}, 
-        }
-        """,
+        bibtex_citation=r"""
+@misc{goodfellow2015explainingharnessingadversarialexamples,
+  archiveprefix = {arXiv},
+  author = {Ian J. Goodfellow and Jonathon Shlens and Christian Szegedy},
+  eprint = {1412.6572},
+  primaryclass = {stat.ML},
+  title = {Explaining and Harnessing Adversarial Examples},
+  url = {https://arxiv.org/abs/1412.6572},
+  year = {2015},
+}
+""",
     )
-    image_column_name: str = "jpg"
-    label_column_name: str = "cls"

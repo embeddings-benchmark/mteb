@@ -5,10 +5,10 @@ from .AlloProfClusteringS2S import AlloProfClusteringS2S, AlloProfClusteringS2SF
 from .HALClusteringS2S import HALClusteringS2S, HALClusteringS2SFast
 
 __all__ = [
-    "HALClusteringS2S",
-    "HALClusteringS2SFast",
-    "AlloProfClusteringS2S",
-    "AlloProfClusteringS2SFast",
     "AlloProfClusteringP2P",
     "AlloProfClusteringP2PFast",
+    "AlloProfClusteringS2S",
+    "AlloProfClusteringS2SFast",
+    "HALClusteringS2S",
+    "HALClusteringS2SFast",
 ]

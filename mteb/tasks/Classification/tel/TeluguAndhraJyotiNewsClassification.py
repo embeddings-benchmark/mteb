@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class TeluguAndhraJyotiNewsClassification(AbsTaskClassification):
+class TeluguAndhraJyotiNewsClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="TeluguAndhraJyotiNewsClassification",
         description="A Telugu dataset for 5-class classification of Telugu news articles",
@@ -14,7 +14,7 @@ class TeluguAndhraJyotiNewsClassification(AbsTaskClassification):
             "revision": "3821aa93aa461c9263071e0897234e8d775ad616",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],

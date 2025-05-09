@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -58,7 +58,7 @@ _LANGUAGES = {
 }
 
 
-class MassiveScenarioClassification(AbsTaskClassification):
+class MassiveScenarioClassification(AbsTaskAnyClassification):
     fast_loading = True
     metadata = TaskMetadata(
         name="MassiveScenarioClassification",
@@ -68,7 +68,7 @@ class MassiveScenarioClassification(AbsTaskClassification):
         },
         description="MASSIVE: A 1M-Example Multilingual Natural Language Understanding Dataset with 51 Typologically-Diverse Languages",
         reference="https://arxiv.org/abs/2204.08582",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         type="Classification",
         eval_splits=["validation", "test"],
@@ -81,13 +81,15 @@ class MassiveScenarioClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="human-translated and localized",  # with the exception of the English data
-        bibtex_citation="""@misc{fitzgerald2022massive,
-      title={MASSIVE: A 1M-Example Multilingual Natural Language Understanding Dataset with 51 Typologically-Diverse Languages}, 
-      author={Jack FitzGerald and Christopher Hench and Charith Peris and Scott Mackie and Kay Rottmann and Ana Sanchez and Aaron Nash and Liam Urbach and Vishesh Kakarala and Richa Singh and Swetha Ranganath and Laurie Crist and Misha Britan and Wouter Leeuwis and Gokhan Tur and Prem Natarajan},
-      year={2022},
-      eprint={2204.08582},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-}""",
+        bibtex_citation=r"""
+@misc{fitzgerald2022massive,
+  archiveprefix = {arXiv},
+  author = {Jack FitzGerald and Christopher Hench and Charith Peris and Scott Mackie and Kay Rottmann and Ana Sanchez and Aaron Nash and Liam Urbach and Vishesh Kakarala and Richa Singh and Swetha Ranganath and Laurie Crist and Misha Britan and Wouter Leeuwis and Gokhan Tur and Prem Natarajan},
+  eprint = {2204.08582},
+  primaryclass = {cs.CL},
+  title = {MASSIVE: A 1M-Example Multilingual Natural Language Understanding Dataset with 51 Typologically-Diverse Languages},
+  year = {2022},
+}
+""",
         prompt="Given a user utterance as query, find the user scenarios",
     )

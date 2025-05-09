@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import logging
-import os
 from collections import defaultdict
 from pathlib import Path
 from time import time
@@ -10,14 +9,14 @@ from typing import Any, Callable
 
 from datasets import Dataset, DatasetDict
 
-from mteb.abstasks.TaskMetadata import HFSubset
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset
+from mteb.encoder_interface import Encoder
 
 from ..evaluation.evaluators import RetrievalEvaluator
 from ..evaluation.evaluators.utils import make_score_dict
 from ..load_results.task_results import ScoresDict
 from .AbsTask import AbsTask
-from .dataloaders import RetrievalDataLoader
-from .TaskMetadata import DescriptiveStatistics
+from .dataset_loaders import RetrievalDataLoader, RetrievalSplitData
 
 logger = logging.getLogger(__name__)
 
@@ -101,84 +100,128 @@ class AbsTaskRetrieval(AbsTask):
 
     Child-classes must implement the following properties:
 
-    self.corpus: dict[str, dict[str, str]]
-        Semantically, it should contain dict[split_name, dict[sample_id, dict[str, str]]]
-        E.g. {"test": {"document_one": {"_id": "d1", "title": "title", "text": "text"}}}
-
-    self.queries: dict[str, dict[str, Union[str, list[str]]]]
-        Semantically, it should contain dict[split_name, dict[sample_id, str]] or dict[split_name, dict[sample_id, list[str]]] for conversations
-        E.g. {"test": {"q1": "query"}}
-        or {"test": {"q1": ["turn1", "turn2", "turn3"]}}
-
-    self.relevant_docs: dict[str, dict[str, dict[str, int]]]
-        Semantically, it should contain dict[split_name, dict[sample_id, dict[doc_id, score]]]
-        E.g.: {"test": {"q1": {"document_one": 1}}}
-
-    Child classes may optionally implement the following properties (top_ranked for reranking and instructions if needed):
-
-    self.top_ranked: dict[str, dict[str, list[str]]] or dict[str, dict[str, dict[str, float]]]
-        Semantically, it should contain dict[split_name, dict[sample_id, list[doc_id]]] or dict[split_name, dict[sample_id, dict[doc_id, score]]]
-        E.g.: {"test": {"q1": ["document_one", "document_two"]}} or {"test": {"q1": {"document_one": 1, "document_two": 0.5}}}
-
-    self.instructions: dict[str, dict[str, str]] or dict[str, dict[str, list[str]]]
-        Semantically, it should contain dict[split_name, dict[sample_id, str]]. If there are multiple instructions per query, please duplicate the queries and give them unique ids for consolidation.
-        E.g. {"test": {"query-id1": "instruction text"}}
+    self.dataset: dict[str, dict[str, dict[str, Any]]]
+        A dictionary containing all dataset components with the following structure:
+        {
+            hf_subset: {
+                split: {
+                    'corpus': dict[str, dict[str, str]],  # doc_id -> doc
+                        Semantically, it should contain dict[split_name, dict[sample_id, dict[str, str]]]
+                        E.g. {"test": {"document_one": {"_id": "d1", "title": "title", "text": "text"}}}
+                    'queries': dict[str, str | list[str]]],  # query_id -> query
+                        Semantically, it should contain dict[split_name, dict[sample_id, str]] or dict[split_name, dict[sample_id, list[str]]] for conversations
+                        E.g. {"test": {"q1": "query"}}
+                        or {"test": {"q1": ["turn1", "turn2", "turn3"]}}
+                    'relevant_docs': dict[str, dict[str, int]],  # query_id -> doc_id -> score
+                        Semantically, it should contain dict[split_name, dict[sample_id, dict[doc_id, score]]]
+                        E.g.: {"test": {"q1": {"document_one": 1}}}
+                    'instructions': Optional[dict[str, str]],  # query_id -> instruction
+                        Semantically, it should contain dict[split_name, dict[sample_id, list[doc_id]]] or dict[split_name, dict[sample_id, dict[doc_id, score]]]
+                        E.g.: {"test": {"q1": ["document_one", "document_two"]}} or {"test": {"q1": {"document_one": 1, "document_two": 0.5}}}
+                    'top_ranked': Optional[dict[str, list[str]]]  # query_id -> doc_ids
+                        Semantically, it should contain dict[split_name, dict[sample_id, str]]. If there are multiple instructions per query, please duplicate the queries and give them unique ids for consolidation.
+                        E.g. {"test": {"query-id1": "instruction text"}}
+                }
+            }
+        }
     """
 
     ignore_identical_ids: bool = False
     abstask_prompt = "Retrieve text based on user query."
-    instructions = None
-    top_ranked = None
+    top_k = 100
+    dataset: dict[str, dict[str, RetrievalSplitData]]
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.dataset = defaultdict(
+            lambda: defaultdict(
+                lambda: {
+                    "corpus": {},
+                    "queries": {},
+                    "relevant_docs": {},
+                    "instructions": None,
+                    "top_ranked": None,
+                }
+            )
+        )
+
+    def convert_v1_dataset_format_to_v2(self):
+        if not hasattr(self, "queries"):
+            return
+        self.dataset = defaultdict(
+            lambda: defaultdict(
+                lambda: {
+                    "corpus": {},
+                    "queries": {},
+                    "relevant_docs": {},
+                    "instructions": None,
+                    "top_ranked": None,
+                }
+            )
+        )
+
+        if self.metadata.is_multilingual:
+            for subset in self.queries:
+                for split in self.queries[subset]:
+                    self.dataset[subset][split]["queries"] = self.queries[subset][split]
+                    self.dataset[subset][split]["corpus"] = self.corpus[subset][split]
+                    self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[
+                        subset
+                    ][split]
+                    if hasattr(self, "instructions"):
+                        self.dataset[subset][split]["instructions"] = self.instructions[
+                            subset
+                        ][split]
+                    if hasattr(self, "top_ranked"):
+                        self.dataset[subset][split]["top_ranked"] = self.top_ranked[
+                            subset
+                        ][split]
+        else:
+            subset = "default"
+            for split in self.queries:
+                self.dataset[subset][split]["queries"] = self.queries[split].copy()
+                self.dataset[subset][split]["corpus"] = self.corpus[split].copy()
+                self.dataset[subset][split]["relevant_docs"] = self.relevant_docs[
+                    split
+                ].copy()
+                if hasattr(self, "instructions"):
+                    self.dataset[subset][split]["instructions"] = self.instructions[
+                        split
+                    ].copy()
+                if hasattr(self, "top_ranked"):
+                    self.dataset[subset][split]["top_ranked"] = self.top_ranked[
+                        split
+                    ].copy()
+        del self.queries
+        del self.corpus
+        del self.relevant_docs
+        if hasattr(self, "instructions"):
+            del self.instructions
+        if hasattr(self, "top_ranked"):
+            del self.top_ranked
 
     def load_data(self, **kwargs):
         if self.data_loaded:
             return
-
-        self.corpus = defaultdict(dict)
-        self.queries = defaultdict(dict)
-        self.relevant_docs = defaultdict(dict)
-        self.instructions = None
-        self.top_ranked = None
 
         dataset_path = self.metadata.dataset["path"]
         eval_splits = kwargs.get("eval_splits", self.metadata.eval_splits)
         trust_remote_code = self.metadata.dataset.get("trust_remote_code", False)
         revision = self.metadata.dataset["revision"]
 
-        def process_data(split: str, lang: str | None = None):
+        def process_data(split: str, hf_subset: str = "default"):
             """Helper function to load and process data for a given split and language"""
-            corpus, queries, qrels, instructions, top_ranked = RetrievalDataLoader(
+            logger.info(
+                f"Loading {split} split for {hf_subset} subset of {self.metadata.name}"
+            )
+
+            self.dataset[hf_subset][split] = RetrievalDataLoader(
                 hf_repo=dataset_path,
                 revision=revision,
                 trust_remote_code=trust_remote_code,
                 split=split,
-                config=lang,
+                config=hf_subset,
             ).load()
-
-            if lang:
-                self.corpus[lang][split] = corpus
-                self.queries[lang][split] = queries
-                self.relevant_docs[lang][split] = qrels
-            else:
-                self.corpus[split] = corpus
-                self.queries[split] = queries
-                self.relevant_docs[split] = qrels
-
-            if instructions:
-                if self.instructions is None:
-                    self.instructions = defaultdict(dict)
-                if lang:
-                    self.instructions[lang][split] = instructions
-                else:
-                    self.instructions[split] = instructions
-
-            if top_ranked:
-                if self.top_ranked is None:
-                    self.top_ranked = defaultdict(dict)
-                if lang:
-                    self.top_ranked[lang][split] = top_ranked
-                else:
-                    self.top_ranked[split] = top_ranked
 
         if self.metadata.is_multilingual:
             for lang in self.metadata.eval_langs:
@@ -187,124 +230,109 @@ class AbsTaskRetrieval(AbsTask):
         else:
             for split in eval_splits:
                 process_data(split)
+        self.dataset_transform()
         self.data_loaded = True
 
     def evaluate(
         self,
-        model,
+        model: Encoder,
         split: str = "test",
         subsets_to_run: list[HFSubset] | None = None,
         *,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
         **kwargs,
     ) -> dict[HFSubset, ScoresDict]:
-        retriever = RetrievalEvaluator(
-            retriever=model,
-            task_name=self.metadata.name,
+        """Evaluate the model on the retrieval task.
+
+        Args:
+            model: Model to evaluate
+            split: Split to evaluate on
+            subsets_to_run: Optional list of subsets to evaluate on
+            encode_kwargs: Keyword arguments passed to the encoder
+            **kwargs: Additional keyword arguments passed to the evaluator
+
+        Returns:
+            Dictionary mapping subsets to their evaluation scores
+        """
+        if not self.data_loaded:
+            self.load_data()
+        # TODO: convert all tasks directly https://github.com/embeddings-benchmark/mteb/issues/2030
+        self.convert_v1_dataset_format_to_v2()
+
+        return super().evaluate(
+            model,
+            split,
+            subsets_to_run,
             encode_kwargs=encode_kwargs,
             **kwargs,
         )
 
-        scores = {}
-        hf_subsets = self.hf_subsets
-        if subsets_to_run is not None:
-            hf_subsets = [s for s in hf_subsets if s in subsets_to_run]
-
-        for hf_subset in hf_subsets:
-            logger.info(f"Subset: {hf_subset}")
-
-            if hf_subset == "default" and "default" not in self.corpus:
-                corpus = self.corpus[split]
-                queries = self.queries[split]
-                relevant_docs = self.relevant_docs[split]
-                top_ranked = self.top_ranked[split] if self.top_ranked else None
-                instructions = self.instructions[split] if self.instructions else None
-            else:
-                corpus = self.corpus[hf_subset][split]
-                queries = self.queries[hf_subset][split]
-                relevant_docs = self.relevant_docs[hf_subset][split]
-                top_ranked = (
-                    self.top_ranked[hf_subset][split] if self.top_ranked else None
-                )
-                instructions = (
-                    self.instructions[hf_subset][split] if self.instructions else None
-                )
-
-            scores[hf_subset] = self._evaluate_subset(
-                retriever,
-                corpus,
-                queries,
-                relevant_docs,
-                hf_subset,
-                top_ranked,
-                instructions,
-                **kwargs,
-            )
-        return scores
-
     def _evaluate_subset(
         self,
-        retriever: RetrievalEvaluator,
-        corpus: dict[str, dict[str, str]],
-        queries: dict[str, str],
-        relevant_docs: dict[str, dict[str, int]],
+        model: Encoder,
+        data_split: DatasetDict | Dataset,
+        encode_kwargs: dict[str, Any],
+        hf_split: str,
         hf_subset: str,
-        top_ranked: dict[str, list[str]] | None = None,
-        instructions: dict[str, str] | None = None,
+        # retrieval specific args
         save_predictions: bool = False,
         export_errors: bool = False,
         save_qrels: bool = False,
         output_folder: str = "results",
         results: dict[str, dict[str, float]] | None = None,
-        top_k: int | None = None,
         **kwargs,
     ) -> ScoresDict:
-        """Evaluate the retrieval task for a given subset of the dataset.
+        """Evaluate a model on a specific subset of the data.
 
         Args:
-            retriever: Evaluation object
-            corpus: Corpus to evaluate on
-            queries: Queries to evaluate on
-            relevant_docs: Relevant documents for the queries
-            hf_subset: Subset of the dataset
-            top_ranked: Top ranked documents (used for reranking)
-            instructions: Instructions for the queries (used for InstructRetrieval/Reranking)
-            save_predictions: Whether to save the predictions
+            model: Model to evaluate
+            data_split: Data split to evaluate on
+            encode_kwargs: Keyword arguments passed to the encoder
+            hf_split: Split to evaluate on
+            hf_subset: Subset to evaluate on
+            save_predictions: Whether to save predictions
             export_errors: Whether to export errors
             save_qrels: Whether to save the qrels
             output_folder: Folder to save the results
             results: Results from retrieval from previous run
-            top_k: Top k documents to consider
-            **kwargs: kwargs
+            **kwargs: Additional keyword arguments passed to the evaluator
 
         Returns:
-            ScoresDict: Evaluation scores
+            Dictionary of evaluation scores
         """
+        retriever = RetrievalEvaluator(
+            corpus=data_split["corpus"],
+            queries=data_split["queries"],
+            task_metadata=self.metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            instructions=data_split["instructions"],
+            top_ranked=data_split["top_ranked"],
+            **kwargs,
+        )
+
         if not results:
-            # perform the retrieval here
             start_time = time()
             results = retriever(
-                corpus,
-                queries,
-                instructions=instructions,
-                top_ranked=top_ranked,
+                model,
+                encode_kwargs=encode_kwargs,
                 **kwargs,
             )
             end_time = time()
-            logger.info(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
+            logger.debug(f"Time taken to retrieve: {end_time - start_time:.2f} seconds")
 
         if save_predictions or export_errors or save_qrels:
             output_folder = Path(output_folder)
-            if not os.path.isdir(output_folder):
-                os.makedirs(output_folder)
+            if not output_folder.exists():
+                output_folder.mkdir(parents=True)
 
         if save_predictions:
-            if top_k is not None:
+            if self.top_k is not None:
                 for qid in list(results.keys()):
                     doc_ids = set(
                         sorted(
                             results[qid], key=lambda x: results[qid][x], reverse=True
-                        )[:top_k]
+                        )[: self.top_k]
                     )
                     results[qid] = {
                         k: v for k, v in results[qid].items() if k in doc_ids
@@ -320,37 +348,32 @@ class AbsTaskRetrieval(AbsTask):
             with open(
                 output_folder / f"{self.metadata.name}_{hf_subset}_qrels.json", "w"
             ) as f:
-                json.dump(relevant_docs, f)
+                json.dump(data_split["relevant_docs"], f)
 
-        ndcg, _map, recall, precision, naucs, task_scores = retriever.evaluate(
-            relevant_docs,
-            results,
-            retriever.k_values,
-            ignore_identical_ids=self.ignore_identical_ids,
-            task_name=self.metadata.name,
-        )
-
-        mrr, naucs_mrr = retriever.evaluate_custom(
-            relevant_docs, results, retriever.k_values, "mrr"
+        ndcg, _map, recall, precision, naucs, task_scores, mrr, naucs_mrr = (
+            retriever.evaluate(
+                data_split["relevant_docs"],
+                results,
+                retriever.k_values,
+                ignore_identical_ids=self.ignore_identical_ids,
+            )
         )
         scores = make_score_dict(
             ndcg, _map, recall, precision, mrr, naucs, naucs_mrr, task_scores
         )
-        self._add_main_score(scores)
 
         if export_errors:
             errors = {}
 
-            top_k = top_k or 1
-            if not save_predictions and top_k == 1:
+            if not save_predictions:
                 for qid in results.keys():
                     doc_scores = results[qid]
                     sorted_docs = sorted(
                         doc_scores.items(), key=lambda x: x[1], reverse=True
-                    )[:top_k]
+                    )[:1]
                     results[qid] = dict(sorted_docs)
             for qid, retrieved_docs in results.items():
-                expected_docs = relevant_docs[qid]
+                expected_docs = data_split["relevant_docs"][qid]
                 false_positives = [
                     doc for doc in retrieved_docs if doc not in expected_docs
                 ]
@@ -362,11 +385,10 @@ class AbsTaskRetrieval(AbsTask):
                         "false_positives": false_positives,
                         "false_negatives": false_negatives,
                     }
-
             errors_save_path = (
                 output_folder / f"{self.metadata.name}_{hf_subset}_errors.json"
             )
-            with open(errors_save_path, "w") as f:
+            with errors_save_path.open("w") as f:
                 json.dump(errors, f)
 
         return scores
@@ -374,23 +396,14 @@ class AbsTaskRetrieval(AbsTask):
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
     ) -> RetrievalDescriptiveStatistics:
-        top_ranked = None
-        instructions = None
-        if hf_subset and hf_subset in self.queries:
-            # BrightRetrieval has different splits for different subsets of the corpus.
-            if (
-                self.corpus.get(hf_subset, None) is None
-                or self.corpus[hf_subset].get(split, None) is None
-            ):
-                return {}
-
-            queries = self.queries[hf_subset][split]
-            corpus = self.corpus[hf_subset][split]
-            relevant_docs = self.relevant_docs[hf_subset][split]
-            if self.instructions is not None:
-                instructions = self.instructions[hf_subset][split]
-            if self.top_ranked is not None:
-                top_ranked = self.top_ranked[hf_subset][split]
+        self.convert_v1_dataset_format_to_v2()
+        if hf_subset and hf_subset in self.dataset:
+            split_data = self.dataset[hf_subset][split]
+            queries = split_data["queries"]
+            corpus = split_data["corpus"]
+            relevant_docs = split_data["relevant_docs"]
+            instructions = split_data["instructions"]
+            top_ranked = split_data["top_ranked"]
         elif compute_overall:
             queries = {}
             corpus = {}
@@ -398,35 +411,34 @@ class AbsTaskRetrieval(AbsTask):
             instructions = {}
             top_ranked = {}
             for hf_subset in self.metadata.eval_langs:
-                # BrightRetrieval has different splits for different subsets of the corpus.
-                if (
-                    self.corpus.get(hf_subset, None) is None
-                    or self.corpus[hf_subset].get(split, None) is None
-                ):
-                    continue
-                queries.update(process_docs(self.queries, hf_subset, split))
-                corpus.update(process_docs(self.corpus, hf_subset, split))
+                split_data = self.dataset[hf_subset][split]
+                queries.update(process_docs(split_data["queries"], hf_subset, split))
+                corpus.update(process_docs(split_data["corpus"], hf_subset, split))
                 relevant_docs.update(
-                    process_relevant_docs(self.relevant_docs, hf_subset, split)
+                    process_relevant_docs(split_data["relevant_docs"], hf_subset, split)
                 )
-                if self.instructions is not None:
+                if (
+                    "instructions" in split_data
+                    and split_data["instructions"] is not None
+                ):
                     instructions.update(
-                        process_docs(self.instructions, hf_subset, split)
+                        process_docs(split_data["instructions"], hf_subset, split)
                     )
-                if self.top_ranked is not None:
-                    top_ranked.update(process_docs(self.top_ranked, hf_subset, split))
+                if "top_ranked" in split_data and split_data["top_ranked"] is not None:
+                    top_ranked.update(
+                        process_docs(split_data["top_ranked"], hf_subset, split)
+                    )
         else:
-            if "default" in self.queries and split != "default":
+            if "default" in self.dataset and split != "default":
                 return self._calculate_metrics_from_split(
                     split=split, hf_subset="default"
                 )
-            queries = self.queries[split]
-            corpus = self.corpus[split]
-            relevant_docs = self.relevant_docs[split]
-            if self.instructions is not None:
-                instructions = self.instructions[split]
-            if self.top_ranked is not None:
-                top_ranked = self.top_ranked[split]
+            split_data = self.dataset["default"][split]
+            queries = split_data["queries"]
+            corpus = split_data["corpus"]
+            relevant_docs = split_data["relevant_docs"]
+            instructions = split_data["instructions"]
+            top_ranked = split_data["top_ranked"]
 
         query_len = calculate_queries_length(queries)
         doc_len = calculate_corpus_length(corpus)
@@ -447,7 +459,7 @@ class AbsTaskRetrieval(AbsTask):
         )
         qrels_per_doc = num_qrels_non_zero / len(relevant_docs) if num_queries else 0
 
-        if self.instructions is not None:
+        if instructions is not None and len(instructions) > 0:
             instructions_len = [
                 len(instruction) for instruction in instructions.values()
             ]
@@ -463,7 +475,7 @@ class AbsTaskRetrieval(AbsTask):
             max_instruction_length = None
             unique_instructions = None
 
-        if self.top_ranked is not None and num_queries:
+        if top_ranked is not None and num_queries and len(top_ranked) > 0:
             top_ranked_per_query = [len(docs) for docs in top_ranked.values()]
             num_top_ranked = len(top_ranked_per_query)
             min_top_ranked_per_query = min(top_ranked_per_query)
@@ -522,110 +534,70 @@ class AbsTaskRetrieval(AbsTask):
 
         def push_section(
             data: dict[str, dict[Any, Any]],
+            column: str,
             suffix: str,
             converter: Callable[[Any, Any], dict[str, Any]],
         ) -> None:
             sections = {}
-            for split, items in data.items():
+            for split in data.keys():
+                # skip empty instructions and top ranked
+                if column not in data[split] or data[split][column] is None:
+                    continue
                 sections[split] = Dataset.from_list(
-                    [converter(idx, item) for idx, item in items.items()]
+                    [converter(idx, item) for idx, item in data[split][column].items()]
                 )
-            DatasetDict(sections).push_to_hub(repo_name, suffix)
+            if len(sections) > 0:
+                DatasetDict(sections).push_to_hub(repo_name, suffix)
 
-        if self.metadata.is_multilingual:
-            for lang in self.queries:
-                logger.info(f"Converting {lang} of {self.metadata.name}")
-                push_section(
-                    self.queries[lang],
-                    f"{lang}-queries",
-                    lambda idx, text: {"_id": idx, "text": text},
-                )
-                push_section(
-                    self.corpus[lang],
-                    f"{lang}-corpus",
-                    lambda idx, text: {
-                        "_id": idx,
-                        "text": format_text_field(text),
-                        "title": "",
-                    },
-                )
-                # Handle relevant_docs separately since one entry expands to multiple records.
-                relevant_sections = {}
-                for split, queries in self.relevant_docs[lang].items():
-                    entries = []
-                    for query_id, docs in queries.items():
-                        for doc_id, score in docs.items():
-                            entries.append(
-                                {
-                                    "query-id": query_id,
-                                    "corpus-id": doc_id,
-                                    "score": score,
-                                }
-                            )
-                    relevant_sections[split] = Dataset.from_list(entries)
-                DatasetDict(relevant_sections).push_to_hub(repo_name, f"{lang}-qrels")
-
-                if self.instructions:
-                    push_section(
-                        self.instructions[lang],
-                        f"{lang}-instruction",
-                        lambda idx, text: {"query-id": idx, "instruction": text},
-                    )
-                if self.top_ranked:
-                    push_section(
-                        self.top_ranked[lang],
-                        f"{lang}-top_ranked",
-                        lambda idx, docs: {"query-id": idx, "corpus-ids": docs},
-                    )
-        else:
-            # For non-multilingual cases, flatten the structure if a "default" key exists.
-            if "default" in self.queries:
-                self.queries = self.queries["default"]
-                self.corpus = self.corpus["default"]
-                self.relevant_docs = self.relevant_docs["default"]
-                if self.instructions:
-                    self.instructions = self.instructions["default"]
-                if self.top_ranked:
-                    self.top_ranked = self.top_ranked["default"]
-
+        for subset in self.dataset:
+            logger.info(f"Converting {subset} of {self.metadata.name}")
             push_section(
-                self.queries,
+                self.dataset[subset],
                 "queries",
+                f"{subset}-queries" if subset != "default" else "queries",
                 lambda idx, text: {"_id": idx, "text": text},
             )
             push_section(
-                self.corpus,
+                self.dataset[subset],
                 "corpus",
+                f"{subset}-corpus" if subset != "default" else "corpus",
                 lambda idx, text: {
                     "_id": idx,
                     "text": format_text_field(text),
                     "title": text.get("title", "") if isinstance(text, dict) else "",
                 },
             )
-            # Process relevant_docs with flattening.
+            # Handle relevant_docs separately since one entry expands to multiple records.
             relevant_sections = {}
-            for split, queries in self.relevant_docs.items():
+            for split, values in self.dataset[subset].items():
+                relecant_docs = values["relevant_docs"]
                 entries = []
-                for query_id, docs in queries.items():
+                for query_id, docs in relecant_docs.items():
                     for doc_id, score in docs.items():
                         entries.append(
-                            {"query-id": query_id, "corpus-id": doc_id, "score": score}
+                            {
+                                "query-id": query_id,
+                                "corpus-id": doc_id,
+                                "score": score,
+                            }
                         )
                 relevant_sections[split] = Dataset.from_list(entries)
-            DatasetDict(relevant_sections).push_to_hub(repo_name, "default")
+            DatasetDict(relevant_sections).push_to_hub(
+                repo_name, f"{subset}-qrels" if subset != "default" else "qrels"
+            )
 
-            if self.instructions:
-                push_section(
-                    self.instructions,
-                    "instruction",
-                    lambda idx, text: {"query-id": idx, "instruction": text},
-                )
-            if self.top_ranked:
-                push_section(
-                    self.top_ranked,
-                    "top_ranked",
-                    lambda idx, docs: {"query-id": idx, "corpus-ids": docs},
-                )
+            push_section(
+                self.dataset[subset],
+                "instructions",
+                f"{subset}-instruction" if subset != "default" else "instruction",
+                lambda idx, text: {"query-id": idx, "instruction": text},
+            )
+            push_section(
+                self.dataset[subset],
+                "top_ranked",
+                f"{subset}-top_ranked" if subset != "default" else "top_ranked",
+                lambda idx, docs: {"query-id": idx, "corpus-ids": docs},
+            )
 
 
 def calculate_queries_length(queries: dict[str, str]) -> list[int] | None:
@@ -657,22 +629,20 @@ def calculate_corpus_length(
 
 
 def process_docs(
-    collection: dict[str, dict[str, dict[str, str] | str]], hf_subset: str, split: str
+    collection: dict[str, dict[str, str] | str], hf_subset: str, split: str
 ) -> dict[str, str]:
     """Collections can contain overlapping ids in different splits. Prepend split to avoid this"""
-    return {
-        f"{split}_{hf_subset}_{k}": v for k, v in collection[hf_subset][split].items()
-    }
+    return {f"{split}_{hf_subset}_{k}": v for k, v in collection.items()}
 
 
 def process_relevant_docs(
-    collection: dict[str, dict[str, dict[str, dict[str, int]]]],
+    collection: dict[str, dict[str, int]],
     hf_subset: str,
     split: str,
 ) -> dict[str, dict[str, int]]:
     """Collections can contain overlapping ids in different splits. Prepend split to avoid this"""
     return_collection = {}
-    for query_id, relevant in collection[hf_subset][split].items():
+    for query_id, relevant in collection.items():
         return_collection[f"{split}_{hf_subset}_{query_id}"] = {
             f"{split}_{hf_subset}_{doc_id}": value for doc_id, value in relevant.items()
         }

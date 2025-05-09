@@ -1,15 +1,16 @@
 from __future__ import annotations
 
-from functools import partial
 from typing import Any
 
 import numpy as np
 import torch
 import tqdm
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import PromptType
+from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
-from mteb.models.wrapper import Wrapper
+from mteb.models.abs_encoder import AbsEncoder
+from mteb.types import Array, BatchedInput, PromptType
 
 supported_languages = [
     "afr-Latn",
@@ -125,19 +126,19 @@ supported_languages = [
 
 
 # Implementation follows https://github.com/KennethEnevoldsen/scandinavian-embedding-benchmark/blob/main/src/seb/registered_models/cohere_models.py
-class CohereTextEmbeddingModel(Wrapper):
+class CohereTextEmbeddingModel(AbsEncoder):
     def __init__(
         self,
         model_name: str,
+        revision: str,
         sep: str = " ",
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ) -> None:
-        self.model_name = model_name
+        self.model_name = model_name.lstrip("Cohere/Cohere-")
         self.sep = sep
-        self.model_prompts = (
-            self.validate_task_to_prompt_name(model_prompts) if model_prompts else None
-        )
+        self.model_prompts = model_prompts
+        self.validate_task_to_prompt_name()
 
     def _embed(
         self,
@@ -180,13 +181,15 @@ class CohereTextEmbeddingModel(Wrapper):
 
     def encode(
         self,
-        sentences: list[str],
+        inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
-        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+    ) -> Array:
+        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         cohere_task_type = self.model_prompts.get(prompt_name)
 
         if cohere_task_type is None:
@@ -198,9 +201,10 @@ class CohereTextEmbeddingModel(Wrapper):
             if "show_progress_bar" not in kwargs
             else kwargs.pop("show_progress_bar")
         )
+        inputs = [text for batch in inputs for text in batch["text"]]
 
         return self._embed(
-            sentences,
+            inputs,
             cohere_task_type=cohere_task_type,
             show_progress_bar=show_progress_bar,
         )
@@ -215,9 +219,8 @@ model_prompts = {
 }
 
 cohere_mult_3 = ModelMeta(
-    loader=partial(  # type: ignore
-        CohereTextEmbeddingModel,
-        model_name="embed-multilingual-v3.0",
+    loader=CohereTextEmbeddingModel,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     name="Cohere/Cohere-embed-multilingual-v3.0",
@@ -240,9 +243,8 @@ cohere_mult_3 = ModelMeta(
 )
 
 cohere_eng_3 = ModelMeta(
-    loader=partial(  # type: ignore
-        CohereTextEmbeddingModel,
-        model_name="embed-english-v3.0",
+    loader=CohereTextEmbeddingModel,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     name="Cohere/Cohere-embed-english-v3.0",
@@ -265,9 +267,8 @@ cohere_eng_3 = ModelMeta(
 )
 
 cohere_mult_light_3 = ModelMeta(
-    loader=partial(
-        CohereTextEmbeddingModel,
-        model_name="embed-multilingual-light-v3.0",
+    loader=CohereTextEmbeddingModel,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     name="Cohere/Cohere-embed-multilingual-light-v3.0",
@@ -290,9 +291,8 @@ cohere_mult_light_3 = ModelMeta(
 )
 
 cohere_eng_light_3 = ModelMeta(
-    loader=partial(
-        CohereTextEmbeddingModel,
-        model_name="embed-english-light-v3.0",
+    loader=CohereTextEmbeddingModel,
+    loader_kwargs=dict(
         model_prompts=model_prompts,
     ),
     name="Cohere/Cohere-embed-english-light-v3.0",

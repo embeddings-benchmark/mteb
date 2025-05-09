@@ -1,17 +1,17 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class KorSarcasmClassification(AbsTaskClassification):
+class KorSarcasmClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="KorSarcasmClassification",
         description="""
         The Korean Sarcasm Dataset was created to detect sarcasm in text, which can significantly alter the original
         meaning of a sentence. 9319 tweets were collected from Twitter and labeled for sarcasm or not_sarcasm. These
         tweets were gathered by querying for: irony sarcastic, and
-        sarcasm. 
+        sarcasm.
         The dataset was created by gathering HTML data from Twitter. Queries for hashtags that include sarcasm
         and variants of it were used to return tweets. It was preprocessed by removing the keyword
         hashtag, urls and mentions of the user to preserve anonymity.
@@ -22,7 +22,7 @@ class KorSarcasmClassification(AbsTaskClassification):
         },
         reference="https://github.com/SpellOnYou/korean-sarcasm",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["kor-Hang"],
@@ -34,16 +34,16 @@ class KorSarcasmClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{kim2019kocasm,
-            author = {Kim, Jiwon and Cho, Won Ik},
-            title = {Kocasm: Korean Automatic Sarcasm Detection},
-            year = {2019},
-            publisher = {GitHub},
-            journal = {GitHub repository},
-            howpublished = {https://github.com/SpellOnYou/korean-sarcasm}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{kim2019kocasm,
+  author = {Kim, Jiwon and Cho, Won Ik},
+  howpublished = {https://github.com/SpellOnYou/korean-sarcasm},
+  journal = {GitHub repository},
+  publisher = {GitHub},
+  title = {Kocasm: Korean Automatic Sarcasm Detection},
+  year = {2019},
+}
+""",
     )
 
     def dataset_transform(self):

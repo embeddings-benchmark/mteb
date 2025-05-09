@@ -1,27 +1,25 @@
 from __future__ import annotations
 
-from functools import partial
-
 from mteb.model_meta import (
     ModelMeta,
     ScoringFunction,
-    sentence_transformers_loader,
 )
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 GRANITE_LANGUAGES = [
-    "ara_Latn",
-    "ces_Latn",
-    "deu_Latn",
-    "eng_Latn",
-    "spa_Latn",
-    "fra_Latn",
-    "ita_Latn",
-    "jpn_Latn",
-    "kor_Latn",
-    "nld_Latn",
-    "por_Latn",
-    "zho_Hant",
-    "zho_Hans",
+    "ara-Latn",
+    "ces-Latn",
+    "deu-Latn",
+    "eng-Latn",
+    "spa-Latn",
+    "fra-Latn",
+    "ita-Latn",
+    "jpn-Latn",
+    "kor-Latn",
+    "nld-Latn",
+    "por-Latn",
+    "zho-Hant",
+    "zho-Hans",
 ]
 
 granite_training_data = {
@@ -89,11 +87,7 @@ granite_training_data = {
 }
 
 granite_107m_multilingual = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="ibm-granite/granite-embedding-107m-multilingual",
-        revision="47db56afe692f731540413c67dd818ff492277e7",
-    ),
+    loader=sentence_transformers_loader,
     name="ibm-granite/granite-embedding-107m-multilingual",
     languages=GRANITE_LANGUAGES,
     open_weights=True,
@@ -116,11 +110,7 @@ granite_107m_multilingual = ModelMeta(
 )
 
 granite_278m_multilingual = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="ibm-granite/granite-embedding-278m-multilingual",
-        revision="84e3546b88b0cb69f8078608a1df558020bcbf1f",
-    ),
+    loader=sentence_transformers_loader,
     name="ibm-granite/granite-embedding-278m-multilingual",
     languages=GRANITE_LANGUAGES,
     open_weights=True,
@@ -143,13 +133,9 @@ granite_278m_multilingual = ModelMeta(
 )
 
 granite_30m_english = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="ibm-granite/granite-embedding-30m-english",
-        revision="eddbb57470f896b5f8e2bfcb823d8f0e2d2024a5",
-    ),
+    loader=sentence_transformers_loader,
     name="ibm-granite/granite-embedding-30m-english",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="eddbb57470f896b5f8e2bfcb823d8f0e2d2024a5",
     release_date="2024-12-18",
@@ -170,13 +156,9 @@ granite_30m_english = ModelMeta(
 )
 
 granite_125m_english = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="ibm-granite/granite-embedding-125m-english",
-        revision="e48d3a5b47eaa18e3fe07d4676e187fd80f32730",
-    ),
+    loader=sentence_transformers_loader,
     name="ibm-granite/granite-embedding-125m-english",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="e48d3a5b47eaa18e3fe07d4676e187fd80f32730",
     release_date="2024-12-18",

@@ -31,25 +31,27 @@ class FQuADRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{dhoffschmidt-etal-2020-fquad,
-    title = "{FQ}u{AD}: {F}rench Question Answering Dataset",
-    author = "d{'}Hoffschmidt, Martin  and
-      Belblidia, Wacim  and
-      Heinrich, Quentin  and
-      Brendl{\'e}, Tom  and
-      Vidal, Maxime",
-    editor = "Cohn, Trevor  and
-      He, Yulan  and
-      Liu, Yang",
-    booktitle = "Findings of the Association for Computational Linguistics: EMNLP 2020",
-    month = nov,
-    year = "2020",
-    address = "Online",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/2020.findings-emnlp.107",
-    doi = "10.18653/v1/2020.findings-emnlp.107",
-    pages = "1193--1208",
-}""",
+        bibtex_citation=r"""
+@inproceedings{dhoffschmidt-etal-2020-fquad,
+  address = {Online},
+  author = {d{'}Hoffschmidt, Martin  and
+Belblidia, Wacim  and
+Heinrich, Quentin  and
+Brendl{\'e}, Tom  and
+Vidal, Maxime},
+  booktitle = {Findings of the Association for Computational Linguistics: EMNLP 2020},
+  doi = {10.18653/v1/2020.findings-emnlp.107},
+  editor = {Cohn, Trevor  and
+He, Yulan  and
+Liu, Yang},
+  month = nov,
+  pages = {1193--1208},
+  publisher = {Association for Computational Linguistics},
+  title = {{FQ}u{AD}: {F}rench Question Answering Dataset},
+  url = {https://aclanthology.org/2020.findings-emnlp.107},
+  year = {2020},
+}
+""",
     )
 
     def load_data(self, **kwargs):

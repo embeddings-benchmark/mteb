@@ -2,21 +2,35 @@ from __future__ import annotations
 
 import pytest
 
+from mteb import TaskMetadata
 from mteb.evaluation.evaluators import RetrievalEvaluator
-from mteb.models import SentenceTransformerWrapper
-from tests.test_benchmark.mock_models import MockNumpyEncoder
+from tests.test_benchmark.mock_tasks import general_args
 
 TOL = 0.0001
 
 
 class TestRetrievalEvaluator:
+    metadata = TaskMetadata(
+        type="Retrieval",
+        name="MockRetrievalTask",
+        main_score="ndcg_at_10",
+        **general_args,
+    )
+
     def setup_method(self):
         """Setup any state tied to the execution of the given method in a class.
 
         setup_method is invoked for every test method of a class.
         """
         self.evaluator = RetrievalEvaluator(
-            SentenceTransformerWrapper(MockNumpyEncoder()),
+            corpus=None,
+            queries=None,
+            task_metadata=self.metadata,
+            hf_split=None,
+            hf_subset=None,
+            instructions=None,
+            top_ranked=None,
+            qid=None,
         )
 
     @pytest.mark.parametrize(
@@ -73,7 +87,7 @@ class TestRetrievalEvaluator:
             ignore_identical_ids=ignore_identical_ids,
         )
 
-        ndcg, _map, recall, precision, nauc, task_specific = output
+        ndcg, _map, recall, precision, nauc, task_specific, mrr, nauc_mrr = output
 
         assert ndcg == expected_metrics["ndcg"]
         assert _map == expected_metrics["map"]
@@ -118,19 +132,21 @@ class TestRetrievalEvaluator:
             "4": {"0": 0.5, "1": 0.4, "2": 0.5},
         }
 
-        _, _, _, _, naucs, _ = self.evaluator.evaluate(
+        (
+            _,
+            _,
+            _,
+            _,
+            naucs,
+            _,
+            _,
+            _,
+        ) = self.evaluator.evaluate(
             relevant_docs,
             results,
             [1, 2, 3],
             ignore_identical_ids=ignore_identical_ids,
         )
-
-        print(
-            naucs["nAUC_NDCG@3_max"],
-            naucs["nAUC_NDCG@3_std"],
-            naucs["nAUC_NDCG@3_diff1"],
-        )
-
         aucs = ["nAUC_NDCG@3_max", "nAUC_NDCG@3_std", "nAUC_NDCG@3_diff1"]
         for auc in aucs:
             assert naucs[auc] == pytest.approx(expected_naucs[auc], TOL)

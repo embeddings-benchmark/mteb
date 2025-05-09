@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class CyrillicTurkicLangClassification(AbsTaskClassification):
+class CyrillicTurkicLangClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="CyrillicTurkicLangClassification",
         description="Cyrillic dataset of 8 Turkic languages spoken in Russia and former USSR",
@@ -14,7 +14,7 @@ class CyrillicTurkicLangClassification(AbsTaskClassification):
         },
         reference="https://huggingface.co/datasets/tatiana-merz/cyrillic_turkic_langs",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=[
@@ -36,14 +36,14 @@ class CyrillicTurkicLangClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @inproceedings{goldhahn2012building,
-        title={Building Large Monolingual Dictionaries at the Leipzig Corpora Collection: From 100 to 200 Languages},
-        author={Goldhahn, Dirk and Eckart, Thomas and Quasthoff, Uwe},
-        booktitle={Proceedings of the Eighth International Conference on Language Resources and Evaluation (LREC'12)},
-        year={2012}
-        }
-        """,
+        bibtex_citation=r"""
+@inproceedings{goldhahn2012building,
+  author = {Goldhahn, Dirk and Eckart, Thomas and Quasthoff, Uwe},
+  booktitle = {Proceedings of the Eighth International Conference on Language Resources and Evaluation (LREC'12)},
+  title = {Building Large Monolingual Dictionaries at the Leipzig Corpora Collection: From 100 to 200 Languages},
+  year = {2012},
+}
+""",
     )
 
     def dataset_transform(self):

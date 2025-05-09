@@ -28,24 +28,26 @@ class NorQuadRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{ivanova-etal-2023-norquad,
-    title = "{N}or{Q}u{AD}: {N}orwegian Question Answering Dataset",
-    author = "Ivanova, Sardana  and
-      Andreassen, Fredrik  and
-      Jentoft, Matias  and
-      Wold, Sondre  and
-      {\O}vrelid, Lilja",
-    editor = {Alum{\"a}e, Tanel  and
-      Fishel, Mark},
-    booktitle = "Proceedings of the 24th Nordic Conference on Computational Linguistics (NoDaLiDa)",
-    month = may,
-    year = "2023",
-    address = "T{\'o}rshavn, Faroe Islands",
-    publisher = "University of Tartu Library",
-    url = "https://aclanthology.org/2023.nodalida-1.17",
-    pages = "159--168",
-    abstract = "In this paper we present NorQuAD: the first Norwegian question answering dataset for machine reading comprehension. The dataset consists of 4,752 manually created question-answer pairs. We here detail the data collection procedure and present statistics of the dataset. We also benchmark several multilingual and Norwegian monolingual language models on the dataset and compare them against human performance. The dataset will be made freely available.",
-}""",
+        bibtex_citation=r"""
+@inproceedings{ivanova-etal-2023-norquad,
+  abstract = {In this paper we present NorQuAD: the first Norwegian question answering dataset for machine reading comprehension. The dataset consists of 4,752 manually created question-answer pairs. We here detail the data collection procedure and present statistics of the dataset. We also benchmark several multilingual and Norwegian monolingual language models on the dataset and compare them against human performance. The dataset will be made freely available.},
+  address = {T{\'o}rshavn, Faroe Islands},
+  author = {Ivanova, Sardana  and
+Andreassen, Fredrik  and
+Jentoft, Matias  and
+Wold, Sondre  and
+{\O}vrelid, Lilja},
+  booktitle = {Proceedings of the 24th Nordic Conference on Computational Linguistics (NoDaLiDa)},
+  editor = {Alum{\"a}e, Tanel  and
+Fishel, Mark},
+  month = may,
+  pages = {159--168},
+  publisher = {University of Tartu Library},
+  title = {{N}or{Q}u{AD}: {N}orwegian Question Answering Dataset},
+  url = {https://aclanthology.org/2023.nodalida-1.17},
+  year = {2023},
+}
+""",
         prompt={
             "query": "Given a question in Norwegian, retrieve the answer from Wikipedia articles"
         },

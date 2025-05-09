@@ -7,34 +7,37 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 import tqdm
+from torch.utils.data import DataLoader
 from transformers import AutoModel, AutoTokenizer
 
-from mteb.encoder_interface import Encoder, PromptType
+from mteb.abstasks import TaskMetadata
+from mteb.encoder_interface import Encoder
 from mteb.model_meta import (
     ModelMeta,
     ScoringFunction,
 )
-from mteb.models.wrapper import Wrapper
+from mteb.models.abs_encoder import AbsEncoder
+from mteb.requires_package import requires_package
+from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
 
-class RepLLaMAWrapper(Wrapper):
+class RepLLaMAModel(AbsEncoder):
     def __init__(
         self,
-        base_model_name_or_path: str,
         peft_model_name_or_path: str,
+        *,
+        base_model_name_or_path: str,
         torch_dtype: torch.dtype,
         device_map: str,
         model_prompts: dict[str, str] | None = None,
         **kwargs,
     ):
-        try:
-            from peft import PeftModel
-        except ImportError:
-            raise ImportError(
-                "To use the RepLLaMA based models `peft` is required. Please install it with `pip install 'mteb[peft]'`."
-            )
+        requires_package(
+            self, "peft", peft_model_name_or_path, "pip install 'mteb[peft]'"
+        )
+        from peft import PeftModel
 
         self.base_model = AutoModel.from_pretrained(
             base_model_name_or_path,
@@ -83,16 +86,19 @@ class RepLLaMAWrapper(Wrapper):
 
     def encode(
         self,
-        sentences: list[str],
+        inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
-        **kwargs,
-    ) -> np.ndarray:
+        **kwargs: Any,
+    ) -> Array:
         batch_size = 16 if "batch_size" not in kwargs else kwargs.pop("batch_size")
         all_embeddings = []
-        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
         prompt = self.model_prompts.get(prompt_name)
+        sentences = [text for batch in inputs for text in batch["text"]]
 
         if prompt:
             if prompt_type == "queries":
@@ -126,7 +132,7 @@ class RepLLaMAWrapper(Wrapper):
         return np.concatenate(all_embeddings, axis=0)
 
 
-def _loader(wrapper: type[RepLLaMAWrapper], **kwargs) -> Callable[..., Encoder]:
+def _loader(wrapper: type[RepLLaMAModel], **kwargs) -> Callable[..., Encoder]:
     _kwargs = kwargs
 
     def loader_inner(**kwargs: Any) -> Encoder:
@@ -142,7 +148,7 @@ model_prompts = {
 
 REPLLAMA_CITATION = """
 @article{rankllama,
-      title={Fine-Tuning LLaMA for Multi-Stage Text Retrieval}, 
+      title={Fine-Tuning LLaMA for Multi-Stage Text Retrieval},
       author={Xueguang Ma and Liang Wang and Nan Yang and Furu Wei and Jimmy Lin},
       year={2023},
       journal={arXiv:2310.08319},
@@ -150,16 +156,15 @@ REPLLAMA_CITATION = """
 """
 
 repllama_llama2_original = ModelMeta(
-    loader=_loader(
-        RepLLaMAWrapper,
+    loader=RepLLaMAModel,  # type: ignore
+    loader_kwargs=dict(
         base_model_name_or_path="meta-llama/Llama-2-7b-hf",
-        peft_model_name_or_path="castorini/repllama-v1-7b-lora-passage",
         device_map="auto",
         torch_dtype=torch.bfloat16,
         model_prompts=model_prompts,
     ),
     name="castorini/repllama-v1-7b-lora-passage",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="01c7f73d771dfac7d292323805ebc428287df4f9-6097554dfe6e7d93e92f55010b678bcca1e233a8",  # base-peft revision
     release_date="2023-10-11",
@@ -183,16 +188,15 @@ repllama_llama2_original = ModelMeta(
 
 
 repllama_llama2_reproduced = ModelMeta(
-    loader=_loader(
-        RepLLaMAWrapper,
+    loader=RepLLaMAModel,  # type: ignore
+    loader_kwargs=dict(
         base_model_name_or_path="meta-llama/Llama-2-7b-hf",
-        peft_model_name_or_path="samaya-ai/RepLLaMA-reproduced",
         device_map="auto",
         torch_dtype=torch.bfloat16,
         model_prompts=model_prompts,
     ),
     name="samaya-ai/RepLLaMA-reproduced",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="01c7f73d771dfac7d292323805ebc428287df4f9-ad5c1d0938a1e02954bcafb4d811ba2f34052e71",  # base-peft revision
     release_date="2024-09-15",

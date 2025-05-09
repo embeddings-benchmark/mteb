@@ -1,6 +1,6 @@
 # CLI
 
-<!-- 
+<!--
 We essentially just need to make this cli.py's docstring -- figure out a way to do this automatically
 
 We can then extend it to be more detailed going forward. Ideally adding some documentation on the different arguments

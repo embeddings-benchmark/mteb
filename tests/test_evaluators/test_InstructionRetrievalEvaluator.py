@@ -1,8 +1,6 @@
 from __future__ import annotations
 
 from mteb.evaluation.evaluators import RetrievalEvaluator, utils
-from mteb.models import SentenceTransformerWrapper
-from tests.test_benchmark.mock_models import MockNumpyEncoder
 
 
 class TestInstructionMetricsEvaluation:
@@ -13,7 +11,14 @@ class TestInstructionMetricsEvaluation:
         """
         # checks that it loads
         self.evaluator = RetrievalEvaluator(
-            SentenceTransformerWrapper(MockNumpyEncoder()), task_name="test"
+            corpus=None,
+            queries=None,
+            task_metadata=None,
+            hf_split=None,
+            hf_subset=None,
+            instructions=None,
+            top_ranked=None,
+            qid=None,
         )
 
     def test_p_mrr(self):

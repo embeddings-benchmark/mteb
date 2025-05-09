@@ -3,29 +3,30 @@ from __future__ import annotations
 import json
 import logging
 from collections.abc import Mapping
-from datetime import date
 from pathlib import Path
-from typing import Annotated, Any, Union
+from typing import Any, Union
 
+from huggingface_hub import (
+    DatasetCard,
+    DatasetCardData,
+    constants,
+    file_exists,
+    repo_exists,
+)
 from pydantic import (
-    AnyUrl,
     BaseModel,
-    BeforeValidator,
     ConfigDict,
-    TypeAdapter,
     field_validator,
 )
 from typing_extensions import Literal, TypedDict
 
-from ..encoder_interface import PromptType
-from ..languages import (
+import mteb
+from mteb.custom_validators import LICENSES, MODALITIES, STR_DATE, STR_URL
+from mteb.languages import (
     ISO_LANGUAGE_SCRIPT,
-    ISO_TO_LANGUAGE,
-    ISO_TO_SCRIPT,
-    path_to_lang_codes,
-    path_to_lang_scripts,
+    check_language_code,
 )
-from ..modalities import MODALITIES
+from mteb.types import PromptType
 
 TASK_SUBTYPE = Literal[
     "Article retrieval",
@@ -60,6 +61,8 @@ TASK_SUBTYPE = Literal[
     "Activity recognition",
     "Tumor detection",
     "Duplicate Detection",
+    "Rendered semantic textual similarity",
+    "Intent classification",
 ]
 
 TASK_DOMAIN = Literal[
@@ -86,6 +89,7 @@ TASK_DOMAIN = Literal[
     "Programming",
     "Chemistry",
     "Financial",
+    "Entertainment",
 ]
 
 SAMPLE_CREATION_METHOD = Literal[
@@ -101,20 +105,22 @@ SAMPLE_CREATION_METHOD = Literal[
     "multiple",
 ]
 
-
 MIEB_TASK_TYPE = (
     "Any2AnyMultiChoice",
     "Any2AnyRetrieval",
-    "Any2TextMutipleChoice",
+    "Any2AnyMultilingualRetrieval",
+    "VisionCentricQA",
     "ImageClustering",
     "ImageClassification",
     "ImageMultilabelClassification",
-    "ImageTextPairClassification",
-    "VisualSTS",
+    "DocumentUnderstanding",
+    "VisualSTS(eng)",
+    "VisualSTS(multi)",
     "ZeroShotClassification",
+    "Compositionality",
 )
 
-_task_types = (
+_TASK_TYPE = (
     "BitextMining",
     "Classification",
     "MultilabelClassification",
@@ -126,14 +132,16 @@ _task_types = (
     "Summarization",
     "InstructionRetrieval",
     "InstructionReranking",
-    "Speed",
 ) + MIEB_TASK_TYPE
 
-TASK_TYPE = Literal[_task_types]
+TASK_TYPE = Literal[_TASK_TYPE]
+
 
 TASK_CATEGORY = Literal[
     "t2t",
+    "t2c",  # text-to-category
     "i2i",  # image-to-image
+    "i2c",  # image-to-category
     "i2t",  # image-to-text
     "t2i",  # text-to-image
     "it2t",  # image+text-to-text
@@ -151,69 +159,11 @@ ANNOTATOR_TYPE = Literal[
     "LM-generated and reviewed",  # reviewed by humans
 ]
 
-http_url_adapter = TypeAdapter(AnyUrl)
-STR_URL = Annotated[
-    str, BeforeValidator(lambda value: str(http_url_adapter.validate_python(value)))
-]  # Allows the type to be a string, but ensures that the string is a URL
-
-pastdate_adapter = TypeAdapter(date)
-STR_DATE = Annotated[
-    str, BeforeValidator(lambda value: str(pastdate_adapter.validate_python(value)))
-]  # Allows the type to be a string, but ensures that the string is a valid date
-
 SPLIT_NAME = str
 HFSubset = str
 LANGUAGES = Union[
     list[ISO_LANGUAGE_SCRIPT], Mapping[HFSubset, list[ISO_LANGUAGE_SCRIPT]]
 ]
-
-PROGRAMMING_LANGS = [
-    "python",
-    "javascript",
-    "typescript",
-    "go",
-    "ruby",
-    "java",
-    "php",
-    "c",
-    "c++",
-    "rust",
-    "swift",
-    "scala",
-    "shell",
-    "sql",
-]
-
-LICENSES = (  # this list can be extended as needed
-    Literal[  # we use lowercase for the licenses similar to the huggingface datasets
-        "not specified",  # or none found
-        "mit",
-        "cc-by-2.0",
-        "cc-by-3.0",
-        "cc-by-4.0",
-        "cc-by-sa-3.0",
-        "cc-by-sa-4.0",
-        "cc-by-nc-4.0",
-        "cc-by-nc-sa-3.0",
-        "cc-by-nc-sa-4.0",
-        "cc-by-nc-nd-4.0",
-        "cc-by-nd-4.0",
-        "openrail",
-        "openrail++",
-        "odc-by",
-        "afl-3.0",
-        "apache-2.0",
-        "cc-by-nd-2.1-jp",
-        "cc0-1.0",
-        "bsd-3-clause",
-        "gpl-3.0",
-        "lgpl-3.0",
-        "cdla-sharing-1.0",
-        "mpl-2.0",
-        "msr-la-nc",
-        "multiple",
-    ]
-)
 
 METRIC_NAME = str
 METRIC_VALUE = Union[int, float, dict[str, Any]]
@@ -235,6 +185,81 @@ class DescriptiveStatistics(TypedDict):
     """Class for descriptive statistics."""
 
     pass
+
+
+class TextStatistics(TypedDict):
+    """Class for descriptive statistics for texts.
+
+    Attributes:
+        min_text_length: Minimum length of text
+        average_text_length: Average length of text
+        max_text_length: Maximum length of text
+        unique_texts: Number of unique texts
+    """
+
+    min_text_length: int
+    average_text_length: float
+    max_text_length: int
+    unique_texts: int
+
+
+class ImageStatistics(TypedDict):
+    """Class for descriptive statistics for images.
+
+    Attributes:
+        min_image_width: Minimum width of images
+        average_image_width: Average width of images
+        max_image_width: Maximum width of images
+
+        min_image_height: Minimum height of images
+        average_image_height: Average height of images
+        max_image_height: Maximum height of images
+    """
+
+    min_image_width: float
+    average_image_width: float
+    max_image_width: float
+
+    min_image_height: float
+    average_image_height: float
+    max_image_height: float
+
+
+class LabelStatistics(TypedDict):
+    """Class for descriptive statistics for texts.
+
+    Attributes:
+        min_labels_per_text: Minimum number of labels per text
+        average_label_per_text: Average number of labels per text
+        max_labels_per_text: Maximum number of labels per text
+
+        unique_labels: Number of unique labels
+        labels: dict of label frequencies
+    """
+
+    min_labels_per_text: int
+    average_label_per_text: float
+    max_labels_per_text: int
+
+    unique_labels: int
+    labels: dict[str, dict[str, int]]
+
+
+class ScoreStatistics(TypedDict):
+    """Class for descriptive statistics for texts.
+
+    Attributes:
+        min_labels_per_text: Minimum number of labels per text
+        average_label_per_text: Average number of labels per text
+        max_labels_per_text: Maximum number of labels per text
+
+        unique_labels: Number of unique labels
+        labels: dict of label frequencies
+    """
+
+    min_score: int
+    avg_score: float
+    max_score: int
 
 
 logger = logging.getLogger(__name__)
@@ -287,6 +312,7 @@ class TaskMetadata(BaseModel):
             "machine-translated and localized".
         prompt: The prompt used for the task. Can be a string or a dictionary containing the query and passage prompts.
         bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available.
+        adapted_from: Datasets adapted (translated, sampled from, etc.) from other datasets.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -315,6 +341,7 @@ class TaskMetadata(BaseModel):
 
     sample_creation: SAMPLE_CREATION_METHOD | None = None
     bibtex_citation: str | None = None
+    adapted_from: list[str] | None = None
 
     def validate_metadata(self) -> None:
         self.dataset_path_is_specified(self.dataset)
@@ -373,30 +400,10 @@ class TaskMetadata(BaseModel):
         if isinstance(eval_langs, dict):
             for langs in eval_langs.values():
                 for code in langs:
-                    self._check_language_code(code)
+                    check_language_code(code)
         else:
             for code in eval_langs:
-                self._check_language_code(code)
-
-    @staticmethod
-    def _check_language_code(code):
-        """This method checks that the language code (e.g. "eng-Latn") is valid."""
-        lang, script = code.split("-")
-        if script == "Code":
-            if lang in PROGRAMMING_LANGS:
-                return  # override for code
-            else:
-                raise ValueError(
-                    f"Programming language {lang} is not a valid programming language."
-                )
-        if lang not in ISO_TO_LANGUAGE:
-            raise ValueError(
-                f"Invalid language code: {lang}, you can find valid ISO 639-3 codes in {path_to_lang_codes}"
-            )
-        if script not in ISO_TO_SCRIPT:
-            raise ValueError(
-                f"Invalid script code: {script}, you can find valid ISO 15924 codes in {path_to_lang_scripts}"
-            )
+                check_language_code(code)
 
     @property
     def bcp47_codes(self) -> list[ISO_LANGUAGE_SCRIPT]:
@@ -438,7 +445,7 @@ class TaskMetadata(BaseModel):
         return all(
             getattr(self, field_name) is not None
             for field_name in self.model_fields
-            if field_name != "prompt"
+            if field_name not in ["prompt", "adapted_from"]
         )
 
     @property
@@ -514,3 +521,255 @@ class TaskMetadata(BaseModel):
     @property
     def revision(self) -> str:
         return self.dataset["revision"]
+
+    def create_dataset_card_data(
+        self, existing_dataset_card_data: DatasetCardData | None = None
+    ) -> tuple[DatasetCardData, dict[str, str]]:
+        """Create a DatasetCardData object from the task metadata.
+
+        Args:
+            existing_dataset_card_data: The existing DatasetCardData object to update. If None, a new object will be created.
+
+        Returns:
+            A DatasetCardData object with the metadata for the task with kwargs to card
+        """
+        # todo figure out datasets with multiple types. E. g. one dataset as classification and ZeroShotClassification
+        # to get full list of task_types execute:
+        # requests.post("https://huggingface.co/api/validate-yaml", json={
+        #     "content": "---\ntask_categories: ['test']\n---", "repoType": "dataset"
+        # }).json()
+        # or look at https://huggingface.co/tasks
+        mteb_task_type_to_datasets = {
+            # Text
+            "BitextMining": ["translation"],
+            "Classification": ["text-classification"],
+            "MultilabelClassification": ["text-classification"],
+            "Clustering": ["text-classification"],
+            "PairClassification": ["text-classification"],
+            "Reranking": ["text-ranking"],
+            "Retrieval": ["text-retrieval"],
+            "STS": ["sentence-similarity"],
+            "Summarization": ["summarization"],
+            "InstructionRetrieval": ["text-retrieval"],
+            "InstructionReranking": ["text-ranking"],
+            # Image
+            "Any2AnyMultiChoice": ["visual-question-answering"],
+            "Any2AnyRetrieval": ["visual-document-retrieval"],
+            "Any2AnyMultilingualRetrieval": ["visual-document-retrieval"],
+            "VisionCentricQA": ["visual-question-answering"],
+            "ImageClustering": ["image-clustering"],
+            "ImageClassification": ["image-classification"],
+            "ImageMultilabelClassification": ["image-classification"],
+            "DocumentUnderstanding": ["visual-document-retrieval"],
+            "VisualSTS(eng)": ["other"],
+            "VisualSTS(multi)": ["other"],
+            "ZeroShotClassification": ["zero-shot-image-classification"],
+            "Compositionality": ["other"],
+        }
+
+        dataset_type = mteb_task_type_to_datasets[self.type]
+
+        if self.category in ["i2i", "it2i", "i2it", "it2it"]:
+            dataset_type.append("image-to-image")
+        if self.category in ["i2t", "t2i", "it2t", "it2i", "t2it", "i2it", "it2it"]:
+            dataset_type.extend(["image-to-text", "text-to-image"])
+
+        if self.is_multilingual:
+            languages: list[str] = []
+            for val in list(self.eval_langs.values()):
+                languages.extend(val)
+        else:
+            languages: list[str] = self.eval_langs
+
+        languages = sorted({lang.split("-")[0] for lang in languages})
+
+        multilinguality = "multilingual" if self.is_multilingual else "monolingual"
+        if self.sample_creation and "translated" in self.sample_creation:
+            multilinguality = "translated"
+
+        if self.adapted_from is not None:
+            source_datasets = [
+                task.metadata.dataset["path"]
+                for task in mteb.get_tasks(self.adapted_from)
+            ]
+        else:
+            source_datasets = None
+
+        tags = ["mteb"] + self.modalities
+
+        descriptive_stats = self.descriptive_stats
+        if descriptive_stats is not None:
+            for split, split_stat in descriptive_stats.items():
+                if len(split_stat.get("hf_subset_descriptive_stats", {})) > 10:
+                    split_stat.pop("hf_subset_descriptive_stats", {})
+            descriptive_stats = json.dumps(descriptive_stats, indent=4)
+
+        if existing_dataset_card_data is None:
+            existing_dataset_card_data = DatasetCardData()
+
+        dataset_license = self.license
+        if dataset_license:
+            license_mapping = {"not specified": "unknown", "msr-la-nc": "other"}
+            dataset_license = license_mapping.get(
+                dataset_license,
+                "other" if dataset_license.startswith("http") else dataset_license,
+            )
+
+        dataset_card_data_params = existing_dataset_card_data.to_dict()
+        # override the existing values
+        dataset_card_data_params.update(
+            dict(
+                language=languages,
+                license=dataset_license,
+                annotations_creators=[self.annotations_creators]
+                if self.annotations_creators
+                else None,
+                multilinguality=multilinguality,
+                source_datasets=source_datasets,
+                task_categories=dataset_type,
+                task_ids=self._map_subtypes_to_hf(),
+                tags=tags,
+            )
+        )
+
+        return (
+            DatasetCardData(**dataset_card_data_params),
+            # parameters for readme generation
+            dict(
+                citation=self.bibtex_citation,
+                dataset_description=self.description,
+                dataset_reference=self.reference,
+                descritptive_stats=descriptive_stats,
+                dataset_task_name=self.name,
+                category=self.category,
+                domains=", ".join(self.domains) if self.domains else None,
+            ),
+        )
+
+    def generate_dataset_card(
+        self, existing_dataset_card: DatasetCard | None = None
+    ) -> DatasetCard:
+        """Generates a dataset card for the task.
+
+        Args:
+            existing_dataset_card: The existing dataset card to update. If None, a new dataset card will be created.
+
+        Returns:
+            DatasetCard: The dataset card for the task.
+        """
+        path = Path(__file__).parent / "dataset_card_template.md"
+        existing_dataset_card_data = (
+            existing_dataset_card.data if existing_dataset_card else None
+        )
+        dataset_card_data, template_kwargs = self.create_dataset_card_data(
+            existing_dataset_card_data
+        )
+        dataset_card = DatasetCard.from_template(
+            card_data=dataset_card_data,
+            template_path=str(path),
+            **template_kwargs,
+        )
+        return dataset_card
+
+    def push_dataset_card_to_hub(self, repo_name: str) -> None:
+        """Pushes the dataset card to the huggingface hub.
+
+        Args:
+            repo_name: The name of the repository to push the dataset card to.
+        """
+        dataset_card = None
+        if repo_exists(
+            repo_name, repo_type=constants.REPO_TYPE_DATASET
+        ) and file_exists(
+            repo_name, constants.REPOCARD_NAME, repo_type=constants.REPO_TYPE_DATASET
+        ):
+            dataset_card = DatasetCard.load(repo_name)
+        dataset_card = self.generate_dataset_card(dataset_card)
+        dataset_card.push_to_hub(repo_name, commit_message="Add dataset card")
+
+    def _map_subtypes_to_hf(self) -> list[str]:
+        # to get full list of available task_ids execute
+        # requests.post("https://huggingface.co/api/validate-yaml", json={
+        #   "content": "---\ntask_ids: 'test'\n---",
+        #   "repoType": "dataset"
+        # })
+        mteb_to_hf_subtype = {
+            "Article retrieval": ["document-retrieval"],
+            "Conversational retrieval": ["conversational", "utterance-retrieval"],
+            "Dialect pairing": [],
+            "Dialog Systems": ["dialogue-modeling", "dialogue-generation"],
+            "Discourse coherence": [],
+            "Duplicate Image Retrieval": [],
+            "Language identification": ["language-identification"],
+            "Linguistic acceptability": ["acceptability-classification"],
+            "Political classification": [],
+            "Question answering": [
+                "multiple-choice-qa",
+            ],
+            "Sentiment/Hate speech": [
+                "sentiment-analysis",
+                "sentiment-scoring",
+                "sentiment-classification",
+                "hate-speech-detection",
+            ],
+            "Thematic clustering": [],
+            "Scientific Reranking": [],
+            "Claim verification": ["fact-checking", "fact-checking-retrieval"],
+            "Topic classification": ["topic-classification"],
+            "Code retrieval": [],
+            "False Friends": [],
+            "Cross-Lingual Semantic Discrimination": [],
+            "Textual Entailment": ["natural-language-inference"],
+            "Counterfactual Detection": [],
+            "Emotion classification": [],
+            "Reasoning as Retrieval": [],
+            "Rendered Texts Understanding": [],
+            "Image Text Retrieval": [],
+            "Object recognition": [],
+            "Scene recognition": [],
+            "Caption Pairing": ["image-captioning"],
+            "Emotion recognition": [],
+            "Textures recognition": [],
+            "Activity recognition": [],
+            "Tumor detection": [],
+            "Duplicate Detection": [],
+            "Rendered semantic textual similarity": [
+                "semantic-similarity-scoring",
+                "rendered semantic textual similarity",
+            ],
+            "Intent classification": [
+                "intent-classification",
+            ],
+        }
+        task_types_to_task_ids = {
+            # Text
+            "BitextMining": [],
+            "Classification": [],
+            "MultilabelClassification": ["multi-label-classification"],
+            "Clustering": [],
+            "PairClassification": ["semantic-similarity-classification"],
+            "Reranking": [],
+            "Retrieval": [],
+            "STS": ["semantic-similarity-scoring"],
+            "Summarization": [],
+            "InstructionRetrieval": [],
+            "InstructionReranking": [],
+            # Image
+            "Any2AnyMultiChoice": [],
+            "Any2AnyRetrieval": [],
+            "Any2AnyMultilingualRetrieval": [],
+            "VisionCentricQA": ["visual-question-answering"],
+            "ImageClustering": [],
+            "ImageClassification": [],
+            "ImageMultilabelClassification": [],
+            "DocumentUnderstanding": [],
+            "VisualSTS(eng)": [],
+            "VisualSTS(multi)": [],
+            "ZeroShotClassification": [],
+            "Compositionality": [],
+        }
+        subtypes = task_types_to_task_ids.get(self.type, [])
+        if self.task_subtypes:
+            for subtype in self.task_subtypes:
+                subtypes.extend(mteb_to_hf_subtype.get(subtype, []))
+        return subtypes

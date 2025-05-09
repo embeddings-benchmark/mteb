@@ -5,11 +5,37 @@ from typing import Any
 
 from datasets import Dataset
 
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics
+
 from ...encoder_interface import Encoder
 from ...evaluation.evaluators import ImageTextPairClassificationEvaluator
 from ..AbsTask import AbsTask, ScoresDict
 
 logger = logging.getLogger(__name__)
+
+
+class ImageTextPairClassificationDescriptiveStatistics(DescriptiveStatistics):
+    """Descriptive statistics for ImageTextPairClassification
+
+    Attributes:
+        num_samples: number of samples in the dataset.
+        num_images: number of images in the dataset.
+        num_texts: number of texts in the dataset.
+        num_unique_texts: number of unique texts in the dataset.
+
+        min_text_length: Minimum length of texts
+        average_text_length: Average length of texts
+        max_text_length: Maximum length of texts
+    """
+
+    num_samples: int
+    num_images: int
+    num_texts: int
+    num_unique_texts: int
+
+    min_text_length: int
+    average_text_length: float
+    max_text_length: int
 
 
 class AbsTaskImageTextPairClassification(AbsTask):
@@ -35,22 +61,65 @@ class AbsTaskImageTextPairClassification(AbsTask):
 
     def _calculate_metrics_from_split(
         self, split: str, hf_subset: str | None = None, compute_overall: bool = False
-    ):
-        pass
+    ) -> ImageTextPairClassificationDescriptiveStatistics:
+        if compute_overall:
+            # TODO: implement overall statistics
+            return {}
+        else:
+            dataset = (
+                self.dataset[split]
+                if hf_subset is None
+                else self.dataset[hf_subset][split]
+            )
+        num_samples = len(dataset)
+
+        if isinstance(self.images_column_names, str):
+            num_images = len(list(dataset[self.images_column_names]))
+        elif isinstance(self.images_column_names, list):
+            num_images = sum(
+                [len(dataset[img_column]) for img_column in self.images_column_names]
+            )
+
+        if isinstance(self.texts_column_names, str):
+            texts = list(dataset[self.texts_column_names])
+            unique_texts = set(texts)
+            text_lengths = [len(text) for text in texts]
+        elif isinstance(self.texts_column_names, list):
+            texts = [
+                text
+                for text_column in self.texts_column_names
+                for text in dataset[text_column]
+            ]
+            unique_texts = set(texts)
+            text_lengths = [len(text) for text in texts]
+
+        return ImageTextPairClassificationDescriptiveStatistics(
+            num_samples=num_samples,
+            num_images=num_images,
+            num_texts=len(texts),
+            num_unique_texts=len(unique_texts),
+            min_text_length=min(text_lengths),
+            average_text_length=sum(text_lengths) / len(text_lengths),
+            max_text_length=max(text_lengths),
+        )
 
     def _evaluate_subset(
         self,
         model: Encoder,
         dataset: Dataset,
         *,
-        encode_kwargs: dict[str, Any] = {},
+        hf_split: str,
+        hf_subset: str,
+        encode_kwargs: dict[str, Any],
         **kwargs,
     ) -> ScoresDict:
         evaluator = ImageTextPairClassificationEvaluator(
             dataset,
             images_column_names=self.images_column_names,
             texts_column_names=self.texts_column_names,
-            task_name=self.metadata.name,
+            task_metadata=self.metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
             **kwargs,
         )
         scores = evaluator(model, encode_kwargs=encode_kwargs)

@@ -9,14 +9,14 @@ import numpy as np
 from datasets import Dataset, DatasetDict
 from sklearn.base import ClassifierMixin, clone
 from sklearn.metrics import f1_score, label_ranking_average_precision_score
-from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
+from torch.utils.data import DataLoader
 
 from mteb.encoder_interface import Encoder
 
 from ..load_results.task_results import ScoresDict
-from .AbsTaskClassification import AbsTaskClassification
+from .AbsTaskAnyClassification import AbsTaskAnyClassification
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +41,7 @@ def evaluate_classifier(
     }
 
 
-class AbsTaskMultilabelClassification(AbsTaskClassification):
+class AbsTaskMultilabelClassification(AbsTaskAnyClassification):
     """Abstract class for multioutput classification tasks
     The similarity is computed between pairs and the results are ranked.
 
@@ -60,13 +60,14 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         self,
         model: Encoder,
         dataset: DatasetDict | Dataset,
-        eval_split_name: str,
         *,
-        encode_kwargs: dict[str, Any] = {},
+        hf_split: str,
+        hf_subset: str,
+        encode_kwargs: dict[str, Any],
         **kwargs: Any,
     ) -> ScoresDict:
         train_split = dataset[self.train_split]
-        eval_split = dataset[eval_split_name]
+        eval_split = dataset[hf_split]
 
         scores = []
         # Bootstrap sample indices from training set for each experiment
@@ -78,33 +79,39 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
             train_samples.append(sample_indices)
         # Encode all unique sentences at the indices
         unique_train_indices = list(set(itertools.chain.from_iterable(train_samples)))
-        unique_train_sentences = train_split.select(unique_train_indices)["text"]
+        unique_train_dataset = train_split.select(unique_train_indices)
 
         _unique_train_embeddings = model.encode(
-            unique_train_sentences,
-            task_name=self.metadata.name,
+            DataLoader(unique_train_dataset),
+            task_metadata=self.metadata,
+            hf_split=self.train_split,
+            hf_subset=hf_subset,
             **encode_kwargs,
         )
         unique_train_embeddings = dict(
             zip(unique_train_indices, _unique_train_embeddings)
         )
-        test_text = eval_split["text"]
-        binarizer = MultiLabelBinarizer()
-        y_test = binarizer.fit_transform(eval_split["label"])
         # Stratified subsampling of test set to 2000 examples.
+        test_dataset = eval_split
         try:
-            if len(test_text) > 2000:
-                test_text, _, y_test, _ = train_test_split(
-                    test_text, y_test, stratify=y_test, train_size=2000
+            if len(test_dataset) > 2000:
+                split_dataset = eval_split.train_test_split(
+                    test_size=2000, seed=42, stratify_by_column="label"
                 )
+                test_dataset = split_dataset["test"]
         except ValueError:
             logger.warning("Couldn't subsample, continuing with the entire test set.")
 
         X_test = model.encode(
-            test_text,
-            task_name=self.metadata.name,
+            DataLoader(test_dataset),
+            task_metadata=self.metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
             **encode_kwargs,
         )
+        binarizer = MultiLabelBinarizer()
+        y_test = binarizer.fit_transform(test_dataset["label"])
+
         for i_experiment, sample_indices in enumerate(train_samples):
             logger.info(
                 "=" * 10
@@ -131,7 +138,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         sample_indices = []
         if idxs is None:
             idxs = np.arange(len(y))
-        np.random.shuffle(idxs)
+        self.np_rng.shuffle(idxs)
         label_counter = defaultdict(int)
         for i in idxs:
             if any((label_counter[label] < samples_per_label) for label in y[i]):

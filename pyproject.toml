@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.34.29"
+version = "1.38.4"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -23,12 +23,12 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.9,<3.13"
 dependencies = [
     "datasets>=2.19.0",
     "numpy>=1.0.0,<3.0.0",
     "requests>=2.26.0",
-    "scikit_learn>=1.0.2",
+    "scikit-learn>=1.4.0",
     "scipy>=0.0.0",
     "sentence_transformers>=3.0.0",
     "typing-extensions>=4.5.0",
@@ -41,7 +41,6 @@ dependencies = [
     "eval_type_backport>=0.0.0",
     "polars>=0.20.22",
     "codecarbon>=2.0.0",
-    "torchvision>0.0.0",
 ]
 
 
@@ -54,13 +53,16 @@ homepage = "https://github.com/embeddings-benchmark/mteb"
 mteb = "mteb.cli:main"
 
 [project.optional-dependencies]
+image = ["torchvision>0.2.1"]
 dev = [
     "ruff==0.9.7", # locked so we don't get PRs which fail only due to a lint update
     "pytest>=8.3.4",
     "pytest-xdist>=3.6.1",
     "pytest-coverage>=0.0",
     "pytest-rerunfailures>=15.0",
-    "python-iso639>=2025.2.18" # used for tests/scripts/test_generate_model_meta.py
+    "python-iso639>=2025.2.18", # used for tests/scripts/test_generate_model_meta.py
+    "pre-commit>=4.1.0",
+    "bibtexparser>=1.4.3" # used for tests/test_citation_formatting.py
 ]
 docs = [
   "mkdocs>=1.6.1",
@@ -68,21 +70,31 @@ docs = [
   "mkdocstrings[python]>=0.18",
   "mkdocs-bibtex>=2.16.2",
 ]
-
-speedtask = ["GPUtil>=1.4.0", "psutil>=5.9.8"]
 peft = ["peft>=0.11.0"]
-leaderboard = ["gradio>=5.16.0,<6.0.0", "gradio_rangeslider>=0.0.8", "plotly>=5.24.0,<6.0.0", "cachetools>=5.2.0"]
-flagembedding = ["FlagEmbedding"]
+leaderboard = [
+    "gradio==5.27.1; python_version > '3.9'", # 3.10 is required for gradio
+    "gradio_rangeslider>=0.0.8",
+    "plotly>=5.24.0,<6.0.0",
+    "cachetools>=5.2.0",
+    "matplotlib>=3.9.4",
+]
+flagembedding = ["FlagEmbedding==1.3.4"]
 jina = ["einops>=0.8.0"]
 flash_attention = ["flash-attn>=2.6.3"]
 openai = ["openai>=1.41.0", "tiktoken>=0.8.0"]
 model2vec = ["model2vec>=0.3.0"]
-pylate = ["pylate>=1.1.4"]
+pylate = ["pylate>=1.1.6"]
 bm25s = ["bm25s>=0.2.6", "PyStemmer>=2.2.0.3"]
 gritlm = ["gritlm>=1.0.2"]
 xformers = ["xformers>=0.0.29"]
 blip2 = ["salesforce-lavis>=1.0.2"]
-
+voyageai = ["voyageai>=1.0.0,<2.0.0"]
+voyage_v = ["voyageai>1.0.0,<2.0.0", "tenacity>1.0.0,<2.0.0"]
+cohere = ["cohere==5.14.0"]
+vertexai = ["vertexai==1.71.1"]
+ll2vec = ["ll2vec==0.2.3"]
+timm = ["timm==1.0.15"]
+open_clip_torch = ["open_clip_torch==2.31.0"]
 
 [tool.coverage.report]
 
@@ -111,7 +123,7 @@ exclude = ["tests", "results"]
 
 [tool.setuptools.package-data]
 "*" = ["*.json"]
-"mteb.abstasks" = ["the_ugly_duckling.txt"]
+"mteb.abstasks" = ["dataset_card_template.md"]
 
 [tool.ruff]
 
@@ -120,17 +132,18 @@ target-version = "py39"
 
 [tool.ruff.lint]
 select = [
-    "F",  # pyflakes rules, 
+    "F",  # pyflakes rules,
     "I",  # sorting for imports
     "E",  # formatting for docs
     "D",  # formatting for docs
     "UP", # upgrade to latest syntax if possible
     "FA", # Future annotations
     "C4", # cleaner comprehensions
+    "NPY", # numpy
 ]
 
 
-ignore = ["E501",   # line too long 
+ignore = ["E501",   # line too long
         "E741",     # ambiguous variable name
         "F403",     # undefined import
         "D100",     # Missing docstring in public module
@@ -172,9 +185,9 @@ patch_types = ["fix", "perf"]
 
 [tool.pytest.ini_options]
 addopts = """
-            --reruns 3 
-            --only-rerun requests.exceptions.ReadTimeout 
-            --only-rerun huggingface_hub.errors.HfHubHTTPError 
+            --reruns 3
+            --only-rerun requests.exceptions.ReadTimeout
+            --only-rerun huggingface_hub.errors.HfHubHTTPError
             --only-rerun huggingface_hub.errors.LocalEntryNotFoundError
             --only-rerun FileNotFoundError
             --durations=5
@@ -187,3 +200,12 @@ addopts = """
 # FileNotFoundError -> HF Cache is broken:  https://github.com/embeddings-benchmark/mteb/actions/runs/13302915091/job/37147507251?pr=2029
 # --durations=5 -> Show the 5 slowest tests
 # --reruns-delay 10 -> Delay between reruns in seconds to avoid running into the same issue again
+
+markers = [
+    "test_datasets: marks tests that tests dataset availability",
+]
+
+[tool.uv]
+override-dependencies = [
+    "salesforce-lavis", # salesforce-lavis is not valid with sentence transformers >=3.0.0
+]

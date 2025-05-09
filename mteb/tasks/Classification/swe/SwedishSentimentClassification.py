@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class SwedishSentimentClassification(AbsTaskClassification):
+class SwedishSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SwedishSentimentClassification",
         description="Dataset of Swedish reviews scarped from various public available websites",
@@ -14,7 +14,7 @@ class SwedishSentimentClassification(AbsTaskClassification):
             "revision": "39e35f55d58338ebd602f8d83b52cfe027f5146a",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["validation", "test"],
         eval_langs=["swe-Latn"],

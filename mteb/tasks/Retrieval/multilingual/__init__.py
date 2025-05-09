@@ -24,31 +24,33 @@ from .NeuCLIR2023Retrieval import (
 )
 from .PublicHealthQARetrieval import PublicHealthQARetrieval
 from .StatcanDialogueDatasetRetrieval import StatcanDialogueDatasetRetrieval
+from .WebFAQRetrieval import WebFAQRetrieval
 from .WikipediaRetrievalMultilingual import WikipediaRetrievalMultilingual
 from .XMarketRetrieval import XMarket
 from .XPQARetrieval import XPQARetrieval
 from .XQuADRetrieval import XQuADRetrieval
 
 __all__ = [
-    "WikipediaRetrievalMultilingual",
-    "MintakaRetrieval",
-    "PublicHealthQARetrieval",
-    "CrossLingualSemanticDiscriminationWMT19",
-    "MultiLongDocRetrieval",
-    "MIRACLRetrieval",
-    "MIRACLRetrievalHardNegatives",
-    "NeuCLIR2022Retrieval",
-    "NeuCLIR2022RetrievalHardNegatives",
-    "StatcanDialogueDatasetRetrieval",
-    "IndicQARetrieval",
-    "NeuCLIR2023Retrieval",
-    "NeuCLIR2023RetrievalHardNegatives",
-    "CrossLingualSemanticDiscriminationWMT21",
-    "XMarket",
-    "XPQARetrieval",
     "BelebeleRetrieval",
     "CUREv1Retrieval",
+    "CrossLingualSemanticDiscriminationWMT19",
+    "CrossLingualSemanticDiscriminationWMT21",
+    "IndicQARetrieval",
+    "MIRACLRetrieval",
+    "MIRACLRetrievalHardNegatives",
     "MLQARetrieval",
-    "XQuADRetrieval",
+    "MintakaRetrieval",
     "MrTidyRetrieval",
+    "MultiLongDocRetrieval",
+    "NeuCLIR2022Retrieval",
+    "NeuCLIR2022RetrievalHardNegatives",
+    "NeuCLIR2023Retrieval",
+    "NeuCLIR2023RetrievalHardNegatives",
+    "PublicHealthQARetrieval",
+    "StatcanDialogueDatasetRetrieval",
+    "WebFAQRetrieval",
+    "WikipediaRetrievalMultilingual",
+    "XMarket",
+    "XPQARetrieval",
+    "XQuADRetrieval",
 ]

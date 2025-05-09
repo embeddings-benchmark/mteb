@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class KinopoiskClassification(AbsTaskClassification):
+class KinopoiskClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="KinopoiskClassification",
         dataset={
@@ -14,7 +14,7 @@ class KinopoiskClassification(AbsTaskClassification):
         description="Kinopoisk review sentiment classification",
         reference="https://www.dialog-21.ru/media/1226/blinovpd.pdf",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],
@@ -26,14 +26,16 @@ class KinopoiskClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{blinov2013research,
-        title={Research of lexical approach and machine learning methods for sentiment analysis},
-        author={Blinov, PD and Klekovkina, Maria and Kotelnikov, Eugeny and Pestov, Oleg},
-        journal={Computational Linguistics and Intellectual Technologies},
-        volume={2},
-        number={12},
-        pages={48--58},
-        year={2013}
-        }""",
+        bibtex_citation=r"""
+@article{blinov2013research,
+  author = {Blinov, PD and Klekovkina, Maria and Kotelnikov, Eugeny and Pestov, Oleg},
+  journal = {Computational Linguistics and Intellectual Technologies},
+  number = {12},
+  pages = {48--58},
+  title = {Research of lexical approach and machine learning methods for sentiment analysis},
+  volume = {2},
+  year = {2013},
+}
+""",
         prompt="Classify the sentiment expressed in the given movie review text",
     )

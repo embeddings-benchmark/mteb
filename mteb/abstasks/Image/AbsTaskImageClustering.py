@@ -6,12 +6,11 @@ from typing import Any
 
 from datasets import Dataset
 
-from mteb.abstasks.TaskMetadata import HFSubset
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset
 
 from ...encoder_interface import Encoder
 from ...evaluation.evaluators import ImageClusteringEvaluator
 from ..AbsTask import AbsTask, ScoresDict
-from ..TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -73,8 +72,7 @@ class AbsTaskImageClustering(AbsTask):
             imgs = self.dataset[hf_subset][split][self.image_column_name]
             labels = self.dataset[hf_subset][split][self.label_column_name]
         elif compute_overall:
-            imgs = []
-            labels = []
+            imgs, labels = [], []
             for hf_subset in self.metadata.eval_langs:
                 imgs.extend(self.dataset[hf_subset][split][self.image_column_name])
                 labels.extend(self.dataset[hf_subset][split][self.label_column_name])
@@ -88,7 +86,7 @@ class AbsTaskImageClustering(AbsTask):
 
         img_widths, img_heights = [], []
         for img in imgs:
-            width, height = img.size
+            width, height = img.size  # type: ignore
             img_heights.append(height)
             img_widths.append(width)
 
@@ -111,13 +109,18 @@ class AbsTaskImageClustering(AbsTask):
         model: Encoder,
         dataset: Dataset,
         *,
-        encode_kwargs: dict[str, Any] = {},
+        hf_split: str,
+        hf_subset: str,
+        encode_kwargs: dict[str, Any],
         **kwargs,
     ) -> ScoresDict:
         evaluator = ImageClusteringEvaluator(
-            dataset[self.image_column_name],
-            dataset[self.label_column_name],
-            task_name=self.metadata.name,
+            dataset,
+            image_column_name=self.image_column_name,
+            label_column_name=self.label_column_name,
+            task_metadata=self.metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
             **kwargs,
         )
         metrics = evaluator(model, encode_kwargs=encode_kwargs)

@@ -11,12 +11,13 @@ import sklearn
 import sklearn.cluster
 from datasets import Dataset, DatasetDict
 from sklearn.metrics.cluster import v_measure_score
+from torch.utils.data import DataLoader
 
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics
 from mteb.encoder_interface import Encoder
 
 from ..load_results.task_results import HFSubset
 from .AbsTask import AbsTask
-from .TaskMetadata import DescriptiveStatistics
 
 logger = logging.getLogger(__name__)
 
@@ -144,9 +145,11 @@ class AbsTaskClusteringFast(AbsTask):
     def _evaluate_subset(
         self,
         model: Encoder,
-        dataset: DatasetDict,
+        dataset: Dataset,
         *,
-        encode_kwargs: dict[str, Any] = {},
+        hf_split: str,
+        hf_subset: str,
+        encode_kwargs: dict[str, Any],
         **kwargs: Any,
     ) -> dict[str, float | dict[str, list[float]]]:
         if (
@@ -176,9 +179,14 @@ class AbsTaskClusteringFast(AbsTask):
             )
             downsampled_dataset = dataset.select(example_indices)  # type: ignore
 
+        downsampled_dataset = downsampled_dataset.rename_column(
+            original_column_name="sentences", new_column_name="text"
+        )
         embeddings = model.encode(
-            downsampled_dataset["sentences"],  # type: ignore
-            task_name=self.metadata.name,
+            DataLoader(downsampled_dataset),
+            task_metadata=self.metadata,
+            hf_subset=hf_subset,
+            hf_split=hf_split,
             **encode_kwargs,
         )
 

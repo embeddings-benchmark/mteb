@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class AngryTweetsClassification(AbsTaskClassification):
+class AngryTweetsClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="AngryTweetsClassification",
         dataset={
@@ -14,7 +14,7 @@ class AngryTweetsClassification(AbsTaskClassification):
         description="A sentiment dataset with 3 classes (positiv, negativ, neutral) for Danish tweets",
         reference="https://aclanthology.org/2021.nodalida-main.53/",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["dan-Latn"],
@@ -26,13 +26,15 @@ class AngryTweetsClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{pauli2021danlp,
-  title={DaNLP: An open-source toolkit for Danish Natural Language Processing},
-  author={Pauli, Amalie Brogaard and Barrett, Maria and Lacroix, Oph{\'e}lie and Hvingelby, Rasmus},
-  booktitle={Proceedings of the 23rd Nordic Conference on Computational Linguistics (NoDaLiDa)},
-  pages={460--466},
-  year={2021}
-}""",
+        bibtex_citation=r"""
+@inproceedings{pauli2021danlp,
+  author = {Pauli, Amalie Brogaard and Barrett, Maria and Lacroix, Oph{\'e}lie and Hvingelby, Rasmus},
+  booktitle = {Proceedings of the 23rd Nordic Conference on Computational Linguistics (NoDaLiDa)},
+  pages = {460--466},
+  title = {DaNLP: An open-source toolkit for Danish Natural Language Processing},
+  year = {2021},
+}
+""",
         prompt="Classify Danish tweets by sentiment. (positive, negative, neutral).",
     )
 

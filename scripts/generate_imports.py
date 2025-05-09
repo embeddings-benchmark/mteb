@@ -91,7 +91,7 @@ for root, dirs, files in os.walk(BASE_DIR, topdown=False):
                 import_lines.append(sub_import_line)
                 all_classes.extend(sub_all)
     # Deduplicate classes
-    all_classes = list(
+    all_classes = sorted(
         dict.fromkeys(all_classes)
     )  # preserves order while removing duplicates
 

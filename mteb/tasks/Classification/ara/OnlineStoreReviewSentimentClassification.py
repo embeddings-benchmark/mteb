@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
+class OnlineStoreReviewSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="OnlineStoreReviewSentimentClassification",
         dataset={
@@ -14,7 +14,7 @@ class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
         description="This dataset contains Arabic reviews of products from the SHEIN online store.",
         reference="https://huggingface.co/datasets/Ruqiya/Arabic_Reviews_of_SHEIN",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["ara-Arab"],

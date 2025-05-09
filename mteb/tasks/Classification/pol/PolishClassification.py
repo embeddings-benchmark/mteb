@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class CbdClassification(AbsTaskClassification):
+class CbdClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="CBD",
         description="Polish Tweets annotated for cyberbullying detection.",
@@ -14,7 +14,7 @@ class CbdClassification(AbsTaskClassification):
             "revision": "36ddb419bcffe6a5374c3891957912892916f28d",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
@@ -26,19 +26,21 @@ class CbdClassification(AbsTaskClassification):
         annotations_creators="human-annotated",  # guess
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@proceedings{ogr:kob:19:poleval,
-  editor    = {Maciej Ogrodniczuk and Łukasz Kobyliński},
-  title     = {{Proceedings of the PolEval 2019 Workshop}},
-  year      = {2019},
-  address   = {Warsaw, Poland},
+        bibtex_citation=r"""
+@proceedings{ogr:kob:19:poleval,
+  address = {Warsaw, Poland},
+  editor = {Maciej Ogrodniczuk and Łukasz Kobyliński},
+  isbn = {978-83-63159-28-3},
   publisher = {Institute of Computer Science, Polish Academy of Sciences},
-  url       = {http://2019.poleval.pl/files/poleval2019.pdf},
-  isbn      = "978-83-63159-28-3"}
-}""",
+  title = {{Proceedings of the PolEval 2019 Workshop}},
+  url = {http://2019.poleval.pl/files/poleval2019.pdf},
+  year = {2019},
+}
+""",
     )
 
 
-class PolEmo2InClassification(AbsTaskClassification):
+class PolEmo2InClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="PolEmo2.0-IN",
         description="A collection of Polish online reviews from four domains: medicine, hotels, products and "
@@ -49,7 +51,7 @@ class PolEmo2InClassification(AbsTaskClassification):
             "revision": "d90724373c70959f17d2331ad51fb60c71176b03",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
@@ -61,25 +63,27 @@ class PolEmo2InClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{kocon-etal-2019-multi,
-    title = "Multi-Level Sentiment Analysis of {P}ol{E}mo 2.0: Extended Corpus of Multi-Domain Consumer Reviews",
-    author = "Koco{\'n}, Jan  and
-      Mi{\l}kowski, Piotr  and
-      Za{\'s}ko-Zieli{\'n}ska, Monika",
-    booktitle = "Proceedings of the 23rd Conference on Computational Natural Language Learning (CoNLL)",
-    month = nov,
-    year = "2019",
-    address = "Hong Kong, China",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/K19-1092",
-    doi = "10.18653/v1/K19-1092",
-    pages = "980--991",
-    abstract = "In this article we present an extended version of PolEmo {--} a corpus of consumer reviews from 4 domains: medicine, hotels, products and school. Current version (PolEmo 2.0) contains 8,216 reviews having 57,466 sentences. Each text and sentence was manually annotated with sentiment in 2+1 scheme, which gives a total of 197,046 annotations. We obtained a high value of Positive Specific Agreement, which is 0.91 for texts and 0.88 for sentences. PolEmo 2.0 is publicly available under a Creative Commons copyright license. We explored recent deep learning approaches for the recognition of sentiment, such as Bi-directional Long Short-Term Memory (BiLSTM) and Bidirectional Encoder Representations from Transformers (BERT).",
-}""",
+        bibtex_citation=r"""
+@inproceedings{kocon-etal-2019-multi,
+  abstract = {In this article we present an extended version of PolEmo {--} a corpus of consumer reviews from 4 domains: medicine, hotels, products and school. Current version (PolEmo 2.0) contains 8,216 reviews having 57,466 sentences. Each text and sentence was manually annotated with sentiment in 2+1 scheme, which gives a total of 197,046 annotations. We obtained a high value of Positive Specific Agreement, which is 0.91 for texts and 0.88 for sentences. PolEmo 2.0 is publicly available under a Creative Commons copyright license. We explored recent deep learning approaches for the recognition of sentiment, such as Bi-directional Long Short-Term Memory (BiLSTM) and Bidirectional Encoder Representations from Transformers (BERT).},
+  address = {Hong Kong, China},
+  author = {Koco{\'n}, Jan  and
+Mi{\l}kowski, Piotr  and
+Za{\'s}ko-Zieli{\'n}ska, Monika},
+  booktitle = {Proceedings of the 23rd Conference on Computational Natural Language Learning (CoNLL)},
+  doi = {10.18653/v1/K19-1092},
+  month = nov,
+  pages = {980--991},
+  publisher = {Association for Computational Linguistics},
+  title = {Multi-Level Sentiment Analysis of {P}ol{E}mo 2.0: Extended Corpus of Multi-Domain Consumer Reviews},
+  url = {https://aclanthology.org/K19-1092},
+  year = {2019},
+}
+""",
     )
 
 
-class PolEmo2OutClassification(AbsTaskClassification):
+class PolEmo2OutClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="PolEmo2.0-OUT",
         description="A collection of Polish online reviews from four domains: medicine, hotels, products and "
@@ -91,7 +95,7 @@ class PolEmo2OutClassification(AbsTaskClassification):
             "revision": "6a21ab8716e255ab1867265f8b396105e8aa63d4",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
@@ -107,7 +111,7 @@ class PolEmo2OutClassification(AbsTaskClassification):
     )
 
 
-class AllegroReviewsClassification(AbsTaskClassification):
+class AllegroReviewsClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="AllegroReviews",
         description="A Polish dataset for sentiment classification on reviews from e-commerce marketplace Allegro.",
@@ -117,13 +121,13 @@ class AllegroReviewsClassification(AbsTaskClassification):
             "revision": "b89853e6de927b0e3bfa8ecc0e56fe4e02ceafc6",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
         main_score="accuracy",
         date=None,
-        domains=None,
+        domains=["Reviews"],
         task_subtypes=None,
         license=None,
         annotations_creators=None,
@@ -133,7 +137,7 @@ class AllegroReviewsClassification(AbsTaskClassification):
     )
 
 
-class PacClassification(AbsTaskClassification):
+class PacClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="PAC",
         description="Polish Paraphrase Corpus",
@@ -144,7 +148,7 @@ class PacClassification(AbsTaskClassification):
             "trust_remote_code": True,
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["pol-Latn"],
@@ -156,13 +160,15 @@ class PacClassification(AbsTaskClassification):
         annotations_creators=None,
         dialect=[],
         sample_creation=None,
-        bibtex_citation="""@misc{augustyniak2022waydesigningcompilinglepiszcze,
-      title={This is the way: designing and compiling LEPISZCZE, a comprehensive NLP benchmark for Polish}, 
-      author={Łukasz Augustyniak and Kamil Tagowski and Albert Sawczyn and Denis Janiak and Roman Bartusiak and Adrian Szymczak and Marcin Wątroba and Arkadiusz Janz and Piotr Szymański and Mikołaj Morzy and Tomasz Kajdanowicz and Maciej Piasecki},
-      year={2022},
-      eprint={2211.13112},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2211.13112}, 
-}""",
+        bibtex_citation=r"""
+@misc{augustyniak2022waydesigningcompilinglepiszcze,
+  archiveprefix = {arXiv},
+  author = {Łukasz Augustyniak and Kamil Tagowski and Albert Sawczyn and Denis Janiak and Roman Bartusiak and Adrian Szymczak and Marcin Wątroba and Arkadiusz Janz and Piotr Szymański and Mikołaj Morzy and Tomasz Kajdanowicz and Maciej Piasecki},
+  eprint = {2211.13112},
+  primaryclass = {cs.CL},
+  title = {This is the way: designing and compiling LEPISZCZE, a comprehensive NLP benchmark for Polish},
+  url = {https://arxiv.org/abs/2211.13112},
+  year = {2022},
+}
+""",
     )

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import sys
 from pathlib import Path
 
 import pytest
@@ -12,7 +11,6 @@ from mteb.abstasks import AbsTask
 from .mock_tasks import MockRetrievalTask
 
 
-@pytest.mark.skipif(sys.version_info < (3, 10), reason="Requires Python 3.10 or higher")
 @pytest.mark.parametrize("model", ["colbert-ir/colbertv2.0"])
 @pytest.mark.parametrize("task", [MockRetrievalTask()])
 def test_colbert_model_e2e(task: AbsTask, model: str, tmp_path: Path):

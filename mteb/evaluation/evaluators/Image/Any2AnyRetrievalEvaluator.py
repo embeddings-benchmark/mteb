@@ -1,10 +1,8 @@
 from __future__ import annotations
 
 import heapq
-import io
 import json
 import logging
-import math
 import os
 from collections import defaultdict
 from typing import Any
@@ -14,16 +12,15 @@ import pytrec_eval
 import torch
 from datasets import Dataset
 from PIL import Image
-from torch.utils.data import DataLoader
-from torchvision import transforms
 
-from mteb.encoder_interface import Encoder, PromptType
+from mteb.abstasks import TaskMetadata
+from mteb.create_dataloaders import create_image_dataloader
+from mteb.encoder_interface import Encoder
+from mteb.types import PromptType
 
 from ..Evaluator import Evaluator
 from ..utils import (
     confidence_scores,
-    cos_sim,
-    dot_score,
     download,
     hole,
     mrr,
@@ -36,60 +33,21 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_TRANSFORM = transforms.Compose([transforms.PILToTensor()])
-
-
-class ImageDataset(torch.utils.data.Dataset):
-    def __init__(self, hf_dataset, image_column_name: str = "image", transform=None):
-        self.dataset = hf_dataset
-        self.transform = transform
-        self.image_column_name = image_column_name
-
-    def __len__(self):
-        return len(self.dataset)
-
-    def __getitem__(self, idx):
-        image = self.dataset[idx][self.image_column_name]
-        if isinstance(image, bytes):
-            image = Image.open(io.BytesIO(image))
-        else:
-            # Assume the image is already in a usable format (e.g., PIL Image)
-            image = image
-        if image.mode != "RGB":
-            image = image.convert("RGB")
-        if self.transform is not None:
-            image = self.transform(image)
-        return image
-
-
-def custom_collate_fn(batch):
-    return batch
-
 
 # Adapted from https://github.com/beir-cellar/beir/blob/f062f038c4bfd19a8ca942a9910b1e0d218759d4/beir/retrieval/search/dense/exact_search.py#L12
 class Any2AnyDenseRetrievalExactSearch:
     def __init__(
         self,
         model: Encoder,
-        encode_kwargs: dict[str, Any] = {},
+        encode_kwargs: dict[str, Any],
         corpus_chunk_size: int = 20000,
         previous_results: str | None = None,
-        transform=DEFAULT_TRANSFORM,
         **kwargs: Any,
     ):
         # Model is class that provides get_text_embeddings() and get_image_embeddings()
         self.model = model
         self.encode_kwargs = encode_kwargs
-        self.transform = transform
 
-        if "batch_size" not in encode_kwargs:
-            encode_kwargs["batch_size"] = 128
-
-        self.score_functions = {"cos_sim": cos_sim, "dot": dot_score}
-        self.score_function_desc = {
-            "cos_sim": "Cosine Similarity",
-            "dot": "Dot Product",
-        }
         self.corpus_chunk_size = corpus_chunk_size
         self.previous_results = previous_results
         self.batch_size = encode_kwargs.get("batch_size")
@@ -107,68 +65,33 @@ class Any2AnyDenseRetrievalExactSearch:
         queries: Dataset,  # solve memoery issues
         top_k: int,
         score_function: str,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         return_sorted: bool = False,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
-        if score_function not in self.score_functions:
-            raise ValueError(
-                f"score function: {score_function} must be either (cos_sim) for cosine similarity or (dot) for dot product"
-            )
-
         logger.info("Encoding Queries.")
         query_ids = list(queries["id"])
         self.results = {qid: {} for qid in query_ids}
 
-        q_modality = queries[0]["modality"]
-
-        if q_modality == "text":
-            query_texts = queries["text"]
-            query_embeddings = self.model.get_text_embeddings(
-                texts=query_texts,
-                task_name=task_name,
-                prompt_type=PromptType.query,
-                **self.encode_kwargs,
-            )
-        else:
-            queries_dataset = ImageDataset(
-                queries, image_column_name="image", transform=self.transform
-            )
-            query_image_dataloader = DataLoader(
-                queries_dataset,
+        query_embeddings = self.model.encode(
+            create_image_dataloader(
+                queries,
+                image_column_name="image",
                 batch_size=self.encode_kwargs["batch_size"],
-                shuffle=False,
-                collate_fn=custom_collate_fn,
-                num_workers=min(math.floor(os.cpu_count() / 2), 16),
-            )
-            if q_modality == "image":
-                query_embeddings = self.model.get_image_embeddings(
-                    images=query_image_dataloader,
-                    task_name=task_name,
-                    prompt_type=PromptType.query,
-                    **self.encode_kwargs,
-                )
-            elif q_modality == "image,text":
-                query_texts = queries["text"]
-                query_embeddings = self.model.get_fused_embeddings(
-                    texts=query_texts,
-                    images=query_image_dataloader,
-                    task_name=task_name,
-                    prompt_type=PromptType.query,
-                    **self.encode_kwargs,
-                )
-            else:
-                raise ValueError(f"Unsupported modality: {q_modality}")
+            ),
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
+            prompt_type=PromptType.query,
+            **self.encode_kwargs,
+        )
 
         logger.info("Preparing Corpus...")
         corpus_ids = list(corpus["id"])
 
-        corpus_modality = corpus[0]["modality"]
-
         logger.info("Encoding Corpus in batches... Warning: This might take a while!")
-        logger.info(
-            f"Scoring Function: {self.score_function_desc[score_function]} ({score_function})"
-        )
 
         result_heaps = {qid: [] for qid in query_ids}
         for chunk_start in range(0, len(corpus), self.corpus_chunk_size):
@@ -179,47 +102,22 @@ class Any2AnyDenseRetrievalExactSearch:
             )
             chunk_ids = corpus_ids[chunk_start : chunk_start + self.corpus_chunk_size]
 
-            if corpus_modality == "text":
-                corpus_texts = chunk["text"]
-                sub_corpus_embeddings = self.model.get_text_embeddings(
-                    texts=corpus_texts,
-                    task_name=task_name,
-                    prompt_type=PromptType.passage,
-                    **self.encode_kwargs,
-                )
-            else:
-                corpus_dataset = ImageDataset(
-                    chunk, image_column_name="image", transform=self.transform
-                )
-                corpus_image_dataloader = DataLoader(
-                    corpus_dataset,
-                    batch_size=self.encode_kwargs["batch_size"],
-                    shuffle=False,
-                    collate_fn=custom_collate_fn,
-                    num_workers=min(math.floor(os.cpu_count() / 2), 16),
-                )
-                if corpus_modality == "image":
-                    sub_corpus_embeddings = self.model.get_image_embeddings(
-                        images=corpus_image_dataloader,
-                        task_name=task_name,
-                        prompt_type=PromptType.passage,
-                        **self.encode_kwargs,
-                    )
-                elif corpus_modality == "image,text":
-                    corpus_texts = chunk["text"]
-                    sub_corpus_embeddings = self.model.get_fused_embeddings(
-                        texts=corpus_texts,
-                        images=corpus_image_dataloader,
-                        task_name=task_name,
-                        prompt_type=PromptType.passage,
-                        **self.encode_kwargs,
-                    )
-                else:
-                    raise ValueError(f"Unsupported modality: {corpus_modality}")
-
-            cos_scores = self.score_functions[score_function](
-                query_embeddings, sub_corpus_embeddings
+            dataloader = create_image_dataloader(
+                chunk,
+                image_column_name="image",
+                batch_size=self.encode_kwargs["batch_size"],
             )
+
+            sub_corpus_embeddings = self.model.encode(
+                dataloader,
+                task_metadata=task_metadata,
+                hf_split=hf_split,
+                hf_subset=hf_subset,
+                prompt_type=PromptType.passage,
+                **self.encode_kwargs,
+            )
+
+            cos_scores = self.model.similarity(query_embeddings, sub_corpus_embeddings)
             cos_scores[torch.isnan(cos_scores)] = -1
 
             cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(
@@ -279,10 +177,10 @@ class Any2AnyRetrievalEvaluator(Evaluator):
     def __init__(
         self,
         retriever=None,
-        task_name: str | None = None,
         k_values: list[int] = [1, 3, 5, 10, 20, 100, 1000],
         score_function: str = "cos_sim",
-        encode_kwargs: dict[str, Any] = {},
+        *,
+        encode_kwargs: dict[str, Any],
         **kwargs,
     ):
         super().__init__(**kwargs)
@@ -295,12 +193,14 @@ class Any2AnyRetrievalEvaluator(Evaluator):
             max(k_values) if "top_k" not in kwargs else kwargs["top_k"]
         )  # can lower it if reranking
         self.score_function = score_function
-        self.task_name = task_name
 
     def __call__(
         self,
         corpus: dict[str, dict[str, str | Image.Image]],
         queries: dict[str, dict[str, str | Image.Image]],
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
     ) -> dict[str, dict[str, float]]:
         if not self.retriever:
             raise ValueError("Model/Technique has not been provided!")
@@ -310,7 +210,9 @@ class Any2AnyRetrievalEvaluator(Evaluator):
             queries,
             self.top_k,
             self.score_function,
-            task_name=self.task_name,
+            task_metadata=task_metadata,
+            hf_split=hf_split,
+            hf_subset=hf_subset,
         )
 
     @staticmethod
@@ -425,7 +327,7 @@ class Any2AnyRetrievalEvaluator(Evaluator):
         output_type: str = "all",
     ) -> tuple[dict[str, float]]:
         if metric.lower() in ["mrr", "mrr@k", "mrr_cut"]:
-            metric_scores = mrr(qrels, results, k_values, output_type)
+            metric_scores = mrr(qrels, results, k_values)
 
         elif metric.lower() in ["recall_cap", "r_cap", "r_cap@k"]:
             metric_scores = recall_cap(qrels, results, k_values, output_type)

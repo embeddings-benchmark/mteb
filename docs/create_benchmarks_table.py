@@ -3,8 +3,9 @@ from __future__ import annotations
 from collections import Counter
 from pathlib import Path
 
+from create_tasks_table import insert_tables
+
 import mteb
-from docs.create_tasks_table import insert_tables
 
 
 def benchmark_to_markdown_row(b: mteb.Benchmark) -> str:
@@ -21,18 +22,26 @@ def benchmark_to_markdown_row(b: mteb.Benchmark) -> str:
         if t.metadata.languages:
             agg_langs.update(t.languages)
 
+    # to not infinitely trigger ci
+    agg_domains = sorted(agg_domains)
+    agg_langs = sorted(agg_langs)
     langs = ",".join(list(agg_langs))
     domains = "[" + ", ".join(agg_domains) + "]" if agg_domains else ""
 
-    task_types = dict(Counter([t.metadata.type for t in b.tasks]))
+    task_types = ", ".join(
+        [
+            f"{name}: {val}"
+            for name, val in Counter([t.metadata.type for t in b.tasks]).items()
+        ]
+    )
 
-    return f"| {name_w_reference} | {n_tasks} | {task_types} | {domains} | {langs} |"
+    return f"| {name_w_reference} | {b.display_name if b.display_name else b.name} | {n_tasks} | {task_types} | {domains} | {langs} |"
 
 
 def create_benchmarks_table(benchmarks: list[mteb.Benchmark]) -> str:
     table = """
-| Name | # Tasks | Task Types | Domains | Languages |
-|------|---------|------------|---------|-----------|
+| Name | Leaderboard name | # Tasks | Task Types | Domains | Languages |
+|------|------------------|---------|------------|---------|-----------|
 """
     for benchmark in benchmarks:
         table += benchmark_to_markdown_row(benchmark) + "\n"

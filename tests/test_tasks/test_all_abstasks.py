@@ -3,16 +3,18 @@ from __future__ import annotations
 import logging
 from unittest.mock import Mock, patch
 
+import huggingface_hub
 import pytest
-import requests
 
 import mteb
 from mteb.abstasks import AbsTask
 from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
-from mteb.abstasks.AbsTaskSpeedTask import AbsTaskSpeedTask
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import AbsTaskAny2AnyMultiChoice
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.Image.AbsTaskImageTextPairClassification import (
+    AbsTaskImageTextPairClassification,
+)
 from mteb.overview import TASKS_REGISTRY, get_tasks
 
 from ..test_benchmark.task_grid import (
@@ -31,12 +33,21 @@ tasks = [
 ]
 
 
+datasets_not_available = [
+    "AfriSentiLangClassification",
+    "SNLHierarchicalClusteringP2P",
+    "SNLClustering",
+    "SNLHierarchicalClusteringS2S",
+    "SNLRetrieval",
+]
+
+
 dataset_revisions = list(
     {  # deduplicate as multiple tasks rely on the same dataset (save us at least 100 test cases)
         (t.metadata.dataset["path"], t.metadata.dataset["revision"])
         for t in mteb.get_tasks(exclude_superseded=False)
-        if not isinstance(t, (AbsTaskAggregate, AbsTaskSpeedTask))
-        and t.metadata.name != "AfriSentiLangClassification"
+        if not isinstance(t, AbsTaskAggregate)
+        and t.metadata.name not in datasets_not_available
         and t.metadata.name not in ALL_MOCK_TASKS
     }
 )
@@ -52,8 +63,8 @@ def test_load_data(
     if (
         isinstance(task, AbsTaskRetrieval)
         or isinstance(task, AbsTaskAny2AnyRetrieval)
-        or isinstance(task, AbsTaskSpeedTask)
         or isinstance(task, AbsTaskAny2AnyMultiChoice)
+        or isinstance(task, AbsTaskImageTextPairClassification)
         or task.metadata.is_multilingual
     ):
         pytest.skip()
@@ -66,6 +77,7 @@ def test_load_data(
             mock_dataset_transform.assert_called_once()
 
 
+@pytest.mark.test_datasets
 @pytest.mark.flaky(
     reruns=3,
     reruns_delay=5,
@@ -74,13 +86,16 @@ def test_load_data(
 )
 @pytest.mark.parametrize("dataset_revision", dataset_revisions)
 def test_dataset_on_hf(dataset_revision: tuple[str, str]):
-    dataset, revision = dataset_revision
-    url = f"https://huggingface.co/datasets/{dataset}/tree/{revision}"
-    response = requests.head(url)
-
-    assert response.status_code == 200, (
-        f"Dataset {dataset} - {revision} not available. Status code: {response.status_code}"
-    )
+    repo_id, revision = dataset_revision
+    try:
+        huggingface_hub.dataset_info(repo_id, revision=revision)
+    except (
+        huggingface_hub.errors.RepositoryNotFoundError,
+        huggingface_hub.errors.RevisionNotFoundError,
+    ):
+        assert False, f"Dataset {repo_id} - {revision} not available"
+    except Exception as e:
+        assert False, f"Dataset {repo_id} - {revision} failed with {e}"
 
 
 def test_superseded_dataset_exists():
@@ -90,3 +105,10 @@ def test_superseded_dataset_exists():
             assert task.superseded_by in TASKS_REGISTRY, (
                 f"{task} is superseded by {task.superseded_by} but {task.superseded_by} is not in the TASKS_REGISTRY"
             )
+
+
+def test_is_aggregate_property_correct():
+    tasks = mteb.get_tasks()
+
+    for task in tasks:
+        assert task.is_aggregate == isinstance(task, AbsTaskAggregate)

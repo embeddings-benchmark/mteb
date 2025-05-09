@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class SinhalaNewsSourceClassification(AbsTaskClassification):
+class SinhalaNewsSourceClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SinhalaNewsSourceClassification",
         description="This dataset contains Sinhala news headlines extracted from 9 news sources (websites) (Sri Lanka Army, Dinamina, GossipLanka, Hiru, ITN, Lankapuwath, NewsLK, Newsfirst, World Socialist Web Site-Sinhala).",
@@ -14,7 +14,7 @@ class SinhalaNewsSourceClassification(AbsTaskClassification):
         },
         reference="https://huggingface.co/datasets/NLPC-UOM/Sinhala-News-Source-classification",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["sin-Sinh"],
@@ -26,13 +26,14 @@ class SinhalaNewsSourceClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-            @article{dhananjaya2022,
-            author    = {Dhananjaya et al.},
-            title     = {BERTifying Sinhala - A Comprehensive Analysis of Pre-trained Language Models for Sinhala Text Classification},
-            journal   = {Year of Publication},
-            year      = {2022},
-            }""",
+        bibtex_citation=r"""
+@article{dhananjaya2022,
+  author = {Dhananjaya et al.},
+  journal = {Year of Publication},
+  title = {BERTifying Sinhala - A Comprehensive Analysis of Pre-trained Language Models for Sinhala Text Classification},
+  year = {2022},
+}
+""",
     )
 
     def dataset_transform(self):

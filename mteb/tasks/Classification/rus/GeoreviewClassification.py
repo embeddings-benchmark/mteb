@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class GeoreviewClassification(AbsTaskClassification):
+class GeoreviewClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="GeoreviewClassification",
         dataset={
@@ -15,7 +15,7 @@ class GeoreviewClassification(AbsTaskClassification):
         description="Review classification (5-point scale) based on Yandex Georeview dataset",
         reference="https://github.com/yandex/geo-reviews-dataset-2023",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["rus-Cyrl"],

@@ -22,21 +22,29 @@ class T2Retrieval(AbsTaskRetrieval):
         eval_splits=["dev"],
         eval_langs=["cmn-Hans"],
         main_score="ndcg_at_10",
-        date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
+        date=("2023-04-04", "2023-05-16"),
+        domains=[
+            "Medical",
+            "Academic",
+            "Financial",
+            "Government",
+            "Non-fiction",
+        ],
+        task_subtypes=[],
+        license="apache-2.0",
+        annotations_creators="human-annotated",
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@misc{xie2023t2ranking,
-      title={T2Ranking: A large-scale Chinese Benchmark for Passage Ranking}, 
-      author={Xiaohui Xie and Qian Dong and Bingning Wang and Feiyang Lv and Ting Yao and Weinan Gan and Zhijing Wu and Xiangsheng Li and Haitao Li and Yiqun Liu and Jin Ma},
-      year={2023},
-      eprint={2304.03679},
-      archivePrefix={arXiv},
-      primaryClass={cs.IR}
-}""",
+        bibtex_citation=r"""
+@misc{xie2023t2ranking,
+  archiveprefix = {arXiv},
+  author = {Xiaohui Xie and Qian Dong and Bingning Wang and Feiyang Lv and Ting Yao and Weinan Gan and Zhijing Wu and Xiangsheng Li and Haitao Li and Yiqun Liu and Jin Ma},
+  eprint = {2304.03679},
+  primaryclass = {cs.IR},
+  title = {T2Ranking: A large-scale Chinese Benchmark for Passage Ranking},
+  year = {2023},
+}
+""",
         prompt={
             "query": "Given a Chinese search query, retrieve web passages that answer the question"
         },
@@ -67,14 +75,16 @@ class MMarcoRetrieval(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@misc{xiao2024cpack,
-      title={C-Pack: Packaged Resources To Advance General Chinese Embedding}, 
-      author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
-      year={2024},
-      eprint={2309.07597},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-}""",
+        bibtex_citation=r"""
+@misc{xiao2024cpack,
+  archiveprefix = {arXiv},
+  author = {Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff and Defu Lian and Jian-Yun Nie},
+  eprint = {2309.07597},
+  primaryclass = {cs.CL},
+  title = {C-Pack: Packaged Resources To Advance General Chinese Embedding},
+  year = {2024},
+}
+""",
         prompt={
             "query": "Given a web search query, retrieve relevant passages that answer the query"
         },
@@ -103,14 +113,16 @@ class DuRetrieval(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@misc{qiu2022dureaderretrieval,
-      title={DuReader_retrieval: A Large-scale Chinese Benchmark for Passage Retrieval from Web Search Engine}, 
-      author={Yifu Qiu and Hongyu Li and Yingqi Qu and Ying Chen and Qiaoqiao She and Jing Liu and Hua Wu and Haifeng Wang},
-      year={2022},
-      eprint={2203.10232},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-}""",
+        bibtex_citation=r"""
+@misc{qiu2022dureaderretrieval,
+  archiveprefix = {arXiv},
+  author = {Yifu Qiu and Hongyu Li and Yingqi Qu and Ying Chen and Qiaoqiao She and Jing Liu and Hua Wu and Haifeng Wang},
+  eprint = {2203.10232},
+  primaryclass = {cs.CL},
+  title = {DuReader_retrieval: A Large-scale Chinese Benchmark for Passage Retrieval from Web Search Engine},
+  year = {2022},
+}
+""",
         prompt={
             "query": "Given a Chinese search query, retrieve web passages that answer the question"
         },
@@ -132,14 +144,24 @@ class CovidRetrieval(AbsTaskRetrieval):
         eval_splits=["dev"],
         eval_langs=["cmn-Hans"],
         main_score="ndcg_at_10",
-        date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
+        date=("2022-03-03", "2022-03-18"),
+        domains=["Medical", "Entertainment"],
+        task_subtypes=[],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
         sample_creation=None,
-        bibtex_citation=None,
+        bibtex_citation=r"""
+@misc{long2022multicprmultidomainchinese,
+  archiveprefix = {arXiv},
+  author = {Dingkun Long and Qiong Gao and Kuan Zou and Guangwei Xu and Pengjun Xie and Ruijie Guo and Jian Xu and Guanjun Jiang and Luxi Xing and Ping Yang},
+  eprint = {2203.03367},
+  primaryclass = {cs.IR},
+  title = {Multi-CPR: A Multi Domain Chinese Dataset for Passage Retrieval},
+  url = {https://arxiv.org/abs/2203.03367},
+  year = {2022},
+}
+""",
         prompt={
             "query": "Given a question on COVID-19, retrieve news articles that answer the question"
         },
@@ -168,7 +190,17 @@ class CmedqaRetrieval(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation=None,
+        bibtex_citation=r"""
+@misc{qiu2022dureaderretrievallargescalechinesebenchmark,
+  archiveprefix = {arXiv},
+  author = {Yifu Qiu and Hongyu Li and Yingqi Qu and Ying Chen and Qiaoqiao She and Jing Liu and Hua Wu and Haifeng Wang},
+  eprint = {2203.10232},
+  primaryclass = {cs.CL},
+  title = {DuReader_retrieval: A Large-scale Chinese Benchmark for Passage Retrieval from Web Search Engine},
+  url = {https://arxiv.org/abs/2203.10232},
+  year = {2022},
+}
+""",
         prompt={
             "query": "Given a Chinese community medical question, retrieve replies that best answer the question"
         },
@@ -199,7 +231,17 @@ class EcomRetrieval(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation=None,
+        bibtex_citation=r"""
+@misc{long2022multicprmultidomainchinese,
+  archiveprefix = {arXiv},
+  author = {Dingkun Long and Qiong Gao and Kuan Zou and Guangwei Xu and Pengjun Xie and Ruijie Guo and Jian Xu and Guanjun Jiang and Luxi Xing and Ping Yang},
+  eprint = {2203.03367},
+  primaryclass = {cs.IR},
+  title = {Multi-CPR: A Multi Domain Chinese Dataset for Passage Retrieval},
+  url = {https://arxiv.org/abs/2203.03367},
+  year = {2022},
+}
+""",
         prompt={
             "query": "Given a user query from an e-commerce website, retrieve description sentences of relevant products"
         },
@@ -230,7 +272,17 @@ class MedicalRetrieval(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation=None,
+        bibtex_citation=r"""
+@misc{long2022multicprmultidomainchinese,
+  archiveprefix = {arXiv},
+  author = {Dingkun Long and Qiong Gao and Kuan Zou and Guangwei Xu and Pengjun Xie and Ruijie Guo and Jian Xu and Guanjun Jiang and Luxi Xing and Ping Yang},
+  eprint = {2203.03367},
+  primaryclass = {cs.IR},
+  title = {Multi-CPR: A Multi Domain Chinese Dataset for Passage Retrieval},
+  url = {https://arxiv.org/abs/2203.03367},
+  year = {2022},
+}
+""",
         prompt={
             "query": "Given a medical question, retrieve user replies that best answer the question"
         },
@@ -261,7 +313,17 @@ class VideoRetrieval(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation=None,
+        bibtex_citation=r"""
+@misc{long2022multicprmultidomainchinese,
+  archiveprefix = {arXiv},
+  author = {Dingkun Long and Qiong Gao and Kuan Zou and Guangwei Xu and Pengjun Xie and Ruijie Guo and Jian Xu and Guanjun Jiang and Luxi Xing and Ping Yang},
+  eprint = {2203.03367},
+  primaryclass = {cs.IR},
+  title = {Multi-CPR: A Multi Domain Chinese Dataset for Passage Retrieval},
+  url = {https://arxiv.org/abs/2203.03367},
+  year = {2022},
+}
+""",
         prompt={
             "query": "Given a video search query, retrieve the titles of relevant videos"
         },

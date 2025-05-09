@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 TEST_SAMPLES = 2048
 
 
-class RomanianSentimentClassification(AbsTaskClassification):
+class RomanianSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="RomanianSentimentClassification",
         description="An Romanian dataset for sentiment classification.",
@@ -17,7 +17,7 @@ class RomanianSentimentClassification(AbsTaskClassification):
             "trust_remote_code": True,
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         date=("2020-09-18", "2020-09-18"),
         eval_splits=["test"],
@@ -29,11 +29,12 @@ class RomanianSentimentClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{dumitrescu2020birth,
-  title={The birth of Romanian BERT},
-  author={Dumitrescu, Stefan Daniel and Avram, Andrei-Marius and Pyysalo, Sampo},
-  journal={arXiv preprint arXiv:2009.08712},
-  year={2020}
+        bibtex_citation=r"""
+@article{dumitrescu2020birth,
+  author = {Dumitrescu, Stefan Daniel and Avram, Andrei-Marius and Pyysalo, Sampo},
+  journal = {arXiv preprint arXiv:2009.08712},
+  title = {The birth of Romanian BERT},
+  year = {2020},
 }
 """,
     )

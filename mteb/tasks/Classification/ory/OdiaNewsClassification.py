@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class OdiaNewsClassification(AbsTaskClassification):
+class OdiaNewsClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="OdiaNewsClassification",
         description="A Odia dataset for 3-class classification of Odia news articles",
@@ -14,7 +14,7 @@ class OdiaNewsClassification(AbsTaskClassification):
             "revision": "ffb8a34c9637fb20256e8c7be02504d16af4bd6b",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         date=("2014-01-01", "2018-01-01"),
         eval_splits=["test"],
@@ -26,12 +26,14 @@ class OdiaNewsClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{kunchukuttan2020indicnlpcorpus,
-    title={AI4Bharat-IndicNLP Corpus: Monolingual Corpora and Word Embeddings for Indic Languages},
-    author={Anoop Kunchukuttan and Divyanshu Kakwani and Satish Golla and Gokul N.C. and Avik Bhattacharyya and Mitesh M. Khapra and Pratyush Kumar},
-    year={2020},
-    journal={arXiv preprint arXiv:2005.00085},
-}""",
+        bibtex_citation=r"""
+@article{kunchukuttan2020indicnlpcorpus,
+  author = {Anoop Kunchukuttan and Divyanshu Kakwani and Satish Golla and Gokul N.C. and Avik Bhattacharyya and Mitesh M. Khapra and Pratyush Kumar},
+  journal = {arXiv preprint arXiv:2005.00085},
+  title = {AI4Bharat-IndicNLP Corpus: Monolingual Corpora and Word Embeddings for Indic Languages},
+  year = {2020},
+}
+""",
     )
 
     def dataset_transform(self):

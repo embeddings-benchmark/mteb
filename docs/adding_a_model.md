@@ -5,8 +5,10 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
 1. **Add meta information about your model to [model dir](../mteb/models/)**. See the docstring of ModelMeta for meta data details.
    ```python
    from mteb.model_meta import ModelMeta
-    
+   from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
+
    bge_m3 = ModelMeta(
+       loader=sentence_transformers_loader,
        name="model_name",
        languages=["model_languages"], # in format eng-Latn
        open_weights=True,
@@ -18,7 +20,7 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
        license="mit",
        max_tokens=8194,
        reference="https://huggingface.co/BAAI/bge-m3",
-       similarity_fn_name="cosine",
+       similarity_fn_name=ScoringFunction.COSINE,
        framework=["Sentence Transformers", "PyTorch"],
        use_instructions=False,
        public_training_code=None,
@@ -26,17 +28,17 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
        training_datasets={"your_dataset": ["train"]},
    )
    ```
-   To calculate `memory_usage_mb` you can run `model_meta.memory_usage_mb()`. By default, the model will run using the [`sentence_transformers_loader`](../mteb/models/sentence_transformer_wrapper.py) loader function. If you need to use a custom implementation, you can specify the `loader` parameter in the `ModelMeta` class. For example:
+   To calculate `memory_usage_mb` you can run `model_meta.calculate_memory_usage_mb()`. By default, the model will run using the [`sentence_transformers_loader`](../mteb/models/sentence_transformer_wrapper.py) loader function. If you need to use a custom implementation, you can specify the `loader` parameter in the `ModelMeta` class. For example:
    ```python
-   from mteb.models.wrapper import Wrapper
-   from mteb.encoder_interface import PromptType
+   from mteb.encoder_interface import Encoder
+   from mteb.types import PromptType
    import numpy as np
-   
-   class CustomWrapper(Wrapper):
-       def __init__(self, model_name, model_revision):
-           super().__init__(model_name, model_revision)
+
+   class CustomWrapper:
+       def __init__(self, model_name, revision):
+           super().__init__(model_name, revision)
            # your custom implementation here
-       
+
        def encode(
             self,
             sentences: list[str],
@@ -51,11 +53,10 @@ The MTEB Leaderboard is available [here](https://huggingface.co/spaces/mteb/lead
    Then you can specify the `loader` parameter in the `ModelMeta` class:
    ```python
    your_model = ModelMeta(
-       loader=partial(
-            CustomWrapper, 
-            model_name="model_name",
-            model_revision="5617a9f61b028005a4858fdac845db406aefb181"
-       ),
+       loader=CustomWrapper,
+       name = "{model name}",
+       revision = "{revision on huggingface}"
+       loader_kwargs={} # additional argument passed to the loader besides name and revision
        ...
    )
    ```
@@ -70,7 +71,7 @@ import mteb
 model = mteb.get_model("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
 
 tasks = mteb.get_tasks(...) # get specific tasks
-# or 
+# or
 tasks = mteb.get_benchmark("MTEB(eng, classic)") # or use a specific benchmark
 
 evaluation = mteb.MTEB(tasks=tasks)
@@ -95,7 +96,7 @@ To add results to the public leaderboard you can push your results to the [resul
 
 ##### Using Prompts with Sentence Transformers
 
-If your model uses Sentence Transformers and requires different prompts for encoding the queries and corpus, you can take advantage of the `prompts` [parameter](https://sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html#sentence_transformers.SentenceTransformer). 
+If your model uses Sentence Transformers and requires different prompts for encoding the queries and corpus, you can take advantage of the `prompts` [parameter](https://sbert.net/docs/package_reference/sentence_transformer/SentenceTransformer.html#sentence_transformers.SentenceTransformer).
 
 Internally, `mteb` uses `query` for encoding the queries and `passage` as the prompt names for encoding the corpus. This is aligned with the default names used by Sentence Transformers.
 
@@ -106,10 +107,8 @@ You can directly add the prompts when saving and uploading your model to the Hub
 
 ```python
 model = ModelMeta(
-    loader=partial(  # type: ignore
-        sentence_transformers_loader,
-        model_name="intfloat/multilingual-e5-small",
-        revision="fd1525a9fd15316a2d503bf26ab031a61d056e98",
+    loader=sentence_transformers_loader
+    loader_kwargs=dict(
         model_prompts={
            "query": "query: ",
            "passage": "passage: ",
@@ -124,12 +123,26 @@ If you are unable to directly add the prompts in the model configuration, you ca
 Models that use instructions can use the [`InstructSentenceTransformerWrapper`](../mteb/models/instruct_wrapper.py). For example:
 ```python
 model = ModelMeta(
-    loader=partial(
-        InstructSentenceTransformerWrapper,
-        model="nvidia/NV-Embed-v1",
-        revision="7604d305b621f14095a1aa23d351674c2859553a",
+    loader=InstructSentenceTransformerWrapper,
+    loader_kwargs=dict(
         instruction_template="Instruct: {instruction}\nQuery: ",
     ),
+    name="nvidia/NV-Embed-v1",
+    revision="7604d305b621f14095a1aa23d351674c2859553a",
    ...
 )
 ```
+
+##### Adding model dependencies in pyproject.toml
+If your are adding a model that requires additional dependencies, you can add them to the `pyproject.toml` file and instead of checking whether dependencies are installed or not make use of `requires_package` from [requires_package.py](../mteb/requires_packages.py). For example:
+
+In the [voyage_models.py](../mteb/models/voyage_models.py) file, we have added the following code:
+```python
+requires_package(self, "voyageai", model_name, "pip install 'mteb[voyageai]'")
+```
+and also updated [pyproject.toml]((../pyproject.toml)) file with the following code:
+```python
+voyageai = ["voyageai>=1.0.0,<2.0.0"]
+```
+so that it will check whether voyageai is installed or not. If not, then it will give an error message to install voyageai. This has done so as to give clear installation warnings.
+If you want to give suggestion instead of warning, you can use `suggest_package` from [requires_package.py](../mteb/requires_packages.py).

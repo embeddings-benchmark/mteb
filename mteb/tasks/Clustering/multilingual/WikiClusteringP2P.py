@@ -38,7 +38,7 @@ class WikiClusteringP2P(AbsTaskClustering):
             "revision": "d4d92f8f28be71035be6a96bdfd4e200cf62faa8",
         },
         type="Clustering",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
@@ -67,7 +67,7 @@ class WikiClusteringFastP2P(AbsTaskClusteringFast):
             "revision": "d4d92f8f28be71035be6a96bdfd4e200cf62faa8",
         },
         type="Clustering",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=_LANGUAGES,
@@ -80,6 +80,7 @@ class WikiClusteringFastP2P(AbsTaskClusteringFast):
         dialect=[],
         sample_creation="created",
         bibtex_citation="",  # None exists
+        adapted_from=["WikiClusteringP2P"],
     )
 
     def dataset_transform(self):

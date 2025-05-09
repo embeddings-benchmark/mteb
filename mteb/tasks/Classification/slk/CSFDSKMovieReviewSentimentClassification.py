@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class CSFDSKMovieReviewSentimentClassification(AbsTaskClassification):
+class CSFDSKMovieReviewSentimentClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="CSFDSKMovieReviewSentimentClassification",
         description="The dataset contains 30k user reviews from csfd.cz in Slovak.",
@@ -14,7 +14,7 @@ class CSFDSKMovieReviewSentimentClassification(AbsTaskClassification):
             "revision": "23a20c659d868740ef9c54854de631fe19cd5c17",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         date=("2002-05-21", "2020-03-05"),
         eval_splits=["test"],
@@ -26,14 +26,14 @@ class CSFDSKMovieReviewSentimentClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
+        bibtex_citation=r"""
 @misc{štefánik2023resources,
-      title={Resources and Few-shot Learners for In-context Learning in Slavic Languages}, 
-      author={Michal Štefánik and Marek Kadlčík and Piotr Gramacki and Petr Sojka},
-      year={2023},
-      eprint={2304.01922},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+  archiveprefix = {arXiv},
+  author = {Michal Štefánik and Marek Kadlčík and Piotr Gramacki and Petr Sojka},
+  eprint = {2304.01922},
+  primaryclass = {cs.CL},
+  title = {Resources and Few-shot Learners for In-context Learning in Slavic Languages},
+  year = {2023},
 }
 """,
     )

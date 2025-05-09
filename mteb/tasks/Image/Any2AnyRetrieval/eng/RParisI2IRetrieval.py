@@ -1,23 +1,24 @@
 from __future__ import annotations
 
+from mteb.abstasks.Image.AbsTaskAny2AnyMultiChoice import MultiChoiceEvaluationMixin
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class RParisEasyI2IRetrieval(AbsTaskAny2AnyRetrieval):
+class RParisEasyI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="RParisEasyI2IRetrieval",
-        description="Retrieve photos of landmarks in Paris, France.",
+        description="Retrieve photos of landmarks in Paris, UK.",
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Paris_and_CVPR_2018_paper.html",
         dataset={
-            "path": "JamieSJS/r-paris-easy",
-            "revision": "7d821ddebcb30ad343133e3a81e23347ac2a08a8",
+            "path": "JamieSJS/r-paris-easy-multi",
+            "revision": "db94b5afd0014ab8c978f20a0fbcc52da1612a08",
         },
         type="Any2AnyRetrieval",
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="cv_recall_at_1",
+        main_score="map_at_5",
         date=("2009-01-01", "2010-04-01"),
         domains=["Web"],
         task_subtypes=["Object recognition"],
@@ -26,32 +27,33 @@ class RParisEasyI2IRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{radenovic2018revisiting,
-  title={Revisiting oxford and paris: Large-scale image retrieval benchmarking},
-  author={Radenovi{\'c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej},
-  booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
-  pages={5706--5715},
-  year={2018}
+        bibtex_citation=r"""
+@inproceedings{radenovic2018revisiting,
+  author = {Radenovi{\'c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej},
+  booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
+  pages = {5706--5715},
+  title = {Revisiting oxford and paris: Large-scale image retrieval benchmarking},
+  year = {2018},
 }
-        """,
+""",
     )
     skip_first_result = False
 
 
-class RParisMediumI2IRetrieval(AbsTaskAny2AnyRetrieval):
+class RParisMediumI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="RParisMediumI2IRetrieval",
-        description="Retrieve photos of landmarks in Paris, France.",
+        description="Retrieve photos of landmarks in Paris, UK.",
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Paris_and_CVPR_2018_paper.html",
         dataset={
-            "path": "JamieSJS/r-paris-medium",
-            "revision": "3d959815e102785efd628170281f1e65561b03d2",
+            "path": "JamieSJS/r-paris-medium-multi",
+            "revision": "372c79fc823e1cebc1d55f8e0039aa239285e177",
         },
         type="Any2AnyRetrieval",
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="cv_recall_at_1",
+        main_score="map_at_5",
         date=("2009-01-01", "2010-04-01"),
         domains=["Web"],
         task_subtypes=["Object recognition"],
@@ -60,32 +62,33 @@ class RParisMediumI2IRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{radenovic2018revisiting,
-  title={Revisiting oxford and paris: Large-scale image retrieval benchmarking},
-  author={Radenovi{\'c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej},
-  booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
-  pages={5706--5715},
-  year={2018}
+        bibtex_citation=r"""
+@inproceedings{radenovic2018revisiting,
+  author = {Radenovi{\'c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej},
+  booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
+  pages = {5706--5715},
+  title = {Revisiting oxford and paris: Large-scale image retrieval benchmarking},
+  year = {2018},
 }
-        """,
+""",
     )
     skip_first_result = False
 
 
-class RParisHardI2IRetrieval(AbsTaskAny2AnyRetrieval):
+class RParisHardI2IRetrieval(MultiChoiceEvaluationMixin, AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
         name="RParisHardI2IRetrieval",
-        description="Retrieve photos of landmarks in Paris, France.",
+        description="Retrieve photos of landmarks in Paris, UK.",
         reference="https://openaccess.thecvf.com/content_cvpr_2018/html/Radenovic_Revisiting_Paris_and_CVPR_2018_paper.html",
         dataset={
-            "path": "JamieSJS/r-paris-hard",
-            "revision": "d3e0adf4e942446c04427511ccce281c86861248",
+            "path": "JamieSJS/r-paris-hard-multi",
+            "revision": "4e5997e48fb2f2f8bf1c8973851dedeb17e09a83",
         },
         type="Any2AnyRetrieval",
         category="i2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="cv_recall_at_1",
+        main_score="map_at_5",
         date=("2009-01-01", "2010-04-01"),
         domains=["Web"],
         task_subtypes=["Object recognition"],
@@ -94,13 +97,14 @@ class RParisHardI2IRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{radenovic2018revisiting,
-  title={Revisiting oxford and paris: Large-scale image retrieval benchmarking},
-  author={Radenovi{\'c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej},
-  booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
-  pages={5706--5715},
-  year={2018}
+        bibtex_citation=r"""
+@inproceedings{radenovic2018revisiting,
+  author = {Radenovi{\'c}, Filip and Iscen, Ahmet and Tolias, Giorgos and Avrithis, Yannis and Chum, Ond{\v{r}}ej},
+  booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
+  pages = {5706--5715},
+  title = {Revisiting oxford and paris: Large-scale image retrieval benchmarking},
+  year = {2018},
 }
-        """,
+""",
     )
     skip_first_result = False

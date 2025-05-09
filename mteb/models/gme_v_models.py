@@ -2,8 +2,6 @@ from __future__ import annotations
 
 import logging
 import math
-import os
-from functools import partial
 from typing import Any
 
 import torch
@@ -12,15 +10,12 @@ from torch.utils.data import DataLoader
 from tqdm.autonotebook import tqdm
 from transformers import AutoModelForVision2Seq, AutoProcessor
 
-from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta
-from mteb.models.wrapper import Wrapper
+from mteb.abstasks import TaskMetadata
+from mteb.model_meta import ModelMeta, ScoringFunction
+from mteb.models.abs_encoder import AbsEncoder
+from mteb.types import Array, BatchedInput, PromptType
 
-logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
-
-HF_GME_QWEN2VL_2B = "Alibaba-NLP/gme-Qwen2-VL-2B-Instruct"
-HF_GME_QWEN2VL_7B = "Alibaba-NLP/gme-Qwen2-VL-7B-Instruct"
 
 
 class Encoder(torch.nn.Module):
@@ -130,10 +125,11 @@ class Encoder(torch.nn.Module):
         return embeddings
 
 
-class GmeQwen2VL(Wrapper):
+class GmeQwen2VL(AbsEncoder):
     def __init__(
         self,
-        model_name: str = HF_GME_QWEN2VL_2B,
+        model_name: str,
+        revision: str,
         model_path: str | None = None,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         min_image_tokens=4,
@@ -143,12 +139,16 @@ class GmeQwen2VL(Wrapper):
     ) -> None:
         model_name = model_path or model_name
         base = AutoModelForVision2Seq.from_pretrained(
-            model_name, torch_dtype=torch.float16, **kwargs
+            model_name, revision=revision, torch_dtype=torch.float16, **kwargs
         )
         min_pixels = min_image_tokens * 28 * 28
         max_pixels = max_image_tokens * 28 * 28
         processor = AutoProcessor.from_pretrained(
-            model_name, min_pixels=min_pixels, max_pixels=max_pixels, **kwargs
+            model_name,
+            revision=revision,
+            min_pixels=min_pixels,
+            max_pixels=max_pixels,
+            **kwargs,
         )
         self.model = Encoder(base, processor, max_length=max_length)
         self.model.eval()
@@ -157,128 +157,49 @@ class GmeQwen2VL(Wrapper):
 
     def encode(
         self,
-        sentences: list[str],
+        inputs: DataLoader[BatchedInput],
         *,
-        task_name: str | None = None,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
+        show_progress_bar: bool = True,
         **kwargs: Any,
-    ):
-        return self.get_fused_embeddings(
-            texts=sentences, task_name=task_name, prompt_type=prompt_type, **kwargs
-        )
-
-    def encode_queries(self, queries: list[str], **kwargs):
-        embeddings = self.encode(queries, prompt_type=PromptType.query, **kwargs)
-        return embeddings
-
-    def encode_corpus(self, corpus: list[dict[str, str]], **kwargs):
-        if type(corpus) is dict:
-            sentences = [
-                (corpus["title"][i] + self.sep + corpus["text"][i]).strip()
-                if "title" in corpus
-                else corpus["text"][i].strip()
-                for i in range(len(corpus["text"]))
-            ]
-        else:
-            sentences = [
-                (doc["title"] + self.sep + doc["text"]).strip()
-                if "title" in doc
-                else doc["text"].strip()
-                for doc in corpus
-            ]
-        embeddings = self.encode(sentences, prompt_type=PromptType.passage**kwargs)
-        return embeddings
-
-    def get_image_embeddings(self, images: list[Image.Image] | DataLoader, **kwargs):
-        return self.get_fused_embeddings(images=images, **kwargs)
-
-    def get_text_embeddings(self, texts: list[str], **kwargs):
-        return self.get_fused_embeddings(texts=texts, **kwargs)
-
-    def calculate_probs(self, text_embeddings, image_embeddings):
-        text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True)
-        image_embeddings = image_embeddings / image_embeddings.norm(
-            dim=-1, keepdim=True
-        )
-        logits = torch.matmul(image_embeddings, text_embeddings.T)
-        probs = (logits * 100).softmax(dim=-1)
-        return probs
-
-    def get_fused_embeddings(
-        self,
-        texts: list[str] | None = None,
-        images: list[Image.Image] | DataLoader | None = None,
-        task_name: str | None = None,
-        prompt_type: PromptType | None = None,
-        tqdm_mininterval: int = 15,
-        instruction=None,
-        **kwargs: Any,
-    ):
+    ) -> Array:
+        instruction = self.get_instruction(task_metadata, prompt_type)
         if prompt_type == PromptType.passage:
             instruction = None
         elif instruction is None:
-            instruction = self.get_instruction(task_name, prompt_type)
+            instruction = self.get_instruction(task_metadata, prompt_type)
             # NOTE: copied from the old get_gme_instruction function.
             if isinstance(instruction, str) and instruction[-1] != ".":
                 instruction += "."
         self.model = self.model.to(self.device)
-
-        if isinstance(images, DataLoader):
-            image_loader = images
-            batch_size = image_loader.batch_size
-            image_loader.dataset.transform = None
-        else:
-            batch_size = kwargs.pop("batch_size", 32)
-            if images is None:
-                image_loader = None
-            else:
-                image_loader = DataLoader(
-                    images,
-                    batch_size=batch_size,
-                    shuffle=False,
-                    collate_fn=custom_collate_fn,
-                    num_workers=min(math.floor(os.cpu_count() / 2), 8),
-                )
-
-        if texts is None:
-            assert image_loader is not None
-            n_batch = len(image_loader)
-        else:
-            n_batch = len(texts) // batch_size + int(len(texts) % batch_size > 0)
-            image_loader = image_loader or [None] * n_batch
-
         all_embeddings = []
-        none_batch = [None] * batch_size
-        show_progress_bar = kwargs.pop("show_progress_bar", True)
-        pbar = tqdm(
-            total=n_batch,
-            disable=not show_progress_bar,
-            mininterval=tqdm_mininterval,
-            miniters=n_batch // 10,
-            desc="encode",
-        )
-        for n, (i, img_batch) in enumerate(
-            zip(range(0, n_batch * batch_size, batch_size), image_loader)
-        ):
-            text_batch = none_batch if texts is None else texts[i : i + batch_size]
-            img_batch = none_batch if img_batch is None else img_batch
+        for batch in tqdm(inputs, disable=not show_progress_bar, desc="Fused Encoding"):
+            batch_size = len(batch["text"]) or len(batch["image"])
+            if "text" in batch:
+                text_batch = batch["text"]
+            else:
+                text_batch = [None] * batch_size
+
+            if "image" in batch:
+                img_batch = batch["image"]
+            else:
+                img_batch = [None] * batch_size
+
             inputs = dict(
                 texts=text_batch, images=img_batch, instruction=instruction, **kwargs
             )
             with torch.inference_mode():
                 embeddings = self.model.embed(**inputs, device=self.device)
             all_embeddings.append(embeddings.cpu())
-            pbar.update(1)
-        pbar.close()
         all_embeddings = torch.cat(all_embeddings, dim=0)
         return all_embeddings
 
 
-def custom_collate_fn(batch):
-    return batch
-
-
 ### Copied from qwen_vl_utils.vision_process.py
+
 IMAGE_FACTOR = 28
 MIN_PIXELS = 4 * 28 * 28
 MAX_PIXELS = 16384 * 28 * 28
@@ -411,12 +332,9 @@ training_data = {
 
 
 gme_qwen2vl_2b = ModelMeta(
-    loader=partial(
-        GmeQwen2VL,
-        model_name=HF_GME_QWEN2VL_2B,
-    ),
-    name=HF_GME_QWEN2VL_2B,
-    languages=["eng_Latn", "cmn-Hans"],
+    loader=GmeQwen2VL,
+    name="Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
+    languages=["eng-Latn", "cmn-Hans"],
     open_weights=True,
     revision="ce765ae71b8cdb208203cd8fb64a170b1b84293a",
     release_date="2024-12-24",
@@ -426,8 +344,8 @@ gme_qwen2vl_2b = ModelMeta(
     embed_dim=1536,
     license="apache-2.0",
     max_tokens=32768,
-    reference="https://huggingface.co/" + HF_GME_QWEN2VL_2B,
-    similarity_fn_name="cosine",
+    reference="https://huggingface.co/Alibaba-NLP/gme-Qwen2-VL-2B-Instruct",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch"],
     use_instructions=True,
     public_training_code=None,
@@ -436,12 +354,9 @@ gme_qwen2vl_2b = ModelMeta(
 )
 
 gme_qwen2vl_7b = ModelMeta(
-    loader=partial(
-        GmeQwen2VL,
-        model_name=HF_GME_QWEN2VL_7B,
-    ),
-    name=HF_GME_QWEN2VL_7B,
-    languages=["eng_Latn", "cmn-Hans"],
+    loader=GmeQwen2VL,
+    name="Alibaba-NLP/gme-Qwen2-VL-7B-Instruct",
+    languages=["eng-Latn", "cmn-Hans"],
     open_weights=True,
     revision="477027a6480f8630363be77751f169cc3434b673",
     release_date="2024-12-24",
@@ -451,8 +366,8 @@ gme_qwen2vl_7b = ModelMeta(
     embed_dim=3584,
     license="apache-2.0",
     max_tokens=32768,
-    reference="https://huggingface.co/" + HF_GME_QWEN2VL_2B,
-    similarity_fn_name="cosine",
+    reference="https://huggingface.co/Alibaba-NLP/gme-Qwen2-VL-7B-Instruct",
+    similarity_fn_name=ScoringFunction.COSINE,
     framework=["PyTorch"],
     use_instructions=True,
     public_training_code=None,

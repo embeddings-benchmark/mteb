@@ -13,7 +13,9 @@ from mteb.encoder_interface import Encoder
 from mteb.model_meta import ModelMeta
 from mteb.models import (
     align_models,
+    ara_models,
     arctic_models,
+    b1ade_models,
     bedrock_models,
     bge_models,
     blip2_models,
@@ -25,6 +27,7 @@ from mteb.models import (
     cohere_models,
     cohere_v,
     colbert_models,
+    conan_models,
     dino_models,
     e5_instruct,
     e5_models,
@@ -42,38 +45,49 @@ from mteb.models import (
     jina_models,
     lens_models,
     linq_models,
+    llm2clip_models,
     llm2vec_models,
     misc_models,
     moco_models,
     model2vec_models,
     moka_models,
     mxbai_models,
+    nb_sbert,
     no_instruct_sentence_models,
     nomic_models,
     nomic_models_vision,
     nvidia_models,
     openai_models,
     openclip_models,
+    ops_moa_models,
     piccolo_models,
     promptriever_models,
     qodo_models,
     qtack_models,
+    relle_models,
     repllama_models,
     rerankers_custom,
     rerankers_monot5_based,
+    richinfoai_models,
     ru_sentence_models,
     salesforce_models,
+    searchmap_models,
+    seed_models,
     sentence_transformers_models,
+    shuu_model,
     siglip_models,
     sonar_models,
     stella_models,
     text2vec_models,
+    ua_sentence_models,
     uae_models,
+    vdr_models,
     vista_models,
     vlm2vec_models,
     voyage_models,
     voyage_v,
 )
+from mteb.models.sentence_transformer_wrapper import sentence_transformers_loader
 
 logger = logging.getLogger(__name__)
 
@@ -91,6 +105,7 @@ model_modules = [
     cohere_models,
     cohere_v,
     colbert_models,
+    conan_models,
     dino_models,
     e5_instruct,
     e5_models,
@@ -106,6 +121,7 @@ model_modules = [
     jina_clip,
     lens_models,
     linq_models,
+    llm2clip_models,
     llm2vec_models,
     misc_models,
     model2vec_models,
@@ -118,17 +134,23 @@ model_modules = [
     nvidia_models,
     openai_models,
     openclip_models,
+    ops_moa_models,
     piccolo_models,
     gme_v_models,
     promptriever_models,
     qodo_models,
     qtack_models,
+    relle_models,
     repllama_models,
     rerankers_custom,
     rerankers_monot5_based,
+    richinfoai_models,
     ru_sentence_models,
+    ua_sentence_models,
     salesforce_models,
+    searchmap_models,
     sentence_transformers_models,
+    shuu_model,
     siglip_models,
     vista_models,
     vlm2vec_models,
@@ -140,7 +162,12 @@ model_modules = [
     bedrock_models,
     uae_models,
     voyage_models,
+    vdr_models,
     fa_models,
+    ara_models,
+    b1ade_models,
+    nb_sbert,
+    seed_models,
 ]
 MODEL_REGISTRY = {}
 
@@ -223,8 +250,8 @@ def get_model(model_name: str, revision: str | None = None, **kwargs: Any) -> En
     model = meta.load_model(**kwargs)
 
     # If revision not available in the modelmeta, try to extract it from sentence-transformers
-    if isinstance(model.model, SentenceTransformer):
-        _meta = model_meta_from_sentence_transformers(model.model)
+    if hasattr(model, "model") and isinstance(model.model, SentenceTransformer):  # type: ignore
+        _meta = model_meta_from_sentence_transformers(model.model)  # type: ignore
         if meta.revision is None:
             meta.revision = _meta.revision if _meta.revision else meta.revision
         if not meta.similarity_fn_name:
@@ -239,12 +266,15 @@ def get_model(model_name: str, revision: str | None = None, **kwargs: Any) -> En
     return model
 
 
-def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
+def get_model_meta(
+    model_name: str, revision: str | None = None, fetch_from_hf: bool = True
+) -> ModelMeta:
     """A function to fetch a model metadata object by name.
 
     Args:
         model_name: Name of the model to fetch
         revision: Revision of the model to fetch
+        fetch_from_hf: Whether to fetch the model from HuggingFace Hub if not found in the registry
 
     Returns:
         A model metadata object
@@ -256,137 +286,102 @@ def get_model_meta(model_name: str, revision: str | None = None) -> ModelMeta:
             )
         return MODEL_REGISTRY[model_name]
     else:  # assume it is a sentence-transformers model
+        if not fetch_from_hf:
+            raise ValueError(
+                f"Model {model_name} not found in MTEB registry. Please set fetch_from_hf=False to load it from HuggingFace Hub."
+            )
         logger.info(
             "Model not found in model registry, assuming it is on HF Hub model."
         )
         logger.info(
             f"Attempting to extract metadata by loading the model ({model_name}) using HuggingFace."
         )
+
         meta = model_meta_from_hf_hub(model_name)
         meta.revision = revision
         meta.name = model_name
     return meta
 
 
-empty_model_meta = ModelMeta(
-    name=None,
-    revision=None,
-    languages=None,
-    release_date=None,
-    n_parameters=None,
-    memory_usage_mb=None,
-    max_tokens=None,
-    embed_dim=None,
-    license=None,
-    open_weights=True,
-    public_training_code=None,
-    public_training_data=None,
-    similarity_fn_name=None,
-    use_instructions=None,
-    training_datasets=None,
-    framework=[],
-)
-
-
 @lru_cache
 def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
+    card_data = {}
+    frameworks = ["PyTorch"]
     try:
-        card = ModelCard.load(model_name)
-        card_data = card.data.to_dict()
-        frameworks = ["PyTorch"]
-        if card_data.get("library_name", None) == "sentence-transformers":
-            frameworks.append("Sentence Transformers")
-        return ModelMeta(
-            name=model_name,
-            revision=card_data.get("base_model_revision", None),
-            # TODO
-            release_date=None,
-            # TODO: We need a mapping between conflicting language codes
-            languages=None,
-            license=card_data.get("license", None),
-            framework=frameworks,  # type: ignore
-            training_datasets=card_data.get("datasets", None),
-            similarity_fn_name=None,
-            n_parameters=None,
-            memory_usage_mb=None,
-            max_tokens=None,
-            embed_dim=None,
-            open_weights=True,
-            public_training_code=None,
-            public_training_data=None,
-            use_instructions=None,
-        )
+        card_data = ModelCard.load(model_name).data.to_dict()
     except Exception as e:
         logger.warning(f"Failed to extract metadata from model: {e}.")
-        meta = empty_model_meta
-        meta.name = model_name
-        return meta
+    if card_data.get("library_name", None) == "sentence-transformers":
+        frameworks.append("Sentence Transformers")
+    revision = card_data.get("base_model_revision", None)
+    license = card_data.get("license", None)
+    return ModelMeta(
+        loader=sentence_transformers_loader,  # we assume all models are loadable with sentence-transformers
+        name=model_name,
+        revision=revision,
+        release_date=None,
+        languages=None,
+        license=license,
+        framework=frameworks,  # type: ignore
+        training_datasets=None,
+        similarity_fn_name=None,
+        n_parameters=None,
+        memory_usage_mb=None,
+        max_tokens=None,
+        embed_dim=None,
+        open_weights=True,
+        public_training_code=None,
+        public_training_data=None,
+        use_instructions=None,
+    )
 
 
 def model_meta_from_cross_encoder(model: CrossEncoder) -> ModelMeta:
-    try:
-        name = model.model.name_or_path
-
-        meta = ModelMeta(
-            name=name,
-            revision=model.config._commit_hash,
-            release_date=None,
-            languages=None,
-            framework=["Sentence Transformers"],
-            similarity_fn_name=None,
-            n_parameters=None,
-            memory_usage_mb=None,
-            max_tokens=None,
-            embed_dim=None,
-            license=None,
-            open_weights=True,
-            public_training_code=None,
-            public_training_data=None,
-            use_instructions=None,
-            training_datasets=None,
-        )
-    except AttributeError as e:
-        logger.warning(
-            f"Failed to extract metadata from model: {e}. Upgrading to sentence-transformers v3.0.0 or above is recommended."
-        )
-        meta = empty_model_meta
-    return meta
+    return ModelMeta(
+        loader=None,
+        name=model.model.name_or_path,
+        revision=model.config._commit_hash,
+        release_date=None,
+        languages=None,
+        framework=["Sentence Transformers"],
+        similarity_fn_name=None,
+        n_parameters=None,
+        memory_usage_mb=None,
+        max_tokens=None,
+        embed_dim=None,
+        license=None,
+        open_weights=True,
+        public_training_code=None,
+        public_training_data=None,
+        use_instructions=None,
+        training_datasets=None,
+    )
 
 
 def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMeta:
-    try:
-        name = (
-            model.model_card_data.model_name
-            if model.model_card_data.model_name
-            else model.model_card_data.base_model
-        )
-        languages = (
-            [model.model_card_data.language]
-            if isinstance(model.model_card_data.language, str)
-            else model.model_card_data.language
-        )
-        embeddings_dim = model.get_sentence_embedding_dimension()
-        meta = ModelMeta(
-            name=name,
-            revision=model.model_card_data.base_model_revision,
-            release_date=None,
-            languages=languages,
-            framework=["Sentence Transformers"],
-            similarity_fn_name=model.similarity_fn_name,
-            n_parameters=None,
-            memory_usage_mb=None,
-            max_tokens=None,
-            embed_dim=embeddings_dim,
-            license=None,
-            open_weights=True,
-            public_training_code=None,
-            public_training_data=None,
-            use_instructions=None,
-            training_datasets=None,
-        )
-    except AttributeError as e:
-        logger.warning(
-            f"Failed to extract metadata from model: {e}. Upgrading to sentence-transformers v3.0.0 or above is recommended."
-        )
-        meta = empty_model_meta
+    name: str | None = (
+        model.model_card_data.model_name
+        if model.model_card_data.model_name
+        else model.model_card_data.base_model
+    )
+    embeddings_dim = model.get_sentence_embedding_dimension()
+    meta = ModelMeta(
+        loader=sentence_transformers_loader,
+        name=name,
+        revision=model.model_card_data.base_model_revision,
+        release_date=None,
+        languages=None,
+        framework=["Sentence Transformers"],
+        similarity_fn_name=None,
+        n_parameters=None,
+        memory_usage_mb=None,
+        max_tokens=None,
+        embed_dim=embeddings_dim,
+        license=None,
+        open_weights=True,
+        public_training_code=None,
+        public_training_data=None,
+        use_instructions=None,
+        training_datasets=None,
+    )
     return meta

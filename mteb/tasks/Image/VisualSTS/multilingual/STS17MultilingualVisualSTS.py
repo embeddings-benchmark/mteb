@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskVisualSTS import AbsTaskVisualSTS
+from mteb.abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -20,7 +20,7 @@ _LANGUAGES = {
 _SPLITS = ["test"]
 
 
-class STS17MultilingualVisualSTS(AbsTaskVisualSTS):
+class STS17MultilingualVisualSTS(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="STS17MultilingualVisualSTS",
         dataset={
@@ -32,7 +32,7 @@ class STS17MultilingualVisualSTS(AbsTaskVisualSTS):
             + "rendered into images."
         ),
         reference="https://arxiv.org/abs/2402.08183/",
-        type="VisualSTS",
+        type="VisualSTS(multi)",
         category="i2i",
         modalities=["image"],
         eval_splits=_SPLITS,
@@ -40,15 +40,17 @@ class STS17MultilingualVisualSTS(AbsTaskVisualSTS):
         main_score="cosine_spearman",
         date=("2012-01-01", "2017-12-31"),
         domains=["News", "Social", "Web", "Spoken", "Written"],
-        task_subtypes=[],
+        task_subtypes=["Rendered semantic textual similarity"],
         license="not specified",
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="rendered",
-        bibtex_citation="""@article{xiao2024pixel,
-  title={Pixel Sentence Representation Learning},
-  author={Xiao, Chenghao and Huang, Zhuoxu and Chen, Danlu and Hudson, G Thomas and Li, Yizhi and Duan, Haoran and Lin, Chenghua and Fu, Jie and Han, Jungong and Moubayed, Noura Al},
-  journal={arXiv preprint arXiv:2402.08183},
-  year={2024}
-}""",
+        bibtex_citation=r"""
+@article{xiao2024pixel,
+  author = {Xiao, Chenghao and Huang, Zhuoxu and Chen, Danlu and Hudson, G Thomas and Li, Yizhi and Duan, Haoran and Lin, Chenghua and Fu, Jie and Han, Jungong and Moubayed, Noura Al},
+  journal = {arXiv preprint arXiv:2402.08183},
+  title = {Pixel Sentence Representation Learning},
+  year = {2024},
+}
+""",
     )

@@ -41,14 +41,14 @@ class LEMBNeedleRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-            @article{zhu2024longembed,
-            title={LongEmbed: Extending Embedding Models for Long Context Retrieval},
-            author={Zhu, Dawei and Wang, Liang and Yang, Nan and Song, Yifan and Wu, Wenhao and Wei, Furu and Li, Sujian},
-            journal={arXiv preprint arXiv:2404.12096},
-            year={2024}
-            }
-        """,
+        bibtex_citation=r"""
+@article{zhu2024longembed,
+  author = {Zhu, Dawei and Wang, Liang and Yang, Nan and Song, Yifan and Wu, Wenhao and Wei, Furu and Li, Sujian},
+  journal = {arXiv preprint arXiv:2404.12096},
+  title = {LongEmbed: Extending Embedding Models for Long Context Retrieval},
+  year = {2024},
+}
+""",
     )
 
     def load_data(self, **kwargs):

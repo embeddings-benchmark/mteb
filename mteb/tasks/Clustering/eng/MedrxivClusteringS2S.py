@@ -22,7 +22,7 @@ class MedrxivClusteringS2SFast(AbsTaskClusteringFast):
             "revision": "35191c8c0dca72d8ff3efcd72aa802307d469663",
         },
         type="Clustering",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
@@ -36,6 +36,7 @@ class MedrxivClusteringS2SFast(AbsTaskClusteringFast):
         sample_creation="created",
         bibtex_citation="",
         prompt="Identify the main category of Medrxiv papers based on the titles",
+        adapted_from=["MedrxivClusteringS2S"],
     )
 
     def dataset_transform(self):
@@ -61,7 +62,7 @@ class MedrxivClusteringS2S(AbsTaskClustering):
             "revision": "35191c8c0dca72d8ff3efcd72aa802307d469663",
         },
         type="Clustering",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["eng-Latn"],

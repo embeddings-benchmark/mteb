@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class SinhalaNewsClassification(AbsTaskClassification):
+class SinhalaNewsClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SinhalaNewsClassification",
         description="This file contains news texts (sentences) belonging to 5 different news categories (political, business, technology, sports and Entertainment). The original dataset was released by Nisansa de Silva (Sinhala Text Classification: Observations from the Perspective of a Resource Poor Language, 2015).",
@@ -14,7 +14,7 @@ class SinhalaNewsClassification(AbsTaskClassification):
         },
         reference="https://huggingface.co/datasets/NLPC-UOM/Sinhala-News-Category-classification",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["sin-Sinh"],
@@ -26,18 +26,21 @@ class SinhalaNewsClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{deSilva2015,
-            author    = {Nisansa de Silva},
-            title     = {Sinhala Text Classification: Observations from the Perspective of a Resource Poor Language},
-            journal   = {Year of Publication},
-            year      = {2015},
-            }
-            @article{dhananjaya2022,
-            author    = {Dhananjaya et al.},
-            title     = {BERTifying Sinhala - A Comprehensive Analysis of Pre-trained Language Models for Sinhala Text Classification},
-            journal   = {Year of Publication},
-            year      = {2022},
-            }""",
+        bibtex_citation=r"""
+@article{deSilva2015,
+  author = {Nisansa de Silva},
+  journal = {Year of Publication},
+  title = {Sinhala Text Classification: Observations from the Perspective of a Resource Poor Language},
+  year = {2015},
+}
+
+@article{dhananjaya2022,
+  author = {Dhananjaya et al.},
+  journal = {Year of Publication},
+  title = {BERTifying Sinhala - A Comprehensive Analysis of Pre-trained Language Models for Sinhala Text Classification},
+  year = {2022},
+}
+""",
     )
 
     def dataset_transform(self):

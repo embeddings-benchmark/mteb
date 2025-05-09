@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class SwahiliNewsClassification(AbsTaskClassification):
+class SwahiliNewsClassification(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="SwahiliNewsClassification",
         description="Dataset for Swahili News Classification, categorized with 6 domains (Local News (Kitaifa), International News (Kimataifa), Finance News (Uchumi), Health News (Afya), Sports News (Michezo), and Entertainment News (Burudani)). Building and Optimizing Swahili Language Models: Techniques, Embeddings, and Datasets",
@@ -14,7 +14,7 @@ class SwahiliNewsClassification(AbsTaskClassification):
             "revision": "24fcf066e6b96f9e0d743e8b79184e0c599f73c3",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["train"],
         eval_langs=["swa-Latn"],
@@ -26,16 +26,16 @@ class SwahiliNewsClassification(AbsTaskClassification):
         license="cc-by-nc-sa-4.0",
         annotations_creators="derived",
         sample_creation="found",
-        bibtex_citation="""
-        @inproceedings{davis2020swahili,
-        title = "Swahili: News Classification Dataset (0.2)",
-        author = "Davis, David",
-        year = "2020",
-        publisher = "Zenodo",
-        doi = "10.5281/zenodo.5514203",
-        url = "https://doi.org/10.5281/zenodo.5514203"
-        }
-        """,
+        bibtex_citation=r"""
+@inproceedings{davis2020swahili,
+  author = {Davis, David},
+  doi = {10.5281/zenodo.5514203},
+  publisher = {Zenodo},
+  title = {Swahili: News Classification Dataset (0.2)},
+  url = {https://doi.org/10.5281/zenodo.5514203},
+  year = {2020},
+}
+""",
     )
 
     def dataset_transform(self) -> None:

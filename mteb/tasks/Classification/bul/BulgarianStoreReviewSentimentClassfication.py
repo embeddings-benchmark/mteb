@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class BulgarianStoreReviewSentimentClassfication(AbsTaskClassification):
+class BulgarianStoreReviewSentimentClassfication(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="BulgarianStoreReviewSentimentClassfication",
         description="Bulgarian online store review dataset for sentiment classification.",
@@ -14,7 +14,7 @@ class BulgarianStoreReviewSentimentClassfication(AbsTaskClassification):
             "revision": "701984d6c6efea0e14a1c7850ef70e464c5577c0",
         },
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         date=("2018-05-14", "2018-05-14"),
         eval_splits=["test"],
@@ -26,14 +26,15 @@ class BulgarianStoreReviewSentimentClassfication(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@data{DVN/TXIK9P_2018,
-author = {Georgieva-Trifonova, Tsvetanka and Stefanova, Milena and Kalchev, Stefan},
-publisher = {Harvard Dataverse},
-title = {{Dataset for ``Customer Feedback Text Analysis for Online Stores Reviews in Bulgarian''}},
-year = {2018},
-version = {V1},
-doi = {10.7910/DVN/TXIK9P},
-url = {https://doi.org/10.7910/DVN/TXIK9P}
+        bibtex_citation=r"""
+@data{DVN/TXIK9P_2018,
+  author = {Georgieva-Trifonova, Tsvetanka and Stefanova, Milena and Kalchev, Stefan},
+  doi = {10.7910/DVN/TXIK9P},
+  publisher = {Harvard Dataverse},
+  title = {{Dataset for ``Customer Feedback Text Analysis for Online Stores Reviews in Bulgarian''}},
+  url = {https://doi.org/10.7910/DVN/TXIK9P},
+  version = {V1},
+  year = {2018},
 }
 """,
     )

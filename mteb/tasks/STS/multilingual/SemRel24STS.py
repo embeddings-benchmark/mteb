@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskSTS import AbsTaskSTS
+from mteb.abstasks.AbsTaskAnySTS import AbsTaskAnySTS
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
@@ -21,7 +21,7 @@ _LANGUAGES = {
 _SPLITS = ["test"]
 
 
-class SemRel24STS(AbsTaskSTS):
+class SemRel24STS(AbsTaskAnySTS):
     metadata = TaskMetadata(
         name="SemRel24STS",
         dataset={
@@ -48,20 +48,21 @@ class SemRel24STS(AbsTaskSTS):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@misc{ousidhoum2024semrel2024,
-        title={SemRel2024: A Collection of Semantic Textual Relatedness Datasets for 14 Languages}, 
-        author={Nedjma Ousidhoum and Shamsuddeen Hassan Muhammad and Mohamed Abdalla and Idris Abdulmumin and Ibrahim Said Ahmad and
-        Sanchit Ahuja and Alham Fikri Aji and Vladimir Araujo and Abinew Ali Ayele and Pavan Baswani and Meriem Beloucif and
-        Chris Biemann and Sofia Bourhim and Christine De Kock and Genet Shanko Dekebo and
-        Oumaima Hourrane and Gopichand Kanumolu and Lokesh Madasu and Samuel Rutunda and Manish Shrivastava and
-        Thamar Solorio and Nirmal Surange and Hailegnaw Getaneh Tilaye and Krishnapriya Vishnubhotla and Genta Winata and
-        Seid Muhie Yimam and Saif M. Mohammad},
-              year={2024},
-              eprint={2402.08638},
-              archivePrefix={arXiv},
-              primaryClass={cs.CL}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{ousidhoum2024semrel2024,
+  archiveprefix = {arXiv},
+  author = {Nedjma Ousidhoum and Shamsuddeen Hassan Muhammad and Mohamed Abdalla and Idris Abdulmumin and Ibrahim Said Ahmad and
+Sanchit Ahuja and Alham Fikri Aji and Vladimir Araujo and Abinew Ali Ayele and Pavan Baswani and Meriem Beloucif and
+Chris Biemann and Sofia Bourhim and Christine De Kock and Genet Shanko Dekebo and
+Oumaima Hourrane and Gopichand Kanumolu and Lokesh Madasu and Samuel Rutunda and Manish Shrivastava and
+Thamar Solorio and Nirmal Surange and Hailegnaw Getaneh Tilaye and Krishnapriya Vishnubhotla and Genta Winata and
+Seid Muhie Yimam and Saif M. Mohammad},
+  eprint = {2402.08638},
+  primaryclass = {cs.CL},
+  title = {SemRel2024: A Collection of Semantic Textual Relatedness Datasets for 14 Languages},
+  year = {2024},
+}
+""",
     )
 
     min_score = 0

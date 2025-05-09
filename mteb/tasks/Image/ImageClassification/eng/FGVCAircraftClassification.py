@@ -1,10 +1,16 @@
 from __future__ import annotations
 
-from mteb.abstasks.Image.AbsTaskImageClassification import AbsTaskImageClassification
+from mteb.abstasks import AbsTaskAnyClassification
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
-class FGVCAircraftClassification(AbsTaskImageClassification):
+class FGVCAircraftClassification(AbsTaskAnyClassification):
+    input_column_name: str = "image"
+    samples_per_label: int = 16
+    n_experiments: int = 5
+    # could be family, manufacturer, or variant. Variant has the higher number of classes.
+    label_column_name: str = "variant"
+
     metadata = TaskMetadata(
         name="FGVCAircraft",
         description="Classifying aircraft images from 41 manufacturers and 102 variants.",
@@ -15,7 +21,7 @@ class FGVCAircraftClassification(AbsTaskImageClassification):
             "trust_remote_code": True,
         },
         type="ImageClassification",
-        category="i2i",
+        category="i2c",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
@@ -30,15 +36,15 @@ class FGVCAircraftClassification(AbsTaskImageClassification):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@misc{maji2013finegrainedvisualclassificationaircraft,
-            title={Fine-Grained Visual Classification of Aircraft}, 
-            author={Subhransu Maji and Esa Rahtu and Juho Kannala and Matthew Blaschko and Andrea Vedaldi},
-            year={2013},
-            eprint={1306.5151},
-            archivePrefix={arXiv},
-            primaryClass={cs.CV},
-            url={https://arxiv.org/abs/1306.5151}, 
-        }
-        """,
+        bibtex_citation=r"""
+@misc{maji2013finegrainedvisualclassificationaircraft,
+  archiveprefix = {arXiv},
+  author = {Subhransu Maji and Esa Rahtu and Juho Kannala and Matthew Blaschko and Andrea Vedaldi},
+  eprint = {1306.5151},
+  primaryclass = {cs.CV},
+  title = {Fine-Grained Visual Classification of Aircraft},
+  url = {https://arxiv.org/abs/1306.5151},
+  year = {2013},
+}
+""",
     )
-    label_column_name: str = "variant"  ## could be family, manufacturer, or variant. Variant has the higher number of classes.

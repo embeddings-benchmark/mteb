@@ -10,16 +10,15 @@ from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.TaskMetadata import (
     ANNOTATOR_TYPE,
     LANGUAGES,
-    LICENSES,
     MODALITIES,
     SAMPLE_CREATION_METHOD,
-    STR_DATE,
     TASK_DOMAIN,
     TASK_SUBTYPE,
     TASK_TYPE,
     HFSubset,
     TaskMetadata,
 )
+from mteb.custom_validators import LICENSES, STR_DATE
 from mteb.languages import ISO_LANGUAGE_SCRIPT
 
 logger = logging.getLogger(__name__)
@@ -60,6 +59,8 @@ class AggregateTaskMetadata(TaskMetadata):
     @property
     def hf_subsets_to_langscripts(self) -> dict[HFSubset, list[ISO_LANGUAGE_SCRIPT]]:
         """Return a dictionary mapping huggingface subsets to languages."""
+        if isinstance(self.eval_langs, dict):
+            return self.eval_langs
         return {"default": self.eval_langs}  # type: ignore
 
     @model_validator(mode="after")  # type: ignore

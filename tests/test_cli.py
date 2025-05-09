@@ -33,7 +33,7 @@ def test_available_benchmarks():
 
 run_task_fixures = [
     (
-        "average_word_embeddings_komninos",
+        "sentence-transformers/average_word_embeddings_komninos",
         "BornholmBitextMining",
         "21eec43590414cb8e3a6f654857abed0483ae36e",
     ),
@@ -190,7 +190,7 @@ def test_create_meta_from_existing(
 
 
 def test_save_predictions():
-    command = f"{sys.executable} -m mteb run -m average_word_embeddings_komninos -t NFCorpus --output_folder tests/results --save_predictions"
+    command = f"{sys.executable} -m mteb run -m sentence-transformers/average_word_embeddings_komninos -t NFCorpus --output_folder tests/results --save_predictions"
     result = subprocess.run(command, shell=True, capture_output=True, text=True)
     assert result.returncode == 0, "Command failed"
     test_folder = Path(__file__).parent

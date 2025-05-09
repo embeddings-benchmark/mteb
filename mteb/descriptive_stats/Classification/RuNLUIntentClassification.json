@@ -1,0 +1,564 @@
+{
+    "test": {
+        "num_samples": 10000,
+        "number_of_characters": 362048,
+        "number_texts_intersect_with_train": 247,
+        "min_text_length": 1,
+        "average_text_length": 36.2048,
+        "max_text_length": 228,
+        "unique_texts": 4797,
+        "min_labels_per_text": 9,
+        "average_label_per_text": 14.3008,
+        "max_labels_per_text": 25,
+        "unique_labels": 26,
+        "labels": {
+            "q": {
+                "count": 3780
+            },
+            "a": {
+                "count": 13906
+            },
+            "_": {
+                "count": 20546
+            },
+            "d": {
+                "count": 4088
+            },
+            "e": {
+                "count": 17856
+            },
+            "f": {
+                "count": 1928
+            },
+            "i": {
+                "count": 7744
+            },
+            "n": {
+                "count": 7722
+            },
+            "t": {
+                "count": 7074
+            },
+            "o": {
+                "count": 6038
+            },
+            "m": {
+                "count": 4304
+            },
+            "u": {
+                "count": 4588
+            },
+            "s": {
+                "count": 5054
+            },
+            "c": {
+                "count": 5116
+            },
+            "r": {
+                "count": 10692
+            },
+            "y": {
+                "count": 4160
+            },
+            "g": {
+                "count": 3428
+            },
+            "l": {
+                "count": 7444
+            },
+            "p": {
+                "count": 2968
+            },
+            "v": {
+                "count": 770
+            },
+            "w": {
+                "count": 970
+            },
+            "h": {
+                "count": 1212
+            },
+            "k": {
+                "count": 1142
+            },
+            "b": {
+                "count": 100
+            },
+            "x": {
+                "count": 338
+            },
+            "j": {
+                "count": 40
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "rus-eng": {
+                "num_samples": 5000,
+                "number_of_characters": 181024,
+                "number_texts_intersect_with_train": 0,
+                "min_text_length": 1,
+                "average_text_length": 36.2048,
+                "max_text_length": 228,
+                "unique_texts": 4797,
+                "min_labels_per_text": 9,
+                "average_label_per_text": 14.3008,
+                "max_labels_per_text": 25,
+                "unique_labels": 26,
+                "labels": {
+                    "q": {
+                        "count": 1890
+                    },
+                    "a": {
+                        "count": 6953
+                    },
+                    "_": {
+                        "count": 10273
+                    },
+                    "d": {
+                        "count": 2044
+                    },
+                    "e": {
+                        "count": 8928
+                    },
+                    "f": {
+                        "count": 964
+                    },
+                    "i": {
+                        "count": 3872
+                    },
+                    "n": {
+                        "count": 3861
+                    },
+                    "t": {
+                        "count": 3537
+                    },
+                    "o": {
+                        "count": 3019
+                    },
+                    "m": {
+                        "count": 2152
+                    },
+                    "u": {
+                        "count": 2294
+                    },
+                    "s": {
+                        "count": 2527
+                    },
+                    "c": {
+                        "count": 2558
+                    },
+                    "r": {
+                        "count": 5346
+                    },
+                    "y": {
+                        "count": 2080
+                    },
+                    "g": {
+                        "count": 1714
+                    },
+                    "l": {
+                        "count": 3722
+                    },
+                    "p": {
+                        "count": 1484
+                    },
+                    "v": {
+                        "count": 385
+                    },
+                    "w": {
+                        "count": 485
+                    },
+                    "h": {
+                        "count": 606
+                    },
+                    "k": {
+                        "count": 571
+                    },
+                    "b": {
+                        "count": 50
+                    },
+                    "x": {
+                        "count": 169
+                    },
+                    "j": {
+                        "count": 20
+                    }
+                }
+            },
+            "rus": {
+                "num_samples": 5000,
+                "number_of_characters": 181024,
+                "number_texts_intersect_with_train": 247,
+                "min_text_length": 1,
+                "average_text_length": 36.2048,
+                "max_text_length": 228,
+                "unique_texts": 4797,
+                "min_labels_per_text": 9,
+                "average_label_per_text": 14.3008,
+                "max_labels_per_text": 25,
+                "unique_labels": 26,
+                "labels": {
+                    "q": {
+                        "count": 1890
+                    },
+                    "a": {
+                        "count": 6953
+                    },
+                    "_": {
+                        "count": 10273
+                    },
+                    "d": {
+                        "count": 2044
+                    },
+                    "e": {
+                        "count": 8928
+                    },
+                    "f": {
+                        "count": 964
+                    },
+                    "i": {
+                        "count": 3872
+                    },
+                    "n": {
+                        "count": 3861
+                    },
+                    "t": {
+                        "count": 3537
+                    },
+                    "o": {
+                        "count": 3019
+                    },
+                    "m": {
+                        "count": 2152
+                    },
+                    "u": {
+                        "count": 2294
+                    },
+                    "s": {
+                        "count": 2527
+                    },
+                    "c": {
+                        "count": 2558
+                    },
+                    "r": {
+                        "count": 5346
+                    },
+                    "y": {
+                        "count": 2080
+                    },
+                    "g": {
+                        "count": 1714
+                    },
+                    "l": {
+                        "count": 3722
+                    },
+                    "p": {
+                        "count": 1484
+                    },
+                    "v": {
+                        "count": 385
+                    },
+                    "w": {
+                        "count": 485
+                    },
+                    "h": {
+                        "count": 606
+                    },
+                    "k": {
+                        "count": 571
+                    },
+                    "b": {
+                        "count": 50
+                    },
+                    "x": {
+                        "count": 169
+                    },
+                    "j": {
+                        "count": 20
+                    }
+                }
+            }
+        }
+    },
+    "train": {
+        "num_samples": 10000,
+        "number_of_characters": 350229,
+        "number_texts_intersect_with_train": null,
+        "min_text_length": 2,
+        "average_text_length": 35.0229,
+        "max_text_length": 153,
+        "unique_texts": 9771,
+        "min_labels_per_text": 9,
+        "average_label_per_text": 14.2662,
+        "max_labels_per_text": 25,
+        "unique_labels": 26,
+        "labels": {
+            "q": {
+                "count": 3664
+            },
+            "a": {
+                "count": 13914
+            },
+            "_": {
+                "count": 20490
+            },
+            "s": {
+                "count": 5254
+            },
+            "t": {
+                "count": 7220
+            },
+            "o": {
+                "count": 5824
+            },
+            "c": {
+                "count": 5100
+            },
+            "k": {
+                "count": 1180
+            },
+            "w": {
+                "count": 968
+            },
+            "e": {
+                "count": 18176
+            },
+            "h": {
+                "count": 1128
+            },
+            "r": {
+                "count": 10788
+            },
+            "u": {
+                "count": 4456
+            },
+            "y": {
+                "count": 4146
+            },
+            "f": {
+                "count": 1700
+            },
+            "i": {
+                "count": 7436
+            },
+            "d": {
+                "count": 3894
+            },
+            "l": {
+                "count": 7504
+            },
+            "m": {
+                "count": 4310
+            },
+            "g": {
+                "count": 3512
+            },
+            "n": {
+                "count": 7786
+            },
+            "p": {
+                "count": 3018
+            },
+            "b": {
+                "count": 92
+            },
+            "v": {
+                "count": 694
+            },
+            "x": {
+                "count": 342
+            },
+            "j": {
+                "count": 66
+            }
+        },
+        "hf_subset_descriptive_stats": {
+            "rus-eng": {
+                "num_samples": 5000,
+                "number_of_characters": 172389,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 2,
+                "average_text_length": 34.4778,
+                "max_text_length": 142,
+                "unique_texts": 5000,
+                "min_labels_per_text": 9,
+                "average_label_per_text": 14.2662,
+                "max_labels_per_text": 25,
+                "unique_labels": 26,
+                "labels": {
+                    "q": {
+                        "count": 1832
+                    },
+                    "a": {
+                        "count": 6957
+                    },
+                    "_": {
+                        "count": 10245
+                    },
+                    "s": {
+                        "count": 2627
+                    },
+                    "t": {
+                        "count": 3610
+                    },
+                    "o": {
+                        "count": 2912
+                    },
+                    "c": {
+                        "count": 2550
+                    },
+                    "k": {
+                        "count": 590
+                    },
+                    "w": {
+                        "count": 484
+                    },
+                    "e": {
+                        "count": 9088
+                    },
+                    "h": {
+                        "count": 564
+                    },
+                    "r": {
+                        "count": 5394
+                    },
+                    "u": {
+                        "count": 2228
+                    },
+                    "y": {
+                        "count": 2073
+                    },
+                    "f": {
+                        "count": 850
+                    },
+                    "i": {
+                        "count": 3718
+                    },
+                    "d": {
+                        "count": 1947
+                    },
+                    "l": {
+                        "count": 3752
+                    },
+                    "m": {
+                        "count": 2155
+                    },
+                    "g": {
+                        "count": 1756
+                    },
+                    "n": {
+                        "count": 3893
+                    },
+                    "p": {
+                        "count": 1509
+                    },
+                    "b": {
+                        "count": 46
+                    },
+                    "v": {
+                        "count": 347
+                    },
+                    "x": {
+                        "count": 171
+                    },
+                    "j": {
+                        "count": 33
+                    }
+                }
+            },
+            "rus": {
+                "num_samples": 5000,
+                "number_of_characters": 177840,
+                "number_texts_intersect_with_train": null,
+                "min_text_length": 2,
+                "average_text_length": 35.568,
+                "max_text_length": 153,
+                "unique_texts": 4781,
+                "min_labels_per_text": 9,
+                "average_label_per_text": 14.2662,
+                "max_labels_per_text": 25,
+                "unique_labels": 26,
+                "labels": {
+                    "q": {
+                        "count": 1832
+                    },
+                    "a": {
+                        "count": 6957
+                    },
+                    "_": {
+                        "count": 10245
+                    },
+                    "s": {
+                        "count": 2627
+                    },
+                    "t": {
+                        "count": 3610
+                    },
+                    "o": {
+                        "count": 2912
+                    },
+                    "c": {
+                        "count": 2550
+                    },
+                    "k": {
+                        "count": 590
+                    },
+                    "w": {
+                        "count": 484
+                    },
+                    "e": {
+                        "count": 9088
+                    },
+                    "h": {
+                        "count": 564
+                    },
+                    "r": {
+                        "count": 5394
+                    },
+                    "u": {
+                        "count": 2228
+                    },
+                    "y": {
+                        "count": 2073
+                    },
+                    "f": {
+                        "count": 850
+                    },
+                    "i": {
+                        "count": 3718
+                    },
+                    "d": {
+                        "count": 1947
+                    },
+                    "l": {
+                        "count": 3752
+                    },
+                    "m": {
+                        "count": 2155
+                    },
+                    "g": {
+                        "count": 1756
+                    },
+                    "n": {
+                        "count": 3893
+                    },
+                    "p": {
+                        "count": 1509
+                    },
+                    "b": {
+                        "count": 46
+                    },
+                    "v": {
+                        "count": 347
+                    },
+                    "x": {
+                        "count": 171
+                    },
+                    "j": {
+                        "count": 33
+                    }
+                }
+            }
+        }
+    }
+}

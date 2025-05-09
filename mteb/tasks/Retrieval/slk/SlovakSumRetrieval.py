@@ -34,14 +34,14 @@ class SlovakSumRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-            @inproceedings{OndrejowaSlovakSum24,
-                title = {SlovakSum: A Large Scale Slovak Summarization Dataset},
-                booktitle = {Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation},
-                author = {Ondrejová, Viktória and Šuppa, Marek},
-                date = {2024},
-            }
-        """,
+        bibtex_citation=r"""
+@inproceedings{OndrejowaSlovakSum24,
+  author = {Ondrejová, Viktória and Šuppa, Marek},
+  booktitle = {Proceedings of the 2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation},
+  date = {2024},
+  title = {SlovakSum: A Large Scale Slovak Summarization Dataset},
+}
+""",
     )
 
     def load_data(self, **kwargs):

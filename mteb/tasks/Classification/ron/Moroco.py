@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mteb.abstasks.AbsTaskClassification import AbsTaskClassification
+from mteb.abstasks.AbsTaskAnyClassification import AbsTaskAnyClassification
 
 # type: ignore
 from mteb.abstasks.TaskMetadata import TaskMetadata  # type: ignore
 
 
-class Moroco(AbsTaskClassification):
+class Moroco(AbsTaskAnyClassification):
     metadata = TaskMetadata(
         name="Moroco",
         dataset={
@@ -17,7 +17,7 @@ class Moroco(AbsTaskClassification):
         description="The Moldavian and Romanian Dialectal Corpus. The MOROCO data set contains Moldavian and Romanian samples of text collected from the news domain. The samples belong to one of the following six topics: (0) culture, (1) finance, (2) politics, (3) science, (4) sports, (5) tech",
         reference="https://huggingface.co/datasets/moroco",
         type="Classification",
-        category="t2t",
+        category="t2c",
         modalities=["text"],
         eval_splits=["test"],
         eval_langs=["ron-Latn"],
@@ -32,15 +32,15 @@ class Moroco(AbsTaskClassification):
             "ron-Latn-mol",
         ],  # Moldavian, or the Romanian dialect used in Moldova, does not have an ISO 639-1 code assigned to it. However, it has been given the three-letter code "mol" under ISO 639-3
         sample_creation="found",
-        bibtex_citation=""""
-        @inproceedings{ Butnaru-ACL-2019,
-        author = {Andrei M. Butnaru and Radu Tudor Ionescu},
-        title = "{MOROCO: The Moldavian and Romanian Dialectal Corpus}",
-        booktitle = {Proceedings of ACL},
-        year = {2019},
-        pages={688--698},
-        }
-        """,
+        bibtex_citation=r"""
+@inproceedings{Butnaru-ACL-2019,
+  author = {Andrei M. Butnaru and Radu Tudor Ionescu},
+  booktitle = {Proceedings of ACL},
+  pages = {688--698},
+  title = {{MOROCO: The Moldavian and Romanian Dialectal Corpus}},
+  year = {2019},
+}
+""",
     )
 
     def dataset_transform(self):

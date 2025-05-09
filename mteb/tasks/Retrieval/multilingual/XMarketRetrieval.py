@@ -53,7 +53,7 @@ def _load_xmarket_data(
         corpus[lang][split] = {row["_id"]: row for row in corpus_rows}
         queries[lang][split] = {row["_id"]: row["text"] for row in query_rows}
         relevant_docs[lang][split] = {
-            row["_id"]: {v: 1 for v in row["text"].split(" ")} for row in qrels_rows
+            row["_id"]: dict.fromkeys(row["text"].split(" "), 1) for row in qrels_rows
         }
 
     corpus = datasets.DatasetDict(corpus)
@@ -85,15 +85,20 @@ class XMarket(AbsTaskRetrieval):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@inproceedings{Bonab_2021, series={CIKM ’21},
-   title={Cross-Market Product Recommendation},
-   url={http://dx.doi.org/10.1145/3459637.3482493},
-   DOI={10.1145/3459637.3482493},
-   booktitle={Proceedings of the 30th ACM International Conference on Information &amp; Knowledge Management},
-   publisher={ACM},
-   author={Bonab, Hamed and Aliannejadi, Mohammad and Vardasbi, Ali and Kanoulas, Evangelos and Allan, James},
-   year={2021},
-   month=oct, collection={CIKM ’21} }""",
+        bibtex_citation=r"""
+@inproceedings{Bonab_2021,
+  author = {Bonab, Hamed and Aliannejadi, Mohammad and Vardasbi, Ali and Kanoulas, Evangelos and Allan, James},
+  booktitle = {Proceedings of the 30th ACM International Conference on Information &amp; Knowledge Management},
+  collection = {CIKM ’21},
+  doi = {10.1145/3459637.3482493},
+  month = oct,
+  publisher = {ACM},
+  series = {CIKM ’21},
+  title = {Cross-Market Product Recommendation},
+  url = {http://dx.doi.org/10.1145/3459637.3482493},
+  year = {2021},
+}
+""",
     )
 
     def load_data(self, **kwargs):

@@ -14,7 +14,7 @@ class InstructIR(AbsTaskRetrieval):
             "path": "mteb/InstructIR-mteb",
             "revision": "42c3afabe480643b755a7099dbf0f9ebeedaf6ca",
         },
-        type="Reranking",
+        type="InstructionRetrieval",
         category="t2t",
         modalities=["text"],
         eval_splits=["test"],
@@ -27,12 +27,14 @@ class InstructIR(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@article{oh2024instructir,
-      title={{INSTRUCTIR: A Benchmark for Instruction Following of Information Retrieval Models}}, 
-      author={{Hanseok Oh and Hyunji Lee and Seonghyeon Ye and Haebin Shin and Hansol Jang and Changwook Jun and Minjoon Seo}},
-      year={{2024}},
-      eprint={{2402.14334}},
-      archivePrefix={{arXiv}},
-      primaryClass={{cs.CL}}
-}""",
+        bibtex_citation=r"""
+@article{oh2024instructir,
+  archiveprefix = {{arXiv}},
+  author = {{Hanseok Oh and Hyunji Lee and Seonghyeon Ye and Haebin Shin and Hansol Jang and Changwook Jun and Minjoon Seo}},
+  eprint = {{2402.14334}},
+  primaryclass = {{cs.CL}},
+  title = {{INSTRUCTIR: A Benchmark for Instruction Following of Information Retrieval Models}},
+  year = {{2024}},
+}
+""",
     )

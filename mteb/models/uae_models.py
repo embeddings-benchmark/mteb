@@ -1,16 +1,15 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Sequence
-from functools import partial
 from typing import Any
 
-import numpy as np
 import torch
+from torch.utils.data import DataLoader
 
-from mteb.encoder_interface import PromptType
+from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
+from mteb.types import Array, BatchedInput, PromptType
 
 logger = logging.getLogger(__name__)
 
@@ -20,20 +19,24 @@ class UAEWrapper(SentenceTransformerWrapper):
 
     def encode(
         self,
-        sentences: Sequence[str],
+        inputs: DataLoader[BatchedInput],
         *,
-        task_name: str,
+        task_metadata: TaskMetadata,
+        hf_split: str,
+        hf_subset: str,
         prompt_type: PromptType | None = None,
         **kwargs: Any,
-    ) -> np.ndarray:
-        prompt_name = self.get_prompt_name(self.model_prompts, task_name, prompt_type)
+    ) -> Array:
+        prompt_name = self.get_prompt_name(task_metadata, prompt_type)
+        sentences = [text for batch in inputs for text in batch["text"]]
+
         if prompt_name:
             logger.info(
-                f"Using prompt_name={prompt_name} for task={task_name} prompt_type={prompt_type}"
+                f"Using prompt_name={prompt_name} for task={task_metadata.name} prompt_type={prompt_type}"
             )
         else:
             logger.info(
-                f"No model prompts found for task={task_name} prompt_type={prompt_type}"
+                f"No model prompts found for task={task_metadata.name} prompt_type={prompt_type}"
             )
         logger.info(f"Encoding {len(sentences)} sentences.")
         if prompt_name and prompt_name in self.model.prompts:
@@ -51,10 +54,8 @@ class UAEWrapper(SentenceTransformerWrapper):
 
 
 uae_large_v1 = ModelMeta(
-    loader=partial(  # type: ignore
-        UAEWrapper,
-        model="WhereIsAI/UAE-Large-V1",
-        revision="369c368f70f16a613f19f5598d4f12d9f44235d4",
+    loader=UAEWrapper,
+    loader_kwargs=dict(
         # https://github.com/SeanLee97/AnglE/blob/b04eae166d8596b47293c75b4664d3ad820d7331/angle_emb/angle.py#L291-L314
         model_prompts={
             "query": "Represent this sentence for searching relevant passages: {text}",
@@ -62,11 +63,11 @@ uae_large_v1 = ModelMeta(
         },
     ),
     name="WhereIsAI/UAE-Large-V1",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="369c368f70f16a613f19f5598d4f12d9f44235d4",
     release_date="2023-12-04",  # initial commit of hf model.
-    n_parameters=335 * 1e6,
+    n_parameters=int(335 * 1e6),
     memory_usage_mb=1278,
     max_tokens=512,
     embed_dim=1024,
