@@ -51,7 +51,13 @@ class OpenAIWrapper(Wrapper):
         self._client = OpenAI()
 
         self._model_name = model_name
-        self._embed_dim = embed_dim or self.default_embed_dims.get(model_name)
+        if embed_dim is None:
+            if model_name not in self.default_embed_dims:
+                raise ValueError(
+                    f"Model {model_name} does not have a default embed_dim. Please provide an embedding dimension."
+                )
+            embed_dim = self.default_embed_dims[model_name]
+
         self._max_tokens = max_tokens
         self._encoding = tiktoken.get_encoding(tokenizer_name)
 
