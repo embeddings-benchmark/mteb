@@ -29,20 +29,20 @@ class CzechProductReviewSentimentClassification(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{habernal-etal-2013-sentiment,
-    address = {Atlanta, Georgia},
-    author = {Habernal, Ivan  and
+  address = {Atlanta, Georgia},
+  author = {Habernal, Ivan  and
 Pt{\'a}{\v{c}}ek, Tom{\'a}{\v{s}}  and
 Steinberger, Josef},
-    booktitle = {Proceedings of the 4th Workshop on Computational Approaches to Subjectivity, Sentiment and Social Media Analysis},
-    editor = {Balahur, Alexandra  and
+  booktitle = {Proceedings of the 4th Workshop on Computational Approaches to Subjectivity, Sentiment and Social Media Analysis},
+  editor = {Balahur, Alexandra  and
 van der Goot, Erik  and
 Montoyo, Andres},
-    month = jun,
-    pages = {65--74},
-    publisher = {Association for Computational Linguistics},
-    title = {Sentiment Analysis in {C}zech Social Media Using Supervised Machine Learning},
-    url = {https://aclanthology.org/W13-1609},
-    year = {2013},
+  month = jun,
+  pages = {65--74},
+  publisher = {Association for Computational Linguistics},
+  title = {Sentiment Analysis in {C}zech Social Media Using Supervised Machine Learning},
+  url = {https://aclanthology.org/W13-1609},
+  year = {2013},
 }
 """,
     )
@@ -50,21 +50,22 @@ Montoyo, Andres},
 
     def dataset_transform(self) -> None:
         self.dataset = self.dataset.rename_columns(
-                {"comment": "text", "rating_str": "label"}
+            {"comment": "text", "rating_str": "label"}
         )
         self.dataset = self.stratified_subsampling(
-                self.dataset, seed=self.seed, splits=["test"]
+            self.dataset, seed=self.seed, splits=["test"]
         )
+
 
 class CzechProductReviewSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CzechProductReviewSentimentClassification.v2",
         description="""User reviews of products on Czech e-shop Mall.cz with 3 sentiment classes (positive, neutral, negative)
-        This version corrects errors found in the original data. For details, see https://github.com/embeddings-benchmark/mteb/pull/12345""",
+        This version corrects errors found in the original data. For details, see https://github.com/embeddings-benchmark/mteb/pull/2680""",
         reference="https://aclanthology.org/W13-1609/",
         dataset={
-                "path": "mteb/czech_product_review_sentiment",
-                "revision": "983dd9da4e10b1ce3821cccd67ef1444134a7f25",
+            "path": "mteb/czech_product_review_sentiment",
+            "revision": "983dd9da4e10b1ce3821cccd67ef1444134a7f25",
         },
         type="Classification",
         category="s2s",
@@ -81,20 +82,20 @@ class CzechProductReviewSentimentClassificationV2(AbsTaskClassification):
         sample_creation="found",
         bibtex_citation=r"""
 @inproceedings{habernal-etal-2013-sentiment,
-    address = {Atlanta, Georgia},
-    author = {Habernal, Ivan  and
+  address = {Atlanta, Georgia},
+  author = {Habernal, Ivan  and
 Pt{\'a}{\v{c}}ek, Tom{\'a}{\v{s}}  and
 Steinberger, Josef},
-    booktitle = {Proceedings of the 4th Workshop on Computational Approaches to Subjectivity, Sentiment and Social Media Analysis},
-    editor = {Balahur, Alexandra  and
+  booktitle = {Proceedings of the 4th Workshop on Computational Approaches to Subjectivity, Sentiment and Social Media Analysis},
+  editor = {Balahur, Alexandra  and
 van der Goot, Erik  and
 Montoyo, Andres},
-    month = jun,
-    pages = {65--74},
-    publisher = {Association for Computational Linguistics},
-    title = {Sentiment Analysis in {C}zech Social Media Using Supervised Machine Learning},
-    url = {https://aclanthology.org/W13-1609},
-    year = {2013},
+  month = jun,
+  pages = {65--74},
+  publisher = {Association for Computational Linguistics},
+  title = {Sentiment Analysis in {C}zech Social Media Using Supervised Machine Learning},
+  url = {https://aclanthology.org/W13-1609},
+  year = {2013},
 }
 """,
     )
@@ -102,5 +103,5 @@ Montoyo, Andres},
 
     def dataset_transform(self) -> None:
         self.dataset = self.stratified_subsampling(
-                self.dataset, seed=self.seed, splits=["test"]
+            self.dataset, seed=self.seed, splits=["test"]
         )

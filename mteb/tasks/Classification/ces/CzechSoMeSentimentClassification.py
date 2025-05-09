@@ -53,11 +53,12 @@ Montoyo, Andres},
             {"comment": "text", "sentiment_int": "label"}
         )
 
+
 class CzechSoMeSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="CzechSoMeSentimentClassification.v2",
         description="""User comments on Facebook
-        This version corrects errors found in the original data. For details, see https://github.com/embeddings-benchmark/mteb/pull/12345""",
+        This version corrects errors found in the original data. For details, see https://github.com/embeddings-benchmark/mteb/pull/2680""",
         reference="https://aclanthology.org/W13-1609/",
         dataset={
             "path": "mteb/czech_so_me_sentiment",
