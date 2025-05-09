@@ -5,6 +5,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 
 class CzechSoMeSentimentClassification(AbsTaskClassification):
+    superseded_by = "CzechSoMeSentimentClassification.v2"
     metadata = TaskMetadata(
         name="CzechSoMeSentimentClassification",
         description="User comments on Facebook",
@@ -51,3 +52,47 @@ Montoyo, Andres},
         self.dataset = self.dataset.rename_columns(
             {"comment": "text", "sentiment_int": "label"}
         )
+
+class CzechSoMeSentimentClassificationV2(AbsTaskClassification):
+    metadata = TaskMetadata(
+        name="CzechSoMeSentimentClassification.v2",
+        description="""User comments on Facebook
+        This version corrects errors found in the original data. For details, see https://github.com/embeddings-benchmark/mteb/pull/12345""",
+        reference="https://aclanthology.org/W13-1609/",
+        dataset={
+            "path": "mteb/czech_so_me_sentiment",
+            "revision": "8902253acefac13f91e339bf3dfe8fdafc1d5766",
+        },
+        type="Classification",
+        category="s2s",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=["ces-Latn"],
+        main_score="accuracy",
+        date=("2013-01-01", "2013-06-01"),
+        dialect=[],
+        domains=["Reviews", "Written"],
+        task_subtypes=["Sentiment/Hate speech"],
+        license="cc-by-nc-sa-4.0",
+        annotations_creators="derived",
+        sample_creation="found",
+        bibtex_citation=r"""
+@inproceedings{habernal-etal-2013-sentiment,
+  address = {Atlanta, Georgia},
+  author = {Habernal, Ivan  and
+Pt{\'a}{\v{c}}ek, Tom{\'a}{\v{s}}  and
+Steinberger, Josef},
+  booktitle = {Proceedings of the 4th Workshop on Computational Approaches to Subjectivity, Sentiment and Social Media Analysis},
+  editor = {Balahur, Alexandra  and
+van der Goot, Erik  and
+Montoyo, Andres},
+  month = jun,
+  pages = {65--74},
+  publisher = {Association for Computational Linguistics},
+  title = {Sentiment Analysis in {C}zech Social Media Using Supervised Machine Learning},
+  url = {https://aclanthology.org/W13-1609},
+  year = {2013},
+}
+""",
+    )
+    samples_per_label = 16
