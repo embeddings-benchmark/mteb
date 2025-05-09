@@ -27,7 +27,7 @@ Example:
 class MenuEntry:
     name: str | None
     benchmarks: list[Benchmark]
-    open: bool
+    open: bool = False
 
 
 BENCHMARK_ENTRIES = [
@@ -67,7 +67,6 @@ BENCHMARK_ENTRIES = [
                 "ChemTEB",
             ]
         ),
-        False,
     ),
     MenuEntry(
         "Language-specific Benchmarks",
@@ -82,7 +81,6 @@ BENCHMARK_ENTRIES = [
                 "MTEB(rus, v1)",
             ]
         ),
-        False,
     ),
     MenuEntry(
         "Miscellaneous",
@@ -101,7 +99,6 @@ BENCHMARK_ENTRIES = [
                 "RAR-b",
             ]
         ),
-        False,
     ),
     MenuEntry(
         "Legacy",
@@ -110,7 +107,6 @@ BENCHMARK_ENTRIES = [
                 "MTEB(eng, v1)",
             ]
         ),
-        False,
     ),
 ]
 
