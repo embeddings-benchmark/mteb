@@ -1,17 +1,20 @@
 from __future__ import annotations
 
+from mteb.abstasks.TaskMetadata import TaskMetadata
 import random
-
-import datasets
-import pandas as pd
-
+from collections import defaultdict
+from datasets import Dataset, DatasetDict
+import numpy as np
 from mteb.abstasks.Audio.AbsTaskAudioPairClassification import (
     AbsTaskAudioPairClassification,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from tqdm import tqdm
+import datasets
+import pandas as pd
+import gc
+import logging
 
-random.seed(42)
-
+logger = logging.getLogger(__name__)
 
 class NMSQAPairClassification(AbsTaskAudioPairClassification):
     metadata = TaskMetadata(
@@ -29,7 +32,7 @@ class NMSQAPairClassification(AbsTaskAudioPairClassification):
         main_score="max_ap",
         domains=["Spoken"],
         task_subtypes=["Question answering"],
-        license="not specified",
+        license="cc-by-sa-4.0",
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation="""@misc{lin2022dualdiscretespokenunit,
@@ -62,53 +65,54 @@ class NMSQAPairClassification(AbsTaskAudioPairClassification):
         df.loc[:, audio2_name] = df.apply(lambda row: row[audio2_name]["array"], axis=1)
 
     def dataset_transform(self):
-        df = pd.DataFrame(self.dataset["test"])
+        ds = self.dataset["test"]
 
-        # shuffle and split dataset by row
-        df = df.sample(frac=1)
-        df_sim = df.iloc[: len(df) // 2, :]
-        df_dissim = df.iloc[len(df) // 2 :, :]
 
-        similar_pairs = []
-        dissimilar_pairs = []
+        ds = ds.shuffle(self.seed)
 
-        # match question and answer pairs for similar
-        columns_to_keep = ["question_audio_path", "content_segment_audio_path"]
-        df_sim = df_sim[columns_to_keep]
-        df_sim["label"] = 1
-        self._extract_waveform_from_df(df_sim)
-        self._extract_waveform_from_df(df_dissim)
+        # split into similar and dissimilar halves
+        half = len(ds) // 2
+        ds_sim = ds.select(range(half))
+        ds_dissim = ds.select(range(half, len(ds)))
 
-        similar_pairs = df_sim.values.tolist()
+        # add label to similar pairs
+        ds_sim = ds_sim.add_column("label", [1] * len(ds_sim))
 
-        num_similar = len(similar_pairs)
-        print("Similar pairs: ", num_similar)
-
-        # shuffle and mismatch question and answer pairs for dissimilar
-        df_dissim.sample(frac=1)
-        dissimilar_pairs = [
-            [
-                df_dissim.iloc[i]["question_audio_path"],
-                df_dissim.iloc[(i + 1) % len(df_dissim)]["content_segment_audio_path"],
-                0,
-            ]
-            for i in range(len(df_dissim))
-        ]
-
-        pairs = similar_pairs + dissimilar_pairs
-        print("Number of pairs: ", len(pairs))
-        random.shuffle(pairs)
-
-        audio1, audio2, label = zip(*pairs[:10])
-        audio1 = list(audio1)
-        audio2 = list(audio2)
-        label = list(label)
-
-        print("Generating dataset: ")
-        HF_ds = datasets.Dataset.from_dict(
-            {"audio1": audio1, "audio2": audio2, "label": label}
+        # extract waveforms for similar pairs
+        ds_sim = ds_sim.map(
+            lambda row: {
+                "question_audio_path": row["question_audio_path"]["array"],
+                "content_segment_audio_path": row["content_segment_audio_path"]["array"],
+            },
+            batched=False,
         )
 
-        # convert back to HF dataset
-        self.dataset = datasets.DatasetDict({"test": HF_ds})
-        print("done!")
+        # for dissimilar pairs, mismatch the answer audio
+        def make_dissimilar_pairs(batch):
+            n = len(batch["question_audio_path"])
+            return {
+                "question_audio_path": batch["question_audio_path"],
+                "content_segment_audio_path": batch["content_segment_audio_path"][1:] + batch["content_segment_audio_path"][:1],
+                "label": [0] * n,
+            }
+
+        ds_dissim = ds_dissim.map(
+            lambda row, idx: {
+                "question_audio_path": row["question_audio_path"]["array"],
+                "content_segment_audio_path": ds_dissim[(idx + 1) % len(ds_dissim)]["content_segment_audio_path"]["array"],
+                "label": 0,
+            },
+            with_indices=True,
+        )
+
+        ds_combined = datasets.concatenate_datasets([ds_sim, ds_dissim])
+
+        ds_combined = ds_combined.shuffle(seed=self.seed)
+
+        ds_combined = ds_combined.rename_columns({
+            "question_audio_path": "audio1",
+            "content_segment_audio_path": "audio2"
+        })
+
+        # wrap in DatasetDict
+        self.dataset = datasets.DatasetDict({"test": ds_combined})

@@ -1,17 +1,20 @@
 from __future__ import annotations
 
 import random
-
-import datasets
-import pandas as pd
-from tqdm import tqdm
-
+from collections import defaultdict
+from datasets import Dataset, DatasetDict
+import numpy as np
 from mteb.abstasks.Audio.AbsTaskAudioPairClassification import (
     AbsTaskAudioPairClassification,
 )
-from mteb.abstasks.TaskMetadata import TaskMetadata
+from tqdm import tqdm
+import datasets
+import pandas as pd
+import gc
+import logging
 
-random.seed(42)
+logger = logging.getLogger(__name__)
+
 
 
 class ESC50PairClassification(AbsTaskAudioPairClassification):
@@ -31,7 +34,7 @@ class ESC50PairClassification(AbsTaskAudioPairClassification):
         date=("2023-01-07", "2023-01-07"),
         domains=["Encyclopaedic"],
         task_subtypes=["Environment Sound Classification"],
-        license="cc-by-nc-sa-3.0",  # Replace with appropriate license from allowed list
+        license="cc-by-nc-sa-3.0",
         annotations_creators="human-annotated",
         dialect=[],
         modalities=["audio"],
@@ -59,50 +62,78 @@ class ESC50PairClassification(AbsTaskAudioPairClassification):
     samples_per_label: int = 2
 
     def dataset_transform(self):
-        df = pd.DataFrame(self.dataset["train"])
+        ds = self.dataset["train"]
+        logger.info(f"Starting dataset transformation with seed {self.seed}...")
 
-        df = df.rename(columns={"target": "label"})
-        grouped = [df.loc[df["label"] == label] for label in df["label"].unique()]
+        ds = ds.rename_column("target", "label")
 
+        # group indices by label
+        label2indices = {}
+        for idx, label in enumerate(ds["label"]):
+            label2indices.setdefault(label, []).append(idx)
+
+        rng = np.random.default_rng(self.seed)
         similar_pairs = []
+
+        logger.info("Generating similar pairs:")
+        for label, indices in tqdm(label2indices.items()):
+            indices = np.array(indices)
+            rng.shuffle(indices)
+            # create pairs, handling odd number of samples
+            for i in range(0, len(indices) - 1, 2):
+                idx1, idx2 = indices[i], indices[i + 1]
+                similar_pairs.append((int(idx1), int(idx2), 1))
+
+        num_similar = len(similar_pairs)
+        logger.info(f"Number of similar pairs: {num_similar}")
+
+
+        logger.info("Generating dissimilar pairs:")
+        labels = list(label2indices.keys())
         dissimilar_pairs = []
 
-        print("Generating similar pairs: ")
-        for group in tqdm(grouped):
-            files = [audio["array"].tolist() for audio in group["audio"]]
-            random.shuffle(files)
-            similar_pairs.extend(
-                [[files[i], files[i + 1], [1]] for i in range(0, len(files) - 1, 2)]
-            )
+        # pre-compute the candidate indices for each label
+        label_candidates = {}
+        for label in labels:
+            other_labels = [l for l in labels if l != label]
+            label_candidates[label] = []
+            for other_label in other_labels:
+                label_candidates[label].extend(label2indices[other_label])
 
-        all_files = [audio["array"].tolist() for audio in df["audio"]]
-        all_labels = df["label"].values.tolist()
 
-        print("done!")
+        for label, indices in tqdm(label2indices.items()):
+            candidates = label_candidates[label]
+            if not candidates:
+                continue
 
-        print("Generating dissimilar pairs: ")
-        num_similar = len(similar_pairs)
-        while len(dissimilar_pairs) < num_similar:
-            idx1, idx2 = random.sample(range(len(all_files)), 2)
-            if all_labels[idx1] != all_labels[idx2]:
-                dissimilar_pairs.append([all_files[idx1], all_files[idx2], [0]])
+            n_pairs = min(len(indices), num_similar // len(labels))
+
+            sampled_indices = rng.choice(indices, size=n_pairs, replace=False)
+
+            sampled_candidates = rng.choice(candidates, size=n_pairs, replace=True)
+
+            for idx1, idx2 in zip(sampled_indices, sampled_candidates):
+                dissimilar_pairs.append((int(idx1), int(idx2), 0))
+
+        # ensure same number of similar and dissimilar pairs
+        min_pairs = min(len(similar_pairs), len(dissimilar_pairs))
+        similar_pairs = similar_pairs[:min_pairs]
+        dissimilar_pairs = dissimilar_pairs[:min_pairs]
+
+        logger.info(f"Number of dissimilar pairs: {len(dissimilar_pairs)}")
 
         pairs = similar_pairs + dissimilar_pairs
-        random.shuffle(pairs)
-        print("done!")
+        rng.shuffle(pairs)
 
-        print(f"Number of pairs: {len(pairs)}")
-        audio1, audio2, label = zip(*pairs)
+        audio1 = [ds[idx1]["audio"]["array"] for idx1, idx2, _ in pairs]
+        audio2 = [ds[idx2]["audio"]["array"] for idx1, idx2, _ in pairs]
+        label = [[lbl] for _, _, lbl in pairs]
 
-        audio1 = list(audio1)
-        audio2 = list(audio2)
-        label = list(label)
-
+        logger.info("Creating dataset...")
         HF_ds = datasets.Dataset.from_dict(
             {"audio1": audio1, "audio2": audio2, "label": label}
         )
 
-        print("Zipping features and generating dataset...")
-        # convert back to HF dataset
+        logger.info("Generating final dataset...")
         self.dataset = datasets.DatasetDict({"test": HF_ds})
-        print("done!")
+        logger.info("done!")
