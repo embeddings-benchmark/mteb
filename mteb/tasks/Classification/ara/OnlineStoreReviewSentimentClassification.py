@@ -43,7 +43,8 @@ class OnlineStoreReviewSentimentClassificationV2(AbsTaskClassification):
             "path": "mteb/online_store_review_sentiment",
             "revision": "11ba0645b00bb68f34e741956d07f19eb0526c92",
         },
-        description="This dataset contains Arabic reviews of products from the SHEIN online store.",
+        description="""This dataset contains Arabic reviews of products from the SHEIN online store.
+        This version corrects errors found in the original data. For details, see https://github.com/embeddings-benchmark/mteb/pull/2632""",
         reference="https://huggingface.co/datasets/Ruqiya/Arabic_Reviews_of_SHEIN",
         type="Classification",
         category="s2s",
