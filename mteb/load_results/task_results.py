@@ -638,6 +638,8 @@ class TaskResult(BaseModel):
 
         Args:
             new_results: The new TaskResult object to merge with the current one.
+            criteria: Additional criteria to check for merging. Can be "mteb_version" or "dataset_revision".
+                It will always check that the task name match.
 
         Returns:
             A new TaskResult object with the merged scores.
