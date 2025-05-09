@@ -626,7 +626,11 @@ class TaskMetadata(BaseModel):
 
         dataset_license = self.license
         if dataset_license:
-            license_mapping = {"not specified": "unknown", "msr-la-nc": "other"}
+            license_mapping = {
+                "not specified": "unknown",
+                "msr-la-nc": "other",
+                "cc-by-nd-2.1-jp": "cc-by-nd-2.1",
+            }
             dataset_license = license_mapping.get(
                 dataset_license,
                 "other" if dataset_license.startswith("http") else dataset_license,
@@ -660,6 +664,7 @@ class TaskMetadata(BaseModel):
                 dataset_task_name=self.name,
                 category=self.category,
                 domains=", ".join(self.domains) if self.domains else None,
+                reupload=reupload,
             ),
         )
 

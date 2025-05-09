@@ -448,7 +448,6 @@ class AbsTask(ABC):
                         }
                     )
                 else:
-                    print(self.dataset[split])
                     sentences[split] = Dataset.from_dict(
                         {field: self.dataset[split][field] for field in fields}
                     )

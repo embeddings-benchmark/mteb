@@ -36,9 +36,9 @@ def load_bright_data(
     cache_dir: str | None = None,
     revision: str | None = None,
 ):
-    corpus = {domain: dict.fromkeys(eval_splits) for domain in DOMAINS}
-    queries = {domain: dict.fromkeys(eval_splits) for domain in DOMAINS}
-    relevant_docs = {domain: dict.fromkeys(eval_splits) for domain in DOMAINS}
+    corpus = {domain: dict.fromkeys(eval_splits) for domain in domains}
+    queries = {domain: dict.fromkeys(eval_splits) for domain in domains}
+    relevant_docs = {domain: dict.fromkeys(eval_splits) for domain in domains}
 
     for domain in domains:
         domain_corpus = datasets.load_dataset(
@@ -154,9 +154,3 @@ class BrightLongRetrieval(AbsTaskRetrieval):
 
     load_bright_data = load_bright_data
     load_data = load_data
-
-
-if __name__ == "__main__":
-    print("long")
-    task = BrightLongRetrieval()
-    task.push_dataset_to_hub(f"mteb/{task.metadata.name}", reupload=True)
