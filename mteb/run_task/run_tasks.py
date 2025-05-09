@@ -209,11 +209,12 @@ def run_tasks(
         encode_kwargs: Additional keyword arguments passed to the models `encode` method.
         raise_error: If True, raise an error if the task fails. If False, return an empty list.
         output_folder: The folder to save the results to. If None, the results will not be saved.
-        cache_strategy: The strategy to use for loading existing the results. Can be "no_cache", "output_folder" or "online_cache". Where
-            "no_cache" will not cache the results,
-            "output_folder" will cache the results in the output folder and
-            "online_cache" will cache the results in the online cache folder.
-        overwrite_strategy: The strategy to use for overwriting the results. Can be "always", "never", "only-missing" or "if-version-changed".
+        cache_strategy: The strategy to use for loading existing the results. Can be:
+            - "no_cache": will not load the results from the cache.
+            - "output_folder": Will check if the results exist in the output folder and load them from there.
+            - "online_cache": Will check if the results exist in the online cache and load them from there. This will download the results from the online cache.
+            - "only_cache": Will only load the results from the cache folder and do not run the task. Useful for debugging and testing.
+        overwrite_strategy: The strategy to use for overwriting the results. Can be "always", "never", "only-missing" or "on-version-mismatch".
         kwargs: Additional keyword arguments for the task.
 
     Returns:
