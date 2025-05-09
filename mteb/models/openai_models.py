@@ -30,7 +30,8 @@ class OpenAIWrapper(Wrapper):
         **kwargs,
     ) -> None:
         """Wrapper for OpenAIs embedding API.
-        To handle documents larger than 8191 tokens, we truncate the document to the specified sequence length.
+        To handle documents larger than 8191 tokens, we truncate the document to the specified sequence length. If the docuement is empty we return a
+        zero vector.
         """
         requires_package(
             self,
@@ -56,7 +57,9 @@ class OpenAIWrapper(Wrapper):
                 raise ValueError(
                     f"Model {model_name} does not have a default embed_dim. Please provide an embedding dimension."
                 )
-            embed_dim = self.default_embed_dims[model_name]
+            self._embed_dim = self.default_embed_dims[model_name]
+        else:
+            self._embed_dim = embed_dim
 
         self._max_tokens = max_tokens
         self._encoding = tiktoken.get_encoding(tokenizer_name)
