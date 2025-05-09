@@ -107,9 +107,8 @@ class MIRACLRetrieval(AbsTaskRetrieval):
         description="MIRACL (Multilingual Information Retrieval Across a Continuum of Languages) is a multilingual retrieval dataset that focuses on search across 18 different languages.",
         reference="http://miracl.ai",
         dataset={
-            "path": "miracl/mmteb-miracl",
+            "path": "RSamoed/MIRACLRetrieval",
             "revision": "main",
-            "trust_remote_code": True,
         },
         type="Retrieval",
         category="t2t",
