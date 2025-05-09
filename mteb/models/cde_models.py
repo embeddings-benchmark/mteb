@@ -132,12 +132,18 @@ class CDEWrapper(SentenceTransformerWrapper):
         elif task_metadata.type in self.classification_task_types:
             task: AbsTaskAnyClassification = mteb.get_task(task_metadata.name)
             task.load_data()
-            cur_ds = task.dataset[hf_subset][task.train_split]
+            if hf_subset in task.dataset:
+                cur_ds = task.dataset[hf_subset][task.train_split]
+            else:
+                cur_ds = task.dataset[task.train_split]
             sentences = cur_ds[task.input_column_name]
         elif task_metadata.type == "Summarization":
             task: AbsTaskSummarization = mteb.get_task(task_metadata.name)
             task.load_data()
-            cur_ds = task.dataset[hf_subset][hf_split]
+            if hf_subset in task.dataset:
+                cur_ds = task.dataset[hf_subset][hf_split]
+            else:
+                cur_ds = task.dataset[hf_split]
             sentences = cur_ds["text"]
 
         # We need to sample with replacement if the minicorpus needs to be bigger than the number of sentences
