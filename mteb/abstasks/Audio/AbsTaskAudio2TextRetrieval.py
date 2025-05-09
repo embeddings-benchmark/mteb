@@ -205,7 +205,7 @@ class HFDataLoader:
                 streaming=self.streaming,
                 keep_in_memory=self.keep_in_memory,
             )
-        queries_ds = next(iter(queries_ds.values()))  # get first split
+        queries_ds = next(iter(queries_ds.values())).select(range(10))  # get first split
         queries_ds = queries_ds.cast_column(self.id_column_name, Value("string"))
         queries_ds = queries_ds.rename_column(self.id_column_name, "id")
         queries_ds = queries_ds.remove_columns(
