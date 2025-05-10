@@ -65,6 +65,7 @@ from mteb.models import (
     promptriever_models,
     qodo_models,
     qtack_models,
+    qwen2_models,
     relle_models,
     repllama_models,
     rerankers_custom,
@@ -174,6 +175,7 @@ model_modules = [
     whisper_models,
     nb_sbert,
     seed_models,
+    qwen2_models,
 ]
 MODEL_REGISTRY = {}
 

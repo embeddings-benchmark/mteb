@@ -9,11 +9,14 @@ from .eng.ESC50 import *
 from .eng.FSDD import *
 from .eng.GTZANGenre import *
 from .eng.GunshotTriangulation import *
+from .eng.IEMOCAPEmotion import *
+from .eng.IEMOCAPGender import *
 from .eng.LibriCount import *
 from .eng.MridinghamStroke import *
 from .eng.MridinghamTonic import *
 from .eng.NSynth import *
 from .eng.SIBFLEURS import *
+from .eng.SpeechCommands import *
 from .eng.SpokenQAforIC import *
 from .eng.TUTAcousticScenes import *
 from .eng.VoxCelebSA import *
