@@ -22,8 +22,8 @@ class TUTAcousticScenesClassification(AbsTaskAudioClassification):
         main_score="accuracy",
         date=("2018-01-01", "2018-12-31"),
         domains=[
-            "Spoken"
-        ],  # A more appropriate domain for this task could be put when the domain list is updated
+            "AudioScene",
+        ],
         task_subtypes=["Environment Sound Classification"],
         license="cc-by-4.0",
         annotations_creators="expert-annotated",
