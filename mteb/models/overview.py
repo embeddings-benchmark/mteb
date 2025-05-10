@@ -84,6 +84,7 @@ from mteb.models import (
     ua_sentence_models,
     uae_models,
     vdr_models,
+    vggish_models,
     vista_models,
     vlm2vec_models,
     voyage_models,
@@ -91,6 +92,7 @@ from mteb.models import (
     wav2vec2_models,
     wavlm_models,
     whisper_models,
+    yamnet_models,
 )
 
 logger = logging.getLogger(__name__)
@@ -176,6 +178,8 @@ model_modules = [
     nb_sbert,
     seed_models,
     qwen2_models,
+    yamnet_models,
+    vggish_models,
 ]
 MODEL_REGISTRY = {}
 
