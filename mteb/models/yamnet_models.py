@@ -38,6 +38,7 @@ def yamnet_loader(**kwargs):
             self.converter = WaveformToInput()
             self.sampling_rate = 16000  # YAMNet requires 16kHz audio
             self.embed_dim = 1024  # YAMNet embedding dimension
+            self.min_audio_length = 0.96
 
         def _process_audio(self, audio):
             processed_audio = []
@@ -86,6 +87,11 @@ def yamnet_loader(**kwargs):
             # Normalize to [-1.0, 1.0] if needed
             if audio.abs().max() > 1.0:
                 audio = audio / audio.abs().max()
+            min_samples = int(self.min_audio_length * self.sampling_rate)
+            if audio.shape[0] < min_samples:
+                repeats = int(np.ceil(min_samples / audio.shape[0]))
+                audio = audio.repeat(repeats)
+                audio = audio[:min_samples]
             return audio
 
         def _load_audio_file(self, path):
@@ -97,6 +103,15 @@ def yamnet_loader(**kwargs):
                 )
                 waveform = resampler(waveform)
             return waveform
+
+        def _pad_audio_batch(self, batch):
+            batch = [x.reshape(-1) if x.ndim == 0 else x for x in batch]
+            max_length = max(audio.shape[0] for audio in batch)
+            padded_batch = [
+                torch.nn.functional.pad(audio, (0, max_length - audio.shape[0]))
+                for audio in batch
+            ]
+            return torch.stack(padded_batch)
 
         def get_audio_embeddings(
             self, audio, *, task_name=None, prompt_type=None, batch_size=4, **kwargs
@@ -110,9 +125,15 @@ def yamnet_loader(**kwargs):
                 ):
                     batch = processed_audio[i : i + batch_size]
 
+                    if len(batch) > 1:
+                        batch_tensor = self._pad_audio_batch(batch)
+                    else:
+                        batch_tensor = batch[0].unsqueeze(0)
+
                     batch_embeddings = []
-                    for audio_data in batch:
+                    for j in range(batch_tensor.shape[0]):
                         # Prepare input tensor for the model
+                        audio_data = batch_tensor[j]
                         audio_tensor = audio_data.to(self.device)
 
                         # Convert to input format expected by YAMNet
