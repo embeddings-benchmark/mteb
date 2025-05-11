@@ -15,6 +15,7 @@ from mteb.models import (
     align_models,
     ara_models,
     arctic_models,
+    ast_model,
     b1ade_models,
     bedrock_models,
     bge_models,
@@ -98,6 +99,7 @@ logger = logging.getLogger(__name__)
 model_modules = [
     align_models,
     arctic_models,
+    ast_model,
     bedrock_models,
     bge_models,
     blip2_models,
