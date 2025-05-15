@@ -119,7 +119,7 @@ exclude_also = [
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["mteb.*"]
+include = ["mteb", "mteb.*"]
 namespaces = false
 
 [tool.setuptools.package-data]
