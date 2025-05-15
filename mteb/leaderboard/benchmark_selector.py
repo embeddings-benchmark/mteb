@@ -1,28 +1,30 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 import gradio as gr
 
 import mteb
 from mteb import Benchmark
 
-"""
-Each entry is a tuple, where the first element is a label, and the second is either a single benchmark or a group of benchmarks.
 
-Example:
-[
-    ("First Benchmark", dict(value="MTEB(something)", icon="icon_url")),
-    ("Group of Benchmarks",
-        [
-            ("Second Benchmark", dict(value="MTEB(something)", icon="icon_url")),
-            ("Third Benchmark", dict(value="MTEB(something)", icon="icon_url")),
-        ],
-    ),
-]
-"""
+@dataclass
+class MenuEntry:
+    name: str | None
+    benchmarks: list[Benchmark]
+    open: bool = False
+    size: str = "sm"
+
+
 BENCHMARK_ENTRIES = [
-    mteb.get_benchmarks(["MTEB(Multilingual, v2)", "MTEB(eng, v2)"]),
-    (
-        "Image Benchmarks",
+    MenuEntry(
+        None,
+        mteb.get_benchmarks(["MTEB(Multilingual, v2)", "MTEB(eng, v2)"]),
+        False,
+        size="md",
+    ),
+    MenuEntry(
+        "Image",
         mteb.get_benchmarks(
             [
                 "MIEB(Multilingual)",
@@ -31,9 +33,21 @@ BENCHMARK_ENTRIES = [
                 "MIEB(Img)",
             ]
         ),
+        True,
     ),
-    (
-        "Domain-Specific Benchmarks",
+    MenuEntry(
+        "Regional",
+        mteb.get_benchmarks(
+            [
+                "MTEB(Europe, v1)",
+                "MTEB(Indic, v1)",
+                "MTEB(Scandinavian, v1)",
+            ]
+        ),
+        True,
+    ),
+    MenuEntry(
+        "Domain-Specific",
         mteb.get_benchmarks(
             [
                 "MTEB(Code, v1)",
@@ -43,18 +57,8 @@ BENCHMARK_ENTRIES = [
             ]
         ),
     ),
-    (
-        "Regional Benchmarks",
-        mteb.get_benchmarks(
-            [
-                "MTEB(Europe, v1)",
-                "MTEB(Indic, v1)",
-                "MTEB(Scandinavian, v1)",
-            ]
-        ),
-    ),
-    (
-        "Language-specific Benchmarks",
+    MenuEntry(
+        "Language-specific",
         mteb.get_benchmarks(
             [
                 "MTEB(cmn, v1)",
@@ -64,11 +68,10 @@ BENCHMARK_ENTRIES = [
                 "MTEB(kor, v1)",
                 "MTEB(pol, v1)",
                 "MTEB(rus, v1)",
-                "MTEB(fas, beta)",
             ]
         ),
     ),
-    (
+    MenuEntry(
         "Miscellaneous",
         mteb.get_benchmarks(
             [
@@ -86,7 +89,7 @@ BENCHMARK_ENTRIES = [
             ]
         ),
     ),
-    (
+    MenuEntry(
         "Legacy",
         mteb.get_benchmarks(
             [
@@ -133,38 +136,29 @@ def _create_button(
 
 
 def make_selector(
-    entries: list[list[Benchmark] | tuple[str, list[Benchmark]]],
+    entries: list[MenuEntry],
 ) -> tuple[gr.State, gr.Column]:
     if not entries:
         raise ValueError("No entries were specified, can't build selector.")
     label_to_value = {}
-    state = None
+
     with gr.Column() as column:
+        state = gr.State(entries[0].benchmarks[0].name)
         i = 0
         for entry in entries:
-            if i == 0:
-                if isinstance(entry, list):
-                    fist_entry = entry[0]
-                    state = gr.State(fist_entry.name)
-                elif isinstance(entry, tuple):
-                    _label, _entry = entry
-                    state = gr.State(_entry[0].name)
-                else:
-                    raise ValueError("Benchmark selector specified incorrectly")
-            if isinstance(entry, list):
-                for benchmark in entry:
+            if entry.name is None:
+                for benchmark in entry.benchmarks:
                     button = _create_button(
-                        i, benchmark, state, label_to_value, size="lg"
+                        i, benchmark, state, label_to_value, size=entry.size
                     )
                     i += 1
-            elif isinstance(entry, tuple):
-                label, _entry = entry
-                gr.Markdown(f"### **{label}**")
-                for benchmark in _entry:
-                    button = _create_button(  # noqa: F841
-                        i, benchmark, state, label_to_value, size="md"
-                    )
-                    i += 1
+            if entry.name is not None:
+                with gr.Accordion(entry.name, open=entry.open):
+                    for benchmark in entry.benchmarks:
+                        button = _create_button(  # noqa: F841
+                            i, benchmark, state, label_to_value, size=entry.size
+                        )
+                        i += 1
 
     return state, column
 
