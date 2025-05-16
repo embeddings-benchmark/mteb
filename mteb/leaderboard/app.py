@@ -21,18 +21,19 @@ from mteb.custom_validators import MODALITIES
 from mteb.leaderboard.benchmark_selector import BENCHMARK_ENTRIES, make_selector
 from mteb.leaderboard.figures import performance_size_plot, radar_chart
 from mteb.leaderboard.table import create_tables
+from mteb.leaderboard.text_segments import ACKNOWLEDGEMENT, FAQ
 from mteb.leaderboard.url_utils import (
     decode_filter_state,
     encode_filter_state,
     generate_short_url,
 )
-from mteb.leaderboard.text_segments import ACKNOWLEDGEMENT, FAQ
 
 logger = logging.getLogger(__name__)
 
 
 LANGUAGE: list[str] = list({l for t in mteb.get_tasks() for l in t.metadata.languages})
 ALL_MODELS = {meta.name for meta in mteb.get_model_metas()}
+SHORT_URL_MAP: dict[str, str] = {}  # Map Short Url id to its encoded state
 
 
 def load_results():
@@ -83,9 +84,10 @@ def produce_benchmark_link(
     base_url = request.request.base_url
     long_url = f"{base_url}?s={encoded}"
     short_id = generate_short_url(long_url)
+    SHORT_URL_MAP[short_id] = encoded
     short_url = f"{base_url}?id={short_id}"
-    md = f"```\n{short_url}\n```"
-    return md
+    short_md = f"```\n{short_url}\n```"
+    return short_md
 
 
 DEFAULT_BENCHMARK_NAME = MTEB_multilingual.name
@@ -96,6 +98,12 @@ def set_benchmark_on_load(
 ) -> tuple[str, list[str], list[str], list[str], list[str], list[str]]:
     """Load benchmark configuration from encoded URL parameter"""
     query_params = request.query_params
+
+    if "id" in query_params:
+        sid = query_params.get("id")
+        encoded = SHORT_URL_MAP.get(sid)
+        if encoded:
+            query_params = {"s": encoded}
 
     if "s" in query_params:
         encoded_state = query_params.get("s")
