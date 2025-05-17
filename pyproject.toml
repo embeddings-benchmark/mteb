@@ -118,11 +118,14 @@ exclude_also = [
     ]
 
 [tool.setuptools.packages.find]
-exclude = ["tests", "results"]
+where = ["."]
+include = ["mteb", "mteb.*"]
+namespaces = false
 
 [tool.setuptools.package-data]
 "*" = ["*.json"]
 "mteb.abstasks" = ["the_ugly_duckling.txt"]
+"mteb.tasks.Image.ZeroShotClassification.eng.templates" = ["*.txt"]
 
 [tool.ruff]
 
