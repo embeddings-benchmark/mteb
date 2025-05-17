@@ -80,7 +80,7 @@ class OpenAIWrapper(Wrapper):
             )
 
         mask_sents = [(i, t) for i, t in enumerate(sentences) if t.strip()]
-        mask, no_empty_sent = map(list, zip(*mask_sents)) if mask_sents else ([], [])
+        mask, no_empty_sent = list(zip(*mask_sents)) if mask_sents else ([], [])
         trimmed_sentences = []
         for sentence in no_empty_sent:
             encoded_sentence = self._encoding.encode(sentence)
