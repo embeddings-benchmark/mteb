@@ -72,11 +72,13 @@ from mteb.models import (
     salesforce_models,
     searchmap_models,
     sentence_transformers_models,
+    sewd_models,
     siglip_models,
     sonar_models,
     stella_models,
     text2vec_models,
     uae_models,
+    unispeech_models,
     vdr_models,
     vista_models,
     vlm2vec_models,
@@ -85,6 +87,7 @@ from mteb.models import (
     wav2vec2_models,
     wavlm_models,
     whisper_models,
+
 )
 
 logger = logging.getLogger(__name__)
@@ -163,6 +166,8 @@ model_modules = [
     nb_sbert,
     wavlm_models,
     whisper_models,
+    sewd_models,
+    unispeech_models
 ]
 MODEL_REGISTRY = {}
 
