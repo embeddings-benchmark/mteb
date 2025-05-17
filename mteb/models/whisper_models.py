@@ -154,6 +154,7 @@ class WhisperAudioWrapper(Wrapper):
 
 
 # Model Metas for Different Whisper Models
+
 whisper_langs = [
     "eng-Latn",
     "zho-Hans",
@@ -255,7 +256,6 @@ whisper_langs = [
     "jav-Latn",
     "sun-Latn",
 ]
-
 
 whisper_tiny = ModelMeta(
     loader=partial(WhisperAudioWrapper, model_name="openai/whisper-tiny"),
