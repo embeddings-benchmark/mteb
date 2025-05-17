@@ -111,6 +111,8 @@ def load_results(
             splits from the results object that are not default in the task metadata. Defaults to True.
         only_main_score: If True, only the main score will be loaded.
     """
+    # TODO: we want to allow results_repo (the first argument) to be a local path
+    # TODO: in v2 we can rename it to "path" to align with load_dataset
     repo_directory = download_of_results(results_repo, download_latest=download_latest)
     model_paths = [p for p in (repo_directory / "results").glob("*") if p.is_dir()]
 

@@ -46,7 +46,14 @@ class CodeEditSearchRetrieval(MultilingualTask, AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="@article{muennighoff2023octopack, title={OctoPack: Instruction Tuning Code Large Language Models}, author={Niklas Muennighoff and Qian Liu and Armel Zebaze and Qinkai Zheng and Binyuan Hui and Terry Yue Zhuo and Swayam Singh and Xiangru Tang and Leandro von Werra and Shayne Longpre}, journal={arXiv preprint arXiv:2308.07124}, year={2023} }",
+        bibtex_citation=r"""
+@article{muennighoff2023octopack,
+  author = {Niklas Muennighoff and Qian Liu and Armel Zebaze and Qinkai Zheng and Binyuan Hui and Terry Yue Zhuo and Swayam Singh and Xiangru Tang and Leandro von Werra and Shayne Longpre},
+  journal = {arXiv preprint arXiv:2308.07124},
+  title = {OctoPack: Instruction Tuning Code Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def load_data(self, **kwargs):

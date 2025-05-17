@@ -32,40 +32,40 @@ class LEMBQMSumRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-            @inproceedings{zhong-etal-2021-qmsum,
-            title = "{QMS}um: A New Benchmark for Query-based Multi-domain Meeting Summarization",
-            author = "Zhong, Ming  and
-            Yin, Da  and
-            Yu, Tao  and
-            Zaidi, Ahmad  and
-            Mutuma, Mutethia  and
-            Jha, Rahul  and
-            Awadallah, Ahmed Hassan  and
-            Celikyilmaz, Asli  and
-            Liu, Yang  and
-            Qiu, Xipeng  and
-            Radev, Dragomir",
-            editor = "Toutanova, Kristina  and
-            Rumshisky, Anna  and
-            Zettlemoyer, Luke  and
-            Hakkani-Tur, Dilek  and
-            Beltagy, Iz  and
-            Bethard, Steven  and
-            Cotterell, Ryan  and
-            Chakraborty, Tanmoy  and
-            Zhou, Yichao",
-            booktitle = "Proceedings of the 2021 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies",
-            month = jun,
-            year = "2021",
-            address = "Online",
-            publisher = "Association for Computational Linguistics",
-            url = "https://aclanthology.org/2021.naacl-main.472",
-            doi = "10.18653/v1/2021.naacl-main.472",
-            pages = "5905--5921",
-            abstract = "",
-            }
-        """,
+        bibtex_citation=r"""
+@inproceedings{zhong-etal-2021-qmsum,
+  abstract = {},
+  address = {Online},
+  author = {Zhong, Ming  and
+Yin, Da  and
+Yu, Tao  and
+Zaidi, Ahmad  and
+Mutuma, Mutethia  and
+Jha, Rahul  and
+Awadallah, Ahmed Hassan  and
+Celikyilmaz, Asli  and
+Liu, Yang  and
+Qiu, Xipeng  and
+Radev, Dragomir},
+  booktitle = {Proceedings of the 2021 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies},
+  doi = {10.18653/v1/2021.naacl-main.472},
+  editor = {Toutanova, Kristina  and
+Rumshisky, Anna  and
+Zettlemoyer, Luke  and
+Hakkani-Tur, Dilek  and
+Beltagy, Iz  and
+Bethard, Steven  and
+Cotterell, Ryan  and
+Chakraborty, Tanmoy  and
+Zhou, Yichao},
+  month = jun,
+  pages = {5905--5921},
+  publisher = {Association for Computational Linguistics},
+  title = {{QMS}um: A New Benchmark for Query-based Multi-domain Meeting Summarization},
+  url = {https://aclanthology.org/2021.naacl-main.472},
+  year = {2021},
+}
+""",
     )
 
     def load_data(self, **kwargs):

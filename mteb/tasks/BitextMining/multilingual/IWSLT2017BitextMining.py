@@ -59,26 +59,26 @@ class IWSLT2017BitextMining(AbsTaskBitextMining, MultilingualTask):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
+        bibtex_citation=r"""
 @inproceedings{cettolo-etal-2017-overview,
-    title = "Overview of the {IWSLT} 2017 Evaluation Campaign",
-    author = {Cettolo, Mauro  and
-      Federico, Marcello  and
-      Bentivogli, Luisa  and
-      Niehues, Jan  and
-      St{\"u}ker, Sebastian  and
-      Sudoh, Katsuhito  and
-      Yoshino, Koichiro  and
-      Federmann, Christian},
-    editor = "Sakti, Sakriani  and
-      Utiyama, Masao",
-    booktitle = "Proceedings of the 14th International Conference on Spoken Language Translation",
-    month = dec # " 14-15",
-    year = "2017",
-    address = "Tokyo, Japan",
-    publisher = "International Workshop on Spoken Language Translation",
-    url = "https://aclanthology.org/2017.iwslt-1.1",
-    pages = "2--14",
+  address = {Tokyo, Japan},
+  author = {Cettolo, Mauro  and
+Federico, Marcello  and
+Bentivogli, Luisa  and
+Niehues, Jan  and
+St{\"u}ker, Sebastian  and
+Sudoh, Katsuhito  and
+Yoshino, Koichiro  and
+Federmann, Christian},
+  booktitle = {Proceedings of the 14th International Conference on Spoken Language Translation},
+  editor = {Sakti, Sakriani  and
+Utiyama, Masao},
+  month = dec # { 14-15},
+  pages = {2--14},
+  publisher = {International Workshop on Spoken Language Translation},
+  title = {Overview of the {IWSLT} 2017 Evaluation Campaign},
+  url = {https://aclanthology.org/2017.iwslt-1.1},
+  year = {2017},
 }
 """,
     )

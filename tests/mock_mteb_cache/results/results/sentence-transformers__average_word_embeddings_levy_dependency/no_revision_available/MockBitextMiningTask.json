@@ -1,0 +1,22 @@
+{
+    "dataset_revision": "NA",
+    "evaluation_time": 0.008999824523925781,
+    "kg_co2_emissions": null,
+    "mteb_version": "1.12.75",
+    "scores": {
+        "test": [
+            {
+                "accuracy": 0.5,
+                "f1": 0.3333333333333333,
+                "hf_subset": "default",
+                "languages": [
+                    "eng-Latn"
+                ],
+                "main_score": 0.5,
+                "precision": 0.25,
+                "recall": 0.5
+            }
+        ]
+    },
+    "task_name": "MockBitextMiningTask"
+}

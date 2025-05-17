@@ -15,16 +15,23 @@ logger = logging.getLogger(__name__)
 
 
 class OpenAIWrapper(Wrapper):
+    default_embed_dims = {
+        "text-embedding-3-small": 1536,
+        "text-embedding-3-large": 3072,
+        "text-embedding-ada-002": 1536,
+    }
+
     def __init__(
         self,
         model_name: str,
         max_tokens: int,
-        tokenizer_name: str = "cl100k_base",  # since all models use this tokenizer now
+        tokenizer_name: str = "cl100k_base",
         embed_dim: int | None = None,
         **kwargs,
     ) -> None:
         """Wrapper for OpenAIs embedding API.
-        To handle documents larger than 8191 tokens, we truncate the document to the specified sequence length.
+        To handle documents larger than 8191 tokens, we truncate the document to the specified sequence length. If the docuement is empty we return a
+        zero vector.
         """
         requires_package(
             self,
@@ -43,8 +50,17 @@ class OpenAIWrapper(Wrapper):
         import tiktoken
 
         self._client = OpenAI()
+
         self._model_name = model_name
-        self._embed_dim = embed_dim
+        if embed_dim is None:
+            if model_name not in self.default_embed_dims:
+                raise ValueError(
+                    f"Model {model_name} does not have a default embed_dim. Please provide an embedding dimension."
+                )
+            self._embed_dim = self.default_embed_dims[model_name]
+        else:
+            self._embed_dim = embed_dim
+
         self._max_tokens = max_tokens
         self._encoding = tiktoken.get_encoding(tokenizer_name)
 
@@ -63,8 +79,11 @@ class OpenAIWrapper(Wrapper):
                 "Reducing embedding size available only for text-embedding-3-* models"
             )
 
+        mask_sents = [(i, t) for i, t in enumerate(sentences) if t.strip()]
+        mask, no_empty_sent = zip(*mask_sents) if mask_sents else ([], [])
+
         trimmed_sentences = []
-        for sentence in sentences:
+        for sentence in no_empty_sent:
             encoded_sentence = self._encoding.encode(sentence)
             if len(encoded_sentence) > self._max_tokens:
                 truncated_sentence = self.truncate_text_tokens(sentence)
@@ -84,7 +103,7 @@ class OpenAIWrapper(Wrapper):
             else kwargs.pop("show_progress_bar")
         )
 
-        all_embeddings = []
+        no_empty_embeddings = []
 
         for sublist in tqdm.tqdm(sublists, leave=False, disable=not show_progress_bar):
             try:
@@ -116,9 +135,14 @@ class OpenAIWrapper(Wrapper):
                         encoding_format="float",
                         dimensions=self._embed_dim or NotGiven(),
                     )
-            all_embeddings.extend(self._to_numpy(response))
+            no_empty_embeddings.extend(self._to_numpy(response))
 
-        return np.array(all_embeddings)
+        no_empty_embeddings = np.array(no_empty_embeddings)
+
+        all_embeddings = np.zeros((len(sentences), self._embed_dim), dtype=np.float32)
+        if mask:
+            all_embeddings[mask] = no_empty_embeddings
+        return all_embeddings
 
     def _to_numpy(self, embedding_response) -> np.ndarray:
         return np.array([e.embedding for e in embedding_response.data])
@@ -126,7 +150,7 @@ class OpenAIWrapper(Wrapper):
 
 text_embedding_3_small = ModelMeta(
     name="openai/text-embedding-3-small",
-    revision="2",
+    revision="3",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
     loader=partial(  # type: ignore
@@ -151,7 +175,7 @@ text_embedding_3_small = ModelMeta(
 )
 text_embedding_3_large = ModelMeta(
     name="openai/text-embedding-3-large",
-    revision="2",
+    revision="3",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
     loader=partial(  # type: ignore
@@ -176,7 +200,7 @@ text_embedding_3_large = ModelMeta(
 )
 text_embedding_ada_002 = ModelMeta(
     name="openai/text-embedding-ada-002",
-    revision="2",
+    revision="3",
     release_date="2022-12-15",
     languages=None,  # supported languages not specified
     loader=partial(  # type: ignore

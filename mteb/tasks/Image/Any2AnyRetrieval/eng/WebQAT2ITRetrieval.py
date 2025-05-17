@@ -26,13 +26,15 @@ class WebQAT2ITRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["image", "text"],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{chang2022webqa,
-      title={Webqa: Multihop and multimodal qa},
-      author={Chang, Yingshan and Narang, Mridu and Suzuki, Hisami and Cao, Guihong and Gao, Jianfeng and Bisk, Yonatan},
-      booktitle={Proceedings of the IEEE/CVF conference on computer vision and pattern recognition},
-      pages={16495--16504},
-       year={2022}
-      }""",
+        bibtex_citation=r"""
+@inproceedings{chang2022webqa,
+  author = {Chang, Yingshan and Narang, Mridu and Suzuki, Hisami and Cao, Guihong and Gao, Jianfeng and Bisk, Yonatan},
+  booktitle = {Proceedings of the IEEE/CVF conference on computer vision and pattern recognition},
+  pages = {16495--16504},
+  title = {Webqa: Multihop and multimodal qa},
+  year = {2022},
+}
+""",
         prompt={"query": "Find a Wikipedia image that answers this question."},
         descriptive_stats={
             "n_samples": {"test": 2511},

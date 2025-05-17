@@ -147,6 +147,7 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
             "model_text": False,
         },
         hover_name="Model",
+        color_continuous_scale=px.colors.sequential.Greens,
     )
     # Note: it's important that this comes before setting the size mode
     fig = add_size_guide(fig)
