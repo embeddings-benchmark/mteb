@@ -19,12 +19,13 @@ from mteb.models.wrapper import Wrapper
 class SewDWrapper(Wrapper):
     def __init__(
         self,
-        model_name: str = "asapp/sew-d-base-plus-400k-ft-ls100h",
+        model_name: str = "facebook/hubert-base-ls960",
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
         self.model_name = model_name
         self.device = device
+
         # SewD uses the same feature extractor as Wav2Vec2
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(model_name)
         self.model = SEWDForCTC.from_pretrained(model_name).to(self.device)
@@ -46,9 +47,9 @@ class SewDWrapper(Wrapper):
     ) -> list[torch.Tensor]:
         waveforms = []
 
-        if isinstance(batch, tuple):
+        if isinstance(batch, tuple):  # Handle (audio, metadata) tuples
             for audio, _ in batch:
-                waveforms.append(self._convert_audio(audio))
+                waveforms.append(self._convert_audio_from_numpy(audio))
         else:
             for item in batch:
                 if isinstance(item, dict):
@@ -64,11 +65,11 @@ class SewDWrapper(Wrapper):
                                 item["sampling_rate"], self.sampling_rate
                             )
                             audio = resampler(audio)
-                        waveforms.append(self._convert_audio(audio))
+                        waveforms.append(self._convert_audio_from_numpy(audio))
                     elif "path" in item:
                         waveforms.append(self._load_audio_file(item["path"]))
                 elif isinstance(item, (np.ndarray, torch.Tensor)):
-                    waveforms.append(self._convert_audio(item))
+                    waveforms.append(self._convert_audio_from_numpy(item))
                 elif isinstance(item, str):
                     waveforms.append(self._load_audio_file(item))
 
@@ -86,7 +87,8 @@ class SewDWrapper(Wrapper):
             waveform = resampler(waveform)
         return waveform.squeeze()
 
-    def _pad_audio_batch(self, batch: list[torch.Tensor]) -> torch.Tensor:
+    def _pad_audio_batch(self, batch):
+        batch = [x.reshape(-1) if x.ndim == 0 else x for x in batch]
         max_length = max(audio.shape[0] for audio in batch)
         padded_batch = [
             torch.nn.functional.pad(audio, (0, max_length - audio.shape[0]))
@@ -101,7 +103,6 @@ class SewDWrapper(Wrapper):
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
         batch_size: int = 4,
-        hidden_layer: float = 1.0,
         **kwargs: Any,
     ) -> torch.Tensor:
         processed_audio = self._process_audio(audio)
@@ -110,33 +111,39 @@ class SewDWrapper(Wrapper):
         with torch.no_grad():
             for i in tqdm(range(0, len(processed_audio), batch_size)):
                 batch = processed_audio[i : i + batch_size]
-                batch = self._pad_audio_batch(batch)
+
+                # Pre-process like Wav2Vec2
+                batch_tensor = self._pad_audio_batch(batch)
+
+                if batch_tensor.ndim == 1:
+                    batch_tensor = batch_tensor.unsqueeze(0)
+                elif batch_tensor.ndim > 2:
+                    batch_tensor = batch_tensor.view(batch_tensor.size(0), -1)
 
                 inputs = self.feature_extractor(
-                    batch,
+                    batch_tensor.cpu().numpy(),
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
                     padding="longest",
                     return_attention_mask=True,
                 ).to(self.device)
 
+                # SewD model outputs
                 outputs = self.model(
-                    inputs.input_features,
+                    inputs.input_values,
+                    attention_mask=inputs.attention_mask,
                     output_hidden_states=True,
                 )
 
-                hidden_states = outputs.hidden_states
-                no_hidden_states = len(hidden_states)
-
-                layer_idx = int(hidden_layer * no_hidden_states)
-                layer_idx = min(max(layer_idx, 1), no_hidden_states) - 1
-
-                selected_hidden = hidden_states[layer_idx]
-                embeddings = torch.mean(selected_hidden, dim=1)
-
+                # Get embeddings from last hidden state
+                last_hidden_state = outputs.hidden_states[-1]
+                embeddings = torch.mean(last_hidden_state, dim=1)
                 all_embeddings.append(embeddings.cpu())
 
-        return torch.cat(all_embeddings, dim=0)
+        if all_embeddings:
+            return torch.cat(all_embeddings, dim=0)
+        else:
+            return torch.zeros((0, self.model.config.hidden_size))
 
     def encode(
         self,
@@ -148,15 +155,15 @@ class SewDWrapper(Wrapper):
     ) -> np.ndarray:
         return self.get_audio_embeddings(inputs, task_name=task_name, **kwargs).numpy()
 
-
-# Model Metas for Different Whisper Models
-
 sewd_base = ModelMeta(
-    loader=partial(SewDWrapper, model_name="openai/whisper-tiny"),
-    name="asapp/sew-d-base-plus-400k-ft-ls100h",
+    loader=partial(
+        SewDWrapper,
+        model_name="asapp/sew-d-base-plus-400k-ft-ls100h",
+    ),
+    name="asapp/c",
     languages=["eng"],
     open_weights=True,
-    revision="d78e7a1b50e9f1ce21887ca069330efdd5ccd4ca",
+    revision="dba3bb02fda4248b6e082697eee756de8fe8aa8a",
     release_date="2021-09-14",
     max_tokens=float("inf"),
     n_parameters=95_000_000,
