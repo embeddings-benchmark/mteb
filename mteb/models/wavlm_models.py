@@ -8,7 +8,6 @@ import numpy as np
 import torch
 import torchaudio
 from torch.utils.data import DataLoader
-
 from transformers import Wav2Vec2FeatureExtractor, WavLMModel
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
@@ -157,6 +156,7 @@ class WavlmWrapper(Wrapper):
         **kwargs: Any,
     ) -> np.ndarray:
         return self.get_audio_embeddings(inputs, task_name=task_name, **kwargs).numpy()
+
 
 wavlm_base = ModelMeta(
     loader=partial(
