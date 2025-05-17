@@ -77,12 +77,14 @@ from mteb.models import (
     seed_models,
     sentence_transformers_models,
     shuu_model,
+    sewd_models,
     siglip_models,
     sonar_models,
     stella_models,
     text2vec_models,
     ua_sentence_models,
     uae_models,
+    unispeech_models,
     vdr_models,
     vista_models,
     vlm2vec_models,
@@ -176,6 +178,8 @@ model_modules = [
     nb_sbert,
     seed_models,
     qwen2_models,
+    sewd_models,
+    unispeech_models
 ]
 MODEL_REGISTRY = {}
 
