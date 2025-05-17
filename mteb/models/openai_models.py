@@ -80,8 +80,7 @@ class OpenAIWrapper(Wrapper):
             )
 
         mask_sents = [(i, t) for i, t in enumerate(sentences) if t.strip()]
-        mask, no_empty_sent = zip(*mask_sents) if mask_sents else ([], [])
-
+        mask, no_empty_sent = map(list, zip(*mask_sents)) if mask_sents else ([], [])
         trimmed_sentences = []
         for sentence in no_empty_sent:
             encoded_sentence = self._encoding.encode(sentence)
@@ -140,7 +139,8 @@ class OpenAIWrapper(Wrapper):
         no_empty_embeddings = np.array(no_empty_embeddings)
 
         all_embeddings = np.zeros((len(sentences), self._embed_dim), dtype=np.float32)
-        if mask:
+        if len(mask) > 0:
+            mask = np.array(mask, dtype=int)
             all_embeddings[mask] = no_empty_embeddings
         return all_embeddings
 
