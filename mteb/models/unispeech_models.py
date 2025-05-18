@@ -162,7 +162,7 @@ unispeech_base = ModelMeta(
         model_name="microsoft/unispeech-sat-base-100h-libri-ft",
     ),
     name="microsoft/unispeech-sat-base-100h-libri-ft",
-    languages=["eng"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="b294556d8d77cc539f9d08bef0ddbb0f60985328",
     release_date="2021-10-12",
