@@ -76,8 +76,8 @@ from mteb.models import (
     searchmap_models,
     seed_models,
     sentence_transformers_models,
-    shuu_model,
     sewd_models,
+    shuu_model,
     siglip_models,
     sonar_models,
     stella_models,
@@ -179,7 +179,7 @@ model_modules = [
     seed_models,
     qwen2_models,
     sewd_models,
-    unispeech_models
+    unispeech_models,
 ]
 MODEL_REGISTRY = {}
 

@@ -155,6 +155,7 @@ class SewDWrapper(Wrapper):
     ) -> np.ndarray:
         return self.get_audio_embeddings(inputs, task_name=task_name, **kwargs).numpy()
 
+
 sewd_base = ModelMeta(
     loader=partial(
         SewDWrapper,

@@ -155,6 +155,7 @@ class UniSpeechWrapper(Wrapper):
     ) -> np.ndarray:
         return self.get_audio_embeddings(inputs, task_name=task_name, **kwargs).numpy()
 
+
 unispeech_base = ModelMeta(
     loader=partial(
         UniSpeechWrapper,
