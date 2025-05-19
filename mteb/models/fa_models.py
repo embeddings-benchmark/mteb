@@ -167,7 +167,6 @@ fa_bert = ModelMeta(
     },
 )
 
-
 hakim = ModelMeta(
     name="MCINext/Hakim",
     languages=["fas-Arab"],
@@ -181,7 +180,7 @@ hakim = ModelMeta(
     max_tokens=512,
     reference="https://arxiv.org/abs/2505.08435",
     similarity_fn_name="cosine",
-    framework=["API"],
+    framework=[],
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
@@ -201,7 +200,7 @@ hakim_small = ModelMeta(
     max_tokens=512,
     reference="https://arxiv.org/abs/2505.08435",
     similarity_fn_name="cosine",
-    framework=["API"],
+    framework=[],
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
