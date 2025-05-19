@@ -141,9 +141,7 @@ tooka_sbert = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={
-        # This model is finetuned from PartAI/TookaBERT-Large
-    },
+    training_datasets=None,
 )
 
 fa_bert = ModelMeta(
@@ -167,4 +165,45 @@ fa_bert = ModelMeta(
         # It's just a base model
         # https://huggingface.co/datasets/sbunlp/hmblogs-v3
     },
+)
+
+
+hakim = ModelMeta(
+    name="MCINext/Hakim",
+    languages=["fas-Arab"],
+    open_weights=False,
+    revision="v1",
+    release_date="2025-05-10",
+    n_parameters=124_441_344,
+    memory_usage_mb=475,
+    embed_dim=768,
+    license="not specified",
+    max_tokens=512,
+    reference="https://arxiv.org/abs/2505.08435",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+)
+
+hakim_small = ModelMeta(
+    name="MCINext/Hakim-small",
+    languages=["fas-Arab"],
+    open_weights=False,
+    revision="v1",
+    release_date="2025-05-10",
+    n_parameters=38_736_384,
+    memory_usage_mb=148,
+    embed_dim=512,
+    license="not specified",
+    max_tokens=512,
+    reference="https://arxiv.org/abs/2505.08435",
+    similarity_fn_name="cosine",
+    framework=["API"],
+    use_instructions=False,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
 )
