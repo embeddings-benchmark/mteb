@@ -4,7 +4,7 @@ from functools import partial
 
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
-# NOTE: This model is intentionally not imported to ensure that it does not appear on the leaderboard 
+# NOTE: This model is intentionally not imported to ensure that it does not appear on the leaderboard
 # see more here: https://github.com/embeddings-benchmark/mteb/issues/2698
 chain19_en = ModelMeta(
     loader=partial(
