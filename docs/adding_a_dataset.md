@@ -236,9 +236,9 @@ Once you are finished create a PR to the [MTEB](https://github.com/embeddings-be
 The PR will be reviewed by one of the organizers or contributors who might ask you to change things. Once the PR is approved the dataset will be added into the main repository.
 
 
-Before you commit here is a checklist you should complete before submitting:
+Before you commit, here is a checklist you should complete before submitting:
 
-- [ ] I have outlined why this dataset is fills an existing gab in `mteb`
+- [ ] I have outlined why this dataset is filling an existing gap in `mteb`
 - [ ] I have tested that the dataset runs with the `mteb` package.
 
 An easy way to test it is using:

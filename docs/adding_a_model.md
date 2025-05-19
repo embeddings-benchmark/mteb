@@ -36,13 +36,13 @@ my_model = ModelMeta(
 )
 ```
 
-This will work for all [Sentence Transformers](https://sbert.net) compatible models. Once filled out you can submit you model to `mteb` by
+This works for all [Sentence Transformers](https://sbert.net) compatible models. Once filled out, you can submit your model to `mteb` by
 submitting a PR.
 
 
 ### Calculating the Memory Usage
 
-To calculate `memory_usage_mb` you can simply run:
+To calculate `memory_usage_mb`, run:
 
 ```py
 model_meta = mteb.get_model_meta("model_name")
@@ -51,8 +51,8 @@ model_meta.calculate_memory_usage_mb()
 
 ### Adding instruction models
 
-Some models such as the [E5 models](https://huggingface.co/intfloat/multilingual-e5-large-instruct) use instructions or prompts.
-You can directly add the prompts when saving and uploading your model to the Hub. For an example, refer to this [configuration file](https://huggingface.co/Snowflake/snowflake-arctic-embed-m-v1.5/blob/3b5a16eaf17e47bd997da998988dce5877a57092/config_sentence_transformers.json). 
+Some models, such as the [E5 models](https://huggingface.co/intfloat/multilingual-e5-large-instruct), use instructions or prompts.
+You can directly add the prompts when saving and uploading your model to the Hub. Refer to this [configuration file as an example](https://huggingface.co/Snowflake/snowflake-arctic-embed-m-v1.5/blob/3b5a16eaf17e47bd997da998988dce5877a57092/config_sentence_transformers.json). 
 
 However, you can also add these directly to the model configuration:
 
@@ -130,9 +130,8 @@ class VoyageWrapper(Wrapper):
         import voyageai
         ...
 ```
-He you will also see that we use [`requires_package`](../mteb/requires_packages.py) to ensure friendly error messages when package installations are
-required.
-If you want to give suggestion instead of warning, you can use [`suggest_package`](../mteb/requires_packages.py).
+Here you will also see that we use  to ensure friendly error messages when package installations are required.
+If you want to give a suggestion instead of a warning, you can use [`suggest_package`](../mteb/requires_packages.py).
 
 ### Submitting your model as a PR
 
