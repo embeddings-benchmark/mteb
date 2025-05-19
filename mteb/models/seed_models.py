@@ -136,6 +136,10 @@ class SeedTextEmbeddingModel(Wrapper):
         )
 
 
+# NOTE: This model is intentionally not imported to
+# 1) ensure that it does not appear on the leaderboard and
+# 2) ensure that people can't run it as it is not publicly available (either as open weights or API)
+# see more here: https://github.com/embeddings-benchmark/mteb/issues/2698
 seed_embedding = ModelMeta(
     name="ByteDance-Seed/Seed1.5-Embedding",
     revision="3",
