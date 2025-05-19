@@ -1322,7 +1322,7 @@ C_MTEB = Benchmark(
 
 FA_MTEB = Benchmark(
     name="MTEB(fas, v1)",
-    display_name="Farsi (BETA)",
+    display_name="Farsi",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ir.svg",
     tasks=get_tasks(
         languages=["fas"],
@@ -1337,7 +1337,7 @@ FA_MTEB = Benchmark(
             "SynPerChatbotRAGToneUserClassification",
             "SynPerChatbotToneChatbotClassification",
             "SynPerChatbotToneUserClassification",
-            "PersianTextTone",
+            "SynPerTextToneClassification",
             "SIDClassification",
             "DeepSentiPers",
             "PersianTextEmotion",
@@ -1396,9 +1396,16 @@ FA_MTEB = Benchmark(
             "SynPerChatbotRAGSumSRetrieval",
         ],
     ),
-    description="Main Persian (Farsi) benchmarks from MTEB",
-    reference=None,
-    citation=None,
+    description="The Persian Massive Text Embedding Benchmark (FaMTEB) is a comprehensive benchmark for Persian text embeddings covering 7 tasks and 60+ datasets.",
+    reference="https://arxiv.org/abs/2502.11571",
+    citation=r"""
+@article{zinvandi2025famteb,
+  author = {Zinvandi, Erfan and Alikhani, Morteza and Sarmadi, Mehran and Pourbahman, Zahra and Arvin, Sepehr and Kazemi, Reza and Amini, Arash},
+  journal = {arXiv preprint arXiv:2502.11571},
+  title = {Famteb: Massive text embedding benchmark in persian language},
+  year = {2025},
+}
+""",
     contacts=["mehran-sarmadi", "ERfun", "morteza20"],
 )
 
