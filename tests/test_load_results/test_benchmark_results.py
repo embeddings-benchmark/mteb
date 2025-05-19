@@ -26,9 +26,9 @@ def benchmark_results() -> BenchmarkResults:
 
 def test_indexing(benchmark_results: BenchmarkResults) -> None:
     model_res = benchmark_results.model_results[0]
-    assert isinstance(
-        model_res, ModelResult
-    ), "indexing into the list should return a ModelResult"
+    assert isinstance(model_res, ModelResult), (
+        "indexing into the list should return a ModelResult"
+    )
 
 
 def test_select_models(benchmark_results: BenchmarkResults) -> None:
@@ -72,9 +72,9 @@ def test_join_revisions(benchmark_results: BenchmarkResults) -> None:
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
     bench_res = benchmark_results.select_models([model_name])
 
-    assert (
-        len(bench_res.model_revisions) == 2
-    ), "There should only be two revisions for this model in the mock cache"
+    assert len(bench_res.model_revisions) == 2, (
+        "There should only be two revisions for this model in the mock cache"
+    )
 
     bench_res = bench_res.join_revisions()
     assert isinstance(bench_res, BenchmarkResults)
@@ -104,9 +104,9 @@ def test_to_dataframe(
         col in t2.columns for col in required_columns if col not in ["subset"]
     ), "Columns are missing"
     assert "subset" not in t2.columns, "Subset column should not be present"
-    assert (
-        t1.shape[0] >= t2.shape[0]
-    ), "Aggregation level 'split' should have more rows than 'subset'"
+    assert t1.shape[0] >= t2.shape[0], (
+        "Aggregation level 'split' should have more rows than 'subset'"
+    )
 
     t3 = benchmark_results.to_dataframe(aggregation_level="task", format="long")
     assert all(
@@ -114,16 +114,16 @@ def test_to_dataframe(
     ), "Columns are missing"
     assert "subset" not in t3.columns, "Subset column should not be present"
     assert "split" not in t3.columns, "Split column should not be present"
-    assert (
-        t2.shape[0] >= t3.shape[0]
-    ), "Aggregation level 'task' should have more rows than 'split'"
+    assert t2.shape[0] >= t3.shape[0], (
+        "Aggregation level 'task' should have more rows than 'split'"
+    )
 
     # test no model revisions
     benchmark_res = benchmark_results.join_revisions()
     t1 = benchmark_res.to_dataframe(aggregation_level="subset", format="long")
-    assert (
-        "model_revision" not in t1.columns
-    ), "Model revision column should not be present"
+    assert "model_revision" not in t1.columns, (
+        "Model revision column should not be present"
+    )
     # Test the wide format
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
     task = mteb.get_task("BornholmBitextMining")
@@ -136,9 +136,9 @@ def test_to_dataframe(
     assert isinstance(t4_wide, pd.DataFrame)
 
     # check that the scores are the same for a given model
-    assert (
-        t4_wide[model_name][0] == t4_long["score"][0]
-    ), "The scores in wide and long format should be the same"
+    assert t4_wide[model_name][0] == t4_long["score"][0], (
+        "The scores in wide and long format should be the same"
+    )
 
 
 def test_utility_properties(

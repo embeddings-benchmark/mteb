@@ -45,9 +45,9 @@ def model_result() -> ModelResult:
 
 def test_indexing(model_result: ModelResult) -> None:
     res = model_result[0]
-    assert isinstance(
-        res, TaskResult
-    ), "indexing into the list should return a ModelResult"
+    assert isinstance(res, TaskResult), (
+        "indexing into the list should return a ModelResult"
+    )
 
 
 def test_utility_properties(
@@ -97,9 +97,9 @@ def test_to_dataframe(
         col in t2.columns for col in required_columns if col not in ["subset"]
     ), "Columns are missing"
     assert "subset" not in t2.columns, "Subset column should not be present"
-    assert (
-        t1.shape[0] >= t2.shape[0]
-    ), "Aggregation level 'split' should have more rows than 'subset'"
+    assert t1.shape[0] >= t2.shape[0], (
+        "Aggregation level 'split' should have more rows than 'subset'"
+    )
 
     t3 = mr.to_dataframe(aggregation_level="task", format="long")
     assert all(
@@ -107,15 +107,15 @@ def test_to_dataframe(
     ), "Columns are missing"
     assert "subset" not in t3.columns, "Subset column should not be present"
     assert "split" not in t3.columns, "Split column should not be present"
-    assert (
-        t2.shape[0] >= t3.shape[0]
-    ), "Aggregation level 'task' should have more rows than 'split'"
+    assert t2.shape[0] >= t3.shape[0], (
+        "Aggregation level 'task' should have more rows than 'split'"
+    )
 
     t4_wide = mr.to_dataframe(aggregation_level="task", format="wide")
     t4_long = mr.to_dataframe(aggregation_level="task", format="long")
     assert isinstance(t4_wide, pd.DataFrame)
 
     # we know it is only one task
-    assert (
-        t4_wide[mr.model_name].tolist()[0] == t4_long["score"][0]
-    ), "The scores in wide and long format should be the same"
+    assert t4_wide[mr.model_name].tolist()[0] == t4_long["score"][0], (
+        "The scores in wide and long format should be the same"
+    )
