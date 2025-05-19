@@ -20,3 +20,4 @@ from .eng.SpeechCommands import *
 from .eng.SpokenQAforIC import *
 from .eng.VoxCelebSA import *
 from .eng.VoxLingua107Top10 import *
+from .multilingual.MInDS14 import *
