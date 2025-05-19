@@ -121,7 +121,6 @@ class AbsTaskRetrieval(AbsTask):
                     'top_ranked': Optional[dict[str, list[str]]]  # query_id -> doc_ids
                         Semantically, it should contain dict[split_name, dict[sample_id, str]]. If there are multiple instructions per query, please duplicate the queries and give them unique ids for consolidation.
                         E.g. {"test": {"query-id1": "instruction text"}}
-                    'qrels_diff': Optional[dict[str, list[str]]]
                 }
             }
         }
@@ -144,7 +143,6 @@ class AbsTaskRetrieval(AbsTask):
                     relevant_docs={},
                     instructions=None,
                     top_ranked=None,
-                    qrels_diff=None,
                 )
             )
         )
@@ -160,7 +158,6 @@ class AbsTaskRetrieval(AbsTask):
                     relevant_docs={},
                     instructions=None,
                     top_ranked=None,
-                    qrels_diff=None,
                 )
             )
         )
@@ -181,10 +178,6 @@ class AbsTaskRetrieval(AbsTask):
                         self.dataset[subset][split]["top_ranked"] = self.top_ranked[
                             subset
                         ][split]
-                    if hasattr(self, "qrels_diff"):
-                        self.dataset[subset][split]["qrels_diff"] = self.qrels_diff[
-                            subset
-                        ][split]
         else:
             subset = "default"
             for split in self.queries:
@@ -201,10 +194,6 @@ class AbsTaskRetrieval(AbsTask):
                     self.dataset[subset][split]["top_ranked"] = self.top_ranked[
                         split
                     ].copy()
-                if hasattr(self, "qrels_diff"):
-                    self.dataset[subset][split]["top_ranked"] = self.qrels_diff[
-                        split
-                    ].copy()
 
         del self.queries
         del self.corpus
@@ -213,8 +202,6 @@ class AbsTaskRetrieval(AbsTask):
             del self.instructions
         if hasattr(self, "top_ranked"):
             del self.top_ranked
-        if hasattr(self, "qrels_diff"):
-            del self.qrels_diff
 
     def load_data(self, **kwargs):
         if self.data_loaded:
