@@ -19,7 +19,7 @@ from mteb.models.wrapper import Wrapper
 class Data2VecAudioWrapper(Wrapper):
     def __init__(
         self,
-        model_name: str = "facebook/data2vec-audio-base-960h",
+        model_name: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
@@ -128,14 +128,12 @@ class Data2VecAudioWrapper(Wrapper):
                     return_attention_mask=True,
                 ).to(self.device)
 
-                # Data2Vec Audio model outputs
                 outputs = self.model(
                     inputs.input_values,
                     attention_mask=inputs.attention_mask,
                     output_hidden_states=True,
                 )
 
-                # Get embeddings from last hidden state
                 last_hidden_state = outputs.last_hidden_state
                 embeddings = torch.mean(last_hidden_state, dim=1)
                 all_embeddings.append(embeddings.cpu())
@@ -163,14 +161,14 @@ data2vec_audio_base = ModelMeta(
         model_name="facebook/data2vec-audio-base-960h",
     ),
     name="facebook/data2vec-audio-base-960h",
-    languages=["eng-Latn"],  # English support
+    languages=["eng-Latn"],
     open_weights=True,
     revision="32331f3123e703528918aa688a9a38232d58c872",
     release_date="2022-02-07",  # Paper release date
     max_tokens=float("inf"),
-    n_parameters=93_164_288,  # ~95M parameters for base
-    memory_usage_mb=380,  # Estimate
-    embed_dim=768,  # Base model embedding dimension
+    n_parameters=93_164_288,
+    memory_usage_mb=355,
+    embed_dim=768,
     license="mit",
     reference="https://huggingface.co/facebook/data2vec-audio-base-960h",
     similarity_fn_name="cosine",
@@ -182,28 +180,27 @@ data2vec_audio_base = ModelMeta(
     modalities=["audio"],
 )
 
-# Large model
 data2vec_audio_large = ModelMeta(
     loader=partial(
         Data2VecAudioWrapper,
         model_name="facebook/data2vec-audio-large-960h",
     ),
     name="facebook/data2vec-audio-large-960h",
-    languages=["eng-Latn"],  # English support
+    languages=["eng-Latn"],
     open_weights=True,
     revision="27aba26eed532b86dcd0f17284a0307de4b51f39",
     release_date="2022-02-07",  # Paper release date
-    max_tokens=float("inf"),
-    n_parameters=313_276_416,  # ~317M parameters for large
-    memory_usage_mb=1260,  # Estimate
-    embed_dim=1024,  # Large model embedding dimension
+    max_tokens=None,
+    n_parameters=313_276_416,
+    memory_usage_mb=1195,
+    embed_dim=1024,
     license="mit",
     reference="https://huggingface.co/facebook/data2vec-audio-large-960h",
     similarity_fn_name="cosine",
     framework=["PyTorch"],
     use_instructions=False,
     public_training_code="https://github.com/facebookresearch/fairseq/tree/main/examples/data2vec",
-    public_training_data="LibriSpeech (960h)",
-    training_datasets={"LibriSpeech": ["train"]},
+    public_training_data="https://www.openslr.org/12",  # Link to LibriSpeech Dataset
+    training_datasets={},  # "LibriSpeech": ["train"]},
     modalities=["audio"],
 )
