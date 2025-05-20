@@ -175,8 +175,8 @@ data2vec_audio_base = ModelMeta(
     framework=["PyTorch"],
     use_instructions=False,
     public_training_code="https://github.com/facebookresearch/fairseq/tree/main/examples/data2vec",
-    public_training_data="LibriSpeech (960h)",
-    training_datasets={"LibriSpeech": ["train"]},
+    public_training_data="https://www.openslr.org/12",  # Link to LibriSpeech Dataset
+    training_datasets={},  # "LibriSpeech": ["train"]},
     modalities=["audio"],
 )
 
