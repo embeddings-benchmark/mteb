@@ -166,6 +166,11 @@ class DenseRetrievalExactSearch:
                 if self.save_corpus_embeddings and request_qid:
                     self.corpus_embeddings[request_qid].append(sub_corpus_embeddings)
 
+            if hasattr(self.model.model, "add_to_index"):
+                corpus_ids_slice = corpus_ids[corpus_start_idx:corpus_end_idx]
+                self.model.model.add_to_index(sub_corpus_embeddings, corpus_ids_slice)
+                continue
+
             # Compute similarites using self defined similarity otherwise default to cosine-similarity
             if hasattr(self.model, "similarity"):
                 similarity_scores = self.model.similarity(
@@ -211,6 +216,23 @@ class DenseRetrievalExactSearch:
                     else:
                         # If item is larger than the smallest in the heap, push it on the heap then pop the smallest element
                         heapq.heappushpop(result_heaps[query_id], (score, corpus_id))
+
+        if hasattr(self.model.model, "add_to_index"):
+            if hasattr(self.model.model, "retrieve_from_index"):
+                results = self.model.model.retrieve_from_index(query_embeddings, top_k)
+                for query_itr in range(len(query_embeddings)):
+                    query_id = query_ids[query_itr]
+                    result = results[query_itr]
+                    for id_score_pair in result:
+                        score = id_score_pair["score"]
+                        corpus_id = id_score_pair["id"]
+                        self.results[query_id][corpus_id] = score
+
+                return self.results
+            else:
+                raise ValueError(
+                    "The model as a add_to_index method but does not have a retrieve_from_index method. Please implement it."
+                )
 
         for qid in result_heaps:
             for score, corpus_id in result_heaps[qid]:

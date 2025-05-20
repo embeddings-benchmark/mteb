@@ -6,7 +6,6 @@ from functools import partial
 from typing import Any
 
 import numpy as np
-import torch
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
@@ -54,6 +53,37 @@ class ColBERTWrapper(Wrapper):
             self.model.prompts = model_prompts
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
 
+        self.create_index()
+
+    def create_index(self) -> None:
+        """Creates an index for the model."""
+        from pylate import indexes
+        from pylate import retrieve as colbert_retrieve
+
+        self.index = indexes.PLAID(
+            index_folder="pylate-index",
+            index_name="index",
+            override=True,
+            # embedding_size=self.model.document_length, #TODO: set this to the correct value dynamically
+        )
+
+        self.retriever = colbert_retrieve.ColBERT(index=self.index)
+
+    def add_to_index(
+        self, documents_embeddings: np.ndarray, documents_ids: list[str]
+    ) -> None:
+        self.index.add_documents(
+            documents_ids=documents_ids,
+            documents_embeddings=documents_embeddings,
+        )
+
+    def retrieve_from_index(self, queries_embeddings: np.ndarray, top_k: int):
+        scores = self.retriever.retrieve(
+            queries_embeddings=queries_embeddings,
+            k=top_k,
+        )
+        return scores
+
     def encode(
         self,
         sentences: Sequence[str],
@@ -96,47 +126,21 @@ class ColBERTWrapper(Wrapper):
             )
         logger.info(f"Encoding {len(sentences)} sentences.")
 
+        if "convert_to_numpy" in kwargs:
+            del kwargs["convert_to_numpy"]
+
+        if "convert_to_tensor" in kwargs:
+            del kwargs["convert_to_tensor"]
+
         pred = self.model.encode(
             sentences,
             prompt_name=prompt_name,
             is_query=True if prompt_type == PromptType.query else False,
+            convert_to_numpy=True,
             **kwargs,
         )
 
-        # encode returns a list of tensors shaped (x, token_dim) where x is the number of tokens in the sentence
-        # we need to pad these tensors to the same length
-        # Tensors have varying lengths; therefore, they need to be padded with zeros to ensure uniformity before being combined
-        # output shape will be (batch_size, len(max(tokens)), embedding_token_dim)
-        pred = torch.nn.utils.rnn.pad_sequence(pred, batch_first=True, padding_value=0)
-
-        return pred.cpu().numpy()
-
-    def similarity(self, a: np.ndarray, b: np.ndarray) -> np.ndarray:
-        """Computes the max-similarity max_sim(a[i], b[j]) for all i and j.
-            Works with a Tensor of the shape (batch_size, num_tokens, token_dim)
-
-        Return:
-            Matrix with res[i][j]  = max_sim(a[i], b[j])
-        """  # noqa: D402
-        if not isinstance(a, torch.Tensor):
-            a = torch.tensor(a, dtype=torch.float32)
-
-        if not isinstance(b, torch.Tensor):
-            b = torch.tensor(b, dtype=torch.float32)
-
-        if len(a.shape) == 2:
-            a = a.unsqueeze(0)
-
-        if len(b.shape) == 2:
-            b = b.unsqueeze(0)
-
-        scores = torch.einsum(
-            "ash,bth->abst",
-            a,
-            b,
-        )
-
-        return scores.max(axis=-1).values.sum(axis=-1)
+        return pred
 
 
 colbert_v2 = ModelMeta(
