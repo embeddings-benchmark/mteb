@@ -230,8 +230,11 @@ class DenseRetrievalExactSearch:
 
                 return self.results
             else:
-                raise ValueError(
-                    "The model as a add_to_index method but does not have a retrieve_from_index method. Please implement it."
+                logger.error(
+                    "The model provides an 'add_to_index' method but lacks a 'retrieve_from_index' method. Index-based retrieval cannot proceed. Please implement 'retrieve_from_index' in your model."
+                )
+                raise NotImplementedError(
+                    "Missing 'retrieve_from_index' method in the model. Implement this method to enable index-based retrieval."
                 )
 
         for qid in result_heaps:
