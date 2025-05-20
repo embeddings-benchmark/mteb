@@ -19,7 +19,7 @@ from mteb.models.wrapper import Wrapper
 class ASTWrapper(Wrapper):
     def __init__(
         self,
-        model_name: str = "MIT/ast-finetuned-audioset-10-10-0.4593",
+        model_name: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
@@ -105,7 +105,6 @@ class ASTWrapper(Wrapper):
                 # AST processes raw waveforms directly through its feature extractor
                 batch_inputs = []
                 for audio_tensor in batch:
-                    # Ensure audio is in the right format for the feature extractor
                     audio_np = (
                         audio_tensor.numpy()
                         if isinstance(audio_tensor, torch.Tensor)
@@ -113,7 +112,6 @@ class ASTWrapper(Wrapper):
                     )
                     batch_inputs.append(audio_np)
 
-                # Use the feature extractor to prepare inputs
                 inputs = self.feature_extractor(
                     batch_inputs,
                     sampling_rate=self.sampling_rate,
@@ -121,7 +119,6 @@ class ASTWrapper(Wrapper):
                     padding=True,
                 ).to(self.device)
 
-                # Get model outputs
                 outputs = self.model(**inputs)
 
                 # AST's pooled output is the [CLS] token embedding
@@ -155,10 +152,10 @@ ast_audioset = ModelMeta(
     languages=["eng-Latn"],
     open_weights=True,
     revision="f826b80d28226b62986cc218e5cec390b1096902",
-    release_date="2021-07-08",  # Approximate based on paper
-    max_tokens=float("inf"),
-    n_parameters=86_600_000,  # ~86M parameters
-    memory_usage_mb=344,  # Estimated
+    release_date="2021-07-08",
+    max_tokens=None,
+    n_parameters=86_600_000,
+    memory_usage_mb=330,
     embed_dim=768,
     license="apache-2.0",
     reference="https://huggingface.co/MIT/ast-finetuned-audioset-10-10-0.4593",
@@ -166,7 +163,7 @@ ast_audioset = ModelMeta(
     framework=["PyTorch"],
     use_instructions=False,
     public_training_code="https://github.com/YuanGongND/ast",
-    public_training_data="AudioSet",
-    training_datasets={"AudioSet": ["train"]},
+    public_training_data="https://research.google.com/audioset/dataset/index.html",
+    training_datasets={},  # "AudioSet": ["train"]},
     modalities=["audio"],
 )
