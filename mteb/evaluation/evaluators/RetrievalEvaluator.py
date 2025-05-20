@@ -107,6 +107,12 @@ class DenseRetrievalExactSearch:
         **kwargs,
     ) -> dict[str, dict[str, float]]:
         logger.info("Encoding Queries.")
+
+        if hasattr(self.model.model, "create_index"):
+            # create the index for the model
+            self.model.model.create_index()
+            logger.info("Index created for the model.")
+
         query_ids = list(queries.keys())
         self.results = {qid: {} for qid in query_ids}
         queries = [queries[qid] for qid in queries]  # type: ignore

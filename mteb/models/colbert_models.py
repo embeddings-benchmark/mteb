@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import uuid
 from collections.abc import Sequence
 from functools import partial
 from typing import Any
@@ -57,16 +58,15 @@ class ColBERTWrapper(Wrapper):
             self.model.prompts = model_prompts
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
 
-        self.create_index()
-
     def create_index(self) -> None:
         """Creates an index for the model."""
         from pylate import indexes
         from pylate import retrieve as colbert_retrieve
 
+        uuid_str = str(uuid.uuid4())
         self.index = indexes.PLAID(
-            index_folder="pylate-index",
-            index_name="index",
+            index_folder="pylate-index/" + uuid_str,
+            index_name="index" + uuid_str,
             override=True,
             embedding_size=self.embedding_size,
         )
