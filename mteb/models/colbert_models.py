@@ -21,6 +21,7 @@ class ColBERTWrapper(Wrapper):
         model_name: str,
         revision: str | None = None,
         model_prompts: dict[str, str] | None = None,
+        embedding_size: int = 128,
         **kwargs,
     ) -> None:
         """Wrapper for ColBERT models.
@@ -32,6 +33,7 @@ class ColBERTWrapper(Wrapper):
                 First priority is given to the composed prompt of task name + prompt type (query or passage), then to the specific task prompt,
                 then to the composed prompt of task type + prompt type, then to the specific task type prompt,
                 and finally to the specific prompt type.
+            embedding_size: The size of the embeddings. Default is 128.
             **kwargs: Additional arguments to pass to the model.
         """
         requires_package(self, "pylate", model_name, "pip install mteb[pylate]")
@@ -39,9 +41,7 @@ class ColBERTWrapper(Wrapper):
 
         self.model_name = model_name
         self.model = colbert_model.ColBERT(self.model_name, revision=revision, **kwargs)
-        self.embedding_size = (
-            128 if "embedding_size" not in kwargs else kwargs["embedding_size"]
-        )
+        self.embedding_size = embedding_size
 
         if (
             model_prompts is None
