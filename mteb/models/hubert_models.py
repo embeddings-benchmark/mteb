@@ -19,7 +19,7 @@ from mteb.models.wrapper import Wrapper
 class HubertWrapper(Wrapper):
     def __init__(
         self,
-        model_name: str = "facebook/hubert-base-ls960",
+        model_name: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
@@ -128,14 +128,12 @@ class HubertWrapper(Wrapper):
                     return_attention_mask=True,
                 ).to(self.device)
 
-                # HuBERT model outputs
                 outputs = self.model(
                     inputs.input_values,
                     attention_mask=inputs.attention_mask,
                     output_hidden_states=True,
                 )
 
-                # Get embeddings from last hidden state
                 last_hidden_state = outputs.last_hidden_state
                 embeddings = torch.mean(last_hidden_state, dim=1)
                 all_embeddings.append(embeddings.cpu())
@@ -163,22 +161,22 @@ hubert_base = ModelMeta(
         model_name="facebook/hubert-base-ls960",
     ),
     name="facebook/hubert-base-ls960",
-    languages=["eng-Latn"],  # English support
+    languages=["eng-Latn"],
     open_weights=True,
     revision="dba3bb02fda4248b6e082697eee756de8fe8aa8a",
     release_date="2021-06-14",  # Paper release date
     max_tokens=float("inf"),
-    n_parameters=95_000_000,  # ~95M parameters for base
-    memory_usage_mb=380,  # Estimate
-    embed_dim=768,  # Base model embedding dimension
+    n_parameters=95_000_000,
+    memory_usage_mb=360,
+    embed_dim=768,
     license="mit",
     reference="https://huggingface.co/facebook/hubert-base-ls960",
     similarity_fn_name="cosine",
     framework=["PyTorch"],
     use_instructions=False,
     public_training_code="https://github.com/pytorch/fairseq/tree/master/examples/hubert",
-    public_training_data="LibriSpeech (960h)",
-    training_datasets={"LibriSpeech": ["train"]},
+    public_training_data="https://www.openslr.org/12",  # Link to LibriSpeech Dataset
+    training_datasets={},  # "LibriSpeech": ["train"]},
     modalities=["audio"],
 )
 
@@ -189,21 +187,21 @@ hubert_large_ft = ModelMeta(
         model_name="facebook/hubert-large-ls960-ft",
     ),
     name="facebook/hubert-large-ls960-ft",
-    languages=["eng-Latn"],  # English support
+    languages=["eng-Latn"],
     open_weights=True,
     revision="ece5fabbf034c1073acae96d5401b25be96709d8",
     release_date="2021-06-14",  # Paper release date
     max_tokens=float("inf"),
-    n_parameters=317_000_000,  # ~317M parameters for large
-    memory_usage_mb=1260,  # Estimate
-    embed_dim=1024,  # Large model embedding dimension
+    n_parameters=317_000_000,
+    memory_usage_mb=1203,
+    embed_dim=1024,
     license="mit",
     reference="https://huggingface.co/facebook/hubert-large-ls960-ft",
     similarity_fn_name="cosine",
     framework=["PyTorch"],
     use_instructions=False,
     public_training_code="https://github.com/pytorch/fairseq/tree/master/examples/hubert",
-    public_training_data="LibriSpeech (960h)",
-    training_datasets={"LibriSpeech": ["train"]},
+    public_training_data="https://www.openslr.org/12",  # Link to LibriSpeech Dataset
+    training_datasets={},  # "LibriSpeech": ["train"]},
     modalities=["audio"],
 )
