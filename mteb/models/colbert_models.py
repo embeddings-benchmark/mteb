@@ -65,7 +65,7 @@ class ColBERTWrapper(Wrapper):
 
         uuid_str = str(uuid.uuid4())
         self.index = indexes.PLAID(
-            index_folder="pylate-index/" + uuid_str,
+            index_folder=os.path.join("pylate-index", uuid_str),
             index_name="index" + uuid_str,
             override=True,
             embedding_size=self.embedding_size,
