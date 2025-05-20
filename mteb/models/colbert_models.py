@@ -39,6 +39,8 @@ class ColBERTWrapper(Wrapper):
 
         self.model_name = model_name
         self.model = colbert_model.ColBERT(self.model_name, revision=revision, **kwargs)
+        self.embedding_size = 128 if "embedding_size" not in kwargs else kwargs["embedding_size"]
+
         if (
             model_prompts is None
             and hasattr(self.model, "prompts")
@@ -59,12 +61,12 @@ class ColBERTWrapper(Wrapper):
         """Creates an index for the model."""
         from pylate import indexes
         from pylate import retrieve as colbert_retrieve
-
+        self.model
         self.index = indexes.PLAID(
             index_folder="pylate-index",
             index_name="index",
             override=True,
-            # embedding_size=self.model.document_length, #TODO: set this to the correct value dynamically
+            embedding_size=self.embedding_size,
         )
 
         self.retriever = colbert_retrieve.ColBERT(index=self.index)

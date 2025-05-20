@@ -402,11 +402,10 @@ evaluation = MTEB(tasks=tasks)
 evaluation.run(
     colbert,
     eval_splits=eval_splits,
-    corpus_chunk_size=500,
 )
 ```
-This implementation employs the MaxSim operation to compute the similarity between sentences. While MaxSim provides high-quality results, it processes a larger number of embeddings, potentially leading to increased resource usage. To manage resource consumption, consider lowering the `corpus_chunk_size` parameter.
 
+By default, MTEB uses the PLAID index for retrieval tasks.
 
 ### Saving retrieval task predictions
 
