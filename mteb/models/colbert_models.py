@@ -64,7 +64,6 @@ class ColBERTWrapper(Wrapper):
         from pylate import indexes
         from pylate import retrieve as colbert_retrieve
 
-        self.model
         self.index = indexes.PLAID(
             index_folder="pylate-index",
             index_name="index",
