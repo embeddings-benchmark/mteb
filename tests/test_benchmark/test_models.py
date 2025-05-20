@@ -22,7 +22,6 @@ def test_colbert_model_e2e(task: AbsTask, model: str, tmp_path: Path):
     results = evaluation.run(
         model,
         eval_splits=eval_splits,
-        corpus_chunk_size=500,
         output_folder=tmp_path.as_posix(),
     )
     result = results[0]
