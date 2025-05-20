@@ -9,6 +9,7 @@ from sentence_transformers import CrossEncoder, SentenceTransformer
 import mteb
 from mteb import MTEB
 from mteb.model_meta import ModelMeta
+from tests.test_benchmark.mock_tasks import MockRetrievalTask
 
 logging.basicConfig(level=logging.INFO)
 
@@ -342,7 +343,6 @@ def test_mteb_rerank(tmp_path: Path):
         output_folder=tmp_path.as_posix(),
         overwrite_results=True,
         eval_splits=["test"],
-        top_k=2,
         previous_results=tmp_file,
         save_predictions=True,
     )
@@ -351,10 +351,11 @@ def test_mteb_rerank(tmp_path: Path):
     with (tmp_path / "SciFact_default_predictions.json").open() as f:
         results = json.load(f)
 
+    results = sorted(results["1"].keys(), key=lambda x: (results["1"][x], x))[:2]
     # check that only the top two results are re-orderd
-    assert "19238" not in results["1"]
-    assert "4983" in results["1"]
-    assert "18670" in results["1"]
+    assert "19238" not in results
+    assert "4983" in results
+    assert "18670" in results
 
 
 def test_reranker_same_ndcg1(tmp_path: Path):
@@ -383,7 +384,8 @@ def test_reranker_same_ndcg1(tmp_path: Path):
         training_datasets=None,
         framework=["Sentence Transformers", "PyTorch"],
     )
-    eval = MTEB(tasks=mteb.get_tasks(["SciFact"]))
+    task = MockRetrievalTask()
+    eval = MTEB(tasks=[task])
     stage1_path = tmp_path / "stage1"
     eval.run(
         de,
@@ -397,21 +399,22 @@ def test_reranker_same_ndcg1(tmp_path: Path):
         ce,  # type: ignore
         output_folder=stage2_path.as_posix(),
         overwrite_results=True,
-        previous_results=(stage1_path / "SciFact_default_predictions.json"),
+        previous_results=(
+            stage1_path / f"{task.metadata.name}_default_predictions.json"
+        ),
         save_predictions=False,
         eval_splits=["test"],
-        top_k=1,  # don't allow it to rerank more than 1 so we can check for top_1 being the same
     )
 
     # read in stage 1 and stage two and check ndcg@1 is the same
     with open(
-        f"{stage1_path}/{de_name.replace('/', '__')}/{revision}/SciFact.json"
+        f"{stage1_path}/{de_name.replace('/', '__')}/{revision}/{task.metadata.name}.json"
     ) as f:
         stage1 = json.load(f)
 
     with (
         stage2_path
-        / f"cross-encoder__ms-marco-TinyBERT-L-2-v2/{ce_revision}/SciFact.json"
+        / f"cross-encoder__ms-marco-TinyBERT-L-2-v2/{ce_revision}/{task.metadata.name}.json"
     ).open() as f:
         stage2 = json.load(f)
 
