@@ -1745,3 +1745,47 @@ BUILT_MTEB = Benchmark(
 }""",
     contacts=["mehrzadshm"],
 )
+
+VIDORE = Benchmark(
+    name="ViDoRe(v1)",
+    tasks=get_tasks(
+        tasks=[
+            "VidoreArxivQARetrieval",
+            "VidoreDocVQARetrieval",
+            "VidoreInfoVQARetrieval",
+            "VidoreTabfquadRetrieval",
+            "VidoreTatdqaRetrieval",
+            "VidoreShiftProjectRetrieval",
+            "VidoreSyntheticDocQAAIRetrieval",
+            "VidoreSyntheticDocQAEnergyRetrieval",
+            "VidoreSyntheticDocQAGovernmentReportsRetrieval",
+            "VidoreSyntheticDocQAHealthcareIndustryRetrieval",
+        ],
+    ),
+    description="Retrieve associated pages according to questions.",
+    reference="https://arxiv.org/abs/2407.01449",
+    citation="""@article{faysse2024colpali,
+  title={ColPali: Efficient Document Retrieval with Vision Language Models},
+  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal={arXiv preprint arXiv:2407.01449},
+  year={2024}""",
+)
+
+VIDORE_V2 = Benchmark(
+    name="ViDoRe(v2)",
+    tasks=get_tasks(
+        tasks=[
+            "Vidore2SyntheticESGReportsRetrieval",
+            "Vidore2SyntheticEconsRetrieval",
+            "Vidore2SyntheticBioMedRetrieval",
+            "Vidore2ESGReportsRetrieval",
+        ],
+    ),
+    description="Retrieve associated pages according to questions.",
+    reference="https://arxiv.org/abs/2407.01449",
+    citation="""@article{faysse2024colpali,
+  title={ColPali: Efficient Document Retrieval with Vision Language Models},
+  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal={arXiv preprint arXiv:2407.01449},
+  year={2024}""",
+)
