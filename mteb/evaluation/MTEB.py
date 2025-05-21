@@ -137,7 +137,6 @@ class MTEB:
     @classmethod
     def mteb_tasks(cls):
         """Get all tasks available in the MTEB."""
-        import mteb 
         tasks = mteb.get_tasks()
         instance = cls(tasks)
         instance._display_tasks(tasks, name="MTEB tasks")
