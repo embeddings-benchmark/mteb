@@ -314,21 +314,3 @@ def run_tasks(
         task_results=[result],
     )
 
-
-# TODO:
-# Figure out a good UI for running tasks (how should the TQDM progress bar look like) - how does it interact with the sentence TRF progress bar
-# Add tests
-
-
-# PR notes:
-# Notes to consider:
-# - Currently MTEB checks for bm25 and retrieval task. I don't believe this is currently needed.
-# - One of the reasons for doing this task was also to refactor AbsTaskAggregate. I haven't done this yet, as I think it might be worth refactoring this
-#   part. We have also have people ask about getting result for a benchmark and I feel like the two are very close. I also don't like that AbsTaskAggregate
-#   isn't really a AbsTask. I would love to brainstorm this idea a bit and hear what you guys think. (this means that I currently can't remove MTEB)
-# - Currently the results is a list[TaskResult], but it could as well be ModelResults() as it also stores the metadata. WDYT?
-# - I had a lot of issues with circular imports. A lot of this stems from types. I think an easy solution here is to create a types module (I didn't more everything here because it woudl inflate the div)
-
-# Minor notes:
-# - Previously mentioned that I wanted to add a benchmark.run() method, but I think it is better to just do mteb.run_tasks(benchmark)
-# - Seems like we have a few attributes on the benchmark that are only for the leaderboard (e.g. icon). Not sure if those should be private or moved elsewhere (leaderboard code)
