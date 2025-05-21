@@ -22,7 +22,6 @@ from mteb.models import (
     blip_models,
     bm25,
     cde_models,
-    chain19_models,
     clip_models,
     codesage_models,
     cohere_models,
@@ -72,7 +71,6 @@ from mteb.models import (
     ru_sentence_models,
     salesforce_models,
     searchmap_models,
-    seed_models,
     sentence_transformers_models,
     shuu_model,
     siglip_models,
@@ -101,7 +99,6 @@ model_modules = [
     clip_models,
     codesage_models,
     cde_models,
-    chain19_models,
     cohere_models,
     cohere_v,
     colbert_models,
@@ -164,7 +161,6 @@ model_modules = [
     ara_models,
     b1ade_models,
     nb_sbert,
-    seed_models,
 ]
 MODEL_REGISTRY = {}
 

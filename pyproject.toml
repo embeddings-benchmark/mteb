@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.38.7"
+version = "1.38.12"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -87,12 +87,12 @@ bm25s = ["bm25s>=0.2.6", "PyStemmer>=2.2.0.3"]
 gritlm = ["gritlm>=1.0.2"]
 xformers = ["xformers>=0.0.29"]
 blip2 = ["salesforce-lavis>=1.0.2"]
-voyageai = ["voyageai>=1.0.0,<2.0.0"]
-voyage_v = ["voyageai>1.0.0,<2.0.0", "tenacity>1.0.0,<2.0.0"]
+voyageai = ["voyageai>0.3.0,<2.0.0"]
+voyage_v = ["voyageai>0.3.0,<2.0.0", "tenacity>9.0.0"]
 cohere = ["cohere==5.14.0"]
 vertexai = ["vertexai==1.71.1"]
-ll2vec = ["ll2vec==0.2.3"]
-timm = ["timm==1.0.15"]
+llm2vec = ["llm2vec>=0.2.3,<0.3.0"]
+timm = ["timm>=1.0.15,<1.1.0"]
 open_clip_torch = ["open_clip_torch==2.31.0"]
 
 [tool.coverage.report]
@@ -118,11 +118,14 @@ exclude_also = [
     ]
 
 [tool.setuptools.packages.find]
-exclude = ["tests", "results"]
+where = ["."]
+include = ["mteb", "mteb.*"]
+namespaces = false
 
 [tool.setuptools.package-data]
 "*" = ["*.json"]
 "mteb.abstasks" = ["the_ugly_duckling.txt"]
+"mteb.tasks.Image.ZeroShotClassification.eng.templates" = ["*.txt"]
 
 [tool.ruff]
 
@@ -202,4 +205,9 @@ addopts = """
 [tool.uv]
 override-dependencies = [
     "salesforce-lavis", # salesforce-lavis is not valid with sentence transformers >=3.0.0
+]
+conflicts = [
+    [{ extra = "timm" }, { extra = "blip2" }],
+    [{ extra = "llm2vec" }, { extra = "pylate" }],
+    [{ extra = "llm2vec" }, { extra = "model2vec" }]
 ]
