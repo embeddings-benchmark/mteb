@@ -15,6 +15,7 @@ from mteb.models import (
     get_model_metas,
 )
 from mteb.overview import TASKS_REGISTRY, get_task, get_tasks
+from mteb.run_tasks import run_tasks
 
 from .benchmarks.benchmark import Benchmark
 from .benchmarks.get_benchmark import BENCHMARK_REGISTRY, get_benchmark, get_benchmarks
@@ -40,4 +41,5 @@ __all__ = [
     "Encoder",
     "AbsTask",
     "SentenceTransformerWrapper",
+    "run_tasks",
 ]

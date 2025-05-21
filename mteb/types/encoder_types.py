@@ -7,9 +7,11 @@ import numpy as np
 import torch
 from PIL import Image
 
+# --- Output types ---
 Array = Union[np.ndarray, torch.Tensor]
 
 
+# --- Input types ---
 class PromptType(str, Enum):
     query = "query"
     passage = "passage"

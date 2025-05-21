@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Iterable
+from copy import deepcopy
 from time import time
 from typing import Any, Literal, cast
 
@@ -12,11 +13,56 @@ from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.TaskMetadata import HFSubset, Splitname
 from mteb.cache import ResultCache
 from mteb.encoder_interface import Encoder
-from mteb.load_results import TaskResult
-
-from .get_model_meta import get_model_meta
+from mteb.load_results.task_results import TaskResult
+from mteb.model_meta import ModelMeta
+from mteb.models import (
+    model_meta_from_cross_encoder,
+    model_meta_from_sentence_transformers,
+)
 
 logger = logging.getLogger(__name__)
+
+empty_model_meta = ModelMeta(
+    loader=None,
+    name=None,
+    revision=None,
+    release_date=None,
+    languages=None,
+    framework=[],
+    similarity_fn_name=None,
+    n_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=None,
+    embed_dim=None,
+    license=None,
+    open_weights=None,
+    public_training_code=None,
+    public_training_data=None,
+    use_instructions=None,
+    training_datasets=None,
+)
+
+
+# TODO: seems like we could avoid this if we know that we are getting
+def _get_model_meta(model: Encoder | SentenceTransformer | CrossEncoder) -> ModelMeta:
+    meta: ModelMeta | None = None
+    if hasattr(model, "mteb_model_meta"):
+        meta = model.mteb_model_meta  # type: ignore
+
+    if meta is None:
+        if isinstance(model, CrossEncoder):
+            meta = model_meta_from_cross_encoder(model)
+        elif isinstance(model, SentenceTransformer):
+            meta = model_meta_from_sentence_transformers(model)
+        else:
+            meta = empty_model_meta
+
+    # create a copy of the meta to avoid modifying the original object
+    meta = deepcopy(meta)
+    meta.revision = meta.revision or "no_revision_available"
+    meta.name = meta.name or "no_model_name_available"
+
+    return meta
 
 
 def _run_task(
@@ -103,8 +149,8 @@ def _run_task(
 
 
 def run_tasks(
-    model: Encoder | SentenceTransformer | CrossEncoder,
-    tasks: AbsTask | Iterable[AbsTask],  # TODO: allow multiple tasks + benchmarks
+    model: ModelMeta | Encoder | SentenceTransformer | CrossEncoder,
+    tasks: AbsTask | Iterable[AbsTask],
     *,
     co2_tracker: bool | None = None,
     raise_error: bool = True,
@@ -140,17 +186,21 @@ def run_tasks(
 
     Example:
         >>> import mteb
-        >>> model = mteb.get_model("sentence-transformers/all-MiniLM-L6-v2")
+        >>> model_meta = mteb.get_model_meta("sentence-transformers/all-MiniLM-L6-v2")
         >>> task = mteb.get_task("STS12")
-        >>> result = mteb.run_tasks(model, task)
+        >>> result = mteb.run_tasks(ModelMeta, task)
+        >>>
         >>> # with CO2 tracking
-        >>> result = mteb.run_tasks(model, task, co2_tracker=True)
+        >>> result = mteb.run_tasks(model_meta, task, co2_tracker=True)
+        >>>
         >>> # with encode kwargs
-        >>> result = mteb.run_tasks(model, task, encode_kwargs={"batch_size": 16})
+        >>> result = mteb.run_tasks(model_meta, task, encode_kwargs={"batch_size": 16})
+        >>>
         >>> # with online cache
         >>> cache = mteb.ResultCache(cache_path="~/.cache/mteb")
+        >>>
         >>> cache.download_from_remote()
-        >>> result = mteb.run_tasks(model, task, cache=cache)
+        >>> result = mteb.run_tasks(model_meta, task, cache=cache)
     """
     if isinstance(tasks, AbsTask):
         task = tasks
@@ -180,7 +230,7 @@ def run_tasks(
             "No batch size defined in encode_kwargs. Setting `encode_kwargs['batch_size'] = 32`."
         )
 
-    meta = get_model_meta(model)
+    meta = _get_model_meta(model) if not isinstance(model, ModelMeta) else model
     if isinstance(model, (SentenceTransformer, CrossEncoder)):
         model = SentenceTransformerWrapper(model)  # type: ignore[assignment] # TODO: SentenceTransformerWrapper should be a subclass of Encoder
     model = cast(Encoder, model)
@@ -206,6 +256,8 @@ def run_tasks(
     else:
         missing_eval = {split: task.hf_subsets for split in task.eval_splits}
 
+    if isinstance(model, ModelMeta):
+        model = model.load_model()
     if raise_error is False:
         try:
             result = _run_task(
@@ -247,11 +299,15 @@ def run_tasks(
 # Add tests
 
 
-
 # PR notes:
-# Currently MTEB checks for bm25 and retrieval task. I don't believe this is currently needed.
-# Previously mentioned that I wanted to add a benchmark.run() method, but I think it is better to just do mteb.run_tasks(benchmark)
-# One of the reasons for doing this task was also to refactor AggregatedTask. I haven't done this yet, but I think it might be better to do this in a separate PR as it requires a bit more work.
-# this means that we of course can't remove MTEB() yet. I imagine that we might consider merging benchmark and 
+# Notes to consider:
+# - Currently MTEB checks for bm25 and retrieval task. I don't believe this is currently needed.
+# - One of the reasons for doing this task was also to refactor AbsTaskAggregate. I haven't done this yet, as I think it might be worth refactoring this
+#   part. We have also have people ask about getting result for a benchmark and I feel like the two are very close. I also don't like that AbsTaskAggregate
+#   isn't really a AbsTask. I would love to brainstorm this idea a bit and hear what you guys think. (this means that I currently can't remove MTEB)
+# - Currently the results is a list[TaskResult], but it could as well be ModelResults() as it also stores the metadata. WDYT?
+# - I had a lot of issues with circular imports. A lot of this stems from types. I think an easy solution here is to create a types module (I didn't more everything here because it woudl inflate the div)
 
-# Other notes: Seems like we have a few attributes on the benchmark that are only for the leaderboard (e.g. icon). Not sure if those should be private or moved elsewhere (leaderboard code)
+# Minor notes:
+# - Previously mentioned that I wanted to add a benchmark.run() method, but I think it is better to just do mteb.run_tasks(benchmark)
+# - Seems like we have a few attributes on the benchmark that are only for the leaderboard (e.g. icon). Not sure if those should be private or moved elsewhere (leaderboard code)

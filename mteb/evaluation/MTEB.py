@@ -17,17 +17,15 @@ from codecarbon import EmissionsTracker
 from sentence_transformers import CrossEncoder, SentenceTransformer
 
 import mteb
-from mteb.abstasks.AbsTask import ScoresDict
+from mteb.abstasks.AbsTask import AbsTask, ScoresDict
 from mteb.encoder_interface import Encoder
+from mteb.load_results.task_results import TaskResult
 from mteb.model_meta import ModelMeta
 from mteb.models import (
     model_meta_from_cross_encoder,
     model_meta_from_sentence_transformers,
 )
-
-from ..abstasks.AbsTask import AbsTask
-from ..load_results.task_results import TaskResult
-from ..models.sentence_transformer_wrapper import SentenceTransformerWrapper
+from mteb.models.sentence_transformer_wrapper import SentenceTransformerWrapper
 
 if TYPE_CHECKING:
     from mteb.benchmarks import Benchmark
@@ -139,6 +137,7 @@ class MTEB:
     @classmethod
     def mteb_tasks(cls):
         """Get all tasks available in the MTEB."""
+        import mteb 
         tasks = mteb.get_tasks()
         instance = cls(tasks)
         instance._display_tasks(tasks, name="MTEB tasks")

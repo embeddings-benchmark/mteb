@@ -13,10 +13,9 @@ from datasets import Dataset, DatasetDict
 from sklearn.metrics.cluster import v_measure_score
 from torch.utils.data import DataLoader
 
-from mteb.abstasks.TaskMetadata import DescriptiveStatistics
+from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset
 from mteb.encoder_interface import Encoder
 
-from ..load_results.task_results import HFSubset
 from .AbsTask import AbsTask
 
 logger = logging.getLogger(__name__)

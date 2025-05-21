@@ -5,8 +5,8 @@ import logging
 from collections.abc import Sequence
 from pathlib import Path
 
-import mteb.cache as cache
 from mteb.abstasks.AbsTask import AbsTask
+from mteb.cache import ResultCache
 from mteb.load_results.benchmark_results import BenchmarkResults, ModelResult
 from mteb.load_results.task_results import TaskResult
 from mteb.model_meta import ModelMeta
@@ -62,9 +62,9 @@ def load_results(
     """
     # TODO: we want to allow results_repo (the first argument) to be a local path
     # TODO: in v2 we can rename it to "path" to align with load_dataset
-    repo_directory = cache.download_results_cache(
-        results_repo=results_repo, download_latest=download_latest
-    )
+    cache = ResultCache()
+    cache.download_from_remote(download_latest=download_latest)
+    repo_directory = cache.cache_path
     model_paths = [p for p in (repo_directory / "results").glob("*") if p.is_dir()]
 
     if models is not None:

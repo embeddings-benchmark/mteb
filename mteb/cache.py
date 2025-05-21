@@ -4,8 +4,7 @@ import logging
 import os
 import subprocess
 from pathlib import Path
-
-from mteb.load_results import TaskResult
+from mteb.load_results.task_results import TaskResult
 from mteb.model_meta import ModelMeta
 
 logger = logging.getLogger(__name__)

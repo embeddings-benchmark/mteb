@@ -20,11 +20,9 @@ from mteb.abstasks.stratification import _iterative_train_test_split
 from mteb.abstasks.TaskMetadata import DescriptiveStatistics, HFSubset, TaskMetadata
 from mteb.encoder_interface import Encoder
 from mteb.languages import LanguageScripts
+from mteb.types import ScoresDict
 
 logger = logging.getLogger(__name__)
-
-ScoresDict = dict[str, Any]
-# ^ e.g {'main_score': 0.5, 'hf_subset': 'en-de', 'languages': ['eng-Latn', 'deu-Latn']}
 
 
 def set_seed(seed: int) -> tuple[random.Random, np.random.Generator]:
