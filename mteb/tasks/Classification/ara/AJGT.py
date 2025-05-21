@@ -45,7 +45,7 @@ class AJGTV2(AbsTaskClassification):
         name="AJGT.v2",
         dataset={
             "path": "mteb/ajgt",
-            "revision": "6c3a9c1aaf2d9fd5e41508c33eb250cd6804ce98",
+            "revision": "0a3dea7301ee0c051891f04d32f3e8577a9eae36",
         },
         description="""Arabic Jordanian General Tweets (AJGT) Corpus consisted of 1,800 tweets (900 for training and 900 for testing) annotated as positive and negative. Modern Standard Arabic (MSA) or Jordanian dialect.
         This version corrects errors found in the original data. For details, see https://github.com/embeddings-benchmark/mteb/pull/2632""",

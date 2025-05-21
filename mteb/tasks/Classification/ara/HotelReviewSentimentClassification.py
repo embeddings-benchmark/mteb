@@ -44,8 +44,8 @@ class HotelReviewSentimentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="HotelReviewSentimentClassification.v2",
         dataset={
-            "path": "mteb/hotel_review_sentiment",
-            "revision": "9dd15890ce97da846d75dc329b70d3b8398c5542",
+            "path": "mteb/HotelReviewSentimentClassification",
+            "revision": "f5e6a24acbed4182114ffdf46747090b3f51e836",
         },
         description="""HARD is a dataset of Arabic hotel reviews collected from the Booking.com website.
         This version corrects errors found in the original data. For details, see https://github.com/embeddings-benchmark/mteb/pull/2632""",

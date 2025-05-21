@@ -52,9 +52,9 @@ class RestaurantReviewSentimentClassificationV2(AbsTaskClassification):
         name="RestaurantReviewSentimentClassification.v2",
         dataset={
             "path": "mteb/restaurant_review_sentiment",
-            "revision": "04df217aa4274e0806e879ce8b76754d57544343",
+            "revision": "5d28c1e8fb393173a849696ed178b90a6f78754a",
         },
-        description="""Dataset of 8299 restaurant reviews from qaym.com in Arabic for sentiment analysis.
+        description="""Dataset of 8156 restaurant reviews from qaym.com in Arabic for sentiment analysis
         This version corrects errors found in the original data. For details, see https://github.com/embeddings-benchmark/mteb/pull/2632""",
         reference="https://link.springer.com/chapter/10.1007/978-3-319-18117-2_2",
         type="Classification",

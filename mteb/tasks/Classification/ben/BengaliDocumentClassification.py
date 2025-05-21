@@ -62,7 +62,7 @@ class BengaliDocumentClassificationV2(AbsTaskClassification):
         reference="https://aclanthology.org/2023.eacl-main.4",
         dataset={
             "path": "mteb/bengali_document",
-            "revision": "96cdf5a36d3f1242bb53e92f0578761821aeceea",
+            "revision": "c5427220bbc2bc0ab6e19dabdbbd6d4e82b4846a",
         },
         type="Classification",
         category="s2s",

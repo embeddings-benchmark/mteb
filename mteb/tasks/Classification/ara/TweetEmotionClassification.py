@@ -44,8 +44,8 @@ class TweetEmotionClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="TweetEmotionClassification.v2",
         dataset={
-            "path": "mteb/tweet_emotion",
-            "revision": "0a5ed32f2f7ab21271de1323e6f3daaedf6c7874",
+            "path": "mteb/TweetEmotionClassification",
+            "revision": "930d65840c089406ceed5241b1a9ba7294e5eeae",
         },
         description="""A dataset of 10,012 tweets that was created with the aim of covering the most frequently used emotion categories in Arabic tweets.
         This version corrects errors found in the original data. For details, see https://github.com/embeddings-benchmark/mteb/pull/2632""",

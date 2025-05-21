@@ -47,12 +47,12 @@ class BengaliSentimentAnalysis(AbsTaskClassification):
 class BengaliSentimentAnalysisV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="BengaliSentimentAnalysis.v2",
-        description="""dataset contains 3057 Negative reviews and 7696 Positive reviews collected and manually annotated from Youtube Bengali drama.
+        description="""dataset contains 2854 Negative reviews and 7238 Positive reviews collected and manually annotated from Youtube Bengali drama.
         This version corrects errors found in the original data. For details, see https://github.com/embeddings-benchmark/mteb/pull/2632""",
         reference="https://data.mendeley.com/datasets/p6zc7krs37/4",
         dataset={
             "path": "mteb/bengali_sentiment_analysis",
-            "revision": "236e341b9d7481172939eb7440e1d4dcb554c3ac",
+            "revision": "23edb78a3dd297a4d92f9c011a0503be0c0949d0",
         },
         type="Classification",
         category="s2s",

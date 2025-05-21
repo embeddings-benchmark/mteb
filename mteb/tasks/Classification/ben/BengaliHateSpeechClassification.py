@@ -52,7 +52,7 @@ class BengaliHateSpeechClassificationV2(AbsTaskClassification):
         reference="https://huggingface.co/datasets/bn_hate_speech",
         dataset={
             "path": "mteb/bengali_hate_speech",
-            "revision": "c601457b532dbbaac0cec24f9da1f16bfc1c5e5a",
+            "revision": "ccd942d16d2f0512799a1480034650a7b076027e",
         },
         type="Classification",
         category="s2s",
