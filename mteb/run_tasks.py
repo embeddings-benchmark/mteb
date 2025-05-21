@@ -13,6 +13,7 @@ from mteb.abstasks.AbsTask import AbsTask
 from mteb.abstasks.TaskMetadata import HFSubset, Splitname
 from mteb.cache import ResultCache
 from mteb.encoder_interface import Encoder
+from mteb.load_results.benchmark_results import ModelResult
 from mteb.load_results.task_results import TaskResult
 from mteb.model_meta import ModelMeta
 from mteb.models import (
@@ -43,7 +44,7 @@ empty_model_meta = ModelMeta(
 )
 
 
-# TODO: seems like we could avoid this if we know that we are getting
+# TODO: seems like we could avoid this by making the wrapper first
 def _get_model_meta(model: Encoder | SentenceTransformer | CrossEncoder) -> ModelMeta:
     meta: ModelMeta | None = None
     if hasattr(model, "mteb_model_meta"):
@@ -160,7 +161,7 @@ def run_tasks(
         "always", "never", "only-missing", "only-cache"
     ] = "only-missing",
     **kwargs: Any,
-) -> list[TaskResult]:
+) -> ModelResult:
     """This function runs a model on a a given task and returns the results.
 
     Args:
@@ -207,19 +208,22 @@ def run_tasks(
     else:
         results = []
         for task in tasks:
-            results.extend(
-                run_tasks(
-                    model,
-                    task,
-                    co2_tracker=co2_tracker,
-                    raise_error=raise_error,
-                    encode_kwargs=encode_kwargs,
-                    cache=cache,
-                    overwrite_strategy=overwrite_strategy,
-                    **kwargs,
-                )
+            _res = run_tasks(
+                model,
+                task,
+                co2_tracker=co2_tracker,
+                raise_error=raise_error,
+                encode_kwargs=encode_kwargs,
+                cache=cache,
+                overwrite_strategy=overwrite_strategy,
+                **kwargs,
             )
-        return results
+            results.extend(_res.task_results)
+        return ModelResult(
+            model_name=_res.model_name,
+            model_revision=_res.model_revision,
+            task_results=results,
+        )
 
     if encode_kwargs is None:
         encode_kwargs = {}
@@ -231,6 +235,8 @@ def run_tasks(
         )
 
     meta = _get_model_meta(model) if not isinstance(model, ModelMeta) else model
+    model_name = cast(str, meta.name)
+    model_revision = cast(str, meta.revision)
     if isinstance(model, (SentenceTransformer, CrossEncoder)):
         model = SentenceTransformerWrapper(model)  # type: ignore[assignment] # TODO: SentenceTransformerWrapper should be a subclass of Encoder
     model = cast(Encoder, model)
@@ -241,12 +247,6 @@ def run_tasks(
         if results:
             existing_results = results
 
-    if existing_results and overwrite_strategy in ["never", "only-cache"]:
-        logger.debug(
-            f"Results for {task.metadata.name} already exist in cache. Skipping evaluation."
-        )
-        return [existing_results]
-
     if (
         existing_results
         and overwrite_strategy == "only-missing"
@@ -256,6 +256,21 @@ def run_tasks(
     else:
         missing_eval = {split: task.hf_subsets for split in task.eval_splits}
 
+    if existing_results and not missing_eval and overwrite_strategy != "always":
+        # if there are no missing evals we can just return the results
+        logger.debug(
+            f"Results for {task.metadata.name} already exist in cache. Skipping evaluation."
+        )
+        return ModelResult(
+            model_name=model_name,
+            model_revision=model_revision,
+            task_results=[existing_results],
+        )
+    if missing_eval and overwrite_strategy in ["never", "only-cache"]:
+        raise ValueError(
+            f"overwrite_strategy is set to '{overwrite_strategy}' and the results file exists. However there are the following missing splits (and subsets): {missing_eval}. To rerun these set overwrite_strategy to 'only-missing'."
+        )
+
     if isinstance(model, ModelMeta):
         model = model.load_model()
     if raise_error is False:
@@ -264,7 +279,6 @@ def run_tasks(
                 model=model,
                 splits=missing_eval,
                 task=task,
-                subsets_to_run=task.hf_subsets,
                 co2_tracker=co2_tracker,
                 encode_kwargs=encode_kwargs,
                 **kwargs,
@@ -273,13 +287,16 @@ def run_tasks(
             logger.error(
                 f"Error while running task {task.metadata.name} on splits {list(missing_eval.keys())}: {e}"
             )
-            return []
+            return ModelResult(
+                model_name=model_name,
+                model_revision=model_revision,
+                task_results=[],
+            )
 
     result = _run_task(
         model=model,
         splits=missing_eval,
         task=task,
-        subsets_to_run=task.hf_subsets,
         co2_tracker=co2_tracker,
         encode_kwargs=encode_kwargs,
         **kwargs,
@@ -291,7 +308,11 @@ def run_tasks(
     if cache:
         cache.save_to_cache(result, meta)
 
-    return [result]
+    return ModelResult(
+        model_name=model_name,
+        model_revision=model_revision,
+        task_results=[result],
+    )
 
 
 # TODO:

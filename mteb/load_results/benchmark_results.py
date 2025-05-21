@@ -308,6 +308,9 @@ class ModelResult(BaseModel):
     def __getitem__(self, index) -> TaskResult:
         return self.task_results[index]
 
+    def __len__(self) -> int:
+        return len(self.task_results)
+
     @property
     def languages(self) -> list[str]:
         """Get all languages in the model results.

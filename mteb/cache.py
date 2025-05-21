@@ -4,6 +4,7 @@ import logging
 import os
 import subprocess
 from pathlib import Path
+
 from mteb.load_results.task_results import TaskResult
 from mteb.model_meta import ModelMeta
 
@@ -47,7 +48,7 @@ class ResultCache:
                 "model_revision must be specified when model_name is a string"
             )
 
-        return self.cache_path / model_name / model_revision / task_name
+        return self.cache_path / model_name / model_revision / f"{task_name}.json"
 
     def load_from_cache(
         self,
