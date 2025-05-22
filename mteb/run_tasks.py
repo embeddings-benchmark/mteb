@@ -73,7 +73,6 @@ def _run_task(
     splits: dict[Splitname, list[HFSubset]],
     co2_tracker: bool | None,
     encode_kwargs: dict[str, Any],
-    **kwargs: Any,
 ) -> TaskResult:
     """The core logic to run a model on a given task. See `run_task` for more details."""
     if co2_tracker is None or co2_tracker is True:
@@ -89,26 +88,21 @@ def _run_task(
             co2_tracker = True
 
     if co2_tracker:
-        if co2_tracker:
-            logger.warning(
-                "Evaluating multiple MTEB runs simultaniously will produce incorrect CO₂ results"
+        with EmissionsTracker(
+            save_to_file=False,
+            save_to_api=False,
+            logging_logger=logger,  # type: ignore[arg-type]
+            allow_multiple_runs=False,
+        ) as tracker:
+            result = _run_task(
+                model,
+                task,
+                splits=splits,
+                encode_kwargs=encode_kwargs,
+                co2_tracker=False,
             )
-            with EmissionsTracker(
-                save_to_file=False,
-                save_to_api=False,
-                logging_logger=logger,
-                allow_multiple_runs=True,
-            ) as tracker:
-                result = _run_task(
-                    model,
-                    task,
-                    splits=splits,
-                    encode_kwargs=encode_kwargs,
-                    co2_tracker=False,
-                    **kwargs,
-                )
-            result.kg_co2_emissions = tracker.final_emissions
-            return result
+        result.kg_co2_emissions = tracker.final_emissions
+        return result
 
     task_results = {}
 
@@ -116,7 +110,7 @@ def _run_task(
 
     data_loaded = task.data_loaded
     if data_loaded:
-        task.load_data(**kwargs)
+        task.load_data()
 
     evaluation_time = 0
 
@@ -127,12 +121,11 @@ def _run_task(
             split,
             subsets_to_run=hf_subsets,
             encode_kwargs=encode_kwargs,
-            **kwargs,
         )
         tock = time()
 
-        logger.info(
-            f"Evaluation for {task.metadata.name} on {split} took {tick - tock:.2f} seconds"
+        logger.debug(
+            f"Evaluation for {task.metadata.name} on {split} took {tock - tick:.2f} seconds"
         )
         evaluation_time += tock - tick
 
@@ -156,11 +149,10 @@ def run_tasks(
     co2_tracker: bool | None = None,
     raise_error: bool = True,
     encode_kwargs: dict[str, Any] | None = None,
-    cache: None | ResultCache = ResultCache(),
+    cache: ResultCache | None = ResultCache(),
     overwrite_strategy: Literal[
         "always", "never", "only-missing", "only-cache"
     ] = "only-missing",
-    **kwargs: Any,
 ) -> ModelResult:
     """This function runs a model on a a given task and returns the results.
 
@@ -180,7 +172,6 @@ def run_tasks(
                 changed.
             - "only-cache": Only load the results from the cache folder and do not run the task. Useful if you just want to load the results from the
                 cache.
-        kwargs: Additional keyword arguments for the task.
 
     Returns:
         The results of the evaluation.
@@ -216,7 +207,6 @@ def run_tasks(
                 encode_kwargs=encode_kwargs,
                 cache=cache,
                 overwrite_strategy=overwrite_strategy,
-                **kwargs,
             )
             results.extend(_res.task_results)
         return ModelResult(
@@ -230,7 +220,7 @@ def run_tasks(
 
     if "batch_size" not in encode_kwargs:
         encode_kwargs["batch_size"] = 32
-        logger.debug(
+        logger.info(
             "No batch size defined in encode_kwargs. Setting `encode_kwargs['batch_size'] = 32`."
         )
 
@@ -238,7 +228,7 @@ def run_tasks(
     model_name = cast(str, meta.name)
     model_revision = cast(str, meta.revision)
     if isinstance(model, (SentenceTransformer, CrossEncoder)):
-        model = SentenceTransformerWrapper(model)  # type: ignore[assignment] # TODO: SentenceTransformerWrapper should be a subclass of Encoder
+        model = SentenceTransformerWrapper(model) # type: ignore[assignment] # TODO: SentenceTransformerWrapper should be a subclass of Encoder
     model = cast(Encoder, model)
 
     existing_results = None
@@ -281,7 +271,11 @@ def run_tasks(
                 task=task,
                 co2_tracker=co2_tracker,
                 encode_kwargs=encode_kwargs,
-                **kwargs,
+            )
+            return ModelResult(
+                model_name=model_name,
+                model_revision=model_revision,
+                task_results=[result],
             )
         except Exception as e:
             logger.error(
@@ -292,14 +286,12 @@ def run_tasks(
                 model_revision=model_revision,
                 task_results=[],
             )
-
     result = _run_task(
         model=model,
         splits=missing_eval,
         task=task,
         co2_tracker=co2_tracker,
         encode_kwargs=encode_kwargs,
-        **kwargs,
     )
 
     if existing_results:

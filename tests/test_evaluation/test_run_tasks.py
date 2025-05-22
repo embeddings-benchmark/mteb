@@ -55,12 +55,7 @@ def test_run_tasks_with_cache(
     )
 
 
-@pytest.mark.parametrize(
-    "model, task, expected_score",
-    [
-        (MockSentenceTransformer(), MockRetrievalTask(), 0.63093),
-    ],
-)
+@pytest.mark.parametrize("model, task, expected_score", [simple_test_case])
 def test_run_task_w_missing_splits(
     model: Encoder, task: AbsTask, expected_score: float, tmp_path: Path
 ):
@@ -121,12 +116,7 @@ def test_run_task_w_missing_subset(
     )
 
 
-@pytest.mark.parametrize(
-    "model, task, expected_score",
-    [
-        (MockSentenceTransformer(), MockRetrievalTask(), 0.63093),
-    ],
-)
+@pytest.mark.parametrize("model, task, expected_score", [simple_test_case])
 def test_run_task_overwrites(
     model: Encoder, task: AbsTask, expected_score: float, tmp_path: Path
 ):
