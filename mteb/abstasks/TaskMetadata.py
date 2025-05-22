@@ -534,35 +534,40 @@ class TaskMetadata(BaseModel):
             A DatasetCardData object with the metadata for the task with kwargs to card
         """
         # todo figure out datasets with multiple types. E. g. one dataset as classification and ZeroShotClassification
+        # to get full list of task_types execute:
+        # requests.post("https://huggingface.co/api/validate-yaml", json={
+        #     "content": "---\ntask_categories: ['test']\n---", "repoType": "dataset"
+        # }).json()
+        # or look at https://huggingface.co/tasks
         mteb_task_type_to_datasets = {
             # Text
-            "BitextMining": "translation",
-            "Classification": "text-classification",
-            "MultilabelClassification": "text-classification",
-            "Clustering": "text-clustering",
-            "PairClassification": "text-classification",
-            "Reranking": "text-ranking",
-            "Retrieval": "text-retrieval",
-            "STS": "sentence-similarity",
-            "Summarization": "summarization",
-            "InstructionRetrieval": "text-retrieval",
-            "InstructionReranking": "text-ranking",
+            "BitextMining": ["translation"],
+            "Classification": ["text-classification"],
+            "MultilabelClassification": ["text-classification"],
+            "Clustering": ["text-classification"],
+            "PairClassification": ["text-classification"],
+            "Reranking": ["text-ranking"],
+            "Retrieval": ["text-retrieval"],
+            "STS": ["sentence-similarity"],
+            "Summarization": ["summarization"],
+            "InstructionRetrieval": ["text-retrieval"],
+            "InstructionReranking": ["text-ranking"],
             # Image
-            "Any2AnyMultiChoice": "image-multiple-choice",  # currently not real HF type
-            "Any2AnyRetrieval": "image-retrieval",  # currently not real HF type
-            "Any2AnyMultilingualRetrieval": "image-retrieval",  # currently not real HF type
-            "VisionCentricQA": "visual-question-answering",
-            "ImageClustering": "image-clustering",
-            "ImageClassification": "image-classification",
-            "ImageMultilabelClassification": "image-classification",
-            "DocumentUnderstanding": "image-retrieval",  # currently not real HF type
-            "VisualSTS(eng)": "image-similarity",  # currently not real HF type
-            "VisualSTS(multi)": "image-similarity",  # currently not real HF type
-            "ZeroShotClassification": "zero-shot-image-classification",
-            "Compositionality": "image-text-classification",  # currently not real HF type
+            "Any2AnyMultiChoice": ["visual-question-answering"],
+            "Any2AnyRetrieval": ["visual-document-retrieval"],
+            "Any2AnyMultilingualRetrieval": ["visual-document-retrieval"],
+            "VisionCentricQA": ["visual-question-answering"],
+            "ImageClustering": ["image-clustering"],
+            "ImageClassification": ["image-classification"],
+            "ImageMultilabelClassification": ["image-classification"],
+            "DocumentUnderstanding": ["visual-document-retrieval"],
+            "VisualSTS(eng)": ["other"],
+            "VisualSTS(multi)": ["other"],
+            "ZeroShotClassification": ["zero-shot-image-classification"],
+            "Compositionality": ["other"],
         }
 
-        dataset_type = [mteb_task_type_to_datasets[self.type]]
+        dataset_type = mteb_task_type_to_datasets[self.type]
 
         if self.category in ["i2i", "it2i", "i2it", "it2it"]:
             dataset_type.append("image-to-image")
@@ -590,11 +595,13 @@ class TaskMetadata(BaseModel):
         else:
             source_datasets = None
 
-        tags = ["mteb"]
-        tags.extend(self.modalities)
+        tags = ["mteb"] + self.modalities
 
         descriptive_stats = self.descriptive_stats
         if descriptive_stats is not None:
+            for split, split_stat in descriptive_stats.items():
+                if len(split_stat.get("hf_subset_descriptive_stats", {})) > 10:
+                    split_stat.pop("hf_subset_descriptive_stats", {})
             descriptive_stats = json.dumps(descriptive_stats, indent=4)
 
         if existing_dataset_card_data is None:
@@ -620,7 +627,7 @@ class TaskMetadata(BaseModel):
                 multilinguality=multilinguality,
                 source_datasets=source_datasets,
                 task_categories=dataset_type,
-                task_ids=self.task_subtypes,
+                task_ids=self._map_subtypes_to_hf(),
                 tags=tags,
             )
         )
@@ -679,3 +686,90 @@ class TaskMetadata(BaseModel):
             dataset_card = DatasetCard.load(repo_name)
         dataset_card = self.generate_dataset_card(dataset_card)
         dataset_card.push_to_hub(repo_name, commit_message="Add dataset card")
+
+    def _map_subtypes_to_hf(self) -> list[str]:
+        # to get full list of available task_ids execute
+        # requests.post("https://huggingface.co/api/validate-yaml", json={
+        #   "content": "---\ntask_ids: 'test'\n---",
+        #   "repoType": "dataset"
+        # })
+        mteb_to_hf_subtype = {
+            "Article retrieval": ["document-retrieval"],
+            "Conversational retrieval": ["conversational", "utterance-retrieval"],
+            "Dialect pairing": [],
+            "Dialog Systems": ["dialogue-modeling", "dialogue-generation"],
+            "Discourse coherence": [],
+            "Duplicate Image Retrieval": [],
+            "Language identification": ["language-identification"],
+            "Linguistic acceptability": ["acceptability-classification"],
+            "Political classification": [],
+            "Question answering": [
+                "multiple-choice-qa",
+            ],
+            "Sentiment/Hate speech": [
+                "sentiment-analysis",
+                "sentiment-scoring",
+                "sentiment-classification",
+                "hate-speech-detection",
+            ],
+            "Thematic clustering": [],
+            "Scientific Reranking": [],
+            "Claim verification": ["fact-checking", "fact-checking-retrieval"],
+            "Topic classification": ["topic-classification"],
+            "Code retrieval": [],
+            "False Friends": [],
+            "Cross-Lingual Semantic Discrimination": [],
+            "Textual Entailment": ["natural-language-inference"],
+            "Counterfactual Detection": [],
+            "Emotion classification": [],
+            "Reasoning as Retrieval": [],
+            "Rendered Texts Understanding": [],
+            "Image Text Retrieval": [],
+            "Object recognition": [],
+            "Scene recognition": [],
+            "Caption Pairing": ["image-captioning"],
+            "Emotion recognition": [],
+            "Textures recognition": [],
+            "Activity recognition": [],
+            "Tumor detection": [],
+            "Duplicate Detection": [],
+            "Rendered semantic textual similarity": [
+                "semantic-similarity-scoring",
+                "rendered semantic textual similarity",
+            ],
+            "Intent classification": [
+                "intent-classification",
+            ],
+        }
+        task_types_to_task_ids = {
+            # Text
+            "BitextMining": [],
+            "Classification": [],
+            "MultilabelClassification": ["multi-label-classification"],
+            "Clustering": [],
+            "PairClassification": ["semantic-similarity-classification"],
+            "Reranking": [],
+            "Retrieval": [],
+            "STS": ["semantic-similarity-scoring"],
+            "Summarization": [],
+            "InstructionRetrieval": [],
+            "InstructionReranking": [],
+            # Image
+            "Any2AnyMultiChoice": [],
+            "Any2AnyRetrieval": [],
+            "Any2AnyMultilingualRetrieval": [],
+            "VisionCentricQA": ["visual-question-answering"],
+            "ImageClustering": [],
+            "ImageClassification": [],
+            "ImageMultilabelClassification": [],
+            "DocumentUnderstanding": [],
+            "VisualSTS(eng)": [],
+            "VisualSTS(multi)": [],
+            "ZeroShotClassification": [],
+            "Compositionality": [],
+        }
+        subtypes = task_types_to_task_ids.get(self.type, [])
+        if self.task_subtypes:
+            for subtype in self.task_subtypes:
+                subtypes.extend(mteb_to_hf_subtype.get(subtype, []))
+        return subtypes
