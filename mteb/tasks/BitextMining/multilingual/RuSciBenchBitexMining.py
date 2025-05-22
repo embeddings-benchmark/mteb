@@ -8,7 +8,7 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 
 _LANGUAGES = {
     "ru-en": ["rus-Cyrl", "eng-Latn"],
-    "en-ru": ["rus-Cyrl", "rus-Cyrl"],
+    "en-ru": ["eng-Latn", "rus-Cyrl"],
 }
 
 
