@@ -1949,3 +1949,4 @@ VIDORE_V2 = Benchmark(
   author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
   journal={arXiv preprint arXiv:2407.01449},
   year={2024}""",
+)
