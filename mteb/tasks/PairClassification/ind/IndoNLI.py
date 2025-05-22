@@ -27,17 +27,19 @@ class IndoNLI(AbsTaskPairClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{mahendra-etal-2021-indonli,
-            title = "{I}ndo{NLI}: A Natural Language Inference Dataset for {I}ndonesian",
-            author = "Mahendra, Rahmad and Aji, Alham Fikri and Louvan, Samuel and Rahman, Fahrurrozi and Vania, Clara",
-            booktitle = "Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing",
-            month = nov,
-            year = "2021",
-            address = "Online and Punta Cana, Dominican Republic",
-            publisher = "Association for Computational Linguistics",
-            url = "https://aclanthology.org/2021.emnlp-main.821",
-            pages = "10511--10527",
-        }""",
+        bibtex_citation=r"""
+@inproceedings{mahendra-etal-2021-indonli,
+  address = {Online and Punta Cana, Dominican Republic},
+  author = {Mahendra, Rahmad and Aji, Alham Fikri and Louvan, Samuel and Rahman, Fahrurrozi and Vania, Clara},
+  booktitle = {Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing},
+  month = nov,
+  pages = {10511--10527},
+  publisher = {Association for Computational Linguistics},
+  title = {{I}ndo{NLI}: A Natural Language Inference Dataset for {I}ndonesian},
+  url = {https://aclanthology.org/2021.emnlp-main.821},
+  year = {2021},
+}
+""",
         # after removing neutral
     )
 

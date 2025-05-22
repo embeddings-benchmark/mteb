@@ -28,16 +28,17 @@ class SciMMIR(AbsTaskZeroShotClassification):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="created",
-        bibtex_citation="""\
+        bibtex_citation=r"""
 @misc{wu2024scimmirbenchmarkingscientificmultimodal,
-      title={SciMMIR: Benchmarking Scientific Multi-modal Information Retrieval},
-      author={Siwei Wu and Yizhi Li and Kang Zhu and Ge Zhang and Yiming Liang and Kaijing Ma and Chenghao Xiao and Haoran Zhang and Bohao Yang and Wenhu Chen and Wenhao Huang and Noura Al Moubayed and Jie Fu and Chenghua Lin},
-      year={2024},
-      eprint={2401.13478},
-      archivePrefix={arXiv},
-      primaryClass={cs.IR},
-      url={https://arxiv.org/abs/2401.13478},
-}""",
+  archiveprefix = {arXiv},
+  author = {Siwei Wu and Yizhi Li and Kang Zhu and Ge Zhang and Yiming Liang and Kaijing Ma and Chenghao Xiao and Haoran Zhang and Bohao Yang and Wenhu Chen and Wenhao Huang and Noura Al Moubayed and Jie Fu and Chenghua Lin},
+  eprint = {2401.13478},
+  primaryclass = {cs.IR},
+  title = {SciMMIR: Benchmarking Scientific Multi-modal Information Retrieval},
+  url = {https://arxiv.org/abs/2401.13478},
+  year = {2024},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 16263},
             "avg_character_length": {"test": 0},

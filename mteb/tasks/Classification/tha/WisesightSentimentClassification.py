@@ -10,9 +10,8 @@ class WisesightSentimentClassification(AbsTaskClassification):
         description="Wisesight Sentiment Corpus: Social media messages in Thai language with sentiment label (positive, neutral, negative, question)",
         reference="https://github.com/PyThaiNLP/wisesight-sentiment",
         dataset={
-            "path": "pythainlp/wisesight_sentiment",
-            "revision": "14aa5773afa135ba835cc5179bbc4a63657a42ae",
-            "trust_remote_code": True,
+            "path": "mteb/WisesightSentimentClassification",
+            "revision": "727ea9bd253f9eedf16aebec6ac3f07791fb3db2",
         },
         type="Classification",
         category="s2s",
@@ -27,30 +26,19 @@ class WisesightSentimentClassification(AbsTaskClassification):
         license="cc0-1.0",
         annotations_creators="expert-annotated",
         sample_creation="found",
-        bibtex_citation="""@software{bact_2019_3457447,
-  author       = {Suriyawongkul, Arthit and
-                  Chuangsuwanich, Ekapol and
-                  Chormai, Pattarawat and
-                  Polpanumas, Charin},
-  title        = {PyThaiNLP/wisesight-sentiment: First release},
-  month        = sep,
-  year         = 2019,
-  publisher    = {Zenodo},
-  version      = {v1.0},
-  doi          = {10.5281/zenodo.3457447},
-  url          = {https://doi.org/10.5281/zenodo.3457447}
+        bibtex_citation=r"""
+@software{bact_2019_3457447,
+  author = {Suriyawongkul, Arthit and
+Chuangsuwanich, Ekapol and
+Chormai, Pattarawat and
+Polpanumas, Charin},
+  doi = {10.5281/zenodo.3457447},
+  month = sep,
+  publisher = {Zenodo},
+  title = {PyThaiNLP/wisesight-sentiment: First release},
+  url = {https://doi.org/10.5281/zenodo.3457447},
+  version = {v1.0},
+  year = {2019},
 }
-
 """,
     )
-
-    def dataset_transform(self):
-        for split in self.dataset.keys():
-            self.dataset[split] = self.dataset[split].rename_column("texts", "text")
-            self.dataset[split] = self.dataset[split].rename_column("category", "label")
-
-        self.dataset = self.stratified_subsampling(
-            self.dataset,
-            seed=self.seed,
-            splits=["test"],
-        )

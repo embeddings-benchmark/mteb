@@ -28,14 +28,16 @@ class T2Reranking(AbsTaskReranking):
         dialect=None,
         sample_creation=None,
         prompt="Given a Chinese search query, retrieve web passages that answer the question",
-        bibtex_citation="""@misc{xie2023t2ranking,
-      title={T2Ranking: A large-scale Chinese Benchmark for Passage Ranking},
-      author={Xiaohui Xie and Qian Dong and Bingning Wang and Feiyang Lv and Ting Yao and Weinan Gan and Zhijing Wu and Xiangsheng Li and Haitao Li and Yiqun Liu and Jin Ma},
-      year={2023},
-      eprint={2304.03679},
-      archivePrefix={arXiv},
-      primaryClass={cs.IR}
-}""",
+        bibtex_citation=r"""
+@misc{xie2023t2ranking,
+  archiveprefix = {arXiv},
+  author = {Xiaohui Xie and Qian Dong and Bingning Wang and Feiyang Lv and Ting Yao and Weinan Gan and Zhijing Wu and Xiangsheng Li and Haitao Li and Yiqun Liu and Jin Ma},
+  eprint = {2304.03679},
+  primaryclass = {cs.IR},
+  title = {T2Ranking: A large-scale Chinese Benchmark for Passage Ranking},
+  year = {2023},
+}
+""",
     )
 
 
@@ -63,14 +65,16 @@ class MMarcoReranking(AbsTaskReranking):
         dialect=None,
         sample_creation=None,
         prompt="Given a Chinese search query, retrieve web passages that answer the question",
-        bibtex_citation="""@misc{bonifacio2021mmarco,
-      title={mMARCO: A Multilingual Version of MS MARCO Passage Ranking Dataset},
-      author={Luiz Henrique Bonifacio and Vitor Jeronymo and Hugo Queiroz Abonizio and Israel Campiotti and Marzieh Fadaee and  and Roberto Lotufo and Rodrigo Nogueira},
-      year={2021},
-      eprint={2108.13897},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-}""",
+        bibtex_citation=r"""
+@misc{bonifacio2021mmarco,
+  archiveprefix = {arXiv},
+  author = {Luiz Henrique Bonifacio and Vitor Jeronymo and Hugo Queiroz Abonizio and Israel Campiotti and Marzieh Fadaee and  and Roberto Lotufo and Rodrigo Nogueira},
+  eprint = {2108.13897},
+  primaryclass = {cs.CL},
+  title = {mMARCO: A Multilingual Version of MS MARCO Passage Ranking Dataset},
+  year = {2021},
+}
+""",
     )
 
 
@@ -97,16 +101,18 @@ class CMedQAv1(AbsTaskReranking):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{zhang2017chinese,
-  title={Chinese Medical Question Answer Matching Using End-to-End Character-Level Multi-Scale CNNs},
-  author={Zhang, Sheng and Zhang, Xin and Wang, Hui and Cheng, Jiajun and Li, Pei and Ding, Zhaoyun},
-  journal={Applied Sciences},
-  volume={7},
-  number={8},
-  pages={767},
-  year={2017},
-  publisher={Multidisciplinary Digital Publishing Institute}
-}""",
+        bibtex_citation=r"""
+@article{zhang2017chinese,
+  author = {Zhang, Sheng and Zhang, Xin and Wang, Hui and Cheng, Jiajun and Li, Pei and Ding, Zhaoyun},
+  journal = {Applied Sciences},
+  number = {8},
+  pages = {767},
+  publisher = {Multidisciplinary Digital Publishing Institute},
+  title = {Chinese Medical Question Answer Matching Using End-to-End Character-Level Multi-Scale CNNs},
+  volume = {7},
+  year = {2017},
+}
+""",
     )
 
 
@@ -134,16 +140,19 @@ class CMedQAv2(AbsTaskReranking):
         annotations_creators=None,
         dialect=None,
         sample_creation=None,
-        bibtex_citation="""@ARTICLE{8548603,
-author={S. Zhang and X. Zhang and H. Wang and L. Guo and S. Liu},
-journal={IEEE Access},
-title={Multi-Scale Attentive Interaction Networks for Chinese Medical Question Answer Selection},
-year={2018},
-volume={6},
-number={},
-pages={74061-74071},
-keywords={Biomedical imaging;Data mining;Semantics;Medical services;Feature extraction;Knowledge discovery;Medical question answering;interactive attention;deep learning;deep neural networks},
-doi={10.1109/ACCESS.2018.2883637},
-ISSN={2169-3536},
-month={},}""",
+        bibtex_citation=r"""
+@article{8548603,
+  author = {S. Zhang and X. Zhang and H. Wang and L. Guo and S. Liu},
+  doi = {10.1109/ACCESS.2018.2883637},
+  issn = {2169-3536},
+  journal = {IEEE Access},
+  keywords = {Biomedical imaging;Data mining;Semantics;Medical services;Feature extraction;Knowledge discovery;Medical question answering;interactive attention;deep learning;deep neural networks},
+  month = {},
+  number = {},
+  pages = {74061-74071},
+  title = {Multi-Scale Attentive Interaction Networks for Chinese Medical Question Answer Selection},
+  volume = {6},
+  year = {2018},
+}
+""",
     )

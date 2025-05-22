@@ -26,13 +26,15 @@ class SOPI2IRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{oh2016deep,
-  title={Deep metric learning via lifted structured feature embedding},
-  author={Oh Song, Hyun and Xiang, Yu and Jegelka, Stefanie and Savarese, Silvio},
-  booktitle={Proceedings of the IEEE conference on computer vision and pattern recognition},
-  pages={4004--4012},
-  year={2016}
-}""",
+        bibtex_citation=r"""
+@inproceedings{oh2016deep,
+  author = {Oh Song, Hyun and Xiang, Yu and Jegelka, Stefanie and Savarese, Silvio},
+  booktitle = {Proceedings of the IEEE conference on computer vision and pattern recognition},
+  pages = {4004--4012},
+  title = {Deep metric learning via lifted structured feature embedding},
+  year = {2016},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 120053},
             "avg_character_length": {

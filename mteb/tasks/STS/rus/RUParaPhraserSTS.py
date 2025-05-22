@@ -27,30 +27,31 @@ class RUParaPhraserSTS(AbsTaskSTS):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @inproceedings{gudkov-etal-2020-automatically,
-          title = "Automatically Ranked {R}ussian Paraphrase Corpus for Text Generation",
-          author = "Gudkov, Vadim  and
-            Mitrofanova, Olga  and
-            Filippskikh, Elizaveta",
-          booktitle = "Proceedings of the Fourth Workshop on Neural Generation and Translation",
-          month = jul,
-          year = "2020",
-          address = "Online",
-          publisher = "Association for Computational Linguistics",
-          url = "https://aclanthology.org/2020.ngt-1.6",
-          doi = "10.18653/v1/2020.ngt-1.6",
-          pages = "54--59",
-        }
-        @inproceedings{pivovarova2017paraphraser,
-          title={ParaPhraser: Russian paraphrase corpus and shared task},
-          author={Pivovarova, Lidia and Pronoza, Ekaterina and Yagunova, Elena and Pronoza, Anton},
-          booktitle={Conference on artificial intelligence and natural language},
-          pages={211--225},
-          year={2017},
-          organization={Springer}
-        }
-        """,
+        bibtex_citation=r"""
+@inproceedings{gudkov-etal-2020-automatically,
+  address = {Online},
+  author = {Gudkov, Vadim  and
+Mitrofanova, Olga  and
+Filippskikh, Elizaveta},
+  booktitle = {Proceedings of the Fourth Workshop on Neural Generation and Translation},
+  doi = {10.18653/v1/2020.ngt-1.6},
+  month = jul,
+  pages = {54--59},
+  publisher = {Association for Computational Linguistics},
+  title = {Automatically Ranked {R}ussian Paraphrase Corpus for Text Generation},
+  url = {https://aclanthology.org/2020.ngt-1.6},
+  year = {2020},
+}
+
+@inproceedings{pivovarova2017paraphraser,
+  author = {Pivovarova, Lidia and Pronoza, Ekaterina and Yagunova, Elena and Pronoza, Anton},
+  booktitle = {Conference on artificial intelligence and natural language},
+  organization = {Springer},
+  pages = {211--225},
+  title = {ParaPhraser: Russian paraphrase corpus and shared task},
+  year = {2017},
+}
+""",
     )
 
     @property

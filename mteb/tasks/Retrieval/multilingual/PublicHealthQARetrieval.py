@@ -85,14 +85,14 @@ class PublicHealthQARetrieval(MultilingualTask, AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-@misc {xing_han_lu_2024,
-	author       = { {Xing Han Lu} },
-	title        = { publichealth-qa (Revision 3b67b6b) },
-	year         = 2024,
-	url          = { https://huggingface.co/datasets/xhluca/publichealth-qa },
-	doi          = { 10.57967/hf/2247 },
-	publisher    = { Hugging Face }
+        bibtex_citation=r"""
+@misc{xing_han_lu_2024,
+  author = { {Xing Han Lu} },
+  doi = { 10.57967/hf/2247 },
+  publisher = { Hugging Face },
+  title = { publichealth-qa (Revision 3b67b6b) },
+  url = { https://huggingface.co/datasets/xhluca/publichealth-qa },
+  year = {2024},
 }
 """,
     )

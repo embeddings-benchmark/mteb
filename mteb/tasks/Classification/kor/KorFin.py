@@ -31,14 +31,14 @@ class KorFin(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""""
-        @article{son2023removing,
-        title={Removing Non-Stationary Knowledge From Pre-Trained Language Models for Entity-Level Sentiment Classification in Finance},
-        author={Son, Guijin and Lee, Hanwool and Kang, Nahyeon and Hahm, Moonjeong},
-        journal={arXiv preprint arXiv:2301.03136},
-        year={2023}
-        }
-        """,
+        bibtex_citation=r"""
+@article{son2023removing,
+  author = {Son, Guijin and Lee, Hanwool and Kang, Nahyeon and Hahm, Moonjeong},
+  journal = {arXiv preprint arXiv:2301.03136},
+  title = {Removing Non-Stationary Knowledge From Pre-Trained Language Models for Entity-Level Sentiment Classification in Finance},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):

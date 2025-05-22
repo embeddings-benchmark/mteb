@@ -29,16 +29,18 @@ class SUN397Classification(AbsTaskImageClassification):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@INPROCEEDINGS{5539970,
-        author={Xiao, Jianxiong and Hays, James and Ehinger, Krista A. and Oliva, Aude and Torralba, Antonio},
-        booktitle={2010 IEEE Computer Society Conference on Computer Vision and Pattern Recognition},
-        title={SUN database: Large-scale scene recognition from abbey to zoo},
-        year={2010},
-        volume={},
-        number={},
-        pages={3485-3492},
-        doi={10.1109/CVPR.2010.5539970}
-        }""",
+        bibtex_citation=r"""
+@inproceedings{5539970,
+  author = {Xiao, Jianxiong and Hays, James and Ehinger, Krista A. and Oliva, Aude and Torralba, Antonio},
+  booktitle = {2010 IEEE Computer Society Conference on Computer Vision and Pattern Recognition},
+  doi = {10.1109/CVPR.2010.5539970},
+  number = {},
+  pages = {3485-3492},
+  title = {SUN database: Large-scale scene recognition from abbey to zoo},
+  volume = {},
+  year = {2010},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 21750},
             "avg_character_length": {"test": 256},
