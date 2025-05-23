@@ -94,6 +94,7 @@ vertexai = ["vertexai==1.71.1"]
 llm2vec = ["llm2vec>=0.2.3,<0.3.0"]
 timm = ["timm>=1.0.15,<1.1.0"]
 open_clip_torch = ["open_clip_torch==2.31.0"]
+colpali = ["colpali_engine>=0.3.10"]
 
 [tool.coverage.report]
 
