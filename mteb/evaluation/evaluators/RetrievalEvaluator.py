@@ -223,25 +223,16 @@ class DenseRetrievalExactSearch:
                         # If item is larger than the smallest in the heap, push it on the heap then pop the smallest element
                         heapq.heappushpop(result_heaps[query_id], (score, corpus_id))
 
-        if hasattr(self.model.model, "add_to_index"):
-            if hasattr(self.model.model, "retrieve_from_index"):
-                results = self.model.model.retrieve_from_index(query_embeddings, top_k)
-                for query_itr in range(len(query_embeddings)):
-                    query_id = query_ids[query_itr]
-                    result = results[query_itr]
-                    for id_score_pair in result:
-                        score = id_score_pair["score"]
-                        corpus_id = id_score_pair["id"]
-                        self.results[query_id][corpus_id] = score
+        if hasattr(self.model.model, "add_to_index") and hasattr(
+            self.model.model, "retrieve_from_index"
+        ):
+            results = self.model.model.retrieve_from_index(query_embeddings, top_k)
 
-                return self.results
-            else:
-                logger.error(
-                    "The model provides an 'add_to_index' method but lacks a 'retrieve_from_index' method. Index-based retrieval cannot proceed. Please implement 'retrieve_from_index' in your model."
-                )
-                raise NotImplementedError(
-                    "Missing 'retrieve_from_index' method in the model. Implement this method to enable index-based retrieval."
-                )
+            # Build result_heaps from results
+            result_heaps = {
+                query_ids[i]: [(item["score"], item["id"]) for item in results[i]]
+                for i in range(len(query_embeddings))
+            }
 
         for qid in result_heaps:
             for score, corpus_id in result_heaps[qid]:
