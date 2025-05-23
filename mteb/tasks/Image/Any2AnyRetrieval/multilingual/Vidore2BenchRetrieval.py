@@ -267,7 +267,7 @@ class Vidore2ESGReportsHLRetrieval(AbsTaskAny2AnyRetrieval):
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
-            "path": "vidore/esg_reports_hl_v2",
+            "path": "vidore/esg_reports_human_labeled_v2",
             "revision": "162ba2fc1a8437eda8b6c37b240bc1c0f0deb092",
         },
         type="DocumentUnderstanding",
