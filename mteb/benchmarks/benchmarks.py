@@ -1925,11 +1925,14 @@ VIDORE = Benchmark(
     ),
     description="Retrieve associated pages according to questions.",
     reference="https://arxiv.org/abs/2407.01449",
-    citation="""@article{faysse2024colpali,
-  title={ColPali: Efficient Document Retrieval with Vision Language Models},
-  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
-  journal={arXiv preprint arXiv:2407.01449},
-  year={2024}""",
+    citation=r"""
+@article{faysse2024colpali,
+  author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal = {arXiv preprint arXiv:2407.01449},
+  title = {ColPali: Efficient Document Retrieval with Vision Language Models},
+  year = {2024},
+}
+""",
 )
 
 VIDORE_V2 = Benchmark(
@@ -1944,9 +1947,12 @@ VIDORE_V2 = Benchmark(
     ),
     description="Retrieve associated pages according to questions.",
     reference="https://arxiv.org/abs/2407.01449",
-    citation="""@article{faysse2024colpali,
-  title={ColPali: Efficient Document Retrieval with Vision Language Models},
-  author={Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
-  journal={arXiv preprint arXiv:2407.01449},
-  year={2024}""",
+    citation=r"""
+@article{faysse2024colpali,
+  author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal = {arXiv preprint arXiv:2407.01449},
+  title = {ColPali: Efficient Document Retrieval with Vision Language Models},
+  year = {2024},
+}
+""",
 )
