@@ -31,7 +31,7 @@ class SeedWrapper(Wrapper):
         requires_package(
             self,
             "volcenginesdkarkruntime",
-            "Volcengine",
+            "ByteDance Seed",
             "pip install volcengine-python-sdk[ark]",
         )
         from volcenginesdkarkruntime import Ark
