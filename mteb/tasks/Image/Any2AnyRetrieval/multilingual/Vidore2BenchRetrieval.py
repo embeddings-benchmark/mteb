@@ -13,6 +13,7 @@ _LANGS = {
     "german": ["deu-Latn"],
 }
 
+
 def _load_data(
     path: str,
     splits: str,
@@ -46,7 +47,7 @@ def _load_data(
             },
             remove_columns=["query-id", "query"],
         )
-        
+
         corpus_ds = load_dataset(
             path,
             "corpus",
@@ -83,9 +84,7 @@ def _load_data(
                 relevant_docs[split][qid][did] = int(row["score"])
         else:
             for lang in langs:
-                queries[lang][split] = query_ds.filter(
-                    lambda x: x["language"] == lang
-                )
+                queries[lang][split] = query_ds.filter(lambda x: x["language"] == lang)
 
                 corpus[lang][split] = corpus_ds
 
