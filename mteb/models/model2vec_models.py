@@ -152,6 +152,7 @@ class Model2VecWrapper(Wrapper):
         """
         return self.static_model.encode(sentences).astype(np.float32)
 
+
 m2v_base_glove_subword = ModelMeta(
     loader=partial(
         Model2VecWrapper,
