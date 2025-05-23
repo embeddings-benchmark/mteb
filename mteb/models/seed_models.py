@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import time
 from functools import partial
-from typing import Any, List
+from typing import Any
 
 import numpy as np
 import torch
@@ -24,7 +24,7 @@ class SeedWrapper(Wrapper):
         max_tokens: int,
         tokenizer_name: str = "cl100k_base",
         embed_dim: int | None = None,
-        available_embed_dims: List[int | None] = [None],
+        available_embed_dims: list[int | None] = [None],
         **kwargs,
     ) -> None:
         """Wrapper for Seed embedding API."""
