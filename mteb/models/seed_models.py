@@ -126,6 +126,7 @@ class SeedWrapper(Wrapper):
                     break
                 except Exception as e:
                     # Sleep due to too many requests
+                    time.sleep(1)
                     logger.warning(
                         f"Retrying... {retries} retries left. Error: {str(e)}"
                     )
@@ -209,7 +210,7 @@ TASK_NAME_TO_INSTRUCTION = {
     "CLSClusteringS2S": "Instruct: Identify the main category of scholar papers based on the titles\nQuery: ",
     "CLSClusteringP2P": "Instruct: Identify the main category of scholar papers based on the titles and abstracts\nQuery: ",
     "ThuNewsClusteringS2S": "Instruct: Identify the topic or theme of the given news articles based on the titles\nQuery: ",
-    "ThuNewsClusteringP2P": "Instruct: Identify the topic or theme of the given news articles based on the titles and abstracts\nQuery: "
+    "ThuNewsClusteringP2P": "Instruct: Identify the topic or theme of the given news articles based on the titles and abstracts\nQuery: ",
 }
 
 DEFAULT_INSTRUCTION = "Instruct: Given a web search query, retrieve relevant passages that answer the query\nQuery: "
