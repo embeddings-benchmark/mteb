@@ -1,0 +1,83 @@
+from __future__ import annotations
+
+import logging
+from functools import partial
+from typing import Literal
+
+from mteb.model_meta import ModelMeta
+from mteb.models.colpali_models import ColPaliEngineWrapper
+
+logger = logging.getLogger(__name__)
+
+EncodeTypes = Literal["query", "passage"]
+
+
+class ColSmolWrapper(ColPaliEngineWrapper):
+    """Wrapper for ColQwen2 model."""
+
+    def __init__(
+        self, model_name: str = "vidore/colqwen2-v1.0", device: str = None, **kwargs
+    ):
+        from colpali_engine.models import ColIdefics3, ColIdefics3Processor
+
+        super().__init__(
+            model_name=model_name,
+            model_class=ColIdefics3,
+            processor_class=ColIdefics3Processor,
+            device=device,
+            **kwargs,
+        )
+
+colpali_training_datasets = {
+    # TODO: Add the training datasets here
+}
+
+colsmol_256m = ModelMeta(
+    loader=partial(
+        ColSmolWrapper,
+        model_name="vidore/colSmol-256M",
+    ),
+    name="vidore/colSmol-256M",
+    languages=["eng-Latn"],
+    revision="530094e83a40ca4edcb5c9e5ddfa61a4b5ea0d2f",
+    release_date="2025-01-22",
+    modalities=["image", "text"],
+    n_parameters=256_000_000,
+    memory_usage_mb=800,
+    max_tokens=8192,
+    embed_dim=576,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code="https://github.com/illuin-tech/colpali",
+    public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
+    framework=["ColPali"],
+    reference="https://huggingface.co/vidore/colSmol-256M",
+    similarity_fn_name="max_sim",
+    use_instructions=False,
+    training_datasets=colpali_training_datasets,
+)
+
+colsmol_500m = ModelMeta(
+    loader=partial(
+        ColSmolWrapper,
+        model_name="vidore/colSmol-500M",
+    ),
+    name="vidore/colSmol-500M",
+    languages=["eng-Latn"],
+    revision="530094e83a40ca4edcb5c9e5ddfa61a4b5ea0d2f",
+    release_date="2025-01-22",
+    modalities=["image", "text"],
+    n_parameters=500_000_000,
+    memory_usage_mb=1200,
+    max_tokens=8192,
+    embed_dim=576,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code="https://github.com/illuin-tech/colpali",
+    public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
+    framework=["ColPali"],
+    reference="https://huggingface.co/vidore/colSmol-500M",
+    similarity_fn_name="max_sim",
+    use_instructions=False,
+    training_datasets=colpali_training_datasets,
+)
