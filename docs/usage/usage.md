@@ -181,7 +181,7 @@ For instance to select the 56 English datasets that form the English leaderboard
 
 ```python
 import mteb
-benchmark = mteb.get_benchmark("MTEB(eng, v2)")
+benchmark = mteb.get_benchmark("MTEB(eng, v1)")
 evaluation = mteb.MTEB(tasks=benchmark)
 ```
 
