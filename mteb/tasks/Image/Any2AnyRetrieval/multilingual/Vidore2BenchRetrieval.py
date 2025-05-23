@@ -3,18 +3,31 @@ from __future__ import annotations
 from datasets import load_dataset
 
 from mteb.abstasks.Image.AbsTaskAny2AnyRetrieval import AbsTaskAny2AnyRetrieval
+from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+_LANGS = {
+    "french": ["fra-Latn"],
+    "spanish": ["spa-Latn"],
+    "english": ["eng-Latn"],
+    "german": ["deu-Latn"],
+}
 
 def _load_data(
     path: str,
     splits: str,
+    langs: list | None = None,
     cache_dir: str | None = None,
     revision: str | None = None,
 ):
-    corpus = {}
-    queries = {}
-    relevant_docs = {}
+    if langs is None:
+        corpus = {}
+        queries = {}
+        relevant_docs = {}
+    else:
+        corpus = dict.fromkeys(langs, {})
+        queries = dict.fromkeys(langs, {})
+        relevant_docs = dict.fromkeys(langs, {})
 
     for split in splits:
         query_ds = load_dataset(
@@ -33,8 +46,7 @@ def _load_data(
             },
             remove_columns=["query-id", "query"],
         )
-        queries[split] = query_ds
-
+        
         corpus_ds = load_dataset(
             path,
             "corpus",
@@ -50,7 +62,6 @@ def _load_data(
             },
             remove_columns=["corpus-id"],
         )
-        corpus[split] = corpus_ds
 
         qrels_ds = load_dataset(
             path,
@@ -59,30 +70,49 @@ def _load_data(
             cache_dir=cache_dir,
             revision=revision,
         )
-        relevant_docs[split] = {}
-        for row in qrels_ds:
-            qid = f"query-{split}-{row['query-id']}"
-            did = f"corpus-{split}-{row['corpus-id']}"
-            if qid not in relevant_docs[split]:
-                relevant_docs[split][qid] = {}
-            relevant_docs[split][qid][did] = int(row["score"])
+
+        if langs is None:
+            queries[split] = query_ds
+            corpus[split] = corpus_ds
+            relevant_docs[split] = {}
+            for row in qrels_ds:
+                qid = f"query-{split}-{row['query-id']}"
+                did = f"corpus-{split}-{row['corpus-id']}"
+                if qid not in relevant_docs[split]:
+                    relevant_docs[split][qid] = {}
+                relevant_docs[split][qid][did] = int(row["score"])
+        else:
+            for lang in langs:
+                queries[lang][split] = query_ds.filter(
+                    lambda x: x["language"] == lang
+                )
+
+                corpus[lang][split] = corpus_ds
+
+                relevant_docs[lang][split] = {}
+                for row in qrels_ds:
+                    qid = f"query-{split}-{row['query-id']}"
+                    did = f"corpus-{split}-{row['corpus-id']}"
+                    if qid not in relevant_docs[lang][split]:
+                        relevant_docs[lang][split][qid] = {}
+                    relevant_docs[lang][split][qid][did] = int(row["score"])
 
     return corpus, queries, relevant_docs
 
 
-class Vidore2SyntheticESGReportsRetrieval(AbsTaskAny2AnyRetrieval):
+class Vidore2ESGReportsRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
-        name="Vidore2SyntheticESGReportsRetrieval",
+        name="Vidore2ESGReportsRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
-            "path": "vidore/synthetic_rse_restaurant_filtered_v1.0_multilingual",
+            "path": "vidore/esg_reports_v2",
             "revision": "0542c0d03da0ec1c8cbc517c8d78e7e95c75d3d3",
         },
         type="DocumentUnderstanding",
         category="t2i",
         eval_splits=["test"],
-        eval_langs=["eng-Latn", "spa-Latn", "fra-Latn", "deu-Latn"],
+        eval_langs=_LANGS,
         main_score="ndcg_at_5",
         date=("2025-01-01", "2025-03-01"),
         domains=["Academic"],
@@ -116,6 +146,7 @@ class Vidore2SyntheticESGReportsRetrieval(AbsTaskAny2AnyRetrieval):
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata_dict["dataset"]["path"],
             splits=self.metadata_dict["eval_splits"],
+            langs=_LANGS.keys(),
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["dataset"]["revision"],
         )
@@ -123,19 +154,19 @@ class Vidore2SyntheticESGReportsRetrieval(AbsTaskAny2AnyRetrieval):
         self.data_loaded = True
 
 
-class Vidore2SyntheticEconsRetrieval(AbsTaskAny2AnyRetrieval):
+class Vidore2EconomicsReportsRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
-        name="Vidore2SyntheticEconsRetrieval",
+        name="Vidore2EconomicsReportsRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
-            "path": "vidore/synthetics_economics_macro_economy_2024_filtered_v1.0_multilingual",
+            "path": "vidore/economics_reports_v2",
             "revision": "162ba2fc1a8437eda8b6c37b240bc1c0f0deb092",
         },
         type="DocumentUnderstanding",
         category="t2i",
         eval_splits=["test"],
-        eval_langs=["eng-Latn", "spa-Latn", "fra-Latn", "deu-Latn"],
+        eval_langs=_LANGS,
         main_score="ndcg_at_5",
         date=("2025-01-01", "2025-03-01"),
         domains=["Academic"],
@@ -169,6 +200,7 @@ class Vidore2SyntheticEconsRetrieval(AbsTaskAny2AnyRetrieval):
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata_dict["dataset"]["path"],
             splits=self.metadata_dict["eval_splits"],
+            langs=_LANGS.keys(),
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["dataset"]["revision"],
         )
@@ -176,19 +208,19 @@ class Vidore2SyntheticEconsRetrieval(AbsTaskAny2AnyRetrieval):
         self.data_loaded = True
 
 
-class Vidore2SyntheticBioMedRetrieval(AbsTaskAny2AnyRetrieval):
+class Vidore2BioMedicalLecturesRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
-        name="Vidore2SyntheticBioMedRetrieval",
+        name="Vidore2BioMedicalLecturesRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
-            "path": "vidore/synthetic_mit_biomedical_tissue_interactions_unfiltered_multilingual",
+            "path": "vidore/biomedical_lectures_v2",
             "revision": "162ba2fc1a8437eda8b6c37b240bc1c0f0deb092",
         },
         type="DocumentUnderstanding",
         category="t2i",
         eval_splits=["test"],
-        eval_langs=["eng-Latn", "spa-Latn", "fra-Latn", "deu-Latn"],
+        eval_langs=_LANGS,
         main_score="ndcg_at_5",
         date=("2025-01-01", "2025-03-01"),
         domains=["Academic"],
@@ -222,6 +254,7 @@ class Vidore2SyntheticBioMedRetrieval(AbsTaskAny2AnyRetrieval):
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata_dict["dataset"]["path"],
             splits=self.metadata_dict["eval_splits"],
+            langs=_LANGS.keys(),
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["dataset"]["revision"],
         )
@@ -229,13 +262,13 @@ class Vidore2SyntheticBioMedRetrieval(AbsTaskAny2AnyRetrieval):
         self.data_loaded = True
 
 
-class Vidore2ESGReportsRetrieval(AbsTaskAny2AnyRetrieval):
+class Vidore2ESGReportsHLRetrieval(AbsTaskAny2AnyRetrieval):
     metadata = TaskMetadata(
-        name="Vidore2ESGReportsRetrieval",
+        name="Vidore2ESGReportsHLRetrieval",
         description="Retrieve associated pages according to questions.",
         reference="https://arxiv.org/pdf/2407.01449",
         dataset={
-            "path": "vidore/restaurant_esg_reports_beir",
+            "path": "vidore/esg_reports_hl_v2",
             "revision": "162ba2fc1a8437eda8b6c37b240bc1c0f0deb092",
         },
         type="DocumentUnderstanding",

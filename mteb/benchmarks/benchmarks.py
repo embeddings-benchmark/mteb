@@ -1936,10 +1936,10 @@ VIDORE_V2 = Benchmark(
     name="ViDoRe(v2)",
     tasks=get_tasks(
         tasks=[
-            "Vidore2SyntheticESGReportsRetrieval",
-            "Vidore2SyntheticEconsRetrieval",
-            "Vidore2SyntheticBioMedRetrieval",
             "Vidore2ESGReportsRetrieval",
+            "Vidore2EconomicsReportsRetrieval",
+            "Vidore2BioMedicalLecturesRetrieval",
+            "Vidore2ESGReportsHLRetrieval",
         ],
     ),
     description="Retrieve associated pages according to questions.",
