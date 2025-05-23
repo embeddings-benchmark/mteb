@@ -29,6 +29,7 @@ from mteb.models import (
     colbert_models,
     colpali_models,
     colqwen_models,
+    colsmol_models,
     conan_models,
     dino_models,
     e5_instruct,
@@ -165,6 +166,7 @@ model_modules = [
     nb_sbert,
     colpali_models,
     colqwen_models,
+    colsmol_models,
 ]
 MODEL_REGISTRY = {}
 

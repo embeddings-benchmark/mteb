@@ -28,6 +28,7 @@ class ColSmolWrapper(ColPaliEngineWrapper):
             **kwargs,
         )
 
+
 colpali_training_datasets = {
     # TODO: Add the training datasets here
 }

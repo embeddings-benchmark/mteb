@@ -259,28 +259,3 @@ colpali = ModelMeta(
     use_instructions=False,
     training_datasets=colpali_training_datasets,
 )
-
-colqwen2 = ModelMeta(
-    loader=partial(
-        ColPaliWrapper,
-        model_name="vidore/colqwen2-v1.0-merged",
-    ),
-    name="vidore/colqwen2-v1.0",
-    languages=["eng-Latn"],
-    revision="530094e83a40ca4edcb5c9e5ddfa61a4b5ea0d2f",
-    release_date="2025-02-11",
-    modalities=["image", "text"],
-    n_parameters=2_210_000_000,
-    memory_usage_mb=4700,
-    max_tokens=32768,
-    embed_dim=1536,
-    license="apache-2.0",
-    open_weights=True,
-    public_training_code="https://github.com/illuin-tech/colpali",
-    public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
-    framework=["ColPali"],
-    reference="https://huggingface.co/vidore/colqwen2-v1.0",
-    similarity_fn_name="max_sim",
-    use_instructions=False,
-    training_datasets=colpali_training_datasets,
-)

@@ -53,7 +53,7 @@ colpali_training_datasets = {
 colqwen2 = ModelMeta(
     loader=partial(
         ColQwen2Wrapper,
-        model_name="vidore/colqwen2-v1.0-merged",  # TODO: Understand why merged works but not peft one
+        model_name="vidore/colqwen2-v1.0",
     ),
     name="vidore/colqwen2-v1.0",
     languages=["eng-Latn"],
