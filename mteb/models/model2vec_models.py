@@ -118,6 +118,7 @@ _POTION_MULTILINGUAL_128M_LANGUAGES = [
     "zul-Latn",
 ]
 
+
 class Model2VecWrapper(Wrapper):
     def __init__(
         self,
