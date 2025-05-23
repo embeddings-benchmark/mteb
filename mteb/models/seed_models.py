@@ -32,11 +32,16 @@ class SeedWrapper(Wrapper):
             self,
             "volcenginesdkarkruntime",
             "ByteDance Seed",
-            "pip install volcengine-python-sdk[ark]",
+            "pip install mteb[ark]",
         )
         from volcenginesdkarkruntime import Ark
 
-        requires_package(self, "tiktoken", "Tiktoken package")
+        requires_package(
+            self,
+            "tiktoken",
+            "ByteDance Seed",
+            "pip install mteb[ark]",
+        )
         import tiktoken
 
         self._client = Ark()
@@ -85,6 +90,7 @@ class SeedWrapper(Wrapper):
         sentences: list[str],
         task_name: str,
         prompt_type: PromptType | None = None,
+        retries: int = 5,
         **kwargs: Any,
     ) -> np.ndarray:
         trimmed_sentences = []
@@ -113,15 +119,19 @@ class SeedWrapper(Wrapper):
         for i, sublist in enumerate(
             tqdm.tqdm(sublists, leave=False, disable=not show_progress_bar)
         ):
-            while 1:
+            while retries > 0:
                 try:
                     embedding = self._encode(sublist, task_name, prompt_type)
                     all_embeddings.extend(embedding)
                     break
                 except Exception as e:
                     # Sleep due to too many requests
-                    logger.warning(f"Encountering error {e}. Retrying")
-                    time.sleep(1)
+                    logger.warning(
+                        f"Retrying... {retries} retries left. Error: {str(e)}"
+                    )
+                    retries -= 1
+                    if retries == 0:
+                        raise e
 
         return np.array(all_embeddings)
 
@@ -199,8 +209,7 @@ TASK_NAME_TO_INSTRUCTION = {
     "CLSClusteringS2S": "Instruct: Identify the main category of scholar papers based on the titles\nQuery: ",
     "CLSClusteringP2P": "Instruct: Identify the main category of scholar papers based on the titles and abstracts\nQuery: ",
     "ThuNewsClusteringS2S": "Instruct: Identify the topic or theme of the given news articles based on the titles\nQuery: ",
-    "ThuNewsClusteringP2P": "Instruct: Identify the topic or theme of the given news articles based on the titles and abstracts\nQuery: ",
-    "no": "",
+    "ThuNewsClusteringP2P": "Instruct: Identify the topic or theme of the given news articles based on the titles and abstracts\nQuery: "
 }
 
 DEFAULT_INSTRUCTION = "Instruct: Given a web search query, retrieve relevant passages that answer the query\nQuery: "
