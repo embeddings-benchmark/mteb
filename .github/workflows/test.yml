@@ -22,6 +22,12 @@ jobs:
             python-version: "3.9"
 
     steps:
+      # Install build tools on Windows for pylate PLAID Index
+      - name: Set up MSVC Build environment
+        uses: ilammy/msvc-dev-cmd@v1
+        if: runner.os == 'Windows'
+
+
       - uses: actions/checkout@v3
 
       - name: Cache Hugging Face

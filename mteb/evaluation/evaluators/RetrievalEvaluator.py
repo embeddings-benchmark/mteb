@@ -107,6 +107,12 @@ class DenseRetrievalExactSearch:
         **kwargs,
     ) -> dict[str, dict[str, float]]:
         logger.info("Encoding Queries.")
+
+        if hasattr(self.model.model, "create_index"):
+            # create the index for the model
+            self.model.model.create_index()
+            logger.info("Index created for the model.")
+
         query_ids = list(queries.keys())
         self.results = {qid: {} for qid in query_ids}
         queries = [queries[qid] for qid in queries]  # type: ignore
@@ -166,6 +172,11 @@ class DenseRetrievalExactSearch:
                 if self.save_corpus_embeddings and request_qid:
                     self.corpus_embeddings[request_qid].append(sub_corpus_embeddings)
 
+            if hasattr(self.model.model, "add_to_index"):
+                corpus_ids_slice = corpus_ids[corpus_start_idx:corpus_end_idx]
+                self.model.model.add_to_index(sub_corpus_embeddings, corpus_ids_slice)
+                continue
+
             # Compute similarites using self defined similarity otherwise default to cosine-similarity
             if hasattr(self.model, "similarity"):
                 similarity_scores = self.model.similarity(
@@ -211,6 +222,17 @@ class DenseRetrievalExactSearch:
                     else:
                         # If item is larger than the smallest in the heap, push it on the heap then pop the smallest element
                         heapq.heappushpop(result_heaps[query_id], (score, corpus_id))
+
+        if hasattr(self.model.model, "add_to_index") and hasattr(
+            self.model.model, "retrieve_from_index"
+        ):
+            results = self.model.model.retrieve_from_index(query_embeddings, top_k)
+
+            # Build result_heaps from results
+            result_heaps = {
+                query_ids[i]: [(item["score"], item["id"]) for item in results[i]]
+                for i in range(len(query_embeddings))
+            }
 
         for qid in result_heaps:
             for score, corpus_id in result_heaps[qid]:

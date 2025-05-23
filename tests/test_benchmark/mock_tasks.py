@@ -1279,6 +1279,71 @@ class MockMultilingualRerankingTask(AbsTaskReranking, MultilingualTask):
         self.data_loaded = True
 
 
+class MockLargeRetrievalTask(AbsTaskRetrieval):
+    expected_stats = {
+        "test": {
+            "number_of_characters": None,
+            "num_samples": 256,
+            "num_queries": 128,
+            "num_documents": 128,
+            "min_document_length": None,
+            "average_document_length": None,
+            "max_document_length": None,
+            "unique_documents": 128,
+            "min_query_length": None,
+            "average_query_length": None,
+            "max_query_length": None,
+            "unique_queries": 128,
+            "min_relevant_docs_per_query": 2,
+            "average_relevant_docs_per_query": 2.0,
+            "max_relevant_docs_per_query": 2,
+            "unique_relevant_docs": 128,
+        },
+        "val": {
+            "number_of_characters": None,
+            "num_samples": 256,
+            "num_queries": 128,
+            "num_documents": 128,
+            "min_document_length": None,
+            "average_document_length": None,
+            "max_document_length": None,
+            "unique_documents": 128,
+            "min_query_length": None,
+            "average_query_length": None,
+            "max_query_length": None,
+            "unique_queries": 128,
+            "min_relevant_docs_per_query": 2,
+            "average_relevant_docs_per_query": 2.0,
+            "max_relevant_docs_per_query": 2,
+            "unique_relevant_docs": 128,
+        },
+    }
+
+    metadata = TaskMetadata(
+        type="Retrieval",
+        name="MockLargeRetrievalTask",
+        main_score="ndcg_at_10",
+        **dict(general_args | {"eval_splits": ["val", "test"]}),  # type: ignore
+    )
+
+    def load_data(self, **kwargs):
+        # Generate 128 queries and 128 documents
+        self.queries = {
+            split: {f"q{i}": f"This is query {i} for {split}" for i in range(128)}
+            for split in ["test", "val"]
+        }
+        self.corpus = {
+            split: {f"d{i}": f"This is document {i} for {split}" for i in range(128)}
+            for split in ["test", "val"]
+        }
+        # Each query is relevant to its own doc and the next one (modulo 128)
+        self.relevant_docs = {
+            split: {f"q{i}": {f"d{i}": 1, f"d{(i + 1) % 128}": 1} for i in range(128)}
+            for split in ["test", "val"]
+        }
+        self.data_loaded = True
+
+
 class MockRetrievalTask(AbsTaskRetrieval):
     expected_stats = {
         "test": {

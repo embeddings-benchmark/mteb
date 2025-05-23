@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import logging
+import os
+import uuid
 from collections.abc import Sequence
 from functools import partial
 from typing import Any
 
 import numpy as np
-import torch
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
@@ -22,6 +23,7 @@ class ColBERTWrapper(Wrapper):
         model_name: str,
         revision: str | None = None,
         model_prompts: dict[str, str] | None = None,
+        embedding_size: int = 128,
         **kwargs,
     ) -> None:
         """Wrapper for ColBERT models.
@@ -33,6 +35,7 @@ class ColBERTWrapper(Wrapper):
                 First priority is given to the composed prompt of task name + prompt type (query or passage), then to the specific task prompt,
                 then to the composed prompt of task type + prompt type, then to the specific task type prompt,
                 and finally to the specific prompt type.
+            embedding_size: The size of the embeddings. Default is 128.
             **kwargs: Additional arguments to pass to the model.
         """
         requires_package(self, "pylate", model_name, "pip install mteb[pylate]")
@@ -40,6 +43,8 @@ class ColBERTWrapper(Wrapper):
 
         self.model_name = model_name
         self.model = colbert_model.ColBERT(self.model_name, revision=revision, **kwargs)
+        self.embedding_size = embedding_size
+
         if (
             model_prompts is None
             and hasattr(self.model, "prompts")
@@ -53,6 +58,36 @@ class ColBERTWrapper(Wrapper):
             logger.info(f"Model prompts will be overwritten with {model_prompts}")
             self.model.prompts = model_prompts
         self.model_prompts = self.validate_task_to_prompt_name(model_prompts)
+
+    def create_index(self) -> None:
+        """Creates an index for the model."""
+        from pylate import indexes
+        from pylate import retrieve as colbert_retrieve
+
+        uuid_str = str(uuid.uuid4())
+        self.index = indexes.PLAID(
+            index_folder=os.path.join("pylate-index", uuid_str),
+            index_name="index" + uuid_str,
+            override=True,
+            embedding_size=self.embedding_size,
+        )
+
+        self.retriever = colbert_retrieve.ColBERT(index=self.index)
+
+    def add_to_index(
+        self, documents_embeddings: np.ndarray, documents_ids: list[str]
+    ) -> None:
+        self.index.add_documents(
+            documents_ids=documents_ids,
+            documents_embeddings=documents_embeddings,
+        )
+
+    def retrieve_from_index(self, queries_embeddings: np.ndarray, top_k: int):
+        scores = self.retriever.retrieve(
+            queries_embeddings=queries_embeddings,
+            k=top_k,
+        )
+        return scores
 
     def encode(
         self,
@@ -96,47 +131,21 @@ class ColBERTWrapper(Wrapper):
             )
         logger.info(f"Encoding {len(sentences)} sentences.")
 
+        if "convert_to_numpy" in kwargs:
+            del kwargs["convert_to_numpy"]
+
+        if "convert_to_tensor" in kwargs:
+            del kwargs["convert_to_tensor"]
+
         pred = self.model.encode(
             sentences,
             prompt_name=prompt_name,
             is_query=True if prompt_type == PromptType.query else False,
+            convert_to_numpy=True,
             **kwargs,
         )
 
-        # encode returns a list of tensors shaped (x, token_dim) where x is the number of tokens in the sentence
-        # we need to pad these tensors to the same length
-        # Tensors have varying lengths; therefore, they need to be padded with zeros to ensure uniformity before being combined
-        # output shape will be (batch_size, len(max(tokens)), embedding_token_dim)
-        pred = torch.nn.utils.rnn.pad_sequence(pred, batch_first=True, padding_value=0)
-
-        return pred.cpu().numpy()
-
-    def similarity(self, a: np.ndarray, b: np.ndarray) -> np.ndarray:
-        """Computes the max-similarity max_sim(a[i], b[j]) for all i and j.
-            Works with a Tensor of the shape (batch_size, num_tokens, token_dim)
-
-        Return:
-            Matrix with res[i][j]  = max_sim(a[i], b[j])
-        """  # noqa: D402
-        if not isinstance(a, torch.Tensor):
-            a = torch.tensor(a, dtype=torch.float32)  # type: ignore[no-untyped-call]
-
-        if not isinstance(b, torch.Tensor):
-            b = torch.tensor(b, dtype=torch.float32)  # type: ignore[no-untyped-call]
-
-        if len(a.shape) == 2:
-            a = a.unsqueeze(0)  # type: ignore[no-untyped-call]
-
-        if len(b.shape) == 2:
-            b = b.unsqueeze(0)  # type: ignore[no-untyped-call]
-
-        scores = torch.einsum(
-            "ash,bth->abst",
-            a,
-            b,
-        )
-
-        return scores.max(axis=-1).values.sum(axis=-1)  # type: ignore[no-untyped-call]
+        return pred
 
 
 colbert_v2 = ModelMeta(
