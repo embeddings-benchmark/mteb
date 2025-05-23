@@ -117,10 +117,18 @@ class Any2AnyDenseRetrievalExactSearch:
         return_sorted: bool = False,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
-        if score_function not in self.score_functions:
-            raise ValueError(
-                f"score function: {score_function} must be either (cos_sim) for cosine similarity or (dot) for dot product"
+        if hasattr(self.model, "similarity"):
+            score_function = self.model.similarity
+            logger.info("Scoring Function: from model")
+        else:
+            if score_function not in self.score_functions:
+                raise ValueError(
+                    f"score function: {score_function} must be either (cos_sim) for cosine similarity or (dot) for dot product"
+                )
+            logger.info(
+                f"Scoring Function: {self.score_function_desc[score_function]} ({score_function})"
             )
+            score_function = self.score_functions[score_function]
 
         logger.info("Encoding Queries.")
         query_ids = list(queries["id"])
@@ -172,9 +180,6 @@ class Any2AnyDenseRetrievalExactSearch:
         corpus_modality = corpus[0]["modality"]
 
         logger.info("Encoding Corpus in batches... Warning: This might take a while!")
-        logger.info(
-            f"Scoring Function: {self.score_function_desc[score_function]} ({score_function})"
-        )
 
         result_heaps = {qid: [] for qid in query_ids}
         for chunk_start in range(0, len(corpus), self.corpus_chunk_size):
@@ -223,9 +228,7 @@ class Any2AnyDenseRetrievalExactSearch:
                 else:
                     raise ValueError(f"Unsupported modality: {corpus_modality}")
 
-            cos_scores = self.score_functions[score_function](
-                query_embeddings, sub_corpus_embeddings
-            )
+            cos_scores = score_function(query_embeddings, sub_corpus_embeddings)
             cos_scores[torch.isnan(cos_scores)] = -1
 
             cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(

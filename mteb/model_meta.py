@@ -39,6 +39,7 @@ FRAMEWORKS = Literal[
     "NumPy",
     "PyLate",
     "ColBERT",
+    "ColPali",
 ]
 DISTANCE_METRICS = Literal["cosine", "max_sim", "dot"]
 
