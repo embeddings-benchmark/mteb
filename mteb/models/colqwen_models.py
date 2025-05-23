@@ -6,6 +6,9 @@ from typing import Literal
 
 from mteb.model_meta import ModelMeta
 from mteb.models.colpali_models import ColPaliEngineWrapper
+from mteb.requires_package import (
+    requires_package,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -16,14 +19,22 @@ class ColQwen2Wrapper(ColPaliEngineWrapper):
     """Wrapper for ColQwen2 model."""
 
     def __init__(
-        self, model_name: str = "vidore/colqwen2-v1.0", device: str = None, **kwargs
+        self,
+        model_name: str = "vidore/colqwen2-v1.0",
+        revision: str | None = None,
+        device: str = None,
+        **kwargs,
     ):
+        requires_package(
+            self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
+        )
         from colpali_engine.models import ColQwen2, ColQwen2Processor
 
         super().__init__(
             model_name=model_name,
             model_class=ColQwen2,
             processor_class=ColQwen2Processor,
+            revision=revision,
             device=device,
             **kwargs,
         )
@@ -33,14 +44,22 @@ class ColQwen2_5Wrapper(ColPaliEngineWrapper):
     """Wrapper for ColQwen2.5 model."""
 
     def __init__(
-        self, model_name: str = "vidore/colqwen2.5-v0.2", device: str = None, **kwargs
+        self,
+        model_name: str = "vidore/colqwen2.5-v0.2",
+        revision: str | None = None,
+        device: str = None,
+        **kwargs,
     ):
+        requires_package(
+            self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
+        )
         from colpali_engine.models import ColQwen2_5, ColQwen2_5Processor
 
         super().__init__(
             model_name=model_name,
             model_class=ColQwen2_5,
             processor_class=ColQwen2_5Processor,
+            revision=revision,
             device=device,
             **kwargs,
         )

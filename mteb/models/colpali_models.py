@@ -29,6 +29,7 @@ class ColPaliEngineWrapper:
         model_name: str,
         model_class: type,
         processor_class: type,
+        revision: str | None = None,
         device: str = None,
         **kwargs,
     ):
@@ -48,7 +49,7 @@ class ColPaliEngineWrapper:
 
         # Load model
         self.mdl = model_class.from_pretrained(
-            model_name, trust_remote_code=True, **kwargs
+            model_name, trust_remote_code=True, revision=revision, **kwargs
         )
         self.mdl.eval().to(self.device)
 
@@ -142,15 +143,20 @@ class ColPaliWrapper(ColPaliEngineWrapper):
     def __init__(
         self,
         model_name: str = "vidore/colpali-v1.3",
+        revision: str | None = None,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs,
     ):
+        requires_package(
+            self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
+        )
         from colpali_engine.models import ColPali, ColPaliProcessor
 
         super().__init__(
             model_name=model_name,
             model_class=ColPali,
             processor_class=ColPaliProcessor,
+            revision=revision,
             device=device,
             **kwargs,
         )
