@@ -177,7 +177,7 @@ This section describes how to select benchmarks and task to evaluate, including 
 ### Selecting a Benchmark
 
 `mteb` comes with a set of predefined benchmarks. These can be fetched using `mteb.get_benchmark` and run in a similar fashion to other sets of tasks.
-For instance to select the 56 English datasets that form the English leaderboard:
+For instance to select the English datasets that form the English leaderboard:
 
 ```python
 import mteb
