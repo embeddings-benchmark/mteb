@@ -147,8 +147,11 @@ class RetrievalDatasetLoader:
         logger.info("Loading qrels...")
 
         config = f"{self.config}-qrels" if self.config is not None else "default"
-
-        qrels_ds = self.load_dataset_split(config)
+        try:
+            qrels_ds = self.load_dataset_split(config)
+        except Exception:
+            # todo Remove after uploading
+            qrels_ds = self.load_dataset_split("qrels")
 
         qrels_ds = qrels_ds.cast(
             Features(

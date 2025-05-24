@@ -14,7 +14,7 @@ class FeedbackQARetrieval(AbsTaskRetrieval):
         reference="https://arxiv.org/abs/2204.03025",
         dataset={
             "path": "lt2c/fqa",
-            "revision": "1ee1cd0",
+            "revision": "a5cb615179f91ae10605b39cf21e40e3ebb577e3",
         },
         type="Retrieval",
         category="t2t",
