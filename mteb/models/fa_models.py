@@ -141,9 +141,7 @@ tooka_sbert = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets={
-        # This model is finetuned from PartAI/TookaBERT-Large
-    },
+    training_datasets=None,
 )
 
 fa_bert = ModelMeta(
