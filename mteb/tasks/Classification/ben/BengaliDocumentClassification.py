@@ -58,7 +58,7 @@ class BengaliDocumentClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="BengaliDocumentClassification.v2",
         description="""Dataset for News Classification, categorized with 13 domains.
-        This version corrects errors found in the original data. For details, see https://github.com/embeddings-benchmark/mteb/pull/2632""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2632)""",
         reference="https://aclanthology.org/2023.eacl-main.4",
         dataset={
             "path": "mteb/bengali_document",

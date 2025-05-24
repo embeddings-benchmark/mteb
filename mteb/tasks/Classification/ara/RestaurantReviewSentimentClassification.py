@@ -55,7 +55,7 @@ class RestaurantReviewSentimentClassificationV2(AbsTaskClassification):
             "revision": "5d28c1e8fb393173a849696ed178b90a6f78754a",
         },
         description="""Dataset of 8156 restaurant reviews from qaym.com in Arabic for sentiment analysis
-        This version corrects errors found in the original data. For details, see https://github.com/embeddings-benchmark/mteb/pull/2632""",
+        This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2632)""",
         reference="https://link.springer.com/chapter/10.1007/978-3-319-18117-2_2",
         type="Classification",
         category="s2s",
