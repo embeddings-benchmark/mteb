@@ -12,6 +12,7 @@ from .eng.GunshotTriangulation import *
 from .eng.IEMOCAPEmotion import *
 from .eng.IEMOCAPGender import *
 from .eng.LibriCount import *
+from .eng.IEMOCAP import *
 from .eng.MridinghamStroke import *
 from .eng.MridinghamTonic import *
 from .eng.NSynth import *
