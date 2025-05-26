@@ -43,5 +43,7 @@ The following table gives you an overview of the benchmarks in MTEB.
 | [MTEB(rus, v1)](https://aclanthology.org/2023.eacl-main.148/) | Russian | 23 | Classification: 9, Clustering: 3, MultilabelClassification: 2, PairClassification: 1, Reranking: 2, Retrieval: 3, STS: 3 | [Academic, Blog, Encyclopaedic, News, Reviews, Social, Spoken, Web, Written] | rus |
 | [NanoBEIR](https://huggingface.co/collections/zeta-alpha-ai/nanobeir-66e1a0af21dfd93e620cd9f6) | NanoBEIR | 13 | Retrieval: 13 | [Academic, Encyclopaedic, Medical, News, Non-fiction, Social, Web, Written] | eng |
 | [RAR-b](https://arxiv.org/abs/2404.06347) | Reasoning retrieval | 17 | Retrieval: 17 | [Encyclopaedic, Programming, Written] | eng |
+| [ViDoRe(v1)](https://arxiv.org/abs/2407.01449) | ViDoRe(v1) | 10 | DocumentUnderstanding: 10 | [Academic] | eng |
+| [ViDoRe(v2)](https://arxiv.org/abs/2407.01449) | ViDoRe(v2) | 4 | DocumentUnderstanding: 4 | [Academic] | deu,eng,fra,spa |
 
 <!-- BENCHMARKS TABLE END -->

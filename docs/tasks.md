@@ -834,6 +834,10 @@ The following tables give you an overview of the tasks in MTEB.
 | [VOC2007](http://host.robots.ox.ac.uk/pascal/VOC/) (Everingham et al., 2010) | ['eng'] | ImageClassification | i2i | [Encyclopaedic] | {'test': 4952} | {'test': {'num_samples': 4952, 'min_image_width': 148, 'average_image_width': 471.25, 'max_image_width': 500, 'min_image_height': 139, 'average_image_height': 381.54, 'max_image_height': 500, 'min_labels_per_sample': 1, 'average_label_per_sample': 1.42, 'max_labels_per_sample': 5, 'unique_num_labels': 20, 'labels': {'14': {'count': 2007}, '11': {'count': 418}, '18': {'count': 259}, '17': {'count': 223}, '8': {'count': 417}, '6': {'count': 721}, '15': {'count': 224}, '10': {'count': 190}, '12': {'count': 274}, '7': {'count': 322}, '9': {'count': 127}, '5': {'count': 174}, '1': {'count': 239}, '13': {'count': 222}, '2': {'count': 282}, '19': {'count': 229}, '16': {'count': 97}, '0': {'count': 204}, '3': {'count': 172}, '4': {'count': 212}}}} |
 | [VQA2IT2TRetrieval](https://openaccess.thecvf.com/content_cvpr_2017/html/Goyal_Making_the_v_CVPR_2017_paper.html) (Goyal et al., 2017) | ['eng'] | Any2AnyRetrieval | it2t | [Web] | {'test': 235951} | {'test': {'number_of_characters': 6850685, 'num_samples': 235951, 'num_queries': 214354, 'num_documents': 21597, 'min_document_length': 1, 'average_document_length': 11.19, 'max_document_length': 99, 'unique_documents': 21597, 'num_document_images': 0, 'min_query_length': 10, 'average_query_length': 30.83, 'max_query_length': 100, 'unique_queries': 81565, 'num_query_images': 214354, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 21597}} |
 | [VideoRetrieval](https://arxiv.org/abs/2203.03367) (Dingkun Long, 2022) | ['cmn'] | Retrieval | s2p |  | None | None |
+| [Vidore2BioMedicalLecturesRetrieval](https://arxiv.org/pdf/2407.01449) (Macé et al., 2025) | ['deu', 'eng', 'fra', 'spa'] | DocumentUnderstanding | t2i | [Academic] | None | None |
+| [Vidore2ESGReportsHLRetrieval](https://arxiv.org/pdf/2407.01449) (Macé et al., 2025) | ['eng'] | DocumentUnderstanding | t2i | [Academic] | None | None |
+| [Vidore2ESGReportsRetrieval](https://arxiv.org/pdf/2407.01449) (Macé et al., 2025) | ['deu', 'eng', 'fra', 'spa'] | DocumentUnderstanding | t2i | [Academic] | None | None |
+| [Vidore2EconomicsReportsRetrieval](https://arxiv.org/pdf/2407.01449) (Macé et al., 2025) | ['deu', 'eng', 'fra', 'spa'] | DocumentUnderstanding | t2i | [Academic] | None | None |
 | [VidoreArxivQARetrieval](https://arxiv.org/pdf/2407.01449) (Faysse et al., 2024) | ['eng'] | DocumentUnderstanding | t2i | [Academic] | {'test': 1000} | {'test': {'number_of_characters': 49664, 'num_samples': 1000, 'num_queries': 500, 'num_documents': 500, 'min_document_length': 0, 'average_document_length': 0, 'max_document_length': 0, 'unique_documents': 0, 'num_document_images': 500, 'min_query_length': 37, 'average_query_length': 99.33, 'max_query_length': 200, 'unique_queries': 500, 'num_query_images': 0, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.0, 'max_relevant_docs_per_query': 1, 'unique_relevant_docs': 500}} |
 | [VidoreDocVQARetrieval](https://arxiv.org/pdf/2407.01449) (Faysse et al., 2024) | ['eng'] | DocumentUnderstanding | t2i | [Academic] | {'test': 951} | {'test': {'number_of_characters': 19499, 'num_samples': 951, 'num_queries': 451, 'num_documents': 500, 'min_document_length': 0, 'average_document_length': 0, 'max_document_length': 0, 'unique_documents': 0, 'num_document_images': 500, 'min_query_length': 13, 'average_query_length': 43.24, 'max_query_length': 128, 'unique_queries': 451, 'num_query_images': 0, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.11, 'max_relevant_docs_per_query': 12, 'unique_relevant_docs': 500}} |
 | [VidoreInfoVQARetrieval](https://arxiv.org/pdf/2407.01449) (Faysse et al., 2024) | ['eng'] | DocumentUnderstanding | t2i | [Academic] | {'test': 994} | {'test': {'number_of_characters': 32253, 'num_samples': 994, 'num_queries': 494, 'num_documents': 500, 'min_document_length': 0, 'average_document_length': 0, 'max_document_length': 0, 'unique_documents': 0, 'num_document_images': 500, 'min_query_length': 21, 'average_query_length': 65.29, 'max_query_length': 167, 'unique_queries': 494, 'num_query_images': 0, 'min_relevant_docs_per_query': 1, 'average_relevant_docs_per_query': 1.01, 'max_relevant_docs_per_query': 5, 'unique_relevant_docs': 500}} |
@@ -1169,7 +1173,7 @@ The following tables give you an overview of the tasks in MTEB.
 | dah | Gwahatike | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | dan | Danish | Indo-European | 0 | 2 | 0 | 8 | 10 | 2 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 1 | 6 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 31 |
 | ded | Dedua | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| deu | German | Indo-European | 0 | 2 | 0 | 8 | 14 | 7 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 7 | 2 | 20 | 4 | 0 | 0 | 0 | 0 | 4 | 0 | 69 |
+| deu | German | Indo-European | 0 | 2 | 0 | 8 | 14 | 7 | 0 | 3 | 0 | 0 | 0 | 0 | 1 | 7 | 2 | 20 | 4 | 0 | 0 | 0 | 0 | 4 | 0 | 72 |
 | dgc | Casiguran Dumagat Agta | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | dgr | Dogrib | Athabaskan-Eyak-Tlingit | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | dgz | Daga | Dagan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1197,7 +1201,7 @@ The following tables give you an overview of the tasks in MTEB.
 | ell | Modern Greek (1453-) | Indo-European | 0 | 2 | 0 | 5 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 2 | 0 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 21 |
 | emi | Mussau-Emira | Austronesian | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | emp | Northern Emberá | Chocoan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| eng | English | Indo-European | 0 | 3 | 49 | 20 | 161 | 21 | 7 | 10 | 22 | 5 | 0 | 3 | 1 | 13 | 9 | 113 | 13 | 2 | 1 | 6 | 7 | 3 | 24 | 493 |
+| eng | English | Indo-European | 0 | 3 | 49 | 20 | 161 | 21 | 7 | 14 | 22 | 5 | 0 | 3 | 1 | 13 | 9 | 113 | 13 | 2 | 1 | 6 | 7 | 3 | 24 | 497 |
 | enq | Enga | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | epo | Esperanto | Artificial Language | 0 | 0 | 0 | 3 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | eri | Ogea | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1218,7 +1222,7 @@ The following tables give you an overview of the tasks in MTEB.
 | fin | Finnish | Uralic | 0 | 1 | 0 | 5 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 1 | 2 | 6 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 24 |
 | fon | Fon | Atlantic-Congo | 0 | 0 | 0 | 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 |
 | for | Fore | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| fra | French | Indo-European | 0 | 1 | 0 | 9 | 13 | 8 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 6 | 3 | 17 | 4 | 0 | 1 | 0 | 0 | 4 | 0 | 67 |
+| fra | French | Indo-European | 0 | 1 | 0 | 9 | 13 | 8 | 0 | 3 | 0 | 0 | 0 | 0 | 1 | 6 | 3 | 17 | 4 | 0 | 1 | 0 | 0 | 4 | 0 | 70 |
 | fry | Western Frisian | Indo-European | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | fuc | Pulaar | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | fue | Borgu Fulfulde | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1744,7 +1748,7 @@ The following tables give you an overview of the tasks in MTEB.
 | soq | Kanasi | Dagan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | sot | Southern Sotho | Atlantic-Congo | 0 | 0 | 0 | 1 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 5 |
 | soy | Miyobe | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| spa | Spanish | Indo-European | 0 | 2 | 0 | 6 | 13 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 3 | 2 | 15 | 4 | 0 | 0 | 0 | 0 | 4 | 0 | 54 |
+| spa | Spanish | Indo-European | 0 | 2 | 0 | 6 | 13 | 4 | 0 | 3 | 0 | 0 | 0 | 0 | 1 | 3 | 2 | 15 | 4 | 0 | 0 | 0 | 0 | 4 | 0 | 57 |
 | spl | Selepet | Nuclear Trans New Guinea | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | spm | Akukem | Ramu | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | spp | Supyire Senoufo | Atlantic-Congo | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
@@ -1970,7 +1974,7 @@ The following tables give you an overview of the tasks in MTEB.
 | zty | Yatee Zapotec | Otomanguean | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
 | zul | Zulu | Atlantic-Congo | 0 | 0 | 0 | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
 | zyp | Zyphe Chin | Sino-Tibetan | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
-| Total | None | None | None | 0 | 55 | 49 | 1494 | 846 | 316 | 7 | 10 | 22 | 5 | 0 | 3 | 28 | 92 | 56 | 593 | 88 | 2 | 2 | 6 | 7 | 37 | 24 |
+| Total | None | None | None | 0 | 55 | 49 | 1494 | 846 | 316 | 7 | 23 | 22 | 5 | 0 | 3 | 28 | 92 | 56 | 593 | 88 | 2 | 2 | 6 | 7 | 37 | 24 |
 
 <!-- TASK LANG TABLE END -->
 
