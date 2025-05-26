@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+from datasets import load_dataset
+
+from mteb.abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 from mteb.abstasks.MultilingualTask import MultilingualTask
 from mteb.abstasks.TaskMetadata import TaskMetadata
-
-from ....abstasks.AbsTaskRetrieval import AbsTaskRetrieval
 
 _LANGUAGES = {
     "as": ["asm-Beng"],
@@ -19,6 +20,8 @@ _LANGUAGES = {
     "te": ["tel-Telu"],
 }
 
+SPLIT = "test"
+
 
 class IndicQARetrieval(AbsTaskRetrieval, MultilingualTask):
     metadata = TaskMetadata(
@@ -32,7 +35,7 @@ class IndicQARetrieval(AbsTaskRetrieval, MultilingualTask):
         type="Retrieval",
         category="s2p",
         modalities=["text"],
-        eval_splits=["test"],
+        eval_splits=[SPLIT],
         eval_langs=_LANGUAGES,
         main_score="ndcg_at_10",
         date=("2022-08-01", "2022-12-20"),
@@ -52,3 +55,57 @@ class IndicQARetrieval(AbsTaskRetrieval, MultilingualTask):
 }
 """,
     )
+
+    def load_data(self):
+        self.corpus = {
+            subset: {split: {} for split in self.eval_splits}
+            for subset in self.hf_subsets
+        }
+        self.queries = {
+            subset: {split: {} for split in self.eval_splits}
+            for subset in self.hf_subsets
+        }
+        self.relevant_docs = {
+            subset: {split: {} for split in self.eval_splits}
+            for subset in self.hf_subsets
+        }
+        for lang in self.hf_subsets:
+            corpus = load_dataset(
+                self.metadata.dataset["path"],
+                name=f"{lang}-corpus",
+                split=SPLIT,
+                revision=self.metadata.dataset["revision"],
+            )
+
+            self.corpus[lang][SPLIT] = {
+                row["_id"]: {
+                    "text": row["text"],
+                    "title": row.get("title", ""),
+                }
+                for row in corpus
+            }
+
+            queries = load_dataset(
+                self.metadata.dataset["path"],
+                name=f"{lang}-queries",
+                split=SPLIT,
+                revision=self.metadata.dataset["revision"],
+            )
+
+            self.queries[lang][SPLIT] = {row["_id"]: row["text"] for row in queries}
+
+            qrels = load_dataset(
+                self.metadata.dataset["path"],
+                name=f"{lang}-qrels",
+                split=SPLIT,
+                revision=self.metadata.dataset["revision"],
+            )
+
+            for row in qrels:
+                if row["query-id"] not in self.relevant_docs[lang][SPLIT]:
+                    self.relevant_docs[lang][SPLIT][row["query-id"]] = {}
+                self.relevant_docs[lang][SPLIT][row["query-id"]][row["corpus-id"]] = (
+                    row["score"]
+                )
+
+        self.data_loaded = True
