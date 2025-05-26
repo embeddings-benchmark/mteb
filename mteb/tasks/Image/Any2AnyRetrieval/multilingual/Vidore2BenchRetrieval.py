@@ -121,7 +121,7 @@ class Vidore2ESGReportsRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        citation=r"""
+        bibtex_citation=r"""
 @article{mace2025vidorev2,
   author = {Macé, Quentin and Loison António and Faysse, Manuel},
   journal = {arXiv preprint arXiv:2505.17166},
@@ -180,7 +180,7 @@ class Vidore2EconomicsReportsRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        citation=r"""
+        bibtex_citation=r"""
 @article{mace2025vidorev2,
   author = {Macé, Quentin and Loison António and Faysse, Manuel},
   journal = {arXiv preprint arXiv:2505.17166},
@@ -239,7 +239,7 @@ class Vidore2BioMedicalLecturesRetrieval(MultilingualTask, AbsTaskAny2AnyRetriev
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        citation=r"""
+        bibtex_citation=r"""
 @article{mace2025vidorev2,
   author = {Macé, Quentin and Loison António and Faysse, Manuel},
   journal = {arXiv preprint arXiv:2505.17166},
@@ -298,7 +298,7 @@ class Vidore2ESGReportsHLRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        citation=r"""
+        bibtex_citation=r"""
 @article{mace2025vidorev2,
   author = {Macé, Quentin and Loison António and Faysse, Manuel},
   journal = {arXiv preprint arXiv:2505.17166},
