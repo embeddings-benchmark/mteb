@@ -123,10 +123,10 @@ class Vidore2ESGReportsRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         sample_creation="found",
         citation=r"""
 @article{mace2025vidorev2,
-author = {Macé, Quentin and Loison António and Faysse, Manuel},
-journal = {arXiv preprint arXiv:2505.17166},
-title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
-year = {2025},
+  author = {Macé, Quentin and Loison António and Faysse, Manuel},
+  journal = {arXiv preprint arXiv:2505.17166},
+  title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
+  year = {2025},
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
@@ -182,10 +182,10 @@ class Vidore2EconomicsReportsRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval
         sample_creation="found",
         citation=r"""
 @article{mace2025vidorev2,
-author = {Macé, Quentin and Loison António and Faysse, Manuel},
-journal = {arXiv preprint arXiv:2505.17166},
-title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
-year = {2025},
+  author = {Macé, Quentin and Loison António and Faysse, Manuel},
+  journal = {arXiv preprint arXiv:2505.17166},
+  title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
+  year = {2025},
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
@@ -241,10 +241,10 @@ class Vidore2BioMedicalLecturesRetrieval(MultilingualTask, AbsTaskAny2AnyRetriev
         sample_creation="found",
         citation=r"""
 @article{mace2025vidorev2,
-author = {Macé, Quentin and Loison António and Faysse, Manuel},
-journal = {arXiv preprint arXiv:2505.17166},
-title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
-year = {2025},
+  author = {Macé, Quentin and Loison António and Faysse, Manuel},
+  journal = {arXiv preprint arXiv:2505.17166},
+  title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
+  year = {2025},
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
@@ -300,10 +300,10 @@ class Vidore2ESGReportsHLRetrieval(AbsTaskAny2AnyRetrieval):
         sample_creation="found",
         citation=r"""
 @article{mace2025vidorev2,
-author = {Macé, Quentin and Loison António and Faysse, Manuel},
-journal = {arXiv preprint arXiv:2505.17166},
-title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
-year = {2025},
+  author = {Macé, Quentin and Loison António and Faysse, Manuel},
+  journal = {arXiv preprint arXiv:2505.17166},
+  title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
+  year = {2025},
 }
 """,
         prompt={"query": "Find a screenshot that relevant to the user's question."},
