@@ -26,9 +26,9 @@ def _load_data(
         queries = {}
         relevant_docs = {}
     else:
-        corpus = dict.fromkeys(langs, {})
-        queries = dict.fromkeys(langs, {})
-        relevant_docs = dict.fromkeys(langs, {})
+        corpus = {lang: {} for lang in langs}
+        queries = {lang: {} for lang in langs}
+        relevant_docs = {lang: {} for lang in langs}
 
     for split in splits:
         query_ds = load_dataset(
@@ -122,13 +122,13 @@ class Vidore2ESGReportsRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         citation=r"""
-    @article{mace2025vidorev2,
-    author = {Macé, Quentin and Loison António and Faysse, Manuel},
-    journal = {arXiv preprint arXiv:2505.17166},
-    title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
-    year = {2025},
-    }
-    """,
+@article{mace2025vidorev2,
+author = {Macé, Quentin and Loison António and Faysse, Manuel},
+journal = {arXiv preprint arXiv:2505.17166},
+title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
+year = {2025},
+}
+""",
         prompt={"query": "Find a screenshot that relevant to the user's question."},
         descriptive_stats={
             "n_samples": None,
@@ -144,6 +144,9 @@ class Vidore2ESGReportsRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
     )
 
     def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata_dict["dataset"]["path"],
             splits=self.metadata_dict["eval_splits"],
@@ -178,13 +181,13 @@ class Vidore2EconomicsReportsRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval
         modalities=["text", "image"],
         sample_creation="found",
         citation=r"""
-    @article{mace2025vidorev2,
-    author = {Macé, Quentin and Loison António and Faysse, Manuel},
-    journal = {arXiv preprint arXiv:2505.17166},
-    title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
-    year = {2025},
-    }
-    """,
+@article{mace2025vidorev2,
+author = {Macé, Quentin and Loison António and Faysse, Manuel},
+journal = {arXiv preprint arXiv:2505.17166},
+title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
+year = {2025},
+}
+""",
         prompt={"query": "Find a screenshot that relevant to the user's question."},
         descriptive_stats={
             "n_samples": None,
@@ -200,6 +203,9 @@ class Vidore2EconomicsReportsRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval
     )
 
     def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata_dict["dataset"]["path"],
             splits=self.metadata_dict["eval_splits"],
@@ -234,13 +240,13 @@ class Vidore2BioMedicalLecturesRetrieval(MultilingualTask, AbsTaskAny2AnyRetriev
         modalities=["text", "image"],
         sample_creation="found",
         citation=r"""
-    @article{mace2025vidorev2,
-    author = {Macé, Quentin and Loison António and Faysse, Manuel},
-    journal = {arXiv preprint arXiv:2505.17166},
-    title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
-    year = {2025},
-    }
-    """,
+@article{mace2025vidorev2,
+author = {Macé, Quentin and Loison António and Faysse, Manuel},
+journal = {arXiv preprint arXiv:2505.17166},
+title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
+year = {2025},
+}
+""",
         prompt={"query": "Find a screenshot that relevant to the user's question."},
         descriptive_stats={
             "n_samples": None,
@@ -256,6 +262,9 @@ class Vidore2BioMedicalLecturesRetrieval(MultilingualTask, AbsTaskAny2AnyRetriev
     )
 
     def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata_dict["dataset"]["path"],
             splits=self.metadata_dict["eval_splits"],
@@ -290,13 +299,13 @@ class Vidore2ESGReportsHLRetrieval(AbsTaskAny2AnyRetrieval):
         modalities=["text", "image"],
         sample_creation="found",
         citation=r"""
-    @article{mace2025vidorev2,
-    author = {Macé, Quentin and Loison António and Faysse, Manuel},
-    journal = {arXiv preprint arXiv:2505.17166},
-    title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
-    year = {2025},
-    }
-    """,
+@article{mace2025vidorev2,
+author = {Macé, Quentin and Loison António and Faysse, Manuel},
+journal = {arXiv preprint arXiv:2505.17166},
+title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
+year = {2025},
+}
+""",
         prompt={"query": "Find a screenshot that relevant to the user's question."},
         descriptive_stats={
             "n_samples": None,
@@ -312,6 +321,9 @@ class Vidore2ESGReportsHLRetrieval(AbsTaskAny2AnyRetrieval):
     )
 
     def load_data(self, **kwargs):
+        if self.data_loaded:
+            return
+
         self.corpus, self.queries, self.relevant_docs = _load_data(
             path=self.metadata_dict["dataset"]["path"],
             splits=self.metadata_dict["eval_splits"],
