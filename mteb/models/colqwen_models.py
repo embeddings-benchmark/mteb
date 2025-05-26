@@ -83,7 +83,7 @@ colqwen2 = ModelMeta(
     framework=["ColPali"],
     reference="https://huggingface.co/vidore/colqwen2-v1.0",
     similarity_fn_name="max_sim",
-    use_instructions=False,
+    use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
 )
 
@@ -108,7 +108,7 @@ colqwen2_5 = ModelMeta(
     framework=["ColPali"],
     reference="https://huggingface.co/vidore/colqwen2.5-v0.2",
     similarity_fn_name="max_sim",
-    use_instructions=False,
+    use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
 )
 
@@ -133,7 +133,7 @@ colnomic_7b = ModelMeta(
     framework=["ColPali"],
     reference="https://huggingface.co/nomic-ai/colnomic-embed-multimodal-7b",
     similarity_fn_name="max_sim",
-    use_instructions=False,
+    use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
 )
 
@@ -160,6 +160,6 @@ colnomic_3b = ModelMeta(
     framework=["ColPali"],
     reference="https://huggingface.co/nomic-ai/colnomic-embed-multimodal-3b",
     similarity_fn_name="max_sim",
-    use_instructions=False,
+    use_instructions=True,
     training_datasets=COLNOMIC_TRAINING_DATA,
 )

@@ -189,7 +189,7 @@ colpali_v1_3 = ModelMeta(
     framework=["ColPali"],
     reference="https://huggingface.co/vidore/colpali-v1.3",
     similarity_fn_name="max_sim",
-    use_instructions=False,
+    use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
 )
 
@@ -214,7 +214,7 @@ colpali_v1_2 = ModelMeta(
     framework=["ColPali"],
     reference="https://huggingface.co/vidore/colpali-v1.2",
     similarity_fn_name="max_sim",
-    use_instructions=False,
+    use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
 )
 
@@ -239,7 +239,7 @@ colpali_v1_1 = ModelMeta(
     framework=["ColPali"],
     reference="https://huggingface.co/vidore/colpali-v1.1",
     similarity_fn_name="max_sim",
-    use_instructions=False,
+    use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
 )
 
@@ -264,6 +264,6 @@ colpali = ModelMeta(
     framework=["ColPali"],
     reference="https://huggingface.co/vidore/colpali",
     similarity_fn_name="max_sim",
-    use_instructions=False,
+    use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
 )

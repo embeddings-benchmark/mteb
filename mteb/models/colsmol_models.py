@@ -58,7 +58,7 @@ colsmol_256m = ModelMeta(
     framework=["ColPali"],
     reference="https://huggingface.co/vidore/colSmol-256M",
     similarity_fn_name="max_sim",
-    use_instructions=False,
+    use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
 )
 
@@ -83,6 +83,6 @@ colsmol_500m = ModelMeta(
     framework=["ColPali"],
     reference="https://huggingface.co/vidore/colSmol-500M",
     similarity_fn_name="max_sim",
-    use_instructions=False,
+    use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
 )
