@@ -1948,11 +1948,11 @@ VIDORE_V2 = Benchmark(
     description="Retrieve associated pages according to questions.",
     reference="https://arxiv.org/abs/2407.01449",
     citation=r"""
-@article{faysse2024colpali,
-  author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
-  journal = {arXiv preprint arXiv:2407.01449},
-  title = {ColPali: Efficient Document Retrieval with Vision Language Models},
-  year = {2024},
+@article{mace2025vidorev2,
+  author = {Macé, Quentin and Loison António and Faysse, Manuel},
+  journal = {arXiv preprint arXiv:2505.17166},
+  title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
+  year = {2025},
 }
 """,
 )
