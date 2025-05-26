@@ -2,17 +2,14 @@ from __future__ import annotations
 
 import logging
 from functools import partial
-from typing import Literal
 
 from mteb.model_meta import ModelMeta
-from mteb.models.colpali_models import ColPaliEngineWrapper
+from mteb.models.colpali_models import COLPALI_TRAINING_DATA, ColPaliEngineWrapper
 from mteb.requires_package import (
     requires_package,
 )
 
 logger = logging.getLogger(__name__)
-
-EncodeTypes = Literal["query", "passage"]
 
 
 class ColSmolWrapper(ColPaliEngineWrapper):
@@ -40,10 +37,6 @@ class ColSmolWrapper(ColPaliEngineWrapper):
         )
 
 
-colpali_training_datasets = {
-    # TODO: Add the training datasets here
-}
-
 colsmol_256m = ModelMeta(
     loader=partial(
         ColSmolWrapper,
@@ -66,7 +59,7 @@ colsmol_256m = ModelMeta(
     reference="https://huggingface.co/vidore/colSmol-256M",
     similarity_fn_name="max_sim",
     use_instructions=False,
-    training_datasets=colpali_training_datasets,
+    training_datasets=COLPALI_TRAINING_DATA,
 )
 
 colsmol_500m = ModelMeta(
@@ -91,5 +84,5 @@ colsmol_500m = ModelMeta(
     reference="https://huggingface.co/vidore/colSmol-500M",
     similarity_fn_name="max_sim",
     use_instructions=False,
-    training_datasets=colpali_training_datasets,
+    training_datasets=COLPALI_TRAINING_DATA,
 )

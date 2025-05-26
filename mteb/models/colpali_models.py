@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from functools import partial
-from typing import Any, Literal
+from typing import Any
 
 import torch
 from PIL import Image
@@ -17,8 +17,6 @@ from mteb.requires_package import (
 )
 
 logger = logging.getLogger(__name__)
-
-EncodeTypes = Literal["query", "passage"]
 
 
 class ColPaliEngineWrapper:
@@ -162,8 +160,12 @@ class ColPaliWrapper(ColPaliEngineWrapper):
         )
 
 
-colpali_training_datasets = {
-    # TODO: Add the training datasets here
+COLPALI_TRAINING_DATA = {
+    # from https://huggingface.co/datasets/vidore/colpali_train_set
+    "DocVQA": ["train"],
+    "InfoVQA": ["train"],
+    "TATDQA": ["train"],
+    "arXivQA": ["train"],
 }
 
 colpali_v1_3 = ModelMeta(
@@ -188,7 +190,7 @@ colpali_v1_3 = ModelMeta(
     reference="https://huggingface.co/vidore/colpali-v1.3",
     similarity_fn_name="max_sim",
     use_instructions=False,
-    training_datasets=colpali_training_datasets,
+    training_datasets=COLPALI_TRAINING_DATA,
 )
 
 colpali_v1_2 = ModelMeta(
@@ -213,7 +215,7 @@ colpali_v1_2 = ModelMeta(
     reference="https://huggingface.co/vidore/colpali-v1.2",
     similarity_fn_name="max_sim",
     use_instructions=False,
-    training_datasets=colpali_training_datasets,
+    training_datasets=COLPALI_TRAINING_DATA,
 )
 
 colpali_v1_1 = ModelMeta(
@@ -238,7 +240,7 @@ colpali_v1_1 = ModelMeta(
     reference="https://huggingface.co/vidore/colpali-v1.1",
     similarity_fn_name="max_sim",
     use_instructions=False,
-    training_datasets=colpali_training_datasets,
+    training_datasets=COLPALI_TRAINING_DATA,
 )
 
 colpali = ModelMeta(
@@ -263,5 +265,5 @@ colpali = ModelMeta(
     reference="https://huggingface.co/vidore/colpali",
     similarity_fn_name="max_sim",
     use_instructions=False,
-    training_datasets=colpali_training_datasets,
+    training_datasets=COLPALI_TRAINING_DATA,
 )

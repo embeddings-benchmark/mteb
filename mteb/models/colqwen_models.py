@@ -2,17 +2,14 @@ from __future__ import annotations
 
 import logging
 from functools import partial
-from typing import Literal
 
 from mteb.model_meta import ModelMeta
-from mteb.models.colpali_models import ColPaliEngineWrapper
+from mteb.models.colpali_models import COLPALI_TRAINING_DATA, ColPaliEngineWrapper
 from mteb.requires_package import (
     requires_package,
 )
 
 logger = logging.getLogger(__name__)
-
-EncodeTypes = Literal["query", "passage"]
 
 
 class ColQwen2Wrapper(ColPaliEngineWrapper):
@@ -65,10 +62,6 @@ class ColQwen2_5Wrapper(ColPaliEngineWrapper):
         )
 
 
-colpali_training_datasets = {
-    # TODO: Add the training datasets here
-}
-
 colqwen2 = ModelMeta(
     loader=partial(
         ColQwen2Wrapper,
@@ -91,7 +84,7 @@ colqwen2 = ModelMeta(
     reference="https://huggingface.co/vidore/colqwen2-v1.0",
     similarity_fn_name="max_sim",
     use_instructions=False,
-    training_datasets=colpali_training_datasets,
+    training_datasets=COLPALI_TRAINING_DATA,
 )
 
 colqwen2_5 = ModelMeta(
@@ -116,7 +109,7 @@ colqwen2_5 = ModelMeta(
     reference="https://huggingface.co/vidore/colqwen2.5-v0.2",
     similarity_fn_name="max_sim",
     use_instructions=False,
-    training_datasets=colpali_training_datasets,
+    training_datasets=COLPALI_TRAINING_DATA,
 )
 
 colnomic_7b = ModelMeta(
@@ -141,8 +134,10 @@ colnomic_7b = ModelMeta(
     reference="https://huggingface.co/nomic-ai/colnomic-embed-multimodal-7b",
     similarity_fn_name="max_sim",
     use_instructions=False,
-    training_datasets=colpali_training_datasets,
+    training_datasets=COLPALI_TRAINING_DATA,
 )
+
+COLNOMIC_TRAINING_DATA = {"VDRMultilingual": ["Train"], **COLPALI_TRAINING_DATA}
 
 colnomic_3b = ModelMeta(
     loader=partial(
@@ -166,5 +161,5 @@ colnomic_3b = ModelMeta(
     reference="https://huggingface.co/nomic-ai/colnomic-embed-multimodal-3b",
     similarity_fn_name="max_sim",
     use_instructions=False,
-    training_datasets=colpali_training_datasets,
+    training_datasets=COLNOMIC_TRAINING_DATA,
 )
