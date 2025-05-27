@@ -31,6 +31,7 @@ BENCHMARK_ENTRIES = [
                 "MIEB(eng)",
                 "MIEB(lite)",
                 "MIEB(Img)",
+                "VisualDocumentRetrieval",
             ]
         ),
         True,
