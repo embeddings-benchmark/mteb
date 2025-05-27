@@ -56,7 +56,7 @@ class IndicQARetrieval(AbsTaskRetrieval, MultilingualTask):
 """,
     )
 
-    def load_data(self):
+    def load_data(self, **kwargs):
         self.corpus = {
             subset: {split: {} for split in self.eval_splits}
             for subset in self.hf_subsets
