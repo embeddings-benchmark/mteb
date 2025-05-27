@@ -1963,3 +1963,39 @@ VIDORE_V2 = Benchmark(
 }
 """,
 )
+
+VISUAL_DOCUMENT_RETRIEVAL = Benchmark(
+    name="VisualDocumentRetrieval",
+    display_name="VisualDocumentRetrieval",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-picture.svg",
+    tasks=get_tasks(
+        tasks=[
+            # v1
+            "VidoreArxivQARetrieval",
+            "VidoreDocVQARetrieval",
+            "VidoreInfoVQARetrieval",
+            "VidoreTabfquadRetrieval",
+            "VidoreTatdqaRetrieval",
+            "VidoreShiftProjectRetrieval",
+            "VidoreSyntheticDocQAAIRetrieval",
+            "VidoreSyntheticDocQAEnergyRetrieval",
+            "VidoreSyntheticDocQAGovernmentReportsRetrieval",
+            "VidoreSyntheticDocQAHealthcareIndustryRetrieval",
+            # v2
+            "Vidore2ESGReportsRetrieval",
+            "Vidore2EconomicsReportsRetrieval",
+            "Vidore2BioMedicalLecturesRetrieval",
+            "Vidore2ESGReportsHLRetrieval",
+        ],
+    ),
+    description="A benchmark for evaluating visual document retrieval, combining ViDoRe v1 and v2.",
+    reference="https://arxiv.org/abs/2407.01449",
+    citation=r"""
+@article{mace2025vidorev2,
+  author = {Macé, Quentin and Loison António and Faysse, Manuel},
+  journal = {arXiv preprint arXiv:2505.17166},
+  title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
+  year = {2025},
+}
+""",
+)
