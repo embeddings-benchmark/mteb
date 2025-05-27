@@ -45,5 +45,6 @@ The following table gives you an overview of the benchmarks in MTEB.
 | [RAR-b](https://arxiv.org/abs/2404.06347) | Reasoning retrieval | 17 | Retrieval: 17 | [Encyclopaedic, Programming, Written] | eng |
 | [ViDoRe(v1)](https://arxiv.org/abs/2407.01449) | ViDoRe(v1) | 10 | DocumentUnderstanding: 10 | [Academic] | eng |
 | [ViDoRe(v2)](https://arxiv.org/abs/2407.01449) | ViDoRe(v2) | 4 | DocumentUnderstanding: 4 | [Academic] | deu,eng,fra,spa |
+| [VisualDocumentRetrieval](https://arxiv.org/abs/2407.01449) | VisualDocumentRetrieval | 14 | DocumentUnderstanding: 14 | [Academic] | deu,eng,fra,spa |
 
 <!-- BENCHMARKS TABLE END -->
