@@ -1966,7 +1966,7 @@ VIDORE_V2 = Benchmark(
 
 VISUAL_DOCUMENT_RETRIEVAL = Benchmark(
     name="VisualDocumentRetrieval",
-    display_name="VisualDocumentRetrieval",
+    display_name="Visual Document Retrieval",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-picture.svg",
     tasks=get_tasks(
         tasks=[
