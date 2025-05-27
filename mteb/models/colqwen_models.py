@@ -3,6 +3,9 @@ from __future__ import annotations
 import logging
 from functools import partial
 
+import torch
+from transformers.utils.import_utils import is_flash_attn_2_available
+
 from mteb.model_meta import ModelMeta
 from mteb.models.colpali_models import COLPALI_TRAINING_DATA, ColPaliEngineWrapper
 from mteb.requires_package import (
@@ -19,7 +22,7 @@ class ColQwen2Wrapper(ColPaliEngineWrapper):
         self,
         model_name: str = "vidore/colqwen2-v1.0",
         revision: str | None = None,
-        device: str = None,
+        device: str | None = None,
         **kwargs,
     ):
         requires_package(
@@ -44,7 +47,7 @@ class ColQwen2_5Wrapper(ColPaliEngineWrapper):
         self,
         model_name: str = "vidore/colqwen2.5-v0.2",
         revision: str | None = None,
-        device: str = None,
+        device: str | None = None,
         **kwargs,
     ):
         requires_package(
@@ -66,6 +69,10 @@ colqwen2 = ModelMeta(
     loader=partial(
         ColQwen2Wrapper,
         model_name="vidore/colqwen2-v1.0",
+        torch_dtype=torch.float16,
+        attn_implementation="flash_attention_2"
+        if is_flash_attn_2_available()
+        else None,
     ),
     name="vidore/colqwen2-v1.0",
     languages=["eng-Latn"],
@@ -91,6 +98,10 @@ colqwen2_5 = ModelMeta(
     loader=partial(
         ColQwen2_5Wrapper,
         model_name="vidore/colqwen2.5-v0.2",
+        torch_dtype=torch.float16,
+        attn_implementation="flash_attention_2"
+        if is_flash_attn_2_available()
+        else None,
     ),
     name="vidore/colqwen2.5-v0.2",
     languages=["eng-Latn"],
@@ -116,6 +127,10 @@ colnomic_7b = ModelMeta(
     loader=partial(
         ColQwen2_5Wrapper,
         model_name="nomic-ai/colnomic-embed-multimodal-7b",
+        torch_dtype=torch.float16,
+        attn_implementation="flash_attention_2"
+        if is_flash_attn_2_available()
+        else None,
     ),
     name="nomic-ai/colnomic-embed-multimodal-7b",
     languages=["eng-Latn"],
@@ -138,14 +153,25 @@ colnomic_7b = ModelMeta(
 )
 
 COLNOMIC_TRAINING_DATA = {"VDRMultilingual": ["Train"], **COLPALI_TRAINING_DATA}
+COLNOMIC_LANGUAGES = [
+    "deu-Latn",  # German
+    "spa-Latn",  # Spanish
+    "eng-Latn",  # English
+    "fra-Latn",  # French
+    "ita-Latn",  # Italian
+]
 
 colnomic_3b = ModelMeta(
     loader=partial(
         ColQwen2_5Wrapper,
         model_name="nomic-ai/colnomic-embed-multimodal-3b",
+        torch_dtype=torch.float16,
+        attn_implementation="flash_attention_2"
+        if is_flash_attn_2_available()
+        else None,
     ),
     name="nomic-ai/colnomic-embed-multimodal-3b",
-    languages=["eng-Latn"],
+    languages=COLNOMIC_LANGUAGES,
     revision="530094e83a40ca4edcb5c9e5ddfa61a4b5ea0d2f",
     release_date="2025-03-31",
     modalities=["image", "text"],
@@ -168,10 +194,14 @@ colnomic_7b = ModelMeta(
     loader=partial(
         ColQwen2_5Wrapper,
         model_name="nomic-ai/colnomic-embed-multimodal-7b",
+        torch_dtype=torch.float16,
+        attn_implementation="flash_attention_2"
+        if is_flash_attn_2_available()
+        else None,
     ),
     name="nomic-ai/colnomic-embed-multimodal-7b",
-    languages=["eng-Latn"],
-    revision="530094e83a40ca4edcb5c9e5ddfa61a4b5ea0d2f",
+    languages=COLNOMIC_LANGUAGES,
+    revision="09dbc9502b66605d5be56d2226019b49c9fd3293",
     release_date="2025-03-31",
     modalities=["image", "text"],
     n_parameters=7_000_000_000,

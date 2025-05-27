@@ -13,14 +13,13 @@ from mteb.model_meta import ModelMeta
 from mteb.requires_package import (
     requires_image_dependencies,
     requires_package,
-    suggest_package,
 )
 
 logger = logging.getLogger(__name__)
 
 
 class ColPaliEngineWrapper:
-    """Base wrapper for ColPali models. Adapted from https://github.com/illuin-tech/colpali/tree/bebcdd6715dba42624acd8d7f7222a16a5daf848/colpali_engine/models"""
+    """Base wrapper for `colpali_engine` models. Adapted from https://github.com/illuin-tech/colpali/tree/bebcdd6715dba42624acd8d7f7222a16a5daf848/colpali_engine/models"""
 
     def __init__(
         self,
@@ -28,17 +27,10 @@ class ColPaliEngineWrapper:
         model_class: type,
         processor_class: type,
         revision: str | None = None,
-        device: str = None,
+        device: str | None = None,
         **kwargs,
     ):
         requires_image_dependencies()
-        if suggest_package(
-            self,
-            "flash_attn",
-            model_name,
-            "pip install flash-attn --no-build-isolation",
-        ):
-            import flash_attn  # noqa
         requires_package(
             self, "colpali_engine", model_name, "pip install mteb[colpali_engine]"
         )
@@ -47,9 +39,9 @@ class ColPaliEngineWrapper:
 
         # Load model
         self.mdl = model_class.from_pretrained(
-            model_name, trust_remote_code=True, revision=revision, **kwargs
+            model_name, revision=revision, device_map=self.device, **kwargs
         )
-        self.mdl.eval().to(self.device)
+        self.mdl.eval()
 
         # Load processor
         self.processor = processor_class.from_pretrained(model_name)
@@ -142,7 +134,7 @@ class ColPaliWrapper(ColPaliEngineWrapper):
         self,
         model_name: str = "vidore/colpali-v1.3",
         revision: str | None = None,
-        device: str = "cuda" if torch.cuda.is_available() else "cpu",
+        device: str | None = None,
         **kwargs,
     ):
         requires_package(
@@ -172,10 +164,11 @@ colpali_v1_1 = ModelMeta(
     loader=partial(
         ColPaliWrapper,
         model_name="vidore/colpali-v1.1",
+        torch_dtype=torch.float16,
     ),
     name="vidore/colpali-v1.1",
     languages=["eng-Latn"],
-    revision="1b5c8929330df1a66de441a9b5409a878f0de5b0",
+    revision="a0f15e3bcf97110e7ac1bb4be4bcd30eeb31992a",
     release_date="2024-08-21",
     modalities=["image", "text"],
     n_parameters=2_920_000_000,
@@ -197,10 +190,11 @@ colpali_v1_2 = ModelMeta(
     loader=partial(
         ColPaliWrapper,
         model_name="vidore/colpali-v1.2",
+        torch_dtype=torch.float16,
     ),
     name="vidore/colpali-v1.2",
     languages=["eng-Latn"],
-    revision="1b5c8929330df1a66de441a9b5409a878f0de5b0",
+    revision="6b89bc63c16809af4d111bfe412e2ac6bc3c9451",
     release_date="2024-08-26",
     modalities=["image", "text"],
     n_parameters=2_920_000_000,
@@ -222,6 +216,7 @@ colpali_v1_3 = ModelMeta(
     loader=partial(
         ColPaliWrapper,
         model_name="vidore/colpali-v1.3",
+        torch_dtype=torch.float16,
     ),
     name="vidore/colpali-v1.3",
     languages=["eng-Latn"],

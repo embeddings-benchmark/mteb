@@ -3,6 +3,9 @@ from __future__ import annotations
 import logging
 from functools import partial
 
+import torch
+from transformers.utils.import_utils import is_flash_attn_2_available
+
 from mteb.model_meta import ModelMeta
 from mteb.models.colpali_models import COLPALI_TRAINING_DATA, ColPaliEngineWrapper
 from mteb.requires_package import (
@@ -19,7 +22,7 @@ class ColSmolWrapper(ColPaliEngineWrapper):
         self,
         model_name: str = "vidore/colqwen2-v1.0",
         revision: str | None = None,
-        device: str = None,
+        device: str | None = None,
         **kwargs,
     ):
         requires_package(
@@ -41,6 +44,10 @@ colsmol_256m = ModelMeta(
     loader=partial(
         ColSmolWrapper,
         model_name="vidore/colSmol-256M",
+        torch_dtype=torch.float16,
+        attn_implementation="flash_attention_2"
+        if is_flash_attn_2_available()
+        else None,
     ),
     name="vidore/colSmol-256M",
     languages=["eng-Latn"],
@@ -66,6 +73,10 @@ colsmol_500m = ModelMeta(
     loader=partial(
         ColSmolWrapper,
         model_name="vidore/colSmol-500M",
+        torch_dtype=torch.float16,
+        attn_implementation="flash_attention_2"
+        if is_flash_attn_2_available()
+        else None,
     ),
     name="vidore/colSmol-500M",
     languages=["eng-Latn"],
