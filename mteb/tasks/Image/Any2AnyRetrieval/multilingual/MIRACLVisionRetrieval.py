@@ -64,22 +64,33 @@ def _load_miracl_data(
             trust_remote_code=trust_remote_code,
         )
 
+        # corpus_data = corpus_data.map(
+        #     lambda x: {
+        #         "id": str(x["_id"]),
+        #         # "modality": "text",
+        #         "modality": "image",
+        #         "image": id2img[str(x["image_id"])],
+        #     },
+        #     remove_columns=["_id", "image_id", "text_downloaded_from_Wikipedia"],
+        # )
+
         # assume images_data is a DatasetDict with the same splits as corpus_data
-        id2img = {
-            str(ex["file_name"]): ex["image"]
-            for ex in images_data[split]  # e.g. “train”, “validation”, etc.
+        imgid2docid = {
+            str(ex["image_id"]): str(ex["_id"])
+            for ex in corpus_data[split]  # e.g. “train”, “validation”, etc.
         }
 
-        corpus_data = corpus_data.map(
+        images_data = images_data.map(
             lambda x: {
-                "id": str(x["_id"]),
+                "id": imgid2docid[str(x["file_name"])],
                 # "modality": "text",
                 "modality": "image",
-                "image": id2img[str(x["image_id"])],
+                "text": None,
             },
-            remove_columns=["_id", "image_id", "text_downloaded_from_Wikipedia"],
+            remove_columns=["file_name"],
         )
-        corpus[lang][split] = corpus_data[split]
+
+        corpus[lang][split] = images_data[split]
 
         # Load queries data
         queries_identifier = f"queries-{lang}"
