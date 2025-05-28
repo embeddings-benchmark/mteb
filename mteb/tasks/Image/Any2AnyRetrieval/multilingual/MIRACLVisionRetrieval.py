@@ -9,24 +9,24 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 _EVAL_SPLIT = "default"
 
 _LANGUAGES = {
-    # "ar": ["ara-Arab"],
-    # "bn": ["ben-Beng"],
-    # "de": ["deu-Latn"],
-    # "en": ["eng-Latn"],
-    # "es": ["spa-Latn"],
-    # "fa": ["fas-Arab"],
-    # "fi": ["fin-Latn"],
+    "ar": ["ara-Arab"],
+    "bn": ["ben-Beng"],
+    "de": ["deu-Latn"],
+    "en": ["eng-Latn"],
+    "es": ["spa-Latn"],
+    "fa": ["fas-Arab"],
+    "fi": ["fin-Latn"],
     "fr": ["fra-Latn"],
-    # "hi": ["hin-Deva"],
-    # "id": ["ind-Latn"],
-    # "ja": ["jpn-Jpan"],
-    # "ko": ["kor-Kore"],
-    # "ru": ["rus-Cyrl"],
-    # "sw": ["swa-Latn"],
-    # "te": ["tel-Telu"],
-    # "th": ["tha-Thai"],
-    # "yo": ["yor-Latn"],
-    # "zh": ["zho-Hans"],
+    "hi": ["hin-Deva"],
+    "id": ["ind-Latn"],
+    "ja": ["jpn-Jpan"],
+    "ko": ["kor-Kore"],
+    "ru": ["rus-Cyrl"],
+    "sw": ["swa-Latn"],
+    "te": ["tel-Telu"],
+    "th": ["tha-Thai"],
+    "yo": ["yor-Latn"],
+    "zh": ["zho-Hans"],
 }
 
 
@@ -64,17 +64,17 @@ def _load_miracl_data(
             trust_remote_code=trust_remote_code,
         )
 
+
+        # For text data, it would look like this:
         # corpus_data = corpus_data.map(
         #     lambda x: {
         #         "id": str(x["_id"]),
-        #         # "modality": "text",
-        #         "modality": "image",
-        #         "image": id2img[str(x["image_id"])],
+        #         "modality": "text",
         #     },
         #     remove_columns=["_id", "image_id", "text_downloaded_from_Wikipedia"],
         # )
+        # corpus[lang][split] = corpus_data[split]
 
-        # assume images_data is a DatasetDict with the same splits as corpus_data
         imgid2docid = {
             str(ex["image_id"]): str(ex["_id"])
             for ex in corpus_data[split]  # e.g. “train”, “validation”, etc.
