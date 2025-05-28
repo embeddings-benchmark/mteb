@@ -54,12 +54,19 @@ def _load_miracl_data(
             revision=revision,
             trust_remote_code=trust_remote_code,
         )
-        corpus[lang][split] = {}
-        for row in corpus_data["corpus"]:
-            docid = row["docid"]
-            doc_title = row["title"]
-            doc_text = row["text"]
-            corpus[lang][split][docid] = {"title": doc_title, "text": doc_text}
+
+        corpus_data = corpus_data.map(
+            lambda x: {
+                "id": x['_id'],
+                "text": x["text"],
+                "modality": "text",
+                "title": x["title"],
+                "image_id": x["image_id"],
+            },
+            remove_columns=["_id"],
+        )
+        corpus[lang][split] = corpus_data[split]
+
 
         # Load queries data
         queries_identifier = f"queries-{lang}"
@@ -70,14 +77,19 @@ def _load_miracl_data(
             revision=revision,
             trust_remote_code=trust_remote_code,
         )
-        queries[lang][split] = {}
-        for row in queries_data["queries"]:
-            query_id = row["query_id"]
-            query_text = row["query"]
-            queries[lang][split][query_id] = query_text
+        queries_data = queries_data.map(
+            lambda x: {
+                "id": x['_id'],
+                "text": x["text"],
+                "modality": "text",
+                "image": None,
+            },
+            remove_columns=["_id"],
+        )
+        queries[lang][split] = queries_data[split]
 
         # Load relevant documents data
-        qrels_identifier = f"{lang}"
+        qrels_identifier = f"qrels-{lang}"
         qrels_data = datasets.load_dataset(
             path,
             qrels_identifier,
@@ -87,8 +99,8 @@ def _load_miracl_data(
         )
         relevant_docs[lang][split] = {}
         for row in qrels_data[split]:
-            query_id = row["query_id"]
-            doc_id = row["docid"]
+            query_id = row["query-id"]
+            doc_id = row["corpus-id"]
             score = row["score"]
             if query_id not in relevant_docs[lang][split]:
                 relevant_docs[lang][split][query_id] = {}
@@ -113,11 +125,11 @@ class MIRACLVisionRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         },
         type="DocumentUnderstanding",
         category="t2i",
-        eval_splits=["test"],
-        eval_langs=list(_LANGUAGES.keys()),
+        eval_splits=["default"],
+        eval_langs=_LANGUAGES,
         main_score="ndcg_at_5",
         date=("2025-03-01", "2025-06-01"),
-        domains=["Wikipedia"],
+        domains=["Encyclopaedic"],
         task_subtypes=["Image Text Retrieval"],
         license="cc-by-sa-4.0",
         annotations_creators="derived",
@@ -156,7 +168,7 @@ class MIRACLVisionRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         self.corpus, self.queries, self.relevant_docs = _load_miracl_data(
             path=self.metadata_dict["dataset"]["path"],
             splits=self.metadata_dict["eval_splits"],
-            langs=self.hf_subsets,
+            langs=self.metadata_dict["eval_langs"],
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["dataset"]["revision"],
         )
