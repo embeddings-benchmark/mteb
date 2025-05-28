@@ -191,7 +191,7 @@ class MIRACLVisionRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         self.corpus, self.queries, self.relevant_docs = _load_miracl_data(
             path=self.metadata_dict["dataset"]["path"],
             splits=self.metadata_dict["eval_splits"],
-            langs=self.metadata_dict["eval_langs"],
+            langs=self.hf_subsets,
             cache_dir=kwargs.get("cache_dir", None),
             revision=self.metadata_dict["dataset"]["revision"],
         )
