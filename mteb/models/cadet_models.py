@@ -3,10 +3,28 @@ from __future__ import annotations
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta, sentence_transformers_loader
 from functools import partial
+from mteb.models.bge_models import bge_m3_training_data
 
 cadet_training_data = {
+    # we train with the corpora of FEVER, MSMARCO, and DBPEDIA. We only train with synthetic generated queries. However, we do use queries from MSMARCO as examples for synthetic query generation.
     "MSMARCO": ["train"],
-    # we train with the corpora of FEVER, MSMARCO, and DBPEDIA. We only train with synthetic generated queries (but we do use query examples from the MSMARCO train set), so perhaps it is not suitable to list "train" for FEVER and DBPEDIA?
+    "DBPedia": [],
+    
+    # We distill from RankT5 which trains using MSMARCO + NQ. source: https://arxiv.org/pdf/2210.10634
+    "NQ": ["train"],
+
+    # We also distill from bge-rerankerv2.5-gemma2-lightweight, which utilizes the BGE-M3 dataset, along with Arguana, HotpotQA, and FEVER for training. source: https://arxiv.org/pdf/2409.15700
+    "FEVER": ["train"],
+    "HotpotQA": ["train"],
+    "ArguAna": ["train"],
+}
+
+for k, v in bge_m3_training_data.items():
+    cadet_training_data.setdefault(k, []).extend(v)
+# deduplicate
+cadet_training_data = {
+    k: list(dict.fromkeys(v))
+    for k, v in cadet_training_data.items()
 }
 
 
@@ -39,4 +57,3 @@ cadet_embed = ModelMeta(
     training_datasets=cadet_training_data,
     adapted_from="intfloat/e5-base-unsupervised",
 )
-
