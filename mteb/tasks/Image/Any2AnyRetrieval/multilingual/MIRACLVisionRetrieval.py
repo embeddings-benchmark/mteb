@@ -9,24 +9,24 @@ from mteb.abstasks.TaskMetadata import TaskMetadata
 _EVAL_SPLIT = "default"
 
 _LANGUAGES = {
-    "ar": ["ara-Arab"],
-    "bn": ["ben-Beng"],
-    "de": ["deu-Latn"],
-    "en": ["eng-Latn"],
-    "es": ["spa-Latn"],
-    "fa": ["fas-Arab"],
-    "fi": ["fin-Latn"],
+    # "ar": ["ara-Arab"],
+    # "bn": ["ben-Beng"],
+    # "de": ["deu-Latn"],
+    # "en": ["eng-Latn"],
+    # "es": ["spa-Latn"],
+    # "fa": ["fas-Arab"],
+    # "fi": ["fin-Latn"],
     "fr": ["fra-Latn"],
-    "hi": ["hin-Deva"],
-    "id": ["ind-Latn"],
-    "ja": ["jpn-Jpan"],
-    "ko": ["kor-Kore"],
-    "ru": ["rus-Cyrl"],
-    "sw": ["swa-Latn"],
-    "te": ["tel-Telu"],
-    "th": ["tha-Thai"],
-    "yo": ["yor-Latn"],
-    "zh": ["zho-Hans"],
+    # "hi": ["hin-Deva"],
+    # "id": ["ind-Latn"],
+    # "ja": ["jpn-Jpan"],
+    # "ko": ["kor-Kore"],
+    # "ru": ["rus-Cyrl"],
+    # "sw": ["swa-Latn"],
+    # "te": ["tel-Telu"],
+    # "th": ["tha-Thai"],
+    # "yo": ["yor-Latn"],
+    # "zh": ["zho-Hans"],
 }
 
 
@@ -57,7 +57,7 @@ def _load_miracl_data(
 
         corpus_data = corpus_data.map(
             lambda x: {
-                "id": x["_id"],
+                "id": str(x["_id"]),
                 "text": x["text"],
                 "modality": "text",
                 "title": x["title"],
@@ -78,7 +78,7 @@ def _load_miracl_data(
         )
         queries_data = queries_data.map(
             lambda x: {
-                "id": x["_id"],
+                "id": str(x["_id"]),
                 "text": x["text"],
                 "modality": "text",
                 "image": None,
@@ -98,8 +98,8 @@ def _load_miracl_data(
         )
         relevant_docs[lang][split] = {}
         for row in qrels_data[split]:
-            query_id = row["query-id"]
-            doc_id = row["corpus-id"]
+            query_id = str(row["query-id"])
+            doc_id = str(row["corpus-id"])
             score = row["score"]
             if query_id not in relevant_docs[lang][split]:
                 relevant_docs[lang][split][query_id] = {}
