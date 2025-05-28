@@ -64,7 +64,6 @@ def _load_miracl_data(
             trust_remote_code=trust_remote_code,
         )
 
-
         # For text data, it would look like this:
         # corpus_data = corpus_data.map(
         #     lambda x: {
