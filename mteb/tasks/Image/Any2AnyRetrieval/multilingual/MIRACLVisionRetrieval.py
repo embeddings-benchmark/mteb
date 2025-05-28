@@ -158,7 +158,7 @@ class MIRACLVisionRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         annotations_creators="derived",
         dialect=[],
         modalities=["text", "image"],
-        sample_creation="found",
+        sample_creation="created",
         bibtex_citation=r"""
 @article{osmulski2025miraclvisionlargemultilingualvisual,
       title={MIRACL-VISION: A Large, multilingual, visual document retrieval benchmark}, 
@@ -171,17 +171,6 @@ class MIRACLVisionRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
 }
 """,
         prompt={"query": "Find a screenshot that is relevant to the user's query."},
-        descriptive_stats={
-            "n_samples": None,
-            "avg_character_length": {
-                "test": {
-                    "average_document_length": 1.0,
-                    "num_documents": 30,
-                    "num_queries": 228,
-                    "average_relevant_docs_per_query": 1.0,
-                }
-            },
-        },
     )
 
     def load_data(self, **kwargs):
