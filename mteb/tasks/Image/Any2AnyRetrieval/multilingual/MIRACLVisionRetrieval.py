@@ -55,15 +55,29 @@ def _load_miracl_data(
             trust_remote_code=trust_remote_code,
         )
 
+        images_identifier = f"images-{lang}"
+        images_data = datasets.load_dataset(
+            path,
+            images_identifier,
+            cache_dir=cache_dir,
+            revision=revision,
+            trust_remote_code=trust_remote_code,
+        )
+
+        # assume images_data is a DatasetDict with the same splits as corpus_data
+        id2img = {
+            str(ex["file_name"]): ex["image"]
+            for ex in images_data[split]  # e.g. “train”, “validation”, etc.
+        }
+
         corpus_data = corpus_data.map(
             lambda x: {
                 "id": str(x["_id"]),
-                "text": x["text"],
-                "modality": "text",
-                "title": x["title"],
-                "image_id": x["image_id"],
+                # "modality": "text",
+                "modality": "image",
+                "image": id2img[str(x["image_id"])],
             },
-            remove_columns=["_id"],
+            remove_columns=["_id", "image_id", "text_downloaded_from_Wikipedia"],
         )
         corpus[lang][split] = corpus_data[split]
 
