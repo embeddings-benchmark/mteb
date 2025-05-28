@@ -89,6 +89,7 @@ from .eng.QuailRetrieval import *
 from .eng.QuoraRetrieval import *
 from .eng.RARbCodeRetrieval import *
 from .eng.RARbMathRetrieval import *
+from .eng.R2MEDRetrieval import *
 from .eng.SCIDOCSRetrieval import *
 from .eng.SciFactRetrieval import *
 from .eng.SiqaRetrieval import *
