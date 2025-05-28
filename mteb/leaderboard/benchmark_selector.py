@@ -31,6 +31,7 @@ BENCHMARK_ENTRIES = [
                 "MIEB(eng)",
                 "MIEB(lite)",
                 "MIEB(Img)",
+                "VisualDocumentRetrieval",
             ]
         ),
         True,
@@ -68,6 +69,7 @@ BENCHMARK_ENTRIES = [
                 "MTEB(kor, v1)",
                 "MTEB(pol, v1)",
                 "MTEB(rus, v1)",
+                "MTEB(fas, v1)",
             ]
         ),
     ),

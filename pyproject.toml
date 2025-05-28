@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.38.16"
+version = "1.38.20"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -95,6 +95,7 @@ llm2vec = ["llm2vec>=0.2.3,<0.3.0"]
 timm = ["timm>=1.0.15,<1.1.0"]
 open_clip_torch = ["open_clip_torch==2.31.0"]
 ark = ["volcengine-python-sdk[ark]==3.0.2", "tiktoken>=0.8.0"]
+colpali_engine = ["colpali_engine>=0.3.10"]
 
 [tool.coverage.report]
 
