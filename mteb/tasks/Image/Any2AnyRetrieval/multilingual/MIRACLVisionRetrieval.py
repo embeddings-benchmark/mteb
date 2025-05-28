@@ -38,9 +38,9 @@ def _load_miracl_data(
     revision: str | None = None,
     trust_remote_code: bool = False,
 ):
-    corpus = {lang: {split: None for split in splits} for lang in langs}
-    queries = {lang: {split: None for split in splits} for lang in langs}
-    relevant_docs = {lang: {split: None for split in splits} for lang in langs}
+    corpus = {lang: dict.fromkeys(splits) for lang in langs}
+    queries = {lang: dict.fromkeys(splits) for lang in langs}
+    relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}
 
     split = _EVAL_SPLIT
 
@@ -57,7 +57,7 @@ def _load_miracl_data(
 
         corpus_data = corpus_data.map(
             lambda x: {
-                "id": x['_id'],
+                "id": x["_id"],
                 "text": x["text"],
                 "modality": "text",
                 "title": x["title"],
@@ -66,7 +66,6 @@ def _load_miracl_data(
             remove_columns=["_id"],
         )
         corpus[lang][split] = corpus_data[split]
-
 
         # Load queries data
         queries_identifier = f"queries-{lang}"
@@ -79,7 +78,7 @@ def _load_miracl_data(
         )
         queries_data = queries_data.map(
             lambda x: {
-                "id": x['_id'],
+                "id": x["_id"],
                 "text": x["text"],
                 "modality": "text",
                 "image": None,
@@ -111,7 +110,6 @@ def _load_miracl_data(
     relevant_docs = datasets.DatasetDict(relevant_docs)
 
     return corpus, queries, relevant_docs
-
 
 
 class MIRACLVisionRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
