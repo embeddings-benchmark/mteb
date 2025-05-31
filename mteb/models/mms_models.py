@@ -9,7 +9,7 @@ import torch
 import torchaudio
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import AutoProcessor, Wav2Vec2FeatureExtractor, Wav2Vec2Model
+from transformers import AutoProcessor, Wav2Vec2Model
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
 from mteb.model_meta import ModelMeta
@@ -30,29 +30,24 @@ class MMSWrapper(Wrapper):
         self.target_lang = target_lang
         self.device = device
 
-        # MMS uses Wav2Vec2FeatureExtractor
-        self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(
-            model_name, revision=model_revision
-        )
-
-        # Also load language-specific processor
+        # MMS models use AutoProcessor which handles language-specific processing
         self.processor = AutoProcessor.from_pretrained(
             model_name, target_lang=target_lang, revision=model_revision
         )
-
+        
         # Load model with specified language
         self.model = Wav2Vec2Model.from_pretrained(
             model_name, revision=model_revision
         ).to(self.device)
-
+        
         # Load language adapter if available
         try:
             self.model.load_adapter(target_lang)
         except Exception:
             pass
-
+            
         self.model.eval()
-        self.sampling_rate = self.feature_extractor.sampling_rate
+        self.sampling_rate = 16000  # MMS models use 16kHz sampling rate
 
     def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
         processed_audio = []
@@ -142,7 +137,7 @@ class MMSWrapper(Wrapper):
                 elif batch_tensor.ndim > 2:
                     batch_tensor = batch_tensor.view(batch_tensor.size(0), -1)
 
-                inputs = self.feature_extractor(
+                inputs = self.processor(
                     batch_tensor.cpu().numpy(),
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
