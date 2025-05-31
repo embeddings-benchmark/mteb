@@ -16,6 +16,7 @@ from .ces.CzechSoMeSentimentClassification import *
 from .ces.CzechSubjectivityClassification import *
 from .dan.AngryTweetsClassification import *
 from .dan.DanishPoliticalCommentsClassification import *
+from .dan.DdiscoCohesionClassification import *
 from .dan.DKHateClassification import *
 from .dan.LccSentimentClassification import *
 from .deu.GermanPoliticiansTwitterSentimentClassification import *
