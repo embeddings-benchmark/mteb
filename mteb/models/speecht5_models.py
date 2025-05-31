@@ -127,7 +127,8 @@ class SpeechT5Wrapper(Wrapper):
                 ).to(self.device)
 
                 outputs = self.model.encoder(
-                    inputs.input_features,
+                    inputs.input_values,
+                    attention_mask=inputs.attention_mask,
                     output_hidden_states=True,
                 )
 
