@@ -71,6 +71,7 @@ TASK_SUBTYPE = Literal[
     "Intent Classification",
     "Vehicle Clustering",
     "Environment Sound Clustering",
+    "Environment Sound Reranking",
     "Rendered semantic textual similarity",
     "Gender Classification",
     "Age Classification",
