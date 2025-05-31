@@ -462,6 +462,18 @@ class AbsTask(ABC):
 
         Args:
             repo_name: The name of the repository to push the dataset to.
+
+        Example:
+            >>> import mteb
+            >>> task = mteb.get_task("Caltech101")
+            >>> repo_name = f"myorg/{task.metadata.name}"
+            >>> task.load_data() # ensure that the dataset can load
+            >>>
+            >>> # Create the repo on HuggingFace Hub if it does not exist
+            >>> from huggingface_hub import create_repo
+            >>> create_repo(repo_name, repo_type="dataset")
+            >>> # Push the dataset to the Hub
+            >>> task.push_dataset_to_hub(repo_name)
         """
         if not self.data_loaded:
             self.load_data()
