@@ -1,11 +1,12 @@
 from __future__ import annotations
 
+import difflib
 import logging
 from collections.abc import Iterable
-from functools import lru_cache
 from typing import Any
 
 from huggingface_hub import ModelCard
+from huggingface_hub.errors import RepositoryNotFoundError
 from sentence_transformers import SentenceTransformer
 
 from mteb.abstasks.AbsTask import AbsTask
@@ -273,76 +274,66 @@ def get_model_meta(
         A model metadata object
     """
     if model_name in MODEL_REGISTRY:
-        if revision and (not MODEL_REGISTRY[model_name].revision == revision):
+        model_meta = MODEL_REGISTRY[model_name]
+
+        if revision and (not model_meta.revision == revision):
             raise ValueError(
-                f"Model revision {revision} not found for model {model_name}. Expected {MODEL_REGISTRY[model_name].revision}."
+                f"Model revision {revision} not found for model {model_name}. Expected {model_meta.revision}."
             )
-        return MODEL_REGISTRY[model_name]
-    else:  # assume it is a sentence-transformers model
-        if not fetch_from_hf:
-            raise ValueError(
-                f"Model {model_name} not found in MTEB registry. Please set fetch_from_hf=False to load it from HuggingFace Hub."
-            )
+        return model_meta
+    if fetch_from_hf:
         logger.info(
-            "Model not found in model registry, assuming it is on HF Hub model."
+            "Model not found in model registry. Attempting to extract metadata by loading the model ({model_name}) using HuggingFace."
         )
-        logger.info(
-            f"Attempting to extract metadata by loading the model ({model_name}) using HuggingFace."
-        )
-        meta = model_meta_from_hf_hub(model_name)
-        meta.revision = revision
-        meta.name = model_name
-    return meta
+        try:
+            meta = model_meta_from_hf_hub(model_name)
+            meta.revision = revision
+        except RepositoryNotFoundError:
+            pass
+
+    not_found_msg = f"Model '{model_name}' not found in MTEB registry"
+    not_found_msg += " nor on the Huggingface Hub." if fetch_from_hf else "."
+
+    close_matches = difflib.get_close_matches(model_name, MODEL_REGISTRY.keys())
+    model_names_no_org = {mdl: mdl.split("/")[-1] for mdl in MODEL_REGISTRY.keys()}
+    if model_name in model_names_no_org:
+        close_matches = [model_names_no_org[model_name]] + close_matches
+
+    if close_matches:
+        if len(close_matches) > 1:
+            suggestion = f" Did you mean: '{close_matches[0]}' or {close_matches[1]}?"
+        else:
+            suggestion = f" Did you mean: '{close_matches[0]}'?"
+
+    raise KeyError(not_found_msg + suggestion)
 
 
-@lru_cache
 def model_meta_from_hf_hub(model_name: str) -> ModelMeta:
-    try:
-        card = ModelCard.load(model_name)
-        card_data = card.data.to_dict()
-        frameworks = ["PyTorch"]
-        if card_data.get("library_name", None) == "sentence-transformers":
-            frameworks.append("Sentence Transformers")
-        return ModelMeta(
-            name=model_name,
-            revision=card_data.get("base_model_revision", None),
-            # TODO
-            release_date=None,
-            # TODO: We need a mapping between conflicting language codes
-            languages=None,
-            license=card_data.get("license", None),
-            framework=frameworks,  # type: ignore
-            training_datasets=card_data.get("datasets", None),
-            similarity_fn_name=None,
-            n_parameters=None,
-            memory_usage_mb=None,
-            max_tokens=None,
-            embed_dim=None,
-            open_weights=True,
-            public_training_code=None,
-            public_training_data=None,
-            use_instructions=None,
-        )
-    except Exception as e:
-        logger.warning(f"Failed to extract metadata from model: {e}.")
-        return ModelMeta(
-            name=model_name,
-            revision=None,
-            languages=None,
-            release_date=None,
-            n_parameters=None,
-            memory_usage_mb=None,
-            max_tokens=None,
-            embed_dim=None,
-            license=None,
-            open_weights=True,
-            public_training_code=None,
-            public_training_data=None,
-            similarity_fn_name=None,
-            use_instructions=None,
-            training_datasets=None,
-            framework=[],
-        )
+    card = ModelCard.load(model_name)
+    card_data = card.data.to_dict()
+    frameworks = ["PyTorch"]
+    if card_data.get("library_name", None) == "sentence-transformers":
+        frameworks.append("Sentence Transformers")
+    return ModelMeta(
+        name=model_name,
+        revision=card_data.get("base_model_revision", None),
+        # TODO: Add release date
+        release_date=None,
+        # TODO: We need a mapping between conflicting language codes
+        languages=None,
+        license=card_data.get("license", None),
+        framework=frameworks,  # type: ignore
+        training_datasets=card_data.get("datasets", None),
+        similarity_fn_name=None,
+        n_parameters=None,
+        memory_usage_mb=None,
+        max_tokens=None,
+        embed_dim=None,
+        open_weights=True,
+        public_training_code=None,
+        public_training_data=None,
+        use_instructions=None,
+    )
 
 
 def model_meta_from_sentence_transformers(model: SentenceTransformer) -> ModelMeta:
