@@ -11,23 +11,26 @@ import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
-from mteb.models.wrapper import Wrapper
-from mteb.requires_package import requires_package
-
 from mteb.models.bge_models import bge_chinese_training_data
 from mteb.models.nvidia_models import nvidia_training_datasets
+from mteb.models.wrapper import Wrapper
+from mteb.requires_package import requires_package
 
 logger = logging.getLogger(__name__)
 
 
-seed_1_5_training_data = {
-    "PAWSX": ["train"],
-    "QBQTC": ["train"],
-    "STSB": ["train"],
-    "TNews": ["train"],
-    "Waimai": ["train"],
-    "IFlyTek": ["train"],
-} | bge_chinese_training_data | nvidia_training_datasets
+seed_1_5_training_data = (
+    {
+        "PAWSX": ["train"],
+        "QBQTC": ["train"],
+        "STSB": ["train"],
+        "TNews": ["train"],
+        "Waimai": ["train"],
+        "IFlyTek": ["train"],
+    }
+    | bge_chinese_training_data
+    | nvidia_training_datasets
+)
 
 
 class SeedWrapper(Wrapper):
