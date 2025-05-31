@@ -8,7 +8,6 @@ import numpy as np
 import torch
 import torchaudio
 from torch.utils.data import DataLoader
-from tqdm import tqdm
 from transformers import SpeechT5FeatureExtractor, SpeechT5Model
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
@@ -122,7 +121,7 @@ class SpeechT5Wrapper(Wrapper):
                     batch_tensor.cpu().numpy(),
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
-                    padding="longest",
+                    padding=True,
                     return_attention_mask=True,
                 ).to(self.device)
 
@@ -132,7 +131,6 @@ class SpeechT5Wrapper(Wrapper):
                     output_hidden_states=True,
                 )
 
-                # Get encoder's last hidden state for embeddings
                 encoder_output = outputs.encoder_last_hidden_state
                 embeddings = torch.mean(encoder_output, dim=1)
                 all_embeddings.append(embeddings.cpu())
@@ -141,7 +139,6 @@ class SpeechT5Wrapper(Wrapper):
             return torch.cat(all_embeddings, dim=0)
         else:
             return torch.zeros((0, self.model.config.hidden_size))
-
 
     def encode(
         self,
