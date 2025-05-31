@@ -9,7 +9,7 @@ import torch
 import torchaudio
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import AutoProcessor, Wav2Vec2Model
+from transformers import Wav2Vec2FeatureExtractor, Wav2Vec2Model
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
 from mteb.model_meta import ModelMeta
@@ -30,14 +30,16 @@ class MMSWrapper(Wrapper):
         self.target_lang = target_lang
         self.device = device
 
-        # MMS models use AutoProcessor which handles language-specific processing
-        self.processor = AutoProcessor.from_pretrained(
-            model_name, target_lang=target_lang, revision=model_revision
+        # Standard feature extractor used by audio models
+        self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(
+            model_name, revision=model_revision
         )
         
-        # Load model with specified language
+        # Load model
         self.model = Wav2Vec2Model.from_pretrained(
-            model_name, revision=model_revision
+            model_name, 
+            revision=model_revision,
+            ignore_mismatched_sizes=True
         ).to(self.device)
         
         # Load language adapter if available
@@ -47,7 +49,7 @@ class MMSWrapper(Wrapper):
             pass
             
         self.model.eval()
-        self.sampling_rate = 16000  # MMS models use 16kHz sampling rate
+        self.sampling_rate = self.feature_extractor.sampling_rate
 
     def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
         processed_audio = []
@@ -137,7 +139,7 @@ class MMSWrapper(Wrapper):
                 elif batch_tensor.ndim > 2:
                     batch_tensor = batch_tensor.view(batch_tensor.size(0), -1)
 
-                inputs = self.processor(
+                inputs = self.feature_extractor(
                     batch_tensor.cpu().numpy(),
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
@@ -171,56 +173,6 @@ class MMSWrapper(Wrapper):
         return self.get_audio_embeddings(inputs, task_name=task_name, **kwargs).numpy()
 
 
-# Model variants using ModelMeta
-mms_300m = ModelMeta(
-    loader=partial(
-        MMSWrapper,
-        model_name="facebook/mms-300m",
-    ),
-    name="facebook/mms-300m",
-    languages=["eng-Latn"],
-    open_weights=True,
-    revision="4ee317ce793c53dbc041fc4376c7558292dd38dc",
-    release_date="2023-05-22",  # Release date of the paper
-    max_tokens=None,
-    n_parameters=300_000_000,
-    memory_usage_mb=1210,
-    embed_dim=1024,
-    license="mit",
-    reference="https://huggingface.co/facebook/mms-300m",
-    similarity_fn_name="cosine",
-    framework=["PyTorch"],
-    use_instructions=False,
-    public_training_code="https://github.com/facebookresearch/fairseq/tree/main/examples/mms",
-    public_training_data="https://github.com/facebookresearch/fairseq/tree/main/examples/mms#data",
-    training_datasets={},
-    modalities=["audio"],
-)
-
-mms_1b = ModelMeta(
-    loader=partial(
-        MMSWrapper,
-        model_name="facebook/mms-1b",
-    ),
-    name="facebook/mms-1b",
-    languages=["eng-Latn"],
-    open_weights=True,
-    revision="99aa7c40c50aa514c81cfa705ae05f9a10f42fc1",
-    release_date="2023-05-22",  # Release date of the paper
-    max_tokens=None,
-    n_parameters=1_000_000_000,
-    memory_usage_mb=3683,
-    embed_dim=1024,
-    license="mit",
-    reference="https://huggingface.co/facebook/mms-1b",
-    similarity_fn_name="cosine",
-    framework=["PyTorch"],
-    use_instructions=False,
-    public_training_code="https://github.com/facebookresearch/fairseq/tree/main/examples/mms",
-    public_training_data="https://github.com/facebookresearch/fairseq/tree/main/examples/mms#data",
-    training_datasets={},
-    modalities=["audio"],
-)
 
 mms_1b_all = ModelMeta(
     loader=partial(
@@ -238,8 +190,8 @@ mms_1b_all = ModelMeta(
         "rus-Cyrl",
     ],  # Supports 1162 languages
     open_weights=True,
-    revision="b97581507fd06e35d0840faec611305a1c179f8c",
-    release_date="2023-05-22",  # Release date of the paper
+    revision="3d33597edbdaaba14a8e858e2c8caa76e3cec0cd",
+    release_date="2023-05-22",
     max_tokens=None,
     n_parameters=1_000_000_000,
     memory_usage_mb=3680,
@@ -263,8 +215,8 @@ mms_1b_fl102 = ModelMeta(
     name="facebook/mms-1b-fl102",
     languages=["eng-Latn"],  # Supports 102 languages
     open_weights=True,
-    revision="f65f86f27881e9fa8e382b9bb357b9b858bd20a8",
-    release_date="2023-05-22",  # Release date of the paper
+    revision="d483345545bea550895b1aa0c6ba40236b9f1e22",
+    release_date="2023-05-22",
     max_tokens=None,
     n_parameters=1_000_000_000,
     memory_usage_mb=3680,
@@ -288,8 +240,8 @@ mms_1b_l1107 = ModelMeta(
     name="facebook/mms-1b-l1107",
     languages=["eng-Latn"],  # Supports 1107 languages
     open_weights=True,
-    revision="c5d2815e9460a3acd9694ab78580d4985a00e01d",
-    release_date="2023-05-22",  # Release date of the paper
+    revision="1fdc004dff8c399df6b15f136abfe8e83e073d51",
+    release_date="2023-05-22",
     max_tokens=None,
     n_parameters=1_000_000_000,
     memory_usage_mb=3680,
