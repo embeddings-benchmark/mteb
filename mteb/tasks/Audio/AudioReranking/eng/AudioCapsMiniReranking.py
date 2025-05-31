@@ -32,13 +32,15 @@ class AudioCapsMiniReranking(AbsTaskAudioReranking):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{kim2019audiocaps,
-  title={AudioCaps: Generating captions for audios in the wild},
-  author={Kim, Chris Dongjoo and Kim, Byeongchang and Lee, Hyunmin and Kim, Gunhee},
-  booktitle={Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long and Short Papers)},
-  pages={119--132},
-  year={2019}
-}""",
+        bibtex_citation=r"""
+@inproceedings{kim2019audiocaps,
+  author = {Kim, Chris Dongjoo and Kim, Byeongchang and Lee, Hyunmin and Kim, Gunhee},
+  booktitle = {Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long and Short Papers)},
+  pages = {119--132},
+  title = {AudioCaps: Generating captions for audios in the wild},
+  year = {2019},
+}
+""",
     )
 
     # The column names from our preprocessed dataset
