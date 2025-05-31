@@ -132,8 +132,9 @@ class SpeechT5Wrapper(Wrapper):
                     output_hidden_states=True,
                 )
 
-                last_hidden_state = outputs.hidden_states[-1]
-                embeddings = torch.mean(last_hidden_state, dim=1)
+                # Get encoder's last hidden state for embeddings
+                encoder_output = outputs.encoder_last_hidden_state
+                embeddings = torch.mean(encoder_output, dim=1)
                 all_embeddings.append(embeddings.cpu())
 
         if all_embeddings:
