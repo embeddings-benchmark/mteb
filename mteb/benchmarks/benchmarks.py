@@ -1999,3 +1999,21 @@ VISUAL_DOCUMENT_RETRIEVAL = Benchmark(
 }
 """,
 )
+
+R2MED = Benchmark(
+    name="R2MED",
+    tasks=get_tasks(tasks=["R2MEDRetrieval"], eval_splits=["test"]),
+    description="""R2MED: First Reasoning-Driven Medical Retrieval Benchmark.
+    R2MED is a high-quality, high-resolution information retrieval (IR) dataset designed for medical scenarios. 
+    It contains 876 queries with three retrieval tasks, five medical scenarios, and twelve body systems.
+    """,
+    reference="https://r2med.github.io/",
+    citation=r"""
+@article{li2025r2med,
+  title={R2MED: A Benchmark for Reasoning-Driven Medical Retrieval},
+  author={Li, Lei and Zhou, Xiao and Liu, Zheng},
+  journal={arXiv preprint arXiv:2505.14558},
+  year={2025}
+}
+""",
+)
