@@ -12,7 +12,7 @@ class Caltech101Classification(AbsTaskImageClassification):
         dataset={
             "path": "HuggingFaceM4/Caltech-101",
             "name": "with_background_category",
-            "revision": "851374102055782c84f89b1b4e9d128a6568847b",
+            "revision": "71d2394c09f83658fb6f6a1eb272a0d9dc71b331",
             "trust_remote_code": True,
         },
         type="ImageClassification",
