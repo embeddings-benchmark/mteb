@@ -9,7 +9,7 @@ import torch
 import torchaudio
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import SpeechT5Model, SpeechT5FeatureExtractor
+from transformers import SpeechT5FeatureExtractor, SpeechT5Model
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
 from mteb.model_meta import ModelMeta
@@ -108,10 +108,9 @@ class SpeechT5Wrapper(Wrapper):
         all_embeddings = []
 
         with torch.no_grad():
-            for i in tqdm(range(0, len(processed_audio), batch_size)):
+            for i in range(0, len(processed_audio), batch_size):
                 batch = processed_audio[i : i + batch_size]
 
-                # Pre-process audio
                 batch_tensor = self._pad_audio_batch(batch)
 
                 if batch_tensor.ndim == 1:
@@ -119,49 +118,29 @@ class SpeechT5Wrapper(Wrapper):
                 elif batch_tensor.ndim > 2:
                     batch_tensor = batch_tensor.view(batch_tensor.size(0), -1)
 
-                # Limit sequence length to avoid OOM
-                max_seq_len = 30 * self.sampling_rate  # 30 seconds max
-                if batch_tensor.shape[1] > max_seq_len:
-                    batch_tensor = batch_tensor[:, :max_seq_len]
+                inputs = self.feature_extractor(
+                    batch_tensor.cpu().numpy(),
+                    sampling_rate=self.sampling_rate,
+                    return_tensors="pt",
+                    padding="longest",
+                    return_attention_mask=True,
+                ).to(self.device)
 
-                try:
-                    # Use SpeechT5FeatureExtractor for feature extraction
-                    inputs = self.feature_extractor(
-                        audio=batch_tensor.cpu().numpy(),
-                        sampling_rate=self.sampling_rate,
-                        return_tensors="pt",
-                        padding="longest",
-                        return_attention_mask=True,
-                    )
-                    
-                    # Move to device
-                    inputs = {k: v.to(self.device) for k, v in inputs.items() if isinstance(v, torch.Tensor)}
+                outputs = self.model(
+                    inputs.input_values,
+                    attention_mask=inputs.attention_mask,
+                    output_hidden_states=True,
+                )
 
-                    # Get embeddings from model
-                    outputs = self.model(
-                        input_values=inputs["input_values"],
-                        attention_mask=inputs.get("attention_mask"),
-                        output_hidden_states=True,
-                    )
-
-                    # Get encoder's last hidden state for embeddings
-                    encoder_output = outputs.encoder_last_hidden_state
-                    embeddings = torch.mean(encoder_output, dim=1)
-                    all_embeddings.append(embeddings.cpu())
-
-                except Exception as e:
-                    print(f"Error processing batch: {e}")
-                    # Provide a zero embedding to maintain batch order
-                    all_embeddings.append(torch.zeros((batch_tensor.size(0), self.model.config.hidden_size), device="cpu"))
-
-                # Free up memory
-                del inputs, outputs
-                torch.cuda.empty_cache()
+                last_hidden_state = outputs.hidden_states[-1]
+                embeddings = torch.mean(last_hidden_state, dim=1)
+                all_embeddings.append(embeddings.cpu())
 
         if all_embeddings:
             return torch.cat(all_embeddings, dim=0)
         else:
             return torch.zeros((0, self.model.config.hidden_size))
+
 
     def encode(
         self,
