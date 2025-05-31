@@ -34,20 +34,18 @@ class MMSWrapper(Wrapper):
         self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(
             model_name, revision=model_revision
         )
-        
+
         # Load model
         self.model = Wav2Vec2Model.from_pretrained(
-            model_name, 
-            revision=model_revision,
-            ignore_mismatched_sizes=True
+            model_name, revision=model_revision, ignore_mismatched_sizes=True
         ).to(self.device)
-        
+
         # Load language adapter if available
         try:
             self.model.load_adapter(target_lang)
         except Exception:
             pass
-            
+
         self.model.eval()
         self.sampling_rate = self.feature_extractor.sampling_rate
 
@@ -171,7 +169,6 @@ class MMSWrapper(Wrapper):
         **kwargs: Any,
     ) -> np.ndarray:
         return self.get_audio_embeddings(inputs, task_name=task_name, **kwargs).numpy()
-
 
 
 mms_1b_all = ModelMeta(
