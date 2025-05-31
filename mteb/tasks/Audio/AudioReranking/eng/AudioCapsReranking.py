@@ -26,7 +26,7 @@ class AudioCapsReranking(AbsTaskAudioReranking):
         main_score="map",
         date=("2019-04-01", "2019-04-01"),
         domains=["General"],
-        task_subtypes=["Audio Reranking"],
+        task_subtypes=["AudioReranking"],
         license="cc-by-sa-4.0",
         annotations_creators="expert-generated",
         dialect=[],
