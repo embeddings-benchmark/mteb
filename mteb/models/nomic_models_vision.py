@@ -12,28 +12,40 @@ from transformers import AutoImageProcessor, AutoModel, AutoTokenizer
 from mteb.abstasks import TaskMetadata
 from mteb.model_meta import ModelMeta, ScoringFunction
 from mteb.models.abs_encoder import AbsEncoder
+from mteb.requires_package import requires_package
 from mteb.types import Array, BatchedInput, PromptType
 
 
 class NomicVisionModel(AbsEncoder):
     def __init__(
         self,
-        vision_model_name: str,
+        model_name: str,
+        revision: str,
         text_model_name: str,
+        text_model_revision: str,
         device: str = "cuda" if torch.cuda.is_available() else "cpu",
         **kwargs: Any,
     ):
-        self.vision_model_name = vision_model_name
+        requires_package(self, "einops", model_name, "pip install 'mteb[nomic]'")
+
+        self.vision_model_name = model_name
         self.text_model_name = text_model_name
+        self.revision = revision
         self.device = device
-        self.processor = AutoImageProcessor.from_pretrained(self.vision_model_name)
+        self.processor = AutoImageProcessor.from_pretrained(
+            self.vision_model_name, revision=self.revision
+        )
         self.vision_model = AutoModel.from_pretrained(
-            self.vision_model_name, trust_remote_code=True
+            self.vision_model_name, trust_remote_code=True, revision=self.revision
         ).to(self.device)
         self.text_model = AutoModel.from_pretrained(
-            self.text_model_name, trust_remote_code=True
+            self.text_model_name,
+            revision=text_model_revision,
+            trust_remote_code=True,
         ).to(self.device)
-        self.tokenizer = AutoTokenizer.from_pretrained(self.text_model_name)
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            self.text_model_name, revision=text_model_revision
+        )
 
         self.text_model.eval()
         self.vision_model.eval()
@@ -139,8 +151,8 @@ class NomicVisionModel(AbsEncoder):
 nomic_embed_vision_v1_5 = ModelMeta(
     loader=NomicVisionModel,
     loader_kwargs={
-        "vision_model_name": "nomic-ai/nomic-embed-vision-v1.5",
         "text_model_name": "nomic-ai/nomic-embed-text-v1.5",
+        "text_model_revision": "a03db6748c80237063eb0546ac6b627eca2318cb",
     },
     name="nomic-ai/nomic-embed-vision-v1.5",
     languages=["eng-Latn"],
