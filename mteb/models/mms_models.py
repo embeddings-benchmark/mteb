@@ -8,7 +8,8 @@ import numpy as np
 import torch
 import torchaudio
 from torch.utils.data import DataLoader
-from transformers import AutoProcessor, Wav2Vec2Model
+from tqdm import tqdm
+from transformers import AutoProcessor, Wav2Vec2FeatureExtractor, Wav2Vec2Model
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
 from mteb.model_meta import ModelMeta
@@ -29,24 +30,29 @@ class MMSWrapper(Wrapper):
         self.target_lang = target_lang
         self.device = device
 
-        # Load processor with specified language
+        # MMS uses Wav2Vec2FeatureExtractor
+        self.feature_extractor = Wav2Vec2FeatureExtractor.from_pretrained(
+            model_name, revision=model_revision
+        )
+
+        # Also load language-specific processor
         self.processor = AutoProcessor.from_pretrained(
             model_name, target_lang=target_lang, revision=model_revision
         )
-        
-        # Load base model for embeddings
+
+        # Load model with specified language
         self.model = Wav2Vec2Model.from_pretrained(
             model_name, revision=model_revision
         ).to(self.device)
-        
+
         # Load language adapter if available
         try:
             self.model.load_adapter(target_lang)
-        except Exception as e:
+        except Exception:
             pass
-            
+
         self.model.eval()
-        self.sampling_rate = 16000  # MMS models use 16kHz sampling rate
+        self.sampling_rate = self.feature_extractor.sampling_rate
 
     def _process_audio(self, audio: AudioBatch) -> list[torch.Tensor]:
         processed_audio = []
@@ -126,7 +132,7 @@ class MMSWrapper(Wrapper):
         all_embeddings = []
 
         with torch.no_grad():
-            for i in range(0, len(processed_audio), batch_size):
+            for i in tqdm(range(0, len(processed_audio), batch_size)):
                 batch = processed_audio[i : i + batch_size]
 
                 batch_tensor = self._pad_audio_batch(batch)
@@ -136,7 +142,7 @@ class MMSWrapper(Wrapper):
                 elif batch_tensor.ndim > 2:
                     batch_tensor = batch_tensor.view(batch_tensor.size(0), -1)
 
-                inputs = self.processor(
+                inputs = self.feature_extractor(
                     batch_tensor.cpu().numpy(),
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
@@ -227,7 +233,15 @@ mms_1b_all = ModelMeta(
         model_name="facebook/mms-1b-all",
     ),
     name="facebook/mms-1b-all",
-    languages=["eng-Latn", "fra-Latn", "deu-Latn", "spa-Latn", "ara-Arab", "cmn-Hans", "rus-Cyrl"],  # Supports 1162 languages
+    languages=[
+        "eng-Latn",
+        "fra-Latn",
+        "deu-Latn",
+        "spa-Latn",
+        "ara-Arab",
+        "cmn-Hans",
+        "rus-Cyrl",
+    ],  # Supports 1162 languages
     open_weights=True,
     revision="b97581507fd06e35d0840faec611305a1c179f8c",
     release_date="2023-05-22",  # Release date of the paper
