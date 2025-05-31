@@ -285,9 +285,21 @@ class AudioRerankingEvaluator(Evaluator):
 
         # Add nAUC scores if we have multiple samples
         if len(all_mrr_scores) > 1:
-            nAUC_values = nAUC(all_mrr_scores, all_mrr_scores)
-            for k, v in nAUC_values.items():
-                results[k] = v
+            try:
+                # Use ap_scores as confidence scores instead of mrr_scores
+                all_mrr_scores_array = np.array(all_mrr_scores)
+                all_ap_scores_array = np.array(all_ap_scores)
+                
+                # Check for potential NaN or inf values
+                if np.isnan(all_ap_scores_array).any() or np.isinf(all_ap_scores_array).any():
+                    logger.warning("Found NaN or inf values in confidence scores, skipping nAUC calculation")
+                else:
+                    nAUC_values = nAUC(all_ap_scores_array, all_mrr_scores_array)
+                    for k, v in nAUC_values.items():
+                        results[k] = v
+            except Exception as e:
+                logger.warning(f"Error calculating nAUC: {e}")
+                # Continue without nAUC values
 
         return results
 
