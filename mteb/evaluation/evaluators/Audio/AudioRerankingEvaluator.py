@@ -289,10 +289,15 @@ class AudioRerankingEvaluator(Evaluator):
                 # Use ap_scores as confidence scores instead of mrr_scores
                 all_mrr_scores_array = np.array(all_mrr_scores)
                 all_ap_scores_array = np.array(all_ap_scores)
-                
+
                 # Check for potential NaN or inf values
-                if np.isnan(all_ap_scores_array).any() or np.isinf(all_ap_scores_array).any():
-                    logger.warning("Found NaN or inf values in confidence scores, skipping nAUC calculation")
+                if (
+                    np.isnan(all_ap_scores_array).any()
+                    or np.isinf(all_ap_scores_array).any()
+                ):
+                    logger.warning(
+                        "Found NaN or inf values in confidence scores, skipping nAUC calculation"
+                    )
                 else:
                     nAUC_values = nAUC(all_ap_scores_array, all_mrr_scores_array)
                     for k, v in nAUC_values.items():
