@@ -45,10 +45,3 @@ class AudioCapsMiniReranking(AbsTaskAudioReranking):
     audio_query_column_name: str = "query"
     audio_positive_column_name: str = "positive"
     audio_negative_column_name: str = "negative"
-
-    def load_data(self):
-        """Load the preprocessed dataset that's already in the reranking format.
-        No transformation needed as the dataset is already prepared.
-        """
-        # Load the dataset directly - it's already in the correct format
-        self.dataset = self.metadata.load_dataset()
