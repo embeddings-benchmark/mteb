@@ -101,6 +101,7 @@ class SpeechT5Wrapper(Wrapper):
         task_name: str | None = None,
         prompt_type: PromptType | None = None,
         batch_size: int = 4,
+        hidden_layer: float = 1.0,
         **kwargs: Any,
     ) -> torch.Tensor:
         processed_audio = self._process_audio(audio)
@@ -121,18 +122,24 @@ class SpeechT5Wrapper(Wrapper):
                     batch_tensor.cpu().numpy(),
                     sampling_rate=self.sampling_rate,
                     return_tensors="pt",
-                    padding=True,
+                    padding="longest",
                     return_attention_mask=True,
                 ).to(self.device)
 
-                outputs = self.model(
-                    inputs.input_values,
-                    attention_mask=inputs.attention_mask,
+                outputs = self.model.encoder(
+                    inputs.input_features,
                     output_hidden_states=True,
                 )
 
-                encoder_output = outputs.encoder_last_hidden_state
-                embeddings = torch.mean(encoder_output, dim=1)
+                hidden_states = outputs.hidden_states
+                no_hidden_states = len(hidden_states)
+
+                layer_idx = int(hidden_layer * no_hidden_states)
+                layer_idx = min(max(layer_idx, 1), no_hidden_states) - 1
+
+                selected_hidden = hidden_states[layer_idx]
+                embeddings = torch.mean(selected_hidden, dim=1)
+
                 all_embeddings.append(embeddings.cpu())
 
         if all_embeddings:
