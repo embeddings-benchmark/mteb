@@ -96,6 +96,7 @@ from mteb.models import (
     wav2vec2_models,
     wavlm_models,
     whisper_models,
+    mctct_model,
 )
 
 logger = logging.getLogger(__name__)
@@ -186,6 +187,7 @@ model_modules = [
     qwen2_models,
     sewd_models,
     unispeech_models,
+    mctct_model,
 ]
 MODEL_REGISTRY = {}
 
