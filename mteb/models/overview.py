@@ -137,6 +137,7 @@ model_modules = [
     llm2clip_models,
     llm2vec_models,
     misc_models,
+    mctct_model,
     model2vec_models,
     moka_models,
     moco_models,
@@ -187,7 +188,6 @@ model_modules = [
     qwen2_models,
     sewd_models,
     unispeech_models,
-    mctct_model,
 ]
 MODEL_REGISTRY = {}
 
