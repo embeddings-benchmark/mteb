@@ -132,12 +132,9 @@ class SpeechT5Wrapper(Wrapper):
                 outputs = self.model.encoder(
                     inputs.input_values,
                     attention_mask=inputs.attention_mask,
-                    output_hidden_states=True,
+                    output_hidden_states=False,
                 )
                 print("left")
-                print(outputs.hidden_states[0].shape)
-                del inputs
-                torch.cuda.empty_cache()
                 hidden_states = outputs.hidden_states
                 no_hidden_states = len(hidden_states)
                 layer_idx = int(hidden_layer * no_hidden_states)
