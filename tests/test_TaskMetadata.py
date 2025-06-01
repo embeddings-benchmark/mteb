@@ -27,7 +27,6 @@ _HISTORIC_DATASETS = [
     "TenKGnadClusteringS2S",
     "ArxivClusteringP2P",
     "ArxivClusteringS2S",
-    "BigPatentClustering",
     "RedditClustering",
     "RedditClusteringP2P",
     "StackExchangeClustering",
