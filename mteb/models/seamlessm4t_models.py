@@ -9,7 +9,7 @@ import torch
 import torchaudio
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import SeamlessM4Tv2Model, AutoProcessor
+from transformers import AutoProcessor, SeamlessM4Tv2Model
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
 from mteb.model_meta import ModelMeta
@@ -114,9 +114,9 @@ class SeamlessM4TWrapper(Wrapper):
                 # Process audio through the model's encoder
                 inputs = self.processor(
                     audios=batch_tensor.cpu().numpy(),
-                    sampling_rate=self.sampling_rate, 
+                    sampling_rate=self.sampling_rate,
                     return_tensors="pt",
-                    padding=True
+                    padding=True,
                 ).to(self.device)
 
                 # Get encodings through the encoder
@@ -150,13 +150,15 @@ seamless_m4t_v2_large = ModelMeta(
         model_name="facebook/seamless-m4t-v2-large",
     ),
     name="facebook/seamless-m4t-v2-large",
-    languages=["eng-Latn"], # multilingual: supported languages can be found in the reference
+    languages=[
+        "eng-Latn"
+    ],  # multilingual: supported languages can be found in the reference
     open_weights=True,
     revision="5f8cc790b19fc3f67a61c105133b20b34e3dcb76",
     release_date="2023-11-06",
     max_tokens=None,
     n_parameters=2_300_000_000,
-    memory_usage_mb=None,
+    memory_usage_mb=8809,
     embed_dim=1024,
     license="mit",
     reference="https://huggingface.co/facebook/seamless-m4t-v2-large",
