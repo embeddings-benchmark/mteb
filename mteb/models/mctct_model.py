@@ -170,6 +170,6 @@ mctct_large = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/speechbrain/speechbrain",
     public_training_data="https://github.com/speechbrain/speechbrain",
-    training_datasets={"Common Voice": ["train"], "VoxPopuli": ["train"]},
+    training_datasets= {}, #{"Common Voice": ["train"], "VoxPopuli": ["train"]},
     modalities=["audio"],
 )
