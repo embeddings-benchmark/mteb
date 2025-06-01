@@ -13,7 +13,6 @@ from mteb.overview import get_tasks
 _HISTORIC_DATASETS = [
     "PolEmo2.0-IN",
     "PolEmo2.0-OUT",
-    "AllegroReviews",
     "PAC",
     "TNews",
     "IFlyTek",
