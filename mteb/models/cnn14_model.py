@@ -164,7 +164,7 @@ cnn14_esc50 = ModelMeta(
     release_date="2022-11-26",
     max_tokens=None,
     n_parameters=80_753_615,
-    memory_usage_mb=320,
+    memory_usage_mb=308,
     embed_dim=2048,
     license="apache-2.0",
     reference="https://huggingface.co/speechbrain/cnn14-esc50",
@@ -172,7 +172,7 @@ cnn14_esc50 = ModelMeta(
     framework=["PyTorch"],
     use_instructions=False,
     public_training_code="https://github.com/speechbrain/speechbrain",
-    public_training_data=None,  # "ESC-50, VGGSound",
+    public_training_data=None,
     training_datasets=None,  # ["ESC-50", "VGGSound"],
     modalities=["audio"],
 )
