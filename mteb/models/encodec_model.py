@@ -9,7 +9,7 @@ import torch
 import torchaudio
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import EncodecModel, AutoProcessor
+from transformers import AutoProcessor, EncodecModel
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
 from mteb.model_meta import ModelMeta
@@ -114,7 +114,7 @@ class EncodecWrapper(Wrapper):
         with torch.no_grad():
             for i in tqdm(range(0, len(processed_audio), batch_size)):
                 batch = processed_audio[i : i + batch_size]
-                
+
                 # Process audio through EnCodec's processor
                 inputs = self.processor(
                     raw_audio=[audio.cpu().numpy() for audio in batch],
@@ -122,17 +122,17 @@ class EncodecWrapper(Wrapper):
                     return_tensors="pt",
                     padding=True,
                 ).to(self.device)
-                
+
                 # Get the latent representations directly from the encoder
                 # This gives continuous embeddings instead of discrete codes
                 latent = self.model.encoder(inputs.input_values)
-                
+
                 # Apply mean pooling over the time dimension to get fixed-size embeddings
                 embeddings = torch.mean(latent, dim=2)  # Average over time dimension
-                
+
                 # Normalize embeddings
                 embeddings = embeddings / embeddings.norm(dim=-1, keepdim=True)
-                
+
                 all_embeddings.append(embeddings.cpu())
 
         if all_embeddings:
@@ -158,14 +158,14 @@ encodec_24khz = ModelMeta(
         model_name="facebook/encodec_24khz",
     ),
     name="facebook/encodec_24khz",
-    languages=["eng-Latn"], 
+    languages=["eng-Latn"],
     open_weights=True,
     revision="c1dbe2ae3f1de713481a3b3e7c47f357092ee040",
     release_date="2022-10-25",
     max_tokens=None,
-    n_parameters=26_900_000,  # ~27M parameters
-    memory_usage_mb=110,  # Relatively lightweight
-    embed_dim=1024,  # Codebook size
+    n_parameters=23_273_218,
+    memory_usage_mb=88,
+    embed_dim=128,
     license="cc-by-nc-4.0",
     reference="https://huggingface.co/facebook/encodec_24khz",
     similarity_fn_name="cosine",
@@ -173,6 +173,6 @@ encodec_24khz = ModelMeta(
     use_instructions=False,
     public_training_code="https://github.com/facebookresearch/encodec",
     public_training_data=None,
-    training_datasets=None, # ["AudioSet", "VCTK", "DNS-Challenge"],
+    training_datasets=None,  # ["AudioSet", "VCTK", "DNS-Challenge"],
     modalities=["audio"],
 )
