@@ -9,7 +9,7 @@ import torch
 import torchaudio
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from transformers import MCTCTModel, MCTCTFeatureExtractor
+from transformers import MCTCTFeatureExtractor, MCTCTModel
 
 from mteb.encoder_interface import AudioBatch, AudioData, PromptType
 from mteb.model_meta import ModelMeta
@@ -77,23 +77,23 @@ class MCTCTWrapper(Wrapper):
     def _convert_audio(self, audio: AudioData) -> torch.Tensor:
         if isinstance(audio, np.ndarray):
             audio = torch.from_numpy(audio)
-        
+
         # Ensure float type
         audio = audio.float()
-        
+
         # Convert to mono if needed (MCTCT expects mono audio)
         if audio.dim() > 1 and audio.shape[0] > 1:  # If multi-channel
             audio = torch.mean(audio, dim=0, keepdim=True)  # Convert to mono
-            
+
         return audio.squeeze()
 
     def _load_audio_file(self, path: str) -> torch.Tensor:
         waveform, sample_rate = torchaudio.load(path)
-        
+
         # Convert to mono if needed
         if waveform.shape[0] > 1:  # If multi-channel
             waveform = torch.mean(waveform, dim=0, keepdim=True)  # Convert to mono
-            
+
         if sample_rate != self.sampling_rate:
             resampler = torchaudio.transforms.Resample(sample_rate, self.sampling_rate)
             waveform = resampler(waveform)
@@ -114,7 +114,7 @@ class MCTCTWrapper(Wrapper):
         with torch.no_grad():
             for i in tqdm(range(0, len(processed_audio), batch_size)):
                 batch = processed_audio[i : i + batch_size]
-                
+
                 # Process each audio in the batch
                 inputs = self.feature_extractor(
                     [audio.cpu().numpy() for audio in batch],
@@ -122,7 +122,7 @@ class MCTCTWrapper(Wrapper):
                     return_tensors="pt",
                     padding=True,
                 ).to(self.device)
-                
+
                 # Get embeddings from the model
                 outputs = self.model(
                     input_features=inputs.input_features,
@@ -130,7 +130,7 @@ class MCTCTWrapper(Wrapper):
                     output_hidden_states=True,
                     return_dict=True,
                 )
-                
+
                 # Get embeddings from the final layer hidden states
                 last_hidden = outputs.hidden_states[-1]
                 emb = last_hidden.mean(dim=1).cpu()
@@ -160,8 +160,8 @@ mctct_large = ModelMeta(
     revision="ed014c8255cea2c36f87a71cf2533b665ba00863",
     release_date="2022-01-10",
     max_tokens=None,
-    n_parameters= 1_058_978_691, 
-    memory_usage_mb=4039,  
+    n_parameters=1_058_978_691,
+    memory_usage_mb=4039,
     embed_dim=1536,  # Hidden dimension
     license="apache-2.0",
     reference="https://huggingface.co/speechbrain/m-ctc-t-large",
@@ -169,7 +169,7 @@ mctct_large = ModelMeta(
     framework=["PyTorch"],
     use_instructions=False,
     public_training_code="https://github.com/speechbrain/speechbrain",
-    public_training_data= "https://github.com/speechbrain/speechbrain", 
-    training_datasets= {"Common Voice": ["train"], "VoxPopuli": ["train"]},
+    public_training_data="https://github.com/speechbrain/speechbrain",
+    training_datasets={"Common Voice": ["train"], "VoxPopuli": ["train"]},
     modalities=["audio"],
 )

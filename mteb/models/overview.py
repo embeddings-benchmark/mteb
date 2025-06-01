@@ -51,6 +51,7 @@ from mteb.models import (
     linq_models,
     llm2clip_models,
     llm2vec_models,
+    mctct_model,
     misc_models,
     moco_models,
     model2vec_models,
@@ -96,7 +97,6 @@ from mteb.models import (
     wav2vec2_models,
     wavlm_models,
     whisper_models,
-    mctct_model,
 )
 
 logger = logging.getLogger(__name__)
