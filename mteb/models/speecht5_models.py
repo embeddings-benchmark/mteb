@@ -130,8 +130,12 @@ class SpeechT5Wrapper(Wrapper):
                     inputs.input_values,
                     attention_mask=inputs.attention_mask,
                     output_hidden_states=True,
+                    return_all_hiddens=False,
                 )
 
+
+                del inputs
+                torch.cuda.empty_cache()
                 hidden_states = outputs.hidden_states
                 no_hidden_states = len(hidden_states)
 
