@@ -16,8 +16,8 @@ class BigPatentClustering(AbsTaskClustering):
     metadata = TaskMetadata(
         name="BigPatentClustering",
         description="Clustering of documents from the Big Patent dataset. Test set only includes documents"
-        + "belonging to a single category, with a total of 9 categories.",
-        reference="https://www.kaggle.com/datasets/big_patent",
+        + " belonging to a single category, with a total of 9 categories.",
+        reference="https://huggingface.co/datasets/NortheasternUniversity/big_patent",
         dataset={
             "path": "jinaai/big-patent-clustering",
             "revision": "62d5330920bca426ce9d3c76ea914f15fc83e891",
@@ -28,13 +28,16 @@ class BigPatentClustering(AbsTaskClustering):
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="v_measure",
-        date=None,
-        domains=None,
-        task_subtypes=None,
-        license=None,
-        annotations_creators=None,
-        dialect=None,
-        sample_creation=None,
+        date=(
+            "1971-01-01",
+            "2019-06-10",
+        ),  # start date from paper, end date - paper publication
+        domains=["Legal", "Written"],
+        task_subtypes=["Thematic clustering"],
+        license="cc-by-4.0",
+        annotations_creators="derived",
+        dialect=[],
+        sample_creation="found",
         bibtex_citation=r"""
 @article{DBLP:journals/corr/abs-1906-03741,
   author = {Eva Sharma and
@@ -61,7 +64,7 @@ class BigPatentClusteringFast(AbsTaskClusteringFast):
     metadata = TaskMetadata(
         name="BigPatentClustering.v2",
         description="Clustering of documents from the Big Patent dataset. Test set only includes documents"
-        + "belonging to a single category, with a total of 9 categories.",
+        + " belonging to a single category, with a total of 9 categories.",
         reference="https://huggingface.co/datasets/NortheasternUniversity/big_patent",
         dataset={
             "path": "mteb/big-patent",

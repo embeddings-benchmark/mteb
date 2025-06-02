@@ -24,7 +24,7 @@ class OVENIT2TRetrieval(AbsTaskAny2AnyRetrieval):
         license="cc-by-sa-4.0",
         annotations_creators="derived",
         dialect=[],
-        modalities=["text"],
+        modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation=r"""
 @inproceedings{hu2023open,

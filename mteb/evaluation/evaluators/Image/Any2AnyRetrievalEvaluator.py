@@ -71,6 +71,22 @@ class Any2AnyDenseRetrievalExactSearch:
         return_sorted: bool = False,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
+<<<<<<< HEAD
+=======
+        if hasattr(self.model, "similarity"):
+            score_function = self.model.similarity
+            logger.info("Scoring Function: from model")
+        else:
+            if score_function not in self.score_functions:
+                raise ValueError(
+                    f"score function: {score_function} must be either (cos_sim) for cosine similarity or (dot) for dot product"
+                )
+            logger.info(
+                f"Scoring Function: {self.score_function_desc[score_function]} ({score_function})"
+            )
+            score_function = self.score_functions[score_function]
+
+>>>>>>> main
         logger.info("Encoding Queries.")
         query_ids = list(queries["id"])
         self.results = {qid: {} for qid in query_ids}
@@ -102,6 +118,7 @@ class Any2AnyDenseRetrievalExactSearch:
             )
             chunk_ids = corpus_ids[chunk_start : chunk_start + self.corpus_chunk_size]
 
+<<<<<<< HEAD
             dataloader = create_image_dataloader(
                 chunk,
                 image_column_name="image",
@@ -118,6 +135,47 @@ class Any2AnyDenseRetrievalExactSearch:
             )
 
             cos_scores = self.model.similarity(query_embeddings, sub_corpus_embeddings)
+=======
+            if corpus_modality == "text":
+                corpus_texts = chunk["text"]
+                sub_corpus_embeddings = self.model.get_text_embeddings(
+                    texts=corpus_texts,
+                    task_name=task_name,
+                    prompt_type=PromptType.passage,
+                    **self.encode_kwargs,
+                )
+            else:
+                corpus_dataset = ImageDataset(
+                    chunk, image_column_name="image", transform=self.transform
+                )
+                corpus_image_dataloader = DataLoader(
+                    corpus_dataset,
+                    batch_size=self.encode_kwargs["batch_size"],
+                    shuffle=False,
+                    collate_fn=custom_collate_fn,
+                    num_workers=min(math.floor(os.cpu_count() / 2), 16),
+                )
+                if corpus_modality == "image":
+                    sub_corpus_embeddings = self.model.get_image_embeddings(
+                        images=corpus_image_dataloader,
+                        task_name=task_name,
+                        prompt_type=PromptType.passage,
+                        **self.encode_kwargs,
+                    )
+                elif corpus_modality == "image,text":
+                    corpus_texts = chunk["text"]
+                    sub_corpus_embeddings = self.model.get_fused_embeddings(
+                        texts=corpus_texts,
+                        images=corpus_image_dataloader,
+                        task_name=task_name,
+                        prompt_type=PromptType.passage,
+                        **self.encode_kwargs,
+                    )
+                else:
+                    raise ValueError(f"Unsupported modality: {corpus_modality}")
+
+            cos_scores = score_function(query_embeddings, sub_corpus_embeddings)
+>>>>>>> main
             cos_scores[torch.isnan(cos_scores)] = -1
 
             cos_scores_top_k_values, cos_scores_top_k_idx = torch.topk(

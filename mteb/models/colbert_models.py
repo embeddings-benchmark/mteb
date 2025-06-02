@@ -35,7 +35,7 @@ class ColBERTModel(AbsEncoder):
             **kwargs: Additional arguments to pass to the model.
         """
         requires_package(self, "pylate", model_name, "pip install mteb[pylate]")
-        from pylate import models as colbert_model
+        from pylate import models as colbert_model  # type: ignore[import]
 
         self.model_name = model_name
         self.model = colbert_model.ColBERT(self.model_name, revision=revision, **kwargs)
@@ -96,9 +96,45 @@ class ColBERTModel(AbsEncoder):
 
         return pred.cpu().numpy()
 
+<<<<<<< HEAD
 
 colbert_v2 = ModelMeta(
     loader=ColBERTModel,
+=======
+    def similarity(self, a: np.ndarray, b: np.ndarray) -> np.ndarray:
+        """Computes the max-similarity max_sim(a[i], b[j]) for all i and j.
+            Works with a Tensor of the shape (batch_size, num_tokens, token_dim)
+
+        Return:
+            Matrix with res[i][j]  = max_sim(a[i], b[j])
+        """  # noqa: D402
+        if not isinstance(a, torch.Tensor):
+            a = torch.tensor(a, dtype=torch.float32)  # type: ignore[no-untyped-call]
+
+        if not isinstance(b, torch.Tensor):
+            b = torch.tensor(b, dtype=torch.float32)  # type: ignore[no-untyped-call]
+
+        if len(a.shape) == 2:
+            a = a.unsqueeze(0)  # type: ignore[no-untyped-call]
+
+        if len(b.shape) == 2:
+            b = b.unsqueeze(0)  # type: ignore[no-untyped-call]
+
+        scores = torch.einsum(
+            "ash,bth->abst",
+            a,
+            b,
+        )
+
+        return scores.max(axis=-1).values.sum(axis=-1)  # type: ignore[no-untyped-call]
+
+
+colbert_v2 = ModelMeta(
+    loader=partial(  # type: ignore[call-arg]
+        ColBERTWrapper,
+        model_name="colbert-ir/colbertv2.0",
+    ),
+>>>>>>> main
     name="colbert-ir/colbertv2.0",
     languages=["eng-Latn"],
     open_weights=True,
@@ -177,5 +213,37 @@ jina_colbert_v2 = ModelMeta(
         "mMARCO-NL": ["train"],  # translation not trained on
         "DuRetrieval": [],
         "MIRACL": ["train"],
+    },
+)
+
+
+lightonai__GTE_ModernColBERT_v1 = ModelMeta(
+    loader=partial(  # type: ignore[call-arg]
+        ColBERTWrapper,
+        model_name="lightonai/GTE-ModernColBERT-v1",
+    ),
+    name="lightonai/GTE-ModernColBERT-v1",
+    languages=[
+        "eng-Latn",  # English
+    ],
+    open_weights=True,
+    revision="78d50a162b04dfdc45c3af6b4294ba77c24888a3",
+    public_training_code="https://gist.github.com/NohTow/3030fe16933d8276dd5b3e9877d89f0f",
+    public_training_data="https://huggingface.co/datasets/lightonai/ms-marco-en-bge-gemma",
+    release_date="2025-04-30",
+    n_parameters=int(149 * 1e6),
+    memory_usage_mb=None,
+    max_tokens=8192,
+    embed_dim=None,  # Bag of Embeddings (128) for each token
+    license="apache-2.0",
+    similarity_fn_name="max_sim",
+    framework=["PyLate", "ColBERT"],
+    reference="https://huggingface.co/lightonai/GTE-ModernColBERT-v1",
+    use_instructions=False,
+    adapted_from="Alibaba-NLP/gte-modernbert-base",
+    superseded_by=None,
+    training_datasets={
+        "MSMARCO": ["train"],
+        "mMARCO-NL": ["train"],  # translation not trained on
     },
 )

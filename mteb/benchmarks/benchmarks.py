@@ -671,21 +671,6 @@ MTEB_code = Benchmark(
             "StackOverflowQA",
             "SyntheticText2SQL",
         ],
-        languages=[
-            "c",
-            "c++",
-            "go",
-            "java",
-            "javascript",
-            "php",
-            "python",
-            "ruby",
-            "rust",
-            "scala",
-            "shell",
-            "swift",
-            "typescript",
-        ],
     ),
     description="A massive code embedding benchmark covering retrieval tasks in a miriad of popular programming languages.",
     reference=None,
@@ -1319,8 +1304,8 @@ C_MTEB = Benchmark(
 )
 
 FA_MTEB = Benchmark(
-    name="MTEB(fas, beta)",
-    display_name="Farsi (BETA)",
+    name="MTEB(fas, v1)",
+    display_name="Farsi",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ir.svg",
     tasks=get_tasks(
         languages=["fas"],
@@ -1335,7 +1320,7 @@ FA_MTEB = Benchmark(
             "SynPerChatbotRAGToneUserClassification",
             "SynPerChatbotToneChatbotClassification",
             "SynPerChatbotToneUserClassification",
-            "PersianTextTone",
+            "SynPerTextToneClassification",
             "SIDClassification",
             "DeepSentiPers",
             "PersianTextEmotion",
@@ -1394,9 +1379,16 @@ FA_MTEB = Benchmark(
             "SynPerChatbotRAGSumSRetrieval",
         ],
     ),
-    description="Main Persian (Farsi) benchmarks from MTEB",
-    reference=None,
-    citation=None,
+    description="The Persian Massive Text Embedding Benchmark (FaMTEB) is a comprehensive benchmark for Persian text embeddings covering 7 tasks and 60+ datasets.",
+    reference="https://arxiv.org/abs/2502.11571",
+    citation=r"""
+@article{zinvandi2025famteb,
+  author = {Zinvandi, Erfan and Alikhani, Morteza and Sarmadi, Mehran and Pourbahman, Zahra and Arvin, Sepehr and Kazemi, Reza and Amini, Arash},
+  journal = {arXiv preprint arXiv:2502.11571},
+  title = {Famteb: Massive text embedding benchmark in persian language},
+  year = {2025},
+}
+""",
     contacts=["mehran-sarmadi", "ERfun", "morteza20"],
 )
 
@@ -1971,6 +1963,92 @@ ENCODECHKA = Benchmark(
   title = {Russian rating of sentence encoders},
   url = {https://habr.com/ru/articles/669674/},
   year = {2022},
+}
+""",
+)
+
+VIDORE = Benchmark(
+    name="ViDoRe(v1)",
+    tasks=get_tasks(
+        tasks=[
+            "VidoreArxivQARetrieval",
+            "VidoreDocVQARetrieval",
+            "VidoreInfoVQARetrieval",
+            "VidoreTabfquadRetrieval",
+            "VidoreTatdqaRetrieval",
+            "VidoreShiftProjectRetrieval",
+            "VidoreSyntheticDocQAAIRetrieval",
+            "VidoreSyntheticDocQAEnergyRetrieval",
+            "VidoreSyntheticDocQAGovernmentReportsRetrieval",
+            "VidoreSyntheticDocQAHealthcareIndustryRetrieval",
+        ],
+    ),
+    description="Retrieve associated pages according to questions.",
+    reference="https://arxiv.org/abs/2407.01449",
+    citation=r"""
+@article{faysse2024colpali,
+  author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal = {arXiv preprint arXiv:2407.01449},
+  title = {ColPali: Efficient Document Retrieval with Vision Language Models},
+  year = {2024},
+}
+""",
+)
+
+VIDORE_V2 = Benchmark(
+    name="ViDoRe(v2)",
+    tasks=get_tasks(
+        tasks=[
+            "Vidore2ESGReportsRetrieval",
+            "Vidore2EconomicsReportsRetrieval",
+            "Vidore2BioMedicalLecturesRetrieval",
+            "Vidore2ESGReportsHLRetrieval",
+        ],
+    ),
+    description="Retrieve associated pages according to questions.",
+    reference="https://arxiv.org/abs/2407.01449",
+    citation=r"""
+@article{mace2025vidorev2,
+  author = {Macé, Quentin and Loison António and Faysse, Manuel},
+  journal = {arXiv preprint arXiv:2505.17166},
+  title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
+  year = {2025},
+}
+""",
+)
+
+VISUAL_DOCUMENT_RETRIEVAL = Benchmark(
+    name="VisualDocumentRetrieval",
+    display_name="Visual Document Retrieval",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-picture.svg",
+    tasks=get_tasks(
+        tasks=[
+            # v1
+            "VidoreArxivQARetrieval",
+            "VidoreDocVQARetrieval",
+            "VidoreInfoVQARetrieval",
+            "VidoreTabfquadRetrieval",
+            "VidoreTatdqaRetrieval",
+            "VidoreShiftProjectRetrieval",
+            "VidoreSyntheticDocQAAIRetrieval",
+            "VidoreSyntheticDocQAEnergyRetrieval",
+            "VidoreSyntheticDocQAGovernmentReportsRetrieval",
+            "VidoreSyntheticDocQAHealthcareIndustryRetrieval",
+            # v2
+            "Vidore2ESGReportsRetrieval",
+            "Vidore2EconomicsReportsRetrieval",
+            "Vidore2BioMedicalLecturesRetrieval",
+            "Vidore2ESGReportsHLRetrieval",
+        ],
+    ),
+    description="A benchmark for evaluating visual document retrieval, combining ViDoRe v1 and v2.",
+    reference="https://arxiv.org/abs/2407.01449",
+    citation=r"""
+@article{mace2025vidorev2,
+  author = {Macé, Quentin and Loison António and Faysse, Manuel},
+  journal = {arXiv preprint arXiv:2505.17166},
+  title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
+  year = {2025},
 }
 """,
 )

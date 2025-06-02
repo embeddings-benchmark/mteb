@@ -29,3 +29,21 @@ repos:
         language: python
         types_or: [python]
         minimum_pre_commit_version: "2.9.2"
+      - id: format-benchmarks-citations
+        name: format-benchmarks-citations
+        description: "Format benchmarks citations"
+        entry: python scripts/format_citations.py benchmarks --error-on-change
+        language: system
+        files: 'mteb/benchmarks/'
+        pass_filenames: false
+        types_or: [ python ]
+        minimum_pre_commit_version: "2.9.2"
+      - id: format-tasks-citations
+        name: format-tasks-citations
+        description: "Format tasks citations"
+        entry: python scripts/format_citations.py tasks --error-on-change
+        language: system
+        files: 'mteb/tasks/'
+        pass_filenames: false
+        types_or: [ python ]
+        minimum_pre_commit_version: "2.9.2"

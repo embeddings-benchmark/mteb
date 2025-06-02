@@ -21,6 +21,7 @@ class STSBenchmarkMultilingualVisualSTSEng(AbsTaskAggregate):
         tasks=task_list_stsb,
         category="i2i",
         license="not specified",
+        modalities=["image"],
         annotations_creators="human-annotated",
         dialect=[""],
         sample_creation="rendered",
@@ -67,7 +68,7 @@ task_list_multi: list[AbsTask] = [
 ]
 
 
-class STSBenchmarkMultilingualVisualSTSMultilingual(AbsTaskAggregate):
+class STSBenchmarkMultilingualVisualSTSMultilingual(AbsTaskAggregate, MultilingualTask):
     metadata = AggregateTaskMetadata(
         name="VisualSTS-b-Multilingual",
         description="STSBenchmarkMultilingualVisualSTS multilingual.",
@@ -75,6 +76,7 @@ class STSBenchmarkMultilingualVisualSTSMultilingual(AbsTaskAggregate):
         tasks=task_list_multi,
         category="i2i",
         license="not specified",
+        modalities=["image"],
         annotations_creators="human-annotated",
         dialect=[""],
         sample_creation="rendered",
