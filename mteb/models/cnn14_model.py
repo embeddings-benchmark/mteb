@@ -27,7 +27,7 @@ class CNN14Wrapper(Wrapper):
         self.device = device
 
         requires_package(
-            CNN14Wrapper.__name__,
+            self,
             "speechbrain",
             "speechbrain/cnn14-esc50",
             "pip install 'mteb[speechbrain]'",
