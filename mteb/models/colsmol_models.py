@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-from functools import partial
 
 import torch
 from transformers.utils.import_utils import is_flash_attn_2_available
@@ -41,9 +40,8 @@ class ColSmolWrapper(ColPaliEngineWrapper):
 
 
 colsmol_256m = ModelMeta(
-    loader=partial(
-        ColSmolWrapper,
-        model_name="vidore/colSmol-256M",
+    loader=ColSmolWrapper,
+    loader_kwargs=dict(
         torch_dtype=torch.float16,
         attn_implementation="flash_attention_2"
         if is_flash_attn_2_available()
@@ -64,15 +62,14 @@ colsmol_256m = ModelMeta(
     public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
     framework=["ColPali"],
     reference="https://huggingface.co/vidore/colSmol-256M",
-    similarity_fn_name="max_sim",
+    similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
 )
 
 colsmol_500m = ModelMeta(
-    loader=partial(
-        ColSmolWrapper,
-        model_name="vidore/colSmol-500M",
+    loader=ColSmolWrapper,
+    loader_kwargs=dict(
         torch_dtype=torch.float16,
         attn_implementation="flash_attention_2"
         if is_flash_attn_2_available()
@@ -93,7 +90,7 @@ colsmol_500m = ModelMeta(
     public_training_data="https://huggingface.co/datasets/vidore/colpali_train_set",
     framework=["ColPali"],
     reference="https://huggingface.co/vidore/colSmol-500M",
-    similarity_fn_name="max_sim",
+    similarity_fn_name="MaxSim",
     use_instructions=True,
     training_datasets=COLPALI_TRAINING_DATA,
 )

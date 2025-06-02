@@ -2,16 +2,25 @@ from __future__ import annotations
 
 from .ara import (
     AJGT,
+    AJGTV2,
     HotelReviewSentimentClassification,
+    HotelReviewSentimentClassificationV2,
     OnlineStoreReviewSentimentClassification,
+    OnlineStoreReviewSentimentClassificationV2,
     RestaurantReviewSentimentClassification,
+    RestaurantReviewSentimentClassificationV2,
     TweetEmotionClassification,
+    TweetEmotionClassificationV2,
     TweetSarcasmClassification,
+    TweetSarcasmClassificationV2,
 )
 from .ben import (
     BengaliDocumentClassification,
+    BengaliDocumentClassificationV2,
     BengaliHateSpeechClassification,
+    BengaliHateSpeechClassificationV2,
     BengaliSentimentAnalysis,
+    BengaliSentimentAnalysisV2,
 )
 from .bul import BulgarianStoreReviewSentimentClassfication
 from .ces import (
@@ -184,7 +193,6 @@ from .fas import (
     NLPTwitterAnalysisClassification,
     PersianFoodSentimentClassification,
     PersianTextEmotion,
-    PersianTextTone,
     SentimentDKSF,
     SIDClassification,
     SynPerChatbotConvSAAnger,
@@ -203,6 +211,7 @@ from .fas import (
     SynPerChatbotSatisfactionLevelClassification,
     SynPerChatbotToneChatbotClassification,
     SynPerChatbotToneUserClassification,
+    SynPerTextToneClassification,
 )
 from .fil import FilipinoHateSpeechClassification, FilipinoShopeeReviewsClassification
 from .fin import FinToxicityClassification
@@ -324,6 +333,7 @@ from .zul import IsiZuluNewsClassification
 
 __all__ = [
     "AJGT",
+    "AJGTV2",
     "AfriSentiClassification",
     "AfriSentiLangClassification",
     "AllegroReviewsClassification",
@@ -334,8 +344,11 @@ __all__ = [
     "ArxivClassification",
     "Banking77Classification",
     "BengaliDocumentClassification",
+    "BengaliDocumentClassificationV2",
     "BengaliHateSpeechClassification",
+    "BengaliHateSpeechClassificationV2",
     "BengaliSentimentAnalysis",
+    "BengaliSentimentAnalysisV2",
     "BulgarianStoreReviewSentimentClassfication",
     "CSFDCZMovieReviewSentimentClassification",
     "CSFDSKMovieReviewSentimentClassification",
@@ -436,6 +449,7 @@ __all__ = [
     "HinDialectClassification",
     "HindiDiscourseClassification",
     "HotelReviewSentimentClassification",
+    "HotelReviewSentimentClassificationV2",
     "IFlyTek",
     "ImdbClassification",
     "InappropriatenessClassification",
@@ -517,6 +531,7 @@ __all__ = [
     "OdiaNewsClassification",
     "OnlineShopping",
     "OnlineStoreReviewSentimentClassification",
+    "OnlineStoreReviewSentimentClassificationV2",
     "OralArgumentQuestionPurposeLegalBenchClassification",
     "OverrulingLegalBenchClassification",
     "PROALegalBenchClassification",
@@ -524,13 +539,13 @@ __all__ = [
     "PatentClassification",
     "PersianFoodSentimentClassification",
     "PersianTextEmotion",
-    "PersianTextTone",
     "PersonalJurisdictionLegalBenchClassification",
     "PoemSentimentClassification",
     "PolEmo2InClassification",
     "PolEmo2OutClassification",
     "PunjabiNewsClassification",
     "RestaurantReviewSentimentClassification",
+    "RestaurantReviewSentimentClassificationV2",
     "RomanianReviewsSentiment",
     "RomanianSentimentClassification",
     "RuNLUIntentClassification",
@@ -585,6 +600,7 @@ __all__ = [
     "SynPerChatbotSatisfactionLevelClassification",
     "SynPerChatbotToneChatbotClassification",
     "SynPerChatbotToneUserClassification",
+    "SynPerTextToneClassification",
     "TNews",
     "TamilNewsClassification",
     "TelemarketingSalesRuleLegalBenchClassification",
@@ -599,7 +615,9 @@ __all__ = [
     "TurkishMovieSentimentClassification",
     "TurkishProductSentimentClassification",
     "TweetEmotionClassification",
+    "TweetEmotionClassificationV2",
     "TweetSarcasmClassification",
+    "TweetSarcasmClassificationV2",
     "TweetSentimentClassification",
     "TweetSentimentExtractionClassification",
     "TweetTopicSingleClassification",
