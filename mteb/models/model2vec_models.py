@@ -315,10 +315,7 @@ potion_base_8m = ModelMeta(
 )
 
 potion_multilingual_128m = ModelMeta(
-    loader=partial(
-        Model2VecWrapper,
-        model_name="minishlab/potion-multilingual-128M",
-    ),
+    loader=Model2VecWrapper,
     name="minishlab/potion-multilingual-128M",
     languages=_POTION_MULTILINGUAL_128M_LANGUAGES,
     open_weights=True,

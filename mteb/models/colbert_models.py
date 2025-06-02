@@ -96,45 +96,9 @@ class ColBERTModel(AbsEncoder):
 
         return pred.cpu().numpy()
 
-<<<<<<< HEAD
 
 colbert_v2 = ModelMeta(
     loader=ColBERTModel,
-=======
-    def similarity(self, a: np.ndarray, b: np.ndarray) -> np.ndarray:
-        """Computes the max-similarity max_sim(a[i], b[j]) for all i and j.
-            Works with a Tensor of the shape (batch_size, num_tokens, token_dim)
-
-        Return:
-            Matrix with res[i][j]  = max_sim(a[i], b[j])
-        """  # noqa: D402
-        if not isinstance(a, torch.Tensor):
-            a = torch.tensor(a, dtype=torch.float32)  # type: ignore[no-untyped-call]
-
-        if not isinstance(b, torch.Tensor):
-            b = torch.tensor(b, dtype=torch.float32)  # type: ignore[no-untyped-call]
-
-        if len(a.shape) == 2:
-            a = a.unsqueeze(0)  # type: ignore[no-untyped-call]
-
-        if len(b.shape) == 2:
-            b = b.unsqueeze(0)  # type: ignore[no-untyped-call]
-
-        scores = torch.einsum(
-            "ash,bth->abst",
-            a,
-            b,
-        )
-
-        return scores.max(axis=-1).values.sum(axis=-1)  # type: ignore[no-untyped-call]
-
-
-colbert_v2 = ModelMeta(
-    loader=partial(  # type: ignore[call-arg]
-        ColBERTWrapper,
-        model_name="colbert-ir/colbertv2.0",
-    ),
->>>>>>> main
     name="colbert-ir/colbertv2.0",
     languages=["eng-Latn"],
     open_weights=True,

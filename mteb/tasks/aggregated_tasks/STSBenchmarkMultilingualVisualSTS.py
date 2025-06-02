@@ -68,7 +68,7 @@ task_list_multi: list[AbsTask] = [
 ]
 
 
-class STSBenchmarkMultilingualVisualSTSMultilingual(AbsTaskAggregate, MultilingualTask):
+class STSBenchmarkMultilingualVisualSTSMultilingual(AbsTaskAggregate):
     metadata = AggregateTaskMetadata(
         name="VisualSTS-b-Multilingual",
         description="STSBenchmarkMultilingualVisualSTS multilingual.",
