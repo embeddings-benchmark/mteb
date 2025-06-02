@@ -16,14 +16,14 @@ UrlString = Annotated[
 ]  # Allows the type to be a string, but ensures that the string is a URL
 
 
-MMTEB_CITATION = """@article{enevoldsen2025mmtebmassivemultilingualtext,
-    title={MMTEB: Massive Multilingual Text Embedding Benchmark},
-    author={Kenneth Enevoldsen and Isaac Chung and Imene Kerboua and Márton Kardos and Ashwin Mathur and David Stap and Jay Gala and Wissam Siblini and Dominik Krzemiński and Genta Indra Winata and Saba Sturua and Saiteja Utpala and Mathieu Ciancone and Marion Schaeffer and Gabriel Sequeira and Diganta Misra and Shreeya Dhakal and Jonathan Rystrøm and Roman Solomatin and Ömer Çağatan and Akash Kundu and Martin Bernstorff and Shitao Xiao and Akshita Sukhlecha and Bhavish Pahwa and Rafał Poświata and Kranthi Kiran GV and Shawon Ashraf and Daniel Auras and Björn Plüster and Jan Philipp Harries and Loïc Magne and Isabelle Mohr and Mariya Hendriksen and Dawei Zhu and Hippolyte Gisserot-Boukhlef and Tom Aarsen and Jan Kostkan and Konrad Wojtasik and Taemin Lee and Marek Šuppa and Crystina Zhang and Roberta Rocca and Mohammed Hamdy and Andrianos Michail and John Yang and Manuel Faysse and Aleksei Vatolin and Nandan Thakur and Manan Dey and Dipam Vasani and Pranjal Chitale and Simone Tedeschi and Nguyen Tai and Artem Snegirev and Michael Günther and Mengzhou Xia and Weijia Shi and Xing Han Lù and Jordan Clive and Gayatri Krishnakumar and Anna Maksimova and Silvan Wehrli and Maria Tikhonova and Henil Panchal and Aleksandr Abramov and Malte Ostendorff and Zheng Liu and Simon Clematide and Lester James Miranda and Alena Fenogenova and Guangyu Song and Ruqiya Bin Safi and Wen-Ding Li and Alessia Borghini and Federico Cassano and Hongjin Su and Jimmy Lin and Howard Yen and Lasse Hansen and Sara Hooker and Chenghao Xiao and Vaibhav Adlakha and Orion Weller and Siva Reddy and Niklas Muennighoff},
-    publisher = {arXiv},
-    journal={arXiv preprint arXiv:2502.13595},
-    year={2025},
-    url={https://arxiv.org/abs/2502.13595},
-    doi = {10.48550/arXiv.2502.13595},
+MMTEB_CITATION = r"""@article{enevoldsen2025mmtebmassivemultilingualtext,
+  author = {Kenneth Enevoldsen and Isaac Chung and Imene Kerboua and Márton Kardos and Ashwin Mathur and David Stap and Jay Gala and Wissam Siblini and Dominik Krzemiński and Genta Indra Winata and Saba Sturua and Saiteja Utpala and Mathieu Ciancone and Marion Schaeffer and Gabriel Sequeira and Diganta Misra and Shreeya Dhakal and Jonathan Rystrøm and Roman Solomatin and Ömer Çağatan and Akash Kundu and Martin Bernstorff and Shitao Xiao and Akshita Sukhlecha and Bhavish Pahwa and Rafał Poświata and Kranthi Kiran GV and Shawon Ashraf and Daniel Auras and Björn Plüster and Jan Philipp Harries and Loïc Magne and Isabelle Mohr and Mariya Hendriksen and Dawei Zhu and Hippolyte Gisserot-Boukhlef and Tom Aarsen and Jan Kostkan and Konrad Wojtasik and Taemin Lee and Marek Šuppa and Crystina Zhang and Roberta Rocca and Mohammed Hamdy and Andrianos Michail and John Yang and Manuel Faysse and Aleksei Vatolin and Nandan Thakur and Manan Dey and Dipam Vasani and Pranjal Chitale and Simone Tedeschi and Nguyen Tai and Artem Snegirev and Michael Günther and Mengzhou Xia and Weijia Shi and Xing Han Lù and Jordan Clive and Gayatri Krishnakumar and Anna Maksimova and Silvan Wehrli and Maria Tikhonova and Henil Panchal and Aleksandr Abramov and Malte Ostendorff and Zheng Liu and Simon Clematide and Lester James Miranda and Alena Fenogenova and Guangyu Song and Ruqiya Bin Safi and Wen-Ding Li and Alessia Borghini and Federico Cassano and Hongjin Su and Jimmy Lin and Howard Yen and Lasse Hansen and Sara Hooker and Chenghao Xiao and Vaibhav Adlakha and Orion Weller and Siva Reddy and Niklas Muennighoff},
+  doi = {10.48550/arXiv.2502.13595},
+  journal = {arXiv preprint arXiv:2502.13595},
+  publisher = {arXiv},
+  title = {MMTEB: Massive Multilingual Text Embedding Benchmark},
+  url = {https://arxiv.org/abs/2502.13595},
+  year = {2025},
 }"""
 
 MTEB_EN = Benchmark(
@@ -179,15 +179,17 @@ MTEB_ENG_CLASSIC = Benchmark(
 This page is an adaptation of the [old MTEB leaderboard](https://huggingface.co/spaces/mteb/leaderboard_legacy).
 We recommend that you use [MTEB(eng, v2)](http://mteb-leaderboard.hf.space/?benchmark_name=MTEB%28eng%2C+v2%29) instead, as it uses updated versions of the task, making it notably faster to run and resolving [a known bug](https://github.com/embeddings-benchmark/mteb/issues/1156) in existing tasks. This benchmark also removes datasets common for fine-tuning, such as MSMARCO, which makes model performance scores more comparable. However, generally, both benchmarks provide similar estimates.
     """,
-    citation="""@article{muennighoff2022mteb,
-    author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Lo{\"\i}c and Reimers, Nils},
-    title = {MTEB: Massive Text Embedding Benchmark},
-    publisher = {arXiv},
-    journal={arXiv preprint arXiv:2210.07316},
-    year = {2022}
-    url = {https://arxiv.org/abs/2210.07316},
-    doi = {10.48550/ARXIV.2210.07316},
-}""",
+    citation=r"""
+@article{muennighoff2022mteb,
+  author = {Muennighoff, Niklas and Tazi, Nouamane and Magne, Lo{\"\i}c and Reimers, Nils},
+  doi = {10.48550/ARXIV.2210.07316},
+  journal = {arXiv preprint arXiv:2210.07316},
+  publisher = {arXiv},
+  title = {MTEB: Massive Text Embedding Benchmark},
+  url = {https://arxiv.org/abs/2210.07316},
+  year = {2022},
+}
+""",
     contacts=["Muennighoff"],
 )
 
@@ -235,15 +237,17 @@ MTEB_MAIN_RU = Benchmark(
     ),
     description="A Russian version of the Massive Text Embedding Benchmark with a number of novel Russian tasks in all task categories of the original MTEB.",
     reference="https://aclanthology.org/2023.eacl-main.148/",
-    citation="""@misc{snegirev2024russianfocusedembeddersexplorationrumteb,
-    title={The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design},
-    author={Artem Snegirev and Maria Tikhonova and Anna Maksimova and Alena Fenogenova and Alexander Abramov},
-    year={2024},
-    eprint={2408.12503},
-    archivePrefix={arXiv},
-    primaryClass={cs.CL},
-    url={https://arxiv.org/abs/2408.12503},
-}""",
+    citation=r"""
+@misc{snegirev2024russianfocusedembeddersexplorationrumteb,
+  archiveprefix = {arXiv},
+  author = {Artem Snegirev and Maria Tikhonova and Anna Maksimova and Alena Fenogenova and Alexander Abramov},
+  eprint = {2408.12503},
+  primaryclass = {cs.CL},
+  title = {The Russian-focused embedders' exploration: ruMTEB benchmark and Russian embedding model design},
+  url = {https://arxiv.org/abs/2408.12503},
+  year = {2024},
+}
+""",
 )
 
 MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
@@ -258,14 +262,16 @@ MTEB_RETRIEVAL_WITH_INSTRUCTIONS = Benchmark(
     ),
     description="Retrieval w/Instructions is the task of finding relevant documents for a query that has detailed instructions.",
     reference="https://arxiv.org/abs/2403.15246",
-    citation="""@misc{weller2024followir,
-    title={FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions},
-    author={Orion Weller and Benjamin Chang and Sean MacAvaney and Kyle Lo and Arman Cohan and Benjamin Van Durme and Dawn Lawrie and Luca Soldaini},
-    year={2024},
-    eprint={2403.15246},
-    archivePrefix={arXiv},
-    primaryClass={cs.IR}
-}""",
+    citation=r"""
+@misc{weller2024followir,
+  archiveprefix = {arXiv},
+  author = {Orion Weller and Benjamin Chang and Sean MacAvaney and Kyle Lo and Arman Cohan and Benjamin Van Durme and Dawn Lawrie and Luca Soldaini},
+  eprint = {2403.15246},
+  primaryclass = {cs.IR},
+  title = {FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions},
+  year = {2024},
+}
+""",
 )
 
 MTEB_RETRIEVAL_LAW = Benchmark(
@@ -332,12 +338,14 @@ MTEB_MINERS_BITEXT_MINING = Benchmark(
     including bitext mining and classification via retrieval-augmented contexts.
     """,
     reference="https://arxiv.org/pdf/2406.07424",
-    citation="""@article{winata2024miners,
-    title={MINERS: Multilingual Language Models as Semantic Retrievers},
-    author={Winata, Genta Indra and Zhang, Ruochen and Adelani, David Ifeoluwa},
-    journal={arXiv preprint arXiv:2406.07424},
-    year={2024}
-}""",
+    citation=r"""
+@article{winata2024miners,
+  author = {Winata, Genta Indra and Zhang, Ruochen and Adelani, David Ifeoluwa},
+  journal = {arXiv preprint arXiv:2406.07424},
+  title = {MINERS: Multilingual Language Models as Semantic Retrievers},
+  year = {2024},
+}
+""",
 )
 
 SEB = Benchmark(
@@ -383,13 +391,15 @@ SEB = Benchmark(
     ),
     description="A curated selection of tasks coverering the Scandinavian languages; Danish, Swedish and Norwegian, including Bokmål and Nynorsk.",
     reference="https://kennethenevoldsen.github.io/scandinavian-embedding-benchmark/",
-    citation="""@inproceedings{enevoldsen2024scandinavian,
-    title={The Scandinavian Embedding Benchmarks: Comprehensive Assessment of Multilingual and Monolingual Text Embedding},
-    author={Enevoldsen, Kenneth and Kardos, M{\'a}rton and Muennighoff, Niklas and Nielbo, Kristoffer},
-    booktitle={Advances in Neural Information Processing Systems},
-    year={2024},
-    url={https://nips.cc/virtual/2024/poster/97869}
-}""",
+    citation=r"""
+@inproceedings{enevoldsen2024scandinavian,
+  author = {Enevoldsen, Kenneth and Kardos, M{\'a}rton and Muennighoff, Niklas and Nielbo, Kristoffer},
+  booktitle = {Advances in Neural Information Processing Systems},
+  title = {The Scandinavian Embedding Benchmarks: Comprehensive Assessment of Multilingual and Monolingual Text Embedding},
+  url = {https://nips.cc/virtual/2024/poster/97869},
+  year = {2024},
+}
+""",
     contacts=["KennethEnevoldsen", "x-tabdeveloping", "Samoed"],
 )
 
@@ -412,15 +422,17 @@ CoIR = Benchmark(
     ),
     description="CoIR: A Comprehensive Benchmark for Code Information Retrieval Models",
     reference="https://github.com/CoIR-team/coir",
-    citation="""@misc{li2024coircomprehensivebenchmarkcode,
-    title={CoIR: A Comprehensive Benchmark for Code Information Retrieval Models},
-    author={Xiangyang Li and Kuicai Dong and Yi Quan Lee and Wei Xia and Yichun Yin and Hao Zhang and Yong Liu and Yasheng Wang and Ruiming Tang},
-    year={2024},
-    eprint={2407.02883},
-    archivePrefix={arXiv},
-    primaryClass={cs.IR},
-    url={https://arxiv.org/abs/2407.02883},
-}""",
+    citation=r"""
+@misc{li2024coircomprehensivebenchmarkcode,
+  archiveprefix = {arXiv},
+  author = {Xiangyang Li and Kuicai Dong and Yi Quan Lee and Wei Xia and Yichun Yin and Hao Zhang and Yong Liu and Yasheng Wang and Ruiming Tang},
+  eprint = {2407.02883},
+  primaryclass = {cs.IR},
+  title = {CoIR: A Comprehensive Benchmark for Code Information Retrieval Models},
+  url = {https://arxiv.org/abs/2407.02883},
+  year = {2024},
+}
+""",
 )
 
 RAR_b = Benchmark(
@@ -449,12 +461,14 @@ RAR_b = Benchmark(
     ),
     description="A benchmark to evaluate reasoning capabilities of retrievers.",
     reference="https://arxiv.org/abs/2404.06347",
-    citation="""@article{xiao2024rar,
-    title={RAR-b: Reasoning as Retrieval Benchmark},
-    author={Xiao, Chenghao and Hudson, G Thomas and Al Moubayed, Noura},
-    journal={arXiv preprint arXiv:2404.06347},
-    year={2024}
-}""",
+    citation=r"""
+@article{xiao2024rar,
+  author = {Xiao, Chenghao and Hudson, G Thomas and Al Moubayed, Noura},
+  journal = {arXiv preprint arXiv:2404.06347},
+  title = {RAR-b: Reasoning as Retrieval Benchmark},
+  year = {2024},
+}
+""",
     contacts=["gowitheflow-1998"],
 )
 
@@ -502,15 +516,17 @@ MTEB_FRA = Benchmark(
     ),
     description="MTEB-French, a French expansion of the original benchmark with high-quality native French datasets.",
     reference="https://arxiv.org/abs/2405.20468",
-    citation="""@misc{ciancone2024mtebfrenchresourcesfrenchsentence,
-    title={MTEB-French: Resources for French Sentence Embedding Evaluation and Analysis},
-    author={Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
-    year={2024},
-    eprint={2405.20468},
-    archivePrefix={arXiv},
-    primaryClass={cs.CL},
-    url={https://arxiv.org/abs/2405.20468},
-}""",
+    citation=r"""
+@misc{ciancone2024mtebfrenchresourcesfrenchsentence,
+  archiveprefix = {arXiv},
+  author = {Mathieu Ciancone and Imene Kerboua and Marion Schaeffer and Wissam Siblini},
+  eprint = {2405.20468},
+  primaryclass = {cs.CL},
+  title = {MTEB-French: Resources for French Sentence Embedding Evaluation and Analysis},
+  url = {https://arxiv.org/abs/2405.20468},
+  year = {2024},
+}
+""",
     contacts=["imenelydiaker"],
 )
 
@@ -551,15 +567,17 @@ MTEB_DEU = Benchmark(
     ),
     description="A benchmark for text-embedding performance in German.",
     reference="https://arxiv.org/html/2401.02709v1",
-    citation="""@misc{wehrli2024germantextembeddingclustering,
-    title={German Text Embedding Clustering Benchmark},
-    author={Silvan Wehrli and Bert Arnrich and Christopher Irrgang},
-    year={2024},
-    eprint={2401.02709},
-    archivePrefix={arXiv},
-    primaryClass={cs.CL},
-    url={https://arxiv.org/abs/2401.02709},
-}""",
+    citation=r"""
+@misc{wehrli2024germantextembeddingclustering,
+  archiveprefix = {arXiv},
+  author = {Silvan Wehrli and Bert Arnrich and Christopher Irrgang},
+  eprint = {2401.02709},
+  primaryclass = {cs.CL},
+  title = {German Text Embedding Clustering Benchmark},
+  url = {https://arxiv.org/abs/2401.02709},
+  year = {2024},
+}
+""",
     contacts=["slvnwhrl"],
 )
 
@@ -625,12 +643,14 @@ NLP community. In addition, a new PLSC (Polish Library of Science Corpus) datase
 consisting of titles and abstracts of scientific publications in Polish, which was used as the basis for
 two novel clustering tasks.""",  # Rephrased from the abstract
     reference="https://arxiv.org/abs/2405.10138",
-    citation="""@article{poswiata2024plmteb,
-    title={PL-MTEB: Polish Massive Text Embedding Benchmark},
-    author={Rafał Poświata and Sławomir Dadas and Michał Perełkiewicz},
-    journal={arXiv preprint arXiv:2405.10138},
-    year={2024}
-}""",
+    citation=r"""
+@article{poswiata2024plmteb,
+  author = {Rafał Poświata and Sławomir Dadas and Michał Perełkiewicz},
+  journal = {arXiv preprint arXiv:2405.10138},
+  title = {PL-MTEB: Polish Massive Text Embedding Benchmark},
+  year = {2024},
+}
+""",
     contacts=["rafalposwiata"],
 )
 
@@ -654,169 +674,169 @@ MTEB_code = Benchmark(
             "StackOverflowQA",
             "SyntheticText2SQL",
         ],
-        languages=[
-            "c",
-            "c++",
-            "go",
-            "java",
-            "javascript",
-            "php",
-            "python",
-            "ruby",
-            "rust",
-            "scala",
-            "shell",
-            "swift",
-            "typescript",
-        ],
     ),
     description="A massive code embedding benchmark covering retrieval tasks in a miriad of popular programming languages.",
     reference=None,
     citation=MMTEB_CITATION,
 )
 
+mteb_multilingual_tasks = get_tasks(
+    tasks=[
+        "BornholmBitextMining",
+        "BibleNLPBitextMining",
+        "BUCC.v2",
+        "DiaBlaBitextMining",
+        "FloresBitextMining",
+        "IN22GenBitextMining",
+        "IndicGenBenchFloresBitextMining",
+        "NollySentiBitextMining",
+        "NorwegianCourtsBitextMining",
+        "NTREXBitextMining",
+        "NusaTranslationBitextMining",
+        "NusaXBitextMining",
+        "Tatoeba",
+        "BulgarianStoreReviewSentimentClassfication",
+        "CzechProductReviewSentimentClassification",
+        "GreekLegalCodeClassification",
+        "DBpediaClassification",
+        "FinancialPhrasebankClassification",
+        "PoemSentimentClassification",
+        "ToxicConversationsClassification",
+        "TweetTopicSingleClassification",
+        "EstonianValenceClassification",
+        "FilipinoShopeeReviewsClassification",
+        "GujaratiNewsClassification",
+        "SentimentAnalysisHindi",
+        "IndonesianIdClickbaitClassification",
+        "ItaCaseholdClassification",
+        "KorSarcasmClassification",
+        "KurdishSentimentClassification",
+        "MacedonianTweetSentimentClassification",
+        "AfriSentiClassification",
+        "AmazonCounterfactualClassification",
+        "CataloniaTweetClassification",
+        "CyrillicTurkicLangClassification",
+        "IndicLangClassification",
+        "MasakhaNEWSClassification",
+        "MassiveIntentClassification",
+        "MultiHateClassification",
+        "NordicLangClassification",
+        "NusaParagraphEmotionClassification",
+        "NusaX-senti",
+        "ScalaClassification",
+        "SwissJudgementClassification",
+        "NepaliNewsClassification",
+        "OdiaNewsClassification",
+        "PunjabiNewsClassification",
+        "PolEmo2.0-OUT",
+        "PAC",
+        "SinhalaNewsClassification",
+        "CSFDSKMovieReviewSentimentClassification",
+        "SiswatiNewsClassification",
+        "SlovakMovieReviewSentimentClassification",
+        "SwahiliNewsClassification",
+        "DalajClassification",
+        "TswanaNewsClassification",
+        "IsiZuluNewsClassification",
+        "WikiCitiesClustering",
+        "MasakhaNEWSClusteringS2S",
+        "RomaniBibleClustering",
+        "ArXivHierarchicalClusteringP2P",
+        "ArXivHierarchicalClusteringS2S",
+        "BigPatentClustering.v2",
+        "BiorxivClusteringP2P.v2",
+        "MedrxivClusteringP2P.v2",
+        "StackExchangeClustering.v2",
+        "AlloProfClusteringS2S.v2",
+        "HALClusteringS2S.v2",
+        "SIB200ClusteringS2S",
+        "WikiClusteringP2P.v2",
+        "PlscClusteringP2P.v2",
+        "SwednClusteringP2P",
+        "CLSClusteringP2P.v2",
+        "StackOverflowQA",
+        "TwitterHjerneRetrieval",
+        "AILAStatutes",
+        "ArguAna",
+        "HagridRetrieval",
+        "LegalBenchCorporateLobbying",
+        "LEMBPasskeyRetrieval",
+        "SCIDOCS",
+        "SpartQA",
+        "TempReasonL1",
+        "TRECCOVID",
+        "WinoGrande",
+        "BelebeleRetrieval",
+        "MLQARetrieval",
+        "StatcanDialogueDatasetRetrieval",
+        "WikipediaRetrievalMultilingual",
+        "CovidRetrieval",
+        "Core17InstructionRetrieval",
+        "News21InstructionRetrieval",
+        "Robust04InstructionRetrieval",
+        "KorHateSpeechMLClassification",
+        "MalteseNewsClassification",
+        "MultiEURLEXMultilabelClassification",
+        "BrazilianToxicTweetsClassification",
+        "CEDRClassification",
+        "CTKFactsNLI",
+        "SprintDuplicateQuestions",
+        "TwitterURLCorpus",
+        "ArmenianParaphrasePC",
+        "indonli",
+        "OpusparcusPC",
+        "PawsXPairClassification",
+        "RTE3",
+        "XNLI",
+        "PpcPC",
+        "TERRa",
+        "WebLINXCandidatesReranking",
+        "AlloprofReranking",
+        "VoyageMMarcoReranking",
+        "WikipediaRerankingMultilingual",
+        "RuBQReranking",
+        "T2Reranking",
+        "GermanSTSBenchmark",
+        "SICK-R",
+        "STS12",
+        "STS13",
+        "STS14",
+        "STS15",
+        "STSBenchmark",
+        "FaroeseSTS",
+        "FinParaSTS",
+        "JSICK",
+        "IndicCrosslingualSTS",
+        "SemRel24STS",
+        "STS17",
+        "STS22.v2",
+        "STSES",
+        "STSB",
+        "MIRACLRetrievalHardNegatives",
+    ],
+)
+
 MTEB_multilingual = Benchmark(
     name="MTEB(Multilingual, v1)",
     display_name="Multilingual",
     icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-globe.svg",
-    tasks=get_tasks(
-        tasks=[
-            "BornholmBitextMining",
-            "BibleNLPBitextMining",
-            "BUCC.v2",
-            "DiaBlaBitextMining",
-            "FloresBitextMining",
-            "IN22GenBitextMining",
-            "IndicGenBenchFloresBitextMining",
-            "NollySentiBitextMining",
-            "NorwegianCourtsBitextMining",
-            "NTREXBitextMining",
-            "NusaTranslationBitextMining",
-            "NusaXBitextMining",
-            "Tatoeba",
-            "BulgarianStoreReviewSentimentClassfication",
-            "CzechProductReviewSentimentClassification",
-            "GreekLegalCodeClassification",
-            "DBpediaClassification",
-            "FinancialPhrasebankClassification",
-            "PoemSentimentClassification",
-            "ToxicConversationsClassification",
-            "TweetTopicSingleClassification",
-            "EstonianValenceClassification",
-            "FilipinoShopeeReviewsClassification",
-            "GujaratiNewsClassification",
-            "SentimentAnalysisHindi",
-            "IndonesianIdClickbaitClassification",
-            "ItaCaseholdClassification",
-            "KorSarcasmClassification",
-            "KurdishSentimentClassification",
-            "MacedonianTweetSentimentClassification",
-            "AfriSentiClassification",
-            "AmazonCounterfactualClassification",
-            "CataloniaTweetClassification",
-            "CyrillicTurkicLangClassification",
-            "IndicLangClassification",
-            "MasakhaNEWSClassification",
-            "MassiveIntentClassification",
-            "MultiHateClassification",
-            "NordicLangClassification",
-            "NusaParagraphEmotionClassification",
-            "NusaX-senti",
-            "ScalaClassification",
-            "SwissJudgementClassification",
-            "NepaliNewsClassification",
-            "OdiaNewsClassification",
-            "PunjabiNewsClassification",
-            "PolEmo2.0-OUT",
-            "PAC",
-            "SinhalaNewsClassification",
-            "CSFDSKMovieReviewSentimentClassification",
-            "SiswatiNewsClassification",
-            "SlovakMovieReviewSentimentClassification",
-            "SwahiliNewsClassification",
-            "DalajClassification",
-            "TswanaNewsClassification",
-            "IsiZuluNewsClassification",
-            "WikiCitiesClustering",
-            "MasakhaNEWSClusteringS2S",
-            "RomaniBibleClustering",
-            "ArXivHierarchicalClusteringP2P",
-            "ArXivHierarchicalClusteringS2S",
-            "BigPatentClustering.v2",
-            "BiorxivClusteringP2P.v2",
-            "MedrxivClusteringP2P.v2",
-            "StackExchangeClustering.v2",
-            "AlloProfClusteringS2S.v2",
-            "HALClusteringS2S.v2",
-            "SIB200ClusteringS2S",
-            "WikiClusteringP2P.v2",
-            "SNLHierarchicalClusteringP2P",
-            "PlscClusteringP2P.v2",
-            "SwednClusteringP2P",
-            "CLSClusteringP2P.v2",
-            "StackOverflowQA",
-            "TwitterHjerneRetrieval",
-            "AILAStatutes",
-            "ArguAna",
-            "HagridRetrieval",
-            "LegalBenchCorporateLobbying",
-            "LEMBPasskeyRetrieval",
-            "SCIDOCS",
-            "SpartQA",
-            "TempReasonL1",
-            "TRECCOVID",
-            "WinoGrande",
-            "BelebeleRetrieval",
-            "MLQARetrieval",
-            "StatcanDialogueDatasetRetrieval",
-            "WikipediaRetrievalMultilingual",
-            "CovidRetrieval",
-            "Core17InstructionRetrieval",
-            "News21InstructionRetrieval",
-            "Robust04InstructionRetrieval",
-            "KorHateSpeechMLClassification",
-            "MalteseNewsClassification",
-            "MultiEURLEXMultilabelClassification",
-            "BrazilianToxicTweetsClassification",
-            "CEDRClassification",
-            "CTKFactsNLI",
-            "SprintDuplicateQuestions",
-            "TwitterURLCorpus",
-            "ArmenianParaphrasePC",
-            "indonli",
-            "OpusparcusPC",
-            "PawsXPairClassification",
-            "RTE3",
-            "XNLI",
-            "PpcPC",
-            "TERRa",
-            "WebLINXCandidatesReranking",
-            "AlloprofReranking",
-            "VoyageMMarcoReranking",
-            "WikipediaRerankingMultilingual",
-            "RuBQReranking",
-            "T2Reranking",
-            "GermanSTSBenchmark",
-            "SICK-R",
-            "STS12",
-            "STS13",
-            "STS14",
-            "STS15",
-            "STSBenchmark",
-            "FaroeseSTS",
-            "FinParaSTS",
-            "JSICK",
-            "IndicCrosslingualSTS",
-            "SemRel24STS",
-            "STS17",
-            "STS22.v2",
-            "STSES",
-            "STSB",
-            "MIRACLRetrievalHardNegatives",
-        ],
+    tasks=MTEBTasks(
+        mteb_multilingual_tasks + get_tasks(tasks=["SNLHierarchicalClusteringP2P"])
     ),
-    description="A large-scale multilingual expansion of MTEB, driven mainly by highly-curated community contributions covering 250+ languages.",
-    reference=None,
+    description="A large-scale multilingual expansion of MTEB, driven mainly by highly-curated community contributions covering 250+ languages. This benhcmark has been replaced by MTEB(Multilingual, v2) as one of the datasets (SNLHierarchicalClustering) included in v1 was removed from the Hugging Face Hub.",
+    reference="https://arxiv.org/abs/2502.13595",
+    citation=MMTEB_CITATION,
+    contacts=["KennethEnevoldsen", "isaac-chung"],
+)
+
+
+MTEB_multilingual = Benchmark(
+    name="MTEB(Multilingual, v2)",
+    display_name="Multilingual",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-globe.svg",
+    tasks=mteb_multilingual_tasks,
+    description="A large-scale multilingual expansion of MTEB, driven mainly by highly-curated community contributions covering 250+ languages. ",
+    reference="https://arxiv.org/abs/2502.13595",
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
 )
@@ -935,7 +955,7 @@ MTEB_INDIC = Benchmark(
         (get_task("IndicCrosslingualSTS"),)
     ),
     description="A regional geopolitical text embedding benchmark targetting embedding performance on Indic languages.",
-    reference=None,
+    reference="https://arxiv.org/abs/2502.13595",
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
 )
@@ -1069,7 +1089,7 @@ MTEB_EU = Benchmark(
         exclusive_language_filter=True,
     ),
     description="A regional geopolitical text embedding benchmark targetting embedding performance on European languages.",
-    reference=None,
+    reference="https://arxiv.org/abs/2502.13595",
     citation=MMTEB_CITATION,
     contacts=["KennethEnevoldsen", "isaac-chung"],
 )
@@ -1092,12 +1112,14 @@ LONG_EMBED = Benchmark(
     featuring documents of varying length and dispersed target information.
     """,  # Pieced together from paper abstract.
     reference="https://arxiv.org/abs/2404.12096v2",
-    citation="""@article{zhu2024longembed,
-    title={LongEmbed: Extending Embedding Models for Long Context Retrieval},
-    author={Zhu, Dawei and Wang, Liang and Yang, Nan and Song, Yifan and Wu, Wenhao and Wei, Furu and Li, Sujian},
-    journal={arXiv preprint arXiv:2404.12096},
-    year={2024}
-}""",
+    citation=r"""
+@article{zhu2024longembed,
+  author = {Zhu, Dawei and Wang, Liang and Yang, Nan and Song, Yifan and Wu, Wenhao and Wei, Furu and Li, Sujian},
+  journal = {arXiv preprint arXiv:2404.12096},
+  title = {LongEmbed: Extending Embedding Models for Long Context Retrieval},
+  year = {2024},
+}
+""",
 )
 
 BRIGHT = Benchmark(
@@ -1111,12 +1133,14 @@ BRIGHT = Benchmark(
     naturally occurring and carefully curated human data.
     """,
     reference="https://brightbenchmark.github.io/",
-    citation="""@article{su2024bright,
-    title={Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
-    author={Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
-    journal={arXiv preprint arXiv:2407.12883},
-    year={2024}
-}""",
+    citation=r"""
+@article{su2024bright,
+  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
+  journal = {arXiv preprint arXiv:2407.12883},
+  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
+  year = {2024},
+}
+""",
 )
 
 BRIGHT_LONG = Benchmark(
@@ -1138,12 +1162,14 @@ naturally occurring and carefully curated human data.
 This is the long version of the benchmark, which only filter longer documents.
     """,
     reference="https://brightbenchmark.github.io/",
-    citation="""@article{su2024bright,
-    title={Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
-    author={Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
-    journal={arXiv preprint arXiv:2407.12883},
-    year={2024}
-}""",
+    citation=r"""
+@article{su2024bright,
+  author = {Su, Hongjin and Yen, Howard and Xia, Mengzhou and Shi, Weijia and Muennighoff, Niklas and Wang, Han-yu and Liu, Haisu and Shi, Quan and Siegel, Zachary S and Tang, Michael and others},
+  journal = {arXiv preprint arXiv:2407.12883},
+  title = {Bright: A realistic and challenging benchmark for reasoning-intensive retrieval},
+  year = {2024},
+}
+""",
 )
 
 CODE_RAG = Benchmark(
@@ -1158,15 +1184,17 @@ CODE_RAG = Benchmark(
     ),
     description="A benchmark for evaluating code retrieval augmented generation, testing models' ability to retrieve relevant programming solutions, tutorials and documentation.",
     reference="https://arxiv.org/abs/2406.14497",
-    citation="""@misc{wang2024coderagbenchretrievalaugmentcode,
-    title={CodeRAG-Bench: Can Retrieval Augment Code Generation?},
-    author={Zora Zhiruo Wang and Akari Asai and Xinyan Velocity Yu and Frank F. Xu and Yiqing Xie and Graham Neubig and Daniel Fried},
-    year={2024},
-    eprint={2406.14497},
-    archivePrefix={arXiv},
-    primaryClass={cs.SE},
-    url={https://arxiv.org/abs/2406.14497},
-}""",
+    citation=r"""
+@misc{wang2024coderagbenchretrievalaugmentcode,
+  archiveprefix = {arXiv},
+  author = {Zora Zhiruo Wang and Akari Asai and Xinyan Velocity Yu and Frank F. Xu and Yiqing Xie and Graham Neubig and Daniel Fried},
+  eprint = {2406.14497},
+  primaryclass = {cs.SE},
+  title = {CodeRAG-Bench: Can Retrieval Augment Code Generation?},
+  url = {https://arxiv.org/abs/2406.14497},
+  year = {2024},
+}
+""",
 )
 
 BEIR = Benchmark(
@@ -1192,11 +1220,12 @@ BEIR = Benchmark(
     + get_tasks(tasks=["MSMARCO"], languages=["eng"], eval_splits=["dev"]),
     description="BEIR is a heterogeneous benchmark containing diverse IR tasks. It also provides a common and easy framework for evaluation of your NLP-based retrieval models within the benchmark.",
     reference="https://arxiv.org/abs/2104.08663",
-    citation="""@article{thakur2021beir,
-    title={Beir: A heterogenous benchmark for zero-shot evaluation of information retrieval models},
-    author={Thakur, Nandan and Reimers, Nils and R{\"u}ckl{\'e}, Andreas and Srivastava, Abhishek and Gurevych, Iryna},
-    journal={arXiv preprint arXiv:2104.08663},
-    year={2021}
+    citation=r"""
+@article{thakur2021beir,
+  author = {Thakur, Nandan and Reimers, Nils and R{\"u}ckl{\'e}, Andreas and Srivastava, Abhishek and Gurevych, Iryna},
+  journal = {arXiv preprint arXiv:2104.08663},
+  title = {Beir: A heterogenous benchmark for zero-shot evaluation of information retrieval models},
+  year = {2021},
 }
 """,
 )
@@ -1279,19 +1308,21 @@ C_MTEB = Benchmark(
     ),
     description="The Chinese Massive Text Embedding Benchmark (C-MTEB) is a comprehensive benchmark for Chinese text embeddings covering 6 tasks and 35 datasets.",
     reference="https://github.com/FlagOpen/FlagEmbedding/tree/master/research/C_MTEB",
-    citation="""@misc{c-pack,
-    title={C-Pack: Packaged Resources To Advance General Chinese Embedding},
-    author={Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff},
-    year={2023},
-    eprint={2309.07597},
-    archivePrefix={arXiv},
-    primaryClass={cs.CL}
-}""",
+    citation=r"""
+@misc{c-pack,
+  archiveprefix = {arXiv},
+  author = {Shitao Xiao and Zheng Liu and Peitian Zhang and Niklas Muennighoff},
+  eprint = {2309.07597},
+  primaryclass = {cs.CL},
+  title = {C-Pack: Packaged Resources To Advance General Chinese Embedding},
+  year = {2023},
+}
+""",
 )
 
 FA_MTEB = Benchmark(
-    name="MTEB(fas, beta)",
-    display_name="Farsi (BETA)",
+    name="MTEB(fas, v1)",
+    display_name="Farsi",
     icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/ir.svg",
     tasks=get_tasks(
         languages=["fas"],
@@ -1306,7 +1337,7 @@ FA_MTEB = Benchmark(
             "SynPerChatbotRAGToneUserClassification",
             "SynPerChatbotToneChatbotClassification",
             "SynPerChatbotToneUserClassification",
-            "PersianTextTone",
+            "SynPerTextToneClassification",
             "SIDClassification",
             "DeepSentiPers",
             "PersianTextEmotion",
@@ -1365,9 +1396,16 @@ FA_MTEB = Benchmark(
             "SynPerChatbotRAGSumSRetrieval",
         ],
     ),
-    description="Main Persian (Farsi) benchmarks from MTEB",
-    reference=None,
-    citation=None,
+    description="The Persian Massive Text Embedding Benchmark (FaMTEB) is a comprehensive benchmark for Persian text embeddings covering 7 tasks and 60+ datasets.",
+    reference="https://arxiv.org/abs/2502.11571",
+    citation=r"""
+@article{zinvandi2025famteb,
+  author = {Zinvandi, Erfan and Alikhani, Morteza and Sarmadi, Mehran and Pourbahman, Zahra and Arvin, Sepehr and Kazemi, Reza and Amini, Arash},
+  journal = {arXiv preprint arXiv:2502.11571},
+  title = {Famteb: Massive text embedding benchmark in persian language},
+  year = {2025},
+}
+""",
     contacts=["mehran-sarmadi", "ERfun", "morteza20"],
 )
 
@@ -1408,12 +1446,14 @@ CHEMTEB = Benchmark(
     ),
     description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
     reference="https://arxiv.org/abs/2412.00532",
-    citation="""@article{kasmaee2024chemteb,
-    title={ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \\& Efficiency on a Specific Domain},
-    author={Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
-    journal={arXiv preprint arXiv:2412.00532},
-    year={2024}
-}""",
+    citation=r"""
+@article{kasmaee2024chemteb,
+  author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
+  journal = {arXiv preprint arXiv:2412.00532},
+  title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \\& Efficiency on a Specific Domain},
+  year = {2024},
+}
+""",
 )
 
 BEIR_NL = Benchmark(
@@ -1441,15 +1481,17 @@ BEIR_NL = Benchmark(
     "translation.",
     reference="https://arxiv.org/abs/2412.08329",
     contacts=["nikolay-banar"],
-    citation="""@misc{banar2024beirnlzeroshotinformationretrieval,
-    title={BEIR-NL: Zero-shot Information Retrieval Benchmark for the Dutch Language},
-    author={Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
-    year={2024},
-    eprint={2412.08329},
-    archivePrefix={arXiv},
-    primaryClass={cs.CL},
-    url={https://arxiv.org/abs/2412.08329},
-}""",
+    citation=r"""
+@misc{banar2024beirnlzeroshotinformationretrieval,
+  archiveprefix = {arXiv},
+  author = {Nikolay Banar and Ehsan Lotfi and Walter Daelemans},
+  eprint = {2412.08329},
+  primaryclass = {cs.CL},
+  title = {BEIR-NL: Zero-shot Information Retrieval Benchmark for the Dutch Language},
+  url = {https://arxiv.org/abs/2412.08329},
+  year = {2024},
+}
+""",
 )
 
 MIEB_common_tasks = [
@@ -1602,15 +1644,17 @@ MIEB_ENG = Benchmark(
     document undestanding, visual STS, and CV-centric tasks.""",
     reference="https://arxiv.org/abs/2504.10471",
     contacts=["gowitheflow-1998", "isaac-chung"],
-    citation="""@misc{xiao2025miebmassiveimageembedding,
-      title={MIEB: Massive Image Embedding Benchmark},
-      author={Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
-      year={2025},
-      eprint={2504.10471},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2504.10471},
-    }""",
+    citation=r"""
+@article{xiao2025mieb,
+  author = {Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
+  doi = {10.48550/ARXIV.2504.10471},
+  journal = {arXiv preprint arXiv:2504.10471},
+  publisher = {arXiv},
+  title = {MIEB: Massive Image Embedding Benchmark},
+  url = {https://arxiv.org/abs/2504.10471},
+  year = {2025},
+}
+""",
 )
 
 MIEB_MULTILINGUAL = Benchmark(
@@ -1635,15 +1679,17 @@ MIEB_MULTILINGUAL = Benchmark(
     datasets + the multilingual parts of VisualSTS-b and VisualSTS-16.""",
     reference="https://arxiv.org/abs/2504.10471",
     contacts=["gowitheflow-1998", "isaac-chung"],
-    citation="""@misc{xiao2025miebmassiveimageembedding,
-      title={MIEB: Massive Image Embedding Benchmark},
-      author={Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
-      year={2025},
-      eprint={2504.10471},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2504.10471},
-    }""",
+    citation=r"""
+@article{xiao2025mieb,
+  author = {Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
+  doi = {10.48550/ARXIV.2504.10471},
+  journal = {arXiv preprint arXiv:2504.10471},
+  publisher = {arXiv},
+  title = {MIEB: Massive Image Embedding Benchmark},
+  url = {https://arxiv.org/abs/2504.10471},
+  year = {2025},
+}
+""",
 )
 
 MIEB_LITE = Benchmark(
@@ -1717,15 +1763,17 @@ MIEB_LITE = Benchmark(
     relative rank of models.""",
     reference="https://arxiv.org/abs/2504.10471",
     contacts=["gowitheflow-1998", "isaac-chung"],
-    citation="""@misc{xiao2025miebmassiveimageembedding,
-      title={MIEB: Massive Image Embedding Benchmark},
-      author={Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
-      year={2025},
-      eprint={2504.10471},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2504.10471},
-    }""",
+    citation=r"""
+@article{xiao2025mieb,
+  author = {Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
+  doi = {10.48550/ARXIV.2504.10471},
+  journal = {arXiv preprint arXiv:2504.10471},
+  publisher = {arXiv},
+  title = {MIEB: Massive Image Embedding Benchmark},
+  url = {https://arxiv.org/abs/2504.10471},
+  year = {2025},
+}
+""",
 )
 
 MIEB_IMG = Benchmark(
@@ -1787,15 +1835,17 @@ MIEB_IMG = Benchmark(
     ),
     description="A image-only version of MIEB(Multilingual) that consists of 49 tasks.",
     reference="https://arxiv.org/abs/2504.10471",
-    citation="""@misc{xiao2025miebmassiveimageembedding,
-      title={MIEB: Massive Image Embedding Benchmark},
-      author={Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
-      year={2025},
-      eprint={2504.10471},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2504.10471},
-    }""",
+    citation=r"""
+@article{xiao2025mieb,
+  author = {Chenghao Xiao and Isaac Chung and Imene Kerboua and Jamie Stirling and Xin Zhang and Márton Kardos and Roman Solomatin and Noura Al Moubayed and Kenneth Enevoldsen and Niklas Muennighoff},
+  doi = {10.48550/ARXIV.2504.10471},
+  journal = {arXiv preprint arXiv:2504.10471},
+  publisher = {arXiv},
+  title = {MIEB: Massive Image Embedding Benchmark},
+  url = {https://arxiv.org/abs/2504.10471},
+  year = {2025},
+}
+""",
     contacts=["gowitheflow-1998", "isaac-chung"],
 )
 
@@ -1811,12 +1861,14 @@ BUILT_MTEB = Benchmark(
     ),
     description='"Built-Bench" is an ongoing effort aimed at evaluating text embedding models in the context of built asset management, spanning over various dicsiplines such as architeture, engineering, constrcution, and operations management of the built environment.',
     reference="https://arxiv.org/abs/2411.12056",
-    citation="""@article{shahinmoghadam2024benchmarking,
-    title={Benchmarking pre-trained text embedding models in aligning built asset information},
-    author={Shahinmoghadam, Mehrzad and Motamedi, Ali},
-    journal={arXiv preprint arXiv:2411.12056},
-    year={2024}
-}""",
+    citation=r"""
+@article{shahinmoghadam2024benchmarking,
+  author = {Shahinmoghadam, Mehrzad and Motamedi, Ali},
+  journal = {arXiv preprint arXiv:2411.12056},
+  title = {Benchmarking pre-trained text embedding models in aligning built asset information},
+  year = {2024},
+}
+""",
     contacts=["mehrzadshm"],
 )
 
@@ -1849,13 +1901,101 @@ ENCODECHKA = Benchmark(
     ),
     description="A benchmark for evaluating text embedding models on Russian data.",
     reference="https://github.com/avidale/encodechka",
-    citation="""@misc{dale_encodechka,
-   author = "Dale, David",
-   title  = "Russian rating of sentence encoders",
-   editor = "habr.com",
-   url    = "https://habr.com/ru/articles/669674/",
-   month  = {June},
-   year   = {2022},
-   note = {[Online; posted 12-June-2022]},
-}""",
+    citation=r"""
+@misc{dale_encodechka,
+  author = {Dale, David},
+  editor = {habr.com},
+  month = {June},
+  note = {[Online; posted 12-June-2022]},
+  title = {Russian rating of sentence encoders},
+  url = {https://habr.com/ru/articles/669674/},
+  year = {2022},
+}
+""",
+)
+
+VIDORE = Benchmark(
+    name="ViDoRe(v1)",
+    tasks=get_tasks(
+        tasks=[
+            "VidoreArxivQARetrieval",
+            "VidoreDocVQARetrieval",
+            "VidoreInfoVQARetrieval",
+            "VidoreTabfquadRetrieval",
+            "VidoreTatdqaRetrieval",
+            "VidoreShiftProjectRetrieval",
+            "VidoreSyntheticDocQAAIRetrieval",
+            "VidoreSyntheticDocQAEnergyRetrieval",
+            "VidoreSyntheticDocQAGovernmentReportsRetrieval",
+            "VidoreSyntheticDocQAHealthcareIndustryRetrieval",
+        ],
+    ),
+    description="Retrieve associated pages according to questions.",
+    reference="https://arxiv.org/abs/2407.01449",
+    citation=r"""
+@article{faysse2024colpali,
+  author = {Faysse, Manuel and Sibille, Hugues and Wu, Tony and Viaud, Gautier and Hudelot, C{\'e}line and Colombo, Pierre},
+  journal = {arXiv preprint arXiv:2407.01449},
+  title = {ColPali: Efficient Document Retrieval with Vision Language Models},
+  year = {2024},
+}
+""",
+)
+
+VIDORE_V2 = Benchmark(
+    name="ViDoRe(v2)",
+    tasks=get_tasks(
+        tasks=[
+            "Vidore2ESGReportsRetrieval",
+            "Vidore2EconomicsReportsRetrieval",
+            "Vidore2BioMedicalLecturesRetrieval",
+            "Vidore2ESGReportsHLRetrieval",
+        ],
+    ),
+    description="Retrieve associated pages according to questions.",
+    reference="https://arxiv.org/abs/2407.01449",
+    citation=r"""
+@article{mace2025vidorev2,
+  author = {Macé, Quentin and Loison António and Faysse, Manuel},
+  journal = {arXiv preprint arXiv:2505.17166},
+  title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
+  year = {2025},
+}
+""",
+)
+
+VISUAL_DOCUMENT_RETRIEVAL = Benchmark(
+    name="VisualDocumentRetrieval",
+    display_name="Visual Document Retrieval",
+    icon="https://github.com/DennisSuitters/LibreICONS/raw/2d2172d15e3c6ca03c018629d60050e4b99e5c55/svg-color/libre-gui-picture.svg",
+    tasks=get_tasks(
+        tasks=[
+            # v1
+            "VidoreArxivQARetrieval",
+            "VidoreDocVQARetrieval",
+            "VidoreInfoVQARetrieval",
+            "VidoreTabfquadRetrieval",
+            "VidoreTatdqaRetrieval",
+            "VidoreShiftProjectRetrieval",
+            "VidoreSyntheticDocQAAIRetrieval",
+            "VidoreSyntheticDocQAEnergyRetrieval",
+            "VidoreSyntheticDocQAGovernmentReportsRetrieval",
+            "VidoreSyntheticDocQAHealthcareIndustryRetrieval",
+            # v2
+            "Vidore2ESGReportsRetrieval",
+            "Vidore2EconomicsReportsRetrieval",
+            "Vidore2BioMedicalLecturesRetrieval",
+            "Vidore2ESGReportsHLRetrieval",
+        ],
+    ),
+    description="A benchmark for evaluating visual document retrieval, combining ViDoRe v1 and v2.",
+    reference="https://arxiv.org/abs/2407.01449",
+    citation=r"""
+@article{mace2025vidorev2,
+  author = {Macé, Quentin and Loison António and Faysse, Manuel},
+  journal = {arXiv preprint arXiv:2505.17166},
+  title = {ViDoRe Benchmark V2: Raising the Bar for Visual Retrieval},
+  year = {2025},
+}
+""",
 )

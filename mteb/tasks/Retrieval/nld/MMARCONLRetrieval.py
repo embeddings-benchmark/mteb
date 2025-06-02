@@ -29,20 +29,22 @@ class MMMARCONL(AbsTaskRetrieval):
         annotations_creators="derived",  # manually checked a small subset
         dialect=[],
         sample_creation="machine-translated and verified",
-        bibtex_citation="""@article{DBLP:journals/corr/abs-2108-13897,
-  author       = {Luiz Bonifacio and
-                  Israel Campiotti and
-                  Roberto de Alencar Lotufo and
-                  Rodrigo Frassetto Nogueira},
-  title        = {mMARCO: {A} Multilingual Version of {MS} {MARCO} Passage Ranking Dataset},
-  journal      = {CoRR},
-  volume       = {abs/2108.13897},
-  year         = {2021},
-  url          = {https://arxiv.org/abs/2108.13897},
-  eprinttype    = {arXiv},
-  eprint       = {2108.13897},
-  timestamp    = {Mon, 20 Mar 2023 15:35:34 +0100},
-  biburl       = {https://dblp.org/rec/journals/corr/abs-2108-13897.bib},
-  bibsource    = {dblp computer science bibliography, https://dblp.org}
-}""",
+        bibtex_citation=r"""
+@article{DBLP:journals/corr/abs-2108-13897,
+  author = {Luiz Bonifacio and
+Israel Campiotti and
+Roberto de Alencar Lotufo and
+Rodrigo Frassetto Nogueira},
+  bibsource = {dblp computer science bibliography, https://dblp.org},
+  biburl = {https://dblp.org/rec/journals/corr/abs-2108-13897.bib},
+  eprint = {2108.13897},
+  eprinttype = {arXiv},
+  journal = {CoRR},
+  timestamp = {Mon, 20 Mar 2023 15:35:34 +0100},
+  title = {mMARCO: {A} Multilingual Version of {MS} {MARCO} Passage Ranking Dataset},
+  url = {https://arxiv.org/abs/2108.13897},
+  volume = {abs/2108.13897},
+  year = {2021},
+}
+""",
     )

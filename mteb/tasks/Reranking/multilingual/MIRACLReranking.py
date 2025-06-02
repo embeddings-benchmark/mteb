@@ -37,16 +37,16 @@ _LANGUAGES = {
     "zh": ["zho-Hans"],
 }
 
-_CITATION = """@article{10.1162/tacl_a_00595,
-    author = {Zhang, Xinyu and Thakur, Nandan and Ogundepo, Odunayo and Kamalloo, Ehsan and Alfonso-Hermelo, David and Li, Xiaoguang and Liu, Qun and Rezagholizadeh, Mehdi and Lin, Jimmy},
-    title = "{MIRACL: A Multilingual Retrieval Dataset Covering 18 Diverse Languages}",
-    journal = {Transactions of the Association for Computational Linguistics},
-    volume = {11},
-    pages = {1114-1131},
-    year = {2023},
-    month = {09},
-    issn = {2307-387X},
-    doi = {10.1162/tacl_a_00595},
+_CITATION = r"""@article{10.1162/tacl_a_00595,
+  author = {Zhang, Xinyu and Thakur, Nandan and Ogundepo, Odunayo and Kamalloo, Ehsan and Alfonso-Hermelo, David and Li, Xiaoguang and Liu, Qun and Rezagholizadeh, Mehdi and Lin, Jimmy},
+  doi = {10.1162/tacl_a_00595},
+  issn = {2307-387X},
+  journal = {Transactions of the Association for Computational Linguistics},
+  month = {09},
+  pages = {1114-1131},
+  title = {{MIRACL: A Multilingual Retrieval Dataset Covering 18 Diverse Languages}},
+  volume = {11},
+  year = {2023},
 }"""
 
 

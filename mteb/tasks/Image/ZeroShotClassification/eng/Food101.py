@@ -31,12 +31,14 @@ class Food101ZeroShotClassification(AbsTaskZeroShotClassification):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="created",
-        bibtex_citation=""" @inproceedings{bossard14,
-        title = {Food-101 -- Mining Discriminative Components with Random Forests},
-        author = {Bossard, Lukas and Guillaumin, Matthieu and Van Gool, Luc},
-        booktitle = {European Conference on Computer Vision},
-        year = {2014}
-        }""",
+        bibtex_citation=r"""
+@inproceedings{bossard14,
+  author = {Bossard, Lukas and Guillaumin, Matthieu and Van Gool, Luc},
+  booktitle = {European Conference on Computer Vision},
+  title = {Food-101 -- Mining Discriminative Components with Random Forests},
+  year = {2014},
+}
+""",
         descriptive_stats={
             "n_samples": {"validation": 25300},
             "avg_character_length": {"validation": 431.4},

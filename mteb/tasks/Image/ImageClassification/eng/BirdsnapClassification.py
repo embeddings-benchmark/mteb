@@ -29,13 +29,15 @@ class BirdsnapClassification(AbsTaskImageClassification):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@InProceedings{Berg_2014_CVPR,
-        author = {Berg, Thomas and Liu, Jiongxin and Woo Lee, Seung and Alexander, Michelle L. and Jacobs, David W. and Belhumeur, Peter N.},
-        title = {Birdsnap: Large-scale Fine-grained Visual Categorization of Birds},
-        booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
-        month = {June},
-        year = {2014}
-        }""",
+        bibtex_citation=r"""
+@inproceedings{Berg_2014_CVPR,
+  author = {Berg, Thomas and Liu, Jiongxin and Woo Lee, Seung and Alexander, Michelle L. and Jacobs, David W. and Belhumeur, Peter N.},
+  booktitle = {Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)},
+  month = {June},
+  title = {Birdsnap: Large-scale Fine-grained Visual Categorization of Birds},
+  year = {2014},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 1851},
             "avg_character_length": {"test": 431.4},

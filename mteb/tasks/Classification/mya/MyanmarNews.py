@@ -8,9 +8,8 @@ class MyanmarNews(AbsTaskClassification):
     metadata = TaskMetadata(
         name="MyanmarNews",
         dataset={
-            "path": "ayehninnkhine/myanmar_news",
-            "revision": "b899ec06227db3679b0fe3c4188a6b48cc0b65eb",
-            "trust_remote_code": True,
+            "path": "mteb/MyanmarNews",
+            "revision": "644419f24bc820bbf8af24e0b4714a069812e0a3",
         },
         description="The Myanmar News dataset on Hugging Face contains news articles in Burmese. It is designed for tasks such as text classification, sentiment analysis, and language modeling. The dataset includes a variety of news topics in 4 categorie, providing a rich resource for natural language processing applications involving Burmese which is a low resource language.",
         reference="https://huggingface.co/datasets/myanmar_news",
@@ -27,19 +26,14 @@ class MyanmarNews(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""""
-        @inproceedings{Khine2017,
-        author    = {A. H. Khine and K. T. Nwet and K. M. Soe},
-        title     = {Automatic Myanmar News Classification},
-        booktitle = {15th Proceedings of International Conference on Computer Applications},
-        year      = {2017},
-        month     = {February},
-        pages     = {401--408}
-        }""",
+        bibtex_citation=r"""
+@inproceedings{Khine2017,
+  author = {A. H. Khine and K. T. Nwet and K. M. Soe},
+  booktitle = {15th Proceedings of International Conference on Computer Applications},
+  month = {February},
+  pages = {401--408},
+  title = {Automatic Myanmar News Classification},
+  year = {2017},
+}
+""",
     )
-
-    def dataset_transform(self):
-        self.dataset = self.dataset.rename_columns({"category": "label"})
-        self.dataset = self.stratified_subsampling(
-            self.dataset, seed=self.seed, splits=["train"]
-        )

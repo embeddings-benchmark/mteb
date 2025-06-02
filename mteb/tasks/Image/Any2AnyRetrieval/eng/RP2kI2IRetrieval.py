@@ -26,12 +26,14 @@ class RP2kI2IRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@article{peng2020rp2k,
-  title={RP2K: A large-scale retail product dataset for fine-grained image classification},
-  author={Peng, Jingtian and Xiao, Chang and Li, Yifan},
-  journal={arXiv preprint arXiv:2006.12634},
-  year={2020}
-}""",
+        bibtex_citation=r"""
+@article{peng2020rp2k,
+  author = {Peng, Jingtian and Xiao, Chang and Li, Yifan},
+  journal = {arXiv preprint arXiv:2006.12634},
+  title = {RP2K: A large-scale retail product dataset for fine-grained image classification},
+  year = {2020},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 39457},
             "avg_character_length": {

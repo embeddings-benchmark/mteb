@@ -215,23 +215,23 @@ google_text_multilingual_emb_002 = ModelMeta(
     training_datasets=GECKO_TRAINING_DATA,
 )
 
-google_gemini_embedding_exp_03_07 = ModelMeta(
+google_gemini_embedding_001 = ModelMeta(
     loader=partial(
         GoogleTextEmbeddingModel,
-        model_name="gemini-embedding-exp-03-07",
+        model_name="gemini-embedding-001",
         model_prompts=MODEL_PROMPTS,
     ),
-    name="google/gemini-embedding-exp-03-07",
+    name="google/gemini-embedding-001",
     languages=MULTILINGUAL_EVALUATED_LANGUAGES,
     open_weights=False,
     revision="1",
     release_date="2025-03-07",
     n_parameters=None,
     memory_usage_mb=None,
-    max_tokens=8192,
+    max_tokens=2048,
     embed_dim=3072,
     license=None,
-    reference="https://developers.googleblog.com/en/gemini-embedding-text-model-now-available-gemini-api/",
+    reference="https://cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings",
     similarity_fn_name="cosine",
     framework=["API"],
     use_instructions=True,

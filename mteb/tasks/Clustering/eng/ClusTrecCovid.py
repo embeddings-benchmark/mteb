@@ -29,19 +29,20 @@ class ClusTrecCovid(AbsTaskClusteringFast, MultilingualTask):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{katz-etal-2024-knowledge,
-            title = "Knowledge Navigator: {LLM}-guided Browsing Framework for Exploratory Search in Scientific Literature",
-            author = "Katz, Uri  and
-              Levy, Mosh  and
-              Goldberg, Yoav",
-            booktitle = "Findings of the Association for Computational Linguistics: EMNLP 2024",
-            month = nov,
-            year = "2024",
-            address = "Miami, Florida, USA",
-            publisher = "Association for Computational Linguistics",
-            url = "https://aclanthology.org/2024.findings-emnlp.516",
-            pages = "8838--8855",
-        }
-                """,
+        bibtex_citation=r"""
+@inproceedings{katz-etal-2024-knowledge,
+  address = {Miami, Florida, USA},
+  author = {Katz, Uri  and
+Levy, Mosh  and
+Goldberg, Yoav},
+  booktitle = {Findings of the Association for Computational Linguistics: EMNLP 2024},
+  month = nov,
+  pages = {8838--8855},
+  publisher = {Association for Computational Linguistics},
+  title = {Knowledge Navigator: {LLM}-guided Browsing Framework for Exploratory Search in Scientific Literature},
+  url = {https://aclanthology.org/2024.findings-emnlp.516},
+  year = {2024},
+}
+""",
         prompt="Identify the main category of the covid-19 papers based on the titles and abstracts",
     )

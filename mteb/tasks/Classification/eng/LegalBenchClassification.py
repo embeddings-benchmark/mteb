@@ -32,15 +32,16 @@ class CanadaTaxCourtOutcomesLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=["en-CA"],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-            }""",
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -72,21 +73,23 @@ class ContractNLIConfidentialityOfAgreementLegalBenchClassification(
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{koreeda2021contractnli,
-            title={ContractNLI: A dataset for document-level natural language inference for contracts},
-            author={Koreeda, Yuta and Manning, Christopher D},
-            journal={arXiv preprint arXiv:2110.01799},
-            year={2021}
-        }""",
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{koreeda2021contractnli,
+  author = {Koreeda, Yuta and Manning, Christopher D},
+  journal = {arXiv preprint arXiv:2110.01799},
+  title = {ContractNLI: A dataset for document-level natural language inference for contracts},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -122,21 +125,23 @@ class ContractNLIExplicitIdentificationLegalBenchClassification(AbsTaskClassific
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{koreeda2021contractnli,
-            title={ContractNLI: A dataset for document-level natural language inference for contracts},
-            author={Koreeda, Yuta and Manning, Christopher D},
-            journal={arXiv preprint arXiv:2110.01799},
-            year={2021}
-        }""",
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{koreeda2021contractnli,
+  author = {Koreeda, Yuta and Manning, Christopher D},
+  journal = {arXiv preprint arXiv:2110.01799},
+  title = {ContractNLI: A dataset for document-level natural language inference for contracts},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -174,21 +179,23 @@ class ContractNLIInclusionOfVerballyConveyedInformationLegalBenchClassification(
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{koreeda2021contractnli,
-            title={ContractNLI: A dataset for document-level natural language inference for contracts},
-            author={Koreeda, Yuta and Manning, Christopher D},
-            journal={arXiv preprint arXiv:2110.01799},
-            year={2021}
-        }""",
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{koreeda2021contractnli,
+  author = {Koreeda, Yuta and Manning, Christopher D},
+  journal = {arXiv preprint arXiv:2110.01799},
+  title = {ContractNLI: A dataset for document-level natural language inference for contracts},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -224,21 +231,23 @@ class ContractNLILimitedUseLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{koreeda2021contractnli,
-            title={ContractNLI: A dataset for document-level natural language inference for contracts},
-            author={Koreeda, Yuta and Manning, Christopher D},
-            journal={arXiv preprint arXiv:2110.01799},
-            year={2021}
-        }""",
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{koreeda2021contractnli,
+  author = {Koreeda, Yuta and Manning, Christopher D},
+  journal = {arXiv preprint arXiv:2110.01799},
+  title = {ContractNLI: A dataset for document-level natural language inference for contracts},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -274,21 +283,23 @@ class ContractNLINoLicensingLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{koreeda2021contractnli,
-            title={ContractNLI: A dataset for document-level natural language inference for contracts},
-            author={Koreeda, Yuta and Manning, Christopher D},
-            journal={arXiv preprint arXiv:2110.01799},
-            year={2021}
-        }""",
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{koreeda2021contractnli,
+  author = {Koreeda, Yuta and Manning, Christopher D},
+  journal = {arXiv preprint arXiv:2110.01799},
+  title = {ContractNLI: A dataset for document-level natural language inference for contracts},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -326,21 +337,23 @@ class ContractNLINoticeOnCompelledDisclosureLegalBenchClassification(
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{koreeda2021contractnli,
-            title={ContractNLI: A dataset for document-level natural language inference for contracts},
-            author={Koreeda, Yuta and Manning, Christopher D},
-            journal={arXiv preprint arXiv:2110.01799},
-            year={2021}
-        }""",
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{koreeda2021contractnli,
+  author = {Koreeda, Yuta and Manning, Christopher D},
+  journal = {arXiv preprint arXiv:2110.01799},
+  title = {ContractNLI: A dataset for document-level natural language inference for contracts},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -378,21 +391,23 @@ class ContractNLIPermissibleAcquirementOfSimilarInformationLegalBenchClassificat
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{koreeda2021contractnli,
-            title={ContractNLI: A dataset for document-level natural language inference for contracts},
-            author={Koreeda, Yuta and Manning, Christopher D},
-            journal={arXiv preprint arXiv:2110.01799},
-            year={2021}
-        }""",
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{koreeda2021contractnli,
+  author = {Koreeda, Yuta and Manning, Christopher D},
+  journal = {arXiv preprint arXiv:2110.01799},
+  title = {ContractNLI: A dataset for document-level natural language inference for contracts},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -428,21 +443,23 @@ class ContractNLIPermissibleCopyLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{koreeda2021contractnli,
-            title={ContractNLI: A dataset for document-level natural language inference for contracts},
-            author={Koreeda, Yuta and Manning, Christopher D},
-            journal={arXiv preprint arXiv:2110.01799},
-            year={2021}
-        }""",
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{koreeda2021contractnli,
+  author = {Koreeda, Yuta and Manning, Christopher D},
+  journal = {arXiv preprint arXiv:2110.01799},
+  title = {ContractNLI: A dataset for document-level natural language inference for contracts},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -480,21 +497,23 @@ class ContractNLIPermissibleDevelopmentOfSimilarInformationLegalBenchClassificat
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{koreeda2021contractnli,
-            title={ContractNLI: A dataset for document-level natural language inference for contracts},
-            author={Koreeda, Yuta and Manning, Christopher D},
-            journal={arXiv preprint arXiv:2110.01799},
-            year={2021}
-        }""",
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{koreeda2021contractnli,
+  author = {Koreeda, Yuta and Manning, Christopher D},
+  journal = {arXiv preprint arXiv:2110.01799},
+  title = {ContractNLI: A dataset for document-level natural language inference for contracts},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -532,21 +551,23 @@ class ContractNLIPermissiblePostAgreementPossessionLegalBenchClassification(
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{koreeda2021contractnli,
-            title={ContractNLI: A dataset for document-level natural language inference for contracts},
-            author={Koreeda, Yuta and Manning, Christopher D},
-            journal={arXiv preprint arXiv:2110.01799},
-            year={2021}
-        }""",
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{koreeda2021contractnli,
+  author = {Koreeda, Yuta and Manning, Christopher D},
+  journal = {arXiv preprint arXiv:2110.01799},
+  title = {ContractNLI: A dataset for document-level natural language inference for contracts},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -584,21 +605,23 @@ class ContractNLIReturnOfConfidentialInformationLegalBenchClassification(
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{koreeda2021contractnli,
-            title={ContractNLI: A dataset for document-level natural language inference for contracts},
-            author={Koreeda, Yuta and Manning, Christopher D},
-            journal={arXiv preprint arXiv:2110.01799},
-            year={2021}
-        }""",
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{koreeda2021contractnli,
+  author = {Koreeda, Yuta and Manning, Christopher D},
+  journal = {arXiv preprint arXiv:2110.01799},
+  title = {ContractNLI: A dataset for document-level natural language inference for contracts},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -634,21 +657,23 @@ class ContractNLISharingWithEmployeesLegalBenchClassification(AbsTaskClassificat
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{koreeda2021contractnli,
-            title={ContractNLI: A dataset for document-level natural language inference for contracts},
-            author={Koreeda, Yuta and Manning, Christopher D},
-            journal={arXiv preprint arXiv:2110.01799},
-            year={2021}
-        }""",
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{koreeda2021contractnli,
+  author = {Koreeda, Yuta and Manning, Christopher D},
+  journal = {arXiv preprint arXiv:2110.01799},
+  title = {ContractNLI: A dataset for document-level natural language inference for contracts},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -684,21 +709,23 @@ class ContractNLISharingWithThirdPartiesLegalBenchClassification(AbsTaskClassifi
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{koreeda2021contractnli,
-            title={ContractNLI: A dataset for document-level natural language inference for contracts},
-            author={Koreeda, Yuta and Manning, Christopher D},
-            journal={arXiv preprint arXiv:2110.01799},
-            year={2021}
-        }""",
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{koreeda2021contractnli,
+  author = {Koreeda, Yuta and Manning, Christopher D},
+  journal = {arXiv preprint arXiv:2110.01799},
+  title = {ContractNLI: A dataset for document-level natural language inference for contracts},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -734,21 +761,23 @@ class ContractNLISurvivalOfObligationsLegalBenchClassification(AbsTaskClassifica
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{koreeda2021contractnli,
-            title={ContractNLI: A dataset for document-level natural language inference for contracts},
-            author={Koreeda, Yuta and Manning, Christopher D},
-            journal={arXiv preprint arXiv:2110.01799},
-            year={2021}
-        }""",
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{koreeda2021contractnli,
+  author = {Koreeda, Yuta and Manning, Christopher D},
+  journal = {arXiv preprint arXiv:2110.01799},
+  title = {ContractNLI: A dataset for document-level natural language inference for contracts},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -784,16 +813,16 @@ class CorporateLobbyingLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -844,22 +873,23 @@ class CUADAffiliateLicenseLicenseeLegalBenchClassification(AbsTaskClassification
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -895,22 +925,23 @@ class CUADAffiliateLicenseLicensorLegalBenchClassification(AbsTaskClassification
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -946,22 +977,23 @@ class CUADAntiAssignmentLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -997,22 +1029,23 @@ class CUADAuditRightsLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -1048,22 +1081,23 @@ class CUADCapOnLiabilityLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -1099,22 +1133,23 @@ class CUADChangeOfControlLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -1152,22 +1187,23 @@ class CUADCompetitiveRestrictionExceptionLegalBenchClassification(
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -1203,22 +1239,23 @@ class CUADCovenantNotToSueLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -1254,22 +1291,23 @@ class CUADEffectiveDateLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -1305,22 +1343,23 @@ class CUADExclusivityLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -1356,22 +1395,23 @@ class CUADExpirationDateLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -1407,22 +1447,23 @@ class CUADGoverningLawLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -1458,22 +1499,23 @@ class CUADInsuranceLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -1509,22 +1551,23 @@ class CUADIPOwnershipAssignmentLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -1560,22 +1603,23 @@ class CUADIrrevocableOrPerpetualLicenseLegalBenchClassification(AbsTaskClassific
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -1611,22 +1655,23 @@ class CUADJointIPOwnershipLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -1662,22 +1707,23 @@ class CUADLicenseGrantLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -1713,22 +1759,23 @@ class CUADLiquidatedDamagesLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -1764,22 +1811,23 @@ class CUADMinimumCommitmentLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -1815,22 +1863,23 @@ class CUADMostFavoredNationLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -1866,22 +1915,23 @@ class CUADNoSolicitOfCustomersLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -1917,22 +1967,23 @@ class CUADNoSolicitOfEmployeesLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -1968,22 +2019,23 @@ class CUADNonCompeteLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -2019,22 +2071,23 @@ class CUADNonDisparagementLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -2070,22 +2123,23 @@ class CUADNonTransferableLicenseLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -2121,22 +2175,23 @@ class CUADNoticePeriodToTerminateRenewalLegalBenchClassification(AbsTaskClassifi
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -2172,22 +2227,23 @@ class CUADPostTerminationServicesLegalBenchClassification(AbsTaskClassification)
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -2223,22 +2279,23 @@ class CUADPriceRestrictionsLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -2274,22 +2331,23 @@ class CUADRenewalTermLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -2325,22 +2383,23 @@ class CUADRevenueProfitSharingLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -2376,22 +2435,23 @@ class CUADRofrRofoRofnLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -2427,22 +2487,23 @@ class CUADSourceCodeEscrowLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -2478,22 +2539,23 @@ class CUADTerminationForConvenienceLegalBenchClassification(AbsTaskClassificatio
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -2529,22 +2591,23 @@ class CUADThirdPartyBeneficiaryLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -2580,22 +2643,23 @@ class CUADUncappedLiabilityLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -2631,22 +2695,23 @@ class CUADUnlimitedAllYouCanEatLicenseLegalBenchClassification(AbsTaskClassifica
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -2682,22 +2747,23 @@ class CUADVolumeRestrictionLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -2733,22 +2799,23 @@ class CUADWarrantyDurationLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{hendrycks2021cuad,
-            title={Cuad: An expert-annotated nlp dataset for legal contract review},
-            author={Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
-            journal={arXiv preprint arXiv:2103.06268},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{hendrycks2021cuad,
+  author = {Hendrycks, Dan and Burns, Collin and Chen, Anya and Ball, Spencer},
+  journal = {arXiv preprint arXiv:2103.06268},
+  title = {Cuad: An expert-annotated nlp dataset for legal contract review},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -2784,16 +2851,16 @@ class DefinitionClassificationLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -2829,16 +2896,16 @@ class Diversity1LegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -2898,16 +2965,16 @@ class Diversity2LegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -2967,16 +3034,16 @@ class Diversity3LegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -3036,16 +3103,16 @@ class Diversity4LegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -3105,16 +3172,16 @@ class Diversity5LegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -3174,16 +3241,16 @@ class Diversity6LegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -3251,16 +3318,16 @@ class FunctionOfDecisionSectionLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -3299,16 +3366,16 @@ class InsurancePolicyInterpretationLegalBenchClassification(AbsTaskClassificatio
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -3344,23 +3411,24 @@ class InternationalCitizenshipQuestionsLegalBenchClassification(AbsTaskClassific
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @misc{vink2023globalcit,
-            author = {Vink, Maarten and van der Baaren, Luuk and Bauböck, Rainer and Džankić, Jelena and Honohan, Iseult and Manby, Bronwen},
-            title = {GLOBALCIT Citizenship Law Dataset, v2.0, Country-Year-Mode Data (Acquisition)},
-            howpublished = {https://hdl.handle.net/1814/73190},
-            year = {2023},
-            publisher = {Global Citizenship Observatory}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@misc{vink2023globalcit,
+  author = {Vink, Maarten and van der Baaren, Luuk and Bauböck, Rainer and Džankić, Jelena and Honohan, Iseult and Manby, Bronwen},
+  howpublished = {https://hdl.handle.net/1814/73190},
+  publisher = {Global Citizenship Observatory},
+  title = {GLOBALCIT Citizenship Law Dataset, v2.0, Country-Year-Mode Data (Acquisition)},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -3401,16 +3469,16 @@ class JCrewBlockerLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -3446,24 +3514,25 @@ class LearnedHandsBenefitsLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @dataset{learned_hands,
-            title = {LearnedHands Dataset},
-            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
-            year = {2022},
-            url = {https://spot.suffolklitlab.org/data/#learnedhands},
-            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
-            urldate = {2022-05-21}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@dataset{learned_hands,
+  author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+  note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+  title = {LearnedHands Dataset},
+  url = {https://spot.suffolklitlab.org/data/#learnedhands},
+  urldate = {2022-05-21},
+  year = {2022},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -3499,24 +3568,25 @@ class LearnedHandsBusinessLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @dataset{learned_hands,
-            title = {LearnedHands Dataset},
-            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
-            year = {2022},
-            url = {https://spot.suffolklitlab.org/data/#learnedhands},
-            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
-            urldate = {2022-05-21}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@dataset{learned_hands,
+  author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+  note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+  title = {LearnedHands Dataset},
+  url = {https://spot.suffolklitlab.org/data/#learnedhands},
+  urldate = {2022-05-21},
+  year = {2022},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -3552,24 +3622,25 @@ class LearnedHandsConsumerLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @dataset{learned_hands,
-            title = {LearnedHands Dataset},
-            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
-            year = {2022},
-            url = {https://spot.suffolklitlab.org/data/#learnedhands},
-            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
-            urldate = {2022-05-21}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@dataset{learned_hands,
+  author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+  note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+  title = {LearnedHands Dataset},
+  url = {https://spot.suffolklitlab.org/data/#learnedhands},
+  urldate = {2022-05-21},
+  year = {2022},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -3605,24 +3676,25 @@ class LearnedHandsCourtsLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @dataset{learned_hands,
-            title = {LearnedHands Dataset},
-            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
-            year = {2022},
-            url = {https://spot.suffolklitlab.org/data/#learnedhands},
-            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
-            urldate = {2022-05-21}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@dataset{learned_hands,
+  author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+  note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+  title = {LearnedHands Dataset},
+  url = {https://spot.suffolklitlab.org/data/#learnedhands},
+  urldate = {2022-05-21},
+  year = {2022},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -3658,24 +3730,25 @@ class LearnedHandsCrimeLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @dataset{learned_hands,
-            title = {LearnedHands Dataset},
-            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
-            year = {2022},
-            url = {https://spot.suffolklitlab.org/data/#learnedhands},
-            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
-            urldate = {2022-05-21}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@dataset{learned_hands,
+  author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+  note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+  title = {LearnedHands Dataset},
+  url = {https://spot.suffolklitlab.org/data/#learnedhands},
+  urldate = {2022-05-21},
+  year = {2022},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -3711,24 +3784,25 @@ class LearnedHandsDivorceLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @dataset{learned_hands,
-            title = {LearnedHands Dataset},
-            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
-            year = {2022},
-            url = {https://spot.suffolklitlab.org/data/#learnedhands},
-            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
-            urldate = {2022-05-21}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@dataset{learned_hands,
+  author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+  note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+  title = {LearnedHands Dataset},
+  url = {https://spot.suffolklitlab.org/data/#learnedhands},
+  urldate = {2022-05-21},
+  year = {2022},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -3764,24 +3838,25 @@ class LearnedHandsDomesticViolenceLegalBenchClassification(AbsTaskClassification
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @dataset{learned_hands,
-            title = {LearnedHands Dataset},
-            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
-            year = {2022},
-            url = {https://spot.suffolklitlab.org/data/#learnedhands},
-            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
-            urldate = {2022-05-21}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@dataset{learned_hands,
+  author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+  note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+  title = {LearnedHands Dataset},
+  url = {https://spot.suffolklitlab.org/data/#learnedhands},
+  urldate = {2022-05-21},
+  year = {2022},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -3817,24 +3892,25 @@ class LearnedHandsEducationLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @dataset{learned_hands,
-            title = {LearnedHands Dataset},
-            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
-            year = {2022},
-            url = {https://spot.suffolklitlab.org/data/#learnedhands},
-            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
-            urldate = {2022-05-21}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@dataset{learned_hands,
+  author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+  note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+  title = {LearnedHands Dataset},
+  url = {https://spot.suffolklitlab.org/data/#learnedhands},
+  urldate = {2022-05-21},
+  year = {2022},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -3870,24 +3946,25 @@ class LearnedHandsEmploymentLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @dataset{learned_hands,
-            title = {LearnedHands Dataset},
-            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
-            year = {2022},
-            url = {https://spot.suffolklitlab.org/data/#learnedhands},
-            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
-            urldate = {2022-05-21}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@dataset{learned_hands,
+  author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+  note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+  title = {LearnedHands Dataset},
+  url = {https://spot.suffolklitlab.org/data/#learnedhands},
+  urldate = {2022-05-21},
+  year = {2022},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -3923,24 +4000,25 @@ class LearnedHandsEstatesLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @dataset{learned_hands,
-            title = {LearnedHands Dataset},
-            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
-            year = {2022},
-            url = {https://spot.suffolklitlab.org/data/#learnedhands},
-            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
-            urldate = {2022-05-21}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@dataset{learned_hands,
+  author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+  note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+  title = {LearnedHands Dataset},
+  url = {https://spot.suffolklitlab.org/data/#learnedhands},
+  urldate = {2022-05-21},
+  year = {2022},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -3976,24 +4054,25 @@ class LearnedHandsFamilyLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @dataset{learned_hands,
-            title = {LearnedHands Dataset},
-            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
-            year = {2022},
-            url = {https://spot.suffolklitlab.org/data/#learnedhands},
-            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
-            urldate = {2022-05-21}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@dataset{learned_hands,
+  author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+  note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+  title = {LearnedHands Dataset},
+  url = {https://spot.suffolklitlab.org/data/#learnedhands},
+  urldate = {2022-05-21},
+  year = {2022},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -4032,24 +4111,25 @@ class LearnedHandsHealthLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @dataset{learned_hands,
-            title = {LearnedHands Dataset},
-            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
-            year = {2022},
-            url = {https://spot.suffolklitlab.org/data/#learnedhands},
-            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
-            urldate = {2022-05-21}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@dataset{learned_hands,
+  author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+  note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+  title = {LearnedHands Dataset},
+  url = {https://spot.suffolklitlab.org/data/#learnedhands},
+  urldate = {2022-05-21},
+  year = {2022},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -4085,24 +4165,25 @@ class LearnedHandsHousingLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @dataset{learned_hands,
-            title = {LearnedHands Dataset},
-            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
-            year = {2022},
-            url = {https://spot.suffolklitlab.org/data/#learnedhands},
-            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
-            urldate = {2022-05-21}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@dataset{learned_hands,
+  author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+  note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+  title = {LearnedHands Dataset},
+  url = {https://spot.suffolklitlab.org/data/#learnedhands},
+  urldate = {2022-05-21},
+  year = {2022},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -4141,24 +4222,25 @@ class LearnedHandsImmigrationLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @dataset{learned_hands,
-            title = {LearnedHands Dataset},
-            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
-            year = {2022},
-            url = {https://spot.suffolklitlab.org/data/#learnedhands},
-            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
-            urldate = {2022-05-21}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@dataset{learned_hands,
+  author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+  note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+  title = {LearnedHands Dataset},
+  url = {https://spot.suffolklitlab.org/data/#learnedhands},
+  urldate = {2022-05-21},
+  year = {2022},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -4194,24 +4276,25 @@ class LearnedHandsTortsLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @dataset{learned_hands,
-            title = {LearnedHands Dataset},
-            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
-            year = {2022},
-            url = {https://spot.suffolklitlab.org/data/#learnedhands},
-            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
-            urldate = {2022-05-21}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@dataset{learned_hands,
+  author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+  note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+  title = {LearnedHands Dataset},
+  url = {https://spot.suffolklitlab.org/data/#learnedhands},
+  urldate = {2022-05-21},
+  year = {2022},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -4247,24 +4330,25 @@ class LearnedHandsTrafficLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @dataset{learned_hands,
-            title = {LearnedHands Dataset},
-            author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
-            year = {2022},
-            url = {https://spot.suffolklitlab.org/data/#learnedhands},
-            note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
-            urldate = {2022-05-21}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@dataset{learned_hands,
+  author = {{Suffolk University Law School} and {Stanford Legal Design Lab}},
+  note = {The LearnedHands dataset is licensed under CC BY-NC-SA 4.0},
+  title = {LearnedHands Dataset},
+  url = {https://spot.suffolklitlab.org/data/#learnedhands},
+  urldate = {2022-05-21},
+  year = {2022},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -4300,16 +4384,16 @@ class LegalReasoningCausalityLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -4523,22 +4607,23 @@ class MAUDLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        }
-        @article{wang2023maud,
-            title={MAUD: An Expert-Annotated Legal NLP Dataset for Merger Agreement Understanding},
-            author={Wang, Steven H and Scardigli, Antoine and Tang, Leonard and Chen, Wei and Levkin, Dimitry and Chen, Anya and Ball, Spencer and Woodside, Thomas and Zhang, Oliver and Hendrycks, Dan},
-            journal={arXiv preprint arXiv:2301.00876},
-            year={2023}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{wang2023maud,
+  author = {Wang, Steven H and Scardigli, Antoine and Tang, Leonard and Chen, Wei and Levkin, Dimitry and Chen, Anya and Ball, Spencer and Woodside, Thomas and Zhang, Oliver and Hendrycks, Dan},
+  journal = {arXiv preprint arXiv:2301.00876},
+  title = {MAUD: An Expert-Annotated Legal NLP Dataset for Merger Agreement Understanding},
+  year = {2023},
+}
+""",
     )
 
     def load_data(self, **kwargs: Any) -> None:
@@ -4630,16 +4715,16 @@ class NYSJudicialEthicsLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -4677,23 +4762,24 @@ class OPP115DataRetentionLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        }
-        @inproceedings{wilson2016creation,
-            title={The creation and analysis of a website privacy policy corpus},
-            author={Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
-            booktitle={Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
-            pages={1330--1340},
-            year={2016}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@inproceedings{wilson2016creation,
+  author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
+  booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  pages = {1330--1340},
+  title = {The creation and analysis of a website privacy policy corpus},
+  year = {2016},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -4729,23 +4815,24 @@ class OPP115DataSecurityLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        }
-        @inproceedings{wilson2016creation,
-            title={The creation and analysis of a website privacy policy corpus},
-            author={Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
-            booktitle={Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
-            pages={1330--1340},
-            year={2016}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@inproceedings{wilson2016creation,
+  author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
+  booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  pages = {1330--1340},
+  title = {The creation and analysis of a website privacy policy corpus},
+  year = {2016},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -4781,23 +4868,24 @@ class OPP115DoNotTrackLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        }
-        @inproceedings{wilson2016creation,
-            title={The creation and analysis of a website privacy policy corpus},
-            author={Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
-            booktitle={Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
-            pages={1330--1340},
-            year={2016}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@inproceedings{wilson2016creation,
+  author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
+  booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  pages = {1330--1340},
+  title = {The creation and analysis of a website privacy policy corpus},
+  year = {2016},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -4833,23 +4921,24 @@ class OPP115FirstPartyCollectionUseLegalBenchClassification(AbsTaskClassificatio
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        }
-        @inproceedings{wilson2016creation,
-            title={The creation and analysis of a website privacy policy corpus},
-            author={Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
-            booktitle={Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
-            pages={1330--1340},
-            year={2016}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@inproceedings{wilson2016creation,
+  author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
+  booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  pages = {1330--1340},
+  title = {The creation and analysis of a website privacy policy corpus},
+  year = {2016},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -4887,23 +4976,24 @@ class OPP115InternationalAndSpecificAudiencesLegalBenchClassification(
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        }
-        @inproceedings{wilson2016creation,
-            title={The creation and analysis of a website privacy policy corpus},
-            author={Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
-            booktitle={Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
-            pages={1330--1340},
-            year={2016}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@inproceedings{wilson2016creation,
+  author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
+  booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  pages = {1330--1340},
+  title = {The creation and analysis of a website privacy policy corpus},
+  year = {2016},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -4939,23 +5029,24 @@ class OPP115PolicyChangeLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        }
-        @inproceedings{wilson2016creation,
-            title={The creation and analysis of a website privacy policy corpus},
-            author={Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
-            booktitle={Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
-            pages={1330--1340},
-            year={2016}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@inproceedings{wilson2016creation,
+  author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
+  booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  pages = {1330--1340},
+  title = {The creation and analysis of a website privacy policy corpus},
+  year = {2016},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -4991,23 +5082,24 @@ class OPP115ThirdPartySharingCollectionLegalBenchClassification(AbsTaskClassific
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        }
-        @inproceedings{wilson2016creation,
-            title={The creation and analysis of a website privacy policy corpus},
-            author={Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
-            booktitle={Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
-            pages={1330--1340},
-            year={2016}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@inproceedings{wilson2016creation,
+  author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
+  booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  pages = {1330--1340},
+  title = {The creation and analysis of a website privacy policy corpus},
+  year = {2016},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -5043,23 +5135,24 @@ class OPP115UserAccessEditAndDeletionLegalBenchClassification(AbsTaskClassificat
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        }
-        @inproceedings{wilson2016creation,
-            title={The creation and analysis of a website privacy policy corpus},
-            author={Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
-            booktitle={Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
-            pages={1330--1340},
-            year={2016}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@inproceedings{wilson2016creation,
+  author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
+  booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  pages = {1330--1340},
+  title = {The creation and analysis of a website privacy policy corpus},
+  year = {2016},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -5095,23 +5188,24 @@ class OPP115UserChoiceControlLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        }
-        @inproceedings{wilson2016creation,
-            title={The creation and analysis of a website privacy policy corpus},
-            author={Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
-            booktitle={Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
-            pages={1330--1340},
-            year={2016}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@inproceedings{wilson2016creation,
+  author = {Wilson, Shomir and Schaub, Florian and Dara, Aswarth Abhilash and Liu, Frederick and Cherivirala, Sushain and Leon, Pedro Giovanni and Andersen, Mads Schaarup and Zimmeck, Sebastian and Sathyendra, Kanthashree Mysore and Russell, N Cameron and others},
+  booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)},
+  pages = {1330--1340},
+  title = {The creation and analysis of a website privacy policy corpus},
+  year = {2016},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -5155,16 +5249,16 @@ class OralArgumentQuestionPurposeLegalBenchClassification(AbsTaskClassification)
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -5196,23 +5290,24 @@ class OverrulingLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @inproceedings{zheng2021does,
-            title={When does pretraining help? assessing self-supervised learning for law and the casehold dataset of 53,000+ legal holdings},
-            author={Zheng, Lucia and Guha, Neel and Anderson, Brandon R and Henderson, Peter and Ho, Daniel E},
-            booktitle={Proceedings of the eighteenth international conference on artificial intelligence and law},
-            pages={159--168},
-            year={2021}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@inproceedings{zheng2021does,
+  author = {Zheng, Lucia and Guha, Neel and Anderson, Brandon R and Henderson, Peter and Ho, Daniel E},
+  booktitle = {Proceedings of the eighteenth international conference on artificial intelligence and law},
+  pages = {159--168},
+  title = {When does pretraining help? assessing self-supervised learning for law and the casehold dataset of 53,000+ legal holdings},
+  year = {2021},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -5251,16 +5346,16 @@ class PersonalJurisdictionLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -5296,16 +5391,16 @@ class PROALegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -5341,25 +5436,26 @@ class SCDBPAccountabilityLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{chilton2017limitations,
-        title={The limitations of supply chain disclosure regimes},
-        author={Chilton, Adam S and Sarfaty, Galit A},
-        journal={Stan. J. Int'l L.},
-        volume={53},
-        pages={1},
-        year={2017},
-        publisher={HeinOnline}
-        }
-        """,
+        bibtex_citation=r"""
+@article{chilton2017limitations,
+  author = {Chilton, Adam S and Sarfaty, Galit A},
+  journal = {Stan. J. Int'l L.},
+  pages = {1},
+  publisher = {HeinOnline},
+  title = {The limitations of supply chain disclosure regimes},
+  volume = {53},
+  year = {2017},
+}
+
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -5395,25 +5491,26 @@ class SCDBPAuditsLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{chilton2017limitations,
-        title={The limitations of supply chain disclosure regimes},
-        author={Chilton, Adam S and Sarfaty, Galit A},
-        journal={Stan. J. Int'l L.},
-        volume={53},
-        pages={1},
-        year={2017},
-        publisher={HeinOnline}
-        }
-        """,
+        bibtex_citation=r"""
+@article{chilton2017limitations,
+  author = {Chilton, Adam S and Sarfaty, Galit A},
+  journal = {Stan. J. Int'l L.},
+  pages = {1},
+  publisher = {HeinOnline},
+  title = {The limitations of supply chain disclosure regimes},
+  volume = {53},
+  year = {2017},
+}
+
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -5449,25 +5546,26 @@ class SCDBPCertificationLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{chilton2017limitations,
-        title={The limitations of supply chain disclosure regimes},
-        author={Chilton, Adam S and Sarfaty, Galit A},
-        journal={Stan. J. Int'l L.},
-        volume={53},
-        pages={1},
-        year={2017},
-        publisher={HeinOnline}
-        }
-        """,
+        bibtex_citation=r"""
+@article{chilton2017limitations,
+  author = {Chilton, Adam S and Sarfaty, Galit A},
+  journal = {Stan. J. Int'l L.},
+  pages = {1},
+  publisher = {HeinOnline},
+  title = {The limitations of supply chain disclosure regimes},
+  volume = {53},
+  year = {2017},
+}
+
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -5503,25 +5601,26 @@ class SCDBPTrainingLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{chilton2017limitations,
-        title={The limitations of supply chain disclosure regimes},
-        author={Chilton, Adam S and Sarfaty, Galit A},
-        journal={Stan. J. Int'l L.},
-        volume={53},
-        pages={1},
-        year={2017},
-        publisher={HeinOnline}
-        }
-        """,
+        bibtex_citation=r"""
+@article{chilton2017limitations,
+  author = {Chilton, Adam S and Sarfaty, Galit A},
+  journal = {Stan. J. Int'l L.},
+  pages = {1},
+  publisher = {HeinOnline},
+  title = {The limitations of supply chain disclosure regimes},
+  volume = {53},
+  year = {2017},
+}
+
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -5557,25 +5656,26 @@ class SCDBPVerificationLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{chilton2017limitations,
-        title={The limitations of supply chain disclosure regimes},
-            author={Chilton, Adam S and Sarfaty, Galit A},
-            journal={Stan. J. Int'l L.},
-            volume={53},
-            pages={1},
-            year={2017},
-            publisher={HeinOnline}
-        }
-        """,
+        bibtex_citation=r"""
+@article{chilton2017limitations,
+  author = {Chilton, Adam S and Sarfaty, Galit A},
+  journal = {Stan. J. Int'l L.},
+  pages = {1},
+  publisher = {HeinOnline},
+  title = {The limitations of supply chain disclosure regimes},
+  volume = {53},
+  year = {2017},
+}
+
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -5611,25 +5711,26 @@ class SCDDAccountabilityLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{chilton2017limitations,
-        title={The limitations of supply chain disclosure regimes},
-        author={Chilton, Adam S and Sarfaty, Galit A},
-        journal={Stan. J. Int'l L.},
-        volume={53},
-        pages={1},
-        year={2017},
-        publisher={HeinOnline}
-        }
-        """,
+        bibtex_citation=r"""
+@article{chilton2017limitations,
+  author = {Chilton, Adam S and Sarfaty, Galit A},
+  journal = {Stan. J. Int'l L.},
+  pages = {1},
+  publisher = {HeinOnline},
+  title = {The limitations of supply chain disclosure regimes},
+  volume = {53},
+  year = {2017},
+}
+
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -5665,25 +5766,26 @@ class SCDDAuditsLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{chilton2017limitations,
-        title={The limitations of supply chain disclosure regimes},
-        author={Chilton, Adam S and Sarfaty, Galit A},
-        journal={Stan. J. Int'l L.},
-        volume={53},
-        pages={1},
-        year={2017},
-        publisher={HeinOnline}
-        }
-        """,
+        bibtex_citation=r"""
+@article{chilton2017limitations,
+  author = {Chilton, Adam S and Sarfaty, Galit A},
+  journal = {Stan. J. Int'l L.},
+  pages = {1},
+  publisher = {HeinOnline},
+  title = {The limitations of supply chain disclosure regimes},
+  volume = {53},
+  year = {2017},
+}
+
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -5719,25 +5821,26 @@ class SCDDCertificationLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{chilton2017limitations,
-        title={The limitations of supply chain disclosure regimes},
-        author={Chilton, Adam S and Sarfaty, Galit A},
-        journal={Stan. J. Int'l L.},
-        volume={53},
-        pages={1},
-        year={2017},
-        publisher={HeinOnline}
-        }
-        """,
+        bibtex_citation=r"""
+@article{chilton2017limitations,
+  author = {Chilton, Adam S and Sarfaty, Galit A},
+  journal = {Stan. J. Int'l L.},
+  pages = {1},
+  publisher = {HeinOnline},
+  title = {The limitations of supply chain disclosure regimes},
+  volume = {53},
+  year = {2017},
+}
+
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -5773,25 +5876,26 @@ class SCDDTrainingLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{chilton2017limitations,
-        title={The limitations of supply chain disclosure regimes},
-        author={Chilton, Adam S and Sarfaty, Galit A},
-        journal={Stan. J. Int'l L.},
-        volume={53},
-        pages={1},
-        year={2017},
-        publisher={HeinOnline}
-        }
-        """,
+        bibtex_citation=r"""
+@article{chilton2017limitations,
+  author = {Chilton, Adam S and Sarfaty, Galit A},
+  journal = {Stan. J. Int'l L.},
+  pages = {1},
+  publisher = {HeinOnline},
+  title = {The limitations of supply chain disclosure regimes},
+  volume = {53},
+  year = {2017},
+}
+
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -5827,25 +5931,26 @@ class SCDDVerificationLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        },
-        @article{chilton2017limitations,
-        title={The limitations of supply chain disclosure regimes},
-        author={Chilton, Adam S and Sarfaty, Galit A},
-        journal={Stan. J. Int'l L.},
-        volume={53},
-        pages={1},
-        year={2017},
-        publisher={HeinOnline}
-        }
-        """,
+        bibtex_citation=r"""
+@article{chilton2017limitations,
+  author = {Chilton, Adam S and Sarfaty, Galit A},
+  journal = {Stan. J. Int'l L.},
+  pages = {1},
+  publisher = {HeinOnline},
+  title = {The limitations of supply chain disclosure regimes},
+  volume = {53},
+  year = {2017},
+}
+
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -5881,16 +5986,16 @@ class TelemarketingSalesRuleLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -5926,16 +6031,16 @@ class TextualismToolDictionariesLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -5971,16 +6076,16 @@ class TextualismToolPlainLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -6016,16 +6121,16 @@ class UCCVCommonLawLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+""",
     )
 
     def dataset_transform(self):
@@ -6063,25 +6168,26 @@ class UnfairTOSLegalBenchClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @misc{guha2023legalbench,
-            title={LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
-            author={Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
-            year={2023},
-            eprint={2308.11462},
-            archivePrefix={arXiv},
-            primaryClass={cs.CL}
-        }
-        @article{lippi2019claudette,
-            title={CLAUDETTE: an automated detector of potentially unfair clauses in online terms of service},
-            author={Lippi, Marco and Pa{\l}ka, Przemys{\l}aw and Contissa, Giuseppe and Lagioia, Francesca and Micklitz, Hans-Wolfgang and Sartor, Giovanni and Torroni, Paolo},
-            journal={Artificial Intelligence and Law},
-            volume={27},
-            pages={117--139},
-            year={2019},
-            publisher={Springer}
-        }
-        """,
+        bibtex_citation=r"""
+@misc{guha2023legalbench,
+  archiveprefix = {arXiv},
+  author = {Neel Guha and Julian Nyarko and Daniel E. Ho and Christopher Ré and Adam Chilton and Aditya Narayana and Alex Chohlas-Wood and Austin Peters and Brandon Waldon and Daniel N. Rockmore and Diego Zambrano and Dmitry Talisman and Enam Hoque and Faiz Surani and Frank Fagan and Galit Sarfaty and Gregory M. Dickinson and Haggai Porat and Jason Hegland and Jessica Wu and Joe Nudell and Joel Niklaus and John Nay and Jonathan H. Choi and Kevin Tobia and Margaret Hagan and Megan Ma and Michael Livermore and Nikon Rasumov-Rahe and Nils Holzenberger and Noam Kolt and Peter Henderson and Sean Rehaag and Sharad Goel and Shang Gao and Spencer Williams and Sunny Gandhi and Tom Zur and Varun Iyer and Zehua Li},
+  eprint = {2308.11462},
+  primaryclass = {cs.CL},
+  title = {LegalBench: A Collaboratively Built Benchmark for Measuring Legal Reasoning in Large Language Models},
+  year = {2023},
+}
+
+@article{lippi2019claudette,
+  author = {Lippi, Marco and Pa{\l}ka, Przemys{\l}aw and Contissa, Giuseppe and Lagioia, Francesca and Micklitz, Hans-Wolfgang and Sartor, Giovanni and Torroni, Paolo},
+  journal = {Artificial Intelligence and Law},
+  pages = {117--139},
+  publisher = {Springer},
+  title = {CLAUDETTE: an automated detector of potentially unfair clauses in online terms of service},
+  volume = {27},
+  year = {2019},
+}
+""",
     )
 
     def dataset_transform(self):

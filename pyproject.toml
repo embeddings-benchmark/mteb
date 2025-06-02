@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mteb"
-version = "1.38.2"
+version = "1.38.21"
 description = "Massive Text Embedding Benchmark"
 readme = "README.md"
 authors = [
@@ -25,7 +25,7 @@ classifiers = [
 ]
 requires-python = ">=3.9,<3.13"
 dependencies = [
-    "datasets>=2.19.0,<3.0.0",
+    "datasets>=2.19.0",
     "numpy>=1.0.0,<3.0.0",
     "requests>=2.26.0",
     "scikit_learn>=1.0.2",
@@ -61,6 +61,7 @@ dev = [
 "pytest-rerunfailures>=15.0",
 "iso639>=0.1.4", # used for tests/scripts/test_generate_model_meta.py
 "pre-commit>=4.1.0",
+"bibtexparser>=1.4.3" # used for tests/test_citation_formatting.py
 ]
 codecarbon = ["codecarbon>=2.0.0,<3.0.0"]
 speedtask = [
@@ -70,7 +71,7 @@ speedtask = [
 ]
 peft = ["peft>=0.11.0"]
 leaderboard = [
-    "gradio==5.17.1; python_version > '3.9'", # 3.10 is required for gradio
+    "gradio==5.27.1; python_version > '3.9'", # 3.10 is required for gradio
     "gradio_rangeslider>=0.0.8",
     "plotly>=5.24.0,<6.0.0",
     "cachetools>=5.2.0",
@@ -86,14 +87,16 @@ bm25s = ["bm25s>=0.2.6", "PyStemmer>=2.2.0.3"]
 gritlm = ["gritlm>=1.0.2"]
 xformers = ["xformers>=0.0.29"]
 blip2 = ["salesforce-lavis>=1.0.2"]
-voyageai = ["voyageai>=1.0.0,<2.0.0"]
-voyage_v = ["voyageai>1.0.0,<2.0.0", "tenacity>1.0.0,<2.0.0"]
+voyageai = ["voyageai>0.3.0,<2.0.0"]
+voyage_v = ["voyageai>0.3.0,<2.0.0", "tenacity>9.0.0"]
 cohere = ["cohere==5.14.0"]
 vertexai = ["vertexai==1.71.1"]
-ll2vec = ["ll2vec==0.2.3"]
-timm = ["timm==1.0.15"]
+llm2vec = ["llm2vec>=0.2.3,<0.3.0"]
+timm = ["timm>=1.0.15,<1.1.0"]
 open_clip_torch = ["open_clip_torch==2.31.0"]
 xet = ["huggingface_hub[hf_xet]>=0.30.0"]
+ark = ["volcengine-python-sdk[ark]==3.0.2", "tiktoken>=0.8.0"]
+colpali_engine = ["colpali_engine>=0.3.10"]
 
 [tool.coverage.report]
 
@@ -118,11 +121,14 @@ exclude_also = [
     ]
 
 [tool.setuptools.packages.find]
-exclude = ["tests", "results"]
+where = ["."]
+include = ["mteb", "mteb.*"]
+namespaces = false
 
 [tool.setuptools.package-data]
 "*" = ["*.json"]
 "mteb.abstasks" = ["the_ugly_duckling.txt"]
+"mteb.tasks.Image.ZeroShotClassification.eng.templates" = ["*.txt"]
 
 [tool.ruff]
 
@@ -202,4 +208,9 @@ addopts = """
 [tool.uv]
 override-dependencies = [
     "salesforce-lavis", # salesforce-lavis is not valid with sentence transformers >=3.0.0
+]
+conflicts = [
+    [{ extra = "timm" }, { extra = "blip2" }],
+    [{ extra = "llm2vec" }, { extra = "pylate" }],
+    [{ extra = "llm2vec" }, { extra = "model2vec" }]
 ]

@@ -85,14 +85,16 @@ class HatefulMemesI2TRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{kiela2020hateful,
-  title={The hateful memes challenge: Detecting hate speech in multimodal memes},
-  author={Kiela, Douwe and Firooz, Hamed and Mohan, Aravind and Goswami, Vedanuj and Singh, Amanpreet and Ringshia, Pratik and Testuggine, Davide},
-  journal={Advances in neural information processing systems},
-  volume={33},
-  pages={2611--2624},
-  year={2020}
-}""",
+        bibtex_citation=r"""
+@article{kiela2020hateful,
+  author = {Kiela, Douwe and Firooz, Hamed and Mohan, Aravind and Goswami, Vedanuj and Singh, Amanpreet and Ringshia, Pratik and Testuggine, Davide},
+  journal = {Advances in neural information processing systems},
+  pages = {2611--2624},
+  title = {The hateful memes challenge: Detecting hate speech in multimodal memes},
+  volume = {33},
+  year = {2020},
+}
+""",
         descriptive_stats={
             "n_samples": None,
             "avg_character_length": {

@@ -26,13 +26,15 @@ class GLDv2I2IRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["image"],
         sample_creation="created",
-        bibtex_citation="""@InProceedings{Weyand_2020_CVPR,
-author = {Weyand, Tobias and Araujo, Andre and Cao, Bingyi and Sim, Jack},
-title = {Google Landmarks Dataset v2 - A Large-Scale Benchmark for Instance-Level Recognition and Retrieval},
-booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
-month = {June},
-year = {2020}
-}""",
+        bibtex_citation=r"""
+@inproceedings{Weyand_2020_CVPR,
+  author = {Weyand, Tobias and Araujo, Andre and Cao, Bingyi and Sim, Jack},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  month = {June},
+  title = {Google Landmarks Dataset v2 - A Large-Scale Benchmark for Instance-Level Recognition and Retrieval},
+  year = {2020},
+}
+""",
         descriptive_stats={
             "n_samples": {"test": 1129},
             "avg_character_length": {

@@ -35,24 +35,25 @@ class NordicLangClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{haas-derczynski-2021-discriminating,
-    title = "Discriminating Between Similar {N}ordic Languages",
-    author = "Haas, Ren{\'e}  and
-      Derczynski, Leon",
-    editor = {Zampieri, Marcos  and
-      Nakov, Preslav  and
-      Ljube{\v{s}}i{\'c}, Nikola  and
-      Tiedemann, J{\"o}rg  and
-      Scherrer, Yves  and
-      Jauhiainen, Tommi},
-    booktitle = "Proceedings of the Eighth Workshop on NLP for Similar Languages, Varieties and Dialects",
-    month = apr,
-    year = "2021",
-    address = "Kiyv, Ukraine",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/2021.vardial-1.8",
-    pages = "67--75",
-    abstract = "Automatic language identification is a challenging problem. Discriminating between closely related languages is especially difficult. This paper presents a machine learning approach for automatic language identification for the Nordic languages, which often suffer miscategorisation by existing state-of-the-art tools. Concretely we will focus on discrimination between six Nordic languages: Danish, Swedish, Norwegian (Nynorsk), Norwegian (Bokm{\aa}l), Faroese and Icelandic.",
+        bibtex_citation=r"""
+@inproceedings{haas-derczynski-2021-discriminating,
+  abstract = {Automatic language identification is a challenging problem. Discriminating between closely related languages is especially difficult. This paper presents a machine learning approach for automatic language identification for the Nordic languages, which often suffer miscategorisation by existing state-of-the-art tools. Concretely we will focus on discrimination between six Nordic languages: Danish, Swedish, Norwegian (Nynorsk), Norwegian (Bokm{\aa}l), Faroese and Icelandic.},
+  address = {Kiyv, Ukraine},
+  author = {Haas, Ren{\'e}  and
+Derczynski, Leon},
+  booktitle = {Proceedings of the Eighth Workshop on NLP for Similar Languages, Varieties and Dialects},
+  editor = {Zampieri, Marcos  and
+Nakov, Preslav  and
+Ljube{\v{s}}i{\'c}, Nikola  and
+Tiedemann, J{\"o}rg  and
+Scherrer, Yves  and
+Jauhiainen, Tommi},
+  month = apr,
+  pages = {67--75},
+  publisher = {Association for Computational Linguistics},
+  title = {Discriminating Between Similar {N}ordic Languages},
+  url = {https://aclanthology.org/2021.vardial-1.8},
+  year = {2021},
 }
 """,
         prompt="Classify texts based on language",
