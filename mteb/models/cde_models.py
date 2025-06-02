@@ -46,11 +46,20 @@ class CDEWrapper(SentenceTransformerWrapper):
         model_config = AutoConfig.from_pretrained(model, trust_remote_code=True)
         self.max_sentences = model_config.transductive_corpus_size
 
-    def create_embeddings_key(
+    def _create_embeddings_key(
         self,
         task_metadata: TaskMetadata,
         hf_subset: str,
     ) -> tuple[str, str]:
+        """Create a key for the embeddings based on task metadata and subset.
+
+        Args:
+            task_metadata: Task metadata containing the task name.
+            hf_subset: The subset of the task, e.g., "train", "test", etc.
+
+        Returns:
+            A tuple containing the task name and the subset.
+        """
         return (
             task_metadata.name,
             hf_subset,
@@ -76,7 +85,7 @@ class CDEWrapper(SentenceTransformerWrapper):
                 f"No model prompts found for task={task_metadata.name} prompt_type={prompt_type}"
             )
         sentences = [text for batch in inputs for text in batch["text"]]
-        self.load_task_sample(
+        self._load_task_sample(
             sentences,
             task_metadata,
             prompt_type,
@@ -99,10 +108,10 @@ class CDEWrapper(SentenceTransformerWrapper):
             # sometimes in kwargs can be return_tensors=True
             embeddings = embeddings.cpu().detach().float().numpy()
 
-        self.prev_embeddings_key = self.create_embeddings_key(task_metadata, hf_subset)
+        self.prev_embeddings_key = self._create_embeddings_key(task_metadata, hf_subset)
         return embeddings
 
-    def load_task_sample(
+    def _load_task_sample(
         self,
         sentences: Sequence[str],
         task_metadata: TaskMetadata,
@@ -111,7 +120,17 @@ class CDEWrapper(SentenceTransformerWrapper):
         hf_subset: str,
         **kwargs: Any,
     ) -> None:
-        if self.prev_embeddings_key == self.create_embeddings_key(
+        """Load a sample of the task dataset to create embeddings for the sentences.
+
+        Args:
+            sentences: List of sentences to encode.
+            task_metadata: Task metadata containing the task name and type.
+            prompt_type: The type of prompt to use (query or passage).
+            hf_split: Split of the task, e.g., "train", "test", etc.
+            hf_subset: Subset of the task, e.g., "train", "validation", etc.
+            **kwargs: Encoding arguments to pass to the model.
+        """
+        if self.prev_embeddings_key == self._create_embeddings_key(
             task_metadata, hf_subset
         ):
             logger.info(
