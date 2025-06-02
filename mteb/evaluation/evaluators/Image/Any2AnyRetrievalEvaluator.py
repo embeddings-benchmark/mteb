@@ -71,19 +71,6 @@ class Any2AnyDenseRetrievalExactSearch:
         return_sorted: bool = False,
         **kwargs,
     ) -> dict[str, dict[str, float]]:
-        if hasattr(self.model, "similarity"):
-            score_function = self.model.similarity
-            logger.info("Scoring Function: from model")
-        else:
-            if score_function not in self.score_functions:
-                raise ValueError(
-                    f"score function: {score_function} must be either (cos_sim) for cosine similarity or (dot) for dot product"
-                )
-            logger.info(
-                f"Scoring Function: {self.score_function_desc[score_function]} ({score_function})"
-            )
-            score_function = self.score_functions[score_function]
-
         logger.info("Encoding Queries.")
         query_ids = list(queries["id"])
         self.results = {qid: {} for qid in query_ids}
