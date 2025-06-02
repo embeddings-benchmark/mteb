@@ -22,6 +22,7 @@ class OpenAIModel(AbsEncoder):
         "text-embedding-3-large": 3072,
         "text-embedding-ada-002": 1536,
     }
+
     def __init__(
         self,
         model_name: str,
@@ -165,7 +166,7 @@ text_embedding_3_small = ModelMeta(
     revision="3",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
-    loader=OpenAIModel, # type: ignore[call-arg]
+    loader=OpenAIModel,  # type: ignore[call-arg]
     loader_kwargs=dict(
         tokenizer_name="cl100k_base",
         max_tokens=8191,
@@ -189,7 +190,7 @@ text_embedding_3_large = ModelMeta(
     revision="3",
     release_date="2024-01-25",
     languages=None,  # supported languages not specified
-    loader=OpenAIModel, # type: ignore[call-arg]
+    loader=OpenAIModel,  # type: ignore[call-arg]
     loader_kwargs=dict(
         tokenizer_name="cl100k_base",
         max_tokens=8191,
@@ -213,7 +214,7 @@ text_embedding_ada_002 = ModelMeta(
     revision="3",
     release_date="2022-12-15",
     languages=None,  # supported languages not specified
-    loader=OpenAIModel, # type: ignore[call-arg]
+    loader=OpenAIModel,  # type: ignore[call-arg]
     loader_kwargs=dict(
         tokenizer_name="cl100k_base",
         max_tokens=8191,
