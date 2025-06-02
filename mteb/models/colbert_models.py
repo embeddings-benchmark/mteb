@@ -182,10 +182,7 @@ jina_colbert_v2 = ModelMeta(
 
 
 lightonai__GTE_ModernColBERT_v1 = ModelMeta(
-    loader=partial(  # type: ignore[call-arg]
-        ColBERTWrapper,
-        model_name="lightonai/GTE-ModernColBERT-v1",
-    ),
+    loader=ColBERTModel,
     name="lightonai/GTE-ModernColBERT-v1",
     languages=[
         "eng-Latn",  # English
