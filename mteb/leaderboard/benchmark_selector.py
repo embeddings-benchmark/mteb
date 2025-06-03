@@ -11,93 +11,79 @@ from mteb import Benchmark
 @dataclass
 class MenuEntry:
     name: str | None
-    benchmarks: list[Benchmark]
+    benchmarks: list[Benchmark | MenuEntry]
+    description: str | None = None
     open: bool = False
-    size: str = "sm"
 
 
 BENCHMARK_ENTRIES = [
     MenuEntry(
-        None,
-        mteb.get_benchmarks(["MTEB(Multilingual, v2)", "MTEB(eng, v2)"]),
-        False,
-        size="md",
-    ),
-    MenuEntry(
-        "Image",
-        mteb.get_benchmarks(
-            [
-                "MIEB(Multilingual)",
-                "MIEB(eng)",
-                "MIEB(lite)",
-                "MIEB(Img)",
-                "VisualDocumentRetrieval",
-            ]
-        ),
-        True,
-    ),
-    MenuEntry(
-        "Regional",
-        mteb.get_benchmarks(
-            [
-                "MTEB(Europe, v1)",
-                "MTEB(Indic, v1)",
-                "MTEB(Scandinavian, v1)",
-            ]
-        ),
-        True,
-    ),
-    MenuEntry(
-        "Domain-Specific",
-        mteb.get_benchmarks(
-            [
-                "MTEB(Code, v1)",
-                "MTEB(Law, v1)",
-                "MTEB(Medical, v1)",
-                "ChemTEB",
-            ]
-        ),
-    ),
-    MenuEntry(
-        "Language-specific",
-        mteb.get_benchmarks(
-            [
-                "MTEB(cmn, v1)",
-                "MTEB(deu, v1)",
-                "MTEB(fra, v1)",
-                "MTEB(jpn, v1)",
-                "MTEB(kor, v1)",
-                "MTEB(pol, v1)",
-                "MTEB(rus, v1)",
-                "MTEB(fas, v1)",
-            ]
-        ),
-    ),
-    MenuEntry(
-        "Miscellaneous",
-        mteb.get_benchmarks(
-            [
-                "BEIR",
-                "BEIR-NL",
-                "NanoBEIR",
-                "BRIGHT",
-                "BRIGHT (long)",
-                "BuiltBench(eng)",
-                "CoIR",
-                "FollowIR",
-                "LongEmbed",
-                "MINERSBitextMining",
-                "RAR-b",
-            ]
-        ),
-    ),
-    MenuEntry(
-        "Legacy",
-        mteb.get_benchmarks(
-            [
-                "MTEB(eng, v1)",
-            ]
-        ),
+        name="Select Benchmark",
+        description="",
+        open=False,
+        benchmarks=mteb.get_benchmarks(["MTEB(Multilingual, v2)", "MTEB(eng, v2)"])
+        + [
+            MenuEntry(
+                "Image",
+                mteb.get_benchmarks(
+                    [
+                        "MIEB(Multilingual)",
+                        "MIEB(eng)",
+                        "MIEB(lite)",
+                        "MIEB(Img)",
+                        "VisualDocumentRetrieval",
+                    ]
+                ),
+            ),
+            MenuEntry(
+                "Domain-Specific",
+                mteb.get_benchmarks(
+                    [
+                        "MTEB(Code, v1)",
+                        "MTEB(Law, v1)",
+                        "MTEB(Medical, v1)",
+                        "ChemTEB",
+                    ]
+                ),
+            ),
+            MenuEntry(
+                "Language-specific",
+                mteb.get_benchmarks(
+                    [
+                        "MTEB(Europe, v1)",
+                        "MTEB(Indic, v1)",
+                        "MTEB(Scandinavian, v1)",
+                        "MTEB(cmn, v1)",
+                        "MTEB(deu, v1)",
+                        "MTEB(fra, v1)",
+                        "MTEB(jpn, v1)",
+                        "MTEB(kor, v1)",
+                        "MTEB(pol, v1)",
+                        "MTEB(rus, v1)",
+                        "MTEB(fas, v1)",
+                    ]
+                )
+                + [MenuEntry("Other", mteb.get_benchmarks(["MTEB(eng, v1)"]))],
+            ),
+            MenuEntry(
+                "Miscellaneous",  # All of these are retrieval benchmarks
+                mteb.get_benchmarks(
+                    [
+                        "BEIR",
+                        "BEIR-NL",
+                        "NanoBEIR",
+                        "BRIGHT",
+                        "BRIGHT (long)",
+                        "BuiltBench(eng)",
+                        "CoIR",
+                        "FollowIR",
+                        "LongEmbed",
+                        "MINERSBitextMining",
+                        "RAR-b",
+                    ]
+                ),
+            ),
+        ],
     ),
 ]
 
@@ -145,24 +131,51 @@ def make_selector(
     label_to_value = {}
 
     with gr.Column() as column:
-        state = gr.State(entries[0].benchmarks[0].name)
+        state = gr.State("selector_state")
         i = 0
-        for entry in entries:
-            if entry.name is None:
-                for benchmark in entry.benchmarks:
+
+        for category_entry in entries:
+            gr.Markdown(f"## {category_entry.name}")
+            if category_entry.description:
+                gr.Markdown(category_entry.description)
+
+            for benchmarks_group in category_entry.benchmarks:
+                if isinstance(benchmarks_group, Benchmark):  # level 0
                     button = _create_button(
-                        i, benchmark, state, label_to_value, size=entry.size
+                        i, benchmarks_group, state, label_to_value, size="md"
                     )
                     i += 1
-            if entry.name is not None:
-                with gr.Accordion(entry.name, open=entry.open):
-                    for benchmark in entry.benchmarks:
-                        button = _create_button(  # noqa: F841
-                            i, benchmark, state, label_to_value, size=entry.size
-                        )
-                        i += 1
+                    continue
 
-    return state, column
+                with gr.Accordion(benchmarks_group.name, open=benchmarks_group.open):
+                    for benchmark_entry in benchmarks_group.benchmarks:
+                        if isinstance(benchmark_entry, Benchmark):  # level 1
+                            button = _create_button(
+                                i, benchmark_entry, state, label_to_value, size="sm"
+                            )
+                            i += 1
+                            continue
+
+                        with gr.Accordion(
+                            benchmark_entry.name, open=benchmark_entry.open
+                        ):
+                            for minor_benchmarks in benchmark_entry.benchmarks:
+                                if not isinstance(minor_benchmarks, Benchmark):
+                                    raise TypeError(
+                                        f"The leaderboard only support three layers of nesting. Expected Benchmark, got {type(minor_benchmarks)}."
+                                    )
+
+                                button = _create_button(
+                                    i,
+                                    minor_benchmarks,
+                                    state,
+                                    label_to_value,
+                                    size="sm",
+                                )
+                                i += 1
+                            continue
+
+        return state, column
 
 
 if __name__ == "__main__":
