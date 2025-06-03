@@ -52,4 +52,5 @@ class VoxCelebClustering(AbsTaskAudioClustering):
             return example
 
         ds = ds.map(add_label_id)
+        self.dataset = ds
         self.label_column_name = "label_id"
