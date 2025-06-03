@@ -45,6 +45,9 @@ class AbsTaskAudioPairClassification(AbsTask):
         **kwargs,
     ) -> ScoresDict:
         data_split = dataset
+        logging.getLogger(
+            "sentence_transformers.evaluation.PairClassificationEvaluator"
+        ).setLevel(logging.WARN)
         evaluator = AudioPairClassificationEvaluator(
             data_split[self.audio1_column_name],
             data_split[self.audio2_column_name],
