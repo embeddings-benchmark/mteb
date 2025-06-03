@@ -19,7 +19,7 @@ class VoxPopuliLanguageID(AbsTaskAudioClassification):
         },
         type="AudioClassification",
         category="a2t",
-        eval_splits=["test"],
+        eval_splits=["train"],
         eval_langs=[
             "eng-Latn",  # English
             "deu-Latn",  # German
@@ -60,7 +60,7 @@ Dupoux, Emmanuel},
 """,
         descriptive_stats={
             "n_samples": {
-                "test": 7800,
+                "train": 7800,
             },
         },
     )

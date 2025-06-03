@@ -19,7 +19,7 @@ class VoxPopuliGenderID(AbsTaskAudioClassification):
         },
         type="AudioClassification",
         category="a2t",
-        eval_splits=["test"],
+        eval_splits=["train"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2009-01-01", "2020-12-31"),
