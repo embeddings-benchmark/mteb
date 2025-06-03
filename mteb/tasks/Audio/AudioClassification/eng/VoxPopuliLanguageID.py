@@ -60,8 +60,7 @@ Dupoux, Emmanuel},
 """,
         descriptive_stats={
             "n_samples": {
-                "train": 6200,  # ~80% of test examples
-                "test": 1600,  # ~20% of test examples
+                "test": 7800,
             },
         },
     )

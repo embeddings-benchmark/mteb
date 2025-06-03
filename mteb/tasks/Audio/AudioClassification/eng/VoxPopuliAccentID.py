@@ -15,6 +15,7 @@ class VoxPopuliAccentID(AbsTaskAudioClassification):
             "path": "facebook/voxpopuli",
             "name": "en_accented",  
             "revision": "719aaef8225945c0d80b277de6c79aa42ab053d5",
+            "trust_remote_code": True,
         },
         type="AudioClassification",
         category="a2t",
