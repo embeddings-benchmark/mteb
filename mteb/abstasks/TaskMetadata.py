@@ -67,6 +67,9 @@ TASK_SUBTYPE = Literal[
     "Gender Clustering",
     "Music Clustering",
     "Accent Clustering",
+    "Sentiment Clustering",
+    "Emotion Clustering",
+
     "Rendered semantic textual similarity",
     "Sentiment Analysis",
     "Intent Classification",
@@ -79,6 +82,7 @@ TASK_SUBTYPE = Literal[
 
 TASK_DOMAIN = Literal[
     "Academic",
+    "AudioScene",
     "Bioacoustics",
     "Blog",
     "Constructed",
