@@ -159,16 +159,15 @@ class MIRACLVisionRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         modalities=["text", "image"],
         sample_creation="created",
         bibtex_citation=r"""
-        @article{osmulski2025miraclvisionlargemultilingualvisual,
-            title={MIRACL-VISION: A Large, multilingual, visual document retrieval benchmark}, 
-            author={Radek Osmulski and Gabriel de Souza P. Moreira and Ronay Ak and Mengyao Xu and Benedikt Schifferer and Even Oldridge},
-            year={2025},
-            eprint={2505.11651},
-            archivePrefix={arXiv},
-            primaryClass={cs.IR},
-            url={https://arxiv.org/abs/2505.11651}, 
-        }
-        """,
+@article{osmulski2025miraclvisionlargemultilingualvisual,
+  author = {Radek Osmulski and Gabriel de Souza P. Moreira and Ronay Ak and Mengyao Xu and Benedikt Schifferer and Even Oldridge},
+  eprint = {2505.11651},
+  journal = {arxiv},
+  title = {{MIRACL-VISION: A Large, multilingual, visual document retrieval benchmark}},
+  url = {https://arxiv.org/abs/2505.11651},
+  year = {2025},
+}
+""",
         prompt={"query": "Find a screenshot that is relevant to the user's query."},
     )
 
