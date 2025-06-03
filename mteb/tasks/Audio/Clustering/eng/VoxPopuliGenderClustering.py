@@ -13,13 +13,13 @@ class VoxPopuliGenderClustering(AbsTaskAudioClustering):
         reference="https://huggingface.co/datasets/facebook/voxpopuli",
         dataset={
             "path": "facebook/voxpopuli",
-            "name": "en",  # This selects the english config
+            "name": "en",
             "revision": "719aaef8225945c0d80b277de6c79aa42ab053d5",
         },
         type="AudioClustering",
         category="a2a",
-        eval_splits=["validation", "test"],
-        eval_langs=["eng-Latn"],  # Focus on one language for clustering
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"], 
         main_score="cluster_accuracy",
         date=("2009-01-01", "2020-12-31"),
         domains=["Spoken", "Speech"],

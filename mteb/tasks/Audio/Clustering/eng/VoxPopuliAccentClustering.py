@@ -13,13 +13,13 @@ class VoxPopuliAccentClustering(AbsTaskAudioClustering):
         reference="https://huggingface.co/datasets/facebook/voxpopuli",
         dataset={
             "path": "facebook/voxpopuli",
-            "name": "en_accented",  # This explicitly selects the accented English config
+            "name": "en_accented",
             "revision": "719aaef8225945c0d80b277de6c79aa42ab053d5",
         },
         type="AudioClustering",
         category="a2a",
-        eval_splits=["test"],  # Only test split is available for accented English
-        eval_langs=["eng-Latn"],  # Using BCP-47 format
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
         main_score="cluster_accuracy",
         date=("2009-01-01", "2020-12-31"),
         domains=["Spoken", "Speech"],
@@ -55,94 +55,3 @@ Dupoux, Emmanuel},
             "n_samples": {"test": 6900},
         },
     )
-
-    audio_column_name: str = "audio"
-
-    def dataset_transform(self):
-        # Split test into train (80%) and new test (20%)
-        import random
-
-        import numpy as np
-
-        random.seed(42)
-        dataset = self.dataset
-
-        # Function to filter out corrupted or empty audio samples
-        def is_valid_audio(example):
-            # Check if audio array exists and is not empty
-            if "audio" not in example or "array" not in example["audio"]:
-                return False
-
-            # Get the audio array
-            audio_array = example["audio"]["array"]
-
-            # Check if array is empty or too short (needs at least 10 samples for wav2vec2)
-            if (
-                audio_array is None or len(audio_array) < 500
-            ):  # Minimum length to avoid kernel error
-                return False
-
-            # Check for NaN or Inf values
-            if np.isnan(audio_array).any() or np.isinf(audio_array).any():
-                return False
-
-            return True
-
-        # Filter test data to remove corrupted samples
-        print("Filtering out corrupted audio samples...")
-        test_data = dataset["test"]
-        valid_indices = []
-
-        # Find valid indices
-        for i in range(len(test_data)):
-            if is_valid_audio(test_data[i]):
-                valid_indices.append(i)
-
-        # Use only valid samples
-        test_data = test_data.select(valid_indices)
-        print(
-            f"Kept {len(valid_indices)} valid samples out of {len(dataset['test'])} total"
-        )
-
-        # Map accent codes to numeric IDs for clustering
-        accent2id = {
-            "en_nl": 0,  # Dutch
-            "en_de": 1,  # German
-            "en_cs": 2,  # Czech
-            "en_pl": 3,  # Polish
-            "en_fr": 4,  # French
-            "en_hu": 5,  # Hungarian
-            "en_fi": 6,  # Finnish
-            "en_ro": 7,  # Romanian
-            "en_sk": 8,  # Slovak
-            "en_es": 9,  # Spanish
-            "en_it": 10,  # Italian
-            "en_et": 11,  # Estonian
-            "en_lt": 12,  # Lithuanian
-            "en_hr": 13,  # Croatian
-            "en_sl": 14,  # Slovene
-        }
-
-        # Add accent_id based on accent code
-        def add_accent_id(example):
-            example["accent_id"] = accent2id[example["accent"]]
-            return example
-
-        test_data = test_data.map(add_accent_id)
-        print(f"Mapped {len(accent2id)} accent codes to numeric IDs")
-
-        # Continue with the original split logic
-        indices = list(range(len(test_data)))
-        random.shuffle(indices)
-
-        split_point = int(len(indices) * 0.8)
-        train_indices = indices[:split_point]
-        test_indices = indices[split_point:]
-
-        self.dataset = {
-            "train": test_data.select(train_indices),
-            "test": test_data.select(test_indices),
-        }
-        print(
-            f"Created train split with {len(train_indices)} samples and test split with {len(test_indices)} samples"
-        )
