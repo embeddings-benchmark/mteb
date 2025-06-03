@@ -41,6 +41,20 @@ results = evaluation.run(model)
 ```
 
 
+## Speeding up evaluations
+
+Evaluation in MTEB consists of three main components. The download of the dataset, the encoding of the samples, and the evaluation. Typically, the most notable bottleneck are either in the encoding step or on the download step. We discuss how to speed these up in the following sections.
+
+### Speeding up download
+
+The fastest way to speed up downloads is by using Huggingface's [`xet`](https://huggingface.co/blog/xet-on-the-hub). You can use this simply using:
+
+```bash
+pip install mteb[xet]
+```
+
+When experimenting with this feature, we have seen notable speedups, especially for larger datasets. It took to download `MrTidyRetrieval` (weights 15gb) around 40 minutes, while using `xet` it took around 30 minutes.
+
 ### Evaluating on Different Modalities
 MTEB is not only text evaluating, but also allow you to evaluate image and image-text embeddings.
 
