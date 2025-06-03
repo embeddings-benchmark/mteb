@@ -19,15 +19,6 @@ DOMAINS = [
     "PMC-Clinical",
     "IIYi-Clinical",
 ]
-VERSION = {"Biology": "8b9fec2db9eda4b5742d03732213fbaee8169556",
-           "Bioinformatics": "6021fce366892cbfd7837fa85a4128ea93315e18",
-           "Medical-Sciences": "7f11654e9aed0c6fa99784641c8880f87ad62930",
-           "MedXpertQA-Exam": "b457ea43db9ae5db74c3a3e5be0a213d0f85ac3a",
-           "MedQA-Diag": "78b585990279cc01a493f876c1b0cf09557fba57",
-           "PMC-Treatment": "53c489a44a3664ba352c07550b72b4525a5968d5",
-           "PMC-Clinical": "812829522f7eaa407ef82b96717be85788a50f7e",
-           "IIYi-Clinical": "974abbc9bc281c3169180a6aa5d7586cfd2f5877",
-}
 
 DOMAINS_langs = {split: ["eng-Latn"] for split in DOMAINS}
 
@@ -38,7 +29,7 @@ def load_r2med_data(
     domains: list,
     eval_splits: list,
     cache_dir: str,
-    revision: dict,
+    revision: str,
 ):
     corpus = {domain: {split: None for split in eval_splits} for domain in DOMAINS}
     queries = {domain: {split: None for split in eval_splits} for domain in DOMAINS}
@@ -47,15 +38,14 @@ def load_r2med_data(
     }
 
     for domain in domains:
-        data_path = path + domain
         domain_corpus = datasets.load_dataset(
-            data_path, "corpus", split="corpus", cache_dir=cache_dir, revision=VERSION[domain]
+            path, name=domain+"-corpus", split="corpus", cache_dir=cache_dir, revision=revision
         )
         domain_queries = datasets.load_dataset(
-            data_path, "query", split="query", cache_dir=cache_dir, revision=VERSION[domain]
+            path, name=domain+"-query", split="query", cache_dir=cache_dir, revision=revision
         )
         domain_qrels = datasets.load_dataset(
-            data_path, "qrels", split="qrels", cache_dir=cache_dir, revision=VERSION[domain]
+            path, name=domain+"-qrels", split="qrels", cache_dir=cache_dir, revision=revision
         )
         corpus[domain]["test"] = {
             e["id"]: {"text": e["text"]} for e in domain_corpus
@@ -93,10 +83,10 @@ class R2MEDRetrieval(MultilingualTask, AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="R2MEDRetrieval",
         dataset={
-            "path": "R2MED/",
-            "revision": "1.0",
+            "path": "R2MED/R2MED",
+            "revision": "f7cf8ddcc9e5a9c971fa71d7582fab41611c8972",
         },
-        reference="https://huggingface.co/R2MED",
+        reference="https://huggingface.co/R2MED/R2MED",
         description="R2MED retrieval dataset.",
         type="Retrieval",
         category="s2p",
