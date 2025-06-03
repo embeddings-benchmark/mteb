@@ -15,9 +15,8 @@ class AudioCapsMiniReranking(AbsTaskAudioReranking):
         description="A smaller subset of AudioCaps dataset preprocessed for audio reranking",
         reference="https://audiocaps.github.io/",
         dataset={
-            # Replace YOUR_USERNAME with your actual Hugging Face username
             "path": "AdnanElAssadi/audiocaps-mini",
-            "revision": "d4dc581109fd9ea6b8ed2c4a85075a5ec910cfda",  # Use the latest revision
+            "revision": "d4dc581109fd9ea6b8ed2c4a85075a5ec910cfda",
         },
         type="AudioReranking",
         category="a2t",
