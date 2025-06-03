@@ -47,13 +47,15 @@ class IndicQARetrieval(MultilingualTask, AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="machine-translated and verified",
-        bibtex_citation="""@article{doddapaneni2022towards,
-  title     = {Towards Leaving No Indic Language Behind: Building Monolingual Corpora, Benchmark and Models for Indic Languages},
-  author    = {Sumanth Doddapaneni and Rahul Aralikatte and Gowtham Ramesh and Shreyansh Goyal and Mitesh M. Khapra and Anoop Kunchukuttan and Pratyush Kumar},
-  journal   = {Annual Meeting of the Association for Computational Linguistics},
-  year      = {2022},
-  doi       = {10.18653/v1/2023.acl-long.693}
-}""",
+        bibtex_citation=r"""
+@article{doddapaneni2022towards,
+  author = {Sumanth Doddapaneni and Rahul Aralikatte and Gowtham Ramesh and Shreyansh Goyal and Mitesh M. Khapra and Anoop Kunchukuttan and Pratyush Kumar},
+  doi = {10.18653/v1/2023.acl-long.693},
+  journal = {Annual Meeting of the Association for Computational Linguistics},
+  title = {Towards Leaving No Indic Language Behind: Building Monolingual Corpora, Benchmark and Models for Indic Languages},
+  year = {2022},
+}
+""",
     )
 
     def load_data(self, **kwargs):

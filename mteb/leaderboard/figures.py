@@ -147,6 +147,7 @@ def performance_size_plot(df: pd.DataFrame) -> go.Figure:
             "model_text": False,
         },
         hover_name="Model",
+        color_continuous_scale=px.colors.sequential.Greens,
     )
     # Note: it's important that this comes before setting the size mode
     fig = add_size_guide(fig)
@@ -219,7 +220,7 @@ def radar_chart(df: pd.DataFrame) -> go.Figure:
             "Couldn't produce radar chart, the benchmark only contains one task category."
         )
     df = df[["Model", *task_type_columns]].set_index("Model")
-    df = df.replace("", np.nan)
+    df = df.mask(df == "", np.nan)
     df = df.dropna()
     df = df.head(TOP_N)
     df = df.iloc[::-1]

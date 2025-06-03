@@ -29,11 +29,12 @@ class RomanianSentimentClassification(AbsTaskClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{dumitrescu2020birth,
-  title={The birth of Romanian BERT},
-  author={Dumitrescu, Stefan Daniel and Avram, Andrei-Marius and Pyysalo, Sampo},
-  journal={arXiv preprint arXiv:2009.08712},
-  year={2020}
+        bibtex_citation=r"""
+@article{dumitrescu2020birth,
+  author = {Dumitrescu, Stefan Daniel and Avram, Andrei-Marius and Pyysalo, Sampo},
+  journal = {arXiv preprint arXiv:2009.08712},
+  title = {The birth of Romanian BERT},
+  year = {2020},
 }
 """,
     )

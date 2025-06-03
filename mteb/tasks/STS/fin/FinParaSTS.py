@@ -31,30 +31,30 @@ class FinParaSTS(AbsTaskSTS):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @inproceedings{kanerva-etal-2021-finnish,
-            title = "{F}innish Paraphrase Corpus",
-            author = {Kanerva, Jenna  and
-            Ginter, Filip  and
-            Chang, Li-Hsin  and
-            Rastas, Iiro  and
-            Skantsi, Valtteri  and
-            Kilpel{\"a}inen, Jemina  and
-            Kupari, Hanna-Mari  and
-            Saarni, Jenna  and
-            Sev{\'o}n, Maija  and
-            Tarkka, Otto},
-            editor = "Dobnik, Simon  and
-            {\\O}vrelid, Lilja",
-            booktitle = "Proceedings of the 23rd Nordic Conference on Computational Linguistics (NoDaLiDa)",
-            month = may # " 31--2 " # jun,
-            year = "2021",
-            address = "Reykjavik, Iceland (Online)",
-            publisher = {Link{\"o}ping University Electronic Press, Sweden},
-            url = "https://aclanthology.org/2021.nodalida-main.29",
-            pages = "288--298",
-        }
-        """,
+        bibtex_citation=r"""
+@inproceedings{kanerva-etal-2021-finnish,
+  address = {Reykjavik, Iceland (Online)},
+  author = {Kanerva, Jenna  and
+Ginter, Filip  and
+Chang, Li-Hsin  and
+Rastas, Iiro  and
+Skantsi, Valtteri  and
+Kilpel{\"a}inen, Jemina  and
+Kupari, Hanna-Mari  and
+Saarni, Jenna  and
+Sev{\'o}n, Maija  and
+Tarkka, Otto},
+  booktitle = {Proceedings of the 23rd Nordic Conference on Computational Linguistics (NoDaLiDa)},
+  editor = {Dobnik, Simon  and
+{\\O}vrelid, Lilja},
+  month = may # { 31--2 } # jun,
+  pages = {288--298},
+  publisher = {Link{\"o}ping University Electronic Press, Sweden},
+  title = {{F}innish Paraphrase Corpus},
+  url = {https://aclanthology.org/2021.nodalida-main.29},
+  year = {2021},
+}
+""",
     )
 
     @property

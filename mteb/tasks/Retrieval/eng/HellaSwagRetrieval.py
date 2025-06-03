@@ -28,17 +28,19 @@ class HellaSwag(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{xiao2024rar,
-  title={RAR-b: Reasoning as Retrieval Benchmark},
-  author={Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
-  journal={arXiv preprint arXiv:2404.06347},
-  year={2024}
+        bibtex_citation=r"""
+@article{xiao2024rar,
+  author = {Xiao, Chenghao and Hudson, G Thomas and Moubayed, Noura Al},
+  journal = {arXiv preprint arXiv:2404.06347},
+  title = {RAR-b: Reasoning as Retrieval Benchmark},
+  year = {2024},
 }
+
 @article{zellers2019hellaswag,
-  title={Hellaswag: Can a machine really finish your sentence?},
-  author={Zellers, Rowan and Holtzman, Ari and Bisk, Yonatan and Farhadi, Ali and Choi, Yejin},
-  journal={arXiv preprint arXiv:1905.07830},
-  year={2019}
+  author = {Zellers, Rowan and Holtzman, Ari and Bisk, Yonatan and Farhadi, Ali and Choi, Yejin},
+  journal = {arXiv preprint arXiv:1905.07830},
+  title = {Hellaswag: Can a machine really finish your sentence?},
+  year = {2019},
 }
 """,
         prompt={

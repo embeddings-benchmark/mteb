@@ -26,15 +26,16 @@ class FilipinoShopeeReviewsClassification(AbsTaskClassification):
         sample_creation="found",
         date=("2022-05-13", "2023-05-13"),
         main_score="accuracy",
-        bibtex_citation="""
-        @article{riegoenhancement,
-            title={Enhancement to Low-Resource Text Classification via Sequential Transfer Learning},
-            author={Riego, Neil Christian R. and Villarba, Danny Bell and Sison, Ariel Antwaun Rolando C. and Pineda, Fernandez C. and Lagunzad, Herminiño C.}
-            journal={United International Journal for Research & Technology},
-            volume={04},
-            issue={08},
-            pages={72--82}
-        }""",
+        bibtex_citation=r"""
+@article{riegoenhancement,
+  author = {Riego, Neil Christian R. and Villarba, Danny Bell and Sison, Ariel Antwaun Rolando C. and Pineda, Fernandez C. and Lagunzad, Herminiño C.},
+  issue = {08},
+  journal = {United International Journal for Research & Technology},
+  pages = {72--82},
+  title = {Enhancement to Low-Resource Text Classification via Sequential Transfer Learning},
+  volume = {04},
+}
+""",
     )
 
     def dataset_transform(self):

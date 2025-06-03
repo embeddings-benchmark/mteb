@@ -12,6 +12,7 @@ from mteb.encoder_interface import Encoder
 from mteb.evaluation.evaluators.RetrievalEvaluator import DenseRetrievalExactSearch
 from mteb.model_meta import ModelMeta
 from mteb.models.bge_models import bge_m3_training_data
+from mteb.requires_package import requires_package
 
 logger = logging.getLogger(__name__)
 
@@ -61,12 +62,13 @@ class BGEReranker(RerankerWrapper):
         if self.fp_options:
             model_args["torch_dtype"] = self.fp_options
 
-        try:
-            from FlagEmbedding import FlagReranker
-        except ImportError:
-            raise ImportError(
-                "FlagEmbedding is not installed. Please install it via `pip install mteb[flagembedding]`"
-            )
+        requires_package(
+            self,
+            "FlagEmbedding",
+            model_name_or_path,
+            "pip install 'mteb[flagembedding]'",
+        )
+        from FlagEmbedding import FlagReranker
 
         self.model = FlagReranker(model_name_or_path, use_fp16=True)
 
@@ -201,7 +203,7 @@ monobert_large = ModelMeta(
         fp_options="float16",
     ),
     name="castorini/monobert-large-msmarco",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="0a97706f3827389da43b83348d5d18c9d53876fa",
     release_date="2020-05-28",
@@ -228,7 +230,7 @@ jina_reranker_multilingual = ModelMeta(
         fp_options="float16",
     ),
     name="jinaai/jina-reranker-v2-base-multilingual",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="126747772a932960028d9f4dc93bd5d9c4869be4",
     release_date="2024-09-26",
@@ -255,38 +257,38 @@ bge_reranker_v2_m3 = ModelMeta(
     ),
     name="BAAI/bge-reranker-v2-m3",
     languages=[
-        "eng_Latn",
-        "ara_Arab",
-        "ben_Beng",
-        "spa_Latn",
-        "fas_Arab",
-        "fin_Latn",
-        "fra_Latn",
-        "hin_Deva",
-        "ind_Latn",
-        "jpn_Jpan",
-        "kor_Hang",
-        "rus_Cyrl",
-        "swa_Latn",
-        "tel_Telu",
-        "tha_Thai",
-        "zho_Hans",
-        "deu_Latn",
-        "yor_Latn",
-        "dan_Latn",
-        "heb_Hebr",
-        "hun_Latn",
-        "ita_Latn",
-        "khm_Khmr",
-        "msa_Latn",
-        "nld_Latn",
-        "nob_Latn",
-        "pol_Latn",
-        "por_Latn",
-        "swe_Latn",
-        "tur_Latn",
-        "vie_Latn",
-        "zho_Hant",
+        "eng-Latn",
+        "ara-Arab",
+        "ben-Beng",
+        "spa-Latn",
+        "fas-Arab",
+        "fin-Latn",
+        "fra-Latn",
+        "hin-Deva",
+        "ind-Latn",
+        "jpn-Jpan",
+        "kor-Hang",
+        "rus-Cyrl",
+        "swa-Latn",
+        "tel-Telu",
+        "tha-Thai",
+        "zho-Hans",
+        "deu-Latn",
+        "yor-Latn",
+        "dan-Latn",
+        "heb-Hebr",
+        "hun-Latn",
+        "ita-Latn",
+        "khm-Khmr",
+        "msa-Latn",
+        "nld-Latn",
+        "nob-Latn",
+        "pol-Latn",
+        "por-Latn",
+        "swe-Latn",
+        "tur-Latn",
+        "vie-Latn",
+        "zho-Hant",
     ],
     open_weights=True,
     revision="953dc6f6f85a1b2dbfca4c34a2796e7dde08d41e",

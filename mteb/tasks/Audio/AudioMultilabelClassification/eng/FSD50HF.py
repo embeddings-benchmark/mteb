@@ -31,17 +31,19 @@ class FSD50HFMultilingualClassification(AbsTaskAudioMultilabelClassification):
         dialect=[],
         modalities=["audio"],
         sample_creation="found",
-        bibtex_citation="""@ARTICLE{9645159,
-                    author={Fonseca, Eduardo and Favory, Xavier and Pons, Jordi and Font, Frederic and Serra, Xavier},
-                    journal={IEEE/ACM Transactions on Audio, Speech, and Language Processing}, 
-                    title={FSD50K: An Open Dataset of Human-Labeled Sound Events}, 
-                    year={2022},
-                    volume={30},
-                    number={},
-                    pages={829-852},
-                    keywords={Videos;Task analysis;Labeling;Vocabulary;Speech recognition;Ontologies;Benchmark testing;Audio dataset;sound event;recognition;classification;tagging;data collection;environmental sound},
-                    doi={10.1109/TASLP.2021.3133208}}
-        """,
+        bibtex_citation=r"""
+@article{9645159,
+  author = {Fonseca, Eduardo and Favory, Xavier and Pons, Jordi and Font, Frederic and Serra, Xavier},
+  doi = {10.1109/TASLP.2021.3133208},
+  journal = {IEEE/ACM Transactions on Audio, Speech, and Language Processing},
+  keywords = {Videos;Task analysis;Labeling;Vocabulary;Speech recognition;Ontologies;Benchmark testing;Audio dataset;sound event;recognition;classification;tagging;data collection;environmental sound},
+  number = {},
+  pages = {829-852},
+  title = {FSD50K: An Open Dataset of Human-Labeled Sound Events},
+  volume = {30},
+  year = {2022},
+}
+""",
     )
 
     audio_column_name: str = "audio"

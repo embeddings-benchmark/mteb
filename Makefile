@@ -1,12 +1,12 @@
 install:
 	@echo "--- 🚀 Installing project dependencies ---"
-	pip install -e ".[dev]"
+	pip install -e ".[dev,image]"
 	pre-commit install
 
 install-for-tests:
 	@echo "--- 🚀 Installing project dependencies for test ---"
 	@echo "This ensures that the project is not installed in editable mode"
-	pip install ".[dev,speedtask]"
+	pip install ".[dev,image]"
 
 lint:
 	@echo "--- 🧹 Running linters ---"
@@ -38,11 +38,12 @@ build-docs:
 	@echo "--- 📚 Building documentation ---"
 	# since we do not have a documentation site, this just build tables for the .md files
 	python docs/create_tasks_table.py
+	python docs/create_benchmarks_table.py
 
 
 model-load-test:
 	@echo "--- 🚀 Running model load test ---"
-	pip install ".[dev, speedtask, pylate,gritlm,xformers,model2vec]"
+	pip install ".[dev, pylate,gritlm,xformers,model2vec]"
 	python scripts/extract_model_names.py $(BASE_BRANCH) --return_one_model_name_per_file
 	python tests/test_models/model_loading.py --model_name_file scripts/model_names.txt
 

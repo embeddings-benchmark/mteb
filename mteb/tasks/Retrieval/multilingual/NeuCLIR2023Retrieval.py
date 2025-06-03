@@ -79,14 +79,16 @@ class NeuCLIR2023Retrieval(MultilingualTask, AbsTaskRetrieval):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{lawrie2024overview,
-      title={Overview of the TREC 2023 NeuCLIR Track},
-      author={Dawn Lawrie and Sean MacAvaney and James Mayfield and Paul McNamee and Douglas W. Oard and Luca Soldaini and Eugene Yang},
-      year={2024},
-      eprint={2404.08071},
-      archivePrefix={arXiv},
-      primaryClass={cs.IR}
-}""",
+        bibtex_citation=r"""
+@misc{lawrie2024overview,
+  archiveprefix = {arXiv},
+  author = {Dawn Lawrie and Sean MacAvaney and James Mayfield and Paul McNamee and Douglas W. Oard and Luca Soldaini and Eugene Yang},
+  eprint = {2404.08071},
+  primaryclass = {cs.IR},
+  title = {Overview of the TREC 2023 NeuCLIR Track},
+  year = {2024},
+}
+""",
     )
 
     def load_data(self, **kwargs):
@@ -194,14 +196,16 @@ class NeuCLIR2023RetrievalHardNegatives(MultilingualTask, AbsTaskRetrieval):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{lawrie2024overview,
-      title={Overview of the TREC 2023 NeuCLIR Track},
-      author={Dawn Lawrie and Sean MacAvaney and James Mayfield and Paul McNamee and Douglas W. Oard and Luca Soldaini and Eugene Yang},
-      year={2024},
-      eprint={2404.08071},
-      archivePrefix={arXiv},
-      primaryClass={cs.IR}
-}""",
+        bibtex_citation=r"""
+@misc{lawrie2024overview,
+  archiveprefix = {arXiv},
+  author = {Dawn Lawrie and Sean MacAvaney and James Mayfield and Paul McNamee and Douglas W. Oard and Luca Soldaini and Eugene Yang},
+  eprint = {2404.08071},
+  primaryclass = {cs.IR},
+  title = {Overview of the TREC 2023 NeuCLIR Track},
+  year = {2024},
+}
+""",
         adapted_from=["NeuCLIR2022Retrieval"],
     )
 

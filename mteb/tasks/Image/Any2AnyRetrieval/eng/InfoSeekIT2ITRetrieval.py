@@ -27,13 +27,15 @@ class InfoSeekIT2ITRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{chen2023can,
-  title={Can Pre-trained Vision and Language Models Answer Visual Information-Seeking Questions?},
-  author={Chen, Yang and Hu, Hexiang and Luan, Yi and Sun, Haitian and Changpinyo, Soravit and Ritter, Alan and Chang, Ming-Wei},
-  booktitle={Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing},
-  pages={14948--14968},
-  year={2023}
-}""",
+        bibtex_citation=r"""
+@inproceedings{chen2023can,
+  author = {Chen, Yang and Hu, Hexiang and Luan, Yi and Sun, Haitian and Changpinyo, Soravit and Ritter, Alan and Chang, Ming-Wei},
+  booktitle = {Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing},
+  pages = {14948--14968},
+  title = {Can Pre-trained Vision and Language Models Answer Visual Information-Seeking Questions?},
+  year = {2023},
+}
+""",
         prompt={
             "query": "Find an image and subject description from Wikipedia that answers my question about this image."
         },

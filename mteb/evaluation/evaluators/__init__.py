@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from .Audio.Any2AnyRetrievalEvaluator import *
+from .Audio.AudioPairClassificationEvaluator import *
 from .Audio.ClassificationEvaluator import *
 from .Audio.ClusteringEvaluator import *
 from .Audio.ZeroshotClassificationEvaluator import *
@@ -9,12 +10,11 @@ from .ClassificationEvaluator import *
 from .ClusteringEvaluator import *
 from .Image.Any2AnyMultiChoiceEvaluator import *
 from .Image.Any2AnyRetrievalEvaluator import *
-from .Image.Any2TextMultipleChoiceEvaluator import *
 from .Image.ClassificationEvaluator import *
 from .Image.ClusteringEvaluator import *
 from .Image.ImageTextPairClassificationEvaluator import *
 from .Image.VisualSTSEvaluator import *
-from .Image.ZeroshotClassificationEvaluator import *
+from .Image.ZeroShotClassificationEvaluator import *
 from .PairClassificationEvaluator import *
 from .RerankingEvaluator import *
 from .RetrievalEvaluator import *

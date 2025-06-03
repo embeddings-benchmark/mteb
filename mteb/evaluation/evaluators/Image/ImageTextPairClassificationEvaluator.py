@@ -8,14 +8,11 @@ from typing import Any
 import torch
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
-from torchvision import transforms
 
 from mteb.encoder_interface import Encoder, EncoderWithSimilarity
 from mteb.evaluation.evaluators.Evaluator import Evaluator
 
 logger = logging.getLogger(__name__)
-
-transform = transforms.Compose([transforms.PILToTensor()])
 
 
 class ImageTextDataset(torch.utils.data.Dataset):
@@ -134,11 +131,15 @@ class ImageTextPairClassificationEvaluator(Evaluator):
             images = [img for images in images_list for img in images]
             texts = [txt for texts in texts_list for txt in texts]
             images_emb = F.normalize(
-                model.get_image_embeddings(images, batch_size=len(images)),
+                model.get_image_embeddings(
+                    images, batch_size=len(images), task_name=self.task_name
+                ),
                 dim=-1,
             ).view(len(batch), num_images_per_sample, -1)
             texts_emb = F.normalize(
-                model.get_text_embeddings(texts, batch_size=len(texts)),
+                model.get_text_embeddings(
+                    texts, batch_size=len(texts), task_name=self.task_name
+                ),
                 dim=-1,
             ).view(len(batch), num_texts_per_sample, -1)
             for i in range(len(batch)):

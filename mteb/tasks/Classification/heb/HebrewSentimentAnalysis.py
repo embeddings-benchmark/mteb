@@ -30,19 +30,19 @@ class HebrewSentimentAnalysis(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""""
-        @inproceedings{amram-etal-2018-representations,
-            title = "Representations and Architectures in Neural Sentiment Analysis for Morphologically Rich Languages: A Case Study from {M}odern {H}ebrew",
-            author = "Amram, Adam and Ben David, Anat and Tsarfaty, Reut",
-            booktitle = "Proceedings of the 27th International Conference on Computational Linguistics",
-            month = aug,
-            year = "2018",
-            address = "Santa Fe, New Mexico, USA",
-            publisher = "Association for Computational Linguistics",
-            url = "https://www.aclweb.org/anthology/C18-1190",
-            pages = "2242--2252"
-        }
-        """,
+        bibtex_citation=r"""
+@inproceedings{amram-etal-2018-representations,
+  address = {Santa Fe, New Mexico, USA},
+  author = {Amram, Adam and Ben David, Anat and Tsarfaty, Reut},
+  booktitle = {Proceedings of the 27th International Conference on Computational Linguistics},
+  month = aug,
+  pages = {2242--2252},
+  publisher = {Association for Computational Linguistics},
+  title = {Representations and Architectures in Neural Sentiment Analysis for Morphologically Rich Languages: A Case Study from {M}odern {H}ebrew},
+  url = {https://www.aclweb.org/anthology/C18-1190},
+  year = {2018},
+}
+""",
     )
 
     def dataset_transform(self):

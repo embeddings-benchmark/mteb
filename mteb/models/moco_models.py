@@ -10,13 +10,13 @@ from tqdm import tqdm
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
+from mteb.requires_package import requires_image_dependencies, requires_package
 
 
 def mocov3_loader(**kwargs):
-    try:
-        import timm
-    except ImportError:
-        raise ImportError("Please install `pip install timm` to use MOCOv3 models.")
+    model_name = kwargs.get("model_name", "MOCOv3")
+    requires_package(mocov3_loader, "timm", model_name, "pip install 'mteb[timm]'")
+    import timm
 
     class MOCOv3Wrapper:
         """A wrapper class for MOCOv3 models that supports image encoding.
@@ -29,6 +29,8 @@ def mocov3_loader(**kwargs):
             device: str = "cuda" if torch.cuda.is_available() else "cpu",
             **kwargs: Any,
         ):
+            requires_image_dependencies()
+
             self.model_name = model_name
             self.device = device
             name = "vit_base_patch16_224"
@@ -69,11 +71,11 @@ def mocov3_loader(**kwargs):
             batch_size: int = 32,
             **kwargs: Any,
         ):
+            import torchvision.transforms.functional as F
+
             all_image_embeddings = []
 
             if isinstance(images, DataLoader):
-                import torchvision.transforms.functional as F
-
                 with torch.no_grad():
                     for batch in tqdm(images):
                         inputs = torch.vstack(
@@ -107,8 +109,8 @@ def mocov3_loader(**kwargs):
 
         def get_fused_embeddings(
             self,
-            texts: list[str] = None,
-            images: list[Image.Image] | DataLoader = None,
+            texts: list[str] | None = None,
+            images: list[Image.Image] | DataLoader | None = None,
             *,
             task_name: str | None = None,
             prompt_type: PromptType | None = None,
@@ -148,7 +150,7 @@ mocov3_vit_base = ModelMeta(
         model_name="nyu-visionx/moco-v3-vit-b",
     ),
     name="nyu-visionx/moco-v3-vit-b",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     revision="7d091cd70772c5c0ecf7f00b5f12ca609a99d69d",
     release_date="2024-06-03",
     modalities=["image"],
@@ -173,7 +175,7 @@ mocov3_vit_large = ModelMeta(
         model_name="nyu-visionx/moco-v3-vit-l",
     ),
     name="nyu-visionx/moco-v3-vit-l",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     revision="7bf75358d616f39b9716148bf4e3425f3bd35b47",
     release_date="2024-06-03",
     modalities=["image"],
