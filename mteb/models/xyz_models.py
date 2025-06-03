@@ -5,7 +5,8 @@ from mteb.model_meta import ModelMeta
 
 xyz_embedding = ModelMeta(
     name="fangxq/XYZ-embedding",
-    languages=["zho-Hans"], # follows ISO 639-3 and BCP-47
+    languages=["zho-Hans"],
+    loader=None,
     open_weights=False,
     revision="4004120220b99baea764a1d3508427248ac3bccf",
     release_date="2024-09-13",
