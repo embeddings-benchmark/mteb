@@ -64,5 +64,4 @@ Dupoux, Emmanuel},
 
     def dataset_transform(self):
         self.dataset["train"] = self.dataset["test"]
-        self.dataset["test"] = None
 
