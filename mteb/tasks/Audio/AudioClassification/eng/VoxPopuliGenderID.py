@@ -13,12 +13,13 @@ class VoxPopuliGenderID(AbsTaskAudioClassification):
         reference="https://huggingface.co/datasets/facebook/voxpopuli",
         dataset={
             "path": "facebook/voxpopuli",
-            "name": "en",  # This selects the english config/subset
+            "name": "en",
             "revision": "719aaef8225945c0d80b277de6c79aa42ab053d5",
+            "trust_remote_code": True,
         },
         type="AudioClassification",
         category="a2t",
-        eval_splits=["validation", "test"],
+        eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="accuracy",
         date=("2009-01-01", "2020-12-31"),
@@ -62,5 +63,5 @@ Dupoux, Emmanuel},
 
     audio_column_name: str = "audio"
     label_column_name: str = "gender"
-    samples_per_label: int = 100
-    is_cross_validation: bool = False
+    samples_per_label: int = 50
+    is_cross_validation: bool = True

@@ -13,8 +13,9 @@ class VoxPopuliLanguageID(AbsTaskAudioClassification):
         reference="https://huggingface.co/datasets/facebook/voxpopuli",
         dataset={
             "path": "facebook/voxpopuli",
-            "name": "multilang",  # This selects the multilingual config/subset
+            "name": "multilang",
             "revision": "719aaef8225945c0d80b277de6c79aa42ab053d5",
+            "trust_remote_code": True,
         },
         type="AudioClassification",
         category="a2t",
@@ -25,7 +26,7 @@ class VoxPopuliLanguageID(AbsTaskAudioClassification):
             "fra-Latn",  # French
             "spa-Latn",  # Spanish
             "pol-Latn",  # Polish
-        ],  # Using BCP-47 format for the 5 main languages
+        ], 
         main_score="accuracy",
         date=("2009-01-01", "2020-12-31"),
         domains=["Spoken", "Speech"],
@@ -67,46 +68,7 @@ Dupoux, Emmanuel},
 
     audio_column_name: str = "audio"
     label_column_name: str = "language"
-    samples_per_label: int = 50  # For balanced training
-    is_cross_validation: bool = False
+    samples_per_label: int = 30 
+    is_cross_validation: bool = True
 
-    def dataset_transform(self):
-        """Create train and test splits from the original test split."""
-        import random
-
-        random.seed(42)
-
-        if "test" in self.dataset:
-            test_data = self.dataset["test"]
-            print(
-                f"Creating train/test splits from original test split with {len(test_data)} examples"
-            )
-
-            # Get all indices (all audio assumed valid)
-            all_indices = list(range(len(test_data)))
-
-            # Create stratified split (balanced by language)
-            lang_indices = {}
-            for i in all_indices:
-                lang = test_data[i][self.label_column_name]
-                if lang not in lang_indices:
-                    lang_indices[lang] = []
-                lang_indices[lang].append(i)
-
-            # Take 80% for training, 20% for testing from each language
-            train_indices = []
-            test_indices = []
-
-            for lang, indices in lang_indices.items():
-                # Shuffle indices for this language
-                shuffled = indices.copy()
-                random.shuffle(shuffled)
-
-                # Split 80/20
-                split_point = int(len(shuffled) * 0.8)
-                train_indices.extend(shuffled[:split_point])
-                test_indices.extend(shuffled[split_point:])
-
-            # Create the splits
-            self.dataset["train"] = test_data.select(train_indices)
-            self.dataset["test"] = test_data.select(test_indices)
+ 
