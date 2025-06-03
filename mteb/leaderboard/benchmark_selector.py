@@ -122,6 +122,7 @@ def _create_button(
     button.click(_update_value, inputs=[button], outputs=[state])
     return button
 
+
 def make_selector(entries: list[MenuEntry]) -> tuple[gr.State, gr.Column]:
     """Creates a UI selector from menu entries with up to 3 levels of nesting.
 
