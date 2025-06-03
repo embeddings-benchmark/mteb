@@ -19,6 +19,7 @@ from .eng.NSynth import *
 from .eng.SIBFLEURS import *
 from .eng.SpeechCommands import *
 from .eng.SpokenQAforIC import *
+from .eng.TUTAcousticScenes import *
 from .eng.VoxCelebSA import *
 from .eng.VoxLingua107Top10 import *
 from .multilingual.MInDS14 import *
