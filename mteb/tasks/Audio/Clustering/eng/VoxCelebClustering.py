@@ -3,6 +3,7 @@ from __future__ import annotations
 from mteb.abstasks.Audio.AbsTaskAudioClustering import AbsTaskAudioClustering
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
+
 class VoxCelebClustering(AbsTaskAudioClustering):
     label_column_name: str = "label_id"
     metadata = TaskMetadata(
@@ -40,7 +41,6 @@ class VoxCelebClustering(AbsTaskAudioClustering):
     )
 
     def dataset_transform(self):
-
         ds = self.dataset
         # Remove 'Disagreement' samples and '<mixed>' samples
         ds = ds.filter(lambda x: x["label"] not in ["Disagreement", "<mixed>"])
