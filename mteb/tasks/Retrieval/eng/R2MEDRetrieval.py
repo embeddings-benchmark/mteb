@@ -108,5 +108,3 @@ class R2MEDRetrieval(MultilingualTask, AbsTaskRetrieval):
 }
 """,
     )
-    load_r2med_data = load_r2med_data
-    load_data = load_data
