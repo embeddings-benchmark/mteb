@@ -16,66 +16,66 @@ from mteb.model_meta import ModelMeta
 from mteb.models.wrapper import Wrapper
 
 COMMON_VOICE_LANGUAGES = [
-    "ab-Cyrl",  # Abkhaz
-    "ar-Arab",  # Arabic
-    "as-Beng",  # Assamese
-    "eu-Latn",  # Basque
-    "br-Latn",  # Breton
-    "ca-Latn",  # Catalan
-    "zh-Hans-CN",  # Chinese (China)
-    "zh-Hant-HK",  # Chinese (Hong Kong)
-    "zh-Hant-TW",  # Chinese (Taiwan)
-    "cv-Cyrl",  # Chuvash
-    "cs-Latn",  # Czech
-    "dv-Thaa",  # Dhivehi
-    "nl-Latn",  # Dutch
-    "en-Latn",  # English
-    "eo-Latn",  # Esperanto
-    "et-Latn",  # Estonian
-    "fi-Latn",  # Finnish
-    "fr-Latn",  # French
-    "fy-Latn",  # Frisian
-    "ka-Geor",  # Georgian
-    "de-Latn",  # German
-    "el-Grek",  # Greek
+    "abk-Cyrl",  # Abkhaz
+    "ara-Arab",  # Arabic
+    "asm-Beng",  # Assamese
+    "eus-Latn",  # Basque
+    "bre-Latn",  # Breton
+    "cat-Latn",  # Catalan
+    "zho-Hans-CN",  # Chinese (China)
+    "zho-Hant-HK",  # Chinese (Hong Kong)
+    "zho-Hant-TW",  # Chinese (Taiwan)
+    "chv-Cyrl",  # Chuvash
+    "ces-Latn",  # Czech
+    "div-Thaa",  # Dhivehi
+    "nld-Latn",  # Dutch
+    "eng-Latn",  # English
+    "epo-Latn",  # Esperanto
+    "est-Latn",  # Estonian
+    "fin-Latn",  # Finnish
+    "fra-Latn",  # French
+    "fry-Latn",  # Frisian
+    "kat-Geor",  # Georgian
+    "deu-Latn",  # German
+    "ell-Grek",  # Greek
     "cfm-Latn",  # Hakha Chin
-    "hi-Deva",  # Hindi
-    "hu-Latn",  # Hungarian
-    "id-Latn",  # Indonesian
-    "ia-Latn",  # Interlingua
-    "ga-Latn",  # Irish
-    "it-Latn",  # Italian
-    "ja-Jpan",  # Japanese
+    "hin-Deva",  # Hindi
+    "hun-Latn",  # Hungarian
+    "ind-Latn",  # Indonesian
+    "ina-Latn",  # Interlingua
+    "gle-Latn",  # Irish
+    "ita-Latn",  # Italian
+    "jpn-Jpan",  # Japanese
     "kab-Latn",  # Kabyle
-    "rw-Latn",  # Kinyarwanda
-    "ky-Cyrl",  # Kyrgyz
-    "lv-Latn",  # Latvian
-    "lt-Latn",  # Lithuanian
-    "lg-Latn",  # Luganda
-    "mt-Latn",  # Maltese
-    "mn-Cyrl",  # Mongolian
-    "or-Orya",  # Odia
-    "fa-Arab",  # Persian
-    "pl-Latn",  # Polish
-    "pt-Latn",  # Portuguese
-    "pa-Guru",  # Punjabi
-    "ro-Latn",  # Romanian
-    "rm-Surs",  # Romansh Sursilvan
-    "rm-Vall",  # Romansh Vallader
-    "ru-Cyrl",  # Russian
+    "kin-Latn",  # Kinyarwanda
+    "kir-Cyrl",  # Kyrgyz
+    "lav-Latn",  # Latvian
+    "lit-Latn",  # Lithuanian
+    "lug-Latn",  # Luganda
+    "mlt-Latn",  # Maltese
+    "mon-Cyrl",  # Mongolian
+    "ori-Orya",  # Odia
+    "fas-Arab",  # Persian
+    "pol-Latn",  # Polish
+    "por-Latn",  # Portuguese
+    "pan-Guru",  # Punjabi
+    "ron-Latn",  # Romanian
+    "roh-Surs",  # Romansh Sursilvan
+    "roh-Vall",  # Romansh Vallader
+    "rus-Cyrl",  # Russian
     "sah-Cyrl",  # Sakha
-    "sl-Latn",  # Slovenian
+    "slv-Latn",  # Slovenian
     "hsb-Latn",  # Upper Sorbian
-    "es-Latn",  # Spanish
-    "sv-Latn",  # Swedish
-    "ta-Taml",  # Tamil
-    "tt-Cyrl",  # Tatar
-    "th-Thai",  # Thai
-    "tr-Latn",  # Turkish
-    "uk-Cyrl",  # Ukrainian
-    "vi-Latn",  # Vietnamese
+    "spa-Latn",  # Spanish
+    "swe-Latn",  # Swedish
+    "tam-Taml",  # Tamil
+    "tat-Cyrl",  # Tatar
+    "tha-Thai",  # Thai
+    "tur-Latn",  # Turkish
+    "ukr-Cyrl",  # Ukrainian
+    "vie-Latn",  # Vietnamese
     "vot-Latn",  # Votic
-    "cy-Latn",  # Welsh
+    "cym-Latn",  # Welsh
 ]
 
 
