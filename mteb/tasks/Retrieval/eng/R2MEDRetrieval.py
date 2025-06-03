@@ -24,7 +24,6 @@ DOMAINS_langs = {split: ["eng-Latn"] for split in DOMAINS}
 
 
 def load_r2med_data(
-    self,
     path: str,
     domains: list,
     eval_splits: list,
