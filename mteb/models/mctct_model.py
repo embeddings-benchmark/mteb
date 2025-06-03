@@ -59,8 +59,7 @@ COMMON_VOICE_LANGUAGES = [
     "por-Latn",  # Portuguese
     "pan-Guru",  # Punjabi
     "ron-Latn",  # Romanian
-    "roh-Surs",  # Romansh Sursilvan
-    "roh-Vall",  # Romansh Vallader
+    "roh-Latn",  # Romansh Sursilvan + Romansh Vallader
     "rus-Cyrl",  # Russian
     "sah-Cyrl",  # Sakha
     "slv-Latn",  # Slovenian
