@@ -54,6 +54,13 @@ from .eng.FiQA2018Retrieval import *
 from .eng.HagridRetrieval import *
 from .eng.HellaSwagRetrieval import *
 from .eng.HotpotQARetrieval import *
+from .eng.IFIRAilaRetrieval import *
+from .eng.IFIRCdsRetrieval import *
+from .eng.IFIRFiQARetrieval import *
+from .eng.IFIRFireRetrieval import *
+from .eng.IFIRPmRetrieval import *
+from .eng.IFIRNFCorpusRetrieval import *
+from .eng.IFIRScifactRetrieval import *
 from .eng.LegalBenchConsumerContractsQARetrieval import *
 from .eng.LegalBenchCorporateLobbyingRetrieval import *
 from .eng.LegalSummarizationRetrieval import *
