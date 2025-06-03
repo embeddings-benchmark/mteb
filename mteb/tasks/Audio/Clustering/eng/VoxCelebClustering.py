@@ -3,9 +3,6 @@ from __future__ import annotations
 from mteb.abstasks.Audio.AbsTaskAudioClustering import AbsTaskAudioClustering
 from mteb.abstasks.TaskMetadata import TaskMetadata
 
-# ASSUMED VOXCELEB IN CLASSIFICATION TASK WAS ACCURATE.
-
-
 class VoxCelebClustering(AbsTaskAudioClustering):
     label_column_name: str = "label_id"
     metadata = TaskMetadata(
@@ -18,7 +15,7 @@ class VoxCelebClustering(AbsTaskAudioClustering):
         },
         type="AudioClustering",
         category="a2a",
-        eval_splits=["train"],
+        eval_splits=["test"],
         eval_langs=["eng-Latn"],
         main_score="cluster_accuracy",
         date=("2024-06-27", "2024-06-28"),
@@ -43,7 +40,7 @@ class VoxCelebClustering(AbsTaskAudioClustering):
     )
 
     def dataset_transform(self):
-        # Get the original training split
+
         ds = self.dataset
         # Remove 'Disagreement' samples and '<mixed>' samples
         ds = ds.filter(lambda x: x["label"] not in ["Disagreement", "<mixed>"])
@@ -55,6 +52,4 @@ class VoxCelebClustering(AbsTaskAudioClustering):
             return example
 
         ds = ds.map(add_label_id)
-        # Update the dataset and label column
-        self.dataset["train"] = ds.pop("test")
         self.label_column_name = "label_id"
