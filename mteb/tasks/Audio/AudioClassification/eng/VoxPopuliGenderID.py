@@ -63,5 +63,5 @@ Dupoux, Emmanuel},
 
     audio_column_name: str = "audio"
     label_column_name: str = "gender"
-    samples_per_label: int = 50
+    samples_per_label: int = 30
     is_cross_validation: bool = True
