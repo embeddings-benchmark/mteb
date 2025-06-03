@@ -65,3 +65,7 @@ Dupoux, Emmanuel},
     label_column_name: str = "gender"
     samples_per_label: int = 30
     is_cross_validation: bool = True
+
+    def dataset_transform(self):
+        self.dataset["train"] = self.dataset["test"]
+        self.dataset["test"] = None

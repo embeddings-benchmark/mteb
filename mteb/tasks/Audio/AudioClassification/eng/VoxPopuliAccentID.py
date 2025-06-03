@@ -60,4 +60,9 @@ Dupoux, Emmanuel},
     audio_column_name: str = "audio"
     label_column_name: str = "accent"
     samples_per_label: int = 50
-    is_cross_validation: bool = False
+    is_cross_validation: bool = True
+
+    def dataset_transform(self):
+        self.dataset["train"] = self.dataset["test"]
+        self.dataset["test"] = None
+
