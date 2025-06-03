@@ -79,6 +79,7 @@ TASK_SUBTYPE = Literal[
 
 TASK_DOMAIN = Literal[
     "Academic",
+    "AudioScene",
     "Bioacoustics",
     "Blog",
     "Constructed",
