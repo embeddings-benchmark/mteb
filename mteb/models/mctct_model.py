@@ -22,8 +22,8 @@ COMMON_VOICE_LANGUAGES = [
     "eus-Latn",  # Basque
     "bre-Latn",  # Breton
     "cat-Latn",  # Catalan
-    "zho-Hans-CN",  # Chinese (China)
-    "zho-Hant-HK",  # Chinese (Hong Kong) + (Taiwan)
+    "zho-Hans",  # Chinese (China)
+    "zho-Hant",  # Chinese (Hong Kong) + (Taiwan)
     "chv-Cyrl",  # Chuvash
     "ces-Latn",  # Czech
     "div-Thaa",  # Dhivehi
