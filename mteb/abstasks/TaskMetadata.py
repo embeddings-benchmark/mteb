@@ -69,7 +69,6 @@ TASK_SUBTYPE = Literal[
     "Accent Clustering",
     "Sentiment Clustering",
     "Emotion Clustering",
-
     "Rendered semantic textual similarity",
     "Sentiment Analysis",
     "Intent Classification",

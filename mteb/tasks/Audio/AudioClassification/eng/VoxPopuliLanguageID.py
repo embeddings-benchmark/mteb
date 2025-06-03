@@ -26,7 +26,7 @@ class VoxPopuliLanguageID(AbsTaskAudioClassification):
             "fra-Latn",  # French
             "spa-Latn",  # Spanish
             "pol-Latn",  # Polish
-        ], 
+        ],
         main_score="accuracy",
         date=("2009-01-01", "2020-12-31"),
         domains=["Spoken", "Speech"],
@@ -67,7 +67,5 @@ Dupoux, Emmanuel},
 
     audio_column_name: str = "audio"
     label_column_name: str = "language"
-    samples_per_label: int = 30 
+    samples_per_label: int = 30
     is_cross_validation: bool = True
-
- 
