@@ -45,4 +45,5 @@ class AESDDClassification(AbsTaskAudioClassification):
 
     audio_column_name: str = "audio"
     label_column_name: str = "label"
-    samples_per_label: int = 32
+    samples_per_label: int = 16
+    is_cross_validation: bool = True
