@@ -1592,7 +1592,6 @@ MIEB_common_tasks = [
     "MemotionI2TRetrieval",
     "MemotionT2IRetrieval",
     "METI2IRetrieval",
-    "MIRACLVisionRetrieval",
     "MSCOCOI2TRetrieval",
     "MSCOCOT2IRetrieval",
     "NIGHTSI2IRetrieval",
