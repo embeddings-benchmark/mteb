@@ -122,60 +122,66 @@ def _create_button(
     button.click(_update_value, inputs=[button], outputs=[state])
     return button
 
+def make_selector(entries: list[MenuEntry]) -> tuple[gr.State, gr.Column]:
+    """Creates a UI selector from menu entries with up to 3 levels of nesting.
 
-def make_selector(
-    entries: list[MenuEntry],
-) -> tuple[gr.State, gr.Column]:
-    if not entries:
-        raise ValueError("No entries were specified, can't build selector.")
+    Args:
+        entries: List of MenuEntry objects to build the selector from
+
+    Returns:
+        tuple: (state object, column widget)
+    """
     label_to_value = {}
+    button_counter = 0
 
     with gr.Column() as column:
         state = gr.State("selector_state")
-        i = 0
 
         for category_entry in entries:
-            gr.Markdown(f"## {category_entry.name}")
-            if category_entry.description:
-                gr.Markdown(category_entry.description)
+            button_counter = _render_category(
+                category_entry, state, label_to_value, button_counter
+            )
 
-            for benchmarks_group in category_entry.benchmarks:
-                if isinstance(benchmarks_group, Benchmark):  # level 0
-                    button = _create_button(
-                        i, benchmarks_group, state, label_to_value, size="md"
-                    )
-                    i += 1
-                    continue
+    return state, column
 
-                with gr.Accordion(benchmarks_group.name, open=benchmarks_group.open):
-                    for benchmark_entry in benchmarks_group.benchmarks:
-                        if isinstance(benchmark_entry, Benchmark):  # level 1
-                            button = _create_button(
-                                i, benchmark_entry, state, label_to_value, size="sm"
-                            )
-                            i += 1
-                            continue
 
-                        with gr.Accordion(
-                            benchmark_entry.name, open=benchmark_entry.open
-                        ):
-                            for minor_benchmarks in benchmark_entry.benchmarks:
-                                if not isinstance(minor_benchmarks, Benchmark):
-                                    raise TypeError(
-                                        f"The leaderboard only support three layers of nesting. Expected Benchmark, got {type(minor_benchmarks)}."
-                                    )
+def _render_category(
+    entry: MenuEntry,
+    state: gr.State,
+    label_to_value: dict,
+    button_counter: int,
+) -> int:
+    gr.Markdown(f"## {entry.name}")
+    if entry.description:
+        gr.Markdown(entry.description)
 
-                                button = _create_button(
-                                    i,
-                                    minor_benchmarks,
-                                    state,
-                                    label_to_value,
-                                    size="sm",
-                                )
-                                i += 1
-                            continue
+    for benchmarks_group in entry.benchmarks:
+        button_counter = _render_benchmark_item(
+            benchmarks_group, state, label_to_value, button_counter, level=0
+        )
 
-        return state, column
+    return button_counter
+
+
+def _render_benchmark_item(
+    item: Benchmark | MenuEntry,
+    state: gr.State,
+    label_to_value: dict,
+    button_counter: int,
+    level: int,
+) -> int:
+    if isinstance(item, Benchmark):
+        size = "md" if level == 0 else "sm"
+        _create_button(button_counter, item, state, label_to_value, size=size)
+        return button_counter + 1
+
+    with gr.Accordion(item.name, open=item.open):
+        for nested_item in item.benchmarks:
+            button_counter = _render_benchmark_item(
+                nested_item, state, label_to_value, button_counter, level + 1
+            )
+
+    return button_counter
 
 
 if __name__ == "__main__":
