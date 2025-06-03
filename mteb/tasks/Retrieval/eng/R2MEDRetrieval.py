@@ -96,3 +96,16 @@ class R2MEDRetrieval(MultilingualTask, AbsTaskRetrieval):
 }
 """,
     )
+    
+    def load_data(self, **kwargs):
+        if self.data_loaded:
+        return
+
+        self.corpus, self.queries, self.relevant_docs = self.load_r2med_data(
+            path=self.metadata.dataset["path"],
+            domains=DOMAINS,
+            eval_splits=self.metadata.eval_splits,
+            cache_dir=kwargs.get("cache_dir", None),
+            revision=self.metadata.dataset["revision"],
+        )
+        self.data_loaded = True
