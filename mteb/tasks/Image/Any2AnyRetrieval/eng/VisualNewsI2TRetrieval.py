@@ -26,13 +26,15 @@ class VisualNewsI2TRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["image", "text"],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{liu2021visual,
-  title={Visual News: Benchmark and Challenges in News Image Captioning},
-  author={Liu, Fuxiao and Wang, Yinghan and Wang, Tianlu and Ordonez, Vicente},
-  booktitle={Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing},
-  pages={6761--6771},
-  year={2021}
-}""",
+        bibtex_citation=r"""
+@inproceedings{liu2021visual,
+  author = {Liu, Fuxiao and Wang, Yinghan and Wang, Tianlu and Ordonez, Vicente},
+  booktitle = {Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing},
+  pages = {6761--6771},
+  title = {Visual News: Benchmark and Challenges in News Image Captioning},
+  year = {2021},
+}
+""",
         prompt={"query": "Find a caption for the news in the given photo."},
         descriptive_stats={
             "n_samples": {"test": 20000},

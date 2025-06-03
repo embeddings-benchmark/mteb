@@ -29,12 +29,14 @@ class AmazonPolarityClassification(AbsTaskClassification):
         license="apache-2.0",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{McAuley2013HiddenFA,
-  title={Hidden factors and hidden topics: understanding rating dimensions with review text},
-  author={Julian McAuley and Jure Leskovec},
-  journal={Proceedings of the 7th ACM conference on Recommender systems},
-  year={2013},
-  url={https://api.semanticscholar.org/CorpusID:6440341}
-}""",
+        bibtex_citation=r"""
+@article{McAuley2013HiddenFA,
+  author = {Julian McAuley and Jure Leskovec},
+  journal = {Proceedings of the 7th ACM conference on Recommender systems},
+  title = {Hidden factors and hidden topics: understanding rating dimensions with review text},
+  url = {https://api.semanticscholar.org/CorpusID:6440341},
+  year = {2013},
+}
+""",
         prompt="Classify Amazon reviews into positive or negative sentiment",
     )

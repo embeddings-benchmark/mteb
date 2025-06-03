@@ -17,7 +17,7 @@ class ImageCoDeT2IRetrieval(AbsTaskAny2AnyRetrieval):
         category="t2i",
         eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="ndcg_at_10",
+        main_score="cv_recall_at_3",
         date=("2022-05-22", "2022-05-27"),  # conference dates
         domains=["Web", "Written"],
         task_subtypes=["Image Text Retrieval"],
@@ -26,11 +26,12 @@ class ImageCoDeT2IRetrieval(AbsTaskAny2AnyRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
-        bibtex_citation="""@article{krojer2022image,
-  title={Image retrieval from contextual descriptions},
-  author={Krojer, Benno and Adlakha, Vaibhav and Vineet, Vibhav and Goyal, Yash and Ponti, Edoardo and Reddy, Siva},
-  journal={arXiv preprint arXiv:2203.15867},
-  year={2022}
+        bibtex_citation=r"""
+@article{krojer2022image,
+  author = {Krojer, Benno and Adlakha, Vaibhav and Vineet, Vibhav and Goyal, Yash and Ponti, Edoardo and Reddy, Siva},
+  journal = {arXiv preprint arXiv:2203.15867},
+  title = {Image retrieval from contextual descriptions},
+  year = {2022},
 }
 """,
         descriptive_stats={

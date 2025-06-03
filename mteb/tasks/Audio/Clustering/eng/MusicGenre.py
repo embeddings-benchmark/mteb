@@ -27,12 +27,14 @@ class MusicGenreClustering(AbsTaskAudioClustering):
         dialect=[],
         modalities=["audio"],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{homburg2005benchmark,
-                        title={A Benchmark Dataset for Audio Classification and Clustering.},
-                        author={Homburg, Helge and Mierswa, Ingo and M{\"o}ller, B{\"u}lent and Morik, Katharina and Wurst, Michael},
-                        booktitle={ISMIR},
-                        volume={2005},
-                        pages={528--31},
-                        year={2005}
-                        }""",
+        bibtex_citation=r"""
+@inproceedings{homburg2005benchmark,
+  author = {Homburg, Helge and Mierswa, Ingo and M{\"o}ller, B{\"u}lent and Morik, Katharina and Wurst, Michael},
+  booktitle = {ISMIR},
+  pages = {528--31},
+  title = {A Benchmark Dataset for Audio Classification and Clustering.},
+  volume = {2005},
+  year = {2005},
+}
+""",
     )

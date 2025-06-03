@@ -107,12 +107,14 @@ class MrTidyRetrieval(MultilingualTask, AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@article{mrtydi,
-              title={{Mr. TyDi}: A Multi-lingual Benchmark for Dense Retrieval},
-              author={Xinyu Zhang and Xueguang Ma and Peng Shi and Jimmy Lin},
-              year={2021},
-              journal={arXiv:2108.08787},
-        }""",
+        bibtex_citation=r"""
+@article{mrtydi,
+  author = {Xinyu Zhang and Xueguang Ma and Peng Shi and Jimmy Lin},
+  journal = {arXiv:2108.08787},
+  title = {{Mr. TyDi}: A Multi-lingual Benchmark for Dense Retrieval},
+  year = {2021},
+}
+""",
     )
 
     def load_data(self, **kwargs):

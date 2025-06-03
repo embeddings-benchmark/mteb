@@ -26,7 +26,7 @@ ops_moa_conan_embedding = ModelMeta(
     name="OpenSearch-AI/Ops-MoA-Conan-embedding-v1",
     revision="46dcd58753f3daa920c66f89e47086a534089350",
     release_date="2025-03-26",
-    languages=["zho_Hans"],
+    languages=["zho-Hans"],
     loader=partial(
         CustomWrapper,
         "OpenSearch-AI/Ops-MoA-Conan-embedding-v1",
@@ -61,7 +61,7 @@ ops_moa_yuan_embedding = ModelMeta(
     name="OpenSearch-AI/Ops-MoA-Yuan-embedding-1.0",
     revision="23712d0766417b0eb88a2513c6e212a58b543268",
     release_date="2025-03-26",
-    languages=["zho_Hans"],
+    languages=["zho-Hans"],
     loader=partial(
         CustomWrapper,
         "OpenSearch-AI/Ops-MoA-Yuan-embedding-1.0",

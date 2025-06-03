@@ -167,7 +167,7 @@ nomic_embed_vision_v1_5 = ModelMeta(
         text_model_name="nomic-ai/nomic-embed-text-v1.5",
     ),
     name="nomic-ai/nomic-embed-vision-v1.5",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     revision="af2246fffdab78d8458418480e4886a8e48b70a7",
     release_date="2024-06-08",
     modalities=["image", "text"],

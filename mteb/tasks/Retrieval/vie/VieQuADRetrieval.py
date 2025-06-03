@@ -33,23 +33,26 @@ class VieQuADRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@inproceedings{nguyen-etal-2020-vietnamese,
-title = "A Vietnamese Dataset for Evaluating Machine Reading Comprehension",
-author = "Nguyen, Kiet  and
-    Nguyen, Vu  and
-    Nguyen, Anh  and
-    Nguyen, Ngan",
-editor = "Scott, Donia  and
-    Bel, Nuria  and
-    Zong, Chengqing",
-booktitle = "Proceedings of the 28th International Conference on Computational Linguistics",
-month = dec,
-year = "2020",
-address = "Barcelona, Spain (Online)",
-publisher = "International Committee on Computational Linguistics",
-url = "https://aclanthology.org/2020.coling-main.233",
-doi = "10.18653/v1/2020.coling-main.233",
-pages = "2595--2605"}""",
+        bibtex_citation=r"""
+@inproceedings{nguyen-etal-2020-vietnamese,
+  address = {Barcelona, Spain (Online)},
+  author = {Nguyen, Kiet  and
+Nguyen, Vu  and
+Nguyen, Anh  and
+Nguyen, Ngan},
+  booktitle = {Proceedings of the 28th International Conference on Computational Linguistics},
+  doi = {10.18653/v1/2020.coling-main.233},
+  editor = {Scott, Donia  and
+Bel, Nuria  and
+Zong, Chengqing},
+  month = dec,
+  pages = {2595--2605},
+  publisher = {International Committee on Computational Linguistics},
+  title = {A Vietnamese Dataset for Evaluating Machine Reading Comprehension},
+  url = {https://aclanthology.org/2020.coling-main.233},
+  year = {2020},
+}
+""",
     )
 
     def load_data(self, **kwargs):

@@ -10,8 +10,8 @@ from .Classification import *
 from .Clustering import *
 from .Image.Any2AnyMultiChoice import *
 from .Image.Any2AnyRetrieval import *
-from .Image.Clustering import *
 from .Image.ImageClassification import *
+from .Image.ImageClustering import *
 from .Image.ImageMultilabelClassification import *
 from .Image.ImageTextPairClassification import *
 from .Image.VisualSTS import *

@@ -123,12 +123,14 @@ class VDRMultilingualRetrieval(MultilingualTask, AbsTaskAny2AnyRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""@misc{llamaindex2024vdrmultilingual,
-      title={Visual Document Retrieval Goes Multilingual},
-      author={LlamaIndex},
-      year={2025},
-      howpublished={https://huggingface.co/datasets/llamaindex/vdr-multilingual-test},
-}""",
+        bibtex_citation=r"""
+@misc{llamaindex2024vdrmultilingual,
+  author = {LlamaIndex},
+  howpublished = {https://huggingface.co/datasets/llamaindex/vdr-multilingual-test},
+  title = {Visual Document Retrieval Goes Multilingual},
+  year = {2025},
+}
+""",
     )
 
     def load_data(self, **kwargs):

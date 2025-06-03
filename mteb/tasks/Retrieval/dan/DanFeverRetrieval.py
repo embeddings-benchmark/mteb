@@ -27,21 +27,21 @@ class DanFeverRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
+        bibtex_citation=r"""
 @inproceedings{norregaard-derczynski-2021-danfever,
-    title = "{D}an{FEVER}: claim verification dataset for {D}anish",
-    author = "N{\o}rregaard, Jeppe  and
-      Derczynski, Leon",
-    editor = "Dobnik, Simon  and
-      {\O}vrelid, Lilja",
-    booktitle = "Proceedings of the 23rd Nordic Conference on Computational Linguistics (NoDaLiDa)",
-    month = may # " 31--2 " # jun,
-    year = "2021",
-    address = "Reykjavik, Iceland (Online)",
-    publisher = {Link{\"o}ping University Electronic Press, Sweden},
-    url = "https://aclanthology.org/2021.nodalida-main.47",
-    pages = "422--428",
-    abstract = "We present a dataset, DanFEVER, intended for multilingual misinformation research. The dataset is in Danish and has the same format as the well-known English FEVER dataset. It can be used for testing methods in multilingual settings, as well as for creating models in production for the Danish language.",
+  abstract = {We present a dataset, DanFEVER, intended for multilingual misinformation research. The dataset is in Danish and has the same format as the well-known English FEVER dataset. It can be used for testing methods in multilingual settings, as well as for creating models in production for the Danish language.},
+  address = {Reykjavik, Iceland (Online)},
+  author = {N{\o}rregaard, Jeppe  and
+Derczynski, Leon},
+  booktitle = {Proceedings of the 23rd Nordic Conference on Computational Linguistics (NoDaLiDa)},
+  editor = {Dobnik, Simon  and
+{\O}vrelid, Lilja},
+  month = may # { 31--2 } # jun,
+  pages = {422--428},
+  publisher = {Link{\"o}ping University Electronic Press, Sweden},
+  title = {{D}an{FEVER}: claim verification dataset for {D}anish},
+  url = {https://aclanthology.org/2021.nodalida-main.47},
+  year = {2021},
 }
 """,
         prompt={
@@ -130,21 +130,21 @@ class DanFever(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
+        bibtex_citation=r"""
 @inproceedings{norregaard-derczynski-2021-danfever,
-    title = "{D}an{FEVER}: claim verification dataset for {D}anish",
-    author = "N{\o}rregaard, Jeppe  and
-      Derczynski, Leon",
-    editor = "Dobnik, Simon  and
-      {\O}vrelid, Lilja",
-    booktitle = "Proceedings of the 23rd Nordic Conference on Computational Linguistics (NoDaLiDa)",
-    month = may # " 31--2 " # jun,
-    year = "2021",
-    address = "Reykjavik, Iceland (Online)",
-    publisher = {Link{\"o}ping University Electronic Press, Sweden},
-    url = "https://aclanthology.org/2021.nodalida-main.47",
-    pages = "422--428",
-    abstract = "We present a dataset, DanFEVER, intended for multilingual misinformation research. The dataset is in Danish and has the same format as the well-known English FEVER dataset. It can be used for testing methods in multilingual settings, as well as for creating models in production for the Danish language.",
+  abstract = {We present a dataset, DanFEVER, intended for multilingual misinformation research. The dataset is in Danish and has the same format as the well-known English FEVER dataset. It can be used for testing methods in multilingual settings, as well as for creating models in production for the Danish language.},
+  address = {Reykjavik, Iceland (Online)},
+  author = {N{\o}rregaard, Jeppe  and
+Derczynski, Leon},
+  booktitle = {Proceedings of the 23rd Nordic Conference on Computational Linguistics (NoDaLiDa)},
+  editor = {Dobnik, Simon  and
+{\O}vrelid, Lilja},
+  month = may # { 31--2 } # jun,
+  pages = {422--428},
+  publisher = {Link{\"o}ping University Electronic Press, Sweden},
+  title = {{D}an{FEVER}: claim verification dataset for {D}anish},
+  url = {https://aclanthology.org/2021.nodalida-main.47},
+  year = {2021},
 }
 """,
         prompt={

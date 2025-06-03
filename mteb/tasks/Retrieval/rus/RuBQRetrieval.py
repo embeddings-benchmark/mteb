@@ -29,13 +29,15 @@ class RuBQRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="""@inproceedings{RuBQ2021,
-        title={RuBQ 2.0: An Innovated Russian Question Answering Dataset},
-        author={Ivan Rybin and Vladislav Korablinov and Pavel Efimov and Pavel Braslavski},
-        booktitle={ESWC},
-        year={2021},
-        pages={532--547}
-        }""",
+        bibtex_citation=r"""
+@inproceedings{RuBQ2021,
+  author = {Ivan Rybin and Vladislav Korablinov and Pavel Efimov and Pavel Braslavski},
+  booktitle = {ESWC},
+  pages = {532--547},
+  title = {RuBQ 2.0: An Innovated Russian Question Answering Dataset},
+  year = {2021},
+}
+""",
         prompt={
             "query": "Given a question, retrieve Wikipedia passages that answer the question"
         },

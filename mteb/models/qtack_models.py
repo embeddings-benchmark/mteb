@@ -32,7 +32,7 @@ mini_gte = ModelMeta(
         revision="7fbe6f9b4cc42615e0747299f837ad7769025492",
     ),
     name="prdev/mini-gte",
-    languages=["eng_Latn"],
+    languages=["eng-Latn"],
     open_weights=True,
     revision="7fbe6f9b4cc42615e0747299f837ad7769025492",
     release_date="2025-01-28",
