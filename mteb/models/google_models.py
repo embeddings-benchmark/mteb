@@ -37,7 +37,7 @@ MODEL_PROMPTS = {
     "Classification": "CLASSIFICATION",
     "MultilabelClassification": "CLASSIFICATION",
     "Clustering": "CLUSTERING",
-    "STS": "SIMILARITY",
+    "STS": "SEMANTIC_SIMILARITY",
     PromptType.query.value: "RETRIEVAL_QUERY",
     PromptType.passage.value: "RETRIEVAL_DOCUMENT",
 }
