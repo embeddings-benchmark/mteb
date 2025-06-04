@@ -71,7 +71,6 @@ Dupoux, Emmanuel},
     is_cross_validation: bool = True
 
     def dataset_transform(self):
-
         import numpy as np
         from datasets import DatasetDict
 
@@ -90,7 +89,9 @@ Dupoux, Emmanuel},
         print(f"Kept {len(filtered_test)} valid samples out of {len(test_ds)} total")
 
         # Create a new DatasetDict that has both "train" and "test" = filtered_test
-        self.dataset = DatasetDict({
-            "train": filtered_test,
-            "test":  filtered_test,
-        })
+        self.dataset = DatasetDict(
+            {
+                "train": filtered_test,
+                "test": filtered_test,
+            }
+        )
