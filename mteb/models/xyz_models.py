@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-from mteb.model_meta import ModelMeta
-
+from mteb.model_meta import ModelMeta, sentence_transformers_loader
 
 xyz_embedding = ModelMeta(
     name="fangxq/XYZ-embedding",
     languages=["zho-Hans"],
-    loader=None,
+    loader=sentence_transformers_loader,
     open_weights=False,
     revision="4004120220b99baea764a1d3508427248ac3bccf",
     release_date="2024-09-13",
