@@ -7,7 +7,7 @@ import torch
 
 from mteb.encoder_interface import PromptType
 from mteb.model_meta import ModelMeta
-from mteb.models.instruct_wrapper import instruct_wrapper
+from mteb.models.instruct_wrapper import InstructSentenceTransformerWrapper
 
 
 def instruction_template(
@@ -113,20 +113,18 @@ training_data = {
 
 
 def q3e_instruct_loader(model_name_or_path, **kwargs):
-    model = instruct_wrapper(
+    model = InstructSentenceTransformerWrapper(
         model_name_or_path,
-        mode="embedding",
+        revision=kwargs.pop("revision", None),
         instruction_template=instruction_template,
-        attn="cccc",
-        pooling_method="lasttoken",
-        torch_dtype=torch.float16,
-        normalized=True,
-        embed_eos="<|endoftext|>",
+        apply_instruction_to_passages=False,
+        # model_kwargs=dict(torch_dtype=torch.float16),  # , attn_implementation="flash_attention_2"
         **kwargs,
     )
-    if model.model.config._attn_implementation == "flash_attention_2":
+    encoder = model.model._first_module()
+    if encoder.auto_model.config._attn_implementation == "flash_attention_2":
         # The Qwen3 code only use left padding in flash_attention_2 mode.
-        model.tokenizer.padding_side = "left"
+        encoder.tokenizer.padding_side = "left"
     return model
 
 
