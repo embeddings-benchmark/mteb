@@ -6,7 +6,7 @@ from functools import partial
 import torch
 
 from mteb.encoder_interface import PromptType
-from mteb.model_meta import ModelMeta, sentence_transformers_loader
+from mteb.model_meta import ModelMeta
 from mteb.models.instruct_wrapper import instruct_wrapper
 
 
@@ -98,23 +98,21 @@ multilingual_langs = [
 ]
 
 training_data = {
-    "T2Retrieval": ["train"], 
-    "DuRetrieval": ["train"], 
-    "MMarcoReranking": ["train"], 
-    "CMedQAv2-reranking": ["train"], 
-    "NQ": ["train"], 
-    "MSMARCO": ["train"], 
-    "HotpotQA": ["train"], 
-    "FEVER": ["train"], 
-    "MrTidyRetrieval": ["train"], 
-    "MIRACLRetrieval": ["train"], 
-    "CodeSearchNet": ["train"]
+    "T2Retrieval": ["train"],
+    "DuRetrieval": ["train"],
+    "MMarcoReranking": ["train"],
+    "CMedQAv2-reranking": ["train"],
+    "NQ": ["train"],
+    "MSMARCO": ["train"],
+    "HotpotQA": ["train"],
+    "FEVER": ["train"],
+    "MrTidyRetrieval": ["train"],
+    "MIRACLRetrieval": ["train"],
+    "CodeSearchNet": ["train"],
 }
 
-def q3e_instruct_loader(model_name_or_path):
-    attn_impl = os.environ.get("Q3E_ATTN_IMPL", "flash_attention_2")
-    if attn_impl in {'none', 'null'}:
-        attn_impl = None
+
+def q3e_instruct_loader(model_name_or_path, **kwargs):
     model = instruct_wrapper(
         model_name_or_path,
         mode="embedding",
@@ -122,12 +120,13 @@ def q3e_instruct_loader(model_name_or_path):
         attn="cccc",
         pooling_method="lasttoken",
         torch_dtype=torch.float16,
-        attn_implementation=attn_impl,
         normalized=True,
         embed_eos="<|endoftext|>",
+        **kwargs,
     )
-    if attn_impl == "flash_attention_2":
-        model.tokenizer.padding_side = 'left'
+    if model.model.config._attn_implementation == "flash_attention_2":
+        # The Qwen3 code only use left padding in flash_attention_2 mode.
+        model.tokenizer.padding_side = "left"
     return model
 
 
@@ -179,7 +178,7 @@ Qwen3_Embedding_4B = ModelMeta(
     training_datasets=training_data,
 )
 
-Qwen3_Embedding_8B =  ModelMeta(
+Qwen3_Embedding_8B = ModelMeta(
     loader=partial(  # type: ignore
         q3e_instruct_loader,
         model_name_or_path=os.environ.get("Q3E_8B_PATH", "Qwen/Qwen3-Embedding-8B"),
@@ -205,17 +204,21 @@ Qwen3_Embedding_8B =  ModelMeta(
 
 
 def test_model():
-    queries = ["黑龙江的省会在哪儿", "Where is the caption of Heilongjiang", "阿里巴巴总部在杭州吗"]
+    queries = [
+        "黑龙江的省会在哪儿",
+        "Where is the caption of Heilongjiang",
+        "阿里巴巴总部在杭州吗",
+    ]
     documents = ["阿里巴巴", "黑龙江的省会是哈尔滨", " You are a hero"]
     model = Qwen3_Embedding_0B6.load_model()
-    vd = model.encode(documents, task_name='MSMARCO', prompt_type=PromptType.passage)
-    vq = model.encode(queries, task_name='MSMARCO', prompt_type=PromptType.query)
-    print('query outputs', vq)
-    print('doc outputs', vd)
+    vd = model.encode(documents, task_name="MSMARCO", prompt_type=PromptType.passage)
+    vq = model.encode(queries, task_name="MSMARCO", prompt_type=PromptType.query)
+    print("query outputs", vq)
+    print("doc outputs", vd)
     scores = (vq @ vd.T) * 100
     print(scores.tolist())
     return
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test_model()
