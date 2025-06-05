@@ -21,7 +21,6 @@ xyz_embedding = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     training_datasets={
-    ##
     "BQ": ["train"],
     "LCQMC": ["train"],
     "PAWSX": ["train"],
@@ -34,4 +33,8 @@ xyz_embedding = ModelMeta(
     "T2Reranking": ["train"],
     "MMarcoReranking": ["train"],
     "CMedQAv2-reranking": ["train"],
-    "Multi-CPR":"http://github.com/Alibaba-NLP/Multi-CPR"},)
+    "Covid-News":"NCPPolicies_train",
+    "cMedQA":"https://github.com/zhangsheng93/cMedQA",
+    "Multi-CPR":"http://github.com/Alibaba-NLP/Multi-CPR",
+    "retrieval_data_llm":"https://huggingface.co/datasets/infgrad/retrieval_data_llm",
+    "Huatuo26M-Lite":"https://huggingface.co/datasets/FreedomIntelligence/Huatuo26M-Lite"},)
