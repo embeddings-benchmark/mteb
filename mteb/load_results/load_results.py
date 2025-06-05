@@ -63,7 +63,8 @@ def load_results(
     # TODO: we want to allow results_repo (the first argument) to be a local path
     # TODO: in v2 we can rename it to "path" to align with load_dataset
     cache = ResultCache()
-    cache.download_from_remote(download_latest=download_latest)
+    if download_latest:
+        cache.download_from_remote(remote=results_repo, download_latest=download_latest)
     repo_directory = cache.cache_path
     model_paths = [p for p in (repo_directory / "results").glob("*") if p.is_dir()]
 

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import os
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -23,17 +24,27 @@ class ResultCache:
 
     cache_path: Path
 
-    def __init__(self, cache_path: Path | None = None) -> None:
+    def __init__(self, cache_path: Path | str | None = None) -> None:
         if cache_path is not None:
-            self.cache_path = cache_path
+            self.cache_path = Path(cache_path)
         else:
-            self.cache_path = self.get_cache_path()
+            self.cache_path = self.default_cache_path
+
+    @property
+    def has_remote(self) -> bool:
+        """Check if the remote results repository exists in the cache directory.
+
+        Returns:
+            True if the remote results repository exists, False otherwise.
+        """
+        return (self.cache_path / "remote").exists()
 
     def get_task_result_path(
         self,
         task_name: str,
         model_name: str | ModelMeta,
         model_revision: str | None = None,
+        remote: bool = False,
     ) -> Path:
         if isinstance(model_name, ModelMeta):
             if model_revision is not None:
@@ -48,7 +59,15 @@ class ResultCache:
                 "model_revision must be specified when model_name is a string"
             )
 
-        return self.cache_path / model_name / model_revision / f"{task_name}.json"
+        results_folder = "results" if not remote else "remote"
+
+        return (
+            self.cache_path
+            / results_folder
+            / model_name
+            / model_revision
+            / f"{task_name}.json"
+        )
 
     def load_from_cache(
         self,
@@ -73,6 +92,17 @@ class ResultCache:
             model_revision=model_revision,
             task_name=task_name,
         )
+
+        if self.has_remote:
+            remote_result_path = self.get_task_result_path(
+                model_name=model_name,
+                model_revision=model_revision,
+                task_name=task_name,
+                remote=True,
+            )
+            if remote_result_path.exists():
+                result_path = remote_result_path
+
         if not result_path.exists():
             msg = f"Results for {model_name} on {task_name} not found in {result_path}"
             if raise_if_not_found:
@@ -103,8 +133,8 @@ class ResultCache:
         result_path.parent.mkdir(parents=True, exist_ok=True)
         task_result.to_disk(result_path)
 
-    @staticmethod
-    def get_cache_path() -> Path:
+    @property
+    def default_cache_path(self) -> Path:
         """Get the local cache directory for MTEB results.
 
         Returns:
@@ -116,10 +146,6 @@ class ResultCache:
         cache_directory = (
             Path(_cache_directory) if _cache_directory else default_cache_directory
         )
-
-        if not cache_directory.exists():
-            cache_directory.mkdir(parents=True)
-
         return cache_directory
 
     def download_from_remote(
@@ -140,24 +166,51 @@ class ResultCache:
             logger.debug(
                 f"Cache directory {self.cache_path} does not exist, creating it"
             )
-            self.cache_path.mkdir(parents=True)
 
         # if "results" folder already exists update it
-        results_directory = self.cache_path / os.path.basename(remote)
+        results_directory = self.cache_path / "remote"
+
         if results_directory.exists():
+            # check repository in the directory is the same as the remote
+            remote_url = subprocess.run(
+                ["git", "config", "--get", "remote.origin.url"],
+                cwd=results_directory,
+                capture_output=True,
+                text=True,
+            ).stdout.strip()
+            if remote_url != remote:
+                msg = (
+                    f"remote repository '{remote}' does not match the one in {results_directory},  which is '{remote_url}'."
+                    + " Please remove the directory and try again."
+                )
+                raise ValueError(msg)
+
             if download_latest:
                 logger.info(
-                    f"Results repository already exists in {results_directory}, updating it using git pull"
+                    f"remote repository already exists in {results_directory}, updating it using git pull"
                 )
                 subprocess.run(["git", "pull"], cwd=results_directory)
             else:
-                logger.info(
+                logger.debug(
                     f"Results repository already exists in {results_directory}, skipping update, set download_latest=True to update it"
                 )
-        else:
-            logger.info(
-                f"No results repository found in {results_directory}, cloning it from {remote}"
-            )
-            subprocess.run(["git", "clone", remote], cwd=self.cache_path)
+            return results_directory
+        
+        logger.info(
+            f"No results repository found in {results_directory}, cloning it from {remote}"
+        )
+
+        subprocess.run(["git", "clone", remote, "remote"], cwd=self.cache_path)
 
         return results_directory
+
+    def clear_cache(self) -> None:
+        """Clear the local cache directory."""
+        if self.cache_path.exists() and self.cache_path.is_dir():
+            shutil.rmtree(self.cache_path)
+            logger.info(f"Cache directory {self.cache_path} cleared.")
+        else:
+            logger.warning(f"Cache directory {self.cache_path} does not exist.")
+
+    def __repr__(self) -> str:
+        return f"ResultCache(cache_path={self.cache_path})"
