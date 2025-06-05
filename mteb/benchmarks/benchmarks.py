@@ -2005,14 +2005,14 @@ R2MED = Benchmark(
     display_name="Reasoning-driven medical retrieval",
     tasks=get_tasks(
         tasks=[
-            "BiologyRetrieval",
-            "BioinformaticsRetrieval",
-            "MedicalSciencesRetrieval",
-            "MedXpertQAExamRetrieval",
-            'MedQADiagRetrieval',
-            "PMCTreatmentRetrieval",
-            "PMCClinicalRetrieval",
-            "IIYiClinicalRetrieval",
+            "R2MEDBiologyRetrieval",
+            "R2MEDBioinformaticsRetrieval",
+            "R2MEDMedicalSciencesRetrieval",
+            "R2MEDMedXpertQAExamRetrieval",
+            "R2MEDMedQADiagRetrieval",
+            "R2MEDPMCTreatmentRetrieval",
+            "R2MEDPMCClinicalRetrieval",
+            "R2MEDIIYiClinicalRetrieval",
         ]
     ),
     description="""R2MED: First Reasoning-Driven Medical Retrieval Benchmark.
